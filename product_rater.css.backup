@@ -1,0 +1,167 @@
+.votes{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 7pt;
+    color: #333;
+   }
+   
+span.votetext{
+    display:block;
+    overflow:visible;
+    
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #333;
+   }   
+      
+td.votetext{
+  width: 90px;
+   }   
+   
+td.votes{
+    text-align: center;
+   }
+    
+#starcontainer{
+    margin: 0px;
+    padding: 0px;
+    width: 90px;
+/*     height: 17px; */
+    overflow: hidden;
+    background: #888;
+    }    
+    
+#starcontainer a img{
+    margin: 0px;
+    border: 1px solid green !important;
+    }    
+
+#starcontainer a{
+    border: 1px solid red;
+    } 
+    
+#starcontainer a img{
+    margin: 0px;
+    border: 0px;
+    } 
+
+#singleimg{
+    margin: 0px;
+    padding: 0px;
+    width: 240px;
+    text-align:center;    
+    }
+        
+#starcont2{
+    margin: 0px;
+    padding: 0px;
+    width: 90px;
+    height: 17px;
+    overflow: hidden;
+    background: #888;
+    }
+
+#starmove{
+    width: 190px;
+    margin: 0px;
+    height: 17px;
+    padding-left: 10px;
+   }
+        
+#starmovenv{
+     width: 150px; 
+    margin: 0px;
+    padding: 0px;
+    height: 17px;
+   }
+
+#startxtmove{
+    width: 110px;
+    margin: 0px;
+    padding: 0px;
+   }
+   
+#goldstarcont{
+    margin: 0px;
+    padding: 0px;
+    height: 17px;
+    overflow: hidden;
+    } 
+    
+.starimage{
+    /* for Internet Explorer, dont you love how unsupported CSS elements are ignored by other browsers */
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/24bit-star.png',sizingMethod='scale');
+    }   
+           
+a.star1{
+    display:block;
+    width: 18px;
+    text-align: right;
+    z-index: 5;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    }
+    
+a.star1:hover{
+    /*background: #46F;*/
+    background: url(images/blue-star.gif);
+    }
+    
+a.star2{
+    display:block;
+    width: 36px;
+    text-align: right;
+    z-index: 4;
+    position: relative;
+    top: -17px;
+    left: 0px;
+    }
+    
+a.star2:hover{
+    /*background: #46F;*/
+    background: url(images/blue-star.gif);
+    }
+    
+a.star3{
+    display:block;
+    width: 54px;
+    text-align: right;
+    z-index: 3;
+    position: relative;
+    top: -34px;
+    left: 0px;
+    }
+    
+a.star3:hover{
+    /*background: #46F;*/
+    background: url(images/blue-star.gif);
+    }
+a.star4{
+    display:block;
+    width: 72px;
+    text-align: right;
+    z-index: 2;
+    position: relative;
+    top: -51px;
+    left: 0px;
+    }
+    
+a.star4:hover{
+    /*background: #46F;*/
+    background: url(images/blue-star.gif);
+    }
+    
+a.star5{
+    display:block;
+    width: 90px;
+    text-align: right;
+    z-index: 1;
+    position: relative;
+    top: -68px;
+    left: 0px;
+    }
+    
+a.star5:hover{
+    /*background: #46F;*/
+    background: url(images/blue-star.gif);
+    }
