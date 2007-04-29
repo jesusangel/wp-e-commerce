@@ -4,7 +4,7 @@ Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control
 Requires at least: 2.0.2
 Tested up to: 2.1
-Stable tag: 3.5 RC1
+Stable tag: 3.5
 
 
 == Description ==

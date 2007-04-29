@@ -30,7 +30,7 @@ var getresults=function(results)
     {
     document.getElementById('alt_loadingindicator').style.visibility = 'hidden';
     }
-  if((document.getElementById('sliding_cart') != null) && (document.getElementById('sliding_cart').style.display == 'none') && (document.getElementById("fancy_collapser") != null))
+  if((document.getElementById('sliding_cart') != null) && (document.getElementById('sliding_cart').style.display != 'block') && (document.getElementById("fancy_collapser") != null))
     {
     $("#sliding_cart").slideDown("fast",function(){    
     ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1");

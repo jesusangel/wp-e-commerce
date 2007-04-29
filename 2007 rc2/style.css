@@ -117,10 +117,6 @@ table.productdisplay tr td{
  text-align: left !important;
  }
 
-table.productdisplay tr td form{
- text-align: left;
- }
-
 
 table.productdisplay tr td.imagecol{
  padding-right: 5px;
@@ -497,16 +493,6 @@ ul.checkout_links li a{
 ul.checkout_links li a:hover{
  color: #000000 !important;
  }
-
-/* override some styling in the default wordpress theme */
-.wrap .PeSwitcher ul li:before, .wrap .PeCatsBrands ul li:before{
-  content: "";
-  }
-  
-.wrap .PeSwitcher ul li, .wrap .PeCatsBrands ul li{
-  padding-left: 0px !important;
-  margin-left: 0px;
-  }
   
 .PeSwitcher ul{
  padding-left: 0px;
@@ -521,11 +507,6 @@ ul.checkout_links li a:hover{
 .category_brand_header li{
  margin-left: 0px;
  }
- 
- 
-.category_brand_header li:before{
- content: none !important;
- }  
   
 #content .category_brand_header li a{
  color: #333333;
