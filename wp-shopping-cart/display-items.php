@@ -5,7 +5,7 @@ $category_data = null;
 function topcategorylist() {
   global $wpdb,$category_data;
   $siteurl = get_option('siteurl'); 
-  $url = $siteurl."/wp-admin/admin.php?page=wp-shopping-cart/display-items.php";
+  $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
   $options = "";
   $options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
   $options .= top_category_options(null, 0, $_GET['catid']);
@@ -20,7 +20,7 @@ function top_category_options($category_id = null, $iteration = 0, $selected_id 
    */
   global $wpdb;
   $siteurl = get_option('siteurl'); 
-  $url = $siteurl."/wp-admin/admin.php?page=wp-shopping-cart/display-items.php";
+  $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
   if(is_numeric($category_id)) {
     $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
 	} else {
@@ -655,7 +655,7 @@ IN (
 )
 ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
   } else {
-		$itempp = 10;
+		$itempp = 20;
 		if ($_GET['pnum']!='all') {
 			$page = (int)$_GET['pnum'];
 			
@@ -712,7 +712,7 @@ $num_prodcuts = count($wpdb->get_results("SELECT DISTINCT * FROM `".$wpdb->prefi
 
   <?php
   ?>
-  <a href='' onclick='return showaddform()' class='add_item_link'><img src='../wp-content/plugins/wp-shopping-cart/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a><br />
+  <a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a><br />
 
   <script language='javascript' type='text/javascript'>
 function conf()
@@ -755,7 +755,7 @@ echo "          </tr>\n\r";
 echo "          <tr class='selectcategory'>\n\r";
 echo "            <td colspan='4' width='160px'>\n\r";
 echo "<div style='float: right; width: 160px;'>";
-echo topcategorylist() . "<span id='loadingindicator_span'><img id='loadingimage' src='../wp-content/plugins/wp-shopping-cart/images/indicator.gif' alt='Loading' title='Loading' /></span></div>";
+echo topcategorylist() . "<span id='loadingindicator_span'><img id='loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /></span></div>";
 echo TXT_WPSC_PLEASESELECTACATEGORY.":";
 
 echo "            </td>\n\r";
@@ -855,7 +855,7 @@ if($product_list != null)
   } else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
 		echo "<img title='Drag to a new position' src='".WPSC_THUMBNAIL_URL.$product['image']."' title='".$product['name']."' alt='".$product['name']."' width='35' height='35'  />";
 	} else { // no image, display this fact
-		echo "<img title='Drag to a new position' src='../wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='35' height='35' />";
+		echo "<img title='Drag to a new position' src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='35' height='35' />";
 	}
 
 	echo "</a>";
@@ -892,45 +892,30 @@ if($product_list != null)
 			echo "            </div>\n\r";
     }
     
-    if(is_numeric($_GET['catid']))
-      {
-      //echo "            <td class='positioning_buttons'>\n\r";
-      //$position_url = "?page=".$_GET['page']."&amp;catid=".$_GET['catid']."&amp;product_id=".$product['id']."&amp;position_action=";
-      //echo "<a href='".$position_url."top'><img src='../wp-content/plugins/wp-shopping-cart/images/order_top.png' alt='Move to Top' title='Move to Top'/></a>";
-      //echo "<a href='".$position_url."up'><img src='../wp-content/plugins/wp-shopping-cart/images/order_up.png' alt='Move Up' title='Move Up'/></a>";
-      //echo "<a href='".$position_url."down'><img src='../wp-content/plugins/wp-shopping-cart/images/order_down.png' alt='Move Down' title='Move Down'/></a>";
-      //echo "<a href='".$position_url."bottom'><img src='../wp-content/plugins/wp-shopping-cart/images/order_bottom.png' alt='Move to Bottom' title='Move to Bottom'/> </a>";
-      //echo $product['order'];
-      //echo "            </td>\n\r";
-      }
-      else
-        {
-        echo "            <td>\n\r";
-		$category_list = $wpdb->get_results("SELECT `".$wpdb->prefix."product_categories`.`id`,`".$wpdb->prefix."product_categories`.`name` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product['id']."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1')",ARRAY_A);
-        $i = 0;
-        foreach((array)$category_list as $category_row)
-          {
-          if($i > 0)
-            {
-            echo "<br />";
-            }
-          echo "<a href='?page=".$_GET['page']."&amp;catid=".$category_row['id']."'>".stripslashes($category_row['name'])."</a>";
-          $i++;
-          }        
-        }
-	if(is_numeric($_GET['catid'])){
-	} else {
+    if(!is_numeric($_GET['catid'])) {
+			echo "            <td>\n\r";
+	$category_list = $wpdb->get_results("SELECT `".$wpdb->prefix."product_categories`.`id`,`".$wpdb->prefix."product_categories`.`name` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product['id']."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1')",ARRAY_A);
+			$i = 0;
+			foreach((array)$category_list as $category_row)
+				{
+				if($i > 0)
+					{
+					echo "<br />";
+					}
+				echo "<a href='?page=".$_GET['page']."&amp;catid=".$category_row['id']."'>".stripslashes($category_row['name'])."</a>";
+				$i++;
+				}        
+		}
+	if(!is_numeric($_GET['catid'])){
     echo "</td>";
 	}    
    // echo "<a href='#' title='sth' onclick='filleditform(".$product['id'].");return false;'>".TXT_WPSC_EDIT."</a>";
     echo "				</div>\n\r";
 	echo "            </div>\n\r";
-		if(is_numeric($_GET['catid'])){
-		
-		} else {
+		if(!is_numeric($_GET['catid'])){
 			echo "</tr>";
 		}
-    }
+	}
 	echo "    </div>\n\r";
 	echo "</td></tr>";
 	if(is_numeric($_GET['catid'])){

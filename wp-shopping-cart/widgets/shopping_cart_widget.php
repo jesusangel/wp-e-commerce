@@ -6,10 +6,10 @@ function widget_wp_shopping_cart($args) {
 		if(get_option('show_sliding_cart') == 1)	{
 			if(is_numeric($_SESSION['slider_state']))	{
 				if($_SESSION['slider_state'] == 0) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
-				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 			} else {
 				if($_SESSION['nzshpcrt_cart'] == null) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
-				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 			}
 		} else {
 			$fancy_collapser = "";

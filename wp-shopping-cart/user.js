@@ -44,8 +44,7 @@ var getresults=function(results)
     }
   if((document.getElementById('sliding_cart') != null) && (document.getElementById('sliding_cart').style.display == 'none'))
     {
-    //alert(base_url+"/wp-content/plugins/wp-shopping-cart/images/minus.png");
-    jQuery("#fancy_collapser").attr("src", (base_url+"/wp-content/plugins/wp-shopping-cart/images/minus.png"));
+    jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/minus.png"));
     jQuery("#sliding_cart").show("fast",function(){
     ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1"); });
     }
@@ -79,12 +78,12 @@ function submitform(frm, show_notification)
   ajax.post("index.php?ajax=true&user=true",getresults,ajax.serialize(frm));
   if(document.getElementById('loadingimage') != null)
     {
-    document.getElementById('loadingimage').src = base_url+'/wp-content/plugins/wp-shopping-cart/images/indicator.gif';
+    document.getElementById('loadingimage').src = WPSC_URL+'/images/indicator.gif';
     document.getElementById('loadingindicator').style.visibility = 'visible';
     } 
     else if(document.getElementById('alt_loadingimage') != null)
     {
-    document.getElementById('alt_loadingimage').src = base_url+'/wp-content/plugins/wp-shopping-cart/images/indicator.gif';
+    document.getElementById('alt_loadingimage').src = WPSC_URL+'/images/indicator.gif';
     document.getElementById('alt_loadingindicator').style.visibility = 'visible';
     }     
   if((show_notification == true) && (document.getElementById('fancy_notification') != null))
@@ -133,10 +132,10 @@ function submitform(frm, show_notification)
 function emptycart() {
   ajax.post("index.php",getresults,"ajax=true&user=true&emptycart=true&current_page="+window.location+"");
   if(document.getElementById('loadingimage') != null) {
-    document.getElementById('loadingimage').src = base_url+'/wp-content/plugins/wp-shopping-cart/images/indicator.gif';
+    document.getElementById('loadingimage').src = WPSC_URL+'/images/indicator.gif';
     document.getElementById('loadingindicator').style.visibility = 'visible';
 	} else if(document.getElementById('alt_loadingimage') != null) {
-    document.getElementById('alt_loadingimage').src = base_url+'/wp-content/plugins/wp-shopping-cart/images/indicator.gif';
+    document.getElementById('alt_loadingimage').src = WPSC_URL+'/images/indicator.gif';
     document.getElementById('alt_loadingindicator').style.visibility = 'visible';
 	}    
 }
@@ -148,12 +147,12 @@ function show_additional_description(id,image_id)
   if(currentstate != 'inline')
     {
     document.getElementById(id).style.display = 'inline';
-    document.getElementById(image_id).src = base_url+'/wp-content/plugins/wp-shopping-cart/images/icon_window_collapse.gif';
+    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_collapse.gif';
     }
     else
       {
       document.getElementById(id).style.display = 'none';
-      document.getElementById(image_id).src = base_url+'/wp-content/plugins/wp-shopping-cart/images/icon_window_expand.gif';
+      document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_expand.gif';
       }
   return false;
   }
@@ -181,11 +180,11 @@ function ie_rating_rollover(id,state)
     {
     case 1:
     previous_rating = target_element.style.background;
-    target_element.style.background = "url("+base_url+"/wp-content/plugins/wp-shopping-cart/images/blue-star.gif)";
+    target_element.style.background = "url("+WPSC_URL+"/images/blue-star.gif)";
     break;
     
     default:
-    if(target_element.style.background != "url("+base_url+"/wp-content/plugins/wp-shopping-cart/images/gold-star.gif)")
+    if(target_element.style.background != "url("+WPSC_URL+"/images/gold-star.gif)")
       {
       target_element.style.background = previous_rating;
       }
@@ -200,7 +199,7 @@ var apply_rating=function(results)
   for(i=1;i<=outarr[1];i++)
     {
     id = "star"+outarr[0]+"and"+i+"_link";
-    document.getElementById(id).style.background = "url("+base_url+"/wp-content/plugins/wp-shopping-cart/images/gold-star.gif)";
+    document.getElementById(id).style.background = "url("+WPSC_URL+"/images/gold-star.gif)";
     }
     
   for(i=5;i>outarr[1];i--)
@@ -314,14 +313,14 @@ function shopping_cart_collapser() {
     case 'none':
     jQuery("#sliding_cart").slideToggle("fast",function(){
       ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1");
-      jQuery("#fancy_collapser").attr("src", (base_url+"/wp-content/plugins/wp-shopping-cart/images/minus.png"));
+      jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/minus.png"));
 		});
     break;
     
     default:
     jQuery("#sliding_cart").slideToggle("fast",function(){
       ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=0");
-      jQuery("#fancy_collapser").attr("src", (base_url+"/wp-content/plugins/wp-shopping-cart/images/plus.png"));
+      jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/plus.png"));
 		});
     break;
 	}
@@ -332,10 +331,10 @@ function show_details_box(id,image_id) {
   state = document.getElementById(id).style.display; 
   if(state != 'block') {
     document.getElementById(id).style.display = 'block';
-    document.getElementById(image_id).src = base_url+"/wp-content/plugins/wp-shopping-cart/images/icon_window_collapse.gif";
+    document.getElementById(image_id).src = WPSC_URL+"/images/icon_window_collapse.gif";
 	} else {
 		document.getElementById(id).style.display = 'none';
-		document.getElementById(image_id).src = base_url+"/wp-content/plugins/wp-shopping-cart/images/icon_window_expand.gif";
+		document.getElementById(image_id).src = WPSC_URL+"/images/icon_window_expand.gif";
 	}
   return false;
 }
@@ -367,8 +366,8 @@ function change_pics(command){
 
 	if (command == 1){
 		document.getElementById('out_view_type').innerHTML = "<input type='hidden' id='view_type' name='view_type' value='default'>";
-		document.getElementById('out_default_pic').innerHTML ="<img id='default_pic' src='wp-content/plugins/wp-shopping-cart/images/default-on.gif'>";
-		document.getElementById('out_grid_pic').innerHTML ="<img id='grid_pic' style='cursor:pointer;' onclick='change_pics(0)' src='wp-content/plugins/wp-shopping-cart/images/grid-off.gif'>";
+		document.getElementById('out_default_pic').innerHTML ="<img id='default_pic' src='"+WPSC_URL+"/images/default-on.gif'>";
+		document.getElementById('out_grid_pic').innerHTML ="<img id='grid_pic' style='cursor:pointer;' onclick='change_pics(0)' src='"+WPSC_URL+"/images/grid-off.gif'>";
 		if (location1.search(/view_type/)!=-1) {
 			$new_location = location1.replace("grid","default");
 		} else {
@@ -381,8 +380,8 @@ function change_pics(command){
 		window.location = $new_location;
 	} else {
 		document.getElementById('out_view_type').innerHTML = "<input type='hidden' id='view_type' name='view_type' value='grid'>";
-		document.getElementById('out_default_pic').innerHTML ="<img id='default_pic'  style='cursor:pointer;' onclick='change_pics(1)' src='wp-content/plugins/wp-shopping-cart/images/default-off.gif'>";
-		document.getElementById('out_grid_pic').innerHTML ="<img id='grid_pic' src='wp-content/plugins/wp-shopping-cart/images/grid-on.gif'>";
+		document.getElementById('out_default_pic').innerHTML ="<img id='default_pic'  style='cursor:pointer;' onclick='change_pics(1)' src='"+WPSC_URL+"/images/default-off.gif'>";
+		document.getElementById('out_grid_pic').innerHTML ="<img id='grid_pic' src='"+WPSC_URL+"/images/grid-on.gif'>";
 		if (location1.search(/view_type/)!=-1) {
 			$new_location = location1.replace("default","grid");
 		} else {

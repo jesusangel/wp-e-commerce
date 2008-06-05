@@ -43,7 +43,7 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "       <td colspan='4' class='colspan'>\n\r";
   if($subcategory_level > 0) {
     echo "<div class='subcategory' style='padding-left: ".(1*$subcategory_level)."em;'>";
-    echo "<img class='category_indenter' src='../wp-content/plugins/wp-shopping-cart/images/indenter.gif' alt='' title='' />";
+    echo "<img class='category_indenter' src='".WPSC_URL."/images/indenter.gif' alt='' title='' />";
 	}
   echo "        <table class='itemlist'>\n\r";
   echo "          <tr>\n\r";
@@ -51,7 +51,7 @@ function display_category_row($category,$subcategory_level = 0) {
   if($category['image'] !=null) {
 		echo "<img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='35' height='35' />";
 	} else {
-		echo "<img style='border-style:solid; border-color: red' src='../wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
+		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
 	}
   echo "            </td>\n\r";
   
@@ -302,9 +302,9 @@ function categorisation_conf() {
 <noscript>
 </noscript>
 <div class="wrap">
-  <h2><?php echo TXT_WPSC_DISPLAYCATEGORIES;?></h2>
-  <a href='' onclick='return showadd_categorisation_form()' class='add_item_link'><span><?php echo TXT_WPSC_ADDCATEGORY;?></span></a>
-  <span id='loadingindicator_span'><img id='loadingimage' src='../wp-content/plugins/wp-shopping-cart/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
+  <h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
+  <a href='' onclick='return showadd_categorisation_form()' class='add_item_link'><span><?php echo TXT_WPSC_ADD_CATEGORISATION;?></span></a>
+  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL;?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
   
   
 <div id='add_categorisation'>
@@ -364,7 +364,7 @@ function categorisation_conf() {
  
 $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 echo "<ul class='categorisation_links'>\n\r";
-foreach($categorisation_groups as $categorisation_group){
+foreach((array)$categorisation_groups as $categorisation_group){
   $selected = '';
   if($current_categorisation['id'] == $categorisation_group['id']) {
     $selected = "class='selected'";
@@ -453,16 +453,16 @@ echo "        </div>\n\r";
     </tr>
 <?php
 if(function_exists("getimagesize")) {
-?>
-    <tr>
-      <td>
-      </td>
-      <td>
-        <?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br /><span class='small'><?php echo $nzshpcrt_imagesize_info; ?></span>
-      </td>
-    </tr>
-<?php
-  }
+		?>
+		<tr>
+			<td>
+			</td>
+			<td>
+				<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br /><span class='small'><?php echo $nzshpcrt_imagesize_info; ?></span>
+			</td>
+		</tr>
+		<?php
+}
 ?>
     <tr>
       <td>

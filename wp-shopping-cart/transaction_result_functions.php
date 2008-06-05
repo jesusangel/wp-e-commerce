@@ -20,7 +20,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$selectsql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1";
 		$purchase_log = $wpdb->get_row($selectsql,ARRAY_A) ;
 		
-    $order_url = $siteurl."/wp-admin/admin.php?page=wp-shopping-cart/display-log.php&amp;purchcaseid=".$purchase_log['id'];
+    $order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
 
     if(($_GET['ipn_request'] != 'true') and (get_option('paypal_ipn') == 1)) {
       if($purchase_log == null) {

@@ -1,5 +1,5 @@
 <?php
-include_once(ABSPATH.'wp-content/plugins/wp-shopping-cart/tagging_functions.php');
+include_once(WPSC_FILE_PATH.'/tagging_functions.php');
 
 function widget_product_tag($args)
   {

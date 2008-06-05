@@ -212,7 +212,7 @@ function wpsc_list_product_themes($theme_name = null) {
     $selected_theme = 'default';
 	}
     
-  $theme_path = ABSPATH . 'wp-content/plugins/wp-shopping-cart/themes/';
+  $theme_path = WPSC_FILE_PATH.'/themes/';
   $theme_list = nzshpcrt_listdir($theme_path);
   foreach($theme_list as $theme_file) {
     if(is_dir($theme_path.$theme_file) && is_file($theme_path.$theme_file."/".$theme_file.".css")) {

@@ -73,7 +73,7 @@ class extras {
 				} else {
 					$price=nzshpcrt_currency_display($extras_assoc_data[$x]['price'],0);
 				}
-				$output.="<input style='float:left;' type='checkbox' $checked name='extras[]' value='".$extras_value_datum['id']."' class='extras_".$product_id."' id='extras_".$product_id."_".$extras_value_datum['id']."' onclick='manage_extras(".$product_id.",".$extras_value_datum['id'].",".$special.")' id='extra_value_id_".$extras_value_datum['id']."'><label style='float:left;' for='extras_".$product_id."_".$extras_value_datum['id']."'>". $extras_value_datum['name']."&ensp;".$price."</label><img style='display:none;float:left;' id='extras_indicator".$product_id.$extras_value_datum['id']."' src=' ".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/indicator.gif'><br>";
+				$output.="<input style='float:left;' type='checkbox' $checked name='extras[]' value='".$extras_value_datum['id']."' class='extras_".$product_id."' id='extras_".$product_id."_".$extras_value_datum['id']."' onclick='manage_extras(".$product_id.",".$extras_value_datum['id'].",".$special.")' id='extra_value_id_".$extras_value_datum['id']."'><label style='float:left;' for='extras_".$product_id."_".$extras_value_datum['id']."'>". $extras_value_datum['name']."&ensp;".$price."</label><img style='display:none;float:left;' id='extras_indicator".$product_id.$extras_value_datum['id']."' src=' ".WPSC_DIR_NAME."/images/indicator.gif'><br>";
 				$x++;
 			}
 		}

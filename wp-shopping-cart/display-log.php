@@ -107,7 +107,7 @@ if($_GET['filter'] !== 'true')
         if(($date_pair['end'] >= $earliest_timestamp) && ($date_pair['start'] <= $current_timestamp)) {   
           $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
 					if ($paidlog) {
-						$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed`='2' ORDER BY `date` DESC";
+						$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed` >= '2' ORDER BY `date` DESC";
 					} else if($_GET['filteremail']) {
 						$sql = "SELECT DISTINCT `{$wpdb->prefix}purchase_logs` . * FROM `{$wpdb->prefix}submited_form_data` LEFT JOIN `{$wpdb->prefix}purchase_logs` ON `{$wpdb->prefix}submited_form_data`.`log_id` = `{$wpdb->prefix}purchase_logs`.`id` WHERE `{$wpdb->prefix}submited_form_data`.`value` IN ( '".$wpdb->escape($_GET['filteremail'])."' ) AND `{$wpdb->prefix}purchase_logs`.`date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `{$wpdb->prefix}purchase_logs`.`date` DESC;";
 					}
@@ -195,7 +195,7 @@ if($_GET['filter'] !== 'true')
                 $status_state = "collapse";
                 $status_style = "style='display: block;'";
                 }
-              echo "<img class='log_expander_icon' id='log_expander_icon_".$purchase['id']."' src='../wp-content/plugins/wp-shopping-cart/images/icon_window_$status_state.gif' alt='' title='' />";
+              echo "<img class='log_expander_icon' id='log_expander_icon_".$purchase['id']."' src='".WPSC_URL."/images/icon_window_$status_state.gif' alt='' title='' />";
               if($stage_data['colour'] != '')
                 {
                 $colour = "style='color: #".$stage_data['colour'].";'";
@@ -276,7 +276,7 @@ if($_GET['filter'] !== 'true')
                 echo " </td>\n\r";
                 }
               echo " <td>";
-              echo "<a href='admin.php?page=wp-shopping-cart/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
+              echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
               echo " </td>\n\r";
 	
 							//echo " <td>";
@@ -293,7 +293,7 @@ if($_GET['filter'] !== 'true')
               echo "  <div id='status_box_".$purchase['id']."' class='order_status' $status_style>\n\r";
               echo "  <div>\n\r";
               echo "  <strong class='form_group'>".TXT_WPSC_ORDER_STATUS."</strong>\n\r";
-              echo "  <form onsubmit='log_submitform(this);return false;' id='form_group_".$purchase['id']."' method='GET' action='admin.php?page=wp-shopping-cart/display-log.php'>\n\r";
+              echo "  <form onsubmit='log_submitform(this);return false;' id='form_group_".$purchase['id']."' method='GET' action='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>\n\r";
               echo "  <input type='hidden' name='page' value='".$_GET['page']."' />\n\r";
               if(isset($_GET['filter']))
                 {
@@ -321,7 +321,7 @@ if($_GET['filter'] !== 'true')
                 {
                 echo "  <span style='float:right; margin-right: 15px; '>".TXT_WPSC_TXN_ID.": ".$purchase['transactid']."</span>";
                 }
-              echo "<a href='admin.php?page=wp-shopping-cart/display-log.php&amp;deleteid=".$purchase['id']."'>".TXT_WPSC_REMOVE_LOG."</a>";
+              echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;deleteid=".$purchase['id']."'>".TXT_WPSC_REMOVE_LOG."</a>";
               echo "  </div>\n\r";
               echo "  </div>\n\r";
               echo " </td>\n\r";
@@ -331,7 +331,7 @@ if($_GET['filter'] !== 'true')
             echo "<tr>";
             echo " <td colspan='$col_count'>";
             echo "<strong>Total:</strong> ".nzshpcrt_currency_display($subtotal ,1);
-            echo "<br /><a class='admin_download' href='index.php?purchase_log_csv=true&rss_key=key&start_timestamp=".$date_pair['start']."&end_timestamp=".$date_pair['end']."' ><img align='absmiddle' src='../wp-content/plugins/wp-shopping-cart/images/download.gif' alt='' title='' /><span>".TXT_WPSC_DOWNLOAD_CSV."</span></a>";
+            echo "<br /><a class='admin_download' href='index.php?purchase_log_csv=true&rss_key=key&start_timestamp=".$date_pair['start']."&end_timestamp=".$date_pair['end']."' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_DOWNLOAD_CSV."</span></a>";
             echo " </td>";      
             echo "</tr>";
             }
@@ -597,8 +597,8 @@ if($_GET['filter'] !== 'true')
 		} else {
 			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
 		}
-		echo "<br /><a href='admin.php?page=wp-shopping-cart/display-log.php&amp;deleteid=".$_GET['purchaseid']."'>".TXT_WPSC_REMOVE_LOG."</a>";
-		echo "<br /><a href='admin.php?page=wp-shopping-cart/display-log.php'>".TXT_WPSC_GOBACK."</a>";
+		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;deleteid=".$_GET['purchaseid']."'>".TXT_WPSC_REMOVE_LOG."</a>";
+		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>".TXT_WPSC_GOBACK."</a>";
 	}
       
 $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
@@ -624,7 +624,7 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
 					}
 					?>
 					</ul>
-					<a href='admin.php?page=wp-shopping-cart/display-log.php&#038;hide_news=true' id='close_news_box'>X</a>
+					<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a>
 				</div>
 				<?php
 			}
@@ -634,10 +634,10 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
 		<div class='order_summary_subsection'>
 			<strong><?php echo TXT_WPSC_MENU; ?></strong>
 			<p>
-			<a href="?page=wp-shopping-cart/options.php">Shop Settings</a><br>
-			<a href="?page=wp-shopping-cart/gatewayoptions.php">Gateway Settings</a><br>
-			<a href="?page=wp-shopping-cart/form_fields.php">Checkout Settings</a><br>
-			<a href="?page=wp-shopping-cart/instructions.php">Help</a>
+			<a href="?page=<?php echo WPSC_DIR_NAME;?>/options.php">Shop Settings</a><br>
+			<a href="?page=<?php echo WPSC_DIR_NAME;?>/gatewayoptions.php">Gateway Settings</a><br>
+			<a href="?page=<?php echo WPSC_DIR_NAME;?>/form_fields.php">Checkout Settings</a><br>
+			<a href="?page=<?php echo WPSC_DIR_NAME;?>/instructions.php">Help</a>
 			</p>
 		</div>
 	</div>
@@ -712,7 +712,7 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
       <div class='order_summary_subsection'>
       <strong><?php echo TXT_WPSC_RSS_FEED_HEADER; ?></strong>
       <p>
-        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='absmiddle' src='../wp-content/plugins/wp-shopping-cart/images/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php echo TXT_WPSC_RSS_FEED_LINK; ?></span></a> <?php echo TXT_WPSC_RSS_FEED_TEXT; ?>      </p>
+        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='absmiddle' src='<?php echo WPSC_URL; ?>/images/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php echo TXT_WPSC_RSS_FEED_LINK; ?></span></a> <?php echo TXT_WPSC_RSS_FEED_TEXT; ?>      </p>
       </div>
          <div class='order_summary_subsection'>
       <strong><?php echo TXT_WPSC_PLUGIN_NEWS_HEADER; ?></strong>
@@ -728,7 +728,7 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
       ?>
       <div class='gold-cart_pesterer'> 
         <div>
-        <img src='../wp-content/plugins/wp-shopping-cart/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/blogshop/'>Upgrade to Gold</a> and unleash more functionality into your shop.
+        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/blogshop/'>Upgrade to Gold</a> and unleash more functionality into your shop.
         </div>
       </div>
       <?php

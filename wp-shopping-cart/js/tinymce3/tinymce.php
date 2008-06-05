@@ -33,8 +33,7 @@ function register_wpsc_button($buttons) {
 // Load the TinyMCE plugin : editor_plugin.js (wp2.5)
 function add_wpsc_tinymce_plugin($plugin_array) {
 
-	$plugin_array['WPSC'] = get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/js/tinymce3/editor_plugin.js';
-	
+	$plugin_array['WPSC'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';	
 	return $plugin_array;
 }
 

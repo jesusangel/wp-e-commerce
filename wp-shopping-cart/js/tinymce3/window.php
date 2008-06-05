@@ -24,7 +24,7 @@ global $wpdb;
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/tiny_mce_popup.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/utils/mctabs.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/utils/form_utils.js"></script>
-	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-content/plugins/wp-shopping-cart/js/tinymce3/tinymce.js"></script>
+	<script language="javascript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/tinymce3/tinymce.js"></script>
 	<base target="_self" />
 </head>
 		<body id="link" onload="tinyMCEPopup.executeOnLoad('init();');document.body.style.display='';document.getElementById('category').focus();" style="display: none">

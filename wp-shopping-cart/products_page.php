@@ -108,7 +108,7 @@ function nzshpcrt_display_categories_groups() {
 					}
 				}
 				if(get_option('fancy_notifications') != 1) {
-					echo "<span id='loadingindicator'><img id='loadingimage' src='$siteurl/wp-content/plugins/wp-shopping-cart/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span><br />";
+					echo "<span id='loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span><br />";
 				} else {
 					echo "<br />";
 				}

@@ -669,7 +669,7 @@ $output .="</table></div></div></td></tr>";
     $output .= "            </td>\n\r";
     $output .= "            <td>\n\r";    
     
-    $output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product['id']."' style='float: left;' ><img align='absmiddle' src='../wp-content/plugins/wp-shopping-cart/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
+    $output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product['id']."' style='float: left;' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
 
     $file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
     if(($file_data != null) && (function_exists('listen_button')))
@@ -732,7 +732,7 @@ $output .="</table></div></div></td></tr>";
   $output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input  class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />";
-  $output .= "<a class='button delete_button' ' href='admin.php?page=wp-shopping-cart/display-items.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
+  $output .= "<a class='button delete_button' ' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
   $output .= "            <td>\n\r";
   $output .= "          </tr>\n\r";
   
@@ -829,7 +829,7 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input class='button' style='float:left;' type='submit' name='submit' value='".TXT_WPSC_EDIT."' />";
-  $output .= "<a class='button delete_button' href='admin.php?page=wp-shopping-cart/display-category.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
+  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display-category.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r"; 
@@ -870,7 +870,7 @@ function nzshpcrt_getbrandsform($catid)
   $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input class='button' style='float:left;' type='submit' name='submit' value='".TXT_WPSC_EDIT."' />";
-  $output .= "<a class='button delete_button' href='admin.php?page=wp-shopping-cart/display-brands.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
+  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display-brands.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r";
@@ -910,8 +910,7 @@ function nzshpcrt_getvariationform($variation_id)
     $output .= "<input type='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES)."' />";
     if($variation_value_count > 1)
       {
-      $output .= " <a  class='image_link' onclick='remove_variation_value(\"variation_value_".$num."\",".$variation_value['id'].")' href='#'><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
-      //admin.php?page=wp-shopping-cart/display_variations.php&amp;delete_value=true&amp;variation_id=".$variation_id."&amp;value_id=".$variation_value['id']."
+      $output .= " <a  class='image_link' onclick='remove_variation_value(\"variation_value_".$num."\",".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
       }
     $output .= "<br />";
     $output .= "</span>";
@@ -930,7 +929,7 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= "<input type='hidden' name='prodid' value='".$variation['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT."' />";
-  $output .= "<a class='button delete_button' href='admin.php?page=wp-shopping-cart/display_variations.php&amp;deleteid=".$variation['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
+  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;deleteid=".$variation['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r";
@@ -942,7 +941,7 @@ function coupon_edit_form($coupon) {
   $end_timestamp = strtotime($coupon['expiry']);
   $id = $coupon['id'];
   $output = '';
-  $output .= "<form name='edit_coupon' method='post' action='".get_option('siteurl')."/wp-admin/admin.php?page=wp-shopping-cart/display-coupons.php'>\n\r";
+  $output .= "<form name='edit_coupon' method='post' action='".get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
     $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
   $output .= "<table class='add-coupon'>\n\r";
   $output .= " <tr>\n\r";
@@ -1035,16 +1034,14 @@ function coupon_edit_form($coupon) {
   }
   
   function setting_button(){
-// 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/settings_button.jpg' onclick='display_settings_button()'>";
 	$output.="<div><input type='button' value='Settings &raquo;' class='button' onclick='display_settings_button()'>";
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
-	$output.="<li><a href='?page=wp-shopping-cart/options.php'>Shop Settings</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/gatewayoptions.php'>Money and Payment</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/form_fields.php'>Chechkout page Settings</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/instructions.php'>Help/Upgrade</a></li>";
+	$output.="<li><a href='?page=".WPSC_DIR_NAME."/options.php'>Shop Settings</a></li>";
+	$output.="<li><a href='?page=".WPSC_DIR_NAME."/gatewayoptions.php'>Money and Payment</a></li>";
+	$output.="<li><a href='?page=".WPSC_DIR_NAME."/form_fields.php'>Chechkout page Settings</a></li>";
+	$output.="<li><a href='?page=".WPSC_DIR_NAME."/instructions.php'>Help/Upgrade</a></li>";
 	$output.="</ul>";
-//	$output.="<div>Checkout Settings</div>";
 	$output.="</span>&nbsp;&nbsp;</div>";
 	
 	return $output;

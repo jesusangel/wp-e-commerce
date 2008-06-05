@@ -1,41 +1,34 @@
 <?php
-class nzshpcrt_variations
-  {
-  function nzshpcrt_variations()
-    {
+class nzshpcrt_variations {
+  function nzshpcrt_variations() {
     global $wpdb;
-    }
+	}
     
-  function display_variation_values($prefix,$variation_id)
-    {
+  function display_variation_values($prefix,$variation_id) {
     global $wpdb;
-    if(is_numeric($variation_id))
-      {
+    if(is_numeric($variation_id)) {
       $variation_values = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_values` WHERE `variation_id` = '{$variation_id}' ORDER BY `id` ASC",ARRAY_A);
-      if($variation_values != null)
-        {
+      if($variation_values != null) {
         $output .= "<input type='hidden' name='variation_id[]' class='variation_ids' value='{$variation_id}'>";
         $output .= "<table>";
         $output .= "<tr><th>".TXT_WPSC_VISIBLE."</th><th>".TXT_WPSC_NAME."</th></tr>";
-        foreach($variation_values as $variation_value)
-          {
+        foreach($variation_values as $variation_value) {
           $output .= "<tr>";
           $output .= "<td style='text-align: center;'><input type='checkbox' name='variation_values[{$variation_id}][{$variation_value['id']}][active]' value='1' checked='true' id='variation_active_{$variation_id}_{$variation_value['id']}' />";
           $output .= "<input type='hidden' name='variation_values[{$variation_id}][{$variation_value['id']}][blank]' value='null' />  </td>";
           $output .= "<td>".stripslashes($variation_value['name'])."</td>";
           $output .= "</tr>";
-          }
-
+				}
         $output .= "<tr>";
         $output .= "<td colspan='4'>";
         $output .= "<a href='#' onclick='return remove_variation_value_list(\\\"$prefix\\\",\\\"$variation_id\\\");'>".TXT_WPSC_REMOVE_SET."</a>";
         $output .= "</td>";
         $output .= "</tr>";
         $output .= "</table>";
-        }
-      }
+			}
+		}
     return $output;
-    }
+	}
     
   
   function falsepost_variation_values($variation_id) {
@@ -53,25 +46,18 @@ class nzshpcrt_variations
 	}
     
     
-  function add_to_existing_product($product_id,$variation_list)
-    {
+  function add_to_existing_product($product_id,$variation_list) {
      global $wpdb;
-    if(is_numeric($product_id))
-      { 
-      foreach($variation_list as $variation_id => $variation_values)
-        {
-        if(is_numeric($variation_id))
-          { 
+    if(is_numeric($product_id)) {
+      foreach($variation_list as $variation_id => $variation_values) {
+        if(is_numeric($variation_id)) {
           $num = 0;
           $variation_assoc_sql = "INSERT INTO `".$wpdb->prefix."variation_associations` ( `type` , `name` , `associated_id` , `variation_id` ) VALUES ( 'product', '', '$product_id', '$variation_id');";
 
           $product_assoc_sql = "INSERT INTO `".$wpdb->prefix."variation_values_associations` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES";
-          foreach($variation_values as $variation_value_id => $variation_value_properties)
-            {
-            if(is_numeric($variation_value_id))
-              {
-              switch($num)
-                {
+          foreach($variation_values as $variation_value_id => $variation_value_properties) {
+            if(is_numeric($variation_value_id)) {
+              switch($num) {
                 case 0:
                 $comma = '';
                 break;
@@ -79,47 +65,39 @@ class nzshpcrt_variations
                 default:
                 $comma = ', ';
                 break;
-                }
+							}
                 
               if(is_numeric($variation_value_properties['price']) && ($variation_value_properties['price'] > 0))
                 {
                 $price = $variation_value_properties['price'];
-                }
-                else
-                  {
-                  $price = '';
-                  }
+							} else {
+								$price = '';
+							}
                 
-              if($variation_value_properties['active'] == 1)
-                {
+              if($variation_value_properties['active'] == 1) {
                 $active = 1;
-                }
-                else
-                  {
-                  $active = 0;
-                  }
+							} else {
+								$active = 0;
+							}
               
-              if(is_numeric($variation_value_properties['stock']) && ($variation_value_properties['stock'] > 0))
-                {
+              if(is_numeric($variation_value_properties['stock']) && ($variation_value_properties['stock'] > 0)) {
                 $quantity = $variation_value_properties['stock'];
-                }
-                else
-                  {
-                  $quantity = 0;
-                  }
+							} else {
+								$quantity = 0;
+							}
               
               $product_assoc_sql .= "$comma ( '$product_id', '$variation_value_id', '$quantity', '".$price."', '$active', '$variation_id')";
               $num++;
-              }
-            }
+						}
+					}
           $product_assoc_sql .= ";";
           $wpdb->query($product_assoc_sql);
           $wpdb->query($variation_assoc_sql);
-          }
-        }
-      }
+				}
+			}
+		}
     return $output;
-    }
+	}
   
   function variations_grid_view($product_id) {
     global $wpdb;
@@ -300,7 +278,7 @@ class nzshpcrt_variations
       
       $output .= "<tr>";
       $output .= "<td colspan='4'>";
-      $output .= "<a href='admin.php?page=wp-shopping-cart/display-items.php&amp;submit_action=remove_set&amp;product_id=".$product_id."&amp;variation_assoc_id=".$associated_variation['id']."'>".TXT_WPSC_REMOVE_SET."</a>";
+      $output .= "<a href='admin.php?page=".WPSC_DIR_NAME."/display-items.php&amp;submit_action=remove_set&amp;product_id=".$product_id."&amp;variation_assoc_id=".$associated_variation['id']."'>".TXT_WPSC_REMOVE_SET."</a>";
       $output .= "</td>";
       $output .= "</tr>";
       $output .= "</table>";

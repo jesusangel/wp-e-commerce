@@ -23,7 +23,7 @@ function parent_variation_list()
   global $wpdb,$variation_data;
   $options = "";
   $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `variation_parent`='0' AND `active` = '1' ORDER BY `id` ASC",ARRAY_A);
-  $url = "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?page=wp-shopping-cart/display-items.php";
+  $url = "http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?page=".WPSC_DIR_NAME."/display-items.php";
   $options .= "<option value='$url'>".TXT_WPSC_SELECT_PARENT."</option>\r\n";
   if($values != null)
     {
@@ -57,7 +57,7 @@ function display_variation_row($variation)
   }
 
 
-  $imagedir = ABSPATH."/wp-content/plugins/wp-shopping-cart/variation_images/";
+  $imagedir = WPSC_FILE_PATH."/variation_images/";
   
  /*  delete variation_value */  
   if($_GET['delete_value'] == 'true')
@@ -209,8 +209,8 @@ function conf()
   	  <?php echo TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION;?>
 
 </p>
-  <a href='' onclick='return showaddform()' class='add_item_link'><img src='../wp-content/plugins/wp-shopping-cart/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDVARIATION;?></span></a>
-  <span id='loadingindicator_span'><img id='loadingimage' src='../wp-content/plugins/wp-shopping-cart/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
+  <a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDVARIATION;?></span></a>
+  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
   <?php
   $num = 0;
 echo "  <table id='productpage'>\n\r";
@@ -278,10 +278,10 @@ echo "        </div>";
       <td>
         <div id='add_variation_values'><span id='variation_value_1'>
         <input type='text' name='variation_values[]' value='' />
-        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_1")'><img src='../wp-content/plugins/wp-shopping-cart/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
+        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_1")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
         </span><span id='variation_value_2'>
         <input type='text' name='variation_values[]' value='' />
-        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_2")'><img src='../wp-content/plugins/wp-shopping-cart/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
+        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_2")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
         </span></div>
        <a href='#' onclick='return add_variation_value("add")'><?php echo TXT_WPSC_ADD;?></a>
       </td>

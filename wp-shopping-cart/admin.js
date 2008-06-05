@@ -72,14 +72,14 @@ var getresults=function(results)
 function filleditform(prodid)
 	{
 	ajax.post("index.php",getresults,"ajax=true&admin=true&prodid="+prodid);
-	jQuery('#loadingimage').attr('src', '../wp-content/plugins/wp-shopping-cart/images/indicator.gif');
+	jQuery('#loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
 	jQuery('#loadingindicator_span').css('visibility','visible');
 	}
    
 function fillvariationform(variation_id)
   {
   ajax.post("index.php",getresults,"ajax=true&admin=true&variation_id="+variation_id);
-	jQuery('#loadingimage').attr('src', '../wp-content/plugins/wp-shopping-cart/images/indicator.gif');
+	jQuery('#loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
 	jQuery('#loadingindicator_span').css('visibility','visible');
   }
    
@@ -191,7 +191,7 @@ function add_variation_value(value_type)
       {
       new_element_contents += "<input type='text' name='variation_values[]' value='' />";
       }
-  new_element_contents += " <a class='image_link' href='#' onclick='remove_variation_value_field(\""+new_element_id+"\")'><img src='../wp-content/plugins/wp-shopping-cart/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a><br />";
+  new_element_contents += " <a class='image_link' href='#' onclick='remove_variation_value_field(\""+new_element_id+"\")'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a><br />";
   //new_element_contents += "</span>";
   
   new_element = document.createElement('span');
@@ -335,7 +335,7 @@ function add_form_field()
   new_element_contents += "<td class='mandatorycol' style='text-align: center;'><input type='checkbox' name='new_form_mandatory["+new_element_number+"]' value='1' /></td>\n\r";
   new_element_contents += "<td class='logdisplaycol' style='text-align: center;'><input type='checkbox' name='new_form_display_log["+new_element_number+"]' value='1' /></td>\n\r";
   new_element_contents += "<td class='ordercol'><input type='text' size='3' name='new_form_order["+new_element_number+"]' value='' /></td>\n\r";
-  new_element_contents += "<td  style='text-align: center; width: 12px;'><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='../wp-content/plugins/wp-shopping-cart/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
+  new_element_contents += "<td  style='text-align: center; width: 12px;'><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
   new_element_contents += "<td></td>\n\r";
   new_element_contents += "</tr></table>";
   
@@ -379,12 +379,12 @@ function show_status_box(id,image_id)
   if(state != 'block')
     {
     document.getElementById(id).style.display = 'block';
-    document.getElementById(image_id).src = '../wp-content/plugins/wp-shopping-cart/images/icon_window_collapse.gif';
+    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_collapse.gif';
     }
     else
       {
       document.getElementById(id).style.display = 'none';
-      document.getElementById(image_id).src = '../wp-content/plugins/wp-shopping-cart/images/icon_window_expand.gif';
+      document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_expand.gif';
       }
   return false;
   }
@@ -579,7 +579,7 @@ function serialize(s) {
 	serial = jQuery.SortSerialize(s);
 	category_id = jQuery("input#item_list_category_id").val();
 	ajax.post("index.php", serialize_results, "ajax=true&changeorder=true&category_id="+category_id+"&"+serial.hash);
-	jQuery("#loadingimage").attr('src', '../wp-content/plugins/wp-shopping-cart/images/indicator.gif');
+	jQuery("#loadingimage").attr('src', WPSC_URL+'/images/indicator.gif');
 	jQuery('#loadingindicator_span').css('visibility','visible');
 };
 

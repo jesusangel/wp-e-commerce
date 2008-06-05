@@ -14,26 +14,31 @@ function wpsc_auto_update() {
     include_once('updates/update-to-3.6.4.php');
 	}
 
-  //exit('foo');
+  $wpsc_files_directory = ABSPATH.get_option('upload_path').'/wpsc/';
+
+  if(!is_dir($wpsc_files_directory)) {
+	  @ mkdir($wpsc_files_directory, 0775);
+  }
+  
   if(!is_dir(WPSC_FILE_DIR)) {
-		@ mkdir(WPSC_FILE_DIR, 0775, true);
+	  @ mkdir(WPSC_FILE_DIR, 0775);
 		wpsc_product_files_htaccess();  
   }
   
 	if(!is_dir(WPSC_PREVIEW_DIR)) {
-		@ mkdir(WPSC_PREVIEW_DIR, 0775, true);
+		@ mkdir(WPSC_PREVIEW_DIR, 0775);
 	}
 		
 	if(!is_dir(WPSC_IMAGE_DIR)) {
-		@ mkdir(WPSC_IMAGE_DIR, 0775, true);
+		@ mkdir(WPSC_IMAGE_DIR, 0775);
 	}
 		
 	if(!is_dir(WPSC_THUMBNAIL_DIR)) {
-		@ mkdir(WPSC_THUMBNAIL_DIR, 0775, true);
+		@ mkdir(WPSC_THUMBNAIL_DIR, 0775);
 	}
 		
 	if(!is_dir(WPSC_CATEGORY_DIR)) {
-		@ mkdir(WPSC_CATEGORY_DIR, 0775, true);
+		@ mkdir(WPSC_CATEGORY_DIR, 0775);
 	}
 	
 	
@@ -47,8 +52,7 @@ function wpsc_auto_update() {
 		@ chmod( WPSC_CATEGORY_DIR, 0775 );	
 	}
 
-  wpsc_product_files_htaccess();
-  
+  wpsc_product_files_htaccess();  
   wpsc_check_and_copy_files();
   
   if((get_option('wpsc_version') < WPSC_VERSION) || (get_option('wpsc_version') == WPSC_VERSION) && (get_option('wpsc_minor_version') < WPSC_MINOR_VERSION)) {
@@ -1078,9 +1082,9 @@ function nzshpcrt_install()
   /*
    * Moves images to thumbnails directory
    */
-  $image_dir = ABSPATH."/wp-content/plugins/wp-shopping-cart/images/";
-  $product_images = ABSPATH."/wp-content/plugins/wp-shopping-cart/product_images/";
-  $product_thumbnails = ABSPATH."/wp-content/plugins/wp-shopping-cart/product_images/thumbnails/";
+  $image_dir = WPSC_FILE_PATH."/images/";
+  $product_images = WPSC_FILE_PATH."/product_images/";
+  $product_thumbnails = WPSC_FILE_PATH."/product_images/thumbnails/";
   if(!is_dir($product_thumbnails)) { $wp_rewrite->flush_rules();
     mkdir($product_thumbnails, 0775);
 	}
@@ -1235,7 +1239,7 @@ function wpsc_uninstall_plugin() {
 			$wpdb->query("DROP TABLE `{$wpsc_table_name}`");
 		}
 		$active_plugins = get_option('active_plugins');
-		unset($active_plugins[array_search('wp-shopping-cart/wp-shopping-cart.php', $active_plugins)]);
+		unset($active_plugins[array_search(WPSC_DIR_NAME.'/wp-shopping-cart.php', $active_plugins)]);
 		update_option('active_plugins', $active_plugins);
 		header('Location: '.get_option('siteurl').'/wp-admin/plugins.php');
 		exit();
@@ -1243,7 +1247,7 @@ function wpsc_uninstall_plugin() {
 }
 
 function wpsc_uninstall_plugin_link($plugin) {
-	if(($plugin == 'wp-shopping-cart/wp-shopping-cart.php') && current_user_can('edit_plugins')) {
+	if(($plugin == WPSC_DIR_NAME.'/wp-shopping-cart.php') && current_user_can('edit_plugins')) {
 		echo "<td class='plugin-update' colspan='5' style='background: #ff7777;'>";
 		echo "Are you sure, uninstalling will permanently delete all your wp-e-commerce settings: <a href='?wpsc_uninstall=verified'>Yes</a> or <a href='plugins.php'>No</a>";
 		echo "</td>";
@@ -1274,7 +1278,7 @@ function wpsc_product_files_htaccess() {
 
 
 function wpsc_check_and_copy_files() {
-  $upload_path = 'wp-content/plugins/wp-shopping-cart';
+  $upload_path = 'wp-content/plugins/'.WPSC_DIR_NAME;
   
 	$wpsc_dirs['files']['old'] = ABSPATH."{$upload_path}/files/";
 	$wpsc_dirs['files']['new'] = WPSC_FILE_DIR;

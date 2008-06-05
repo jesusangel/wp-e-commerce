@@ -1,6 +1,6 @@
 <?php
 /*
-Modified to integrate with wp-shopping-cart
+Modified to integrate with wp shopping cart
 */
 
 @define('wpsc_akst_ADDTOCONTENT', true);
@@ -102,7 +102,7 @@ $social_sites = array(
 // ============================================================
 
 @define('AK_WPROOT', '../../../');
-@define('wpsc_akst_FILEPATH', '/wp-content/plugins/wp-shopping-cart/share-this.php');
+@define('wpsc_akst_FILEPATH', WPSC_URL.'/share-this.php');
 
 // if (function_exists('load_plugin_textdomain')) {
 //   load_plugin_textdomain('alexking.org');
@@ -392,7 +392,7 @@ add_action('init', 'wpsc_akst_init');
 
 function wpsc_akst_head() {
   $wp = get_bloginfo('wpurl');
-  $url = $wp.wpsc_akst_FILEPATH;
+  $url = wpsc_akst_FILEPATH;
   ak_prototype();
   print('
   <script type="text/javascript" src="'.$url.'?wpsc_akst_action=js"></script>
@@ -425,7 +425,7 @@ function wpsc_akst_share_link($action = 'print') {
   ob_start();
  /*<?php bloginfo('siteurl'); ?>/?p=<?php print($post->ID); ?>&amp;wpsc_akst_action=share-this */
 ?>
-<a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'alexking.org'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src='<?php echo get_option('siteurl'); ?>/wp-content/plugins/wp-shopping-cart/images/social_networking/share-this-product.gif' title='Share This' alt='Share This' /></a>
+<a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'alexking.org'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src='<?php echo WPSC_URL; ?>/images/social_networking/share-this-product.gif' title='Share This' alt='Share This' /></a>
 <?php
   $link = ob_get_contents();
   ob_end_clean();
@@ -686,7 +686,7 @@ function wpsc_akst_page() {
 <head>
   <title><?php _e('Share This : ', 'alexking.org'); the_title(); ?></title>
   <meta name="robots" content="noindex, noarchive" />
-  <link rel="stylesheet" type="text/css" href="<?php bloginfo('wpurl'); print(wpsc_akst_FILEPATH); ?>?wpsc_akst_action=css" />
+  <link rel="stylesheet" type="text/css" href="<?php print(wpsc_akst_FILEPATH); ?>?wpsc_akst_action=css" />
   <style type="text/css">
   
   #wpsc_akst_social ul li {

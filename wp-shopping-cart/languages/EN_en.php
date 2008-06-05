@@ -623,7 +623,7 @@ define('TXT_WPSC_DONATION', 'Donation');
 define('TXT_WPSC_DONATION_LC', 'donation');
 define('TXT_WPSC_DONATION_SHIPPING', 'No shipping for donations');
 define('TXT_WPSC_DOWNLOADABLEPRODUCT_URL', 'Product Filename');
-define('TXT_WPSC_FILETOBEPRODUCTURL', 'Note: Upload your file to the wp-shopping-cart/files directory and enter the filename here.');
+define('TXT_WPSC_FILETOBEPRODUCTURL', 'Note: Upload your file to the e-commerce files directory and enter the filename here.');
 define('TXT_WPSC_DONATIONS', 'Donations');
 define('TXT_WPSC_WRONG_FILE_PERMS', 'The following directories are not writable: :directory: You won\'t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.');
 define('TXT_WPSC_RESET_API', 'Reset API key');
@@ -743,7 +743,7 @@ define('TXT_DISPLAY_VARIATIONS', 'Display Variations');
 
 define('TXT_WPSC_NONAME', 'No Name');
 define('TXT_WPSC_WEIGHT', 'Weight');
-define('TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS', 'Transaction accepted logs');
+define('TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS', 'Display only accepted transactions');
 define('TXT_WPSC_SEARCHEMAIL', 'Search By Email');
 
 ?>

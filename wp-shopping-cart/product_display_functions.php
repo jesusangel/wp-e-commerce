@@ -285,9 +285,9 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 						}
 					} else {
 						if(get_option('product_image_width') != '') {
-							$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' id='product_image_".$product['id']."' class='product_image' />";
+							$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' id='product_image_".$product['id']."' class='product_image' />";
 						} else {
-							$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image' />";
+							$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image' />";
 						}
 					}
           
@@ -335,7 +335,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 
       if($product['additional_description'] != '') {
         $output .= "<a href='#' class='additional_description_link' onclick='return show_additional_description(\"additionaldescription".$product['id']."\",\"link_icon".$product['id']."\");'>";
-        $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='$siteurl/wp-content/plugins/wp-shopping-cart/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
+        $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
         $output .= TXT_WPSC_MOREDETAILS."</a>";
 
         $output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";
@@ -532,9 +532,9 @@ function single_product_display($product_id)
 						}
 					} else {
 						if(get_option('product_image_width') != '') {
-							$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' />";
+							$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' />";
 						} else {
-							$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' />";
+							$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' />";
 						}
 					}
 				}
@@ -777,9 +777,9 @@ function wpsc_also_bought($product_id) {
           $output .= "</a>";
 				} else {
           if(get_option('product_image_width') != '') {
-            $output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$also_bought_data['name']."' width='$image_display_height' height='$image_display_height' id='product_image_".$also_bought_data['id']."' class='product_image' />";
+            $output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$also_bought_data['name']."' width='$image_display_height' height='$image_display_height' id='product_image_".$also_bought_data['id']."' class='product_image' />";
 					} else {
-            $output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$product['name']."' id='product_image_".$also_bought_data['id']."' class='product_image' />";
+            $output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$product['name']."' id='product_image_".$also_bought_data['id']."' class='product_image' />";
 					}
 				}
 			}
@@ -800,7 +800,7 @@ function fancy_notifications() {
     $output = "";
     $output .= "<div id='fancy_notification'>\n\r";
     $output .= "  <div id='loading_animation'>\n\r";
-    $output .= '<img id="fancy_notificationimage" title="Loading" alt="Loading" src="'.get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/images/indicator.gif"/>'.TXT_WPSC_UPDATING."...\n\r";
+    $output .= '<img id="fancy_notificationimage" title="Loading" alt="Loading" src='.WPSC_URL.'/images/indicator.gif"/>'.TXT_WPSC_UPDATING."...\n\r";
     $output .= "  </div>\n\r";
     $output .= "  <div id='fancy_notification_content'>\n\r";
     $output .= "  </div>\n\r";

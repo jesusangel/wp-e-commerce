@@ -106,7 +106,7 @@ $date_list[0]['end'] = $end_timestamp;
               $status_state = "collapse";
               $status_style = "style='display: block;'";
               }
-            echo "<img class='log_expander_icon' id='log_expander_icon_".$purchase['id']."' src='$siteurl/wp-content/plugins/wp-shopping-cart/images/icon_window_$status_state.gif' alt='' title='' />";
+            echo "<img class='log_expander_icon' id='log_expander_icon_".$purchase['id']."' src='".WPSC_URL."/images/icon_window_$status_state.gif' alt='' title='' />";
             if($stage_data['colour'] != '')
               {
               $colour = "style='color: #".$stage_data['colour'].";'";
@@ -198,7 +198,6 @@ $date_list[0]['end'] = $end_timestamp;
               }
             echo "  </ul>\n\r";
             echo "  </form>\n\r";
-            //echo "<a href='admin.php?page=wp-shopping-cart/display-log.php&amp;deleteid=".$purchase['id']."'>".TXT_WPSC_REMOVE_LOG."</a>";
 
            //written by allen
 	$usps_id = get_option('usps_user_id');

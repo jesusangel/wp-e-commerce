@@ -26,7 +26,7 @@ function widget_specials($args) {
 			foreach($product as $special) {
 				$output .= "<strong>".$special['name']."</strong><br /> ";
 				if($special['image'] != null) {
-					$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/product_images/thumbnails/".$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+					$output .= "<img src='".WPSC_URL."/product_images/thumbnails/".$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
 				}
 				$output .= $special['description']."<br />";
 		

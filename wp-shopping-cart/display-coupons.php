@@ -78,8 +78,8 @@ if(isset($_POST) && is_array($_POST)) {
 ?>
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYCOUPONS;?></h2>
-  <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='../wp-content/plugins/wp-shopping-cart/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADD_COUPON;?></span></a>
-  <span id='loadingindicator_span'><img id='loadingimage' src='../wp-content/plugins/wp-shopping-cart/images/indicator.gif' alt='Loading' title='Loading' /></span><br />  
+  <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADD_COUPON;?></span></a>
+  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />  
   <p style='margin: 0px 0px 5px 0px;'>		  <?php echo TXT_WPSC_PAYPALNOTE;?>
 
   </p>
@@ -274,11 +274,11 @@ foreach((array)$coupon_data as $coupon) {
   echo "    <td>\n\r";  
   switch($coupon['active']) {
     case 1:
-    echo "<img src='../wp-content/plugins/wp-shopping-cart/images/yes_stock.gif' alt='' title='' />";
+    echo "<img src='".WPSC_URL."/images/yes_stock.gif' alt='' title='' />";
     break;
     
     case 0: default:
-    echo "<img src='../wp-content/plugins/wp-shopping-cart/images/no_stock.gif' alt='' title='' />";
+    echo "<img src='".WPSC_URL."/images/no_stock.gif' alt='' title='' />";
     break;
     }
   echo "    </td>\n\r";
@@ -286,11 +286,11 @@ foreach((array)$coupon_data as $coupon) {
    echo "    <td>\n\r";
   switch($coupon['every_product']) {
 	  case 1:
-		  echo "<img src='../wp-content/plugins/wp-shopping-cart/images/yes_stock.gif' alt='' title='' />";
+		  echo "<img src='".WPSC_URL."/images/yes_stock.gif' alt='' title='' />";
 		  break;
     
 	  case 0: default:
-		  echo "<img src='../wp-content/plugins/wp-shopping-cart/images/no_stock.gif' alt='' title='' />";
+		  echo "<img src='".WPSC_URL."/images/no_stock.gif' alt='' title='' />";
 		  break;
   }
   echo "    </td>\n\r";

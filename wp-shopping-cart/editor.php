@@ -34,7 +34,7 @@ function ecom_button_plugin($plugins) {
 
 // Load the TinyMCE plugin : editor_plugin.js (wp2.1)
 function ecom_button_script() {
-		$pluginURL = get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/';
+		$pluginURL = WPSC_URL;
 		//exit($pluginURL);
 		//$pluginURL = $cforms_root .'/js/';
 

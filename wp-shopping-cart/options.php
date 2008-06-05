@@ -454,7 +454,7 @@ if($_GET['clean_categories'] == 'true') {
     <h2><?php echo TXT_WPSC_OPTIONS;?></h2>
     <?php
     ?>
-    <form name='cart_options' id='cart_options' method='POST' action='admin.php?page=wp-shopping-cart/options.php'>
+    <form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
     <table class='wpsc_options'>
       <tr>
         <td colspan='2'><br />
@@ -509,7 +509,7 @@ if($_GET['clean_categories'] == 'true') {
         
         if($country_data['has_regions'] == 1)
           {
-          echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page=wp-shopping-cart/options.php&isocode=".get_option('base_country')."'>".$region_count." Regions</a>";
+          echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page=".WPSC_DIR_NAME."/options.php&isocode=".get_option('base_country')."'>".$region_count." Regions</a>";
           }
           else
             {
@@ -723,7 +723,7 @@ if($_GET['clean_categories'] == 'true') {
             {
             $language_setting = "EN_en.php";
             }
-        $languages_directory = ABSPATH . 'wp-content/plugins/wp-shopping-cart/languages';
+        $languages_directory = WPSC_FILE_PATH.'/languages';
         $language_files = nzshpcrt_listdir($languages_directory);
         //echo "<pre>".print_r($language_files,true)."</pre>";
         foreach($language_files as $language_file)
@@ -1740,7 +1740,7 @@ if(function_exists("nzshpcrt_user_log")) {
         <td>
         </td>
         <td>
-        <a href='admin.php?page=wp-shopping-cart/options.php&amp;update_page_urls=true'><?php echo TXT_WPSC_UPDATE_PAGE_URLS; ?></a>
+        <a href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php&amp;update_page_urls=true'><?php echo TXT_WPSC_UPDATE_PAGE_URLS; ?></a>
         </td>
       </tr>
       
@@ -1748,7 +1748,7 @@ if(function_exists("nzshpcrt_user_log")) {
         <td>
         </td>
         <td>
-        <a href='admin.php?page=wp-shopping-cart/options.php&amp;clean_categories=true'><?php echo TXT_WPSC_FIX_CATEGORY_PERMALINKS; ?></a>
+        <a href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php&amp;clean_categories=true'><?php echo TXT_WPSC_FIX_CATEGORY_PERMALINKS; ?></a>
         </td>
       </tr>
       

@@ -46,15 +46,6 @@ $base_region = get_option('base_region');
 <div class="wrap">
   <h2><?php echo TXT_WPSC_GSTTAXRATE;?></h2>
   <?php
-  /*
-  <form name='change_country' method='GET'>
-  <input type='hidden' name='page' value='<?php echo $_GET['page']; ?>' />
-  <select name='isocode' id='current_country' onchange='submit_change_country();' >
-  <?php echo country_list($country_isocode); ?>
-  </select>
-  </form>
-  <span id='loadingindicator_span'><img id='loadingimage' src='../wp-content/plugins/wp-shopping-cart/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
-  */
   if($changes_made === true)
     {
     echo "Thanks, your changes have been made<br />";
