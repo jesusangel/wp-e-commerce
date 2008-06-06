@@ -649,7 +649,7 @@ function nzshpcrt_install()
     
     include_once('updates/update-to-3.5.2.php');
     include_once('updates/update-to-3.6.0.php');
-    include_once('updates/update-to-3.7.0.php');
+    include_once('updates/update-to-3.6.4.php');
   /* all code to add new database tables and columns must be above here */  
   if((get_option('wpsc_version') < WPSC_VERSION) || (get_option('wpsc_version') == WPSC_VERSION) && (get_option('wpsc_minor_version') < WPSC_MINOR_VERSION)) {
     update_option('wpsc_version', WPSC_VERSION);
