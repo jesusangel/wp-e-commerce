@@ -22,7 +22,7 @@ function nzshpcrt_latest_product($input = null) {
 		foreach($latest_product as $special){
 			$output.="<a href='".wpsc_product_url($special['id'],$special['category'])."'><div>";
 			if($special['image'] != null) {
-				$output .= "<img src='".WPSC_URL."/product_images/thumbnails/".$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+				$output .= "<img src='".WPSC_THUMBNAIL_URL.$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
 			} else {
 				$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
 			}

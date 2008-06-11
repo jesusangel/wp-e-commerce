@@ -14,43 +14,7 @@ function wpsc_auto_update() {
     include_once('updates/update-to-3.6.4.php');
 	}
 
-  $wpsc_files_directory = ABSPATH.get_option('upload_path').'/wpsc/';
-
-  if(!is_dir($wpsc_files_directory)) {
-	  @ mkdir($wpsc_files_directory, 0775);
-  }
-  
-  if(!is_dir(WPSC_FILE_DIR)) {
-	  @ mkdir(WPSC_FILE_DIR, 0775);
-		wpsc_product_files_htaccess();  
-  }
-  
-	if(!is_dir(WPSC_PREVIEW_DIR)) {
-		@ mkdir(WPSC_PREVIEW_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_IMAGE_DIR)) {
-		@ mkdir(WPSC_IMAGE_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_THUMBNAIL_DIR)) {
-		@ mkdir(WPSC_THUMBNAIL_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_CATEGORY_DIR)) {
-		@ mkdir(WPSC_CATEGORY_DIR, 0775);
-	}
-	
-	
-	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
-	if(is_dir($wpsc_file_directory)) {
-	  // sort the permissions out in case they are not already sorted out.
-		@ chmod( $wpsc_file_directory, 0775 );			
-		@ chmod( WPSC_FILE_DIR, 0775 );			
-		@ chmod( WPSC_PREVIEW_DIR, 0775 );			
-		@ chmod( WPSC_IMAGE_DIR, 0775 );	
-		@ chmod( WPSC_CATEGORY_DIR, 0775 );	
-	}
+  wpsc_create_upload_directories();
 
   wpsc_product_files_htaccess();  
   wpsc_check_and_copy_files();
@@ -60,7 +24,6 @@ function wpsc_auto_update() {
     update_option('wpsc_minor_version', WPSC_MINOR_VERSION);
 	}
 }
-
 
 function nzshpcrt_install()
    {
@@ -634,6 +597,8 @@ function nzshpcrt_install()
 		}
 	}
  
+  wpsc_create_upload_directories();
+  
  
 	require dirname(__FILE__) . "/currency_list.php";
   /*
@@ -1079,14 +1044,14 @@ function nzshpcrt_install()
 	}
     
     
-  /*
-   * Moves images to thumbnails directory
-   */
+  
+  /* Moves images to thumbnails directory
+   // this code should no longer be needed, as most people will be using a sufficiently new version
   $image_dir = WPSC_FILE_PATH."/images/";
   $product_images = WPSC_FILE_PATH."/product_images/";
   $product_thumbnails = WPSC_FILE_PATH."/product_images/thumbnails/";
-  if(!is_dir($product_thumbnails)) { $wp_rewrite->flush_rules();
-    mkdir($product_thumbnails, 0775);
+  if(!is_dir($product_thumbnails)) {
+    @ mkdir($product_thumbnails, 0775);
 	}
   $product_list = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `image` != ''",ARRAY_A);
   foreach((array)$product_list as $product) {
@@ -1112,7 +1077,8 @@ function nzshpcrt_install()
 				}
 			}
 		}
-	}
+	}	*/
+   
 }
   
 function wpsc_uninstall_plugin() {
@@ -1301,7 +1267,7 @@ function wpsc_check_and_copy_files() {
 	    if(count($files_in_dir) > 0) {
 	      foreach($files_in_dir as $file_in_dir) {
 	        $file_name = str_replace($wpsc_dir['old'], '', $file_in_dir);
-	        if(rename($wpsc_dir['old'].$file_name, $wpsc_dir['new'].$file_name) ) {
+	        if( @ rename($wpsc_dir['old'].$file_name, $wpsc_dir['new'].$file_name) ) {
 	          if(is_dir($wpsc_dir['new'].$file_name)) {
 							$perms = $stat['mode'] & 0000775;
 	          } else { $perms = $stat['mode'] & 0000665; }
@@ -1316,6 +1282,56 @@ function wpsc_check_and_copy_files() {
 	}
 	if($incomplete_file_transfer == true) {
 		add_option('wpsc_incomplete_file_transfer', 'default', "", 'true');
+	}
+}
+
+
+function wpsc_create_upload_directories() {
+
+  $wpsc_files_directory = ABSPATH.get_option('upload_path').'/wpsc/';
+  
+  
+  
+  if(!is_dir(ABSPATH.get_option('upload_path'))) {
+	  @ mkdir(ABSPATH.get_option('upload_path'), 0775);
+  }
+
+  if(!is_dir($wpsc_files_directory)) {
+	  @ mkdir($wpsc_files_directory, 0775);
+  }
+  
+  if(!is_dir(WPSC_FILE_DIR)) {
+	  @ mkdir(WPSC_FILE_DIR, 0775);
+		wpsc_product_files_htaccess();  
+  }
+  
+	if(!is_dir(WPSC_PREVIEW_DIR)) {
+		 mkdir(WPSC_PREVIEW_DIR, 0775);
+	}
+		
+	if(!is_dir(WPSC_IMAGE_DIR)) {
+		@ mkdir(WPSC_IMAGE_DIR, 0775);
+	}
+		
+	if(!is_dir(WPSC_THUMBNAIL_DIR)) {
+		@ mkdir(WPSC_THUMBNAIL_DIR, 0775);
+	}
+		
+	if(!is_dir(WPSC_CATEGORY_DIR)) {
+		@ mkdir(WPSC_CATEGORY_DIR, 0775);
+	}
+	
+	
+	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
+	if(is_dir($wpsc_file_directory)) {
+	  // sort the permissions out in case they are not already sorted out.
+	  
+		@ chmod( ABSPATH.get_option('upload_path'), 0775 );			
+		@ chmod( $wpsc_file_directory, 0775 );			
+		@ chmod( WPSC_FILE_DIR, 0775 );			
+		@ chmod( WPSC_PREVIEW_DIR, 0775 );			
+		@ chmod( WPSC_IMAGE_DIR, 0775 );	
+		@ chmod( WPSC_CATEGORY_DIR, 0775 );	
 	}
 }
 

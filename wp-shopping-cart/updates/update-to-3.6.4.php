@@ -144,7 +144,7 @@ if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `".$wpdb->prefix."product_list` L
 }
 
 if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `".$wpdb->prefix."wpsc_coupon_codes` LIKE 'every_product';",ARRAY_A)) {
-	$wpdb->query("ALTER TABLE `".$wpdb->prefix."coupon_codes` ADD `every_product` varchar(255) NOT NULL AFTER `active`");
+	$wpdb->query("ALTER TABLE `".$wpdb->prefix."wpsc_coupon_codes` ADD `every_product` varchar(255) NOT NULL AFTER `active`");
 }
 
 

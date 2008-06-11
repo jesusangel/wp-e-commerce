@@ -126,7 +126,7 @@ function nzshpcrt_getproductform($prodid)
   
     $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 					
-	foreach($categorisation_groups as $categorisation_group){
+	foreach((array)$categorisation_groups as $categorisation_group){
 		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$categorisation_group['id']}')");
 		if($category_count > 0) {
 			$output .= "<p>";

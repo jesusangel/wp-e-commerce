@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.5
+Version: 3.6.6
 Author: Thomas Howard of Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
@@ -12,7 +12,7 @@ define('WPSC_VERSION', '3.6');
  * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
  * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
  */
-define('WPSC_MINOR_VERSION', '50');
+define('WPSC_MINOR_VERSION', '55');
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -2190,11 +2190,10 @@ add_filter('page_rewrite_rules', 'wpsc_product_permalinks');
 
 require_once(WPSC_FILE_PATH . '/product_display_functions.php');
 
-  
-
 if(is_file(WPSC_FILE_PATH.'/gold_shopping_cart.php')) {
   require_once(WPSC_FILE_PATH.'/gold_shopping_cart.php');
-  }
+}
+
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
 require_once(WPSC_FILE_PATH."/form_display_functions.php"); 
 require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
@@ -2232,7 +2231,6 @@ if(count(explode(".",$current_version_number))) {
 	array_pop($current_version_number_array);
 	$current_version_number = (float)implode(".", $current_version_number_array );
 }
-
 
 if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
   include_once("install_and_update.php");
