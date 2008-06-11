@@ -2224,7 +2224,7 @@ if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_opt
   }
 
 $current_version_number = get_option('wpsc_version');
-if(count(explode(".",$current_version_number))) {
+if(count(explode(".",$current_version_number)) > 2) {
 	// in a previous version, I accidentally had the major version number have two dots, and three numbers
 	// this code rectifies that mistake
 	$current_version_number_array = explode(".",$current_version_number);
@@ -2233,10 +2233,10 @@ if(count(explode(".",$current_version_number))) {
 }
 
 if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
-  include_once("install_and_update.php");
+	include_once("install_and_update.php");
   add_action('init', 'nzshpcrt_install');
 } else if(($current_version_number < WPSC_VERSION ) || (($current_version_number == WPSC_VERSION ) && (get_option('wpsc_minor_version') <= WPSC_MINOR_VERSION))) {
-  include_once("install_and_update.php");
+	include_once("install_and_update.php");
   add_action('init', 'wpsc_auto_update');
 }
 
