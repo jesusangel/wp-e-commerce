@@ -27,7 +27,7 @@ Perfect for:
 
 = Updating =
 
-Simply copy the new files across and replace the old files saving saving ones you’ve modified. If you have product images uploaded then do not overwrite the product_images folder or images folder. If you have downloadable products for sale do not overwrite the files folder.
+Simply copy the new files across and replace the old files saving saving ones you've modified. If you have product images uploaded then do not overwrite the product_images folder or images folder. If you have downloadable products for sale do not overwrite the files folder.
 
 When updating it is important that you do not overwrite the entire images folder. Instead you should copy over the contents of the new images folder into the existing images folder on your server - saving all the exiting product images you may have already uploaded.
 
