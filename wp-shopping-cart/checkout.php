@@ -167,7 +167,23 @@ if($_SESSION['nzshpcrt_checkouterr'] != null)
         </tr>\n\r";
         }
     }
-    
+    echo "
+    <tr>
+<td colspan='2'>
+<strong>".TXT_WPSC_SELECTGATEWAY."</strong>
+</td>
+</tr>
+";
+    echo "<tr><td colspan='2'>";
+		if (get_option('custom_gateway')) {
+			foreach (get_option('custom_gateway_options') as $option) {
+				foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
+					if ($gateway['internalname'] == $option)
+						echo "<input name='custom_gateway' value='$option' type='radio'>{$gateway['name']}<br>";
+				}
+			}
+		}
+	echo "</td></tr>";
 	if(isset($gateway_checkout_form_fields)) {
 		echo $gateway_checkout_form_fields;
 	}
@@ -221,6 +237,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null)
         echo "<input type='hidden' value='yes' name='agree' />";
         echo "";
         }
+	
     if(get_option('payment_method') == 2)
       {
       $curgateway = get_option('payment_gateway');
@@ -287,13 +304,17 @@ if($_SESSION['nzshpcrt_checkouterr'] != null)
 			$google_button_w=160;
 			$google_button_h=43;
 		}
+		
+
 		if ($_SESSION['google_prohibited']!='1') {
 	?>
 		<input  type='image' class='googlebutton' src="https://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo get_option('google_id')?>&w=<?php echo $google_button_w?>&h=<?php echo $google_button_h?>&style=<?php echo get_option('google_button_bg')?>&variant=text&loc=en_US">
 		<?php } else { ?>
 		<img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo get_option('google_id')?>&w=<?php echo $google_button_w?>&h=<?php echo $google_button_h?>&style=<?php echo get_option('google_button_bg')?>&variant=disabled&loc=en_US"/>
 		<?php }?>
-	<?php } else { ?>
+	<?php } else {
+		
+		?>
 	<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' />
 	<?php  } ?>
 	<?php } else { ?>

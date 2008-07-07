@@ -1,5 +1,6 @@
 <?php
 include_once('tagging_functions.php');
+include_once('google_base_functions.php');
 $category_data = null;
 
 function topcategorylist() {
@@ -136,9 +137,17 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
 /*
  * Adds new products
  */
-if($_POST['submit_action'] == 'add')
-  {
-   
+if($_POST['submit_action'] == 'add') {
+   //Allen's Change for Google base
+	if (isset($_GET['token']) || isset($_SESSION['google_base_sessionToken'])) {
+		$sessionToken=exchangeToken($_GET['token']);
+		$_SESSION['google_base_sessionToken'] = $sessionToken;
+		if (isset($_SESSION['google_base_sessionToken']))
+			$sessionToken=$_SESSION['google_base_sessionToken'];
+		postItem($_POST['name'], $_POST['price'], $_POST['description'], $sessionToken);
+	}
+//Google base change ends here
+
   $file_name = null;
   if($_POST['file_url'] != null)
     {
@@ -208,7 +217,8 @@ if($_POST['submit_action'] == 'add')
        
 
        
-  $insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price` , `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$image."', '".$wpdb->escape((int)$_POST['brand'])."', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
+     //modified for USPS
+  $insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape($_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$image."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
   
   
   if($wpdb->query($insertsql)) {
@@ -527,8 +537,8 @@ if($_POST['submit_action'] == "edit")
 			$no_shipping = 0;
 		}
 		
-		$updatesql = "UPDATE `".$wpdb->prefix."product_list` SET `name` = '".$wpdb->escape($_POST['title'])."', `description` = '".$wpdb->escape($_POST['description'])."', `additional_description` = '".$wpdb->escape($_POST['additional_description'])."', `price` = '".$wpdb->escape(str_replace(",","",$_POST['price']))."', `pnp` = '".(float)$wpdb->escape($_POST['pnp'])."', `international_pnp` = '".(float)$wpdb->escape($_POST['international_pnp'])."', `brand` = '".$wpdb->escape($_POST['brand'])."', quantity_limited = '".$quantity_limited."', `quantity` = '".(int)$quantity."', `special`='$special', `special_price`='$special_price', `display_frontpage`='$display_frontpage', `notax`='$notax', `donation`='$is_donation', `no_shipping` = '$no_shipping'  WHERE `id`='".$_POST['prodid']."' LIMIT 1";
-		
+		$updatesql = "UPDATE `".$wpdb->prefix."product_list` SET `name` = '".$wpdb->escape($_POST['title'])."', `description` = '".$wpdb->escape($_POST['description'])."', `additional_description` = '".$wpdb->escape($_POST['additional_description'])."', `price` = '".$wpdb->escape(str_replace(",","",$_POST['price']))."', `pnp` = '".(float)$wpdb->escape($_POST['pnp'])."', `international_pnp` = '".(float)$wpdb->escape($_POST['international_pnp'])."', `brand` = '0', quantity_limited = '".$quantity_limited."', `quantity` = '".(int)$quantity."', `special`='$special', `special_price`='$special_price', `display_frontpage`='$display_frontpage', `notax`='$notax', `donation`='$is_donation', `no_shipping` = '$no_shipping', `weight` = '".$wpdb->escape($_POST['weight'])."', `weight_unit` = '".$wpdb->escape($_POST['weight_unit'])."'  WHERE `id`='".$_POST['prodid']."' LIMIT 1";
+
 		$wpdb->query($updatesql);
 		if(($_FILES['image']['name'] != null) && ($image != null)) {
 			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$image."' WHERE `id`='".$_POST['prodid']."' LIMIT 1");
@@ -667,7 +677,7 @@ ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
 	}  
     
 $product_list = $wpdb->get_results($sql,ARRAY_A);
-$num_prodcuts = count($wpdb->get_results("SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active`='1'",ARRAY_A));
+$num_prodcuts = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefix."product_list` WHERE `active`='1'");
 
 /*
  * The product list is stored in $product_list now
@@ -873,7 +883,7 @@ if($product_list != null)
 	if ($product['name']=='') {
 		echo "(".TXT_WPSC_NONAME.")";
 	} else {
-		echo stripslashes($product['name']);
+		echo htmlentities(stripslashes($product['name']), ENT_QUOTES);
 	}
 	echo "</a>";
 
@@ -1109,6 +1119,22 @@ echo "        </div>";
 		</h3>
       <div class='inside'>
   <table>
+  
+  	  <!--USPS shipping changes-->
+	<tr>
+		<td>
+			<?php echo TXT_WPSC_WEIGHT; ?>
+		</td>
+		<td>
+			<input type="text" size='5' name='weight' value=''>
+			<select name='weight_unit'>
+				<option value="pound">Pounds</option>
+				<option value="once">Onces</option>
+			</select>
+		</td>
+    </tr>
+    <!--USPS shipping changes ends-->
+
     <tr>
       <td>
       <?php echo TXT_WPSC_LOCAL_PNP; ?> 

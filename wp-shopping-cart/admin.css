@@ -27,6 +27,10 @@ td.processed a.yes{ color: green; }
 
 td.processed a.no{ color: red; }
 
+table.wpsc_options tr.merged th, table.wpsc_options tr.merged td { border: none; padding: 5px 10px 5px 10px; }
+
+table.wpsc_options tr th{ width: 30%; }
+
 table.wpsc_options tr td{ vertical-align: top; }
 
 table.wpsc_options tr td input.text, table.wpsc_options tr td textarea{ width: 300px; }
@@ -679,6 +683,15 @@ div#pli_edit{
 	float:left;
 }
 
+span#settings_button{
+  width:180px;
+  background-color:#f1f1f1;
+  position:absolute;
+  border:1px solid black;
+  display:none;
+  z-index: 100;
+}
+
 
 ul.settings_button{
 	list-style-type:none;
@@ -762,6 +775,7 @@ div#add_categorisation, div#edit_categorisation{
 	display: none;
   border: 1px solid #BBBBBB;
   padding: 4px;
+  margin-top: 6px;
 }
 
 div#add_categorisation br, div#edit_categorisation br{
@@ -853,4 +867,16 @@ table.category_forms {
   border-left:1px solid #bbb;
   border-right:1px solid #bbb;
   border-bottom:1px solid #bbb;
+}
+
+div#wpsc_shipwire_setting {
+  display: none;
+}
+
+#wpsc_options {
+	border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
+	border-style:solid;
+	border-width:1px;
+	margin:0pt 15% 0pt 15px;
+	padding:2px;
 }

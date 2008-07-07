@@ -38,12 +38,34 @@ if(is_numeric($_GET['deleteid']))
   echo '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
   }
 
+
+
+if(isset($_GET['clear_locks']) && ($_GET['clear_locks'] == 'true') && is_numeric($_GET['purchaseid'])) {
+  $purchase_id = (int)$_GET['purchaseid'];
+  $downloadable_items = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `purchid` IN ('$purchase_id')", ARRAY_A);
+  
+  $clear_locks_sql = "UPDATE`".$wpdb->prefix."download_status` SET `ip_number` = '' WHERE `purchid` IN ('$purchase_id')";
+  $wpdb->query($clear_locks_sql);
+  
+  
+	$email_form_field = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1");
+	$email_address = $wpdb->get_var("SELECT `value` FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`='{$purchase_id}' AND `form_id` = '{$email_form_field}' LIMIT 1");
+	
+	foreach($downloadable_items as $downloadable_item) {
+	  $download_links .= $siteurl."?downloadid=".$downloadable_item['uniqueid']. "\n";
+	}
+	
+	
+	mail($email_address, TXT_WPSC_USER_UNLOCKED_EMAIL, str_replace("[download_links]", $download_links, TXT_WPSC_USER_UNLOCKED_EMAIL_MESSAGE), "From: ".get_option('return_email')."");
+  
+  echo '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_UNLOCKED.'</p></div>';
+}
+
+
 //echo("<pre>".print_r($cart_item,true)."</pre>");
 /*
  * this finds the earliest time in the shopping cart and sorts out the timestamp system for the month by month display
  */  
-$sql = "SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!='' ORDER BY `date` DESC";
-$purchase_count= $wpdb->get_results($sql,ARRAY_A) ;
 
 $earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
 $earliest_record = $wpdb->get_results($earliest_record_sql,ARRAY_A) ;
@@ -208,13 +230,11 @@ if($_GET['filter'] !== 'true')
               echo date("jS M Y",$purchase['date']);
               echo " </td>\n\r";
             
-              foreach($form_data as $form_field)
-                {
+              foreach($form_data as $form_field) {
                 $collected_data_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
                 $collected_data = $wpdb->get_results($collected_data_sql,ARRAY_A);
                 $collected_data = $collected_data[0];
-                switch($form_field['type'])
-                  {
+                switch($form_field['type']) {
                   case 'country': 
                   echo " <td>";
                   echo get_country($purchase['billing_country']);
@@ -232,49 +252,40 @@ if($_GET['filter'] !== 'true')
                   echo $collected_data['value'];
                   echo " </td>\n\r";
                   break;
-                  }
-                }
+								}
+							}
         
               echo " <td>";
 
-              if($purchase['shipping_country'] != '')
-                {
+              if($purchase['shipping_country'] != '') {
                 $billing_country = $purchase['billing_country'];
                 $shipping_country = $purchase['shipping_country'];
-                }
-                else
-                  {
-                  $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-                  $country_data = $wpdb->get_results($country_sql,ARRAY_A);
-                  $billing_country = $country_data[0]['value'];
-                  $shipping_country = $country_data[0]['value'];
-                  }
+							} else {
+								$country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+								$country_data = $wpdb->get_results($country_sql,ARRAY_A);
+								$billing_country = $country_data[0]['value'];
+								$shipping_country = $country_data[0]['value'];
+							}
               //echo $country;
               echo nzshpcrt_currency_display(nzshpcrt_find_total_price($purchase['id'],$shipping_country),1);
               $subtotal += nzshpcrt_find_total_price($purchase['id'],$shipping_country);
               echo " </td>\n\r";
 
-              if(get_option('payment_method') == 2)
-                {
+              if(get_option('payment_method') == 2) {
                 echo " <td>";
                 $gateway_name = '';
-                foreach($GLOBALS['nzshpcrt_gateways'] as $gateway)
-                  {
-                  if($purchase['gateway'] != 'testmode')
-                    {
-                    if($gateway['internalname'] == $purchase['gateway'] )
-                      {
+                foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+                  if($purchase['gateway'] != 'testmode') {
+                    if($gateway['internalname'] == $purchase['gateway'] ) {
                       $gateway_name = $gateway['name'];
-                      }
-                    }
-                    else
-                      {
-                      $gateway_name = "Manual Payment";
-                      }
-                  }
+										}
+									} else {
+										$gateway_name = "Manual Payment";
+									}
+								}
                 echo $gateway_name;
                 echo " </td>\n\r";
-                }
+							}
               echo " <td>";
               echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
               echo " </td>\n\r";
@@ -597,6 +608,7 @@ if($_GET['filter'] !== 'true')
 		} else {
 			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
 		}
+		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$_GET['purchaseid']."&amp;clear_locks=true'>".TXT_WPSC_CLEAR_IP_LOCKS."</a><br />";
 		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;deleteid=".$_GET['purchaseid']."'>".TXT_WPSC_REMOVE_LOG."</a>";
 		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>".TXT_WPSC_GOBACK."</a>";
 	}

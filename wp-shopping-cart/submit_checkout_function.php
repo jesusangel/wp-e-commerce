@@ -178,8 +178,11 @@ function nzshpcrt_submit_checkout() {
    if( !(is_numeric($user_ID) && ($user_ID > 0))) {
      $user_ID = 'null';
      }
-	
-    $base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+	  if(isset($_SESSION['usps_shipping']) && is_numeric($_SESSION['usps_shipping'])) { 
+	    $base_shipping = $_SESSION['usps_shipping'];
+    } else {
+			$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+    }
     //clear the coupon
     //$_SESSION['coupon_num'] = '';
     
@@ -374,12 +377,27 @@ function nzshpcrt_submit_checkout() {
    do_action('wpsc_submit_checkout', $log_id);
    //mail( get_option('purch_log_email'),('debug from '.date("d/m/Y H:i:s")), $debug);
    $curgateway = get_option('payment_gateway');
+		if (get_option('custom_gateway')) {
+			$selected_gateways = get_option('custom_gateway_options');
+			if (in_array($_POST['custom_gateway'], (array)$selected_gateways)) {
+				$curgateway = $_POST['custom_gateway'];
+			} else {
+				$curgateway = get_option('payment_gateway');
+			}
+			
+		  
+		
+		} else {
+			$curgateway = get_option('payment_gateway');
+		}
+
 
     if(get_option('permalink_structure') != '') {
       $seperator ="?";
 		} else {
       $seperator ="&";
 		}
+		
     if((($_POST['payment_method'] == 2) && (get_option('payment_method') == 2)) || (get_option('payment_method') == 3)) {
       foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == 'testmode')  {

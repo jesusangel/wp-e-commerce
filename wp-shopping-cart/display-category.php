@@ -56,7 +56,7 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "            </td>\n\r";
   
   echo "            <td>\n\r";
-  echo "".stripslashes($category['name'])." (".$category['id'].")";
+  echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES)." (".$category['id'].")";
   echo "            </td>\n\r";
   
   $displaydescription = substr(stripslashes($category['description']),0,44);
@@ -270,6 +270,19 @@ if(is_numeric($_GET['deleteid'])) {
   if($wpdb->query($deletesql)) {
 		$delete_subcat_sql = "UPDATE `".$wpdb->prefix."product_categories` SET `active` = '0', `nice-name` = '' WHERE `category_parent`='{$delete_id}'";
 		$wpdb->query($delete_subcat_sql);
+		// if this is the default category, we need to find a new default category
+		if($delete_id == get_option('default_category')) {
+			// select the category that is not deleted with the greatest number of products in it
+			$new_default = $wpdb->get_var("SELECT `cat`.`id` FROM `{$wpdb->prefix}product_categories` AS `cat`
+				LEFT JOIN `{$wpdb->prefix}item_category_associations` AS `assoc` ON `cat`.`id` = `assoc`.`category_id`
+				WHERE `cat`.`active` IN ( '1' )
+				GROUP BY `cat`.`id`
+				ORDER BY COUNT( `assoc`.`id` ) DESC
+				LIMIT 1");
+			if($new_default > 0) {
+				update_option('default_category', $new_default);
+			}
+		}
 		$wp_rewrite->flush_rules(); 
 	}
 }
@@ -303,9 +316,8 @@ function categorisation_conf() {
 </noscript>
 <div class="wrap">
   <h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
-  <a href='' onclick='return showadd_categorisation_form()' class='add_item_link'><span><?php echo TXT_WPSC_ADD_CATEGORISATION;?></span></a>
   <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL;?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
-  
+  <span><?php echo TXT_WPSC_CATEGORISATION_GROUPS_DESCR;?></span>
   
 <div id='add_categorisation'>
   <strong><?php echo TXT_WPSC_ADD_CATEGORISATION;?></strong>
@@ -373,6 +385,7 @@ foreach((array)$categorisation_groups as $categorisation_group){
   echo "    <a href='?page={$_GET['page']}&amp;category_group={$categorisation_group['id']}'>{$categorisation_group['name']}</a> ";
   echo "  </li>\n\r";
 }
+echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
 echo "</ul>\n\r";
 
 

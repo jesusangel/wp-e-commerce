@@ -213,16 +213,19 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
             $all_no_shipping = false;
             }
 
-          if(($cart_row['donation'] != 1) && ($cart_row['no_shipping'] != 1))
-            {
+          if(($cart_row['donation'] != 1) && ($cart_row['no_shipping'] != 1)) {
             $shipping = nzshpcrt_determine_item_shipping($cart_row['prodid'], $cart_row['quantity'], $country_code);
             }
           $endtotal += $shipping + $price;
           }
-        if(($all_donations == false) && ($all_no_shipping == false))
-          {
-          $endtotal += nzshpcrt_determine_base_shipping(0, $country_code);
-          }
+        if(($all_donations == false) && ($all_no_shipping == false)){
+          if($purch_data['base_shipping'] > 0) {
+						$base_shipping = $purch_data['base_shipping'];
+					} else {
+						$base_shipping = nzshpcrt_determine_base_shipping(0, $country_code);
+					}
+					$endtotal += $base_shipping;
+				}
         
         if($purch_data['discount_value'] > 0) {
 					$endtotal -= $purch_data['discount_value'];
@@ -246,7 +249,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 		$coupon_data = $wpdb->get_results($coupon_sql,ARRAY_A);
 		$coupon_data = $coupon_data[0];
 	}
-	if ($coupon_data['active']=='1'){
+	if ( ($coupon_data['active']=='1') && !(($coupon_data['use_once']=='1') && ($coupon_data['is_used']=='1'))){
 		if ((strtotime($coupon_data['start']) < $now)&&(strtotime($coupon_data['expiry']) > $now)){
 
 			if ($coupon_data['is-percentage']=='1'){
@@ -335,7 +338,7 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
     
     }
 
-  $price_out =  number_format($price_in, 2, '.', '');
+  $price_out =  number_format($price_in, 2, '.', ',');
 
   if($currency_data[0]['symbol'] != '')
     {    
@@ -774,5 +777,27 @@ function wpsc_get_mimetype($file) {
 	}
 	return $mimetype;
 }
-
+function shopping_cart_total_weight(){
+	global $wpdb;
+	$cart = $_SESSION['nzshpcrt_cart'];
+	$total_weight=0;
+	foreach($cart as $item) {
+		$sql="SELECT weight FROM ".$wpdb->prefix."product_list WHERE id='".$item->product_id."'";
+		$weight=$wpdb->get_var($sql);
+		$subweight = $weight*$item->quantity;
+		$total_weight+=$subweight;
+	}
+	return $total_weight;function shopping_cart_total_weight(){
+	global $wpdb;
+	$cart = $_SESSION['nzshpcrt_cart'];
+	$total_weight=0;
+	foreach($cart as $item) {
+		$sql="SELECT weight FROM ".$wpdb->prefix."product_list WHERE id='".$item->product_id."'";
+		$weight=$wpdb->get_var($sql);
+		$subweight = $weight*$item->quantity;
+		$total_weight+=$subweight;
+	}
+	return $total_weight;
+}
+}
 ?>

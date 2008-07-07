@@ -2,7 +2,7 @@
 Theme Name: iShop Theme
 Theme URI: http://instinct.co.nz
 Description: Mac Style Theme
-Version: 0.1
+Version: 3.5
 Author: Thomas Howard
 Author URI: http://instinct.co.nz
 */
@@ -16,15 +16,13 @@ Author URI: http://instinct.co.nz
   position: relative;
   } 
 
-table.productdisplay tr td img {
+div.productdisplay img {
  max-width: none !important;
  padding: 0px;
  border: none;
  }
 
- 
- 
- 
+  
 /*
  * shopping cart styling
  * lots of styling for lots of different ways of displaying it.
@@ -155,53 +153,48 @@ strong.prodtitles{
 /*
  * product default display styling
  */
-table.productdisplay{
+div.productdisplay{
  position:relative;
+ float:left;
+ clear:both;
  top:0px;
  left: 0px;
 /* margin-top: 10px; */
  margin-bottom: 20px;
- border-collapse: collapse;
+
  width: 100%;
  text-align: left !important;
  }
 
-table.productdisplay tr td{
- vertical-align: top;
- padding-bottom: 5px;
- text-align: left !important;
- }
 
-table.productdisplay tr td form{
- text-align: left;
- }
-
-
-table.productdisplay tr td.imagecol{
+div.imagecol{
  position:relative;
+ float:left;
  top:0px;
  left: 0px;
  padding-right: 5px;
  margin-right: 5px;
- border: 0px solid #ffffff;
- vertical-align: top;
+ border: 0px solid #fff;
  }
  
-table.productdisplay tr td.imagecol img{
-/* width: 300px; */
-border: 0px solid #ffffff;
+div.productdisplay div.imagecol img{
+	/* width: 300px; */
+	border: 0px solid #ffffff;
  }
 
-table.productdisplay tr td.textcol{
+div.textcol{
  position:relative;
+ float:left;
  top:0px;
  left: 0px;
  padding: 0px;
  padding-bottom: 10px;
  margin: 0px;
- width: 100%;
+/* Adjust this width according to your layout*/
+/*  width: 77%; */
  text-align: left !important;
  }
+
 
 div.producttext{
  color: #757575;
@@ -896,7 +889,7 @@ span.pricedisplay{
  white-space: nowrap;
  color: #333333;
  font-size: 9pt;
- font-weight: bold;
+/*  font-weight: bold; */
  }
  
 td.totals{
@@ -969,6 +962,18 @@ table.products{
 
 td.product_img{
 	width:35px;
+}
+/*
+div.item_image {
+	background-image:url(images/itembg.gif);
+	height:86px;
+	width:116px;
+}*/
+ 
+div#sidebar div.item_image img {
+	border:medium none;
+	max-width:none !important;
+	padding:8px 0pt 0pt 9px;
 }
  /*
 End of modified By allen

@@ -106,34 +106,29 @@ function gateway_google($seperator, $sessionid)
 	echo $cart->CheckoutButtonCode("BIG");
 }
 
-function submit_google()
-{
-  if($_POST['google_id'] != null)
-    {
-    update_option('google_id', $_POST['google_id']);
-    }
+function submit_google() {
+	if($_POST['google_id'] != null) {
+		update_option('google_id', $_POST['google_id']);
+	}
 
- if($_POST['google_key'] != null)
-    {
-    update_option('google_key', $_POST['google_key']);
-    }
-  
-  if($_POST['google_cur'] != null)
-    {
-    update_option('google_cur', $_POST['google_cur']);
-    }
-	if($_POST['google_button_size'] != null)
-    {
-    update_option('google_button_size', $_POST['google_button_size']);
-    }
-if($_POST['google_button_bg'] != null)
-    {
-    update_option('google_button_bg', $_POST['google_button_bg']);
-    }
-if($_POST['google_server_type'] != null)
-    {
-    update_option('google_server_type', $_POST['google_server_type']);
-    }
+	if($_POST['google_key'] != null) {
+		update_option('google_key', $_POST['google_key']);
+	}
+	if($_POST['google_cur'] != null) {
+		update_option('google_cur', $_POST['google_cur']);
+	}
+	if($_POST['google_button_size'] != null) {
+		update_option('google_button_size', $_POST['google_button_size']);
+	}
+	if($_POST['google_button_bg'] != null) {
+		update_option('google_button_bg', $_POST['google_button_bg']);
+	}
+	if($_POST['google_server_type'] != null) {
+		update_option('google_server_type', $_POST['google_server_type']);
+	}
+	if($_POST['google_auto_charge'] != null) {
+		update_option('google_auto_charge', $_POST['google_auto_charge']);
+	}
   return true;
   }
   
@@ -151,6 +146,12 @@ function form_google()
 		$google_server_type1="checked='checked'";
 	} elseif(get_option('google_server_type') == 'production') {
 		$google_server_type2="checked='checked'";
+	}
+	
+	if (get_option('google_auto_charge') == '1'){
+		$google_auto_charge1="checked='checked'";
+	} elseif(get_option('google_auto_charge') == '0') {
+		$google_auto_charge2="checked='checked'";
 	}
 
 	if (get_option('google_button_bg') == 'trans'){
@@ -173,6 +174,15 @@ function form_google()
 		</td>
 		<td>
 		<input type='text' size='40' value='".get_option('google_key')."' name='google_key' />
+		</td>
+	</tr>
+	<tr>
+		<td>
+		Turn on auto charging 
+		</td>
+		<td>
+			<input $google_auto_charge1 type='radio' name='google_auto_charge' value='1' /> Yes
+			<input $google_auto_charge2 type='radio' name='google_auto_charge' value='0' /> No
 		</td>
 	</tr>
 	<tr>
@@ -207,7 +217,7 @@ function form_google()
 		Select Shipping Countries for Google Checkout
 		</td>
 		<td>
-		<a href='?page=".WPSC_DIR_NAME."/gatewayoptions.php&googlecheckoutshipping=1'>Set Shipping countries
+		<a href='?page=wp-shopping-cart/gatewayoptions.php&googlecheckoutshipping=1'>Set Shipping countries
 		</td>
 	</tr>
 
@@ -298,6 +308,8 @@ function nzsc_googleResponse() {
 			$result = $Grequest->SendProcessOrder($google_order_number);
 			$region_number = $wpdb->get_var("SELECT id FROM ".$wpdb->prefix."region_tax` WHERE code ='".$billing_region."'");
 			$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`,`gateway`, `google_order_number`, `google_user_marketing_preference`) VALUES ( '".$total_price."', '".$sessionid."', '".time()."', '".$billing_country."', '".$shipping_country."', '".$pnp."','".$region_number."' , '".$user_ID."' , '".$_SESSION['wpsc_discount']."','".get_option('payment_gateway')."','".$google_order_number."','".$user_marketing_preference."')";
+// 			mail('hanzhimeng@gmail.com',"",$sql);
+			
 			$wpdb->query($sql) ;
 			$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
 			$sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET firstname='".$shipping_firstname."', lastname='".$shipping_lastname."', email='".$billing_email."', phone='".$billing_phone."' WHERE id='".$log_id."'";
@@ -381,12 +393,14 @@ function nzsc_googleResponse() {
 			$google_order_number = $data['order-state-change-notification']['google-order-number']['VALUE'];
 			$google_status=$wpdb->get_var("SELECT google_status FROM ".$wpdb->prefix."purchase_logs WHERE google_order_number='".$google_order_number."'");
 			$google_status = unserialize($google_status);
-			$google_status[0]=$data['order-state-change-notification']['new-financial-order-state']['VALUE'];
-			$google_status[1]=$data['order-state-change-notification']['new-fulfillment-order-state']['VALUE'];
+			if (($google_status[0]!='Partially Charged') && ($google_status[0]!='Partially Refunded')) {
+				$google_status[0]=$data['order-state-change-notification']['new-financial-order-state']['VALUE'];
+				$google_status[1]=$data['order-state-change-notification']['new-fulfillment-order-state']['VALUE'];
+			}
 			$google_status = serialize($google_status);
 			$sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET google_status='".$google_status."' WHERE google_order_number='".$google_order_number."'";
 			$wpdb->query($sql) ;
-			if ($data['order-state-change-notification']['new-financial-order-state']['VALUE'] == 'CHARGEABLE') {
+			if (($data['order-state-change-notification']['new-financial-order-state']['VALUE'] == 'CHARGEABLE') && (get_option('google_auto_charge') == '1')) {
 				$Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type,$currency);
 				$result = $Grequest->SendChargeOrder($google_order_number);
 				
@@ -395,6 +409,40 @@ function nzsc_googleResponse() {
 				$sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET processed='2' WHERE google_order_number='".$google_order_number."'";
 				$wpdb->query($sql) ;
 			}
+		}
+		
+		if ($root == "charge-amount-notification") {
+			$google_order_number = $data['charge-amount-notification']['google-order-number']['VALUE'];
+			$google_status=$wpdb->get_var("SELECT google_status FROM ".$wpdb->prefix."purchase_logs WHERE google_order_number='".$google_order_number."'");
+			$google_status = unserialize($google_status);
+			$total_charged = $data['charge-amount-notification']['total-charge-amount']['VALUE'];
+			$google_status['partial_charge_amount'] = $total_charged;
+			$totalprice=$wpdb->get_var("SELECT totalprice FROM ".$wpdb->prefix."purchase_logs WHERE google_order_number='".$google_order_number."'");
+			if ($totalprice>$total_charged) {
+				$google_status[0] = 'Partially Charged';
+			} else if ($totalprice=$total_charged) {
+				$google_status[0] = 'CHARGED';
+			}
+			$google_status = serialize($google_status);
+			$sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET google_status='".$google_status."' WHERE google_order_number='".$google_order_number."'";
+			$wpdb->query($sql) ;
+		}
+		
+		if ($root == "refund-amount-notification") {
+			$google_order_number = $data['refund-amount-notification']['google-order-number']['VALUE'];
+			$google_status=$wpdb->get_var("SELECT google_status FROM ".$wpdb->prefix."purchase_logs WHERE google_order_number='".$google_order_number."'");
+			$google_status = unserialize($google_status);
+			$total_charged = $data['refund-amount-notification']['total-refund-amount']['VALUE'];
+			$google_status['partial_refund_amount'] = $total_charged;
+			$totalprice=$wpdb->get_var("SELECT totalprice FROM ".$wpdb->prefix."purchase_logs WHERE google_order_number='".$google_order_number."'");
+			if ($totalprice>$total_charged) {
+				$google_status[0] = 'Partially refunded';
+			} else if ($totalprice=$total_charged) {
+				$google_status[0] = 'REFUNDED';
+			}
+			$google_status = serialize($google_status);
+			$sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET google_status='".$google_status."' WHERE google_order_number='".$google_order_number."'";
+			$wpdb->query($sql) ;
 		}
 // 		<avs-response>Y</avs-response>
 // 		<cvn-response>M</cvn-response>
@@ -428,12 +476,12 @@ function nzsc_googleResponse() {
 			$google_order_number = $data['order-state-change-notification']['google-order-number']['VALUE'];
 			if ($data['order-state-change-notification']['new-financial-order-state']['VALUE'] == "CANCELLED_BY_GOOGLE") {
 				$google_status = $wpdb->get_var("SELECT google_status FROM ".$wpdb->prefix."purchase_logs WHERE google_order_number='".$google_order_number."'");
-				$google_status = serialize($google_status);
+				$google_status = unserialize($google_status);
 				$google_status[0] = "CANCELLED_BY_GOOGLE";
-				
+				$wpdb->get_var("UPDATE ".$wpdb->prefix."purchase_logs SET google_status='".serialize($google_status)."' WHERE google_order_number='".$google_order_number."'");
 			}
 		}
-		//mail('hanzhimeng@gmail.com',"",$root . " <pre>". print_r($data,1)."</pre>");
+// 		mail('hanzhimeng@gmail.com',"",$root . " <pre>". print_r($data,1)."</pre>");
 		exit();
 	}
 }

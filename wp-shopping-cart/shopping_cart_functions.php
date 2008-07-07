@@ -121,7 +121,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
     
 
     $output .= "<table class='shoppingcart'>\n\r";
-    $output .= "<tr><th>".TXT_WPSC_PRODUCT."</th><th>".TXT_WPSC_QUANTITY_SHORT."</th><th>".TXT_WPSC_PRICE."</th></tr>\n\r";
+    $output .= "<tr><th id='thproduct'>".TXT_WPSC_PRODUCT."</th><th id='thqty'>".TXT_WPSC_QUANTITY_SHORT."</th><th id='thprice'>".TXT_WPSC_PRICE."</th></tr>\n\r";
     $all_donations = true;
     $all_no_shipping = true;
     $tax = 0;
@@ -181,12 +181,12 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			}
       $output .= "<tr>";
       if (get_option("hide_name_link")=='1') {
-	      $output .= "<td>".$product['name']."</td>";
+	      $output .= "<td class='tdproduct'>".$product['name']."</td>";
       } else {
         $output .= "<td><a href='".wpsc_product_url($product['id'])."' >".$product['name']."</a></td>";
       }
-      $output .= "<td>".$quantity."</td>";
-      $output .= "<td>".nzshpcrt_currency_display($price, 1)."</td>";
+      $output .= "<td class='tdqty'>".$quantity."</td>";
+      $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
       $output .= "</tr>\n\r";
       }
 	//google checkout stuff.

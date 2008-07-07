@@ -341,7 +341,7 @@ class nzshpcrt_variations {
     return $output;
 	}
   
-  function display_product_variations($product_id,$no_label = false, $no_br = false, $update_price = false ) {
+  function display_product_variations($product_id,$no_label = false, $no_div = false, $update_price = false ) {
     global $wpdb;
     $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1";
     $product_data = $wpdb->get_row($sql,ARRAY_A);
@@ -355,6 +355,9 @@ class nzshpcrt_variations {
 			$j=0;
       foreach((array)$variation_assoc_data as $variation_association) {
         $i = 0;
+        if($no_div !== true) {
+					$output .= "<div>";
+				}
 				if($j==0) {
 					$default_topping='checked="checked"';
 				} else {
@@ -416,8 +419,8 @@ class nzshpcrt_variations {
 				} else {
 					$output .= "</select>";
 				}
-				if($no_br !== true) {
-					$output .= "<br />";
+				if($no_div !== true) {
+					$output .= "</div>";
 				}
 			}
 		}

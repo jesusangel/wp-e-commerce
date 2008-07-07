@@ -1,8 +1,10 @@
 <?php
 /*
 This is a language file for the WP Shopping Cart plugin version 2.6.5 beta
+перевел это все mikolka http://www.mikolka.info
+Есть предложения по улучшению или благодарности и т.п. - пишите
 */
-
+define('TXT_WPSC_ADVANCED_OPTIONS', 'Дополнительные настройки');
 define('TXT_WPSC_IMAGESIZEINFO', 'Примечание: если оставить пустым, размеры изображения изменяться не будут');
 define('TXT_WPSC_RECEIVED', 'Заказ получен');
 define('TXT_WPSC_ORDER_STATUS', 'Состояние заказа');
@@ -81,6 +83,11 @@ define('TXT_WPSC_PRODUCTSTOCK', 'Количество на складе');
 define('TXT_WPSC_PURCHASE_NUMBER','Номер заказа');
 define('TXT_WPSC_UNTICKBOX', 'На складе ограниченное количество этого товара. Если склад опустеет, этот продукт не будет доступен в магазине пока эта птичка не будет снята или не пополнен склад.');
 define('TXT_WPSC_LIMITED_STOCK', 'Ограничение запаса');
+define('TXT_WPSC_ADMINNOTES', 'Торговые заметки');
+define('TXT_WPSC_ENGRAVE', 'Гравировка');
+define('TXT_WPSC_EXTERNALLINK', 'Внешняя ссылка');
+define('TXT_WPSC_USEONLYEXTERNALLINK', 'Примечание: используйте только если у вас есть внешние ссылки');
+define('TXT_WPSC_VARIATION_VALUES', 'Значение');
 
 define('TXT_WPSC_CATEGORY', 'Категория');
 define('TXT_WPSC_BRAND', 'Бренд(производитель)');
@@ -199,12 +206,29 @@ define('TXT_WPSC_ADDCATEGORY', 'Добавить категорию');
 define('TXT_WPSC_EDITCATEGORY', 'Редактировать категорию');
 define('TXT_WPSC_ALLCATEGORIES', 'Все категории');
 
-define('TXT_WPSC_DISPLAYVARIATIONS', 'Варианты опси');
+define('TXT_WPSC_DISPLAYVARIATIONS', 'Варианты описания');
 define('TXT_WPSC_ADDVARIATION', 'Добавить ');
-define('TXT_WPSC_EDITVARIATION', 'Edit Variation Set');
-define('TXT_WPSC_VARIATIONHASBEENEDITED', 'The variation has been edited.');
-define('TXT_WPSC_VARIATION_VALUES', 'Variation Values');
-define('TXT_WPSC_REMOVE_SET', 'Remove This Set'); //this needs to be translated
+define('TXT_WPSC_EDITVARIATION', 'Редактировать набор');
+define('TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION','Просмотр');
+define('TXT_WPSC_VARIATIONHASBEENEDITED', 'Изменения записаны.');
+define('TXT_WPSC_REMOVE_SET', 'Удалить этот набор'); //this needs to be translated
+define('TXT_WPSC_PAYPALNOTE', '<strong>Примечание:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing.<br>Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.');
+define('TXT_WPSC_MARKETING_SETTINGS', 'Настройки маркетинга');
+
+define('TXT_WPSC_DISPLAYCOUPONS', 'Купоны');
+define('TXT_WPSC_ADD_COUPON', 'Добавить купон');
+define('TXT_WPSC_COUPON', 'Купон');
+define('TXT_WPSC_ADDCOUPONS', 'Добавить купон');
+define('TXT_WPSC_COUPON_CODE', 'Код купона');
+define('TXT_WPSC_DISCOUNT', 'Скидка');
+define('TXT_WPSC_START', 'Начало');
+define('TXT_WPSC_EXPIRY', 'Звершение');
+define('TXT_WPSC_USE_ONCE', 'Использовать единожды');
+define('TXT_WPSC_ACTIVE', 'Активировать');
+define('TXT_WPSC_COUPONHASBEENADDED', 'Спасибо, купон добавлен.');
+define('TXT_WPSC_COUPON', 'Купон');
+define('TXT_WPSC_COUPON_DOESNT_EXIST', 'Этот купон не существует или просрочен.');
+define('TXT_WPSC_PERTICKED', 'Применить к каждому продукту');
 
 define('TXT_WPSC_SELECT_PARENT', 'Выбрать родительскую');
 define('TXT_WPSC_PRODUCTHASBEENEDITED', 'Товар отредактирован.');
@@ -261,6 +285,29 @@ define('TXT_WPSC_CATEGORYTHUMBNAILSIZE', 'Размеры превью катег
 define('TXT_WPSC_SHOWPOSTAGEANDPACKAGING', 'Показывать стоимость пересылки и упаковки');
 define('TXT_WPSC_YES', 'Да');
 define('TXT_WPSC_NO', 'Нет');
+define('TXT_WPSC_MARKETING', 'Маркетинг');
+define('TXT_WPSC_OPTION_ALSO_BOUGHT', 'Показывать продажи');
+define('TXT_WPSC_SHOW_SHARE_THIS', 'Показывать соц. закладки');
+define('TXT_WPSC_RSS_ADDRESS', 'Адрес RSS');
+define('TXT_WPSC_DISPLAYHOWCUSTOMERFINDUS', 'Показывать как Вы нас нашли');
+define('TXT_WPSC_RSSNOTE', '<strong>Примечание:</strong> Вы можете использовать этот адрес и в facebook. <br>Лишь добавте <a href="http://apps.facebook.com/getshopped">getshopped! facebook application</a> в вашем профиле и настройте.');
+define('TXT_WPSC_HIDEADDTOCARTBUTTON', 'Спрятать кнопку "Добавить в корзину"');
+define('TXT_WPSC_HIDEADDNAMELINK', 'Спрятать ссылку на название брэнда');
+define('TXT_WPSC_BUTTONTYPE', 'Тип кнопки');
+define('TXT_WPSC_BUYNOW', 'Купить сейчас');
+define('TXT_WPSC_SELECT_THEME', 'Выбрать тему');
+define('TXT_WPSC_SHOW_CATEGORY_DESCRIPTION', 'Показывать описание категории');
+define('TXT_WPSC_DISPLAY_PLUSTAX', 'Показывать "+налог"');
+define('TXT_WPSC_USPS_USERID', 'USPS ID');
+define('TXT_WPSC_SHIPWIRESETTINGS', 'Настройки ShipWire');
+define('TXT_WPSC_SHIPWIREEMAIL', 'ShipWire Email');
+define('TXT_WPSC_SHIPWIREPASSWORD', 'ShipWire пароль');
+define('TXT_WPSC_UPDATE_PAGE_URLS', 'Обновить URLы страниц');
+define('TXT_WPSC_FIX_CATEGORY_PERMALINKS', 'Исправить постоянные ссылки на категории');
+define('TXT_WPSC_REQUIRE_REGISTRATION', 'Пользователи должны быть зарегистрированы');
+define('TXT_WPSC_ANYONEREGISTER', 'Если да, то вам необходимо включить опцию Wordpress "Любой может зарегистрироваться"');
+
+
 define('TXT_WPSC_SHOWSPECIALS', 'Показывать специальное');
 define('TXT_WPSC_SHOWPRODUCTRATINGS', 'Показывать рейтинг товара');
 define('TXT_WPSC_CURRENCYSETTINGS', 'Установки валюты');
@@ -306,6 +353,7 @@ define('TXT_WPSC_THETRANSACTIONWASNOTSUCCESSFUL', 'Транзакция не б�
 define('TXT_WPSC_GOBACKTOCHECKOUT', 'Вернитесь к проверке');
 define('TXT_WPSC_SPECIALPRICE', 'Специальная цена');
 define('TXT_WPSC_USERACCOUNTURL', 'URL аккаунта пользователя');
+define('TXT_WPSC_YOUR_ACCOUNT', 'Ваш аккаунт');
 // дополнения к файлу
 define('TXT_WPSC_TAX_SETTINGS', 'Процент налога');
 define('TXT_WPSC_GENERAL_SETTINGS', 'Основные установки');
@@ -409,8 +457,10 @@ define('TXT_WPSC_COUNTRY_FORM_FIELD_EXPLANATION', '(выберите поле ф
 define('TXT_WPSC_SHIPPING', 'Отправка');
 define('TXT_WPSC_EMAIL_FORM_FIELD', 'Поле "Email"');
 define('TXT_WPSC_EMAIL_FORM_FIELD_EXPLANATION', '(выберите поле формы на странице контроля, которое Вы хотите использовать для того, чтобы определять email-адрес)');
-
-
+define('TXT_WPSC_PRODUCT_TAGS', 'Метки для товаров');
+define('TXT_WPSC_NO_SHIPPING', "Скидок не будет");
+define('TXT_WPSC_VARIATION_CONTROL', 'Контроль изменений');
+define('TXT_WPSC_PLEASECHOOSE', 'Выберите');
 
 
 define('TXT_WPSC_PRODUCTIMAGES', 'Изображение товара');
@@ -451,14 +501,10 @@ define('TXT_WPSC_REMOVE_LOG','Удалить журнал');
 define('TXT_WPSC_PLUGIN_NEWS', '
 
 The <a href="http://instinct.co.nz/blogshop/products-page/" target="_blank">WP DropShop Module</a> is the latest and most cutting edge shopping cart available online. Coupled with Grid View then your site will be the talk of street! <br/><br/>
-
-
-
 ');
-
-
-
-
+define('TXT_WPSC_PLEASE_LOGIN', 'Пожалуйста сделайте вход в систему если вы зарегистрированы');
+define('TXT_WPSC_IF_JUST_REGISTERED', 'Или зарегистрируйтесь пожалуйста');
+define('TXT_WPSC_CREDITCARDHANDY', 'Примечание, если Вы намерены оплачивать кредитной картой, то как только Вы нажмете “Отправить”, Ваша кредитная карта должна быть под руками.');
 define('TXT_WPSC_POWERED_BY', 'Магазин управляется ');
 define('TXT_WPSC_NO_PURCHASES', 'Пока никаких покупок не было.');
 
@@ -473,4 +519,9 @@ define('TXT_WPSC_PREVIEW', 'Предпросмотр');
 define('TXT_WPSC_DOWNLOAD_CSV', 'Скачать CSV');
 define('TXT_WPSC_PREVIEW_FILE', 'Предпросмотр файла');
 define('TXT_WPSC_REPLACE_PRODUCT', 'Заменить товар');
+
+define('TXT_WPSC_MANUAL_PAYMENT', 'Ручной платеж');
+define('TXT_WPSC_CREDIT_CARD', 'Кредитная карта');
+define('TXT_WPSC_CREDIT_CARD_AND_MANUAL_PAYMENT', 'Ручной платеж и кредитная карта');
+define('TXT_WPSC_PAYMENT_INSTRUCTIONS', 'Введите инструкции для ручного платежа сюда');
 ?>

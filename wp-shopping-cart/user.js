@@ -525,3 +525,11 @@ function statusTextKeyPress(event){
 	}
 	return true;
 }
+function switchmethod(key){
+	total=document.getElementById("shopping_cart_total_price").value;
+	ajax.post("index.php",usps_method_switch,"ajax=true&uspsswitch=true&key="+key+"&total="+total);
+}
+
+var usps_method_switch=function (results){
+	document.getElementById("checkout_total").innerHTML=results;
+}

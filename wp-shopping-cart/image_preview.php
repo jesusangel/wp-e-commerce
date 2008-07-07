@@ -35,12 +35,51 @@
  //Temp dimensions to crop image properly
     $temp_w = $width;
     $temp_h = $height;
-    if ($height < $width ) {
-       $temp_h = ($width / $source_w) * $source_h;
-    } else {
-       $temp_w = ($height / $source_h) * $source_w;
+    
+	// select our scaling method
+    $scaling_method = 'cropping';
+    
+    //list($source_h, $source_w) = array($source_w, $source_h);
+    
+    // set both offsets to zero
+    $offset_x = $offset_y = 0;
+    
+    // Here are the scaling methods, non-cropping causes black lines in tall images, but doesnt crop images.
+    switch($scaling_method) {
+      case  'cropping':
+        // if the image is wider than it is high and at least as wide as the target width. 
+				if (($source_h <= $source_w)) {				  
+					if ($height < $width ) {
+						$temp_h = ($width / $source_w) * $source_h;
+					} else {
+						$temp_w = ($height / $source_h) * $source_w;
+					}
+						
+					//$temp_w = ($height / $source_h) * $source_w;
+				} else {
+					$temp_h = ($width / $source_w) * $source_h;
+				}
+      break;    
+    
+      case 'non-cropping':
+      default:
+				if ($height < $width ) {
+					$temp_h = ($width / $source_w) * $source_h;
+				} else {
+					$temp_w = ($height / $source_h) * $source_w;
+				}
+			break;
     }
+    
+    
+//     echo "Source Height: $source_h <br />";
+//     echo "Source Width: $source_w <br />";
+//     echo "<br />";
+//     echo "Temp Height: $temp_h <br />";
+//     echo "Temp Width: $temp_w <br />";
+//     exit();
 
+ 
     // Create temp resized image
     $temp_img = ImageCreateTrueColor( $temp_w, $temp_h );
     $bgcolor = ImageColorAllocate( $temp_img, 255, 255, 255 );
@@ -49,17 +88,66 @@
 
     ImageCopyResampled( $temp_img, $src_img, 0, 0, 0, 0, $temp_w, $temp_h, $source_w, $source_h );
 
+
+
     $dst_img = ImageCreateTrueColor($width,$height);
     $bgcolor = ImageColorAllocate( $dst_img, 255, 255, 255 );
     ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $bgcolor );
     ImageAlphaBlending($dst_img, TRUE );
 
     // X & Y Offset to crop image properly
-    $w1 = ($temp_w/2) - ($width/2);
-    $h1 = ($temp_h/2) - ($height/2);
-   
+    if($temp_w < $width) {
+			$w1 = ($width/2) - ($temp_w/2);
+    } else if($temp_w == $width) {
+			$w1 = 0;
+    } else {
+			$w1 = ($width/2) - ($temp_w/2);
+    }
     
-    ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
+    if($temp_h < $height) {
+			$h1 = ($height/2) - ($temp_h/2);
+    } else if($temp_h == $height) {
+      $h1 = 0;
+    } else {
+			$h1 = ($height/2) - ($temp_h/2);
+    }
+
+// 		echo "Width: $width <br />";
+// 		echo "Height: $height <br />";
+// 		echo "<br />";
+// 		echo "Temp Width: $temp_w <br />";
+// 		echo "Temp Height: $temp_h <br />";
+// 		echo "<br />";
+// 		echo "Offset X: $w1 <br />";
+// 		echo "Offset Y: $h1 <br />";
+// 		echo "<br />";
+// 		
+// 		exit();
+   
+    switch($scaling_method) {
+      case  'cropping': 
+				//ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
+				ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );// 		echo "Width: $width <br />";
+				/*
+				echo "Width: $width <br />";
+				echo "Height: $height <br />";
+				echo "<br />";
+				echo "Temp Width: $temp_w <br />";
+				echo "Temp Height: $temp_h <br />";
+				echo "<br />";
+				echo "Offset X: $w1 <br />";
+				echo "Offset Y: $h1 <br />";
+				echo "<br />";
+				exit();
+				// */
+
+		  break;
+		  
+      case 'non-cropping':
+      default:
+				ImageCopy( $dst_img, $temp_img, 0, 0, 0, 0, $temp_w, $temp_h );
+      break;
+		}
     
     if($imagetype[2] == IMAGETYPE_PNG) {
       imagesavealpha($dst_img,true);
@@ -68,6 +156,7 @@
 
     header("Content-type: image/png");
     ImagePNG($dst_img);
+//    ImagePNG($temp_img);
     exit();
     }
 ?>

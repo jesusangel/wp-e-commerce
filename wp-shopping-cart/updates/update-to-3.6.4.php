@@ -204,7 +204,7 @@ if($converted_brand_count <= 0) {
 				$url_name .= $extension_number;   
 			}
 			
-			$wpdb->query( "INSERT INTO `wp_product_categories` ( `group_id`, `name`, `nice-name`, `description`, `image`, `fee`, `active`, `category_parent`, `order`) VALUES ( {$brand_group['id']}, '{$brand['name']}', '{$url_name}', '{$brand['description']}', '', '0', '1', 0, 0)");
+			$wpdb->query( "INSERT INTO `{$wpdb->prefix}product_categories` ( `group_id`, `name`, `nice-name`, `description`, `image`, `fee`, `active`, `category_parent`, `order`) VALUES ( {$brand_group['id']}, '{$brand['name']}', '{$url_name}', '{$brand['description']}', '', '0', '1', 0, 0)");
 		}  
 	}
 }
@@ -213,5 +213,14 @@ if($converted_brand_count <= 0) {
 if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}wpsc_productmeta` LIKE 'custom';",ARRAY_A)) {
 	$wpdb->query("ALTER TABLE `{$wpdb->prefix}wpsc_productmeta` ADD `custom` VARCHAR( 1 ) NOT NULL DEFAULT '0' AFTER `meta_value`;");
 	$wpdb->query("ALTER TABLE `{$wpdb->prefix}wpsc_productmeta` ADD INDEX ( `custom` ) ;");
+}
+
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}download_status` LIKE 'ip_number';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}download_status` ADD `ip_number` varchar(255) NOT NULL AFTER `downloads`;");
+}
+
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}product_list` LIKE 'weight';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_list` ADD `weight` INT( 11 ) NOT NULL DEFAULT 0 AFTER `price`;");
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_list` ADD `weight_unit` VARCHAR( 10 ) NOT NULL AFTER `weight`;");
 }
 ?>

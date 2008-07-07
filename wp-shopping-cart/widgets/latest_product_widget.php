@@ -20,13 +20,24 @@ function nzshpcrt_latest_product($input = null) {
 	if($latest_product != null) {
 		$output = "<div>";
 		foreach($latest_product as $special){
+			
 			$output.="<a href='".wpsc_product_url($special['id'],$special['category'])."'><div>";
+			$output .= "<div class='item_image'>";
 			if($special['image'] != null) {
-				$output .= "<img src='".WPSC_THUMBNAIL_URL.$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+				if(get_option('wpsc_selected_theme')) {
+					$src = WPSC_IMAGE_URL.$special['image'];
+							
+					$output .= "<img src='index.php?productid=".$special['id']."&amp;width=100&amp;height=70' title='".$special['name']."' alt='".$special['name']."' id='product_image_".$product['id']."' class='product_image'/>";
+					
+				} else {
+					$output .= "<img src='".WPSC_THUMBNAIL_URL.$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+				}
 			} else {
-				$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
+				$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
 			}
-			$output .= "<strong>".$special['name']."</strong></a><br><br /> ";
+			$output .= "</div>";
+			$output .= "<strong>".stripslashes($special['name'])."</strong></a><br><br /> ";
+			
 			$output .= "</div>";
 		}
 		$output .= "</div>";

@@ -87,7 +87,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= TXT_WPSC_PRODUCTNAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input  size='30' type='text' class='text'  name='title' value='".stripslashes($product['name'])."' />";
+  $output .= "<input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
@@ -314,7 +314,24 @@ function nzshpcrt_getproductform($prodid)
   $output .= "</h3>
       <div class='inside'>
   <table>";
-  
+    if ($product['weight_unit']=='pound') {
+	  $unit1="selected='selected'";
+  } else {
+	  $unit2="selected='selected'";
+  }
+	$output .= "<tr>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "		". TXT_WPSC_WEIGHT."\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "		<input type='text' size='5' name='weight' value='".$product['weight']."'>\n\r";
+	$output .= "		<select>\n\r";
+	$output .= "			<option $unit1 value='pound'>Pounds</option>\n\r";
+	$output .= "			<option $unit2 value='once'>Onces</option>\n\r";
+	$output .= "		</select>\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "</tr>";
+
   $output .= "    <tr>\n\r";
   $output .= "      <td>";
   $output .= TXT_WPSC_LOCAL_PNP;
@@ -752,7 +769,7 @@ function nzshpcrt_getcategoryform($catid)
   $output .= TXT_WPSC_NAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' name='title' value='".stripslashes($product['name'])."' />";
+  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
@@ -884,13 +901,13 @@ function nzshpcrt_getvariationform($variation_id)
   $variation_sql = "SELECT * FROM `".$wpdb->prefix."product_variations` WHERE `id`='$variation_id' LIMIT 1";
   $variation_data = $wpdb->get_results($variation_sql,ARRAY_A) ;
   $variation = $variation_data[0];
-  $output .= "        <table>\n\r";
+  $output .= "        <table class='category_forms' >\n\r";
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= TXT_WPSC_NAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' name='title' value='".stripslashes($variation['name'])."' />";
+  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES)."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
@@ -1033,17 +1050,28 @@ function coupon_edit_form($coupon) {
   return $output;
   }
   
-  function setting_button(){
+function setting_button(){
+	$itemsFeedURL = "http://www.google.com/base/feeds/items";
+	$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wp-shopping-cart/display-items.php";
+	$redirect_url = 'https://www.google.com/accounts/AuthSubRequest?session=1';
+	$redirect_url .= '&next=';
+	$redirect_url .= urlencode($next_url);
+	$redirect_url .= "&scope=";
+	$redirect_url .= urlencode($itemsFeedURL);
+	
+// 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/settings_button.jpg' onclick='display_settings_button()'>";
 	$output.="<div><input type='button' value='Settings &raquo;' class='button' onclick='display_settings_button()'>";
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
-	$output.="<li><a href='?page=".WPSC_DIR_NAME."/options.php'>Shop Settings</a></li>";
-	$output.="<li><a href='?page=".WPSC_DIR_NAME."/gatewayoptions.php'>Money and Payment</a></li>";
-	$output.="<li><a href='?page=".WPSC_DIR_NAME."/form_fields.php'>Chechkout page Settings</a></li>";
-	$output.="<li><a href='?page=".WPSC_DIR_NAME."/instructions.php'>Help/Upgrade</a></li>";
+	$output.="<li><a href='?page=wp-shopping-cart/options.php'>Shop Settings</a></li>";
+	$output.="<li><a href='?page=wp-shopping-cart/getwayoptions.php'>Money and Payment</a></li>";
+	$output.="<li><a href='?page=wp-shopping-cart/form_fields.php'>Chechkout page Settings</a></li>";
+	$output.="<li><a href='?page=wp-shopping-cart/instructions.php'>Help/Upgrade</a></li>";
+	$output.="<li><a href='{$redirect_url}'>Login to Google base</a></li>";
 	$output.="</ul>";
-	$output.="</span>&nbsp;&nbsp;</div>";
+//	$output.="<div>Checkout Settings</div>";
+	$output.="</span>&emsp;&emsp;</div>";
 	
 	return $output;
-  }
+}
 ?>

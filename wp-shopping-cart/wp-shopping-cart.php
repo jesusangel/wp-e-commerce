@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.6
+Version: 3.6.7 Beta
 Author: Thomas Howard of Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
@@ -12,7 +12,7 @@ define('WPSC_VERSION', '3.6');
  * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
  * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
  */
-define('WPSC_MINOR_VERSION', '55');
+define('WPSC_MINOR_VERSION', '65');
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -27,7 +27,10 @@ define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
 $siteurl = get_option('siteurl');
-define('WPSC_URL', str_replace(ABSPATH, $siteurl."/",  WPSC_FILE_PATH));
+
+// thanks to ikool for this fix
+define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
+define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
 
 
 
@@ -68,6 +71,7 @@ if(get_option('language_setting') != '') {
 }
 require(WPSC_FILE_PATH.'/classes/variations.class.php');
 require(WPSC_FILE_PATH.'/classes/extra.class.php');
+// require(WPSC_FILE_PATH.'/classes/http_client.php');
 require(WPSC_FILE_PATH.'/classes/mimetype.php');
 require(WPSC_FILE_PATH.'/classes/cart.class.php');
 require(WPSC_FILE_PATH.'/classes/xmlparser.php');
@@ -209,7 +213,7 @@ class wp_shopping_cart {
         gold_shpcrt_options($base_page);
         }
       add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
-      add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
+//       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
       }
     return;
     }
@@ -332,6 +336,7 @@ function wpsc_admin_css() {
   if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 ?>
 <link href='<?php echo WPSC_URL; ?>/admin.css' rel="stylesheet" type="text/css" />
+<link href='<?php echo WPSC_URL; ?>/js/jquery.ui.tabs.css' rel="stylesheet" type="text/css" />
 <!--[if gte IE 6]>
 <link href='<?php echo WPSC_URL; ?>/admin-ie.css' rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -340,6 +345,7 @@ function wpsc_admin_css() {
 
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.tooltip.js"></script>
 <script language='JavaScript' type='text/javascript'>
+
 /* base url */
 var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
@@ -451,14 +457,11 @@ function nzshpcrt_submit_ajax()
   {
   global $wpdb,$user_level,$wp_rewrite;
   get_currentuserinfo();  
-  if(get_option('permalink_structure') != '')
-    {
+  if(get_option('permalink_structure') != '') {
     $seperator ="?";
-    }
-    else
-      {
-      $seperator ="&amp;";
-      }
+	} else {
+		$seperator ="&amp;";
+	}
    
    $cartt = $_SESSION['nzshpcrt_cart'];
    $cartt1=$cartt[0]->product_id;
@@ -589,7 +592,20 @@ function nzshpcrt_submit_ajax()
 		exit();
 	}
 
-	
+		////changes for usps
+	if ($_POST['uspsswitch']) {
+		foreach ($_SESSION['uspsQuote'] as $quotes) {
+			$total=$_POST['total'];
+			if ($quotes[$_POST['key']]!='') {
+				echo nzshpcrt_currency_display($total+$quotes[$_POST['key']],1);
+					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
+				$_SESSION['usps_shipping']= $quotes[$_POST['key']];
+			}
+		}
+		
+		exit();
+	}
+	//changes for usps ends
 	
     if(($_GET['user'] == "true") && is_numeric($_POST['prodid']))
       {
@@ -657,34 +673,25 @@ function nzshpcrt_submit_ajax()
 					}
 				}
 			}
-			if($item_data[0]['donation'] == 1)
-			  {
+			if($item_data[0]['donation'] == 1) {
 			  $donation = $_POST['donation_price'];
-			  }
-			  else
-				{
+			} else 	{
 				$donation = false;
-				}
-			if (($memberstatus[0]=='1')&&(count($_SESSION['nzshpcrt_cart'])>0)){
-				}else{
+			}
+			if(!(($memberstatus[0]=='1')&&(count($_SESSION['nzshpcrt_cart'])>0))){
 				$status = get_product_meta($cartt1, 'is_membership', true);
 				if ($status[0]=='1'){
 				  exit();
 				}	
-				if($updated_quantity === false)
-				  {
-				  if(is_numeric($_POST['quantity']))
-					{
-					if($_POST['quantity'] > 0)
-					  {
-					  $new_cart_item = new cart_item($_POST['prodid'],$variations,$_POST['quantity'], $donation,$extras);
+				if($updated_quantity === false) {
+				  if(is_numeric($_POST['quantity'])) {
+						if($_POST['quantity'] > 0) {
+							$new_cart_item = new cart_item($_POST['prodid'],$variations,$_POST['quantity'], $donation,$extras);
 					  }
-					}
-					else
-					  {
+					} else {
 						//echo "correct";
 					  $new_cart_item = new cart_item($_POST['prodid'],$variations, 1, $donation,$extras);
-					  }
+					}
 				  $_SESSION['nzshpcrt_cart'][] = $new_cart_item;
 				  }
 			  }
@@ -1306,7 +1313,7 @@ function nzshpcrt_submit_ajax()
       /* man, this is a hard to read SQL statement */
       $sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$_GET['category_id']."') ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC $limit";      
     } else {
-      $sql = "SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') $limit";
+      $sql = "SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') ORDER BY `id` DESC $limit";
     }
     
     
@@ -1563,12 +1570,23 @@ function nzshpcrt_download_file() {
 		  $download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `id` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' AND `uniqueid` IS NULL LIMIT 1",ARRAY_A);
 		}
 		
+		if((get_option('wpsc_ip_lock_downloads') == 1) && ($_SERVER['REMOTE_ADDR'] != null)) {
+		  $ip_number = $_SERVER['REMOTE_ADDR'];
+		  if($download_data['ip_number'] == '') {
+		    // if the IP number is not set, set it
+		    $wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `ip_number` = '{$ip_number}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+		  } else if($ip_number != $download_data['ip_number']) {
+		    // if the IP number is set but does not match, fail here.
+// 				return false;
+				exit(WPSC_DOWNLOAD_INVALID);
+		  }
+		}
+		
     //exit("<pre>".print_r($download_data,true)."</pre>");
    
     if($download_data != null) {
       $file_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$download_data['fileid']."' LIMIT 1",ARRAY_A) ;
-      $file_data = $file_data[0];
-      
+      $file_data = $file_data[0];      
       
       if((int)$download_data['downloads'] >= 1) {
         $download_count = (int)$download_data['downloads'] - 1;
@@ -1773,12 +1791,12 @@ function nzshpcrt_product_vote($prodid, $starcontainer_attributes = '')
        
       if(($browsername == 'MSIE') && ($browserversion < 7.0))
         {
-        $starimg = ''. get_option('siteurl').'/images/star.gif';
+        $starimg = ''. get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/images/star.gif';
         $ie_javascript_hack = "onmouseover='ie_rating_rollover(this.id,1)' onmouseout='ie_rating_rollover(this.id,0)'";
         }
         else 
           {
-          $starimg = ''. get_option('siteurl').'/images/24bit-star.png';
+          $starimg = ''. get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/images/24bit-star.png';
           $ie_javascript_hack = '';
           }
        
@@ -2009,6 +2027,8 @@ function nzshpcrt_user_log($content = '') {
 	}
 }
   
+  
+//displays a list of categoies when the code [showcategories] is present in a post or page.
 function nzshpcrt_show_categories($content = '') {
   if(preg_match("/\[showcategories\]/",$content)) {
     $GLOBALS['nzshpcrt_activateshpcrt'] = true;
@@ -2018,6 +2038,28 @@ function nzshpcrt_show_categories($content = '') {
     return $content;
 	}
 }
+
+
+// This function displays the category gropus, it is used by the above function
+function nzshpcrt_display_categories_groups() {
+    global $wpdb;
+
+    if(get_option('permalink_structure') != '') {
+      $seperator ="?";
+    } else {
+      $seperator ="&amp;";
+    }
+
+    if(function_exists('gold_shpcrt_search_form') && get_option('show_search') == 1) {
+      echo gold_shpcrt_search_form();
+    }
+
+    //include("show_cats_brands.php");
+    if (get_option('cat_brand_loc') == 0) {
+      show_cats_brands();
+    }
+  }
+
 
 function add_product_meta($product_id, $key, $value, $unique = false) {
   global $wpdb, $post_meta_cache, $blog_id;
@@ -2121,10 +2163,14 @@ function wpsc_refresh_page_urls($content) {
   $changes_made = false;
   foreach($wpsc_pageurl_option as $option_key => $page_string) {
     $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%$page_string%' LIMIT 1");
-    update_option($option_key, get_permalink($post_id));
-    }
+    $the_new_link = get_permalink($post_id);
+    if(stristr(get_option($option_key), "https://")) {
+      $the_new_link = str_replace('http://', "https://",$the_new_link);
+    }    
+    update_option($option_key, $the_new_link);
+	}
   return $content;
-  }
+}
   
 
 	function wpsc_product_permalinks($rewrite_rules) {
@@ -2218,10 +2264,10 @@ include_once(WPSC_FILE_PATH.'/image_processing.php');
 include_once(WPSC_FILE_PATH."/show_cats_brands.php");
 
 
-$theme_path = WPSC_URL . '/themes/';
+$theme_path = WPSC_FILE_PATH . '/themes/';
 if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
   include_once(WPSC_FILE_PATH.'/themes/'.get_option('wpsc_selected_theme').'/'.get_option('wpsc_selected_theme').'.php');
-  }
+}
 
 $current_version_number = get_option('wpsc_version');
 if(count(explode(".",$current_version_number)) > 2) {
@@ -2255,8 +2301,7 @@ function nzshpcrt_enable_page_filters($excerpt = ''){
   return $excerpt;
   }
 
-function nzshpcrt_disable_page_filters($excerpt = '')
-  {
+function nzshpcrt_disable_page_filters($excerpt = '') {
   remove_filter('the_content', 'nzshpcrt_products_page');
   remove_filter('the_content', 'nzshpcrt_shopping_cart');
   remove_filter('the_content', 'nzshpcrt_transaction_results');
@@ -2272,14 +2317,7 @@ nzshpcrt_enable_page_filters();
 
 add_filter('get_the_excerpt', 'nzshpcrt_disable_page_filters', -1000000);
 add_filter('get_the_excerpt', 'nzshpcrt_enable_page_filters', 1000000);
-//add_filter('mod_rewrite_rules', 'wpsc_refresh_page_urls');
-
-
-add_filter('mod_rewrite_rules', 'wpsc_refresh_page_urls');
-//add_action('generate_rewrite_rules', 'wpsc_refresh_page_urls');
-
-
-//add_filter('wp_list_pages', 'nzshpcrt_hidepages');
+ 
  
 add_action('wp_head', 'nzshpcrt_style');
 
@@ -2297,7 +2335,22 @@ add_action('init', 'nzshpcrt_submit_ajax');
 add_action('init', 'nzshpcrt_download_file');
 add_action('init', 'nzshpcrt_display_preview_image');
 
+if(stristr($_GET['page'], WPSC_DIR_NAME)) {
+  add_action('admin_notices', 'wpsc_admin_notices');
+}
 
+
+function wpsc_admin_notices() {
+  global $wpdb;
+
+  if((get_option('default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_categories` WHERE `id` IN ('".get_option('default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
+    if(!$_POST['default_category']) { // if we are not changing the default category
+			echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
+			echo "<p>".TXT_WPSC_NO_DEFAULT_PRODUCTS."</p>";
+			echo "</div>\n\r";
+		}
+  }
+}
 
 function wpsc_admin_latest_activity() {
   $user = wp_get_current_user();
@@ -2334,35 +2387,45 @@ if(get_option('wpsc_share_this') == 1) {
 }
  
 add_filter('option_update_plugins', 'wpsc_plugin_no_upgrade');
-function wpsc_plugin_no_upgrade($option){
+function wpsc_plugin_no_upgrade($option) {
 	$this_plugin = plugin_basename(__FILE__);
   //echo "<pre>".print_r($option->response[ $this_plugin ],true)."</pre>";
-	if( isset($option->response[ $this_plugin ]) ){
+	if( isset($option->response[ $this_plugin ]) ) {
 		$option->response[ $this_plugin ]->package = '';
 	}
 	return $option;
 }
 
-// if(get_option('cat_brand_loc') != 0)
-//   {
-//   //add_action('wp_list_pages', 'show_cats_brands');
+// if(get_option('cat_brand_loc') != 0) {
+//   add_action('wp_list_pages', 'show_cats_brands');
 //   }
 // }.pe
 add_action('plugins_loaded', 'widget_wp_shopping_cart_init');
 
 
+// refresh page urls when permalinks are turned on or altered
+add_filter('mod_rewrite_rules', 'wpsc_refresh_page_urls');
+
+// refresh the page URL's when permalinks are turned off
+// the plugin hook used just above doesnt run when they are turned off
+// if(stristr($_POST['_wp_http_referer'], 'options-permalink.php')) {
+// 	add_filter('admin_head', 'wpsc_refresh_page_urls');
+// }
+
+
 if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
   wp_enqueue_script( 'jQuery', WPSC_URL.'/js/jquery.js', false, '1.2.3');
-	wp_enqueue_script('instinct_thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
+// 	wp_enqueue_script('instinct_thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
+	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
 } else {
 	wp_enqueue_script('thickbox');
+	wp_enqueue_script('ui-tabs',WPSC_URL.'/js/jquery.tabs.pack.js?ver=2.7.4', array('jquery'), '2.7.4');
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
 }
 
-switch(get_option('cart_location'))
-  {
+switch(get_option('cart_location')) {
   case 1:
   add_action('wp_list_pages','nzshpcrt_shopping_basket');
   break;
@@ -2400,7 +2463,7 @@ switch(get_option('cart_location'))
   default:
   add_action('the_content', 'nzshpcrt_shopping_basket');
   break;
-  }
+}
 
 
   

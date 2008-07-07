@@ -41,24 +41,7 @@ if($_GET['cart']== 'empty') {
 if(function_exists('fancy_notifications')) {
   echo fancy_notifications();
   }
-function nzshpcrt_display_categories_groups() {
-    global $wpdb;
 
-    if(get_option('permalink_structure') != '') {
-      $seperator ="?";
-    } else {
-      $seperator ="&amp;";
-    }
-
-    if(function_exists('gold_shpcrt_search_form') && get_option('show_search') == 1) {
-      echo gold_shpcrt_search_form();
-    }
-
-    //include("show_cats_brands.php");
-    if (get_option('cat_brand_loc') == 0) {
-      show_cats_brands();
-    }
-  }
 
 
   $num = 0; 
@@ -104,13 +87,11 @@ function nzshpcrt_display_categories_groups() {
 					echo "".$category_image."<strong class='cattitles'>".stripslashes($category_data[0]['name'])."</strong>";
 					if((get_option('wpsc_category_description') == 'true') && ($category_data[0]['description'] != '')) {
 						//echo "<p>".stripslashes($category_data[0]['description'])."</p>";
-						echo "<pre>".$category_data[0]['description']."</pre>";
+						echo "<p>".nl2br($category_data[0]['description'])."</p>";
 					}
 				}
 				if(get_option('fancy_notifications') != 1) {
 					echo "<span id='loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span><br />";
-				} else {
-					echo "<br />";
 				}
 				if (isset($GET['item_per_page'])){
 					$item_per_page = $_GET['item_per_page'];

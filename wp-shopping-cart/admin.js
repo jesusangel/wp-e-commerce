@@ -13,8 +13,7 @@ if(typeof(select_min_height) == undefined)
   }
 
 jQuery(document).ready(
-  function()
-  {  
+  function() {  
   jQuery('div.select_product_file').Resizable({
     minWidth: 300,
     minHeight: select_min_height,
@@ -27,8 +26,7 @@ jQuery(document).ready(
   }
 );
 
-function activate_resizable()
-  {
+function activate_resizable() {
   jQuery('div.edit_select_product_file').Resizable({
     minWidth: 300,
     minHeight: select_min_height,
@@ -37,22 +35,34 @@ function activate_resizable()
     handlers: {
       s: '.edit_select_product_handle'
       }
-    });
-  }
+	});
+}
   
-function categorylist(url)
-  {
+	jQuery(document).ready(function(){
+		jQuery(function() {
+		  // set us up some mighty fine tabs for the options page
+			jQuery('#wpsc_options > ul').tabs();
+			
+			// this here code handles remembering what tab you were on
+			jQuery('#wpsc_options > ul').bind('tabsselect', function(event, ui) {
+			  form_action = jQuery('#cart_options').attr('action').split('#');  //split at the #
+			  form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+			  jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
+			});
+		});
+  });
+  
+  
+function categorylist(url) {
   self.location = url;
-  }
+}
   
-function submit_change_country()
-  {
+function submit_change_country() {
   document.cart_options.submit();
   //document.cart_options.submit();
-  }
+}
   
-var getresults=function(results)
-  {
+var getresults=function(results) {
   document.getElementById('formcontent').innerHTML = results;
   document.getElementById('additem').style.display = 'none';
   document.getElementById('productform').style.display = 'block';
@@ -67,7 +77,7 @@ var getresults=function(results)
   });
   activate_resizable();
   TB_init();
-  }  
+}
 
 function filleditform(prodid)
 	{

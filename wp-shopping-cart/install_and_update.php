@@ -9,7 +9,7 @@ function wpsc_auto_update() {
     include_once('updates/update-to-3.5.2.php');
 	}
 
- if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && (get_option('wpsc_minor_version') < 38))) {
+ if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && (get_option('wpsc_minor_version') < 62))) {
     include_once('updates/update-to-3.6.0.php');
     include_once('updates/update-to-3.6.4.php');
 	}
@@ -158,6 +158,7 @@ function nzshpcrt_install()
 		`purchid` bigint(20) unsigned NOT NULL default '0',
 		`uniqueid` varchar(64) default NULL,
 		`downloads` int(11) NOT NULL default '0',
+		`ip_number` varchar(255) NOT NULL default '',
 		`active` varchar(1) NOT NULL default '0',
 		`datetime` datetime NOT NULL,
 		PRIMARY KEY  (`id`),
@@ -301,6 +302,8 @@ function nzshpcrt_install()
 		`description` longtext NOT NULL,
 		`additional_description` longtext NOT NULL,
 		`price` varchar(20) NOT NULL default '0',
+		`weight` int(11) NOT NULL default '0',
+		`weight_unit` varchar(10) NOT NULL,
 		`pnp` varchar(20) NOT NULL default '0',
 		`international_pnp` varchar(20) NOT NULL default '0',
 		`file` bigint(20) unsigned NOT NULL,
@@ -1163,6 +1166,7 @@ function wpsc_uninstall_plugin() {
 		$option_list[] = 'wpsc_use_pnp_cols ';
 		$option_list[] = 'wpsc_version'; 
 		$option_list[] = 'wpsc_incomplete_file_transfer'; 
+		$option_list[] = 'wpsc_ip_lock_downloads'; 
 		
 		foreach($option_list as $wpsc_option) {
 			delete_option($wpsc_option);
@@ -1290,8 +1294,6 @@ function wpsc_create_upload_directories() {
 
   $wpsc_files_directory = ABSPATH.get_option('upload_path').'/wpsc/';
   
-  
-  
   if(!is_dir(ABSPATH.get_option('upload_path'))) {
 	  @ mkdir(ABSPATH.get_option('upload_path'), 0775);
   }
@@ -1306,7 +1308,7 @@ function wpsc_create_upload_directories() {
   }
   
 	if(!is_dir(WPSC_PREVIEW_DIR)) {
-		 mkdir(WPSC_PREVIEW_DIR, 0775);
+		@ mkdir(WPSC_PREVIEW_DIR, 0775);
 	}
 		
 	if(!is_dir(WPSC_IMAGE_DIR)) {

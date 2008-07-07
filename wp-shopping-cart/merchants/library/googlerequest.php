@@ -191,7 +191,6 @@
       }
       $postargs .= "<comment>". htmlentities($comment) . "</comment>
                   </refund-order>";
-      echo $postargs;
       return $this->SendReq($this->request_url, 
                    $this->GetAuthenticationHeaders(), $postargs);
     }

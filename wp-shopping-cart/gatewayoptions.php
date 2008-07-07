@@ -9,19 +9,34 @@ if (isset($_GET['googlecheckoutshipping'])) {
 $curgateway = get_option('payment_gateway');
 $changes_made = false;
  
- 
- 
 
 if(is_numeric($_POST['payment_method']) && (get_option('payment_gateway') != $_POST['payment_method'])) {
 	update_option('payment_method', $_POST['payment_method']);
 	$changes_made = true;
 }
-	
-if($_POST['payment_instructions'] != get_option('payment_instructions')) {
+
+
+if ($_POST['custom_gateway_options'] != null){
+	update_option('custom_gateway_options', $_POST['custom_gateway_options']);
+	$changes_made = true;
+}
+
+if(isset($_POST['payment_instructions']) && ($_POST['payment_instructions'] != get_option('payment_instructions'))) {
 	update_option('payment_instructions', $_POST['payment_instructions']);
 	$changes_made = true;
 }
 
+
+if(isset($_POST['custom_gateway'])) {
+  // this particular form field refuses to submit in a way that appears to defy logic if dealt with like the others, hence this overkill
+	if($_POST['custom_gateway'] == 1) {
+		update_option('custom_gateway', 1);
+		$changes_made = true;
+	} else if(($_POST['custom_gateway'] == 0) && (get_option('custom_gateway') != 0)) {
+		update_option('custom_gateway', 0);
+		$changes_made = true;
+	}
+}
 if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] == null)) {
   update_option('payment_gateway', $_POST['payment_gw']);
 	$curgateway = get_option('payment_gateway');
@@ -36,26 +51,25 @@ if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] != null)) {
 		}
 	}
 }
-
-if($changes_made == true)
-  {
+if($changes_made == true) {
   echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
-  }
+}
+if (get_option('custom_gateway')) {
+	$custom_gateway1 = "checked='checked'";
+} else {
+	$custom_gateway2 = "checked='checked'";
+}
 //exit($curgateway);
 $form = "";
-foreach($nzshpcrt_gateways as $gateway)
-  {
-  if($gateway['internalname'] == $curgateway )
-    {
+foreach($nzshpcrt_gateways as $gateway) {
+  if($gateway['internalname'] == $curgateway ) {
     $selected = " selected='selected'";
     $form = $gateway['form']();
-    }
-    else
-      {
-      $selected = '';
-      }
+	} else {
+		$selected = '';
+	}
   $gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
-  }
+}
 $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY."</option>" . $gatewaylist;
 
 
@@ -109,12 +123,58 @@ function selectgateway()
   <br />
   <br />
   
+	<?php 
+		if (get_option('custom_gateway') == 1){ 
+			$custom_gateway_hide="style='display:block;'";
+			$custom_gateway1 = 'checked="true"';
+		} else {
+			$custom_gateway_hide="style='display:none;'";
+			$custom_gateway2 = 'checked="true"';
+		}
+	?>
   <h2><?php echo TXT_WPSC_GATEWAY_OPTIONS;?></h2>
-  <table>
+  <p>Do you want your customers to be able to choose from multiple payment gateways at checkout?</p>
+  <table class='form-table'>
     <tr>
-      <td>
+	   <!-- <th scope='row'><?php echo TXT_WPSC_CUSTOMERCHOOSEGATEWAY;?></th>-->
+	    <td colspan='2'>
+	    <input onclick="jQuery('#custom_gateway_div').slideDown(200)" <?=$custom_gateway1;?> type='radio' value='1' name='custom_gateway' id='custom_gateway_1'>
+	    <label for='custom_gateway_1'><?php echo TXT_WPSC_YES;?></label>
+	    <input <?=$custom_gateway2;?> onclick="jQuery('#custom_gateway_div').slideUp(200)" type='radio' value='0' name='custom_gateway' id='custom_gateway_2'>
+	    <label for='custom_gateway_2'><?php echo TXT_WPSC_NO;?></label><br>
+	    <small>Note: Select the ones that you have entered your details only</small>
+	    <div id='custom_gateway_div' <?=$custom_gateway_hide?>>
+	    <table>
+	    <tr>
+	  <th style='border-bottom:none;'>
+	  Select Gateways
+	  </th>
+	  <td  style='border-bottom:none;'>
+	  
+	  <?php
+		foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+			if (($gateway['internalname'] != 'testmode') && ($gateway['internalname'] != 'google')) {
+				$selected_gateways = get_option('custom_gateway_options');
+				if (in_array($gateway['internalname'], (array)$selected_gateways)) {
+					echo "<input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
+				} else {
+					echo "<input name='custom_gateway_options[]' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
+				}
+			}
+		}
+		?>
+		</div>
+	</td>
+	</td>
+	    </table>
+	    </td>
+	   
+	</tr>
+	
+    <tr>
+      <th scope='row'>
       <?php echo TXT_WPSC_PAYMENTGATEWAY2;?>
-      </td>
+      </th>
       <td>
       <select name='payment_gw' onChange='selectgateway();'>
       <?php
