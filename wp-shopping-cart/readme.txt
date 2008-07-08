@@ -4,7 +4,7 @@ Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control
 Requires at least: 2.0.2
 Tested up to: 2.5.1
-Stable tag: 3.6.6
+Stable tag: 3.6.7
 
 == Description ==
 
@@ -29,8 +29,6 @@ Perfect for:
 Simply copy the new files across and replace the old files saving saving ones you've modified. If you have product images uploaded then do not overwrite the product_images folder or images folder. If you have downloadable products for sale do not overwrite the files folder.
 
 When updating it is important that you do not overwrite the entire images folder. Instead you should copy over the contents of the new images folder into the existing images folder on your server - saving all the exiting product images you may have already uploaded.
-
-There are also four new images that you need to copy over. These files are order_bottom.png, order_down.png, order_top.png, and order_up.png - you must copy these files into the existing image folder on your server to ensure that the new product ordering feature works.
 
 If you experience database errors try de-activating and re-activating your plugin. 
 
