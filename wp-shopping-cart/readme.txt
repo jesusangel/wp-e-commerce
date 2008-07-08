@@ -6,7 +6,6 @@ Requires at least: 2.0.2
 Tested up to: 2.5.1
 Stable tag: 3.6.6
 
-
 == Description ==
 
 The WP e-Commerce shopping cart plugin for WordPress is an elegant easy to use fully featured http:shopping cart application suitable for selling your products, services, and or fees online.
