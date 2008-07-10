@@ -62,22 +62,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 
 <form action='' method='POST' enctype="multipart/form-data">
 <table class='wpsc_checkout_table'>
- <?php
-	$cart = $_SESSION['nzshpcrt_cart'];
-  foreach($cart as $key => $product) {
-		$product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '{$product->product_id}' LIMIT 1",ARRAY_A);
-		$can_have_uploaded_image = get_product_meta($product->product_id,'can_have_uploaded_image',true);
-		if ($can_have_uploaded_image[0]=='on'){
-			echo "<tr>\n\r";
-			echo "  <td colspan='2'>\n\r";
-			echo "<h2 style='margin-bottom: 6px;'>".TXT_WPSC_UPLOAD_IMAGE_FOR." ".$product_data['name']."</h2>\n\r";
-			echo "<input type='file' name='uploaded_image[$key]' value=''> \n\r";//
-			
-			echo "  </td>\n\r";
-			echo "</tr>\n\r";
-		}
-  }
- ?>
+
  
  
 
@@ -174,23 +159,40 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
         </tr>\n\r";
         }
     }
-    echo "
-    <tr>
-<td colspan='2'>
-<strong>".TXT_WPSC_SELECTGATEWAY."</strong>
-</td>
-</tr>
-";
-    echo "<tr><td colspan='2'>";
-		if (get_option('custom_gateway')) {
-			foreach (get_option('custom_gateway_options') as $option) {
-				foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
-					if ($gateway['internalname'] == $option)
-						echo "<input name='custom_gateway' value='$option' type='radio'>{$gateway['name']}<br>";
+    
+	$cart = $_SESSION['nzshpcrt_cart'];
+  foreach($cart as $key => $product) {
+		$product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '{$product->product_id}' LIMIT 1",ARRAY_A);
+		$can_have_uploaded_image = get_product_meta($product->product_id,'can_have_uploaded_image',true);
+		if ($can_have_uploaded_image[0]=='on'){
+			echo "<tr>\n\r";
+			echo "  <td colspan='2'>\n\r";
+			echo "<h2 style='margin-bottom: 6px;'>".TXT_WPSC_UPLOAD_IMAGE_FOR." ".$product_data['name']."</h2>\n\r";
+			echo "<input type='file' name='uploaded_image[$key]' value=''> \n\r";//
+			
+			echo "  </td>\n\r";
+			echo "</tr>\n\r";
+		}
+  }    
+
+	if (get_option('custom_gateway')) {    
+		echo "<tr>\n\r";
+		echo "  <td colspan='2'>\n\r";
+		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";
+		echo "  </td>\n\r";
+		echo "</tr>\n\r";
+		echo "<tr>\n\r";
+		echo "  <td colspan='2'>\n\r";
+		foreach (get_option('custom_gateway_options') as $option) {
+			foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
+				if ($gateway['internalname'] == $option) {
+					echo "<input name='custom_gateway' value='$option' type='radio'>{$gateway['name']}<br>";
 				}
 			}
 		}
-	echo "</td></tr>";
+		echo "  </td>\n\r";
+		echo "</tr>";
+	}
 	if(isset($gateway_checkout_form_fields)) {
 		echo $gateway_checkout_form_fields;
 	}
@@ -294,9 +296,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	?>
     <tr>
       <?php if((is_user_logged_in() && (get_option('require_register') == 1)) xor (get_option('require_register') == 0)) { ?>
-      <td>
-      </td>
-      <td>
+      <td colspan='2'><br />
       <input type='hidden' value='true' name='submitwpcheckout' />
 	<?php 
 	if (get_option('payment_gateway') == 'google') { 
