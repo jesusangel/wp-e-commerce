@@ -57,6 +57,7 @@ function nzshpcrt_getproductform($prodid)
   $meta_data = $wpdb->get_results($sql,ARRAY_A) ;
   $product['merchant_notes'] = $meta_data[0]['meta_value'];
   $engrave = get_product_meta($prodid,'engraved',true);
+  $can_have_uploaded_image = get_product_meta($prodid,'can_have_uploaded_image',true);
   if(function_exists('wp_insert_term')) {
 		$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = $prodid", ARRAY_A);
 		
@@ -87,7 +88,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= TXT_WPSC_PRODUCTNAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />";
+  $output .= "<input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
@@ -387,16 +388,29 @@ function nzshpcrt_getproductform($prodid)
   $output .= "<label for='form_display_frontpage'>".TXT_WPSC_DISPLAY_FRONT_PAGE."</form>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
+  
+  
   if ($engrave[0]=='on'){
 		$engra="checked='checked'";
 	}
-
+  $output .= "          <tr>\n\r";
+  $output .= "            <td>\n\r";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<input type='hidden' name='productmeta_values[engraved]' value='0'>";
   $output .= "<input $engra type='checkbox' name='productmeta_values[engraved]'>". TXT_WPSC_ENGRAVE."<br />";
+  $output .= "            </td>\n\r";
+  $output .= "          </tr>\n\r";
+  
+  if ($can_have_uploaded_image[0]=='on'){
+		$can_have_uploaded_image_state="checked='checked'";
+	}
+  $output .= "          <tr>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= "            </td>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= "<input type='hidden' name='productmeta_values[can_have_uploaded_image]' value='0'>";
+  $output .= "<input $can_have_uploaded_image_state type='checkbox' name='productmeta_values[can_have_uploaded_image]'>". TXT_WPSC_ALLOW_UPLOADING_IMAGE."<br />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
@@ -769,7 +783,7 @@ function nzshpcrt_getcategoryform($catid)
   $output .= TXT_WPSC_NAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />";
+  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
@@ -907,7 +921,7 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= TXT_WPSC_NAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES)."' />";
+  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
@@ -924,7 +938,7 @@ function nzshpcrt_getvariationform($variation_id)
   foreach($variation_values as $variation_value)
     {
     $output .= "<span id='variation_value_".$num."'>";
-    $output .= "<input type='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES)."' />";
+    $output .= "<input type='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8')."' />";
     if($variation_value_count > 1)
       {
       $output .= " <a  class='image_link' onclick='remove_variation_value(\"variation_value_".$num."\",".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";

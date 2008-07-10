@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.7
+Version: 3.6.7.1
 Author: Thomas Howard of Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
@@ -12,7 +12,7 @@ define('WPSC_VERSION', '3.6');
  * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
  * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
  */
-define('WPSC_MINOR_VERSION', '70');
+define('WPSC_MINOR_VERSION', '74');
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -91,6 +91,7 @@ $wpsc_preview_dir = ABSPATH."{$upload_path}/wpsc/previews/";
 $wpsc_image_dir = ABSPATH."{$upload_path}/wpsc/product_images/";
 $wpsc_thumbnail_dir = ABSPATH."{$upload_path}/wpsc/product_images/thumbnails/";
 $wpsc_category_dir = ABSPATH."{$upload_path}/wpsc/category_images/";
+$wpsc_user_uploads_dir = ABSPATH."{$upload_path}/wpsc/user_uploads/";
 
 
 // $wpsc_file_dir = ABSPATH."{$upload_path}/files/";
@@ -105,6 +106,7 @@ define('WPSC_PREVIEW_DIR', $wpsc_preview_dir);
 define('WPSC_IMAGE_DIR', $wpsc_image_dir);
 define('WPSC_THUMBNAIL_DIR', $wpsc_thumbnail_dir);
 define('WPSC_CATEGORY_DIR', $wpsc_category_dir);
+define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
 
 
 /**
@@ -115,6 +117,7 @@ $wpsc_preview_url = "{$siteurl}/{$upload_path}/wpsc/previews/";
 $wpsc_image_url = "{$siteurl}/{$upload_path}/wpsc/product_images/";
 $wpsc_thumbnail_url = "{$siteurl}/{$upload_path}/wpsc/product_images/thumbnails/";
 $wpsc_category_url = "{$siteurl}/{$upload_path}/wpsc/category_images/";
+$wpsc_user_uploads_url = "{$siteurl}/{$upload_path}/wpsc/user_uploads/";
 
 
 // $wpsc_preview_url = "{$siteurl}/{$upload_path}/preview_clips/";
@@ -126,6 +129,7 @@ define('WPSC_PREVIEW_URL', $wpsc_preview_url);
 define('WPSC_IMAGE_URL', $wpsc_image_url);
 define('WPSC_THUMBNAIL_URL', $wpsc_thumbnail_url);
 define('WPSC_CATEGORY_URL', $wpsc_category_url);
+define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 
 
 /*
@@ -1332,9 +1336,9 @@ function nzshpcrt_submit_ajax()
     foreach($product_list as $product) {
       $purchase_link = wpsc_product_url($product['id']);
       $output .= "    <item>\n\r";
-      $output .= "      <title>".htmlentities(stripslashes($product['name']))."</title>\n\r";
+      $output .= "      <title>".htmlentities(stripslashes($product['name']), ENT_NOQUOTES, 'UTF-8')."</title>\n\r";
       $output .= "      <link>$purchase_link</link>\n\r";
-      $output .= "      <description>".htmlentities(stripslashes($product['description']))."</description>\n\r";
+      $output .= "      <description>".htmlentities(stripslashes($product['description']), ENT_NOQUOTES, 'UTF-8')."</description>\n\r";
       $output .= "      <pubDate>".date("r")."</pubDate>\n\r";
       $output .= "      <guid>$purchase_link</guid>\n\r"; 
       if($product['thumbnail_image'] != null) {

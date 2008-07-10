@@ -94,6 +94,7 @@
     $bgcolor = ImageColorAllocate( $dst_img, 255, 255, 255 );
     ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $bgcolor );
     ImageAlphaBlending($dst_img, TRUE );
+    imagecolortransparent($dst_img, $bgcolor);
 
     // X & Y Offset to crop image properly
     if($temp_w < $width) {
@@ -111,36 +112,10 @@
     } else {
 			$h1 = ($height/2) - ($temp_h/2);
     }
-
-// 		echo "Width: $width <br />";
-// 		echo "Height: $height <br />";
-// 		echo "<br />";
-// 		echo "Temp Width: $temp_w <br />";
-// 		echo "Temp Height: $temp_h <br />";
-// 		echo "<br />";
-// 		echo "Offset X: $w1 <br />";
-// 		echo "Offset Y: $h1 <br />";
-// 		echo "<br />";
-// 		
-// 		exit();
-   
+    
     switch($scaling_method) {
       case  'cropping': 
-				//ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
-				ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );// 		echo "Width: $width <br />";
-				/*
-				echo "Width: $width <br />";
-				echo "Height: $height <br />";
-				echo "<br />";
-				echo "Temp Width: $temp_w <br />";
-				echo "Temp Height: $temp_h <br />";
-				echo "<br />";
-				echo "Offset X: $w1 <br />";
-				echo "Offset Y: $h1 <br />";
-				echo "<br />";
-				exit();
-				// */
-
+				ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );
 		  break;
 		  
       case 'non-cropping':
@@ -149,10 +124,9 @@
       break;
 		}
     
-    if($imagetype[2] == IMAGETYPE_PNG) {
-      imagesavealpha($dst_img,true);
-      ImageAlphaBlending($dst_img, false);
-    }
+// 		imagesavealpha($dst_img,true);
+		ImageAlphaBlending($dst_img, false);
+    
 
     header("Content-type: image/png");
     ImagePNG($dst_img);

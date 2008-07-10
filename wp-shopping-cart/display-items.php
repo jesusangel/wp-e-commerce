@@ -883,7 +883,7 @@ if($product_list != null)
 	if ($product['name']=='') {
 		echo "(".TXT_WPSC_NONAME.")";
 	} else {
-		echo htmlentities(stripslashes($product['name']), ENT_QUOTES);
+		echo htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8');
 	}
 	echo "</a>";
 
@@ -1176,11 +1176,21 @@ echo "        </div>";
         <label for='add_form_display_frontpage'><?php echo TXT_WPSC_DISPLAY_FRONT_PAGE;?></label>
       </td>
     </tr>
+    <tr>
       <td class='itemfirstcol'>
       </td>
       <td>
         <input type='checkbox' name="productmeta_values[engraved]" id='add_engrave_text'>
         <label for='add_engrave_text'><?php echo TXT_WPSC_ENGRAVE;?></label>
+        <br />
+      </td>
+    </tr>
+    <tr>
+      <td class='itemfirstcol'>
+      </td>
+      <td>
+        <input type='checkbox' name="productmeta_values[can_have_uploaded_image]" id='can_have_uploaded_image'>
+        <label for='can_have_uploaded_image'><?php echo TXT_WPSC_ALLOW_UPLOADING_IMAGE;?></label>
         <br />
       </td>
     </tr>

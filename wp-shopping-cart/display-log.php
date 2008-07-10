@@ -406,6 +406,7 @@ if($_GET['filter'] !== 'true')
 			$endtotal = 0;
 			$all_donations = true;
 			$all_no_shipping = true;
+			$file_link_list = array();
 			foreach($cart_log as $cart_row)
 				{
 				$alternate = "";
@@ -467,6 +468,13 @@ if($_GET['filter'] !== 'true')
 					$all_no_shipping = false;
 				} else {
 					$shipping = 0;
+				}
+				
+				if($cart_row['files'] != null) {
+				  $file_data = unserialize($cart_row['files']);
+				  if(is_array($file_data)) {
+				    $file_link_list[] = "<a href='".WPSC_USER_UPLOADS_URL.$file_data['file_name']."'>{$product_data[0]['name']} </a><br />";
+				  }
 				}
 				echo "<tr $alternate>";
 		
@@ -543,6 +551,15 @@ if($_GET['filter'] !== 'true')
 			echo "</table>";
 			echo "<br />";
 			
+			
+			if(count($file_link_list) > 0) {
+			  echo "<p>\n\r";
+				echo "  <strong>".TXT_WPSC_DOWNLOAD_ATTACHED_FILES."</strong><br />\n\r";
+			  foreach($file_link_list as $file_link) {
+			    echo "{$file_link}\n\r";
+			  }
+			  echo "</p>\n\r";
+			}
 			
 
 			

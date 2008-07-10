@@ -137,42 +137,99 @@ function nzshpcrt_submit_checkout() {
           }
         }
       }
+      
+      
+      
+  // this here section handles uploading files specified by the user for products 
+  $accepted_file_types['mime'][] = 'image/jpeg';
+  $accepted_file_types['mime'][] = 'image/gif';
+  $accepted_file_types['mime'][] = 'image/png';
   
-  //echo("<pre>".print_r($bad_input_mesage,true)."</pre>");
-  //exit("<pre>".print_r($_POST,true)."</pre>");
+  
+  $accepted_file_types['ext'][] = 'jpeg';
+  $accepted_file_types['ext'][] = 'jpg';
+  $accepted_file_types['ext'][] = 'gif';
+  $accepted_file_types['ext'][] = 'png';
+  
+  
+  
+  foreach($_SESSION['nzshpcrt_cart'] as $key => $item) {    
+		$can_have_uploaded_image = get_product_meta($item->product_id,'can_have_uploaded_image',true);
+		if ($can_have_uploaded_image[0]=='on') {
+		  $file_data['name'] = basename($_FILES['uploaded_image']['name'][$key]);
+		  $file_data['type'] = $_FILES['uploaded_image']['type'][$key];
+		  $file_data['tmp_name'] = $_FILES['uploaded_image']['tmp_name'][$key];
+		  $file_data['error'] = $_FILES['uploaded_image']['error'][$key];
+		  $file_data['size'] = $_FILES['uploaded_image']['size'][$key];
+		  $mime_type_data = wpsc_get_mimetype($file_data['tmp_name'], true);
+			
+			$name_parts = explode('.',basename($file_data['name']));
+			$extension = array_pop($name_parts);
+			echo $extension ."<br />";
+		  if($mime_type_data['is_reliable'] == true) {
+		    $mime_type = $mime_type_data['mime_type'];
+		  } else {
+		    // if we can't use what PHP provides us with, we have to trust the user as there aren't really any other choices.
+		    $mime_type = $file_data['type'];
+		  }
+			if((array_search($mime_type, $accepted_file_types['mime']) !== false) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
+			  if(is_file(WPSC_USER_UPLOADS_DIR.$file_data['name'])) {
+					$name_parts = explode('.',basename($file_data['name']));
+					$extension = array_pop($name_parts);
+					$name_base = implode('.',$name_parts);
+					$file_data['name'] = null;
+					$num = 2;
+					//  loop till we find a free file name, first time I get to do a do loop in yonks
+					do {
+						$test_name = "{$name_base}-{$num}.{$extension}";
+						if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name)) {
+							$file_data['name'] = $test_name;
+						} 						
+						$num++;
+					} while ($file_data['name'] == null);
+			  }
+			  //exit($file_data['name']);
+				if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) ) {
+					$_SESSION['nzshpcrt_cart'][$key]->file_data = array('file_name' => $file_data['name'], 'mime_type' => $mime_type );			
+				}
+			}
+		}
+  }
+  //echo("<pre>".print_r($_FILES,true)."</pre>");
+  //exit("<pre>".print_r($_SESSION['nzshpcrt_cart'],true)."</pre>");
     
 
     foreach((array)$_SESSION['nzshpcrt_cart'] as $item) {
-		//exit("------><pre>".print_r((array)$_SESSION['nzshpcrt_cart'],1)."</pre>");
-	$in_stock = check_in_stock($item->product_id, $item->product_variations, $item->quantity);
-	if (get_option('checkbox_variation')=='1') {
-		$in_stock = true;
-	}
+			//exit("------><pre>".print_r((array)$_SESSION['nzshpcrt_cart'],1)."</pre>");
+			$in_stock = check_in_stock($item->product_id, $item->product_variations, $item->quantity);
+			if (get_option('checkbox_variation')=='1') {
+				$in_stock = true;
+			}
       if($in_stock == false) {
         $bad_input_message .= TXT_WPSC_ITEM_GONE_OUT_OF_STOCK . "";
         $bad_input_message .= "\n\r";
         $any_bad_inputs = true;
         break;
-        }
-      }
+			}
+		}
 
     if($any_bad_inputs === true) {
       $_SESSION['nzshpcrt_checkouterr'] = nl2br($bad_input_message);
       header($returnurl);
       exit();
-      }
+		}
     $cart = $_SESSION['nzshpcrt_cart'];
     $_SESSION['checkoutdata'] = $_POST;
     if($_POST['agree'] != 'yes') {
       $_SESSION['nzshpcrt_checkouterr'] = TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS;
       header($returnurl);
       exit();
-      }
+		}
     if($cart == null) {
       $_SESSION['nzshpcrt_checkouterr'] = TXT_WPSC_NOTHINGINYOURSHOPPINGCART;
       header($returnurl);
       exit();
-      }
+		}
     $sessionid = (mt_rand(100,999).time());
 
    if( !(is_numeric($user_ID) && ($user_ID > 0))) {
@@ -223,6 +280,12 @@ function nzshpcrt_submit_checkout() {
      $quantity = $cart_item->quantity;
      $variations = $cart_item->product_variations;
      $extras = $cart_item->extras;
+     // serialize file data
+     if(is_array($cart_item->file_data)) {
+       $file_data = $wpdb->escape(serialize($cart_item->file_data));
+     } else {
+       $file_data = '';
+     }
      /* creates an array of purchased items for logging further on */
      if(isset($also_bought[$cart_item->product_id])) {
        $also_bought[$cart_item->product_id]++;
@@ -271,7 +334,7 @@ function nzshpcrt_submit_checkout() {
      $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
      
      $shipping = nzshpcrt_determine_item_shipping($row, 1, $_SESSION['delivery_country']);
-     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."')";
+     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
     //exit($cartsql);
   
      

@@ -42,11 +42,18 @@ global $wpdb;
 			//Temp dimensions to crop image properly
 			$temp_w = $width;
 			$temp_h = $height;
-			if ( $source_w < $source_h ) {
-				$temp_h = ($width / $source_w) * $source_h;
-			} else {
-				$temp_w = ($height / $source_h) * $source_w;
-			}
+        // if the image is wider than it is high and at least as wide as the target width. 
+				if (($source_h <= $source_w)) {				  
+					if ($height < $width ) {
+						$temp_h = ($width / $source_w) * $source_h;
+					} else {
+						$temp_w = ($height / $source_h) * $source_w;
+					}
+						
+					//$temp_w = ($height / $source_h) * $source_w;
+				} else {
+					$temp_h = ($width / $source_w) * $source_h;
+				}
 	
 			// Create temp resized image
 			$temp_img = ImageCreateTrueColor( $temp_w, $temp_h );
@@ -61,10 +68,17 @@ global $wpdb;
 			$white = ImageColorAllocate( $dst_img, 255, 255, 255 );
 			ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $white );
 			ImageAlphaBlending($dst_img, TRUE );
+			imagecolortransparent($dst_img, $white);
+
 	
 			// X & Y Offset to crop image properly
-			$w1 = ($temp_w/2) - ($width/2);
-			$h1 = ($temp_h/2) - ($height/2);
+			if($temp_w < $width) {
+				$w1 = ($width/2) - ($temp_w/2);
+			} else if($temp_w == $width) {
+				$w1 = 0;
+			} else {
+				$w1 = ($width/2) - ($temp_w/2);
+			}
 			
 			if($imagetype[2] == IMAGETYPE_PNG) {
 				imagesavealpha($dst_img,true);
@@ -73,8 +87,9 @@ global $wpdb;
 				
 				
 			// Final thumbnail cropped from the center out.
-			ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
-	
+			//ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
+			ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );
+			
 			switch($imagetype[2]) {
 				case IMAGETYPE_JPEG:
 				if(@ ImageJPEG($dst_img, $image_output, 75) == false) { return false; }

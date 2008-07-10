@@ -160,10 +160,9 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 		$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql");
 		
 		if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
-		if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0))
-			{
+		if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
 			$startnum = $rowcount - $products_per_page;
-			}
+		}
 		if ($_REQUEST['order']==null) {
 			$order = 'ASC';
 		} elseif ($_REQUEST['order']=='DESC') {
@@ -171,9 +170,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 		}
 		$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` $order LIMIT $startnum, $products_per_page";
 		//exit($sql);
-		}
-		else
-			{
+		} else {
 			$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql");
 			
 			if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
@@ -181,8 +178,10 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 				$startnum = $rowcount - $products_per_page;
 			}
 			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql ORDER BY `".$wpdb->prefix."product_list`.`special` DESC LIMIT $startnum, $products_per_page"; 
-			}
 		}
+	}
+	
+
 				
   // shows page numbers, probably fairly obviously
 

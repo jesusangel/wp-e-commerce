@@ -1,10 +1,12 @@
 <?php
-$imagetype = @getimagesize($imagepath); //previously exif_imagetype()
+/** 
+This code appears to no longer be used.
+*/
 
-if(file_exists($imagepath) && is_numeric($height) && is_numeric($width))
-  {
-  switch($imagetype[2])
-    {
+
+$imagetype = @getimagesize($imagepath); //previously exif_imagetype()
+if(file_exists($imagepath) && is_numeric($height) && is_numeric($width)) {
+  switch($imagetype[2]) {
     case IMAGETYPE_JPEG:
     //$extension = ".jpg";
     $src_img = imagecreatefromjpeg($imagepath);
@@ -28,10 +30,9 @@ if(file_exists($imagepath) && is_numeric($height) && is_numeric($width))
     default:
     $pass_imgtype = false;
     break;
-    }
+	}
 
-  if($pass_imgtype === true)
-    {
+  if($pass_imgtype === true) {
     $source_w = imagesx($src_img);
     $source_h = imagesy($src_img);
 
@@ -61,44 +62,39 @@ if(file_exists($imagepath) && is_numeric($height) && is_numeric($width))
     $w1 = ($temp_w/2) - ($width/2);
     $h1 = ($temp_h/2) - ($height/2);
 
-    ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
+    //ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
+		ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );
     
-    if($imagetype[2] == IMAGETYPE_PNG)
-      {
+    if($imagetype[2] == IMAGETYPE_PNG) {
       imagesavealpha($dst_img,true);
       ImageAlphaBlending($dst_img, false);
-      }
+		}
 
-    ImageCopyResampled($dst_img,$src_img,0,0,0,0,$width,$height,$source_w,$source_h);
-    switch($imagetype[2])
-      {
+    
+    //ImageCopyResampled($dst_img,$src_img,0,0,0,0,$width,$height,$source_w,$source_h);
+    switch($imagetype[2]) {
       case IMAGETYPE_JPEG:
       ImageJPEG($dst_img, $image_output, 75);
       break;
 
       case IMAGETYPE_GIF:
-      if(function_exists("ImageGIF"))
-        {
-        @ImageGIF($dst_img, $image_output);
-        }
-        else
-          {
-          ImageAlphaBlending($dst_img, false);
-          @ImagePNG($dst_img, $image_output);
-          }
+      if(function_exists("ImageGIF")) {
+        @ ImageGIF($dst_img, $image_output);
+			} else {
+				ImageAlphaBlending($dst_img, false);
+				@ ImagePNG($dst_img, $image_output);
+			}
       break;
 
       case IMAGETYPE_PNG:
-      @ImagePNG($dst_img, $image_output);
+      @ ImagePNG($dst_img, $image_output);
       break;
-      }
+		}
     usleep(50000);  //wait 0.05 of of a second to process and save the new image
     imagedestroy($dst_img);
-    }
-  }
-  else
-    {
-    move_uploaded_file($imagepath, ($imagedir.basename($_FILES['image']['name'])));
-    $image = $wpdb->escape(basename($_FILES['image']['name']));
-    }
+	}
+} else {
+	move_uploaded_file($imagepath, ($imagedir.basename($_FILES['image']['name'])));
+	$image = $wpdb->escape(basename($_FILES['image']['name']));
+}
 ?>

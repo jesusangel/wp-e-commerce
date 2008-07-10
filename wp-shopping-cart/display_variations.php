@@ -20,7 +20,7 @@ function display_variation_row($variation) {
   echo "          <tr>\n\r";
   
   echo "            <td>\n\r";
-  echo "".htmlentities(stripslashes($variation['name']), ENT_QUOTES)."";
+  echo "".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."";
   echo "            </td>\n\r";
     
   echo "            <td>\n\r";

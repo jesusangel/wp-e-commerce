@@ -9,9 +9,13 @@ function wpsc_auto_update() {
     include_once('updates/update-to-3.5.2.php');
 	}
 
- if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && (get_option('wpsc_minor_version') < 62))) {
+ if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && (get_option('wpsc_minor_version') < 68))) {
     include_once('updates/update-to-3.6.0.php');
     include_once('updates/update-to-3.6.4.php');
+	}
+
+ if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && (get_option('wpsc_minor_version') < 80))) {
+    include_once('updates/update-to-3.6.8.php');
 	}
 
   wpsc_create_upload_directories();
@@ -79,6 +83,7 @@ function nzshpcrt_install()
 		`quantity` int(10) unsigned NOT NULL default '0',
 		`donation` varchar(1) NOT NULL default '0',
 		`no_shipping` varchar(1) NOT NULL default '0',
+		`files` TEXT NOT NULL default '',
 		PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ;
 	";
@@ -593,7 +598,7 @@ function nzshpcrt_install()
 	";
 
 
-	// and here is where the tables are added to the database
+	// and here is where the tables are added to the database, fairly simple, if it doesnt find the table, it makes it
 	foreach($wpsc_tables as $wpsc_table) {
 		if(!$wpdb->get_var("SHOW TABLES LIKE '{$wpsc_table['table_name']}'")) {
 			$wpdb->query($wpsc_table['table_sql']);
@@ -1291,7 +1296,6 @@ function wpsc_check_and_copy_files() {
 
 
 function wpsc_create_upload_directories() {
-
   $wpsc_files_directory = ABSPATH.get_option('upload_path').'/wpsc/';
   
   if(!is_dir(ABSPATH.get_option('upload_path'))) {
@@ -1322,18 +1326,22 @@ function wpsc_create_upload_directories() {
 	if(!is_dir(WPSC_CATEGORY_DIR)) {
 		@ mkdir(WPSC_CATEGORY_DIR, 0775);
 	}
+		
+	if(!is_dir(WPSC_CATEGORY_DIR)) {
+		@ mkdir(WPSC_USER_UPLOADS_DIR, 0775);
+	}
 	
 	
 	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
 	if(is_dir($wpsc_file_directory)) {
-	  // sort the permissions out in case they are not already sorted out.
-	  
+	  // sort the permissions out in case they are not already sorted out.	  
 		@ chmod( ABSPATH.get_option('upload_path'), 0775 );			
 		@ chmod( $wpsc_file_directory, 0775 );			
 		@ chmod( WPSC_FILE_DIR, 0775 );			
 		@ chmod( WPSC_PREVIEW_DIR, 0775 );			
 		@ chmod( WPSC_IMAGE_DIR, 0775 );	
 		@ chmod( WPSC_CATEGORY_DIR, 0775 );	
+		@ chmod( WPSC_USER_UPLOADS_DIR, 0775 );	
 	}
 }
 

@@ -56,7 +56,7 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "            </td>\n\r";
   
   echo "            <td>\n\r";
-  echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES)." (".$category['id'].")";
+  echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES, 'UTF-8')." (".$category['id'].")";
   echo "            </td>\n\r";
   
   $displaydescription = substr(stripslashes($category['description']),0,44);

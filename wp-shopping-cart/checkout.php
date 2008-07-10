@@ -11,35 +11,26 @@ if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."usermeta'")) {
 	}
 }
 
-if(!isset($_SESSION['collected_data']) || ($_SESSION['collected_data'] == null))
-  {
+if(!isset($_SESSION['collected_data']) || ($_SESSION['collected_data'] == null)) {
   $_SESSION['collected_data'] = $meta_data;
-  }
-  else
-    {
-    foreach($_SESSION['collected_data'] as $form_key => $session_form_data)
-      {
-      if($session_form_data == null)
-        {
-        $_SESSION['collected_data'][$form_key] = $meta_data[$form_key];
-        }
-      }
-    }
+} else {
+	foreach($_SESSION['collected_data'] as $form_key => $session_form_data) {
+		if($session_form_data == null) {
+			$_SESSION['collected_data'][$form_key] = $meta_data[$form_key];
+		}
+	}
+}
 
 $checkout = $_SESSION['checkoutdata'];
-if(get_option('permalink_structure') != '')
-   {
-   $seperator ="?";
-    }
-    else
-       {
-       $seperator ="&amp;";
-       }
+if(get_option('permalink_structure') != '') {
+	$seperator ="?";
+} else {
+	$seperator ="&amp;";
+}
 $currenturl = get_option('checkout_url') . $seperator .'total='.$_GET['total'];
-if(get_option('permalink_structure') == '')
-  {
+if(get_option('permalink_structure') == '') {
   $currenturl = str_replace(trailingslashit(get_option('siteurl')).'?',trailingslashit(get_option('siteurl')) . 'index.php?', $currenturl);
-  } 
+}
 if(!isset($_GET['result'])){
   if(!(get_option('payment_gateway')=='google')) {
 ?>
@@ -47,8 +38,7 @@ if(!isset($_GET['result'])){
 <strong><?php echo TXT_WPSC_CONTACTDETAILS;?></strong><br />
 <?php
  echo TXT_WPSC_CREDITCARDHANDY;
- if(!is_numeric($user_ID) && ($user_ID < 1) && get_settings('users_can_register'))
-   {
+ if(!is_numeric($user_ID) && ($user_ID < 1) && get_settings('users_can_register')) {
    echo " ".TXT_WPSC_IF_USER_CHECKOUT."<a href='#' onclick='jQuery(\"#checkout_login_box\").slideToggle(\"fast\"); return false;'>".TXT_WPSC_LOG_IN."</a>";
    echo "<div id='checkout_login_box'>";
    ?>
@@ -61,18 +51,35 @@ if(!isset($_GET['result'])){
    <?php 
    echo "<a class='thickbox' rel='".TXT_WPSC_REGISTER."' href='".$siteurl."?ajax=true&amp;action=register&amp;width=360&amp;height=300' >".TXT_WPSC_REGISTER."</a>";
    echo "</div>";
-   }
+}
 echo "<br /><br />";
 echo TXT_WPSC_ASTERISK;
-if($_SESSION['nzshpcrt_checkouterr'] != null)
-  {
+if($_SESSION['nzshpcrt_checkouterr'] != null) {
   echo "<br /><span style='color: red;'>".$_SESSION['nzshpcrt_checkouterr']."</span>";
   $_SESSION['nzshpcrt_checkouterr'] = '';
-  }
+}
 ?>
 
- <form action='' method='POST'>
+<form action='' method='POST' enctype="multipart/form-data">
 <table class='wpsc_checkout_table'>
+ <?php
+	$cart = $_SESSION['nzshpcrt_cart'];
+  foreach($cart as $key => $product) {
+		$product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '{$product->product_id}' LIMIT 1",ARRAY_A);
+		$can_have_uploaded_image = get_product_meta($product->product_id,'can_have_uploaded_image',true);
+		if ($can_have_uploaded_image[0]=='on'){
+			echo "<tr>\n\r";
+			echo "  <td colspan='2'>\n\r";
+			echo "<h2 style='margin-bottom: 6px;'>".TXT_WPSC_UPLOAD_IMAGE_FOR." ".$product_data['name']."</h2>\n\r";
+			echo "<input type='file' name='uploaded_image[$key]' value=''> \n\r";//
+			
+			echo "  </td>\n\r";
+			echo "</tr>\n\r";
+		}
+  }
+ ?>
+ 
+ 
 
 <?php
   $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' ORDER BY `order`;";

@@ -758,25 +758,36 @@ function wpsc_item_reassign_file($selected_product_file, $mode = 'add') {
 	return $fileid;
 }
 
-function wpsc_get_mimetype($file) {
+function wpsc_get_mimetype($file, $check_reliability = false) {
+  // Sometimes we need to know how useless the result from this is, hence the "check_reliability" parameter
 	if(file_exists($file)) {
 		if(function_exists('finfo_open') && function_exists('finfo_file')) { 
 			// fileinfo apparently works best, wish it was included with PHP by default
 			$finfo_handle = finfo_open(FILEINFO_MIME);
 			$mimetype = finfo_file($finfo_handle,$file);
+			$is_reliable = true;
 		} else if(function_exists('mime_content_type')) {
 			//obsolete, but probably second best due to completeness
 			$mimetype = mime_content_type($file); 
+			$is_reliable = true;
 		} else {
 			//included with plugin, uses the extention, limited and odd list, last option
 			$mimetype_class = new mimetype();
 			$mimetype = $mimetype_class->getType($file);
+			$is_reliable = false;
 		}
 	} else {
 		$mimetype = false;
+		$is_reliable = false;
 	}
-	return $mimetype;
+	if($check_reliability == true) {
+		return array('mime_type' =>$mimetype, 'is_reliable' => $is_reliable );
+	} else {
+		return $mimetype;
+	}
 }
+
+
 function shopping_cart_total_weight(){
 	global $wpdb;
 	$cart = $_SESSION['nzshpcrt_cart'];

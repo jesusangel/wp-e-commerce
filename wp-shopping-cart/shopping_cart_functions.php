@@ -45,8 +45,7 @@ function nzshpcrt_shopping_basket($input = null, $override_state = null) {
 }
   
 
-function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_title=false)
-  {
+function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_title=false) {
   global $wpdb;
   
   if(get_option('permalink_structure') != '') {

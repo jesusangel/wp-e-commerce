@@ -11,7 +11,9 @@ define('TXT_WPSC_OPTIONS_SHIPPING_TAB', 'Shipping');
 define('TXT_WPSC_OPTIONS_PAYMENT_TAB', 'Payment');
 define('TXT_WPSC_OPTIONS_ADMIN_TAB', 'Admin');
 define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
+define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
 
+define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload an image when ordering this product.');
 
 define('TXT_WPSC_OPTIONS_GENERAL_HEADER', 'General Settings');
 define('TXT_WPSC_OPTIONS_PRESENTATION_HEADER', 'Presentation Settings');
@@ -19,10 +21,11 @@ define('TXT_WPSC_OPTIONS_SHIPPING_HEADER', 'Shipping Settings');
 define('TXT_WPSC_OPTIONS_PAYMENT_HEADER', 'Payment Settings');
 define('TXT_WPSC_OPTIONS_ADMIN_HEADER', 'Admin Settings');
 define('TXT_WPSC_OPTIONS_MARKETING_HEADER', 'Marketing Settings');
+define('TXT_WPSC_UPLOAD_IMAGE_FOR', 'Upload Image for');
 
 define('TXT_WPSC_THUMBNAILSETTINGS', 'Thumbnail Settings');
 
-define('TXT_WPSC_CLEAR_IP_LOCKS', 'Free downloads to locked to an IP number.');
+define('TXT_WPSC_CLEAR_IP_LOCKS', 'Free downloads locked to an IP number.');
 define('TXT_WPSC_THANKS_UNLOCKED', 'Thanks, the downloads that were locked to this users IP number have been freed.');
 
 
