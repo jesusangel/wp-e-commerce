@@ -282,6 +282,12 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
       update_option('list_view_quantity', 0);
     }
     
+    if($_POST['show_breadcrumbs'] == 1) {
+      update_option('show_breadcrumbs', 1);
+    } else {
+      update_option('show_breadcrumbs', 0);
+    }
+    
     if($_POST['display_variations'] == 1) {
       update_option('display_variations', 1);
 		} else {
@@ -1022,6 +1028,32 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' value='0' name='display_pnp' id='display_pnp2' <?php echo $display_pnp2; ?> /> <label for='display_pnp2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
+								
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_SHOW_BREADCRUMBS;?>:
+									</th>
+									<td>
+									<?php
+									$show_breadcrumbs = get_option('show_breadcrumbs');
+									$show_breadcrumbs1 = "";
+									$show_breadcrumbs2 = "";
+									switch($show_breadcrumbs) {
+										case 0:
+										$show_breadcrumbs2 = "checked ='true'";
+										break;
+										
+										case 1:
+										$show_breadcrumbs1 = "checked ='true'";
+										break;
+									}
+						
+									?>
+									<input type='radio' value='1' name='show_breadcrumbs' id='show_breadcrumbs1' <?php echo $show_breadcrumbs1; ?> /> <label for='show_breadcrumbs1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input type='radio' value='0' name='show_breadcrumbs' id='show_breadcrumbs2' <?php echo $show_breadcrumbs2; ?> /> <label for='show_breadcrumbs2'><?php echo TXT_WPSC_NO;?></label>
+									</td>
+								</tr>							
+								
 								<tr>
 									<th scope="row">
 									<?php echo TXT_WPSC_SHOWPRODUCTRATINGS;?>:

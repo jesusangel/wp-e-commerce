@@ -663,7 +663,8 @@ AND `".$wpdb->prefix."item_category_associations`.`category_id`
 IN (
 '".$_GET['catid']."'
 )
-ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
+ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC,  `".$wpdb->prefix."product_list`.`id` DESC";
+
   } else {
 		$itempp = 20;
 		if ($_GET['pnum']!='all') {

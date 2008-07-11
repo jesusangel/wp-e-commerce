@@ -975,6 +975,10 @@ div#sidebar div.item_image img {
 	max-width:none !important;
 	padding:8px 0pt 0pt 9px;
 }
+
+div.breadcrumb {
+  margin: 0px 0px 10px 0px;
+}
  /*
 End of modified By allen
 */

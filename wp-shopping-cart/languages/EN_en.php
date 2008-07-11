@@ -13,6 +13,8 @@ define('TXT_WPSC_OPTIONS_ADMIN_TAB', 'Admin');
 define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
 define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
 
+define('TXT_WPSC_SHOW_BREADCRUMBS', 'Show Breadcrumbs');
+
 define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload an image when ordering this product.');
 
 define('TXT_WPSC_OPTIONS_GENERAL_HEADER', 'General Settings');

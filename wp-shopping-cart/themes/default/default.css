@@ -931,6 +931,9 @@ table.productdisplay tr td {
   position: relative;
  }
 
+div.breadcrumb {
+  margin: 0px 0px 10px 0px;
+}
  /*
 End of modified By allen
 */
