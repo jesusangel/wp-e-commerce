@@ -1,22 +1,19 @@
 <?php
 if (isset($_GET['googlecheckoutshipping'])) {
 	include('google_shipping_country.php');
+	return;
 	exit();
 }
 	
-	
-
 $curgateway = get_option('payment_gateway');
 $changes_made = false;
- 
 
 if(is_numeric($_POST['payment_method']) && (get_option('payment_gateway') != $_POST['payment_method'])) {
 	update_option('payment_method', $_POST['payment_method']);
 	$changes_made = true;
 }
 
-
-if ($_POST['custom_gateway_options'] != null){
+if ($_POST['custom_gateway_options'] != null) {
 	update_option('custom_gateway_options', $_POST['custom_gateway_options']);
 	$changes_made = true;
 }
@@ -25,7 +22,6 @@ if(isset($_POST['payment_instructions']) && ($_POST['payment_instructions'] != g
 	update_option('payment_instructions', $_POST['payment_instructions']);
 	$changes_made = true;
 }
-
 
 if(isset($_POST['custom_gateway'])) {
   // this particular form field refuses to submit in a way that appears to defy logic if dealt with like the others, hence this overkill
@@ -37,6 +33,7 @@ if(isset($_POST['custom_gateway'])) {
 		$changes_made = true;
 	}
 }
+
 if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] == null)) {
   update_option('payment_gateway', $_POST['payment_gw']);
 	$curgateway = get_option('payment_gateway');
@@ -51,6 +48,7 @@ if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] != null)) {
 		}
 	}
 }
+
 if($changes_made == true) {
   echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
 }
@@ -59,7 +57,7 @@ if (get_option('custom_gateway')) {
 } else {
 	$custom_gateway2 = "checked='checked'";
 }
-//exit($curgateway);
+
 $form = "";
 foreach($nzshpcrt_gateways as $gateway) {
   if($gateway['internalname'] == $curgateway ) {
@@ -95,8 +93,10 @@ function selectgateway()
       </td>
       
       <td rowspan='4'>
+      <?php /*
       <strong><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS; ?>:</strong>
       <textarea cols='55' rows='6' name='payment_instructions'><?php echo  get_option('payment_instructions');?></textarea>
+      */ ?>
       </td>
       
     </tr>
@@ -142,34 +142,38 @@ function selectgateway()
 	    <label for='custom_gateway_1'><?php echo TXT_WPSC_YES;?></label>
 	    <input <?=$custom_gateway2;?> onclick="jQuery('#custom_gateway_div').slideUp(200)" type='radio' value='0' name='custom_gateway' id='custom_gateway_2'>
 	    <label for='custom_gateway_2'><?php echo TXT_WPSC_NO;?></label><br>
-	    <small>Note: Select the ones that you have entered your details only</small>
+	    <small>Note: Select the ones that you have entered your details for only</small>
 	    <div id='custom_gateway_div' <?=$custom_gateway_hide?>>
+	    
+	    <div style='float: right;'>
+				<strong><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS; ?>:</strong><br />
+				<textarea cols='50' rows='9' name='payment_instructions'><?php echo  get_option('payment_instructions');?></textarea>
+      </div>
+      
 	    <table>
-	    <tr>
-	  <th style='border-bottom:none;'>
-	  Select Gateways
-	  </th>
-	  <td  style='border-bottom:none;'>
-	  
-	  <?php
-		foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-			if (($gateway['internalname'] != 'testmode') && ($gateway['internalname'] != 'google')) {
-				$selected_gateways = get_option('custom_gateway_options');
-				if (in_array($gateway['internalname'], (array)$selected_gateways)) {
-					echo "<input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
-				} else {
-					echo "<input name='custom_gateway_options[]' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
-				}
-			}
-		}
-		?>
-		</div>
-	</td>
-	</td>
+				<tr>
+					<th style='border-bottom:none;'>
+					Select Gateways
+					</th>
+					<td  style='border-bottom:none;'>
+					
+					<?php
+					foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+						$selected_gateways = get_option('custom_gateway_options');
+						if (in_array($gateway['internalname'], (array)$selected_gateways)) {
+							echo "<input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
+						} else {
+							echo "<input name='custom_gateway_options[]' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
+						}
+					}
+					?>
+					</td>
+				</tr>
 	    </table>
-	    </td>
-	   
-	</tr>
+      
+	    </div>
+			</td>
+		</tr>
 	
     <tr>
       <th scope='row'>
@@ -183,7 +187,7 @@ function selectgateway()
       </select>
       </td>
     </tr><?php
-echo $form;
+	echo $form;
   ?>
   <table>
   <tr>
@@ -193,7 +197,7 @@ echo $form;
       <input type='submit' value='<?php echo TXT_WPSC_SUBMIT;?>' name='submit_details' />
       </td>
     </tr>
-	<?php if (($curgateway=='paypal_multiple')||($curgateway=='paypal_certified')){?>
+	<?php if (($curgateway=='paypal_multiple')||($curgateway=='paypal_certified')) { ?>
 	<tr>
       <td colspan="2">
 	  	When you signup for PayPal, you can start accepting credit card payments instantly. As the world's number one online payment service, PayPal is the fastest way to open your doors to over 150 million member accounts worldwide. Best of all, it's completely free to sign up! To sign up or learn more:
@@ -204,7 +208,7 @@ echo $form;
 	  	<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src=" http://images.paypal.com/en_US/i/bnr/paypal_mrb_banner.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly."></A>
       </td>
     </tr>
-	<?php }  elseif ($curgateway=='google') {?>
+	<?php }  elseif ($curgateway=='google') { ?>
 	<tr>
 		<td colspan="2">Find it with Google.  Buy it with Google Checkout.
 	</tr>
@@ -225,9 +229,8 @@ echo $form;
   </form>
   <br />
 <?php
-if((get_option('activation_state') !== 'true')&&($curgateway!='google'))
-  {
+if((get_option('activation_state') !== 'true')&&($curgateway!='google')) {
   echo TXT_WPSC_PAYMENTGATEWAYNOTE;
-  }
+}
 ?>
 </div>

@@ -43,7 +43,9 @@ function gateway_paypal_multiple($seperator, $sessionid)
   $data['lc'] = 'NZ';
   $data['bn'] = 'wp_e-commerce';
   $data['no_shipping'] = '2';
-  $data['address_override'] = '1';
+  if(get_option('address_override') == 1) {
+		$data['address_override'] = '1';
+	}
   $data['no_note'] = '1';
   
   switch($paypal_currency_code)
@@ -357,7 +359,10 @@ function submit_paypal_multiple(){
 	}
     
   if($_POST['paypal_ipn'] != null) {
-    update_option('paypal_ipn', $_POST['paypal_ipn']);
+    update_option('paypal_ipn', (int)$_POST['paypal_ipn']);
+	}
+  if($_POST['address_override'] != null) {
+    update_option('address_override', (int)$_POST['address_override']);
 	}
     
   foreach((array)$_POST['paypal_form'] as $form => $value) {
@@ -383,15 +388,9 @@ function form_paypal_multiple()
       PayPal Url
       </td>
       <td>
-      <input type='text' size='40' value='".get_option('paypal_multiple_url')."' name='paypal_multiple_url' />
-      </td>
-  </tr>
-  <tr>
-     <td>
-     </td>
-     <td>
+      <input type='text' size='40' value='".get_option('paypal_multiple_url')."' name='paypal_multiple_url' /> <br />
      <strong>Note:</strong>The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr
-     </td>
+      </td>
   </tr>
   ";
   
@@ -399,8 +398,7 @@ function form_paypal_multiple()
 $paypal_ipn = get_option('paypal_ipn');
 $paypal_ipn1 = "";
 $paypal_ipn2 = "";
-switch($paypal_ipn)
-  {
+switch($paypal_ipn) {
   case 0:
   $paypal_ipn2 = "checked ='true'";
   break;
@@ -408,7 +406,7 @@ switch($paypal_ipn)
   case 1:
   $paypal_ipn1 = "checked ='true'";
   break;
-  }
+}
   
 $output .= "
    <tr>
@@ -444,10 +442,34 @@ $output .= "
           <option ".$select_currency['CZK']." value='CZK'>Czech Koruna</option>
         </select> 
       </td>
-   </tr>
+   </tr>";
+   
+	$address_override = get_option('address_override');
+	$address_override1 = "";
+	$address_override2 = "";
+	switch($address_override) {
+		case 1:
+		$address_override1 = "checked ='true'";
+		break;
+		
+		case 0:
+		default:
+		$address_override2 = "checked ='true'";
+		break;
+		
+	}
+     
+$output .= "
+   <tr>
+     <td>
+      Override the users address stored on paypal:
+     </td>
+     <td>
+       <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".TXT_WPSC_YES."</label> &nbsp;
+       <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".TXT_WPSC_NO."</label>
+     </td>
 </table>
 <h2>Forms Sent to Gateway</h2>
-
 ";
 $output .= "
   <table>

@@ -162,15 +162,14 @@ function form_google()
 	$output = "
 	<tr>
 		<td>
-		Google Checkout Mechat id
-		</td>
+		Google Checkout Merchant ID		</td>
 		<td>
 		<input type='text' size='40' value='".get_option('google_id')."' name='google_id' />
 		</td>
 	</tr>
 	<tr>
 		<td>
-		Google Checkout Mechant Key
+		Google Checkout Merchant Key
 		</td>
 		<td>
 		<input type='text' size='40' value='".get_option('google_key')."' name='google_key' />
@@ -225,28 +224,20 @@ function form_google()
 		  <td>
 		  Google Checkout Button Styles
 		  </td>
-		  <td>
-		  </td>
-	</tr>
-	
-	<tr>
-		<td>
-		</td>
-		<td>Size:
-			<input $button_size1 type='radio' name='google_button_size' value='0' /> 180&times;46
-			<input $button_size2 type='radio' name='google_button_size' value='1' /> 168&times;44
-			<input $button_size3 type='radio' name='google_button_size' value='2' /> 160&times;43
-		</td>
-	</tr>
-	  <tr>
-	  <td>
-	  </td>
-		<td>Background:
+			<td><div>Size:
+				<input $button_size1 type='radio' name='google_button_size' value='0' /> 180&times;46
+				<input $button_size2 type='radio' name='google_button_size' value='1' /> 168&times;44
+				<input $button_size3 type='radio' name='google_button_size' value='2' /> 160&times;43
+				</div>
+				<div>
+				Background:
 		  <select name='google_button_bg'>
 		  <option $button_bg1 value='trans'>Transparent</option>
 		  <option $button_bg2 value='white'>White</option>
-		  </td>
-	  </tr>
+		  </div>				
+			</td>
+	</tr>
+
 	<tr>
 		<td colspan='2'>
 				Note: Please put this link to your Google API callback url field on your Google checkout account: <strong>".get_option('siteurl')."/index.php</strong>
