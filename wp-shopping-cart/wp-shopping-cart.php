@@ -21,7 +21,6 @@ define('WPSC_DEBUG', false);
  */
 define('IS_WP25', version_compare($wp_version, '2.4', '>=') );
 
-
 // // we need to know where we are, rather than assuming where we are
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
@@ -82,16 +81,22 @@ if (!IS_WP25) {
 }
 
 
+if ( !defined('WP_CONTENT_URL') ) {
+    define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+	}
+if ( !defined('WP_CONTENT_DIR') ) {
+	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+}
 
+$upload_path = WP_CONTENT_DIR."/uploads";
+$upload_url = WP_CONTENT_URL."/uploads";
 
-$upload_path = get_option('upload_path');
-
-$wpsc_file_dir = ABSPATH."{$upload_path}/wpsc/downloadables/";
-$wpsc_preview_dir = ABSPATH."{$upload_path}/wpsc/previews/";
-$wpsc_image_dir = ABSPATH."{$upload_path}/wpsc/product_images/";
-$wpsc_thumbnail_dir = ABSPATH."{$upload_path}/wpsc/product_images/thumbnails/";
-$wpsc_category_dir = ABSPATH."{$upload_path}/wpsc/category_images/";
-$wpsc_user_uploads_dir = ABSPATH."{$upload_path}/wpsc/user_uploads/";
+$wpsc_file_dir = "{$upload_path}/wpsc/downloadables/";
+$wpsc_preview_dir = "{$upload_path}/wpsc/previews/";
+$wpsc_image_dir = "{$upload_path}/wpsc/product_images/";
+$wpsc_thumbnail_dir = "{$upload_path}/wpsc/product_images/thumbnails/";
+$wpsc_category_dir = "{$upload_path}/wpsc/category_images/";
+$wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
 
 
 // $wpsc_file_dir = ABSPATH."{$upload_path}/files/";
@@ -113,11 +118,11 @@ define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
 * files that are uploaded as part of digital products are not directly downloaded, therefore there is no need for a URL constant for them
 */
 
-$wpsc_preview_url = "{$siteurl}/{$upload_path}/wpsc/previews/";
-$wpsc_image_url = "{$siteurl}/{$upload_path}/wpsc/product_images/";
-$wpsc_thumbnail_url = "{$siteurl}/{$upload_path}/wpsc/product_images/thumbnails/";
-$wpsc_category_url = "{$siteurl}/{$upload_path}/wpsc/category_images/";
-$wpsc_user_uploads_url = "{$siteurl}/{$upload_path}/wpsc/user_uploads/";
+$wpsc_preview_url = "{$upload_url}/wpsc/previews/";
+$wpsc_image_url = "{$upload_url}/wpsc/product_images/";
+$wpsc_thumbnail_url = "{$upload_url}/wpsc/product_images/thumbnails/";
+$wpsc_category_url = "{$upload_url}/wpsc/category_images/";
+$wpsc_user_uploads_url = "{$upload_url}/wpsc/user_uploads/";
 
 
 // $wpsc_preview_url = "{$siteurl}/{$upload_path}/preview_clips/";

@@ -1296,10 +1296,10 @@ function wpsc_check_and_copy_files() {
 
 
 function wpsc_create_upload_directories() {
-  $wpsc_files_directory = ABSPATH.get_option('upload_path').'/wpsc/';
+  $wpsc_files_directory = WP_CONTENT_DIR.'/uploads/wpsc/';
   
-  if(!is_dir(ABSPATH.get_option('upload_path'))) {
-	  @ mkdir(ABSPATH.get_option('upload_path'), 0775);
+  if(!is_dir(WP_CONTENT_DIR.'/uploads')) {
+	  @ mkdir(WP_CONTENT_DIR.'/uploads', 0775);
   }
 
   if(!is_dir($wpsc_files_directory)) {
