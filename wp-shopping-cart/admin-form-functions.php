@@ -326,7 +326,7 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "	</td>\n\r";
 	$output .= "	<td>\n\r";
 	$output .= "		<input type='text' size='5' name='weight' value='".$product['weight']."'>\n\r";
-	$output .= "		<select>\n\r";
+	$output .= "   <select name='weight_unit'>\n\r";
 	$output .= "			<option $unit1 value='pound'>Pounds</option>\n\r";
 	$output .= "			<option $unit2 value='once'>Onces</option>\n\r";
 	$output .= "		</select>\n\r";

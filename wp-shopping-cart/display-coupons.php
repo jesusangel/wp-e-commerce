@@ -388,7 +388,7 @@ echo "</table>\n\r";
 		}
 	?>
         <td>
-		<input <?=$display_find_us1?> type='checkbox' name='display_find_us'>
+		<input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us'>
         </td>
       </tr>
       <tr>
