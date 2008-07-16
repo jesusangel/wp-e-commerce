@@ -175,7 +175,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 		}
   }    
 
-	if (get_option('custom_gateway')) {    
+	if (count(get_option('custom_gateway_options')) > 1) {
 		echo "<tr>\n\r";
 		echo "  <td colspan='2'>\n\r";
 		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";
@@ -192,6 +192,14 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 		}
 		echo "  </td>\n\r";
 		echo "</tr>";
+	} else {
+		foreach (get_option('custom_gateway_options') as $option) {
+			foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
+				if ($gateway['internalname'] == $option) {
+					echo "<input name='custom_gateway' value='$option' type='hidden' />";
+				}
+			}
+		}
 	}
 	if(isset($gateway_checkout_form_fields)) {
 		echo $gateway_checkout_form_fields;

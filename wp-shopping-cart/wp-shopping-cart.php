@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.7.2
+Version: 3.6.7.6
 Author: Thomas Howard of Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
@@ -12,7 +12,7 @@ define('WPSC_VERSION', '3.6');
  * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
  * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
  */
-define('WPSC_MINOR_VERSION', '75');
+define('WPSC_MINOR_VERSION', '77');
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -2070,25 +2070,26 @@ function nzshpcrt_display_categories_groups() {
   }
 
 
-function add_product_meta($product_id, $key, $value, $unique = false) {
+function add_product_meta($product_id, $key, $value, $unique = false, $custom = false) {
   global $wpdb, $post_meta_cache, $blog_id;
   $product_id = (int)$product_id;
   if($product_id > 0) {
     if(($unique == true) && $wpdb->get_var("SELECT meta_key FROM `".$wpdb->prefix."wpsc_productmeta` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
       return false;
-      }
+		}
     
     $value = $wpdb->escape(maybe_serialize($value));
     
     if(!$wpdb->get_var("SELECT meta_key FROM `".$wpdb->prefix."wpsc_productmeta` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
-      $wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_productmeta` (product_id,meta_key,meta_value) VALUES ('$product_id','$key','$value')");
-      } else {
+      $custom = (int)$custom;
+      $wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_productmeta` (product_id,meta_key,meta_value, custom) VALUES ('$product_id','$key','$value', '$custom')");
+		} else {
       $wpdb->query("UPDATE `".$wpdb->prefix."wpsc_productmeta` SET meta_value = '$value' WHERE meta_key = '$key' AND product_id = '$product_id'");
-      }
+		}
     return true;
-    }
+	}
   return false; 
-  }
+}
   
 function delete_product_meta($product_id, $key, $value = '') {
   global $wpdb, $post_meta_cache, $blog_id;

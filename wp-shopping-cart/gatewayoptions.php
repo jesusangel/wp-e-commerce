@@ -82,47 +82,6 @@ function selectgateway()
 </script>
 <div class="wrap">
   <form name='gatewayopt' method='POST'>
-  
-	<h2><?php echo TXT_WPSC_PAYMENT_OPTIONS;?></h2>
-  <p><?php echo TXT_WPSC_PAYMENT_DESCRIPTION;?></p>
-  <table>
-    <tr>
-      <td colspan='2' width='50%'>
-      <input type='radio' name='payment_method' value='3' id='payment_method_3' <?php echo $selected[3]; ?>>
-      <label for='payment_method_3'><?php echo TXT_WPSC_MANUAL_PAYMENT; ?></label>
-      </td>
-      
-      <td rowspan='4'>
-      <?php /*
-      <strong><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS; ?>:</strong>
-      <textarea cols='55' rows='6' name='payment_instructions'><?php echo  get_option('payment_instructions');?></textarea>
-      */ ?>
-      </td>
-      
-    </tr>
-    <tr>
-      <td colspan='2'>
-      <input type='radio' name='payment_method' value='1' id='payment_method_1' <?php echo $selected[1]; ?>>
-      <label for='payment_method_1'><?php echo TXT_WPSC_CREDIT_CARD; ?></label>
-      </td>
-    </tr>
-    <tr>
-      <td colspan='2'>
-      <input type='radio' name='payment_method' value='2' id='payment_method_2' <?php echo $selected[2]; ?>>
-      <label for='payment_method_2'><?php echo TXT_WPSC_CREDIT_CARD_AND_MANUAL_PAYMENT; ?></label>
-      </td>
-    </tr>
-    <tr>
-      <td colspan='2' style='padding: 2px;'>
-        <input type='hidden' name='submit_action' value='add' />
-        <input type='submit' name='submit_details' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
-      </td>
-    </tr>
-  </table>
-  
-  <br />
-  <br />
-  
 	<?php 
 		if (get_option('custom_gateway') == 1){ 
 			$custom_gateway_hide="style='display:block;'";
@@ -133,33 +92,33 @@ function selectgateway()
 		}
 	?>
   <h2><?php echo TXT_WPSC_GATEWAY_OPTIONS;?></h2>
-  <p>Do you want your customers to be able to choose from multiple payment gateways at checkout?</p>
   <table class='form-table'>
     <tr>
 	   <!-- <th scope='row'><?php echo TXT_WPSC_CUSTOMERCHOOSEGATEWAY;?></th>-->
 	    <td colspan='2'>
+	    <?php /*
 	    <input onclick="jQuery('#custom_gateway_div').slideDown(200)" <?=$custom_gateway1;?> type='radio' value='1' name='custom_gateway' id='custom_gateway_1'>
 	    <label for='custom_gateway_1'><?php echo TXT_WPSC_YES;?></label>
 	    <input <?=$custom_gateway2;?> onclick="jQuery('#custom_gateway_div').slideUp(200)" type='radio' value='0' name='custom_gateway' id='custom_gateway_2'>
 	    <label for='custom_gateway_2'><?php echo TXT_WPSC_NO;?></label><br>
 	    <small>Note: Select the ones that you have entered your details for only</small>
 	    <div id='custom_gateway_div' <?=$custom_gateway_hide?>>
-	    
-	    <div style='float: right;'>
-				<strong><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS; ?>:</strong><br />
-				<textarea cols='50' rows='9' name='payment_instructions'><?php echo  get_option('payment_instructions');?></textarea>
+	    */?>
+	    <div style='float: right;width: 600px;'>
+				<strong><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR; ?>:</strong><br />
+				<textarea cols='50' rows='9' name='payment_instructions'><?php echo  get_option('payment_instructions');?></textarea><br />
+				<em><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR; ?> </em>
       </div>
       
-	    <table>
+	    <table style='width: 360px;'>
 				<tr>
-					<th style='border-bottom:none;'>
-					Select Gateways
-					</th>
-					<td  style='border-bottom:none;'>
+					<td  style='border-bottom:none; padding-top: 0px;'>
 					
+					<strong><?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?></strong><br /><br />
 					<?php
+					$selected_gateways = get_option('custom_gateway_options');
+					//echo("<pre>".print_r($selected_gateways,true)."</pre>");
 					foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-						$selected_gateways = get_option('custom_gateway_options');
 						if (in_array($gateway['internalname'], (array)$selected_gateways)) {
 							echo "<input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
 						} else {

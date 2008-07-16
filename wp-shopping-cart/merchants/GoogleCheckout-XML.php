@@ -14,6 +14,7 @@ $nzshpcrt_gateways[$num]['internalname'] = 'google';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_google';
 $nzshpcrt_gateways[$num]['form'] = "form_google";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_google";
+$nzshpcrt_gateways[$num]['is_exclusive'] = true;
 
 function gateway_google($seperator, $sessionid)
 {

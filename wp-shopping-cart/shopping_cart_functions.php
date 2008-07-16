@@ -182,7 +182,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       if (get_option("hide_name_link")=='1') {
 	      $output .= "<td class='tdproduct'>".$product['name']."</td>";
       } else {
-        $output .= "<td><a href='".wpsc_product_url($product['id'])."' >".$product['name']."</a></td>";
+        $output .= "<td><a href='".wpsc_product_url($product['id'])."' >".stripslashes($product['name'])."</a></td>";
       }
       $output .= "<td class='tdqty'>".$quantity."</td>";
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";

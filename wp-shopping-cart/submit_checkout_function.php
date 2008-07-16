@@ -470,10 +470,8 @@ function nzshpcrt_submit_checkout() {
           }
         }
       } else {
-      foreach($nzshpcrt_gateways as $gateway)
-        {
-        if($gateway['internalname'] == $curgateway )
-          {
+      foreach($nzshpcrt_gateways as $gateway) {
+        if($gateway['internalname'] == $curgateway ) {
           $gateway_used = $gateway['internalname'];
           $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 	$gateway['function']($seperator, $sessionid);

@@ -5,8 +5,7 @@ $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_multiple';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_multiple";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_multiple";
 
-function gateway_paypal_multiple($seperator, $sessionid)
-  {
+function gateway_paypal_multiple($seperator, $sessionid) {
   global $wpdb;
   $purchase_log_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1";
   $purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
@@ -48,8 +47,7 @@ function gateway_paypal_multiple($seperator, $sessionid)
 	}
   $data['no_note'] = '1';
   
-  switch($paypal_currency_code)
-    {
+  switch($paypal_currency_code) {
     case "JPY":
     $decimal_places = 0;
     break;
@@ -60,7 +58,7 @@ function gateway_paypal_multiple($seperator, $sessionid)
     default:
     $decimal_places = 2;
     break;
-    }
+	}
   
   $i = 1;
   
@@ -89,77 +87,64 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 			$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$item['id']."'";
 			$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 			$variation_count = count($variation_data);
-			if($variation_count >= 1)
-				{
+			if($variation_count >= 1) {
 				$variation_list = " (";
 				$j = 0;
-				foreach($variation_data as $variation)
-					{
-					if($j > 0)
-						{
+				foreach($variation_data as $variation) {
+					if($j > 0) {
 						$variation_list .= ", ";
-						}
+					}
 					$value_id = $variation['value_id'];
 					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 					$variation_list .= $value_data[0]['name'];
 					$j++;
-					}
-				$variation_list .= ")";
 				}
-				else
-					{
-					$variation_list = '';
-					}
+				$variation_list .= ")";
+			} else {
+				$variation_list = '';
+			}
 			
 			
 			$local_currency_productprice = $item['price'];
 			$local_currency_shipping = $item['pnp'];
 			
 			//exit($local_currency_productprice . " " . $local_currency_code);
-			if($paypal_currency_code != $local_currency_code)
-				{
+			if($paypal_currency_code != $local_currency_code) {
 				$paypal_currency_productprice = $curr->convert($local_currency_productprice,$paypal_currency_code,$local_currency_code);
 				$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
-				}
-				else
-					{
-					$paypal_currency_productprice = $local_currency_productprice;
-					$paypal_currency_shipping = $local_currency_shipping;
-					}
+			} else {
+				$paypal_currency_productprice = $local_currency_productprice;
+				$paypal_currency_shipping = $local_currency_shipping;
+			}
 			//exit("---->".$paypal_currency_shipping);
-			$data['item_name_'.$i] = urlencode($product_data['name'].$variation_list);
+			$data['item_name_'.$i] = urlencode(stripslashes($product_data['name']).$variation_list);
 			$data['amount_'.$i] = number_format(sprintf("%01.2f", $paypal_currency_productprice),$decimal_places,'.','');
 			$data['quantity_'.$i] = $item['quantity'];
 			$data['item_number_'.$i] = $product_data['id'];
-			if($item['donation'] !=1)
-				{
+			if($item['donation'] !=1) {
 				$all_donations = false;
 				$data['shipping_'.$i] = number_format($paypal_currency_shipping,$decimal_places,'.','');
 				$data['shipping2_'.$i] = number_format($paypal_currency_shipping,$decimal_places,'.','');      
-				}
-				else
-				{
+			} else {
 				$data['shipping_'.$i] = number_format(0,$decimal_places,'.','');
 				$data['shipping2_'.$i] = number_format(0,$decimal_places,'.','');
-				}
+			}
 					
 			if($product_data['no_shipping'] != 1) {
 				$all_no_shipping = false;
-				}
+			}
 			
 			$data['handling_'.$i] = '';
 			$i++;
-			}
-    }
+		}
+	}
   $data['tax'] = '';
 
   $base_shipping = $purchase_log[0]['base_shipping'];
   //exit($base_shipping);
-  if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false))
-    {
-	
+  if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false)) {
     $data['handling_cart'] = number_format($base_shipping,$decimal_places,'.','');
-    }
+	}
   
   $data['custom'] = '';
   $data['invoice'] = $sessionid;
@@ -225,14 +210,14 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
     }
 	//written by allen
   if ($is_member == '1'){
-	$membership_length = get_product_meta($cart[0]['prodid'],'membership_length',true);
-	if ($is_perm == '1'){
-		$permsub = '&src=1';
-	} else {
-		$permsub = '';
+		$membership_length = get_product_meta($cart[0]['prodid'],'membership_length',true);
+		if ($is_perm == '1'){
+			$permsub = '&src=1';
+		} else {
+			$permsub = '';
+		}
+		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
-	$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
-}
 
 	//   echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
 	//   exit("<pre>".print_r($data,true)."</pre>");
@@ -245,15 +230,14 @@ function nzshpcrt_paypal_ipn()
   global $wpdb;
   // needs to execute on page start
   // look at page 36
-  if(($_GET['ipn_request'] == 'true') && (get_option('paypal_ipn') == 1))
-    {
+  if(($_GET['ipn_request'] == 'true') && (get_option('paypal_ipn') == 1)) {
     // read the post from PayPal system and add 'cmd'
     $req = 'cmd=_notify-validate';
     $message = "";
     foreach ($_POST as $key => $value) {
       $value = urlencode(stripslashes($value));
       $req .= "&$key=$value";
-      }
+		}
     //$req .= "&ipn_request=true";
     $replace_strings[0] = 'http://';
     $replace_strings[1] = 'https://';
@@ -282,13 +266,12 @@ function nzshpcrt_paypal_ipn()
     if(!$fp) {
        //mail(get_option('purch_log_email'),'IPN CONNECTION FAILS IT',("Fix the paypal URL, it is currently:\n\r". $paypal_url));
       // HTTP ERROR
-      } else {
+		} else {
       fputs ($fp, $header . $req);
       while (!feof($fp)) {
         $res = fgets ($fp, 1024);
         if(strcmp ($res, "VERIFIED") == 0){
-          switch($verification_data['payment_status'])
-            {
+          switch($verification_data['payment_status']) {
             case 'Processed': // I think this is mostly equivalent to Completed
             case 'Completed':
             $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
@@ -299,10 +282,9 @@ function nzshpcrt_paypal_ipn()
             $log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`='$sessionid' LIMIT 1");
             $delete_log_form_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$log_id'";
             $cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
-            foreach((array)$cart_content as $cart_item)
-              {
+            foreach((array)$cart_content as $cart_item) {
               $cart_item_variations = $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
-              }
+						}
             $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$log_id'");
             $wpdb->query("DELETE FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` IN ('$log_id')");
             $wpdb->query("DELETE FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='$log_id' LIMIT 1");
@@ -314,29 +296,26 @@ function nzshpcrt_paypal_ipn()
             break;
             
             default: // if nothing, do nothing, safest course of action here.
-            break;
-            
-            }
-          }
-          else if (strcmp ($res, "INVALID") == 0) {
-            // Its already logged, not much need to do more
-            }
-        }
+            break;            
+					}
+				} else if (strcmp ($res, "INVALID") == 0) {
+					// Its already logged, not much need to do more
+				}
+			}
       fclose ($fp);
-      }
+		}
     /*
      * Detect use of sandbox mode, if sandbox mode is present, send debugging email.
      */
-     if(stristr(get_option('paypal_multiple_url'), "sandbox"))
-       {
-       $message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
-       $message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
-       $message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";
-       $message .= "GET:\n\r".print_r($_GET,true)."\n\r\n\r";
-       $message .= "SERVER:\n\r".print_r($_SERVER,true)."\n\r\n\r";
-       $wpdb->query("INSERT INTO `paypal_log` ( `id` , `text` , `date` ) VALUES ( '', '$message', NOW( ) );");
-       mail(get_option('purch_log_email'), "IPN Data", $message);
-       }    
+     if(stristr(get_option('paypal_multiple_url'), "sandbox")) {
+				$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
+				$message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
+				$message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";
+				$message .= "GET:\n\r".print_r($_GET,true)."\n\r\n\r";
+				$message .= "SERVER:\n\r".print_r($_SERVER,true)."\n\r\n\r";
+				$wpdb->query("INSERT INTO `paypal_log` ( `id` , `text` , `date` ) VALUES ( '', '$message', NOW( ) );");
+				mail(get_option('purch_log_email'), "IPN Data", $message);
+			}    
     }
   }
   
@@ -371,8 +350,7 @@ function submit_paypal_multiple(){
   return true;
 }
 
-function form_paypal_multiple()
-  {
+function form_paypal_multiple() {
   $select_currency[get_option('paypal_curcode')] = "selected='true'";
   $output = "
   <tr>
@@ -395,20 +373,20 @@ function form_paypal_multiple()
   ";
   
   
-$paypal_ipn = get_option('paypal_ipn');
-$paypal_ipn1 = "";
-$paypal_ipn2 = "";
-switch($paypal_ipn) {
-  case 0:
-  $paypal_ipn2 = "checked ='true'";
-  break;
-  
-  case 1:
-  $paypal_ipn1 = "checked ='true'";
-  break;
-}
-  
-$output .= "
+	$paypal_ipn = get_option('paypal_ipn');
+	$paypal_ipn1 = "";
+	$paypal_ipn2 = "";
+	switch($paypal_ipn) {
+		case 0:
+		$paypal_ipn2 = "checked ='true'";
+		break;
+		
+		case 1:
+		$paypal_ipn1 = "checked ='true'";
+		break;
+	}
+		
+	$output .= "
    <tr>
      <td>
       PayPal IPN
@@ -456,7 +434,6 @@ $output .= "
 		default:
 		$address_override2 = "checked ='true'";
 		break;
-		
 	}
      
 $output .= "
@@ -546,7 +523,7 @@ $output .= "
 </table> ";
   
   return $output;
-  }
+}
   
   
 add_action('init', 'nzshpcrt_paypal_ipn');

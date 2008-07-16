@@ -13,7 +13,12 @@ define('TXT_WPSC_OPTIONS_ADMIN_TAB', 'Admin');
 define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
 define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
 
+define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Choose the payment options that you want to make available to your customers. Select a payment option below to configure it.'); 
+// to come: "Click on a payment option to configure it"
+
 define('TXT_WPSC_SHOW_BREADCRUMBS', 'Show Breadcrumbs');
+define('TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR', 'Enter the payment instructions that you wish to display to your customers when they make a successful purchase');
+define('TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR', 'For example, this is where you the Shop Owner might enter your bank account details or address so that your customer can make their manual payment.');
 
 define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload an image when ordering this product.');
 
