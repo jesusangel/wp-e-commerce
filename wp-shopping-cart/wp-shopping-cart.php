@@ -31,7 +31,7 @@ $siteurl = get_option('siteurl');
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
 
-
+//exit("");
 
 if(WPSC_DEBUG === true) {
 	function microtime_float() {
@@ -80,16 +80,20 @@ if (!IS_WP25) {
 	require(WPSC_FILE_PATH.'/js/tinymce3/tinymce.php');
 }
 
-
-if ( !defined('WP_CONTENT_URL') ) {
-    define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+if(IS_WPMU == 1) {
+		$upload_url = get_option('siteurl').'/files';
+		$upload_path = get_option('upload_path');
+} else {
+	if ( !defined('WP_CONTENT_URL') ) {
+			define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+		}
+	if ( !defined('WP_CONTENT_DIR') ) {
+		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 	}
-if ( !defined('WP_CONTENT_DIR') ) {
-	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+	
+	$upload_path = WP_CONTENT_DIR."/uploads";
+	$upload_url = WP_CONTENT_URL."/uploads";
 }
-
-$upload_path = WP_CONTENT_DIR."/uploads";
-$upload_url = WP_CONTENT_URL."/uploads";
 
 $wpsc_file_dir = "{$upload_path}/wpsc/downloadables/";
 $wpsc_preview_dir = "{$upload_path}/wpsc/previews/";
