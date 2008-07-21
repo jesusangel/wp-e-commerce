@@ -167,15 +167,7 @@ div.productdisplay{
  }
 
 
-div.imagecol{
- position:relative;
- float:left;
- top:0px;
- left: 0px;
- padding-right: 5px;
- margin-right: 5px;
- border: 0px solid #fff;
- }
+
  
 div.productdisplay div.imagecol img{
 	/* width: 300px; */
@@ -190,11 +182,21 @@ div.textcol{
  padding: 0px;
  padding-bottom: 10px;
  margin: 0px;
-/* Adjust this width according to your layout*/
-/*  width: 77%; */
+ /* Adjust this width according to your layout*/
+ /*  width: 77%; */
  text-align: left !important;
- }
+}
 
+
+div.imagecol{
+ position:absolute;
+ float:left;
+ top:0px;
+ left: 0px;
+ padding-right: 5px;
+ margin-right: 0px;
+/*  border: 0px solid #fff; */
+ }
 
 div.producttext{
  color: #757575;

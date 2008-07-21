@@ -288,7 +288,12 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 
 			$output .= "<div class='productdisplay $category_nice_name'>";
 
-      if($category_data[0]['fee'] == 0) {
+     
+      
+      
+      $output .= "      <div class='textcol'>";
+      
+       if($category_data[0]['fee'] == 0) {
 				$output .= "      <div class='imagecol'>";
         if(get_option('show_thumbnails') == 1) {
           if($product['image'] !=null) {
@@ -301,7 +306,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
               $image_file_name = $product['image'];
 						}
 
-            $output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>";
+            $output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".htmlentities($product['name'], ENT_QUOTES)."' alt='".htmlentities($product['name'], ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>";
             $output .= "</a>";
             if(function_exists("gold_shpcrt_display_extra_images")) {
               $output .= gold_shpcrt_display_extra_images($product['id'],$product['name']);
@@ -320,9 +325,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 				}
         $output .= "</div>";
 			}
-      
-      
-      $output .= "      <div class='textcol'>";
+			
       if($product['special'] == 1) {
         $special = "<strong class='special'>".TXT_WPSC_SPECIAL." - </strong>";
 			} else {

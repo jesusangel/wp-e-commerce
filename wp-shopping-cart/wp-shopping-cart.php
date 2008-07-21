@@ -235,6 +235,31 @@ class wp_shopping_cart {
 function nzshpcrt_style() {
   ?>
   <style type="text/css" media="screen">
+  
+	<?php
+	if((get_option('product_view') == 'default') ||  (get_option('product_view') == '')) {
+		$thumbnail_width = get_option('product_image_width');
+		if($thumbnail_width <= 0) {
+			$thumbnail_width = 96;
+		}
+	?>
+	div.textcol{
+	margin-left: <?php echo $thumbnail_width; ?>px !important;
+	}
+	
+	
+	div.imagecol{
+	position:absolute;
+	top:0px;
+	left: 0px;
+	margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
+	}
+	
+	<?php
+	}
+	?>
+  
+  
     <?php
   if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {
     $brandstate = 'block';
@@ -328,6 +353,9 @@ jQuery(document).ready( function() {
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
 <script src="<?php echo WPSC_URL; ?>/user.js" language='JavaScript' type="text/javascript">
 </script>
+
+
+
 <?php
   $theme_path = WPSC_FILE_PATH. '/themes/';
   if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css") )) {    

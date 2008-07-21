@@ -194,8 +194,8 @@ div.imagecol{
  }
   
 div.productdisplay div.imagecol img{
-	width: 150px;
-	height: 150px;
+/* 	width: 150px; */
+/* 	height: 150px; */
 	border:1px solid #F2F2F2;
 	padding:2px;
  }

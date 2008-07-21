@@ -1299,7 +1299,8 @@ if($_GET['clean_categories'] == 'true') {
 									<?php echo TXT_WPSC_PRODUCTTHUMBNAILSIZE;?>:
 									</th>
 									<td>
-									<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='product_image_height' value='<?php echo get_option('product_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='product_image_width' value='<?php echo get_option('product_image_width'); ?>' /> <span class='small'></span>
+									<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='product_image_height' value='<?php echo get_option('product_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='product_image_width' value='<?php echo get_option('product_image_width'); ?>' /> <br /><span class='small'></span>
+									Changing this will only set the default size for images uploaded in future, to resize your current images, click <a href='#'>here</a> (this needs to be made to work, and this text needs adding to the language file)</span>
 									</td>
 								</tr>
 								<tr>
