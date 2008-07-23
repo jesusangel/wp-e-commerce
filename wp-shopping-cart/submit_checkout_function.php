@@ -212,6 +212,15 @@ function nzshpcrt_submit_checkout() {
         break;
 			}
 		}
+		
+ 		if(get_option('custom_gateway_options') == null) {
+			$bad_input_message .= TXT_WPSC_PROCESSING_PROBLEM . "";
+			$bad_input_message .= "\n\r";
+			$any_bad_inputs = true;
+ 		}
+
+   list($bad_input_message, $any_bad_inputs) = apply_filters('wpsc_additional_checkout_checks', array($bad_input_message, $any_bad_inputs));
+   //exit("<pre>".print_r($bad_input_message, true)."</pre>");
 
     if($any_bad_inputs === true) {
       $_SESSION['nzshpcrt_checkouterr'] = nl2br($bad_input_message);
@@ -440,19 +449,26 @@ function nzshpcrt_submit_checkout() {
    do_action('wpsc_submit_checkout', $log_id);
    //mail( get_option('purch_log_email'),('debug from '.date("d/m/Y H:i:s")), $debug);
    $curgateway = get_option('payment_gateway');
-		if (get_option('custom_gateway')) {
-			$selected_gateways = get_option('custom_gateway_options');
+	 //	if (get_option('custom_gateway')) {
+	 
+	 
+		$selected_gateways = get_option('custom_gateway_options');
+		
+		if(count($selected_gateways) > 1) {
 			if (in_array($_POST['custom_gateway'], (array)$selected_gateways)) {
 				$curgateway = $_POST['custom_gateway'];
 			} else {
 				$curgateway = get_option('payment_gateway');
 			}
-			
-		  
-		
-		} else {
-			$curgateway = get_option('payment_gateway');
+		} else if(count($selected_gateways) == 1) {
+			$curgateway = array_pop($selected_gateways);
 		}
+				
+				
+		
+		//} else {
+		//	$curgateway = get_option('payment_gateway');
+		//}
 
 
     if(get_option('permalink_structure') != '') {

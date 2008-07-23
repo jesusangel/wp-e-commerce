@@ -138,182 +138,181 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
  * Adds new products
  */
 if($_POST['submit_action'] == 'add') {
-   //Allen's Change for Google base
-	if (isset($_GET['token']) || isset($_SESSION['google_base_sessionToken'])) {
-		$sessionToken=exchangeToken($_GET['token']);
-		$_SESSION['google_base_sessionToken'] = $sessionToken;
-		if (isset($_SESSION['google_base_sessionToken']))
-			$sessionToken=$_SESSION['google_base_sessionToken'];
-		postItem($_POST['name'], $_POST['price'], $_POST['description'], $sessionToken);
-	}
-//Google base change ends here
-
-  $file_name = null;
-  if($_POST['file_url'] != null)
-    {
-    $url_array = array_reverse(explode("/",$_POST['file_url']));
-    if(is_file(WPSC_FILE_DIR.$url_array[0])) {
-      $file_name = $url_array[0];
+  // well, there is simply no way to do this other than the blatantly obvious, so here it is
+  if(!is_callable('getshopped_item_limit') || (@getshopped_item_limit() !== false)) {
+  
+		//Allen's Change for Google base
+		if (isset($_GET['token']) || isset($_SESSION['google_base_sessionToken'])) {
+			$sessionToken=exchangeToken($_GET['token']);
+			$_SESSION['google_base_sessionToken'] = $sessionToken;
+			if (isset($_SESSION['google_base_sessionToken']))
+				$sessionToken=$_SESSION['google_base_sessionToken'];
+			postItem($_POST['name'], $_POST['price'], $_POST['description'], $sessionToken);
 		}
-	}
+	//Google base change ends here
 	
-	$thumbnail_image = '';
-	
-	  
-  $file = 0;  
-  /* handle adding file uploads here */
-  if(!empty($_FILES['file']['name'])) {
-		$fileid = wpsc_item_process_file('add');
-		$file = $fileid;
-	} else if (($_POST['select_product_file'] != '')) {
-		$fileid = wpsc_item_reassign_file($_POST['select_product_file'], 'add');
-		$file = $fileid;
-	}
-      
-   
- if(is_numeric($_POST['quantity']) && ($_POST['quantity_limited'] == "yes")) {
-			$quantity_limited = 1;
-			$quantity = (int)$_POST['quantity'];
-		} else {
-			$quantity_limited = 0;
-			$quantity = 0;
-		}
-       
-		if($_POST['special'] == 'yes') {
-			$special = 1;
-			if(is_numeric($_POST['special_price'])) {
-				$special_price = $_POST['price'] - $_POST['special_price'];
-			}
-		} else {
-			$special = 0;
-			$special_price = '';
-		}
-		
-		if($_POST['notax'] == 'yes') {
-			$notax = 1;
-		} else {
-			$notax = 0;
-		}
-
-      
-		if($_POST['display_frontpage'] == "yes") {
-			$display_frontpage = 1;
-		} else {
-			$display_frontpage = 0;
-		}
-		
-		if($_POST['donation'] == "yes") {
-			$is_donation = 1;
-		} else {
-			$is_donation = 0;
-		}
-		
-		if($_POST['no_shipping'] == "yes") {
-			$no_shipping = 1;
-		} else {
-			$no_shipping = 0;
-		}
-
-       
-
-       
-     //modified for USPS
-  $insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape($_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$image."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
-  
-  
-  if($wpdb->query($insertsql)) {
-  
-    $product_id_data = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1",ARRAY_A);
-	$product_id = $product_id_data[0]['id'];
-	if(function_exists('wp_insert_term')) {
-		product_tag_init();
-		$tags = $_POST['product_tag'];
-		if ($tags!="") {
-			$tags = explode(',',$tags);
-			foreach($tags as $tag){
-				$tt = wp_insert_term((string)$tag, 'product_tag');
-			}
-			$return = wp_set_object_terms($product_id, $tags, 'product_tag');
-		}
-	}
-
-	   /* Handle new image uploads here */
-  $image = wpsc_item_process_image($product_id);
-
-
-    /* Process extra meta values */
-    if($_POST['productmeta_values'] != null) {
-      foreach((array)$_POST['productmeta_values'] as $key => $value) {
-        if(get_product_meta($product_id, $key) != false) {
-          update_product_meta($product_id, $key, $value);
-          } else {
-          add_product_meta($product_id, $key, $value);
-          }
-        }
-      }
-        
-    if($_POST['new_custom_meta'] != null) {
-      foreach((array)$_POST['new_custom_meta']['name'] as $key => $name) {
-				$value = $_POST['new_custom_meta']['value'][(int)$key];
-        if(($name != '') && ($value != '')) {
-					add_product_meta($product_id, $name, $value, false, true);
-        }
+		$file_name = null;
+		if($_POST['file_url'] != null) {
+			$url_array = array_reverse(explode("/",$_POST['file_url']));
+			if(is_file(WPSC_FILE_DIR.$url_array[0])) {
+				$file_name = $url_array[0];
 			}
 		}
 		
-    do_action('wpsc_product_form_submit', $product_id);
-    
-    /* Add tidy url name */
-    $tidied_name = trim($_POST['name']);
-    $tidied_name = strtolower($tidied_name);
-    $url_name = preg_replace(array("/(\s)+/","/[^\w-]+/i"), array("-", ''), $tidied_name);
-    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
-    $extension_number = '';
-    if($similar_names['count'] > 0) {
-      $extension_number = (int)$similar_names['max_number']+1;
-      }
-    $url_name .= $extension_number;
-    add_product_meta($product_id, 'url_name', $url_name,true);
-    
-    if(($_FILES['extra_image'] != null) && function_exists('edit_submit_extra_images')) {
-      $var = edit_submit_extra_images($product_id);
-    }
-    
-    $variations_procesor = new nzshpcrt_variations;
-    if($_POST['variation_values'] != null) {
-      $variations_procesor->add_to_existing_product($product_id,$_POST['variation_values']);
-    }
+		$thumbnail_image = '';
+		
 			
-		if($_POST['variation_priceandstock'] != null) {
-			$variations_procesor->update_variation_values($product_id, $_POST['variation_priceandstock']);
-// 			  exit("<pre>".print_r($_POST,true)."</pre>");
+		$file = 0;  
+		/* handle adding file uploads here */
+		if(!empty($_FILES['file']['name'])) {
+			$fileid = wpsc_item_process_file('add');
+			$file = $fileid;
+		} else if (($_POST['select_product_file'] != '')) {
+			$fileid = wpsc_item_reassign_file($_POST['select_product_file'], 'add');
+			$file = $fileid;
 		}
+				
+		
+	if(is_numeric($_POST['quantity']) && ($_POST['quantity_limited'] == "yes")) {
+				$quantity_limited = 1;
+				$quantity = (int)$_POST['quantity'];
+			} else {
+				$quantity_limited = 0;
+				$quantity = 0;
+			}
+				
+			if($_POST['special'] == 'yes') {
+				$special = 1;
+				if(is_numeric($_POST['special_price'])) {
+					$special_price = $_POST['price'] - $_POST['special_price'];
+				}
+			} else {
+				$special = 0;
+				$special_price = '';
+			}
+			
+			if($_POST['notax'] == 'yes') {
+				$notax = 1;
+			} else {
+				$notax = 0;
+			}
+	
+				
+			if($_POST['display_frontpage'] == "yes") {
+				$display_frontpage = 1;
+			} else {
+				$display_frontpage = 0;
+			}
+			
+			if($_POST['donation'] == "yes") {
+				$is_donation = 1;
+			} else {
+				$is_donation = 0;
+			}
+			
+			if($_POST['no_shipping'] == "yes") {
+				$no_shipping = 1;
+			} else {
+				$no_shipping = 0;
+			}
+	
+				
+	
+				
+			//modified for USPS
+		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape($_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$image."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
 		
 		
-       //$variations_procesor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
-    $counter = 0;
-    $item_list = '';
-    if(count($_POST['category']) > 0)
-      {
-      foreach($_POST['category'] as $category_id)
-        {
-        $check_existing = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
-        if($check_existing == null)
-          {
-          $wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
-          }
-        }
-      }
-    
-    $display_added_product = "filleditform(".$product_id.");";
-    
-    echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
-    }
-    else
-      {
-      echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
-      }
- }
+		if($wpdb->query($insertsql)) {  
+			$product_id_data = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1",ARRAY_A);
+			$product_id = $product_id_data[0]['id'];
+			if(function_exists('wp_insert_term')) {
+				product_tag_init();
+				$tags = $_POST['product_tag'];
+				if ($tags!="") {
+					$tags = explode(',',$tags);
+					foreach($tags as $tag) {
+						$tt = wp_insert_term((string)$tag, 'product_tag');
+					}
+					$return = wp_set_object_terms($product_id, $tags, 'product_tag');
+				}
+			}
+		
+				/* Handle new image uploads here */
+			$image = wpsc_item_process_image($product_id);
+	
+	
+			/* Process extra meta values */
+			if($_POST['productmeta_values'] != null) {
+				foreach((array)$_POST['productmeta_values'] as $key => $value) {
+					if(get_product_meta($product_id, $key) != false) {
+						update_product_meta($product_id, $key, $value);
+					} else {
+						add_product_meta($product_id, $key, $value);
+					}
+				}
+			}
+					
+			if($_POST['new_custom_meta'] != null) {
+				foreach((array)$_POST['new_custom_meta']['name'] as $key => $name) {
+					$value = $_POST['new_custom_meta']['value'][(int)$key];
+					if(($name != '') && ($value != '')) {
+						add_product_meta($product_id, $name, $value, false, true);
+					}
+				}
+			}
+			
+			do_action('wpsc_product_form_submit', $product_id);
+			
+			/* Add tidy url name */
+			$tidied_name = trim($_POST['name']);
+			$tidied_name = strtolower($tidied_name);
+			$url_name = preg_replace(array("/(\s)+/","/[^\w-]+/i"), array("-", ''), $tidied_name);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+			$extension_number = '';
+			if($similar_names['count'] > 0) {
+				$extension_number = (int)$similar_names['max_number']+1;
+				}
+			$url_name .= $extension_number;
+			add_product_meta($product_id, 'url_name', $url_name,true);
+			
+			if(($_FILES['extra_image'] != null) && function_exists('edit_submit_extra_images')) {
+				$var = edit_submit_extra_images($product_id);
+			}
+			
+			$variations_procesor = new nzshpcrt_variations;
+			if($_POST['variation_values'] != null) {
+				$variations_procesor->add_to_existing_product($product_id,$_POST['variation_values']);
+			}
+				
+			if($_POST['variation_priceandstock'] != null) {
+				$variations_procesor->update_variation_values($product_id, $_POST['variation_priceandstock']);
+	// 			  exit("<pre>".print_r($_POST,true)."</pre>");
+			}
+			
+			
+				//$variations_procesor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
+			$counter = 0;
+			$item_list = '';
+			if(count($_POST['category']) > 0) {
+				foreach($_POST['category'] as $category_id) {
+					$check_existing = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
+					if($check_existing == null) {
+						$wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
+					}
+				}
+			}
+			
+			$display_added_product = "filleditform(".$product_id.");";
+			
+			echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
+		} else {
+			echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
+		}
+	} else {
+		echo "<div class='updated'><p align='center'>".TXT_WPSC_MAX_PRODUCTS."</p></div>";
+	}
+}
 
 if($_GET['submit_action'] == "remove_set")
   {
@@ -340,8 +339,7 @@ if($_GET['submit_action'] == "remove_set")
     } 
   }
 
-if($_POST['submit_action'] == "edit")
-  {
+if($_POST['submit_action'] == "edit") {
 //   exit("<pre>".print_r($_POST,true)."</pre>");
   $id = $_POST['prodid'];
   if(function_exists('edit_submit_extra_images'))

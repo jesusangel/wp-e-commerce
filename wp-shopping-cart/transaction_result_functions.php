@@ -234,8 +234,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			$report = $report_user. $report_id . $report;
 
 			if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
-        		mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')."");
-        	}
+				mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')."");
+			}
 			
 			$_SESSION['nzshpcrt_cart'] = '';
 			$_SESSION['nzshpcrt_cart'] = Array();
@@ -243,11 +243,11 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			if(true === $echo_to_screen) { 
 				echo '<div class="wrap">';
 				if($sessionid != null) {
-          			echo TXT_WPSC_THETRANSACTIONWASSUCCESSFUL."<br />";
-          			echo "<br />" . nl2br(str_replace("$",'\$',$message_html));
-          		}
-        		echo '</div>';
-        	}
+					echo TXT_WPSC_THETRANSACTIONWASSUCCESSFUL."<br />";
+					echo "<br />" . nl2br(str_replace("$",'\$',$message_html));
+				}
+				echo '</div>';
+			}
 		} else {
 			if(true === $echo_to_screen) {    
 				echo '<div class="wrap">';

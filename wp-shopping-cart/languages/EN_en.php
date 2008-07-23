@@ -275,6 +275,10 @@ define('TXT_WPSC_PLEASEENTERAVALIDADDRESS', 'Please enter a valid address');
 define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', 'Please enter a valid phone number');
 define('TXT_WPSC_TERMSANDCONDITIONS', 'You have not agreed to the terms and conditions');
 define('TXT_WPSC_NOTHINGINYOURSHOPPINGCART', 'There is nothing in your shopping cart');
+
+define('TXT_WPSC_PROCESSING_PROBLEM', 'There was a problem with processing the puchase, please email the site owner.');
+
+
 define('TXT_WPSC_SPECIALS', 'Specials');
 define('TXT_WPSC_BUY', 'Buy');
 define('TXT_WPSC_SHOPPINGCART', 'Shopping Cart');

@@ -93,7 +93,7 @@ if($_REQUEST['act']=='error'){
 	</center>
 		</table>
 <?php 
-}else if($_REQUEST['act']=='do'){
+} else if($_REQUEST['act']=='do') {
 	session_start();
 	
 	/* Gather the information to make the final call to

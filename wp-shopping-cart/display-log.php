@@ -2,41 +2,34 @@
 /*
  * this updates the processing status of an item
  */
-if(is_numeric($_GET['id']) && is_numeric($_GET['value']))
-  {
+if(is_numeric($_GET['id']) && is_numeric($_GET['value'])) {
   $max_stage = $wpdb->get_var("SELECT MAX(*) AS `max` FROM `".$wpdb->prefix."purchase_statuses` WHERE `active`='1'");
-  if(is_numeric($_GET['value']) && ($_GET['value'] <= $max_stage))
-    {
+  if(is_numeric($_GET['value']) && ($_GET['value'] <= $max_stage)) {
     $newvalue = $_GET['value'];
-    }
-    else
-      {
-      $newvalue = 1;
-      }
+	} else {
+		$newvalue = 1;
+	}
   $log_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id` = '".$_GET['id']."' LIMIT 1");  
   $update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '".$newvalue."' WHERE `id` = '".$_GET['id']."' LIMIT 1";  
   $wpdb->query($update_sql);
-  if(($newvalue > $log_data['processed']) && ($log_data['processed'] <=1))
-    {
+  if(($newvalue > $log_data['processed']) && ($log_data['processed'] <=1)) {
     transaction_results($log_data['sessionid'], false);
-    }
-  }
+	}
+}
 
 
-if(is_numeric($_GET['deleteid']))
-  {
+if(is_numeric($_GET['deleteid'])) {
   $delete_id = $_GET['deleteid'];
   $delete_log_form_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$delete_id'";
   $cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
-  foreach((array)$cart_content as $cart_item)
-    {
+  foreach((array)$cart_content as $cart_item) {
     $cart_item_variations = $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
-    }
+	}
   $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$delete_id'");
   $wpdb->query("DELETE FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` IN ('$delete_id')");
   $wpdb->query("DELETE FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='$delete_id' LIMIT 1");
   echo '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
-  }
+}
 
 
 
@@ -77,35 +70,30 @@ $current_year = date("Y");
 $earliest_year = date("Y",$earliest_timestamp);
 
 $j = 0;
-for($year = $current_year; $year >= $earliest_year; $year--)
-  {
-  for($month = 12; $month >= 1; $month--)
-    {          
+for($year = $current_year; $year >= $earliest_year; $year--) {
+  for($month = 12; $month >= 1; $month--) {          
     $start_timestamp = mktime(0, 0, 0, $month, 1, $year);
     $end_timestamp = mktime(0, 0, 0, ($month+1), 1, $year);
-    if(($end_timestamp >= $earliest_timestamp) && ($start_timestamp <= $current_timestamp))
-      {   
+    if(($end_timestamp >= $earliest_timestamp) && ($start_timestamp <= $current_timestamp)) {
       $date_list[$j]['start'] = $start_timestamp;
       $date_list[$j]['end'] = $end_timestamp;
       $j++;
-      }
-    }
-  }
+		}
+	}
+}
 
-if($_GET['filter'] !== 'true')
-  {
+if($_GET['filter'] !== 'true') {
   if(is_numeric($_GET['filter'])) {
     $max_number = $_GET['filter'];
 	} else {
 		if ($_GET['filter']=='paid') {
 			$paidlog=true;
 		}
-
 		$max_number = 3;
 	}
   
   $date_list = array_slice($date_list, 0, $max_number);
-  }
+}
 
 ?>
 <div class="wrap" style=''>
