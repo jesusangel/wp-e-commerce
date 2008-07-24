@@ -641,8 +641,26 @@ if(is_numeric($_GET['deleteid'])) {
   $wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id` = '".$_GET['deleteid']."' AND `meta_key` IN ('url_name')");  
   $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET  `active` = '0' WHERE `id`='".$_GET['deleteid']."' LIMIT 1");
 }
-  
-  
+
+
+
+/*
+ * Sort out the searching of the products
+ */
+if($_GET['search_products']) {
+	$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search_products']))."%";
+	$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search_products']))."%";
+	
+	$search_sql = "AND (`".$wpdb->prefix."product_list`.`name` LIKE '".$search_string_title."' OR `".$wpdb->prefix."product_list`.`description` LIKE '".$search_string_description."')";
+	
+	$search_string = $_GET['search_products'];
+} else {
+  $search_sql = '';
+  $search_string = '';
+}
+
+
+
 /*
  * Gets the product list, commented to make it stick out more, as it is hard to notice 
  */
@@ -656,7 +674,7 @@ LEFT JOIN `".$wpdb->prefix."product_order` ON ( (
 AND (
 `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` 
 ) ) 
-WHERE `".$wpdb->prefix."product_list`.`active` = '1'
+WHERE `".$wpdb->prefix."product_list`.`active` = '1' $search_sql
 AND `".$wpdb->prefix."item_category_associations`.`category_id` 
 IN (
 '".$_GET['catid']."'
@@ -669,14 +687,14 @@ ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC,  `".$w
 			$page = (int)$_GET['pnum'];
 			
 			$start = $page * $itempp;
-			$sql = "SELECT DISTINCT * FROM `{$wpdb->prefix}product_list` WHERE `active`='1' LIMIT $start,$itempp";
+			$sql = "SELECT DISTINCT * FROM `{$wpdb->prefix}product_list` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
 		} else {
-			$sql = "SELECT DISTINCT * FROM `{$wpdb->prefix}product_list` WHERE `active`='1'";
+			$sql = "SELECT DISTINCT * FROM `{$wpdb->prefix}product_list` WHERE `active`='1' $search_sql";
 		}
 	}  
     
 $product_list = $wpdb->get_results($sql,ARRAY_A);
-$num_prodcuts = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefix."product_list` WHERE `active`='1'");
+$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefix."product_list` WHERE `active`='1' $search_sql");
 
 /*
  * The product list is stored in $product_list now
@@ -724,27 +742,21 @@ $num_prodcuts = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
   <a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a><br />
 
   <script language='javascript' type='text/javascript'>
-function conf()
-  {
+function conf() {
   var check = confirm("<?php echo TXT_WPSC_SURETODELETEPRODUCT;?>");
-  if(check)
-    {
+  if(check) {
     return true;
-  }
-  else
-    {
+  } else  {
     return false;
-    }
+	}
   }
 <?php
-if(is_numeric($_POST['prodid']))
-  {
-  echo "filleditform(".$_POST['prodid'].");";
+if(is_numeric($_POST['prodid'])) {
+		echo "filleditform(".$_POST['prodid'].");";
   }
-  else if(is_numeric($_GET['product_id']))
-    {
+else if(is_numeric($_GET['product_id'])) {
     echo "filleditform(".$_GET['product_id'].");";
-    }
+  }
   
 echo $display_added_product ;
 ?>
@@ -758,24 +770,40 @@ echo "      <tr><td>\n\r";
 echo "        <table id='itemlist'>\n\r";
 echo "          <tr class='firstrowth'>\n\r";
 echo "            <td colspan='4' style='text-align: left;'>\n\r";
+echo "<span id='loadingindicator_span' class='product_loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/grey-loader.gif' alt='Loading' title='Loading' /></span>";
 echo "<strong class='form_group'>".TXT_WPSC_SELECT_PRODUCT."</strong>";
 echo "            </td>\n\r";
 echo "          </tr>\n\r";
 echo "          <tr class='selectcategory'>\n\r";
-echo "            <td colspan='4' width='160px'>\n\r";
-echo "<div style='float: right; width: 160px;'>";
-echo topcategorylist() . "<span id='loadingindicator_span'><img id='loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /></span></div>";
-echo TXT_WPSC_PLEASESELECTACATEGORY.":";
+echo "            <td colspan='3'>\n\r";
+	echo TXT_WPSC_ADMIN_SEARCH_PRODUCTS.": ";
+echo "            </td>\n\r";
+echo "            <td colspan='1'>\n\r";
+if(($num_products > 20) || ($search_string != '')) {
+	echo "<div>\n\r";
+	echo "  <form method='GET' action=''>\n\r";
+	echo "<input type='hidden' value='{$_GET['page']}' name='page'>";
+	echo "<input type='text' value='{$search_string}' name='search_products' style='width: 115px; padding: 1px;'>";
+	echo "  </form>\n\r";
+	echo "</div>\n\r";
+}
 
 echo "            </td>\n\r";
 echo "          </tr>\n\r";
-// echo "          <tr>\n\r";
-	// echo"<td colspan='4'>\n\r";
-// echo "		<div id='changenotice' class='updated'></div>";
-// echo "		</td>\n\r";
-// echo "          </tr>\n\r";
 
 
+echo "          <tr class='selectcategory'>\n\r";
+echo "            <td colspan='3'>\n\r";
+echo TXT_WPSC_PLEASESELECTACATEGORY.": ";
+echo "            </td>\n\r";
+echo "            <td colspan='1'>\n\r";
+echo "<div>\n\r";
+echo topcategorylist();
+//echo "<div style='float: right; width: 160px;'>". topcategorylist() ."</div>";
+echo "</div>\n\r";
+
+echo "            </td>\n\r";
+echo "          </tr>\n\r";
 
 if(is_numeric($_GET['catid'])) {
 	$name_style = 'class="pli_name"';
@@ -905,22 +933,21 @@ if($product_list != null)
 			echo "            <td>\n\r";
 	$category_list = $wpdb->get_results("SELECT `".$wpdb->prefix."product_categories`.`id`,`".$wpdb->prefix."product_categories`.`name` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product['id']."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1')",ARRAY_A);
 			$i = 0;
-			foreach((array)$category_list as $category_row)
-				{
-				if($i > 0)
-					{
+			foreach((array)$category_list as $category_row) {
+				if($i > 0) {
 					echo "<br />";
-					}
+				}
 				echo "<a href='?page=".$_GET['page']."&amp;catid=".$category_row['id']."'>".stripslashes($category_row['name'])."</a>";
 				$i++;
-				}        
+			}        
 		}
-	if(!is_numeric($_GET['catid'])){
-    echo "</td>";
-	}    
+		if(!is_numeric($_GET['catid'])){
+			echo "</td>";
+		}    
+		
    // echo "<a href='#' title='sth' onclick='filleditform(".$product['id'].");return false;'>".TXT_WPSC_EDIT."</a>";
     echo "				</div>\n\r";
-	echo "            </div>\n\r";
+		echo "            </div>\n\r";
 		if(!is_numeric($_GET['catid'])){
 			echo "</tr>";
 		}
@@ -929,29 +956,46 @@ if($product_list != null)
 	echo "</td></tr>";
 	if(is_numeric($_GET['catid'])){
 		//echo "<tr><td>&nbsp;&nbsp;&nbsp;<a href='#' onClick='serialize();return false;'>".TXT_WPSC_SAVE_PRODUCT_ORDER."</a></td><td></td></tr>";
-  	} else {
+	} else {
 		if (isset($itempp)) {
-		$num_pages = ceil($num_prodcuts/$itempp);
-	}
-	if (!isset($_GET['pnum'])) {
-		$_GET['pnum']=0;
-	}
-	echo "<tr class='selectcategory' style='border: none;'><td style='text-align:right;' colspan='4' width='70%'>";
-		for ($i=0;$i<$num_pages;$i++) {
-			$newpage=$_GET['pnum']+1;
-			$pagenumber=$i+1;
-			if (($i==$_GET['pnum']) && is_numeric($_GET['pnum'] )) {
-				echo '<span class="page-numbers current">'.$pagenumber.'</span>';
-			} else {
-				echo "<a style='text-decoration:none;' class='page-numbers' href='?page=".$_GET['page']."&pnum=".$i."'>".$pagenumber."</a>";
-			}
+		$num_pages = floor($num_products/$itempp);
 		}
+		if (!isset($_GET['pnum'])) {
+			$_GET['pnum']=0;
+		}
+		echo "<tr class='selectcategory' style='border: none;'><td style='text-align:right;' colspan='4' width='70%'>";
+		
+		$page_links = paginate_links( array(
+			'base' => add_query_arg( 'pnum', '%#%' ),
+			'format' => '',
+			'total' => $num_pages,
+			'current' => $_GET['pnum'],
+			'end_size' => 2, // How many numbers on either end including the end
+			'mid_size' => 2, // How many numbers to either side of current not including current
+		));
+		
+			echo "<div class='tablenav-pages'>";
+			
+			echo $page_links;
+			
+// 		for ($i=0;$i<$num_pages;$i++) {
+// 			$newpage=$_GET['pnum']+1;
+// 			$pagenumber=$i+1;
+// 			if (($i==$_GET['pnum']) && is_numeric($_GET['pnum'] )) {
+// 				echo '<span class="page-numbers current">'.$pagenumber.'</span>';
+// 			} else {
+// 				echo "<a style='text-decoration:none;' class='page-numbers' href='?page=".$_GET['page']."&pnum=".$i."'>".$pagenumber."</a>";
+// 			}
+// 		}
+// 		
+		
 		if (!isset($_GET['catid'])) {
 			if ($_GET['pnum']==='all') {
 				echo '<span class="page-numbers current">'.TXT_WPSC_SHOWALL.'</span>';
 			} else {
 				echo "<a style='text-decoration:none;' class='page-numbers' href='?page=".$_GET['page']."&pnum=all'>".TXT_WPSC_SHOWALL."</a>";
 			}
+			echo "</div>";
 		}
 		echo "</td></tr>";
 	}

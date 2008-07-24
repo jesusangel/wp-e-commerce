@@ -13,6 +13,7 @@ define('TXT_WPSC_OPTIONS_ADMIN_TAB', 'Admin');
 define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
 define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
 
+define('TXT_WPSC_ADMIN_SEARCH_PRODUCTS', 'Search for a Product');
 define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Choose the payment options that you want to make available to your customers. Select a payment option below to configure it.'); 
 // to come: "Click on a payment option to configure it"
 

@@ -74,8 +74,9 @@ table#itemlist tr.firstrow td{ font-weight: bold; padding-left: 5px; padding-rig
 
 
 
-table tr.firstrowth{background-color:#333; padding:10px 5px 8px 5px;border-left:1px solid #bbb;border-right:1px solid #bbb;border-top:1px solid #bbb;}
+table tr.firstrowth{background-color:#575757; padding:10px 5px 8px 5px;border-left:1px solid #bbb;border-right:1px solid #bbb;border-top:1px solid #bbb;}
 table tr.selectcategory{background-color:#E4F2FD;border-left:1px solid #bbb;border-right:1px solid #bbb;}
+table tr.selectcategory td{ padding: 3px 3px 3px 13px !important;}
 
 table.itemlist{ margin: 0px; }
  
@@ -672,7 +673,7 @@ div.pli_price{
 	display:block;
 	top:0px;
 	float:left;
-  margin-left: 80px;
+  margin-left: 18px;
   margin-top:10px;
 }
 
@@ -762,7 +763,7 @@ padding:9px 5px;
 }
 
 div.categorisation_title {
-	background:#333333;
+	background:#575757;
 	padding:10px 5px 8px;
   position: relative;
   top: 0px;
@@ -879,4 +880,10 @@ div#wpsc_shipwire_setting {
 	border-width:1px;
 	margin:0pt 15% 0pt 15px;
 	padding:2px;
+}
+
+
+span.product_loadingindicator {
+  display: block;
+  float: right;
 }

@@ -82,7 +82,7 @@ if (!IS_WP25) {
 
 if(IS_WPMU == 1) {
 		$upload_url = get_option('siteurl').'/files';
-		$upload_path = get_option('upload_path');
+		$upload_path = ABSPATH.get_option('upload_path');
 } else {
 	if ( !defined('WP_CONTENT_URL') ) {
 			define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
@@ -243,12 +243,12 @@ function nzshpcrt_style() {
 			$thumbnail_width = 96;
 		}
 	?>
-	div.textcol{
+	div.default_product_display div.textcol{
 	margin-left: <?php echo $thumbnail_width; ?>px !important;
 	}
 	
 	
-	div.imagecol{
+	div.default_product_display  div.textcol div.imagecol{
 	position:absolute;
 	top:0px;
 	left: 0px;

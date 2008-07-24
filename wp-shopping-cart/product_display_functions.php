@@ -286,7 +286,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 			
 
-			$output .= "<div class='productdisplay $category_nice_name'>";
+			$output .= "<div class='productdisplay default_product_display $category_nice_name'>";
 
      
       

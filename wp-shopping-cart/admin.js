@@ -82,7 +82,7 @@ var getresults=function(results) {
 function filleditform(prodid)
 	{
 	ajax.post("index.php",getresults,"ajax=true&admin=true&prodid="+prodid);
-	jQuery('#loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
+	jQuery('#loadingimage').attr('src', jQuery("#loadingimage").attr('src'));
 	jQuery('#loadingindicator_span').css('visibility','visible');
 	}
    
