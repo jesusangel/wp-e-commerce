@@ -327,20 +327,21 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 			
       if($product['special'] == 1) {
-        $special = "<strong class='special'>".TXT_WPSC_SPECIAL." - </strong>";
+        $special = "<span class='special'>".TXT_WPSC_SPECIAL." - </span>";
 			} else {
 				$special = "";
 			}
 
 			$output .= "<form id='product_".$product['id']."' name='product_".$product['id']."' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >";
 			$output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
-			$output .= "<div class='producttext'>";
+			$output .= "<div class='producttext'><h2 class='prodtitles'>";
 
 			if (get_option('hide_name_link')!=1) {
-				$output .= "<a href='".wpsc_product_url($product['id'])."' class='wpsc_product_title' >$special<strong>" . stripslashes($product['name']) . "</strong></a>";
+				$output .= "<a href='".wpsc_product_url($product['id'])."'  class='wpsc_product_title' >$special" . stripslashes($product['name']) . "</a>";
 			} else {
 				$output .= "<a class='wpsc_product_title' >$special<strong>" . stripslashes($product['name']) . "</strong></a>";
 			}
+			$output .= "</h2>";
 
 
       ob_start();
@@ -432,7 +433,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			  $wpsc_theme = wpsc_theme_html($product);
 			}
       if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && $variations_output[1] === null) {
-        $output .= TXT_WPSC_PRODUCTSOLDOUT."";
+        $output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
 			} else {
 				if((get_option('hide_addtocart_button') != 1) && (get_option('payment_gateway') !='google')) {
 					if ((get_option('addtocart_or_buynow') == 0)) {
@@ -592,7 +593,7 @@ function single_product_display($product_id)
 			}
       $output .= "      <div class='textcol'>";
       if($product['special'] == 1) {
-        $special = "<strong class='special'>".TXT_WPSC_SPECIAL." - </strong>";
+				$special = "<span class='special'>".TXT_WPSC_SPECIAL." - </span>";
 			} else {
 				$special = "";
 			}
@@ -604,12 +605,13 @@ function single_product_display($product_id)
 			if(($product['image'] != '') && (file_exists(WPSC_IMAGE_DIR.$product['image']) === true) && function_exists("getimagesize")) {
         $image_size = @getimagesize(WPSC_IMAGE_DIR.$product['image']);
         $image_link = "index.php?productid=".$product['id']."&width=".$image_size[0]."&height=".$image_size[1]."";
-        $output .= "<div class='producttext'>";
+        $output .= "<div class='producttext'><h2 class='prodtitles'>";
 			} else {
-				$output .= "<div class='producttext'>$special";
+				$output .= "<div class='producttext'><h2 class='prodtitles'>$special";
 			}
       
-      $output .= "$special<strong>" . stripslashes($product['name']);
+      $output .= "$special" . stripslashes($product['name']);
+      $output .= "</h2>";
       if (get_option('wpsc_selected_theme') == 'market3') {
 				if (($product['quantity_limited']) && ($product['quantity']<1)) {
 					$soldout=1;
@@ -621,11 +623,11 @@ function single_product_display($product_id)
 				} else {
 					$output .="<span class='price'>".nzshpcrt_currency_display($product['price'], $product['notax'])."</span>". "</strong>";
 				}
-				$output .= "<br />";
+				//$output .= "<br />";
 			} else {
 			  $output .= "</strong>";
 			}
-      $output .= "<br />";
+      //$output .= "<br />";
 
       
       
@@ -641,7 +643,8 @@ function single_product_display($product_id)
 			}
             
       if($product['description'] != '') {
-        $output .= nl2br(stripslashes($product['description'])) . "<br />";
+				$output .= "<p  class='description'>";
+				$output .= nl2br(stripslashes($product['description'])) . "</p>";
 			}
 			if (get_option('wpsc_selected_theme') == 'market3') {
 	       $output .= "<br />";
@@ -655,7 +658,7 @@ function single_product_display($product_id)
 				}
 
         $output .= nl2br(stripslashes($product['additional_description'])) . "";
-        $output .= "</span><br /><br />";
+        $output .= "</span>";
 			}
 			
 			
@@ -722,7 +725,7 @@ function single_product_display($product_id)
       //AND (`quantity_limited` = '1' AND `quantity` > '0' OR `quantity_limited` = '0' )
       if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
         if (get_option("wpsc_selected_theme")!='market3') {
-					$output .= TXT_WPSC_PRODUCTSOLDOUT."";
+					$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
 				}
 			} else {
 				if (get_option('hide_addtocart_button') != 1) {
@@ -800,7 +803,7 @@ function wpsc_post_title_seo($title) {
 	} else if(is_numeric($_GET['product_id'])) {
 		$title=$wpdb->get_var("SELECT `name` FROM ".$wpdb->prefix."product_list WHERE id IN ('".(int)$_GET['product_id']."') LIMIT 1" );
 	}
-	return $title;
+	return stripslashes($title);
 }
 
 
@@ -901,7 +904,7 @@ function fancy_notification_content($product_id, $quantity_limit = false) {
     //if($product['quantity_limited'] == 1) { }
     $output = "";
     if($quantity_limit == false) {
-      $output .= "<span>".str_replace("[product_name]", $product['name'], TXT_WPSC_YOU_JUST_ADDED)."</span>";
+      $output .= "<span>".str_replace("[product_name]", stripslashes($product['name']), TXT_WPSC_YOU_JUST_ADDED)."</span>";
 		} else {
 			$output .= "<span>".str_replace("[product_name]", $product['name'], TXT_WPSC_SORRY_NONE_LEFT)."</span>";
 		}

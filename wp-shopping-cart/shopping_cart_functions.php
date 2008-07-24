@@ -111,11 +111,11 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
  $output .= "<div id='sliding_cart'>";
   if($cart != null) {
     if(($quantity_limit == true) || ($_SESSION['out_of_stock'] == true)) {
-      $output .= TXT_WPSC_NUMBEROFITEMS.": &nbsp;&nbsp;".$cart_count."<br /><br />";
-      $output .= TXT_WPSC_NOMOREAVAILABLE."<br /><br />";
+			$output .= "<span class='items'><span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span></span>";
+      $output .= "<span class='nomore'>".TXT_WPSC_NOMOREAVAILABLE."</span>";
       $_SESSION['out_of_stock'] = false;
 		} else {
-			$output .= TXT_WPSC_NUMBEROFITEMS.": &nbsp;&nbsp;".$cart_count."<br /><br />";
+			$output .= "<span class='items'><span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span></span>";
 		}
     
 
@@ -211,39 +211,35 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	// 	}
 	//end of google checkout.
     $output .= "</table>";
-    if($_SESSION['delivery_country'] != null)
-      {
+    if($_SESSION['delivery_country'] != null) {
       $total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
-      $output .= "<strong>".TXT_WPSC_SUBTOTAL.":</strong> &nbsp;&nbsp;".nzshpcrt_currency_display(($total), 1)."<br />";
+      $output .= "<span class='subtotal'><span class='subtotalhead'>".TXT_WPSC_SUBTOTAL.":</span>".nzshpcrt_currency_display(($total), 1)."</span>";
       if((get_option('do_not_use_shipping') != 1) && ($all_donations == false) && ($all_no_shipping == false))
         {
-        $output .= "<strong>".TXT_WPSC_POSTAGE.":</strong> &nbsp;&nbsp;".nzshpcrt_currency_display($total_shipping, 1)."<br />";
+        $output .= "<span class='postage'><span class='postagehead'>".TXT_WPSC_POSTAGE.":</span>".nzshpcrt_currency_display($total_shipping, 1)."</span> ";
         }
       if($tax > 0)
         {
-        $output .= "<strong>".TXT_WPSC_TAX.":</strong> &nbsp;&nbsp;".nzshpcrt_currency_display($tax, 1)."<br />";
+        $output .= "<span class='tax'><span class='taxhead'>".TXT_WPSC_TAX.":</span> &nbsp;&nbsp;".nzshpcrt_currency_display($tax, 1)."</span>";
         }
       if($_SESSION['coupon_num']){
-		$overall_total = nzshpcrt_overall_total_price_numeric($_SESSION['selected_country'],true);
-		$discount = $overall_total - nzshpcrt_apply_coupon($overall_total,$_SESSION['coupon_num']);
-		$total_after_discount = $overall_total-$discount;
-		$_SESSION['wpsc_discount']= $discount;
-		} else {
-		$_SESSION['wpsc_discount']= 0;
+				$overall_total = nzshpcrt_overall_total_price_numeric($_SESSION['selected_country'],true);
+				$discount = $overall_total - nzshpcrt_apply_coupon($overall_total,$_SESSION['coupon_num']);
+				$total_after_discount = $overall_total-$discount;
+				$_SESSION['wpsc_discount']= $discount;
+			} else {
+				$_SESSION['wpsc_discount']= 0;
+			}
+			if($discount > 0) {
+				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
+			}
+      $output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
+		} else{
+			if($discount > 0) {
+				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
+			}
+			$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
 		}
-	if($discount > 0) {
-		$output .= "<strong>".TXT_WPSC_DISCOUNT.":</strong> &nbsp;&nbsp;".nzshpcrt_currency_display($discount, 1)."<br />";
-	}
-      $output .= "<strong>".TXT_WPSC_TOTAL.":</strong> &nbsp;&nbsp;".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."<br /><br />";
-      }
-      else
-        {
-		if($discount > 0) {
-			$output .= "<strong>".TXT_WPSC_DISCOUNT.":</strong> &nbsp;&nbsp;".nzshpcrt_currency_display($discount, 1)."<br />";
-		}
-        $output .= "<strong>".TXT_WPSC_TOTAL.":</strong> &nbsp;&nbsp;".nzshpcrt_overall_total_price($_SESSION['selected_country'],true)."<br /><br />";
-	//$output .= "<strong>".TXT_WPSC_PRICEAFTERDISCOUNT.":</strong> &nbsp;&nbsp;".nzshpcrt_currency_display($total_after_discount, 1)."<br /><br />";
-        }
     if(get_option('permalink_structure') != '')
       {
       $seperator ="?";
@@ -309,8 +305,9 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			$google_cart->AddDefaultTaxRules($alter_tax_rule);
 	 }
 
-    $output .= "<a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><br />";
-    $output .= "<a href='".get_option('shopping_cart_url')."'>".TXT_WPSC_GOTOCHECKOUT."</a><br />";
+    $output .= "<span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span>";
+    $output .= "<span class='gocheckout'><a href='".get_option('shopping_cart_url')."'>".TXT_WPSC_GOTOCHECKOUT."</a></span>";
+
 	if (get_option('payment_gateway') == 'google') {
 		if (get_option('google_button_size') == '0'){
 			$google_button_size = 'BIG';
@@ -341,8 +338,8 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
     else
       {
       $output .= $spacing;
-      $output .= TXT_WPSC_YOURSHOPPINGCARTISEMPTY.".<br />";
-      $output .= "<a href='".get_option('product_list_url')."'>".TXT_WPSC_VISITTHESHOP."</a>";
+      $output .= "<p class='empty'>".TXT_WPSC_YOURSHOPPINGCARTISEMPTY.".</p>";
+      $output .= "<p class='visitshop'><a href='".get_option('product_list_url')."'>".TXT_WPSC_VISITTHESHOP."</a></p>";
       }
   
  $output .= "</div>";

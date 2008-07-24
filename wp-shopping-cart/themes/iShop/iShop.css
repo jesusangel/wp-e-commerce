@@ -129,14 +129,53 @@ span.oldprice{
  text-decoration: line-through;
  }
  
-strong.special{
+span.special{
  color: #DD0000;
+ font-weight:bold;
  }
 
 strong.prodtitles{
  display: block;
  margin-bottom: -15px;
  }
+ 
+ h2.prodtitles{
+ font-size:1em;
+}
+
+pan.items{
+ display:block;
+ margin:0 0 15px 0;
+}
+
+span.nomore{
+ display:block;
+ margin:0 0 15px 0;
+}
+
+span.numberitems{
+ margin:0 5px 0 0;
+}
+
+span.subtotal,span.total,span.discount,span.postage,span.tax,span.gocheckout{
+display:block;
+}
+
+span.totalhead,span.discounthead,span.subtotalhead,span.postagehead,span.taxhead{
+font-weight:bold;
+margin-right:5px;
+}
+
+span.emptycart{
+ display:block;
+ margin:10px 0 0 0;
+}
+
+p.empty,p.visitshop{
+ margin:0;
+ padding:0;
+}
+
  
 /*
  * end shopping cart styling

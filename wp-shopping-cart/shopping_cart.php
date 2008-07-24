@@ -116,7 +116,7 @@ function wpsc_shipping_country_list($selected_country = null) {
     echo "<tr class='product_row'>\n\r";
     
     echo "  <td class='firstcol'>\n\r";
-    echo $product_list['name'] . $variation_list;
+    echo stripslashes($product_list['name']) . $variation_list;
     echo "  </td>\n\r";
     
     echo "  <td>\n\r";
