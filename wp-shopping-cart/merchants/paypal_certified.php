@@ -139,10 +139,22 @@ $output .= "
         </select> 
       </td>
    </tr>
-</table>
-
-<h2>Forms Sent to Gateway</h2>
-  <table>
+   
+   
+	<tr class='update_gateway' >
+		<td colspan='2'>
+			<div class='submit'>
+			<input type='submit' value='Update &raquo;' name='updateoption'/>
+		</div>
+		</td>
+	</tr>
+	
+    <tr style='background: none;'>
+      <td colspan='2'>
+				<h4>Forms Sent to Gateway</h2>
+      </td>
+		</tr>
+   
     <tr>
       <td>
       First Name Field
@@ -213,7 +225,6 @@ $output .= "
       </select>
       </td>
   </tr>
-</table>
 ";
   return $output;
   }

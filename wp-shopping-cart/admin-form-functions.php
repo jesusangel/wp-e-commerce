@@ -426,6 +426,16 @@ function nzshpcrt_getproductform($prodid)
 		$output .= "          </tr>\n\r";
   }
 
+
+  $output .= "          <tr>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= TXT_WPSC_PRODUCT_ID.": ";
+  $output .= "            </td>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= $product['id'];
+  $output .= "            </td>\n\r";
+  $output .= "          </tr>\n\r";
+
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= TXT_WPSC_EXTERNALLINK.": ";

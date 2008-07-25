@@ -1016,4 +1016,34 @@ function wpsc_odd_category_setup() {
   }
   return $output;
 }
+
+function wpsc_buy_now_button($product_id) {
+  global $wpdb;
+  $selected_gateways = get_option('custom_gateway_options');
+
+  if (in_array('google', (array)$selected_gateways)) {
+		$output .= google_buynow($product['id']);
+	} else if (in_array('paypal_multiple', (array)$selected_gateways)) {
+		if ($product_id > 0){
+			$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1";
+			$product = $wpdb->get_row($product_sql, ARRAY_A);
+			$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
+				<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
+				<input type='hidden' name='cmd' value='_xclick'>
+				<input type='hidden' name='item_name' value='".$product['name']."'>
+				<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
+				<input type='hidden' id='amount' name='amount' value='".$product['price']."'>
+				<input type='hidden' id='unit' name='unit' value='".$product['price']."'>
+				<input type='hidden' id='shipping' name='ship11' value='".$shipping."'>
+				<input type='hidden' name='handling' value='".get_option('base_local_shipping')."'>
+				<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."'>
+				<input type='hidden' name='undefined_quantity' value='0'>
+				<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online'>
+				<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' >
+			</form>
+		";
+		}
+	}
+  echo $output;
+}
 ?>

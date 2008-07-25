@@ -445,11 +445,23 @@ $output .= "
        <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".TXT_WPSC_NO."</label>
      </td>
-</table>
-<h2>Forms Sent to Gateway</h2>
-";
-$output .= "
-  <table>
+   </tr>
+   
+   
+   <tr class='update_gateway' >
+		<td colspan='2'>
+			<div class='submit'>
+			<input type='submit' value='Update &raquo;' name='updateoption'/>
+		</div>
+		</td>
+	</tr>
+	
+    <tr style='background: none;'>
+      <td colspan='2'>
+				<h4>Forms Sent to Gateway</h2>
+      </td>
+		</tr>
+   
     <tr>
       <td>
       First Name Field
@@ -519,8 +531,7 @@ $output .= "
       ".nzshpcrt_form_field_list(get_option('paypal_form_country'))."
       </select>
       </td>
-  </tr>
-</table> ";
+  </tr> ";
   
   return $output;
 }

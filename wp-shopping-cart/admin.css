@@ -1,4 +1,4 @@
-a{
+a {
   text-decoration:none;
   outline: none;
 }
@@ -886,4 +886,65 @@ div#wpsc_shipwire_setting {
 span.product_loadingindicator {
   display: block;
   float: right;
+}
+
+
+table#gateway_options{
+  margin: 8px 0px 0px 0px;
+}
+
+table#gateway_options tr td{
+  padding: 8px;
+  vertical-align: top;
+}
+
+
+table#gateway_options tr td h4{
+}
+
+td.select_gateway {
+  width: 360px;
+  min-width: 360px;
+	background-color:#EAF3FA;
+  border-right: 8px solid #ffffff;
+}
+
+td.select_gateway h4 {
+  margin: 0px 0px 10px 0px;
+}
+
+td.select_gateway p {
+ margin: 0px
+}
+
+td.select_gateway p input {
+ position: relative;
+ top: 3px;
+ margin: 0px 3px 0px 0px;
+ display: block;
+ float: left;
+}
+
+td.gateway_settings {
+  padding-top: 0px !important;
+}
+
+td.gateway_settings h4 {
+  margin: 0px;
+}
+td.gateway_settings table.form-table {
+  margin: 0px 0px 0px 0px;
+}
+
+
+tr.update_gateway {
+  background: none;
+}
+tr.update_gateway td {
+  padding: 0px 0px 0px 8px !important;
+}
+tr.update_gateway td div {
+  border-top: none;
+  margin: 0px;
+  padding: 0px;
 }

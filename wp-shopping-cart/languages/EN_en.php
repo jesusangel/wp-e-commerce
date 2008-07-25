@@ -4,6 +4,7 @@ This is a language file for the WP Shopping Cart plugin version 3.5
 */
 
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
+define('TXT_WPSC_PRODUCT_ID', 'Product ID');
 define('TXT_WPSC_USPS_PASSWORD', 'USPS Password');
 define('TXT_WPSC_OPTIONS_GENERAL_TAB', 'General');
 define('TXT_WPSC_OPTIONS_PRESENTATION_TAB', 'Presentation');
@@ -14,7 +15,11 @@ define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
 define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
 
 define('TXT_WPSC_ADMIN_SEARCH_PRODUCTS', 'Search for a Product');
-define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Choose the payment options that you want to make available to your customers. Select a payment option below to configure it.'); 
+define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Choose the payment options that you want to make available to your customers.');
+
+define('TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY', ' Select a payment option below to configure it.');
+
+
 // to come: "Click on a payment option to configure it"
 
 define('TXT_WPSC_SHOW_BREADCRUMBS', 'Show Breadcrumbs');

@@ -75,10 +75,9 @@ $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY
 $selected[get_option('payment_method')] = "checked='true'";
 ?>
 <script language='JavaScript' type='text/javascript'>
-function selectgateway()
-  {
+function selectgateway() {
   document.forms.gatewayopt.submit()
-  }
+}
 </script>
 <div class="wrap">
   <form name='gatewayopt' method='POST'>
@@ -92,48 +91,66 @@ function selectgateway()
 		}
 	?>
   <h2><?php echo TXT_WPSC_GATEWAY_OPTIONS;?></h2>
-  <table class='form-table'>
-    <tr>
-	   <!-- <th scope='row'><?php echo TXT_WPSC_CUSTOMERCHOOSEGATEWAY;?></th>-->
-	    <td colspan='2'>
-	    <?php /*
-	    <input onclick="jQuery('#custom_gateway_div').slideDown(200)" <?=$custom_gateway1;?> type='radio' value='1' name='custom_gateway' id='custom_gateway_1'>
-	    <label for='custom_gateway_1'><?php echo TXT_WPSC_YES;?></label>
-	    <input <?=$custom_gateway2;?> onclick="jQuery('#custom_gateway_div').slideUp(200)" type='radio' value='0' name='custom_gateway' id='custom_gateway_2'>
-	    <label for='custom_gateway_2'><?php echo TXT_WPSC_NO;?></label><br>
-	    <small>Note: Select the ones that you have entered your details for only</small>
-	    <div id='custom_gateway_div' <?=$custom_gateway_hide?>>
-	    */?>
-	    <div style='float: right;width: 600px;'>
-				<strong><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR; ?>:</strong><br />
-				<textarea cols='50' rows='9' name='payment_instructions'><?php echo  get_option('payment_instructions');?></textarea><br />
-				<em><?php echo TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR; ?> </em>
-      </div>
+
+		<table id='gateway_options' >
       
-	    <table style='width: 360px;'>
-				<tr>
-					<td  style='border-bottom:none; padding-top: 0px;'>
-					
-					<strong><?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?></strong><br /><br />
-					<?php
-					$selected_gateways = get_option('custom_gateway_options');
-					//echo("<pre>".print_r($selected_gateways,true)."</pre>");
-					foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-						if (in_array($gateway['internalname'], (array)$selected_gateways)) {
-							echo "<input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
-						} else {
-							echo "<input name='custom_gateway_options[]' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label><br>";
+      <tr>
+				<td class='select_gateway'>
+						<h4><?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?></h4>
+						<?php
+						$selected_gateways = get_option('custom_gateway_options');
+						//echo("<pre>".print_r($selected_gateways,true)."</pre>");
+						foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+							if (in_array($gateway['internalname'], (array)$selected_gateways)) {
+								echo "						";// add the whitespace to the html
+								echo "<p><input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label></p>\n\r";
+							} else {
+							  echo "						";
+								echo "<p><input name='custom_gateway_options[]' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label></p>\n\r";
+							}
 						}
-					}
-					?>
-					</td>
-				</tr>
-	    </table>
-      
-	    </div>
-			</td>
-		</tr>
-	
+						?>
+						<div class='submit gateway_settings'>
+							<input type='submit' value='Update &raquo;' name='updateoption'/>
+						</div>
+				</td>
+				
+				<td class='gateway_settings'>										
+					<?php
+
+					?>					
+					<table class='form-table'>
+					<tr>
+					  <td colspan='2'  style='border-bottom: none;'>
+							<h4 style='font-size: 13px;' ><?php echo TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY;?></h4>
+					  </td>
+					</tr>
+					<tr>
+					  <td style='border-top: none;'>
+							<h4><?php echo TXT_WPSC_PAYMENTGATEWAY2;?></h4>
+					  </td>
+					  <td style='border-top: none;'>
+					<select name='payment_gw' onChange='selectgateway();'>
+					<?php echo $gatewaylist; ?>
+					</select>
+						</td>
+					</tr>
+					<?php echo $form; ?>   
+					
+					<tr class='update_gateway' >
+						<td colspan='2'>
+							<div class='submit'>
+								<input type='submit' value='Update &raquo;' name='updateoption'/>
+							</div>
+						</td>
+					</tr>
+					</table>
+				</td>
+      </tr>
+		</table>
+	        <?php /*
+  <table class='form-table'>
+
     <tr>
       <th scope='row'>
       <?php echo TXT_WPSC_PAYMENTGATEWAY2;?>
@@ -148,25 +165,23 @@ function selectgateway()
     </tr><?php
 	echo $form;
   ?>
+  </table>
+  */?>
+  
+  
+  
   <table>
-  <tr>
-      <td>
-      </td>
-      <td>
-      <input type='submit' value='<?php echo TXT_WPSC_SUBMIT;?>' name='submit_details' />
-      </td>
-    </tr>
 	<?php if (($curgateway=='paypal_multiple')||($curgateway=='paypal_certified')) { ?>
-	<tr>
-      <td colspan="2">
-	  	When you signup for PayPal, you can start accepting credit card payments instantly. As the world's number one online payment service, PayPal is the fastest way to open your doors to over 150 million member accounts worldwide. Best of all, it's completely free to sign up! To sign up or learn more:
-      </td>
-    </tr>
-	<tr>
-      <td colspan="2">
-	  	<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src=" http://images.paypal.com/en_US/i/bnr/paypal_mrb_banner.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly."></A>
-      </td>
-    </tr>
+			<tr>
+				<td colspan="2">
+				When you signup for PayPal, you can start accepting credit card payments instantly. As the world's number one online payment service, PayPal is the fastest way to open your doors to over 150 million member accounts worldwide. Best of all, it's completely free to sign up! To sign up or learn more:
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src=" http://images.paypal.com/en_US/i/bnr/paypal_mrb_banner.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly."></a>
+				</td>
+			</tr>  
 	<?php }  elseif ($curgateway=='google') { ?>
 	<tr>
 		<td colspan="2">Find it with Google.  Buy it with Google Checkout.
@@ -178,15 +193,15 @@ function selectgateway()
 	</td>
 	</tr>
 	<tr>
-	<td></td>
-      <td>
-	  	<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout"></A>
-      </td>
-    </tr>
+		<td>
+		</td>
+		<td>
+	  	<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout"></a>
+		</td>
+	</tr>
 	<?php }?>
-  </table>
+	</table>
   </form>
-  <br />
 <?php
 if((get_option('activation_state') !== 'true')&&($curgateway!='google')) {
   echo TXT_WPSC_PAYMENTGATEWAYNOTE;

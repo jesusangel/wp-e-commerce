@@ -18,7 +18,18 @@ function submit_testmode() {
   return true;
 }
 
-function form_testmode() {
-  return '';
+function form_testmode() {  
+	$output = "<tr>\n\r";
+	$output .= "<tr>\n\r";
+	$output .= "	<td colspan='2'>\n\r";
+	// $output = "	</td>\n\r";
+	// $output = "	<td>\n\r";
+	
+	$output .= "<strong>".TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR.":</strong><br />\n\r";
+	$output .= "<textarea cols='50' rows='9' name='payment_instructions'>".get_option('payment_instructions')."</textarea><br />\n\r";
+	$output .= "<em>".TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR."</em>\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "</tr>\n\r";
+  return $output;
 }
 ?>
