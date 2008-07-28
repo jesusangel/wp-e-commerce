@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.7.6
+Version: 3.6.7.8
 Author: Thomas Howard of Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
@@ -12,7 +12,7 @@ define('WPSC_VERSION', '3.6');
  * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
  * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
  */
-define('WPSC_MINOR_VERSION', '77');
+define('WPSC_MINOR_VERSION', '78');
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -242,6 +242,11 @@ function nzshpcrt_style() {
 		if($thumbnail_width <= 0) {
 			$thumbnail_width = 96;
 		}
+		
+		$single_thumbnail_width = get_option('single_view_image_width');
+		if($single_thumbnail_width <= 0) {
+			$single_thumbnail_width = 128;
+		}
 	?>
 	div.default_product_display div.textcol{
 	margin-left: <?php echo $thumbnail_width; ?>px !important;
@@ -253,6 +258,18 @@ function nzshpcrt_style() {
 	top:0px;
 	left: 0px;
 	margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
+	}
+	
+	div.single_product_display div.textcol{
+	margin-left: <?php echo $single_thumbnail_width; ?>px !important;
+	}
+	
+	
+	div.single_product_display  div.textcol div.imagecol{
+	position:absolute;
+	top:0px;
+	left: 0px;
+	margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
 	}
 	
 	<?php

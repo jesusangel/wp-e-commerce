@@ -565,6 +565,8 @@ function single_product_display($product_id)
         $wpsc_theme = wpsc_theme_html($product);
 			}
       $output .= "    <div class='single_product_display'>";
+      
+      $output .= "      <div class='textcol'>";
       if($category_data[0]['fee'] == 0) {
         $output .= "      <div class='imagecol'>";
         if(get_option('show_thumbnails') == 1) {
@@ -596,7 +598,6 @@ function single_product_display($product_id)
 				}        
 				$output .= "</div>";
 			}
-      $output .= "      <div class='textcol'>";
       if($product['special'] == 1) {
 				$special = "<span class='special'>".TXT_WPSC_SPECIAL." - </span>";
 			} else {
@@ -824,7 +825,7 @@ function wpsc_also_bought($product_id) {
   if(get_option('wpsc_also_bought') == 0) {
     //returns nothing if this is off
     return '';
-    } 
+	}
   
   // to be made customiseable in a future release
   $also_bought_limit = 3;

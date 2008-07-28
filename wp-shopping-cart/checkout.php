@@ -178,7 +178,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	if (count(get_option('custom_gateway_options')) > 1) {
 		echo "<tr>\n\r";
 		echo "  <td colspan='2'>\n\r";
-		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";ee
+		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";
 		echo "  </td>\n\r";
 		echo "</tr>\n\r";
 		echo "<tr>\n\r";

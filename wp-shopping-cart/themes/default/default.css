@@ -247,7 +247,7 @@ div.textcol{
 
 div.single_product_display div.textcol{
 /* Adjust this width according to your layout*/
- width:41%;
+/*  width:41%; */
  margin-right:15px;
 }
 

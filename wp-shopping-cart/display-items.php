@@ -901,7 +901,7 @@ if($product_list != null)
 	echo "</td><td width='25%'>";
 	}
     
-	if(is_numeric($_GET['catid'])){ 
+	if(is_numeric($_GET['catid'])) { 
     echo "            <div class='pli_name'>\n\r";
    }
    
