@@ -36,12 +36,15 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 		$startnum = 0;
 	}
   
-  if($wp_query->query_vars['product_category'] != null) {
+  if(is_numeric($wp_query->query_vars['product_category'])) {
     $category_id = $wp_query->query_vars['product_category'];
-    } else if(is_numeric($_GET['category'])) {
+	} else if(is_numeric($_GET['category'])) {
     $category_id = $_GET['category'];
-    }
+	} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
+	  $category_id = $GLOBALS['wpsc_category_id'];
+	}
     
+    //echo("<pre>".print_r($category_id,true)."</pre>");
   	if (is_numeric($_GET['range'])) {
 	    $ranges = $_SESSION['price_range'];
 // 	    exit("<pre>".print_r($ranges,1)."</pre>");
@@ -148,6 +151,8 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 			$catid = $wp_query->query_vars['product_category'];
 			} else if(is_numeric($_GET['category'])) {
 				$catid = $_GET['category'];
+			} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
+				$catid = $GLOBALS['wpsc_category_id'];
 			} else {
 				$catid = get_option('default_category');
 			}

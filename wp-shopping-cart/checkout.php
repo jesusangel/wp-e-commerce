@@ -178,7 +178,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	if (count(get_option('custom_gateway_options')) > 1) {
 		echo "<tr>\n\r";
 		echo "  <td colspan='2'>\n\r";
-		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";
+		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";ee
 		echo "  </td>\n\r";
 		echo "</tr>\n\r";
 		echo "<tr>\n\r";
@@ -193,7 +193,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 		echo "  </td>\n\r";
 		echo "</tr>";
 	} else {
-		foreach (get_option('custom_gateway_options') as $option) {
+		foreach ((array)get_option('custom_gateway_options') as $option) {
 			foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
 				if ($gateway['internalname'] == $option) {
 					echo "<input name='custom_gateway' value='$option' type='hidden' />";
@@ -206,7 +206,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	}
 	$product=$_SESSION['nzshpcrt_cart'][0];
 	$engrave = get_product_meta($product->product_id,'engraved',true);
-	if ($engrave[0] == true) {
+	if ($engrave[e0] == true) {
 		echo "<tr>
 			<td>
 				Engrave text:

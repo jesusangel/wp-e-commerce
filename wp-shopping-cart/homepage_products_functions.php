@@ -67,7 +67,7 @@ function nszhpcrt_category_tag($content = '') {
 		  if($category['display'] == 'full') {
 		  
 				// sorry about the global variable, but it was the best way I could think of to avoid people having to upgrade the gold cart	
-				$_GLOBAL['wpsc_category_id'] = $category['id'];
+				$GLOBALS['wpsc_category_id'] = $category['id'];
 		    if(function_exists('product_display_list') && (get_option('product_view') == 'list')) {
 					$output .= product_display_list($product_list, $group_type, $group_sql, $search_sql);
 				} else if(function_exists('product_display_grid') && (get_option('product_view') == 'grid')) {
@@ -95,7 +95,7 @@ function nszhpcrt_category_tag($content = '') {
 					$output .= "<tr>";
 					$output .= "<td class='imagecol'>";
 					}
-					$output .="<a href='".WPSC_THUMBNAIL_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>";
+					$output .="<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>";
 					if($product['image'] != '') {
 						$output .= "<img class='product_image' src='".WPSC_THUMBNAIL_URL.$product['image']."' title='".$product['name']."' alt='".$product['name']."' />\n\r";
 					}

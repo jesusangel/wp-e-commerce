@@ -1,6 +1,6 @@
 <?php
 /*
-This is a language file for the WP Shopping Cart plugin version 3.5
+This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
 define('TXT_WPSC_USPS_USERID', 'USPS ID');

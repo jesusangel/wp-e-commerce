@@ -3,7 +3,7 @@
 (function() {
 	// Load plugin specific language pack
 	tinymce.PluginManager.requireLangPack('WPSC');
-	
+	 
 	tinymce.create('tinymce.plugins.WPSC', {
 		/**
 		 * Initializes the plugin, this will be executed after the plugin has been created.
@@ -73,6 +73,80 @@
 
 	// Register plugin
 	tinymce.PluginManager.add('WPSC', tinymce.plugins.WPSC);
+	
+	
+	
+	
+	
+	
+ // add image for products page short tag	
+ 
+ 	tinymce.create('tinymce.plugins.productspage_image', {
+		init : function(ed, url) {
+			var pb = '<img src="' + url + '/productspage.gif" class="productspage_image mceItemNoResize" />', cls = 'productspage_image', sep = ed.getParam('productspage_image', '[productspage]'), pbRE;
+
+			pbRE = new RegExp(sep.replace(/[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, function(a) {return '\\' + a;}), 'g');
+			
+			// Register commands
+			ed.addCommand('productspage_image', function() {
+				ed.execCommand('mceInsertContent', 0, pb);
+			});
+
+			// Register buttons
+			//ed.addButton('subscribe2', {title : 'Insert Products Page Token', image : url + '/productspage.gif', cmd : cls});
+
+			ed.onInit.add(function() {
+				//ed.dom.loadCSS(url + "/css/content.css");
+				if (ed.theme.onResolveName) {
+					ed.theme.onResolveName.add(function(th, o) {
+						if (o.node.nodeName == 'IMG' && ed.dom.hasClass(o.node, cls))
+							o.name = 'productspage_image';
+					});
+				}
+			});
+
+			ed.onClick.add(function(ed, e) {
+				e = e.target;
+
+				if (e.nodeName === 'IMG' && ed.dom.hasClass(e, cls))
+					ed.selection.select(e);
+			});
+
+			ed.onNodeChange.add(function(ed, cm, n) {
+				cm.setActive('productspage_image', n.nodeName === 'IMG' && ed.dom.hasClass(n, cls));
+			});
+
+			ed.onBeforeSetContent.add(function(ed, o) {
+				o.content = o.content.replace(pbRE, pb);
+			});
+
+			ed.onPostProcess.add(function(ed, o) {
+				if (o.get)
+					o.content = o.content.replace(/<img[^>]+>/g, function(im) {
+						if (im.indexOf('class="productspage_image') !== -1)
+							im = sep;
+
+						return im;
+					});
+			});
+		},
+
+		getInfo : function() {
+			return {
+				longname : 'Insert productspage Image',
+				author : 'Instinct Entertainment',
+				authorurl : 'http://instinct.co.nz',
+				infourl : 'http://instinct.co.nz',
+				version : tinymce.majorVersion + "." + tinymce.minorVersion
+			};
+		}
+	});
+	
+	
+	
+	tinymce.PluginManager.add('productspage_image', tinymce.plugins.productspage_image);
+	
+	
 })();
 
 

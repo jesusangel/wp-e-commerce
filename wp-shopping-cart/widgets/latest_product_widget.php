@@ -23,7 +23,7 @@ function nzshpcrt_latest_product($input = null) {
 			
 			$output.="<a href='".wpsc_product_url($special['id'],$special['category'])."'><div>";
 			$output .= "<div class='item_image'>";
-			if($special['image'] != null) {
+			if(($special['image'] != null) && file_exists(WPSC_IMAGE_DIR.$special['image'])) {
 				if(get_option('wpsc_selected_theme') == 'marketplace') {
 					$src = WPSC_IMAGE_URL.$special['image'];
 							
@@ -33,7 +33,7 @@ function nzshpcrt_latest_product($input = null) {
 					$output .= "<img src='".WPSC_THUMBNAIL_URL.$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
 				}
 			} else {
-				$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
+				//$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
 			}
 			$output .= "</div>";
 			$output .= "<strong>".stripslashes($special['name'])."</strong></a><br><br /> ";

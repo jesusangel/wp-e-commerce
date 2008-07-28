@@ -16,6 +16,8 @@ if(is_numeric($_POST['payment_method']) && (get_option('payment_gateway') != $_P
 if ($_POST['custom_gateway_options'] != null) {
 	update_option('custom_gateway_options', $_POST['custom_gateway_options']);
 	$changes_made = true;
+} else if($_POST['custom_gateway_options'] == null) {
+  update_option('custom_gateway_options', null);
 }
 
 if(isset($_POST['payment_instructions']) && ($_POST['payment_instructions'] != get_option('payment_instructions'))) {

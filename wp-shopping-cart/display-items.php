@@ -774,22 +774,21 @@ echo "<span id='loadingindicator_span' class='product_loadingindicator'><img id=
 echo "<strong class='form_group'>".TXT_WPSC_SELECT_PRODUCT."</strong>";
 echo "            </td>\n\r";
 echo "          </tr>\n\r";
-echo "          <tr class='selectcategory'>\n\r";
-echo "            <td colspan='3'>\n\r";
-	echo TXT_WPSC_ADMIN_SEARCH_PRODUCTS.": ";
-echo "            </td>\n\r";
-echo "            <td colspan='1'>\n\r";
 if(($num_products > 20) || ($search_string != '')) {
+	echo "          <tr class='selectcategory'>\n\r";
+	echo "            <td colspan='3'>\n\r";
+	echo TXT_WPSC_ADMIN_SEARCH_PRODUCTS.": ";
+	echo "            </td>\n\r";
+	echo "            <td colspan='1'>\n\r";
 	echo "<div>\n\r";
 	echo "  <form method='GET' action=''>\n\r";
 	echo "<input type='hidden' value='{$_GET['page']}' name='page'>";
 	echo "<input type='text' value='{$search_string}' name='search_products' style='width: 115px; padding: 1px;'>";
 	echo "  </form>\n\r";
 	echo "</div>\n\r";
+	echo "            </td>\n\r";
+	echo "          </tr>\n\r";
 }
-
-echo "            </td>\n\r";
-echo "          </tr>\n\r";
 
 
 echo "          <tr class='selectcategory'>\n\r";
