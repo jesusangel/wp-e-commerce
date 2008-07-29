@@ -70,95 +70,86 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
   $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' ORDER BY `order`;";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
   //exit("<pre>".print_r($form_data,true)."</pre>");
-  foreach($form_data as $form_field)
-    {
-    if($form_field['type'] == 'heading')
-      {
-      echo "
-      <tr>
-        <td colspan='2'>\n\r";
-      echo "<strong>".$form_field['name']."</strong>";
-      echo "
-        </td>
-      </tr>\n\r";
-      }
-      else
-        {
-        echo "
-        <tr>
-          <td>\n\r";
-        echo $form_field['name'];
-        if($form_field['mandatory'] == 1)
-          {
-          if(!(($form_field['type'] == 'country') || ($form_field['type'] == 'delivery_country')))
-            {
-            echo "*";
-            }
-          }
-        echo "
-          </td>\n\r
-          <td>\n\r";
-        switch($form_field['type'])
-          {
-					case "city":
-					if (function_exists('getdistance')) {
-						echo "<input onblur='store_list()' id='user_city' type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
-					} else  {
-						echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
-					}
-					break;
-	
-          case "text":
-          case "city":
-          case "delivery_city":
-          case "coupon":
-          echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
-          break;
-	
-					case "address":
-					if (function_exists('getdistance')) {
-						echo "<input type='text' id='user_address' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]'>";
-					} else  {
-						echo "<textarea name='collected_data[".$form_field['id']."]'>".$_SESSION['collected_data'][$form_field['id']]."</textarea>";
-					}
-					break;
+  foreach($form_data as $form_field) {
+    if($form_field['type'] == 'heading') {
+      
+      echo "<tr>\n\r";
+      echo "  <td colspan='2'>\n\r";
+      echo "    <strong>".$form_field['name']."</strong>\n\r";
+      echo "  </td>\n\r";
+      echo "</tr>\n\r";
+		} else {
+			
+			echo "<tr>\n\r";
+			echo "	<td>\n\r";
+			echo $form_field['name'];
+			if($form_field['mandatory'] == 1) {
+				if(!(($form_field['type'] == 'country') || ($form_field['type'] == 'delivery_country'))) {
+					echo "*";
+				}
+			}
+			
+			echo "	</td>\n\r";
+			echo "	<td>\n\r";
+			switch($form_field['type']) {
+				case "city":
+				if (function_exists('getdistance')) {
+					echo "<input onblur='store_list()' id='user_city' type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				} else  {
+					echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				}
+				break;
 
-          case "address":
-          case "delivery_address":
-          case "textarea":
-          echo "<textarea name='collected_data[".$form_field['id']."]'>".$_SESSION['collected_data'][$form_field['id']]."</textarea>";
-          break;
-          
-	
-          /*
-          case "region":
-          case "delivery_region":
-          echo "<select name='collected_data[".$form_field['id']."]'>".nzshpcrt_region_list($_SESSION['collected_data'][$form_field['id']])."</select>";
-          break;
-          */
+				case "text":
+				case "city":
+				case "delivery_city":
+				case "coupon":
+				echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				break;
 
-          case "country":
-          echo wpsc_country_region_list($form_field['id'] , false, $_SESSION['selected_country'], $_SESSION['selected_region']);
-          break;
+				case "address":
+				if (function_exists('getdistance')) {
+					echo "<input type='text' id='user_address' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]'>";
+				} else  {
+					echo "<textarea name='collected_data[".$form_field['id']."]'>".$_SESSION['collected_data'][$form_field['id']]."</textarea>";
+				}
+				break;
 
-          case "delivery_country":
-          $country_name = $wpdb->get_var("SELECT `country` FROM `".$wpdb->prefix."currency_list` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
-          echo "<input type='hidden' name='collected_data[".$form_field['id']."]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
-          break;
+				case "address":
+				case "delivery_address":
+				case "textarea":
+				echo "<textarea name='collected_data[".$form_field['id']."]'>".$_SESSION['collected_data'][$form_field['id']]."</textarea>";
+				break;
+				
 
-          case "email":
-          echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
-          break;
+				/*
+				case "region":
+				case "delivery_region":
+				echo "<select name='collected_data[".$form_field['id']."]'>".nzshpcrt_region_list($_SESSION['collected_data'][$form_field['id']])."</select>";
+				break;
+				*/
 
-          default:
-          echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
-          break;
-          }
-        echo "
-          </td>
-        </tr>\n\r";
-        }
-    }
+				case "country":
+				echo wpsc_country_region_list($form_field['id'] , false, $_SESSION['selected_country'], $_SESSION['selected_region']);
+				break;
+
+				case "delivery_country":
+				$country_name = $wpdb->get_var("SELECT `country` FROM `".$wpdb->prefix."currency_list` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
+				echo "<input type='hidden' name='collected_data[".$form_field['id']."]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
+				break;
+
+				case "email":
+				echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				break;
+
+				default:
+				echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				break;
+			}
+			echo "	</td>\n\r";
+			echo "</tr>\n\r";
+		}
+	}
     
 	$cart = $_SESSION['nzshpcrt_cart'];
   foreach($cart as $key => $product) {
@@ -207,21 +198,21 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	$product=$_SESSION['nzshpcrt_cart'][0];
 	$engrave = get_product_meta($product->product_id,'engraved',true);
 	if ($engrave[e0] == true) {
-		echo "<tr>
-			<td>
-				Engrave text:
-			</td>
-			<td>
-				<input type='text' name='engrave1'>
-			</td>
-		</tr>
-		<tr>
-			<td>
-			</td>
-			<td>
-				<input type='text' name='engrave2'>
-			</td>
-		</tr>";
+		echo "	<tr>\n\r";
+		echo "		<td>\n\r";
+		echo "			Engrave text:\n\r";
+		echo "		</td>\n\r";
+		echo "		<td>\n\r";
+		echo "			<input type='text' name='engrave1'>\n\r";
+		echo "		</td>\n\r";
+		echo "	</tr>\n\r";
+		echo "	<tr>\n\r";
+		echo "		<td>\n\r";
+		echo "		</td>\n\r";
+		echo "		<td>\n\r";
+		echo "			<input type='text' name='engrave2'>\n\r";
+		echo "		</td>\n\r";
+		echo "	</tr>\n\r";
 	}
 	
 	if (get_option('display_find_us') == '1') {
@@ -236,8 +227,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	}
 	
     $termsandconds = get_option('terms_and_conditions');
-    if($termsandconds != '')
-      {
+    if($termsandconds != '') {
       ?>
 	<tr>
       <td>
@@ -248,12 +238,10 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
       </td>
     </tr>
       <?php
-      }
-      else
-        {
-        echo "<input type='hidden' value='yes' name='agree' />";
-        echo "";
-        }
+		} else {
+			echo "<input type='hidden' value='yes' name='agree' />";
+			echo "";
+		}
 	
     if(get_option('payment_method') == 2)
       {

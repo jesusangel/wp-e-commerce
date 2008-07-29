@@ -891,6 +891,7 @@ span.product_loadingindicator {
 
 table#gateway_options{
   margin: 8px 0px 0px 0px;
+  width: 100%;
 }
 
 table#gateway_options tr td{

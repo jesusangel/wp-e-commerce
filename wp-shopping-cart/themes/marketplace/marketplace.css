@@ -146,6 +146,7 @@ span.special{
 
 h2.prodtitles{
  font-size:1em;
+ margin-top: 0px;
 }
 
 
@@ -198,7 +199,7 @@ p.empty,p.visitshop{
  */
 div.productdisplay {
  position:relative;
- float:left;
+/*  float:left; */
  clear:both;
  top:0px;
  left: 0px;
@@ -241,7 +242,7 @@ div.productdisplay div.imagecol img{
 
 div.textcol{
  position:relative;
- float:left;
+/*  float:left; */
  top:0px;
  left: 0px;
  padding: 0px;
@@ -369,7 +370,7 @@ p.wpsc_product_extra_content{
  }
  
  input.wpsc_buy_button {
-	text-indent:-9999px;
+/* 	text-indent:-9999px; */
 	background-image: url(images/atc.gif);
 	border: none;
 	width: 152px;

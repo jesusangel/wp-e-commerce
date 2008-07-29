@@ -249,7 +249,7 @@ function nzshpcrt_style() {
 		}
 	?>
 	div.default_product_display div.textcol{
-	margin-left: <?php echo $thumbnail_width; ?>px !important;
+	margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
 	}
 	
 	
@@ -261,7 +261,7 @@ function nzshpcrt_style() {
 	}
 	
 	div.single_product_display div.textcol{
-	margin-left: <?php echo $single_thumbnail_width; ?>px !important;
+	margin-left: <?php echo $single_thumbnail_width  + 10; ?>px !important;
 	}
 	
 	

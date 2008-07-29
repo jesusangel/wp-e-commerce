@@ -81,8 +81,8 @@ function nszhpcrt_category_tag($content = '') {
 				$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$category['id']."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
 			
 				$product_list = $wpdb->get_results($sql,ARRAY_A);
-			
-				$output = "<div id='homepage_products'>\n\r";
+			  $output = "<div id='products_page_container' class='wrap wpsc_container'>\n\r";
+				$output .= "<div id='homepage_products'>\n\r";
 				if ($full_view != null){
 					$output .= "<table class='productdisplay'>";
 				}
@@ -206,8 +206,10 @@ function nszhpcrt_category_tag($content = '') {
 				}
 				$output .= "</div>\n\r";
 				$output .= "<br style='clear: left;'>\n\r";
+			  $output .= "</div>\n\r";
 			}
 		$content = str_replace($category['original_string'], $output, $content);
+		
 		}	 
 	}
 	return $content;

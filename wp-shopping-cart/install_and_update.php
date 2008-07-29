@@ -1327,7 +1327,7 @@ function wpsc_create_upload_directories() {
 		@ mkdir(WPSC_CATEGORY_DIR, 0775);
 	}
 		
-	if(!is_dir(WPSC_CATEGORY_DIR)) {
+	if(!is_dir(WPSC_USER_UPLOADS_DIR)) {
 		@ mkdir(WPSC_USER_UPLOADS_DIR, 0775);
 	}
 	

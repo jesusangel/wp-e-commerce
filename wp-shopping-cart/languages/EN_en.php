@@ -3,6 +3,8 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
+define('TXT_WPSC_WE_RECOMMEND', 'We Recommend');
+
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
 define('TXT_WPSC_PRODUCT_ID', 'Product ID');
 define('TXT_WPSC_USPS_PASSWORD', 'USPS Password');
