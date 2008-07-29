@@ -97,7 +97,7 @@ if($_GET['filter'] !== 'true') {
 
 ?>
 <div class="wrap" style=''>
-  <h2><?php echo TXT_WPSC_DISPLAYPURCHASES;?></h2><br />
+  <h2><?php echo TXT_WPSC_PURCHASELOG;?></h2><br />
   <table style='width: 100%;'>
    <tr>  
     <td id='product_log_data'>

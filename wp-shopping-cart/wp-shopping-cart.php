@@ -219,13 +219,13 @@ class wp_shopping_cart {
       add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
       
       add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
+      add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
       if(get_option('nzshpcrt_first_load') != 0) {
         add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
         }
       if(function_exists('gold_shpcrt_options')) {
         gold_shpcrt_options($base_page);
         }
-      add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
 //       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
       }
     return;
