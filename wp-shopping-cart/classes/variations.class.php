@@ -356,7 +356,7 @@ class nzshpcrt_variations {
       foreach((array)$variation_assoc_data as $variation_association) {
         $i = 0;
         if($no_div !== true) {
-					$output .= "<div>";
+			
 				}
 				if($j==0) {
 					$default_topping='checked="checked"';
@@ -420,7 +420,7 @@ class nzshpcrt_variations {
 					$output .= "</select>";
 				}
 				if($no_div !== true) {
-					$output .= "</div>";
+		
 				}
 			}
 		}

@@ -677,7 +677,6 @@ function single_product_display($product_id)
 			    $output .= "<strong>{$custom_field['meta_key']}:</strong> {$custom_field['meta_value']} <br />\n\r";
 			  }
 			  $output .= "</div>\n\r";
-			  $output .= "<br />\n\r";
 			}
       
 
