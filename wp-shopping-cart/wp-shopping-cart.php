@@ -270,8 +270,8 @@ function nzshpcrt_style() {
 /* 	position:absolute; */
 	top:0px;
 	left: 0px;
-	margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
-	_margin-left: -<?php echo ($single_thumbnail_widt/2) + 10; ?>px !important;
+/* 	margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important; */
+/* 	_margin-left: -<?php echo ($single_thumbnail_widt/2) + 10; ?>px !important; */
 	}
 	
 	<?php

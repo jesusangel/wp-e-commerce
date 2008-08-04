@@ -199,7 +199,6 @@ div.productdisplay{
  clear:both;
  top:0px;
  left: 0px;
-/* margin-top: 10px; */
  margin-bottom: 20px;
  width: 100%;
  text-align: left !important;
@@ -217,7 +216,6 @@ div.imagecol{
  }
  
 div.productdisplay div.imagecol img{
-/* width: 300px; */
 border: 0px solid #fff;
  }
 
