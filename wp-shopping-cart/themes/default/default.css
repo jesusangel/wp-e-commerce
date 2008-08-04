@@ -189,14 +189,6 @@ p.empty,p.visitshop{
 /*
  * end shopping cart styling
  */
-
-
-
-
-
-
-
-
  
 /*
  * product default display styling
@@ -209,11 +201,9 @@ div.productdisplay{
  left: 0px;
 /* margin-top: 10px; */
  margin-bottom: 20px;
-
  width: 100%;
  text-align: left !important;
  }
-
 
 
 div.imagecol{
@@ -241,7 +231,7 @@ div.textcol{
  padding-bottom: 10px;
  margin: 0px;
 /* Adjust this width according to your layout*/
-/*  width: 77%; */
+ width: 77%;
  text-align: left !important;
  }
 

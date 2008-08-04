@@ -526,24 +526,30 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
   return $output;
 }
 
-function single_product_display($product_id)
-  {
-  global $wpdb;
+
+
+
+function single_product_display($product_id) {
+	global $wpdb;
   $siteurl = get_option('siteurl');
-  if(get_option('permalink_structure') != '') {
+  if(get_option('permalink_structure') != '') { 
     $seperator ="?";
   } else {
 		$seperator ="&amp;";
 	}
+	
+	// what is our product?
   if(is_numeric($product_id)) {
     $product_list = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$product_id."' LIMIT 1",ARRAY_A);
 	}
-  
+	
+	// if we have a product
   if($product_list != null) {
-    //$output .= "<strong class='cattitles'>".$product_list[0]['name']."</strong>";
-		if (get_option("show_breadcrumbs") == '1') {
-			$output .= "<div class='breadcrumb'>";
-			$output .= "<a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
+    
+    // show the breadcrumbs
+  	if (get_option("show_breadcrumbs") == '1') {
+			$output .= "<div class='breadcrumb'>\n\r";
+			$output .= "  <a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
 			$category = $wpdb->get_var("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id='".$product_id."' ORDER BY id ASC LIMIT 1");
 			$category_info =  $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
 			$category_name=  $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_categories WHERE id='".$category."'");
@@ -553,90 +559,75 @@ function single_product_display($product_id)
 				$output .= "<a href='".wpsc_category_url($category_info[0]['id'])."'>".$category_info[0]['name']."</a> &raquo; ";
 			}
 			$output .= "<a href='".wpsc_category_url($category)."'>".$category_name."</a> &raquo; ";
-			$output .= $product_list[0]['name'];
-			$output .= "</div>";
+			$output .= $product_list[0]['name']."\n\r";
+			$output .= "</div>\n\r";
 		}
     
+    $output .= "  <div class='productdisplay'>\n\r";
     
-    $output .= "<div class='productdisplay'>";
     foreach((array)$product_list as $product) {
       $num++;
-      if(function_exists('wpsc_theme_html')) {
-        $wpsc_theme = wpsc_theme_html($product);
-			}
-      $output .= "    <div class='single_product_display'>";
+      $output .= "    <div class='single_product_display'>\n\r";
+      $output .= "      <div class='textcol'>\n\r";
       
-      $output .= "      <div class='textcol'>";
-      if($category_data[0]['fee'] == 0) {
-        $output .= "      <div class='imagecol'>";
-        if(get_option('show_thumbnails') == 1) {
-					if($product['image'] !=null) {
-						if($product['thumbnail_image'] != null) {
-							$image_file_name = $product['thumbnail_image'];
-						} else {
-							$image_file_name = $product['image'];
-						}
-						
-						$output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>";
-						$src = WPSC_IMAGE_URL.$product['image'];
-						if((get_option('single_view_image_width') >= 1) && (get_option('single_view_image_height') >= 1)) {
-							$output .= "<img src='index.php?productid=".$product['id']."&amp;width=".get_option('single_view_image_width')."&amp;height=".get_option('single_view_image_height')."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>";
-						} else {
-							$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>";
-						}
-						$output .= "</a>";
-						if(function_exists("gold_shpcrt_display_extra_images")) {
-							$output .= gold_shpcrt_display_extra_images($product['id'],$product['name']);
-						}
+      
+      // display the image
+			$output .= "        <div class='imagecol'>\n\r";
+			if(get_option('show_thumbnails') == 1) {
+				if($product['image'] !=null) {
+					if($product['thumbnail_image'] != null) {
+						$image_file_name = $product['thumbnail_image'];
 					} else {
-						if(get_option('product_image_width') != '') {
-							$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' />";
-						} else {
-							$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' />";
-						}
+						$image_file_name = $product['image'];
 					}
-				}        
-				$output .= "</div>";
-			}
+					
+					$output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>\n\r";
+					$src = WPSC_IMAGE_URL.$product['image'];
+					if((get_option('single_view_image_width') >= 1) && (get_option('single_view_image_height') >= 1)) {
+						$output .= "<img src='index.php?productid=".$product['id']."&amp;width=".get_option('single_view_image_width')."&amp;height=".get_option('single_view_image_height')."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
+					} else {
+						$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
+					}
+					$output .= "</a>\n\r";
+					if(function_exists("gold_shpcrt_display_extra_images")) {
+						$output .= gold_shpcrt_display_extra_images($product['id'],$product['name']);
+					}
+				} else {
+					if(get_option('product_image_width') != '') {
+						$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' />\n\r";
+					} else {
+						$output .= "<img src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' />\n\r";
+					}
+				}
+			}        
+			$output .= "        </div>\n\r";
+  
+  
+      // if the product is special, say so
       if($product['special'] == 1) {
-				$special = "<span class='special'>".TXT_WPSC_SPECIAL." - </span>";
-			} else {
-				$special = "";
-			}
+				$special = "        <span class='special'>".TXT_WPSC_SPECIAL." - </span>\n\r";
+			} 
       
-      
-      $output .= "<form id='product_".$product['id']."' name='$num' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >";
-      $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
-      
-			if(($product['image'] != '') && (file_exists(WPSC_IMAGE_DIR.$product['image']) === true) && function_exists("getimagesize")) {
-        $image_size = @getimagesize(WPSC_IMAGE_DIR.$product['image']);
-        $image_link = "index.php?productid=".$product['id']."&width=".$image_size[0]."&height=".$image_size[1]."";
-        $output .= "<div class='producttext'><h2 class='prodtitles'>";
-			} else {
-				$output .= "<div class='producttext'><h2 class='prodtitles'>$special";
-			}
-      
-      $output .= "$special" . stripslashes($product['name']);
-      $output .= "</h2>";
-      if (get_option('wpsc_selected_theme') == 'market3') {
+			$output .= "        <form id='product_".$product['id']."' name='$num' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >\n\r";
+      $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />\n\r";
+ 
+      $output .= "        <div class='producttext'>\n\r";
+      $output .= "           <h2 class='prodtitles'>$special" . stripslashes($product['name'])."</h2>\n\r";
+			if (get_option('wpsc_selected_theme') == 'market3') {
+				$soldout=0;
 				if (($product['quantity_limited']) && ($product['quantity']<1)) {
 					$soldout=1;
-				} else {
-					$soldout=0;
 				}
 				if ($soldout) {
-					$output .="<span class='soldout'>Sold out</span>";
+					$output .="           <span class='soldout'>Sold out</span>\n\r";
 				} else {
-					$output .="<span class='price'>".nzshpcrt_currency_display($product['price'], $product['notax'])."</span>";
+					$output .="           <span class='price'>".nzshpcrt_currency_display($product['price'], $product['notax'])."</span>\n\r";
 				}
-				//$output .= "<br />";
-			} else {
 			}
-      //$output .= "<br />";
-
-      
-      
-      ob_start();
+			
+			
+			
+			ob_start();
       do_action('wpsc_product_addons', $product['id']);
       $output .= ob_get_contents();
       ob_end_clean();
@@ -648,34 +639,32 @@ function single_product_display($product_id)
 			}
             
       if($product['description'] != '') {
-				$output .= "<p  class='description'>";
-				$output .= nl2br(stripslashes($product['description'])) . "</p>";
+				$output .= "           <p  class='description'>".nl2br(stripslashes($product['description'])) . "</p>\n\r";
 			}
 			if (get_option('wpsc_selected_theme') == 'market3') {
-	       $output .= "<br />";
+	       $output .= "           <br />";
       }
 
         
       if($product['additional_description'] != '') {                
-        $output .= "<p class='single_additional_description' >";
+        $output .= "           <p class='single_additional_description' >\n\r";
         if (get_option('wpsc_selected_theme') == 'market3') {
-					$output .= "<span class='additional'>Additional Details: </span>";
+					$output .= "           <span class='additional'>Additional Details: </span>\n\r";
 				}
 
         $output .= nl2br(stripslashes($product['additional_description'])) . "";
-        $output .= "</p>";
+        $output .= "           </p>\n\r";
 			}
-			
 			
 			
 			// print the custom fields here, if there are any
 			$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
 			if(count($custom_fields) > 0) {
-			  $output .= "<div class='custom_meta'>\n\r";
+			  $output .= "           <div class='custom_meta'>\n\r";
 			  foreach((array)$custom_fields as $custom_field) {
-			    $output .= "<strong>{$custom_field['meta_key']}:</strong> {$custom_field['meta_value']} <br />\n\r";
+			    $output .= "             <strong>{$custom_field['meta_key']}:</strong> {$custom_field['meta_value']} <br />\n\r";
 			  }
-			  $output .= "</div>\n\r";
+			  $output .= "           </div>\n\r";
 			}
       
 
@@ -688,40 +677,45 @@ function single_product_display($product_id)
       if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {
         $output .=  wpsc_akst_share_link('return');
 			}
-      
-      $variations_procesor = new nzshpcrt_variations;
+			
+			
+			$variations_procesor = new nzshpcrt_variations;
           
       $variations_output = $variations_procesor->display_product_variations($product['id'],false, false, true);
       if($variations_output[0] != '') { //will always be set, may sometimes be an empty string 
-        $output .= "<p class='wpsc_variation_forms'>".$variations_output[0]."</p>";
+        $output .= "           <p class='wpsc_variation_forms'>".$variations_output[0]."</p>";
 			}
       if($variations_output[1] !== null) {
         $product['price'] = $variations_output[1];
 			}
-	    if (get_option('wpsc_selected_theme') != 'market3') {
-				$output .= "<p class='wpsc_product_price'>";
-      }
-      if($product['donation'] == 1) {
-        $currency_sign_location = get_option('currency_sign_location');
-        $currency_type = get_option('currency_type');
-        $currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
-        $output .= "<label for='donation_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='donation_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
-			} else {
-			  
-				if (get_option('wpsc_selected_theme') != 'market3') {
-					if(($product['special']==1) && ($variations_output[1] === null)) {
-						$output .= "<span class='oldprice'>".TXT_WPSC_PRICE.": " . nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
-						$output .= TXT_WPSC_PRICE.": " . nzshpcrt_currency_display(($product['price'] - $product['special_price']), $product['notax'],false,$product['id']) . "<br />";
-					} else {
-						$output .= TXT_WPSC_PRICE.": <span id='product_price_".$product['id']."'>" . nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
-					}
-					if(get_option('display_pnp') == 1) {
-						$output .= TXT_WPSC_PNP.": " . nzshpcrt_currency_display($product['pnp'], 1) . "<br />";
+			
+			
+			if (get_option('wpsc_selected_theme') != 'market3') {
+				$output .= "           <p class='wpsc_product_price'>";
+				if($product['donation'] == 1) {
+					$currency_sign_location = get_option('currency_sign_location');
+					$currency_type = get_option('currency_type');
+					$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
+					$output .= "           <label for='donation_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='donation_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
+				} else {
+					
+					if (get_option('wpsc_selected_theme') != 'market3') {
+						if(($product['special']==1) && ($variations_output[1] === null)) {
+							$output .= "<span class='oldprice'>".TXT_WPSC_PRICE.": " . nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
+							$output .= TXT_WPSC_PRICE.": " . nzshpcrt_currency_display(($product['price'] - $product['special_price']), $product['notax'],false,$product['id']) . "<br />";
+						} else {
+							$output .= TXT_WPSC_PRICE.": <span id='product_price_".$product['id']."'>" . nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
+						}
+						if(get_option('display_pnp') == 1) {
+							$output .= TXT_WPSC_PNP.": " . nzshpcrt_currency_display($product['pnp'], 1) . "<br />";
+						}
 					}
 				}
-			}
-      $output .= "</p>";
-	
+				$output .= "</p>\n\r";	
+      }
+			
+      
+      
 			if(function_exists('wpsc_theme_html')) {
 			  $wpsc_theme = wpsc_theme_html($product);
 			}
@@ -744,8 +738,11 @@ function single_product_display($product_id)
       if(function_exists('gold_shpcrt_display_gallery')) {
         $output .= gold_shpcrt_display_gallery($product['id']);
 			}
-
-
+      
+      
+      
+      
+      
       if(get_option('product_ratings') == 1) {
         $output .= "<div class='product_footer'>";
 
@@ -770,31 +767,35 @@ function single_product_display($product_id)
         $output .= "</div>";
 			}
       
-      $output .= "</div>";
+      $output .= "          </div>\n\r";
+			$output .= "        </form>\n\r";
+			
+			
+			
+			
+			
+			$output .= "        <form id='product_extra_".$product['id']."' name='product_".$product['id']."' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >\n\r";
+      $output .= "          <input type='hidden' name='prodid' value='".$product['id']."' />\n\r";
+      $output .= "          <input type='hidden' name='item' value='".$product['id']."' />\n\r";
+      $output .= "        </form>\n\r";
+		
+		
       
-      $output .= "</form>";
-      
-      $output .= "<form id='product_".$product['id']."' name='product_".$product['id']."' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >";
-      $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
-      $output .= "<input type='hidden' name='item' value='".$product['id']."' />";
-      $output .= "</form>";
-      
-      $output .= "</div>"; 
+      $output .= "      </div>\n\r";
+      $output .= "    </div>\n\r";
 			$output .= " <div class='clear'></div>\n\r";
-
-      }
-      
-			$output .= wpsc_also_bought($product_id);
-			$output .= "</div>"; 
- 
-			$output .= "</div>";
-
-    //$output .=  "<pre>".print_r($also_bought,true)."</pre>";    
-	} else {
+    }
+    
+		$output .= wpsc_also_bought($product_id);
+    $output .= "  </div>";
+    
+	} else { // otherwise, we have no product
 		$output .= "<p>".TXT_WPSC_NOITEMSINTHIS." ".$group_type.".</p>";
 	}
+	// replace dollar signs with the HTML code so that PHP doesn't try to interpret them as variables.
 	$output = str_replace('$', '&#036;', $output);
-  return $output;
+	
+  return $output; 
 }
 
 
