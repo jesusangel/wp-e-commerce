@@ -248,31 +248,31 @@ function nzshpcrt_style() {
 			$single_thumbnail_width = 128;
 		}
 	?>
-	div.default_product_display div.textcol{
+div.default_product_display div.textcol{
 	margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-	_margin-left: <?php echo ($thumbnail_width/2) + 10; ?>px !important;
-	}
+	_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+}
 	
 	
-	div.default_product_display  div.textcol div.imagecol{
-/* 	position:absolute; */
+div.default_product_display  div.textcol div.imagecol{
+	position:absolute;
 	top:0px;
 	left: 0px;
 	margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
-	}
+}
 	
-	div.single_product_display div.textcol{
+div.single_product_display div.textcol{
 	margin-left: <?php echo $single_thumbnail_width  + 10; ?>px !important;
-	}
+	_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+}
 	
 	
-	div.single_product_display  div.textcol div.imagecol{
-/* 	position:absolute; */
+div.single_product_display  div.textcol div.imagecol{
+	position:absolute;
 	top:0px;
 	left: 0px;
-/* 	margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important; */
-/* 	_margin-left: -<?php echo ($single_thumbnail_widt/2) + 10; ?>px !important; */
-	}
+	margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
+}
 	
 	<?php
 	

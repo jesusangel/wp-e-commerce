@@ -13,7 +13,8 @@ Author URI: http://instinct.co.nz
 */
 
 .wpsc_container{
-  position: relative;
+/*   position: relative; */
+  _zoom: 1;
   } 
 
 div.productdisplay img {
@@ -200,8 +201,10 @@ div.productdisplay{
  top:0px;
  left: 0px;
  margin-bottom: 20px;
+ padding: 0px;
  width: 100%;
  text-align: left !important;
+/*   border: 1px solid red; */
  }
 
 
@@ -213,6 +216,7 @@ div.imagecol{
  padding-right: 5px;
  margin-right: 5px;
  border: 0px solid #fff;
+/*  border: 1px solid blue; */
  }
  
 div.productdisplay div.imagecol img{
@@ -229,8 +233,9 @@ div.textcol{
  padding-bottom: 10px;
  margin: 0px;
 /* Adjust this width according to your layout*/
- width: 77%;
+/*  width: 77%; */
  text-align: left !important;
+/*   border: 1px solid green; */
  }
 
 div.single_product_display div.textcol{
