@@ -259,16 +259,18 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		}
 	 if (get_option('payment_gateway') == 'google') {
 		 if (!$total_shipping) $total_shipping = 0;
+		 $pnp=$wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$google_product_id.")");
 		 $local_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country'));
-		 $google_local_shipping = new GoogleFlatRateShipping("Local Shipping", $local_shipping_price);
+		 $google_local_shipping = new GoogleFlatRateShipping("Local Shipping", $local_shipping_price+$pnp);
 		 $international_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country')."-");
-		 //$international_shipping_price=(int)$international_shipping_price-(int)$google_local_shipping;
-		 $google_international_shipping = new GoogleFlatRateShipping("International Shipping", $international_shipping_price);
+		 $google_international_shipping = new GoogleFlatRateShipping("International Shipping", $international_shipping_price+$pnp);
 		 $Gfilter2 = new GoogleShippingFilters();
 		 $Gfilter = new GoogleShippingFilters();
 		 $google_checkout_shipping=get_option("google_shipping_country");
-		 $google_shipping_country_ids = implode(",",(array)$google_checkout_shipping);
-		 $google_shipping_country = $wpdb->get_results("SELECT isocode FROM ".$wpdb->prefix."currency_list WHERE id IN (".$google_shipping_country_ids.")", ARRAY_A);
+		 if (!empty($google_checkout_shipping)) {
+			 $google_shipping_country_ids = implode(",",(array)$google_checkout_shipping);
+			 $google_shipping_country = $wpdb->get_results("SELECT isocode FROM ".$wpdb->prefix."currency_list WHERE id IN (".$google_shipping_country_ids.")", ARRAY_A);
+		}
 		 //exit(print_r($google_shipping_country,1));
 		foreach ((array)$google_shipping_country as $country) {
 			$Gfilter->AddAllowedPostalArea($country['isocode']);
@@ -331,6 +333,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$google_cart->SetContinueShoppingUrl($continueshoppingurl);
 		$google_cart->SetEditCartUrl(get_option('shopping_cart_url'));
 		$_SESSION['google_shopping_cart']=serialize($google_cart);
+// 		$output .= $google_cart->getXML();
 		$output .= "<br>".$google_cart->CheckoutButtonCode($google_button_size);
 	}
     //$output .= "<a href='".get_option('product_list_url')."'>".TXT_WPSC_CONTINUESHOPPING."</a>";
