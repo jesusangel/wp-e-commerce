@@ -10,8 +10,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
     $total_weight = 0;
     $all_donations = true;
     $all_no_shipping = true;
-    foreach($cart as $cart_item)
-      {
+    foreach($cart as $cart_item) {
       $product_id = $cart_item->product_id;
       $quantity = $cart_item->quantity;
       $product_variations = $cart_item->product_variations;
@@ -19,53 +18,42 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
       $extras_count=count($extras);
       $raw_price = 0;
       $variation_count = count($product_variations);
-      if($variation_count > 0)
-        {
-        foreach($product_variations as $product_variation)
-          {
+      if($variation_count > 0) {
+        foreach($product_variations as $product_variation) {
           $value_id = $product_variation;
           $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-          }
-        }
+				}
+			}
 	
       //$total_quantity += $quantity;
       $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1";
       $product = $wpdb->get_row($sql,ARRAY_A);
       
-      if($product['donation'] == 1)
-        {
+      if($product['donation'] == 1) {
         $price = $quantity * $cart_item->donation_price;
-        }
-        else
-        {
+        } else {
         $price = $quantity * calculate_product_price($product_id, $product_variations,'stay',$extras);
-        if($country_code != null)
-          {
-          if($product['notax'] != 1)
-            {
+        if($country_code != null) {
+          if($product['notax'] != 1) {
             $price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
-            }
+					}
           $shipping = nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code);
           $price += $shipping;
-          }
+				}
         $all_donations = false;
-        }
+			}
       if($product['no_shipping'] != 1) {
         $all_no_shipping = false;
-        }
-// 	if ($extras_count>0) {
-// 		foreach($extras as $extra) {
-// 		$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$product_id."' AND `value_id` = '".$extra."' LIMIT 1");
-// 		}
-// 	}
+			}
+
       $total += $price;
-      }
+		}
 
     if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
       //echo $_SESSION['selected_country'];
       //exit(nzshpcrt_determine_base_shipping(0, $country_code));
       $total +=  nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
-      }
+		}
 		if(!empty($_SESSION['coupon_num']) && ($no_discount !== true)){
 			$total += nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) - $total ;
 		}
@@ -77,7 +65,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 			}
 		}
     return $total;
-    }
+	}
 	
 	//written by allen
 	
@@ -239,7 +227,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
       }
     }
   //written by Allen
-  function nzshpcrt_apply_coupon($price,$coupon_num){
+function nzshpcrt_apply_coupon($price,$coupon_num){
 	global $wpdb;
 	$now = date("Y-m-d H:i:s");
 	$now = strtotime($now);
@@ -255,9 +243,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 			if ($coupon_data['is-percentage']=='1'){
 				$price = $price*(1-$coupon_data['value']/100);
 			} else {
-			  if ($coupon_data['every_product']=='0') {
-					$price = $price-$coupon_data['value'];
-				} else {
+			  if ($coupon_data['every_product']=='1') {
 					$cart = $_SESSION['nzshpcrt_cart'];
 					$total_quantity=0;
 					
@@ -265,6 +251,8 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 						$total_quantity+=$product->quantity;
 					}
 					$price = $price-$coupon_data['value']*$total_quantity;
+				} else {
+					$price = $price-$coupon_data['value'];
 				}
 
 			}
@@ -276,7 +264,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 		$price = 0;
 	}
 	return $price;
-   }
+}
   //End of written by Allen  
   
   function nzshpcrt_determine_base_shipping($per_item_shipping, $country_code) {    
@@ -294,30 +282,29 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
     return $shipping;
 	}
     
-  function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code)
-    {    
+  function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code) {    
     global $wpdb;
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
       $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
-      $product_list = $GLOBALS['wpdb']->get_row($sql,ARRAY_A) ;
+      $product_list = $wpdb->get_row($sql,ARRAY_A) ;
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping
         if($country_code == get_option('base_country')) {
           $additional_shipping = $product_list['pnp'];
-          } else {
+				} else {
           $additional_shipping = $product_list['international_pnp'];
-          }          
+				}          
         $shipping = $quantity * $additional_shipping;
-        } else {
+			} else {
         //if the item does not have shipping
         $shipping = 0;
-        }
-      } else {
+			}
+		} else {
       //if the item is invalid or all items do not have shipping
-      $shipping = 0;
-      }
+			$shipping = 0;
+		}
     return $shipping;    
-    }
+	}
 
 function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false)
   {

@@ -3,6 +3,9 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
+
+
+define('TXT_WPSC_PURCHASE_UNAVAILABLE', 'Purchase unavailable options');
 define('TXT_WPSC_WE_RECOMMEND', 'We Recommend');
 
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
@@ -548,8 +551,10 @@ define('TXT_WPSC_ACTIVATE_SETTINGS', 'Activation Settings: Gold Cart');
 define('TXT_WPSC_ACTIVATION_KEY', 'Activation Key');
 define('TXT_WPSC_THANKSACTIVATED', 'Thanks, the gold shopping cart has been activated.');
 define('TXT_WPSC_NOTACTIVATED', 'Sorry, the API key was incorrect.');
-define('TXT_WPSC_DEFAULT', 'Default');
-define('TXT_WPSC_LIST', 'List');
+
+define('TXT_WPSC_DEFAULT', 'Default View');
+define('TXT_WPSC_LIST', 'List View');
+
 define('TXT_WPSC_VISIBLE', 'Visible');
 define('TXT_WPSC_DELETE_PRODUCT', 'Delete Product');
 define('TXT_WPSC_ADDITIONAL_IMAGE', 'Additional Image');
@@ -629,7 +634,7 @@ define('TXT_WPSC_DELIVERY_REGION', 'Delivery Region');
 define('TXT_WPSC_GENERAL_SETTINGS', 'General Settings');
 define('TXT_WPSC_TAX_SETTINGS', 'Tax Settings');
 define('TXT_WPSC_POSTAGE_AND_TAX', 'Postage &amp; Tax ');
-define('TXT_WPSC_GRID', 'Grid');
+define('TXT_WPSC_GRID', 'Grid View');
 define('TXT_WPSC_CANT_MOVE_CATEGORY', 'You cannot move a product group with subcategories.');
 define('TXT_WPSC_SURETODELETECATEGORY', 'Are you sure you want to delete this category? If the category has any subcategories, they will be deleted too.');
 define('TXT_WPSC_VARIATION', 'Variation');

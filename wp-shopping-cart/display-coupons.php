@@ -10,13 +10,11 @@ if(isset($_POST) && is_array($_POST)) {
     $start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
     $end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
     
-    if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$start_date' , '$end_date' );")) {  
+    if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product ` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' );")) {  
       echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
       }
     }
-//
   if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true')) {
-    
     foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
 			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
       $coupon_id = (int)$coupon_id;
@@ -35,23 +33,23 @@ if(isset($_POST) && is_array($_POST)) {
 				  }
 					if($coupon_value != $check_values[$coupon_key]) {
 						$insert_array[] = "`$coupon_key` = '$coupon_value'";
-						}
 					}
+				}
 					
 				//echo("<pre>".print_r($insert_array,true)."</pre>");
 				if(count($insert_array) > 0) {
 					$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_coupon_codes` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
-					}
+				}
 				unset($insert_array);
 				//echo("<pre>".print_r($check_values,true)."</pre>");
-				}
+			}
 				//echo("<pre>".print_r($coupon_data,true)."</pre>");
 				
-				if($coupon_data['delete_coupon'] != '') {
-					$wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE `id` = '$coupon_id' LIMIT 1;");
-				}
-      }
-    }
+			if($coupon_data['delete_coupon'] != '') {
+				$wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE `id` = '$coupon_id' LIMIT 1;");
+			}
+		}
+	}
   
   if($_POST['change-settings'] == 'true') {
     if($_POST['wpsc_also_bought'] == 1) {
@@ -313,8 +311,6 @@ foreach((array)$coupon_data as $coupon) {
   }
 echo "</table>\n\r";
   ?>
-    </td>
-    <td id="order_summary_container">
     </td>
   </tr>
 </table>

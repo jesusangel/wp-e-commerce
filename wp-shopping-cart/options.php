@@ -800,7 +800,101 @@ if($_GET['clean_categories'] == 'true') {
 						  /* here start the presentation options */						  
 						  ?>
 						  
-							<table class='wpsc_options form-table'>								
+							<table class='wpsc_options form-table'>		
+							<?php
+							// if(function_exists('product_display_list') || function_exists('product_display_grid')) {
+								?>    
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_PRODUCT_DISPLAY;?>:
+									</th>
+									<td>
+									<?php
+									$display_pnp = get_option('product_view');
+									$product_view1 = null;
+									$product_view2 = null;
+									$product_view3 = null;
+									switch($display_pnp) {
+										case "grid":
+										if(function_exists('product_display_grid')) {
+											$product_view3 = "selected ='true'";
+											break;
+										}
+										
+										case "list":
+										if(function_exists('product_display_list')) {
+											$product_view2 = "selected ='true'";
+											break;
+										}
+										
+										default:
+										$product_view1 = "selected ='true'";
+										break;
+									}
+									
+									if(get_option('list_view_quantity') == 1) {
+										$list_view_quantity_value = "checked='true'";
+									} else {
+										$list_view_quantity_value = '';
+									}
+						
+									if(get_option('show_images_only') == 1) {
+										$show_images_only_value = "checked='true'";
+									} else {
+										$show_images_only_value = '';
+									}
+									if(get_option('display_variations') == 1) {
+										$display_variations = "checked='true'";
+									} else {
+										$display_variations = '';
+									}
+									?>
+									<select name='product_view' onchange="toggle_display_options(this.options[this.selectedIndex].value)">
+									<option value='default' <?php echo $product_view1; ?>><?php echo TXT_WPSC_DEFAULT;?></option>
+									<?php
+									if(function_exists('product_display_list')) {
+										?>
+										<option value='list' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+										<?php      
+									}  else {
+										?>
+										<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+										<?php      
+									  
+									}
+									
+									if(function_exists('product_display_grid')) {
+										?>
+									<option value='grid' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+										<?php   
+									} else {
+										?>
+									<option value='grid' disabled='disabled' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+										<?php 
+									}
+									?>
+									</select>
+									<?php 
+									if(!function_exists('product_display_grid')) {
+									?><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo TXT_WPSC_PURCHASE_UNAVAILABLE; ?></a> <?php 
+									}
+									?>
+										<div id='list_view_options' <?php if(is_null($product_view2)) { echo "style='display:none;'";} ?> >
+											<input type='checkbox' value='1' name='list_view_quantity' id='list_view_quantity' <?php echo $list_view_quantity_value;?> />
+											<label for='list_view_options'><?php echo TXT_WPSC_ADJUSTABLE_QUANTITY;?></label>
+										</div>
+										<div id='grid_view_options' <?php echo $list_view_quantity_style;?> <?php if(is_null($product_view3)) { echo "style='display:none;'";} ?>>
+											<input type='checkbox' value='1' name='show_images_only' id='show_images_only' <?php echo $show_images_only_value;?> />
+											<label for='show_images_only'><?php echo TXT_SHOW_IMAGES_ONLY;?></label><br />
+											<input type='checkbox' value='1' name='display_variations' id='display_variations' <?php echo $display_variations;?> />
+											<label for='display_variations'><?php echo TXT_DISPLAY_VARIATIONS;?></label>
+										</div>
+									</td>
+								</tr>
+								<?php
+								//  }
+								?>			
+													
 								<tr>
 									<th scope="row">
 									<?php echo TXT_WPSC_SELECT_THEME;?>:
@@ -888,85 +982,7 @@ if($_GET['clean_categories'] == 'true') {
 							</div>
 									</td>
 								</tr>
-								<?php
-							if(function_exists('product_display_list') || function_exists('product_display_grid')) {
-								?>    
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_PRODUCT_DISPLAY;?>:
-									</th>
-									<td>
-									<?php
-									$display_pnp = get_option('product_view');
-									$product_view1 = null;
-									$product_view2 = null;
-									$product_view3 = null;
-									switch($display_pnp) {
-										case "grid":
-										if(function_exists('product_display_grid')) {
-											$product_view3 = "selected ='true'";
-											break;
-										}
-										
-										case "list":
-										if(function_exists('product_display_list')) {
-											$product_view2 = "selected ='true'";
-											break;
-										}
-										
-										default:
-										$product_view1 = "selected ='true'";
-										break;
-									}
-									
-									if(get_option('list_view_quantity') == 1) {
-										$list_view_quantity_value = "checked='true'";
-									} else {
-										$list_view_quantity_value = '';
-									}
-						
-									if(get_option('show_images_only') == 1) {
-										$show_images_only_value = "checked='true'";
-									} else {
-										$show_images_only_value = '';
-									}
-									if(get_option('display_variations') == 1) {
-										$display_variations = "checked='true'";
-									} else {
-										$display_variations = '';
-									}
-									?>
-									<select name='product_view' onchange="toggle_display_options(this.options[this.selectedIndex].value)">
-									<option value='default' <?php echo $product_view1; ?>><?php echo TXT_WPSC_DEFAULT;?></option>
-									<?php
-									if(function_exists('product_display_list')) {
-										?>
-										<option value='list' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
-										<?php      
-									}
-									
-									if(function_exists('product_display_grid')) {
-										?>
-									<option value='grid' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
-										<?php   
-									}
-									?>
-									</select>
-										<div id='list_view_options' <?php if(is_null($product_view2)) { echo "style='display:none;'";} ?> >
-											<input type='checkbox' value='1' name='list_view_quantity' id='list_view_quantity' <?php echo $list_view_quantity_value;?> />
-											<label for='list_view_options'><?php echo TXT_WPSC_ADJUSTABLE_QUANTITY;?></label>
-										</div>
-										<div id='grid_view_options' <?php echo $list_view_quantity_style;?> <?php if(is_null($product_view3)) { echo "style='display:none;'";} ?>>
-											<input type='checkbox' value='1' name='show_images_only' id='show_images_only' <?php echo $show_images_only_value;?> />
-											<label for='show_images_only'><?php echo TXT_SHOW_IMAGES_ONLY;?></label><br />
-											<input type='checkbox' value='1' name='display_variations' id='display_variations' <?php echo $display_variations;?> />
-											<label for='display_variations'><?php echo TXT_DISPLAY_VARIATIONS;?></label>
-										</div>
-									</td>
-								</tr>
-								<?php
-								}
-								?>    
+ 
 								<tr>
 									<th scope="row">
 									<?php echo TXT_WPSC_DEFAULTCATEGORY; ?>:

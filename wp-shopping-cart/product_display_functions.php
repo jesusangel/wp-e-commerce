@@ -291,11 +291,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 			
 
-			$output .= "<div class='productdisplay default_product_display $category_nice_name'>";
+			$output .= "<div class='productdisplay default_product_display product_view_{$product['id']} {$category_nice_name}'>";
 
-     
-      
-      
       $output .= "      <div class='textcol'>";
       
        if($category_data[0]['fee'] == 0) {
@@ -567,7 +564,7 @@ function single_product_display($product_id) {
     
     foreach((array)$product_list as $product) {
       $num++;
-      $output .= "    <div class='single_product_display'>\n\r";
+      $output .= "    <div class='single_product_display product_view_{$product['id']} '>\n\r";
       $output .= "      <div class='textcol'>\n\r";
       
       

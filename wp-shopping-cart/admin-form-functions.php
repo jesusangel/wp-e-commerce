@@ -1062,6 +1062,10 @@ function coupon_edit_form($coupon) {
   $output .= "   <input type='checkbox' value='1' ".(($coupon['active'] == 1) ? "checked='true'" : '')." name='edit_coupon[".$id."][active]' />\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
+  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][every_product]' />\n\r";
+  $output .= "   <input type='checkbox' value='1' ".(($coupon['every_product'] == 1) ? "checked='true'" : '')." name='edit_coupon[".$id."][every_product]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
   //$output .= "   <input type='hidden' value='false' name='add_coupon' />\n\r";
   $output .= "   <input type='submit' value='Submit' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
