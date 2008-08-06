@@ -40,7 +40,7 @@ if($_GET['cart']== 'empty') {
 <?php
 if(function_exists('fancy_notifications')) {
   echo fancy_notifications();
-  }
+}
 
 
 
@@ -48,12 +48,12 @@ if(function_exists('fancy_notifications')) {
   
   //else if(is_numeric($_GET['category']) || (is_numeric(get_option('default_category')) && (get_option('show_categorybrands') != 3)))
   if((is_numeric($category_id) || is_numeric(get_option('default_category'))) && ((get_option('show_categorybrands') == 1) || (get_option('show_categorybrands') == 2)) || (is_numeric($_GET['product_id']))) {
-			$display_items = true;
-    } else if((is_numeric($_GET['brand']) || is_numeric(get_option('default_brand'))) && ((get_option('show_categorybrands') == 3) || (get_option('show_categorybrands') == 1))) {
-      $display_items = true;
-    } else if($_GET['product_search'] != '') {
-      $display_items = true;
-		}
+		$display_items = true;
+	} else if((is_numeric($_GET['brand']) || is_numeric(get_option('default_brand'))) && ((get_option('show_categorybrands') == 3) || (get_option('show_categorybrands') == 1))) {
+		$display_items = true;
+	} else if($_GET['product_search'] != '') {
+		$display_items = true;
+	}
       
   if($display_items == true) {
     if(get_option('permalink_structure') != '') {
@@ -69,9 +69,9 @@ if(function_exists('fancy_notifications')) {
 		}
 
 
-     if(is_numeric($product_id)) { 
-       echo single_product_display($product_id);
-       } else { 
+			if(is_numeric($product_id)) { 
+				echo single_product_display($product_id);
+			} else {
 				 if(function_exists('gold_shpcrt_search_form') && get_option('show_search') == 1) {
 					 echo gold_shpcrt_search_form();
 				 }

@@ -104,8 +104,8 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
     if(is_array($widget_container) && array_search(TXT_WPSC_DONATIONS, $widget_container)) {
       $no_donations_sql = "AND `".$wpdb->prefix."product_list`.`donation` != '1'";
       break;
-      }
-    }  
+		}
+	}  
   
   if(function_exists('gold_shpcrt_search_sql') && ($_GET['product_search'] != '')) {
     $search_sql = gold_shpcrt_search_sql();

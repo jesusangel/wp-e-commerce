@@ -241,7 +241,7 @@ div.textcol{
 div.single_product_display div.textcol{
 /* Adjust this width according to your layout*/
 /*  width:41%; */
- margin-right:15px;
+ margin-right: 0;
 }
 
 div.producttext{
@@ -974,3 +974,4 @@ div.breadcrumb {
  /*
 End of modified By allen
 */
+
