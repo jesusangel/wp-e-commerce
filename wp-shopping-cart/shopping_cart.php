@@ -303,6 +303,11 @@ if(!empty($_SESSION['coupon_num'])) {
 	 } else {
 		 $_SESSION['wpsc_discount']= 0;
 	 }
+	 
+	 if ($_POST["quantity"]) {
+		$google_cart->item_arr[$_POST["key"]]->quantity=$_POST["quantity"];
+	}
+	
 	 if ($discount > 0) {
 		 $google_item = new GoogleItem(utf8_decode("Coupon Code: '".$_SESSION['coupon_num']."'"),      // Item name
 				 utf8_decode("A coupon redeem"), // Item      description
