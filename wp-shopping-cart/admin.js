@@ -399,10 +399,9 @@ function show_status_box(id,image_id)
   return false;
   }
   
-function submit_status_form(id)
-  {
+function submit_status_form(id) {
   document.getElementById(id).submit();
-  }
+}
   
 // pe.{
 var prevElement = null;

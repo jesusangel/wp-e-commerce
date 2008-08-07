@@ -867,16 +867,13 @@ function nzshpcrt_install()
 	add_option('google_id', 'none', TXT_WPSC_GOOGLEMECHANTID, 'yes');
  
    add_option('default_brand', 'none', TXT_WPSC_DEFAULTBRAND, 'yes');
-   add_option('default_category', 'none', TXT_WPSC_DEFAULTCATEGORY, 'yes');
+   add_option('wpsc_default_category', 'none', TXT_WPSC_DEFAULTCATEGORY, 'yes');
    
    add_option('product_view', 'default', "", 'yes');
    add_option('add_plustax', 'default', "", '1');
-     
-   if(get_option('default_category') < 1) {
-     update_option('default_category','none');
-		}
+    
    
-    add_option('nzshpcrt_first_load', '0', "", 'yes');
+	add_option('nzshpcrt_first_load', '0', "", 'yes');
   
   if(!((get_option('show_categorybrands') > 0) && (get_option('show_categorybrands') < 3))) {
     update_option('show_categorybrands', 2);

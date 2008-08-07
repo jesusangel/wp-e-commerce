@@ -2402,12 +2402,13 @@ if(stristr($_GET['page'], WPSC_DIR_NAME)) {
 
 function wpsc_admin_notices() {
   global $wpdb;
-
-  if((get_option('default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_categories` WHERE `id` IN ('".get_option('default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
-    if(!$_POST['default_category']) { // if we are not changing the default category
-			echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
-			echo "<p>".TXT_WPSC_NO_DEFAULT_PRODUCTS."</p>";
-			echo "</div>\n\r";
+  if(get_option('wpsc_default_category') != 'all') {
+		if((get_option('wpsc_default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_categories` WHERE `id` IN ('".get_option('wpsc_default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
+			if(!$_POST['wpsc_default_category']) { // if we are not changing the default category
+				echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
+				echo "<p>".TXT_WPSC_NO_DEFAULT_PRODUCTS."</p>";
+				echo "</div>\n\r";
+			}
 		}
   }
 }

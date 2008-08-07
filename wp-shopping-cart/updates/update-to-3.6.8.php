@@ -48,4 +48,11 @@ if(get_option('payment_method') != null) {
 	update_option('payment_method', null);
 }
 
+
+// switch this variable over to our own option name, seems default_category was used by wordpress
+if(get_option('wpsc_default_category') == null) {
+  update_option('wpsc_default_category', get_option('default_category'));
+}
+
+
 ?>

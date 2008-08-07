@@ -14,13 +14,13 @@ if(is_numeric($_GET['brand']) || (is_numeric(get_option('default_brand')) && (ge
   
   $cat_sql = "SELECT * FROM `".$wpdb->prefix."product_brands` WHERE `id`='".$brandid."' LIMIT 1";
   $group_type = TXT_WPSC_BRANDNOCAP;
-} else if(is_numeric($_GET['category']) || ($wp_query->query_vars['prodcat_name'] != null) || (is_numeric(get_option('default_category')) && (get_option('show_categorybrands') != 3))) {
+} else if(is_numeric($_GET['category']) || ($wp_query->query_vars['prodcat_name'] != null) || (is_numeric(get_option('wpsc_default_category')) && (get_option('show_categorybrands') != 3))) {
   if(is_numeric($wp_query->query_vars['product_category'])) {
     $category_id = $wp_query->query_vars['product_category'];
 	} else if(is_numeric($_GET['category'])) {
     $category_id = $_GET['category'];
 	} else { 
-    $category_id = get_option('default_category');
+    $category_id = get_option('wpsc_default_category');
 	}
   $cat_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id`='".$category_id."' LIMIT 1";
   $group_type = TXT_WPSC_CATEGORYNOCAP;
@@ -46,8 +46,8 @@ if(function_exists('fancy_notifications')) {
 
   $num = 0; 
   
-  //else if(is_numeric($_GET['category']) || (is_numeric(get_option('default_category')) && (get_option('show_categorybrands') != 3)))
-  if((is_numeric($category_id) || is_numeric(get_option('default_category'))) && ((get_option('show_categorybrands') == 1) || (get_option('show_categorybrands') == 2)) || (is_numeric($_GET['product_id']))) {
+  //else if(is_numeric($_GET['category']) || (is_numeric(get_option('wpsc_default_category')) && (get_option('show_categorybrands') != 3)))
+  if((is_numeric($category_id) || is_numeric(get_option('wpsc_default_category'))) && ((get_option('show_categorybrands') == 1) || (get_option('show_categorybrands') == 2)) || (is_numeric($_GET['product_id']))) {
 		$display_items = true;
 	} else if((is_numeric($_GET['brand']) || is_numeric(get_option('default_brand'))) && ((get_option('show_categorybrands') == 3) || (get_option('show_categorybrands') == 1))) {
 		$display_items = true;

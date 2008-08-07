@@ -58,7 +58,7 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "            <td>\n\r";
   echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES, 'UTF-8')." (".$category['id'].")";
   echo "            </td>\n\r";
-  
+  /*
   $displaydescription = substr(stripslashes($category['description']),0,44);
   if($displaydescription != $category['description']) {
     $displaydescription_arr = explode(" ",$displaydescription);
@@ -81,7 +81,7 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "            <td>\n\r";
   echo "".stripslashes($displaydescription)."";
   echo "            </td>\n\r";
-  
+  */
   echo "            <td>\n\r";
   echo "<a href='#' onclick='fillcategoryform(".$category['id'].");return false;'>".TXT_WPSC_EDIT."</a>";
   echo "            </td>\n\r";
@@ -271,7 +271,7 @@ if(is_numeric($_GET['deleteid'])) {
 		$delete_subcat_sql = "UPDATE `".$wpdb->prefix."product_categories` SET `active` = '0', `nice-name` = '' WHERE `category_parent`='{$delete_id}'";
 		$wpdb->query($delete_subcat_sql);
 		// if this is the default category, we need to find a new default category
-		if($delete_id == get_option('default_category')) {
+		if($delete_id == get_option('wpsc_default_category')) {
 			// select the category that is not deleted with the greatest number of products in it
 			$new_default = $wpdb->get_var("SELECT `cat`.`id` FROM `{$wpdb->prefix}product_categories` AS `cat`
 				LEFT JOIN `{$wpdb->prefix}item_category_associations` AS `assoc` ON `cat`.`id` = `assoc`.`category_id`
@@ -280,7 +280,7 @@ if(is_numeric($_GET['deleteid'])) {
 				ORDER BY COUNT( `assoc`.`id` ) DESC
 				LIMIT 1");
 			if($new_default > 0) {
-				update_option('default_category', $new_default);
+				update_option('wpsc_default_category', $new_default);
 			}
 		}
 		$wp_rewrite->flush_rules(); 
@@ -371,30 +371,50 @@ function categorisation_conf() {
 	<br/>
 </div>
 
+<div class="tablenav">
+	<div class="alignleft" style='width: 500px;'>
+	  <form action='' method='GET' id='submit_categorisation_form' >
+	  <input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
+	  <?php
+	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
+		//echo "<ul class='categorisation_links'>\n\r";
+		echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":</label>";
+		echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 
+		foreach((array)$categorisation_groups as $categorisation_group) {
+			$selected = '';
+			if($current_categorisation['id'] == $categorisation_group['id']) {
+				//$selected = "class='selected'";
+				$selected = "selected='selected'";
+			}
+			echo "<option value='{$categorisation_group['id']}' $selected >{$categorisation_group['name']}</option>";
+			//echo "  <li $selected >\n\r";
+			//echo "    <a href='?page={$_GET['page']}&amp;category_group={$categorisation_group['id']}'>{$categorisation_group['name']}</a> ";
+			//echo "  </li>\n\r";
+		}
+		echo "</select>"; 
+		//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
+		//echo "</ul>\n\r";
+	  ?>
+		<?php echo "<a class='button edit_categorisation_group' href='#' onclick='return showedit_categorisation_form()'><span>".TXT_WPSC_EDIT_THIS_GROUP."</span></a>"; ?>
+		
+		<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
+	  </form>
+	  
+	  <?php /*<input type="submit" class="button-secondary" value="Filter" id="post-query-submit"/>*/ ?>
+	</div>
+	
+	<br class="clear"/>
+</div>
 
+<br class="clear"/>
 <?php
  
-$categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
-echo "<ul class='categorisation_links'>\n\r";
-foreach((array)$categorisation_groups as $categorisation_group){
-  $selected = '';
-  if($current_categorisation['id'] == $categorisation_group['id']) {
-    $selected = "class='selected'";
-  }
-  echo "  <li $selected >\n\r";
-  echo "    <a href='?page={$_GET['page']}&amp;category_group={$categorisation_group['id']}'>{$categorisation_group['name']}</a> ";
-  echo "  </li>\n\r";
-}
-echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
-echo "</ul>\n\r";
-
-
 $num = 0;
 echo "  <table id='productpage'>\n\r";
-echo "    <tr><td>\n\r";
-echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
+echo "    <tr><td class='firstcol'>\n\r";
+//echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
 echo "      <table id='itemlist'>\n\r";
-echo "        <tr class='firstrow'>\n\r";
+echo "        <tr class='firstrow categorisation_title'>\n\r";
 
 echo "          <td>\n\r";
 echo TXT_WPSC_IMAGE;
@@ -405,7 +425,7 @@ echo TXT_WPSC_NAME;
 echo "          </td>\n\r";
 
 echo "          <td>\n\r";
-echo TXT_WPSC_DESCRIPTION;
+//echo TXT_WPSC_DESCRIPTION;
 echo "          </td>\n\r";
 
 echo "          <td>\n\r";
@@ -413,6 +433,14 @@ echo TXT_WPSC_EDIT;
 echo "          </td>\n\r";
 
 echo "        </tr>\n\r";
+
+
+echo "     <tr>\n\r";
+echo "       <td colspan='4' class='colspan'>\n\r";
+echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP) ."</p></div>";
+echo "<a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a>";
+echo "       </td>\n\r";
+echo "     <tr>\n\r";
 
 display_categories($current_categorisation['id']);
   
@@ -422,6 +450,7 @@ echo "        <div id='productform'>";
 echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>\n\r";
 echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_EDITDETAILS." </strong></div>\n\r";
 
+echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP) ."</p></div>";
 echo "        <div id='formcontent'>\n\r";
 echo "        </div>\n\r";
 echo "</form>\n\r";
@@ -431,6 +460,7 @@ echo "        </div>\n\r";
 
 	<div class='categorisation_title'><strong class='form_group'><?php echo TXT_WPSC_ADDDETAILS;?></strong></div>
   <form method='POST' enctype='multipart/form-data'>
+	<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
   <table class='category_forms'>
     <tr>
       <td>

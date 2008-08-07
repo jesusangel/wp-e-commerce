@@ -41,10 +41,10 @@ if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] == null)) {
 	$curgateway = get_option('payment_gateway');
   $changes_made = true;
 }
- 
-if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] != null)) {
+//exit("<pre>" .print_r($_POST,true). "</pre>");
+if(($_POST['payment_gw'] != null)) {
   foreach($nzshpcrt_gateways as $gateway) {
-    if($gateway['internalname'] == $curgateway) {
+		if($gateway['internalname'] == $_POST['payment_gw']) {
       $gateway['submit_function']();
       $changes_made = true;
 		}

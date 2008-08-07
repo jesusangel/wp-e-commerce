@@ -112,7 +112,7 @@ input.image_resize{ position: relative; top: 4px; }
  
 #loadingindicator_span{ visibility: hidden; }
  
-strong.form_group{ font-size: 11pt; color: #ccc; }
+strong.form_group{ font-size: 11pt; color: #dfdfdf; }
  
 strong.form_group span{ font-size: 8pt; }
  
@@ -763,13 +763,83 @@ padding:9px 5px;
 }
 
 div.categorisation_title {
-	background:#575757;
-	padding:10px 5px 8px;
+	background:#585858;
+	padding:4px 5px 10px;
   position: relative;
+  height: 15px;
   top: 0px;
   left: 0px;
 }
 
+div.categorisation_title strong {
+ display: block;
+ font-size: 11px;
+ margin-top: 5px;
+}
+
+tr.categorisation_title {
+	background:#585858;
+  height: 14px;
+}
+
+div#submit_categorisation_form {
+  float: left;
+  display: block;
+}
+
+div.editing_this_group {
+  width: 100%;
+  border-bottom: 1px dotted black;
+}
+.secondcol div.editing_this_group {
+  border-left:1px solid #BBBBBB;
+	border-right:1px solid #BBBBBB;
+  width: 580px;
+}
+
+div.editing_this_group p {
+  padding: 8px;
+  margin: 0px;
+}
+
+
+a.add_category_link{
+ display: block;
+ margin: 8px;
+}
+
+table#itemlist tr.categorisation_title td {
+	color: #dfdfdf;
+	font-size: 11px;
+	line-height:1.3em;
+	padding:9px 15px 6px 10px;
+	text-align:left;
+}
+
+
+
+label.select_categorisation_group, select#select_categorisation_group, a.add_categorisation_group, a.edit_categorisation_group {
+  display: block;
+  float: left;
+}
+
+label.select_categorisation_group {
+  padding-top: 4px;
+  color: #336699;
+  font-size: 11px;
+}
+
+a.add_categorisation_group {
+/* 	margin-left: 30px; */
+}
+
+a.edit_categorisation_group {
+	margin-left: 30px;
+}
+
+table#productpage tr td.firstcol {
+padding:0 0 0 0px;
+}
 
 
 div#add_categorisation, div#edit_categorisation{
@@ -814,9 +884,6 @@ color: #D54E21;
 }
 
 
-a.add_category_link{
-  float: right;
- }
  
  
 div.product_custom_meta {
@@ -933,6 +1000,7 @@ td.gateway_settings {
 td.gateway_settings h4 {
   margin: 0px;
 }
+
 td.gateway_settings table.form-table {
   margin: 0px 0px 0px 0px;
 }
@@ -941,11 +1009,13 @@ td.gateway_settings table.form-table {
 tr.update_gateway {
   background: none;
 }
+
 tr.update_gateway td {
   padding: 0px 0px 0px 8px !important;
 }
+
 tr.update_gateway td div {
-  border-top: none;
+  border-top: none;  
   margin: 0px;
   padding: 0px;
 }

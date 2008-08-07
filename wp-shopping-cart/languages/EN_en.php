@@ -5,8 +5,17 @@ This is a language file for the WP Shopping Cart plugin version 3.6.8
 
 
 
+define('TXT_WPSC_SELECTALLCATEGORIES', 'Show All Products');
+
+define('TXT_WPSC_EDITING_GROUP', 'You are editing the [categorisation] group');
+define('TXT_WPSC_ADDING_TO_GROUP', 'You are adding a new item to the [categorisation] group');
+define('TXT_WPSC_EDITING_IN_GROUP', 'You are editing an item in the [categorisation] group');
+
+
 define('TXT_WPSC_PURCHASE_UNAVAILABLE', 'Purchase unavailable options');
 define('TXT_WPSC_WE_RECOMMEND', 'We Recommend');
+define('TXT_WPSC_SELECT_PRODUCT_GROUP', 'Select a Group');
+define('TXT_WPSC_EDIT_THIS_GROUP', 'Edit This Group');
 
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
 define('TXT_WPSC_PRODUCT_ID', 'Product ID');
@@ -50,7 +59,7 @@ define('TXT_WPSC_THANKS_UNLOCKED', 'Thanks, the downloads that were locked to th
 define('TXT_WPSC_SELECTGATEWAY', 'Select a payment gateway');
 define('TXT_WPSC_VARIATION_LIST', 'Select a Variation');
 
-define('TXT_WPSC_CATEGORISATION_GROUPS_DESCR', 'Groups help your visitors find your products. If you sell t-shirts, hats, and trousers you might want to setup a new group called clothing and then add the categories t-shirts, hats, and trousers to that group. Now you can associate individual products to their respecitve clothing group categories when you add or edit products.');
+define('TXT_WPSC_CATEGORISATION_GROUPS_DESCR', 'Groups help your visitors find your products. If you sell t-shirts, hats, and trousers you might want to setup a new group called clothing and then add the categories t-shirts, hats, and trousers to that group. Now you can associate individual products to their respective clothing group categories when you add or edit products.');
 define('TXT_WPSC_CATEGORISATION_DESCR', 'Product Grouping Widget');
 define('WPSC_DOWNLOAD_INVALID', 'This download is no longer valid.');
 define('TXT_WPSC_LOCK_DOWNLOADS_TO_IP', 'Lock downloads to IP address');
@@ -87,7 +96,7 @@ define('TXT_WPSC_ADD_CATEGORISATION', 'Add New Group');
 define('TXT_WPSC_EDIT_CATEGORISATION', 'Edit Group');
 define('TXT_WPSC_ADDDETAILS', 'Add Details');
 define('TXT_WPSC_EDITDETAILS', 'Edit Details');
-define('TXT_WPSC_ADDNEWCATEGORY', 'Add New');
+define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Item &raquo;');
 define('TXT_WPSC_VALUE', 'Value');
 define('TXT_WPSC_ADD_CUSTOM_FIELD', 'Add Custom Field');
 define('TXT_WPSC_EDIT_CUSTOM_FIELDS', 'Edit Custom Fields');

@@ -101,13 +101,13 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
       update_option('show_categorybrands', $_POST['show_categorybrands']);
 		}
   
-    if($_POST['default_category'] != get_option('default_category')) {
-      update_option('default_category', $_POST['default_category']);
+    if( isset($_POST['wpsc_default_category']) && ($_POST['wpsc_default_category'] != get_option('wpsc_default_category'))) {
+      //echo $_POST['wpsc_default_category'];
+     delete_option('wpsc_default_category');
+      update_option('wpsc_default_category', (string)$_POST['wpsc_default_category']);
+      //echo get_option('wpsc_default_category');
 		}
 
-    if($_POST['default_brand'] != get_option('default_brand')) {
-      update_option('default_brand', $_POST['default_brand']);
-		}
 
     if($_POST['product_view'] != get_option('product_view')) {
       update_option('product_view', $_POST['product_view']);
@@ -425,11 +425,17 @@ if($_GET['clean_categories'] == 'true') {
 
   function options_categorylist() {
     global $wpdb;
-    $current_default = get_option('default_category');
+    $current_default = get_option('wpsc_default_category');
     $group_sql = "SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active`='1'";
     $group_data = $wpdb->get_results($group_sql,ARRAY_A);
-    $categorylist .= "<select name='default_category'>";
+    $categorylist .= "<select name='wpsc_default_category'>";
     $categorylist .= "<option value='none' ".$selected." >".TXT_WPSC_SELECTACATEGORY."</option>";
+    
+		if(get_option('wpsc_default_category') == 'all')  {
+				$selected = "selected='true'";
+			}
+    
+    $categorylist .= "<option value='all' ".$selected." >".TXT_WPSC_SELECTALLCATEGORIES."</option>";
     foreach($group_data as $group) {
 			$cat_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
 			$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
@@ -438,7 +444,7 @@ if($_GET['clean_categories'] == 'true') {
 				
 				$categorylist .= "<optgroup label='{$group['name']}'>";;
 				foreach((array)$category_data as $category)  {
-					if(get_option('default_category') == $category['id'])  {
+					if(get_option('wpsc_default_category') == $category['id'])  {
 						$selected = "selected='true'";
 					} else {
 						$selected = "";

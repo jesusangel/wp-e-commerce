@@ -146,7 +146,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 	
 		$sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id IN (".$product_id.")";
 	} else {
-	if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || (is_numeric(get_option('default_category')) && (get_option('show_categorybrands') != 3) && !is_numeric($_GET['brand']))) {
+	if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || (is_numeric(get_option('wpsc_default_category')) && (get_option('show_categorybrands') != 3) && !is_numeric($_GET['brand']))) {
 		if($wp_query->query_vars['product_category'] != null) {
 			$catid = $wp_query->query_vars['product_category'];
 			} else if(is_numeric($_GET['category'])) {
@@ -154,7 +154,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 			} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
 				$catid = $GLOBALS['wpsc_category_id'];
 			} else {
-				$catid = get_option('default_category');
+				$catid = get_option('wpsc_default_category');
 			}
 		/*
 			* The reason this is so complicated is because of the product ordering, it is done by category/product association
@@ -509,7 +509,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			$output .= "<br /><strong class='cattitles'>".TXT_WPSC_YOUR_SEARCH_FOR." \"".$_GET['product_search']."\" ".TXT_WPSC_RETURNED_NO_RESULTS."</strong>";
 		} else {
 			$output .= "<p>".TXT_WPSC_NOITEMSINTHIS." ".$group_type.".</p>";
-			if(get_option('default_category') == $product_listing_data['category_id']) {
+			if(get_option('wpsc_default_category') == $product_listing_data['category_id']) {
 				$output .= wpsc_odd_category_setup();
 			}
 		}
@@ -924,7 +924,7 @@ function wpsc_product_url($product_id, $category_id = null) {
 		if(is_numeric($wp_query->query_vars['product_category'])) {
 		  $category_id = $wp_query->query_vars['product_category'];
 		} else {
-			$category_list = $wpdb->get_row("SELECT `".$wpdb->prefix."product_categories`.`id`, IF((`".$wpdb->prefix."product_categories`.`id` = '".get_option('default_category')."'), 0, 1) AS `order_state` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product_id."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1') LIMIT 1",ARRAY_A);
+			$category_list = $wpdb->get_row("SELECT `".$wpdb->prefix."product_categories`.`id`, IF((`".$wpdb->prefix."product_categories`.`id` = '".get_option('wpsc_default_category')."'), 0, 1) AS `order_state` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product_id."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1') LIMIT 1",ARRAY_A);
 			$category_id = $category_list['id'];		
 		}
   }
@@ -1010,7 +1010,7 @@ function wpsc_odd_category_setup() {
   global $userdata;  
   $output = '';
   if(($userdata->wp_capabilities['administrator'] ==1) || ($userdata->user_level >=9)) {
-    if(get_option('default_category') == 1) {
+    if(get_option('wpsc_default_category') == 1) {
 			$output = "<p>".TXT_WPSC_USING_EXAMPLE_CATEGORY."</p>";
 		} else {
 		  $output = "<p>".TXT_WPSC_ADMIN_EMPTY_CATEGORY."</p>";
