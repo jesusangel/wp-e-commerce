@@ -2306,7 +2306,24 @@ function wpsc_query_vars($vars) {
 add_filter('query_vars', 'wpsc_query_vars');
 
 // using page_rewrite_rules makes it so that odd permalink structures like /%category%/%postname%.htm do not override the plugin permalinks.
-add_filter('page_rewrite_rules', 'wpsc_product_permalinks'); 
+add_filter('page_rewrite_rules', 'wpsc_product_permalinks');
+ 
+ 
+function wpsc_replace_the_title($input) {
+  global $wpdb, $wp_query;
+	if(is_numeric($wp_query->query_vars['product_category'])) {
+		// using debug_backtrace here is not a good way of doing this, but wordpress provides no way to differentiate between the various uses of this plugin hook.
+		$backtrace = debug_backtrace();
+		if($backtrace[3]['function'] == 'get_the_title') {
+			return $wpdb->get_var("SELECT `name` FROM `".$wpdb->prefix."product_categories` WHERE `id`='{$wp_query->query_vars['product_category']}' LIMIT 1");
+		}	
+	}
+	return $input;
+}
+ 
+ 
+ 
+add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
 
 require_once(WPSC_FILE_PATH . '/product_display_functions.php');
 
@@ -2350,6 +2367,8 @@ if(count(explode(".",$current_version_number)) > 2) {
 	$current_version_number_array = explode(".",$current_version_number);
 	array_pop($current_version_number_array);
 	$current_version_number = (float)implode(".", $current_version_number_array );
+} else if(!is_numeric(get_option('wpsc_version'))) {
+  $current_version_number = 0;
 }
 
 if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
