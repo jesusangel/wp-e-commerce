@@ -2098,16 +2098,18 @@ function nzshpcrt_show_categories($content = '') {
 	}
 }
 
-//
-// function nzshpcrt_show_categories($content = '') {
-//   if(preg_match("/\[showcategories\]/",$content)) {
-//     $GLOBALS['nzshpcrt_activateshpcrt'] = true;
-//     $output = nzshpcrt_display_categories_groups();
-//     return preg_replace("/(<p>)*\[showcategories\](<\/p>)*/",$output, $content);
-// 	} else {
-//     return $content;
-// 	}
-// }
+// substitutes in the buy now buttons where the shortcode is in a post.
+function nzshpcrt_substitute_buy_now_button($content = '') {
+  if(preg_match_all("/\[buy_now_button=([\d]+)\]/", $content, $matches)) {
+    foreach($matches[1] as $key => $product_id) {
+      $original_string = $matches[0][$key];
+      //print_r($matches);
+      $output = wpsc_buy_now_button($product_id, true);  
+			$content = str_replace($original_string, $output, $content);
+    }
+	}	
+	return $content;
+}
 
 
 
@@ -2370,6 +2372,7 @@ function nzshpcrt_enable_page_filters($excerpt = ''){
   add_filter('the_content', 'nzshpcrt_user_log', 12);
   add_filter('the_content', 'nszhpcrt_category_tag', 12);
   add_filter('the_content', 'nzshpcrt_show_categories', 12);
+  add_filter('the_content', 'nzshpcrt_substitute_buy_now_button', 12);
   return $excerpt;
   }
 
@@ -2382,6 +2385,7 @@ function nzshpcrt_disable_page_filters($excerpt = '') {
   remove_filter('the_content', 'nzshpcrt_user_log');
   remove_filter('the_content', 'nszhpcrt_category_tag');
   remove_filter('the_content', 'nzshpcrt_show_categories');
+  remove_filter('the_content', 'nzshpcrt_substitute_buy_now_button');
   return $excerpt;
   }
 
