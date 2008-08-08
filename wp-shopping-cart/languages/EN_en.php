@@ -464,6 +464,7 @@ define('TXT_WPSC_PRODUCTSOLDOUT', 'This product has sold out.');
 define('TXT_WPSC_NOITEMSINTHIS', 'There are no items in this');
 define('TXT_WPSC_CATEGORYORBRAND', 'Category or Brand');
 define('TXT_WPSC_PLEASECHOOSEA', 'Please choose a');
+define('TXT_WPSC_PLEASECHOOSEAGROUP', 'Please choose a Product Group');
 define('TXT_WPSC_PRODUCT', 'Product');
 define('TXT_WPSC_QUANTITY', 'Quantity');
 define('TXT_WPSC_QUANTITY_SHORT', 'Qty'); //translation needed

@@ -2087,7 +2087,7 @@ function nzshpcrt_user_log($content = '') {
 }
   
   
-//displays a list of categoies when the code [showcategories] is present in a post or page.
+//displays a list of categories when the code [showcategories] is present in a post or page.
 function nzshpcrt_show_categories($content = '') {
   if(preg_match("/\[showcategories\]/",$content)) {
     $GLOBALS['nzshpcrt_activateshpcrt'] = true;
@@ -2097,6 +2097,18 @@ function nzshpcrt_show_categories($content = '') {
     return $content;
 	}
 }
+
+//
+// function nzshpcrt_show_categories($content = '') {
+//   if(preg_match("/\[showcategories\]/",$content)) {
+//     $GLOBALS['nzshpcrt_activateshpcrt'] = true;
+//     $output = nzshpcrt_display_categories_groups();
+//     return preg_replace("/(<p>)*\[showcategories\](<\/p>)*/",$output, $content);
+// 	} else {
+//     return $content;
+// 	}
+// }
+
 
 
 // This function displays the category gropus, it is used by the above function

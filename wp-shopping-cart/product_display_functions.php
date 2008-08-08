@@ -146,35 +146,35 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 	
 		$sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id IN (".$product_id.")";
 	} else {
-	if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || (is_numeric(get_option('wpsc_default_category')) && (get_option('show_categorybrands') != 3) && !is_numeric($_GET['brand']))) {
-		if($wp_query->query_vars['product_category'] != null) {
-			$catid = $wp_query->query_vars['product_category'];
-			} else if(is_numeric($_GET['category'])) {
-				$catid = $_GET['category'];
-			} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
-				$catid = $GLOBALS['wpsc_category_id'];
-			} else {
-				$catid = get_option('wpsc_default_category');
+		if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
+			if($wp_query->query_vars['product_category'] != null) {
+				$catid = $wp_query->query_vars['product_category'];
+				} else if(is_numeric($_GET['category'])) {
+					$catid = $_GET['category'];
+				} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
+					$catid = $GLOBALS['wpsc_category_id'];
+				} else {
+					$catid = get_option('wpsc_default_category');
+				}
+			/*
+				* The reason this is so complicated is because of the product ordering, it is done by category/product association
+				* If you can see a way of simplifying it and speeding it up, then go for it.
+				*/
+				
+				
+			$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql");
+			
+			if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
+			if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
+				$startnum = $rowcount - $products_per_page;
 			}
-		/*
-			* The reason this is so complicated is because of the product ordering, it is done by category/product association
-			* If you can see a way of simplifying it and speeding it up, then go for it.
-			*/
-			
-			
-		$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql");
-		
-		if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
-		if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
-			$startnum = $rowcount - $products_per_page;
-		}
-		if ($_REQUEST['order']==null) {
-			$order = 'ASC';
-		} elseif ($_REQUEST['order']=='DESC') {
-			$order = 'DESC';
-		}
-		$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` $order, `".$wpdb->prefix."product_list`.`id` DESC LIMIT $startnum, $products_per_page";
-		//exit($sql);
+			if ($_REQUEST['order']==null) {
+				$order = 'ASC';
+			} elseif ($_REQUEST['order']=='DESC') {
+				$order = 'DESC';
+			}
+			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` $order, `".$wpdb->prefix."product_list`.`id` DESC LIMIT $startnum, $products_per_page";
+			//exit($sql);
 		} else {
 			$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql");
 			
@@ -182,7 +182,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 			if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
 				$startnum = $rowcount - $products_per_page;
 			}
-			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql ORDER BY `".$wpdb->prefix."product_list`.`special` DESC LIMIT $startnum, $products_per_page"; 
+			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql ORDER BY `".$wpdb->prefix."product_list`.`special`, `".$wpdb->prefix."product_list`.`id`  DESC LIMIT $startnum, $products_per_page"; 
 		}
 	}
 	
@@ -1019,7 +1019,7 @@ function wpsc_odd_category_setup() {
   return $output;
 }
 
-function wpsc_buy_now_button($product_id) {
+function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
   global $wpdb;
   $selected_gateways = get_option('custom_gateway_options');
 
@@ -1046,6 +1046,10 @@ function wpsc_buy_now_button($product_id) {
 		";
 		}
 	}
-  echo $output;
+	if($replaced_shortcode == true) {
+		return $output;
+	} else {
+		echo $output;
+  }
 }
 ?>
