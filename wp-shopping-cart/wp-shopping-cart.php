@@ -1396,7 +1396,6 @@ function nzshpcrt_submit_ajax()
       $output .= "      <title>".htmlentities(stripslashes($product['name']), ENT_NOQUOTES, 'UTF-8')."</title>\n\r";
       $output .= "      <link>$purchase_link</link>\n\r";
       $output .= "      <description>".htmlentities(stripslashes($product['description']), ENT_NOQUOTES, 'UTF-8')."</description>\n\r";
-      $output .= "      <price>".$product['price']."</price>\n\r";
       $output .= "      <pubDate>".date("r")."</pubDate>\n\r";
       $output .= "      <guid>$purchase_link</guid>\n\r"; 
       if($product['thumbnail_image'] != null) {
@@ -1410,6 +1409,7 @@ function nzshpcrt_submit_ajax()
         $image_link = WPSC_THUMBNAIL_URL.$product['image'];
         $output .= "      <enclosure url='$image_link' length='".filesize($image_path)."' type='".$image_data['mime']."' width='".$image_data[0]."' height='".$image_data[1]."' />\n\r"; 
         }
+      $output .= "      <price>".$product['price']."</price>\n\r";
       $output .= "    </item>\n\r";
       }
     $output .= "  </channel>\n\r";
