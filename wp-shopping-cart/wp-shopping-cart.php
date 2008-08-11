@@ -242,42 +242,43 @@ function nzshpcrt_style() {
 		if($thumbnail_width <= 0) {
 			$thumbnail_width = 96;
 		}
-		
-		$single_thumbnail_width = get_option('single_view_image_width');
-		if($single_thumbnail_width <= 0) {
-			$single_thumbnail_width = 128;
-		}
 	?>
-div.default_product_display div.textcol{
-	margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-	_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
-}
-	
-	
-div.default_product_display  div.textcol div.imagecol{
-	position:absolute;
-	top:0px;
-	left: 0px;
-	margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
-}
-	
-div.single_product_display div.textcol{
-	margin-left: <?php echo $single_thumbnail_width  + 10; ?>px !important;
-	_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
-}
-	
-	
-div.single_product_display  div.textcol div.imagecol{
-	position:absolute;
-	top:0px;
-	left: 0px;
-	margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
-}
-	
+		div.default_product_display div.textcol{
+			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
+			_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+		}
+			
+			
+		div.default_product_display  div.textcol div.imagecol{
+			position:absolute;
+			top:0px;
+			left: 0px;
+			margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
+		}
 	<?php
+	}
 	
+	
+		
+	$single_thumbnail_width = get_option('single_view_image_width');
+	if($single_thumbnail_width <= 0) {
+		$single_thumbnail_width = 128;
 	}
 	?>
+	
+	div.single_product_display div.textcol{
+		margin-left: <?php echo $single_thumbnail_width  + 10; ?>px !important;
+		_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+	}
+		
+		
+	div.single_product_display  div.textcol div.imagecol{
+		position:absolute;
+		top:0px;
+		left: 0px;
+		margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
+	}
+	
   
   
     <?php
@@ -1361,9 +1362,9 @@ function nzshpcrt_submit_ajax()
     $siteurl = get_option('siteurl');    
     if(is_numeric($_GET['limit'])) {
       $limit = "LIMIT ".$_GET['limit']."";
-      } else {
+		} else {
       $limit = '';
-      }
+		}
     
     // LIMIT $startnum
     if(is_numeric($_GET['product_id'])) {
@@ -1377,19 +1378,26 @@ function nzshpcrt_submit_ajax()
       $sql = "SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') ORDER BY `id` DESC $limit";
     }
     
+    include_once(WPSC_FILE_PATH."/product_display_functions.php");
+    include_once(WPSC_FILE_PATH."/show_cats_brands.php");
+    
+    
+		if(isset($_GET['category_id']) and is_numeric($_GET['category_id'])){
+			$selected_category = "&amp;category_id=".$_GET['category']."";
+		}
+		$self = get_option('siteurl')."/index.php?rss=true&amp;action=product_list$selected_category";
     
     $product_list = $wpdb->get_results($sql,ARRAY_A);
     header("Content-Type: application/xml; charset=UTF-8"); 
-    header('Content-Disposition: inline; filename="WP_E-Commerce_Product_List.rss"');
+    header('Content-Disposition: inline; filename="E-Commerce_Product_List.rss"');
     $output = "<?xml version='1.0'?>\n\r";
-    $output .= "<rss version='2.0'>\n\r";    
+    $output .= "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom' xmlns:product='http://www.buy.com/rss/module/productV2/'>\n\r";    
     $output .= "  <channel>\n\r";
-    $output .= "    <title>WP E-Commerce Product Log</title>\n\r";
+    $output .= "    <title>".get_option('blogname')." Products</title>\n\r";
     $output .= "    <link>".get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php</link>\n\r";
     $output .= "    <description>This is the WP E-Commerce Product List RSS feed</description>\n\r";
     $output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
-    include_once(WPSC_FILE_PATH."/product_display_functions.php");
-    include_once(WPSC_FILE_PATH."/show_cats_brands.php");
+    $output .= "    <atom:link href='$self' rel='self' type='application/rss+xml' />";
     foreach($product_list as $product) {
       $purchase_link = wpsc_product_url($product['id']);
       $output .= "    <item>\n\r";
@@ -1409,7 +1417,7 @@ function nzshpcrt_submit_ajax()
         $image_link = WPSC_THUMBNAIL_URL.$product['image'];
         $output .= "      <enclosure url='$image_link' length='".filesize($image_path)."' type='".$image_data['mime']."' width='".$image_data[0]."' height='".$image_data[1]."' />\n\r"; 
         }
-      $output .= "      <price>".$product['price']."</price>\n\r";
+      $output .= "      <product:price>".$product['price']."</product:price>\n\r";
       $output .= "    </item>\n\r";
       }
     $output .= "  </channel>\n\r";
@@ -1992,19 +2000,16 @@ function make_csv($array)
   return $output;
   }   
   
-function nzshpcrt_product_log_rss_feed()
-  {
+function nzshpcrt_product_log_rss_feed() {
   echo "<link type='application/rss+xml' href='".get_option('siteurl')."/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP E-Commerce Purchase Log RSS' rel='alternate'/>";
-  }
+}
   
-function nzshpcrt_product_list_rss_feed()
-  {
-  if(isset($_GET['category']) and is_numeric($_GET['category']))
-    {
+function nzshpcrt_product_list_rss_feed() {
+  if(isset($_GET['category']) and is_numeric($_GET['category'])){
     $selected_category = "&amp;category_id=".$_GET['category']."";
-    }
-  echo "<link rel='alternate' type='application/rss+xml' title='WP E-Commerce Product List RSS' href='".get_option('siteurl')."/index.php?rss=true&amp;action=product_list$selected_category'/>";
-  }
+	}
+  echo "<link rel='alternate' type='application/rss+xml' title='".get_option('blogname')." Product List RSS' href='".get_option('siteurl')."/index.php?rss=true&amp;action=product_list$selected_category'/>";
+}
 
 
 //handles replacing the tags in the pages

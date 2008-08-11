@@ -209,7 +209,7 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
     //$wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
     }
 	//written by allen
-  if ($is_member == '1'){
+  if ($is_member == '1') {
 		$membership_length = get_product_meta($cart[0]['prodid'],'membership_length',true);
 		if ($is_perm == '1'){
 			$permsub = '&src=1';
