@@ -1038,4 +1038,39 @@ function usps_shipping_methods() {
 	}
 }
 
+function wpsc_ping() {
+	$services = get_option('ping_sites');
+	$services = explode("\n", $services);
+	foreach ( (array) $services as $service ) {
+		$service = trim($service);
+		if($service != '' ) {
+			wpsc_send_ping($service);
+		}
+	}
+}
+
+function wpsc_send_ping($server) {
+	global $wp_version;
+	include_once(ABSPATH . WPINC . '/class-IXR.php');
+
+	// using a timeout of 3 seconds should be enough to cover slow servers
+	$client = new IXR_Client($server, ((!strlen(trim($path)) || ('/' == $path)) ? false : $path));
+	$client->timeout = 3;
+	$client->useragent .= ' -- WordPress/'.$wp_version;
+
+	// when set to true, this outputs debug messages by itself
+	$client->debug = false;
+	$home = trailingslashit( get_option('product_list_url') );
+	$rss_url = get_option('siteurl')."/index.php?rss=true&amp;action=product_list";
+	if ( !$client->query('weblogUpdates.extendedPing', get_option('blogname'), $home, $rss_url ) ) {
+		$client->query('weblogUpdates.ping', get_option('blogname'), $home);
+	}
+}
+
+
+
+
+
+
+
 ?>

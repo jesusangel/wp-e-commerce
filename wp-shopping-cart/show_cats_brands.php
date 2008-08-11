@@ -150,7 +150,7 @@ function wpsc_category_url($category_id) {
       }
   }
   $category_name = array_reverse($category_name);
-  if($wp_rewrite->rules != null) {
+  if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
     $url_name = get_product_meta($product_id, 'url_name', true);
     if(!empty($category_name)) {
 			if(substr(get_option('product_list_url'), -1, 1) == '/') {

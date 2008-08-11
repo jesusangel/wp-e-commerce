@@ -302,6 +302,8 @@ if($_POST['submit_action'] == 'add') {
 					}
 				}
 			}
+			// send the pings out.
+		 wpsc_ping();		
 			
 			$display_added_product = "filleditform(".$product_id.");";
 			
@@ -633,6 +635,10 @@ if($_POST['submit_action'] == "edit") {
 		if($_POST['variation_priceandstock'] != null) {
 			$variations_procesor->update_variation_values($_POST['prodid'], $_POST['variation_priceandstock']);
 		}     
+		
+		// send the pings out.
+		wpsc_ping();
+		
 		echo "<div class='updated'><p align='center'>".TXT_WPSC_PRODUCTHASBEENEDITED."</p></div>";
 	}
 }
