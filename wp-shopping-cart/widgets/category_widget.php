@@ -34,7 +34,7 @@ function widget_wpsc_categorisation( $args, $widget_args = 1 ) {
 	    if(count($categorisation_groups) > 1) {  // no title unless multiple category groups
 			  echo "<h2 class='categorytitle'>{$categorisation_group['name']}</h2>\n\r";
 			}
-			show_cats_brands($categorisation_group['id'], 'sidebar');
+			show_cats_brands($categorisation_group['id'], 'sidebar', 'name', $my_options['image']);
 		  echo "\n\r";
 			echo "</div>\n\r";
 	  }
@@ -89,7 +89,6 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 			// compile data from $widget_wpsc_categorisation_instance
 			if ( !isset($widget_wpsc_categorisation_instance['title']) && isset($options[$widget_number]) ) // user clicked cancel
 				continue;
-			
 			$options[$widget_number]['title'] = wp_specialchars($widget_wpsc_categorisation_instance['title']);
 			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 			
@@ -102,10 +101,15 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 				}
 			}
 			
+			if ($widget_wpsc_categorisation_instance['image'] == "true") {
+				$options[$widget_number]['image'] = true;
+			} else {
+				$options[$widget_number]['image']  = false;
+			}
+			
 		}
 
 		update_option($option_name, $options);
-
 		$updated = true; // So that we don't go through this more than once
 	}
 
@@ -142,7 +146,7 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 		$category_group_name = str_replace("[categorisation]", $cat_group['name'], TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES);
 		
 		if($options[$number]['categorisation'][$cat_group['id']] == true) {
-		  $checked = "checked='true'";
+			$checked = "checked='true'";
 		}
 		
 		if($category_count <1) {
@@ -153,11 +157,15 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 		echo "	<label for='{$form_id}'>\n\r";
 		echo "		<input type='checkbox' name='{$option_name}[$number][categorisation][{$cat_group['id']}]' id='{$form_id}' value='true' class='checkbox' {$checked} />\n\r";
 		echo "		{$category_group_name}</label>\n\r";
-		echo "	<br/>\n\r";			
+		echo "	<br/>\n\r";
 	}
-
-
-
+	if ($options[$number]['image'] == true) {
+		$checked = "checked='true'";
+	}
+	echo "	<label for='sidebar_category_image'>\n\r";
+	echo "		<input type='checkbox' name='{$option_name}[$number][image]' id='sidebar_category_image' value='true' class='checkbox' {$checked} />\n\r";
+	echo "		Display Images</label>\n\r";
+	echo "	<br/>\n\r";
 }
 
 // Registers each instance of our widget on startup

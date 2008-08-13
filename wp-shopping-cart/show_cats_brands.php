@@ -24,7 +24,7 @@ function display_subcategories($id) {
   return $output;
   }
  
-function show_cats_brands($category_group = null , $display_method = null, $order_by = 'name') {
+function show_cats_brands($category_group = null , $display_method = null, $order_by = 'name', $image = null) {
   global $wpdb; 
   
   if($category_group == null) {
@@ -42,10 +42,10 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
     $seperator ="?";
 	} else {
     $seperator ="&amp;";
-	}   
-  
+	}
+
   $output = "<div class='PeSwitcher'>";
-  
+
   switch(get_option('show_categorybrands')) {
     case 1:
       $output .= "<ul id='PeCatsBrandsBoth' class='category_brand_header'><li id='PeSwitcherFirst'><a href='' onclick='return prodgroupswitch(\"categories\");'>".TXT_WPSC_CATEGORIES."</a> | <a href='' onclick='return prodgroupswitch(\"brands\");'>".TXT_WPSC_BRANDS."</a></li></ul>";
@@ -71,14 +71,18 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
           $count_sql = "SELECT count(*) FROM `".$wpdb->prefix."item_category_associations` WHERE `category_id` = '".$option['id']."'";
           $count = $wpdb->get_var($count_sql);
           $addCount =  " [".$count."]";
-        } //end get_option    
+        } //end get_option
         // Adrian - if sliding category type selected, NO link for category text, mootools.js creates the linkable sliders onDomReady.
         if (get_option('catsprods_display_type') == 1){ 
           $output .= "<li class='MainCategory'><strong class='category'>".stripslashes($option['name']).$addCount."</strong>";
         }else{
         // Adrian - otherwise create normal category text with or without product count
-          $output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
-        }//end get_option
+		if (!$image) {
+			$output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
+		} else {
+			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
+		}
+	}//end get_option
         $subcategory_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
         $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
         if($subcategories != null)
