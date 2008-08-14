@@ -723,7 +723,7 @@ function single_product_display($product_id) {
 					$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
 				}
 			} else {
-				if (get_option('hide_addtocart_button') != 1) {
+				if ((get_option('hide_addtocart_button') != 1) && (get_option('addtocart_or_buynow') == 0)) {
 					if(isset($wpsc_theme) && is_array($wpsc_theme) && ($wpsc_theme['html'] !='')) {
 						$output .= $wpsc_theme['html'];
 					} else {
@@ -767,6 +767,31 @@ function single_product_display($product_id) {
       $output .= "          </div>\n\r";
 			$output .= "        </form>\n\r";
 			
+			if ((count($updatelink_data)>0)&&($updatelink_data[0]['meta_value'] != '')) {
+				$output .= external_link($product['id']);
+			} else {
+				if (get_option('addtocart_or_buynow')=='1')
+					if (get_option('payment_gateway')=='google') {
+						$output .= google_buynow($product['id']);
+					} else if (get_option('payment_gateway') == 'paypal_multiple') {
+					  $output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
+							<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
+							<input type='hidden' name='cmd' value='_xclick'>
+							<input type='hidden' name='item_name' value='".$product['name']."'>
+							<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
+							<input type='hidden' id='amount' name='amount' value='".$product['price']."'>
+							<input type='hidden' id='unit' name='unit' value='".$product['price']."'>
+							<input type='hidden' id='shipping' name='ship11' value='".$shipping."'>
+							<input type='hidden' name='handling' value='".get_option('base_local_shipping')."'>
+							<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."'>
+							<input type='hidden' name='undefined_quantity' value='0'>
+							<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online'>
+							<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' >
+						</form>
+					";						
+					}
+			}
+			
 			
 			
 			
@@ -785,6 +810,7 @@ function single_product_display($product_id) {
     
 		$output .= wpsc_also_bought($product_id);
     $output .= "  </div>";
+    
     
 	} else { // otherwise, we have no product
 		$output .= "<p>".TXT_WPSC_NOITEMSINTHIS." ".$group_type.".</p>";

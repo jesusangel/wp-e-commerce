@@ -1177,7 +1177,7 @@ echo "        </div>";
 			<input type="text" size='5' name='weight' value=''>
 			<select name='weight_unit'>
 				<option value="pound">Pounds</option>
-				<option value="once">Onces</option>
+				<option value="once">Ounce</option>
 			</select>
 		</td>
     </tr>
@@ -1414,6 +1414,7 @@ if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
       <td>
       </td>
       <td>
+      <br />
         <input type='hidden' name='submit_action' value='add' />
         <input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_PRODUCT;?>' />
       </td>

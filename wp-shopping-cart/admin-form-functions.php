@@ -328,7 +328,7 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "		<input type='text' size='5' name='weight' value='".$product['weight']."'>\n\r";
 	$output .= "   <select name='weight_unit'>\n\r";
 	$output .= "			<option $unit1 value='pound'>Pounds</option>\n\r";
-	$output .= "			<option $unit2 value='once'>Onces</option>\n\r";
+	$output .= "			<option $unit2 value='once'>Ounce</option>\n\r";
 	$output .= "		</select>\n\r";
 	$output .= "	</td>\n\r";
 	$output .= "</tr>";
@@ -769,7 +769,8 @@ $output .="</table></div></div></td></tr>";
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
+  $output .= "            <td>\n\r";;
+  $output .= "            <br />\n\r";
   $output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input  class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />";

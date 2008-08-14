@@ -570,6 +570,12 @@ function wpsc_item_process_image($id='') {
         $width  = $_POST['width'];
         break;
         
+        
+        case 0:
+        $height = null;
+        $width  = null;
+        break;
+        
         case 1:
         default:
         $height = get_option('product_image_height');

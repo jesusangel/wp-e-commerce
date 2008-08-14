@@ -1050,11 +1050,11 @@ function nzshpcrt_install()
     
     
   
-  /* Moves images to thumbnails directory
+  /* Moves images to thumbnails directory */
    // this code should no longer be needed, as most people will be using a sufficiently new version
   $image_dir = WPSC_FILE_PATH."/images/";
-  $product_images = WPSC_FILE_PATH."/product_images/";
-  $product_thumbnails = WPSC_FILE_PATH."/product_images/thumbnails/";
+  $product_images = WPSC_IMAGE_DIR;
+  $product_thumbnails = WPSC_THUMBNAIL_DIR;
   if(!is_dir($product_thumbnails)) {
     @ mkdir($product_thumbnails, 0775);
 	}
@@ -1082,7 +1082,7 @@ function nzshpcrt_install()
 				}
 			}
 		}
-	}	*/
+	}	// */
    
 }
   

@@ -261,6 +261,7 @@ function nzshpcrt_style() {
 	
 		
 	$single_thumbnail_width = get_option('single_view_image_width');
+	$single_thumbnail_height = get_option('single_view_image_height');
 	if($single_thumbnail_width <= 0) {
 		$single_thumbnail_width = 128;
 	}
@@ -269,6 +270,8 @@ function nzshpcrt_style() {
 	div.single_product_display div.textcol{
 		margin-left: <?php echo $single_thumbnail_width  + 10; ?>px !important;
 		_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+		min-height: <?php echo $single_thumbnail_height + 10;?>px;
+		_height: <?php echo $single_thumbnail_height + 10;?>px;
 	}
 		
 		
@@ -2533,18 +2536,22 @@ switch(get_option('cart_location')) {
   break;
   
   case 2:
-  add_action('the_content', 'nzshpcrt_shopping_basket');
+  add_action('the_content', 'nzshpcrt_shopping_basket' , 14);
   break;
   
   case 4:
   break;
   
   case 5:
+  //exit("<pre>".print_r($_SERVER,true)."</pre>");
   if(function_exists('drag_and_drop_cart')) {
     $shop_pages_only = 1;
 		add_action('init', 'drag_and_drop_cart_ajax');  
 		if (get_option('dropshop_display')=='product'){
-			if(stristr(get_option('product_list_url'), ($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']))){
+		  $url_prefix_array = explode("://", get_option('product_list_url'));
+		  $url_prefix = $url_prefix_array[0]."://";
+			if(stristr(($url_prefix.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
+			  
 				wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
 				add_action('wp_head', 'drag_and_drop_js');  
 				add_action('wp_footer', 'drag_and_drop_cart');  
@@ -2563,7 +2570,7 @@ switch(get_option('cart_location')) {
   break;
   
   default:
-  add_action('the_content', 'nzshpcrt_shopping_basket');
+  add_action('the_content', 'nzshpcrt_shopping_basket', 14);
   break;
 }
 

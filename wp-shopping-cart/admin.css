@@ -45,10 +45,15 @@ table#productpage{
 
 table#productpage tr td{
   vertical-align: top; 
-  padding: 0px 0px 0px 6px;
+/*   padding: 0px 0px 0px 6px; */
 }
 
-table#productpage tr td.secondcol{ width: 60%; margin-left: 20px; ; }
+table#productpage tr td.secondcol{
+  width: 60%;
+  margin-left: 20px;
+  padding: 0px 0px 0px 2px;
+     
+}
 
 table#itemlist{
 	width: 100%;
@@ -74,11 +79,28 @@ table#itemlist tr.firstrow td{ font-weight: bold; padding-left: 5px; padding-rig
 
 
 
-table tr.firstrowth{background-color:#575757; padding:10px 5px 8px 5px;border-left:1px solid #bbb;border-right:1px solid #bbb;border-top:1px solid #bbb;}
+table tr.firstrowth{background-color:#575757; border-left:1px solid #575757;border-right:1px solid #575757;border-top: none ;}
+
+table#itemlist tr.firstrowth td{  
+	padding:4px 5px 6px;
+}
+table tr.firstrowth strong.form_group {
+	display:block;
+	font-size:11px;
+	margin-top:5px;
+}
+
 table tr.selectcategory{background-color:#E4F2FD;border-left:1px solid #bbb;border-right:1px solid #bbb;}
+
 table tr.selectcategory td{ padding: 3px 3px 3px 13px !important;}
 
-table.itemlist{ margin: 0px; }
+div.tablenav-pages {
+  margin: 4px;
+  _margin: 2px;
+
+}
+
+table.itemlist{ margin: 0px; } 
  
 div.subcategory{ list-style-type: none; vertical-align: top; margin: 0px; padding: 0px; }
 
@@ -94,7 +116,7 @@ span.small_italic{font-size:9px; font-style:italic;color:#888;}
 table.producttext{width:497px;border-collapse:collapse;border-left:1px solid #bbb;border-right:1px solid #bbb;}
 table tr.firstrowth td{ vertical-align: top; padding:10px 5px 8px;}
 
-div#productform{ display: none; }
+div#productform{ display: none; width: 586px; }
 
 div#productform table tr td{ height: 11px !important; }
 div#productform table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: middle; }
@@ -705,50 +727,59 @@ ul.settings_button{
 border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
 }
 #additem .postbox, #productform .postbox, #additem .stuffbox {
-border-style:solid;
-border-width:1px;
-margin-bottom:10px;
-margin-left:20px;
-margin-right:8px;
-padding:2px;
+	border-style:solid;
+	border-width:1px;
+	margin-bottom:-3px;
+	margin-left:-3px;
+	margin-right:-3px;
+/* 	padding:2px; */
 }
 
-#additem .togbox,#productform .togbox {
-background-color:#B2B2B2;
-background-image:url(./images/toggle-arrow.gif);
-}
+
 #additem .togbox, #productform .togbox{
--moz-border-radius-bottomleft:3px;
--moz-border-radius-topleft:3px;
-background-position:-10px 16px;
-background-repeat:no-repeat;
-display:block;
-height:39px;
-margin-left:-19px;
-margin-top:-11px;
-overflow:hidden;
-position:absolute;
-text-indent:-9999px;
-width:12px;
-border:none !important;
+	display:block;
+	position:absolute;
+  top: 0px;
+  left: 0px;
+	height:35px;
+	_height:37px;
+	overflow:hidden;
+	width:12px;
+  border-right: 1px solid white;
+	background-position:-10px 16px;
+	background-repeat:no-repeat;
 }
+
+
 #additem h3, #productform h3 {
-color:#333;
-background-color:#EAF3FA;
+	color:#DFDFDF;
+	background-color:#575757;
+  position: relative;
+  zoom: 1;
+
 }
 #additem h3, #productform h3 {
 font-size:14px;
 font-weight:bold;
 margin:0pt 0pt 0px;
-padding:9px 5px;
+padding:9px 5px 9px 26px;
 }
+
 
 #additem .closed h3, #productform .closed h3 {
 	margin: 0px;
 }
 
+
+#additem .togbox, #productform .togbox {
+	background-color:#B2B2B2;
+	color:#B2B2B2;
+	background-image:url(./images/toggle-arrow.gif);
+}
+
 #additem .closed .togbox, #productform .closed .togbox {
-	background-color:#2583AD;
+		/*	background-color:#2583AD;
+			color:#2583AD;*/
 	background-image:url(images/toggle-arrow.gif);
 	background-position:4px 15px;
 }
@@ -794,12 +825,13 @@ div.editing_this_group {
 .secondcol div.editing_this_group {
   border-left:1px solid #BBBBBB;
 	border-right:1px solid #BBBBBB;
-  width: 580px;
+  width: 100%;
 }
 
 div.editing_this_group p {
   padding: 8px;
   margin: 0px;
+  font-size:8pt;
 }
 
 
@@ -830,7 +862,7 @@ label.select_categorisation_group {
 }
 
 a.add_categorisation_group {
-/* 	margin-left: 30px; */
+	margin-left: 30px;
 }
 
 a.edit_categorisation_group {

@@ -37,11 +37,7 @@ function nzshpcrt_shopping_basket($input = null, $override_state = null) {
 		}
 	}
   
-  if($dont_add_input !== true) {
-    if($input != '') {
-      echo $input;
-		}
-	}
+	return $input;
 }
   
 

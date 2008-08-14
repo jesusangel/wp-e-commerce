@@ -395,7 +395,6 @@ function categorisation_conf() {
 		//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
 		//echo "</ul>\n\r";
 	  ?>
-		<?php echo "<a class='button edit_categorisation_group' href='#' onclick='return showedit_categorisation_form()'><span>".TXT_WPSC_EDIT_THIS_GROUP."</span></a>"; ?>
 		
 		<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
 	  </form>
@@ -437,7 +436,12 @@ echo "        </tr>\n\r";
 
 echo "     <tr>\n\r";
 echo "       <td colspan='4' class='colspan'>\n\r";
-echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP) ."</p></div>";
+echo "<div class='editing_this_group'><p>";
+echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP);
+
+echo "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";
+
+echo "</p></div>";
 echo "<a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a>";
 echo "       </td>\n\r";
 echo "     <tr>\n\r";

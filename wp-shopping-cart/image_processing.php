@@ -22,8 +22,8 @@ global $wpdb;
 			case IMAGETYPE_PNG:
 			//$extension = ".png";
 			$src_img = imagecreatefrompng($image_input);
-			imagesavealpha($src_img,true);
-			ImageAlphaBlending($src_img, false);
+			//  imagesavealpha($src_img,true);
+			//  ImageAlphaBlending($src_img, false);
 			$pass_imgtype = true;
 			break;
 	
@@ -60,10 +60,21 @@ global $wpdb;
 			$bgcolor = ImageColorAllocate( $temp_img, 255, 255, 255 );
 			ImageFilledRectangle( $temp_img, 0, 0, $width, $height, $white );
 			ImageAlphaBlending( $temp_img, TRUE );
+			if($imagetype[2] == IMAGETYPE_PNG) {
+				imagesavealpha($temp_img,true);
+				ImageAlphaBlending($temp_img, false);
+			}
 	
 			// resize keeping the perspective
 			ImageCopyResampled( $temp_img, $src_img, 0, 0, 0, 0, $temp_w, $temp_h, $source_w, $source_h );
-	
+			
+			
+			if($imagetype[2] == IMAGETYPE_PNG) {
+				imagesavealpha($temp_img,true);
+				ImageAlphaBlending($temp_img, false);
+			}
+			
+			
 			$dst_img = ImageCreateTrueColor($width,$height);
 			$white = ImageColorAllocate( $dst_img, 255, 255, 255 );
 			ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $white );
@@ -105,6 +116,8 @@ global $wpdb;
 				break;
 	
 				case IMAGETYPE_PNG:
+				imagesavealpha($dst_img,true);
+				ImageAlphaBlending($dst_img, false);
 				if(@ ImagePNG($dst_img, $image_output) == false) { return false; }
 				break;
 			}
@@ -118,7 +131,7 @@ global $wpdb;
 			return true;
 		}
 	} else {
-		move_uploaded_file($_FILES[$imagefield]['tmp_name'], $image_output);
+		copy($image_input, $image_output);
 		$image = $wpdb->escape(basename($_FILES[$imagefield]['name']));
 		return $image;
 	}
