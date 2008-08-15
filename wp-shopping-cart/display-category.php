@@ -371,14 +371,14 @@ function categorisation_conf() {
 	<br/>
 </div>
 
-<div class="tablenav">
+<div class="tablenav wpsc_groups_nav" >
 	<div class="alignleft" style='width: 500px;'>
 	  <form action='' method='GET' id='submit_categorisation_form' >
 	  <input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
 	  <?php
 	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 		//echo "<ul class='categorisation_links'>\n\r";
-		echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":</label>";
+		echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":&nbsp;&nbsp;</label>";
 		echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 
 		foreach((array)$categorisation_groups as $categorisation_group) {
 			$selected = '';
@@ -405,7 +405,7 @@ function categorisation_conf() {
 	<br class="clear"/>
 </div>
 
-<br class="clear"/>
+<!-- <br class="clear"/> -->
 <?php
  
 $num = 0;
@@ -471,7 +471,7 @@ echo "        </div>\n\r";
         <?php echo TXT_WPSC_NAME;?>:
       </td>
       <td>
-        <input type='text' name='name' value=''  />
+        <input type='text' class="text" name='name' value=''  />
       </td>
     </tr>
     <tr>

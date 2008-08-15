@@ -37,6 +37,11 @@ table.wpsc_options tr td input.text, table.wpsc_options tr td textarea{ width: 3
 
 table.wpsc_options tr td textarea{ height: 120px; }
 
+div.wpsc_groups_nav {
+  margin-bottom: 1px;
+  margin-top: 20px;
+}
+
 table#productpage{
   width: 100%;
   clear: both;
@@ -105,7 +110,7 @@ table.itemlist{ margin: 0px; }
 div.subcategory{ list-style-type: none; vertical-align: top; margin: 0px; padding: 0px; }
 
 div.subcategory img.category_indenter{ float: left; margin-top: 10px; }
-table.additem{ width: 100%; border-left:1px solid #bbb;border-right:1px solid #bbb;}
+table.additem{ width: 100%;}
 
 
 table.itemlist tr td{ text-align: center; padding-left: 3px; padding-right: 3px; }
@@ -820,18 +825,30 @@ div#submit_categorisation_form {
 
 div.editing_this_group {
   width: 100%;
-  border-bottom: 1px dotted black;
+	border-bottom: 1px dotted black;
 }
 .secondcol div.editing_this_group {
-  border-left:1px solid #BBBBBB;
-	border-right:1px solid #BBBBBB;
   width: 100%;
 }
 
+#additem form{
+  border-left:1px solid #bbb;
+  border-right:1px solid #bbb;
+  border-bottom:1px solid #bbb;
+}
+
+#productform form{
+  border-left:1px solid #bbb;
+  border-right:1px solid #bbb;
+  border-bottom:1px solid #bbb;
+}
+
+
 div.editing_this_group p {
-  padding: 8px;
+	font-size:8pt;
+	min-height:16px;
+	padding:4px 4px 4px 8px;
   margin: 0px;
-  font-size:8pt;
 }
 
 
@@ -862,16 +879,19 @@ label.select_categorisation_group {
 }
 
 a.add_categorisation_group {
-	margin-left: 30px;
+	margin-left: 10px;
 }
 
 a.edit_categorisation_group {
 	margin-left: 30px;
 }
 
+
+
 table#productpage tr td.firstcol {
-padding:0 0 0 0px;
+padding:0px !important;
 }
+
 
 
 div#add_categorisation, div#edit_categorisation{
@@ -960,14 +980,20 @@ table.product_editform {
   width: 100%;
   border-left:1px solid #bbb;
   border-right:1px solid #bbb;
+  border-bottom:1px solid #bbb;
 }
 
 table.category_forms {
   width: 100%;
-  border-left:1px solid #bbb;
-  border-right:1px solid #bbb;
-  border-bottom:1px solid #bbb;
 }
+table.category_forms tr td {
+ padding-left: 8px;
+}
+/*
+ input, table.category_forms tr td textarea {
+ width: 440px;
+}*/
+
 
 div#wpsc_shipwire_setting {
   display: none;

@@ -195,11 +195,11 @@ function add_variation_value(value_type)
   new_element_contents = "";
   if(value_type == "edit")
     {
-    new_element_contents += "<input type='text' name='new_variation_values[]' value='' />";
+    new_element_contents += "<input type='text' class='text' name='new_variation_values[]' value='' />";
     }
     else
       {
-      new_element_contents += "<input type='text' name='variation_values[]' value='' />";
+      new_element_contents += "<input type='text' class='text' name='variation_values[]' value='' />";
       }
   new_element_contents += " <a class='image_link' href='#' onclick='remove_variation_value_field(\""+new_element_id+"\")'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a><br />";
   //new_element_contents += "</span>";

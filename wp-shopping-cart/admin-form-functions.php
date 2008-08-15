@@ -794,7 +794,7 @@ function nzshpcrt_getcategoryform($catid)
   $output .= TXT_WPSC_NAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
+  $output .= "<input type='text' class='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
@@ -932,7 +932,7 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= TXT_WPSC_NAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."' />";
+  $output .= "<input type='text'  class='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."' />";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
@@ -949,7 +949,7 @@ function nzshpcrt_getvariationform($variation_id)
   foreach($variation_values as $variation_value)
     {
     $output .= "<span id='variation_value_".$num."'>";
-    $output .= "<input type='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8')."' />";
+    $output .= "<input type='text' class='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8')."' />";
     if($variation_value_count > 1)
       {
       $output .= " <a  class='image_link' onclick='remove_variation_value(\"variation_value_".$num."\",".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";

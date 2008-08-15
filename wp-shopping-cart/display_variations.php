@@ -172,7 +172,7 @@ function conf()
   <?php
   $num = 0;
 echo "  <table id='productpage'>\n\r";
-echo "    <tr><td>\n\r";
+echo "    <tr><td class='firstcol'>\n\r";
 echo "  <div class='categorisation_title'>\n\r";
 echo "		<strong class='form_group'>".TXT_WPSC_VARIATION_LIST."</strong>\n\r";
 echo "	</div>\n\r";
@@ -221,7 +221,7 @@ echo "        </div>";
         <?php echo TXT_WPSC_NAME;?>:
       </td>
       <td>
-        <input type='text' name='name' value=''  />
+        <input type='text'  class="text" name='name' value=''  />
       </td>
     </tr>
     <tr>
@@ -230,10 +230,10 @@ echo "        </div>";
       </td>
       <td>
         <div id='add_variation_values'><span id='variation_value_1'>
-        <input type='text' name='variation_values[]' value='' />
+        <input type='text' class="text" name='variation_values[]' value='' />
         <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_1")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
         </span><span id='variation_value_2'>
-        <input type='text' name='variation_values[]' value='' />
+        <input type='text' class="text" name='variation_values[]' value='' />
         <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_2")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
         </span></div>
        <a href='#' onclick='return add_variation_value("add")'><?php echo TXT_WPSC_ADD;?></a>

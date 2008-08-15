@@ -772,7 +772,7 @@ $num = 0;
 
 
 echo "    <table id='productpage'>\n\r";
-echo "      <tr><td>\n\r";
+echo "      <tr><td style='padding: 0px;'>\n\r";
 echo "        <table id='itemlist'>\n\r";
 echo "          <tr class='firstrowth'>\n\r";
 echo "            <td colspan='4' style='text-align: left;'>\n\r";
