@@ -189,7 +189,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 
 				
   // shows page numbers, probably fairly obviously
-
+// exit($sql);
   $return_array['product_list'] = $wpdb->get_results($sql,ARRAY_A);
   $return_array['page_listing'] = "";
   
@@ -239,8 +239,8 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
   return $return_array;
   }
 
-
 function product_display_default($product_list, $group_type, $group_sql = '', $search_sql = '') {
+  
   global $wpdb, $wp_rewrite;
   if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('product_display_default','start');}
   $siteurl = get_option('siteurl');
@@ -251,8 +251,9 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 	}
    
   $product_listing_data = wpsc_get_product_listing($product_list, $group_type, $group_sql, $search_sql);
-  
+  if ($product_list == '')
   $product_list = $product_listing_data['product_list'];
+  
   if((get_option('wpsc_page_number_position') == 1) || (get_option('wpsc_page_number_position') == 3)) {
     $output .= $product_listing_data['page_listing'];
 	}
@@ -261,7 +262,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
   } else {
     $category_nice_name = '';
   }
-  if($product_list != null) {	
+  if($product_list != null) {
 		// breadcrumbs start here
 		if ((get_option("show_breadcrumbs") == '1') && is_numeric($product_listing_data['category_id'])) {
 			$output .= "<div class='breadcrumb'>";

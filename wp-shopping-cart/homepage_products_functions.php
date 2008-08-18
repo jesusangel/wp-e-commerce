@@ -39,23 +39,42 @@ function nszhpcrt_homepage_products($content = '') {
   
 
 function nszhpcrt_category_tag($content = '') {
-  require_once('themes/iShop/iShop.php');
-  global $wpdb;
-  if(preg_match_all("/\[wpsc_category=([\d]+),*(full)?\]/", $content, $matches)) {
-    foreach($matches[1] as $key => $category_id) {
-      $categories[$key]['id'] = $category_id;
-      $categories[$key]['display'] = $matches[2][$key];
-      $categories[$key]['original_string'] = $matches[0][$key];
-    }
-    
-    //echo("<pre>".print_r($categories,true)."</pre>");
-    $siteurl = get_option('siteurl');
-    if(get_option('permalink_structure') != '') {
-      $seperator ="?";
-		} else {
-      $seperator ="&amp;";
-    }
-    
+	require_once('themes/iShop/iShop.php');
+	global $wpdb;
+	if(preg_match_all("/\[wpsc_category_exclude=([\d]+),*(full)?\]/", $content, $matches)) {
+		foreach($matches[1] as $key => $category_id) {
+			$categories[$key]['id'] = $category_id;
+			$categories[$key]['display'] = $matches[2][$key];
+			$categories[$key]['original_string'] = $matches[0][$key];
+		}
+		foreach ($categories as $category) {
+			$sql1 = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` NOT IN ('".$category['id']."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
+			$product_list1 = $wpdb->get_results($sql1,ARRAY_A);
+			if(function_exists('product_display_list') && (get_option('product_view') == 'list')) {
+				$output1= product_display_list($product_list1, $group_type, $group_sql, $search_sql);
+			} else if(function_exists('product_display_grid') && (get_option('product_view') == 'grid')) {
+				$output1= product_display_grid($product_list1, $group_type, $group_sql, $search_sql);
+			} else {
+				$output1= product_display_default($product_list1,'');
+			}
+		}
+		$content = str_replace($category['original_string'], $output1, $content);
+	}
+	if(preg_match_all("/\[wpsc_category=([\d]+),*(full)?\]/", $content, $matches)) {
+		foreach($matches[1] as $key => $category_id) {
+			$categories[$key]['id'] = $category_id;
+			$categories[$key]['display'] = $matches[2][$key];
+			$categories[$key]['original_string'] = $matches[0][$key];
+		}
+
+	//echo("<pre>".print_r($categories,true)."</pre>");
+	$siteurl = get_option('siteurl');
+	if(get_option('permalink_structure') != '') {
+		$seperator ="?";
+	} else {
+		$seperator ="&amp;";
+	}
+
 		foreach((array)$activated_widgets as $widget_container) {
 			if(is_array($widget_container) && array_search(TXT_WPSC_DONATIONS, $widget_container)) {
 				$no_donations_sql = "AND `".$wpdb->prefix."product_list`.`donation` != '1'";
@@ -65,10 +84,12 @@ function nszhpcrt_category_tag($content = '') {
 		foreach((array)$categories as $category) {
 		  $full_view = null;
 		  if($category['display'] == 'full') {
-		  
+				$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$category['id']."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
+			
+				$product_list = $wpdb->get_results($sql,ARRAY_A);
 				// sorry about the global variable, but it was the best way I could think of to avoid people having to upgrade the gold cart	
 				$GLOBALS['wpsc_category_id'] = $category['id'];
-		    if(function_exists('product_display_list') && (get_option('product_view') == 'list')) {
+				if(function_exists('product_display_list') && (get_option('product_view') == 'list')) {
 					$output .= product_display_list($product_list, $group_type, $group_sql, $search_sql);
 				} else if(function_exists('product_display_grid') && (get_option('product_view') == 'grid')) {
 					$output .= product_display_grid($product_list, $group_type, $group_sql, $search_sql);
@@ -76,8 +97,7 @@ function nszhpcrt_category_tag($content = '') {
 					$output .= product_display_default($product_list, $group_type, $group_sql, $search_sql);
 				}
 		  
-		  
-		  } else {		
+		  } else {
 				$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$category['id']."') $no_donations_sql ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC";
 			
 				$product_list = $wpdb->get_results($sql,ARRAY_A);
@@ -209,8 +229,7 @@ function nszhpcrt_category_tag($content = '') {
 			  $output .= "</div>\n\r";
 			}
 		$content = str_replace($category['original_string'], $output, $content);
-		
-		}	 
+		}
 	}
 	return $content;
 }
