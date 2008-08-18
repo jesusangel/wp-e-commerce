@@ -40,6 +40,21 @@ table.wpsc_options tr td textarea{ height: 120px; }
 div.wpsc_groups_nav {
   margin-bottom: 1px;
   margin-top: 20px;
+  font-size: 12px;
+}
+
+div.wpsc_products_nav {
+  margin-bottom: 1px;
+  margin-top: 20px;
+  color: #666666;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-left: 1px solid #EAF3FA;
+  font-size: 12px;
+}
+
+div.wpsc_products_nav div {
+  margin-top: 5px;
 }
 
 table#productpage{
@@ -215,11 +230,22 @@ a.image_link{ border-bottom: none !important; }
  
 a.image_link img{ border-bottom: none !important; }
  
+ 
 a.add_item_link{ display: block; border-bottom: none !important; }
  
-a.add_item_link span{ /*border-bottom: 1px solid #69c;*/ }
+a.add_item_link span{ text-decoration: underline; }
  
 a.add_item_link img{ margin-bottom: -3px; }
+ 
+ 
+ 
+a.about_this_page{ display: block; border-bottom: none !important; float: right; }
+ 
+a.about_this_page span{ text-decoration: underline; }
+ 
+a.about_this_page img{ margin-bottom: -3px; }
+  
+  
   
 table#form_field_table tr td, table#form_field_table tr th{ border: 1px solid white; }
   
@@ -728,9 +754,17 @@ ul.settings_button{
 }
 
 
+table.product_editform tr td.itemformcol, table.additem tr td.itemformcol {
+  padding-bottom: 10px;
+
+}
+
+
 #additem .postbox, #productform .postbox, #titlediv, #additem .postarea, #additem .stuffbox {
 border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
 }
+
+
 #additem .postbox, #productform .postbox, #additem .stuffbox {
 	border-style:solid;
 	border-width:1px;
@@ -978,9 +1012,9 @@ div.product_custom_meta br {
 
 table.product_editform {
   width: 100%;
-  border-left:1px solid #bbb;
-  border-right:1px solid #bbb;
-  border-bottom:1px solid #bbb;
+/*   border-left:1px solid #bbb; */
+/*   border-right:1px solid #bbb; */
+/*   border-bottom:1px solid #bbb; */
 }
 
 table.category_forms {

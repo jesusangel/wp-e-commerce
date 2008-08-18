@@ -4,7 +4,10 @@ This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
 
-
+define('TXT_WPSC_SKU', 'SKU');
+define('TXT_WPSC_YOUR_ORDER', 'Your Order');
+define('TXT_WPSC_ABOUT_THIS_PAGE', 'About This Page');
+define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Order Pending: Payment Required');
 define('TXT_WPSC_SELECTALLCATEGORIES', 'Show All Products');
 
 define('TXT_WPSC_EDITING_GROUP', 'You are editing the [categorisation] group');
@@ -37,7 +40,7 @@ define('TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY', ' Select a payment option below to 
 // to come: "Click on a payment option to configure it"
 
 define('TXT_WPSC_SHOW_BREADCRUMBS', 'Show Breadcrumbs');
-define('TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR', 'Enter the payment instructions that you wish to display to your customers when they make a successful purchase');
+define('TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR', 'Enter the payment instructions that you wish to display to your customers when they make a purchase');
 define('TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR', 'For example, this is where you the Shop Owner might enter your bank account details or address so that your customer can make their manual payment.');
 
 define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload an image when ordering this product.');
@@ -473,7 +476,7 @@ define('TXT_WPSC_MAKEPAYMENT', 'Make Payment');
 define('TXT_WPSC_EMPTYSHOPPINGCART', 'Empty shopping cart');
 define('TXT_WPSC_TOTALPRICE', 'Total Price');
 define('TXT_WPSC_NOITEMSINTHESHOPPINGCART', 'There are no items in the shopping cart');
-define('TXT_WPSC_EMAILMSG1', "Thank you, the order has been accepted, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.\n\r\n\rAll prices include tax and postage and packaging where applicable.\n\r\n\rYou ordered these items:\n\r\n\r");
+define('TXT_WPSC_EMAILMSG1', "Thank you, the order has been accepted, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.\n\rAll prices include tax and postage and packaging where applicable.\n\rYou ordered these items:\n\r");
 define('TXT_WPSC_EMAILMSG2', ".\n\rThese items were ordered:\n\r\n\r");
 define('TXT_WPSC_CLICKTODOWNLOAD', 'Click here to download');
 define('TXT_WPSC_DOWNLOAD', 'Download');
@@ -684,7 +687,7 @@ define('TXT_WPSC_PLEASE_SELECT', 'Please select');
 define('TXT_WPSC_TXN_ID', 'Transaction Id');
 define('TXT_WPSC_SINGLE_PRODUCTTHUMBNAILSIZE', 'Single Product Image Size');
 define('TXT_WPSC_RESET', 'Reset');
-define('TXT_WPSC_ORDER_PENDING', 'Thank you, the order is pending, you will be sent an email once the order clears.');
+define('TXT_WPSC_ORDER_PENDING', 'Thank you, your purchase is pending, you will be sent an email once the order clears.');
 define('TXT_WPSC_ORDER_FAILED', 'We\'re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.');
 // Adrian - added for the options I added
 define('TXT_WPSC_SHOW_CATEGORY_COUNT', 'Show Product Count per Product Group');

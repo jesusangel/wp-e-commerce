@@ -741,11 +741,10 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
 
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYPRODUCTS;?></h2>
-  		<span style='float:right;'><?php echo setting_button(); ?></span>
 
   <?php
   ?>
-  <a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a><br />
+
 
   <script language='javascript' type='text/javascript'>
 function conf() {
@@ -755,7 +754,7 @@ function conf() {
   } else  {
     return false;
 	}
-  }
+}
 <?php
 if(is_numeric($_POST['prodid'])) {
 		echo "filleditform(".$_POST['prodid'].");";
@@ -767,6 +766,23 @@ else if(is_numeric($_GET['product_id'])) {
 echo $display_added_product ;
 ?>
 </script>
+<div class="tablenav wpsc_products_nav">
+	<div style="width: 500px;" class="alignleft">
+		<a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a>
+	</div>
+	
+	
+	<div style="width: 300px; margin-right: -18px;" class="alignright">
+		<?php echo setting_button(); ?>
+		<a href='#' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
+	
+	</div>
+
+	
+	<br class="clear"/>
+</div>
+
+
   <?php
 $num = 0;
 
@@ -1031,15 +1047,23 @@ echo "        </div>";
       <td class='itemfirstcol'>
         <?php echo TXT_WPSC_PRODUCTNAME;?>:
       </td>
-      <td>
+      <td class='itemformcol'>
         <input size='30' type='text' name='name' value='' class='text' />
+      </td>
+    </tr>
+    <tr>
+      <td class='itemfirstcol'>
+        <?php echo TXT_WPSC_SKU;?>:
+      </td>
+      <td class='itemformcol'>
+        <input size='30' type='text' name='productmeta_values[sku]' value='' class='text' />
       </td>
     </tr>
     <tr>
       <td class='itemfirstcol'>
         <?php echo TXT_WPSC_PRODUCTDESCRIPTION;?>:
       </td>
-      <td>
+      <td class='itemformcol'>
         <textarea name='description' cols='40' rows='8'></textarea><br />
       </td>
     </tr>
@@ -1047,7 +1071,7 @@ echo "        </div>";
       <td class='itemfirstcol'>
        <?php echo TXT_WPSC_ADDITIONALDESCRIPTION;?>:
       </td>
-      <td>
+      <td class='itemformcol'>
         <textarea name='additional_description' cols='40' rows='8'></textarea><br />
       </td>
     </tr>
@@ -1055,13 +1079,13 @@ echo "        </div>";
       <td class='itemfirstcol'>
        <?php echo TXT_WPSC_PRODUCT_TAGS;?>:
       </td>
-      <td>
+      <td class='itemformcol'>
         <input type='text' class='text' name='product_tag' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
       </td>
     </tr>
-  <tr><td>&nbsp;</td></tr>
     <tr>
       <td class='itemfirstcol'>
+			<?php echo TXT_WPSC_CATEGORISATION; ?>
       </td>
       <td>
         <?php

@@ -87,8 +87,20 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td class='itemfirstcol'>\n\r";
   $output .= TXT_WPSC_PRODUCTNAME.": ";
   $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
+  $output .= "            <td class='itemformcol'>\n\r";
+  $output .= "<input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
+  $output .= "            </td>\n\r";
+  $output .= "          </tr>\n\r";
+  
+  
+  $output .= "          <tr>\n\r";
+  $output .= "            <td class='itemfirstcol'>\n\r";
+  $output .= TXT_WPSC_SKU.": ";
+  $output .= "            </td>\n\r";
+  $output .= "            <td class='itemformcol'>\n\r";
+  $sku = get_product_meta($product['id'], 'sku');
+  $sku = $sku[0];
+  $output .= "<input  size='30' type='text' class='text'  name='productmeta_values[sku]' value='".htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8')."' />\n\r";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
@@ -96,7 +108,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td class='itemfirstcol'>\n\r";
   $output .= TXT_WPSC_PRODUCTDESCRIPTION.": ";
   $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
+  $output .= "            <td class='itemformcol'>\n\r";
   $output .= "<textarea name='description' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
@@ -105,7 +117,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td class='itemfirstcol'>\n\r";
   $output .= TXT_WPSC_ADDITIONALDESCRIPTION.": ";
   $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
+  $output .= "            <td class='itemformcol'>\n\r";
   $output .= "<textarea name='additional_description' cols='40' rows='8' >".stripslashes($product['additional_description'])."</textarea>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
@@ -114,27 +126,26 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td class='itemfirstcol'>\n\r";
   $output .= TXT_WPSC_PRODUCT_TAGS.": ";
   $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
+  $output .= "            <td class='itemformcol'>\n\r";
   $output .= "<input type='text' class='text'  name='product_tags' value='$imtags'><br /><span class='small_italic'>Seperate with commas</span>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
-  $output .="<tr><td>&nbsp;</td></tr>";
+//   $output .="<tr><td>&nbsp;</td></tr>";
   $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "            </td>\n\r";
+  $output .= "            <td class='itemfirstcol'>".TXT_WPSC_CATEGORISATION.":</td>\n\r";
   $output .= "            <td>\n\r";
   
     $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 					
-	foreach((array)$categorisation_groups as $categorisation_group){
+	foreach((array)$categorisation_groups as $categorisation_group) {
 		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$categorisation_group['id']}')");
 		if($category_count > 0) {
 			$output .= "<p>";
 			$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
 			$output .= "<strong>".$category_group_name.":</strong><br>";
 			$output .= categorylist($categorisation_group['id'], $product['id'], 'edit_');
-			$output .= "</p>";
+			$output .= "</p>\n\r";
 		}						
 	}
 
@@ -1089,8 +1100,8 @@ function setting_button(){
 	$redirect_url .= urlencode($itemsFeedURL);
 	
 // 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/settings_button.jpg' onclick='display_settings_button()'>";
-	$output.="<div><input type='button' value='Settings &raquo;' class='button' onclick='display_settings_button()'>";
-	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; border:1px solid black; display:none;'>";
+	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>Settings &raquo;</a>";
+	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
 	$output.="<li><a href='?page=wp-shopping-cart/options.php'>Shop Settings</a></li>";
 	$output.="<li><a href='?page=wp-shopping-cart/getwayoptions.php'>Money and Payment</a></li>";
