@@ -3,8 +3,35 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
+//http://www.instinct.co.nz/wordpress_2.6/wp-admin/
+// and :tagcount: tags. 
 
-define('TXT_WPSC_NO_SHORTCODE', 'This item product does not exist yet, so there are no shortcodes to display.');
+
+
+
+
+
+define('TXT_WPSC_PRODUCTCOUNT_SINGULAR','product');
+define('TXT_WPSC_PRODUCTCOUNT_PLURAL','products');
+define('TXT_WPSC_GROUPCOUNT_SINGULAR','group');
+define('TXT_WPSC_GROUPCOUNT_PLURAL','groups');
+define('TXT_WPSC_SALECOUNT_SINGULAR','sale');
+define('TXT_WPSC_SALECOUNT_PLURAL','sales');	
+define('TXT_WPSC_PENDINGCOUNT_SINGULAR','transaction');
+define('TXT_WPSC_PENDINGCOUNT_PLURAL','transactions');
+
+
+
+
+
+
+define('TXT_WPSC_SALES_DASHBOARD', 'You have <a href=\'admin.php?page=wp-shopping-cart/display-items.php\'>:productcount:</a>, contained within <a href=\'admin.php?page=wp-shopping-cart/display-category.php\'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.');
+
+
+
+
+define('TXT_WPSC_YOUAREUSING', 'You are using the :theme: style. This is WP e-Commerce :versionnumber:.');
+define('TXT_WPSC_NO_SHORTCODE', 'This item product is still waiting to be added to your catalogue. There are no shortcodes or tags available at this point.');
 define('TXT_WPSC_SKU', 'SKU');
 define('TXT_WPSC_YOUR_ORDER', 'Your Order');
 define('TXT_WPSC_ABOUT_THIS_PAGE', 'About This Page');

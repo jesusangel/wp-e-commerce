@@ -1,4 +1,5 @@
 <?php
+$wpdb->show_errors = true;
 if(isset($_POST) && is_array($_POST)) {
   if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
     $coupon_code = $_POST['add_coupon_code'];
@@ -10,7 +11,7 @@ if(isset($_POST) && is_array($_POST)) {
     $start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
     $end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
     
-    if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product ` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' );")) {  
+    if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' );")) {  
       echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
       }
     }

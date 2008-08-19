@@ -1124,4 +1124,52 @@ function setting_button(){
 	
 	return $output;
 }
+
+function wpsc_right_now() {
+  global $wpdb,$nzshpcrt_imagesize_info;
+	$year = date("Y");
+	$month = date("m");
+	$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
+	$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
+
+  $replace_values[":productcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1')");
+  $replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
+  
+  $replace_values[":groupcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_categories` WHERE `active` IN ('1')");
+  $replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
+  
+  $replace_values[":salecount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
+  $replace_values[":salecount:"] .= " ".(($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
+		
+  $replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
+  $replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
+  
+  $replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('1')");
+  $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
+  
+  $replace_values[":theme:"] = get_option('wpsc_selected_theme');
+  $replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
+  
+  
+	$output="";	
+	$output.="<div id='rightnow'>\n\r";
+	$output.="	<h3 class='reallynow'>\n\r";
+	$output.="		<span>"._('Right Now')."</span>\n\r";
+	$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
+	$output.="		<br class='clear'/>\n\r";
+	$output.="	</h3>\n\r";
+	
+	$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>\n\r";
+	$output.="	<p class='youare'>\n\r";
+	$output.="		".TXT_WPSC_YOUAREUSING."\n\r";
+	//$output.="		<a class='rbutton' href='themes.php'>Change Theme</a>\n\r";
+	//$output.="<span id='wp-version-message'>This is WordPress version 2.6. <a class='rbutton' href='http://wordpress.org/download/'>Update to 2.6.1</a></span>\n\r";
+	$output.="		</p>\n\r";
+	$output.="</div>\n\r";
+	$output.="<br />\n\r";
+	
+	$output = str_replace(array_keys($replace_values), array_values($replace_values),$output);
+	return $output;
+}
+
 ?>

@@ -3,16 +3,16 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.7.8
+Version: 3.6.7.9
 Author: Thomas Howard of Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
 define('WPSC_VERSION', '3.6');
-/*
- * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
- * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
- */
 define('WPSC_MINOR_VERSION', '79');
+
+
+define('WPSC_PRESENTABLE_VERSION', '3.6.8');
+
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -400,9 +400,14 @@ function wpsc_admin_css() {
 ?>
 <link href='<?php echo WPSC_URL; ?>/admin.css' rel="stylesheet" type="text/css" />
 <link href='<?php echo WPSC_URL; ?>/js/jquery.ui.tabs.css' rel="stylesheet" type="text/css" />
-<!--[if gte IE 6]>
-<link href='<?php echo WPSC_URL; ?>/admin-ie.css' rel="stylesheet" type="text/css" />
-<![endif]-->
+<?php
+
+if($_GET['page'] == 'wp-shopping-cart/display-log.php') {
+	?>
+		<link href='<?php echo $siteurl; ?>/wp-admin/css/dashboard.css?ver=2.6' rel="stylesheet" type="text/css" />
+	<?php
+}
+?>
 <link href='<?php echo WPSC_URL; ?>/thickbox.css' rel="stylesheet" type="text/css" />
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
 
@@ -2468,7 +2473,7 @@ function wpsc_admin_latest_activity() {
 		$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
 		$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
 		echo nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
-		echo "</p><br /> ";
+		echo "</p>";
 		echo "<p>";
 		echo "<strong>".TXT_WPSC_TOTAL_INCOME."</strong><br />";
 		echo nzshpcrt_currency_display(admin_display_total_price(),1);

@@ -98,6 +98,10 @@ if($_GET['filter'] !== 'true') {
 ?>
 <div class="wrap" style=''>
   <h2><?php echo TXT_WPSC_PURCHASELOG;?></h2><br />
+   <?php
+    echo wpsc_right_now();
+    ?>
+
   <table style='width: 100%;'>
    <tr>  
     <td id='product_log_data'>
