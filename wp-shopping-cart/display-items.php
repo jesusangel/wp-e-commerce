@@ -772,7 +772,7 @@ echo $display_added_product ;
 	</div>
 	
 	
-	<div style="width: 300px; margin-right: -18px;" class="alignright">
+	<div class="alignright">
 		<?php echo setting_button(); ?>
 		<a href='#' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
 	
@@ -1048,7 +1048,15 @@ echo "        </div>";
         <?php echo TXT_WPSC_PRODUCTNAME;?>:
       </td>
       <td class='itemformcol'>
-        <input size='30' type='text' name='name' value='' class='text' />
+      
+        <div class='admin_product_name'>
+					<input size='30' type='text' name='name' value='' class='text' />
+					<a href='#' class='shorttag_toggle'></a>					
+					<div class='admin_product_shorttags'>
+					<?php echo TXT_WPSC_NO_SHORTCODE;?>
+					</div>        
+        </div>
+        
       </td>
     </tr>
     <tr>

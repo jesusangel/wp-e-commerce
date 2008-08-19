@@ -382,7 +382,7 @@ if($_GET['update_page_urls'] == 'true') {
   $wpsc_pageurl_option['user_account_url'] = '[userlog]';
   $changes_made = false;
   foreach($wpsc_pageurl_option as $option_key => $page_string) {
-    $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%$page_string%' LIMIT 1");
+    $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$page_string%' LIMIT 1");
     $the_new_link = get_permalink($post_id);
     if(stristr(get_option($option_key), "https://")) {
       $the_new_link = str_replace('http://', "https://",$the_new_link);

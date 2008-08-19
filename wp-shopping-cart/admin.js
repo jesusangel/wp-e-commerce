@@ -23,6 +23,15 @@ jQuery(document).ready(
       s: '.select_product_handle'
       }
     });
+		jQuery("div.admin_product_name a.shorttag_toggle").toggle(
+			function () {
+				jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');
+			},
+			function () {
+				//jQuery("div#admin_product_name a.shorttag_toggle").toggleClass('toggled');
+				jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'none');
+			}
+		);
   }
 );
 
@@ -77,21 +86,29 @@ var getresults=function(results) {
   });
   activate_resizable();
   TB_init();
+  
+	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
+		function () {
+			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');
+		},
+		function () {
+			//jQuery("div#admin_product_name a.shorttag_toggle").toggleClass('toggled');
+			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'none');
+		}
+	);
 }
 
-function filleditform(prodid)
-	{
+function filleditform(prodid)	{
 	ajax.post("index.php",getresults,"ajax=true&admin=true&prodid="+prodid);
 	jQuery('#loadingimage').attr('src', jQuery("#loadingimage").attr('src'));
 	jQuery('#loadingindicator_span').css('visibility','visible');
-	}
+}
    
-function fillvariationform(variation_id)
-  {
+function fillvariationform(variation_id) {
   ajax.post("index.php",getresults,"ajax=true&admin=true&variation_id="+variation_id);
 	jQuery('#loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
 	jQuery('#loadingindicator_span').css('visibility','visible');
-  }
+}
    
 function showaddform() {
    document.getElementById('productform').style.display = 'none';

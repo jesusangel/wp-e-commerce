@@ -13,39 +13,34 @@ function nzshpcrt_getproductform($prodid)
     //$options .= "<option value=''>".TXT_WPSC_SELECTACATEGORY."</option>\r\n";
     $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_brands` WHERE `active`='1' ORDER BY `id` ASC",ARRAY_A);
     $options .= "<option  $selected value='0'>".TXT_WPSC_SELECTABRAND."</option>\r\n";
-    foreach((array)$values as $option)
-      {
-      if($current_brand == $option['id'])
-        {
+    foreach((array)$values as $option) {
+      if($current_brand == $option['id']) {
         $selected = "selected='selected'";
-        }
+			}
       $options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
       $selected = "";
-      }
+		}
     $concat .= "<select name='brand'>".$options."</select>\r\n";
     return $concat;
-    }
+	}
   
-  function variationslist($current_variation = '')
-    {
+  function variationslist($current_variation = '') {
     global $wpdb;
     $options = "";
     //$options .= "<option value=''>".TXT_WPSC_SELECTACATEGORY."</option>\r\n";
     $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
     $options .= "<option  $selected value='0'>".TXT_WPSC_PLEASECHOOSE."</option>\r\n";
-		foreach((array)$values as $option)
-			{
-			if($current_brand == $option['id'])
-				{
+		foreach((array)$values as $option) {
+			if($current_brand == $option['id']) {
 				$selected = "selected='selected'";
-				}
+			}
 			$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
 			$selected = "";
-			}
+		}
 
     $concat .= "<select name='variations' onChange='edit_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
     return $concat;
-    }
+	}
   
   $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=$prodid LIMIT 1";
   $product_data = $wpdb->get_results($sql,ARRAY_A) ;
@@ -88,7 +83,22 @@ function nzshpcrt_getproductform($prodid)
   $output .= TXT_WPSC_PRODUCTNAME.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td class='itemformcol'>\n\r";
-  $output .= "<input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
+  
+	$output .= "        <div class='admin_product_name'>\n\r";
+  $output .= "          <input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
+	$output .= "				   <a href='#' class='shorttag_toggle'></a>\n\r";
+	$output .= "				   <div class='admin_product_shorttags'>\n\r";
+	$output .= "				     <dl>\n\r";
+// 	$output .= "				       <dt>Embed Product:</dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
+// 	$output .= "				       <dt>Buy Now Button:</dt><dd></dd>\n\r";
+	$output .= "				       <dt>Buy Now Shortcode:</dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
+	$output .= "				       <dt>Buy Now PHP:</dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
+	$output .= "				     </dl>\n\r";
+	$output .= "				     <br clear='both' />\n\r";
+	
+	$output .= "				   </div>\n\r";
+	$output .= "        </div>\n\r";
+        
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   

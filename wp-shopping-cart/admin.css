@@ -53,6 +53,13 @@ div.wpsc_products_nav {
   font-size: 12px;
 }
 
+div.wpsc_products_nav div.alignright {
+	width: 300px;
+	margin-right: -18px;
+	_margin-right: 0px;
+}
+
+
 div.wpsc_products_nav div {
   margin-top: 5px;
 }
@@ -139,13 +146,12 @@ table tr.firstrowth td{ vertical-align: top; padding:10px 5px 8px;}
 div#productform{ display: none; width: 586px; }
 
 div#productform table tr td{ height: 11px !important; }
-div#productform table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: middle; }
  
 div#additem{ display: block;}
 
 /* div#additem table tr td{ height: 11px; } */
 
-div#additem table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: middle; }
+div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; padding-top: 5px; vertical-align: top; }
 
 div#productform td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: middle; }
 div#additem table.additem input.text,div#additem table.additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
@@ -1111,3 +1117,58 @@ tr.update_gateway td div {
   margin: 0px;
   padding: 0px;
 }
+
+div.admin_product_name {
+  width: 360px;
+  padding: 0px;
+}
+
+div.admin_product_name input.text{
+  width: 325px !important;
+  margin: 0px 0px 0px 1px !important;
+  float: left;
+  _height: 17px;
+}
+
+div.admin_product_name a.shorttag_toggle {
+	background:#FFFFFF url(images/info_icon.jpg) no-repeat scroll 5px 4px;
+	border-bottom:1px solid #BBBBBB;
+	border-right:1px solid #BBBBBB;
+	border-top:1px solid #BBBBBB;
+	display:block;
+	float:left;
+	height:17px;
+	padding:3px;
+	width:18px;
+}
+
+div.admin_product_name a.shorttag_toggle.toggled {
+	background:#FFFFFF url(images/plus_icon.jpg) no-repeat scroll 5px 4px;
+}
+
+div.admin_product_name div.admin_product_shorttags {
+  width: 344px;
+  clear: both;
+  padding: 6px;
+  font-size: 8pt;
+  margin: 0px 0px 0px 1px !important;
+	border-left:1px solid #BBBBBB;
+	border-right:1px solid #BBBBBB;
+	border-bottom:1px solid #BBBBBB;
+  display: none;
+}
+
+div.admin_product_name div.admin_product_shorttags dl {
+  margin: 0px;
+}
+div.admin_product_name div.admin_product_shorttags dl dt {
+  display: block;
+  float: left;
+  clear: left;
+}
+div.admin_product_name div.admin_product_shorttags dl dd {
+  display: block;
+  float: left;
+  margin-bottom: 0px;
+}
+

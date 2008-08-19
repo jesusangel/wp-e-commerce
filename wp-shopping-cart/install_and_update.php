@@ -398,9 +398,9 @@ function nzshpcrt_install()
 		`email_sent` char(1) NOT NULL default '0',
 		`discount_value` varchar(32) NOT NULL default '0',
 		`discount_data` text NOT NULL,
-		`track_id` varchar(50) default NULL,
-		`shipping_region` char(6) NOT NULL,
-		`find_us` varchar(255) NOT NULL,
+		`track_id` varchar(50) default NULL default '',
+		`shipping_region` char(6) NOT NULL default '',
+		`find_us` varchar(255) NOT NULL  default '',
 		`engravetext` varchar(255) default NULL,
 		`closest_store` varchar(255) default NULL,
 		`google_order_number` varchar(20) NOT NULL default '',
@@ -421,7 +421,7 @@ function nzshpcrt_install()
 		`id` bigint(20) unsigned NOT NULL auto_increment,
 		`name` varchar(128) NOT NULL default '',
 		`active` varchar(1) NOT NULL default '0',
-		`colour` varchar(6) NOT NULL,
+		`colour` varchar(6) NOT NULL default '',
 		PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ;
 	";
@@ -485,7 +485,7 @@ function nzshpcrt_install()
 		`variation_id_1` bigint(20) unsigned NOT NULL default '0',
 		`variation_id_2` bigint(20) unsigned NOT NULL default '0',
 		`stock` bigint(20) unsigned NOT NULL default '0',
-		`price` varchar(32) NOT NULL,
+		`price` varchar(32) NOT NULL default '0',
 		`file` varchar(1) NOT NULL default '0',
 		PRIMARY KEY  (`id`),
 		KEY `product_id` (`product_id`),

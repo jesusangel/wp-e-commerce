@@ -4,6 +4,7 @@ This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
 
+define('TXT_WPSC_NO_SHORTCODE', 'This item product does not exist yet, so there are no shortcodes to display.');
 define('TXT_WPSC_SKU', 'SKU');
 define('TXT_WPSC_YOUR_ORDER', 'Your Order');
 define('TXT_WPSC_ABOUT_THIS_PAGE', 'About This Page');
