@@ -12,7 +12,7 @@ define('WPSC_VERSION', '3.6');
  * Minor version for minor releases, non whole numbers are for development versions, alphas, betas and release candidates,
  * they will be slightly less efficient as they will always run the upgrade code unless the minor version is a whole number 
  */
-define('WPSC_MINOR_VERSION', '78');
+define('WPSC_MINOR_VERSION', '79');
 define('WPSC_DEBUG', false);
 /*
  * {Notes} Language Files
@@ -198,15 +198,15 @@ class wp_shopping_cart {
      * its in an object because nobody has moved it out of the object yet.
      */
     if(function_exists('add_options_page')) {
-      if(get_option('nzshpcrt_first_load') == 0) {
-        $base_page = WPSC_DIR_NAME.'/options.php';
-        add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 7, $base_page);
-        add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
-        } else {
-        $base_page = WPSC_DIR_NAME.'/display-log.php';
-        add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 7, $base_page);
-        add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
-        }
+				//       if(get_option('nzshpcrt_first_load') == 0) {
+				//         $base_page = WPSC_DIR_NAME.'/options.php';
+				//         add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 7, $base_page);
+				//         add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
+				//         } else {
+			$base_page = WPSC_DIR_NAME.'/display-log.php';
+			add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 7, $base_page);
+			add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
+				//         }
       //written by allen
 	  add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
 	  //exit(ABSPATH.'wp-admin/users.php');
@@ -220,9 +220,7 @@ class wp_shopping_cart {
       
       add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
       add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
-      if(get_option('nzshpcrt_first_load') != 0) {
-        add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
-        }
+			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
       if(function_exists('gold_shpcrt_options')) {
         gold_shpcrt_options($base_page);
         }
