@@ -94,11 +94,25 @@ function selectgateway() {
 	?>
   <h2><?php echo TXT_WPSC_GATEWAY_OPTIONS;?></h2>
 
+		<div class="tablenav wpsc_admin_nav">
+			<div class="alignright">
+				<a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span> </a>
+			</div>
+			<br class="clear"/>
+		</div>
+
+
 		<table id='gateway_options' >
       
       <tr>
 				<td class='select_gateway'>
-						<h4><?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?></h4>
+					<div class="categorisation_title">
+					  <strong class="form_group"><?php echo TXT_WPSC_PAYMENT_GATEWAYS; ?></strong>
+					</div>
+				  <p>
+				  <?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?>
+				  </p>
+						
 						<?php
 						$selected_gateways = get_option('custom_gateway_options');
 						//echo("<pre>".print_r($selected_gateways,true)."</pre>");
@@ -116,25 +130,18 @@ function selectgateway() {
 							<input type='hidden' value='true' name='update_gateways'/>
 							<input type='submit' value='Update &raquo;' name='updateoption'/>
 						</div>
-						
-						<br />
-						
-						<br />
-						<h4><?php echo TXT_WPSC_WE_RECOMMEND; ?></h4>
-							<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/paypal-referal.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly."></a> <br /><br />
-							<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout"></a>
-		
+								
 						
 				</td>
 				
-				<td class='gateway_settings'>										
+				<td class='gateway_settings' rowspan='2'>										
 					<?php
 
 					?>					
 					<table class='form-table'>
-					<tr>
-					  <td colspan='2'  style='border-bottom: none;'>
-							<h4 style='font-size: 13px;' ><?php echo TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY;?></h4>
+					<tr class="firstrowth">
+					  <td colspan='2' style='border-bottom: none;'>
+					    <strong class="form_group"><?php echo TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY;?></strong>
 					  </td>
 					</tr>
 					<tr>
@@ -159,46 +166,20 @@ function selectgateway() {
 					</table>
 				</td>
       </tr>
+      
+      
+      
+      <tr>
+        <td>
+					<h4><?php echo TXT_WPSC_WE_RECOMMEND; ?></h4>
+						<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/paypal-referal.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly."></a> <br /><br />
+						<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout"></a>
+        </td>
+      </tr>
 		</table>
 
   
   
   
-  <table>
-	<?php if (($curgateway=='paypal_multiple')||($curgateway=='paypal_certified')) { ?>
-			<tr>
-				<td colspan="2">
-				When you signup for PayPal, you can start accepting credit card payments instantly. As the world's number one online payment service, PayPal is the fastest way to open your doors to over 150 million member accounts worldwide. Best of all, it's completely free to sign up! To sign up or learn more:
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-				<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src=" http://images.paypal.com/en_US/i/bnr/paypal_mrb_banner.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly."></a>
-				</td>
-			</tr>  
-	<?php }  elseif ($curgateway=='google') { ?>
-	<tr>
-		<td colspan="2">Find it with Google.  Buy it with Google Checkout.
-	</tr>
-	<tr>
-	<td></td>
-	<td>
-	Want a faster, safer and more convenient way to shop online? You got it.</td>
-	</td>
-	</tr>
-	<tr>
-		<td>
-		</td>
-		<td>
-	  	<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout"></a>
-		</td>
-	</tr>
-	<?php }?>
-	</table>
   </form>
-<?php
-if((get_option('activation_state') !== 'true')&&($curgateway!='google')) {
-  echo TXT_WPSC_PAYMENTGATEWAYNOTE;
-}
-?>
 </div>

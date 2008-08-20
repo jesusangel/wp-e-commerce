@@ -37,11 +37,6 @@ table.wpsc_options tr td input.text, table.wpsc_options tr td textarea{ width: 3
 
 table.wpsc_options tr td textarea{ height: 120px; }
 
-div.wpsc_groups_nav {
-  margin-bottom: 1px;
-  margin-top: 20px;
-  font-size: 12px;
-}
 
 div.wpsc_products_nav {
   margin-bottom: 1px;
@@ -53,16 +48,55 @@ div.wpsc_products_nav {
   font-size: 12px;
 }
 
+div.wpsc_products_nav div {
+  margin-top: 5px;
+}
+
 div.wpsc_products_nav div.alignright {
 	width: 300px;
 	margin-right: -18px;
 	_margin-right: 0px;
 }
 
-
-div.wpsc_products_nav div {
-  margin-top: 5px;
+div.wpsc_groups_nav div.alignright {
+	width: 300px;
+  font-size: 12px;
+  padding-top: 5px;
 }
+
+div.wpsc_groups_nav {
+  margin-bottom: 1px;
+  margin-top: 20px;
+  font-size: 12px;
+}
+
+
+div.wpsc_admin_nav{
+  margin-bottom: 1px;
+  margin-top: 20px;
+  color: #666666;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
+}
+
+div.wpsc_admin_nav div{
+  padding-top: 5px;
+}
+
+div.wpsc_admin_nav div.alignleft a {
+ display: block;
+ float: left;
+}
+
+div.wpsc_admin_nav div.alignleft span#loadingindicator_span {
+ margin-left: 8px;
+ float: left;
+}
+
+
+
+
 
 table#productpage{
   width: 100%;
@@ -1055,12 +1089,12 @@ span.product_loadingindicator {
 
 
 table#gateway_options{
-  margin: 8px 0px 0px 0px;
+  margin: 0px;
   width: 100%;
 }
 
 table#gateway_options tr td{
-  padding: 8px;
+  padding: 8px 0px 8px 2px;
   vertical-align: top;
 }
 
@@ -1068,11 +1102,15 @@ table#gateway_options tr td{
 table#gateway_options tr td h4{
 }
 
-td.select_gateway {
+table#gateway_options tr td.select_gateway {
   width: 360px;
+  height: 360px;
   min-width: 360px;
 	background-color:#EAF3FA;
-  border-right: 8px solid #ffffff;
+  padding: 0px;
+}
+table#gateway_options tr td.select_gateway div.gateway_settings {
+  padding-left: 10px;
 }
 
 td.select_gateway h4 {
@@ -1080,7 +1118,8 @@ td.select_gateway h4 {
 }
 
 td.select_gateway p {
- margin: 0px
+  padding-left: 8px;
+  margin: 0px;
 }
 
 td.select_gateway p input {
@@ -1101,6 +1140,11 @@ td.gateway_settings h4 {
 
 td.gateway_settings table.form-table {
   margin: 0px 0px 0px 0px;
+}
+
+table.form-table tr.firstrowth td {
+	padding: 4px 5px 6px 6px !important;
+	line-height: normal;
 }
 
 
@@ -1172,3 +1216,6 @@ div.admin_product_name div.admin_product_shorttags dl dd {
   margin-bottom: 0px;
 }
 
+table#itemlist tr.firstrowth td {
+padding:4px 5px 6px;
+}

@@ -162,7 +162,7 @@ function display_category_row($category,$subcategory_level = 0) {
 					$image = $wpdb->escape($_FILES['image']['name']);
         }
       } else {
-      $image = '';
+				$image = '';
       }
     
     if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
@@ -174,8 +174,8 @@ function display_category_row($category,$subcategory_level = 0) {
         $imagepath = WPSC_CATEGORY_DIR . $imagedata[0]['image'];
         $image_output = WPSC_CATEGORY_DIR . $imagedata[0]['image'];
         image_processing($imagepath, $image_output, $width, $height);
-        }
-      }
+			}
+		}
    
     $category_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$_POST['prodid']."')", ARRAY_A);
     
@@ -398,10 +398,12 @@ function categorisation_conf() {
 		
 		<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
 	  </form>
-	  
-	  <?php /*<input type="submit" class="button-secondary" value="Filter" id="post-query-submit"/>*/ ?>
 	</div>
 	
+	  
+	<div class="alignright">
+		<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
+	</div>
 	<br class="clear"/>
 </div>
 

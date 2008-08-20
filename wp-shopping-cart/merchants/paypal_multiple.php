@@ -456,11 +456,11 @@ $output .= "
 		</td>
 	</tr>
 	
-    <tr style='background: none;'>
-      <td colspan='2'>
-				<h4>Forms Sent to Gateway</h2>
-      </td>
-		</tr>
+	<tr class='firstrowth'>
+		<td style='border-bottom: medium none;' colspan='2'>
+			<strong class='form_group'>Forms Sent to Gateway</strong>
+		</td>
+	</tr>
    
     <tr>
       <td>

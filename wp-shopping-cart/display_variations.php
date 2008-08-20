@@ -167,8 +167,23 @@ function conf()
   	  <?php echo TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION;?>
 
 </p>
-  <a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDVARIATION;?></span></a>
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
+
+  
+  
+  
+  
+  <div class="tablenav wpsc_admin_nav" >
+	<div class="alignleft" style='width: 500px;'>
+		<a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDVARIATION;?></span></a>
+		<span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
+	</div>
+	
+	  
+	<div class="alignright">
+		<a target="_blank" href='http://www.instinct.co.nz/e-commerce/variations/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
+	</div>
+	<br class="clear"/>
+</div>
   <?php
   $num = 0;
 echo "  <table id='productpage'>\n\r";

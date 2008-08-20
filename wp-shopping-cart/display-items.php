@@ -774,7 +774,7 @@ echo $display_added_product ;
 	
 	<div class="alignright">
 		<?php echo setting_button(); ?>
-		<a href='#' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
+		<a target="_blank" href='http://www.instinct.co.nz/e-commerce/products/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
 	
 	</div>
 
