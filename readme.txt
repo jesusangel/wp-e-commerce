@@ -4,13 +4,13 @@ Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control
 Requires at least: 2.0.2
 Tested up to: 2.5.1
-Stable tag: 3.6.7
+Stable tag: 3.6.8 RC1
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
 == Description ==
 
-The WP e-Commerce shopping cart plugin for WordPress is an elegant easy to use fully featured http:shopping cart application suitable for selling your products, services, and or fees online.
+The WP e-Commerce shopping cart plugin for WordPress is an elegant easy to use fully featured shopping cart application suitable for selling your products, services, and or fees online.
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
