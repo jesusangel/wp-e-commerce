@@ -76,6 +76,8 @@ var getresults=function(results) {
   document.getElementById('additem').style.display = 'none';
   document.getElementById('productform').style.display = 'block';
 	jQuery("#loadingindicator_span").css('visibility','hidden');
+	
+	
   jQuery('#formcontent .postbox h3').click( function() {
   	jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
 		if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
@@ -83,7 +85,11 @@ var getresults=function(results) {
 		} else {
 			jQuery('a.togbox',this).html('&ndash;');
 		}
+	  wpsc_save_postboxes_state('editproduct', '#formcontent');
   });
+  
+  
+ 
   activate_resizable();
   TB_init();
   
@@ -555,6 +561,7 @@ jQuery(window).load( function () {
 		} else {
 			jQuery('a.togbox',this).html('&ndash;');
 		}
+	  wpsc_save_postboxes_state('products', '.additem');
 	});
 	
 	jQuery('a.closeEl').bind('click', toggleContent);
@@ -715,4 +722,15 @@ function remove_meta(e, meta_id) {
 		}
 	}); 
   return false;
+}
+
+
+function wpsc_save_postboxes_state(page, container) {
+	var closed = jQuery(container+' .postbox').filter('.closed').map(function() { return this.id; }).get().join(',');
+	jQuery.post(postboxL10n.requestFile, {
+		action: 'closed-postboxes',
+		closed: closed,
+		closedpostboxesnonce: jQuery('#closedpostboxesnonce').val(),
+		page: page
+	});
 }

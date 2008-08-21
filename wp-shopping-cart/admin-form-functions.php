@@ -77,6 +77,9 @@ function nzshpcrt_getproductform($prodid)
   $check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".$wpdb->prefix."variation_values_associations` WHERE `product_id` = '".$product['id']."'");
   
   
+	$current_user = wp_get_current_user();
+	$closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_editproduct');
+  
   $output .= "        <table class='product_editform'>\n\r";
   $output .= "          <tr>\n\r";
   $output .= "            <td class='itemfirstcol'>\n\r";
@@ -157,12 +160,12 @@ function nzshpcrt_getproductform($prodid)
 			$output .= categorylist($categorisation_group['id'], $product['id'], 'edit_');
 			$output .= "</p>\n\r";
 		}						
-	}
+	} 
 
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 
-  $output .= "<tr><td  colspan='2'><div id='edit_price_and_stock' class='postbox'>
+  $output .= "<tr><td  colspan='2'><div id='edit_price_and_stock' class='postbox ".((array_search('edit_price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."'>
 	<h3>
 		<a class='togbox'>+</a>";
   $output .= "".TXT_WPSC_PRICE_AND_STOCK_CONTROL."";
@@ -287,7 +290,7 @@ function nzshpcrt_getproductform($prodid)
     
   $output .= "          <tr>\n\r";
   $output .= "            <td colspan='2'>\n\r";
-  $output .= "<div id='edit_variation' class='postbox closed'>
+  $output .= "<div id='edit_variation' class='postbox ".((array_search('edit_variation', $closed_postboxes) !== false) ? 'closed' : '')."'>
         <h3>
 		<a class='togbox'>+</a>";
   $output .= "".TXT_WPSC_VARIATION_CONTROL."";
@@ -330,7 +333,7 @@ function nzshpcrt_getproductform($prodid)
 
   $output .= "    <tr>\n\r";
   $output .= "      <td colspan='2'>\n\r";
-  $output .= "  <div class='postbox closed' id='edit_shipping'>
+  $output .= "  <div class='postbox ".((array_search('edit_shipping', $closed_postboxes) !== false) ? 'closed' : '')."' id='edit_shipping'>
 	     <h3>
 		     <a class='togbox'>+</a>".TXT_WPSC_SHIPPING_DETAILS."";
   $output .= "</h3>
@@ -378,7 +381,7 @@ function nzshpcrt_getproductform($prodid)
   $output .="</table></div></div></td></tr>";
   
   $output .= "<tr><td colspan='2'>";
-  $output .="<div id='edit_advanced' class='postbox closed'>
+  $output .="<div id='edit_advanced' class='postbox ".((array_search('edit_advanced', $closed_postboxes) !== false) ? 'closed' : '')."'>
 	    <h3>
 		    <a class='togbox'>+</a>";
   $output .=TXT_WPSC_ADVANCED_OPTIONS;
@@ -538,7 +541,7 @@ $output .="</table></div></div></td></tr>";
   
   $output .= "          <tr>\n\r";
   $output .= "            <td colspan='2'>\n\r";
-  $output .= "<div id='edit_product_image' class='postbox'>
+  $output .= "<div id='edit_product_image' class='postbox ".((array_search('edit_product_image', $closed_postboxes) !== false) ? 'closed' : '')."'>
         <h3> 
 		<a class='togbox'>+</a>".TXT_WPSC_PRODUCTIMAGE."";
   $output .= "</h3>

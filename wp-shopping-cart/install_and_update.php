@@ -14,7 +14,7 @@ function wpsc_auto_update() {
     include_once('updates/update-to-3.6.4.php');
 	}
 
- if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && ((int)get_option('wpsc_minor_version') < 80))) {
+ if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && ((int)get_option('wpsc_minor_version') < 82))) {
     include_once('updates/update-to-3.6.8.php');
 	}
 

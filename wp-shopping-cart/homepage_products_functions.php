@@ -39,7 +39,6 @@ function nszhpcrt_homepage_products($content = '') {
   
 
 function nszhpcrt_category_tag($content = '') {
-	require_once('themes/iShop/iShop.php');
 	global $wpdb;
 	if(preg_match_all("/\[wpsc_category_exclude=([\d]+),*(full)?\]/", $content, $matches)) {
 		foreach($matches[1] as $key => $category_id) {
@@ -107,7 +106,9 @@ function nszhpcrt_category_tag($content = '') {
 					$output .= "<table class='productdisplay'>";
 				}
 				foreach((array)$product_list as $product) {
-					$wpsc_theme = wpsc_theme_html($product);
+				  if(function_exists('wpsc_theme_html')) {
+						$wpsc_theme = wpsc_theme_html($product);
+					}
 					if ($full_view == null) {
 						$output .= "<div class='category_view_product'>\n\r";
 					} else {

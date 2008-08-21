@@ -72,110 +72,110 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	$previous_download_ids = array(0); 
 	if(($cart != null) && ($errorcode == 0)) {
 		foreach($cart as $row) {
-		$link = "";
-		$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$row['prodid']."";
-		$product_data = $wpdb->get_results($productsql,ARRAY_A) ;
-		if($product_data[0]['file'] > 0) {
-			if($purchase_log['email_sent'] != 1) {
-				$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
-			}
-			/*
-			$digitalsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE purchaseid=".$purchase_log['id']."";
-			$digital = $wpdb->get_results($digitalsql,ARRAY_A);
-			$digitalsql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`=".$digital[0]['id']."";
-			$digital = $wpdb->get_results($digitalsql,ARRAY_A);
-			$digitalsql = "SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `variation_id_1`=".$digital[0]['value_id']." AND product_id=".$product_data[0]['id']."";
-			$digital = $wpdb->get_results($digitalsql,ARRAY_A);*/
-			
-			
-			
-			
-			$downloadable='1';
-			// 		if ($digital[0]['file'] == '1'){
-			// 			$downloadable='1';
-			// 		}
-			if ($downloadable){
-				$download_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
-				$download_data = $download_data[0];
-				
-				if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
-					$link = $siteurl."?downloadid=".$download_data['id'];
-				} else {
-					$link = $siteurl."?downloadid=".$download_data['uniqueid'];
-				}	
-				$previous_download_ids[] = $download_data['id'];
-				$order_status= 4;
-			}
-		}
-	
-	
-		do_action('wpsc_confirm_checkout', $purchase_log['id']);
-	
-		$shipping = nzshpcrt_determine_item_shipping($row['prodid'], $row['quantity'], $shipping_country);
-		$total_shipping += $shipping;
-		
-		if($product_data[0]['special']==1) {
-			$price_modifier = $product_data[0]['special_price'];
-		} else {
-			$price_modifier = 0;
-		}
-		
-		$total+=($row['price']*$row['quantity']);
-		$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), $product_data[0]['notax'], true);
-		$shipping_price  = nzshpcrt_currency_display($shipping, 1, true);
-		$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$row['id']."'";
-		$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
-		$variation_count = count($variation_data);
-			
-		if($variation_count > 1) {
-			$variation_list = " (";
-			
-			if($purchase['gateway'] != 'testmode') {
-				if($gateway['internalname'] == $purch_data[0]['gateway'] ) {
-					$gateway_name = $gateway['name'];
+			$link = "";
+			$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$row['prodid']."";
+			$product_data = $wpdb->get_results($productsql,ARRAY_A) ;
+			if($product_data[0]['file'] > 0) {
+				if($purchase_log['email_sent'] != 1) {
+					$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
 				}
-			} else {
-				$gateway_name = "Manual Payment";
-			}
-								
-			$i = 0;
-			
-			foreach($variation_data as $variation) {	
-				if($i > 0) {
-					$variation_list.= ", ";
-				}
+				/*
+				$digitalsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE purchaseid=".$purchase_log['id']."";
+				$digital = $wpdb->get_results($digitalsql,ARRAY_A);
+				$digitalsql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`=".$digital[0]['id']."";
+				$digital = $wpdb->get_results($digitalsql,ARRAY_A);
+				$digitalsql = "SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `variation_id_1`=".$digital[0]['value_id']." AND product_id=".$product_data[0]['id']."";
+				$digital = $wpdb->get_results($digitalsql,ARRAY_A);*/
 				
-				$value_id = $variation['value_id'];
-				$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-				$variation_list.= $value_data[0]['name'];              
-				$i++;	
-			}
-			$variation_list .= ")";
-		} else {
-			if($variation_count == 1) {
-				$value_id = $variation_data[0]['value_id'];
-				$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-				$variation_list = " (".$value_data[0]['name'].")";
-			} else {
-				$variation_list = '';
-			}
-		}
-        
-		if($link != '') {
-			$message.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."  ".TXT_WPSC_CLICKTODOWNLOAD.": $link\n";
-			$message_html.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_DOWNLOAD."</a>\n";
-		} else {
-			$plural = '';
-			
-			if($row['quantity'] > 1) {
-				$plural = "s";
-			}
-			$message.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-			$message_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-		}
+				
+				
+				
+				$downloadable='1';
+				// 		if ($digital[0]['file'] == '1'){
+				// 			$downloadable='1';
+				// 		}
+				if ($downloadable){
+					$download_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
+					$download_data = $download_data[0];
 					
-		$report.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
-	}
+					if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
+						$link = $siteurl."?downloadid=".$download_data['id'];
+					} else {
+						$link = $siteurl."?downloadid=".$download_data['uniqueid'];
+					}	
+					$previous_download_ids[] = $download_data['id'];
+					$order_status= 4;
+				}
+			}
+		
+		
+			do_action('wpsc_confirm_checkout', $purchase_log['id']);
+		
+			$shipping = nzshpcrt_determine_item_shipping($row['prodid'], $row['quantity'], $shipping_country);
+			$total_shipping += $shipping;
+			
+			if($product_data[0]['special']==1) {
+				$price_modifier = $product_data[0]['special_price'];
+			} else {
+				$price_modifier = 0;
+			}
+			
+			$total+=($row['price']*$row['quantity']);
+			$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), $product_data[0]['notax'], true);
+			$shipping_price  = nzshpcrt_currency_display($shipping, 1, true);
+			$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$row['id']."'";
+			$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
+			$variation_count = count($variation_data);
+				
+			if($variation_count > 1) {
+				$variation_list = " (";
+				
+				if($purchase['gateway'] != 'testmode') {
+					if($gateway['internalname'] == $purch_data[0]['gateway'] ) {
+						$gateway_name = $gateway['name'];
+					}
+				} else {
+					$gateway_name = "Manual Payment";
+				}
+									
+				$i = 0;
+				
+				foreach($variation_data as $variation) {	
+					if($i > 0) {
+						$variation_list.= ", ";
+					}
+					
+					$value_id = $variation['value_id'];
+					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$variation_list.= $value_data[0]['name'];              
+					$i++;	
+				}
+				$variation_list .= ")";
+			} else {
+				if($variation_count == 1) {
+					$value_id = $variation_data[0]['value_id'];
+					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$variation_list = " (".$value_data[0]['name'].")";
+				} else {
+					$variation_list = '';
+				}
+			}
+					
+			if($link != '') {
+				$message.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."  ".TXT_WPSC_CLICKTODOWNLOAD.": $link\n";
+				$message_html.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_DOWNLOAD."</a>\n";
+			} else {
+				$plural = '';
+				
+				if($row['quantity'] > 1) {
+					$plural = "s";
+				}
+				$message.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+				$message_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+			}
+						
+			$report.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
+		}
 			
 			if($purchase_log['discount_data'] != '') {
 				$coupon_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE coupon_code='".$wpdb->escape($purchase_log['discount_data'])."' LIMIT 1",ARRAY_A);

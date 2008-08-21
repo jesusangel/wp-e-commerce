@@ -2531,7 +2531,13 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
+		if($_GET['page'] == 'wp-shopping-cart/display-items.php') {
+			wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
+		}	
 }
+
+
+
 
 switch(get_option('cart_location')) {
   case 1:

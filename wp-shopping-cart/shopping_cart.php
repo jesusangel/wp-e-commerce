@@ -547,10 +547,10 @@ if(!empty($_SESSION['coupon_num'])) {
 	 
 	if ($_POST["quantity"]) {
 		
-		$pnp=$wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$cart_item->product_id.")");
+		$pnp=$wpdb->get_var("SELECT SUM(`pnp`) FROM `".$wpdb->prefix."product_list` WHERE `id` IN ('".(int)$cart_item->product_id."')");
 		$local_shipping_price= nzshpcrt_determine_base_shipping(0, get_option('base_country'));
 		$google_local_shipping = $local_shipping_price+$pnp*$_POST["quantity"];
-		$pnp=$wpdb->get_var("SELECT SUM(international_pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$cart_item->product_id.")");
+		$pnp=$wpdb->get_var("SELECT SUM(`international_pnp`) FROM `".$wpdb->prefix."product_list` WHERE `id` IN ('".(int)$cart_item->product_id."')");
 		$international_shipping_price= nzshpcrt_determine_base_shipping(0, get_option('base_country')."-");
 		$google_international_shipping = $international_shipping_price+$pnp*$_POST["quantity"];
 		$google_cart->shipping_arr[0]->price=$google_local_shipping;

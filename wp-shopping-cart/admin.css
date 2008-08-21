@@ -166,7 +166,7 @@ table.itemlist{ margin: 0px; }
 div.subcategory{ list-style-type: none; vertical-align: top; margin: 0px; padding: 0px; }
 
 div.subcategory img.category_indenter{ float: left; margin-top: 10px; }
-table.additem{ width: 100%;}
+table.additem{ width: 100%; margin-top: 15px;}
 
 
 table.itemlist tr td{ text-align: center; padding-left: 3px; padding-right: 3px; }
@@ -187,7 +187,7 @@ div#additem{ display: block;}
 
 div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; padding-top: 5px; vertical-align: top; }
 
-div#productform td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: middle; }
+div#productform td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: top; }
 div#additem table.additem input.text,div#additem table.additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
 div#productform input.text,div#productform textarea, div#additem input.text,div#additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
 input.image_resize{ position: relative; top: 4px; }
@@ -869,7 +869,7 @@ padding:9px 5px 9px 26px;
 }
 #additem .inside, #productform .inside {
 	font-size:11px;
-	margin:0pt 12px 15px;
+	margin:15px 12px;
 }
 
 div.categorisation_title {
@@ -1051,7 +1051,8 @@ div.product_custom_meta br {
 }
 
 table.product_editform {
-  width: 100%;
+  width: 588px;
+  margin-top: 15px;
 /*   border-left:1px solid #bbb; */
 /*   border-right:1px solid #bbb; */
 /*   border-bottom:1px solid #bbb; */

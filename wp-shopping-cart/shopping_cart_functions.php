@@ -255,7 +255,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		}
 	 if (get_option('payment_gateway') == 'google') {
 		 if (!$total_shipping) $total_shipping = 0;
-		 $pnp=$wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$google_product_id.")");
+		 $pnp=$wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".(int)$google_product_id.")");
 		 $local_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country'));
 		 $google_local_shipping = new GoogleFlatRateShipping("Local Shipping", $local_shipping_price+$pnp);
 		 $international_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country')."-");
