@@ -568,6 +568,10 @@ if($_GET['clean_categories'] == 'true') {
 											$language = "Deutsch";
 											break;
 											
+											case "NL_nl.php";
+											$language = "Dutch";
+											break;
+										
 											case "FR_fr.php";
 											$language = "Français";
 											break;
