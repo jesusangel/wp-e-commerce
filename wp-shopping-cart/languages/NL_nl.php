@@ -1,8 +1,28 @@
-<?php
+﻿<?php
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 Language version 0.1 in Dutch by http://level-level.com -> mail@level-level.com
 */
+
+define('TXT_WPSC_PAYMENT_GATEWAYS', 'Betalingsmodulen');
+
+define('TXT_WPSC_SALES_DASHBOARD', 'U heeft <a href=\'admin.php?page=wp-shopping-cart/display-items.php\'>:productcount:</a>, in <a href=\'admin.php?page=wp-shopping-cart/display-category.php\'>:groupcount:</a>. Deze maand heeft u :salecount: met een opbrengst van :monthtotal:. De totale opbrengst tot nu toe is :overaltotal:. U heeft :pendingcount:, die wachten op goedkeuring.');
+define('TXT_WPSC_PRODUCTCOUNT_SINGULAR','product');
+define('TXT_WPSC_PRODUCTCOUNT_PLURAL','producten');
+define('TXT_WPSC_GROUPCOUNT_SINGULAR','groep');
+define('TXT_WPSC_GROUPCOUNT_PLURAL','groepen');
+define('TXT_WPSC_SALECOUNT_SINGULAR','verkoop');
+define('TXT_WPSC_SALECOUNT_PLURAL','verkopen');	
+define('TXT_WPSC_PENDINGCOUNT_SINGULAR','transactie');
+define('TXT_WPSC_PENDINGCOUNT_PLURAL','transacties');
+
+define('TXT_WPSC_YOUAREUSING', 'U gebruikt het :theme: thema. Met Instincts WP e-Commerce :versionnumber:.');
+define('TXT_WPSC_SKU', 'SKU');
+define('TXT_WPSC_YOUR_ORDER', 'Uw bestelling');
+define('TXT_WPSC_ABOUT_THIS_PAGE', 'Over deze pagina');
+define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Bestelling in behandeling: Betaling vereist');
+define('TXT_WPSC_SELECTALLCATEGORIES', 'Laat alle producten zien');
+
 
 //define('TXT_WPSC_WE_RECOMMEND', 'We Recommend');
 define('TXT_WPSC_WE_RECOMMEND', 'Onze aanbeveling');
@@ -1560,6 +1580,14 @@ define('TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS', 'Toon enkel geaccepteerde betalin
 //define('TXT_WPSC_SEARCHEMAIL', 'Search By Email');
 define('TXT_WPSC_SEARCHEMAIL', 'Zoek op Emailadres');
 
-define('TXT_WPSC_MANUALPAYMENT', 'Handleiding betaling / Test Gateway');
+define('TXT_WPSC_MANUALPAYMENT', 'Handmatig betalen / overmaken');
+define('TXT_WPSC_ABOUT_THIS_PAGE', 'Over deze pagina');
+define('TXT_WPSC_EDITING_GROUP', 'U bewerkt de [indeling] groep');
+define('TXT_WPSC_ADDING_TO_GROUP', 'U bent de toevoeging van een nieuw item aan de [indeling] groep');
+define('TXT_WPSC_EDITING_IN_GROUP', 'U bent het bewerken van een item in de [indeling] groep');
 
+define('TXT_WPSC_PURCHASE_UNAVAILABLE', 'Aankoop niet beschikbaar opties');
+define('TXT_WPSC_WE_RECOMMEND', 'We raden');
+define('TXT_WPSC_SELECT_PRODUCT_GROUP', 'Selecteer een groep');
+define('TXT_WPSC_EDIT_THIS_GROUP', 'Deze groep');
 ?>

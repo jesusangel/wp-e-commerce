@@ -179,7 +179,7 @@ function conf()
 	</div>
 	
 	  
-	<div class="alignright">
+	<div>
 		<a target="_blank" href='http://www.instinct.co.nz/e-commerce/variations/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
 	</div>
 	<br class="clear"/>
