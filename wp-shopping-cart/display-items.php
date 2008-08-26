@@ -1069,7 +1069,7 @@ echo "        </div>";
     </tr>
     <tr>
       <td class='itemfirstcol'>
-        <?php echo TXT_WPSC_SKU;?>:
+        <abbr alt='<?php echo TXT_WPSC_SKU_FULL; ?>' title='<?php echo TXT_WPSC_SKU_FULL; ?>' ><?php echo TXT_WPSC_SKU;?></abbr>:
       </td>
       <td class='itemformcol'>
         <input size='30' type='text' name='productmeta_values[sku]' value='' class='text' />

@@ -108,7 +108,7 @@ function nzshpcrt_getproductform($prodid)
   
   $output .= "          <tr>\n\r";
   $output .= "            <td class='itemfirstcol'>\n\r";
-  $output .= TXT_WPSC_SKU.": ";
+  $output .="<abbr alt='".TXT_WPSC_SKU_FULL."' title='". TXT_WPSC_SKU_FULL."' >".TXT_WPSC_SKU."</abbr>";
   $output .= "            </td>\n\r";
   $output .= "            <td class='itemformcol'>\n\r";
   $sku = get_product_meta($product['id'], 'sku');

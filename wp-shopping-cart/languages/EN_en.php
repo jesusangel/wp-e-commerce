@@ -4,7 +4,7 @@ This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
 //http://www.instinct.co.nz/wordpress_2.6/wp-admin/
-
+define('TXT_WPSC_SKU_FULL', 'Stock Keeping Unit');
 define('TXT_WPSC_PAYMENT_GATEWAYS', 'Payment Gateways');
 
 define('TXT_WPSC_PRODUCTCOUNT_SINGULAR','product');
