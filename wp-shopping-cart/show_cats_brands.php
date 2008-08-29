@@ -68,7 +68,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
         // Adrian - check option for category count
         if (get_option('show_category_count') == 1){
           //show product count for each category
-          $count_sql = "SELECT count(*) FROM `".$wpdb->prefix."item_category_associations` WHERE `category_id` = '".$option['id']."'";
+          $count_sql = "SELECT COUNT(`p`.`id`) FROM `{$wpdb->prefix}item_category_associations` AS `a` JOIN `{$wpdb->prefix}product_list` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')";
           $count = $wpdb->get_var($count_sql);
           $addCount =  " [".$count."]";
         } //end get_option
