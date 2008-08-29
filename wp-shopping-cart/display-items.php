@@ -1295,6 +1295,11 @@ echo "        </div>";
       </td>
     </tr>
     <?php } ?>
+    
+	<?php
+  do_action('wpsc_add_advanced_options', null);
+	?>
+
  <tr>
       <td class='itemfirstcol'>
        <?php echo TXT_WPSC_EXTERNALLINK;?>:

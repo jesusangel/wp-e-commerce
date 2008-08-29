@@ -68,6 +68,10 @@ foreach($nzshpcrt_gateways as $gateway) {
 	} else {
 		$selected = '';
 	}
+	
+	if(isset($gateway['admin_name'])) {
+		$gateway['name'] = $gateway['admin_name'];
+	}
   $gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
 }
 $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY."</option>" . $gatewaylist;
@@ -117,6 +121,9 @@ function selectgateway() {
 						$selected_gateways = get_option('custom_gateway_options');
 						//echo("<pre>".print_r($selected_gateways,true)."</pre>");
 						foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+						  if(isset($gateway['admin_name'])) {
+						    $gateway['name'] = $gateway['admin_name'];
+						  }
 							if (in_array($gateway['internalname'], (array)$selected_gateways)) {
 								echo "						";// add the whitespace to the html
 								echo "<p><input name='custom_gateway_options[]' checked='checked' type='checkbox' value='{$gateway['internalname']}' id='{$gateway['internalname']}_id'><label for='{$gateway['internalname']}_id'>{$gateway['name']}</label></p>\n\r";

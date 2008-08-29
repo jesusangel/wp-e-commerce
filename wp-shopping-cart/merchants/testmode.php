@@ -1,5 +1,6 @@
 <?php
-$nzshpcrt_gateways[$num]['name'] = 'Manual Payment / Test Gateway';
+$nzshpcrt_gateways[$num]['name'] = 'Manual Payment';
+$nzshpcrt_gateways[$num]['admin_name'] = 'Manual Payment / Test Gateway';
 $nzshpcrt_gateways[$num]['internalname'] = 'testmode';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_testmode';
 $nzshpcrt_gateways[$num]['form'] = "form_testmode";

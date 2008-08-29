@@ -161,7 +161,7 @@ define('TXT_WPSC_CHECKBOX_VARIATIONS', 'Display Variations in Checkboxes');
 define('TXT_WPSC_DISPLAY_PLUSTAX', 'Display "+tax"');
 define('TXT_WPSC_DISPLAYHOWCUSTOMERFINDUS', 'Display How Customer Found Us Survey');
 define('TXT_WPSC_HOWCUSTOMERFINDUS', 'How The Customer Found Us');
-define('TXT_WPSC_ENGRAVE', 'Engrave text');
+define('TXT_WPSC_ENGRAVE', 'Personalisation text');
 define('TXT_WPSC_FREETRIAL', 'One Month Free Trial');
 define('TXT_WPSC_PROHIBITED', 'Prohibited');
 define('TXT_WPSC_ADMINNOTES', 'Merchant Notes');

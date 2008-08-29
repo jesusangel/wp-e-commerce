@@ -449,6 +449,11 @@ function nzshpcrt_getproductform($prodid)
 		$output .= "            </td>\n\r";
 		$output .= "          </tr>\n\r";
   }
+  
+  ob_start();
+  do_action('wpsc_add_advanced_options', $product['id']);
+  $output .= ob_get_contents();
+  ob_end_clean();
 
 
   $output .= "          <tr>\n\r";

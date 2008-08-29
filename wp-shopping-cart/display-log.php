@@ -699,7 +699,7 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
       <br />
       <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='true' id='order_filter_none' /> <label class='order_filters' for='order_filter_none'><?php echo TXT_WPSC_LOG_ALL; ?></label>
       <br>
-      <?=TXT_WPSC_SEARCHEMAIL?>: <input type='text' name='filteremail' >
+       <label class="order_filters"><?=TXT_WPSC_SEARCHEMAIL?>:</label> <input type='text' name='filteremail' >
       </form>
       <br />
       </p>

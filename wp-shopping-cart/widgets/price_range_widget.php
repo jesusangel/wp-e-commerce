@@ -6,7 +6,7 @@ function widget_price_range($args) {
 	$title = empty($options['title']) ? __(TXT_WPSC_PRICE_RANGE) : $options['title'];
 	echo $before_widget."";
 	$full_title = $before_title . $title . $after_title;
-	echo $full_title."<br>";
+	echo $full_title."";
 	nzshpcrt_price_range();
 	echo $after_widget;
 }
