@@ -99,7 +99,9 @@ if($_GET['filter'] !== 'true') {
 <div class="wrap" style=''>
   <h2><?php echo TXT_WPSC_PURCHASELOG;?></h2><br />
    <?php
-    echo wpsc_right_now();
+   if(function_exists('wpsc_right_now')) {
+			echo wpsc_right_now();
+    }
     ?>
 
   <table style='width: 100%;'>
