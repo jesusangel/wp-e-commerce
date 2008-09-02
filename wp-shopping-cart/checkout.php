@@ -318,7 +318,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	<?php } else {
 		
 		?>
-	<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' />
+	<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
 	<?php  } ?>
 	<?php } else { ?>
       <td colspan='2'>

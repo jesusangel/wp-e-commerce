@@ -231,4 +231,7 @@ function wpsc_list_product_themes($theme_name = null) {
   $output .= "</select>\n\r";    
   return $output;
 }
+
+
+
 ?>

@@ -2267,7 +2267,19 @@ function wpsc_refresh_page_urls($content) {
 		if((get_option('page_on_front') == $page_details['ID']) && (get_option('show_on_front') == 'page')) {		
 		  $is_index = true;
 		}
-		$page_name = $page_details['post_name'];
+		
+		$page_name_array[] = $page_details['post_name'];
+		if($page_details['post_parent'] > 0) {
+		  $count = 0;
+		  while(($page_details['post_parent'] > 0) && ($count <= 20)) {
+				$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `ID` IN('{$page_details['post_parent']}') LIMIT 1", ARRAY_A);
+				$page_name_array[] = $page_details['post_name'];
+				$count ++;	  
+		  }		
+		}
+		
+		$page_name_array = array_reverse($page_name_array);
+		$page_name = implode("/",$page_name_array);
 		
 		if(!function_exists('wpsc_rewrite_categories')) {	 // to stop this function from being declared multiple times, which causes wordpress to fail.
 			function wpsc_rewrite_categories($page_name, $id = null, $level = 0, $parent_categories = array(), $is_index = false) {
