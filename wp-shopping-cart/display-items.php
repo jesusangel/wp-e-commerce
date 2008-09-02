@@ -7,7 +7,7 @@ $category_data = null;
 
 $current_user = wp_get_current_user();
 
-$closed_postboxes = get_usermeta( $current_user->ID, 'closedpostboxes_products');
+$closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
 
 
 function topcategorylist() {
