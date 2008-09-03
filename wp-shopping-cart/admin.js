@@ -734,3 +734,7 @@ function wpsc_save_postboxes_state(page, container) {
 		page: page
 	});
 }
+
+jQuery(document).ready(function(){
+	jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
+});

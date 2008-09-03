@@ -1037,7 +1037,9 @@ function coupon_edit_form($coupon) {
   $output .= "   </select>\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";  
+  $coupon_start = explode(" ",$coupon['start']);
+  $output .= "<input type='text' class='pickdate' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
+/*  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";  
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
      if($i == date("d", $start_timestamp)) { $selected = "selected='true'"; }
@@ -1057,10 +1059,12 @@ function coupon_edit_form($coupon) {
      if($i == date("Y", $start_timestamp)) { $selected = "selected='true'"; }
      $output .= "    <option $selected value='$i'>".$i."</option>";
      }
-  $output .= "   </select>\n\r";
+  $output .= "   </select>\n\r";*/
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
+  $coupon_expiry = explode(" ",$coupon['expiry']);
+  $output .= "<input type='text' class='pickdate' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
+  /*$output .= "   <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
      if($i == date("d", $end_timestamp)) { $selected = "selected='true'"; }
@@ -1081,7 +1085,7 @@ function coupon_edit_form($coupon) {
      if($i == (date("Y", $end_timestamp))) { $selected = "selected='true'"; }
      $output .= "    <option $selected value='$i'>".$i."</option>\n\r";
      }
-  $output .= "   </select>\n\r";
+  $output .= "   </select>\n\r";*/
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";

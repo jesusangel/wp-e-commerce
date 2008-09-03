@@ -1,26 +1,29 @@
 <?php
 if(isset($_POST) && is_array($_POST)) {
-  if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
-    $coupon_code = $_POST['add_coupon_code'];
-    $discount = (double)$_POST['add_discount'];
-    // cast to boolean, then integer, prevents the value from being anything but 1 or 0
-    $discount_type = (int)(bool)$_POST['add_discount_type'];
-    $use_once = (int)(bool)$_POST['add_use-once'];
+	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
+		$coupon_code = $_POST['add_coupon_code'];
+		$discount = (double)$_POST['add_discount'];
+		// cast to boolean, then integer, prevents the value from being anything but 1 or 0
+		$discount_type = (int)(bool)$_POST['add_discount_type'];
+		$use_once = (int)(bool)$_POST['add_use-once'];
 		$every_product = (int)(bool)$_POST['add_every_product'];
-    $start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
-    $end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
-    
-    if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' );")) {  
-      echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
-      }
-    }
-  if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true')) {
-    foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
+// 		$start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
+// 		$end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
+		$start_date = $_POST['add_start']." 00:00:00";
+		$end_date = $_POST['add_end']." 00:00:00";
+		if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' );")) {  
+			echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
+		}
+	}
+	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true')) {
+		foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
 			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
-      $coupon_id = (int)$coupon_id;
+			$coupon_id = (int)$coupon_id;
 			// convert dates to a form that compares well and can be inserted into the database
-			$coupon_data['start'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['start']['month'], (int)$coupon_data['start']['day'], (int)$coupon_data['start']['year']));
-			$coupon_data['expiry'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['expiry']['month'], (int)$coupon_data['expiry']['day'], (int)$coupon_data['expiry']['year']));
+// 			$coupon_data['start'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['start']['month'], (int)$coupon_data['start']['day'], (int)$coupon_data['start']['year']));
+// 			$coupon_data['expiry'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['expiry']['month'], (int)$coupon_data['expiry']['day'], (int)$coupon_data['expiry']['year']));
+			$coupon_data['start'] = $coupon_data['start']." 00:00:00";
+			$coupon_data['expiry'] = $coupon_data['expiry']." 00:00:00";
 			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE `id` = '$coupon_id'", ARRAY_A);
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
 			ksort($check_values); ksort($coupon_data);
@@ -126,7 +129,8 @@ if(isset($_POST) && is_array($_POST)) {
    </select>
    </td>
    <td>
-   <select name='add_start[day]'>
+   <input type='text' class='pickdate' name='add_start'>
+   <!--<select name='add_start[day]'>
    <?php
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
@@ -152,10 +156,11 @@ if(isset($_POST) && is_array($_POST)) {
      echo "<option $selected value='$i'>".$i."</option>";
      }
    ?>
-   </select>
+   </select>-->
    </td>
    <td>
-   <select name='add_end[day]'>
+   <input type='text' class='pickdate' name='add_end'>
+   <!--<select name='add_end[day]'>
    <?php
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
@@ -181,7 +186,7 @@ if(isset($_POST) && is_array($_POST)) {
      echo "<option $selected value='$i'>".$i."</option>";
      }
    ?>
-   </select>
+   </select>-->
    </td>
    <td>
    <input type='hidden' value='0' name='add_use-once' />
