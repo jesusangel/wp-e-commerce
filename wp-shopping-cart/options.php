@@ -621,7 +621,7 @@ if($_GET['clean_categories'] == 'true') {
 											break;
 											
 											case "ZH_zh.php";
-											$language = "Chinese";
+											$language = "简体中文";
 											break;
 											
 											case "DK_da.php";

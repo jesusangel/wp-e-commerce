@@ -14,6 +14,9 @@ if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}cart_contents` LI
 	$wpdb->query("ALTER TABLE `{$wpdb->prefix}cart_contents` ADD `files` TEXT NOT NULL AFTER `no_shipping`");
 }
 
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}wpsc_coupon_codes` LIKE 'every_product';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}wpsc_coupon_codes` ADD `every_product` TEXT NOT NULL AFTER `active`");
+}
 
 
 // here isthe code to update the payment gateway options.

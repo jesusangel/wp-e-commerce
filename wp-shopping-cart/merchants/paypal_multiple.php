@@ -26,6 +26,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['cancel_return'] = urlencode($transact_url);
   $data['notify_url'] =urlencode(get_option('siteurl')."/?ipn_request=true");
   $data['rm'] = '2';
+  //data['bn'] = 'Instinct-WP-e-commerce_ShoppingCart_EC';
   
   // look up the currency codes and local price
 
@@ -220,7 +221,7 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 	}
 
 	//   echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
-	//   exit("<pre>".print_r($data,true)."</pre>");
+	exit("<pre>".print_r($data,true)."</pre>");
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
 }

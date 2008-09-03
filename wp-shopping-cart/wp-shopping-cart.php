@@ -4,7 +4,7 @@ Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
 Version: 3.6.8 RC1
-Author: Thomas Howard of Instinct Entertainment
+Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
 define('WPSC_VERSION', '3.6');
