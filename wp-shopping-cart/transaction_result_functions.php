@@ -89,12 +89,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				
 				
 				
-				
-				$downloadable='1';
-				// 		if ($digital[0]['file'] == '1'){
-				// 			$downloadable='1';
-				// 		}
-				if ($downloadable){
+				if (($purchase_log['processed'] >= 2)){
 					$download_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
 					$download_data = $download_data[0];
 					
