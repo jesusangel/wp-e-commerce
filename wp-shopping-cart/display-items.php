@@ -1,9 +1,7 @@
-<?php
+ <?php
 include_once('tagging_functions.php');
 include_once('google_base_functions.php');
 $category_data = null;
-
-
 
 $current_user = wp_get_current_user();
 
@@ -45,37 +43,6 @@ function top_category_options($category_id = null, $iteration = 0, $selected_id 
   return $output;
 }
 
-function brandslist($current_brand = '') {
-  global $wpdb;
-  $options = "";
-  $options .= "<option  $selected value='0'>".TXT_WPSC_SELECTABRAND."</option>\r\n";
-  $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_brands` WHERE `active`='1' ORDER BY `id` ASC",ARRAY_A);
-  foreach((array)$values as $option) {
-    if($curent_category == $option['id']) {
-      $selected = "selected='selected'";
-    }
-    $options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
-    $selected = "";
-  }
-  $concat .= "<select name='brand'>".$options."</select>\r\n";
-  return $concat;
-}
-
-function variationslist($current_variation = '') {
-	global $wpdb;
-	$options = "";
-	$values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
-	$options .= "<option  $selected value='0'>".TXT_WPSC_PLEASECHOOSE."</option>\r\n";
-	foreach((array)$values as $option) {
-		if($current_brand == $option['id']) {
-			$selected = "selected='selected'";
-		}
-		$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
-		$selected = "";
-	}
-	$concat .= "<select name='variations' onChange='add_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
-	return $concat;
-}
 
 /*
  * Makes the order changes
@@ -145,6 +112,7 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
  * Adds new products
  */
 if($_POST['submit_action'] == 'add') {
+  
   // well, there is simply no way to do this other than the blatantly obvious, so here it is
   if(!is_callable('getshopped_item_limit') || (@getshopped_item_limit() !== false)) {
   
@@ -246,7 +214,7 @@ if($_POST['submit_action'] == 'add') {
 			}
 		
 				/* Handle new image uploads here */
-			$image = wpsc_item_process_image($product_id);
+			$image = wpsc_item_process_image($product_id, $_FILES['image']['tmp_name'], $_FILES['image']['name'], $_POST['width'], $_POST['height'], $_POST['image_resize']);
 	
 	
 			/* Process extra meta values */
@@ -436,7 +404,7 @@ if($_POST['submit_action'] == "edit") {
 		}
 
   /* Handle new image uploads here */
-  $image = wpsc_item_process_image();
+  $image = wpsc_item_process_image($_POST['prodid'], $_FILES['image']['tmp_name'], $_FILES['image']['name'], $_POST['width'], $_POST['height'], $_POST['image_resize']);
 
 
   if(is_numeric($_POST['prodid'])) {
@@ -555,11 +523,11 @@ if($_POST['submit_action'] == "edit") {
       foreach((array)$_POST['productmeta_values'] as $key => $value) {
         if(get_product_meta($_POST['prodid'], $key) != false) {
           update_product_meta($_POST['prodid'], $key, $value);
-          } else {
+				} else {
           add_product_meta($_POST['prodid'], $key, $value);
-          }
-        }
-      }
+				}
+			}
+		}
 
     if($_POST['new_custom_meta'] != null) {
       foreach((array)$_POST['new_custom_meta']['name'] as $key => $name) {

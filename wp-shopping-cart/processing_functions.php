@@ -306,8 +306,7 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
     return $shipping;    
 	}
 
-function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false)
-  {
+function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
   /*
    * This now ignores tax status, but removing it entirely will probably have to wait for the inevitable yet indefinately delayed total rewrite, woot
    */
@@ -320,31 +319,20 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
   $currency_type = get_option('currency_type');
   $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
   $price_out = null;
-  if(is_numeric($id))
-    {
-    
-    }
 
   $price_out =  number_format($price_in, 2, '.', ',');
 
-  if($currency_data[0]['symbol'] != '')
-    {    
-    if($nohtml == false)
-      {
+  if($currency_data[0]['symbol'] != '') {    
+    if($nohtml == false) {
       $currency_sign = $currency_data[0]['symbol_html'];
-      }
-      else
-        {
-        $currency_sign = $currency_data[0]['symbol'];
-        }
-    }
-    else
-      {
-      $currency_sign = $currency_data[0]['code'];
-      }
+		} else {
+			$currency_sign = $currency_data[0]['symbol'];
+		}
+	} else {
+		$currency_sign = $currency_data[0]['code'];
+	}
 
-  switch($currency_sign_location)
-    {
+  switch($currency_sign_location) {
     case 1:
     $output = $price_out.$currency_sign;
     break;
@@ -360,23 +348,19 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
     case 4:
     $output = $currency_sign.'  '.$price_out;
     break;
-    }
+	}
 
-  if($nohtml == true)
-    {
+  if($nohtml == true) {
     $output = "".$output."";
-    }
-    else
-      {
-      $output = "<span class='pricedisplay'>".$output."</span>";
-      }
+	} else {
+		$output = "<span class='pricedisplay'>".$output."</span>";
+	}
       
-  if($no_dollar_sign == true)
-    {
+  if($no_dollar_sign == true) {
     return $price_out;
-    }
+	}
   return $output;
-  }
+}
   
 function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
   {
@@ -477,64 +461,53 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
   return $price;
 }
   
-function check_in_stock($id, $variations, $item_quantity = 1)
-  {
+function check_in_stock($id, $variations, $item_quantity = 1) {
   global $wpdb;
   $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$id."' LIMIT 1";
   $item_data = $wpdb->get_row($sql,ARRAY_A);
   
   $item_stock = null;
   $variation_count = count($variations);
-  if(($variation_count >= 1) && ($variation_count <= 2))
-    {
-    foreach($variations as $variation_id)
-      {
-      if(is_numeric($variation_id))
-        {
+  if(($variation_count >= 1) && ($variation_count <= 2)) {
+    foreach($variations as $variation_id) {
+      if(is_numeric($variation_id)) {
         $variation_ids[] = $variation_id;
-        }
-      }
-    if(count($variation_ids) == 2)
-      {
+			}
+		}
+    if(count($variation_ids) == 2) {
       $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$id."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '".$variation_ids[1]."') OR (`variation_id_1` = '".$variation_ids[1]."' AND `variation_id_2` = '".$variation_ids[0]."') LIMIT 1",ARRAY_A);
       $item_stock = $variation_stock_data['stock'];
-      }
-      else if(count($variation_ids) == 1)
-        {
-        $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$id."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
+		} else if(count($variation_ids) == 1) {
+			$variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$id."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
 
-        $item_stock = $variation_stock_data['stock'];
-        }
-    }
+			$item_stock = $variation_stock_data['stock'];
+		}
+	}
     
-  if($item_stock === null)
-    {
+  if($item_stock === null) {
     $item_stock = $item_data['quantity'];
-    }
+	}
   
-  if((($item_data['quantity_limited'] == 1) && ($item_stock > 0) && ($item_stock >= $item_quantity)) || ($item_data['quantity_limited'] == 0)) 
-    {
+  if((($item_data['quantity_limited'] == 1) && ($item_stock > 0) && ($item_stock >= $item_quantity)) || ($item_data['quantity_limited'] == 0))  {
     $output = true;
-    }
-    else
-      {
-      $output = false;
-      }
+	} else {
+		$output = false;
+	}
   return $output;
-  }
+}
  
   
   
-function wpsc_item_process_image($id='') {
+function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0, $height = 0, $resize_method = 1) {
+  //  the function for processing images, takes a product_id, input_file outout file name, height and width
   global $wpdb;
-  if ($id=='') {
-	  $id=$_POST['prodid'];
-	}
+	//$_FILES['image']['tmp_name']
 	
-  if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name']) && apply_filters( 'wpsc_filter_file', $_FILES['image']['tmp_name'] )) {
+	//$_FILES['image']['name']
+  if(preg_match("/\.(gif|jp(e)*g|png){1}$/i",$output_filename) && apply_filters( 'wpsc_filter_file', $input_file )) {
 		//$active_signup = apply_filters( 'wpsc_filter_file', $_FILES['image']['tmp_name'] );
     if(function_exists("getimagesize")) {
-			$image_name = basename($_FILES['image']['name']);
+			$image_name = basename($output_filename);
 			if(is_file((WPSC_IMAGE_DIR.$image_name))) {
 				$name_parts = explode('.',basename($image_name));
 				$extension = array_pop($name_parts);
@@ -559,15 +532,19 @@ function wpsc_item_process_image($id='') {
 			//exit("<pre>".print_r($image_name,true)."</pre>");
 			
 			$new_image_path = WPSC_IMAGE_DIR.$image_name;
-			move_uploaded_file($_FILES['image']['tmp_name'], $new_image_path);
+			rename($input_file, $new_image_path);
 			$stat = stat( dirname( $new_image_path ));
 			$perms = $stat['mode'] & 0000666;
 			@ chmod( $new_image_path, $perms );	
 			
-      switch($_POST['image_resize']) {
+      switch($resize_method) {
         case 2:
-        $height = $_POST['height'];
-        $width  = $_POST['width'];
+        if($height < 1) {
+					$height = get_option('product_image_height');
+        }
+        if($width < 1) {
+					$width  = get_option('product_image_width');
+        }
         break;
         
         
@@ -582,7 +559,7 @@ function wpsc_item_process_image($id='') {
         $width  = get_option('product_image_width');
         break;
 			}
-			if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
+			if(($resize_method == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
 				$imagefield='thumbnailImage';
 				$image= image_processing($_FILES['thumbnailImage']['tmp_name'], (WPSC_THUMBNAIL_DIR.$image_name),null,null,$imagefield);
 				$thumbnail_image = $image;
@@ -595,7 +572,7 @@ function wpsc_item_process_image($id='') {
 
 			$image = $wpdb->escape($image_name);
     } else {
-			$image_name = basename($_FILES['image']['name']);
+			$image_name = basename($output_filename);
 			if(is_file((WPSC_IMAGE_DIR.$image_name))) {
 				$name_parts = explode('.',basename($image_name));
 				$extension = array_pop($name_parts);
@@ -617,7 +594,7 @@ function wpsc_item_process_image($id='') {
 				} while ($image_name == null);
 			}			
 			$new_image_path = WPSC_IMAGE_DIR.$image_name;
-			move_uploaded_file($_FILES['image']['tmp_name'], $new_image_path);
+			move_uploaded_file($input_file, $new_image_path);
 			$stat = stat( dirname( $new_image_path ));
 			$perms = $stat['mode'] & 0000666;
 			@ chmod( $new_image_path, $perms );	
@@ -842,7 +819,7 @@ function usps_shipping_methods() {
 // 					if ($transit) {
 // 						$transitreq  = 'USERID="' . MODULE_SHIPPING_USPS_USERID .
 // 						 '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">' .
-// 						 '<OriginZip>' . STORE_ORIGIN_ZIP . '</OriginZip>' .
+// 						 '<OriginZip>' . STORE_ORIGIN_ZIP . '</OriginZip>' . 
 // 						 '<DestinationZip>' . $dest_zip . '</DestinationZip>';
 // 
 // 					switch ($key) {
@@ -1077,6 +1054,123 @@ function wpsc_send_ping($server) {
 
 
 
-
+function wpsc_add_product($product_values) {
+    global $wpdb;
+		// takes an array, inserts it into the database as a product
+		$success = false;
+		
+		
+		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` SET";
+		$insertsql .= "`name` = '".$wpdb->escape($product_values['name'])."',";
+		$insertsql .= "`description`  = '".$wpdb->escape($product_values['description'])."',";
+		$insertsql .= "`additional_description`  = '".$wpdb->escape($product_values['additional_description'])."',";
+				
+		$insertsql .= "`price` = ".$wpdb->escape($product_values['price'])."',";
+		
+		$insertsql .= "`quantity_limited` = '".$wpdb->escape($product_values['quantity_limited'])."',";
+		$insertsql .= "`quantity` = '".$wpdb->escape($product_values['quantity'])."',";
+		
+		$insertsql .= "`special` = '".$wpdb->escape($product_values['special'])."',";
+		$insertsql .= "`special_price` = '".$wpdb->escape($product_values['special_price'])."',";
+		
+		$insertsql .= "`weight` = '".$wpdb->escape($product_values['weight'])."',";
+		$insertsql .= "`weight_unit` = '".$wpdb->escape($product_values['weight_unit'])."',";
+		
+		$insertsql .= "`no_shipping` = '".$wpdb->escape($product_values['no_shipping'])."',";	
+		$insertsql .= "`pnp` = '".$wpdb->escape($product_values['pnp'])."',";
+		$insertsql .= "`international_pnp` = '".$wpdb->escape($product_values['international_pnp'])."',";
+		
+		$insertsql .= "`donation` = '".$wpdb->escape($product_values['donation'])."',";
+		$insertsql .= "`display_frontpage` = '".$wpdb->escape($product_values['display_frontpage'])."',";
+		$insertsql .= "`notax` = '".$wpdb->escape($product_values['notax'])."',";
+		
+		$insertsql .= "`image` = '0',";
+		$insertsql .= "`file` = '0',";
+		$insertsql .= "`thumbnail_state` = '0'";
+		
+		
+		//Insert the data
+		if($wpdb->query($insertsql)) {  
+		  // if we succeeded, we have a product id, we wants it for the next stuff
+			$product_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
+			
+			// add the tags
+			if(function_exists('wp_insert_term')) {
+				product_tag_init();
+				$tags = $product_values['product_tag'];
+				if ($tags!="") {
+					$tags = explode(',',$tags);
+					foreach($tags as $tag) {
+						$tt = wp_insert_term((string)$tag, 'product_tag');
+					}
+					$return = wp_set_object_terms($product_id, $tags, 'product_tag');
+				}
+			}
+			
+			$image = wpsc_item_process_image($product_id, $product_values['image_path'], basename($product_values['image_path']), $product_values['width'], $product_values['height'], $product_values['image_resize']);
+						
+			if(($image != null)) {
+				$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$wpdb->escape($image)."' WHERE `id`='".$product_id."' LIMIT 1");
+			}
+		
+			
+			// add the product meta values
+			if($product_values['productmeta_values'] != null) {
+				foreach((array)$product_values['productmeta_values'] as $key => $value) {
+					if(get_product_meta($product_id, $key) != false) {
+						update_product_meta($product_id, $key, $value);
+					} else {
+						add_product_meta($product_id, $key, $value);
+					}
+				}
+			}
+			
+			// and the custom meta values		
+			if($product_values['new_custom_meta'] != null) {
+				foreach((array)$product_values['new_custom_meta']['name'] as $key => $name) {
+					$value = $product_values['new_custom_meta']['value'][(int)$key];
+					if(($name != '') && ($value != '')) {
+						add_product_meta($product_id, $name, $value, false, true);
+					}
+				}
+			}
+			
+			// Add the tidy url name 
+			$tidied_name = trim($product_values['name']);
+			$tidied_name = strtolower($tidied_name);
+			$url_name = preg_replace(array("/(\s)+/","/[^\w-]+/i"), array("-", ''), $tidied_name);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '".$wpdb->escape($url_name)."', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape($url_name)."){1}(\d)*$' ",ARRAY_A);
+			$extension_number = '';
+			if($similar_names['count'] > 0) {
+				$extension_number = (int)$similar_names['max_number']+1;
+			}
+			$url_name .= $extension_number;
+			add_product_meta($product_id, 'url_name', $url_name,true);
+			
+			// Add the varations and associated values
+			$variations_procesor = new nzshpcrt_variations;
+			if($product_values['variation_values'] != null) {
+				$variations_procesor->add_to_existing_product($product_id,$product_values['variation_values']);
+			}
+				
+			if($product_values['variation_priceandstock'] != null) {
+				$variations_procesor->update_variation_values($product_id, $product_values['variation_priceandstock']);
+			}
+						
+			// Add the selelcted categories
+			$item_list = '';
+			if(count($product_values['category']) > 0) {
+				foreach($product_values['category'] as $category_id) {
+				  $category_id = (int)$category_id;
+					$check_existing = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
+					if($check_existing == null) {
+						$wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
+					}
+				}
+			}
+		$success = true;
+		}
+	return $success;
+}
 
 ?>

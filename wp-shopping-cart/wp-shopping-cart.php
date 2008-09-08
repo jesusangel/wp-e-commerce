@@ -396,7 +396,7 @@ jQuery(document).ready( function() {
 
 function wpsc_admin_css() {
   $siteurl = get_option('siteurl'); 
-  if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
+  if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) || ($_GET['mass_upload'] == 'true')) {
 ?>
 <link href='<?php echo WPSC_URL; ?>/admin.css' rel="stylesheet" type="text/css" />
 <link href='<?php echo WPSC_URL; ?>/js/jquery.ui.tabs.css' rel="stylesheet" type="text/css" />
@@ -2114,6 +2114,7 @@ function nzshpcrt_show_categories($content = '') {
 // substitutes in the buy now buttons where the shortcode is in a post.
 function nzshpcrt_substitute_buy_now_button($content = '') {
   if(preg_match_all("/\[buy_now_button=([\d]+)\]/", $content, $matches)) {
+  //echo "<pre>".print_r($matches,true)."</pre>";
     foreach($matches[1] as $key => $product_id) {
       $original_string = $matches[0][$key];
       //print_r($matches);

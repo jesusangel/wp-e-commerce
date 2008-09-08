@@ -1,100 +1,79 @@
 <?php
-function categorylist($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0)
-  {
-  /*
-   * Displays the category forms for adding and editing products
+function categorylist($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0) {
+  /* Displays the category forms for adding and editing products
    * Recurses to generate the branched view for subcategories
-   */
+	*/
   global $wpdb;
   if(is_numeric($category_id)) {
     $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
   } else {
     $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
 	}
-  foreach((array)$values as $option)
-    {
-    if(is_numeric($product_id) && ($product_id > 0))
-      {
+  foreach((array)$values as $option) {
+    if(is_numeric($product_id) && ($product_id > 0)) {
       $category_assoc = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
       //echo "<pre>".print_r($category_assoc,true)."</pre>";
-      if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0))
-        {
+      if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0)) {
         $selected = "checked='true'";
-        }
-      }
-    if(is_numeric($category_id) && ($iteration > 0))
-      {
-      if($iteration > 1)
-        {
-        if($iteration > 3)
-          {
+			}
+		}
+    if(is_numeric($category_id) && ($iteration > 0)) {
+      if($iteration > 1) {
+        if($iteration > 3) {
           $output .= str_repeat("&nbsp;", $iteration);
-          }
+				}
         $output .= str_repeat("&nbsp;", $iteration);
-        }
+			}
       $output .=   "-&nbsp;";
-      }
+		}
     $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' >".stripslashes($option['name'])."</label><br />";
     $output .= categorylist($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
     $selected = "";
-    }
+	}
   return $output;
-  }
+}
   
-function nzshpcrt_country_list($selected_country = null)
-  {
+function nzshpcrt_country_list($selected_country = null) {
   global $wpdb;
   $output = "<option value=''></option>";
-  if($selected_country == null)
-    {
+  if($selected_country == null) {
     $output = "<option value=''>".TXT_WPSC_PLEASE_SELECT."</option>";
-    }
+	}
   $country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
-  foreach ($country_data as $country)
-    {
+  foreach ($country_data as $country) {
     $selected ='';
-    if($selected_country == $country['isocode'])
-      {
+    if($selected_country == $country['isocode']) {
       $selected = "selected='true'";
-      }
+		}
     $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
-    }
+	}
   return $output;
-  }
+}
 
-function nzshpcrt_region_list($selected_country = null, $selected_region = null)
-  {
+function nzshpcrt_region_list($selected_country = null, $selected_region = null) {
   global $wpdb;
-  if($selected_region == null)
-    {
+  if($selected_region == null) {
     $selected_region = get_option('base_region');
-    }
+	}
   $output = "";
   $region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$selected_country."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
-  if($region_list != null)
-    {
+  if($region_list != null) {
     $output .= "<select name='base_region'>\n\r";
     $output .= "<option value=''>None</option>";
-    foreach($region_list as $region)
-      {
-      if($selected_region == $region['id'])
-        {
+    foreach($region_list as $region) {
+      if($selected_region == $region['id']) {
         $selected = "selected='true'";
-        }
-        else
-          {
-          $selected = "";
-          }
+			} else {
+				$selected = "";
+			}
       $output .= "<option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
-      }
+		}
     $output .= "</select>\n\r";    
-    }
-    else
-      {
-      $output .= "<select name='base_region' disabled='true'><option value=''>None</option></select>\n\r";
-      }
+	} else {
+		$output .= "<select name='base_region' disabled='true'><option value=''>None</option></select>\n\r";
+	}
   return $output;
-  }
+}
   
 function nzshpcrt_form_field_list($selected_field = null)
   {
@@ -232,6 +211,20 @@ function wpsc_list_product_themes($theme_name = null) {
   return $output;
 }
 
-
+function variationslist($current_variation = '') {
+	global $wpdb;
+	$options = "";
+	$values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
+	$options .= "<option  $selected value='0'>".TXT_WPSC_PLEASECHOOSE."</option>\r\n";
+	foreach((array)$values as $option) {
+		if($current_brand == $option['id']) {
+			$selected = "selected='selected'";
+		}
+		$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
+		$selected = "";
+	}
+	$concat .= "<select name='variations' onChange='add_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
+	return $concat;
+}
 
 ?>

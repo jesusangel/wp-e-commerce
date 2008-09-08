@@ -308,14 +308,14 @@ function nzshpcrt_install()
 		`additional_description` longtext NOT NULL,
 		`price` varchar(20) NOT NULL default '0',
 		`weight` int(11) NOT NULL default '0',
-		`weight_unit` varchar(10) NOT NULL,
+		`weight_unit` varchar(10) NOT NULL default '' ,
 		`pnp` varchar(20) NOT NULL default '0',
 		`international_pnp` varchar(20) NOT NULL default '0',
-		`file` bigint(20) unsigned NOT NULL,
-		`image` text NOT NULL,
+		`file` bigint(20) unsigned NOT NULL default '0',
+		`image` text NOT NULL default '',
 		`category` bigint(20) unsigned NOT NULL default '0',
 		`brand` bigint(20) unsigned NOT NULL default '0',
-		`quantity_limited` varchar(1) NOT NULL,
+		`quantity_limited` varchar(1) NOT NULL default '0',
 		`quantity` int(10) unsigned NOT NULL default '0',
 		`special` varchar(1) NOT NULL default '0',
 		`special_price` varchar(20) NOT NULL default '0',
@@ -325,7 +325,7 @@ function nzshpcrt_install()
 		`donation` varchar(1) NOT NULL default '0',
 		`no_shipping` varchar(1) NOT NULL default '0',
 		`thumbnail_image` text,
-		`thumbnail_state` int(11) NOT NULL,
+		`thumbnail_state` int(11) NOT NULL default '0',
 		PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ;
 	";
@@ -1243,7 +1243,7 @@ function wpsc_product_files_htaccess() {
 		$file_handle = @ fopen($filename, 'w+');
 		@ fwrite($file_handle, $htaccess);
 		@ fclose($file_handle);
-		@ chmod($file_handle, 665);
+		@ chmod($file_handle, 0665);
   }
 }
 

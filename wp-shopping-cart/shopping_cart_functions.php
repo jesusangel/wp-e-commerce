@@ -132,6 +132,23 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
     foreach($cart as $cart_item) {
       $product_id = $cart_item->product_id;
       $quantity = $cart_item->quantity;
+      
+			if(count($cart_item->product_variations) >= 1) {
+				$variation_list = "&nbsp;(";
+				$i = 0;
+		//exit(print_r($product_variations,1));
+				foreach($cart_item->product_variations as $value_id) {
+					if($i > 0) {
+						$variation_list .= ",&nbsp;";
+					}
+					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$variation_list .= stripslashes(str_replace("", " ",$value_data[0]['name']));
+					$i++;
+				}
+				$variation_list .= ")";
+			} else {
+				$variation_list = '';
+			}
 	
       //echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
       $product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
@@ -176,9 +193,9 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			}
       $output .= "<tr>";
       if (get_option("hide_name_link")=='1') {
-	      $output .= "<td class='tdproduct'>".$product['name']."</td>";
+	      $output .= "<td class='tdproduct'>".$product['name'].$variation_list."</td>";
       } else {
-        $output .= "<td><a href='".wpsc_product_url($product['id'])."' >".stripslashes($product['name'])."</a></td>";
+        $output .= "<td><a href='".wpsc_product_url($product['id'])."' >".stripslashes($product['name']).$variation_list."</a></td>";
       }
       $output .= "<td class='tdqty'>".$quantity."</td>";
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
