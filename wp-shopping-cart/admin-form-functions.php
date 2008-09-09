@@ -23,33 +23,14 @@ function nzshpcrt_getproductform($prodid)
     $concat .= "<select name='brand'>".$options."</select>\r\n";
     return $concat;
 	}
-  
-  function variationslist($current_variation = '') {
-    global $wpdb;
-    $options = "";
-    //$options .= "<option value=''>".TXT_WPSC_SELECTACATEGORY."</option>\r\n";
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
-    $options .= "<option  $selected value='0'>".TXT_WPSC_PLEASECHOOSE."</option>\r\n";
-		foreach((array)$values as $option) {
-			if($current_brand == $option['id']) {
-				$selected = "selected='selected'";
-			}
-			$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
-			$selected = "";
-		}
-
-    $concat .= "<select name='variations' onChange='edit_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
-    return $concat;
-	}
-  
   $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=$prodid LIMIT 1";
-  $product_data = $wpdb->get_results($sql,ARRAY_A) ;
+  $product_data = $wpdb->get_results($sql,ARRAY_A);
   $product = $product_data[0];
   $sql = "SELECT * FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id`=$prodid AND meta_key='external_link' LIMIT 1";
-  $meta_data = $wpdb->get_results($sql,ARRAY_A) ;
+  $meta_data = $wpdb->get_results($sql,ARRAY_A);
   $product['external_link'] = $meta_data[0]['meta_value'];
   $sql = "SELECT * FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id`=$prodid AND meta_key='merchant_notes' LIMIT 1";
-  $meta_data = $wpdb->get_results($sql,ARRAY_A) ;
+  $meta_data = $wpdb->get_results($sql,ARRAY_A);
   $product['merchant_notes'] = $meta_data[0]['meta_value'];
   $engrave = get_product_meta($prodid,'engraved',true);
   $can_have_uploaded_image = get_product_meta($prodid,'can_have_uploaded_image',true);
@@ -303,7 +284,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= TXT_WPSC_ADD_VAR.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= variationslist();
+  $output .= variationslist(null, 'edit');
   if($check_variation_value_count < 1) {
 		$output .= "            	<div id='edit_variations_container'>\n\r";
 		$output .= "            	</div>\n\r";

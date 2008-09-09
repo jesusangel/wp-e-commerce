@@ -1065,7 +1065,7 @@ function wpsc_add_product($product_values) {
 		$insertsql .= "`description`  = '".$wpdb->escape($product_values['description'])."',";
 		$insertsql .= "`additional_description`  = '".$wpdb->escape($product_values['additional_description'])."',";
 				
-		$insertsql .= "`price` = ".$wpdb->escape($product_values['price'])."',";
+		$insertsql .= "`price` = '".$wpdb->escape($product_values['price'])."',";
 		
 		$insertsql .= "`quantity_limited` = '".$wpdb->escape($product_values['quantity_limited'])."',";
 		$insertsql .= "`quantity` = '".$wpdb->escape($product_values['quantity'])."',";
@@ -1086,7 +1086,7 @@ function wpsc_add_product($product_values) {
 		
 		$insertsql .= "`image` = '0',";
 		$insertsql .= "`file` = '0',";
-		$insertsql .= "`thumbnail_state` = '0'";
+		$insertsql .= "`thumbnail_state` = '0' ;";
 		
 		
 		//Insert the data

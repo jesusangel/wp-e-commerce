@@ -211,7 +211,7 @@ function wpsc_list_product_themes($theme_name = null) {
   return $output;
 }
 
-function variationslist($current_variation = '') {
+function variationslist($current_variation = '', $mode='add') {
 	global $wpdb;
 	$options = "";
 	$values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
@@ -223,7 +223,7 @@ function variationslist($current_variation = '') {
 		$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
 		$selected = "";
 	}
-	$concat .= "<select name='variations' onChange='add_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
+	$concat .= "<select name='variations' onChange='$mode_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
 	return $concat;
 }
 
