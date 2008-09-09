@@ -133,9 +133,9 @@ function display_category_row($category,$subcategory_level = 0) {
     if($similar_names['count'] > 0) {
       $extension_number = (int)$similar_names['max_number']+1;
 		}
-    $url_name .= $extension_number;   
+    $url_name .= $extension_number;
       
-    $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
+    $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` , `display_type` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0' , '{$_POST['display_type']}')";
 		$wp_rewrite->flush_rules(); 
     if($wpdb->query($insertsql)) {
       echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
@@ -143,7 +143,7 @@ function display_category_row($category,$subcategory_level = 0) {
       echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
 		}
     
-		$wp_rewrite->flush_rules(); 
+		$wp_rewrite->flush_rules();
 	}
 
   if(($_POST['submit_action'] == "edit") && is_numeric($_POST['prodid'])) {
@@ -219,6 +219,11 @@ function display_category_row($category,$subcategory_level = 0) {
       if($image != null) {
         $category_sql_list[] = "`image` = '$image'";
 			}
+		}
+
+	if($_POST['display_type'] != $category_data['display_type']) {
+      $display_type = $_POST['display_type'];
+      $category_sql_list[] = "display_type = '$display_type' ";
 		}
 
     if(count($category_sql_list) > 0) {
@@ -484,6 +489,23 @@ echo "        </div>\n\r";
         <textarea name='description' cols='40' rows='8'></textarea>
       </td>
     </tr>
+    <?php
+    
+    if (function_exists('product_display_grid')) {
+	    echo "<tr>
+		<td>
+		". TXT_WPSC_DISPLAYTYPE.":
+		</td>
+	      <td>
+        <select name='display_type'>
+		<option value='grid'>Gird</option>
+		<option value='default'>Default</option>
+	</select>
+      </td>
+    </tr>
+    <tr>";
+    }
+    ?>
     <tr>
       <td>
         <?php echo TXT_WPSC_CATEGORY_PARENT;?>:

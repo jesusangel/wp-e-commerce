@@ -828,6 +828,26 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "          </tr>\n\r";
   $output .= "          </tr>\n\r";
 
+     if (function_exists('product_display_grid')) {
+	   if ($product['display_type'] == 'grid') {
+		   $display_type1="selected='selected'";
+	   } else if ($product['display_type'] == 'default') {
+		   $display_type2="selected='selected'";
+	   }
+	   $output.= "<tr>
+		<td>
+		". TXT_WPSC_DISPLAYTYPE.":
+		</td>
+	      <td>
+        <select name='display_type'>
+		<option {$display_type1} value='grid'>Gird</option>
+		<option {$display_type2} value='default'>Default</option>
+	</select>
+      </td>
+    </tr>
+    <tr>";
+    }
+
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= TXT_WPSC_IMAGE.": ";

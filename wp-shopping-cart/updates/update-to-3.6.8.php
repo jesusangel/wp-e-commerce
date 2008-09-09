@@ -57,5 +57,9 @@ if(get_option('wpsc_default_category') == null) {
   update_option('wpsc_default_category', get_option('default_category'));
 }
 
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}product_categories` LIKE 'display_type';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_categories` ADD `display_type` VARCHAR(10) NOT NULL AFTER `order`");
+}
+
 
 ?>
