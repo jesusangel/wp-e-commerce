@@ -4,7 +4,11 @@ $curgateway = get_option('payment_gateway');
 $sessionid = $_GET['sessionid'];
 $errorcode = '';
 $transactid = '';
- if ($_REQUEST['payflow']=='1') {
+if ($_REQUEST['eway']=='1') {
+	echo $_SESSION['eway_message'];
+	$_SESSION['eway_message']='';
+}
+if ($_REQUEST['payflow']=='1') {	
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';
 }
@@ -93,7 +97,7 @@ if($_REQUEST['act']=='error'){
 	</center>
 		</table>
 <?php 
-} else if($_REQUEST['act']=='do') {
+}else if($_REQUEST['act']=='do'){
 	session_start();
 	
 	/* Gather the information to make the final call to
