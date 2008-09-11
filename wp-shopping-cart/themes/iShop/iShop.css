@@ -292,6 +292,10 @@ p.wpsc_product_extra_content{
  font-size: 9pt;
  font-weight: bold;
  }
+
+ p.galleryheading{
+	font-weight:bold;
+}
  
  input.wpsc_buy_button{
  background-image: url(images/buy_button.gif);

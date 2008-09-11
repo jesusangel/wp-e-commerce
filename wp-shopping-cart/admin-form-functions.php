@@ -840,7 +840,7 @@ function nzshpcrt_getcategoryform($catid)
 		</td>
 	      <td>
         <select name='display_type'>
-		<option {$display_type1} value='grid'>Gird</option>
+		<option {$display_type1} value='grid'>Grid</option>
 		<option {$display_type2} value='default'>Default</option>
 	</select>
       </td>

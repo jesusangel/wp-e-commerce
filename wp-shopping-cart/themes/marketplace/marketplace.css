@@ -385,7 +385,9 @@ p.wpsc_product_extra_content{
 
 }
 
- 
+ p.galleryheading{
+	font-weight:bold;
+}
  
 /* styles the additional description */
 span.additional_description{

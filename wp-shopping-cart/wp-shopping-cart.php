@@ -265,21 +265,7 @@ function nzshpcrt_style() {
 	}
 	?>
 	
-	div.single_product_display div.textcol{
-		margin-left: <?php echo $single_thumbnail_width  + 10; ?>px !important;
-		_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
-		min-height: <?php echo $single_thumbnail_height + 10;?>px;
-		_height: <?php echo $single_thumbnail_height + 10;?>px;
-	}
-		
-		
-	div.single_product_display  div.textcol div.imagecol{
-		position:absolute;
-		top:0px;
-		left: 0px;
-		margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
-	}
-	
+
   
   
     <?php
@@ -2349,7 +2335,7 @@ function wpsc_replace_the_title($input) {
  
  
  
-add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
+// add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
 
 require_once(WPSC_FILE_PATH . '/product_display_functions.php');
 
