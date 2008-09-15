@@ -1444,3 +1444,13 @@ img.ui-datepicker-trigger {
 	width: 193px;
 	height: 200px;
 }
+
+/* Affiliates styles */
+select#affliate_products {
+	width:150px;
+}
+
+textarea.affiliate_text {
+	width:450px;
+	height:150px;
+}

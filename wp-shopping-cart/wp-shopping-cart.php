@@ -188,6 +188,7 @@ class wp_shopping_cart {
   }
   function displaypages()
     {
+    global $userdata;
     /*
      * Fairly standard wordpress plugin API stuff for adding the admin pages, rearrange the order to rearrange the pages
      * The bits to display the options page first on first use may be buggy, but tend not to stick around long enough to be identified and fixed
@@ -204,31 +205,38 @@ class wp_shopping_cart {
 				//         add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
 				//         } else {
 			$base_page = WPSC_DIR_NAME.'/display-log.php';
-			add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 7, $base_page);
-			add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
+			if ($userdata->user_level <= 6) {
+				add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
+			} else {
+				add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+			}
+				add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
 				//         }
-      //written by allen
-	  add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
-	  //exit(ABSPATH.'wp-admin/users.php');
-	  //end of written by allen
-      
-      add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
-      add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
-      
-      add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
-      add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
-      
-      add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
-      add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
+			//written by allen
+			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
+			//exit(ABSPATH.'wp-admin/users.php');
+			//end of written by allen
+			
+			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
+			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
+			
+			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
+			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
+			
+			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
+			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
 			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
-      if(function_exists('gold_shpcrt_options')) {
-        gold_shpcrt_options($base_page);
-        }
+			
+			if(function_exists('gold_shpcrt_options')) {
+				gold_shpcrt_options($base_page);
+			}
+			
+			do_action('wpsc_add_submenu');
 //       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
-      }
-    return;
-    }
-  }
+		}
+		return;
+	}
+}
 
 function nzshpcrt_style() {
   ?>

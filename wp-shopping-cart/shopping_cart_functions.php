@@ -67,8 +67,8 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
  switch(get_option('cart_location'))  {
     case 1:
     if($no_title !== true) {
-			$output .= "<h2>".TXT_WPSC_SHOPPINGCART." $fancy_collapser</h2>";
-			$output .="<span id='alt_loadingindicator'><img id='alt_loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span></strong><br />";
+	$output .= "<h2>".TXT_WPSC_SHOPPINGCART." $fancy_collapser</h2>";
+	$output .="<span id='alt_loadingindicator'><img id='alt_loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span></strong><br />";
     }
     $spacing = "";
     break;
@@ -113,7 +113,6 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		} else {
 			$output .= "<span class='items'><span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span></span>";
 		}
-    
 
     $output .= "<table class='shoppingcart'>\n\r";
     $output .= "<tr><th id='thproduct'>".TXT_WPSC_PRODUCT."</th><th id='thqty'>".TXT_WPSC_QUANTITY_SHORT."</th><th id='thprice'>".TXT_WPSC_PRICE."</th></tr>\n\r";
@@ -126,6 +125,8 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	$merchant_key = get_option('google_key');  // Your Merchant Key
 	$server_type = get_option('google_server_type');
 	$currency = get_option('google_cur');
+	$payment_gateway_backup = get_option('payment_gateway');
+	update_option('payment_gateway', 'google');
 	if (get_option('payment_gateway') == 'google') {
 		$google_cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	}
@@ -201,28 +202,6 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
       $output .= "</tr>\n\r";
       }
-	//google checkout stuff.
-	// 	if (get_option('payment_gateway') == 'google') {
-	// 		$google_shipping = new GoogleFlatRateShipping("Flat Rate Shipping", $total_shipping);
-	// 		$Gfilter = new GoogleShippingFilters();
-	// 		$google_checkout_shipping=get_option("google_shipping_country");
-	// 		$google_shipping_country_ids = implode(",",(array)$google_checkout_shipping);
-	// 		if($google_shipping_country_ids != null) {
-	// 			$google_shipping_country = $wpdb->get_var("SELECT isocode FROM ".$wpdb->prefix."currency_list WHERE id IN (".$google_shipping_country_ids.")");
-	// 		}
-	// 		$Gfilter->AddAllowedPostalArea($google_shipping_country);
-	// 		$google_shipping->AddShippingRestrictions($Gfilter);
-	// 		$google_cart->AddShipping($google_shipping);
-	// 
-	// 		if ($_SESSION['selected_country']=='US'){
-	// 			$tax_rule = new GoogleDefaultTaxRule(0.05);
-	// 			$state_name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."region_tax WHERE id='".$_SESSION['selected_region']."'");
-	// 			$tax_rule->SetStateAreas(array($state_name));
-	// 			$tax_rule->AddPostalArea($google_shipping_country);
-	// 			$google_cart->AddDefaultTaxRules($tax_rule);
-	// 		}
-	// 	}
-	//end of google checkout.
     $output .= "</table>";
     if($_SESSION['delivery_country'] != null) {
       $total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
@@ -320,9 +299,8 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			$google_cart->AddDefaultTaxRules($alter_tax_rule);
 	 }
 
-    $output .= "<span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span>";
+    $output .= "<br><span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span><br>";
     $output .= "<span class='gocheckout'><a href='".get_option('shopping_cart_url')."'>".TXT_WPSC_GOTOCHECKOUT."</a></span>";
-
 	if (get_option('payment_gateway') == 'google') {
 		if (get_option('google_button_size') == '0'){
 			$google_button_size = 'BIG';
@@ -359,6 +337,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       }
   
  $output .= "</div>";
+ update_option('payment_gateway', $backup_payment_gateway);
   return $output;
   }
   
