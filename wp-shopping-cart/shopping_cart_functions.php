@@ -107,11 +107,19 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
  $output .= "<div id='sliding_cart'>";
   if($cart != null) {
     if(($quantity_limit == true) || ($_SESSION['out_of_stock'] == true)) {
-			$output .= "<span class='items'><span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span></span>";
-      $output .= "<span class='nomore'>".TXT_WPSC_NOMOREAVAILABLE."</span>";
-      $_SESSION['out_of_stock'] = false;
+			$output .= "<span class='items'>";
+			
+			$output .= "<span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span></span>";
+			$output .= "<span class='nomore'>".TXT_WPSC_NOMOREAVAILABLE."</span>";
+			$_SESSION['out_of_stock'] = false;
 		} else {
-			$output .= "<span class='items'><span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span></span>";
+			$output .= "<span class='items'>";
+			if ($_GET['action']=='affiliate') {
+				$output .= "<img style='border:0px;' src='".WPSC_URL."/images/cart_logo.gif'>";
+			} else {
+				$output .= "<span class='numberitems'>".TXT_WPSC_NUMBEROFITEMS.": </span><span class='cartcount'>".$cart_count."</span>";
+			}
+			$output .= "</span>";
 		}
 
     $output .= "<table class='shoppingcart'>\n\r";
@@ -202,7 +210,9 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
       $output .= "</tr>\n\r";
       }
-    $output .= "</table>";
+      if ($_GET['action']!='affiliate') {
+	    $output .= "</table>";
+    }
     if($_SESSION['delivery_country'] != null) {
       $total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
       $output .= "<span class='subtotal'><span class='subtotalhead'>".TXT_WPSC_SUBTOTAL.":</span>".nzshpcrt_currency_display(($total), 1)."</span>";
@@ -230,8 +240,15 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
 			}
-			$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
+			 if ($_GET['action']=='affiliate') {
+				$output .= "<tr><td style='background-color:white;'></td><td class='tdqty' >".TXT_WPSC_TOTAL.":</td><td class='tdqty'>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</td></tr>";
+			} else {
+				$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
+			}
 		}
+	 if ($_GET['action']=='affiliate') {
+	    $output .= "</table>";
+    }
     if(get_option('permalink_structure') != '')
       {
       $seperator ="?";
