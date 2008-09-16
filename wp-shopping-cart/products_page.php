@@ -16,7 +16,7 @@ if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_ca
   $group_type = TXT_WPSC_CATEGORYNOCAP;
 }
 
-$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
+$category_data = $wpdb->get_row($cat_sql,ARRAY_A);
 
 if($_GET['cart']== 'empty') {
   $_SESSION['nzshpcrt_cart'] = '';
@@ -64,24 +64,25 @@ if(function_exists('fancy_notifications')) {
 					echo "<br /><strong class='cattitles'>".TXT_WPSC_SEARCH_FOR." : ".stripslashes($_GET['product_search'])."</strong>";
 				} else {
 					$category_image = '';
-					if((get_option('show_category_thumbnails') == 1) && ($category_data[0]['image'] != null)) {
-						$category_image = "<img src='".WPSC_CATEGORY_URL.$category_data[0]['image']."' class='category_image' alt='' title='' />";
+					if((get_option('show_category_thumbnails') == 1) && ($category_data['image'] != null)) {
+						$category_image = "<img src='".WPSC_CATEGORY_URL.$category_data['image']."' class='category_image' alt='' title='' />";
 					}
-					echo "".$category_image."<strong class='cattitles'>".stripslashes($category_data[0]['name'])."</strong>";
-					if((get_option('wpsc_category_description') == 'true') && ($category_data[0]['description'] != '')) {
-						//echo "<p>".stripslashes($category_data[0]['description'])."</p>";
-						echo "<p>".nl2br($category_data[0]['description'])."</p>";
+					echo "".$category_image."<strong class='cattitles'>".stripslashes($category_data['name'])."</strong>";
+					if((get_option('wpsc_category_description') == 'true') && ($category_data['description'] != '')) {
+						//echo "<p>".stripslashes($category_data['description'])."</p>";
+						echo "<p>".nl2br($category_data['description'])."</p>";
 					}
 				}
+				
 				if(get_option('fancy_notifications') != 1) {
 					echo "<span id='loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span><br />";
 				}
+				
 				if (isset($GET['item_per_page'])){
 					$item_per_page = $_GET['item_per_page'];
 					$_SESSION['item_per_page'] = $item_per_page;
 					update_option('use_pagination',1);
 				} 
-				
 				
 				if(((get_option('show_advanced_search') != 1) || (get_option('show_search') != 1)) && (get_option('product_view') == 'grid') ) {
 				  $_SESSION['customer_view'] = 'grid';
@@ -89,18 +90,31 @@ if(function_exists('fancy_notifications')) {
 				  $_SESSION['customer_view'] = 'default';
 				}
 				
-				if(function_exists('product_display_list') && (get_option('product_view') == 'list')) {
-					echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
-				} else if(function_exists('product_display_grid') && (($_SESSION['customer_view'] == 'grid') || ((get_option('product_view') == 'grid') && ($_SESSION['customer_view'] != 'default')))) {		
-					//echo get_option('show_search');
-					
-					echo product_display_grid($product_list, $group_type, $group_sql, $search_sql);
-				} else {
-					echo product_display_default($product_list, $group_type, $group_sql, $search_sql);
+				$display_mode = get_option('product_view');							
+				if($category_data['display_type'] != '') {
+				  $display_type = $category_data['display_type'];
+				}
+				
+				switch($display_type) {
+					case "grid":
+					if(function_exists('product_display_grid')) {
+						echo product_display_grid($product_list, $group_type, $group_sql, $search_sql);
+					break; // only break if we have the function;
+					}
+				  
+				  case "list":
+					if(function_exists('product_display_list')) {
+						echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
+					break; // only break if we have the function;
+					}
+				  
+				  case "default":  // this may be redundant :D
+				  default:
+						echo product_display_default($product_list, $group_type, $group_sql, $search_sql);
+				  break;
 				}
 			}
 		} else {
-
       echo "<a name='products' ></a><strong class='prodtitles'>".TXT_WPSC_PLEASECHOOSEAGROUP."</strong><br />";
       echo nzshpcrt_display_categories_groups();
 		}
