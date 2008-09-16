@@ -200,7 +200,7 @@ div.productdisplay{
  clear:both;
  top:0px;
  left: 0px;
- margin-bottom: 20px;
+ margin-bottom: 12px;
  padding: 0px;
  width: 100%;
  text-align: left !important;
@@ -964,6 +964,7 @@ div.wpsc_product_search{
  height: 22px;
  _height: 30px;
  padding: 4px;
+ margin: 20px 0px 12px 0px;
  }
   
 table.productdisplay tr td {

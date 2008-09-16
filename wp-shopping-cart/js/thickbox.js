@@ -333,6 +333,7 @@ function TB_position() {
 	var arrayPageScroll = TB_getPageScrollTop();
 	var style = {width: TB_WIDTH, left: (arrayPageScroll[0] + (pagesize[0] - TB_WIDTH)/2), top: (arrayPageScroll[1] + (pagesize[1]-TB_HEIGHT)/2)};
 	jQuery("#TB_window").css(style);
+	jQuery("#TB_window").css("margin-top", 0);
 }
 
 function TB_overlaySize(){
