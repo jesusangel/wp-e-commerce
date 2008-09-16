@@ -45,9 +45,8 @@ if(function_exists('fancy_notifications')) {
 		} else {
 			$seperator ="&amp;";
 		}
-        
 		if($wp_query->query_vars['product_name'] != null){
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 		} else {
 			$product_id = $_GET['product_id'];
 		}

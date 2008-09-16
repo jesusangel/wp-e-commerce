@@ -244,7 +244,10 @@ function nzshpcrt_install()
 		`fee` varchar(1) NOT NULL default '0',
 		`active` varchar(1) NOT NULL default '1',
 		`category_parent` bigint(20) unsigned default '0',
-		`order` bigint(20) unsigned NOT NULL,
+		`order` bigint(20) unsigned NOT NULL default '',
+		`display_type` VARCHAR( 10 ) NOT NULL default '',		
+		`image_width` VARCHAR( 32 ) NOT NULL default '',
+		`image_height` VARCHAR( 32 ) NOT NULL default '',
 		PRIMARY KEY  (`id`),
 		KEY `group_id` (`group_id`),
 		KEY `nice-name` (`nice-name`)
@@ -882,6 +885,7 @@ function nzshpcrt_install()
   /* PayPal options */
   add_option('paypal_business', '', TXT_WPSC_PAYPALBUSINESS, 'yes');
   add_option('paypal_url', '', TXT_WPSC_PAYPALURL, 'yes');
+  add_option('paypal_ipn', '1', TXT_WPSC_PAYPALURL, 'yes');
   //update_option('paypal_url', "https://www.sandbox.paypal.com/xclick");
   
   

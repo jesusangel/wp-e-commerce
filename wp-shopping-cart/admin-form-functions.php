@@ -543,7 +543,7 @@ $output .="</table></div></div></td></tr>";
       $output .= "          <tr>\n\r";
       $output .= "            <td>\n\r";
       $output .= TXT_WPSC_RESIZEIMAGE.": <br />";      
-      $output .= "<span class='image_size_text'>".$image_size[0]."x".$image_size[1]."</span>";
+      $output .= "<span class='image_size_text'>".$image_size[0]."&times;".$image_size[1]."px</span>";
       $output .= "            </td>\n\r";  
       
       $output .= "            <td>\n\r";
@@ -582,7 +582,7 @@ $output .="</table></div></div></td></tr>";
 			if ($product['thumbnail_state'] == 1) {
 				//$output .= "checked='true'";
 			}
-			$output .= "name='image_resize' value='1' id='image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\")' /> <label for='image_resize1'>".TXT_WPSC_USEDEFAULTSIZE." (".get_option('product_image_height') ."x".get_option('product_image_width').")";
+			$output .= "name='image_resize' value='1' id='image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\")' /> <label for='image_resize1'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
 			$output .= "    </td>";
 			$output .= "  </tr>";
 	
@@ -775,21 +775,21 @@ $output .="</table></div></div></td></tr>";
       $output .= "        </td>";
       $output .= "      </tr>";
       }
-      $output.=" </table></div></div></td></tr>";
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";;
-  $output .= "            <br />\n\r";
-  $output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
-  $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input  class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />";
-  $output .= "<a class='button delete_button' ' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
-  $output .= "            <td>\n\r";
-  $output .= "          </tr>\n\r";
-  
-  $output .= "        </table>\n\r";
-  return $output;
+		$output.=" </table></div></div></td></tr>";
+		$output .= "          <tr>\n\r";
+		$output .= "            <td>\n\r";
+		$output .= "            </td>\n\r";
+		$output .= "            <td>\n\r";;
+		$output .= "            <br />\n\r";
+		$output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
+		$output .= "<input type='hidden' name='submit_action' value='edit' />";
+		$output .= "<input  class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />";
+		$output .= "<a class='button delete_button' ' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
+		$output .= "            <td>\n\r";
+		$output .= "          </tr>\n\r";
+		
+		$output .= "        </table>\n\r";
+		return $output;
   }
 
 function nzshpcrt_getcategoryform($catid)
@@ -828,25 +828,64 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "          </tr>\n\r";
   $output .= "          </tr>\n\r";
 
-     if (function_exists('product_display_grid')) {
-	   if ($product['display_type'] == 'grid') {
-		   $display_type1="selected='selected'";
-	   } else if ($product['display_type'] == 'default') {
-		   $display_type2="selected='selected'";
-	   }
-	   $output.= "<tr>
-		<td>
-		". TXT_WPSC_DISPLAYTYPE.":
-		</td>
-	      <td>
-        <select name='display_type'>
-		<option {$display_type1} value='grid'>Grid</option>
-		<option {$display_type2} value='default'>Default</option>
-	</select>
-      </td>
-    </tr>
-    <tr>";
-    }
+
+	if ($product['display_type'] == 'grid') {
+		$display_type1="selected='selected'";
+	} else if ($product['display_type'] == 'default') {
+		$display_type2="selected='selected'";
+	}
+	
+	switch($product['display_type']) {
+		case "grid":
+		if(function_exists('product_display_grid')) {
+			$product_view3 = "selected ='true'";
+			break;
+		}
+		
+		case "list":
+		if(function_exists('product_display_list')) {
+			$product_view2 = "selected ='true'";
+			break;
+		}
+		
+		default:
+		$product_view1 = "selected ='true'";
+		break;
+	}	
+	
+	$output .= "          <tr>\n\r";
+	$output .= "          	<td>\n\r";
+	$output .= "          	". TXT_WPSC_DISPLAYTYPE.":\n\r";
+	$output .= "          	</td>\n\r";
+	$output .= "          	<td>\n\r";
+	$output .= "          		<select name='display_type'>\n\r";	
+	$output .= "          			<option value='default' $product_view1 >".TXT_WPSC_DEFAULT."</option>\n\r";	
+	if(function_exists('product_display_list')) {
+		$output .= "          			<option value='list' ". $product_view2.">". TXT_WPSC_LIST."</option>\n\r"; 
+	} else {
+		$output .= "          			<option value='list' disabled='disabled' ". $product_view2.">". TXT_WPSC_LIST."</option>\n\r";
+	}	
+	if(function_exists('product_display_grid')) {
+		$output .= "          			<option value='grid' ". $product_view3.">". TXT_WPSC_GRID."</option>\n\r";
+	} else {
+		$output .= "          			<option value='grid' disabled='disabled' ". $product_view3.">". TXT_WPSC_GRID."</option>\n\r";
+	}	
+	$output .= "          		</select>\n\r";	
+	$output .= "          	</td>\n\r";
+	$output .= "          </tr>\n\r";
+	$output .= "          <tr>\n\r";
+	
+	
+  $output .= "          <tr>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= TXT_WPSC_CATEGORY_PRODUCT_IMAGE.": ";
+  $output .= "            </td>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= TXT_WPSC_HEIGHT.": <input type='text' value='".$product['image_height']."' name='product_height' size='6'/> ";
+  $output .= TXT_WPSC_WIDTH.": <input type='text' value='".$product['image_width']."' name='product_width' size='6'/> <br/>";
+  $output .= "            </td>\n\r";
+  $output .= "          </tr>\n\r";
+  $output .= "          </tr>\n\r";
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";

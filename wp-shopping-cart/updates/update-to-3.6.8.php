@@ -58,8 +58,18 @@ if(get_option('wpsc_default_category') == null) {
 }
 
 if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}product_categories` LIKE 'display_type';",ARRAY_A)) {
-	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_categories` ADD `display_type` VARCHAR(10) NOT NULL AFTER `order`");
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_categories` ADD `display_type` VARCHAR(10) NOT NULL DEFAULT '' AFTER `order`");
 }
+
+
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}product_categories` LIKE 'image_width';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_categories` ADD `image_width` VARCHAR(32) NOT NULL DEFAULT '' AFTER `display_type`");
+}
+
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}product_categories` LIKE 'image_height';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_categories` ADD `image_height` VARCHAR(32) NOT NULL DEFAULT '' AFTER `image_width`");
+}
+
 
 
 ?>

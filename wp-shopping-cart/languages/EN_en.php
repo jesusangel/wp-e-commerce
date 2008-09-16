@@ -3,7 +3,8 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
-//http://www.instinct.co.nz/wordpress_2.6/wp-admin/
+define('TXT_WPSC_CATEGORY_PRODUCT_IMAGE', 'Product Image Size');
+define('TXT_WPSC_SETONSETTINGS', 'This is set on the Settings Page');
 define('TXT_WPSC_AFFILIATION', 'Affiliation');
 define('TXT_WPSC_DISPLAYTYPE', 'Display Type');
 define('TXT_WPSC_SKU_FULL', 'Stock Keeping Unit');
@@ -50,9 +51,9 @@ define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
 define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
 
 define('TXT_WPSC_ADMIN_SEARCH_PRODUCTS', 'Search for a Product');
-define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Choose the payment options that you want to make available to your customers.');
+define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Activate the payment gateways that you want to make available to your customers by selecting them below.');
 
-define('TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY', ' Select a payment option below to configure it.');
+define('TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY', ' Select a Payment Gateway below to configure it.');
 
 
 // to come: "Click on a payment option to configure it"
@@ -275,7 +276,7 @@ define('TXT_WPSC_PRODUCTATT', 'Product Attachments');
 define('TXT_WPSC_DOWNLOADABLEPRODUCT', 'Upload File');
 define('TXT_WPSC_FILETOBEPRODUCT', 'Note: if this is filled in, the file uploaded will be the product to be purchased.');
 define('TXT_WPSC_RESIZEIMAGE', 'Resize Thumbnail');
-define('TXT_WPSC_DONOTRESIZEIMAGE', 'do not resize thumbnail.');
+define('TXT_WPSC_DONOTRESIZEIMAGE', 'do not resize thumbnail image');
 // define('TXT_WPSC_USEDEFAULTHEIGHTANDWIDTH', 'use default height and width');
 // define('TXT_WPSC_USE', 'use');
 // define('TXT_WPSC_PXHEIGHTBY', 'px height by');

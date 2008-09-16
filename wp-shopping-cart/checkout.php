@@ -175,11 +175,17 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 		echo "<tr>\n\r";
 		echo "  <td colspan='2'>\n\r";
 		foreach (get_option('custom_gateway_options') as $option) {
+		  if($count == 0) {
+		    $checked = "checked='true'";
+		  }  else {
+				$checked = " ";
+		  }
 			foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
 				if ($gateway['internalname'] == $option) {
-					echo "<input name='custom_gateway' value='$option' type='radio'>{$gateway['name']}<br>";
+					echo "<input name='custom_gateway' $checked value='$option' type='radio'>{$gateway['name']}<br>";
 				}
 			}
+		  $count++;
 		}
 		echo "  </td>\n\r";
 		echo "</tr>";
@@ -242,7 +248,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 			echo "<input type='hidden' value='yes' name='agree' />";
 			echo "";
 		}
-	
+	/*
     if(get_option('payment_method') == 2)
       {
       $curgateway = get_option('payment_gateway');
@@ -275,6 +281,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
       </tr>
       <?php
       }
+      */
 // 	if ((function_exists('getdistance')) && (get_option('googleStoreLocator')==1)) {
 // 		echo "<tr><td colspan='2'><strong>2. Select Store</strong</td></tr>";
 // 		echo "<tr><td>Stores</td><td width='80'><select name='chosen_store' style='float:left;' id='gloc_storelist'></select><div style='float:left;display:none;' id='gloc_loading'>Loading Stores...</div></td></tr>";

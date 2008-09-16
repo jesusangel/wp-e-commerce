@@ -271,7 +271,12 @@ a.image_link{ border-bottom: none !important; }
 a.image_link img{ border-bottom: none !important; }
  
  
-a.add_item_link{ display: block; border-bottom: none !important; }
+a.add_item_link{
+	display: block;
+	border-bottom: none !important;
+	float:left;
+	margin-right:10px;
+}
  
 a.add_item_link span{ text-decoration: underline; }
  
@@ -874,7 +879,8 @@ padding:9px 5px 9px 26px;
 
 div.categorisation_title {
 	background:#585858;
-	padding:4px 5px 10px;
+	padding: 4px 5px 10px;
+	margin: 0px 0px 0px 0px;
   position: relative;
   height: 15px;
   top: 0px;
@@ -1148,6 +1154,10 @@ td.gateway_settings h4 {
 
 td.gateway_settings table.form-table {
   margin: 0px 0px 0px 0px;
+}
+
+table#gateway_options table.form-table tr td {
+	padding-left: 8px;
 }
 
 table.form-table tr.firstrowth td {

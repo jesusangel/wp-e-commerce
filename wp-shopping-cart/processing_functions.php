@@ -569,7 +569,14 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			
 			$updatelink_sql = "UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$image_name."', `thumbnail_image` = '".$thumbnail_image."'  WHERE `id` = '$id'";
 			$wpdb->query($updatelink_sql);
-
+			
+			if(function_exists('getimagesize')) {
+				$imagetype = getimagesize(WPSC_THUMBNAIL_DIR.$image_name);
+				update_product_meta($id, 'thumbnail_width', $imagetype[0]);
+				update_product_meta($id, 'thumbnail_height', $imagetype[1]);				
+			}
+			
+			
 			$image = $wpdb->escape($image_name);
     } else {
 			$image_name = basename($output_filename);

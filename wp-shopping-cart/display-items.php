@@ -441,6 +441,8 @@ if($_POST['submit_action'] == "edit") {
           break;
           }
         image_processing($imagepath, $image_output, $width, $height);
+				update_product_meta($id, 'thumbnail_width', $width);
+				update_product_meta($id, 'thumbnail_height', $height);		
         }
     }
     
@@ -579,19 +581,24 @@ if($_POST['submit_action'] == "edit") {
     /* update thumbnail images */
     if(!($thumbnail_image == null && $_POST['image_resize'] == 3 && $_POST['current_thumbnail_image'] != null)) {
       if($thumbnail_image != null) {
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id`='".$_POST['prodid']."' LIMIT 1");
+        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
 			}
 		}
-      
-		$image_resize = $_POST['image_resize'];
+    
+    
+		$thumbnail_state = $wpdb->get_var("SELECT `thumbnail_state` FROM `".$wpdb->prefix."product_list` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1",ARRAY_A);      
+    
+    
+		$image_resize = (int)$_POST['image_resize'];
 		if(!is_numeric($image_resize) || ($image_resize < 1)) {
 			$image_resize = 0;
 		}
-      
-    $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_state` = '".$image_resize."' WHERE `id`='".$_POST['prodid']."' LIMIT 1");
+    if(($image_resize == 0) && ($thumbnail_state != 0)) {
+			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_state` = '".$image_resize."' WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+    }
     
     if($_POST['deleteimage'] == 1) {
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = ''  WHERE `id`='".$_POST['prodid']."' LIMIT 1");
+			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = ''  WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
 		}
      
 		$variations_procesor = new nzshpcrt_variations;
@@ -744,6 +751,10 @@ echo $display_added_product ;
 <div class="tablenav wpsc_products_nav">
 	<div style="width: 500px;" class="alignleft">
 		<a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a>
+		<?php
+		do_action('wpsc_admin_products_tablenav');
+		?>
+		
 	</div>
 	
 	
@@ -1343,7 +1354,7 @@ echo "        </div>";
       </tr>
       <tr>
         <td>
-          <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, "image_resize1");' /> <label for='add_image_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE;?> (<?php echo get_option('product_image_height') ."x".get_option('product_image_width'); ?>)</label>
+          <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, "image_resize1");' /> <label for='add_image_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE;?> <?php echo "(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)"; ?></label>
         </td>
       </tr>
     <?php  

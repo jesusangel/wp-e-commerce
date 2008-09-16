@@ -134,8 +134,38 @@ function display_category_row($category,$subcategory_level = 0) {
       $extension_number = (int)$similar_names['max_number']+1;
 		}
     $url_name .= $extension_number;
+    
+    
+    
+    switch($_POST['display_type']) {
+			case "grid":
+				$display_type = 'grid';
+			break;
+			
+			case "list":
+				$display_type = 'list';
+			break;
+			
+			default:
+				$display_type = 'default';
+			break;
+    }
       
-    $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` , `display_type` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0' , '{$_POST['display_type']}')";
+      
+    if($_POST['product_height'] > 0) {
+      $product_height = (int)$_POST['product_height'];
+    } else {
+      $product_height = '';
+    }
+    
+    
+    if($_POST['product_width'] > 0) {
+      $product_width = (int)$_POST['product_width'];
+    } else {
+      $product_width = '';
+    }
+    
+    $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` , `display_type`, `image_width`,	`image_height` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0' , '{$display_type}', '{$product_width}', '{$product_height}')";
 		$wp_rewrite->flush_rules(); 
     if($wpdb->query($insertsql)) {
       echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
@@ -221,10 +251,37 @@ function display_category_row($category,$subcategory_level = 0) {
 			}
 		}
 
-	if($_POST['display_type'] != $category_data['display_type']) {
-      $display_type = $_POST['display_type'];
-      $category_sql_list[] = "display_type = '$display_type' ";
+		if($_POST['display_type'] != $category_data['display_type']) {
+			switch($category_data['display_type']) {
+				case "grid":
+					$display_type = 'grid';
+				break;
+				
+				case "list":
+					$display_type = 'list';
+				break;
+				
+				default:
+					$display_type = 'default';
+				break;
+			}
+      $category_sql_list[] = "`display_type` = '$display_type' ";
 		}
+
+
+    if($_POST['product_height'] > 0) {
+      $product_height = (int)$_POST['product_height'];
+    } else {
+      $product_height = '';
+    }
+		$category_sql_list[] = "`image_height` = '$product_height' ";
+    
+    if($_POST['product_width'] > 0) {
+      $product_width = (int)$_POST['product_width'];
+    } else {
+      $product_width = '';
+    }
+		$category_sql_list[] = "`image_width` = '$product_height' ";
 
     if(count($category_sql_list) > 0) {
       $category_sql = implode(", ",$category_sql_list);
@@ -488,24 +545,51 @@ echo "        </div>\n\r";
       <td>
         <textarea name='description' cols='40' rows='8'></textarea>
       </td>
-    </tr>
-    <?php
-    
-    if (function_exists('product_display_grid')) {
-	    echo "<tr>
-		<td>
-		". TXT_WPSC_DISPLAYTYPE.":
-		</td>
-	      <td>
-        <select name='display_type'>
-		<option value='grid'>Gird</option>
-		<option value='default'>Default</option>
-	</select>
+    </tr>   
+    <tr>
+      <td>
+        <?php echo TXT_WPSC_DISPLAYTYPE;?>:
+      </td>
+      <td>
+    			<select name='product_view'>
+						<option value='default' <?php echo $product_view1; ?>><?php echo TXT_WPSC_DEFAULT;?></option>
+						<?php
+						if(function_exists('product_display_list')) {
+							?>
+							<option value='list' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+							<?php      
+						}  else {
+							?>
+							<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+							<?php      
+							
+						}
+						
+						if(function_exists('product_display_grid')) {
+							?>
+						<option value='grid' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+							<?php   
+						} else {
+							?>
+						<option value='grid' disabled='disabled' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+							<?php 
+						}
+						?>
+					</select>
       </td>
     </tr>
-    <tr>";
-    }
-    ?>
+    
+		<tr>
+			<td>
+			<?php echo TXT_WPSC_CATEGORY_PRODUCT_IMAGE; ?>:
+			</td>
+			<td>
+				<?php echo TXT_WPSC_HEIGHT; ?>: <input type='text' value='' name='product_height' size='6'/>
+				<?php echo TXT_WPSC_WIDTH; ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
+			</td>
+		</tr>
+    
+    
     <tr>
       <td>
         <?php echo TXT_WPSC_CATEGORY_PARENT;?>:
