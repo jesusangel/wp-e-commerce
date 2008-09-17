@@ -101,6 +101,7 @@ $wpsc_image_dir = "{$upload_path}/wpsc/product_images/";
 $wpsc_thumbnail_dir = "{$upload_path}/wpsc/product_images/thumbnails/";
 $wpsc_category_dir = "{$upload_path}/wpsc/category_images/";
 $wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
+$wpsc_cache_dir = "{$upload_path}/wpsc/cache/";
 
 
 // $wpsc_file_dir = ABSPATH."{$upload_path}/files/";
@@ -116,6 +117,7 @@ define('WPSC_IMAGE_DIR', $wpsc_image_dir);
 define('WPSC_THUMBNAIL_DIR', $wpsc_thumbnail_dir);
 define('WPSC_CATEGORY_DIR', $wpsc_category_dir);
 define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
+define('WPSC_CACHE_DIR', $wpsc_cache_dir);
 
 
 /**
@@ -127,6 +129,7 @@ $wpsc_image_url = "{$upload_url}/wpsc/product_images/";
 $wpsc_thumbnail_url = "{$upload_url}/wpsc/product_images/thumbnails/";
 $wpsc_category_url = "{$upload_url}/wpsc/category_images/";
 $wpsc_user_uploads_url = "{$upload_url}/wpsc/user_uploads/";
+$wpsc_cache_url = "{$upload_url}/wpsc/cache/";
 
 
 // $wpsc_preview_url = "{$siteurl}/{$upload_path}/preview_clips/";
@@ -139,6 +142,7 @@ define('WPSC_IMAGE_URL', $wpsc_image_url);
 define('WPSC_THUMBNAIL_URL', $wpsc_thumbnail_url);
 define('WPSC_CATEGORY_URL', $wpsc_category_url);
 define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
+define('WPSC_CACHE_URL', $wpsc_cache_url);
 
 
 /*
@@ -1772,66 +1776,49 @@ function nzshpcrt_download_file() {
   }
 }
 
-function nzshpcrt_display_preview_image()
-  {
+function nzshpcrt_display_preview_image() {
   global $wpdb;
-  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id']))
-    {
-     if(function_exists("getimagesize"))
-      {
-      if(is_numeric($_GET['productid']))
-        {
-        $imagesql = "SELECT `image`,`thumbnail_image` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$_GET['productid']."' LIMIT 1";
-        $imagedata = $wpdb->get_row($imagesql,ARRAY_A);
-        if($_GET['thumbnail'] == 'true')
-          {
-          if($imagedata['thumbnail_image'] != '')
-            {
-            $image_name = $imagedata['thumbnail_image'];
-            }
-            else
-              {
-              $image_name = $imagedata['image'];
-              }
-          $imagepath = WPSC_THUMBNAIL_DIR . $image_name;
-          }
-          else
-          {
-          $imagepath = WPSC_IMAGE_DIR . $imagedata['image'];
-          }
-        }
-        else if($_GET['image_id'])
-        {
-        $image_id = $_GET['image_id'];
-        $image = $wpdb->get_var("SELECT `image` FROM `".$wpdb->prefix."product_images` WHERE `id` = '$image_id' LIMIT 1");
-        $imagepath = WPSC_IMAGE_DIR . $image;
-        }
+  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])) {
+		if(function_exists("getimagesize")) {
+			if(is_numeric($_GET['productid'])) {
+			  $product_id = (int)$_GET['productid'];
+				$imagesql = "SELECT `image`,`thumbnail_image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1";
+				$imagedata = $wpdb->get_row($imagesql,ARRAY_A);
+				if($_GET['thumbnail'] == 'true') {
+					if($imagedata['thumbnail_image'] != '') {
+						$image_name = $imagedata['thumbnail_image'];
+					} else {
+						$image_name = $imagedata['image'];
+					}
+					$imagepath = WPSC_THUMBNAIL_DIR . $image_name;
+				} else {
+					$imagepath = WPSC_IMAGE_DIR . $imagedata['image'];
+				}
+			} else if($_GET['image_id']) {
+				$image_id = (int)$_GET['image_id'];
+				$image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_images` WHERE `id` = '{$image_id}' LIMIT 1");
+				$imagepath = WPSC_IMAGE_DIR . $image;
+			}
       
       
       $image_size = @getimagesize($imagepath);
-      if(is_numeric($_GET['height']) && is_numeric($_GET['width']))
-        {
-        $height = $_GET['height'];
-        $width = $_GET['width'];
-        }
-        else
-          {
-          $width = $image_size[0];
-          $height = $image_size[1];
-          }
-      if(($height > 0) && ($height <= 1024) && ($width > 0) && ($width <= 1024))
-       {
-       include("image_preview.php");
-       }
-       else
-         {
-         $width = $image_size[0];
-         $height = $image_size[1];
-         include("image_preview.php");
-         }
-      }
-    }
-  }
+      if(is_numeric($_GET['height']) && is_numeric($_GET['width'])) {
+        $height = (int)$_GET['height'];
+        $width = (int)$_GET['width'];
+			} else {
+				$width = $image_size[0];
+				$height = $image_size[1];
+			}
+      if(!(($height > 0) && ($height <= 1024) && ($width > 0) && ($width <= 1024))) { 
+				$width = $image_size[0];
+				$height = $image_size[1];
+			}
+			
+			$cache_filename = basename("product_{$product_id}_{$height}x{$width}");
+			include("image_preview.php");
+		}
+	}
+}
   
   
 function nzshpcrt_listdir($dirname)

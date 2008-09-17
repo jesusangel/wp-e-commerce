@@ -309,7 +309,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
               $image_file_name = $product['image'];
 						}
 
-            $output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".htmlentities($product['name'], ENT_QUOTES)."' alt='".htmlentities($product['name'], ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>";
+            $output .= "<img src='".wpsc_product_image_html($image_file_name, $product['id'])."' title='".htmlentities($product['name'], ENT_QUOTES)."' alt='".htmlentities($product['name'], ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>";
+            
             $output .= "</a>";
             if(function_exists("gold_shpcrt_display_extra_images")) {
               $output .= gold_shpcrt_display_extra_images($product['id'],$product['name']);
@@ -1044,6 +1045,40 @@ function wpsc_odd_category_setup() {
 		}
   }
   return $output;
+}
+
+
+function wpsc_product_image_html($image_name, $product_id) {
+  global $wpdb, $wp_query;
+	if(is_numeric($wp_query->query_vars['product_category'])) {
+    $category_id = (int)$wp_query->query_vars['product_category'];
+	} else if (is_numeric($_GET['category'])) {
+    $category_id = (int)$_GET['category'];
+	} else {
+    $category_id = (int)get_option('wpsc_default_category');
+	}
+	// 	$options['height'] = get_option('product_image_height');
+	// 	$options['width']  = get_option('product_image_width');
+	// 
+	$product['height'] = get_product_meta($id, 'thumbnail_height');	
+	$product['width']  = get_product_meta($id, 'thumbnail_width');
+	
+	
+	$use_thumbnail_image = 'false';
+	if(($product['height'] > $category['height']) || ($product['width'] > $category['width'])) {
+		$use_thumbnail_image = 'true';
+	}
+	
+	//list($category['height'], $category['width']) =
+	 
+	$category = $wpdb->get_row("SELECT `image_height` AS `height`, `image_width` AS `width` FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('{$category_id}')", ARRAY_A);
+	// if there is a height, width, and imagePNG function
+	if(($category['height'] != null) && ($category['width'] != null) && (function_exists('ImagePNG'))) {
+		$image_path = "index.php?productid=".$product_id."&amp;thumbnail=".$use_thumbnail_image."&amp;width=".$category['width']."&amp;height=".$category['height']."";
+	} else {
+	  $image_path = WPSC_THUMBNAIL_URL.$image_name;
+	}
+  return $image_path;
 }
 
 function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {

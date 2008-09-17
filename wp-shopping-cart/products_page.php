@@ -78,7 +78,7 @@ if(function_exists('fancy_notifications')) {
 					echo "<span id='loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/indicator.gif' alt='Loading' title='Loading' /> ".TXT_WPSC_UDPATING."...</span><br />";
 				}
 				
-				if (isset($GET['item_per_page'])){
+				if (isset($GET['item_per_page'])) {
 					$item_per_page = $_GET['item_per_page'];
 					$_SESSION['item_per_page'] = $item_per_page;
 					update_option('use_pagination',1);

@@ -1332,6 +1332,10 @@ function wpsc_create_upload_directories() {
 		@ mkdir(WPSC_USER_UPLOADS_DIR, 0775);
 	}
 	
+	if(!is_dir(WPSC_CACHE_DIR)) {
+		@ mkdir(WPSC_CACHE_DIR, 0775);
+	}
+	
 	
 	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
 	if(is_dir($wpsc_file_directory)) {
@@ -1343,6 +1347,7 @@ function wpsc_create_upload_directories() {
 		@ chmod( WPSC_IMAGE_DIR, 0775 );	
 		@ chmod( WPSC_CATEGORY_DIR, 0775 );	
 		@ chmod( WPSC_USER_UPLOADS_DIR, 0775 );	
+		@ chmod( WPSC_CACHE_DIR, 0775 );
 	}
 }
 

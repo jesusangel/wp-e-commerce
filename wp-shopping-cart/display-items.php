@@ -439,11 +439,11 @@ if($_POST['submit_action'] == "edit") {
           $height = $_POST['height'];
           $width  = $_POST['width'];
           break;
-          }
+				}
         image_processing($imagepath, $image_output, $width, $height);
 				update_product_meta($id, 'thumbnail_width', $width);
 				update_product_meta($id, 'thumbnail_height', $height);		
-        }
+			}
     }
     
     if(is_numeric($_POST['prodid'])) {
