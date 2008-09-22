@@ -95,7 +95,8 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "      </tr>\n\r";
 }
 
-  if($_POST['submit_action'] == "add") { 
+  if($_POST['submit_action'] == "add") {
+    //exit("<pre>".print_r($_POST,true)."</pre>"); 
     if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
       if(function_exists("getimagesize")) {
 				if(((int)$_POST['width'] > 10 && (int)$_POST['width'] < 512) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
@@ -165,15 +166,18 @@ function display_category_row($category,$subcategory_level = 0) {
       $product_width = '';
     }
     
-    $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` , `display_type`, `image_width`,	`image_height` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0' , '{$display_type}', '{$product_width}', '{$product_height}')";
-		$wp_rewrite->flush_rules(); 
-    if($wpdb->query($insertsql)) {
-      echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
-		} else {
+    if(trim($_POST['name']) != null) {
+      $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
+      $wp_rewrite->flush_rules(); 
+      if($wpdb->query($insertsql)) {
+        echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
+      } else {
+        echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
+      }
+      $wp_rewrite->flush_rules();
+    } else {
       echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
-		}
-    
-		$wp_rewrite->flush_rules();
+    }
 	}
 
   if(($_POST['submit_action'] == "edit") && is_numeric($_POST['prodid'])) {
@@ -209,7 +213,7 @@ function display_category_row($category,$subcategory_level = 0) {
    
     $category_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$_POST['prodid']."')", ARRAY_A);
     
-    if($_POST['title'] != $category_data['name']) {
+    if(($_POST['title'] != $category_data['name']) && (trim($_POST['name']) != null)) {
       $category_name = $_POST['title'];
       $category_sql_list[] = "`name` = '$category_name' ";
       

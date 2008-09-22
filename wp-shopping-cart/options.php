@@ -317,6 +317,13 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 	} else {
 		update_option('show_live_search', 0);
 	}
+	
+	
+	if($_POST['wpsc_replace_page_title'] == '1') {
+		update_option('wpsc_replace_page_title', 1);
+	} else {
+		update_option('wpsc_replace_page_title', 0);
+	}
 
 	if($_POST['googleStoreLocator'] == 1) {
 		update_option('googleStoreLocator', 1);
@@ -810,6 +817,7 @@ if($_GET['clean_categories'] == 'true') {
 						  /* here start the presentation options */						  
 						  ?>
 						  
+							<h3 class="form_group"><?php echo TXT_WPSC_PRODUCTS_PAGE_SETTINGS;?></h3>
 							<table class='wpsc_options form-table'>		
 							<?php
 							// if(function_exists('product_display_list') || function_exists('product_display_grid')) {
@@ -916,82 +924,6 @@ if($_GET['clean_categories'] == 'true') {
 									</td>
 								</tr>
 								
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_CARTLOCATION;?>:
-									</th>
-									<td>
-									<?php
-									$cart_location = get_option('cart_location');
-									$cart1 = "";
-									$cart2 = "";
-									switch($cart_location) {
-										case 1:
-										$cart1 = "checked ='true'";
-										break;
-										
-										case 2:
-										$cart2 = "checked ='true'";
-										break;
-										
-										case 3:
-										$cart3 = "checked ='true'";
-										break;
-										
-										case 4:
-										$cart4 = "checked ='true'";
-										break;
-										
-										case 5:
-										$cart5 = "checked ='true'";
-										break;
-									} 
-									if(function_exists('register_sidebar_widget')) {
-										?>
-										<input type='radio' value='1' onclick='hideelement1("dropshop_option", this.value)' disabled='true'  name='cart_location' id='cart1' <?php echo $cart1; ?> /> <label style='color: #666666;' for='cart1'><?php echo TXT_WPSC_SIDEBAR;?></label> &nbsp;
-										<?php
-									} else {
-										?>
-										<input type='radio' value='1' name='cart_location' id='cart1' <?php echo $cart1; ?> /> <label for='cart1'><?php echo TXT_WPSC_SIDEBAR;?></label> &nbsp;
-										<?php
-									}
-									?>
-									<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='2' name='cart_location' id='cart2' <?php echo $cart2; ?> /> <label for='cart2'><?php echo TXT_WPSC_PAGE;?></label> &nbsp;
-									<?php
-									if(function_exists('register_sidebar_widget')) {
-										?>
-										<input type='radio' value='4' onclick='hideelement1("dropshop_option", this.value)' name='cart_location' id='cart4' <?php echo $cart4; ?> /> <label for='cart4'><?php echo TXT_WPSC_WIDGET;?></label> &nbsp;
-										<?php
-									} else {
-										?>
-										<input type='radio'  disabled='true' value='4' name='cart_location' id='cart4' alt='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>' title='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>' <?php echo $cart4; ?> /> <label style='color: #666666;' for='cart4' title='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>'><?php echo TXT_WPSC_WIDGET;?></label> &nbsp;
-										<?php
-									}
-									
-									if(function_exists('drag_and_drop_cart')) {
-										?>
-										<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='5' name='cart_location' id='cart5' <?php echo $cart5; ?> /> <label for='cart5'><?php echo TXT_WPSC_GOLD_DROPSHOP;?></label> &nbsp;
-										<?php
-									} else {
-										?>
-										<input type='radio' disabled='true' value='5' name='cart_location' id='cart5' alt='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>' title='<?php echo TXT_WPSC_NEEDTOENABLEDROPSHOP;?>' <?php echo $cart5; ?> /> <label style='color: #666666;' for='cart5' title='<?php echo TXT_WPSC_NEEDTOENABLEDROPSHOP;?>'><?php echo TXT_WPSC_GOLD_DROPSHOP;?></label> &nbsp;
-										<?php
-									}
-										?>
-									<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='3' name='cart_location' id='cart3' <?php echo $cart3; ?> /> <label for='cart3'><?php echo TXT_WPSC_MANUAL;?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo nzshpcrt_shopping_basket(); ?&gt; )</span></label>
-							<div  style='display: <?php if (isset($cart5)) { echo "block"; } else { echo "none"; } ?>;'  id='dropshop_option'>
-							<p>
-							<input type="radio" id="drop1" value="all" <?php if (get_option('dropshop_display') == 'all') { echo "checked='checked'"; } ?> name="wpsc_dropshop_display" /><label for="drop1"><?php echo TXT_WPSC_SHOW_DROPSHOP_ALL;?></label>
-							<input type="radio" id="drop2" value="product" <?php if (get_option('dropshop_display') == 'product') { echo "checked='checked'"; } ?> name="wpsc_dropshop_display"/><label for="drop2"><?php echo TXT_WPSC_SHOW_DROPSHOP_PRODUCT;?></label>
-							</p>
-							<p>
-							<input type="radio" id="wpsc_dropshop_theme1" value="light" <?php if (get_option('wpsc_dropshop_theme') != 'dark') { echo "checked='checked'"; } ?> name="wpsc_dropshop_theme" /><label for="wpsc_dropshop_theme1"><?php echo TXT_WPSC_DROPSHOP_LIGHT;?></label>
-							<input type="radio" id="wpsc_dropshop_theme2" value="dark" <?php if (get_option('wpsc_dropshop_theme') == 'dark') { echo "checked='checked'"; } ?> name="wpsc_dropshop_theme"/><label for="wpsc_dropshop_theme2"><?php echo TXT_WPSC_DROPSHOP_DARK;?></label>
-							
-							</p>
-							</div>
-									</td>
-								</tr>
  
 								<tr>
 									<th scope="row">
@@ -1105,30 +1037,7 @@ if($_GET['clean_categories'] == 'true') {
 									</td>
 								</tr>
 								
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_SHOW_SLIDING_CART;?>:
-									</th>
-									<td>
-									<?php
-									$display_pnp = get_option('show_sliding_cart');
-									$show_sliding_cart1 = "";
-									$show_sliding_cart2 = "";
-									switch($display_pnp) {
-										case 0:
-										$show_sliding_cart2 = "checked ='true'";
-										break;
-										
-										case 1:
-										$show_sliding_cart1 = "checked ='true'";
-										break;
-									}
-						
-									?>
-									<input type='radio' value='1' name='show_sliding_cart' id='show_sliding_cart1' <?php echo $show_sliding_cart1; ?> /> <label for='show_sliding_cart1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-									<input type='radio' value='0' name='show_sliding_cart' id='show_sliding_cart2' <?php echo $show_sliding_cart2; ?> /> <label for='show_sliding_cart2'><?php echo TXT_WPSC_NO;?></label>
-									</td>
-								</tr>
+
 					<!-- // Adrian - options for displaying number of products per category -->      
 								
 								<tr>
@@ -1234,33 +1143,6 @@ if($_GET['clean_categories'] == 'true') {
 								</tr>
 						<?php
 						}
-					if(function_exists('gold_shpcrt_display_gallery')) {
-						?>
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_SHOW_GALLERY;?>:
-									</th>
-									<td>
-									<?php
-									$display_pnp = get_option('show_gallery');
-									$show_gallery1 = "";
-									$show_gallery2 = "";
-									switch($display_pnp) {
-										case 0:
-										$show_gallery2 = "checked ='true'";
-										break;
-										
-										case 1:
-										$show_gallery1 = "checked ='true'";
-										break;
-									}
-									?>
-									<input type='radio' value='1' name='show_gallery' id='show_gallery1' <?php echo $show_gallery1; ?> /> <label for='show_gallery1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-									<input type='radio' value='0' name='show_gallery' id='show_gallery2' <?php echo $show_gallery2; ?> /> <label for='show_gallery2'><?php echo TXT_WPSC_NO;?></label>
-									</td>
-								</tr>
-						<?php
-						}
 					?>
 					
 							<tr>
@@ -1287,7 +1169,141 @@ if($_GET['clean_categories'] == 'true') {
 								<input type='radio' value='0' name='fancy_notifications' id='fancy_notifications2' <?php echo $fancy_notifications2; ?> /> <label for='fancy_notifications2'><?php echo TXT_WPSC_NO;?></label>
 								</td>
 							</tr>  
+				
+              <tr>
+								<th scope="row">
+                <?php echo TXT_WPSC_REPLACE_PAGE_TITLE;?>:
+                </th>
+                <td>
+                <?php
+                $wpsc_replace_page_title = get_option('wpsc_replace_page_title');
+                $wpsc_replace_page_title1 = "";
+                $wpsc_replace_page_title2 = "";
+                switch($wpsc_replace_page_title) {
+                  case 0:
+                  $wpsc_replace_page_title2 = "checked ='true'";
+                  break;
+                  
+                  case 1:
+                  $wpsc_replace_page_title1 = "checked ='true'";
+                  break;
+                }
+                ?>
+                <input type='radio' value='1' name='wpsc_replace_page_title' id=wpsc_replace_page_title1' <?php echo $wpsc_replace_page_title1; ?> /> <label for='wpsc_replace_page_title1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+                <input type='radio' value='0' name='wpsc_replace_page_title' id='wpsc_replace_page_title2' <?php echo $wpsc_replace_page_title2; ?> /> <label for='wpsc_replace_page_title2'><?php echo TXT_WPSC_NO;?></label>
+                </td>
+              </tr>
+
 					
+					
+							</table> 
+							
+							<h3 class="form_group"><?php echo TXT_WPSC_CARTSETTINGS;?></h3>
+							<table class='wpsc_options form-table'>
+							
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_CARTLOCATION;?>:
+									</th>
+									<td>
+									<?php
+									$cart_location = get_option('cart_location');
+									$cart1 = "";
+									$cart2 = "";
+									switch($cart_location) {
+										case 1:
+										$cart1 = "checked ='true'";
+										break;
+										
+										case 2:
+										$cart2 = "checked ='true'";
+										break;
+										
+										case 3:
+										$cart3 = "checked ='true'";
+										break;
+										
+										case 4:
+										$cart4 = "checked ='true'";
+										break;
+										
+										case 5:
+										$cart5 = "checked ='true'";
+										break;
+									} 
+									if(function_exists('register_sidebar_widget')) {
+										?>
+										<input type='radio' value='1' onclick='hideelement1("dropshop_option", this.value)' disabled='true'  name='cart_location' id='cart1' <?php echo $cart1; ?> /> <label style='color: #666666;' for='cart1'><?php echo TXT_WPSC_SIDEBAR;?></label> &nbsp;
+										<?php
+									} else {
+										?>
+										<input type='radio' value='1' name='cart_location' id='cart1' <?php echo $cart1; ?> /> <label for='cart1'><?php echo TXT_WPSC_SIDEBAR;?></label> &nbsp;
+										<?php
+									}
+									?>
+									<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='2' name='cart_location' id='cart2' <?php echo $cart2; ?> /> <label for='cart2'><?php echo TXT_WPSC_PAGE;?></label> &nbsp;
+									<?php
+									if(function_exists('register_sidebar_widget')) {
+										?>
+										<input type='radio' value='4' onclick='hideelement1("dropshop_option", this.value)' name='cart_location' id='cart4' <?php echo $cart4; ?> /> <label for='cart4'><?php echo TXT_WPSC_WIDGET;?></label> &nbsp;
+										<?php
+									} else {
+										?>
+										<input type='radio'  disabled='true' value='4' name='cart_location' id='cart4' alt='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>' title='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>' <?php echo $cart4; ?> /> <label style='color: #666666;' for='cart4' title='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>'><?php echo TXT_WPSC_WIDGET;?></label> &nbsp;
+										<?php
+									}
+									
+									if(function_exists('drag_and_drop_cart')) {
+										?>
+										<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='5' name='cart_location' id='cart5' <?php echo $cart5; ?> /> <label for='cart5'><?php echo TXT_WPSC_GOLD_DROPSHOP;?></label> &nbsp;
+										<?php
+									} else {
+										?>
+										<input type='radio' disabled='true' value='5' name='cart_location' id='cart5' alt='<?php echo TXT_WPSC_NEEDTOENABLEWIDGET;?>' title='<?php echo TXT_WPSC_NEEDTOENABLEDROPSHOP;?>' <?php echo $cart5; ?> /> <label style='color: #666666;' for='cart5' title='<?php echo TXT_WPSC_NEEDTOENABLEDROPSHOP;?>'><?php echo TXT_WPSC_GOLD_DROPSHOP;?></label> &nbsp;
+										<?php
+									}
+										?>
+									<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='3' name='cart_location' id='cart3' <?php echo $cart3; ?> /> <label for='cart3'><?php echo TXT_WPSC_MANUAL;?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo nzshpcrt_shopping_basket(); ?&gt; )</span></label>
+							<div  style='display: <?php if (isset($cart5)) { echo "block"; } else { echo "none"; } ?>;'  id='dropshop_option'>
+							<p>
+							<input type="radio" id="drop1" value="all" <?php if (get_option('dropshop_display') == 'all') { echo "checked='checked'"; } ?> name="wpsc_dropshop_display" /><label for="drop1"><?php echo TXT_WPSC_SHOW_DROPSHOP_ALL;?></label>
+							<input type="radio" id="drop2" value="product" <?php if (get_option('dropshop_display') == 'product') { echo "checked='checked'"; } ?> name="wpsc_dropshop_display"/><label for="drop2"><?php echo TXT_WPSC_SHOW_DROPSHOP_PRODUCT;?></label>
+							</p>
+							<p>
+							<input type="radio" id="wpsc_dropshop_theme1" value="light" <?php if (get_option('wpsc_dropshop_theme') != 'dark') { echo "checked='checked'"; } ?> name="wpsc_dropshop_theme" /><label for="wpsc_dropshop_theme1"><?php echo TXT_WPSC_DROPSHOP_LIGHT;?></label>
+							<input type="radio" id="wpsc_dropshop_theme2" value="dark" <?php if (get_option('wpsc_dropshop_theme') == 'dark') { echo "checked='checked'"; } ?> name="wpsc_dropshop_theme"/><label for="wpsc_dropshop_theme2"><?php echo TXT_WPSC_DROPSHOP_DARK;?></label>
+							
+							</p>
+							</div>
+									</td>
+								</tr>
+								
+								
+                <tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_SHOW_SLIDING_CART;?>:
+									</th>
+									<td>
+									<?php
+									$display_pnp = get_option('show_sliding_cart');
+									$show_sliding_cart1 = "";
+									$show_sliding_cart2 = "";
+									switch($display_pnp) {
+										case 0:
+										$show_sliding_cart2 = "checked ='true'";
+										break;
+										
+										case 1:
+										$show_sliding_cart1 = "checked ='true'";
+										break;
+									}
+						
+									?>
+									<input type='radio' value='1' name='show_sliding_cart' id='show_sliding_cart1' <?php echo $show_sliding_cart1; ?> /> <label for='show_sliding_cart1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input type='radio' value='0' name='show_sliding_cart' id='show_sliding_cart2' <?php echo $show_sliding_cart2; ?> /> <label for='show_sliding_cart2'><?php echo TXT_WPSC_NO;?></label>
+									</td>
+								</tr>
+								
 							<tr>
 								<th scope="row">
 								<?php echo TXT_WPSC_DISPLAY_PLUSTAX;?>:
@@ -1311,9 +1327,8 @@ if($_GET['clean_categories'] == 'true') {
 								<input type='radio' value='0' name='add_plustax' id='add_plustax2' <?php echo $add_plustax2; ?> /> <label for='add_plustax2'><?php echo TXT_WPSC_NO;?></label>
 								</td>
 							</tr>
-					
-							</table> 
 							
+							</table> 
 							
 							<h3 class="form_group"><?php echo TXT_WPSC_THUMBNAILSETTINGS;?></h3>
 							<table class='wpsc_options form-table'>
@@ -1400,6 +1415,35 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' value='0' name='show_category_thumbnails' id='show_category_thumbnails2' <?php echo $show_category_thumbnails2; ?> /> <label for='show_category_thumbnails2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
+								<?php
+                if(function_exists('gold_shpcrt_display_gallery')) {
+                  ?>
+                    <tr>
+                      <th scope="row">
+                      <?php echo TXT_WPSC_SHOW_GALLERY;?>:
+                      </th>
+                      <td>
+                      <?php
+                      $display_pnp = get_option('show_gallery');
+                      $show_gallery1 = "";
+                      $show_gallery2 = "";
+                      switch($display_pnp) {
+                        case 0:
+                        $show_gallery2 = "checked ='true'";
+                        break;
+                        
+                        case 1:
+                        $show_gallery1 = "checked ='true'";
+                        break;
+                      }
+                      ?>
+                      <input type='radio' value='1' name='show_gallery' id='show_gallery1' <?php echo $show_gallery1; ?> /> <label for='show_gallery1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+                      <input type='radio' value='0' name='show_gallery' id='show_gallery2' <?php echo $show_gallery2; ?> /> <label for='show_gallery2'><?php echo TXT_WPSC_NO;?></label>
+                      </td>
+                    </tr>
+                  <?php
+                  }
+								?>
 							</table>
 							
 									

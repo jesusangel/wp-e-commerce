@@ -242,7 +242,8 @@ class wp_shopping_cart {
 	}
 }
 
-function nzshpcrt_style() {
+function nzshpcrt_style() { 
+  global $wpdb; 
   ?>
   <style type="text/css" media="screen">
   
@@ -252,10 +253,18 @@ function nzshpcrt_style() {
 		if($thumbnail_width <= 0) {
 			$thumbnail_width = 96;
 		}
+    $thumbnail_height = get_option('product_image_height'); 
+    if($thumbnail_height <= 0) { 
+      $thumbnail_height = 96; 
+    }
+		
+		
 	?>
 		div.default_product_display div.textcol{
 			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
 			_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+			min-height: <?php echo $thumbnail_height;?>px;
+			_height: <?php echo $thumbnail_height;?>px;
 		}
 			
 			
@@ -265,6 +274,12 @@ function nzshpcrt_style() {
 			left: 0px;
 			margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
 		}
+		
+    div.default_product_display  div.textcol div.imagecol a img {
+      width: <?php echo $thumbnail_width; ?>px;
+      height: <?php echo $thumbnail_height; ?>px;
+    }
+		
 	<?php
 	}
 	
@@ -275,19 +290,44 @@ function nzshpcrt_style() {
 	if($single_thumbnail_width <= 0) {
 		$single_thumbnail_width = 128;
 	}
-	?>
 	
-
-  
-  
-    <?php
+  $product_ids = $wpdb->get_col("SELECT `id` FROM `wp_product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
+  foreach($product_ids as $product_id) {
+    list($individual_thumbnail_height) = get_product_meta($product_id, 'thumbnail_height'); 
+    list($individual_thumbnail_width) = get_product_meta($product_id, 'thumbnail_width');     
+    if($individual_thumbnail_height> $thumbnail_height) { 
+      echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r"; 
+      echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+      echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+      echo "      }\n\r";                                    
+    } 
+    if($individual_thumbnail_width> $thumbnail_width) {
+        echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
+        echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
+        echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
+        echo "      }\n\r";
+                      
+        echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
+        echo "            position:absolute;\n\r";
+        echo "            top:0px;\n\r";
+        echo "            left: 0px;\n\r";
+        echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
+        echo "      }\n\r";
+                      
+        echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
+        echo "            width: ".$individual_thumbnail_width."px;\n\r";
+        echo "            height: ".$individual_thumbnail_height."px;\n\r";
+        echo "      }\n\r";
+      }
+    }	
+    
   if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {
     $brandstate = 'block';
     $categorystate = 'none';
-    } else {
+  } else {
     $brandstate = 'none';
     $categorystate = 'block';
-    }
+  }
       
     ?>
     div#categorydisplay{
@@ -406,7 +446,7 @@ if (($_GET['page'] == 'wp-shopping-cart/display-log.php') || ($_GET['page'] == '
 	<?php
 }
 ?>
-<link href='<?php echo WPSC_URL; ?>/thickbox.css' rel="stylesheet" type="text/css" />
+<!-- <link href='<?php echo WPSC_URL; ?>/thickbox.css' rel="stylesheet" type="text/css" /> -->
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
 
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.tooltip.js"></script>
@@ -448,7 +488,7 @@ var borderSize = 10;
 ?>
 /* custom admin functions end*/
 </script>
-<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/thickbox.js"></script>
+<!--<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/thickbox.js"></script>-->
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.tooltip.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/dimensions.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/admin.js"></script>
@@ -2330,13 +2370,21 @@ function wpsc_replace_the_title($input) {
  
  
  
-// add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
+if(get_option('wpsc_replace_page_title') == 1) {
+  add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
+}
 
 require_once(WPSC_FILE_PATH . '/product_display_functions.php');
 
 if(is_file(WPSC_FILE_PATH.'/gold_shopping_cart.php')) {
   require_once(WPSC_FILE_PATH.'/gold_shopping_cart.php');
 }
+
+// need to sort the merchants here, after the gold ones are included. 
+function wpsc_merchant_sort($a, $b) { 
+  return strnatcmp(strtolower($a['name']), strtolower($b['name'])); 
+} 
+uasort($nzshpcrt_gateways, 'wpsc_merchant_sort'); 
 
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
 require_once(WPSC_FILE_PATH."/form_display_functions.php"); 
@@ -2522,6 +2570,7 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
 } else {
 	wp_enqueue_script('thickbox');
+  wp_enqueue_style( 'thickbox' );
 	wp_enqueue_script('ui-tabs',WPSC_URL.'/js/jquery.tabs.pack.js?ver=2.7.4', array('jquery'), '2.7.4');
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
