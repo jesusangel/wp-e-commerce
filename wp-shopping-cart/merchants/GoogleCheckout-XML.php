@@ -295,11 +295,20 @@ function nzsc_googleResponse() {
 			$billing_city = $data['new-order-notification']['buyer-billing-address']['city']['VALUE'];
 			$google_order_number = $data['new-order-notification']['google-order-number']['VALUE'];
 			$pnp = $data['new-order-notification']['order-adjustment']['shipping']['flat-rate-shipping-adjustment']['shipping-cost']['VALUE'];
+			$affiliate_id=$data['new-order-notification']['shopping-cart']['merchant-private-data'];
+			$affiliate_id=explode('=',$affiliate_id);
+			if ($affiliate_id[0]=='affiliate_id') {
+				if ($affiliate_id[1] == '') {
+					$affiliate_id = null;
+				} else {
+					$affiliate_id = $affiliate_id[1];
+				}
+			}
 			//$tax = $data['new-order-notification']['order-adjustment'][];
 			$Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type,$currency);
 			$result = $Grequest->SendProcessOrder($google_order_number);
 			$region_number = $wpdb->get_var("SELECT id FROM ".$wpdb->prefix."region_tax` WHERE code ='".$billing_region."'");
-			$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`,`gateway`, `google_order_number`, `google_user_marketing_preference`) VALUES ( '".$total_price."', '".$sessionid."', '".time()."', '".$billing_country."', '".$shipping_country."', '".$pnp."','".$region_number."' , '".$user_ID."' , '".$_SESSION['wpsc_discount']."','".get_option('payment_gateway')."','".$google_order_number."','".$user_marketing_preference."')";
+			$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`,`gateway`, `google_order_number`, `google_user_marketing_preference`, `affiliate_id`) VALUES ( '".$total_price."', '".$sessionid."', '".time()."', '".$billing_country."', '".$shipping_country."', '".$pnp."','".$region_number."' , '".$user_ID."' , '".$_SESSION['wpsc_discount']."','".get_option('payment_gateway')."','".$google_order_number."','".$user_marketing_preference."', '".$affiliate_id."')";
 // 			mail('hanzhimeng@gmail.com',"",$sql);
 			
 			$wpdb->query($sql) ;

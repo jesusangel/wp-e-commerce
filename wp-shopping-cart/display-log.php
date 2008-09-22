@@ -126,6 +126,8 @@ if($_GET['filter'] !== 'true') {
 						$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed` >= '2' ORDER BY `date` DESC";
 					} else if($_GET['filteremail']) {
 						$sql = "SELECT DISTINCT `{$wpdb->prefix}purchase_logs` . * FROM `{$wpdb->prefix}submited_form_data` LEFT JOIN `{$wpdb->prefix}purchase_logs` ON `{$wpdb->prefix}submited_form_data`.`log_id` = `{$wpdb->prefix}purchase_logs`.`id` WHERE `{$wpdb->prefix}submited_form_data`.`value` IN ( '".$wpdb->escape($_GET['filteremail'])."' ) AND `{$wpdb->prefix}purchase_logs`.`date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `{$wpdb->prefix}purchase_logs`.`date` DESC;";
+					} else if ($_GET['filter']=='affiliate') {
+						$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `affiliate_id` IS NOT  NULL ORDER BY `date` DESC";
 					}
 
           
@@ -171,7 +173,7 @@ if($_GET['filter'] !== 'true') {
               echo TXT_WPSC_PAYMENT_METHOD;
               echo " </td>";  
               }
-
+	    
             echo " <td>";
             echo TXT_WPSC_VIEWDETAILS;
             echo " </td>";
@@ -249,21 +251,21 @@ if($_GET['filter'] !== 'true') {
 								}
 							}
         
-              echo " <td>";
-
-              if($purchase['shipping_country'] != '') {
-                $billing_country = $purchase['billing_country'];
-                $shipping_country = $purchase['shipping_country'];
-							} else {
-								$country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-								$country_data = $wpdb->get_results($country_sql,ARRAY_A);
-								$billing_country = $country_data[0]['value'];
-								$shipping_country = $country_data[0]['value'];
-							}
-              //echo $country;
-              echo nzshpcrt_currency_display(nzshpcrt_find_total_price($purchase['id'],$shipping_country),1);
-              $subtotal += nzshpcrt_find_total_price($purchase['id'],$shipping_country);
-              echo " </td>\n\r";
+//               echo " <td>";
+// 
+//               if($purchase['shipping_country'] != '') {
+//                 $billing_country = $purchase['billing_country'];
+//                 $shipping_country = $purchase['shipping_country'];
+// 							} else {
+// 								$country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+// 								$country_data = $wpdb->get_results($country_sql,ARRAY_A);
+// 								$billing_country = $country_data[0]['value'];
+// 								$shipping_country = $country_data[0]['value'];
+// 							}
+//               //echo $country;
+//               echo nzshpcrt_currency_display(nzshpcrt_find_total_price($purchase['id'],$shipping_country),1);
+//               $subtotal += nzshpcrt_find_total_price($purchase['id'],$shipping_country);
+//               echo " </td>\n\r";
 
               if(get_option('payment_method') == 2) {
                 echo " <td>";
@@ -280,15 +282,23 @@ if($_GET['filter'] !== 'true') {
                 echo $gateway_name;
                 echo " </td>\n\r";
 							}
-              echo " <td>";
-              echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
-              echo " </td>\n\r";
-	
+							
+		echo "<td>";
+		$affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purchase['affiliate_id']}'");
+		$sale = $purchase['totalprice'] * (100-$affiliate_commision_percentage)/100;
+		echo nzshpcrt_currency_display($sale,1);
+		echo "</td>";
+
+		echo " <td>";
+		echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
+		echo " </td>\n\r";
+
 							//echo " <td>";
 							//echo $purchase['closest_store'];
 							//echo " </td>\n\r";
-          
-              echo "</tr>\n\r";
+		
+		
+		echo "</tr>\n\r";
               
               $stage_list_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` ORDER BY `id` ASC";
               $stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);
@@ -383,14 +393,18 @@ if($_GET['filter'] !== 'true') {
 			echo " <td>";
 			echo TXT_WPSC_PRICE;
 			echo " </td>";
-
+			
+// 			echo " <td>";
+// 			echo TXT_WPSC_COMMISION;
+// 			echo " </td>";
+			
 			echo " <td>";
 			echo TXT_WPSC_TAX;
 			echo " </td>";
 
 			echo " <td>";
 			echo TXT_WPSC_SHIPPING;
-			echo " </td>";       
+			echo " </td>";
 
 			echo " <td>";
 			echo TXT_WPSC_TOTAL;
@@ -487,7 +501,7 @@ if($_GET['filter'] !== 'true') {
 				$gst = $price - ($price  / (1+($cart_row['gst'] / 100)));
 				echo nzshpcrt_currency_display($price-$gst, 1);
 				echo " </td>";
-
+				
 				echo " <td>";
 				
 				echo nzshpcrt_currency_display($gst, 1);
@@ -516,11 +530,15 @@ if($_GET['filter'] !== 'true') {
 				}
 				
 				
+				
 				if(($all_donations == false) && ($all_no_shipping == false)) {
 
 				
 					echo "<strong>".TXT_WPSC_BASESHIPPING.":</strong><br />";    
 					echo "<strong>".TXT_WPSC_TOTALSHIPPING.":</strong><br />";    
+				}
+				if($purch_data[0]['affiliate_id'] != '') {
+					echo "<strong>".TXT_WPSC_COMMISION.":</strong><br />"; 
 				}
 				echo "<strong>".TXT_WPSC_FINALTOTAL.":</strong>";
 				echo " </td>";
@@ -537,6 +555,10 @@ if($_GET['filter'] !== 'true') {
 					echo nzshpcrt_currency_display($total_shipping, 1) . "<br />";
 				}
 				$endtotal -= $purch_data[0]['discount_value'];
+				$affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purch_data[0]['affiliate_id']}'");
+				$sale = $purch_data[0]['totalprice'] * ($affiliate_commision_percentage)/100;
+				echo nzshpcrt_currency_display($sale,1). "<br />";
+				$endtotal -= $sale;
 				echo nzshpcrt_currency_display($endtotal,1);
 				echo " </td>";
 							
@@ -680,6 +702,10 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
         case "true":
         $filter[1] = "checked='true'";
         break;
+			
+	case "affiliate":
+        $filter[4] = "checked='true'";
+        break;
         
         case 3:
         default:
@@ -693,11 +719,13 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
         }
       
       ?>
+      <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[4];?> name='filter' value='affiliate' id='order_filter_affiliate' /> <label class='order_filters' for='order_filter_affiliate'><?php echo TXT_WPSC_LOG_AFFILIATES; ?></label>
+      <br />
       <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='1' id='order_filter_1' /> <label class='order_filters' for='order_filter_1'><?php echo TXT_WPSC_LOG_CURRENT_MONTH; ?></label>
       <br />
       <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='3' id='order_filter_3' /> <label class='order_filters' for='order_filter_3'><?php echo TXT_WPSC_LOG_PAST_THREE_MONTHS; ?></label>
       <br />
-			<input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='paid' id='order_filter_paid' /> <label class='order_filters' for='order_filter_paid'><?php echo TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS; ?></label>
+	<input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='paid' id='order_filter_paid' /> <label class='order_filters' for='order_filter_paid'><?php echo TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS; ?></label>
       <br />
       <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='true' id='order_filter_none' /> <label class='order_filters' for='order_filter_none'><?php echo TXT_WPSC_LOG_ALL; ?></label>
       <br>

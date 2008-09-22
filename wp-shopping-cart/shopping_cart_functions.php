@@ -138,6 +138,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	if (get_option('payment_gateway') == 'google') {
 		$google_cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	}
+	$affliate_no = 0;
     foreach($cart as $cart_item) {
       $product_id = $cart_item->product_id;
       $quantity = $cart_item->quantity;
@@ -206,7 +207,13 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       } else {
         $output .= "<td><a href='".wpsc_product_url($product['id'])."' >".stripslashes($product['name']).$variation_list."</a></td>";
       }
-      $output .= "<td class='tdqty'>".$quantity."</td>";
+	if ($_GET['action']!='affiliate') {
+		$output .= "<td class='tdqty'>".$quantity."</td>";
+	} else {
+		$google_cart->SetMerchantPrivateData('affiliate_user='.$_GET['user_id']);
+		$output .= "<td class='tdqty'><input type='hidden' value='".$affliate_no."' name='id_array[]'><input type='text' value='".$quantity."' name='quantity_array[]'></td>";
+		$affliate_no++;
+	}
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
       $output .= "</tr>\n\r";
       }
@@ -224,7 +231,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
         {
         $output .= "<span class='tax'><span class='taxhead'>".TXT_WPSC_TAX.":</span> &nbsp;&nbsp;".nzshpcrt_currency_display($tax, 1)."</span>";
         }
-      if($_SESSION['coupon_num']){
+			if($_SESSION['coupon_num']){
 				$overall_total = nzshpcrt_overall_total_price_numeric($_SESSION['selected_country'],true);
 				$discount = $overall_total - nzshpcrt_apply_coupon($overall_total,$_SESSION['coupon_num']);
 				$total_after_discount = $overall_total-$discount;
@@ -235,30 +242,26 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
 			}
-      $output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
+			$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
 		} else{
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
 			}
-			 if ($_GET['action']=='affiliate') {
+			if ($_GET['action']=='affiliate') {
 				$output .= "<tr><td style='background-color:white;'></td><td class='tdqty' >".TXT_WPSC_TOTAL.":</td><td class='tdqty'>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</td></tr>";
 			} else {
 				$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
 			}
 		}
-	 if ($_GET['action']=='affiliate') {
-	    $output .= "</table>";
-    }
-    if(get_option('permalink_structure') != '')
-      {
-      $seperator ="?";
-      }
-      else
-         {
-         $seperator ="&amp;";
-         }
-         
-         
+	if ($_GET['action']=='affiliate') {
+		$output .= "</table>";
+	}
+	if(get_option('permalink_structure') != '') {
+		$seperator ="?";
+	} else {
+		$seperator ="&amp;";
+	}
+
     if ($discount > 0) {
 			if (get_option('payment_gateway') == 'google') {
 				$google_item = new GoogleItem(utf8_decode("Coupon Code: '".$_SESSION['coupon_num']."'"), utf8_decode("A coupon redeem"),1,	-$discount); 
@@ -286,24 +289,24 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			$Gfilter2->AddAllowedPostalArea($country['isocode']);
 			$Gfilter2->AddExcludedPostalArea(get_option('base_country'));
 			if ($country['isocode'] != get_option('base_country')) {
-				 $Gfilter->AddExcludedPostalArea($country['isocode']);
-			 }
-		 }
-		 $google_local_shipping->AddShippingRestrictions($Gfilter);
-		 $google_international_shipping->AddShippingRestrictions($Gfilter2);
-		 $google_cart->AddShipping($google_local_shipping);
-		 $google_cart->AddShipping($google_international_shipping);
+				$Gfilter->AddExcludedPostalArea($country['isocode']);
+			}
+		}
+		$google_local_shipping->AddShippingRestrictions($Gfilter);
+		$google_international_shipping->AddShippingRestrictions($Gfilter2);
+		$google_cart->AddShipping($google_local_shipping);
+		$google_cart->AddShipping($google_international_shipping);
 		
-		 $local_tax = $wpdb->get_var("SELECT tax from ".$wpdb->prefix."currency_list WHERE isocode='".get_option('base_country')."'");
-		 //exit($local_tax);
-		 $tax_rule = new GoogleDefaultTaxRule($local_tax/100);
-		 
-		 if (($_SESSION['selected_country']=='US') && (get_option('base_country')=='US')){
-			 $state_name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."region_tax WHERE id='".$_SESSION['selected_region']."'");
-			 //foreach ($state_name as $state)
-			 $tax_rule->SetStateAreas(array($state_name));
-		 } else {
-			 $tax_rule->AddPostalArea(get_option('base_country'));
+		$local_tax = $wpdb->get_var("SELECT tax from ".$wpdb->prefix."currency_list WHERE isocode='".get_option('base_country')."'");
+		//exit($local_tax);
+		$tax_rule = new GoogleDefaultTaxRule($local_tax/100);
+		
+		if (($_SESSION['selected_country']=='US') && (get_option('base_country')=='US')){
+			$state_name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."region_tax WHERE id='".$_SESSION['selected_region']."'");
+			//foreach ($state_name as $state)
+			$tax_rule->SetStateAreas(array($state_name));
+		} else {
+			$tax_rule->AddPostalArea(get_option('base_country'));
 		 }
 		$google_cart->AddDefaultTaxRules($tax_rule);
 		
@@ -314,10 +317,15 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		}
 		if ($alter_tax_rule != '')
 			$google_cart->AddDefaultTaxRules($alter_tax_rule);
-	 }
-
-    $output .= "<br><span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span><br>";
-    $output .= "<span class='gocheckout'><a href='".get_option('shopping_cart_url')."'>".TXT_WPSC_GOTOCHECKOUT."</a></span>";
+	}
+	if ($_GET['action']=='affiliate') {
+		$output .= "<br><span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span><br>";
+		$output .= "<span class='gocheckout'><a href='#' onclick='updatecart();'>Update Cart</a><span><br>";
+		$output .= "</form>";
+	} else {
+		$output .= "<br><span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span><br>";
+		$output .= "<span class='gocheckout'><a href='".get_option('shopping_cart_url')."'>".TXT_WPSC_GOTOCHECKOUT."</a></span>";
+	}
 	if (get_option('payment_gateway') == 'google') {
 		if (get_option('google_button_size') == '0'){
 			$google_button_size = 'BIG';
@@ -342,6 +350,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$google_cart->SetEditCartUrl(get_option('shopping_cart_url'));
 		$_SESSION['google_shopping_cart']=serialize($google_cart);
 // 		$output .= $google_cart->getXML();
+
 		$output .= "<br>".$google_cart->CheckoutButtonCode($google_button_size);
 	}
     //$output .= "<a href='".get_option('product_list_url')."'>".TXT_WPSC_CONTINUESHOPPING."</a>";

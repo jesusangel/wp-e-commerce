@@ -59,7 +59,7 @@ function activate_resizable() {
 			  jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
 			});
 		});
-  });
+	});
   
   
 function categorylist(url) {

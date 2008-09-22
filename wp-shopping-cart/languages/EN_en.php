@@ -2,7 +2,21 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
-
+define('TXT_WPSC_COMMISSIONTOPAY','Commission to Pay');
+define('TXT_WPSC_TOTALCOMMISSION','Total Commission');
+define('TXT_WPSC_PAYMENT','Payment');
+define('TXT_WPSC_USERNAME','Username');
+define('TXT_WPSC_PAID','Paid');
+define('TXT_WPSC_NONEEDTOPAY','No need to pay');
+define('TXT_WPSC_AFFILIATIONCODE','Affiliation Code');
+define('TXT_WPSC_COMMISSIONPERCENTAGE','Commission Percentage');
+define('TXT_WPSC_YOURPAYPALEMAIL','Your Paypal Account Email');
+define('TXT_WPSC_SETTINGS', 'Settings');
+define('TXT_WPSC_EARNINGS', 'Earnings');
+define('TXT_WPSC_AFFILIATE', 'Affiliate');
+define('TXT_WPSC_SALES_DASHBOARD', 'This month you made :affiliatesalecount: and generated a total of :monthtotal: and your total affiliate sales ever is :affiliateoveraltotal:. ');
+define('TXT_WPSC_COMMISION', 'Commission to pay');
+define('TXT_WPSC_LOG_AFFILIATES', 'Display Affiliate Sales');
 define('TXT_WPSC_CATEGORY_PRODUCT_IMAGE', 'Product Image Size');
 define('TXT_WPSC_SETONSETTINGS', 'This is set on the Settings Page');
 define('TXT_WPSC_AFFILIATION', 'Affiliation');
