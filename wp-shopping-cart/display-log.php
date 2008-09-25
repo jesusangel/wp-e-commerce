@@ -284,8 +284,12 @@ if($_GET['filter'] !== 'true') {
 							}
 							
 		echo "<td>";
-		$affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purchase['affiliate_id']}'");
-		$sale = $purchase['totalprice'] * (100-$affiliate_commision_percentage)/100;
+		if($purchase['affiliate_id'] > 0) {
+      $affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purchase['affiliate_id']}'");
+      $sale = $purchase['totalprice'] * (100-$affiliate_commision_percentage)/100;
+		} else {
+		  $sale = $purchase['totalprice'];
+		}
 		echo nzshpcrt_currency_display($sale,1);
 		echo "</td>";
 
@@ -555,10 +559,13 @@ if($_GET['filter'] !== 'true') {
 					echo nzshpcrt_currency_display($total_shipping, 1) . "<br />";
 				}
 				$endtotal -= $purch_data[0]['discount_value'];
-				$affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purch_data[0]['affiliate_id']}'");
-				$sale = $purch_data[0]['totalprice'] * ($affiliate_commision_percentage)/100;
-				echo nzshpcrt_currency_display($sale,1). "<br />";
-				$endtotal -= $sale;
+				
+        if($purch_data[0]['affiliate_id'] > 0) {
+          $affiliate_commision_percentage = $wpdb->get_var("SELECT `commision_percentage` FROM `{$wpdb->prefix}wpsc_affiliates` WHERE `user_id`='{$purch_data[0]['affiliate_id']}'");
+          $sale = $purch_data[0]['totalprice'] * (100-$affiliate_commision_percentage)/100;
+          echo nzshpcrt_currency_display($sale,1). "<br />";
+          $endtotal -= $sale;
+        }
 				echo nzshpcrt_currency_display($endtotal,1);
 				echo " </td>";
 							
@@ -632,8 +639,8 @@ if($_GET['filter'] !== 'true') {
 			echo "  <tr><td>".TXT_WPSC_HOWCUSTOMERFINDUS.":</td><td>".$purch_data[0]['find_us']."</td></tr>";
 			$engrave_line = explode(",",$purch_data[0]['engravetext']);
 			echo "  <tr><td>".TXT_WPSC_ENGRAVE."</td><td></td></tr>";
-			echo "  <tr><td>Line1:</td><td>".$engrave_line[0]."</td></tr>";
-			echo "  <tr><td>Line2:</td><td>".$engrave_line[1]."</td></tr>";
+			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>";
+			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>";
 			if($purch_data[0]['transactid'] != '') {
 				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data[0]['transactid']."</td></tr>";
 			}
@@ -774,16 +781,15 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
       </div>
     </div>
     <?php
-    if(get_option('activation_state') != "true")
-      {
+    if(get_option('activation_state') != "true") {
       ?>
       <div class='gold-cart_pesterer'> 
         <div>
-        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/blogshop/'>Upgrade to Gold</a> and unleash more functionality into your shop.
+        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo TXT_WPSC_UPGRADE_TO_GOLD; ?></a><?php echo TXT_WPSC_UNLEASH_MORE; ?>
         </div>
       </div>
       <?php
-      }
+    }
     ?>
     </td>  
   </tr>

@@ -1,6 +1,5 @@
 <?php
-function widget_admin_menu($args)
-  {
+function widget_admin_menu($args) {
   global $wpdb, $table_prefix;
   extract($args);
   //$options = get_option('widget_wp_shopping_cart');
@@ -10,7 +9,7 @@ function widget_admin_menu($args)
   echo $full_title;
   admin_menu();
   echo $after_widget;
-  }
+}
 
 function widget_admin_menu_control() { return null; }
 
@@ -26,9 +25,9 @@ add_action('plugins_loaded', 'widget_admin_menu_init');
 function admin_menu() {
 	$siteurl = get_option('siteurl');
 	echo "<ul id='set1'>";
-	echo "<li><a title='People come here to write new pages' href='".$siteurl."/wp-admin/page-new.php'>Add Pages</a></li>";
-	echo "<li><a title='People come here to add products' href='".$siteurl."/wp-admin/admin.php?page=wp-shopping-cart/display-items.php'>Add Products</a></li>";
-	echo "<li><a title='People come here to change themes and widgets settings' href='".$siteurl."/wp-admin/themes.php'>Presentation</a></li>";
+	echo "<li><a title='".TXT_WPSC_ADWIDG_ADD_PAGES_TITLE."' href='".$siteurl."/wp-admin/page-new.php'>".TXT_WPSC_ADWIDG_ADD_PAGES."</a></li>";
+	echo "<li><a title='".TXT_WPSC_ADWIDG_ADD_PRODUCTS_TITLE."' href='".$siteurl."/wp-admin/admin.php?page=wp-shopping-cart/display-items.php'>".TXT_WPSC_ADWIDG_ADD_PRODUCTS."</a></li>";
+	echo "<li><a title='".TXT_WPSC_ADWIDG_PRESENTATION_TITLE."' href='".$siteurl."/wp-admin/themes.php'>".TXT_WPSC_ADWIDG_PRESENTATION."</a></li>";
 	echo "</ul>";
 }
 

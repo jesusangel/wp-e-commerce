@@ -2,6 +2,29 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+  define('TXT_WPSC_UPGRADE_TO_GOLD','Upgrade to Gold');
+  define('TXT_WPSC_UNLEASH_MORE',' and unleash more functionality into your shop.');
+  
+define('TXT_WPSC_ENGRAVE_LINE_ONE','Line 1');
+define('TXT_WPSC_ENGRAVE_LINE_TWO','Line 2');  
+
+define('TXT_WPSC_SHOP_SETTINGS','Shop Settings');
+define('TXT_WPSC_MONEY_AND_PAYMENT','Money and Payment');
+define('TXT_WPSC_CHECKOUT_PAGE_SETTINGS','Checkout Page Settings');
+define('TXT_WPSC_LOGIN_TO_GOOGLE_BASE','Login to Google base');
+
+define('TXT_WPSC_ADWIDG_ADD_PAGES','Add Pages');
+define('TXT_WPSC_ADWIDG_ADD_PRODUCTS','Add Products');
+define('TXT_WPSC_ADWIDG_PRESENTATION','Presentation');
+
+define('TXT_WPSC_ADWIDG_ADD_PAGES_TITLE','People come here to write new pages');
+define('TXT_WPSC_ADWIDG_ADD_PRODUCTS_TITLE','People come here to add products');
+define('TXT_WPSC_ADWIDG_PRESENTATION_TITLE','People come here to change themes and widgets settings');
+
+
+define('TXT_WPSC_GOLD_ACTIVATED','The gold cart is currently activated.');
+define('TXT_WPSC_GOLD_DEACTIVATED','The gold cart is currently deactivated.');
 define('TXT_WPSC_COMMISSIONTOPAY','Commission to Pay');
 define('TXT_WPSC_TOTALCOMMISSION','Total Commission');
 define('TXT_WPSC_PAYMENT','Payment');
@@ -14,7 +37,7 @@ define('TXT_WPSC_YOURPAYPALEMAIL','Your Paypal Account Email');
 define('TXT_WPSC_SETTINGS', 'Settings');
 define('TXT_WPSC_EARNINGS', 'Earnings');
 define('TXT_WPSC_AFFILIATE', 'Affiliate');
-define('TXT_WPSC_SALES_DASHBOARD', 'This month you made :affiliatesalecount: and generated a total of :monthtotal: and your total affiliate sales ever is :affiliateoveraltotal:. ');
+//define('TXT_WPSC_SALES_DASHBOARD', 'This month you made :affiliatesalecount: and generated a total of :monthtotal: and your total affiliate sales ever is :affiliateoveraltotal:. ');
 define('TXT_WPSC_COMMISION', 'Commission to pay');
 define('TXT_WPSC_LOG_AFFILIATES', 'Display Affiliate Sales');
 define('TXT_WPSC_PRODUCTS_PAGE_SETTINGS', 'Product Page Settings');

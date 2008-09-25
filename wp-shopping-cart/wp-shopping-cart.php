@@ -31,6 +31,10 @@ $siteurl = get_option('siteurl');
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
 
+if(isset($wpmu_version)) {
+    define('IS_WPMU', 1);
+}
+
 //exit("");
 
 if(WPSC_DEBUG === true) {

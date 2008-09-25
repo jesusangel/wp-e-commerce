@@ -742,7 +742,7 @@ $output .="</table></div></div></td></tr>";
     $output .= "            </td>\n\r";
     $output .= "          </tr>\n\r";
     
-    if((function_exists("make_mp3_preview") && ($file_data['mimetype'] == 'audio/mpeg')) || function_exists("wpsc_media_player")){
+    if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player")) {
       $output .= "          <tr>\n\r";
       $output .= "            <td>\n\r";
       $output .= TXT_WPSC_NEW_PREVIEW_FILE.": ";
@@ -1142,8 +1142,8 @@ function coupon_edit_form($coupon) {
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
   //$output .= "   <input type='hidden' value='false' name='add_coupon' />\n\r";
-  $output .= "   <input type='submit' value='Submit' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
-  $output .= "   <input type='submit' value='Delete' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
+  $output .= "   <input type='submit' value='".TXT_WPSC_SUBMIT."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
+  $output .= "   <input type='submit' value='".TXT_WPSC_DELETE."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
   
   $output .= "  </td>\n\r";
   $output .= " </tr>\n\r";
@@ -1165,11 +1165,12 @@ function setting_button(){
 	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>Settings &raquo;</a>";
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
-	$output.="<li><a href='?page=wp-shopping-cart/options.php'>Shop Settings</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/getwayoptions.php'>Money and Payment</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/form_fields.php'>Chechkout page Settings</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/instructions.php'>Help/Upgrade</a></li>";
-	$output.="<li><a href='{$redirect_url}'>Login to Google base</a></li>";
+	
+	$output.="<li><a href='?page=wp-shopping-cart/options.php'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
+	$output.="<li><a href='?page=wp-shopping-cart/getwayoptions.php'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
+	$output.="<li><a href='?page=wp-shopping-cart/form_fields.php'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
+	//$output.="<li><a href='?page=wp-shopping-cart/instructions.php'>Help/Upgrade</a></li>";
+	$output.="<li><a href='{$redirect_url}'>".TXT_WPSC_LOGIN_TO_GOOGLE_BASE."</a></li>";
 	$output.="</ul>";
 //	$output.="<div>Checkout Settings</div>";
 	$output.="</span>&emsp;&emsp;</div>";

@@ -642,6 +642,9 @@ if($_GET['clean_categories'] == 'true') {
 											case "nn_NO.php";
 											$language = "Norwegian";
 											break;
+											case "CZ_cz.php";
+											$language = "Czech";
+											break;
 																	
 											default:
 											continue 2;
