@@ -223,7 +223,7 @@ function variationslist($current_variation = '', $mode='add') {
 		$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
 		$selected = "";
 	}
-	$concat .= "<select name='variations' onChange='$mode_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
+	$concat .= "<select name='variations' onChange='{$mode}_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
 	return $concat;
 }
 
