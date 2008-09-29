@@ -320,11 +320,15 @@ function nzshpcrt_getproductform($prodid)
   $output .= "</h3>
       <div class='inside'>
   <table>";
-    if ($product['weight_unit']=='pound') {
-	  $unit1="selected='selected'";
-  } else {
-	  $unit2="selected='selected'";
-  }
+	if ($product['weight_unit']=='pound') {
+		$unit1="selected='selected'";
+	} else if ($product['weight_unit']=='once') {
+		$unit2="selected='selected'";
+	}else if ($product['weight_unit']=='gram') {
+		$unit3="selected='selected'";
+	}else if ($product['weight_unit']=='kilogram') {
+		$unit4="selected='selected'";
+	}
 	$output .= "<tr>\n\r";
 	$output .= "	<td>\n\r";
 	$output .= "		". TXT_WPSC_WEIGHT."\n\r";
@@ -333,7 +337,9 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "		<input type='text' size='5' name='weight' value='".$product['weight']."'>\n\r";
 	$output .= "   <select name='weight_unit'>\n\r";
 	$output .= "			<option $unit1 value='pound'>Pounds</option>\n\r";
-	$output .= "			<option $unit2 value='once'>Ounce</option>\n\r";
+	$output .= "			<option $unit2 value='once'>Ounces</option>\n\r";
+	$output .= "			<option $unit3 value='gram'>Grams</option>\n\r";
+	$output .= "			<option $unit4 value='kilogram'>Kilograms</option>\n\r";
 	$output .= "		</select>\n\r";
 	$output .= "	</td>\n\r";
 	$output .= "</tr>";

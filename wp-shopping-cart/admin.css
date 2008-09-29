@@ -200,7 +200,7 @@ strong.form_group span{ font-size: 8pt; }
  
 span.image_size_text{ font-size: 8pt; }
  
-img#previewimage{ width: 100px; max-width: 100px; }
+img#previewimage{max-width: 100px; }
  
 div#preview_button{ width: 100%; text-align: center; }
  

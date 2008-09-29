@@ -9,14 +9,14 @@ $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_pro
 
 
 function topcategorylist() {
-  global $wpdb,$category_data;
-  $siteurl = get_option('siteurl'); 
-  $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
-  $options = "";
-  $options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
-  $options .= top_category_options(null, 0, $_GET['catid']);
-  $concat .= "<select name='category' onChange='categorylist(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
-  return $concat;
+	global $wpdb,$category_data;
+	$siteurl = get_option('siteurl'); 
+	$url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
+	$options = "";
+	$options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
+	$options .= top_category_options(null, 0, $_GET['catid']);
+	$concat .= "<select name='category' onChange='categorylist(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
+	return $concat;
 }
 
 function top_category_options($category_id = null, $iteration = 0, $selected_id = null) {
@@ -1196,7 +1196,9 @@ echo "        </div>";
 			<input type="text" size='5' name='weight' value=''>
 			<select name='weight_unit'>
 				<option value="pound">Pounds</option>
-				<option value="once">Ounce</option>
+				<option value="once">Ounces</option>
+				<option value="gram">Grams</option>
+				<option value="kilogram">Kilograms</option>
 			</select>
 		</td>
     </tr>

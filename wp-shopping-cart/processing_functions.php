@@ -1,152 +1,143 @@
 <?php
 function nzshpcrt_overall_total_price($country_code = null, $for_display = false, $no_discount = false, $total_checkbox=0) {
-    /*
-     * Determines the total in the shopping cart, adds the tax and shipping if a country code is supplied and adds the discount of a coupon code is present
-     * Adds a dollar sign and information if there is no tax and shipping if $for_display is true
-     */
-    global $wpdb;
-    $cart  =& $_SESSION['nzshpcrt_cart'];
-    $total_quantity =0;
-    $total_weight = 0;
-    $all_donations = true;
-    $all_no_shipping = true;
-    foreach($cart as $cart_item) {
-      $product_id = $cart_item->product_id;
-      $quantity = $cart_item->quantity;
-      $product_variations = $cart_item->product_variations;
-      $extras = $cart_item->extras;
-      $extras_count=count($extras);
-      $raw_price = 0;
-      $variation_count = count($product_variations);
-      if($variation_count > 0) {
-        foreach($product_variations as $product_variation) {
-          $value_id = $product_variation;
-          $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-				}
+	/*
+	* Determines the total in the shopping cart, adds the tax and shipping if a country code is supplied and adds the discount of a coupon code is present
+	* Adds a dollar sign and information if there is no tax and shipping if $for_display is true
+	*/
+	global $wpdb;
+	$cart  =& $_SESSION['nzshpcrt_cart'];
+	$total_quantity =0;
+	$total_weight = 0;
+	$all_donations = true;
+	$all_no_shipping = true;
+	foreach($cart as $cart_item) {
+		$product_id = $cart_item->product_id;
+		$quantity = $cart_item->quantity;
+		$product_variations = $cart_item->product_variations;
+		$extras = $cart_item->extras;
+		$extras_count=count($extras);
+		$raw_price = 0;
+		$variation_count = count($product_variations);
+		if($variation_count > 0) {
+			foreach($product_variations as $product_variation) {
+				$value_id = $product_variation;
+				$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 			}
+		}
 	
-      //$total_quantity += $quantity;
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1";
-      $product = $wpdb->get_row($sql,ARRAY_A);
-      
-      if($product['donation'] == 1) {
-        $price = $quantity * $cart_item->donation_price;
-        } else {
-        $price = $quantity * calculate_product_price($product_id, $product_variations,'stay',$extras);
-        if($country_code != null) {
-          if($product['notax'] != 1) {
-            $price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
-					}
-          $shipping = nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code);
-          $price += $shipping;
+		//$total_quantity += $quantity;
+		$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1";
+		$product = $wpdb->get_row($sql,ARRAY_A);
+
+		if($product['donation'] == 1) {
+			$price = $quantity * $cart_item->donation_price;
+		} else {
+			$price = $quantity * calculate_product_price($product_id, $product_variations,'stay',$extras);
+			if($country_code != null) {
+				if($product['notax'] != 1) {
+					$price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
 				}
-        $all_donations = false;
+				$shipping = nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code);
+				$price += $shipping;
 			}
-      if($product['no_shipping'] != 1) {
-        $all_no_shipping = false;
-			}
-
-      $total += $price;
+			$all_donations = false;
 		}
-
-    if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
-      //echo $_SESSION['selected_country'];
-      //exit(nzshpcrt_determine_base_shipping(0, $country_code));
-      $total +=  nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+		if($product['no_shipping'] != 1) {
+			$all_no_shipping = false;
 		}
-		if(!empty($_SESSION['coupon_num']) && ($no_discount !== true)){
-			$total += nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) - $total ;
-		}
-
-    if($for_display === true) {
-      $total = nzshpcrt_currency_display($total,1);
-      if(($country_code == null) && (get_option('add_plustax') == 1)) {
-        $total .= "<span class='pluspostagetax'> + ".TXT_WPSC_POSTAGE_AND_TAX."</span>";
-			}
-		}
-    return $total;
+		$total += $price;
 	}
+	if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
+		//echo $_SESSION['selected_country'];
+		//exit(nzshpcrt_determine_base_shipping(0, $country_code));
+		$total +=  nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+	}
+	if(!empty($_SESSION['coupon_num']) && ($no_discount !== true)){
+		$total += nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) - $total ;
+	}
+	if($for_display === true) {
+		$total = nzshpcrt_currency_display($total,1);
+		if(($country_code == null) && (get_option('add_plustax') == 1)) {
+			$total .= "<span class='pluspostagetax'> + ".TXT_WPSC_POSTAGE_AND_TAX."</span>";
+		}
+	}
+	return $total;
+}
 	
 	//written by allen
 	
-	function nzshpcrt_overall_total_price_numeric($country_code = null, $for_display = false) {
-		/*
-		* Determines the total in the shopping cart, adds the tax and shipping if a country code is supplied
-		* Adds a dollar sign and information if there is no tax and shipping if $for_display is true
-		*/
-		global $wpdb;
-		$cart  =& $_SESSION['nzshpcrt_cart'];
-		$total_quantity =0;
-		$total_weight = 0;
-		$all_donations = true;
-		$all_no_shipping = true;
-		foreach($cart as $cart_item) {
-			$product_id = $cart_item->product_id;
-			$quantity = $cart_item->quantity;
-			$product_variations = $cart_item->product_variations;
-			$raw_price = 0;
-			$variation_count = count($product_variations);
-			if($variation_count > 0) {
-				foreach($product_variations as $product_variation) {
-					$value_id = $product_variation;
-					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-				}
+function nzshpcrt_overall_total_price_numeric($country_code = null, $for_display = false) {
+	/*
+	* Determines the total in the shopping cart, adds the tax and shipping if a country code is supplied
+	* Adds a dollar sign and information if there is no tax and shipping if $for_display is true
+	*/
+	global $wpdb;
+	$cart  =& $_SESSION['nzshpcrt_cart'];
+	$total_quantity =0;
+	$total_weight = 0;
+	$all_donations = true;
+	$all_no_shipping = true;
+	foreach($cart as $cart_item) {
+		$product_id = $cart_item->product_id;
+		$quantity = $cart_item->quantity;
+		$product_variations = $cart_item->product_variations;
+		$raw_price = 0;
+		$variation_count = count($product_variations);
+		if($variation_count > 0) {
+			foreach($product_variations as $product_variation) {
+				$value_id = $product_variation;
+				$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 			}
-			//$total_quantity += $quantity;
-			$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1";
-			$product = $wpdb->get_row($sql,ARRAY_A);
-			if($product['donation'] == 1) {
-				$price = $quantity * $cart_item->donation_price;
-			} else {
-				$price = $quantity * calculate_product_price($product_id, $product_variations);
-				if($country_code != null) {
-					if($product['notax'] != 1) {
-						$price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
-					}
-					$shipping = nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code);
-					$price += $shipping;
-				}
-				$all_donations = false;
-			}
-			if($product['no_shipping'] != 1) {
-				$all_no_shipping = false;
-			}
-			$total += $price;
 		}
-
-		if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
-			$total +=  nzshpcrt_determine_base_shipping(0, $country_code);
+		//$total_quantity += $quantity;
+		$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1";
+		$product = $wpdb->get_row($sql,ARRAY_A);
+		if($product['donation'] == 1) {
+			$price = $quantity * $cart_item->donation_price;
+		} else {
+			$price = $quantity * calculate_product_price($product_id, $product_variations);
+			if($country_code != null) {
+				if($product['notax'] != 1) {
+					$price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
+				}
+				$shipping = nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code);
+				$price += $shipping;
+			}
+			$all_donations = false;
 		}
-		return $total;
+		if($product['no_shipping'] != 1) {
+			$all_no_shipping = false;
+		}
+		$total += $price;
 	}
+
+	if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
+		$total +=  nzshpcrt_determine_base_shipping(0, $country_code);
+	}
+	return $total;
+}
 	
 	//end of written by allen
   
-  function nzshpcrt_calculate_tax($price, $country, $region)
-    {
-    global $wpdb;
-    $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
-    if(($country_data['has_regions'] == 1))
-      {
-      $region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".$region."') ",ARRAY_A) ;
-       $tax_percentage =  $region_data['tax'];
-      }
-      else
-        {
-        $tax_percentage =  $country_data['tax'];
-        }
-    $add_tax = false;
-    if($country == get_option('base_country'))
-      {
-	$add_tax = true;
-      }
-    if($add_tax === true)
-      {
-      $price = $price * (1 + ($tax_percentage/100));
-      }
-    return $price;
-    }
-  
+function nzshpcrt_calculate_tax($price, $country, $region) {
+	global $wpdb;
+	$country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+	if(($country_data['has_regions'] == 1)) {
+		$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".$region."') ",ARRAY_A) ;
+		$tax_percentage =  $region_data['tax'];
+	} else {
+		$tax_percentage =  $country_data['tax'];
+	}
+	$add_tax = false;
+	if($country == get_option('base_country')) {
+		$add_tax = true;
+	}
+	if($add_tax === true) {
+		$price = $price * (1 + ($tax_percentage/100));
+	}
+	return $price;
+}
+
   function nzshpcrt_find_total_price($purchase_id,$country_code)
     {
     global $wpdb;
@@ -757,11 +748,30 @@ function shopping_cart_total_weight(){
 	$cart = $_SESSION['nzshpcrt_cart'];
 	$total_weight=0;
 	foreach($cart as $item) {
-		$sql="SELECT weight FROM ".$wpdb->prefix."product_list WHERE id='".$item->product_id."'";
-		$weight=$wpdb->get_var($sql);
+		$sql="SELECT weight, weight_unit FROM ".$wpdb->prefix."product_list WHERE id='".$item->product_id."'";
+		$weight=$wpdb->get_results($sql);
+		$weight = $weight[0];
+		switch($weight['weight_unit']) {
+			case "kilogram":
+			$weight = $weight['weight'] / 0.45359237;
+			break;
+			
+			case "gram":
+			$weight = $weight['weight'] / 453.59237;
+			break;
+		
+			case "ounces":
+			$weight = $weight['weight'] / 16;
+			break;
+			
+			default:
+			$weight = $weight['weight'];
+			break;
+		}
 		$subweight = $weight*$item->quantity;
 		$total_weight+=$subweight;
 	}
+	exit($total_weight);
 	return $total_weight;
 }
 
