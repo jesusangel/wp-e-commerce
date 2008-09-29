@@ -771,7 +771,6 @@ function shopping_cart_total_weight(){
 		$subweight = $weight*$item->quantity;
 		$total_weight+=$subweight;
 	}
-	exit($total_weight);
 	return $total_weight;
 }
 
