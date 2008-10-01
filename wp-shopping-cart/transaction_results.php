@@ -1,13 +1,14 @@
 <?php
 global $wpdb, $user_ID;
-$curgateway = get_option('payment_gateway');
+//$curgateway = get_option('payment_gateway');
 $sessionid = $_GET['sessionid'];
+$curgateway = $wpdb->get_var("SELECT gateway FROM {$wpdb->prefix}purchase_logs WHERE sessionid='$sessionid'");
 $errorcode = '';
 $transactid = '';
-if ($_REQUEST['eway']=='1') {
-	echo $_SESSION['eway_message'];
-	$_SESSION['eway_message']='';
-}
+// if ($_REQUEST['eway']=='1') {
+// 	echo $_SESSION['eway_message'];
+// 	$_SESSION['eway_message']='';
+// }
 if ($_REQUEST['payflow']=='1') {	
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';
@@ -355,7 +356,7 @@ else
 } else {
 
 	if(function_exists('decrypt_dps_response') && !is_numeric($sessionid)) {
-	  $sessionid = decrypt_dps_response();
+		$sessionid = decrypt_dps_response();
 	}
 	
 	echo transaction_results($sessionid, true);

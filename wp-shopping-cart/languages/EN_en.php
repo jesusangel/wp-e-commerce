@@ -2,10 +2,16 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_SHIPPINGOPTIONS', 'Shipping Options');
 
-  define('TXT_WPSC_UPGRADE_TO_GOLD','Upgrade to Gold');
-  define('TXT_WPSC_UNLEASH_MORE',' and unleash more functionality into your shop.');
-  
+define('TXT_WPSC_SHIPPING_MODULES', 'Shipping Modules');
+define('TXT_WPSC_CHOOSE_SHIPPING_MODULES', 'Choose Shipping Modules');
+define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', 'Select a Shipping option below to configure it.');
+define('TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER', 'Select a Shipping Provider');
+
+define('TXT_WPSC_UPGRADE_TO_GOLD','Upgrade to Gold');
+define('TXT_WPSC_UNLEASH_MORE',' and unleash more functionality into your shop.');
+
 define('TXT_WPSC_ENGRAVE_LINE_ONE','Line 1');
 define('TXT_WPSC_ENGRAVE_LINE_TWO','Line 2');  
 

@@ -978,3 +978,9 @@ div.breadcrumb {
 End of modified By allen
 */
 
+/* Verify your Order styling */
+td.shipping_header {
+	background-color:#E5E5E5;
+	text-transform: uppercase;
+	font-weight:bold;
+}

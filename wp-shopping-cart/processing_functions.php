@@ -749,7 +749,7 @@ function shopping_cart_total_weight(){
 	$total_weight=0;
 	foreach($cart as $item) {
 		$sql="SELECT weight, weight_unit FROM ".$wpdb->prefix."product_list WHERE id='".$item->product_id."'";
-		$weight=$wpdb->get_results($sql);
+		$weight=$wpdb->get_results($sql, ARRAY_A);
 		$weight = $weight[0];
 		switch($weight['weight_unit']) {
 			case "kilogram":

@@ -248,6 +248,10 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
       update_option('base_local_shipping', $_POST['base_local_shipping']);
     }
       
+    if(isset($_POST['base_zipcode'])) {
+	    update_option('base_zipcode', $_POST['base_zipcode']);
+    }
+    
     if(isset($_POST['base_international_shipping'])) {
       update_option('base_international_shipping', $_POST['base_international_shipping']);
     }
@@ -526,6 +530,18 @@ if($_GET['clean_categories'] == 'true') {
 									</span>
 									</td>
 								</tr>
+										<?php
+										if (get_option('base_country') == 'US') {
+										echo "<tr>";
+										echo "<th>";
+										echo "Zipcode:";
+										echo "</th>";
+										echo "<td>";
+										echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
+										echo "</td>";
+										echo "</tr>";
+										}
+										?>
 								<tr>
 									<th scope="row">
 									<?php echo TXT_WPSC_TAX_SETTINGS;?>:

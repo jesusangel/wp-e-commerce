@@ -1,16 +1,15 @@
 var someresults=function()  {
-  document.getElementById('changenotice').innerHTML = "Thank you, your change has been saved";
-  }
+	document.getElementById('changenotice').innerHTML = "Thank you, your change has been saved";
+}
 
 var noresults=function()  {
-  // see nothing, know nothing, do nothing
-  }
+	// see nothing, know nothing, do nothing
+}
 
-if(typeof(select_min_height) == undefined)
-  {
-  var select_min_height = 0;
-  var select_max_height = 200;
-  }
+if(typeof(select_min_height) == undefined) {
+	var select_min_height = 0;
+	var select_max_height = 200;
+}
 
 jQuery(document).ready(
   function() {  
@@ -122,26 +121,26 @@ function showaddform() {
    return false;
 }
    
- function showadd_categorisation_form(){
-  if(jQuery('div#add_categorisation').css('display') != 'block') {
-    jQuery('div#add_categorisation').css('display', 'block');      
-    jQuery('div#edit_categorisation').css('display', 'none');
-  } else {
-    jQuery('div#add_categorisation').css('display', 'none');
-  }
+function showadd_categorisation_form() {
+	if(jQuery('div#add_categorisation').css('display') != 'block') {
+		jQuery('div#add_categorisation').css('display', 'block');
+		jQuery('div#edit_categorisation').css('display', 'none');
+	} else {
+		jQuery('div#add_categorisation').css('display', 'none');
+	}
 	return false;
 }
 
 
-function showedit_categorisation_form(){
-  if(jQuery('div#edit_categorisation').css('display') != 'block') {
-    jQuery('div#edit_categorisation').css('display', 'block');  
-    jQuery('div#add_categorisation').css('display', 'none');
-  } else {
+function showedit_categorisation_form() {
+	if(jQuery('div#edit_categorisation').css('display') != 'block') {
+		jQuery('div#edit_categorisation').css('display', 'block');  
+		jQuery('div#add_categorisation').css('display', 'none');
+	} else {
 		jQuery('div#edit_categorisation').css('display', 'none');
 	}
 	return false;
-}  
+}
 	
 function fillcategoryform(catid) {
 	ajax.post("index.php",getresults,"ajax=true&admin=true&catid="+catid);
@@ -738,3 +737,15 @@ function wpsc_save_postboxes_state(page, container) {
 jQuery(document).ready(function(){
 	jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
 });
+
+function addlayer(){
+	jQuery("tr.addlayer").before("<tr><td><input type='text' name='layer[]'> and above</td><td><input type='text' name='shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/wp-shopping-cart/images/delete.png'></a></td></tr>");
+}
+
+function addweightlayer(){
+	jQuery("tr.addlayer").before("<tr><td><input type='text' name='weight_layer[]'> and above</td><td><input type='text' name='weight_shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/wp-shopping-cart/images/delete.png'></a></td></tr>");
+}
+
+function removelayer() {
+	this.parent.parent.innerHTML='';
+}

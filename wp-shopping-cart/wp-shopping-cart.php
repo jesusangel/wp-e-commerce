@@ -232,6 +232,7 @@ class wp_shopping_cart {
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
 			
 			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
+			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
 			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
 			
@@ -704,20 +705,21 @@ function nzshpcrt_submit_ajax()
 	}
 
 		////changes for usps
-	if ($_POST['uspsswitch']) {
-		foreach ($_SESSION['uspsQuote'] as $quotes) {
+		if ($_POST['uspsswitch']) {
 			$total=$_POST['total'];
-			if ($quotes[$_POST['key']]!='') {
-				echo nzshpcrt_currency_display($total+$quotes[$_POST['key']],1);
+			$quotes = $_SESSION['uspsQuote'];
+			foreach ($quotes[$_POST['key1']] as $quote) {
+				if ($quote[$_POST['key']] !== null) {
+					echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);
 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
-				$_SESSION['usps_shipping']= $quotes[$_POST['key']];
+					$_SESSION['quote_shipping']= $quote[$_POST['key']];
+					$_SESSION['quote_shipping_total'] = $total+$quote[$_POST['key']];
+				}
 			}
+			exit();
 		}
-		
-		exit();
-	}
-	//changes for usps ends
-	
+		//changes for usps ends
+
     if(($_GET['user'] == "true") && is_numeric($_POST['prodid']))
       {
 	  $memberstatus = get_product_meta($_POST['prodid'],'is_membership',true);
@@ -1503,7 +1505,15 @@ foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
 /* 
  * and ends here
  */
-  
+// include shipping modules here.
+$shipping_directory = WPSC_FILE_PATH.'/shipping';
+$nzshpcrt_shipping_list = nzshpcrt_listdir($shipping_directory);
+foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
+	if(stristr( $nzshpcrt_shipping , '.php' )) {
+		require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
+	}
+}
+
   if(($_GET['purchase_log_csv'] == "true") && ($_GET['rss_key'] == 'key') && is_numeric($_GET['start_timestamp']) && is_numeric($_GET['end_timestamp']))
     {
     $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
