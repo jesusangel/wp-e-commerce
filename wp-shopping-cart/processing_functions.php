@@ -370,95 +370,52 @@ function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
 
 function calculate_product_price($product_id, $variations = false, $pm='',$extras=false) {
   global $wpdb;
-  $pm = '';  // PM override code lies here
   if(is_numeric($product_id)) {
-    if(is_array($variations) && ((count($variations) >= 1) && (count($variations) <= 2))) {
+    if(is_array($variations) && (count($variations) >= 1)) {
       $variation_count = count($variations);
       $variations = array_values($variations);
+      array_walk($variations, 'wpsc_sanitise_keys');
 		}
-		if ($pm!='') {
-			$checkb_sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '".(int)$product_id."' LIMIT 1";
-			$product_data = $wpdb->get_results($checkb_sql,ARRAY_A);
-			if ($product_data[0]['special']=='1') {
-				$std_price = $product_data[0]['price'] - $product_data[0]['special_price'];
-			} else {
-				$std_price = $product_data[0]['price'];
-			}
-			if ($pm=='stay') {
-				if ((count($extras)>0)&&($extras!=null)) {
-					foreach ($extras as $extra) {
-						$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$product_id."' AND `value_id` = '".$extra."' LIMIT 1");
-					}
-				}
-				return $std_price+$price;
-			}
-			$sql = "SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$product_id."' AND `extras_id` = '".$extras[0]."' LIMIT 1";
-			
-			if ($pm=='plus') {
-				if ((count($extras)>0)&&($extras!=null)) {
-					foreach ($extras as $extra) {
-						$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$product_id."' AND `extras_id` = '".$extra."' LIMIT 1");
-					}
-				}
-				return $std_price+$price;
-			} elseif ($pm=='minus') {
-				if ((count($extras)>0)&&($extras!=null)) {
-					foreach ($extras as $extra) {
-						$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$product_id."' AND `extras_id` = '".$extra."' LIMIT 1");
-					}
-				}
-				return $std_price+$price;
-			}			
-			return $price;
-		} else {
-			if(($variation_count >= 1) && ($variation_count <= 2)) {
-				switch($variation_count) {
-					case 1:
-					$sql = "SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` IN ('".$product_id."') AND `variation_id_1` = '".$variations[0]."' AND `variation_id_2` = '0' LIMIT 1";
-					break;
 		
-					case 2:
-					$sql = "SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` IN ('".$product_id."') AND ((`variation_id_1` = '".$variations[0]."' AND `variation_id_2` = '".$variations[1]."') OR (`variation_id_1` = '".$variations[1]."' AND `variation_id_2` = '".$variations[0]."')) LIMIT 1";
-					break;
-				}
-				$price = $wpdb->get_var($sql);
-				//exit("// $price $sql");
-			} else {
-				$sql = "SELECT `price`,`special`,`special_price` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1";
-				$product_data = $wpdb->get_row($sql,ARRAY_A);
-				if($product_data['special_price'] > 0) {
-					$price = $product_data['price'] - $product_data['special_price'];
-				} else {
-					$price = $product_data['price'];
-				}
-			}
-		}
+    /// the start of the normal price determining code.
+    if($variation_count >= 1) {
+      // if we have variations, grab the individual price for them.    
+      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+      $price = $wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+    } else {
+      $sql = "SELECT `price`,`special`,`special_price` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1";
+      $product_data = $wpdb->get_row($sql,ARRAY_A);
+      if($product_data['special_price'] > 0) {
+        $price = $product_data['price'] - $product_data['special_price'];
+      } else {
+        $price = $product_data['price'];
+      }
+    }
 	} else {
 		$price = false;
 	}
   return $price;
 }
   
-function check_in_stock($id, $variations, $item_quantity = 1) {
+function check_in_stock($product_id, $variations, $item_quantity = 1) {
   global $wpdb;
-  $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$id."' LIMIT 1";
-  $item_data = $wpdb->get_row($sql,ARRAY_A);
+  $product_id = (int)$product_id;
+  $item_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
   
   $item_stock = null;
   $variation_count = count($variations);
-  if(($variation_count >= 1) && ($variation_count <= 2)) {
+  if($variation_count > 0) {
     foreach($variations as $variation_id) {
       if(is_numeric($variation_id)) {
         $variation_ids[] = $variation_id;
 			}
 		}
-    if(count($variation_ids) == 2) {
-      $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$id."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '".$variation_ids[1]."') OR (`variation_id_1` = '".$variation_ids[1]."' AND `variation_id_2` = '".$variation_ids[0]."') LIMIT 1",ARRAY_A);
+    if(count($variation_ids) > 0) {
+      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
+      
+      $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+      
       $item_stock = $variation_stock_data['stock'];
-		} else if(count($variation_ids) == 1) {
-			$variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$id."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
-
-			$item_stock = $variation_stock_data['stock'];
 		}
 	}
     
@@ -1176,4 +1133,8 @@ function wpsc_add_product($product_values) {
 	return $success;
 }
 
+function wpsc_sanitise_keys($value) {
+  /// Function used to cast array items to integer.
+  return (int)$value;
+}
 ?>

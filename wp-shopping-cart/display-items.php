@@ -1163,10 +1163,12 @@ echo "        </div>";
 	<div class='inside'>
     <table>
     <tr>
-      <td>
+      <td colspan='2'>
         <?php echo TXT_WPSC_ADD_VAR; ?>
       </td>
-      <td>
+    </tr> 
+    <tr>
+      <td colspan='2'>
         <?php echo variationslist(); ?>
         <div id='add_product_variations'>
 		

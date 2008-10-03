@@ -280,10 +280,37 @@ if($converted_brand_count <= 0) {
 		}  
 	}
 }
-
+// Field 	Type 	Collation 	Null 	Key 	Default 	Extra 	Privileges 	Comment 
 
 if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}wpsc_productmeta` LIKE 'custom';",ARRAY_A)) {
 	$wpdb->query("ALTER TABLE `{$wpdb->prefix}wpsc_productmeta` ADD `custom` VARCHAR( 1 ) NOT NULL DEFAULT '0' AFTER `meta_value`;");
 	$wpdb->query("ALTER TABLE `{$wpdb->prefix}wpsc_productmeta` ADD INDEX ( `custom` ) ;");
+}
+
+
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}variation_priceandstock` LIKE 'weight';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}variation_priceandstock` ADD `weight` VARCHAR( 64 ) NULL AFTER `price`;");
+  $wpdb->query("ALTER TABLE `{$wpdb->prefix}variation_priceandstock` ADD `visibility` VARCHAR( 1 ) NOT NULL DEFAULT '1' AFTER `weight`;");
+}
+
+
+if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations`") < 1) {
+  $variation_priceandstock = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock`",ARRAY_A);
+  
+  foreach((array)$variation_priceandstock_items as $variation_priceandstock_item) {
+    $keys = array();
+    $keys[] = $variation_priceandstock_item['variation_id_1'];
+    $keys[] = $variation_priceandstock_item['variation_id_2'];
+    $variation_priceandstock_id = $variation_priceandstock_item['id'];
+    $product_id = $variation_priceandstock_item['product_id'];
+    foreach((array)$keys as $key) {
+      if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$key'") < 1) {
+        $variation_id = $wpdb->get_var("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$key}'");
+        if($variation_id > 0) {
+          $wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$key', '$variation_id' )");
+        }
+      }
+    }
+  }
 }
 ?>

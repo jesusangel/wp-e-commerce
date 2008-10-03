@@ -439,7 +439,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
       if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && $variations_output[1] === null) {
         $output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
 			} else {
-				if((get_option('hide_addtocart_button') != 1) && (get_option('payment_gateway') !='google')) {
+				if((get_option('hide_addtocart_button') != 1)) {
 					if ((get_option('addtocart_or_buynow') == 0)) {
 						if(isset($wpsc_theme) && is_array($wpsc_theme) && ($wpsc_theme['html'] !='')) {
 							$output .= $wpsc_theme['html'];

@@ -213,7 +213,7 @@ function display_category_row($category,$subcategory_level = 0) {
    
     $category_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$_POST['prodid']."')", ARRAY_A);
     
-    if(($_POST['title'] != $category_data['name']) && (trim($_POST['name']) != null)) {
+    if(($_POST['title'] != $category_data['name']) && (trim($_POST['title']) != null)) {
       $category_name = $_POST['title'];
       $category_sql_list[] = "`name` = '$category_name' ";
       

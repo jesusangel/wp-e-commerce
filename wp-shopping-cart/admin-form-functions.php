@@ -294,10 +294,14 @@ function nzshpcrt_getproductform($prodid)
     
   if($check_variation_value_count > 0) {
     $output .= "          <tr>\n\r";
-    $output .= "            <td>\n\r";
+    $output .= "            <td colspan='2'>\n\r";
     $output .= TXT_WPSC_EDIT_VAR.": ";
     $output .= "            </td>\n\r";
-    $output .= "            <td>\n\r";
+    $output .= "          </tr>\n\r";
+    
+    
+    $output .= "          <tr>\n\r";
+    $output .= "            <td colspan='2'>\n\r";
 		$output .= "            <div id='edit_product_variations'>";
 	
 		$output .= "            </div>";

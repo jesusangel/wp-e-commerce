@@ -90,7 +90,7 @@ if(function_exists('fancy_notifications')) {
 				  $_SESSION['customer_view'] = 'default';
 				}
 				
-				$display_mode = get_option('product_view');							
+				$display_type = get_option('product_view');							
 				if($category_data['display_type'] != '') {
 				  $display_type = $category_data['display_type'];
 				}

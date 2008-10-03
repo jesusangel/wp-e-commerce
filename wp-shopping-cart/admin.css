@@ -200,7 +200,7 @@ strong.form_group span{ font-size: 8pt; }
  
 span.image_size_text{ font-size: 8pt; }
  
-img#previewimage{max-width: 100px; }
+img#previewimage{ max-width: 100px; }
  
 div#preview_button{ width: 100%; text-align: center; }
  
@@ -1445,7 +1445,7 @@ img.ui-datepicker-trigger {
 }
 .ui-datepicker-cover {
 	display: none;
-	display/**/: block;
+	display: block;
 	position: absolute;
 	z-index: -1;
 	filter: mask();
@@ -1465,6 +1465,89 @@ textarea.affiliate_text {
 	height:150px;
 }
 
+
+table.product_variation_grid {
+ border-collapse: collapse;
+ margin-top: 0px;
+}
+
+table.product_variation_grid tr td, table.product_variation_grid tr th {
+ border: 1px solid #cccccc;
+ border-collapse: collapse;
+ text-align: left;
+}
+
+table.product_variation_grid tr th {
+   border-bottom: 1px solid #969696;
+}
+
+table.product_variation_grid tr th.stock {
+   border-bottom: 1px solid #969696;
+   width: 50px;
+}
+
+table.product_variation_grid tr th.price {
+   width: 78px;
+}
+
+table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
+  padding: 4px 0px 4px 10px;  
+}
+  
+table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
+  width: 300px;
+}
+ 
+ 
+table.product_variation_grid tr td input{
+   padding: 0px 3px 0px 3px;
+}
+
+table.product_variation_grid tr.group_boundary td {
+   border-bottom: 1px solid #969696;
+}
+
 a.about_this_page_sub {
 	text-decoration:underline;
+}
+
+table.product_variation_grid {
+ border-collapse: collapse;
+ margin-top: 0px;
+}
+
+table.product_variation_grid tr td, table.product_variation_grid tr th {
+ border: 1px solid #cccccc;
+ border-collapse: collapse;
+ text-align: left;
+}
+
+table.product_variation_grid tr th {
+   border-bottom: 1px solid #969696;
+}
+
+table.product_variation_grid tr th.stock {
+   border-bottom: 1px solid #969696;
+   width: 50px;
+}
+
+table.product_variation_grid tr th.price {
+   width: 78px;
+}
+
+table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
+  padding: 4px 0px 4px 10px;  
+}
+  
+table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
+  width: 300px;
+}
+ 
+ 
+table.product_variation_grid tr td input{
+   padding: 0px 3px 0px 3px;
+}
+
+table.product_variation_grid tr.group_boundary td {
+   border-bottom: 1px solid #969696;
 }

@@ -364,70 +364,43 @@ function nzshpcrt_submit_checkout() {
 		}	
 	}
 	}
-	$j=0;
-	$extra_var.='],[';
-	if($extras != null) {
-       foreach($extras as $extra) {
-		$wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_extras` ( `cart_id` , `extra_id`) VALUES ( '".$cart_id."', '".$extra."');");
-		$name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."extras_values WHERE id=$extra");
-		$j++;
-		if ($j==1) {
-			$extra_var.=$name;
-		} else {
-			$extra_var.=",".$name;
-		}
-	}
-	$extra_var.=']';
-       }
-	/*
-	if (function_exists('sendemailstostores')) {
-		if ($_POST['pickupordelivery']==1){
-			$delivery = "Pick Up";
-		} else {
-			$delivery = "Delivery";
-		}
-		$chosen_store = $_POST['chosen_store'];
-		$email_sql = "SELECT * FROM locations WHERE storename='".$chosen_store."'";
-		$email_data = $wpdb->get_results($email_sql,ARRAY_A);
-		
-		$email_message = "Order: ".$product_data['name']." with additional variations : ".$extra_var."<br>";
-		$email_message .= "<br>";
-		$email_message .= "Delivery/Pick Up:".$delivery;
-		$email_message .= "<br>";
-		$email_message .= "Customer detail: <br>";
-		$email_message .= "Name:". $_POST['collected_data'][get_option('paypal_form_first_name')]." ".$_POST['collected_data'][get_option('paypal_form_last_name')]."<br>";
-		$email_message .= "Address: ".$map_data['address']."<br>";
-		$email_message .= "City:".$map_data['city'];
-		sendemailstostores($email_data[0]['url'],'New Order',$email_message);
-	}*/
+        /*
+        $j=0;
+        $extra_var.='],[';
+        if($extras != null) {
+          foreach($extras as $extra) {
+            $wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_extras` ( `cart_id` , `extra_id`) VALUES ( '".$cart_id."', '".$extra."');");
+            $name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."extras_values WHERE id=$extra");
+            $j++;
+            if ($j==1) {
+              $extra_var.=$name;
+            } else {
+              $extra_var.=",".$name;
+            }
+          }
+        $extra_var.=']';
+        }*/
      /*
       * This code decrements the stock quantitycart_item_variations`
      */
-     if(is_array($variations)) {
+    if(is_array($variations)) {
        $variation_values = array_values($variations);
-       }
-     //$debug .= "<pre>".print_r($variations,true)."</pre>";
-     if($product_data['quantity_limited'] == 1) {
-       switch(count($variation_values)) {
-         case 2:
-         $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$product_data['id']."' AND (`variation_id_1` = '".$variation_values[0]."' AND `variation_id_2` = '".$variation_data[1]."') OR (`variation_id_1` = '".$variation_values[1]."' AND `variation_id_2` = '".$variation_values[0]."') LIMIT 1",ARRAY_A);
-         //$debug .= "<pre>".print_r($variation_stock_data,true)."</pre>";
-         $wpdb->query("UPDATE `".$wpdb->prefix."variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '".$variation_stock_data['id']."' LIMIT 1",ARRAY_A);
-         break;
-         
-         case 1:
-         $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$product_data['id']."' AND (`variation_id_1` = '".$variation_values[0]."' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
-         //$debug .= "<pre>".print_r($variation_stock_data,true)."</pre>";
-         $wpdb->query("UPDATE `".$wpdb->prefix."variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '".$variation_stock_data['id']."' LIMIT 1",ARRAY_A);
-         break;
+    }
+    //$debug .= "<pre>".print_r($variations,true)."</pre>";
+    if($product_data['quantity_limited'] == 1) {
+      if(count($variation_values) > 0) {
+        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
         
-         default:
-         /* normal form of decrementing stock */
-         $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `quantity`='".($product_data['quantity']-$quantity)."' WHERE `id`='".$product_data['id']."' LIMIT 1");
-         break;
-         }
-       }     
-     }
+        $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+        
+        $wpdb->query("UPDATE `".$wpdb->prefix."variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '".$variation_stock_data['id']."' LIMIT 1",ARRAY_A);
+      
+      
+      } else {
+        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `quantity`='".($product_data['quantity']-$quantity)."' WHERE `id`='".$product_data['id']."' LIMIT 1");
+      }    
+    }     
+  }
    
    
    $unneeded_value = null; //this is only used to store the quantity for the item we are working on, so that we can get the array key

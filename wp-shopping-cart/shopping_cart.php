@@ -202,7 +202,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 	//End of written by allen
 			$total_weight = shopping_cart_total_weight();
 	if ($total_weight > 0) {
-		if((get_option('do_not_use_shipping') != 1) && (get_option('base_country') != null)) {
+		if(get_option('base_country') != null) {
 			//if (!function_exists('getdistance')) {
 		
 		
@@ -218,9 +218,6 @@ function wpsc_shipping_country_list($selected_country = null) {
 
 				echo "<tr class='total_price'>\n\r";
 				echo "  <td colspan='3' >\n\r";
-				if (get_option('payment_gateway')=='google') {
-					echo TXT_WPSC_POSTAGE.":";
-				} else {
 					?>
 							<div class='select_country'>
 							<form name='change_country' action='' method='POST'>
@@ -229,7 +226,6 @@ function wpsc_shipping_country_list($selected_country = null) {
 					?>
 							</div>
 							<?php
-				}
 				echo "  </td>\n\r";
 				echo "<td>";
 				echo "<input type='submit' onclick='' value='Rate'>";

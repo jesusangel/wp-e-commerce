@@ -287,14 +287,35 @@ function nzshpcrt_style() {
 		
 	<?php
 	}
-	
-	
+			
 		
 	$single_thumbnail_width = get_option('single_view_image_width');
 	$single_thumbnail_height = get_option('single_view_image_height');
 	if($single_thumbnail_width <= 0) {
 		$single_thumbnail_width = 128;
 	}
+	?>
+		div.single_product_display div.textcol{
+			margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
+			_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+			min-height: <?php echo $single_thumbnail_height;?>px;
+			_height: <?php echo $single_thumbnail_height;?>px;
+		}
+			
+			
+		div.single_product_display  div.textcol div.imagecol{
+			position:absolute;
+			top:0px;
+			left: 0px;
+			margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
+		}
+		
+    div.single_product_display  div.textcol div.imagecol a img {
+      width: <?php echo $single_thumbnail_width; ?>px;
+      height: <?php echo $single_thumbnail_height; ?>px;
+    }
+		
+	<?php
 	
   $product_ids = $wpdb->get_col("SELECT `id` FROM `wp_product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
   foreach($product_ids as $product_id) {
@@ -747,19 +768,21 @@ function nzshpcrt_submit_ajax()
 		  
 		  $item_stock = null;
 		  $variation_count = count($_POST['variation']);
-		  if(($variation_count >= 1) && ($variation_count <= 2)) {
+		  if($variation_count >= 1) {
 				foreach($_POST['variation'] as $variation_id) {
 					if(is_numeric($variation_id)) {
 						$variation_ids[] = (int)$variation_id;
 					}
 				}
-				if(count($variation_ids) == 2)	{
-					$variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$_POST['prodid']."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '".$variation_ids[1]."') OR (`variation_id_1` = '".$variation_ids[1]."' AND `variation_id_2` = '".$variation_ids[0]."') LIMIT 1",ARRAY_A);
-					$item_stock = $variation_stock_data['stock'];
-				} else if(count($variation_ids) == 1) {
-					$variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$_POST['prodid']."' AND (`variation_id_1` = '".$variation_ids[0]."' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
-					$item_stock = $variation_stock_data['stock'];
-				}
+				
+        if(count($variation_ids) > 0) {
+          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$_POST['prodid']."' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
+          
+          $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+          
+          $item_stock = $variation_stock_data['stock'];
+          echo "/*".print_r($variation_stock_data,true)."*/";
+        }				
 			}
 			
 		  if($item_stock === null) {
@@ -1027,37 +1050,37 @@ function nzshpcrt_submit_ajax()
 			// 		exit();
 			// 	}
       
-    if(($_POST['remove_variation_value'] == "true") && is_numeric($_POST['variation_value_id']))
-      {
+    if(($_POST['remove_variation_value'] == "true") && is_numeric($_POST['variation_value_id'])) {
       $wpdb->query("DELETE FROM `".$wpdb->prefix."variation_values_associations` WHERE `value_id` = '".$_POST['variation_value_id']."'");
       $wpdb->query("DELETE FROM `".$wpdb->prefix."variation_values` WHERE `id` = '".$_POST['variation_value_id']."' LIMIT 1");
       exit();
-      }
+    }
       
-    if(($_POST['get_updated_price'] == "true") && is_numeric($_POST['product_id']))
-      {
+      
+      
+    if(($_POST['get_updated_price'] == "true") && is_numeric($_POST['product_id'])) {
       $notax = $wpdb->get_var("SELECT `notax` FROM `".$wpdb->prefix."product_list` WHERE `id` IN('".$_POST['product_id']."') LIMIT 1");
-      foreach((array)$_POST['variation'] as $variation)
-        {
-        if(is_numeric($variation))
-          {
-          $variations[] = $variation;
-          }
+      foreach((array)$_POST['variation'] as $variation) {
+        if(is_numeric($variation)) {
+          $variations[] = (int)$variation;
         }
-	foreach((array)$_POST['extra'] as $extra)
-        {
-        if(is_numeric($extra))
-          {
-          $extras[] = $extra;
-          }
-        }
-	$pm=$_POST['pm'];
-	echo "product_id=".$_POST['product_id'].";\n";
-	
-	echo "price=\"".nzshpcrt_currency_display(calculate_product_price($_POST['product_id'], $variations,'stay',$extras), $notax)."\";\n";
-      //exit(print_r($extras,1));
-	exit();
       }
+      foreach((array)$_POST['extra'] as $extra) {
+        if(is_numeric($extra)) {
+          $extras[] = (int)$extra;
+        }
+      }
+    $pm=$_POST['pm'];
+    echo "product_id=".(int)$_POST['product_id'].";\n";
+    
+    echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax)."\";\n";
+        //exit(print_r($extras,1));
+    exit();
+  }
+      
+      
+      
+      
       
     if(($_REQUEST['log_state'] == "true") && is_numeric($_POST['id']) && is_numeric($_POST['value'])) {
 			$newvalue = $_POST['value'];
@@ -1099,8 +1122,8 @@ function nzshpcrt_submit_ajax()
 				exit();
 		  }
     }
-      
-	if(($_POST['list_variation_values'] == "true") && is_numeric($_POST['new_variation_id'])) {
+   
+  if(($_POST['list_variation_values'] == "true") && is_numeric($_POST['new_variation_id'])) {
 		$variation_processor = new nzshpcrt_variations();
 		echo "variation_value_id = \"".$_POST['new_variation_id']."\";\n";
 		echo "variation_value_html = \"".$variation_processor->display_variation_values($_POST['prefix'],$_POST['new_variation_id'])."\";\n";
@@ -1109,7 +1132,7 @@ function nzshpcrt_submit_ajax()
 		//echo "/*\n\r".print_r(array_values(array_unique(array_merge((array)$_POST['new_variation_id'], $_POST['variation_id']))),true)."\n\r*/";
 		exit();
 	}
-      
+
 	if(($_POST['redisplay_variation_values'] == "true")) {
 		$variation_processor = new nzshpcrt_variations();
 		$variations_selected = array_values(array_unique(array_merge((array)$_POST['new_variation_id'], (array)$_POST['variation_id'])));		
@@ -1131,6 +1154,7 @@ function nzshpcrt_submit_ajax()
 		if(is_array($variation_values)) {
 			//echo(print_r($variation_values,true));
 			$check_variation_added = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') LIMIT 1");
+			//exit("<pre>".print_r($variation_values,true)."<pre>");
 			if($check_variation_added == null) {
 				$variations_processor->add_to_existing_product($product_id,$variation_values);			
 			}

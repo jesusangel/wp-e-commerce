@@ -303,7 +303,7 @@ function remove_variation_value_field(id)
 function variation_value_list(id) {
 	var display_list=function(results) {
 		eval(results);
-		if(variation_value_html != '') {
+		//if(variation_value_html != '') {
 			new_element_id = "product_variations_"+variation_value_id;
 			if(document.getElementById(new_element_id) === null) {
 				new_element = document.createElement('span');
@@ -311,7 +311,7 @@ function variation_value_list(id) {
 				document.getElementById("edit_product_variations").appendChild(new_element);
 				document.getElementById(new_element_id).innerHTML = variation_value_html;
 			}
-		}
+		//}
 		prodid=document.getElementById("prodid").value;
 		var id_string = '';
 		jQuery("#"+new_element_id+" input[@type='checkbox']").each(function() {id_string+="&"+this.name+"="+this.value; });
@@ -349,19 +349,19 @@ function add_variation_value_list(id)
   {
 	var display_list=function(results) {
 		eval(results);
-		if(variation_value_html != '') {
-			new_element_id = "add_product_variations_"+variation_value_id;
-			if(document.getElementById(new_element_id) === null) {
-				new_element = document.createElement('span');
-				new_element.id = new_element_id;
-				document.getElementById("add_product_variations").appendChild(new_element);
-				document.getElementById(new_element_id).innerHTML = variation_value_html;
-			}
-		jQuery("#add_product_variation_details").html(variation_subvalue_html);
-		}
+    if(variation_subvalue_html != '') {
+        new_element_id = "add_product_variations_"+variation_value_id;
+        if(document.getElementById(new_element_id) === null) {
+          new_element = document.createElement('span');
+          new_element.id = new_element_id;
+          document.getElementById("add_product_variations").appendChild(new_element);
+          document.getElementById(new_element_id).innerHTML = variation_value_html;
+        }
+      jQuery("#add_product_variation_details").html(variation_subvalue_html);
+    }
 		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
 // 		  alert(this.id);
-		  });
+    });
 		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
 	}
 	current_variations = jQuery("input.variation_ids").serialize();
@@ -386,16 +386,13 @@ function remove_variation_value_list(prefix,id){
   return false;
 }
   
-function tick_active(target_id,input_value)
-  {
-  if(input_value != '')
-    {
+function tick_active(target_id,input_value) {
+  if(input_value != '') {
     document.getElementById(target_id).checked = true;
-    }
   }
+}
   
-function add_form_field()
-  {
+function add_form_field() {
   time = new Date();
   new_element_number = time.getTime();
   new_element_id = "form_id_"+new_element_number;
@@ -417,18 +414,16 @@ function add_form_field()
   document.getElementById("form_field_form_container").appendChild(new_element);
   document.getElementById(new_element_id).innerHTML = new_element_contents;
   return false;
-  }
+}
   
-function remove_new_form_field(id)
-  {
+function remove_new_form_field(id) {
   element_count = document.getElementById("form_field_form_container").childNodes.length;
-  if(element_count > 1)
-    {
+  if(element_count > 1) {
     target_element = document.getElementById(id);
     document.getElementById("form_field_form_container").removeChild(target_element);
-    }
-  return false;
   }
+  return false;
+}
   
 function remove_form_field(id,form_id)
   {
