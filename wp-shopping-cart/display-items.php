@@ -25,7 +25,7 @@ function top_category_options($category_id = null, $iteration = 0, $selected_id 
    * Recurses to generate the branched view for subcategories
    */
   global $wpdb;
-  $siteurl = get_option('siteurl'); 
+  $siteurl = get_option('siteurl');
   $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
   if(is_numeric($category_id)) {
     $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);

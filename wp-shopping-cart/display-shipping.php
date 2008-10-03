@@ -4,9 +4,13 @@ if (isset($_GET['googlecheckoutshipping'])) {
 	return;
 	exit();
 }
-	
+
+// exit("<pre>".print_r($_POST,1)."</pre>");
+
 $curgateway = get_option('shipping_gw');
 $changes_made = false;
+
+
 
 if(is_numeric($_POST['payment_method']) && (get_option('payment_gateway') != $_POST['payment_method'])) {
 	update_option('payment_method', $_POST['payment_method']);
@@ -17,6 +21,30 @@ if($_POST['custom_shipping_options'] != null) {
 	update_option('custom_shipping_options', $_POST['custom_shipping_options']);
 	$changes_made = true;
 }
+
+		if($_POST['do_not_use_shipping'] == 1) {
+			update_option('do_not_use_shipping', 1);
+		} else {
+			update_option('do_not_use_shipping', 0);
+		}
+		
+		if(isset($_POST['base_zipcode'])) {
+			update_option('base_zipcode', $_POST['base_zipcode']);
+		}
+		
+		if($_POST['shipwire'] == 1) {
+			update_option('shipwire', 1);
+		} else {
+			update_option('shipwire', 0);
+		}
+
+		if($_POST['shipwireemail'] != null) {
+			update_option('shipwireemail', $_POST['shipwireemail']);
+		}
+	
+		if($_POST['shipwirepassword'] != null) {
+			update_option('shipwirepassword', $_POST['shipwirepassword']);
+		}
 
 if(isset($_POST['custom_gateway'])) {
   // this particular form field refuses to submit in a way that appears to defy logic if dealt with like the others, hence this overkill
@@ -45,8 +73,9 @@ if(($_POST['shipping_gw'] != null)) {
 }
 
 if($changes_made == true) {
-  echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
+  //echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
 }
+
 if (get_option('custom_gateway')) {
 	$custom_gateway1 = "checked='checked'";
 } else {
@@ -69,14 +98,16 @@ $shippinglist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTASHIPPINGPROVI
 
 
 $selected[get_option('payment_method')] = "checked='true'";
+if ($_GET['shipping_options']=='true') {
 ?>
 <script language='JavaScript' type='text/javascript'>
 function selectgateway() {
-  document.forms.gatewayopt.submit()
+	document.forms.shippingopt.submit();
 }
 </script>
 <div class="wrap">
-  <form name='gatewayopt' method='POST'>
+		<form name='shippingopt' method='POST' id='shipping_options' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
+		<input type='hidden' name='shipping_submits' value='true'>
 	<?php 
 		if (get_option('custom_gateway') == 1){ 
 			$custom_gateway_hide="style='display:block;'";
@@ -95,7 +126,86 @@ function selectgateway() {
 			<br class="clear"/>
 		</div>
 
-
+				<table class='wpsc_options form-table'>
+				<tr>
+				<th scope="row">
+									<?php echo TXT_WPSC_USE_SHIPPING;?>:
+				</th>
+						<td>
+						<?php
+						$do_not_use_shipping = get_option('do_not_use_shipping');
+				$do_not_use_shipping1 = "";
+				$do_not_use_shipping2 = "";
+				switch($do_not_use_shipping) {    
+					case 1:
+						$do_not_use_shipping1 = "checked ='true'";
+						break;
+												
+					case 0:
+					default:
+						$do_not_use_shipping2 = "checked ='true'";
+						break;
+				}
+						
+				?>
+						<input type='radio' value='0' name='do_not_use_shipping' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
+				<input type='radio' value='1' name='do_not_use_shipping' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
+						<?php echo TXT_WPSC_USE_SHIPPING_DESCRIPTION;?>
+								</td>
+										</tr>
+										<?php
+										if (get_option('base_country') == 'US') {
+									echo "<tr>";
+									echo "<th>";
+									echo "Zipcode:";
+									echo "</th>";
+									echo "<td>";
+									echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
+									echo "</td>";
+									echo "</tr>";
+										}
+										?>
+								
+								
+										<?php
+										$shipwire1 = "";
+										$shipwire2 = "";
+										switch(get_option('shipwire')) {    
+										case 1:
+										$shipwire1 = "checked ='true'";
+										$shipwire_settings = 'style=\'display: block;\'';
+										break;
+												
+										case 0:
+										default:
+										$shipwire2 = "checked ='true'";
+										$shipwire_settings = '';
+										break;
+										}
+						
+										?>
+								
+										<tr>
+										<th scope="row">
+										<?php echo TXT_WPSC_SHIPWIRESETTINGS;?><span style='color: red;'></span> :
+										</th>
+										<td>
+										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='shipwire' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='shipwire' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php echo TXT_WPSC_NO;?></label>
+										<?php
+										$shipwrieemail = get_option("shipwireemail");
+										$shipwriepassword = get_option("shipwirepassword");
+										?>
+										<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
+										<table>
+										<tr><td><?=TXT_WPSC_SHIPWIREEMAIL;?> :</td><td> <input type="text" name="shipwireemail" value="<?=$shipwrieemail;?>"></td></tr>
+										<tr><td><?=TXT_WPSC_SHIPWIREPASSWORD;?> :</td><td><input type="text" name="shipwirepassword" value="<?=$shipwriepassword;?>"></td></tr>
+										<tr><td><a onclick='shipwire_sync()' style="cursor:pointer;">Sync product</a></td></tr>
+										</table>
+										</div>
+										</td>
+										</tr>
+										</table>
 		<table id='gateway_options' >
 			<tr>
 				<td class='select_gateway'>
@@ -164,3 +274,7 @@ function selectgateway() {
 		</table>
 	</form>
 </div>
+				
+<?php
+}
+?>

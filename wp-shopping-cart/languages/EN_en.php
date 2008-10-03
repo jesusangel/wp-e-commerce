@@ -2,8 +2,10 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
-define('TXT_WPSC_SHIPPINGOPTIONS', 'Shipping Options');
+define('TXT_WPSC_SELECTYOURBUSINESSLOCATION','Select your primary business location.');
+define('TXT_WPSC_ENTEREMAILADDRESS', 'Enter the email address for the owner of this shop to receive e-mail notifications.');
 
+define('TXT_WPSC_SHIPPINGOPTIONS', 'Shipping Options');
 define('TXT_WPSC_SHIPPING_MODULES', 'Shipping Modules');
 define('TXT_WPSC_CHOOSE_SHIPPING_MODULES', 'Choose Shipping Modules');
 define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', 'Select a Shipping option below to configure it.');

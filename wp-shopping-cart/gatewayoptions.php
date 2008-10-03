@@ -41,18 +41,18 @@ if(($_POST['payment_gw'] != null) && ($_POST['submit_details'] == null)) {
 	$curgateway = get_option('payment_gateway');
   $changes_made = true;
 }
-//exit("<pre>" .print_r($_POST,true). "</pre>");
+// exit("<pre>" .print_r($_POST,true). "</pre>");
 if(($_POST['payment_gw'] != null)) {
-  foreach($nzshpcrt_gateways as $gateway) {
+	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
 		if($gateway['internalname'] == $_POST['payment_gw']) {
-      $gateway['submit_function']();
-      $changes_made = true;
+			$gateway['submit_function']();
+			$changes_made = true;
 		}
 	}
 }
 
 if($changes_made == true) {
-  echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
+//   echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
 }
 if (get_option('custom_gateway')) {
 	$custom_gateway1 = "checked='checked'";
@@ -61,32 +61,39 @@ if (get_option('custom_gateway')) {
 }
 
 $form = "";
-foreach($nzshpcrt_gateways as $gateway) {
-  if($gateway['internalname'] == $curgateway ) {
-    $selected = " selected='selected'";
-    $form = $gateway['form']();
-	} else {
-		$selected = '';
+// echo "---->".$GLOBALS['nzshpcrt_gateways'];
+if (is_array($GLOBALS['nzshpcrt_gateways'])) {
+	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+		if($gateway['internalname'] == $curgateway ) {
+			$selected = " selected='selected'";
+			$form = $gateway['form']();
+		} else {
+			$selected = '';
+		}
+		
+		if(isset($gateway['admin_name'])) {
+			$gateway['name'] = $gateway['admin_name'];
+		}
+	  $gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
 	}
-	
-	if(isset($gateway['admin_name'])) {
-		$gateway['name'] = $gateway['admin_name'];
-	}
-  $gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
 }
 $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY."</option>" . $gatewaylist;
 
 
 
 $selected[get_option('payment_method')] = "checked='true'";
+if ($_GET['payments_options']=='true') {
 ?>
+		
+		
 <script language='JavaScript' type='text/javascript'>
 function selectgateway() {
-  document.forms.gatewayopt.submit()
+	document.forms.gatewayopt.submit();
 }
 </script>
 <div class="wrap">
-  <form name='gatewayopt' method='POST'>
+		<form name='gatewayopt' method='POST' id='gateway_options_tbl' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
+		<input type='hidden' name='gateway_submits' value='true'>
 	<?php 
 		if (get_option('custom_gateway') == 1){ 
 			$custom_gateway_hide="style='display:block;'";
@@ -100,7 +107,7 @@ function selectgateway() {
 
 		<div class="tablenav wpsc_admin_nav">
 			<div class="alignright">
-				<a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span> </a>
+				<a class="about_this_page_sub" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span></a>
 			</div>
 			<br class="clear"/>
 		</div>
@@ -190,3 +197,7 @@ function selectgateway() {
   
   </form>
 </div>
+								
+<?php
+}
+?>

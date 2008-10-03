@@ -1464,3 +1464,7 @@ textarea.affiliate_text {
 	width:450px;
 	height:150px;
 }
+
+a.about_this_page_sub {
+	text-decoration:underline;
+}

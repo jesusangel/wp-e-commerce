@@ -56,12 +56,14 @@ if($_POST['submit_action'] == 'add')
       $wpdb->query("INSERT INTO `".$wpdb->prefix."collect_data_forms` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');");
       }
     }
-  echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
+//   echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
   }
+  if ($_GET['checkout_options']=='true') {
 ?>
 <div class="wrap">
   <h2><?php echo TXT_WPSC_FORM_FIELDS;?></h2>  
-  <form method='POST' action=''>
+		<form method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php' id='chekcout_options_tbl'>
+		  <input type='hidden' name='checkout_submits' value='true'>
 <table>
 <tr>
         <td>
@@ -212,3 +214,6 @@ if($_POST['submit_action'] == 'add')
    ?>
   </form>
 </div>
+		   <?php
+  }
+  ?>

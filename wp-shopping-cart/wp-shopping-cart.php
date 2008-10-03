@@ -60,7 +60,7 @@ if(WPSC_DEBUG === true) {
 	
   $wpsc_start_time = microtime_float();
 } else {
-	function wpsc_debug_start_subtimer($name) {	
+	function wpsc_debug_start_subtimer($name) {
 		return null;
 	}
 }
@@ -92,7 +92,7 @@ if(IS_WPMU == 1) {
 			define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
 		}
 	if ( !defined('WP_CONTENT_DIR') ) {
-		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content');
 	}
 	
 	$upload_path = WP_CONTENT_DIR."/uploads";
@@ -231,14 +231,14 @@ class wp_shopping_cart {
 			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
 			
-			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
-			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
-			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
+// 			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
+// 			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
+// 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
 			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
 			
-			if(function_exists('gold_shpcrt_options')) {
-				gold_shpcrt_options($base_page);
-			}
+// 			if(function_exists('gold_shpcrt_options')) {
+// 				gold_shpcrt_options($base_page);
+// 			}
 			
 			do_action('wpsc_add_submenu');
 //       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
@@ -247,7 +247,7 @@ class wp_shopping_cart {
 	}
 }
 
-function nzshpcrt_style() { 
+function nzshpcrt_style() {
   global $wpdb; 
   ?>
   <style type="text/css" media="screen">
@@ -382,9 +382,9 @@ var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
 
 /* LightBox Configuration start*/
-var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";    
+var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
-var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";    
+var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";
 var resizeSpeed = 9;  // controls the speed of the image resizing (1=slowest and 10=fastest)
 var borderSize = 10;  //if you adjust the padding in the CSS, you will need to update this variable
 jQuery(document).ready( function() {
@@ -708,6 +708,7 @@ function nzshpcrt_submit_ajax()
 		if ($_POST['uspsswitch']) {
 			$total=$_POST['total'];
 			$quotes = $_SESSION['uspsQuote'];
+			//echo "<pre>".print_r($quotes,1)."</pre>";
 			foreach ($quotes[$_POST['key1']] as $quote) {
 				if ($quote[$_POST['key']] !== null) {
 					echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);
@@ -2669,5 +2670,57 @@ function serialize_shopping_cart() {
   return true;
 }  
 register_shutdown_function("serialize_shopping_cart");
+
+
+function shipping_options(){
+	if ($_GET['shipping_options']=='true'){
+		include(WPSC_FILE_PATH.'/display-shipping.php');
+		exit();
+	}
+	
+	if ($_GET['payments_options']=='true'){
+		include(WPSC_FILE_PATH.'/gatewayoptions.php');
+		exit();
+	}
+	
+	if ($_GET['checkout_options']=='true'){
+		include(WPSC_FILE_PATH.'/form_fields.php');
+		exit();
+	}
+	
+	if ($_GET['gold_options']=='true'){
+		include(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
+		exit();
+	}
+}
+
+function shipping_submits(){
+	if ($_POST['shipping_submits']=='true'){
+		require_once(WPSC_FILE_PATH."/display-shipping.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		exit();
+	}
+	
+	if ($_POST['gateway_submits']=='true'){
+		require_once(WPSC_FILE_PATH."/gatewayoptions.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		exit();
+	}
+	
+	if ($_POST['checkout_submits']=='true'){
+		require_once(WPSC_FILE_PATH."/form_fields.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		exit();
+	}
+	
+	if ($_POST['gold_submits']=='true'){
+		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
+		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		exit();
+	}
+}
+
+add_action('init','shipping_options');
+add_action('init','shipping_submits');
 
 ?>

@@ -229,8 +229,8 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		}
         
     
-    if($_POST['do_not_use_shipping'] == 1) {
-      update_option('do_not_use_shipping', 1);
+		if($_POST['do_not_use_shipping'] == 1) {
+			update_option('do_not_use_shipping', 1);
 		} else {
 			update_option('do_not_use_shipping', 0);
 		}
@@ -485,22 +485,31 @@ if($_GET['clean_categories'] == 'true') {
       return $output;
 		}
   ?>
+
 				<form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
-					<div id="wpsc_options" class="wrap">
+		  <div id="wpsc_options" class="wrap">
 					<a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a>
             <ul id="tabs" class="ui-tabs-nav">
                 <li><a href="#options_general"><?php echo TXT_WPSC_OPTIONS_GENERAL_TAB; ?></a></li>
                 <li><a href="#options_presentation"><?php echo TXT_WPSC_OPTIONS_PRESENTATION_TAB; ?></a></li>
-								<li><a href="#options_shipping"><?php echo TXT_WPSC_OPTIONS_SHIPPING_TAB; ?></a></li>
+<!-- 								<li><a href="#options_shipping"><?php echo TXT_WPSC_OPTIONS_SHIPPING_TAB; ?></a></li> -->
 								<!-- <li><a href="#wpsc_options_payment"><?php echo TXT_WPSC_OPTIONS_PAYMENT_TAB; ?></a></li> -->
-                <li><a href="#options_admin"><?php echo TXT_WPSC_OPTIONS_ADMIN_TAB; ?></a></li>
+		<li><a href="#options_admin"><?php echo TXT_WPSC_OPTIONS_ADMIN_TAB; ?></a></li>
+		<li><a href="<?php echo get_option('siteurl'); ?>/?shipping_options=true"><?php echo "Shipping"; ?></a></li>
+		<li><a href="<?php echo get_option('siteurl'); ?>/?payments_options=true"><?php echo "Payments"; ?></a></li>
+		<li><a href="<?php echo get_option('siteurl'); ?>/?checkout_options=true"><?php echo "Checkout"; ?></a></li>
+		<?php
+		if(function_exists('gold_shpcrt_options')) {
+			gold_shpcrt_options($base_page);
+		}
+		?>
             </ul>
             
             
 						<div id="options_general">
 						  <h2><?php echo TXT_WPSC_OPTIONS_GENERAL_HEADER; ?></h2>
 						  <?php
-						  /* here start the general options */						  
+						  /* here start the general options */
 						  ?>
 							<table class='wpsc_options form-table'>
 								<tr>
@@ -510,8 +519,8 @@ if($_GET['clean_categories'] == 'true') {
 									<td>
 									<select name='base_country' onChange='submit_change_country();'>
 									<?php echo country_list(get_option('base_country')); ?>
-									</select>
-									<span id='options_region'>
+										</select>
+										<span id='options_region'>
 									<?php
 									$region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".get_option('base_country')."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
 									if($region_list != null) {
@@ -527,21 +536,10 @@ if($_GET['clean_categories'] == 'true') {
 										echo "</select>\n\r";    
 									}
 									?>
-									</span>
+										</span><br><?php echo TXT_WPSC_SELECTYOURBUSINESSLOCATION;?>
 									</td>
 								</tr>
-										<?php
-										if (get_option('base_country') == 'US') {
-										echo "<tr>";
-										echo "<th>";
-										echo "Zipcode:";
-										echo "</th>";
-										echo "<td>";
-										echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
-										echo "</td>";
-										echo "</tr>";
-										}
-										?>
+										
 								<tr>
 									<th scope="row">
 									<?php echo TXT_WPSC_TAX_SETTINGS;?>:
@@ -1520,8 +1518,8 @@ if($_GET['clean_categories'] == 'true') {
 						
 						
 						
-						
-						<div id="options_shipping">
+<!-- Next section is moved to display-shippings.php -->
+						<!--<div id="options_shipping">
 						  <h2><?php echo TXT_WPSC_OPTIONS_SHIPPING_HEADER; ?></h2>
 							<?php
 							/* here start the shipping options */						  
@@ -1553,41 +1551,18 @@ if($_GET['clean_categories'] == 'true') {
 									<?php echo TXT_WPSC_USE_SHIPPING_DESCRIPTION;?>
 									</td>
 								</tr>
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_BASE_LOCAL;?>:
-									</th>
-									<td>
-									<input type='text' size='10' value='<?php echo number_format(get_option('base_local_shipping'), 2); ?>' name='base_local_shipping' />
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_BASE_INTERNATIONAL;?>:
-									</th>
-									<td>
-									<input type='text' size='10' value='<?php echo number_format(get_option('base_international_shipping'), 2); ?>' name='base_international_shipping' /><br />
-									<?php echo TXT_WPSC_SHIPPING_NOTE;?>
-									</td>
-								</tr>
-								
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_USPS_USERID;?>:
-									</th>
-									<td>
-									<input type='text' size='20' value='<?php echo get_option('usps_user_id'); ?>' name='usps_user_id' />
-									</td>
-								</tr>
-					
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_USPS_PASSWORD;?>:
-									</th>
-									<td>
-									<input type='text' size='20' value='<?php echo get_option('usps_user_password'); ?>' name='usps_user_password' />
-									</td>
-								</tr>
+										<?php
+										if (get_option('base_country') == 'US') {
+										echo "<tr>";
+										echo "<th>";
+										echo "Zipcode:";
+										echo "</th>";
+										echo "<td>";
+										echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
+										echo "</td>";
+										echo "</tr>";
+										}
+										?>
 								
 								
 									<?php
@@ -1635,7 +1610,7 @@ if($_GET['clean_categories'] == 'true') {
 							<div class="submit">
 								<input type="submit" value="Update »" name="updateoption"/>
 							</div>
-						</div>
+						</div>-->
 						
 						
 						
@@ -1795,4 +1770,6 @@ if($_GET['clean_categories'] == 'true') {
 			</form>
   <?php
   }
+  
+
 ?>
