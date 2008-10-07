@@ -601,7 +601,22 @@ function nzshpcrt_install()
   KEY `group_name` (`name`)
 ) ENGINE=MyISAM ;
 	";
-
+	
+	$num++;
+	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'wpsc_variation_combinations';
+	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `{$wpdb->prefix}wpsc_variation_combinations` (
+  `product_id` bigint(20) unsigned NOT NULL,
+  `priceandstock_id` bigint(20) unsigned NOT NULL,
+  `value_id` bigint(20) unsigned NOT NULL,
+  `variation_id` bigint(20) unsigned NOT NULL,
+  `all_variation_ids` varchar(64) collate NOT NULL,
+  KEY `product_id` (`product_id`),
+  KEY `priceandstock_id` (`priceandstock_id`),
+  KEY `value_id` (`value_id`),
+  KEY `variation_id` (`variation_id`),
+  KEY `all_variation_ids` (`all_variation_ids`)
+) ENGINE=MyISAM;
+  ";	
 
 	// and here is where the tables are added to the database, fairly simple, if it doesnt find the table, it makes it
 	foreach($wpsc_tables as $wpsc_table) {

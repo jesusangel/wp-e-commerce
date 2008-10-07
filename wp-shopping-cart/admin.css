@@ -1551,3 +1551,12 @@ table.product_variation_grid tr td input{
 table.product_variation_grid tr.group_boundary td {
    border-bottom: 1px solid #969696;
 }
+
+
+div#add_product_variation_details {
+  margin: 1ex 0px 0px 0px;
+}
+
+div#add_product_variation_details table.product_variation_grid {
+  margin: 4px 0px 0px 0px;
+}

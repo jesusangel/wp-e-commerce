@@ -280,11 +280,9 @@ function nzshpcrt_getproductform($prodid)
     <table>";  
   
   $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_ADD_VAR.": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= variationslist(null, 'edit');
+  $output .= "            <td colspan='2'>\n\r";
+  $output .= TXT_WPSC_ADD_VAR.": <br />";
+  $output .= $variations_processor->list_variations($product['id']);
   if($check_variation_value_count < 1) {
 		$output .= "            	<div id='edit_variations_container'>\n\r";
 		$output .= "            	</div>\n\r";
@@ -561,88 +559,7 @@ $output .="</table></div></div></td></tr>";
       $output .= "<ul>";
       $output .= "</ul>";
       $output .= "</div>";
-// 			$output .= "<table>";// style='border: 1px solid black'
-// 			$output .= "  <tr>";
-// 			$output .= "    <td style='height: 1em;'>";
-// 			$output .= "<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='" . $product['thumbnail_image'] . "' />";
-// 			$output .= "<input type='radio' ";
-// // 			if ($product['thumbnail_state'] == 0) {
-// 				$output .= "checked='true'";
-// // 			}
-// 			$output .= " name='image_resize' value='0' id='image_resize0' class='image_resize' onclick='hideOptionElement(null, \"image_resize0\")' /> <label for='image_resize0'> ".TXT_WPSC_DONOTRESIZEIMAGE."<br />";
-// 			$output .= "    </td>";
-// 			// Put lightbox here so doesn't move around with DHTML bits
-// 			$output .= "    <td rowspan=4>";
-// 			
-// 			$image_link = WPSC_IMAGE_URL.$product['image'];
-// 
-// 			$output .= "<a  href='".$image_link."' rel='edit_product_1' class='thickbox preview_link'><img id='previewimage' src='$image_link' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' />"."</a>";
-// 			$output .= "<br /><span style=\"font-size: 7pt;\">" . TXT_WPSC_PRODUCT_IMAGE_PREVIEW . "</span><br /><br />";
-// 			
-// 			if(($product['thumbnail_image'] != null)) {
-// 				$output .= "<a id='preview_link' href='".WPSC_THUMBNAIL_URL . $product['thumbnail_image'] . "' rel='edit_product_2' class='thickbox'><img id='previewimage' src='" . WPSC_THUMBNAIL_URL . $product['thumbnail_image'] . "' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' />"."</a>";
-// 				$output .= "<br /><span style=\"font-size: 7pt;\">" . TXT_WPSC_PRODUCT_THUMBNAIL_PREVIEW . "</span><br />";
-// 			}
-// 
-// 						
-// 			//<div id='preview_button'><a id='preview_button' href='#'>".TXT_WPSC_PREVIEW."</a></div>
-// 			// onclick='return display_preview_image(".$product['id'].")' 
-// 			$output .= "    </td>";
-// 			$output .= "  </tr>";
-// 	
-// 			$output .= "  <tr>";
-// 			$output .= "    <td>";
-// 			$output .= "<input type='radio' ";
-// 			if ($product['thumbnail_state'] == 1) {
-// 				//$output .= "checked='true'";
-// 			}
-// 			$output .= "name='image_resize' value='1' id='image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\")' /> <label for='image_resize1'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
-// 			$output .= "    </td>";
-// 			$output .= "  </tr>";
-// 	
-// 			$output .= "  <tr>";
-// 			$output .= "    <td>";
-// 			$output .= "<input type='radio' ";
-// 			if ($product['thumbnail_state'] == 2)
-// 			{
-// // 				$output .= "checked='true'";
-// 			}
-// 			$output .= " name='image_resize' value='2' id='image_resize2' class='image_resize' onclick='hideOptionElement(\"heightWidth\", \"image_resize2\")' /> <label for='image_resize2'>".TXT_WPSC_USESPECIFICSIZE." </label>
-// 			<div id=\"heightWidth\" style=\"display: ";
-// 			
-// 			if ($product['thumbnail_state'] == 2) {
-// 				$output .= "block;";
-// 			} else {
-// 				$output .= "none;";
-// 			}
-// 			
-// 			$output .= "\">
-// 			<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>
-// 			<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT." </label></div>";
-// 			$output .= "    </td>";
-// 			$output .= "  </tr>";
-// 			$output .= "  <tr>";
-// 			$output .= "    <td>";
-// 			$output .= "<input type='radio' ";
-// 			if ($product['thumbnail_state'] == 3) {
-// // 				$output .= "checked='true'";
-// 			}
-// 			$output .= " name='image_resize' value='3' id='image_resize3' class='image_resize' onclick='hideOptionElement(\"browseThumb\", \"image_resize3\")' /> <label for='image_resize3'> ".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
-// 			$output .= "<div id='browseThumb' style='display: ";
-// 			
-// 			if($product['thumbnail_state'] == 3) {
-// 				$output .= "block";
-// 			} else {
-// 				$output .= "none";
-// 			}
-// 	
-// 			$output .= ";'>\n\r<input type='file' name='thumbnailImage' size='15' value='' />";
-// 			$output .= "</div>\n\r";
-// 			$output .= "    </td>";
-//       $output .= "  </tr>";
-//     // }.pe
-// 
-//       $output .= "</table>";
+
       $output .= "            </td>\n\r";
       $output .= "          </tr>\n\r";
       }

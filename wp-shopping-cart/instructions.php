@@ -5,54 +5,26 @@ global $wpdb;
 ?>
 <div class="wrap">
   <?php
-    $variations = array(5,6,7);
- 		$variation_processor = new nzshpcrt_variations();
- 		echo $variation_processor->variations_add_grid_view((array)$variations);
-		
-		
-		foreach((array)$variations as $variation) {		
-      $variation = (int)$variation;
-      // generate all the various bits of SQL to bind the tables together
-      $join_selected_cols[] = "`a{$variation}`.`id` AS `id_{$variation}`, `a{$variation}`.`name` AS `name_{$variation}`";
-      $join_tables[] = "`{$wpdb->prefix}variation_values` AS `a{$variation}`";
-      $join_conditions[] = "`a{$variation}`.`variation_id` = '{$variation}'";
-    }
-    
-    // implode the SQL statment segments into bigger segments
-    $join_selected_cols = implode(", ", $join_selected_cols);
-    $join_tables = implode(" JOIN ", $join_tables);
-    $join_conditions = implode(" AND ", $join_conditions);
-    
-    // Assemble and execute the SQL query
-    $associated_variation_values = $wpdb->get_results("SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}", ARRAY_A);
-		
-		$variation_sets = array();
-		$i = 0;
-		foreach($associated_variation_values as $associated_variation_value_set) {
-		  foreach($variations as $variation) {
-		    $value_id = $associated_variation_value_set["id_$variation"];
-		    $name_id = $associated_variation_value_set["name_$variation"];
-		    $variation_sets[$i][$value_id] = $name_id;
-		  }
-      $i++;
-		}
-		
-		
-		
-		$sql_query ="SELECT `a1`.`id` AS `id_1` , `a1`.`name` AS `name_1` , `a2`.`id` , `a2`.`name` , `a3`.`id` , `a3`.`name`
-    FROM `wp_variation_values` AS `a1`
-    JOIN `wp_variation_values` AS `a2`
-    JOIN `wp_variation_values` AS `a3`
-    WHERE `a1`.`variation_id` = '2'
-    AND `a2`.`variation_id` = '3'
-    AND `a3`.`variation_id` = '4';
-    ";
-		// */
   
-   //$variation_priceandstock = $wpdb->get_results("$associated_variation_values",ARRAY_A);
-   echo "<pre>".print_r($variation_sets,true)."</pre>";
-// 
-//     foreach($variation_priceandstock_items as $variation_priceandstock_item) {
+  if($wpdb->get_var("SELECT COUNT( * ) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `all_variation_ids` IN ( '' )") > 0 ) {
+    
+    $variation_priceandstock_ids = $wpdb->get_col("SELECT DISTINCT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations`");
+    foreach($variation_priceandstock_ids as $variation_priceandstock_id) {
+      $variation_priceandstock_rows = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` IN ('$variation_priceandstock_id')", ARRAY_A);
+      $all_value_array = array();
+      foreach($variation_priceandstock_rows as $variation_priceandstock_row) {
+        $all_value_array[] = $variation_priceandstock_row['variation_id'];
+      }
+      asort($all_value_array);    
+      
+      $all_value_ids = implode(",", $all_value_array);
+      $update_sql = "UPDATE `{$wpdb->prefix}wpsc_variation_combinations` SET `all_variation_ids` = '".$all_value_ids."' WHERE `priceandstock_id` IN( '$variation_priceandstock_id' );";
+      
+      //echo "<pre>".print_r($update_sql,true)."</pre>";
+      $wpdb->query($update_sql);
+    }
+  }
+/*
 //       $keys = array();
 //       $keys[] = $variation_priceandstock_item['variation_id_1'];
 //       $keys[] = $variation_priceandstock_item['variation_id_2'];
@@ -66,8 +38,9 @@ global $wpdb;
 //           }
 //         }
 //       }
-//     }
-//   
+
+
+*/
 
    // echo "<pre>".print_r($_SERVER,true)."</pre>";
 		//phpinfo();

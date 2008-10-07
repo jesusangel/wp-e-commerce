@@ -135,8 +135,7 @@ if($_POST['submit_action'] == 'add')
   $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' ORDER BY `order`;";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
   //exit("<pre>".print_r($form_data,true)."</pre>");
-  foreach($form_data as $form_field)
-    {
+  foreach($form_data as $form_field) {
     echo "
     <div id='form_id_".$form_field['id']."'>
     <table>
@@ -144,30 +143,26 @@ if($_POST['submit_action'] == 'add')
     echo "      <td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
     
     echo "      <td class='typecol'><select name='form_type[".$form_field['id']."]'>";
-    foreach($form_types as $form_type)
-      {
+    foreach($form_types as $form_type) {
       $selected = '';
-      if($form_type === $form_field['type'])
-        {
+      if($form_type === $form_field['type']) {
         $selected = "selected='true'";
-        }
+      }
        // define('TXT_WPSC_TEXTAREA', 'Textarea');
       echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
-      }
+    }
     echo "</select></td>";
     
     
     $checked = "";
-    if($form_field['mandatory'])
-      {
+    if($form_field['mandatory']) {
       $checked = "checked='true'";
-      }
+    }
     echo "      <td class='mandatorycol' style='text-align: center;'><input $checked type='checkbox' name='form_mandatory[".$form_field['id']."]' value='1' /></td>";
     $checked = "";
-    if($form_field['display_log'])
-      {
+    if($form_field['display_log']) {
       $checked = "checked='true'";
-      }
+    }
     echo "      <td class='logdisplaycol' style='text-align: center;'><input $checked type='checkbox' name='form_display_log[".$form_field['id']."]' value='1' /></td>";
     
     echo "      <td class='ordercol'><input type='text' size='3' name='form_order[".$form_field['id']."]' value='".$form_field['order']."' /></td>";
@@ -176,10 +171,9 @@ if($_POST['submit_action'] == 'add')
     echo "</td>";
     
     echo "<td>";
-    if($email_form_field['id'] == $form_field['id'])
-      {
+    if($email_form_field['id'] == $form_field['id']) {
       echo "<div class='flag_email'>This will be the Email address that the Purchase Reciept is sent to. </div>";
-      }    
+    }
     echo "</td>";
     
     echo "
@@ -202,13 +196,11 @@ if($_POST['submit_action'] == 'add')
    
    <?php
     $curgateway = get_option('payment_gateway');
-    foreach($GLOBALS['nzshpcrt_gateways'] as $gateway)
-      {
-      if($gateway['internalname'] == $curgateway )
-        {
+    foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+      if($gateway['internalname'] == $curgateway ) {
         $gateway_name = $gateway['name'];
-        }
       }
+    }
       
    $selected[get_option('payment_method')] = "checked='true'";
    ?>

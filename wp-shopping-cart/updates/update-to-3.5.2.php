@@ -112,10 +112,10 @@ add_option('wpsc_category_description', 'false', "", 'yes');
 add_option('wpsc_use_pnp_cols', '', "", 'yes');
 if(get_option('wpsc_use_pnp_cols') != 'true') {
   $base_country = get_option('base_country');
-  $results = $wpdb->get_results("SELECT `wp_cart_contents`.`id`, `wp_cart_contents`.`pnp`, IF((`wp_purchase_logs`.`shipping_country` IN('$base_country')), `wp_product_list`.`pnp`, `wp_product_list`.`international_pnp`) AS `new_pnp` FROM `wp_cart_contents`, `wp_purchase_logs`, `wp_product_list` WHERE `wp_cart_contents`.`purchaseid` IN(`wp_purchase_logs`.`id`) AND `wp_cart_contents`.`prodid` IN(`wp_product_list`.`id`) ",ARRAY_A);
+  $results = $wpdb->get_results("SELECT `{$wpdb->prefix}cart_contents`.`id`, `{$wpdb->prefix}cart_contents`.`pnp`, IF((`{$wpdb->prefix}purchase_logs`.`shipping_country` IN('$base_country')), `{$wpdb->prefix}product_list`.`pnp`, `{$wpdb->prefix}product_list`.`international_pnp`) AS `new_pnp` FROM `{$wpdb->prefix}cart_contents`, `{$wpdb->prefix}purchase_logs`, `{$wpdb->prefix}product_list` WHERE `{$wpdb->prefix}cart_contents`.`purchaseid` IN(`{$wpdb->prefix}purchase_logs`.`id`) AND `{$wpdb->prefix}cart_contents`.`prodid` IN(`{$wpdb->prefix}product_list`.`id`) ",ARRAY_A);
   foreach((array)$results as $row) {
     if((float)$row['pnp'] != (float)$row['new_pnp']) {
-      $wpdb->query("UPDATE `wp_cart_contents` SET `pnp` = '".((float)$row['new_pnp'])."' WHERE `id` = '".$row['id']."' AND `pnp` IN('0');");
+      $wpdb->query("UPDATE `{$wpdb->prefix}cart_contents` SET `pnp` = '".((float)$row['new_pnp'])."' WHERE `id` = '".$row['id']."' AND `pnp` IN('0');");
       //echo "UPDATE `wp_cart_contents` SET `pnp` = '".((float)$row['new_pnp'])."' WHERE `id` = '".$row['id']."' LIMIT 1 ;"."<br />";
       }      
     }  

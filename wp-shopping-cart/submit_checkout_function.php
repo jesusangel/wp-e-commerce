@@ -389,10 +389,17 @@ function nzshpcrt_submit_checkout() {
     //$debug .= "<pre>".print_r($variations,true)."</pre>";
     if($product_data['quantity_limited'] == 1) {
       if(count($variation_values) > 0) {
-        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
+      
+        $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
+        asort($variation_ids);         
+        $all_variation_ids = implode(",", $variation_ids);
+      
+      
+        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
+        
+        
         
         $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-        
         $wpdb->query("UPDATE `".$wpdb->prefix."variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '".$variation_stock_data['id']."' LIMIT 1",ARRAY_A);
       
       

@@ -379,8 +379,16 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
 		
     /// the start of the normal price determining code.
     if($variation_count >= 1) {
-      // if we have variations, grab the individual price for them.    
-      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+      // if we have variations, grab the individual price for them. 
+      
+      $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variations)."')");
+      asort($variation_ids);         
+      $all_variation_ids = implode(",", $variation_ids);
+      
+      
+      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+      
+      
       $price = $wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
     } else {
       $sql = "SELECT `price`,`special`,`special_price` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1";
@@ -411,7 +419,13 @@ function check_in_stock($product_id, $variations, $item_quantity = 1) {
 			}
 		}
     if(count($variation_ids) > 0) {
-      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
+      
+        $actual_variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_ids)."')");
+        asort($actual_variation_ids);         
+        $all_variation_ids = implode(",", $actual_variation_ids);
+    
+    
+      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
       
       $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
       

@@ -130,7 +130,7 @@ var getresults=function(results) {
   
  
   activate_resizable();
-  TB_init();
+  //tb_init();
   
 	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
 		function () {
@@ -324,8 +324,31 @@ function variation_value_list(id) {
  
 
   
+  
+var display_list_ajaxx=function(results) {
+	jQuery("div#edit_variations_container").html(results);
+	//alert(results);
+}
+  
+function variation_value_list(id) {
+  if(id == null) {
+    id = '';
+  }
+	var display_list=function(results) {
+		eval(results);
+    if(id != '') {
+      jQuery("#edit_variations_container").html(edit_variation_combinations_html);
+    } else {
+      jQuery("#add_product_variation_details").html(add_variation_combinations_html);
+    }
+	}
+	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
+	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&"+current_variations+"");
+}
+
+
 function edit_variation_value_list(id) {
-  // haah, the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
+  // the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
 	var display_variation_forms=function(results) {
 		if(results !== "false") { // do nothing if just the word false is returned
 	  //alert(jQuery("div#edit_variations_container").html(results));
@@ -337,36 +360,7 @@ function edit_variation_value_list(id) {
 	product_id= jQuery("#prodid").val();
 	ajax.post("index.php",display_variation_forms,"ajax=true&edit_variation_value_list=true&variation_id="+id+"&product_id="+product_id);
  }
-  
-  
-  
-var display_list_ajaxx=function(results) {
-	jQuery("div#edit_variations_container").html(results);
-	//alert(results);
-}
-  
-function add_variation_value_list(id)
-  {
-	var display_list=function(results) {
-		eval(results);
-    if(variation_subvalue_html != '') {
-        new_element_id = "add_product_variations_"+variation_value_id;
-        if(document.getElementById(new_element_id) === null) {
-          new_element = document.createElement('span');
-          new_element.id = new_element_id;
-          document.getElementById("add_product_variations").appendChild(new_element);
-          document.getElementById(new_element_id).innerHTML = variation_value_html;
-        }
-      jQuery("#add_product_variation_details").html(variation_subvalue_html);
-    }
-		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
-// 		  alert(this.id);
-    });
-		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
-	}
-	current_variations = jQuery("input.variation_ids").serialize();
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
-}
+
   
 function remove_variation_value_list(prefix,id){
 	var redisplay_list=function(results) {

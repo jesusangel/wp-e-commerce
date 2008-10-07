@@ -255,18 +255,25 @@ if($_POST['submit_action'] == 'add') {
 				$var = edit_submit_extra_images($product_id);
 			}
 			
-			$variations_procesor = new nzshpcrt_variations;
-			if($_POST['variation_values'] != null) {
-				$variations_procesor->add_to_existing_product($product_id,$_POST['variation_values']);
+			$variations_processor = new nzshpcrt_variations;
+			if($_POST['variations'] != null) {
+			
+        foreach((array)$_POST['variations'] as $variation_id => $state) {
+          $variation_id = (int)$variation_id;
+          if($state == 1) {
+            $variation_values = $variations_processor->falsepost_variation_values($variation_id);
+            $variations_processor->add_to_existing_product($product_id,$variation_values);
+          }
+        }
 			}
 				
 			if($_POST['variation_priceandstock'] != null) {
-				$variations_procesor->update_variation_values($product_id, $_POST['variation_priceandstock']);
+				$variations_processor->update_variation_values($product_id, $_POST['variation_priceandstock']);
 	// 			  exit("<pre>".print_r($_POST,true)."</pre>");
 			}
 			
 			
-				//$variations_procesor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
+				//$variations_processor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
 			$counter = 0;
 			$item_list = '';
 			if(count($_POST['category']) > 0) {
@@ -291,8 +298,10 @@ if($_POST['submit_action'] == 'add') {
 	}
 }
 
-if($_GET['submit_action'] == "remove_set")
-  {
+
+
+/*  /// this code should be obsolete, now
+if($_GET['submit_action'] == "remove_set") {
   if(is_numeric($_GET['product_id']) && is_numeric($_GET['variation_assoc_id']))
     {
     $product_id = $_GET['product_id'];
@@ -315,7 +324,7 @@ if($_GET['submit_action'] == "remove_set")
       }
     } 
   }
-
+*/
 if($_POST['submit_action'] == "edit") {
 //   exit("<pre>".print_r($_POST,true)."</pre>");
   $id = $_POST['prodid'];
@@ -601,21 +610,21 @@ if($_POST['submit_action'] == "edit") {
 			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = ''  WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
 		}
      
-		$variations_procesor = new nzshpcrt_variations;
+		$variations_processor = new nzshpcrt_variations;
 		if($_POST['variation_values'] != null) {
-			//$variations_procesor->add_to_existing_product($_POST['prodid'],$_POST['variation_values']);
+			//$variations_processor->add_to_existing_product($_POST['prodid'],$_POST['variation_values']);
 		}
 		
 		if($_POST['edit_variation_values'] != null) {
-			$variations_procesor->edit_product_values($_POST['prodid'],$_POST['edit_variation_values']);
+			$variations_processor->edit_product_values($_POST['prodid'],$_POST['edit_variation_values']);
 		}
 		
 		if($_POST['edit_add_variation_values'] != null) {
-			$variations_procesor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
+			$variations_processor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
 		}
 			
 		if($_POST['variation_priceandstock'] != null) {
-			$variations_procesor->update_variation_values($_POST['prodid'], $_POST['variation_priceandstock']);
+			$variations_processor->update_variation_values($_POST['prodid'], $_POST['variation_priceandstock']);
 		}     
 		
 		// send the pings out.
@@ -714,10 +723,12 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
     $unwriteable_directories[] = WPSC_CATEGORY_DIR;
 	}
     
-  if(count($unwriteable_directories) > 0)
-    {
+  if(count($unwriteable_directories) > 0) {
     echo "<div class='error'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";
-    }
+  }
+    
+
+$variations_processor = new nzshpcrt_variations;
 ?>
 
 
@@ -1149,7 +1160,7 @@ echo "        </div>";
         </div>
       </td>
     </tr>
-  </table></div></div></TD></tr>
+  </table></div></div></td></tr>
   <?php   
   do_action('wpsc_product_form', array('product_id' => 0, 'state' => 'add'));
   ?>
@@ -1169,7 +1180,7 @@ echo "        </div>";
     </tr> 
     <tr>
       <td colspan='2'>
-        <?php echo variationslist(); ?>
+        <?php echo $variations_processor->list_variations(); ?>
         <div id='add_product_variations'>
 		
         </div>

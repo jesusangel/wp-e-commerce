@@ -211,20 +211,6 @@ function wpsc_list_product_themes($theme_name = null) {
   return $output;
 }
 
-function variationslist($current_variation = '', $mode='add') {
-	global $wpdb;
-	$options = "";
-	$values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
-	$options .= "<option  $selected value='0'>".TXT_WPSC_PLEASECHOOSE."</option>\r\n";
-	foreach((array)$values as $option) {
-		if($current_brand == $option['id']) {
-			$selected = "selected='selected'";
-		}
-		$options .= "<option  $selected value='".$option['id']."'>".$option['name']."</option>\r\n";
-		$selected = "";
-	}
-	$concat .= "<select name='variations' onChange='{$mode}_variation_value_list(this.options[this.selectedIndex].value)'>".$options."</select>\r\n";
-	return $concat;
-}
+
 
 ?>
