@@ -336,6 +336,7 @@ function variation_value_list(id) {
   }
 	var display_list=function(results) {
 		eval(results);
+    jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").removeAttr("disabled", "true");
     if(id != '') {
       jQuery("#edit_variations_container").html(edit_variation_combinations_html);
     } else {
@@ -343,6 +344,8 @@ function variation_value_list(id) {
     }
 	}
 	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
+	
+	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").attr("disabled", "true");
 	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&"+current_variations+"");
 }
 
