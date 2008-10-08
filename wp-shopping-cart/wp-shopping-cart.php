@@ -1078,7 +1078,7 @@ function nzshpcrt_submit_ajax()
     $pm=$_POST['pm'];
     echo "product_id=".(int)$_POST['product_id'].";\n";
     
-    echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax)."\";\n";
+    echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax, true)."\";\n";
         //exit(print_r($extras,1));
     exit();
   }

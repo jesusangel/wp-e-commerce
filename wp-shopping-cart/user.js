@@ -299,9 +299,9 @@ function change_variation(product_id, variation_ids, special) {
         target_id = "product_price_"+product_id;
 				buynow_id = "BB_BuyButtonForm"+product_id;
 							document.getElementById(target_id).firstChild.innerHTML = price;
-				if (price.substring(27,price.indexOf("&"))!='') {
-					document.getElementById(form_id).item_price_1.value = price.substring(27,price.indexOf("&"));
-				}
+				//if (price.substring(27,price.indexOf("&"))!='') {
+					//document.getElementById(form_id).item_price_1.value = price.substring(27,price.indexOf("&"));
+				//}
 			}
 		}
 	}

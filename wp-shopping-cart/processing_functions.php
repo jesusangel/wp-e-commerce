@@ -332,6 +332,7 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
     $output = "".$output."";
 	} else {
 		$output = "<span class='pricedisplay'>".$output."</span>";
+    //$output = "".$output."";
 	}
       
   if($no_dollar_sign == true) {

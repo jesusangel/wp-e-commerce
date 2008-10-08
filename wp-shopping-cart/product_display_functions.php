@@ -365,6 +365,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 
       if($product['additional_description'] != '') {
+        $output .= "<span class=’additional_description_span’>";// add better option
         $output .= "<a href='#' class='additional_description_link' onclick='return show_additional_description(\"additionaldescription".$product['id']."\",\"link_icon".$product['id']."\");'>";
         $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
         $output .= TXT_WPSC_MOREDETAILS."</a>";
@@ -372,6 +373,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         $output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";
         $output .= nl2br(stripslashes($product['additional_description'])) . "";
         $output .= "</span><br />";
+        $output .= "</span>";// add better option
 			}
 
 			// print the custom fields here, if there are any
