@@ -200,7 +200,7 @@ strong.form_group span{ font-size: 8pt; }
  
 span.image_size_text{ font-size: 8pt; }
  
-img#previewimage{ max-width: 100px; }
+img.previewimage{ width: 60px; height: 60px; margin-right:4px;cursor:move;}
  
 div#preview_button{ width: 100%; text-align: center; }
  
@@ -1536,7 +1536,7 @@ table.product_variation_grid tr th.price {
 }
 
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
-  padding: 4px 0px 4px 10px;  
+  padding: 4px 0px 4px 10px;
 }
   
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
@@ -1552,11 +1552,117 @@ table.product_variation_grid tr.group_boundary td {
    border-bottom: 1px solid #969696;
 }
 
-
 div#add_product_variation_details {
   margin: 1ex 0px 0px 0px;
 }
 
 div#add_product_variation_details table.product_variation_grid {
   margin: 4px 0px 0px 0px;
+}
+
+ul#gallery_list{
+	clear:both;
+	list-style-type:none;
+	list-style-position: inside;
+	cursor: hand;
+	min-height:70px;
+	_height:70px;
+}
+
+ul#gallery_list li{
+	float:left;
+}
+
+ul#gallery_list li *{
+	z-index:998;
+}
+ul#gallery_list li.first *{
+	z-index:999;
+}
+.ui-selected {
+	border:2px dashed #969696;
+}
+img.deleteButton {
+ 	display:none;
+	position:absolute;
+	margin-left:-16px;
+	top:-5px;
+	width:16px;
+	height:16px;
+	cursor:pointer;
+}
+a.editButton {
+	background:#FFFFFF none repeat scroll 0%;
+	height:20px;
+	display:none;
+	position:absolute;
+	margin-left:-50px;
+	top:0px;
+	padding-bottom:3px;
+	padding-left:3px;
+	cursor:pointer;
+}
+
+div#image_settings_box {
+	position:absolute;
+	width:150px;
+	display:none;
+	margin-left:36px;
+	margin-top:-66px;
+	_margin-top:0px;
+	_margin-left:-30px;
+	padding-top:2px;
+/*	padding-left:4px;*/
+
+	width:252px;
+	z-index:99;
+	_z-index:999;
+}
+
+div.lower_settings_box {
+	width:234px;
+	background-color:white;
+	border:1px solid black;
+	border-top:1px solid #CCCCCC;
+	float:right;
+	margin-right:-6px;
+	background-color:#EAF3FA;
+}
+
+div.upper_settings_box {
+	width:250px;
+	background-color:white;
+	border:1px solid black;
+	border-bottom:none;
+	padding:3px 1px 2px 5px;
+}
+
+div.upper_image{
+	float:left;
+	border-bottom:1px solid black;
+	padding-left:5px;
+	margin-left:-5px;
+	_margin-left:-3px;
+	margin-right:-7px;
+	padding-bottom:1px;
+	_padding-bottom:6px;
+	_margin-bottom:-2px;
+}
+
+div.upper_txt{
+	padding-left:22px;
+	color:#666666;
+}
+
+div.previewimage {
+	position:relative;
+}
+
+tr.edit_product_image *{
+	z-index:999;
+}
+
+a.closeimagesettings{
+	cursor:pointer;
+	margin-left:110px;
 }

@@ -449,14 +449,14 @@ function check_in_stock($product_id, $variations, $item_quantity = 1) {
   
   
 function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0, $height = 0, $resize_method = 1) {
-  //  the function for processing images, takes a product_id, input_file outout file name, height and width
-  global $wpdb;
+//  the function for processing images, takes a product_id, input_file outout file name, height and width
+	global $wpdb;
 	//$_FILES['image']['tmp_name']
 	
 	//$_FILES['image']['name']
-  if(preg_match("/\.(gif|jp(e)*g|png){1}$/i",$output_filename) && apply_filters( 'wpsc_filter_file', $input_file )) {
+	if(preg_match("/\.(gif|jp(e)*g|png){1}$/i",$output_filename) && apply_filters( 'wpsc_filter_file', $input_file )) {
 		//$active_signup = apply_filters( 'wpsc_filter_file', $_FILES['image']['tmp_name'] );
-    if(function_exists("getimagesize")) {
+		if(function_exists("getimagesize")) {
 			$image_name = basename($output_filename);
 			if(is_file((WPSC_IMAGE_DIR.$image_name))) {
 				$name_parts = explode('.',basename($image_name));

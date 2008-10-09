@@ -126,8 +126,98 @@ var getresults=function(results) {
 		}
 	  wpsc_save_postboxes_state('editproduct', '#formcontent');
   });
-  
-  
+
+jQuery("img.deleteButton").click(
+	function(){
+		var r=confirm("Please confirm deletion");
+		if (r==true) {
+			jQuery(this).parent().parent('li').remove();
+}
+}
+);
+
+jQuery("a.editButton").click(
+	function(){
+		jQuery(this).hide();
+		jQuery('#image_settings_box').show('fast');
+}
+);
+
+jQuery("#gallery_list").sortable({
+	revert: true,
+	placeholder: "ui-selected",
+	start: function(e,ui) {
+		jQuery('#image_settings_box').hide();
+		jQuery('a.editButton').hide();
+		jQuery('img.deleteButton').hide();
+},
+	update: function (e,ui){
+				ser = jQuery("#gallery_list").sortable('toArray');
+				jQuery('#gallery_image_'+ser[0]).children('img.deleteButton').remove();
+				jQuery('#gallery_image_'+ser[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+				for(i=1;i<ser.length;i++) {
+					jQuery('#gallery_image_'+ser[i]).children('a.editButton').remove();
+					jQuery('#gallery_image_'+ser[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+}
+				order = ser.join(',');
+				prodid = jQuery('#prodid').val();
+				ajax.post("index.php",imageorderresults,"ajax=true&prodid="+prodid+"&imageorder=true&order="+order);
+},
+	'opacity':0.5
+});
+
+function imageorderresults(results){
+	//alert(results);
+}
+
+jQuery("div.previewimage").hover(
+	function () {
+		jQuery(this).children('img.deleteButton').show();
+		if(jQuery('#image_settings_box').css('display')!='block')
+			jQuery(this).children('a.editButton').show();
+},
+	function () {
+		jQuery(this).children('img.deleteButton').hide();
+		jQuery(this).children('a.editButton').hide();
+}
+);
+
+jQuery("a.closeimagesettings").click(
+	function (e) {
+		jQuery("div#image_settings_box").hide();
+}
+);
+//SWFUpload
+	filesizeLimit = 5120000;
+	var swfu = new SWFUpload({
+		flash_url : base_url+'/wp-includes/js/swfupload/swfupload_f9.swf',
+		upload_url: base_url+'/?action=wpsc_add_image',
+		post_params: {"prodid" : jQuery('#prodid').val()},
+		file_queue_limit : 1,
+		file_size_limit : filesizeLimit+'b',
+		file_types : "*.jpg;*.jpeg;*.png;*.gif",
+		file_types_description : "Web-compatible Image Files",
+		file_upload_limit : filesizeLimit,
+			custom_settings : {
+			targetHolder : false,
+			progressBar : false,
+			sorting : false
+},
+		debug: false,
+		
+		file_queued_handler : imageFileQueued,
+		file_queue_error_handler : imageFileQueueError,
+		file_dialog_complete_handler : imageFileDialogComplete,
+		upload_start_handler : startImageUpload,
+		upload_progress_handler : imageUploadProgress,
+		upload_error_handler : imageUploadError,
+		upload_success_handler : imageUploadSuccess,
+		upload_complete_handler : imageUploadComplete,
+		queue_complete_handler : imageQueueComplete
+});
+
+	jQuery("#add-product-image").click(function(){ swfu.selectFiles(); });
+
  
   activate_resizable();
   //tb_init();
@@ -780,4 +870,82 @@ function addweightlayer(){
 
 function removelayer() {
 	this.parent.parent.innerHTML='';
+}
+
+/**
+ * SWFUpload Image Uploading events
+ **/
+
+function imageFileQueued (file) {
+
+}
+
+function imageFileQueueError (file, error, message) {
+	if (error == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+		alert("You selected too many files to upload at one time. " + (message === 0 ? "You have reached the upload limit." : "You may upload " + (message > 1 ? "up to " + message + " files." : "only one file.")));
+		return;
+}
+
+}
+
+function imageFileDialogComplete (selected, queued) {
+	try {
+		this.startUpload();
+} catch (ex) {
+		this.debug(ex);
+}
+}
+
+function startImageUpload (file) {
+	var cell = jQuery('<li id="image-uploading">uploading..</li>').appendTo(jQuery('#gallery_list'));
+	var sorting = jQuery('<input type="hidden" name="images[]" value="" />').appendTo(cell);
+	var progress = jQuery('<div class="progress"></div>').appendTo(cell);
+	var bar = jQuery('<div class="bar"></div>').appendTo(progress);
+	var art = jQuery('<div class="gloss"></div>').appendTo(progress);
+
+	this.targetHolder = cell;
+	this.progressBar = bar;
+	this.sorting = sorting;
+	return true;
+}
+
+function imageUploadProgress (file, loaded, total) {
+	var progress = Math.ceil((loaded/total)*76);
+	jQuery(this.progressBar).animate({'width':progress+'px'},100);
+}
+
+function imageUploadError (file, error, message) {
+	console.log(error+": "+message);
+}
+
+function imageUploadSuccess (file, results) {
+	src = results.split('&');
+	src = src[0];
+	src = src.split('=');
+	src = src[1];
+	id = src[1];
+	id = id.split('=');
+	id = id[1];
+	jQuery(this.targetHolder).attr({'id':'image-'+src});
+	jQuery(this.targetHolder).html('');
+	var img = jQuery('<div class="previewimage" id="id"><a id="extra_preview_link_'+id+'" href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a><img alt="-" class="deleteButton" src="'+WPSC_URL+'/images/cross.png"/></div>').appendTo(this.targetHolder).hide();
+
+	jQuery(this.progressBar).animate({'width':'76px'},250,function () {
+		jQuery(this).parent().fadeOut(500,function() {
+			jQuery(this).remove();
+			jQuery(img).fadeIn('500');
+			//enableDeleteButton(deleteButton);
+});
+});
+}
+
+function imageUploadComplete (file) {
+	if (jQuery('#gallery_list li').size() > 1)
+		jQuery('#gallery_list').sortable('refresh');
+	else
+		jQuery('#gallery_list').sortable();
+}
+
+function imageQueueComplete (uploads) {
+
 }

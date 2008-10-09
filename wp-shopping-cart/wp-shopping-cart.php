@@ -401,7 +401,7 @@ jQuery.noConflict();
 /* base url */
 var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
-
+var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
 /* LightBox Configuration start*/
 var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
@@ -476,16 +476,18 @@ if (($_GET['page'] == 'wp-shopping-cart/display-log.php') || ($_GET['page'] == '
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
 
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.tooltip.js"></script>
+<!--		<script src="http://dev.jquery.com/view/tags/ui/latest/ui/ui.core.js"></script>
+<script src="http://dev.jquery.com/view/tags/ui/latest/ui/ui.sortable.js"></script>-->
 <script language='JavaScript' type='text/javascript'>
 
 /* base url */
 var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
-
+var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
 /* LightBox Configuration start*/
-var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";    
+var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
-var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";    
+var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";
 
 var resizeSpeed = 9;  
 
@@ -600,8 +602,25 @@ function nzshpcrt_submit_ajax()
    $cartt1=$cartt[0]->product_id;
    
   // if is an AJAX request, cruddy code, could be done better but getting approval would be impossible
-  if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true"))
-    {
+if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
+	if ($_POST['imageorder']=='true') {
+		$images = explode(",",$_POST['order']);
+		$prodid = $_POST['prodid'];
+		$new_main_image = $images[0];
+		if ($new_main_image!=0) {
+			$new_image_name = $wpdb->get_var("SELECT image FROM {$wpdb->prefix}product_images WHERE id='{$images[0]}'");
+			$old_image_name =  $wpdb->get_var("SELECT image FROM {$wpdb->prefix}product_list WHERE id='{$prodid}'");
+			$wpdb->query("UPDATE {$wpdb->prefix}product_list SET image='$new_image_name' WHERE id='{$prodid}'");
+			$wpdb->query("UPDATE {$wpdb->prefix}product_images SET image='$old_image_name' WHERE id='{$images[0]}'");
+			copy(WPSC_IMAGE_DIR.$new_image_name, WPSC_THUMBNAIL_DIR.$new_image_name);
+		} else {
+			for($i=1;$i<count($images);$i++ ) {
+				$wpdb->query("UPDATE {$wpdb->prefix}product_images SET image_order='$i' WHERE id=".$images[$i]);
+			}
+		}
+// 		echo $new_image_name."--->".$old_image_name;
+		exit();
+	}
 	if ($_POST['changetax'] == "true") {
 		
 		if (isset($_POST['billing_region'])){
@@ -2664,14 +2683,18 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
 } else {
 	wp_enqueue_script('thickbox');
-  wp_enqueue_style( 'thickbox' );
+	wp_enqueue_style( 'thickbox' );
 	wp_enqueue_script('ui-tabs',WPSC_URL.'/js/jquery.tabs.pack.js?ver=2.7.4', array('jquery'), '2.7.4');
+	
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
-	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
+// 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
+	wp_enqueue_script('ui-sortable',WPSC_URL.'/js/jquery-ui-sortable.js?ver=1.5.2', array('jquery'), '1.5.2');
+	wp_enqueue_script('swfupload');
+	wp_enqueue_script('swfupload-degrade');
 		if($_GET['page'] == 'wp-shopping-cart/display-items.php') {
 			wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
-		}	
+		}
 }
 
 

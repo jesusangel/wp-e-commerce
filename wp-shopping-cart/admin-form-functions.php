@@ -533,46 +533,43 @@ function nzshpcrt_getproductform($prodid)
   
 $output .="</table></div></div></td></tr>";
   
-  $output .= "          <tr>\n\r";
+  $output .= "          <tr class='edit_product_image'>\n\r";
   $output .= "            <td colspan='2'>\n\r";
   $output .= "<div id='edit_product_image' class='postbox ".((array_search('edit_product_image', $closed_postboxes) !== false) ? 'closed' : '')."'>
         <h3> 
 		<a class='togbox'>+</a>".TXT_WPSC_PRODUCTIMAGE."";
   $output .= "</h3>
-	<div class='inside'>
-	<table>";
- 
+		  <div class='inside'>";
+// 	<table>";
+ $output .= '<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
   if(function_exists("getimagesize"))
     {
     if($product['image'] != '')
       {
       $imagedir = WPSC_THUMBNAIL_DIR;
       $image_size = @getimagesize(WPSC_THUMBNAIL_DIR.$product['image']);
-      $output .= "          <tr>\n\r";
-      $output .= "            <td>\n\r";
-      $output .= TXT_WPSC_RESIZEIMAGE.": <br />";      
-      $output .= "<span class='image_size_text'>".$image_size[0]."&times;".$image_size[1]."px</span>";
-      $output .= "            </td>\n\r";  
-      
-      $output .= "            <td>\n\r";
-      $output .= "<div>";
-      $output .= "<ul>";
-      $output .= "</ul>";
-      $output .= "</div>";
+//       $output .= "          <tr>\n\r";
+//       $output .= "            <td>\n\r";
+// //       $output .= TXT_WPSC_RESIZEIMAGE.": <br />";      
+// //       $output .= "<span class='image_size_text'>".$image_size[0]."&times;".$image_size[1]."px</span>";
+//       $output .= "            </td>\n\r";  
+//       
+//       $output .= "            <td>\n\r";
 
-      $output .= "            </td>\n\r";
-      $output .= "          </tr>\n\r";
+
+//       $output .= "            </td>\n\r";
+//       $output .= "          </tr>\n\r";
       }
     }
   
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_UPLOADNEWIMAGE.": <br />";
-  $output .= "<input type='file' name='image' value='' />";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
+//   $output .= "          <tr>\n\r";
+//   $output .= "            <td>\n\r";
+//   $output .= "            </td>\n\r";
+//   $output .= "            <td>\n\r";
+//   $output .= TXT_WPSC_UPLOADNEWIMAGE.": <br />";
+//   $output .= "<input type='file' name='image' value='' />";
+//   $output .= "            </td>\n\r";
+//   $output .= "          </tr>\n\r";
   
   if(function_exists("getimagesize"))
     {
@@ -619,18 +616,26 @@ $output .="</table></div></div></td></tr>";
       $output .= "          </tr>\n\r";
       }
     }
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input id='delete_image' type='checkbox' name='deleteimage' value='1' /> ";
-  $output .= "<label for='delete_image'>".TXT_WPSC_DELETEIMAGE."</label>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
+//   $output .= "          <tr>\n\r";
+//   $output .= "            <td>\n\r";
+//   $output .= "            </td>\n\r";
+//   $output .= "            <td>\n\r";
+//   $output .= "<input id='delete_image' type='checkbox' name='deleteimage' value='1' /> ";
+//   $output .= "<label for='delete_image'>".TXT_WPSC_DELETEIMAGE."</label>";
+//   $output .= "            </td>\n\r";
+//   $output .= "          </tr>\n\r";
+//   $output .= "          <tr>\n\r";
+//   $output .= "            <td colspan='2'>\n\r";
+  $output .= "<ul id='gallery_list' class='ui-sortable'>";
+ 
 	if(function_exists('edit_multiple_image_form')) {
-    $output .= edit_multiple_image_form($product['id']); 
+		$output .= edit_multiple_image_form($product['id']); 
 	}
-  $output .="</table></div></div></td></tr>";
+	$output .= "</ul>";
+	$output .= "<br style='clear:both;'>";
+// 	$output .= "            </td>\n\r";
+// 	$output .= "          </tr>\n\r";
+  $output .="</div></div></td></tr>";
 
 
     

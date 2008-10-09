@@ -18,6 +18,12 @@ if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}wpsc_coupon_codes
 	$wpdb->query("ALTER TABLE `{$wpdb->prefix}wpsc_coupon_codes` ADD `every_product` TEXT NOT NULL AFTER `active`");
 }
 
+if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}product_images` LIKE 'image_order';",ARRAY_A)) {
+	$wpdb->query("ALTER TABLE `{$wpdb->prefix}product_images` ADD `image_order` varchar(3) NOT NULL AFTER `height`");
+}
+
+
+
 
 // here isthe code to update the payment gateway options.
 $selected_gateways = array();
