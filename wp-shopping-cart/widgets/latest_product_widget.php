@@ -19,8 +19,7 @@ function nzshpcrt_latest_product($input = null) {
 	$latest_product = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1') ORDER BY `id` DESC LIMIT 5", ARRAY_A);
 	if($latest_product != null) {
 		$output = "<div>";
-		foreach($latest_product as $special){
-			
+		foreach($latest_product as $special) {			
 			$output.="<a href='".wpsc_product_url($special['id'],$special['category'])."'><div>";
 			$output .= "<div class='item_image'>";
 			if(($special['image'] != null) && file_exists(WPSC_IMAGE_DIR.$special['image'])) {

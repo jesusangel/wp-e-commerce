@@ -294,6 +294,23 @@ if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}variation_pricean
 }
 
 
+if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."wpsc_variation_combinations'") != ($wpdb->prefix."wpsc_variation_combinations")) {
+   $wpsc_variation_combinations = "CREATE TABLE `{$wpdb->prefix}wpsc_variation_combinations` (
+  `product_id` bigint(20) unsigned NOT NULL,
+  `priceandstock_id` bigint(20) unsigned NOT NULL,
+  `value_id` bigint(20) unsigned NOT NULL,
+  `variation_id` bigint(20) unsigned NOT NULL,
+  `all_variation_ids` varchar(64) collate NOT NULL,
+  KEY `product_id` (`product_id`),
+  KEY `priceandstock_id` (`priceandstock_id`),
+  KEY `value_id` (`value_id`),
+  KEY `variation_id` (`variation_id`),
+  KEY `all_variation_ids` (`all_variation_ids`)
+) ENGINE=MyISAM;";
+  $wpdb->query($wpsc_variation_combinations);
+  }
+
+
 if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations`") < 1) {
   $variation_priceandstock = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock`",ARRAY_A);
   
