@@ -214,7 +214,9 @@ class wp_shopping_cart {
 				//         } else {
 			$base_page = WPSC_DIR_NAME.'/display-log.php';
 			if ($userdata->user_level <= 6) {
-				add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
+				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
+					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
+				}
 			} else {
 				add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
 			}
@@ -603,6 +605,12 @@ function nzshpcrt_submit_ajax()
    
   // if is an AJAX request, cruddy code, could be done better but getting approval would be impossible
 if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
+	if($_POST['del_img'] == 'true') {
+		$img_id = $_POST['del_img_id'];
+		$wpdb->query("DELETE FROM {$wpdb->prefix} WHERE id='{$img_id}'");
+		exit();
+	}
+	
 	if ($_POST['imageorder']=='true') {
 		$images = explode(",",$_POST['order']);
 		$prodid = $_POST['prodid'];
@@ -618,7 +626,75 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				$wpdb->query("UPDATE {$wpdb->prefix}product_images SET image_order='$i' WHERE id=".$images[$i]);
 			}
 		}
-// 		echo $new_image_name."--->".$old_image_name;
+		$output .= "<div id='image_settings_box'>";
+		$output .= "<div class='upper_settings_box'>";
+		$output .= "<div class='upper_image'><img src='".WPSC_URL."/images/pencil.png'/></div><div class='upper_txt'>Thumbnail Settings<a class='closeimagesettings'>X</a></div>";
+		$output .= "</div>";
+		$output .= "<div class='lower_settings_box'>";
+		$output .= "<table>";// style='border: 1px solid black'
+		$output .= "  <tr>";
+		$output .= "    <td style='height: 1em;'>";
+		$output .= "<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='" . $product['thumbnail_image'] . "' />";
+		$output .= "<input type='radio' ";
+		if ($product['thumbnail_state'] == 0) {
+			$output .= "checked='true'";
+		}
+		$output .= " name='image_resize' value='0' id='image_resize0' class='image_resize' onclick='hideOptionElement(null, \"image_resize0\")' /> <label for='image_resize0'> ".TXT_WPSC_DONOTRESIZEIMAGE."<br />";
+		$output .= "    </td>";
+		$output .= "  </tr>";
+
+		$output .= "  <tr>";
+		$output .= "    <td>";
+		$output .= "<input type='radio' ";
+		if ($product['thumbnail_state'] == 1) {
+			$output .= "checked='true'";
+		}
+		$output .= "name='image_resize' value='1' id='image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\")' /> <label for='image_resize1'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
+		$output .= "    </td>";
+		$output .= "  </tr>";
+
+		$output .= "  <tr>";
+		$output .= "    <td>";
+		$output .= "<input type='radio' ";
+		if ($product['thumbnail_state'] == 2) {
+			$output .= "checked='true'";
+		}
+		$output .= " name='image_resize' value='2' id='image_resize2' class='image_resize' onclick='hideOptionElement(\"heightWidth\", \"image_resize2\")' /> <label for='image_resize2'>".TXT_WPSC_USESPECIFICSIZE." </label>
+				<div id=\"heightWidth\" style=\"display: ";
+
+		if ($product['thumbnail_state'] == 2) {
+			$output .= "block;";
+		} else {
+			$output .= "none;";
+		}
+
+		$output .= "\">
+				<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>
+				<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT." </label></div>";
+		$output .= "    </td>";
+		$output .= "  </tr>";
+		$output .= "  <tr>";
+		$output .= "    <td>";
+		$output .= "<input type='radio' ";
+		if ($product['thumbnail_state'] == 3) {
+			$output .= "checked='true'";
+		}
+		$output .= " name='image_resize' value='3' id='image_resize3' class='image_resize' onclick='hideOptionElement(\"browseThumb\", \"image_resize3\")' /> <label for='image_resize3'> ".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
+		$output .= "<div id='browseThumb' style='display: ";
+
+		if($product['thumbnail_state'] == 3) {
+			$output .= "block";
+		} else {
+			$output .= "none";
+		}
+
+		$output .= ";'>\n\r<input type='file' name='thumbnailImage' size='15' value='' />";
+		$output .= "</div>\n\r";
+		$output .= "    </td>";
+		$output .= "  </tr>";
+		$output .= "</table>";
+		$output .= "</div>";
+		echo "output=".$output."&ser=".$images[0];
 		exit();
 	}
 	if ($_POST['changetax'] == "true") {
@@ -788,24 +864,19 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		  $item_stock = null;
 		  $variation_count = count($_POST['variation']);
 		  if($variation_count >= 1) {
-				foreach($_POST['variation'] as $value_id) {
-					if(is_numeric($value_id)) {
-						$value_ids[] = (int)$value_id;
+				foreach($_POST['variation'] as $variation_id) {
+					if(is_numeric($variation_id)) {
+						$variation_ids[] = (int)$variation_id;
 					}
 				}
 				
-        if(count($value_ids) > 0) {
-          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$value_ids)."')");
-          asort($variation_ids);         
-          $all_variation_ids = implode(",", $variation_ids);
-        
-        
-          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$_POST['prodid']."' AND `value_id` IN ( '".implode("', '",$value_ids )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($value_ids)."' LIMIT 1");
+        if(count($variation_ids) > 0) {
+          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$_POST['prodid']."' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
           
           $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
           
           $item_stock = $variation_stock_data['stock'];
-          //echo "/*".print_r($variation_stock_data,true)."*/";
+          echo "/*".print_r($variation_stock_data,true)."*/";
         }				
 			}
 			
@@ -1097,7 +1168,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     $pm=$_POST['pm'];
     echo "product_id=".(int)$_POST['product_id'].";\n";
     
-    echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax, true)."\";\n";
+    echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax)."\";\n";
         //exit(print_r($extras,1));
     exit();
   }
@@ -1146,79 +1217,29 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				exit();
 		  }
     }
-
    
-   
-   
-   
-   
-  if(($_POST['list_variation_values'] == "true")) {
-    // retrieve the forms for associating variations and their values with products
+  if(($_POST['list_variation_values'] == "true") && is_numeric($_POST['new_variation_id'])) {
 		$variation_processor = new nzshpcrt_variations();
-		$variations_selected = array();
-    foreach((array)$_POST['variations'] as $variation_id => $checked) {
-      $variations_selected[] = (int)$variation_id;
-    }
-    
-    if(is_numeric($_POST['product_id'])) {
-      $product_id = (int)$_POST['product_id'];
-      
-      // get all the currently associated variations from the database
-      $associated_variations = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}')", ARRAY_A);
-      
-      $variations_still_associated = array();
-      foreach((array)$associated_variations as $associated_variation) {
-			  // remove variations not checked that are in the database
-        if(array_search($associated_variation['variation_id'], $variations_selected) === false) {
-          $wpdb->query("DELETE FROM `{$wpdb->prefix}variation_associations` WHERE `id` = '{$associated_variation['id']}' LIMIT 1");
-          $wpdb->query("DELETE FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '{$product_id}' AND `variation_id` = '{$associated_variation['variation_id']}' ");
-        } else {
-          // make an array for adding in the variations next step, for efficiency
-          $variations_still_associated[] = $associated_variation['variation_id'];
-        }
-      }
-       
-			foreach((array)$variations_selected as $variation_id) {
-			  // add variations not already in the database that have been checked.
-        $variation_values = $variation_processor->falsepost_variation_values($variation_id);
-        if(array_search($variation_id, $variations_still_associated) === false) {
-      	  $variation_processor->add_to_existing_product($product_id,$variation_values);
-        }
-      }
-      //echo "/* ".print_r($associated_variations,true)." */\n\r";
-      echo "edit_variation_combinations_html = \"".str_replace("\n\r", '\n\r', $variation_processor->variations_grid_view($product_id))."\";\n";
-    } else {      
-      if(count($variations_selected) > 0) {
-        // takes an array of variations, returns a form for adding data to those variations.
-        
-        //
-        echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace("\n\r", '\n\r', $variation_processor->variations_add_grid_view((array)$variations_selected))."\";\n";
-      } else {
-        echo "add_variation_combinations_html = \"\";\n";
-      }
+		echo "variation_value_id = \"".$_POST['new_variation_id']."\";\n";
+		echo "variation_value_html = \"".$variation_processor->display_variation_values($_POST['prefix'],$_POST['new_variation_id'])."\";\n";
+		$variations_selected = array_values(array_unique(array_merge((array)$_POST['new_variation_id'], (array)$_POST['variation_id'])));		
+		echo "variation_subvalue_html = \"".str_replace("\n\r", '\n\r', $variation_processor->variations_add_grid_view((array)$variations_selected))."\";\n";
+		//echo "/*\n\r".print_r(array_values(array_unique(array_merge((array)$_POST['new_variation_id'], $_POST['variation_id']))),true)."\n\r*/";
+		exit();
+	}
+
+	if(($_POST['redisplay_variation_values'] == "true")) {
+		$variation_processor = new nzshpcrt_variations();
+		$variations_selected = array_values(array_unique(array_merge((array)$_POST['new_variation_id'], (array)$_POST['variation_id'])));		
+		foreach($variations_selected as $variation_id) {
+		  // cast everything to integer to make sure nothing nasty gets in.
+		  $variation_list[] = (int)$variation_id;
 		}
-    exit();
+		echo $variation_processor->variations_add_grid_view((array)$variation_list);
+		//echo "/*\n\r".print_r(array_values(array_unique($_POST['variation_id'])),true)."\n\r*/";
+		exit();
 	}
 	
-	
-	
-	
-	
-	
-	
-
-// 	if(($_POST['redisplay_variation_values'] == "true")) {
-// 		$variation_processor = new nzshpcrt_variations();
-// 		$variations_selected = array_values(array_unique(array_merge((array)$_POST['new_variation_id'], (array)$_POST['variation_id'])));		
-// 		foreach($variations_selected as $variation_id) {
-// 		  // cast everything to integer to make sure nothing nasty gets in.
-// 		  $variation_list[] = (int)$variation_id;
-// 		}
-// 		echo $variation_processor->variations_add_grid_view((array)$variation_list);
-// 		//echo "/*\n\r".print_r(array_values(array_unique($_POST['variation_id'])),true)."\n\r*/";
-// 		exit();
-// 	}
-// 	
 
 	if(($_POST['edit_variation_value_list'] == 'true') && is_numeric($_POST['variation_id']) && is_numeric($_POST['product_id'])) {
 		$variation_id = (int)$_POST['variation_id'];
@@ -2684,12 +2705,11 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 } else {
 	wp_enqueue_script('thickbox');
 	wp_enqueue_style( 'thickbox' );
-	wp_enqueue_script('ui-tabs',WPSC_URL.'/js/jquery.tabs.pack.js?ver=2.7.4', array('jquery'), '2.7.4');
-	
+	wp_enqueue_script('jQuery-ui',WPSC_URL.'/js/jquery-ui.js?ver=1.6', array('jquery'), '1.6');
+	//wp_enqueue_script('ui-tabs',WPSC_URL.'/js/jquery.tabs.pack.js?ver=2.7.4', array('jquery'), '2.7.4');
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 // 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
-	wp_enqueue_script('ui-sortable',WPSC_URL.'/js/jquery-ui-sortable.js?ver=1.5.2', array('jquery'), '1.5.2');
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-degrade');
 		if($_GET['page'] == 'wp-shopping-cart/display-items.php') {

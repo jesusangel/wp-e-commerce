@@ -1565,8 +1565,9 @@ ul#gallery_list{
 	list-style-type:none;
 	list-style-position: inside;
 	cursor: hand;
-	min-height:70px;
+/* 	min-height:70px; */
 	_height:70px;
+	padding-left:0px;
 }
 
 ul#gallery_list li{
@@ -1665,4 +1666,13 @@ tr.edit_product_image *{
 a.closeimagesettings{
 	cursor:pointer;
 	margin-left:110px;
+}
+
+table.wpsc_options, table.form-table{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+h2.wpsc_special{
+	margin-bottom:5px;
 }

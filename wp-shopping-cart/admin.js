@@ -13,15 +13,15 @@ if(typeof(select_min_height) == undefined) {
 
 jQuery(document).ready(
   function() {  
-  jQuery('div.select_product_file').Resizable({
-    minWidth: 300,
-    minHeight: select_min_height,
-    maxWidth: 300,
-    maxHeight: select_max_height,
-    handlers: {
-      s: '.select_product_handle'
-      }
-    });
+//   jQuery('div.select_product_file').Resizable({
+//     minWidth: 300,
+//     minHeight: select_min_height,
+//     maxWidth: 300,
+//     maxHeight: select_max_height,
+//     handlers: {
+//       s: '.select_product_handle'
+//       }
+//     });
 		jQuery("div.admin_product_name a.shorttag_toggle").toggle(
 			function () {
 				jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');
@@ -35,21 +35,21 @@ jQuery(document).ready(
 );
 
 function activate_resizable() {
-  jQuery('div.edit_select_product_file').Resizable({
-    minWidth: 300,
-    minHeight: select_min_height,
-    maxWidth: 300,
-    maxHeight: select_max_height,
-    handlers: {
-      s: '.edit_select_product_handle'
-      }
-	});
+//   jQuery('div.edit_select_product_file').Resizable({
+//     minWidth: 300,
+//     minHeight: select_min_height,
+//     maxWidth: 300,
+//     maxHeight: select_max_height,
+//     handlers: {
+//       s: '.edit_select_product_handle'
+//       }
+// 	});
 }
   
 	jQuery(document).ready(function(){
 		jQuery(function() {
 		  // set us up some mighty fine tabs for the options page
-			$tabs = jQuery('#wpsc_options > ul').tabs();
+			$tabs = jQuery('#wpsc_options > ul#tabs').tabs();
 // 			current_tab = window.location.href.split('#');
 			
 			// this here code handles remembering what tab you were on
@@ -117,40 +117,58 @@ var getresults=function(results) {
 	jQuery("#loadingindicator_span").css('visibility','hidden');
 	
 	
-  jQuery('#formcontent .postbox h3').click( function() {
-  	jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
+jQuery('#formcontent .postbox h3').click( function() {
+	jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
 		if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
 			jQuery('a.togbox',this).html('+');
 		} else {
 			jQuery('a.togbox',this).html('&ndash;');
 		}
 	  wpsc_save_postboxes_state('editproduct', '#formcontent');
-  });
+});
 
 jQuery("img.deleteButton").click(
 	function(){
 		var r=confirm("Please confirm deletion");
 		if (r==true) {
+			img_id = jQuery(this).parent().parent('li').attr('id');
 			jQuery(this).parent().parent('li').remove();
-}
-}
+			ajax.post("index.php",noresults,"ajax=true&del_img=true&del_img_id="+img_id);
+		}
+	}
+);
+
+jQuery("div.previewimage").hover(
+	function () {
+		jQuery(this).children('img.deleteButton').show();
+		if(jQuery('#image_settings_box').css('display')!='block')
+			jQuery(this).children('a.editButton').show();
+		},
+	function () {
+		 jQuery(this).children('img.deleteButton').hide();
+		 jQuery(this).children('a.editButton').hide();
+	}
 );
 
 jQuery("a.editButton").click(
 	function(){
 		jQuery(this).hide();
 		jQuery('#image_settings_box').show('fast');
-}
+	}
 );
 
 jQuery("#gallery_list").sortable({
-	revert: true,
+	revert: false,
 	placeholder: "ui-selected",
 	start: function(e,ui) {
 		jQuery('#image_settings_box').hide();
 		jQuery('a.editButton').hide();
 		jQuery('img.deleteButton').hide();
-},
+		jQuery('ul#gallery_list').children('li').removeClass('first');
+	},
+	stop:function (e,ui) {
+		jQuery('ul#gallery_list').children('li:first').addClass('first');
+	},
 	update: function (e,ui){
 				ser = jQuery("#gallery_list").sortable('toArray');
 				jQuery('#gallery_image_'+ser[0]).children('img.deleteButton').remove();
@@ -158,16 +176,22 @@ jQuery("#gallery_list").sortable({
 				for(i=1;i<ser.length;i++) {
 					jQuery('#gallery_image_'+ser[i]).children('a.editButton').remove();
 					jQuery('#gallery_image_'+ser[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
-}
+				}
 				order = ser.join(',');
 				prodid = jQuery('#prodid').val();
 				ajax.post("index.php",imageorderresults,"ajax=true&prodid="+prodid+"&imageorder=true&order="+order);
-},
+			},
 	'opacity':0.5
 });
 
 function imageorderresults(results){
-	//alert(results);
+	output = results.split('&ser=');
+	output1 = output[0];
+	ser = output[1];
+	output = output1.substr(7,output1.length-5);
+	jQuery('#gallery_image_'+ser).append(output);
+
+	enablebuttons();
 }
 
 jQuery("div.previewimage").hover(
@@ -175,17 +199,17 @@ jQuery("div.previewimage").hover(
 		jQuery(this).children('img.deleteButton').show();
 		if(jQuery('#image_settings_box').css('display')!='block')
 			jQuery(this).children('a.editButton').show();
-},
+	},
 	function () {
 		jQuery(this).children('img.deleteButton').hide();
 		jQuery(this).children('a.editButton').hide();
-}
+	}
 );
 
 jQuery("a.closeimagesettings").click(
 	function (e) {
 		jQuery("div#image_settings_box").hide();
-}
+	}
 );
 //SWFUpload
 	filesizeLimit = 5120000;
@@ -202,7 +226,7 @@ jQuery("a.closeimagesettings").click(
 			targetHolder : false,
 			progressBar : false,
 			sorting : false
-},
+		},
 		debug: false,
 		
 		file_queued_handler : imageFileQueued,
@@ -214,14 +238,12 @@ jQuery("a.closeimagesettings").click(
 		upload_success_handler : imageUploadSuccess,
 		upload_complete_handler : imageUploadComplete,
 		queue_complete_handler : imageQueueComplete
-});
+	});
 
 	jQuery("#add-product-image").click(function(){ swfu.selectFiles(); });
+	activate_resizable();
+//   TB_init();
 
- 
-  activate_resizable();
-  //tb_init();
-  
 	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
 		function () {
 			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');
@@ -264,7 +286,7 @@ function showadd_categorisation_form() {
 
 function showedit_categorisation_form() {
 	if(jQuery('div#edit_categorisation').css('display') != 'block') {
-		jQuery('div#edit_categorisation').css('display', 'block');  
+		jQuery('div#edit_categorisation').css('display', 'block');
 		jQuery('div#add_categorisation').css('display', 'none');
 	} else {
 		jQuery('div#edit_categorisation').css('display', 'none');
@@ -414,34 +436,8 @@ function variation_value_list(id) {
  
 
   
-  
-var display_list_ajaxx=function(results) {
-	jQuery("div#edit_variations_container").html(results);
-	//alert(results);
-}
-  
-function variation_value_list(id) {
-  if(id == null) {
-    id = '';
-  }
-	var display_list=function(results) {
-		eval(results);
-    jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").removeAttr("disabled", "true");
-    if(id != '') {
-      jQuery("#edit_variations_container").html(edit_variation_combinations_html);
-    } else {
-      jQuery("#add_product_variation_details").html(add_variation_combinations_html);
-    }
-	}
-	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
-	
-	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").attr("disabled", "true");
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&"+current_variations+"");
-}
-
-
 function edit_variation_value_list(id) {
-  // the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
+  // haah, the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
 	var display_variation_forms=function(results) {
 		if(results !== "false") { // do nothing if just the word false is returned
 	  //alert(jQuery("div#edit_variations_container").html(results));
@@ -453,7 +449,36 @@ function edit_variation_value_list(id) {
 	product_id= jQuery("#prodid").val();
 	ajax.post("index.php",display_variation_forms,"ajax=true&edit_variation_value_list=true&variation_id="+id+"&product_id="+product_id);
  }
-
+  
+  
+  
+var display_list_ajaxx=function(results) {
+	jQuery("div#edit_variations_container").html(results);
+	//alert(results);
+}
+  
+function add_variation_value_list(id)
+  {
+	var display_list=function(results) {
+		eval(results);
+    if(variation_subvalue_html != '') {
+        new_element_id = "add_product_variations_"+variation_value_id;
+        if(document.getElementById(new_element_id) === null) {
+          new_element = document.createElement('span');
+          new_element.id = new_element_id;
+          document.getElementById("add_product_variations").appendChild(new_element);
+          document.getElementById(new_element_id).innerHTML = variation_value_html;
+        }
+      jQuery("#add_product_variation_details").html(variation_subvalue_html);
+    }
+		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
+// 		  alert(this.id);
+    });
+		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
+	}
+	current_variations = jQuery("input.variation_ids").serialize();
+	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
+}
   
 function remove_variation_value_list(prefix,id){
 	var redisplay_list=function(results) {
@@ -619,47 +644,47 @@ function save_tracking_id(id)
   
 
 /* the following is written by Allen */
-jQuery(document).ready(
-	function()
-	{
-		jQuery('#description').Resizable(
-			{
-				minWidth: 50,
-				minHeight: 50,
-				maxWidth: 400,
-				maxHeight: 400,
-				handlers: {
-					s: '#resizeS'
-				},
-				onResize: function(size)
-				{
-					jQuery('textarea', this).css('height', size.height - 6 + 'px');
-				}
-			}
-		);
-	}
-);
-
-jQuery(document).ready(
-	function()
-	{
-		jQuery('#description1').Resizable(
-			{
-				minWidth: 50,
-				minHeight: 50,
-				maxWidth: 400,
-				maxHeight: 400,
-				handlers: {
-					s: '#resizeS1'
-				},
-				onResize: function(size)
-				{
-					jQuery('textarea', this).css('height', size.height - 6 + 'px');
-				}
-			}
-		);
-	}
-);
+// jQuery(document).ready(
+// 	function()
+// 	{
+// // 		jQuery('#description').Resizable(
+// // 			{
+// // 				minWidth: 50,
+// // 				minHeight: 50,
+// // 				maxWidth: 400,
+// // 				maxHeight: 400,
+// // 				handlers: {
+// // 					s: '#resizeS'
+// // 				},
+// // 				onResize: function(size)
+// // 				{
+// // 					jQuery('textarea', this).css('height', size.height - 6 + 'px');
+// // 				}
+// // 			}
+// // 		);
+// 	}
+// );
+// 
+// jQuery(document).ready(
+// 	function()
+// 	{
+// 		jQuery('#description1').Resizable(
+// 			{
+// 				minWidth: 50,
+// 				minHeight: 50,
+// 				maxWidth: 400,
+// 				maxHeight: 400,
+// 				handlers: {
+// 					s: '#resizeS1'
+// 				},
+// 				onResize: function(size)
+// 				{
+// 					jQuery('textarea', this).css('height', size.height - 6 + 'px');
+// 				}
+// 			}
+// 		);
+// 	}
+// );
 
 var select_min_height = 75;
 var select_max_height = 50;
@@ -674,7 +699,8 @@ jQuery('img').Tooltip(
 );
 
 jQuery(window).load( function () {
-    
+
+	
 	jQuery('.additem .postbox h3').click( function() {
 		jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
 		if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
@@ -686,24 +712,24 @@ jQuery(window).load( function () {
 	});
 	
 	jQuery('a.closeEl').bind('click', toggleContent);
-	jQuery('div.groupWrapper').Sortable( {
-			accept: 'groupItem',
-			helperclass: 'sortHelper',
-			activeclass : 	'sortableactive',
-			hoverclass : 	'sortablehover',
-			handle: 'div.itemHeader',
-			tolerance: 'pointer',
-			onChange : function(ser) {
-			serialize();
-			},
-			onStart : function() {
-				jQuery.iAutoscroller.start(this, document.getElementsByTagName('body'));
-			},
-			onStop : function() {
-				jQuery.iAutoscroller.stop();
-			}
-		}
-	);
+// 	jQuery('div.groupWrapper').Sortable( {
+// 			accept: 'groupItem',
+// 			helperclass: 'sortHelper',
+// 			activeclass : 	'sortableactive',
+// 			hoverclass : 	'sortablehover',
+// 			handle: 'div.itemHeader',
+// 			tolerance: 'pointer',
+// 			onChange : function(ser) {
+// 			serialize();
+// 			},
+// 			onStart : function() {
+// 				jQuery.iAutoscroller.start(this, document.getElementsByTagName('body'));
+// 			},
+// 			onStop : function() {
+// 				jQuery.iAutoscroller.stop();
+// 			}
+// 		}
+// 	);
 
 	jQuery('a#close_news_box').click( function () {
 		jQuery('div.wpsc_news').css( 'display', 'none' );
@@ -858,6 +884,34 @@ function wpsc_save_postboxes_state(page, container) {
 
 jQuery(document).ready(function(){
 	jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
+	filesizeLimit = 5120000;
+	var swfu = new SWFUpload({
+		flash_url : base_url+'/wp-includes/js/swfupload/swfupload_f9.swf',
+		upload_url: base_url+'/?action=wpsc_add_image',
+		post_params: {"prodid" : jQuery('#prodid').val()},
+		file_queue_limit : 1,
+		file_size_limit : filesizeLimit+'b',
+		file_types : "*.jpg;*.jpeg;*.png;*.gif",
+		file_types_description : "Web-compatible Image Files",
+		file_upload_limit : filesizeLimit,
+		custom_settings : {
+		targetHolder : false,
+		progressBar : false,
+		sorting : false
+		},
+		debug: false,
+			
+		file_queued_handler : imageFileQueued,
+		file_queue_error_handler : imageFileQueueError,
+		file_dialog_complete_handler : imageFileDialogComplete,
+		upload_start_handler : startImageUpload,
+		upload_progress_handler : imageUploadProgress,
+		upload_error_handler : imageUploadError,
+		upload_success_handler : imageUploadSuccess,
+		upload_complete_handler : imageUploadComplete,
+		queue_complete_handler : imageQueueComplete
+	});
+	jQuery("#add-product-image").click(function(){ swfu.selectFiles(); });
 });
 
 function addlayer(){
@@ -884,20 +938,20 @@ function imageFileQueueError (file, error, message) {
 	if (error == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
 		alert("You selected too many files to upload at one time. " + (message === 0 ? "You have reached the upload limit." : "You may upload " + (message > 1 ? "up to " + message + " files." : "only one file.")));
 		return;
-}
+	}
 
 }
 
 function imageFileDialogComplete (selected, queued) {
 	try {
 		this.startUpload();
-} catch (ex) {
+	} catch (ex) {
 		this.debug(ex);
-}
+	}
 }
 
 function startImageUpload (file) {
-	var cell = jQuery('<li id="image-uploading">uploading..</li>').appendTo(jQuery('#gallery_list'));
+	var cell = jQuery('<li></li>').appendTo(jQuery('#gallery_list'));
 	var sorting = jQuery('<input type="hidden" name="images[]" value="" />').appendTo(cell);
 	var progress = jQuery('<div class="progress"></div>').appendTo(cell);
 	var bar = jQuery('<div class="bar"></div>').appendTo(progress);
@@ -926,17 +980,27 @@ function imageUploadSuccess (file, results) {
 	id = src[1];
 	id = id.split('=');
 	id = id[1];
-	jQuery(this.targetHolder).attr({'id':'image-'+src});
-	jQuery(this.targetHolder).html('');
-	var img = jQuery('<div class="previewimage" id="id"><a id="extra_preview_link_'+id+'" href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a><img alt="-" class="deleteButton" src="'+WPSC_URL+'/images/cross.png"/></div>').appendTo(this.targetHolder).hide();
-
+	
+	if (id == null ) {
+		if (jQuery('#gold_present').val() != '1') {
+			jQuery('#add-product-image').remove();
+		}
+		jQuery(this.sorting).attr({'value':src});
+		var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+	} else {
+		jQuery(this.targetHolder).attr({'id':'image-'+src});
+		jQuery(this.targetHolder).html('');
+		var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+	}
 	jQuery(this.progressBar).animate({'width':'76px'},250,function () {
 		jQuery(this).parent().fadeOut(500,function() {
 			jQuery(this).remove();
 			jQuery(img).fadeIn('500');
+			jQuery(img).append('<img class="deleteButton" src="'+WPSC_URL+'/images/cross.png" alt="-" style="display: none;"/>');
+			enablebuttons()
 			//enableDeleteButton(deleteButton);
-});
-});
+		});
+	});
 }
 
 function imageUploadComplete (file) {
@@ -948,4 +1012,42 @@ function imageUploadComplete (file) {
 
 function imageQueueComplete (uploads) {
 
+}
+
+function enablebuttons(){
+	jQuery("img.deleteButton").click(
+		function(){
+			var r=confirm("Please confirm deletion");
+			if (r==true) {
+				img_id = jQuery(this).parent().parent('li').attr('id');
+				jQuery(this).parent().parent('li').remove();
+				ajax.post("index.php",noresults,"ajax=true&del_img=true&del_img_id="+img_id);
+			}
+		 }
+	);
+
+	jQuery("div.previewimage").hover(
+		function () {
+			jQuery(this).children('img.deleteButton').show();
+			if(jQuery('#image_settings_box').css('display')!='block')
+				jQuery(this).children('a.editButton').show();
+			},
+		 function () {
+			 jQuery(this).children('img.deleteButton').hide();
+			 jQuery(this).children('a.editButton').hide();
+		}
+	);
+	
+	jQuery("a.editButton").click(
+		function(){
+			jQuery(this).hide();
+			jQuery('#image_settings_box').show('fast');
+		}
+	);
+	
+	jQuery("a.closeimagesettings").click(
+		function (e) {
+			jQuery("div#image_settings_box").hide();
+		}
+	);
 }

@@ -42,14 +42,13 @@ global $wpdb;
 			//Temp dimensions to crop image properly
 			$temp_w = $width;
 			$temp_h = $height;
-        // if the image is wider than it is high and at least as wide as the target width. 
-				if (($source_h <= $source_w)) {				  
+			// if the image is wider than it is high and at least as wide as the target width. 
+				if (($source_h <= $source_w)) {
 					if ($height < $width ) {
 						$temp_h = ($width / $source_w) * $source_h;
 					} else {
 						$temp_w = ($height / $source_h) * $source_w;
 					}
-						
 					//$temp_w = ($height / $source_h) * $source_w;
 				} else {
 					$temp_h = ($width / $source_w) * $source_h;

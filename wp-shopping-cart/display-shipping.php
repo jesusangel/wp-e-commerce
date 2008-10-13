@@ -117,12 +117,15 @@ function selectgateway() {
 			$custom_gateway2 = 'checked="true"';
 		}
 	?>
-  <h2><?php echo TXT_WPSC_SHIPPINGOPTIONS;?></h2>
+  <h2 class='wpsc_special'><?php echo TXT_WPSC_SHIPPINGOPTIONS;?></h2>
 
-		<div class="tablenav wpsc_admin_nav">
+			<div class="categorisation_title">
 			<div class="alignright">
 <!-- 				<a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span> </a> -->
 			</div>
+					<strong class="form_group">
+			<?=TXT_WPSC_OPTIONS_GENERAL_HEADER?>
+					</strong>
 			<br class="clear"/>
 		</div>
 

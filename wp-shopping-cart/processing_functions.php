@@ -474,7 +474,7 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 					$test_name = "{$name_base}-{$num}.{$extension}";
 					if(!file_exists(WPSC_IMAGE_DIR.$test_name)) {
 						$image_name = $test_name;
-					} 						
+					}
 					$num++;
 				} while ($image_name == null);
 			}			
@@ -485,29 +485,29 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			rename($input_file, $new_image_path);
 			$stat = stat( dirname( $new_image_path ));
 			$perms = $stat['mode'] & 0000666;
-			@ chmod( $new_image_path, $perms );	
+			@ chmod( $new_image_path, $perms );
 			
-      switch($resize_method) {
-        case 2:
-        if($height < 1) {
+			switch($resize_method) {
+				case 2:
+				if($height < 1) {
 					$height = get_option('product_image_height');
-        }
-        if($width < 1) {
+				}
+				if($width < 1) {
 					$width  = get_option('product_image_width');
-        }
-        break;
-        
-        
-        case 0:
-        $height = null;
-        $width  = null;
-        break;
-        
-        case 1:
-        default:
-        $height = get_option('product_image_height');
-        $width  = get_option('product_image_width');
-        break;
+				}
+				break;
+
+
+				case 0:
+				$height = null;
+				$width  = null;
+				break;
+
+				case 1:
+				default:
+				$height = get_option('product_image_height');
+				$width  = get_option('product_image_width');
+				break;
 			}
 			if(($resize_method == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
 				$imagefield='thumbnailImage';
@@ -523,12 +523,12 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			if(function_exists('getimagesize')) {
 				$imagetype = getimagesize(WPSC_THUMBNAIL_DIR.$image_name);
 				update_product_meta($id, 'thumbnail_width', $imagetype[0]);
-				update_product_meta($id, 'thumbnail_height', $imagetype[1]);				
+				update_product_meta($id, 'thumbnail_height', $imagetype[1]);
 			}
 			
 			
 			$image = $wpdb->escape($image_name);
-    } else {
+		} else {
 			$image_name = basename($output_filename);
 			if(is_file((WPSC_IMAGE_DIR.$image_name))) {
 				$name_parts = explode('.',basename($image_name));
@@ -546,18 +546,18 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 					$test_name = "{$name_base}-{$num}.{$extension}";
 					if(!file_exists(WPSC_IMAGE_DIR.$test_name)) {
 						$image_name = $test_name;
-					} 						
+					}
 					$num++;
 				} while ($image_name == null);
-			}			
+			}
 			$new_image_path = WPSC_IMAGE_DIR.$image_name;
 			move_uploaded_file($input_file, $new_image_path);
 			$stat = stat( dirname( $new_image_path ));
 			$perms = $stat['mode'] & 0000666;
-			@ chmod( $new_image_path, $perms );	
+			@ chmod( $new_image_path, $perms );
 			$image = $wpdb->escape($image_name);
-    }
-  } else {
+		}
+	} else {
 			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1",ARRAY_A);
 			//exit("<pre>".print_r($image_data,true)."</pre>");
 			

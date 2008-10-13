@@ -221,7 +221,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$_SESSION['nzshpcrt_cart'] = '';
 				$_SESSION['nzshpcrt_cart'] = Array();
 
-				if(true === $echo_to_screen) { 
+				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';
 					if($sessionid != null) {
 						echo TXT_WPSC_THETRANSACTIONWASSUCCESSFUL."<br />";

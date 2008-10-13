@@ -195,12 +195,13 @@ if($_POST['submit_action'] == 'add') {
 	
 				
 			//modified for USPS
-		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$image."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
-		
+		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
 		
 		if($wpdb->query($insertsql)) {  
-			$product_id_data = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1",ARRAY_A);
-			$product_id = $product_id_data[0]['id'];
+			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
+			for($i=1;$i<count($_POST['images']);$i++) {
+				$wpdb->query("INSERT INTO {$wpdb->prefix}product_images VALUES('','$product_id','".$_POST['images'][$i]."','0','0','$i')");
+			}
 			if(function_exists('wp_insert_term')) {
 				product_tag_init();
 				$tags = $_POST['product_tag'];
@@ -255,25 +256,18 @@ if($_POST['submit_action'] == 'add') {
 				$var = edit_submit_extra_images($product_id);
 			}
 			
-			$variations_processor = new nzshpcrt_variations;
-			if($_POST['variations'] != null) {
-			
-        foreach((array)$_POST['variations'] as $variation_id => $state) {
-          $variation_id = (int)$variation_id;
-          if($state == 1) {
-            $variation_values = $variations_processor->falsepost_variation_values($variation_id);
-            $variations_processor->add_to_existing_product($product_id,$variation_values);
-          }
-        }
+			$variations_procesor = new nzshpcrt_variations;
+			if($_POST['variation_values'] != null) {
+				$variations_procesor->add_to_existing_product($product_id,$_POST['variation_values']);
 			}
 				
 			if($_POST['variation_priceandstock'] != null) {
-				$variations_processor->update_variation_values($product_id, $_POST['variation_priceandstock']);
+				$variations_procesor->update_variation_values($product_id, $_POST['variation_priceandstock']);
 	// 			  exit("<pre>".print_r($_POST,true)."</pre>");
 			}
 			
 			
-				//$variations_processor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
+				//$variations_procesor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
 			$counter = 0;
 			$item_list = '';
 			if(count($_POST['category']) > 0) {
@@ -298,10 +292,8 @@ if($_POST['submit_action'] == 'add') {
 	}
 }
 
-
-
-/*  /// this code should be obsolete, now
-if($_GET['submit_action'] == "remove_set") {
+if($_GET['submit_action'] == "remove_set")
+  {
   if(is_numeric($_GET['product_id']) && is_numeric($_GET['variation_assoc_id']))
     {
     $product_id = $_GET['product_id'];
@@ -324,7 +316,7 @@ if($_GET['submit_action'] == "remove_set") {
       }
     } 
   }
-*/
+
 if($_POST['submit_action'] == "edit") {
 //   exit("<pre>".print_r($_POST,true)."</pre>");
   $id = $_POST['prodid'];
@@ -449,9 +441,9 @@ if($_POST['submit_action'] == "edit") {
           $width  = $_POST['width'];
           break;
 				}
-        image_processing($imagepath, $image_output, $width, $height);
+			image_processing($imagepath, $image_output, $width, $height);
 				update_product_meta($id, 'thumbnail_width', $width);
-				update_product_meta($id, 'thumbnail_height', $height);		
+				update_product_meta($id, 'thumbnail_height', $height);
 			}
     }
     
@@ -610,21 +602,21 @@ if($_POST['submit_action'] == "edit") {
 			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = ''  WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
 		}
      
-		$variations_processor = new nzshpcrt_variations;
+		$variations_procesor = new nzshpcrt_variations;
 		if($_POST['variation_values'] != null) {
-			//$variations_processor->add_to_existing_product($_POST['prodid'],$_POST['variation_values']);
+			//$variations_procesor->add_to_existing_product($_POST['prodid'],$_POST['variation_values']);
 		}
 		
 		if($_POST['edit_variation_values'] != null) {
-			$variations_processor->edit_product_values($_POST['prodid'],$_POST['edit_variation_values']);
+			$variations_procesor->edit_product_values($_POST['prodid'],$_POST['edit_variation_values']);
 		}
 		
 		if($_POST['edit_add_variation_values'] != null) {
-			$variations_processor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
+			$variations_procesor->edit_add_product_values($_POST['prodid'],$_POST['edit_add_variation_values']);
 		}
 			
 		if($_POST['variation_priceandstock'] != null) {
-			$variations_processor->update_variation_values($_POST['prodid'], $_POST['variation_priceandstock']);
+			$variations_procesor->update_variation_values($_POST['prodid'], $_POST['variation_priceandstock']);
 		}     
 		
 		// send the pings out.
@@ -723,12 +715,10 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
     $unwriteable_directories[] = WPSC_CATEGORY_DIR;
 	}
     
-  if(count($unwriteable_directories) > 0) {
+  if(count($unwriteable_directories) > 0)
+    {
     echo "<div class='error'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";
-  }
-    
-
-$variations_processor = new nzshpcrt_variations;
+    }
 ?>
 
 
@@ -1160,7 +1150,7 @@ echo "        </div>";
         </div>
       </td>
     </tr>
-  </table></div></div></td></tr>
+  </table></div></div></TD></tr>
   <?php   
   do_action('wpsc_product_form', array('product_id' => 0, 'state' => 'add'));
   ?>
@@ -1180,7 +1170,7 @@ echo "        </div>";
     </tr> 
     <tr>
       <td colspan='2'>
-        <?php echo $variations_processor->list_variations(); ?>
+        <?php //echo variationslist(); ?>
         <div id='add_product_variations'>
 		
         </div>
@@ -1344,19 +1334,21 @@ echo "        </div>";
 		<?php echo TXT_WPSC_PRODUCTIMAGES;?>
 	</h3>
 	<div class='inside'>
-	<table>
+	<table width='100%'>
     <tr>
       <td>
-        <?php echo TXT_WPSC_PRODUCTIMAGE;?>:
-      </td>
-      <td>
+			<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>
+        <?php// echo TXT_WPSC_PRODUCTIMAGE;?><!--:-->
+	</td>
+	<!-- <td>
         <input type='file' name='image' value='' />
-      </td>
+	</td>-->
     </tr>
     
     <tr>
-      <td></td><td>
+      <!--<td></td>--><td>
       <table>
+	<ul id='gallery_list'></ul>
   <?php
   // pe.{ & table opening above
   if(function_exists("getimagesize") && is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width')))
@@ -1376,35 +1368,38 @@ echo "        </div>";
     $default_size_set = true;
     }
   
-  if(function_exists("getimagesize"))
-    {
-    ?>
-      <tr>
-        <td>
-          <input type='radio' name='image_resize' value='2'id='add_image_resize2' class='image_resize'  onclick='hideOptionElement("heightWidth", "image_resize2");' />
-      <label for='add_image_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>        
-          <div id='heightWidth' style='display: none;'>
-        <input type='text' size='4' name='width' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXWIDTH;?></label>
-        <input type='text' size='4' name='height' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
-      </div>
-        </td>
-      </tr>
-      <tr>
-      <td>
-        <input type='radio' name='image_resize' value='3' id='add_image_resize3' class='image_resize' onclick='hideOptionElement("browseThumb", "image_resize3");' />
-        <label for='add_image_resize3'><?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
-        <div id='browseThumb' style='display: none;'>
-          <input type='file' name='thumbnailImage' value='' />
-        </div>
-      </td>
-    </tr>
-    
+//   if(function_exists("getimagesize"))
+//     {
+//     ?>
+<!--      <tr>
+//         <td>
+//           <input type='radio' name='image_resize' value='2'id='add_image_resize2' class='image_resize'  onclick='hideOptionElement("heightWidth", "image_resize2");' />
+//       <label for='add_image_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>        
+//           <div id='heightWidth' style='display: none;'>
+//         <input type='text' size='4' name='width' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXWIDTH;?></label>
+//         <input type='text' size='4' name='height' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
+//       </div>
+//         </td>
+//       </tr>
+//       <tr>
+//       <td>
+//         <input type='radio' name='image_resize' value='3' id='add_image_resize3' class='image_resize' onclick='hideOptionElement("browseThumb", "image_resize3");' />
+//         <label for='add_image_resize3'><?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
+//         <div id='browseThumb' style='display: none;'>
+//           <input type='file' name='thumbnailImage' value='' />
+//         </div>
+//       </td>
+//     </tr>
+//     -->
     <?php
-    }
+//     }
     
-    if(function_exists('add_multiple_image_form')) {
-      echo add_multiple_image_form("add_");
-      }
+//     if(function_exists('add_multiple_image_form')) {
+//       echo add_multiple_image_form("add_");
+//       }
+	if(function_exists('gold_shpcrt_install')) {
+		echo "<input type='hidden' value='1' id='gold_present'>";
+	}
   ?>
         </table>
       </td>

@@ -10,6 +10,10 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $purchase_log_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1";
   $purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
 //exit(print_r($purchase_log,1));
+ if ($purchase_log[0]['totalprice']==0) {
+	header("Location: ".get_option('transact_url').$seperator."sessionid=".$sessionid);
+	exit();
+ }
   $cart_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
   $cart = $wpdb->get_results($cart_sql,ARRAY_A) ;
   //written by allen
@@ -83,6 +87,9 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 		foreach($cart as $item) {
 			$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
 			$product_data = $product_data[0];
+			if ($product_data['price']==0) {
+				continue;
+			}
 			$variation_count = count($product_variations);
 			
 			$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$item['id']."'";
