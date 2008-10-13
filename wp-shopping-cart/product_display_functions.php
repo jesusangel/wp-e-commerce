@@ -774,8 +774,9 @@ function single_product_display($product_id) {
 			if ((count($updatelink_data)>0)&&($updatelink_data[0]['meta_value'] != '')) {
 				$output .= external_link($product['id']);
 			} else {
-				if (get_option('addtocart_or_buynow')=='1')
-					if (get_option('payment_gateway')=='google') {
+				if (get_option('addtocart_or_buynow')=='1') {
+					$selected_gateways = get_option('custom_gateway_options');
+					if (in_array('google',$selected_gateways)) {
 						$output .= google_buynow($product['id']);
 					} else if (get_option('payment_gateway') == 'paypal_multiple') {
 					  $output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
@@ -794,6 +795,7 @@ function single_product_display($product_id) {
 						</form>
 					";						
 					}
+				}
 			}
 			
 			
@@ -999,7 +1001,7 @@ function google_buynow($product_id) {
 
 	
 		$product_info = $product_info[0];
-		$output .= "<form id='BB_BuyButtonForm".$product_id."' onsubmit='log_buynow(this);return true;' action= 'https://sandbox.google.com/checkout/cws/v2/Merchant/".get_option('google_id')."/checkoutForm'c method='post' name='BB_BuyButtonForm".$product_id."'>";
+		$output .= "<form id='BB_BuyButtonForm".$product_id."' onsubmit='log_buynow(this);return true;' action= '".$action_target."' method='post' name='BB_BuyButtonForm".$product_id."'>";
 		$output .= "<input name='product_id' type='hidden' value='".$product_id."'>";
 		$output .= "<input name='item_name_1' type='hidden' value='".$product_info['name']."'>";
 		$output .= "<input name='item_description_1' type='hidden' value='".$product_info['description']."'>";
@@ -1086,7 +1088,6 @@ function wpsc_product_image_html($image_name, $product_id) {
 function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
   global $wpdb;
   $selected_gateways = get_option('custom_gateway_options');
-
   if (in_array('google', (array)$selected_gateways)) {
 		$output .= google_buynow($product['id']);
 	} else if (in_array('paypal_multiple', (array)$selected_gateways)) {
