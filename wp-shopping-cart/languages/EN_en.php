@@ -2,6 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_NO_STOCK', 'No Stock');
+
 define('TXT_WPSC_SELECTYOURBUSINESSLOCATION','Select your primary business location.');
 define('TXT_WPSC_ENTEREMAILADDRESS', 'Enter the email address for the owner of this shop to receive e-mail notifications.');
 

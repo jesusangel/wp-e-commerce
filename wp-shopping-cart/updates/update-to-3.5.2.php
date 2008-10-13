@@ -11,7 +11,8 @@ if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."wpsc_productmeta'") != ($w
   ) TYPE=MyISAM;";
   $wpdb->query($wpsc_productmeta);
   }
-   /* adds nice names for permalinks for products */
+  
+/* adds nice names for permalinks for products */
 $check_product_names = $wpdb->get_results("SELECT `".$wpdb->prefix."product_list`.`id`, `".$wpdb->prefix."product_list`.`name`, `".$wpdb->prefix."wpsc_productmeta`.`meta_key` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."wpsc_productmeta` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."wpsc_productmeta`.`product_id` WHERE (`".$wpdb->prefix."wpsc_productmeta`.`meta_key` IN ('url_name') AND  `".$wpdb->prefix."wpsc_productmeta`.`meta_value` IN (''))  OR ISNULL(`".$wpdb->prefix."wpsc_productmeta`.`meta_key`)");  
 if($check_product_names != null) {
   $sql_query = "SELECT `id`, `name` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')";
@@ -49,6 +50,8 @@ if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."also_bought_product'") != 
 ) TYPE=MyISAM;";
   $wpdb->query($wpsc_also_bought_product);
   }
+  
+  
 if(!$wpdb->get_results("SELECT `id` FROM `".$wpdb->prefix."also_bought_product`")) {
   /* inserts data on what was bought with what however many times */
   $product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')");
@@ -60,16 +63,16 @@ if(!$wpdb->get_results("SELECT `id` FROM `".$wpdb->prefix."also_bought_product`"
       foreach((array)$purchase_data as $purchase_row) {
         if(isset($popular_array[$purchase_row['prodid']])) {
           $popular_array[$purchase_row['prodid']]++;
-          } else {
+        } else {
           $popular_array[$purchase_row['prodid']] = 1;
-          }
-        }      
-      }
+        }
+      }      
+    }
     foreach((array)$popular_array as $assoc_prodid => $quantity) {
       $wpdb->query("INSERT INTO `".$wpdb->prefix."also_bought_product` ( `id` , `selected_product` , `associated_product` , `quantity` ) VALUES ('', '$prodid', '".$assoc_prodid."', '".$quantity."' );");
-      }
     }
   }
+}
 
 if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `".$wpdb->prefix."product_categories` LIKE 'nice-name';",ARRAY_A)) {
   $wpdb->query("ALTER TABLE `".$wpdb->prefix."product_categories` ADD `nice-name` VARCHAR( 255 ) NOT NULL AFTER `name` ;");
@@ -102,7 +105,7 @@ if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `".$wpdb->prefix."purchase_logs` 
   $local_shipping = (float)get_option('base_local_shipping');
   $international_shipping = (float)get_option('base_international_shipping');
   $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `base_shipping` = IF((`shipping_country` IN('$base_country')), $local_shipping, $international_shipping) WHERE `base_shipping` IN('0')");
-  }
+}
 add_option('wpsc_category_description', 'false', "", 'yes');
 
   
@@ -134,12 +137,11 @@ if($check_chekout != null) {
 $wpsc_pageurl_option['transact_url'] = '[transactionresults]';
 $wpsc_pageurl_option['user_account_url'] = '[userlog]';
 $changes_made = false;
-foreach($wpsc_pageurl_option as $option_key => $page_string)
-  {
+foreach($wpsc_pageurl_option as $option_key => $page_string) {
   $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%$page_string%' LIMIT 1");
   update_option($option_key, get_permalink($post_id));
   $changes_made = true;
-  }
+}
   
 
 if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."wpsc_coupon_codes'") != ($wpdb->prefix."wpsc_coupon_codes")) {

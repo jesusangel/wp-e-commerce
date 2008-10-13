@@ -1,23 +1,14 @@
 <?php
 function wpsc_auto_update() {
   global $wpdb;
-  if(get_option('wpsc_version') <= 3.5) {
-    include_once('updates/update-to-3.5.0.php');
-	}
+
   
-  if((get_option('wpsc_version') < 3.5 ) || ((get_option('wpsc_version') == 3.5 ) && (get_option('wpsc_minor_version') < 2))) {
-    include_once('updates/update-to-3.5.2.php');
-	}
 
- if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && (get_option('wpsc_minor_version') < 68))) {
-    include_once('updates/update-to-3.6.0.php');
-    include_once('updates/update-to-3.6.4.php');
-	}
 
- if((get_option('wpsc_version') < 3.6 ) || ((get_option('wpsc_version') == 3.6 ) && ((int)get_option('wpsc_minor_version') < 82))) {
-    include_once('updates/update-to-3.6.8.php');
-	}
-
+  wpsc_create_or_update_tables();
+  
+  include_once('updates/updating_tasks.php');
+  
   wpsc_create_upload_directories();
 
   wpsc_product_files_htaccess();  
@@ -38,8 +29,8 @@ function nzshpcrt_install()
      get_currentuserinfo();
      if($user_level < 8) {
        return;
-			}
     }
+  }
   $first_install = false;
   $result = mysql_list_tables(DB_NAME);
   $tables = array();
@@ -53,596 +44,35 @@ function nzshpcrt_install()
   if(get_option('wpsc_version') == null) {
     add_option('wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes');
 	}
-        
 
-	// Table structure for table `".$wpdb->prefix."also_bought_product`      
-	
-	$num = 0;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix."also_bought_product";
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."also_bought_product` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`selected_product` bigint(20) unsigned NOT NULL default '0',
-		`associated_product` bigint(20) unsigned NOT NULL default '0',
-		`quantity` int(10) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."cart_contents`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'cart_contents';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."cart_contents` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`prodid` bigint(20) unsigned NOT NULL default '0',
-		`purchaseid` bigint(20) unsigned NOT NULL default '0',
-		`price` varchar(128) NOT NULL default '0',
-		`pnp` varchar(128) NOT NULL default '0',
-		`gst` varchar(128) NOT NULL default '0',
-		`quantity` int(10) unsigned NOT NULL default '0',
-		`donation` varchar(1) NOT NULL default '0',
-		`no_shipping` varchar(1) NOT NULL default '0',
-		`files` TEXT NOT NULL default '',
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."cart_item_extras`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'cart_item_extras';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."cart_item_extras` (
-		`id` int(11) NOT NULL auto_increment,
-		`cart_id` int(11) NOT NULL,
-		`extra_id` int(11) NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM;
-	";
-	
-	// Table structure for table `".$wpdb->prefix."cart_item_variations`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'cart_item_variations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."cart_item_variations` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`cart_id` bigint(20) unsigned NOT NULL default '0',
-		`variation_id` bigint(20) unsigned NOT NULL default '0',
-		`value_id` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."collect_data_forms`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'collect_data_forms';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."collect_data_forms` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`name` varchar(255) NOT NULL default '',
-		`type` varchar(64) NOT NULL default '',
-		`mandatory` varchar(1) NOT NULL default '0',
-		`display_log` char(1) NOT NULL default '0',
-		`default` varchar(128) NOT NULL default '0',
-		`active` varchar(1) NOT NULL default '1',
-		`order` int(10) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `order` (`order`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."currency_list`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'currency_list';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."currency_list` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`country` varchar(255) NOT NULL default '',
-		`isocode` char(2) default NULL,
-		`currency` varchar(255) NOT NULL default '',
-		`symbol` varchar(10) NOT NULL default '',
-		`symbol_html` varchar(10) NOT NULL default '',
-		`code` char(3) NOT NULL default '',
-		`has_regions` char(1) NOT NULL default '0',
-		`tax` varchar(8) NOT NULL default '',
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."download_status`
-		
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'download_status';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."download_status` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`fileid` bigint(20) unsigned NOT NULL default '0',
-		`purchid` bigint(20) unsigned NOT NULL default '0',
-		`uniqueid` varchar(64) default NULL,
-		`downloads` int(11) NOT NULL default '0',
-		`ip_number` varchar(255) NOT NULL default '',
-		`active` varchar(1) NOT NULL default '0',
-		`datetime` datetime NOT NULL,
-		PRIMARY KEY  (`id`),
-		UNIQUE KEY `uniqueid` (`uniqueid`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."extras_values`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'extras_values';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."extras_values` (
-		`id` int(11) NOT NULL auto_increment,
-		`name` varchar(128) NOT NULL,
-		`extras_id` int(11) NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."extras_values_associations`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'extras_values_associations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."extras_values_associations` (
-		`id` int(11) NOT NULL auto_increment,
-		`product_id` int(11) NOT NULL,
-		`value_id` int(11) NOT NULL,
-		`price` varchar(20) NOT NULL,
-		`visible` varchar(1) NOT NULL,
-		`extras_id` int(11) NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."item_category_associations`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'item_category_associations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."item_category_associations` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`product_id` bigint(20) unsigned NOT NULL default '0',
-		`category_id` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		UNIQUE KEY `product_id` (`product_id`,`category_id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_brands`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_brands';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_brands` (
-		`id` bigint(20) NOT NULL auto_increment,
-		`name` text NOT NULL,
-		`description` text NOT NULL,
-		`active` varchar(1) NOT NULL default '1',
-		`order` bigint(20) unsigned NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_categories`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_categories';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_categories` (
-		`id` bigint(20) NOT NULL auto_increment,
-		`group_id` BIGINT( 20 ) UNSIGNED NOT NULL,
-		`name` text NOT NULL,
-		`nice-name` varchar(255) NOT NULL,
-		`description` text NOT NULL,
-		`image` text NOT NULL,
-		`fee` varchar(1) NOT NULL default '0',
-		`active` varchar(1) NOT NULL default '1',
-		`category_parent` bigint(20) unsigned default '0',
-		`order` bigint(20) unsigned NOT NULL default 'default',
-		`display_type` VARCHAR( 10 ) NULL default '',		
-		`image_width` VARCHAR( 32 ) NULL default '',
-		`image_height` VARCHAR( 32 ) NULL default '',
-		PRIMARY KEY  (`id`),
-		KEY `group_id` (`group_id`),
-		KEY `nice-name` (`nice-name`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_extra`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_extra';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_extra` (
-		`id` int(11) NOT NULL auto_increment,
-		`name` varchar(128) NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_files`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_files';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_files` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`filename` varchar(255) NOT NULL default '',
-		`mimetype` varchar(128) NOT NULL default '',
-		`idhash` varchar(45) NOT NULL default '',
-		`preview` varchar(255) NOT NULL default '',
-		`preview_mimetype` varchar(128) NOT NULL default '',
-		`date` varchar(255) NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_images`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_images';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_images` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`product_id` bigint(20) unsigned NOT NULL,
-		`image` varchar(255) NOT NULL,
-		`width` mediumint(8) unsigned NOT NULL,
-		`height` mediumint(8) unsigned NOT NULL,
-		PRIMARY KEY  (`id`),
-		KEY `product_id` (`product_id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_list`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_list';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_list` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`name` text NOT NULL,
-		`description` longtext NOT NULL,
-		`additional_description` longtext NOT NULL,
-		`price` varchar(20) NOT NULL default '0',
-		`weight` int(11) NOT NULL default '0',
-		`weight_unit` varchar(10) NOT NULL default '' ,
-		`pnp` varchar(20) NOT NULL default '0',
-		`international_pnp` varchar(20) NOT NULL default '0',
-		`file` bigint(20) unsigned NOT NULL default '0',
-		`image` text NOT NULL default '',
-		`category` bigint(20) unsigned NOT NULL default '0',
-		`brand` bigint(20) unsigned NOT NULL default '0',
-		`quantity_limited` varchar(1) NOT NULL default '0',
-		`quantity` int(10) unsigned NOT NULL default '0',
-		`special` varchar(1) NOT NULL default '0',
-		`special_price` varchar(20) NOT NULL default '0',
-		`display_frontpage` varchar(1) NOT NULL default '0',
-		`notax` varchar(1) NOT NULL default '0',
-		`active` varchar(1) NOT NULL default '1',
-		`donation` varchar(1) NOT NULL default '0',
-		`no_shipping` varchar(1) NOT NULL default '0',
-		`thumbnail_image` text,
-		`thumbnail_state` int(11) NOT NULL default '0',
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_order`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_order';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_order` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`category_id` bigint(20) unsigned NOT NULL default '0',
-		`product_id` bigint(20) unsigned NOT NULL default '0',
-		`order` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		UNIQUE KEY `category_id` (`category_id`,`product_id`),
-		KEY `order` (`order`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_rating`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_rating';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_rating` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`ipnum` varchar(30) NOT NULL default '',
-		`productid` bigint(20) unsigned NOT NULL default '0',
-		`rated` tinyint(1) NOT NULL default '0',
-		`time` bigint(20) unsigned NOT NULL,
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."product_variations`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'product_variations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."product_variations` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`name` varchar(128) NOT NULL default '',
-		`variation_association` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `variation_association` (`variation_association`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."purchase_logs`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'purchase_logs';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."purchase_logs` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`totalprice` varchar(128) NOT NULL default '0',
-		`statusno` smallint(6) NOT NULL default '0',
-		`sessionid` varchar(255) NOT NULL default '',
-		`transactid` varchar(255) NOT NULL default '',
-		`authcode` varchar(255) NOT NULL default '',
-		`downloadid` bigint(20) unsigned NOT NULL default '0',
-		`processed` bigint(20) unsigned NOT NULL default '1',
-		`user_ID` bigint(20) unsigned default NULL,
-		`date` varchar(255) NOT NULL default '',
-		`gateway` varchar(64) NOT NULL default '',
-		`billing_country` char(6) NOT NULL default '',
-		`shipping_country` char(6) NOT NULL default '',
-		`base_shipping` varchar(128) NOT NULL default '0',
-		`email_sent` char(1) NOT NULL default '0',
-		`discount_value` varchar(32) NOT NULL default '0',
-		`discount_data` text NOT NULL,
-		`track_id` varchar(50) default NULL default '',
-		`shipping_region` char(6) NOT NULL default '',
-		`find_us` varchar(255) NOT NULL  default '',
-		`engravetext` varchar(255) default NULL,
-		`closest_store` varchar(255) default NULL,
-		`google_order_number` varchar(20) NOT NULL default '',
-		`google_user_marketing_preference` varchar(10) NOT NULL default '',
-		`google_status` longtext NOT NULL,
-		PRIMARY KEY  (`id`),
-		UNIQUE KEY `sessionid` (`sessionid`),
-		KEY `gateway` (`gateway`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."purchase_statuses`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'purchase_statuses';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."purchase_statuses` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`name` varchar(128) NOT NULL default '',
-		`active` varchar(1) NOT NULL default '0',
-		`colour` varchar(6) NOT NULL default '',
-		PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."region_tax`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'region_tax';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."region_tax` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`country_id` bigint(20) unsigned NOT NULL default '0',
-		`name` varchar(64) NOT NULL default '',
-		`code` char(2) NOT NULL default '',
-		`tax` float NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `country_id` (`country_id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."submited_form_data`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'submited_form_data';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."submited_form_data` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`log_id` bigint(20) unsigned NOT NULL default '0',
-		`form_id` bigint(20) unsigned NOT NULL default '0',
-		`value` varchar(255) NOT NULL default '',
-		PRIMARY KEY  (`id`),
-		KEY `log_id` (`log_id`,`form_id`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."variation_associations`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'variation_associations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."variation_associations` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`type` varchar(64) NOT NULL default '',
-		`name` varchar(128) NOT NULL default '',
-		`associated_id` bigint(20) unsigned NOT NULL default '0',
-		`variation_id` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `associated_id` (`associated_id`),
-		KEY `variation_id` (`variation_id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."variation_priceandstock`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'variation_priceandstock';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."variation_priceandstock` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`product_id` bigint(20) unsigned NOT NULL default '0',
-		`variation_id_1` bigint(20) unsigned NOT NULL default '0',
-		`variation_id_2` bigint(20) unsigned NOT NULL default '0',
-		`stock` bigint(20) unsigned NOT NULL default '0',
-		`price` varchar(32) NOT NULL default '0',
-    `weight` varchar(64) default NULL,
-    `visibility` varchar(1) NOT NULL default '1',
-		`file` varchar(1) NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `product_id` (`product_id`),
-		KEY `variation_id_1` (`variation_id_1`,`variation_id_2`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."variation_values`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'variation_values';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."variation_values` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`name` varchar(128) NOT NULL default '',
-		`variation_id` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `variation_id` (`variation_id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."variation_values_associations`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'variation_values_associations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."variation_values_associations` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`product_id` bigint(20) unsigned NOT NULL default '0',
-		`value_id` bigint(20) unsigned NOT NULL default '0',
-		`quantity` int(11) NOT NULL default '0',
-		`price` varchar(32) NOT NULL default '0',
-		`visible` varchar(1) NOT NULL default '0',
-		`variation_id` bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `product_id` (`product_id`,`value_id`,`variation_id`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."wpsc_coupon_codes`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'wpsc_coupon_codes';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."wpsc_coupon_codes` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`coupon_code` varchar(255) default NULL,
-		`value` bigint(20) unsigned NOT NULL default '0',
-		`is-percentage` char(1) NOT NULL default '0',
-		`use-once` char(1) NOT NULL default '0',
-		`is-used` char(1) NOT NULL default '0',
-		`active` char(1) NOT NULL default '1',
-		`every_product` varchar(255) NOT NULL,
-		`start` datetime NOT NULL,
-		`expiry` datetime NOT NULL,
-		PRIMARY KEY  (`id`),
-		KEY `coupon_code` (`coupon_code`),
-		KEY `active` (`active`),
-		KEY `start` (`start`),
-		KEY `expiry` (`expiry`)
-	) TYPE=MyISAM ;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."wpsc_logged_subscriptions`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'wpsc_logged_subscriptions';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."wpsc_logged_subscriptions` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`cart_id` bigint(20) unsigned NOT NULL default '0',
-		`user_id` bigint(20) unsigned NOT NULL default '0',
-		`length` varchar(64) NOT NULL default '0',
-		`start_time` varchar(64) NOT NULL default '0',
-		`active` varchar(1) NOT NULL default '0',
-		PRIMARY KEY  (`id`),
-		KEY `cart_id` (`cart_id`),
-		KEY `user_id` (`user_id`),
-		KEY `start_time` (`start_time`)
-	) TYPE=MyISAM;
-	";
-	
-	
-	// Table structure for table `".$wpdb->prefix."wpsc_productmeta`
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'wpsc_productmeta';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."wpsc_productmeta` (
-		`id` bigint(20) unsigned NOT NULL auto_increment,
-		`product_id` bigint(20) unsigned NOT NULL default '0',
-		`meta_key` varchar(255) default NULL,
-		`meta_value` longtext,
-		PRIMARY KEY  (`id`),
-		KEY `product_id` (`product_id`),
-		KEY `meta_key` (`meta_key`)
-	) TYPE=MyISAM ;
-	";	
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'wpsc_categorisation_groups';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `".$wpdb->prefix."wpsc_categorisation_groups` (
-  `id` bigint(20) unsigned NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `active` varchar(1) NOT NULL default '1',
-  `default` varchar(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `group_name` (`name`)
-) ENGINE=MyISAM ;
-	";
-	
-	$num++;
-	$wpsc_tables[$num]['table_name'] = $wpdb->prefix.'wpsc_variation_combinations';
-	$wpsc_tables[$num]['table_sql'] = "CREATE TABLE `{$wpdb->prefix}wpsc_variation_combinations` (
-  `product_id` bigint(20) unsigned NOT NULL,
-  `priceandstock_id` bigint(20) unsigned NOT NULL,
-  `value_id` bigint(20) unsigned NOT NULL,
-  `variation_id` bigint(20) unsigned NOT NULL,
-  `all_variation_ids` varchar(64) collate NOT NULL,
-  KEY `product_id` (`product_id`),
-  KEY `priceandstock_id` (`priceandstock_id`),
-  KEY `value_id` (`value_id`),
-  KEY `variation_id` (`variation_id`),
-  KEY `all_variation_ids` (`all_variation_ids`)
-) ENGINE=MyISAM;
-  ";	
 
-	// and here is where the tables are added to the database, fairly simple, if it doesnt find the table, it makes it
-	foreach($wpsc_tables as $wpsc_table) {
-		if(!$wpdb->get_var("SHOW TABLES LIKE '{$wpsc_table['table_name']}'")) {
-			$wpdb->query($wpsc_table['table_sql']);
-		}
-	}
+
+
+
+  // run the create or update code here.
+  wpsc_create_or_update_tables();
+  
+
+
+
+
  
   wpsc_create_upload_directories();
   
  
 	require dirname(__FILE__) . "/currency_list.php";
-  /*
-  Updates from old versions, 
-  */  
-	if(get_option('wpsc_version') <= 3.5) {
-		include_once('updates/update-to-3.5.0.php');
-	}
-//   
-//   if((get_option('wpsc_version') < 3.5 ) || ((get_option('wpsc_version') == 3.5 ) && (get_option('wpsc_minor_version') <= 2))) {
+	
+	/*
+    if(get_option('wpsc_version') <= 3.5) {
+      include_once('updates/update-to-3.5.0.php');
+    }
     include_once('updates/update-to-3.5.2.php');
-//     }
     
     include_once('updates/update-to-3.5.2.php');
     include_once('updates/update-to-3.6.0.php');
     include_once('updates/update-to-3.6.4.php');
+    
+    */
   /* all code to add new database tables and columns must be above here */  
   if((get_option('wpsc_version') < WPSC_VERSION) || (get_option('wpsc_version') == WPSC_VERSION) && (get_option('wpsc_minor_version') < WPSC_MINOR_VERSION)) {
     update_option('wpsc_version', WPSC_VERSION);
@@ -690,122 +120,70 @@ function nzshpcrt_install()
   $add_regions = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."region_tax`");
   // exit($add_regions);
   if($add_regions < 1) {
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Alberta', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'British Columbia', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Manitoba', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'New Brunswick', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Newfoundland', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Northwest Territories', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Nova Scotia', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Nunavut', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Ontario', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Prince Edward Island', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Quebec', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Saskatchewan', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '100', 'Yukon', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Alabama', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Alaska', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Arizona', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Arkansas', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'California', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Colorado', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Connecticut', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Delaware', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Florida', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Georgia', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Hawaii', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Idaho', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Illinois', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Indiana', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Iowa', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Kansas', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Kentucky', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Louisiana', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Maine', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Maryland', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Massachusetts', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Michigan', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Minnesota', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Mississippi', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Missouri', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Montana', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Nebraska', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Nevada', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'New Hampshire', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'New Jersey', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'New Mexico', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'New York', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'North Carolina', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'North Dakota', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Ohio', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Oklahoma', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Oregon', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Pennsylvania', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Rhode Island', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'South Carolina', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'South Dakota', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Tennessee', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Texas', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Utah', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Vermont', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Virginia', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Washington', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Washington DC', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'West Virginia', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Wisconsin', '0.00')");
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."region_tax` ( `country_id` , `name` , `tax` ) VALUES ( '136', 'Wyoming', '0.00')");
-    
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'AL' WHERE `name` IN('Alabama')LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'AK' WHERE `name` IN('Alaska') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'AZ' WHERE `name` IN('Arizona') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'AR' WHERE `name` IN('Arkansas') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'CA' WHERE `name` IN('California') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'CO' WHERE `name` IN('Colorado') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'CT' WHERE `name` IN('Connecticut') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'DE' WHERE `name` IN('Delaware') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'FL' WHERE `name` IN('Florida') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'GA' WHERE `name` IN('Georgia')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'HI' WHERE `name` IN('Hawaii')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'ID' WHERE`name` IN('Idaho')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'IL' WHERE `name` IN('Illinois')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'IN' WHERE `name` IN('Indiana')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'IA' WHERE `name` IN('Iowa')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'KS' WHERE `name` IN('Kansas')  LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'KY' WHERE `name` IN('Kentucky') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'LA' WHERE `name` IN('Louisiana') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'ME' WHERE `name` IN('Maine') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MD' WHERE `name` IN('Maryland') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MA' WHERE `name` IN('Massachusetts') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MI' WHERE `name` IN('Michigan') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MN' WHERE `name` IN('Minnesota') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MS' WHERE `name` IN('Mississippi') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MO' WHERE `name` IN('Missouri') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'MT' WHERE `name` IN('Montana') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NE' WHERE `name` IN('Nebraska') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NV' WHERE `name` IN('Nevada') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NH' WHERE `name` IN('New Hampshire') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NJ' WHERE `name` IN('New Jersey') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NM' WHERE `name` IN('New Mexico') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NY' WHERE `name` IN('New York') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'NC' WHERE `name` IN('North Carolina') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'ND' WHERE `name` IN('North Dakota') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'OH' WHERE `name` IN('Ohio') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'OK' WHERE `name` IN('Oklahoma') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'OR' WHERE `name` IN('Oregon') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'PA' WHERE `name` IN('Pennsylvania') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'RI' WHERE `name` IN('Rhode Island') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'SC' WHERE `name` IN('South Carolina') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'SD' WHERE `name` IN('South Dakota') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'TN' WHERE `name` IN('Tennessee') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'TX' WHERE `name` IN('Texas') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'UT' WHERE `name` IN('Utah') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'VT' WHERE `name` IN('Vermont') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'VA' WHERE `name` IN('Virginia') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'WA' WHERE `name` IN('Washington') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'DC' WHERE `name` IN('Washington DC') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'WV' WHERE `name` IN('West Virginia') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'WI' WHERE `name` IN('Wisconsin') LIMIT 1 ;");
-		$wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `code` = 'WY' WHERE `name` IN('Wyoming') LIMIT 1 ;");    
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Alberta', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'British Columbia', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Manitoba', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'New Brunswick', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Newfoundland', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Northwest Territories', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Nova Scotia', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Nunavut', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Ontario', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Prince Edward Island', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Quebec', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Saskatchewan', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Yukon', '', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Alabama', 'AL', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Alaska', 'AK', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Arizona', 'AZ', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Arkansas', 'AR', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'California', 'CA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Colorado', 'CO', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Connecticut', 'CT', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Delaware', 'DE', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Florida', 'FL', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Georgia', 'GA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Hawaii', 'HI', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Idaho', 'ID', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Illinois', 'IL', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Indiana', 'IN', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Iowa', 'IA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Kansas', 'KS', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Kentucky', 'KY', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Louisiana', 'LA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Maine', 'ME', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Maryland', 'MD', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Massachusetts', 'MA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Michigan', 'MI', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Minnesota', 'MN', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Mississippi', 'MS', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Missouri', 'MO', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Montana', 'MT', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Nebraska', 'NE', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Nevada', 'NV', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Hampshire', 'NH', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Jersey', 'NJ', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Mexico', 'NM', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New York', 'NY', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'North Carolina', 'NC', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'North Dakota', 'ND', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Ohio', 'OH', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Oklahoma', 'OK', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Oregon', 'OR', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Pennsylvania', 'PA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Rhode Island', 'RI', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'South Carolina', 'SC', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'South Dakota', 'SD', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Tennessee', 'TN', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Texas', 'TX', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Utah', 'UT', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Vermont', 'VT', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Virginia', 'VA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Washington', 'WA', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Washington DC', 'DC', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'West Virginia', 'WV', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Wisconsin', 'WI', '0')");
+    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Wyoming', 'WY', '0')");
 	}
     
     
@@ -1368,4 +746,95 @@ function wpsc_create_upload_directories() {
 	}
 }
 
+
+function wpsc_create_or_update_tables() {
+  global $wpdb;
+  // creates or updates the structure of the shopping cart tables
+  
+  include_once('updates/database_template.php');
+  $failure_reasons = array();
+  $upgrade_failed = false;
+  foreach((array)$wpsc_database_template as $table_name => $table_data) {
+    if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'")) {
+      //if the table does not exixt, create the table
+      
+      $constructed_sql_parts = array();
+      $constructed_sql = "CREATE TABLE `{$table_name}` (\n";
+      
+      // loop through the columns
+      foreach((array)$table_data['columns'] as $column => $properties) {
+        $constructed_sql_parts[] = "`$column` $properties";
+      }
+      // then through the indexes
+      foreach((array)$table_data['indexes'] as $properties) {
+        $constructed_sql_parts[] = "$properties";
+      }
+      $constructed_sql .= implode(",\n", $constructed_sql_parts);
+      $constructed_sql .= "\n) ENGINE=MyISAM;";
+    
+      if(!$wpdb->query($constructed_sql)) {
+        $upgrade_failed = true;
+        $failure_reasons[] = $wpdb->last_error;
+      }
+      //echo "<pre>$constructed_sql</pre>";
+    } else {
+      //check to see if the table needs updating
+      $existing_table_columns = array();
+      $existing_table_column_data = $wpdb->get_results("SHOW COLUMNS FROM `$table_name`", ARRAY_A);
+      foreach((array)$existing_table_column_data as $existing_table_column) {
+        $existing_table_columns[] = $existing_table_column['Field'];
+      }
+      $supplied_table_columns = array_keys($table_data['columns']);
+      
+      // compare the supplied and existing columns to find the differences
+      $missing_or_extra_table_columns = array_diff($supplied_table_columns, $existing_table_columns);
+          
+      if(count($missing_or_extra_table_columns) > 0) {
+        foreach((array)$missing_or_extra_table_columns as $missing_or_extra_table_column) {
+          if(isset($table_data['columns'][$missing_or_extra_table_column])) {
+            //table column is missing, add it
+            $previous_column = $supplied_table_columns[array_search($missing_or_extra_table_column, $supplied_table_columns)-1];
+            if($previous_column != '') {
+              $previous_column = "AFTER `$previous_column`";
+            }
+            $constructed_sql = "ALTER TABLE `$table_name` ADD `$missing_or_extra_table_column` ".$table_data['columns'][$missing_or_extra_table_column]." $previous_column;";
+            if(!$wpdb->query($constructed_sql)) {
+              $upgrade_failed = true;
+              $failure_reasons[] = $wpdb->last_error;
+            }
+          }
+        }
+      }
+      
+      // get the list of existing indexes
+      $existing_table_index_data = $wpdb->get_results("SHOW INDEX FROM `$table_name`", ARRAY_A);
+      $existing_table_indexes = array();
+      foreach($existing_table_index_data as $existing_table_index) {
+        $existing_table_indexes[] = $existing_table_index['Key_name'];
+      }
+      
+      $existing_table_indexes = array_unique($existing_table_indexes);
+      $supplied_table_indexes = array_keys($table_data['indexes']);
+      
+      // compare the supplied and existing indxes to find the differences
+      $missing_or_extra_table_indexes = array_diff($supplied_table_indexes, $existing_table_indexes);
+      
+      
+      if(count($missing_or_extra_table_indexes) > 0) {
+        foreach($missing_or_extra_table_indexes as $missing_or_extra_table_index) {
+          if(isset($table_data['indexes'][$missing_or_extra_table_index])) {
+            $constructed_sql = "ALTER TABLE `$table_name` ADD ".$table_data['indexes'][$missing_or_extra_table_index].";";
+            if(!$wpdb->query($constructed_sql)) {
+              $upgrade_failed = true;
+              $failure_reasons[] = $wpdb->last_error;
+            }
+          }
+        }
+      }
+      
+      //echo "<pre>".print_r($missing_or_extra_table_indexes,true)."</pre>";
+      
+    }
+  }
+}
 ?>

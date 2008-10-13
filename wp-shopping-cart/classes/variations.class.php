@@ -356,22 +356,28 @@ class nzshpcrt_variations {
           $value_id = $value_association['value_id'];
           $value_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
           $check_stock = false;
-          if(($product_data['quantity_limited'] == 1) && (count($variation_assoc_data) == 1)) {
           
-            $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `product_id` = '".$product_id."' AND (`variation_id_1` = '".$value_data['id']."' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
+          
+          
+          if(($product_data['quantity_limited'] == 1) && (count($variation_assoc_data) == 1)) {
+            $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '{$value_data['id']}' ) AND `all_variation_ids` IN('{$variation_data['id']}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '1' LIMIT 1");
+            
+            //echo "SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '{$value_data['id']}' ) AND `all_variation_ids` IN('{$value_data['id']}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '1' LIMIT 1";
+            
+            $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1",ARRAY_A);
             $check_stock = true;
             $stock = $variation_stock_data['stock'];
-					}
+          }
 		
 					if (get_option('checkbox_variations')==1) {
 					$output .= "<input type='checkbox' id='variation[".$value_data['id']."]' name='variation[".$variation_data['name']."][]'".$default_topping." value='".$value_data['id']."' onclick='manage_topping(".$product_id.",".$value_data['id'].",".$special.")'>".$value_data['name']."<br>";
 					//exit("'onclick='add_toping(".$product_id.", ".$value_data['id'].")'>");
 					} else {
-						//if(($check_stock == true) && ($stock < 1)) {
-						//	$output .= "<option value='".$value_data['id']."' disabled='true'>".$value_data['name']." - ".TXT_WPSC_NO_STOCK."</option>";
-						//} else {
+						if(($check_stock == true) && ($stock < 1)) {
+							$output .= "<option value='".$value_data['id']."' disabled='true'>".$value_data['name']." - ".TXT_WPSC_NO_STOCK."</option>";
+						} else {
 							$output .= "<option value='".$value_data['id']."'>".$value_data['name']."</option>";
-						//}
+						}
 					}
 					$i++;
 				}
@@ -519,7 +525,6 @@ class nzshpcrt_variations {
         $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$keys )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($keys)."' LIMIT 1");
         
         $variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-        
         
         //exit("<pre>".print_r($priceandstock_data,true)."</pre>");
         
