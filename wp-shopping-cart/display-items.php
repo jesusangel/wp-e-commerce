@@ -359,6 +359,15 @@ if($_POST['submit_action'] == "edit") {
 		add_product_meta($_POST['prodid'], 'external_link', $_POST['external_link'],true);
 	}
 	
+	if (isset($_POST['images'])) {
+		$id = (int)$_POST['prodid'];
+		$old_image = $wpdb->get_var("SELECT image FROM {$wpdb->prefix}product_list WHERE id='{$_POST['prodid']}'");
+		if ($old_image == ''){
+			$updatelink_sql = "UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$_POST['images'][0]}' WHERE `id` = '$id'";
+			$updatelink_data = $wpdb->query($updatelink_sql);
+		}
+	}
+	
 	if (isset($_POST['merchant_notes'])) {
 		$id = (int)$_POST['prodid'];
 		$notes = $_POST['merchant_notes'];
@@ -388,20 +397,20 @@ if($_POST['submit_action'] == "edit") {
 // 	}
   
   /* handle editing file uploads here */
-  if(!empty($_FILES['file']['name'])) {
-		$fileid = wpsc_item_process_file('edit');
-		$file = $fileid;
-	} else if (($_POST['select_product_file'] != '')) {
-		$fileid = wpsc_item_reassign_file($_POST['select_product_file'], 'edit');
-		$file = $fileid;
-	}
+		if(!empty($_FILES['file']['name'])) {
+			$fileid = wpsc_item_process_file('edit');
+			$file = $fileid;
+		} else if (($_POST['select_product_file'] != '')) {
+			$fileid = wpsc_item_reassign_file($_POST['select_product_file'], 'edit');
+			$file = $fileid;
+		}
 
   
-	if(file_exists($_FILES['preview_file']['tmp_name'])) {
-		$fileid = $wpdb->get_var("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$id' LIMIT 1");
-		copy($_FILES['preview_file']['tmp_name'], (WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name'])));
-		$mimetype = wpsc_get_mimetype(WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name']));
-		$wpdb->query("UPDATE `".$wpdb->prefix."product_files` SET `preview` = '".$wpdb->escape(basename($_FILES['preview_file']['name']))."', `preview_mimetype` = '".$mimetype."' WHERE `id` = '$fileid' LIMIT 1");
+		if(file_exists($_FILES['preview_file']['tmp_name'])) {
+			$fileid = $wpdb->get_var("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$id' LIMIT 1");
+			copy($_FILES['preview_file']['tmp_name'], (WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name'])));
+			$mimetype = wpsc_get_mimetype(WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name']));
+			$wpdb->query("UPDATE `".$wpdb->prefix."product_files` SET `preview` = '".$wpdb->escape(basename($_FILES['preview_file']['name']))."', `preview_mimetype` = '".$mimetype."' WHERE `id` = '$fileid' LIMIT 1");
 		}
 
   /* Handle new image uploads here */

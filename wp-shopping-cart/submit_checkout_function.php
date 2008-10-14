@@ -184,7 +184,7 @@ function nzshpcrt_submit_checkout() {
 						$test_name = "{$name_base}-{$num}.{$extension}";
 						if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name)) {
 							$file_data['name'] = $test_name;
-						} 						
+						}
 						$num++;
 					} while ($file_data['name'] == null);
 			  }

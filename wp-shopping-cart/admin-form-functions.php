@@ -140,7 +140,7 @@ function nzshpcrt_getproductform($prodid)
 			$output .= "<strong>".$category_group_name.":</strong><br>";
 			$output .= categorylist($categorisation_group['id'], $product['id'], 'edit_');
 			$output .= "</p>\n\r";
-		}						
+		}
 	} 
 
   $output .= "            </td>\n\r";
@@ -571,51 +571,48 @@ $output .="</table></div></div></td></tr>";
 //   $output .= "            </td>\n\r";
 //   $output .= "          </tr>\n\r";
   
-  if(function_exists("getimagesize"))
-    {
-    if($product['image'] == '')
-      {
-      $output .= "          <tr>\n\r";
-      $output .= "            <td></td>\n\r";
-      $output .= "            <td>\n\r";
-      $output .= "<table>\n\r";
-      if(is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width')))
-        {
-        $output .= "      <tr>\n\r";
-        $output .= "        <td>\n\r";
-        $output .= "      <input type='radio' name='image_resize' value='0' id='image_resize0' class='image_resize' onclick='hideOptionElement(null, \"image_resize0\");' /> <label for='image_resize0'>".TXT_WPSC_DONOTRESIZEIMAGE."</label>\n\r";
-        $output .= "        </td>\n\r";
-        $output .= "      </tr>\n\r";
-        $output .= "      <tr>\n\r";
-        $output .= "        <td>\n\r";
-        $output .= "          <input type='radio' checked='true' name='image_resize' value='1' id='image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\");' /> <label for='image_resize1'>".TXT_WPSC_USEDEFAULTSIZE." (".get_option('product_image_height') ."x".get_option('product_image_width').")</label>\n\r";
-        $output .= "        </td>\n\r";
-        $output .= "      </tr>\n\r";
-        }
-      $output .= "      <tr>\n\r";
-      $output .= "        <td>\n\r";
-      $output .= "          <input type='radio' name='image_resize' value='2' id='image_resize2' class='image_resize' onclick='hideOptionElement(\"heightWidth\", \"image_resize2\");' />\n\r";
-      $output .= "      <label for='image_resize2'>".TXT_WPSC_USESPECIFICSIZE."</label>\n\r";
-      $output .= "          <div id='heightWidth' style='display: none;'>\n\r";
-      $output .= "        <input type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>\n\r";
-      $output .= "        <input type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT."</label>\n\r";
-      $output .= "      </div>\n\r";
-      $output .= "        </td>\n\r";
-      $output .= "      </tr>\n\r";
-      $output .= "      <tr>\n\r";
-      $output .= "      <td>\n\r";
-      $output .= "        <input type='radio' name='image_resize' value='3' id='image_resize3' class='image_resize' onclick='hideOptionElement(\"browseThumb\", \"image_resize3\");' />\n\r";
-      $output .= "        <label for='image_resize3'>".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
-      $output .= "        <div id='browseThumb' style='display: none;'>\n\r";
-      $output .= "          <input type='file' name='thumbnailImage' value='' />\n\r";
-      $output .= "        </div>\n\r";
-      $output .= "      </td>\n\r";
-      $output .= "    </tr>\n\r";
-      $output .= "  </table>\n\r";
-      $output .= "            </td>\n\r";
-      $output .= "          </tr>\n\r";
-      }
-    }
+	if(function_exists("getimagesize")) {
+		if($product['image'] == '') {
+// 			$output .= "          <tr>\n\r";
+// 			$output .= "            <td></td>\n\r";
+// 			$output .= "            <td>\n\r";
+// 			$output .= "<table>\n\r";
+			if(is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width'))) {
+// 				$output .= "      <tr>\n\r";
+// 				$output .= "        <td>\n\r";
+// 				$output .= "      <input type='radio' name='image_resize' value='0' id='image_resize0' class='image_resize' onclick='hideOptionElement(null, \"image_resize0\");' /> <label for='image_resize0'>".TXT_WPSC_DONOTRESIZEIMAGE."</label>\n\r";
+// 				$output .= "        </td>\n\r";
+// 				$output .= "      </tr>\n\r";
+// 				$output .= "      <tr>\n\r";
+// 				$output .= "        <td>\n\r";
+// 				$output .= "          <input type='radio' checked='true' name='image_resize' value='1' id='image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\");' /> <label for='image_resize1'>".TXT_WPSC_USEDEFAULTSIZE." (".get_option('product_image_height') ."x".get_option('product_image_width').")</label>\n\r";
+// 				$output .= "        </td>\n\r";
+// 				$output .= "      </tr>\n\r";
+			}
+// 			$output .= "      <tr>\n\r";
+// 			$output .= "        <td>\n\r";
+// 			$output .= "          <input type='radio' name='image_resize' value='2' id='image_resize2' class='image_resize' onclick='hideOptionElement(\"heightWidth\", \"image_resize2\");' />\n\r";
+// 			$output .= "      <label for='image_resize2'>".TXT_WPSC_USESPECIFICSIZE."</label>\n\r";
+// 			$output .= "          <div id='heightWidth' style='display: none;'>\n\r";
+// 			$output .= "        <input type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>\n\r";
+// 			$output .= "        <input type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT."</label>\n\r";
+// 			$output .= "      </div>\n\r";
+// 			$output .= "        </td>\n\r";
+// 			$output .= "      </tr>\n\r";
+// 			$output .= "      <tr>\n\r";
+// 			$output .= "      <td>\n\r";
+// 			$output .= "        <input type='radio' name='image_resize' value='3' id='image_resize3' class='image_resize' onclick='hideOptionElement(\"browseThumb\", \"image_resize3\");' />\n\r";
+// 			$output .= "        <label for='image_resize3'>".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
+// 			$output .= "        <div id='browseThumb' style='display: none;'>\n\r";
+// 			$output .= "          <input type='file' name='thumbnailImage' value='' />\n\r";
+// 			$output .= "        </div>\n\r";
+// 			$output .= "      </td>\n\r";
+// 			$output .= "    </tr>\n\r";
+// 			$output .= "  </table>\n\r";
+// 			$output .= "            </td>\n\r";
+// 			$output .= "          </tr>\n\r";
+		}
+	}
 //   $output .= "          <tr>\n\r";
 //   $output .= "            <td>\n\r";
 //   $output .= "            </td>\n\r";
@@ -624,12 +621,12 @@ $output .="</table></div></div></td></tr>";
 //   $output .= "<label for='delete_image'>".TXT_WPSC_DELETEIMAGE."</label>";
 //   $output .= "            </td>\n\r";
 //   $output .= "          </tr>\n\r";
-//   $output .= "          <tr>\n\r";
-//   $output .= "            <td colspan='2'>\n\r";
-  $output .= "<ul id='gallery_list' class='ui-sortable'>";
+  $output .= "          <tr>\n\r";
+  $output .= "            <td colspan='2'>\n\r";
+  $output .= "<ul id='gallery_list'>";
  
 	if(function_exists('edit_multiple_image_form')) {
-		$output .= edit_multiple_image_form($product['id']); 
+		$output .= edit_multiple_image_form($product['id']);
 	}
 	$output .= "</ul>";
 	$output .= "<br style='clear:both;'>";
