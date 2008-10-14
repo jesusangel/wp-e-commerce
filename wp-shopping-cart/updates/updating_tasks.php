@@ -230,6 +230,10 @@ if(($converted_brand_count <= 0) && ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->p
 	}
 }
 
+$unassociated_categories = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('0')");
+if($unassociated_categories > 0) {
+  $wpdb->query("UPDATE `{$wpdb->prefix}product_categories` SET `group_id` = '1' WHERE `group_id` IN ('0')");
+}
 
 
 // here is the code to update the payment gateway options.
