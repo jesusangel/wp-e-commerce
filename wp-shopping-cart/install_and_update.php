@@ -211,11 +211,6 @@ function nzshpcrt_install()
 	}
 		
 		
-	$product_brands_data  = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_brands`",ARRAY_A);
-	if($product_brands_data[0]['count'] == 0) {
-		$wpdb->query("INSERT INTO `".$wpdb->prefix."product_brands` ( `name`, `description`, `active`, `order`) VALUES ( '".TXT_WPSC_EXAMPLEBRAND."','".TXT_WPSC_EXAMPLEDETAILS."', '1', '0');");
-	}
-  
   add_option('show_thumbnails', 1, TXT_WPSC_SHOWTHUMBNAILS, "yes");
 
   add_option('product_image_width', '', TXT_WPSC_PRODUCTIMAGEWIDTH, 'yes');
@@ -574,41 +569,13 @@ function wpsc_uninstall_plugin() {
 		}
 		
 		
-		$wpsc_table_list[] = $wpdb->prefix.'also_bought_product';
-		$wpsc_table_list[] = $wpdb->prefix.'cart_contents';
-		$wpsc_table_list[] = $wpdb->prefix.'cart_item_extras';
-		$wpsc_table_list[] = $wpdb->prefix.'cart_item_variations';
-		$wpsc_table_list[] = $wpdb->prefix.'collect_data_forms';
-		$wpsc_table_list[] = $wpdb->prefix.'currency_list';
-		$wpsc_table_list[] = $wpdb->prefix.'download_status';
-		$wpsc_table_list[] = $wpdb->prefix.'extras_values';
-		$wpsc_table_list[] = $wpdb->prefix.'extras_values_associations';
-		$wpsc_table_list[] = $wpdb->prefix.'item_category_associations';
-		$wpsc_table_list[] = $wpdb->prefix.'product_brands';
-		$wpsc_table_list[] = $wpdb->prefix.'product_categories';
-		$wpsc_table_list[] = $wpdb->prefix.'product_extra';
-		$wpsc_table_list[] = $wpdb->prefix.'product_files';
-		$wpsc_table_list[] = $wpdb->prefix.'product_images';
-		$wpsc_table_list[] = $wpdb->prefix.'product_list';
-		$wpsc_table_list[] = $wpdb->prefix.'product_order';
-		$wpsc_table_list[] = $wpdb->prefix.'product_rating';
-		$wpsc_table_list[] = $wpdb->prefix.'product_variations';
-		$wpsc_table_list[] = $wpdb->prefix.'purchase_logs';
-		$wpsc_table_list[] = $wpdb->prefix.'purchase_statuses';
-		$wpsc_table_list[] = $wpdb->prefix.'region_tax';
-		$wpsc_table_list[] = $wpdb->prefix.'submited_form_data';
-		$wpsc_table_list[] = $wpdb->prefix.'variation_associations';
-		$wpsc_table_list[] = $wpdb->prefix.'variation_priceandstock';
-		$wpsc_table_list[] = $wpdb->prefix.'variation_values';
-		$wpsc_table_list[] = $wpdb->prefix.'variation_values_associations';
-		$wpsc_table_list[] = $wpdb->prefix.'wpsc_coupon_codes';
-		$wpsc_table_list[] = $wpdb->prefix.'wpsc_logged_subscriptions';
-		$wpsc_table_list[] = $wpdb->prefix.'wpsc_productmeta'; 
-		$wpsc_table_list[] = $wpdb->prefix.'wpsc_categorisation_groups'; 
-		
+    include_once('updates/database_template.php');
+    
+    $wpsc_table_list = array_keys($wpsc_database_template);
 		foreach($wpsc_table_list as $wpsc_table_name) {
 			$wpdb->query("DROP TABLE `{$wpsc_table_name}`");
 		}
+		
 		$active_plugins = get_option('active_plugins');
 		unset($active_plugins[array_search(WPSC_DIR_NAME.'/wp-shopping-cart.php', $active_plugins)]);
 		update_option('active_plugins', $active_plugins);

@@ -2665,7 +2665,7 @@ add_action('activity_box_end', 'wpsc_admin_latest_activity');
 add_action('admin_menu', 'nzshpcrt_displaypages');
 
 // pe.{
-if(get_option('wpsc_share_this') == 1) {
+if((get_option('wpsc_share_this') == 1) && (get_option('product_list_url') != '')) {
   if(stristr(("http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
     include_once(WPSC_FILE_PATH."/share-this.php");
   }
@@ -2845,4 +2845,30 @@ function shipping_submits(){
 add_action('init','shipping_options');
 add_action('init','shipping_submits');
 
+
+function upload_images() {
+	global $wpdb;
+	if ($_REQUEST['action']=='wpsc_add_image') {
+		$file = $_FILES['Filedata'];
+		$pid = $_POST['prodid'];
+		$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.$file['name']);
+		if ($pid == '')
+			copy(WPSC_IMAGE_DIR.$file['name'],WPSC_THUMBNAIL_DIR.$file['name']);
+		$order = $wpdb->get_var("SELECT MAX(image_order) FROM {$wpdb->prefix}product_images WHERE product_id='$pid'");
+		$order++;
+		if ($success) {
+			if ($pid != '')
+				$wpdb->query("INSERT INTO {$wpdb->prefix}product_images VALUES('', '$pid','{$file['name']}', '0', '0',  $order)");
+			$id = $wpdb->get_var("SELECT LAST_INSERT_ID() as `id` FROM `".$wpdb->prefix."product_images` LIMIT 1");
+			$src = $file['name'];
+			echo "src=".$src."&id=".$id;
+		} else {
+			echo "file uploading error";
+		}
+		
+		exit();
+	}
+}
+
+add_action('init','upload_images');
 ?>

@@ -214,13 +214,13 @@ INSERT INTO `".$wpdb->prefix."currency_list` VALUES (212, 'Tanzania', 'TZ', 'Tan
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (213, 'Thailand', 'TH', 'Thai Baht', '', '', 'THB', '0', '0','asiapacific');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (214, 'Togo', 'TG', 'CFA Franc BCEAO', '', '', 'XOF', '0', '0','africa');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (215, 'Tokelau', 'TK', 'New Zealand Dollar', '$', '&#036;', 'NZD', '0', '0','asiapacific');
-INSERT INTO `".$wpdb->prefix."currency_list` VALUES (216, 'Tonga', 'TO', 'Tongan Pa''anga', '', '', 'TOP', '0', '0','asiapacific');
+INSERT INTO `".$wpdb->prefix."currency_list` VALUES (216, 'Tonga', 'TO', 'Tongan Pa&#699;anga', '', '', 'TOP', '0', '0','asiapacific');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (217, 'Trinidad and Tobago', 'TT', 'Trinidad and Tobago Dollar', '$', '&#036;', 'TTD', '0', '0','africa');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (218, 'Tunisia', 'TN', 'Tunisian Dollar', '$', '&#036;', 'TND', '0', '0','africa');
-INSERT INTO `".$wpdb->prefix."currency_list` VALUES (219, 'Turkey', 'TR', 'Turkish Lira', '', '', 'TRL', '0', '0',','asiapacific'');
+INSERT INTO `".$wpdb->prefix."currency_list` VALUES (219, 'Turkey', 'TR', 'Turkish Lira', '', '', 'TRL', '0', '0','asiapacific');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (220, 'Turkmenistan', 'TM', 'Manat', '', '', 'TMM', '0', '0','asiapacific');
-INSERT INTO `".$wpdb->prefix."currency_list` VALUES (221, 'Turks and Caicos Islands', 'TC', 'US Dollar', '$', '&#036;', 'USD', '0', '0');
-INSERT INTO `".$wpdb->prefix."currency_list` VALUES (222, 'Tuvalu', 'TV', 'Australian Dollar', '$', '&#036;', 'AUD', '0', '0');
+INSERT INTO `".$wpdb->prefix."currency_list` VALUES (221, 'Turks and Caicos Islands', 'TC', 'US Dollar', '$', '&#036;', 'USD', '0', '0', 'northamerica');
+INSERT INTO `".$wpdb->prefix."currency_list` VALUES (222, 'Tuvalu', 'TV', 'Australian Dollar', '$', '&#036;', 'AUD', '0', '0','asiapacific');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (223, 'U.K.', 'UK', 'Pound Sterling', '£', '&#163;', 'GBP', '0', '17.5','europe');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (224, 'Uganda', 'UG', 'Uganda Shilling', '', '', 'UGS', '0', '0','africa');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (225, 'Ukraine', 'UA', 'Ukraine Hryvnia', '', '', 'UAG', '0', '0','europe');
