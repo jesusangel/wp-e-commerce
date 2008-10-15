@@ -363,7 +363,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       }
   
  $output .= "</div>";
- update_option('payment_gateway', $backup_payment_gateway);
+  ///update_option('payment_gateway', $backup_payment_gateway);
   return $output;
   }
   

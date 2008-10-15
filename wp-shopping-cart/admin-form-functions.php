@@ -1158,4 +1158,154 @@ function wpsc_right_now() {
 	return $output;
 }
 
+
+function wpsc_packing_slip($purchase_id) {
+  global $wpdb;
+	$purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$purchase_id."'";
+		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
+			
+			
+	  //echo "<p style='padding-left: 5px;'><strong>".TXT_WPSC_DATE."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
+
+		$cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_id."";
+		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
+		$j = 0;
+		if($cart_log != null) {
+      echo "<div class='packing_slip'>\n\r";
+			echo "<h2>".TXT_WPSC_PACKING_SLIP."</h2>\n\r";
+			echo "<strong>".TXT_WPSC_ORDER." #</strong> ".$purchase_id."<br /><br />\n\r";
+			
+			echo "<table>\n\r";
+			
+			$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".(int)$purchase_id."'";
+			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
+			
+			foreach($input_data as $input_row) {
+			  $rekeyed_input[$input_row['form_id']] = $input_row;
+			}
+			
+			
+			if($input_data != null) {
+        $form_data = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}collect_data_forms` WHERE `active` = '1'",ARRAY_A);
+        
+        foreach($form_data as $form_field) {
+          switch($form_field['type']) {
+            case 'country':
+            if(is_numeric($purch_data['shipping_region'])) {
+              echo "  <tr><td>".TXT_WPSC_STATE.":</td><td>".get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+            }
+            echo "  <tr><td>".$form_field['name'].":</td><td>".get_country($purch_data['billing_country'])."</td></tr>\n\r";
+            break;
+                
+            case 'delivery_country':
+            echo "  <tr><td>".$form_field['name'].":</td><td>".get_country($purch_data['shipping_country'])."</td></tr>\n\r";
+            break;
+                
+            case 'heading':
+            echo "  <tr><td colspan='2'><strong>".$form_field['name'].":</strong></td></tr>\n\r";
+            break;
+            
+            default:
+            echo "  <tr><td>".$form_field['name'].":</td><td>".$rekeyed_input[$form_field['id']]['value']."</td></tr>\n\r";
+            break;
+          }
+        }
+				
+				
+			} else {
+					echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
+					echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purch_data['address']."</td></tr>\n\r";
+					echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data['phone']."</td></tr>\n\r";
+					echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data['email']."</td></tr>\n\r";
+			}
+			
+			if(get_option('payment_method') == 2) {
+				$gateway_name = '';
+				foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+					if($purch_data['gateway'] != 'testmode') {
+						if($gateway['internalname'] == $purch_data['gateway'] ) {
+							$gateway_name = $gateway['name'];
+						}
+					} else {
+						$gateway_name = "Manual Payment";
+					}
+				}
+			}
+// 			echo "  <tr><td colspan='2'></td></tr>\n\r";
+// 			echo "  <tr><td>".TXT_WPSC_PAYMENT_METHOD.":</td><td>".$gateway_name."</td></tr>\n\r";
+// 			//echo "  <tr><td>".TXT_WPSC_PURCHASE_NUMBER.":</td><td>".$purch_data['id']."</td></tr>\n\r";
+// 			echo "  <tr><td>".TXT_WPSC_HOWCUSTOMERFINDUS.":</td><td>".$purch_data['find_us']."</td></tr>\n\r";
+// 			$engrave_line = explode(",",$purch_data['engravetext']);
+// 			echo "  <tr><td>".TXT_WPSC_ENGRAVE."</td><td></td></tr>\n\r";
+// 			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>\n\r";
+// 			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>\n\r";
+// 			if($purch_data['transactid'] != '') {
+// 				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data['transactid']."</td></tr>\n\r";
+// 			}
+			echo "</table>\n\r";
+			
+			
+			
+			
+      echo "<table class='packing_slip'>";
+		
+			$endtotal = 0;
+			$all_donations = true;
+			$all_no_shipping = true;
+			$file_link_list = array();
+			foreach($cart_log as $cart_row) {
+				$alternate = "";
+				$j++;
+				if(($j % 2) != 0) {
+					$alternate = "class='alt'";
+        }
+				$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
+				$product_data = $wpdb->get_results($productsql,ARRAY_A); 
+			
+				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
+				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
+				$variation_count = count($variation_data);
+				if($variation_count > 1) {
+					$variation_list = " (";
+					$i = 0;
+					foreach($variation_data as $variation) {
+						if($i > 0) {
+							$variation_list .= ", ";
+            }
+						$value_id = $variation['value_id'];
+						$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+						$variation_list .= $value_data[0]['name'];
+						$i++;
+          }
+					$variation_list .= ")";
+        } else if($variation_count == 1) {
+          $value_id = $variation_data[0]['value_id'];
+          $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+          $variation_list = " (".$value_data[0]['name'].")";
+        } else {
+							$variation_list = '';
+        }
+
+				echo "<tr $alternate>";
+		
+		
+				echo " <td>";
+				echo $cart_row['quantity'];
+				echo " </td>";
+				
+				echo " <td>";
+				echo $product_data[0]['name'];
+				echo $variation_list;
+				echo " </td>";
+							
+				echo '</tr>';
+				}
+			echo "</table>";
+			echo "</div>\n\r";
+		} else {
+			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
+		}
+
+}
+
 ?>

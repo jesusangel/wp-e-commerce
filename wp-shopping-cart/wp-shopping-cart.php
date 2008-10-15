@@ -2765,34 +2765,6 @@ switch(get_option('cart_location')) {
 }
 
 
-  
-/*
- * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
- */  
-function serialize_shopping_cart() {
-  global $wpsc_start_time, $wpsc_debug_sections;
-  @$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
-  if(WPSC_DEBUG === true) {
-    $wpsc_end_time = microtime_float() - $wpsc_start_time;    
-    $memory_usage = (@memory_get_usage() / 1000);
-    $debug_message = "/*\n\r<div style='position: absolute; top: 4px; left: 4px; background: #ffffff; padding: 3px; outline: 1px solid black; text-align: left;'>\n\r";
-    $debug_message .= "<div>Total Seconds: $wpsc_end_time</div>\n\r";
-    $debug_message .= "<div>Total Memory: $memory_usage kb</div>\n\r";
-    //$sections 
-    
-    foreach((array)$wpsc_debug_sections as $debug_section_name => $debug_section_values) {
-      $execution_time = ($debug_section_values['stop'] - $debug_section_values['start']);
-      $debug_message .= "<div>{$debug_section_name} Seconds: {$execution_time}</div>\n\r";
-    }
-    
-    $debug_message .= "</div>\n\r*/";
-    //mail(get_option('purch_log_email'), "debug_report", $debug_email);
-    exit($debug_message);  
-	}
-  return true;
-}  
-register_shutdown_function("serialize_shopping_cart");
-
 
 function shipping_options(){
 	if ($_GET['shipping_options']=='true'){
@@ -2871,4 +2843,52 @@ function upload_images() {
 }
 
 add_action('init','upload_images');
+
+
+function wpsc_display_involce() {
+  $purchase_id = (int)$_GET['purchaseid'];
+  include_once(WPSC_FILE_PATH."/admin-form-functions.php");
+  // echo "testing";
+	require_once(ABSPATH.'wp-admin/includes/media.php');
+	wp_iframe('wpsc_packing_slip', $purchase_id);  
+  //wpsc_packing_slip($purchase_id);
+  exit();
+}
+
+
+if($_GET['display_invoice']=='true') {
+  add_action('admin_init', 'wpsc_display_involce', 0);
+
+}
+
+
+
+
+  
+/*
+ * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
+ */  
+function serialize_shopping_cart() {
+  global $wpsc_start_time, $wpsc_debug_sections;
+  @$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
+  if(WPSC_DEBUG === true) {
+    $wpsc_end_time = microtime_float() - $wpsc_start_time;    
+    $memory_usage = (@memory_get_usage() / 1000);
+    $debug_message = "/*\n\r<div style='position: absolute; top: 4px; left: 4px; background: #ffffff; padding: 3px; outline: 1px solid black; text-align: left;'>\n\r";
+    $debug_message .= "<div>Total Seconds: $wpsc_end_time</div>\n\r";
+    $debug_message .= "<div>Total Memory: $memory_usage kb</div>\n\r";
+    //$sections 
+    
+    foreach((array)$wpsc_debug_sections as $debug_section_name => $debug_section_values) {
+      $execution_time = ($debug_section_values['stop'] - $debug_section_values['start']);
+      $debug_message .= "<div>{$debug_section_name} Seconds: {$execution_time}</div>\n\r";
+    }
+    
+    $debug_message .= "</div>\n\r*/";
+    //mail(get_option('purch_log_email'), "debug_report", $debug_email);
+    exit($debug_message);  
+	}
+  return true;
+}  
+register_shutdown_function("serialize_shopping_cart");
 ?>

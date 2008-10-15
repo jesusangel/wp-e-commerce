@@ -184,40 +184,35 @@ if($_GET['filter'] !== 'true') {
 
             echo "</tr>";
 
-            foreach($purchase_log as $purchase)
-              {
+            foreach($purchase_log as $purchase) {
               $status_state = "expand";
               $status_style = "";
               $alternate = "";
-                $i++;
-                if(($i % 2) != 0)
-                  {
-                  $alternate = "class='alt'";
-                  }
+              $i++;
+              if(($i % 2) != 0) {
+                $alternate = "class='alt'";
+              }
               echo "<tr $alternate>\n\r";
               //  echo " <td>";
               //  echo $purchase['id'];
               //  echo " </td>";
 
               echo " <td class='processed'>";
-              if($purchase['processed'] < 1)
-                {
+              if($purchase['processed'] < 1) {
                 $purchase['processed'] = 1;
-                }
+              }
               $stage_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
               $stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
 
               echo "<a href='#' onclick='return show_status_box(\"status_box_".$purchase['id']."\",\"log_expander_icon_".$purchase['id']."\");'>";
-              if($_GET['id'] == $purchase['id'])
-                {
+              if($_GET['id'] == $purchase['id']) {
                 $status_state = "collapse";
                 $status_style = "style='display: block;'";
-                }
+              }
               echo "<img class='log_expander_icon' id='log_expander_icon_".$purchase['id']."' src='".WPSC_URL."/images/icon_window_$status_state.gif' alt='' title='' />";
-              if($stage_data['colour'] != '')
-                {
+              if($stage_data['colour'] != '') {
                 $colour = "style='color: #".$stage_data['colour'].";'";
-                }
+              }
               echo "<span $colour  id='form_group_".$purchase['id']."_text'>".$stage_data['name']."</span>";
               echo "</a>";
               echo " </td>\n\r";
@@ -297,10 +292,6 @@ if($_GET['filter'] !== 'true') {
 		echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
 		echo " </td>\n\r";
 
-							//echo " <td>";
-							//echo $purchase['closest_store'];
-							//echo " </td>\n\r";
-		
 		
 		echo "</tr>\n\r";
               
@@ -378,6 +369,9 @@ if($_GET['filter'] !== 'true') {
 
 		$purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$_GET['purchaseid']."'";
 		$purch_data = $wpdb->get_results($purch_sql,ARRAY_A) ;
+			
+			
+	  echo "<p style='padding-left: 5px;'><strong>".TXT_WPSC_DATE."</strong>:".date("jS M Y", $purch_data[0]['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$_GET['purchaseid']."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
@@ -388,6 +382,10 @@ if($_GET['filter'] !== 'true') {
 
 			echo " <td>";
 			echo TXT_WPSC_NAME;
+			echo " </td>";
+			
+			echo " <td>";
+			echo TXT_WPSC_SKU;
 			echo " </td>";
 
 			echo " <td>";
@@ -496,6 +494,12 @@ if($_GET['filter'] !== 'true') {
 				echo " </td>";
 		
 				echo " <td>";
+        $sku = get_product_meta($product_data[0]['id'], 'sku');
+        $sku = (string)$sku[0];
+				echo $sku;
+				echo " </td>";
+		
+				echo " <td>";
 				echo $cart_row['quantity'];
 				echo " </td>";
 
@@ -503,7 +507,11 @@ if($_GET['filter'] !== 'true') {
 	
 				$price = $cart_row['price'] * $cart_row['quantity'];
 				$gst = $price - ($price  / (1+($cart_row['gst'] / 100)));
-				echo nzshpcrt_currency_display($price-$gst, 1);
+				
+				if($gst > 0) {
+				  $tax_per_item = $gst / $cart_row['quantity'];
+				}
+				echo nzshpcrt_currency_display($cart_row['price'] - $tax_per_item, 1);
 				echo " </td>";
 				
 				echo " <td>";
@@ -585,41 +593,51 @@ if($_GET['filter'] !== 'true') {
 			}
 			
 
+			echo "<strong>".TXT_WPSC_PURCHASE_NUMBER.":</strong>".$purch_data[0]['id']."<br /><br />\n\r";
 			
-			echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>";
-			echo "<table>";
-			$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".$_GET['purchaseid']."'";
+			echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>\n\r";
+			echo "<table>\n\r";
+			
+			$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".(int)$_GET['purchaseid']."'";
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
-			//exit("<pre>".print_r($input_data,true)."</pre>");
+			
+			foreach($input_data as $input_row) {
+			  $rekeyed_input[$input_row['form_id']] = $input_row;
+			}
+			
+			
 			if($input_data != null) {
-				foreach($input_data as $form_field) {
-					$form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `id` = '".$form_field['form_id']."' LIMIT 1";
-					$form_data = $wpdb->get_results($form_sql,ARRAY_A);
-					if($form_data != null) {
-						$form_data = $form_data[0];
-						switch($form_data['type']) {
-							case 'country': 
-							if(is_numeric($purch_data[0]['shipping_region'])) {
-								echo "  <tr><td>".TXT_WPSC_STATE.":</td><td>".get_region($purch_data[0]['shipping_region'])."</td></tr>";   
-							}
-							echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($purch_data[0]['billing_country'])."</td></tr>";   
-							break;           
-									
-							case 'delivery_country': 
-							echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($purch_data[0]['shipping_country'])."</td></tr>";   
-							break;                
-							
-							default:
-							echo "  <tr><td>".$form_data['name'].":</td><td>".$form_field['value']."</td></tr>";
-							break;
-						}
-					}
-				}
+        $form_data = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}collect_data_forms` WHERE `active` = '1'",ARRAY_A);
+        
+        foreach($form_data as $form_field) {
+          switch($form_field['type']) {
+            case 'country':
+            if(is_numeric($purch_data[0]['shipping_region'])) {
+              echo "  <tr><td>".TXT_WPSC_STATE.":</td><td>".get_region($purch_data[0]['shipping_region'])."</td></tr>\n\r";
+            }
+            echo "  <tr><td>".$form_field['name'].":</td><td>".get_country($purch_data[0]['billing_country'])."</td></tr>\n\r";
+            break;
+                
+            case 'delivery_country':
+            echo "  <tr><td>".$form_field['name'].":</td><td>".get_country($purch_data[0]['shipping_country'])."</td></tr>\n\r";
+            break;
+                
+            case 'heading':
+            echo "  <tr><td colspan='2'><strong>".$form_field['name'].":</strong></td></tr>\n\r";
+            break;
+            
+            default:
+            echo "  <tr><td>".$form_field['name'].":</td><td>".$rekeyed_input[$form_field['id']]['value']."</td></tr>\n\r";
+            break;
+          }
+        }
+				
+				
 			} else {
-					echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purch_data[0]['firstname']." ".$purch_data[0]['lastname']."</td></tr>";
-					echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purch_data[0]['address']."</td></tr>";
-					echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data[0]['phone']."</td></tr>";
-					echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data[0]['email']."</td></tr>";
+					echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purch_data[0]['firstname']." ".$purch_data[0]['lastname']."</td></tr>\n\r";
+					echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purch_data[0]['address']."</td></tr>\n\r";
+					echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data[0]['phone']."</td></tr>\n\r";
+					echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data[0]['email']."</td></tr>\n\r";
 			}
 			
 			if(get_option('payment_method') == 2) {
@@ -634,22 +652,30 @@ if($_GET['filter'] !== 'true') {
 					}
 				}
 			}
-			echo "  <tr><td>".TXT_WPSC_PAYMENT_METHOD.":</td><td>".$gateway_name."</td></tr>";
-			echo "  <tr><td>".TXT_WPSC_PURCHASE_NUMBER.":</td><td>".$purch_data[0]['id']."</td></tr>";
-			echo "  <tr><td>".TXT_WPSC_HOWCUSTOMERFINDUS.":</td><td>".$purch_data[0]['find_us']."</td></tr>";
+			echo "  <tr><td colspan='2'></td></tr>\n\r";
+			echo "  <tr><td>".TXT_WPSC_PAYMENT_METHOD.":</td><td>".$gateway_name."</td></tr>\n\r";
+			echo "  <tr><td>".TXT_WPSC_PURCHASE_NUMBER.":</td><td>".$purch_data[0]['id']."</td></tr>\n\r";
+			echo "  <tr><td>".TXT_WPSC_HOWCUSTOMERFINDUS.":</td><td>".$purch_data[0]['find_us']."</td></tr>\n\r";
 			$engrave_line = explode(",",$purch_data[0]['engravetext']);
-			echo "  <tr><td>".TXT_WPSC_ENGRAVE."</td><td></td></tr>";
-			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>";
-			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>";
+			echo "  <tr><td>".TXT_WPSC_ENGRAVE."</td><td></td></tr>\n\r";
+			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>\n\r";
+			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>\n\r";
 			if($purch_data[0]['transactid'] != '') {
-				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data[0]['transactid']."</td></tr>";
+				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data[0]['transactid']."</td></tr>\n\r";
 			}
-			echo "</table>";
+			echo "</table>\n\r";
 		} else {
 			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
 		}
 		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$_GET['purchaseid']."&amp;clear_locks=true'>".TXT_WPSC_CLEAR_IP_LOCKS."</a><br />";
+		
+		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;display_invoice=true&amp;purchaseid=".$_GET['purchaseid']."'>".TXT_WPSC_VIEW_PACKING_SLIP."</a><br />";
+		
+		
 		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;deleteid=".$_GET['purchaseid']."'>".TXT_WPSC_REMOVE_LOG."</a>";
+
+		
+		//http://www.instinct.co.nz/wordpress_2.6/wp-admin/admin.php?page=wp-shopping-cart/display-log.php&display_invoice=true&purchaseid=27
 		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>".TXT_WPSC_GOBACK."</a>";
 	}
       

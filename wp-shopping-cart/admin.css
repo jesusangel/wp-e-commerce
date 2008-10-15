@@ -1676,3 +1676,61 @@ table.wpsc_options, table.form-table{
 h2.wpsc_special{
 	margin-bottom:5px;
 }
+
+
+/*div#wpcontent div:not(#wpbody) * {
+  display:none;
+  }*/
+div.packing_slip {
+  margin: 10px;
+}
+
+table.packing_slip {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 500px
+}
+
+table.packing_slip tr td  {
+  border: 1px solid black;
+  padding: 6px 6px 6px 6px;
+}
+
+@media print {
+  div#wpcontent ul {
+    display: none;
+  }
+  
+  div#wphead {
+    display: none;
+  }
+  
+  div#user_info {
+    display: none;
+  }
+  
+  div#update-nag {
+    display: none;
+  }
+
+  div#rightnow {
+    display: none;
+  }
+  
+  td#order_summary_container {
+    display: none;
+  }
+
+  div#footer {
+    display: none;
+  }
+  a {
+    display: none;
+  }
+
+
+  embed {
+    display: none;
+  }
+  
+}
