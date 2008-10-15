@@ -32,7 +32,7 @@ if(get_option('permalink_structure') == '') {
   $currenturl = str_replace(trailingslashit(get_option('siteurl')).'?',trailingslashit(get_option('siteurl')) . 'index.php?', $currenturl);
 }
 if(!isset($_GET['result'])){
-  if(!(get_option('payment_gateway')=='google')) {
+//   if(!(get_option('payment_gateway')=='google')) {
 ?>
 <div class="wrap wpsc_container">
 <strong><?php echo TXT_WPSC_CONTACTDETAILS;?></strong><br />
@@ -166,7 +166,14 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 		}
   }    
 
-	if (count(get_option('custom_gateway_options')) > 1) {
+
+  $gateway_options = get_option('custom_gateway_options');
+ 
+  $google_decrement = 0;
+  if(array_search("google",$gateway_options) !== false) {
+     $google_decrement = 1;
+  }
+	if ((count($gateway_options) - $google_decrement) > 1) {
 		echo "<tr>\n\r";
 		echo "  <td colspan='2'>\n\r";
 		echo "    <strong>".TXT_WPSC_SELECTGATEWAY."</strong>\n\r";
@@ -174,7 +181,11 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 		echo "</tr>\n\r";
 		echo "<tr>\n\r";
 		echo "  <td colspan='2'>\n\r";
-		foreach (get_option('custom_gateway_options') as $option) {
+		foreach ($gateway_options as $option) {
+			if($option == 'google') {
+			  //skip google
+        continue;
+			}
 		  if($count == 0) {
 		    $checked = "checked='true'";
 		  }  else {
@@ -203,7 +214,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	}
 	$product=$_SESSION['nzshpcrt_cart'][0];
 	$engrave = get_product_meta($product->product_id,'engraved',true);
-	if ($engrave[e0] == true) {
+	if ($engrave[0] == true) {
 		echo "	<tr>\n\r";
 		echo "		<td>\n\r";
 		echo "			Engrave text:\n\r";
@@ -248,85 +259,15 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 			echo "<input type='hidden' value='yes' name='agree' />";
 			echo "";
 		}
-	/*
-    if(get_option('payment_method') == 2)
-      {
-      $curgateway = get_option('payment_gateway');
-      foreach($GLOBALS['nzshpcrt_gateways'] as $gateway)
-        {
-        if($gateway['internalname'] == $curgateway )
-          {
-          $gateway_name = $gateway['name'];
-          }
-        }
-      ?>
-      <tr>
-        <td colspan="2">
-        <strong>Payment Method</strong>
-        </td>
-      </tr>
-
-      <tr>
-        <td colspan='2'>
-        <input type='radio' name='payment_method' value='1' id='payment_method_1' checked='true'>
-        <label for='payment_method_1'><?php echo TXT_WPSC_PAY_USING;?> <?php echo $gateway_name; ?>/<?php echo TXT_WPSC_CREDIT_CARD;?></label>
-        </td>
-      </tr>
-      
-      <tr>
-        <td colspan='2'>
-        <input type='radio' name='payment_method' value='2' id='payment_method_2'>
-        <label for='payment_method_2'><?php echo TXT_WPSC_PAY_MANUALLY;?></label>
-        </td>
-      </tr>
-      <?php
-      }
-      */
-// 	if ((function_exists('getdistance')) && (get_option('googleStoreLocator')==1)) {
-// 		echo "<tr><td colspan='2'><strong>2. Select Store</strong</td></tr>";
-// 		echo "<tr><td>Stores</td><td width='80'><select name='chosen_store' style='float:left;' id='gloc_storelist'></select><div style='float:left;display:none;' id='gloc_loading'>Loading Stores...</div></td></tr>";
-// 	}
-// 	if (get_option('googleStoreLocator')==1) {
-// 		echo "<tr>
-// 			<td>
-// 				<input type='radio' name='pickupordelivery' id='pickupordelivery1' value='1'><label for='pickupordelivery1'>".TXT_WPSC_PICKUP."</label>
-// 			</td>
-// 			<td>
-// 				<input type='radio' name='pickupordelivery' id='pickupordelivery2' value='2'><label for='pickupordelivery2'>".TXT_WPSC_DELIVERY."</label>
-// 			</td>
-// 		</tr>";
-// 	}
+	
 	?>
     <tr>
       <?php if((is_user_logged_in() && (get_option('require_register') == 1)) xor (get_option('require_register') == 0)) { ?>
       <td colspan='2'><br />
       <input type='hidden' value='true' name='submitwpcheckout' />
-	<?php 
-	if (get_option('payment_gateway') == 'google') { 
-		echo "<br>";
-		if (get_option('google_button_size') == '0'){
-			$google_button_w=180;
-			$google_button_h=46;
-		} elseif(get_option('google_button_size') == '1') {
-			$google_button_w=168;
-			$google_button_h=44;
-		} elseif(get_option('google_button_size') == '2') {
-			$google_button_w=160;
-			$google_button_h=43;
-		}
-		
-
-		if ($_SESSION['google_prohibited']!='1') {
-	?>
-		<input  type='image' class='googlebutton' src="https://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo get_option('google_id')?>&w=<?php echo $google_button_w?>&h=<?php echo $google_button_h?>&style=<?php echo get_option('google_button_bg')?>&variant=text&loc=en_US">
-		<?php } else { ?>
-		<img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo get_option('google_id')?>&w=<?php echo $google_button_w?>&h=<?php echo $google_button_h?>&style=<?php echo get_option('google_button_bg')?>&variant=disabled&loc=en_US"/>
-		<?php }?>
-	<?php } else {
-		
-		?>
-	<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
-	<?php  } ?>
+      <input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
+	
+	
 	<?php } else { ?>
       <td colspan='2'>
       <br /><strong><?php echo TXT_WPSC_PLEASE_LOGIN;?></strong><br />
@@ -338,7 +279,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 </form>
 </div>
 <?php
-    }
+//     }
   }
   else
     {
