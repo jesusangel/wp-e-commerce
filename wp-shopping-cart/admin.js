@@ -413,32 +413,24 @@ function remove_variation_value_field(id)
   }
   
 function variation_value_list(id) {
+  if(id == null) {
+    id = '';
+  }
 	var display_list=function(results) {
 		eval(results);
-		//if(variation_value_html != '') {
-			new_element_id = "product_variations_"+variation_value_id;
-			if(document.getElementById(new_element_id) === null) {
-				new_element = document.createElement('span');
-				new_element.id = new_element_id;
-				document.getElementById("edit_product_variations").appendChild(new_element);
-				document.getElementById(new_element_id).innerHTML = variation_value_html;
-			}
-		//}
-		prodid=document.getElementById("prodid").value;
-		var id_string = '';
-		jQuery("#"+new_element_id+" input[@type='checkbox']").each(function() {id_string+="&"+this.name+"="+this.value; });
-		jQuery("#"+new_element_id+" input[@type='hidden']").each(function() {id_string+="&"+this.name+"="+this.value; });
-		//alert(id_string);
-		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true&pid="+prodid+id_string);
+    jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").removeAttr("disabled", "true");
+    if(id != '') {
+      jQuery("#edit_variations_container").html(edit_variation_combinations_html);
+    } else {
+      jQuery("#add_product_variation_details").html(add_variation_combinations_html);
+    }
 	}
-	if(id  > 0) {
-    prefix_prefix = "edit_";
-	} else {
-	  prefix_prefix = "add_";
-	}
+	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
 	
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&variation_id="+id+"&prefix="+prefix_prefix+"product_variations");
- }
+	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").attr("disabled", "true");
+	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&"+current_variations+"");
+}
+
  
   
   
@@ -448,29 +440,29 @@ var display_list_ajaxx=function(results) {
 	//alert(results);
 }
   
-// function add_variation_value_list(id)
-//   {
-// 	var display_list=function(results) {
-// 		eval(results);
-//     if(variation_subvalue_html != '') {
-//         new_element_id = "add_product_variations_"+variation_value_id;
-//         if(document.getElementById(new_element_id) === null) {
-//           new_element = document.createElement('span');
-//           new_element.id = new_element_id;
-//           document.getElementById("add_product_variations").appendChild(new_element);
-//           document.getElementById(new_element_id).innerHTML = variation_value_html;
-//         }
-//       jQuery("#add_product_variation_details").html(variation_subvalue_html);
-//     }
-// 		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
-// // 		  alert(this.id);
-//     });
-// 		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
-// 	}
-// 	current_variations = jQuery("input.variation_ids").serialize();
-// 	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
-// }
-//   
+function add_variation_value_list(id)
+  {
+	var display_list=function(results) {
+		eval(results);
+    if(variation_subvalue_html != '') {
+        new_element_id = "add_product_variations";
+        if(document.getElementById(new_element_id) === null) {
+          new_element = document.createElement('span');
+          new_element.id = new_element_id;
+          document.getElementById("add_product_variations").appendChild(new_element);
+          //document.getElementById(new_element_id).innerHTML = variation_value_html;
+        }
+      jQuery("#add_product_variation_details").html(variation_subvalue_html);
+    }
+		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
+// 		  alert(this.id);
+    });
+		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
+	}
+	current_variations = jQuery("input.variation_ids").serialize();
+	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
+}
+  
   
 function edit_variation_value_list(id) {
   // haah, the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag

@@ -13,6 +13,13 @@ class nzshpcrt_variations {
     $options = "";
     $variations = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id` ASC",ARRAY_A);
     //$options .= "<option  $selected value='0'>".TXT_WPSC_PLEASECHOOSE."</option>\r\n";
+    /*
+    if($product_id > 0) {
+      $if_adding = '';
+    } else {
+      $if_adding = 'add_';
+    }*/
+    
     foreach((array)$variations as $variation) {
       $checked = "";
       if($product_id > 0) {
@@ -23,7 +30,7 @@ class nzshpcrt_variations {
         }
       }
     
-      $options .= "<label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='variation_value_list({$product_id});' value='1' name='variations[{$variation['id']}]' >".$variation['name']."</label> <br />\r\n";
+      $options .= "<label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list({$product_id});' value='1' name='variations[{$variation['id']}]' >".$variation['name']."</label> <br />\r\n";
     }
     return $options;
   }

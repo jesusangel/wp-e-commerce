@@ -7,6 +7,7 @@ $current_user = wp_get_current_user();
 
 $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
 
+  $variations_processor = new nzshpcrt_variations;
 
 function topcategorylist() {
 	global $wpdb,$category_data;
@@ -270,7 +271,7 @@ if($_POST['submit_action'] == 'add') {
 
 				
 			if($_POST['variation_priceandstock'] != null) {
-				$variations_procesor->update_variation_values($product_id, $_POST['variation_priceandstock']);
+				$variations_processor->update_variation_values($product_id, $_POST['variation_priceandstock']);
 	// 			  exit("<pre>".print_r($_POST,true)."</pre>");
 			}
 			
@@ -1191,7 +1192,10 @@ echo "        </div>";
       <td colspan='2'>
         <?php //echo variationslist(); ?>
         <div id='add_product_variations'>
+		<?php
+    echo $variations_processor->list_variations();
 		
+		?>
         </div>
         <div id='add_product_variation_details'>
 		
