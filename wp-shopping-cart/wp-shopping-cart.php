@@ -605,6 +605,15 @@ function nzshpcrt_submit_ajax()
    
   // if is an AJAX request, cruddy code, could be done better but getting approval would be impossible
 if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
+	if ($_POST['del_prod'] == 'true') {
+		$ids = $_POST['del_prod_id'];
+		$ids = explode(',',$ids);
+		foreach ($ids as $id) {
+			$wpdb->query("DELETE FROM {$wpdb->prefix}product_list WHERE id='$id'");
+		}
+		exit();
+	}
+	
 	if($_POST['del_img'] == 'true') {
 		$img_id = $_POST['del_img_id'];
 		$wpdb->query("DELETE FROM {$wpdb->prefix} WHERE id='{$img_id}'");
@@ -612,6 +621,8 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 	}
 	
 	if ($_POST['imageorder']=='true') {
+		$height = get_option('product_image_height');
+		$width  = get_option('product_image_width');
 		$images = explode(",",$_POST['order']);
 		$prodid = $_POST['prodid'];
 		$new_main_image = $images[0];
@@ -620,7 +631,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			$old_image_name =  $wpdb->get_var("SELECT image FROM {$wpdb->prefix}product_list WHERE id='{$prodid}'");
 			$wpdb->query("UPDATE {$wpdb->prefix}product_list SET image='$new_image_name' WHERE id='{$prodid}'");
 			$wpdb->query("UPDATE {$wpdb->prefix}product_images SET image='$old_image_name' WHERE id='{$images[0]}'");
-			copy(WPSC_IMAGE_DIR.$new_image_name, WPSC_THUMBNAIL_DIR.$new_image_name);
+			$image= image_processing(WPSC_IMAGE_DIR.$new_image_name, (WPSC_THUMBNAIL_DIR.$new_image_name),$width,$height,'thumbnailImage');
 		} else {
 			for($i=1;$i<count($images);$i++ ) {
 				$wpdb->query("UPDATE {$wpdb->prefix}product_images SET image_order='$i' WHERE id=".$images[$i]);
@@ -1905,8 +1916,8 @@ function nzshpcrt_download_file() {
 }
 
 function nzshpcrt_display_preview_image() {
-  global $wpdb;
-  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])) {
+	  global $wpdb;
+	  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])) {
 		if(function_exists("getimagesize")) {
 			if(is_numeric($_GET['productid'])) {
 			  $product_id = (int)$_GET['productid'];
@@ -1927,17 +1938,15 @@ function nzshpcrt_display_preview_image() {
 				$image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_images` WHERE `id` = '{$image_id}' LIMIT 1");
 				$imagepath = WPSC_IMAGE_DIR . $image;
 			}
-      
-      
-      $image_size = @getimagesize($imagepath);
-      if(is_numeric($_GET['height']) && is_numeric($_GET['width'])) {
-        $height = (int)$_GET['height'];
-        $width = (int)$_GET['width'];
+			$image_size = @getimagesize($imagepath);
+			if(is_numeric($_GET['height']) && is_numeric($_GET['width'])) {
+				$height = (int)$_GET['height'];
+				$width = (int)$_GET['width'];
 			} else {
 				$width = $image_size[0];
 				$height = $image_size[1];
 			}
-      if(!(($height > 0) && ($height <= 1024) && ($width > 0) && ($width <= 1024))) { 
+			if(!(($height > 0) && ($height <= 1024) && ($width > 0) && ($width <= 1024))) { 
 				$width = $image_size[0];
 				$height = $image_size[1];
 			}

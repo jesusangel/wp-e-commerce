@@ -883,6 +883,29 @@ function wpsc_save_postboxes_state(page, container) {
 }
 
 jQuery(document).ready(function(){
+	jQuery('.deleteproducts > button.button').click(
+		function () {
+			var ids='0';
+			jQuery('.deletecheckbox:checked').each(
+				function () {
+					ids += ","+jQuery(this).val();
+				}
+			);
+			var r=confirm("Please confirm deletion");
+			if (r==true) {
+				ajax.post("index.php",reloadresults,"ajax=true&del_prod=true&del_prod_id="+ids);
+			}
+		}
+	);
+	jQuery('#selectall').click(
+		function () {
+			if (this.checked) {
+				jQuery('.deletecheckbox').each(function(){this.checked = true;});
+			} else {
+				jQuery('.deletecheckbox').each(function(){this.checked = false;});
+			}
+		}
+	);
 	jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
 	filesizeLimit = 5120000;
 	var swfu = new SWFUpload({
@@ -1050,4 +1073,8 @@ function enablebuttons(){
 			jQuery("div#image_settings_box").hide();
 		}
 	);
+}
+
+function reloadresults(){
+	window.location = window.location.href;
 }

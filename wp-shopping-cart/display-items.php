@@ -836,6 +836,7 @@ if(is_numeric($_GET['catid'])) {
 echo "          <tr class='firstrow'>\n\r";
 
 echo "            <td width='45px'>";
+echo "<input type='checkbox' id='selectall'>";
 echo "</td>\n\r";
 
 echo "            <td ".$name_style.">";
@@ -891,22 +892,23 @@ if($product_list != null)
 			if($product['order'] > $order_number) {
 				$order_number = $product['order'];
 				$order_number++;
-			}      
+			}
 		} else {
 			$wpdb->query("INSERT INTO `".$wpdb->prefix."product_order` (  `category_id` , `product_id` , `order` ) VALUES ( '".$product['category_id']."', '".$product['id']."', '$order_number');");
 			$order_number++;
 		}
 	}
+	
 	if(is_numeric($_GET['catid'])) {
     	echo "	<div class='itemHeader pli_img'>\n\r";
 		echo "<a class='noline' title='Drag to a new position'>";
 	} else {
 		echo "	<td style='width: 40px;' class='imagecol'>\r\n";
 	}
-	
+	echo "<input type='checkbox' name='productdelete[]' class='deletecheckbox' value='{$product['id']}'>";
 	if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images
 		echo "<img title='Drag to a new position' src='".WPSC_THUMBNAIL_URL.$product['thumbnail_image']."' title='".$product['name']."' alt='".$product['name']."' width='35' height='35'  />";
-  } else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
+	} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
 		echo "<img title='Drag to a new position' src='".WPSC_THUMBNAIL_URL.$product['image']."' title='".$product['name']."' alt='".$product['name']."' width='35' height='35'  />";
 	} else { // no image, display this fact
 		echo "<img title='Drag to a new position' src='".WPSC_URL."/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='35' height='35' />";
@@ -990,7 +992,7 @@ if($product_list != null)
 			'end_size' => 2, // How many numbers on either end including the end
 			'mid_size' => 2, // How many numbers to either side of current not including current
 		));
-		
+		echo "<div class='deleteproducts' style='float:left;'><button class='button'>Delete</button></div>";
 			echo "<div class='tablenav-pages'>";
 			
 			echo $page_links;

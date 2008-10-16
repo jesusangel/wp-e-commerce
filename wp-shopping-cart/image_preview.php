@@ -1,8 +1,8 @@
 <?php
 $imagetype = @getimagesize($imagepath);
 if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
-  header("Location: ".WPSC_CACHE_URL.$cache_filename.".png");
-  exit();
+	header("Location: ".WPSC_CACHE_URL.$cache_filename.".png");
+	exit();
 } else {
 	switch($imagetype[2]) {
 		case IMAGETYPE_JPEG:
@@ -57,7 +57,7 @@ if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
 				} else {
 					$temp_h = ($width / $source_w) * $source_h;
 				}
-			break;    
+			break;
 		
 			case 'non-cropping':
 			default:
@@ -80,7 +80,9 @@ if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
 		$bgcolor = ImageColorAllocate( $dst_img, 255, 255, 255 );
 		ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $bgcolor );
 		ImageAlphaBlending($dst_img, TRUE );
-		imagecolortransparent($dst_img, $bgcolor);
+		if (($imagetype[2]==IMAGETYPE_PNG) ||($imagetype[2]==IMAGETYPE_GIF)){
+			imagecolortransparent($dst_img, $bgcolor);
+		}
 	
 		// X & Y Offset to crop image properly
 		if($temp_w < $width) {
@@ -112,11 +114,36 @@ if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
 		
 		
 		ImageAlphaBlending($dst_img, false);
+		switch($imagetype[2]) {
+			case IMAGETYPE_JPEG:
+			header("Content-type: image/jpeg");
+			ImagePNG($dst_img);
+			ImagePNG($dst_img, WPSC_CACHE_DIR.$cache_filename.".jpg");
+			@ chmod( WPSC_CACHE_DIR.$cache_filename.".jpg", 0775 );
+			break;
 		
+			case IMAGETYPE_GIF:
+			header("Content-type: image/gif");
+			ImagePNG($dst_img);
+			ImagePNG($dst_img, WPSC_CACHE_DIR.$cache_filename.".gif");
+			@ chmod( WPSC_CACHE_DIR.$cache_filename.".gif", 0775 );
+			break;
+		
+			case IMAGETYPE_PNG:
+			header("Content-type: image/png");
+			ImagePNG($dst_img);
+			ImagePNG($dst_img, WPSC_CACHE_DIR.$cache_filename.".png");
+			@ chmod( WPSC_CACHE_DIR.$cache_filename.".png", 0775 );
+			break;
+		
+			default:
+			$pass_imgtype = false;
+			break;
+		}/*
 		header("Content-type: image/png");
 		ImagePNG($dst_img);
 		ImagePNG($dst_img, WPSC_CACHE_DIR.$cache_filename.".png");
-		@ chmod( WPSC_CACHE_DIR.$cache_filename.".png", 0775 );
+		@ chmod( WPSC_CACHE_DIR.$cache_filename.".png", 0775 );*/
 		exit();
 	}
 }

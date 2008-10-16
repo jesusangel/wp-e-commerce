@@ -621,8 +621,8 @@ $output .="</table></div></div></td></tr>";
 //   $output .= "<label for='delete_image'>".TXT_WPSC_DELETEIMAGE."</label>";
 //   $output .= "            </td>\n\r";
 //   $output .= "          </tr>\n\r";
-  $output .= "          <tr>\n\r";
-  $output .= "            <td colspan='2'>\n\r";
+//   $output .= "          <tr>\n\r";
+//   $output .= "            <td colspan='2'>\n\r";
   $output .= "<ul id='gallery_list'>";
  
 	if(function_exists('edit_multiple_image_form')) {

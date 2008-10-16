@@ -301,7 +301,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         if(get_option('show_thumbnails') == 1) {
           if($product['image'] !=null) {
             $image_size = @getimagesize(WPSC_IMAGE_DIR.$product['image']);
-            $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>";
+		$output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities($product['name'], ENT_QUOTES))."'>";
+
 
             if($product['thumbnail_image'] != null) {
               $image_file_name = $product['thumbnail_image'];
@@ -482,26 +483,29 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			if ((count($updatelink_data)>0)&&($updatelink_data[0]['meta_value'] != '')) {
 				$output .= external_link($product['id']);
 			} else {
-				if (get_option('addtocart_or_buynow')=='1')
-					if (get_option('payment_gateway')=='google') {
-						$output .= google_buynow($product['id']);
-					} else if (get_option('payment_gateway') == 'paypal_multiple') {
-					  $output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
-							<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
-							<input type='hidden' name='cmd' value='_xclick'>
-							<input type='hidden' name='item_name' value='".$product['name']."'>
-							<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
-							<input type='hidden' id='amount' name='amount' value='".$product['price']."'>
-							<input type='hidden' id='unit' name='unit' value='".$product['price']."'>
-							<input type='hidden' id='shipping' name='ship11' value='".$shipping."'>
-							<input type='hidden' name='handling' value='".get_option('base_local_shipping')."'>
-							<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."'>
-							<input type='hidden' name='undefined_quantity' value='0'>
-							<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online'>
-							<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' >
-						</form>
-					";						
+				if (get_option('addtocart_or_buynow')=='1') {
+					if ($product['quantity_limited'] < $product['quantity']) {
+						if (get_option('payment_gateway')=='google') {
+							$output .= google_buynow($product['id']);
+						} else if (get_option('payment_gateway') == 'paypal_multiple') {
+							$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
+								<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
+								<input type='hidden' name='cmd' value='_xclick'>
+								<input type='hidden' name='item_name' value='".$product['name']."'>
+								<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
+								<input type='hidden' id='amount' name='amount' value='".$product['price']."'>
+								<input type='hidden' id='unit' name='unit' value='".$product['price']."'>
+								<input type='hidden' id='shipping' name='ship11' value='".$shipping."'>
+								<input type='hidden' name='handling' value='".get_option('base_local_shipping')."'>
+								<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."'>
+								<input type='hidden' name='undefined_quantity' value='0'>
+								<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online'>
+								<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' >
+							</form>
+						";
+						}
 					}
+				}
 			}
 			$output .= "      </div>\n\r";
 			$output .= " <div class='clear'></div>\n\r";
@@ -1018,7 +1022,7 @@ function google_buynow($product_id) {
 		$output .= "<input name='item_currency_1' type='hidden' value='".get_option('google_cur')."'>";
 		$output .= "<input type='hidden' name='checkout-flow-support.merchant-checkout-flow-support.continue-shopping-url' value='".get_option('product_list_url')."'>";
 		$output .= "<input type='hidden' name='checkout-flow-support.merchant-checkout-flow-support.edit-cart-url' value='".get_option('shopping_cart_url')."'>";
-		$output .= "<input alt='' src=' https://checkout.google.com/buttons/buy.gif?merchant_id=".get_option('google_id')."&w=117&h=48&style=white&variant=text&loc=en_US' type='image'/>";
+		$output .= "<input alt='' src=' https://checkout.google.com/buttons/buy.gif?merchant_id=".get_option('google_id')."&w=117&h=48&style=trans&variant=text&loc=en_US' type='image'/>";
 		$output .="</form>";
 	}
 	return $output;

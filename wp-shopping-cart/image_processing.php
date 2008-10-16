@@ -57,7 +57,7 @@ global $wpdb;
 			// Create temp resized image
 			$temp_img = ImageCreateTrueColor( $temp_w, $temp_h );
 			$bgcolor = ImageColorAllocate( $temp_img, 255, 255, 255 );
-			ImageFilledRectangle( $temp_img, 0, 0, $width, $height, $white );
+			ImageFilledRectangle( $temp_img, 0, 0, $width, $height, $bgcolor );
 			ImageAlphaBlending( $temp_img, TRUE );
 			if($imagetype[2] == IMAGETYPE_PNG) {
 				imagesavealpha($temp_img,true);
@@ -65,7 +65,7 @@ global $wpdb;
 			}
 	
 			// resize keeping the perspective
-			ImageCopyResampled( $temp_img, $src_img, 0, 0, 0, 0, $temp_w, $temp_h, $source_w, $source_h );
+			Imagecopyresampled( $temp_img, $src_img, 0, 0, 0, 0, $temp_w, $temp_h, $source_w, $source_h );
 			
 			
 			if($imagetype[2] == IMAGETYPE_PNG) {
