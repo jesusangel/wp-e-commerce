@@ -256,10 +256,18 @@ if($_POST['submit_action'] == 'add') {
 				$var = edit_submit_extra_images($product_id);
 			}
 			
-			$variations_procesor = new nzshpcrt_variations;
-			if($_POST['variation_values'] != null) {
-				$variations_procesor->add_to_existing_product($product_id,$_POST['variation_values']);
+			$variations_processor = new nzshpcrt_variations;
+			if($_POST['variations'] != null) {
+			
+        foreach((array)$_POST['variations'] as $variation_id => $state) {
+          $variation_id = (int)$variation_id;
+          if($state == 1) {
+            $variation_values = $variations_processor->falsepost_variation_values($variation_id);
+            $variations_processor->add_to_existing_product($product_id,$variation_values);
+          }
+        }
 			}
+
 				
 			if($_POST['variation_priceandstock'] != null) {
 				$variations_procesor->update_variation_values($product_id, $_POST['variation_priceandstock']);

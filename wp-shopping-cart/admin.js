@@ -434,21 +434,6 @@ function variation_value_list(id) {
 	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&variation_id="+id+"&prefix=edit_product_variations");
  }
  
-
-  
-function edit_variation_value_list(id) {
-  // haah, the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
-	var display_variation_forms=function(results) {
-		if(results !== "false") { // do nothing if just the word false is returned
-	  //alert(jQuery("div#edit_variations_container").html(results));
-		
-			//alert(jQuery("div#edit_variations_container"));
-			jQuery("div#edit_variations_container").html(results);	
-		}
-	}	
-	product_id= jQuery("#prodid").val();
-	ajax.post("index.php",display_variation_forms,"ajax=true&edit_variation_value_list=true&variation_id="+id+"&product_id="+product_id);
- }
   
   
   
@@ -480,6 +465,21 @@ function add_variation_value_list(id)
 	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
 }
   
+  
+function edit_variation_value_list(id) {
+  // haah, the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
+	var display_variation_forms=function(results) {
+		if(results !== "false") { // do nothing if just the word false is returned
+	  //alert(jQuery("div#edit_variations_container").html(results));
+		
+			//alert(jQuery("div#edit_variations_container"));
+			jQuery("div#edit_variations_container").html(results);	
+		}
+	}	
+	product_id= jQuery("#prodid").val();
+	ajax.post("index.php",display_variation_forms,"ajax=true&edit_variation_value_list=true&variation_id="+id+"&product_id="+product_id);
+ }
+
 function remove_variation_value_list(prefix,id){
 	var redisplay_list=function(results) {
 		jQuery("#add_product_variation_details").html(results);
