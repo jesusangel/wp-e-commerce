@@ -431,7 +431,13 @@ function variation_value_list(id) {
 		//alert(id_string);
 		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true&pid="+prodid+id_string);
 	}
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&variation_id="+id+"&prefix=edit_product_variations");
+	if(id  > 0) {
+    prefix_prefix = "edit_";
+	} else {
+	  prefix_prefix = "add_";
+	}
+	
+	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&variation_id="+id+"&prefix="+prefix_prefix+"product_variations");
  }
  
   
@@ -442,29 +448,29 @@ var display_list_ajaxx=function(results) {
 	//alert(results);
 }
   
-function add_variation_value_list(id)
-  {
-	var display_list=function(results) {
-		eval(results);
-    if(variation_subvalue_html != '') {
-        new_element_id = "add_product_variations_"+variation_value_id;
-        if(document.getElementById(new_element_id) === null) {
-          new_element = document.createElement('span');
-          new_element.id = new_element_id;
-          document.getElementById("add_product_variations").appendChild(new_element);
-          document.getElementById(new_element_id).innerHTML = variation_value_html;
-        }
-      jQuery("#add_product_variation_details").html(variation_subvalue_html);
-    }
-		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
-// 		  alert(this.id);
-    });
-		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
-	}
-	current_variations = jQuery("input.variation_ids").serialize();
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
-}
-  
+// function add_variation_value_list(id)
+//   {
+// 	var display_list=function(results) {
+// 		eval(results);
+//     if(variation_subvalue_html != '') {
+//         new_element_id = "add_product_variations_"+variation_value_id;
+//         if(document.getElementById(new_element_id) === null) {
+//           new_element = document.createElement('span');
+//           new_element.id = new_element_id;
+//           document.getElementById("add_product_variations").appendChild(new_element);
+//           document.getElementById(new_element_id).innerHTML = variation_value_html;
+//         }
+//       jQuery("#add_product_variation_details").html(variation_subvalue_html);
+//     }
+// 		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
+// // 		  alert(this.id);
+//     });
+// 		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
+// 	}
+// 	current_variations = jQuery("input.variation_ids").serialize();
+// 	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
+// }
+//   
   
 function edit_variation_value_list(id) {
   // haah, the javascript end does essentially nothing of interest, just sends a request, and dumps the output in a div tag
