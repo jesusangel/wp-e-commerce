@@ -2,6 +2,11 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+define('TXT_WPSC_PDF', 'PDF');
+define('TXT_WPSC_SORT_PRODUCT_BY', 'Sort Product By');
+define('TXT_WPSC_TIME_UPLOADED', 'Time Uploaded');
+
 define('TXT_WPSC_VIEW_PACKING_SLIP', 'View Packing Slip');
 define('TXT_WPSC_PACKING_SLIP', 'Packing Slip');
 define('TXT_WPSC_NO_STOCK', 'No Stock');

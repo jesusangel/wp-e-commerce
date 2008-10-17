@@ -459,7 +459,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= TXT_WPSC_EXTERNALLINK.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='text' class='text'  value='".$product['external_link']."' name='external_link' id='external_link' size='40'> ";
+  $output .= "<input type='text' class='text'  value='".$product['external_link']."' name='productmeta_values[external_link]' id='external_link' size='40'> ";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
 

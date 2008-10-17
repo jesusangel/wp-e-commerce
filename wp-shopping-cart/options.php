@@ -119,13 +119,15 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 			update_option('show_thumbnails', 0);
 		}
     
-    if($_POST['wpsc_also_bought'] == 1) {
-      update_option('wpsc_also_bought', 1);
+		if($_POST['wpsc_also_bought'] == 1) {
+			update_option('wpsc_also_bought', 1);
 		} else {
 			update_option('wpsc_also_bought', 0);
 		}
 
-
+		if($_POST['sort_by']) {
+			update_option('wpsc_sort_by', $_POST['sort_by']);
+		}
     if($_POST['show_category_thumbnails'] == 1) {
       update_option('show_category_thumbnails', 1);
 		} else {
@@ -641,7 +643,7 @@ if($_GET['clean_categories'] == 'true') {
 											$language = "Korean";
 											break;
 											
-											case "ZH_zh.php";
+											case "zh_CN.php";
 											$language = "简体中文";
 											break;
 											
@@ -950,7 +952,35 @@ if($_GET['clean_categories'] == 'true') {
 									<?php echo options_categorylist(); ?>
 									</td>
 								</tr>
-								
+								<?php
+									$wpsc_sort_by = get_option('wpsc_sort_by');
+									switch($wpsc_sort_by) {    
+										case 'name':
+										$wpsc_sort_by1 = "selected ='true'";
+										break;
+										
+										case 'price':
+										$wpsc_sort_by2 = "selected ='true'";
+										break;
+										
+										case 'id':
+										default:
+										$wpsc_sort_by3 = "selected ='true'";
+										break;
+									}
+								?>
+								<tr>
+									<th scope="row">
+										<?php echo TXT_WPSC_SORT_PRODUCT_BY;?>:
+									</th>
+									<td>
+										<select name='sort_by'>
+										<option <?=$wpsc_sort_by1?> value='name'><?=TXT_WPSC_NAME?></option>
+										<option <?=$wpsc_sort_by2?> value='price'><?=TXT_WPSC_PRICE?></option>
+										<option <?=$wpsc_sort_by3?> value='id'><?=TXT_WPSC_TIME_UPLOADED?></option>
+										</select>
+									</td>
+								</tr>
 								
 								<tr>
 									<th scope="row">
@@ -1053,7 +1083,6 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' value='0' name='product_ratings' id='product_ratings2' <?php echo $product_ratings2; ?> /> <label for='product_ratings2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
-								
 
 					<!-- // Adrian - options for displaying number of products per category -->      
 								

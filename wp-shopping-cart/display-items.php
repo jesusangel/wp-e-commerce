@@ -1114,7 +1114,7 @@ echo "        </div>";
 						  echo "<strong>".$category_group_name.":</strong><br>";
 						  echo categorylist($categorisation_group['id'], false, 'add_');
 						  echo "</p>";
-						}						
+						}
 					}
 				?>
       </td>
@@ -1312,7 +1312,7 @@ echo "        </div>";
        <?php echo TXT_WPSC_EXTERNALLINK;?>:
       </td>
       <td>
-        <input type='text' class='text' name='external_link' id='external_link' size='40'> 
+		      <input type='text' class='text' name='productmeta_values[external_link]' id='external_link' size='40'> 
       </td>
     </tr>
 
@@ -1322,13 +1322,16 @@ echo "        </div>";
       <?php echo TXT_WPSC_USEONLYEXTERNALLINK;?></strong>
       </td>
     </tr>
-    
+    <tr>
+		<td><?=TXT_WPSC_PDF?></td>
+		<td><input type='file' name='pdf'></td>
+    </tr>
 	<tr>
 		<td>
 			<?php echo TXT_WPSC_ADD_CUSTOM_FIELD;?>:
 		</td>
 		<td>
-  <div class="product_custom_meta">
+		<div class="product_custom_meta">
 		<label >
 		<?php echo TXT_WPSC_NAME;?>:
 		<input type="text" name="new_custom_meta[name][]" value="" class="text"/>
@@ -1377,7 +1380,7 @@ echo "        </div>";
   if(function_exists("getimagesize") && is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width')))
     {
     ?>
-      <tr>
+<!--      <tr>
         <td>
       <input type='radio' name='image_resize' value='0' id='add_image_resize0' class='image_resize' onclick='hideOptionElement(null, "image_resize0");' /> <label for='add_image_resize0'><?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label>
         </td>
@@ -1386,7 +1389,7 @@ echo "        </div>";
         <td>
           <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, "image_resize1");' /> <label for='add_image_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE;?> <?php echo "(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)"; ?></label>
         </td>
-      </tr>
+      </tr>-->
     <?php  
     $default_size_set = true;
     }
