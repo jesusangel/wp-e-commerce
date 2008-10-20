@@ -447,8 +447,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			if(function_exists('wpsc_theme_html')) {
 			  $wpsc_theme = wpsc_theme_html($product);
 			}
-      if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && $variations_output[1] === null) {
-        $output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
+			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && $variations_output[1] === null) {
+				$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
 			} else {
 				if((get_option('hide_addtocart_button') != 1)) {
 					if ((get_option('addtocart_or_buynow') == 0)) {
@@ -462,12 +462,11 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
       if(get_option('product_ratings') == 1) {
         $output .= "<div class='product_footer'>";
-        
         $output .= "<div class='product_average_vote'>";
         $output .= "<strong>".TXT_WPSC_AVGCUSTREVIEW.":</strong>";
         $output .= nzshpcrt_product_rating($product['id']);
         $output .= "</div>";
-        
+
         $output .= "<div class='product_user_vote'>";
         $vote_output = nzshpcrt_product_vote($product['id'],"onmouseover='hide_save_indicator(\"saved_".$product['id']."_text\");'");
         if($vote_output[1] == 'voted') {
@@ -661,15 +660,16 @@ function single_product_display($product_id) {
         
       if($product['additional_description'] != '') {                
         $output .= "           <p class='single_additional_description' >\n\r";
-        if (get_option('wpsc_selected_theme') == 'market3') {
+if (get_option('wpsc_selected_theme') == 'market3') {
 					$output .= "           <span class='additional'>Additional Details: </span>\n\r";
 				}
 
         $output .= nl2br(stripslashes($product['additional_description'])) . "";
         $output .= "           </p>\n\r";
 			}
-			
-			
+	$pdf = get_product_meta($product_id, 'pdf');
+	$pdf = $pdf[0];
+	$output .= TXT_WPSC_PDF.": <a href='".WPSC_PREVIEW_URL."$pdf'>$pdf</a>";
 			// print the custom fields here, if there are any
 			$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
 			if(count($custom_fields) > 0) {
@@ -725,17 +725,17 @@ function single_product_display($product_id) {
 					}
 				}
 				$output .= "</p>\n\r";	
-      }
-			
-      
-      
-			if(function_exists('wpsc_theme_html')) {
-			  $wpsc_theme = wpsc_theme_html($product);
 			}
-      $output .= "<input type='hidden' name='item' value='".$product['id']."' />";
-      //AND (`quantity_limited` = '1' AND `quantity` > '0' OR `quantity_limited` = '0' )
-      if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
-        if (get_option("wpsc_selected_theme")!='market3') {
+			if(function_exists('wpsc_theme_html')) {
+				$wpsc_theme = wpsc_theme_html($product);
+			}
+			
+			$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
+			//Add more than 1 product into the shopping cart
+			$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity' size='3'><br>";
+// 			$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
+			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
+				if (get_option("wpsc_selected_theme")!='market3') {
 					$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";
 				}
 			} else {
@@ -748,8 +748,8 @@ function single_product_display($product_id) {
 				}
 			}
 
-      if(function_exists('gold_shpcrt_display_gallery')) {
-        $output .= gold_shpcrt_display_gallery($product['id']);
+			if(function_exists('gold_shpcrt_display_gallery')) {
+				$output .= gold_shpcrt_display_gallery($product['id']);
 			}
       
       
@@ -815,9 +815,9 @@ function single_product_display($product_id) {
 			
 			
 			$output .= "        <form id='product_extra_".$product['id']."' name='product_".$product['id']."' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >\n\r";
-      $output .= "          <input type='hidden' name='prodid' value='".$product['id']."' />\n\r";
-      $output .= "          <input type='hidden' name='item' value='".$product['id']."' />\n\r";
-      $output .= "        </form>\n\r";
+			$output .= "          <input type='hidden' name='prodid' value='".$product['id']."' />\n\r";
+			$output .= "          <input type='hidden' name='item' value='".$product['id']."' />\n\r";
+			$output .= "        </form>\n\r";
 		
 		
       

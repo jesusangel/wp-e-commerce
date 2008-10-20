@@ -848,28 +848,27 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		}
 		//changes for usps ends
 
-    if(($_GET['user'] == "true") && is_numeric($_POST['prodid']))
-      {
-	  $memberstatus = get_product_meta($_POST['prodid'],'is_membership',true);
-	  if(($memberstatus[0]=='1') && ($_SESSION['nzshopcrt_cart']!=NULL)){
-	  } else{
-		  $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$_POST['prodid']."' LIMIT 1";
-		  $item_data = $wpdb->get_results($sql,ARRAY_A);
-		  
-		  $item_quantity = 0;
-		  if($_SESSION['nzshpcrt_cart'] != null)
-			{
-			foreach($_SESSION['nzshpcrt_cart'] as $cart_key => $cart_item)
-			  {
-				if (($memberstatus[0]!='1')&&($_SESSION['nzshpcrt_cart']!=NULL)){
-					if($cart_item->product_id == $_POST['prodid']) {
-						if(($_SESSION['nzshpcrt_cart'][$cart_key]->product_variations === $_POST['variation'])&&($_SESSION['nzshpcrt_cart'][$cart_key]->extras === $_POST['extras'])) {
-							$item_quantity += $_SESSION['nzshpcrt_cart'][$cart_key]->quantity;
-							$item_variations = $_SESSION['nzshpcrt_cart'][$cart_key]->product_variations;
+	if(($_GET['user'] == "true") && is_numeric($_POST['prodid'])) {
+		$memberstatus = get_product_meta($_POST['prodid'],'is_membership',true);
+		if(($memberstatus[0]=='1') && ($_SESSION['nzshopcrt_cart']!=NULL)){
+		} else{
+			$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$_POST['prodid']."' LIMIT 1";
+			$item_data = $wpdb->get_results($sql,ARRAY_A);
+			if ($_POST['quantity']!='') {
+				$add_quantity = $_POST['quantity'];
+			}
+			$item_quantity = 0;
+			if($_SESSION['nzshpcrt_cart'] != null) {
+				foreach($_SESSION['nzshpcrt_cart'] as $cart_key => $cart_item) {
+					if (($memberstatus[0]!='1')&&($_SESSION['nzshpcrt_cart']!=NULL)){
+						if($cart_item->product_id == $_POST['prodid']) {
+							if(($_SESSION['nzshpcrt_cart'][$cart_key]->product_variations === $_POST['variation'])&&($_SESSION['nzshpcrt_cart'][$cart_key]->extras === $_POST['extras'])) {
+								$item_quantity += $_SESSION['nzshpcrt_cart'][$cart_key]->quantity;
+								$item_variations = $_SESSION['nzshpcrt_cart'][$cart_key]->product_variations;
+							}
 						}
 					}
 				}
-			  }
 			}
 		  
 		  $item_stock = null;

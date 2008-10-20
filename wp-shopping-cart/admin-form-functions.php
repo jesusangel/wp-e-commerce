@@ -471,6 +471,17 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
+  $pdf = get_product_meta($product['id'], 'pdf');
+  $pdf = $pdf[0];
+  $output .= "          <tr>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= TXT_WPSC_PDF.": ";
+  $output .= "            </td>\n\r";
+  $output .= "            <td>\n\r";
+  $output .= "<input type='file' name='pdf'> <font color='red'>to replace $pdf</font>";
+  $output .= "            </td>\n\r";
+  $output .= "          </tr>\n\r";
+  
  $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= TXT_WPSC_ADD_CUSTOM_FIELD;

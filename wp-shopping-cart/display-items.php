@@ -229,7 +229,12 @@ if($_POST['submit_action'] == 'add') {
 					}
 				}
 			}
-					
+			
+			if($_FILES['pdf'] != null) {
+				move_uploaded_file($_FILES['pdf']['tmp_name'], WPSC_PREVIEW_DIR.$_FILES['pdf']['name']);
+				add_product_meta($product_id,'pdf',$_FILES['pdf']['name']);
+			}
+			
 			if($_POST['new_custom_meta'] != null) {
 				foreach((array)$_POST['new_custom_meta']['name'] as $key => $name) {
 					$value = $_POST['new_custom_meta']['value'][(int)$key];
@@ -414,7 +419,12 @@ if($_POST['submit_action'] == "edit") {
 			$file = $fileid;
 		}
 
-  
+
+		if($_FILES['pdf'] != null) {
+			move_uploaded_file($_FILES['pdf']['tmp_name'], WPSC_PREVIEW_DIR.$_FILES['pdf']['name']);
+			add_product_meta($product_id,'pdf',$_FILES['pdf']['name']);
+		}
+
 		if(file_exists($_FILES['preview_file']['tmp_name'])) {
 			$fileid = $wpdb->get_var("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$id' LIMIT 1");
 			copy($_FILES['preview_file']['tmp_name'], (WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name'])));
@@ -912,7 +922,7 @@ if($product_list != null)
     	echo "	<div class='itemHeader pli_img'>\n\r";
 		echo "<a class='noline' title='Drag to a new position'>";
 	} else {
-		echo "	<td style='width: 40px;' class='imagecol'>\r\n";
+		echo "	<td style='width: 17%;' class='imagecol'>\r\n";
 	}
 	echo "<input type='checkbox' name='productdelete[]' class='deletecheckbox' value='{$product['id']}'>";
 	if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images

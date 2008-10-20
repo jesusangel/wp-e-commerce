@@ -391,7 +391,7 @@ class nzshpcrt_variations {
 				if (get_option("checkbox_variations")=='1') {
 					$output .= "";
 				} else {
-					$output .= "</select>";
+					$output .= "</select><br>";
 				}
 				if($no_div !== true) {
 		

@@ -19,6 +19,7 @@ $wpsc_database_template[$table_name]['columns']['quantity'] = "int(10) unsigned 
 $wpsc_database_template[$table_name]['columns']['donation'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['no_shipping'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['files'] = "text NOT NULL ";
+$wpsc_database_template[$table_name]['columns']['meta'] = "longtext NOT NULL ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY ( `id` )";
 
 
