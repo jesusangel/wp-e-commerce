@@ -146,6 +146,12 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 			update_option('multi_add', 0);
 		}
 		
+		if($_POST['time_requested'] == 1) {
+			update_option('time_requested', 1);
+		} else {
+			update_option('time_requested', 0);
+		}
+		
 		if($_POST['addtocart_or_buynow'] == 1) {
 			update_option('addtocart_or_buynow', 1);
 		} else {
@@ -764,7 +770,7 @@ if($_GET['clean_categories'] == 'true') {
 								</tr>
 								<tr>
 									<th scope="row">
-									<?php echo TXT_WPSC_COMMENTS;?>:
+									<?php echo TXT_WPSC_COMMENTS_NOTES_FIELD;?>:
 									</th>
 									<td>
 									<?php
@@ -802,6 +808,27 @@ if($_GET['clean_categories'] == 'true') {
 									?>
 									<input type='radio' value='1' name='multi_add' id='multi_adding1' <?php echo $multi_adding1; ?> /> <label for='multi_adding1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
 									<input type='radio' value='0' name='multi_add' id='multi_adding2' <?php echo $multi_adding2; ?> /> <label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_TIME_REQUESTED;?>:
+									</th>
+									<td>
+									<?php
+										$time_requested = get_option('time_requested');
+										switch($time_requested) {
+											case 1:
+											$time_requested1 = "checked ='checked'";
+											break;
+											
+											case 0:
+											$time_requested2 = "checked ='checked'";
+											break;
+										}
+									?>
+									<input type='radio' value='1' name='time_requested' id='time_requested1' <?php echo $time_requested1; ?> /> <label for='time_requested1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input type='radio' value='0' name='time_requested' id='time_requested2' <?php echo $time_requested2; ?> /> <label for='time_requested2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
 							</table> 

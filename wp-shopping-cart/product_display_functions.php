@@ -735,6 +735,8 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			//Add more than 1 product into the shopping cart
 			if (get_option('multi_add')=='1')
 				$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity' size='3'><br>";
+			if (get_option('time_requested')=='1')
+				$output .= TXT_WPSC_DATE_REQUESTED.": <input type='text' class='time_requested' name='time_requested' size='10'><br>";
 			if (get_option('commenting')=='1')
 				$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
 			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
@@ -808,7 +810,7 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 							<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online'>
 							<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' >
 						</form>
-					";						
+					";
 					}
 				}
 			}

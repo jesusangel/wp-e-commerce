@@ -2,7 +2,9 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
-define('TXT_WPSC_MULTIPLE_ADDING_PRODUCTS', 'Add multiple product to cart');
+define('TXT_WPSC_DATE_REQUESTED', 'Date requested');
+define('TXT_WPSC_MULTIPLE_ADDING_PRODUCTS', 'Add quantity field to each product description');
+define('TXT_WPSC_COMMENTS_NOTES_FIELD', 'Add comments/notes field per each item');
 define('TXT_WPSC_COMMENTS', 'Comments');
 define('TXT_WPSC_COMMENT', 'Comment');
 define('TXT_WPSC_PDF', 'PDF File');

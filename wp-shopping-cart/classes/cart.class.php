@@ -14,8 +14,9 @@ class cart_item {
 	var $extras;
 	var $file_data;
 	var $comment;
+	var $time_requested;
 	
-	function cart_item($product_id,$variations = null,$quantity = 1, $donation_price = null,$extras=null,$comment=null) {
+	function cart_item($product_id,$variations = null,$quantity = 1, $donation_price = null,$extras=null,$comment=null,$time_requested=null) {
 		$this->product_id = (int)$product_id;
 		$this->quantity = (int)$quantity;
 		$this->extras = $extras;
@@ -25,6 +26,7 @@ class cart_item {
 		$this->donation_price = (float)$donation_price;
 		$this->file_data = null;
 		$this->comment = $comment;
+		$this->time_requested = $time_requested;
 	}
 
 	function update_item($quantity) {
@@ -38,6 +40,7 @@ class cart_item {
 		unset($this->donation_price);
 		unset($this->file_data);
 		unset($this->comment);
+		unset($this->time_requested);
 	}
 }
 ?>

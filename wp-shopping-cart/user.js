@@ -533,3 +533,7 @@ function switchmethod(key,key1){
 var usps_method_switch=function (results){
 	document.getElementById("checkout_total").innerHTML=results;
 }
+
+jQuery(document).ready(function(){
+	jQuery('.time_requested').datepicker({ dateFormat: 'yy-mm-dd' });
+});

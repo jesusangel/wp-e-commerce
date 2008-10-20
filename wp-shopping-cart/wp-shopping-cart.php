@@ -439,6 +439,7 @@ jQuery(document).ready( function() {
 });
 </script>
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/ui.datepicker.js"></script>
 <script src="<?php echo WPSC_URL; ?>/user.js" language='JavaScript' type="text/javascript">
 </script>
 
@@ -882,7 +883,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				
         if(count($value_ids) > 0) {
           $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$value_ids)."')");
-          asort($variation_ids);         
+          asort($variation_ids);
           $all_variation_ids = implode(",", $variation_ids);
         
         
@@ -916,6 +917,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 										$_SESSION['nzshpcrt_cart'][$cart_key]->quantity++;
 									}
 									$_SESSION['nzshpcrt_cart'][$cart_key]->comment = $_POST['comment'];
+									$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested = $_POST['time_requested'];
 									$updated_quantity = true;
 								}
 							}
