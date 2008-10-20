@@ -660,6 +660,15 @@ if($_GET['filter'] !== 'true') {
 			echo "  <tr><td>".TXT_WPSC_ENGRAVE."</td><td></td></tr>\n\r";
 			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>\n\r";
 			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>\n\r";
+			$comments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}cart_contents WHERE purchaseid='".$purch_data[0]['id']."' AND meta IS NOT NULL",ARRAY_A);
+			echo "  <tr><td><b>".TXT_WPSC_COMMENTS."</b></td><td></td></tr>";
+			foreach ($comments as $comment) {
+				$comm = unserialize($comment['meta']);
+				$product_name = $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_list WHERE id='{$comment['prodid']}'");
+				if ($comm != '') {
+					echo "  <tr><td>".$product_name.":</td><td> ".$comm['comment']."</td></tr>\n\r";
+				}
+			}
 			if($purch_data[0]['transactid'] != '') {
 				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data[0]['transactid']."</td></tr>\n\r";
 			}

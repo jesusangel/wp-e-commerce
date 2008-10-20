@@ -90,10 +90,10 @@ function wpsc_shipping_country_list($selected_country = null) {
 		<div class="wrap wpsc_container">
 		<?php
 		if($_SESSION['nzshpcrt_cart'] != null) {
-  
+
 	echo "<span>".TXT_WPSC_CONFIRM_TOTALS."</span>\n\r";
 	echo "<hr class='productcart' />\n\r";
-  
+
 	echo "<table class='productcart'>\n\r";  
 	echo "<tr class='firstrow'>\n\r";
 	echo "  <td class='firstcol'>".TXT_WPSC_PRODUCT.":</td>\n\r";
@@ -179,8 +179,8 @@ function wpsc_shipping_country_list($selected_country = null) {
 		$total += $total_shipping;
 	}
 	
- 	//Written by allen
-			$status = get_product_meta($cart[0]->product_id,'is_membership',true);
+		//Written by allen
+	$status = get_product_meta($cart[0]->product_id,'is_membership',true);
 	$coupon_info = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'wpsc_coupon_codes WHERE active="1"',ARRAY_A);
 	if (($status[0]=='1')||(count($coupon_info)<1)){
 	

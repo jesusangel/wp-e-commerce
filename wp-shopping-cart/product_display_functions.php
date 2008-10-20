@@ -669,7 +669,8 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			}
 	$pdf = get_product_meta($product_id, 'pdf');
 	$pdf = $pdf[0];
-	$output .= TXT_WPSC_PDF.": <a href='".WPSC_PREVIEW_URL."$pdf'>$pdf</a>";
+	if ($pdf != '')
+		$output .= TXT_WPSC_PDF.": <a href='".WPSC_PREVIEW_URL."$pdf'>$pdf</a>";
 			// print the custom fields here, if there are any
 			$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
 			if(count($custom_fields) > 0) {
@@ -732,8 +733,10 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			
 			$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
 			//Add more than 1 product into the shopping cart
-			$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity' size='3'><br>";
-// 			$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
+			if (get_option('multi_add')=='1')
+				$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity' size='3'><br>";
+			if (get_option('commenting')=='1')
+				$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
 			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
 				if (get_option("wpsc_selected_theme")!='market3') {
 					$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";

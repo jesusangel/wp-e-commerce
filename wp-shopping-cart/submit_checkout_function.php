@@ -289,6 +289,7 @@ function nzshpcrt_submit_checkout() {
      $quantity = $cart_item->quantity;
      $variations = $cart_item->product_variations;
      $extras = $cart_item->extras;
+     $comment = $cart_item->comment;
      // serialize file data
      if(is_array($cart_item->file_data)) {
        $file_data = $wpdb->escape(serialize($cart_item->file_data));
@@ -343,7 +344,7 @@ function nzshpcrt_submit_checkout() {
      $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
      
      $shipping = nzshpcrt_determine_item_shipping($row, 1, $_SESSION['delivery_country']);
-     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
+     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files`,`meta`) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data','".serialize(array('comment'=>$comment))."')";
     //exit($cartsql);
   
      

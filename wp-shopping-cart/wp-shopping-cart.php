@@ -327,21 +327,21 @@ function nzshpcrt_style() {
       echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r"; 
       echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
       echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-      echo "      }\n\r";                                    
+      echo "      }\n\r";
     } 
     if($individual_thumbnail_width> $thumbnail_width) {
         echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
         echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
         echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
         echo "      }\n\r";
-                      
+
         echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
         echo "            position:absolute;\n\r";
         echo "            top:0px;\n\r";
         echo "            left: 0px;\n\r";
         echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
         echo "      }\n\r";
-                      
+
         echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
         echo "            width: ".$individual_thumbnail_width."px;\n\r";
         echo "            height: ".$individual_thumbnail_height."px;\n\r";
@@ -416,7 +416,7 @@ jQuery(document).ready( function() {
     if(is_numeric($_SESSION['slider_state'])) {
       if($_SESSION['slider_state'] == 0) {
         ?>
-        jQuery("#sliding_cart").css({ display: "none"});  
+        jQuery("#sliding_cart").css({ display: "none"});
         <?php
 			} else {
         ?>
@@ -896,10 +896,10 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			}
 
 			
-		  if($item_stock === null) {
-				$item_stock = $item_data[0]['quantity'];
-			}
-		  
+		if($item_stock === null) {
+			$item_stock = $item_data[0]['quantity'];
+		}
+		
 		  if((($item_data[0]['quantity_limited'] == 1) && ($item_stock > 0) && ($item_stock > $item_quantity)) || ($item_data[0]['quantity_limited'] == 0)) {
 				$cartcount = count($_SESSION['nzshpcrt_cart']);
 				if(is_array($_POST['variation'])) {  $variations = $_POST['variation'];  }  else  { $variations = null; }
@@ -915,41 +915,41 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 									} else {
 										$_SESSION['nzshpcrt_cart'][$cart_key]->quantity++;
 									}
+									$_SESSION['nzshpcrt_cart'][$cart_key]->comment = $_POST['comment'];
 									$updated_quantity = true;
 								}
 							}
+						}
 					}
 				}
-			}
-			if($item_data[0]['donation'] == 1) {
-			  $donation = $_POST['donation_price'];
-			} else 	{
-				$donation = false;
-			}
-			if(!(($memberstatus[0]=='1')&&(count($_SESSION['nzshpcrt_cart'])>0))){
-				$status = get_product_meta($cartt1, 'is_membership', true);
-				if ($status[0]=='1'){
-				  exit();
-				}	
-				if($updated_quantity === false) {
-				  if(is_numeric($_POST['quantity'])) {
-						if($_POST['quantity'] > 0) {
-							$new_cart_item = new cart_item($_POST['prodid'],$variations,$_POST['quantity'], $donation,$extras);
-					  }
-					} else {
-						//echo "correct";
-					  $new_cart_item = new cart_item($_POST['prodid'],$variations, 1, $donation,$extras);
+				if($item_data[0]['donation'] == 1) {
+					$donation = $_POST['donation_price'];
+				} else {
+					$donation = false;
+				}
+				if(!(($memberstatus[0]=='1')&&(count($_SESSION['nzshpcrt_cart'])>0))){
+					$status = get_product_meta($cartt1, 'is_membership', true);
+					if ($status[0]=='1'){
+					exit();
+					}	
+					if($updated_quantity === false) {
+						if(is_numeric($_POST['quantity'])) {
+							if($_POST['quantity'] > 0) {
+								$new_cart_item = new cart_item($_POST['prodid'],$variations,$_POST['quantity'], $donation,$extras,$_POST['comment']);
+							}
+						} else {
+							$new_cart_item = new cart_item($_POST['prodid'],$variations, 1, $donation,$extras,$_POST['comment']);
+						}
+				  		$_SESSION['nzshpcrt_cart'][] = $new_cart_item;
 					}
-				  $_SESSION['nzshpcrt_cart'][] = $new_cart_item;
-				  }
-			  }
+				}
 			} else {
-			  $quantity_limit = true;
+				$quantity_limit = true;
 			}
-		  
-		  $cart = $_SESSION['nzshpcrt_cart'];
-		  
-		  if (($memberstatus[0]=='1')&&(count($cart)>1)) {
+		
+			$cart = $_SESSION['nzshpcrt_cart'];
+		
+			if (($memberstatus[0]=='1')&&(count($cart)>1)) {
 			} else {
 				$status = get_product_meta($cartt1, 'is_membership', true);
 				if ($status[0]=='1'){

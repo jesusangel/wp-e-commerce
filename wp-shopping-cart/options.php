@@ -128,20 +128,32 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		if($_POST['sort_by']) {
 			update_option('wpsc_sort_by', $_POST['sort_by']);
 		}
-    if($_POST['show_category_thumbnails'] == 1) {
-      update_option('show_category_thumbnails', 1);
+		if($_POST['show_category_thumbnails'] == 1) {
+			update_option('show_category_thumbnails', 1);
 		} else {
 			update_option('show_category_thumbnails', 0);
 		}
 		
+		if($_POST['commenting'] == 1) {
+			update_option('commenting', 1);
+		} else {
+			update_option('commenting', 0);
+		}
+		
+		if($_POST['multi_add'] == 1) {
+			update_option('multi_add', 1);
+		} else {
+			update_option('multi_add', 0);
+		}
+		
 		if($_POST['addtocart_or_buynow'] == 1) {
-      update_option('addtocart_or_buynow', 1);
+			update_option('addtocart_or_buynow', 1);
 		} else {
 			update_option('addtocart_or_buynow', 0);
 		}
 
 		if($_POST['hide_name_link'] == 1) {
-      update_option('hide_name_link', 1);
+			update_option('hide_name_link', 1);
 		} else {
 			update_option('hide_name_link', 0);
 		}
@@ -748,6 +760,48 @@ if($_GET['clean_categories'] == 'true') {
 									?>
 									<input type='radio' value='0' name='addtocart_or_buynow' id='addtocart_or_buynow1' <?php echo $addtocart_or_buynow1; ?> /> <label for='addtocart_or_buynow1'><?php echo TXT_WPSC_ADDTOCART;?></label> &nbsp;
 									<input type='radio' value='1' name='addtocart_or_buynow' id='addtocart_or_buynow2' <?php echo $addtocart_or_buynow2; ?> /> <label for='addtocart_or_buynow2'><?php echo TXT_WPSC_BUYNOW;?></label>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_COMMENTS;?>:
+									</th>
+									<td>
+									<?php
+										$commenting = get_option('commenting');
+										switch($commenting) {
+											case 1:
+											$commenting1 = "checked ='checked'";
+											break;
+											
+											case 0:
+											$commenting2 = "checked ='checked'";
+											break;
+										}
+									?>
+									<input type='radio' value='1' name='commenting' id='commenting1' <?php echo $commenting1; ?> /> <label for='commenting1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input type='radio' value='0' name='commenting' id='commenting2' <?php echo $commenting2; ?> /> <label for='commenting2'><?php echo TXT_WPSC_NO;?></label>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_MULTIPLE_ADDING_PRODUCTS;?>:
+									</th>
+									<td>
+									<?php
+										$multi_adding = get_option('multi_add');
+										switch($multi_adding) {
+											case 1:
+											$multi_adding1 = "checked ='checked'";
+											break;
+											
+											case 0:
+											$multi_adding2 = "checked ='checked'";
+											break;
+										}
+									?>
+									<input type='radio' value='1' name='multi_add' id='multi_adding1' <?php echo $multi_adding1; ?> /> <label for='multi_adding1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input type='radio' value='0' name='multi_add' id='multi_adding2' <?php echo $multi_adding2; ?> /> <label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
 							</table> 
