@@ -134,15 +134,14 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	$server_type = get_option('google_server_type');
 	$currency = get_option('google_cur');
 	$payment_gateway_backup = get_option('payment_gateway');
-	update_option('payment_gateway', 'google');
+	//update_option('payment_gateway', 'google');
 	if (array_search("google",get_option('custom_gateway_options')) !== false) {
 		$google_cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	}
 	$affliate_no = 0;
-    foreach($cart as $cart_item) {
-      $product_id = $cart_item->product_id;
-      $quantity = $cart_item->quantity;
-      
+	foreach($cart as $cart_item) {
+		$product_id = $cart_item->product_id;
+		$quantity = $cart_item->quantity;
 			if(count($cart_item->product_variations) >= 1) {
 				$variation_list = "&nbsp;(";
 				$i = 0;
@@ -160,9 +159,9 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 				$variation_list = '';
 			}
 	
-      //echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
-      $product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
-      if($product['donation'] == 1) {
+	//echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
+	$product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+	if($product['donation'] == 1) {
         if (array_search("google",get_option('custom_gateway_options')) !== false) {
 					$google_unit_price = $cart_item->donation_price;
 	      }
@@ -172,6 +171,18 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 					$google_unit_price = calculate_product_price($product_id, $cart_item->product_variations,'stay',$cart_item->extras);
 				}
         $price = $quantity * calculate_product_price($product_id, $cart_item->product_variations,'stay',$cart_item->extras);
+        $levels = get_product_meta($product_id, 'table_rate_price');
+        $levels = $levels[0];
+        if ($levels != '') {
+		foreach($levels['quantity'] as $qty) {
+			if ($quantity >= $qty) {
+				$unit_price = $levels['table_price'][array_search($qty, $levels['quantity'])];
+				$price = $quantity * $unit_price;
+			}
+		}
+	}
+//         exit("<pre>".print_r($price,1)."</pre>");
+//         $price = $quantity * 
 				if($product['notax'] != 1) {
 					$tax += nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']) - $price;
 				}

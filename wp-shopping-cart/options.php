@@ -812,7 +812,7 @@ if($_GET['clean_categories'] == 'true') {
 								</tr>
 								<tr>
 									<th scope="row">
-									<?php echo TXT_WPSC_TIME_REQUESTED;?>:
+									<?php echo TXT_WPSC_DATE_REQUESTED;?>:
 									</th>
 									<td>
 									<?php

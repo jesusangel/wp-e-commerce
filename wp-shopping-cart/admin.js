@@ -1076,3 +1076,21 @@ function enablebuttons(){
 function reloadresults(){
 	window.location = window.location.href;
 }
+
+jQuery(document).ready(function(){
+	jQuery("#table_rate_price").click(
+		function() {
+			if (this.checked) {
+				jQuery("#table_rate").slideDown("fast");
+			} else {
+				jQuery("#table_rate").slideUp("fast");
+			}
+		}
+	);
+	
+	jQuery(".add_level").click(
+		function() {
+			added = jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td></tr>');
+		}
+	);
+});

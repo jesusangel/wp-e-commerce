@@ -2,6 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_TABLE_RATED_PRICE', 'Table Rate Price');
 define('TXT_WPSC_DATE_REQUESTED', 'Date requested');
 define('TXT_WPSC_MULTIPLE_ADDING_PRODUCTS', 'Add quantity field to each product description');
 define('TXT_WPSC_COMMENTS_NOTES_FIELD', 'Add comments/notes field per each item');
@@ -200,13 +201,13 @@ define('TXT_WPSC_CVN', 'Credit Verification');
 define('TXT_WPSC_AVS', 'Address Verification');
 define('TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION', 'A variation can be anything "optional" about a product. ie: Size, Color, etc <br />For example: if you are selling t-shirts you might setup a variation set called size with the values small, medium, large...');
 
-define('TXT_WPSC_PERTICKED', 'Apply On Every Product');
+define('TXT_WPSC_PERTICKED', 'Apply On All Products');
 define('TXT_WPSC_EMAILALLOWED', 'Email Allowed');
 define('TXT_WPSC_EMAILNOTALLOWED', 'Email NOT Allowed');
 
  
 define('TXT_WPSC_GOOGLERISK', 'Eligible for Protection');
-define('TXT_WPSC_PAYPALNOTE', '<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing.<br>Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.');
+define('TXT_WPSC_PAYPALNOTE', '<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.');
 
 define('TXT_WPSC_GOOGLEMARKETINGPREFERENCE', 'Google User Marketing Preference');
 

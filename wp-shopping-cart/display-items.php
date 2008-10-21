@@ -11,7 +11,7 @@ $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_pro
 
 function topcategorylist() {
 	global $wpdb,$category_data;
-	$siteurl = get_option('siteurl'); 
+	$siteurl = get_option('siteurl');
 	$url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
 	$options = "";
 	$options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
@@ -1168,6 +1168,19 @@ echo "        </div>";
         <label for="add_form_special"><?php echo TXT_WPSC_SPECIAL;?></label>
         <div style="display: none;" id="add_special">
           <input type="text" size="10" value="0.00" name="special_price"/>
+        </div>
+      </td>
+    </tr>
+     <tr>
+      <td>
+        <input type="checkbox" value="yes" name="table_rate_price" id="table_rate_price"/>
+        <label for="table_rate_price"><?php echo TXT_WPSC_TABLE_RATED_PRICE;?></label>
+        <div style="display: none;" id="table_rate">
+          <a class='add_level' style='cursor:pointer;'>Add level</a><br>
+          <table>
+          <tr><td><?=TXT_WPSC_QUANTITY;?></td><td><?=TXT_WPSC_PRICE;?></td></tr>
+          <tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td></tr>
+          </table>
         </div>
       </td>
     </tr>

@@ -34,6 +34,9 @@ function nzshpcrt_getproductform($prodid)
   $product['merchant_notes'] = $meta_data[0]['meta_value'];
   $engrave = get_product_meta($prodid,'engraved',true);
   $can_have_uploaded_image = get_product_meta($prodid,'can_have_uploaded_image',true);
+  
+   $table_rate_price = get_product_meta($prodid,'table_rate_price',true);
+//    exit("<pre>".print_r($table_rate_price,1)."</pre>");
   if(function_exists('wp_insert_term')) {
 		$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = $prodid", ARRAY_A);
 		
@@ -478,7 +481,8 @@ function nzshpcrt_getproductform($prodid)
   $output .= TXT_WPSC_PDF.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= "<input type='file' name='pdf'> <font color='red'>to replace $pdf</font>";
+  $output .= "<input type='file' name='pdf'>";
+  if ($pdf != '') $output .="<font color='red'>to replace $pdf</font>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
@@ -1022,7 +1026,7 @@ function coupon_edit_form($coupon) {
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $coupon_start = explode(" ",$coupon['start']);
-  $output .= "<input type='text' class='pickdate' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
+  $output .= "<input type='text' class='pickdate' size='10' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
 /*  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";  
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
@@ -1047,7 +1051,7 @@ function coupon_edit_form($coupon) {
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $coupon_expiry = explode(" ",$coupon['expiry']);
-  $output .= "<input type='text' class='pickdate' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
+  $output .= "<input type='text' class='pickdate' size='10' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
   /*$output .= "   <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
