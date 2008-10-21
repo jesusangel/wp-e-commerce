@@ -174,21 +174,21 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
         $levels = get_product_meta($product_id, 'table_rate_price');
         $levels = $levels[0];
         if ($levels != '') {
-		foreach($levels['quantity'] as $qty) {
+		foreach($levels['quantity'] as $key => $qty) {
 			if ($quantity >= $qty) {
-				$unit_price = $levels['table_price'][array_search($qty, $levels['quantity'])];
-				$price = $quantity * $unit_price;
+				$unit_price = $levels['table_price'][$key];
+				if ($unit_price != '')
+					$price = $quantity * $unit_price;
 			}
 		}
 	}
-//         exit("<pre>".print_r($price,1)."</pre>");
-//         $price = $quantity * 
+
 				if($product['notax'] != 1) {
 					$tax += nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']) - $price;
 				}
         $all_donations = false;
 			}
-        
+        				
       if($product['no_shipping'] != 1) {
         $all_no_shipping = false;
 			}
@@ -201,8 +201,6 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	//exit(utf8_encode('&trade;'));
 	$product['name'] = str_replace("™","&trade;",$product['name']);
 	$product['description'] = str_replace("™","&trade;",$product['description']);
-	
-	
 			if (array_search("google",get_option('custom_gateway_options')) !== false) {
 				$google_item = new GoogleItem(utf8_decode($product['name']),utf8_decode($product['description']), $quantity, $google_unit_price);
 				$google_item->SetMerchantItemId($product['id']);
@@ -225,6 +223,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$output .= "<td class='tdqty'><input type='hidden' value='".$affliate_no."' name='id_array[]'><input type='text' value='".$quantity."' name='quantity_array[]'></td>";
 		$affliate_no++;
 	}
+
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
       $output .= "</tr>\n\r";
       }

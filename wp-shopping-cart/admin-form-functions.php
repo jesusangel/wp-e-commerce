@@ -213,7 +213,24 @@ function nzshpcrt_getproductform($prodid)
   if($disable_form != '') {
     $output .="<br /><span class='small'>". TXT_WPSC_VARIATIONS_AND_SPECIALS_DONT_MIX."<span>";
 	}
-  
+	
+	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
+	$table_rate_price = $table_rate_price[0];
+	if ($table_rate_price != '') {
+		$output .= '<br><input type="checkbox" value="yes" name="table_rate_price" checked="yes" id="table_rate_price"/>
+		<label for="table_rate_price">'.TXT_WPSC_TABLE_RATED_PRICE.'</label>';
+		
+		$output .= '<div id="table_rate">
+				<a class="add_level" style="cursor:pointer;">Add level</a><br>
+				<table>
+				<tr><td>'.TXT_WPSC_QUANTITY.'</td><td>'.TXT_WPSC_PRICE.'</td></tr>';
+		foreach($table_rate_price['quantity'] as $key => $qty) {
+			$output .= '<tr><td><input type="text" size="10" value="'.$qty.'" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="'.$table_rate_price['table_price'][$key].'" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'.WPSC_URL.'/images/cross.png" class="remove_line"></td></tr>';
+		}
+// 		$output .= '<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'.WPSC_URL.'/images/cross.png" class="remove_line"></td></tr>
+		$output .=	'</table>
+				</div>';
+	}
   if($product['special'] == 1) {
     $output .= "            <div id='edit_special' style='display: block;'>\n\r";
     $output .= "<input type='text' name='special_price' value='".number_format(($product['price']-$product['special_price']), 2, '.', '')."' size='10' />";

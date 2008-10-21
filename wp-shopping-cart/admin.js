@@ -211,6 +211,28 @@ jQuery("a.closeimagesettings").click(
 		jQuery("div#image_settings_box").hide();
 	}
 );
+
+jQuery("#table_rate_price").click(
+	function() {
+		if (this.checked) {
+			jQuery("#table_rate").slideDown("fast");
+		} else {
+			jQuery("#table_rate").slideUp("fast");
+		}
+	}
+);
+
+jQuery(".add_level").click(
+	function() {
+		jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'+WPSC_URL+'/images/cross.png" class="remove_line"></td></tr>');
+	}
+);
+
+jQuery(".remove_line").click(
+	function() {
+		jQuery(this).parent().parent('tr').remove();
+	}
+);
 //SWFUpload
 	filesizeLimit = 5120000;
 	var swfu = new SWFUpload({
