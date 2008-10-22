@@ -669,12 +669,21 @@ if($_GET['filter'] !== 'true') {
 					echo "  <tr><td>".$product_name.":</td><td> ".$comm['comment']."</td></tr>\n\r";
 				}
 			}
-			echo "  <tr><td><b>".TXT_WPSC_DATE_REQUESTED."</b></td><td></td></tr>";
+// 			echo "  <tr><td><b>".TXT_WPSC_DATE_REQUESTED."</b></td><td></td></tr>";
+// 			foreach ($comments as $comment) {
+// 				$comm = unserialize($comment['meta']);
+// 				$product_name = $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_list WHERE id='{$comment['prodid']}'");
+// 				if ($comm != '') {
+// 					echo "  <tr><td>".$product_name.":</td><td> ".$comm['time_requested']."</td></tr>\n\r";
+// 				}
+// 			}
+			echo "  <tr><td><b>".TXT_WPSC_LABEL."</b></td><td></td><td></td></tr>";
 			foreach ($comments as $comment) {
 				$comm = unserialize($comment['meta']);
-				$product_name = $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_list WHERE id='{$comment['prodid']}'");
-				if ($comm != '') {
-					echo "  <tr><td>".$product_name.":</td><td> ".$comm['time_requested']."</td></tr>\n\r";
+				foreach($comm['meta'] as $key => $meta) {
+					if ($comm != '') {
+						echo "  <tr><td>".$key.":</td><td> ".$meta."</td><td></td></tr>\n\r";
+					}
 				}
 			}
 			if($purch_data[0]['transactid'] != '') {

@@ -2,6 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+define('TXT_WPSC_LABEL', 'Label');
 define('TXT_WPSC_TABLE_RATED_PRICE', 'Table Rate Price');
 define('TXT_WPSC_DATE_REQUESTED', 'Date requested');
 define('TXT_WPSC_MULTIPLE_ADDING_PRODUCTS', 'Add quantity field to each product description');

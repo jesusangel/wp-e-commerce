@@ -292,7 +292,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 		// breadcrumbs end here
   
   
-    foreach($product_list as $product) {      
+    foreach($product_list as $product) {
 			if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('product_start_loop','start', true);}
       $num++;
       if(function_exists('wpsc_theme_html')) {
@@ -733,12 +733,18 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			
 			$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
 			//Add more than 1 product into the shopping cart
+			$output .= "<a class='add_meta_box'>Add Label</a>";
+			$output .= "<div class='meta_box'>";
 			if (get_option('multi_add')=='1')
-				$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity' size='3'><br>";
+				$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity[]' size='3'><br>";
 			if (get_option('time_requested')=='1')
-				$output .= TXT_WPSC_DATE_REQUESTED.": <input type='text' class='time_requested' name='time_requested' size='10'><br>";
+				$output .= TXT_WPSC_DATE_REQUESTED.": <input type='text' class='time_requested' name='time_requested[]' size='10'><br>";
 			if (get_option('commenting')=='1')
 				$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
+				
+			$output .= TXT_WPSC_LABEL.":<br><textarea type='text' name='label[]'></textarea><br>";
+			$output .= "</div>";
+			
 			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
 				if (get_option("wpsc_selected_theme")!='market3') {
 					$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";

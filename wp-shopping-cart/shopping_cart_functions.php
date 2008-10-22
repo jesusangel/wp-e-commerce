@@ -225,6 +225,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	}
 
       $output .= "<td class='tdprice'>".nzshpcrt_currency_display($price, 1)."</td>";
+//       $output .= "<td class='label'><pre>".print_r($cart_item->meta,1)."</pre></td>";
       $output .= "</tr>\n\r";
       }
       if ($_GET['action']!='affiliate') {

@@ -606,6 +606,20 @@ function nzshpcrt_submit_ajax()
    
   // if is an AJAX request, cruddy code, could be done better but getting approval would be impossible
 if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
+	if ($_POST['metabox'] == 'true') {
+		$output .= "<div class='meta_box'>";
+		if (get_option('multi_add')=='1')
+			$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity[]' size='3'><br>";
+		if (get_option('time_requested')=='1')
+			$output .= TXT_WPSC_DATE_REQUESTED.": <input type='text' class='time_requested' name='time_requested[]' size='10'><br>";
+		if (get_option('commenting')=='1')
+			$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment[]'></textarea><br>";
+			
+		$output .= TXT_WPSC_LABEL.":<br><textarea type='text' name='label[]'></textarea><br>";
+		$output .= "</div>";
+		exit($output);
+	}
+
 	if ($_POST['del_prod'] == 'true') {
 		$ids = $_POST['del_prod_id'];
 		$ids = explode(',',$ids);
@@ -911,13 +925,22 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 						if ((!($memberstatus[0]=='1')&&(count($_SESSION['nzshpcrt_cart'])>0))) {
 							if((int)$cart_item->product_id === (int)$_POST['prodid']) {  // force both to integer before testing for identicality
 								if(($_SESSION['nzshpcrt_cart'][$cart_key]->extras === $extras)&&($_SESSION['nzshpcrt_cart'][$cart_key]->product_variations === $variations) && ((int)$_SESSION['nzshpcrt_cart'][$cart_key]->donation_price == (int)$_POST['donation_price'])) {
-									if(is_numeric($_POST['quantity'])) {
-										$_SESSION['nzshpcrt_cart'][$cart_key]->quantity += (int)$_POST['quantity'];
+									if ($_POST['quantity'] != ''){
+										foreach ($_POST['quantity'] as $qty)
+											$_SESSION['nzshpcrt_cart'][$cart_key]->quantity += (int)$qty;
 									} else {
 										$_SESSION['nzshpcrt_cart'][$cart_key]->quantity++;
 									}
 									$_SESSION['nzshpcrt_cart'][$cart_key]->comment = $_POST['comment'];
-									$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested = $_POST['time_requested'];
+									foreach($_POST['label'] as $key => $label) {
+										if (array_key_exists($label, $_SESSION['nzshpcrt_cart'][$cart_key]->meta)) {
+											$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label]+=(int)$_POST['quantity'];
+											$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested[$label] = $_POST['time_requested'];
+										} else {
+											$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label] = $_POST['quantity'];
+											$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested[$label] = $_POST['time_requested'];
+										}
+									}
 									$updated_quantity = true;
 								}
 							}
@@ -935,10 +958,13 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					exit();
 					}	
 					if($updated_quantity === false) {
-						if(is_numeric($_POST['quantity'])) {
-							if($_POST['quantity'] > 0) {
-								$new_cart_item = new cart_item($_POST['prodid'],$variations,$_POST['quantity'], $donation,$extras,$_POST['comment']);
+						
+						if($_POST['quantity'] != '') {
+							$total_qty = 0;
+							foreach ($_POST['quantity'] as $qty) {
+								$total_qty+=$qty;
 							}
+							$new_cart_item = new cart_item($_POST['prodid'],$variations,$total_qty, $donation,$extras,$_POST['comment']);
 						} else {
 							$new_cart_item = new cart_item($_POST['prodid'],$variations, 1, $donation,$extras,$_POST['comment']);
 						}
