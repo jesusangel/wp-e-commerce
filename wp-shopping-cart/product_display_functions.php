@@ -19,9 +19,9 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 	}
 
 	
-  if((isset($_GET['items_per_page'])) && ($_GET['items_per_page']!=0)){
-  	update_option('use_pagination',1);
-  }
+	if((isset($_GET['items_per_page'])) && ($_GET['items_per_page']!=0)){
+		update_option('use_pagination',1);
+	}
 	if((get_option('use_pagination') == 1)) {
 		$products_per_page = get_option('wpsc_products_per_page');
 		if (isset($_REQUEST['items_per_page'])){

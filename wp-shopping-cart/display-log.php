@@ -682,7 +682,7 @@ if($_GET['filter'] !== 'true') {
 				$comm = unserialize($comment['meta']);
 				foreach($comm['meta'] as $key => $meta) {
 					if ($comm != '') {
-						echo "  <tr><td>".$key.":</td><td> ".$meta."</td><td></td></tr>\n\r";
+						echo "  <tr><td>".$key.":</td><td> ".$meta."</td><td>".$comm['time_requested'][$key]."</td></tr>\n\r";
 					}
 				}
 			}

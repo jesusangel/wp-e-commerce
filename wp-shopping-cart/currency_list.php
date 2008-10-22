@@ -241,3 +241,5 @@ INSERT INTO `".$wpdb->prefix."currency_list` VALUES (239, 'Yugoslavia', 'YU', 'Y
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (240, 'Zambia', 'ZM', 'Zambian Kwacha', '', '', 'ZMK', '0', '0','africa');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (241, 'Zimbabwe', 'ZW', 'Zimbabwe Dollar', '$', '&#036;', 'ZWD', '0', '0','africa');
 INSERT INTO `".$wpdb->prefix."currency_list` VALUES (242, 'Deutschland', 'DE', 'Euro', '€', '&#8364;', 'EUR', '0', '0','europe');";
+
+exit($currency_sql);

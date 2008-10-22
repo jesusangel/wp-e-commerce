@@ -21,7 +21,7 @@ var changetaxntotal=function(results) {
 	document.getElementById('checkout_total').innerHTML="<span class='pricedisplay'>$"+total+"</span>";
 	//alert(t);
 	return true;
-  }
+}
 
 function roundNumber(num, dec) {
 	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);

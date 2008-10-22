@@ -28,7 +28,7 @@ class cart_item {
 		$this->file_data = null;
 		$this->comment = $comment;
 		$this->time_requested = $time_requested;
-		$this->meta[$meta] = '';
+		$this->meta = $meta;
 	}
 
 	function update_item($quantity) {

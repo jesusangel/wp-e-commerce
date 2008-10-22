@@ -915,7 +915,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			$item_stock = $item_data[0]['quantity'];
 		}
 		
-		  if((($item_data[0]['quantity_limited'] == 1) && ($item_stock > 0) && ($item_stock > $item_quantity)) || ($item_data[0]['quantity_limited'] == 0)) {
+			if((($item_data[0]['quantity_limited'] == 1) && ($item_stock > 0) && ($item_stock > $item_quantity)) || ($item_data[0]['quantity_limited'] == 0)) {
 				$cartcount = count($_SESSION['nzshpcrt_cart']);
 				if(is_array($_POST['variation'])) {  $variations = $_POST['variation'];  }  else  { $variations = null; }
 				if(is_array($_POST['extras'])) {  $extras = $_POST['extras'];  }  else  { $extras = null; }
@@ -933,12 +933,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 									}
 									$_SESSION['nzshpcrt_cart'][$cart_key]->comment = $_POST['comment'];
 									foreach($_POST['label'] as $key => $label) {
-										if (array_key_exists($label, $_SESSION['nzshpcrt_cart'][$cart_key]->meta)) {
-											$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label]+=(int)$_POST['quantity'];
-											$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested[$label] = $_POST['time_requested'];
-										} else {
-											$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label] = $_POST['quantity'];
-											$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested[$label] = $_POST['time_requested'];
+										if ($label != '') {
+											if (array_key_exists($label, $_SESSION['nzshpcrt_cart'][$cart_key]->meta)) {
+												$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label]+=(int)$_POST['quantity'][$key];
+												$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested[$label] = $_POST['time_requested'][$key];
+											} else {
+												$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label] = $_POST['quantity'][$key];
+												$_SESSION['nzshpcrt_cart'][$cart_key]->time_requested[$label] = $_POST['time_requested'][$key];
+											}
 										}
 									}
 									$updated_quantity = true;
@@ -961,10 +963,12 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 						
 						if($_POST['quantity'] != '') {
 							$total_qty = 0;
-							foreach ($_POST['quantity'] as $qty) {
+							foreach ($_POST['quantity'] as $key=>$qty) {
 								$total_qty+=$qty;
+								$label[$_POST['label'][$key]] = $qty;
+								$time_requested[$_POST['label'][$key]] = $_POST['time_requested'][$key];
 							}
-							$new_cart_item = new cart_item($_POST['prodid'],$variations,$total_qty, $donation,$extras,$_POST['comment']);
+							$new_cart_item = new cart_item($_POST['prodid'],$variations,$total_qty, $donation,$extras,$_POST['comment'],$time_requested,$label);
 						} else {
 							$new_cart_item = new cart_item($_POST['prodid'],$variations, 1, $donation,$extras,$_POST['comment']);
 						}
