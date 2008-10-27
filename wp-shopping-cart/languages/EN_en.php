@@ -655,7 +655,7 @@ define('TXT_WPSC_VISIBLE', 'Visible');
 define('TXT_WPSC_DELETE_PRODUCT', 'Delete Product');
 define('TXT_WPSC_ADDITIONAL_IMAGE', 'Additional Image');
 define('TXT_WPSC_GATEWAY_OPTIONS', 'Gateway Options');
-define('TXT_WPSC_SHIPPING_COUNTRY', 'Choose your shipping country');
+define('TXT_WPSC_SHIPPING_COUNTRY', 'Calculate Shipping Price');
 define('TXT_WPSC_CONFIRM_TOTALS', 'Confirm your totals before making the payment:');
 define('TXT_WPSC_CHECKOUT_FORM_FIELDS_DESCRIPTION', 'Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name...');
 define('TXT_WPSC_PAYMENT_OPTIONS', 'Payment Options');

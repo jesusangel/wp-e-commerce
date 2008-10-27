@@ -264,7 +264,7 @@ jQuery(".remove_line").click(
 
 	jQuery("#add-product-image").click(function(){ swfu.selectFiles(); });
 	activate_resizable();
-//   TB_init();
+	tb_init("a.thickbox");
 
 	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
 		function () {
@@ -954,7 +954,7 @@ jQuery(document).ready(function(){
 		upload_complete_handler : imageUploadComplete,
 		queue_complete_handler : imageQueueComplete
 	});
-	jQuery("#add-product-image").click(function(){ swfu.selectFiles(); });
+	jQuery("#add-product-image").click(function(){swfu.selectFiles(); });
 });
 
 function addlayer(){

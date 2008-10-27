@@ -206,7 +206,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 			//if (!function_exists('getdistance')) {
 		
 		
-				if (get_option("payment_gateway")!='google') {
+// 				if (get_option("payment_gateway")!='google') {
 				echo "<tr class='product_shipping'>\n\r";
 				echo "  <td colspan='2'>\n\r";
 				echo "<h2>".TXT_WPSC_SHIPPING_COUNTRY."</h2>";
@@ -214,7 +214,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 				echo "  <td colspan='2' style='vertical-align: middle;'>";
 				echo "</td>\n\r";
 				echo "</tr>\n\r";
-				}
+// 				}
 
 				echo "<tr class='total_price'>\n\r";
 				echo "  <td colspan='3' >\n\r";
@@ -261,7 +261,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 		}
 		foreach ((array)$shipping_quote as $quotes) {
 			foreach($quotes as $key=>$quote) {
-				echo "<tr><td colspan='2'><label for='$key$key1'>".$key."</label></td><td><label for='$key$key1'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='$key$key1' onclick='switchmethod(\"$key\", \"$key1\")' value='$key' name='shipping_method'></td></tr>";
+				echo "<tr><td colspan='2'><label for='$key$key1'>".$key."</label></td><td><label for='$key$key1'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='$key$key1' onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
 			}
 		}
 	}

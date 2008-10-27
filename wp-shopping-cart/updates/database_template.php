@@ -132,6 +132,7 @@ $wpsc_database_template[$table_name]['columns']['image'] = "varchar(255) NOT NUL
 $wpsc_database_template[$table_name]['columns']['width'] = "mediumint(8) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['height'] = "mediumint(8) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['image_order'] = "varchar(10) NOT NULL DEFAULT '' ";
+$wpsc_database_template[$table_name]['columns']['meta'] = "longtext NULL";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['product_id'] = " KEY `product_id` ( `product_id` )";
 

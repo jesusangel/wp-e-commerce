@@ -2,7 +2,7 @@
 $imagetype = @getimagesize($imagepath);
 if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
 	header("Location: ".WPSC_CACHE_URL.$cache_filename.".png");
-	exit();
+	exit('asfdasdf');
 } else {
 	switch($imagetype[2]) {
 		case IMAGETYPE_JPEG:

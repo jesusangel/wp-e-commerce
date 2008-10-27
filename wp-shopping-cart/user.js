@@ -531,7 +531,14 @@ function switchmethod(key,key1){
 }
 
 var usps_method_switch=function (results){
-	document.getElementById("checkout_total").innerHTML=results;
+	shipping = results.split('---');
+	shipping1 = shipping[1];
+	jQuery("#checkout_total").html(shipping[0]);
+	
+	jQuery('.total > .pricedisplay').remove();
+	jQuery('.total > .totalhead').after(shipping[0]);
+	jQuery('.postage > .pricedisplay').remove();
+	jQuery('.postage > .postagehead').after(shipping1);
 }
 
 jQuery(document).ready(function(){

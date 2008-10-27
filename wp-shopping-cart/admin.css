@@ -1575,10 +1575,10 @@ ul#gallery_list li{
 }
 
 ul#gallery_list li *{
-	z-index:998;
+	z-index:79;
 }
 ul#gallery_list li.first *{
-	z-index:999;
+	z-index:80;
 }
 .ui-selected {
 	border:2px dashed #969696;
@@ -1616,8 +1616,8 @@ div#image_settings_box {
 /*	padding-left:4px;*/
 
 	width:252px;
-	z-index:99;
-	_z-index:999;
+	z-index:69;
+	_z-index:80;
 }
 
 div.lower_settings_box {
@@ -1660,12 +1660,12 @@ div.previewimage {
 }
 
 tr.edit_product_image *{
-	z-index:999;
+	z-index:80;
 }
 
 a.closeimagesettings{
 	cursor:pointer;
-	margin-left:110px;
+	margin-left:90px;
 }
 
 table.wpsc_options, table.form-table{

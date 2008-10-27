@@ -854,6 +854,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			foreach ($quotes[$_POST['key1']] as $quote) {
 				if ($quote[$_POST['key']] !== null) {
 					echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);
+					echo "---".nzshpcrt_currency_display($quote[$_POST['key']],1);
 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
 					$_SESSION['quote_shipping']= $quote[$_POST['key']];
 					$_SESSION['quote_shipping_total'] = $total+$quote[$_POST['key']];
@@ -1997,7 +1998,7 @@ function nzshpcrt_display_preview_image() {
 	  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])) {
 		if(function_exists("getimagesize")) {
 			if(is_numeric($_GET['productid'])) {
-			  $product_id = (int)$_GET['productid'];
+				$product_id = (int)$_GET['productid'];
 				$imagesql = "SELECT `image`,`thumbnail_image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1";
 				$imagedata = $wpdb->get_row($imagesql,ARRAY_A);
 				if($_GET['thumbnail'] == 'true') {
@@ -2027,14 +2028,12 @@ function nzshpcrt_display_preview_image() {
 				$width = $image_size[0];
 				$height = $image_size[1];
 			}
-			
 			$cache_filename = basename("product_{$product_id}_{$height}x{$width}");
 			include("image_preview.php");
 		}
 	}
 }
-  
-  
+
 function nzshpcrt_listdir($dirname)
     {
     /*
