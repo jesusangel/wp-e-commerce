@@ -1107,7 +1107,6 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
       echo $currency_sign;
       exit();
 		}
-      //echo "--==->";
 	if($_POST['buynow'] == "true") {
 		$id = $_REQUEST['product_id'];
 		$price = $_REQUEST['price'];

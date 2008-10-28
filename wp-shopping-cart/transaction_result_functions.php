@@ -86,9 +86,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
 		
 				$shipping = nzshpcrt_determine_item_shipping($row['prodid'], $row['quantity'], $shipping_country);
-				if ($_SESSION['quote_shipping']) 『
-					$shippping = $_SESSION['quote_shipping'];
-				}	
+				if (isset($_SESSION['quote_shipping'])){
+					$shipping = $_SESSION['quote_shipping'];
+				}
 				$total_shipping += $shipping;
 		
 				if($product_data[0]['special']==1) {
@@ -99,7 +99,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		
 				$total+=($row['price']*$row['quantity']);
 				$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), $product_data[0]['notax'], true);
-				$shipping_price  = nzshpcrt_currency_display($shipping, 1, true);
+
+				$shipping_price = nzshpcrt_currency_display($shipping, 1, true);
+				
 				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$row['id']."'";
 				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 				$variation_count = count($variation_data);
@@ -159,8 +161,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					}
 				}
 				//$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
-	
-				$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
+				if (!isset($_SESSION['quote_shipping']))
+					$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
 				$total = (($total+$total_shipping) - $purchase_log['discount_value']);
 			// $message.= "\n\r";
 				$message.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
