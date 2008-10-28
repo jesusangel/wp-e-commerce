@@ -244,19 +244,18 @@ function nzshpcrt_submit_checkout() {
    if( !(is_numeric($user_ID) && ($user_ID > 0))) {
      $user_ID = 'null';
      }
-
-			$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
-
+	if(isset($_SESSION['usps_shipping']) && is_numeric($_SESSION['usps_shipping'])) { 
+	    $base_shipping = $_SESSION['usps_shipping'];
+    } else {
+		$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+    }
     //clear the coupon
     //$_SESSION['coupon_num'] = '';
     
     
     //insert the record into the purchase log table
-	exit("----->". $_POST['shipping_method']);
+	//exit("----->". $_SESSION['delivery_country']);
 	$price = nzshpcrt_overall_total_price($_SESSION['selected_country'],false);
-	if ($_POST['shipping_method']) {
-		$base_shipping = $_POST['shipping_method'];
-	}
 	$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '', '{$engrave}', ' ')";
 	//exit($sql);
 	$wpdb->query($sql) ;
@@ -290,9 +289,6 @@ function nzshpcrt_submit_checkout() {
      $quantity = $cart_item->quantity;
      $variations = $cart_item->product_variations;
      $extras = $cart_item->extras;
-     $comment = $cart_item->comment;
-     $time_requested = $cart_item->time_requested;
-     $meta = $cart_item->meta;
      // serialize file data
      if(is_array($cart_item->file_data)) {
        $file_data = $wpdb->escape(serialize($cart_item->file_data));
@@ -347,7 +343,7 @@ function nzshpcrt_submit_checkout() {
      $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
      
      $shipping = nzshpcrt_determine_item_shipping($row, 1, $_SESSION['delivery_country']);
-     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files`,`meta`) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data','".serialize(array('comment'=>$comment, 'time_requested'=>$time_requested, 'meta'=>$meta))."')";
+     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
     //exit($cartsql);
   
      

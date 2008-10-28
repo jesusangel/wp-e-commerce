@@ -86,6 +86,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
 		
 				$shipping = nzshpcrt_determine_item_shipping($row['prodid'], $row['quantity'], $shipping_country);
+				if ($_SESSION['quote_shipping']) 『
+					$shippping = $_SESSION['quote_shipping'];
+				}	
 				$total_shipping += $shipping;
 		
 				if($product_data[0]['special']==1) {
