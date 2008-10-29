@@ -2478,34 +2478,34 @@ function update_product_meta($product_id, $key, $value, $prev_value = '') {
     
     
 function wpsc_refresh_page_urls($content) {
-  global $wpdb;
-  $wpsc_pageurl_option['product_list_url'] = '[productspage]';
-  $wpsc_pageurl_option['shopping_cart_url'] = '[shoppingcart]';
-  $check_chekout = $wpdb->get_var("SELECT `guid` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%[checkout]%' LIMIT 1");
-  if($check_chekout != null) {
-    $wpsc_pageurl_option['checkout_url'] = '[checkout]';
-    } else {
-    $wpsc_pageurl_option['checkout_url'] = '[checkout]';
-    }
-  $wpsc_pageurl_option['transact_url'] = '[transactionresults]';
-  $wpsc_pageurl_option['user_account_url'] = '[userlog]';
-  $changes_made = false;
-  foreach($wpsc_pageurl_option as $option_key => $page_string) {
-    $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%$page_string%' LIMIT 1");
-    $the_new_link = get_permalink($post_id);
-    if(stristr(get_option($option_key), "https://")) {
-      $the_new_link = str_replace('http://', "https://",$the_new_link);
-    }    
-    update_option($option_key, $the_new_link);
-	}
-  return $content;
+ global $wpdb;
+ $wpsc_pageurl_option['product_list_url'] = '[productspage]';
+ $wpsc_pageurl_option['shopping_cart_url'] = '[shoppingcart]';
+ $check_chekout = $wpdb->get_var("SELECT `guid` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%[checkout]%' LIMIT 1");
+ if($check_chekout != null) {
+   $wpsc_pageurl_option['checkout_url'] = '[checkout]';
+   } else {
+   $wpsc_pageurl_option['checkout_url'] = '[checkout]';
+   }
+ $wpsc_pageurl_option['transact_url'] = '[transactionresults]';
+ $wpsc_pageurl_option['user_account_url'] = '[userlog]';
+ $changes_made = false;
+ foreach($wpsc_pageurl_option as $option_key => $page_string) {
+   $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$page_string%' LIMIT 1");
+   $the_new_link = get_permalink($post_id);
+   if(stristr(get_option($option_key), "https://")) {
+     $the_new_link = str_replace('http://', "https://",$the_new_link);
+   }    
+   update_option($option_key, $the_new_link);
+   }
+ return $content;
 }
   
 
-	function wpsc_product_permalinks($rewrite_rules) {
+		function wpsc_product_permalinks($rewrite_rules) {
 		global $wpdb, $wp_rewrite;  
 		
-		$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' LIMIT 1", ARRAY_A);
+		$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A);
 		$is_index = false;
 		if((get_option('page_on_front') == $page_details['ID']) && (get_option('show_on_front') == 'page')) {		
 		  $is_index = true;
@@ -2515,7 +2515,7 @@ function wpsc_refresh_page_urls($content) {
 		if($page_details['post_parent'] > 0) {
 		  $count = 0;
 		  while(($page_details['post_parent'] > 0) && ($count <= 20)) {
-				$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `ID` IN('{$page_details['post_parent']}') LIMIT 1", ARRAY_A);
+				$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `ID` IN('{$page_details['post_parent']}') AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A);
 				$page_name_array[] = $page_details['post_name'];
 				$count ++;	  
 		  }		
@@ -2563,6 +2563,7 @@ function wpsc_refresh_page_urls($content) {
 		$new_rewrite_rules = array_merge((array)$new_rules,(array)$rewrite_rules);
 		return $new_rewrite_rules;
 	}
+
 
 function wpsc_query_vars($vars) {
   $vars[] = "product_category";
