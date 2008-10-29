@@ -38,7 +38,7 @@ If you experience database errors try de-activating and re-activating your plugi
 
 = Where do I find DropShop and Grid View =
 
-From the BlogShop of course www.instinct.co.nz/blogshop
+From the BlogShop of course http://www.instinct.co.nz/e-commerce/shop/
 
 = How do I customize WP e-Commerce =
 
