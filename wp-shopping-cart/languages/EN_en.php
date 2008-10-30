@@ -2,10 +2,12 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_FILE_NAMES', 'File Names');
+define('TXT_WPSC_DOWNLOADS_LEFT', 'Downloads Left');
 
+
+define('TXT_WPSC_FILE', 'File');
 define('TXT_WPSC_PDF', 'PDF');
-define('TXT_WPSC_SORT_PRODUCT_BY', 'Sort Product By');
-define('TXT_WPSC_TIME_UPLOADED', 'Time Uploaded');
 
 define('TXT_WPSC_LABEL', 'Label');
 define('TXT_WPSC_TABLE_RATED_PRICE', 'Table Rate Price');

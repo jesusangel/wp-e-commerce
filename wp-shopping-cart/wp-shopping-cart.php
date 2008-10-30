@@ -240,9 +240,9 @@ class wp_shopping_cart {
 // 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
 			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
 			
-// 			if(function_exists('gold_shpcrt_options')) {
-// 				gold_shpcrt_options($base_page);
-// 			}
+			if(function_exists('gold_shpcrt_options')) {
+				gold_shpcrt_options($base_page);
+			}
 			
 			do_action('wpsc_add_submenu');
 //       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
@@ -1306,9 +1306,10 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     } else {      
       if(count($variations_selected) > 0) {
         // takes an array of variations, returns a form for adding data to those variations.
-        
-        //
-        echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace("\n\r", '\n\r', $variation_processor->variations_add_grid_view((array)$variations_selected))."\";\n";
+        if((float)$_POST['selected_price'] > 0) {
+          $selected_price = (float)$_POST['selected_price'];
+        }
+        echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace("\n\r", '\n\r', $variation_processor->variations_add_grid_view((array)$variations_selected, $selected_price))."\";\n";
       } else {
         echo "add_variation_combinations_html = \"\";\n";
       }

@@ -19,7 +19,7 @@ $wpsc_database_template[$table_name]['columns']['quantity'] = "int(10) unsigned 
 $wpsc_database_template[$table_name]['columns']['donation'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['no_shipping'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['files'] = "text NOT NULL ";
-$wpsc_database_template[$table_name]['columns']['meta'] = "longtext NOT NULL ";
+$wpsc_database_template[$table_name]['columns']['meta'] = "longtext NULL ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY ( `id` )";
 
 
@@ -69,6 +69,7 @@ $table_name = "{$wpdb->prefix}download_status";
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['fileid'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['purchid'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['cartid'] = "bigint(20) unsigned NULL";
 $wpsc_database_template[$table_name]['columns']['uniqueid'] = "varchar(64) NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['downloads'] = "int(11) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['ip_number'] = "varchar(255) NOT NULL DEFAULT '' ";

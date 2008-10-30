@@ -280,151 +280,157 @@ function nzshpcrt_submit_checkout() {
 			}
 		}
 
-   $downloads = get_option('max_downloads');
-   $also_bought = array();
-   $all_donations = true;
-   $all_no_shipping = true;
-   foreach($cart as $cart_item) {
-     $row = $cart_item->product_id;
-     $quantity = $cart_item->quantity;
-     $variations = $cart_item->product_variations;
-     $extras = $cart_item->extras;
-     // serialize file data
-     if(is_array($cart_item->file_data)) {
-       $file_data = $wpdb->escape(serialize($cart_item->file_data));
-     } else {
-       $file_data = '';
-     }
-     /* creates an array of purchased items for logging further on */
-     if(isset($also_bought[$cart_item->product_id])) {
-       $also_bought[$cart_item->product_id]++;
-       } else {
-       $also_bought[$cart_item->product_id] = 1;
-       }
-     
-     $product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$row' LIMIT 1",ARRAY_A) ;
-		 if($product_data['file'] > 0) {
-			 $unique_id = sha1(uniqid(mt_rand(), true));
-			 $wpdb->query("INSERT INTO `".$wpdb->prefix."download_status` ( `fileid` , `purchid` , `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '".$product_data['file']."', '".$log_id."', '".$unique_id."', '$downloads', '0', NOW( ));");
-			 }
-     
-     if($product_data['donation'] == 1) {
-       $price = $cart_item->donation_price;
-       $gst = 0;
-       $donation = 1;
-       } else {
-       $price = calculate_product_price($row, $variations);
-       if($product_data['notax'] != 1) {
-         $price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
-         if(get_option('base_country') == $_SESSION['selected_country']) {
-           $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
-           if(($country_data['has_regions'] == 1)) {
-             if(get_option('base_region') == $_SESSION['selected_region']) {
-               $region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
-               }
-             $gst =  $region_data['tax'];
-             } else {
-             $gst =  $country_data['tax'];
-             }
-           }
-         } else { $gst = 0; }
-        $donation = 0;
-        $all_donations = false;
-        }
+    $downloads = get_option('max_downloads');
+    $also_bought = array();
+    $all_donations = true;
+    $all_no_shipping = true;
+    foreach($cart as $cart_item) {
+      $row = $cart_item->product_id;
+      $quantity = $cart_item->quantity;
+      $variations = $cart_item->product_variations;
+      $extras = $cart_item->extras;
+      // serialize file data
+      if(is_array($cart_item->file_data)) {
+        $file_data = $wpdb->escape(serialize($cart_item->file_data));
+      } else {
+        $file_data = '';
+      }
+      /* creates an array of purchased items for logging further on */
+      if(isset($also_bought[$cart_item->product_id])) {
+        $also_bought[$cart_item->product_id]++;
+      } else {
+        $also_bought[$cart_item->product_id] = 1;
+      }
+    
       
-        
-      if($product_data['no_shipping'] != 1) {
-        $all_no_shipping = false;
-        }
-            
-      $country = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`='".$log_id."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
-      $country = $country[0]['value'];
-     
-     $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
-     
-     $shipping = nzshpcrt_determine_item_shipping($row, 1, $_SESSION['delivery_country']);
-     $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
-    //exit($cartsql);
-  
-     
-     $wpdb->query($cartsql);
-     $cart_id = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_variations` LIMIT 1",ARRAY_A);
-     $cart_id = $cart_id[0]['id'];
-	$extra_var='';
-     if($variations != null) {
-	$extra_var.='[';
-	$i=0;
-       foreach($variations as $variation => $value) {
-         $wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_variations` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation."', '".$value."' );");
-        $i++;
-		if ($i==1) {
-			$extra_var.=$value;
-		} else {
-			$extra_var.=",".$value;
-		}	
-	}
-	}
-        /*
-        $j=0;
-        $extra_var.='],[';
-        if($extras != null) {
-          foreach($extras as $extra) {
-            $wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_extras` ( `cart_id` , `extra_id`) VALUES ( '".$cart_id."', '".$extra."');");
-            $name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."extras_values WHERE id=$extra");
-            $j++;
-            if ($j==1) {
-              $extra_var.=$name;
+      $product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$row' LIMIT 1",ARRAY_A) ;
+      
+      
+      if($product_data['donation'] == 1) {
+        $price = $cart_item->donation_price;
+        $gst = 0;
+        $donation = 1;
+      } else {
+        $price = calculate_product_price($row, $variations);
+        if($product_data['notax'] != 1) {
+          $price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
+          if(get_option('base_country') == $_SESSION['selected_country']) {
+            $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+            if(($country_data['has_regions'] == 1)) {
+              if(get_option('base_region') == $_SESSION['selected_region']) {
+                $region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+              }
+              $gst =  $region_data['tax'];
             } else {
-              $extra_var.=",".$name;
+              $gst =  $country_data['tax'];
             }
           }
-        $extra_var.=']';
-        }*/
-     /*
-      * This code decrements the stock quantitycart_item_variations`
-     */
-    if(is_array($variations)) {
-       $variation_values = array_values($variations);
+        } else { $gst = 0; }
+        $donation = 0;
+        $all_donations = false;
+      }
+        
+          
+      if($product_data['no_shipping'] != 1) {
+        $all_no_shipping = false;
+      }
+              
+      $country = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`='".$log_id."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
+      $country = $country[0]['value'];
+      
+      $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+      
+      $shipping = nzshpcrt_determine_item_shipping($row, 1, $_SESSION['delivery_country']);
+      $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
+      //exit($cartsql);
+      $wpdb->query($cartsql);
+      
+      // get the cart id
+      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_variations` LIMIT 1");
+      
+      
+      $extra_var='';
+      if($variations != null) {
+        $extra_var.='[';
+        $i=0;
+        foreach($variations as $variation => $value) {
+          $wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_variations` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation."', '".$value."' );");
+          $i++;
+          if ($i==1) {
+            $extra_var.=$value;
+          } else {
+            $extra_var.=",".$value;
+          }	
+        }
+      }
+      
+      if(is_array($variations)) {
+        $variation_values = array_values($variations);
+      }
+      
+      
+      
+      if($product_data['file'] > 0) {
+        $add_download_link = false;
+        
+        if(count($variation_values) > 0) {
+          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
+          asort($variation_ids);         
+          $all_variation_ids = implode(",", $variation_ids);
+        
+          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
+          
+          $variation_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+          if((int)$variation_data['file'] == 1) {
+            $add_download_link = true;
+          } 
+        } else {
+          $add_download_link = true;
+        }
+        
+        if($add_download_link == true) {
+          $unique_id = sha1(uniqid(mt_rand(), true));
+          $wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$product_data['file']}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+        }
+      }
+      
+      /*
+        * This code decrements the stock quantitycart_item_variations`
+      */
+      //$debug .= "<pre>".print_r($variations,true)."</pre>";
+      if($product_data['quantity_limited'] == 1) {
+        if(count($variation_values) > 0) {
+        
+          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
+          asort($variation_ids);         
+          $all_variation_ids = implode(",", $variation_ids);
+        
+          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
+          
+          $variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+          $wpdb->query("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '{$variation_stock_data['id']}' LIMIT 1",ARRAY_A);
+        } else {
+          $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `quantity`='".($product_data['quantity']-$quantity)."' WHERE `id`='{$product_data['id']}' LIMIT 1");
+        }
+      }
     }
-    //$debug .= "<pre>".print_r($variations,true)."</pre>";
-    if($product_data['quantity_limited'] == 1) {
-      if(count($variation_values) > 0) {
-      
-        $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
-        asort($variation_ids);         
-        $all_variation_ids = implode(",", $variation_ids);
-      
-      
-        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
-        
-        
-        
-        $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-        $wpdb->query("UPDATE `".$wpdb->prefix."variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '".$variation_stock_data['id']."' LIMIT 1",ARRAY_A);
-      
-      
-      } else {
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `quantity`='".($product_data['quantity']-$quantity)."' WHERE `id`='".$product_data['id']."' LIMIT 1");
-      }    
-    }     
-  }
    
    
    $unneeded_value = null; //this is only used to store the quantity for the item we are working on, so that we can get the array key
    $assoc_quantity = null;
-   foreach($also_bought as $selected_product => $unneeded_value) {
-     foreach($also_bought as $associated_product => $assoc_quantity) {
-       if(($selected_product == $associated_product)) {
-         continue; //don't want to associate products with themselves
-         }
-       $check_assoc = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."also_bought_product` WHERE `selected_product` IN('$selected_product') AND `associated_product` IN('$associated_product') LIMIT 1");
-       if(isset($check_assoc) && ($check_assoc > 0)) {
-         $wpdb->query("UPDATE `".$wpdb->prefix."also_bought_product` SET `quantity` = (`quantity` + $assoc_quantity) WHERE `id` = '$check_assoc' LIMIT 1;");
-         } else {
-         $wpdb->query("INSERT INTO `".$wpdb->prefix."also_bought_product` ( `selected_product` , `associated_product` , `quantity` ) VALUES ( '$selected_product', '".$associated_product."', '".$assoc_quantity."' );");
-         }
-       }
-     }
+    foreach($also_bought as $selected_product => $unneeded_value) {
+      foreach($also_bought as $associated_product => $assoc_quantity) {
+        if(($selected_product == $associated_product)) {
+          continue; //don't want to associate products with themselves
+        }
+        $check_assoc = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."also_bought_product` WHERE `selected_product` IN('$selected_product') AND `associated_product` IN('$associated_product') LIMIT 1");
+        if(isset($check_assoc) && ($check_assoc > 0)) {
+          $wpdb->query("UPDATE `".$wpdb->prefix."also_bought_product` SET `quantity` = (`quantity` + $assoc_quantity) WHERE `id` = '$check_assoc' LIMIT 1;");
+        } else {
+          $wpdb->query("INSERT INTO `".$wpdb->prefix."also_bought_product` ( `selected_product` , `associated_product` , `quantity` ) VALUES ( '$selected_product', '".$associated_product."', '".$assoc_quantity."' );");
+        }
+      }
+    }
    
    do_action('wpsc_submit_checkout', $log_id);
    //mail( get_option('purch_log_email'),('debug from '.date("d/m/Y H:i:s")), $debug);
@@ -463,19 +469,19 @@ function nzshpcrt_submit_checkout() {
           $gateway_used = $gateway['internalname'];
           $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
           $gateway['function']($seperator, $sessionid);
-          }
         }
-      } else {
+      }
+    } else {
       foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == $curgateway ) {
           $gateway_used = $gateway['internalname'];
           $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
-	$gateway['function']($seperator, $sessionid);
-          }
+          $gateway['function']($seperator, $sessionid);
         }
       }
+    }
     $_SESSION['coupon_num'] = '';
   //exit("<pre>".print_r($nzshpcrt_gateways,true)."</pre>");
-    }
   }
+}
 ?>

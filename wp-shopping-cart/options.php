@@ -520,7 +520,7 @@ if($_GET['clean_categories'] == 'true') {
 		<li><a href="<?php echo get_option('siteurl'); ?>/?checkout_options=true"><?php echo "Checkout"; ?></a></li>
 		<?php
 		if(function_exists('gold_shpcrt_options')) {
-			echo "sdsdf";
+			//echo "sdsdf";
 			gold_shpcrt_options($base_page);
 		}
 		?>

@@ -1,19 +1,15 @@
 <?php
 global $wpdb, $user_ID;
-if(get_option('permalink_structure') != '')
-   {
-   $seperator ="?";
-    }
-    else
-       {
-       $seperator ="&amp;";
-       }
+if(get_option('permalink_structure') != '') {
+  $seperator ="?";
+} else {
+  $seperator ="&amp;";
+}
 $siteurl = get_option('siteurl'); 
 
-if($_GET['edit_profile'] == 'true') 
-  {
+if($_GET['edit_profile'] == 'true') {
   require('edit-profile.php');
-  }  else if ($_GET['downloads'] == 'true'){
+}  else if ($_GET['downloads'] == 'true'){
 	require('user-downloads.php');
 } else {
 /*
@@ -37,13 +33,10 @@ $date_list[0]['end'] = $end_timestamp;
 ?>
 <div class="wrap" style=''>
 <?php
-  if(is_numeric($user_ID) && ($user_ID > 0))
-    {
+  if(is_numeric($user_ID) && ($user_ID > 0)) {
     echo " <div class='user-profile-links'><a href='".get_option('user_account_url')."'>Purchase History</a> | <a href='".get_option('user_account_url').$seperator."edit_profile=true'>Your Details</a> | <a href='".get_option('user_account_url').$seperator."downloads=true'>Your Downloads</a></div><br />";
-    if(($purchase_log == null) && !is_numeric($_GET['purchaseid']))
-      {
-      if($earliest_record[0]['date'] != null)
-        {
+    if(($purchase_log == null) && !is_numeric($_GET['purchaseid'])) {
+      if($earliest_record[0]['date'] != null) {
         $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
         $col_count = 4 + count($form_data);
         echo "<table class='logdisplay'>";    
@@ -52,8 +45,7 @@ $date_list[0]['end'] = $end_timestamp;
 
         $i = 0;
         $subtotal = 0;
-        if($purchase_log != null)
-          {
+        if($purchase_log != null) {
           echo "<tr class='toprow'>";
           
           echo " <td'>";
@@ -63,37 +55,27 @@ $date_list[0]['end'] = $end_timestamp;
           echo " <td>";
           echo TXT_WPSC_DATE;
           echo " </td>";
-          
-    //       foreach((array)$form_data as $form_field)
-    //         {
-    //         echo " <td>";
-    //         echo $form_field['name'];
-    //         echo " </td>";
-    //         }
             
           echo " <td>";
           echo TXT_WPSC_PRICE;
           echo " </td>";  
           
-          if(get_option('payment_method') == 2)
-            {
+          if(get_option('payment_method') == 2) {
             echo " <td>";
             echo TXT_WPSC_PAYMENT_METHOD;
             echo " </td>";  
-            }
+          }
         
           echo "</tr>";
       
-          foreach((array)$purchase_log as $purchase)
-            {
+          foreach((array)$purchase_log as $purchase) {
             $status_state = "expand";
             $status_style = "";
             $alternate = "";
-              $i++;
-              if(($i % 2) != 0)
-                {
-                $alternate = "class='alt'";
-                }
+            $i++;
+            if(($i % 2) != 0) {
+              $alternate = "class='alt'";
+            }
             echo "<tr $alternate>\n\r";
             //  echo " <td>";
             //  echo $purchase['id'];
@@ -101,16 +83,14 @@ $date_list[0]['end'] = $end_timestamp;
             
             echo " <td class='processed'>";
             echo "<a href='#' onclick='return show_details_box(\"status_box_".$purchase['id']."\",\"log_expander_icon_".$purchase['id']."\");'>";
-            if($_GET['id'] == $purchase['id'])
-              {
+            if($_GET['id'] == $purchase['id']) {
               $status_state = "collapse";
               $status_style = "style='display: block;'";
-              }
+            }
             echo "<img class='log_expander_icon' id='log_expander_icon_".$purchase['id']."' src='".WPSC_URL."/images/icon_window_$status_state.gif' alt='' title='' />";
-            if($stage_data['colour'] != '')
-              {
+            if($stage_data['colour'] != '') {
               $colour = "style='color: #".$stage_data['colour'].";'";
-              }
+            }
             echo "<span id='form_group_".$purchase['id']."_text'>".TXT_WPSC_VIEWDETAILS."</span>";
             echo "</a>";
             echo " </td>\n\r";
@@ -118,57 +98,38 @@ $date_list[0]['end'] = $end_timestamp;
             echo " <td>";
             echo date("jS M Y",$purchase['date']);
             echo " </td>\n\r";
-          
-    //         foreach((array)$form_data as $form_field)
-    //           {
-    //           $collected_data_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
-    //           $collected_data = $wpdb->get_results($collected_data_sql,ARRAY_A);
-    //           $collected_data = $collected_data[0];
-    //           echo " <td>";
-    //           echo $collected_data['value'];
-    //           echo " </td>\n\r";
-    //           }
       
             echo " <td>";
 
-            if($purchase['shipping_country'] != '')
-              {
+            if($purchase['shipping_country'] != '') {
               $billing_country = $purchase['billing_country'];
               $shipping_country = $purchase['shipping_country'];
-              }
-              else
-                {
-                $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-                $country_data = $wpdb->get_results($country_sql,ARRAY_A);
-                $billing_country = $country_data[0]['value'];
-                $shipping_country = $country_data[0]['value'];
-                }
+            } else {
+              $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+              $country_data = $wpdb->get_results($country_sql,ARRAY_A);
+              $billing_country = $country_data[0]['value'];
+              $shipping_country = $country_data[0]['value'];
+            }
             echo nzshpcrt_currency_display(nzshpcrt_find_total_price($purchase['id'],$shipping_country),1);
             $subtotal += nzshpcrt_find_total_price($purchase['id'],$shipping_country);
             echo " </td>\n\r";
       
             
-            if(get_option('payment_method') == 2)
-              {
+            if(get_option('payment_method') == 2) {
               echo " <td>";
               $gateway_name = '';
-              foreach((array)$GLOBALS['nzshpcrt_gateways'] as $gateway)
-                {
-                if($purchase['gateway'] != 'testmode')
-                  {
-                  if($gateway['internalname'] == $purchase['gateway'] )
-                    {
+              foreach((array)$GLOBALS['nzshpcrt_gateways'] as $gateway) {
+                if($purchase['gateway'] != 'testmode') {
+                  if($gateway['internalname'] == $purchase['gateway'] ) {
                     $gateway_name = $gateway['name'];
-                    }
                   }
-                  else
-                    {
-                    $gateway_name = "Manual Payment";
-                    }
+                } else {
+                  $gateway_name = "Manual Payment";
                 }
+              }
               echo $gateway_name;
               echo " </td>\n\r";
-              }
+            }
         
             echo "</tr>\n\r";
             
@@ -186,11 +147,9 @@ $date_list[0]['end'] = $end_timestamp;
             echo "  <strong class='form_group'>".TXT_WPSC_ORDER_STATUS."</strong>\n\r";
             echo "  <form>\n\r";
             echo "  <ul style='text-align:left;'>\n\r";
-            foreach((array)$stage_list_data as $stage)
-              {
+            foreach((array)$stage_list_data as $stage) {
               $selected = '';
-              if($stage['id'] == $purchase['processed'])
-                {
+              if($stage['id'] == $purchase['processed']) {
                 $selected = "checked='true'";
                 }
               $button_id = "button_".$purchase['id']."_".$stage['id'];

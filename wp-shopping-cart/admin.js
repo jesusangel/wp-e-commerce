@@ -447,10 +447,11 @@ function variation_value_list(id) {
       jQuery("#add_product_variation_details").html(add_variation_combinations_html);
     }
 	}
-	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
+	selected_price = jQuery("div#price_and_stock input[@name='price']").val();
 	
+	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
 	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").attr("disabled", "true");
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&"+current_variations+"");
+	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&"+current_variations+"");
 }
 
  

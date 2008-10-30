@@ -1548,6 +1548,11 @@ table.product_variation_grid tr td input{
    padding: 0px 3px 0px 3px;
 }
 
+table.product_variation_grid tr td input.checkbox{
+  display: block;
+  margin:6px auto;
+}
+
 table.product_variation_grid tr.group_boundary td {
    border-bottom: 1px solid #969696;
 }
@@ -1703,38 +1708,36 @@ table.packing_slip tr td  {
 @media print {
   div#wpcontent ul {
     display: none;
-}
+  }
   
   div#wphead {
     display: none;
-}
+  }
   
   div#user_info {
     display: none;
-}
+  }
   
   div#update-nag {
     display: none;
-}
+  }
 
   div#rightnow {
     display: none;
-}
+  }
   
   td#order_summary_container {
     display: none;
-}
+  }
 
   div#footer {
     display: none;
-}
+  }
   a {
     display: none;
-}
-
-
+  }
   embed {
     display: none;
-}
+  }
   
 }

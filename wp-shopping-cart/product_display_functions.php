@@ -309,7 +309,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         if(get_option('show_thumbnails') == 1) {
           if($product['image'] !=null) {
             $image_size = @getimagesize(WPSC_IMAGE_DIR.$product['image']);
-		$output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities($product['name'], ENT_QUOTES))."'>";
+            $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities($product['name'], ENT_QUOTES))."'>";
 
 
             if($product['thumbnail_image'] != null) {
