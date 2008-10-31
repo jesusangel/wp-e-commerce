@@ -1739,5 +1739,10 @@ table.packing_slip tr td  {
   embed {
     display: none;
   }
-  
+}
+
+img.file_delete_button {
+	float:right;
+	cursor: pointer;
+	margin-top: -17px;
 }

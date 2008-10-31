@@ -132,12 +132,30 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
 function wpsc_uploaded_files()
   {
   global $wpdb;
+  /*
+$product_files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list", ARRAY_A);
+  foreach($product_files as $product_file){
+  	$filelist[] = $product_file['file'];
+  }
+  $filelist = implode(',', $filelist);
+  $files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_files WHERE id IN ($filelist)", ARRAY_A);
+  $num = 0;
+  foreach ($files as $file_data) {
+  	if ($file_data != null){
+  		$dirlist[$num]['display_filename'] = $file_data['filename'];
+        $dirlist[$num]['file_id'] = $file_data['id'];
+		$dirlist[$num]['real_filename'] = $file_data['idhash'];
+  	}
+  	$num++;
+  }
+*/
+  
   $dir = @opendir(WPSC_FILE_DIR);
   $num = 0;
   while(($file = @readdir($dir)) !== false)
     {
     //filter out the dots, macintosh hidden files and any backup files
-    if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ))
+    if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old"))
       {
       $file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".$wpdb->prefix."product_files` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
       if($file_data != null)
@@ -173,7 +191,7 @@ function wpsc_select_product_file($product_id = null)
   foreach((array)$file_list as $file)
     {
     $num++;
-    $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='".$file['real_filename']."' id='select_product_file_$num' ".((is_numeric($file_id) && ($file_id == $file['file_id'])) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".$file['display_filename']."</label></p>";
+    $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='".$file['real_filename']."' id='select_product_file_$num' ".((is_numeric($file_id) && ($file_id == $file['file_id'])) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".$file['display_filename']."</label>  <img class='file_delete_button' src='".WPSC_URL."/images/cross.png'></p>";
     }
   $output .= "</div>";
   $output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";

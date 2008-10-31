@@ -577,12 +577,20 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 
 function wpsc_item_process_file($mode = 'add') {
   global $wpdb;
+  	$files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_files ORDER BY id ASC", ARRAY_A);
+		if (is_array($files)){
+			foreach($files as $file){
+				$file_names[] = $file['filename'];
+				$file_hashes[] = $file['idhash'];
+			}
+		}
+		
 	if(apply_filters( 'wpsc_filter_file', $_FILES['file']['tmp_name'] )) {
 	  // initialise $idhash to null to prevent issues with undefined variables and error logs
 	  $idhash = null;
 		switch($mode) {
 			case 'edit':
-	    /* if we are editing, grab the current file and ID hash */ 
+	   		/* if we are editing, grab the current file and ID hash */ 
 			$product_id = $_POST['prodid'];
 			$fileid_data = $wpdb->get_results("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 			
@@ -608,7 +616,27 @@ function wpsc_item_process_file($mode = 'add') {
 		$mimetype = wpsc_get_mimetype($_FILES['file']['tmp_name']);
 		
 		$filename = basename($_FILES['file']['name']);
-	
+		
+		
+		if (in_array($_FILES['file']['name'],$file_names)){
+			$i=0;
+			$new_name = $_FILES['file']['name'].".old";
+			while(file_exists(WPSC_FILE_DIR.$new_name)){
+				$new_name = $_FILES['file']['name'].".old_".$i;
+				$i++;
+			}
+			$old_idhash_id = array_search($_FILES['file']['name'],$file_names);
+			$old_idhash = $file_hashes[$old_idhash_id];
+			while(!file_exists(WPSC_FILE_DIR.$old_idhash)){
+				unset($file_hashes[$old_idhash_id]);
+				unset($file_names[$old_idhash_id]);
+				
+				$old_idhash_id = array_search($_FILES['file']['name'],$file_names);
+				$old_idhash = $file_hashes[$old_idhash_id];
+			}
+			copy(WPSC_FILE_DIR.$old_idhash, WPSC_FILE_DIR.$new_name);
+			unlink(WPSC_FILE_DIR.$old_idhash);
+		}
 		if(move_uploaded_file($_FILES['file']['tmp_name'],(WPSC_FILE_DIR.$idhash)))	{
 			$stat = stat( dirname( (WPSC_FILE_DIR.$idhash) ));
 			$perms = $stat['mode'] & 0000666;

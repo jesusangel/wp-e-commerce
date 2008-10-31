@@ -608,6 +608,12 @@ function nzshpcrt_submit_ajax()
    
   // if is an AJAX request, cruddy code, could be done better but getting approval would be impossible
 if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
+	if ($_POST['del_file'] == 'true') {
+		$wpdb->query("DELETE FROM {$wpdb->prefix}product_files WHERE idhash=".$_POST['del_file_hash']);
+		unlink(WPSC_FILE_DIR.$_POST['del_file_hash']);
+		exit();
+	}
+	
 	if ($_POST['metabox'] == 'true') {
 		$output .= "<div class='meta_box'>";
 		if (get_option('multi_add')=='1')

@@ -1116,4 +1116,12 @@ jQuery(document).ready(function(){
 			added = jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td></tr>');
 		}
 	);
+	
+	jQuery(".file_delete_button").click(
+		function() {
+			jQuery(this).parent().remove();
+			file_hash = jQuery(this).siblings("input").val();
+			ajax.post("index.php",noresults,"ajax=true&del_file=true&del_file_hash="+file_hash);
+		}
+	);
 });
