@@ -958,7 +958,7 @@ if($product_list != null)
 	if(is_numeric($_GET['catid'])){
 		echo "            </div>\n\r";    
 	} else {
-		echo "</td><td>";
+		echo "</td><td id=".$product['id'].">";
 	}
 		if(is_numeric($_GET['catid'])){ 
 			echo "            <div class='pli_price'>\n\r";

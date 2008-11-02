@@ -442,6 +442,7 @@ jQuery(document).ready( function() {
 </script>
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/ui.datepicker.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.jeditable.pack.js"></script>
 <script src="<?php echo WPSC_URL; ?>/user.js" language='JavaScript' type="text/javascript">
 </script>
 
@@ -2800,7 +2801,7 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 	wp_enqueue_script('thickbox');
 	wp_enqueue_style( 'thickbox' );
 	wp_enqueue_script('jQuery-ui',WPSC_URL.'/js/jquery-ui.js?ver=1.6', array('jquery'), '1.6');
-	//wp_enqueue_script('ui-tabs',WPSC_URL.'/js/jquery.tabs.pack.js?ver=2.7.4', array('jquery'), '2.7.4');
+	wp_enqueue_script('jEditable',WPSC_URL.'/js/jquery.jeditable.pack.js', array('jquery'), '2.7.4');
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 // 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
@@ -2953,6 +2954,19 @@ function wpsc_display_involce() {
 if($_GET['display_invoice']=='true') {
   add_action('admin_init', 'wpsc_display_involce', 0);
 
+}
+
+function wpsc_save_inline_price() {
+	global $wpdb;
+	$pid = $_POST['id'];
+	$new_price = $_POST['value'];
+	$new_price1 = str_replace('$','',$new_price);
+	$wpdb->query("UPDATE {$wpdb->prefix}product_list SET price='$new_price1' WHERE id='$pid'");
+	exit($new_price);
+}
+
+if($_GET['inline_price']=='true') { 
+	add_action('init', 'wpsc_save_inline_price', 0);
 }
 
 

@@ -74,7 +74,12 @@ if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 		if(isset($gateway['admin_name'])) {
 			$gateway['name'] = $gateway['admin_name'];
 		}
-	  $gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
+		$selected_gateways = get_option('custom_gateway_options');
+		if (in_array($gateway['internalname'], $selected_gateways)) {
+	  		$gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
+		} else {
+			$gatewaylist .="<option disabled value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>";
+		}
 	}
 }
 $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY."</option>" . $gatewaylist;

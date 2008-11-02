@@ -1124,4 +1124,13 @@ jQuery(document).ready(function(){
 			ajax.post("index.php",noresults,"ajax=true&del_file=true&del_file_hash="+file_hash);
 		}
 	);
+	jQuery(".pricedisplay").each(
+		function () {
+			jQuery(this).attr("id",jQuery(this).parent().attr('id'));
+		}
+	);
+	jQuery(".pricedisplay").editable(base_url+"/?inline_price=true", {
+        indicator : "Saving...",
+        tooltip   : 'Click to edit...'
+     });
 });
