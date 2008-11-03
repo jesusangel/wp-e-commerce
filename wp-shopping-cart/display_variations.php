@@ -161,16 +161,13 @@ function conf()
 </script>
 <noscript>
 </noscript>
+
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYVARIATIONS;?></h2>
   <p>	
   	  <?php echo TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION;?>
 
 </p>
-
-  
-  
-  
   
   <div class="tablenav wpsc_admin_nav" >
 	<div class="alignleft" style='width: 500px;'>
@@ -229,7 +226,7 @@ echo "        </div>";
   <div class="categorisation_title">
 		<strong class="form_group"><?php echo TXT_WPSC_ADDVARIATION;?></strong>
 	</div>
-  <form method='POST' enctype='multipart/form-data'>
+  <form method='POST' action='admin.php?thickbox_variation=true'>
   <table class='category_forms'>
     <tr>
       <td>

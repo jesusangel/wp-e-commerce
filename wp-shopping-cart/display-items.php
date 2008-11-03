@@ -1209,7 +1209,13 @@ echo "        </div>";
     <table>
     <tr>
       <td colspan='2'>
-        <?php echo TXT_WPSC_ADD_VAR; ?>
+        <?php 
+        	if ($variations_processor->list_variations() == '') {
+        		echo "<a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>Add New Variations</a>";
+        	} else {
+        		echo TXT_WPSC_ADD_VAR."  <a class='thickbox' href='?page=wp-shopping-cart/display_variations.php?page=product&TB_iframe=true'>Add New Variations</a>"; 
+        	}
+        ?>
       </td>
     </tr> 
     <tr>

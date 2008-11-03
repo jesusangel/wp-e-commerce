@@ -2970,6 +2970,182 @@ if($_GET['inline_price']=='true') {
 }
 
 
+function thickbox_variation() {
+	global $wpdb;
+	$variations_processor = new nzshpcrt_variations;
+	echo "<head>";
+	echo "<link rel='stylesheet' href='http://localhost/develop/wp-admin/wp-admin.css?ver=2.6.3' type='text/css' media='all' />
+	<link rel='stylesheet' href='http://localhost/develop/wp-admin/css/colors-fresh.css?ver=2.6.3' type='text/css' media='all' />
+	<link href='http://localhost/develop/wp-content/plugins/wp-shopping-cart/admin.css' rel='stylesheet' type='text/css'/>
+	<link rel='stylesheet' href='http://localhost/develop/wp-admin/css/global.css?ver=2.6.3' type='text/css' media='all' />";
+	echo "<script type='text/javascript' src='http://localhost/develop/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>";
+	echo "<script type='text/javascript' src='http://localhost/develop/wp-includes/js/thickbox/thickbox.js?ver=3.1-20080430'></script>
+	<script language='JavaScript' type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/jquery.tooltip.js'></script>
+<script type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/jquery-ui.js?ver=1.6'></script>
+<script type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
+<script language='JavaScript' type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/ui.datepicker.js'></script>
+<script type='text/javascript' src='http://localhost/develop/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
+";
+	echo "<script language='JavaScript' type='text/javascript'>
+			var base_url = '".$siteurl."';
+			var WPSC_URL = '".WPSC_URL."';
+			var WPSC_IMAGE_URL = '".WPSC_IMAGE_URL."';";
+		echo "var TXT_WPSC_DELETE = '".TXT_WPSC_DELETE."';\n\r";
+    	echo "var TXT_WPSC_TEXT = '".TXT_WPSC_TEXT."';\n\r";
+   	 echo "var TXT_WPSC_EMAIL = '".TXT_WPSC_EMAIL."';\n\r";
+   	 echo "var TXT_WPSC_COUNTRY = '".TXT_WPSC_COUNTRY."';\n\r";
+    echo "var TXT_WPSC_TEXTAREA = '".TXT_WPSC_TEXTAREA."';\n\r";
+    echo "var TXT_WPSC_HEADING = '".TXT_WPSC_HEADING."';\n\r";
+    echo "var TXT_WPSC_COUPON = '".TXT_WPSC_COUPON."';\n\r";
+    echo "var HTML_FORM_FIELD_TYPES =\"<option value='text' >".TXT_WPSC_TEXT."</option>";
+    echo "<option value='email' >".TXT_WPSC_EMAIL."</option>";
+    echo "<option value='address' >".TXT_WPSC_ADDRESS."</option>";
+    echo "<option value='city' >".TXT_WPSC_CITY."</option>";
+    echo "<option value='country'>".TXT_WPSC_COUNTRY."</option>";
+    echo "<option value='delivery_address' >".TXT_WPSC_DELIVERY_ADDRESS."</option>";
+    echo "<option value='delivery_city' >".TXT_WPSC_DELIVERY_CITY."</option>";
+    echo "<option value='delivery_country'>".TXT_WPSC_DELIVERY_COUNTRY."</option>";
+    echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";    
+    echo "<option value='heading' >".TXT_WPSC_HEADING."</option>";
+    echo "<option value='coupon' >".TXT_WPSC_COUPON."</option>\";\n\r";
+		
+	echo	"</script>";
+		
+	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script></head>";
+	if($_POST){
+				if($_POST['submit_action'] == "add") {
+    //exit("<pre>".print_r($_POST,true)."</pre>");
+    $variation_sql = "INSERT INTO `".$wpdb->prefix."product_variations` (`name`, `variation_association`) VALUES ( '".$_POST['name']."', 0);";
+    if($wpdb->query($variation_sql)) {
+      $variation_id = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_variations` LIMIT 1",ARRAY_A);
+      $variation_id = $variation_id[0]['id'];
+      $variation_values = $_POST['variation_values'];
+      $variation_value_sql ="INSERT INTO `".$wpdb->prefix."variation_values` ( `name` , `variation_id` ) VALUES ";
+      $num = 0;
+      foreach($variation_values as $variation_value) {
+        switch($num) {
+          case 0:
+          $comma = '';
+          break;
+          
+          default:
+          $comma = ', ';
+          break;
+				}
+        $variation_value_sql .= "$comma( '".$wpdb->escape(trim($variation_value))."', '".$variation_id."')";
+        $num++;
+			}
+      $variation_value_sql .= ";";
+      $wpdb->query($variation_value_sql);
+      echo "<head>";
+		echo "
+		<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script>
+		<script language='JavaScript' type='text/javascript'>
+			jQuery(document).ready(function(){
+				parent.jQuery('#add_product_variations').html(\"".nl2br($variations_processor->list_variations())."\");
+				parent.tb_remove();
+			});
+		</script>";
+	
+		echo "</head>";
+
+      echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
+		} else {
+			echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
+		}
+	}
+
+	}
+		echo "  <table id='productpage'>\n\r";
+		echo "    <tr>";
+		/*
+echo "  <div class='categorisation_title'>\n\r";
+		echo "		<strong class='form_group'>".TXT_WPSC_VARIATION_LIST."</strong>\n\r";
+		echo "	</div>\n\r";
+		echo "      <table id='itemlist'>\n\r";
+		echo "        <tr class='firstrow'>\n\r";
+	
+		echo "          <td>\n\r";
+		echo TXT_WPSC_NAME;
+		echo "          </td>\n\r";
+	
+		echo "          <td>\n\r";
+		echo TXT_WPSC_EDIT;
+		echo "          </td>\n\r";
+		
+		echo "        </tr>\n\r";
+		$variation_sql = "SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id`";
+		$variation_list = $wpdb->get_results($variation_sql,ARRAY_A);
+		if($variation_list != null) {
+		  foreach($variation_list as $variation) {
+		    display_variation_row($variation);
+			}
+		}
+		  
+		echo "      </table>\n\r";
+*/
+		echo "      <td class='secondcol'>\n\r";
+		echo "        <div id='productform'>";
+		echo "  <div class='categorisation_title'>\n\r";
+		echo "		<strong class='form_group'>".TXT_WPSC_EDITVARIATION."</strong>\n\r";
+		echo "	</div>\n\r";
+
+		echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>";
+		echo "        <div id='formcontent'>\n\r";
+		echo "        </div>\n\r";
+		echo "</form>";
+		echo "        </div>";
+		?>
+		<div id='additem'>
+  <div class="categorisation_title">
+		<strong class="form_group"><?php echo TXT_WPSC_ADDVARIATION;?></strong>
+	</div>
+  <form method='POST' action='<?php echo get_option('siteurl');?>/?thickbox_variations=true&width=550'>
+  <table class='category_forms'>
+    <tr>
+      <td>
+        <?php echo TXT_WPSC_NAME;?>:
+      </td>
+      <td>
+        <input type='text'  class="text" name='name' value=''  />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <?php echo TXT_WPSC_VARIATION_VALUES;?>:
+      </td>
+      <td>
+        <div id='add_variation_values'><span id='variation_value_1'>
+        <input type='text' class="text" name='variation_values[]' value='' />
+        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_1")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
+        </span><span id='variation_value_2'>
+        <input type='text' class="text" name='variation_values[]' value='' />
+        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_2")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
+        </span></div>
+       <a href='#' onclick='return add_variation_value("add")'><?php echo TXT_WPSC_ADD;?></a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <input type='hidden' name='submit_action' value='add' />
+        <input class='button'  type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
+      </td>
+    </tr>
+  </table>
+  </form>
+</div>
+<?php
+echo "      </td></tr>\n\r";
+echo "     </table>\n\r";
+		
+		exit();
+	}
+	
+	if ($_GET['thickbox_variations']) {
+		add_action('init','thickbox_variation');
+	}
 
 
   

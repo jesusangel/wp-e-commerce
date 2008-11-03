@@ -30,8 +30,9 @@ class nzshpcrt_variations {
         }
       }
     
-      $options .= "<label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list({$product_id});' value='1' name='variations[{$variation['id']}]' >{$variation['name']}</label> <br />\r\n";
+      $options .= "<label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list({$product_id});' value='1' name='variations[{$variation['id']}]' >{$variation['name']}</label><br>";
     }
+
     return $options;
   }
     
