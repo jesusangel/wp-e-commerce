@@ -678,13 +678,17 @@ if($_GET['filter'] !== 'true') {
 // 				}
 // 			}
 			echo "  <tr><td><b>".TXT_WPSC_LABEL."</b></td><td></td><td></td></tr>";
+			if (is_array($comments)){			
 			foreach ($comments as $comment) {
 				$comm = unserialize($comment['meta']);
+				if (is_array($comm['meta'])){
 				foreach($comm['meta'] as $key => $meta) {
 					if ($comm != '') {
 						echo "  <tr><td>".$key.":</td><td> ".$meta."</td><td>".$comm['time_requested'][$key]."</td></tr>\n\r";
 					}
 				}
+				}
+			}
 			}
 			if($purch_data[0]['transactid'] != '') {
 				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data[0]['transactid']."</td></tr>\n\r";
@@ -693,9 +697,9 @@ if($_GET['filter'] !== 'true') {
 		} else {
 			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
 		}
-		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$_GET['purchaseid']."&amp;clear_locks=true'>".TXT_WPSC_CLEAR_IP_LOCKS."</a><br />";
+		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$_GET['purchaseid']."&amp;clear_locks=true'>".TXT_WPSC_CLEAR_IP_LOCKS."</a>";
 		
-		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;display_invoice=true&amp;purchaseid=".$_GET['purchaseid']."'>".TXT_WPSC_VIEW_PACKING_SLIP."</a><br />";
+		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;display_invoice=true&amp;purchaseid=".$_GET['purchaseid']."'>".TXT_WPSC_VIEW_PACKING_SLIP."</a>";
 		
 		
 		echo "<br /><a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;deleteid=".$_GET['purchaseid']."'>".TXT_WPSC_REMOVE_LOG."</a>";

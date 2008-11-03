@@ -72,9 +72,9 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
           $count = $wpdb->get_var($count_sql);
           $addCount =  " [".$count."]";
         } //end get_option
-        // Adrian - if sliding category type selected, NO link for category text, mootools.js creates the linkable sliders onDomReady.
+        // No more mootools
         if (get_option('catsprods_display_type') == 1){ 
-          $output .= "<li class='MainCategory'><strong class='category'>".stripslashes($option['name']).$addCount."</strong>";
+          $output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
         }else{
         // Adrian - otherwise create normal category text with or without product count
 		if (!$image) {
@@ -90,7 +90,19 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
         $output .= display_subcategories($option['id']);
         } else {
           // Adrian - check if the user wants categories only or sliding categories
-          if (get_option('catsprods_display_type') == 1){     
+          if (get_option('permalink_structure')!=''){
+          	$uri = $_SERVER['REQUEST_URI'];
+          	$category = explode('/',$uri);
+          	$count = count($category);
+          	$category_nice_name = $category[$count-2];
+          	$category_nice_name2 = $wpdb->get_var("SELECT `nice-name` FROM {$wpdb->prefix}product_categories WHERE id='{$option['id']}'");
+          	if ($category_nice_name == $category_nice_name2) {
+          		$list_product=true;
+          	} else {
+          		$list_product=false;
+          	}
+          }
+          if ((get_option('catsprods_display_type') == 1) && (($option['id'] == $_GET['category']) || $list_product) ){     
           // Adrian - display all products for that category          
             $product_sql = "SELECT product_id FROM `".$wpdb->prefix."item_category_associations` WHERE `category_id` = '".$option['id']."'";
             $productIDs = $wpdb->get_results($product_sql,ARRAY_A);
@@ -98,9 +110,10 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
               $output .= "<ul>";
               foreach($productIDs as $productID){
                 $ID = $productID['product_id'];
-                $productName_sql = "SELECT name FROM `".$wpdb->prefix."product_list` WHERE `id` = '".$ID."'";
-                $productName = $wpdb->get_var($productName_sql);
-                $output .= "<li><a class='productlink' href='".wpsc_product_url($ID,$option['id'])."'>".$productName."</a></li>";
+                $productName_sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '".$ID."'";
+                $productName = $wpdb->get_results($productName_sql,ARRAY_A);
+                if ($productName[0]['active'])
+                	$output .= "<li><a class='productlink' href='".wpsc_product_url($ID,$option['id'])."'>".$productName[0]['name']."</a></li>";
               }//end foreach            
             $output .= "</ul>";         
             }//end if productsIDs
