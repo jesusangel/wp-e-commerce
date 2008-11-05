@@ -1,7 +1,4 @@
 <?php
-$flash = true;
-if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac') && apache_mod_loaded('mod_security') )
-	$flash = false;
 function nzshpcrt_getproductform($prodid)
   {
   global $wpdb,$nzshpcrt_imagesize_info;
@@ -574,16 +571,25 @@ $output .="</table></div></div></td></tr>";
   $output .= "<div id='edit_product_image' class='postbox ".((array_search('edit_product_image', $closed_postboxes) !== false) ? 'closed' : '')."'>
         <h3> 
 		<a class='togbox'>+</a>".TXT_WPSC_PRODUCTIMAGE."";
-  $output .= "</h3>
-		  <div class='inside'>
-	<table>";
-// 	$flash = true;
-// 	if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac') && apache_mod_loaded('mod_security') )
-// 		$flash = false;\
-	global $flash;
-	if ($flash)
-		$output .= '<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
-	if (!$flash) {
+  $output .="</h3>";
+	$output .=	  "<div class='inside'>";
+    
+    
+  $output .= "  <table width='100%' class='flash-image-uploader'>";
+  $output .= "    <td>";
+  $output .= "      <td>";
+  
+  $output .= '      <span id=\'spanButtonPlaceholder\'></span>';
+  $output .= '      <button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
+		
+  $output .= "      <p>".TXT_WPSC_FLASH_UPLOADER."</p>";
+  $output .= "      </td>";
+  $output .= "    </tr>";
+  $output .= "  </table>";
+		
+		
+		
+	$output .= "<table width='100%' class='browser-image-uploader'>";
 		if(function_exists("getimagesize")){
 			if($product['image'] != '') {
 			$imagedir = WPSC_THUMBNAIL_DIR;
@@ -679,7 +685,7 @@ $output .="</table></div></div></td></tr>";
 			$output .= "            </td>\n\r";
 			$output .= "          </tr>\n\r";
 		}
-	}
+	
   
 	$output .= "          <tr>\n\r";
 	$output .= "            <td>\n\r";
@@ -731,8 +737,8 @@ $output .="</table></div></div></td></tr>";
 			$output .= "          </tr>\n\r";
 		}
 	}
-	if ($flash)
-		$output .= "  </table>\n\r";
+	
+	
 	$output .= "            </td>\n\r";
 	$output .= "          </tr>\n\r";
 	$output .= "          <tr>\n\r";
@@ -744,34 +750,41 @@ $output .="</table></div></div></td></tr>";
 	$output .= "            </td>\n\r";
 	$output .= "          </tr>\n\r";
 	if(function_exists('edit_multiple_image_form')) {
-		$output .= edit_multiple_image_form($product['id']);
+		//$output .= edit_multiple_image_form($product['id']);
 	}
-		$output .= "            </td>\n\r";
+  $output .= "            </td>\n\r";
 	$output .= "          </tr>\n\r";
-	$output .="</table>";
-} else {
-	
+	if(function_exists('add_multiple_image_form')) {
+    $output .= add_multiple_image_form('');
+  }
+  $output .= "          <tr>\n\r";
+  $output .= "            <td colspan='2' >\n\r";
+  $output .= "              <p>".TXT_WPSC_BROWSER_UPLOADER."</p>\n\r";
+  $output .= "            </td>\n\r";
+  $output .= "          </tr>\n\r";
+    
+    $output .="</table>";
+    
+  }
+	$output .="<table>";
 	$output .= "          <tr>\n\r";
 	$output .= "            <td colspan='2'>\n\r";
 	$output .= "<ul id='gallery_list'>";
- 
-	if(function_exists('edit_multiple_image_form')) {
-		$output .= edit_multiple_image_form($product['id']);
+	if(function_exists('edit_multiple_image_gallery')) {
+	  $output .= edit_multiple_image_gallery($product['id']);
 	}
 	$output .= "</ul>";
 	$output .= "<br style='clear:both;'>";
 	$output .= "            </td>\n\r";
 	$output .= "          </tr>\n\r";
 	$output .="</table>";
-}
 // 	$output .= "            </td>\n\r";
 // 	$output .= "          </tr>\n\r";
   $output .="</div></div></td></tr>";
 
 
     
-  if($product['file'] > 0)
-    {
+  if($product['file'] > 0) {
     $output .= "          <tr>\n\r";
     $output .= "            <td colspan='2'>\n\r";
     $output .= "<div id='edit_product_download' class='postbox closed'>
@@ -790,10 +803,9 @@ $output .="</table></div></div></td></tr>";
     $output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product['id']."' style='float: left;' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
 
     $file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
-    if(($file_data != null) && (function_exists('listen_button')))
-      {
+    if(($file_data != null) && (function_exists('listen_button'))) {
       $output .= "".listen_button($file_data['idhash'], $file_data['id']);
-      }
+    }
       
     $output .= "            </td>\n\r";
     $output .= "          </tr>\n\r";
@@ -820,10 +832,8 @@ $output .="</table></div></div></td></tr>";
       $output .= "<br /><br />";
       $output .= "            </td>\n\r";
       $output .= "          </tr>\n\r";
-      }
     }
-    else
-      {
+  } else {
       $output .="<tr><td  colspan='2'>";
      $output .= "<div id='edit_product_download' class='postbox closed'>
         <h3>
@@ -841,7 +851,7 @@ $output .="</table></div></div></td></tr>";
       $output .= wpsc_select_product_file($product['id']);
       $output .= "        </td>";
       $output .= "      </tr>";
-      }
+    }
 		$output.=" </table></div></div></td></tr>";
 		$output .= "          <tr>\n\r";
 		$output .= "            <td>\n\r";
@@ -1344,13 +1354,11 @@ function wpsc_packing_slip($purchase_id) {
             break;
           }
         }
-				
-				
 			} else {
-					echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
-					echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purch_data['address']."</td></tr>\n\r";
-					echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data['phone']."</td></tr>\n\r";
-					echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data['email']."</td></tr>\n\r";
+        echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
+        echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purch_data['address']."</td></tr>\n\r";
+        echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data['phone']."</td></tr>\n\r";
+        echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data['email']."</td></tr>\n\r";
 			}
 			
 			if(get_option('payment_method') == 2) {
@@ -1440,6 +1448,115 @@ function wpsc_packing_slip($purchase_id) {
 			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
 		}
 
+}
+
+
+    
+function edit_multiple_image_gallery($id) {
+	global $wpdb;
+	$siteurl = get_option('siteurl');
+	$main_image = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$id'",ARRAY_A);
+	$timestamp = time();
+	$output .= "<li class='first' id='0'>";
+	if ($main_image[0]['image'] == '') {
+		$output .='';
+	} else {
+		$output .= "<div class='previewimage' id='gallery_image_0'><a id='extra_preview_link_".$image['id']."' href='".WPSC_IMAGE_URL.$main_image[0]['image']."' rel='product_extra_image_".$image['id']."' class='thickbox'><img class='previewimage' src='".WPSC_IMAGE_URL.$main_image[0]['image']."' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' /></a>";
+	}
+	$output .= "<div id='image_settings_box'>";
+	$output .= "<div class='upper_settings_box'>";
+	$output .= "<div class='upper_image'><img src='".WPSC_URL."/images/pencil.png'/></div><div class='upper_txt'>Thumbnail Settings<a class='closeimagesettings'>X</a></div>";
+	$output .= "</div>";
+	$output .= "<div class='lower_settings_box'>";
+	$output .= "<table>";// style='border: 1px solid black'
+	$output .= "  <tr>";
+	$output .= "    <td style='height: 1em;'>";
+	$output .= "<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='" . $product['thumbnail_image'] . "' />";
+	$output .= "<input type='radio' ";
+	if ($product['thumbnail_state'] == 0) {
+		$output .= "checked='true'";
+	}
+	$output .= " name='image_resize' value='0' id='image_resize0_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize0_$timestamp'> ".TXT_WPSC_DONOTRESIZEIMAGE."<br />";
+	$output .= "    </td>";
+	$output .= "  </tr>";
+
+	$output .= "  <tr>";
+	$output .= "    <td>";
+	$output .= "<input type='radio' ";
+	if ($product['thumbnail_state'] == 1) {
+		$output .= "checked='true'";
+	}
+	$output .= "name='image_resize' value='1' id='image_resize1_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize1_$timestamp'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
+	$output .= "    </td>";
+	$output .= "  </tr>";
+
+	$output .= "  <tr>";
+	$output .= "    <td>";
+	$output .= "<input type='radio' ";
+	if ($product['thumbnail_state'] == 2) {
+		$output .= "checked='true'";
+	}
+	$output .= " name='image_resize' value='2' id='image_resize2_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize2_$timestamp'>".TXT_WPSC_USESPECIFICSIZE." </label>
+	<div class='heightWidth image_resize_extra_forms' style=\"display: none;\">
+	<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>
+	<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT." </label></div>";
+	$output .= "    </td>";
+	$output .= "  </tr>";
+	$output .= "  <tr>";
+	$output .= "    <td>";
+	$output .= "<input type='radio' ";
+	if ($product['thumbnail_state'] == 3) {
+		$output .= "checked='true'";
+	}
+	$output .= " name='image_resize' value='3' id='image_resize3_$timestamp' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='image_resize3_$timestamp'> ".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
+	$output .= "<div class='browseThumb image_resize_extra_forms' style='display: ";
+	
+	if($product['thumbnail_state'] == 3) {
+		$output .= "block";
+	} else {
+		$output .= "none";
+	}
+
+	$output .= ";'>\n\r<input type='file' name='thumbnailImage' size='15' value='' />";
+	$output .= "</div>\n\r";
+	$output .= "    </td>";
+	$output .= "  </tr>";
+	
+	$output .= "  <tr>";
+	$output .= "    <td>";
+	$output .= "    <a href='#' class='delete_primary_image'>Delete this Image</a>";
+	$output .= "    </td>";
+	$output .= "  </tr>";
+	
+	$output .= "</table>";
+	$output .= "</div>";
+	$output .= "</div>";
+	$output .= "<a class='editButton'>Edit   <img src='".WPSC_URL."/images/pencil.png'/></a>";
+	$output .= "</div>";
+	$output .= "</li>";
+	
+	$num = 0;
+	if(function_exists('gold_shpcrt_display_gallery')) {
+    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_images` WHERE `product_id` = '$id' ORDER BY image_order ASC",ARRAY_A);
+    if($values != null) {
+      foreach($values as $image) {
+        if(function_exists("getimagesize")) {
+          if($image['image'] != '') {
+            $num++;
+            $imagepath = WPSC_IMAGE_DIR . $image['image'];
+            include('getimagesize.php');
+            $output .= "<li id=".$image['id'].">";
+            //  $output .= $image['image'];
+            $output .= "<div class='previewimage' id='gallery_image_{$image['id']}'><a id='extra_preview_link_".$image['id']."' href='".WPSC_IMAGE_URL.$image['image']."' rel='product_extra_image_".$image['id']."' class='thickbox'><img class='previewimage' src='".WPSC_IMAGE_URL.$image['image']."' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' /></a>";
+            $output .= "<img alt='-' class='deleteButton' src='".WPSC_URL."/images/cross.png'/>";
+            $output .= "</div>";
+            $output .= "</li>";
+          }
+        }
+      }
+    }
+  }
+  return $output;
 }
 
 ?>

@@ -2,6 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_FLASH_UPLOADER', 'You are using the Flash uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.');
+define('TXT_WPSC_BROWSER_UPLOADER', 'You are using the Browser uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("flash")\'>Flash uploader</a> instead.');
 
 define('TXT_WPSC_ADMIN_REPORT', 'Admin Report');
 define('TXT_WPSC_TAGS_CAN_BE_USED', 'Tags can be used');

@@ -1390,85 +1390,103 @@ echo "        </div>";
 		<?php echo TXT_WPSC_PRODUCTIMAGES;?>
 	</h3>
 	<div class='inside'>
-	<table width='100%'>
-    <tr>
-      <td>
-      	<?php
-      	if ($flash)
-		echo '<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
-        else {
-		echo TXT_WPSC_PRODUCTIMAGE.":";
-		echo "</td>
-		<td>
-			<input type='file' name='image' value='' />
-		</td>
-	</tr>";
-    }
-    ?>
-    <tr>
-      <!--<td></td>--><td>
-      <table>
-	<ul id='gallery_list'></ul>
-  <?php
-  // pe.{ & table opening above
-	
-	if ($flash) {
-	 } else {
-  if(function_exists("getimagesize") && is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width'))) {
-    ?>
-      <tr>
-        <td>
-      <input type='radio' name='image_resize' value='0' id='add_image_resize0' class='image_resize' onclick='hideOptionElement(null, "image_resize0");' /> <label for='add_image_resize0'><?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, "image_resize1");' /> <label for='add_image_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE;?> <?php echo "(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)"; ?></label>
-        </td>
-      </tr>
-    <?php  
-    $default_size_set = true;
-    }
-  
-  if(function_exists("getimagesize"))
-    {
-    ?>
-     <tr>
-        <td>
-           <input type='radio' name='image_resize' value='2'id='add_image_resize2' class='image_resize'  onclick='hideOptionElement("heightWidth", "image_resize2");' />
-       <label for='add_image_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>        
-           <div id='heightWidth' style='display: none;'>
-         <input type='text' size='4' name='width' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXWIDTH;?></label>
-        <input type='text' size='4' name='height' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
-       </div>
-         </td>
-       </tr>
-       <tr>
-       <td>
-         <input type='radio' name='image_resize' value='3' id='add_image_resize3' class='image_resize' onclick='hideOptionElement("browseThumb", "image_resize3");' />
-         <label for='add_image_resize3'><?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
-         <div id='browseThumb' style='display: none;'>
-           <input type='file' name='thumbnailImage' value='' />
-         </div>
-       </td>
-     </tr>
-    <?php
-        }
     
-    if(function_exists('add_multiple_image_form')) {
-      echo add_multiple_image_form("add_");
-      }
-	if(function_exists('gold_shpcrt_install')) {
-		echo "<input type='hidden' value='1' id='gold_present'>";
-	}
-	}
-  ?>
-        </table>
-      </td>
-    </tr>
+    <table width='100%' class='flash-image-uploader'>
+      <tr>
+        <td>
+          <?php
+            echo "<span id='spanButtonPlaceholder'></span>";
+            echo '<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
+            
+            echo "<p>".TXT_WPSC_FLASH_UPLOADER."</p>";
+          ?>
+        </td>
+      </tr>
     </table>
-   </div></div></td></tr>
     
+    
+    
+    
+    <table width='100%' class='browser-image-uploader'>
+      <tr>
+        <td>
+        <?php echo TXT_WPSC_PRODUCTIMAGE.":"; ?>
+        </td>
+        <td>
+          <input type='file' name='image' value='' />
+        </td>
+      </tr>
+      <?php
+      if(function_exists("getimagesize") && is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width'))) {
+        ?>
+        <tr>
+          <td></td>
+          <td>
+        <input type='radio' name='image_resize' value='0' id='add_image_resize0' class='image_resize' onclick='hideOptionElement(null, "image_resize0");' /> <label for='add_image_resize0'><?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, "image_resize1");' /> <label for='add_image_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE;?> <?php echo "(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)"; ?></label>
+          </td>
+        </tr>
+        <?php  
+        $default_size_set = true;
+      }
+    
+      if(function_exists("getimagesize")) {
+        ?>
+        <tr>
+          <td></td>
+          <td>
+            <input type='radio' name='image_resize' value='2'id='add_image_resize2' class='image_resize'  onclick='hideOptionElement("heightWidth", "image_resize2");' />
+            <label for='add_image_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>        
+            <div id='heightWidth' style='display: none;'>
+              <input type='text' size='4' name='width' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXWIDTH;?></label>
+              <input type='text' size='4' name='height' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type='radio' name='image_resize' value='3' id='add_image_resize3' class='image_resize' onclick='hideOptionElement("browseThumb", "image_resize3");' />
+            <label for='add_image_resize3'><?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
+            <div id='browseThumb' style='display: none;'>
+              <input type='file' name='thumbnailImage' value='' />
+            </div>
+          </td>
+        </tr>
+        <?php
+          if(function_exists('add_multiple_image_form')) {
+            echo add_multiple_image_form("add_");
+          }
+        ?>
+        <tr>
+          <td colspan='2' >
+            <?php echo "<p>".TXT_WPSC_BROWSER_UPLOADER."</p>"; ?>
+          </td>
+        </tr>
+      <?php
+      }
+      
+      if(function_exists('gold_shpcrt_install')) {
+        echo "<input type='hidden' value='1' id='gold_present'>";
+      }
+      
+      ?>
+      
+    </table>
+    
+    <table width='100%'>
+      <tr>
+        <td>
+          <ul id='gallery_list'></ul>
+        </td>
+      </tr>
+    </table>
+  </div></div></td></tr>
     <tr>
       <td colspan='2'>
         <div id='product_download' class='postbox <?php echo ((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>

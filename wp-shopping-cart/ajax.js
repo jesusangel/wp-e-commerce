@@ -18,7 +18,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 // mini/ajax.js - http://timmorgan.org/mini
-var fvd = 0;
+// var fvd = 0;
 function ajax_item(e){if(typeof e=='string')e=document.getElementById(e);return e};
 function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
 

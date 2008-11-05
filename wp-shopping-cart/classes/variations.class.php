@@ -133,7 +133,7 @@ class nzshpcrt_variations {
       $output .= "    <th class='titles stock'>".TXT_WPSC_STOCK."</th>\n\r";
       $output .= "    <th class='titles price'>".TXT_WPSC_PRICE."</th>\n\r";
       $output .= "    <th class='titles'>".TXT_WPSC_WEIGHT."</th>\n\r";
-      $output .= "    <th class='titles'><label alt='".TXT_WPSC_ASSOCIATEWITHFILE."' title='".TXT_WPSC_ASSOCIATEWITHFILE."'>".TXT_WPSC_FILE."</label>&nbsp;</th>\n\r";
+      $output .= "    <th class='titles'><abbr alt='".TXT_WPSC_ASSOCIATEWITHFILE."' title='".TXT_WPSC_ASSOCIATEWITHFILE."'>".TXT_WPSC_FILE."</abbr>&nbsp;</th>\n\r";
       $output .= "  </tr>\n\r";
       
       
@@ -401,7 +401,7 @@ class nzshpcrt_variations {
     $output .= "    <th class='titles stock'>".TXT_WPSC_STOCK."</th>\n\r";
     $output .= "    <th class='titles price'>".TXT_WPSC_PRICE."</th>\n\r";
     $output .= "    <th class='titles'>".TXT_WPSC_WEIGHT."</th>\n\r";
-    $output .= "    <th class='titles'><label alt='".TXT_WPSC_ASSOCIATEWITHFILE."' title='".TXT_WPSC_ASSOCIATEWITHFILE."'>".TXT_WPSC_FILE."</label></th>\n\r";
+    $output .= "    <th class='titles'><abbr alt='".TXT_WPSC_ASSOCIATEWITHFILE."' title='".TXT_WPSC_ASSOCIATEWITHFILE."'>".TXT_WPSC_FILE."</abbr></th>\n\r";
 		$output .= "  </tr>\n\r";
 		
     
