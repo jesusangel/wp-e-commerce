@@ -1816,11 +1816,11 @@ if($_GET['clean_categories'] == 'true') {
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_PURCHASERECEIPT?></th>
-										<td><textarea name="email_receipt"><?php echo get_option('email_receipt');?></textarea></textarea></td>
+										<td><textarea wrap='hard' name="email_receipt"><?php echo get_option('email_receipt');?></textarea></textarea></td>
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_ADMIN_REPORT?></th>
-										<td><textarea name="email_admin"><?php echo get_option('email_admin');?></textarea></td>
+										<td><textarea wrap='hard' name="email_admin"><?php echo get_option('email_admin');?></textarea></td>
 									</tr>
 								</table>
 								<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>

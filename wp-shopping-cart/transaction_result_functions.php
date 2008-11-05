@@ -18,13 +18,12 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$purchase_log = $wpdb->get_row($selectsql,ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
-			$message = "".TXT_WPSC_YOUR_ORDER.":\n";
-			$message_html = "<h2  style='padding-top: 0px;' >".TXT_WPSC_YOUR_ORDER."</h2>";
+			$message = get_option("email_receipt");
+			$message_html = $message;
 		} else {
-			$message = TXT_WPSC_EMAILMSG1;
+			$message = get_option("email_receipt");
 			$message_html = $message;
 		}
-
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
 
 		if(($_GET['ipn_request'] != 'true') and (get_option('paypal_ipn') == 1)) {
@@ -61,7 +60,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$email = $email_address[0]['value'];
 
 		$previous_download_ids = array(0); 
-	
+		$product_list='';
 		if(($cart != null) && ($errorcode == 0)) {
 			foreach($cart as $row) {
 				$link = "";
@@ -74,11 +73,11 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if (($purchase_log['processed'] >= 2)) {
 						$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR `cartid` IS NULL) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
 						if($download_data != null) {
-              if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
-                $link = $siteurl."?downloadid=".$download_data['id'];
-              } else {
-                $link = $siteurl."?downloadid=".$download_data['uniqueid'];
-              }
+            				if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
+            				  	$link = $siteurl."?downloadid=".$download_data['id'];
+            				} else {
+            				  	$link = $siteurl."?downloadid=".$download_data['uniqueid'];
+            				}
 						}
 						$previous_download_ids[] = $download_data['id'];
 						$order_status= 4;
@@ -140,19 +139,19 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						}
 			
 						if($link != '') {
-							$message.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."  ".TXT_WPSC_CLICKTODOWNLOAD.": $link\n";
-							$message_html.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_DOWNLOAD."</a>\n";
+							$product_list.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."  ".TXT_WPSC_CLICKTODOWNLOAD.": $link\n";
+							$product_list_html.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_DOWNLOAD."</a>\n";
 						} else {
 							$plural = '';
 							
 							if($row['quantity'] > 1) {
 								$plural = "s";
 							  }
-							$message.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-							$message_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							$product_list.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							$product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
 						}
-						
-						$report.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
+						$report = get_option("email_admin");
+						$report_product_list.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
 				}
 				
 				if($purchase_log['discount_data'] != '') {
@@ -166,18 +165,18 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
 				$total = (($total+$total_shipping) - $purchase_log['discount_value']);
 			// $message.= "\n\r";
-				$message.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
+				$product_list.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
 				if($purchase_log['discount_value'] > 0) {
-					$message.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
+					$discount_email.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
-				$message.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
-				$message.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total,1,true)."\n\r";
-				$message_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
+				$total_shipping_email.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
+				$total_price_email.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total,1,true)."\n\r";
+				$product_list_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
 				if($purchase_log['discount_value'] > 0) {
-					$message_html.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
+					$discount_html.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
-				$message_html.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
-				$message_html.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total, 1,true)."\n\r";
+				$total_shipping_html.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
+				$total_price_html.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total, 1,true)."\n\r";
 				if(isset($_GET['ti'])) {
 					$message.= "\n\r".TXT_WPSC_YOURTRANSACTIONID.": " . $_GET['ti'];
 					$message_html.= "\n\r".TXT_WPSC_YOURTRANSACTIONID.": " . $_GET['ti'];
@@ -186,12 +185,26 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
 				}
 				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
+					$message = str_replace('%product_list%',$product_list,$message);
+					$message = str_replace('%total_shipping%',$total_shipping_email,$message);
+					$message = str_replace('%total_price%',$total_price_email,$message);
+					$message = str_replace('%shop_name%',get_option('blogname'),$message);
+					
+					$report = str_replace('%product_list%',$report_product_list,$report);
+					$report = str_replace('%total_shipping%',$total_shipping_email,$report);
+					$report = str_replace('%total_price%',$total_price_email,$report);
+					$report = str_replace('%shop_name%',get_option('blogname'),$report);
+					exit(nl2br($report));
+					$message_html = str_replace('%product_list%',$product_list,$message_html);
+					$message_html = str_replace('%total_shipping%',$total_shipping_email,$message_html);
+					$message_html = str_replace('%total_price%',$total_price_email,$message_html);
+					$message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
+						mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, nl2br($message), "From: ".get_option('return_email')."");
 					} else {
-						mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')."");
+						mail($email, TXT_WPSC_PURCHASERECEIPT, nl2br($message), "From: ".get_option('return_email')."");
 					}
 				}
 				$report_user = TXT_WPSC_CUSTOMERDETAILS."\n\r";
@@ -216,7 +229,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$report = $report_user. $report_id . $report;
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
-					mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')."");
+					mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, nl2br($report), "From: ".get_option('return_email')."");
 				}
 
 				if($purchase_log['processed'] < 2) {
