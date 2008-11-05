@@ -267,6 +267,14 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
     if(isset($_POST['base_local_shipping'])) {
       update_option('base_local_shipping', $_POST['base_local_shipping']);
     }
+    
+    if(isset($_POST['email_receipt'])) {
+      update_option('email_receipt', $_POST['email_receipt']);
+    }
+      
+    if(isset($_POST['email_admin'])) {
+      update_option('email_admin', $_POST['email_admin']);
+    }
       
     if(isset($_POST['base_zipcode'])) {
 	    update_option('base_zipcode', $_POST['base_zipcode']);
@@ -1801,7 +1809,20 @@ if($_GET['clean_categories'] == 'true') {
 									</tr>
 						
 								</table> 
-										
+								<h3 class="form_group"><?php echo TXT_WPSC_EMAIL_SETTINGS;?>:</h3>
+								<table class='wpsc_options form-table'>
+									<tr>
+										<th colspan="2">Tags can be used: %product_list%, %total_price%，%total_shipping%</th>
+									</tr>
+									<tr>
+										<th><?=TXT_WPSC_PURCHASERECEIPT?></th>
+										<td><textarea name="email_receipt"></textarea></td>
+									</tr>
+									<tr>
+										<th>Admin Report</th>
+										<td><textarea name="email_admin"></textarea></td>
+									</tr>
+								</table>
 								<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>
 								<table class='wpsc_options form-table'>
 									</tr>

@@ -202,7 +202,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	$product['name'] = str_replace("™","&trade;",$product['name']);
 	$product['description'] = str_replace("™","&trade;",$product['description']);
 			if (array_search("google",get_option('custom_gateway_options')) !== false) {
-				$google_item = new GoogleItem(utf8_decode($product['name']),utf8_decode($product['description']), $quantity, $google_unit_price);
+				$google_item = new GoogleItem(utf8_decode($product['name'].$variation_list),utf8_decode($product['description']), $quantity, $google_unit_price);
 				$google_item->SetMerchantItemId($product['id']);
 				
 				$google_cart->SetMerchantCalculations(get_option('siteurl'),"false","false","false");

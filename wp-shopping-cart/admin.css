@@ -1746,3 +1746,7 @@ img.file_delete_button {
 	cursor: pointer;
 	margin-top: -17px;
 }
+
+br.small {
+	line-height: 0.5em;
+}

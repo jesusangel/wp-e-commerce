@@ -2,6 +2,15 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+define('TXT_WPSC_ADMIN_REPORT', 'Admin Report');
+define('TXT_WPSC_TAGS_CAN_BE_USED', 'Tags can be used');
+define('TXT_WPSC_EMAIL_SETTINGS', 'Email Settings');
+define('TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL', 'An Error Occured While Sending Email');
+define('TXT_WPSC_EMAIL_SENT', 'Email Sent');
+define('TXT_WPSC_ACTIONS', 'Actions');
+define('TXT_WPSC_EMAIL_BUYER', 'Email Buyer');
+
 define('TXT_WPSC_FILE_NAMES', 'File Names');
 define('TXT_WPSC_DOWNLOADS_LEFT', 'Downloads Left');
 
@@ -754,7 +763,7 @@ define('TXT_WPSC_PRODUCT_CATEGORIES', 'Select Categories');
 define('TXT_WPSC_THANKS_DELETED', 'Thanks, the purchase log record has been deleted');
 define('TXT_WPSC_PRODUCT_IMAGE_PREVIEW', 'Product image');
 define('TXT_WPSC_PRODUCT_THUMBNAIL_PREVIEW', 'Product thumbnail');
-define('TXT_WPSC_REMOVE_LOG', 'Remove this record from the purchase log');
+define('TXT_WPSC_REMOVE_LOG', 'Remove this record');
 define('TXT_WPSC_CATSANDBRAND', 'Categories &amp; Brands');
 define('TXT_WPSC_GOLD_DROPSHOP', 'DropShop');
 define('TXT_WPSC_NEEDTOENABLEDROPSHOP', 'You need to install the Gold and DropShop extentions to use this');
