@@ -369,33 +369,38 @@ function nzshpcrt_submit_checkout() {
       }
       
       
+      // this code attaches files to cart items
+      $is_downloadable = false;
+      if(count($variation_values) > 0) { 
+        // if there are any variations, there might also be a file, hunt for a file ID for this variation
+        $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
+        asort($variation_ids);         
+        $all_variation_ids = implode(",", $variation_ids);
       
-      if($product_data['file'] > 0) {
-        $add_download_link = false;
+        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
         
-        if(count($variation_values) > 0) {
-          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
-          asort($variation_ids);         
-          $all_variation_ids = implode(",", $variation_ids);
-        
-          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
-          
-          $variation_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-          if((int)$variation_data['file'] == 1) {
-            $add_download_link = true;
-          } 
-        } else {
-          $add_download_link = true;
+        $variation_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+        if((int)$variation_data['file'] > 0) {
+          $is_downloadable = true;
+          $file_id = (int)$variation_data['file'];
         }
+      } else if($product_data['file'] > 0) {
+        // otherwise, we use the attached file, if it exists
+        $file_id = (int)$product_data['file'];
+        $is_downloadable = true;
+      }
         
-        if($add_download_link == true) {
+      if($is_downloadable == true) {
+        // if the file is downloadable, check that the file is real
+        if($wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_files` WHERE `id` IN ('$file_id')")) {
           $unique_id = sha1(uniqid(mt_rand(), true));
-          $wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$product_data['file']}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+          $wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
         }
       }
       
+      
       /*
-        * This code decrements the stock quantitycart_item_variations`
+        * This code decrements the stock quantity
       */
       //$debug .= "<pre>".print_r($variations,true)."</pre>";
       if($product_data['quantity_limited'] == 1) {

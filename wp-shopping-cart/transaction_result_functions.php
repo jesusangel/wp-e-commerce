@@ -68,10 +68,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$product_data = $wpdb->get_results($productsql,ARRAY_A) ;
 				if($product_data[0]['file'] > 0) {
 					if($purchase_log['email_sent'] != 1) {
-						$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
+						$wpdb->query("UPDATE `{$wpdb->prefix}download_status` SET `active`='1' WHERE (`fileid` = '{$product_data[0]['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}' LIMIT 1");
 					}
 					if (($purchase_log['processed'] >= 2)) {
-						$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR `cartid` IS NULL) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
+						$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data[0]['file']}') ) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
 						if($download_data != null) {
             				if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
             				  	$link = $siteurl."?downloadid=".$download_data['id'];
