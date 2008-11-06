@@ -199,12 +199,13 @@ if($_POST['submit_action'] == 'add') {
 	
 				
 			//modified for USPS
+			//exit($_POST['images'][0]);
 		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
 		
 		if($wpdb->query($insertsql)) {  
 			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
 			for($i=1;$i<count($_POST['images']);$i++) {
-				$wpdb->query("INSERT INTO {$wpdb->prefix}product_images VALUES('','$product_id','".$_POST['images'][$i]."','0','0','$i')");
+				$wpdb->query("INSERT INTO {$wpdb->prefix}product_images VALUES('','$product_id','".$_POST['images'][$i]."','0','0','$i','')");
 			}
 			if(function_exists('wp_insert_term')) {
 				product_tag_init();
@@ -234,8 +235,15 @@ if($_POST['submit_action'] == 'add') {
 			}
 			
 			if($_FILES['pdf'] != null) {
-				move_uploaded_file($_FILES['pdf']['tmp_name'], WPSC_PREVIEW_DIR.$_FILES['pdf']['name']);
-				add_product_meta($product_id,'pdf',$_FILES['pdf']['name']);
+				foreach($_FILES['pdf'] as $key => $pdf) {
+					move_uploaded_file($_FILES['pdf'][$key]['tmp_name'], WPSC_PREVIEW_DIR.$_FILES['pdf'][$key]['name']);
+					$pdf_names[] = $_FILES['pdf'][$key]['name'];
+				}
+				if (get_product_meta($product_id,'pdf') != false) {
+					update_product_meta($product_id,'pdf',$pdf_names);
+				} else {
+					add_product_meta($product_id,'pdf',$pdf_names);
+				}
 			}
 			
 			if($_POST['new_custom_meta'] != null) {
@@ -267,15 +275,17 @@ if($_POST['submit_action'] == 'add') {
 			
 			$variations_processor = new nzshpcrt_variations;
 			if($_POST['variations'] != null) {
-				foreach((array)$_POST['variations'] as $variation_id => $state) {
-					$variation_id = (int)$variation_id;
-					if($state == 1) {
-						$variation_values = $variations_processor->falsepost_variation_values($variation_id);
-						$variations_processor->add_to_existing_product($product_id,$variation_values);
-					}
-				}
+			
+        foreach((array)$_POST['variations'] as $variation_id => $state) {
+          $variation_id = (int)$variation_id;
+          if($state == 1) {
+            $variation_values = $variations_processor->falsepost_variation_values($variation_id);
+            $variations_processor->add_to_existing_product($product_id,$variation_values);
+          }
+        }
 			}
 
+				
 			if($_POST['variation_priceandstock'] != null) {
 				$variations_processor->update_variation_values($product_id, $_POST['variation_priceandstock']);
 	// 			  exit("<pre>".print_r($_POST,true)."</pre>");
@@ -422,8 +432,11 @@ if($_POST['submit_action'] == "edit") {
 
 
 		if($_FILES['pdf'] != null) {
-			move_uploaded_file($_FILES['pdf']['tmp_name'], WPSC_PREVIEW_DIR.$_FILES['pdf']['name']);
-			add_product_meta($product_id,'pdf',$_FILES['pdf']['name']);
+			foreach($_FILES['pdf'] as $key => $pdf){
+				move_uploaded_file($_FILES['pdf'][$key]['tmp_name'], WPSC_PREVIEW_DIR.$_FILES['pdf'][$key]['name']);
+				$pdf_names[]=$_FILES['pdf'][$key]['name'];
+			}
+			update_product_meta($product_id,'pdf',$pdf_names);
 		}
 
 		if(file_exists($_FILES['preview_file']['tmp_name'])) {
@@ -1524,6 +1537,58 @@ if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
   }
     ?>
     </table></div></div></td></tr>
+    
+    <!--For product labels-->
+    <tr>
+    <td colspan="2">
+	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
+        <h3>
+		<a class="togbox">+</a>
+		<?php echo TXT_WPSC_LABEL_CONTROL; ?>
+	</h3>
+	<div class='inside'>
+    <table>
+    <tr>
+      <td colspan='2'>
+        <?php echo TXT_WPSC_LABELS; ?> :
+      	<a id='add_label'><?php echo TXT_WPSC_LABELS; ?></a>
+      </td>
+    </tr> 
+    <tr>
+      <td colspan='2'>
+      <div id="labels">
+        <table>
+        	<tr>
+        		<td><?=TXT_WPSC_LABEL?> :</td>
+        		<td><input type="text" name="productmeta_values[labels][]"></td>
+        	</tr>
+        	<tr>
+        		<td><?=TXT_WPSC_LABEL_DESC?> :</td>
+        		<td><textarea name="productmeta_values[labels_desc][]"></textarea></td>
+        	</tr>
+        	<tr>
+        		<td><?=TXT_WPSC_LIFE_NUMBER?> :</td>
+        		<td><input type="text" name="productmeta_values[life_number][]"></td>
+        	</tr>
+        	<tr>
+        		<td><?=TXT_WPSC_ITEM_NUMBER?> :</td>
+        		<td><input type="text" name="productmeta_values[item_number][]"></td>
+        	</tr>
+        	<tr>
+        		<td><?=TXT_WPSC_PRODUCT_CODE?> :</td>
+        		<td><input type="text" name="productmeta_values[product_code][]"></td>
+        	</tr>
+        	<tr>
+        		<td><?=TXT_WPSC_PDF?> :</td>
+        		<td><input type="file" name="pdf[]"></td>
+        	</tr>
+        </table>
+        </div>
+      </td>
+    </tr> 
+	</table></div></div></td></tr>
+	
+	<!--Product label ends here-->
     <tr>
       <td>
       </td>

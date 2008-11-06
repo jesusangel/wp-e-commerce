@@ -160,12 +160,11 @@ jQuery("#gallery_list").sortable({
 					jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
 					jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
 					
-          element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
+          			element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
 					if(element_id == 0) {
-            jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
+            			jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
 					}
 				}
-				
 				
 				order = set.join(',');
 				prodid = jQuery('#prodid').val();
@@ -213,6 +212,18 @@ jQuery("#table_rate_price").click(
 jQuery(".add_level").click(
 	function() {
 		jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'+WPSC_URL+'/images/cross.png" class="remove_line"></td></tr>');
+	}
+);
+
+jQuery(".remove_label").click(
+	function(){
+		jQuery(this).parent().parent().parent().remove();
+	}
+);
+
+jQuery("#add_label").click(
+	function(){
+		jQuery("#labels").append("<br><table><tr><td>"+TXT_WPSC_LABEL+" :</td><td><input type='text' name='productmeta_values[labels][]'></td></tr><tr><td>"+TXT_WPSC_LIFE_NUMBER+" :</td><td><input type='text' name='productmeta_values[life_number][]'></td></tr><tr><td>"+TXT_WPSC_ITEM_NUMBER+" :</td><td><input type='text' name='productmeta_values[item_number][]'></td></tr><tr><td>"+TXT_WPSC_PRODUCT_CODE+" :</td><td><input type='text' name='productmeta_values[product_code][]'></td></tr><tr><td>"+TXT_WPSC_PDF+" :</td><td><input type='file' name='productmeta_values[product_pdf][]'></td></tr></table>");
 	}
 );
 
@@ -720,24 +731,27 @@ jQuery(window).load( function () {
 	});
 	
 	jQuery('a.closeEl').bind('click', toggleContent);
-// 	jQuery('div.groupWrapper').Sortable( {
-// 			accept: 'groupItem',
-// 			helperclass: 'sortHelper',
-// 			activeclass : 	'sortableactive',
-// 			hoverclass : 	'sortablehover',
-// 			handle: 'div.itemHeader',
-// 			tolerance: 'pointer',
-// 			onChange : function(ser) {
-// 			serialize();
-// 			},
-// 			onStart : function() {
-// 				jQuery.iAutoscroller.start(this, document.getElementsByTagName('body'));
-// 			},
-// 			onStop : function() {
-// 				jQuery.iAutoscroller.stop();
-// 			}
-// 		}
-// 	);
+ 	jQuery('div.groupWrapper').sortable( {
+			accept: 'groupItem',
+ 			helperclass: 'sortHelper',
+ 			activeclass : 	'sortableactive',
+ 			hoverclass : 	'sortablehover',
+ 			handle: 'div.itemHeader',
+ 			tolerance: 'pointer',
+ 			onStart : function() {
+ 				jQuery.iAutoscroller.start(this, document.getElementsByTagName('body'));
+ 			},
+ 			onStop : function() {
+				jQuery.iAutoscroller.stop();
+ 			},
+ 			update : function(e,ui) {
+ 				serial = jQuery('div.groupWrapper').sortable('toArray');
+ 				category_id = jQuery("input#item_list_category_id").val();
+ 				
+ 				ajax.post("index.php", noresults, "ajax=true&changeorder=true&category_id="+category_id+"&sort1="+serial);
+ 			}
+ 		}
+ 	);
 
 	jQuery('a#close_news_box').click( function () {
 		jQuery('div.wpsc_news').css( 'display', 'none' );
@@ -756,19 +770,6 @@ var toggleContent = function(e)
 		$(this).html('[+]');
 	}
 	return false;
-};
-
-
-function serialize(s) {
-	var serialize_results=function()  {
-		jQuery("div#changenotice").css("display","block").html('Product Order Saved');
-		jQuery('#loadingindicator_span').css('visibility','hidden');
-		}
-	serial = jQuery.SortSerialize(s);
-	category_id = jQuery("input#item_list_category_id").val();
-	ajax.post("index.php", serialize_results, "ajax=true&changeorder=true&category_id="+category_id+"&"+serial.hash);
-	jQuery("#loadingimage").attr('src', WPSC_URL+'/images/indicator.gif');
-	jQuery('#loadingindicator_span').css('visibility','visible');
 };
 
 
@@ -1016,27 +1017,28 @@ function imageUploadError (file, error, message) {
 }
 
 function imageUploadSuccess (file, results) {
-  /*alert(results)*/;
-  id = null;
+  /* alert(results) */;
+  	//Don't delete, initiate id is neccesary.
+  	var id = null;
 	eval(results);
 	
 	if (id == null ) {
-	  if(replacement_src != null) {
-	    jQuery("li.first div.previewimage a.thickbox").attr('href', replacement_src);
-	    jQuery("li.first div.previewimage a.thickbox img.previewimage").attr('src', replacement_src);
-	  } else {
-      if (jQuery('#gold_present').val() != '1') {
-        jQuery('#add-product-image').remove();
-      }
-      jQuery(this.sorting).attr({'value':src});
-      var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+	  	if(replacement_src != null) {
+	  	  	jQuery("li.first div.previewimage a.thickbox").attr('href', replacement_src);
+	  	  	jQuery("li.first div.previewimage a.thickbox img.previewimage").attr('src', replacement_src);
+	  	} else {
+      		if (jQuery('#gold_present').val() != '1') {
+      		  jQuery('#add-product-image').remove();
+      		}
+      		jQuery(this.sorting).attr({'value':src});
+      		var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
 		}
 	} else {
 		//jQuery(this.targetHolder).attr({'id':'image-'+src});
 		jQuery(this.targetHolder).attr({'id':id});
 		div_id = 'gallery_image_-'+id;
 		jQuery(this.targetHolder).html('');
-		var img = jQuery('<div class="previewimage" id="'+div_id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+		var img = jQuery('<div class="previewimage" id="'+div_id+'"><input type="hidden" name="images[]" value="'+src+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
 	}
 	jQuery(this.progressBar).animate({'width':'76px'},250,function () {
 		jQuery(this).parent().fadeOut(500,function() {
@@ -1153,7 +1155,11 @@ jQuery(document).ready(function(){
 			}
 		}
 	);
-	
+	jQuery("#add_label").click(
+		function(){
+			jQuery("#labels").append("<br><table><tr><td>"+TXT_WPSC_LABEL+" :</td><td><input type='text' name='productmeta_values[labels][]'></td></tr><tr><td>"+TXT_WPSC_LABEL_DESC+" :</td><td><textarea name='productmeta_values[labels_desc][]'></textarea></td></tr><tr><td>"+TXT_WPSC_LIFE_NUMBER+" :</td><td><input type='text' name='productmeta_values[life_number][]'></td></tr><tr><td>"+TXT_WPSC_ITEM_NUMBER+" :</td><td><input type='text' name='productmeta_values[item_number][]'></td></tr><tr><td>"+TXT_WPSC_PRODUCT_CODE+" :</td><td><input type='text' name='productmeta_values[product_code][]'></td></tr><tr><td>"+TXT_WPSC_PDF+" :</td><td><input type='file' name='productmeta_values[product_pdf][]'></td></tr></table>");
+		}
+	);
 	jQuery(".add_level").click(
 		function() {
 			added = jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td></tr>');
@@ -1173,12 +1179,10 @@ jQuery(document).ready(function(){
 			jQuery(this).attr("id",jQuery(this).parent().attr('id'));
 		}
 	);
-// 	jQuery(".pricedisplay").editable(base_url+"/?inline_price=true", {
-//         indicator : "Saving...",
-//         tooltip   : 'Click to edit...'
-//      });
-
-	
+ 	jQuery(".pricedisplay").editable(base_url+"/?inline_price=true", {
+         indicator : "Saving...",
+         tooltip   : 'Click to edit...'
+    });
 });
 
 

@@ -519,6 +519,13 @@ var borderSize = 10;
     echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";    
     echo "<option value='heading' >".TXT_WPSC_HEADING."</option>";
     echo "<option value='coupon' >".TXT_WPSC_COUPON."</option>\";\n\r";
+    
+    echo "var TXT_WPSC_LABEL = '".TXT_WPSC_LABEL."';\n\r";
+    echo "var TXT_WPSC_LABEL_DESC = '".TXT_WPSC_LABEL_DESC."';\n\r";
+    echo "var TXT_WPSC_ITEM_NUMBER = '".TXT_WPSC_ITEM_NUMBER."';\n\r";
+    echo "var TXT_WPSC_LIFE_NUMBER = '".TXT_WPSC_LIFE_NUMBER."';\n\r";
+    echo "var TXT_WPSC_PRODUCT_CODE = '".TXT_WPSC_PRODUCT_CODE."';\n\r";
+    echo "var TXT_WPSC_PDF = '".TXT_WPSC_PDF."';\n\r";
 ?>
 /* custom admin functions end*/
 </script>
@@ -1191,13 +1198,13 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 	
 	if(($_POST['changeorder'] == "true") && is_numeric($_POST['category_id'])) {
 		$category_id = (int)$_POST['category_id'];
-		$hash=$_POST['sort1'];
+		$hash=explode(',', $_POST['sort1']);
 		$order=1;
 		foreach($hash as $id) {
 			$wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order`=$order WHERE `product_id`=".(int)$id." AND `category_id`=".(int)$category_id." LIMIT 1");
 			$order++;
 		}  
-	exit(" ");
+	exit("");
 	}
 	
     
@@ -3249,4 +3256,15 @@ function serialize_shopping_cart() {
   return true;
 }  
 register_shutdown_function("serialize_shopping_cart");
+
+add_filter('favorite_actions', 'wpsc_fav_action');
+ 
+function wpsc_fav_action($actions) {
+    // remove the "Add new page" link
+    // unset($actions['page-new.php']);
+  	// add quick link to our favorite plugin
+    $actions['admin.php?page=wp-shopping-cart/display-items.php'] = array('Add New Product', 'manage_options');
+    return $actions;
+}
+
 ?>

@@ -194,7 +194,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$report = str_replace('%total_shipping%',$total_shipping_email,$report);
 					$report = str_replace('%total_price%',$total_price_email,$report);
 					$report = str_replace('%shop_name%',get_option('blogname'),$report);
-					exit(nl2br($report));
+					
 					$message_html = str_replace('%product_list%',$product_list,$message_html);
 					$message_html = str_replace('%total_shipping%',$total_shipping_email,$message_html);
 					$message_html = str_replace('%total_price%',$total_price_email,$message_html);
