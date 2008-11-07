@@ -1812,15 +1812,15 @@ if($_GET['clean_categories'] == 'true') {
 								<h3 class="form_group"><?php echo TXT_WPSC_EMAIL_SETTINGS;?>:</h3>
 								<table class='wpsc_options form-table'>
 									<tr>
-										<th colspan="2"><?=TXT_WPSC_TAGS_CAN_BE_USED?>: %shop_name%, %product_list%, %total_price%，%total_shipping%</th>
+										<th colspan="2"><?=TXT_WPSC_TAGS_CAN_BE_USED?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%, %total_shipping%</th>
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_PURCHASERECEIPT?></th>
-										<td><textarea wrap='hard' name="email_receipt"><?php echo get_option('email_receipt');?></textarea></textarea></td>
+										<td><textarea name="email_receipt"  style='width: 100%; height: 200px;'><?php echo get_option('email_receipt');?></textarea></textarea></td>
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_ADMIN_REPORT?></th>
-										<td><textarea wrap='hard' name="email_admin"><?php echo get_option('email_admin');?></textarea></td>
+										<td><textarea name="email_admin" style='width: 100%; height: 200px;'><?php echo get_option('email_admin');?></textarea></td>
 									</tr>
 								</table>
 								<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>

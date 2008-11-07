@@ -148,7 +148,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 								$plural = "s";
 							  }
 							$product_list.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-							$product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							$product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n &nbsp; ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
 						}
 						$report = get_option("email_admin");
 						$report_product_list.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
@@ -184,21 +184,27 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				} else {
 					$report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
 				}
+        
+        
+        $message = str_replace('%product_list%',$product_list,$message);
+        $message = str_replace('%total_shipping%',$total_shipping_email,$message);
+        $message = str_replace('%total_price%',$total_price_email,$message);
+        //$message = str_replace('%order_status%',get_option('blogname'),$message);
+        $message = str_replace('%shop_name%',get_option('blogname'),$message);
+        
+        $report = str_replace('%product_list%',$report_product_list,$report);
+        $report = str_replace('%total_shipping%',$total_shipping_email,$report);
+        $report = str_replace('%total_price%',$total_price_email,$report);
+        $report = str_replace('%shop_name%',get_option('blogname'),$report);
+        
+        $message_html = str_replace('%product_list%',$product_list_html,$message_html);
+        $message_html = str_replace('%total_shipping%',$total_shipping_html,$message_html);
+        $message_html = str_replace('%total_price%',$total_price_email,$message_html);
+        $message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
+        //$message_html = str_replace('%order_status%',get_option('blogname'),$message_html);
+        
+        
 				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
-					$message = str_replace('%product_list%',$product_list,$message);
-					$message = str_replace('%total_shipping%',$total_shipping_email,$message);
-					$message = str_replace('%total_price%',$total_price_email,$message);
-					$message = str_replace('%shop_name%',get_option('blogname'),$message);
-					
-					$report = str_replace('%product_list%',$report_product_list,$report);
-					$report = str_replace('%total_shipping%',$total_shipping_email,$report);
-					$report = str_replace('%total_price%',$total_price_email,$report);
-					$report = str_replace('%shop_name%',get_option('blogname'),$report);
-					
-					$message_html = str_replace('%product_list%',$product_list,$message_html);
-					$message_html = str_replace('%total_shipping%',$total_shipping_email,$message_html);
-					$message_html = str_replace('%total_price%',$total_price_email,$message_html);
-					$message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
@@ -229,7 +235,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$report = $report_user. $report_id . $report;
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
-					mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, nl2br($report), "From: ".get_option('return_email')."");
+					mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')."");
 				}
 
 				if($purchase_log['processed'] < 2) {

@@ -2,13 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
-define('TXT_WPSC_LABEL_CONTROL', 'Label Control');
-define('TXT_WPSC_LABELS', 'Add Label');
-define('TXT_WPSC_PRODUCT_CODE', 'Product Code');
-
-define('TXT_WPSC_LIFE_NUMBER', 'Life Number');
-define('TXT_WPSC_ITEM_NUMBER', 'Item Number');
-define('TXT_WPSC_LABEL_DESC', 'Label Description');
+define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
 define('TXT_WPSC_FLASH_UPLOADER', 'You are using the Flash uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.');
 define('TXT_WPSC_BROWSER_UPLOADER', 'You are using the Browser uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("flash")\'>Flash uploader</a> instead.');
 
@@ -24,7 +18,7 @@ define('TXT_WPSC_FILE_NAMES', 'File Names');
 define('TXT_WPSC_DOWNLOADS_LEFT', 'Downloads Left');
 
 
-define('TXT_WPSC_FILE', 'File');
+define('TXT_WPSC_FILE', 'Files');
 define('TXT_WPSC_PDF', 'PDF');
 
 define('TXT_WPSC_LABEL', 'Label');

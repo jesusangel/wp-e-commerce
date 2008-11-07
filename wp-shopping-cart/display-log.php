@@ -835,7 +835,7 @@ if($_GET['filter'] !== 'true') {
 			$comments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}cart_contents WHERE purchaseid='".$purch_data[0]['id']."' AND meta IS NOT NULL",ARRAY_A);
 			if ($comments[0]['meta'] != '')
 				echo "  <tr><td><b>".TXT_WPSC_COMMENTS."</b></td><td></td></tr>";
-			foreach ($comments as $comment) {
+			foreach ((array)$comments as $comment) {
 				$comm = unserialize($comment['meta']);
 				$product_name = $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_list WHERE id='{$comment['prodid']}'");
 				if ($comm != '') {

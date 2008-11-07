@@ -1379,14 +1379,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
         }
       }
       //echo "/* ".print_r($associated_variations,true)." */\n\r";
-      echo "edit_variation_combinations_html = \"".str_replace("\n\r", '\n\r', $variation_processor->variations_grid_view($product_id))."\";\n";
+      echo "edit_variation_combinations_html = \"".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view($product_id)))."\";\n";
     } else {      
       if(count($variations_selected) > 0) {
         // takes an array of variations, returns a form for adding data to those variations.
         if((float)$_POST['selected_price'] > 0) {
           $selected_price = (float)$_POST['selected_price'];
         }
-        echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace("\n\r", '\n\r', $variation_processor->variations_add_grid_view((array)$variations_selected, $selected_price))."\";\n";
+        echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, $selected_price)))."\";\n";
       } else {
         echo "add_variation_combinations_html = \"\";\n";
       }

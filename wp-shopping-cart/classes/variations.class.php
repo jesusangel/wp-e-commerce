@@ -19,7 +19,7 @@ class nzshpcrt_variations {
     } else {
       $if_adding = 'add_';
     }*/
-    
+    $options .= "<div class='variation_checkboxes'>";
     foreach((array)$variations as $variation) {
       $checked = "";
       if($product_id > 0) {
@@ -30,9 +30,9 @@ class nzshpcrt_variations {
         }
       }
     
-      $options .= "<label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list({$product_id});' value='1' name='variations[{$variation['id']}]' >{$variation['name']}</label><br>";
+      $options .= "<label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list({$product_id});' value='1' name='variations[{$variation['id']}]' >{$variation['name']}</label>";
     }
-
+    $options .= "</div>";
     return $options;
   }
     
@@ -132,7 +132,7 @@ class nzshpcrt_variations {
       $output .= "    <th class='variations titles'>".TXT_WPSC_VARIATION."</th>\n\r";
       $output .= "    <th class='titles stock'>".TXT_WPSC_STOCK."</th>\n\r";
       $output .= "    <th class='titles price'>".TXT_WPSC_PRICE."</th>\n\r";
-      $output .= "    <th class='titles'>".TXT_WPSC_WEIGHT."</th>\n\r";
+      $output .= "    <th class='titles weight'>".TXT_WPSC_WEIGHT."</th>\n\r";
       $output .= "    <th class='titles'><abbr alt='".TXT_WPSC_ASSOCIATEWITHFILE."' title='".TXT_WPSC_ASSOCIATEWITHFILE."'>".TXT_WPSC_FILE."</abbr>&nbsp;</th>\n\r";
       $output .= "  </tr>\n\r";
       
@@ -190,7 +190,7 @@ class nzshpcrt_variations {
         $group_defining_class = '';
         
         if($associated_variation_ids[0] != $associated_variation_values[$key+1]["value_id{$selected_variations[0]}"]) {
-          $group_defining_class = "class='group_boundary'";
+          $group_defining_class = "group_boundary";
         }
         $previous_row_id = $associated_variation_ids[0];
         
@@ -198,6 +198,8 @@ class nzshpcrt_variations {
         $associated_variation_names =  implode(", ",(array)$associated_variation_names);
         $associated_variation_ids = implode(",",(array)$associated_variation_ids);
         
+        $variation_settings_uniqueid = $product_id."_".str_replace(",","_",$associated_variation_ids);
+      
         // Format the price nicely
         if(is_numeric($associated_variation_row['price'])) {
           $product_price = number_format($associated_variation_row['price'],2,'.', '');
@@ -207,16 +209,26 @@ class nzshpcrt_variations {
           $file_checked = "checked='true'";
         }
         
-        
-        $output .= "  <tr {$group_defining_class}>\n\r";
+        $output .= "  <tr class='variation_row'>\n\r";
         $output .= "    <td class='variations'>{$associated_variation_names}</td>\n\r";
         $output .= "    <td class='stock'><input type='text' name='variation_priceandstock[{$associated_variation_ids}][stock]' value='".$associated_variation_row['stock']."' size='3' /></td>\n\r";
         $output .= "    <td class='price'><input type='text' name='variation_priceandstock[{$associated_variation_ids}][price]' value='{$product_price}' size='6' /></td>\n\r";
-        $output .= "    <td class='price'><input type='text' name='variation_priceandstock[{$associated_variation_ids}][weight]' value='{$associated_variation_row['weight']}' size='6' /></td>\n\r";
+        $output .= "    <td class='weight'><input type='text' name='variation_priceandstock[{$associated_variation_ids}][weight]' value='{$associated_variation_row['weight']}' size='3' /></td>\n\r";
         
         $output .= "    <td>\n\r";
-        $output .= "      <input type='hidden' name='variation_priceandstock[{$associated_variation_ids}][file]' value='0' />\n\r";
-        $output .= "      <input $file_checked type='checkbox' class='checkbox' name='variation_priceandstock[{$associated_variation_ids}][file]' value='1'/>\n\r";
+        //$output .= "      <input type='hidden' name='variation_priceandstock[{$associated_variation_ids}][file]' value='0' />\n\r";
+        //$output .= "      <input $file_checked type='checkbox' class='checkbox' name='variation_priceandstock[{$associated_variation_ids}][file]' value='1'/>\n\r";
+        $output .= "      <a href='#' class='variation_edit_button' onclick='return open_variation_settings(\"variation_settings_$variation_settings_uniqueid\")' ><img src='".WPSC_URL."/images/folder_edit.png' alt='".TXT_WPSC_EDIT."' title='".TXT_WPSC_EDIT."'></a>\n\r";
+        $output .= "    </td>\n\r";
+        $output .= "  </tr>\n\r";
+        
+        $output .= "  <tr class='settings_row {$group_defining_class}' id='variation_settings_$variation_settings_uniqueid'>\n\r";
+        $output .= "    <td colspan='5'>\n\r";
+        $output .= "      <div class='variation_settings'>\n\r";
+        $output .= wpsc_select_variation_file($associated_variation_ids, $associated_variation_row['id']);
+        $output .= "      </div>\n\r";
+        
+        
         $output .= "    </td>\n\r";
         $output .= "  </tr>\n\r";
       }
@@ -400,7 +412,7 @@ class nzshpcrt_variations {
     $output .= "    <th class='variations titles'>".TXT_WPSC_VARIATION."</th>\n\r";
     $output .= "    <th class='titles stock'>".TXT_WPSC_STOCK."</th>\n\r";
     $output .= "    <th class='titles price'>".TXT_WPSC_PRICE."</th>\n\r";
-    $output .= "    <th class='titles'>".TXT_WPSC_WEIGHT."</th>\n\r";
+    $output .= "    <th class='titles weight'>".TXT_WPSC_WEIGHT."</th>\n\r";
     $output .= "    <th class='titles'><abbr alt='".TXT_WPSC_ASSOCIATEWITHFILE."' title='".TXT_WPSC_ASSOCIATEWITHFILE."'>".TXT_WPSC_FILE."</abbr></th>\n\r";
 		$output .= "  </tr>\n\r";
 		
@@ -439,26 +451,35 @@ class nzshpcrt_variations {
       $variation_names = implode(", ", $variation_set);
       $variation_id_array = array_keys((array)$variation_set);
       $variation_ids = implode(",", $variation_id_array);
+      $variation_settings_uniqueid = "0_".str_replace(",","_",$variation_ids);
       
       $group_defining_class = '';
       
       $next_id_set = array_keys((array)$variation_sets[$key+1]);
       //echo "<pre>".print_r($variation_set,true)."</pre>";
       if($variation_id_array[0] != $next_id_set[0]) {
-        $group_defining_class = "class='group_boundary'";
+        $group_defining_class = "group_boundary";
       }
       
-      $output .= "  <tr {$group_defining_class}>\n\r";
+      $output .= "  <tr class='variation_row'>\n\r";
       $output .= "    <td class='variations'>".str_replace(" ", "&nbsp;", (stripslashes( $variation_names )))."</td>\n\r";
       $output .= "    <td class='stock'><input type='text' name='variation_priceandstock[{$variation_ids}][stock]' value='' size='3' /></td>\n\r";
       $output .= "    <td class='price'><input type='text' name='variation_priceandstock[{$variation_ids}][price]' value='$default_price' size='6' /></td>\n\r";
-      $output .= "    <td class='price'><input type='text' name='variation_priceandstock[{$variation_ids}][weight]' value='' size='6' /></td>\n\r";
+      $output .= "    <td class='weight'><input type='text' name='variation_priceandstock[{$variation_ids}][weight]' value='' size='3' /></td>\n\r";
       
       $output .= "    <td>\n\r";
-      $output .= "      <input type='hidden' name='variation_priceandstock[{$variation_ids}][file]' value='0' />\n\r";
-      $output .= "      <input type='checkbox' class='checkbox' name='variation_priceandstock[{$variation_ids}][file]' value='1'/>\n\r";
+      //$output .= "      <input type='hidden' name='variation_priceandstock[{$variation_ids}][file]' value='0' />\n\r";
+      //$output .= "      <input type='checkbox' class='checkbox' name='variation_priceandstock[{$variation_ids}][file]' value='1'/>\n\r";
+      $output .= "      <a href='#' class='variation_edit_button' onclick='return open_variation_settings(\"variation_settings_$variation_settings_uniqueid\")' >".TXT_WPSC_EDIT."</a>\n\r";
       $output .= "    </td>\n\r";
       
+      $output .= "  </tr>\n\r";
+      $output .= "  <tr class='settings_row {$group_defining_class}' id='variation_settings_$variation_settings_uniqueid'>\n\r";
+      $output .= "    <td colspan='5'>\n\r";
+      $output .= "      <div class='variation_settings'>\n\r";
+      $output .= wpsc_select_variation_file($variation_ids);
+      $output .= "      </div>\n\r";
+      $output .= "    </td>\n\r";
       $output .= "  </tr>\n\r";
     }
   
@@ -491,7 +512,7 @@ class nzshpcrt_variations {
       $variation_price = (float)str_replace(",","",$variation_data['price']);
       $variation_stock =(int)$variation_data['stock']; // having 1.2 stock makes no sense unless dealing with kilograms or some other such measurement
       $variation_weight =(float)$variation_data['weight'];		
-      $variation_file =(int)(bool)$variation_data['file'];		
+      $variation_file =(int)$variation_data['file'];		
       $variation_visibility =(int)(bool)$variation_data['visibility'];
       
       

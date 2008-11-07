@@ -133,7 +133,9 @@ table#itemlist tr.products td{text-align: left;padding:0px; vertical-align: midd
 table#itemlist tr.productsalt td{text-align: left;padding:0px; vertical-align: middle ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 
 table#itemlist tr td.imagecol{ padding: 4px;}
- 
+
+table#itemlist tr td.imagecol img{ margin-bottom: -12px;  }
+  
 table#itemlist tr td.colspan{ text-align: left; padding: 0px; }
 
 table#itemlist tr.firstrow td{ font-weight: bold; padding-left: 5px; padding-right: 5px; }
@@ -179,7 +181,7 @@ table tr.firstrowth td{ vertical-align: top; padding:10px 5px 8px;}
 
 div#productform{ display: none; width: 586px; }
 
-div#productform table tr td{ height: 11px !important; }
+/* div#productform table tr td{ height: 11px !important; } */
  
 div#additem{ display: block;}
 
@@ -1481,13 +1483,17 @@ table.product_variation_grid tr th {
    border-bottom: 1px solid #969696;
 }
 
-table.product_variation_grid tr th.stock {
+table.product_variation_grid tr *.stock {
    border-bottom: 1px solid #969696;
    width: 50px;
 }
 
-table.product_variation_grid tr th.price {
+table.product_variation_grid tr *.price {
    width: 78px;
+}
+
+table.product_variation_grid tr *.weight {
+   width: 50px;
 }
 
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
@@ -1522,6 +1528,25 @@ table.product_variation_grid tr td, table.product_variation_grid tr th {
  text-align: left;
 }
 
+
+table.product_variation_grid tr.variation_row td {
+ border-bottom: none;
+}
+
+table.product_variation_grid tr.settings_row td {
+ border-top: none;
+ padding: 0px !important;
+}
+
+
+table.product_variation_grid tr.settings_row td div.variation_settings {
+  display: none;
+  border-top: 1px dotted #cccccc;
+  width: 100%;
+  min-height: 30px;
+ 
+}
+
 table.product_variation_grid tr th {
    border-bottom: 1px solid #969696;
 }
@@ -1536,7 +1561,7 @@ table.product_variation_grid tr th.price {
 }
 
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
-  padding: 4px 0px 4px 10px;
+  padding: 4px 10px 4px 10px;
 }
   
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
@@ -1678,7 +1703,8 @@ h2.wpsc_special{
 }
 
 input.deletecheckbox {
-	margin-top:-13px;
+  position: relative;
+	top: -14px;
 	margin-right:10px;
 }
 
@@ -1755,4 +1781,48 @@ a.delete_primary_image {
 
 br.small {
 	line-height: 0.5em;
+}
+
+
+div.variation_checkboxes {
+  margin-bottom: 4px;
+}
+
+div.variation_checkboxes label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+div.variation_checkboxes label input {
+  position: relative;
+  top: 2px; 
+  margin-right: 3px;
+}
+
+a.variation_edit_button {
+  display: block;
+  height: 16px;
+  width: 16px;
+  margin: 4px auto 0px auto;
+
+}
+
+div.variation_settings div.variation_settings_contents{
+  padding-left: 10px;
+}
+
+div.select_variation_file {
+  padding-left: 6px;
+}
+div.select_variation_file p {
+  margin:0 0 3px;
+}
+
+div.select_variation_file p {
+  margin:0 0 3px;
+}
+
+div.select_variation_file p input {
+ position: relative;
+ top: 2px; 
 }
