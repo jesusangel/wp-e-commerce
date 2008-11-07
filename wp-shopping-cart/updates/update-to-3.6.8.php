@@ -611,4 +611,11 @@ if(!$wpdb->get_results("SHOW FULL COLUMNS FROM `{$wpdb->prefix}currency_list` LI
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='242'");
 }
 
+add_option('email_receipt', '', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
+add_option('email_admin', '', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
+
+
+
+
+
 ?>

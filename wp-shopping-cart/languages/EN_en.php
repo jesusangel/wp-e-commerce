@@ -2,6 +2,29 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+
+define('TXT_WPSC_DEFAULT_PURCHASE_RECEIPT', 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.
+All prices include tax and postage and packaging where applicable.
+
+You ordered these items:
+
+%product_list%
+
+%total_price%
+
+%total_shipping%');
+
+define('TXT_WPSC_DEFAULT_PURCHASE_REPORT', '
+%product_list%
+
+%total_price%
+
+%total_shipping%');
+
+define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
+
+
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
 define('TXT_WPSC_FLASH_UPLOADER', 'You are using the Flash uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.');
 define('TXT_WPSC_BROWSER_UPLOADER', 'You are using the Browser uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("flash")\'>Flash uploader</a> instead.');

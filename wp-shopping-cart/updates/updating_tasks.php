@@ -597,4 +597,18 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}currency_list` WHERE `co
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='242'");
 }
 
+add_option('email_receipt', '', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
+add_option('email_admin', '', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
+
+
+$coldata  = $wpdb->get_row("SHOW COLUMNS FROM `{$wpdb->prefix}variation_priceandstock` LIKE 'file'",ARRAY_A);
+if($coldata['Type'] != "bigint(20) unsigned")	{
+  $wpdb->query("ALTER TABLE `{$wpdb->prefix}variation_priceandstock` CHANGE `file` `file` bigint(20) unsigned DEFAULT '0' NOT NULL");
+  $variations_to_upgrade = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `file` IN ('1')",ARRAY_A);
+  foreach((array)$variations_to_upgrade as $variation) {
+    $new_file_id = (int)$wpdb->get_var("SELECT `file` FROM `{$wpdb->prefix}product_list` WHERE `id` IN ('{$variation['product_id']}') LIMIT 1");
+    $wpdb->query("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `file` = '{$new_file_id}' WHERE `id` IN ('{$variation['id']}') LIMIT 1");
+  }
+   
+	}
 ?>
