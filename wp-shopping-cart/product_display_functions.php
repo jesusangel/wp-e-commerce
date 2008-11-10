@@ -309,7 +309,11 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         if(get_option('show_thumbnails') == 1) {
           if($product['image'] !=null) {
             $image_size = @getimagesize(WPSC_IMAGE_DIR.$product['image']);
-            $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities($product['name'], ENT_QUOTES))."'>";
+            if(apply_filters( 'wpsc_mobile_override', false)) {
+              $output .= "<a href='".wpsc_product_url($product['id'])."' >";
+            } else {
+              $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities($product['name'], ENT_QUOTES))."'>";
+            }
 
 
             if($product['thumbnail_image'] != null) {
@@ -374,15 +378,19 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 
       if($product['additional_description'] != '') {
-        $output .= "<span class=’additional_description_span’>";// add better option
-        $output .= "<a href='#' class='additional_description_link' onclick='return show_additional_description(\"additionaldescription".$product['id']."\",\"link_icon".$product['id']."\");'>";
-        $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
-        $output .= TXT_WPSC_MOREDETAILS."</a>";
-
-        $output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";
-        $output .= nl2br(stripslashes($product['additional_description'])) . "";
-        $output .= "</span><br />";
-        $output .= "</span>";// add better option
+        if(apply_filters( 'wpsc_mobile_override', false) && function_exists('xili_WPSC4touch_showAdditionalDesc') ) {
+          $output .= xili_WPSC4touch_showAdditionalDesc($product['id']);
+        } else {
+          $output .= "<span class=’additional_description_span’>";// add better option
+          $output .= "<a href='#' class='additional_description_link' onclick='return show_additional_description(\"additionaldescription".$product['id']."\",\"link_icon".$product['id']."\");'>";
+          $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
+          $output .= TXT_WPSC_MOREDETAILS."</a>";
+  
+          $output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";
+          $output .= nl2br(stripslashes($product['additional_description'])) . "";
+          $output .= "</span><br />";
+          $output .= "</span>";// add better option
+        }
 			}
 
 			// print the custom fields here, if there are any
@@ -408,7 +416,12 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('display_product_variations','stop', true);}
 			
       if($variations_output[0] != '') { //will always be set, may sometimes be an empty string
-        $output .= "<p class='wpsc_variation_forms'>".$variations_output[0]."</p>";
+      
+        if(apply_filters( 'wpsc_mobile_override', false) && function_exists('xili_WPSC4touch_showVariations') ) {
+          $output .= xili_WPSC4touch_showVariations($product['id']);
+        } else {
+          $output .= "<p class='wpsc_variation_forms'>".$variations_output[0]."</p>";
+        }
 			}
       if($variations_output[1] !== null) {
         $product['price'] = $variations_output[1];
@@ -592,15 +605,18 @@ function single_product_display($product_id) {
 					} else {
 						$image_file_name = $product['image'];
 					}
-					
-					$output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>\n\r";
+					if(!apply_filters( 'wpsc_mobile_override', false)) {
+            $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>\n\r";
+					}
 					$src = WPSC_IMAGE_URL.$product['image'];
 					if((get_option('single_view_image_width') >= 1) && (get_option('single_view_image_height') >= 1)) {
 						$output .= "<img src='index.php?productid=".$product['id']."&amp;width=".get_option('single_view_image_width')."&amp;height=".get_option('single_view_image_height')."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
 					} else {
 						$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
 					}
-					$output .= "</a>\n\r";
+					if(!apply_filters( 'wpsc_mobile_override', false)) {
+            $output .= "</a>\n\r";
+          }
 					if(function_exists("gold_shpcrt_display_extra_images")) {
 						$output .= gold_shpcrt_display_extra_images($product['id'],$product['name']);
 					}
@@ -733,18 +749,20 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			
 			$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
 			//Add more than 1 product into the shopping cart
-			$output .= "<a class='add_meta_box'>Add Label</a>";
-			$output .= "<div class='meta_box'>";
-			if (get_option('multi_add')=='1')
-				$output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity[]' size='3'><br>";
-			if (get_option('time_requested')=='1')
-				$output .= TXT_WPSC_DATE_REQUESTED.": <input type='text' class='time_requested' name='time_requested[]' size='10'><br>";
-			if (get_option('commenting')=='1')
-				$output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
-				
-			$output .= TXT_WPSC_LABEL.":<br><textarea type='text' name='label[]'></textarea><br>";
-			$output .= "</div>";
 			
+			if(!apply_filters( 'wpsc_mobile_override', false)) {
+        $output .= "<a class='add_meta_box'>Add Label</a>";
+        $output .= "<div class='meta_box'>";
+        if (get_option('multi_add')=='1')
+          $output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity[]' size='3'><br>";
+        if (get_option('time_requested')=='1')
+          $output .= TXT_WPSC_DATE_REQUESTED.": <input type='text' class='time_requested' name='time_requested[]' size='10'><br>";
+        if (get_option('commenting')=='1')
+          $output .= TXT_WPSC_COMMENT.":<br><textarea type='text' name='comment'></textarea><br>";
+          
+        $output .= TXT_WPSC_LABEL.":<br><textarea type='text' name='label[]'></textarea><br>";
+        $output .= "</div>";
+			}
 			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
 				if (get_option("wpsc_selected_theme")!='market3') {
 					$output .= "<p class='soldout'>".TXT_WPSC_PRODUCTSOLDOUT."</p>";

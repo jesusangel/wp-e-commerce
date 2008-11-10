@@ -253,103 +253,110 @@ class wp_shopping_cart {
 
 function nzshpcrt_style() {
   global $wpdb; 
+  if(function_exists('xili_display4mobile')) {  //check for the function before using it
+    if (xili_display4mobile() === true) {
+      // instead of wrapping the whole block of code in brackets, resulting in mysterious brackets, simply break out of the function here.
+      return null;
+    }
+  }
   ?>
   <style type="text/css" media="screen">
   
 	<?php
-	if((get_option('product_view') == 'default') ||  (get_option('product_view') == '')) {
-		$thumbnail_width = get_option('product_image_width');
-		if($thumbnail_width <= 0) {
-			$thumbnail_width = 96;
-		}
-    $thumbnail_height = get_option('product_image_height'); 
-    if($thumbnail_height <= 0) { 
-      $thumbnail_height = 96; 
-    }
-		
-		
-	?>
-		div.default_product_display div.textcol{
-			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-			_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
-			min-height: <?php echo $thumbnail_height;?>px;
-			_height: <?php echo $thumbnail_height;?>px;
-		}
-			
-			
-		div.default_product_display  div.textcol div.imagecol{
-			position:absolute;
-			top:0px;
-			left: 0px;
-			margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
-		}
-		
-    div.default_product_display  div.textcol div.imagecol a img {
-      width: <?php echo $thumbnail_width; ?>px;
-      height: <?php echo $thumbnail_height; ?>px;
-    }
-		
-	<?php
-	}
-			
-		
-	$single_thumbnail_width = get_option('single_view_image_width');
-	$single_thumbnail_height = get_option('single_view_image_height');
-	if($single_thumbnail_width <= 0) {
-		$single_thumbnail_width = 128;
-	}
-	?>
-		div.single_product_display div.textcol{
-			margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
-			_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
-			min-height: <?php echo $single_thumbnail_height;?>px;
-			_height: <?php echo $single_thumbnail_height;?>px;
-		}
-			
-			
-		div.single_product_display  div.textcol div.imagecol{
-			position:absolute;
-			top:0px;
-			left: 0px;
-			margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
-		}
-		
-    div.single_product_display  div.textcol div.imagecol a img {
-      width: <?php echo $single_thumbnail_width; ?>px;
-      height: <?php echo $single_thumbnail_height; ?>px;
-    }
-		
-	<?php
-	
-  $product_ids = $wpdb->get_col("SELECT `id` FROM `wp_product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
-  foreach($product_ids as $product_id) {
-    list($individual_thumbnail_height) = get_product_meta($product_id, 'thumbnail_height'); 
-    list($individual_thumbnail_width) = get_product_meta($product_id, 'thumbnail_width');     
-    if($individual_thumbnail_height> $thumbnail_height) { 
-      echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r"; 
-      echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-      echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-      echo "      }\n\r";
-    } 
-    if($individual_thumbnail_width> $thumbnail_width) {
-        echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
-        echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
-        echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
-        echo "      }\n\r";
-
-        echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
-        echo "            position:absolute;\n\r";
-        echo "            top:0px;\n\r";
-        echo "            left: 0px;\n\r";
-        echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
-        echo "      }\n\r";
-
-        echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
-        echo "            width: ".$individual_thumbnail_width."px;\n\r";
-        echo "            height: ".$individual_thumbnail_height."px;\n\r";
-        echo "      }\n\r";
+	if(!defined('WPSC_DISABLE_IMAGE_SIZE_FIXES') || !constant('WPSC_DISABLE_IMAGE_SIZE_FIXES')) {
+    if((get_option('product_view') == 'default') ||  (get_option('product_view') == '')) {
+      $thumbnail_width = get_option('product_image_width');
+      if($thumbnail_width <= 0) {
+        $thumbnail_width = 96;
       }
-    }	
+      $thumbnail_height = get_option('product_image_height'); 
+      if($thumbnail_height <= 0) { 
+        $thumbnail_height = 96; 
+      }
+      
+      
+    ?>
+      div.default_product_display div.textcol{
+        margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
+        _margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+        min-height: <?php echo $thumbnail_height;?>px;
+        _height: <?php echo $thumbnail_height;?>px;
+      }
+        
+        
+      div.default_product_display  div.textcol div.imagecol{
+        position:absolute;
+        top:0px;
+        left: 0px;
+        margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
+      }
+      
+      div.default_product_display  div.textcol div.imagecol a img {
+        width: <?php echo $thumbnail_width; ?>px;
+        height: <?php echo $thumbnail_height; ?>px;
+      }
+      
+    <?php
+    }
+        
+      
+    $single_thumbnail_width = get_option('single_view_image_width');
+    $single_thumbnail_height = get_option('single_view_image_height');
+    if($single_thumbnail_width <= 0) {
+      $single_thumbnail_width = 128;
+    }
+    ?>
+      div.single_product_display div.textcol{
+        margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
+        _margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+        min-height: <?php echo $single_thumbnail_height;?>px;
+        _height: <?php echo $single_thumbnail_height;?>px;
+      }
+        
+        
+      div.single_product_display  div.textcol div.imagecol{
+        position:absolute;
+        top:0px;
+        left: 0px;
+        margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
+      }
+      
+      div.single_product_display  div.textcol div.imagecol a img {
+        width: <?php echo $single_thumbnail_width; ?>px;
+        height: <?php echo $single_thumbnail_height; ?>px;
+      }
+      
+    <?php
+    $product_ids = $wpdb->get_col("SELECT `id` FROM `wp_product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
+    foreach($product_ids as $product_id) {
+      list($individual_thumbnail_height) = get_product_meta($product_id, 'thumbnail_height'); 
+      list($individual_thumbnail_width) = get_product_meta($product_id, 'thumbnail_width');     
+      if($individual_thumbnail_height> $thumbnail_height) { 
+        echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r"; 
+        echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+        echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+        echo "      }\n\r";
+      } 
+      if($individual_thumbnail_width> $thumbnail_width) {
+          echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
+          echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
+          echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
+          echo "      }\n\r";
+  
+          echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
+          echo "            position:absolute;\n\r";
+          echo "            top:0px;\n\r";
+          echo "            left: 0px;\n\r";
+          echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
+          echo "      }\n\r";
+  
+          echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
+          echo "            width: ".$individual_thumbnail_width."px;\n\r";
+          echo "            height: ".$individual_thumbnail_height."px;\n\r";
+          echo "      }\n\r";
+        }
+      }	
+    }
     
   if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {
     $brandstate = 'block';
@@ -374,7 +381,12 @@ function nzshpcrt_style() {
 function nzshpcrt_javascript()
   {
   $siteurl = get_option('siteurl'); 
-	echo "";
+  if(function_exists('xili_display4mobile')) {  //check for the function before using it
+    if (xili_display4mobile() === true) {
+      // instead of wrapping the whole block of code in brackets, resulting in mysterious brackets, simply break out of the function here.
+      return null;
+    }
+  }
   if(($_SESSION['nzshpcrt_cart'] == null) && (get_option('show_sliding_cart') == 1)) {
 		?>
 			<style type="text/css" media="screen">
@@ -1005,7 +1017,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 										$_SESSION['nzshpcrt_cart'][$cart_key]->quantity++;
 									}
 									$_SESSION['nzshpcrt_cart'][$cart_key]->comment = $_POST['comment'];
-									foreach($_POST['label'] as $key => $label) {
+									foreach((array)$_POST['label'] as $key => $label) {
 										if ($label != '') {
 											if (array_key_exists($label, $_SESSION['nzshpcrt_cart'][$cart_key]->meta)) {
 												$_SESSION['nzshpcrt_cart'][$cart_key]->meta[$label]+=(int)$_POST['quantity'][$key];
@@ -2760,15 +2772,24 @@ nzshpcrt_enable_page_filters();
 add_filter('get_the_excerpt', 'nzshpcrt_disable_page_filters', -1000000);
 add_filter('get_the_excerpt', 'nzshpcrt_enable_page_filters', 1000000);
  
- 
-add_action('wp_head', 'nzshpcrt_style');
+function wpsc_include_css_and_javascript() {
+  // This must be weapped in a function in order to selectively prevent it from running using filters
+  if(!apply_filters( 'wpsc_override_header', false)) {
+    // expects false in order to to include the css and javascript
+    add_action('wp_head', 'nzshpcrt_style');
+    add_action('wp_head', 'nzshpcrt_javascript');
+  }
+}
+
+add_action('init', 'wpsc_include_css_and_javascript');
+add_action('wp_head', 'nzshpcrt_product_list_rss_feed');
+
+
 
 add_action('admin_head', 'wpsc_admin_css');
 if($_GET['page'] == WPSC_DIR_NAME."/display-log.php") {
   add_action('admin_head', 'nzshpcrt_product_log_rss_feed');
 }
-add_action('wp_head', 'nzshpcrt_javascript');
-add_action('wp_head', 'nzshpcrt_product_list_rss_feed');
 
 if(($_POST['submitwpcheckout'] == 'true')) {
   add_action('init', 'nzshpcrt_submit_checkout');

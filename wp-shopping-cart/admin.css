@@ -134,7 +134,7 @@ table#itemlist tr.productsalt td{text-align: left;padding:0px; vertical-align: m
 
 table#itemlist tr td.imagecol{ padding: 4px;}
 
-table#itemlist tr td.imagecol img{ margin-bottom: -12px;  }
+/* table#itemlist tr td.imagecol img{ margin-bottom: -12px;  } */
   
 table#itemlist tr td.colspan{ text-align: left; padding: 0px; }
 
