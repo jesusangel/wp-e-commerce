@@ -995,12 +995,12 @@ function imageFileDialogComplete (selected, queued) {
 }
 
 function startImageUpload (file) {
+  jQuery("span.swfupload_loadingindicator").css('visibility', 'visible');
 	var cell = jQuery('<li></li>').appendTo(jQuery('#gallery_list'));
 	var sorting = jQuery('<input type="hidden" name="images[]" value="" />').appendTo(cell);
 	var progress = jQuery('<div class="progress"></div>').appendTo(cell);
 	var bar = jQuery('<div class="bar"></div>').appendTo(progress);
 	var art = jQuery('<div class="gloss"></div>').appendTo(progress);
-
 	this.targetHolder = cell;
 	this.progressBar = bar;
 	this.sorting = sorting;
@@ -1019,36 +1019,75 @@ function imageUploadError (file, error, message) {
 function imageUploadSuccess (file, results) {
   /* alert(results) */;
   	//Don't delete, initiate id is neccesary.
+  	
+    jQuery("span.swfupload_loadingindicator").css('visibility', 'hidden');
   	var id = null;
 	eval(results);
-	
+	//alert(id);
 	if (id == null ) {
 	  	if(replacement_src != null) {
 	  	  	jQuery("li.first div.previewimage a.thickbox").attr('href', replacement_src);
 	  	  	jQuery("li.first div.previewimage a.thickbox img.previewimage").attr('src', replacement_src);
 	  	} else {
-      		if (jQuery('#gold_present').val() != '1') {
-      		  jQuery('#add-product-image').remove();
-      		}
-      		jQuery(this.sorting).attr({'value':src});
-      		var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+        if (jQuery('#gold_present').val() != '1') {
+          jQuery('#add-product-image').remove();
+        }
+        jQuery(this.sorting).attr({'value':src});
+        var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+        set = jQuery("#gallery_list").sortable('toArray');
+
+        jQuery('#gallery_image_0').append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+        jQuery('#gallery_image_0').parent('li').addClass('first');
+        jQuery('#gallery_image_0').parent('li').attr('id', 0);
+        jQuery('#gallery_image_0 img.deleteButton').remove();
+        enablebuttons();
 		}
 	} else {
 		//jQuery(this.targetHolder).attr({'id':'image-'+src});
 		jQuery(this.targetHolder).attr({'id':id});
-		div_id = 'gallery_image_-'+id;
+		div_id = 'gallery_image_'+id;
 		jQuery(this.targetHolder).html('');
 		var img = jQuery('<div class="previewimage" id="'+div_id+'"><input type="hidden" name="images[]" value="'+src+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
+		
+    jQuery('#gallery_image_0').append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+    jQuery('#gallery_image_0').parent('li').addClass('first');
+    jQuery('#gallery_image_0').parent('li').attr('id', 0);
+    jQuery('#gallery_image_0 img.deleteButton').remove();
+    
+    
+    if (jQuery('#gallery_list li').size() > 1) {
+      jQuery('#gallery_list').sortable('refresh');
+    } else {
+      jQuery('#gallery_list').sortable();
+		}
+    set = jQuery("#gallery_list").sortable('toArray');
+    order = set.join(',');
+    prodid = jQuery('#prodid').val();
+    if(prodid == null) {
+      prodid = 0;
+    }
+    
+      function imageorderresults(results) {
+        eval(results);
+        jQuery('#gallery_image_'+ser).append(output);
+        enablebuttons();
+      }
+    
+    ajax.post("index.php",imageorderresults,"ajax=true&prodid="+prodid+"&imageorder=true&order="+order+"");
+    
+    
+    enablebuttons();
+
 	}
-	jQuery(this.progressBar).animate({'width':'76px'},250,function () {
-		jQuery(this).parent().fadeOut(500,function() {
-			jQuery(this).remove();
-			jQuery(img).fadeIn('500');
-			jQuery(img).append('<img class="deleteButton" src="'+WPSC_URL+'/images/cross.png" alt="-" style="display: none;"/>');
-			enablebuttons()
-			//enableDeleteButton(deleteButton);
-		});
-	});
+  jQuery(this.progressBar).animate({'width':'76px'},250,function () {
+    jQuery(this).parent().fadeOut(500,function() {
+      jQuery(this).remove();
+      jQuery(img).fadeIn('500');
+      //jQuery(img).append('<img class="deleteButton" src="'+WPSC_URL+'/images/cross.png" alt="-" style="display: none;"/>');
+      enablebuttons()
+      //enableDeleteButton(deleteButton);
+    });
+  });
 }
 
 function imageUploadComplete (file) {
@@ -1063,6 +1102,7 @@ function imageQueueComplete (uploads) {
 }
 
 function enablebuttons(){
+//   console.log('test');
 	jQuery("img.deleteButton").click(
 		function(){
 			var r=confirm("Please confirm deletion");

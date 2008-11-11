@@ -582,6 +582,9 @@ $output .="</table></div></div></td></tr>";
   $output .= '      <span id=\'spanButtonPlaceholder\'></span>';
   $output .= '      <button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
 		
+  $output .= '      <span class="swfupload_loadingindicator" style="visibility: hidden;">';
+  $output .= '      <img id="loadingimage" title="Loading" alt="Loading" src="'.WPSC_URL.'/images/indicator.gif"/>';
+  $output .= '      </span>';
   $output .= "      <p>".TXT_WPSC_FLASH_UPLOADER."</p>";
   $output .= "      </td>";
   $output .= "    </tr>";

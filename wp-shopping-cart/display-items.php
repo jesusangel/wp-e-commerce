@@ -3,6 +3,8 @@ include_once('tagging_functions.php');
 include_once('google_base_functions.php');
 $category_data = null;
 
+
+//echo "<pre>".print_r($_POST,true)."</pre>";
 $current_user = wp_get_current_user();
 
 $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
@@ -200,7 +202,7 @@ if($_POST['submit_action'] == 'add') {
 				
 			//modified for USPS
 			//exit($_POST['images'][0]);
-		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
+		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$wpdb->escape($_POST['images'][0])."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape((int)$_POST['image_resize']) . "');";
 		
 		if($wpdb->query($insertsql)) {  
 			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
@@ -221,6 +223,26 @@ if($_POST['submit_action'] == 'add') {
 		
 				/* Handle new image uploads here */
 			$image = wpsc_item_process_image($product_id, $_FILES['image']['tmp_name'], $_FILES['image']['name'], $_POST['width'], $_POST['height'], $_POST['image_resize']);
+			
+			
+      if(file_exists(WPSC_THUMBNAIL_DIR.basename($_POST['images'][0])) && ($_POST['images'][0] != '')) {
+        $imagepath = WPSC_IMAGE_DIR . basename($_POST['images'][0]);
+        $image_output = WPSC_THUMBNAIL_DIR . basename($_POST['images'][0]);
+        switch($_POST['image_resize']) {
+          case 1:
+          $height = get_option('product_image_height');
+          $width  = get_option('product_image_width');
+          break;
+  
+          case 2:
+          $height = (int)$_POST['height'];
+          $width  = (int)$_POST['width'];
+          break;
+				}
+        image_processing($imagepath, $image_output, $width, $height);
+				update_product_meta($product_id, 'thumbnail_width', $width);
+				update_product_meta($product_id, 'thumbnail_height', $height);
+			}
 	
 	
 			/* Process extra meta values */
@@ -939,6 +961,8 @@ if($product_list != null)
 		echo "	<td style='width: 17%;' class='imagecol'>\r\n";
 	}
 	echo "<input type='checkbox' name='productdelete[]' class='deletecheckbox' value='{$product['id']}'>";
+	
+	 
 	if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images
 		echo "<img title='Drag to a new position' src='".WPSC_THUMBNAIL_URL.$product['thumbnail_image']."' title='".$product['name']."' alt='".$product['name']."' width='35' height='35'  />";
 	} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
@@ -1410,6 +1434,10 @@ echo "        </div>";
           <?php
             echo "<span id='spanButtonPlaceholder'></span>";
             echo '<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
+            
+            echo '<span class="swfupload_loadingindicator" style="visibility: hidden;">';
+            echo '<img id="loadingimage" title="Loading" alt="Loading" src="'.WPSC_URL.'/images/indicator.gif"/>';
+            echo '</span>';
             
             echo "<p>".TXT_WPSC_FLASH_UPLOADER."</p>";
           ?>

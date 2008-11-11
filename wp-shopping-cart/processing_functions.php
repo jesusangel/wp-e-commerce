@@ -484,7 +484,7 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			$new_image_path = WPSC_IMAGE_DIR.$image_name;
 			rename($input_file, $new_image_path);
 			$stat = stat( dirname( $new_image_path ));
-			$perms = $stat['mode'] & 0000666;
+			$perms = $stat['mode'] & 0000770;
 			@ chmod( $new_image_path, $perms );
 			
 			switch($resize_method) {
@@ -553,12 +553,12 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			$new_image_path = WPSC_IMAGE_DIR.$image_name;
 			move_uploaded_file($input_file, $new_image_path);
 			$stat = stat( dirname( $new_image_path ));
-			$perms = $stat['mode'] & 0000666;
+			$perms = $stat['mode'] & 0000770;
 			@ chmod( $new_image_path, $perms );
 			$image = $wpdb->escape($image_name);
 		}
 	} else {
-			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1",ARRAY_A);
+			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$id."' LIMIT 1",ARRAY_A);
 			//exit("<pre>".print_r($image_data,true)."</pre>");
 			
 		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
@@ -567,7 +567,7 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			$thumbnail_image = $image;
 			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");
 			$stat = stat( dirname( (WPSC_THUMBNAIL_DIR.$image_data['image']) ));
-			$perms = $stat['mode'] & 0000666;
+			$perms = $stat['mode'] & 0000770;
 			@ chmod( (WPSC_THUMBNAIL_DIR.$image_data['image']), $perms );	
 		}
 		$image = false;
