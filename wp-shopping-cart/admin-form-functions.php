@@ -1266,42 +1266,125 @@ function wpsc_right_now() {
 	$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
 
   $replace_values[":productcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1')");
+  $product_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1')");
   $replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
+  $product_unit = (($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
   
   $replace_values[":groupcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_categories` WHERE `active` IN ('1')");
+  $group_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_categories` WHERE `active` IN ('1')");
   $replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
+  $group_unit = (($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
   
   $replace_values[":salecount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
+  $sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
   $replace_values[":salecount:"] .= " ".(($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
+  $sales_unit = (($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
 		
   $replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
   $replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
   
+  $variation_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_variations`");
+  $variation_unit = (($variation_count == 1) ? TXT_WPSC_VARIATION_SINGULAR : TXT_WPSC_VARIATION_PLURAL);
+  
   $replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('1')");
+  $pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('1')");
   $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
+  $pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
+  
+  $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('2')");
+  $accept_sales_unit = (($accept_sales == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
+
   
   $replace_values[":theme:"] = get_option('wpsc_selected_theme');
   $replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
   
-  
-	$output="";	
-	$output.="<div id='rightnow'>\n\r";
-	$output.="	<h3 class='reallynow'>\n\r";
-	$output.="		<span>"._('Right Now')."</span>\n\r";
-	$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
-	$output.="		<br class='clear'/>\n\r";
-	$output.="	</h3>\n\r";
+	if (IS_WP27) {
+		$output="";	
+		$output.="<div id='dashboard_right_now' class='postbox'>";
+		$output.="	<h3 class='hndle'>";
+		$output.="		<span>"._('Right Now')."</span>";
+		//$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>";
+		$output.="		<br class='clear'/>";
+		$output.="	</h3>";
+		
+		$output .= "<div class='inside'>";
+		$output .= "<p class='sub'>At a Glance</p>";
+		//$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>";
+		$output .= "<div class='table'>";
+		$output .= "<table>";
+		
+		$output .= "<tr class='first'>";
+		$output .= "<td class='first b'>";
+		$output .= "<a href='?page=wp-shopping-cart/display-items.php'>".$product_count."</a>";
+		$output .= "<td>";
+		$output .= "<td class='t'>";
+		$output .= ucfirst($product_unit);
+		$output .= "<td>";
+		$output .= "<td class='b'>";
+		$output .= "<a href='?page=wp-shopping-cart/display-logs.php'>".$sales_count."</a>";
+		$output .= "<td>";
+		$output .= "<td class='last'>";
+		$output .= ucfirst($sales_unit);
+		$output .= "<td>";
+		$output .= "</tr>";
+		
+		$output .= "<tr>";
+		$output .= "<td class='first b'>";
+		$output .= "<a href='?page=wp-shopping-cart/display-category.php'>".$group_count."</a>";
+		$output .= "<td>";
+		$output .= "<td class='t'>";
+		$output .= ucfirst($group_unit);
+		$output .= "<td>";
+		$output .= "<td class='b'>";
+		$output .= "<a href='?page=wp-shopping-cart/display-logs.php'>".$pending_sales."</a>";
+		$output .= "<td>";
+		$output .= "<td class='last t waiting'>Pending ";
+		$output .= ucfirst($pending_sales_unit);
+		$output .= "<td>";
+		$output .= "</tr>";
+		
+		$output .= "<tr>";
+		$output .= "<td class='first b'>";
+		$output .= "<a href='?page=wp-shopping-cart/display-variations.php'>".$variation_count."</a>";
+		$output .= "<td>";
+		$output .= "<td class='t'>";
+		$output .= ucfirst($variation_unit);
+		$output .= "<td>";
+		$output .= "<td class='b'>";
+		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$accept_sales."</a>";
+		$output .= "<td>";
+		$output .= "<td class='last t approved'>Cleared ";
+		$output .= ucfirst($accept_sales_unit);
+		$output .= "<td>";
+		$output .= "</tr>";
+		
+		$output .= "</table>";
+		$output .= "</div>";
+		$output .= "<div class='versions'>";
+		$output .= "<p><a class='button rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>Add new product</strong></a>Here you can add products, groups or variations</p>";
+		$output .= "</div>";
+		$output .= "</div>";
+		$output.="</div>";
+	} else {  
+		$output="";	
+		$output.="<div id='rightnow'>\n\r";
+		$output.="	<h3 class='reallynow'>\n\r";
+		$output.="		<span>"._('Right Now')."</span>\n\r";
+		$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
+		$output.="		<br class='clear'/>\n\r";
+		$output.="	</h3>\n\r";
+		
+		$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>\n\r";
+		$output.="	<p class='youare'>\n\r";
+		$output.="		".TXT_WPSC_YOUAREUSING."\n\r";
+		//$output.="		<a class='rbutton' href='themes.php'>Change Theme</a>\n\r";
+		//$output.="<span id='wp-version-message'>This is WordPress version 2.6. <a class='rbutton' href='http://wordpress.org/download/'>Update to 2.6.1</a></span>\n\r";
+		$output.="		</p>\n\r";
+		$output.="</div>\n\r";
+		$output.="<br />\n\r";
+		$output = str_replace(array_keys($replace_values), array_values($replace_values),$output);
+	}
 	
-	$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>\n\r";
-	$output.="	<p class='youare'>\n\r";
-	$output.="		".TXT_WPSC_YOUAREUSING."\n\r";
-	//$output.="		<a class='rbutton' href='themes.php'>Change Theme</a>\n\r";
-	//$output.="<span id='wp-version-message'>This is WordPress version 2.6. <a class='rbutton' href='http://wordpress.org/download/'>Update to 2.6.1</a></span>\n\r";
-	$output.="		</p>\n\r";
-	$output.="</div>\n\r";
-	$output.="<br />\n\r";
-	
-	$output = str_replace(array_keys($replace_values), array_values($replace_values),$output);
 	return $output;
 }
 

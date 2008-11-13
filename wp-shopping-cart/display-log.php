@@ -266,17 +266,170 @@ if($_GET['filter'] !== 'true') {
 
 ?>
 <div class="wrap" style=''>
-  <h2><?php echo TXT_WPSC_PURCHASELOG;?></h2><br />
-   <?php
+  <h2><?php echo TXT_WPSC_PURCHASELOG;?></h2>
+  <?php
+	if(IS_WP27) {
+		echo "<div id='dashboard-widgets-wrap'>
+			<div id='dashboard-widgets' class='metabox-holder'>
+				<div id='side-info-column-wpsc' class='inner-sidebar'>";
+?>
+    <?php
+		require_once (ABSPATH . WPINC . '/rss.php');
+		$rss = fetch_rss('http://www.instinct.co.nz/feed/');	
+		if($rss != null) {
+			$rss->items = array_slice((array)$rss->items, 0, 5);
+			$current_hash = sha1(serialize($rss->items));
+			if((string)get_option('wpsc_ecom_news_hash') !== (string)$current_hash ) {
+				?>
+				<div class='postbox'> 
+					<h3 class='hndle'><?php echo TXT_WPSC_ECOM_NEWS; ?></h3>
+					<div class='inside'>
+					<ul class='ecom_dashboard'>
+					<?php
+					foreach($rss->items as $items) {
+						echo "<li><a href='".$items['link']."'>".$items['title']."</a></li>";
+					}
+					?>
+					</ul>
+<!-- 					<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a> -->
+					</div>
+				</div>
+				<?php
+			}
+    }
+    ?>
+	<div class='postbox'> 
+			<h3 class='hndle'><?php echo TXT_WPSC_MENU; ?></h3>
+			<div class='inside'>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/options.php">Shop Settings</a><br>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/gatewayoptions.php">Gateway Settings</a><br>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/form_fields.php">Checkout Settings</a><br>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/instructions.php">Help</a>
+			</div>
+	</div>
+	
+	<div class='postbox'> 
+    <h3 class='hndle'><?php echo TXT_WPSC_ORDER_SUMMARY; ?></h3>
+    
+    <div class='inside'> 
+      <div class='order_summary_subsection'>
+      
+      <strong><?php echo TXT_WPSC_FILTER_ORDER; ?></strong>
+      <p class='order_filters'>
+      <form class='order_filters' method='GET' action='' name='order_filters'>
+      <input type='hidden' name='page' value='<?php echo $_GET['page']?>' />
+      <?php
+      
+      switch($_GET['filter'])
+        {        
+        case "true":
+        $filter[1] = "checked='true'";
+        break;
+			
+	case "affiliate":
+        $filter[4] = "checked='true'";
+        break;
+        
+        case 3:
+        default:
+        $filter[0] = "checked='true'";
+        break;
+        
+        case 1:
+        default:
+        $filter[2] = "checked='true'";
+        break;
+        }
+      
+      ?>
+      <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[4];?> name='filter' value='affiliate' id='order_filter_affiliate' /> <label class='order_filters' for='order_filter_affiliate'><?php echo TXT_WPSC_LOG_AFFILIATES; ?></label>
+      <br />
+      <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='1' id='order_filter_1' /> <label class='order_filters' for='order_filter_1'><?php echo TXT_WPSC_LOG_CURRENT_MONTH; ?></label>
+      <br />
+      <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='3' id='order_filter_3' /> <label class='order_filters' for='order_filter_3'><?php echo TXT_WPSC_LOG_PAST_THREE_MONTHS; ?></label>
+      <br />
+	<input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='paid' id='order_filter_paid' /> <label class='order_filters' for='order_filter_paid'><?php echo TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS; ?></label>
+      <br />
+      <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='true' id='order_filter_none' /> <label class='order_filters' for='order_filter_none'><?php echo TXT_WPSC_LOG_ALL; ?></label>
+      <br>
+       <label class="order_filters"><?=TXT_WPSC_SEARCHEMAIL?>:</label> <input type='text' name='filteremail' >
+      </form>
+      <br />
+      </p>
+            
+      <strong><?php echo TXT_WPSC_TOTAL_THIS_MONTH; ?></strong>
+      <p id='log_total_month'>
+      <?php 
+      $year = date("Y");
+      $month = date("m");
+      $start_timestamp = mktime(0, 0, 0, $month, 1, $year);
+      $end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
+      echo nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
+      echo " ".TXT_WPSC_ACCEPTED_PAYMENTS;
+      ?>
+      </p>
+      </div>
+     
+      
+      <div class='order_summary_subsection'>
+      <strong><?php echo TXT_WPSC_TOTAL_INCOME; ?></strong>
+      <p id='log_total_absolute'>
+      <?php
+       //$total_income = $wpdb->get_results($sql,ARRAY_A);
+       echo nzshpcrt_currency_display(admin_display_total_price(),1);
+       ?>
+      </p>
+      </div>
+      
+      
+     
+      <div class='order_summary_subsection'>
+      <strong><?php echo TXT_WPSC_RSS_FEED_HEADER; ?></strong>
+      <p>
+        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='absmiddle' src='<?php echo WPSC_URL; ?>/images/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php echo TXT_WPSC_RSS_FEED_LINK; ?></span></a> <?php echo TXT_WPSC_RSS_FEED_TEXT; ?>      </p>
+      </div>
+         <div class='order_summary_subsection'>
+      <strong><?php echo TXT_WPSC_PLUGIN_NEWS_HEADER; ?></strong>
+      <p>
+      <?php echo TXT_WPSC_PLUGIN_NEWS; ?>        
+        <br /><br /><?php echo TXT_WPSC_POWERED_BY; ?><a href='http://www.instinct.co.nz'>Instinct</a>
+      </p>
+      </div>
+    </div>
+    <?php
+    if(get_option('activation_state') != "true") {
+      ?>
+      <div class='gold-cart_pesterer'> 
+        <div>
+        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo TXT_WPSC_UPGRADE_TO_GOLD; ?></a><?php echo TXT_WPSC_UNLEASH_MORE; ?>
+        </div>
+      </div>
+      </div>
+      <?php
+    }
+    ?>
+<?php
+	echo "</div>";
+	echo "<div id='post-body' class='has-sidebar'>
+			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
+				
+	}
    if(function_exists('wpsc_right_now')) {
 			echo wpsc_right_now();
     }
-    ?>
+
+	if (IS_WP27) {
+		echo "<div class='postbox'>";
+		echo "<h3 class='hndle'>".TXT_WPSC_PURCHASELOG."</h3>";
+	} else {
+?>
 
   <table style='width: 100%;'>
    <tr>  
     <td id='product_log_data'>
+    
    <?php
+   }
   if(($purchase_log == null) && !is_numeric($_GET['purchaseid'])) {
     if($earliest_record[0]['date'] != null) {
       $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
@@ -761,7 +914,9 @@ if($_GET['filter'] !== 'true') {
 			  echo "</p>\n\r";
 			}
 			
-
+			if (IS_WP27) {
+				echo "<div class='purchase_detail'>";
+			}
 			echo "<strong>".TXT_WPSC_PURCHASE_NUMBER.":</strong>".$purch_data[0]['id']."<br /><br />\n\r";
 			
 			echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>\n\r";
@@ -883,21 +1038,28 @@ if($_GET['filter'] !== 'true') {
 
 		//http://www.instinct.co.nz/wordpress_2.6/wp-admin/admin.php?page=wp-shopping-cart/display-log.php&display_invoice=true&purchaseid=27
 		echo "<br /><br class='small' />&emsp;&ensp; <a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>".TXT_WPSC_GOBACK."</a>";
+	
 	} elseif (is_numeric($_GET['email_buyer_id'])) {
 		if ($resent){
+			if (IS_WP27)
+				echo "<div class='email_buyer'>";
 			echo "The folowing purchase recipt have has been resent:<br>";
 		    echo nl2br($message_html);
 		} else {
 		    echo "An Error Occured While Sending Email";
 		}
 	}
+		if (IS_WP27){
+			echo "</div>";
+		}
       
 $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
 $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
   ?>
    </td>
    
-    <td id='order_summary_container'>
+    <!--
+<td id='order_summary_container'>
     <?php
 		require_once (ABSPATH . WPINC . '/rss.php');
 		$rss = fetch_rss('http://www.instinct.co.nz/feed/');	
@@ -1031,7 +1193,11 @@ $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
     }
     ?>
     </td>  
+-->
   </tr>
  </table>
-
+ </div>
+ </div>
+  </div>
+ </div>
 </div>

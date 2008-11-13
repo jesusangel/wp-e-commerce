@@ -382,7 +382,14 @@ function categorisation_conf() {
 </noscript>
 <div class="wrap">
   <h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL;?>/images/indicator.gif' alt='Loading' title='Loading' /></span><br />
+    <?php
+  
+  
+	if(IS_WP27) {
+		echo "<div id='dashboard-widgets' class='metabox-holder'>";
+	}
+?>
+  <div id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL;?>/images/indicator.gif' alt='Loading' title='Loading' /></div>
   <span><?php echo TXT_WPSC_CATEGORISATION_GROUPS_DESCR;?></span>
   
 <div id='add_categorisation'>
@@ -436,8 +443,14 @@ function categorisation_conf() {
 	</form>
 	<br/>
 </div>
+<?php
+	if (IS_WP27) {
+		echo "<div class='wpsc_products_nav27'>";
+	} else {
+		echo "<div class='tablenav wpsc_groups_nav' >";
+	}
+?>
 
-<div class="tablenav wpsc_groups_nav" >
 	<div class="alignleft" style='width: 500px;'>
 	  <form action='' method='GET' id='submit_categorisation_form' >
 	  <input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
@@ -477,29 +490,39 @@ function categorisation_conf() {
 <?php
  
 $num = 0;
+
 echo "  <table id='productpage'>\n\r";
 echo "    <tr><td class='firstcol'>\n\r";
+if (IS_WP27){
+	echo "<div class='postbox'>";
+	echo "<h3 class='hndle'>".ucfirst(TXT_WPSC_GROUPCOUNT_PLURAL)."</h3>";
+	echo "<div class='inside'>";
+}
 //echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
 echo "      <table id='itemlist'>\n\r";
-echo "        <tr class='firstrow categorisation_title'>\n\r";
+if (IS_WP27) {
+	echo "<tr></tr>";
+} else {
+	echo "        <tr class='firstrow categorisation_title'>\n\r";
+	echo "          <td>\n\r";
+	echo TXT_WPSC_IMAGE;
+	echo "          </td>\n\r";
+	
+	echo "          <td>\n\r";
+	echo TXT_WPSC_NAME;
+	echo "          </td>\n\r";
+	
+	echo "          <td>\n\r";
+	//echo TXT_WPSC_DESCRIPTION;
+	echo "          </td>\n\r";
+	
+	echo "          <td>\n\r";
+	echo TXT_WPSC_EDIT;
+	echo "          </td>\n\r";
+	
+	echo "        </tr>\n\r";
+}
 
-echo "          <td>\n\r";
-echo TXT_WPSC_IMAGE;
-echo "          </td>\n\r";
-
-echo "          <td>\n\r";
-echo TXT_WPSC_NAME;
-echo "          </td>\n\r";
-
-echo "          <td>\n\r";
-//echo TXT_WPSC_DESCRIPTION;
-echo "          </td>\n\r";
-
-echo "          <td>\n\r";
-echo TXT_WPSC_EDIT;
-echo "          </td>\n\r";
-
-echo "        </tr>\n\r";
 
 
 echo "     <tr>\n\r";
@@ -515,8 +538,13 @@ echo "       </td>\n\r";
 echo "     <tr>\n\r";
 
 display_categories($current_categorisation['id']);
-  
-echo "      </table>\n\r";
+if (IS_WP27){
+	echo "</table>";
+	echo "</div>"; //class inside ends
+	echo "</div>"; //class postbox ends
+} else {
+	echo "</table>\n\r";
+}
 echo "      </td><td class='secondcol'>\n\r";
 echo "        <div id='productform'>";
 echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>\n\r";
@@ -528,9 +556,17 @@ echo "        </div>\n\r";
 echo "</form>\n\r";
 echo "        </div>\n\r";
 ?>
-<div id='additem'>
 
-	<div class='categorisation_title'><strong class='form_group'><?php echo TXT_WPSC_ADDDETAILS;?></strong></div>
+<?php
+if (IS_WP27) {
+	echo "<div id='additem' class='postbox'>";
+	echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP)."</h3>";
+	echo "<div class='inside'>";
+} else {
+	echo "<div id='additem'>";
+	echo "<div class='categorisation_title'><strong class='form_group'><?php echo TXT_WPSC_ADDDETAILS;?></strong></div>";
+}
+?>
   <form method='POST' enctype='multipart/form-data'>
 	<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
   <table class='category_forms'>
@@ -639,4 +675,5 @@ if(function_exists("getimagesize")) {
 echo "      </td></tr>\n\r";
 echo "     </table>\n\r";
   ?>
+</div>
 </div>

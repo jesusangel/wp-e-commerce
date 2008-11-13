@@ -787,10 +787,17 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
 
 
 <div class="wrap">
+
   <h2><?php echo TXT_WPSC_DISPLAYPRODUCTS;?></h2>
 
   <?php
-  ?>
+  
+  
+	if(IS_WP27) {
+		echo "
+			<div id='dashboard-widgets' class='metabox-holder'>";
+	}
+?>
 
 
   <script language='javascript' type='text/javascript'>
@@ -813,7 +820,13 @@ else if(is_numeric($_GET['product_id'])) {
 echo $display_added_product ;
 ?>
 </script>
-<div class="tablenav wpsc_products_nav">
+<?php
+	if (IS_WP27) {
+		echo "<div class='wpsc_products_nav27'>";
+	} else {
+		echo "<div class='tablenav wpsc_products_nav'>";
+	}
+?>
 	<div style="width: 500px;" class="alignleft">
 		<a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a>
 		<?php
@@ -840,13 +853,20 @@ $num = 0;
 
 echo "    <table id='productpage'>\n\r";
 echo "      <tr><td style='padding: 0px;'>\n\r";
+if (IS_WP27){
+	echo "<div class='postbox'>";
+	echo "<h3 class='hndle'>".TXT_WPSC_SELECT_PRODUCT."</h3>";
+	echo "<div class='inside'>";
+}
 echo "        <table id='itemlist'>\n\r";
-echo "          <tr class='firstrowth'>\n\r";
-echo "            <td colspan='4' style='text-align: left;'>\n\r";
-echo "<span id='loadingindicator_span' class='product_loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/grey-loader.gif' alt='Loading' title='Loading' /></span>";
-echo "<strong class='form_group'>".TXT_WPSC_SELECT_PRODUCT."</strong>";
-echo "            </td>\n\r";
-echo "          </tr>\n\r";
+if (!IS_WP27) {
+	echo "          <tr class='firstrowth'>\n\r";
+	echo "            <td colspan='4' style='text-align: left;'>\n\r";
+	echo "<span id='loadingindicator_span' class='product_loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/grey-loader.gif' alt='Loading' title='Loading' /></span>";
+	echo "<strong class='form_group'>".TXT_WPSC_SELECT_PRODUCT."</strong>";
+	echo "            </td>\n\r";
+	echo "          </tr>\n\r";
+}
 if(($num_products > 20) || ($search_string != '')) {
 	echo "          <tr class='selectcategory'>\n\r";
 	echo "            <td colspan='3'>\n\r";
@@ -863,7 +883,9 @@ if(($num_products > 20) || ($search_string != '')) {
 	echo "          </tr>\n\r";
 }
 
-
+if (IS_WP27){
+	echo topcategorylist();
+}else{
 echo "          <tr class='selectcategory'>\n\r";
 echo "            <td colspan='3'>\n\r";
 echo TXT_WPSC_PLEASESELECTACATEGORY.": ";
@@ -876,7 +898,7 @@ echo "</div>\n\r";
 
 echo "            </td>\n\r";
 echo "          </tr>\n\r";
-
+}
 if(is_numeric($_GET['catid'])) {
 	$name_style = 'class="pli_name"';
 	$price_style = 'class="pli_price"';
@@ -1039,8 +1061,13 @@ if($product_list != null)
 		if (!isset($_GET['pnum'])) {
 			$_GET['pnum']=0;
 		}
-		echo "<tr class='selectcategory' style='border: none;'><td style='text-align:right;' colspan='4' width='70%'>";
 		
+		if (IS_WP27){
+			echo "</table>";
+			echo "<div id='major-publishing-actions' class='wpsc_delete_product'>";
+		} else {
+			echo "<tr class='selectcategory' style='border: none;'><td style='text-align:right;' colspan='4' width='70%'>";
+		}
 		$page_links = paginate_links( array(
 			'base' => add_query_arg( 'pnum', '%#%' ),
 			'format' => '',
@@ -1049,7 +1076,7 @@ if($product_list != null)
 			'end_size' => 2, // How many numbers on either end including the end
 			'mid_size' => 2, // How many numbers to either side of current not including current
 		));
-		echo "<div class='deleteproducts' style='float:left;'><button class='button'>Delete</button></div>";
+		echo "<div class='deleteproducts' style='float:left;'><button class='button-primary'>Delete</button></div>";
 			echo "<div class='tablenav-pages'>";
 			
 			echo $page_links;
@@ -1073,18 +1100,29 @@ if($product_list != null)
 			}
 			echo "</div>";
 		}
-		echo "</td></tr>";
+		echo "</td>";
+		if (!IS_WP27){
+			echo "</tr>";
+		}
 	}
 	
 	
   }
 
-echo "        </table>\n\r";
+if (IS_WP27){
+	echo "</div>"; //id major-publishing-actions ends
+	echo "</div>"; //class inside ends
+	echo "</div>"; //class postbox ends
+} else {
+	echo "</table>\n\r";
+}
+//First column ends here
 echo "      </td><td class='secondcol'>\n\r";
+
 echo "        <div id='productform'>";
-echo   "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
-echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>";
-echo "        <table class='producttext'>\n\r";;    
+echo "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
+echo "<form method='POST' enctype='multipart/form-data' name='editproduct$num'>";
+echo "        <table class='producttext'>\n\r"; 
 
 
 echo "        </table>\n\r";
@@ -1093,11 +1131,27 @@ echo "        </div>\n\r";
 echo "</form>";
 echo "        </div>";
 ?>
-<div id='additem'>
-<div class="categorisation_title"><strong class="form_group"><?php echo TXT_WPSC_PRODUCTDETAILS;?> <span><?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE;?></span></strong></div>
+
+<form method='POST' enctype='multipart/form-data'>
+<?php
+if (IS_WP27){
+	echo "        <div id='additem' class='postbox'>";
+	echo "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
+	
+} else {
+	echo "        <div id='additem'>";
+	echo "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
+}
+?>
+<!-- <div class="categorisation_title"><strong class="form_group"><?php echo TXT_WPSC_PRODUCTDETAILS;?> <span><?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE;?></span></strong></div> -->
 
   <?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-  <form method='POST' enctype='multipart/form-data'>
+  
+<?php
+	if(IS_WP27) {
+		echo "<div class='inside'>";
+	}
+?>
   <table class='additem'>
     <tr>
       <td class='itemfirstcol'>
@@ -1167,13 +1221,21 @@ echo "        </div>";
 				?>
       </td>
     </tr>
-   
-
+   </table>
+   </div>
+   </div>
+<table class='additem' width="100%">
    
     
 <tr><td  colspan='2'><div id='price_and_stock' class='postbox <?php echo ((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-	<h3>
-		<a class="togbox">+</a>
+	<?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?>
 		<?php echo TXT_WPSC_PRICE_AND_STOCK_CONTROL;?>
 	</h3>
     <div class='inside'>
@@ -1238,8 +1300,15 @@ echo "        </div>";
     <tr>
     <td colspan="2">
 	<div id='variation' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3>
-		<a class="togbox">+</a>
+    <?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?>    
+        
 		<?php echo TXT_WPSC_VARIATION_CONTROL; ?>
 	</h3>
 	<div class='inside'>
@@ -1273,8 +1342,14 @@ echo "        </div>";
     <tr>
       <td colspan='2'>
 	      <div class='postbox <?php echo ((array_search('shipping', $closed_postboxes) !== false) ? 'closed' : ''); ?>' id='shipping'>
-	     <h3>
-		     <a class="togbox">+</a>
+<?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?> 
 		     <?php echo TXT_WPSC_SHIPPING_DETAILS; ?>
 		</h3>
       <div class='inside'>
@@ -1316,8 +1391,14 @@ echo "        </div>";
     </tr>
     </table></div></div></td></tr>
     <tr><td colspan='2'><div id='advanced' class='postbox <?php echo ((array_search('advanced', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-	    <h3>
-		    <a class="togbox">+</a>
+	    <?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?> 
 		    <?php echo TXT_WPSC_ADVANCED_OPTIONS;?>
 	    </h3>
 	    <div class='inside'>
@@ -1422,8 +1503,14 @@ echo "        </div>";
     <tr>
       <td colspan='2'>
         <div id='product_image' class='postbox <?php echo ((array_search('product_image', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3> 
-		<a class="togbox">+</a>
+        <?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?> 
 		<?php echo TXT_WPSC_PRODUCTIMAGES;?>
 	</h3>
 	<div class='inside'>
@@ -1531,8 +1618,14 @@ echo "        </div>";
     <tr>
       <td colspan='2'>
         <div id='product_download' class='postbox <?php echo ((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3>
-		<a class='togbox'>+</a>
+        <?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?> 
 		<?php echo TXT_WPSC_PRODUCTDOWNLOAD;?>
 	</h3>
 	<div class='inside'>
@@ -1570,8 +1663,14 @@ if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
     <tr>
     <td colspan="2">
 	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3>
-		<a class="togbox">+</a>
+        <?php
+    	if (IS_WP27) {
+    		echo "<h3 class='hndle'>";
+    	} else {
+    		echo "<h3>
+		<a class='togbox'>+</a>";
+    	}
+    ?> 
 		<?php echo TXT_WPSC_LABEL_CONTROL; ?>
 	</h3>
 	<div class='inside'>
@@ -1623,7 +1722,7 @@ if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
       <td>
       <br />
         <input type='hidden' name='submit_action' value='add' />
-        <input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_PRODUCT;?>' />
+        <input class='button-primary' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_PRODUCT;?>' />
       </td>
     </tr>
   </table>
@@ -1634,4 +1733,5 @@ echo "      </td></tr>\n\r";
 echo "     </table>\n\r"
 
   ?>
+</div>
 </div>

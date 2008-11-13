@@ -2,6 +2,12 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_LABEL_CONTROL', 'Label Control');
+define('TXT_WPSC_LABELS', 'Add Label');
+define('TXT_WPSC_PRODUCT_CODE', 'Product Code');
+define('TXT_WPSC_LIFE_NUMBER', 'Life Number');
+define('TXT_WPSC_ITEM_NUMBER', 'Item Number');
+define('TXT_WPSC_LABEL_DESC', 'Label Description');
 
 
 define('TXT_WPSC_DEFAULT_PURCHASE_RECEIPT', 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.
@@ -123,6 +129,8 @@ define('TXT_WPSC_SALECOUNT_SINGULAR','sale');
 define('TXT_WPSC_SALECOUNT_PLURAL','sales');	
 define('TXT_WPSC_PENDINGCOUNT_SINGULAR','transaction');
 define('TXT_WPSC_PENDINGCOUNT_PLURAL','transactions');
+define('TXT_WPSC_VARIATION_SINGULAR','variation');
+define('TXT_WPSC_VARIATION_PLURAL','variations');
 
 define('TXT_WPSC_SALES_DASHBOARD', 'You have <a href=\'admin.php?page=wp-shopping-cart/display-items.php\'>:productcount:</a>, contained within <a href=\'admin.php?page=wp-shopping-cart/display-category.php\'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.');
 

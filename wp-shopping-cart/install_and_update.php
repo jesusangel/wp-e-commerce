@@ -595,6 +595,8 @@ if($_GET['wpsc_uninstall'] === 'verified') {
   add_action( 'init', 'wpsc_uninstall_plugin' );
 }
 
+add_action('register_uninstall_hook', 'wpsc_uninstall_plugin');
+
 if($_GET['wpsc_uninstall'] === 'ask') {
   add_action( 'after_plugin_row', 'wpsc_uninstall_plugin_link' );
 }

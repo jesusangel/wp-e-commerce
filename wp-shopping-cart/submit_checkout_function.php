@@ -244,17 +244,15 @@ function nzshpcrt_submit_checkout() {
    if( !(is_numeric($user_ID) && ($user_ID > 0))) {
      $user_ID = 'null';
      }
-	if(isset($_SESSION['usps_shipping']) && is_numeric($_SESSION['usps_shipping'])) { 
-	    $base_shipping = $_SESSION['usps_shipping'];
+     
+	if(isset($_SESSION['quote_shipping']) && is_numeric($_SESSION['quote_shipping'])) { 
+	    $base_shipping = $_SESSION['quote_shipping'];
     } else {
 		$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
     }
-    //clear the coupon
-    //$_SESSION['coupon_num'] = '';
-    
+
     
     //insert the record into the purchase log table
-	//exit("----->". $_SESSION['delivery_country']);
 	$price = nzshpcrt_overall_total_price($_SESSION['selected_country'],false);
 	$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '', '{$engrave}', ' ')";
 	//exit($sql);

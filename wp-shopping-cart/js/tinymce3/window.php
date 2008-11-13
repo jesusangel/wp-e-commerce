@@ -34,6 +34,7 @@ global $wpdb;
 		<ul>
 		<li id="category" class="current"><span><a href="javascript:mcTabs.displayTab('category','wpsc_category_panel');" onmousedown="return false;"><?php _e("Category", 'wpsc_category'); ?></a></span></li>
 		<li id="prodcut_slider"><span><a href="javascript:mcTabs.displayTab('prodcut_slider','product_slider_panel');" onmousedown="return false;"><?php _e("Product Slider", 'wpsc_category'); ?></a></span></li>
+		<li id="add_product"><span><a href="javascript:mcTabs.displayTab('add_product','add_product_panel');" onmousedown="return false;"><?php _e("Add Product", 'wpsc_category'); ?></a></span></li>
 		</ul>
 	</div>
 	
@@ -88,6 +89,42 @@ global $wpdb;
 			<input type='text' id='wpsc_slider_visibles' name='wpsc_slider_visibles'>
 		</td>
 	</tr>
+        </table>
+		</div>
+		
+		<!-- Add product panel -->
+		<div id="add_product_panel" class="panel">
+		<br />
+		<table border="0" cellpadding="4" cellspacing="0">
+         <tr>
+			<td nowrap="nowrap"><label for="add_product_name"><?php _e("Name", 'wpsc_category'); ?></label></td>
+			<td><input type='text' id="add_product_name" name="add_product_name" style="width: 200px"></td>
+		</tr>
+		<tr>
+			<td nowrap="nowrap"><label for="add_product_description"><?php _e("Description", 'wpsc_category'); ?></label></td>
+			<td><input type='text' id="add_product_description" name="add_product_description" style="width: 200px"></td>
+		</tr>
+		<tr>
+			<td nowrap="nowrap"><label for="add_product_price"><?php _e("Price", 'wpsc_category'); ?></label></td>
+			<td><input type='text' id="add_product_price" name="add_product_price" style="width: 200px"></td>
+		</tr>
+		<tr>
+			<td>
+				<label for="add_product_category"><?php _e("Category", 'wpsc_category'); ?></label>
+			</td>
+			<td>
+			<select id="add_product_category" name="add_product_category" style="width: 200px">
+			<option value="0"><?php _e("No Category", 'wpsc_category'); ?></option>
+				<?php
+				$categorylist = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."product_categories ORDER BY id ASC",ARRAY_A);
+				if(is_array($categorylist)) {
+					foreach($categorylist as $category) {
+						echo "<option value=".$category['id']." >".$category['name']."</option>"."\n";
+					}
+				}
+				?>
+            </select></td>
+          </tr>
         </table>
 		</div>
 		

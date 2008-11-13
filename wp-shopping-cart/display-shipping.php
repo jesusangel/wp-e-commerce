@@ -164,6 +164,7 @@ function selectgateway() {
 									echo "</th>";
 									echo "<td>";
 									echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
+									echo "<br>If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.";
 									echo "</td>";
 									echo "</tr>";
 										}

@@ -24,10 +24,8 @@ function insertWPSCLink() {
 	var tagtext;
 	var select_category=document.getElementById('wpsc_category_panel');
 	var category = document.getElementById('wpsc_category');
-	var slider=document.getElementById('product_slider_panel');
-
-// 	var album = document.getElementById('album_panel');
-// 	var singlepic = document.getElementById('singlepic_panel');
+	var slider = document.getElementById('product_slider_panel');
+	var add_product = document.getElementById('add_product_panel');
 	
 	// who is active ?
 	if (select_category.className.indexOf('current') != -1) {
@@ -48,7 +46,6 @@ function insertWPSCLink() {
 		visi = document.getElementById('wpsc_slider_visibles');
 		var categoryid = category.value;
 		var visibles = visi.value;
-
 		if (categoryid > 0 ) {
 			if (visibles != '') {
 				tagtext = "[wpsc_slider_category=" + categoryid + "," + visibles + "]";
@@ -59,23 +56,24 @@ function insertWPSCLink() {
 			tinyMCEPopup.close();
 		}
 	}
-
-// 	if (singlepic.className.indexOf('current') != -1) {
-// // 		var singlepicid = document.getElementById('singlepictag').value;
-// // 		var imgWidth = document.getElementById('imgWidth').value;
-// // 		var imgHeight = document.getElementById('imgHeight').value;
-// // 		var imgeffect = document.getElementById('imgeffect').value;
-// // 		var imgfloat = document.getElementById('imgfloat').value;
-// 
-// 		if (singlepicid != 0 ) {
-// 			if (imgeffect == "none")
-// 				tagtext = "[singlepic=" + singlepicid + "," + imgWidth + "," + imgHeight + ",," + imgfloat + "]";
-// 			else
-// 				tagtext = "[singlepic=" + singlepicid + "," + imgWidth + "," + imgHeight + "," + imgeffect + "," + imgfloat + "]";
-// 		} else {
-// 			tinyMCEPopup.close();
-// 		}
-// 	}
+	
+	if (add_product.className.indexOf('current') != -1) {
+		category = document.getElementById('add_product_category');
+		prod_name = document.getElementById('add_product_name');
+		prod_price = document.getElementById('add_product_price');
+		prod_desc = document.getElementById('add_product_description');
+		var categoryid = category.value;
+		var desc = prod_desc.value;
+		var product_name = prod_name.value;
+		var price = prod_price.value;
+		
+		if (product_name != '') {
+			ajax.post("index.php",noresults,"ajax=true&addfromtinymce=true&value=1");
+			tagtext='1';
+		} else {
+			tinyMCEPopup.close();
+		}
+	}
 	
 	if(window.tinyMCE) {
 		window.tinyMCE.execInstanceCommand('content', 'mceInsertContent', false, tagtext);

@@ -20,7 +20,7 @@ define('WPSC_DEBUG', false);
  * {WP-Set} Yes (Admin Panel)
  */
 define('IS_WP25', version_compare($wp_version, '2.4', '>=') );
-
+define('IS_WP27', version_compare($wp_version, '2.6', '>=') );
 // // we need to know where we are, rather than assuming where we are
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
@@ -217,10 +217,16 @@ class wp_shopping_cart {
 				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
 					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
 				} else {
-					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+					if (IS_WP27)
+						add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
+					else
+						add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
 				}
 			} else {
-				add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+				if (IS_WP27)
+				    add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
+				else
+				    add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
 			}
 				add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
 				//         }
