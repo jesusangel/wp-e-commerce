@@ -1223,6 +1223,38 @@ jQuery(document).ready(function(){
          indicator : "Saving...",
          tooltip   : 'Click to edit...'
     });
+    jQuery('.meta-box-sortables').sortable( {
+	    placeholder: 'sortable-placeholder',
+	    connectWith: [ '.meta-box-sortables' ],
+	    items: '> .postbox',
+	    handle: '.hndle',
+	    distance: 2,
+	    tolerance: 'pointer',
+	    sort: function(e,ui) {
+	    	if ( jQuery(document).width() - e.clientX < 300 ) {
+	    		if ( ! jQuery('#post-body').hasClass('has-sidebar') ) {
+	    			var pos = $('#side-sortables').offset();
+
+	    			jQuery('#side-sortables').append(ui.item)
+	    			jQuery(ui.placeholder).css({'top':pos.top,'left':pos.left}).width($(ui.item).width())
+	    			postboxes.expandSidebar(1);
+	    		}
+	    	}
+	    },
+	    stop: function() {
+	    	var postVars = {
+	    		action: 'meta-box-order',
+	    		_ajax_nonce: $('#meta-box-order-nonce').val(),
+	    		page: page
+	    	}
+	    	jQuery('.meta-box-sortables').each( function() {
+	    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
+	    	} );
+	    	jQuery.post( postboxL10n.requestFile, postVars, function() {
+	    		postboxes.expandSidebar();
+	    	} );
+	    }
+	} );
 });
 
 

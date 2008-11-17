@@ -226,7 +226,7 @@ echo "        </div>";
   <div class="categorisation_title">
 		<strong class="form_group"><?php echo TXT_WPSC_ADDVARIATION;?></strong>
 	</div>
-  <form method='POST' action='admin.php?thickbox_variation=true'>
+  <form method='POST' action='admin.php?thickbox_variation=true' class='additem'>
   <table class='category_forms'>
     <tr>
       <td>

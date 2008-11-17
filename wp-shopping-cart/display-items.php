@@ -3,8 +3,6 @@ include_once('tagging_functions.php');
 include_once('google_base_functions.php');
 $category_data = null;
 
-
-//echo "<pre>".print_r($_POST,true)."</pre>";
 $current_user = wp_get_current_user();
 
 $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
@@ -202,7 +200,7 @@ if($_POST['submit_action'] == 'add') {
 				
 			//modified for USPS
 			//exit($_POST['images'][0]);
-		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$wpdb->escape($_POST['images'][0])."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape((int)$_POST['image_resize']) . "');";
+		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
 		
 		if($wpdb->query($insertsql)) {  
 			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
@@ -793,7 +791,7 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
   <?php
   
   
-	if(IS_WP27) {
+	if(function_exists('add_object_page')) {
 		echo "
 			<div id='dashboard-widgets' class='metabox-holder'>";
 	}
@@ -820,12 +818,13 @@ else if(is_numeric($_GET['product_id'])) {
 echo $display_added_product ;
 ?>
 </script>
+
 <?php
-	if (IS_WP27) {
-		echo "<div class='wpsc_products_nav27'>";
-	} else {
-		echo "<div class='tablenav wpsc_products_nav'>";
-	}
+if (function_exists('add_object_page')) {
+	echo "<div class='wpsc_products_nav27'>";
+} else {
+	echo "<div class='tablenav wpsc_products_nav'>";
+}
 ?>
 	<div style="width: 500px;" class="alignleft">
 		<a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a>
@@ -853,13 +852,13 @@ $num = 0;
 
 echo "    <table id='productpage'>\n\r";
 echo "      <tr><td style='padding: 0px;'>\n\r";
-if (IS_WP27){
+if (function_exists('add_object_page')){
 	echo "<div class='postbox'>";
 	echo "<h3 class='hndle'>".TXT_WPSC_SELECT_PRODUCT."</h3>";
 	echo "<div class='inside'>";
 }
 echo "        <table id='itemlist'>\n\r";
-if (!IS_WP27) {
+if (!function_exists('add_object_page')) {
 	echo "          <tr class='firstrowth'>\n\r";
 	echo "            <td colspan='4' style='text-align: left;'>\n\r";
 	echo "<span id='loadingindicator_span' class='product_loadingindicator'><img id='loadingimage' src='".WPSC_URL."/images/grey-loader.gif' alt='Loading' title='Loading' /></span>";
@@ -883,7 +882,7 @@ if(($num_products > 20) || ($search_string != '')) {
 	echo "          </tr>\n\r";
 }
 
-if (IS_WP27){
+if (function_exists('add_object_page')){
 	echo topcategorylist();
 }else{
 echo "          <tr class='selectcategory'>\n\r";
@@ -980,11 +979,9 @@ if($product_list != null)
     	echo "	<div class='itemHeader pli_img'>\n\r";
 		echo "<a class='noline' title='Drag to a new position'>";
 	} else {
-		echo "	<td style='width: 17%;' class='imagecol'>\r\n";
+		echo "	<td style='width: 25%;' class='imagecol'>\r\n";
 	}
 	echo "<input type='checkbox' name='productdelete[]' class='deletecheckbox' value='{$product['id']}'>";
-	
-	 
 	if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images
 		echo "<img title='Drag to a new position' src='".WPSC_THUMBNAIL_URL.$product['thumbnail_image']."' title='".$product['name']."' alt='".$product['name']."' width='35' height='35'  />";
 	} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
@@ -1062,7 +1059,7 @@ if($product_list != null)
 			$_GET['pnum']=0;
 		}
 		
-		if (IS_WP27){
+		if (function_exists('add_object_page')){
 			echo "</table>";
 			echo "<div id='major-publishing-actions' class='wpsc_delete_product'>";
 		} else {
@@ -1076,7 +1073,12 @@ if($product_list != null)
 			'end_size' => 2, // How many numbers on either end including the end
 			'mid_size' => 2, // How many numbers to either side of current not including current
 		));
-		echo "<div class='deleteproducts' style='float:left;'><button class='button-primary'>Delete</button></div>";
+		if(function_exists('add_object_page')){
+			echo "<div class='deleteproducts' style='float:left;'><button class='button-primary'>Delete</button></div>";
+		} else {
+			echo "<div class='deleteproducts' style='float:left;'><button class='button'>Delete</button></div>";
+		}
+		
 			echo "<div class='tablenav-pages'>";
 			
 			echo $page_links;
@@ -1101,7 +1103,7 @@ if($product_list != null)
 			echo "</div>";
 		}
 		echo "</td>";
-		if (!IS_WP27){
+		if (!function_exists('add_object_page')){
 			echo "</tr>";
 		}
 	}
@@ -1109,7 +1111,7 @@ if($product_list != null)
 	
   }
 
-if (IS_WP27){
+if (function_exists('add_object_page')){
 	echo "</div>"; //id major-publishing-actions ends
 	echo "</div>"; //class inside ends
 	echo "</div>"; //class postbox ends
@@ -1132,9 +1134,9 @@ echo "</form>";
 echo "        </div>";
 ?>
 
-<form method='POST' enctype='multipart/form-data'>
+<form method='POST' enctype='multipart/form-data' class='additem'>
 <?php
-if (IS_WP27){
+if (function_exists('add_object_page')){
 	echo "        <div id='additem' class='postbox'>";
 	echo "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
 	
@@ -1148,7 +1150,7 @@ if (IS_WP27){
   <?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
   
 <?php
-	if(IS_WP27) {
+	if(function_exists('add_object_page')) {
 		echo "<div class='inside'>";
 	}
 ?>
@@ -1221,15 +1223,24 @@ if (IS_WP27){
 				?>
       </td>
     </tr>
-   </table>
-   </div>
-   </div>
-<table class='additem' width="100%">
    
+<?php
+	if(function_exists('add_object_page')){
+		echo "</table>
+   </div></div>
+<table class='additem' style='margin-top:0px;'>";
+	}
+?>
     
-<tr><td  colspan='2'><div id='price_and_stock' class='postbox <?php echo ((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
+<tr><td  colspan='2'>
+<?php
+	if (function_exists('add_object_page')){
+		echo "<div class='meta-box-sortables'>";
+	}
+?>
+<div id='price_and_stock' class='postbox <?php echo ((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
 	<?php
-    	if (IS_WP27) {
+    	if (function_exists('add_object_page')) {
     		echo "<h3 class='hndle'>";
     	} else {
     		echo "<h3>
@@ -1293,22 +1304,17 @@ if (IS_WP27){
         </div>
       </td>
     </tr>
-  </table></div></div></TD></tr>
-  <?php   
-  do_action('wpsc_product_form', array('product_id' => 0, 'state' => 'add'));
-  ?>
-    <tr>
-    <td colspan="2">
+  </table></div></div>
+  <?php 
+  	if(!function_exists('add_object_page')) {
+		echo "</td></tr>";
+		do_action('wpsc_product_form', array('product_id' => 0, 'state' => 'add'));
+  		echo "<tr><td colspan='2'>";
+  	}
+  ?> 
 	<div id='variation' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-    <?php
-    	if (IS_WP27) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?>    
-        
+        <h3>
+		<a class="togbox">+</a>
 		<?php echo TXT_WPSC_VARIATION_CONTROL; ?>
 	</h3>
 	<div class='inside'>
@@ -1338,18 +1344,16 @@ if (IS_WP27){
         </div>
       </td>
     </tr> 
-	</table></div></div></td></tr>
-    <tr>
-      <td colspan='2'>
+	</table></div></div>  
+<?php 
+  	if(!function_exists('add_object_page')) {
+		echo "</td></tr>";
+  		echo "<tr><td colspan='2'>";
+  	}
+?> 
 	      <div class='postbox <?php echo ((array_search('shipping', $closed_postboxes) !== false) ? 'closed' : ''); ?>' id='shipping'>
-<?php
-    	if (IS_WP27) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?> 
+	     <h3>
+		     <a class="togbox">+</a>
 		     <?php echo TXT_WPSC_SHIPPING_DETAILS; ?>
 		</h3>
       <div class='inside'>
@@ -1389,10 +1393,16 @@ if (IS_WP27){
         <input type='text' size='10' name='international_pnp' value='0.00' />
       </td>
     </tr>
-    </table></div></div></td></tr>
-    <tr><td colspan='2'><div id='advanced' class='postbox <?php echo ((array_search('advanced', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
+    </table></div></div>
+<?php 
+  	if(!function_exists('add_object_page')) {
+		echo "</td></tr>";
+  		echo "<tr><td colspan='2'>";
+  	}
+?> 
+    <div id='advanced' class='postbox <?php echo ((array_search('advanced', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
 	    <?php
-    	if (IS_WP27) {
+    	if (function_exists('add_object_page')) {
     		echo "<h3 class='hndle'>";
     	} else {
     		echo "<h3>
@@ -1499,18 +1509,16 @@ if (IS_WP27){
 
     
     
-    </table></div></div></td></tr>
-    <tr>
-      <td colspan='2'>
+    </table></div></div>
+<?php 
+  	if(!function_exists('add_object_page')) {
+		echo "</td></tr>";
+  		echo "<tr><td colspan='2'>";
+  	}
+?> 
         <div id='product_image' class='postbox <?php echo ((array_search('product_image', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <?php
-    	if (IS_WP27) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?> 
+        <h3> 
+		<a class="togbox">+</a>
 		<?php echo TXT_WPSC_PRODUCTIMAGES;?>
 	</h3>
 	<div class='inside'>
@@ -1614,18 +1622,16 @@ if (IS_WP27){
         </td>
       </tr>
     </table>
-  </div></div></td></tr>
-    <tr>
-      <td colspan='2'>
+  </div></div>
+<?php 
+  	if(!function_exists('add_object_page')) {
+		echo "</td></tr>";
+  		echo "<tr><td colspan='2'>";
+  	}
+?> 
         <div id='product_download' class='postbox <?php echo ((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <?php
-    	if (IS_WP27) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?> 
+        <h3>
+		<a class='togbox'>+</a>
 		<?php echo TXT_WPSC_PRODUCTDOWNLOAD;?>
 	</h3>
 	<div class='inside'>
@@ -1657,20 +1663,18 @@ if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
   echo "    </tr>\n\r";
   }
     ?>
-    </table></div></div></td></tr>
-    
-    <!--For product labels-->
-    <tr>
-    <td colspan="2">
+    </table></div></div>
+ 
+ <?php 
+  	if(!function_exists('add_object_page')) {
+		echo "</td></tr>";
+  		echo "<tr><td colspan='2'>";
+  	}
+?> 
+<!-- Product label -->
 	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <?php
-    	if (IS_WP27) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?> 
+        <h3>
+		<a class="togbox">+</a>
 		<?php echo TXT_WPSC_LABEL_CONTROL; ?>
 	</h3>
 	<div class='inside'>
@@ -1713,16 +1717,29 @@ if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
         </div>
       </td>
     </tr> 
-	</table></div></div></td></tr>
-	
+	</table></div></div>
 	<!--Product label ends here-->
+	<?php
+	if (function_exists('add_object_page')){
+		echo "</div>";
+	}
+?>
+	
+	</td></tr>
+	
+	
     <tr>
       <td>
       </td>
       <td>
-      <br />
+      
+      <?php
+      	if (!function_exists('add_object_page')){
+      		echo "<br>";
+      	}
+      ?>
         <input type='hidden' name='submit_action' value='add' />
-        <input class='button-primary' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_PRODUCT;?>' />
+        <input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_PRODUCT;?>' />
       </td>
     </tr>
   </table>
@@ -1733,5 +1750,4 @@ echo "      </td></tr>\n\r";
 echo "     </table>\n\r"
 
   ?>
-</div>
 </div>

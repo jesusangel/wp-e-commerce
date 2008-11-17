@@ -291,12 +291,12 @@ if($_GET['filter'] !== 'true') {
 					}
 					?>
 					</ul>
-<!-- 					<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a> -->
+					<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a>
 					</div>
 				</div>
 				<?php
 			}
-    }
+    	}
     ?>
 	<div class='postbox'> 
 			<h3 class='hndle'><?php echo TXT_WPSC_MENU; ?></h3>
@@ -409,7 +409,7 @@ if($_GET['filter'] !== 'true') {
     }
     ?>
 <?php
-	echo "</div>";
+	echo "</div></div>";
 	echo "<div id='post-body' class='has-sidebar'>
 			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
 				

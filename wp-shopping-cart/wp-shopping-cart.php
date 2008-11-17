@@ -223,7 +223,7 @@ class wp_shopping_cart {
 						add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
 				}
 			} else {
-				if (IS_WP27)
+				if (function_exists('add_object_page'))
 				    add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
 				else
 				    add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
@@ -485,8 +485,13 @@ jQuery(document).ready( function() {
 function wpsc_admin_css() {
   $siteurl = get_option('siteurl'); 
   if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) || ($_GET['mass_upload'] == 'true')) {
+  	if(function_exists('add_object_page')) {
+  		echo "<link href='".WPSC_URL."/admin_2.7.css' rel='stylesheet' type='text/css' />";
+  	} else {
+  		echo "<link href='".WPSC_URL."/admin.css' rel='stylesheet' type='text/css' />";
+  	}
 ?>
-<link href='<?php echo WPSC_URL; ?>/admin.css' rel="stylesheet" type="text/css" />
+
 <link href='<?php echo WPSC_URL; ?>/js/jquery.ui.tabs.css' rel="stylesheet" type="text/css" />
 <?php
 

@@ -385,7 +385,7 @@ function categorisation_conf() {
     <?php
   
   
-	if(IS_WP27) {
+	if(function_exists('add_object_page')) {
 		echo "<div id='dashboard-widgets' class='metabox-holder'>";
 	}
 ?>
@@ -444,7 +444,7 @@ function categorisation_conf() {
 	<br/>
 </div>
 <?php
-	if (IS_WP27) {
+	if (function_exists('add_object_page')) {
 		echo "<div class='wpsc_products_nav27'>";
 	} else {
 		echo "<div class='tablenav wpsc_groups_nav' >";
@@ -493,14 +493,14 @@ $num = 0;
 
 echo "  <table id='productpage'>\n\r";
 echo "    <tr><td class='firstcol'>\n\r";
-if (IS_WP27){
+if (function_exists('add_object_page')){
 	echo "<div class='postbox'>";
 	echo "<h3 class='hndle'>".ucfirst(TXT_WPSC_GROUPCOUNT_PLURAL)."</h3>";
 	echo "<div class='inside'>";
 }
 //echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
 echo "      <table id='itemlist'>\n\r";
-if (IS_WP27) {
+if (function_exists('add_object_page')) {
 	echo "<tr></tr>";
 } else {
 	echo "        <tr class='firstrow categorisation_title'>\n\r";
@@ -538,7 +538,7 @@ echo "       </td>\n\r";
 echo "     <tr>\n\r";
 
 display_categories($current_categorisation['id']);
-if (IS_WP27){
+if (function_exists('add_object_page')){
 	echo "</table>";
 	echo "</div>"; //class inside ends
 	echo "</div>"; //class postbox ends
@@ -558,7 +558,7 @@ echo "        </div>\n\r";
 ?>
 
 <?php
-if (IS_WP27) {
+if (function_exists('add_object_page')) {
 	echo "<div id='additem' class='postbox'>";
 	echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP)."</h3>";
 	echo "<div class='inside'>";
@@ -567,7 +567,7 @@ if (IS_WP27) {
 	echo "<div class='categorisation_title'><strong class='form_group'><?php echo TXT_WPSC_ADDDETAILS;?></strong></div>";
 }
 ?>
-  <form method='POST' enctype='multipart/form-data'>
+  <form method='POST' enctype='multipart/form-data' class='additem'>
 	<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
   <table class='category_forms'>
     <tr>

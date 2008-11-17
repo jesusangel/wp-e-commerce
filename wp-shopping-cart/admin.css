@@ -126,7 +126,7 @@ table#productpage tr td.secondcol{
 table#itemlist{
 	width: 100%;
 	border-collapse:collapse;
-/* 	border:1px solid #bbb; */
+	border:1px solid #bbb;
 	border-top:none;
 }
 
@@ -922,12 +922,10 @@ div.editing_this_group {
   width: 100%;
 }
 
-#additem form{
-/*
+form.additem{
   border-left:1px solid #bbb;
   border-right:1px solid #bbb;
   border-bottom:1px solid #bbb;
-*/
 }
 
 #productform form{
@@ -1494,17 +1492,13 @@ table.product_variation_grid tr th {
    border-bottom: 1px solid #969696;
 }
 
-table.product_variation_grid tr *.stock {
+table.product_variation_grid tr th.stock {
    border-bottom: 1px solid #969696;
    width: 50px;
 }
 
-table.product_variation_grid tr *.price {
+table.product_variation_grid tr th.price {
    width: 78px;
-}
-
-table.product_variation_grid tr *.weight {
-   width: 50px;
 }
 
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
@@ -1539,7 +1533,6 @@ table.product_variation_grid tr td, table.product_variation_grid tr th {
  text-align: left;
 }
 
-
 table.product_variation_grid tr.variation_row td {
  border-bottom: none;
 }
@@ -1557,7 +1550,6 @@ table.product_variation_grid tr.settings_row td div.variation_settings {
   min-height: 30px;
  
 }
-
 table.product_variation_grid tr th {
    border-bottom: 1px solid #969696;
 }
@@ -1572,7 +1564,7 @@ table.product_variation_grid tr th.price {
 }
 
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
-  padding: 4px 10px 4px 10px;
+  padding: 4px 0px 4px 10px;
 }
   
 table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
@@ -1794,6 +1786,74 @@ br.small {
 	line-height: 0.5em;
 }
 
+#dashboard-widgets-main-content-wpsc {
+	margin-right:31% !important;
+}
+
+#side-info-column-wpsc {
+	width:28% !important;
+}
+
+.inner-sidebar {
+	float:right;
+	clear:right;
+}
+
+div.purchase_detail{
+	margin-left:10px;
+	margin-bottom: 10px;
+}
+
+div.email_buyer{
+	margin-left:10px;
+	margin-bottom: 10px;
+}
+
+h3.hndle {
+	font-size:12px !important;
+	margin:0px !important;
+/*
+	color:#DFDFDF !important;
+	background-color:#575757;
+	border-left:1px solid #575757;
+	border-right:1px solid #575757;
+*/
+	padding:7px 6px 9px;
+	
+}
+
+#rightnow .reallynow span {
+	display:block;
+	float:none !important;
+	padding:0 6px;
+	text-align:left;
+	width:50%;
+}
+
+#rightnow {
+	margin-top:25px !important;
+}
+
+#side-info-column-wpsc div.postbox{
+	background-color:#EAF2F5;
+	border:1px solid #D7E4EC;
+	margin-bottom: 10px;
+	padding: 5px 15px 5px 15px;
+	position:relative;
+}
+
+#additem h3, #productform h3 {
+font-size:14px;
+font-weight:bold;
+margin:0 0 0;
+padding:9px 5px 9px 26px;
+}
+
+#additem h3, #productform h3 {
+background-color:#575757;
+color:#DFDFDF;
+position:relative;
+}
 
 div.variation_checkboxes {
   margin-bottom: 4px;

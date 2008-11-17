@@ -582,9 +582,6 @@ $output .="</table></div></div></td></tr>";
   $output .= '      <span id=\'spanButtonPlaceholder\'></span>';
   $output .= '      <button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
 		
-  $output .= '      <span class="swfupload_loadingindicator" style="visibility: hidden;">';
-  $output .= '      <img id="loadingimage" title="Loading" alt="Loading" src="'.WPSC_URL.'/images/indicator.gif"/>';
-  $output .= '      </span>';
   $output .= "      <p>".TXT_WPSC_FLASH_UPLOADER."</p>";
   $output .= "      </td>";
   $output .= "    </tr>";
@@ -1298,7 +1295,7 @@ function wpsc_right_now() {
   $replace_values[":theme:"] = get_option('wpsc_selected_theme');
   $replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
   
-	if (IS_WP27) {
+	if (function_exists('add_object_page')) {
 		$output="";	
 		$output.="<div id='dashboard_right_now' class='postbox'>";
 		$output.="	<h3 class='hndle'>";
@@ -1369,9 +1366,10 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='rightnow'>\n\r";
 		$output.="	<h3 class='reallynow'>\n\r";
-		$output.="		<span>"._('Right Now')."</span>\n\r";
 		$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
-		$output.="		<br class='clear'/>\n\r";
+		$output.="		<span>"._('Right Now')."</span>\n\r";
+		
+		//$output.="		<br class='clear'/>\n\r";
 		$output.="	</h3>\n\r";
 		
 		$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>\n\r";
