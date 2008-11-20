@@ -188,6 +188,8 @@ table tr.firstrowth td{ vertical-align: top; padding:10px 5px 8px;}
 
 div#productform{ display: none; width: 586px; }
 
+div#edititem27{ display: none; width: 586px; }
+
 div#productform table tr td{ height: 11px !important; }
  
 div#additem{ display: block;}

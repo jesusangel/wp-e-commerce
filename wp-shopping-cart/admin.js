@@ -1023,7 +1023,7 @@ function imageUploadSuccess (file, results) {
     jQuery("span.swfupload_loadingindicator").css('visibility', 'hidden');
   	var id = null;
 	eval(results);
-	//alert(id);
+	
 	if (id == null ) {
 	  	if(replacement_src != null) {
 	  	  	jQuery("li.first div.previewimage a.thickbox").attr('href', replacement_src);
@@ -1079,15 +1079,15 @@ function imageUploadSuccess (file, results) {
     enablebuttons();
 
 	}
-  jQuery(this.progressBar).animate({'width':'76px'},250,function () {
-    jQuery(this).parent().fadeOut(500,function() {
-      jQuery(this).remove();
-      jQuery(img).fadeIn('500');
-      //jQuery(img).append('<img class="deleteButton" src="'+WPSC_URL+'/images/cross.png" alt="-" style="display: none;"/>');
-      enablebuttons()
-      //enableDeleteButton(deleteButton);
-    });
-  });
+	jQuery(this.progressBar).animate({'width':'76px'},250,function () {
+		jQuery(this).parent().fadeOut(500,function() {
+			jQuery(this).remove();
+			jQuery(img).fadeIn('500');
+			jQuery(img).append('<img class="deleteButton" src="'+WPSC_URL+'/images/cross.png" alt="-" style="display: none;"/>');
+			enablebuttons()
+			//enableDeleteButton(deleteButton);
+		});
+	});
 }
 
 function imageUploadComplete (file) {
@@ -1102,7 +1102,6 @@ function imageQueueComplete (uploads) {
 }
 
 function enablebuttons(){
-//   console.log('test');
 	jQuery("img.deleteButton").click(
 		function(){
 			var r=confirm("Please confirm deletion");
@@ -1233,24 +1232,23 @@ jQuery(document).ready(function(){
 	    sort: function(e,ui) {
 	    	if ( jQuery(document).width() - e.clientX < 300 ) {
 	    		if ( ! jQuery('#post-body').hasClass('has-sidebar') ) {
-	    			var pos = $('#side-sortables').offset();
+	    			var pos = jQuery('#side-sortables').offset();
 
 	    			jQuery('#side-sortables').append(ui.item)
-	    			jQuery(ui.placeholder).css({'top':pos.top,'left':pos.left}).width($(ui.item).width())
+	    			jQuery(ui.placeholder).css({'top':pos.top,'left':pos.left}).width(jQuery(ui.item).width())
 	    			postboxes.expandSidebar(1);
 	    		}
 	    	}
 	    },
 	    stop: function() {
 	    	var postVars = {
-	    		action: 'meta-box-order',
-	    		_ajax_nonce: $('#meta-box-order-nonce').val(),
-	    		page: page
+	    		action: 'product-page-order',
+	    		ajax: 'true'
 	    	}
 	    	jQuery('.meta-box-sortables').each( function() {
 	    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
 	    	} );
-	    	jQuery.post( postboxL10n.requestFile, postVars, function() {
+	    	jQuery.post( base_url+'/?ajax=true', postVars, function() {
 	    		postboxes.expandSidebar();
 	    	} );
 	    }

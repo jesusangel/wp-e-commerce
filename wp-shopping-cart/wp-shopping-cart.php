@@ -670,6 +670,14 @@ function nzshpcrt_submit_ajax()
    
   // if is an AJAX request, cruddy code, could be done better but getting approval would be impossible
 if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
+	if ($_POST['action'] == 'product-page-order'){
+		$order = $_POST['order'];
+		$order = $order[0];
+		$order = explode(',', $order);
+		update_option('wpsc_product_page_order', $order);
+		exit();
+	}
+
 	if ($_POST['del_file'] == 'true') {
 		$wpdb->query("DELETE FROM {$wpdb->prefix}product_files WHERE idhash=".$_POST['del_file_hash']);
 		unlink(WPSC_FILE_DIR.$_POST['del_file_hash']);
@@ -2707,7 +2715,8 @@ require_once(WPSC_FILE_PATH."/shopping_cart_functions.php");
 require_once(WPSC_FILE_PATH."/homepage_products_functions.php"); 
 require_once(WPSC_FILE_PATH."/transaction_result_functions.php"); 
 include_once(WPSC_FILE_PATH.'/submit_checkout_function.php');
-require_once(WPSC_FILE_PATH."/admin-form-functions.php"); 
+require_once(WPSC_FILE_PATH."/admin-form-functions.php");
+require_once(WPSC_FILE_PATH."/display-items-functions.php"); 
 require_once(WPSC_FILE_PATH."/shipwire_functions.php"); 
 
 /* widget_section */

@@ -66,7 +66,6 @@ class usps {
 		$weight = shopping_cart_total_weight();
 		$pound = floor($weight);
 		$ounce = ($weight-$pound)*16;
-
 		$machinable = true;
 		if (($ounce > 13) || ($pound > 1)) {
 			define('MODULE_SHIPPING_USPS_TYPES', "PRIORITY, EXPRESS, PARCEL POST");
@@ -136,6 +135,7 @@ class usps {
 				$services_count++;
 			}
 			$request .= '</RateV3Request>'; //'</RateRequest>'; //Changed by Greg Deeth April 30, 2008
+			exit($request);
 			$request = 'API=RateV3&XML=' . urlencode($request);
 		} else {
 			$dest=$wpdb->get_var("SELECT country FROM ".$wpdb->prefix."currency_list WHERE isocode='".$dest."'");
@@ -178,7 +178,7 @@ class usps {
 				break;
 			}
 		}
-// exit("<pre>".print_r($response,1)."</pre>");
+		exit("<pre>".print_r($response,1)."</pre>");
 		$rates = array();
 		if ($dest == get_option('base_country')) {
 			if (sizeof($response) == '1') {

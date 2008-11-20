@@ -148,139 +148,15 @@ function nzshpcrt_getproductform($prodid)
 
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
+  $output .= "<tr><td  colspan='2'>";
 
-  $output .= "<tr><td  colspan='2'><div id='edit_price_and_stock' class='postbox ".((array_search('edit_price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."'>
-	<h3>
-		<a class='togbox'>+</a>";
-  $output .= "".TXT_WPSC_PRICE_AND_STOCK_CONTROL."";
-  $output .= " </h3> <div class='inside'> <table>";
-  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_PRICE.": <input type='text' name='price' size='10' value='".number_format($product['price'], 2, '.', '')."' />";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
+  $output .= price_and_stock_box($product);
 
-  if($product['notax'] == 1) {
-    $checked = "checked='true'";
-	} else {
-		$checked = "";
+	if (function_exists('add_object_page')) {
+    	$output .= "</TD></tr>";
 	}
-
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input id='tax' type='checkbox' name='notax' value='yes' $checked />&nbsp;<label for='tax'>".TXT_WPSC_TAXALREADYINCLUDED."</label>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  
-  if($product['donation'] == 1) {
-    $checked = "checked='true'";
-	} else {
-    $checked = "";
-	}  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input id='edit_form_donation' type='checkbox' $checked name='donation' value='yes' />&nbsp;<label for='edit_form_donation'>".TXT_WPSC_IS_DONATION."</label>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-
-  if($product['no_shipping'] == 1) {
-    $checked = "checked='true'";
-	} else {
-    $checked = "";
-	}  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input id='add_form_no_shipping' type='checkbox' $checked name='no_shipping' value='yes' />&nbsp;<label for='add_form_no_shipping'>".TXT_WPSC_NO_SHIPPING."</label>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-
-  if($product['special'] == 1) {
-    $checked = "checked='true'";
-	} else {
-    $checked = "";
-	}  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $disable_form = '';
-  if($check_variation_value_count > 0) {
-    if($product['special'] != 1) {
-      $disable_form = "disabled='true'";
-      $disable_form_label = " style='color: #cccccc;'";
-		}
-	}
-  $output .= "<input id='form_special' type='checkbox' $checked name='special' $disable_form value='yes' onclick='hideelement(\"edit_special\")' /> <label for='form_special' $disable_form_label>".TXT_WPSC_SPECIAL."</label>"; 
-  if($disable_form != '') {
-    $output .="<br /><span class='small'>". TXT_WPSC_VARIATIONS_AND_SPECIALS_DONT_MIX."<span>";
-	}
-	
-	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
-	$table_rate_price = $table_rate_price[0];
-	if ($table_rate_price != '') {
-		$output .= '<br><input type="checkbox" value="yes" name="table_rate_price" checked="yes" id="table_rate_price"/>
-		<label for="table_rate_price">'.TXT_WPSC_TABLE_RATED_PRICE.'</label>';
-		
-		$output .= '<div id="table_rate">
-				<a class="add_level" style="cursor:pointer;">Add level</a><br>
-				<table>
-				<tr><td>'.TXT_WPSC_QUANTITY.'</td><td>'.TXT_WPSC_PRICE.'</td></tr>';
-		foreach($table_rate_price['quantity'] as $key => $qty) {
-			if ($qty != '')
-				$output .= '<tr><td><input type="text" size="10" value="'.$qty.'" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="'.$table_rate_price['table_price'][$key].'" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'.WPSC_URL.'/images/cross.png" class="remove_line"></td></tr>';
-		}
-		$output .= '<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'.WPSC_URL.'/images/cross.png" class="remove_line"></td></tr>
-			</table>
-				</div>';
-	}
-  if($product['special'] == 1) {
-    $output .= "            <div id='edit_special' style='display: block;'>\n\r";
-    $output .= "<input type='text' name='special_price' value='".number_format(($product['price']-$product['special_price']), 2, '.', '')."' size='10' />";
-	} else {
-		$output .= "            <div id='edit_special' style='display: none;'>\n\r";
-		$output .= "<input type='text' name='special_price' value='0.00' size='10' />";
-	}
-  $output .= "              </div>\n\r";
-
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r"; 
-
-  if($product['quantity_limited'] == 1) {
-    $checked = "checked='true'";
-	} else {
-		$checked = "";
-	}
-  $output .= "          <tr>\n\r";
-  $output .= "            <td style='width:350px;'>\n\r";
-  $output .= "<input id='form_quantity_limited' type='checkbox' $checked name='quantity_limited' value='yes' onclick='hideelement(\"edit_stock\")' /><label for='form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
-    
-  $variations_output = $variations_processor->variations_grid_view($product['id']); 
-  if($variations_output != '') {
-		//$output .= $variations_output;
-		
-		$output .= "<div id='edit_stock' style='display: none;'>\n\r";
-		$output .= "<input type='hidden' name='quantity' value='".$product['quantity']."' />";
-		$output .= "</div>\n\r";
-	} else {
-		switch($product['quantity_limited']) {
-			case 1:
-			$output .= "            <div id='edit_stock' style='display: block;'>\n\r";
-			break;
-			
-			default:
-			$output .= "            <div id='edit_stock' style='display: none;'>\n\r";
-			break;
-		}
-		$output .= "<input type='text' name='quantity' size='10' value='".$product['quantity']."' />";
-		$output .= "              </div>\n\r";
-	}
-	$output .= "</td></tr>";
-	
-	
-	$output .= "
-    </table></div></div></TD></tr>";
-
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
+	$output .= "            </td>\n\r";
+	$output .= "          </tr>\n\r";
   
   
   ob_start();
@@ -292,7 +168,9 @@ function nzshpcrt_getproductform($prodid)
     
   $output .= "          <tr>\n\r";
   $output .= "            <td colspan='2'>\n\r";
-  $output .= "<div id='edit_variation' class='postbox ".((array_search('edit_variation', $closed_postboxes) !== false) ? 'closed' : '')."'>
+  $output .= variation_box($product);
+  /*
+$output .= "<div id='edit_variation' class='postbox ".((array_search('edit_variation', $closed_postboxes) !== false) ? 'closed' : '')."'>
         <h3>
 		<a class='togbox'>+</a>";
   $output .= "".TXT_WPSC_VARIATION_CONTROL."";
@@ -332,12 +210,16 @@ function nzshpcrt_getproductform($prodid)
     $output .= "            </td>\n\r";
     $output .= "          </tr>\n\r";
     }
-  $output .="</table></div></div></td></tr>";
+  $output .="</table></div></div>
+*/
+	$output .= "</td></tr>";
   
 
   $output .= "    <tr>\n\r";
   $output .= "      <td colspan='2'>\n\r";
-  $output .= "  <div class='postbox ".((array_search('edit_shipping', $closed_postboxes) !== false) ? 'closed' : '')."' id='edit_shipping'>
+  $output .= shipping_box($product);
+  /*
+$output .= "  <div class='postbox ".((array_search('edit_shipping', $closed_postboxes) !== false) ? 'closed' : '')."' id='edit_shipping'>
 	     <h3>
 		     <a class='togbox'>+</a>".TXT_WPSC_SHIPPING_DETAILS."";
   $output .= "</h3>
@@ -388,10 +270,14 @@ function nzshpcrt_getproductform($prodid)
   $output .= "        <input type='text' size='10' name='international_pnp' value='".$product['international_pnp']."' />\n\r";
   $output .= "      </td>\n\r";
   $output .= "    </tr>\n\r";
-  $output .="</table></div></div></td></tr>";
+  $output .="</table></div></div>
+*/
+
+  $output .="</td></tr>";
   
   $output .= "<tr><td colspan='2'>";
-  $output .="<div id='edit_advanced' class='postbox ".((array_search('edit_advanced', $closed_postboxes) !== false) ? 'closed' : '')."'>
+  /*
+$output .="<div id='edit_advanced' class='postbox ".((array_search('edit_advanced', $closed_postboxes) !== false) ? 'closed' : '')."'>
 	    <h3>
 		    <a class='togbox'>+</a>";
   $output .=TXT_WPSC_ADVANCED_OPTIONS;
@@ -492,7 +378,8 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
-  $pdf = get_product_meta($product['id'], 'pdf');
+ 
+ $pdf = get_product_meta($product['id'], 'pdf');
   $pdf = $pdf[0];
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
@@ -503,6 +390,7 @@ function nzshpcrt_getproductform($prodid)
   if ($pdf != '') $output .="<font color='red'>to replace $pdf</font>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
+
   
  $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
@@ -564,14 +452,18 @@ function nzshpcrt_getproductform($prodid)
   
   
   
-$output .="</table></div></div></td></tr>";
+$output .="</table></div></div>";
+*/
+$output .= advanced_box($product);
+$output.="</td></tr>";
   
   $output .= "          <tr class='edit_product_image'>\n\r";
   $output .= "            <td colspan='2'>\n\r";
-  $output .= "<div id='edit_product_image' class='postbox ".((array_search('edit_product_image', $closed_postboxes) !== false) ? 'closed' : '')."'>
+/*  $output .= "<div id='edit_product_image' class='postbox ".((array_search('edit_product_image', $closed_postboxes) !== false) ? 'closed' : '')."'>
         <h3> 
 		<a class='togbox'>+</a>".TXT_WPSC_PRODUCTIMAGE."";
-  $output .="</h3>";
+
+$output .="</h3>";
 	$output .=	  "<div class='inside'>";
     
     
@@ -780,19 +672,23 @@ $output .="</table></div></div></td></tr>";
 	$output .="</table>";
 // 	$output .= "            </td>\n\r";
 // 	$output .= "          </tr>\n\r";
-  $output .="</div></div></td></tr>";
+  $output .="</div></div>";
+*/
+  $output .= product_image_box($product);
+  $output .="</td></tr>";
 
-
-    
-  if($product['file'] > 0) {
-    $output .= "          <tr>\n\r";
+	$output .= "          <tr>\n\r";
     $output .= "            <td colspan='2'>\n\r";
-    $output .= "<div id='edit_product_download' class='postbox closed'>
+    /*
+$output .= "<div id='edit_product_download' class='postbox closed'>
         <h3>
 		<a class='togbox'>+</a>".TXT_WPSC_PRODUCTDOWNLOAD."";
     $output .= " </h3>
 	<div class='inside'>
 	<table>";
+    
+  if($product['file'] > 0) {
+    
     
     $output .= "          <tr>\n\r";
     $output .= "            <td>\n\r";
@@ -834,17 +730,8 @@ $output .="</table></div></div></td></tr>";
       $output .= "          </tr>\n\r";
     }
   } else {
-      $output .="<tr><td  colspan='2'>";
-     $output .= "<div id='edit_product_download' class='postbox closed'>
-        <h3>
-		<a class='togbox'>+</a>".TXT_WPSC_PRODUCTDOWNLOAD."";
-    $output .= " </h3>
-	<div class='inside'>
-	<table>";
-      
       $output .= "       <tr>";
       $output .= "         <td>";
-    //  $output .= "".TXT_WPSC_DOWNLOADABLEPRODUCT.":";
       $output .= "        </td>";
       $output .= "        <td>";
       $output .= "          <input type='file' name='file' value='' />";
@@ -852,7 +739,11 @@ $output .="</table></div></div></td></tr>";
       $output .= "        </td>";
       $output .= "      </tr>";
     }
-		$output.=" </table></div></div></td></tr>";
+		$output.=" </table></div></div>";
+*/
+		
+		$output .= product_download_box($product);
+		$output .= "</td></tr>";
 		$output .= "          <tr>\n\r";
 		$output .= "            <td>\n\r";
 		$output .= "            </td>\n\r";

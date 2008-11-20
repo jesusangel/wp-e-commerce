@@ -920,7 +920,7 @@ if($_GET['filter'] !== 'true') {
 			echo "<strong>".TXT_WPSC_PURCHASE_NUMBER.":</strong>".$purch_data[0]['id']."<br /><br />\n\r";
 			
 			echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>\n\r";
-			echo "<table>\n\r";
+			echo "<table style=''>\n\r";
 			
 			$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".(int)$_GET['purchaseid']."'";
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);

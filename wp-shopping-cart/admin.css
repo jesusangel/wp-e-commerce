@@ -188,6 +188,8 @@ table tr.firstrowth td{ vertical-align: top; padding:10px 5px 8px;}
 
 div#productform{ display: none; width: 586px; }
 
+div#edititem27{ display: none; width: 586px; }
+
 div#productform table tr td{ height: 11px !important; }
  
 div#additem{ display: block;}
@@ -1812,12 +1814,10 @@ div.email_buyer{
 h3.hndle {
 	font-size:12px !important;
 	margin:0px !important;
-/*
 	color:#DFDFDF !important;
 	background-color:#575757;
 	border-left:1px solid #575757;
 	border-right:1px solid #575757;
-*/
 	padding:7px 6px 9px;
 	
 }

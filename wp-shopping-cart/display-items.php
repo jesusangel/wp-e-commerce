@@ -1120,9 +1120,15 @@ if (function_exists('add_object_page')){
 }
 //First column ends here
 echo "      </td><td class='secondcol'>\n\r";
-
-echo "        <div id='productform'>";
-echo "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
+if (function_exists('add_object_page')){
+	echo "        <div id='productform'>";
+	echo "        <div id='productform27' class='postbox'>";
+	echo "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
+	
+} else {
+	echo "        <div id='productform'>";
+	echo "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
+}
 echo "<form method='POST' enctype='multipart/form-data' name='editproduct$num'>";
 echo "        <table class='producttext'>\n\r"; 
 
@@ -1131,13 +1137,17 @@ echo "        </table>\n\r";
 echo "        <div id='formcontent' style='width:100%;'>\n\r";
 echo "        </div>\n\r";
 echo "</form>";
-echo "        </div>";
+echo "</div>";
+if (function_exists('add_object_page')){
+	echo "</div>";
+}
 ?>
 
 <form method='POST' enctype='multipart/form-data' class='additem'>
 <?php
 if (function_exists('add_object_page')){
-	echo "        <div id='additem' class='postbox'>";
+	echo "        <div id='additem'>";
+	echo "        <div id='additem27' class='postbox'>";
 	echo "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
 	
 } else {
@@ -1237,489 +1247,20 @@ if (function_exists('add_object_page')){
 	if (function_exists('add_object_page')){
 		echo "<div class='meta-box-sortables'>";
 	}
-?>
-<div id='price_and_stock' class='postbox <?php echo ((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-	<?php
-    	if (function_exists('add_object_page')) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?>
-		<?php echo TXT_WPSC_PRICE_AND_STOCK_CONTROL;?>
-	</h3>
-    <div class='inside'>
-    <table>
-    <tr>
-      <td>
-       <?php echo TXT_WPSC_PRICE;?>:&nbsp;<input type='text' size='10' name='price' value='0.00' />
-      </td>
-    </tr>
-    <tr>
-       <td>
-          <input id='add_form_tax' type='checkbox' name='notax' value='yes' />&nbsp;<label for='add_form_tax'><?php echo TXT_WPSC_TAXALREADYINCLUDED;?></label>
-       </td>
-    </tr>
-    <tr>
-
-       <td>
-          <input id='add_form_donation' type='checkbox' name='donation' value='yes' />&nbsp;<label for='add_form_donation'><?php echo TXT_WPSC_IS_DONATION;?></label>
-       </td>
-    </tr>
-    <tr>
-
-       <td>
-          <input id='add_form_no_shipping' type='checkbox' name='no_shipping' value='yes' />&nbsp;<label for='add_form_no_shipping'><?php echo TXT_WPSC_NO_SHIPPING;?></label>
-       </td>
-    </tr>
-    <tr>
-      <td>
-        <input type="checkbox" onclick="hideelement('add_special')" value="yes" name="special" id="add_form_special"/>
-        <label for="add_form_special"><?php echo TXT_WPSC_SPECIAL;?></label>
-        <div style="display: none;" id="add_special">
-          <input type="text" size="10" value="0.00" name="special_price"/>
-        </div>
-      </td>
-    </tr>
-     <tr>
-      <td>
-        <input type="checkbox" value="yes" name="table_rate_price" id="table_rate_price"/>
-        <label for="table_rate_price"><?php echo TXT_WPSC_TABLE_RATED_PRICE;?></label>
-        <div style="display: none;" id="table_rate">
-          <a class='add_level' style='cursor:pointer;'>Add level</a><br>
-          <table>
-          <tr><td><?=TXT_WPSC_QUANTITY;?></td><td><?=TXT_WPSC_PRICE;?></td></tr>
-          <tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td></tr>
-          </table>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td style='width:430px;'>
-        <input id='add_form_quantity_limited' type="checkbox" onclick="hideelement('add_stock')" value="yes" name="quantity_limited"/>
-      <label for='add_form_quantity_limited' class='small'><?php echo TXT_WPSC_UNTICKBOX;?></label>
-        <div style="display: none;" id="add_stock">
-          <input type='text' name='quantity' value='0' size='10' />
-        </div>
-      </td>
-    </tr>
-  </table></div></div>
-  <?php 
-  	if(!function_exists('add_object_page')) {
-		echo "</td></tr>";
-		do_action('wpsc_product_form', array('product_id' => 0, 'state' => 'add'));
-  		echo "<tr><td colspan='2'>";
-  	}
-  ?> 
-	<div id='variation' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3>
-		<a class="togbox">+</a>
-		<?php echo TXT_WPSC_VARIATION_CONTROL; ?>
-	</h3>
-	<div class='inside'>
-    <table>
-    <tr>
-      <td colspan='2'>
-        <?php 
-        	if ($variations_processor->list_variations() == '') {
-        		echo "<a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>Add New Variations</a>";
-        	} else {
-        		echo TXT_WPSC_ADD_VAR."  <a class='thickbox' href='?page=wp-shopping-cart/display_variations.php?page=product&TB_iframe=true'>Add New Variations</a>"; 
-        	}
-        ?>
-      </td>
-    </tr> 
-    <tr>
-      <td colspan='2'>
-        <?php //echo variationslist(); ?>
-        <div id='add_product_variations'>
-		<?php
-    echo $variations_processor->list_variations();
-		
-		?>
-        </div>
-        <div id='add_product_variation_details'>
-		
-        </div>
-      </td>
-    </tr> 
-	</table></div></div>  
-<?php 
-  	if(!function_exists('add_object_page')) {
-		echo "</td></tr>";
-  		echo "<tr><td colspan='2'>";
-  	}
-?> 
-	      <div class='postbox <?php echo ((array_search('shipping', $closed_postboxes) !== false) ? 'closed' : ''); ?>' id='shipping'>
-	     <h3>
-		     <a class="togbox">+</a>
-		     <?php echo TXT_WPSC_SHIPPING_DETAILS; ?>
-		</h3>
-      <div class='inside'>
-  <table>
-  
-  	  <!--USPS shipping changes-->
-	<tr>
-		<td>
-			<?php echo TXT_WPSC_WEIGHT; ?>
-		</td>
-		<td>
-			<input type="text" size='5' name='weight' value=''>
-			<select name='weight_unit'>
-				<option value="pound">Pounds</option>
-				<option value="once">Ounces</option>
-				<option value="gram">Grams</option>
-				<option value="kilogram">Kilograms</option>
-			</select>
-		</td>
-    </tr>
-    <!--USPS shipping changes ends-->
-
-    <tr>
-      <td>
-      <?php echo TXT_WPSC_LOCAL_PNP; ?> 
-      </td>
-      <td>
-        <input type='text' size='10' name='pnp' value='0.00' />
-      </td>
-    </tr>
-  
-    <tr>
-      <td>
-      <?php echo TXT_WPSC_INTERNATIONAL_PNP; ?>
-      </td>
-      <td>
-        <input type='text' size='10' name='international_pnp' value='0.00' />
-      </td>
-    </tr>
-    </table></div></div>
-<?php 
-  	if(!function_exists('add_object_page')) {
-		echo "</td></tr>";
-  		echo "<tr><td colspan='2'>";
-  	}
-?> 
-    <div id='advanced' class='postbox <?php echo ((array_search('advanced', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-	    <?php
-    	if (function_exists('add_object_page')) {
-    		echo "<h3 class='hndle'>";
-    	} else {
-    		echo "<h3>
-		<a class='togbox'>+</a>";
-    	}
-    ?> 
-		    <?php echo TXT_WPSC_ADVANCED_OPTIONS;?>
-	    </h3>
-	    <div class='inside'>
-	    <table>
-	    <tr>
-      <td class='itemfirstcol'>
-       <?php echo TXT_WPSC_ADMINNOTES;?>:
-      </td>
-      <td>
-        <textarea cols="40" rows="3" type='text' name='merchant_notes' id='merchant_notes'></textarea> 
-      </td>
-    </tr>
-	 <tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
-        <input type="checkbox" value="yes" id="add_form_display_frontpage" name="display_frontpage"/> 
-        <label for='add_form_display_frontpage'><?php echo TXT_WPSC_DISPLAY_FRONT_PAGE;?></label>
-      </td>
-    </tr>
-    <tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
-        <input type='checkbox' name="productmeta_values[engraved]" id='add_engrave_text'>
-        <label for='add_engrave_text'><?php echo TXT_WPSC_ENGRAVE;?></label>
-        <br />
-      </td>
-    </tr>
-    <tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
-        <input type='checkbox' name="productmeta_values[can_have_uploaded_image]" id='can_have_uploaded_image'>
-        <label for='can_have_uploaded_image'><?php echo TXT_WPSC_ALLOW_UPLOADING_IMAGE;?></label>
-        <br />
-      </td>
-    </tr>
-	
-    
-    <?php if(get_option('payment_gateway') == 'google') { ?>
-		<tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
-        <input type='checkbox' name="productmeta_values['google_prohibited']" id='add_google_prohibited' /> <label for='add_google_prohibited'>
-       <?php echo TXT_WPSC_PROHIBITED;?></label><br />
-	Prohibited <a href='http://checkout.google.com/support/sell/bin/answer.py?answer=75724'>by Google?</a>
-      </td>
-    </tr>
-    <?php } ?>
-    
-	<?php
-  do_action('wpsc_add_advanced_options', null);
-	?>
-
- <tr>
-      <td class='itemfirstcol'>
-       <?php echo TXT_WPSC_EXTERNALLINK;?>:
-      </td>
-      <td>
-		      <input type='text' class='text' name='productmeta_values[external_link]' id='external_link' size='40'> 
-      </td>
-    </tr>
-
-     <tr>
-	<td></td>
-      <td>
-      <?php echo TXT_WPSC_USEONLYEXTERNALLINK;?></strong>
-      </td>
-    </tr>
-    <tr>
-		<td><?=TXT_WPSC_PDF?></td>
-		<td><input type='file' name='pdf'></td>
-    </tr>
-	<tr>
-		<td>
-			<?php echo TXT_WPSC_ADD_CUSTOM_FIELD;?>:
-		</td>
-		<td>
-		<div class="product_custom_meta">
-		<label >
-		<?php echo TXT_WPSC_NAME;?>:
-		<input type="text" name="new_custom_meta[name][]" value="" class="text"/>
-		</label>
-		
-		<label>
-		<?php echo TXT_WPSC_VALUE;?>:
-		<input type="text" name="new_custom_meta[value][]" value="" class="text"/>
-		
-		</label>
-		<a href='#' class='add_more_meta' onclick='return add_more_meta(this)'>+</a>
-		<br />
-  </div>
-  
-	</td>
-</tr>
-
-    
-    
-    </table></div></div>
-<?php 
-  	if(!function_exists('add_object_page')) {
-		echo "</td></tr>";
-  		echo "<tr><td colspan='2'>";
-  	}
-?> 
-        <div id='product_image' class='postbox <?php echo ((array_search('product_image', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3> 
-		<a class="togbox">+</a>
-		<?php echo TXT_WPSC_PRODUCTIMAGES;?>
-	</h3>
-	<div class='inside'>
-    
-    <table width='100%' class='flash-image-uploader'>
-      <tr>
-        <td>
-          <?php
-            echo "<span id='spanButtonPlaceholder'></span>";
-            echo '<button id="add-product-image" name="add-image" class="button-secondary" type="button"><small>Add New Image</small></button>';
-            
-            echo '<span class="swfupload_loadingindicator" style="visibility: hidden;">';
-            echo '<img id="loadingimage" title="Loading" alt="Loading" src="'.WPSC_URL.'/images/indicator.gif"/>';
-            echo '</span>';
-            
-            echo "<p>".TXT_WPSC_FLASH_UPLOADER."</p>";
-          ?>
-        </td>
-      </tr>
-    </table>
-    
-    
-    
-    
-    <table width='100%' class='browser-image-uploader'>
-      <tr>
-        <td>
-        <?php echo TXT_WPSC_PRODUCTIMAGE.":"; ?>
-        </td>
-        <td>
-          <input type='file' name='image' value='' />
-        </td>
-      </tr>
-      <?php
-      if(function_exists("getimagesize") && is_numeric(get_option('product_image_height')) && is_numeric(get_option('product_image_width'))) {
-        ?>
-        <tr>
-          <td></td>
-          <td>
-        <input type='radio' name='image_resize' value='0' id='add_image_resize0' class='image_resize' onclick='hideOptionElement(null, "image_resize0");' /> <label for='add_image_resize0'><?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, "image_resize1");' /> <label for='add_image_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE;?> <?php echo "(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)"; ?></label>
-          </td>
-        </tr>
-        <?php  
-        $default_size_set = true;
-      }
-    
-      if(function_exists("getimagesize")) {
-        ?>
-        <tr>
-          <td></td>
-          <td>
-            <input type='radio' name='image_resize' value='2'id='add_image_resize2' class='image_resize'  onclick='hideOptionElement("heightWidth", "image_resize2");' />
-            <label for='add_image_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>        
-            <div id='heightWidth' style='display: none;'>
-              <input type='text' size='4' name='width' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXWIDTH;?></label>
-              <input type='text' size='4' name='height' value='' /><label for='add_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <input type='radio' name='image_resize' value='3' id='add_image_resize3' class='image_resize' onclick='hideOptionElement("browseThumb", "image_resize3");' />
-            <label for='add_image_resize3'><?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
-            <div id='browseThumb' style='display: none;'>
-              <input type='file' name='thumbnailImage' value='' />
-            </div>
-          </td>
-        </tr>
-        <?php
-          if(function_exists('add_multiple_image_form')) {
-            echo add_multiple_image_form("add_");
-          }
-        ?>
-        <tr>
-          <td colspan='2' >
-            <?php echo "<p>".TXT_WPSC_BROWSER_UPLOADER."</p>"; ?>
-          </td>
-        </tr>
-      <?php
-      }
-      
-      if(function_exists('gold_shpcrt_install')) {
-        echo "<input type='hidden' value='1' id='gold_present'>";
-      }
-      
-      ?>
-      
-    </table>
-    
-    <table width='100%'>
-      <tr>
-        <td>
-          <ul id='gallery_list'></ul>
-        </td>
-      </tr>
-    </table>
-  </div></div>
-<?php 
-  	if(!function_exists('add_object_page')) {
-		echo "</td></tr>";
-  		echo "<tr><td colspan='2'>";
-  	}
-?> 
-        <div id='product_download' class='postbox <?php echo ((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3>
-		<a class='togbox'>+</a>
-		<?php echo TXT_WPSC_PRODUCTDOWNLOAD;?>
-	</h3>
-	<div class='inside'>
-	<table>
-    <tr>
-      <td>
-        <?php echo TXT_WPSC_DOWNLOADABLEPRODUCT;?>:
-      </td>
-      <td>
-        <input type='file' name='file' value='' /><br />
-        <?php echo wpsc_select_product_file(); ?>
-        <br />
-      </td>
-    </tr>
-
-<?php
-if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player"))
-  {    
-  echo "    <tr>\n\r";
-  echo "      <td>\n\r";
-  echo TXT_WPSC_PREVIEW_FILE.": ";
-  echo "      </td>\n\r";
-  echo "      <td>\n\r";
-  echo "<input type='file' name='preview_file' value='' /><br />";
-  //echo "<span class='admin_product_notes'>".TXT_WPSC_PREVIEW_FILE_NOTE."</span>";
-  echo "<br />";
-  echo "<br />";
-  echo "      </td>\n\r";
-  echo "    </tr>\n\r";
-  }
-    ?>
-    </table></div></div>
- 
- <?php 
-  	if(!function_exists('add_object_page')) {
-		echo "</td></tr>";
-  		echo "<tr><td colspan='2'>";
-  	}
-?> 
-<!-- Product label -->
-	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <h3>
-		<a class="togbox">+</a>
-		<?php echo TXT_WPSC_LABEL_CONTROL; ?>
-	</h3>
-	<div class='inside'>
-    <table>
-    <tr>
-      <td colspan='2'>
-        <?php echo TXT_WPSC_LABELS; ?> :
-      	<a id='add_label'><?php echo TXT_WPSC_LABELS; ?></a>
-      </td>
-    </tr> 
-    <tr>
-      <td colspan='2'>
-      <div id="labels">
-        <table>
-        	<tr>
-        		<td><?=TXT_WPSC_LABEL?> :</td>
-        		<td><input type="text" name="productmeta_values[labels][]"></td>
-        	</tr>
-        	<tr>
-        		<td><?=TXT_WPSC_LABEL_DESC?> :</td>
-        		<td><textarea name="productmeta_values[labels_desc][]"></textarea></td>
-        	</tr>
-        	<tr>
-        		<td><?=TXT_WPSC_LIFE_NUMBER?> :</td>
-        		<td><input type="text" name="productmeta_values[life_number][]"></td>
-        	</tr>
-        	<tr>
-        		<td><?=TXT_WPSC_ITEM_NUMBER?> :</td>
-        		<td><input type="text" name="productmeta_values[item_number][]"></td>
-        	</tr>
-        	<tr>
-        		<td><?=TXT_WPSC_PRODUCT_CODE?> :</td>
-        		<td><input type="text" name="productmeta_values[product_code][]"></td>
-        	</tr>
-        	<tr>
-        		<td><?=TXT_WPSC_PDF?> :</td>
-        		<td><input type="file" name="pdf[]"></td>
-        	</tr>
-        </table>
-        </div>
-      </td>
-    </tr> 
-	</table></div></div>
-	<!--Product label ends here-->
-	<?php
+	$order = get_option('wpsc_product_page_order');
+	$order = '';
+	if ($order == ''){
+		$order=array("price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download", "product_label");
+	}
+	foreach((array)$order as $key => $box) {
+		$box_function_name = $box."_box";
+		$output = call_user_func($box_function_name);
+		echo $output;
+		if(!function_exists('add_object_page') && ($key!=count($order)-1)) {
+			echo "</td></tr>";
+  			echo "<tr><td colspan='2'>";
+  		}
+	}
 	if (function_exists('add_object_page')){
 		echo "</div>";
 	}
