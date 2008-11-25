@@ -2985,10 +2985,10 @@ function shipping_options(){
 		exit();
 	}
 	
-	if ($_GET['gold_options']=='true'){
-		include(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-		exit();
-	}
+// 	if ($_GET['gold_options']=='true'){
+// 		include(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
+// 		exit();
+// 	}
 }
 
 function shipping_submits(){
@@ -3010,15 +3010,15 @@ function shipping_submits(){
 		exit();
 	}
 	
-	if ($_POST['gold_submits']=='true'){
-		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
-		exit();
-	}
+// 	if ($_POST['gold_submits']=='true'){
+// 		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
+// 		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+// 		exit();
+// 	}
 }
 
-add_action('init','shipping_options');
-add_action('init','shipping_submits');
+// add_action('init','shipping_options');
+// add_action('init','shipping_submits');
 
 
 function wpsc_swfupload_images() {
