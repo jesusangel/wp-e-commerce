@@ -401,7 +401,8 @@ function nzshpcrt_submit_checkout() {
         * This code decrements the stock quantity
       */
       //$debug .= "<pre>".print_r($variations,true)."</pre>";
-      if($product_data['quantity_limited'] == 1) {
+      /*
+if($product_data['quantity_limited'] == 1) {
         if(count($variation_values) > 0) {
         
           $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
@@ -416,6 +417,7 @@ function nzshpcrt_submit_checkout() {
           $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `quantity`='".($product_data['quantity']-$quantity)."' WHERE `id`='{$product_data['id']}' LIMIT 1");
         }
       }
+*/
     }
    
    

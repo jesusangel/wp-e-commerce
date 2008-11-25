@@ -751,7 +751,8 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			//Add more than 1 product into the shopping cart
 			
 			if(!apply_filters( 'wpsc_mobile_override', false)) {
-        $output .= "<a class='add_meta_box'>Add Label</a>";
+        /*
+$output .= "<a class='add_meta_box'>Add Label</a>";
         $output .= "<div class='meta_box'>";
         if (get_option('multi_add')=='1')
           $output .= TXT_WPSC_QUANTITY.": <input type='text' name='quantity[]' size='3'><br>";
@@ -762,6 +763,7 @@ if (get_option('wpsc_selected_theme') == 'market3') {
           
         $output .= TXT_WPSC_LABEL.":<br><textarea type='text' name='label[]'></textarea><br>";
         $output .= "</div>";
+*/
 			}
 			if(($product['quantity_limited'] == 1) && ($product['quantity'] < 1) && ($variations_output[1] === null)) {
 				if (get_option("wpsc_selected_theme")!='market3') {

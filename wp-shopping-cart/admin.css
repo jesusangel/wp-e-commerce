@@ -175,7 +175,7 @@ table.itemlist{ margin: 0px; }
 div.subcategory{ list-style-type: none; vertical-align: top; margin: 0px; padding: 0px; }
 
 div.subcategory img.category_indenter{ float: left; margin-top: 10px; }
-table.additem{ width: 100%; margin-top: 15px;}
+table.additem{ width: 100%;}
 
 
 table.itemlist tr td{ text-align: center; padding-left: 3px; padding-right: 3px; }
@@ -192,7 +192,7 @@ div#edititem27{ display: none; width: 586px; }
 
 div#productform table tr td{ height: 11px !important; }
  
-div#additem{ display: block;}
+div#additem{ display: block;border: 1px solid #dadada;}
 
 /* div#additem table tr td{ height: 11px; } */
 
@@ -925,9 +925,11 @@ div.editing_this_group {
 }
 
 form.additem{
-  border-left:1px solid #bbb;
+  /*
+border-left:1px solid #bbb;
   border-right:1px solid #bbb;
   border-bottom:1px solid #bbb;
+*/
 }
 
 #productform form{
@@ -1918,7 +1920,5 @@ div.email_buyer{
 
 h3.hndle {
 	font-size:12px !important;
-	background-color:transparent !important;
-	color:#333 !important;
 	padding:6px 7px !important;
 }

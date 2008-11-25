@@ -195,14 +195,9 @@ if($_POST['submit_action'] == 'add') {
 				$no_shipping = 0;
 			}
 	
-				
-	
-				
-			//modified for USPS
-			//exit($_POST['images'][0]);
 		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
 		
-		if($wpdb->query($insertsql)) {  
+		if($wpdb->query($insertsql)) {
 			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
 			for($i=1;$i<count($_POST['images']);$i++) {
 				$wpdb->query("INSERT INTO {$wpdb->prefix}product_images VALUES('','$product_id','".$_POST['images'][$i]."','0','0','$i','')");
@@ -1120,27 +1115,19 @@ if (function_exists('add_object_page')){
 }
 //First column ends here
 echo "      </td><td class='secondcol'>\n\r";
-if (function_exists('add_object_page')){
-	echo "        <div id='productform'>";
-	echo "        <div id='productform27' class='postbox'>";
-	echo "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
-	
-} else {
-	echo "        <div id='productform'>";
-	echo "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
-}
 echo "<form method='POST' enctype='multipart/form-data' name='editproduct$num'>";
+
+
+/*
 echo "        <table class='producttext'>\n\r"; 
 
 
 echo "        </table>\n\r";
+*/
 echo "        <div id='formcontent' style='width:100%;'>\n\r";
 echo "        </div>\n\r";
 echo "</form>";
 echo "</div>";
-if (function_exists('add_object_page')){
-	echo "</div>";
-}
 ?>
 
 <form method='POST' enctype='multipart/form-data' class='additem'>
@@ -1248,9 +1235,9 @@ if (function_exists('add_object_page')){
 		echo "<div class='meta-box-sortables'>";
 	}
 	$order = get_option('wpsc_product_page_order');
-	$order = '';
+	
 	if ($order == ''){
-		$order=array("price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download", "product_label");
+		$order=array("price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
 	}
 	foreach((array)$order as $key => $box) {
 		$box_function_name = $box."_box";

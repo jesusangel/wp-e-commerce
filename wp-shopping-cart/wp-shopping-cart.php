@@ -1376,53 +1376,53 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		  }
     }
    
- if(($_POST['list_variation_values'] == "true")) {
-    // retrieve the forms for associating variations and their values with products
+	if(($_POST['list_variation_values'] == "true")) {
+   		// retrieve the forms for associating variations and their values with products
 		$variation_processor = new nzshpcrt_variations();
 		$variations_selected = array();
-    foreach((array)$_POST['variations'] as $variation_id => $checked) {
-      $variations_selected[] = (int)$variation_id;
-    }
+    	foreach((array)$_POST['variations'] as $variation_id => $checked) {
+    		$variations_selected[] = (int)$variation_id;
+    	}
     
-    if(is_numeric($_POST['product_id'])) {
-      $product_id = (int)$_POST['product_id'];
+    	if(is_numeric($_POST['product_id'])) {
+      		$product_id = (int)$_POST['product_id'];
       
-      // get all the currently associated variations from the database
-      $associated_variations = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}')", ARRAY_A);
+      		// get all the currently associated variations from the database
+      		$associated_variations = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}')", ARRAY_A);
       
-      $variations_still_associated = array();
-      foreach((array)$associated_variations as $associated_variation) {
-			  // remove variations not checked that are in the database
-        if(array_search($associated_variation['variation_id'], $variations_selected) === false) {
-          $wpdb->query("DELETE FROM `{$wpdb->prefix}variation_associations` WHERE `id` = '{$associated_variation['id']}' LIMIT 1");
-          $wpdb->query("DELETE FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '{$product_id}' AND `variation_id` = '{$associated_variation['variation_id']}' ");
-        } else {
-          // make an array for adding in the variations next step, for efficiency
-          $variations_still_associated[] = $associated_variation['variation_id'];
-        }
-      }
+      		$variations_still_associated = array();
+      		foreach((array)$associated_variations as $associated_variation) {
+			  	// remove variations not checked that are in the database
+        		if(array_search($associated_variation['variation_id'], $variations_selected) === false) {
+          			$wpdb->query("DELETE FROM `{$wpdb->prefix}variation_associations` WHERE `id` = '{$associated_variation['id']}' LIMIT 1");
+          			$wpdb->query("DELETE FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '{$product_id}' AND `variation_id` = '{$associated_variation['variation_id']}' ");
+        		} else {
+          			// make an array for adding in the variations next step, for efficiency
+          			$variations_still_associated[] = $associated_variation['variation_id'];
+        		}
+      		}
        
 			foreach((array)$variations_selected as $variation_id) {
-			  // add variations not already in the database that have been checked.
-        $variation_values = $variation_processor->falsepost_variation_values($variation_id);
-        if(array_search($variation_id, $variations_still_associated) === false) {
-      	  $variation_processor->add_to_existing_product($product_id,$variation_values);
-        }
-      }
-      //echo "/* ".print_r($associated_variations,true)." */\n\r";
-      echo "edit_variation_combinations_html = \"".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view($product_id)))."\";\n";
-    } else {      
-      if(count($variations_selected) > 0) {
-        // takes an array of variations, returns a form for adding data to those variations.
-        if((float)$_POST['selected_price'] > 0) {
-          $selected_price = (float)$_POST['selected_price'];
-        }
-        echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, $selected_price)))."\";\n";
-      } else {
-        echo "add_variation_combinations_html = \"\";\n";
-      }
+			  	// add variations not already in the database that have been checked.
+        		$variation_values = $variation_processor->falsepost_variation_values($variation_id);
+        		if(array_search($variation_id, $variations_still_associated) === false) {
+      	  			$variation_processor->add_to_existing_product($product_id,$variation_values);
+        		}
+      		}
+      		//echo "/* ".print_r($associated_variations,true)." */\n\r";
+      		echo "edit_variation_combinations_html = \"".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view($product_id)))."\";\n";
+    	} else {
+      		if(count($variations_selected) > 0) {
+        		// takes an array of variations, returns a form for adding data to those variations.
+        		if((float)$_POST['selected_price'] > 0) {
+          			$selected_price = (float)$_POST['selected_price'];
+        		}
+        		echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, $selected_price)))."\";\n";
+      		} else {
+        		echo "add_variation_combinations_html = \"\";\n";
+      		}
 		}
-    exit();
+    	exit();
 	}
 	
 

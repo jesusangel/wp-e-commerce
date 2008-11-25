@@ -239,7 +239,7 @@ class nzshpcrt_variations {
   
   function display_attached_variations($product_id) {
     global $wpdb;
-      // no longer used, calls to this need to be removed before this can.
+      // no longer used, calls to this need to be removed before this can. Look at function 'variations_grid_view' instead.
     return $output;
   }
     

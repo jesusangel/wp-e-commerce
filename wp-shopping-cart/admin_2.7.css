@@ -186,7 +186,7 @@ span.small_italic{font-size:9px; font-style:italic;color:#888;}
 table.producttext{width:497px;border-collapse:collapse;border-left:1px solid #bbb;border-right:1px solid #bbb;}
 table tr.firstrowth td{ vertical-align: top; padding:10px 5px 8px;}
 
-div#productform{ display: none; width: 586px; }
+div#productform{ display: none; width: 99.5%; }
 
 div#edititem27{ display: none; width: 586px; }
 
@@ -933,9 +933,11 @@ div.editing_this_group {
 }
 
 #productform form{
-  border-left:1px solid #bbb;
+  /*
+border-left:1px solid #bbb;
   border-right:1px solid #bbb;
   border-bottom:1px solid #bbb;
+*/
 }
 
 
@@ -1072,7 +1074,7 @@ div.product_custom_meta br {
 }
 
 table.product_editform {
-  width: 588px;
+  width: 99.5%;
   margin-top: 15px;
 /*   border-left:1px solid #bbb; */
 /*   border-right:1px solid #bbb; */

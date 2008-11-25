@@ -131,6 +131,38 @@ jQuery('#formcontent .postbox h3').click( function() {
 	  wpsc_save_postboxes_state('editproduct', '#formcontent');
 });
 
+jQuery('.meta-box-sortables').sortable( {
+    placeholder: 'sortable-placeholder',
+    connectWith: [ '.meta-box-sortables' ],
+    items: '> .postbox',
+    handle: '.hndle',
+    distance: 2,
+    tolerance: 'pointer',
+    sort: function(e,ui) {
+    	if ( jQuery(document).width() - e.clientX < 300 ) {
+    		if ( ! jQuery('#post-body').hasClass('has-sidebar') ) {
+    			var pos = jQuery('#side-sortables').offset();
+
+    			jQuery('#side-sortables').append(ui.item)
+    			jQuery(ui.placeholder).css({'top':pos.top,'left':pos.left}).width(jQuery(ui.item).width())
+    			postboxes.expandSidebar(1);
+    		}
+    	}
+    },
+    stop: function() {
+    	var postVars = {
+    		action: 'product-page-order',
+    		ajax: 'true'
+    	}
+    	
+    	jQuery('.meta-box-sortables').each( function() {
+    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
+    	} );
+    	jQuery.post( base_url+'/?ajax=true', postVars, function() {
+    		postboxes.expandSidebar();
+    	} );
+    }
+} );
 
 jQuery("#gallery_list").sortable({
 	revert: false,
@@ -232,6 +264,8 @@ jQuery(".remove_line").click(
 		jQuery(this).parent().parent('tr').remove();
 	}
 );
+
+
 //SWFUpload
 	filesizeLimit = 5120000;
 	
@@ -451,12 +485,12 @@ function variation_value_list(id) {
   }
 	var display_list=function(results) {
 		eval(results);
-    jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").removeAttr("disabled", "true");
-    if(id != '') {
-      jQuery("#edit_variations_container").html(edit_variation_combinations_html);
-    } else {
-      jQuery("#add_product_variation_details").html(add_variation_combinations_html);
-    }
+    	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").removeAttr("disabled", "true");
+    	if(id != '') {
+    	  	jQuery("#edit_variations_container").html(edit_variation_combinations_html);
+    	} else {
+    	  	jQuery("#add_product_variation_details").html(add_variation_combinations_html);
+    	}
 	}
 	selected_price = jQuery("div#price_and_stock input[@name='price']").val();
 	

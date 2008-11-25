@@ -144,13 +144,22 @@ function variation_box($product_data=''){
     </tr> 
     <tr>
       <td colspan='2'>
-        <div id='add_product_variations'>
+        ";
+    if ($product_data!=''){
+    	$output .= "<div id='edit_product_variations'>
+		".$variations_processor->list_variations($product_data['id'])."
+        </div>
+        <div id='edit_variations_container'>";
+        $output .= $variations_processor->variations_grid_view($product_data['id']);
+        $output .= "</div>";
+    } else {
+        $output .= "<div id='add_product_variations'>
 		".$variations_processor->list_variations($product_data['id'])."
         </div>
         <div id='add_product_variation_details'>
-		
-        </div>
-      </td>
+        </div>";
+    }
+      $output .= "</td>
     </tr> 
 	</table></div></div>";
 	
@@ -620,7 +629,7 @@ function product_image_box($product_data='') {
         <tr>
           <td></td>
           <td>
-            <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\");' /> <label for='add_image_resize1'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>) /label>
+            <input type='radio' checked='true' name='image_resize' value='1' id='add_image_resize1' class='image_resize' onclick='hideOptionElement(null, \"image_resize1\");' /> <label for='add_image_resize1'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>) </label>
           </td>
         </tr>";
         $default_size_set = true;
