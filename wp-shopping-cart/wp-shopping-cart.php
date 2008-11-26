@@ -3017,8 +3017,8 @@ function shipping_submits(){
 // 	}
 }
 
-// add_action('init','shipping_options');
-// add_action('init','shipping_submits');
+ add_action('admin_init','shipping_options');
+ add_action('admin_init','shipping_submits');
 
 
 function wpsc_swfupload_images() {
@@ -3028,26 +3028,40 @@ function wpsc_swfupload_images() {
 		$pid = (int)$_POST['prodid'];
 		if(function_exists('gold_shpcrt_display_gallery')) {
 		  // if more than one image is permitted
-      $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
-      if ($pid == '') {
-        copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
-      }
-      $order = $wpdb->get_var("SELECT MAX(image_order) FROM {$wpdb->prefix}product_images WHERE product_id='$pid'");
-      $order++;
-      if ($success) {
-        if ($pid != '') {
-          $wpdb->query("INSERT INTO `{$wpdb->prefix}product_images` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$pid','".basename($file['name'])."', '0', '0',  '$order')");
-        }
-        $id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `{$wpdb->prefix}product_images` LIMIT 1");
-        $src = $file['name'];
-        echo "src='".$src."';id='".$id."';";
-        
-      } else {
-        echo "file uploading error";
-      }
+      $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM {$wpdb->prefix}product_images WHERE product_id='$pid'", ARRAY_A);
+      $order = $existing_image_data['order'];
+      $count = $existing_image_data['count'];
+      
+      if($count >  0) {
+        // if there is more than one image
+        $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
+				if ($pid == '') {
+					copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
+				}
+				$order++;
+				if ($success) {
+					if ($pid != '') {
+						$wpdb->query("INSERT INTO `{$wpdb->prefix}product_images` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$pid','".basename($file['name'])."', '0', '0',  '$order')");
+					}
+					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `{$wpdb->prefix}product_images` LIMIT 1");
+					$src = $file['name'];
+					echo "src='".$src."';id='".$id."';";
+				} else {
+					echo "file uploading error";
+				}
+			} else {
+			  // if thereare no images
+				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+				if($src != null) {
+					$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
+					echo "src='".$src."';id='0';";
+				} else {
+					echo "file uploading error";
+				}
+			}
 		} else {
       // Otherwise...
-      $src = wpsc_item_process_image($product_id, $_FILES['Filedata']['tmp_name'], $_FILES['Filedata']['name']);
+      $src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
       if($src != null) {
         $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
         echo "replacement_src='".WPSC_IMAGE_URL.$src."';";
@@ -3093,20 +3107,20 @@ if($_GET['inline_price']=='true') {
 
 
 function thickbox_variation() {
-	global $wpdb;
+	global $wpdb, $siteurl;
 	$variations_processor = new nzshpcrt_variations;
 	echo "<head>";
-	echo "<link rel='stylesheet' href='http://localhost/develop/wp-admin/wp-admin.css?ver=2.6.3' type='text/css' media='all' />
-	<link rel='stylesheet' href='http://localhost/develop/wp-admin/css/colors-fresh.css?ver=2.6.3' type='text/css' media='all' />
-	<link href='http://localhost/develop/wp-content/plugins/wp-shopping-cart/admin.css' rel='stylesheet' type='text/css'/>
-	<link rel='stylesheet' href='http://localhost/develop/wp-admin/css/global.css?ver=2.6.3' type='text/css' media='all' />";
-	echo "<script type='text/javascript' src='http://localhost/develop/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>";
-	echo "<script type='text/javascript' src='http://localhost/develop/wp-includes/js/thickbox/thickbox.js?ver=3.1-20080430'></script>
-	<script language='JavaScript' type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/jquery.tooltip.js'></script>
-<script type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/jquery-ui.js?ver=1.6'></script>
-<script type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
-<script language='JavaScript' type='text/javascript' src='http://localhost/develop/wp-content/plugins/wp-shopping-cart/js/ui.datepicker.js'></script>
-<script type='text/javascript' src='http://localhost/develop/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
+	echo "<link rel='stylesheet' href='{$siteurl}/wp-admin/wp-admin.css?ver=2.6.3' type='text/css' media='all' />
+	<link rel='stylesheet' href='{$siteurl}/wp-admin/css/colors-fresh.css?ver=2.6.3' type='text/css' media='all' />
+	<link href='{$siteurl}/wp-content/plugins/wp-shopping-cart/admin.css' rel='stylesheet' type='text/css'/>
+	<link rel='stylesheet' href='{$siteurl}/wp-admin/css/global.css?ver=2.6.3' type='text/css' media='all' />";
+	echo "<script type='text/javascript' src='{$siteurl}/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>";
+	echo "<script type='text/javascript' src='{$siteurl}/wp-includes/js/thickbox/thickbox.js?ver=3.1-20080430'></script>
+	<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/jquery.tooltip.js'></script>
+<script type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/jquery-ui.js?ver=1.6'></script>
+<script type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
+<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/ui.datepicker.js'></script>
+<script type='text/javascript' src='{$siteurl}/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
 ";
 	echo "<script language='JavaScript' type='text/javascript'>
 			var base_url = '".$siteurl."';
