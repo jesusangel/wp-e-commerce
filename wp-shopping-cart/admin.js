@@ -320,6 +320,13 @@ jQuery(".remove_line").click(
 			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'none');
 		}
 	);
+	jQuery(".file_delete_button").click(
+		function() {
+			jQuery(this).parent().remove();
+			file_hash = jQuery(this).siblings("input").val();
+			ajax.post("index.php",noresults,"ajax=true&del_file=true&del_file_hash="+file_hash);
+		}
+	);
 }
 
 function filleditform(prodid)	{
@@ -961,8 +968,8 @@ jQuery(document).ready(function(){
       button_placeholder_id : "spanButtonPlaceholder",
       button_width: 103,
       button_height: 24,
-      button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-      button_cursor: SWFUpload.CURSOR.HAND,
+      //button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+      //button_cursor: SWFUpload.CURSOR.HAND,
       post_params: {"prodid" : 0},
       file_queue_limit : 1,
       file_size_limit : filesizeLimit+'b',

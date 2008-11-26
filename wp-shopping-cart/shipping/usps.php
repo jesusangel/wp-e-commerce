@@ -178,7 +178,7 @@ class usps {
 				break;
 			}
 		}
-		exit("<pre>".print_r($response,1)."</pre>");
+		//exit("<pre>".print_r($body,1)."</pre>");
 		$rates = array();
 		if ($dest == get_option('base_country')) {
 			if (sizeof($response) == '1') {

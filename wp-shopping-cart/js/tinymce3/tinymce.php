@@ -35,7 +35,9 @@ function add_wpsc_tinymce_plugin($plugin_array) {
 
 	$plugin_array['WPSC'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';	
 	$plugin_array['productspage_image'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';	
-	$plugin_array['transactionresultpage_image'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';	
+	$plugin_array['transactionresultpage_image'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';
+	$plugin_array['checkoutpage_image'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';
+	$plugin_array['userlogpage_image'] = WPSC_URL.'/js/tinymce3/editor_plugin.js';
 	return $plugin_array;
 }
 

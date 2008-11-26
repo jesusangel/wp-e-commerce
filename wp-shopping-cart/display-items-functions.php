@@ -118,6 +118,7 @@ return $output;
 
 function variation_box($product_data=''){
 	global $closed_postboxes, $variations_processor;
+	$siteurl = get_option('siteurl');
 	$output='';
 	$output .= "<div id='variation' class='postbox ".((array_search('variation', $closed_postboxes) !== false) ? 'closed' : '')."'>";
 
@@ -137,7 +138,7 @@ function variation_box($product_data=''){
     if ($variations_processor->list_variations($product_data['id']) == '') {
         $output .= "<a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>Add New Variations</a>";
     } else {
-        $output .= TXT_WPSC_ADD_VAR."  <a class='thickbox' href='?page=wp-shopping-cart/display_variations.php?page=product&TB_iframe=true'>Add New Variations</a>"; 
+        $output .= TXT_WPSC_ADD_VAR."  <a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>Add New Variations</a>"; 
     }
     $output .="
       </td>
@@ -689,7 +690,7 @@ function product_image_box($product_data='') {
 }
 
 function product_download_box($product_data='') {
-	global $closed_postboxes;
+	global $wpdb, $closed_postboxes;
 	$output ='';
 
  	$output .= "<div id='product_download' class='postbox ".((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : '')."'>";
@@ -720,9 +721,9 @@ function product_download_box($product_data='') {
     	$output .= "            </td>\n\r";
     	$output .= "            <td>\n\r";    
     	
-    	$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product['id']."' style='float: left;' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
+    	$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product_data['id']."' style='float: left;' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
 		
-    	$file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
+    	$file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product_data['file']."' LIMIT 1",ARRAY_A);
     	if(($file_data != null) && (function_exists('listen_button'))) {
     	  $output .= "".listen_button($file_data['idhash'], $file_data['id']);
     	}

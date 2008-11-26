@@ -287,7 +287,8 @@ function nzshpcrt_install()
 	}
 
   add_option('product_ratings', '0', TXT_WPSC_SHOWPRODUCTRATINGS, 'yes');
-  
+  add_option('email_receipt', '0', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
+  add_option('email_admin', '0', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
   if(get_option('wpsc_selected_theme') == '') {
     add_option('wpsc_selected_theme', 'default', 'Selected Theme', 'yes');
     update_option('wpsc_selected_theme', "default");
@@ -657,6 +658,7 @@ function wpsc_check_and_copy_files() {
 	if($incomplete_file_transfer == true) {
 		add_option('wpsc_incomplete_file_transfer', 'default', "", 'true');
 	}
+	
 }
 
 

@@ -109,7 +109,7 @@ class ups {
 		}
 		curl_close($ch);
 // 		$Result = explode("%", $Results);
-// 		echo ('<pre>'.print_r($Results,1)."</pre>");
+		//echo ('<pre>'.print_r($Results,1)."</pre>");
 		foreach($Results as $result) {
 			$result = explode("%", $result);
 // 			echo ('--><pre>'.print_r($pre,1)."</pre>");
