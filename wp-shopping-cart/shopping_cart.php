@@ -246,7 +246,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 	
 		//// usps changes
 				$custom_shipping = get_option('custom_shipping_options');
-		foreach($custom_shipping as $shipping) {
+		foreach((array)$custom_shipping as $shipping) {
 			foreach ($GLOBALS['wpsc_shipping_modules'] as $available_shipping) {
 				if ($shipping == $available_shipping->internal_name)
 					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote();
@@ -254,7 +254,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 		}
 // 	echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
 	$_SESSION['uspsQuote']=$shipping_quotes;
-	foreach ($shipping_quotes as $key1 => $shipping_quote) {
+	foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
 		echo "<tr><td class='shipping_header' colspan='4'>$key1</td></tr>";
 		if (empty($shipping_quote)) {
 			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";

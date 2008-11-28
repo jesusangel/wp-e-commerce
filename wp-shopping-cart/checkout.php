@@ -170,7 +170,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
   $gateway_options = get_option('custom_gateway_options');
  
   $google_decrement = 0;
-  if(array_search("google",$gateway_options) !== false) {
+  if(array_search("google",(array)$gateway_options) !== false) {
      $google_decrement = 1;
   }
 	if ((count($gateway_options) - $google_decrement) > 1) {
