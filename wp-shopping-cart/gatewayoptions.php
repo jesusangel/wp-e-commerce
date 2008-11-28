@@ -75,7 +75,7 @@ if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 			$gateway['name'] = $gateway['admin_name'];
 		}
 		$selected_gateways = get_option('custom_gateway_options');
-		if (in_array($gateway['internalname'], $selected_gateways)) {
+		if (in_array($gateway['internalname'], (array)$selected_gateways)) {
 	  		$gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
 		} else {
 			$gatewaylist .="<option disabled value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>";
