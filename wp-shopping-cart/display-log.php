@@ -38,10 +38,10 @@ if(is_numeric($_GET['email_buyer_id'])) {
 		$purchase_log = $wpdb->get_row($selectsql,ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
-			$message = get_option("email_receipt");
+			$message = get_option("wpsc_email_receipt");
 			$message_html = "<h2  style='font-size:16px;font-weight:bold;color:#000;border:0px;padding-top: 0px;' >".TXT_WPSC_YOUR_ORDER."</h2>";
 		} else {
-			$message = get_option("email_receipt");
+			$message = get_option("wpsc_email_receipt");
 			$message_html = $message;
 		}
 		

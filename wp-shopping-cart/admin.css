@@ -191,6 +191,7 @@ div#productform{ display: none; width: 586px; }
 div#edititem27{ display: none; width: 586px; }
 
 div#productform table tr td{ height: 11px !important; }
+div#productform table tr.settings_row td{ height: 0px !important; }
  
 div#additem{ display: block;border: 1px solid #dadada;}
 

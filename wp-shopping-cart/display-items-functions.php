@@ -75,7 +75,7 @@ function price_and_stock_box($product_data=''){
     </tr>
     <tr>
       <td style='width:430px;'>
-      <input id='add_form_quantity_limited' type='checkbox' onclick='hideelement(\"add_stock\")' value='yes'".(($product_data['quantity_limited '] == 1) ? 'checked="true"' : '')."name='quantity_limited'/>";
+      <input id='add_form_quantity_limited' type='checkbox' onclick='hideelement(\"add_stock\")' value='yes'".(($product_data['quantity_limited'] == 1) ? 'checked="true"' : '')."name='quantity_limited'/>";
 	$output .= "<label for='add_form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
 	if ($product_data != ''){
       	$variations_output = $variations_processor->variations_grid_view($product_data['id']); 

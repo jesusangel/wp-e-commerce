@@ -366,6 +366,9 @@ function nzshpcrt_submit_checkout() {
         $variation_values = array_values($variations);
       }
       
+//       echo "<pre>".print_r($variation_values,true)."</pre>";
+//       echo "<pre>".print_r($variations,true)."</pre>";
+//       exit();
       
       // this code attaches files to cart items
       $is_downloadable = false;
@@ -397,12 +400,13 @@ function nzshpcrt_submit_checkout() {
       }
       
       
+      //echo "<pre>".print_r($variations,true)."</pre>";
       /*
         * This code decrements the stock quantity
       */
       //$debug .= "<pre>".print_r($variations,true)."</pre>";
       /*
-if($product_data['quantity_limited'] == 1) {
+			if($product_data['quantity_limited'] == 1) {
         if(count($variation_values) > 0) {
         
           $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");

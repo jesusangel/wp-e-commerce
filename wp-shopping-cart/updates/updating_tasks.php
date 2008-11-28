@@ -597,8 +597,24 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}currency_list` WHERE `co
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='242'");
 }
 
-add_option('email_receipt', '', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
-add_option('email_admin', '', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
+add_option('wpsc_email_receipt', '', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
+add_option('wpsc_email_admin', '', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
+
+if(get_option('wpsc_email_receipt') == '') {
+	if(get_option('email_receipt') != '') {
+		update_option('wpsc_email_receipt', get_option('email_receipt'));
+	} else {
+		update_option('wpsc_email_receipt', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT);
+	}
+}
+if(get_option('wpsc_email_admin') == '') {
+  if(get_option('email_admin') != '') {
+		update_option('wpsc_email_admin', get_option('email_admin'));
+	} else {
+		update_option('wpsc_email_admin', TXT_WPSC_DEFAULT_PURCHASE_REPORT);
+	}
+}
+
 
 
 $coldata  = $wpdb->get_row("SHOW COLUMNS FROM `{$wpdb->prefix}variation_priceandstock` LIKE 'file'",ARRAY_A);

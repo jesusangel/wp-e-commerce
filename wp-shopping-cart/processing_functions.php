@@ -618,20 +618,20 @@ function wpsc_item_process_file($mode = 'add') {
 		$filename = basename($_FILES['file']['name']);
 		
 		
-		if (in_array($_FILES['file']['name'],$file_names)){
+		if (in_array($_FILES['file']['name'],(array)$file_names)){
 			$i=0;
 			$new_name = $_FILES['file']['name'].".old";
 			while(file_exists(WPSC_FILE_DIR.$new_name)){
 				$new_name = $_FILES['file']['name'].".old_".$i;
 				$i++;
 			}
-			$old_idhash_id = array_search($_FILES['file']['name'],$file_names);
+			$old_idhash_id = array_search($_FILES['file']['name'],(array)$file_names);
 			$old_idhash = $file_hashes[$old_idhash_id];
 			while(!file_exists(WPSC_FILE_DIR.$old_idhash)){
 				unset($file_hashes[$old_idhash_id]);
 				unset($file_names[$old_idhash_id]);
 				
-				$old_idhash_id = array_search($_FILES['file']['name'],$file_names);
+				$old_idhash_id = array_search($_FILES['file']['name'],(array)$file_names);
 				$old_idhash = $file_hashes[$old_idhash_id];
 			}
 			copy(WPSC_FILE_DIR.$old_idhash, WPSC_FILE_DIR.$new_name);

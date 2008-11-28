@@ -209,6 +209,7 @@ $wpsc_database_template[$table_name]['columns']['billing_country'] = "char(6) NO
 $wpsc_database_template[$table_name]['columns']['shipping_country'] = "char(6) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['base_shipping'] = "varchar(128) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['email_sent'] = "char(1) NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['stock_adjusted'] = "char(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['discount_value'] = "varchar(32) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['discount_data'] = "text NOT NULL";
 $wpsc_database_template[$table_name]['columns']['track_id'] = "varchar(50) NULL DEFAULT '' ";

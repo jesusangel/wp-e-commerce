@@ -132,7 +132,7 @@ if($_POST['submit_action'] == 'add') {
 	
 		$file_name = null;
 		if($_POST['file_url'] != null) {
-			$url_array = array_reverse(explode("/",$_POST['file_url']));
+			$url_array = array_reverse((array)explode("/",$_POST['file_url']));
 			if(is_file(WPSC_FILE_DIR.$url_array[0])) {
 				$file_name = $url_array[0];
 			}
@@ -152,7 +152,7 @@ if($_POST['submit_action'] == 'add') {
 		}
 				
 		
-	if(is_numeric($_POST['quantity']) && ($_POST['quantity_limited'] == "yes")) {
+	if(is_numeric((int)$_POST['quantity']) && ($_POST['quantity_limited'] == "yes")) {
 				$quantity_limited = 1;
 				$quantity = (int)$_POST['quantity'];
 			} else {
@@ -529,7 +529,7 @@ if($_POST['submit_action'] == "edit") {
 		$key = Array();
 		
          
-		if(is_numeric($_POST['quantity']) && ($_POST['quantity_limited'] == "yes")){
+		if(is_numeric((int)$_POST['quantity']) && ($_POST['quantity_limited'] == "yes")){
 			$quantity_limited = 1;
 			$quantity = $_POST['quantity'];
 		} else {

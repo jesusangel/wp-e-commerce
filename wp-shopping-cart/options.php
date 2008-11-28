@@ -268,12 +268,12 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
       update_option('base_local_shipping', $_POST['base_local_shipping']);
     }
     
-    if(isset($_POST['email_receipt'])) {
-      update_option('email_receipt', $_POST['email_receipt']);
+    if(isset($_POST['wpsc_email_receipt'])) {
+      update_option('wpsc_email_receipt', $_POST['wpsc_email_receipt']);
     }
       
-    if(isset($_POST['email_admin'])) {
-      update_option('email_admin', $_POST['email_admin']);
+    if(isset($_POST['wpsc_email_admin'])) {
+      update_option('wpsc_email_admin', $_POST['wpsc_email_admin']);
     }
       
     if(isset($_POST['base_zipcode'])) {
@@ -1816,11 +1816,11 @@ if($_GET['clean_categories'] == 'true') {
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_PURCHASERECEIPT?></th>
-										<td><textarea name="email_receipt"  style='width: 100%; height: 200px;'><?php echo get_option('email_receipt');?></textarea></textarea></td>
+										<td><textarea name="wpsc_email_receipt"  style='width: 100%; height: 200px;'><?php echo get_option('wpsc_email_receipt');?></textarea></textarea></td>
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_ADMIN_REPORT?></th>
-										<td><textarea name="email_admin" style='width: 100%; height: 200px;'><?php echo get_option('email_admin');?></textarea></td>
+										<td><textarea name="wpsc_email_admin" style='width: 100%; height: 200px;'><?php echo get_option('wpsc_email_admin');?></textarea></td>
 									</tr>
 								</table>
 								<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>
