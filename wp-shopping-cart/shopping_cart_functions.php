@@ -135,7 +135,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	$currency = get_option('google_cur');
 	$payment_gateway_backup = get_option('payment_gateway');
 	//update_option('payment_gateway', 'google');
-	if (array_search("google",get_option('custom_gateway_options')) !== false) {
+	if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 		$google_cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	}
 	$affliate_no = 0;
@@ -167,7 +167,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	      }
         $price = $quantity * $cart_item->donation_price;
 			} else {
-        if (array_search("google",get_option('custom_gateway_options')) !== false) {
+        if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 					$google_unit_price = calculate_product_price($product_id, $cart_item->product_variations,'stay',$cart_item->extras);
 				}
         $price = $quantity * calculate_product_price($product_id, $cart_item->product_variations,'stay',$cart_item->extras);
@@ -201,7 +201,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	//exit(utf8_encode('&trade;'));
 	$product['name'] = str_replace("™","&trade;",$product['name']);
 	$product['description'] = str_replace("™","&trade;",$product['description']);
-			if (array_search("google",get_option('custom_gateway_options')) !== false) {
+			if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 				$google_item = new GoogleItem(utf8_decode($product['name'].$variation_list),utf8_decode($product['description']), $quantity, $google_unit_price);
 				$google_item->SetMerchantItemId($product['id']);
 				
@@ -280,7 +280,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 				$google_cart->AddItem($google_item);
 			}
 		}
-	 if (array_search("google",get_option('custom_gateway_options')) !== false) {
+	 if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 		 if (!$total_shipping) $total_shipping = 0;
 		 $pnp=$wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".(int)$google_product_id.")");
 		 $local_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country'));
@@ -337,7 +337,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$output .= "<br><span class='emptycart'><a href='".get_option('product_list_url').$seperator."category=".$_GET['category']."&amp;cart=empty' onclick='emptycart();return false;'>".TXT_WPSC_EMPTYYOURCART."</a><span><br>";
 		$output .= "<span class='gocheckout'><a href='".get_option('shopping_cart_url')."'>".TXT_WPSC_GOTOCHECKOUT."</a></span>";
 	}
-	if (array_search("google",get_option('custom_gateway_options')) !== false) {
+	if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 		if (get_option('google_button_size') == '0'){
 			$google_button_size = 'BIG';
 		} elseif(get_option('google_button_size') == '1') {
