@@ -564,6 +564,7 @@ function wpsc_uninstall_plugin() {
 		$option_list[] = 'wpsc_version'; 
 		$option_list[] = 'wpsc_incomplete_file_transfer'; 
 		$option_list[] = 'wpsc_ip_lock_downloads'; 
+		$option_list[] = 'wpsc_database_check'; 
 		
 		foreach($option_list as $wpsc_option) {
 			delete_option($wpsc_option);
@@ -723,6 +724,13 @@ function wpsc_create_or_update_tables() {
   // creates or updates the structure of the shopping cart tables
   
   include_once('updates/database_template.php');
+  
+  $template_hash = sha1(serialize($wpsc_database_template));
+  
+  if(get_option('wpsc_database_check') == $template_hash) {
+    return true;
+  }
+  
   $failure_reasons = array();
   $upgrade_failed = false;
   foreach((array)$wpsc_database_template as $table_name => $table_data) {
@@ -802,10 +810,16 @@ function wpsc_create_or_update_tables() {
           }
         }
       }
-      
-      //echo "<pre>".print_r($missing_or_extra_table_indexes,true)."</pre>";
-      
     }
   }
+  
+  
+	if($upgrade_failed !== true) {
+		update_option('wpsc_database_check', $template_hash);
+		return true;
+	} else {
+	  return false;
+	}
+	//echo "<pre>".print_r($missing_or_extra_table_indexes,true)."</pre>";
 }
 ?>
