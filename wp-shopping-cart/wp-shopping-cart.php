@@ -333,7 +333,7 @@ function nzshpcrt_style() {
       }
       
     <?php
-    $product_ids = $wpdb->get_col("SELECT `id` FROM `wp_product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
+    $product_ids = $wpdb->get_col("SELECT `id` FROM `{$wpdb->prefix}product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
     foreach($product_ids as $product_id) {
       list($individual_thumbnail_height) = get_product_meta($product_id, 'thumbnail_height'); 
       list($individual_thumbnail_width) = get_product_meta($product_id, 'thumbnail_width');     
