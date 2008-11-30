@@ -904,7 +904,7 @@ function wpsc_also_bought($product_id) {
   $image_display_height = 96; 
   $image_display_width = 96; 
   
-  $also_bought = $wpdb->get_results("SELECT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."also_bought_product`, `".$wpdb->prefix."product_list` WHERE `selected_product`='".$product_id."' AND `".$wpdb->prefix."also_bought_product`.`associated_product` = `".$wpdb->prefix."product_list`.`id` AND `".$wpdb->prefix."product_list`.`active` IN('1') ORDER BY `wp_also_bought_product`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
+  $also_bought = $wpdb->get_results("SELECT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."also_bought_product`, `".$wpdb->prefix."product_list` WHERE `selected_product`='".$product_id."' AND `".$wpdb->prefix."also_bought_product`.`associated_product` = `".$wpdb->prefix."product_list`.`id` AND `".$wpdb->prefix."product_list`.`active` IN('1') ORDER BY `".$wpdb->prefix."also_bought_product`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
   if(count($also_bought) > 0) {
     $output = "<p class='wpsc_also_bought_header'>".TXT_WPSC_ALSO_BOUGHT."</p>";
     $output .= "<div class='wpsc_also_bought'>";
