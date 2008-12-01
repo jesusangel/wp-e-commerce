@@ -217,16 +217,18 @@ class wp_shopping_cart {
 				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
 					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
 				} else {
-					if (function_exists('add_object_page'))
+					if (function_exists('add_object_page')) {
 						add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
-					else
+					} else {
 						add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+					}
 				}
 			} else {
-				if (function_exists('add_object_page'))
-				    add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
-				else
-				    add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+				if (function_exists('add_object_page')) {
+					add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
+				} else {
+					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+				}
 			}
 				add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
 				//         }
