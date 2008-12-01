@@ -217,7 +217,7 @@ class wp_shopping_cart {
 				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
 					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
 				} else {
-					if (IS_WP27)
+					if (function_exists('add_object_page'))
 						add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
 					else
 						add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
