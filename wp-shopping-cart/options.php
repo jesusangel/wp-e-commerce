@@ -247,8 +247,7 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		} else {
 			update_option('require_register', 0);
 		}
-        
-    
+        exit('asdfasfd');
 		if($_POST['do_not_use_shipping'] == 1) {
 			update_option('do_not_use_shipping', 1);
 		} else {
@@ -516,7 +515,7 @@ if($_GET['clean_categories'] == 'true') {
 
 				<form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
 		  <div id="wpsc_options" class="wrap">
-					<a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a>
+					<!-- <a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a> -->
             <ul id="tabs" class="ui-tabs-nav">
                 <li><a href="#options_general"><?php echo TXT_WPSC_OPTIONS_GENERAL_TAB; ?></a></li>
                 <li><a href="#options_presentation"><?php echo TXT_WPSC_OPTIONS_PRESENTATION_TAB; ?></a></li>

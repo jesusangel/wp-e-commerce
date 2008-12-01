@@ -409,7 +409,7 @@ if($_GET['filter'] !== 'true') {
     }
     ?>
 <?php
-	echo "</div></div>";
+	echo "</div>";
 	echo "<div id='post-body' class='has-sidebar'>
 			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
 				

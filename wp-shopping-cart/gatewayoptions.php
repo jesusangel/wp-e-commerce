@@ -110,12 +110,14 @@ function selectgateway() {
 	?>
   <h2><?php echo TXT_WPSC_GATEWAY_OPTIONS;?></h2>
 
-		<div class="tablenav wpsc_admin_nav">
+		<!--
+<div class="tablenav wpsc_admin_nav">
 			<div class="alignright">
 				<a class="about_this_page_sub" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span></a>
 			</div>
 			<br class="clear"/>
 		</div>
+-->
 
 
 		<table id='gateway_options' >

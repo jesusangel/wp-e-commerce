@@ -135,7 +135,7 @@ class usps {
 				$services_count++;
 			}
 			$request .= '</RateV3Request>'; //'</RateRequest>'; //Changed by Greg Deeth April 30, 2008
-			exit($request);
+			//exit($request);
 			$request = 'API=RateV3&XML=' . urlencode($request);
 		} else {
 			$dest=$wpdb->get_var("SELECT country FROM ".$wpdb->prefix."currency_list WHERE isocode='".$dest."'");

@@ -80,7 +80,7 @@ if(isset($_POST) && is_array($_POST)) {
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYCOUPONS;?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
-  <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a>
+  <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
 
   <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADD_COUPON;?></span></a>
   
@@ -422,6 +422,27 @@ echo "</table>\n\r";
 		</td>
 		<td>
 			<?php echo get_option('siteurl')."/index.php?rss=true&amp;action=product_list" ?>
+		</td>
+	</tr>
+</table>
+
+<h2><?php echo TXT_WPSC_GOOGLE_BASE;?></h2>
+<table>
+	<tr>
+		<td>
+			Login to Google Base:
+		</td>
+		<td>
+			<?php 
+				$itemsFeedURL = "http://www.google.com/base/feeds/items";
+				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wp-shopping-cart/display-items.php";
+				$redirect_url = 'https://www.google.com/accounts/AuthSubRequest?session=1';
+				$redirect_url .= '&next=';
+				$redirect_url .= urlencode($next_url);
+				$redirect_url .= "&scope=";
+				$redirect_url .= urlencode($itemsFeedURL);
+				echo " <a href='$redirect_url'>".TXT_WPSC_GRANT_ACCESS."</a>"; 
+			?>
 		</td>
 	</tr>
 </table>

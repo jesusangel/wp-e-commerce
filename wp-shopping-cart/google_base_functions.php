@@ -41,7 +41,6 @@ function buildInsertXML($name,$price,$description) {
 				<title type='text'>".$name."</title>
 				<content>".$description."</content>
 			</entry>";
-
 	return $result;
 }
 
@@ -131,7 +130,6 @@ function postItem($name,$price,$description, $token='') {
 	curl_setopt($ch, CURLOPT_FAILONERROR, true);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: AuthSub token="' . $token . '"', 'X-Google-Key: key=' . $developerKey, 'Content-Type: application/atom+xml'));
 	$xml=buildInsertXML($name,$price,$description);
-// 	exit($xml);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 	
 	$result = curl_exec($ch);  /* Execute the HTTP request. */

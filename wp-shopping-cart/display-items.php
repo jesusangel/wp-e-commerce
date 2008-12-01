@@ -122,8 +122,10 @@ if($_POST['submit_action'] == 'add') {
   
 		//Allen's Change for Google base
 		if (isset($_GET['token']) || isset($_SESSION['google_base_sessionToken'])) {
-			$sessionToken=exchangeToken($_GET['token']);
-			$_SESSION['google_base_sessionToken'] = $sessionToken;
+			if (isset($_GET['token'])) {
+				$sessionToken=exchangeToken($_GET['token']);
+				$_SESSION['google_base_sessionToken'] = $sessionToken;
+			}
 			if (isset($_SESSION['google_base_sessionToken']))
 				$sessionToken=$_SESSION['google_base_sessionToken'];
 			postItem($_POST['name'], $_POST['price'], $_POST['description'], $sessionToken);
@@ -794,6 +796,24 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
 
 
   <script language='javascript' type='text/javascript'>
+  jQuery('.hide-postbox-tog').click( function() {
+	    var box = jQuery(this).val();
+	    if ( jQuery(this).attr('checked') ) {
+	    	jQuery('#' + box).show();
+	    	if ( jQuery.isFunction( postboxes.pbshow ) )
+	    		postboxes.pbshow( box );
+	
+	    } else {
+	    	jQuery('#' + box).hide();
+	    	if ( jQuery.isFunction( postboxes.pbhide ) )
+	    		postboxes.pbhide( box );
+	
+	    }
+	    postboxes.save_state('products');
+	} );
+	
+		
+	
 function conf() {
   var check = confirm("<?php echo TXT_WPSC_SURETODELETEPRODUCT;?>");
   if(check) {
@@ -802,6 +822,8 @@ function conf() {
     return false;
 	}
 }
+
+
 <?php
 if(is_numeric($_POST['prodid'])) {
 		echo "filleditform(".$_POST['prodid'].");";
@@ -832,8 +854,7 @@ if (function_exists('add_object_page')) {
 	
 	<div class="alignright">
 		<?php echo setting_button(); ?>
-		<a target="_blank" href='http://www.instinct.co.nz/e-commerce/products/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
-	
+		<!-- <a target="_blank" href='http://www.instinct.co.nz/e-commerce/products/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a> -->
 	</div>
 
 	
@@ -1232,11 +1253,10 @@ if (function_exists('add_object_page')){
 <tr><td  colspan='2'>
 <?php
 	if (function_exists('add_object_page')){
-		echo "<div class='meta-box-sortables'>";
+		echo "<div id='normal-sortables' class='meta-box-sortables'>";
 	}
 	$order = get_option('wpsc_product_page_order');
-	
-	if ($order == ''){
+	if (($order == '') || ($order[0]=='')){
 		$order=array("price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
 	}
 	foreach((array)$order as $key => $box) {

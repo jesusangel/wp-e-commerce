@@ -8,7 +8,10 @@ function price_and_stock_box($product_data=''){
 	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
 	$table_rate_price = $table_rate_price[0];
 	$output = '';
-	$output .= "<div id='price_and_stock' class='postbox ".((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."' >";
+	if ($product_data == 'empty') {
+		$display = "style='visibility:hidden;'";
+	}
+	$output .= "<div id='price_and_stock' class='price_and_stock postbox ".((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."' >";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -120,6 +123,9 @@ function variation_box($product_data=''){
 	global $closed_postboxes, $variations_processor;
 	$siteurl = get_option('siteurl');
 	$output='';
+	if ($product_data == 'empty') {
+		$display = "style='display:none;'";
+	}
 	$output .= "<div id='variation' class='postbox ".((array_search('variation', $closed_postboxes) !== false) ? 'closed' : '')."'>";
 
     if (IS_WP27) {
@@ -170,6 +176,9 @@ function variation_box($product_data=''){
 
 function shipping_box($product_data=''){
 	global $closed_postboxes;
+	if ($product_data == 'empty') {
+		$display = "style='display:none;'";
+	}
 	$output .= "<div class='postbox ".((array_search('shipping', $closed_postboxes) !== false) ? 'closed' : '')."' id='shipping'>";
 
     	if (IS_WP27) {
@@ -234,6 +243,9 @@ function advanced_box($product_data='') {
 	$external_link = get_product_meta($product_data['id'], 'external_link');
 	$external_link = $external_link[0];
 	$output ='';
+	if ($product_data == 'empty') {
+		$display = "style='display:none;'";
+	}
 	$output .= "<div id='advanced' class='postbox ".((array_search('advanced', $closed_postboxes) !== false) ? 'closed' : '')."'>";
 
     	if (IS_WP27) {
@@ -368,6 +380,9 @@ function advanced_box($product_data='') {
 
 function product_image_box($product_data='') {
 	global $closed_postboxes;
+	if ($product_data == 'empty') {
+		$display = "style='display:none;'";
+	}
 	$output = "<div id='product_image' class='postbox ".((array_search('product_image', $closed_postboxes) !== false) ? 'closed' : '')."'>";
   
     if (IS_WP27) {
@@ -691,6 +706,9 @@ function product_image_box($product_data='') {
 
 function product_download_box($product_data='') {
 	global $wpdb, $closed_postboxes;
+	if ($product_data == 'empty') {
+		$display = "style='display:none;'";
+	}
 	$output ='';
 
  	$output .= "<div id='product_download' class='postbox ".((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : '')."'>";
@@ -804,4 +822,15 @@ global $closed_postboxes;
 	</table></div></div>
 <?php
 }
+function wpsc_meta_boxes(){
+	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('variation', 'Variations', 'variation_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('shipping', 'Shippings', 'shipping_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('advanced', 'Advanced Settings', 'advanced_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('product_download', 'Product Download', 'product_download_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('product_image', 'Product Images', 'product_image_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+}
+
+add_action('admin_menu', 'wpsc_meta_boxes');
+
 ?>
