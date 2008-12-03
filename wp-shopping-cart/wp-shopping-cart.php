@@ -2920,7 +2920,9 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
 } else {
 	wp_enqueue_script('thickbox');
-	wp_enqueue_style( 'thickbox' );
+	if(function_exists('wp_enqueue_style')) {  // DO NOT ALTER THIS!! This function is not present on older versions of wordpress
+		wp_enqueue_style( 'thickbox' );
+	}
 	wp_enqueue_script('jQuery-ui',WPSC_URL.'/js/jquery-ui.js?ver=1.6', array('jquery'), '1.6');
 	wp_enqueue_script('jEditable',WPSC_URL.'/js/jquery.jeditable.pack.js', array('jquery'), '2.7.4');
 }
