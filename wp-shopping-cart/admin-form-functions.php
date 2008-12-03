@@ -692,7 +692,7 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='dashboard_right_now' class='postbox'>";
 		$output.="	<h3 class='hndle'>";
-		$output.="		<span>"._('Right Now')."</span>";
+		$output.="		<span>"._('Current Month')."</span>";
 		//$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>";
 		$output.="		<br class='clear'/>";
 		$output.="	</h3>";

@@ -239,23 +239,26 @@ class wp_shopping_cart {
 			//end of written by allen
 			
 			$display_items_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
-			add_contextual_help('wp-shopping-cart/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
 			}			//exit('-->'.$help);
 			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
-			add_contextual_help('wp-shopping-cart/display-category',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products-groups/'>About this page</a>");
+			if (function_exists('add_contextual_help')) {
+				add_contextual_help('wp-shopping-cart/display-category',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products-groups/'>About this page</a>");
+				add_contextual_help('wp-shopping-cart/display_variations',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/variations/'>About this page</a>");
+				add_contextual_help('wp-shopping-cart/display-coupons',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/marketing/'>About this page</a>");
+				add_contextual_help('wp-shopping-cart/options',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/integrated/'>About this page</a><br><a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment options</a>");
+				add_contextual_help('wp-shopping-cart/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
+			}
 			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
-			add_contextual_help('wp-shopping-cart/display_variations',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/variations/'>About this page</a>");
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
-			add_contextual_help('wp-shopping-cart/display-coupons',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/marketing/'>About this page</a>");
+			
 // 			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
 // 			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
 // 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
 			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
-			add_contextual_help('wp-shopping-cart/options',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/integrated/'>About this page</a><br><a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment options</a>");
 			if(function_exists('gold_shpcrt_options')) {
 				gold_shpcrt_options($base_page);
 			}
@@ -535,8 +538,8 @@ var borderSize = 10;
 /* custom admin functions start*/
 <?php
 	$hidden_boxes = get_option('wpsc_hidden_box');
-	$hidden_boxes = implode(',', $hidden_boxes);
-	echo "var hidden_boxes = '".$hidden_boxes."';";\
+	$hidden_boxes = implode(',', (array)$hidden_boxes);
+	echo "var hidden_boxes = '".$hidden_boxes."';";
     echo "var TXT_WPSC_DELETE = '".TXT_WPSC_DELETE."';\n\r";
     echo "var TXT_WPSC_TEXT = '".TXT_WPSC_TEXT."';\n\r";
     echo "var TXT_WPSC_EMAIL = '".TXT_WPSC_EMAIL."';\n\r";
