@@ -3072,31 +3072,37 @@ function wpsc_swfupload_images() {
 					}
 					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `{$wpdb->prefix}product_images` LIMIT 1");
 					$src = $file['name'];
-					echo "src='".$src."';id='".$id."';";
+					$output = "src='".$src."';id='".$id."';";
 				} else {
-					echo "file uploading error";
+					$output = "file uploading error";
 				}
 			} else {
 			  // if thereare no images
 				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
 				if($src != null) {
 					$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-					echo "src='".$src."';id='0';";
+					$output = "src='".$src."';id='0';";
 				} else {
-					echo "file uploading error";
+					$output = "file uploading error";
 				}
 			}
 		} else {
       // Otherwise...
+      $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
+      
       $src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
       if($src != null) {
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-        echo "replacement_src='".WPSC_IMAGE_URL.$src."';";
+        $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
+        if(strlen($previous_image) > 0) {
+					$output = "replacement_src='".WPSC_IMAGE_URL.$src."';"; 
+        } else {
+					$output = "src='".$src."';id='0';";        
+        }
       } else {
-        echo "file uploading error";
+        $output = "file uploading error";
       }
 		}
-		exit();
+		exit($output);
 	}
 }
 

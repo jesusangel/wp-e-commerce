@@ -256,7 +256,7 @@ function display_category_row($category,$subcategory_level = 0) {
 		}
 
 		if($_POST['display_type'] != $category_data['display_type']) {
-			switch($category_data['display_type']) {
+			switch($_POST['display_type']) {
 				case "grid":
 					$display_type = 'grid';
 				break;
@@ -272,6 +272,9 @@ function display_category_row($category,$subcategory_level = 0) {
       $category_sql_list[] = "`display_type` = '$display_type' ";
 		}
 
+		
+
+		  //echo "<pre>".print_r($category_sql_list,true)."</pre>";
 
     if($_POST['product_height'] > 0) {
       $product_height = (int)$_POST['product_height'];
