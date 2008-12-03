@@ -20,8 +20,15 @@ define('WPSC_DEBUG', false);
  * {WP-Set} Yes (Admin Panel)
  */
 ini_set('display_errors',1);
-define('IS_WP25', version_compare($wp_version, '2.4', '>=') );
-define('IS_WP27', version_compare($wp_version, '2.6', '>=') );
+
+$v1 = str_replace(array('_','-','+'),'.',strtolower($wp_version));
+$v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);
+$v1 = preg_split("/([a-z]+)/i",$v1,-1, PREG_SPLIT_DELIM_CAPTURE);
+array_walk($v1, create_function('&$v', '$v = trim($v,". ");'));
+
+define('IS_WP25', version_compare($v1[0], '2.5', '>=') );
+define('IS_WP27', version_compare($v1[0], '2.7', '>=') );
+
 // // we need to know where we are, rather than assuming where we are
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
@@ -540,6 +547,7 @@ var borderSize = 10;
 	$hidden_boxes = get_option('wpsc_hidden_box');
 	$hidden_boxes = implode(',', (array)$hidden_boxes);
 	echo "var hidden_boxes = '".$hidden_boxes."';";
+	echo "var IS_WP27 = '".IS_WP27."';";
     echo "var TXT_WPSC_DELETE = '".TXT_WPSC_DELETE."';\n\r";
     echo "var TXT_WPSC_TEXT = '".TXT_WPSC_TEXT."';\n\r";
     echo "var TXT_WPSC_EMAIL = '".TXT_WPSC_EMAIL."';\n\r";
@@ -3348,5 +3356,6 @@ function save_hidden_box() {
 	    exit(print_r($hidden_box,1));
 	}
 }
+
 add_action('init', 'save_hidden_box');
 ?>

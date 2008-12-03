@@ -332,7 +332,9 @@ jQuery(".remove_line").click(
 	boxes = ["price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download"];
 	for (i=0;i<boxes.length;i++) {
 		if ( ! jQuery('#'+boxes[i]+'-hide').attr('checked')){
-			jQuery('#'+boxes[i]).hide();
+			if (IS_WP27) {
+				jQuery('#'+boxes[i]).hide();
+			}
 		}
 	}
 }
@@ -1311,9 +1313,12 @@ jQuery(document).ready(function(){
 		}
 	}
 	boxes = ["price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download"];
+	
 	for (i=0;i<boxes.length;i++) {
 		if ( ! jQuery('#'+boxes[i]+'-hide').attr('checked')){
-			jQuery('#'+boxes[i]).hide();
+			if (IS_WP27) {
+				jQuery('#'+boxes[i]).hide();
+			}
 		}
 	}
 });
