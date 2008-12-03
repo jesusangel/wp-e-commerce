@@ -21,28 +21,29 @@ if($_POST['custom_shipping_options'] != null) {
 	update_option('custom_shipping_options', $_POST['custom_shipping_options']);
 	$changes_made = true;
 }
-		
-		if($_POST['do_not_use_shipping'] == 1) {
-			update_option('do_not_use_shipping', 'true');
-		} else {
-			update_option('do_not_use_shipping', 'false');
-		}
-		if(isset($_POST['base_zipcode'])) {
-			update_option('base_zipcode', $_POST['base_zipcode']);
-		}
-		
-		if($_POST['shipwire'] == 1) {
-			update_option('shipwire', 1);
-		} else {
-			update_option('shipwire', 0);
-		}
-
-		if($_POST['shipwireemail'] != null) {
-			update_option('shipwireemail', $_POST['shipwireemail']);
-		}
-	
-		if($_POST['shipwirepassword'] != null) {
-			update_option('shipwirepassword', $_POST['shipwirepassword']);
+		if (($_POST != array()) && ($_POST != '')) {
+			if($_POST['do_not_use_shipping'] == 1) {
+				update_option('do_not_use_shipping', 1);
+			} else if($_POST['do_not_use_shipping'] == 0) {
+				update_option('do_not_use_shipping', 0);
+			}
+			if(isset($_POST['base_zipcode'])) {
+				update_option('base_zipcode', $_POST['base_zipcode']);
+			}
+			
+			if($_POST['shipwire'] == 1) {
+				update_option('shipwire', 1);
+			} else {
+				update_option('shipwire', 0);
+			}
+			
+			if($_POST['shipwireemail'] != null) {
+				update_option('shipwireemail', $_POST['shipwireemail']);
+			}
+			
+			if($_POST['shipwirepassword'] != null) {
+				update_option('shipwirepassword', $_POST['shipwirepassword']);
+			}
 		}
 
 if(isset($_POST['custom_gateway'])) {

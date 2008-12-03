@@ -1,4 +1,5 @@
 <?php
+   //$_SESSION['debug']=0;
 if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
   include('tax_and_shipping.php');
 } else {
@@ -247,12 +248,13 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		} else {
 			update_option('require_register', 0);
 		}
-        exit('asdfasfd');
-		if($_POST['do_not_use_shipping'] == 1) {
+		/*
+if($_POST['do_not_use_shipping'] == 1) {
 			update_option('do_not_use_shipping', 1);
 		} else {
 			update_option('do_not_use_shipping', 0);
 		}
+*/
     // End of Adrian's additions - more further down page
     
     if(is_numeric($_POST['product_ratings'])) {
@@ -302,7 +304,7 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
     if(is_numeric($_POST['country_form_field'])) {
       update_option('country_form_field', $_POST['country_form_field']);
     }
-      
+   
     if(is_numeric($_POST['email_form_field'])) {
       update_option('email_form_field', $_POST['email_form_field']);
     }
@@ -818,7 +820,8 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' value='0' name='multi_add' id='multi_adding2' <?php echo $multi_adding2; ?> /> <label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
-								<tr>
+								<!--
+<tr>
 									<th scope="row">
 									<?php echo TXT_WPSC_DATE_REQUESTED;?>:
 									</th>
@@ -839,6 +842,7 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' value='0' name='time_requested' id='time_requested2' <?php echo $time_requested2; ?> /> <label for='time_requested2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
+-->
 							</table> 
 							
 							<h3 class="form_group"><?php echo TXT_WPSC_CURRENCYSETTINGS;?>:</h3>
@@ -1709,13 +1713,13 @@ if($_GET['clean_categories'] == 'true') {
 										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='shipwire' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
 										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='shipwire' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php echo TXT_WPSC_NO;?></label>
 											<?php
-											$shipwrieemail = get_option("shipwireemail");
-											$shipwriepassword = get_option("shipwirepassword");
+											$shipwireemail = get_option("shipwireemail");
+											$shipwirepassword = get_option("shipwirepassword");
 											?>
 											<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
 											<table>
-												<tr><td><?=TXT_WPSC_SHIPWIREEMAIL;?> :</td><td> <input type="text" name="shipwireemail" value="<?=$shipwrieemail;?>"></td></tr>
-												<tr><td><?=TXT_WPSC_SHIPWIREPASSWORD;?> :</td><td><input type="text" name="shipwirepassword" value="<?=$shipwriepassword;?>"></td></tr>
+												<tr><td><?=TXT_WPSC_SHIPWIREEMAIL;?> :</td><td> <input type="text" name="shipwireemail" value="<?=$shipwireemail;?>"></td></tr>
+												<tr><td><?=TXT_WPSC_SHIPWIREPASSWORD;?> :</td><td><input type="text" name="shipwirepassword" value="<?=$shipwirepassword;?>"></td></tr>
 												<tr><td><a onclick='shipwire_sync()' style="cursor:pointer;">Sync product</a></td></tr>
 											</table>
 											</div>

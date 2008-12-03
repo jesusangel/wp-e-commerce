@@ -1798,3 +1798,7 @@ h3.hndle {
 	color:#333 !important;
 	padding:6px 7px !important;
 }
+
+.variation_settings{
+	display:none;
+}

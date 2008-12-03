@@ -237,6 +237,10 @@ div.textcol{
  text-align: left !important;
 /*   border: 1px solid green; */
  }
+ 
+div.textcol form{
+	text-align: left !important;
+}
 
 div.single_product_display div.textcol{
 /* Adjust this width according to your layout*/

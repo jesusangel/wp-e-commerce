@@ -928,7 +928,7 @@ define('TXT_WPSC_PRODUCT_TAGS', 'Product Tags');
 define('TXT_WPSC_SHOW_DROPSHOP_ALL', 'Show Dropshop on every page');
 define('TXT_WPSC_SHOW_DROPSHOP_PRODUCT', 'Show Dropshop only on product page');
 define('TXT_WPSC_PRICEAFTERDISCOUNT', 'Price after discount');
-define('TXT_WPSC_ECOM_NEWS', 'e-Commerce News');
+define('TXT_WPSC_ECOM_NEWS', 'WP e-Commerce News');
 define('TXT_WPSC_SAVE_PRODUCT_ORDER', 'Save Product Order');
 
 define('TXT_WPSC_ECOMMERCE_SUBSCRIBERS', 'e-Commerce Subscribers');

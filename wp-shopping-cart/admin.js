@@ -1263,12 +1263,12 @@ jQuery(document).ready(function(){
 		}
 	);
 	
-  jQuery(".pricedisplay").each(
+  	jQuery("table#itemlist .pricedisplay").each(
 		function () {
 			jQuery(this).attr("id",jQuery(this).parent().attr('id'));
 		}
 	);
- 	jQuery(".pricedisplay").editable(base_url+"/?inline_price=true", {
+ 	jQuery("table#itemlist .pricedisplay").editable(base_url+"/?inline_price=true", {
          indicator : "Saving...",
          tooltip   : 'Click to edit...'
     });

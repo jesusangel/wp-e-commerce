@@ -269,9 +269,10 @@ if($_GET['filter'] !== 'true') {
   <h2><?php echo TXT_WPSC_PURCHASELOG;?></h2>
   <?php
 	if(IS_WP27) {
-		echo "<div id='dashboard-widgets-wrap'>
+		echo "<div id='dashboard-widgets'>
 			<div id='dashboard-widgets' class='metabox-holder'>
-				<div id='side-info-column-wpsc' class='inner-sidebar'>";
+				<div id='side-info-column-wpsc' class='inner-sidebar'>
+					<div class='meta-box-sortables'>";
 ?>
     <?php
 		require_once (ABSPATH . WPINC . '/rss.php');
@@ -291,7 +292,10 @@ if($_GET['filter'] !== 'true') {
 					}
 					?>
 					</ul>
-					<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a>
+					<?php
+					if (!IS_WP27)
+					 echo "<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a>";
+					?>
 					</div>
 				</div>
 				<?php
@@ -341,9 +345,16 @@ if($_GET['filter'] !== 'true') {
         break;
         }
       
+      
+      if (is_file(WPSC_DIR.'/gold_cart_files/affiliates.php')) {
+      	
       ?>
       <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[4];?> name='filter' value='affiliate' id='order_filter_affiliate' /> <label class='order_filters' for='order_filter_affiliate'><?php echo TXT_WPSC_LOG_AFFILIATES; ?></label>
       <br />
+      <?php
+      }
+      ?>
+      
       <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='1' id='order_filter_1' /> <label class='order_filters' for='order_filter_1'><?php echo TXT_WPSC_LOG_CURRENT_MONTH; ?></label>
       <br />
       <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='3' id='order_filter_3' /> <label class='order_filters' for='order_filter_3'><?php echo TXT_WPSC_LOG_PAST_THREE_MONTHS; ?></label>
@@ -403,6 +414,7 @@ if($_GET['filter'] !== 'true') {
         <div>
         <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo TXT_WPSC_UPGRADE_TO_GOLD; ?></a><?php echo TXT_WPSC_UNLEASH_MORE; ?>
         </div>
+      </div>
       </div>
       </div>
       <?php
@@ -535,7 +547,27 @@ if($_GET['filter'] !== 'true') {
               if($stage_data['colour'] != '') {
                 $colour = "style='color: #".$stage_data['colour'].";'";
               }
-              echo "<span $colour  id='form_group_".$purchase['id']."_text'>".$stage_data['name']."</span>";
+              echo "<span $colour id='form_group_".$purchase['id']."_text'>";
+              switch ($purchase['processed']){
+              	case 1:
+              		echo "<font color='red'>";
+              		break;
+              
+              	case 2:
+              		echo "<font color='orange'>";
+              		break;
+              		
+              	case 3:
+              		echo "<font color='orange'>";
+              		break;
+              		
+              	case 4:
+              		echo "<font color='green'>";
+              		break;
+              }
+              echo $stage_data['name'];
+              echo "</font>";
+              echo "</span>";
               echo "</a>";
               echo " </td>\n\r";
         

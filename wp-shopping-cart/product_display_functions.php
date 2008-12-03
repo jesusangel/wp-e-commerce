@@ -504,10 +504,10 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 				$output .= external_link($product['id']);
 			} else {
 				if (get_option('addtocart_or_buynow')=='1') {
-					if ($product['quantity_limited'] < $product['quantity']) {
-						if (get_option('payment_gateway')=='google') {
+					if (($product['quantity_limited'] < $product['quantity']) || ($product['quantity_limited'] == 0)) {
+						if (in_array('google',(array)get_option('custom_gateway_options'))) {
 							$output .= google_buynow($product['id']);
-						} else if (get_option('payment_gateway') == 'paypal_multiple') {
+						} else if (in_array('paypal_multiple',(array)get_option('custom_gateway_options'))) {
 							$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
 								<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
 								<input type='hidden' name='cmd' value='_xclick'>
@@ -524,6 +524,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 							</form>
 						";
 						}
+					} else {
+						$output .= "Out of Stock".$product['quantity'];
 					}
 				}
 			}

@@ -19,6 +19,7 @@ define('WPSC_DEBUG', false);
  * {Required} Yes
  * {WP-Set} Yes (Admin Panel)
  */
+ini_set('display_errors',1);
 define('IS_WP25', version_compare($wp_version, '2.4', '>=') );
 define('IS_WP27', version_compare($wp_version, '2.6', '>=') );
 // // we need to know where we are, rather than assuming where we are
@@ -241,7 +242,7 @@ class wp_shopping_cart {
 			add_contextual_help('wp-shopping-cart/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			
 			
-			foreach(get_option('wpsc_product_page_order') as $box) {
+			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
 			}			//exit('-->'.$help);
 			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
