@@ -867,7 +867,18 @@ function wpsc_packing_slip($purchase_id) {
 			
 			
       echo "<table class='packing_slip'>";
-		
+				
+				echo "<tr>";
+				echo " <th>".TXT_WPSC_QUANTITY." </th>";
+				
+				echo " <th>".TXT_WPSC_NAME."</th>";
+				
+				
+				echo " <th>".TXT_WPSC_PRICE." </th>";
+				
+				echo " <th>".TXT_WPSC_SHIPPING." </th>";
+							
+				echo '</tr>';
 			$endtotal = 0;
 			$all_donations = true;
 			$all_no_shipping = true;
@@ -881,9 +892,12 @@ function wpsc_packing_slip($purchase_id) {
 				$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A); 
 			
+			
+			
 				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
 				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 				$variation_count = count($variation_data);
+				
 				if($variation_count > 1) {
 					$variation_list = " (";
 					$i = 0;
@@ -904,6 +918,26 @@ function wpsc_packing_slip($purchase_id) {
         } else {
 							$variation_list = '';
         }
+				
+				
+				if($cart_row['donation'] != 1) {
+					$all_donations = false;
+				}
+				if($cart_row['no_shipping'] != 1) {
+					$shipping = $cart_row['pnp'] * $cart_row['quantity'];
+					$total_shipping += $shipping;            
+					$all_no_shipping = false;
+				} else {
+					$shipping = 0;
+				}
+				
+				$price = $cart_row['price'] * $cart_row['quantity'];
+				$gst = $price - ($price  / (1+($cart_row['gst'] / 100)));
+				
+				if($gst > 0) {
+				  $tax_per_item = $gst / $cart_row['quantity'];
+				}
+				
 
 				echo "<tr $alternate>";
 		
@@ -915,6 +949,15 @@ function wpsc_packing_slip($purchase_id) {
 				echo " <td>";
 				echo $product_data[0]['name'];
 				echo $variation_list;
+				echo " </td>";
+				
+				
+				echo " <td>";
+				echo nzshpcrt_currency_display( $price, 1);
+				echo " </td>";
+				
+				echo " <td>";
+				echo nzshpcrt_currency_display($shipping, 1);
 				echo " </td>";
 							
 				echo '</tr>';

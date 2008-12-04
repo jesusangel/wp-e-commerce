@@ -5,12 +5,12 @@
 if(is_numeric($_GET['id']) && is_numeric($_GET['value'])) {
   $max_stage = $wpdb->get_var("SELECT MAX(*) AS `max` FROM `".$wpdb->prefix."purchase_statuses` WHERE `active`='1'");
   if(is_numeric($_GET['value']) && ($_GET['value'] <= $max_stage)) {
-    $newvalue = $_GET['value'];
+    $newvalue = (int)$_GET['value'];
 	} else {
 		$newvalue = 1;
 	}
   $log_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id` = '".$_GET['id']."' LIMIT 1");  
-  $update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '".$newvalue."' WHERE `id` = '".$_GET['id']."' LIMIT 1";  
+  $update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '{$newvalue}' WHERE `id` = '".$_GET['id']."' LIMIT 1";  
   $wpdb->query($update_sql);
   if(($newvalue > $log_data['processed']) && ($log_data['processed'] <=1)) {
     transaction_results($log_data['sessionid'], false);
@@ -187,14 +187,15 @@ if(is_numeric($_GET['email_buyer_id'])) {
 				} else {
 					$report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
 				}
-				
-				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
+				//exit( mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email').""));
+				//echo mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
+				if(($email != '')) {
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						$resent = mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
+						$resent = (bool)mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
 					} else {
-						$resent = mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')."");
+						$resent = (bool)mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')."");
 					}
 				}
 		}
@@ -1072,9 +1073,11 @@ if($_GET['filter'] !== 'true') {
 		echo "<br /><br class='small' />&emsp;&ensp; <a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>".TXT_WPSC_GOBACK."</a>";
 	
 	} elseif (is_numeric($_GET['email_buyer_id'])) {
-		if ($resent){
-			if (IS_WP27)
+	  echo $resent;
+		if ($resent != 0){
+			if (IS_WP27) {
 				echo "<div class='email_buyer'>";
+			}
 			echo "The folowing purchase recipt have has been resent:<br>";
 		    echo nl2br($message_html);
 		} else {

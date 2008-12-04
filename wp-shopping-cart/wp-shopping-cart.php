@@ -3056,10 +3056,12 @@ function wpsc_swfupload_images() {
 		if(function_exists('gold_shpcrt_display_gallery')) {
 		  // if more than one image is permitted
       $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM {$wpdb->prefix}product_images WHERE product_id='$pid'", ARRAY_A);
-      $order = $existing_image_data['order'];
+      $order = (int)$existing_image_data['order'];
       $count = $existing_image_data['count'];
       
-      if($count >  0) {
+      $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
+		  //echo "<pre>".print_r($previous_image,true)."</pre>";
+      if(($count >  0) || (strlen($previous_image) > 0)) {
         // if there is more than one image
         $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
 				if ($pid == '') {
@@ -3102,6 +3104,7 @@ function wpsc_swfupload_images() {
         $output = "file uploading error";
       }
 		}
+		mail('thomas.howard@gmail.com','upload test', $output);
 		exit($output);
 	}
 }
@@ -3109,7 +3112,7 @@ function wpsc_swfupload_images() {
 add_action('init','wpsc_swfupload_images');
 
 
-function wpsc_display_involce() {
+function wpsc_display_invoice() {
   $purchase_id = (int)$_GET['purchaseid'];
   include_once(WPSC_FILE_PATH."/admin-form-functions.php");
   // echo "testing";
@@ -3121,7 +3124,7 @@ function wpsc_display_involce() {
 
 
 if($_GET['display_invoice']=='true') {
-  add_action('admin_init', 'wpsc_display_involce', 0);
+  add_action('admin_init', 'wpsc_display_invoice', 0);
 
 }
 

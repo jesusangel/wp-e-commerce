@@ -282,13 +282,13 @@ function nzshpcrt_install()
   add_option('paypal_multiple_business', '', TXT_WPSC_PAYPALBUSINESS, 'yes');
   
   if(get_option('paypal_multiple_url') == null) {
-    add_option('paypal_multiple_url', '', TXT_WPSC_PAYPALURL, 'yes');
+    add_option('paypal_multiple_url', TXT_WPSC_PAYPALURL, 'yes');
     update_option('paypal_multiple_url', "https://www.paypal.com/cgi-bin/webscr");
 	}
 
   add_option('product_ratings', '0', TXT_WPSC_SHOWPRODUCTRATINGS, 'yes');
-  add_option('email_receipt', '0', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
-  add_option('email_admin', '0', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
+  add_option('wpsc_email_receipt', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
+  add_option('wpsc_email_admin', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
   if(get_option('wpsc_selected_theme') == '') {
     add_option('wpsc_selected_theme', 'default', 'Selected Theme', 'yes');
     update_option('wpsc_selected_theme', "default");
