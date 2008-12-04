@@ -3104,7 +3104,6 @@ function wpsc_swfupload_images() {
         $output = "file uploading error";
       }
 		}
-		mail('thomas.howard@gmail.com','upload test', $output);
 		exit($output);
 	}
 }
