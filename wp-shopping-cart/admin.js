@@ -513,7 +513,7 @@ function variation_value_list(id) {
 	
 	current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
 	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").attr("disabled", "true");
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&"+current_variations+"");
+	ajax.post("index.php",display_list,"admin=true&ajax=true&list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&"+current_variations+"");
 }
 
  
@@ -545,7 +545,7 @@ function add_variation_value_list(id)
 		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");
 	}
 	current_variations = jQuery("input.variation_ids").serialize();
-	ajax.post("index.php",display_list,"ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
+	ajax.post("index.php",display_list,"admin=true&ajax=true&list_variation_values=true&new_variation_id="+id+"&prefix=add_product_variations&"+current_variations+"");
 }
   
   
