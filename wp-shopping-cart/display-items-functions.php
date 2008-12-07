@@ -51,7 +51,7 @@ function price_and_stock_box($product_data=''){
         <input type='checkbox' onclick='hideelement(\"add_special\")' value='yes' name='special' id='add_form_special' ".(($product_data['special'] == 1) ? 'checked="true"' : '')."/>
         <label for='add_form_special'>".TXT_WPSC_SPECIAL."</label>
         <div style='display:".(($product_data['special'] == 1) ? 'block' : 'none').";' id='add_special'>
-          <input type='text' size='10' value='".$product_data['special_price']."' name='special_price'/>
+          <input type='text' size='10' value='".($product_data['price'] - $product_data['special_price'])."' name='special_price'/>
         </div>
       </td>
     </tr>

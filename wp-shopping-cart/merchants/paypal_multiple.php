@@ -84,7 +84,7 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 		$data['handling_'.$i] = 0;
 		$i++;
 	} else {
-		foreach($cart as $item) {
+		foreach((array)$cart as $item) {
 			$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
 			$product_data = $product_data[0];
 			if ((float)$item['price'] == 0 ) {

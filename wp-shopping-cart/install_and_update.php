@@ -564,7 +564,19 @@ function wpsc_uninstall_plugin() {
 		$option_list[] = 'wpsc_version'; 
 		$option_list[] = 'wpsc_incomplete_file_transfer'; 
 		$option_list[] = 'wpsc_ip_lock_downloads'; 
-		$option_list[] = 'wpsc_database_check'; 
+		$option_list[] = 'wpsc_database_check'; 		
+		$option_list[] = 'wpsc_default_category'; 
+		$option_list[] = 'wpsc_email_receipt'; 
+		$option_list[] = 'wpsc_email_admin'; 
+		$option_list[] = 'wpsc_email_receipt'; 
+		$option_list[] = 'wpsc_email_admin'; 
+		$option_list[] = 'shipwire'; 
+		$option_list[] = 'base_zipcode'; 
+		$option_list[] = 'custom_gateway_options'; 
+		$option_list[] = 'paypal_certified_apiuser'; 
+		$option_list[] = 'paypal_certified_apipass'; 
+		$option_list[] = 'paypal_certified_apisign'; 
+		
 		
 		foreach($option_list as $wpsc_option) {
 			delete_option($wpsc_option);

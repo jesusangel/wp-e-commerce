@@ -118,6 +118,7 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
 if($_POST['submit_action'] == 'add') {
   
   // well, there is simply no way to do this other than the blatantly obvious, so here it is
+  // this code is only used for Instincts Getshopped.com site, I would have used a plugin hook, but could think of no way to use one here.
   if(!is_callable('getshopped_item_limit') || (@getshopped_item_limit() !== false)) {
   
 		//Allen's Change for Google base

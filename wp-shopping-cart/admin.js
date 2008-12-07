@@ -160,7 +160,7 @@ jQuery('.meta-box-sortables').sortable( {
     	jQuery('.meta-box-sortables').each( function() {
     		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
     	} );
-    	jQuery.post( base_url+'/?ajax=true', postVars, function() {
+    	jQuery.post( base_url+'/?admin=true&ajax=true', postVars, function() {
     		postboxes.expandSidebar();
     	} );
     }
@@ -202,7 +202,7 @@ jQuery("#gallery_list").sortable({
 				
 				order = set.join(',');
 				prodid = jQuery('#prodid').val();
-				ajax.post("index.php",imageorderresults,"ajax=true&prodid="+prodid+"&imageorder=true&order="+order);
+				ajax.post("index.php",imageorderresults,"admin=true&ajax=true&prodid="+prodid+"&imageorder=true&order="+order);
 			},
 	'opacity':0.5
 });
@@ -326,7 +326,7 @@ jQuery(".remove_line").click(
 		function() {
 			jQuery(this).parent().remove();
 			file_hash = jQuery(this).siblings("input").val();
-			ajax.post("index.php",noresults,"ajax=true&del_file=true&del_file_hash="+file_hash);
+			ajax.post("index.php",noresults,"admin=true&ajax=true&del_file=true&del_file_hash="+file_hash);
 		}
 	);
 	boxes = ["price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download"];
@@ -480,7 +480,7 @@ function remove_variation_value(id,variation_value)
   element_count = document.getElementById("add_variation_values").childNodes.length;
   if(element_count > 1)
     {
-    ajax.post("index.php",delete_variation_value,"ajax=true&remove_variation_value=true&variation_value_id="+variation_value);
+    ajax.post("index.php",delete_variation_value,"admin=true&ajax=true&remove_variation_value=true&variation_value_id="+variation_value);
     target_element = document.getElementById(id);
     document.getElementById("add_variation_values").removeChild(target_element);
     }
@@ -560,7 +560,7 @@ function edit_variation_value_list(id) {
 		}
 	}	
 	product_id= jQuery("#prodid").val();
-	ajax.post("index.php",display_variation_forms,"ajax=true&edit_variation_value_list=true&variation_id="+id+"&product_id="+product_id);
+	ajax.post("index.php",display_variation_forms,"admin=true&ajax=true&edit_variation_value_list=true&variation_id="+id+"&product_id="+product_id);
  }
 
 function remove_variation_value_list(prefix,id){
@@ -576,7 +576,7 @@ function remove_variation_value_list(prefix,id){
   document.getElementById(prefix).removeChild(target_element);
   if(prefix == "add_product_variations") {
 		current_variations = jQuery("input.variation_ids").serialize();
-		ajax.post("index.php",redisplay_list,"ajax=true&redisplay_variation_values=true&"+current_variations+"");
+		ajax.post("index.php",redisplay_list,"admin=true&ajax=true&redisplay_variation_values=true&"+current_variations+"");
   }  
   return false;
 }
@@ -624,7 +624,7 @@ function remove_form_field(id,form_id) {
   var delete_variation_value=function(results) { }
   element_count = document.getElementById("form_field_form_container").childNodes.length;
   if(element_count > 1) {
-    ajax.post("index.php",delete_variation_value,"ajax=true&remove_form_field=true&form_id="+form_id);
+    ajax.post("index.php",delete_variation_value,"admin=true&ajax=true&remove_form_field=true&form_id="+form_id);
     target_element = document.getElementById(id);
     document.getElementById("form_field_form_container").removeChild(target_element);
   }
@@ -799,7 +799,7 @@ jQuery(window).load( function () {
  				serial = jQuery('div.groupWrapper').sortable('toArray');
  				category_id = jQuery("input#item_list_category_id").val();
  				
- 				ajax.post("index.php", noresults, "ajax=true&changeorder=true&category_id="+category_id+"&sort1="+serial);
+ 				ajax.post("index.php", noresults, "admin=true&ajax=true&changeorder=true&category_id="+category_id+"&sort1="+serial);
  			}
  		}
  	);
@@ -954,7 +954,7 @@ jQuery(document).ready(function(){
 			);
 			var r=confirm("Please confirm deletion");
 			if (r==true) {
-				ajax.post("index.php",reloadresults,"ajax=true&del_prod=true&del_prod_id="+ids);
+				ajax.post("index.php",reloadresults,"admin=true&ajax=true&del_prod=true&del_prod_id="+ids);
 			}
 		}
 	);
@@ -1125,7 +1125,7 @@ function imageUploadSuccess (file, results) {
         enablebuttons();
       }
     
-    ajax.post("index.php",imageorderresults,"ajax=true&prodid="+prodid+"&imageorder=true&order="+order+"");
+    ajax.post("index.php",imageorderresults,"admin=true&ajax=true&prodid="+prodid+"&imageorder=true&order="+order+"");
     
     
     enablebuttons();
@@ -1160,7 +1160,7 @@ function enablebuttons(){
 			if (r==true) {
 				img_id = jQuery(this).parent().parent('li').attr('id');
 				jQuery(this).parent().parent('li').remove();
-				ajax.post("index.php",noresults,"ajax=true&del_img=true&del_img_id="+img_id);
+				ajax.post("index.php",noresults,"admin=true&ajax=true&del_img=true&del_img_id="+img_id);
 			}
 		 }
 	);
@@ -1192,7 +1192,7 @@ function enablebuttons(){
 				}
 				order = set.join(',');
 				prodid = jQuery('#prodid').val();
-				ajax.post("index.php",imageorderresults,"ajax=true&prodid="+prodid+"&imageorder=true&order="+order+"&delete_primary=true");
+				ajax.post("index.php",imageorderresults,"admin=true&ajax=true&prodid="+prodid+"&imageorder=true&order="+order+"&delete_primary=true");
 				
 				jQuery(this).parents('li.first').attr('id', '0');
 			}
@@ -1261,7 +1261,7 @@ jQuery(document).ready(function(){
 		function() {
 			jQuery(this).parent().remove();
 			file_hash = jQuery(this).siblings("input").val();
-			ajax.post("index.php",noresults,"ajax=true&del_file=true&del_file_hash="+file_hash);
+			ajax.post("index.php",noresults,"admin=true&ajax=true&del_file=true&del_file_hash="+file_hash);
 		}
 	);
 	
@@ -1300,7 +1300,7 @@ jQuery(document).ready(function(){
 	    	jQuery('.meta-box-sortables').each( function() {
 	    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
 	    	} );
-	    	jQuery.post( base_url+'/?ajax=true', postVars, function() {
+	    	jQuery.post( base_url+'/?admin=true&ajax=true', postVars, function() {
 	    		postboxes.expandSidebar();
 	    	} );
 	    }
@@ -1331,13 +1331,13 @@ function wpsc_upload_switcher(target_state) {
     case 'flash':
     jQuery("table.browser-image-uploader").css("display","none");
     jQuery("table.flash-image-uploader").css("display","block");
-    ajax.post("index.php",noresults,"ajax=true&save_image_upload_state=true&image_upload_state=1");
+    ajax.post("index.php",noresults,"admin=true&ajax=true&save_image_upload_state=true&image_upload_state=1");
     break;
     
     case 'browser':
     jQuery("table.flash-image-uploader").css("display","none");
     jQuery("table.browser-image-uploader").css("display","block");
-    ajax.post("index.php",noresults,"ajax=true&save_image_upload_state=true&image_upload_state=0");
+    ajax.post("index.php",noresults,"admin=true&ajax=true&save_image_upload_state=true&image_upload_state=0");
     break;
   }
 }
