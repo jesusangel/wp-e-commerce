@@ -271,9 +271,7 @@ jQuery(".remove_line").click(
 //SWFUpload
 	filesizeLimit = 5120000;
 	
-// 	if (typeof SWFUpload != "undefined") {
-	  
-	  
+	if (typeof SWFUpload != "undefined") {
     var swfu = new SWFUpload({
       flash_url : WPSC_URL+'/js/swfupload.swf',
       button_placeholder_id : "spanButtonPlaceholder",
@@ -305,7 +303,7 @@ jQuery(".remove_line").click(
       upload_complete_handler : imageUploadComplete,
       queue_complete_handler : imageQueueComplete
     });
-// 	}
+ 	}
 
 	jQuery("#add-product-image").click(function(){
     swfu.selectFiles();

@@ -551,13 +551,23 @@ if (function_exists('add_object_page')){
 	echo "</table>\n\r";
 }
 echo "      </td><td class='secondcol'>\n\r";
-echo "        <div id='productform'>";
+echo "        <div id='productform' class='postbox'>";
 echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>\n\r";
-echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_EDITDETAILS." </strong></div>\n\r";
 
+if (function_exists('add_object_page')) {
+	echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP)."</h3>";
+	echo "<div class='inside'>";
+} else {
+	echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_EDITDETAILS." </strong></div>\n\r";
 echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP) ."</p></div>";
+}
+
+
 echo "        <div id='formcontent'>\n\r";
 echo "        </div>\n\r";
+if (function_exists('add_object_page')) {
+	echo "</div>";
+}
 echo "</form>\n\r";
 echo "        </div>\n\r";
 ?>
@@ -569,7 +579,7 @@ if (function_exists('add_object_page')) {
 	echo "<div class='inside'>";
 } else {
 	echo "<div id='additem'>";
-	echo "<div class='categorisation_title'><strong class='form_group'><?php echo TXT_WPSC_ADDDETAILS;?></strong></div>";
+	echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_ADDDETAILS."</strong></div>";
 }
 ?>
   <form method='POST' enctype='multipart/form-data' class='additem'>
@@ -679,6 +689,9 @@ if(function_exists("getimagesize")) {
 <?php
 echo "      </td></tr>\n\r";
 echo "     </table>\n\r";
+if (function_exists('add_object_page')) {
+	echo "</div>";
+}
   ?>
 </div>
 </div>

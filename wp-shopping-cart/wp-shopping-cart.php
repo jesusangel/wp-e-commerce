@@ -2220,7 +2220,7 @@ add_filter('page_rewrite_rules', 'wpsc_product_permalinks');
  
 function wpsc_replace_the_title($input) {
   global $wpdb, $wp_query;
-  echo "<pre>".print_r($wp_query->query_vars,true)."</pre>";
+  //echo "<pre>".print_r($wp_query->query_vars,true)."</pre>";
   //echo "<pre>".print_r($input,true)."</pre>";
 	if(is_numeric($wp_query->query_vars['product_category']) && ($input == $wp_query->post->post_title) ) {
 		// using debug_backtrace here is not a good way of doing this, but wordpress provides no way to differentiate between the various uses of this plugin hook.
