@@ -1136,7 +1136,7 @@ if($product_list != null)
 	
   }
 if (isset($_GET['catid'])) {
-	echo "</table>";
+// 	echo "</tahe ble>";
 }
 if (function_exists('add_object_page')){
 	echo "</div>"; //id major-publishing-actions ends
