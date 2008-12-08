@@ -42,7 +42,7 @@ if(!isset($_GET['result'])){
    echo " ".TXT_WPSC_IF_USER_CHECKOUT."<a href='#' onclick='jQuery(\"#checkout_login_box\").slideToggle(\"fast\"); return false;'>".TXT_WPSC_LOG_IN."</a>";
    echo "<div id='checkout_login_box'>";
    ?>
-<form name="loginform" id="loginform" action="wp-login.php" method="post">
+<form name="loginform" id="loginform" action="<?php echo get_option('siteurl'); ?>/wp-login.php" method="post">
   <label>Username:<br /><input type="text" name="log" id="log" value="" size="20" tabindex="1" /></label><br />
   <label>Password:<br /> <input type="password" name="pwd" id="pwd" value="" size="20" tabindex="2" /></label>
   <input type="submit" name="submit" id="submit" value="Login &raquo;" tabindex="4" />
