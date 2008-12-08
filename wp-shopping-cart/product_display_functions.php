@@ -427,8 +427,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         $product['price'] = $variations_output[1];
 			}
 			
-			$extras_processor = new extras();
-			$extras_output = $extras_processor->display_product_extras($product['id'],false,false,true);
+			//$extras_processor = new extras();
+			//$extras_output = $extras_processor->display_product_extras($product['id'],false,false,true);
 			
 			$output.="<p class='wpsc_extras_forms'>".$extras_output."</p>";
 			

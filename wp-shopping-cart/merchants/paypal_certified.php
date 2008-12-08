@@ -80,6 +80,10 @@ function submit_paypal_certified()
     {
     update_option('paypal_certified_apisign', $_POST['paypal_certified_apisign']);
     }
+    
+  foreach((array)$_POST['paypal_form'] as $form => $value) {
+    update_option(('paypal_form_'.$form), $value);
+	}
   return true;
   }
 

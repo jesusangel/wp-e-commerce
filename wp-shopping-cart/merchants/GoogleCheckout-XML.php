@@ -58,11 +58,11 @@ function gateway_google($seperator, $sessionid)
 		$extras_data = $wpdb->get_results($extras_sql,ARRAY_A);
 		$extras_count = count($extras_data);
 		$price = nzshpcrt_calculate_tax($item['price'], $_SESSION['selected_country'], $_SESSION['selected_region']);
-		if ($extras_count>0) {
-			foreach ($extras_data as $extras_datum) {
-				$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$item['prodid']."' AND `extras_id` = '".$extras_datum['extra_id']."' LIMIT 1");
-			}
-		}
+			// 		if ($extras_count>0) {
+			// 			foreach ($extras_data as $extras_datum) {
+			// 				$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$item['prodid']."' AND `extras_id` = '".$extras_datum['extra_id']."' LIMIT 1");
+			// 			}
+			// 		}
 		//exit("------->".$price);
 		$local_currency_shipping = $item['pnp'];
 		$base_shipping = $purchase_log[0]['base_shipping'];

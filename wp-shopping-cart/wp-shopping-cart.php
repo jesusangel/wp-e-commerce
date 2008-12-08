@@ -42,8 +42,8 @@ define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
 if(isset($wpmu_version)) {
     define('IS_WPMU', 1);
 }
-
-//exit("");
+//phpinfo();
+//exit("<pre>");
 
 if(WPSC_DEBUG === true) {
 	function microtime_float() {
@@ -81,7 +81,7 @@ if(get_option('language_setting') != '') {
   require(WPSC_FILE_PATH.'/languages/EN_en.php');
 }
 require(WPSC_FILE_PATH.'/classes/variations.class.php');
-require(WPSC_FILE_PATH.'/classes/extra.class.php');
+//require(WPSC_FILE_PATH.'/classes/extra.class.php');
 // require(WPSC_FILE_PATH.'/classes/http_client.php');
 require(WPSC_FILE_PATH.'/classes/mimetype.php');
 require(WPSC_FILE_PATH.'/classes/cart.class.php');
