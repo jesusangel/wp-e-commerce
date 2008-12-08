@@ -942,7 +942,7 @@ function wpsc_save_postboxes_state(page, container) {
 
 jQuery(document).ready(function(){
 	
-	jQuery('.deleteproducts > button.button').click(
+	jQuery('.deleteproducts > button').click(
 		function () {
 			var ids='0';
 			jQuery('.deletecheckbox:checked').each(

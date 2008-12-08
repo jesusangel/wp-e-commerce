@@ -1079,4 +1079,16 @@ function edit_multiple_image_gallery($id) {
   return $output;
 }
 
+
+
+function wpsc_product_item_row() {
+/*
+"<tr class='products'>	<td class='imagecol' style='width: 25%;'>
+<input type='checkbox' value='3' class='deletecheckbox' name='productdelete[]'/><img width='35' height='35' alt='Praying Mantis' title='Drag to a new position' src='http://apps.instinct.co.nz/wp_2.6.5/wp-content/uploads/wpsc/product_images/thumbnails/mantis-3.jpg'/></td><td width='25%'><a onclick='filleditform(3);return false;' href='#'>Praying Mantis</a></td><td id='3'><span class='pricedisplay' id='3' title='Click to edit...'>$32.00</span>            </td><td>
+
+<a href='?page=wp-shopping-cart/display-items.php&amp;catid=1'>Arthropods</a></td>				
+</tr>
+";*/
+}
+
 ?>

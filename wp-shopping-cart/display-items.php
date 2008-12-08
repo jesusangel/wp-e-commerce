@@ -118,7 +118,6 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
 if($_POST['submit_action'] == 'add') {
   
   // well, there is simply no way to do this other than the blatantly obvious, so here it is
-  // this code is only used for Instincts Getshopped.com site, I would have used a plugin hook, but could think of no way to use one here.
   if(!is_callable('getshopped_item_limit') || (@getshopped_item_limit() !== false)) {
   
 		//Allen's Change for Google base
@@ -687,8 +686,17 @@ if($_POST['submit_action'] == "edit") {
 }
 
 if(is_numeric($_GET['deleteid'])) { 
-  $wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id` = '".$_GET['deleteid']."' AND `meta_key` IN ('url_name')");  
-  $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET  `active` = '0' WHERE `id`='".$_GET['deleteid']."' LIMIT 1");
+  	$wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id` = '".$_GET['deleteid']."' AND `meta_key` IN ('url_name')");  
+  	$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET  `active` = '0' WHERE `id`='".$_GET['deleteid']."' LIMIT 1");
+	product_tag_init();
+	$term = wp_get_object_terms($_GET['deleteid'], 'product_tag');
+	/*
+
+	echo "---->".is_taxonomy('product_tag');
+	echo ("<pre>".print_r($wp_taxonomies,1)."</pre>");
+*/
+	if ($term->errors == '')
+		wp_delete_object_term_relationships($_GET['deleteid'], 'product_tag');
 }
 
 
@@ -1127,7 +1135,9 @@ if($product_list != null)
 	
 	
   }
-
+if (isset($_GET['catid'])) {
+	echo "</table>";
+}
 if (function_exists('add_object_page')){
 	echo "</div>"; //id major-publishing-actions ends
 	echo "</div>"; //class inside ends
@@ -1135,6 +1145,12 @@ if (function_exists('add_object_page')){
 } else {
 	echo "</table>\n\r";
 }
+//No product closing table fix
+$product_data_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}product_list WHERE active='1'");
+if ($product_data_count < 1){
+	echo "</table>";	
+}
+
 //First column ends here
 echo "      </td><td class='secondcol'>\n\r";
 echo "<form method='POST' enctype='multipart/form-data' name='editproduct$num'>";
