@@ -839,7 +839,10 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			//echo "<pre>".print_r($quotes,1)."</pre>";
 			foreach ($quotes[$_POST['key1']] as $quote) {
 				if ($quote[$_POST['key']] !== null) {
-					echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);
+					if ($_SESSION['wpsc_discount'] > 0)
+						echo nzshpcrt_currency_display($total+$quote[$_POST['key']]-$_SESSION['wpsc_discount'],1);
+					else
+						echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);
 					echo "---".nzshpcrt_currency_display($quote[$_POST['key']],1);
 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
 					$_SESSION['quote_shipping']= $quote[$_POST['key']];
