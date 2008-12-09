@@ -21,29 +21,29 @@ if($_POST['custom_shipping_options'] != null) {
 	update_option('custom_shipping_options', $_POST['custom_shipping_options']);
 	$changes_made = true;
 }
-		if (($_POST != array()) && ($_POST != '')) {
-			if($_POST['do_not_use_shipping'] == 1) {
-				update_option('do_not_use_shipping', 1);
-			} else if($_POST['do_not_use_shipping'] == 0) {
-				update_option('do_not_use_shipping', 0);
-			}
-			if(isset($_POST['base_zipcode'])) {
-				update_option('base_zipcode', $_POST['base_zipcode']);
-			}
-			
-			if($_POST['shipwire'] == 1) {
-				update_option('shipwire', 1);
-			} else {
-				update_option('shipwire', 0);
-			}
-			
-			if($_POST['shipwireemail'] != null) {
-				update_option('shipwireemail', $_POST['shipwireemail']);
-			}
-			
-			if($_POST['shipwirepassword'] != null) {
-				update_option('shipwirepassword', $_POST['shipwirepassword']);
-			}
+
+		if($_POST['do_not_use_shipping'] == 1) {
+			update_option('do_not_use_shipping', 1);
+		} else {
+			update_option('do_not_use_shipping', 0);
+		}
+		
+		if(isset($_POST['base_zipcode'])) {
+			update_option('base_zipcode', $_POST['base_zipcode']);
+		}
+		
+		if($_POST['shipwire'] == 1) {
+			update_option('shipwire', 1);
+		} else {
+			update_option('shipwire', 0);
+		}
+
+		if($_POST['shipwireemail'] != null) {
+			update_option('shipwireemail', $_POST['shipwireemail']);
+		}
+	
+		if($_POST['shipwirepassword'] != null) {
+			update_option('shipwirepassword', $_POST['shipwirepassword']);
 		}
 
 if(isset($_POST['custom_gateway'])) {
@@ -95,6 +95,8 @@ foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 }
 $shippinglist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER."</option>" . $shippinglist;
 
+
+
 $selected[get_option('payment_method')] = "checked='true'";
 if ($_GET['shipping_options']=='true') {
 ?>
@@ -103,13 +105,10 @@ function selectgateway() {
 	document.forms.shippingopt.submit();
 }
 </script>
-
 <div class="wrap">
-<div class='metabox-holder'>
 		<form name='shippingopt' method='POST' id='shipping_options' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
 		<input type='hidden' name='shipping_submits' value='true'>
 	<?php 
-	
 		if (get_option('custom_gateway') == 1){ 
 			$custom_gateway_hide="style='display:block;'";
 			$custom_gateway1 = 'checked="true"';
@@ -119,22 +118,16 @@ function selectgateway() {
 		}
 	?>
   <h2 class='wpsc_special'><?php echo TXT_WPSC_SHIPPINGOPTIONS;?></h2>
-			<?php if (IS_WP27) { ?>
-				<div class='postbox'>
-				<h3 class='hndle'><?=TXT_WPSC_OPTIONS_GENERAL_HEADER?></h3>
-				<div class='inside'>
-			<?php } else { ?>
+
 			<div class="categorisation_title">
-			<strong class="form_group">
-			<?=TXT_WPSC_OPTIONS_GENERAL_HEADER?>
-					</strong>
-			</div>
-			<br class="clear"/>
-			<?php }	?>
 			<div class="alignright">
 <!-- 				<a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span> </a> -->
 			</div>
-					
+					<strong class="form_group">
+			<?=TXT_WPSC_OPTIONS_GENERAL_HEADER?>
+					</strong>
+			<br class="clear"/>
+		</div>
 
 				<table class='wpsc_options form-table'>
 				<tr>
@@ -147,15 +140,16 @@ function selectgateway() {
 				$do_not_use_shipping1 = "";
 				$do_not_use_shipping2 = "";
 				switch($do_not_use_shipping) {    
-					case 'true':
+					case 1:
 						$do_not_use_shipping1 = "checked ='true'";
 						break;
 												
-					case 'false':
+					case 0:
 					default:
 						$do_not_use_shipping2 = "checked ='true'";
 						break;
 				}
+						
 				?>
 						<input type='radio' value='0' name='do_not_use_shipping' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
 				<input type='radio' value='1' name='do_not_use_shipping' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
@@ -216,23 +210,12 @@ function selectgateway() {
 										</td>
 										</tr>
 										</table>
-<!-- 										For 2.7 postbox -->
-										</div>
-										</div>
-										
 		<table id='gateway_options' >
 			<tr>
 				<td class='select_gateway'>
-					<?php if (IS_WP27) { ?>
-						<div class='postbox'>
-						<h3 class='hndle'><?=TXT_WPSC_SHIPPING_MODULES?></h3>
-						<div class='inside'>
-					<?php } else { ?>
-					
 					<div class="categorisation_title">
 					  <strong class="form_group"><?php echo TXT_WPSC_SHIPPING_MODULES; ?></strong>
 					</div>
-					<?php } ?>
 					<p>
 						<?php echo TXT_WPSC_CHOOSE_SHIPPING_MODULES; ?>
 					</p>
@@ -253,26 +236,15 @@ function selectgateway() {
 						<input type='hidden' value='true' name='update_gateways'/>
 						<input type='submit' value='Update &raquo;' name='updateoption'/>
 					</div>
-					</div>
 				</td>
 				
 				<td class='gateway_settings' rowspan='2'>
-					<?php if (IS_WP27) { ?>
-						<div class='postbox'>
-						<h3 class='hndle'><?=TXT_WPSC_CONFIGURE_SHIPPING_MODULES?></h3>
-						<div  class='inside'>
-						<table>
-					<?php } else { ?>
 					<table class='form-table'>
 						<tr class="firstrowth">
 							<td colspan='2' style='border-bottom: none;'>
 								<strong class="form_group"><?php echo TXT_WPSC_CONFIGURE_SHIPPING_MODULES;?></strong>
 							</td>
 						</tr>
-					<?php 
-						} 	
-					?>
-					
 						<tr>
 							<td style='border-top: none;'>
 								<h4><?php echo TXT_WPSC_SHIPPING_MODULES;?></h4>
@@ -294,10 +266,6 @@ function selectgateway() {
 							</td>
 						</tr>
 					</table>
-					<?php if (IS_WP27) { ?>
-					</div>
-					</div>
-					<?php } ?>
 				</td>
 			</tr>
 			<!--<tr>
@@ -309,7 +277,6 @@ function selectgateway() {
 			</tr>-->
 		</table>
 	</form>
-	</div>
 </div>
 				
 <?php
