@@ -29,7 +29,7 @@ function widget_wp_shopping_cart($args) {
     echo "</ul>\n\r";
     
     echo $after_widget;
-    echo "<br style='clear:both;'>";
+//     echo "<br style='clear:both;'>";
     }
 
 function widget_wp_shopping_cart_control() {
