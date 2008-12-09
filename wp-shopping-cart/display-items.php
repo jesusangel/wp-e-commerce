@@ -1137,7 +1137,7 @@ if($product_list != null)
   }
 $product_data_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}product_list WHERE active='1'");
 if (isset($_GET['catid'])) {
-	if ($product_data_count >= 1)
+	if (($product_data_count >= 1) && (IS_WP27))
  		echo "</table>";
 }
 if (function_exists('add_object_page')){
@@ -1149,7 +1149,7 @@ if (function_exists('add_object_page')){
 }
 //No product closing table fix
 
-if ($product_data_count < 1){
+if (($product_data_count < 1)&& (IS_WP27)){
 	echo "</table>";	
 }
 
