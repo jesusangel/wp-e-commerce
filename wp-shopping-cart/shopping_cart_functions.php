@@ -139,7 +139,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$google_cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	}
 	$affliate_no = 0;
-
+	
 	foreach($cart as $cart_item) {
 		$product_id = $cart_item->product_id;
 		$quantity = $cart_item->quantity;
@@ -163,6 +163,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	
 	//echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
 	$product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+	
 	if($product['donation'] == 1) {
         if (array_search("google",get_option('custom_gateway_options')) !== false) {
 					$google_unit_price = $cart_item->donation_price;

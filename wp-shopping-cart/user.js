@@ -565,55 +565,57 @@ function do_nothing() {
 
 jQuery(document).ready(
 	function() {
-		var max_height = 0;
-		var min_offset = 9999;
-		var max_left_offset = 0;
-		var top_offset = 0;
-		jQuery("div.product_grid_item").each(
-			function() {
-				jQuery(this).css('margin','0');
-				if (jQuery(this).height() > max_height) {
-					max_height = jQuery(this).height();
+		if (jQuery("#openair").val() == 1) {
+			var max_height = 0;
+			var min_offset = 9999;
+			var max_left_offset = 0;
+			var top_offset = 0;
+			jQuery("div.product_grid_item").each(
+				function() {
+					jQuery(this).css('margin','0');
+					if (jQuery(this).height() > max_height) {
+						max_height = jQuery(this).height();
+					}
+					var offset = jQuery(this).offset();
+					if (offset.left <= min_offset) {
+						min_offset = offset.left;
+					}
+					if (offset.top > top_offset) {
+						top_offset = offset.top;
+					}
+					if (offset.left > max_left_offset) {
+						max_left_offset = offset.left;
+					}
 				}
-				var offset = jQuery(this).offset();
-				if (offset.left <= min_offset) {
-					min_offset = offset.left;
+			);
+			
+			jQuery("div.product_grid_item:last").each(
+				function() {
+					var offset = jQuery(this).offset();
+					
+					if (offset.left != max_left_offset) {
+						jQuery(this).css('border-right','1px solid #ddd');
+					}
 				}
-				if (offset.top > top_offset) {
-					top_offset = offset.top;
+			);
+			
+			jQuery("div.product_grid_item").each(
+				function() {
+					
+					
+					
+					var offset = jQuery(this).offset();
+					if (offset.left == min_offset) {
+						setTimeout('do_nothing', 200);
+						jQuery(this).css('border-left','0px solid #ddd');
+					}
+					
+					if (offset.top == top_offset) {
+						jQuery(this).css('border-bottom','0px solid #ddd');
+					}
+					jQuery(this).height(max_height+30);
 				}
-				if (offset.left > max_left_offset) {
-					max_left_offset = offset.left;
-				}
-			}
-		);
-		
-		jQuery("div.product_grid_item:last").each(
-			function() {
-				var offset = jQuery(this).offset();
-				
-				if (offset.left != max_left_offset) {
-					jQuery(this).css('border-right','1px solid #ddd');
-				}
-			}
-		);
-		
-		jQuery("div.product_grid_item").each(
-			function() {
-				
-				
-				
-				var offset = jQuery(this).offset();
-				if (offset.left == min_offset) {
-					setTimeout('do_nothing', 200);
-					jQuery(this).css('border-left','0px solid #ddd');
-				}
-				
-				if (offset.top == top_offset) {
-					jQuery(this).css('border-bottom','0px solid #ddd');
-				}
-				jQuery(this).height(max_height+30);
-			}
-		);
+			);
+		}
 	}
 );
