@@ -681,7 +681,7 @@ function wpsc_right_now() {
   $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
   $pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
   
-  $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('2')");
+  $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('2' ,'3', '4')");
   $accept_sales_unit = (($accept_sales == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
 
   
@@ -743,7 +743,7 @@ function wpsc_right_now() {
 		$output .= "<td class='b'>";
 		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$accept_sales."</a>";
 		$output .= "<td>";
-		$output .= "<td class='last t approved'>Cleared ";
+		$output .= "<td class='last t approved'>Closed ";
 		$output .= ucfirst($accept_sales_unit);
 		$output .= "<td>";
 		$output .= "</tr>";

@@ -1135,8 +1135,10 @@ if($product_list != null)
 	
 	
   }
+$product_data_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}product_list WHERE active='1'");
 if (isset($_GET['catid'])) {
-// 	echo "</tahe ble>";
+	if ($product_data_count >= 1)
+ 		echo "</table>";
 }
 if (function_exists('add_object_page')){
 	echo "</div>"; //id major-publishing-actions ends
@@ -1146,7 +1148,7 @@ if (function_exists('add_object_page')){
 	echo "</table>\n\r";
 }
 //No product closing table fix
-$product_data_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}product_list WHERE active='1'");
+
 if ($product_data_count < 1){
 	echo "</table>";	
 }

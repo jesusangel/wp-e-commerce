@@ -1137,7 +1137,7 @@ table#gateway_options tr td.select_gateway {
   width: 360px;
   height: 360px;
   min-width: 360px;
-	background-color:#EAF3FA;
+/* 	background-color:#EAF3FA; */
   padding: 0px;
 }
 table#gateway_options tr td.select_gateway div.gateway_settings {

@@ -25,7 +25,7 @@ class weightrate {
 	}
 	
 	function getForm() {
-		$output.="<tr><th>Total weight(in Pound)</th><th>Shipping price</th></tr>";
+		$output.="<tr><th>Total weight(in Pounds)</th><th>Shipping price</th></tr>";
 		$layers = get_option("weight_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {

@@ -27,7 +27,9 @@ function widget_wp_shopping_cart($args) {
     nzshpcrt_shopping_basket("", 4);
     echo "  </li>\n\r";
     echo "</ul>\n\r";
+    
     echo $after_widget;
+    echo "<br style='clear:both;'>";
     }
 
 function widget_wp_shopping_cart_control() {

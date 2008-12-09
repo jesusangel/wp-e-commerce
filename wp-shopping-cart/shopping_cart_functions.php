@@ -139,9 +139,11 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$google_cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	}
 	$affliate_no = 0;
+
 	foreach($cart as $cart_item) {
 		$product_id = $cart_item->product_id;
 		$quantity = $cart_item->quantity;
+		$google_product_id[] = $cart_item->product_id;
 			if(count($cart_item->product_variations) >= 1) {
 				$variation_list = "&nbsp;(";
 				$i = 0;
@@ -274,7 +276,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	}
 
     if ($discount > 0) {
-			if (array_search("google",get_option('custom_gateway_options')) !== false) {
+			if (array_search("google", (array)get_option('custom_gateway_options')) !== false) {
 				$google_item = new GoogleItem(utf8_decode("Coupon Code: '".$_SESSION['coupon_num']."'"), utf8_decode("A coupon redeem"),1,	-$discount); 
 				$google_item->SetMerchantPrivateItemData("Coupon Deduction");
 				$google_cart->AddItem($google_item);
@@ -282,11 +284,13 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		}
 	 if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 		 if (!$total_shipping) $total_shipping = 0;
-		 $pnp=$wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".(int)$google_product_id.")");
+		 $google_product_id = implode(',', $google_product_id);
+		 $pnp += $wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$google_product_id.")");
+		 $international_pnp += $wpdb->get_var("SELECT SUM(international_pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$google_product_id.")");
 		 $local_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country'));
 		 $google_local_shipping = new GoogleFlatRateShipping("Local Shipping", $local_shipping_price+$pnp);
 		 $international_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country')."-");
-		 $google_international_shipping = new GoogleFlatRateShipping("International Shipping", $international_shipping_price+$pnp);
+		 $google_international_shipping = new GoogleFlatRateShipping("International Shipping", $international_shipping_price+$international_pnp);
 		 $Gfilter2 = new GoogleShippingFilters();
 		 $Gfilter = new GoogleShippingFilters();
 		 $google_checkout_shipping=get_option("google_shipping_country");
@@ -360,7 +364,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$google_cart->SetContinueShoppingUrl($continueshoppingurl);
 		$google_cart->SetEditCartUrl(get_option('shopping_cart_url'));
 		$_SESSION['google_shopping_cart']=serialize($google_cart);
-// 		$output .= $google_cart->getXML();
+//		$output .= $google_cart->getXML();
 
 		$output .= "<br>".$google_cart->CheckoutButtonCode($google_button_size);
 	}

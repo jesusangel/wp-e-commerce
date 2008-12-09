@@ -416,11 +416,12 @@ if($_GET['filter'] !== 'true') {
         <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo TXT_WPSC_UPGRADE_TO_GOLD; ?></a><?php echo TXT_WPSC_UNLEASH_MORE; ?>
         </div>
       </div>
-      </div>
-      </div>
+      
       <?php
     }
     ?>
+    </div>
+      </div>
 <?php
 	echo "</div>";
 	echo "<div id='post-body' class='has-sidebar'>

@@ -2,6 +2,11 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+define('TXT_DISPLAY_DESCRIPTION', 'Display Description');
+define('TXT_DISPLAY_ADDTOCART', 'Display "Add To Cart" Button');
+define('TXT_DISPLAY_MOREDETAILS', 'Display "More Details" Button');
+
 define('TXT_WPSC_GOOGLE_BASE', 'Google Base');
 define('TXT_WPSC_GRANT_ACCESS', 'Grant Access');
 define('TXT_WPSC_LABEL_CONTROL', 'Label Control');

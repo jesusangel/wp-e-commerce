@@ -825,7 +825,7 @@ global $closed_postboxes;
 function wpsc_meta_boxes(){
 	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('variation', 'Variations', 'variation_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('shipping', 'Shippings', 'shipping_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('shipping', 'Shipping', 'shipping_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('advanced', 'Advanced Settings', 'advanced_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('product_download', 'Product Download', 'product_download_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('product_image', 'Product Images', 'product_image_box', 'wp-shopping-cart/display-items', 'normal', 'high');

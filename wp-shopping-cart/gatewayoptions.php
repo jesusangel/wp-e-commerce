@@ -97,6 +97,7 @@ function selectgateway() {
 }
 </script>
 <div class="wrap">
+<div class='metabox-holder'>
 		<form name='gatewayopt' method='POST' id='gateway_options_tbl' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
 		<input type='hidden' name='gateway_submits' value='true'>
 	<?php 
@@ -124,9 +125,16 @@ function selectgateway() {
       
       <tr>
 				<td class='select_gateway'>
+				<?php if (IS_WP27) { ?>
+				<div class='postbox'>
+				<h3 class='hndle'><?=TXT_WPSC_OPTIONS_GENERAL_HEADER?></h3>
+				<div class='inside'>
+			<?php } else { ?>
 					<div class="categorisation_title">
 					  <strong class="form_group"><?php echo TXT_WPSC_PAYMENT_GATEWAYS; ?></strong>
 					</div>
+			<?php }	?>
+					
 				  <p>
 				  <?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?>
 				  </p>
@@ -156,15 +164,21 @@ function selectgateway() {
 				</td>
 				
 				<td class='gateway_settings' rowspan='2'>										
-					<?php
-
-					?>					
+					<?php if (IS_WP27) { ?>
+						<div class='postbox'>
+						<h3 class='hndle'><?=TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY?></h3>
+						<div  class='inside'>
+						<table class='form-table'>
+					<?php } else { ?>					
 					<table class='form-table'>
 					<tr class="firstrowth">
 					  <td colspan='2' style='border-bottom: none;'>
 					    <strong class="form_group"><?php echo TXT_WPSC_CONFIGURE_PAYMENT_GATEWAY;?></strong>
 					  </td>
 					</tr>
+					<?php 
+						} 	
+					?>
 					<tr>
 					  <td style='border-top: none;'>
 							<h4><?php echo TXT_WPSC_PAYMENTGATEWAY2;?></h4>
@@ -185,6 +199,10 @@ function selectgateway() {
 						</td>
 					</tr>
 					</table>
+					<?php if (IS_WP27){ ?>
+					</div>
+					</div>
+					<?php } ?>
 				</td>
       </tr>
       
@@ -204,7 +222,7 @@ function selectgateway() {
   
   </form>
 </div>
-								
+</div>						
 <?php
 }
 ?>
