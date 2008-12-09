@@ -571,6 +571,7 @@ jQuery(document).ready(
 		var top_offset = 0;
 		jQuery("div.product_grid_item").each(
 			function() {
+				jQuery(this).css('margin','0');
 				if (jQuery(this).height() > max_height) {
 					max_height = jQuery(this).height();
 				}
@@ -590,9 +591,7 @@ jQuery(document).ready(
 		jQuery("div.product_grid_item:last").each(
 			function() {
 				var offset = jQuery(this).offset();
-				if (offset.top == top_offset) {
-					jQuery(this).css('border-bottom','0px solid #ddd');
-				}
+				
 				if (offset.left != max_left_offset) {
 					jQuery(this).css('border-right','1px solid #ddd');
 				}
@@ -601,14 +600,19 @@ jQuery(document).ready(
 		
 		jQuery("div.product_grid_item").each(
 			function() {
-				jQuery(this).height(max_height+30);
 				
-				jQuery(this).css('margin','0');
+				
+				
 				var offset = jQuery(this).offset();
 				if (offset.left == min_offset) {
 					setTimeout('do_nothing', 200);
 					jQuery(this).css('border-left','0px solid #ddd');
 				}
+				
+				if (offset.top == top_offset) {
+					jQuery(this).css('border-bottom','0px solid #ddd');
+				}
+				jQuery(this).height(max_height+30);
 			}
 		);
 	}
