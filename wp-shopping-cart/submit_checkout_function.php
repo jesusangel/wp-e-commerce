@@ -344,7 +344,7 @@ function nzshpcrt_submit_checkout() {
       $wpdb->query($cartsql);
       
       // get the cart id
-      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_variations` LIMIT 1");
+      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
       
       
       $extra_var='';

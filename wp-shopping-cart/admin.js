@@ -699,14 +699,14 @@ function log_submitform(id) {
     eval(results);
   }
   frm = document.getElementById(id);
-  ajax.post("index.php?ajax=true&log_state=true",get_log_results,ajax.serialize(frm));
+  ajax.post("index.php?admin=true&ajax=true&log_state=true",get_log_results,ajax.serialize(frm));
   return false;
 }
 
 function save_tracking_id(id) {
   value1 = document.getElementById('tracking_id_'+id).value;
   value1 ="id="+id +"&value="+value1;
-  ajax.post("index.php?ajax=true&save_tracking_id=true",noresults,value1);
+  ajax.post("index.php?admin=true&ajax=true&save_tracking_id=true",noresults,value1);
   return false;
 }
   
@@ -838,9 +838,9 @@ function suspendsubs(user_id)
 	var comm =jQuery("#suspend_subs"+user_id).attr("checked");
 	//alert(comm);
 	if (comm == true){
-		ajax.post("index.php",noresults,"ajax=true&log_state=true&suspend=true&value=1&id="+user_id);
+		ajax.post("index.php",noresults,"admin=true&ajax=true&log_state=true&suspend=true&value=1&id="+user_id);
 	} else {		
-		ajax.post("index.php",noresults,"ajax=true&log_state=true&suspend=true&value=2&id="+user_id);
+		ajax.post("index.php",noresults,"admin=true&ajax=true&log_state=true&suspend=true&value=2&id="+user_id);
 	}
 	return false;
 }

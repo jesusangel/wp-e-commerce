@@ -324,65 +324,10 @@ function wpsc_shipping_country_list($selected_country = null) {
 		$_SESSION['nzshpcrt_totalprice'] = $total;
 	}
   
-// 	if (get_option('payment_gateway') == 'google') {
-// 		$google_cart = unserialize($_SESSION['google_shopping_cart']);
-// 		if($_SESSION['coupon_num']){
-// 			$overall_total = nzshpcrt_overall_total_price_numeric(null,true);
-// 			$discount = $overall_total - nzshpcrt_apply_coupon($overall_total,$_SESSION['coupon_num']);
-// 			$total_after_discount = $overall_total-$discount;
-// 			$_SESSION['wpsc_discount']= $discount;
-// 		} else {
-// 			$_SESSION['wpsc_discount']= 0;
-// 		}
-// 	 
-// 		if ($_POST["quantity"]) {
-// 		
-// 			$pnp=$wpdb->get_var("SELECT SUM(`pnp`) FROM `".$wpdb->prefix."product_list` WHERE `id` IN ('".(int)$cart_item->product_id."')");
-// 			$local_shipping_price= nzshpcrt_determine_base_shipping(0, get_option('base_country'));
-// 			$google_local_shipping = $local_shipping_price+$pnp*$_POST["quantity"];
-// 			$pnp=$wpdb->get_var("SELECT SUM(`international_pnp`) FROM `".$wpdb->prefix."product_list` WHERE `id` IN ('".(int)$cart_item->product_id."')");
-// 			$international_shipping_price= nzshpcrt_determine_base_shipping(0, get_option('base_country')."-");
-// 			$google_international_shipping = $international_shipping_price+$pnp*$_POST["quantity"];
-// 			$google_cart->shipping_arr[0]->price=$google_local_shipping;
-// 			$google_cart->shipping_arr[1]->price=$google_international_shipping;
-// 			$google_cart->item_arr[$_POST["key"]]->quantity=$_POST["quantity"];
-// 		}
-// 	
-// 		$state_name = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."region_tax WHERE country_id='136'",ARRAY_A);
-// // 	echo "<pre>".print_r($tax_rate,1)."</pre>";
-// 	foreach ($state_name as $state) {
-// // 		$tax_rate = $wpdb->get_results("SELECT tax FROM ".$wpdb->prefix."region_tax WHERE id='".$state['id']."'",ARRAY_A);
-// 		$tax_rule = new GoogleDefaultTaxRule($state['tax']/100);
-// 		$tax_rule->SetStateAreas($state['code']);
-// 		$google_cart->AddDefaultTaxRules($tax_rule);
-// 	}
-// 	 
-// 	if ($discount > 0) {
-// 		$google_item = new GoogleItem(utf8_decode("Coupon Code: '".$_SESSION['coupon_num']."'"),      // Item name
-// 				utf8_decode("A coupon redeem"), // Item      description
-// 						1, // Quantity
-// 								-$discount); // Unit price
-// 		//echo serialize($cart_item->product_variations);
-// 		$google_item->SetMerchantPrivateItemData("Coupon Deduction");
-// 		$google_cart->AddItem($google_item);
-// 	}
-// 	 //exit("---><pre>".print_r($_SESSION,1)."</pre>");
-// 	 if (get_option('payment_gateway') == 'google') {
-// 		 if (get_option('google_button_size') == '0'){
-// 			 $google_button_size = 'BIG';
-// 		 } elseif(get_option('google_button_size') == '1') {
-// 			 $google_button_size = 'MEDIUM';
-// 		 } elseif(get_option('google_button_size') == '2') {
-// 			 $google_button_size = 'SMALL';
-// 		 }
-// 	 }
-// 	 echo "<br>".$google_cart->CheckoutButtonCode($google_button_size);
-// 	} else {
-		echo "<h2>".TXT_WPSC_ENTERDETAILS."</h2>";
-// 	} 
+	echo "<h2>".TXT_WPSC_ENTERDETAILS."</h2>";
 	include('checkout.php');
-		} else {
-			echo TXT_WPSC_NOITEMSINTHESHOPPINGCART;
-		}
-		?>
+} else {
+	echo TXT_WPSC_NOITEMSINTHESHOPPINGCART;
+}
+?>
 				</div>

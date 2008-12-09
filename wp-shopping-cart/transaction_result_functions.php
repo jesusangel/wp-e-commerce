@@ -64,11 +64,12 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$link = "";
 				$product_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$row['prodid']}' LIMIT 1", ARRAY_A) ;
 				if($product_data['file'] > 0) {
-			
+				
 					if($purchase_log['email_sent'] != 1) {
 						$wpdb->query("UPDATE `{$wpdb->prefix}download_status` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
 					}
 					if (($purchase_log['processed'] >= 2)) {
+					  //echo "SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
 						$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
 						
 						if($download_data != null) {
