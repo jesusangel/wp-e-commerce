@@ -317,7 +317,10 @@ function wpsc_shipping_country_list($selected_country = null) {
 	echo "  </td>\n\r";
 	echo "  <td colspan='2' id='checkout_total' style='vertical-align: middle;'>\n\r";
 	if (isset($_SESSION['quote_shipping_total'])) {
-		echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'],1);
+		if ($discount <= 0) 
+			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'],1);
+		else 
+			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'] - $discount,1);
 	} else {
 		echo nzshpcrt_overall_total_price($_SESSION['selected_country'],true,false,$total);
 	}

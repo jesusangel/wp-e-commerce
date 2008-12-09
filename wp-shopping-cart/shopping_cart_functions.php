@@ -258,13 +258,19 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			} else {
 				$_SESSION['wpsc_discount']= 0;
 			}
+			
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
 			}
+			
 			if (!isset($_SESSION['quote_shipping_total'])) {
 				$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
 			} else {
-				$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_currency_display($_SESSION['quote_shipping_total'], 1)."</span>";
+				if($discount > 0) {
+					$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_currency_display($_SESSION['quote_shipping_total'] - $discount, 1)."</span>";
+				} else {
+					$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_currency_display($_SESSION['quote_shipping_total'], 1)."</span>";
+				}
 			}
 		} else{
 			if($discount > 0) {
