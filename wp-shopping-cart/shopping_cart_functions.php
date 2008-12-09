@@ -235,6 +235,11 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	    $output .= "</table>";
     }
     if($_SESSION['delivery_country'] != null) {
+    if (isset($_SESSION['quote_shipping_total'])) {
+		$total_shipping = $_SESSION['quote_shipping_total'] - $total;
+	} else {
+		$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
+	}
       $total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
       $output .= "<span class='subtotal'><span class='subtotalhead'>".TXT_WPSC_SUBTOTAL.":</span>".nzshpcrt_currency_display(($total), 1)."</span>";
       if((get_option('do_not_use_shipping') != 1) && ($all_donations == false) && ($all_no_shipping == false))

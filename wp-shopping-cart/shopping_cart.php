@@ -86,6 +86,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 	$output .= " <input type='text' style='color:".$color.";' onclick='if (this.value==\"Your Zipcode\") {this.value=\"\";this.style.color=\"#000\";}' onblur='if (this.value==\"\") {this.style.color=\"#999\"; this.value=\"Your Zipcode\"; }' value='".$zipvalue."' size='10' name='zipcode' id='zipcode'>";
 	return $output;
 }
+
 ?>
 		<div class="wrap wpsc_container">
 		<?php
@@ -245,11 +246,12 @@ function wpsc_shipping_country_list($selected_country = null) {
 		}
 	
 		//// usps changes
-				$custom_shipping = get_option('custom_shipping_options');
+		$custom_shipping = get_option('custom_shipping_options');
 		foreach((array)$custom_shipping as $shipping) {
 			foreach ($GLOBALS['wpsc_shipping_modules'] as $available_shipping) {
 				if ($shipping == $available_shipping->internal_name)
 					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote();
+				
 			}
 		}
 // 	echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
@@ -259,9 +261,16 @@ function wpsc_shipping_country_list($selected_country = null) {
 		if (empty($shipping_quote)) {
 			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
 		}
+		$i=0;
 		foreach ((array)$shipping_quote as $quotes) {
 			foreach($quotes as $key=>$quote) {
-				echo "<tr><td colspan='2'><label for='$key$key1'>".$key."</label></td><td><label for='$key$key1'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='$key$key1' onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
+				if ($i == 0) {
+					$selected = "checked='checked'";
+				} else {
+					$selected ="";
+				}
+				echo "<tr><td colspan='2'><label for='$key$key1'>".$key."</label></td><td><label for='$key$key1'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='$key$key1' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
+				$i++;
 			}
 		}
 	}
