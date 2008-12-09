@@ -163,6 +163,7 @@ function conf()
 </noscript>
 
 <div class="wrap">
+<div class='metabox-holder'>
   <h2><?php echo TXT_WPSC_DISPLAYVARIATIONS;?></h2>
   <p>	
   	  <?php echo TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION;?>
@@ -185,9 +186,15 @@ function conf()
   $num = 0;
 echo "  <table id='productpage'>\n\r";
 echo "    <tr><td class='firstcol'>\n\r";
-echo "  <div class='categorisation_title'>\n\r";
-echo "		<strong class='form_group'>".TXT_WPSC_VARIATION_LIST."</strong>\n\r";
-echo "	</div>\n\r";
+if (IS_WP27) {
+	echo "<div class='postbox'>";
+	echo "<h3 class='hndle'>".TXT_WPSC_VARIATION_LIST."</h3>";
+	echo "<div class='inside'>";
+} else {
+	echo "  <div class='categorisation_title'>\n\r";
+	echo "		<strong class='form_group'>".TXT_WPSC_VARIATION_LIST."</strong>\n\r";
+	echo "	</div>\n\r";
+}
 echo "      <table id='itemlist'>\n\r";
 echo "        <tr class='firstrow'>\n\r";
 
@@ -209,23 +216,41 @@ if($variation_list != null) {
 }
   
 echo "      </table>\n\r";
+if (IS_WP27)
+	echo "</div>";
 echo "      </td><td class='secondcol'>\n\r";
 echo "        <div id='productform'>";
-echo "  <div class='categorisation_title'>\n\r";
-echo "		<strong class='form_group'>".TXT_WPSC_EDITVARIATION."</strong>\n\r";
-echo "	</div>\n\r";
 
+if (IS_WP27) {
+	echo "<div class='postbox'>";
+	echo "<h3 class='hndle'>".TXT_WPSC_EDITVARIATION."</h3>";
+	echo "<div class='inside'>";
+} else {
+	echo "  <div class='categorisation_title'>\n\r";
+	echo "		<strong class='form_group'>".TXT_WPSC_EDITVARIATION."</strong>\n\r";
+	echo "	</div>\n\r";
+}
 
 echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>";
 echo "        <div id='formcontent'>\n\r";
 echo "        </div>\n\r";
 echo "</form>";
 echo "        </div>";
+
+if (IS_WP27) {
+	echo "</div></div>";
+}
 ?>
 <div id='additem'>
-  <div class="categorisation_title">
+	<?php if (IS_WP27) {?>
+   	<div class='postbox'>
+		<h3 class='hndle'><?=TXT_WPSC_VARIATION_LIST?></h3>
+		<div class='inside'>
+	<?php } else { ?>
+	<div class="categorisation_title">
 		<strong class="form_group"><?php echo TXT_WPSC_ADDVARIATION;?></strong>
 	</div>
+	<?php } ?>
   <form method='POST' action='' class='additem'>
   <table class='category_forms'>
     <tr>
@@ -261,9 +286,14 @@ echo "        </div>";
     </tr>
   </table>
   </form>
+
 </div>
 <?php
+if (IS_WP27) {
+	echo "</div>";
+}
 echo "      </td></tr>\n\r";
 echo "     </table>\n\r";
   ?>
+</div>
 </div>
