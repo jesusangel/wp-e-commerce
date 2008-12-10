@@ -285,9 +285,6 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
 	}
 
 function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
-  /*
-   * This now ignores tax status, but removing it entirely will probably have to wait for the inevitable yet indefinately delayed total rewrite, woot
-   */
   global $wpdb;
   $currency_sign_location = get_option('currency_sign_location');
   $currency_type = get_option('currency_type');

@@ -464,15 +464,15 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}currency_list` WHERE `co
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='109'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='110'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='southamerica' WHERE id='111'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='112'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='112'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='113'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='114'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='northamerica' WHERE id='115'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='116'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='117'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='southamerica' WHERE id='118'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='119'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='120'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='119'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='120'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='northamerica' WHERE id='121'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='122'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='123'");
@@ -507,14 +507,14 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}currency_list` WHERE `co
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='152'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='153'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='154'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='155'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='155'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='156'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='northamerica' WHERE id='157'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='158'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='159'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='160'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='161'");
-	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapasific' WHERE id='162'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='160'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='161'");
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='162'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='163'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='164'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='asiapacific' WHERE id='165'");
@@ -595,6 +595,11 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}currency_list` WHERE `co
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='240'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='africa' WHERE id='241'");
 	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET continent='europe' WHERE id='242'");
+}
+
+
+if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}currency_list` WHERE `continent` IN ('asiapasific')") > 0) {
+	$wpdb->query("UPDATE `{$wpdb->prefix}currency_list` SET `continent`='asiapacific' WHERE `continent`='asiapasific'");
 }
 
 add_option('wpsc_email_receipt', '', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');

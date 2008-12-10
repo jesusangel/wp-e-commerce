@@ -532,7 +532,7 @@ define('TXT_WPSC_ADDPRODUCT', 'Add Product');
 define('TXT_WPSC_DISPLAYPRODUCTS', 'Display Products');
 define('TXT_WPSC_PLEASESELECTACATEGORY', 'Please Select a Product Group');
 define('TXT_WPSC_STOCK', 'Stock');
-define('TXT_WPSC_PNP', 'PnP');
+define('TXT_WPSC_PNP', 'P&amp;P');
 define('TXT_WPSC_EDITITEM', 'Edit Item');
 define('TXT_WPSC_PRODUCTDETAILS', 'Product Details');
 define('TXT_WPSC_SELECT_PRODUCT', 'Select an Existing Product');

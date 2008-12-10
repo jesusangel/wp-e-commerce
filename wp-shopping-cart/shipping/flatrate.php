@@ -56,13 +56,18 @@ class flatrate {
 	
 	function getQuote() {
 		global $wpdb;
-		if (isset($_POST['country']))
+		if (isset($_POST['country'])) {
 			$country = $_POST['country'];
-		else
-			$country = $_SESSION['selected_country'];
+			$_SESSION['delivery_country'] = $country;
+		} else {
+			$country = $_SESSION['delivery_country'];
+		}
 		if (get_option('base_country') != $country) {
-			$results = $wpdb->get_var("SELECT continent FROM {$wpdb->prefix}currency_list WHERE ISOCODE='{$country}'");
+			$results = $wpdb->get_var("SELECT `continent` FROM `{$wpdb->prefix}currency_list` WHERE `isocode` IN('{$country}') LIMIT 1");
 			$flatrates = get_option('flat_rates');
+			/*
+		echo ('<pre>'.print_r($flatrates,1)."</pre>");
+		echo ('<pre>'.print_r($results,1)."</pre>");*/
 			
 			if ($flatrates != '') {
 // 				exit($results);

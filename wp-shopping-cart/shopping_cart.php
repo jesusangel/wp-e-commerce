@@ -232,16 +232,6 @@ function wpsc_shipping_country_list($selected_country = null) {
 				echo "<input type='submit' onclick='' value='Rate'>";
 				echo "</td>";
 				echo "</form>";
-//     echo "  <td  colspan='2' style='vertical-align: middle;'>\n\r";
-//     if($all_donations == false)
-//       {
-//       echo "" . nzshpcrt_currency_display($total_shipping, 1) . "";
-//       }
-//       else
-//         {
-//         echo TXT_WPSC_DONATION_SHIPPING;
-//         }
-//     echo "  </td>\n\r";
     echo "</tr>\n\r";
 		}
 	
@@ -254,31 +244,33 @@ function wpsc_shipping_country_list($selected_country = null) {
 				
 			}
 		}
-// 	echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
+ 	//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
 	$_SESSION['uspsQuote']=$shipping_quotes;
+	$i=0;
 	foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
-		echo "<tr><td class='shipping_header' colspan='4'>$key1</td></tr>";
+ 	  $shipping_method_name = $GLOBALS['wpsc_shipping_modules'][$key1]->name;
+		echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name</td></tr>";
 		if (empty($shipping_quote)) {
 			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
 		}
-		$i=0;
 		foreach ((array)$shipping_quote as $quotes) {
+			$j=0;
 			foreach($quotes as $key=>$quote) {
-				if ($i == 0) {
+				if (($i == 0) && ($j == 0)) {
 					$selected = "checked='checked'";
 				} else {
 					$selected ="";
 				}
-				echo "<tr><td colspan='2'><label for='$key$key1'>".$key."</label></td><td><label for='$key$key1'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='$key$key1' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
-				$i++;
+				echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
+				$j++;
 			}
 		}
+		$i++;
 	}
 	// usps changes ends
     
   //echo "<tr style='total-price'>\n\r";
-	if($tax > 0)
-	{
+	if($tax > 0) {
 		echo "<tr class='total_price'>\n\r";
 		echo "  <td colspan='2'>\n\r";
 		echo "".TXT_WPSC_TAX.":";
@@ -322,9 +314,11 @@ function wpsc_shipping_country_list($selected_country = null) {
 		else 
 			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'] - $discount,1);
 	} else {
-		echo nzshpcrt_overall_total_price($_SESSION['selected_country'],true,false,$total);
+		echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
 	}
 	echo "<input id='shopping_cart_total_price' type='hidden' value='".$total."'>";
+	
+
 	echo "  </td>\n\r";
 	echo "</tr>\n\r";
 	}

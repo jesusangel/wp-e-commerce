@@ -1323,3 +1323,8 @@ img.ui-datepicker-trigger {
 	width: 193px;
 	height: 200px;
 }
+td.shipping_header {
+	background-color:#E5E5E5;
+	text-transform: uppercase;
+	font-weight:bold;
+}
