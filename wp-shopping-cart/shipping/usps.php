@@ -4,6 +4,7 @@ class usps {
 	function usps () {
 		$this->internal_name = "usps";
 		$this->name="USPS";
+		$this->is_external=true;
 		return true;
 	}
 	
@@ -198,6 +199,9 @@ class usps {
 					$service = $regs[1];
 					$postage = ereg('<Rate>(.*)</Rate>', $response[$i], $regs);
 					$postage = $regs[1];
+					if($postage <= 0) {
+					  continue;
+					}
 					$rates[] = array($service => $postage);
 					if ($transit) {
 						switch ($service) {
@@ -253,7 +257,7 @@ class usps {
 				$number = $regs[1];
 				$description = ereg('<Description>(.*)</Description>', $response[0], $regs);
 				$description = $regs[1];
-				return array('error' => $number . ' - ' . $description);
+				//return array('error' => $number . ' - ' . $description);
 			} else {
 				$body = $response[0];
 				$services = array();
@@ -283,7 +287,7 @@ class usps {
 						$time = preg_replace('/Weeks$/', 'Weeks',$time);
 						$time = preg_replace('/Days$/', 'Days', $time);
 						$time = preg_replace('/Day$/', 'Day', $time);
-						if( !in_array($service, $allowed_types) ) continue;
+						if( !in_array($service, $allowed_types) || ($postage < 0) ) continue;
 						$rates[] = array($service => $postage);
 						if ($time != '') $transittime[$service] = ' (' . $time . ')';
 					}

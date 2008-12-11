@@ -4,6 +4,7 @@ class tablerate {
 	function tablerate () {
 		$this->internal_name = "tablerate";
 		$this->name="Table Rate";
+		$this->is_external=false;
 		return true;
 	}
 	

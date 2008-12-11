@@ -636,9 +636,9 @@ function setting_button(){
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
 	
-	$output.="<li><a href='?page=wp-shopping-cart/options.php'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/getwayoptions.php'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
-	$output.="<li><a href='?page=wp-shopping-cart/form_fields.php'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
+	$output.="<li><a href='admin.php?page=wp-shopping-cart/options.php'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
+	$output.="<li><a href='admin.php?page=wp-shopping-cart/options.php#ui-tabs-76'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
+	$output.="<li><a href='admin.php?page=wp-shopping-cart/options.php#ui-tabs-78'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
 	//$output.="<li><a href='?page=wp-shopping-cart/instructions.php'>Help/Upgrade</a></li>";
 	//$output.="<li><a href='{$redirect_url}'>".TXT_WPSC_LOGIN_TO_GOOGLE_BASE."</a></li>";
 	$output.="</ul>";

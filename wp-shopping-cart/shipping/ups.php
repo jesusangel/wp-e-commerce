@@ -4,6 +4,7 @@ class ups {
 	function ups () {
 		$this->internal_name = "ups";
 		$this->name="UPS";
+		$this->is_external=true;
 		return true;
 	}
 	

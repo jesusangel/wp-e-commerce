@@ -4,6 +4,7 @@ class weightrate {
 	function weightrate () {
 		$this->internal_name = "weightrate";
 		$this->name="Weight Rate";
+		$this->is_external=false;
 		return true;
 	}
 	
@@ -50,8 +51,9 @@ class weightrate {
 				}
 			}
 		}
-		if ($_POST['checkpage'] == 'weight')
+		if ($_POST['checkpage'] == 'weight') {
 			update_option('weight_rate_layers',$new_layer);
+		}
 		return true;
 	}
 	

@@ -310,8 +310,6 @@ function advanced_box($product_data='') {
   	do_action('wpsc_add_advanced_options', $product_data['id']);
   	$output .= ob_get_contents();
   	ob_end_clean();
-	$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
-	
 	$output .= "
 	<tr>
       <td class='itemfirstcol'>
@@ -333,6 +331,35 @@ function advanced_box($product_data='') {
 			".TXT_WPSC_ADD_CUSTOM_FIELD.":
 		</td>
 		<td>";
+		
+		$output .= "<div class='product_custom_meta'>
+		<label >
+		".TXT_WPSC_NAME.":
+		<input type='text' name='new_custom_meta[name][]' value='' class='text'/>
+		</label>
+		
+		<label>
+		".TXT_WPSC_VALUE.":
+		<input type='text' name='new_custom_meta[value][]' value='' class='text'/>
+		
+		</label>
+		<a href='#' class='add_more_meta' onclick='return add_more_meta(this)'>+</a>
+		<br />
+  </div>";
+  
+	$output .= "            </td>\n\r";
+	$output .= "          </tr>\n\r";
+
+ $custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product_data['id']}') AND `custom` IN('1')",ARRAY_A);
+		
+  if(count($custom_fields) > 0) {
+		$output .= "          <tr>\n\r";
+		$output .= "            <td>\n\r";
+		$output .= TXT_WPSC_EDIT_CUSTOM_FIELDS;
+		$output .= "            </td>\n\r";
+		$output .= "            <td>\n\r";
+		
+		//$i = 1;
 		foreach((array)$custom_fields as $custom_field) {
 			$i = $custom_field['id'];
 			// for editing, the container needs an id, I can find no other tidyish method of passing a way to target this object through an ajax request
@@ -352,28 +379,13 @@ function advanced_box($product_data='') {
 			</div>
 			";
 		}
-		
-		$output .= "<div class='product_custom_meta'>
-		<label >
-		".TXT_WPSC_NAME.":
-		<input type='text' name='new_custom_meta[name][]' value='' class='text'/>
-		</label>
-		
-		<label>
-		".TXT_WPSC_VALUE.":
-		<input type='text' name='new_custom_meta[value][]' value='' class='text'/>
-		
-		</label>
-		<a href='#' class='add_more_meta' onclick='return add_more_meta(this)'>+</a>
-		<br />
-  </div>";
-  
-	$output .= "</td>
-</tr>
+		$output .= "            </td>\n\r";
+		$output .= "          </tr>\n\r";
+  }
 
     
     
-    </table></div></div>";
+    $output .= "</table></div></div>";
     
     return $output;
 }

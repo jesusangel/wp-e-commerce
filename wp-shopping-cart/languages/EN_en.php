@@ -3,6 +3,11 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
+define('TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES', 'External Shipping Calculators');
+
+
+define('TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES', 'Internal Shipping Calculators');
+
 define('TXT_DISPLAY_DESCRIPTION', 'Display Description');
 define('TXT_DISPLAY_ADDTOCART', 'Display "Add To Cart" Button');
 define('TXT_DISPLAY_MOREDETAILS', 'Display "More Details" Button');

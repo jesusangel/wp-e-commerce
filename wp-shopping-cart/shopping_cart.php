@@ -200,9 +200,6 @@ function wpsc_shipping_country_list($selected_country = null) {
 		echo "</tr>";
 	}
 	
-	//End of written by allen
-			$total_weight = shopping_cart_total_weight();
-	if ($total_weight > 0) {
 		if(get_option('base_country') != null) {
 			//if (!function_exists('getdistance')) {
 		
@@ -255,7 +252,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 		}
 		foreach ((array)$shipping_quote as $quotes) {
 			$j=0;
-			foreach($quotes as $key=>$quote) {
+			foreach((array)$quotes as $key=>$quote) {
 				if (($i == 0) && ($j == 0)) {
 					$selected = "checked='checked'";
 				} else {
@@ -321,7 +318,6 @@ function wpsc_shipping_country_list($selected_country = null) {
 
 	echo "  </td>\n\r";
 	echo "</tr>\n\r";
-	}
 	echo "</table>";
 
 	if ($_POST['coupon_num']) {

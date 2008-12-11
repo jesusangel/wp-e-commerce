@@ -96,6 +96,15 @@ foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 $shippinglist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER."</option>" . $shippinglist;
 
 
+// sort into external and internal arrays.
+$selected_shippings = get_option('custom_shipping_options');
+foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) {
+	if($module->is_external == true) {
+		$external_shipping_modules[$key] = $module;
+	} else {
+		$internal_shipping_modules[$key] = $module;
+	}
+}
 
 $selected[get_option('payment_method')] = "checked='true'";
 if ($_GET['shipping_options']=='true') {
@@ -235,11 +244,12 @@ function selectgateway() {
 					<?php } ?>
 					
 					<p>
-						<?php echo TXT_WPSC_CHOOSE_SHIPPING_MODULES; ?>
+						<?php echo TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES; ?>
 					</p>
 					<?php
-					$selected_shippings = get_option('custom_shipping_options');
-					foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
+					
+					// print the internal shipping methods
+					foreach($internal_shipping_modules as $shipping) {
 // 						exit("<pre>".print_r($shipping,1)."</pre>");
 						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
 							echo "						";// add the whitespace to the html
@@ -250,6 +260,26 @@ function selectgateway() {
 						}
 					}
 					?>
+					
+					<br />
+					<p>
+						<?php echo TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES; ?>
+					</p>
+					<?php
+					
+					// print the internal shipping methods
+					foreach($external_shipping_modules as $shipping) {
+// 						exit("<pre>".print_r($shipping,1)."</pre>");
+						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
+							echo "						";// add the whitespace to the html
+							echo "<p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+						} else {
+							echo "						";
+							echo "<p><input name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+						}
+					}
+					?>
+					
 					<div class='submit gateway_settings'>
 						<input type='hidden' value='true' name='update_gateways'/>
 						<input type='submit' value='Update &raquo;' name='updateoption'/>

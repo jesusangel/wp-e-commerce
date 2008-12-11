@@ -4,6 +4,7 @@ class flatrate {
 	function flatrate () {
 		$this->internal_name = "flatrate";
 		$this->name="Flat Rate";
+		$this->is_external=false;
 		return true;
 	}
 	
@@ -49,8 +50,10 @@ class flatrate {
 	}
 	
 	function submit_form() {
-		$shippings = $_POST['shipping'];
-		update_option('flat_rates',$shippings);
+	  if($_POST != null) {
+			$shippings = $_POST['shipping'];
+			update_option('flat_rates',$shippings);
+		}
 		return true;
 	}
 	
