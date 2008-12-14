@@ -62,7 +62,10 @@ class usps {
 	}
 	
 	function getQuote() {
-		global $wpdb;
+		global $wpdb, $wpsc_usps_quote;
+		if(isset($wpsc_usps_quote) && (count($wpsc_usps_quote)> 0)) {
+		  return $wpsc_usps_quote;
+		}
 		$dest = $_SESSION['delivery_country'];
 		$weight = shopping_cart_total_weight();
 		$pound = floor($weight);
@@ -250,6 +253,7 @@ class usps {
 					}
 				}
 			}
+			$wpsc_usps_quote = $rates;
 			return $rates;
 		} else {
 			if (ereg('<Error>', $response[0])) {
@@ -295,6 +299,7 @@ class usps {
 				$uspsQuote=$rates;
 			}
 		}
+		$wpsc_usps_quote = $rates;
 		return $uspsQuote;
 	}
 }

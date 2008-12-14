@@ -49,7 +49,7 @@ if(get_option('permalink_structure') != '') {
 	$seperator ="&amp;";
 }
  
-if($_POST['coupon_num']){
+if($_POST['coupon_num']) {
 	$_SESSION['coupon_num'] = $_POST['coupon_num'];
 }
 

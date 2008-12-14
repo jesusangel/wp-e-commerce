@@ -742,7 +742,6 @@ function wpsc_create_or_update_tables() {
   if(get_option('wpsc_database_check') == $template_hash) {
     return true;
   }
-  
   $failure_reasons = array();
   $upgrade_failed = false;
   foreach((array)$wpsc_database_template as $table_name => $table_data) {
@@ -824,7 +823,6 @@ function wpsc_create_or_update_tables() {
       }
     }
   }
-  
   
 	if($upgrade_failed !== true) {
 		update_option('wpsc_database_check', $template_hash);

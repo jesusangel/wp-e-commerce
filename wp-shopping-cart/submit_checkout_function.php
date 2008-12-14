@@ -3,7 +3,7 @@ function nzshpcrt_submit_checkout() {
  /*
   * This is the function used for handling the submitted checkout page
   */
-  global $wpdb, $nzshpcrt_gateways, $user_ID;
+  global $wpdb, $nzshpcrt_gateways, $user_ID, $wpsc_shipping_modules;
   session_start();
   if(get_option('permalink_structure') != '') {
     $seperator ="?";
@@ -251,10 +251,19 @@ function nzshpcrt_submit_checkout() {
 		$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
     }
 
+
+  $shipping_module = '';
+  $shipping_option = '';
+
+  if($_SESSION['quote_shipping_method']) {
+		$shipping_module = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getName();
+		$shipping_option = $wpdb->escape($_SESSION['quote_shipping_option']);
+	}
+
     
     //insert the record into the purchase log table
 	$price = nzshpcrt_overall_total_price($_SESSION['selected_country'],false);
-	$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '', '{$engrave}', ' ')";
+	$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`, `shipping_method`, `shipping_option`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '', '{$engrave}', ' ','$shipping_module','$shipping_option')";
 	//exit($sql);
 	$wpdb->query($sql) ;
 	$email_user_detail = '';
