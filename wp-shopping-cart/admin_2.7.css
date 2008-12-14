@@ -52,7 +52,7 @@ div.wpsc_products_nav27 {
   margin-bottom: 1px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background-color: white;
+/*   background-color: white; */
 }
 
 div.wpsc_products_nav div {
@@ -138,7 +138,7 @@ table#itemlist tr td{text-align: left; padding:10px 5px 8px 5px; }
 table#itemlist tr.products{border-left:1px solid #bbb;border-right:1px solid #bbb;}
 table#itemlist tr.productsalt{background-color:#f3f3f3;border-left:1px solid #bbb;border-right:1px solid #bbb;}
 */
-table#itemlist tr.products td{text-align: left;padding:0px; vertical-align: middle ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
+table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 table#itemlist tr.productsalt td{text-align: left;padding:0px; vertical-align: middle ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 
 table#itemlist tr td.imagecol{ padding: 4px;}
@@ -175,7 +175,7 @@ table.itemlist{ margin: 0px; }
 div.subcategory{ list-style-type: none; vertical-align: top; margin: 0px; padding: 0px; }
 
 div.subcategory img.category_indenter{ float: left; margin-top: 10px; }
-table.additem{ width: 100%; margin-top: 15px;}
+/* table.additem{ width: 100%; margin-top: 15px;} */
 
 
 table.itemlist tr td{ text-align: center; padding-left: 3px; padding-right: 3px; }
@@ -196,12 +196,23 @@ div#additem{ display: block;}
 
 /* div#additem table tr td{ height: 11px; } */
 
-div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; padding-top: 5px; vertical-align: top; }
+div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ min-width: 250px !important; padding-left:8px; vertical-align: top; }
 
 div#productform td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: top; }
-div#additem table.additem input.text,div#additem table.additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
-div#productform input.text,div#productform textarea, div#additem input.text,div#additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
+div#additem table.additem input.text,div#additem table.additem textarea{width:584px;border:1px solid #bbb;}
+form.edititem textarea{width:584px;border:1px solid #bbb;}
+
+div#additem table.additem input.text{width:290px;border:1px solid #bbb;}
+div#productform input.text, div#additem input.text{width:290px;border:1px solid #bbb;}
 input.image_resize{ position: relative; top: 4px; }
+ 
+div#additem table.additem input.wpsc_tag{
+	width:180px;
+}
+div#additem label{
+	font-style: normal;
+	font-size: 0.95em;
+}
  
 #loadingindicator_span{ visibility: hidden; }
  
@@ -809,10 +820,12 @@ ul.settings_button{
 	margin:5px 0 0 0;
 }
 
-
+table.product_editform tr td.itemfirstcol, table.additem tr td.itemfirstcol,
 table.product_editform tr td.itemformcol, table.additem tr td.itemformcol {
-  padding-bottom: 10px;
-
+  	padding-bottom: 10px;
+	color:#666;
+	font-style: italic;
+	font-weight: bold;
 }
 
 
@@ -824,7 +837,8 @@ border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
 #additem .postbox, #productform .postbox, #additem .stuffbox {
 	border-style:solid;
 	border-width:1px;
-	margin-bottom:3px;
+	margin-bottom:10px;
+	width: 620px;
 /*
 	margin-left:-3px;
 	margin-right:-3px;
@@ -1075,7 +1089,7 @@ div.product_custom_meta br {
 
 table.product_editform {
   width: 99.5%;
-  margin-top: 15px;
+/*   margin-top: 15px; */
 /*   border-left:1px solid #bbb; */
 /*   border-right:1px solid #bbb; */
 /*   border-bottom:1px solid #bbb; */
@@ -1198,7 +1212,7 @@ tr.update_gateway td div {
 }
 
 div.admin_product_name {
-  width: 360px;
+  width: 100%;
   padding: 0px;
 }
 
@@ -1775,7 +1789,7 @@ br.small {
 }
 
 #dashboard-widgets-main-content-wpsc {
-	margin-right:31% !important;
+	margin-right:30% !important;
 }
 
 #side-info-column-wpsc {
@@ -1802,3 +1816,35 @@ h3.hndle {
 .variation_settings{
 	display:none;
 }
+
+.wpsc-row-actions {
+	font-size: 10px;
+	visibility: hidden;
+}
+
+table#itemlist .pricedisplay, .category_link {
+	font-size: 11px;
+}
+
+table#itemlist tr {
+	vertical-align: top;
+}
+
+input.wpsc_product_name {
+	padding: 3px 4px;
+	border-width: 1px;
+	border-style: solid;
+	-moz-border-radius: 6px;
+	-khtml-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	font-size: 1.7em;
+}
+
+form.additem input, form.edititem input {
+	-moz-border-radius: 6px;
+	-khtml-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+}
+

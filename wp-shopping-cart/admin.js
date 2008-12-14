@@ -110,7 +110,7 @@ function activate_resizable() {
 function categorylist(url) {
   self.location = url;
 }
-  
+
 function submit_change_country() {
   document.cart_options.submit();
   //document.cart_options.submit();
@@ -165,6 +165,24 @@ jQuery('.meta-box-sortables').sortable( {
     	} );
     }
 } );
+
+tinyMCE.init({
+	theme : "advanced",
+	mode : "specific_textareas",
+	width : '100%',
+	height : '194px',
+	skin : 'wp_theme',
+	editor_selector : "mceEditor",
+	plugins : "spellchecker,pagebreak",
+	theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,pagebreak",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	theme_advanced_toolbar_location : "top",
+	theme_advanced_toolbar_align : "left",
+	theme_advanced_statusbar_location : "bottom",
+	theme_advanced_resizing : true,
+	theme_advanced_resize_horizontal : false
+});
 
 jQuery("#gallery_list").sortable({
 	revert: false,
@@ -905,7 +923,7 @@ function display_partial_box(id){
 }
 
 function add_more_meta(e) {
-  current_meta_forms = jQuery(e).parent("div.product_custom_meta");  // grab the form container
+  current_meta_forms = jQuery(e).parent().children("div.product_custom_meta:last");  // grab the form container
   new_meta_forms = current_meta_forms.clone(true); // clone the form container
   jQuery("label input", new_meta_forms).val(''); // reset all contained forms to empty
   current_meta_forms.after(new_meta_forms);  // append it after the container of the clicked element
@@ -1235,6 +1253,15 @@ function reloadresults(){
 }
 
 jQuery(document).ready(function(){
+	jQuery(".wpsc-row-actions").parent().parent("tr").mouseover(
+		function() {
+			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "visible");
+		}
+	).mouseout(
+		function() {
+			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "hidden");
+		}
+	);
 	jQuery("#table_rate_price").click(
 		function() {
 			if (this.checked) {
@@ -1319,6 +1346,12 @@ jQuery(document).ready(function(){
 			}
 		}
 	}
+	jQuery("#submit_category_select").click(
+		function() {
+			new_url = jQuery("#category_select").children("option:selected").val();
+			window.location = new_url;
+		}
+	);
 });
 
 

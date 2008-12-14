@@ -73,15 +73,18 @@ function nzshpcrt_getproductform($prodid)
 		$output .= "        <div id='productform'>";
 		$output .= "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
 	}
-  $output .= "        <table class='product_editform'>\n\r";
+  $output .= "        <table class='product_editform' style='width:100%;'>\n\r";
   $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol'>\n\r";
+/*
+  $output .= "            <td class='itemformcol'>\n\r";
   $output .= TXT_WPSC_PRODUCTNAME.": ";
   $output .= "            </td>\n\r";
-  $output .= "            <td class='itemformcol'>\n\r";
+*/
+  $output .= "            <td colspan='2' class='itemfirstcol'>\n\r";
   
 	$output .= "        <div class='admin_product_name'>\n\r";
-  $output .= "          <input  size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
+  $output .= "          <input style='width:100%;' class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
+/*
 	$output .= "				   <a href='#' class='shorttag_toggle'></a>\n\r";
 	$output .= "				   <div class='admin_product_shorttags'>\n\r";
 	$output .= "				     <dl>\n\r";
@@ -91,7 +94,7 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "				       <dt>Buy Now PHP:</dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
 	$output .= "				     </dl>\n\r";
 	$output .= "				     <br clear='both' />\n\r";
-	
+*/	
 	$output .= "				   </div>\n\r";
 	$output .= "        </div>\n\r";
         
@@ -101,33 +104,46 @@ function nzshpcrt_getproductform($prodid)
   
   $output .= "          <tr>\n\r";
   $output .= "            <td class='itemfirstcol'>\n\r";
-  $output .="<abbr alt='".TXT_WPSC_SKU_FULL."' title='". TXT_WPSC_SKU_FULL."' >".TXT_WPSC_SKU."</abbr>";
+  $output .= TXT_WPSC_SKU_FULL." :<br />";
+/*
   $output .= "            </td>\n\r";
   $output .= "            <td class='itemformcol'>\n\r";
+*/
   $sku = get_product_meta($product['id'], 'sku');
   $sku = $sku[0];
-  $output .= "<input  size='30' type='text' class='text'  name='productmeta_values[sku]' value='".htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8')."' />\n\r";
+  $output .= "<input size='30' type='text' class='text'  name='productmeta_values[sku]' value='".htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8')."' />\n\r";
   $output .= "            </td>\n\r";
+  $output .= "<td class='itemfirstcol'>";
+  $output .= TXT_WPSC_PRICE." :<br />";
+  $output .= "<input type='text' class='text' size='30' name='price' value='".$product['price']."'>";
+  $output .= "</td>";
   $output .= "          </tr>\n\r";
   
   $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol'>\n\r";
+  $output .= "            <td colspan='2' class='itemfirstcol'>\n\r";
+/*
   $output .= TXT_WPSC_PRODUCTDESCRIPTION.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td class='itemformcol'>\n\r";
-  $output .= "<textarea name='description' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
+*/
+  $output .= "<div id='editorcontainer'>";
+  $output .= "<textarea name='description' class='mceEditor' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
+  $output .= "</div>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   
   $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol'>\n\r";
-  $output .= TXT_WPSC_ADDITIONALDESCRIPTION.": ";
+  $output .= "            <td class='itemfirstcol' colspan='2'>\n\r";
+  $output .= TXT_WPSC_ADDITIONALDESCRIPTION." :<br />";
+/*
   $output .= "            </td>\n\r";
   $output .= "            <td class='itemformcol'>\n\r";
-  $output .= "<textarea name='additional_description' cols='40' rows='8' >".stripslashes($product['additional_description'])."</textarea>";
+*/
+
+ $output .= "<textarea name='additional_description' cols='40' rows='8' >".stripslashes($product['additional_description'])."</textarea>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
-    
+ /*    
   $output .= "          <tr>\n\r";
   $output .= "            <td class='itemfirstcol'>\n\r";
   $output .= TXT_WPSC_PRODUCT_TAGS.": ";
@@ -157,6 +173,7 @@ function nzshpcrt_getproductform($prodid)
 
 	$output .= "            </td>\n\r";
 	$output .= "          </tr>\n\r";
+*/
 	if (IS_WP27) {
 		 $output .= "          </table>\n\r";
 	   $output .= "</div></div>";

@@ -200,8 +200,8 @@ div#additem{ display: block;border: 1px solid #dadada;}
 div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ width: 120px !important; padding-left:8px; padding-top: 5px; vertical-align: top; }
 
 div#productform td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: top; }
-div#additem table.additem input.text,div#additem table.additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
-div#productform input.text,div#productform textarea, div#additem input.text,div#additem textarea{margin-right:6px;width:350px;border:1px solid #bbb;}
+3
+div#productform input.text,div#productform textarea, div#additem input.text,div#additem textarea{margin-right:6px;width:250px;border:1px solid #bbb;}
 input.image_resize{ position: relative; top: 4px; }
  
 #loadingindicator_span{ visibility: hidden; }

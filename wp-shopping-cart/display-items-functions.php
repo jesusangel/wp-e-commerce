@@ -3,6 +3,57 @@
 $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
 
 $variations_processor = new nzshpcrt_variations;
+
+function category_and_tag_box($product_data=''){
+	global $closed_postboxes, $wpdb, $variations_processor;
+	$output = '';
+	if ($product_data == 'empty') {
+		$display = "style='visibility:hidden;'";
+	}
+	$output .= "<div id='price_and_stock' class='price_and_stock postbox ".((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."' >";
+
+    if (IS_WP27) {
+        $output .= "<h3 class='hndle'>";
+    } else {
+        $output .= "<h3>
+	    <a class='togbox'>+</a>";
+    }
+    $output .= TXT_WPSC_CATEGORY_AND_TAG_CONTROL;
+    $output .= "
+	</h3>
+    <div class='inside'>
+    <table>";
+    $output .= "<tr>
+      <td class='itemfirstcol'>
+			".TXT_WPSC_CATEGORISATION.": <br>";
+        
+         $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
+					foreach($categorisation_groups as $categorisation_group){
+					  $category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$categorisation_group['id']}')");
+					  if($category_count > 0) {
+							$output .= "<p>";
+						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
+						  $output .= "<strong>".$category_group_name.":</strong><br>";
+						  $output .= categorylist($categorisation_group['id'], false, 'add_');
+						  $output .= "</p>";
+						}
+					}
+
+     $output .= "</td>
+     <td class='itemfirstcol'>
+       ".TXT_WPSC_PRODUCT_TAGS.":<br>
+        <input type='text' class='text wpsc_tag' name='product_tag' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
+      </td>
+    </tr>";
+    
+$output .= "
+  </table>
+ </div>
+</div>";
+
+return $output;
+
+}
 function price_and_stock_box($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
 	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
@@ -24,11 +75,11 @@ function price_and_stock_box($product_data=''){
 	</h3>
     <div class='inside'>
     <table>
-    <tr>
+    <!--<tr>
       <td>
        ".TXT_WPSC_PRICE.":&nbsp;<input type='text' size='10' name='price' value='".$product_data['price']."' />
       </td>
-    </tr>
+    </tr>-->
     <tr>
        <td>
           <input id='add_form_tax' type='checkbox' name='notax' value='yes' ".(($product_data['notax'] == 1) ? 'checked="true"' : '')."/>&nbsp;<label for='add_form_tax'>".TXT_WPSC_TAXALREADYINCLUDED."</label>
@@ -258,35 +309,55 @@ function advanced_box($product_data='') {
 		$output .= "
 	    </h3>
 	    <div class='inside'>
-	    <table>
-	    <tr>
-      <td class='itemfirstcol'> ". TXT_WPSC_ADMINNOTES .":
-      </td>
-      <td>
+	    <table>";
+	$output .= "
+	<tr>
+		<td colspan='2' class='itemfirstcol'>
+			<a href='#' style='font-style:normal;border-bottom:1px solid;' class='add_more_meta' onclick='return add_more_meta(this)'> + ".TXT_WPSC_ADD_CUSTOM_FIELD."</a><br><br>
+		";
+		foreach((array)$custom_fields as $custom_field) {
+			$i = $custom_field['id'];
+			// for editing, the container needs an id, I can find no other tidyish method of passing a way to target this object through an ajax request
+			$output .= "
+			<div class='product_custom_meta'  id='custom_meta_$i'>
+				".TXT_WPSC_NAME."
+				<input type='text' class='text'  value='{$custom_field['meta_key']}' name='custom_meta[$i][name]' id='custom_meta_name_$i'>
+				
+				".TXT_WPSC_VALUE."
+				<textarea class='text'  value='{$custom_field['meta_value']}' name='custom_meta[$i][value]' id='custom_meta_value_$i'></textarea>
+				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>&ndash;</a>
+				<br />
+			</div>
+			";
+		}
+		
+		$output .= "<div class='product_custom_meta'>
+		".TXT_WPSC_NAME.": <br />
+		<input type='text' name='new_custom_meta[name][]' value='' class='text'/><br />
+		
+		".TXT_WPSC_DESCRIPTION.": <br />
+		<textarea name='new_custom_meta[value][]' value='' class='text' ></textarea>
+		<br /></td></tr>";
+		
+	    $output .= "<tr>
+      <td class='itemfirstcol' colspan='2'> ". TXT_WPSC_ADMINNOTES .":<br>
+      
         <textarea cols='40' rows='3' type='text' name='productmeta_value[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
+      	<small>".TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE."</small>
       </td>
     </tr>
-	 <tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
-        <input type='checkbox' value='yes' id='add_form_display_frontpage' name='display_frontpage' ".(($product_data['display_frontpage'] == 1) ? 'checked="true"' : '')."/> 
-        <label for='add_form_display_frontpage'> ".TXT_WPSC_DISPLAY_FRONT_PAGE."</label>
-      </td>
-    </tr>
+	
     <tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
+      <td class='itemfirstcol' colspan='2'>
+      
         <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="true"' : '')." id='add_engrave_text'>
         <label for='add_engrave_text'> ".TXT_WPSC_ENGRAVE."</label>
         <br />
       </td>
     </tr>
     <tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
+      <td class='itemfirstcol' colspan='2'>
+      
         <input type='checkbox' name='productmeta_values[can_have_uploaded_image]' ".(($can_have_uploaded_image == 'on') ? 'checked="true"' : '')." id='can_have_uploaded_image'>
         <label for='can_have_uploaded_image'> ".TXT_WPSC_ALLOW_UPLOADING_IMAGE."</label>
         <br />
@@ -296,12 +367,11 @@ function advanced_box($product_data='') {
     
     if(get_option('payment_gateway') == 'google') {
 		$output .= "<tr>
-      <td class='itemfirstcol'>
-      </td>
-      <td>
+      <td class='itemfirstcol' colspan='2'>
+      
         <input type='checkbox' name='productmeta_values[google_prohibited]' id='add_google_prohibited' /> <label for='add_google_prohibited'>
-       ".TXT_WPSC_PROHIBITED."</label><br />
-	Prohibited <a href='http://checkout.google.com/support/sell/bin/answer.py?answer=75724'>by Google?</a>
+       ".TXT_WPSC_PROHIBITED."
+	 <a href='http://checkout.google.com/support/sell/bin/answer.py?answer=75724'>by Google?</a></label><br />
       </td>
     </tr>";
     }
@@ -310,82 +380,21 @@ function advanced_box($product_data='') {
   	do_action('wpsc_add_advanced_options', $product_data['id']);
   	$output .= ob_get_contents();
   	ob_end_clean();
+	$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
+	
 	$output .= "
 	<tr>
-      <td class='itemfirstcol'>
-       ".TXT_WPSC_EXTERNALLINK.":
-      </td>
-      <td>
+      <td class='itemfirstcol' colspan='2'>
+       ".TXT_WPSC_OFF_SITE_LINK.":<br><br>
+       <small>".TXT_WPSC_USEONLYEXTERNALLINK."</small><br><br>
+		<label for='external_link'>".TXT_WPSC_EXTERNALLINK."</label>:<br>
 		  <input type='text' class='text' name='productmeta_values[external_link]' value='".$external_link."' id='external_link' size='40'> 
       </td>
-    </tr>
-
-     <tr>
-	<td></td>
-      <td>
-      ".TXT_WPSC_USEONLYEXTERNALLINK."</strong>
-      </td>
-    </tr>
-	<tr>
-		<td>
-			".TXT_WPSC_ADD_CUSTOM_FIELD.":
-		</td>
-		<td>";
-		
-		$output .= "<div class='product_custom_meta'>
-		<label >
-		".TXT_WPSC_NAME.":
-		<input type='text' name='new_custom_meta[name][]' value='' class='text'/>
-		</label>
-		
-		<label>
-		".TXT_WPSC_VALUE.":
-		<input type='text' name='new_custom_meta[value][]' value='' class='text'/>
-		
-		</label>
-		<a href='#' class='add_more_meta' onclick='return add_more_meta(this)'>+</a>
-		<br />
-  </div>";
+    </tr>";
+	
   
-	$output .= "            </td>\n\r";
-	$output .= "          </tr>\n\r";
-
- $custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product_data['id']}') AND `custom` IN('1')",ARRAY_A);
-		
-  if(count($custom_fields) > 0) {
-		$output .= "          <tr>\n\r";
-		$output .= "            <td>\n\r";
-		$output .= TXT_WPSC_EDIT_CUSTOM_FIELDS;
-		$output .= "            </td>\n\r";
-		$output .= "            <td>\n\r";
-		
-		//$i = 1;
-		foreach((array)$custom_fields as $custom_field) {
-			$i = $custom_field['id'];
-			// for editing, the container needs an id, I can find no other tidyish method of passing a way to target this object through an ajax request
-			$output .= "
-			<div class='product_custom_meta'  id='custom_meta_$i'>
-				<label for='custom_meta_name_$i'>
-				".TXT_WPSC_NAME."
-				<input type='text' class='text'  value='{$custom_field['meta_key']}' name='custom_meta[$i][name]' id='custom_meta_name_$i'>
-				</label>
-				
-				<label for='custom_meta_value_$i'>
-				".TXT_WPSC_VALUE."
-				<input type='text' class='text'  value='{$custom_field['meta_value']}' name='custom_meta[$i][value]' id='custom_meta_value_$i'> 
-				</label>
-				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>&ndash;</a>
-				<br />
-			</div>
-			";
-		}
-		$output .= "            </td>\n\r";
-		$output .= "          </tr>\n\r";
-  }
-
-    
-    
-    $output .= "</table></div></div>";
+	$output .= "
+    </table></div></div>";
     
     return $output;
 }

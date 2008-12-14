@@ -2,7 +2,10 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
-
+define('TXT_WPSC_OFF_SITE_LINK', "Off Site Product Link");
+define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'These notes are only available here.');
+define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Categories and Tags');
+define('TXT_WPSC_USPS_DESC', 'If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.');
 define('TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES', 'External Shipping Calculators');
 
 
@@ -245,7 +248,7 @@ define('TXT_WPSC_ADDDETAILS', 'Add Details');
 define('TXT_WPSC_EDITDETAILS', 'Edit Details');
 define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Item &raquo;');
 define('TXT_WPSC_VALUE', 'Value');
-define('TXT_WPSC_ADD_CUSTOM_FIELD', 'Add Custom Field');
+define('TXT_WPSC_ADD_CUSTOM_FIELD', 'Add Custom Meta');
 define('TXT_WPSC_EDIT_CUSTOM_FIELDS', 'Edit Custom Fields');
 define('TXT_WPSC_SAVE', 'Save');
 
@@ -295,7 +298,7 @@ define('TXT_WPSC_PROHIBITED', 'Prohibited');
 define('TXT_WPSC_ADMINNOTES', 'Merchant Notes');
 define('TXT_WPSC_HIDEADDNAMELINK', 'Hide Product Name Links');
 define('TXT_WPSC_ADMINMENU', 'Admin Menu');
-define('TXT_WPSC_USEONLYEXTERNALLINK', 'Note: Use only if you have external links');
+define('TXT_WPSC_USEONLYEXTERNALLINK', 'If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.');
 define('TXT_WPSC_EXTERNALLINK', 'External Link');
 define('TXT_WPSC_BUTTONTYPE', 'Button Type');
 define('TXT_WPSC_BUYNOW', 'Buy Now');
@@ -522,7 +525,7 @@ define('TXT_WPSC_CATEGORYHASBEENEDITED', 'The product group has been edited.');
 define('TXT_WPSC_DISPLAYCATEGORIES', 'Display Product Groups');
 define('TXT_WPSC_ADDCATEGORY', 'Add Product Group');
 define('TXT_WPSC_EDITCATEGORY', 'Edit Product Group');
-define('TXT_WPSC_ALLCATEGORIES', 'All Product Groups');
+define('TXT_WPSC_ALLCATEGORIES', 'View All Product Categories');
 
 define('TXT_WPSC_DISPLAYVARIATIONS', 'Display Variations');
 define('TXT_WPSC_ADDVARIATION', 'Add Variation Set');
@@ -853,7 +856,7 @@ define('TXT_WPSC_ITEM_GONE_OUT_OF_STOCK', 'It appears that an item has gone out 
 define('TXT_WPSC_DISPLAY_FANCY_NOTIFICATIONS', 'Display Fancy Purchase Notifications');
 define('TXT_WPSC_IF_USER_CHECKOUT', 'If you have a user account, Please ');
 define('TXT_WPSC_LOG_IN', 'log in.');
-define('TXT_WPSC_IS_DONATION', 'Is the product a donation?');
+define('TXT_WPSC_IS_DONATION', 'This is a donation only show it in the donations widget');
 define('TXT_WPSC_DONATION', 'Donation');
 define('TXT_WPSC_DONATION_LC', 'donation');
 define('TXT_WPSC_DONATION_SHIPPING', 'No shipping for donations');

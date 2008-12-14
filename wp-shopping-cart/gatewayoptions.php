@@ -138,7 +138,7 @@ function selectgateway() {
 				  <p>
 				  <?php echo TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS; ?>
 				  </p>
-						
+				  <br />
 						<?php
 						$selected_gateways = get_option('custom_gateway_options');
 						//echo("<pre>".print_r($selected_gateways,true)."</pre>");

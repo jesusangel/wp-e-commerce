@@ -177,7 +177,7 @@ function selectgateway() {
 											echo "</th>";
 											echo "<td>";
 											echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
-											echo "<br>If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.";
+											echo "<br>".TXT_WPSC_USPS_DESC;
 											echo "</td>";
 											echo "</tr>";
 										
@@ -241,11 +241,13 @@ function selectgateway() {
 					<div class="categorisation_title">
 					  <strong class="form_group"><?php echo TXT_WPSC_SHIPPING_MODULES; ?></strong>
 					</div>
+					
 					<?php } ?>
 					
 					<p>
 						<?php echo TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES; ?>
 					</p>
+					<br />
 					<?php
 					
 					// print the internal shipping methods
