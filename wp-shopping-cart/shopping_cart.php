@@ -1,5 +1,21 @@
 <?php
-global $wpdb, $user_ID;
+global $wpdb, $user_ID, $wpsc_shipping_modules;
+
+			$shipping_quotes = null;
+			if($_SESSION['quote_shipping_method'] != null) {
+			   // use the selected shipping module
+			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+			} else {
+			  // otherwise select the first one with any quotes
+				foreach($custom_shipping as $shipping_module) {
+					$_SESSION['quote_shipping_method'] = $shipping_module;
+					$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+					if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+					  break;
+					}
+				}
+			}
+$shipping_quotes = null;
 //$_SESSION['coupon_num'] = '';
 
 
@@ -235,17 +251,22 @@ function wpsc_shipping_country_list($selected_country = null) {
 		//// usps changes
 		$custom_shipping = get_option('custom_shipping_options');
 		foreach((array)$custom_shipping as $shipping) {
-			foreach ($GLOBALS['wpsc_shipping_modules'] as $available_shipping) {
+			foreach ($wpsc_shipping_modules as $available_shipping) {
 				if ($shipping == $available_shipping->internal_name)
 					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote();
 				
 			}
 		}
  	//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
+ 	//echo ('<pre>'.print_r($_SESSION['quote_shipping_option'],1)."</pre>");
 	$_SESSION['uspsQuote']=$shipping_quotes;
 	$i=0;
+	$shipping_is_selected = false;
+	if(($_SESSION['quote_shipping_method'] != null) && ($_SESSION['quote_shipping_option']  != null)) {
+	  $shipping_is_selected = true;
+	}
 	foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
- 	  $shipping_method_name = $GLOBALS['wpsc_shipping_modules'][$key1]->name;
+ 	  $shipping_method_name = $wpsc_shipping_modules[$key1]->name;
 		echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name</td></tr>";
 		if (empty($shipping_quote)) {
 			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
@@ -253,10 +274,18 @@ function wpsc_shipping_country_list($selected_country = null) {
 		foreach ((array)$shipping_quote as $quotes) {
 			$j=0;
 			foreach((array)$quotes as $key=>$quote) {
-				if (($i == 0) && ($j == 0)) {
-					$selected = "checked='checked'";
+				if($shipping_is_selected == true) {
+				  if(($_SESSION['quote_shipping_method'] == $key1) && ($_SESSION['quote_shipping_option']  == $key)) {
+						$selected = "checked='checked'";
+				  } else {
+						$selected ="";
+				  }
 				} else {
-					$selected ="";
+					if (($i == 0) && ($j == 0)) {
+						$selected = "checked='checked'";
+					} else {
+						$selected ="";
+					}
 				}
 				echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
 				$j++;
@@ -305,14 +334,14 @@ function wpsc_shipping_country_list($selected_country = null) {
 	echo "".TXT_WPSC_TOTALPRICE.":";
 	echo "  </td>\n\r";
 	echo "  <td colspan='2' id='checkout_total' style='vertical-align: middle;'>\n\r";
-	if (isset($_SESSION['quote_shipping_total'])) {
-		if ($discount <= 0) 
-			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'],1);
-		else 
-			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'] - $discount,1);
-	} else {
+// 	if (isset($_SESSION['quote_shipping_total'])) {
+// 		if ($discount <= 0) 
+// 			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'],1);
+// 		else 
+// 			echo nzshpcrt_currency_display($_SESSION['quote_shipping_total'] - $discount,1);
+// 	} else {
 		echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-	}
+// 	}
 	echo "<input id='shopping_cart_total_price' type='hidden' value='".$total."'>";
 	
 

@@ -235,11 +235,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	    $output .= "</table>";
     }
     if($_SESSION['delivery_country'] != null) {
-    if (isset($_SESSION['quote_shipping_total'])) {
-		$total_shipping = $_SESSION['quote_shipping_total'] - $total - $tax;
-	} else {
-		$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
-	}
+			$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
       //$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
       $output .= "<span class='subtotal'><span class='subtotalhead'>".TXT_WPSC_SUBTOTAL.":</span>".nzshpcrt_currency_display(($total), 1)."</span>";
       if((get_option('do_not_use_shipping') != 1) && ($all_donations == false) && ($all_no_shipping == false))
@@ -262,16 +258,8 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
 			}
+			$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
 			
-			if (!isset($_SESSION['quote_shipping_total'])) {
-				$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_overall_total_price($_SESSION['delivery_country'],true)."</span>";
-			} else {
-				if($discount > 0) {
-					$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_currency_display($_SESSION['quote_shipping_total'] - $discount, 1)."</span>";
-				} else {
-					$output .= "<span class='total'><span class='totalhead'>".TXT_WPSC_TOTAL.":</span>".nzshpcrt_currency_display($_SESSION['quote_shipping_total'], 1)."</span>";
-				}
-			}
 		} else{
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";
@@ -398,62 +386,49 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
   return $output;
   }
   
-function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null )
-  {
+function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null ) {
   global $wpdb;
-  if($selected_country == null)
-    {
+  if($selected_country == null) {
     $selected_country = get_option('base_country');
-    }
-  if($selected_region == null)
-    {
+	}
+  if($selected_region == null) {
     $selected_region = get_option('base_region');
-    }
-  if($form_id != null)
-    {
+	}
+  if($form_id != null) {
     $html_form_id = "region_country_form_$form_id";
-    }
-    else
-      {
-      $html_form_id = 'region_country_form';
-      }
+	} else {
+		$html_form_id = 'region_country_form';
+	}
   $country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
   $output .= "<div id='$html_form_id'>\n\r";
   $output .= "<select name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
-  foreach ($country_data as $country)
-    {
+  foreach ($country_data as $country) {
     $selected ='';
-    if($selected_country == $country['isocode'])
-      {
+    if($selected_country == $country['isocode']) {
       $selected = "selected='true'";
-      }
+		}
     $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>\n\r";
-    }  
+	}  
   $output .= "</select>\n\r";
   
   
   $region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$selected_country."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
     $output .= "<div id='region_select_$form_id'>";
-    if($region_list != null)
-      {
+    if($region_list != null) {
       $output .= "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
       //$output .= "<option value=''>None</option>";
-      foreach($region_list as $region)
-        {
-        if($selected_region == $region['id'])
-          {
+      foreach($region_list as $region) {
+        if($selected_region == $region['id']) {
           $selected = "selected='true'";
-          }
-          else
-            {
-            $selected = "";
-            }
+				} else {
+					$selected = "";
+				}
         $output .= "<option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
-        }
+			}
       $output .= "</select>\n\r";
-      }
+		}
   $output .= "</div>";
   $output .= "</div>\n\r";
   return $output;
-  }
+}
 ?>

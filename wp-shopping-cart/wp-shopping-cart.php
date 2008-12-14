@@ -836,17 +836,24 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		if ($_POST['uspsswitch']) {
 			$total=$_POST['total'];
 			$quotes = $_SESSION['uspsQuote'];
+			$_SESSION['quote_shipping_method']= $_POST['key1'];
+			$_SESSION['quote_shipping_option']= $_POST['key'];
 			//echo "<pre>".print_r($quotes,1)."</pre>";
 			foreach ($quotes[$_POST['key1']] as $quote) {
 				if ($quote[$_POST['key']] !== null) {
-					if ($_SESSION['wpsc_discount'] > 0)
-						echo nzshpcrt_currency_display($total+$quote[$_POST['key']]-$_SESSION['wpsc_discount'],1);
+				
+					echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
+					/*if ($_SESSION['wpsc_discount'] > 0)
+  					echo nzshpcrt_currency_display($total+$quote[$_POST['key']]-$_SESSION['wpsc_discount'],1);
+						
+						echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
 					else
-						echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);
-					echo "---".nzshpcrt_currency_display($quote[$_POST['key']],1);
+						echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);*/
+					echo "---";					
+					echo nzshpcrt_currency_display(nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']), true);
 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
-					$_SESSION['quote_shipping']= $quote[$_POST['key']];
-					$_SESSION['quote_shipping_total'] = $total+$quote[$_POST['key']];
+					$_SESSION['quote_shipping']= nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
+					$_SESSION['quote_shipping_total'] = nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
 				}
 			}
 			exit();
@@ -1195,86 +1202,68 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			echo "
 			";
 			}else{
-			if ($status[0]=='1'){
-			  exit();
-			}
+				if ($status[0]=='1'){
+					exit();
+				}
 			  echo  "if(document.getElementById('shoppingcartcontents') != null)
 					  {
 					  document.getElementById('shoppingcartcontents').innerHTML = \"".str_replace(Array("\n","\r") , "",addslashes(nzshpcrt_shopping_basket_internals($cart,$quantity_limit))). "\";
 					  }
 					";
 		
-			  if($do_not_refresh_regions == false)
-				{
-				$region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$_POST['billing_country']."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
-				  if($region_list != null)
-					{
+			  if($do_not_refresh_regions == false) {
+					$region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$_POST['billing_country']."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
+				  if($region_list != null) {
 					$output .= "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\\\"$html_form_id\\\", \\\"$form_id\\\");'>";
 					//$output .= "<option value=''>None</option>";
-					foreach($region_list as $region)
-					  {
-					  if($_SESSION['selected_region'] == $region['id'])
-						{
-						$selected = "selected='true'";
-						}
-						else
-						  {
+					foreach($region_list as $region) {
+					  if($_SESSION['selected_region'] == $region['id']) {
+							$selected = "selected='true'";
+						} else {
 						  $selected = "";
-						  }
+						}
 					  $output .= "<option value='".$region['id']."' $selected>".$region['name']."</option>";
-					  }
+					}
 					$output .= "</select>";
-			  echo  "if(document.getElementById('region_select_$form_id') != null)
-		  {
-		  document.getElementById('region_select_$form_id').innerHTML = \"".$output."\";
-		  }
-		";
-				  }
-				  else
-				  {
+					echo  "if(document.getElementById('region_select_$form_id') != null)
+						{
+						document.getElementById('region_select_$form_id').innerHTML = \"".$output."\";
+						}
+					";
+				} else {
 				  echo  "if(document.getElementById('region_select_$form_id') != null)
-		  {
-		  document.getElementById('region_select_$form_id').innerHTML = \"\";
-		  }
-		";
-				  }
+					{
+					document.getElementById('region_select_$form_id').innerHTML = \"\";
+					}
+				";
 				}
+			}
 		}
-      exit();
-      }
+		exit();
+	}
     
-    if(($_POST['get_country_tax'] == "true") && preg_match("/[a-zA-Z]{2,4}/",$_POST['country_id']))  
-      {
+    if(($_POST['get_country_tax'] == "true") && preg_match("/[a-zA-Z]{2,4}/",$_POST['country_id'])) {
       $country_id = $_POST['country_id'];
       $region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$country_id."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
-      if($region_list != null)
-        {
+      if($region_list != null) {
         echo "<select name='base_region'>\n\r";
-        foreach($region_list as $region)
-          {
-          if(get_option('base_region')  == $region['id'])
-            {
+        foreach($region_list as $region) {
+          if(get_option('base_region')  == $region['id']) {
             $selected = "selected='true'";
-            }
-            else
-              {
-              $selected = "";
-              }
+					} else {
+						$selected = "";
+					}
           echo "<option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
-          }
+				}
         echo "</select>\n\r";    
-        }
-        else { echo "&nbsp;"; }
+			}  else { echo "&nbsp;"; }
       exit();
-      }
-      
-    
+		}
     /* fill product form */    
-    if(($_POST['set_slider'] == "true") && is_numeric($_POST['state']))
-      {
+    if(($_POST['set_slider'] == "true") && is_numeric($_POST['state'])) {
       $_SESSION['slider_state'] = $_POST['state'];
       exit();
-      }  /* fill category form */
+		}  /* fill category form */
       
       
      
@@ -2628,7 +2617,7 @@ function wpsc_swfupload_images() {
 	}
 }
 
-add_action('init','wpsc_swfupload_images');
+add_action('admin_init','wpsc_swfupload_images');
 
 
 function wpsc_display_invoice() {

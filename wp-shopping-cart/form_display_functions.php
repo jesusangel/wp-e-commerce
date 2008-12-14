@@ -82,17 +82,15 @@ function nzshpcrt_form_field_list($selected_field = null)
   $output .= "<option value=''>Please choose</option>";
   $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1';";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
-  foreach ($form_data as $form)
-    {
+  foreach ((array)$form_data as $form) {
     $selected ='';
-    if($selected_field == $form['id'])
-      {
+    if($selected_field == $form['id']) {
       $selected = "selected='true'";
-      }
+		}
     $output .= "<option value='".$form['id']."' $selected>".$form['name']."</option>";
-    }
+	}
   return $output;
-  }
+}
   
   
 function wpsc_parent_category_list($group_id, $category_id, $category_parent_id) {

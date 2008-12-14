@@ -138,22 +138,18 @@ function nzshpcrt_calculate_tax($price, $country, $region) {
 	return $price;
 }
 
-  function nzshpcrt_find_total_price($purchase_id,$country_code)
-    {
+  function nzshpcrt_find_total_price($purchase_id,$country_code) {
     global $wpdb;
-    if(is_numeric($purchase_id))
-      {
+    if(is_numeric($purchase_id)) {
       $purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$purchase_id."'";
       $purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 
       $cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_id."";
       $cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
-      if($cart_log != null)
-        {
+      if($cart_log != null) {
         $all_donations = true;
         $all_no_shipping = true;
-        foreach($cart_log as $cart_row)
-          {
+        foreach($cart_log as $cart_row) {
           $productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
           $product_data = $wpdb->get_results($productsql,ARRAY_A); 
         
@@ -162,28 +158,27 @@ function nzshpcrt_calculate_tax($price, $country, $region) {
           $variation_count = count($variation_data);
           $price = ($cart_row['price'] * $cart_row['quantity']);          
           
-          if($purch_data['shipping_country'] != '')
-            {
+          if($purch_data['shipping_country'] != '') {
             $country_code = $purch_data['shipping_country'];
-            }
+					}
             
           if($cart_row['donation'] == 1) {
             $shipping = 0;
-            } else {
+					} else {
             $all_donations = false;
-            }
+					}
           
           if($cart_row['no_shipping'] == 1) {
             $shipping = 0;
-            } else {
+					} else {
             $all_no_shipping = false;
-            }
+					}
 
           if(($cart_row['donation'] != 1) && ($cart_row['no_shipping'] != 1)) {
             $shipping = nzshpcrt_determine_item_shipping($cart_row['prodid'], $cart_row['quantity'], $country_code);
-            }
+					}
           $endtotal += $shipping + $price;
-          }
+				}
         if(($all_donations == false) && ($all_no_shipping == false)){
           if($purch_data['base_shipping'] > 0) {
 						$base_shipping = $purch_data['base_shipping'];
@@ -200,11 +195,14 @@ function nzshpcrt_calculate_tax($price, $country, $region) {
 					}
         }
           
-        }
+			}
       return $endtotal;
-      }
-    }
+		}
+	}
+    
+    
   //written by Allen
+  
 function nzshpcrt_apply_coupon($price,$coupon_num){
 	global $wpdb;
 	$now = date("Y-m-d H:i:s");
@@ -246,14 +244,38 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
   //End of written by Allen  
   
   function nzshpcrt_determine_base_shipping($per_item_shipping, $country_code) {    
-    global $wpdb;
+    global $wpdb, $wpsc_shipping_modules;
     if(get_option('do_not_use_shipping') != 1) {
-      if($country_code == get_option('base_country')) {
-        $base_shipping = get_option('base_local_shipping');
-      } else {
-				$base_shipping = get_option('base_international_shipping');
+			$custom_shipping = get_option('custom_shipping_options');
+			
+			
+			$shipping_quotes = null;
+			if($_SESSION['quote_shipping_method'] != null) {
+			   // use the selected shipping module
+			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+			} else {
+			  // otherwise select the first one with any quotes
+				foreach($custom_shipping as $shipping_module) {
+					$_SESSION['quote_shipping_method'] = $shipping_module;
+					$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+					if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+					  break;
+					}
+				}
 			}
-      $shipping = $base_shipping + $per_item_shipping;
+			
+		  	//echo "<pre>".print_r($shipping_quotes,true)."</pre>";
+			if(!isset($_SESSION['quote_shipping_option']) && ($shipping_quotes != null)) {
+				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_pop(array_slice($shipping_quotes,0,1))));
+			}
+			
+			foreach((array)$shipping_quotes as $shipping_quote) {
+				foreach((array)$shipping_quote as $key=>$quote) {
+					if($key == $_SESSION['quote_shipping_option']) {
+					  $shipping = $quote;
+					}
+				}
+			}
 		} else {
       $shipping = 0;
 		}
