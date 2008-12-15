@@ -19,6 +19,28 @@ function category_and_tag_box($product_data=''){
 	    <a class='togbox'>+</a>";
     }
     $output .= TXT_WPSC_CATEGORY_AND_TAG_CONTROL;
+    if ($product_data != '') {
+    	if(function_exists('wp_insert_term')) {
+			$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = ".$product_data['id'], ARRAY_A);
+			
+			foreach ((array)$term_relationships as $term_relationship) {
+				$tt_ids[] = $term_relationship['term_taxonomy_id'];
+			}
+			foreach ((array)$tt_ids as $tt_id) {
+				$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_taxonomy WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
+				$term_ids[] = $results[0]['term_id'];
+			}
+			foreach ((array)$term_ids as $term_id ) {
+				if ($term_id != NULL){
+				$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."terms WHERE term_id=".$term_id." ",ARRAY_A);
+				$tags[] = $results[0]['name'];
+				}
+			}
+			if ($tags != NULL){ 
+				$imtags = implode(',', $tags);
+			}
+  		}
+  	}
     $output .= "
 	</h3>
     <div class='inside'>
@@ -34,7 +56,10 @@ function category_and_tag_box($product_data=''){
 							$output .= "<p>";
 						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
 						  $output .= "<strong>".$category_group_name.":</strong><br>";
-						  $output .= categorylist($categorisation_group['id'], false, 'add_');
+						  if ($product_data == '')
+						  	$output .= categorylist($categorisation_group['id'], false, 'add_');
+						  else 
+						  	$output .= categorylist($categorisation_group['id'], $product_data['id'], 'edit_');
 						  $output .= "</p>";
 						}
 					}
@@ -42,7 +67,7 @@ function category_and_tag_box($product_data=''){
      $output .= "</td>
      <td class='itemfirstcol'>
        ".TXT_WPSC_PRODUCT_TAGS.":<br>
-        <input type='text' class='text wpsc_tag' name='product_tag' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
+        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
       </td>
     </tr>";
     
@@ -850,6 +875,7 @@ global $closed_postboxes;
 <?php
 }
 function wpsc_meta_boxes(){
+	add_meta_box('category_and_tag', 'Category and Tags', 'category_and_tag_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('variation', 'Variations', 'variation_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('shipping', 'Shipping', 'shipping_box', 'wp-shopping-cart/display-items', 'normal', 'high');

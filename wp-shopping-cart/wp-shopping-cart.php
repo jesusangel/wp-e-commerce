@@ -2865,6 +2865,7 @@ function wpsc_fav_action($actions) {
     $actions['admin.php?page=wp-shopping-cart/display-items.php'] = array('New Product', 'manage_options');
     return $actions;
 }
+
 function save_hidden_box() {
 	if ($_POST['action'] == 'closed-postboxes'){
 	    $hidden_box = $_POST['hidden'];
@@ -2874,5 +2875,70 @@ function save_hidden_box() {
 	}
 }
 
+//duplicating a product
+function wpsc_duplicate() {
+	global $wpdb;
+	if (is_numeric($_GET['duplicate'])) {
+		$dup_id = $_GET['duplicate'];
+		$sql = " INSERT INTO {$wpdb->prefix}product_list( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM {$wpdb->prefix}product_list WHERE id = '".$dup_id."' ";
+		$wpdb->query($sql);
+		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
+		
+		//Inserting duplicated category record.
+		$category_assoc = $wpdb->get_col("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id = '".$dup_id."'");
+		$new_product_category = "";
+		if (count($category_assoc) > 0) {
+			foreach($category_assoc as $key => $category) {
+				$new_product_category .= "('".$new_id."','".$category."')";
+				
+				if (count($category_assoc) != $key+1) {
+					$new_product_category .= ",";
+				}
+			}
+			$sql = "INSERT INTO {$wpdb->prefix}item_category_associations (product_id, category_id) VALUES ".$new_product_category;
+			$wpdb->query($sql);
+		}
+		
+		//files, meta, images, category
+		
+	
+		//Inserting duplicated meta info
+		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM {$wpdb->prefix}wpsc_productmeta WHERE product_id='".$dup_id."'", ARRAY_A);
+		$new_meta_value = '';
+		if (count($meta_values)>0){
+			foreach($meta_values as $key => $meta) {
+				$new_meta_value .= "('".$new_id."','".$meta['meta_key']."','".$meta['meta_value']."','".$meta['custom']."')";
+			
+				if (count($meta_values) != $key+1) {
+					$new_meta_value .= ",";
+				}
+			}
+			$sql = "INSERT INTO {$wpdb->prefix}wpsc_productmeta (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".$new_meta_value;
+			$wpdb->query($sql);
+		}
+		
+		
+		
+		//Inserting duplicated image info
+		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM {$wpdb->prefix}product_images WHERE product_id='".$dup_id."'", ARRAY_A);
+		$new_image_value = '';
+		if (count($image_values)>0){
+			foreach($$image_values as $key => $image) {
+				$new_image_value .= "('".$new_id."','".$image['image']."','".$image['width']."','".$image['height']."','".$image['image_order']."','".$image['meta']."')";
+			
+				if (count($meta_values) != $key+1) {
+					$new_image_value .= ",";
+				}
+			}
+			$sql = "INSERT INTO {$wpdb->prefix}product_images (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
+			$wpdb->query($sql);
+		}
+	}
+	wp_redirect('?page=wp-shopping-cart/display-items.php');
+}
+
+if (isset($_GET['duplicate'])) {
+	add_action('admin_init', 'wpsc_duplicate');
+}
 add_action('init', 'save_hidden_box');
 ?>

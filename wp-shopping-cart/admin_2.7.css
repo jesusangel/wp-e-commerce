@@ -139,7 +139,7 @@ table#itemlist tr.products{border-left:1px solid #bbb;border-right:1px solid #bb
 table#itemlist tr.productsalt{background-color:#f3f3f3;border-left:1px solid #bbb;border-right:1px solid #bbb;}
 */
 table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
-table#itemlist tr.productsalt td{text-align: left;padding:0px; vertical-align: middle ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
+table#itemlist tr.productsalt td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 
 table#itemlist tr td.imagecol{ padding: 4px;}
  
@@ -196,14 +196,14 @@ div#additem{ display: block;}
 
 /* div#additem table tr td{ height: 11px; } */
 
-div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ min-width: 250px !important; padding-left:8px; vertical-align: top; }
+div#productform table.additem td.itemfirstcol, div#additem table.additem td.itemfirstcol{ min-width: 250px !important; padding-right:4px; padding-left:4px; vertical-align: top; }
 
-div#productform td.itemfirstcol{ width: 120px !important; padding-left:8px; vertical-align: top; }
+div#productform td.itemfirstcol{ width: 120px !important; padding-right:4px; padding-left:4px;  vertical-align: top; }
 div#additem table.additem input.text,div#additem table.additem textarea{width:584px;border:1px solid #bbb;}
 form.edititem textarea{width:584px;border:1px solid #bbb;}
 
-div#additem table.additem input.text{width:290px;border:1px solid #bbb;}
-div#productform input.text, div#additem input.text{width:290px;border:1px solid #bbb;}
+div#additem table.additem input.text{width:286px;border:1px solid #bbb;}
+div#productform input.text, div#additem input.text{width:286px;border:1px solid #bbb;}
 input.image_resize{ position: relative; top: 4px; }
  
 div#additem table.additem input.wpsc_tag{
@@ -1848,3 +1848,6 @@ form.additem input, form.edititem input {
 	border-radius: 6px;
 }
 
+body.mceContentBody{
+	font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+}

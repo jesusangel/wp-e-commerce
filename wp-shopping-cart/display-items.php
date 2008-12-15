@@ -696,67 +696,6 @@ if(is_numeric($_GET['deleteid'])) {
 		wp_delete_object_term_relationships($_GET['deleteid'], 'product_tag');
 }
 
-if (is_numeric($_GET['duplicate'])) {
-	$dup_id = $_GET['duplicate'];
-	$sql = " INSERT INTO {$wpdb->prefix}product_list( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM {$wpdb->prefix}product_list WHERE id = '".$dup_id."' ";
-	$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
-	
-	//Inserting duplicated category record.
-	$category_assoc = $wpdb->get_col("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id = '".$dup_id."'");
-	$new_product_category = "";
-	if (count($category_assoc) > 0) {
-		foreach($category_assoc as $key => $category) {
-			$new_product_category .= "('".$new_id."','".$category."')";
-			
-			if (count($category_assoc) != $key+1) {
-				$new_product_category .= ",";
-			}
-		}
-		$sql = "INSERT INTO {$wpdb->prefix}item_category_associations (product_id, category_id) VALUES ".$new_product_category;
-		//$wpdb->query($sql);
-	}
-	
-	//variations, files, meta, images, category
-	
-
-	//Inserting duplicated meta info
-	$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM {$wpdb->prefix}wpsc_productmeta WHERE product_id='".$dup_id."'", ARRAY_A);
-	$new_meta_value = '';
-	if (count($meta_values)>0){
-		foreach($meta_values as $key => $meta) {
-			$new_meta_value .= "('".$new_id."','".$meta['meta_key']."','".$meta['meta_value']."','".$meta['custom']."')";
-		
-			if (count($meta_values) != $key+1) {
-				$new_meta_value .= ",";
-			}
-		}
-		$sql = "INSERT INTO {$wpdb->prefix}wpsc_productmeta (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".$new_meta_value;
-		//$wpdb->query($sql);
-	}
-	
-	
-	
-	//Inserting duplicated image info
-	$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM {$wpdb->prefix}product_images WHERE product_id='".$dup_id."'", ARRAY_A);
-	$new_image_value = '';
-	if (count($image_values)>0){
-		foreach($$image_values as $key => $image) {
-			$new_image_value .= "('".$new_id."','".$image['image']."','".$image['width']."','".$image['height']."','".$image['image_order']."','".$image['meta']."')";
-		
-			if (count($meta_values) != $key+1) {
-				$new_image_value .= ",";
-			}
-		}
-		$sql = "INSERT INTO {$wpdb->prefix}product_images (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
-		//$wpdb->query($sql);
-	}
-	
-	
-	exit("<pre>".print_r($sql,1)."</pre>");
-}
-
-
-
 /*
  * Sort out the searching of the products
  */
@@ -879,7 +818,6 @@ $baseurl = includes_url('js/tinymce');
 	    postboxes.save_state('products');
 	} );
 	
-
 tinyMCE.init({
 	theme : "advanced",
 	mode : "specific_textareas",
@@ -895,6 +833,7 @@ tinyMCE.init({
 	theme_advanced_toolbar_align : "left",
 	theme_advanced_statusbar_location : "bottom",
 	theme_advanced_resizing : true,
+	content_css : WPSC_URL+"/js/tinymce3/mce.css",
 	theme_advanced_resize_horizontal : false
 });
 

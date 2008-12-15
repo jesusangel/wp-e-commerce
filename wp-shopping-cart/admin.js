@@ -181,6 +181,7 @@ tinyMCE.init({
 	theme_advanced_toolbar_align : "left",
 	theme_advanced_statusbar_location : "bottom",
 	theme_advanced_resizing : true,
+	content_css : WPSC_URL+"/js/tinymce3/mce.css",
 	theme_advanced_resize_horizontal : false
 });
 
@@ -1253,6 +1254,7 @@ function reloadresults(){
 }
 
 jQuery(document).ready(function(){
+	
 	jQuery(".wpsc-row-actions").parent().parent("tr").mouseover(
 		function() {
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "visible");
