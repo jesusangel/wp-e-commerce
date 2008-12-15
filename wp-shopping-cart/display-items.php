@@ -1221,13 +1221,11 @@ if (function_exists('add_object_page')){
       <td colspan="2" class='itemfirstcol'>
       
         <div class='admin_product_name'>
-					<input size='40' class='wpsc_product_name' type='text' name='name' value='' class='text' />
-					<!--
-<a href='#' class='shorttag_toggle'></a>					
+					<input size='40' class='wpsc_product_name' type='text' name='name' value='' class='text'/>
+					<a href='#' class='shorttag_toggle'></a>					
 					<div class='admin_product_shorttags'>
 					<?php echo TXT_WPSC_NO_SHORTCODE;?>
-					</div>   
--->     
+					</div>        
         </div>
         
       </td>

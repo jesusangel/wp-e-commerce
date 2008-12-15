@@ -1218,14 +1218,25 @@ div.admin_product_name a.shorttag_toggle {
 	height:17px;
 	padding:3px;
 	width:18px;
+	margin-top:1px;
 }
 
 div.admin_product_name a.shorttag_toggle.toggled {
 	background:#FFFFFF url(images/plus_icon.jpg) no-repeat scroll 5px 4px;
 }
 
+form.additem input.wpsc_product_name, form.edititem input.wpsc_product_name{
+/*
+	-moz-border-radius-topright:0px;
+	-moz-border-radius-bottomright:0px;
+*/
+	margin-bottom:0px;
+	float:left;
+	width:85%;
+}
+
 div.admin_product_name div.admin_product_shorttags {
-  width: 344px;
+  width: 328px;
   clear: both;
   padding: 6px;
   font-size: 8pt;

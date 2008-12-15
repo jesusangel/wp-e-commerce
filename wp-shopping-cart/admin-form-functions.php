@@ -83,8 +83,7 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td colspan='2' class='itemfirstcol'>\n\r";
   
 	$output .= "        <div class='admin_product_name'>\n\r";
-  $output .= "          <input style='width:100%;' class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
-/*
+  $output .= "          <input class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
 	$output .= "				   <a href='#' class='shorttag_toggle'></a>\n\r";
 	$output .= "				   <div class='admin_product_shorttags'>\n\r";
 	$output .= "				     <dl>\n\r";
@@ -93,8 +92,7 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "				       <dt>Buy Now Shortcode:</dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
 	$output .= "				       <dt>Buy Now PHP:</dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
 	$output .= "				     </dl>\n\r";
-	$output .= "				     <br clear='both' />\n\r";
-*/	
+	$output .= "				     <br clear='both' />\n\r";	
 	$output .= "				   </div>\n\r";
 	$output .= "        </div>\n\r";
         

@@ -1224,19 +1224,31 @@ div.admin_product_name input.text{
 }
 
 div.admin_product_name a.shorttag_toggle {
-	background:#FFFFFF url(images/info_icon.jpg) no-repeat scroll 5px 4px;
-	border-bottom:1px solid #BBBBBB;
-	border-right:1px solid #BBBBBB;
-	border-top:1px solid #BBBBBB;
+	background:#FFFFFF url(images/info_icon.jpg) no-repeat scroll 5px 8px;
+	border-bottom:1px solid #DFDFDF;
+	border-right:1px solid #DFDFDF;
+	border-top:1px solid #DFDFDF;
 	display:block;
 	float:left;
-	height:17px;
+	height:27px;
+	margin-left:-1px;
+	margin-top:1px;
 	padding:3px;
 	width:18px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topright:6px;
 }
 
 div.admin_product_name a.shorttag_toggle.toggled {
 	background:#FFFFFF url(images/plus_icon.jpg) no-repeat scroll 5px 4px;
+}
+
+form.additem input.wpsc_product_name, form.edititem input.wpsc_product_name{
+	-moz-border-radius-topright:0px;
+	-moz-border-radius-bottomright:0px;
+	margin-bottom:0px;
+	float:left;
+	width:95%;
 }
 
 div.admin_product_name div.admin_product_shorttags {
@@ -1244,10 +1256,10 @@ div.admin_product_name div.admin_product_shorttags {
   clear: both;
   padding: 6px;
   font-size: 8pt;
-  margin: 0px 0px 0px 1px !important;
-	border-left:1px solid #BBBBBB;
-	border-right:1px solid #BBBBBB;
-	border-bottom:1px solid #BBBBBB;
+  margin:0 0 0 6px !important;
+	border-left:1px solid #DFDFDF;
+	border-right:1px solid #DFDFDF;
+	border-bottom:1px solid #DFDFDF;
   display: none;
 }
 
