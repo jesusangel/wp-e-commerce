@@ -1923,3 +1923,12 @@ h3.hndle {
 	font-size:12px !important;
 	padding:6px 7px !important;
 }
+
+.wpsc-row-actions {
+	font-size: 0.8em;
+	visibility: hidden;
+}
+
+#editorcontainer {
+	padding:0px;
+}

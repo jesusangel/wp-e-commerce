@@ -987,16 +987,20 @@ if (function_exists('add_object_page')){
 	//echo topcategorylist();
 }else{
 echo "          <tr class='selectcategory'>\n\r";
-echo "            <td colspan='3'>\n\r";
+echo "            <td colspan='4'>\n\r";
 echo TXT_WPSC_PLEASESELECTACATEGORY.": ";
 echo "            </td>\n\r";
+/*
 echo "            <td colspan='1'>\n\r";
 echo "<div>\n\r";
 echo topcategorylist();
+*/
 //echo "<div style='float: right; width: 160px;'>". topcategorylist() ."</div>";
+/*
 echo "</div>\n\r";
 
 echo "            </td>\n\r";
+*/
 echo "          </tr>\n\r";
 }
 if(is_numeric($_GET['catid'])) {

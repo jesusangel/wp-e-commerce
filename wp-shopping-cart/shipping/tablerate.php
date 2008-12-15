@@ -62,7 +62,7 @@ class tablerate {
 		$shopping_cart = $_SESSION['nzshpcrt_cart'];
 // 		exit(print_r($shopping_cart,1));
 		$price=0;
-		foreach ($shopping_cart as $item) {
+		foreach ((array)$shopping_cart as $item) {
 			$price += $wpdb->get_var("SELECT price FROM {$wpdb->prefix}product_list WHERE id='{$item->product_id}'");
 		}
 		
