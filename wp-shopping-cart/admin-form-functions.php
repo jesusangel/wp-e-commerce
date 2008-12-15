@@ -728,7 +728,7 @@ function wpsc_right_now() {
 		$output .= ucfirst($product_unit);
 		$output .= "<td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-logs.php'>".$sales_count."</a>";
+		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$sales_count."</a>";
 		$output .= "<td>";
 		$output .= "<td class='last'>";
 		$output .= ucfirst($sales_unit);
@@ -743,7 +743,7 @@ function wpsc_right_now() {
 		$output .= ucfirst($group_unit);
 		$output .= "<td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-logs.php'>".$pending_sales."</a>";
+		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$pending_sales."</a>";
 		$output .= "<td>";
 		$output .= "<td class='last t waiting'>Pending ";
 		$output .= ucfirst($pending_sales_unit);
@@ -752,7 +752,7 @@ function wpsc_right_now() {
 		
 		$output .= "<tr>";
 		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-variations.php'>".$variation_count."</a>";
+		$output .= "<a href='?page=wp-shopping-cart/display_variations.php'>".$variation_count."</a>";
 		$output .= "<td>";
 		$output .= "<td class='t'>";
 		$output .= ucfirst($variation_unit);

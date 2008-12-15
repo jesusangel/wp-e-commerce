@@ -229,9 +229,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, nl2br($message), "From: ".get_option('return_email')."");
+						mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
 					} else {
-						mail($email, TXT_WPSC_PURCHASERECEIPT, nl2br($message), "From: ".get_option('return_email')."");
+						mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')."");
 					}
 				}
 				$report_user = TXT_WPSC_CUSTOMERDETAILS."\n\r";

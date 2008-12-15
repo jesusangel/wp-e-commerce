@@ -973,7 +973,7 @@ if($_GET['filter'] !== 'true') {
             break;
                 
             case 'heading':
-            echo "  <tr><td colspan='2'><strong>".$form_field['name'].":</strong></td></tr>\n\r";
+            echo "  <tr><td colspan='2'><br /><strong>".$form_field['name'].":</strong></td></tr>\n\r";
             break;
             
             default:
@@ -1054,7 +1054,7 @@ if($_GET['filter'] !== 'true') {
 		}
 		if($purch_data[0]['shipping_method'] != '') {
 		  echo "<br />";
-			echo "<strong>".TXT_WPSC_SHIPPING_DETAILS."</strong>\n\r";
+			echo "<strong>".TXT_WPSC_SHIPPING_METHOD."</strong>\n\r";
 			echo "<table style=''>\n\r";
 			echo "  <tr><td>".TXT_WPSC_SHIPPING_METHOD.":</td><td> ".$purch_data[0]['shipping_method']."</td></tr>\n\r";
 			echo "  <tr><td>".TXT_WPSC_SHIPPING_OPTION.":</td><td> ".$purch_data[0]['shipping_option']."</td></tr>\n\r";

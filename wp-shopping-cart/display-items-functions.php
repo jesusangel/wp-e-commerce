@@ -262,6 +262,12 @@ function shipping_box($product_data=''){
     <!--USPS shipping changes ends-->
 
     <tr>
+    <tr>
+      <td colspan='2'>
+      <strong>".TXT_WPSC_FLAT_RATE_SETTINGS."</strong> 
+      </td>
+    </tr>
+    <tr>
       <td>
       ".TXT_WPSC_LOCAL_PNP." 
       </td>

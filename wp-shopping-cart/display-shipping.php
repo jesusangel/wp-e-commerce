@@ -22,10 +22,12 @@ if($_POST['custom_shipping_options'] != null) {
 	$changes_made = true;
 }
 
-		if($_POST['do_not_use_shipping'] == 1) {
-			update_option('do_not_use_shipping', 1);
-		} else {
-			update_option('do_not_use_shipping', 0);
+		if(isset($_POST['do_not_use_shipping'])) {
+			if($_POST['do_not_use_shipping'] == 'no') {
+				update_option('do_not_use_shipping', 1);
+			} else {
+				update_option('do_not_use_shipping', 0);
+			}
 		}
 		
 		if(isset($_POST['base_zipcode'])) {
@@ -164,8 +166,8 @@ function selectgateway() {
 				}
 						
 				?>
-						<input type='radio' value='0' name='do_not_use_shipping' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
-				<input type='radio' value='1' name='do_not_use_shipping' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
+						<input type='radio' value='yes' name='do_not_use_shipping' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
+				<input type='radio' value='no' name='do_not_use_shipping' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
 						<?php echo TXT_WPSC_USE_SHIPPING_DESCRIPTION;?>
 								</td>
 										</tr>

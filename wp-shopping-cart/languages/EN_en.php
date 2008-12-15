@@ -2,6 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_FLAT_RATE_SETTINGS', "Flat Rate Settings");
 define('TXT_WPSC_OFF_SITE_LINK', "Off Site Product Link");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'These notes are only available here.');
 define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Categories and Tags');

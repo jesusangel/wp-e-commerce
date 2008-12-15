@@ -631,5 +631,38 @@ if($coldata['Type'] != "bigint(20) unsigned")	{
     $wpdb->query("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `file` = '{$new_file_id}' WHERE `id` IN ('{$variation['id']}') LIMIT 1");
   }
    
-	}
+}
+
+//   echo "<pre>".print_r(geast_option('flat_rates'),true)."</pre>";
+
+
+// update_option('base_local_shipping',8);
+// 	update_option('base_international_shipping',12);
+
+if((get_option('flat_rates') == null) || (count(get_option('flat_rates')) < 1)) {
+	$local_shipping = get_option('base_local_shipping');
+	$international_shipping = get_option('base_international_shipping');  
+// 	echo $international_shipping;
+	// Local Shipping Settings
+	$shipping['local'] = $local_shipping;
+	
+	$shipping['southisland'] = $local_shipping;
+	$shipping['northisland'] = $local_shipping;	
+	
+	// International Shipping Settings
+	$shipping['continental'] = $international_shipping;
+	$shipping['all'] = $international_shipping;
+	$shipping['canada'] = $international_shipping;
+	
+	$shipping['northamerica'] = $international_shipping;
+	$shipping['southamerica'] = $international_shipping;
+	$shipping['asiapacific'] = $international_shipping;
+	$shipping['europe'] = $international_shipping;
+	$shipping['africa'] = $international_shipping;
+	
+	//echo "<pre>".print_r($shipping,true)."</pre>";
+	
+	update_option('flat_rates',$shipping);
+}
+
 ?>

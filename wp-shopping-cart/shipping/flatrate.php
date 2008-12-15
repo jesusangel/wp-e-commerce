@@ -25,6 +25,7 @@ class flatrate {
 		return $this->internal_name;
 	}
 	
+	
 	function getForm() {
 		$shipping = get_option('flat_rates');
 		$output = "<tr><td colspan='1'><strong>Base Local</strong></td>";
@@ -50,7 +51,7 @@ class flatrate {
 	}
 	
 	function submit_form() {
-	  if($_POST != null) {
+	  if($_POST['shipping'] != null) {
 			$shippings = $_POST['shipping'];
 			update_option('flat_rates',$shippings);
 		}
