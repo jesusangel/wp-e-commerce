@@ -777,43 +777,35 @@ if($_GET['filter'] !== 'true') {
 				{
 				$alternate = "";
 				$j++;
-				if(($j % 2) != 0)
-					{
+				if(($j % 2) != 0) {
 					$alternate = "class='alt'";
-					}
+				}
 				$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A); 
 			
 				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
 				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 				$variation_count = count($variation_data);
-				if($variation_count > 1)
-					{
+				if($variation_count > 1) {
 					$variation_list = " (";
 					$i = 0;
-					foreach($variation_data as $variation)
-						{
-						if($i > 0)
-							{
+					foreach($variation_data as $variation) {
+						if($i > 0) {
 							$variation_list .= ", ";
-							}
+						}
 						$value_id = $variation['value_id'];
 						$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 						$variation_list .= $value_data[0]['name'];
 						$i++;
-						}
-					$variation_list .= ")";
 					}
-					else if($variation_count == 1)
-						{
-						$value_id = $variation_data[0]['value_id'];
-						$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-						$variation_list = " (".$value_data[0]['name'].")";
-						}
-						else
-							{
-							$variation_list = '';
-							}
+					$variation_list .= ")";
+				} else if($variation_count == 1) {
+					$value_id = $variation_data[0]['value_id'];
+					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$variation_list = " (".$value_data[0]['name'].")";
+				} else {
+					$variation_list = '';
+				}
 
 				if($purch_data[0]['shipping_country'] != '') {
 					$billing_country = $purch_data[0]['billing_country'];
@@ -1060,6 +1052,16 @@ if($_GET['filter'] !== 'true') {
 		} else {
 			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
 		}
+		if($purch_data[0]['shipping_method'] != '') {
+		  echo "<br />";
+			echo "<strong>".TXT_WPSC_SHIPPING_DETAILS."</strong>\n\r";
+			echo "<table style=''>\n\r";
+			echo "  <tr><td>".TXT_WPSC_SHIPPING_METHOD.":</td><td> ".$purch_data[0]['shipping_method']."</td></tr>\n\r";
+			echo "  <tr><td>".TXT_WPSC_SHIPPING_OPTION.":</td><td> ".$purch_data[0]['shipping_option']."</td></tr>\n\r";
+			echo "</table>\n\r";
+		}
+		
+		
 		echo "<br><b>".TXT_WPSC_ACTIONS."</b>";
 		
 		echo "<br /><br class='small' /><img src='".WPSC_URL."/images/lock_open.png'>&ensp;<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$_GET['purchaseid']."&amp;clear_locks=true'>".TXT_WPSC_CLEAR_IP_LOCKS."</a>";

@@ -6,9 +6,11 @@ define('TXT_WPSC_OFF_SITE_LINK', "Off Site Product Link");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'These notes are only available here.');
 define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Categories and Tags');
 define('TXT_WPSC_USPS_DESC', 'If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.');
+
+define('TXT_WPSC_SHIPPING_DETAILS', 'Shipping Details');
+define('TXT_WPSC_SHIPPING_METHOD', 'Shipping Method');
+define('TXT_WPSC_SHIPPING_OPTION', 'Shipping Option');
 define('TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES', 'External Shipping Calculators');
-
-
 define('TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES', 'Internal Shipping Calculators');
 
 define('TXT_DISPLAY_DESCRIPTION', 'Display Description');
