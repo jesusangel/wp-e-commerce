@@ -798,8 +798,8 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
 	}
 $baseurl = includes_url('js/tinymce');
 ?>
-<link  href="http://localhost/272/wp-includes/js/tinymce/themes/advanced/skins/wp_theme/ui.css" lang="stylesheet">
 <script type="text/javascript" src="<?php echo $baseurl; ?>/tiny_mce.js"></script>
+<script type="text/javascript" src="<?php echo $baseurl; ?>/langs/wp-langs-en.js"></script>
   <script src="../../wp-includes/js/tinymce/tiny_mce_popup.js" language="javascript" type='text/javascript' ></script>
   <script language='javascript' type='text/javascript'>
   jQuery('.hide-postbox-tog').click( function() {

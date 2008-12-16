@@ -478,6 +478,7 @@ jQuery(document).ready( function() {
   ?>
 });
 </script>
+
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/ui.datepicker.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.jeditable.pack.js"></script>
