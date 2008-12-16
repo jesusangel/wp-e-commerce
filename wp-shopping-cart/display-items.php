@@ -1351,7 +1351,7 @@ echo " <tr>
 		echo "<div id='normal-sortables' class='meta-box-sortables'>";
 	}
 	$order = get_option('wpsc_product_page_order');
-	if (($order == '') || ($order[0]=='')){
+	if (($order == '') || ($order[0]=='') || (count($order) < 7)){
 		$order=array("category_and_tag", "price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
 	}
 	foreach((array)$order as $key => $box) {
