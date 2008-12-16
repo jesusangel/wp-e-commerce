@@ -34,12 +34,13 @@ if($_POST['custom_shipping_options'] != null) {
 			update_option('base_zipcode', $_POST['base_zipcode']);
 		}
 		
-		if($_POST['shipwire'] == 1) {
-			update_option('shipwire', 1);
-		} else {
-			update_option('shipwire', 0);
+		if(isset($_POST['shipwire'])) {
+			if($_POST['shipwire'] == 1) {
+				update_option('shipwire', 1);
+			} else {
+				update_option('shipwire', 0);
+			}
 		}
-
 		if($_POST['shipwireemail'] != null) {
 			update_option('shipwireemail', $_POST['shipwireemail']);
 		}

@@ -101,7 +101,7 @@ function nzshpcrt_getproductform($prodid)
   
   
   $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol'>\n\r";
+  $output .= "            <td  class='skuandprice'>\n\r";
   $output .= TXT_WPSC_SKU_FULL." :<br />";
 /*
   $output .= "            </td>\n\r";
@@ -111,14 +111,14 @@ function nzshpcrt_getproductform($prodid)
   $sku = $sku[0];
   $output .= "<input size='30' type='text' class='text'  name='productmeta_values[sku]' value='".htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8')."' />\n\r";
   $output .= "            </td>\n\r";
-  $output .= "<td class='itemfirstcol'>";
+  $output .= "<td  class='skuandprice'>";
   $output .= TXT_WPSC_PRICE." :<br />";
   $output .= "<input type='text' class='text' size='30' name='price' value='".$product['price']."'>";
   $output .= "</td>";
   $output .= "          </tr>\n\r";
   
   $output .= "          <tr>\n\r";
-  $output .= "            <td colspan='2' class='itemfirstcol'>\n\r";
+  $output .= "            <td colspan='2'>\n\r";
 /*
   $output .= TXT_WPSC_PRODUCTDESCRIPTION.": ";
   $output .= "            </td>\n\r";

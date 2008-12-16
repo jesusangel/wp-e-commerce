@@ -252,9 +252,9 @@ function wpsc_shipping_country_list($selected_country = null) {
 		$custom_shipping = get_option('custom_shipping_options');
 		foreach((array)$custom_shipping as $shipping) {
 			foreach ($wpsc_shipping_modules as $available_shipping) {
-				if ($shipping == $available_shipping->internal_name)
-					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote();
-				
+				if ($shipping == $available_shipping->internal_name) {
+					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote(true);
+			  }
 			}
 		}
  	//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
@@ -271,8 +271,8 @@ function wpsc_shipping_country_list($selected_country = null) {
 		if (empty($shipping_quote)) {
 			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
 		}
+		$j=0;
 		foreach ((array)$shipping_quote as $quotes) {
-			$j=0;
 			foreach((array)$quotes as $key=>$quote) {
 				if($shipping_is_selected == true) {
 				  if(($_SESSION['quote_shipping_method'] == $key1) && ($_SESSION['quote_shipping_option']  == $key)) {
@@ -287,6 +287,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 						$selected ="";
 					}
 				}
+				
 				echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
 				$j++;
 			}

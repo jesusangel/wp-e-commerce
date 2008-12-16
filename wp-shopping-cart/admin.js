@@ -118,8 +118,10 @@ function submit_change_country() {
   
 var getresults=function(results) {
   document.getElementById('formcontent').innerHTML = results;
-  document.getElementById('additem').style.display = 'none';
-  document.getElementById('productform').style.display = 'block';
+  jQuery('form.edititem').css('display', 'block');
+  jQuery('form.edititem').css('display', 'block');
+  jQuery('#additem').css('display', 'none');
+  jQuery('#productform').css('display', 'block');
 	jQuery("#loadingindicator_span").css('visibility','hidden');
 	enablebuttons();
 	
@@ -357,9 +359,11 @@ jQuery(".remove_line").click(
 }
 
 function filleditform(prodid)	{
-	ajax.post("index.php",getresults,"ajax=true&admin=true&prodid="+prodid);
-	jQuery('#loadingimage').attr('src', jQuery("#loadingimage").attr('src'));
-	jQuery('#loadingindicator_span').css('visibility','visible');
+	jQuery(document).ready(function(){
+		ajax.post("index.php",getresults,"ajax=true&admin=true&prodid="+prodid);
+		jQuery('#loadingimage').attr('src', jQuery("#loadingimage").attr('src'));
+		jQuery('#loadingindicator_span').css('visibility','visible');
+	});
 }
    
 function fillvariationform(variation_id) {

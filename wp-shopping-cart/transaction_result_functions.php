@@ -182,8 +182,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					}
 				}
 				//$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
-				if (!isset($_SESSION['quote_shipping']))
-					$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
+				//if (!isset($_SESSION['quote_shipping']))
+					//$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
+			  $total_shipping += $purchase_log['base_shipping'];
+					
 				$total = (($total+$total_shipping) - $purchase_log['discount_value']);
 			// $message.= "\n\r";
 				$product_list.= "Your Purchase No.: ".$purchase_log['id']."\n\r";

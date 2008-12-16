@@ -1944,3 +1944,7 @@ h3.hndle {
 	padding:0px;
 }
 
+label.variation_checkbox {
+  display: block;
+}
+

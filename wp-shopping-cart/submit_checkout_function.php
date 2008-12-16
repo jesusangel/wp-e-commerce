@@ -262,7 +262,7 @@ function nzshpcrt_submit_checkout() {
 
     
     //insert the record into the purchase log table
-	$price = nzshpcrt_overall_total_price($_SESSION['selected_country'],false);
+	$price = nzshpcrt_overall_total_price($_SESSION['delivery_country'],false);
 	$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`, `shipping_method`, `shipping_option`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '', '{$engrave}', ' ','$shipping_module','$shipping_option')";
 	//exit($sql);
 	$wpdb->query($sql) ;

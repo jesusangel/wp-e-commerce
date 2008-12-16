@@ -1176,24 +1176,15 @@ if (($product_data_count < 1)&& (IS_WP27)){
 //First column ends here
 echo "      </td><td class='secondcol'>\n\r";
 echo "<form method='POST' enctype='multipart/form-data' class='edititem' name='editproduct$num'>";
-
-
-/*
-echo "        <table class='producttext'>\n\r"; 
-
-
-echo "        </table>\n\r";
-*/
-echo "        <div id='formcontent' style='width:100%;'>\n\r";
-echo "        </div>\n\r";
+echo "<div id='formcontent' style='width:100%;'>";
+echo "</div>";
 echo "</form>";
 echo "</div>";
 ?>
-
 <form method='POST' enctype='multipart/form-data' class='additem'>
 <?php
 if (function_exists('add_object_page')){
-	echo "        <div id='additem'>";
+	echo "<div id='additem'>";
 	echo "        <div id='additem27' class='postbox'>";
 	echo "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
 	
@@ -1202,22 +1193,13 @@ if (function_exists('add_object_page')){
 	echo "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
 }
 ?>
-<!-- <div class="categorisation_title"><strong class="form_group"><?php echo TXT_WPSC_PRODUCTDETAILS;?> <span><?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE;?></span></strong></div> -->
-
   <?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-  
 <?php
 	if(function_exists('add_object_page')) {
 		echo "<div class='inside'>";
 	}
-?>
-  <table class='additem' style='width:100%;'>
+?><table class='additem' style='width:100%;'>
     <tr>
-      <!--
-<td class='itemfirstcol'>
-        <?php echo TXT_WPSC_PRODUCTNAME;?>:
-      </td>
--->
       <td colspan="2" class='itemfirstcol'>
       
         <div class='admin_product_name'>

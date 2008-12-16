@@ -821,7 +821,7 @@ ul.settings_button{
 }
 
 table.product_editform tr td.itemfirstcol, table.additem tr td.itemfirstcol,
-table.product_editform tr td.itemformcol, table.additem tr td.itemformcol {
+table.product_editform tr td.itemformcol, table.additem tr td.itemformcol, td.skuandprice {
   	padding-bottom: 10px;
 	color:#666;
 	font-style: italic;
@@ -881,6 +881,10 @@ padding:9px 5px 9px 26px;
 	margin: 0px;
 }
 
+
+form.edititem {
+  display: none;
+}
 
 #additem .togbox, #productform .togbox {
 	background-color:#B2B2B2;
@@ -1230,7 +1234,7 @@ div.admin_product_name a.shorttag_toggle {
 	border-top:1px solid #DFDFDF;
 	display:block;
 	float:left;
-	height:27px;
+	height:28px;
 	margin-left:-1px;
 	margin-top:1px;
 	padding:3px;
@@ -1248,7 +1252,10 @@ form.additem input.wpsc_product_name, form.edititem input.wpsc_product_name{
 	-moz-border-radius-bottomright:0px;
 	margin-bottom:0px;
 	float:left;
-	width:95%;
+	width:558px;
+	_width:560px;
+  _height: 28px;
+	_border:1px solid #DFDFDF;
 }
 
 div.admin_product_name div.admin_product_shorttags {
@@ -1260,6 +1267,7 @@ div.admin_product_name div.admin_product_shorttags {
 	border-left:1px solid #DFDFDF;
 	border-right:1px solid #DFDFDF;
 	border-bottom:1px solid #DFDFDF;
+  height: 28px;
   display: none;
 }
 
@@ -1862,4 +1870,7 @@ form.additem input, form.edititem input {
 
 body.mceContentBody{
 	font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+}
+div.variation_checkboxes label, label.variation_checkbox {
+  display: block;
 }

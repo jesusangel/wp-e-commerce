@@ -264,11 +264,10 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
 				}
 			}
 			
-		  	//echo "<pre>".print_r($shipping_quotes,true)."</pre>";
+		  //echo "<pre>".print_r($shipping_quotes,true)."</pre>";
 			if(!isset($_SESSION['quote_shipping_option']) && ($shipping_quotes != null)) {
-				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_pop(array_slice($shipping_quotes,0,1))));
+				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_slice($shipping_quotes[0],0,1)));
 			}
-			
 			foreach((array)$shipping_quotes as $shipping_quote) {
 				foreach((array)$shipping_quote as $key=>$quote) {
 					if($key == $_SESSION['quote_shipping_option']) {
@@ -284,7 +283,7 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
     
   function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code) {    
     global $wpdb;
-    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
       $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
       $product_list = $wpdb->get_row($sql,ARRAY_A) ;
       if($product_list['no_shipping'] == 0) {
@@ -766,7 +765,7 @@ function shopping_cart_total_weight(){
 	global $wpdb;
 	$cart = $_SESSION['nzshpcrt_cart'];
 	$total_weight=0;
-	foreach($cart as $item) {
+	foreach((array)$cart as $item) {
 		$sql="SELECT weight, weight_unit FROM ".$wpdb->prefix."product_list WHERE id='".$item->product_id."'";
 		$weight=$wpdb->get_results($sql, ARRAY_A);
 		$weight = $weight[0];

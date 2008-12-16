@@ -844,14 +844,17 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				if ($quote[$_POST['key']] !== null) {
 				
 					echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-					/*if ($_SESSION['wpsc_discount'] > 0)
-  					echo nzshpcrt_currency_display($total+$quote[$_POST['key']]-$_SESSION['wpsc_discount'],1);
-						
-						echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-					else
-						echo nzshpcrt_currency_display($total+$quote[$_POST['key']],1);*/
 					echo "---";					
-					echo nzshpcrt_currency_display(nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']), true);
+					
+					$total_shipping = nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
+					if($_SESSION['quote_shipping_method'] == 'flatrate') {
+						foreach((array)$_SESSION['nzshpcrt_cart'] as $cart_item) {
+							$product_id = $cart_item->product_id;
+							$quantity = $cart_item->quantity;
+							$total_shipping += nzshpcrt_determine_item_shipping($product_id, $quantity, $_SESSION['delivery_country']);
+						}
+			    }
+					echo nzshpcrt_currency_display($total_shipping, true);
 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
 					$_SESSION['quote_shipping']= nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
 					$_SESSION['quote_shipping_total'] = nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
