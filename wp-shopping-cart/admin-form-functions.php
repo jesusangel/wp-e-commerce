@@ -182,7 +182,7 @@ function nzshpcrt_getproductform($prodid)
 	}
 	$order = get_option('wpsc_product_page_order');
 	if (($order == '') || (count($order < 7 ))){
-		$order=array("price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
+		$order=array("category_and_tag", "price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
 	}
 	update_option('wpsc_product_page_order', $order);
 	foreach((array)$order as $key => $box) {
