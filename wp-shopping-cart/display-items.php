@@ -1023,7 +1023,7 @@ if($product_list != null)
     	echo "	<div class='itemHeader pli_img'>\n\r";
 		echo "<a class='noline' title='Drag to a new position'>";
 	} else {
-		echo "	<td style='width: 18%;' class='imagecol'>\r\n";
+		echo "	<td style='width: 20%;' class='imagecol'>\r\n";
 	}
 	echo "<input type='checkbox' name='productdelete[]' class='deletecheckbox' value='{$product['id']}'>";
 	if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images

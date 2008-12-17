@@ -124,6 +124,7 @@ table#productpage tr td.secondcol{
 }
 
 table#itemlist{
+	min-width: 350px;
 	width: 100%;
 	border-collapse:collapse;
 	border:1px solid #bbb;
@@ -138,8 +139,9 @@ table#itemlist tr td{text-align: left; padding:10px 5px 8px 5px; }
 table#itemlist tr.products{border-left:1px solid #bbb;border-right:1px solid #bbb;}
 table#itemlist tr.productsalt{background-color:#f3f3f3;border-left:1px solid #bbb;border-right:1px solid #bbb;}
 */
-table#itemlist tr.products td{text-align: left;padding:0px; vertical-align: middle ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
-table#itemlist tr.productsalt td{text-align: left;padding:0px; vertical-align: middle ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
+
+table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
+table#itemlist tr.productsalt td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 
 table#itemlist tr td.imagecol{ padding: 4px;}
  
@@ -588,7 +590,7 @@ border-right:1px solid #bbb;
 
 .groupItem{
  border-top:1px solid #bbb;
- width:385px;
+width:350px;
  height:35px;
  clear: both;
 /*  margin-left:-6px; */
@@ -1210,9 +1212,9 @@ div.admin_product_name input.text{
 
 div.admin_product_name a.shorttag_toggle {
 	background:#FFFFFF url(images/info_icon.jpg) no-repeat scroll 5px 4px;
-	border-bottom:1px solid #BBBBBB;
-	border-right:1px solid #BBBBBB;
-	border-top:1px solid #BBBBBB;
+/* 	border-bottom:1px solid #BBBBBB; */
+/* 	border-right:1px solid #BBBBBB; */
+/* 	border-top:1px solid #BBBBBB; */
 	display:block;
 	float:left;
 	height:17px;
@@ -1241,9 +1243,9 @@ div.admin_product_name div.admin_product_shorttags {
   padding: 6px;
   font-size: 8pt;
   margin: 0px 0px 0px 1px !important;
-	border-left:1px solid #BBBBBB;
-	border-right:1px solid #BBBBBB;
-	border-bottom:1px solid #BBBBBB;
+/* 	border-left:1px solid #BBBBBB; */
+/* 	border-right:1px solid #BBBBBB; */
+/* 	border-bottom:1px solid #BBBBBB; */
   display: none;
 }
 

@@ -124,6 +124,7 @@ table#productpage tr td.secondcol{
 }
 
 table#itemlist{
+	min-width: 350px;
 	width: 100%;
 	border-collapse:collapse;
 /* 	border:1px solid #bbb; */
