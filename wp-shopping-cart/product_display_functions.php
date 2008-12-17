@@ -374,7 +374,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 
       if($product['description'] != '') {
-        $output .= "<p class='wpsc_description'>".nl2br(stripslashes($product['description'])) . "</p>";
+        $output .= "<div class='wpsc_description'>".nl2br(stripslashes($product['description'])) . "</div>";
 			}
 
       if($product['additional_description'] != '') {
@@ -409,10 +409,10 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
       $output .= ob_get_contents();
       ob_end_clean();
 
-      $variations_procesor = new nzshpcrt_variations;
+      $variations_processor = new nzshpcrt_variations;
 
 			if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('display_product_variations','start', true);}
-      $variations_output = $variations_procesor->display_product_variations($product['id'],false, false, true);
+      $variations_output = $variations_processor->display_product_variations($product['id'],false, false, true);
 			if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('display_product_variations','stop', true);}
 			
       if($variations_output[0] != '') { //will always be set, may sometimes be an empty string
@@ -437,7 +437,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         $currency_sign_location = get_option('currency_sign_location');
         $currency_type = get_option('currency_type');
         $currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
-        $output .= "<label for='donation_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='donation_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
+        $output .= "<label for='product_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='product_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
 			} else {
         if(($product['special']==1) && ($variations_output[1] === null)) {
           $output .= "<span class='oldprice'>".TXT_WPSC_PRICE.": " . nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
@@ -711,9 +711,9 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 			}
 			
 			
-			$variations_procesor = new nzshpcrt_variations;
+			$variations_processor = new nzshpcrt_variations;
           
-      $variations_output = $variations_procesor->display_product_variations($product['id'],false, false, true);
+      $variations_output = $variations_processor->display_product_variations($product['id'],false, false, true);
       if($variations_output[0] != '') { //will always be set, may sometimes be an empty string 
         $output .= "           <p class='wpsc_variation_forms'>".$variations_output[0]."</p>";
 			}
@@ -728,7 +728,7 @@ if (get_option('wpsc_selected_theme') == 'market3') {
 					$currency_sign_location = get_option('currency_sign_location');
 					$currency_type = get_option('currency_type');
 					$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
-					$output .= "           <label for='donation_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='donation_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
+					$output .= "           <label for='product_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='product_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
 				} else {
 					
 					if (get_option('wpsc_selected_theme') != 'market3') {

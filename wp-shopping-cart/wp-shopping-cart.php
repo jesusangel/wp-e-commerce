@@ -3,15 +3,15 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.6.8 RC3
+Version: 3.6.8 RC4
 Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 /* Major version for "major" releases */
 define('WPSC_VERSION', '3.6');
-define('WPSC_MINOR_VERSION', '89');
+define('WPSC_MINOR_VERSION', '90');
 
 
-define('WPSC_PRESENTABLE_VERSION', '3.6.8 RC3');
+define('WPSC_PRESENTABLE_VERSION', '3.6.8 RC4');
 
 define('WPSC_DEBUG', false);
 /*
@@ -1143,6 +1143,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     echo "product_id=".(int)$_POST['product_id'].";\n";
     
     echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax, true)."\";\n";
+    echo "numeric_price=\"".number_format(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), 2)."\";\n";
         //exit(print_r($extras,1));
     exit();
   }

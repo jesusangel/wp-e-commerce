@@ -2,6 +2,11 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ Add New Variations');
+define('TXT_WPSC_ADMIN_ENGRAVE', 'Users can personalize this product by leaving a message during checkout');
+define('TXT_WPSC_PERSONALISATION_OPTIONS','Personalisation Options');
+
+define('TXT_WPSC_CHOOSE_SHIPPING', "To enable shipping in WP e-Commerce you must select  which shipping methods you want to enable on your site");
 define('TXT_WPSC_FLAT_RATE_SETTINGS', "Flat Rate Settings");
 define('TXT_WPSC_OFF_SITE_LINK', "Off Site Product Link");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'These notes are only available here.');
@@ -193,7 +198,7 @@ define('TXT_WPSC_SHOW_BREADCRUMBS', 'Show Breadcrumbs');
 define('TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR', 'Enter the payment instructions that you wish to display to your customers when they make a purchase');
 define('TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR', 'For example, this is where you the Shop Owner might enter your bank account details or address so that your customer can make their manual payment.');
 
-define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload an image when ordering this product.');
+define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload images at checkout to purchase logs.');
 
 define('TXT_WPSC_OPTIONS_GENERAL_HEADER', 'General Settings');
 define('TXT_WPSC_OPTIONS_PRESENTATION_HEADER', 'Presentation Settings');
@@ -251,6 +256,7 @@ define('TXT_WPSC_ADDDETAILS', 'Add Details');
 define('TXT_WPSC_EDITDETAILS', 'Edit Details');
 define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Item &raquo;');
 define('TXT_WPSC_VALUE', 'Value');
+define('TXT_WPSC_CUSTOM_META', 'Custom Meta');
 define('TXT_WPSC_ADD_CUSTOM_FIELD', 'Add Custom Meta');
 define('TXT_WPSC_EDIT_CUSTOM_FIELDS', 'Edit Custom Fields');
 define('TXT_WPSC_SAVE', 'Save');

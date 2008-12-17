@@ -1213,21 +1213,16 @@ if (function_exists('add_object_page')){
       </td>
     </tr>
     <tr>
-      <td class='itemfirstcol'>
-        <?php echo TXT_WPSC_SKU_FULL;?> :<br />
+      <td>
+        <strong><?php echo TXT_WPSC_SKU_FULL;?>:</strong> <br />
         <input size='30' type='text' name='productmeta_values[sku]' value='' class='text' />
       </td>
-      <td class='itemfirstcol'>
-      	<?=TXT_WPSC_PRICE;?> :<br />
+      <td >
+      	<strong><?php echo TXT_WPSC_PRICE;?> :</strong> <br />
         <input size='30' type='text' name='price' value='' class='text' />
       </td>
     </tr>
     <tr>
-      <!--
-<td class='itemfirstcol'>
-        <?php echo TXT_WPSC_PRODUCTDESCRIPTION;?>:
-      </td> 
--->
       <td colspan="2" class='itemfirstcol'>
       	<div id='editorcontainer'>
         	<textarea name='description' class='mceEditor' id='description' cols='50' rows='10'></textarea>
@@ -1235,90 +1230,14 @@ if (function_exists('add_object_page')){
       </td>
     </tr>
     <tr>
-      <!--
-<td class='itemfirstcol'>
-       <?php echo TXT_WPSC_ADDITIONALDESCRIPTION;?>:
-      </td>
--->
       <td colspan="2" class='itemfirstcol'>
-      	<?php echo TXT_WPSC_ADDITIONALDESCRIPTION;?>:<br />
+      	<strong><?php echo TXT_WPSC_ADDITIONALDESCRIPTION;?>:</strong> <br />
         <textarea name='additional_description' cols='40' rows='8'></textarea>
       </td>
     </tr>
-    <!--
-<tr>
-      <td class='itemfirstcol'>
-       <?php echo TXT_WPSC_PRODUCT_TAGS;?>:
-      </td>
-      <td class='itemformcol'>
-        <input type='text' class='text' name='product_tag' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
-      </td>
-    </tr>
-    <tr>
-      <td class='itemfirstcol'>
-			<?php echo TXT_WPSC_CATEGORISATION; ?>
-      </td>
-      <td>
-        <?php
-         $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
-					foreach($categorisation_groups as $categorisation_group){
-					  $category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$categorisation_group['id']}')");
-					  if($category_count > 0) {
-							echo "<p>";
-						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
-						  echo "<strong>".$category_group_name.":</strong><br>";
-						  echo categorylist($categorisation_group['id'], false, 'add_');
-						  echo "</p>";
-						}
-					}
-				?>
-      </td>
-    </tr>
--->
+ 
    
 <?php
-//Commented out the part we wished to moved to the first box of product page.
-	/*
-echo " <tr>
-      <td class='itemfirstcol' colspan='2'>
-        <input type='checkbox' value='yes' id='add_form_display_frontpage' name='display_frontpage' ".(($product_data['display_frontpage'] == 1) ? 'checked="true"' : '')."/> 
-        <label for='add_form_display_frontpage'> ".TXT_WPSC_DISPLAY_FRONT_PAGE."</label>
-      </td>
-    </tr>";
-	echo "
-	<tr>
-		<td colspan='2' class='itemfirstcol'>
-			<a href='#' style='font-style:normal;border-bottom:1px solid;' class='add_more_meta' onclick='return add_more_meta(this)'> + ".TXT_WPSC_ADD_CUSTOM_FIELD."</a><br><br>
-		";
-		foreach((array)$custom_fields as $custom_field) {
-			$i = $custom_field['id'];
-			// for editing, the container needs an id, I can find no other tidyish method of passing a way to target this object through an ajax request
-			echo "
-			<div class='product_custom_meta'  id='custom_meta_$i'>
-				".TXT_WPSC_NAME."
-				<input type='text' class='text'  value='{$custom_field['meta_key']}' name='custom_meta[$i][name]' id='custom_meta_name_$i'>
-				
-				".TXT_WPSC_DESCRIPTION."
-				<textarea class='text'  value='{$custom_field['meta_value']}' name='custom_meta[$i][value]' id='custom_meta_value_$i'></textarea>
-				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>&ndash;</a>
-				<br />
-			</div>
-			";
-		}
-		
-		echo "<div class='product_custom_meta'>
-		".TXT_WPSC_NAME.": <br />
-		<input type='text' name='new_custom_meta[name][]' value='' class='text'/><br />
-		
-		".TXT_WPSC_DESCRIPTION.": <br />
-		<textarea name='new_custom_meta[value][]' value='' class='text' ></textarea>
- 
-		
-		<br />";
-*/
-
-
-
 
 	if(function_exists('add_object_page')){
 		echo "</table>

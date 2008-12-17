@@ -665,4 +665,8 @@ if((get_option('flat_rates') == null) || (count(get_option('flat_rates')) < 1)) 
 	update_option('flat_rates',$shipping);
 }
 
+if(get_option('custom_shipping_options') == null ) {
+	update_option('custom_shipping_options',array('flatrate'));
+}
+
 ?>

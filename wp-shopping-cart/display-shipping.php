@@ -109,6 +109,7 @@ foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) {
 	}
 }
 
+
 $selected[get_option('payment_method')] = "checked='true'";
 if ($_GET['shipping_options']=='true') {
 ?>
@@ -144,10 +145,11 @@ function selectgateway() {
 				<br class="clear"/>
 			</div>
 			<?php } ?>
-
+			
 				<table class='wpsc_options form-table'>
 				<tr>
 				<th scope="row">
+				
 									<?php echo TXT_WPSC_USE_SHIPPING;?>:
 				</th>
 						<td>
@@ -248,9 +250,12 @@ function selectgateway() {
 					<?php } ?>
 					
 					<p>
-						<?php echo TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES; ?>
+						<?php echo TXT_WPSC_CHOOSE_SHIPPING; ?>
 					</p>
 					<br />
+					<p>
+						<?php echo TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES; ?>
+					</p>
 					<?php
 					
 					// print the internal shipping methods

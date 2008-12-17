@@ -7,7 +7,7 @@ global $wpdb, $user_ID, $wpsc_shipping_modules;
 			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
 			} else {
 			  // otherwise select the first one with any quotes
-				foreach($custom_shipping as $shipping_module) {
+				foreach((array)$custom_shipping as $shipping_module) {
 					$_SESSION['quote_shipping_method'] = $shipping_module;
 					$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
 					if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.

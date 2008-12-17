@@ -298,10 +298,12 @@ function change_variation(product_id, variation_ids, special) {
       if(product_id != null) {
         target_id = "product_price_"+product_id;
 				buynow_id = "BB_BuyButtonForm"+product_id;
-							document.getElementById(target_id).firstChild.innerHTML = price;
-				//if (price.substring(27,price.indexOf("&"))!='') {
-					//document.getElementById(form_id).item_price_1.value = price.substring(27,price.indexOf("&"));
-				//}
+				//document.getElementById(target_id).firstChild.innerHTML = price;			
+				if(jQuery("input#"+target_id).attr('type') == 'text') {
+				  jQuery("input#"+target_id).val(numeric_price);
+				} else {
+				  jQuery("#"+target_id+" span.pricedisplay").html(price);
+				}
 			}
 		}
 	}
@@ -617,5 +619,28 @@ jQuery(document).ready(
 				}
 			);
 		}
+		
+		
+		
+		jQuery("div.custom_gateway table").each(
+			function() {
+				if(jQuery(this).css('display') == 'none') {
+					jQuery('input', this).attr( 'disabled', true);
+				}
+			}
+		);
+		
+		jQuery("input.custom_gateway").change(
+			function() {
+				if(jQuery(this).attr('checked') == true) {
+					parent_div = jQuery(this).parents("div.custom_gateway");
+					jQuery('table input',parent_div).attr( 'disabled', false);
+					jQuery('table',parent_div).css('display', 'block');
+				  jQuery("div.custom_gateway table").not(jQuery('table',parent_div)).css('display', 'none');
+				  
+				  jQuery("div.custom_gateway table input").not(jQuery('table input',parent_div)).attr( 'disabled', true);
+				}
+			}
+		);
 	}
 );

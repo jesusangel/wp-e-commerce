@@ -110,12 +110,15 @@ function wpsc_admin_ajax() {
 	
 	if ($_POST['action'] == 'product-page-order'){
 		$order = $_POST['order'];
-		$order = $order['normal'];
-		$order = explode(',', $order);
+		if(!isset($order[0])) {
+			$order = $order['normal'];
+		} else {
+			$order = $order[0];
+		}
+		$order = array_unique(explode(',', $order));
 		update_option('wpsc_product_page_order', $order);
 		exit(print_r($order,1));
 	}
-	
 	
 
 	if ($_POST['del_prod'] == 'true') {
@@ -459,7 +462,6 @@ function wpsc_admin_ajax() {
     echo $output;
     exit();
 	}
-	
 }
 
 
@@ -470,4 +472,5 @@ if($_GET['purchase_log_csv'] == "true") {
 if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
 	add_action('admin_init', 'wpsc_admin_ajax');
 }
+
 ?>

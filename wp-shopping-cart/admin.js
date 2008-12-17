@@ -162,7 +162,7 @@ jQuery('.meta-box-sortables').sortable( {
     	jQuery('.meta-box-sortables').each( function() {
     		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
     	} );
-    	jQuery.post( base_url+'/?admin=true&ajax=true', postVars, function() {
+    	jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {
     		postboxes.expandSidebar();
     	} );
     }
@@ -1331,7 +1331,7 @@ jQuery(document).ready(function(){
 	    	jQuery('.meta-box-sortables').each( function() {
 	    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
 	    	} );
-	    	jQuery.post( base_url+'/?admin=true&ajax=true', postVars, function() {
+	    	jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {
 	    		postboxes.expandSidebar();
 	    	} );
 	    }

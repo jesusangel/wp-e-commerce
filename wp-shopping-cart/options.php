@@ -339,10 +339,10 @@ if($_POST['do_not_use_shipping'] == 1) {
 			update_option('display_addtocart', 0);
     }
     
-    if($_POST['display_moredtails'] == 1) {
-      update_option('display_moredtails', 1);
+    if($_POST['display_moredetails'] == 1) {
+      update_option('display_moredetails', 1);
 		} else {
-			update_option('display_moredtails', 0);
+			update_option('display_moredetails', 0);
     }
     
     if($_POST['show_images_only'] == 1) {

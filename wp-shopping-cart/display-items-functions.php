@@ -10,7 +10,7 @@ function category_and_tag_box($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	$output .= "<div id='price_and_stock' class='price_and_stock postbox ".((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."' >";
+	$output .= "<div id='category_and_tag' class=' postbox ".((array_search('category_and_tag', $closed_postboxes) !== false) ? 'closed' : '')."' >";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -47,7 +47,7 @@ function category_and_tag_box($product_data=''){
     <table>";
     $output .= "<tr>
       <td class='itemfirstcol'>
-			".TXT_WPSC_CATEGORISATION.": <br>";
+			".TXT_WPSC_CATEGORISATION.": <br />";
         
          $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 					foreach($categorisation_groups as $categorisation_group){
@@ -55,7 +55,7 @@ function category_and_tag_box($product_data=''){
 					  if($category_count > 0) {
 							$output .= "<p>";
 						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
-						  $output .= "<strong>".$category_group_name.":</strong><br>";
+						  $output .= "<strong>".$category_group_name.":</strong><br />";
 						  if ($product_data == '')
 						  	$output .= categorylist($categorisation_group['id'], false, 'add_');
 						  else 
@@ -66,7 +66,7 @@ function category_and_tag_box($product_data=''){
 
      $output .= "</td>
      <td class='itemfirstcol'>
-       ".TXT_WPSC_PRODUCT_TAGS.":<br>
+       ".TXT_WPSC_PRODUCT_TAGS.":<br />
         <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
       </td>
     </tr>";
@@ -136,7 +136,7 @@ function price_and_stock_box($product_data=''){
         <input type='checkbox' value='yes' name='table_rate_price' id='table_rate_price'/>
         <label for='table_rate_price'>".TXT_WPSC_TABLE_RATED_PRICE."</label>
         <div style='display:".(($table_rate_price != '') ? 'block' : 'none').";' id='table_rate'>
-          <a class='add_level' style='cursor:pointer;'>Add level</a><br>
+          <a class='add_level' style='cursor:pointer;'>Add level</a><br />
           <table>
           <tr><td>".TXT_WPSC_QUANTITY."</td><td>".TXT_WPSC_PRICE."</td></tr>";
           
@@ -218,9 +218,9 @@ function variation_box($product_data=''){
     <tr>
       <td colspan='2'>";
     if ($variations_processor->list_variations($product_data['id']) == '') {
-        $output .= "<a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>Add New Variations</a>";
+        $output .= "<a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>".TXT_WPSC_ADD_NEW_VARIATIONS."</a>";
     } else {
-        $output .= TXT_WPSC_ADD_VAR."  <a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>Add New Variations</a>"; 
+        $output .= "<strong>".TXT_WPSC_ADD_VAR."</strong><br />  <a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>".TXT_WPSC_ADD_NEW_VARIATIONS."</a>"; 
     }
     $output .="
       </td>
@@ -344,7 +344,8 @@ function advanced_box($product_data='') {
 	$output .= "
 	<tr>
 		<td colspan='2' class='itemfirstcol'>
-			<a href='#' style='font-style:normal;border-bottom:1px solid;' class='add_more_meta' onclick='return add_more_meta(this)'> + ".TXT_WPSC_ADD_CUSTOM_FIELD."</a><br><br>
+		  <strong>".TXT_WPSC_CUSTOM_META.":</strong><br />
+			<a href='#' class='add_more_meta' onclick='return add_more_meta(this)'> + ".TXT_WPSC_ADD_CUSTOM_FIELD."</a><br /><br />
 		";
 		foreach((array)$custom_fields as $custom_field) {
 			$i = $custom_field['id'];
@@ -371,7 +372,7 @@ function advanced_box($product_data='') {
 		<br /></td></tr>";
 		
 	    $output .= "<tr>
-      <td class='itemfirstcol' colspan='2'> ". TXT_WPSC_ADMINNOTES .":<br>
+      <td class='itemfirstcol' colspan='2'><br /> <strong>". TXT_WPSC_ADMINNOTES .":</strong><br />
       
         <textarea cols='40' rows='3' type='text' name='productmeta_value[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
       	<small>".TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE."</small>
@@ -379,10 +380,10 @@ function advanced_box($product_data='') {
     </tr>
 	
     <tr>
-      <td class='itemfirstcol' colspan='2'>
-      
+      <td class='itemfirstcol' colspan='2'><br />
+       <strong>". TXT_WPSC_PERSONALISATION_OPTIONS .":</strong><br />
         <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="true"' : '')." id='add_engrave_text'>
-        <label for='add_engrave_text'> ".TXT_WPSC_ENGRAVE."</label>
+        <label for='add_engrave_text'> ".TXT_WPSC_ADMIN_ENGRAVE."</label>
         <br />
       </td>
     </tr>
@@ -415,10 +416,10 @@ function advanced_box($product_data='') {
 	
 	$output .= "
 	<tr>
-      <td class='itemfirstcol' colspan='2'>
-       ".TXT_WPSC_OFF_SITE_LINK.":<br><br>
-       <small>".TXT_WPSC_USEONLYEXTERNALLINK."</small><br><br>
-		<label for='external_link'>".TXT_WPSC_EXTERNALLINK."</label>:<br>
+      <td class='itemfirstcol' colspan='2'><br />
+       <strong>".TXT_WPSC_OFF_SITE_LINK.":</strong><br />
+       <small>".TXT_WPSC_USEONLYEXTERNALLINK."</small><br /><br />
+		<label for='external_link'>".TXT_WPSC_EXTERNALLINK."</label>:<br />
 		  <input type='text' class='text' name='productmeta_values[external_link]' value='".$external_link."' id='external_link' size='40'> 
       </td>
     </tr>";

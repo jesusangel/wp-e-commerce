@@ -405,34 +405,13 @@ function nzshpcrt_submit_checkout() {
         if($wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_files` WHERE `id` IN ('$file_id')")) {
           $unique_id = sha1(uniqid(mt_rand(), true));
           $wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+          //echo "INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));<br />";
         }
       }
       
-      
-      //echo "<pre>".print_r($variations,true)."</pre>";
-      /*
-        * This code decrements the stock quantity
-      */
-      //$debug .= "<pre>".print_r($variations,true)."</pre>";
-      /*
-			if($product_data['quantity_limited'] == 1) {
-        if(count($variation_values) > 0) {
-        
-          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
-          asort($variation_ids);         
-          $all_variation_ids = implode(",", $variation_ids);
-        
-          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
-          
-          $variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-          $wpdb->query("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$quantity)."'  WHERE `id` = '{$variation_stock_data['id']}' LIMIT 1",ARRAY_A);
-        } else {
-          $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `quantity`='".($product_data['quantity']-$quantity)."' WHERE `id`='{$product_data['id']}' LIMIT 1");
-        }
-      }
-*/
     }
    
+      //exit("<pre>".print_r($variations,true)."</pre>");
    
    $unneeded_value = null; //this is only used to store the quantity for the item we are working on, so that we can get the array key
    $assoc_quantity = null;

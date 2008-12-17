@@ -1,5 +1,5 @@
 <?php
-global $wpdb,$gateway_checkout_form_fields, $user_ID;
+global $wpdb,$gateway_checkout_form_fields, $gateway_checkout_form_field, $user_ID;
 $_SESSION['cart_paid'] = false;
 
 
@@ -188,12 +188,21 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 			}
 		  if($count == 0) {
 		    $checked = "checked='true'";
+				$gateway_form_css = "";
 		  }  else {
 				$checked = " ";
+				$gateway_form_css = "style='display: none;'";
 		  }
 			foreach ($GLOBALS['nzshpcrt_gateways'] as $gateway){
 				if ($gateway['internalname'] == $option) {
-					echo "<input name='custom_gateway' $checked value='$option' type='radio'>{$gateway['name']}<br>";
+					echo "<div class='custom_gateway'>\n\r";
+					echo "  <label><input class='custom_gateway' name='custom_gateway' $checked value='$option' type='radio'>{$gateway['name']}</label>\n\r";
+					if(isset($gateway_checkout_form_fields[$gateway['internalname']])) {
+					  echo "  <table $gateway_form_css>\n\r";
+					  echo $gateway_checkout_form_fields[$gateway['internalname']];
+					  echo "  </table>\n\r";
+					}
+					echo "</div>\n\r";
 				}
 			}
 		  $count++;
@@ -209,8 +218,9 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 			}
 		}
 	}
-	if(isset($gateway_checkout_form_fields)) {
-		echo $gateway_checkout_form_fields;
+	//echo "<h5>Test Code</h5><pre>".print_r($gateway_checkout_form_field, true)."</pre>";
+	if(isset($gateway_checkout_form_field)) {
+		echo $gateway_checkout_form_field;
 	}
 	$product=$_SESSION['nzshpcrt_cart'][0];
 	$engrave = get_product_meta($product->product_id,'engraved',true);

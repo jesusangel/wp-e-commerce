@@ -132,7 +132,7 @@ function nzshpcrt_getproductform($prodid)
   
   $output .= "          <tr>\n\r";
   $output .= "            <td class='itemfirstcol' colspan='2'>\n\r";
-  $output .= TXT_WPSC_ADDITIONALDESCRIPTION." :<br />";
+  $output .= "<strong >".TXT_WPSC_ADDITIONALDESCRIPTION." :</strong><br />";
 /*
   $output .= "            </td>\n\r";
   $output .= "            <td class='itemformcol'>\n\r";
@@ -205,53 +205,6 @@ function nzshpcrt_getproductform($prodid)
   		}
 	}
 	
-	/*
-$output .= price_and_stock_box($product);
-	
-	if (!IS_WP27) {
-		$output .= "            </td>\n\r";
-		$output .= "          </tr>\n\r";
-  	}
-  
-	ob_start();
-	do_action('wpsc_product_form', $product['id']);
-	$output .= ob_get_contents();
-	ob_end_clean();
-    
-	if (!IS_WP27) {
-		$output .= "          <tr>\n\r";
-		$output .= "            <td colspan='2'>\n\r";
-	}
-	$output .= variation_box($product);
-
-	if (!IS_WP27){
-		$output .= "</td></tr>";
-		$output .= "    <tr><td colspan='2'>\n\r";
-	}
-	
-	$output .= shipping_box($product);
-
-	if (!IS_WP27) {
-		$output .="</td></tr>";
-		$output .= "<tr><td colspan='2'>";
-	}
-	
-	$output .= advanced_box($product);
-	
-	if (!IS_WP27) {
-		$output.="</td></tr>";
-		
-		$output .= "          <tr class='edit_product_image'>\n\r";
-		$output .= "            <td colspan='2'>\n\r";
-	}
-  	$output .= product_image_box($product);
-	if (!IS_WP27) {
-		$output .="</td></tr>";
-		$output .= "          <tr>\n\r";
-		$output .= "            <td colspan='2'>\n\r";
-	}
-	$output .= product_download_box($product);
-*/
 	if (!IS_WP27) {
 		$output .= "</td></tr>";
 		$output .= "          <tr>\n\r";

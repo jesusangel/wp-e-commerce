@@ -534,16 +534,76 @@ table.product_variation_listing th.variation_name{
  padding-bottom: 1px;
  }
  
-table.product_variation_grid{ 
- margin-top: 12px;
- }
- 
-table.product_variation_grid th.variation_name{ 
- color: #71A4C8;
- font-style: italic;
+table.product_variation_grid {
+ border-collapse: collapse;
+ margin-top: 0px;
+}
+
+table.product_variation_grid tr td, table.product_variation_grid tr th {
+ border: 1px solid #cccccc;
+ border-collapse: collapse;
  text-align: left;
- padding-bottom: 1px;
- }
+}
+
+table.product_variation_grid tr.variation_row td {
+ border-bottom: none;
+}
+
+table.product_variation_grid tr.settings_row td {
+ border-top: none;
+ padding: 0px !important;
+}
+
+
+table.product_variation_grid tr.settings_row td div.variation_settings {
+  display: none;
+  border-top: 1px dotted #cccccc;
+  width: 100%;
+  min-height: 30px;
+ 
+}
+table.product_variation_grid tr th {
+   border-bottom: 1px solid #969696;
+}
+
+table.product_variation_grid tr th.stock {
+   border-bottom: 1px solid #969696;
+   width: 50px;
+}
+
+table.product_variation_grid tr th.price {
+   width: 78px;
+}
+
+table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
+  padding: 4px 0px 4px 10px;
+}
+  
+table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
+  width: 300px;
+}
+ 
+ 
+table.product_variation_grid tr td input{
+   padding: 0px 3px 0px 3px;
+}
+
+table.product_variation_grid tr td input.checkbox{
+  display: block;
+  margin:6px auto;
+}
+
+table.product_variation_grid tr.group_boundary td {
+   border-bottom: 1px solid #969696;
+}
+
+div#add_product_variation_details {
+  margin: 1ex 0px 0px 0px;
+}
+
+div#add_product_variation_details table.product_variation_grid {
+  margin: 4px 0px 0px 0px;
+}
  
 div.wpsc_listen_button{
   clear: both;
@@ -820,13 +880,18 @@ ul.settings_button{
 	margin:5px 0 0 0;
 }
 
-table.product_editform tr td.itemfirstcol, table.additem tr td.itemfirstcol,
-table.product_editform tr td.itemformcol, table.additem tr td.itemformcol, td.skuandprice {
-  	padding-bottom: 10px;
-	color:#666;
-	font-style: italic;
+td.skuandprice, td.secondcol strong {
 	font-weight: bold;
+	font-size:11px;
+	margin:0px;
 }
+a.add_more_meta, a.thickbox {
+	font-weight: bold;
+	font-size:11px;
+	margin:0px;
+  text-decoration: underline;
+}
+
 
 
 #additem .postbox, #productform .postbox, #titlediv, #additem .postarea, #additem .stuffbox {
@@ -1874,3 +1939,11 @@ body.mceContentBody{
 div.variation_checkboxes label, label.variation_checkbox {
   display: block;
 }
+
+td.select_gateway h3.hndle {
+  margin-bottom: 5px;
+}
+
+
+div#productform table tr td{ height: 11px !important; }
+div#productform table tr.settings_row td{ height: 0px !important; }
