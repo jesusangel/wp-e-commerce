@@ -318,6 +318,11 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinati
     
     asort($keys);    
     $all_value_ids = implode(",", $keys);
+			
+			
+		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$keys)."')");
+		asort($variation_ids);
+		$all_variation_ids = implode(",", $variation_ids);
     
     $variation_priceandstock_id = $variation_priceandstock_item['id'];
     $product_id = $variation_priceandstock_item['product_id'];
@@ -325,13 +330,46 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinati
       if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$key'") < 1) {
         $variation_id = $wpdb->get_var("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$key}'");
         if($variation_id > 0) {
-          $wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_value_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$key', '$variation_id', '$all_value_ids' )");
+          $wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_value_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$key', '$variation_id', '$all_variation_ids' )");
         }
       }
     }
   }
 }
 
+
+$product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')");
+foreach($product_ids as $product_id) {
+  if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product_id}'") < 1 ) {
+		$variation_priceandstock = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `product_id` = '{$product_id}'",ARRAY_A);
+		
+  
+		foreach((array)$variation_priceandstock as $variation_priceandstock_item) {
+			$keys = array();
+			$keys[] = $variation_priceandstock_item['variation_id_1'];
+			$keys[] = $variation_priceandstock_item['variation_id_2'];
+			
+			asort($keys);    
+			$all_value_ids = implode(",", $keys);
+			
+			$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$keys)."')");
+			asort($variation_ids);
+			$all_variation_ids = implode(",", $variation_ids);
+			
+			$variation_priceandstock_id = $variation_priceandstock_item['id'];
+			$product_id = $variation_priceandstock_item['product_id'];
+			
+			foreach((array)$keys as $key) {
+				if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$key'") < 1) {
+					$variation_id = $wpdb->get_var("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$key}'");
+					if($variation_id > 0) {
+						$wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_variation_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$key', '$variation_id', '$all_variation_ids' )");
+					}
+				}
+			}
+		}
+	}
+}
 
 // Update the variation combinations table to have the all_variation_ids column
 if($wpdb->get_var("SELECT COUNT( * ) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `all_variation_ids` IN ( '' )") > 0 ) {
@@ -344,8 +382,11 @@ if($wpdb->get_var("SELECT COUNT( * ) FROM `{$wpdb->prefix}wpsc_variation_combina
     }
     asort($all_value_array);    
     
-    $all_value_ids = implode(",", $all_value_array);
-    $update_sql = "UPDATE `{$wpdb->prefix}wpsc_variation_combinations` SET `all_variation_ids` = '".$all_value_ids."' WHERE `priceandstock_id` IN( '$variation_priceandstock_id' );";
+		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$all_value_array)."')");
+		asort($variation_ids);
+		$all_variation_ids = implode(",", $variation_ids);
+		
+    $update_sql = "UPDATE `{$wpdb->prefix}wpsc_variation_combinations` SET `all_variation_ids` = '".$all_variation_ids."' WHERE `priceandstock_id` IN( '$variation_priceandstock_id' );";
     
     //echo "<pre>".print_r($update_sql,true)."</pre>";
     $wpdb->query($update_sql);

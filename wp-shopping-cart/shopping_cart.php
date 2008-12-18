@@ -216,7 +216,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 		echo "</tr>";
 	}
 	
-		if(get_option('base_country') != null) {
+		if((get_option('base_country') != null) && (get_option('do_not_use_shipping') == 0)) {
 			//if (!function_exists('getdistance')) {
 		
 		
@@ -247,54 +247,57 @@ function wpsc_shipping_country_list($selected_country = null) {
 				echo "</form>";
     echo "</tr>\n\r";
 		}
-	
-		//// usps changes
-		$custom_shipping = get_option('custom_shipping_options');
-		foreach((array)$custom_shipping as $shipping) {
-			foreach ($wpsc_shipping_modules as $available_shipping) {
-				if ($shipping == $available_shipping->internal_name) {
-					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote(true);
-			  }
-			}
-		}
- 	//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
- 	//echo ('<pre>'.print_r($_SESSION['quote_shipping_option'],1)."</pre>");
-	$_SESSION['uspsQuote']=$shipping_quotes;
-	$i=0;
-	$shipping_is_selected = false;
-	if(($_SESSION['quote_shipping_method'] != null) && ($_SESSION['quote_shipping_option']  != null)) {
-	  $shipping_is_selected = true;
-	}
-	foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
- 	  $shipping_method_name = $wpsc_shipping_modules[$key1]->name;
-		echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name</td></tr>";
-		if (empty($shipping_quote)) {
-			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
-		}
-		$j=0;
-		foreach ((array)$shipping_quote as $quotes) {
-			foreach((array)$quotes as $key=>$quote) {
-				if($shipping_is_selected == true) {
-				  if(($_SESSION['quote_shipping_method'] == $key1) && ($_SESSION['quote_shipping_option']  == $key)) {
-						$selected = "checked='checked'";
-				  } else {
-						$selected ="";
-				  }
-				} else {
-					if (($i == 0) && ($j == 0)) {
-						$selected = "checked='checked'";
-					} else {
-						$selected ="";
+	 if(get_option('do_not_use_shipping') == 0) {
+			//// usps changes
+			$custom_shipping = get_option('custom_shipping_options');
+			foreach((array)$custom_shipping as $shipping) {
+				foreach ($wpsc_shipping_modules as $available_shipping) {
+					if ($shipping == $available_shipping->internal_name) {
+						$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote(true);
 					}
 				}
-				
-				echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
-				$j++;
 			}
+		//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
+		//echo ('<pre>'.print_r($_SESSION['quote_shipping_option'],1)."</pre>");
+		$_SESSION['uspsQuote']=$shipping_quotes;
+		$i=0;
+		$shipping_is_selected = false;
+		if(($_SESSION['quote_shipping_method'] != null) && ($_SESSION['quote_shipping_option']  != null)) {
+			$shipping_is_selected = true;
 		}
-		$i++;
-	}
-	// usps changes ends
+		foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
+			$shipping_method_name = $wpsc_shipping_modules[$key1]->name;
+			echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name</td></tr>";
+			if (empty($shipping_quote)) {
+				echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
+			}
+			$j=0;
+			foreach ((array)$shipping_quote as $quotes) {
+				foreach((array)$quotes as $key=>$quote) {
+					if($shipping_is_selected == true) {
+						if(($_SESSION['quote_shipping_method'] == $key1) && ($_SESSION['quote_shipping_option']  == $key)) {
+							$selected = "checked='checked'";
+						} else {
+							$selected ="";
+						}
+					} else {
+						if (($i == 0) && ($j == 0)) {
+							$selected = "checked='checked'";
+						} else {
+							$selected ="";
+						}
+					}
+					
+					echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
+					$j++;
+				}
+			}
+			$i++;
+		}
+		// usps changes ends
+    
+  }
+    
     
   //echo "<tr style='total-price'>\n\r";
 	if($tax > 0) {
