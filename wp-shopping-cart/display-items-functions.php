@@ -218,9 +218,9 @@ function variation_box($product_data=''){
     <tr>
       <td colspan='2'>";
     if ($variations_processor->list_variations($product_data['id']) == '') {
-        $output .= "<a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>".TXT_WPSC_ADD_NEW_VARIATIONS."</a>";
+        $output .= "<a class='thickbox' href='admin.php?thickbox_variations=true&amp;width=550&amp;TB_iframe=true'>".TXT_WPSC_ADD_NEW_VARIATIONS."</a>";
     } else {
-        $output .= "<strong>".TXT_WPSC_ADD_VAR."</strong><br />  <a class='thickbox' href='$siteurl/?thickbox_variations=true&width=550&TB_iframe=true'>".TXT_WPSC_ADD_NEW_VARIATIONS."</a>"; 
+        $output .= "<strong>".TXT_WPSC_ADD_VAR."</strong><br />  <a class='thickbox' href='admin.php?thickbox_variations=true&amp;width=550&amp;TB_iframe=true'>".TXT_WPSC_ADD_NEW_VARIATIONS."</a>"; 
     }
     $output .="
       </td>

@@ -696,7 +696,7 @@ if($_GET['filter'] !== 'true') {
               
             echo "<tr>";
             echo " <td colspan='$col_count'>";
-            echo "<strong>Total:</strong> ".nzshpcrt_currency_display($subtotal ,1);
+            echo "<strong>Total:</strong> ".nzshpcrt_currency_display(admin_display_total_price($date_pair['start'], $date_pair['end']),1);
             echo "<br /><a class='admin_download' href='index.php?purchase_log_csv=true&rss_key=key&start_timestamp=".$date_pair['start']."&end_timestamp=".$date_pair['end']."' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_DOWNLOAD_CSV."</span></a>";
             echo " </td>";      
             echo "</tr>";

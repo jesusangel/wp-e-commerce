@@ -70,7 +70,7 @@ if(function_exists('fancy_notifications')) {
 					echo "".$category_image."<strong class='cattitles'>".stripslashes($category_data['name'])."</strong>";
 					if((get_option('wpsc_category_description') == 'true') && ($category_data['description'] != '')) {
 						//echo "<p>".stripslashes($category_data['description'])."</p>";
-						echo "<p>".nl2br($category_data['description'])."</p>";
+						echo "<p>".wpautop($category_data['description'])."</p>";
 					}
 				}
 				

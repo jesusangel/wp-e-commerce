@@ -381,10 +381,11 @@ function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
     {
     foreach($purchase_log as $purchase)
       {
-      $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-      $country_data = $wpdb->get_results($country_sql,ARRAY_A);
-      $country = $country_data[0]['value'];
-      $total += nzshpcrt_find_total_price($purchase['id'],$country);
+//       $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+//       $country_data = $wpdb->get_results($country_sql,ARRAY_A);
+//       $country = $country_data[0]['value'];
+//       $total += nzshpcrt_find_total_price($purchase['id'],$country);
+         $total += $purchase['totalprice'];
       }
     }
   return $total;

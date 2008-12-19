@@ -2515,150 +2515,6 @@ switch(get_option('cart_location')) {
 
 
 
-function shipping_options(){
-	if ($_GET['shipping_options']=='true'){
-		include(WPSC_FILE_PATH.'/display-shipping.php');
-		exit();
-	}
-	
-	if ($_GET['payments_options']=='true'){
-		include(WPSC_FILE_PATH.'/gatewayoptions.php');
-		exit();
-	}
-	
-	if ($_GET['checkout_options']=='true'){
-		include(WPSC_FILE_PATH.'/form_fields.php');
-		exit();
-	}
-	
-// 	if ($_GET['gold_options']=='true'){
-// 		include(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-// 		exit();
-// 	}
-}
-
-function shipping_submits(){
-	if ($_POST['shipping_submits']=='true'){
-		require_once(WPSC_FILE_PATH."/display-shipping.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
-		exit();
-	}
-	
-	if ($_POST['gateway_submits']=='true'){
-		require_once(WPSC_FILE_PATH."/gatewayoptions.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
-		exit();
-	}
-	
-	if ($_POST['checkout_submits']=='true'){
-		require_once(WPSC_FILE_PATH."/form_fields.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
-		exit();
-	}
-	
-// 	if ($_POST['gold_submits']=='true'){
-// 		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-// 		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
-// 		exit();
-// 	}
-}
-
- add_action('admin_init','shipping_options');
- add_action('admin_init','shipping_submits');
-
-
-function wpsc_swfupload_images() {
-	global $wpdb;
-	if ($_REQUEST['action']=='wpsc_add_image') {
-		$file = $_FILES['Filedata'];
-		$pid = (int)$_POST['prodid'];
-		if(function_exists('gold_shpcrt_display_gallery')) {
-		  // if more than one image is permitted
-      $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM {$wpdb->prefix}product_images WHERE product_id='$pid'", ARRAY_A);
-      $order = (int)$existing_image_data['order'];
-      $count = $existing_image_data['count'];
-      
-      $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
-		  //echo "<pre>".print_r($previous_image,true)."</pre>";
-      if(($count >  0) || (strlen($previous_image) > 0)) {
-        // if there is more than one image
-        $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
-				if ($pid == '') {
-					copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
-				}
-				$order++;
-				if ($success) {
-					if ($pid != '') {
-						$wpdb->query("INSERT INTO `{$wpdb->prefix}product_images` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$pid','".basename($file['name'])."', '0', '0',  '$order')");
-					}
-					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `{$wpdb->prefix}product_images` LIMIT 1");
-					$src = $file['name'];
-					$output = "src='".$src."';id='".$id."';";
-				} else {
-					$output = "file uploading error";
-				}
-			} else {
-			  // if thereare no images
-				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
-				if($src != null) {
-					$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-					$output = "src='".$src."';id='0';";
-				} else {
-					$output = "file uploading error";
-				}
-			}
-		} else {
-      // Otherwise...
-      $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
-      
-      $src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
-      if($src != null) {
-        $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-        if(strlen($previous_image) > 0) {
-					$output = "replacement_src='".WPSC_IMAGE_URL.$src."';"; 
-        } else {
-					$output = "src='".$src."';id='0';";        
-        }
-      } else {
-        $output = "file uploading error";
-      }
-		}
-		exit($output);
-	}
-}
-
-add_action('admin_init','wpsc_swfupload_images');
-
-
-function wpsc_display_invoice() {
-  $purchase_id = (int)$_GET['purchaseid'];
-  include_once(WPSC_FILE_PATH."/admin-form-functions.php");
-  // echo "testing";
-	require_once(ABSPATH.'wp-admin/includes/media.php');
-	wp_iframe('wpsc_packing_slip', $purchase_id);  
-  //wpsc_packing_slip($purchase_id);
-  exit();
-}
-
-
-if($_GET['display_invoice']=='true') {
-  add_action('admin_init', 'wpsc_display_invoice', 0);
-
-}
-
-function wpsc_save_inline_price() {
-	global $wpdb;
-	$pid = $_POST['id'];
-	$new_price = $_POST['value'];
-	$new_price1 = str_replace('$','',$new_price);
-	$wpdb->query("UPDATE {$wpdb->prefix}product_list SET price='$new_price1' WHERE id='$pid'");
-	exit($new_price);
-}
-
-if($_GET['inline_price']=='true') { 
-	add_action('init', 'wpsc_save_inline_price', 0);
-}
-
 
 function thickbox_variation() {
 	global $wpdb, $siteurl;
@@ -2731,10 +2587,8 @@ function thickbox_variation() {
 		echo "
 		<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script>
 		<script language='JavaScript' type='text/javascript'>
-			jQuery(document).ready(function(){
 				parent.jQuery('#add_product_variations').html(\"".nl2br($variations_processor->list_variations())."\");
 				parent.tb_remove();
-			});
 		</script>";
 	
 		echo "</head>";
@@ -2790,7 +2644,7 @@ echo "  <div class='categorisation_title'>\n\r";
   <div class="categorisation_title">
 		<strong class="form_group"><?php echo TXT_WPSC_ADDVARIATION;?></strong>
 	</div>
-  <form method='POST' action='<?php echo get_option('siteurl');?>/?thickbox_variations=true&width=550'>
+  <form method='POST' action='admin.php?thickbox_variations=true&amp;width=550'>
   <table class='category_forms'>
     <tr>
       <td>
@@ -2834,7 +2688,7 @@ echo "     </table>\n\r";
 	}
 	
 	if ($_GET['thickbox_variations']) {
-		add_action('init','thickbox_variation');
+		add_action('admin_init','thickbox_variation');
 	}
 
 
