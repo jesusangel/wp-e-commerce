@@ -66,6 +66,12 @@ class usps {
 		if(isset($wpsc_usps_quote) && (count($wpsc_usps_quote)> 0)) {
 		  return $wpsc_usps_quote;
 		}
+    if(isset($_POST['zipcode'])) {
+      $zipcode = $_POST['zipcode'];      
+      $_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+    } else if(isset($_SESSION['wpsc_zipcode'])) {
+      $zipcode = $_SESSION['wpsc_zipcode'];
+    }
 		$dest = $_SESSION['delivery_country'];
 		$weight = shopping_cart_total_weight();
 		$pound = floor($weight);
@@ -108,7 +114,7 @@ class usps {
 				'<Service>' . $key . '</Service>' .
 				$FirstClassMailType .
 				'<ZipOrigination>' . get_option("base_zipcode") . '</ZipOrigination>' .
-				'<ZipDestination>' . $_POST['zipcode'] . '</ZipDestination>' .
+				'<ZipDestination>' . $zipcode . '</ZipDestination>' .
 				'<Pounds>' . $pound . '</Pounds>' .
 				'<Ounces>' . $ounce . '</Ounces>' .
 				'<Container>' . $container . '</Container>' .

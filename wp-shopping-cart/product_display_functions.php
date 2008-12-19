@@ -374,7 +374,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 
       if($product['description'] != '') {
-        $output .= "<div class='wpsc_description'>".nl2br(stripslashes($product['description'])) . "</div>";
+        $output .= "<div class='wpsc_description'>".stripslashes($product['description']) . "</div>";
 			}
 
       if($product['additional_description'] != '') {
@@ -387,7 +387,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
           $output .= TXT_WPSC_MOREDETAILS."</a>";
   
           $output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";
-          $output .= nl2br(stripslashes($product['additional_description'])) . "";
+          $output .= wpautop(stripslashes($product['additional_description'])) . "";
           $output .= "</span><br />";
           $output .= "</span>";// add better option
         }
@@ -669,7 +669,7 @@ function single_product_display($product_id) {
 			}
             
       if($product['description'] != '') {
-				$output .= "           <p  class='description'>".nl2br(stripslashes($product['description'])) . "</p>\n\r";
+				$output .= "           <div  class='description'>".stripslashes($product['description']) . "</div>\n\r";
 			}
 			if (get_option('wpsc_selected_theme') == 'market3') {
 	       $output .= "           <br />";
@@ -677,13 +677,13 @@ function single_product_display($product_id) {
 
         
       if($product['additional_description'] != '') {                
-        $output .= "           <p class='single_additional_description' >\n\r";
+        $output .= "           <div class='single_additional_description' >\n\r";
 if (get_option('wpsc_selected_theme') == 'market3') {
 					$output .= "           <span class='additional'>Additional Details: </span>\n\r";
 				}
 
-        $output .= nl2br(stripslashes($product['additional_description'])) . "";
-        $output .= "           </p>\n\r";
+        $output .= wpautop(stripslashes($product['additional_description'])) . "";
+        $output .= "           </div>\n\r";
 			}
 	$pdf = get_product_meta($product_id, 'pdf');
 	$pdf = $pdf[0];

@@ -219,6 +219,25 @@ function nzshpcrt_submit_checkout() {
 			$any_bad_inputs = true;
  		}
 
+	 if(get_option('do_not_use_shipping') == 0) {
+			if($_SESSION['quote_shipping_method'] == null) {
+				$bad_input_message .= TXT_WPSC_PLEASE_SELECT_SHIPPING . "";
+				$bad_input_message .= "\n\r";
+				$any_bad_inputs = true;
+			} else {
+				if(($_SESSION['quote_shipping_option'] == null)) {
+				  if(array_search($_SESSION['quote_shipping_method'], array('ups','usps')) !== false) {
+						$bad_input_message .= TXT_WPSC_PLEASE_ENTER_ZIPCODE . "";
+				  } else {
+						$bad_input_message .= TXT_WPSC_PLEASE_SELECT_SHIPPING . "";
+					}
+					$bad_input_message .= "\n\r";
+					$any_bad_inputs = true;
+				}
+			}
+ 		}
+ 		
+ 		
    list($bad_input_message, $any_bad_inputs) = apply_filters('wpsc_additional_checkout_checks', array($bad_input_message, $any_bad_inputs));
    //exit("<pre>".print_r($bad_input_message, true)."</pre>");
 

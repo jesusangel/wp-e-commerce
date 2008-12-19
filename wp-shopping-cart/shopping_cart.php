@@ -92,12 +92,19 @@ function wpsc_shipping_country_list($selected_country = null) {
 	}
 	
 // 	$output .= "ZipCode:";
-	if ($_POST['zipcode']=='') {
-	$zipvalue = 'Your Zipcode';
-	$color = '#999';
-	} else {
-		$zipvalue = $_POST['zipcode'];
-		$color = '#000';
+if(isset($_POST['zipcode'])) {
+		if ($_POST['zipcode']=='') {
+			$zipvalue = 'Your Zipcode';
+			$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+			$color = '#999';
+		} else {
+			$zipvalue = $_POST['zipcode'];
+			$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+			$color = '#000';
+		}
+	} else if(isset($_SESSION['wpsc_zipcode'])) {
+			$zipvalue = $_SESSION['wpsc_zipcode'];
+			$color = '#000';
 	}
 	$output .= " <input type='text' style='color:".$color.";' onclick='if (this.value==\"Your Zipcode\") {this.value=\"\";this.style.color=\"#000\";}' onblur='if (this.value==\"\") {this.style.color=\"#999\"; this.value=\"Your Zipcode\"; }' value='".$zipvalue."' size='10' name='zipcode' id='zipcode'>";
 	return $output;
@@ -257,7 +264,10 @@ function wpsc_shipping_country_list($selected_country = null) {
 					}
 				}
 			}
-		//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
+		
+			if(array_search($_SESSION['quote_shipping_method'], $custom_shipping) === false) {
+			  unset($_SESSION['quote_shipping_method']);
+			}
 		//echo ('<pre>'.print_r($_SESSION['quote_shipping_option'],1)."</pre>");
 		$_SESSION['uspsQuote']=$shipping_quotes;
 		$i=0;

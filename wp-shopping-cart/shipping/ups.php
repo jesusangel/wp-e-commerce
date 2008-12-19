@@ -86,7 +86,14 @@ class ups {
 		$dest = $_SESSION['delivery_country'];
 		$weight = shopping_cart_total_weight();
 // 		exit('<pre>'.print_r($weight,1)."</pre>");
-		$services = $this->getMethod($_POST['country']);
+    if(isset($_POST['zipcode'])) {
+      $zipcode = $_POST['zipcode'];      
+      $_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+    } else if(isset($_SESSION['wpsc_zipcode'])) {
+      $zipcode = $_SESSION['wpsc_zipcode'];
+    }
+
+		$services = $this->getMethod($_SESSION['delivery_country']);
 		$ch = curl_init();
 		foreach ($services as $key => $service) {
 			$Url = join("&", array("http://www.ups.com/using/services/rave/qcostcgi.cgi?accept_UPS_license_agreement=yes",
@@ -94,8 +101,8 @@ class ups {
 				"13_product=".$key,
 				"14_origCountry=".get_option('base_country'),
 				"15_origPostal=".get_option('base_zipcode'),
-				"19_destPostal=" . $_POST['zipcode'],
-				"22_destCountry=".$_POST['country'],
+				"19_destPostal=" . $zipcode,
+				"22_destCountry=".$_SESSION['delivery_country'],
 				"23_weight=" . $weight,
 				"47_rate_chart=Regular Daily Pickup",
 				"48_container=00",

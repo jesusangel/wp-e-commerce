@@ -2,6 +2,11 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
+
+
+
+define('TXT_WPSC_PLEASE_ENTER_ZIPCODE', 'Please enter a zipcode.');
+define('TXT_WPSC_PLEASE_SELECT_SHIPPING', 'Please select a shipping option.');
 define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ Add New Variations');
 define('TXT_WPSC_ADMIN_ENGRAVE', 'Users can personalize this product by leaving a message during checkout');
 define('TXT_WPSC_PERSONALISATION_OPTIONS','Personalisation Options');
@@ -455,7 +460,7 @@ define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', 'Please enter a valid phone numb
 define('TXT_WPSC_TERMSANDCONDITIONS', 'You have not agreed to the terms and conditions');
 define('TXT_WPSC_NOTHINGINYOURSHOPPINGCART', 'There is nothing in your shopping cart');
 
-define('TXT_WPSC_PROCESSING_PROBLEM', 'There was a problem with processing the puchase, please email the site owner.');
+define('TXT_WPSC_PROCESSING_PROBLEM', 'There was a problem with processing the purchase, please email the site owner.');
 
 
 define('TXT_WPSC_SPECIALS', 'Specials');

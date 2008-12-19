@@ -927,8 +927,13 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 							if((int)$cart_item->product_id === (int)$_POST['prodid']) {  // force both to integer before testing for identicality
 								if(($_SESSION['nzshpcrt_cart'][$cart_key]->extras === $extras)&&($_SESSION['nzshpcrt_cart'][$cart_key]->product_variations === $variations) && ((int)$_SESSION['nzshpcrt_cart'][$cart_key]->donation_price == (int)$_POST['donation_price'])) {
 									if ($_POST['quantity'] != ''){
-										foreach ($_POST['quantity'] as $qty)
-											$_SESSION['nzshpcrt_cart'][$cart_key]->quantity += (int)$qty;
+									  if(is_array($_POST['quantity'])) {
+											foreach ((array)$_POST['quantity'] as $qty) {
+												$_SESSION['nzshpcrt_cart'][$cart_key]->quantity += (int)$qty;
+											}
+										} else {
+											$_SESSION['nzshpcrt_cart'][$cart_key]->quantity += (int)$_POST['quantity'];
+										}
 									} else {
 										$_SESSION['nzshpcrt_cart'][$cart_key]->quantity++;
 									}

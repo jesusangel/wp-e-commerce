@@ -247,7 +247,9 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
     global $wpdb, $wpsc_shipping_modules;
     if(get_option('do_not_use_shipping') != 1) {
 			$custom_shipping = get_option('custom_shipping_options');
-			
+			if(array_search($_SESSION['quote_shipping_method'], $custom_shipping) === false) {
+			  //unset($_SESSION['quote_shipping_method']);
+			}
 			
 			$shipping_quotes = null;
 			if($_SESSION['quote_shipping_method'] != null) {
@@ -264,8 +266,11 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
 				}
 			}
 			
-		  //echo "<pre>".print_r($shipping_quotes,true)."</pre>";
-			if(!isset($_SESSION['quote_shipping_option']) && ($shipping_quotes != null)) {
+			//echo "<pre>".print_r($_SESSION['quote_shipping_method'],true)."</pre>";
+			if(count($shipping_quotes) < 1) {
+			$_SESSION['quote_shipping_option'] = '';
+			}
+			if(($_SESSION['quote_shipping_option'] == null) && ($shipping_quotes != null)) {
 				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_slice($shipping_quotes[0],0,1)));
 			}
 			foreach((array)$shipping_quotes as $shipping_quote) {

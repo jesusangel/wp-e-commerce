@@ -31,7 +31,7 @@ class tablerate {
 		$layers = get_option("table_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
-				$output.="<tr><td><input type='text' value='$key' name='layer[]'> and above</td><td><input type='text' value='{$shipping}' name='shipping[]'></td></tr>";
+				$output.="<tr><td><input type='text' value='$key' size='10' name='layer[]'><i style='color: grey;'> and above</i></td><td><input type='text' value='{$shipping}' name='shipping[]'></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";
@@ -62,16 +62,21 @@ class tablerate {
 		$shopping_cart = $_SESSION['nzshpcrt_cart'];
 // 		exit(print_r($shopping_cart,1));
 		$price=0;
-		foreach ((array)$shopping_cart as $item) {
-			$price += $wpdb->get_var("SELECT price FROM {$wpdb->prefix}product_list WHERE id='{$item->product_id}'");
+		foreach ((array)$shopping_cart as $cart_item) {
+	    $price += $cart_item->quantity * calculate_product_price($cart_item->product_id, $cart_item->product_variations,'stay',$extras);
 		}
 		
 		$layers = get_option('table_rate_layers');
+		
+		//echo "<pre>".print_r($layers,true)."</pre>";
+		
 		if ($layers != '') {
-			$layers = array_reverse($layers);
+			$layers = array_reverse($layers,true);
 			foreach ($layers as $key => $shipping) {
-				if ($price >= (double)$key) {
+				if ($price >= (float)$key) {
+				  //echo "<pre>$price $key</pre>";
 					return array(array("Table Rate"=>$shipping));
+					exit();
 				}
 			}
 		

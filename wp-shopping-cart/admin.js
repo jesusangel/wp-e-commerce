@@ -1328,7 +1328,7 @@ jQuery(document).ready(function(){
 	    		action: 'product-page-order',
 	    		ajax: 'true'
 	    	}
-	    	jQuery('.meta-box-sortables').each( function() {
+	    	jQuery('.meta-box-sortables', this).each( function() {
 	    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
 	    	} );
 	    	jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {

@@ -63,9 +63,9 @@ class weightrate {
 		$weight = shopping_cart_total_weight();
 		$layers = get_option('weight_rate_layers');
 		if ($layers != '') {
-			$layers = array_reverse($layers);
+			$layers = aarray_reverse($layers,true);
 			foreach ($layers as $key => $shipping) {
-				if ($weight >= (double)$key) {
+				if ($weight >= (float)$key) {
 					return array(array("Weight Rate"=>$shipping));
 				}
 			}
