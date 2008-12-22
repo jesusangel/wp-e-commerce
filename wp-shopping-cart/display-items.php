@@ -868,7 +868,8 @@ if (function_exists('add_object_page')) {
 }
 ?>
 	<div style="width: 500px;" class="alignleft">
-		<a href='' onclick='return showaddform()' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a>
+	  <?php //onclick='return showaddform()' ?>
+		<a href='admin.php?page=wp-shopping-cart/display-items.php' class='add_item_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADDPRODUCT;?></span></a>
 		<?php
 		do_action('wpsc_admin_products_tablenav');
 		?>

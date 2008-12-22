@@ -274,18 +274,27 @@ function selectgateway() {
 					<br />
 					<p>
 						<?php echo TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES; ?>
+						<?php
+						if(!function_exists('curl_init')) {
+						 echo "<br /><span style='color: red; font-size:8pt; line-height:10pt;'>". TXT_WPSC_SHIPPING_BUT_NO_CURL."</span>";
+						}
+						?>
 					</p>
 					<?php
 					
 					// print the internal shipping methods
 					foreach($external_shipping_modules as $shipping) {
-// 						exit("<pre>".print_r($shipping,1)."</pre>");
+					  $disabled = '';
+					  if(($shipping->requires_curl == true) && !function_exists('curl_init')) {
+							$disabled = "disabled='true'";
+					  }
+
 						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
 							echo "						";// add the whitespace to the html
-							echo "<p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							echo "<p><input $disabled name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
 						} else {
 							echo "						";
-							echo "<p><input name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							echo "<p><input $disabled name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
 						}
 					}
 					?>

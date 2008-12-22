@@ -5,6 +5,7 @@ class usps {
 		$this->internal_name = "usps";
 		$this->name="USPS";
 		$this->is_external=true;
+		$this->requires_curl=true;
 		return true;
 	}
 	

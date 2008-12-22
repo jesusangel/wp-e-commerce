@@ -524,6 +524,7 @@ function wpsc_swfupload_images() {
 	if ($_REQUEST['action']=='wpsc_add_image') {
 		$file = $_FILES['Filedata'];
 		$pid = (int)$_POST['prodid'];
+		//mail('thomas.howard@gmail.com','swfuploader', print_r($_POST,true).print_r($_FILES,true));
 		if(function_exists('gold_shpcrt_display_gallery')) {
 		  // if more than one image is permitted
       $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM {$wpdb->prefix}product_images WHERE product_id='$pid'", ARRAY_A);
@@ -531,7 +532,6 @@ function wpsc_swfupload_images() {
       $count = $existing_image_data['count'];
       
       $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
-		  //echo "<pre>".print_r($previous_image,true)."</pre>";
       if(($count >  0) || (strlen($previous_image) > 0)) {
         // if there is more than one image
         $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
@@ -545,7 +545,7 @@ function wpsc_swfupload_images() {
 					}
 					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `{$wpdb->prefix}product_images` LIMIT 1");
 					$src = $file['name'];
-					$output = "src='".$src."';id='".$id."';";
+					$output = "src='".$src."';id='".$id."';pid='$pid';";
 				} else {
 					$output = "file uploading error";
 				}
@@ -554,7 +554,7 @@ function wpsc_swfupload_images() {
 				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
 				if($src != null) {
 					$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-					$output = "src='".$src."';id='0';";
+					$output = "src='".$src."';id='0';pid='$pid';";
 				} else {
 					$output = "file uploading error";
 				}
@@ -569,7 +569,7 @@ function wpsc_swfupload_images() {
         if(strlen($previous_image) > 0) {
 					$output = "replacement_src='".WPSC_IMAGE_URL.$src."';"; 
         } else {
-					$output = "src='".$src."';id='0';";        
+					$output = "src='".$src."';id='0';pid='$pid';";        
         }
       } else {
         $output = "file uploading error";

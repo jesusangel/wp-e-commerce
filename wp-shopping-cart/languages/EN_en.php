@@ -4,7 +4,7 @@ This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
 
-
+define('TXT_WPSC_SHIPPING_BUT_NO_CURL', 'The following shipping modules all need cURL which is not installed on this server, you may need to contact your web hosting provider to get it set up. ');
 define('TXT_WPSC_PLEASE_ENTER_ZIPCODE', 'Please enter a zipcode.');
 define('TXT_WPSC_PLEASE_SELECT_SHIPPING', 'Please select a shipping option.');
 define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ Add New Variations');

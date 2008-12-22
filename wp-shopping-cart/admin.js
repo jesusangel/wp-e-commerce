@@ -1090,29 +1090,35 @@ function imageUploadError (file, error, message) {
 }
 
 function imageUploadSuccess (file, results) {
-  /* alert(results) */;
   	//Don't delete, initiate id is neccesary.
+  	var id = null;
+  	var pid = null;
   	
     jQuery("span.swfupload_loadingindicator").css('visibility', 'hidden');
-  	var id = null;
-	eval(results);
+		eval(results);
+// 		jQuery(this).css('border', '1px solid red');
+	  if(pid >= 1) {
+	    context = jQuery("div#productform");
+	  } else {
+			context = jQuery("div#additem");
+	  }
 	
 	if (id == null ) {
 	  	if(replacement_src != null) {
-	  	  	jQuery("li.first div.previewimage a.thickbox").attr('href', replacement_src);
-	  	  	jQuery("li.first div.previewimage a.thickbox img.previewimage").attr('src', replacement_src);
+	  	  	jQuery("li.first div.previewimage a.thickbox", context).attr('href', replacement_src);
+	  	  	jQuery("li.first div.previewimage a.thickbox img.previewimage", context).attr('src', replacement_src);
 	  	} else {
-        if (jQuery('#gold_present').val() != '1') {
-          jQuery('#add-product-image').remove();
+        if (jQuery('#gold_present', context).val() != '1') {
+          jQuery('#add-product-image', context).remove();
         }
         jQuery(this.sorting).attr({'value':src});
         var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
-        set = jQuery("#gallery_list").sortable('toArray');
+        set = jQuery("#gallery_list", context).sortable('toArray');
 
-        jQuery('#gallery_image_0').append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
-        jQuery('#gallery_image_0').parent('li').addClass('first');
-        jQuery('#gallery_image_0').parent('li').attr('id', 0);
-        jQuery('#gallery_image_0 img.deleteButton').remove();
+        jQuery('#gallery_image_0', context).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+        jQuery('#gallery_image_0', context).parent('li').addClass('first');
+        jQuery('#gallery_image_0', context).parent('li').attr('id', 0);
+        jQuery('#gallery_image_0 img.deleteButton', context).remove();
         enablebuttons();
 		}
 	} else {
@@ -1122,20 +1128,20 @@ function imageUploadSuccess (file, results) {
 		jQuery(this.targetHolder).html('');
 		var img = jQuery('<div class="previewimage" id="'+div_id+'"><input type="hidden" name="images[]" value="'+src+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
 		
-    jQuery('#gallery_image_0').append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
-    jQuery('#gallery_image_0').parent('li').addClass('first');
-    jQuery('#gallery_image_0').parent('li').attr('id', 0);
-    jQuery('#gallery_image_0 img.deleteButton').remove();
+    jQuery('#gallery_image_0', context).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+    jQuery('#gallery_image_0', context).parent('li').addClass('first');
+    jQuery('#gallery_image_0', context).parent('li').attr('id', 0);
+    jQuery('#gallery_image_0 img.deleteButton', context).remove();
     
     
-    if (jQuery('#gallery_list li').size() > 1) {
-      jQuery('#gallery_list').sortable('refresh');
+    if (jQuery('#gallery_list li', context).size() > 1) {
+      jQuery('#gallery_list', context).sortable('refresh');
     } else {
-      jQuery('#gallery_list').sortable();
+      jQuery('#gallery_list', context).sortable();
 		}
-    set = jQuery("#gallery_list").sortable('toArray');
+    set = jQuery("#gallery_list", context).sortable('toArray');
     order = set.join(',');
-    prodid = jQuery('#prodid').val();
+    prodid = jQuery('#prodid', context).val();
     if(prodid == null) {
       prodid = 0;
     }

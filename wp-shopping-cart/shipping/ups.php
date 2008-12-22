@@ -5,6 +5,7 @@ class ups {
 		$this->internal_name = "ups";
 		$this->name="UPS";
 		$this->is_external=true;
+		$this->requires_curl=true;
 		return true;
 	}
 	
