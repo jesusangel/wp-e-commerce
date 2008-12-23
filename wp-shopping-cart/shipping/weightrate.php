@@ -62,6 +62,7 @@ class weightrate {
 		$shopping_cart = $_SESSION['nzshpcrt_cart'];
 		$weight = shopping_cart_total_weight();
 		$layers = get_option('weight_rate_layers');
+		//echo "<pre>".print_r($weight,true)."</pre>";
 		if ($layers != '') {
 			$layers = array_reverse($layers,true);
 			foreach ($layers as $key => $shipping) {
