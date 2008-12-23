@@ -446,4 +446,6 @@ echo "</table>\n\r";
 		</td>
 	</tr>
 </table>
+<?php //echo TXT_WPSC_PROMOTE_YOUR_SHOP; ?>
+
 </div>

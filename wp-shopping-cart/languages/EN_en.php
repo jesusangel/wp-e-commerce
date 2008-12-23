@@ -3,6 +3,20 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.8
 */
 
+define('TXT_WPSC_PROMOTE_YOUR_SHOP', '
+<h2>Online Promotion</h2>
+<p>Now you have a site with products you need to get your products out there.</p>
+
+<p>Three of the best places to link your WordPress e-Commerce site are here:</p>
+<p>
+<a href=\'http://wordpress.org/support/forum/11\'>\'></a><br />
+<a href=\'http://www.instinct.co.nz/forums/forum.php?id=5\'></a><br />
+<a href=\'http://www.facebook.com/wordpress-e-commerce-plugin\'></a><br />
+</p>
+<p>
+By linking your site to any of these locations you are ensuring that people will browse to your site.
+</p>
+');
 
 define('TXT_WPSC_SHIPPING_BUT_NO_CURL', 'The following shipping modules all need cURL which is not installed on this server, you may need to contact your web hosting provider to get it set up. ');
 define('TXT_WPSC_PLEASE_ENTER_ZIPCODE', 'Please enter a zipcode.');
