@@ -291,7 +291,7 @@ jQuery(".remove_line").click(
 
 //SWFUpload
 	filesizeLimit = 5120000;
-	
+alert('prodid defined');
 	if (typeof SWFUpload != "undefined") {
     var swfu = new SWFUpload({
       flash_url : WPSC_URL+'/js/swfupload.swf',
@@ -1365,25 +1365,6 @@ jQuery(document).ready(function(){
 		}
 	);
 });
-
-
-
-
-function wpsc_upload_switcher(target_state) {
-  switch(target_state) {
-    case 'flash':
-    jQuery("table.browser-image-uploader").css("display","none");
-    jQuery("table.flash-image-uploader").css("display","block");
-    ajax.post("index.php",noresults,"admin=true&ajax=true&save_image_upload_state=true&image_upload_state=1");
-    break;
-    
-    case 'browser':
-    jQuery("table.flash-image-uploader").css("display","none");
-    jQuery("table.browser-image-uploader").css("display","block");
-    ajax.post("index.php",noresults,"admin=true&ajax=true&save_image_upload_state=true&image_upload_state=0");
-    break;
-  }
-}
 
 
 function image_resize_extra_forms(option) {

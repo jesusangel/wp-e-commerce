@@ -611,7 +611,29 @@ var borderSize = 10;
       <?php
     
     }
-  ?>
+    if(get_option('wpsc_use_flash_uploader_product') == 1) {
+      ?>
+      table.flash-product-uploader, button.select_preview_attach {
+        display: block;
+      }
+      
+      table.browser-product-uploader, span.select_preview_attach {
+        display: none;
+      }
+      <?php
+    } else {
+      ?>
+      table.flash-product-uploader, button.select_preview_attach {
+        display: none;
+      }
+      
+      table.browser-product-uploader, span.select_preview_attach {
+        display: block;
+      }
+      <?php
+    
+    }
+?>
   </style>
 <?php
 	}
@@ -1609,11 +1631,13 @@ function nzshpcrt_download_file() {
 			}
 		}
 	} else {
-		if(($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {
-			$product_id = $_GET['product_id'];
-			$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
-			if(is_numeric($product_data[0]['file']) && ($product_data[0]['file'] > 0)) {
-				$file_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product_data[0]['file']."' LIMIT 1",ARRAY_A) ;
+		if(($_GET['admin_preview'] == "true") && (is_numeric($_GET['file_id']) && $_GET['file_id'] > 0) && current_user_can('edit_plugins')) {
+
+//	Modified by TRansom - to support new product upload
+// 			$product_id = $_GET['product_id'];
+// 			$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+// 			if(is_numeric($product_data[0]['file']) && ($product_data[0]['file'] > 0)) {
+				$file_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$_GET['file_id']."' LIMIT 1",ARRAY_A) ;
 				$file_data = $file_data[0];
 				if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
 					header('Content-Type: '.$file_data['mimetype']);
@@ -1636,7 +1660,7 @@ function nzshpcrt_download_file() {
 					readfile_chunked($filename);   
 					exit();
 				}            
-			}
+//			}
     }
   }
 }
@@ -2466,7 +2490,24 @@ if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 		}
 }
 
-
+function wpsc_insert_footer_js() {
+	// link for the flash file
+	$swf_upload_link = WPSC_URL.'/wpsc_upload_files.php?action=wpsc_add_product';
+	$swf_upload_link = wp_nonce_url($swf_upload_link, 'wp-shopping-cart');
+	//flash doesn't seem to like encoded ampersands, so convert them back here
+	$swf_upload_link = str_replace('&#038;', '&', $swf_upload_link);
+?>
+<script language="JavaScript">
+var base_url = "<?php bloginfo('siteurl'); ?>";
+var upload_url = "<?php echo $swf_upload_link; ?>";
+var auth_cookie = "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>";
+var wpnonce = "<?php echo wp_create_nonce('wp-shopping-cart'); ?>";
+</script>
+<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/admin-test.js"></script>
+<?php
+	return;
+}
+add_action('admin_footer','wpsc_insert_footer_js');
 
 
 switch(get_option('cart_location')) {
@@ -2557,7 +2598,7 @@ function thickbox_variation() {
 		
 	echo	"</script>";
 		
-	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script></head>";
+	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin-test.js'></script><script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script></head>";
 	if($_POST){
 				if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>");
@@ -2586,6 +2627,7 @@ function thickbox_variation() {
       echo "<head>";
 		echo "
 		<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script>
+		<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin-test.js'></script>
 		<script language='JavaScript' type='text/javascript'>
 				parent.jQuery('#add_product_variations').html(\"".nl2br($variations_processor->list_variations())."\");
 				parent.tb_remove();

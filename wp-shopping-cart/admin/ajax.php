@@ -154,6 +154,13 @@ function wpsc_admin_ajax() {
 	exit("");
 	}
 		
+	if(($_POST['save_product_upload_state'] == "true") && is_numeric($_POST['product_upload_state'])) {
+		//get_option('wpsc_product_upload_state');
+		$upload_state = (int)(bool)$_POST['product_upload_state'];
+		update_option('wpsc_use_flash_uploader_product', $upload_state);
+		exit("done");
+	}
+      
 	if(($_POST['save_image_upload_state'] == "true") && is_numeric($_POST['image_upload_state'])) {
 		//get_option('wpsc_image_upload_state');
 		$upload_state = (int)(bool)$_POST['image_upload_state'];

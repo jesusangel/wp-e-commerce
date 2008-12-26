@@ -76,6 +76,8 @@ define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file fo
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
 define('TXT_WPSC_FLASH_UPLOADER', 'You are using the Flash uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.');
 define('TXT_WPSC_BROWSER_UPLOADER', 'You are using the Browser uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("flash")\'>Flash uploader</a> instead.');
+define('TXT_WPSC_FLASH_PRODUCT_UPLOADER', 'You are using the Flash uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_fileup_switcher("browser")\'>Browser uploader</a> instead.');
+define('TXT_WPSC_BROWSER_PRODUCT_UPLOADER', 'You are using the Browser uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_fileup_switcher("flash")\'>Flash uploader</a> instead.');
 
 define('TXT_WPSC_ADMIN_REPORT', 'Admin Report');
 define('TXT_WPSC_TAGS_CAN_BE_USED', 'Tags can be used');

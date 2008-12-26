@@ -608,9 +608,9 @@ function wpsc_item_process_file($mode = 'add') {
 				$file_hashes[] = $file['idhash'];
 			}
 		}
-		
-	if(apply_filters( 'wpsc_filter_file', $_FILES['file']['tmp_name'] )) {
-	  // initialise $idhash to null to prevent issues with undefined variables and error logs
+
+	if( apply_filters( 'wpsc_filter_file', $_FILES['file']['tmp_name']) ) {
+		// initialise $idhash to null to prevent issues with undefined variables and error logs
 	  $idhash = null;
 		switch($mode) {
 			case 'edit':
@@ -642,9 +642,9 @@ function wpsc_item_process_file($mode = 'add') {
 		$filename = basename($_FILES['file']['name']);
 		
 		
-		if (in_array($_FILES['file']['name'],(array)$file_names)){
+		if (in_array($_FILES['file']['name'],(array)$file_names)){  // Determine if we are uploading a new version of an existing file
 			$i=0;
-			$new_name = $_FILES['file']['name'].".old";
+			$new_name = $_FILES['file']['name'].".old";		// Find the next available suffix
 			while(file_exists(WPSC_FILE_DIR.$new_name)){
 				$new_name = $_FILES['file']['name'].".old_".$i;
 				$i++;
@@ -661,7 +661,7 @@ function wpsc_item_process_file($mode = 'add') {
 			copy(WPSC_FILE_DIR.$old_idhash, WPSC_FILE_DIR.$new_name);
 			unlink(WPSC_FILE_DIR.$old_idhash);
 		}
-		if(move_uploaded_file($_FILES['file']['tmp_name'],(WPSC_FILE_DIR.$idhash)))	{
+		if(move_uploaded_file($_FILES['file']['tmp_name'],(WPSC_FILE_DIR.$idhash)))	{	// Copy uploaded file to archive
 			$stat = stat( dirname( (WPSC_FILE_DIR.$idhash) ));
 			$perms = $stat['mode'] & 0000666;
 			@ chmod( (WPSC_FILE_DIR.$idhash), $perms );	

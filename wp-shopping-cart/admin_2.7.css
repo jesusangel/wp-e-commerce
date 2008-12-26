@@ -1,3 +1,5 @@
+@import url(admin-test.css);
+
 a {
   text-decoration:none;
   outline: none;
@@ -467,7 +469,7 @@ a.thickbox img{
 
 
 div.select_product_file, div.edit_select_product_file{
- width: 300px; 
+ width: 90%; 
  margin-top: 3px;
  padding: 2px;
  border: 1px solid #B2B2B2;
@@ -1948,3 +1950,4 @@ td.select_gateway h3.hndle {
 
 div#productform table tr td{ height: 11px !important; }
 div#productform table tr.settings_row td{ height: 0px !important; }
+
