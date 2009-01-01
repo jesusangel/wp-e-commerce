@@ -1,5 +1,3 @@
-@import url(admin-test.css);
-
 a {
   text-decoration:none;
   outline: none;
@@ -1951,3 +1949,44 @@ td.select_gateway h3.hndle {
 div#productform table tr td{ height: 11px !important; }
 div#productform table tr.settings_row td{ height: 0px !important; }
 
+/*
+/* Inserted by TRansom for Flash Upload of Digital products
+*/
+td.product_file_icon, td.product_file_actions {
+	margin-top: -17px;
+	width: 18px;
+	margin: 0 auto;
+}
+td.product_file_name {
+	width: 300px;
+}
+
+td.product_file_actions {
+	cursor: pointer;
+}
+
+#select_product_table label {
+	overflow:hidden;
+	display: block;
+	width: 300px;
+}
+#flash-product-uploader-status {
+	margin: 0;
+	padding-top: -12px;
+}
+
+/*
+/ ellipsis code from http://www.jide.fr/emulate-text-overflowellipsis-in-firefox-with-css
+*/
+
+
+.ellipsis label {
+   white-space:nowrap;
+   text-overflow: ellipsis; /* for internet explorer */
+   overflow:hidden;
+   width:310px;
+   display:block;
+}
+/*
+/*	END of TRansom insert
+*/

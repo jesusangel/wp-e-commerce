@@ -291,7 +291,6 @@ jQuery(".remove_line").click(
 
 //SWFUpload
 	filesizeLimit = 5120000;
-alert('prodid defined');
 	if (typeof SWFUpload != "undefined") {
     var swfu = new SWFUpload({
       flash_url : WPSC_URL+'/js/swfupload.swf',
@@ -1379,3 +1378,255 @@ function open_variation_settings(element_id) {
   return false;
 }
 
+var flashaction = '';
+window.onload = function () {
+
+//SWFUpload - for product files
+	filesizeLimit = 5120000;
+	prodid = jQuery('#prodid').val();
+	if( typeof(prodid) == "undefined") {
+		prodid = 0;
+	}
+	
+	if (typeof SWFUpload != "undefined") {
+    var swfdl = new SWFUpload({
+      flash_url : WPSC_URL+'/js/swfupload.swf',
+      button_placeholder_id : "spanButtonPlaceholderProduct",
+      swfupload_element_id: "flashui2",
+      degraded_element_id: "degradedui2",
+      button_width: 103,
+      button_height: 24,
+      button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+      button_cursor: SWFUpload.CURSOR.HAND,
+      upload_url: WPSC_URL+'/wpsc_upload_files.php',
+      post_params: {
+      		action  : 'wpsc_add_product'
+      		,"prodid" : prodid
+      		,"auth_cookie" : auth_cookie
+			,"_wpnonce" : wpnonce
+      		},
+      file_queue_limit : 1,
+      file_size_limit : filesizeLimit+'b',
+      file_types : "*.mp3;*.avi;*.pdf;*.*",
+      file_types_description : "Files to be delivered to customer",
+      file_post_name: "file",
+      file_upload_limit : filesizeLimit,
+        custom_settings : {
+        targetHolder : false,
+        progressBar : false,
+        sorting : false
+      },
+      debug: false,
+      
+      file_queued_handler : productFileQueued,
+      file_queue_error_handler : productFileQueueError,
+      file_dialog_complete_handler : productFileDialogComplete,
+      upload_start_handler : startProductUpload,
+      upload_progress_handler : productUploadProgress,
+      upload_error_handler : productUploadError,
+      upload_success_handler : productUploadSuccess,
+      upload_complete_handler : productUploadComplete,
+      queue_complete_handler : productQueueComplete
+    });
+
+    var swfpre = new SWFUpload({
+      flash_url : WPSC_URL+'/js/swfupload.swf',
+      button_placeholder_id : "spanButtonPlaceholderPreview",
+      swfupload_element_id: "flashui3",
+      degraded_element_id: "degradedui3",
+      button_width: 103,
+      button_height: 24,
+      button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+      button_cursor: SWFUpload.CURSOR.HAND,
+      upload_url: WPSC_URL+'/wpsc_upload_files.php',
+      post_params: {
+      		action  : 'wpsc_add_preview'
+      		,"prodid" : prodid
+      		,"auth_cookie" : auth_cookie
+			,"_wpnonce" : wpnonce
+      		},
+      file_queue_limit : 1,
+      file_size_limit : filesizeLimit+'b',
+      file_types : "*.mp3;*.avi;*.pdf;*.*",
+      file_types_description : "Sample Files for this product",
+      file_post_name: "file",
+      file_upload_limit : filesizeLimit,
+        custom_settings : {
+        targetHolder : false,
+        progressBar : false,
+        sorting : false
+      },
+      debug: false,
+      
+      file_queued_handler : previewFileQueued,
+      file_queue_error_handler : previewFileQueueError,
+      file_dialog_complete_handler : previewFileDialogComplete,
+      upload_start_handler : startPreviewUpload,
+      upload_progress_handler : previewUploadProgress,
+      upload_error_handler : previewUploadError,
+      upload_success_handler : previewUploadSuccess,
+      upload_complete_handler : previewUploadComplete,
+      queue_complete_handler : previewQueueComplete,
+      swfupload_loaded_handler : swfPreviewLoaded
+    });
+ 	}
+	function productFileQueued (file) {
+	
+	}
+	
+	function productFileQueueError (file, error, message) {
+		if (error == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+			alert("You selected too many files to upload at one time. " + (message === 0 ? "You have reached the upload limit." : "You may upload " + (message > 1 ? "up to " + message + " files." : "only one file.")));
+			return;
+		}
+	
+	}
+	
+	function productFileDialogComplete (selected, queued) {
+		try {
+			this.startUpload();
+		} catch (ex) {
+			this.debug(ex);
+		}
+	}
+
+	function startProductUpload (file) {
+		return true;
+	}
+	
+	function productUploadProgress (file, loaded, total) {
+		var progress = Math.ceil((loaded/total)*76);
+		jQuery(this.progressBar).animate({'width':progress+'px'},100);
+	}
+	
+	function productUploadError (file, error, message) {
+		console.log(error+": "+message);
+	}
+	
+	function productUploadSuccess (file, results) {
+		jQuery('#flash-product-uploader-status').html('Product Added').addClass('updated');
+
+	}
+
+	function productUploadComplete (file) {
+	}
+	
+	function productQueueComplete (uploads) {
+	}
+//
+//		JS Routines for uploading preview files
+	function previewFileQueued (file) {
+	}
+	
+	function previewFileQueueError (file, error, message) {
+		if (error == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+			alert("You selected too many files to upload at one time. " + (message === 0 ? "You have reached the upload limit." : "You may upload " + (message > 1 ? "up to " + message + " files." : "only one file.")));
+			return;
+		}
+	}
+	
+	function previewFileDialogComplete (selected, queued) {
+		try {
+			this.startUpload();
+		} catch (ex) {
+			this.debug(ex);
+		}
+	}
+
+	function startPreviewUpload (file) {
+		return true;
+	}
+	
+	function previewUploadProgress (file, loaded, total) {
+		var progress = Math.ceil((loaded/total)*76);
+		jQuery(this.progressBar).animate({'width':progress+'px'},100);
+	}
+	
+	function previewUploadError (file, error, message) {
+		console.log(error+": "+message);
+	}
+	
+	function previewUploadSuccess (file, results) {
+		jQuery('#flash-product-uploader-status').html('preview Added').addClass('updated');
+
+	}
+
+	function previewUploadComplete (file) {
+	   alert('Complete');
+	
+	}
+	
+	function previewQueueComplete (uploads) {
+	
+	}
+	function swfPreviewLoaded() {
+		jQuery("button.select_preview_attach").click(function(){
+			var dlfile = jQuery(this).parents('tr:first').attr('id').replace(/select_product_row_/,"");
+			var flashaction = 'preview';
+	//		swfpre.addPostParam('action','preview');
+	//		swfpre.addPostParam('fileid',dlfile);
+			swfpre.selectFile();
+			alert("hello");
+		});
+	}
+}
+jQuery(document).ready(function(){
+	jQuery("#add-product-files").click(function(){
+		var flashaction = 'add';
+		swfdl.addPostParam('subaction','add');
+		swfdl.selectFiles();
+	});
+	jQuery("#add-edit-files").click(function(){
+		var flashaction = 'edit';
+		swfdl.addPostParam('action','edit');
+		swfdl.selectFiles();
+	});
+
+});
+
+function wpsc_fileup_switcher(target_state) {
+  switch(target_state) {
+    case 'flash':
+    jQuery("table.browser-product-uploader").css("display","none");
+    jQuery("table.flash-product-uploader").css("display","block");
+    jQuery("button.select_preview_attach").css("display","block");
+    jQuery("span.select_preview_attach").css("display","none");
+    ajax.post("index.php",noresults,"admin=true&ajax=true&save_product_upload_state=true&product_upload_state=1");
+    break;
+    
+    case 'browser':
+    jQuery("table.flash-product-uploader").css("display","none");
+    jQuery("table.browser-product-uploader").css("display","block");
+    jQuery("button.select_preview_attach").css("display","none");
+    jQuery("span.select_preview_attach").css("display","block");
+    ajax.post("index.php",noresults,"admin=true&ajax=true&save_product_upload_state=true&product_upload_state=0");
+    break;
+  }
+}
+
+	jQuery('.select_product_delete').click(function(){
+		var dlfile = jQuery(this).parents('tr:first').attr('id');
+		alert("Delete Me "+dlfile);
+// 		if(areYouSure('Are you sure you want to delete this product?')){
+// 			var which_one = jQuery(this).id().remove('select_product_delete_');
+// 		jQuery.post(siteurl+'wp-admin/admin-ajax.php', 
+// 		{action:"delete_file"
+// 		, 'cookie': encodeURIComponent(document.cookie)
+// 		, 'fileid': dlfile
+// 		};
+// 			productUploadSuccess();
+	});
+	jQuery('.select_product_preview').click(function(){
+		var dlfile = jQuery(this).parents('tr:first').attr('id');
+		alert("Preview Me "+dlfile);
+// 		jQuery.post(siteurl+'wp-admin/admin-ajax.php', 
+// 		{action:"preview_file"
+// 		, 'cookie': encodeURIComponent(document.cookie)
+// 		, 'fileid': dlfile
+// 		};
+// 			productUploadSuccess();
+	});
+
+function wpsc_product_action_delete() {
+
+}

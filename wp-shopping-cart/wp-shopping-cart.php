@@ -2503,7 +2503,6 @@ var upload_url = "<?php echo $swf_upload_link; ?>";
 var auth_cookie = "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>";
 var wpnonce = "<?php echo wp_create_nonce('wp-shopping-cart'); ?>";
 </script>
-<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/admin-test.js"></script>
 <?php
 	return;
 }
@@ -2598,7 +2597,7 @@ function thickbox_variation() {
 		
 	echo	"</script>";
 		
-	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin-test.js'></script><script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script></head>";
+	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script></head>";
 	if($_POST){
 				if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>");
@@ -2627,7 +2626,6 @@ function thickbox_variation() {
       echo "<head>";
 		echo "
 		<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script>
-		<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin-test.js'></script>
 		<script language='JavaScript' type='text/javascript'>
 				parent.jQuery('#add_product_variations').html(\"".nl2br($variations_processor->list_variations())."\");
 				parent.tb_remove();
