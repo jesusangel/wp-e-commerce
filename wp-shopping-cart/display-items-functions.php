@@ -898,6 +898,34 @@ global $closed_postboxes;
 	</table></div></div>
 <?php
 }
+
+function wpsc_get_publish_status($product_id) {
+
+	$status = ( wpsc_publish_status($product_id) ) ? "Unpublish" : "Publish";
+	return $status;
+}
+
+function wpsc_toggle_publish_status($product_id) {
+	global $wpdb;
+
+	$status = (int) ( wpsc_publish_status($product_id) ) ? 0 : 1;
+	$result = $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `publish` = '{$status}' WHERE `id` = '{$product_id}'");
+	return ($status) ? ('true') : ('false');
+}
+
+function wpsc_publish_status($product_id) {
+	global $wpdb;
+	
+	$status = $wpdb->get_var("SELECT publish FROM `{$wpdb->prefix}product_list` WHERE `id` = '{$product_id}'");
+	return $status;
+}
+
+function wpsc_ajax_toggle_publish() {
+
+	die( wpsc_toggle_publish_status($_POST['productid']) );
+}
+add_action('wp_ajax_wpsc_toggle_publish','wpsc_ajax_toggle_publish');
+
 function wpsc_meta_boxes(){
 	add_meta_box('category_and_tag', 'Category and Tags', 'category_and_tag_box', 'wp-shopping-cart/display-items', 'normal', 'high');
 	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', 'wp-shopping-cart/display-items', 'normal', 'high');

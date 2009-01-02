@@ -1000,10 +1000,11 @@ if($product_list != null)
 		//echo "    <div class='itemHeader'></div>\n\r";
 		echo "    <div class='itemContent'>\n\r";
 	} else {
+		$published = ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published';
 		if ($tablei==1) {
-			echo "<tr class='products'>";
+			echo "<tr id='".$product['id']."' class='products".$published."'>";
 		} else {
-			echo "<tr class='productsalt'>";
+			echo "<tr id='".$product['id']."' class='productsalt".$published."'>";
 		}
 		$tablei*=-1;
 	}
@@ -1059,8 +1060,12 @@ if($product_list != null)
 	if(is_numeric($_GET['catid'])){
 		echo "            </div>\n\r";    
 	} else {
-		echo '<div class="wpsc-row-actions"><span class="edit"><a title="Edit this post" style="cursor:pointer;" onclick="filleditform('.$product['id'].');return false;">Edit</a></span> | <span class="delete"><a onclick="if ( confirm(\'Are you sure to delete this product?\') ) { return true;}return false;" href="?page=wp-shopping-cart/display-items.php&deleteid='.$product['id'].'" title="Delete this product">Delete</a></span> | <span class="view"><a target="_blank" rel="permalink" title=\'View "'.$product['name'].'"\' href="'.wpsc_product_url($product['id']).'">View</a></span> | <span class="view"><a rel="permalink" title=\'Duplicate "'.$product['name'].'"\' href="?page=wp-shopping-cart/display-items.php&duplicate='.$product['id'].'">Duplicate</a></span></div>';
-		echo "</td><td id=".$product['id'].">";
+		echo '<div class="wpsc-row-actions"><span class="edit"><a title="Edit this product" style="cursor:pointer;" onclick="filleditform('.$product['id'].');return false;">Edit</a></span> ';
+		echo '| <span class="delete"><a onclick="if ( confirm(\'Are you sure to delete this product?\') ) { return true;}return false;" href="?page=wp-shopping-cart/display-items.php&deleteid='.$product['id'].'" title="Delete this product">Delete</a></span> ';
+		echo '| <span class="view"><a target="_blank" rel="permalink" title=\'View "'.$product['name'].'"\' href="'.wpsc_product_url($product['id']).'">View</a></span>';
+		echo ' | <span class="view"><a rel="permalink" title=\'Duplicate "'.$product['name'].'"\' href="?page=wp-shopping-cart/display-items.php&duplicate='.$product['id'].'">Duplicate</a></span> ';
+		echo '| <span class="publish_toggle"><a title="Change publish status " style="cursor:pointer;" href="'.get_bloginfo("wpurl").'/wp-admin/admin-ajax.php">'.wpsc_get_publish_status($product['id']).'</a></span>';
+		echo "</div></td><td id=".$product['id'].">";
 	}
 		if(is_numeric($_GET['catid'])){ 
 			echo "            <div class='pli_price'>\n\r";

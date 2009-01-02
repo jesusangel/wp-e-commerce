@@ -158,6 +158,7 @@ $wpsc_database_template[$table_name]['columns']['special'] = "varchar(1) NOT NUL
 $wpsc_database_template[$table_name]['columns']['special_price'] = "varchar(20) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['display_frontpage'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['notax'] = "varchar(1) NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['publish'] = "varchar(1) NOT NULL DEFAULT '1' ";
 $wpsc_database_template[$table_name]['columns']['active'] = "varchar(1) NOT NULL DEFAULT '1' ";
 $wpsc_database_template[$table_name]['columns']['donation'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['no_shipping'] = "varchar(1) NOT NULL DEFAULT '0' ";

@@ -143,6 +143,9 @@ table#itemlist tr.productsalt{background-color:#f3f3f3;border-left:1px solid #bb
 table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 table#itemlist tr.productsalt td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 
+table#itemlist tr.wpsc_published td{ background-color: #fff }
+table#itemlist tr.wpsc_not_published td{ background-color: #DFDFDF }
+
 table#itemlist tr td.imagecol{ padding: 4px;}
  
 table#itemlist tr td.colspan{ text-align: left; padding: 0px; }

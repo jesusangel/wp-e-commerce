@@ -606,11 +606,7 @@ function wpsc_save_inline_price() {
 	$wpdb->query("UPDATE {$wpdb->prefix}product_list SET price='$new_price1' WHERE id='$pid'");
 	exit($new_price);
 }
-
-if($_GET['inline_price']=='true') { 
-	add_action('admin_init', 'wpsc_save_inline_price', 0);
-}
-
+add_action('wp_ajax_wpsc_save_inline_price','wpsc_save_inline_price');
 
 if($_GET['display_invoice']=='true') {
   add_action('admin_init', 'wpsc_display_invoice', 0);

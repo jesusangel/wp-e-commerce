@@ -1303,13 +1303,20 @@ jQuery(document).ready(function(){
 	
   	jQuery("table#itemlist .pricedisplay").each(
 		function () {
-			jQuery(this).attr("id",jQuery(this).parent().attr('id'));
+			jQuery(this).attr("id",jQuery(this).parents('tr:first').attr('id'));
 		}
 	);
- 	jQuery("table#itemlist .pricedisplay").editable(base_url+"/?inline_price=true", {
-         indicator : "Saving...",
-         tooltip   : 'Click to edit...'
-    });
+	
+	// http://www.appelsiini.net/projects/jeditable
+ 	jQuery("table#itemlist .pricedisplay").editable( base_url+'/wp-admin/admin-ajax.php', {
+			indicator : "Saving...",
+			tooltip   : 'Click to edit...',
+			submitdata : {
+			   action: "wpsc_save_inline_price"
+			, 'cookie': encodeURIComponent(document.cookie)
+			}
+	});
+	
     jQuery('.meta-box-sortables').sortable( {
 	    placeholder: 'sortable-placeholder',
 	    connectWith: [ '.meta-box-sortables' ],
@@ -1566,7 +1573,6 @@ window.onload = function () {
 	//		swfpre.addPostParam('action','preview');
 	//		swfpre.addPostParam('fileid',dlfile);
 			swfpre.selectFile();
-			alert("hello");
 		});
 	}
 }
@@ -1582,6 +1588,31 @@ jQuery(document).ready(function(){
 		swfdl.selectFiles();
 	});
 
+});
+
+jQuery(document).ready(function(){
+// Used on admin/display-items.php - toggles the publish status of a product (dims background for unpublished)
+// click logic from http://xplus3.net/2008/10/16/jquery-and-ajax-in-wordpress-plugins-administration-pages/
+	jQuery("span.publish_toggle a").click(function() {
+		var that = this;
+		var theRow = jQuery(this).parents('tr:first');
+		jQuery.post(jQuery(this).attr("href"), {
+			   action: "wpsc_toggle_publish"
+			, 'cookie': encodeURIComponent(document.cookie)
+			, 'productid': jQuery(theRow).attr('id')
+			}
+			, function(newstatus){
+				if (newstatus == 'true') {
+					jQuery(that).text('Unpublish');
+					jQuery(theRow).removeClass('wpsc_not_published').addClass('wpsc_published')
+				} else {
+					jQuery(that).text('Publish');
+					jQuery(theRow).removeClass('wpsc_published').addClass('wpsc_not_published');
+				}	
+			}
+		);
+		return false; // The click never happened - defeat the a tag
+	});
 });
 
 function wpsc_fileup_switcher(target_state) {
