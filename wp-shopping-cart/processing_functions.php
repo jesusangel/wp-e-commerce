@@ -1111,6 +1111,7 @@ function wpsc_add_product($product_values) {
 		$insertsql .= "`donation` = '".$wpdb->escape($product_values['donation'])."',";
 		$insertsql .= "`display_frontpage` = '".$wpdb->escape($product_values['display_frontpage'])."',";
 		$insertsql .= "`notax` = '".$wpdb->escape($product_values['notax'])."',";
+		$insertsql .= "`publish` = '".$wpdb->escape($product_values['publish'])."',";
 		
 		$insertsql .= "`image` = '0',";
 		$insertsql .= "`file` = '0',";

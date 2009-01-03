@@ -38,7 +38,7 @@ function nzshpcrt_price_range($input = null) {
 	} else {
 		$seperater='?';
 	}
-	$result = $wpdb->get_results("SELECT DISTINCT price FROM ".$wpdb->prefix."product_list ORDER BY price ASC",ARRAY_A);
+	$result = $wpdb->get_results("SELECT DISTINCT price FROM ".$wpdb->prefix."product_list WHERE `active`='1' AND `publish`='1' ORDER BY price ASC",ARRAY_A);
 	sort($result);
 	$count = count($result);
 	$price_seperater = ceil($count/6);

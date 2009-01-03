@@ -156,7 +156,7 @@ if($_POST['submit_action'] == 'add') {
 		}
 				
 		
-	if(is_numeric((int)$_POST['quantity']) && ($_POST['quantity_limited'] == "yes")) {
+		if(is_numeric((int)$_POST['quantity']) && ($_POST['quantity_limited'] == "yes")) {
 				$quantity_limited = 1;
 				$quantity = (int)$_POST['quantity'];
 			} else {
@@ -164,43 +164,49 @@ if($_POST['submit_action'] == 'add') {
 				$quantity = 0;
 			}
 				
-			if($_POST['special'] == 'yes') {
-				$special = 1;
-				if(is_numeric($_POST['special_price'])) {
-					$special_price = $_POST['price'] - $_POST['special_price'];
-				}
-			} else {
-				$special = 0;
-				$special_price = '';
+		if($_POST['special'] == 'yes') {
+			$special = 1;
+			if(is_numeric($_POST['special_price'])) {
+				$special_price = $_POST['price'] - $_POST['special_price'];
 			}
-			
-			if($_POST['notax'] == 'yes') {
-				$notax = 1;
-			} else {
-				$notax = 0;
-			}
-	
-				
-			if($_POST['display_frontpage'] == "yes") {
-				$display_frontpage = 1;
-			} else {
-				$display_frontpage = 0;
-			}
-			
-			if($_POST['donation'] == "yes") {
-				$is_donation = 1;
-			} else {
-				$is_donation = 0;
-			}
-			
-			if($_POST['no_shipping'] == "yes") {
-				$no_shipping = 1;
-			} else {
-				$no_shipping = 0;
-			}
-	
-		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
+		} else {
+			$special = 0;
+			$special_price = '';
+		}
 		
+		if($_POST['publish'] == 'yes') {
+			$publish = 1;
+		} else {
+			$publish = 0;
+		}
+
+		if($_POST['notax'] == 'yes') {
+			$notax = 1;
+		} else {
+			$notax = 0;
+		}
+
+			
+		if($_POST['display_frontpage'] == "yes") {
+			$display_frontpage = 1;
+		} else {
+			$display_frontpage = 0;
+		}
+		
+		if($_POST['donation'] == "yes") {
+			$is_donation = 1;
+		} else {
+			$is_donation = 0;
+		}
+		
+		if($_POST['no_shipping'] == "yes") {
+			$no_shipping = 1;
+		} else {
+			$no_shipping = 0;
+		}
+
+		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`, `publish`, `notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$publish', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
+krumo($insertsql,$_POST);		
 		if($wpdb->query($insertsql)) {
 			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
 			for($i=1;$i<count($_POST['images']);$i++) {
@@ -551,6 +557,12 @@ if($_POST['submit_action'] == "edit") {
         $special_price = '';
 			}
   
+    if($_POST['publish'] == 'yes') {
+      	$publish = 1;
+	} else {
+		$publish = 0;
+	}
+
     if($_POST['notax'] == 'yes') {
       $notax = 1;
 		} else {
@@ -576,7 +588,7 @@ if($_POST['submit_action'] == "edit") {
 			$no_shipping = 0;
 		}
 		
-		$updatesql = "UPDATE `".$wpdb->prefix."product_list` SET `name` = '".$wpdb->escape($_POST['title'])."', `description` = '".$wpdb->escape($_POST['description'])."', `additional_description` = '".$wpdb->escape($_POST['additional_description'])."', `price` = '".$wpdb->escape(str_replace(",","",$_POST['price']))."', `pnp` = '".(float)$wpdb->escape($_POST['pnp'])."', `international_pnp` = '".(float)$wpdb->escape($_POST['international_pnp'])."', `brand` = '0', quantity_limited = '".$quantity_limited."', `quantity` = '".(int)$quantity."', `special`='$special', `special_price`='$special_price', `display_frontpage`='$display_frontpage', `notax`='$notax', `donation`='$is_donation', `no_shipping` = '$no_shipping', `weight` = '".$wpdb->escape($_POST['weight'])."', `weight_unit` = '".$wpdb->escape($_POST['weight_unit'])."'  WHERE `id`='".$_POST['prodid']."' LIMIT 1";
+		$updatesql = "UPDATE `".$wpdb->prefix."product_list` SET `name` = '".$wpdb->escape($_POST['title'])."', `description` = '".$wpdb->escape($_POST['description'])."', `additional_description` = '".$wpdb->escape($_POST['additional_description'])."', `price` = '".$wpdb->escape(str_replace(",","",$_POST['price']))."', `pnp` = '".(float)$wpdb->escape($_POST['pnp'])."', `international_pnp` = '".(float)$wpdb->escape($_POST['international_pnp'])."', `brand` = '0', quantity_limited = '".$quantity_limited."', `quantity` = '".(int)$quantity."', `special`='$special', `special_price`='$special_price', `display_frontpage`='$display_frontpage', `publish`='$publish', `notax`='$notax', `donation`='$is_donation', `no_shipping` = '$no_shipping', `weight` = '".$wpdb->escape($_POST['weight'])."', `weight_unit` = '".$wpdb->escape($_POST['weight_unit'])."'  WHERE `id`='".$_POST['prodid']."' LIMIT 1";
 
 		$wpdb->query($updatesql);
 		if(($_FILES['image']['name'] != null) && ($image != null)) {
@@ -1000,7 +1012,7 @@ if($product_list != null)
 		//echo "    <div class='itemHeader'></div>\n\r";
 		echo "    <div class='itemContent'>\n\r";
 	} else {
-		$published = ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published';
+		$published = ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published'; // TRansom - Publish /No Publish classes added
 		if ($tablei==1) {
 			echo "<tr id='".$product['id']."' class='products".$published."'>";
 		} else {

@@ -596,6 +596,10 @@ function wpsc_display_invoice() {
   //wpsc_packing_slip($purchase_id);
   exit();
 }
+if($_GET['display_invoice']=='true') {
+  add_action('admin_init', 'wpsc_display_invoice', 0);
+
+}
 
 
 function wpsc_save_inline_price() {
@@ -608,18 +612,11 @@ function wpsc_save_inline_price() {
 }
 add_action('wp_ajax_wpsc_save_inline_price','wpsc_save_inline_price');
 
-if($_GET['display_invoice']=='true') {
-  add_action('admin_init', 'wpsc_display_invoice', 0);
-
-}
 
 
 add_action('admin_init','shipping_options');
 add_action('admin_init','shipping_submits');
 add_action('init','wpsc_swfupload_images');
-
-
-
 
 
 if($_GET['purchase_log_csv'] == "true") {

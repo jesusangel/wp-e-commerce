@@ -68,7 +68,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
         // Adrian - check option for category count
         if (get_option('show_category_count') == 1){
           //show product count for each category
-          $count_sql = "SELECT COUNT(`p`.`id`) FROM `{$wpdb->prefix}item_category_associations` AS `a` JOIN `{$wpdb->prefix}product_list` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')";
+          $count_sql = "SELECT COUNT(`p`.`id`) FROM `{$wpdb->prefix}item_category_associations` AS `a` JOIN `{$wpdb->prefix}product_list` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1') AND `p`.`publish`='1'";
           $count = $wpdb->get_var($count_sql);
           $addCount =  " [".$count."]";
         } //end get_option
@@ -112,7 +112,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
                 $ID = $productID['product_id'];
                 $productName_sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '".$ID."'";
                 $productName = $wpdb->get_results($productName_sql,ARRAY_A);
-                if ($productName[0]['active'])
+                if ($productName[0]['active'] && $productName[0]['publish'] )
                 	$output .= "<li><a class='productlink' href='".wpsc_product_url($ID,$option['id'])."'>".$productName[0]['name']."</a></li>";
               }//end foreach            
             $output .= "</ul>";         
