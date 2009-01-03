@@ -3,7 +3,7 @@ function widget_specials($args) {
   global $wpdb, $table_prefix;
   extract($args);
   $options = get_option('wpsc-widget_specials');
-  $special_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_list` WHERE `special` = '1'  AND `active` IN ('1')");   
+  $special_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_list` WHERE `special` = '1'  AND `active` IN ('1') AND `publish`='1'");   
   if($special_count > 0) {
     $title = empty($options['title']) ? __(TXT_WPSC_PRODUCT_SPECIALS) : $options['title'];
     echo $before_widget; 
@@ -19,7 +19,7 @@ function widget_specials($args) {
  function nzshpcrt_specials($input = null) {
    global $wpdb;
    $siteurl = get_option('siteurl');
-   $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `special` = '1'  AND `active` IN ('1')  ORDER BY RAND() LIMIT 1";
+   $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `special` = '1'  AND `active` IN ('1') AND `publish`='1' ORDER BY RAND() LIMIT 1";
    $product = $wpdb->get_results($sql,ARRAY_A) ;
 		if($product != null) {
 			$output = "<div><div>";

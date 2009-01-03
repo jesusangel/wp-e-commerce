@@ -1396,14 +1396,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     
     // LIMIT $startnum
     if(is_numeric($_GET['product_id'])) {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `id` IN('".$_GET['product_id']."') LIMIT 1";
+      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1' AND `id` IN('".$_GET['product_id']."') LIMIT 1";
       } else if($_GET['random'] == 'true') {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') ORDER BY RAND() $limit";
+      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1' ORDER BY RAND() $limit";
       } else if(is_numeric($_GET['category_id'])) {
       /* man, this is a hard to read SQL statement */
-      $sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$_GET['category_id']."') ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC $limit";      
+      $sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."product_list`.publish`='1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$_GET['category_id']."') ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC $limit";      
     } else {
-      $sql = "SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') ORDER BY `id` DESC $limit";
+      $sql = "SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1' ORDER BY `id` DESC $limit";
     }
     
     include_once(WPSC_FILE_PATH."/product_display_functions.php");
@@ -2784,7 +2784,7 @@ function wpsc_duplicate() {
 	global $wpdb;
 	if (is_numeric($_GET['duplicate'])) {
 		$dup_id = $_GET['duplicate'];
-		$sql = " INSERT INTO {$wpdb->prefix}product_list( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM {$wpdb->prefix}product_list WHERE id = '".$dup_id."' ";
+		$sql = " INSERT INTO {$wpdb->prefix}product_list( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `publish`, `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `publish`, `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM {$wpdb->prefix}product_list WHERE id = '".$dup_id."' ";
 		$wpdb->query($sql);
 		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
 		

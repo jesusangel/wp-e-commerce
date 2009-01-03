@@ -4,7 +4,7 @@ function widget_donations($args) {
   extract($args);
   $options = get_option('wpsc-nzshpcrt_donations');    
 	$title = empty($options['title']) ? __(TXT_WPSC_DONATIONS) : $options['title'];
-	$donation_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_list` WHERE `donation` IN ('1') AND `active` IN ('1')");   
+	$donation_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_list` WHERE `donation` IN ('1') AND `active` IN ('1') AND `publish`='1'");   
 	if($donation_count > 0) {
     echo $before_widget; 
     $full_title = $before_title . $title . $after_title;
@@ -17,7 +17,7 @@ function widget_donations($args) {
 function nzshpcrt_donations($input = null) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
-	$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `donation` IN ('1') AND `active` IN ('1')";
+	$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `donation` IN ('1') AND `active` IN ('1') AND `publish`='1'";
 	$products = $wpdb->get_results($sql,ARRAY_A);
 	if($products != null) {
 		$output = "<div><div>";

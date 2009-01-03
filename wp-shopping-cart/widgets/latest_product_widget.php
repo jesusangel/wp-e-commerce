@@ -16,7 +16,7 @@ function widget_latest_products($args) {
 function nzshpcrt_latest_product($input = null) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
-	$latest_product = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1') ORDER BY `id` DESC LIMIT 5", ARRAY_A);
+	$latest_product = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1') AND `publish`='1' ORDER BY `id` DESC LIMIT 5", ARRAY_A);
 	if($latest_product != null) {
 		$output = "<div>";
 		foreach($latest_product as $special) {			

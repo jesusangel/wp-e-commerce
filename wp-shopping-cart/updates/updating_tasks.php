@@ -6,7 +6,7 @@
      
 if(!$wpdb->get_results("SELECT `id` FROM `".$wpdb->prefix."also_bought_product`")) {
   // inserts data on what was bought with what however many times 
-  $product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')");
+  $product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1'");
   foreach((array)$product_ids as $prodid) {
     $cart_ids = $wpdb->get_results("SELECT `purchaseid` FROM `".$wpdb->prefix."cart_contents` WHERE `prodid` IN ('$prodid')", ARRAY_A);
     $popular_array = array();
@@ -53,7 +53,7 @@ if(get_option('wpsc_use_pnp_cols') != 'true') {
 /* adds nice names for permalinks for products */
 $check_product_names = $wpdb->get_results("SELECT `".$wpdb->prefix."product_list`.`id`, `".$wpdb->prefix."product_list`.`name`, `".$wpdb->prefix."wpsc_productmeta`.`meta_key` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."wpsc_productmeta` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."wpsc_productmeta`.`product_id` WHERE (`".$wpdb->prefix."wpsc_productmeta`.`meta_key` IN ('url_name') AND  `".$wpdb->prefix."wpsc_productmeta`.`meta_value` IN (''))  OR ISNULL(`".$wpdb->prefix."wpsc_productmeta`.`meta_key`)");  
 if($check_product_names != null) {
-  $sql_query = "SELECT `id`, `name` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')";
+  $sql_query = "SELECT `id`, `name` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1'";
   $sql_data = $wpdb->get_results($sql_query,ARRAY_A);    
   foreach((array)$sql_data as $datarow) {
     $tidied_name = trim($datarow['name']);
@@ -104,7 +104,7 @@ if($check_category_names == null) {
   
 if(!$wpdb->get_results("SELECT `id` FROM `".$wpdb->prefix."also_bought_product`")) {
   /* inserts data on what was bought with what however many times */
-  $product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')");
+  $product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1'");
   foreach((array)$product_ids as $prodid) {
     $cart_ids = $wpdb->get_results("SELECT `purchaseid` FROM `".$wpdb->prefix."cart_contents` WHERE `prodid` IN ('$prodid')", ARRAY_A);
     $popular_array = array();
@@ -338,7 +338,7 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinati
 }
 
 
-$product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')");
+$product_ids = $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `publish`='1'");
 foreach($product_ids as $product_id) {
   if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product_id}'") < 1 ) {
 		$variation_priceandstock = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `product_id` = '{$product_id}'",ARRAY_A);
