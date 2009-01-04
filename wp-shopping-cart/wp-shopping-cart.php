@@ -2403,14 +2403,18 @@ function wpsc_admin_notices() {
 		}
   }
 }
-
-function wpsc_admin_latest_activity() {
+function wpsc_admin_dashboard_rightnow() {
   $user = wp_get_current_user();
 	if($user->user_level>9){
 		echo "<div>";
 		echo "<h3>".TXT_WPSC_E_COMMERCE."</h3>";
 		echo "<p>";
-		
+		wpsc_admin_latest_activity();
+		echo "</div>";
+    }
+}
+
+function wpsc_admin_latest_activity() {
 		echo "<strong>".TXT_WPSC_TOTAL_THIS_MONTH."</strong><br />";
 		$year = date("Y");
 		$month = date("m");
@@ -2422,11 +2426,27 @@ function wpsc_admin_latest_activity() {
 		echo "<strong>".TXT_WPSC_TOTAL_INCOME."</strong><br />";
 		echo nzshpcrt_currency_display(admin_display_total_price(),1);
 		echo "</p>";
-		echo "</div>";
-		}
   }
 
-add_action('activity_box_end', 'wpsc_admin_latest_activity');
+if(IS_WP27) {
+    add_action('wp_dashboard_setup','wpsc_dashboard_widget_setup');
+} else {
+    add_action('activity_box_end', 'wpsc_admin_latest_activity');
+}
+
+/*
+ * Dashboard Widget for 2.7 (TRansom)
+ */
+function wpsc_dashboard_widget() {
+    wpsc_admin_latest_activity();
+}
+
+function wpsc_dashboard_widget_setup() {
+    wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
+}
+/*
+ * END - Dashboard Widget for 2.7
+ */
 
 //this adds all the admin pages, before the code was a mess, now it is slightly less so.
 add_action('admin_menu', 'nzshpcrt_displaypages');
