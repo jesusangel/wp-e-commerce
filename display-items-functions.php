@@ -888,13 +888,13 @@ global $closed_postboxes;
 <?php
 }
 function wpsc_meta_boxes(){
-	add_meta_box('category_and_tag', 'Category and Tags', 'category_and_tag_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('variation', 'Variations', 'variation_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('shipping', 'Shipping', 'shipping_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('advanced', 'Advanced Settings', 'advanced_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('product_download', 'Product Download', 'product_download_box', 'wp-shopping-cart/display-items', 'normal', 'high');
-	add_meta_box('product_image', 'Product Images', 'product_image_box', 'wp-shopping-cart/display-items', 'normal', 'high');
+	add_meta_box('category_and_tag', 'Category and Tags', 'category_and_tag_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_box('variation', 'Variations', 'variation_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_box('shipping', 'Shipping', 'shipping_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_box('advanced', 'Advanced Settings', 'advanced_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_box('product_download', 'Product Download', 'product_download_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_box('product_image', 'Product Images', 'product_image_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
 }
 
 add_action('admin_menu', 'wpsc_meta_boxes');

@@ -435,7 +435,7 @@ echo "</table>\n\r";
 		<td>
 			<?php 
 				$itemsFeedURL = "http://www.google.com/base/feeds/items";
-				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wp-shopping-cart/display-items.php";
+				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/display-items.php";
 				$redirect_url = 'https://www.google.com/accounts/AuthSubRequest?session=1';
 				$redirect_url .= '&next=';
 				$redirect_url .= urlencode($next_url);

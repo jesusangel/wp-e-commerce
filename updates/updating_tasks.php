@@ -372,7 +372,7 @@ foreach($product_ids as $product_id) {
 }
 
 // Update the variation combinations table to have the all_variation_ids column
-if($wpdb->get_var("SELECT COUNT( * ) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `all_variation_ids` IN ( '' )") > 0 ) {
+if($wpdb->get_var("SELECT COUNT( * ) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `all_variation_ids` IN ( '' )") == $wpdb->get_var("SELECT COUNT( * ) FROM `{$wpdb->prefix}wpsc_variation_combinations`")) {
   $variation_priceandstock_ids = $wpdb->get_col("SELECT DISTINCT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations`");
   foreach($variation_priceandstock_ids as $variation_priceandstock_id) {
     $variation_priceandstock_rows = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` IN ('$variation_priceandstock_id')", ARRAY_A);

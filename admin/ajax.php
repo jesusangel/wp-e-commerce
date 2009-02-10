@@ -510,25 +510,25 @@ function shipping_options(){
 function shipping_submits(){
 	if ($_POST['shipping_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/display-shipping.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
 		exit();
 	}
 	
 	if ($_POST['gateway_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/gatewayoptions.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
 		exit();
 	}
 	
 	if ($_POST['checkout_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/form_fields.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
 		exit();
 	}
 	
 // 	if ($_POST['gold_submits']=='true'){
 // 		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-// 		wp_redirect($_SERVER['PHP_SELF']."?page=wp-shopping-cart/options.php");
+// 		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
 // 		exit();
 // 	}
 }

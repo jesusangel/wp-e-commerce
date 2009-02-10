@@ -295,14 +295,14 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			
 			$category = $product_listing_data['category_id'];
 			
-			$category_info =  $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
-			$category_name=  $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_categories WHERE id='".$category."'");
-			while ($category_info[0]['category_parent']!=0) {
-				$category_info =  $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info[0]['category_parent']."'",ARRAY_A);
+			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
+			//$category_name=  $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_categories WHERE id='".$category."'");
+			while ($category_info['category_parent']!=0) {
+				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info['category_parent']."'",ARRAY_A);
 			
-				$output .= "<a href='".wpsc_category_url($category_info[0]['id'])."'>".$category_info[0]['name']."</a> &raquo; ";
+				$output .= "<a href='".wpsc_category_url($category_info['id'])."'>".$category_info['name']."</a> &raquo; ";
 			}
-			$output .= "".$category_name."";
+			$output .= "".$category_info['name']."";
 // 			$output .= $product_list[0]['name'];
 			$output .= "</div>";
 		}
@@ -610,15 +610,14 @@ function single_product_display($product_id) {
   	if (get_option("show_breadcrumbs") == '1') {
 			$output .= "<div class='breadcrumb'>\n\r";
 			$output .= "  <a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
-			$category = $wpdb->get_var("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id='".$product_id."' ORDER BY id ASC LIMIT 1");
-			$category_info =  $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
-			$category_name=  $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_categories WHERE id='".$category."'");
-			while ($category_info[0]['category_parent']!=0) {
-				$category_info =  $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info[0]['category_parent']."'",ARRAY_A);
+			$category = $wpdb->get_var("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id='{$product_id}' ORDER BY id ASC LIMIT 1");
+			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
+			while ($category_info['category_parent']!=0) {
+				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info['category_parent']."'",ARRAY_A);
 			
-				$output .= "<a href='".wpsc_category_url($category_info[0]['id'])."'>".$category_info[0]['name']."</a> &raquo; ";
+				$output .= "<a href='".wpsc_category_url($category_info['id'])."'>".$category_info['name']."</a> &raquo; ";
 			}
-			$output .= "<a href='".wpsc_category_url($category)."'>".$category_name."</a> &raquo; ";
+			$output .= "<a href='".wpsc_category_url($category)."'>".$category_info['name']."</a> &raquo; ";
 			$output .= $product_list[0]['name']."\n\r";
 			$output .= "</div>\n\r";
 		}

@@ -3,13 +3,15 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
+define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Choose a Shipping Rate');
 
+define('TXT_WPSC_CALCULATE', 'Calculate');
 define('TXT_WPSC_GROUP_PRESENTATION_TEXT', 'To over-ride the presentation settings for this group you can enter in your prefered settings here');
 define('TXT_WPSC_GROUP_SETTINGS', 'Product Group Settings');
 define('TXT_WPSC_GROUP_IMAGE', 'Group&nbsp;Image');
 define('TXT_WPSC_THUMBNAIL_SIZE', 'Thumbnail&nbsp;Size');
 define('TXT_WPSC_CATALOG_VIEW', 'Catalog View');
-define('TXT_WPSC_GROUP_IMAGE_TEXT', 'You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="http://apps.instinct.co.nz/wp_2.7/wp-admin/admin.php?page=wp-shopping-cart/options.php#options_presentation">Presentation Settings</a>.');
+define('TXT_WPSC_GROUP_IMAGE_TEXT', 'You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="http://apps.instinct.co.nz/wp_2.7/wp-admin/admin.php?page='.WPSC_DIR_NAME.'/options.php#options_presentation">Presentation Settings</a>.');
 
 
 
@@ -206,7 +208,7 @@ define('TXT_WPSC_PENDINGCOUNT_PLURAL','transactions');
 define('TXT_WPSC_VARIATION_SINGULAR','variation');
 define('TXT_WPSC_VARIATION_PLURAL','variations');
 
-define('TXT_WPSC_SALES_DASHBOARD', 'You have <a href=\'admin.php?page=wp-shopping-cart/display-items.php\'>:productcount:</a>, contained within <a href=\'admin.php?page=wp-shopping-cart/display-category.php\'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.');
+define('TXT_WPSC_SALES_DASHBOARD', 'You have <a href=\'admin.php?page='.WPSC_DIR_NAME.'/display-items.php\'>:productcount:</a>, contained within <a href=\'admin.php?page='.WPSC_DIR_NAME.'/display-category.php\'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.');
 
 define('TXT_WPSC_YOUAREUSING', 'You are using the :theme: style. This is WP e-Commerce :versionnumber:.');
 define('TXT_WPSC_NO_SHORTCODE', 'This item product is still waiting to be added to your catalogue. There are no shortcodes or tags available at this point.');

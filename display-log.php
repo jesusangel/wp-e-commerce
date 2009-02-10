@@ -443,7 +443,7 @@ if($_GET['filter'] !== 'true') {
       </div>
 <?php
 	echo "</div>";
-	echo "<div id='post-body' class='has-sidebar' style=''>
+	echo "<div id='post-body' class='has-sidebar' style='width:99%;'>
 			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
 				
 	}
@@ -1089,7 +1089,6 @@ if($_GET['filter'] !== 'true') {
 		  
 		echo "<br /><br class='small' /><img src='".WPSC_URL."/images/cross.png'>&ensp;<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;deleteid=".$_GET['purchaseid']."'>".TXT_WPSC_REMOVE_LOG."</a>";
 
-		//http://www.instinct.co.nz/wordpress_2.6/wp-admin/admin.php?page=wp-shopping-cart/display-log.php&display_invoice=true&purchaseid=27
 		echo "<br /><br class='small' />&emsp;&ensp; <a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php'>".TXT_WPSC_GOBACK."</a>";
 	
 	} elseif (is_numeric($_GET['email_buyer_id'])) {

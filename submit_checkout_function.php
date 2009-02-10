@@ -249,11 +249,14 @@ function nzshpcrt_submit_checkout() {
      $user_ID = 'null';
      }
      
+     
+     
+  // if shipping is used, apply it
 	if(isset($_SESSION['quote_shipping']) && is_numeric($_SESSION['quote_shipping'])) { 
 	    $base_shipping = $_SESSION['quote_shipping'];
-    } else {
+	} else if ($all_no_shipping == false) {
 		$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
-    }
+	}
 
 
   $shipping_module = '';

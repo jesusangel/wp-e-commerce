@@ -46,7 +46,7 @@ if(!isset($_GET['result'])){
   <label>Username:<br /><input type="text" name="log" id="log" value="" size="20" tabindex="1" /></label><br />
   <label>Password:<br /> <input type="password" name="pwd" id="pwd" value="" size="20" tabindex="2" /></label>
   <input type="submit" name="submit" id="submit" value="Login &raquo;" tabindex="4" />
-  <input type="hidden" name="redirect_to" value="<?php echo get_option('checkout_url'); ?>" />
+  <input type="hidden" name="redirect_to" value="<?php echo get_option('shopping_cart_url'); ?>" />
 </form>
    <?php 
    echo "<a class='thickbox' rel='".TXT_WPSC_REGISTER."' href='".$siteurl."?ajax=true&amp;action=register&amp;width=360&amp;height=300' >".TXT_WPSC_REGISTER."</a>";

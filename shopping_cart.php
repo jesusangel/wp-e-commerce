@@ -296,31 +296,41 @@ if(isset($_POST['zipcode'])) {
 							<?php
 				echo "  </td>\n\r";
 				echo "<td>";
-				echo "<input type='submit' onclick='' value='Rate'>";
+				echo "<input type='submit' onclick='' value='".TXT_WPSC_CALCULATE."'>";
 				echo "</td>";
 				echo "</form>";
-    echo "</tr>\n\r";
+				echo "</tr>\n\r";
 		}
+		// if shipping is on and not all the items have no shipping or are memberships 
 	 if((get_option('do_not_use_shipping') == 0) && ($all_memberships != true) && ($all_no_shipping != true)) {
-			//// usps changes
+			// get the list of active shipping modules
 			$custom_shipping = get_option('custom_shipping_options');
 			foreach((array)$custom_shipping as $shipping) {
-				$shipping_quotes[$shipping] = $wpsc_shipping_modules[$shipping]->getQuote(true);
+			  // if the shipping module does not require a weight, or requires one and the weight is larger than zero
+				if(($wpsc_shipping_modules[$shipping]->requires_weight != true) or (($wpsc_shipping_modules[$shipping]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
+					$shipping_quotes[$shipping] = $wpsc_shipping_modules[$shipping]->getQuote(true);
+				}
 			}
 		
+			// if the selected shipping method is not active, clear it
 			if(array_search($_SESSION['quote_shipping_method'], $custom_shipping) === false) {
 			  unset($_SESSION['quote_shipping_method']);
+			  unset($_SESSION['quote_shipping_option']);
 			}
-		//echo ('<pre>'.print_r($_SESSION['quote_shipping_option'],1)."</pre>");
+			
+		// what does this do?
 		$_SESSION['uspsQuote']=$shipping_quotes;
+		
+		
 		$i=0;
 		$shipping_is_selected = false;
+		// if there is a form of shipping selected, set this to true
 		if(($_SESSION['quote_shipping_method'] != null) && ($_SESSION['quote_shipping_option']  != null)) {
 			$shipping_is_selected = true;
 		}
 		foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
 			$shipping_method_name = $wpsc_shipping_modules[$key1]->name;
-			echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name</td></tr>";
+			echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name ".TXT_WPSC_CHOOSE_A_SHIPPING_RATE."</td></tr>";
 			if (empty($shipping_quote)) {
 				echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
 			}
@@ -347,9 +357,7 @@ if(isset($_POST['zipcode'])) {
 			}
 			$i++;
 		}
-		// usps changes ends
-    
-  }
+  }  // shipping section ends here
     
     
   //echo "<tr style='total-price'>\n\r";

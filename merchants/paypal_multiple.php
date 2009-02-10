@@ -230,8 +230,8 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
 
-	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
- 	exit("<pre>".print_r($data,true)."</pre>");
+// 	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
+//  	exit("<pre>".print_r($data,true)."</pre>");
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
 }

@@ -574,9 +574,17 @@ table.product_variation_grid tr.settings_row td div.variation_settings {
   min-height: 30px;
   padding: 4px 0px;
 }
+
 div.variation_settings div.variation_weight, div.variation_settings div.variation_settings_contents {
   padding: 0px 10px; 
 }
+
+table.product_variation_grid tr td div.variation_weight input, table.product_variation_grid tr td div.variation_weight select {
+  margin: 0px 3px 0px 3px;
+  display: inline;
+}
+
+
 table.product_variation_grid tr th {
    border-bottom: 1px solid #969696;
 }
@@ -600,7 +608,7 @@ table.product_variation_grid tr td.variations, table.product_variation_grid tr t
  
  
 table.product_variation_grid tr td input{
-   padding: 0px 3px 0px 3px;
+   padding: 2px 3px 2px 3px;
    margin: 3px auto;
    display: block;
 }
@@ -1700,96 +1708,11 @@ textarea.affiliate_text {
 }
 
 
-table.product_variation_grid {
- border-collapse: collapse;
- margin-top: 0px;
-}
-
-table.product_variation_grid tr td, table.product_variation_grid tr th {
- border: 1px solid #cccccc;
- border-collapse: collapse;
- text-align: left;
-}
-
-table.product_variation_grid tr th {
-   border-bottom: 1px solid #969696;
-}
-
-table.product_variation_grid tr th.stock {
-   border-bottom: 1px solid #969696;
-   width: 50px;
-}
-
-table.product_variation_grid tr th.price {
-   width: 78px;
-}
-
-table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
-  padding: 4px 0px 4px 10px;  
-}
-  
-table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
-  width: 300px;
-}
- 
- 
-table.product_variation_grid tr td input{
-   padding: 0px 3px 0px 3px;
-}
-
-table.product_variation_grid tr.group_boundary td {
-   border-bottom: 1px solid #969696;
-}
 
 a.about_this_page_sub {
 	text-decoration:underline;
 }
 
-table.product_variation_grid {
- border-collapse: collapse;
- margin-top: 0px;
-}
-
-table.product_variation_grid tr td, table.product_variation_grid tr th {
- border: 1px solid #cccccc;
- border-collapse: collapse;
- text-align: left;
-}
-
-table.product_variation_grid tr th {
-   border-bottom: 1px solid #969696;
-}
-
-table.product_variation_grid tr th.stock {
-   border-bottom: 1px solid #969696;
-   width: 50px;
-}
-
-table.product_variation_grid tr th.price {
-   width: 78px;
-}
-
-table.product_variation_grid tr td.variations, table.product_variation_grid tr th {
-  padding: 4px 0px 4px 10px;
-}
-  
-table.product_variation_grid tr td.variations, table.product_variation_grid tr th.variations {
-  width: 300px;
-}
- 
- 
-table.product_variation_grid tr td input{
-   padding: 0px 3px 0px 3px;
-}
-
-table.product_variation_grid tr td input.checkbox{
-  display: block;
-  margin:6px auto;
-}
-
-table.product_variation_grid tr.group_boundary td {
-   border-bottom: 1px solid #969696;
-}
 
 div#add_product_variation_details {
   margin: 1ex 0px 0px 0px;

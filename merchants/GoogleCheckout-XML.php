@@ -217,7 +217,7 @@ function form_google()
 		Select Shipping Countries for Google Checkout
 		</td>
 		<td>
-		<a href='?page=wp-shopping-cart/gatewayoptions.php&googlecheckoutshipping=1'>Set Shipping countries
+		<a href='?page=".WPSC_DIR_NAME."/gatewayoptions.php&googlecheckoutshipping=1'>Set Shipping countries
 		</td>
 	</tr>
 

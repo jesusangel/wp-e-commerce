@@ -560,22 +560,22 @@ function coupon_edit_form($coupon) {
   
 function setting_button(){
 	$itemsFeedURL = "http://www.google.com/base/feeds/items";
-	$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wp-shopping-cart/display-items.php";
+	$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/display-items.php";
 	$redirect_url = 'https://www.google.com/accounts/AuthSubRequest?session=1';
 	$redirect_url .= '&next=';
 	$redirect_url .= urlencode($next_url);
 	$redirect_url .= "&scope=";
 	$redirect_url .= urlencode($itemsFeedURL);
 	
-// 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/wp-shopping-cart/images/settings_button.jpg' onclick='display_settings_button()'>";
+// 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/".WPSC_DIR_NAME."/images/settings_button.jpg' onclick='display_settings_button()'>";
 	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>Settings &raquo;</a>";
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
 	
-	$output.="<li><a href='admin.php?page=wp-shopping-cart/options.php'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
-	$output.="<li><a href='admin.php?page=wp-shopping-cart/options.php#ui-tabs-76'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
-	$output.="<li><a href='admin.php?page=wp-shopping-cart/options.php#ui-tabs-78'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
-	//$output.="<li><a href='?page=wp-shopping-cart/instructions.php'>Help/Upgrade</a></li>";
+	$output.="<li><a href='admin.php?page=".WPSC_DIR_NAME."/options.php'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
+	$output.="<li><a href='admin.php?page=".WPSC_DIR_NAME."/options.php#ui-tabs-76'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
+	$output.="<li><a href='admin.php?page=".WPSC_DIR_NAME."/options.php#ui-tabs-78'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
+	//$output.="<li><a href='?page=".WPSC_DIR_NAME."/instructions.php'>Help/Upgrade</a></li>";
 	//$output.="<li><a href='{$redirect_url}'>".TXT_WPSC_LOGIN_TO_GOOGLE_BASE."</a></li>";
 	$output.="</ul>";
 //	$output.="<div>Checkout Settings</div>";
@@ -629,7 +629,7 @@ function wpsc_right_now() {
 		$output.="<div id='dashboard_right_now' class='postbox'>";
 		$output.="	<h3 class='hndle'>";
 		$output.="		<span>"._('Current Month')."</span>";
-		//$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>";
+		//$output.="		<a class='rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>";
 		$output.="		<br class='clear'/>";
 		$output.="	</h3>";
 		
@@ -641,13 +641,13 @@ function wpsc_right_now() {
 		
 		$output .= "<tr class='first'>";
 		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-items.php'>".$product_count."</a>";
+		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-items.php'>".$product_count."</a>";
 		$output .= "<td>";
 		$output .= "<td class='t'>";
 		$output .= ucfirst($product_unit);
 		$output .= "<td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$sales_count."</a>";
+		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-log.php'>".$sales_count."</a>";
 		$output .= "<td>";
 		$output .= "<td class='last'>";
 		$output .= ucfirst($sales_unit);
@@ -656,13 +656,13 @@ function wpsc_right_now() {
 		
 		$output .= "<tr>";
 		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-category.php'>".$group_count."</a>";
+		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-category.php'>".$group_count."</a>";
 		$output .= "<td>";
 		$output .= "<td class='t'>";
 		$output .= ucfirst($group_unit);
 		$output .= "<td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$pending_sales."</a>";
+		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-log.php'>".$pending_sales."</a>";
 		$output .= "<td>";
 		$output .= "<td class='last t waiting'>Pending ";
 		$output .= ucfirst($pending_sales_unit);
@@ -671,13 +671,13 @@ function wpsc_right_now() {
 		
 		$output .= "<tr>";
 		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display_variations.php'>".$variation_count."</a>";
+		$output .= "<a href='?page=".WPSC_DIR_NAME."/display_variations.php'>".$variation_count."</a>";
 		$output .= "<td>";
 		$output .= "<td class='t'>";
 		$output .= ucfirst($variation_unit);
 		$output .= "<td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wp-shopping-cart/display-log.php'>".$accept_sales."</a>";
+		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-log.php'>".$accept_sales."</a>";
 		$output .= "<td>";
 		$output .= "<td class='last t approved'>Closed ";
 		$output .= ucfirst($accept_sales_unit);
@@ -687,7 +687,7 @@ function wpsc_right_now() {
 		$output .= "</table>";
 		$output .= "</div>";
 		$output .= "<div class='versions'>";
-		$output .= "<p><a class='button rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>Add new product</strong></a>Here you can add products, groups or variations</p>";
+		$output .= "<p><a class='button rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>Add new product</strong></a>Here you can add products, groups or variations</p>";
 		$output .= "</div>";
 		$output .= "</div>";
 		$output.="</div>";
@@ -695,7 +695,7 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='rightnow'>\n\r";
 		$output.="	<h3 class='reallynow'>\n\r";
-		$output.="		<a class='rbutton' href='admin.php?page=wp-shopping-cart/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
+		$output.="		<a class='rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
 		$output.="		<span>"._('Right Now')."</span>\n\r";
 		
 		//$output.="		<br class='clear'/>\n\r";
@@ -1022,7 +1022,7 @@ function wpsc_product_item_row() {
 "<tr class='products'>	<td class='imagecol' style='width: 25%;'>
 <input type='checkbox' value='3' class='deletecheckbox' name='productdelete[]'/><img width='35' height='35' alt='Praying Mantis' title='Drag to a new position' src='http://apps.instinct.co.nz/wp_2.6.5/wp-content/uploads/wpsc/product_images/thumbnails/mantis-3.jpg'/></td><td width='25%'><a onclick='filleditform(3);return false;' href='#'>Praying Mantis</a></td><td id='3'><span class='pricedisplay' id='3' title='Click to edit...'>$32.00</span>            </td><td>
 
-<a href='?page=wp-shopping-cart/display-items.php&amp;catid=1'>Arthropods</a></td>				
+<a href='?page=".WPSC_DIR_NAME."/display-items.php&amp;catid=1'>Arthropods</a></td>				
 </tr>
 ";*/
 }

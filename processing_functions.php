@@ -275,15 +275,18 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
 			
 			$shipping_quotes = null;
 			if($_SESSION['quote_shipping_method'] != null) {
-			   // use the selected shipping module
+				// use the selected shipping module
 			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
 			} else {
 			  // otherwise select the first one with any quotes
 				foreach($custom_shipping as $shipping_module) {
-					$_SESSION['quote_shipping_method'] = $shipping_module;
-					$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
-					if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
-					  break;
+					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
+					if(($custom_shipping[$shipping_module]->requires_weight != true) or (($custom_shipping[$shipping_module]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
+						$_SESSION['quote_shipping_method'] = $shipping_module;
+						$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+						if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+							break;
+						}
 					}
 				}
 			}
@@ -333,26 +336,24 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
 	}
 
 function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
-  global $wpdb;
+  global $wpdb, $wpsc_currency_data;
   $currency_sign_location = get_option('currency_sign_location');
   $currency_type = get_option('currency_type');
-  $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
-  $price_out = null;
-  $currency_sign_location = get_option('currency_sign_location');
-  $currency_type = get_option('currency_type');
-  $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
+  if(count($wpsc_currency_data) < 3) {
+		$wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
+  }
   $price_out = null;
 
   $price_out =  number_format($price_in, 2, '.', ',');
 
-  if($currency_data[0]['symbol'] != '') {    
+  if($wpsc_currency_data['symbol'] != '') {
     if($nohtml == false) {
-      $currency_sign = $currency_data[0]['symbol_html'];
+      $currency_sign = $wpsc_currency_data['symbol_html'];
 		} else {
-			$currency_sign = $currency_data[0]['symbol'];
+			$currency_sign = $wpsc_currency_data['symbol'];
 		}
 	} else {
-		$currency_sign = $currency_data[0]['code'];
+		$currency_sign = $wpsc_currency_data['code'];
 	}
 
   switch($currency_sign_location) {
@@ -434,6 +435,9 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
       
       
       $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+      
+      
+   
       
       
       $price = $wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");

@@ -6,6 +6,7 @@ class ups {
 		$this->name="UPS";
 		$this->is_external=true;
 		$this->requires_curl=true;
+		$this->requires_weight=true;
 		$this->needs_zipcode=true;
 		return true;
 	}

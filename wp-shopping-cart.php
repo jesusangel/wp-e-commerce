@@ -44,7 +44,8 @@ if(isset($wpmu_version)) {
 }
 //phpinfo();
 //exit("<pre>");
-
+$wpsc_currency_data = array();
+$wpsc_title_data = array();
 if(WPSC_DEBUG === true) {
 	function microtime_float() {
 		list($usec, $sec) = explode(" ", microtime()); 
@@ -223,7 +224,7 @@ class wp_shopping_cart {
 			$base_page = WPSC_DIR_NAME.'/display-log.php';
 			if ($userdata->user_level <= 6) {
 				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
-					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  'wp-shopping-cart/gold_cart_files/affiliates.php');
+					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2,  WPSC_DIR_NAME.'/gold_cart_files/affiliates.php');
 				} else {
 					if (function_exists('add_object_page')) {
 						add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
@@ -253,11 +254,11 @@ class wp_shopping_cart {
 			}			//exit('-->'.$help);
 			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
 			if (function_exists('add_contextual_help')) {
-				add_contextual_help('wp-shopping-cart/display-category',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products-groups/'>About this page</a>");
-				add_contextual_help('wp-shopping-cart/display_variations',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/variations/'>About this page</a>");
-				add_contextual_help('wp-shopping-cart/display-coupons',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/marketing/'>About this page</a>");
-				add_contextual_help('wp-shopping-cart/options',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/integrated/'>About this page</a><br><a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment options</a>");
-				add_contextual_help('wp-shopping-cart/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
+				add_contextual_help(WPSC_DIR_NAME.'/display-category',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products-groups/'>About this page</a>");
+				add_contextual_help(WPSC_DIR_NAME.'/display_variations',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/variations/'>About this page</a>");
+				add_contextual_help(WPSC_DIR_NAME.'/display-coupons',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/marketing/'>About this page</a>");
+				add_contextual_help(WPSC_DIR_NAME.'/options',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/integrated/'>About this page</a><br><a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment options</a>");
+				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			}
 			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
@@ -467,6 +468,7 @@ jQuery.noConflict();
 var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
 var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
+var WPSC_DIR_NAME = "<?php echo WPSC_DIR_NAME; ?>";
 /* LightBox Configuration start*/
 var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
@@ -539,7 +541,7 @@ function wpsc_admin_css() {
 <link href='<?php echo WPSC_URL; ?>/js/jquery.ui.tabs.css' rel="stylesheet" type="text/css" />
 <?php
 
-if (($_GET['page'] == 'wp-shopping-cart/display-log.php') || ($_GET['page'] == 'wp-shopping-cart/gold_cart_files/affiliates.php')) {
+if (($_GET['page'] == WPSC_DIR_NAME.'/display-log.php') || ($_GET['page'] == WPSC_DIR_NAME.'/gold_cart_files/affiliates.php')) {
 	?>
 		<link href='<?php echo $siteurl; ?>/wp-admin/css/dashboard.css?ver=2.6' rel="stylesheet" type="text/css" />
 	<?php
@@ -1130,25 +1132,20 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
       exit();
 		}
       
-    if(($_POST['get_updated_price'] == "true") && is_numeric($_POST['product_id'])) {
-      $notax = $wpdb->get_var("SELECT `notax` FROM `".$wpdb->prefix."product_list` WHERE `id` IN('".$_POST['product_id']."') LIMIT 1");
-      foreach((array)$_POST['variation'] as $variation) {
-        if(is_numeric($variation)) {
-          $variations[] = (int)$variation;
-        }
-      }
-      foreach((array)$_POST['extra'] as $extra) {
-        if(is_numeric($extra)) {
-          $extras[] = (int)$extra;
-        }
-      }
-    $pm=$_POST['pm'];
-    echo "product_id=".(int)$_POST['product_id'].";\n";
-    
-    echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax, true)."\";\n";
-    echo "numeric_price=\"".number_format(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), 2)."\";\n";
-        //exit(print_r($extras,1));
-    exit();
+	if(($_POST['get_updated_price'] == "true") && is_numeric($_POST['product_id'])) {
+		$notax = $wpdb->get_var("SELECT `notax` FROM `".$wpdb->prefix."product_list` WHERE `id` IN('".$_POST['product_id']."') LIMIT 1");
+		foreach((array)$_POST['variation'] as $variation) {
+			if(is_numeric($variation)) {
+				$variations[] = (int)$variation;
+			}
+		}
+		$pm=$_POST['pm'];
+		echo "product_id=".(int)$_POST['product_id'].";\n";
+		
+		echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax, true)."\";\n";
+		echo "numeric_price=\"".number_format(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), 2)."\";\n";
+				//exit(print_r($extras,1));
+		exit(" ");
   }
       
       
@@ -1774,12 +1771,12 @@ function nzshpcrt_product_vote($prodid, $starcontainer_attributes = '')
        
       if(($browsername == 'MSIE') && ($browserversion < 7.0))
         {
-        $starimg = ''. get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/images/star.gif';
+        $starimg = ''. get_option('siteurl').'/wp-content/plugins/'.WPSC_DIR_NAME.'/images/star.gif';
         $ie_javascript_hack = "onmouseover='ie_rating_rollover(this.id,1)' onmouseout='ie_rating_rollover(this.id,0)'";
         }
         else 
           {
-          $starimg = ''. get_option('siteurl').'/wp-content/plugins/wp-shopping-cart/images/24bit-star.png';
+          $starimg = ''. get_option('siteurl').'/wp-content/plugins/'.WPSC_DIR_NAME.'/images/24bit-star.png';
           $ie_javascript_hack = '';
           }
        
@@ -1874,12 +1871,7 @@ function nzshpcrt_product_vote($prodid, $starcontainer_attributes = '')
   return $region; 
   }
   
-function get_brand($brand_id)  
-  {
-  global $wpdb;
-  $brand_data = $wpdb->get_results("SELECT `name` FROM `".$wpdb->prefix."product_brands` WHERE `id` IN ('".$brand_id."') LIMIT 1",ARRAY_A);
-  return $brand_data[0]['name']; 
-  }
+function get_brand($brand_id) {  }
 
 
 function filter_input_wp($input) {
@@ -2239,24 +2231,65 @@ add_filter('query_vars', 'wpsc_query_vars');
 add_filter('page_rewrite_rules', 'wpsc_product_permalinks');
  
  
+ 
+ 
+ 
+ 
+  
+function wpsc_obtain_the_title() {
+  global $wpdb, $wp_query, $wpsc_title_data;
+  $output = null;
+	if(is_numeric($wp_query->query_vars['product_category'])) {
+	  $category_id = $wp_query->query_vars['product_category'];
+	  if(isset($wpsc_title_data['category'][$category_id])) {
+			$output = $wpsc_title_data['category'][$category_id];
+	  } else {
+			$output = $wpdb->get_var("SELECT `name` FROM `{$wpdb->prefix}product_categories` WHERE `id`='{$category_id}' LIMIT 1");
+			$wpsc_title_data['category'][$category_id] = $output;
+		}
+		
+	}
+	if(isset($wp_query->query_vars['product_name'])) {
+	  $product_name = $wp_query->query_vars['product_name'];
+	  if(isset($wpsc_title_data['product'][$product_name])) {
+	    $product_list = array();
+	    $product_list['name'] = $wpsc_title_data['product'][$product_name];
+	  } else {
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_name']}' ) ORDER BY `id` DESC LIMIT 1");
+			$product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+			$wpsc_title_data['product'][$product_name] = $product_list['name'];
+		}
+  }
+  if(isset($product_list ) && ($product_list != null)) {
+  	$output = $product_list['name'];
+  }
+	return $output;
+}
+ 
 function wpsc_replace_the_title($input) {
   global $wpdb, $wp_query;
-  //echo "<pre>".print_r($wp_query->query_vars,true)."</pre>";
-  //echo "<pre>".print_r($input,true)."</pre>";
-	if(is_numeric($wp_query->query_vars['product_category']) && ($input == $wp_query->post->post_title) ) {
-		// using debug_backtrace here is not a good way of doing this, but wordpress provides no way to differentiate between the various uses of this plugin hook.
+	$output = wpsc_obtain_the_title();
+	if($output != null) {
 		$backtrace = debug_backtrace();
 		if($backtrace[3]['function'] == 'get_the_title') {
-			return $wpdb->get_var("SELECT `name` FROM `".$wpdb->prefix."product_categories` WHERE `id`='{$wp_query->query_vars['product_category']}' LIMIT 1");
-		}	
+			return $output;
+		}
+	}
+	return $input;
+}
+
+function wpsc_replace_wp_title($input) {
+  global $wpdb, $wp_query;
+	$output = wpsc_obtain_the_title();
+	if($output != null) {
+		return $output;
 	}
 	return $input;
 }
  
- 
- 
 if(get_option('wpsc_replace_page_title') == 1) {
   add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
+  add_filter('wp_title', 'wpsc_replace_wp_title', 10, 2);
 }
 
 require_once(WPSC_FILE_PATH . '/product_display_functions.php');
@@ -2512,7 +2545,7 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 // 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
 	
-		if($_GET['page'] == 'wp-shopping-cart/display-items.php') {
+		if($_GET['page'] == WPSC_DIR_NAME.'/display-items.php') {
 			wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
       wp_enqueue_script('new_swfupload', WPSC_URL.'/js/swfupload.js');
       wp_enqueue_script('new_swfupload.swfobject', WPSC_URL.'/js/swfupload/swfupload.swfobject.js');
@@ -2579,14 +2612,14 @@ function thickbox_variation() {
 	echo "<head>";
 	echo "<link rel='stylesheet' href='{$siteurl}/wp-admin/wp-admin.css?ver=2.6.3' type='text/css' media='all' />
 	<link rel='stylesheet' href='{$siteurl}/wp-admin/css/colors-fresh.css?ver=2.6.3' type='text/css' media='all' />
-	<link href='{$siteurl}/wp-content/plugins/wp-shopping-cart/admin.css' rel='stylesheet' type='text/css'/>
+	<link href='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/admin.css' rel='stylesheet' type='text/css'/>
 	<link rel='stylesheet' href='{$siteurl}/wp-admin/css/global.css?ver=2.6.3' type='text/css' media='all' />";
 	echo "<script type='text/javascript' src='{$siteurl}/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>";
 	echo "<script type='text/javascript' src='{$siteurl}/wp-includes/js/thickbox/thickbox.js?ver=3.1-20080430'></script>
-	<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/jquery.tooltip.js'></script>
-<script type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/jquery-ui.js?ver=1.6'></script>
-<script type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
-<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/wp-shopping-cart/js/ui.datepicker.js'></script>
+	<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.tooltip.js'></script>
+<script type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery-ui.js?ver=1.6'></script>
+<script type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
+<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/ui.datepicker.js'></script>
 <script type='text/javascript' src='{$siteurl}/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
 ";
 	echo "<script language='JavaScript' type='text/javascript'>
@@ -2783,7 +2816,7 @@ function wpsc_fav_action($actions) {
     // remove the "Add new page" link
     // unset($actions['page-new.php']);
   	// add quick link to our favorite plugin
-    $actions['admin.php?page=wp-shopping-cart/display-items.php'] = array('New Product', 'manage_options');
+    $actions['admin.php?page='.WPSC_DIR_NAME.'/display-items.php'] = array('New Product', 'manage_options');
     return $actions;
 }
 
@@ -2855,7 +2888,7 @@ function wpsc_duplicate() {
 			$wpdb->query($sql);
 		}
 	}
-	wp_redirect('?page=wp-shopping-cart/display-items.php');
+	wp_redirect('?page='.WPSC_DIR_NAME.'/display-items.php');
 }
 
 if (isset($_GET['duplicate'])) {

@@ -274,6 +274,7 @@ $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsi
 $wpsc_database_template[$table_name]['columns']['stock'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['price'] = "varchar(32) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['weight'] = "varchar(64) NULL DEFAULT '' ";
+$wpsc_database_template[$table_name]['columns']['weight_unit'] = "varchar(10) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['visibility'] = "varchar(1) NOT NULL DEFAULT '1' ";
 $wpsc_database_template[$table_name]['columns']['file'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
