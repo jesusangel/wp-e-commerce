@@ -10,7 +10,7 @@ table.logdisplay tr.toprow td{ text-align: center; font-weight:bold; }
 
 table.logdisplay tr.toprow2 td{ text-align: left; font-weight:bold; }
   
-table.logdisplay tr td{ /* padding-left: 5px; */ padding-top: 2px; padding-bottom: 2px;}
+table.logdisplay tr td{ /* padding-left: 5px; */ padding-top: 2px; padding-bottom: 2px; font-size: 12px;}
   
 table.logdisplay tr.alt{ background-color: #eeeeee; }
 
@@ -117,14 +117,14 @@ table#productpage tr td{
 }
 
 table#productpage tr td.secondcol{
-  width: 60%;
-  margin-left: 20px;
-  padding: 0px 0px 0px 2px;
+/*   width: 60%; */
+/*   margin-left: 20px; */
+  padding: 0px 2px 0px 16px;
      
 }
 
 table#itemlist{
-	min-width: 350px;
+	min-width: 280px;
 	width: 100%;
 	border-collapse:collapse;
 /* 	border:1px solid #bbb; */
@@ -1077,6 +1077,10 @@ form.edititem {
 	margin:15px 12px;
 }
 
+table#productpage tr td.secondcol.product_groups_page {
+	padding-left: 16px;
+}
+
 td.product_groups_page #additem .inside, td.product_groups_page #productform .inside {
 	margin: 0px 0px 15px 0px;
 }
@@ -1291,7 +1295,10 @@ table.category_forms {
   width: 100%;
 }
 table.category_forms tr td {
- padding-left: 8px;
+ padding: 0px 8px ;
+}
+table.category_forms tr td textarea  {
+  width: 100%;
 }
 /*
  input, table.category_forms tr td textarea {
@@ -1457,10 +1464,18 @@ div.admin_product_name div.admin_product_shorttags {
 	border-left:1px solid #DFDFDF;
 	border-right:1px solid #DFDFDF;
 	border-bottom:1px solid #DFDFDF;
-  height: 28px;
+/*   height: 28px; */
   display: none;
 	_width:396px;
 }
+
+
+div.admin_product_name div.admin_product_shorttags p{
+  clear: both;
+  font-size: 8pt;
+  margin-bottom: 0px;
+}
+
 
 div.admin_product_name div.admin_product_shorttags dl {
   margin: 0px;
@@ -1472,7 +1487,7 @@ div.admin_product_name div.admin_product_shorttags dl dt {
 }
 div.admin_product_name div.admin_product_shorttags dl dd {
   display: block;
-  float: left;
+/*   float: left; */
   margin-bottom: 0px;
 }
 
@@ -2013,11 +2028,13 @@ div#swfupload_img_indicator img{
  margin: 4px 2px 2px 4px;
 }
 
-
-
 div#edit_product_variations {
   margin-bottom: 8px;
 }
 
 div#productform table tr td{ height: 11px !important; }
 div#productform table tr.settings_row td{ height: 0px !important; }
+
+.product-alert-image {
+  margin-left: 2px;
+}

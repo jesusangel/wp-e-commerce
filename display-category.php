@@ -381,8 +381,6 @@ function categorisation_conf() {
 	}
 ?>
 </script>
-<noscript>
-</noscript>
 <div class="wrap">
   <h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
     <?php
@@ -501,7 +499,7 @@ $num = 0;
 echo "  <table id='productpage' style='margin-top: 1ex;'>\n\r";
 echo "    <tr><td class='firstcol'>\n\r";
 if (function_exists('add_object_page')){
-	echo "<div class='postbox' style='margin-right: 15px; width: 426px;'>";
+	echo "<div class='postbox' style='margin-right: 15px; min-width:255px;'>";
 	echo "<h3 class='hndle'>".ucfirst(TXT_WPSC_GROUPCOUNT_PLURAL)."</h3>";
 	echo "<div class='inside'>";
 }
@@ -600,7 +598,7 @@ if (function_exists('add_object_page')) {
         <?php echo TXT_WPSC_DESCRIPTION;?>:
       </td>
       <td>
-        <textarea name='description' cols='40' rows='8'></textarea>
+        <textarea name='description' rows='8'></textarea>
       </td>
     </tr>   
     

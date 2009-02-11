@@ -134,29 +134,23 @@ if(is_numeric($_GET['deleteid']))
 ?>
 
 <script language='javascript' type='text/javascript'>
-function conf()
-  {
+function conf() {
   var check = confirm("<?php echo TXT_WPSC_SURETODELETEPRODUCT;?>");
-  if(check)
-    {
+  if(check) {
     return true;
-	}
-	else
-	  {
+	} else {
 	  return false;
-	  }
-  }
+	}
+}
 
 <?php
-  if(is_numeric($_POST['prodid']))
-    {
+  if(is_numeric($_POST['prodid'])) {
     echo "fillvariationform(".$_POST['prodid'].");";
-    }
+	}
     
-  if(is_numeric($_GET['variation_id']))
-    {
+  if(is_numeric($_GET['variation_id'])) {
     echo "fillvariationform(".$_GET['variation_id'].");";
-    }
+	}
 ?>
 </script>
 <noscript>
@@ -167,8 +161,7 @@ function conf()
   <h2><?php echo TXT_WPSC_DISPLAYVARIATIONS;?></h2>
   <p>	
   	  <?php echo TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION;?>
-
-</p>
+  </p>
   
   <div class="tablenav wpsc_admin_nav" >
 	<div class="alignleft" style='width: 500px;'>
@@ -187,7 +180,7 @@ function conf()
 echo "  <table id='productpage'>\n\r";
 echo "    <tr><td class='firstcol'>\n\r";
 if (IS_WP27) {
-	echo "<div class='postbox' style='margin-right: 15px; width: 426px;'>";
+	echo "<div class='postbox' style='margin-right: 15px;'>";
 	echo "<h3 class='hndle'>".TXT_WPSC_VARIATION_LIST."</h3>";
 	echo "<div class='inside'>";
 } else {

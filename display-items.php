@@ -418,7 +418,7 @@ if($_POST['submit_action'] == "edit") {
 		$notes = $_POST['merchant_notes'];
 		$updatelink_sql = "SELECT * FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id` = '$id' AND `meta_key`='merchant_notes'";
 		$updatelink_data = $wpdb->get_results($updatelink_sql, ARRAY_A);
-		if (count($updatelink_data)>0){
+		if (count($updatelink_data)>0) {
 			$updatelink_sql = "UPDATE `".$wpdb->prefix."wpsc_productmeta` SET `meta_value` = '$notes' WHERE `product_id` = '$id' AND `meta_key`='merchant_notes'";
 			$updatelink_data = $wpdb->query($updatelink_sql);
 		} else {
@@ -894,7 +894,7 @@ $num = 0;
 
 
 echo "    <table id='productpage'>\n\r";
-echo "      <tr><td style='padding-right: 15px;' class='products'>\n\r";
+echo "      <tr><td class='products'>\n\r";
 if (function_exists('add_object_page')){
 	echo "<div class='postbox'>";
 	echo "<h3 class='hndle'>".TXT_WPSC_SELECT_PRODUCT."</h3>";
@@ -1056,7 +1056,7 @@ if($product_list != null)
 	}
 	echo "</a>";
 	
-	echo "<img src='". WPSC_URL."/images/product-alert.jpg' alt='' title='' />";
+	echo "<img class='product-alert-image' src='". WPSC_URL."/images/product-alert.jpg' alt='' title='' />";
 
 	
 	

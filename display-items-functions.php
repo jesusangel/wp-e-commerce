@@ -360,7 +360,7 @@ function advanced_box($product_data='') {
 				<input type='text' class='text'  value='{$custom_field['meta_key']}' name='custom_meta[$i][name]' id='custom_meta_name_$i'>
 				
 				".TXT_WPSC_VALUE."
-				<textarea class='text'  value='{$custom_field['meta_value']}' name='custom_meta[$i][value]' id='custom_meta_value_$i'></textarea>
+				<textarea class='text' name='custom_meta[$i][value]' id='custom_meta_value_$i'>{$custom_field['meta_value']}</textarea>
 				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>&ndash;</a>
 				<br />
 			</div>
