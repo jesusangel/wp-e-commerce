@@ -76,6 +76,10 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "				       <dt>Buy Now Shortcode:</dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
 	$output .= "				       <dt>Buy Now PHP:</dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
 	$output .= "				     </dl>\n\r";
+	
+	$output .= "More Shortcodes and Template Tags will be available in 3.7. In the meantime tell us which ones you'd like to see added to 3.7<br />";
+	$output .= "<a href='http://www.instinct.co.nz/more-shortcodes-for-37/'>http://www.instinct.co.nz/more-shortcodes-for-37/</a>";
+	
 	$output .= "				   </div>\n\r";
 	
 	$output .= "				   <div style='clear:both; height: 0px;'></div>\n\r";	

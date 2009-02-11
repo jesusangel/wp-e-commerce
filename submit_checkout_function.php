@@ -203,24 +203,42 @@ function nzshpcrt_submit_checkout() {
 			$bad_input_message .= "\n\r";
 			$any_bad_inputs = true;
  		}
-
-	 if((get_option('do_not_use_shipping') == 0) && ($all_memberships != true) && ($all_no_shipping != true)) {
+ 		
+ 	/*
+ 	* failure messages for shipping options, note the different session variable used.	
+ 	*/
+ 	// if shippping is enabled and not all the items in the cart have "no shipping" and are not all memberships
+	if((get_option('do_not_use_shipping') == 0) && ($all_memberships != true) && ($all_no_shipping != true)) {
+		$custom_shipping = get_option('custom_shipping_options');
+		$bypass_shipping_checks = false;
+		if(count($custom_shipping) == 1) {
+		  $shipping = array_pop($custom_shipping);
+			if(($wpsc_shipping_modules[$shipping]->requires_weight != true) or (($wpsc_shipping_modules[$shipping]->requires_weight == true) and !(shopping_cart_total_weight() > 0))) {
+				$bypass_shipping_checks = true;
+			}
+		}
+		//exit("<pre>".print_r($bypass_shipping_checks, true)."</pre>");
+		// if no shpping method selected
+		if($bypass_shipping_checks == false) {
 			if($_SESSION['quote_shipping_method'] == null) {
-				$_SESSION['quote_shipping_error'] = TXT_WPSC_PLEASE_SELECT_SHIPPING . "";
-				$bad_input_message .= "\n\r";
+				$_SESSION['quote_shipping_error'] = TXT_WPSC_SHIPPING_ERROR_MESSAGE;
+				//$bad_input_message .= "\n\r";
 				$any_bad_inputs = true;
 			} else {
+				// else if no shpping option selected
 				if(($_SESSION['quote_shipping_option'] == null)) {
-				  if(array_search($_SESSION['quote_shipping_method'], array('ups','usps')) !== false) {
-						$_SESSION['quote_shipping_error'] = TXT_WPSC_PLEASE_ENTER_ZIPCODE . "";
-				  } else {
-						$_SESSION['quote_shipping_error'] = TXT_WPSC_PLEASE_SELECT_SHIPPING . "";
+					// no shipping option plus ups or usps plus no zip code means no zip code entered, we need one
+					if((array_search($_SESSION['quote_shipping_method'], array('ups','usps')) !== false) && ($_SESSION['wpsc_zipcode'] == '')) {
+						$_SESSION['quote_shipping_error'] = TXT_WPSC_PLEASE_ENTER_ZIPCODE;
+					} else {
+						$_SESSION['quote_shipping_error'] = TXT_WPSC_SHIPPING_ERROR_MESSAGE;
 					}
-					$bad_input_message .= "\n\r";
+					//$bad_input_message .= "\n\r";
 					$any_bad_inputs = true;
 				}
 			}
- 		}
+		}
+	}
  		
  		
    list($bad_input_message, $any_bad_inputs) = apply_filters('wpsc_additional_checkout_checks', array($bad_input_message, $any_bad_inputs));

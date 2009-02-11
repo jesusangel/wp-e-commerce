@@ -83,7 +83,7 @@ class nzshpcrt_variations {
       $variation_values = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_values` WHERE `variation_id` = '{$variation_id}' ORDER BY `id` ASC",ARRAY_A);
       if($variation_values != null) {
         foreach($variation_values as $variation_value) {
-          if(isset($_POST['edit_add_variation_values'])) {
+          if(isset($_POST['edit_variation_values'])) {
             if($_POST['edit_variation_values'][$variation_value['id']] == 1) {
               $output_variation_values[$variation_id][$variation_value['id']]['active'] = 1;
             } else {
@@ -342,10 +342,18 @@ class nzshpcrt_variations {
 			$combination_data = $wpdb->get_col("SELECT DISTINCT `value_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` IN ('$product_id') AND `all_variation_ids` IN ('{$all_variation_ids}') AND `value_id` IN('{$imploded_modified_values}')");
 			$new_values = array_diff($modified_values, $combination_data);
 			
+			
+
+			
+			
 			if(count($new_values) > 0) {
-				echo "/*\n";				
+				//echo "/*\n";				
 			  foreach($new_values as $new_value) {
 					// Need to join the wp_variation_values variation_values`table to itself multiple times with no condition for joining, resulting in every combination of values being extracted
+					$join_selected_cols = array();
+					$join_tables = array();
+					$join_condition = array();
+					
 					foreach((array)$variation_id_list as $variation) {
 						$variation = (int)$variation;
 						
@@ -367,7 +375,7 @@ class nzshpcrt_variations {
 					$new_variation_combinations = $wpdb->get_results("SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}", ARRAY_A);
 					
 					foreach($new_variation_combinations as $new_variation_combination) {
-						echo print_r($new_variation_combination,true)."\n";
+						//echo print_r($new_variation_combination,true)."\n";
 						
 						$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '');");
 						$variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `{$wpdb->prefix}variation_priceandstock` LIMIT 1");
@@ -385,7 +393,6 @@ class nzshpcrt_variations {
 				// Assemble and execute the SQL query
 				//$associated_variation_values = $wpdb->get_results("SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}", ARRAY_A);
 				
-				echo "*/\n";
 				
 				
 				
@@ -465,7 +472,7 @@ class nzshpcrt_variations {
           $check_stock = false;
           
           if(($product_data['quantity_limited'] == 1) && (count($variation_assoc_data) == 1)) {
-            $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '{$value_association['id']}' ) AND `all_variation_ids` IN('{$variation_data['id']}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '1' LIMIT 1");
+            $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '{$value_association['value_id']}' ) AND `all_variation_ids` IN('{$variation_data['id']}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '1' LIMIT 1");
             
             $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1",ARRAY_A);
             $check_stock = true;

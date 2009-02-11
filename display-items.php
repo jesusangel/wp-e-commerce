@@ -1055,6 +1055,8 @@ if($product_list != null)
 		echo htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8');
 	}
 	echo "</a>";
+	
+	echo "<img src='". WPSC_URL."/images/product-alert.jpg' alt='' title='' />";
 
 	
 	

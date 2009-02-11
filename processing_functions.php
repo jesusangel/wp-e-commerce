@@ -532,7 +532,13 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			//exit("<pre>".print_r($image_name,true)."</pre>");
 			
 			$new_image_path = WPSC_IMAGE_DIR.$image_name;
-			rename($input_file, $new_image_path);
+			
+			// sometimes rename doesn't work, if the file is recently uploaded, use move_uploaded_file instead
+			if(is_uploaded_file($input_file)) {
+				move_uploaded_file($input_file, $new_image_path);
+			} else {
+				rename($input_file, $new_image_path);
+			}
 			$stat = stat( dirname( $new_image_path ));
 			$perms = $stat['mode'] & 0000775;
 			@ chmod( $new_image_path, $perms );

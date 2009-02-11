@@ -2,6 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Opps. We have encountered a problem with the shipping details you provided. If this problem persists you should contact the site owner.');
+define('TXT_WPSC_UPS_AND_NO_WEIGHT', 'This product has a zero weight associated with it and you have UPS shipping enabled. UPS does not support products with zero weight, therefore if your product is a digital download, we would reccomend disabling shipping for this product.');
 
 define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Choose a Shipping Rate');
 
