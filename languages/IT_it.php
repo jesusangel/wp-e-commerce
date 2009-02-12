@@ -5,6 +5,40 @@ Localizzazione vers. 1.0
 Traduzione a cura di Roberto Bellina. Per qualsiasi segnalazione o suggerimento scrivete a robert.bellina at gmail.com
 */
 
+define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Scegliete una tariffa per la spedizione');
+
+define('TXT_WPSC_CALCULATE', 'Calcola');
+define('TXT_WPSC_GROUP_PRESENTATION_TEXT', 'Per sovrascrivere le impostazioni di presentazione di questo gruppo, potete inserire le vostre impostazioni personalizzate qui');
+define('TXT_WPSC_GROUP_SETTINGS', 'Impostazioni Gruppo Prodotti');
+define('TXT_WPSC_GROUP_IMAGE', 'Gruppo&nbsp;Immagine');
+define('TXT_WPSC_THUMBNAIL_SIZE', 'Anteprima&nbsp;Dimensione');
+define('TXT_WPSC_CATALOG_VIEW', 'Vista Catalogo');
+define('TXT_WPSC_GROUP_IMAGE_TEXT', 'Potete caricare le immagini di anteprima per ciascun gruppo. Per visualizzare i dettagli del gruppo nel vostro negozio, dovete configurare queste impostazioni in <a href="http://apps.instinct.co.nz/wp_2.7/wp-admin/admin.php?page='.WPSC_DIR_NAME.'/options.php#options_presentation">Impostazioni Presentazione</a>.');
+
+
+
+define('TXT_WPSC_UPS_DESTINATION', 'Tipo destinazione');
+define('TXT_WPSC_UPS_DESTINATION_COMMERCIAL', 'Indirizzo commerciale');
+define('TXT_WPSC_UPS_DESTINATION_RESIDENTIAL', 'Indirizzo residenziale');
+
+define('TXT_WPSC_UPS_PACKAGING', 'Formato imballo');
+
+define('TXT_WPSC_UPS_PACKAGING_YOURS', 'Imballo proprio');
+define('TXT_WPSC_UPS_PACKAGING_LETTER', 'Lettera UPS');
+define('TXT_WPSC_UPS_PACKAGING_UEB_SMALL', 'UPS Express Box - Piccola');
+define('TXT_WPSC_UPS_PACKAGING_UEB_MEDIUM', 'UPS Express Box - Media');
+define('TXT_WPSC_UPS_PACKAGING_UEB_LARGE', 'UPS Express Box - Grande');
+define('TXT_WPSC_UPS_PACKAGING_TUBE', 'UPS Tube');
+define('TXT_WPSC_UPS_PACKAGING_PAK', 'UPS Pak');
+
+define('TXT_WPSC_UPS_DAILY_PICKUP', 'Ritiro in giornata');
+
+
+define('TXT_WPSC_IMPORT_CSV', 'Importa CSV prodotti');
+define('TXT_WPSC_MORE', 'Altro');
+
+define('TXT_WPSC_WEIGHT_SETTINGS', 'Impostazioni peso');
+
 define('TXT_WPSC_PROMOTE_YOUR_SHOP', '
 <h2>Promuovi il tuo sito online</h2>
 <p>Adesso avete un sito con dei prodotti, ma bisogna fare promozione per farlo sapere in giro.</p>
@@ -176,7 +210,7 @@ define('TXT_WPSC_PENDINGCOUNT_PLURAL','transazioni');
 define('TXT_WPSC_VARIATION_SINGULAR','variante');
 define('TXT_WPSC_VARIATION_PLURAL','varianti');
 
-define('TXT_WPSC_SALES_DASHBOARD', 'Avete <a href=\'admin.php?page=wp-shopping-cart/display-items.php\'>:productcount:</a>, all\'interno di <a href=\'admin.php?page=wp-shopping-cart/display-category.php\'>:groupcount:</a>. Questo mese avete ottenuto :salecount: e generato un totale di :monthtotal: e le vostre vendite totali ammontano a :overaltotal:. Avete :pendingcount: che attendono una approvazione.');
+define('TXT_WPSC_SALES_DASHBOARD', 'Avete <a href=\'admin.php?page='.WPSC_DIR_NAME.'/display-items.php\'>:productcount:</a>, all\'interno di <a href=\'admin.php?page='.WPSC_DIR_NAME.'/display-category.php\'>:groupcount:</a>. Questo mese avete ottenuto :salecount: e generato un totale di :monthtotal: e le vostre vendite totali ammontano a :overaltotal:. Avete :pendingcount: che attendono una approvazione.');
 
 define('TXT_WPSC_YOUAREUSING', 'State usando lo stile :theme: . Questa è la versione :versionnumber: di WP e-Commerce.');
 define('TXT_WPSC_NO_SHORTCODE', 'Questo prodotto è ancora in attesa di essere aggiunto al vostro catalogo. Non ci sono al momento codici o tag disponibili.');
@@ -193,7 +227,7 @@ define('TXT_WPSC_EDITING_IN_GROUP', 'State modificando un elemento nel gruppo [c
 
 define('TXT_WPSC_PURCHASE_UNAVAILABLE', 'Acquista le opzioni non disponibili');
 define('TXT_WPSC_WE_RECOMMEND', 'Raccomandiamo');
-define('TXT_WPSC_SELECT_PRODUCT_GROUP', 'Seleziona un gruppo');
+define('TXT_WPSC_SELECT_PRODUCT_GROUP', 'Seleziona un gruppo da gestire');
 define('TXT_WPSC_EDIT_THIS_GROUP', 'Modifica questo gruppo');
 
 define('TXT_WPSC_USPS_USERID', 'ID USPS');
@@ -463,7 +497,7 @@ define('TXT_WPSC_TYPE', 'Tipo');
 define('TXT_WPSC_MANDATORY', 'Obbligatorio');
 define('TXT_WPSC_DISPLAY_IN_LOG', 'Visualizza<br /> nel Rapporto');
 define('TXT_WPSC_DESCRIPTION', 'Descrizione');
-define('TXT_WPSC_CATEGORY_PARENT', 'Categoria di riferimento');
+define('TXT_WPSC_CATEGORY_PARENT', 'Gruppo di riferimento');
 define('TXT_WPSC_IMAGE', 'Immagine');
 define('TXT_WPSC_HEIGHT', 'Altezza');
 define('TXT_WPSC_WIDTH', 'Larghezza');
@@ -736,7 +770,7 @@ define('TXT_WPSC_PRODUCTDOWNLOAD', 'Download prodotto');
 define('TXT_WPSC_SHOWTHUMBNAILS', 'Mostra anteprime');
 define('TXT_WPSC_ADD_ADDITIONAL_IMAGE', 'Aggiungi immagini aggiuntive');
 define('TXT_WPSC_DELETE_IMAGE', 'Elimina immagine');
-define('TXT_WPSC_GOLD_OPTIONS', 'Opyioni Gold');
+define('TXT_WPSC_GOLD_OPTIONS', 'Opzioni Gold');
 define('TXT_WPSC_ACTIVATE_SETTINGS', 'Impostazioni attivazione: Gold Cart');
 define('TXT_WPSC_ACTIVATION_KEY', 'Chiave di attivazione');
 define('TXT_WPSC_THANKSACTIVATED', 'Grazie, il carrello della spesa gold è stato attivato.');

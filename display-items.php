@@ -780,10 +780,9 @@ $num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefi
     $unwriteable_directories[] = WPSC_CATEGORY_DIR;
 	}
     
-  if(count($unwriteable_directories) > 0)
-    {
+  if(count($unwriteable_directories) > 0) {
     echo "<div class='error'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";
-    }
+	}
 ?>
 
 
@@ -1055,8 +1054,11 @@ if($product_list != null)
 		echo htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8');
 	}
 	echo "</a>";
-	
-	echo "<img class='product-alert-image' src='". WPSC_URL."/images/product-alert.jpg' alt='' title='' />";
+	$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
+	$product_alert['messages'] = implode("\n",$product_alert['messages']);
+	if($product_alert['state'] === true) {
+		echo "<img alt='{$product_alert['messages']}' title='{$product_alert['messages']}' class='product-alert-image' src='". WPSC_URL."/images/product-alert.jpg' alt='' title='' />";
+	}
 
 	
 	

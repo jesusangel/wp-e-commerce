@@ -70,15 +70,16 @@ function nzshpcrt_getproductform($prodid)
   $output .= "          <input class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
 	$output .= "				   <a href='#' class='shorttag_toggle'></a>\n\r";
 	$output .= "				   <div class='admin_product_shorttags'>\n\r";
+	$output .= "				   <h4>Shortcodes</h4>\n\r";
 	$output .= "				     <dl>\n\r";
-// 	$output .= "				       <dt>Embed Product:</dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
-// 	$output .= "				       <dt>Buy Now Button:</dt><dd></dd>\n\r";
 	$output .= "				       <dt>Buy Now Shortcode:</dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
+	$output .= "				     </dl>\n\r";
+	$output .= "				   <h4>Template Tags</h4>\n\r";
+	$output .= "				     <dl>\n\r";
 	$output .= "				       <dt>Buy Now PHP:</dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
 	$output .= "				     </dl>\n\r";
 	$output .= "				     <p>\n\r";
-	$output .= "More Shortcodes and Template Tags will be available in 3.7. In the meantime tell us which ones you'd like to see added to 3.7<br />";
-	$output .= "<a href='http://www.instinct.co.nz/more-shortcodes-for-37/'>http://www.instinct.co.nz/more-shortcodes-for-37/</a>";
+	$output .= "More Shortcodes and Template Tags will be available in 3.7. In the meantime <a href='http://www.instinct.co.nz/more-shortcodes-for-37/'>tell us which ones you'd like</a> to see added to 3.7";
 	$output .= "				     </p>\n\r";
 	$output .= "				   </div>\n\r";
 	

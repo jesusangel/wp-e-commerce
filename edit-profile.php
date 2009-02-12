@@ -1,6 +1,7 @@
 <?php
 $any_bad_inputs = false;
 $changes_saved = false;
+$_SESSION['collected_data'] = null;
 if($_POST['collected_data'] != null)
   {
   foreach((array)$_POST['collected_data'] as $value_id => $value)

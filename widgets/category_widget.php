@@ -143,7 +143,7 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 	  $checked = '';
 	  //$checked = "checked='true'";
 		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$cat_group['id']}')");
-		$category_group_name = str_replace("[categorisation]", $cat_group['name'], TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES);
+		//$category_group_name = str_replace("[categorisation]", , TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES);
 		
 		if($options[$number]['categorisation'][$cat_group['id']] == true) {
 			$checked = "checked='true'";
@@ -156,15 +156,16 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 		$form_id = "{$option_name}-{$number}-group{$cat_group['id']}";
 		echo "	<label for='{$form_id}'>\n\r";
 		echo "		<input type='checkbox' name='{$option_name}[$number][categorisation][{$cat_group['id']}]' id='{$form_id}' value='true' class='checkbox' {$checked} />\n\r";
-		echo "		{$category_group_name}</label>\n\r";
+		echo "		".str_replace(":category:",$cat_group['name'],TXT_WPSC_DISPLAY_THE_GROUP)."</label>\n\r";
 		echo "	<br/>\n\r";
 	}
 	if ($options[$number]['image'] == true) {
 		$checked = "checked='true'";
 	}
+	echo "<br />\n\r";
 	echo "	<label for='sidebar_category_image'>\n\r";
 	echo "		<input type='checkbox' name='{$option_name}[$number][image]' id='sidebar_category_image' value='true' class='checkbox' {$checked} />\n\r";
-	echo "		Display Images</label>\n\r";
+	echo "		".TXT_WPSC_DISPLAY_THE_GROUP_IMAGES."</label>\n\r";
 	echo "	<br/>\n\r";
 }
 

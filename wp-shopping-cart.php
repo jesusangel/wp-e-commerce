@@ -1236,16 +1236,17 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					$billing_region=$_SESSION['selected_region'];
 				}
 				$billing_country=$_POST['billing_country'];
-				foreach($cartt as $cart_item) {
+				$price = 0;
+				foreach($cart as $cart_item) {
 					$product_id = $cart_item->product_id;
 					$quantity = $cart_item->quantity;
 					//echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
 					$product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 				
 					if($product['donation'] == 1) {
-						$price = $quantity * $cart_item->donation_price;
+						$price += $quantity * $cart_item->donation_price;
 					} else {
-						$price = $quantity * calculate_product_price($product_id, $cart_item->product_variations);
+						$price += $quantity * calculate_product_price($product_id, $cart_item->product_variations);
 						if($product['notax'] != 1) {
 							$tax += nzshpcrt_calculate_tax($price, $billing_country, $billing_region) - $price;
 						}
@@ -1256,6 +1257,9 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 						$total_shipping += nzshpcrt_determine_item_shipping($product['id'], $quantity, $_SESSION['delivery_country']);
 					}
 				}
+				
+				$total_shipping +=  nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+				
 				$total = number_format(($tax+$price+$total_shipping), 2);
 				
 				
@@ -1266,7 +1270,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					}
 					$tax = number_format($tax,2);
 					echo  "jQuery('#checkout_tax').html(\"<span class='pricedisplay'>\${$tax}</span>\");\n\r";
-					echo  "jQuery('#checkout_total').html(\"<span class='pricedisplay'>\${$total}</span>\");\n\r";
+					echo  "jQuery('#checkout_total').html(\"<span class='pricedisplay'>\${$total}</span><input id='shopping_cart_total_price' type='hidden' value='\${$total}'>\");\n\r";
 			}  
 			exit();
 		}

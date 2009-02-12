@@ -1250,4 +1250,33 @@ function wpsc_sanitise_keys($value) {
   /// Function used to cast array items to integer.
   return (int)$value;
 }
+
+
+
+function wpsc_check_stock($state, $product) {
+  // if quantity is enabled and is zero
+	if(($product['quantity_limited'] == 1) && ($product['quantity'] == 0)) {
+	  $state['state'] = true;
+		$state['messages'][] = TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE;
+	}
+	return array('state' => $state['state'], 'messages' => $state['messages']);
+}
+
+
+function wpsc_check_weight($state, $product) {
+ // if weight is zero and UPS is on and the product uses shipping
+$custom_shipping = get_option('custom_shipping_options');
+// echo "<pre>".print_r((bool)array_search($custom_shipping, 'ups'),true)."</pre>";
+	if((array_search('ups', $custom_shipping) !== false) && ($product['weight'] == 0) && ($product['no_shipping'] == 0)) {
+		$state['state'] = true;
+		$state['messages'][] = TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE;
+	}
+	return array('state' => $state['state'], 'messages' => $state['messages']);
+}
+
+// add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
+add_filter('wpsc_product_alert', 'wpsc_check_weight', 10, 2);
+
+
+
 ?>

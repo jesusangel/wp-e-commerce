@@ -1469,6 +1469,10 @@ div.admin_product_name div.admin_product_shorttags {
 	_width:396px;
 }
 
+div.admin_product_name div.admin_product_shorttags h4{
+  margin: 0px 0px 3px 0px;
+}
+
 
 div.admin_product_name div.admin_product_shorttags p{
   clear: both;
@@ -1478,7 +1482,7 @@ div.admin_product_name div.admin_product_shorttags p{
 
 
 div.admin_product_name div.admin_product_shorttags dl {
-  margin: 0px;
+  margin: 0px 0px 5px 0px;
 }
 div.admin_product_name div.admin_product_shorttags dl dt {
   display: block;
@@ -2036,5 +2040,9 @@ div#productform table tr td{ height: 11px !important; }
 div#productform table tr.settings_row td{ height: 0px !important; }
 
 .product-alert-image {
-  margin-left: 2px;
+  margin-left: 3px;
+}
+
+#editorcontainer .wp_themeSkin .mceStatusbar {
+  border-color: #DFDFDF;
 }

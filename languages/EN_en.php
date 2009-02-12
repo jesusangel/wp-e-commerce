@@ -2,6 +2,15 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+
+
+
+define("TXT_WPSC_DISPLAY_THE_GROUP_IMAGES", "Display the Group thumbnails in the sidebar");
+define("TXT_WPSC_DISPLAY_THE_GROUP", "Display the :category: Group");
+
+define('TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE', "UPS does not support products without a weight set.\n\r  Please either disable shipping for this product or give it a weight.");
+define('TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE', 'This product has no stock remaining.');
+
 define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Opps. We have encountered a problem with the shipping details you provided. If this problem persists you should contact the site owner.');
 define('TXT_WPSC_UPS_AND_NO_WEIGHT', 'This product has a zero weight associated with it and you have UPS shipping enabled. UPS does not support products with zero weight, therefore if your product is a digital download, we would reccomend disabling shipping for this product.');
 

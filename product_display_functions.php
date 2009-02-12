@@ -1221,4 +1221,7 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 		echo $output;
   }
 }
+
+
+
 ?>
