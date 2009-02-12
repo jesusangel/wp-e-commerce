@@ -955,7 +955,7 @@ jQuery(document).ready(function(){
 	filesizeLimit = 5120000;
 	
 // 	alert('test 1');
-// 	if (typeof SWFUpload != "undefined") {
+ 	if (typeof SWFUpload != "undefined") {
 	  var swfu = new SWFUpload({
       flash_url : WPSC_URL+'/js/swfupload.swf',
       upload_url: base_url+'/?action=wpsc_add_image',
@@ -987,7 +987,7 @@ jQuery(document).ready(function(){
       upload_complete_handler : imageUploadComplete,
       queue_complete_handler : imageQueueComplete
     });
-// 	}
+ 	}
   	jQuery("#add-product-image").click(function(){
       swfu.selectFiles();
   	});

@@ -120,7 +120,7 @@ if(isset($_POST) && is_array($_POST)) {
  </tr>
  <tr>
    <td>
-   <input type='text' value='' name='add_coupon_code' />
+   <input type='text' value='' name='add_coupon_code' style="width: 138px;" />
    </td>
    <td>
    <input type='text' value='' size='3' name='add_discount' />
