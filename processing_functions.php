@@ -1254,7 +1254,15 @@ function wpsc_sanitise_keys($value) {
 
 
 function wpsc_check_stock($state, $product) {
-  // if quantity is enabled and is zero
+	global $wpdb;
+	// if quantity is enabled and is zero
+	
+
+ 	$variation_assoc_data = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')",ARRAY_A);
+// 	$saved_variation_price = 0;
+   echo "<pre>".print_r($variation_assoc_data,true)."</pre>";
+	
+	
 	if(($product['quantity_limited'] == 1) && ($product['quantity'] == 0)) {
 	  $state['state'] = true;
 		$state['messages'][] = TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE;
@@ -1274,7 +1282,7 @@ $custom_shipping = get_option('custom_shipping_options');
 	return array('state' => $state['state'], 'messages' => $state['messages']);
 }
 
-// add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
+//add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
 add_filter('wpsc_product_alert', 'wpsc_check_weight', 10, 2);
 
 
