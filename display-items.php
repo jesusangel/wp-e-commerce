@@ -1055,7 +1055,9 @@ if($product_list != null)
 	}
 	echo "</a>";
 	$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
-	$product_alert['messages'] = implode("\n",$product_alert['messages']);
+	if(count($product_alert['messages']) > 0) {
+		$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
+	}
 	if($product_alert['state'] === true) {
 		echo "<img alt='{$product_alert['messages']}' title='{$product_alert['messages']}' class='product-alert-image' src='". WPSC_URL."/images/product-alert.jpg' alt='' title='' />";
 	}

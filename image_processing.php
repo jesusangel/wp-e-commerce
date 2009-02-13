@@ -5,7 +5,7 @@ global $wpdb;
 	* this handles all resizing of images that results in a file being saved, if no width and height is supplied, then it just copies the image
 	*/
 	$imagetype = getimagesize($image_input);
-	if(file_exists($image_input) && is_numeric($height) && is_numeric($width) && function_exists('imagecreatefrompng')) {
+	if(file_exists($image_input) && is_numeric($height) && is_numeric($width) && function_exists('imagecreatefrompng') && (($height != $imagetype[1]) && ($width != $imagetype[0]))) {
 		switch($imagetype[2]) {
 			case IMAGETYPE_JPEG:
 			//$extension = ".jpg";

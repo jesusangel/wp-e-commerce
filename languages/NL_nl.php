@@ -1,9 +1,41 @@
 <?php
 /*
-This is a language file for the WP shopping cart plugin version 3.6.9
-Language version 1.1 in Dutch by http://level-level.com -> mail@level-level.com
-Januari 8 2009
+This is a language file for the WP shopping cart plugin version 3.6.10
+Language version in Dutch by http://level-level.com -> mail@level-level.com for questions and suggestions
+Februari 12 2009
 */
+
+
+define("TXT_WPSC_DISPLAY_THE_GROUP_IMAGES", "Toon groep-miniatuurafbeeldingen in de zijbalk");
+define("TXT_WPSC_DISPLAY_THE_GROUP", "Toon de :category: groep");
+define('TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE', "UPS accepteert geen producten zonder opgegeven gewicht.\n\r Schakel verzenden uit voor dit product of geef het een gewicht.");
+define('TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE', 'Dit product is niet meer op voorraad.');
+define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Er is een probleem met de door u opgegeven gegevens voor verzending. Als het probleem aanhoudt moet u contact opnemen met de eigenaar van de winkel');
+define('TXT_WPSC_UPS_AND_NO_WEIGHT', 'Dit product heeft geen gewicht toegekend gekregen maar verzenden met UPS is wel ingeschakeld. UPS accepteert geen producten zonder opgegeven gewicht. Schakel verzenden uit voor dit product of geef het een gewicht.');
+define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Kies een verzendwijze');
+define('TXT_WPSC_CALCULATE', 'Bereken');
+define('TXT_WPSC_GROUP_PRESENTATION_TEXT', 'Om de opgegeven presentatie instellingen voor groepen te overrulen kan je hier andere instellingen opgeven.');
+define('TXT_WPSC_GROUP_SETTINGS', 'Product groep Instellingen');
+define('TXT_WPSC_GROUP_IMAGE', 'Groep&nbsp;Afbeelding');
+define('TXT_WPSC_THUMBNAIL_SIZE', 'Miniatuurafbeelding&nbsp;Afmeting');
+define('TXT_WPSC_CATALOG_VIEW', 'Catalogus weergave');
+define('TXT_WPSC_GROUP_IMAGE_TEXT', 'Voor elke groep kan een miniatuurafbeelding geupload worden. Om groep gegevens weer te geven in je webwinkel moeten de <a href="http://apps.instinct.co.nz/wp_2.7/wp-admin/admin.php?page='.WPSC_DIR_NAME.'/options.php#options_presentation">Weergave</a> instellingen aangepast worden.');
+define('TXT_WPSC_UPS_DESTINATION', 'Type bestemming');
+define('TXT_WPSC_UPS_DESTINATION_COMMERCIAL', 'Zakelijk adres');
+define('TXT_WPSC_UPS_DESTINATION_RESIDENTIAL', 'Thuis adres');
+define('TXT_WPSC_UPS_PACKAGING', 'Verpakking');
+define('TXT_WPSC_UPS_PACKAGING_YOURS', 'Uw verpakking');
+define('TXT_WPSC_UPS_PACKAGING_LETTER', 'UPS Brief');
+define('TXT_WPSC_UPS_PACKAGING_UEB_SMALL', 'UPS Express Box - Klein');
+define('TXT_WPSC_UPS_PACKAGING_UEB_MEDIUM', 'UPS Express Box - Medium');
+define('TXT_WPSC_UPS_PACKAGING_UEB_LARGE', 'UPS Express Box - Groot');
+define('TXT_WPSC_UPS_PACKAGING_TUBE', 'UPS Koker');
+define('TXT_WPSC_UPS_PACKAGING_PAK', 'UPS Pak');
+
+define('TXT_WPSC_UPS_DAILY_PICKUP', 'Dagelijkse afhaalservice');
+define('TXT_WPSC_IMPORT_CSV', 'Importeer producten via CSV bestand');
+define('TXT_WPSC_MORE', 'Meer');
+define('TXT_WPSC_WEIGHT_SETTINGS', 'Gewicht instellingen');
 define('TXT_WPSC_PROMOTE_YOUR_SHOP', '<h2>Online promotie</h2>
 <p>Nu je een webshop met producten hebt moet wil je misschien wat verkeer en publiciteit hebben.</p>
 
@@ -16,20 +48,13 @@ define('TXT_WPSC_PROMOTE_YOUR_SHOP', '<h2>Online promotie</h2>
 Door je site op &eacute;&eacute;n van deze fora te plaatsen weet je zeker dat je site bezocht gaat worden.
 </p>
 ');
-
-
 define('TXT_WPSC_SHIPPING_BUT_NO_CURL', 'De volgende verzendmethodes vereisen allen cURL dat niet op deze server ge&iuml;nstalleerd is, neem contact met uw hosting provider op om cURL te installeren. ');
-
 define('TXT_WPSC_PLEASE_ENTER_ZIPCODE', 'Gelieve een postcode in te vullen.');
 define('TXT_WPSC_PLEASE_SELECT_SHIPPING', 'Selecteer een verzendmethode');
 define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ voeg nieuwe variaties toe');
-
 define('TXT_WPSC_ADMIN_ENGRAVE', 'Bezoekers kunnen dit product personaliseren door een bericht in te voeren bij het afrekenen');
 define('TXT_WPSC_PERSONALISATION_OPTIONS','Opties voor personaliseren');
-
-
 define('TXT_WPSC_CHOOSE_SHIPPING', "Om verzenden in WP e-Commerce mogelijk te maken moet je &eacute;&eacute;n of meerdere methodes voor de berekening van de verzendkosten selecteren");
-
 define('TXT_WPSC_FLAT_RATE_SETTINGS', "Instellingen &eacute;&eacute;n tarief (flat rate)");
 define('TXT_WPSC_OFF_SITE_LINK', "Externe productlink");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'Deze notitie is alleen aan de achterkant van de shop zichtbaar.');
