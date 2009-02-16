@@ -565,6 +565,7 @@ if (($_GET['page'] == WPSC_DIR_NAME.'/display-log.php') || ($_GET['page'] == WPS
 var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
 var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
+var WPSC_DIR_NAME = "<?php echo WPSC_DIR_NAME; ?>";
 /* LightBox Configuration start*/
 var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
@@ -605,6 +606,10 @@ var borderSize = 10;
     echo "var TXT_WPSC_LIFE_NUMBER = '".TXT_WPSC_LIFE_NUMBER."';\n\r";
     echo "var TXT_WPSC_PRODUCT_CODE = '".TXT_WPSC_PRODUCT_CODE."';\n\r";
     echo "var TXT_WPSC_PDF = '".TXT_WPSC_PDF."';\n\r";
+    
+    echo "var TXT_WPSC_AND_ABOVE = '".TXT_WPSC_AND_ABOVE."';\n\r";
+    echo "var TXT_WPSC_IF_PRICE_IS = '".TXT_WPSC_IF_PRICE_IS."';\n\r";
+    echo "var TXT_WPSC_IF_WEIGHT_IS = '".TXT_WPSC_IF_WEIGHT_IS."';\n\r";
 ?>
 /* custom admin functions end*/
 </script>
@@ -1511,21 +1516,28 @@ foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
       $_SESSION['nzshpcrt_cart'] = Array();
 		}
       
-    if(is_numeric($_POST['quantity']) && is_numeric($_POST['key'])) {
+     if(is_numeric($_POST['quantity']) && is_numeric($_POST['key'])) {
       $quantity = (int)$_POST['quantity'];
       $key = (int)$_POST['key'];
-      $product_id = $_SESSION['nzshpcrt_cart'][$key]->product_id;
+      $product_id = (int)$_SESSION['nzshpcrt_cart'][$key]->product_id;
 		  $item_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='$product_id' LIMIT 1",ARRAY_A);      
     	$check_stock = false;
-      if((bool)(int)$item_data['quantity_limited'] == true) {				
+      if((bool)(int)$item_data['quantity_limited'] == true) {
 				$item_variations = array_values((array)$_SESSION['nzshpcrt_cart'][$key]->product_variations); // reset the keys to start from 0			
-				if(count($item_variations) == 2)	{
-					$variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `product_id` = '{$product_id}' AND (`variation_id_1` = '{$item_variations[0]}' AND `variation_id_2` = '{$item_variations[1]}') OR (`variation_id_1` = '{$item_variations[1]}' AND `variation_id_2` = '{$item_variations[0]}') LIMIT 1",ARRAY_A);
-					$item_stock = $variation_stock_data['stock'];
-				} else if(count($item_variations) == 1) {
-					$variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `product_id` = '{$product_id}' AND (`variation_id_1` = '{$item_variations[0]}' AND `variation_id_2` = '0') LIMIT 1",ARRAY_A);
-					$item_stock = $variation_stock_data['stock'];
-				} else {
+				if(count($item_variations) > 0) {
+          // get list of associated variation IDs
+          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$item_variations)."')");
+          
+          // sort and comma seperate them
+          asort($variation_ids);
+          $all_variation_ids = implode(",", $variation_ids);
+          
+          // select the variation price and stock data ID
+          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$item_variations )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($item_variations)."' LIMIT 1");
+          // get the stock 
+          $item_stock = $wpdb->get_var("SELECT `stock` FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+					// echo "".print_r($item_stock,true)."";
+        }	else {
 					$item_stock = $item_data['quantity'];
 				}
 				$check_stock = true;

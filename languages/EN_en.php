@@ -4,7 +4,11 @@ This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
 
-
+define("TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS", "Total weight (<abbr alt='You must enter the weight here in pounds, regardless of what you used on your products' title='You must enter the weight here in pounds, regardless of what you used on your products'>in Pounds</abbr>)");
+define("TXT_WPSC_SHIPPING_PRICE", "Shipping price");
+define("TXT_WPSC_IF_PRICE_IS", "If price is ");
+define("TXT_WPSC_IF_WEIGHT_IS", "If weight is ");
+define("TXT_WPSC_AND_ABOVE", " and above");
 define("TXT_WPSC_DISPLAY_THE_GROUP_IMAGES", "Display the Group thumbnails in the sidebar");
 define("TXT_WPSC_DISPLAY_THE_GROUP", "Display the :category: Group");
 

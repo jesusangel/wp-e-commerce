@@ -994,11 +994,11 @@ jQuery(document).ready(function(){
 });
 
 function addlayer(){
-	jQuery("tr.addlayer").before("<tr><td><input type='text' name='layer[]' size='10'> <i style='color:grey'>and above</i></td><td><input type='text' name='shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/"+WPSC_DIR_NAME+"/images/delete.png'></a></td></tr>");
+	jQuery("tr.addlayer").before("<tr><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/"+WPSC_DIR_NAME+"/images/delete.png'></a></td></tr>");
 }
 
 function addweightlayer(){
-	jQuery("tr.addlayer").before("<tr><td><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>and above</i></td><td><input type='text' name='weight_shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/"+WPSC_DIR_NAME+"/images/delete.png'></a></td></tr>");
+	jQuery("tr.addlayer").before("<tr><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/"+WPSC_DIR_NAME+"/images/delete.png'></a></td></tr>");
 }
 
 function removelayer() {

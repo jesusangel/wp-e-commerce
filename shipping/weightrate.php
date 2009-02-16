@@ -26,11 +26,11 @@ class weightrate {
 	}
 	
 	function getForm() {
-		$output.="<tr><th>Total weight(in Pounds)</th><th>Shipping price</th></tr>";
+		$output.="<tr><th>".TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
 		$layers = get_option("weight_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
-				$output.="<tr><td><input type='text' value='$key' name='weight_layer[]'> and above</td><td><input type='text' value='{$shipping}' name='weight_shipping[]'></td></tr>";
+				$output.="<tr><td style='width: 258px;'><div><i style='color: grey;'>".TXT_WPSC_IF_WEIGHT_IS."</i><input type='text' value='$key' name='weight_layer[]'size='10'><i style='color: grey;'>".TXT_WPSC_AND_ABOVE."</i></div></td><td><input type='text' value='{$shipping}' name='weight_shipping[]' size='10'></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='weight'>";

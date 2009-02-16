@@ -27,11 +27,11 @@ class tablerate {
 	
 	function getForm() {
 // 		$output.="<tr><td colspan='2'>Layers: <a style='cursor:pointer;' onclick='addlayer()'>Add Layer</a></td></tr>";
-		$output.="<tr><th>Total price</th><th>Shipping price</th></tr>";
+		$output.="<tr><th>".TXT_WPSC_TOTALPRICE."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
 		$layers = get_option("table_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
-				$output.="<tr><td><input type='text' value='$key' size='10' name='layer[]'><i style='color: grey;'> and above</i></td><td><input type='text' value='{$shipping}' name='shipping[]'></td></tr>";
+				$output.="<tr><td><i style='color: grey;'>".TXT_WPSC_IF_PRICE_IS."</i><input type='text' name='layer[]' value='$key' size='10'><i style='color: grey;'> ".TXT_WPSC_AND_ABOVE."</i></td><td><input type='text' value='{$shipping}' name='shipping[]'></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";
