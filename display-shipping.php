@@ -85,6 +85,9 @@ if (get_option('custom_gateway')) {
 	$custom_gateway2 = "checked='checked'";
 }
 
+
+
+$selected_shippings = get_option('custom_shipping_options');
 $form = "";
 // echo ("<pre>".print_r($GLOBALS['wpsc_shipping_modules'],1)."</pre>");
 foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
@@ -94,13 +97,17 @@ foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 	} else {
 		$selected = '';
 	}
-	$shippinglist .="<option value='".$shipping->internal_name."' ".$selected." >".$shipping->name."</option>";
+	$disabled = '';
+	if (!in_array($shipping->internal_name, (array)$selected_shippings)) {
+		$disabled = "disabled='true'";
+	}
+	
+	$shippinglist .="<option $disabled value='".$shipping->internal_name."' ".$selected." >".$shipping->name."</option>";
 }
 $shippinglist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER."</option>" . $shippinglist;
 
 
 // sort into external and internal arrays.
-$selected_shippings = get_option('custom_shipping_options');
 foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) {
 	if($module->is_external == true) {
 		$external_shipping_modules[$key] = $module;
@@ -215,13 +222,13 @@ function selectgateway() {
 										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='shipwire' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
 										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='shipwire' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php echo TXT_WPSC_NO;?></label>
 										<?php
-										$shipwrieemail = get_option("shipwireemail");
-										$shipwriepassword = get_option("shipwirepassword");
+										$shipwireemail = get_option("shipwireemail");
+										$shipwirepassword = get_option("shipwirepassword");
 										?>
 										<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
 										<table>
-										<tr><td><?=TXT_WPSC_SHIPWIREEMAIL;?> :</td><td> <input type="text" name="shipwireemail" value="<?=$shipwrieemail;?>"></td></tr>
-										<tr><td><?=TXT_WPSC_SHIPWIREPASSWORD;?> :</td><td><input type="text" name="shipwirepassword" value="<?=$shipwriepassword;?>"></td></tr>
+										<tr><td><?=TXT_WPSC_SHIPWIREEMAIL;?> :</td><td> <input type="text" name="shipwireemail" value="<?=$shipwireemail;?>"></td></tr>
+										<tr><td><?=TXT_WPSC_SHIPWIREPASSWORD;?> :</td><td><input type="text" name="shipwirepassword" value="<?=$shipwirepassword;?>"></td></tr>
 										<tr><td><a onclick='shipwire_sync()' style="cursor:pointer;">Sync product</a></td></tr>
 										</table>
 										</div>

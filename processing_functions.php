@@ -1257,15 +1257,23 @@ function wpsc_check_stock($state, $product) {
 	global $wpdb;
 	// if quantity is enabled and is zero
 	
-
- 	$variation_assoc_data = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')",ARRAY_A);
-// 	$saved_variation_price = 0;
-   echo "<pre>".print_r($variation_assoc_data,true)."</pre>";
-	
-	
-	if(($product['quantity_limited'] == 1) && ($product['quantity'] == 0)) {
-	  $state['state'] = true;
-		$state['messages'][] = TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE;
+	if($product['quantity_limited'] == 1) {
+		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
+		asort($variation_ids);
+		$all_variation_ids = implode(",", $variation_ids);
+		
+		$disabled_values = $wpdb->get_col("SELECT `value_id` FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('0')");
+		
+		$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` NOT IN (".implode(",", $disabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
+		
+		$item_stock = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` IN(".implode(",", $priceandstock_ids).")", ARRAY_A);
+		
+		echo "<pre>".print_r($item_stock,true)."</pre>";
+		
+		if(($product['quantity'] == 0)) {
+			$state['state'] = true;
+			$state['messages'][] = TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE;
+		}
 	}
 	return array('state' => $state['state'], 'messages' => $state['messages']);
 }
@@ -1284,7 +1292,6 @@ $custom_shipping = get_option('custom_shipping_options');
 
 //add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
 add_filter('wpsc_product_alert', 'wpsc_check_weight', 10, 2);
-
 
 
 ?>

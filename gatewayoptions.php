@@ -63,6 +63,7 @@ if (get_option('custom_gateway')) {
 $form = "";
 // echo "---->".$GLOBALS['nzshpcrt_gateways'];
 if (is_array($GLOBALS['nzshpcrt_gateways'])) {
+	$selected_gateways = get_option('custom_gateway_options');
 	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
 		if($gateway['internalname'] == $curgateway ) {
 			$selected = " selected='selected'";
@@ -71,15 +72,16 @@ if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 			$selected = '';
 		}
 		
+		
 		if(isset($gateway['admin_name'])) {
 			$gateway['name'] = $gateway['admin_name'];
 		}
-		$selected_gateways = get_option('custom_gateway_options');
-		if (in_array($gateway['internalname'], (array)$selected_gateways)) {
-	  		$gatewaylist .="<option value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>"; 
-		} else {
-			$gatewaylist .="<option disabled value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>";
+		$disabled = '';
+		if (!in_array($gateway['internalname'], (array)$selected_gateways)) {
+		  $disabled = "disabled='true'";
 		}
+		
+		$gatewaylist .="<option $disabled value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>";
 	}
 }
 $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY."</option>" . $gatewaylist;

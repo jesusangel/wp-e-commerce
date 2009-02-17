@@ -310,18 +310,19 @@ class nzshpcrt_variations {
 			$visible_state = (int)(bool)$variation_visibility;
 			// this is inefficient, it would probably be better to get the list of values associated with a variation into an array, and do an array search in PHP. Probably need some SQLfu to do this nicely.
 			$variation_id = $wpdb->get_var("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN('{$variation_value_id}') LIMIT 1");
-			if($wpdb->get_var("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('$product_id') AND `variation_id` IN ('$variation_id')") > 0) {
+			
+			
+			if($wpdb->get_var("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}')") > 0) {
 				$variation_id_list[] = $variation_id;
-				if($wpdb->get_var("SELECT * FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '$product_id' AND `value_id` = '".(int)$variation_value_id."'") > 0) {
+				if($wpdb->get_var("SELECT * FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '{$product_id}' AND `value_id` = '{$variation_value_id}'") > 0) {
 					// if is present, update it
-					$rows_changed = $wpdb->query("UPDATE `".$wpdb->prefix."variation_values_associations` SET `visible` = '".$visible_state."' WHERE `product_id` = '$product_id' AND `value_id` = '".(int)$variation_value_id."' LIMIT 1 ;");
-					if($rows_changed == 1 ) {
-						$modified_values[] = $variation_value_id;
-						$modified_value_variations[$variation_value_id] = $variation_id;
-					}
+					$rows_changed = $wpdb->query("UPDATE `{$wpdb->prefix}variation_values_associations` SET `visible` = '{$visible_state}' WHERE `product_id` = '{$product_id}' AND `value_id` = '".(int)$variation_value_id."' LIMIT 1 ;");
+					
+					$modified_values[] = $variation_value_id;
+					$modified_value_variations[$variation_value_id] = $variation_id;
 				} else {
 			    // otherwise, add it
-					$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_values_associations` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES ( '$product_id', '$variation_value_id', 0, 0, '$visible_state', '$variation_id')");
+					$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_values_associations` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES ( '{$product_id}', '{$variation_value_id}', 0, 0, '{$visible_state}', '{$variation_id}')");
 					$modified_values[] = $variation_value_id;
 					$modified_value_variations[$variation_value_id] = $variation_id;
 				}
@@ -331,77 +332,101 @@ class nzshpcrt_variations {
 		
 		
 		
-		$variation_id_list = array_unique($variation_id_list);
-		asort($variation_id_list);
-		$all_variation_ids = implode(",", $variation_id_list);
-		//get the count of variation combinations, if not zero, then go to the next step
-		if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` IN ('$product_id') AND `all_variation_ids` IN ('{$all_variation_ids}')") > 0 ) {
-		  
-		  // get the variation values with no combination data for them.
-			$imploded_modified_values = implode("','", (array)$modified_values);
-			$combination_data = $wpdb->get_col("SELECT DISTINCT `value_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` IN ('$product_id') AND `all_variation_ids` IN ('{$all_variation_ids}') AND `value_id` IN('{$imploded_modified_values}')");
-			$new_values = array_diff($modified_values, $combination_data);
+		
+		
+		
+		
+		// this will spit errors if there are no variation values, so don't run if there are none
+		if(count($modified_values) > 0) {
+		
+			$variation_id_list = array_unique($variation_id_list);
+			asort($variation_id_list);
+			$all_variation_ids = implode(",", $variation_id_list);
+			
+			$all_value_ids = implode(",", $modified_values);
 			
 			
-
 			
 			
-			if(count($new_values) > 0) {
-				//echo "/*\n";				
-			  foreach($new_values as $new_value) {
-					// Need to join the wp_variation_values variation_values`table to itself multiple times with no condition for joining, resulting in every combination of values being extracted
-					$join_selected_cols = array();
-					$join_tables = array();
-					$join_condition = array();
-					
-					foreach((array)$variation_id_list as $variation) {
-						$variation = (int)$variation;
-						
-						$excluded_value_sql = '';
-						if($modified_value_variations[$new_value] == $variation) {
-							$excluded_value_sql = "AND `a{$variation}`.`id` IN('{$new_value}')";
-						}
-						
-						// generate all the various bits of SQL to bind the tables together
-						$join_selected_cols[] = "`a{$variation}`.`id` AS `id_{$variation}`";
-						$join_tables[] = "`{$wpdb->prefix}variation_values` AS `a{$variation}`";
-						$join_conditions[] = "`a{$variation}`.`variation_id` = '{$variation}' $excluded_value_sql";
-					}
-					
-					// implode the SQL statment segments into bigger segments
-					$join_selected_cols = implode(", ", $join_selected_cols);
-					$join_tables = implode(" JOIN ", $join_tables);
-					$join_conditions = implode(" AND ", $join_conditions);
-					$new_variation_combinations = $wpdb->get_results("SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}", ARRAY_A);
-					
-					foreach($new_variation_combinations as $new_variation_combination) {
-						//echo print_r($new_variation_combination,true)."\n";
-						
-						$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '');");
-						$variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `{$wpdb->prefix}variation_priceandstock` LIMIT 1");
-						foreach($new_variation_combination as $new_variation_value) {
-							if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$new_variation_value'") < 1) {
-								$variation_id = $wpdb->get_var("SELECT `{$wpdb->prefix}variation_values`.`variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$new_variation_value}'");
-								$wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_variation_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$new_variation_value', '$variation_id', '$all_variation_ids' );");
-							}
-						}
-					//$selected_price
-					
-					
-					}
-				}
-				// Assemble and execute the SQL query
-				//$associated_variation_values = $wpdb->get_results("SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}", ARRAY_A);
-				
-				
-				
-				
-				
+			
+			$current_combination_count = $wpdb->get_var("SELECT COUNT(DISTINCT `priceandstock_id`) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` IN ('$product_id') AND `all_variation_ids` IN ('{$all_variation_ids}') AND `value_id` IN ({$all_value_ids})");
+			
+			
+			$variation_value_counts = $wpdb->get_col("SELECT COUNT(`value_id`) FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '{$product_id}'  AND `variation_id` IN($all_variation_ids) GROUP BY `variation_id`");
+			$potential_combination_count = 1;
+			foreach($variation_value_counts as $variation_value_count) {
+				$potential_combination_count *= $variation_value_count;
 			}
 			
-			
+					
+			if($potential_combination_count > $current_combination_count) {
+				$existing_combinations = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product_id}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN ({$all_value_ids})", ARRAY_A);
+				//echo "SELECT * FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product_id}'  AND `all_variation_ids` IN('$all_variation_ids')\n\r";
+				//echo "".print_r($existing_combinations,true)."";
+				
+				foreach((array)$variation_id_list as $variation) {
+					$variation = (int)$variation;
+					// generate all the various bits of SQL to bind the tables together
+					//$join_selected_cols[] = "`a{$variation}`.`value_id` AS `id_{$variation}`";
+					$join_selected_cols[] = "`a{$variation}`.`value_id`";
+					$join_tables[] = "`{$wpdb->prefix}wpsc_variation_combinations` AS `a{$variation}`";
+					$join_on[] = "`a{$variation}`.`priceandstock_id`";
+					$join_conditions[] = "`a{$variation}`.`variation_id` = '{$variation}' AND `a{$variation}`.`product_id` IN ({$product_id}) AND `a{$variation}`.`all_variation_ids` IN('$all_variation_ids')";
+				}
+				
+				// implode the SQL statment segments into bigger segments
+				$join_selected_cols = implode(", ", $join_selected_cols);
+				$join_tables = implode(" JOIN ", $join_tables);
+				$join_on = implode(" = ", $join_on);
+				$join_conditions = implode(" AND ", $join_conditions);
+				//echo "SELECT {$join_selected_cols}\n FROM {$join_tables}\n ON {$join_on}\n WHERE {$join_conditions}\n";
+				$existing_variation_combinations = $wpdb->get_col("SELECT CONCAT_WS(',',{$join_selected_cols}) FROM {$join_tables} ON {$join_on} WHERE {$join_conditions}");
+				asort($existing_variation_combinations);
+				
+				$join_selected_cols = '';
+				$join_tables = '';
+				$join_conditions = '';
+				foreach((array)$variation_id_list as $variation) {
+					$variation = (int)$variation;
+					// generate all the various bits of SQL to bind the tables together
+					//$join_selected_cols[] = "`a{$variation}`.`id` AS `id_{$variation}`";
+					$join_selected_cols[] = "`a{$variation}`.`id`";
+					$join_tables[] = "`{$wpdb->prefix}variation_values` AS `a{$variation}`";
+					$join_conditions[] = "`a{$variation}`.`variation_id` = '{$variation}' $excluded_value_sql";
+				}
+				
+				// implode the SQL statment segments into bigger segments
+				$join_selected_cols = implode(", ", $join_selected_cols);
+				$join_tables = implode(" JOIN ", $join_tables);
+				$join_conditions = implode(" AND ", $join_conditions);
+				$new_variation_combinations = $wpdb->get_col("SELECT CONCAT_WS(',',{$join_selected_cols}) FROM {$join_tables} WHERE {$join_conditions}");
+				asort($new_variation_combinations);
+				
+				
+				//echo "".print_r($existing_variation_combinations,true)."";
+				//echo "".print_r($new_variation_combinations,true)."";
+				$unmade_combinations = array_diff($new_variation_combinations, $existing_variation_combinations);
+				
+				
+				foreach($unmade_combinations as $unmade_combination) {
+					$unmade_combinations = explode(",", $unmade_combination);
+					//echo "".print_r($unmade_combinations,true)."";
+					
+					
+					$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '');");
+					$variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `{$wpdb->prefix}variation_priceandstock` LIMIT 1");
+					foreach($unmade_combinations as $new_variation_value) {
+						if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$new_variation_value'") < 1) {
+							$variation_id = $wpdb->get_var("SELECT `{$wpdb->prefix}variation_values`.`variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$new_variation_value}'");
+							$wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_variation_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$new_variation_value', '$variation_id', '$all_variation_ids' );");
+						}
+					}
+				}
+			}
+		
 		}
-    return $output;
+		return $output; 
+		exit();
 	}
     
    function edit_add_product_values($product_id,$variation_value_list) {
