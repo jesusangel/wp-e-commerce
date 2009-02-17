@@ -642,13 +642,13 @@ class nzshpcrt_variations {
       
 			$output .= "        <div class='variation_weight'>\n\r";
 			$output .= "          <strong>".TXT_WPSC_WEIGHT_SETTINGS."</strong><br />";
-			$output .= "          <input type='text' name='variation_priceandstock[{$associated_variation_ids}][weight]' value='{$associated_variation_row['weight']}' size='3' />";
+			$output .= "          <input type='text' name='variation_priceandstock[{$variation_ids}][weight]' value='0' size='3' />";
 
-			$output .= "          <select name='variation_priceandstock[{$associated_variation_ids}][weight_unit]'>\n\r";
-			$output .= "            <option value='pound' ". (($associated_variation_row['weight_unit'] == 'pound') ? 'selected' : '') .">Pounds</option>\n\r";
-			$output .= "            <option value='once' ". (($associated_variation_row['weight_unit'] == 'once') ? 'selected' : '') .">Ounces</option>\n\r";
-			$output .= "            <option value='gram' ". (($associated_variation_row['weight_unit'] == 'gram') ? 'selected' : '') .">Grams</option>\n\r";
-			$output .= "            <option value='kilogram' ". (($associated_variation_row['weight_unit'] == 'kilogram') ? 'selected' : '') .">Kilograms</option>\n\r";
+			$output .= "          <select name='variation_priceandstock[{$variation_ids}][weight_unit]'>\n\r";
+			$output .= "            <option value='pound' ". (($variation_ids['weight_unit'] == 'pound') ? 'selected' : '') .">Pounds</option>\n\r";
+			$output .= "            <option value='once' ". (($variation_ids['weight_unit'] == 'once') ? 'selected' : '') .">Ounces</option>\n\r";
+			$output .= "            <option value='gram' ". (($variation_ids['weight_unit'] == 'gram') ? 'selected' : '') .">Grams</option>\n\r";
+			$output .= "            <option value='kilogram' ". (($variation_ids['weight_unit'] == 'kilogram') ? 'selected' : '') .">Kilograms</option>\n\r";
 			$output .= "          </select>\n\r";
 
 			$output .= "        </div>\n\r";
