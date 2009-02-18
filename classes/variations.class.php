@@ -377,10 +377,14 @@ class nzshpcrt_variations {
 				// implode the SQL statment segments into bigger segments
 				$join_selected_cols = implode(", ", $join_selected_cols);
 				$join_tables = implode(" JOIN ", $join_tables);
-				$join_on = implode(" = ", $join_on);
+				if(count($join_on) > 1) {  // Join on is invalid for only one table, so only use it if there is more than one variation
+					$join_on = "ON ".implode(" = ", $join_on);
+				} else {
+					$join_on = "";
+				}
 				$join_conditions = implode(" AND ", $join_conditions);
 				//echo "SELECT {$join_selected_cols}\n FROM {$join_tables}\n ON {$join_on}\n WHERE {$join_conditions}\n";
-				$existing_variation_combinations = $wpdb->get_col("SELECT CONCAT_WS(',',{$join_selected_cols}) FROM {$join_tables} ON {$join_on} WHERE {$join_conditions}");
+				$existing_variation_combinations = $wpdb->get_col("SELECT CONCAT_WS(',',{$join_selected_cols}) FROM {$join_tables} {$join_on} WHERE {$join_conditions}");
 				asort($existing_variation_combinations);
 				
 				$join_selected_cols = '';
@@ -413,7 +417,7 @@ class nzshpcrt_variations {
 					//echo "".print_r($unmade_combinations,true)."";
 					
 					
-					$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '');");
+					$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '0');");
 					$variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `{$wpdb->prefix}variation_priceandstock` LIMIT 1");
 					foreach($unmade_combinations as $new_variation_value) {
 						if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$new_variation_value'") < 1) {

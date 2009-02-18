@@ -801,7 +801,7 @@ $baseurl = includes_url('js/tinymce');
 ?>
 <script type="text/javascript" src="<?php echo $baseurl; ?>/tiny_mce.js"></script>
 <script type="text/javascript" src="<?php echo $baseurl; ?>/langs/wp-langs-en.js"></script>
-  <script src="../../wp-includes/js/tinymce/tiny_mce_popup.js" language="javascript" type='text/javascript' ></script>
+<!--   <script src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/tiny_mce_popup.js" language="javascript" type='text/javascript' ></script> -->
   <script language='javascript' type='text/javascript'>
   jQuery('.hide-postbox-tog').click( function() {
 	    var box = jQuery(this).val();

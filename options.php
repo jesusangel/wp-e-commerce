@@ -698,10 +698,6 @@ if($_GET['clean_categories'] == 'true') {
 											$language = "Danish";
 											break;
 											
-											case "DK_da.php";
-											$language = "Danish";
-											break;
-											
 											case "nn_NO.php";
 											$language = "Norwegian";
 											break;
@@ -1862,7 +1858,7 @@ if($_GET['clean_categories'] == 'true') {
 								<h3 class="form_group"><?php echo TXT_WPSC_EMAIL_SETTINGS;?>:</h3>
 								<table class='wpsc_options form-table'>
 									<tr>
-										<th colspan="2"><?=TXT_WPSC_TAGS_CAN_BE_USED?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%, %total_shipping%</th>
+										<th colspan="2"><?=TXT_WPSC_TAGS_CAN_BE_USED?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%</th>
 									</tr>
 									<tr>
 										<th><?=TXT_WPSC_PURCHASERECEIPT?></th>

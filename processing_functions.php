@@ -269,7 +269,7 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
     global $wpdb, $wpsc_shipping_modules;
 		$custom_shipping = get_option('custom_shipping_options');
     if((get_option('do_not_use_shipping') != 1) && (count($custom_shipping) > 0)) {
-			if(array_search($_SESSION['quote_shipping_method'], $custom_shipping) === false) {
+			if(array_search($_SESSION['quote_shipping_method'], (array)$custom_shipping) === false) {
 			  //unset($_SESSION['quote_shipping_method']);
 			}
 			
@@ -279,7 +279,7 @@ function nzshpcrt_apply_coupon($price,$coupon_num){
 			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
 			} else {
 			  // otherwise select the first one with any quotes
-				foreach($custom_shipping as $shipping_module) {
+				foreach((array)$custom_shipping as $shipping_module) {
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
 					if(($custom_shipping[$shipping_module]->requires_weight != true) or (($custom_shipping[$shipping_module]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
 						$_SESSION['quote_shipping_method'] = $shipping_module;

@@ -1248,6 +1248,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				}
 				$billing_country=$_POST['billing_country'];
 				$price = 0;
+				$tax = 0;
 				foreach($cart as $cart_item) {
 					$product_id = $cart_item->product_id;
 					$quantity = $cart_item->quantity;
@@ -1257,10 +1258,11 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					if($product['donation'] == 1) {
 						$price += $quantity * $cart_item->donation_price;
 					} else {
-						$price += $quantity * calculate_product_price($product_id, $cart_item->product_variations);
+						$product_price = $quantity * calculate_product_price($product_id, $cart_item->product_variations);
 						if($product['notax'] != 1) {
-							$tax += nzshpcrt_calculate_tax($price, $billing_country, $billing_region) - $price;
+							$tax += nzshpcrt_calculate_tax($product_price, $billing_country, $billing_region) - $product_price;
 						}
+						$price += $product_price;
 						$all_donations = false;
 					}
 		

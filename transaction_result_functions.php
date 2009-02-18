@@ -63,25 +63,22 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			foreach($cart as $row) {
 				$link = "";
 				$product_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$row['prodid']}' LIMIT 1", ARRAY_A) ;
-				if($product_data['file'] > 0) {
-				
-					if($purchase_log['email_sent'] != 1) {
-						$wpdb->query("UPDATE `{$wpdb->prefix}download_status` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
+				if($purchase_log['email_sent'] != 1) {
+					$wpdb->query("UPDATE `{$wpdb->prefix}download_status` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
+				}
+				if (($purchase_log['processed'] >= 2)) {
+					//echo "SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
+					$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
+					
+					if($download_data != null) {
+									if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
+											$link = $siteurl."?downloadid=".$download_data['id'];
+									} else {
+											$link = $siteurl."?downloadid=".$download_data['uniqueid'];
+									}
 					}
-					if (($purchase_log['processed'] >= 2)) {
-					  //echo "SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
-						$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
-						
-						if($download_data != null) {
-            				if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
-            				  	$link = $siteurl."?downloadid=".$download_data['id'];
-            				} else {
-            				  	$link = $siteurl."?downloadid=".$download_data['uniqueid'];
-            				}
-						}
-						$previous_download_ids[] = $download_data['id'];
-						$order_status= 4;
-					}
+					$previous_download_ids[] = $download_data['id'];
+					$order_status= 4;
 				}
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
 		
@@ -136,12 +133,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				if($variation_count > 1) {
 					$variation_list = " (";
 							$i = 0;
-							foreach($variation_values as $variation) {
+							foreach($variation_values as $value_id) {
 								if($i > 0) {
 									$variation_list.= ", ";
 								}
-								
-								$value_id = $variation['value_id'];
 								$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 								$variation_list.= $value_data[0]['name'];
 								$i++;	
@@ -149,7 +144,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 							$variation_list .= ")";
 						} else {
 							if($variation_count == 1) {
-								$value_id = $variation_values[0]['value_id'];
+								$value_id = array_pop($variation_values);
 								$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 								$variation_list = " (".$value_data[0]['name'].")";
 							} else {
