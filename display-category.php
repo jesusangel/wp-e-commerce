@@ -138,7 +138,7 @@ function display_category_row($category,$subcategory_level = 0) {
     
     
     
-    switch($_POST['display_type']) {
+		switch($_POST['display_type']) {
 			case "grid":
 				$display_type = 'grid';
 			break;
@@ -147,10 +147,14 @@ function display_category_row($category,$subcategory_level = 0) {
 				$display_type = 'list';
 			break;
 			
-			default:
+			case "default":
 				$display_type = 'default';
 			break;
-    }
+			
+			default:
+				$display_type = '';
+			break;
+		}
       
       
     if($_POST['product_height'] > 0) {
@@ -265,8 +269,12 @@ function display_category_row($category,$subcategory_level = 0) {
 					$display_type = 'list';
 				break;
 				
-				default:
+				case "default":
 					$display_type = 'default';
+				break;
+				
+				default:
+					$display_type = '';
 				break;
 			}
       $category_sql_list[] = "`display_type` = '$display_type' ";
@@ -657,8 +665,7 @@ if(function_exists("getimagesize")) {
 						}  else {
 							?>
 							<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
-							<?php      
-							
+							<?php
 						}
 						
 						if(function_exists('product_display_grid')) {

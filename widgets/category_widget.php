@@ -87,8 +87,9 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 
 		foreach ( (array) $_POST[$option_name] as $widget_number => $widget_wpsc_categorisation_instance ) {
 			// compile data from $widget_wpsc_categorisation_instance
-			if ( !isset($widget_wpsc_categorisation_instance['title']) && isset($options[$widget_number]) ) // user clicked cancel
+			if ((!isset($widget_wpsc_categorisation_instance['title']) && isset($options[$widget_number])) || ($options[$widget_number]['check'] == 1))  {// user clicked cancel or no changes made
 				continue;
+			}
 			$options[$widget_number]['title'] = wp_specialchars($widget_wpsc_categorisation_instance['title']);
 			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
 			
@@ -106,7 +107,6 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 			} else {
 				$options[$widget_number]['image']  = false;
 			}
-			
 		}
 
 		update_option($option_name, $options);
@@ -167,7 +167,9 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 	echo "		<input type='checkbox' name='{$option_name}[$number][image]' id='sidebar_category_image' value='true' class='checkbox' {$checked} />\n\r";
 	echo "		".TXT_WPSC_DISPLAY_THE_GROUP_IMAGES."</label>\n\r";
 	echo "	<br/>\n\r";
+	echo "		<input type='hidden' name='{$option_name}[$number][check]' value='1' />\n\r";
 }
+	
 
 // Registers each instance of our widget on startup
 function widget_wpsc_categorisation_register() {

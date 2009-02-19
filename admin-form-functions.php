@@ -280,6 +280,10 @@ function nzshpcrt_getcategoryform($catid)
 	}
 	
 	switch($product['display_type']) {
+	  case "default":
+			$product_view1 = "selected ='true'";
+		break;
+		
 		case "grid":
 		if(function_exists('product_display_grid')) {
 			$product_view3 = "selected ='true'";
@@ -293,7 +297,7 @@ function nzshpcrt_getcategoryform($catid)
 		}
 		
 		default:
-		$product_view1 = "selected ='true'";
+			$product_view0 = "selected ='true'";
 		break;
 	}	
 	
@@ -356,6 +360,7 @@ function nzshpcrt_getcategoryform($catid)
 	$output .= "          	</td>\n\r";
 	$output .= "          	<td>\n\r";
 	$output .= "          		<select name='display_type'>\n\r";	
+	$output .= "          			<option value='' $product_view0 >".TXT_WPSC_PLEASE_SELECT."</option>\n\r";	
 	$output .= "          			<option value='default' $product_view1 >".TXT_WPSC_DEFAULT."</option>\n\r";	
 	if(function_exists('product_display_list')) {
 		$output .= "          			<option value='list' ". $product_view2.">". TXT_WPSC_LIST."</option>\n\r"; 
