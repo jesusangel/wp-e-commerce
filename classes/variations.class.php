@@ -108,7 +108,7 @@ class nzshpcrt_variations {
           $num = 0;
           $variation_assoc_sql = "INSERT INTO `{$wpdb->prefix}variation_associations` ( `type` , `name` , `associated_id` , `variation_id` ) VALUES ( 'product', '', '{$product_id}', '{$variation_id}');";
 
-          $product_assoc_sql = "INSERT INTO `{$wpdb->prefix}variation_values_associations` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES";
+          $product_assoc_sql = "INSERT INTO `{$wpdb->prefix}variation_values_associations` ( `product_id` , `value_id` , `visible` , `variation_id` ) VALUES";
           foreach($variation_values as $variation_value_id => $variation_value_properties) {
             if(is_numeric($variation_value_id)) {
               switch($num) {
@@ -121,26 +121,12 @@ class nzshpcrt_variations {
                 break;
 							}
                 
-              if(is_numeric($variation_value_properties['price']) && ($variation_value_properties['price'] > 0))
-                {
-                $price = $variation_value_properties['price'];
-							} else {
-								$price = '';
-							}
-                
               if($variation_value_properties['active'] == 1) {
                 $active = 1;
 							} else {
 								$active = 0;
 							}
-              
-              if(is_numeric($variation_value_properties['stock']) && ($variation_value_properties['stock'] > 0)) {
-                $quantity = $variation_value_properties['stock'];
-							} else {
-								$quantity = 0;
-							}
-              
-              $product_assoc_sql .= "$comma ( '$product_id', '$variation_value_id', '$quantity', '".$price."', '$active', '$variation_id')";
+              $product_assoc_sql .= "$comma ( '$product_id', '$variation_value_id', '$active', '$variation_id')";
               $num++;
 						}
 					}
@@ -366,7 +352,12 @@ class nzshpcrt_variations {
 				
 				foreach((array)$variation_id_list as $variation) {
 					$variation = (int)$variation;
-					// generate all the various bits of SQL to bind the tables together
+					/* generate all the various bits of SQL to bind the tables together
+					 * the values are concatenated because we cannot use array_diff on an array of arrays, it simply does not work.
+					 * We concatenate the values in the SQL statments, is faster than looping through them later
+					*/
+					
+					
 					//$join_selected_cols[] = "`a{$variation}`.`value_id` AS `id_{$variation}`";
 					$join_selected_cols[] = "`a{$variation}`.`value_id`";
 					$join_tables[] = "`{$wpdb->prefix}wpsc_variation_combinations` AS `a{$variation}`";
@@ -405,17 +396,13 @@ class nzshpcrt_variations {
 				$join_conditions = implode(" AND ", $join_conditions);
 				$new_variation_combinations = $wpdb->get_col("SELECT CONCAT_WS(',',{$join_selected_cols}) FROM {$join_tables} WHERE {$join_conditions}");
 				asort($new_variation_combinations);
-				
-				
-				//echo "".print_r($existing_variation_combinations,true)."";
-				//echo "".print_r($new_variation_combinations,true)."";
+				// diff them to find any combinations that do not yet exist
 				$unmade_combinations = array_diff($new_variation_combinations, $existing_variation_combinations);
 				
 				
 				foreach($unmade_combinations as $unmade_combination) {
-					$unmade_combinations = explode(",", $unmade_combination);
-					//echo "".print_r($unmade_combinations,true)."";
-					
+				  // explode the comnination strings at the commas.
+					$unmade_combinations = explode(",", $unmade_combination);				
 					
 					$wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '0');");
 					$variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `{$wpdb->prefix}variation_priceandstock` LIMIT 1");

@@ -1253,44 +1253,92 @@ function wpsc_sanitise_keys($value) {
 
 
 
+/*
+ * this function checks every product on the products page to see if it has any stock remaining
+ * it is executed through the wpsc_product_alert filter
+ */
 function wpsc_check_stock($state, $product) {
 	global $wpdb;
 	// if quantity is enabled and is zero
-	
+	$out_of_stock = false;
+	// only do anything if the quantity is limited.
 	if($product['quantity_limited'] == 1) {
+	  $excluded_values = '';
+	  // get the variation IDs  associated with this product
 		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
-		asort($variation_ids);
-		$all_variation_ids = implode(",", $variation_ids);
-		
-		$disabled_values = $wpdb->get_col("SELECT `value_id` FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('0')");
-		
-		$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` NOT IN (".implode(",", $disabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
-		
-		$item_stock = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` IN(".implode(",", $priceandstock_ids).")", ARRAY_A);
-		
-		echo "<pre>".print_r($item_stock,true)."</pre>";
-		
-		if(($product['quantity'] == 0)) {
+		// if there are any, look through them for items out of stock
+		if(count($variation_ids) > 0) { 
+		  // sort and comma seperate them
+			asort($variation_ids);
+			$all_variation_ids = implode(",", $variation_ids);
+			
+			// get the visible variation values associated with this product
+			$enabled_values = $wpdb->get_col("SELECT `value_id` FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('1')");
+			
+			// get the priceandstock IDs using the variation and variation value IDs
+			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
+			
+			// count the variation combinations with a stock of zero
+			$items_out_of_stock = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `stock` IN (0)");
+			if($items_out_of_stock > 0) {
+				$out_of_stock = true;
+			}
+		} else if(($product['quantity'] == 0)) { // otherwise, use the stock from the products list table
+		  $out_of_stock = true;
+		}
+	}
+		if($out_of_stock === true) {
 			$state['state'] = true;
 			$state['messages'][] = TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE;
+		}
+	
+	return array('state' => $state['state'], 'messages' => $state['messages']);
+}
+
+
+/*
+ * if UPS is on, this function checks every product on the products page to see if it has a weight
+ * it is executed through the wpsc_product_alert filter
+ */
+function wpsc_check_weight($state, $product) {
+	global $wpdb;
+	$custom_shipping = get_option('custom_shipping_options');
+	$has_no_weight = false;
+	// only do anything if UPS is on and shipping is used
+	if((array_search('ups', $custom_shipping) !== false) && ($product['no_shipping'] != 1)) {
+		$excluded_values = '';
+		// get the variation IDs  associated with this product
+		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
+		// if there are any, look through them for itemswith no weight
+		if(count($variation_ids) > 0) { 
+			// sort and comma seperate them
+			asort($variation_ids);
+			$all_variation_ids = implode(",", $variation_ids);
+			
+			// get the visible variation values associated with this product
+			$enabled_values = $wpdb->get_col("SELECT `value_id` FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('1')");
+			
+			// get the priceandstock IDs using the variation and variation value IDs
+			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
+			
+			// count the variation combinations with a weight of zero
+			$unweighted_items = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `weight` IN (0)");
+			if($unweighted_items > 0) {
+				$has_no_weight = true;
+			}
+		} else if(($product['weight'] == 0)) { // otherwise, use the stock from the products list table
+			$has_no_weight = true;
+			//echo "<pre>".print_r($product,true)."</pre>";
+		}
+		if($has_no_weight === true) {
+			$state['state'] = true;
+			$state['messages'][] = TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE;
 		}
 	}
 	return array('state' => $state['state'], 'messages' => $state['messages']);
 }
 
-
-function wpsc_check_weight($state, $product) {
- // if weight is zero and UPS is on and the product uses shipping
-$custom_shipping = get_option('custom_shipping_options');
-// echo "<pre>".print_r((bool)array_search($custom_shipping, 'ups'),true)."</pre>";
-	if((array_search('ups', $custom_shipping) !== false) && ($product['weight'] == 0) && ($product['no_shipping'] == 0)) {
-		$state['state'] = true;
-		$state['messages'][] = TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE;
-	}
-	return array('state' => $state['state'], 'messages' => $state['messages']);
-}
-
-//add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
+add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
 add_filter('wpsc_product_alert', 'wpsc_check_weight', 10, 2);
 
 

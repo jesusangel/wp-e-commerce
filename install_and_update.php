@@ -731,17 +731,18 @@ function wpsc_create_upload_directories() {
 }
 
 
-function wpsc_create_or_update_tables() {
+function wpsc_create_or_update_tables($debug = false) {
   global $wpdb;
   // creates or updates the structure of the shopping cart tables
   
-  include_once('updates/database_template.php');
+  include('updates/database_template.php');
   
   $template_hash = sha1(serialize($wpsc_database_template));
   
-  if(get_option('wpsc_database_check') == $template_hash) {
+  if((get_option('wpsc_database_check') == $template_hash) && ($debug == false)) {
     return true;
   }
+  
   $failure_reasons = array();
   $upgrade_failed = false;
   foreach((array)$wpsc_database_template as $table_name => $table_data) {
@@ -775,19 +776,25 @@ function wpsc_create_or_update_tables() {
     } else {
       //check to see if the table needs updating
       $existing_table_columns = array();
-      
-      //check and possibly update the character encoding      
-			if(version_compare($wpdb->db_version(), '4.1', '>=')) {
+      //check and possibly update the character encoding      			
+			if( method_exists($wpdb, 'db_version') &&  version_compare($wpdb->db_version(), '4.1', '>=')) {
 				$table_status_data = $wpdb->get_row("SHOW TABLE STATUS LIKE '$table_name'", ARRAY_A);
 				if($table_status_data['Collation'] != 'utf8_general_ci') {
 					$wpdb->query("ALTER TABLE `$table_name`  DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 				}
 			}
-				
       //get the column list
-      $existing_table_column_data = $wpdb->get_results("SHOW COLUMNS FROM `$table_name`", ARRAY_A);
+      $existing_table_column_data = $wpdb->get_results("SHOW FULL COLUMNS FROM `$table_name`", ARRAY_A);
+
       foreach((array)$existing_table_column_data as $existing_table_column) {
-        $existing_table_columns[] = $existing_table_column['Field'];
+        $column_name = $existing_table_column['Field'];
+        $existing_table_columns[] = $column_name;
+        
+				//echo "<pre>".print_r($existing_table_column,true)."</pre>";
+        if(isset($table_data['columns'][$column_name]) && (stristr($table_data['columns'][$column_name], $existing_table_column['Type']) === false)) {
+          $wpdb->query("ALTER TABLE `$table_name` CHANGE `$column_name` `$column_name` {$table_data['columns'][$column_name]} ");
+				}
+        
       }
       $supplied_table_columns = array_keys($table_data['columns']);
       
