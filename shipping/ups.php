@@ -152,7 +152,14 @@ class ups {
 		$shipping_cache_check['zipcode'] = $zipcode;
 		$shipping_cache_check['weight'] = $weight;
  		//$_SESSION['wpsc_shipping_cache_check']
- 		
+		//this is where shipping breaks out of UPS if weight is higher than 150 LBS
+		if($weight > 150){
+			$shipping_quotes[TXT_WPSC_OVER_UPS_WEIGHT] = 0;
+			$_SESSION['wpsc_shipping_cache_check']['weight'] = $weight;
+			$_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_quotes;
+			$_SESSION['quote_shipping_method'] = $this->internal_name;
+			return array($shipping_quotes);
+		}
  		if(($_SESSION['wpsc_shipping_cache_check'] === $shipping_cache_check) && ($_SESSION['wpsc_shipping_cache'][$this->internal_name] != null)) {
 			$shipping_list = $_SESSION['wpsc_shipping_cache'][$this->internal_name];
  		} else {
@@ -181,7 +188,7 @@ class ups {
 			}
 			curl_close($ch);
 	// 		$Result = explode("%", $Results);
-			//echo ('<pre>'.print_r($Results,1)."</pre>");
+	//		echo ('<pre>'.print_r($Results,1)."</pre>");
 			foreach($Results as $result) {
 				$result = explode("%", $result);
 	// 			echo ('--><pre>'.print_r($pre,1)."</pre>");

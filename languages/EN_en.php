@@ -3,6 +3,12 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
+define("TXT_WPSC_OVER_UPS_WEIGHT", "Because your order is over 150lbs, the SIte Owner will contact you directly about shipping rates.");
+define("TXT_WPSC_ADD_TO_CART_PHP", "Add to Cart PHP");
+define("TXT_WPSC_BUY_NOW_PHP", "Buy Now PHP");
+
+define("TXT_WPSC_ADD_TO_CART_SHORTCODE", "Add to Cart Shortcode");
+define("TXT_WPSC_BUY_NOW_SHORTCODE", "Buy Now Shortcode");
 
 define("TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS", "Total weight (<abbr alt='You must enter the weight here in pounds, regardless of what you used on your products' title='You must enter the weight here in pounds, regardless of what you used on your products'>in Pounds</abbr>)");
 define("TXT_WPSC_SHIPPING_PRICE", "Shipping price");

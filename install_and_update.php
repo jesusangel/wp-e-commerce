@@ -403,7 +403,7 @@ function nzshpcrt_install()
     foreach((array)$sql_data as $datarow) {
       $tidied_name = trim($datarow['name']);
       $tidied_name = strtolower($tidied_name);
-      $url_name = preg_replace(array("/(\s)+/","/[^\w-]+/"), array("-", ''), $tidied_name);            
+			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);     
       $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` LIKE 'url_name' AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
       $extension_number = '';
       if($similar_names['count'] > 0) {
@@ -431,7 +431,7 @@ function nzshpcrt_install()
     foreach((array)$sql_data as $datarow) {
       $tidied_name = trim($datarow['name']);
       $tidied_name = strtolower($tidied_name);
-      $url_name = preg_replace(array("/(\s)+/","/[^\w-]+/"), array("-", ''), $tidied_name);            
+			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);    
       $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."product_categories` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
       $extension_number = '';
       if($similar_names['count'] > 0) {

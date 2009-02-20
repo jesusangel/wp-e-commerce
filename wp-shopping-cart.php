@@ -2044,9 +2044,28 @@ function nzshpcrt_substitute_buy_now_button($content = '') {
 	return $content;
 }
 
+/* 19-02-09
+ * add to cart shortcode function used for shortcodes calls the function in
+ * product_display_functions.php
+ */
+function add_to_cart_shortcode($content = '') {
+		//exit($content);
+  if(preg_match_all("/\[add_to_cart=([\d]+)\]/",$content, $matches)) {
+    	foreach($matches[1] as $key => $product_id){
+  			$original_string = $matches[0][$key];
+  			$output = wpsc_add_to_cart_button($product_id, true);  
+			$content = str_replace($original_string, $output, $content);
+  	}
+  }
+    return $content;	
+}
 
 
-// This function displays the category gropus, it is used by the above function
+
+
+
+
+// This function displays the category groups, it is used by the above function
 function nzshpcrt_display_categories_groups() {
     global $wpdb;
 
@@ -2381,6 +2400,7 @@ add_filter('single_post_title','wpsc_post_title_seo');
    
 function nzshpcrt_enable_page_filters($excerpt = ''){
   global $wp_query;
+   add_filter('the_content', 'add_to_cart_shortcode', 12);//Used for add_to_cart_button shortcode
   add_filter('the_content', 'nzshpcrt_products_page', 12);
   add_filter('the_content', 'nzshpcrt_shopping_cart', 12);
   add_filter('the_content', 'nzshpcrt_transaction_results', 12);
@@ -2394,6 +2414,7 @@ function nzshpcrt_enable_page_filters($excerpt = ''){
   }
 
 function nzshpcrt_disable_page_filters($excerpt = '') {
+	remove_filter('the_content', 'add_to_cart_shortcode');//Used for add_to_cart_button shortcode
   remove_filter('the_content', 'nzshpcrt_products_page');
   remove_filter('the_content', 'nzshpcrt_shopping_cart');
   remove_filter('the_content', 'nzshpcrt_transaction_results');

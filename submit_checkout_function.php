@@ -485,6 +485,11 @@ function nzshpcrt_submit_checkout() {
       $seperator ="&";
 		}
 		
+	// THIS IS WHERE WE CHANGE FROM UPS TO CUSTOM GATEWAY WHEN WEIGHT IS LARGER OR EQUAL TO 250
+	if($_SESSION['quote_shipping_method'] = 'ups' && $_SESSION['wpsc_shipping_cache_check']['weight'] >= 250){
+	 	$curgateway = 'testmode';
+	 }
+		
     if((($_POST['payment_method'] == 2) && (get_option('payment_method') == 2)) || (get_option('payment_method') == 3)) {
       foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == 'testmode')  {

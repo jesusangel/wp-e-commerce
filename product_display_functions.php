@@ -1199,19 +1199,19 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 			
 			$price += $tax_percentage;
 		
-			$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
-				<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
-				<input type='hidden' name='cmd' value='_xclick'>
-				<input type='hidden' name='item_name' value='".$product['name']."'>
-				<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
-				<input type='hidden' id='amount' name='amount' value='".$price."'>
-				<input type='hidden' id='unit' name='unit' value='".$price."'>
-				<input type='hidden' id='shipping' name='ship11' value='".$shipping."'>
-				<input type='hidden' name='handling' value='".get_option('base_local_shipping')."'>
-				<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."'>
-				<input type='hidden' name='undefined_quantity' value='0'>
-				<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online'>
-				<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' >
+			$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post' />
+				<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."' />
+				<input type='hidden' name='cmd' value='_xclick' />
+				<input type='hidden' name='item_name' value='".$product['name']."' />
+				<input type='hidden' id='item_number' name='item_number' value='".$product['id']."' />
+				<input type='hidden' id='amount' name='amount' value='".$price."' />
+				<input type='hidden' id='unit' name='unit' value='".$price."' />
+				<input type='hidden' id='shipping' name='ship11' value='".$shipping."' />
+				<input type='hidden' name='handling' value='".get_option('base_local_shipping')."' />
+				<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."' />
+				<input type='hidden' name='undefined_quantity' value='0' />
+				<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online' />
+				<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' />
 			</form>\n\r";
 		}
 	}
@@ -1221,6 +1221,25 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 		echo $output;
   }
 }
+/* 19-02-09
+ * add cart button function used for php template tags and shortcodes
+*/
+function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
+
+	global $wpdb;
+	if ($product_id > 0){
+		$output .= "<form onsubmit='submitform(this);return false;'  action='' method='post'>";
+		$output .= "<input type='hidden' name='prodid' value='".$product_id."' />";
+		$output .= "<input type='hidden' name='item' value='".$product_id."' />";
+		$output .= "<input type='image' src='".WPSC_URL."/themes/iShop/images/buy_button.gif' id='product_".$product_id."_submit_button' class='wpsc_buy_button' name='Buy' value='Add To Cart'  /></form>\n\r";	
+		if($replaced_shortcode == true) {
+			return $output;
+		} else {
+			echo $output;
+	 	}
+	} 
+}
+
 
 
 
