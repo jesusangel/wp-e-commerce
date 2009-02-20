@@ -1228,10 +1228,27 @@ function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
 
 	global $wpdb;
 	if ($product_id > 0){
+		if(function_exists('wpsc_theme_html')) {
+			$product = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1", ARRAY_A);
+			//this needs the results from the product_list table passed to it, does not take just an ID
+			$wpsc_theme = wpsc_theme_html($product);
+		}
+		
+		// grab the variation form fields here
+		$variations_processor = new nzshpcrt_variations;         
+		$variations_output = $variations_processor->display_product_variations($product_id,false, false, false);
+
 		$output .= "<form onsubmit='submitform(this);return false;'  action='' method='post'>";
+		if($variations_output != '') { //will always be set, may sometimes be an empty string 
+			$output .= "           <p>".$variations_output."</p>";
+		}
 		$output .= "<input type='hidden' name='prodid' value='".$product_id."' />";
 		$output .= "<input type='hidden' name='item' value='".$product_id."' />";
-		$output .= "<input type='image' src='".WPSC_URL."/themes/iShop/images/buy_button.gif' id='product_".$product_id."_submit_button' class='wpsc_buy_button' name='Buy' value='Add To Cart'  /></form>\n\r";	
+		if(isset($wpsc_theme) && is_array($wpsc_theme) && ($wpsc_theme['html'] !='')) {
+				$output .= $wpsc_theme['html'];
+			} else {
+				$output .= "<input type='submit' id='product_".$product['id']."_submit_button' class='wpsc_buy_button' name='Buy' value='".TXT_WPSC_ADDTOCART."'  />";
+			}
 		if($replaced_shortcode == true) {
 			return $output;
 		} else {
