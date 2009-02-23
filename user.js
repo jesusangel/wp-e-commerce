@@ -528,15 +528,6 @@ var usps_method_switch=function (results){
 	jQuery('.postage > .postagehead').after(shipping1);
 }
 
-jQuery(document).ready(function(){
-	jQuery('.time_requested').datepicker({ dateFormat: 'yy-mm-dd' });
-	jQuery('.add_meta_box').click(
-		function(){
-			ajax.post("index.php",add_meta_box,"ajax=true&metabox=true");
-		}
-	);
-});
-
 function add_meta_box(results){
 	jQuery(".wpsc_buy_button").before(results);
 	jQuery('.time_requested').datepicker({ dateFormat: 'yy-mm-dd' });

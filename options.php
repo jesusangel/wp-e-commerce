@@ -835,29 +835,6 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' value='0' name='multi_add' id='multi_adding2' <?php echo $multi_adding2; ?> /> <label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
 									</td>
 								</tr>
-								<!--
-<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_DATE_REQUESTED;?>:
-									</th>
-									<td>
-									<?php
-										$time_requested = get_option('time_requested');
-										switch($time_requested) {
-											case 1:
-											$time_requested1 = "checked ='checked'";
-											break;
-											
-											case 0:
-											$time_requested2 = "checked ='checked'";
-											break;
-										}
-									?>
-									<input type='radio' value='1' name='time_requested' id='time_requested1' <?php echo $time_requested1; ?> /> <label for='time_requested1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-									<input type='radio' value='0' name='time_requested' id='time_requested2' <?php echo $time_requested2; ?> /> <label for='time_requested2'><?php echo TXT_WPSC_NO;?></label>
-									</td>
-								</tr>
--->
 							</table> 
 							
 							<h3 class="form_group"><?php echo TXT_WPSC_CURRENCYSETTINGS;?>:</h3>
