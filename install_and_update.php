@@ -762,8 +762,10 @@ function wpsc_create_or_update_tables($debug = false) {
       }
       $constructed_sql .= implode(",\n", $constructed_sql_parts);
       $constructed_sql .= "\n) ENGINE=MyISAM";
+      
+			
       // if mySQL is new enough, set the character encoding
-			if(version_compare($wpdb->db_version(), '4.1', '>=')) {
+			if( method_exists($wpdb, 'db_version') &&  version_compare($wpdb->db_version(), '4.1', '>=')) {
 				$constructed_sql .= " CHARSET=utf8";
 			}
 			$constructed_sql .= ";";
