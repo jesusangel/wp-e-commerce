@@ -446,6 +446,16 @@ div.select_country form{
  text-align: left;
  }
 
+
+table.wpsc_checkout_table input.text, table.wpsc_checkout_table textarea, table.wpsc_checkout_table select {
+	margin-right:0;
+	width:260px;
+	font-family:"Verdana","Lucida Fax","Lucida Grande","Lucida Sans Unicode",Arial,sans-serif;
+	font-size: 10pt;
+}
+table.wpsc_checkout_table select {
+	width:271px !important;
+}
  
 tr.product_shipping td h2{
  margin-bottom: 15px;

@@ -286,7 +286,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			if(preg_match("/^[\w\s._,-]+$/",$transaction_id)) {
 				$transact_id_sql = "`transactid` = '".$transaction_id."',";
 			}
-			$update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET $transact_id_sql `date` = '".time()."',`email_sent` = '1', `processed` = '$order_status' WHERE `sessionid` = ".$sessionid." LIMIT 1";
+			$update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET $transact_id_sql `email_sent` = '1', `processed` = '$order_status' WHERE `sessionid` = ".$sessionid." LIMIT 1";
 			$wpdb->query($update_sql) ;
 		}
 	}

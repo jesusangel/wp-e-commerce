@@ -511,12 +511,8 @@ jQuery(document).ready( function() {
 </script>
 
 <script src="<?php echo WPSC_URL; ?>/ajax.js" language='JavaScript' type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/ui.datepicker.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.jeditable.pack.js"></script>
-<script src="<?php echo WPSC_URL; ?>/user.js" language='JavaScript' type="text/javascript">
-</script>
-
-
+<script src="<?php echo WPSC_URL; ?>/user.js" language='JavaScript' type="text/javascript"></script>
 
 <?php
   $theme_path = WPSC_FILE_PATH. '/themes/';
@@ -617,7 +613,9 @@ var borderSize = 10;
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/jquery.tooltip.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/dimensions.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/admin.js"></script>
+<?php if($_GET['page'] == 'trunk/display-coupons.php') { ?>
 <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/ui.datepicker.js"></script>
+<?php } ?>
   <style type="text/css" media="screen">
   <?php
   
@@ -2221,7 +2219,10 @@ function wpsc_refresh_page_urls($content) {
 		$page_name_array = array_reverse($page_name_array);
 		$page_name = implode("/",$page_name_array);
 		
-		if(!function_exists('wpsc_rewrite_categories')) {	 // to stop this function from being declared multiple times, which causes wordpress to fail.
+		if(!function_exists('wpsc_rewrite_categories')) {	 // to stop this function from being declared multiple times
+		  /*
+		   * This is the function for making the e-commerce rewrite rules, it is recursive
+		  */
 			function wpsc_rewrite_categories($page_name, $id = null, $level = 0, $parent_categories = array(), $is_index = false) {
 				global $wpdb,$category_data;
 				if($is_index == true) {
@@ -2245,6 +2246,7 @@ function wpsc_refresh_page_urls($content) {
 						$parent_categories[] = $category['nice-name'];
 						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/?$')] = 'index.php?pagename='.$page_name.'&product_category='.$category['id'];
 						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-]+)/?$')] = 'index.php?pagename='.$page_name.'&product_category='.$category['id'].'&product_name=$matches[1]';
+						// recurses here
 						$sub_rules = wpsc_rewrite_categories($page_name, $category['id'], ($level+1), $parent_categories, $is_index);
 						array_pop($parent_categories);
 						$new_rules = array_merge((array)$new_rules, (array)$sub_rules);
@@ -2253,6 +2255,8 @@ function wpsc_refresh_page_urls($content) {
 			return $new_rules;
 			}
 		}
+		
+		
 		$new_rules = wpsc_rewrite_categories($page_name, null, 0, null, $is_index);
 		$new_rules = array_reverse((array)$new_rules);
 	  //$new_rules[$page_name.'/product-tag/(.+?)/page/?([0-9]{1,})/?$'] = 'index.php?pagename='.$page_name.'&ptag=$matches[1]&paged=$matches[2]';
@@ -2664,7 +2668,6 @@ function thickbox_variation() {
 	<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.tooltip.js'></script>
 <script type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery-ui.js?ver=1.6'></script>
 <script type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
-<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/ui.datepicker.js'></script>
 <script type='text/javascript' src='{$siteurl}/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
 ";
 	echo "<script language='JavaScript' type='text/javascript'>

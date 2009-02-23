@@ -951,7 +951,10 @@ jQuery(document).ready(function(){
 			}
 		}
 	);
-	jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
+	
+	if (typeof jQuery('.pickdate').datepicker != "undefined") {
+		jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
+	}
 	filesizeLimit = 5120000;
 	
 // 	alert('test 1');

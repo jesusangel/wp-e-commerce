@@ -687,16 +687,17 @@ class nzshpcrt_variations {
         $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$keys )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($keys)."' LIMIT 1");
         
         $variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-        //echo("<pre>".print_r($all_variation_ids,true)."</pre>");
-        //echo("<pre>".print_r($variation_stock_data,true)."</pre>");
         
+        // if the associated row has already been created
         if(is_numeric($variation_stock_data['id'])) {
           foreach($keys as $key) {
+            // if create the records to associate it with a product if they are not present
             if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_stock_data['id']}' AND `value_id` = '$key'") < 1) {
               $variation_id = $wpdb->get_var("SELECT `{$wpdb->prefix}variation_values`.`variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$key}'");
               $wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_variation_ids` ) VALUES ( '$product_id', '{$variation_stock_data['id']}', '$key', '$variation_id', '$all_variation_ids' );");
             }
           }
+          // and start building the SQL query to edit the item
           $variation_sql = null; // return the sql array to null for each trip round the loop
           if(($variation_stock_data['stock'] != $variation_stock)) {
             $variation_sql[] = "`stock` = '{$variation_stock}'";
@@ -709,8 +710,7 @@ class nzshpcrt_variations {
           if(($variation_stock_data['weight'] != $variation_weight)) {
             $variation_sql[] = "`weight` = '{$variation_weight}'";
           }
-          
-          
+                    
           if(($variation_stock_data['weight_unit'] != $variation_weight_unit)) {
             $variation_sql[] = "weight_unit = '{$variation_weight_unit}'";
           }
@@ -718,17 +718,16 @@ class nzshpcrt_variations {
           if(($variation_stock_data['file'] != $variation_file)) {
             $variation_sql[] = "`file` = '{$variation_file}'";
           }
-          
-          //if(($variation_stock_data['visibility'] != $variation_visibility)) {
-          //  $variation_sql[] = "`visibility` = '{$variation_visibility}'";
-          //}
-          if($variation_sql != null) {
+          // if there is any SQL to execute, make it so
+          if($variation_sql != null) { 
             $wpdb->query("UPDATE `{$wpdb->prefix}variation_priceandstock` SET ".implode(",",$variation_sql)."WHERE `id` = '{$variation_stock_data['id']}' LIMIT 1 ;");
           }
         }	else {
-          $wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '{$variation_stock}', '{$variation_price}', '{$variation_weight}', '{$variation_file}');");
+          // otherwise, the price and stock row does not exist, make it
+          $wpdb->query("INSERT INTO `{$wpdb->prefix}variation_priceandstock` ( `product_id` , `stock`, `price`, `weight`, `weight_unit`, `file` ) VALUES ('{$product_id}', '{$variation_stock}', '{$variation_price}', '{$variation_weight}', '{$variation_weight_unit}', '{$variation_file}');");
           $variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `{$wpdb->prefix}variation_priceandstock` LIMIT 1");
           foreach($keys as $key) {
+            // then make sure it is associated with the product and variations.
             if($wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$key'") < 1) {
               $variation_id = $wpdb->get_var("SELECT `{$wpdb->prefix}variation_values`.`variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` = '{$key}'");
               $wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_variation_combinations` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_variation_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$key', '$variation_id', '$all_variation_ids' );");

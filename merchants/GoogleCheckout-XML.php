@@ -66,7 +66,7 @@ function gateway_google($seperator, $sessionid)
 		//exit("------->".$price);
 		$local_currency_shipping = $item['pnp'];
 		$base_shipping = $purchase_log[0]['base_shipping'];
-		$total_shipping = $local_currency_shipping+$base_shipping;
+		$total_shipping = $local_currency_shipping;//+$base_shipping;
 		$cartitem["$no"] = new GoogleItem($product_data['name'],      // Item name
 		$product_data['description'], // Item      description
 		$item['quantity'], // Quantity

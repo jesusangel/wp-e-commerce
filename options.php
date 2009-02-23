@@ -1105,9 +1105,9 @@ if($_GET['clean_categories'] == 'true') {
 									</th>
 									<td>
 										<select name='sort_by'>
-										<option <?=$wpsc_sort_by1?> value='name'><?=TXT_WPSC_NAME?></option>
-										<option <?=$wpsc_sort_by2?> value='price'><?=TXT_WPSC_PRICE?></option>
-										<option <?=$wpsc_sort_by3?> value='id'><?=TXT_WPSC_TIME_UPLOADED?></option>
+										<option <?php echo $wpsc_sort_by1; ?> value='name'><?php echo TXT_WPSC_NAME;?></option>
+										<option <?php echo $wpsc_sort_by2; ?> value='price'><?php echo TXT_WPSC_PRICE;?></option>
+										<option <?php echo $wpsc_sort_by3; ?> value='id'><?php echo TXT_WPSC_TIME_UPLOADED;?></option>
 										</select>
 									</td>
 								</tr>
@@ -1281,7 +1281,7 @@ if($_GET['clean_categories'] == 'true') {
 									<input type='radio' onclick='jQuery("#wpsc_advanced_search").show()' value='1' name='show_search' id='show_search1' <?php echo $show_search1; ?> /> <label for='show_search1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
 									<input type='radio' onclick='jQuery("#wpsc_advanced_search").hide()' value='0' name='show_search' id='show_search2' <?php echo $show_search2; ?> /> <label for='show_search2'><?php echo TXT_WPSC_NO;?></label>
 									
-								<div <?=$dis?> id='wpsc_advanced_search'>
+								<div <?php echo $dis;?> id='wpsc_advanced_search'>
 									<input  type='checkbox' name='show_advanced_search' id='show_advanced_search' <?php echo $show_advanced_search; ?> />
 									<?php echo TXT_WPSC_SHOWADVANCEDSEARCH;?><br>
 									<input type='checkbox' name='show_live_search' id='show_live_search' <?php echo $show_live_search; ?> />
@@ -1681,110 +1681,7 @@ if($_GET['clean_categories'] == 'true') {
 						</div>
 						
 						
-						
-<!-- Next section is moved to display-shippings.php -->
-						<!--<div id="options_shipping">
-						  <h2><?php echo TXT_WPSC_OPTIONS_SHIPPING_HEADER; ?></h2>
-							<?php
-							/* here start the shipping options */						  
-						  ?>
-							<table class='wpsc_options form-table'>
-								<tr>
-									<th scope="row">
-									<?php echo TXT_WPSC_USE_SHIPPING;?>:
-									</th>
-									<td>
-									<?php
-									$do_not_use_shipping = get_option('do_not_use_shipping');
-									$do_not_use_shipping1 = "";
-									$do_not_use_shipping2 = "";
-									switch($do_not_use_shipping) {    
-										case 1:
-										$do_not_use_shipping1 = "checked ='true'";
-										break;
-												
-										case 0:
-										default:
-										$do_not_use_shipping2 = "checked ='true'";
-										break;
-									}
-						
-									?>
-										<input type='radio' value='0' name='do_not_use_shipping' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
-									<input type='radio' value='1' name='do_not_use_shipping' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
-									<?php echo TXT_WPSC_USE_SHIPPING_DESCRIPTION;?>
-									</td>
-								</tr>
-										<?php
-										if (get_option('base_country') == 'US') {
-										echo "<tr>";
-										echo "<th>";
-										echo "Zipcode:";
-										echo "</th>";
-										echo "<td>";
-										echo "<input type='text' name='base_zipcode' value='".get_option('base_zipcode')."'>";
-										echo "</td>";
-										echo "</tr>";
-										}
-										?>
-								
-								
-									<?php
-									$shipwire1 = "";
-									$shipwire2 = "";
-									switch(get_option('shipwire')) {    
-										case 1:
-										$shipwire1 = "checked ='true'";
-										$shipwire_settings = 'style=\'display: block;\'';
-										break;
-												
-										case 0:
-										default:
-										$shipwire2 = "checked ='true'";
-										$shipwire_settings = '';
-										break;
-									}
-						
-									?>
-								
-								<tr>
-									<th scope="row">
-										<?php echo TXT_WPSC_SHIPWIRESETTINGS;?><span style='color: red;'></span> :
-									</th>
-									<td>
-										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='shipwire' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-										<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='shipwire' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php echo TXT_WPSC_NO;?></label>
-											<?php
-											$shipwireemail = get_option("shipwireemail");
-											$shipwirepassword = get_option("shipwirepassword");
-											?>
-											<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
-											<table>
-												<tr><td><?=TXT_WPSC_SHIPWIREEMAIL;?> :</td><td> <input type="text" name="shipwireemail" value="<?=$shipwireemail;?>"></td></tr>
-												<tr><td><?=TXT_WPSC_SHIPWIREPASSWORD;?> :</td><td><input type="text" name="shipwirepassword" value="<?=$shipwirepassword;?>"></td></tr>
-												<tr><td><a onclick='shipwire_sync()' style="cursor:pointer;">Sync product</a></td></tr>
-											</table>
-											</div>
-									</td>
-								</tr>
-							</table> 						  
-							<?php
-							/* here end the shipping options */						  
-						  ?>						  
-							<div class="submit">
-								<input type="submit" value="Update »" name="updateoption"/>
-							</div>
-						</div>-->
-						
-						
-						
-						<!--
-						<div id="options_payment">
-						  <h2><?php echo TXT_WPSC_OPTIONS_PAYMENT_HEADER; ?></h2>
-						</div>-->
-						
-						
-						
+					
 						
 						<div id="options_admin">
 						  <h2><?php echo TXT_WPSC_OPTIONS_ADMIN_HEADER; ?></h2>
@@ -1858,14 +1755,14 @@ if($_GET['clean_categories'] == 'true') {
 								<h3 class="form_group"><?php echo TXT_WPSC_EMAIL_SETTINGS;?>:</h3>
 								<table class='wpsc_options form-table'>
 									<tr>
-										<th colspan="2"><?=TXT_WPSC_TAGS_CAN_BE_USED?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%</th>
+										<th colspan="2"><?php echo TXT_WPSC_TAGS_CAN_BE_USED;?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%</th>
 									</tr>
 									<tr>
-										<th><?=TXT_WPSC_PURCHASERECEIPT?></th>
+										<th><?php echo TXT_WPSC_PURCHASERECEIPT;?></th>
 										<td><textarea name="wpsc_email_receipt"  style='width: 100%; height: 200px;'><?php echo get_option('wpsc_email_receipt');?></textarea></textarea></td>
 									</tr>
 									<tr>
-										<th><?=TXT_WPSC_ADMIN_REPORT?></th>
+										<th><?php echo TXT_WPSC_ADMIN_REPORT;?></th>
 										<td><textarea name="wpsc_email_admin" style='width: 100%; height: 200px;'><?php echo get_option('wpsc_email_admin');?></textarea></td>
 									</tr>
 								</table>

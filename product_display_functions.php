@@ -710,17 +710,19 @@ function single_product_display($product_id) {
         
       if($product['additional_description'] != '') {                
         $output .= "           <div class='single_additional_description' >\n\r";
-if (get_option('wpsc_selected_theme') == 'market3') {
+				if (get_option('wpsc_selected_theme') == 'market3') {
 					$output .= "           <span class='additional'>Additional Details: </span>\n\r";
 				}
 
         $output .= wpautop(stripslashes($product['additional_description'])) . "";
         $output .= "           </div>\n\r";
 			}
-	$pdf = get_product_meta($product_id, 'pdf');
-	$pdf = $pdf[0];
-	if ($pdf != '')
-		$output .= TXT_WPSC_PDF.": <a href='".WPSC_PREVIEW_URL."$pdf'>$pdf</a>";
+			/*
+			$pdf = get_product_meta($product_id, 'pdf');
+			$pdf = $pdf[0];
+			if ($pdf != '')
+				$output .= TXT_WPSC_PDF.": <a href='".WPSC_PREVIEW_URL."$pdf'>$pdf</a>";
+				*/
 			// print the custom fields here, if there are any
 			$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
 			if(count($custom_fields) > 0) {

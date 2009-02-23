@@ -96,7 +96,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 				if (function_exists('getdistance')) {
 					echo "<input onblur='store_list()' id='user_city' type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
 				} else  {
-					echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+					echo "<input type='text' class='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
 				}
 				break;
 
@@ -104,14 +104,14 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 				case "city":
 				case "delivery_city":
 				case "coupon":
-				echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				echo "<input type='text' class='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
 				break;
 
 				case "address":
 				if (function_exists('getdistance')) {
-					echo "<input type='text' id='user_address' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]'>";
+					echo "<input type='text' class='text' id='user_address' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]'>";
 				} else  {
-					echo "<textarea name='collected_data[".$form_field['id']."]'>".$_SESSION['collected_data'][$form_field['id']]."</textarea>";
+					echo "<textarea class='text' name='collected_data[".$form_field['id']."]'>".$_SESSION['collected_data'][$form_field['id']]."</textarea>";
 				}
 				break;
 
@@ -139,11 +139,11 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 				break;
 
 				case "email":
-				echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				echo "<input type='text' class='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
 				break;
 
 				default:
-				echo "<input type='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
+				echo "<input type='text' class='text' value='".$_SESSION['collected_data'][$form_field['id']]."' name='collected_data[".$form_field['id']."]' />";
 				break;
 			}
 			echo "	</td>\n\r";

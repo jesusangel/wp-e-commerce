@@ -154,6 +154,7 @@ class ups {
  		//$_SESSION['wpsc_shipping_cache_check']
 		//this is where shipping breaks out of UPS if weight is higher than 150 LBS
 		if($weight > 150){
+			unset($_SESSION['quote_shipping_method']);
 			$shipping_quotes[TXT_WPSC_OVER_UPS_WEIGHT] = 0;
 			$_SESSION['wpsc_shipping_cache_check']['weight'] = $weight;
 			$_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_quotes;

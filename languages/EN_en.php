@@ -32,7 +32,7 @@ define('TXT_WPSC_GROUP_SETTINGS', 'Product Group Settings');
 define('TXT_WPSC_GROUP_IMAGE', 'Group&nbsp;Image');
 define('TXT_WPSC_THUMBNAIL_SIZE', 'Thumbnail&nbsp;Size');
 define('TXT_WPSC_CATALOG_VIEW', 'Catalog View');
-define('TXT_WPSC_GROUP_IMAGE_TEXT', 'You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="http://apps.instinct.co.nz/wp_2.7/wp-admin/admin.php?page='.WPSC_DIR_NAME.'/options.php#options_presentation">Presentation Settings</a>.');
+define('TXT_WPSC_GROUP_IMAGE_TEXT', 'You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page='.WPSC_DIR_NAME.'/options.php#options_presentation">Presentation Settings</a>.');
 
 
 
