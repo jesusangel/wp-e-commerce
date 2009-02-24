@@ -402,25 +402,27 @@ function wpsc_akst_head() {
 add_action('wp_head', 'wpsc_akst_head');
 
 function wpsc_akst_share_link($action = 'print') {
-  global $wpsc_akst_action, $post;
+  global $wpdb, $wpsc_akst_action, $post, $wp_query;
   if (in_array($wpsc_akst_action, array('page'))) {
     return '';
   }
   if (is_feed() || (function_exists('akm_check_mobile') && akm_check_mobile())) {
     $onclick = '';
-  }
-  else {
-    $permalink = get_permalink($post->ID) ;
-    if(strstr($permalink, "?") !== false)
-      {
-      $product_link = $permalink."&product_id=".$_REQUEST['product_id'];
-      }
-      else
-        {
-        $product_link = $permalink."?product_id=".$_REQUEST['product_id'];
-        }
-    $onclick = 'onclick="wpsc_akst_share(\''.$post->ID.'\', \''.urlencode($product_link).'\', \''.urlencode(get_the_title()).'\'); return false;"';
-  }
+  } else {
+		$permalink = get_permalink($post->ID);
+		if($wp_query->query_vars['product_name'] != null){
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$product_link = wpsc_product_url($product_id);
+		} else {
+			if(strstr($permalink, "?") !== false) {
+				$product_link = $permalink."&product_id=".$_REQUEST['product_id'];
+			} else {
+				$product_link = wpsc_product_url((int)$_REQUEST['product_id']);
+			}
+		}
+// 		exit("<pre>".print_r($product_link,true)."</pre>");
+	$onclick = 'onclick="wpsc_akst_share(\''.$post->ID.'\', \''.urlencode($product_link).'\', \''.urlencode(get_the_title()).'\'); return false;"';
+	}
   global $post;
   ob_start();
  /*<?php bloginfo('siteurl'); ?>/?p=<?php print($post->ID); ?>&amp;wpsc_akst_action=share-this */
@@ -456,7 +458,7 @@ function wpsc_akst_add_share_link_to_content($content) {
 //add_action('the_content_rss', 'wpsc_akst_add_share_link_to_content');
 
 function wpsc_akst_share_form() {
-  global $post, $social_sites, $current_user;
+  global $post, $social_sites, $current_user, $wp_query, $wpdb;
 
   if (!empty($_GET['p'])) {
     $id = intval($_GET['p']);
@@ -518,9 +520,12 @@ function wpsc_akst_share_form() {
           <input type="hidden" name="wpsc_akst_action" value="send_mail" />
           <input type="hidden" name="wpsc_akst_post_id" id="wpsc_akst_post_id" value="<?php print($id); ?>" />
           <?php
-          if(is_numeric($_GET['product_id'])){
-            echo "<input type=\"hidden\" name=\"wpsc_akst_product_id\" id=\"wpsc_akst_product_id\" value=\"".$_GET['product_id']."\" />\n\r";
-            }
+					if($wp_query->query_vars['product_name'] != '') {
+						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+					} else if(is_numeric($_GET['product_id'])){
+					  $product_id = (int)$_GET['product_id'];
+					}
+					echo "<input type=\"hidden\" name=\"wpsc_akst_product_id\" id=\"wpsc_akst_product_id\" value=\"".$product_id."\" />\n\r";
           ?>
         </fieldset>
       </form>
@@ -534,6 +539,7 @@ if (wpsc_akst_ADDTOFOOTER) {
 }
 
 function wpsc_akst_send_mail() {
+  global $wpdb, $wp_query;
   //exit("<pre>".print_r($_REQUEST,true)."</pre>");
   $post_id = '';
   $to = '';
@@ -608,14 +614,17 @@ function wpsc_akst_send_mail() {
     $message .= __('Greetings--', 'alexking.org')."\n\n";
     $message .= $name.__(' thinks this will be of interest to you:', 'alexking.org')."\n\n";
     //$message .= ak_decode_entities(get_the_title($post_id))."\n\n";
-    if(strstr($permalink, "?") !== false)
-      {
-      $message .= $permalink."&product_id=".$_REQUEST['wpsc_akst_product_id']."\n\n";
-      }
-      else
-        {
-        $message .= $permalink."?product_id=".$_REQUEST['wpsc_akst_product_id']."\n\n";
-        }
+    if($wp_query->query_vars['product_name'] != '') {
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$message .= wpsc_product_url($product_id);
+    } else {
+			if(strstr($permalink, "?") !== false) {
+				$message .= $permalink."&product_id=".$_REQUEST['wpsc_akst_product_id']."\n\n";
+			} else {
+				// $message .= $permalink."?product_id=".$_REQUEST['wpsc_akst_product_id']."\n\n";
+				$message .= wpsc_product_url((int)$_REQUEST['wpsc_akst_product_id'])."\n\n";
+			}
+    }
     $message .= __('Enjoy.', 'alexking.org')."\n\n";
     $message .= '--'."\n";
     $message .= get_bloginfo('home')."\n";
@@ -646,7 +655,7 @@ function wpsc_akst_hide_pop() {
 }
 
 function wpsc_akst_page() {
-  global $social_sites, $wpsc_akst_action, $current_user, $post;
+  global $social_sites, $wpsc_akst_action, $current_user, $post, $wp_query, $wpdb;
   
   $wpsc_akst_action = 'page';
   
@@ -874,9 +883,12 @@ function wpsc_akst_page() {
           <input type="hidden" name="wpsc_akst_action" value="send_mail" />
           <input type="hidden" name="wpsc_akst_post_id" id="wpsc_akst_post_id" value="<?php print($id); ?>" />
           <?php
-          if(is_numeric($_GET['product_id'])){
-            echo "<input type=\"hidden\" name=\"wpsc_akst_product_id\" id=\"wpsc_akst_product_id\" value=\"".$_GET['product_id']."\" />\n\r";
-            }
+					if($wp_query->query_vars['product_name'] != '') {
+						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+					} else if(is_numeric($_GET['product_id'])){
+					  $product_id = (int)$_GET['product_id'];
+					}
+					echo "<input type=\"hidden\" name=\"wpsc_akst_product_id\" id=\"wpsc_akst_product_id\" value=\"".$product_id."\" />\n\r";
           ?>
         </fieldset>
       </form>

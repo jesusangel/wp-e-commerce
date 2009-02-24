@@ -234,6 +234,16 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       if ($_GET['action']!='affiliate') {
 	    $output .= "</table>";
     }
+    
+			if($_SESSION['coupon_num']){
+				$overall_total = nzshpcrt_overall_total_price_numeric($_SESSION['selected_country'],true);
+				$discount = $total - nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
+				$total_after_discount = $total-$discount;
+				$_SESSION['wpsc_discount']= $discount;
+			} else {
+				$_SESSION['wpsc_discount']= 0;
+			}
+    
     if($_SESSION['delivery_country'] != null) {
 			$total_shipping += nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
       //$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
@@ -246,14 +256,6 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
         {
         $output .= "<span class='tax'><span class='taxhead'>".TXT_WPSC_TAX.":</span> &nbsp;&nbsp;".nzshpcrt_currency_display($tax, 1)."</span>";
         }
-			if($_SESSION['coupon_num']){
-				$overall_total = nzshpcrt_overall_total_price_numeric($_SESSION['selected_country'],true);
-				$discount = $overall_total - nzshpcrt_apply_coupon($overall_total,$_SESSION['coupon_num']);
-				$total_after_discount = $overall_total-$discount;
-				$_SESSION['wpsc_discount']= $discount;
-			} else {
-				$_SESSION['wpsc_discount']= 0;
-			}
 			
 			if($discount > 0) {
 				$output .= "<span class='discount'><span class='discounthead'>".TXT_WPSC_DISCOUNT.":</span>".nzshpcrt_currency_display($discount, 1)."</span>";

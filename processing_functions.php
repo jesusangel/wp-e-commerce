@@ -8,6 +8,8 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 	$cart  =& $_SESSION['nzshpcrt_cart'];
 	$total_quantity =0;
 	$total_weight = 0;
+	$total = 0;
+	$unaltered_total = 0;
 	$all_donations = true;
 	$all_no_shipping = true;
 	foreach($cart as $cart_item) {
@@ -33,6 +35,7 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 			$price = $quantity * $cart_item->donation_price;
 		} else {
 			$price = $quantity * calculate_product_price($product_id, $product_variations,'stay',$extras);
+			$unaltered_price = $quantity * calculate_product_price($product_id, $product_variations,'stay',$extras);
 			if($country_code != null) {
 				if($product['notax'] != 1) {
 					$price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
@@ -46,11 +49,12 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 			$all_no_shipping = false;
 		}
 		$total += $price;
+		$unaltered_total += $unaltered_price;
 	}
 	
 		
 	if(!empty($_SESSION['coupon_num']) && ($no_discount !== true)){
-		$total += nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) - $total ;
+		$total += nzshpcrt_apply_coupon($unaltered_total,$_SESSION['coupon_num']) - $unaltered_total ;
 	}
 	
 	if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
@@ -58,9 +62,9 @@ function nzshpcrt_overall_total_price($country_code = null, $for_display = false
 		//exit(nzshpcrt_determine_base_shipping(0, $country_code));
 		$total +=  nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
 	}
-	if(!empty($_SESSION['coupon_num']) && ($no_discount !== true)){
-		$total += nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) - $total ;
-	}
+// 	if(!empty($_SESSION['coupon_num']) && ($no_discount !== true)){
+// 		$total += nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) - $total ;
+// 	}
 	if($for_display === true) {
 		$total = nzshpcrt_currency_display($total,1);
 		if(($country_code == null) && (get_option('add_plustax') == 1)) {

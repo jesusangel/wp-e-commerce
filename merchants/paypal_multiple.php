@@ -7,14 +7,16 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_multiple";
 
 function gateway_paypal_multiple($seperator, $sessionid) {
   global $wpdb;
-  $purchase_log_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1";
-  $purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
+  $purchase_log = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 //exit(print_r($purchase_log,1));
-	if ($purchase_log[0]['totalprice']==0) {
+	if ($purchase_log['totalprice']==0) {
 		header("Location: ".get_option('transact_url').$seperator."sessionid=".$sessionid);
 		exit();
 	}
-  $cart_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
+	
+// 	exit( nzshpcrt_overall_total_price($_SESSION['selected_country']));
+	
+  $cart_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='".$purchase_log['id']."'";
   $cart = $wpdb->get_results($cart_sql,ARRAY_A) ;
   //written by allen
   //exit("<pre>".print_r($cart,true)."</pre>");
@@ -74,12 +76,12 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $all_no_shipping = true;
   
   
-$total = nzshpcrt_overall_total_price($_SESSION['selected_country'],false,true);
+	$total = nzshpcrt_overall_total_price($_SESSION['selected_country'],false,true);
 
-$discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
+	$discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 	if(($discount > 0) && ($_SESSION['coupon_num'] != null)) {
 		$data['item_name_'.$i] = "Your Shopping Cart";
-		$data['amount_'.$i] = number_format(sprintf("%01.2f", $discount),$decimal_places,'.','');
+		$data['amount_'.$i] = number_format(sprintf("%01.2f", $purchase_log['totalprice']),$decimal_places,'.','');
 		$data['quantity_'.$i] = 1;
 		// $data['item_number_'.$i] = 0;
 		$data['shipping_'.$i] = 0;
@@ -151,7 +153,7 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 	}
   $data['tax'] = '';
 
-  $base_shipping = $purchase_log[0]['base_shipping'];
+  $base_shipping = $purchase_log['base_shipping'];
   //exit($base_shipping);
   if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false)) {
     $data['handling_cart'] = number_format($base_shipping,$decimal_places,'.','');
@@ -230,7 +232,7 @@ $discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
 
-// 	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
+//  	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
 //  	exit("<pre>".print_r($data,true)."</pre>");
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
