@@ -3,6 +3,17 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
+define('TXT_WPSC_GATEWAY_SETTINGS', 'Gateway Settings');
+define('TXT_WPSC_CHECKOUT_SETTINGS', 'Checkout Settings');
+define('TXT_WPSC_ADD_NEW_PRODUCT', 'Add New Product');
+define("TXT_WPSC_HERE_YOU_CAN_ADD", "Here you can add products, groups or variations");
+define("TXT_WPSC_CLOSED", "Closed");
+define("TXT_WPSC_PENDING", "Pending");
+define("TXT_WPSC_CURRENT_MONTH", "Current Month");
+define("TXT_WPSC_AT_A_GLANCE", "At a Glance");
+define("TXT_WPSC_CHECKOUT", "Checkout");
+define("TXT_WPSC_RECIEPT_EMAIL_ADDRESS", "This will be the Email address that the Purchase Reciept is sent to.");
+
 define("TXT_WPSC_OVER_UPS_WEIGHT", "Because your order is over 150lbs, the SIte Owner will contact you directly about shipping rates.");
 define("TXT_WPSC_ADD_TO_CART_PHP", "Add to Cart PHP");
 define("TXT_WPSC_BUY_NOW_PHP", "Buy Now PHP");
@@ -708,7 +719,7 @@ define('TXT_WPSC_TOTALPRICE', 'Total Price');
 define('TXT_WPSC_NOITEMSINTHESHOPPINGCART', 'There are no items in the shopping cart');
 define('TXT_WPSC_EMAILMSG1', "Thank you, the order has been accepted, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.\n\rAll prices include tax and postage and packaging where applicable.\n\rYou ordered these items:\n\r");
 define('TXT_WPSC_EMAILMSG2', ".\n\rThese items were ordered:\n\r\n\r");
-define('TXT_WPSC_CLICKTODOWNLOAD', 'Click here to download');
+define('TXT_WPSC_CLICKTODOWNLOAD', 'Click to download');
 define('TXT_WPSC_DOWNLOAD', 'Download');
 define('TXT_WPSC_YOURTRANSACTIONID', 'Your Transaction ID');
 define('TXT_WPSC_TRANSACTIONID', 'Transaction ID');

@@ -172,7 +172,7 @@ if($_POST['submit_action'] == 'add')
     
     echo "<td>";
     if($email_form_field['id'] == $form_field['id']) {
-      echo "<div class='flag_email'>This will be the Email address that the Purchase Reciept is sent to. </div>";
+      echo "<div class='flag_email'>".TXT_WPSC_RECIEPT_EMAIL_ADDRESS." </div>";
     }
     echo "</td>";
     

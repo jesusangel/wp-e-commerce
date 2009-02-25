@@ -543,9 +543,9 @@ if($_GET['clean_categories'] == 'true') {
 <!-- 								<li><a href="#options_shipping"><?php echo TXT_WPSC_OPTIONS_SHIPPING_TAB; ?></a></li> -->
 								<!-- <li><a href="#wpsc_options_payment"><?php echo TXT_WPSC_OPTIONS_PAYMENT_TAB; ?></a></li> -->
 		<li><a href="#options_admin"><?php echo TXT_WPSC_OPTIONS_ADMIN_TAB; ?></a></li>
-		<li><a href="<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?shipping_options=true"><?php echo "Shipping"; ?></a></li>
-		<li><a href="<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?payments_options=true"><?php echo "Payments"; ?></a></li>
-		<li><a href="<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?checkout_options=true"><?php echo "Checkout"; ?></a></li>
+		<li><a href="<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?shipping_options=true"><?php echo TXT_WPSC_SHIPPING; ?></a></li>
+		<li><a href="<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?payments_options=true"><?php echo TXT_WPSC_PAYMENTGATEWAYOPTIONS; ?></a></li>
+		<li><a href="<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?checkout_options=true"><?php echo TXT_WPSC_CHECKOUT; ?></a></li>
 		<?php
 		if(function_exists('gold_shpcrt_options')) {
 			//echo "sdsdf";

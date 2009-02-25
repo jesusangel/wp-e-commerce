@@ -142,8 +142,8 @@ if(is_numeric($_GET['email_buyer_id'])) {
 						}
 			
 						if($link != '') {
-							$product_list.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."  ".TXT_WPSC_CLICKTODOWNLOAD.": $link\n";
-							$product_list_html.= " - ". $product_data[0]['name'] . $variation_list ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_DOWNLOAD."</a>\n";
+							$product_list.= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":\n $link\n";
+							$product_list_html.= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_CLICKTODOWNLOAD."</a>\n";
 						} else {
 							$plural = '';
 							
@@ -326,9 +326,9 @@ if($_GET['filter'] !== 'true') {
 	<div class='postbox'> 
 			<h3 class='hndle'><?php echo TXT_WPSC_MENU; ?></h3>
 			<div class='inside'>
-				<a href="?page=<?php echo WPSC_DIR_NAME;?>/options.php">Shop Settings</a><br>
-				<a href="?page=<?php echo WPSC_DIR_NAME;?>/gatewayoptions.php">Gateway Settings</a><br>
-				<a href="?page=<?php echo WPSC_DIR_NAME;?>/form_fields.php">Checkout Settings</a><br>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/options.php"><?php echo TXT_WPSC_SHOP_SETTINGS; ?></a><br>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/gatewayoptions.php"><?php echo TXT_WPSC_CHECKOUT_SETTINGS; ?></a><br>
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/form_fields.php"><?php echo TXT_WPSC_CHECKOUT_SETTINGS; ?></a><br>
 			</div>
 	</div>
 	
@@ -651,22 +651,22 @@ if($_GET['filter'] !== 'true') {
                 echo " </td>\n\r";
 							}
 							
-		echo "<td>";
-		if($purchase['affiliate_id'] > 0) {
-      $affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purchase['affiliate_id']}'");
-      $sale = $purchase['totalprice'] * (100-$affiliate_commision_percentage)/100;
-		} else {
-		  $sale = $purchase['totalprice'];
-		}
-		echo nzshpcrt_currency_display($sale,1);
-		echo "</td>";
-
-		echo " <td>";
-		echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
-		echo " </td>\n\r";
-
-		
-		echo "</tr>\n\r";
+							echo "<td>";
+							if($purchase['affiliate_id'] > 0) {
+								$affiliate_commision_percentage = $wpdb->get_var("SELECT commision_percentage FROM {$wpdb->prefix}wpsc_affiliates WHERE user_id='{$purchase['affiliate_id']}'");
+								$sale = $purchase['totalprice'] * (100-$affiliate_commision_percentage)/100;
+							} else {
+								$sale = $purchase['totalprice'];
+							}
+							echo nzshpcrt_currency_display($sale,1);
+							echo "</td>";
+					
+							echo " <td>";
+							echo "<a href='admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id']."'>".TXT_WPSC_VIEWDETAILS."</a>";
+							echo " </td>\n\r";
+					
+							
+							echo "</tr>\n\r";
               
               $stage_list_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` ORDER BY `id` ASC";
               $stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);

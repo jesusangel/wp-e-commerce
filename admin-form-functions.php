@@ -584,7 +584,7 @@ function setting_button(){
 	$redirect_url .= urlencode($itemsFeedURL);
 	
 // 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/".WPSC_DIR_NAME."/images/settings_button.jpg' onclick='display_settings_button()'>";
-	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>Settings &raquo;</a>";
+	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>".TXT_WPSC_SETTINGS." &raquo;</a>";
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
 	
@@ -644,13 +644,13 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='dashboard_right_now' class='postbox'>";
 		$output.="	<h3 class='hndle'>";
-		$output.="		<span>"._('Current Month')."</span>";
+		$output.="		<span>".TXT_WPSC_CURRENT_MONTH."</span>";
 		//$output.="		<a class='rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>";
 		$output.="		<br class='clear'/>";
 		$output.="	</h3>";
 		
 		$output .= "<div class='inside'>";
-		$output .= "<p class='sub'>At a Glance</p>";
+		$output .= "<p class='sub'>".TXT_WPSC_AT_A_GLANCE."</p>";
 		//$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>";
 		$output .= "<div class='table'>";
 		$output .= "<table>";
@@ -680,7 +680,7 @@ function wpsc_right_now() {
 		$output .= "<td class='b'>";
 		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-log.php'>".$pending_sales."</a>";
 		$output .= "<td>";
-		$output .= "<td class='last t waiting'>Pending ";
+		$output .= "<td class='last t waiting'>".TXT_WPSC_PENDING;
 		$output .= ucfirst($pending_sales_unit);
 		$output .= "<td>";
 		$output .= "</tr>";
@@ -695,7 +695,7 @@ function wpsc_right_now() {
 		$output .= "<td class='b'>";
 		$output .= "<a href='?page=".WPSC_DIR_NAME."/display-log.php'>".$accept_sales."</a>";
 		$output .= "<td>";
-		$output .= "<td class='last t approved'>Closed ";
+		$output .= "<td class='last t approved'>".TXT_WPSC_CLOSED;
 		$output .= ucfirst($accept_sales_unit);
 		$output .= "<td>";
 		$output .= "</tr>";
@@ -703,7 +703,7 @@ function wpsc_right_now() {
 		$output .= "</table>";
 		$output .= "</div>";
 		$output .= "<div class='versions'>";
-		$output .= "<p><a class='button rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>Add new product</strong></a>Here you can add products, groups or variations</p>";
+		$output .= "<p><a class='button rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>".TXT_WPSC_ADD_NEW_PRODUCT."</strong></a>".TXT_WPSC_HERE_YOU_CAN_ADD."</p>";
 		$output .= "</div>";
 		$output .= "</div>";
 		$output.="</div>";
@@ -711,7 +711,7 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='rightnow'>\n\r";
 		$output.="	<h3 class='reallynow'>\n\r";
-		$output.="		<a class='rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>".TXT_WPSC_ADDNEWPRODUCT."</strong></a>\n\r";
+		$output.="		<a class='rbutton' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php'><strong>".TXT_WPSC_ADD_NEW_PRODUCT."</strong></a>\n\r";
 		$output.="		<span>"._('Right Now')."</span>\n\r";
 		
 		//$output.="		<br class='clear'/>\n\r";
