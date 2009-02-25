@@ -125,16 +125,16 @@ You ordered these items:
 
 %product_list%
 
-%total_price%
+%total_shipping%
 
-%total_shipping%');
+%total_price%');
 
 define('TXT_WPSC_DEFAULT_PURCHASE_REPORT', '
 %product_list%
 
-%total_price%
+%total_shipping%
 
-%total_shipping%');
+%total_price%');
 
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
 
