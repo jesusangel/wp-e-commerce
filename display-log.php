@@ -443,7 +443,7 @@ if($_GET['filter'] !== 'true') {
       </div>
 <?php
 	echo "</div>";
-	echo "<div id='post-body' class='has-sidebar' style='width:99%;'>
+	echo "<div id='post-body' class='has-sidebar' style='width:95%;'>
 			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
 				
 	}
