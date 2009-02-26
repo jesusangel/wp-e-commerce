@@ -10,8 +10,9 @@ $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_pro
 $variations_processor = new nzshpcrt_variations;
 
 $flash = true;
-if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac') && apache_mod_loaded('mod_security') )
+if ( false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac') && apache_mod_loaded('mod_security') ) {
 	$flash = false;
+}
 function topcategorylist() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');

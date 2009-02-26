@@ -331,6 +331,9 @@ function selectgateway() {
 								<strong class="form_group"><?php echo TXT_WPSC_CONFIGURE_SHIPPING_MODULES;?></strong>
 							</td>
 						</tr>
+						
+					</table>
+					<table class='form-table'>
 					<?php } ?>
 					
 						<tr>
@@ -345,15 +348,10 @@ function selectgateway() {
 						</tr>
 						<?php echo $form; ?>
 					
-						<tr class='update_gateway' >
-							<td colspan='2'>
-								<div class='submit'>
-									<input type='submit' value='Update &raquo;' name='updateoption'/>
-									
-								</div>
-							</td>
-						</tr>
 					</table>
+					<div class='submit'>
+						<input type='submit' value='Update &raquo;' name='updateoption'/>
+					</div>
 					<?php
 					if (IS_WP27) {
 					    echo "</div>";
