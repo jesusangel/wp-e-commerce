@@ -30,7 +30,7 @@ class weightrate {
 		$layers = get_option("weight_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
-				$output.="<tr><td style='width: 258px;'><div><i style='color: grey;'>".TXT_WPSC_IF_WEIGHT_IS."</i><input type='text' value='$key' name='weight_layer[]'size='10'><i style='color: grey;'>".TXT_WPSC_AND_ABOVE."</i></div></td><td><input type='text' value='{$shipping}' name='weight_shipping[]' size='10'></td></tr>";
+				$output.="<tr class='rate_row'><td style='width: 258px;'><div><i style='color: grey;'>".TXT_WPSC_IF_WEIGHT_IS."</i><input type='text' value='$key' name='weight_layer[]'size='10'><i style='color: grey;'>".TXT_WPSC_AND_ABOVE."</i></div></td><td><input type='text' value='{$shipping}' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='weight'>";

@@ -31,7 +31,7 @@ class tablerate {
 		$layers = get_option("table_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
-				$output.="<tr><td><i style='color: grey;'>".TXT_WPSC_IF_PRICE_IS."</i><input type='text' name='layer[]' value='$key' size='10'><i style='color: grey;'> ".TXT_WPSC_AND_ABOVE."</i></td><td><input type='text' value='{$shipping}' name='shipping[]'></td></tr>";
+				$output.="<tr class='rate_row'><td><i style='color: grey;'>".TXT_WPSC_IF_PRICE_IS."</i><input type='text' name='layer[]' value='$key' size='10'><i style='color: grey;'> ".TXT_WPSC_AND_ABOVE."</i></td><td><input type='text' value='{$shipping}' name='shipping[]'  size='10'>&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";

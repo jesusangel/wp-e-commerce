@@ -49,8 +49,24 @@ function activate_resizable() {
 //       }
 // 	});
 }
-  
+
+function bind_shipping_rate_deletion() {
+  jQuery('table#gateway_options a.delete_button').click(function () {
+    this_row = jQuery(this).parents('tr.rate_row');
+    if(jQuery(this).hasClass('nosubmit')) {
+			// if the row was added using JS, just scrap it
+			jQuery(this_row).remove();
+    } else {
+			// otherwise, empty it and submit it
+			jQuery('td input', this_row).val('');
+			jQuery(this).parents('form').submit();
+    }
+    return false;
+	});
+}
+
 	jQuery(document).ready(function(){
+	  bind_shipping_rate_deletion();
 		jQuery(function() {
 		  // set us up some mighty fine tabs for the options page
 		  
@@ -79,6 +95,7 @@ function activate_resizable() {
 // 				}
 			});
 			jQuery('#wpsc_options > ul').bind('tabsload', function(event, ui) {
+			   bind_shipping_rate_deletion();
 // 				form_action = jQuery('#cart_options').attr('action').split('#');  //split at the #
 // 				form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
 // 				jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
@@ -997,11 +1014,13 @@ jQuery(document).ready(function(){
 });
 
 function addlayer(){
-	jQuery("tr.addlayer").before("<tr><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/"+WPSC_DIR_NAME+"/images/delete.png'></a></td></tr>");
+	jQuery("tr.addlayer").before("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
+	bind_shipping_rate_deletion();
 }
 
 function addweightlayer(){
-	jQuery("tr.addlayer").before("<tr><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='#' onclick='removelayer()'><img src='../wp-content/plugins/"+WPSC_DIR_NAME+"/images/delete.png'></a></td></tr>");
+	jQuery("tr.addlayer").before("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
+	bind_shipping_rate_deletion();
 }
 
 function removelayer() {
