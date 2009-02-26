@@ -2,6 +2,13 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define("TXT_WPSC_TM", "Target Markets");
+define("TXT_WPSC_SHIPPING_DETAIL","Please choose a country bellow to calculate your shipping costs");
+define('TXT_WPSC_TOTAL_THIS_MONTH', 'Last 30 Days');
+define('TXT_WPSC_TOTAL_INCOME', 'Life Time');
+define('TXT_WPSC_SALES_TITLE', 'Sales');
+define('TXT_WPSC_ORDERS_TITLE', 'Orders');
+define('TXT_WPSC_AVGORDER_TITLE', 'Avg Orders');
 
 define('TXT_WPSC_GATEWAY_SETTINGS', 'Gateway Settings');
 define('TXT_WPSC_CHECKOUT_SETTINGS', 'Checkout Settings');

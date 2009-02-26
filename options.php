@@ -4,6 +4,32 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
   include('tax_and_shipping.php');
 } else {
   if($_POST != null) {
+  
+      // Jeff 23-02-09 Used for target market options
+	   
+    if($_POST['countrylist2'] != null){
+    	$AllSelected = false;
+    	if(in_array('all',$_POST['countrylist2'])){
+    		$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = '1'");
+			$AllSelected = true;
+    	}
+    	if($AllSelected != true){
+			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
+			//find the countries not selected 
+			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
+			foreach($unselectedCountries as $unselected){
+				$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = 0 WHERE id = '".$unselected."' LIMIT 1");
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+				$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
+			}
+ 		}
+	} 
+  
+  
     if($_POST['product_list_url'] != null) {
       update_option('product_list_url', $_POST['product_list_url']);
     }
@@ -611,7 +637,37 @@ if($_GET['clean_categories'] == 'true') {
 									</span>
 									</td>
 								</tr>
+								<?php
+								/* START OF TARGET MARKET SELECTION */					
+								$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ",ARRAY_A);
+							
+								?>
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_TM; ?>:
+									</th>
+									<td>
+									<div id='resizeable' class='ui-widget-content multiple-select'>
+									<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
+									<?php
+									
+									foreach($countrylist as $country){
+										if($country['visible'] == 1){
+										echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />";
+										}else{
+										echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />";
+										}
+											
+									}
+
+									?>		
+									
+									</div>
+						
+									</td>
+								</tr>
 								
+
 								
 								<tr>
 									<th scope="row">

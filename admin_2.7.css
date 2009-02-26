@@ -2046,3 +2046,54 @@ div#productform table tr.settings_row td{ height: 0px !important; }
 #editorcontainer .wp_themeSkin .mceStatusbar {
   border-color: #DFDFDF;
 }
+
+.multiple-select {
+background:#FFFFFF none repeat scroll 0 0;
+border:1px solid #DFDFDF;
+display:inline-block;
+height:120px;
+margin:0;
+overflow-x:hidden;
+overflow-y:auto;
+padding:0;
+position:relative;
+width:250px;
+}
+#leftDashboard{
+width:49%; 
+float:left;
+text-align:right;
+border-right:1px #999999 solid;
+
+}
+#leftDashboard strong{
+float:left;
+padding-left: 40px;
+}
+#rightDashboard strong{
+float:left;
+padding-left: 40px;
+}
+#rightDashboard{
+width:50%; 
+float:right;
+text-align:right;
+
+}
+.pricedisplay{
+width:40%;
+float:left;
+}
+.dashboardWidgetSpecial{
+font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+color:#21759B;
+font-size:18px!important;
+margin: 5px 0 5px 0;
+}
+.dashboardWidget{
+color:#777777;
+padding-left:10px;
+padding-right: 50px;
+
+}
+

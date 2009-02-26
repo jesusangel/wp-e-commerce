@@ -406,11 +406,15 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
   $output .= "<select name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
   foreach ($country_data as $country) {
     $selected ='';
-    if($selected_country == $country['isocode']) {
-      $selected = "selected='true'";
-		}
-    $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>\n\r";
-	}  
+   if($country['visible'] == '1'){
+  
+		if($selected_country == $country['isocode']) {
+		  $selected = "selected='true'";
+			}
+		$output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>\n\r";
+		}  
+	}
+
   $output .= "</select>\n\r";
   
   
