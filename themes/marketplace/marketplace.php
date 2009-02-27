@@ -1,7 +1,6 @@
 <?php
 if(get_option('wpsc_selected_theme') == 'marketplace') {
 	function wpsc_grid_title_and_price(&$product) {
-	
 		$output .= "<div class='grid_price'>";
 		if ($soldout) {
 			$output .= "<span class='soldoutgrid'>Sold out</span>";
