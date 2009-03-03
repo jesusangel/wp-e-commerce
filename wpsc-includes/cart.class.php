@@ -1,12 +1,40 @@
 <?php
-class cart_handler {
-	function cart_handler() {
-		// look at line 774
-		// look at line 1734
-	}
+/**
+ * WP eCommerce Cart and Cart Item classes
+ *
+ * These are the classes for the WP eCommerce Cart and Cart Items, 
+ *
+ * The Cart class handles adding, removing and adjusting items in the cart, and totaling up the cost of the items in the cart.
+ * 
+ * The Cart Items class handles the same, but for cart items themselves.
+ *
+ *
+ * @package wp-e-commerce
+ * @subpackage wpsc-cart-classes 
+
+*/
+
+
+
+/**
+ * The WPSC Cart class
+ */
+class wpsc_cart {
+  var $shipping_country;
+	var $billing_country;
+  function add_item() {
+  }
 }
 
-class cart_item {
+
+
+
+
+
+/**
+ * The WPSC Cart Items class
+ */
+class wpsc_cart_item {
 	var $product_id;
 	var $product_variations;
 	var $quantity;

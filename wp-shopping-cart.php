@@ -991,9 +991,9 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 								$label[$_POST['label'][$key]] = $qty;
 								$time_requested[$_POST['label'][$key]] = $_POST['time_requested'][$key];
 							}
-							$new_cart_item = new cart_item($_POST['prodid'],$variations,$total_qty, $donation,$extras,$_POST['comment'],$time_requested,$label);
+							$new_cart_item = new wpsc_cart_item($_POST['prodid'],$variations,$total_qty, $donation,$extras,$_POST['comment'],$time_requested,$label);
 						} else {
-							$new_cart_item = new cart_item($_POST['prodid'],$variations, 1, $donation,$extras,$_POST['comment']);
+							$new_cart_item = new wpsc_cart_item($_POST['prodid'],$variations, 1, $donation,$extras,$_POST['comment']);
 						}
 				  		$_SESSION['nzshpcrt_cart'][] = $new_cart_item;
 					}
@@ -1955,7 +1955,7 @@ function nzshpcrt_products_page($content = '') {
   //if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('nzshpcrt_products_page','start');}
   //exit(htmlentities($content));
   if(preg_match("/\[productspage\]/",$content)) {
-    define('WPSC_USE_THEME_ENGINE', TRUE);
+    define('WPSC_USE_THEME_ENGINE', FALSE);
     if(WPSC_USE_THEME_ENGINE === TRUE) {
 			if(!file_exists($theme_path.get_option('wpsc_selected_theme'))) {
 				$theme_dir = 'default';
@@ -2337,7 +2337,7 @@ function wpsc_obtain_the_title() {
 		}
   }
   if(isset($product_list ) && ($product_list != null)) {
-  	$output = $product_list['name'];
+  	$output = htmlentities(stripslashes($product_list['name']), ENT_QUOTES);
   }
 	return $output;
 }

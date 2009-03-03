@@ -294,9 +294,8 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			$output .= "<a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
 			
 			$category = $product_listing_data['category_id'];
-			
 			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
-			//$category_name=  $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_categories WHERE id='".$category."'");
+			$category_info['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
 			while ($category_info['category_parent']!=0) {
 				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info['category_parent']."'",ARRAY_A);
 			
@@ -329,7 +328,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
             if(apply_filters( 'wpsc_mobile_override', false)) {
               $output .= "<a href='".wpsc_product_url($product['id'])."' >";
             } else {
-              $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities($product['name'], ENT_QUOTES))."'>";
+              $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities(stripslashes($product['name']), ENT_QUOTES))."'>";
             }
 
 
@@ -339,7 +338,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
               $image_file_name = $product['image'];
 						}
 
-            $output .= "<img src='".wpsc_product_image_html($image_file_name, $product['id'])."' title='".htmlentities($product['name'], ENT_QUOTES)."' alt='".htmlentities($product['name'], ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>";
+            $output .= "<img src='".wpsc_product_image_html($image_file_name, $product['id'])."' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>";
             
             $output .= "</a>";
             if(function_exists("gold_shpcrt_display_extra_images")) {
@@ -347,9 +346,9 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 						}
 					} else {
 						if(get_option('product_image_width') != '') {
-							$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' id='product_image_".$product['id']."' class='product_image' />";
+							$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' id='product_image_".$product['id']."' class='product_image' />";
 						} else {
-							$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image' />";
+							$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image' />";
 						}
 					}
           
@@ -400,7 +399,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
         } else {
           $output .= "<span class=’additional_description_span’>";// add better option
           $output .= "<a href='#' class='additional_description_link' onclick='return show_additional_description(\"additionaldescription".$product['id']."\",\"link_icon".$product['id']."\");'>";
-          $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
+          $output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />";
           $output .= TXT_WPSC_MOREDETAILS."</a>";
   
           $output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";
@@ -544,7 +543,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 							$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
 								<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
 								<input type='hidden' name='cmd' value='_xclick'>
-								<input type='hidden' name='item_name' value='".$product['name']."'>
+								<input type='hidden' name='item_name' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."'>
 								<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
 								<input type='hidden' id='amount' name='amount' value='".$price."'>
 								<input type='hidden' id='unit' name='unit' value='".$price."'>
@@ -612,13 +611,14 @@ function single_product_display($product_id) {
 			$output .= "  <a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
 			$category = $wpdb->get_var("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id='{$product_id}' ORDER BY id ASC LIMIT 1");
 			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
+			$category_info['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
 			while ($category_info['category_parent']!=0) {
 				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info['category_parent']."'",ARRAY_A);
 			
 				$output .= "<a href='".wpsc_category_url($category_info['id'])."'>".$category_info['name']."</a> &raquo; ";
 			}
 			$output .= "<a href='".wpsc_category_url($category)."'>".$category_info['name']."</a> &raquo; ";
-			$output .= $product_list[0]['name']."\n\r";
+			$output .= htmlentities(stripslashes($product_list[0]['name']), ENT_QUOTES)."\n\r";
 			$output .= "</div>\n\r";
 		}
     
@@ -640,13 +640,13 @@ function single_product_display($product_id) {
 						$image_file_name = $product['image'];
 					}
 					if(!apply_filters( 'wpsc_mobile_override', false)) {
-            $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>\n\r";
+            $output .= "<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",htmlentities(stripslashes($product['name']), ENT_QUOTES))."'>\n\r";
 					}
 					$src = WPSC_IMAGE_URL.$product['image'];
 					if((get_option('single_view_image_width') >= 1) && (get_option('single_view_image_height') >= 1)) {
-						$output .= "<img src='index.php?productid=".$product['id']."&amp;width=".get_option('single_view_image_width')."&amp;height=".get_option('single_view_image_height')."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
+						$output .= "<img src='index.php?productid=".$product['id']."&amp;width=".get_option('single_view_image_width')."&amp;height=".get_option('single_view_image_height')."' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
 					} else {
-						$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$product['name']."' alt='".$product['name']."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
+						$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' id='product_image_".$product['id']."' class='product_image'/>\n\r";
 					}
 					if(!apply_filters( 'wpsc_mobile_override', false)) {
             $output .= "</a>\n\r";
@@ -656,9 +656,9 @@ function single_product_display($product_id) {
 					}
 				} else {
 					if(get_option('product_image_width') != '') {
-						$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' />\n\r";
+						$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' />\n\r";
 					} else {
-						$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$product['name']."' alt='".$product['name']."' />\n\r";
+						$output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />\n\r";
 					}
 				}
 			}        
@@ -877,7 +877,7 @@ $output .= "<a class='add_meta_box'>Add Label</a>";
 					  $output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post'>
 							<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."'>
 							<input type='hidden' name='cmd' value='_xclick'>
-							<input type='hidden' name='item_name' value='".$product['name']."'>
+							<input type='hidden' name='item_name' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."'>
 							<input type='hidden' id='item_number' name='item_number' value='".$product['id']."'>
 							<input type='hidden' id='amount' name='amount' value='".$price."'>
 							<input type='hidden' id='unit' name='unit' value='".$price."'>
@@ -992,7 +992,7 @@ function wpsc_also_bought($product_id) {
           if(get_option('product_image_width') != '') {
             $output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$also_bought_data['name']."' width='$image_display_height' height='$image_display_height' id='product_image_".$also_bought_data['id']."' class='product_image' />";
 					} else {
-            $output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$product['name']."' id='product_image_".$also_bought_data['id']."' class='product_image' />";
+            $output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' id='product_image_".$also_bought_data['id']."' class='product_image' />";
 					}
 				}
 			}
@@ -1204,7 +1204,7 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 			$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post' />
 				<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."' />
 				<input type='hidden' name='cmd' value='_xclick' />
-				<input type='hidden' name='item_name' value='".$product['name']."' />
+				<input type='hidden' name='item_name' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' />
 				<input type='hidden' id='item_number' name='item_number' value='".$product['id']."' />
 				<input type='hidden' id='amount' name='amount' value='".$price."' />
 				<input type='hidden' id='unit' name='unit' value='".$price."' />
