@@ -64,7 +64,8 @@ function wpsc_the_product_id() {
 
 function wpsc_the_product_title() {
 	global $wpsc_query;
-	return stripslashes($wpsc_query->the_product_title());
+	
+	return htmlentities(stripslashes($wpsc_query->the_product_title()), ENT_QUOTES);
 }
 
 
@@ -833,7 +834,7 @@ class WPSC_Query {
     $i = 0;
 		if( $this->category != null) {
 		  if($this->is_single == true) {
-				$this->breadcrumbs[$i]['name'] = $this->product['name'];
+				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($this->product['name']), ENT_QUOTES);
 				$this->breadcrumbs[$i]['url'] = '';
 				$i++;
 		  }
@@ -850,7 +851,7 @@ class WPSC_Query {
 			
 			while ($category_info['category_parent']!=0) {
 				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='{$category_info['category_parent']}'",ARRAY_A);			
-				$this->breadcrumbs[$i]['name'] = $category_info['name'];
+				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
 				$this->breadcrumbs[$i]['url'] = wpsc_category_url($category_info['id']);
 				$i++;
 			}

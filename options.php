@@ -30,6 +30,9 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 	} 
   
   
+    if($_POST['wpsc_use_theme_engine'] != null) {
+      update_option('wpsc_use_theme_engine', $_POST['wpsc_use_theme_engine']);
+    }
     if($_POST['product_list_url'] != null) {
       update_option('product_list_url', $_POST['product_list_url']);
     }
@@ -1376,7 +1379,29 @@ if($_GET['clean_categories'] == 'true') {
                 </td>
               </tr>
 
-					
+						<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_USE_THEME_ENGINE;?>:
+									</th>
+									<td>
+									<?php
+									$wpsc_use_theme_engine = get_option('wpsc_use_theme_engine');
+									$wpsc_use_theme_engine1 = "";
+									$wpsc_use_theme_engine2 = "";
+									switch($wpsc_use_theme_engine) {
+										case 0:
+										$wpsc_use_theme_engine2 = "checked ='true'";
+										break;
+										
+										case 1:
+										$wpsc_use_theme_engine1 = "checked ='true'";
+										break;
+									}
+									?>
+									<input type='radio' value='1' name='wpsc_use_theme_engine' id=wpsc_use_theme_engine1' <?php echo $wpsc_use_theme_engine1; ?> /> <label for='wpsc_use_theme_engine1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input type='radio' value='0' name='wpsc_use_theme_engine' id='wpsc_use_theme_engine2' <?php echo $wpsc_use_theme_engine2; ?> /> <label for='wpsc_use_theme_engine2'><?php echo TXT_WPSC_NO;?></label>
+									</td>
+								</tr>
 					
 							</table> 
 							

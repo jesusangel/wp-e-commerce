@@ -2,10 +2,8 @@
 /**
  * WP eCommerce Cart and Cart Item classes
  *
- * These are the classes for the WP eCommerce Cart and Cart Items, 
- *
+ * These are the classes for the WP eCommerce Cart and Cart Items,
  * The Cart class handles adding, removing and adjusting items in the cart, and totaling up the cost of the items in the cart.
- * 
  * The Cart Items class handles the same, but for cart items themselves.
  *
  *
@@ -20,9 +18,114 @@
  * The WPSC Cart class
  */
 class wpsc_cart {
-  var $shipping_country;
-	var $billing_country;
-  function add_item() {
+  var $delivery_country;
+	var $selected_country;
+	var $delivery_region;
+	var $selected_region;
+	
+	var $coupon;
+	var $cart_items = array();
+   
+  function wpsc_cart() {
+    $coupon = 'percentage';
+    
+    $delivery_country =& $_SESSION['delivery_country'];
+	  $selected_country =& $_SESSION['selected_country'];
+	  $delivery_region =& $_SESSION['delivery_region'];
+	  $selected_region =& $_SESSION['selected_region'];
+  }
+
+	/**
+	 * Set Item method, requires a product ID and the parameters for the product
+	 * @access public
+	 *
+	 * @param integer the product ID
+	 * @param array parameters
+	 * @return boolean true on sucess, false on failure
+	*/
+  function set_item($product_id, $parameters) {
+    // default action is adding
+		$new_cart_item = new wpsc_cart_item($product_id,$parameters, $cart);
+    $add_item = true;
+    $edit_item = false;
+    if(count($this->cart_items) > 0) {
+      //loop through each cart item
+      foreach($this->cart_items as $key => $cart_item) {
+        // compare product ids and variations.
+				if(($cart_item->product_id == $new_cart_item->product_id) && ($cart_item->product_variations == $new_cart_item->product_variations)) {
+				  // if they are the same, increment the count, and break out;
+					$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
+					$this->cart_items[$key]->refresh_item();
+					$add_item = false;
+					$edit_item = true;
+				}
+      }
+    
+    }
+    // if we are still adding the item, add it
+    if($add_item === true) {
+      //$new_key = sha1(uniqid(rand(), true));
+			$this->cart_items[] = $new_cart_item;
+		}
+		
+		
+	  // if some action was performed, return true, otherwise, return false;
+	  $status = false;
+		if(($add_item == true) || ($edit_item == true)) {
+			$status = true;
+		}	
+		return $status;
+	}
+  
+	/**
+	 * Edit Item method
+	 * @access public
+	 *
+	 * @param integer a cart_items key
+	 * @param array an array of parameters to change
+	 * @return boolean true on sucess, false on failure
+	*/
+  function edit_item($key, $parameters) {
+    if(isset($this->cart_items[$key])) {
+			unset($this->cart_items[$key]);
+			return true;
+		} else {
+			return false;
+		}
+  }  
+  
+	/**
+	 * Remove Item method 
+	 * @access public
+	 *
+	 * @param integer a cart_items key
+	 * @return boolean true on sucess, false on failure
+	*/
+  function remove_item($key) {
+    if(isset($this->cart_items[$key])) {
+			$this->cart_items[$key]->empty_item();
+			unset($this->cart_items[$key]);
+			return true;
+		} else {
+			return false;
+		}
+  }
+  
+  	/**
+	 * calculate_total_price method 
+	 * @access public
+	 *
+	 * @return float returns the price as a floating point value
+	*/
+  function calculate_total_price() {
+    global $wpdb;
+    
+		foreach($this->cart_items as $key => $cart_item) {
+		  $total += $cart_item->total_price;
+		
+		}
+		  
+		return $total;
   }
 }
 
@@ -35,43 +138,128 @@ class wpsc_cart {
  * The WPSC Cart Items class
  */
 class wpsc_cart_item {
+  // provided values
 	var $product_id;
+	var $variation_values;
 	var $product_variations;
-	var $quantity;
-	var $donation_price;
-	var $extras;
-	var $file_data;
-	var $comment;
-	var $time_requested;
-	var $meta;
+	var $quantity = 1;
+	var $provided_price;
 	
-	function cart_item($product_id,$variations = null,$quantity = 1, $donation_price = null,$extras=null,$comment=null,$time_requested=null,$meta=null) {
+	
+	//values from the database
+	var $product_name;
+	var $unit_price;
+	var $total_price;
+	var $taxable_price = 0;
+	var $tax;
+	
+	var $is_donation = false;
+	var $apply_tax = true;
+	var $priceandstock_id;
+	
+	var $meta = array();
+		/**
+	 * wpsc_cart_item constructor, requires a product ID and the parameters for the product
+	 * @access public
+	 *
+	 * @param integer the product ID
+	 * @param array parameters
+	 * @param objcet  the cart object
+	 * @return boolean true on sucess, false on failure
+	*/
+	function wpsc_cart_item($product_id, $parameters, &$cart) {
+    global $wpdb;
+    //extract($parameters);
+    foreach($parameters as $name => $value) {
+			$this->$name = $value;
+    }
+    
+    
 		$this->product_id = (int)$product_id;
-		$this->quantity = (int)$quantity;
-		$this->extras = $extras;
-		if(is_array($variations)) {
-			$this->product_variations = $variations;
-		}
-		$this->donation_price = (float)$donation_price;
-		$this->file_data = null;
-		$this->comment = $comment;
-		$this->time_requested = $time_requested;
-		$this->meta = $meta;
+		// to preserve backwards compatibility, make product_variations a reference to variations.
+		$this->product_variations =& $this->variation_values;
+		
+		
+		
+		//$this->meta = $meta;
+		$this->refresh_item();
 	}
 
+		/**
+	 * update item method, currently can only update the quantity
+	 * will require the parameters to update (no, you cannot change the product ID, delete the item and make a new one)
+	 * @access public
+	 *
+	 * @param integer quantity
+	 * #@param array parameters
+	 * @return boolean true on sucess, false on failure
+	*/
 	function update_item($quantity) {
 		$this->quantity = (int)$quantity;
 	}
-  
+			/**
+	 * refresh_item method, refreshes the item, calculates the prices, gets the name
+	 * @access public
+	 *
+	 * @return array array of monetary and other values
+	*/
+	function refresh_item() {
+    global $wpdb;
+    $product = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
+    $priceandstock_id = 0;
+    if(count($this->variation_values) > 0) {
+      // if there are variations, get the price of the combination and the names of the variations.
+			$variation_data = $wpdb->get_results("SELECT `name`,`variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$this->variation_values)."')", ARRAY_A);
+			$variation_names = array();
+			$variation_ids = array();
+			foreach($variation_data as $variation_row) {
+				$variation_names[] = $variation_row['name'];
+				$variation_ids[] = $variation_row['variation_id'];
+			}
+			
+			asort($variation_ids);         
+			$variation_id_string = implode(",", $variation_ids);
+			
+			$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$this->product_id}' AND `value_id` IN ( '".implode("', '",$this->variation_values )."' ) AND `all_variation_ids` IN('$variation_id_string') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($this->variation_values)."' LIMIT 1");	
+			$price = $wpdb->get_var("SELECT `price` FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+		} else {
+		  // otherwise, just get the price.
+      if($product['special_price'] > 0) {
+        $price = $product['price'] - $product['special_price'];
+      } else {
+        if($product['special'] == 1) {
+          $sale_discount = (float)$product['special_price'];
+        } else {
+					$sale_discount = 0;
+        }
+        $price = $product['price'] - $sale_discount;
+      }
+		}
+		// create the string containing the product name.
+		$product_name = $product['name'];
+		if(count($variation_names) > 0) {
+			$product_name .= " (".implode(", ",$variation_names).")";
+		}
+		$this->product_name = $product_name;
+		$this->priceandstock_id = $priceandstock_id;
+		$this->is_donation = (bool)$product['donation'];
+		// change notax to boolean and invert it
+		$this->apply_tax = !(bool)$product['notax'];
+		if($this->is_donation == 1) {
+			$this->unit_price = $this->provided_price;
+		} else {
+			$this->unit_price = $price;
+		}
+		
+		$this->total_price = $this->unit_price * $this->quantity;
+		if($this->apply_tax == true) {
+		  $this->taxable_price = $this->total_price;
+		}
+// 		$tax = $this->taxable_price - ();
+		
+	}
+   // spare, no longer needed, delete when possible
 	function empty_item() {
-		unset($this->product_id);
-		unset($this->quantity);
-		unset($this->product_variations);
-		unset($this->donation_price);
-		unset($this->file_data);
-		unset($this->comment);
-		unset($this->time_requested);
-		unset($this->meta);
 	}
 }
 ?>

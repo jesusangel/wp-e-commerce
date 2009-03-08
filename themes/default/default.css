@@ -236,6 +236,7 @@ div.textcol{
 /*  width: 77%; */
  text-align: left !important;
 /*   border: 1px solid green; */
+  _display: inline;
  }
  
 div.textcol form{

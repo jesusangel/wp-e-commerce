@@ -981,9 +981,11 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					if (function_exists('wpsc_members_init') && ( $status[0]=='1')){
 						exit();
 					}	
-
+					$parameters = array();
 					if($updated_quantity === false) {
-						
+						$parameters['variation_values'] = $variations;
+						$parameters['provided_price'] = $donation;
+						$parameters['meta']=null;
 						if($_POST['quantity'] != '') {
 							$total_qty = 0;
 							foreach ($_POST['quantity'] as $key=>$qty) {
@@ -991,11 +993,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 								$label[$_POST['label'][$key]] = $qty;
 								$time_requested[$_POST['label'][$key]] = $_POST['time_requested'][$key];
 							}
-							$new_cart_item = new wpsc_cart_item($_POST['prodid'],$variations,$total_qty, $donation,$extras,$_POST['comment'],$time_requested,$label);
+							$parameters['quantity'] = $total_qty;
+							//$new_cart_item = new wpsc_cart_item($_POST['prodid'],$variations,$total_qty, $donation,$_POST['comment'],$time_requested,$label);
 						} else {
-							$new_cart_item = new wpsc_cart_item($_POST['prodid'],$variations, 1, $donation,$extras,$_POST['comment']);
+							$parameters['quantity'] = 1;
 						}
-				  		$_SESSION['nzshpcrt_cart'][] = $new_cart_item;
+						//mail('tom@instinct.co.nz', 'stuff', print_r($parameters,true));
+						$new_cart_item = new wpsc_cart_item($_POST['prodid'],$parameters);
+						$_SESSION['nzshpcrt_cart'][] = $new_cart_item;
 					}
 				}
 			} else {
@@ -1955,8 +1960,9 @@ function nzshpcrt_products_page($content = '') {
   //if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('nzshpcrt_products_page','start');}
   //exit(htmlentities($content));
   if(preg_match("/\[productspage\]/",$content)) {
-    define('WPSC_USE_THEME_ENGINE', FALSE);
-    if(WPSC_USE_THEME_ENGINE === TRUE) {
+    
+    
+    if(get_option('wpsc_use_theme_engine') == TRUE) {
 			if(!file_exists($theme_path.get_option('wpsc_selected_theme'))) {
 				$theme_dir = 'default';
 			} else {

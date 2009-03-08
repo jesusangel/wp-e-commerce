@@ -2,6 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define("TXT_WPSC_USE_THEME_ENGINE", "Use the experimental Theme Engine");
 define("TXT_WPSC_TM", "Target Markets");
 define("TXT_WPSC_SHIPPING_DETAIL","Please choose a country bellow to calculate your shipping costs");
 define('TXT_WPSC_TOTAL_THIS_MONTH', 'Last 30 Days');
