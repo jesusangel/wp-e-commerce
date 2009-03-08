@@ -34,6 +34,42 @@ class wpsc_cart {
 	  $delivery_region =& $_SESSION['delivery_region'];
 	  $selected_region =& $_SESSION['selected_region'];
   }
+   
+  function get_tax_rate() {
+    global $wpdb;
+    $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+		if(($country_data['has_regions'] == 1)) {
+			$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+			$tax_percentage =  $region_data['tax'];
+		} else {
+			$tax_percentage =  $country_data['tax'];
+		}
+		$add_tax = false;
+		if($country == get_option('base_country')) {
+			if($country == 'US' ) { // tax handling for US 
+				if($_SESSION['selected_region'] == get_option('base_region')) {
+					// if they in the state, they pay tax
+					$add_tax = true;
+				} else if($_SESSION['delivery_region'] == get_option('base_region')) {
+					// if they live outside the state, but are delivering to within the state, they pay tax also
+					$add_tax = true;
+				}
+			} else { // tax handling for everywhere else
+				if($country_data['has_regions'] == 1) {
+					if(get_option('base_region') == $region ) {
+						$add_tax = true;
+					}
+				} else {
+					$add_tax = true;
+				}
+			}
+		}
+		if($add_tax === true) {
+			$price = $price * (1 + ($tax_percentage/100));
+		}
+		return $price;
+  }
+
 
 	/**
 	 * Set Item method, requires a product ID and the parameters for the product

@@ -1942,7 +1942,7 @@ function make_csv($array)
   }   
   
 function nzshpcrt_product_log_rss_feed() {
-  echo "<link type='application/rss+xml' href='".get_option('siteurl')."/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP E-Commerce Purchase Log RSS' rel='alternate'/>";
+  echo "<link type='application/rss+xml' href='".get_option('siteurl')."/wp-admin/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP E-Commerce Purchase Log RSS' rel='alternate'/>";
 }
   
 function nzshpcrt_product_list_rss_feed() {

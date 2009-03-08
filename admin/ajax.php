@@ -447,8 +447,11 @@ function wpsc_admin_ajax() {
 			update_option('language_setting', $_POST['language_setting']);
 		}
 	}
-	
-    
+}
+
+
+function wpsc_admin_sale_rss() {
+  global $wpdb;
   if(($_GET['rss'] == "true") && ($_GET['rss_key'] == 'key') && ($_GET['action'] == "purchase_log")) {
     $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!='' ORDER BY `date` DESC";
     $purchase_log = $wpdb->get_results($sql,ARRAY_A);
@@ -480,12 +483,7 @@ function wpsc_admin_ajax() {
 	}
 }
 
-
-
-
-
-
-function shipping_options(){
+function wpsc_shipping_options(){
 	if ($_GET['shipping_options']=='true'){
 		include(WPSC_FILE_PATH.'/display-shipping.php');
 		exit();
@@ -507,7 +505,7 @@ function shipping_options(){
 // 	}
 }
 
-function shipping_submits(){
+function wpsc_shipping_submits(){
 	if ($_POST['shipping_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/display-shipping.php");
 		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
@@ -620,23 +618,23 @@ function wpsc_save_inline_price() {
 	exit($new_price);
 }
 
-if($_GET['inline_price']=='true') { 
+if($_GET['inline_price']=='true') {
 	add_action('admin_init', 'wpsc_save_inline_price', 0);
 }
 
 
 if($_GET['display_invoice']=='true') {
   add_action('admin_init', 'wpsc_display_invoice', 0);
-
 }
 
 
-add_action('admin_init','shipping_options');
-add_action('admin_init','shipping_submits');
+add_action('admin_init','wpsc_shipping_options');
+add_action('admin_init','wpsc_shipping_submits');
 add_action('init','wpsc_swfupload_images');
 
-
-
+if($_GET['action'] == "purchase_log") {
+	add_action('admin_init', 'wpsc_admin_sale_rss');
+}
 
 
 if($_GET['purchase_log_csv'] == "true") {
