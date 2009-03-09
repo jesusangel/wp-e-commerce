@@ -847,6 +847,29 @@ function shopping_cart_total_weight() {
 	return $total_weight;
 }
 
+function wpsc_convert_weights($weight, $unit) {
+	switch($unit) {
+		case "kilogram":
+		$weight = $weight / 0.45359237;
+		break;
+		
+		case "gram":
+		$weight = $weight / 453.59237;
+		break;
+	
+		case "once":
+		case "ounces":
+		$weight = $weight / 16;
+		break;
+		
+		default:
+		$weight = $weight['weight'];
+		break;
+	}
+	return $weight;
+}
+
+
 
 function usps_shipping_methods() {
   /// this section of code needs to be tidied up and all references to "ereg" changed to "preg_match" or similar.

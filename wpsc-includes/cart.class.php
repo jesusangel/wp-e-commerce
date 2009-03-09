@@ -9,7 +9,6 @@
  *
  * @package wp-e-commerce
  * @subpackage wpsc-cart-classes 
-
 */
 
 
@@ -23,34 +22,44 @@ class wpsc_cart {
 	var $delivery_region;
 	var $selected_region;
 	
+	
+	
+	
 	var $coupon;
+	var $tax_percentage;
+	
+	
 	var $cart_items = array();
    
   function wpsc_cart() {
     $coupon = 'percentage';
     
-    $delivery_country =& $_SESSION['delivery_country'];
-	  $selected_country =& $_SESSION['selected_country'];
-	  $delivery_region =& $_SESSION['delivery_region'];
-	  $selected_region =& $_SESSION['selected_region'];
+    $this->delivery_country =& $_SESSION['delivery_country'];
+	  $this->selected_country =& $_SESSION['selected_country'];
+	  $this->delivery_region =& $_SESSION['delivery_region'];
+	  $this->selected_region =& $_SESSION['selected_region'];
+	  $this->get_tax_rate();
   }
-   
+	/**
+	* get_tax_rate method, gets the tax rate as a percentage, based on the selected country and region
+	* @access public
+	*/
   function get_tax_rate() {
     global $wpdb;
     $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
 		if(($country_data['has_regions'] == 1)) {
-			$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+			$region_data = $wpdb->get_row("SELECT `{$wpdb->prefix}region_tax`.* FROM `{$wpdb->prefix}region_tax` WHERE `{$wpdb->prefix}region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
 			$tax_percentage =  $region_data['tax'];
 		} else {
 			$tax_percentage =  $country_data['tax'];
 		}
 		$add_tax = false;
-		if($country == get_option('base_country')) {
-			if($country == 'US' ) { // tax handling for US 
-				if($_SESSION['selected_region'] == get_option('base_region')) {
+		if($this->selected_country == get_option('base_country')) {
+			if($this->selected_country == 'US' ) { // tax handling for US 
+				if($this->selected_region == get_option('base_region')) {
 					// if they in the state, they pay tax
 					$add_tax = true;
-				} else if($_SESSION['delivery_region'] == get_option('base_region')) {
+				} else if($this->delivery_region == get_option('base_region')) {
 					// if they live outside the state, but are delivering to within the state, they pay tax also
 					$add_tax = true;
 				}
@@ -64,10 +73,10 @@ class wpsc_cart {
 				}
 			}
 		}
-		if($add_tax === true) {
-			$price = $price * (1 + ($tax_percentage/100));
+		if($add_tax !== true) {
+			$tax_percentage = 0;
 		}
-		return $price;
+		$this->tax_percentage = $tax_percentage;
   }
 
 
@@ -81,7 +90,7 @@ class wpsc_cart {
 	*/
   function set_item($product_id, $parameters) {
     // default action is adding
-		$new_cart_item = new wpsc_cart_item($product_id,$parameters, $cart);
+		$new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
     $add_item = true;
     $edit_item = false;
     if(count($this->cart_items) > 0) {
@@ -174,6 +183,8 @@ class wpsc_cart {
  * The WPSC Cart Items class
  */
 class wpsc_cart_item {
+  // each cart item contains a reference to the cart that it is a member of
+	var $cart;
   // provided values
 	var $product_id;
 	var $variation_values;
@@ -187,7 +198,9 @@ class wpsc_cart_item {
 	var $unit_price;
 	var $total_price;
 	var $taxable_price = 0;
-	var $tax;
+	var $tax = 0;
+	var $weight = 0;
+	var $shipping = 0;
 	
 	var $is_donation = false;
 	var $apply_tax = true;
@@ -205,6 +218,8 @@ class wpsc_cart_item {
 	*/
 	function wpsc_cart_item($product_id, $parameters, &$cart) {
     global $wpdb;
+    // each cart item contains a reference to the cart that it is a member of, this makes that reference 
+    $this->cart =& $cart;
     //extract($parameters);
     foreach($parameters as $name => $value) {
 			$this->$name = $value;
@@ -257,8 +272,12 @@ class wpsc_cart_item {
 			$variation_id_string = implode(",", $variation_ids);
 			
 			$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$this->product_id}' AND `value_id` IN ( '".implode("', '",$this->variation_values )."' ) AND `all_variation_ids` IN('$variation_id_string') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($this->variation_values)."' LIMIT 1");	
-			$price = $wpdb->get_var("SELECT `price` FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+			
+			$priceandstock_values = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+			$price = $priceandstock_values['price'];
+			$weight = wpsc_convert_weights($priceandstock_values['weight'], $priceandstock_values['weight_unit']);
 		} else {
+			$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
 		  // otherwise, just get the price.
       if($product['special_price'] > 0) {
         $price = $product['price'] - $product['special_price'];
@@ -286,10 +305,11 @@ class wpsc_cart_item {
 		} else {
 			$this->unit_price = $price;
 		}
-		
+		$this->weight = $weight;
 		$this->total_price = $this->unit_price * $this->quantity;
 		if($this->apply_tax == true) {
 		  $this->taxable_price = $this->total_price;
+			$this->tax = $this->taxable_price * ($this->cart->tax_percentage/100);
 		}
 // 		$tax = $this->taxable_price - ();
 		
