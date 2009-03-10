@@ -1,4 +1,13 @@
 <?php
+/**
+ * WP eCommerce Database template
+ *
+ * This is the WPSC database template it is a multidimensional associative array used to create and update the database tables.
+ * @package wp-e-commerce
+ * @subpackage wpsc-updating-code 
+ */
+
+
 
 $table_name = "{$wpdb->prefix}also_bought_product";
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";

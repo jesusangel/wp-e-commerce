@@ -1,26 +1,5 @@
 <?php
 
-$v1 = str_replace(array('_','-','+'),'.',strtolower($wp_version));
-$v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);
-$v1 = preg_split("/([a-z]+)/i",$v1,-1, PREG_SPLIT_DELIM_CAPTURE);
-array_walk($v1, create_function('&$v', '$v = trim($v,". ");'));
-
-define('IS_WP25', version_compare($v1[0], '2.5', '>=') );
-define('IS_WP27', version_compare($v1[0], '2.7', '>=') );
-
-// // we need to know where we are, rather than assuming where we are
-define('WPSC_FILE_PATH', dirname(__FILE__));
-define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
-
-$siteurl = get_option('siteurl');
-
-// thanks to ikool for this fix
-define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
-define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
-
-if(isset($wpmu_version)) {
-    define('IS_WPMU', 1);
-}
 //phpinfo();
 //exit("<pre>");
 $wpsc_currency_data = array();
@@ -55,98 +34,6 @@ if(WPSC_DEBUG === true) {
 
  
 
-if(get_option('language_setting') != '') {
-  require(WPSC_FILE_PATH.'/languages/'.get_option('language_setting'));
-} else {
-  require(WPSC_FILE_PATH.'/languages/EN_en.php');
-}
-
-
-require(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
-//require(WPSC_FILE_PATH.'/wpsc-includes/extra.class.php');
-// require(WPSC_FILE_PATH.'/wpsc-includes/http_client.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
-if (!IS_WP25) {
-	require(WPSC_FILE_PATH.'/editor.php');
-} else { 
-	require(WPSC_FILE_PATH.'/js/tinymce3/tinymce.php');
-}
-
-if(IS_WPMU == 1) {
-		$upload_url = get_option('siteurl').'/files';
-		$upload_path = ABSPATH.get_option('upload_path');
-} else {
-	if ( !defined('WP_CONTENT_URL') ) {
-			define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
-		}
-	if ( !defined('WP_CONTENT_DIR') ) {
-		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content');
-	}
-	
-	$upload_path = WP_CONTENT_DIR."/uploads";
-	$upload_url = WP_CONTENT_URL."/uploads";
-}
-
-$wpsc_file_dir = "{$upload_path}/wpsc/downloadables/";
-$wpsc_preview_dir = "{$upload_path}/wpsc/previews/";
-$wpsc_image_dir = "{$upload_path}/wpsc/product_images/";
-$wpsc_thumbnail_dir = "{$upload_path}/wpsc/product_images/thumbnails/";
-$wpsc_category_dir = "{$upload_path}/wpsc/category_images/";
-$wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
-$wpsc_cache_dir = "{$upload_path}/wpsc/cache/";
-
-
-// $wpsc_file_dir = ABSPATH."{$upload_path}/files/";
-// $wpsc_preview_dir = ABSPATH."{$upload_path}/preview_clips/";
-// $wpsc_image_dir = ABSPATH."{$upload_path}/product_images/";
-// $wpsc_thumbnail_dir = ABSPATH."{$upload_path}/product_images/thumbnails/";
-// $wpsc_category_dir = ABSPATH."{$upload_path}/category_images/";
-
-
-define('WPSC_FILE_DIR', $wpsc_file_dir);
-define('WPSC_PREVIEW_DIR', $wpsc_preview_dir);
-define('WPSC_IMAGE_DIR', $wpsc_image_dir);
-define('WPSC_THUMBNAIL_DIR', $wpsc_thumbnail_dir);
-define('WPSC_CATEGORY_DIR', $wpsc_category_dir);
-define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
-define('WPSC_CACHE_DIR', $wpsc_cache_dir);
-
-
-/**
-* files that are uploaded as part of digital products are not directly downloaded, therefore there is no need for a URL constant for them
-*/
-
-$wpsc_preview_url = "{$upload_url}/wpsc/previews/";
-$wpsc_image_url = "{$upload_url}/wpsc/product_images/";
-$wpsc_thumbnail_url = "{$upload_url}/wpsc/product_images/thumbnails/";
-$wpsc_category_url = "{$upload_url}/wpsc/category_images/";
-$wpsc_user_uploads_url = "{$upload_url}/wpsc/user_uploads/";
-$wpsc_cache_url = "{$upload_url}/wpsc/cache/";
-
-
-// $wpsc_preview_url = "{$siteurl}/{$upload_path}/preview_clips/";
-// $wpsc_image_url = "{$siteurl}/{$upload_path}/product_images/";
-// $wpsc_thumbnail_url = "{$siteurl}/{$upload_path}/product_images/thumbnails/";
-// $wpsc_category_url = "{$siteurl}/{$upload_path}/category_images/";
-
-define('WPSC_PREVIEW_URL', $wpsc_preview_url);
-define('WPSC_IMAGE_URL', $wpsc_image_url);
-define('WPSC_THUMBNAIL_URL', $wpsc_thumbnail_url);
-define('WPSC_CATEGORY_URL', $wpsc_category_url);
-define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
-define('WPSC_CACHE_URL', $wpsc_cache_url);
-
-
-/*
- * {Notes} Session will sometimes always exist dependent on server
- * {Notes} Controls user Session
- */
-if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSION)) {
-  session_start();
-}
 
 
 if(isset($_SESSION['nzshpcrt_cart'])) {
@@ -1941,20 +1828,14 @@ function nzshpcrt_products_page($content = '') {
   if(preg_match("/\[productspage\]/",$content)) {
     
     
-    if(get_option('wpsc_use_theme_engine') == TRUE) {
-			if(!file_exists($theme_path.get_option('wpsc_selected_theme'))) {
-				$theme_dir = 'default';
-			} else {
-				$theme_dir = get_option('wpsc_selected_theme');
-			}
-	
+    if(get_option('wpsc_use_theme_engine') == TRUE) {	
 			$wpsc_query->get_products();
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			ob_start();
 			if(wpsc_is_single_product()) {
-				include_once(WPSC_FILE_PATH . "/themes/$theme_dir/single_product.php");
+				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/single_product.php");
 			} else {
-				include_once(WPSC_FILE_PATH . "/themes/$theme_dir/products_page.php");
+				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/products_page.php");
 			}
 			$output = ob_get_contents();
 			ob_end_clean();
@@ -2991,5 +2872,5 @@ function wpsc_duplicate() {
 if (isset($_GET['duplicate'])) {
 	add_action('admin_init', 'wpsc_duplicate');
 }
-add_action('init', 'save_hidden_box');
+//add_action('init', 'save_hidden_box');
 ?>

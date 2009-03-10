@@ -446,8 +446,7 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
       
       $price = $wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
     } else {
-      $sql = "SELECT `price`,`special`,`special_price` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1";
-      $product_data = $wpdb->get_row($sql,ARRAY_A);
+      $product_data = $wpdb->get_row("SELECT `price`,`special`,`special_price` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
       if($product_data['special_price'] > 0) {
         $price = $product_data['price'] - $product_data['special_price'];
       } else {

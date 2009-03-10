@@ -10,6 +10,23 @@
  * @package wp-e-commerce
  * @subpackage wpsc-cart-classes 
 */
+/**
+ * The WPSC Cart API for templates
+ */
+function wpsc_have_cart_items() {
+	global $wpsc_cart;
+	return $wpsc_cart->have_cart_items();
+}
+ 
+function wpsc_the_cart_item() {
+	global $wpsc_cart;
+	return $wpsc_cart->the_cart_item();
+}
+ 
+function wpsc_cart_item_name() {
+	global $wpsc_cart;
+	return htmlentities(stripslashes($wpsc_cart->cart_item->product_name), ENT_QUOTES);
+}
 
 
 
@@ -22,14 +39,14 @@ class wpsc_cart {
 	var $delivery_region;
 	var $selected_region;
 	
-	
-	
-	
 	var $coupon;
 	var $tax_percentage;
 	
-	
 	var $cart_items = array();
+	var $cart_item;
+	var $cart_item_count = 0;
+	var $current_cart_item = -1;
+	var $in_the_loop = false;
    
   function wpsc_cart() {
     $coupon = 'percentage';
@@ -119,6 +136,7 @@ class wpsc_cart {
 		if(($add_item == true) || ($edit_item == true)) {
 			$status = true;
 		}	
+		$this->cart_item_count = count($this->cart_items);
 		return $status;
 	}
   
@@ -172,6 +190,46 @@ class wpsc_cart {
 		  
 		return $total;
   }
+  
+  
+  /**
+	 * cart loop methods
+	*/
+ 
+  
+  function next_cart_item() {
+		$this->current_cart_item++;
+		$this->cart_item = $this->cart_items[$this->current_cart_item];
+		return $this->cart_item;
+	}
+
+  
+  function the_cart_item() {
+		$this->in_the_loop = true;
+		$this->cart_item = $this->next_cart_item();
+		if ( $this->current_cart_item == 0 ) // loop has just started
+			do_action('wpsc_cart_loop_start');
+	}
+
+	function have_cart_items() {
+		if ($this->current_cart_item + 1 < $this->cart_item_count) {
+			return true;
+		} else if ($this->current_cart_item + 1 == $this->cart_item_count && $this->cart_item_count > 0) {
+			do_action('wpsc_cart_loop_end');
+			// Do some cleaning up after the loop,
+			$this->rewind_cart_items();
+		}
+
+		$this->in_the_loop = false;
+		return false;
+	}
+
+	function rewind_cart_items() {
+		$this->current_cart_item = -1;
+		if ($this->cart_item_count > 0) {
+			$this->cart_item = $this->cart_items[0];
+		}
+	}    
 }
 
 

@@ -94,7 +94,7 @@ function wpsc_the_product_price() {
     $output = nzshpcrt_currency_display($price, $wpsc_query->product['notax']);
   }
   if(get_option('display_pnp') == 1) {
-    $output = nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
+    //$output = nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
   }
   //$output .= "<pre>".print_r($wpsc_query->first_variations,true)."</pre>";
   return $output;
