@@ -133,8 +133,10 @@ $image_height = get_option('single_view_image_height');
 						echo wpsc_akst_share_link('return');
 					} ?>
 						
-						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
-						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item"/>
+				<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
+        <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
+        <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
+        <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item"/>
 						
 						
 						

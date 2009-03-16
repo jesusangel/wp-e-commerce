@@ -104,7 +104,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
    $cart_count += $item->quantity;
 	}
  
- $output .= "<div id='sliding_cart'>";
+ //$output .= "<div id='sliding_cart'>";
   if($cart != null) {
     if(($quantity_limit == true) || ($_SESSION['out_of_stock'] == true)) {
 			$output .= "<span class='items'>";
@@ -383,7 +383,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
       $output .= "<p class='visitshop'><a href='".get_option('product_list_url')."'>".TXT_WPSC_VISITTHESHOP."</a></p>";
       }
   
- $output .= "</div>";
+ //$output .= "</div>";
   ///update_option('payment_gateway', $backup_payment_gateway);
   return $output;
   }

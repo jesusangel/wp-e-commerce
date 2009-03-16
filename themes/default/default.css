@@ -548,6 +548,11 @@ table.productcart tr.product_shipping td{
  padding-top: 4px;
  }
 
+button.remove_button {
+  margin: 0px !important;
+}
+
+
 #coupon_num{
   width: 134px !important;
  }

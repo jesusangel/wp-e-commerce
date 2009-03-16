@@ -801,7 +801,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			if((($item_data[0]['quantity_limited'] == 1) && ($item_stock > 0) && ($item_stock > $item_quantity)) || ($item_data[0]['quantity_limited'] == 0)) {
 				$cartcount = count($_SESSION['nzshpcrt_cart']);
 				if(is_array($_POST['variation'])) {  $variations = $_POST['variation'];  }  else  { $variations = null; }
-				if(is_array($_POST['extras'])) {  $extras = $_POST['extras'];  }  else  { $extras = null; }
+				//if(is_array($_POST['extras'])) {  $extras = $_POST['extras'];  }  else  { $extras = null; }
 				$updated_quantity = false;
 				if($_SESSION['nzshpcrt_cart'] != null) {
 					foreach($_SESSION['nzshpcrt_cart'] as $cart_key => $cart_item) {
@@ -1396,49 +1396,7 @@ foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
       $_SESSION['nzshpcrt_cart'] = Array();
 		}
       
-     if(is_numeric($_POST['quantity']) && is_numeric($_POST['key'])) {
-      $quantity = (int)$_POST['quantity'];
-      $key = (int)$_POST['key'];
-      $product_id = (int)$_SESSION['nzshpcrt_cart'][$key]->product_id;
-		  $item_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='$product_id' LIMIT 1",ARRAY_A);      
-    	$check_stock = false;
-      if((bool)(int)$item_data['quantity_limited'] == true) {
-				$item_variations = array_values((array)$_SESSION['nzshpcrt_cart'][$key]->product_variations); // reset the keys to start from 0			
-				if(count($item_variations) > 0) {
-          // get list of associated variation IDs
-          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$item_variations)."')");
-          
-          // sort and comma seperate them
-          asort($variation_ids);
-          $all_variation_ids = implode(",", $variation_ids);
-          
-          // select the variation price and stock data ID
-          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$item_variations )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($item_variations)."' LIMIT 1");
-          // get the stock 
-          $item_stock = $wpdb->get_var("SELECT `stock` FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
-					// echo "".print_r($item_stock,true)."";
-        }	else {
-					$item_stock = $item_data['quantity'];
-				}
-				$check_stock = true;
-			}
-			
-			
-      $_SESSION['out_of_stock'] = false;
-      if(is_object($_SESSION['nzshpcrt_cart'][$key])) {
-        if($quantity > 0) {
-          // if stock is not limited or stock is limited and requested quantity is equal to or less than current stock.
-          if(($check_stock == false) || (($check_stock == true) && ($quantity <= $item_stock))) {
-						$_SESSION['nzshpcrt_cart'][$key]->quantity = $quantity;
-          } else {
-						$_SESSION['out_of_stock'] = true;
-          }
-				} else {
-					$_SESSION['nzshpcrt_cart'][$key]->empty_item();
-					unset($_SESSION['nzshpcrt_cart'][$key]);
-				}
-			}
-		}
+
 
 function nzshpcrt_download_file() {
   global $wpdb,$user_level,$wp_rewrite; 
@@ -1828,7 +1786,7 @@ function nzshpcrt_products_page($content = '') {
   if(preg_match("/\[productspage\]/",$content)) {
     
     
-    if(get_option('wpsc_use_theme_engine') == TRUE) {	
+    if(get_option('wpsc_use_theme_engine') == TRUE) {
 			$wpsc_query->get_products();
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			ob_start();
@@ -1856,10 +1814,19 @@ function nzshpcrt_products_page($content = '') {
 function nzshpcrt_shopping_cart($content = '') {
 		//exit($content);
   if(preg_match("/\[shoppingcart\]/",$content)) {
-    ob_start();
-    include_once(WPSC_FILE_PATH . "/shopping_cart.php");
-    $output = ob_get_contents();
-    ob_end_clean();
+  if(get_option('wpsc_use_theme_engine') == TRUE) {
+			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+			ob_start();
+			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/shopping_cart_page.php");
+			$output = ob_get_contents();
+			ob_end_clean();
+			$output = str_replace('$','\$', $output);
+    } else {
+			ob_start();
+			include_once(WPSC_FILE_PATH . "/shopping_cart.php");
+			$output = ob_get_contents();
+			ob_end_clean();
+    }
     return preg_replace("/(<p>)*\[shoppingcart\](<\/p>)*/",$output, $content);
 	} else {
     return $content;

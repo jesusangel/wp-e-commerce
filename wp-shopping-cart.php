@@ -54,6 +54,7 @@ require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
+require(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
 if (!IS_WP25) {
 	require(WPSC_FILE_PATH.'/editor.php');
@@ -160,6 +161,12 @@ function wpsc_serialize_shopping_cart() {
 add_action('shutdown','wpsc_serialize_shopping_cart');
 
 
+
 /// OLD CODE INCLUDED HERE
 include_once('wp-shopping-cart.old.php');
+
+
+
+/// Include javascript here
+wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js');
 ?>

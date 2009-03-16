@@ -115,7 +115,7 @@ function submitform(frm, show_notification)
   }
 
 function emptycart() {
-  ajax.post("index.php",getresults,"ajax=true&user=true&emptycart=true&current_page="+window.location+"");
+  ajax.post("index.php",getresults,"ajax=true&user=true&wpsc_ajax_action=empty_cart&current_page="+window.location+"");
   if(document.getElementById('loadingimage') != null) {
     document.getElementById('loadingimage').src = WPSC_URL+'/images/indicator.gif';
     document.getElementById('loadingindicator').style.visibility = 'visible';

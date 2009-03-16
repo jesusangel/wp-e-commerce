@@ -4,6 +4,16 @@
 */
 
 
+function wpsc_this_page_url() {
+	global $wpsc_query;
+	//echo "<pre>".print_r($wpsc_query->category,true)."</pre>";
+	if($wpsc_query->is_single === true) {
+		return wpsc_product_url($wpsc_query->product['id']);
+	} else {
+		return wpsc_category_url($wpsc_query->category);
+	}
+}
+
 function wpsc_is_single_product() {
 	global $wpsc_query;
 	if($wpsc_query->is_single === true) {

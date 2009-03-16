@@ -68,80 +68,6 @@ $rawnum = null;
 $number = null;  
 $cart = $_SESSION['nzshpcrt_cart'];
 
-function wpsc_shipping_country_list($selected_country = null, $selected_region = null) {
-	global $wpdb, $wpsc_shipping_modules;
-	if($selected_country == null) {
-		$selected_country = get_option('base_country');
-	}
-	if($selected_region == null) {
-		$selected_region = get_option('base_region');
-	}
-	$country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
-	$output .= "<select name='country' id='current_country' onchange='submit_change_country();' >";
-	foreach ($country_data as $country) {
-	// 23-02-09 fix for custom target market by jeffry
-	// recon this should be taken out and put into a function somewhere maybe,,,
-	 if($country['visible'] == '1'){
-		$selected ='';
-		if($selected_country == $country['isocode']) {
-			$selected = "selected='true'";
-		}
-		$output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
-	 }
-	}
-
-	$output .= "</select>";
-	
-	if ($selected_country == 'US') {
-		$region_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."region_tax` WHERE country_id='136'",ARRAY_A);
-		$output .= "<select name='region'  onchange='submit_change_country();' >";
-		foreach ($region_data as $region) {
-			$selected ='';
-			if($selected_region == $region['id']) {
-				$selected = "selected='true'";
-			}
-			$output .= "<option $selected value='{$region['id']}'>{$region['name']}</option>";
-		}
-		$output .= "";
-		
-		$output .= "</select>";
-	} else {
-		$output .= " ";
-	}
-	
-// 	$output .= "ZipCode:";
-if(isset($_POST['zipcode'])) {
-		if ($_POST['zipcode']=='') {
-			$zipvalue = 'Your Zipcode';
-			$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
-			$color = '#999';
-		} else {
-			$zipvalue = $_POST['zipcode'];
-			$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
-			$color = '#000';
-		}
-	} else if(isset($_SESSION['wpsc_zipcode']) && ($_SESSION['wpsc_zipcode'] != '')) {
-			$zipvalue = $_SESSION['wpsc_zipcode'];
-			$color = '#000';
-	} else {
-		$zipvalue = 'Your Zipcode';
-		$_SESSION['wpsc_zipcode'] = '';
-		$color = '#999';
-	}
-	
-		$uses_zipcode = false;
-		$custom_shipping = get_option('custom_shipping_options');
-		foreach((array)$custom_shipping as $shipping) {
-		  if($wpsc_shipping_modules[$shipping]->needs_zipcode == true) {
-		    $uses_zipcode = true;
-		  }
-		}
-	
-	if($uses_zipcode == true) {
-		$output .= " <input type='text' style='color:".$color.";' onclick='if (this.value==\"Your Zipcode\") {this.value=\"\";this.style.color=\"#000\";}' onblur='if (this.value==\"\") {this.style.color=\"#999\"; this.value=\"Your Zipcode\"; }' value='".$zipvalue."' size='10' name='zipcode' id='zipcode'>";
-	}
-	return $output;
-}
 
 ?>
 		<div class="wrap wpsc_container">
@@ -232,7 +158,7 @@ if(isset($_POST['zipcode'])) {
     $shipping = nzshpcrt_determine_item_shipping($product_id, $number, $_SESSION['delivery_country']);
     $total_shipping += $shipping;
     echo "  <td>\n\r";
-    echo "<a href='".get_option('shopping_cart_url').$seperator."remove=".$key."'>Remove</a>";
+    echo "<a href='".get_option('shopping_cart_url').$seperator."remove=".$key."'>".TXT_WPSC_REMOVE."</a>";
     echo "  </td>\n\r";
     
     echo "</tr>\n\r";
