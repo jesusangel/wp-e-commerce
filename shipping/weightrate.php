@@ -74,6 +74,22 @@ class weightrate {
 			return array(array("Weight Rate"=>array_shift($layers)));
 		}
 	}
+	
+	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
+	}
+	
+	function get_cart_shipping($total_price, $weight) {
+		$layers = get_option('weight_rate_layers');
+		if ($layers != '') {
+			$layers = array_reverse($layers,true);
+			foreach ($layers as $key => $shipping) {
+				if ($weight >= (float)$key) {
+					$output = $shipping;
+				}
+			}
+		}
+	  return $output;
+	}
 }
 $weightrate = new weightrate();
 $wpsc_shipping_modules[$weightrate->getInternalName()] = $weightrate;

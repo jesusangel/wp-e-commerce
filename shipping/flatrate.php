@@ -132,7 +132,15 @@ class flatrate {
 			}
 			
 			return array($shipping_quotes);
-		}	
+		}
+	}
+	
+	
+	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
+	}
+	
+	function get_cart_shipping($total_price, $weight) {
+	  return $output;
 	}
 }
 $flatrate = new flatrate();

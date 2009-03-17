@@ -32,7 +32,28 @@ function wpsc_cart_total() {
 	global $wpsc_cart;
 	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_price());
 }
- 
+  
+/**
+* cart has shipping function, no parameters
+* @return boolean true for yes, false for no
+*/
+function wpsc_cart_has_shipping() {
+	global $wpsc_cart;
+	if($wpsc_cart->calculate_total_shipping() > 0) {
+		$output = true;
+	} else {
+		$output = false;
+	}
+	return $output;
+}
+/**
+* cart shipping function, no parameters
+* @return string the total shipping of the cart, with a currency sign
+*/
+function wpsc_cart_shipping() {
+	global $wpsc_cart;
+	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_shipping());
+}
 /**
 * have cart items function, no parameters
 * @return boolean true if there are cart items left
@@ -88,6 +109,15 @@ function wpsc_cart_item_price() {
 
 
 /**
+* cart item url function, no parameters
+* @return string the cart item url
+*/
+function wpsc_cart_item_url() {
+	global $wpsc_cart;
+	return $wpsc_cart->cart_item->product_url;
+}
+
+/**
 * cart item image function
 * returns the url to the to the cart item thumbnail image, if a width and height is specified, it resizes the thumbnail image to that size using the preview code (which caches the thumbnail also)
 * @param integer width
@@ -116,11 +146,14 @@ class wpsc_cart {
 	var $selected_region;
 	
 	var $shipping_method = null;
+	var $shipping_quotes = null;
 	var $shipping_option = null;
 	
 	var $coupon;
 	var $tax_percentage;
 	 
+	var $is_incomplete = true;
+	
 	// The cart loop variables
 	var $cart_items = array();
 	var $cart_item;
@@ -140,47 +173,58 @@ class wpsc_cart {
 	  
 	  $this->get_tax_rate();
 	  
-	  $this->get_shipping_rates();
+	  $this->get_shipping_method();
   }
   
-  	/**
+  /**
 	* get_shipping_rates method, gets the shipping rates
 	* @access public
 	*/
-  function get_shipping_rates() {
-    global $wpdb;
+  function get_shipping_method() {
+    global $wpdb, $wpsc_shipping_modules;
     
 	  // set us up with a shipping method.
-	  if($this->shipping_method == null) {
-	  		$custom_shipping = get_option('custom_shipping_options');
-			if((get_option('do_not_use_shipping') != 1) && (count($custom_shipping) > 0)) {
-				if(array_search($_SESSION['quote_shipping_method'], (array)$custom_shipping) === false) {
-					//unset($_SESSION['quote_shipping_method']);
-				}
-				
-				$shipping_quotes = null;
-				if($_SESSION['quote_shipping_method'] != null) {
-					// use the selected shipping module
-//					$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
-				} else {
-					// otherwise select the first one with any quotes
-					foreach((array)$custom_shipping as $shipping_module) {
-						// if the shipping module does not require a weight, or requires one and the weight is larger than zero
-						if(($custom_shipping[$shipping_module]->requires_weight != true) or (($custom_shipping[$shipping_module]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
-							$_SESSION['quote_shipping_method'] = $shipping_module;
-	//						$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
-							if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
-								break;
-							}
+		$custom_shipping = get_option('custom_shipping_options');
+		if((get_option('do_not_use_shipping') != 1) && (count($custom_shipping) > 0)) {
+			if(array_search($this->shipping_method, (array)$custom_shipping) === false) {
+				//unset($this->shipping_method);
+			}
+			
+			$shipping_quotes = null;
+			if($this->shipping_method != null) {
+				// use the selected shipping module
+				$this->shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+			} else {
+				// otherwise select the first one with any quotes
+				foreach((array)$custom_shipping as $shipping_module) {
+					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
+					if(($custom_shipping[$shipping_module]->requires_weight != true) or ($custom_shipping[$shipping_module]->requires_weight == true)) {
+						$this->shipping_method = $shipping_module;
+						$this->shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+						if(count($this->shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+							break;
 						}
 					}
 				}
 			}
-	  }
-	  if($this->shipping_option == null) {
-	  }
-	  
+		}
   }
+  
+  /**
+	* get_shipping_option method, gets the shipping option from the selected method and associated quotes
+	* @access public
+	*/
+  function get_shipping_option() {
+    global $wpdb, $wpsc_shipping_modules;
+    if(count($this->shipping_quotes) < 1) {
+			$this->shipping_option = '';
+			}
+		if(($this->shipping_option == null) && ($this->shipping_quotes != null)) {
+			$this->shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes[0],0,1)));
+		}
+  }
+  
+
   
   
   
@@ -348,7 +392,15 @@ class wpsc_cart {
 		return $total;
   }
   
-  
+    /**
+	* get_shipping_option method, gets the shipping option from the selected method and associated quotes
+	* @access public
+	 * @return float returns the shipping as a floating point value
+	*/
+  function calculate_total_shipping() {
+    global $wpdb, $wpsc_shipping_modules;
+		return $wpsc_shipping_modules[$this->shipping_method]->get_cart_shipping($this->calculate_total_price(), $this->calculate_total_weight());
+  }
   
 	/**
 	 * process_as_currency method 
@@ -486,6 +538,9 @@ class wpsc_cart_item {
 	*/
 	function wpsc_cart_item($product_id, $parameters, &$cart) {
     global $wpdb;
+    // still need to add the ability to limit the number of an item in the cart at once.
+    
+    
     // each cart item contains a reference to the cart that it is a member of, this makes that reference 
     $this->cart =& $cart;
     //extract($parameters);
@@ -523,7 +578,7 @@ class wpsc_cart_item {
 	 * @return array array of monetary and other values
 	*/
 	function refresh_item() {
-    global $wpdb;
+    global $wpdb, $wpsc_shipping_modules;
     $product = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
     $priceandstock_id = 0;
     if(count($this->variation_values) > 0) {
@@ -586,7 +641,8 @@ class wpsc_cart_item {
 			$this->thumbnail_image = $product['thumbnail_image'];
 		} else {
 			$this->thumbnail_image = $product['image'];
-		}		
+		}
+	  $this->shipping = $wpsc_shipping_modules[$this->cart->shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $weight, $product['id']);
 	}
    // spare, no longer needed, delete when possible
 	function empty_item() {

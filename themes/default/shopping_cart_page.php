@@ -14,7 +14,9 @@ $wpsc_checkout = new wpsc_checkout();
 	<?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
 		<tr class="product_row">
 			<td class="firstcol"><img src='<?php echo wpsc_cart_item_image(); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
-			<td class="firstcol"><?php echo wpsc_cart_item_name(); ?></td>
+			<td class="firstcol">
+			<a href='<?php echo wpsc_cart_item_url();?>'><?php echo wpsc_cart_item_name(); ?></a>
+			</td>
 			<td>
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
 					<input type="text" name="quantity" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
@@ -46,6 +48,7 @@ $wpsc_checkout = new wpsc_checkout();
 	</form>
 
 
+	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
 <form action='' method='POST' enctype="multipart/form-data">
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>

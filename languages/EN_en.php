@@ -720,7 +720,7 @@ define('TXT_WPSC_PLEASECHOOSEAGROUP', 'Please choose a Product Group');
 define('TXT_WPSC_PRODUCT', 'Product');
 define('TXT_WPSC_QUANTITY', 'Quantity');
 define('TXT_WPSC_QUANTITY_SHORT', 'Qty'); //translation needed
-define('TXT_WPSC_APPLY', 'Apply');
+define('TXT_WPSC_APPLY', 'Update');
 define('TXT_WPSC_MAKEPAYMENT', 'Make Payment');
 define('TXT_WPSC_EMPTYSHOPPINGCART', 'Empty shopping cart');
 define('TXT_WPSC_TOTALPRICE', 'Total Price');

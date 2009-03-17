@@ -25,10 +25,35 @@ global $wpsc_cart, $wpdb;
 			</tr>	
 		<?php endwhile; ?>
 	</table>
-	<span class='total'><span class='totalhead'>
-		<?php echo TXT_WPSC_TOTAL; ?>:
-	  </span><?php echo wpsc_cart_total(); ?>
+	
+	<?php
+	/*
+	<pre style='text-align: left;'>
+		$wpsc_cart->get_shipping_method();
+		$wpsc_cart->get_shipping_option();
+		echo print_r($wpsc_cart->shipping_method, true)."\n\r";
+		echo print_r($wpsc_cart->shipping_option, true)."\n\r";
+	</pre>
+	*/
+	?>
+	
+<?php if(wpsc_cart_has_shipping()) : ?>
+		<span class='total'>
+		<span class='totalhead'>
+			<?php echo TXT_WPSC_SHIPPING; ?>:
+	  </span>
+	  <?php echo wpsc_cart_shipping(); ?>
 	</span>
+	<?php endif; ?>
+	
+	<span class='total'>
+		<span class='totalhead'>
+			<?php echo TXT_WPSC_TOTAL; ?>:
+	  </span>
+	  <?php echo wpsc_cart_total(); ?>
+	</span>
+	
+	
 	<form action='' method='POST' class='wpsc_empty_the_cart'>
 		<input type='hidden' name='wpsc_ajax_action' value='empty_cart' />
 		<span class='emptycart'>
@@ -46,12 +71,6 @@ global $wpsc_cart, $wpdb;
 	</p>
 <?php endif; ?>
 
-<pre>
-<?php
-$wpsc_cart->get_shipping_rates();
-print_r($wpsc_cart->shipping_method);
-print_r($wpsc_cart->shipping_option);
-?>
-</pre>
+
 <?php
 ?>
