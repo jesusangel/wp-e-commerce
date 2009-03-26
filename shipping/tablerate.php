@@ -80,7 +80,7 @@ class tablerate {
 				}
 			}
 		
-			return array(array("Table Rate"=>array_shift($layers)));
+			return array("Table Rate"=>array_shift($layers));
 		}
 	}
 	

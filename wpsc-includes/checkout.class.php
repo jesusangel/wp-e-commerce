@@ -48,9 +48,9 @@ function wpsc_checkout_form_field() {
 
 function wpsc_shipping_country_list() {
 	global $wpdb, $wpsc_shipping_modules;
-	
-	$selected_country = $_SESSION['delivery_country'];
-	$selected_region = $_SESSION['delivery_region'];
+	$output = "<input type='hidden' name='wpsc_ajax_actions' value='update_location' />";
+	$selected_country = $_SESSION['wpsc_delivery_country'];
+	$selected_region = $_SESSION['wpsc_delivery_region'];
 	if($selected_country == null) {
 		$selected_country = get_option('base_country');
 	}
@@ -189,6 +189,45 @@ class wpsc_checkout {
 			}
     return $output;
 	}
+  
+  function validate_forms() {
+   global $wpdb;
+   $any_bad_inputs = false;
+		foreach($_POST['collected_data'] as $value_id => $value) {
+			$form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `id` = '$value_id' LIMIT 1";
+			$form_data = $wpdb->get_results($form_sql,ARRAY_A);
+			$form_data = $form_data[0];
+			
+			$bad_input = false;
+			if(($form_data['mandatory'] == 1) || ($form_data['type'] == "coupon")) {
+				switch($form_data['type']) {
+					case "email":
+					if(!preg_match("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,5}$/",$value)) {
+						$any_bad_inputs = true;
+						$bad_input = true;
+					}
+					break;
+
+					case "delivery_country":
+					break;
+
+					case "country":
+					break;
+					
+					default:
+					if($value == null) {
+						$any_bad_inputs = true;
+						$bad_input = true;
+					}
+					break;
+				}
+				if($bad_input === true) {
+					$bad_input_message[] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data['name']) . ".";
+				}
+			}
+		}
+		return array('is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message);
+  }
   
   
   /**

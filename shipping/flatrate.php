@@ -74,9 +74,9 @@ class flatrate {
 		global $wpdb;
 		if (isset($_POST['country'])) {
 			$country = $_POST['country'];
-			$_SESSION['delivery_country'] = $country;
+			$_SESSION['wpsc_delivery_country'] = $country;
 		} else {
-			$country = $_SESSION['delivery_country'];
+			$country = $_SESSION['wpsc_delivery_country'];
 		}
 		if (get_option('base_country') != $country) {
 			$results = $wpdb->get_var("SELECT `continent` FROM `{$wpdb->prefix}currency_list` WHERE `isocode` IN('{$country}') LIMIT 1");
@@ -98,7 +98,7 @@ class flatrate {
 			  }
 			}
 			  
-				return array(array("Flat Rate"=>(float)$flatrates[$results]));
+				return array("Flat Rate"=>(float)$flatrates[$results]);
 			}
 		} else {
 			$flatrates = get_option('flat_rates');
@@ -131,12 +131,32 @@ class flatrate {
 			  }
 			}
 			
-			return array($shipping_quotes);
+			return $shipping_quotes;
 		}
 	}
 	
 	
 	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
+		global $wpdb;
+    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
+      $product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+      if($product_list['no_shipping'] == 0) {
+        //if the item has shipping
+        if($country_code == get_option('base_country')) {
+          $additional_shipping = $product_list['pnp'];
+				} else {
+          $additional_shipping = $product_list['international_pnp'];
+				}          
+        $shipping = $quantity * $additional_shipping;
+			} else {
+        //if the item does not have shipping
+        $shipping = 0;
+			}
+		} else {
+      //if the item is invalid or all items do not have shipping
+			$shipping = 0;
+		}
+    return $shipping;	
 	}
 	
 	function get_cart_shipping($total_price, $weight) {

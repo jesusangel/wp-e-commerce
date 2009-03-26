@@ -1,6 +1,7 @@
 <?php
 global $wpsc_cart, $wpdb, $wpsc_checkout;
 $wpsc_checkout = new wpsc_checkout();
+ //echo "<pre>".print_r($_SESSION,true)."</pre>";
 ?>
 
 <table class="productcart">
@@ -37,15 +38,63 @@ $wpsc_checkout = new wpsc_checkout();
 			</td>
 		</tr>
 	<?php endwhile; ?>
+	
+	<tr>
+		<td colspan='5'>
+      <h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>
+			<?php echo TXT_WPSC_SHIPPING_DETAIL; ?>
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan='5'>
+			<form name='change_country' action='' method='POST'>
+				<?php echo wpsc_shipping_country_list();?>
+				<input type='hidden' name='wpsc_update_location' value='true' />
+			</form>
+		</td>
+	</tr>
+	
+	<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
+			<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
+			<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote(); ?>
+				<tr>
+				  <td colspan='3'>
+				    <label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
+				  </td>
+				  <td>
+				    <label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
+				  </td>
+				  <td style='text-align:center;'>
+				    <input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?> onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+				  </td>
+				</tr>
+			<?php endwhile; ?>
+	<?php endwhile; ?>
+	
+	<tr class="total_price total_tax">
+		<td colspan="3">
+			<?php echo TXT_WPSC_TAX; ?>
+		</td>
+		<td colspan="2">
+			<span id="checkout_tax" class="pricedisplay"><?php echo wpsc_cart_tax(); ?></span>
+	  </td>
+	</tr>
+	
+	<tr class='total_price'>
+		<td colspan='3'>
+		<?php echo TXT_WPSC_TOTALPRICE; ?>
+		</td>
+		<td colspan='2'>
+			<span id='checkout_total' class="pricedisplay"><?php echo wpsc_cart_total(); ?></span>
+		</td>
+	</tr>
+	
+	
 	</table>
 	
-		
-	<h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>
-	<?php echo TXT_WPSC_SHIPPING_DETAIL; ?>
-	
-	<form name='change_country' action='' method='POST'>
-	<?php echo wpsc_shipping_country_list();?>
-	</form>
+<!-- <pre><?php#print_r($wpsc_cart);?></pre> -->
+
 
 
 	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
@@ -73,7 +122,7 @@ $wpsc_checkout = new wpsc_checkout();
 		<?php endwhile; ?>
 		<tr>
 			<td colspan='2'>
-				<input type='hidden' value='true' name='submitwpcheckout' />
+				<input type='hidden' value='submit_checkout' name='wpsc_action' />
 				<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
 			</td>
 		</tr>

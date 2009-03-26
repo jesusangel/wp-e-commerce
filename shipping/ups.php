@@ -138,7 +138,7 @@ class ups {
 		global $wpdb;
 		$dest = $_SESSION['delivery_country'];
 		$wpsc_ups_settings = get_option("wpsc_ups_settings");
-		$weight = shopping_cart_total_weight();
+		$weight = wpsc_cart_weight_total();
     if(isset($_POST['zipcode'])) {
       $zipcode = $_POST['zipcode'];      
       $_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
@@ -161,10 +161,11 @@ class ups {
 			$_SESSION['quote_shipping_method'] = $this->internal_name;
 			return array($shipping_quotes);
 		}
+		//$shipping_cache_check = null;
  		if(($_SESSION['wpsc_shipping_cache_check'] === $shipping_cache_check) && ($_SESSION['wpsc_shipping_cache'][$this->internal_name] != null)) {
 			$shipping_list = $_SESSION['wpsc_shipping_cache'][$this->internal_name];
  		} else {
-			$services = $this->getMethod($_SESSION['delivery_country']);
+			$services = $this->getMethod($_SESSION['wpsc_delivery_country']);
 			$ch = curl_init();
 			foreach ($services as $key => $service) {
 				$Url = join("&", array("http://www.ups.com/using/services/rave/qcostcgi.cgi?accept_UPS_license_agreement=yes",
@@ -173,7 +174,7 @@ class ups {
 					"14_origCountry=".get_option('base_country'),
 					"15_origPostal=".get_option('base_zipcode'),
 					"19_destPostal=" . $zipcode,
-					"22_destCountry=".$_SESSION['delivery_country'],
+					"22_destCountry=".$_SESSION['wpsc_delivery_country'],
 					"23_weight=" . $weight,
 					"47_rate_chart=Regular Daily Pickup",
 					"48_container={$wpsc_ups_settings['48_container']}",
@@ -188,21 +189,22 @@ class ups {
 				$Results[]=curl_exec($ch);
 			}
 			curl_close($ch);
-	// 		$Result = explode("%", $Results);
-	//		echo ('<pre>'.print_r($Results,1)."</pre>");
+	// 		$Result = explode("%", $Results);;
+			$shipping_list = array();
 			foreach($Results as $result) {
 				$result = explode("%", $result);
 	// 			echo ('--><pre>'.print_r($pre,1)."</pre>");
 				if ($services[$result[1]] != ''){
 					if ((($result[1]=='XPR') && ($pre == 'XPR')) || (($result[1]=='XDM') && ($pre == 'XDM')) || (($result[1]=='1DP') && ($pre == '1DP')) || (($result[1]=='1DM') && ($pre == '1DM')) || (($result[1]=='1DA') && ($pre == '1DA')) || (($result[1]=='2DA') && ($pre == '2DA')))
-						$shipping_list[] = array($services[$result[1]."L"] => $result[8]);
+						$shipping_list += array($services[$result[1]."L"] => $result[8]);
 					else if (($result[1]=='GND') && ($pre == 'GND'))
-						$shipping_list[] = array($services[$result[1]."RES"] => $result[8]);
+						$shipping_list += array($services[$result[1]."RES"] => $result[8]);
 					else
-						$shipping_list[] = array($services[$result[1]] => $result[8]);
+						$shipping_list += array($services[$result[1]] => $result[8]);
 					$pre = $result[1];
 				}
 			}
+			//echo ('<pre>'.print_r($shipping_list,1)."</pre>");
 			$_SESSION['wpsc_shipping_cache_check']['zipcode'] = $zipcode;
 			$_SESSION['wpsc_shipping_cache_check']['weight'] = $weight;
 			$_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_list;

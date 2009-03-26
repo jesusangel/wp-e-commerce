@@ -67,15 +67,16 @@ class weightrate {
 			$layers = array_reverse($layers,true);
 			foreach ($layers as $key => $shipping) {
 				if ($weight >= (float)$key) {
-					return array(array("Weight Rate"=>$shipping));
+					return array("Weight Rate"=>$shipping);
 				}
 			}
 		
-			return array(array("Weight Rate"=>array_shift($layers)));
+			return array("Weight Rate"=>array_shift($layers));
 		}
 	}
 	
 	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
+	  return 0;
 	}
 	
 	function get_cart_shipping($total_price, $weight) {

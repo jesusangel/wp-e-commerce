@@ -229,10 +229,6 @@ function update_vote_count(prodid)
   ajax.post("index.php",update_vote_count,"ajax=true&get_rating_count=true&product_id="+prodid);
   }
 
-function submit_change_country()
-  {
-  document.forms.change_country.submit();
-  }
   
 function update_preview_url(prodid)
   {
@@ -512,10 +508,10 @@ function statusTextKeyPress(event){
 	}
 	return true;
 }
-function switchmethod(key,key1){
-	total=document.getElementById("shopping_cart_total_price").value;
-	ajax.post("index.php",usps_method_switch,"ajax=true&uspsswitch=true&key1="+key1+"&key="+key+"&total="+total);
-}
+// function switchmethod(key,key1){
+// // 	total=document.getElementById("shopping_cart_total_price").value;
+// 	ajax.post("index.php",usps_method_switch,"ajax=true&uspsswitch=true&key1="+key1+"&key="+key+"&total="+total);
+// }
 
 var usps_method_switch=function (results){
 	shipping = results.split('---');

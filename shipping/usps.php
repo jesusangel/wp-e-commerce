@@ -74,8 +74,8 @@ class usps {
     } else if(isset($_SESSION['wpsc_zipcode'])) {
       $zipcode = $_SESSION['wpsc_zipcode'];
     }
-		$dest = $_SESSION['delivery_country'];
-		$weight = shopping_cart_total_weight();
+		$dest = $_SESSION['wpsc_delivery_country'];
+		$weight = wpsc_cart_weight_total();
 		$pound = floor($weight);
 		$ounce = ($weight-$pound)*16;
 		$machinable = true;
@@ -177,8 +177,9 @@ class usps {
 		curl_setopt($ch, CURLOPT_USERAGENT, 'osCommerce'); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 		$body = curl_exec($ch);
-
+		
 		curl_close($ch);
+		$rates=array();
 		$response=array();
 		while (true) {
 			if ($start = strpos($body, '<Package ID=')) {
@@ -213,7 +214,7 @@ class usps {
 					if($postage <= 0) {
 					  continue;
 					}
-					$rates[] = array($service => $postage);
+					$rates += array($service => $postage);
 					if ($transit) {
 						switch ($service) {
 							case 'EXPRESS':     $time = ereg('<MonFriCommitment>(.*)</MonFriCommitment>', $transresp[$service], $tregs);
@@ -262,7 +263,7 @@ class usps {
 				}
 			}
 			$wpsc_usps_quote = $rates;
-			return $rates;
+			//return $rates;
 		} else {
 			if (ereg('<Error>', $response[0])) {
 				$number = ereg('<Number>(.*)</Number>', $response[0], $regs);
@@ -300,13 +301,14 @@ class usps {
 						$time = preg_replace('/Days$/', 'Days', $time);
 						$time = preg_replace('/Day$/', 'Day', $time);
 						if( !in_array($service, $allowed_types) || ($postage < 0) ) continue;
-						$rates[] = array($service => $postage);
+						$rates += array($service => $postage);
 						if ($time != '') $transittime[$service] = ' (' . $time . ')';
 					}
 				}
-				$uspsQuote=$rates;
+				//$uspsQuote=$rates;
 			}
 		}
+		$uspsQuote=$rates;
 		$wpsc_usps_quote = $rates;
 		return $uspsQuote;
 	}

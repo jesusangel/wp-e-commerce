@@ -109,4 +109,98 @@ if($_REQUEST['wpsc_update_quantity'] == 'true') {
 }
 
 
+/**
+	* update_shipping_price function, used through ajax and in normal page loading.
+	* No parameters, returns nothing
+*/
+function wpsc_update_shipping_price() {
+  global $wpdb, $wpsc_cart;
+ 	$quote_shipping_method = $_POST['key1'];
+ 	$quote_shipping_option = $_POST['key'];
+	$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
+	echo "jQuery('span#checkout_total').html('".wpsc_cart_total()."');";
+	exit();
+}
+// execute on POST and GET
+if($_REQUEST['wpsc_ajax_action'] == 'update_shipping_price') {
+	add_action('init', 'wpsc_update_shipping_price');
+}
+
+
+
+/**
+	* update quantity function, used through ajax and in normal page loading.
+	* No parameters, returns nothing
+*/
+function wpsc_update_location() {
+  global $wpdb, $wpsc_cart;
+
+	if($_POST['country'] != null) {
+		$_SESSION['wpsc_delivery_country'] = $_POST['country'];
+		if($_SESSION['wpsc_selected_country'] == null) {
+			$_SESSION['wpsc_selected_country'] = $_POST['country'];
+		}
+		if($_POST['region'] != null) {
+			$_SESSION['wpsc_delivery_region'] = $_POST['region'];
+			if($_SESSION['wpsc_selected_region'] == null) {
+				$_SESSION['wpsc_selected_region'] = $_POST['region'];
+			}
+		} else if($_SESSION['wpsc_selected_region'] == '') {
+			$_SESSION['wpsc_delivery_region'] = get_option('base_region');
+			$_SESSION['wpsc_selected_region'] = get_option('base_region');
+		}
+		
+		
+		if($_SESSION['wpsc_delivery_region'] == '') {
+			$_SESSION['wpsc_delivery_region'] = $_SESSION['selected_region'];
+		}
+	}
+	
+	if($_POST['zipcode'] == '') {
+		$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+	}
+	
+	$wpsc_cart->update_location();
+	$wpsc_cart->get_shipping_method();
+	$wpsc_cart->get_shipping_option();
+	
+	
+	if($_GET['ajax'] == 'true') {
+		exit();
+	}
+}
+  
+// execute on POST and GET
+if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
+	add_action('init', 'wpsc_update_location');
+}
+
+
+/**
+	* submit checkout function, used through ajax and in normal page loading.
+	* No parameters, returns nothing
+*/
+function wpsc_submit_checkout() {
+  global $wpdb, $wpsc_cart;
+	$wpsc_checkout = new wpsc_checkout();
+	
+	$form_validity = $wpsc_checkout->validate_forms();
+	extract($form_validity); // extracts $is_valid and $error_messages
+	if($is_valid == true) {
+	
+	
+	} else {
+	  // do ???
+	}
+	//echo "<pre>".print_r($form_validity,true)."</pre>";
+  
+  exit();
+
+}
+
+// execute on POST and GET
+if($_REQUEST['wpsc_action'] == 'submit_checkout') {
+	add_action('init', 'wpsc_submit_checkout');
+}
+
 ?>

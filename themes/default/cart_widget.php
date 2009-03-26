@@ -27,14 +27,11 @@ global $wpsc_cart, $wpdb;
 	</table>
 	
 	<?php
-	/*
-	<pre style='text-align: left;'>
-		$wpsc_cart->get_shipping_method();
-		$wpsc_cart->get_shipping_option();
-		echo print_r($wpsc_cart->shipping_method, true)."\n\r";
-		echo print_r($wpsc_cart->shipping_option, true)."\n\r";
-	</pre>
-	*/
+// 		echo "<pre style='text-align: left;'>"."\n\r";
+// 		echo print_r($wpsc_cart->shipping_method, true)."\n\r";
+// 		echo print_r($wpsc_cart->shipping_option, true)."\n\r";
+// 		echo print_r($wpsc_cart->shipping_quotes, true)."\n\r";
+// 		echo "</pre>"."\n\r";
 	?>
 	
 <?php if(wpsc_cart_has_shipping()) : ?>

@@ -713,34 +713,34 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 	}
 
 		////changes for usps
-		if ($_POST['uspsswitch']) {
-			$total=$_POST['total'];
-			$quotes = $_SESSION['uspsQuote'];
-			$_SESSION['quote_shipping_method']= $_POST['key1'];
-			$_SESSION['quote_shipping_option']= $_POST['key'];
-			//echo "<pre>".print_r($quotes,1)."</pre>";
-			foreach ($quotes[$_POST['key1']] as $quote) {
-				if ($quote[$_POST['key']] !== null) {
-				
-					echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-					echo "---";					
-					
-					$total_shipping = nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
-					if($_SESSION['quote_shipping_method'] == 'flatrate') {
-						foreach((array)$_SESSION['nzshpcrt_cart'] as $cart_item) {
-							$product_id = $cart_item->product_id;
-							$quantity = $cart_item->quantity;
-							$total_shipping += nzshpcrt_determine_item_shipping($product_id, $quantity, $_SESSION['delivery_country']);
-						}
-			    }
-					echo nzshpcrt_currency_display($total_shipping, true);
-					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
-					$_SESSION['quote_shipping']= nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
-					$_SESSION['quote_shipping_total'] = nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-				}
-			}
-			exit();
-		}
+// 		if ($_POST['uspsswitch']) {
+// 			$total=$_POST['total'];
+// 			$quotes = $_SESSION['uspsQuote'];
+// 			$_SESSION['quote_shipping_method']= $_POST['key1'];
+// 			$_SESSION['quote_shipping_option']= $_POST['key'];
+// 			//echo "<pre>".print_r($quotes,1)."</pre>";
+// 			foreach ($quotes[$_POST['key1']] as $quote) {
+// 				if ($quote[$_POST['key']] !== null) {
+// 				
+// 					echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
+// 					echo "---";					
+// 					
+// 					$total_shipping = nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
+// 					if($_SESSION['quote_shipping_method'] == 'flatrate') {
+// 						foreach((array)$_SESSION['nzshpcrt_cart'] as $cart_item) {
+// 							$product_id = $cart_item->product_id;
+// 							$quantity = $cart_item->quantity;
+// 							$total_shipping += nzshpcrt_determine_item_shipping($product_id, $quantity, $_SESSION['delivery_country']);
+// 						}
+// 			    }
+// 					echo nzshpcrt_currency_display($total_shipping, true);
+// 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
+// 					$_SESSION['quote_shipping']= nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
+// 					$_SESSION['quote_shipping_total'] = nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
+// 				}
+// 			}
+// 			exit();
+// 		}
 		//changes for usps ends
 
 	if(($_GET['user'] == "true") && is_numeric($_POST['prodid'])) {
@@ -958,21 +958,27 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
       echo $currency_sign;
       exit();
 		}
+		
 	if($_POST['buynow'] == "true") {
-		$id = $_REQUEST['product_id'];
-		$price = $_REQUEST['price'];
-		$downloads = get_option('max_downloads');
-		$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$id." LIMIT 1";
-		$product_info = $wpdb->get_results($product_sql, ARRAY_A);
-		$product_info = $product_info[0];
-		$sessionid = (mt_rand(100,999).time());
-		$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`shipping_region`, `user_ID`, `discount_value` ) VALUES ( '".$price."', '".$sessionid."', '".time()."', 'BuyNow', 'BuyNow', 'BuyNow' , NULL , 0)";
-		$wpdb->query($sql) ;
-		$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
-		$cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$id."', '".$log_id."','".$price."','0', '0','1', '".$donation."', '1')";
-		$wpdb->query($cartsql);
-		$wpdb->query("INSERT INTO `".$wpdb->prefix."download_status` ( `fileid` , `purchid` , `downloads` , `active` , `datetime` ) VALUES ( '".$product_info['file']."', '".$log_id."', '$downloads', '0', NOW( ));");
-	exit();
+	  if(is_numeric($_REQUEST['product_id']) || is_numeric($_REQUEST['price'])) {
+			$id = (int)$wpdb->escape($_REQUEST['product_id']);
+			$price =  (int)$wpdb->escape($_REQUEST['price']);
+			$downloads = get_option('max_downloads');
+			$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$id." LIMIT 1";
+			$product_info = $wpdb->get_results($product_sql, ARRAY_A);
+			$product_info = $product_info[0];
+			$sessionid = (mt_rand(100,999).time());
+			$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`shipping_region`, `user_ID`, `discount_value` ) VALUES ( '".$price."', '".$sessionid."', '".time()."', 'BuyNow', 'BuyNow', 'BuyNow' , NULL , 0)";
+			$wpdb->query($sql) ;
+			$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
+			$cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$id."', '".$log_id."','".$price."','0', '0','1', '".$donation."', '1')";
+			$wpdb->query($cartsql);
+			$wpdb->query("INSERT INTO `".$wpdb->prefix."download_status` ( `fileid` , `purchid` , `downloads` , `active` , `datetime` ) VALUES ( '".$product_info['file']."', '".$log_id."', '$downloads', '0', NOW( ));");
+			exit();
+		} else {
+			$message = "GET:\n\r".print_r($_GET)."POST:\n\r".print_r($_POST)."SERVER:\n\r".print_r($_SERVER);
+			mail('tom@instinct.co.nz', 'hack attempt', $message);
+		}
 	}
 	
     
@@ -2318,7 +2324,7 @@ if($_GET['page'] == WPSC_DIR_NAME."/display-log.php") {
 }
 
 if(($_POST['submitwpcheckout'] == 'true')) {
-  add_action('init', 'nzshpcrt_submit_checkout');
+  //add_action('init', 'nzshpcrt_submit_checkout');
 }
 add_action('init', 'nzshpcrt_submit_ajax');
 add_action('init', 'nzshpcrt_download_file');

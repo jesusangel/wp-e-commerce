@@ -82,7 +82,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
 		
-				$shipping = $row['pnp'];
+				$shipping = $row['pnp']*$row['quantity'];
 				$total_shipping += $shipping;
 		
 				if($product_data['special']==1) {

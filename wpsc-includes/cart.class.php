@@ -30,7 +30,26 @@ function wpsc_cart_item_count() {
 */
 function wpsc_cart_total() {
 	global $wpsc_cart;
-	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_price());
+	
+	$total = $wpsc_cart->calculate_total_price();
+	$total += $wpsc_cart->calculate_total_shipping();
+	return $wpsc_cart->process_as_currency($total);
+}
+/**
+* cart total function, no parameters
+* @return float the total weight of the cart
+*/
+function wpsc_cart_weight_total() {
+	global $wpsc_cart;
+	return $wpsc_cart->calculate_total_weight();
+}
+/**
+* tax total function, no parameters
+* @return float the total weight of the cart
+*/
+function wpsc_cart_tax() {
+	global $wpsc_cart;
+	return $wpsc_cart->calculate_total_tax();
 }
   
 /**
@@ -137,6 +156,110 @@ function wpsc_cart_item_image($width = null, $height = null) {
 
 
 /**
+* have shipping methods function, no parameters
+* @return boolean
+*/
+function wpsc_have_shipping_methods() {
+	global $wpsc_cart;
+	return $wpsc_cart->have_shipping_methods();
+}
+/**
+* the shipping method function, no parameters
+* @return boolean
+*/
+function wpsc_the_shipping_method() {
+	global $wpsc_cart;
+	return $wpsc_cart->the_shipping_method();
+}
+/**
+* the shipping method name function, no parameters
+* @return string shipping method name
+*/
+function wpsc_shipping_method_name() {
+	global $wpsc_cart, $wpsc_shipping_modules;
+	return $wpsc_shipping_modules[$wpsc_cart->shipping_method]->name;
+}
+
+
+/**
+* the shipping method  internal name function, no parameters
+* @return string shipping method internal name
+*/
+function wpsc_shipping_method_internal_name() {
+	global $wpsc_cart, $wpsc_shipping_modules;
+	return $wpsc_cart->shipping_method;
+}
+
+
+
+
+
+
+ /**
+* have shipping quotes function, no parameters
+* @return string the cart item url
+*/
+function wpsc_have_shipping_quotes() {
+	global $wpsc_cart;
+	return $wpsc_cart->have_shipping_quotes();
+}
+
+/**
+* the shipping quote function, no parameters
+* @return string the cart item url
+*/
+function wpsc_the_shipping_quote() {
+	global $wpsc_cart;
+	return $wpsc_cart->the_shipping_quote();
+}
+
+/**
+* the shipping quote name function, no parameters
+* @return string shipping quote name
+*/
+function wpsc_shipping_quote_name() {
+	global $wpsc_cart;
+	return $wpsc_cart->shipping_quote['name'];
+}
+
+/**
+* the shipping quote value function, no parameters
+* @return string shipping quote value
+*/
+function wpsc_shipping_quote_value($numeric = false) {
+	global $wpsc_cart;
+	if($numeric == true) {
+		return $wpsc_cart->shipping_quote['value'];
+	} else {
+		return $wpsc_cart->process_as_currency($wpsc_cart->shipping_quote['value']);
+	}
+}
+
+/**
+* the shipping quote html ID function, no parameters
+* @return string shipping quote html ID
+*/
+function wpsc_shipping_quote_html_id() {
+	global $wpsc_cart;
+	return $wpsc_cart->shipping_method."_".$wpsc_cart->current_shipping_quote;
+}
+
+/**
+* the shipping quote selected state function, no parameters
+* @return string true or false
+*/
+function wpsc_shipping_quote_selected_state() {
+	global $wpsc_cart;
+	//
+	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method)&& ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name'])) {
+		return "checked='checked'";
+	} else {
+		return "";
+	}
+}
+
+
+/**
  * The WPSC Cart class
  */
 class wpsc_cart {
@@ -145,9 +268,9 @@ class wpsc_cart {
 	var $delivery_region;
 	var $selected_region;
 	
-	var $shipping_method = null;
-	var $shipping_quotes = null;
-	var $shipping_option = null;
+	var $selected_shipping_method = null;
+// 	var $shipping_quotes = null;
+	var $selected_shipping_option = null;
 	
 	var $coupon;
 	var $tax_percentage;
@@ -161,21 +284,44 @@ class wpsc_cart {
 	var $current_cart_item = -1;
 	var $in_the_loop = false;
    
+	// The shipping method loop variables
+	var $shipping_methods = array();
+	var $shipping_method;
+	var $shipping_method_count = 0;
+	var $current_shipping_method = -1;
+	var $in_the_method_loop = false;
+	
+	// The shipping quote loop variables
+	var $shipping_quotes = array();
+	var $shipping_quote;
+	var $shipping_quote_count = 0;
+	var $current_shipping_quote = -1;
+	var $in_the_quote_loop = false;
+	
+	
   function wpsc_cart() {
-    global $wpdb;
-    $coupon = 'percentage';
+    global $wpdb, $wpsc_shipping_modules;
+    $coupon = 'percentage'; 
     
-    $this->delivery_country =& $_SESSION['delivery_country'];
-	  $this->selected_country =& $_SESSION['selected_country'];
-	  $this->delivery_region =& $_SESSION['delivery_region'];
-	  $this->selected_region =& $_SESSION['selected_region'];
-	  
-	  
+	  $this->update_location();
 	  $this->get_tax_rate();
 	  
 	  $this->get_shipping_method();
   }
   
+    
+  /**
+	* update_location method, updates the location
+	* @access public
+	*/
+  function update_location() {
+    $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
+	  $this->selected_country =& $_SESSION['wpsc_selected_country'];
+	  $this->delivery_region =& $_SESSION['wpsc_delivery_region'];
+	  $this->selected_region =& $_SESSION['wpsc_selected_region'];
+	}
+	
+	
   /**
 	* get_shipping_rates method, gets the shipping rates
 	* @access public
@@ -185,25 +331,28 @@ class wpsc_cart {
     
 	  // set us up with a shipping method.
 		$custom_shipping = get_option('custom_shipping_options');
-		if((get_option('do_not_use_shipping') != 1) && (count($custom_shipping) > 0)) {
-			if(array_search($this->shipping_method, (array)$custom_shipping) === false) {
-				//unset($this->shipping_method);
+		
+	  $this->shipping_methods = get_option('custom_shipping_options');
+	  $this->shipping_method_count = count($this->shipping_methods);
+		
+		if((get_option('do_not_use_shipping') != 1) && (count($this->shipping_methods) > 0)) {
+			if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
+				//unset($this->selected_shipping_method);
 			}
 			
 			$shipping_quotes = null;
-			if($this->shipping_method != null) {
+			if($this->selected_shipping_method != null) {
 				// use the selected shipping module
-				$this->shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 			} else {
 				// otherwise select the first one with any quotes
 				foreach((array)$custom_shipping as $shipping_module) {
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
-					if(($custom_shipping[$shipping_module]->requires_weight != true) or ($custom_shipping[$shipping_module]->requires_weight == true)) {
-						$this->shipping_method = $shipping_module;
-						$this->shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
-						if(count($this->shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
-							break;
-						}
+					//if(($wpsc_shipping_modules[$shipping_module]->requires_weight != true) or ($wpsc_shipping_modules[$shipping_module]->requires_weight == true)) {
+					$this->selected_shipping_method = $shipping_module;
+					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+					if(count($this->shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+						break;
 					}
 				}
 			}
@@ -217,16 +366,31 @@ class wpsc_cart {
   function get_shipping_option() {
     global $wpdb, $wpsc_shipping_modules;
     if(count($this->shipping_quotes) < 1) {
-			$this->shipping_option = '';
+			$this->selected_shipping_option = '';
 			}
-		if(($this->shipping_option == null) && ($this->shipping_quotes != null)) {
-			$this->shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes[0],0,1)));
+		if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, $this->shipping_quotes) === false)) {
+			$this->selected_shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes,0,1)));
 		}
   }
   
 
-  
-  
+  /**
+	* update_shipping method, updates the shipping
+	* @access public
+	*/
+  function update_shipping($method, $option) {
+    global $wpdb, $wpsc_shipping_modules;
+		$this->selected_shipping_method = $method;
+		
+		$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
+		
+		$this->selected_shipping_option = $option;
+		
+		foreach($this->cart_items as $key => $cart_item) {
+			$this->cart_items[$key]->refresh_item();
+		}
+		
+	}
   
 	/**
 	* get_tax_rate method, gets the tax rate as a percentage, based on the selected country and region
@@ -377,6 +541,21 @@ class wpsc_cart {
 		}
 		return $total;
   }
+  
+  	/**
+	 * calculate_total_price method 
+	 * @access public
+	 *
+	 * @return float returns the price as a floating point value
+	*/
+  function calculate_total_tax() {
+    global $wpdb;
+    
+		foreach($this->cart_items as $key => $cart_item) {
+		  $total += $cart_item->tax;
+		}
+		return $total;
+  }
   	/**
 	 * calculate_total_weight method 
 	 * @access public
@@ -399,7 +578,11 @@ class wpsc_cart {
 	*/
   function calculate_total_shipping() {
     global $wpdb, $wpsc_shipping_modules;
-		return $wpsc_shipping_modules[$this->shipping_method]->get_cart_shipping($this->calculate_total_price(), $this->calculate_total_weight());
+		$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+    //$shipping = (float)$wpsc_shipping_modules[$this->selected_shipping_method]->get_cart_shipping($this->calculate_total_price(), $this->calculate_total_weight());
+    $shipping = (float)$this->shipping_quotes[$this->selected_shipping_option];
+    //echo "<pre>".print_r($this->shipping_quotes[$this->selected_shipping_option],true)."</pre>";
+		return $shipping;
   }
   
 	/**
@@ -488,7 +671,84 @@ class wpsc_cart {
 		if ($this->cart_item_count > 0) {
 			$this->cart_item = $this->cart_items[0];
 		}
-	}    
+	}
+  
+  /**
+	 * shipping_methods methods
+	*/
+	function next_shipping_method() {
+		$this->current_shipping_method++;
+		$this->shipping_method = $this->shipping_methods[$this->current_shipping_method];
+		return $this->shipping_method;
+	}
+	
+	
+	function the_shipping_method() {
+		$this->shipping_method = $this->next_shipping_method();
+	 	$this->get_shipping_quotes();
+	}
+	
+	function have_shipping_methods() {
+		if ($this->current_shipping_method + 1 < $this->shipping_method_count) {
+			return true;
+		} else if ($this->current_shipping_method + 1 == $this->shipping_method_count && $this->shipping_method_count > 0) {
+			// Do some cleaning up after the loop,
+			$this->rewind_shipping_methods();
+		}
+		return false;
+	}
+	
+	function rewind_shipping_methods() {
+		$this->current_shipping_method = -1;
+		if ($this->shipping_method_count > 0) {
+			$this->shipping_method = $this->shipping_methods[0];
+		}
+	}
+	
+	  /**
+	 * shipping_quotes methods
+	*/
+  function get_shipping_quotes() {
+    global $wpdb, $wpsc_shipping_modules;
+    $this->shipping_quotes = array();
+    $unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+    $num = 0;
+    foreach($unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
+      $this->shipping_quotes[$num]['name'] = $shipping_key;
+      $this->shipping_quotes[$num]['value'] = $shipping_value;
+      $num++;
+    }
+    $this->shipping_quote_count = count($this->shipping_quotes);
+  }
+  
+  
+	function next_shipping_quote() {
+		$this->current_shipping_quote++;
+		$this->shipping_quote = $this->shipping_quotes[$this->current_shipping_quote];
+		return $this->shipping_quote;
+	}
+	
+	
+	function the_shipping_quote() {
+		$this->shipping_quote = $this->next_shipping_quote();
+	}
+	
+	function have_shipping_quotes() {
+		if ($this->current_shipping_quote + 1 < $this->shipping_quote_count) {
+			return true;
+		} else if ($this->current_shipping_quote + 1 == $this->shipping_quote_count && $this->shipping_quote_count > 0) {
+			// Do some cleaning up after the loop,
+			$this->rewind_shipping_quotes();
+		}
+		return false;
+	}
+	
+	function rewind_shipping_quotes() {
+		$this->current_shipping_quote = -1;
+		if ($this->shipping_quote_count > 0) {
+			$this->shipping_quote = $this->shipping_quotes[0];
+		}
+	}
 }
 
 
@@ -642,10 +902,7 @@ class wpsc_cart_item {
 		} else {
 			$this->thumbnail_image = $product['image'];
 		}
-	  $this->shipping = $wpsc_shipping_modules[$this->cart->shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $weight, $product['id']);
-	}
-   // spare, no longer needed, delete when possible
-	function empty_item() {
+	  $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $weight, $product['id']);
 	}
 }
 ?>
