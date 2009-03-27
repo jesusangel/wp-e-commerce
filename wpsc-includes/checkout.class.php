@@ -18,6 +18,30 @@ function wpsc_the_checkout_item() {
 	global $wpsc_checkout;
 	return $wpsc_checkout->the_checkout_item();
 }
+
+function wpsc_the_checkout_item_error_class($as_attribute = true) {
+	global $wpsc_checkout;
+	if($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
+	  $class_name = 'validation-error';
+	}
+	if(($as_attribute == true)){
+	 $output = "class='$class_name'";
+	} else {
+		$output = $class_name;
+	}
+	return $output;
+}
+
+function wpsc_the_checkout_item_error() {
+	global $wpsc_checkout;
+	$output = false;
+	if($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
+	  $output = $_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id];
+	}
+	return $output;
+}
+
+
 function wpsc_checkout_form_is_header() {
 	global $wpsc_checkout;
 	if($wpsc_checkout->checkout_item->type == 'heading') {
@@ -166,7 +190,7 @@ class wpsc_checkout {
 				case "address":
 				case "delivery_address":
 				case "textarea":
-				$output = "<textarea id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['collected_data'][$this->checkout_item->id]."</textarea>";
+				$output = "<textarea id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
 				break;
 				
 				case "country":
@@ -184,7 +208,7 @@ class wpsc_checkout {
 				case "email":
 				case "coupon":
 				default:
-				$output = "<input type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['collected_data'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
+				$output = "<input type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
 				break;
 			}
     return $output;
@@ -194,10 +218,12 @@ class wpsc_checkout {
    global $wpdb;
    $any_bad_inputs = false;
 		foreach($_POST['collected_data'] as $value_id => $value) {
+		  $value_id = (int)$value_id;
 			$form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `id` = '$value_id' LIMIT 1";
 			$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 			$form_data = $form_data[0];
 			
+			$_SESSION['wpsc_checkout_saved_values'][$form_data['id']] = $value;
 			$bad_input = false;
 			if(($form_data['mandatory'] == 1) || ($form_data['type'] == "coupon")) {
 				switch($form_data['type']) {
@@ -222,7 +248,8 @@ class wpsc_checkout {
 					break;
 				}
 				if($bad_input === true) {
-					$bad_input_message[] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data['name']) . ".";
+					$_SESSION['wpsc_checkout_error_messages'][$form_data['id']] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data['name']) . ".";
+					$_SESSION['wpsc_checkout_saved_values'][$form_data['id']] = '';
 				}
 			}
 		}
@@ -269,4 +296,109 @@ class wpsc_checkout {
 	}    
   
 }
+
+
+
+
+
+
+
+/**
+ * The WPSC Gateway functions
+ */
+
+
+function wpsc_gateway_count() {
+	global $wpsc_gateway;
+	return $wpsc_gateway->gateway_count;
+}
+
+function wpsc_have_gateways() {
+	global $wpsc_gateway;
+	return $wpsc_gateway->have_gateways();
+}
+
+function wpsc_the_gateway() {
+	global $wpsc_gateway;
+	return $wpsc_gateway->the_gateway();
+}
+
+function wpsc_gateway_name() {
+	global $wpsc_gateway;
+	return $wpsc_gateway->gateway['name'];
+}
+
+function wpsc_gateway_internal_name() {
+	global $wpsc_gateway;
+	return $wpsc_gateway->gateway['internalname'];
+}
+function wpsc_gateway_form_fields() {
+	global $wpsc_gateway, $gateway_checkout_form_fields;
+	return $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']];
+}
+
+/**
+ * The WPSC Gateway class
+ */
+
+class wpsc_gateways {
+  var $wpsc_gateways;
+	var $gateway;
+	var $gateway_count = 0;
+	var $current_gateway = -1;
+	var $in_the_loop = false;
+  
+  function wpsc_gateways() {
+		global $nzshpcrt_gateways;
+		
+		$gateway_options = get_option('custom_gateway_options');
+		foreach($nzshpcrt_gateways as $gateway) {
+			if(array_search($gateway['internalname'], $gateway_options) !== false) {
+				$this->wpsc_gateways[] = $gateway;
+			}		
+		}
+		$this->gateway_count = count($this->wpsc_gateways);
+  }
+
+  /**
+	 * checkout loop methods
+	*/ 
+  
+  function next_gateway() {
+		$this->current_gateway++;
+		$this->gateway = $this->wpsc_gateways[$this->current_gateway];
+		return $this->gateway;
+	}
+
+  
+  function the_gateway() {
+		$this->in_the_loop = true;
+		$this->gateway = $this->next_gateway();
+		if ( $this->current_gateway == 0 ) // loop has just started
+			do_action('wpsc_checkout_loop_start');
+	}
+
+	function have_gateways() {
+		if ($this->current_gateway + 1 < $this->gateway_count) {
+			return true;
+		} else if ($this->current_gateway + 1 == $this->gateway_count && $this->gateway_count > 0) {
+			do_action('wpsc_checkout_loop_end');
+			// Do some cleaning up after the loop,
+			$this->rewind_gateways();
+		}
+
+		$this->in_the_loop = false;
+		return false;
+	}
+
+	function rewind_gateways() {
+		$this->current_gateway = -1;
+		if ($this->gateway_count > 0) {
+			$this->gateway = $this->wpsc_gateways[0];
+		}
+	}    
+
+}
+
+
 ?>

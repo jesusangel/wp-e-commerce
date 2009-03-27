@@ -188,13 +188,14 @@ function wpsc_submit_checkout() {
 	extract($form_validity); // extracts $is_valid and $error_messages
 	if($is_valid == true) {
 	
-	
+	exit();
 	} else {
-	  // do ???
+// 	  $_SESSION['wpsc_checkout_error_messages'] = $error_messages
+	
 	}
 	//echo "<pre>".print_r($form_validity,true)."</pre>";
   
-  exit();
+  
 
 }
 

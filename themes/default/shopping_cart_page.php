@@ -1,6 +1,7 @@
 <?php
-global $wpsc_cart, $wpdb, $wpsc_checkout;
+global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway;
 $wpsc_checkout = new wpsc_checkout();
+$wpsc_gateway = new wpsc_gateways();
  //echo "<pre>".print_r($_SESSION,true)."</pre>";
 ?>
 
@@ -101,7 +102,7 @@ $wpsc_checkout = new wpsc_checkout();
 <form action='' method='POST' enctype="multipart/form-data">
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
-		<tr>
+		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 		  <?php if(wpsc_checkout_form_is_header() == true) : ?>
 			<td colspan='2'>
 			   <h4>
@@ -116,10 +117,44 @@ $wpsc_checkout = new wpsc_checkout();
 			</td>
 			<td>
 				<?php echo wpsc_checkout_form_field();?>
+				
+		  <?php if(wpsc_the_checkout_item_error()): ?>
+		    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
+			<?php endif; ?>
 			</td>
 			<?php endif; ?>
 		</tr>
 		<?php endwhile; ?>
+		<tr>
+			<td colspan='2'>			  
+			  
+				<?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?> 
+					<h3><?php echo TXT_WPSC_SELECTGATEWAY;?></h3>
+					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
+						<div class="custom_gateway">
+							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="true" name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							
+							<?php if(wpsc_gateway_form_fields()): ?> 
+								<table>
+									<?php echo wpsc_gateway_form_fields();?> 
+								</table>		
+							<?php endif; ?>			
+						</div>
+					<?php endwhile; ?>
+				<?php else: // otherwise, there is no choice, stick in a hidden form ?>
+					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
+						<input name='custom_gateway' value='<?php echo wpsc_gateway_internal_name();?>' type='hidden' />
+						
+							<?php if(wpsc_gateway_form_fields()): ?> 
+								<table>
+									<?php echo wpsc_gateway_form_fields();?> 
+								</table>		
+							<?php endif; ?>	
+					<?php endwhile; ?>				
+				<?php endif; ?>				
+				
+			</td>
+		</tr>
 		<tr>
 			<td colspan='2'>
 				<input type='hidden' value='submit_checkout' name='wpsc_action' />

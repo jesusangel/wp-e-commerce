@@ -588,6 +588,16 @@ a.termsandconds
  {
  text-decoration: underline;
  }
+ 
+ .validation-error input, .validation-error textarea {
+   border: 1px solid red;
+ }
+ 
+ p.validation-error {
+  color: red;
+  margin-bottom: 0px;
+ }
+ 
 /* end Verify your Order styling */
 
 
