@@ -244,12 +244,12 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 	
 	if (get_option('display_find_us') == '1') {
 		echo "<tr><td>&nbsp;</td></tr><tr>
-		<td>How did you find us:</td>
+		<td>".TXT_WPSC_HOW_DID_YOU_FIND_US.":</td>
 		<td><select name='how_find_us'>
-			<option value='Word of Mouth'>Word of mouth</option>
-			<option value='Advertisement'>Advertising</option>
-			<option value='Internet'>Internet</option>
-			<option value='Customer'>Existing Customer</option>
+			<option value='Word of Mouth'>".TXT_WPSC_HOW_DID_YOU_FIND_US_WOM."</option>
+			<option value='Advertisement'>".TXT_WPSC_HOW_DID_YOU_FIND_US_ADV."</option>
+			<option value='Internet'>".TXT_WPSC_HOW_DID_YOU_FIND_US_INT."</option>
+			<option value='Customer'>".TXT_WPSC_HOW_DID_YOU_FIND_US_EC."</option>
 		</select></td></tr>";
 	}
 	

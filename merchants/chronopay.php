@@ -441,7 +441,7 @@ function form_chronopay()
 	<tr class='update_gateway' >
 		<td colspan='2'>
 			<div class='submit'>
-			<input type='submit' value='Update &raquo;' name='updateoption'/>
+			<input type='submit' value='".TXT_WPSC_UPDATE_BUTTON."' name='updateoption'/>
 		</div>
 		</td>
 	</tr>

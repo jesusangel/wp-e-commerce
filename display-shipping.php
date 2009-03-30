@@ -308,7 +308,7 @@ function selectgateway() {
 					
 					<div class='submit gateway_settings'>
 						<input type='hidden' value='true' name='update_gateways'/>
-						<input type='submit' value='Update &raquo;' name='updateoption'/>
+						<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption'/>
 					</div>
 					<?php
 					if (IS_WP27) {
@@ -350,7 +350,7 @@ function selectgateway() {
 					
 					</table>
 					<div class='submit'>
-						<input type='submit' value='Update &raquo;' name='updateoption'/>
+						<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption'/>
 					</div>
 					<?php
 					if (IS_WP27) {

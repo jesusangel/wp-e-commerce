@@ -80,11 +80,11 @@ if(isset($_POST) && is_array($_POST)) {
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYCOUPONS;?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
-  <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
+  <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span> </a> -->
 
   <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADD_COUPON;?></span></a>
   
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span>
+  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='<?php echo TXT_WPSC_LOADING;?>' title='<?php echo TXT_WPSC_LOADING;?>' /></span>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
 <table style="width: 100%;">

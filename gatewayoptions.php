@@ -116,7 +116,7 @@ function selectgateway() {
 		<!--
 <div class="tablenav wpsc_admin_nav">
 			<div class="alignright">
-				<a class="about_this_page_sub" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span>About This Page</span></a>
+				<a class="about_this_page_sub" href="http://www.instinct.co.nz/e-commerce/payment-options/" target="_blank"><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span></a>
 			</div>
 			<br class="clear"/>
 		</div>
@@ -159,7 +159,7 @@ function selectgateway() {
 						?>
 						<div class='submit gateway_settings'>
 							<input type='hidden' value='true' name='update_gateways'/>
-							<input type='submit' value='Update &raquo;' name='updateoption'/>
+							<input type='submit' value='<? echo TXT_WPSC_UPDATE_BUTTON?>' name='updateoption'/>
 						</div>
 								
 						
@@ -196,7 +196,7 @@ function selectgateway() {
 					<tr class='update_gateway' >
 						<td colspan='2'>
 							<div class='submit'>
-								<input type='submit' value='Update &raquo;' name='updateoption'/>
+								<input type='submit' value='<? echo TXT_WPSC_UPDATE_BUTTON?>' name='updateoption'/>
 							</div>
 						</td>
 					</tr>

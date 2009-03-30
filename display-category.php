@@ -51,7 +51,7 @@ function display_category_row($category,$subcategory_level = 0) {
   if($category['image'] !=null) {
 		echo "<img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='35' height='35' />";
 	} else {
-		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
+		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
 	}
   echo "            </td>\n\r";
   
@@ -126,9 +126,7 @@ function display_category_row($category,$subcategory_level = 0) {
 		}
       
    
-    $tidied_name = trim($_POST['name']);
-    $tidied_name = strtolower($tidied_name);
-		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
+    $url_name = sanitize_title($_POST['name']);
     $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."product_categories` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
     $extension_number = '';
     if($similar_names['count'] > 0) {

@@ -966,7 +966,7 @@ if($_GET['clean_categories'] == 'true') {
 						  /* here end the general options */						  
 						  ?>
 							<div class="submit">
-								<input type="submit" value="Update »" name="updateoption"/>
+								<input type="submit" value="<?php echo TXT_WPSC_UPDATE_BUTTON;?>" name="updateoption"/>
 							</div>
 						</div>
 						
@@ -1722,9 +1722,9 @@ if($_GET['clean_categories'] == 'true') {
 										<?php echo TXT_WPSC_PAGE_NUMBER_POSITION;?>:
 									</th>
 									<td>
-										<input type='radio' value='1' name='wpsc_page_number_position' id='wpsc_page_number_position1' <?php if (get_option('wpsc_page_number_position') == 1) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position1'>Top</label>&nbsp;
-										<input type='radio' value='2' name='wpsc_page_number_position' id='wpsc_page_number_position2' <?php if (get_option('wpsc_page_number_position') == 2) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position2'>Bottom</label>&nbsp;
-										<input type='radio' value='3' name='wpsc_page_number_position' id='wpsc_page_number_position3' <?php if (get_option('wpsc_page_number_position') == 3) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position3'>Both</label>
+										<input type='radio' value='1' name='wpsc_page_number_position' id='wpsc_page_number_position1' <?php if (get_option('wpsc_page_number_position') == 1) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position1'><?php echo TXT_WPSC_PAGENUMBER_POSITION_TOP; ?></label>&nbsp;
+										<input type='radio' value='2' name='wpsc_page_number_position' id='wpsc_page_number_position2' <?php if (get_option('wpsc_page_number_position') == 2) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position2'><?php echo TXT_WPSC_PAGENUMBER_POSITION_BOTTOM; ?></label>&nbsp;
+										<input type='radio' value='3' name='wpsc_page_number_position' id='wpsc_page_number_position3' <?php if (get_option('wpsc_page_number_position') == 3) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position3'><?php echo TXT_WPSC_PAGENUMBER_POSITION_BOTH; ?></label>
 										<br />
 									</td>
 								</tr>   
@@ -1734,7 +1734,7 @@ if($_GET['clean_categories'] == 'true') {
 						  /* here end the presentation options */						  
 						  ?>
 							<div class="submit">
-								<input type="submit" value="Update »" name="updateoption"/>
+								<input type="submit" value="<?php echo TXT_WPSC_UPDATE_BUTTON;?>" name="updateoption"/>
 							</div>
 						</div>
 						
@@ -1888,7 +1888,7 @@ if($_GET['clean_categories'] == 'true') {
 							/* here end the admin options */						  
 						  ?>
 							<div class="submit">
-								<input type="submit" value="Update »" name="updateoption"/>
+								<input type="submit" value="<?php echo TXT_WPSC_UPDATE_BUTTON;?>" name="updateoption"/>
 							</div>
 						</div>
 						

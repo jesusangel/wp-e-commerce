@@ -220,8 +220,9 @@ if($_POST['submit_action'] == 'add') {
 			}
 		
 				/* Handle new image uploads here */
-			$image = wpsc_item_process_image($product_id, $_FILES['image']['tmp_name'], $_FILES['image']['name'], $_POST['width'], $_POST['height'], $_POST['image_resize']);
+			$image = wpsc_item_process_image($product_id, $_FILES['image']['tmp_name'], str_replace(" ", "_", $_FILES['image']['name']), $_POST['width'], $_POST['height'], $_POST['image_resize']);
 			
+		
 			
       if(file_exists(WPSC_THUMBNAIL_DIR.basename($_POST['images'][0])) && ($_POST['images'][0] != '')) {
         $imagepath = WPSC_IMAGE_DIR . basename($_POST['images'][0]);
@@ -468,7 +469,8 @@ if($_POST['submit_action'] == "edit") {
 		}
 
   /* Handle new image uploads here */
-  $image = wpsc_item_process_image($_POST['prodid'], $_FILES['image']['tmp_name'], $_FILES['image']['name'], $_POST['width'], $_POST['height'], $_POST['image_resize']);
+	$image = wpsc_item_process_image($_POST['prodid'], $_FILES['image']['tmp_name'], str_replace(" ", "_", $_FILES['image']['name']), $_POST['width'], $_POST['height'], $_POST['image_resize']);
+
 
 
   if(is_numeric($_POST['prodid'])) {

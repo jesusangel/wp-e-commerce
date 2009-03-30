@@ -1266,7 +1266,8 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
       <label for='user_login'>Username:</label><br/> <input type='text' value='' maxlength='20' size='20' id='user_login' name='user_login'/><br/></p>
       <p><label for='user_email'>E-mail:</label><br/> <input type='text' value='' maxlength='100' size='25' id='user_email' name='user_email'/></p>
       <p>A password will be emailed to you.</p>
-      <p class='submit'><input type='submit' name='submit_form' id='submit' value='Register »'/><img id='register_loading_img' src='".WPSC_URL."/images/loading.gif' alt='' title=''></p>
+      <p class='submit'><input type='submit' name='submit_form' id='submit' value='".TXT_WPSC_REGISTER." »'/><img id='register_loading_img' src='".WPSC_URL."/images/loading.gif' alt='' title=''></p>
+
       
     </form>
     </div>";

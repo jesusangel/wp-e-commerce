@@ -67,7 +67,7 @@ function category_and_tag_box($product_data=''){
      $output .= "</td>
      <td class='itemfirstcol product_tags'>
        ".TXT_WPSC_PRODUCT_TAGS.":<br />
-        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>Seperate with commas</span>
+        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".TXT_WPSC_COMA_SEPARATED."</span>
       </td>
     </tr>";
     

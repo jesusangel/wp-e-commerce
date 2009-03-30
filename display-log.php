@@ -443,7 +443,7 @@ if($_GET['filter'] !== 'true') {
       </div>
 <?php
 	echo "</div>";
-	echo "<div id='post-body' class='has-sidebar' style='width:95%;'>
+	echo "<div id='post-body' class='has-sidebar' style='width:99%;'>
 			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
 				
 	}
@@ -584,7 +584,7 @@ if($_GET['filter'] !== 'true') {
               		echo "<font color='green'>";
               		break;
               }
-              echo $stage_data['name'];
+              echo constant('TXT_WPSC_PAYSTATUS_'.str_replace(" ","_",strtoupper($stage_data['name'])));
               echo "</font>";
               echo "</span>";
               echo "</a>";
@@ -693,13 +693,13 @@ if($_GET['filter'] !== 'true') {
                   $selected = "checked='true'";
                   }
                 $button_id = "button_".$purchase['id']."_".$stage['id'];
-                echo "    <li><input type='radio' name='value' $selected value='".$stage['id']."' onclick='log_submitform(\"form_group_".$purchase['id']."\");' id='".$button_id."'/><label for='$button_id'>".$stage['name']."</label>\n\r";
+                echo "    <li><input type='radio' name='value' $selected value='".$stage['id']."' onclick='log_submitform(\"form_group_".$purchase['id']."\");' id='".$button_id."'/><label for='$button_id'>".constant('TXT_WPSC_PAYSTATUS_'.str_replace(" ","_",strtoupper($stage['name'])))."</label>\n\r";
 		}
 
               echo "  </ul>\n\r";
               //echo "  <input type='submit' name='log_state_submit' value='Save... &raquo;' class='button' /> \n\r";
               echo "  </form>\n\r";
-							echo "<li style='display:none;' id='track_id'>Tracking ID: <form method='GET'><input type='text' siez='20' id='tracking_id_".$purchase['id']."' name='track_id' value=".$purchase['track_id']."><input type = 'button' value='Submit' onclick='save_tracking_id(".$purchase['id'].");'></form></li>";
+							echo "<li style='display:none;' id='track_id'>".TXT_WPSC_AT_THIS_MOMENT_TRACE_ID.": <form method='GET'><input type='text' siez='20' id='tracking_id_".$purchase['id']."' name='track_id' value=".$purchase['track_id']."><input type = 'button' value='".TXT_WPSC_SUBMIT."' onclick='save_tracking_id(".$purchase['id'].");'></form></li>";
               if($purchase['transactid'] != '')
                 {
                 echo "  <span style='float:right; margin-right: 15px; '>".TXT_WPSC_TXN_ID.": ".$purchase['transactid']."</span>";
@@ -713,7 +713,7 @@ if($_GET['filter'] !== 'true') {
               
             echo "<tr>";
             echo " <td colspan='$col_count'>";
-            echo "<strong>Total:</strong> ".nzshpcrt_currency_display(admin_display_total_price($date_pair['start'], $date_pair['end']),1);
+            echo "<strong>".TXT_WPSC_TOTAL.":</strong> ".nzshpcrt_currency_display(admin_display_total_price($date_pair['start'], $date_pair['end']),1);
             echo "<br /><a class='admin_download' href='index.php?purchase_log_csv=true&rss_key=key&start_timestamp=".$date_pair['start']."&end_timestamp=".$date_pair['end']."' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_DOWNLOAD_CSV."</span></a>";
             echo " </td>";      
             echo "</tr>";
@@ -722,7 +722,7 @@ if($_GET['filter'] !== 'true') {
               {
               echo "<tr>";
               echo " <td colspan='$col_count'>";
-              echo "No transactions for this month.";
+              echo TXT_WPSC_AT_THIS_MOMENT_NO_TRANSACTION;
               echo " </td>";      
               echo "</tr>";
               }
@@ -1097,10 +1097,10 @@ if($_GET['filter'] !== 'true') {
 			if (IS_WP27) {
 				echo "<div class='email_buyer'>";
 			}
-			echo "The folowing purchase receipt has has been resent:<br>";
+			echo TXT_WPSC_MAIL_RESENDED.":<br>";
 		    echo nl2br($message_html);
 		} else {
-		    echo "An Error Occured While Sending Email";
+		    echo TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL;
 		}
 	}
 		if (IS_WP27){
