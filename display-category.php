@@ -51,7 +51,7 @@ function display_category_row($category,$subcategory_level = 0) {
   if($category['image'] !=null) {
 		echo "<img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='35' height='35' />";
 	} else {
-		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
+		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
 	}
   echo "            </td>\n\r";
   

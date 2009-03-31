@@ -2,6 +2,35 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+
+
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_WOM", "Word of mouth");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_ADV", "Advertising");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_INT", "Internet");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_EC", "Existing Customer");
+
+
+define("TXT_WPSC_ABOUT_THIS_PAGE", "About This Page");
+define("TXT_WPSC_LOADING", "Loading");
+
+define("TXT_WPSC_COMMA_SEPARATED", "Seperate with commas");
+
+define("TXT_WPSC_AT_THIS_MOMENT_TRACE_ID", "Tracking ID");
+
+define("TXT_WPSC_AT_THIS_MOMENT_NO_TRANSACTION", "No transactions for this month.");
+define("TXT_WPSC_MAIL_RESENDED", "The folowing purchase receipt has has been resent");
+define("TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL", "An Error Occured While Sending Email");
+
+define("TXT_WPSC_UPDATE_BUTTON", "Update &raquo;");
+
+define("TXT_WPSC_ABOUT_THIS_PAGE", "About This Page");
+
+define("TXT_WPSC_PAGENUMBER_POSITION_TOP", "Top");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTTOM", "Bottom");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTH", "Both");
+
+
+
 define("TXT_WPSC_USE_THEME_ENGINE", "Use the experimental Theme Engine");
 define("TXT_WPSC_TM", "Target Markets");
 define("TXT_WPSC_SHIPPING_DETAIL","Please choose a country below to calculate your shipping costs");

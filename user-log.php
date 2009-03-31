@@ -153,7 +153,7 @@ $date_list[0]['end'] = $end_timestamp;
                 $selected = "checked='true'";
                 }
               $button_id = "button_".$purchase['id']."_".$stage['id'];
-              echo "    <li><input readonly='true' type='radio' name='value' $selected value='".$stage['id']."' onclick='this.blur(); return false;' id='".$button_id."'/><label for='$button_id'>".constant('TXT_WPSC_PAYSTATUS_'.str_replace(" ","_",strtoupper($stage['name'])))."</label>\n\r";
+              echo "    <li><input readonly='true' type='radio' name='value' $selected value='".$stage['id']."' onclick='this.blur(); return false;' id='".$button_id."'/><label for='$button_id'>".$stage['name']."</label>\n\r";
               }
             echo "  </ul>\n\r";
             echo "  </form>\n\r";
@@ -170,7 +170,7 @@ $date_list[0]['end'] = $end_timestamp;
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$postdata = "API=TrackV2&XML=".$XML1;
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
-		$result = curl_exec($ch);
+// 		$result = curl_exec($ch);
 		
 		$parser = new xml2array;
 		$parsed = $parser->parse($result);

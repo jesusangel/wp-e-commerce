@@ -443,7 +443,7 @@ if($_GET['filter'] !== 'true') {
       </div>
 <?php
 	echo "</div>";
-	echo "<div id='post-body' class='has-sidebar' style='width:99%;'>
+	echo "<div id='post-body' class='has-sidebar' style='width:95%;'>
 			<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>";
 				
 	}
@@ -584,7 +584,7 @@ if($_GET['filter'] !== 'true') {
               		echo "<font color='green'>";
               		break;
               }
-              echo constant('TXT_WPSC_PAYSTATUS_'.str_replace(" ","_",strtoupper($stage_data['name'])));
+              echo $stage_data['name'];
               echo "</font>";
               echo "</span>";
               echo "</a>";
@@ -693,7 +693,7 @@ if($_GET['filter'] !== 'true') {
                   $selected = "checked='true'";
                   }
                 $button_id = "button_".$purchase['id']."_".$stage['id'];
-                echo "    <li><input type='radio' name='value' $selected value='".$stage['id']."' onclick='log_submitform(\"form_group_".$purchase['id']."\");' id='".$button_id."'/><label for='$button_id'>".constant('TXT_WPSC_PAYSTATUS_'.str_replace(" ","_",strtoupper($stage['name'])))."</label>\n\r";
+                echo "    <li><input type='radio' name='value' $selected value='".$stage['id']."' onclick='log_submitform(\"form_group_".$purchase['id']."\");' id='".$button_id."'/><label for='$button_id'>".$stage['name']."</label>\n\r";
 		}
 
               echo "  </ul>\n\r";
