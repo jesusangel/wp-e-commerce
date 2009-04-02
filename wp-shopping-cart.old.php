@@ -141,6 +141,7 @@ class wp_shopping_cart {
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment Options</a> <br />");
 				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			}
+
 			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
 			if (file_exists(dirname(__FILE__).'/gold_cart_files/csv_import.php')) {
@@ -407,7 +408,7 @@ jQuery(document).ready( function() {
 
 function wpsc_admin_css() {
   $siteurl = get_option('siteurl'); 
-  if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) || ($_GET['mass_upload'] == 'true')) {
+  if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME) !== false) || ($_GET['mass_upload'] == 'true') || ((strpos($_SERVER['REQUEST_URI'], 'wp-admin/index.php') !== false) && !isset($_GET['page']))) {
   	if(function_exists('add_object_page')) {
   		echo "<link href='".WPSC_URL."/admin_2.7.css' rel='stylesheet' type='text/css' />";
   	} else {
@@ -960,26 +961,24 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		}
 		
 	if($_POST['buynow'] == "true") {
-	  if(is_numeric($_REQUEST['product_id']) || is_numeric($_REQUEST['price'])) {
-			$id = (int)$wpdb->escape($_REQUEST['product_id']);
-			$price =  (int)$wpdb->escape($_REQUEST['price']);
+		if(is_numeric($_REQUEST['product_id']) && is_numeric($_REQUEST['price'])) {
+			$id = $wpdb->escape((int)$_REQUEST['product_id']);
+			$price = $wpdb->escape((float)$_REQUEST['price']);
 			$downloads = get_option('max_downloads');
-			$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$id." LIMIT 1";
-			$product_info = $wpdb->get_results($product_sql, ARRAY_A);
-			$product_info = $product_info[0];
-			$sessionid = (mt_rand(100,999).time());
-			$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`shipping_region`, `user_ID`, `discount_value` ) VALUES ( '".$price."', '".$sessionid."', '".time()."', 'BuyNow', 'BuyNow', 'BuyNow' , NULL , 0)";
-			$wpdb->query($sql) ;
-			$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
-			$cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$id."', '".$log_id."','".$price."','0', '0','1', '".$donation."', '1')";
-			$wpdb->query($cartsql);
-			$wpdb->query("INSERT INTO `".$wpdb->prefix."download_status` ( `fileid` , `purchid` , `downloads` , `active` , `datetime` ) VALUES ( '".$product_info['file']."', '".$log_id."', '$downloads', '0', NOW( ));");
-			exit();
-		} else {
-			$message = "GET:\n\r".print_r($_GET)."POST:\n\r".print_r($_POST)."SERVER:\n\r".print_r($_SERVER);
-			mail('tom@instinct.co.nz', 'hack attempt', $message);
+			$product_info = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$id." LIMIT 1", ARRAY_A);
+			if(count($product_info) > 0) {
+				$sessionid = (mt_rand(100,999).time());
+				$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`shipping_region`, `user_ID`, `discount_value` ) VALUES ( '".$price."', '".$sessionid."', '".time()."', 'BuyNow', 'BuyNow', 'BuyNow' , NULL , 0)";
+				$wpdb->query($sql) ;
+				$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
+				$cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$id."', '".$log_id."','".$price."','0', '0','1', '".$donation."', '1')";
+				$wpdb->query($cartsql);
+				$wpdb->query("INSERT INTO `".$wpdb->prefix."download_status` ( `fileid` , `purchid` , `downloads` , `active` , `datetime` ) VALUES ( '".$product_info['file']."', '".$log_id."', '$downloads', '0', NOW( ));");
+			}
 		}
+		exit();
 	}
+
 	
     
     /* rate item */    
@@ -1490,6 +1489,7 @@ function nzshpcrt_download_file() {
 					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');       
 				}        
         $filename = WPSC_FILE_DIR.$file_data['idhash'];
+        session_destroy();
         readfile_chunked($filename);   
         exit();
 			}
@@ -1520,6 +1520,7 @@ function nzshpcrt_download_file() {
 					}             
 					$filename = WPSC_FILE_DIR.$file_data['idhash'];  
 					readfile_chunked($filename);   
+					session_destroy();
 					exit();
 				}            
 			}

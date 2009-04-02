@@ -52,19 +52,19 @@ function wpsc_have_products() {
 	return $wpsc_query->have_products();
 }
 
+function wpsc_the_product() {
+	global $wpsc_query;
+	$wpsc_query->the_product();
+}
+
 function wpsc_in_the_loop() {
 	global $wpsc_query;
 	return $wpsc_query->in_the_loop;
 }
 
-function rewind_products() {
+function wpsc_rewind_products() {
 	global $wpsc_query;
 	return $wpsc_query->rewind_products();
-}
-
-function wpsc_the_product() {
-	global $wpsc_query;
-	$wpsc_query->the_product();
 }
 
 function wpsc_the_product_id() {
@@ -202,6 +202,37 @@ function wpsc_the_product_thumbnail() {
   }
 }
 
+function wpsc_have_custom_meta() {
+	global $wpsc_query;
+	return $wpsc_query->have_custom_meta();
+}
+
+function wpsc_the_custom_meta() {
+	global $wpsc_query;
+	$wpsc_query->the_custom_meta();
+}
+
+function wpsc_have_variation_groups() {
+	global $wpsc_query;
+	return $wpsc_query->have_variation_groups();
+}
+
+function wpsc_the_variation_group() {
+	global $wpsc_query;
+	$wpsc_query->the_variation_group();
+}
+
+function wpsc_have_variations() {
+	global $wpsc_query;
+	return $wpsc_query->have_variations();
+}
+
+function wpsc_the_variation() {
+	global $wpsc_query;
+	$wpsc_query->the_variation();
+}
+
+
 
 
 function wpsc_the_vargrp_name() {
@@ -279,14 +310,24 @@ function wpsc_product_rater() {
 
 
 function wpsc_has_breadcrumbs() {
-	global $wpsc_query;
-	
+	global $wpsc_query;	
   if(($wpsc_query->breadcrumb_count > 0) && (get_option("show_breadcrumbs") == 1)){
     return true;
   } else {
     return false;
   }
 }
+
+function wpsc_have_breadcrumbs() {
+	global $wpsc_query;
+	return $wpsc_query->have_breadcrumbs();
+}
+
+function wpsc_the_breadcrumb() {
+	global $wpsc_query;
+	$wpsc_query->the_breadcrumb();
+}
+
 
 function wpsc_breadcrumb_name() {
  // get the variation name;
@@ -320,6 +361,18 @@ function wpsc_has_pages() {
     return false;
   }
 }
+
+
+function wpsc_have_pages() {
+	global $wpsc_query;
+	return $wpsc_query->have_pages();
+}
+
+function wpsc_the_page() {
+	global $wpsc_query;
+	$wpsc_query->the_page();
+}
+	
 
 function wpsc_page_number() {
  // get the variation name;

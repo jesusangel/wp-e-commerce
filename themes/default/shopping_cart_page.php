@@ -2,7 +2,7 @@
 global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
- //echo "<pre>".print_r($_SESSION,true)."</pre>";
+ //echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 ?>
 
 <table class="productcart">
@@ -134,16 +134,16 @@ $wpsc_gateway = new wpsc_gateways();
 		<tr>
 			<td colspan='2'>
 			
-			<?php  //this HTML displays activated payment gateways	?>			  
+			<?php  //this HTML displays activated payment gateways?>
 			  
-				<?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?> 
+				<?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?>
 					<h3><?php echo TXT_WPSC_SELECTGATEWAY;?></h3>
 					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
 						<div class="custom_gateway">
 							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="true" name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
 							
 							<?php if(wpsc_gateway_form_fields()): ?> 
-								<table>
+								<table class='<?php echo wpsc_gateway_form_field_style();?>'>
 									<?php echo wpsc_gateway_form_fields();?> 
 								</table>		
 							<?php endif; ?>			

@@ -179,11 +179,20 @@ class wpsc_checkout {
   function form_name() {
 		return $this->checkout_item->name;
 	}  
-  
+   
+	
+	/**
+	* form_element_id method, returns the form html ID
+	* @access public
+	*/
   function form_element_id() {
 		return 'wpsc_checkout_form_'.$this->checkout_item->id;
 	}  
 	
+	/**
+	* form_field method, returns the form html
+	* @access public
+	*/
   function form_field() {
     //global $wpdb;
     	switch($this->checkout_item->type) {
@@ -214,19 +223,20 @@ class wpsc_checkout {
     return $output;
 	}
   
+	/**
+	* validate_forms method, validates the input from the checkout page
+	* @access public
+	*/
   function validate_forms() {
    global $wpdb;
    $any_bad_inputs = false;
-		foreach($_POST['collected_data'] as $value_id => $value) {
+		foreach($this->checkout_items as $form_data) {
+			$value = $_POST['collected_data'][$form_data->id];
 		  $value_id = (int)$value_id;
-			$form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `id` = '$value_id' LIMIT 1";
-			$form_data = $wpdb->get_results($form_sql,ARRAY_A);
-			$form_data = $form_data[0];
-			
-			$_SESSION['wpsc_checkout_saved_values'][$form_data['id']] = $value;
+			$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = $value;
 			$bad_input = false;
-			if(($form_data['mandatory'] == 1) || ($form_data['type'] == "coupon")) {
-				switch($form_data['type']) {
+			if(($form_data->mandatory == 1) || ($form_data->type == "coupon")) {
+				switch($form_data->type) {
 					case "email":
 					if(!preg_match("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,5}$/",$value)) {
 						$any_bad_inputs = true;
@@ -248,14 +258,31 @@ class wpsc_checkout {
 					break;
 				}
 				if($bad_input === true) {
-					$_SESSION['wpsc_checkout_error_messages'][$form_data['id']] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data['name']) . ".";
-					$_SESSION['wpsc_checkout_saved_values'][$form_data['id']] = '';
+					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data->name) . ".";
+					$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = '';
 				}
 			}
 		}
 		return array('is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message);
   }
   
+	/**
+	* validate_forms method, validates the input from the checkout page
+	* @access public
+	*/
+  function save_forms_to_db($purchase_id) {
+   global $wpdb;
+   
+   
+		foreach($this->checkout_items as $form_data) {
+		  $value = $_POST['collected_data'][$form_data->id];		  
+		  if($form_data->type != 'heading') {
+				//echo "INSERT INTO `{$wpdb->prefix}submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
+				$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+				
+ 			}
+		}
+  }
   
   /**
 	 * checkout loop methods
@@ -335,6 +362,9 @@ function wpsc_gateway_internal_name() {
 function wpsc_gateway_form_fields() {
 	global $wpsc_gateway, $gateway_checkout_form_fields;
 	return $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']];
+}
+function wpsc_gateway_form_field_style() {
+ return "checkout_forms_hidden";
 }
 
 /**

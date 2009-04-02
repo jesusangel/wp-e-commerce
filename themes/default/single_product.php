@@ -1,10 +1,7 @@
 <?php
 global $wpsc_query, $wpdb;
-
 $image_width = get_option('single_view_image_width');
 $image_height = get_option('single_view_image_height');
-
-
 ?>
 <div id='products_page_container' class="wrap wpsc_container">
 	
@@ -12,7 +9,7 @@ $image_height = get_option('single_view_image_height');
 	<?php if(wpsc_has_breadcrumbs()) :?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
-			<?php while ($wpsc_query->have_breadcrumbs()) : $wpsc_query->the_breadcrumb(); ?>
+			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
 				<?php if(wpsc_breadcrumb_url()) :?> 	   
 					<a href='<?php echo wpsc_breadcrumb_url(); ?>'><?php echo wpsc_breadcrumb_name(); ?></a> &raquo;
 				<?php else: ?> 
@@ -24,10 +21,8 @@ $image_height = get_option('single_view_image_height');
 	
 	
 	<div class="productdisplay">
-			<?php
-			while ($wpsc_query->have_products()) {
-				$wpsc_query->the_product();
-			?>
+<?php /** start the product loop here, this is single products view, sho there should be only one */?>
+		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
 					<div class="imagecol">
@@ -78,48 +73,37 @@ $image_height = get_option('single_view_image_height');
 						</p>
 					<?php endif; ?>
 				
-						<div class="custom_meta">
-						<?php
-							while ($wpsc_query->have_custom_meta()) {
-								$wpsc_query->the_custom_meta();
-								?>
-								<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_name(); ?><br />
-								<?php
-							}
-							?>
-						</div>
-			
-						<p class="wpsc_variation_forms">
-							<?php
-							//$wpsc_query->get_variation_groups();
-							while ($wpsc_query->have_variation_groups()) {
-								$wpsc_query->the_variation_group();
-							?>
+					<?php /** the custom meta HTML and loop */?>
+					<div class="custom_meta">
+						<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
+							<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_name(); ?><br />
+						<?php endwhile; ?>
+					</div>
+					<?php /** the custom meta HTML and loop ends here */?>
+					
+						<?php /** the variation group HTML and loop */?>
+					<p class="wpsc_variation_forms">
+						<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
 							<p>
 								<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
+								<?php /** the variation HTML and loop */?>
 								<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
-								<?php
-								while ($wpsc_query->have_variations()) {
-									$wpsc_query->the_variation();
-									?>
+								<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
 									<option value="<?php echo wpsc_the_variation_id(); ?>"><?php echo wpsc_the_variation_name(); ?></option>
-									<?php
-								}
-								?>
+								<?php endwhile; ?>
 								</select> 
 							</p>
-							<?php
-							}
-							?>
-						</p>        
+						<?php endwhile; ?>
+					</p>
+					<?php /** the variation group HTML and loop ends here */?>
 									
 						<p class="wpsc_product_price">
-							<?php if(wpsc_product_is_donation()) { ?>
+							<?php if(wpsc_product_is_donation()) : ?>
 								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?></label><br />
 								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' /><br />
 							
 							
-							<?php } else { ?>
+							<?php else : ?>
 								<?php if(wpsc_product_on_special()) : ?>
 									<span class='oldprice'><?php echo TXT_WPSC_PRICE; ?>: <?php echo wpsc_product_normal_price(); ?></span><br />
 								<?php endif; ?>
@@ -127,7 +111,7 @@ $image_height = get_option('single_view_image_height');
 								<?php if(get_option('display_pnp') == 1) : ?>
 									<?php echo TXT_WPSC_PNP; ?>:  <span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><br />
 								<?php endif; ?>							
-							<?php } ?>
+							<?php endif; ?>
 						</p>
 					<?php if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {
 						echo wpsc_akst_share_link('return');
@@ -166,8 +150,11 @@ $image_height = get_option('single_view_image_height');
 				</div>
 			</div>
 		</div>
+		
+<?php endwhile; ?>
+<?php /** end the product loop here */?>
+
 		<?php
-		}
 		if(function_exists('fancy_notifications')) {
 			echo fancy_notifications();
 		}

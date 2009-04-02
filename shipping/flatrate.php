@@ -71,57 +71,45 @@ class flatrate {
 	}
 	
 	function getQuote($for_display = false) {
-		global $wpdb;
+		global $wpdb, $wpsc_cart;
 		if (isset($_POST['country'])) {
 			$country = $_POST['country'];
 			$_SESSION['wpsc_delivery_country'] = $country;
 		} else {
 			$country = $_SESSION['wpsc_delivery_country'];
 		}
+		
+		
 		if (get_option('base_country') != $country) {
 			$results = $wpdb->get_var("SELECT `continent` FROM `{$wpdb->prefix}currency_list` WHERE `isocode` IN('{$country}') LIMIT 1");
 			$flatrates = get_option('flat_rates');
 			
 			if ($flatrates != '') {
-			  if($for_display == true) {
-			    // if it is for display, we need to add the per item shipping too
-			    foreach((array)$_SESSION['nzshpcrt_cart'] as $cart_item) {
-						$product_id = $cart_item->product_id;
-						$quantity = $cart_item->quantity;
-			      $flatrates[$results] += nzshpcrt_determine_item_shipping($product_id, $quantity, $country);
-			    }
-			  }
-			  
-			if($_SESSION['quote_shipping_method'] == $this->internal_name) {
-			  if($_SESSION['quote_shipping_option'] != "Flat Rate") {
-			    $_SESSION['quote_shipping_option'] = null;
-			  }
-			}
+					
+				if($_SESSION['quote_shipping_method'] == $this->internal_name) {
+					if($_SESSION['quote_shipping_option'] != "Flat Rate") {
+						$_SESSION['quote_shipping_option'] = null;
+					}
+				}
 			  
 				return array("Flat Rate"=>(float)$flatrates[$results]);
 			}
 		} else {
 			$flatrates = get_option('flat_rates');
-			if($for_display == true) {
-				foreach((array)$_SESSION['nzshpcrt_cart'] as $cart_item) {
-					$product_id = $cart_item->product_id;
-					$quantity = $cart_item->quantity;
-					$per_item_shipping += nzshpcrt_determine_item_shipping($product_id, $quantity, $country);
-				}
-			}
+
 			switch($country) {
 			  case 'NZ':
-				$shipping_quotes["North Island"] = (float)$flatrates['northisland']+$per_item_shipping;
-				$shipping_quotes["South Island"] = (float)$flatrates['southisland']+$per_item_shipping;
+				$shipping_quotes["North Island"] = (float)$flatrates['northisland'];
+				$shipping_quotes["South Island"] = (float)$flatrates['southisland'];
 			  break;
 			  
 			  case 'US':
-				$shipping_quotes["Continental 48 States"] = (float)$flatrates['continental']+$per_item_shipping;
-				$shipping_quotes["All 50 States"] = (float)$flatrates['all']+$per_item_shipping;
+				$shipping_quotes["Continental 48 States"] = (float)$flatrates['continental'];
+				$shipping_quotes["All 50 States"] = (float)$flatrates['all'];
 			  break;
 			  
 			  default:
-				$shipping_quotes["Local Shipping"] = (float)$flatrates['local']+$per_item_shipping;
+				$shipping_quotes["Local Shipping"] = (float)$flatrates['local'];
 			  break;
 			}
 			if($_SESSION['quote_shipping_method'] == $this->internal_name) {
@@ -138,7 +126,8 @@ class flatrate {
 	
 	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
 		global $wpdb;
-    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
+    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+			$country_code = $_SESSION['wpsc_delivery_country'];
       $product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping

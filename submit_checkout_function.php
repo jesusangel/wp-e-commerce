@@ -295,8 +295,8 @@ function nzshpcrt_submit_checkout() {
 
    $log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
    foreach($_POST['collected_data'] as $value_id => $value) {
-     $wpdb->query("INSERT INTO `".$wpdb->prefix."submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( '".$log_id."', '".$value_id."', '".$value."');") ;
-     }
+     $wpdb->query("INSERT INTO `".$wpdb->prefix."submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( '".$log_id."', '".(int)$value_id."', '".$value."');") ;
+		}
    
 		if(function_exists("nzshpcrt_user_log")) {
 			if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."usermeta'")) {
@@ -430,13 +430,11 @@ function nzshpcrt_submit_checkout() {
         if($wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_files` WHERE `id` IN ('$file_id')")) {
           $unique_id = sha1(uniqid(mt_rand(), true));
           $wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
-          //echo "INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));<br />";
         }
       }
       
     }
-   
-      //exit("<pre>".print_r($variations,true)."</pre>");
+   ;
    
    $unneeded_value = null; //this is only used to store the quantity for the item we are working on, so that we can get the array key
    $assoc_quantity = null;

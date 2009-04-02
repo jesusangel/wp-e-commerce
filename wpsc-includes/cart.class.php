@@ -31,8 +31,9 @@ function wpsc_cart_item_count() {
 function wpsc_cart_total() {
 	global $wpsc_cart;
 	
-	$total = $wpsc_cart->calculate_total_price();
+	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
+	$total += $wpsc_cart->calculate_total_tax();
 	return $wpsc_cart->process_as_currency($total);
 }
 /**
@@ -49,7 +50,7 @@ function wpsc_cart_weight_total() {
 */
 function wpsc_cart_tax() {
 	global $wpsc_cart;
-	return $wpsc_cart->calculate_total_tax();
+	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
 }
   
 /**
@@ -274,6 +275,14 @@ class wpsc_cart {
 	
 	var $coupon;
 	var $tax_percentage;
+	
+	// caching of frequently used values, these are wiped when the cart is modified and then remade when needed
+	var $total_tax = null;
+	var $base_shipping = null;
+	var $total_item_shipping = null;
+	var $total_shipping = null;
+	var $subtotal = null;
+	var $total_price = null;
 	 
 	var $is_incomplete = true;
 	
@@ -315,6 +324,17 @@ class wpsc_cart {
 	* @access public
 	*/
   function update_location() {
+   if(!isset($_SESSION['wpsc_selected_country']) && !isset($_SESSION['wpsc_delivery_country'])) {
+			$_SESSION['wpsc_selected_country'] = get_option('base_country');
+			$_SESSION['wpsc_delivery_country'] = get_option('base_country');   
+   } else {
+     if(!isset($_SESSION['wpsc_selected_country'])) {
+			$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_delivery_country'];
+     } else if(!isset($_SESSION['wpsc_delivery_country'])) {
+			$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_selected_country'];     
+     }   
+   }
+  
     $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
 	  $this->selected_country =& $_SESSION['wpsc_selected_country'];
 	  $this->delivery_region =& $_SESSION['wpsc_delivery_region'];
@@ -348,7 +368,6 @@ class wpsc_cart {
 				// otherwise select the first one with any quotes
 				foreach((array)$custom_shipping as $shipping_module) {
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
-					//if(($wpsc_shipping_modules[$shipping_module]->requires_weight != true) or ($wpsc_shipping_modules[$shipping_module]->requires_weight == true)) {
 					$this->selected_shipping_method = $shipping_module;
 					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 					if(count($this->shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
@@ -389,6 +408,7 @@ class wpsc_cart {
 		foreach($this->cart_items as $key => $cart_item) {
 			$this->cart_items[$key]->refresh_item();
 		}
+		$this->clear_cache();
 		
 	}
   
@@ -471,6 +491,7 @@ class wpsc_cart {
 			$status = true;
 		}	
 		$this->cart_item_count = count($this->cart_items);
+		$this->clear_cache();
 		return $status;
 	}
   
@@ -488,6 +509,7 @@ class wpsc_cart {
         $this->cart_items[$key]->$name = $value; 
       }
 			$this->cart_items[$key]->refresh_item();
+			$this->clear_cache();
       return true;
     } else {
      return false;
@@ -503,7 +525,7 @@ class wpsc_cart {
 	*/
   function remove_item($key) {
     if(isset($this->cart_items[$key])) {
-			$this->cart_items[$key]->empty_item();
+			//$this->cart_items[$key]->empty_item();
 			unset($this->cart_items[$key]);
 	    $this->cart_items = array_values($this->cart_items);
 			$this->cart_item_count = count($this->cart_items);
@@ -512,6 +534,7 @@ class wpsc_cart {
 		} else {
 			return false;
 		}
+		$this->clear_cache();
   }
   
 	/**
@@ -525,37 +548,86 @@ class wpsc_cart {
 		$this->cart_item = null;
 		$this->cart_item_count = 0;
 		$this->current_cart_item = -1;
+		$this->clear_cache();
   }
   
-  	/**
-	 * calculate_total_price method 
+  
+  
+	/**
+	 * Clear Cache method, used to clear the cached totals 
+	 * @access public
+	 *
+	 * No parameters, nothing returned
+	*/
+  function clear_cache() {
+	 $this->total_tax = null;
+	 $this->base_shipping = null;
+	 $this->total_item_shipping = null;
+	 $this->total_shipping = null;
+	 $this->subtotal = null;
+	 $this->total_price = null;
+	}
+  
+ 
+  /**
+	 * calculate total price method 
 	 * @access public
 	 *
 	 * @return float returns the price as a floating point value
 	*/
   function calculate_total_price() {
+    if($this->total_price == null) {
+			$total = $this->calculate_subtotal();
+			$total += $this->calculate_total_shipping();
+			$total += $this->calculate_total_tax();
+			$this->total_price = $total;
+		} else {
+		  $total = $this->total_price;
+		}
+		return $total;
+  }
+  
+  /**
+	 * calculate_subtotal method 
+	 * @access public
+	 *
+	 * @return float returns the price as a floating point value
+	*/
+  function calculate_subtotal() {
     global $wpdb;
-    
-		foreach($this->cart_items as $key => $cart_item) {
-		  $total += $cart_item->total_price;
+    $total = 0;
+    if($this->subtotal == null) {
+			foreach($this->cart_items as $key => $cart_item) {
+				$total += $cart_item->total_price;
+			}
+			$this->subtotal = $total;
+		} else {
+		  $total = $this->subtotal;
 		}
 		return $total;
   }
   
   	/**
-	 * calculate_total_price method 
+	 * calculate total tax method 
 	 * @access public
 	 *
 	 * @return float returns the price as a floating point value
 	*/
   function calculate_total_tax() {
     global $wpdb;
-    
-		foreach($this->cart_items as $key => $cart_item) {
-		  $total += $cart_item->tax;
+    $total = 0;
+    if($this->total_tax == null) {
+			foreach($this->cart_items as $key => $cart_item) {
+				$total += $cart_item->tax;
+			}
+			$this->total_tax = $total;
+		} else {
+		  $total = $this->total_tax;
 		}
 		return $total;
   }
+  
+  
   	/**
 	 * calculate_total_weight method 
 	 * @access public
@@ -571,18 +643,60 @@ class wpsc_cart {
 		return $total;
   }
   
+  
     /**
-	* get_shipping_option method, gets the shipping option from the selected method and associated quotes
+	* calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
 	* @access public
 	 * @return float returns the shipping as a floating point value
 	*/
   function calculate_total_shipping() {
+    $total = $this->calculate_base_shipping();
+    $total += $this->calculate_per_item_shipping();
+    return $total;
+  }
+  
+  
+    /**
+	* calculate_base_shipping method, gets the shipping option from the selected method and associated quotes
+	* @access public
+	 * @return float returns the shipping as a floating point value
+	*/
+  function calculate_base_shipping() {
     global $wpdb, $wpsc_shipping_modules;
-		$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-    //$shipping = (float)$wpsc_shipping_modules[$this->selected_shipping_method]->get_cart_shipping($this->calculate_total_price(), $this->calculate_total_weight());
-    $shipping = (float)$this->shipping_quotes[$this->selected_shipping_option];
-    //echo "<pre>".print_r($this->shipping_quotes[$this->selected_shipping_option],true)."</pre>";
-		return $shipping;
+    
+    if($this->base_shipping == null) {
+			$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+			$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
+			$this->base_shipping = $total;
+		} else {
+		  $total = $this->base_shipping;
+		}
+		return $total;
+  }
+  
+    /**
+	* calculate_per_item_shipping method, gets the shipping option from the selected method and associated quotes
+	* @access public
+	 * @return float returns the shipping as a floating point value
+	*/
+  function calculate_per_item_shipping($method = null) {
+    global $wpdb, $wpsc_shipping_modules;
+    if($method == null) {
+      $method = $this->selected_shipping_method;
+    }
+		
+    if(($this->total_item_shipping == null) || ($method != $this->selected_shipping_method)) {
+			foreach((array)$this->cart_items as $cart_item) {
+				$total += $cart_item->calculate_shipping($method);
+			}
+			if($method == $this->selected_shipping_method) {
+				$this->total_item_shipping = $total;
+			}
+		} else {
+		  $total = $this->total_item_shipping;
+		}
+		//exit("<pre>".print_r($total,true)."<pre>");
+		return $total;
   }
   
 	/**
@@ -633,6 +747,18 @@ class wpsc_cart {
 		return $output;  
   }
   
+  	/**
+	 * save_to_db method, saves the cart to the database
+	 * @access public
+	 *
+	*/
+  function save_to_db($purchase_log_id) {
+    global $wpdb;
+    
+		foreach($this->cart_items as $key => $cart_item) {
+		  $cart_item->save_to_db($purchase_log_id);
+		}
+  }
   
   /**
 	 * cart loop methods
@@ -714,8 +840,10 @@ class wpsc_cart {
     $unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
     $num = 0;
     foreach($unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
+      
+			$per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
       $this->shipping_quotes[$num]['name'] = $shipping_key;
-      $this->shipping_quotes[$num]['value'] = $shipping_value;
+      $this->shipping_quotes[$num]['value'] = $shipping_value+$per_item_shipping;
       $num++;
     }
     $this->shipping_quote_count = count($this->shipping_quotes);
@@ -902,7 +1030,42 @@ class wpsc_cart_item {
 		} else {
 			$this->thumbnail_image = $product['image'];
 		}
-	  $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $weight, $product['id']);
+	  $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
 	}
+		
+	/**
+	 * Calculate shipping method
+	 * if no parameter passed, takes the currently selected method
+	 * @access public
+	 *
+	 * @param string shipping method
+	 * @return boolean true on sucess, false on failure
+	*/		
+		
+	function calculate_shipping($method = null) {
+    global $wpdb, $wpsc_shipping_modules;
+    if($method === null) {
+      $method = $this->cart->selected_shipping_method;
+    }
+    $shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+    if($method == $this->cart->selected_shipping_method) {
+    $this->shipping = $shipping;
+    }
+	  return $shipping;
+	}
+		
+	/**
+	 * save to database method
+	 * @access public
+	 *
+	 * @param integer purchase log id
+	*/
+	function save_to_db($purchase_log_id) {
+		global $wpdb, $wpsc_shipping_modules;
+    $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
+    //echo "INSERT INTO `wp_cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('{$this->product_id}', '{$this->product_name}', '{$purchase_log_id}', '{$this->unit_price}', '{$shipping}', '{$this->cart->tax_percentage}', {$this->quantity}, '{$this->is_donation}', '0', '', NULL)";
+		$prepared_query = $wpdb->query("INSERT INTO `wp_cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('{$this->product_id}', '{$this->product_name}', '{$purchase_log_id}', '{$this->unit_price}', '{$shipping}', '{$this->cart->tax_percentage}', {$this->quantity}, '{$this->is_donation}', '0', '', NULL)");		
+	}
+	
 }
 ?>

@@ -1259,3 +1259,7 @@ img.ui-datepicker-trigger {
 	width: 193px;
 	height: 200px;
 }
+
+.checkout_forms_hidden {
+  display: none;
+}

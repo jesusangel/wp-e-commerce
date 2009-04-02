@@ -181,22 +181,60 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 	* No parameters, returns nothing
 */
 function wpsc_submit_checkout() {
-  global $wpdb, $wpsc_cart;
+  global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways;
 	$wpsc_checkout = new wpsc_checkout();
 	
+	$selected_gateways = get_option('custom_gateway_options');
+	$submitted_gateway = $_POST['custom_gateway'];
 	$form_validity = $wpsc_checkout->validate_forms();
 	extract($form_validity); // extracts $is_valid and $error_messages
+	//exit("<pre>".print_r($submitted_gateway,true)."</pre>");
 	if($is_valid == true) {
-	
-	exit();
+		// check that the submitted gateway is in the list of selected ones
+		if(array_search($submitted_gateway,$selected_gateways) !== false) {
+		
+  
+		
+			$sessionid = (mt_rand(100,999).time());
+			$subtotal = $wpsc_cart->calculate_subtotal();
+			$base_shipping= $wpsc_cart->calculate_base_shipping();
+			$tax = $wpsc_cart->calculate_total_tax();
+			$total = $wpsc_cart->calculate_total_price();
+			
+			
+			
+	    
+	    //echo "INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}')";
+	    //echo "<br />";
+			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}')");
+			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}purchase_logs` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
+			//$purchase_log_id = 1;
+			$wpsc_checkout->save_forms_to_db($purchase_log_id);
+			$wpsc_cart->save_to_db($purchase_log_id);
+			
+			
+			if(get_option('permalink_structure') != '') {
+				$seperator ="?";
+			} else {
+				$seperator ="&";
+			}
+		
+			
+			
+			// submit to gateway
+			foreach($nzshpcrt_gateways as $gateway) {
+        if($gateway['internalname'] == $submitted_gateway ) {
+          $gateway_used = $gateway['internalname'];
+          $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
+          $gateway['function']($seperator, $sessionid);
+          break;
+        }
+      }
+			exit();
+		}
 	} else {
-// 	  $_SESSION['wpsc_checkout_error_messages'] = $error_messages
 	
 	}
-	//echo "<pre>".print_r($form_validity,true)."</pre>";
-  
-  
-
 }
 
 // execute on POST and GET
