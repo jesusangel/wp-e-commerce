@@ -38,6 +38,7 @@ function wpsc_the_checkout_item_error() {
 	if($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
 	  $output = $_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id];
 	}
+	
 	return $output;
 }
 
@@ -199,7 +200,7 @@ class wpsc_checkout {
 				case "address":
 				case "delivery_address":
 				case "textarea":
-				$output = "<textarea id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
+				$output = "<textarea class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
 				break;
 				
 				case "country":
@@ -316,6 +317,7 @@ class wpsc_checkout {
 	}
 
 	function rewind_checkout_items() {
+	  $_SESSION['wpsc_checkout_error_messages'] = array();
 		$this->current_checkout_item = -1;
 		if ($this->checkout_item_count > 0) {
 			$this->checkout_item = $this->checkout_items[0];

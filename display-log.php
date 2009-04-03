@@ -854,8 +854,7 @@ if($_GET['filter'] !== 'true') {
 				echo "<tr $alternate>";
 		
 				echo " <td>";
-				echo $product_data[0]['name'];
-				echo stripslashes($variation_list);
+				echo stripslashes($cart_row['name']);
 				echo " </td>";
 		
 				echo " <td>";
@@ -871,17 +870,17 @@ if($_GET['filter'] !== 'true') {
 				echo " <td>";
 	
 				$price = $cart_row['price'] * $cart_row['quantity'];
-				$gst = $price - ($price  / (1+($cart_row['gst'] / 100)));
-				
-				if($gst > 0) {
-				  $tax_per_item = $gst / $cart_row['quantity'];
-				}
-				echo nzshpcrt_currency_display($cart_row['price'] - $tax_per_item, 1);
+				echo nzshpcrt_currency_display($cart_row['price'], 1);
 				echo " </td>";
 				
 				echo " <td>";
-				
-				echo nzshpcrt_currency_display($gst, 1);
+				$gst = $cart_row['tax_charged'];
+				$tax = 0;
+				if($gst > 0) {
+				  $tax = $gst * $cart_row['quantity'];
+				}
+				$endtotal += $tax;
+				echo nzshpcrt_currency_display($tax, 1);
 				echo " </td>";
 
 				echo " <td>";
@@ -890,7 +889,7 @@ if($_GET['filter'] !== 'true') {
 
 				echo " <td>";
 				$endtotal += $price;
-				echo nzshpcrt_currency_display(($shipping + $price), 1);
+				echo nzshpcrt_currency_display(($shipping + $price + $tax), 1);
 				echo " </td>";
 							
 				echo '</tr>';

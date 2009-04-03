@@ -1,6 +1,6 @@
 <?php
 function transaction_results($sessionid, $echo_to_screen = true, $transaction_id = null) {
-	global $wpdb;
+	global $wpdb,$wpsc_cart;
 	//$curgateway = get_option('payment_gateway');
 	$curgateway = $wpdb->get_var("SELECT gateway FROM {$wpdb->prefix}purchase_logs WHERE sessionid='$sessionid'");
 	$errorcode = '';
@@ -263,8 +263,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					return;
 				}
 
-				$_SESSION['nzshpcrt_cart'] = '';
-				$_SESSION['nzshpcrt_cart'] = Array();
+				/// Empty the cart
+				$wpsc_cart->empty_cart();
 
 				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';

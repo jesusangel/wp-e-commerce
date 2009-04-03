@@ -6,8 +6,8 @@
  *
  * TODO: Implement 'ANY' logic of conditional coupons.
  *
- * @package Wp-shopping-cart
- * @since 3.6.9
+ * @package wp-e-commerce
+ * @since 3.7
  */
 class wpsc_coupons {
 	var $code;

@@ -8,6 +8,7 @@
  *
  *
  * @package wp-e-commerce
+ * @since 3.7
  * @subpackage wpsc-cart-classes 
 */
 /**
@@ -30,20 +31,33 @@ function wpsc_cart_item_count() {
 */
 function wpsc_cart_total() {
 	global $wpsc_cart;
-	
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
 	$total += $wpsc_cart->calculate_total_tax();
 	return $wpsc_cart->process_as_currency($total);
 }
+
 /**
-* cart total function, no parameters
+* nzshpcrt_overall_total_price function, no parameters
+* @return string the total price of the cart, with a currency sign
+*/
+function nzshpcrt_overall_total_price() {
+	global $wpsc_cart;
+	$total = $wpsc_cart->calculate_subtotal();
+	$total += $wpsc_cart->calculate_total_shipping();
+	$total += $wpsc_cart->calculate_total_tax();
+  return $total;
+}
+
+/**
+* cart total weight function, no parameters
 * @return float the total weight of the cart
 */
 function wpsc_cart_weight_total() {
 	global $wpsc_cart;
 	return $wpsc_cart->calculate_total_weight();
 }
+
 /**
 * tax total function, no parameters
 * @return float the total weight of the cart
@@ -51,6 +65,15 @@ function wpsc_cart_weight_total() {
 function wpsc_cart_tax() {
 	global $wpsc_cart;
 	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+}
+
+/**
+* uses shipping function, no parameters
+* @return boolean if true, all items in the cart do use shipping
+*/
+function wpsc_uses_shipping() {
+	global $wpsc_cart;
+	return $wpsc_cart->uses_shipping();
 }
   
 /**
@@ -66,6 +89,7 @@ function wpsc_cart_has_shipping() {
 	}
 	return $output;
 }
+
 /**
 * cart shipping function, no parameters
 * @return string the total shipping of the cart, with a currency sign
@@ -283,6 +307,7 @@ class wpsc_cart {
 	var $total_shipping = null;
 	var $subtotal = null;
 	var $total_price = null;
+	var $uses_shipping = null;
 	 
 	var $is_incomplete = true;
 	
@@ -566,6 +591,7 @@ class wpsc_cart {
 	 $this->total_shipping = null;
 	 $this->subtotal = null;
 	 $this->total_price = null;
+	 $this->uses_shipping = null;
 	}
   
  
@@ -663,19 +689,22 @@ class wpsc_cart {
 	*/
   function calculate_base_shipping() {
     global $wpdb, $wpsc_shipping_modules;
-    
-    if($this->base_shipping == null) {
-			$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-			$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
-			$this->base_shipping = $total;
+    if($this->uses_shipping()) {
+			if($this->base_shipping == null) {
+				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+				$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
+				$this->base_shipping = $total;
+			} else {
+				$total = $this->base_shipping;
+			}
 		} else {
-		  $total = $this->base_shipping;
+		  $total = 0;
 		}
 		return $total;
   }
   
     /**
-	* calculate_per_item_shipping method, gets the shipping option from the selected method and associated quotes
+	* calculate_per_item_shipping method, gets the shipping option from the selected method and associated quotesing 
 	* @access public
 	 * @return float returns the shipping as a floating point value
 	*/
@@ -697,6 +726,27 @@ class wpsc_cart {
 		}
 		//exit("<pre>".print_r($total,true)."<pre>");
 		return $total;
+  }
+  
+  
+  /**
+	 * uses shipping method, to determine if shipping is used.
+	 * @access public
+	 *
+	 * @return float returns the price as a floating point value
+	*/
+  function uses_shipping() {
+    global $wpdb;
+    $uses_shipping = 0;
+    if(($this->uses_shipping === null)) {
+			foreach($this->cart_items as $key => $cart_item) {
+				$uses_shipping += (int)$cart_item->uses_shipping;
+			}
+		  $uses_shipping = (bool)$uses_shipping;
+		} else {
+		  $uses_shipping = $this->uses_shipping;
+		}
+		return $uses_shipping;
   }
   
 	/**
@@ -1011,6 +1061,8 @@ class wpsc_cart_item {
 		$this->is_donation = (bool)$product['donation'];
 		// change notax to boolean and invert it
 		$this->apply_tax = !(bool)$product['notax'];
+		// change no_shipping to boolean and invert it
+		$this->uses_shipping = !(bool)$product['no_shipping'];
 		if($this->is_donation == 1) {
 			$this->unit_price = $this->provided_price;
 		} else {
@@ -1063,8 +1115,13 @@ class wpsc_cart_item {
 	function save_to_db($purchase_log_id) {
 		global $wpdb, $wpsc_shipping_modules;
     $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
-    //echo "INSERT INTO `wp_cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('{$this->product_id}', '{$this->product_name}', '{$purchase_log_id}', '{$this->unit_price}', '{$shipping}', '{$this->cart->tax_percentage}', {$this->quantity}, '{$this->is_donation}', '0', '', NULL)";
-		$prepared_query = $wpdb->query("INSERT INTO `wp_cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('{$this->product_id}', '{$this->product_name}', '{$purchase_log_id}', '{$this->unit_price}', '{$shipping}', '{$this->cart->tax_percentage}', {$this->quantity}, '{$this->is_donation}', '0', '', NULL)");		
+    
+		if($this->apply_tax == true) {
+			$tax = $this->unit_price * ($this->cart->tax_percentage/100);
+		} else {
+			$tax = 0;
+		}
+		$prepared_query = $wpdb->query("INSERT INTO `wp_cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('{$this->product_id}', '{$this->product_name}', '{$purchase_log_id}', '{$this->unit_price}', '{$shipping}', '{$tax}', '{$this->cart->tax_percentage}', {$this->quantity}, '{$this->is_donation}', '0', '', NULL)");		
 	}
 	
 }

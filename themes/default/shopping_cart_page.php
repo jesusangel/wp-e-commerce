@@ -18,7 +18,7 @@ $wpsc_gateway = new wpsc_gateways();
 	<?php  //this displays the confirm your order html	?>
 		
 		<tr class="product_row">
-			<td class="firstcol"><img src='<?php echo wpsc_cart_item_image(); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
+			<td class="firstcol"><img src='<?php echo wpsc_cart_item_image(48,48); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
 			<td class="firstcol">
 			<a href='<?php echo wpsc_cart_item_url();?>'><?php echo wpsc_cart_item_name(); ?></a>
 			</td>
@@ -42,42 +42,47 @@ $wpsc_gateway = new wpsc_gateways();
 			</td>
 		</tr>
 	<?php endwhile; ?>
-	
+	</table>
 	<?php  //this HTML dispalys the calculate your order HTML	?>
 	
-	<tr>
-		<td colspan='5'>
-      <h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>
-			<?php echo TXT_WPSC_SHIPPING_DETAIL; ?>
-		</td>
-	</tr>
-	
-	<tr>
-		<td colspan='5'>
-			<form name='change_country' action='' method='POST'>
-				<?php echo wpsc_shipping_country_list();?>
-				<input type='hidden' name='wpsc_update_location' value='true' />
-			</form>
-		</td>
-	</tr>
-	
-	<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
-			<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
-			<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote(); ?>
-				<tr>
-				  <td colspan='3'>
-				    <label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
-				  </td>
-				  <td>
-				    <label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
-				  </td>
-				  <td style='text-align:center;'>
-				    <input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?> onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
-				  </td>
-				</tr>
+	<?php if(wpsc_uses_shipping()) : ?>
+		<h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>
+		<table class="productcart">
+			<tr>
+				<td colspan='5'>
+					<?php echo TXT_WPSC_SHIPPING_DETAIL; ?>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan='5'>
+					<form name='change_country' action='' method='POST'>
+						<?php echo wpsc_shipping_country_list();?>
+						<input type='hidden' name='wpsc_update_location' value='true' />
+					</form>
+				</td>
+			</tr>
+			
+			<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
+					<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
+					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote(); ?>
+						<tr>
+							<td colspan='3'>
+								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
+							</td>
+							<td>
+								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
+							</td>
+							<td style='text-align:center;'>
+								<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?> onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+							</td>
+						</tr>
+					<?php endwhile; ?>
 			<?php endwhile; ?>
-	<?php endwhile; ?>
+		</table>
+	<?php endif; ?>
 	
+	<table class="productcart">
 	<tr class="total_price total_tax">
 		<td colspan="3">
 			<?php echo TXT_WPSC_TAX; ?>
@@ -105,6 +110,8 @@ $wpsc_gateway = new wpsc_gateways();
 
 
 	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
+	<?php echo TXT_WPSC_CREDITCARDHANDY; ?><br />
+	<?php echo TXT_WPSC_ASTERISK; ?>
 <form action='' method='POST' enctype="multipart/form-data">
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>

@@ -96,7 +96,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 				continue;
 			}
 			$variation_count = count($product_variations);
-			
+			/*
 			$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$item['id']."'";
 			$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 			$variation_count = count($variation_data);
@@ -116,7 +116,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 			} else {
 				$variation_list = '';
 			}
-			
+			*/
 			
 			$local_currency_productprice = $item['price'];
 			$local_currency_shipping = $item['pnp'];
@@ -130,8 +130,9 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 				$paypal_currency_shipping = $local_currency_shipping;
 			}
 			//exit("---->".$paypal_currency_shipping);
-			$data['item_name_'.$i] = urlencode(stripslashes($product_data['name']).stripslashes($variation_list));
+			$data['item_name_'.$i] = urlencode(stripslashes($item['name']));
 			$data['amount_'.$i] = number_format(sprintf("%01.2f", $paypal_currency_productprice),$decimal_places,'.','');
+			$data['tax_'.$i] = number_format(sprintf("%01.2f", $item['tax_charged']),$decimal_places,'.','');
 			$data['quantity_'.$i] = $item['quantity'];
 			$data['item_number_'.$i] = $product_data['id'];
 			if($item['donation'] !=1) {
@@ -320,13 +321,13 @@ function nzshpcrt_paypal_ipn()
     /*
      * Detect use of sandbox mode, if sandbox mode is present, send debugging email.
      */
-     if(stristr(get_option('paypal_multiple_url'), "sandbox")) {
+     if(stristr(get_option('paypal_multiple_url'), "sandbox") || (WPSC_PAYPAL_DEBUG == true )) {
 				$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
 				$message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
 				$message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";
 				$message .= "GET:\n\r".print_r($_GET,true)."\n\r\n\r";
 				$message .= "SERVER:\n\r".print_r($_SERVER,true)."\n\r\n\r";
-				$wpdb->query("INSERT INTO `paypal_log` ( `id` , `text` , `date` ) VALUES ( '', '$message', NOW( ) );");
+				//$wpdb->query("INSERT INTO `paypal_log` ( `id` , `text` , `date` ) VALUES ( '', '$message', NOW( ) );");
 				mail(get_option('purch_log_email'), "IPN Data", $message);
 			}    
     }

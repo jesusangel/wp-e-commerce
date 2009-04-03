@@ -5,6 +5,7 @@
  * These are the WPSC AJAX functions
  *
  * @package wp-e-commerce
+ * @since 3.7
  * @subpackage wpsc-cart-classes 
  */
  
@@ -68,7 +69,7 @@ function wpsc_empty_cart() {
     if(get_option('wpsc_use_theme_engine') == TRUE) {	    
 			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
 	  } else {
-			nzshpcrt_shopping_basket("", 4);	  
+			nzshpcrt_shopping_basket("", 4);
 	  }
 		$output = ob_get_contents();
 		ob_end_clean();
@@ -78,7 +79,7 @@ function wpsc_empty_cart() {
   }
 }
 // execute on POST and GET
-if($_REQUEST['wpsc_ajax_action'] == 'empty_cart') {
+if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) {
 	add_action('init', 'wpsc_empty_cart');
 }
 
@@ -201,12 +202,10 @@ function wpsc_submit_checkout() {
 			$tax = $wpsc_cart->calculate_total_tax();
 			$total = $wpsc_cart->calculate_total_price();
 			
-			
-			
-	    
+			    
 	    //echo "INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}')";
 	    //echo "<br />";
-			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}')");
+			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`, `plugin_version`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."')");
 			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}purchase_logs` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
 			//$purchase_log_id = 1;
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
