@@ -13,12 +13,14 @@ global $wpsc_cart, $wpdb;
 	</span>
 	<table class='shoppingcart'>
 		<tr>
+			<th></th>
 			<th id='product'><?php echo TXT_WPSC_PRODUCT; ?></th>
 			<th id='quantity'><?php echo TXT_WPSC_QUANTITY_SHORT; ?></th>
 			<th id='price'><?php echo TXT_WPSC_PRICE; ?></th>
 		</tr>
 			<?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
 			<tr>
+					<td><img src='<?php echo wpsc_cart_item_image(32,32); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
 					<td><?php echo wpsc_cart_item_name(); ?></td>
 					<td><?php echo wpsc_cart_item_quantity(); ?></td>
 					<td><?php echo wpsc_cart_item_price(); ?></td>
