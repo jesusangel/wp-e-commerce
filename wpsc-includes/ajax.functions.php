@@ -23,7 +23,6 @@ function wpsc_add_to_cart() {
 	$default_parameters['comment']=null;
 	$default_parameters['time_requested']=null;
 	$default_parameters['meta']=null;
-  
    /// sanitise submitted values
   $product_id = (int)$_POST['product_id'];
   foreach((array)$_POST['variation'] as $key => $variation) {
@@ -32,18 +31,19 @@ function wpsc_add_to_cart() {
   if($_POST['quantity'] > 0) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
   }
+  
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
-  $wpsc_cart->set_item($product_id,$parameters);
+  
+	$wpsc_cart->set_item($product_id,$parameters);  
   if($_GET['ajax'] == 'true') {
+		
 		ob_start();
-    if(get_option('wpsc_use_theme_engine') == TRUE) {	    
-			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
-	  } else {
-			nzshpcrt_shopping_basket("", 4);	  
-	  }
-		$output = ob_get_contents();
+		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	  $output = ob_get_contents();
 		ob_end_clean();
+		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+		
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
     echo "wpsc_bind_to_events();\n";
 		exit();
@@ -119,7 +119,9 @@ function wpsc_update_shipping_price() {
  	$quote_shipping_method = $_POST['key1'];
  	$quote_shipping_option = $_POST['key'];
 	$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
-	echo "jQuery('span#checkout_total').html('".wpsc_cart_total()."');";
+	
+	echo "jQuery('.pricedisplay.checkout-shipping').html('".wpsc_cart_shipping()."');\n\r";
+	echo "jQuery('.pricedisplay.checkout-total').html('".wpsc_cart_total()."');\n\r";
 	exit();
 }
 // execute on POST and GET
@@ -205,7 +207,7 @@ function wpsc_submit_checkout() {
 			    
 	    //echo "INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}')";
 	    //echo "<br />";
-			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`, `plugin_version`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."')");
+			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`, `plugin_version`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."')");
 			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}purchase_logs` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
 			//$purchase_log_id = 1;
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);

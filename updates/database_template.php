@@ -381,4 +381,16 @@ $wpsc_database_template[$table_name]['indexes']['value_id'] = " KEY `value_id` (
 $wpsc_database_template[$table_name]['indexes']['variation_id'] = " KEY `variation_id` ( `variation_id` )";
 $wpsc_database_template[$table_name]['indexes']['all_variation_ids'] = " KEY `all_variation_ids` ( `all_variation_ids` )";
 
+
+
+$table_name = "{$wpdb->prefix}wpsc_claimed_stock";
+$wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) UNSIGNED NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['variation_stock_id'] = "bigint(20) UNSIGNED NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['stock_claimed'] = "FLOAT NOT NULL ";
+$wpsc_database_template[$table_name]['columns']['last_activity'] = "DATETIME NOT NULL ";
+$wpsc_database_template[$table_name]['columns']['cart_id'] = "VARCHAR( 255 ) NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['indexes']['unique_key'] = "UNIQUE KEY `unique_key` ( `product_id`,`variation_stock_id`,`cart_id`)";
+$wpsc_database_template[$table_name]['indexes']['last_activity'] = "KEY `last_activity` ( `last_activity` )";
+//) ENGINE = memory;
+
 ?>

@@ -312,6 +312,9 @@ class usps {
 		$wpsc_usps_quote = $rates;
 		return $uspsQuote;
 	}
+	
+	function get_item_shipping() {
+	}
 }
 $usps = new usps();
 $wpsc_shipping_modules[$usps->getInternalName()] = $usps;

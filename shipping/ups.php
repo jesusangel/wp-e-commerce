@@ -211,6 +211,9 @@ class ups {
 		}
 		return $shipping_list;
 	}
+	
+	function get_item_shipping() {
+	}
 }
 $ups = new ups();
 $wpsc_shipping_modules[$ups->getInternalName()] = $ups;

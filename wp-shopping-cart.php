@@ -138,13 +138,13 @@ function wpsc_initialisation() {
   
   // initialise the cart session, if it exist, unserialize it, otherwise make it
   if(isset($_SESSION['wpsc_cart'])) {
-		$wpsc_cart = unserialize($_SESSION['wpsc_cart']);
+		$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
   } else {
-    $wpsc_cart = new wpsc_cart;
+    $GLOBALS['wpsc_cart'] = new wpsc_cart;
   }
 }
 // first plugin hook in wordpress
-add_action('plugins_loaded','wpsc_initialisation');
+add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
 
@@ -153,10 +153,18 @@ add_action('plugins_loaded','wpsc_initialisation');
  * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
  */  
 function wpsc_serialize_shopping_cart() {
-  global $wpsc_start_time, $wpsc_cart;
-  @$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
+  global $wpdb, $wpsc_start_time, $wpsc_cart;
+  //@$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
   
   $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
+  /// Delete the old claims on stock
+  //$session_timeout = @session_cache_expire()*60;
+  //if($session_timeout <= 0) { 
+	$session_timeout = 60*60; // 180 * 60 = three hours in seconds
+  $old_claimed_stock_timestamp = time() - $session_timeout;
+  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
+  $wpdb->query("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `last_activity` < '{$old_claimed_stock_datetime}'");
+  
   return true;
 }  
 add_action('shutdown','wpsc_serialize_shopping_cart');

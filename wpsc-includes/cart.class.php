@@ -15,7 +15,7 @@
  * The WPSC Cart API for templates
  */
 
-
+//exit('test');
 /**
 * cart item count function, no parameters
 * * @return integer the item count
@@ -30,7 +30,7 @@ function wpsc_cart_item_count() {
 * @return string the total price of the cart, with a currency sign
 */
 function wpsc_cart_total() {
-	global $wpsc_cart;
+	global $wpsc_cart;  
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
 	$total += $wpsc_cart->calculate_total_tax();
@@ -299,6 +299,7 @@ class wpsc_cart {
 	
 	var $coupon;
 	var $tax_percentage;
+	var $unique_id;
 	
 	// caching of frequently used values, these are wiped when the cart is modified and then remade when needed
 	var $total_tax = null;
@@ -336,9 +337,13 @@ class wpsc_cart {
   function wpsc_cart() {
     global $wpdb, $wpsc_shipping_modules;
     $coupon = 'percentage'; 
-    
+    // this is here to stop extremely bizzare errors with $wpsc_cart somehow not ending up as a global variable, yet certain code being run from it that eventually expects it to be one
+    if(!is_object($GLOBALS['wpsc_cart'])) {
+// 			$GLOBALS['wpsc_cart'] =& $this;
+    }
 	  $this->update_location();
 	  $this->get_tax_rate();
+	  $this->unique_id = sha1(uniqid(rand(), true));
 	  
 	  $this->get_shipping_method();
   }
@@ -413,6 +418,7 @@ class wpsc_cart {
 			$this->selected_shipping_option = '';
 			}
 		if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, $this->shipping_quotes) === false)) {
+			//echo "<pre>".print_r(array_pop(array_keys(array_slice($this->shipping_quotes,0,1))),true)."</pre>";
 			$this->selected_shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes,0,1)));
 		}
   }
@@ -434,7 +440,7 @@ class wpsc_cart {
 			$this->cart_items[$key]->refresh_item();
 		}
 		$this->clear_cache();
-		
+		$this->get_shipping_option();	
 	}
   
 	/**
@@ -487,28 +493,32 @@ class wpsc_cart {
 	*/
   function set_item($product_id, $parameters) {
     // default action is adding
-		$new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
-    $add_item = true;
-    $edit_item = false;
-    if(count($this->cart_items) > 0) {
-      //loop through each cart item
-      foreach($this->cart_items as $key => $cart_item) {
-        // compare product ids and variations.
-				if(($cart_item->product_id == $new_cart_item->product_id) && ($cart_item->product_variations == $new_cart_item->product_variations)) {
-				  // if they are the same, increment the count, and break out;
-					$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
-					$this->cart_items[$key]->refresh_item();
-					$add_item = false;
-					$edit_item = true;
-				}
-      }
     
-    }
-    // if we are still adding the item, add it
-    if($add_item === true) {
-			$this->cart_items[] = $new_cart_item;
+    if($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true) {
+			$new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
+			
+			$add_item = true;
+			$edit_item = false;
+			if(count($this->cart_items) > 0) {
+				//loop through each cart item
+				foreach($this->cart_items as $key => $cart_item) {
+					// compare product ids and variations.
+					if(($cart_item->product_id == $new_cart_item->product_id) && ($cart_item->product_variations == $new_cart_item->product_variations)) {
+						// if they are the same, increment the count, and break out;
+						$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
+						$this->cart_items[$key]->refresh_item();
+						$add_item = false;
+						$edit_item = true;
+					}
+				}
+			
+			}
+			// if we are still adding the item, add it
+			if($add_item === true) {
+				$this->cart_items[] = $new_cart_item;
+			}
 		}
-		
+    
 		
 	  // if some action was performed, return true, otherwise, return false;
 	  $status = false;
@@ -530,15 +540,65 @@ class wpsc_cart {
 	*/
   function edit_item($key, $parameters) {
     if(isset($this->cart_items[$key])) {
-      foreach($parameters as $name => $value) {
-        $this->cart_items[$key]->$name = $value; 
-      }
-			$this->cart_items[$key]->refresh_item();
-			$this->clear_cache();
+    
+			if($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true) {
+				foreach($parameters as $name => $value) {
+					$this->cart_items[$key]->$name = $value; 
+				}
+				$this->cart_items[$key]->refresh_item();
+				$this->clear_cache();
+			}
       return true;
     } else {
      return false;
     }
+  }
+  
+	/**
+	 * check remaining quantity method
+	 * currently only checks remaining stock, in future will do claimed stock and quantity limits
+	 * will need to return errors, then, rather than true/false, maybe use the wp_error object?
+	 * @access public
+	 *
+	 * @param integer a product ID key
+	 * @param array  variations on the product
+	 * @return boolean true on sucess, false on failure
+	*/
+  function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
+    global $wpdb;
+		$quantity_data = $wpdb->get_row("SELECT `quantity_limited`, `quantity`  FROM `{$wpdb->prefix}product_list` WHERE `id` IN ('$product_id') LIMIT 1", ARRAY_A);
+		// check to see if the product uses stock
+		if($quantity_data['quantity_limited'] == 1){
+			if(count($variations) > 0) { /// if so and we have variations, select the stock for the chosen variations
+				$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variations)."')");
+				asort($variation_ids);
+				$all_variation_ids = implode(",", $variation_ids);
+				
+				$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_id."' AND `value_id` IN ( '".implode("', '",$variations )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+				
+				$variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+				$stock = $variation_stock_data['stock'];
+				
+			} else { /// if so and we have no variations, select the stock for the product
+			  $stock = $quantity_data['quantity'];
+			  $priceandstock_id = 0;
+			}
+	    if($stock > 0) {
+				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
+				echo "/*".print_r($claimed_stock,true)."*/";
+				if(($claimed_stock + $quantity) <= $stock) {
+					$output = true;
+				} else {
+					$output = false;
+				}
+		  } else {
+				$output = false;	    
+	    }
+	     
+    } else {
+      $output = true;
+    }
+    return $output;
   }
   
 	/**
@@ -574,6 +634,7 @@ class wpsc_cart {
 		$this->cart_item_count = 0;
 		$this->current_cart_item = -1;
 		$this->clear_cache();
+		$this->cleanup();
   }
   
   
@@ -585,16 +646,29 @@ class wpsc_cart {
 	 * No parameters, nothing returned
 	*/
   function clear_cache() {
-	 $this->total_tax = null;
-	 $this->base_shipping = null;
-	 $this->total_item_shipping = null;
-	 $this->total_shipping = null;
-	 $this->subtotal = null;
-	 $this->total_price = null;
-	 $this->uses_shipping = null;
+		$this->total_tax = null;
+		$this->base_shipping = null;
+		$this->total_item_shipping = null;
+		$this->total_shipping = null;
+		$this->subtotal = null;
+		$this->total_price = null;
+		$this->uses_shipping = null;
+		$this->get_shipping_option();	
 	}
   
- 
+ 	/**
+	 * cleanup method, cleans up the cart just before final destruction
+	 * @access public
+	 *
+	 * No parameters, nothing returned
+	*/
+  function cleanup() {
+    global $wpdb;
+    //echo $wpdb->prepare("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN ('%s')", $this->unique_id);
+		$wpdb->query($wpdb->prepare("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN ('%s')", $this->unique_id));
+	}
+	
+	
   /**
 	 * calculate total price method 
 	 * @access public
@@ -881,7 +955,7 @@ class wpsc_cart {
 		}
 	}
 	
-	  /**
+	/**
 	 * shipping_quotes methods
 	*/
   function get_shipping_quotes() {
@@ -893,7 +967,7 @@ class wpsc_cart {
       
 			$per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
       $this->shipping_quotes[$num]['name'] = $shipping_key;
-      $this->shipping_quotes[$num]['value'] = $shipping_value+$per_item_shipping;
+      $this->shipping_quotes[$num]['value'] = (float)$shipping_value+(float)$per_item_shipping;
       $num++;
     }
     $this->shipping_quote_count = count($this->shipping_quotes);
@@ -944,6 +1018,7 @@ class wpsc_cart_item {
 	var $product_id;
 	var $variation_values;
 	var $product_variations;
+	var $variation_data;
 	var $quantity = 1;
 	var $provided_price;
 	
@@ -1021,7 +1096,8 @@ class wpsc_cart_item {
     $priceandstock_id = 0;
     if(count($this->variation_values) > 0) {
       // if there are variations, get the price of the combination and the names of the variations.
-			$variation_data = $wpdb->get_results("SELECT `name`,`variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$this->variation_values)."')", ARRAY_A);
+			$variation_data = $wpdb->get_results("SELECT *FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$this->variation_values)."')", ARRAY_A);
+			$this->variation_data = $variation_data;
 			$variation_names = array();
 			$variation_ids = array();
 			foreach($variation_data as $variation_row) {
@@ -1038,6 +1114,7 @@ class wpsc_cart_item {
 			$price = $priceandstock_values['price'];
 			$weight = wpsc_convert_weights($priceandstock_values['weight'], $priceandstock_values['weight_unit']);
 		} else {
+		  $priceandstock_id = 0;
 			$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
 		  // otherwise, just get the price.
       if($product['special_price'] > 0) {
@@ -1063,6 +1140,7 @@ class wpsc_cart_item {
 		$this->apply_tax = !(bool)$product['notax'];
 		// change no_shipping to boolean and invert it
 		$this->uses_shipping = !(bool)$product['no_shipping'];
+		$this->has_limited_stock = (bool)(int)$product['quantity_limited'];
 		if($this->is_donation == 1) {
 			$this->unit_price = $this->provided_price;
 		} else {
@@ -1083,6 +1161,8 @@ class wpsc_cart_item {
 			$this->thumbnail_image = $product['image'];
 		}
 	  $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+	  // update the claimed stock here
+	  $this->update_claimed_stock();
 	}
 		
 	/**
@@ -1107,6 +1187,21 @@ class wpsc_cart_item {
 	}
 		
 	/**
+	 * update_claimed_stock method
+	 * Updates the claimed stock table, to prevent people from having more than the existing stock in their carts
+	 * @access public
+	 *
+	 * no parameters, nothing returned
+	*/
+	function update_claimed_stock() {
+		global $wpdb;
+		if($this->has_limited_stock == true) {
+			$wpdb->query($wpdb->prepare("REPLACE INTO`{$wpdb->prefix}wpsc_claimed_stock` ( `product_id` , `variation_stock_id` , `stock_claimed` , `last_activity` , `cart_id` )VALUES ('%d', '%d', '%s', NOW(), '%s');",$this->product_id, $this->priceandstock_id, $this->quantity, $this->cart->unique_id));	
+ 		}
+	}
+		
+		
+	/**
 	 * save to database method
 	 * @access public
 	 *
@@ -1121,7 +1216,14 @@ class wpsc_cart_item {
 		} else {
 			$tax = 0;
 		}
-		$prepared_query = $wpdb->query("INSERT INTO `wp_cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('{$this->product_id}', '{$this->product_name}', '{$purchase_log_id}', '{$this->unit_price}', '{$shipping}', '{$tax}', '{$this->cart->tax_percentage}', {$this->quantity}, '{$this->is_donation}', '0', '', NULL)");		
+		
+		
+		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation));
+		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
+		
+		foreach($this->variation_data as $variation_row) {
+			$wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_variations` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation_row['variation_id']."', '".$variation_row['id']."' );");
+		}
 	}
 	
 }

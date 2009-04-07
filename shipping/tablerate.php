@@ -52,20 +52,20 @@ class tablerate {
 				}
 			}
 		}
-		if ($_POST['checkpage'] == 'table')
+		if ($_POST['checkpage'] == 'table') {
 			update_option('table_rate_layers',$new_layer);
+		}
 		return true;
 	}
 	
 	function getQuotes() {
-		global $wpdb;
+		global $wpdb, $wpsc_cart;
 		$shopping_cart = $_SESSION['nzshpcrt_cart'];
-// 		exit(print_r($shopping_cart,1));
-		$price=0;
-		foreach ((array)$shopping_cart as $cart_item) {
-	    $price += $cart_item->quantity * calculate_product_price($cart_item->product_id, $cart_item->product_variations,'stay',$extras);
+
+		if(is_object($wpsc_cart)) {
+			$price = $wpsc_cart->calculate_subtotal();
 		}
-		
+		//$price = nzshpcrt_overall_total_price();
 		$layers = get_option('table_rate_layers');
 		
 		//echo "<pre>".print_r($layers,true)."</pre>";
@@ -75,11 +75,10 @@ class tablerate {
 			foreach ($layers as $key => $shipping) {
 				if ($price >= (float)$key) {
 				  //echo "<pre>$price $key</pre>";
-					return array(array("Table Rate"=>$shipping));
+					return array("Table Rate"=>$shipping);
 					exit();
 				}
 			}
-		
 			return array("Table Rate"=>array_shift($layers));
 		}
 	}
@@ -88,10 +87,9 @@ class tablerate {
 		return $this->getQuotes();
 	}
 		
-		
 	
 	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
-	
+	  global $wpdb;
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
       $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
       $product_list = $wpdb->get_row($sql,ARRAY_A) ;

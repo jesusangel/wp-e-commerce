@@ -2,7 +2,7 @@
 global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
- //echo "<pre>".print_r($wpsc_cart,true)."</pre>";
+// echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 ?>
 
 <table class="productcart">
@@ -88,7 +88,7 @@ $wpsc_gateway = new wpsc_gateways();
 			<?php echo TXT_WPSC_TAX; ?>
 		</td>
 		<td colspan="2">
-			<span id="checkout_tax" class="pricedisplay"><?php echo wpsc_cart_tax(); ?></span>
+			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 	  </td>
 	</tr>
 	
@@ -97,7 +97,7 @@ $wpsc_gateway = new wpsc_gateways();
 		<?php echo TXT_WPSC_TOTALPRICE; ?>
 		</td>
 		<td colspan='2'>
-			<span id='checkout_total' class="pricedisplay"><?php echo wpsc_cart_total(); ?></span>
+			<span id='checkout_total' class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
 		</td>
 	</tr>
 	

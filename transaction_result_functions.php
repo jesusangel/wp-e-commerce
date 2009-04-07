@@ -265,6 +265,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 
 				/// Empty the cart
 				$wpsc_cart->empty_cart();
+				$wpsc_cart->cleanup();
 
 				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';

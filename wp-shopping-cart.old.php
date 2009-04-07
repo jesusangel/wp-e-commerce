@@ -32,9 +32,6 @@ if(WPSC_DEBUG === true) {
 	}
 }
 
- 
-
-
 
 if(isset($_SESSION['nzshpcrt_cart'])) {
   foreach((array)$_SESSION['nzshpcrt_cart'] as $key => $item) {
@@ -2499,7 +2496,7 @@ function wpsc_plugin_no_upgrade($option) {
 //   add_action('wp_list_pages', 'show_cats_brands');
 //   }
 // }.pe
-add_action('plugins_loaded', 'widget_wp_shopping_cart_init');
+add_action('plugins_loaded', 'widget_wp_shopping_cart_init', 10);
 
 
 // refresh page urls when permalinks are turned on or altered

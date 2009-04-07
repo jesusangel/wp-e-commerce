@@ -1,6 +1,7 @@
 <?php
 global $wpsc_query, $wpdb;
 ?>
+
 <div id='products_page_container' class="wrap wpsc_container">
 	
 	<?php if(wpsc_has_breadcrumbs()) : ?>
