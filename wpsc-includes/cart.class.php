@@ -1128,8 +1128,11 @@ class wpsc_cart_item {
 			$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$this->product_id}' AND `value_id` IN ( '".implode("', '",$this->variation_values )."' ) AND `all_variation_ids` IN('$variation_id_string') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($this->variation_values)."' LIMIT 1");	
 			
 			$priceandstock_values = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+			
 			$price = $priceandstock_values['price'];
 			$weight = wpsc_convert_weights($priceandstock_values['weight'], $priceandstock_values['weight_unit']);
+			$file_id = $product_data['file'];
+			
 		} else {
 		  $priceandstock_id = 0;
 			$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
@@ -1143,6 +1146,7 @@ class wpsc_cart_item {
 					$sale_discount = 0;
         }
         $price = $product['price'] - $sale_discount;
+        $file_id = $priceandstock_values['file'];
       }
 		}
 		// create the string containing the product name.
@@ -1177,6 +1181,16 @@ class wpsc_cart_item {
 		} else {
 			$this->thumbnail_image = $product['image'];
 		}
+		
+		if($file_id > 0) {
+			$this->file_id = (int)$file_id;
+			$this->is_downloadable = true;
+		} else {
+			$this->file_id = null;
+			$this->is_downloadable = false;
+		}
+		
+		
 	  $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
 	  // update the claimed stock here
 	  $this->update_claimed_stock();
@@ -1232,8 +1246,7 @@ class wpsc_cart_item {
 			$tax = $this->unit_price * ($this->cart->tax_percentage/100);
 		} else {
 			$tax = 0;
-		}
-		
+		}		
 		
 		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation));
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
@@ -1241,6 +1254,16 @@ class wpsc_cart_item {
 		foreach($this->variation_data as $variation_row) {
 			$wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_variations` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation_row['variation_id']."', '".$variation_row['id']."' );");
 		}
+		
+    $downloads = get_option('max_downloads');
+		if($this->is_downloadable == true) {
+			// if the file is downloadable, check that the file is real
+			if($wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_files` WHERE `id` IN ('{$this->file_id}')")) {
+				$unique_id = sha1(uniqid(mt_rand(), true));
+				$wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->file_id}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+			}
+		}
+		
 	}
 	
 }
