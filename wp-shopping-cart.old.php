@@ -1784,7 +1784,7 @@ function nzshpcrt_products_page($content = '') {
   if(preg_match("/\[productspage\]/",$content)) {
     
     
-    if(get_option('wpsc_use_theme_engine') == TRUE) {
+//     if(get_option('wpsc_use_theme_engine') == TRUE) {
 			$wpsc_query->get_products();
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			ob_start();
@@ -1796,13 +1796,13 @@ function nzshpcrt_products_page($content = '') {
 			$output = ob_get_contents();
 			ob_end_clean();
 			$output = str_replace('$','\$', $output);
-    } else {
-			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-			ob_start();
-			include_once(WPSC_FILE_PATH . "/products_page.php");
-			$output = ob_get_contents();
-			ob_end_clean();
-    }
+//     } else {
+// 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+// 			ob_start();
+// 			include_once(WPSC_FILE_PATH . "/products_page.php");
+// 			$output = ob_get_contents();
+// 			ob_end_clean();
+//     }
     return preg_replace("/(<p>)*\[productspage\](<\/p>)*/",$output, $content);
 	} else {
     return $content;
@@ -1812,19 +1812,19 @@ function nzshpcrt_products_page($content = '') {
 function nzshpcrt_shopping_cart($content = '') {
 		//exit($content);
   if(preg_match("/\[shoppingcart\]/",$content)) {
-  if(get_option('wpsc_use_theme_engine') == TRUE) {
+//   if(get_option('wpsc_use_theme_engine') == TRUE) {
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			ob_start();
 			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/shopping_cart_page.php");
 			$output = ob_get_contents();
 			ob_end_clean();
 			$output = str_replace('$','\$', $output);
-    } else {
-			ob_start();
-			include_once(WPSC_FILE_PATH . "/shopping_cart.php");
-			$output = ob_get_contents();
-			ob_end_clean();
-    }
+//     } else {
+// 			ob_start();
+// 			include_once(WPSC_FILE_PATH . "/shopping_cart.php");
+// 			$output = ob_get_contents();
+// 			ob_end_clean();
+//     }
     return preg_replace("/(<p>)*\[shoppingcart\](<\/p>)*/",$output, $content);
 	} else {
     return $content;
