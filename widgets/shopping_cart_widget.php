@@ -25,12 +25,12 @@ function widget_wp_shopping_cart($args) {
     echo "<ul>\n\r";
     echo "  <li>\n\r";
 		echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
-    if(get_option('wpsc_use_theme_engine') == TRUE) {	    
+//     if(get_option('wpsc_use_theme_engine') == TRUE) {	    
 			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
-    
+    /*
 	  } else {
 			nzshpcrt_shopping_basket("", 4);	  
-	  }
+	  }*/
 		echo "    </div>";
     echo "  </li>\n\r";
     echo "</ul>\n\r";

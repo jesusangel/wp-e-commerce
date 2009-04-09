@@ -82,6 +82,138 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
   return $output;
 }
   
+  
+  function nzshpcrt_find_total_price($purchase_id,$country_code) {
+    global $wpdb;
+    if(is_numeric($purchase_id)) {
+      $purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$purchase_id."'";
+      $purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
+
+      $cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_id."";
+      $cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
+      if($cart_log != null) {
+        $all_donations = true;
+        $all_no_shipping = true;
+        foreach($cart_log as $cart_row) {
+          $productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
+          $product_data = $wpdb->get_results($productsql,ARRAY_A); 
+        
+          $variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
+          $variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
+          $variation_count = count($variation_data);
+          $price = ($cart_row['price'] * $cart_row['quantity']);          
+          
+          if($purch_data['shipping_country'] != '') {
+            $country_code = $purch_data['shipping_country'];
+					}
+            
+          if($cart_row['donation'] == 1) {
+            $shipping = 0;
+					} else {
+            $all_donations = false;
+					}
+          
+          if($cart_row['no_shipping'] == 1) {
+            $shipping = 0;
+					} else {
+            $all_no_shipping = false;
+					}
+
+          if(($cart_row['donation'] != 1) && ($cart_row['no_shipping'] != 1)) {
+            $shipping = nzshpcrt_determine_item_shipping($cart_row['prodid'], $cart_row['quantity'], $country_code);
+					}
+          $endtotal += $shipping + $price;
+				}
+        if(($all_donations == false) && ($all_no_shipping == false)){
+          if($purch_data['base_shipping'] > 0) {
+						$base_shipping = $purch_data['base_shipping'];
+					} else {
+						$base_shipping = nzshpcrt_determine_base_shipping(0, $country_code);
+					}
+					$endtotal += $base_shipping;
+				}
+        
+        if($purch_data['discount_value'] > 0) {
+					$endtotal -= $purch_data['discount_value'];
+					if($endtotal < 0) {
+						$endtotal = 0;
+					}
+        }
+          
+			}
+      return $endtotal;
+		}
+	}
+	
+	function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code) {    
+    global $wpdb;
+    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
+      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
+      $product_list = $wpdb->get_row($sql,ARRAY_A) ;
+      if($product_list['no_shipping'] == 0) {
+        //if the item has shipping
+        if($country_code == get_option('base_country')) {
+          $additional_shipping = $product_list['pnp'];
+				} else {
+          $additional_shipping = $product_list['international_pnp'];
+				}          
+        $shipping = $quantity * $additional_shipping;
+			} else {
+        //if the item does not have shipping
+        $shipping = 0;
+			}
+		} else {
+      //if the item is invalid or all items do not have shipping
+			$shipping = 0;
+		}
+    return $shipping;    
+	}
+  function nzshpcrt_determine_base_shipping($per_item_shipping, $country_code) {    
+    global $wpdb, $wpsc_shipping_modules;
+		$custom_shipping = get_option('custom_shipping_options');
+    if((get_option('do_not_use_shipping') != 1) && (count($custom_shipping) > 0)) {
+			if(array_search($_SESSION['quote_shipping_method'], (array)$custom_shipping) === false) {
+			  //unset($_SESSION['quote_shipping_method']);
+			}
+			
+			$shipping_quotes = null;
+			if($_SESSION['quote_shipping_method'] != null) {
+				// use the selected shipping module
+			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+			} else {
+			  // otherwise select the first one with any quotes
+				foreach((array)$custom_shipping as $shipping_module) {
+					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
+					if(($custom_shipping[$shipping_module]->requires_weight != true) or (($custom_shipping[$shipping_module]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
+						$_SESSION['quote_shipping_method'] = $shipping_module;
+						$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
+						if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+							break;
+						}
+					}
+				}
+			}
+			
+			//echo "<pre>".print_r($_SESSION['quote_shipping_method'],true)."</pre>";
+			if(count($shipping_quotes) < 1) {
+			$_SESSION['quote_shipping_option'] = '';
+			}
+			if(($_SESSION['quote_shipping_option'] == null) && ($shipping_quotes != null)) {
+				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_slice($shipping_quotes[0],0,1)));
+			}
+			foreach((array)$shipping_quotes as $shipping_quote) {
+				foreach((array)$shipping_quote as $key=>$quote) {
+					if($key == $_SESSION['quote_shipping_option']) {
+					  $shipping = $quote;
+					}
+				}
+			}
+		} else {
+      $shipping = 0;
+		}
+    return $shipping;
+	}
+  
 function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
   {
   global $wpdb;
