@@ -18,7 +18,7 @@ define('WPSC_MINOR_VERSION', '0');
 define('WPSC_PRESENTABLE_VERSION', '3.7 Development Version');
 
 define('WPSC_DEBUG', false);
-define('WPSC_PAYPAL_DEBUG', true);
+define('WPSC_GATEWAY_DEBUG', true);
 
 $v1 = str_replace(array('_','-','+'),'.',strtolower($wp_version));
 $v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);
@@ -156,6 +156,7 @@ function wpsc_serialize_shopping_cart() {
   global $wpdb, $wpsc_start_time, $wpsc_cart;
   //@$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
   
+  $wpsc_cart->errors = array();
   $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
   /// Delete the old claims on stock
   //$session_timeout = @session_cache_expire()*60;
@@ -163,7 +164,7 @@ function wpsc_serialize_shopping_cart() {
 	$session_timeout = 60*60; // 180 * 60 = three hours in seconds
   $old_claimed_stock_timestamp = time() - $session_timeout;
   $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
-  $wpdb->query("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `last_activity` < '{$old_claimed_stock_datetime}'");
+  $wpdb->query("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
   
   return true;
 }  

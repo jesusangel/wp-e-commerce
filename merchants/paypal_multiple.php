@@ -232,9 +232,10 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		}
 		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
-
+	if(WPSC_GATEWAY_DEBUG == true ) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
   	exit("<pre>".print_r($data,true)."</pre>");
+	}
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
 }
@@ -321,7 +322,7 @@ function nzshpcrt_paypal_ipn()
     /*
      * Detect use of sandbox mode, if sandbox mode is present, send debugging email.
      */
-     if(stristr(get_option('paypal_multiple_url'), "sandbox") || (WPSC_PAYPAL_DEBUG == true )) {
+     if(stristr(get_option('paypal_multiple_url'), "sandbox") || (WPSC_GATEWAY_DEBUG == true )) {
 				$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
 				$message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
 				$message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";

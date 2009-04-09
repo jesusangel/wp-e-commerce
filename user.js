@@ -114,33 +114,6 @@ function submitform(frm, show_notification)
   return false;
   }
 
-function emptycart() {
-  ajax.post("index.php",getresults,"ajax=true&user=true&wpsc_ajax_action=empty_cart&current_page="+window.location+"");
-  if(document.getElementById('loadingimage') != null) {
-    document.getElementById('loadingimage').src = WPSC_URL+'/images/indicator.gif';
-    document.getElementById('loadingindicator').style.visibility = 'visible';
-	} else if(document.getElementById('alt_loadingimage') != null) {
-    document.getElementById('alt_loadingimage').src = WPSC_URL+'/images/indicator.gif';
-    document.getElementById('alt_loadingindicator').style.visibility = 'visible';
-	}    
-}
-
-function show_additional_description(id,image_id)
-  {
-  currentstate = document.getElementById(id).style.display;
-  //document.getElementById(id).style.display = 'inline';
-  if(currentstate != 'inline')
-    {
-    document.getElementById(id).style.display = 'inline';
-    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_collapse.gif';
-    }
-    else
-      {
-      document.getElementById(id).style.display = 'none';
-      document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_expand.gif';
-      }
-  return false;
-  }
 
 function prodgroupswitch(state)
   {

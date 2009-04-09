@@ -1,268 +1,34 @@
 <?php	
-	//written by allen
+/**
+	* wpsc_decrement_claimed_stock method 
+	*
+	* @param float a price
+	* @return string a price with a currency sign
+*/
+function wpsc_decrement_claimed_stock($purchase_log_id) {
+  global $wpdb;
+  $all_claimed_stock = $wpdb->get_results($wpdb->prepare("SELECT * FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN('%s') AND `cart_submitted` IN('1')", $purchase_log_id), ARRAY_A);
 	
-function nzshpcrt_overall_total_price_numeric($country_code = null, $for_display = false) {
-	/*
-	* Determines the total in the shopping cart, adds the tax and shipping if a country code is supplied
-	* Adds a dollar sign and information if there is no tax and shipping if $for_display is true
-	*/
-	global $wpdb;
-	$cart  =& $_SESSION['nzshpcrt_cart'];
-	$total_quantity =0;
-	$total_weight = 0;
-	$all_donations = true;
-	$all_no_shipping = true;
-	foreach($cart as $cart_item) {
-		$product_id = $cart_item->product_id;
-		$quantity = $cart_item->quantity;
-		$product_variations = $cart_item->product_variations;
-		$raw_price = 0;
-		$variation_count = count($product_variations);
-		if($variation_count > 0) {
-			foreach($product_variations as $product_variation) {
-				$value_id = $product_variation;
-				$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-			}
-		}
-		//$total_quantity += $quantity;
-		$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1";
-		$product = $wpdb->get_row($sql,ARRAY_A);
-		if($product['donation'] == 1) {
-			$price = $quantity * $cart_item->donation_price;
+	foreach($all_claimed_stock as $claimed_stock) {
+	  // for people to have claimed stock, it must have been available to take, no need to look at the existing stock, just subtract from it
+	  // If this is ever wrong, and you get negative stock, do not fix it here, go find the real cause of the problem 
+		if($claimed_stock['variation_stock_id'] > 0) {
+			$wpdb->query($wpdb->prepare("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `stock` = (`stock` - %s)  WHERE `id` = '%d' LIMIT 1", $claimed_stock['stock_claimed'], $claimed_stock['variation_stock_id']));
 		} else {
-			$price = $quantity * calculate_product_price($product_id, $product_variations);
-			if($country_code != null) {
-				if($product['notax'] != 1) {
-					$price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
-				}
-				$shipping = nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code);
-				$price += $shipping;
-			}
-			$all_donations = false;
+			$wpdb->query($wpdb->prepare("UPDATE `{$wpdb->prefix}product_list` SET `quantity` = (`quantity` - %s)  WHERE `id` = '%d' LIMIT 1", $claimed_stock['stock_claimed'], $claimed_stock['product_id']));
 		}
-		if($product['no_shipping'] != 1) {
-			$all_no_shipping = false;
-		}
-		$total += $price;
 	}
-
-	if(($country_code != null) && ($all_donations == false) && ($all_no_shipping == false)) {
-		$total +=  nzshpcrt_determine_base_shipping(0, $country_code);
-	}
-	return $total;
+	$wpdb->query($wpdb->prepare("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN ('%s')", $purchase_log_id));
 }
-	
-	//end of written by allen
   
-function nzshpcrt_calculate_tax($price, $country, $region) {
-	global $wpdb;
-	$country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
-	if(($country_data['has_regions'] == 1)) {
-		$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
-		$tax_percentage =  $region_data['tax'];
-	} else {
-		$tax_percentage =  $country_data['tax'];
-	}
-	$add_tax = false;
-	if($country == get_option('base_country')) {
-	  if($country == 'US' ) { // tax handling for US 
-	    if($_SESSION['selected_region'] == get_option('base_region')) {
-	      // if they in the state, they pay tax
-				$add_tax = true;
-	    } else if($_SESSION['delivery_region'] == get_option('base_region')) {
-	      // if they live outside the state, but are delivering to within the state, they pay tax also
-				$add_tax = true;
-	    }
-	  } else { // tax handling for everywhere else
-			if($country_data['has_regions'] == 1) {
-				if(get_option('base_region') == $region ) {
-					$add_tax = true;
-				}
-			} else {
-				$add_tax = true;
-			}
-		}
-	}
-	if($add_tax === true) {
-		$price = $price * (1 + ($tax_percentage/100));
-	}
-	return $price;
-}
-
-  function nzshpcrt_find_total_price($purchase_id,$country_code) {
-    global $wpdb;
-    if(is_numeric($purchase_id)) {
-      $purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$purchase_id."'";
-      $purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
-
-      $cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_id."";
-      $cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
-      if($cart_log != null) {
-        $all_donations = true;
-        $all_no_shipping = true;
-        foreach($cart_log as $cart_row) {
-          $productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
-          $product_data = $wpdb->get_results($productsql,ARRAY_A); 
-        
-          $variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
-          $variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
-          $variation_count = count($variation_data);
-          $price = ($cart_row['price'] * $cart_row['quantity']);          
-          
-          if($purch_data['shipping_country'] != '') {
-            $country_code = $purch_data['shipping_country'];
-					}
-            
-          if($cart_row['donation'] == 1) {
-            $shipping = 0;
-					} else {
-            $all_donations = false;
-					}
-          
-          if($cart_row['no_shipping'] == 1) {
-            $shipping = 0;
-					} else {
-            $all_no_shipping = false;
-					}
-
-          if(($cart_row['donation'] != 1) && ($cart_row['no_shipping'] != 1)) {
-            $shipping = nzshpcrt_determine_item_shipping($cart_row['prodid'], $cart_row['quantity'], $country_code);
-					}
-          $endtotal += $shipping + $price;
-				}
-        if(($all_donations == false) && ($all_no_shipping == false)){
-          if($purch_data['base_shipping'] > 0) {
-						$base_shipping = $purch_data['base_shipping'];
-					} else {
-						$base_shipping = nzshpcrt_determine_base_shipping(0, $country_code);
-					}
-					$endtotal += $base_shipping;
-				}
-        
-        if($purch_data['discount_value'] > 0) {
-					$endtotal -= $purch_data['discount_value'];
-					if($endtotal < 0) {
-						$endtotal = 0;
-					}
-        }
-          
-			}
-      return $endtotal;
-		}
-	}
-    
-    
-  //written by Allen
   
-function nzshpcrt_apply_coupon($price,$coupon_num){
-	global $wpdb;
-	$now = date("Y-m-d H:i:s");
-	$now = strtotime($now);
-	//echo $now;
-	if ($coupon_num!=NULL) {
-		$coupon_sql = "SELECT * FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE coupon_code='".$coupon_num."' LIMIT 1";
-		$coupon_data = $wpdb->get_results($coupon_sql,ARRAY_A);
-		$coupon_data = $coupon_data[0];
-	}
-	if ( ($coupon_data['active']=='1') && !(($coupon_data['use_once']=='1') && ($coupon_data['is_used']=='1'))){
-		if ((strtotime($coupon_data['start']) < $now)&&(strtotime($coupon_data['expiry']) > $now)){
-
-			if ($coupon_data['is-percentage']=='1'){
-				$price = $price*(1-$coupon_data['value']/100);
-			} else {
-			  if ($coupon_data['every_product']=='1') {
-					$cart = $_SESSION['nzshpcrt_cart'];
-					$total_quantity=0;
-					
-					foreach($cart as $product) {
-						$total_quantity+=$product->quantity;
-					}
-					$price = $price-$coupon_data['value']*$total_quantity;
-				} else {
-					$price = $price-$coupon_data['value'];
-				}
-
-			}
-		} else {
-			return $price;
-		}
-	}
-	if($price<0){
-		$price = 0;
-	}
-	return $price;
-}
-  //End of written by Allen  
   
-  function nzshpcrt_determine_base_shipping($per_item_shipping, $country_code) {    
-    global $wpdb, $wpsc_shipping_modules;
-		$custom_shipping = get_option('custom_shipping_options');
-    if((get_option('do_not_use_shipping') != 1) && (count($custom_shipping) > 0)) {
-			if(array_search($_SESSION['quote_shipping_method'], (array)$custom_shipping) === false) {
-			  //unset($_SESSION['quote_shipping_method']);
-			}
-			
-			$shipping_quotes = null;
-			if($_SESSION['quote_shipping_method'] != null) {
-				// use the selected shipping module
-			  $shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
-			} else {
-			  // otherwise select the first one with any quotes
-				foreach((array)$custom_shipping as $shipping_module) {
-					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
-					if(($custom_shipping[$shipping_module]->requires_weight != true) or (($custom_shipping[$shipping_module]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
-						$_SESSION['quote_shipping_method'] = $shipping_module;
-						$shipping_quotes = $wpsc_shipping_modules[$_SESSION['quote_shipping_method']]->getQuote();
-						if(count($shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
-							break;
-						}
-					}
-				}
-			}
-			
-			//echo "<pre>".print_r($_SESSION['quote_shipping_method'],true)."</pre>";
-			if(count($shipping_quotes) < 1) {
-			$_SESSION['quote_shipping_option'] = '';
-			}
-			if(($_SESSION['quote_shipping_option'] == null) && ($shipping_quotes != null)) {
-				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_slice($shipping_quotes[0],0,1)));
-			}
-			foreach((array)$shipping_quotes as $shipping_quote) {
-				foreach((array)$shipping_quote as $key=>$quote) {
-					if($key == $_SESSION['quote_shipping_option']) {
-					  $shipping = $quote;
-					}
-				}
-			}
-		} else {
-      $shipping = 0;
-		}
-    return $shipping;
-	}
-    
-  function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code) {    
-    global $wpdb;
-    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
-      $product_list = $wpdb->get_row($sql,ARRAY_A) ;
-      if($product_list['no_shipping'] == 0) {
-        //if the item has shipping
-        if($country_code == get_option('base_country')) {
-          $additional_shipping = $product_list['pnp'];
-				} else {
-          $additional_shipping = $product_list['international_pnp'];
-				}          
-        $shipping = $quantity * $additional_shipping;
-			} else {
-        //if the item does not have shipping
-        $shipping = 0;
-			}
-		} else {
-      //if the item is invalid or all items do not have shipping
-			$shipping = 0;
-		}
-    return $shipping;    
-	}
+  
+/**
+* All the code below here needs commenting and looking at to see if it needs to be altered or disposed of.
+* Correspondingly, all the code above here has been commented, uses the wpsc prefix, and has been made for or modified to work with the object oriented cart code.
+*/
+
 
 function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
   global $wpdb, $wpsc_currency_data;

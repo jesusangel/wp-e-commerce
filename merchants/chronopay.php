@@ -64,7 +64,7 @@ function gateway_chronopay($seperator, $sessionid)
 	
 	
 	// Get Currency details abd price
-	$currency_code = $wpdb->get_results("SELECT `code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".get_option(currency_type)."' LIMIT 1",ARRAY_A);
+	$currency_code = $wpdb->get_results("SELECT `code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
 	$local_currency_code = $currency_code[0]['code'];
 	$chronopay_currency_code = get_option('chronopay_curcode');
   
@@ -113,18 +113,12 @@ function gateway_chronopay($seperator, $sessionid)
     
     	$local_currency_productprice = $item['price'];
 
-		$local_currency_shipping = nzshpcrt_determine_item_shipping($item['prodid'], 1, $_SESSION['delivery_country']);
+			$local_currency_shipping = nzshpcrt_determine_item_shipping($item['prodid'], 1, $_SESSION['delivery_country']);
     	
-		if($chronopay_currency_code != $local_currency_code)
-      	{
-      		$chronopay_currency_productprice = $curr->convert($local_currency_productprice,$chronopay_currency_code,$local_currency_code);
-      		$chronopay_currency_shipping = $curr->convert($local_currency_shipping,$chronopay_currency_code,$local_currency_code);
-      	}
-      	else
-        {
-        	$chronopay_currency_productprice = $local_currency_productprice;
-        	$chronopay_currency_shipping = $local_currency_shipping;
-        }
+
+			$chronopay_currency_productprice = $local_currency_productprice;
+			$chronopay_currency_shipping = $local_currency_shipping;
+			
     	$data['item_name_'.$i] = $product_data['name'].$variation_list;
     	$data['amount_'.$i] = number_format(sprintf("%01.2f", $chronopay_currency_productprice),$decimal_places,'.','');
     	$data['quantity_'.$i] = $item['quantity'];
@@ -158,15 +152,16 @@ function gateway_chronopay($seperator, $sessionid)
   	$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
   	if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false))
     {
-    	if($chronopay_currency_code != $local_currency_code)
-		{
-			$base_shipping = $curr->convert($base_shipping,$chronopay_currency_code,$local_currency_code);
-		}
 		$data['handling_cart'] = number_format($base_shipping,$decimal_places,'.','');
 		$total_price += number_format($base_shipping,$decimal_places,'.','');
     }
 
 	$data['product_price'] = $total_price;
+	
+	
+	if(WPSC_GATEWAY_DEBUG == true ) {
+  	exit("<pre>".print_r($data,true)."</pre>");
+	}
 
 
 	// Create Form to post to Chronopay

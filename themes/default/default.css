@@ -1263,3 +1263,7 @@ img.ui-datepicker-trigger {
 .checkout_forms_hidden {
   display: none;
 }
+
+div.custom_meta {
+  clear: both;
+}

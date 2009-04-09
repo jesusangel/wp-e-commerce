@@ -34,9 +34,15 @@ function wpsc_add_to_cart() {
   
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
   
-	$wpsc_cart->set_item($product_id,$parameters);  
+	$state = $wpsc_cart->set_item($product_id,$parameters); 
   if($_GET['ajax'] == 'true') {
-		
+		if(($product_id != null) &&(get_option('fancy_notifications') == 1)) {
+			echo "if(jQuery('#fancy_notification_content')) {\n\r";
+			echo "  jQuery('#fancy_notification_content').html(\"".str_replace(Array("\n","\r") , Array('\n','\r'),addslashes(fancy_notification_content($product_id, (!$state)))). "\");\n\r";
+			echo "  jQuery('#loading_animation').css('display', 'none');\n\r";
+			echo "  jQuery('#fancy_notification_content').css('display', 'block');\n\r";
+			echo "}\n\r";
+		}
 		ob_start();
 		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
 	  $output = ob_get_contents();
@@ -45,6 +51,11 @@ function wpsc_add_to_cart() {
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
 		
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
+    
+
+    
+    
+    
     echo "wpsc_bind_to_events();\n";
 		exit();
   }
@@ -130,6 +141,22 @@ if($_REQUEST['wpsc_ajax_action'] == 'update_shipping_price') {
 }
 
 
+/**
+	* update_shipping_price function, used through ajax and in normal page loading.
+	* No parameters, returns nothing
+*/
+function wpsc_get_rating_count() {
+  global $wpdb, $wpsc_cart;
+  $prodid = $_POST['product_id'];
+	$data = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_rating` WHERE `productid` = '".$prodid."'",ARRAY_A) ;
+	echo $data[0]['count'].",".$prodid;
+	exit();
+}
+// execute on POST and GET
+if(($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])) {
+	add_action('init', 'wpsc_get_rating_count');
+}
+
 
 /**
 	* update quantity function, used through ajax and in normal page loading.
@@ -212,6 +239,7 @@ function wpsc_submit_checkout() {
 			//$purchase_log_id = 1;
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
 			$wpsc_cart->save_to_db($purchase_log_id);
+			$wpsc_cart->submit_stock_claims($purchase_log_id);
 			
 			
 			if(get_option('permalink_structure') != '') {

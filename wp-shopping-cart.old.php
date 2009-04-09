@@ -1016,13 +1016,6 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		exit();
 	}
       
-    if(($_POST['get_rating_count'] == "true") && is_numeric($_POST['product_id'])) {
-      $prodid = $_POST['product_id'];
-      $data = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_rating` WHERE `productid` = '".$prodid."'",ARRAY_A) ;
-      echo $data[0]['count'].",".$prodid;
-      exit();
-		}
-      
 	if(($_POST['get_updated_price'] == "true") && is_numeric($_POST['product_id'])) {
 		$notax = $wpdb->get_var("SELECT `notax` FROM `".$wpdb->prefix."product_list` WHERE `id` IN('".$_POST['product_id']."') LIMIT 1");
 		foreach((array)$_POST['variation'] as $variation) {

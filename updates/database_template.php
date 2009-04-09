@@ -389,8 +389,10 @@ $wpsc_database_template[$table_name]['columns']['variation_stock_id'] = "bigint(
 $wpsc_database_template[$table_name]['columns']['stock_claimed'] = "FLOAT NOT NULL ";
 $wpsc_database_template[$table_name]['columns']['last_activity'] = "DATETIME NOT NULL ";
 $wpsc_database_template[$table_name]['columns']['cart_id'] = "VARCHAR( 255 ) NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['cart_submitted'] = "VARCHAR( 1 ) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['unique_key'] = "UNIQUE KEY `unique_key` ( `product_id`,`variation_stock_id`,`cart_id`)";
 $wpsc_database_template[$table_name]['indexes']['last_activity'] = "KEY `last_activity` ( `last_activity` )";
+$wpsc_database_template[$table_name]['indexes']['cart_submitted'] = "KEY `cart_submitted` ( `cart_submitted` )";
 //) ENGINE = memory;
 
 ?>

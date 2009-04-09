@@ -41,7 +41,7 @@ global $wpsc_query, $wpdb;
 					<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="Mandelbrot" title="Mandelbrot" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
 				</a>
 			</div>
-			<form onsubmit="submitform(this);return false;" action="<?php echo wpsc_this_page_url();?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>">
+			<form class='product_form' action="<?php echo wpsc_this_page_url();?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 				<div class="producttext">
 					<h2 class="prodtitles">
 						<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>
@@ -62,8 +62,8 @@ global $wpsc_query, $wpdb;
 					
 					
 					<?php if(wpsc_the_product_additional_description()) : ?>
-					<div class=’additional_description_span’>
-						<a href='#' class='additional_description_link'>
+					<div class='additional_description_span'>
+						<a href='<?php echo wpsc_the_product_permalink(); ?>' class='additional_description_link'>
 							<img class='additional_description_button'  src='<?php echo WPSC_URL; ?>/images/icon_window_expand.gif' title='Additional Description' alt='Additional Description' /><?php echo TXT_WPSC_MOREDETAILS; ?>
 						</a>
 						<span class='additional_description'><br />
@@ -140,8 +140,6 @@ global $wpsc_query, $wpdb;
 					
 					<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
 					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
-					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
-					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item"/>
 					<?php if(wpsc_product_has_stock()) : ?>
 						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 					<?php else : ?>

@@ -101,24 +101,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				//echo "<pre>".print_r($product_data,true)."</pre>";
 				
 				$variation_count = count($variation_values);
-				if(($purchase_log['processed'] >= 2) && ($sessionid != '') && ($purchase_log['stock_adjusted'] != 1)) {
-					if($product_data['quantity_limited'] == 1) {
-						if(count($variation_values) > 0) {
-						
-							$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
-							asort($variation_ids);         
-							$all_variation_ids = implode(",", $variation_ids);
-						
-							$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
-							
-							$variation_stock_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-							$wpdb->query("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `stock` = '".($variation_stock_data['stock']-$row['quantity'])."'  WHERE `id` = '{$variation_stock_data['id']}' LIMIT 1",ARRAY_A);
-						} else {
-							$wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `quantity`='".($product_data['quantity']-$row['quantity'])."' WHERE `id`='{$product_data['id']}' LIMIT 1");
-						}
-					}
-					$stock_adjusted = true;
-				}
 				
 				
 		
@@ -166,6 +148,11 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						}
 						$report = get_option('wpsc_email_admin');
 						$report_product_list.= " - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n";
+				}
+				
+				// Decrement the stock here
+				if (($purchase_log['processed'] >= 2)) {
+					wpsc_decrement_claimed_stock($purchase_log['id']);
 				}
 				
 				if($purchase_log['discount_data'] != '') {
@@ -264,8 +251,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 
 				/// Empty the cart
+				$wpsc_cart->submit_stock_claims($purchase_log['id']);
 				$wpsc_cart->empty_cart();
-				$wpsc_cart->cleanup();
+				//$wpsc_cart->cleanup();
 
 				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';

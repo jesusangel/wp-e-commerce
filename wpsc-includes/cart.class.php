@@ -300,6 +300,8 @@ class wpsc_cart {
 	var $coupon;
 	var $tax_percentage;
 	var $unique_id;
+	var $errors;
+	
 	
 	// caching of frequently used values, these are wiped when the cart is modified and then remade when needed
 	var $total_tax = null;
@@ -517,6 +519,8 @@ class wpsc_cart {
 			if($add_item === true) {
 				$this->cart_items[] = $new_cart_item;
 			}
+		} else {
+			//$errors[] = new WP_Error('no_stock_available', __(TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE));
 		}
     
 		
@@ -547,6 +551,8 @@ class wpsc_cart {
 				}
 				$this->cart_items[$key]->refresh_item();
 				$this->clear_cache();
+			} else {
+				//$errors[] = new WP_Error('no_stock_available', __(TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE));
 			}
       return true;
     } else {
@@ -657,6 +663,18 @@ class wpsc_cart {
 	}
   
  	/**
+	 * submit_stock_claims method, changes the association of the stock claims from the cart unique to the purchase log ID
+	 * @access public
+	 *
+	 * No parameters, nothing returned
+	*/
+  function submit_stock_claims($purchase_log_id) {
+    global $wpdb;
+    //exit($wpdb->prepare("UPDATE `{$wpdb->prefix}wpsc_claimed_stock` SET `cart_id` = '%d', `cart_submitted` = '1' WHERE `cart_id` IN('%s')", $purchase_log_id, $this->unique_id));
+		$wpdb->query($wpdb->prepare("UPDATE `{$wpdb->prefix}wpsc_claimed_stock` SET `cart_id` = '%d', `cart_submitted` = '1' WHERE `cart_id` IN('%s')", $purchase_log_id, $this->unique_id));
+	}
+	
+	 	/**
 	 * cleanup method, cleans up the cart just before final destruction
 	 * @access public
 	 *
@@ -667,7 +685,6 @@ class wpsc_cart {
     //echo $wpdb->prepare("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN ('%s')", $this->unique_id);
 		$wpdb->query($wpdb->prepare("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN ('%s')", $this->unique_id));
 	}
-	
 	
   /**
 	 * calculate total price method 

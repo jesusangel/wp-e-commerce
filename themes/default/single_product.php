@@ -31,7 +31,7 @@ $image_height = get_option('single_view_image_height');
 						</a>
 					</div>
 		
-					<form onsubmit="submitform(this);return false;" action="http://www.instinct.co.nz/wordpress_2.6/products-page/?category=" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
+					<form class='product_form' action="http://www.instinct.co.nz/wordpress_2.6/products-page/?category=" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 		
 					<div class="producttext">
 						<h2 class="prodtitles"><?php echo wpsc_the_product_title(); ?></h2>
@@ -119,10 +119,6 @@ $image_height = get_option('single_view_image_height');
 						
 				<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
         <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
-        <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
-        <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item"/>
-						
-						
 						
 					<?php if(wpsc_product_has_stock()) : ?>
 						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
