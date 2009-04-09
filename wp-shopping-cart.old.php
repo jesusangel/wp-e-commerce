@@ -1747,21 +1747,18 @@ function filter_input_wp($input) {
 	return $output;
 }
     
-function make_csv($array)
-  {
+function make_csv($array) {
   $count = count($array);
   $num = 1;
-  foreach($array as $value)
-    {
+  foreach($array as $value) {
     $output .= "'$value'";
-    if($num < $count)
-      {
+    if($num < $count) {
       $output .= ",";
-      }
+		}
     $num++;
-    }
+	}
   return $output;
-  }   
+}   
   
 function nzshpcrt_product_log_rss_feed() {
   echo "<link type='application/rss+xml' href='".get_option('siteurl')."/wp-admin/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP E-Commerce Purchase Log RSS' rel='alternate'/>";
@@ -1832,37 +1829,29 @@ function nzshpcrt_shopping_cart($content = '') {
 }
   
 
-function nzshpcrt_checkout($content = '')
-  {
-  if(preg_match("/\[checkout\]/",$content))
-    {
+function nzshpcrt_checkout($content = '') {
+  if(preg_match("/\[checkout\]/",$content)) {
     ob_start();
     include_once(WPSC_FILE_PATH . "/checkout.php");
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[checkout\](<\/p>)*/",$output, $content);
-    }
-    else
-    {
+	} else {
     return $content;
-    }
-  }
+	}
+}
 
-function nzshpcrt_transaction_results($content = '')
-  {
-  if(preg_match("/\[transactionresults\]/",$content))
-    {
+function nzshpcrt_transaction_results($content = '') {
+  if(preg_match("/\[transactionresults\]/",$content)) {
     ob_start();
     include_once(WPSC_FILE_PATH . "/transaction_results.php");
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[transactionresults\](<\/p>)*/",$output, $content);
-    }
-    else
-    { 
+	} else { 
     return $content;
-    }
-  }
+	}
+}
   
 function nzshpcrt_user_log($content = '') {
   if(preg_match("/\[userlog\]/",$content)) {

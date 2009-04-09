@@ -195,33 +195,33 @@ class wpsc_checkout {
 	* @access public
 	*/
   function form_field() {
-    //global $wpdb;
-    	switch($this->checkout_item->type) {
-				case "address":
-				case "delivery_address":
-				case "textarea":
-				$output = "<textarea class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
-				break;
-				
-				case "country":
-				$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['selected_country'], $_SESSION['selected_region']);
-				break;
+		global $wpdb;
+		switch($this->checkout_item->type) {
+			case "address":
+			case "delivery_address":
+			case "textarea":
+			$output = "<textarea class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
+			break;
+			
+			case "country":
+			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['selected_country'], $_SESSION['selected_region']);
+			break;
 
-				case "delivery_country":
-				$country_name = $wpdb->get_var("SELECT `country` FROM `{$wpdb->prefix}currency_list` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
-				$output = "<input type='hidden' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
-				break;
-				
-				case "text":
-				case "city":
-				case "delivery_city":
-				case "email":
-				case "coupon":
-				default:
-				$output = "<input type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
-				break;
-			}
-    return $output;
+			case "delivery_country":
+			$country_name = $wpdb->get_var("SELECT `country` FROM `{$wpdb->prefix}currency_list` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
+			$output = "<input type='hidden' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
+			break;
+			
+			case "text":
+			case "city":
+			case "delivery_city":
+			case "email":
+			case "coupon":
+			default:
+			$output = "<input type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
+			break;
+		}
+		return $output;
 	}
   
 	/**
