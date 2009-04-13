@@ -147,6 +147,7 @@ $image_height = get_option('single_view_image_height');
 			</div>
 		</div>
 		
+		<?php echo wpsc_product_comments(); ?>
 <?php endwhile; ?>
 <?php /** end the product loop here */?>
 

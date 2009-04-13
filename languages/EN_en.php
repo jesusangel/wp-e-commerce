@@ -2,6 +2,13 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define('TXT_WPSC_COMMENTSETTINGS', 'Comment Settings');
+define('TXT_WPSC_ENABLE_COMMENTS', 'Use IntenseDebate Comments');
+define('TXT_WPSC_COMMENTS_WHICH_PRODUCTS', 'By Default Display Comments on');
+define('TXT_WPSC_INTENSE_DEBATE_ACCOUNT_ID', 'IntenseDebate Account ID');
+
+define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS', 'Enable Comments');
+define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS_INFO', 'Allow users to comment on this product.');
 
 
 define("TXT_WPSC_HOW_DID_YOU_FIND_US_WOM", "Word of mouth");

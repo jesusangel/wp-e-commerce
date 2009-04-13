@@ -324,6 +324,9 @@ function advanced_box($product_data='') {
 	$can_have_uploaded_image = $can_have_uploaded_image[0];
 	$external_link = get_product_meta($product_data['id'], 'external_link');
 	$external_link = $external_link[0];
+	$enable_comments = get_product_meta($product_data['id'], 'enable_comments');
+	$enable_comments = $enable_comments[0];
+	
 	$output ='';
 	
 	$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product_data['id']}') AND `custom` IN('1') ",ARRAY_A);
@@ -428,12 +431,23 @@ function advanced_box($product_data='') {
 		  <input type='text' class='text' name='productmeta_values[external_link]' value='".$external_link."' id='external_link' size='40'> 
       </td>
     </tr>";
-	
-  
+	if (get_option('wpsc_enable_comments') == 1) {
+		$output .= "
+		<tr>
+			<td class='itemfirstcol' colspan='2'><br />
+				<strong>".TXT_WPSC_PRODUCT_ENABLE_COMMENTS.":</strong><br />
+			<select name='productmeta_values[enable_comments]'>
+				<option value='' ". (($enable_comments == '') ? 'selected' : '') .">Use Default</option>
+				<option value='yes' ". (($enable_comments == 'yes') ? 'selected' : '') .">Yes</option>
+				<option value='no' ". (($enable_comments == 'no') ? 'selected' : '') .">No</option>
+			</select>
+			<br/>".TXT_WPSC_PRODUCT_ENABLE_COMMENTS_INFO."
+			</td>
+		</tr>";
+	}
 	$output .= "
     </table></div></div>";
-    
-    return $output;
+	return $output;
 }
 
 function product_image_box($product_data='') {

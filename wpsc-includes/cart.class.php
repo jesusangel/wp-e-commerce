@@ -284,6 +284,8 @@ function wpsc_shipping_quote_selected_state() {
 }
 
 
+
+
 /**
  * The WPSC Cart class
  */

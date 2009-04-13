@@ -202,6 +202,49 @@ function wpsc_the_product_thumbnail() {
   }
 }
 
+
+function wpsc_product_comment_link() {
+ // add the product comment link
+	global $wpsc_query;
+	
+	if (get_option('wpsc_enable_comments') == 1) {
+		$enable_for_product = get_product_meta($wpsc_query->product['id'], 'enable_comments');
+	
+		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product[0] == '') || $enable_for_product[0] == 'yes') {
+			$original = array("&","'",":","/","@","?","=");
+			$entities = array("%26","%27","%3A","%2F","%40","%3F","%3D");
+	
+			$output = "<div class=\"clear comments\">
+						<script src='http://www.intensedebate.com/js/getCommentLink.php?acct=".get_option("wpsc_intense_debate_account_id")."&postid=product_".$wpsc_query->product['id']."&posttitle=".urlencode($wpsc_query->product['name'])."&posturl=".str_replace($original, $entities, wpsc_product_url($wpsc_query->product['id'], null, false))."&posttime=".urlencode(date('Y-m-d h:i:s', time()))."&postauthor=author_".$wpsc_query->product['id']."' type='text/javascript' defer='defer'></script>
+					</div>";
+		}
+	}
+	return $output;
+}
+
+function wpsc_product_comments() {
+	global $wpsc_query;
+	// add the product comments
+	if (get_option('wpsc_enable_comments') == 1) {
+		$enable_for_product = get_product_meta($wpsc_query->product['id'], 'enable_comments');
+
+		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product[0] == '') || $enable_for_product[0] == 'yes') {
+			$output = "<script>
+				var idcomments_acct = '".get_option('wpsc_intense_debate_account_id')."';
+				var idcomments_post_id = 'product_".$wpsc_query->product['id']."';
+				var idcomments_post_url = encodeURIComponent('".wpsc_product_url($wpsc_query->product['id'], null, false)."');
+				</script>
+				<span id=\"IDCommentsPostTitle\" style=\"display:none\"></span>
+				<script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+				";
+				
+		}
+	}
+	return $output;
+}
+
+
+
 function wpsc_have_custom_meta() {
 	global $wpsc_query;
 	return $wpsc_query->have_custom_meta();
@@ -375,22 +418,28 @@ function wpsc_the_page() {
 	
 
 function wpsc_page_number() {
- // get the variation name;
+ // get the page number;
 	global $wpsc_query;
 	return $wpsc_query->page['number'];
 }
 
 function wpsc_page_is_selected() {
- // get the variation name;
+ // determine if we are on this page
 	global $wpsc_query;
 	return $wpsc_query->page['selected'];
 }
 
 function wpsc_page_url() {
- // generate the variation ID;
+ // generate the page URL
 	global $wpsc_query;
 	return $wpsc_query->page['url'];
 }
+
+
+
+
+
+
 
 
 

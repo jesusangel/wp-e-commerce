@@ -404,6 +404,9 @@ if($_POST['submit_action'] == "edit") {
 
 	if (isset($_POST['external_link'])) {
 		add_product_meta($_POST['prodid'], 'external_link', $_POST['external_link'],true);
+	}	
+	if (isset($_POST['enable_comments'])) {
+		add_product_meta($_POST['prodid'], 'enable_comments', $_POST['enable_comments'],true);
 	}
 	
 	if (isset($_POST['images'])) {

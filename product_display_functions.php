@@ -1043,7 +1043,7 @@ function fancy_notification_content($product_id, $quantity_limit = false) {
 }
 
 
-function wpsc_product_url($product_id, $category_id = null) {
+function wpsc_product_url($product_id, $category_id = null, $escape = true) {
   global $wpdb, $wp_rewrite, $wp_query;
   
   if(!is_numeric($category_id) || ($category_id < 1)) {
@@ -1064,16 +1064,17 @@ function wpsc_product_url($product_id, $category_id = null) {
     if(!stristr(get_option('product_list_url'), "?")) {
       $initial_seperator = "?";
     } else {
-      $initial_seperator = "&amp;";
+      $initial_seperator = ($escape) ? "&amp;" : "&";
     }
     if(is_numeric($category_id) && ($category_id > 0)) {
-      $product_url = get_option('product_list_url').$initial_seperator."category=".$category_id."&amp;product_id=".$product_id;
+      $product_url = get_option('product_list_url').$initial_seperator."category=".$category_id.(($escape) ? "&amp;" : "&")."product_id=".$product_id;
     } else {
       $product_url = get_option('product_list_url').$initial_seperator."product_id=".$product_id;
     }
   }
   return $product_url;
 }
+
 
 function google_buynow($product_id) {
 	global $wpdb;
@@ -1248,9 +1249,9 @@ function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
 		$output .= "<input type='hidden' name='item' value='".$product_id."' />";
 		if(isset($wpsc_theme) && is_array($wpsc_theme) && ($wpsc_theme['html'] !='')) {
 				$output .= $wpsc_theme['html'];
-			} else {
-				$output .= "<input type='submit' id='product_".$product['id']."_submit_button' class='wpsc_buy_button' name='Buy' value='".TXT_WPSC_ADDTOCART."'  />";
-			}
+		} else {
+			$output .= "<input type='submit' id='product_".$product['id']."_submit_button' class='wpsc_buy_button' name='Buy' value='".TXT_WPSC_ADDTOCART."'  />";
+		}
 		if($replaced_shortcode == true) {
 			return $output;
 		} else {

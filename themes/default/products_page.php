@@ -101,6 +101,10 @@ global $wpsc_query, $wpdb;
 					</div>
 					<?php /** the custom meta HTML and loop ends here */?>
 					
+					<?php /** add the comment link here */?>
+					<?php echo wpsc_product_comment_link();	?>
+					
+					
 					<?php /** the variation group HTML and loop */?>
 					<p class="wpsc_variation_forms">
 						<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>

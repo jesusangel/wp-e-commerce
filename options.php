@@ -240,6 +240,25 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		} else {
 			update_option('wpsc_products_per_page', 0);
 		}
+		
+	if($_POST['wpsc_enable_comments'] == 1) {
+ 	  update_option('wpsc_enable_comments', 1);
+	} else {
+			update_option('wpsc_enable_comments', 0);
+	}
+		
+	if(isset($_POST['wpsc_intense_debate_account_id'])) {
+ 	  update_option('wpsc_intense_debate_account_id', $_POST['wpsc_intense_debate_account_id']);
+	} else {
+		update_option('wpsc_intense_debate_account_id', '');
+	}
+		
+	if(isset($_POST['wpsc_comments_which_products'])) {
+ 	  update_option('wpsc_comments_which_products', $_POST['wpsc_comments_which_products']);
+	} else {
+		update_option('wpsc_comments_which_products', 0);
+	}
+
   
     if($_POST['show_sliding_cart'] == 1) {
       update_option('show_sliding_cart', 1);
@@ -1727,7 +1746,56 @@ if($_GET['clean_categories'] == 'true') {
 										<input type='radio' value='3' name='wpsc_page_number_position' id='wpsc_page_number_position3' <?php if (get_option('wpsc_page_number_position') == 3) { echo "checked='true'"; } ?> /><label for='wpsc_page_number_position3'><?php echo TXT_WPSC_PAGENUMBER_POSITION_BOTH; ?></label>
 										<br />
 									</td>
-								</tr>   
+								</tr>    
+							</table>
+
+								
+							<h3 class="form_group"><?php echo TXT_WPSC_COMMENTSETTINGS;?></h3>
+							<table class='wpsc_options form-table'>
+								<tr>
+									<th scope="row">
+									<?php echo TXT_WPSC_ENABLE_COMMENTS;?>:
+									<a href="http://intensedebate.com/" title="IntenseDebate comments enhance and encourage conversation on your blog or website" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/intensedebate-logo.png" alt="intensedebate-logo" title="IntenseDebate"/></a>
+									</th>
+									<td>
+									<?php
+									$enable_comments = get_option('wpsc_enable_comments');
+									$enable_comments1 = "";
+									$enable_comments2 = "";
+									switch($enable_comments) {
+										case 1:
+										$enable_comments1 = "checked ='true'";
+										$intense_debate_account_id_display_state = '';
+										break;
+										
+										default:
+										case 0:
+										$enable_comments2 = "checked ='true'";
+										$intense_debate_account_id_display_state = 'style=\'display: none;\'';
+										break;
+									}
+									?>
+									<input onclick='jQuery("#wpsc_enable_comments").show()'  type='radio' value='1' name='wpsc_enable_comments' id='use_pagination1' <?php echo $enable_comments1; ?> /> <label for='use_pagination1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input onclick='jQuery("#wpsc_enable_comments").hide()' type='radio' value='0' name='wpsc_enable_comments' id='use_pagination2' <?php echo $enable_comments2; ?> /> <label for='use_pagination2'><?php echo TXT_WPSC_NO;?></label><br />
+									<div id='wpsc_enable_comments' <?php echo $intense_debate_account_id_display_state; ?> >
+									<?php echo TXT_WPSC_INTENSE_DEBATE_ACCOUNT_ID; ?>:<br/>
+									<input type='text' size='30' name='wpsc_intense_debate_account_id' value='<?php echo get_option('wpsc_intense_debate_account_id'); ?>' /><br/>
+									<small>Help on finding the Account ID</small>
+									</div>
+									</td>
+								</tr>
+								
+								<tr>
+									<th scope="row">
+										<?php echo TXT_WPSC_COMMENTS_WHICH_PRODUCTS;?>:
+									</th>
+									<td>
+										<input type='radio' value='1' name='wpsc_comments_which_products' id='wpsc_comments_which_products1' <?php if (get_option('wpsc_comments_which_products') == 1 || !get_option('wpsc_comments_which_products')) { echo "checked='true'"; } ?> /><label for='wpsc_comments_which_products1'>All Products</label>&nbsp;
+										<input type='radio' value='2' name='wpsc_comments_which_products' id='wpsc_comments_which_products2' <?php if (get_option('wpsc_comments_which_products') == 2) { echo "checked='true'"; } ?> /><label for='wpsc_comments_which_products2'>Per Product</label>&nbsp;
+										<br />
+									</td>
+								</tr> 
+								
 							</table> 
 							
 							<?php
