@@ -1058,6 +1058,11 @@ class wpsc_cart_item {
 	var $apply_tax = true;
 	var $priceandstock_id;
 	
+	// user provided values
+	var $custom_message = null;
+	var $custom_file = null;
+	
+	
 	var $meta = array();
 		/**
 	 * wpsc_cart_item constructor, requires a product ID and the parameters for the product
@@ -1133,7 +1138,7 @@ class wpsc_cart_item {
 			
 			$price = $priceandstock_values['price'];
 			$weight = wpsc_convert_weights($priceandstock_values['weight'], $priceandstock_values['weight_unit']);
-			$file_id = $product_data['file'];
+			$file_id = $priceandstock_values['file'];
 			
 		} else {
 		  $priceandstock_id = 0;
@@ -1148,7 +1153,7 @@ class wpsc_cart_item {
 					$sale_discount = 0;
         }
         $price = $product['price'] - $sale_discount;
-        $file_id = $priceandstock_values['file'];
+        $file_id = $product['file'];
       }
 		}
 		// create the string containing the product name.
