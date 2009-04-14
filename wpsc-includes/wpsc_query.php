@@ -189,8 +189,8 @@ function wpsc_product_is_donation() {
 }
 
 /**
-* wpsc function
-* @return 
+* wpsc product on special function
+* @return boolean - true if the product is on special, otherwise false
 */
 function wpsc_product_on_special() {
   // function to determine if the product is on special
@@ -202,6 +202,10 @@ function wpsc_product_on_special() {
 	}
 }
 
+/**
+* wpsc product has file function
+* @return boolean - true if the product has a file
+*/
 function wpsc_product_has_file() {
   // function to determine if the product is on special
 	global $wpsc_query, $wpdb;
@@ -211,11 +215,20 @@ function wpsc_product_has_file() {
 	return false;
 }
 
+/**
+* wpsc product postage and packaging function
+* @return string - currently only valid for flat rate
+*/
 function wpsc_product_postage_and_packaging() {
 	global $wpsc_query;
   return nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
 }
 
+/**
+* wpsc normal product price function
+* TODO determine why this function is here
+* @return string - returns some form of product price
+*/
 function wpsc_product_normal_price() {
 	global $wpsc_query;
   $price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);  
@@ -227,7 +240,13 @@ function wpsc_product_normal_price() {
   return $output;
 }
 
-
+/**
+* wpsc product image function
+* if no parameters are passed, the image is not resized, otherwise it is resized to the specified dimensions
+* @param integer width
+* @param integer height
+* @return string - the product image URL, or the URL of the resized version
+*/
 function wpsc_the_product_image($width = null, $height = null) {
   // show the full sized image for the product, if supplied with dimensions, will resize image to those.
 	global $wpsc_query;
@@ -246,7 +265,10 @@ function wpsc_the_product_image($width = null, $height = null) {
   }
 }
 
-
+/**
+* wpsc product thumbnail function
+* @return string - the URL to the thumbnail image
+*/
 function wpsc_the_product_thumbnail() {
   // show the thumbnail image for the product
 	global $wpsc_query;
@@ -264,7 +286,10 @@ function wpsc_the_product_thumbnail() {
   }
 }
 
-
+/**
+* wpsc product comment link function
+* @return string - javascript required to make the intense debate link work
+*/
 function wpsc_product_comment_link() {
  // add the product comment link
 	global $wpsc_query;
@@ -283,7 +308,10 @@ function wpsc_product_comment_link() {
 	}
 	return $output;
 }
-
+/**
+* wpsc product comments function
+* @return string - javascript for the intensedebate comments
+*/
 function wpsc_product_comments() {
 	global $wpsc_query;
 	// add the product comments
@@ -305,33 +333,55 @@ function wpsc_product_comments() {
 	return $output;
 }
 
-
-
+/**
+* wpsc have custom meta function
+* @return boolean - true while we have custom meta to display
+*/
 function wpsc_have_custom_meta() {
 	global $wpsc_query;
 	return $wpsc_query->have_custom_meta();
 }
 
+/**
+* wpsc the custom meta function
+* @return nothing - iterate through the custom meta vallues
+*/
 function wpsc_the_custom_meta() {
 	global $wpsc_query;
 	$wpsc_query->the_custom_meta();
 }
 
+/**
+* wpsc have variation groups function
+* @return boolean - true while we have variation groups
+*/
 function wpsc_have_variation_groups() {
 	global $wpsc_query;
 	return $wpsc_query->have_variation_groups();
 }
 
+/**
+* wpsc the variation group function
+* @return nothing - iterate through the variation groups
+*/
 function wpsc_the_variation_group() {
 	global $wpsc_query;
 	$wpsc_query->the_variation_group();
 }
 
+/**
+* wpsc have variations function
+* @return boolean - true while we have variations
+*/
 function wpsc_have_variations() {
 	global $wpsc_query;
 	return $wpsc_query->have_variations();
 }
 
+/**
+* wpsc the variation function
+* @return nothing - iterate through the variations
+*/
 function wpsc_the_variation() {
 	global $wpsc_query;
 	$wpsc_query->the_variation();
@@ -339,13 +389,20 @@ function wpsc_the_variation() {
 
 
 
-
+/**
+* wpsc variation group name function
+* @return string - the variaton group name
+*/
 function wpsc_the_vargrp_name() {
  // get the variation group name;
 	global $wpsc_query;
   return $wpsc_query->variation_group['name'];
 }
 
+/**
+* wpsc variation group form ID function
+* @return string - the variation group form id, for labels and the like
+*/
 function wpsc_vargrp_form_id() {
  // generate the variation group form ID;
 	global $wpsc_query;
@@ -353,39 +410,56 @@ function wpsc_vargrp_form_id() {
   return $form_id;
 }
 
+/**
+* wpsc variation group ID function
+* @return integer - the variation group ID
+*/
 function wpsc_vargrp_id() {
- // generate the variation group form ID;
 	global $wpsc_query;
   return $wpsc_query->variation_group['variation_id'];
 }
 
+/**
+* wpsc the variation name function
+* @return string - the variation name
+*/
 function wpsc_the_variation_name() {
- // get the variation name;
 	global $wpsc_query;
 	return $wpsc_query->variation['name'];
 }
 
+/**
+* wpsc the variation ID function
+* @return integer - the variation ID
+*/
 function wpsc_the_variation_id() {
- // generate the variation ID;
 	global $wpsc_query;
 	return $wpsc_query->variation['id'];
 }
 
-
+/**
+* wpsc custom meta name function
+* @return string - the custom metal name
+*/
 function wpsc_custom_meta_name() {
- // get the variation name;
 	global $wpsc_query;
 	return  $wpsc_query->custom_meta_values['meta_key'];
 }
 
+/**
+* wpsc custom meta value function
+* @return string - the custom meta value
+*/
 function wpsc_custom_meta_value() {
- // generate the variation ID;
 	global $wpsc_query;
 	return  $wpsc_query->custom_meta_values['meta_value'];
 }
 
+/**
+* wpsc product rater function
+* @return string - HTML to display the product rater
+*/
 function wpsc_product_rater() {
- // generate the variation ID;
 	global $wpsc_query;
 	if(get_option('product_ratings') == 1) {
 		$output .= "<div class='product_footer'>";
@@ -413,7 +487,10 @@ function wpsc_product_rater() {
 	return  $output;
 }
 
-
+/**
+* wpsc has breadcrumbs function
+* @return boolean - true if we have and use them, false otherwise
+*/
 function wpsc_has_breadcrumbs() {
 	global $wpsc_query;	
   if(($wpsc_query->breadcrumb_count > 0) && (get_option("show_breadcrumbs") == 1)){
@@ -423,25 +500,38 @@ function wpsc_has_breadcrumbs() {
   }
 }
 
+/**
+* wpsc have breadcrumbs function
+* @return boolean - true if we have breadcrimbs to loop through
+*/
 function wpsc_have_breadcrumbs() {
 	global $wpsc_query;
 	return $wpsc_query->have_breadcrumbs();
 }
 
+/**
+* wpsc the breadcrumbs function
+* @return nothing - iterate through the breadcrumbs
+*/
 function wpsc_the_breadcrumb() {
 	global $wpsc_query;
 	$wpsc_query->the_breadcrumb();
 }
 
-
+/**
+* wpsc breadcrumb name function
+* @return string - the breadcrumb name 
+*/
 function wpsc_breadcrumb_name() {
- // get the variation name;
 	global $wpsc_query;
 	return $wpsc_query->breadcrumb['name'];
 }
 
+/**
+* wpsc breadcrumb URL function
+* @return string - the breadcrumb URL
+*/
 function wpsc_breadcrumb_url() {
- // generate the variation ID;
 	global $wpsc_query;
 	if($wpsc_query->breadcrumb['url'] == '') {
 	  return false;
@@ -449,7 +539,10 @@ function wpsc_breadcrumb_url() {
 		return $wpsc_query->breadcrumb['url'];
 	}
 }
-
+/**
+* wpsc currency sign function
+* @return string - the selected currency sign for the store
+*/
 function wpsc_currency_sign() {
   global $wpdb;
 	$currency_sign_location = get_option('currency_sign_location');
@@ -457,7 +550,10 @@ function wpsc_currency_sign() {
 	$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
 	return $currency_symbol;
 }
-
+/**
+* wpsc has pages function
+* @return boolean - true if we have pages
+*/
 function wpsc_has_pages() {
 	global $wpsc_query;
   if($wpsc_query->page_count > 0) {
@@ -467,44 +563,52 @@ function wpsc_has_pages() {
   }
 }
 
-
+/**
+* wpsc have pages function
+* @return boolean - true while we have pages to loop through
+*/
 function wpsc_have_pages() {
 	global $wpsc_query;
 	return $wpsc_query->have_pages();
 }
 
+/**
+* wpsc the page function
+* @return nothing - iterate through the pages
+*/
 function wpsc_the_page() {
 	global $wpsc_query;
 	$wpsc_query->the_page();
 }
 	
-
+/**
+* wpsc page number function
+* @return integer - the page number
+*/
 function wpsc_page_number() {
- // get the page number;
 	global $wpsc_query;
 	return $wpsc_query->page['number'];
 }
 
+/**
+* wpsc page is selected function
+* @return boolean - true if the page is selected
+*/
 function wpsc_page_is_selected() {
  // determine if we are on this page
 	global $wpsc_query;
 	return $wpsc_query->page['selected'];
 }
 
+/**
+* wpsc papge URL function
+* @return string - the page URL
+*/
 function wpsc_page_url() {
  // generate the page URL
 	global $wpsc_query;
 	return $wpsc_query->page['url'];
 }
-
-
-
-
-
-
-
-
-
 
 class WPSC_Query {
 
