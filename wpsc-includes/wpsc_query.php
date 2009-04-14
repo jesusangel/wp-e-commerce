@@ -3,7 +3,10 @@
 * this is the wpsc equivalent of the wp query class, needed for the wpsc templates to work
 */
 
-
+/**
+*  this page url function, returns the URL of this page
+* @return string - the URL of the current page
+*/
 function wpsc_this_page_url() {
 	global $wpsc_query;
 	//echo "<pre>".print_r($wpsc_query->category,true)."</pre>";
@@ -14,6 +17,10 @@ function wpsc_this_page_url() {
 	}
 }
 
+/**
+*  is single product function, determines if we are viewing a single product
+* @return boolean - true, or false...
+*/
 function wpsc_is_single_product() {
 	global $wpsc_query;
 	if($wpsc_query->is_single === true) {
@@ -24,6 +31,10 @@ function wpsc_is_single_product() {
   return $state;
 }
 
+/**
+* category class function, categories can have a specific class, this gets that
+* @return string - the class of the selected category
+*/
 function wpsc_category_class() {
 	global $wpdb, $wp_query; 
 	
@@ -47,54 +58,93 @@ function wpsc_category_class() {
 	return $category_nice_name;
 }
 
+/**
+* wpsc have products function, the product loop
+* @return boolean true while we have products, otherwise, false
+*/
 function wpsc_have_products() {
 	global $wpsc_query;
 	return $wpsc_query->have_products();
 }
 
+/**
+* wpsc the product function, gets the next product, 
+* @return nothing
+*/
 function wpsc_the_product() {
 	global $wpsc_query;
 	$wpsc_query->the_product();
 }
 
+/**
+* wpsc in the loop function, 
+* @return boolean - true if we are in the loop
+*/
 function wpsc_in_the_loop() {
 	global $wpsc_query;
 	return $wpsc_query->in_the_loop;
 }
 
+/**
+* wpsc rewind products function, rewinds back to the first product
+* @return nothing
+*/
 function wpsc_rewind_products() {
 	global $wpsc_query;
 	return $wpsc_query->rewind_products();
 }
 
+/**
+* wpsc the product id function, 
+* @return integer - the product ID
+*/
 function wpsc_the_product_id() {
 	global $wpsc_query;
 	return $wpsc_query->product['id'];
 }
 
+/**
+* wpsc the product title function
+* @return string - the product title
+*/
 function wpsc_the_product_title() {
 	global $wpsc_query;
-	
 	return htmlentities(stripslashes($wpsc_query->the_product_title()), ENT_QUOTES);
 }
 
-
+/**
+* wpsc product description function
+* @return string - the product description
+*/
 function wpsc_the_product_description() {
 	global $wpsc_query;
-// 	echo "<pre>".print_r($wpsc_query->product,true)."</pre>";
 	return wpautop(stripslashes($wpsc_query->product['description']));
 }
 
+/**
+* wpsc additional product description function
+* TODO make this work with the tabbed multiple product descriptions, may require another loop
+* @return string - the additional description
+*/
 function wpsc_the_product_additional_description() {
 	global $wpsc_query;
 	return $wpsc_query->product['additional_description'];
 }
 
+
+/**
+* wpsc product permalink function
+* @return string - the URL to the single product page for this product
+*/
 function wpsc_the_product_permalink() {
 	global $wpsc_query;
 	return wpsc_product_url($wpsc_query->product['id']);
 }
 
+/**
+* wpsc product price function
+* @return string - the product price
+*/
 function wpsc_the_product_price() {
   global $wpsc_query;  
   $price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);  
@@ -106,10 +156,14 @@ function wpsc_the_product_price() {
   if(get_option('display_pnp') == 1) {
     //$output = nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
   }
-  //$output .= "<pre>".print_r($wpsc_query->first_variations,true)."</pre>";
   return $output;
 }
 
+/**
+* wpsc product has stock function
+* TODO this may need modifying to work with variations, test this
+* @return boolean - true if the product has stock or does not use stock, false if it does not
+*/
 function wpsc_product_has_stock() {
  // Is the product in stock?
 	global $wpsc_query;
@@ -120,6 +174,10 @@ function wpsc_product_has_stock() {
 	}
 }
 
+/**
+* wpsc is donation function
+* @return boolean - true if it is a donation, otherwise false
+*/
 function wpsc_product_is_donation() {
  // Is the product a donation?
 	global $wpsc_query;
@@ -130,6 +188,10 @@ function wpsc_product_is_donation() {
 	}
 }
 
+/**
+* wpsc function
+* @return 
+*/
 function wpsc_product_on_special() {
   // function to determine if the product is on special
 	global $wpsc_query;

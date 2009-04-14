@@ -356,7 +356,7 @@ function nzshpcrt_install()
   $i = 0;
   $post_parent = 0;
   foreach($pages as $page) {
-    $check_page = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%".$page['tag']."%' LIMIT 1",ARRAY_A);
+    $check_page = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%".$page['tag']."%'  AND `post_type` NOT IN('revision') LIMIT 1",ARRAY_A);
     if($check_page == null) {
       if($i == 0) {
         $post_parent = 0;

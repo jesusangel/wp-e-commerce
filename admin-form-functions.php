@@ -180,6 +180,7 @@ function nzshpcrt_getproductform($prodid)
 	if (($order == '') || (count($order ) < 6)){
 		$order=array("category_and_tag", "price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
 	}
+	
 	update_option('wpsc_product_page_order', $order);
 	foreach((array)$order as $key => $box) {
 		$box_function_name = $box."_box";
@@ -203,11 +204,10 @@ function nzshpcrt_getproductform($prodid)
   		}
 	}
 	
-	
-		ob_start();
-		do_action('wpsc_product_form', $product['id']);
-		$output .= ob_get_contents();
-		ob_end_clean();
+	ob_start();
+	do_action('wpsc_product_form', $product['id']);
+	$output .= ob_get_contents();
+	ob_end_clean();
 		
 		
 	if (!IS_WP27) {
