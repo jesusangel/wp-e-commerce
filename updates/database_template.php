@@ -29,6 +29,7 @@ $wpsc_database_template[$table_name]['columns']['gst'] = "decimal(11,2) NOT NULL
 $wpsc_database_template[$table_name]['columns']['quantity'] = "int(10) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['donation'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['no_shipping'] = "varchar(1) NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['custom_message'] = "text NOT NULL ";
 $wpsc_database_template[$table_name]['columns']['files'] = "text NOT NULL ";
 $wpsc_database_template[$table_name]['columns']['meta'] = "longtext NULL ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY ( `id` )";

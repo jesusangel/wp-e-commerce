@@ -1059,7 +1059,7 @@ function wpsc_product_url($product_id, $category_id = null, $escape = true) {
   
   if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
     $url_name = get_product_meta($product_id, 'url_name', true);	
-		$product_url =wpsc_category_url($category_id).$url_name[0]."/";
+		$product_url =wpsc_category_url($category_id).$url_name."/";
   } else {    
     if(!stristr(get_option('product_list_url'), "?")) {
       $initial_seperator = "?";
@@ -1122,8 +1122,8 @@ function google_buynow($product_id) {
 function external_link($product_id) { 
 	global $wpdb;
 	$link = get_product_meta($product_id,'external_link',true);
-	if (!stristr($link[0],'http://')) {
-		$link = 'http://'.$link[0];
+	if (!stristr($link,'http://')) {
+		$link = 'http://'.$link;
 	}
 	$output .= "<input type='button' value='".TXT_WPSC_BUYNOW."' onclick='gotoexternallink(\"$link\")'>";
 	return $output;

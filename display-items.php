@@ -639,7 +639,7 @@ if($_POST['submit_action'] == "edit") {
     $stored_name = get_product_meta($_POST['prodid'], 'url_name', true);
     if(get_product_meta($_POST['prodid'], 'url_name', true) != false) {
       $current_url_name = get_product_meta($_POST['prodid'], 'url_name');
-      if($current_url_name[0] != $url_name) {
+      if($current_url_name != $url_name) {
         $url_name .= $extension_number;
         update_product_meta($_POST['prodid'], 'url_name', $url_name);
 			}

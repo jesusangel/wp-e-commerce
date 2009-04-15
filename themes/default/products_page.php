@@ -41,7 +41,7 @@ global $wpsc_query, $wpdb;
 					<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="Mandelbrot" title="Mandelbrot" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
 				</a>
 			</div>
-			<form class='product_form' action="<?php echo wpsc_this_page_url();?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
+			<form class='product_form'  enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 				<div class="producttext">
 					<h2 class="prodtitles">
 						<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>
@@ -58,7 +58,7 @@ global $wpsc_query, $wpdb;
 				?>
 					
 					
-					<p class='wpsc_description'><?php echo wpsc_the_product_description(); ?></p>
+					<div class='wpsc_description'><?php echo wpsc_the_product_description(); ?></div>
 					
 					
 					<?php if(wpsc_the_product_additional_description()) : ?>

@@ -25,19 +25,25 @@ jQuery(document).ready(function () {
 	
 	// Submit the product form using AJAX
   jQuery("form.product_form").submit(function() {
-		form_values = jQuery(this).serialize( );
-		jQuery.post( 'index.php?ajax=true', form_values, function(returned_data) {
-			eval(returned_data);
-			wpsc_bind_to_events();
-			if(jQuery('#fancy_notification') != null) {
-				jQuery('#loading_animation').css("display", 'none');
-				//jQuery('#fancy_notificationimage').css("display", 'none');
-			}
+    // we cannot submit a file through AJAX, so this needs to return true to submit the form normaly if a file formfield is present
+    file_upload_elements = jQuery.makeArray(jQuery('input[type=file]', jQuery(this)));
+		if(file_upload_elements.length > 0) {
+			return true;
+		} else {
+			form_values = jQuery(this).serialize( );
+			jQuery.post( 'index.php?ajax=true', form_values, function(returned_data) {
+				eval(returned_data);
+				wpsc_bind_to_events();
+				if(jQuery('#fancy_notification') != null) {
+					jQuery('#loading_animation').css("display", 'none');
+					//jQuery('#fancy_notificationimage').css("display", 'none');
+				}
+				
+			});
+			wpsc_fancy_notification(this);
 			
-		});
-		wpsc_fancy_notification(this);
-		
-		return false;
+			return false;
+		}
 	});
   
   

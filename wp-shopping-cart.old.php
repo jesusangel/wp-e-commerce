@@ -1,7 +1,4 @@
 <?php
-
-//phpinfo();
-//exit("<pre>");
 $wpsc_currency_data = array();
 $wpsc_title_data = array();
 if(WPSC_DEBUG === true) {
@@ -258,8 +255,8 @@ function nzshpcrt_style() {
     <?php
     $product_ids = $wpdb->get_col("SELECT `id` FROM `{$wpdb->prefix}product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
     foreach($product_ids as $product_id) {
-      list($individual_thumbnail_height) = get_product_meta($product_id, 'thumbnail_height'); 
-      list($individual_thumbnail_width) = get_product_meta($product_id, 'thumbnail_width');     
+      $individual_thumbnail_height = get_product_meta($product_id, 'thumbnail_height'); 
+      $individual_thumbnail_width = get_product_meta($product_id, 'thumbnail_width');     
       if($individual_thumbnail_height> $thumbnail_height) { 
         echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r"; 
         echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
@@ -746,7 +743,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			$memberstatus = get_product_meta($_POST['prodid'],'is_membership',true);
 		}
 
-		if(($memberstatus[0]=='1') && ($_SESSION['nzshopcrt_cart']!=NULL)){
+		if(($memberstatus=='1') && ($_SESSION['nzshopcrt_cart']!=NULL)){
 		} else{
 			$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$_POST['prodid']."' LIMIT 1";
 			$item_data = $wpdb->get_results($sql,ARRAY_A);
@@ -840,9 +837,9 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				} else {
 					$donation = false;
 				}
-				if(!(($memberstatus[0]=='1')&&(count($_SESSION['nzshpcrt_cart'])>0))){
+				if(!(($memberstatus=='1')&&(count($_SESSION['nzshpcrt_cart'])>0))){
 					$status = get_product_meta($cartt1, 'is_membership', true);
-					if (function_exists('wpsc_members_init') && ( $status[0]=='1')){
+					if (function_exists('wpsc_members_init') && ( $status=='1')){
 						exit();
 					}	
 					$parameters = array();
@@ -876,7 +873,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			if (($memberstatus[0]=='1')&&(count($cart)>1)) {
 			} else {
 				$status = get_product_meta($cartt1, 'is_membership', true);
-				if (function_exists('wpsc_members_init') && ( $status[0]=='1')){
+				if (function_exists('wpsc_members_init') && ( $status=='1')){
 					exit('st');
 				}
 
@@ -1981,19 +1978,22 @@ function get_product_meta($product_id, $key, $single = false) {
     $meta_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
     if(is_numeric($meta_id) && ($meta_id > 0)) {      
       if($single != false) {
-        $meta_values[0] = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
-        } else {
-        $temp_meta_values = $wpdb->get_results("SELECT `meta_value` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'", ARRAY_A);
-        foreach($temp_meta_values as $value) {
-          $meta_values[] = maybe_unserialize($value['meta_value']);
-          }
-        }
-      }
-    } else {
+        $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
+			} else {
+        $meta_values = $wpdb->get_col("SELECT `meta_value` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'");
+				$meta_values = array_map('maybe_unserialize', $meta_values);
+			}
+		}
+	} else {
     $meta_values = false;
-    }    
-  return $meta_values;
-  }
+	}
+	
+	if (is_array($meta_values) && (count($meta_values) == 1)) {
+		return array_pop($meta_values);
+	} else {
+		return $meta_values;
+	}
+}
 
 function update_product_meta($product_id, $key, $value, $prev_value = '') {
   global $wpdb, $blog_id;

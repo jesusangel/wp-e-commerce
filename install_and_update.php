@@ -2,9 +2,6 @@
 function wpsc_auto_update() {
   global $wpdb;
 
-  
-
-
   wpsc_create_or_update_tables();
   
   include_once('updates/updating_tasks.php');
@@ -411,7 +408,7 @@ function nzshpcrt_install()
 			}      
       if(get_product_meta($datarow['id'], 'url_name') != false) {
         $current_url_name = get_product_meta($datarow['id'], 'url_name');
-        if($current_url_name[0] != $url_name) {
+        if($current_url_name != $url_name) {
           $url_name .= $extension_number;
           update_product_meta($datarow['id'], 'url_name', $url_name);
 				}

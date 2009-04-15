@@ -207,9 +207,50 @@ function wpsc_product_on_special() {
 * @return boolean - true if the product has a file
 */
 function wpsc_product_has_file() {
-  // function to determine if the product is on special
 	global $wpsc_query, $wpdb;
 	if(is_numeric($wpsc_query->product['file']) && ($wpsc_query->product['file'] > 0)) {
+		return true;
+	}
+	return false;
+}
+
+/**
+* wpsc product is modifiable function
+* @return boolean - true if the product has a file
+*/
+function wpsc_product_is_customisable() {
+	global $wpsc_query, $wpdb;
+	
+	$engraved_text = get_product_meta($wpsc_query->product['id'], 'engraved');
+	$can_have_uploaded_image = get_product_meta($wpsc_query->product['id'], 'can_have_uploaded_image');
+	if(($engraved_text == 'on') || ($can_have_uploaded_image == 'on')) {
+		return true;
+	}
+	return false;
+}
+
+
+/**
+* wpsc product has personal text function
+* @return boolean - true if the product has a file
+*/
+function wpsc_product_has_personal_text() {
+	global $wpsc_query, $wpdb;
+	$engraved_text = get_product_meta($wpsc_query->product['id'], 'engraved');
+	if($engraved_text == 'on') {
+		return true;
+	}
+	return false;
+}
+
+/**
+* wpsc product has personal file function
+* @return boolean - true if the product has a file
+*/
+function wpsc_product_has_supplied_file() {
+	global $wpsc_query, $wpdb;
+	$can_have_uploaded_image = get_product_meta($wpsc_query->product['id'], 'can_have_uploaded_image');
+	if($can_have_uploaded_image == 'on') {
 		return true;
 	}
 	return false;
@@ -297,7 +338,7 @@ function wpsc_product_comment_link() {
 	if (get_option('wpsc_enable_comments') == 1) {
 		$enable_for_product = get_product_meta($wpsc_query->product['id'], 'enable_comments');
 	
-		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product[0] == '') || $enable_for_product[0] == 'yes') {
+		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product == '') || $enable_for_product == 'yes') {
 			$original = array("&","'",":","/","@","?","=");
 			$entities = array("%26","%27","%3A","%2F","%40","%3F","%3D");
 	
@@ -318,7 +359,7 @@ function wpsc_product_comments() {
 	if (get_option('wpsc_enable_comments') == 1) {
 		$enable_for_product = get_product_meta($wpsc_query->product['id'], 'enable_comments');
 
-		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product[0] == '') || $enable_for_product[0] == 'yes') {
+		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product == '') || $enable_for_product == 'yes') {
 			$output = "<script>
 				var idcomments_acct = '".get_option('wpsc_intense_debate_account_id')."';
 				var idcomments_post_id = 'product_".$wpsc_query->product['id']."';

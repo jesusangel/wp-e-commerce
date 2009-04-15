@@ -20,10 +20,15 @@ function wpsc_add_to_cart() {
 	$default_parameters['variation_values'] = null;
 	$default_parameters['quantity'] = 1;
 	$default_parameters['provided_price'] = null;
-	$default_parameters['comment']=null;
-	$default_parameters['time_requested']=null;
-	$default_parameters['meta']=null;
-   /// sanitise submitted values
+	$default_parameters['comment'] =null;
+	$default_parameters['time_requested']= null;
+	$default_parameters['custom_message'] = null;
+	$default_parameters['file_data'] = null;
+	$default_parameters['is_customisable'] = false;
+	$default_parameters['meta'] = null;
+  
+  
+  /// sanitise submitted values
   $product_id = (int)$_POST['product_id'];
   foreach((array)$_POST['variation'] as $key => $variation) {
     $provided_parameters['variation_values'][(int)$key] = (int)$variation;
@@ -31,6 +36,16 @@ function wpsc_add_to_cart() {
   if($_POST['quantity'] > 0) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
   }
+  if($_POST['is_customisable'] == 'true') {
+		$provided_parameters['is_customisable'] = true;
+		
+		if(isset($_POST['custom_text'])) {
+			$provided_parameters['custom_message'] = $_POST['custom_text'];
+		}
+		if(isset($_FILES['custom_file'])) {
+			$provided_parameters['file_data'] = $_FILES['custom_file'];
+		}
+	}
   
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
   

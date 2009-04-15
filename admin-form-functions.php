@@ -104,7 +104,6 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td class='itemformcol'>\n\r";
 */
   $sku = get_product_meta($product['id'], 'sku');
-  $sku = $sku[0];
   $output .= "<input size='30' type='text' class='text'  name='productmeta_values[sku]' value='".htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8')."' />\n\r";
   $output .= "            </td>\n\r";
   $output .= "<td  class='skuandprice'>";

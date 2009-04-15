@@ -15,7 +15,6 @@
  * The WPSC Cart API for templates
  */
 
-//exit('test');
 /**
 * cart item count function, no parameters
 * * @return integer the item count
@@ -507,7 +506,7 @@ class wpsc_cart {
 				//loop through each cart item
 				foreach($this->cart_items as $key => $cart_item) {
 					// compare product ids and variations.
-					if(($cart_item->product_id == $new_cart_item->product_id) && ($cart_item->product_variations == $new_cart_item->product_variations)) {
+					if(($cart_item->product_id == $new_cart_item->product_id) && ($cart_item->product_variations == $new_cart_item->product_variations) && ($cart_item->custom_message == $new_cart_item->custom_message)) {
 						// if they are the same, increment the count, and break out;
 						$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
 						$this->cart_items[$key]->refresh_item();
@@ -1024,15 +1023,13 @@ class wpsc_cart {
 
 
 
-
-
-
 /**
  * The WPSC Cart Items class
  */
 class wpsc_cart_item {
   // each cart item contains a reference to the cart that it is a member of
 	var $cart;
+	
   // provided values
 	var $product_id;
 	var $variation_values;
@@ -1076,10 +1073,11 @@ class wpsc_cart_item {
 	function wpsc_cart_item($product_id, $parameters, &$cart) {
     global $wpdb;
     // still need to add the ability to limit the number of an item in the cart at once.
-    
-    
     // each cart item contains a reference to the cart that it is a member of, this makes that reference 
     $this->cart =& $cart;
+    //$this->save_provided_file
+    //$this->
+    
     //extract($parameters);
     foreach($parameters as $name => $value) {
 			$this->$name = $value;
@@ -1092,6 +1090,9 @@ class wpsc_cart_item {
 		
 		
 		
+    if(($parameters['is_customisable'] == true) && ($parameters['file_data'] != null)) {
+      $this->save_provided_file($this->file_data);
+    }
 		//$this->meta = $meta;
 		$this->refresh_item();
 	}
@@ -1225,6 +1226,65 @@ class wpsc_cart_item {
 	}
 		
 	/**
+	 * user provided file method
+	 * @access public
+	 * @param string shipping method
+	 * @return boolean true on sucess, false on failure
+	*/		
+		
+	function save_provided_file($file_data) {
+    global $wpdb;
+		$accepted_file_types['mime'][] = 'image/jpeg';
+		$accepted_file_types['mime'][] = 'image/gif';
+		$accepted_file_types['mime'][] = 'image/png';
+		$accepted_file_types['mime'][] = 'image/svg+xml';
+		
+		
+		$accepted_file_types['ext'][] = 'jpeg';
+		$accepted_file_types['ext'][] = 'jpg';
+		$accepted_file_types['ext'][] = 'gif';
+		$accepted_file_types['ext'][] = 'png';
+		$accepted_file_types['ext'][] = 'svg';
+		
+		
+		$can_have_uploaded_image = get_product_meta($this->product_id,'can_have_uploaded_image');
+		if ($can_have_uploaded_image=='on') {
+		  $mime_type_data = wpsc_get_mimetype($file_data['tmp_name'], true);			
+			$name_parts = explode('.',basename($file_data['name']));
+			$extension = array_pop($name_parts);
+		  if($mime_type_data['is_reliable'] == true) {
+		    $mime_type = $mime_type_data['mime_type'];
+		  } else {
+		    // if we can't use what PHP provides us with, we have to trust the user as there aren't really any other choices.
+		    $mime_type = $file_data['type'];
+		  }
+		  //echo( "<pre>".print_r($mime_type_data,true)."</pre>" );
+		  //exit( "<pre>".print_r($file_data,true)."</pre>" );
+			if((array_search($mime_type, $accepted_file_types['mime']) !== false) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
+			  if(is_file(WPSC_USER_UPLOADS_DIR.$file_data['name'])) {
+					$name_parts = explode('.',basename($file_data['name']));
+					$extension = array_pop($name_parts);
+					$name_base = implode('.',$name_parts);
+					$file_data['name'] = null;
+					$num = 2;
+					//  loop till we find a free file name, first time I get to do a do loop in yonks
+					do {
+						$test_name = "{$name_base}-{$num}.{$extension}";
+						if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name)) {
+							$file_data['name'] = $test_name;
+						}
+						$num++;
+					} while ($file_data['name'] == null);
+			  }
+			  //exit($file_data['name']);
+				if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) ) {
+					$this->custom_file = array('file_name' => $file_data['name'], 'mime_type' => $mime_type );			
+				}
+			}
+		}
+	}
+		
+	/**
 	 * update_claimed_stock method
 	 * Updates the claimed stock table, to prevent people from having more than the existing stock in their carts
 	 * @access public
@@ -1255,7 +1315,7 @@ class wpsc_cart_item {
 			$tax = 0;
 		}		
 		
-		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation));
+		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message));
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
 		
 		foreach($this->variation_data as $variation_row) {

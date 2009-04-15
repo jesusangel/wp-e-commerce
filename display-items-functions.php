@@ -82,7 +82,6 @@ return $output;
 function price_and_stock_box($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
 	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
-	$table_rate_price = $table_rate_price[0];
 	$output = '';
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
@@ -317,15 +316,11 @@ function shipping_box($product_data=''){
 function advanced_box($product_data='') {
 	global $closed_postboxes,$wpdb;
 	$merchant_note = get_product_meta($product_data['id'], 'merchant_notes');
-	$merchant_note = $merchant_note[0];
 	$engraved_text = get_product_meta($product_data['id'], 'engraved');
-	$engraved_text = $engraved_text[0];
 	$can_have_uploaded_image = get_product_meta($product_data['id'], 'can_have_uploaded_image');
-	$can_have_uploaded_image = $can_have_uploaded_image[0];
 	$external_link = get_product_meta($product_data['id'], 'external_link');
-	$external_link = $external_link[0];
 	$enable_comments = get_product_meta($product_data['id'], 'enable_comments');
-	$enable_comments = $enable_comments[0];
+	
 	
 	$output ='';
 	
@@ -680,8 +675,6 @@ function product_image_box($product_data='') {
   	$output .="</div></div>";
 		
 	} else {
-	
-		
 
     $output .= "
 	</h3>

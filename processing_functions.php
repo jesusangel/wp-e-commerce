@@ -603,9 +603,9 @@ function wpsc_get_mimetype($file, $check_reliability = false) {
 			$finfo_handle = finfo_open(FILEINFO_MIME);
 			$mimetype = finfo_file($finfo_handle,$file);
 			$is_reliable = true;
-		} else if(function_exists('mime_content_type')) {
+		} else if(function_exists('mime_content_type') && (mime_content_type($file) != '')) {
 			//obsolete, but probably second best due to completeness
-			$mimetype = mime_content_type($file); 
+			$mimetype = mime_content_type($file);
 			$is_reliable = true;
 		} else {
 			//included with plugin, uses the extention, limited and odd list, last option

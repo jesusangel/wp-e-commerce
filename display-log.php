@@ -859,7 +859,6 @@ if($_GET['filter'] !== 'true') {
 		
 				echo " <td>";
         $sku = get_product_meta($product_data[0]['id'], 'sku');
-        $sku = (string)$sku[0];
 				echo $sku;
 				echo " </td>";
 		
@@ -893,6 +892,15 @@ if($_GET['filter'] !== 'true') {
 				echo " </td>";
 							
 				echo '</tr>';
+				
+				echo "<tr $alternate>";
+				echo " <td colspan='7' style='padding: 0px 4px 0px 4px;'>";
+				echo "<strong>".TXT_WPSC_CUSTOM_TEXT.":</strong>";
+				echo "<p style='margin: 0px;'>".$cart_row['custom_message']."</p>";
+				echo " </td>";
+				echo '</tr>';
+				
+				
 				}
 				echo "<tr >";
 		

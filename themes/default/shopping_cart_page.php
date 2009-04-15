@@ -2,7 +2,7 @@
 global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
-//echo "<pre>".print_r($wpsc_cart,true)."</pre>";
+echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 ?>
 
 <table class="productcart">

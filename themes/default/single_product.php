@@ -31,7 +31,7 @@ $image_height = get_option('single_view_image_height');
 						</a>
 					</div>
 		
-					<form class='product_form' action="http://www.instinct.co.nz/wordpress_2.6/products-page/?category=" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
+					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 		
 					<div class="producttext">
 						<h2 class="prodtitles"><?php echo wpsc_the_product_title(); ?></h2>
@@ -47,22 +47,22 @@ $image_height = get_option('single_view_image_height');
 				?>
 						
 						
-						<p class="description"><?php echo wpsc_the_product_description(); ?></p>
+						<div class="description"><?php echo wpsc_the_product_description(); ?></div>
 		
 						<?php if(wpsc_the_product_additional_description()) : ?>
 						<br clear="all" /><p class="single_additional_description">
             <?php
-				$value = '';
-				$the_addl_desc = wpsc_the_product_additional_description();
-				if( is_serialized($the_addl_desc) ) {
-					$addl_descriptions = @unserialize($the_addl_desc);
-				} else {
-					$addl_descriptions = array('addl_desc', $the_addl_desc);
-				}
-				
-				if( isset($addl_descriptions['addl_desc']) ) {
-					$value = $addl_descriptions['addl_desc'];
-				}
+							$value = '';
+							$the_addl_desc = wpsc_the_product_additional_description();
+							if( is_serialized($the_addl_desc) ) {
+								$addl_descriptions = @unserialize($the_addl_desc);
+							} else {
+								$addl_descriptions = array('addl_desc', $the_addl_desc);
+							}
+							
+							if( isset($addl_descriptions['addl_desc']) ) {
+								$value = $addl_descriptions['addl_desc'];
+							}
 
             	if( function_exists('wpsc_addl_desc_show') ) {
             		echo wpsc_addl_desc_show( $addl_descriptions );
@@ -81,8 +81,24 @@ $image_height = get_option('single_view_image_height');
 					</div>
 					<?php /** the custom meta HTML and loop ends here */?>
 					
-						<?php /** the variation group HTML and loop */?>
-					<p class="wpsc_variation_forms">
+					
+					<?php if(wpsc_product_has_personal_text()) : ?>
+						<div class='custom_text'>
+							<h4><?php echo TXT_WPSC_CUSTOM_TEXT; ?></h4>
+							<input type='text' name='custom_text' value=''  />
+						</div>
+					<?php endif; ?>
+					
+					<?php if(wpsc_product_has_supplied_file()) : ?>
+						<div class='custom_file'>
+							<h4><?php echo TXT_WPSC_CUSTOM_FILE; ?></h4>
+							<input type='file' name='custom_file' value=''  />
+						</div>
+					<?php endif; ?>
+					
+					
+					<?php /** the variation group HTML and loop */?>
+					<div class="wpsc_variation_forms">
 						<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
 							<p>
 								<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
@@ -94,7 +110,7 @@ $image_height = get_option('single_view_image_height');
 								</select> 
 							</p>
 						<?php endwhile; ?>
-					</p>
+					</div>
 					<?php /** the variation group HTML and loop ends here */?>
 									
 						<p class="wpsc_product_price">
@@ -117,9 +133,14 @@ $image_height = get_option('single_view_image_height');
 						echo wpsc_akst_share_link('return');
 					} ?>
 						
-				<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
-        <input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
-						
+					<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
+					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
+							
+					<?php if(wpsc_product_is_customisable()) : ?>				
+						<input type="hidden" value="true" name="is_customisable"/>
+					<?php endif; ?>
+				
+				
 					<?php if(wpsc_product_has_stock()) : ?>
 						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 					<?php else : ?>
