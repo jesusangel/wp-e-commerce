@@ -7,7 +7,12 @@
  * @subpackage wpsc-updating-code 
  */
 
-
+$table_name = "{$wpdb->prefix}wpsc_category_tm";
+$wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
+$wpsc_database_template[$table_name]['columns']['visible'] = "int(2) unsigned NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['countryid'] = "int(20) unsigned NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['categoryid'] = "int(20) unsigned NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 
 $table_name = "{$wpdb->prefix}also_bought_product";
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
@@ -328,11 +333,14 @@ $wpsc_database_template[$table_name]['columns']['active'] = "char(1) NOT NULL DE
 $wpsc_database_template[$table_name]['columns']['every_product'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['start'] = "datetime NOT NULL";
 $wpsc_database_template[$table_name]['columns']['expiry'] = "datetime NOT NULL";
+//condtion
+$wpsc_database_template[$table_name]['columns']['condition'] = " text NULL DEFAULT ''";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['coupon_code'] = " KEY `coupon_code` ( `coupon_code` )";
 $wpsc_database_template[$table_name]['indexes']['active'] = " KEY `active` ( `active` )";
 $wpsc_database_template[$table_name]['indexes']['start'] = " KEY `start` ( `start` )";
 $wpsc_database_template[$table_name]['indexes']['expiry'] = " KEY `expiry` ( `expiry` )";
+
 
 
 $table_name = "{$wpdb->prefix}wpsc_logged_subscriptions";

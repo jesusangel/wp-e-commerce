@@ -11,7 +11,18 @@ if(isset($_POST) && is_array($_POST)) {
 // 		$end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
 		$start_date = $_POST['add_start']." 00:00:00";
 		$end_date = $_POST['add_end']." 00:00:00";
-		if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' );")) {  
+		$rules = $_POST['rules'];
+		foreach ($rules as $key => $rule) {
+			foreach ($rule as $k => $r) {
+				$new_rule[$k][$key] = $r;
+			}
+		}
+		foreach($new_rule as $key => $rule) {
+			if ($rule['value'] == '') {
+				unset($new_rule[$key]);
+			}
+		}
+		if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
 			echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
 		}
 	}
@@ -80,11 +91,11 @@ if(isset($_POST) && is_array($_POST)) {
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYCOUPONS;?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
-  <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span> </a> -->
+  <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
 
   <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADD_COUPON;?></span></a>
   
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='<?php echo TXT_WPSC_LOADING;?>' title='<?php echo TXT_WPSC_LOADING;?>' /></span>
+  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
 <table style="width: 100%;">
@@ -114,13 +125,15 @@ if(isset($_POST) && is_array($_POST)) {
    <th>
    <?php echo TXT_WPSC_ACTIVE; ?>
    </th>
-   <th>
+  <!--
+ <th>
    <?php echo TXT_WPSC_PERTICKED; ?>
    </th>
+-->
  </tr>
  <tr>
    <td>
-   <input type='text' value='' name='add_coupon_code' style="width: 138px;" />
+   <input type='text' value='' name='add_coupon_code' />
    </td>
    <td>
    <input type='text' value='' size='3' name='add_discount' />
@@ -197,10 +210,12 @@ if(isset($_POST) && is_array($_POST)) {
    <input type='hidden' value='0' name='add_active' />
    <input type='checkbox' value='1' checked='true' name='add_active' />
    </td>
-   	<td>
+   	<!--
+<td>
 		   <input type='hidden' value='0' name='add_every_product' />
 			<input type="checkbox" value="1" name='add_every_product'/>
 		</td>
+-->
 
    <td>
    
@@ -208,7 +223,42 @@ if(isset($_POST) && is_array($_POST)) {
    <input type='submit' value='Submit' name='submit_coupon' />
    </td>
  </tr>
+ <tr><td colspan="2">
+		   <input type='hidden' value='0' name='add_every_product' />
+			<input type="checkbox" value="1" name='add_every_product'/>
+		<?=TXT_WPSC_PERTICKED?></td></tr>
+
+<tr><td colspan='3'><b>Conditions</b></td></tr>
+<tr><td colspan="8">
+	<div class='coupon_condition'>
+		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/delete.png"/></button>
+			<select class="ruleprops" name="rules[property][]">
+				<option value="item_name" rel="order">Item name</option>
+				<option value="item_quantity" rel="order">Item quantity</option>
+				<option value="total_quantity" rel="order">Total quantity</option>
+				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+			</select>
+			<select name="rules[logic][]">
+				<option value="equal">Is equal to</option>
+				<option value="greater">Is greater than</option>
+				<option value="less">Is less than</option>
+				<option value="contains">Contains</option>
+				<option value="not_contain">Does not contain</option>
+				<option value="begins">Begins with</option>
+				<option value="ends">Ends with</option>
+			</select>
+			<span>
+				<input type="text" name="rules[value][]"/>
+			</span>
+			<span>
+				<button class="add" type="button">
+					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/add.png"/>
+				</button>
+			</span>
+		</div>
+	</div>
 </table>
+<br />
 </form>  
 </div>    
     
@@ -435,7 +485,7 @@ echo "</table>\n\r";
 		<td>
 			<?php 
 				$itemsFeedURL = "http://www.google.com/base/feeds/items";
-				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/display-items.php";
+				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wp-shopping-cart/display-items.php";
 				$redirect_url = 'https://www.google.com/accounts/AuthSubRequest?session=1';
 				$redirect_url .= '&next=';
 				$redirect_url .= urlencode($next_url);
@@ -446,6 +496,4 @@ echo "</table>\n\r";
 		</td>
 	</tr>
 </table>
-<?php //echo TXT_WPSC_PROMOTE_YOUR_SHOP; ?>
-
 </div>

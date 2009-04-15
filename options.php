@@ -13,6 +13,10 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
     		$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = '1'");
 			$AllSelected = true;
     	}
+    	if(in_array('none', $_POST['countrylist2'])){
+    		$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = '0'");
+			$AllSelected = true;
+    	}
     	if($AllSelected != true){
 			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
 			//find the countries not selected 
@@ -671,6 +675,7 @@ if($_GET['clean_categories'] == 'true') {
 									<td>
 									<div id='resizeable' class='ui-widget-content multiple-select'>
 									<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
+									<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
 									<?php
 									
 									foreach($countrylist as $country){
@@ -684,9 +689,10 @@ if($_GET['clean_categories'] == 'true') {
 
 									?>		
 									
-									</div>
-						
+									</div><br />
+									Select the markets you are selling products to.
 									</td>
+								
 								</tr>
 								
 

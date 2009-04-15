@@ -5,6 +5,40 @@ if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null
   $current_categorisation =  $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
 }
 
+ function wpsc_category_tm(){
+ global $wpdb;
+ /* START OF TARGET MARKET SELECTION */					
+	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ",ARRAY_A);
+?>
+	<tr>
+		<td colspan="2"><h4>Target Market Restrictions</h4></td></tr><tr>
+		<td>
+		<?php echo TXT_WPSC_TM; ?>:
+		</td>
+		<td>
+		<div id='resizeable' class='ui-widget-content multiple-select'>
+		<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
+		<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
+		<?php
+		
+		foreach($countrylist as $country){
+			if($country['visible'] == 1){
+			echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />";
+			}else{
+			echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />";
+			}
+				
+		}
+
+		?>		
+		
+		</div><br />
+		Select the markets you are selling this category to.
+		</td>
+	
+	</tr>
+<?php
+}
 function admin_categorylist($curent_category) {
   global $wpdb;
   $options = "";
@@ -94,6 +128,36 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "       </td>\n\r";
   echo "      </tr>\n\r";
 }
+
+   // Jeff 15-04-09 Used for category target market options
+	   
+    if($_POST['countrylist2'] != null){
+    	exit('Work in Progress.<br /><pre>'.print_r($_POST['countrylist2']).'</pre>');
+    	$AllSelected = false;
+    	if(in_array('all',$_POST['countrylist2'])){
+    		$countryList = $wpdb->get_col("SELECT `id` FROM  `".$wpdb->prefix."currency_list`");
+    		//$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = '1'");
+			//$AllSelected = true;
+    	}
+    	if(in_array('none', $_POST['countrylist2'])){
+    		$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = '0'");
+			$AllSelected = true;
+    	}
+    	if($AllSelected != true){
+	//		$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."wpsc_category_tm` ORDER BY country ASC ");
+			//find the countries not selected 
+			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
+			foreach($unselectedCountries as $unselected){
+	//			$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE id = '".$unselected."' LIMIT 1");
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+			//	$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
+			}
+ 		}
+	} 
 
   if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>"); 
@@ -638,14 +702,14 @@ if(function_exists("getimagesize")) {
 		<?php
 }
 ?>
-
+	<?php  wpsc_category_tm(); ?>
     <tr>
       <td colspan='2' class='category_presentation_settings'>
         <h4><?php echo TXT_WPSC_PRESENTATIONSETTINGS;?></h4>
         <span class='small'><?php echo TXT_WPSC_GROUP_PRESENTATION_TEXT; ?></span>
       </td>
 		</tr>
-         
+    
     
     
     <tr>
@@ -699,6 +763,10 @@ if(function_exists("getimagesize")) {
         <input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
       </td>
     </tr>
+    
+
+
+    
   </table>
   </form>
 </div>

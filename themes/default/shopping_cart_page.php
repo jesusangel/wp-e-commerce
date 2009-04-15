@@ -1,8 +1,9 @@
 <?php
-global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway;
+global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway, $wpsc_coupons;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
-echo "<pre>".print_r($wpsc_cart,true)."</pre>";
+$wpsc_coupons = new wpsc_coupons();
+//echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 ?>
 
 <table class="productcart">
@@ -42,6 +43,21 @@ echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 			</td>
 		</tr>
 	<?php endwhile; ?>
+	<?php //this HTML displays coupons if there are any active coupons to use ?>
+	<?php if(wpsc_uses_coupons()): ?>
+		<tr>
+		<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
+		
+		<td colspan="2">Enter your coupon number:</td>
+		<td  colspan="2" align='left'>
+		<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>'>
+		</td>
+		<td>
+		<input type='submit' value='<?php echo TXT_WPSC_APPLY ?>'>
+		</td>
+		</form>
+		</tr>
+	<?php endif; ?>	
 	</table>
 	<?php  //this HTML dispalys the calculate your order HTML	?>
 	
@@ -91,6 +107,16 @@ echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 	  </td>
 	</tr>
+	  <?php if(wpsc_uses_coupons()): ?>
+	<tr class="total_price">
+		<td colspan="3">
+			<?php echo TXT_WPSC_COUPONS; ?>
+		</td>
+		<td colspan="2">
+			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
+	  </td>
+	  <?php endif ?>
+
 	
 	<tr class='total_price'>
 		<td colspan='3'>

@@ -2,6 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define('TXT_WPSC_COUPONS', 'Coupon Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
 define('TXT_WPSC_CUSTOM_TEXT', 'Custom Text');
 define('TXT_WPSC_COMMENTSETTINGS', 'Comment Settings');

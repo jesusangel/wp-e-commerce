@@ -110,6 +110,29 @@ if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) 
 }
 
 
+/**
+	* coupons price, used through ajax and in normal page loading.
+	* No parameters, returns nothing
+*/
+function wpsc_coupon_price() {
+  global $wpdb, $wpsc_cart, $wpsc_coupons;
+  $coupon = $wpdb->escape($_POST['coupon_num']);
+  $wpsc_coupons = new wpsc_coupons($coupon);
+  if($wpsc_coupons->validate_coupon()){
+  	$discountAmount = $wpsc_coupons->calculate_discount();
+  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
+  }else{
+  	echo 'coupon is not valid';
+  	$wpsc_cart->coupons_amount = 0;
+  }
+	
+ }
+
+// execute on POST and GET
+if(isset($_POST['coupon_num'])) {
+	add_action('init', 'wpsc_coupon_price');
+}
+
 
 /**
 	* update quantity function, used through ajax and in normal page loading.
@@ -228,7 +251,7 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 function wpsc_submit_checkout() {
   global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways;
 	$wpsc_checkout = new wpsc_checkout();
-	
+	//exit('coupons:'.$wpsc_cart->coupons_name);
 	$selected_gateways = get_option('custom_gateway_options');
 	$submitted_gateway = $_POST['custom_gateway'];
 	$form_validity = $wpsc_checkout->validate_forms();
@@ -247,9 +270,9 @@ function wpsc_submit_checkout() {
 			$total = $wpsc_cart->calculate_total_price();
 			
 			    
-	    //echo "INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`) VALUES ('$total' ,'0', '{$sessionid}', '{$user_ID}', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}')";
+//echo "INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '$wpsc_cart->coupons_amount','$wpsc_cart->coupons_name')";
 	    //echo "<br />";
-			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`, `discount_value`, `discount_data`,`shipping_method`, `shipping_option`, `plugin_version`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '0', '', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."')");
+			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '$wpsc_cart->coupons_amount','$wpsc_cart->coupons_name')");
 			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}purchase_logs` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
 			//$purchase_log_id = 1;
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);

@@ -38,18 +38,9 @@ if($_SESSION['delivery_country'] == '') {
 }
 
 if($_POST['region'] != null) {
-	$_SESSION['delivery_region'] = $_POST['region'];
-	if($_SESSION['selected_region'] == null) {
-		$_SESSION['selected_region'] = $_POST['region'];
-	}
+	$_SESSION['selected_region'] = $_POST['region'];
 } else if($_SESSION['selected_region'] == '') {
-	$_SESSION['delivery_region'] = get_option('base_region');
 	$_SESSION['selected_region'] = get_option('base_region');
-}
-
-
-if($_SESSION['delivery_region'] == '') {
-	$_SESSION['delivery_region'] = $_SESSION['selected_region'];
 }
 
 if(get_option('permalink_structure') != '') {
@@ -68,9 +59,52 @@ $rawnum = null;
 $number = null;  
 $cart = $_SESSION['nzshpcrt_cart'];
 
+function wpsc_shipping_country_list($selected_country = null) {
+	global $wpdb;
+	if($selected_country == null) {
+		$selected_country = get_option('base_country');
+	}
+	if($selected_region == null) {
+		$selected_region = get_option('base_region');
+	}
+	$country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+	$output .= "<select name='country' id='current_country' onchange='submit_change_country();' >";
+	foreach ($country_data as $country) {
+		$selected ='';
+		if($selected_country == $country['isocode']) {
+			$selected = "selected='true'";
+		}
+		$output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
+	}
+	$output .= "</select>";
+	
+	if ($selected_country == 'US') {
+		$region_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."region_tax` WHERE country_id='136'",ARRAY_A);
+		$output .= "<select>";
+		foreach ($region_data as $region) {
+			$output .= "<option>".$region['name']."</option>";
+		}
+		$output .= "";
+		
+		$output .= "</select>";
+	} else {
+		$output .= " ";
+	}
+	
+// 	$output .= "ZipCode:";
+	if ($_POST['zipcode']=='') {
+	$zipvalue = 'Your Zipcode';
+	$color = '#999';
+	} else {
+		$zipvalue = $_POST['zipcode'];
+		$color = '#000';
+	}
+	$output .= " <input type='text' style='color:".$color.";' onclick='if (this.value==\"Your Zipcode\") {this.value=\"\";this.style.color=\"#000\";}' onblur='if (this.value==\"\") {this.style.color=\"#999\"; this.value=\"Your Zipcode\"; }' value='".$zipvalue."' size='10' name='zipcode' id='zipcode'>";
+	return $output;
+}
 
 ?>
-		<div class="wrap wpsc_container">
+	<div class="wrap wpsc_container">
 		<?php
 		if($_SESSION['nzshpcrt_cart'] != null) {
 
@@ -89,7 +123,6 @@ $cart = $_SESSION['nzshpcrt_cart'];
 	$total_shipping = 0;
 	$all_donations = true;
 	$all_no_shipping = true;
-	$all_memberships = true;
 	$tax =0;
 	foreach($cart as $key => $cart_item) {
 		$product_id = $cart_item->product_id;
@@ -118,11 +151,12 @@ $cart = $_SESSION['nzshpcrt_cart'];
     } else {
 	    $variation_list = '';
     }
-    $product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='$product_id' LIMIT 1",ARRAY_A) ;
+    $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
+    $product_list = $wpdb->get_row($sql,ARRAY_A) ;
     echo "<tr class='product_row'>\n\r";
     
     echo "  <td class='firstcol'>\n\r";
-    echo $product_list['name'] . stripslashes($variation_list);
+    echo $product_list['name'] . $variation_list;
     echo "  </td>\n\r";
     
     echo "  <td>\n\r";
@@ -139,15 +173,7 @@ $cart = $_SESSION['nzshpcrt_cart'];
 	    }
 	    $all_donations = false;
     }
-		if(function_exists('wpsc_members_init')) {
-			$status = get_product_meta($product_id,'is_membership',true);
-			if($status[0] != 1) {
-				$all_memberships = false;
-			}
-		} else {
-		  $all_memberships = false;
-		}
-		
+    
     if($product_list['no_shipping'] != 1) {
 	    $all_no_shipping = false;
     }
@@ -158,18 +184,18 @@ $cart = $_SESSION['nzshpcrt_cart'];
     $shipping = nzshpcrt_determine_item_shipping($product_id, $number, $_SESSION['delivery_country']);
     $total_shipping += $shipping;
     echo "  <td>\n\r";
-    echo "<a href='".get_option('shopping_cart_url').$seperator."remove=".$key."'>".TXT_WPSC_REMOVE."</a>";
+    echo "<a href='".get_option('shopping_cart_url').$seperator."remove=".$key."'>Remove</a>";
     echo "  </td>\n\r";
     
     echo "</tr>\n\r";
 	}
-  
+    
+ 
 	if(!empty($_SESSION['coupon_num'])) {
 		$discount = $total - nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']) ;
 		$total_after_discount = $total-$discount;
 	}
 
-  
 	$siteurl = get_option('siteurl');
 	if(($all_donations == false) && ($all_no_shipping == false)) {
 		$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $_SESSION['delivery_country']);
@@ -177,140 +203,116 @@ $cart = $_SESSION['nzshpcrt_cart'];
 	}
 	
 		//Written by allen
-	//$status = get_product_meta($cart[0]->product_id,'is_membership',true);
+	$status = get_product_meta($cart[0]->product_id,'is_membership',true);
 	$coupon_info = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'wpsc_coupon_codes WHERE active="1"',ARRAY_A);
-	if (count($coupon_info) > 0){
+	if (($status[0]=='1')||(count($coupon_info)<1)){
+		echo 'somethings going on here';
+	} else {}
+	if($coupon_info != NULL){	
 		echo "<tr>";
-		echo "		<form  method='POST' action='".get_option('shopping_cart_url')."'>";
+		echo "		<form  method='post' action='".get_option('shopping_cart_url')."'>";
 		echo "		<td>Enter your coupon number:</td>";
-		echo "		<td align='left'>";	
+		echo "		<td colspan='2' align='left'>";	
 		echo "		<input type='text' name='coupon_num' id='coupon_num' value='".$_SESSION['coupon_num']."'>";
-		echo "		</td>";
-		
-		echo "		<td>";
 		echo "		</td>";
 		echo "		<td>";
 		echo "		<input type='submit' value='".TXT_WPSC_APPLY."'>";
 		echo "		</td>";
 		echo "		</form>";
 		echo "</tr>";
-	}
 	
-		if((get_option('base_country') != null) && (get_option('do_not_use_shipping') == 0) && ($all_memberships != true) && ($all_no_shipping != true)) {
+	}
+		if(get_option('base_country') != null) {
 			//if (!function_exists('getdistance')) {
 		
 		
 // 				if (get_option("payment_gateway")!='google') {
 				echo "<tr class='product_shipping'>\n\r";
-				echo "  <td colspan='4'>\n\r";
+				echo "  <td colspan='2'>\n\r";
 				echo "<h2>".TXT_WPSC_SHIPPING_COUNTRY."</h2>";
 				echo "  </td>\n\r";
-		
+				echo "  <td colspan='2' style='vertical-align: middle;'>";
+				echo "</td>\n\r";
 				echo "</tr>\n\r";
-				echo " <tr><td>";
-				echo TXT_WPSC_SHIPPING_DETAIL.":";
-				echo "</td></tr>\n\r";
-
-
 // 				}
 
 				echo "<tr class='total_price'>\n\r";
 				echo "  <td colspan='3' >\n\r";
-				if($_SESSION['quote_shipping_error'] != null) {
-					echo "<p style='color: red; font-weight: normal;'>".$_SESSION['quote_shipping_error']."</span>";
-					$_SESSION['quote_shipping_error'] = '';
-				}
-				
 					?>
 							<div class='select_country'>
 							<form name='change_country' action='' method='POST'>
 							<?php
-							echo wpsc_shipping_country_list($_SESSION['delivery_country'], $_SESSION['delivery_region']);
+							echo wpsc_shipping_country_list($_SESSION['delivery_country'], $_SESSION['selected_region']);
 					?>
 							</div>
 							<?php
 				echo "  </td>\n\r";
 				echo "<td>";
-				echo "<input type='submit' onclick='' value='".TXT_WPSC_CALCULATE."'>";
+				echo "<input type='submit' onclick='' value='Rate'>";
 				echo "</td>";
 				echo "</form>";
-				echo "</tr>\n\r";
+    echo "</tr>\n\r";
 		}
-		// if shipping is on and not all the items have no shipping or are memberships 
-	 if((get_option('do_not_use_shipping') == 0) && ($all_memberships != true) && ($all_no_shipping != true)) {
-			// get the list of active shipping modules
-			$custom_shipping = get_option('custom_shipping_options');
-			foreach((array)$custom_shipping as $shipping) {
-			  // if the shipping module does not require a weight, or requires one and the weight is larger than zero
-				if(($wpsc_shipping_modules[$shipping]->requires_weight != true) or (($wpsc_shipping_modules[$shipping]->requires_weight == true) and (shopping_cart_total_weight() > 0))) {
-					$shipping_quotes[$shipping] = $wpsc_shipping_modules[$shipping]->getQuote(true);
-				}
+	
+		//// usps changes
+		$custom_shipping = get_option('custom_shipping_options');
+		foreach((array)$custom_shipping as $shipping) {
+			foreach ($wpsc_shipping_modules as $available_shipping) {
+				if ($shipping == $available_shipping->internal_name)
+					$shipping_quotes[$available_shipping->internal_name] = $available_shipping->getQuote();
+				
 			}
-		
-			// if the selected shipping method is not active, clear it
-			if(array_search($_SESSION['quote_shipping_method'], $custom_shipping) === false) {
-			  unset($_SESSION['quote_shipping_method']);
-			  unset($_SESSION['quote_shipping_option']);
-			}
-			
-		// what does this do?
-		$_SESSION['uspsQuote']=$shipping_quotes;
-		
-		
-		$i=0;
-		$shipping_is_selected = false;
-		// if there is a form of shipping selected, set this to true
-		if(($_SESSION['quote_shipping_method'] != null) && ($_SESSION['quote_shipping_option']  != null)) {
-			$shipping_is_selected = true;
 		}
-		foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
-			$shipping_method_name = $wpsc_shipping_modules[$key1]->name;
-			echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name ".TXT_WPSC_CHOOSE_A_SHIPPING_RATE."</td></tr>";
-			if (empty($shipping_quote)) {
-				echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
-			}
+ 	//echo ('<pre>'.print_r($shipping_quotes,1)."</pre>");
+ 	//echo ('<pre>'.print_r($_SESSION['quote_shipping_option'],1)."</pre>");
+	$_SESSION['uspsQuote']=$shipping_quotes;
+	$i=0;
+	$shipping_is_selected = false;
+	if(($_SESSION['quote_shipping_method'] != null) && ($_SESSION['quote_shipping_option']  != null)) {
+	  $shipping_is_selected = true;
+	}
+	foreach ((array)$shipping_quotes as $key1 => $shipping_quote) {
+ 	  $shipping_method_name = $wpsc_shipping_modules[$key1]->name;
+		echo "<tr><td class='shipping_header' colspan='4'>$shipping_method_name</td></tr>";
+		if (empty($shipping_quote)) {
+			echo "<tr><td colspan='4'>No Shipping Data available</td></tr>";
+		}
+		foreach ((array)$shipping_quote as $quotes) {
 			$j=0;
-			foreach ((array)$shipping_quote as $quotes) {
-				foreach((array)$quotes as $key=>$quote) {
-					if($shipping_is_selected == true) {
-						if(($_SESSION['quote_shipping_method'] == $key1) && ($_SESSION['quote_shipping_option']  == $key)) {
-							$selected = "checked='checked'";
-						} else {
-							$selected ="";
-						}
+			foreach((array)$quotes as $key=>$quote) {
+				if($shipping_is_selected == true) {
+				  if(($_SESSION['quote_shipping_method'] == $key1) && ($_SESSION['quote_shipping_option']  == $key)) {
+						$selected = "checked='checked'";
+				  } else {
+						$selected ="";
+				  }
+				} else {
+					if (($i == 0) && ($j == 0)) {
+						$selected = "checked='checked'";
 					} else {
-						if (($i == 0) && ($j == 0)) {
-							$selected = "checked='checked'";
-						} else {
-							$selected ="";
-						}
+						$selected ="";
 					}
-					
-					echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
-					$j++;
 				}
+				echo "<tr><td colspan='2'><label for='{$key1}_{$j}'>".$key."</label></td><td><label for='{$key1}_{$j}'>".nzshpcrt_currency_display($quote,1)."</label></td><td style='text-align:center;'><input type='radio' id='{$key1}_{$j}' $selected onclick='switchmethod(\"$key\", \"$key1\")' value='$quote' name='shipping_method'></td></tr>";
+				$j++;
 			}
-			$i++;
 		}
-  }  // shipping section ends here
-    
+		$i++;
+	}
+	// usps changes ends
     
   //echo "<tr style='total-price'>\n\r";
 	if($tax > 0) {
+		echo "<tr class='total_price'>\n\r";
+		echo "  <td colspan='2'>\n\r";
+		echo "".TXT_WPSC_TAX.":";
+		echo "  </td>\n\r";
+		echo "  <td colspan='2' id='checkout_tax' style='vertical-align: middle;'>\n\r";
+		echo "" . nzshpcrt_currency_display($tax, 1) . "";
+		echo "  </td>\n\r";
+		echo "</tr>\n\r";
 		$total += $tax;
-		$tax_row_style = '';
-	} else {
-		$tax_row_style = "style='display: none;'";
-  }
-	echo "<tr class='total_price total_tax'>\n\r";
-	echo "  <td colspan='2' $tax_row_style>\n\r";
-	echo "".TXT_WPSC_TAX.":";
-	echo "  </td>\n\r";
-	echo "  <td colspan='2' id='checkout_tax' $tax_row_style>\n\r";
-	echo "" . nzshpcrt_currency_display($tax, 1) . "";
-	echo "  </td>\n\r";
-	echo "</tr>\n\r";
-
+	}
 	if ($_SESSION['coupon_num']) {
 		echo "<tr class='total_price'>\n\r";
 		echo "  <td colspan='2'>\n\r";
@@ -353,22 +355,8 @@ $cart = $_SESSION['nzshpcrt_cart'];
 		$_SESSION['nzshpcrt_totalprice'] = $total;
 	}
   
-	//Here is the code I changed for fix Google Checkout bug. - Allen Han	
-	$gateway_options = get_option('custom_gateway_options');
-  if(array_search("google",(array)$gateway_options) !== false) {
-  		if (get_option('google_button_size') == '0'){
-			$google_button_size = 'BIG';
-		} elseif(get_option('google_button_size') == '1') {
-			$google_button_size = 'MEDIUM';
-		} elseif(get_option('google_button_size') == '2') {
-			$google_button_size = 'SMALL';
-		}
-		$google_cart = unserialize($_SESSION['google_shopping_cart']);
-     echo $google_cart->CheckoutButtonCode($google_button_size);
-  } else {
-		echo "<h2>".TXT_WPSC_ENTERDETAILS."</h2>";
-		include('checkout.php');
-	}
+	echo "<h2>".TXT_WPSC_ENTERDETAILS."</h2>";
+	include('checkout.php');
 } else {
 	echo TXT_WPSC_NOITEMSINTHESHOPPINGCART;
 }

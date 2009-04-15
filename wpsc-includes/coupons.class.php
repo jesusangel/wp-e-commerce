@@ -1,4 +1,14 @@
 <?php
+
+/**
+* uses coupons function, no parameters
+* @return boolean if true, all items in the cart do use shipping
+*/
+function wpsc_uses_coupons() {
+	global $wpsc_coupons;
+	return $wpsc_coupons->uses_coupons();
+}
+
 /**
  * Coupons class.
  *
@@ -40,7 +50,7 @@ class wpsc_coupons {
 			$coupon_data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}wpsc_coupon_codes WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
 			$coupon_data = $coupon_data[0];
 			
-			if ($coupon_data == '') {
+			if ($coupon_data == '' || $coupon_data == NULL) {
 				return false;
 			} else {
 				$this->value = $coupon_data['value'];
@@ -78,31 +88,42 @@ class wpsc_coupons {
 	
 	
 	function calculate_discount() {
-		global $wpdb;
+		global $wpdb, $wpsc_cart;
 		
 		if ($this->conditions == '') {
 			//Calculates the discount for the whole cart if there is no condition on this coupon.
 			if ($this->is_percentage == '1') {
-				$total_price = nzshpcrt_overall_total_price_numeric();
+				$total_price = $wpsc_cart->calculate_total_price();
 				$this->discount = $total_price*$this->value/100;
 				return $this->discount;
 			} else {
 				return $this->value;
 			}
 		} else {
+		
 			//Loop throught all products in the shopping cart, apply coupons on the ones match the conditions. 
-			$cart  =& $_SESSION['nzshpcrt_cart'];
-			foreach ($cart as $key => $item) {
+			$cart  =& $wpsc_cart->have_cart_items();
+		//	exit('<pre>'.print_r($cart->, true).'</pre>');
+			/*
+foreach($wpsc_cart->cart_items as $key => $cart_item) {
+				echo '<pre>'.print_r($cart_item, true).'</pre>';
+			}
+*/
+			foreach ($wpsc_cart->cart_items as $key => $item) {
 				$match = true;
+				
 				$product_data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list WHERE id='{$item->product_id}'");
 				$product_data = $product_data[0];
+			
 				foreach ($this->conditions as $c) {
+					
 					//Check if all the condictions are returning true, so it's an ALL logic, if anyone want to implement a ANY logic please do.
 					$match = $match && $this->compare_logic($c, $item);
 				}
 				if ($match) {
 				    if ($this->is_percentage == '1') {
 						$this->discount = $product_data->price*$item->quantity*$this->value/100;
+					
 						$item->discount = $this->discount;
 						$return += $this->discount;
 						//echo $item->discount."-";
@@ -130,6 +151,7 @@ class wpsc_coupons {
 		if ($c['property'] == 'item_name') {
 			$product_data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list WHERE id='{$product_obj->product_id}'");
 			$product_data = $product_data[0];
+		
 			switch($c['logic']) {
 				case 'equal': //Checks if the product name is exactly the same as the condition value
 				if ($product_data->name == $c['value']) {
@@ -241,7 +263,20 @@ class wpsc_coupons {
 		}
 	}
 	
+	/**
+	* uses coupons function, no parameters
+	* @return boolean if true, items in the cart do use coupons
+	*/
+	function uses_coupons() {
+		global $wpdb;
+		$coupon_info = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'wpsc_coupon_codes WHERE active="1"',ARRAY_A);
+		if($coupon_info != NULL){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	
-	
+		
 }
 ?>

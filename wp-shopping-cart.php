@@ -57,6 +57,9 @@ require(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
+//coupons
+require(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
+
 if (!IS_WP25) {
 	require(WPSC_FILE_PATH.'/editor.php');
 } else { 

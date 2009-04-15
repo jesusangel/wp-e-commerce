@@ -149,7 +149,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						$report = get_option('wpsc_email_admin');
 						$report_product_list.= " - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n";
 				}
-				
+			
 				// Decrement the stock here
 				if (($purchase_log['processed'] >= 2)) {
 					wpsc_decrement_claimed_stock($purchase_log['id']);
@@ -170,12 +170,15 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			// $message.= "\n\r";
 				$product_list.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
 				if($purchase_log['discount_value'] > 0) {
-					$discount_email.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
+					$discount_email.= TXT_WPSC_DISCOUNT."\n\r: ";
+					$discount_email .=$purchase_log['discount_data'].' : '.nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
 				$total_shipping_email.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
 				$total_price_email.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total,1,true)."\n\r";
 				$product_list_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
 				if($purchase_log['discount_value'] > 0) {
+					$report.= $discount_email."\n\r";
+
 					$total_shipping_html.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
 				$total_shipping_html.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n";
@@ -242,6 +245,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
+					//exit($report);
 					wp_mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')."");
 				}
 

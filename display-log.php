@@ -776,7 +776,11 @@ if($_GET['filter'] !== 'true') {
 			echo " <td>";
 			echo TXT_WPSC_TAX;
 			echo " </td>";
-
+			
+			echo " <td>";
+			echo TXT_WPSC_DISCOUNT;
+			echo " </td>";
+			
 			echo " <td>";
 			echo TXT_WPSC_SHIPPING;
 			echo " </td>";
@@ -881,7 +885,18 @@ if($_GET['filter'] !== 'true') {
 				$endtotal += $tax;
 				echo nzshpcrt_currency_display($tax, 1);
 				echo " </td>";
-
+				//discount used
+				$sql = "SELECT `condition` FROM `{$wpdb->prefix}wpsc_coupon_codes` WHERE `coupon_code` ='".$purch_data[0]['discount_data']."' AND active=1";
+				//exit($sql);
+				$conditions = $wpdb->get_var($sql);
+				$conditions = unserialize($conditions);
+				if($conditions[0]['property'] == 'item_name' && $conditions[0]['logic'] == 'equal' && $conditions[0]['value'] == stripslashes($cart_row['name'])){
+				echo "<td>-".$purch_data[0]['discount_value']."</td>";
+				}else{
+				echo "<td>NA</td>";
+				}
+			//	exit('<pre>'.print_r($conditions, true).'</pre>');
+				
 				echo " <td>";
 				echo nzshpcrt_currency_display($cart_row['pnp'], 1);
 				echo " </td>";
@@ -910,7 +925,8 @@ if($_GET['filter'] !== 'true') {
 				echo " <td>";
 				
 				if($purch_data[0]['discount_value'] > 0) {
-					echo "<strong>".TXT_WPSC_DISCOUNT.":</strong><br />"; 
+					echo "<strong>Coupon Used:</strong><br />";
+			
 				}
 				
 				
@@ -929,7 +945,7 @@ if($_GET['filter'] !== 'true') {
 		
 				echo " <td>";
 				if($purch_data[0]['discount_value'] > 0) {
-					echo nzshpcrt_currency_display($purch_data[0]['discount_value'], 1)."<br />";
+					echo $purch_data[0]['discount_data'].'<br />';//nzshpcrt_currency_display($purch_data[0]['discount_value'], 1)."<br />";
 				}
 									
 				if(($all_donations == false) && ($all_no_shipping == false)) {

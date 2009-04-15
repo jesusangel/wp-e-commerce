@@ -23,7 +23,14 @@ function wpsc_cart_item_count() {
 	global $wpsc_cart;
 	return count($wpsc_cart->cart_items);
 }
-
+/**
+* coupon amount function, no parameters
+* * @return integer the item count
+*/
+function wpsc_coupon_amount() {
+	global $wpsc_cart;
+	return $wpsc_cart->process_as_currency($wpsc_cart->coupons_amount);
+}
 /**
 * cart total function, no parameters
 * @return string the total price of the cart, with a currency sign
@@ -33,6 +40,7 @@ function wpsc_cart_total() {
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
 	$total += $wpsc_cart->calculate_total_tax();
+	$total -= $wpsc_cart->coupons_amount;
 	return $wpsc_cart->process_as_currency($total);
 }
 
@@ -336,6 +344,9 @@ class wpsc_cart {
 	var $current_shipping_quote = -1;
 	var $in_the_quote_loop = false;
 	
+	//coupon variable
+	var $coupons_name = '';
+	var $coupons_amount = 0;
 	
   function wpsc_cart() {
     global $wpdb, $wpsc_shipping_modules;
@@ -698,7 +709,9 @@ class wpsc_cart {
 			$total = $this->calculate_subtotal();
 			$total += $this->calculate_total_shipping();
 			$total += $this->calculate_total_tax();
+			$total -= $this->coupons_amount;
 			$this->total_price = $total;
+			//exit($this->coupons_amount);
 		} else {
 		  $total = $this->total_price;
 		}
@@ -900,6 +913,8 @@ class wpsc_cart {
 		foreach($this->cart_items as $key => $cart_item) {
 		  $cart_item->save_to_db($purchase_log_id);
 		}
+		unset($this->coupons_amount);
+		unset($this->coupons_name);
   }
   
   /**
@@ -1018,6 +1033,17 @@ class wpsc_cart {
 		if ($this->shipping_quote_count > 0) {
 			$this->shipping_quote = $this->shipping_quotes[0];
 		}
+	}
+	
+	/**
+	 * Applying Coupons
+	 */
+	function apply_coupons($couponAmount, $coupons){
+		//exit('coupon amount'.$couponAmount);
+		$this->clear_cache();
+		$this->coupons_name = $coupons;
+		$this->coupons_amount = $couponAmount;
+		$this->calculate_total_price();
 	}
 }
 
@@ -1318,7 +1344,7 @@ class wpsc_cart_item {
 		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message));
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
 		
-		foreach($this->variation_data as $variation_row) {
+		foreach((array)$this->variation_data as $variation_row) {
 			$wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_variations` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation_row['variation_id']."', '".$variation_row['id']."' );");
 		}
 		
