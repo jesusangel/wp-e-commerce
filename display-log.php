@@ -849,12 +849,6 @@ if($_GET['filter'] !== 'true') {
 					$shipping = 0;
 				}
 				
-				if($cart_row['files'] != null) {
-				  $file_data = unserialize($cart_row['files']);
-				  if(is_array($file_data)) {
-				    $file_link_list[] = "<a href='".WPSC_USER_UPLOADS_URL.$file_data['file_name']."'>{$product_data[0]['name']} </a><br />";
-				  }
-				}
 				echo "<tr $alternate>";
 		
 				echo " <td>";
@@ -908,12 +902,25 @@ if($_GET['filter'] !== 'true') {
 							
 				echo '</tr>';
 				
+				if((unserialize($cart_row['files']) != null) || ($cart_row['custom_message'] != null)) {
 				echo "<tr $alternate>";
-				echo " <td colspan='7' style='padding: 0px 4px 0px 4px;'>";
-				echo "<strong>".TXT_WPSC_CUSTOM_TEXT.":</strong>";
-				echo "<p style='margin: 0px;'>".$cart_row['custom_message']."</p>";
+				echo " <td colspan='8' style='padding: 0px 4px 0px 4px;'>";
+				
+				  if($cart_row['custom_message'] != null) {
+						echo "<strong>".TXT_WPSC_CUSTOM_TEXT.":</strong>";
+						echo "<p style='margin: 0px;'>".$cart_row['custom_message']."</p>";
+					}
+					if(unserialize($cart_row['files']) != null) {
+					  echo "<strong>".TXT_WPSC_CUSTOM_FILE.":</strong><br />";
+						$file_data = unserialize($cart_row['files']);
+						if(is_array($file_data)) {
+							echo "<a href='".WPSC_USER_UPLOADS_URL.$file_data['file_name']."'>".TXT_WPSC_DOWNLOAD_ATTACHED_FILES."</a><br />";
+						}
+					}
+				echo " <br />";
 				echo " </td>";
 				echo '</tr>';
+				}
 				
 				
 				}
@@ -969,16 +976,6 @@ if($_GET['filter'] !== 'true') {
 				
 			echo "</table>";
 			echo "<br />";
-			
-			
-			if(count($file_link_list) > 0) {
-			  echo "<p>\n\r";
-				echo "  <strong>".TXT_WPSC_DOWNLOAD_ATTACHED_FILES."</strong><br />\n\r";
-			  foreach($file_link_list as $file_link) {
-			    echo "{$file_link}\n\r";
-			  }
-			  echo "</p>\n\r";
-			}
 			
 			if (IS_WP27) {
 				echo "<div class='purchase_detail'>";

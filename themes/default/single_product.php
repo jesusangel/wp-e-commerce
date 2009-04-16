@@ -84,14 +84,16 @@ $image_height = get_option('single_view_image_height');
 					
 					<?php if(wpsc_product_has_personal_text()) : ?>
 						<div class='custom_text'>
-							<h4><?php echo TXT_WPSC_CUSTOM_TEXT; ?></h4>
+							<h4><?php echo TXT_WPSC_PERSONALIZE_YOUR_PRODUCT; ?></h4>
+							<?php echo TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION; ?><br />
 							<input type='text' name='custom_text' value=''  />
 						</div>
 					<?php endif; ?>
 					
 					<?php if(wpsc_product_has_supplied_file()) : ?>
 						<div class='custom_file'>
-							<h4><?php echo TXT_WPSC_CUSTOM_FILE; ?></h4>
+							<h4><?php echo TXT_WPSC_UPLOAD_A_FILE; ?></h4>
+							<?php echo TXT_WPSC_UPLOAD_A_FILE_DESCRIPTION; ?><br />
 							<input type='file' name='custom_file' value=''  />
 						</div>
 					<?php endif; ?>

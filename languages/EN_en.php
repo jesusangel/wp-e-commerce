@@ -2,7 +2,18 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+
 define('TXT_WPSC_CATEGORY_TARGETMARKET','Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above.');
+define('TXT_WPSC_UPLOAD_A_FILE', 'Upload a File');
+define('TXT_WPSC_UPLOAD_A_FILE_DESCRIPTION', 'Select a file from your computer to include with this purchase.  ');
+define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT', 'Personalize your product');
+define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Complete this form to include a personalized message with your purchase.');
+
+define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information"); 
+define('TXT_WPSC_ECOMMERCE', 'Products'); 
+define('TXT_WPSC_PRODUCTS', 'Manage Products'); 
+define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
+
 define('TXT_WPSC_COUPONS', 'Coupon Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
 define('TXT_WPSC_CUSTOM_TEXT', 'Custom Text');
@@ -13,6 +24,8 @@ define('TXT_WPSC_INTENSE_DEBATE_ACCOUNT_ID', 'IntenseDebate Account ID');
 
 define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS', 'Enable Comments');
 define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS_INFO', 'Allow users to comment on this product.');
+
+
 
 
 define("TXT_WPSC_HOW_DID_YOU_FIND_US_WOM", "Word of mouth");
@@ -317,7 +330,7 @@ define('TXT_WPSC_OPTIONS_SHIPPING_TAB', 'Shipping');
 define('TXT_WPSC_OPTIONS_PAYMENT_TAB', 'Payment');
 define('TXT_WPSC_OPTIONS_ADMIN_TAB', 'Admin');
 define('TXT_WPSC_OPTIONS_MARKETING_TAB', 'Marketing');
-define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached files');
+define('TXT_WPSC_DOWNLOAD_ATTACHED_FILES', 'Download attached file');
 
 define('TXT_WPSC_ADMIN_SEARCH_PRODUCTS', 'Search for a Product');
 define('TXT_WPSC_CHOOSE_PAYMENT_GATEWAYS', 'Activate the payment gateways that you want to make available to your customers by selecting them below.');

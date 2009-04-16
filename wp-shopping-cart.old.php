@@ -123,6 +123,7 @@ class wp_shopping_cart {
 			}			//exit('-->'.$help);
 			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
 			if (function_exists('add_contextual_help')) {
+
 				add_contextual_help(WPSC_DIR_NAME.'/display-log',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/sales/'>About this page</a>");
 
 				add_contextual_help(WPSC_DIR_NAME.'/display-category',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/product-groups/'>About this page</a>");
@@ -133,7 +134,7 @@ class wp_shopping_cart {
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/admin-settings/'>Admin Options</a> <br />
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/shipping/'>Shipping Options</a> <br />
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment Options</a> <br />");
-				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
+				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");;
 			}
 
 			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
@@ -707,36 +708,6 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		exit();
 	}
 
-		////changes for usps
-// 		if ($_POST['uspsswitch']) {
-// 			$total=$_POST['total'];
-// 			$quotes = $_SESSION['uspsQuote'];
-// 			$_SESSION['quote_shipping_method']= $_POST['key1'];
-// 			$_SESSION['quote_shipping_option']= $_POST['key'];
-// 			//echo "<pre>".print_r($quotes,1)."</pre>";
-// 			foreach ($quotes[$_POST['key1']] as $quote) {
-// 				if ($quote[$_POST['key']] !== null) {
-// 				
-// 					echo nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-// 					echo "---";					
-// 					
-// 					$total_shipping = nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
-// 					if($_SESSION['quote_shipping_method'] == 'flatrate') {
-// 						foreach((array)$_SESSION['nzshpcrt_cart'] as $cart_item) {
-// 							$product_id = $cart_item->product_id;
-// 							$quantity = $cart_item->quantity;
-// 							$total_shipping += nzshpcrt_determine_item_shipping($product_id, $quantity, $_SESSION['delivery_country']);
-// 						}
-// 			    }
-// 					echo nzshpcrt_currency_display($total_shipping, true);
-// 					echo "<input type='hidden' value='".$total."' id='shopping_cart_total_price'>";
-// 					$_SESSION['quote_shipping']= nzshpcrt_determine_base_shipping(0,$_SESSION['delivery_country']);
-// 					$_SESSION['quote_shipping_total'] = nzshpcrt_overall_total_price($_SESSION['delivery_country'],true,false,$total);
-// 				}
-// 			}
-// 			exit();
-// 		}
-		//changes for usps ends
 
 	if(($_GET['user'] == "true") && is_numeric($_POST['prodid'])) {
 		if(function_exists('wpsc_members_init')) {
@@ -1767,145 +1738,6 @@ function nzshpcrt_product_list_rss_feed() {
 	}
   echo "<link rel='alternate' type='application/rss+xml' title='".get_option('blogname')." Product List RSS' href='".get_option('siteurl')."/index.php?rss=true&amp;action=product_list$selected_category'/>";
 }
-
-
-//handles replacing the tags in the pages
-  
-function nzshpcrt_products_page($content = '') {
-  global $wpsc_query;
-  //if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('nzshpcrt_products_page','start');}
-  //exit(htmlentities($content));
-  if(preg_match("/\[productspage\]/",$content)) {
-    
-    
-//     if(get_option('wpsc_use_theme_engine') == TRUE) {
-			$wpsc_query->get_products();
-			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-			ob_start();
-			if(wpsc_is_single_product()) {
-				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/single_product.php");
-			} else {
-				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/products_page.php");
-			}
-			$output = ob_get_contents();
-			ob_end_clean();
-			$output = str_replace('$','\$', $output);
-//     } else {
-// 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-// 			ob_start();
-// 			include_once(WPSC_FILE_PATH . "/products_page.php");
-// 			$output = ob_get_contents();
-// 			ob_end_clean();
-//     }
-    return preg_replace("/(<p>)*\[productspage\](<\/p>)*/",$output, $content);
-	} else {
-    return $content;
-	}
-}
-
-function nzshpcrt_shopping_cart($content = '') {
-		//exit($content);
-  if(preg_match("/\[shoppingcart\]/",$content)) {
-//   if(get_option('wpsc_use_theme_engine') == TRUE) {
-			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-			ob_start();
-			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/shopping_cart_page.php");
-			$output = ob_get_contents();
-			ob_end_clean();
-			$output = str_replace('$','\$', $output);
-//     } else {
-// 			ob_start();
-// 			include_once(WPSC_FILE_PATH . "/shopping_cart.php");
-// 			$output = ob_get_contents();
-// 			ob_end_clean();
-//     }
-    return preg_replace("/(<p>)*\[shoppingcart\](<\/p>)*/",$output, $content);
-	} else {
-    return $content;
-	}
-}
-  
-
-function nzshpcrt_checkout($content = '') {
-  if(preg_match("/\[checkout\]/",$content)) {
-    ob_start();
-    include_once(WPSC_FILE_PATH . "/checkout.php");
-    $output = ob_get_contents();
-    ob_end_clean();
-    return preg_replace("/(<p>)*\[checkout\](<\/p>)*/",$output, $content);
-	} else {
-    return $content;
-	}
-}
-
-function nzshpcrt_transaction_results($content = '') {
-  if(preg_match("/\[transactionresults\]/",$content)) {
-    ob_start();
-    include_once(WPSC_FILE_PATH . "/transaction_results.php");
-    $output = ob_get_contents();
-    ob_end_clean();
-    return preg_replace("/(<p>)*\[transactionresults\](<\/p>)*/",$output, $content);
-	} else { 
-    return $content;
-	}
-}
-  
-function nzshpcrt_user_log($content = '') {
-  if(preg_match("/\[userlog\]/",$content)) {
-    ob_start();
-    include_once(WPSC_FILE_PATH . '/user-log.php');
-    $output = ob_get_contents();
-    ob_end_clean();
-    return preg_replace("/(<p>)*\[userlog\](<\/p>)*/",$output, $content);
-	} else {
-    return $content;
-	}
-}
-  
-  
-//displays a list of categories when the code [showcategories] is present in a post or page.
-function nzshpcrt_show_categories($content = '') {
-  if(preg_match("/\[showcategories\]/",$content)) {
-    $GLOBALS['nzshpcrt_activateshpcrt'] = true;
-    $output = nzshpcrt_display_categories_groups();
-    return preg_replace("/(<p>)*\[showcategories\](<\/p>)*/",$output, $content);
-	} else {
-    return $content;
-	}
-}
-
-// substitutes in the buy now buttons where the shortcode is in a post.
-function nzshpcrt_substitute_buy_now_button($content = '') {
-  if(preg_match_all("/\[buy_now_button=([\d]+)\]/", $content, $matches)) {
-  //echo "<pre>".print_r($matches,true)."</pre>";
-    foreach($matches[1] as $key => $product_id) {
-      $original_string = $matches[0][$key];
-      //print_r($matches);
-      $output = wpsc_buy_now_button($product_id, true);  
-			$content = str_replace($original_string, $output, $content);
-    }
-	}	
-	return $content;
-}
-
-/* 19-02-09
- * add to cart shortcode function used for shortcodes calls the function in
- * product_display_functions.php
- */
-function add_to_cart_shortcode($content = '') {
-		//exit($content);
-  if(preg_match_all("/\[add_to_cart=([\d]+)\]/",$content, $matches)) {
-    	foreach($matches[1] as $key => $product_id){
-  			$original_string = $matches[0][$key];
-  			$output = wpsc_add_to_cart_button($product_id, true);  
-			$content = str_replace($original_string, $output, $content);
-  	}
-  }
-    return $content;	
-}
-
-
-
 
 
 

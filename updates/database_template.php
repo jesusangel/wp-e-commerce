@@ -334,7 +334,7 @@ $wpsc_database_template[$table_name]['columns']['every_product'] = "varchar(255)
 $wpsc_database_template[$table_name]['columns']['start'] = "datetime NOT NULL";
 $wpsc_database_template[$table_name]['columns']['expiry'] = "datetime NOT NULL";
 //condtion
-$wpsc_database_template[$table_name]['columns']['condition'] = " text NULL DEFAULT ''";
+$wpsc_database_template[$table_name]['columns']['condition'] = " text NULL";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['coupon_code'] = " KEY `coupon_code` ( `coupon_code` )";
 $wpsc_database_template[$table_name]['indexes']['active'] = " KEY `active` ( `active` )";

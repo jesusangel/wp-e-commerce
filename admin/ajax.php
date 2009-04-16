@@ -1,7 +1,7 @@
 <?php
 function wpsc_purchase_log_csv() {
   global $wpdb,$user_level,$wp_rewrite;
-  get_currentuserinfo();  
+  get_currentuserinfo();
   if(($_GET['purchase_log_csv'] == "true") && ($_GET['rss_key'] == 'key') && is_numeric($_GET['start_timestamp']) && is_numeric($_GET['end_timestamp']) && ($user_level >= 7)) {
     $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
     $form_data = $wpdb->get_results($form_sql,ARRAY_A);

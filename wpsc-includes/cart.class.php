@@ -517,7 +517,10 @@ class wpsc_cart {
 				//loop through each cart item
 				foreach($this->cart_items as $key => $cart_item) {
 					// compare product ids and variations.
-					if(($cart_item->product_id == $new_cart_item->product_id) && ($cart_item->product_variations == $new_cart_item->product_variations) && ($cart_item->custom_message == $new_cart_item->custom_message)) {
+					if(($cart_item->product_id == $new_cart_item->product_id) &&
+					  ($cart_item->product_variations == $new_cart_item->product_variations) &&
+					  ($cart_item->custom_message == $new_cart_item->custom_message) &&
+					  ($cart_item->custom_file == $new_cart_item->custom_file)) {
 						// if they are the same, increment the count, and break out;
 						$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
 						$this->cart_items[$key]->refresh_item();
@@ -1303,8 +1306,9 @@ class wpsc_cart_item {
 					} while ($file_data['name'] == null);
 			  }
 			  //exit($file_data['name']);
+			  $unique_id =  sha1(uniqid(rand(), true));
 				if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) ) {
-					$this->custom_file = array('file_name' => $file_data['name'], 'mime_type' => $mime_type );			
+					$this->custom_file = array('file_name' => $file_data['name'], 'mime_type' => $mime_type, "unique_id" => $unique_id );			
 				}
 			}
 		}
@@ -1341,7 +1345,8 @@ class wpsc_cart_item {
 			$tax = 0;
 		}		
 		
-		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message));
+		$wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}cart_contents` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message, serialize($this->custom_file)));
+		
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
 		
 		foreach((array)$this->variation_data as $variation_row) {

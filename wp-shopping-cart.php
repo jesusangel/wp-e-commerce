@@ -51,8 +51,8 @@ if(get_option('language_setting') != '') {
 
 require(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
-//require(WPSC_FILE_PATH.'/wpsc-includes/extra.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
+require(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');

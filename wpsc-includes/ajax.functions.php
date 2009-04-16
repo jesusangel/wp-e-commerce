@@ -305,9 +305,10 @@ TXT_WPSC_CATEGORY_TARGETMARKET;
 			$total = $wpsc_cart->calculate_total_price();
 			
 			    
-//echo "INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '$wpsc_cart->coupons_amount','$wpsc_cart->coupons_name')";
-	    //echo "<br />";
-			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '$wpsc_cart->coupons_amount','$wpsc_cart->coupons_name')");
+
+			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')");
+			
+			
 			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}purchase_logs` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
 			//$purchase_log_id = 1;
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
@@ -316,13 +317,10 @@ TXT_WPSC_CATEGORY_TARGETMARKET;
 			
 			
 			if(get_option('permalink_structure') != '') {
-				$seperator ="?";
+				$seperator = "?";
 			} else {
-				$seperator ="&";
+				$seperator = "&";
 			}
-		
-			
-			
 			// submit to gateway
 			foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == $submitted_gateway ) {
@@ -332,7 +330,7 @@ TXT_WPSC_CATEGORY_TARGETMARKET;
           break;
         }
       }
-			exit();
+			exit('');
 		}
 	} else {
 	

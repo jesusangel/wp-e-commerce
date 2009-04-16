@@ -224,7 +224,7 @@ if($_POST['submit_action'] == 'add') {
 			
 		
 			
-      if(file_exists(WPSC_THUMBNAIL_DIR.basename($_POST['images'][0])) && ($_POST['images'][0] != '')) {
+      if(($_POST['images'][0] != '') && !file_exists(WPSC_THUMBNAIL_DIR.basename($_POST['images'][0]))) {
         $imagepath = WPSC_IMAGE_DIR . basename($_POST['images'][0]);
         $image_output = WPSC_THUMBNAIL_DIR . basename($_POST['images'][0]);
         switch($_POST['image_resize']) {
