@@ -1362,8 +1362,8 @@ td.select_gateway h4 {
 }
 
 td.select_gateway p {
-  padding-left: 8px;
-  margin: 0px 0px 4px 0px;
+  margin: 0px 15px 4px 5px;
+  border-top: 1px solid #e9e9e9;
 }
 
 td.select_gateway p input {
