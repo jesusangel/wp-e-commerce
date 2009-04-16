@@ -231,9 +231,9 @@ class wpsc_checkout {
   function validate_forms() {
    global $wpdb;
    $any_bad_inputs = false;
-		foreach($this->checkout_items as $form_data) {
+  		foreach($this->checkout_items as $form_data) {
 			$value = $_POST['collected_data'][$form_data->id];
-		  $value_id = (int)$value_id;
+		  	$value_id = (int)$value_id;
 			$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = $value;
 			$bad_input = false;
 			if(($form_data->mandatory == 1) || ($form_data->type == "coupon")) {

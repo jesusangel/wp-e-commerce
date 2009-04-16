@@ -129,35 +129,6 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "      </tr>\n\r";
 }
 
-   // Jeff 15-04-09 Used for category target market options
-	   
-    if($_POST['countrylist2'] != null){
-    	exit('Work in Progress.<br /><pre>'.print_r($_POST['countrylist2']).'</pre>');
-    	$AllSelected = false;
-    	if(in_array('all',$_POST['countrylist2'])){
-    		$countryList = $wpdb->get_col("SELECT `id` FROM  `".$wpdb->prefix."currency_list`");
-    		//$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = '1'");
-			//$AllSelected = true;
-    	}
-    	if(in_array('none', $_POST['countrylist2'])){
-    		$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = '0'");
-			$AllSelected = true;
-    	}
-    	if($AllSelected != true){
-	//		$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."wpsc_category_tm` ORDER BY country ASC ");
-			//find the countries not selected 
-			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
-			foreach($unselectedCountries as $unselected){
-	//			$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE id = '".$unselected."' LIMIT 1");
-			} 
-	
-			//find the countries that are selected
-			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
-			foreach($selectedCountries as $selected){
-			//	$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
-			}
- 		}
-	} 
 
   if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>"); 
@@ -244,6 +215,76 @@ function display_category_row($category,$subcategory_level = 0) {
     } else {
       echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
     }
+    
+   // Jeff 15-04-09 Used for category target market options
+	   
+    if($_POST['countrylist2'] != null){
+  		$catid = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."product_categories` WHERE `nice-name`='".$url_name."'");
+    	$AllSelected = false;
+    	
+    	if(in_array('all',$_POST['countrylist2'])){
+    		//get category id, counrtylist, 
+    	
+    		//exit($catid);
+    		$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+    		//echo $sql;
+    		$countryList = $wpdb->get_col($sql);
+    		//exit('<pre>'.print_r($countryList,true).'</pre>');
+    		foreach($countryList as $country){
+ 				//exit(print_r($country));   	
+    			$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1, categoryid=".$catid." AND countryid=".$country);
+    		}
+			$AllSelected = true;
+    	}
+    	if(in_array('none', $_POST['countrylist2'])){
+    	  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+	    	$countryList = $wpdb->get_col($sql);
+    		foreach($countryList as $country){
+    		$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 ,categoryid=".$catid." AND countryid=".$country);
+    		}
+			$AllSelected = true;
+    	}
+      	if($AllSelected != true){
+			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
+			//find the countries not selected 
+			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
+			$catid = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."product_categories` WHERE `nice-name`='".$url_name."'");
+			foreach($unselectedCountries as $unselected){
+				$sqlunselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 AND countryid = '".$unselected."', categoryid=".$catid;
+				$wpdb->query($sqlunselect);
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+				$sqlselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 AND countryid = '".$selected."', categoryid=".$catid;
+
+				$wpdb->query($sqlselect);
+			}
+		//	exit($sqlunselect.'<br />'.$sqlselect);
+ 		}
+    	/*
+if($AllSelected != true){
+    	//exit('Work in Progress.<br /><pre>'.print_r($_POST, true).'</pre>');
+			//find the countries not selected 
+		  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+	    	$countryList = $wpdb->get_col($sql);
+			$unselectedCountries = array_diff($countryList,$_POST['countrylist2']);
+			exit('<pre>'.print_r($unselectedCountries, true).'</pre>');
+			foreach($unselectedCountries as $unselected){
+		
+	//			
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+			//	$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
+			}
+
+ 		}*/
+	} 
+    
 	}
 
   if(($_POST['submit_action'] == "edit") && is_numeric($_POST['prodid'])) {
@@ -302,6 +343,51 @@ function display_category_row($category,$subcategory_level = 0) {
 			}
       $wp_rewrite->flush_rules(); 
 		}   
+	   // Jeff 15-04-09 Used for category target market options
+	   
+    if($_POST['countrylist2'] != null){
+  		
+    	$AllSelected = false;
+    	$catid = $wpdb->escape($_POST['prodid']);
+    	if(in_array('all',$_POST['countrylist2'])){
+    		//get category id, counrtylist, 
+    		$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+    		$countryList = $wpdb->get_col($sql);
+    		foreach($countryList as $country){
+ 				$sql ="UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 WHERE categoryid=".$catid." AND countryid=".$country;
+    		//	exit($sql);
+    			$wpdb->query($sql);
+    		}
+			$AllSelected = true;
+    	}
+    	if(in_array('none', $_POST['countrylist2'])){
+    	  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+	    	$countryList = $wpdb->get_col($sql);
+    		foreach($countryList as $country){
+    		$sql ="UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE categoryid=".$catid." AND countryid=".$country;
+    		//exit($sql);
+    		$wpdb->query($sql);
+    		}
+			$AllSelected = true;
+    	}
+      	if($AllSelected != true){
+			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
+			//find the countries not selected 
+			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
+			foreach($unselectedCountries as $unselected){
+				$sqlunselect = "UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE countryid = '".$unselected."' AND categoryid=".$catid;
+				$wpdb->query($sqlunselect);
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+				$sqlselect = "UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 WHERE countryid = '".$selected."' AND categoryid=".$catid;
+
+				$wpdb->query($sqlselect);
+			}
+		}
+	}
     
     if($_POST['description'] != $category_data['description']) {
       $description = $_POST['description'];
@@ -702,7 +788,7 @@ if(function_exists("getimagesize")) {
 		<?php
 }
 ?>
-	<?php  wpsc_category_tm(); ?>
+	<?php  wpsc_category_tm(); //category target market checkbox ?> 
     <tr>
       <td colspan='2' class='category_presentation_settings'>
         <h4><?php echo TXT_WPSC_PRESENTATIONSETTINGS;?></h4>

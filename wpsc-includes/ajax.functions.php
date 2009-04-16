@@ -255,9 +255,44 @@ function wpsc_submit_checkout() {
 	$selected_gateways = get_option('custom_gateway_options');
 	$submitted_gateway = $_POST['custom_gateway'];
 	$form_validity = $wpsc_checkout->validate_forms();
+//	exit('<pre>'.print_r($form_validity, true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
 	//exit("<pre>".print_r($submitted_gateway,true)."</pre>");
+	
+	
+	$selectedCountry = $_SESSION['wpsc_delivery_country'];
+	$sql="SELECT id, country FROM `{$wpdb->prefix}currency_list` WHERE isocode='".$selectedCountry."'";
+	$selectedCountry = $wpdb->get_results($sql, ARRAY_A);
+
+
+   foreach($wpsc_cart->cart_items as $cartitem){
+   //	exit('<pre>'.print_r($cartitem, true).'</pre>');
+   		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `{$wpdb->prefix}item_category_associations` WHERE product_id=".$cartitem->product_id);
+   		foreach((array)$categoriesIDs as $catid){
+   			$sql ="SELECT countryid FROM `{$wpdb->prefix}wpsc_category_tm` WHERE visible=0 AND categoryid=".$catid;
+   			//exit($sql);
+   			$countries = $wpdb->get_col($sql);
+   			//exit(print_r($selectedCountry).'<br />');
+   			//echo print_r($countries, true);
+   			if(in_array($selectedCountry[0]['id'], (array)$countries)){
+   					$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
+   					 /*
+TXT_WPSC_CATEGORY_TARGETMARKET;
+   					"Oops the product : ".$cartitem->product_name." cannot be shipped to ".$selectedCountry[0]['country']." to continue with your transaction please remove this product.";
+*/
+   			//	exit($errormessage);
+	   				$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
+					$is_valid = false;
+   				}
+   			//   				exit( $sql.'<br /><pre>'.print_r($countries, true).'</pre><br />');
+   		
+   
+   		}
+    }
+  
+	//exit('<pre>'.print_r($categoriesIDs, true).'</pre>');
 	if($is_valid == true) {
+	$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
 		if(array_search($submitted_gateway,$selected_gateways) !== false) {
 		

@@ -351,7 +351,40 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   $output .= "          </tr>\n\r";
+	 /* START OF TARGET MARKET SELECTION */					
+	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ",ARRAY_A);
+	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".$wpdb->prefix."wpsc_category_tm` WHERE categoryid=".$product['id']." AND visible= 1");
+//	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
+	$output .= " <tr>\n\r";
+	$output .= " 	<td colspan='2'><h4>Target Market Restrictions</h4></td></tr><tr>\n\r";
+	$output .= " 	<td>\n\r";
+	$output .= TXT_WPSC_TM.":\n\r";
+	$output .= " 	</td>\n\r";
+	$output .= " 	<td>\n\r";
+	$output .= " 	<div id='resizeable' class='ui-widget-content multiple-select'>\n\r";
+	$output .= " 	<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />\n\r";
+	$output .= " 		<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />\n\r";
 	
+		
+		foreach($countrylist as $country){
+			if(in_array($country['id'], $selectedCountries))
+			/* if($country['visible'] == 1) */{
+			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
+			}else{
+			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";
+			}
+				
+		}
+
+				
+		
+		$output .= " </div><br />\n\r";
+		$output .= " Select the markets you are selling this category to.\n\r";
+		$output .= " </td>\n\r";
+	
+	$output .= " </tr>\n\r";
+	////////
+
 	$output .= "          <tr>\n\r";
 	$output .= "          	<td colspan='2' class='category_presentation_settings'>\n\r";
 	$output .= "          		<h4>".TXT_WPSC_PRESENTATIONSETTINGS."</h4>\n\r";

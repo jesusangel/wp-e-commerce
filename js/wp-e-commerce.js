@@ -74,7 +74,7 @@ function submit_change_country(){
   document.forms.change_country.submit();
 }
 
-// submit the country forms.
+// submit the fancy notifications forms.
 function wpsc_fancy_notification(parent_form){
   if(typeof(WPSC_SHOW_FANCY_NOTIFICATION) == 'undefined'){
     WPSC_SHOW_FANCY_NOTIFICATION = true;

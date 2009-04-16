@@ -10,7 +10,6 @@ function nzshpcrt_submit_checkout() {
 	} else {
     $seperator ="&";
 	}
-	
   if(($_POST['submitwpcheckout'] == 'true')) {
     $check_checkout_page = $wpdb->get_var("SELECT `id` FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[checkout]%' LIMIT 1");
     if(is_numeric($check_checkout_page)) {
