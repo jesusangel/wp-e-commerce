@@ -232,7 +232,7 @@ function display_category_row($category,$subcategory_level = 0) {
     		//exit('<pre>'.print_r($countryList,true).'</pre>');
     		foreach($countryList as $country){
  				//exit(print_r($country));   	
-    			$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1, categoryid=".$catid." AND countryid=".$country);
+    			$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 AND categoryid=".$catid." AND countryid=".$country);
     		}
 			$AllSelected = true;
     	}
@@ -240,7 +240,7 @@ function display_category_row($category,$subcategory_level = 0) {
     	  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
 	    	$countryList = $wpdb->get_col($sql);
     		foreach($countryList as $country){
-    		$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 ,categoryid=".$catid." AND countryid=".$country);
+    			$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 AND categoryid=".$catid." AND countryid=".$country);
     		}
 			$AllSelected = true;
     	}
@@ -250,14 +250,14 @@ function display_category_row($category,$subcategory_level = 0) {
 			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
 			$catid = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."product_categories` WHERE `nice-name`='".$url_name."'");
 			foreach($unselectedCountries as $unselected){
-				$sqlunselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 AND countryid = '".$unselected."', categoryid=".$catid;
+				$sqlunselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 AND countryid = '".$unselected."' AND categoryid=".$catid;
 				$wpdb->query($sqlunselect);
 			} 
 	
 			//find the countries that are selected
 			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
 			foreach($selectedCountries as $selected){
-				$sqlselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 AND countryid = '".$selected."', categoryid=".$catid;
+				$sqlselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 AND countryid = '".$selected."' AND categoryid=".$catid;
 
 				$wpdb->query($sqlselect);
 			}
@@ -364,19 +364,28 @@ if($AllSelected != true){
     	  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
 	    	$countryList = $wpdb->get_col($sql);
     		foreach($countryList as $country){
-    		$sql ="UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE categoryid=".$catid." AND countryid=".$country;
+    			$sql ="UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE categoryid=".$catid." AND countryid=".$country;
     		//exit($sql);
     		$wpdb->query($sql);
+    		
     		}
 			$AllSelected = true;
     	}
       	if($AllSelected != true){
 			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
 			//find the countries not selected 
+		
 			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
+				//exit(count($_POST['countrylist2']).' + '.count($unselectedCountries).' = '.count($countrylist));
 			foreach($unselectedCountries as $unselected){
 				$sqlunselect = "UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE countryid = '".$unselected."' AND categoryid=".$catid;
-				$wpdb->query($sqlunselect);
+				
+				$success = $wpdb->query($sqlunselect);
+				if(!$success){
+    				$sqlunselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` (visible, countryid, categoryid) VALUES (0,'".$unselected."', '".$catid."' )";
+    				//exit($sqlunselect);
+    				$wpdb->query($sqlunselect);
+    			}
 			} 
 	
 			//find the countries that are selected
@@ -384,7 +393,11 @@ if($AllSelected != true){
 			foreach($selectedCountries as $selected){
 				$sqlselect = "UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 WHERE countryid = '".$selected."' AND categoryid=".$catid;
 
-				$wpdb->query($sqlselect);
+				$success = $wpdb->query($sqlselect);
+				if(!$success){
+    				$sqlselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm`(visible, countryid, categoryid) VALUES (0,'".$selected."', '".$catid.".' )";
+    				$wpdb->query($sqlselect);
+				}
 			}
 		}
 	}

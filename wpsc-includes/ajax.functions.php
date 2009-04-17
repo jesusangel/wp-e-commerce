@@ -268,19 +268,17 @@ function wpsc_submit_checkout() {
    foreach($wpsc_cart->cart_items as $cartitem){
    //	exit('<pre>'.print_r($cartitem, true).'</pre>');
    		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `{$wpdb->prefix}item_category_associations` WHERE product_id=".$cartitem->product_id);
+   		
    		foreach((array)$categoriesIDs as $catid){
-   			$sql ="SELECT countryid FROM `{$wpdb->prefix}wpsc_category_tm` WHERE visible=0 AND categoryid=".$catid;
-   			//exit($sql);
+   			$sql ="SELECT countryid FROM `{$wpdb->prefix}wpsc_category_tm` WHERE visible=0 AND categoryid=".$catid[0];
+   		//	exit($sql);
    			$countries = $wpdb->get_col($sql);
-   			//exit(print_r($selectedCountry).'<br />');
-   			//echo print_r($countries, true);
+   			//exit(print_r($countries));
    			if(in_array($selectedCountry[0]['id'], (array)$countries)){
    					$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
-   					 /*
-TXT_WPSC_CATEGORY_TARGETMARKET;
-   					"Oops the product : ".$cartitem->product_name." cannot be shipped to ".$selectedCountry[0]['country']." to continue with your transaction please remove this product.";
-*/
-   			//	exit($errormessage);
+   					
+
+   		//		exit($errormessage);
 	   				$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
 					$is_valid = false;
    				}
