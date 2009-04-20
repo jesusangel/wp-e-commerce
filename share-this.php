@@ -411,7 +411,7 @@ function wpsc_akst_share_link($action = 'print') {
   } else {
 		$permalink = get_permalink($post->ID);
 		if($wp_query->query_vars['product_name'] != null){
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 			$product_link = wpsc_product_url($product_id);
 		} else {
 			if(strstr($permalink, "?") !== false) {
@@ -521,7 +521,7 @@ function wpsc_akst_share_form() {
           <input type="hidden" name="wpsc_akst_post_id" id="wpsc_akst_post_id" value="<?php print($id); ?>" />
           <?php
 					if($wp_query->query_vars['product_name'] != '') {
-						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 					} else if(is_numeric($_GET['product_id'])){
 					  $product_id = (int)$_GET['product_id'];
 					}
@@ -615,7 +615,7 @@ function wpsc_akst_send_mail() {
     $message .= $name.__(' thinks this will be of interest to you:', 'alexking.org')."\n\n";
     //$message .= ak_decode_entities(get_the_title($post_id))."\n\n";
     if($wp_query->query_vars['product_name'] != '') {
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 			$message .= wpsc_product_url($product_id);
     } else {
 			if(strstr($permalink, "?") !== false) {
@@ -884,7 +884,7 @@ function wpsc_akst_page() {
           <input type="hidden" name="wpsc_akst_post_id" id="wpsc_akst_post_id" value="<?php print($id); ?>" />
           <?php
 					if($wp_query->query_vars['product_name'] != '') {
-						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 					} else if(is_numeric($_GET['product_id'])){
 					  $product_id = (int)$_GET['product_id'];
 					}

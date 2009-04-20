@@ -15,7 +15,7 @@
 <form action='?page=<?php echo $_GET['page']; ?>&amp;googlecheckoutshipping=1' method='POST'>
 <?php
 	$google_shipping_country = get_option("google_shipping_country");
-	$country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+	$country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
 	$country_data = array_chunk($country_data, 50);
 	echo "<table>\n\r";
 	echo "<tr>\n\r";

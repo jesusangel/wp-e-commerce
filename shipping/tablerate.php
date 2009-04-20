@@ -91,7 +91,7 @@ class tablerate {
 	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
 	  global $wpdb;
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
+      $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$product_id' LIMIT 1";
       $product_list = $wpdb->get_row($sql,ARRAY_A) ;
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping

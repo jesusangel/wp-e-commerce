@@ -5,13 +5,13 @@ function categorylist($group_id, $product_id = '', $unique_id = '', $category_id
 	*/
   global $wpdb;
   if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
   } else {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
 	}
   foreach((array)$values as $option) {
     if(is_numeric($product_id) && ($product_id > 0)) {
-      $category_assoc = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
+      $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
       //echo "<pre>".print_r($category_assoc,true)."</pre>";
       if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0)) {
         $selected = "checked='true'";
@@ -39,7 +39,7 @@ function nzshpcrt_country_list($selected_country = null) {
   if($selected_country == null) {
     $output = "<option value=''>".TXT_WPSC_PLEASE_SELECT."</option>";
 	}
-  $country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+  $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
   foreach ($country_data as $country) {
     $selected ='';
     if($selected_country == $country['isocode']) {
@@ -56,7 +56,7 @@ function nzshpcrt_region_list($selected_country = null, $selected_region = null)
     $selected_region = get_option('base_region');
 	}
   $output = "";
-  $region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$selected_country."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
+  $region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$selected_country."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
   if($region_list != null) {
     $output .= "<select name='base_region'>\n\r";
     $output .= "<option value=''>None</option>";
@@ -80,7 +80,7 @@ function nzshpcrt_form_field_list($selected_field = null)
   global $wpdb;
   $output = "";
   $output .= "<option value=''>Please choose</option>";
-  $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1';";
+  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
   foreach ((array)$form_data as $form) {
     $selected ='';
@@ -110,9 +110,9 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
   global $wpdb;
   $siteurl = get_option('siteurl'); 
   if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
 	} else {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
 	}
   foreach((array)$values as $option) {
     if($selected_id == $option['id']) {
@@ -131,12 +131,12 @@ function wpsc_uploaded_files()
   {
   global $wpdb;
   /*
-$product_files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list", ARRAY_A);
+$product_files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST."", ARRAY_A);
   foreach($product_files as $product_file){
   	$filelist[] = $product_file['file'];
   }
   $filelist = implode(',', $filelist);
-  $files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_files WHERE id IN ($filelist)", ARRAY_A);
+  $files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE id IN ($filelist)", ARRAY_A);
   $num = 0;
   foreach ($files as $file_data) {
   	if ($file_data != null){
@@ -155,7 +155,7 @@ $product_files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list",
     //filter out the dots, macintosh hidden files and any backup files
     if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old"))
       {
-      $file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".$wpdb->prefix."product_files` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
+      $file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
       if($file_data != null)
         {
         $dirlist[$num]['display_filename'] = $file_data['filename'];
@@ -178,7 +178,7 @@ function wpsc_select_product_file($product_id = null) {
   global $wpdb;
   //return false;
   $file_list = wpsc_uploaded_files();
-  $file_id = $wpdb->get_var("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '".$product_id."' LIMIT 1");
+  $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
   $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span>";
   $output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
   //$output .= "<div class='select_product_file'>";
@@ -205,7 +205,7 @@ function wpsc_select_variation_file($variation_ids, $variation_combination_id = 
   $file_list = wpsc_uploaded_files();
   $file_id = 0;
   if((int)$variation_combination_id > 0) {
-    $file_id = $wpdb->get_var("SELECT `file` FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '".(int)$variation_combination_id."' LIMIT 1");
+    $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '".(int)$variation_combination_id."' LIMIT 1");
   } else {
     $variation_combination_id = 0;
   }

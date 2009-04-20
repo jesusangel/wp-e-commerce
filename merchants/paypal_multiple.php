@@ -7,7 +7,7 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_multiple";
 
 function gateway_paypal_multiple($seperator, $sessionid) {
   global $wpdb;
-  $purchase_log = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
+  $purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 //exit(print_r($purchase_log,1));
 	if ($purchase_log['totalprice']==0) {
 		header("Location: ".get_option('transact_url').$seperator."sessionid=".$sessionid);
@@ -16,7 +16,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	
 // 	exit( nzshpcrt_overall_total_price($_SESSION['selected_country']));
 	
-  $cart_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='".$purchase_log['id']."'";
+  $cart_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='".$purchase_log['id']."'";
   $cart = $wpdb->get_results($cart_sql,ARRAY_A) ;
   //written by allen
   //exit("<pre>".print_r($cart,true)."</pre>");
@@ -36,7 +36,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   
   // look up the currency codes and local price
 
-  $currency_code = $wpdb->get_results("SELECT `code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
+  $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
   $local_currency_code = $currency_code[0]['code'];
   $paypal_currency_code = get_option('paypal_curcode');
   if($paypal_currency_code == '') {
@@ -90,14 +90,14 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		$i++;
 	} else {
 		foreach((array)$cart as $item) {
-			$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
+			$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
 			$product_data = $product_data[0];
 			if ((float)$item['price'] == 0 ) {
 				continue;
 			}
 			$variation_count = count($product_variations);
 			/*
-			$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$item['id']."'";
+			$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$item['id']."'";
 			$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 			$variation_count = count($variation_data);
 			if($variation_count >= 1) {
@@ -108,7 +108,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 						$variation_list .= ", ";
 					}
 					$value_id = $variation['value_id'];
-					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 					$variation_list .= $value_data[0]['name'];
 					$j++;
 				}
@@ -196,7 +196,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	}    
     
   // Change suggested by waxfeet@gmail.com, if email to be sent is not there, dont send an email address        
-  $email_data = $wpdb->get_results("SELECT `id`,`type` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1'",ARRAY_A);
+  $email_data = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1'",ARRAY_A);
   foreach((array)$email_data as $email) {
     $data['email'] = $_POST['collected_data'][$email['id']];
 	}
@@ -220,7 +220,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
     $output .= $key.'='.$value.$amp;
 	}
   if(get_option('paypal_ipn') == 0) { //ensures that digital downloads still work for people without IPN, less secure, though
-    //$wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
+    //$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
     }
 	//written by allen
   if ($is_member == '1') {
@@ -289,24 +289,24 @@ function nzshpcrt_paypal_ipn()
           switch($verification_data['payment_status']) {
             case 'Processed': // I think this is mostly equivalent to Completed
             case 'Completed':
-            $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
+            $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
             transaction_results($sessionid, false, $transaction_id);
             break;
 
             case 'Failed': // if it fails, delete it
-            $log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`='$sessionid' LIMIT 1");
-            $delete_log_form_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$log_id'";
+            $log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`='$sessionid' LIMIT 1");
+            $delete_log_form_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'";
             $cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
             foreach((array)$cart_content as $cart_item) {
-              $cart_item_variations = $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
+              $cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
 						}
-            $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$log_id'");
-            $wpdb->query("DELETE FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` IN ('$log_id')");
-            $wpdb->query("DELETE FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='$log_id' LIMIT 1");
+            $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'");
+            $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$log_id')");
+            $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$log_id' LIMIT 1");
             break;
             
             case 'Pending':      // need to wait for "Completed" before processing
-            $sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1";
+            $sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1";
             $wpdb->query($sql) ;
             break;
             

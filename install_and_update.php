@@ -76,7 +76,7 @@ function nzshpcrt_install()
     update_option('wpsc_minor_version', WPSC_MINOR_VERSION);
 	}
 
-  $currency_data  = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."currency_list`");
+  $currency_data  = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_CURRENCY_LIST."`");
   if($currency_data == 0) {
     $currency_array = explode("\n",$currency_sql);
     foreach($currency_array as $currency_row) {
@@ -84,19 +84,19 @@ function nzshpcrt_install()
 		}
 	}
 
-  $add_initial_category = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_categories`;",ARRAY_A);
+  $add_initial_category = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."`;",ARRAY_A);
   if($add_initial_category[0]['count'] == 0) {
-		$wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_categorisation_groups` (`id`, `name`, `description`, `active`, `default`) VALUES (1, 'Categories', 'Product Categories', '1', '1')");
-		$wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_categorisation_groups` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");	
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (1, 'Categories', 'Product Categories', '1', '1')");
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");	
 		
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `description`, `active`) VALUES ('1', '".TXT_WPSC_EXAMPLECATEGORY."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");    
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".TXT_WPSC_EXAMPLEBRAND."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('1', '".TXT_WPSC_EXAMPLECATEGORY."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");    
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".TXT_WPSC_EXAMPLEBRAND."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");
 	}
   
 
-  $purchase_statuses_data  = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."purchase_statuses`",ARRAY_A);
+  $purchase_statuses_data  = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PURCHASE_STATUSES."`",ARRAY_A);
   if($purchase_statuses_data[0]['count'] == 0) {
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."purchase_statuses` (`name` , `active` , `colour` ) 
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_STATUSES."` (`name` , `active` , `colour` ) 
     VALUES
     ('".TXT_WPSC_RECEIVED."', '1', ''),
     ('".TXT_WPSC_ACCEPTED_PAYMENT."', '1', ''),
@@ -104,89 +104,89 @@ function nzshpcrt_install()
     ('".TXT_WPSC_PROCESSED."', '1', '');");
 	}
 
-  $check_category_assoc = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."item_category_associations`;",ARRAY_A);
+  $check_category_assoc = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`;",ARRAY_A);
   if($check_category_assoc[0]['count'] == 0) {
-    $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active`=1";
+    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`=1";
     $product_list = $wpdb->get_results($sql,ARRAY_A);
     foreach((array)$product_list as $product) {
-      $results = $wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` (`product_id` , `category_id` ) VALUES ('".$product['id']."', '".$product['category']."');");
+      $results = $wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` (`product_id` , `category_id` ) VALUES ('".$product['id']."', '".$product['category']."');");
 		}
 	}
   
   
-  $add_regions = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."region_tax`");
+  $add_regions = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_REGION_TAX."`");
   // exit($add_regions);
   if($add_regions < 1) {
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Alberta', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'British Columbia', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Manitoba', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'New Brunswick', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Newfoundland', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Northwest Territories', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Nova Scotia', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Nunavut', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Ontario', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Prince Edward Island', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Quebec', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Saskatchewan', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Yukon', '', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Alabama', 'AL', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Alaska', 'AK', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Arizona', 'AZ', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Arkansas', 'AR', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'California', 'CA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Colorado', 'CO', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Connecticut', 'CT', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Delaware', 'DE', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Florida', 'FL', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Georgia', 'GA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Hawaii', 'HI', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Idaho', 'ID', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Illinois', 'IL', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Indiana', 'IN', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Iowa', 'IA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Kansas', 'KS', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Kentucky', 'KY', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Louisiana', 'LA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Maine', 'ME', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Maryland', 'MD', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Massachusetts', 'MA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Michigan', 'MI', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Minnesota', 'MN', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Mississippi', 'MS', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Missouri', 'MO', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Montana', 'MT', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Nebraska', 'NE', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Nevada', 'NV', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Hampshire', 'NH', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Jersey', 'NJ', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Mexico', 'NM', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New York', 'NY', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'North Carolina', 'NC', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'North Dakota', 'ND', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Ohio', 'OH', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Oklahoma', 'OK', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Oregon', 'OR', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Pennsylvania', 'PA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Rhode Island', 'RI', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'South Carolina', 'SC', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'South Dakota', 'SD', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Tennessee', 'TN', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Texas', 'TX', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Utah', 'UT', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Vermont', 'VT', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Virginia', 'VA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Washington', 'WA', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Washington DC', 'DC', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'West Virginia', 'WV', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Wisconsin', 'WI', '0')");
-    $wpdb->query("INSERT INTO `{$wpdb->prefix}region_tax` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Wyoming', 'WY', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Alberta', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'British Columbia', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Manitoba', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'New Brunswick', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Newfoundland', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Northwest Territories', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Nova Scotia', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Nunavut', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Ontario', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Prince Edward Island', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Quebec', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Saskatchewan', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Yukon', '', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Alabama', 'AL', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Alaska', 'AK', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Arizona', 'AZ', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Arkansas', 'AR', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'California', 'CA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Colorado', 'CO', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Connecticut', 'CT', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Delaware', 'DE', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Florida', 'FL', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Georgia', 'GA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Hawaii', 'HI', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Idaho', 'ID', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Illinois', 'IL', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Indiana', 'IN', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Iowa', 'IA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Kansas', 'KS', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Kentucky', 'KY', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Louisiana', 'LA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Maine', 'ME', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Maryland', 'MD', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Massachusetts', 'MA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Michigan', 'MI', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Minnesota', 'MN', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Mississippi', 'MS', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Missouri', 'MO', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Montana', 'MT', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Nebraska', 'NE', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Nevada', 'NV', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Hampshire', 'NH', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Jersey', 'NJ', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New Mexico', 'NM', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'New York', 'NY', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'North Carolina', 'NC', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'North Dakota', 'ND', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Ohio', 'OH', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Oklahoma', 'OK', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Oregon', 'OR', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Pennsylvania', 'PA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Rhode Island', 'RI', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'South Carolina', 'SC', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'South Dakota', 'SD', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Tennessee', 'TN', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Texas', 'TX', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Utah', 'UT', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Vermont', 'VT', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Virginia', 'VA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Washington', 'WA', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Washington DC', 'DC', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'West Virginia', 'WV', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Wisconsin', 'WI', '0')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_REGION_TAX."` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '136', 'Wyoming', 'WY', '0')");
 	}
     
     
-	$data_forms = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."collect_data_forms`",ARRAY_A);
+	$data_forms = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_CHECKOUT_FORMS."`",ARRAY_A);
 	if($data_forms[0]['count'] == 0) { 
-	$wpdb->query("INSERT INTO `".$wpdb->prefix."collect_data_forms` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`) VALUES ( '".TXT_WPSC_YOUR_BILLING_CONTACT_DETAILS."', 'heading', '0', '0', '', '1', 1),
+	$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`) VALUES ( '".TXT_WPSC_YOUR_BILLING_CONTACT_DETAILS."', 'heading', '0', '0', '', '1', 1),
 	( '".TXT_WPSC_FIRSTNAME."', 'text', '1', '1', '', '1', 2),
 	( '".TXT_WPSC_LASTNAME."', 'text', '1', '1', '', '1', 3),
 	( '".TXT_WPSC_ADDRESS."', 'address', '1', '0', '', '1', 4),
@@ -204,7 +204,7 @@ function nzshpcrt_install()
 	( '".TXT_WPSC_POSTAL_CODE."', 'text', '0', '0', '', '1', 17);");  
 		update_option('country_form_field', $country_form_id[0]['id']);
 		update_option('email_form_field', $email_form_id[0]['id']);
-		$wpdb->query("INSERT INTO `".$wpdb->prefix."collect_data_forms` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '".TXT_WPSC_PHONE."', 'text', '1', '0', '', '1', '8');");
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '".TXT_WPSC_PHONE."', 'text', '1', '0', '', '1', '8');");
 	}
 		
 		
@@ -393,15 +393,15 @@ function nzshpcrt_install()
    
    
    /* adds nice names for permalinks for products */
-   $check_product_names = $wpdb->get_results("SELECT `".$wpdb->prefix."product_list`.`id`, `".$wpdb->prefix."product_list`.`name`, `".$wpdb->prefix."wpsc_productmeta`.`meta_key` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."wpsc_productmeta` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."wpsc_productmeta`.`product_id` WHERE (`".$wpdb->prefix."wpsc_productmeta`.`meta_key` IN ('url_name') AND  `".$wpdb->prefix."wpsc_productmeta`.`meta_value` IN (''))  OR ISNULL(`".$wpdb->prefix."wpsc_productmeta`.`meta_key`)");  
+   $check_product_names = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id`, `".WPSC_TABLE_PRODUCT_LIST."`.`name`, `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE (`".WPSC_TABLE_PRODUCTMETA."`.`meta_key` IN ('url_name') AND  `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` IN (''))  OR ISNULL(`".WPSC_TABLE_PRODUCTMETA."`.`meta_key`)");  
   if($check_product_names != null) {
-    $sql_query = "SELECT `id`, `name` FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1')";
+    $sql_query = "SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1')";
     $sql_data = $wpdb->get_results($sql_query,ARRAY_A);    
     foreach((array)$sql_data as $datarow) {
       $tidied_name = trim($datarow['name']);
       $tidied_name = strtolower($tidied_name);
 			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);     
-      $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` LIKE 'url_name' AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+      $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` LIKE 'url_name' AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
       $extension_number = '';
       if($similar_names['count'] > 0) {
         $extension_number = (int)$similar_names['max_number']+1;
@@ -421,21 +421,21 @@ function nzshpcrt_install()
     
   
   /* adds nice names for permalinks for categories */
-  $check_category_names = $wpdb->get_results("SELECT DISTINCT `nice-name` FROM `".$wpdb->prefix."product_categories` WHERE `nice-name` IN ('') AND `active` IN ('1')");
+  $check_category_names = $wpdb->get_results("SELECT DISTINCT `nice-name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` IN ('') AND `active` IN ('1')");
   if($check_category_names != null) {
-    $sql_query = "SELECT `id`, `name` FROM `".$wpdb->prefix."product_categories` WHERE `active` IN('1')";
+    $sql_query = "SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN('1')";
     $sql_data = $wpdb->get_results($sql_query,ARRAY_A);    
     foreach((array)$sql_data as $datarow) {
       $tidied_name = trim($datarow['name']);
       $tidied_name = strtolower($tidied_name);
 			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);    
-      $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."product_categories` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+      $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
       $extension_number = '';
       if($similar_names['count'] > 0) {
         $extension_number = (int)$similar_names['max_number']+1;
 			}
       $url_name .= $extension_number;
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_categories` SET `nice-name` = '$url_name' WHERE `id` = '".$datarow['id']."' LIMIT 1 ;");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '$url_name' WHERE `id` = '".$datarow['id']."' LIMIT 1 ;");
 		}
 		$wp_rewrite->flush_rules();
 	}
@@ -450,7 +450,7 @@ function nzshpcrt_install()
   if(!is_dir($product_thumbnails)) {
     @ mkdir($product_thumbnails, 0775);
 	}
-  $product_list = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `image` != ''",ARRAY_A);
+  $product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `image` != ''",ARRAY_A);
   foreach((array)$product_list as $product) {
     if(!glob($product_thumbnails.$product['image'])) {
       $new_filename = $product['id']."_".$product['image'];
@@ -459,7 +459,7 @@ function nzshpcrt_install()
         if(file_exists($product_images.$product['image'])) {
           copy($product_images.$product['image'], $product_images.$new_filename);
 				}
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$new_filename."' WHERE `id`='".$product['id']."' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$new_filename."' WHERE `id`='".$product['id']."' LIMIT 1");
 			} else {
         $imagedir = $product_thumbnails;
         $name = $new_filename;
@@ -470,7 +470,7 @@ function nzshpcrt_install()
         if(file_exists($product_images.$product['image'])) {
           include("extra_image_processing.php");
           copy($product_images.$product['image'], $product_images.$new_filename);
-          $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$new_filename."' WHERE `id`='".$product['id']."' LIMIT 1");
+          $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$new_filename."' WHERE `id`='".$product['id']."' LIMIT 1");
 				}
 			}
 		}
@@ -733,8 +733,6 @@ function wpsc_create_or_update_tables($debug = false) {
   // creates or updates the structure of the shopping cart tables
   
   include('updates/database_template.php');
-  // I need to break this while I work on the template file
-  return true;
   
   $template_hash = sha1(serialize($wpsc_database_template));
   
@@ -745,9 +743,8 @@ function wpsc_create_or_update_tables($debug = false) {
   $failure_reasons = array();
   $upgrade_failed = false;
   foreach((array)$wpsc_database_template as $table_name => $table_data) {
-    if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'")) {
+    if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && !$wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'")) {
       //if the table does not exixt, create the table
-      
       $constructed_sql_parts = array();
       $constructed_sql = "CREATE TABLE `{$table_name}` (\n";
       
@@ -775,6 +772,12 @@ function wpsc_create_or_update_tables($debug = false) {
       }
       //echo "<pre>$constructed_sql</pre>";
     } else {
+      // check to see if the new table name is in use
+			if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && $wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'")) {
+				$wpdb->query("RENAME TABLE `{$table_data['previous_names']}`  TO `{$table_name}`;");
+				$failure_reasons[] = $wpdb->last_error;
+			}
+    
       //check to see if the table needs updating
       $existing_table_columns = array();
       //check and possibly update the character encoding      			
@@ -848,7 +851,7 @@ function wpsc_create_or_update_tables($debug = false) {
   }
   
 	if($upgrade_failed !== true) {
-		update_option('wpsc_database_check', $template_hash);
+		//update_option('wpsc_database_check', $template_hash);
 		return true;
 	} else {
 	  return false;

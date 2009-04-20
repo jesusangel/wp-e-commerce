@@ -38,7 +38,7 @@ function nzshpcrt_products_page($content = '') {
 						$category_id = (int)get_option('wpsc_default_category');
 					}
 				}			
-				$display_type = $wpdb->get_var("SELECT `display_type` FROM `".$wpdb->prefix."product_categories` WHERE `id`='{$category_id}' LIMIT 1");
+				$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
 			
 			
 			

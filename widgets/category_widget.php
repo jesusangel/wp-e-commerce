@@ -28,7 +28,7 @@ function widget_wpsc_categorisation( $args, $widget_args = 1 ) {
 		}
 		$selected_values = implode(',',$selected_categorisations);
 		
-	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `id` IN ({$selected_values}) AND `active` IN ('1')", ARRAY_A);
+	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `id` IN ({$selected_values}) AND `active` IN ('1')", ARRAY_A);
 	  foreach($categorisation_groups as $categorisation_group) {
 	    echo "<div id='categorisation_group_".$categorisation_group['id']."'>\n\r";
 	    if(count($categorisation_groups) > 1) {  // no title unless multiple category groups
@@ -91,7 +91,7 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 				continue;
 			}
 			$options[$widget_number]['title'] = wp_specialchars($widget_wpsc_categorisation_instance['title']);
-			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
+			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 			
 			
 			foreach($categorisation_groups as $cat_group){
@@ -137,12 +137,12 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 	
 	echo "<p>\n\r";
          
-	$categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
+	$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 	
 	foreach($categorisation_groups as $cat_group){
 	  $checked = '';
 	  //$checked = "checked='true'";
-		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$cat_group['id']}')");
+		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$cat_group['id']}')");
 		//$category_group_name = str_replace("[categorisation]", , TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES);
 		
 		if($options[$number]['categorisation'][$cat_group['id']] == true) {

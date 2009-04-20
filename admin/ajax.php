@@ -3,25 +3,25 @@ function wpsc_purchase_log_csv() {
   global $wpdb,$user_level,$wp_rewrite;
   get_currentuserinfo();
   if(($_GET['purchase_log_csv'] == "true") && ($_GET['rss_key'] == 'key') && is_numeric($_GET['start_timestamp']) && is_numeric($_GET['end_timestamp']) && ($user_level >= 7)) {
-    $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
+    $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `display_log` = '1';";
     $form_data = $wpdb->get_results($form_sql,ARRAY_A);
     
     $start_timestamp = $_GET['start_timestamp'];
     $end_timestamp = $_GET['end_timestamp'];
-    $data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC",ARRAY_A);
+    $data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC",ARRAY_A);
     
     header('Content-Type: text/csv');
     header('Content-Disposition: inline; filename="Purchase Log '.date("M-d-Y", $start_timestamp).' to '.date("M-d-Y", $end_timestamp).'.csv"');      
     
     foreach($data as $purchase) {
-      $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+      $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
       $country_data = $wpdb->get_results($country_sql,ARRAY_A);
       $country = $country_data[0]['value'];
            
       $output .= "\"".nzshpcrt_find_total_price($purchase['id'],$country) ."\",";
                 
       foreach($form_data as $form_field) {
-        $collected_data_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
+        $collected_data_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
         $collected_data = $wpdb->get_results($collected_data_sql,ARRAY_A);
         $collected_data = $collected_data[0];
         $output .= "\"".$collected_data['value']."\",";
@@ -44,21 +44,21 @@ function wpsc_purchase_log_csv() {
       if($purchase['processed'] < 1) {
         $purchase['processed'] = 1;
 			}
-      $stage_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
+      $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
       $stage_data = $wpdb->get_results($stage_sql,ARRAY_A);
               
       $output .= "\"". $stage_data[0]['name'] ."\",";
       
       $output .= "\"". date("jS M Y",$purchase['date']) ."\"";
       
-      $cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase['id']."";
+      $cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase['id']."";
       $cart = $wpdb->get_results($cartsql,ARRAY_A) ; 
       //exit(nl2br(print_r($cart,true)));
       
       foreach($cart as $item) {
         $output .= ",";
-        $product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$item['prodid']." LIMIT 1",ARRAY_A);        
-        $variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$item['id']."'";
+        $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$item['prodid']." LIMIT 1",ARRAY_A);        
+        $variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$item['id']."'";
         $variation_data = $wpdb->get_results($variation_sql,ARRAY_A);
          $variation_count = count($variation_data);
           if($variation_count >= 1) {
@@ -69,7 +69,7 @@ function wpsc_purchase_log_csv() {
                 $variation_list .= ", ";
 							}
               $value_id = $variation['value_id'];
-              $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+              $value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
               $variation_list .= $value_data[0]['name'];              
               $i++;
 						}
@@ -125,18 +125,18 @@ function wpsc_admin_ajax() {
 		$ids = $_POST['del_prod_id'];
 		$ids = explode(',',$ids);
 		foreach ($ids as $id) {
-			$wpdb->query("DELETE FROM `{$wpdb->prefix}product_list` WHERE `id`='$id'");
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$id'");
 		}
 		exit();
 	}
 	
 	if($_POST['del_img'] == 'true') {
 		$img_id = (int)$_POST['del_img_id'];
-		$wpdb->query("DELETE FROM `{$wpdb->prefix}product_images` WHERE `id`='{$img_id}' LIMIT 1");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$img_id}' LIMIT 1");
 		exit();
 	}
 	if ($_POST['del_file'] == 'true') {
-		$wpdb->query("DELETE FROM {$wpdb->prefix}product_files WHERE idhash=".$_POST['del_file_hash']);
+		$wpdb->query("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=".$_POST['del_file_hash']);
 		unlink(WPSC_FILE_DIR.$_POST['del_file_hash']);
 		exit();
 	}
@@ -148,7 +148,7 @@ function wpsc_admin_ajax() {
 		$hash=explode(',', $_POST['sort1']);
 		$order=1;
 		foreach($hash as $id) {
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order`=$order WHERE `product_id`=".(int)$id." AND `category_id`=".(int)$category_id." LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order`=$order WHERE `product_id`=".(int)$id." AND `category_id`=".(int)$category_id." LIMIT 1");
 			$order++;
 		}  
 	exit("");
@@ -162,8 +162,8 @@ function wpsc_admin_ajax() {
 	}
       
 	if(($_POST['remove_variation_value'] == "true") && is_numeric($_POST['variation_value_id'])) {
-		$wpdb->query("DELETE FROM `".$wpdb->prefix."variation_values_associations` WHERE `value_id` = '".$_POST['variation_value_id']."'");
-		$wpdb->query("DELETE FROM `".$wpdb->prefix."variation_values` WHERE `id` = '".$_POST['variation_value_id']."' LIMIT 1");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `value_id` = '".$_POST['variation_value_id']."'");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".$_POST['variation_value_id']."' LIMIT 1");
 		exit();
 	}
 		
@@ -175,7 +175,7 @@ function wpsc_admin_ajax() {
 		$variation_values = $variations_processor->falsepost_variation_values($variation_id);
 		if(is_array($variation_values)) {
 			//echo(print_r($variation_values,true));
-			$check_variation_added = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') LIMIT 1");
+			$check_variation_added = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') LIMIT 1");
 			//exit("<pre>".print_r($variation_values,true)."<pre>");
 			if($check_variation_added == null) {
 				$variations_processor->add_to_existing_product($product_id,$variation_values);			
@@ -193,7 +193,7 @@ function wpsc_admin_ajax() {
 	if(($_POST['remove_form_field'] == "true") && is_numeric($_POST['form_id'])) {
 		//exit(print_r($user,true));
 		if(current_user_can('level_7')) {
-			$wpdb->query("UPDATE `".$wpdb->prefix."collect_data_forms` SET `active` = '0' WHERE `id` ='".$_POST['form_id']."' LIMIT 1 ;");
+			$wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `active` = '0' WHERE `id` ='".$_POST['form_id']."' LIMIT 1 ;");
 			exit(' ');
 		}
 	}
@@ -210,9 +210,9 @@ function wpsc_admin_ajax() {
 	
 	if(($_POST['remove_meta'] == 'true') && is_numeric($_POST['meta_id'])) {
 		$meta_id = (int)$_POST['meta_id'];
-		$selected_meta = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `id` IN('{$meta_id}') ",ARRAY_A);
+		$selected_meta = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `id` IN('{$meta_id}') ",ARRAY_A);
 		if($selected_meta != null) {
-			if($wpdb->query("DELETE FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `id` IN('{$meta_id}')  LIMIT 1")) {
+			if($wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `id` IN('{$meta_id}')  LIMIT 1")) {
 				echo $meta_id;
 				exit();
 			}
@@ -232,19 +232,19 @@ function wpsc_admin_ajax() {
 			exit();
 		} else {
 		
-			$log_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id` = '".$_POST['id']."' LIMIT 1",ARRAY_A);  
+			$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '".$_POST['id']."' LIMIT 1",ARRAY_A);  
 			if (($newvalue==2) && function_exists('wpsc_member_activate_subscriptions')){
 				wpsc_member_activate_subscriptions($_POST['id']);
 			}
 			
-			$update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '".$newvalue."' WHERE `id` = '".$_POST['id']."' LIMIT 1";  
+			$update_sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".$newvalue."' WHERE `id` = '".$_POST['id']."' LIMIT 1";  
 			$wpdb->query($update_sql);
 			//echo("/*");
 			if(($newvalue > $log_data['processed']) && ($log_data['processed'] < 2)) {
 				transaction_results($log_data['sessionid'],false);
 			}      
 			//echo("*/");
-			$stage_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` WHERE `id`='".$newvalue."' AND `active`='1' LIMIT 1";
+			$stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$newvalue."' AND `active`='1' LIMIT 1";
 			$stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
 					
 			echo "document.getElementById(\"form_group_".$_POST['id']."_text\").innerHTML = '".$stage_data['name']."';\n";
@@ -279,14 +279,14 @@ function wpsc_admin_ajax() {
       
 
       		// get all the currently associated variations from the database
-      		$associated_variations = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}')", ARRAY_A);
+      		$associated_variations = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}')", ARRAY_A);
       
       		$variations_still_associated = array();
       		foreach((array)$associated_variations as $associated_variation) {
 			  	// remove variations not checked that are in the database
         		if(array_search($associated_variation['variation_id'], $variations_selected) === false) {
-          			$wpdb->query("DELETE FROM `{$wpdb->prefix}variation_associations` WHERE `id` = '{$associated_variation['id']}' LIMIT 1");
-          			$wpdb->query("DELETE FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` = '{$product_id}' AND `variation_id` = '{$associated_variation['variation_id']}' ");
+          			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `id` = '{$associated_variation['id']}' LIMIT 1");
+          			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}' AND `variation_id` = '{$associated_variation['variation_id']}' ");
         		} else {
           			// make an array for adding in the variations next step, for efficiency
           			$variations_still_associated[] = $associated_variation['variation_id'];
@@ -338,27 +338,27 @@ function wpsc_admin_ajax() {
 		if ($new_main_image!=0) {
 		  
 		  if($_POST['delete_primary'] == 'true' ) {
-        $new_image_name = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_images` WHERE `id`='{$new_main_image}' LIMIT 1");
-		    $wpdb->query("DELETE FROM `{$wpdb->prefix}product_images` WHERE `id` = '{$new_main_image}' LIMIT 1");
-        $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");		    
+        $new_image_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$new_main_image}' LIMIT 1");
+		    $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$new_main_image}' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");		    
         for($i=1;$i<count($images);$i++ ) {
-          $wpdb->query("UPDATE `{$wpdb->prefix}product_images` SET `image_order`='$i' WHERE `id`='".(int)$images[$i]."' LIMIT 1");
+          $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image_order`='$i' WHERE `id`='".(int)$images[$i]."' LIMIT 1");
         }
 		  } else {
-        $new_image_name = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_images` WHERE `id`='{$images[0]}' LIMIT 1");
-        $old_image_name =  $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$prodid}' LIMIT 1");
-        $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");
-        $wpdb->query("UPDATE `{$wpdb->prefix}product_images` SET `image`='$old_image_name' WHERE `id`='{$images[0]}' LIMIT 1");
+        $new_image_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$images[0]}' LIMIT 1");
+        $old_image_name =  $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$prodid}' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image`='$old_image_name' WHERE `id`='{$images[0]}' LIMIT 1");
         $image= image_processing(WPSC_IMAGE_DIR.$new_image_name, (WPSC_THUMBNAIL_DIR.$new_image_name),$width,$height,'thumbnailImage');
 			}
 		} else {
       if($_POST['delete_primary'] == 'true' ) {
-        $new_image_name = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_images` WHERE `id`='{$new_main_image}' LIMIT 1");
-		    $wpdb->query("DELETE FROM `{$wpdb->prefix}product_images` WHERE `id` = '{$new_main_image}' LIMIT 1");		
-        $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");		    
+        $new_image_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$new_main_image}' LIMIT 1");
+		    $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$new_main_image}' LIMIT 1");		
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");		    
       }
 			for($i=1;$i<count($images);$i++ ) {
-				$wpdb->query("UPDATE `{$wpdb->prefix}product_images` SET `image_order`='$i' WHERE `id`='".(int)$images[$i]."' LIMIT 1");
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image_order`='$i' WHERE `id`='".(int)$images[$i]."' LIMIT 1");
 			}
 		}
 		$output .= "<div id='image_settings_box'>";
@@ -453,7 +453,7 @@ function wpsc_admin_ajax() {
 function wpsc_admin_sale_rss() {
   global $wpdb;
   if(($_GET['rss'] == "true") && ($_GET['rss_key'] == 'key') && ($_GET['action'] == "purchase_log")) {
-    $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!='' ORDER BY `date` DESC";
+    $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!='' ORDER BY `date` DESC";
     $purchase_log = $wpdb->get_results($sql,ARRAY_A);
     header("Content-Type: application/xml; charset=UTF-8"); 
     header('Content-Disposition: inline; filename="WP_E-Commerce_Purchase_Log.rss"');
@@ -541,11 +541,11 @@ function wpsc_swfupload_images() {
 		//mail('thomas.howard@gmail.com','swfuploader', print_r($_POST,true).print_r($_FILES,true));
 		if(function_exists('gold_shpcrt_display_gallery')) {
 		  // if more than one image is permitted
-      $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM {$wpdb->prefix}product_images WHERE product_id='$pid'", ARRAY_A);
+      $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='$pid'", ARRAY_A);
       $order = (int)$existing_image_data['order'];
       $count = $existing_image_data['count'];
       
-      $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
+      $previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$pid}' LIMIT 1");
       if(($count >  0) || (strlen($previous_image) > 0)) {
         // if there is more than one image
         $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
@@ -555,9 +555,9 @@ function wpsc_swfupload_images() {
 				$order++;
 				if ($success) {
 					if ($pid != '') {
-						$wpdb->query("INSERT INTO `{$wpdb->prefix}product_images` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$pid','".basename($file['name'])."', '0', '0',  '$order')");
+						$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$pid','".basename($file['name'])."', '0', '0',  '$order')");
 					}
-					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `{$wpdb->prefix}product_images` LIMIT 1");
+					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
 					$src = $file['name'];
 					$output = "src='".$src."';id='".$id."';pid='$pid';";
 				} else {
@@ -567,7 +567,7 @@ function wpsc_swfupload_images() {
 			  // if thereare no images
 				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
 				if($src != null) {
-					$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
+					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
 					$output = "src='".$src."';id='0';pid='$pid';";
 				} else {
 					$output = "file uploading error";
@@ -575,11 +575,11 @@ function wpsc_swfupload_images() {
 			}
 		} else {
       // Otherwise...
-      $previous_image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$pid}' LIMIT 1");
+      $previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$pid}' LIMIT 1");
       
       $src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
       if($src != null) {
-        $wpdb->query("UPDATE `{$wpdb->prefix}product_list` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
         if(strlen($previous_image) > 0) {
 					$output = "replacement_src='".WPSC_IMAGE_URL.$src."';"; 
         } else {
@@ -614,7 +614,7 @@ function wpsc_save_inline_price() {
 	$pid = $_POST['id'];
 	$new_price = $_POST['value'];
 	$new_price1 = str_replace('$','',$new_price);
-	$wpdb->query("UPDATE {$wpdb->prefix}product_list SET price='$new_price1' WHERE id='$pid'");
+	$wpdb->query("UPDATE ".WPSC_TABLE_PRODUCT_LIST." SET price='$new_price1' WHERE id='$pid'");
 	exit($new_price);
 }
 

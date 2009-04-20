@@ -82,7 +82,7 @@ function wpsc_shipping_country_list() {
 	if($selected_region == null) {
 		$selected_region = get_option('base_region');
 	}
-	$country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+	$country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
 	$output .= "<select name='country' id='current_country' onchange='submit_change_country();' >";
 	foreach ($country_data as $country) {
 	// 23-02-09 fix for custom target market by jeffry
@@ -99,7 +99,7 @@ function wpsc_shipping_country_list() {
 	$output .= "</select>";
 	
 	if ($selected_country == 'US') {
-		$region_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."region_tax` WHERE country_id='136'",ARRAY_A);
+		$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
 		$output .= "<select name='region'  onchange='submit_change_country();' >";
 		foreach ($region_data as $region) {
 			$selected ='';
@@ -173,7 +173,7 @@ class wpsc_checkout {
 	*/
   function wpsc_checkout() {
     global $wpdb;
-    $this->checkout_items = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}collect_data_forms` WHERE `active` = '1' ORDER BY `order`;");
+    $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;");
     $this->checkout_item_count = count($this->checkout_items);
   }
   
@@ -208,7 +208,7 @@ class wpsc_checkout {
 			break;
 
 			case "delivery_country":
-			$country_name = $wpdb->get_var("SELECT `country` FROM `{$wpdb->prefix}currency_list` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
+			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
 			$output = "<input type='hidden' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
 			break;
 			
@@ -278,8 +278,8 @@ class wpsc_checkout {
 		foreach($this->checkout_items as $form_data) {
 		  $value = $_POST['collected_data'][$form_data->id];		  
 		  if($form_data->type != 'heading') {
-				//echo "INSERT INTO `{$wpdb->prefix}submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
-				$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+				//echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
+				$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 				
  			}
 		}

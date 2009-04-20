@@ -50,7 +50,7 @@ global $wpsc_query, $wpdb;
 						do_action('wpsc_product_addons', wpsc_the_product_id());
 						
 						if((wpsc_product_has_file() == true)  && (function_exists('listen_button'))){
-							$file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
+							$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
 							if($file_data != null) {
 								echo listen_button($file_data['idhash'], $file_data['id']);
 							}

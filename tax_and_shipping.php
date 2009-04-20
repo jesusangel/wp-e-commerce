@@ -6,10 +6,10 @@ if(is_array($_POST['region_tax']))
     {
     if(is_numeric($region_id) && is_numeric($tax))
       {
-      $previous_tax = $wpdb->get_var("SELECT `tax` FROM `".$wpdb->prefix."region_tax` WHERE `id` = '$region_id' LIMIT 1");
+      $previous_tax = $wpdb->get_var("SELECT `tax` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` = '$region_id' LIMIT 1");
       if($tax != $previous_tax)
         {
-        $wpdb->query("UPDATE `".$wpdb->prefix."region_tax` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
         $changes_made = true;
         }
       }
@@ -20,7 +20,7 @@ function country_list($selected_country = null)
   {
   global $wpdb;
   $output = "";
-  $country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+  $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
   foreach ($country_data as $country)
     {
     $selected ='';
@@ -53,10 +53,10 @@ $base_region = get_option('base_region');
   ?>
   <form action='?page=<?php echo $_GET['page']; ?>&amp;isocode=<?php echo $_GET['isocode']; ?>' method='POST' name='regional_tax'>
   <?php
-  $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".$country_isocode."') LIMIT 1",ARRAY_A);
+  $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$country_isocode."') LIMIT 1",ARRAY_A);
   if(($country_data['has_regions'] == 1))
     {
-    $region_data = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') ",ARRAY_A) ;
+    $region_data = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') ",ARRAY_A) ;
     $region_data = array_chunk($region_data, 14);
     
     echo "<table>\n\r";

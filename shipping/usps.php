@@ -150,7 +150,7 @@ class usps {
 			//exit($request);
 			$request = 'API=RateV3&XML=' . urlencode($request);
 		} else {
-			$dest=$wpdb->get_var("SELECT country FROM ".$wpdb->prefix."currency_list WHERE isocode='".$dest."'");
+			$dest=$wpdb->get_var("SELECT country FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE isocode='".$dest."'");
 			$pound = round($pound,2);
 			$ounce = round($ounce,2);
 			$request  = '<IntlRateRequest USERID="' . get_option('uspsid') . '" PASSWORD="' . get_option('uspspw') . '">' .

@@ -15,10 +15,10 @@ if($_GET['edit_profile'] == 'true') {
 /*
  * this finds the earliest timedit-profile in the shopping cart and sorts out the timestamp system for the month by month display
  */  
-$sql = "SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!='' ORDER BY `date` DESC";
+$sql = "SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!='' ORDER BY `date` DESC";
 $purchase_count= $wpdb->get_results($sql,ARRAY_A) ;
 
-$earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
+$earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!=''";
 $earliest_record = $wpdb->get_results($earliest_record_sql,ARRAY_A) ;
 
 $current_timestamp = time();
@@ -37,10 +37,10 @@ $date_list[0]['end'] = $end_timestamp;
     echo " <div class='user-profile-links'><a href='".get_option('user_account_url')."'>Purchase History</a> | <a href='".get_option('user_account_url').$seperator."edit_profile=true'>Your Details</a> | <a href='".get_option('user_account_url').$seperator."downloads=true'>Your Downloads</a></div><br />";
     if(($purchase_log == null) && !is_numeric($_GET['purchaseid'])) {
       if($earliest_record[0]['date'] != null) {
-        $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
+        $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `display_log` = '1';";
         $col_count = 4 + count($form_data);
         echo "<table class='logdisplay'>";    
-        $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `user_ID` IN ('".$user_ID."') ORDER BY `date` DESC";
+        $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `user_ID` IN ('".$user_ID."') ORDER BY `date` DESC";
         $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
 
         $i = 0;
@@ -105,7 +105,7 @@ $date_list[0]['end'] = $end_timestamp;
               $billing_country = $purchase['billing_country'];
               $shipping_country = $purchase['shipping_country'];
             } else {
-              $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+              $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
               $country_data = $wpdb->get_results($country_sql,ARRAY_A);
               $billing_country = $country_data[0]['value'];
               $shipping_country = $country_data[0]['value'];
@@ -133,7 +133,7 @@ $date_list[0]['end'] = $end_timestamp;
         
             echo "</tr>\n\r";
             
-            $stage_list_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` ORDER BY `id` ASC";
+            $stage_list_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` ORDER BY `id` ASC";
             $stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);
             
             echo "<tr>\n\r";
@@ -142,7 +142,7 @@ $date_list[0]['end'] = $end_timestamp;
             echo "  <div>\n\r";
 
             //order status code lies heret
-            $stage_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
+            $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
             $stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
             echo "  <strong class='form_group'>".TXT_WPSC_ORDER_STATUS."</strong>\n\r";
             echo "  <form>\n\r";
@@ -197,7 +197,7 @@ $date_list[0]['end'] = $end_timestamp;
 
 	     //cart contents display starts here;
             echo "  <strong class='form_group'>".TXT_WPSC_ORDER_DETAILS."</strong>\n\r";
-            $cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase['id']."";
+            $cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase['id']."";
             $cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
             $j = 0;
 
@@ -241,10 +241,10 @@ $date_list[0]['end'] = $end_timestamp;
                   {
                   $alternate = "class='alt'";
                   }
-                $productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
+                $productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
                 $product_data = $wpdb->get_results($productsql,ARRAY_A); 
               
-                $variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
+                $variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$cart_row['id']."'";
                 $variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
                 $variation_count = count($variation_data);
                 if($variation_count > 1)
@@ -258,7 +258,7 @@ $date_list[0]['end'] = $end_timestamp;
                       $variation_list .= ", ";
                       }
                     $value_id = $variation['value_id'];
-                    $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+                    $value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
                     $variation_list .= $value_data[0]['name'];              
                     $i++;
                     }
@@ -267,7 +267,7 @@ $date_list[0]['end'] = $end_timestamp;
                   else if($variation_count == 1)
                     {
                     $value_id = $variation_data[0]['value_id'];
-                    $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+                    $value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
                     $variation_list = " (".$value_data[0]['name'].")";
                     }
                     else
@@ -283,7 +283,7 @@ $date_list[0]['end'] = $end_timestamp;
                   }
                   else
                     {          
-                    $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+                    $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
                     $country_data = $wpdb->get_results($country_sql,ARRAY_A);
                     $billing_country = $country_data[0]['value'];
                     $shipping_country = $country_data[0]['value'];
@@ -356,14 +356,14 @@ $date_list[0]['end'] = $end_timestamp;
               
               echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>";
               echo "<table>";
-              $form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".$purchase['id']."'";
+              $form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE  `log_id` = '".$purchase['id']."'";
               $input_data = $wpdb->get_results($form_sql,ARRAY_A);
               //exit("<pre>".print_r($input_data,true)."</pre>");
               if($input_data != null)
                 {
                 foreach((array)$input_data as $form_field)
                   {
-                  $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `id` = '".$form_field['form_id']."' LIMIT 1";
+                  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `id` = '".$form_field['form_id']."' LIMIT 1";
                   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
                   if($form_data != null)
                     {
@@ -450,7 +450,7 @@ $date_list[0]['end'] = $end_timestamp;
       }
       
           
-    $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
+    $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!=''";
     $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
     }
    else

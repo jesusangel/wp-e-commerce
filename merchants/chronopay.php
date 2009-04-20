@@ -8,10 +8,10 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_chronopay";
 function gateway_chronopay($seperator, $sessionid)
 {
 	global $wpdb;
-	$purchase_log_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1";
+	$purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";
 	$purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
 
-	$cart_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
+	$cart_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
 	$cart = $wpdb->get_results($cart_sql,ARRAY_A) ; 
   
 	// Chronopay post variables
@@ -52,7 +52,7 @@ function gateway_chronopay($seperator, $sessionid)
     }    
 
   	// Change suggested by waxfeet@gmail.com, if email to be sent is not there, dont send an email address        
-  	$email_data = $wpdb->get_results("SELECT `id`,`type` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1'",ARRAY_A);
+  	$email_data = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1'",ARRAY_A);
   	foreach((array)$email_data as $email)
     {
     	$data['email'] = $_POST['collected_data'][$email['id']];
@@ -64,7 +64,7 @@ function gateway_chronopay($seperator, $sessionid)
 	
 	
 	// Get Currency details abd price
-	$currency_code = $wpdb->get_results("SELECT `code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
+	$currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
 	$local_currency_code = $currency_code[0]['code'];
 	$chronopay_currency_code = get_option('chronopay_curcode');
   
@@ -81,11 +81,11 @@ function gateway_chronopay($seperator, $sessionid)
 	
 	foreach($cart as $item)
 	{
-		$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
+		$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
 		$product_data = $product_data[0];
 		$variation_count = count($product_variations);
     
-		$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$item['id']."'";
+		$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$item['id']."'";
 		$variation_data = $wpdb->get_results($variation_sql,ARRAY_A);
 		$variation_count = count($variation_data);
 
@@ -100,7 +100,7 @@ function gateway_chronopay($seperator, $sessionid)
           			$variation_list .= ", ";
           		}
         		$value_id = $variation['venue_id'];
-        		$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+        		$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
         		$variation_list .= $value_data[0]['name'];              
         		$j++;
         	}
@@ -223,7 +223,7 @@ function nzshpcrt_chronopay_callback()
 				case 'onetime': // All successful processing statuses.
 	            case 'initial':
 				case 'rebill':
-	            	$wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET 
+	            	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET 
 										`processed` = '2', 
 										`transactid` = '".$transaction_id."', 
 										`date` = '".time()."'
@@ -233,20 +233,20 @@ function nzshpcrt_chronopay_callback()
 	            	break;                        
             
 	            case 'decline': // if it fails, delete it
-	            	$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`='$sessionid' LIMIT 1");
-	            	$delete_log_form_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$log_id'";
+	            	$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`='$sessionid' LIMIT 1");
+	            	$delete_log_form_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'";
 	            	$cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
 	            	foreach((array)$cart_content as $cart_item)
 	              	{
-	              		$cart_item_variations = $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
+	              		$cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
 	              	}
-	            	$wpdb->query("DELETE FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$log_id'");
-	            	$wpdb->query("DELETE FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` IN ('$log_id')");
-	            	$wpdb->query("DELETE FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='$log_id' LIMIT 1");
+	            	$wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'");
+	            	$wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$log_id')");
+	            	$wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$log_id' LIMIT 1");
 	            	break;
             
 	            case 'Pending':      // need to wait for "Completed" before processing
-	            	$sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1";
+	            	$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1";
 	            	$wpdb->query($sql) ;
 	            	break;
             

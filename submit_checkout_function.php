@@ -25,7 +25,7 @@ function nzshpcrt_submit_checkout() {
     }
     $any_bad_inputs = false;
     foreach($_POST['collected_data'] as $value_id => $value) {
-      $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `id` = '$value_id' LIMIT 1";
+      $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '$value_id' LIMIT 1";
       $form_data = $wpdb->get_results($form_sql,ARRAY_A);
       $form_data = $form_data[0];
       
@@ -55,7 +55,7 @@ function nzshpcrt_submit_checkout() {
           /*
 					if($form_data['type'] == "coupon") {
 						if($value != '') { // only act if data has been entered
-							$coupon_sql = "SELECT * FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE `coupon_code` = '".$value."' AND `active` = '1' LIMIT 1";
+							$coupon_sql = "SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `coupon_code` = '".$value."' AND `active` = '1' LIMIT 1";
 							$coupon_data = $wpdb->get_results($coupon_sql,ARRAY_A);
 							if($coupon_data == null) {
 								$any_bad_inputs = true;
@@ -127,7 +127,7 @@ function nzshpcrt_submit_checkout() {
 	$all_no_shipping = true;
 	$all_memberships = true;
   foreach((array)$_SESSION['nzshpcrt_cart'] as $key => $item) {
-		$product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$item->product_id}' LIMIT 1",ARRAY_A) ;
+		$product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$item->product_id}' LIMIT 1",ARRAY_A) ;
 		// Check stock quantity
 		$in_stock = check_in_stock($item->product_id, $item->product_variations, $item->quantity);
 		if (get_option('checkbox_variation')=='1') {
@@ -287,14 +287,14 @@ function nzshpcrt_submit_checkout() {
     
     //insert the record into the purchase log table
 	$price = nzshpcrt_overall_total_price($_SESSION['delivery_country'],false);
-	$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`, `shipping_method`, `shipping_option`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".(int)$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '".$_POST['how_find_us']. "', '{$engrave}', ' ','$shipping_module','$shipping_option')";
+	$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`base_shipping`,`shipping_region`, `user_ID`, `discount_value`, `discount_data`, `find_us`, `engravetext`, `google_status`, `shipping_method`, `shipping_option`) VALUES ( '".$wpdb->escape($price)."', '".$sessionid."', '".time()."', '".$_SESSION['selected_country']."', '".$_SESSION['delivery_country']."', '".$base_shipping."','".(int)$_SESSION['selected_region']."' , '".(int)$user_ID."' , '".(float)$_SESSION['wpsc_discount']."', '".$wpdb->escape($_SESSION['coupon_num'])."', '".$_POST['how_find_us']. "', '{$engrave}', ' ','$shipping_module','$shipping_option')";
 	//exit($sql);
 	$wpdb->query($sql) ;
 	$email_user_detail = '';
 
-   $log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
+   $log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
    foreach($_POST['collected_data'] as $value_id => $value) {
-     $wpdb->query("INSERT INTO `".$wpdb->prefix."submited_form_data` ( `log_id` , `form_id` , `value` ) VALUES ( '".$log_id."', '".(int)$value_id."', '".$value."');") ;
+     $wpdb->query("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '".$log_id."', '".(int)$value_id."', '".$value."');") ;
 		}
    
 		if(function_exists("nzshpcrt_user_log")) {
@@ -334,7 +334,7 @@ function nzshpcrt_submit_checkout() {
       }
     
       
-      $product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$row' LIMIT 1",ARRAY_A) ;
+      $product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$row' LIMIT 1",ARRAY_A) ;
       
       
       if($product_data['donation'] == 1) {
@@ -346,10 +346,10 @@ function nzshpcrt_submit_checkout() {
         if($product_data['notax'] != 1) {
           $price = nzshpcrt_calculate_tax($price, $_SESSION['selected_country'], $_SESSION['selected_region']);
           if(get_option('base_country') == $_SESSION['selected_country']) {
-            $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+            $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
             if(($country_data['has_regions'] == 1)) {
               if(get_option('base_region') == $_SESSION['selected_region']) {
-                $region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+                $region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
               }
               $gst =  $region_data['tax'];
             } else {
@@ -366,18 +366,18 @@ function nzshpcrt_submit_checkout() {
         $all_no_shipping = false;
       }
               
-      $country = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`='".$log_id."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
+      $country = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`='".$log_id."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
       $country = $country[0]['value'];
       
-      $country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+      $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
       
       $shipping = nzshpcrt_determine_item_shipping($row, 1, $_SESSION['delivery_country']);
-      $cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
+      $cartsql = "INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping`, `files` ) VALUES ('".$row."', '".$log_id."','".$price."','".$shipping."', '".$gst."','".$quantity."', '".$donation."', '".$product_data['no_shipping']."', '$file_data')";
       //exit($cartsql);
       $wpdb->query($cartsql);
       
       // get the cart id
-      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."cart_contents` LIMIT 1");
+      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
       
       
       $extra_var='';
@@ -385,7 +385,7 @@ function nzshpcrt_submit_checkout() {
         $extra_var.='[';
         $i=0;
         foreach($variations as $variation => $value) {
-          $wpdb->query("INSERT INTO `".$wpdb->prefix."cart_item_variations` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation."', '".$value."' );");
+          $wpdb->query("INSERT INTO `".WPSC_TABLE_CART_ITEM_VARIATIONS."` ( `cart_id` , `variation_id` , `value_id` ) VALUES ( '".$cart_id."', '".$variation."', '".$value."' );");
           $i++;
           if ($i==1) {
             $extra_var.=$value;
@@ -407,13 +407,13 @@ function nzshpcrt_submit_checkout() {
       $is_downloadable = false;
       if(count($variation_values) > 0) { 
         // if there are any variations, there might also be a file, hunt for a file ID for this variation
-        $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_values)."')");
+        $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variation_values)."')");
         asort($variation_ids);         
         $all_variation_ids = implode(",", $variation_ids);
       
-        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
+        $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '".(int)$product_data['id']."' AND `value_id` IN ( '".implode("', '",$variation_values )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_values)."' LIMIT 1");
         
-        $variation_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+        $variation_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
         if((int)$variation_data['file'] > 0) {
           $is_downloadable = true;
           $file_id = (int)$variation_data['file'];
@@ -426,9 +426,9 @@ function nzshpcrt_submit_checkout() {
         
       if($is_downloadable == true) {
         // if the file is downloadable, check that the file is real
-        if($wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_files` WHERE `id` IN ('$file_id')")) {
+        if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('$file_id')")) {
           $unique_id = sha1(uniqid(mt_rand(), true));
-          $wpdb->query("INSERT INTO `{$wpdb->prefix}download_status` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+          $wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$file_id}', '{$log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
         }
       }
       
@@ -442,11 +442,11 @@ function nzshpcrt_submit_checkout() {
         if(($selected_product == $associated_product)) {
           continue; //don't want to associate products with themselves
         }
-        $check_assoc = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."also_bought_product` WHERE `selected_product` IN('$selected_product') AND `associated_product` IN('$associated_product') LIMIT 1");
+        $check_assoc = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_ALSO_BOUGHT."` WHERE `selected_product` IN('$selected_product') AND `associated_product` IN('$associated_product') LIMIT 1");
         if(isset($check_assoc) && ($check_assoc > 0)) {
-          $wpdb->query("UPDATE `".$wpdb->prefix."also_bought_product` SET `quantity` = (`quantity` + $assoc_quantity) WHERE `id` = '$check_assoc' LIMIT 1;");
+          $wpdb->query("UPDATE `".WPSC_TABLE_ALSO_BOUGHT."` SET `quantity` = (`quantity` + $assoc_quantity) WHERE `id` = '$check_assoc' LIMIT 1;");
         } else {
-          $wpdb->query("INSERT INTO `".$wpdb->prefix."also_bought_product` ( `selected_product` , `associated_product` , `quantity` ) VALUES ( '$selected_product', '".$associated_product."', '".$assoc_quantity."' );");
+          $wpdb->query("INSERT INTO `".WPSC_TABLE_ALSO_BOUGHT."` ( `selected_product` , `associated_product` , `quantity` ) VALUES ( '$selected_product', '".$associated_product."', '".$assoc_quantity."' );");
         }
       }
     }
@@ -491,7 +491,7 @@ function nzshpcrt_submit_checkout() {
       foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == 'testmode')  {
           $gateway_used = $gateway['internalname'];
-          $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
+          $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
           $gateway['function']($seperator, $sessionid);
         }
       }
@@ -499,7 +499,7 @@ function nzshpcrt_submit_checkout() {
       foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == $curgateway ) {
           $gateway_used = $gateway['internalname'];
-          $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
+          $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
           $gateway['function']($seperator, $sessionid);
         }
       }

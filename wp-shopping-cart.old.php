@@ -45,7 +45,7 @@ if(isset($_SESSION['nzshpcrt_cart'])) {
 
 if(is_numeric($_GET['sessionid'])) {
   $sessionid = $_GET['sessionid'];
-  $cart_log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1");
+  $cart_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1");
   if(is_numeric($cart_log_id)) {
     $_SESSION['nzshpcrt_cart'] = null;
     $_SESSION['nzshpcrt_serialized_cart'] = null;
@@ -178,7 +178,7 @@ function nzshpcrt_style() {
 		}
 	}
 
-	$category_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_categories` WHERE `id`='{$category_id}' LIMIT 1",ARRAY_A);
+	$category_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1",ARRAY_A);
 	
 	
 	if($category_data['display_type'] != '') {
@@ -254,7 +254,7 @@ function nzshpcrt_style() {
       }
       
     <?php
-    $product_ids = $wpdb->get_col("SELECT `id` FROM `{$wpdb->prefix}product_list` WHERE `thumbnail_state` IN(0,2,3)"); 
+    $product_ids = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `thumbnail_state` IN(0,2,3)"); 
     foreach($product_ids as $product_id) {
       $individual_thumbnail_height = get_product_meta($product_id, 'thumbnail_height'); 
       $individual_thumbnail_width = get_product_meta($product_id, 'thumbnail_width');     
@@ -625,7 +625,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		$comment=$_POST['comment'];
 		$message=$_POST['message'];
 		$amount=number_format($amount, 2, '.', '');
-		$log_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id` = '".$_POST['id']."' LIMIT 1",ARRAY_A);  
+		$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '".$_POST['id']."' LIMIT 1",ARRAY_A);  
 		if (($newvalue==2) && function_exists('wpsc_member_activate_subscriptions')){
 			wpsc_member_activate_subscriptions($_POST['id']);
 		}
@@ -668,14 +668,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				$google_status[1]='ARCHIVED';
 				break;
 		}
-		$google_status_sql="UPDATE `".$wpdb->prefix."purchase_logs` SET google_status='".serialize($google_status)."' WHERE `id` = '".$_POST['id']."' LIMIT 1";
+		$google_status_sql="UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET google_status='".serialize($google_status)."' WHERE `id` = '".$_POST['id']."' LIMIT 1";
 		$wpdb->query($google_status_sql);
 		$merchant_id = get_option('google_id');
 		$merchant_key = get_option('google_key');
 		$server_type = get_option('google_server_type');
 		$currency = get_option('google_cur');
 		$Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type,$currency);
-		$google_order_number=$wpdb->get_var("SELECT google_order_number FROM `".$wpdb->prefix."purchase_logs` WHERE `id` = '".$_POST['id']."' LIMIT 1");
+		$google_order_number=$wpdb->get_var("SELECT google_order_number FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '".$_POST['id']."' LIMIT 1");
 		switch ($newvalue) {
 			case 'Charge':
 				$Grequest->SendChargeOrder($google_order_number,$amount);
@@ -702,7 +702,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				break;
 		}
 		$newvalue++;
-		$update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '".$newvalue."' WHERE `id` = '".$_POST['id']."' LIMIT 1";  
+		$update_sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".$newvalue."' WHERE `id` = '".$_POST['id']."' LIMIT 1";  
 		//$wpdb->query($update_sql);
 		
 		exit();
@@ -716,7 +716,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 
 		if(($memberstatus=='1') && ($_SESSION['nzshopcrt_cart']!=NULL)){
 		} else{
-			$sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$_POST['prodid']."' LIMIT 1";
+			$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$_POST['prodid']."' LIMIT 1";
 			$item_data = $wpdb->get_results($sql,ARRAY_A);
 			if ($_POST['quantity']!='') {
 				$add_quantity = $_POST['quantity'];
@@ -745,14 +745,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				}
 				
         if(count($value_ids) > 0) {
-          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$value_ids)."')");
+          $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$value_ids)."')");
           asort($variation_ids);
           $all_variation_ids = implode(",", $variation_ids);
         
         
-          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '".(int)$_POST['prodid']."' AND `value_id` IN ( '".implode("', '",$value_ids )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($value_ids)."' LIMIT 1");
+          $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '".(int)$_POST['prodid']."' AND `value_id` IN ( '".implode("', '",$value_ids )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($value_ids)."' LIMIT 1");
           
-          $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+          $variation_stock_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
           
           $item_stock = $variation_stock_data['stock'];
           //echo "/*".print_r($variation_stock_data,true)."*/";
@@ -914,7 +914,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
             
     
     if(is_numeric($_POST['currencyid'])){
-      $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$_POST['currencyid']."' LIMIT 1",ARRAY_A) ;
+      $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$_POST['currencyid']."' LIMIT 1",ARRAY_A) ;
       $price_out = null;
       if($currency_data[0]['symbol'] != '') {
         $currency_sign = $currency_data[0]['symbol_html'];
@@ -930,15 +930,15 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			$id = $wpdb->escape((int)$_REQUEST['product_id']);
 			$price = $wpdb->escape((float)$_REQUEST['price']);
 			$downloads = get_option('max_downloads');
-			$product_info = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$id." LIMIT 1", ARRAY_A);
+			$product_info = $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = ".$id." LIMIT 1", ARRAY_A);
 			if(count($product_info) > 0) {
 				$sessionid = (mt_rand(100,999).time());
-				$sql = "INSERT INTO `".$wpdb->prefix."purchase_logs` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`shipping_region`, `user_ID`, `discount_value` ) VALUES ( '".$price."', '".$sessionid."', '".time()."', 'BuyNow', 'BuyNow', 'BuyNow' , NULL , 0)";
+				$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` ( `totalprice` , `sessionid` , `date`, `billing_country`, `shipping_country`,`shipping_region`, `user_ID`, `discount_value` ) VALUES ( '".$price."', '".$sessionid."', '".time()."', 'BuyNow', 'BuyNow', 'BuyNow' , NULL , 0)";
 				$wpdb->query($sql) ;
-				$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
-				$cartsql = "INSERT INTO `".$wpdb->prefix."cart_contents` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$id."', '".$log_id."','".$price."','0', '0','1', '".$donation."', '1')";
+				$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
+				$cartsql = "INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` ( `prodid` , `purchaseid`, `price`, `pnp`, `gst`, `quantity`, `donation`, `no_shipping` ) VALUES ('".$id."', '".$log_id."','".$price."','0', '0','1', '".$donation."', '1')";
 				$wpdb->query($cartsql);
-				$wpdb->query("INSERT INTO `".$wpdb->prefix."download_status` ( `fileid` , `purchid` , `downloads` , `active` , `datetime` ) VALUES ( '".$product_info['file']."', '".$log_id."', '$downloads', '0', NOW( ));");
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` ( `fileid` , `purchid` , `downloads` , `active` , `datetime` ) VALUES ( '".$product_info['file']."', '".$log_id."', '$downloads', '0', NOW( ));");
 			}
 		}
 		exit();
@@ -957,12 +957,12 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
       
       if(is_numeric($cookie_data[0]) && ($cookie_data[0] > 0)) {
         $vote_id = $cookie_data[0];
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_rating` SET `rated` = '".$rating."' WHERE `id` ='".$vote_id."' LIMIT 1 ;");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_RATING."` SET `rated` = '".$rating."' WHERE `id` ='".$vote_id."' LIMIT 1 ;");
 			} else {
-				$insert_sql = "INSERT INTO `".$wpdb->prefix."product_rating` ( `ipnum`  , `productid` , `rated`, `time`) VALUES ( '".$ip_number."', '".$prodid."', '".$rating."', '".$nowtime."');";
+				$insert_sql = "INSERT INTO `".WPSC_TABLE_PRODUCT_RATING."` ( `ipnum`  , `productid` , `rated`, `time`) VALUES ( '".$ip_number."', '".$prodid."', '".$rating."', '".$nowtime."');";
 				$wpdb->query($insert_sql);
 				
-				$data = $wpdb->get_results("SELECT `id`,`rated` FROM `".$wpdb->prefix."product_rating` WHERE `ipnum`='".$ip_number."' AND `productid` = '".$prodid."'  AND `rated` = '".$rating."' AND `time` = '".$nowtime."' ORDER BY `id` DESC LIMIT 1",ARRAY_A) ;
+				$data = $wpdb->get_results("SELECT `id`,`rated` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `ipnum`='".$ip_number."' AND `productid` = '".$prodid."'  AND `rated` = '".$rating."' AND `time` = '".$nowtime."' ORDER BY `id` DESC LIMIT 1",ARRAY_A) ;
 				
 				$vote_id = $data[0]['id'];
 				setcookie("voting_cookie[$prodid]", ($vote_id.",".$rating),time()+(60*60*24*360));
@@ -979,13 +979,13 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 	if ($_REQUEST['save_tracking_id'] == "true"){
 		$id = $_POST['id'];
 		$value = $_POST['value'];
-		$update_sql = "UPDATE ".$wpdb->prefix."purchase_logs SET track_id = '".$value."' WHERE id=$id";
+		$update_sql = "UPDATE ".WPSC_TABLE_PURCHASE_LOGS." SET track_id = '".$value."' WHERE id=$id";
 		$wpdb->query($update_sql);
 		exit();
 	}
       
 	if(($_POST['get_updated_price'] == "true") && is_numeric($_POST['product_id'])) {
-		$notax = $wpdb->get_var("SELECT `notax` FROM `".$wpdb->prefix."product_list` WHERE `id` IN('".$_POST['product_id']."') LIMIT 1");
+		$notax = $wpdb->get_var("SELECT `notax` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN('".$_POST['product_id']."') LIMIT 1");
 		foreach((array)$_POST['variation'] as $variation) {
 			if(is_numeric($variation)) {
 				$variations[] = (int)$variation;
@@ -1056,7 +1056,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					  }\n\r";
 		
 			  if($do_not_refresh_regions == false) {
-					$region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$_POST['billing_country']."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
+					$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$_POST['billing_country']."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
 				  if($region_list != null) {
 						$output .= "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\\\"$html_form_id\\\", \\\"$form_id\\\");'>";
 						//$output .= "<option value=''>None</option>";
@@ -1094,7 +1094,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					$product_id = $cart_item->product_id;
 					$quantity = $cart_item->quantity;
 					//echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
-					$product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+					$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 				
 					if($product['donation'] == 1) {
 						$price += $quantity * $cart_item->donation_price;
@@ -1131,7 +1131,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     
     if(($_POST['get_country_tax'] == "true") && preg_match("/[a-zA-Z]{2,4}/",$_POST['country_id'])) {
       $country_id = $_POST['country_id'];
-      $region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$country_id."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
+      $region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$country_id."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
       if($region_list != null) {
         echo "<select name='base_region'>\n\r";
         foreach($region_list as $region) {
@@ -1252,14 +1252,14 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     
     // LIMIT $startnum
     if(is_numeric($_GET['product_id'])) {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') AND `id` IN('".$_GET['product_id']."') LIMIT 1";
+      $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1') AND `id` IN('".$_GET['product_id']."') LIMIT 1";
       } else if($_GET['random'] == 'true') {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') ORDER BY RAND() $limit";
+      $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1') ORDER BY RAND() $limit";
       } else if(is_numeric($_GET['category_id'])) {
       /* man, this is a hard to read SQL statement */
-      $sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$_GET['category_id']."') ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC $limit";      
+      $sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.*, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( ( `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` ) AND ( `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` ) ) WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$_GET['category_id']."') ORDER BY `order_state` DESC,`".WPSC_TABLE_PRODUCT_ORDER."`.`order` ASC $limit";      
     } else {
-      $sql = "SELECT DISTINCT * FROM `".$wpdb->prefix."product_list` WHERE `active` IN('1') ORDER BY `id` DESC $limit";
+      $sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1') ORDER BY `id` DESC $limit";
     }
     
     include_once(WPSC_FILE_PATH."/product_display_functions.php");
@@ -1393,17 +1393,17 @@ function nzshpcrt_download_file() {
     // strip out anything that isnt 'a' to 'z' or '0' to '9'
     $downloadid = preg_replace("/[^a-z0-9]+/i",'',strtolower($_GET['downloadid']));
     
-		$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `uniqueid` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' LIMIT 1",ARRAY_A);
+		$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `uniqueid` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' LIMIT 1",ARRAY_A);
 		
 		if(($download_data == null) && is_numeric($downloadid)) {
-		  $download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `id` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' AND `uniqueid` IS NULL LIMIT 1",ARRAY_A);
+		  $download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `id` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' AND `uniqueid` IS NULL LIMIT 1",ARRAY_A);
 		}
 		
 		if((get_option('wpsc_ip_lock_downloads') == 1) && ($_SERVER['REMOTE_ADDR'] != null)) {
 		  $ip_number = $_SERVER['REMOTE_ADDR'];
 		  if($download_data['ip_number'] == '') {
 		    // if the IP number is not set, set it
-		    $wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `ip_number` = '{$ip_number}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+		    $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `ip_number` = '{$ip_number}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
 		  } else if($ip_number != $download_data['ip_number']) {
 		    // if the IP number is set but does not match, fail here.
 // 				return false;
@@ -1414,7 +1414,7 @@ function nzshpcrt_download_file() {
     //exit("<pre>".print_r($download_data,true)."</pre>");
    
     if($download_data != null) {
-      $file_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$download_data['fileid']."' LIMIT 1",ARRAY_A) ;
+      $file_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1",ARRAY_A) ;
       $file_data = $file_data[0];      
       
       if((int)$download_data['downloads'] >= 1) {
@@ -1424,9 +1424,9 @@ function nzshpcrt_download_file() {
       }
       
       
-      $wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
 
-      $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
       if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
         header('Content-Type: '.$file_data['mimetype']);      
         header('Content-Length: '.filesize(WPSC_FILE_DIR.$file_data['idhash']));
@@ -1455,9 +1455,9 @@ function nzshpcrt_download_file() {
 	} else {
 		if(($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {
 			$product_id = $_GET['product_id'];
-			$product_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+			$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 			if(is_numeric($product_data[0]['file']) && ($product_data[0]['file'] > 0)) {
-				$file_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product_data[0]['file']."' LIMIT 1",ARRAY_A) ;
+				$file_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_data[0]['file']."' LIMIT 1",ARRAY_A) ;
 				$file_data = $file_data[0];
 				if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
 					header('Content-Type: '.$file_data['mimetype']);
@@ -1492,7 +1492,7 @@ function nzshpcrt_display_preview_image() {
 		if(function_exists("getimagesize")) {
 			if(is_numeric($_GET['productid'])) {
 				$product_id = (int)$_GET['productid'];
-				$imagesql = "SELECT `image`,`thumbnail_image` FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1";
+				$imagesql = "SELECT `image`,`thumbnail_image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1";
 				$imagedata = $wpdb->get_row($imagesql,ARRAY_A);
 				if($_GET['thumbnail'] == 'true') {
 					if($imagedata['thumbnail_image'] != '') {
@@ -1506,7 +1506,7 @@ function nzshpcrt_display_preview_image() {
 				}
 			} else if($_GET['image_id']) {
 				$image_id = (int)$_GET['image_id'];
-				$image = $wpdb->get_var("SELECT `image` FROM `{$wpdb->prefix}product_images` WHERE `id` = '{$image_id}' LIMIT 1");
+				$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
 				$imagepath = WPSC_IMAGE_DIR . $image;
 			}
 			$image_size = @getimagesize($imagepath);
@@ -1552,7 +1552,7 @@ function nzshpcrt_listdir($dirname) {
 function nzshpcrt_product_rating($prodid)
       {
       global $wpdb;
-      $get_average = $wpdb->get_results("SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `".$wpdb->prefix."product_rating` WHERE `productid`='".$prodid."'",ARRAY_A);
+      $get_average = $wpdb->get_results("SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `productid`='".$prodid."'",ARRAY_A);
       $average = floor($get_average[0]['average']);
       $count = $get_average[0]['count'];
       $output .= "  <span class='votetext'>";
@@ -1613,7 +1613,7 @@ function nzshpcrt_product_vote($prodid, $starcontainer_attributes = '')
         $vote_id = $cookie_data[0];
         }
       
-      $chkrate = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_rating` WHERE `id`='".$vote_id."' LIMIT 1",ARRAY_A);
+      $chkrate = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `id`='".$vote_id."' LIMIT 1",ARRAY_A);
       //$output .= "<pre>".print_r($chkrate,true)."</pre>";
       if($chkrate[0]['rated'] > 0)
         {
@@ -1686,14 +1686,14 @@ function nzshpcrt_product_vote($prodid, $starcontainer_attributes = '')
  function get_country($country_code)  
   {
   global $wpdb;
-  $country = $wpdb->get_var("SELECT `country` FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN ('".$country_code."') LIMIT 1");
+  $country = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN ('".$country_code."') LIMIT 1");
   return $country; 
   }
 
  function get_region($region_code)  
   {
   global $wpdb;
-  $region = $wpdb->get_var("SELECT `name` FROM `".$wpdb->prefix."region_tax` WHERE `id` IN('$region_code')");
+  $region = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` IN('$region_code')");
   return $region; 
   }
   
@@ -1766,17 +1766,17 @@ function add_product_meta($product_id, $key, $value, $unique = false, $custom = 
   global $wpdb, $post_meta_cache, $blog_id;
   $product_id = (int)$product_id;
   if($product_id > 0) {
-    if(($unique == true) && $wpdb->get_var("SELECT meta_key FROM `".$wpdb->prefix."wpsc_productmeta` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
+    if(($unique == true) && $wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
       return false;
 		}
     
     $value = $wpdb->escape(maybe_serialize($value));
     
-    if(!$wpdb->get_var("SELECT meta_key FROM `".$wpdb->prefix."wpsc_productmeta` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
+    if(!$wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
       $custom = (int)$custom;
-      $wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_productmeta` (product_id,meta_key,meta_value, custom) VALUES ('$product_id','$key','$value', '$custom')");
+      $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (product_id,meta_key,meta_value, custom) VALUES ('$product_id','$key','$value', '$custom')");
 		} else {
-      $wpdb->query("UPDATE `".$wpdb->prefix."wpsc_productmeta` SET meta_value = '$value' WHERE meta_key = '$key' AND product_id = '$product_id'");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET meta_value = '$value' WHERE meta_key = '$key' AND product_id = '$product_id'");
 		}
     return true;
 	}
@@ -1788,14 +1788,14 @@ function delete_product_meta($product_id, $key, $value = '') {
   $product_id = (int)$product_id;
   if($product_id > 0) {
     if ( empty($value) ) {
-      $meta_id = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."wpsc_productmeta` WHERE product_id = '$product_id' AND meta_key = '$key'");      
+      $meta_id = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key'");      
       if(is_numeric($meta_id) && ($meta_id > 0)) {
-        $wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_productmeta` WHERE product_id = '$product_id' AND meta_key = '$key'");
+        $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key'");
         }
       } else {
-      $meta_id = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."wpsc_productmeta` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
+      $meta_id = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
       if(is_numeric($meta_id) && ($meta_id > 0)) {
-        $wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_productmeta` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
+        $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
         }        
       }
   }
@@ -1807,12 +1807,12 @@ function get_product_meta($product_id, $key, $single = false) {
   global $wpdb, $post_meta_cache, $blog_id;  
   $product_id = (int)$product_id;
   if($product_id > 0) {
-    $meta_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
+    $meta_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
     if(is_numeric($meta_id) && ($meta_id > 0)) {      
       if($single != false) {
-        $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
+        $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
 			} else {
-        $meta_values = $wpdb->get_col("SELECT `meta_value` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'");
+        $meta_values = $wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'");
 				$meta_values = array_map('maybe_unserialize', $meta_values);
 			}
 		}
@@ -1837,14 +1837,14 @@ function update_product_meta($product_id, $key, $value, $prev_value = '') {
     $prev_value = $wpdb->escape(maybe_serialize($prev_value));
     }
 
-  if($wpdb->get_var("SELECT meta_key FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN('$key') AND product_id = '$product_id'")) {
+  if($wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND product_id = '$product_id'")) {
     if (empty($prev_value)) {
-      $wpdb->query("UPDATE `".$wpdb->prefix."wpsc_productmeta` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id'");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id'");
       } else {
-      $wpdb->query("UPDATE `".$wpdb->prefix."wpsc_productmeta` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id' AND meta_value = '$prev_value'");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id' AND meta_value = '$prev_value'");
       }
     } else {
-    $wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_productmeta` (product_id,meta_key,meta_value) VALUES ('$product_id','$key','$value')");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (product_id,meta_key,meta_value) VALUES ('$product_id','$key','$value')");
     }
   return true;
   }
@@ -1913,10 +1913,10 @@ function wpsc_refresh_page_urls($content) {
 				}
 				
 				if(is_numeric($id)) {
-					$category_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
+					$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
 					$category_list = $wpdb->get_results($category_sql,ARRAY_A);
 				}	else {
-					$category_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '0' ORDER BY `id`";
+					$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0' ORDER BY `id`";
 					$category_list = $wpdb->get_results($category_sql,ARRAY_A);
 				}
 				if($category_list != null)	{
@@ -1972,7 +1972,7 @@ function wpsc_obtain_the_title() {
 	  if(isset($wpsc_title_data['category'][$category_id])) {
 			$output = $wpsc_title_data['category'][$category_id];
 	  } else {
-			$output = $wpdb->get_var("SELECT `name` FROM `{$wpdb->prefix}product_categories` WHERE `id`='{$category_id}' LIMIT 1");
+			$output = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
 			$wpsc_title_data['category'][$category_id] = $output;
 		}
 		
@@ -1983,8 +1983,8 @@ function wpsc_obtain_the_title() {
 	    $product_list = array();
 	    $product_list['name'] = $wpsc_title_data['product'][$product_name];
 	  } else {
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_name']}' ) ORDER BY `id` DESC LIMIT 1");
-			$product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_name']}' ) ORDER BY `id` DESC LIMIT 1");
+			$product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
 			$wpsc_title_data['product'][$product_name] = $product_list['name'];
 		}
   }
@@ -2156,7 +2156,7 @@ add_action('init', 'wpsc_start_the_query', 0);
 function wpsc_admin_notices() {
   global $wpdb;
   if(get_option('wpsc_default_category') != 'all') {
-		if((get_option('wpsc_default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}product_categories` WHERE `id` IN ('".get_option('wpsc_default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
+		if((get_option('wpsc_default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".get_option('wpsc_default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
 			if(!$_POST['wpsc_default_category']) { // if we are not changing the default category
 				echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
 				echo "<p>".TXT_WPSC_NO_DEFAULT_PRODUCTS."</p>";
@@ -2180,7 +2180,7 @@ if( IS_WP27 ) {
 
 function wpsc_admin_latest_activity() {
 global $wpdb;
-		$totalOrders = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs`");
+		$totalOrders = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."`");
 	
 		 
 		/*
@@ -2195,7 +2195,7 @@ global $wpdb;
 		$month = date("m");
 		$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
 		$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
-		$sql = "SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
+		$sql = "SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
 		$currentMonthOrders = $wpdb->get_var($sql);
 		
 		//calculates amount of money made for the month
@@ -2443,12 +2443,12 @@ function thickbox_variation() {
 	if($_POST){
 				if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>");
-    $variation_sql = "INSERT INTO `".$wpdb->prefix."product_variations` (`name`, `variation_association`) VALUES ( '".$_POST['name']."', 0);";
+    $variation_sql = "INSERT INTO `".WPSC_TABLE_PRODUCT_VARIATIONS."` (`name`, `variation_association`) VALUES ( '".$_POST['name']."', 0);";
     if($wpdb->query($variation_sql)) {
-      $variation_id = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_variations` LIMIT 1",ARRAY_A);
+      $variation_id = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` LIMIT 1",ARRAY_A);
       $variation_id = $variation_id[0]['id'];
       $variation_values = $_POST['variation_values'];
-      $variation_value_sql ="INSERT INTO `".$wpdb->prefix."variation_values` ( `name` , `variation_id` ) VALUES ";
+      $variation_value_sql ="INSERT INTO `".WPSC_TABLE_VARIATION_VALUES."` ( `name` , `variation_id` ) VALUES ";
       $num = 0;
       foreach($variation_values as $variation_value) {
         switch($num) {
@@ -2500,7 +2500,7 @@ echo "  <div class='categorisation_title'>\n\r";
 		echo "          </td>\n\r";
 		
 		echo "        </tr>\n\r";
-		$variation_sql = "SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id`";
+		$variation_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` ORDER BY `id`";
 		$variation_list = $wpdb->get_results($variation_sql,ARRAY_A);
 		if($variation_list != null) {
 		  foreach($variation_list as $variation) {
@@ -2601,12 +2601,12 @@ function wpsc_duplicate() {
 	global $wpdb;
 	if (is_numeric($_GET['duplicate'])) {
 		$dup_id = $_GET['duplicate'];
-		$sql = " INSERT INTO {$wpdb->prefix}product_list( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM {$wpdb->prefix}product_list WHERE id = '".$dup_id."' ";
+		$sql = " INSERT INTO ".WPSC_TABLE_PRODUCT_LIST."( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = '".$dup_id."' ";
 		$wpdb->query($sql);
-		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
+		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
 		
 		//Inserting duplicated category record.
-		$category_assoc = $wpdb->get_col("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id = '".$dup_id."'");
+		$category_assoc = $wpdb->get_col("SELECT category_id FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id = '".$dup_id."'");
 		$new_product_category = "";
 		if (count($category_assoc) > 0) {
 			foreach($category_assoc as $key => $category) {
@@ -2616,12 +2616,12 @@ function wpsc_duplicate() {
 					$new_product_category .= ",";
 				}
 			}
-			$sql = "INSERT INTO {$wpdb->prefix}item_category_associations (product_id, category_id) VALUES ".$new_product_category;
+			$sql = "INSERT INTO ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." (product_id, category_id) VALUES ".$new_product_category;
 			$wpdb->query($sql);
 		}
 	
 		//Inserting duplicated meta info
-		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM {$wpdb->prefix}wpsc_productmeta WHERE product_id='".$dup_id."'", ARRAY_A);
+		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id='".$dup_id."'", ARRAY_A);
 		$new_meta_value = '';
 		if (count($meta_values)>0){
 			foreach($meta_values as $key => $meta) {
@@ -2631,14 +2631,14 @@ function wpsc_duplicate() {
 					$new_meta_value .= ",";
 				}
 			}
-			$sql = "INSERT INTO {$wpdb->prefix}wpsc_productmeta (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".$new_meta_value;
+			$sql = "INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".$new_meta_value;
 			$wpdb->query($sql);
 		}
 		
 		
 		
 		//Inserting duplicated image info
-		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM {$wpdb->prefix}product_images WHERE product_id='".$dup_id."'", ARRAY_A);
+		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='".$dup_id."'", ARRAY_A);
 		$new_image_value = '';
 		if (count($image_values)>0){
 			foreach($image_values as $key => $image) {
@@ -2648,7 +2648,7 @@ function wpsc_duplicate() {
 					$new_image_value .= ",";
 				}
 			}
-			$sql = "INSERT INTO {$wpdb->prefix}product_images (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
+			$sql = "INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
 			$wpdb->query($sql);
 		}
 	}

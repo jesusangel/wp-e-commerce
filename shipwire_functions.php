@@ -5,7 +5,7 @@ function shipwire_build_xml($log_id) {
 	$passwd = get_option("shipwirepassword"); 
 	$server = "Production"; // or "Production" 
 	$warehouse = "00";
-	$form_info = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."collect_data_forms", ARRAY_A);
+	$form_info = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_CHECKOUT_FORMS."", ARRAY_A);
 	
 	foreach ($form_info as $info) {
 		if(($info['type'] == 'delivery_address') && ($info['active']=='1')) {
@@ -37,7 +37,7 @@ function shipwire_build_xml($log_id) {
 		}
 	}
 	
-	$user_infos = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."submited_form_data WHERE log_id='".$log_id."'", ARRAY_A);
+	$user_infos = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id='".$log_id."'", ARRAY_A);
 	//echo (print_r($user_infos,1));
 	foreach ($user_infos as $user_info) {
 		if ($user_info['form_id'] == $address_key) {
@@ -61,12 +61,12 @@ function shipwire_build_xml($log_id) {
 		}
 	}
 	if (($first_name_key == '') || ($last_name_key == '')) {
-		$log_info = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."purchase_logs WHERE id='".$log_id."'");
+		$log_info = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE id='".$log_id."'");
 		$first_name = $log_info[0]['firstname'];
 		$last_name = $log_info[0]['lastname'];
 	}
 	$full_name = $first_name." ".$last_name;
-	$products = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."cart_contents WHERE purchaseid='".$log_id."'",ARRAY_A);
+	$products = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_CART_CONTENTS." WHERE purchaseid='".$log_id."'",ARRAY_A);
 	//return $log_id;
 	$xml = "<?xml version='1.0' encoding='utf-8'?>";
 	$xml .= "<OrderList>";

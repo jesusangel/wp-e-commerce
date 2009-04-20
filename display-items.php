@@ -35,9 +35,9 @@ function top_category_options($category_id = null, $iteration = 0, $selected_id 
   $siteurl = get_option('siteurl');
   $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
   if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
 	} else {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
 	}
   foreach((array)$values as $option) {
     if($selected_id == $option['id']) {
@@ -59,18 +59,18 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
   {
   $position_cat_id = $_GET['catid'];
   $position_prod_id = $_GET['product_id'];
-  $current_order_row = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_order` WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('$position_prod_id') LIMIT 1;",ARRAY_A);
+  $current_order_row = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('$position_prod_id') LIMIT 1;",ARRAY_A);
   $current_order_row = $current_order_row[0];
   switch($_GET['position_action'])
     {
     case 'top':
     if($current_order_row['order'] > 0) 
       {
-      $check_existing = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_order` WHERE `category_id` IN('$position_cat_id') AND `order` IN('0') LIMIT 1;",ARRAY_A);
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = '0' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('$position_prod_id') LIMIT 1;");
+      $check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$position_cat_id') AND `order` IN('0') LIMIT 1;",ARRAY_A);
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('$position_prod_id') LIMIT 1;");
       if($check_existing != null)
         {
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = (`order` + 1) WHERE `category_id` IN('$position_cat_id') AND `product_id` NOT IN('$position_prod_id') AND `order` < '".$current_order_row['order']."'");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$position_cat_id') AND `product_id` NOT IN('$position_prod_id') AND `order` < '".$current_order_row['order']."'");
         }
       }
     break;
@@ -78,34 +78,34 @@ if(is_numeric($_GET['catid']) && is_numeric($_GET['product_id']) && ($_GET['posi
     case 'up':
     if($current_order_row['order'] > 0) 
       {
-      $target_rows = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_order` WHERE `category_id` IN ('".$position_cat_id."') AND `order` <= '".$current_order_row['order']."' ORDER BY `order` DESC LIMIT 2",ARRAY_A);
+      $target_rows = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN ('".$position_cat_id."') AND `order` <= '".$current_order_row['order']."' ORDER BY `order` DESC LIMIT 2",ARRAY_A);
       //exit("<pre>".print_r($target_rows,true)."</pre>");
       if(count($target_rows) == 2)
         {
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = '".$target_rows[1]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[0]['product_id']."') LIMIT 1");
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = '".$target_rows[0]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[1]['product_id']."') LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '".$target_rows[1]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[0]['product_id']."') LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '".$target_rows[0]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[1]['product_id']."') LIMIT 1");
         }
       }
     break;
     
     case 'down':
-    $target_rows = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_order` WHERE `category_id` IN ('".$position_cat_id."') AND `order` >= '".$current_order_row['order']."' ORDER BY `order` ASC LIMIT 2",ARRAY_A);
+    $target_rows = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN ('".$position_cat_id."') AND `order` >= '".$current_order_row['order']."' ORDER BY `order` ASC LIMIT 2",ARRAY_A);
     //exit("<pre>".print_r($target_rows,true)."</pre>");
     if(count($target_rows) == 2)
       {
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = '".$target_rows[1]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[0]['product_id']."') LIMIT 1");
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = '".$target_rows[0]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[1]['product_id']."') LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '".$target_rows[1]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[0]['product_id']."') LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '".$target_rows[0]['order']."' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('".$target_rows[1]['product_id']."') LIMIT 1");
       }
     break;
     
     case 'bottom':
-    $end_row = $wpdb->get_results("SELECT MAX( `order` ) AS `order` FROM `".$wpdb->prefix."product_order` WHERE `category_id` IN ('".$position_cat_id."') LIMIT 1",ARRAY_A);
+    $end_row = $wpdb->get_results("SELECT MAX( `order` ) AS `order` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN ('".$position_cat_id."') LIMIT 1",ARRAY_A);
     $end_order_number = $end_row[0]['order'];
     //exit($current_order_row['order'] . " | " . $end_order_number);
     if($current_order_row['order'] < $end_order_number)
       {
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = '$end_order_number' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('$position_prod_id') LIMIT 1;");      
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_order` SET `order` = (`order` - 1) WHERE `category_id` IN('$position_cat_id') AND `product_id` NOT IN('$position_prod_id') AND `order` > '".$current_order_row['order']."'");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '$end_order_number' WHERE `category_id` IN('$position_cat_id') AND `product_id` IN('$position_prod_id') LIMIT 1;");      
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` - 1) WHERE `category_id` IN('$position_cat_id') AND `product_id` NOT IN('$position_prod_id') AND `order` > '".$current_order_row['order']."'");
       }
     break;
     
@@ -200,12 +200,12 @@ if($_POST['submit_action'] == 'add') {
 				$no_shipping = 0;
 			}
 	
-		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
+		$insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_LIST."` ( `name` , `description` , `additional_description` , `price`, `weight`, `weight_unit`, `pnp`, `international_pnp`, `file` , `image` , `brand`, `quantity_limited`, `quantity`, `special`, `special_price`, `display_frontpage`,`notax`, `donation`, `no_shipping`, `thumbnail_image`, `thumbnail_state`) VALUES ('".$wpdb->escape($_POST['name'])."', '".$wpdb->escape($_POST['description'])."', '".$wpdb->escape($_POST['additional_description'])."','".(float)$wpdb->escape(str_replace(",","",$_POST['price']))."','".$wpdb->escape((float)$_POST['weight'])."','".$wpdb->escape($_POST['weight_unit'])."', '".$wpdb->escape((float)$_POST['pnp'])."', '".$wpdb->escape($_POST['international_pnp'])."', '".(int)$file."', '".$_POST['images'][0]."', '0', '$quantity_limited','$quantity','$special','$special_price', '$display_frontpage', '$notax', '$is_donation', '$no_shipping', '".$wpdb->escape($thumbnail_image)."', '" . $wpdb->escape($_POST['image_resize']) . "');";
 		
 		if($wpdb->query($insertsql)) {
-			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
+			$product_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
 			for($i=1;$i<count($_POST['images']);$i++) {
-				$wpdb->query("INSERT INTO {$wpdb->prefix}product_images VALUES('','$product_id','".$_POST['images'][$i]."','0','0','$i','')");
+				$wpdb->query("INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." VALUES('','$product_id','".$_POST['images'][$i]."','0','0','$i','')");
 			}
 			if(function_exists('wp_insert_term')) {
 				product_tag_init();
@@ -283,7 +283,7 @@ if($_POST['submit_action'] == 'add') {
 			$tidied_name = strtolower($tidied_name);
 			
 			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
 			$extension_number = '';
 			if($similar_names['count'] > 0) {
 				$extension_number = (int)$similar_names['max_number']+1;
@@ -319,9 +319,9 @@ if($_POST['submit_action'] == 'add') {
 			$item_list = '';
 			if(count($_POST['category']) > 0) {
 				foreach($_POST['category'] as $category_id) {
-					$check_existing = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
+					$check_existing = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
 					if($check_existing == null) {
-						$wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
+						$wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
 					}
 				}
 			}
@@ -345,17 +345,17 @@ if($_GET['submit_action'] == "remove_set")
     {
     $product_id = $_GET['product_id'];
     $variation_assoc_id = $_GET['variation_assoc_id'];
-    $check_association_id = $wpdb->get_var("SELECT `id` FROM `".$table_prefix."variation_associations` WHERE `id` = '$variation_assoc_id' LIMIT 1");
+    $check_association_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `id` = '$variation_assoc_id' LIMIT 1");
     if(($variation_assoc_id > 0) && ($variation_assoc_id == $check_association_id))
       {
-      $variation_association = $wpdb->get_row("SELECT * FROM `".$table_prefix."variation_associations` WHERE `id` = '$variation_assoc_id' LIMIT 1",ARRAY_A);
-      $delete_variation_sql = "DELETE FROM `".$table_prefix."variation_associations` WHERE `id` = '$variation_assoc_id' LIMIT 1";
+      $variation_association = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `id` = '$variation_assoc_id' LIMIT 1",ARRAY_A);
+      $delete_variation_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `id` = '$variation_assoc_id' LIMIT 1";
       $wpdb->query($delete_variation_sql);
       //echo("<pre>".print_r($variation_association,true)."</pre>");
       if($variation_association != null)
         {
         $variation_id = $variation_association['variation_id'];
-        $delete_value_sql = "DELETE FROM `".$table_prefix."variation_values_associations` WHERE `product_id` = '$product_id' AND `variation_id` = '$variation_id'";
+        $delete_value_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '$product_id' AND `variation_id` = '$variation_id'";
         //exit($delete_value_sql);
         $wpdb->query($delete_value_sql);
         }
@@ -411,9 +411,9 @@ if($_POST['submit_action'] == "edit") {
 	
 	if (isset($_POST['images'])) {
 		$id = (int)$_POST['prodid'];
-		$old_image = $wpdb->get_var("SELECT image FROM {$wpdb->prefix}product_list WHERE id='{$_POST['prodid']}'");
+		$old_image = $wpdb->get_var("SELECT image FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$_POST['prodid']}'");
 		if ($old_image == ''){
-			$updatelink_sql = "UPDATE `".$wpdb->prefix."product_list` SET `image` = '{$_POST['images'][0]}' WHERE `id` = '$id'";
+			$updatelink_sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$_POST['images'][0]}' WHERE `id` = '$id'";
 			$updatelink_data = $wpdb->query($updatelink_sql);
 		}
 	}
@@ -421,13 +421,13 @@ if($_POST['submit_action'] == "edit") {
 	if (isset($_POST['merchant_notes'])) {
 		$id = (int)$_POST['prodid'];
 		$notes = $_POST['merchant_notes'];
-		$updatelink_sql = "SELECT * FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id` = '$id' AND `meta_key`='merchant_notes'";
+		$updatelink_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '$id' AND `meta_key`='merchant_notes'";
 		$updatelink_data = $wpdb->get_results($updatelink_sql, ARRAY_A);
 		if (count($updatelink_data)>0) {
-			$updatelink_sql = "UPDATE `".$wpdb->prefix."wpsc_productmeta` SET `meta_value` = '$notes' WHERE `product_id` = '$id' AND `meta_key`='merchant_notes'";
+			$updatelink_sql = "UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$notes' WHERE `product_id` = '$id' AND `meta_key`='merchant_notes'";
 			$updatelink_data = $wpdb->query($updatelink_sql);
 		} else {
-			$updatelink_sql = "INSERT INTO `".$wpdb->prefix."wpsc_productmeta` (`product_id`,`meta_key`,`meta_value`) VALUES('$id','merchant_notes' ,'$notes')";
+			$updatelink_sql = "INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (`product_id`,`meta_key`,`meta_value`) VALUES('$id','merchant_notes' ,'$notes')";
 			$updatelink_data = $wpdb->query($updatelink_sql);
 		}
 	}
@@ -435,13 +435,13 @@ if($_POST['submit_action'] == "edit") {
 // 	if (isset($_POST['engrave'])) {
 // 		$id = $_POST['prodid'];
 // 		$engrave = $_POST['engrave'];
-// 		$updatelink_sql = "SELECT * FROM ".$wpdb->prefix."wpsc_productmeta WHERE product_id = $id AND meta_key='merchant_notes'";
+// 		$updatelink_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCTMETA." WHERE product_id = $id AND meta_key='merchant_notes'";
 // 		$updatelink_data = $wpdb->get_results($updatelink_sql, ARRAY_A);
 // 		if (count($updatelink_data)>0){
-// 			$updatelink_sql = "UPDATE ".$wpdb->prefix."wpsc_productmeta SET meta_value = '$notes' WHERE product_id = $id AND meta_key='merchant_notes'";
+// 			$updatelink_sql = "UPDATE ".WPSC_TABLE_PRODUCTMETA." SET meta_value = '$notes' WHERE product_id = $id AND meta_key='merchant_notes'";
 // 			$updatelink_data = $wpdb->query($updatelink_sql);
 // 		} else {
-// 			$updatelink_sql = "INSERT INTO ".$wpdb->prefix."wpsc_productmeta VALUES('',$id,'merchant_notes' ,'$notes')";
+// 			$updatelink_sql = "INSERT INTO ".WPSC_TABLE_PRODUCTMETA." VALUES('',$id,'merchant_notes' ,'$notes')";
 // 			$updatelink_data = $wpdb->query($updatelink_sql);
 // 		}
 // 	}
@@ -465,10 +465,10 @@ if($_POST['submit_action'] == "edit") {
 		}
 
 		if(file_exists($_FILES['preview_file']['tmp_name'])) {
-			$fileid = $wpdb->get_var("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$id' LIMIT 1");
+			$fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$id' LIMIT 1");
 			copy($_FILES['preview_file']['tmp_name'], (WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name'])));
 			$mimetype = wpsc_get_mimetype(WPSC_PREVIEW_DIR.basename($_FILES['preview_file']['name']));
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_files` SET `preview` = '".$wpdb->escape(basename($_FILES['preview_file']['name']))."', `preview_mimetype` = '".$mimetype."' WHERE `id` = '$fileid' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape(basename($_FILES['preview_file']['name']))."', `preview_mimetype` = '".$mimetype."' WHERE `id` = '$fileid' LIMIT 1");
 		}
 
   /* Handle new image uploads here */
@@ -479,9 +479,9 @@ if($_POST['submit_action'] == "edit") {
   if(is_numeric($_POST['prodid'])) {
 		if(($_POST['image_resize'] == 1 || $_POST['image_resize'] == 2) && ($image == '')) {
       /*  resize the image if directed to do so and no new image is supplied  */
-      $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".$wpdb->prefix."product_list` WHERE `id`=".$_POST['prodid']." LIMIT 1",ARRAY_A);      
+      $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$_POST['prodid']." LIMIT 1",ARRAY_A);      
       // prevent images from being replaced by those from other products
-      $check_multiple_use = $wpdb->get_var("SELECT COUNT(`image`) AS `count` FROM `".$wpdb->prefix."product_list` WHERE `image`='".$image_data['image']."'");
+      $check_multiple_use = $wpdb->get_var("SELECT COUNT(`image`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `image`='".$image_data['image']."'");
       if($check_multiple_use > 1) {
         $new_filename = $image_data['id']."_".$image_data['image'];
         if(file_exists(WPSC_THUMBNAIL_DIR.$image_data['image']) && ($image_data['image'] != null)) {
@@ -490,8 +490,8 @@ if($_POST['submit_action'] == "edit") {
         if(file_exists(WPSC_IMAGE_DIR.$image_data['image']) && ($image_data['image'] != null)) {
           copy(WPSC_IMAGE_DIR.$image_data['image'], WPSC_IMAGE_DIR.$new_filename);
           }
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$new_filename."' WHERE `id`='".$image_data['id']."' LIMIT 1");
-        $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".$wpdb->prefix."product_list` WHERE `id`=".$_POST['prodid']." LIMIT 1",ARRAY_A);
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$new_filename."' WHERE `id`='".$image_data['id']."' LIMIT 1");
+        $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$_POST['prodid']." LIMIT 1",ARRAY_A);
         }
         
         
@@ -521,9 +521,9 @@ if($_POST['submit_action'] == "edit") {
       if(count($_POST['category']) > 0) {
         foreach($_POST['category'] as $category_id) {
           $category_id = (int)$category_id; // force it to be an integer rather than check if it is one
-          $check_existing = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` = ".$id." AND `category_id` = '$category_id' LIMIT 1");
+          $check_existing = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = ".$id." AND `category_id` = '$category_id' LIMIT 1");
           if($check_existing == null) {
-            $wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` ( `product_id` , `category_id` ) VALUES ('".$id."', '".$category_id."');");        
+            $wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ( `product_id` , `category_id` ) VALUES ('".$id."', '".$category_id."');");        
 					}
           if($counter > 0) {
             $item_list .= ", ";
@@ -534,7 +534,7 @@ if($_POST['submit_action'] == "edit") {
 			} else {
 				$item_list = "'0'";
 			}
-      $wpdb->query("DELETE FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id`= '$id' AND `category_id` NOT IN (".$item_list.")"); 
+      $wpdb->query("DELETE FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id`= '$id' AND `category_id` NOT IN (".$item_list.")"); 
 		}
       
 		$key = Array();
@@ -583,11 +583,11 @@ if($_POST['submit_action'] == "edit") {
 			$no_shipping = 0;
 		}
 		
-		$updatesql = "UPDATE `".$wpdb->prefix."product_list` SET `name` = '".$wpdb->escape($_POST['title'])."', `description` = '".$wpdb->escape($_POST['description'])."', `additional_description` = '".$wpdb->escape($_POST['additional_description'])."', `price` = '".$wpdb->escape(str_replace(",","",$_POST['price']))."', `pnp` = '".(float)$wpdb->escape($_POST['pnp'])."', `international_pnp` = '".(float)$wpdb->escape($_POST['international_pnp'])."', `brand` = '0', quantity_limited = '".$quantity_limited."', `quantity` = '".(int)$quantity."', `special`='$special', `special_price`='$special_price', `display_frontpage`='$display_frontpage', `notax`='$notax', `donation`='$is_donation', `no_shipping` = '$no_shipping', `weight` = '".$wpdb->escape($_POST['weight'])."', `weight_unit` = '".$wpdb->escape($_POST['weight_unit'])."'  WHERE `id`='".$_POST['prodid']."' LIMIT 1";
+		$updatesql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `name` = '".$wpdb->escape($_POST['title'])."', `description` = '".$wpdb->escape($_POST['description'])."', `additional_description` = '".$wpdb->escape($_POST['additional_description'])."', `price` = '".$wpdb->escape(str_replace(",","",$_POST['price']))."', `pnp` = '".(float)$wpdb->escape($_POST['pnp'])."', `international_pnp` = '".(float)$wpdb->escape($_POST['international_pnp'])."', `brand` = '0', quantity_limited = '".$quantity_limited."', `quantity` = '".(int)$quantity."', `special`='$special', `special_price`='$special_price', `display_frontpage`='$display_frontpage', `notax`='$notax', `donation`='$is_donation', `no_shipping` = '$no_shipping', `weight` = '".$wpdb->escape($_POST['weight'])."', `weight_unit` = '".$wpdb->escape($_POST['weight_unit'])."'  WHERE `id`='".$_POST['prodid']."' LIMIT 1";
 
 		$wpdb->query($updatesql);
 		if(($_FILES['image']['name'] != null) && ($image != null)) {
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$image."' WHERE `id`='".$_POST['prodid']."' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$image."' WHERE `id`='".$_POST['prodid']."' LIMIT 1");
 		}
     
     if($_POST['productmeta_values'] != null) {
@@ -613,8 +613,8 @@ if($_POST['submit_action'] == "edit") {
     if($_POST['custom_meta'] != null) {
       foreach((array)$_POST['custom_meta'] as $key => $values) {
         if(($values['name'] != '') && ($values['value'] != '')) {
-          $wpdb->query("UPDATE `".$wpdb->prefix."wpsc_productmeta` SET `meta_key` = '".$wpdb->escape($values['name'])."', `meta_value` = '".$wpdb->escape($values['value'])."' WHERE `id` IN ('".(int)$key."')LIMIT 1 ;");
-         // echo "UPDATE `".$wpdb->prefix."wpsc_productmeta` SET `meta_key` = '".$wpdb->escape($values['name'])."', `meta_value` = '".$wpdb->escape($values['value'])."' WHERE `id` IN ('".(int)$key."') LIMIT 1 ;";
+          $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_key` = '".$wpdb->escape($values['name'])."', `meta_value` = '".$wpdb->escape($values['value'])."' WHERE `id` IN ('".(int)$key."')LIMIT 1 ;");
+         // echo "UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_key` = '".$wpdb->escape($values['name'])."', `meta_value` = '".$wpdb->escape($values['value'])."' WHERE `id` IN ('".(int)$key."') LIMIT 1 ;";
 					//add_product_meta($_POST['prodid'], $values['name'], $values['value'], false, true);
         }
 			}
@@ -630,7 +630,7 @@ if($_POST['submit_action'] == "edit") {
     $tidied_name = strtolower($tidied_name);
     
     $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
-    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
     $extension_number = '';
     if($similar_names['count'] > 0) {
       $extension_number = (int)$similar_names['max_number']+1;
@@ -651,12 +651,12 @@ if($_POST['submit_action'] == "edit") {
     /* update thumbnail images */
     if(!($thumbnail_image == null && $_POST['image_resize'] == 3 && $_POST['current_thumbnail_image'] != null)) {
       if($thumbnail_image != null) {
-        $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
 			}
 		}
     
     
-		$thumbnail_state = $wpdb->get_var("SELECT `thumbnail_state` FROM `".$wpdb->prefix."product_list` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1",ARRAY_A);      
+		$thumbnail_state = $wpdb->get_var("SELECT `thumbnail_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1",ARRAY_A);      
     
     
 		$image_resize = (int)$_POST['image_resize'];
@@ -664,11 +664,11 @@ if($_POST['submit_action'] == "edit") {
 			$image_resize = 0;
 		}
     if(($image_resize == 0) && ($thumbnail_state != 0)) {
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_state` = '".$image_resize."' WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_state` = '".$image_resize."' WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
     }
     
     if($_POST['deleteimage'] == 1) {
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = ''  WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = ''  WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
 		}
      
 		$variations_procesor = new nzshpcrt_variations;
@@ -696,8 +696,8 @@ if($_POST['submit_action'] == "edit") {
 }
 
 if(is_numeric($_GET['deleteid'])) { 
-  	$wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id` = '".$_GET['deleteid']."' AND `meta_key` IN ('url_name')");  
-  	$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET  `active` = '0' WHERE `id`='".$_GET['deleteid']."' LIMIT 1");
+  	$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '".$_GET['deleteid']."' AND `meta_key` IN ('url_name')");  
+  	$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='".$_GET['deleteid']."' LIMIT 1");
 	product_tag_init();
 	$term = wp_get_object_terms($_GET['deleteid'], 'product_tag');
 	if ($term->errors == '')
@@ -711,7 +711,7 @@ if($_GET['search_products']) {
 	$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search_products']))."%";
 	$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search_products']))."%";
 	
-	$search_sql = "AND (`".$wpdb->prefix."product_list`.`name` LIKE '".$search_string_title."' OR `".$wpdb->prefix."product_list`.`description` LIKE '".$search_string_description."')";
+	$search_sql = "AND (`".WPSC_TABLE_PRODUCT_LIST."`.`name` LIKE '".$search_string_title."' OR `".WPSC_TABLE_PRODUCT_LIST."`.`description` LIKE '".$search_string_description."')";
 	
 	$search_string = $_GET['search_products'];
 } else {
@@ -725,21 +725,21 @@ if($_GET['search_products']) {
  * Gets the product list, commented to make it stick out more, as it is hard to notice 
  */
 if(is_numeric($_GET['catid'])) {    // if we are getting items from only one category, this is a monster SQL query to do this with the product order
-  $sql = "SELECT `".$wpdb->prefix."product_list`.`id` , `".$wpdb->prefix."product_list`.`name` , `".$wpdb->prefix."product_list`.`price` , `".$wpdb->prefix."product_list`.`image`, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state`
-FROM `".$wpdb->prefix."product_list` 
-LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` 
-LEFT JOIN `".$wpdb->prefix."product_order` ON ( (
-`".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` 
+  $sql = "SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id` , `".WPSC_TABLE_PRODUCT_LIST."`.`name` , `".WPSC_TABLE_PRODUCT_LIST."`.`price` , `".WPSC_TABLE_PRODUCT_LIST."`.`image`, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state`
+FROM `".WPSC_TABLE_PRODUCT_LIST."` 
+LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` 
+LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( (
+`".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` 
 )
 AND (
-`".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` 
+`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` 
 ) ) 
-WHERE `".$wpdb->prefix."product_list`.`active` = '1' $search_sql
-AND `".$wpdb->prefix."item_category_associations`.`category_id` 
+WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' $search_sql
+AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` 
 IN (
 '".$_GET['catid']."'
 )
-ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC,  `".$wpdb->prefix."product_list`.`id` DESC";
+ORDER BY `order_state` DESC,`".WPSC_TABLE_PRODUCT_ORDER."`.`order` ASC,  `".WPSC_TABLE_PRODUCT_LIST."`.`id` DESC";
 
   } else {
 		$itempp = 20;
@@ -747,14 +747,14 @@ ORDER BY `order_state` DESC,`".$wpdb->prefix."product_order`.`order` ASC,  `".$w
 			$page = (int)$_GET['pnum'];
 			
 			$start = $page * $itempp;
-			$sql = "SELECT DISTINCT * FROM `{$wpdb->prefix}product_list` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
 		} else {
-			$sql = "SELECT DISTINCT * FROM `{$wpdb->prefix}product_list` WHERE `active`='1' $search_sql";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql";
 		}
 	}  
     
 $product_list = $wpdb->get_results($sql,ARRAY_A);
-$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".$wpdb->prefix."product_list` WHERE `active`='1' $search_sql");
+$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql");
 
 /*
  * The product list is stored in $product_list now
@@ -1022,7 +1022,7 @@ if($product_list != null)
 				$order_number++;
 			}
 		} else {
-			$wpdb->query("INSERT INTO `".$wpdb->prefix."product_order` (  `category_id` , `product_id` , `order` ) VALUES ( '".$product['category_id']."', '".$product['id']."', '$order_number');");
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (  `category_id` , `product_id` , `order` ) VALUES ( '".$product['category_id']."', '".$product['id']."', '$order_number');");
 			$order_number++;
 		}
 	}
@@ -1086,7 +1086,7 @@ if($product_list != null)
     
     if(!is_numeric($_GET['catid'])) {
 			echo "            <td>\n\r";
-	$category_list = $wpdb->get_results("SELECT `".$wpdb->prefix."product_categories`.`id`,`".$wpdb->prefix."product_categories`.`name` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product['id']."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1')",ARRAY_A);
+	$category_list = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id`,`".WPSC_TABLE_PRODUCT_CATEGORIES."`.`name` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product['id']."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1')",ARRAY_A);
 			$i = 0;
 			foreach((array)$category_list as $category_row) {
 				if($i > 0) {
@@ -1170,7 +1170,7 @@ if($product_list != null)
 	
 	
   }
-$product_data_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}product_list WHERE active='1'");
+$product_data_count = $wpdb->get_var("SELECT COUNT(*) FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE active='1'");
 if (isset($_GET['catid'])) {
 	if (($product_data_count >= 1) && (IS_WP27))
  		echo "</table>";

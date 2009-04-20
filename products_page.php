@@ -15,7 +15,7 @@ if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_ca
   $group_type = TXT_WPSC_CATEGORYNOCAP;
 }
 
-$category_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id`='".$category_id."' LIMIT 1",ARRAY_A);
+$category_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='".$category_id."' LIMIT 1",ARRAY_A);
 
 if($_GET['cart']== 'empty') {
   $_SESSION['nzshpcrt_cart'] = '';
@@ -45,7 +45,7 @@ if(function_exists('fancy_notifications')) {
 			$seperator ="&amp;";
 		}
 		if($wp_query->query_vars['product_name'] != null){
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 		} else {
 			$product_id = $_GET['product_id'];
 		}

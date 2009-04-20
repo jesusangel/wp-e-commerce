@@ -50,7 +50,7 @@ function wpsc_category_class() {
   }
 	
 	if((int)$catid > 0) {
-		$category_nice_name = $wpdb->get_var("SELECT `nice-name` FROM `{$wpdb->prefix}product_categories` WHERE `id` ='".(int)$catid."' LIMIT 1");
+		$category_nice_name = $wpdb->get_var("SELECT `nice-name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` ='".(int)$catid."' LIMIT 1");
   } else if($catid == 'all') {
     $category_nice_name = 'all-categories';
   }
@@ -588,7 +588,7 @@ function wpsc_currency_sign() {
   global $wpdb;
 	$currency_sign_location = get_option('currency_sign_location');
 	$currency_type = get_option('currency_type');
-	$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
+	$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
 	return $currency_symbol;
 }
 /**
@@ -757,13 +757,13 @@ class WPSC_Query {
   
 		do_action_ref_array('pre_get_products', array(&$this));
 		if($wp_query->query_vars['product_name'] != null){
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 		} else {
 			$product_id = $_GET['product_id'];
 		}
 		
 		if(($product_id > 0)) {
-		  $product_list = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$product_id."' AND `publish` IN('1') AND `active` IN('1') LIMIT 1",ARRAY_A);
+		  $product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `publish` IN('1') AND `active` IN('1') LIMIT 1",ARRAY_A);
 		}
 		
 		if(count($product_list) > 0) {
@@ -808,7 +808,7 @@ class WPSC_Query {
 			$search_sql = gold_shpcrt_search_sql();
 			if($search_sql != '') {
 				// this cannot currently list products that are associated with no categories
-				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`{$wpdb->prefix}product_list`.`id`) AS `count` FROM `{$wpdb->prefix}product_list`,`{$wpdb->prefix}item_category_associations` WHERE `{$wpdb->prefix}product_list`.`publish`='1' AND `{$wpdb->prefix}product_list`.`active`='1' AND `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}item_category_associations`.`product_id` $no_donations_sql $search_sql");
+				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql");
 				if (isset($_SESSION['item_per_page']))
 				$products_per_page = $_SESSION['item_per_page'];
 				//exit($products_per_page);
@@ -817,7 +817,7 @@ class WPSC_Query {
 					$startnum = $rowcount - $products_per_page;
 				}
 				
-				$sql = "SELECT DISTINCT `{$wpdb->prefix}product_list`.* FROM `{$wpdb->prefix}product_list`,`{$wpdb->prefix}item_category_associations` WHERE `{$wpdb->prefix}product_list`.`publish`='1' AND `{$wpdb->prefix}product_list`.`active`='1' AND `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}item_category_associations`.`product_id` $no_donations_sql $search_sql ORDER BY `{$wpdb->prefix}product_list`.`special` DESC LIMIT $startnum, $products_per_page";
+				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special` DESC LIMIT $startnum, $products_per_page";
 			}
 		} else if (($wp_query->query_vars['ptag'] != null) || ( $_GET['ptag']!=null)) {
 			if($wp_query->query_vars['ptag'] != null) {
@@ -842,7 +842,7 @@ class WPSC_Query {
 			}
 			$product_id = implode(",",$product_ids);
 		
-			$sql = "SELECT * FROM {$wpdb->prefix}product_list WHERE id IN (".$product_id.") AND `publish` IN('1') AND `active` IN('1')"; //Transom - added publish & active
+			$sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$product_id.") AND `publish` IN('1') AND `active` IN('1')"; //Transom - added publish & active
 		} else {
 			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
 				if($wp_query->query_vars['product_category'] != null) {
@@ -862,7 +862,7 @@ class WPSC_Query {
 					*/
 					
 					
-				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`{$wpdb->prefix}product_list`.`id`) AS `count` FROM `{$wpdb->prefix}product_list` LEFT JOIN `{$wpdb->prefix}item_category_associations` ON `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}item_category_associations`.`product_id` WHERE `{$wpdb->prefix}product_list`.`publish`='1' AND `{$wpdb->prefix}product_list`.`active` = '1' AND `{$wpdb->prefix}item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql");
+				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$catid."') $no_donations_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
 				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
@@ -877,23 +877,23 @@ class WPSC_Query {
 				
 				
 				if (get_option('wpsc_sort_by')=='name') {
-					$order_by = "`{$wpdb->prefix}product_list`.`name` $order";
+					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`name` $order";
 				} else if (get_option('wpsc_sort_by') == 'price') {
-					$order_by = "`{$wpdb->prefix}product_list`.`price` $order";
+					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`price` $order";
 				} else {
-					$order_by = " `order_state` DESC,`{$wpdb->prefix}product_order`.`order` $order, `{$wpdb->prefix}product_list`.`id` DESC";
+					$order_by = " `order_state` DESC,`".WPSC_TABLE_PRODUCT_ORDER."`.`order` $order, `".WPSC_TABLE_PRODUCT_LIST."`.`id` DESC";
 				}
 				
-				$sql = "SELECT DISTINCT `{$wpdb->prefix}product_list`.*, `{$wpdb->prefix}item_category_associations`.`category_id`,`{$wpdb->prefix}product_order`.`order`, IF(ISNULL(`{$wpdb->prefix}product_order`.`order`), 0, 1) AS `order_state` FROM `{$wpdb->prefix}product_list` LEFT JOIN `{$wpdb->prefix}item_category_associations` ON `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}item_category_associations`.`product_id` LEFT JOIN `{$wpdb->prefix}product_order` ON ( ( `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}product_order`.`product_id` ) AND ( `{$wpdb->prefix}item_category_associations`.`category_id` = `{$wpdb->prefix}product_order`.`category_id` ) ) WHERE `{$wpdb->prefix}product_list`.`publish`='1' AND `{$wpdb->prefix}product_list`.`active` = '1' AND `{$wpdb->prefix}item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY $order_by LIMIT $startnum, $products_per_page";
+				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.*, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( ( `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` ) AND ( `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` ) ) WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY $order_by LIMIT $startnum, $products_per_page";
 			} else {
-				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`{$wpdb->prefix}product_list`.`id`) AS `count` FROM `{$wpdb->prefix}product_list`,`{$wpdb->prefix}item_category_associations` WHERE `{$wpdb->prefix}product_list`.`publish`='1' AND `{$wpdb->prefix}product_list`.`active`='1' AND `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}item_category_associations`.`product_id` $no_donations_sql $group_sql");
+				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
 				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
 					$startnum = $rowcount - $products_per_page;
 				}
 				
-				$sql = "SELECT DISTINCT `{$wpdb->prefix}product_list`.* FROM `{$wpdb->prefix}product_list`,`{$wpdb->prefix}item_category_associations` WHERE `{$wpdb->prefix}product_list`.`publish`='1' AND `{$wpdb->prefix}product_list`.`active`='1' AND `{$wpdb->prefix}product_list`.`id` = `{$wpdb->prefix}item_category_associations`.`product_id` $no_donations_sql $group_sql ORDER BY `{$wpdb->prefix}product_list`.`special`, `{$wpdb->prefix}product_list`.`id`  DESC LIMIT $startnum, $products_per_page";
+				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special`, `".WPSC_TABLE_PRODUCT_LIST."`.`id`  DESC LIMIT $startnum, $products_per_page";
 			}
 		}
 		
@@ -1007,7 +1007,7 @@ class WPSC_Query {
 	*/
   function get_variation_groups() {
     global $wpdb;
-    $this->variation_groups = $wpdb->get_results("SELECT `v`.`id` AS `variation_id`,`v`.`name`  FROM `{$wpdb->prefix}variation_associations` AS `a` JOIN `{$wpdb->prefix}product_variations` AS `v` ON `a`.`variation_id` = `v`.`id` WHERE `a`.`type` IN ('product') AND `a`.`associated_id` IN ('{$this->product['id']}')", ARRAY_A);
+    $this->variation_groups = $wpdb->get_results("SELECT `v`.`id` AS `variation_id`,`v`.`name`  FROM `".WPSC_TABLE_VARIATION_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_VARIATIONS."` AS `v` ON `a`.`variation_id` = `v`.`id` WHERE `a`.`type` IN ('product') AND `a`.`associated_id` IN ('{$this->product['id']}')", ARRAY_A);
     $this->variation_group_count = count($this->variation_groups);
     $this->get_first_variations();
   }
@@ -1051,15 +1051,15 @@ class WPSC_Query {
     global $wpdb;
     $this->first_variations = array();
     foreach((array)$this->variation_groups as $variation_group) {
-      $this->first_variations[] = $wpdb->get_var("SELECT `v`.`id` FROM `{$wpdb->prefix}variation_values_associations` AS `a`JOIN `{$wpdb->prefix}variation_values` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('{$variation_group['variation_id']}') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC LIMIT 1");
+      $this->first_variations[] = $wpdb->get_var("SELECT `v`.`id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a`JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('{$variation_group['variation_id']}') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC LIMIT 1");
     }
   }
 
 
   function get_variations() {
     global $wpdb;
-    //$this->variations  = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_values` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
-    $this->variations = $wpdb->get_results("SELECT `v`.* FROM `{$wpdb->prefix}variation_values_associations` AS `a`JOIN `{$wpdb->prefix}variation_values` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('{$this->variation_group['variation_id']}') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC", ARRAY_A);
+    //$this->variations  = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
+    $this->variations = $wpdb->get_results("SELECT `v`.* FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a`JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('{$this->variation_group['variation_id']}') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC", ARRAY_A);
     $this->variation_count = count($this->variations);
     //echo "<pre>".print_r($this->variations,true)."</pre>";
   }
@@ -1104,8 +1104,8 @@ class WPSC_Query {
 	*/
   function get_custom_meta() {
     global $wpdb;
-    //$this->variations  = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}variation_values` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
-    $this->custom_meta = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$this->product['id']}') AND `custom` IN('1') ", ARRAY_A);
+    //$this->variations  = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
+    $this->custom_meta = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` IN('{$this->product['id']}') AND `custom` IN('1') ", ARRAY_A);
     $this->custom_meta_count = count($this->custom_meta);
   }
   
@@ -1158,7 +1158,7 @@ class WPSC_Query {
 				$i++;
 		  }
 		  
-			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".(int)$this->category."'",ARRAY_A);
+			$category_info =  $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='".(int)$this->category."'",ARRAY_A);
 			$this->breadcrumbs[$i]['name'] = $category_info['name'];
 			if($i > 0) {
 				$this->breadcrumbs[$i]['url'] = wpsc_category_url($category_info['id']);
@@ -1169,7 +1169,7 @@ class WPSC_Query {
 			
 			
 			while ($category_info['category_parent']!=0) {
-				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='{$category_info['category_parent']}'",ARRAY_A);			
+				$category_info =  $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='{$category_info['category_parent']}'",ARRAY_A);			
 				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
 				$this->breadcrumbs[$i]['url'] = wpsc_category_url($category_info['id']);
 				$i++;

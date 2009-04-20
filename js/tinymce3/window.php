@@ -48,7 +48,7 @@ global $wpdb;
 		<td><select id="wpsc_category" name="wpsc_category" style="width: 200px">
 			<option value="0"><?php _e("No Category", 'wpsc_category'); ?></option>
 				<?php
-				$categorylist = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."product_categories ORDER BY id ASC",ARRAY_A);
+				$categorylist = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." ORDER BY id ASC",ARRAY_A);
 				if(is_array($categorylist)) {
 					foreach($categorylist as $category) {
 						echo "<option value=".$category['id']." >".$category['name']."</option>"."\n";
@@ -72,7 +72,7 @@ global $wpdb;
 		<td><select id="wpsc_slider_category" name="wpsc_category" style="width: 200px">
 			<option value="0"><?php _e("No Category", 'wpsc_category'); ?></option>
 				<?php
-				$categorylist = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."product_categories ORDER BY id ASC",ARRAY_A);
+				$categorylist = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." ORDER BY id ASC",ARRAY_A);
 				if(is_array($categorylist)) {
 					foreach($categorylist as $category) {
 						echo "<option value=".$category['id']." >".$category['name']."</option>"."\n";
@@ -116,7 +116,7 @@ global $wpdb;
 			<select id="add_product_category" name="add_product_category" style="width: 200px">
 			<option value="0"><?php _e("No Category", 'wpsc_category'); ?></option>
 				<?php
-				$categorylist = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."product_categories ORDER BY id ASC",ARRAY_A);
+				$categorylist = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." ORDER BY id ASC",ARRAY_A);
 				if(is_array($categorylist)) {
 					foreach($categorylist as $category) {
 						echo "<option value=".$category['id']." >".$category['name']."</option>"."\n";

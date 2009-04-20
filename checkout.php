@@ -67,7 +67,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
  
 
 <?php
-  $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' ORDER BY `order`;";
+  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
   //exit("<pre>".print_r($form_data,true)."</pre>");
   foreach($form_data as $form_field) {
@@ -134,7 +134,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
 				break;
 
 				case "delivery_country":
-				$country_name = $wpdb->get_var("SELECT `country` FROM `".$wpdb->prefix."currency_list` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
+				$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
 				echo "<input type='hidden' name='collected_data[".$form_field['id']."]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
 				break;
 
@@ -153,7 +153,7 @@ if($_SESSION['nzshpcrt_checkouterr'] != null) {
     
 	$cart = $_SESSION['nzshpcrt_cart'];
   foreach($cart as $key => $product) {
-		$product_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '{$product->product_id}' LIMIT 1",ARRAY_A);
+		$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product->product_id}' LIMIT 1",ARRAY_A);
 		$can_have_uploaded_image = get_product_meta($product->product_id,'can_have_uploaded_image',true);
 		if ($can_have_uploaded_image[0]=='on'){
 			echo "<tr>\n\r";

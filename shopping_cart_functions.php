@@ -152,7 +152,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 					if($i > 0) {
 						$variation_list .= ",&nbsp;";
 					}
-					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 					$variation_list .= stripslashes(str_replace("", " ",$value_data[0]['name']));
 					$i++;
 				}
@@ -162,7 +162,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 			}
 	
 	//echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");
-	$product = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 	
 	if($product['donation'] == 1) {
         if (array_search("google",get_option('custom_gateway_options')) !== false) {
@@ -291,8 +291,8 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 	 if (array_search("google",(array)get_option('custom_gateway_options')) !== false) {
 		 if (!$total_shipping) $total_shipping = 0;
 		 $google_product_id = implode(',', $google_product_id);
-		 $pnp += $wpdb->get_var("SELECT SUM(pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$google_product_id.")");
-		 $international_pnp += $wpdb->get_var("SELECT SUM(international_pnp) FROM ".$wpdb->prefix."product_list WHERE id IN (".$google_product_id.")");
+		 $pnp += $wpdb->get_var("SELECT SUM(pnp) FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$google_product_id.")");
+		 $international_pnp += $wpdb->get_var("SELECT SUM(international_pnp) FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$google_product_id.")");
 		 $local_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country'));
 		 $google_local_shipping = new GoogleFlatRateShipping("Local Shipping", $local_shipping_price+$pnp);
 		 $international_shipping_price= nzshpcrt_determine_base_shipping($total_shipping, get_option('base_country')."-");
@@ -302,7 +302,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		 $google_checkout_shipping=get_option("google_shipping_country");
 		 if (!empty($google_checkout_shipping)) {
 			 $google_shipping_country_ids = implode(",",(array)$google_checkout_shipping);
-			 $google_shipping_country = $wpdb->get_results("SELECT isocode FROM ".$wpdb->prefix."currency_list WHERE id IN (".$google_shipping_country_ids.")", ARRAY_A);
+			 $google_shipping_country = $wpdb->get_results("SELECT isocode FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")", ARRAY_A);
 		}
 		 //exit(print_r($google_shipping_country,1));
 		foreach ((array)$google_shipping_country as $country) {
@@ -318,12 +318,12 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
 		$google_cart->AddShipping($google_local_shipping);
 		$google_cart->AddShipping($google_international_shipping);
 		
-		$local_tax = $wpdb->get_var("SELECT tax from ".$wpdb->prefix."currency_list WHERE isocode='".get_option('base_country')."'");
+		$local_tax = $wpdb->get_var("SELECT tax from ".WPSC_TABLE_CURRENCY_LIST." WHERE isocode='".get_option('base_country')."'");
 		//exit($local_tax);
 		$tax_rule = new GoogleDefaultTaxRule($local_tax/100);
 		
 		if (($_SESSION['selected_country']=='US') && (get_option('base_country')=='US')){
-			$state_name = $wpdb->get_var("SELECT name FROM ".$wpdb->prefix."region_tax WHERE id='".$_SESSION['selected_region']."'");
+			$state_name = $wpdb->get_var("SELECT name FROM ".WPSC_TABLE_REGION_TAX." WHERE id='".$_SESSION['selected_region']."'");
 			//foreach ($state_name as $state)
 			$tax_rule->SetStateAreas(array($state_name));
 		} else {
@@ -401,7 +401,7 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
 	} else {
 		$html_form_id = 'region_country_form';
 	}
-  $country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+  $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
   $output .= "<div id='$html_form_id'>\n\r";
   $output .= "<select name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
   foreach ($country_data as $country) {
@@ -418,7 +418,7 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
   $output .= "</select>\n\r";
   
   
-  $region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".$selected_country."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
+  $region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$selected_country."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
     $output .= "<div id='region_select_$form_id'>";
     if($region_list != null) {
       $output .= "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";

@@ -6,7 +6,7 @@ if($_POST['collected_data'] != null)
   {
   foreach((array)$_POST['collected_data'] as $value_id => $value)
     {
-    $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `id` = '$value_id' LIMIT 1";
+    $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '$value_id' LIMIT 1";
     $form_data = $wpdb->get_results($form_sql,ARRAY_A);
     $form_data = $form_data[0];
     $bad_input = false;
@@ -123,7 +123,7 @@ $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
 
 $meta_data = unserialize($saved_data['meta_value']);
 
-$form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' ORDER BY `order`;";
+$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;";
 $form_data = $wpdb->get_results($form_sql,ARRAY_A);
 
 foreach($form_data as $form_field)

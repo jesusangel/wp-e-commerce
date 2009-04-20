@@ -10,7 +10,7 @@ function display_subcategories($id) {
   } else {
     $seperator ="&amp;";
 	}   
-  $subcategory_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
+  $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
   $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
   if($subcategories != null) {
     $output .= "<ul class='SubCategories'>";
@@ -28,7 +28,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
   global $wpdb; 
   
   if($category_group == null) {
-		$category_group =  $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ");
+		$category_group =  $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ");
   } else {
     $category_group = (int)$category_group;
   }
@@ -59,7 +59,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
   if((get_option('show_categorybrands') == 1 ) || (get_option('show_categorybrands') == 2))
     {
     $output .= "<div class='PeCategories categorydisplay'>";
-    $categories = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '0' ORDER BY `".$wpdb->escape($order_by)."` ASC",ARRAY_A);
+    $categories = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '0' ORDER BY `".$wpdb->escape($order_by)."` ASC",ARRAY_A);
     if($categories != null)
     {
       $output .= "<ul class='PeCategories'>";
@@ -68,7 +68,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
         // Adrian - check option for category count
         if (get_option('show_category_count') == 1){
           //show product count for each category
-          $count_sql = "SELECT COUNT(`p`.`id`) FROM `{$wpdb->prefix}item_category_associations` AS `a` JOIN `{$wpdb->prefix}product_list` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')";
+          $count_sql = "SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')";
           $count = $wpdb->get_var($count_sql);
           $addCount =  " [".$count."]";
         } //end get_option
@@ -83,7 +83,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
 			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
 		}
 	}//end get_option
-        $subcategory_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
+        $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
         $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
         if($subcategories != null)
         {
@@ -95,7 +95,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
           	$category = explode('/',$uri);
           	$count = count($category);
           	$category_nice_name = $category[$count-2];
-          	$category_nice_name2 = $wpdb->get_var("SELECT `nice-name` FROM {$wpdb->prefix}product_categories WHERE id='{$option['id']}'");
+          	$category_nice_name2 = $wpdb->get_var("SELECT `nice-name` FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='{$option['id']}'");
           	if ($category_nice_name == $category_nice_name2) {
           		$list_product=true;
           	} else {
@@ -104,13 +104,13 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
           }
           if ((get_option('catsprods_display_type') == 1) && (($option['id'] == $_GET['category']) || $list_product) ){     
           // Adrian - display all products for that category          
-            $product_sql = "SELECT product_id FROM `".$wpdb->prefix."item_category_associations` WHERE `category_id` = '".$option['id']."'";
+            $product_sql = "SELECT product_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `category_id` = '".$option['id']."'";
             $productIDs = $wpdb->get_results($product_sql,ARRAY_A);
             if($productIDs != null){
               $output .= "<ul>";
               foreach($productIDs as $productID){
                 $ID = $productID['product_id'];
-                $productName_sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '".$ID."'";
+                $productName_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$ID."'";
                 $productName = $wpdb->get_results($productName_sql,ARRAY_A);
                 if ($productName[0]['active'])
                 	$output .= "<li><a class='productlink' href='".wpsc_product_url($ID,$option['id'])."'>".$productName[0]['name']."</a></li>";
@@ -155,12 +155,12 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
 
 function wpsc_category_url($category_id) {
   global $wpdb, $wp_rewrite;
-  $category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1", ARRAY_A);
+  $category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1", ARRAY_A);
   $category_name[] = $category_data['nice-name'];
   if($category_data['category_parent'] > 0) {
     $num = 0;
     while($category_data['category_parent'] > 0) {
-			$category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$category_data['category_parent']."') AND `active` IN('1') LIMIT 1", ARRAY_A);
+			$category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_data['category_parent']."') AND `active` IN('1') LIMIT 1", ARRAY_A);
 			$category_name[] = $category_data['nice-name'];			
 			if($num > 10) { break; }
 			$num++;			
@@ -195,7 +195,7 @@ function wpsc_category_description($category_id = null) {
     }
   
   $category_description = "<p>";
-  $category_description .= $wpdb->get_var("SELECT `description` FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1");
+  $category_description .= $wpdb->get_var("SELECT `description` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1");
   $category_description .= "</p>";
   return $category_description;
   }

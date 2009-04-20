@@ -22,7 +22,7 @@ if(isset($_POST) && is_array($_POST)) {
 				unset($new_rule[$key]);
 			}
 		}
-		if($wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_coupon_codes` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
+		if($wpdb->query("INSERT INTO `".WPSC_TABLE_COUPON_CODES."` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
 			echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
 		}
 	}
@@ -35,7 +35,7 @@ if(isset($_POST) && is_array($_POST)) {
 // 			$coupon_data['expiry'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['expiry']['month'], (int)$coupon_data['expiry']['day'], (int)$coupon_data['expiry']['year']));
 			$coupon_data['start'] = $coupon_data['start']." 00:00:00";
 			$coupon_data['expiry'] = $coupon_data['expiry']." 00:00:00";
-			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE `id` = '$coupon_id'", ARRAY_A);
+			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id'", ARRAY_A);
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
 			ksort($check_values); ksort($coupon_data);
 						
@@ -52,7 +52,7 @@ if(isset($_POST) && is_array($_POST)) {
 					
 				//echo("<pre>".print_r($insert_array,true)."</pre>");
 				if(count($insert_array) > 0) {
-					$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_coupon_codes` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
+					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
 				unset($insert_array);
 				//echo("<pre>".print_r($check_values,true)."</pre>");
@@ -60,7 +60,7 @@ if(isset($_POST) && is_array($_POST)) {
 				//echo("<pre>".print_r($coupon_data,true)."</pre>");
 				
 			if($coupon_data['delete_coupon'] != '') {
-				$wpdb->query("DELETE FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE `id` = '$coupon_id' LIMIT 1;");
+				$wpdb->query("DELETE FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id' LIMIT 1;");
 			}
 		}
 	}
@@ -297,7 +297,7 @@ echo TXT_WPSC_EDIT;
 echo "    </td>\n\r";
 
 $i=0;
-$coupon_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."wpsc_coupon_codes` ",ARRAY_A);
+$coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` ",ARRAY_A);
 foreach((array)$coupon_data as $coupon) {
   $alternate = "";
   $i++;

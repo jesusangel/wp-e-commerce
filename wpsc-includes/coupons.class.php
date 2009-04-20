@@ -47,7 +47,7 @@ class wpsc_coupons {
 		} else {
 			$this->code = $code;
 			
-			$coupon_data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}wpsc_coupon_codes WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
+			$coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
 			$coupon_data = $coupon_data[0];
 			
 			if ($coupon_data == '' || $coupon_data == NULL) {
@@ -112,7 +112,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 			foreach ($wpsc_cart->cart_items as $key => $item) {
 				$match = true;
 				
-				$product_data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list WHERE id='{$item->product_id}'");
+				$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$item->product_id}'");
 				$product_data = $product_data[0];
 			
 				foreach ($this->conditions as $c) {
@@ -149,7 +149,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 	function compare_logic($c, $product_obj) {
 		global $wpdb;
 		if ($c['property'] == 'item_name') {
-			$product_data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_list WHERE id='{$product_obj->product_id}'");
+			$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$product_obj->product_id}'");
 			$product_data = $product_data[0];
 		
 			switch($c['logic']) {
@@ -269,7 +269,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 	*/
 	function uses_coupons() {
 		global $wpdb;
-		$coupon_info = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'wpsc_coupon_codes WHERE active="1"',ARRAY_A);
+		$coupon_info = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE active='1' ",ARRAY_A);
 		if($coupon_info != NULL){
 			return true;
 		}else{

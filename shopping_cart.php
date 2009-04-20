@@ -67,7 +67,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 	if($selected_region == null) {
 		$selected_region = get_option('base_region');
 	}
-	$country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+	$country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
 	$output .= "<select name='country' id='current_country' onchange='submit_change_country();' >";
 	foreach ($country_data as $country) {
 		$selected ='';
@@ -79,7 +79,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 	$output .= "</select>";
 	
 	if ($selected_country == 'US') {
-		$region_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."region_tax` WHERE country_id='136'",ARRAY_A);
+		$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
 		$output .= "<select>";
 		foreach ($region_data as $region) {
 			$output .= "<option>".$region['name']."</option>";
@@ -141,7 +141,7 @@ function wpsc_shipping_country_list($selected_country = null) {
 		if($i > 0) {
 			$variation_list .= ",&nbsp;";
 		}
-		$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+		$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 #$variation_list .= str_replace(" ", "&nbsp;",$value_data[0]['name']);
 	$variation_list .= str_replace("", " ",$value_data[0]['name']);
 	//echo("<pre>".print_r($variation,true)."</pre>");
@@ -151,7 +151,7 @@ function wpsc_shipping_country_list($selected_country = null) {
     } else {
 	    $variation_list = '';
     }
-    $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
+    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$product_id' LIMIT 1";
     $product_list = $wpdb->get_row($sql,ARRAY_A) ;
     echo "<tr class='product_row'>\n\r";
     

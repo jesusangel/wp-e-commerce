@@ -30,7 +30,7 @@ if($_POST['submit_action'] == 'add')
       $form_display_log = 0;
       if($_POST['form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
       $form_order = $_POST['form_order'][$form_id];
-      $wpdb->query("UPDATE `".$wpdb->prefix."collect_data_forms` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log', `order` = '$form_order' WHERE `id` ='".$form_id."' LIMIT 1 ;");
+      $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log', `order` = '$form_order' WHERE `id` ='".$form_id."' LIMIT 1 ;");
       }
     }
   
@@ -43,7 +43,7 @@ if($_POST['submit_action'] == 'add')
       if($_POST['new_form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
       $form_display_log = 0;
       if($_POST['new_form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
-      $max_order_sql = "SELECT MAX(`order`) AS `order` FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1';";
+      $max_order_sql = "SELECT MAX(`order`) AS `order` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
       if($_POST['new_form_order'][$form_id] != '')
         {
         $order_number = $_POST['new_form_order'][$form_id];
@@ -53,7 +53,7 @@ if($_POST['submit_action'] == 'add')
           $max_order_sql = $wpdb->get_results($max_order_sql,ARRAY_A);
           $order_number = $max_order_sql[0]['order'] + 1;
           }
-      $wpdb->query("INSERT INTO `".$wpdb->prefix."collect_data_forms` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');");
+      $wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');");
       }
     }
 //   echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
@@ -129,10 +129,10 @@ if($_POST['submit_action'] == 'add')
       <div id='form_field_form_container'>
   <?php
   
-  $email_form_field = $wpdb->get_results("SELECT `id` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
+  $email_form_field = $wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
   $email_form_field = $email_form_field[0];
   
-  $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' ORDER BY `order`;";
+  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
   //exit("<pre>".print_r($form_data,true)."</pre>");
   foreach($form_data as $form_field) {

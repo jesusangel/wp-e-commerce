@@ -50,14 +50,14 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 // 	    exit("<pre>".print_r($ranges,1)."</pre>");
 		switch($_GET['range']) {
 			case 1:
-				$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` < ".$ranges[1]." AND `active` IN ('1')";
+				$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` < ".$ranges[1]." AND `active` IN ('1')";
 				break;
 			
 			case 2: {
 				if (array_key_exists(2,$ranges)) {
-					$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[1]."' AND `price` < '".$ranges[2]."' AND `active` IN ('1')";
+					$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[1]."' AND `price` < '".$ranges[2]."' AND `active` IN ('1')";
 				} else {
-					$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[1]."' AND `active` IN ('1')";
+					$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[1]."' AND `active` IN ('1')";
 				}
 			  break;
 			} 
@@ -65,33 +65,33 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 			
 				case 3: {
 					if (array_key_exists(3,$ranges)) {
-						$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[2]."' AND `price` < '".$ranges[3]."' AND `active` IN ('1')";
+						$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[2]."' AND `price` < '".$ranges[3]."' AND `active` IN ('1')";
 					} else {
-						$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[2]."' AND `active` IN ('1')";
+						$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[2]."' AND `active` IN ('1')";
 					}
 					break;
 				}
 			
 			case 4: {
 				if (array_key_exists(4,$ranges)) {
-					$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[3]."' AND `price` < '".$ranges[4]."' AND `active` IN ('1')";
+					$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[3]."' AND `price` < '".$ranges[4]."' AND `active` IN ('1')";
 				} else {
-					$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[3]."' AND `active` IN ('1')";
+					$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[3]."' AND `active` IN ('1')";
 				}
 				break;
 			}
 			
 			case 5: {
 				if (array_key_exists(5,$ranges)) {
-					$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[4]."' AND `price` < '".$ranges[5]."' AND `active` IN ('1')";
+					$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[4]."' AND `price` < '".$ranges[5]."' AND `active` IN ('1')";
 				} else {
-					$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[4]."' AND `active` IN ('1')";
+					$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[4]."' AND `active` IN ('1')";
 				}
 				break;
 			}
 			
 			case 6: 
-				$range_sql="SELECT * FROM ".$wpdb->prefix."product_list WHERE `price` >= '".$ranges[5]."' AND `active` IN ('1')";
+				$range_sql="SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `price` >= '".$ranges[5]."' AND `active` IN ('1')";
 			break;
 		}
 		//exit($range_sql);
@@ -102,7 +102,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
    
   foreach((array)$activated_widgets as $widget_container) {
     if(is_array($widget_container) && array_search(TXT_WPSC_DONATIONS, $widget_container)) {
-      $no_donations_sql = "AND `".$wpdb->prefix."product_list`.`donation` != '1'";
+      $no_donations_sql = "AND `".WPSC_TABLE_PRODUCT_LIST."`.`donation` != '1'";
       break;
 		}
 	}  
@@ -111,7 +111,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
     $search_sql = gold_shpcrt_search_sql();
     if($search_sql != '') {
       // this cannot currently list products that are associated with no categories
-      $rowcount = $wpdb->get_var("SELECT COUNT(DISTINCT `".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $search_sql");
+      $rowcount = $wpdb->get_var("SELECT COUNT(DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql");
       if (isset($_SESSION['item_per_page']))
 	  	$products_per_page = $_SESSION['item_per_page'];
       //exit($products_per_page);
@@ -120,7 +120,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
         $startnum = $rowcount - $products_per_page;
 			}
 			
-			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $search_sql ORDER BY `".$wpdb->prefix."product_list`.`special` DESC LIMIT $startnum, $products_per_page";
+			$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special` DESC LIMIT $startnum, $products_per_page";
 		}
 	} else if (($wp_query->query_vars['ptag'] != null) || ( $_GET['ptag']!=null)) {
     if($wp_query->query_vars['ptag'] != null) {
@@ -145,7 +145,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 		}
 		$product_id = implode(",",$product_ids);
 	
-		$sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id IN (".$product_id.")";
+		$sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$product_id.")";
 	} else {
 	
 		// Ascending or descending order?
@@ -159,18 +159,18 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 		*/
 		switch(get_option('wpsc_sort_by')) {
 			case 'name':			  
-			$order_by_sql = " `{$wpdb->prefix}product_list`.`name` {$order}";
+			$order_by_sql = " `".WPSC_TABLE_PRODUCT_LIST."`.`name` {$order}";
 			break;
 			
 			case 'price':			  
-			$order_by_sql = " `{$wpdb->prefix}product_list`.`price` {$order}";
+			$order_by_sql = " `".WPSC_TABLE_PRODUCT_LIST."`.`price` {$order}";
 			break;
 			
 			default:
 			// default, order by ID or by per category order.
-			$order_by_sql = "`{$wpdb->prefix}product_list`.`id` {$order} ";			
+			$order_by_sql = "`".WPSC_TABLE_PRODUCT_LIST."`.`id` {$order} ";			
 			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
-				$order_by_sql = "`order_state` DESC,`{$wpdb->prefix}product_order`.`order` $order, `{$wpdb->prefix}product_list`.`id` DESC ";
+				$order_by_sql = "`order_state` DESC,`".WPSC_TABLE_PRODUCT_ORDER."`.`order` $order, `".WPSC_TABLE_PRODUCT_LIST."`.`id` DESC ";
 			}
 			break;
 		}
@@ -188,7 +188,7 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 					$catid = get_option('wpsc_default_category');
 				}
 				
-			$rowcount = $wpdb->get_var("SELECT COUNT(DISTINCT `".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql");
+			$rowcount = $wpdb->get_var("SELECT COUNT(DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$catid."') $no_donations_sql");
 			
 
 			
@@ -197,18 +197,18 @@ function wpsc_get_product_listing($product_list, $group_type, $group_sql = '', $
 				$startnum = $rowcount - $products_per_page;
 			}
 			
-			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.*, `".$wpdb->prefix."item_category_associations`.`category_id`,`".$wpdb->prefix."product_order`.`order`, IF(ISNULL(`".$wpdb->prefix."product_order`.`order`), 0, 1) AS `order_state` FROM `".$wpdb->prefix."product_list` LEFT JOIN `".$wpdb->prefix."item_category_associations` ON `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` LEFT JOIN `".$wpdb->prefix."product_order` ON ( ( `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."product_order`.`product_id` ) AND ( `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_order`.`category_id` ) ) WHERE `".$wpdb->prefix."product_list`.`active` = '1' AND `".$wpdb->prefix."item_category_associations`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY $order_by_sql LIMIT $startnum, $products_per_page";
+			$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.*, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( ( `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` ) AND ( `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` ) ) WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY $order_by_sql LIMIT $startnum, $products_per_page";
 			
 		} else {
 		  // this is the section for that displayng all the products
-			$rowcount = $wpdb->get_var("SELECT COUNT(DISTINCT `".$wpdb->prefix."product_list`.`id`) AS `count` FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql");
+			$rowcount = $wpdb->get_var("SELECT COUNT(DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql");
 			
 			if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
 			if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
 				$startnum = $rowcount - $products_per_page;
 			}
 			
-			$sql = "SELECT DISTINCT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."product_list`,`".$wpdb->prefix."item_category_associations` WHERE `".$wpdb->prefix."product_list`.`active`='1' AND `".$wpdb->prefix."product_list`.`id` = `".$wpdb->prefix."item_category_associations`.`product_id` $no_donations_sql $group_sql ORDER BY $order_by_sql LIMIT $startnum, $products_per_page";
+			$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql ORDER BY $order_by_sql LIMIT $startnum, $products_per_page";
 			//echo $sql;
 		}
 	}
@@ -283,7 +283,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
     $output .= $product_listing_data['page_listing'];
 	}
   if($product_listing_data['category_id']) {
-		$category_nice_name = $wpdb->get_var("SELECT `nice-name` FROM `".$wpdb->prefix."product_categories` WHERE `id` ='".(int)$product_listing_data['category_id']."' LIMIT 1");
+		$category_nice_name = $wpdb->get_var("SELECT `nice-name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` ='".(int)$product_listing_data['category_id']."' LIMIT 1");
   } else {
     $category_nice_name = '';
   }
@@ -294,10 +294,10 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			$output .= "<a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
 			
 			$category = $product_listing_data['category_id'];
-			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
+			$category_info =  $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='".$category."'",ARRAY_A);
 			$category_info['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
 			while ($category_info['category_parent']!=0) {
-				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info['category_parent']."'",ARRAY_A);
+				$category_info =  $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='".$category_info['category_parent']."'",ARRAY_A);
 			
 				$output .= "<a href='".wpsc_category_url($category_info['id'])."'>".$category_info['name']."</a> &raquo; ";
 			}
@@ -383,7 +383,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
       ob_end_clean();
       
       if(is_numeric($product['file']) && ($product['file'] > 0)) {
-        $file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
+        $file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
         if(($file_data != null) && (function_exists('listen_button'))) {
           $output .= listen_button($file_data['idhash'], $file_data['id']);
 				}
@@ -410,7 +410,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 			}
 
 			// print the custom fields here, if there are any
-			$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
+			$custom_fields =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
 			if(count($custom_fields) > 0) {
 			  $output .= "<div class='custom_meta'>";
 			  foreach((array)$custom_fields as $custom_field) {
@@ -452,7 +452,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
       if($product['donation'] == 1) {
         $currency_sign_location = get_option('currency_sign_location');
         $currency_type = get_option('currency_type');
-        $currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
+        $currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
         $output .= "<label for='product_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='product_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
 			} else {
         if(($product['special']==1) && ($variations_output[1] === null)) {
@@ -469,7 +469,7 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
       
       $output .= "<input type='hidden' name='item' value='".$product['id']."' />";
       
-			$updatelink_sql = "SELECT * FROM ".$wpdb->prefix."wpsc_productmeta WHERE product_id =". $product['id']." AND meta_key='external_link'";
+			$updatelink_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCTMETA." WHERE product_id =". $product['id']." AND meta_key='external_link'";
 			$updatelink_data = $wpdb->get_results($updatelink_sql, ARRAY_A);
 			$updatelink = get_product_meta($product['id'], 'external_link', true);
 			
@@ -525,12 +525,12 @@ function product_display_default($product_list, $group_type, $group_sql = '', $s
 							$output .= google_buynow($product['id']);
 						} else if (in_array('paypal_multiple',(array)get_option('custom_gateway_options'))) {
 					
-							$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1";
+							$product_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = ".$product_id." LIMIT 1";
 							$product = $wpdb->get_row($product_sql, ARRAY_A);
 							$tax_percentage = 0;
-							$country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+							$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
 							if(($country_data['has_regions'] == 1)) {
-								$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+								$region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
 								$tax_percentage =  $region_data['tax'];
 							}
 						
@@ -599,7 +599,7 @@ function single_product_display($product_id) {
 	
 	// what is our product?
   if(is_numeric($product_id)) {
-    $product_list = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$product_id."' LIMIT 1",ARRAY_A);
+    $product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' LIMIT 1",ARRAY_A);
 	}
 	
 	// if we have a product
@@ -609,11 +609,11 @@ function single_product_display($product_id) {
   	if (get_option("show_breadcrumbs") == '1') {
 			$output .= "<div class='breadcrumb'>\n\r";
 			$output .= "  <a href='".get_option('siteurl')."'>".get_option('blogname')."</a> &raquo; ";
-			$category = $wpdb->get_var("SELECT category_id FROM {$wpdb->prefix}item_category_associations WHERE product_id='{$product_id}' ORDER BY id ASC LIMIT 1");
-			$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category."'",ARRAY_A);
+			$category = $wpdb->get_var("SELECT category_id FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id='{$product_id}' ORDER BY id ASC LIMIT 1");
+			$category_info =  $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='".$category."'",ARRAY_A);
 			$category_info['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
 			while ($category_info['category_parent']!=0) {
-				$category_info =  $wpdb->get_row("SELECT * FROM {$wpdb->prefix}product_categories WHERE id='".$category_info['category_parent']."'",ARRAY_A);
+				$category_info =  $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='".$category_info['category_parent']."'",ARRAY_A);
 			
 				$output .= "<a href='".wpsc_category_url($category_info['id'])."'>".$category_info['name']."</a> &raquo; ";
 			}
@@ -694,7 +694,7 @@ function single_product_display($product_id) {
       $output .= ob_get_contents();
       ob_end_clean();
       if(is_numeric($product['file']) && ($product['file'] > 0)) {
-        $file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
+        $file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product['file']."' LIMIT 1",ARRAY_A);
         if(($file_data != null) && (function_exists('listen_button'))) {
           $output .= listen_button($file_data['idhash'], $file_data['id']);
 				}
@@ -724,7 +724,7 @@ function single_product_display($product_id) {
 				$output .= TXT_WPSC_PDF.": <a href='".WPSC_PREVIEW_URL."$pdf'>$pdf</a>";
 				*/
 			// print the custom fields here, if there are any
-			$custom_fields =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_productmeta` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
+			$custom_fields =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` IN('{$product['id']}') AND `custom` IN('1') ",ARRAY_A);
 			if(count($custom_fields) > 0) {
 			  $output .= "           <div class='custom_meta'>\n\r";
 			  foreach((array)$custom_fields as $custom_field) {
@@ -761,7 +761,7 @@ function single_product_display($product_id) {
 				if($product['donation'] == 1) {
 					$currency_sign_location = get_option('currency_sign_location');
 					$currency_type = get_option('currency_type');
-					$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1") ;
+					$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
 					$output .= "           <label for='product_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='product_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />";
 				} else {
 					
@@ -859,12 +859,12 @@ $output .= "<a class='add_meta_box'>Add Label</a>";
 						$output .= google_buynow($product['id']);
 					} else if (in_array('paypal_multiple', (array)$selected_gateways)) {
 					
-						$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1";
+						$product_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = ".$product_id." LIMIT 1";
 						$product = $wpdb->get_row($product_sql, ARRAY_A);
 						$tax_percentage = 0;
-						$country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+						$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
 						if(($country_data['has_regions'] == 1)) {
-							$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+							$region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
 							$tax_percentage =  $region_data['tax'];
 						}
 					
@@ -926,10 +926,10 @@ $output .= "<a class='add_meta_box'>Add Label</a>";
 function wpsc_post_title_seo($title) {
 	global $wpdb, $page_id, $wp_query;
 	if($wp_query->query_vars['product_name'] != '') {
-		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpdb->escape($wp_query->query_vars['product_name'])."' ) LIMIT 1");			
-    $title = $wpdb->get_var("SELECT `name` FROM `".$wpdb->prefix."product_list` WHERE `id` IN('".(int)$product_id."') LIMIT 1");
+		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpdb->escape($wp_query->query_vars['product_name'])."' ) LIMIT 1");			
+    $title = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN('".(int)$product_id."') LIMIT 1");
 	} else if(is_numeric($_GET['product_id'])) {
-		$title=$wpdb->get_var("SELECT `name` FROM ".$wpdb->prefix."product_list WHERE id IN ('".(int)$_GET['product_id']."') LIMIT 1" );
+		$title=$wpdb->get_var("SELECT `name` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN ('".(int)$_GET['product_id']."') LIMIT 1" );
 	}
 	return stripslashes($title);
 }
@@ -955,7 +955,7 @@ function wpsc_also_bought($product_id) {
   $image_display_height = 96; 
   $image_display_width = 96; 
   
-  $also_bought = $wpdb->get_results("SELECT `".$wpdb->prefix."product_list`.* FROM `".$wpdb->prefix."also_bought_product`, `".$wpdb->prefix."product_list` WHERE `selected_product`='".$product_id."' AND `".$wpdb->prefix."also_bought_product`.`associated_product` = `".$wpdb->prefix."product_list`.`id` AND `".$wpdb->prefix."product_list`.`active` IN('1') ORDER BY `".$wpdb->prefix."also_bought_product`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
+  $also_bought = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_ALSO_BOUGHT."`, `".WPSC_TABLE_PRODUCT_LIST."` WHERE `selected_product`='".$product_id."' AND `".WPSC_TABLE_ALSO_BOUGHT."`.`associated_product` = `".WPSC_TABLE_PRODUCT_LIST."`.`id` AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN('1') ORDER BY `".WPSC_TABLE_ALSO_BOUGHT."`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
   if(count($also_bought) > 0) {
     $output = "<p class='wpsc_also_bought_header'>".TXT_WPSC_ALSO_BOUGHT."</p>";
     $output .= "<div class='wpsc_also_bought'>";
@@ -1027,7 +1027,7 @@ function fancy_notification_content($product_id, $quantity_limit = false) {
   $siteurl = get_option('siteurl');
   $instock = true;
   if(is_numeric($product_id)) {
-    $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1";
+    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1";
     $product = $wpdb->get_row($sql,ARRAY_A);
     //if($product['quantity_limited'] == 1) { }
     $output = "";
@@ -1050,7 +1050,7 @@ function wpsc_product_url($product_id, $category_id = null, $escape = true) {
 		if(is_numeric($wp_query->query_vars['product_category'])) {
 		  $category_id = $wp_query->query_vars['product_category'];
 		} else {
-			$category_list = $wpdb->get_row("SELECT `".$wpdb->prefix."product_categories`.`id`, IF((`".$wpdb->prefix."product_categories`.`id` = '".get_option('wpsc_default_category')."'), 0, 1) AS `order_state` FROM `".$wpdb->prefix."item_category_associations` , `".$wpdb->prefix."product_categories` WHERE `".$wpdb->prefix."item_category_associations`.`product_id` IN ('".$product_id."') AND `".$wpdb->prefix."item_category_associations`.`category_id` = `".$wpdb->prefix."product_categories`.`id` AND `".$wpdb->prefix."product_categories`.`active` IN('1') LIMIT 1",ARRAY_A);
+			$category_list = $wpdb->get_row("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id`, IF((`".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` = '".get_option('wpsc_default_category')."'), 0, 1) AS `order_state` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product_id."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1') LIMIT 1",ARRAY_A);
 			$category_id = $category_list['id'];		
 		}
   }
@@ -1080,9 +1080,9 @@ function google_buynow($product_id) {
 	global $wpdb;
 	$output = "";
 	if ($product_id > 0){
-		$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1";
+		$product_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = ".$product_id." LIMIT 1";
 		$product_info = $wpdb->get_results($product_sql, ARRAY_A);
-		$variation_sql = "SELECT * FROM ".$wpdb->prefix."variation_priceandstock WHERE product_id = ".$product_id;
+		$variation_sql = "SELECT * FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE product_id = ".$product_id;
 		$variation_info = $wpdb->get_results($variation_sql, ARRAY_A);
 		if (count($variation_info) > 0) {
 			$variation = 1;
@@ -1170,7 +1170,7 @@ function wpsc_product_image_html($image_name, $product_id) {
 	
 	//list($category['height'], $category['width']) =
 	 
-	$category = $wpdb->get_row("SELECT `image_height` AS `height`, `image_width` AS `width` FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('{$category_id}')", ARRAY_A);
+	$category = $wpdb->get_row("SELECT `image_height` AS `height`, `image_width` AS `width` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}')", ARRAY_A);
 	// if there is a height, width, and imagePNG function
 	if(($category['height'] != null) && ($category['width'] != null) && (function_exists('ImagePNG'))) {
 		$image_path = "index.php?productid=".$product_id."&amp;thumbnail=".$use_thumbnail_image."&amp;width=".$category['width']."&amp;height=".$category['height']."";
@@ -1187,12 +1187,12 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 		$output .= google_buynow($product['id']);
 	} else if (in_array('paypal_multiple', (array)$selected_gateways)) {
 		if ($product_id > 0){
-			$product_sql = "SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1";
+			$product_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = ".$product_id." LIMIT 1";
 			$product = $wpdb->get_row($product_sql, ARRAY_A);
 			$tax_percentage = 0;
-			$country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
+			$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
 			if(($country_data['has_regions'] == 1)) {
-				$region_data = $wpdb->get_row("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax` WHERE `".$wpdb->prefix."region_tax`.`country_id` IN('".$country_data['id']."') AND `".$wpdb->prefix."region_tax`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
+				$region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
 				$tax_percentage =  $region_data['tax'];
 			}
 		
@@ -1232,7 +1232,7 @@ function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
 	global $wpdb;
 	if ($product_id > 0){
 		if(function_exists('wpsc_theme_html')) {
-			$product = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."product_list WHERE id = ".$product_id." LIMIT 1", ARRAY_A);
+			$product = $wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = ".$product_id." LIMIT 1", ARRAY_A);
 			//this needs the results from the product_list table passed to it, does not take just an ID
 			$wpsc_theme = wpsc_theme_html($product);
 		}

@@ -186,7 +186,7 @@ if($_REQUEST['wpsc_ajax_action'] == 'update_shipping_price') {
 function wpsc_get_rating_count() {
   global $wpdb, $wpsc_cart;
   $prodid = $_POST['product_id'];
-	$data = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."product_rating` WHERE `productid` = '".$prodid."'",ARRAY_A) ;
+	$data = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `productid` = '".$prodid."'",ARRAY_A) ;
 	echo $data[0]['count'].",".$prodid;
 	exit();
 }
@@ -261,16 +261,16 @@ function wpsc_submit_checkout() {
 	
 	
 	$selectedCountry = $_SESSION['wpsc_delivery_country'];
-	$sql="SELECT id, country FROM `{$wpdb->prefix}currency_list` WHERE isocode='".$selectedCountry."'";
+	$sql="SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$selectedCountry."'";
 	$selectedCountry = $wpdb->get_results($sql, ARRAY_A);
 
 
    foreach($wpsc_cart->cart_items as $cartitem){
    //	exit('<pre>'.print_r($cartitem, true).'</pre>');
-   		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `{$wpdb->prefix}item_category_associations` WHERE product_id=".$cartitem->product_id);
+   		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE product_id=".$cartitem->product_id);
    		
    		foreach((array)$categoriesIDs as $catid){
-   			$sql ="SELECT countryid FROM `{$wpdb->prefix}wpsc_category_tm` WHERE visible=0 AND categoryid=".$catid[0];
+   			$sql ="SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE visible=0 AND categoryid=".$catid[0];
    		//	exit($sql);
    			$countries = $wpdb->get_col($sql);
    			//exit(print_r($countries));
@@ -302,10 +302,10 @@ function wpsc_submit_checkout() {
 			
 			    
 
-			$wpdb->query("INSERT INTO `{$wpdb->prefix}purchase_logs` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')");
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')");
 			
 			
-			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `{$wpdb->prefix}purchase_logs` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
+			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
 			//$purchase_log_id = 1;
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
 			$wpsc_cart->save_to_db($purchase_log_id);
@@ -321,7 +321,7 @@ function wpsc_submit_checkout() {
 			foreach($nzshpcrt_gateways as $gateway) {
         if($gateway['internalname'] == $submitted_gateway ) {
           $gateway_used = $gateway['internalname'];
-          $wpdb->query("UPDATE `".$wpdb->prefix."purchase_logs` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
+          $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
           $gateway['function']($seperator, $sessionid);
           break;
         }

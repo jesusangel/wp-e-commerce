@@ -8,13 +8,13 @@ function nzshpcrt_getproductform($prodid)
   * makes the product form
   * has functions inside a function
   */ 
-  $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=$prodid LIMIT 1";
+  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=$prodid LIMIT 1";
   $product_data = $wpdb->get_results($sql,ARRAY_A);
   $product = $product_data[0];
-  $sql = "SELECT * FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id`=$prodid AND meta_key='external_link' LIMIT 1";
+  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`=$prodid AND meta_key='external_link' LIMIT 1";
   $meta_data = $wpdb->get_results($sql,ARRAY_A);
   $product['external_link'] = $meta_data[0]['meta_value'];
-  $sql = "SELECT * FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `product_id`=$prodid AND meta_key='merchant_notes' LIMIT 1";
+  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`=$prodid AND meta_key='merchant_notes' LIMIT 1";
   $meta_data = $wpdb->get_results($sql,ARRAY_A);
   $product['merchant_notes'] = $meta_data[0]['meta_value'];
   $engrave = get_product_meta($prodid,'engraved',true);
@@ -43,7 +43,7 @@ function nzshpcrt_getproductform($prodid)
 		}
   }
 
-  $check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".$wpdb->prefix."variation_values_associations` WHERE `product_id` = '".$product['id']."'");
+  $check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '".$product['id']."'");
   
   
 	$current_user = wp_get_current_user();
@@ -151,10 +151,10 @@ function nzshpcrt_getproductform($prodid)
   $output .= "            <td class='itemfirstcol'>".TXT_WPSC_CATEGORISATION.":</td>\n\r";
   $output .= "            <td>\n\r";
   
-    $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
+    $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 					
 	foreach((array)$categorisation_groups as $categorisation_group) {
-		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}product_categories` WHERE `group_id` IN ('{$categorisation_group['id']}')");
+		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
 		if($category_count > 0) {
 			$output .= "<p>";
 			$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
@@ -237,7 +237,7 @@ function nzshpcrt_getproductform($prodid)
 function nzshpcrt_getcategoryform($catid)
   {
   global $wpdb,$nzshpcrt_imagesize_info;
-  $sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id`=$catid LIMIT 1";
+  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1";
   $product_data = $wpdb->get_results($sql,ARRAY_A) ;
   $product = $product_data[0];
   $output = '';
@@ -352,8 +352,8 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "          </tr>\n\r";
   $output .= "          </tr>\n\r";
 	 /* START OF TARGET MARKET SELECTION */					
-	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ",ARRAY_A);
-	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".$wpdb->prefix."wpsc_category_tm` WHERE categoryid=".$product['id']." AND visible= 1");
+	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
+	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$product['id']." AND visible= 1");
 //	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
 	$output .= " <tr>\n\r";
 	$output .= " 	<td colspan='2'><h4>Target Market Restrictions</h4></td></tr><tr>\n\r";
@@ -448,7 +448,7 @@ function nzshpcrt_getvariationform($variation_id)
   {
   global $wpdb,$nzshpcrt_imagesize_info;
 
-  $variation_sql = "SELECT * FROM `".$wpdb->prefix."product_variations` WHERE `id`='$variation_id' LIMIT 1";
+  $variation_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='$variation_id' LIMIT 1";
   $variation_data = $wpdb->get_results($variation_sql,ARRAY_A) ;
   $variation = $variation_data[0];
   $output .= "        <table class='category_forms' >\n\r";
@@ -466,7 +466,7 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= TXT_WPSC_VARIATION_VALUES.": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $variation_values_sql = "SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `variation_id`='$variation_id' ORDER BY `id` ASC";
+  $variation_values_sql = "SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id`='$variation_id' ORDER BY `id` ASC";
   $variation_values = $wpdb->get_results($variation_values_sql,ARRAY_A);
   $variation_value_count = count($variation_values);
   $output .= "<div id='edit_variation_values'>";
@@ -639,33 +639,33 @@ function wpsc_right_now() {
 	$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
 	$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
 
-  $replace_values[":productcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1')");
-  $product_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_list` WHERE `active` IN ('1')");
+  $replace_values[":productcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')");
+  $product_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')");
   $replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
   $product_unit = (($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
   
-  $replace_values[":groupcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_categories` WHERE `active` IN ('1')");
-  $group_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_categories` WHERE `active` IN ('1')");
+  $replace_values[":groupcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1')");
+  $group_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1')");
   $replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
   $group_unit = (($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
   
-  $replace_values[":salecount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
-  $sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
+  $replace_values[":salecount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
+  $sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
   $replace_values[":salecount:"] .= " ".(($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
   $sales_unit = (($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
 		
   $replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
   $replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
   
-  $variation_count = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."product_variations`");
+  $variation_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."`");
   $variation_unit = (($variation_count == 1) ? TXT_WPSC_VARIATION_SINGULAR : TXT_WPSC_VARIATION_PLURAL);
   
-  $replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('1')");
-  $pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('1')");
+  $replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
+  $pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
   $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
   $pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
   
-  $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` IN ('2' ,'3', '4')");
+  $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
   $accept_sales_unit = (($accept_sales == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
 
   
@@ -766,13 +766,13 @@ function wpsc_right_now() {
 
 function wpsc_packing_slip($purchase_id) {
   global $wpdb;
-	$purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$purchase_id."'";
+	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 			
 			
 	  //echo "<p style='padding-left: 5px;'><strong>".TXT_WPSC_DATE."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
-		$cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_id."";
+		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
 		$j = 0;
 		if($cart_log != null) {
@@ -782,7 +782,7 @@ function wpsc_packing_slip($purchase_id) {
 			
 			echo "<table>\n\r";
 			
-			$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".(int)$purchase_id."'";
+			$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE  `log_id` = '".(int)$purchase_id."'";
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
 			
 			foreach($input_data as $input_row) {
@@ -791,7 +791,7 @@ function wpsc_packing_slip($purchase_id) {
 			
 			
 			if($input_data != null) {
-        $form_data = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}collect_data_forms` WHERE `active` = '1'",ARRAY_A);
+        $form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
         
         foreach($form_data as $form_field) {
           switch($form_field['type']) {
@@ -873,12 +873,12 @@ function wpsc_packing_slip($purchase_id) {
 				if(($j % 2) != 0) {
 					$alternate = "class='alt'";
         }
-				$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
+				$productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A); 
 			
 			
 			
-				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
+				$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$cart_row['id']."'";
 				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 				$variation_count = count($variation_data);
 				
@@ -890,14 +890,14 @@ function wpsc_packing_slip($purchase_id) {
 							$variation_list .= ", ";
             }
 						$value_id = $variation['value_id'];
-						$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+						$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 						$variation_list .= $value_data[0]['name'];
 						$i++;
           }
 					$variation_list .= ")";
         } else if($variation_count == 1) {
           $value_id = $variation_data[0]['value_id'];
-          $value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+          $value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
           $variation_list = " (".$value_data[0]['name'].")";
         } else {
 							$variation_list = '';
@@ -959,7 +959,7 @@ function wpsc_packing_slip($purchase_id) {
 function edit_multiple_image_gallery($id) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
-	$main_image = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id` = '$id'",ARRAY_A);
+	$main_image = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$id'",ARRAY_A);
 	$timestamp = time();
 	$output .= "<li class='first' id='0'>";
 	if ($main_image[0]['image'] == '') {
@@ -1041,7 +1041,7 @@ function edit_multiple_image_gallery($id) {
 	
 	$num = 0;
 	if(function_exists('gold_shpcrt_display_gallery')) {
-    $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_images` WHERE `product_id` = '$id' ORDER BY image_order ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '$id' ORDER BY image_order ASC",ARRAY_A);
     if($values != null) {
       foreach($values as $image) {
         if(function_exists("getimagesize")) {

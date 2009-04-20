@@ -10,25 +10,25 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
     if($_POST['countrylist2'] != null){
     	$AllSelected = false;
     	if(in_array('all',$_POST['countrylist2'])){
-    		$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = '1'");
+    		$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = '1'");
 			$AllSelected = true;
     	}
     	if(in_array('none', $_POST['countrylist2'])){
-    		$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = '0'");
+    		$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = '0'");
 			$AllSelected = true;
     	}
     	if($AllSelected != true){
-			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
+			$countrylist = $wpdb->get_col("SELECT id FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ");
 			//find the countries not selected 
 			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
 			foreach($unselectedCountries as $unselected){
-				$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = 0 WHERE id = '".$unselected."' LIMIT 1");
+				$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = 0 WHERE id = '".$unselected."' LIMIT 1");
 			} 
 	
 			//find the countries that are selected
 			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
 			foreach($selectedCountries as $selected){
-				$wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
+				$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
 			}
  		}
 	} 
@@ -342,7 +342,7 @@ if($_POST['do_not_use_shipping'] == 1) {
     }
         
     if(is_numeric($_POST['country_id']) && is_numeric($_POST['country_tax'])) {
-      $wpdb->query("UPDATE `".$wpdb->prefix."currency_list` SET `tax` = '".$_POST['country_tax']."' WHERE `id` = '".$_POST['country_id']."' LIMIT 1 ;");
+      $wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET `tax` = '".$_POST['country_tax']."' WHERE `id` = '".$_POST['country_id']."' LIMIT 1 ;");
     }
         
     if(isset($_POST['base_region'])) {
@@ -510,7 +510,7 @@ if($_GET['update_page_urls'] == 'true') {
 
 if($_GET['clean_categories'] == 'true') {
   //exit("<pre>".print_r($check_category_names,true)."</pre>");
-  $sql_query = "SELECT `id`, `name`, `active` FROM `".$wpdb->prefix."product_categories`";
+  $sql_query = "SELECT `id`, `name`, `active` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."`";
 	$sql_data = $wpdb->get_results($sql_query,ARRAY_A);
 	foreach((array)$sql_data as $datarow) {
 	
@@ -518,15 +518,15 @@ if($_GET['clean_categories'] == 'true') {
 	    $tidied_name = trim($datarow['name']);
 			$tidied_name = strtolower($tidied_name);
 			$url_name = preg_replace(array("/(\s)+/","/[^\w-]+/"), array("-", ''), $tidied_name);            
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `{$wpdb->prefix}product_categories` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' AND `id` NOT IN ('{$datarow['id']}') ",ARRAY_A);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' AND `id` NOT IN ('{$datarow['id']}') ",ARRAY_A);
 			$extension_number = '';
 			if($similar_names['count'] > 0) {
 				$extension_number = (int)$similar_names['max_number']+2;
 			}
 			$url_name .= $extension_number;
-			$wpdb->query("UPDATE `{$wpdb->prefix}product_categories` SET `nice-name` = '$url_name' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '$url_name' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
 	  } else if($datarow['active'] == 0) {
-		  $wpdb->query("UPDATE `{$wpdb->prefix}product_categories` SET `nice-name` = '' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
+		  $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
 	  }
 	}
 	$wp_rewrite->flush_rules();
@@ -537,7 +537,7 @@ if($_GET['clean_categories'] == 'true') {
   function options_categorylist() {
     global $wpdb;
     $current_default = get_option('wpsc_default_category');
-    $group_sql = "SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active`='1'";
+    $group_sql = "SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active`='1'";
     $group_data = $wpdb->get_results($group_sql,ARRAY_A);
     $categorylist .= "<select name='wpsc_default_category'>";
     $categorylist .= "<option value='none' ".$selected." >".TXT_WPSC_SELECTACATEGORY."</option>";
@@ -548,7 +548,7 @@ if($_GET['clean_categories'] == 'true') {
     
     $categorylist .= "<option value='all' ".$selected." >".TXT_WPSC_SELECTALLCATEGORIES."</option>";
     foreach($group_data as $group) {
-			$cat_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
+			$cat_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
 			$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
 			if($category_data != null) {
 		    	  			
@@ -574,7 +574,7 @@ if($_GET['clean_categories'] == 'true') {
       global $wpdb;
       $output = "";
       $output .= "<option value=''></option>";
-      $country_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+      $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
       foreach ((array)$country_data as $country) {
         $selected ='';
         if($selected_country == $country['isocode']) {
@@ -623,7 +623,7 @@ if($_GET['clean_categories'] == 'true') {
 										</select>
 										<span id='options_region'>
 									<?php
-									$region_list = $wpdb->get_results("SELECT `".$wpdb->prefix."region_tax`.* FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".get_option('base_country')."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`",ARRAY_A) ;
+									$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".get_option('base_country')."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
 									if($region_list != null) {
 										echo "<select name='base_region'>\n\r";
 										foreach($region_list as $region) {
@@ -648,10 +648,10 @@ if($_GET['clean_categories'] == 'true') {
 									<td>
 									<span id='options_region'>
 									<?php
-									$country_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."currency_list` WHERE `isocode`='".get_option('base_country')."' LIMIT 1",ARRAY_A);
+									$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".get_option('base_country')."' LIMIT 1",ARRAY_A);
 									echo $country_data['country'];
 									
-									$region_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".$wpdb->prefix."region_tax`, `".$wpdb->prefix."currency_list`  WHERE `".$wpdb->prefix."currency_list`.`isocode` IN('".get_option('base_country')."') AND `".$wpdb->prefix."currency_list`.`id` = `".$wpdb->prefix."region_tax`.`country_id`") ;
+									$region_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".get_option('base_country')."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`") ;
 									
 									if($country_data['has_regions'] == 1) {
 										echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page=".WPSC_DIR_NAME."/options.php&isocode=".get_option('base_country')."'>".$region_count." Regions</a>";
@@ -665,7 +665,7 @@ if($_GET['clean_categories'] == 'true') {
 								</tr>
 								<?php
 								/* START OF TARGET MARKET SELECTION */					
-								$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ",ARRAY_A);
+								$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
 							
 								?>
 								<tr>
@@ -931,7 +931,7 @@ if($_GET['clean_categories'] == 'true') {
 									<select name='currency_type' onChange='getcurrency(this.options[this.selectedIndex].value);'>
 									<?php
 									
-									$currency_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."currency_list` ORDER BY `country` ASC",ARRAY_A);
+									$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
 									foreach($currency_data as $currency) {
 										if(get_option('currency_type') == $currency['id']) {
 											$selected = "selected='true'";
@@ -941,7 +941,7 @@ if($_GET['clean_categories'] == 'true') {
 										echo "        <option value='".$currency['id']."' ".$selected." >".$currency['country']." (".$currency['currency'].")</option>";
 									}
 									
-									$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+									$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
 									if($currency_data['symbol'] != '') {
 										$currency_sign = $currency_data['symbol_html'];
 									} else {

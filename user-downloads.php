@@ -1,6 +1,6 @@
 <?php
 	global $wpdb, $user_ID;
-	$purchases= $wpdb->get_col("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE user_ID = ".(int)$user_ID."") ;
+	$purchases= $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE user_ID = ".(int)$user_ID."") ;
 	$rowcount = count($purchases);
 	//echo "<pre>".print_r($purchases,true)."</pre>";
 	
@@ -8,7 +8,7 @@
 		$perchidstr = "(";
 		$perchidstr .= implode(',',$purchases);
 	  $perchidstr .= ")";		
-		$sql = "SELECT * FROM `".$wpdb->prefix."download_status` WHERE `purchid` IN ".$perchidstr." AND `active` IN ('1') ORDER BY `datetime` DESC";
+		$sql = "SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `purchid` IN ".$perchidstr." AND `active` IN ('1') ORDER BY `datetime` DESC";
 		$products = $wpdb->get_results($sql,ARRAY_A) ;
 	}
 	//exit($products);
@@ -18,7 +18,7 @@
 	  } else {
 	  	$links[] = get_option('siteurl')."?downloadid=".$product['uniqueid'];
 	  }	
-		$sql = "SELECT * FROM `".$wpdb->prefix."product_files` WHERE id = ".(int)$product['fileid']."";
+		$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE id = ".(int)$product['fileid']."";
 		$file = $wpdb->get_results($sql,ARRAY_A) ;
 		$files[] = $file[0];
 	}

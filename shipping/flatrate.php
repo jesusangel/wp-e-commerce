@@ -81,7 +81,7 @@ class flatrate {
 		
 		
 		if (get_option('base_country') != $country) {
-			$results = $wpdb->get_var("SELECT `continent` FROM `{$wpdb->prefix}currency_list` WHERE `isocode` IN('{$country}') LIMIT 1");
+			$results = $wpdb->get_var("SELECT `continent` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('{$country}') LIMIT 1");
 			$flatrates = get_option('flat_rates');
 			
 			if ($flatrates != '') {
@@ -128,7 +128,7 @@ class flatrate {
 		global $wpdb;
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
 			$country_code = $_SESSION['wpsc_delivery_country'];
-      $product_list = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+      $product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping
         if($country_code == get_option('base_country')) {

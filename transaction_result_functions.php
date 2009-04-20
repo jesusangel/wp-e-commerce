@@ -2,7 +2,7 @@
 function transaction_results($sessionid, $echo_to_screen = true, $transaction_id = null) {
 	global $wpdb,$wpsc_cart;
 	//$curgateway = get_option('payment_gateway');
-	$curgateway = $wpdb->get_var("SELECT gateway FROM {$wpdb->prefix}purchase_logs WHERE sessionid='$sessionid'");
+	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
 	$errorcode = '';
 	$order_status= 2;
 	$siteurl = get_option('siteurl');
@@ -13,7 +13,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	$echo_to_screen=(((!is_bool($echo_to_screen)))?((true)):(($echo_to_screen)));
 	
 	if(is_numeric($sessionid)) {
-		$purchase_log = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
+		$purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
 			$message = get_option('wpsc_email_receipt');
@@ -42,19 +42,19 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			}
 		}
 
-		$cart = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='{$purchase_log['id']}'",ARRAY_A);
+		$cart = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='{$purchase_log['id']}'",ARRAY_A);
 		
 		if($purchase_log['shipping_country'] != '') {
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
 		} else {
-			$country = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
+			$country = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
 			$billing_country = $country[0]['value'];
 			$shipping_country = $country[0]['value'];
 		}
 	
-		$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
-		$email_address = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1",ARRAY_A);
+		$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
+		$email_address = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1",ARRAY_A);
 		$email = $email_address[0]['value'];
 		$stock_adjusted = false;
 		$previous_download_ids = array(0); 
@@ -62,13 +62,13 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		if(($cart != null) && ($errorcode == 0)) {
 			foreach($cart as $row) {
 				$link = "";
-				$product_data = $wpdb->get_row("SELECT * FROM `{$wpdb->prefix}product_list` WHERE `id`='{$row['prodid']}' LIMIT 1", ARRAY_A) ;
+				$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$row['prodid']}' LIMIT 1", ARRAY_A) ;
 				if($purchase_log['email_sent'] != 1) {
-					$wpdb->query("UPDATE `{$wpdb->prefix}download_status` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
+					$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
 				}
 				if (($purchase_log['processed'] >= 2)) {
-					//echo "SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
-					$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
+					//echo "SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
+					$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
 					
 					if($download_data != null) {
 									if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
@@ -96,7 +96,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 
 				$shipping_price = nzshpcrt_currency_display($shipping, 1, true);
 				
-				$variation_values = $wpdb->get_col("SELECT `value_id`  FROM `{$wpdb->prefix}cart_item_variations` WHERE `cart_id`='{$row['id']}'"); 
+				$variation_values = $wpdb->get_col("SELECT `value_id`  FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='{$row['id']}'"); 
 
 				//echo "<pre>".print_r($product_data,true)."</pre>";
 				
@@ -119,7 +119,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 								if($i > 0) {
 									$variation_list.= ", ";
 								}
-								$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+								$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 								$variation_list.= $value_data[0]['name'];
 								$i++;	
 							}
@@ -127,7 +127,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						} else {
 							if($variation_count == 1) {
 								$value_id = array_pop($variation_values);
-								$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+								$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 								$variation_list = " (".$value_data[0]['name'].")";
 							} else {
 								$variation_list = '';
@@ -156,12 +156,12 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 				
 				if($purchase_log['discount_data'] != '') {
-					$coupon_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE coupon_code='".$wpdb->escape($purchase_log['discount_data'])."' LIMIT 1",ARRAY_A);
+					$coupon_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='".$wpdb->escape($purchase_log['discount_data'])."' LIMIT 1",ARRAY_A);
 					if($coupon_data['use-once'] == 1) {
-						$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_coupon_codes` SET `active`='0', `is-used`='1' WHERE `id`='".$coupon_data['id']."' LIMIT 1");
+						$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `active`='0', `is-used`='1' WHERE `id`='".$coupon_data['id']."' LIMIT 1");
 					}
 				}
-				//$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
+				//$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
 				//if (!isset($_SESSION['quote_shipping']))
 					//$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
 			  $total_shipping += $purchase_log['base_shipping'];
@@ -220,12 +220,12 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					}
 				}
 				$report_user = TXT_WPSC_CUSTOMERDETAILS."\n\r";
-				$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase_log['id']."'";
+				$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
 				$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 				
 				if($form_data != null) {
 					foreach($form_data as $form_field) {
-						$form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `id` = '".$form_field['form_id']."' LIMIT 1";
+						$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1";
 						$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 						$form_data = $form_data[0];
 						
@@ -241,7 +241,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$report = $report_user. $report_id . $report;
 				
 				if($stock_adjusted == true) {
-					$wpdb->query("UPDATE `{$wpdb->prefix}purchase_logs` SET `stock_adjusted` = '1' WHERE `sessionid` = ".$sessionid." LIMIT 1") ;
+					$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `stock_adjusted` = '1' WHERE `sessionid` = ".$sessionid." LIMIT 1") ;
 				}
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
@@ -279,7 +279,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			if(preg_match("/^[\w\s._,-]+$/",$transaction_id)) {
 				$transact_id_sql = "`transactid` = '".$transaction_id."',";
 			}
-			$update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET $transact_id_sql `email_sent` = '1', `processed` = '$order_status' WHERE `sessionid` = ".$sessionid." LIMIT 1";
+			$update_sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET $transact_id_sql `email_sent` = '1', `processed` = '$order_status' WHERE `sessionid` = ".$sessionid." LIMIT 1";
 			$wpdb->query($update_sql) ;
 		}
 	}

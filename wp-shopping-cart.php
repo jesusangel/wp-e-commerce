@@ -81,6 +81,7 @@ define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wpdb->prefix}wpsc_variation_combi
 define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock"); 
 
 
+
 require(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
@@ -199,7 +200,7 @@ function wpsc_serialize_shopping_cart() {
 	$session_timeout = 60*60; // 180 * 60 = three hours in seconds
   $old_claimed_stock_timestamp = time() - $session_timeout;
   $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
-  $wpdb->query("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
+  $wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
   
   return true;
 }  

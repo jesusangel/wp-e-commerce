@@ -88,10 +88,10 @@ else
 
 
   global $wpdb;
-  $purchase_log_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid`= ".$sessionid." LIMIT 1";
+  $purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";
   $purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
 
-  $cart_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
+  $cart_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
   $cart = $wpdb->get_results($cart_sql,ARRAY_A) ; 
   
  // $transact_url = get_option('transact_url');
@@ -103,7 +103,7 @@ else
   $data['rm'] = '2';
   
   // look up the currency codes and local price
-  $currency_code = $wpdb->get_results("SELECT `code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
+  $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
   $local_currency_code = $currency_code[0]['code'];
   $paypal_currency_code = get_option('paypal_curcode');
 
@@ -268,13 +268,13 @@ $_SESSION['paypalExpressMessage']= '
 		$country = $_POST['country']; //form_id 15
 		$postalCode = $_POST['postalCode'];//form_id 16
 
-		$log_id = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."purchase_logs` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
+		$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
 
-		 $wpdb->query("UPDATE `".$wpdb->prefix."submited_form_data` SET `value` = '".$street."' WHERE log_id=".$log_id." AND form_id = 12") ;  
-		 $wpdb->query("UPDATE `".$wpdb->prefix."submited_form_data` SET `value` ='".$city."' WHERE log_id=".$log_id." AND form_id = 13");  
-		  $wpdb->query("UPDATE `".$wpdb->prefix."submited_form_data` SET `value` ='".$state."' WHERE log_id=".$log_id." AND form_id = 14");  
-		 $wpdb->query("UPDATE `".$wpdb->prefix."submited_form_data` SET `value` ='".$country."' WHERE log_id=".$log_id." AND form_id = 15"); 
-		  $wpdb->query("UPDATE `".$wpdb->prefix."submited_form_data` SET `value`='".$postalCode."' WHERE log_id=".$log_id." AND form_id = 16"); 
+		 $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` = '".$street."' WHERE log_id=".$log_id." AND form_id = 12") ;  
+		 $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` ='".$city."' WHERE log_id=".$log_id." AND form_id = 13");  
+		  $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` ='".$state."' WHERE log_id=".$log_id." AND form_id = 14");  
+		 $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` ='".$country."' WHERE log_id=".$log_id." AND form_id = 15"); 
+		  $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value`='".$postalCode."' WHERE log_id=".$log_id." AND form_id = 16"); 
 		  }
 				   }
 	

@@ -3,14 +3,14 @@
  * this updates the processing status of an item
  */
 if(is_numeric($_GET['id']) && is_numeric($_GET['value'])) {
-  $max_stage = $wpdb->get_var("SELECT MAX(*) AS `max` FROM `".$wpdb->prefix."purchase_statuses` WHERE `active`='1'");
+  $max_stage = $wpdb->get_var("SELECT MAX(*) AS `max` FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `active`='1'");
   if(is_numeric($_GET['value']) && ($_GET['value'] <= $max_stage)) {
     $newvalue = (int)$_GET['value'];
 	} else {
 		$newvalue = 1;
 	}
-  $log_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id` = '".$_GET['id']."' LIMIT 1");  
-  $update_sql = "UPDATE `".$wpdb->prefix."purchase_logs` SET `processed` = '{$newvalue}' WHERE `id` = '".$_GET['id']."' LIMIT 1";  
+  $log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '".$_GET['id']."' LIMIT 1");  
+  $update_sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '{$newvalue}' WHERE `id` = '".$_GET['id']."' LIMIT 1";  
   $wpdb->query($update_sql);
   if(($newvalue > $log_data['processed']) && ($log_data['processed'] <=1)) {
     transaction_results($log_data['sessionid'], false);
@@ -20,21 +20,21 @@ if(is_numeric($_GET['id']) && is_numeric($_GET['value'])) {
 
 if(is_numeric($_GET['deleteid'])) {
   $delete_id = $_GET['deleteid'];
-  $delete_log_form_sql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$delete_id'";
+  $delete_log_form_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$delete_id'";
   $cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
   foreach((array)$cart_content as $cart_item) {
-    $cart_item_variations = $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
+    $cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
 	}
-  $wpdb->query("DELETE FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`='$delete_id'");
-  $wpdb->query("DELETE FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` IN ('$delete_id')");
-  $wpdb->query("DELETE FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='$delete_id' LIMIT 1");
+  $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$delete_id'");
+  $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$delete_id')");
+  $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$delete_id' LIMIT 1");
   echo '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
 }
 
 if(is_numeric($_GET['email_buyer_id'])) {
 	$log_id = $_GET['email_buyer_id'];
 	if(is_numeric($log_id)) {
-		$selectsql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`= ".$log_id." LIMIT 1";
+		$selectsql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`= ".$log_id." LIMIT 1";
 		$purchase_log = $wpdb->get_row($selectsql,ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
@@ -47,19 +47,19 @@ if(is_numeric($_GET['email_buyer_id'])) {
 		
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
 
-		$cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_log['id']."";
+		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_log['id']."";
 		$cart = $wpdb->get_results($cartsql,ARRAY_A);
 		if($purchase_log['shipping_country'] != '') {
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
 		} else {
-			$country = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
+			$country = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
 			$billing_country = $country[0]['value'];
 			$shipping_country = $country[0]['value'];
 		}
 	
-		$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
-		$email_address = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1",ARRAY_A);
+		$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
+		$email_address = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1",ARRAY_A);
 		$email = $email_address[0]['value'];
 	
 		$previous_download_ids = array(0); 
@@ -67,14 +67,14 @@ if(is_numeric($_GET['email_buyer_id'])) {
 		if(($cart != null) && ($errorcode == 0)) {
 			foreach($cart as $row) {
 				$link = "";
-				$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$row['prodid']."";
+				$productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A) ;
 				if($product_data[0]['file'] > 0) {
 					if($purchase_log['email_sent'] != 1) {
-						$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
+						$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
 					}
 					if (($purchase_log['processed'] >= 2)) {
-						$download_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR `cartid` IS NULL) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
+						$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR `cartid` IS NULL) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
 						if($download_data != null) {
               if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
                 $link = $siteurl."?downloadid=".$download_data['id'];
@@ -105,7 +105,7 @@ if(is_numeric($_GET['email_buyer_id'])) {
 
 				$shipping_price = nzshpcrt_currency_display($shipping, 1, true);
 				
-				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$row['id']."'";
+				$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$row['id']."'";
 				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 				$variation_count = count($variation_data);
 		
@@ -126,7 +126,7 @@ if(is_numeric($_GET['email_buyer_id'])) {
 								}
 								
 								$value_id = $variation['value_id'];
-								$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+								$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 								$variation_list.= $value_data[0]['name'];
 								$i++;	
 							}
@@ -134,7 +134,7 @@ if(is_numeric($_GET['email_buyer_id'])) {
 						} else {
 							if($variation_count == 1) {
 								$value_id = $variation_data[0]['value_id'];
-								$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+								$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 								$variation_list = " (".$value_data[0]['name'].")";
 							} else {
 								$variation_list = '';
@@ -158,12 +158,12 @@ if(is_numeric($_GET['email_buyer_id'])) {
 				}
 				
 				if($purchase_log['discount_data'] != '') {
-					$coupon_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_coupon_codes` WHERE coupon_code='".$wpdb->escape($purchase_log['discount_data'])."' LIMIT 1",ARRAY_A);
+					$coupon_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='".$wpdb->escape($purchase_log['discount_data'])."' LIMIT 1",ARRAY_A);
 					if($coupon_data['use-once'] == 1) {
-						$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_coupon_codes` SET `active`='0', `is-used`='1' WHERE `id`='".$coupon_data['id']."' LIMIT 1");
+						$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `active`='0', `is-used`='1' WHERE `id`='".$coupon_data['id']."' LIMIT 1");
 					}
 				}
-				//$wpdb->query("UPDATE `".$wpdb->prefix."download_status` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
+				//$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
 				$total_shipping += $purchase_log['base_shipping'];
 
 				$total = (($total+$total_shipping) - $purchase_log['discount_value']);
@@ -225,14 +225,14 @@ if(is_numeric($_GET['email_buyer_id'])) {
 
 if(isset($_GET['clear_locks']) && ($_GET['clear_locks'] == 'true') && is_numeric($_GET['purchaseid'])) {
   $purchase_id = (int)$_GET['purchaseid'];
-  $downloadable_items = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."download_status` WHERE `purchid` IN ('$purchase_id')", ARRAY_A);
+  $downloadable_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `purchid` IN ('$purchase_id')", ARRAY_A);
   
-  $clear_locks_sql = "UPDATE`".$wpdb->prefix."download_status` SET `ip_number` = '' WHERE `purchid` IN ('$purchase_id')";
+  $clear_locks_sql = "UPDATE`".WPSC_TABLE_DOWNLOAD_STATUS."` SET `ip_number` = '' WHERE `purchid` IN ('$purchase_id')";
   $wpdb->query($clear_locks_sql);
   
   
-	$email_form_field = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."collect_data_forms` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1");
-	$email_address = $wpdb->get_var("SELECT `value` FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id`='{$purchase_id}' AND `form_id` = '{$email_form_field}' LIMIT 1");
+	$email_form_field = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1");
+	$email_address = $wpdb->get_var("SELECT `value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`='{$purchase_id}' AND `form_id` = '{$email_form_field}' LIMIT 1");
 	
 	foreach($downloadable_items as $downloadable_item) {
 	  $download_links .= $siteurl."?downloadid=".$downloadable_item['uniqueid']. "\n";
@@ -250,7 +250,7 @@ if(isset($_GET['clear_locks']) && ($_GET['clear_locks'] == 'true') && is_numeric
  * this finds the earliest time in the shopping cart and sorts out the timestamp system for the month by month display
  */  
 
-$earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
+$earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!=''";
 $earliest_record = $wpdb->get_results($earliest_record_sql,ARRAY_A) ;
 
 $current_timestamp = time();
@@ -465,7 +465,7 @@ if($_GET['filter'] !== 'true') {
    }
   if(($purchase_log == null) && !is_numeric($_GET['purchaseid'])) {
     if($earliest_record[0]['date'] != null) {
-      $form_sql = "SELECT * FROM `".$wpdb->prefix."collect_data_forms` WHERE `active` = '1' AND `display_log` = '1';";
+      $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `display_log` = '1';";
       $form_data = $wpdb->get_results($form_sql,ARRAY_A);
       
       $col_count = 5 + count($form_data);
@@ -476,13 +476,13 @@ if($_GET['filter'] !== 'true') {
       //exit("<pre>".print_r($date_list,true)."</pre>");
       foreach($date_list as $date_pair){
         if(($date_pair['end'] >= $earliest_timestamp) && ($date_pair['start'] <= $current_timestamp)) {   
-          $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
+          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
 					if ($paidlog) {
-						$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed` >= '2' ORDER BY `date` DESC";
+						$sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed` >= '2' ORDER BY `date` DESC";
 					} else if($_GET['filteremail']) {
-						$sql = "SELECT DISTINCT `{$wpdb->prefix}purchase_logs` . * FROM `{$wpdb->prefix}submited_form_data` LEFT JOIN `{$wpdb->prefix}purchase_logs` ON `{$wpdb->prefix}submited_form_data`.`log_id` = `{$wpdb->prefix}purchase_logs`.`id` WHERE `{$wpdb->prefix}submited_form_data`.`value` IN ( '".$wpdb->escape($_GET['filteremail'])."' ) AND `{$wpdb->prefix}purchase_logs`.`date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `{$wpdb->prefix}purchase_logs`.`date` DESC;";
+						$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` IN ( '".$wpdb->escape($_GET['filteremail'])."' ) AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `".WPSC_TABLE_PURCHASE_LOGS."`.`date` DESC;";
 					} else if ($_GET['filter']=='affiliate') {
-						$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `affiliate_id` IS NOT  NULL ORDER BY `date` DESC";
+						$sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `affiliate_id` IS NOT  NULL ORDER BY `date` DESC";
 					}
 
           
@@ -554,7 +554,7 @@ if($_GET['filter'] !== 'true') {
               if($purchase['processed'] < 1) {
                 $purchase['processed'] = 1;
               }
-              $stage_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
+              $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
               $stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
 
               echo "<a href='#' onclick='return show_status_box(\"status_box_".$purchase['id']."\",\"log_expander_icon_".$purchase['id']."\");'>";
@@ -595,7 +595,7 @@ if($_GET['filter'] !== 'true') {
               echo " </td>\n\r";
             
               foreach((array)$form_data as $form_field) {
-                $collected_data_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
+                $collected_data_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
                 $collected_data = $wpdb->get_results($collected_data_sql,ARRAY_A);
                 $collected_data = $collected_data[0];
                 switch($form_field['type']) {
@@ -625,7 +625,7 @@ if($_GET['filter'] !== 'true') {
 //                 $billing_country = $purchase['billing_country'];
 //                 $shipping_country = $purchase['shipping_country'];
 // 							} else {
-// 								$country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+// 								$country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
 // 								$country_data = $wpdb->get_results($country_sql,ARRAY_A);
 // 								$billing_country = $country_data[0]['value'];
 // 								$shipping_country = $country_data[0]['value'];
@@ -668,7 +668,7 @@ if($_GET['filter'] !== 'true') {
 							
 							echo "</tr>\n\r";
               
-              $stage_list_sql = "SELECT * FROM `".$wpdb->prefix."purchase_statuses` ORDER BY `id` ASC";
+              $stage_list_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` ORDER BY `id` ASC";
               $stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);
               
               echo "<tr>\n\r";
@@ -740,13 +740,13 @@ if($_GET['filter'] !== 'true') {
 		}
 	} else if(is_numeric($_GET['purchaseid'])) {
 
-		$purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$_GET['purchaseid']."'";
+		$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$_GET['purchaseid']."'";
 		$purch_data = $wpdb->get_results($purch_sql,ARRAY_A) ;
 			
 			
 	  echo "<p style='padding-left: 5px;'><strong>".TXT_WPSC_DATE."</strong>:".date("jS M Y", $purch_data[0]['date'])."</p>";
 
-		$cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$_GET['purchaseid']."";
+		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$_GET['purchaseid']."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
 		$j = 0;
 		if($cart_log != null) {
@@ -801,10 +801,10 @@ if($_GET['filter'] !== 'true') {
 				if(($j % 2) != 0) {
 					$alternate = "class='alt'";
 				}
-				$productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
+				$productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A); 
 			
-				$variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
+				$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$cart_row['id']."'";
 				$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
 				$variation_count = count($variation_data);
 				if($variation_count > 1) {
@@ -815,14 +815,14 @@ if($_GET['filter'] !== 'true') {
 							$variation_list .= ", ";
 						}
 						$value_id = $variation['value_id'];
-						$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+						$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 						$variation_list .= $value_data[0]['name'];
 						$i++;
 					}
 					$variation_list .= ")";
 				} else if($variation_count == 1) {
 					$value_id = $variation_data[0]['value_id'];
-					$value_data = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."variation_values` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+					$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
 					$variation_list = " (".$value_data[0]['name'].")";
 				} else {
 					$variation_list = '';
@@ -832,7 +832,7 @@ if($_GET['filter'] !== 'true') {
 					$billing_country = $purch_data[0]['billing_country'];
 					$shipping_country = $purch_data[0]['shipping_country'];
 				} else {
-					$country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$_GET['purchaseid']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+					$country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$_GET['purchaseid']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
 					$country_data = $wpdb->get_results($country_sql,ARRAY_A);
 					$billing_country = $country_data[0]['value'];
 					$shipping_country = $country_data[0]['value'];
@@ -880,7 +880,7 @@ if($_GET['filter'] !== 'true') {
 				echo nzshpcrt_currency_display($tax, 1);
 				echo " </td>";
 				//discount used
-				$sql = "SELECT `condition` FROM `{$wpdb->prefix}wpsc_coupon_codes` WHERE `coupon_code` ='".$purch_data[0]['discount_data']."' AND active=1";
+				$sql = "SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `coupon_code` ='".$purch_data[0]['discount_data']."' AND active=1";
 				//exit($sql);
 				$conditions = $wpdb->get_var($sql);
 				$conditions = unserialize($conditions);
@@ -985,7 +985,7 @@ if($_GET['filter'] !== 'true') {
 			echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>\n\r";
 			echo "<table style=''>\n\r";
 			
-			$form_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE  `log_id` = '".(int)$_GET['purchaseid']."'";
+			$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE  `log_id` = '".(int)$_GET['purchaseid']."'";
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
 			
 			foreach($input_data as $input_row) {
@@ -994,7 +994,7 @@ if($_GET['filter'] !== 'true') {
 			
 			
 			if($input_data != null) {
-        $form_data = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}collect_data_forms` WHERE `active` = '1'",ARRAY_A);
+        $form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
         
         foreach($form_data as $form_field) {
           switch($form_field['type']) {
@@ -1050,12 +1050,12 @@ if($_GET['filter'] !== 'true') {
 				echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>\n\r";
 				echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>\n\r";
 			}
-			$comments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}cart_contents WHERE purchaseid='".$purch_data[0]['id']."' AND meta IS NOT NULL",ARRAY_A);
+			$comments = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_CART_CONTENTS." WHERE purchaseid='".$purch_data[0]['id']."' AND meta IS NOT NULL",ARRAY_A);
 			if ($comments[0]['meta'] != '')
 				echo "  <tr><td><b>".TXT_WPSC_COMMENTS."</b></td><td></td></tr>";
 			foreach ((array)$comments as $comment) {
 				$comm = unserialize($comment['meta']);
-				$product_name = $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_list WHERE id='{$comment['prodid']}'");
+				$product_name = $wpdb->get_var("SELECT name FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$comment['prodid']}'");
 				if ($comm != '') {
 					echo "  <tr><td>".$product_name.":</td><td> ".$comm['comment']."</td></tr>\n\r";
 				}
@@ -1063,7 +1063,7 @@ if($_GET['filter'] !== 'true') {
 // 			echo "  <tr><td><b>".TXT_WPSC_DATE_REQUESTED."</b></td><td></td></tr>";
 // 			foreach ($comments as $comment) {
 // 				$comm = unserialize($comment['meta']);
-// 				$product_name = $wpdb->get_var("SELECT name FROM {$wpdb->prefix}product_list WHERE id='{$comment['prodid']}'");
+// 				$product_name = $wpdb->get_var("SELECT name FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$comment['prodid']}'");
 // 				if ($comm != '') {
 // 					echo "  <tr><td>".$product_name.":</td><td> ".$comm['time_requested']."</td></tr>\n\r";
 // 				}
@@ -1127,7 +1127,7 @@ if($_GET['filter'] !== 'true') {
 			echo "</div>";
 		}
       
-$sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `date`!=''";
+$sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!=''";
 $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
   ?>
    </td>

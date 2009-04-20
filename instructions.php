@@ -5,11 +5,33 @@ global $wpdb;
 <?php
 include('updates/database_template.php');
 
-
-
+$path = "/var/www/apps.instinct.co.nz/wp_2.7/wp-content/plugins/trunk/*";
 
 echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif;', font-size:12px;>";
-;
+
+//$search_command = 'grep -RIsE --exclude-dir=\.svn \'(".[:space:]*|\{)\$wpdb->prefix(\}|[:space:]*.")_TABLENAME_\' *  ' ;
+//  $search_command = 'grep -RIsEl --exclude-dir=\.svn --exclude=database_template.php \'("\.[:space:]*|\{)\$wpdb->prefix(\}|[:space:]*\.")_TABLENAME_\' '.$path.'  ' ;
+//  $replace_command = 'sed -ri \'s/("\.[:space:]*|\{)\$wpdb->prefix(\}|[:space:]*\.")_TABLENAME_/"._CONSTANTNAME_."/g\' ' ;
+ 
+ 
+ $search_command = 'grep -RIsEl --exclude-dir=\.svn --exclude=database_template.php \'`(\{)\$wpdb->prefix(\})_TABLENAME_`\' '.$path.'  ' ;
+ $replace_command = 'sed -ri \'s/`(\{)\$wpdb->prefix(\})_TABLENAME_`/`"._CONSTANTNAME_."`/g\' ' ;
+
+// $search_command = 'grep -RIsEl --exclude-dir=\.svn --exclude=database_template.php \'WPSC_TABLE\' '.$path.'  ' ;
+// $replace_command = 'sed -ri \'s/WPSC_TABLE/WPSC_TABLE/g\' ' ;
+// 
+// //echo $constant_name."\n";
+// //echo str_replace("_TABLENAME_", $table_name, $search_command)."\n";
+// $file_list = explode("\n", shell_exec($search_command));
+// foreach($file_list as $file) {
+// 	if($file != '') {
+// 		$sed_command = $replace_command.trim($file);
+// 		echo $sed_command. "\n";
+// 	//	shell_exec($sed_command);
+// 	}
+// }
+// print_r($file_list);
+/*
 
 foreach($wpsc_database_template as $key => $table_data) {
   
@@ -19,8 +41,25 @@ foreach($wpsc_database_template as $key => $table_data) {
   }
   
   $table_name = preg_replace("/^wp_/", "", $table_name);
-  echo $table_name." \n";
+  //echo $table_name." \n";
+  
+  $constant_name = strtoupper(str_replace("wp_wpsc_", "wpsc_table_", $key));
+  
+  //echo $constant_name."\n";
+  echo str_replace("_TABLENAME_", $table_name, $search_command)."\n";
+  $file_list = explode("\n", shell_exec(str_replace("_TABLENAME_", $table_name, $search_command)));
+  foreach($file_list as $file) {
+    if($file != '') {
+			$sed_command = str_replace(array("_TABLENAME_", "_CONSTANTNAME_"), array($table_name, $constant_name), $replace_command).trim($file);
+			echo $sed_command."\n";
+			shell_exec($sed_command);
+    }
+  }
+  print_r($file_list);
+  
+  //break;  
 }
+// */
 echo "</pre>";
 
 

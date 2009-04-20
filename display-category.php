@@ -1,14 +1,14 @@
 <?php
 if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
-  $current_categorisation =  $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
+  $current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
 } else {
-  $current_categorisation =  $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
+  $current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
 }
 
  function wpsc_category_tm(){
  global $wpdb;
  /* START OF TARGET MARKET SELECTION */					
-	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ",ARRAY_A);
+	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
 ?>
 	<tr>
 		<td colspan="2"><h4>Target Market Restrictions</h4></td></tr><tr>
@@ -43,7 +43,7 @@ function admin_categorylist($curent_category) {
   global $wpdb;
   $options = "";
   //$options .= "<option value=''>".TXT_WPSC_SELECTACATEGORY."</option>\r\n";
-  $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` ORDER BY `id` ASC",ARRAY_A);
+  $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` ORDER BY `id` ASC",ARRAY_A);
   foreach($values as $option) {
     if($curent_category == $option['id']) {
       $selected = "selected='selected'";
@@ -58,10 +58,10 @@ function admin_categorylist($curent_category) {
 function display_categories($group_id, $id = null, $level = 0) {
   global $wpdb,$category_data;
   if(is_numeric($id)) {
-    $category_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$group_id') AND `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
+    $category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
     $category_list = $wpdb->get_results($category_sql,ARRAY_A);
 	} else {
-		$category_sql = "SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `group_id` IN ('$group_id') AND `active`='1' AND `category_parent` = '0' ORDER BY `id`";
+		$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND `active`='1' AND `category_parent` = '0' ORDER BY `id`";
 		$category_list = $wpdb->get_results($category_sql,ARRAY_A);
 	}
   if($category_list != null) {
@@ -162,7 +162,7 @@ function display_category_row($category,$subcategory_level = 0) {
       
    
     $url_name = sanitize_title($_POST['name']);
-    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."product_categories` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
     $extension_number = '';
     if($similar_names['count'] > 0) {
       $extension_number = (int)$similar_names['max_number']+1;
@@ -204,7 +204,7 @@ function display_category_row($category,$subcategory_level = 0) {
     }
     
     if(trim($_POST['name']) != null) {
-      $insertsql = "INSERT INTO `".$wpdb->prefix."product_categories` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
+      $insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
       $wp_rewrite->flush_rules(); 
       if($wpdb->query($insertsql)) {
         echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
@@ -219,45 +219,45 @@ function display_category_row($category,$subcategory_level = 0) {
    // Jeff 15-04-09 Used for category target market options
 	   
     if($_POST['countrylist2'] != null){
-  		$catid = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."product_categories` WHERE `nice-name`='".$url_name."'");
+  		$catid = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name`='".$url_name."'");
     	$AllSelected = false;
     	
     	if(in_array('all',$_POST['countrylist2'])){
     		//get category id, counrtylist, 
     	
     		//exit($catid);
-    		$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+    		$sql = "SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`";
     		//echo $sql;
     		$countryList = $wpdb->get_col($sql);
     		//exit('<pre>'.print_r($countryList,true).'</pre>');
     		foreach($countryList as $country){
  				//exit(print_r($country));   	
-    			$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 AND categoryid=".$catid." AND countryid=".$country);
+    			$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORY_TM."` SET visible = 1 AND categoryid=".$catid." AND countryid=".$country);
     		}
 			$AllSelected = true;
     	}
     	if(in_array('none', $_POST['countrylist2'])){
-    	  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+    	  	$sql = "SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`";
 	    	$countryList = $wpdb->get_col($sql);
     		foreach($countryList as $country){
-    			$wpdb->query("INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 AND categoryid=".$catid." AND countryid=".$country);
+    			$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORY_TM."` SET visible = 0 AND categoryid=".$catid." AND countryid=".$country);
     		}
 			$AllSelected = true;
     	}
       	if($AllSelected != true){
-			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
+			$countrylist = $wpdb->get_col("SELECT id FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ");
 			//find the countries not selected 
 			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
-			$catid = $wpdb->get_var("SELECT id FROM `".$wpdb->prefix."product_categories` WHERE `nice-name`='".$url_name."'");
+			$catid = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name`='".$url_name."'");
 			foreach($unselectedCountries as $unselected){
-				$sqlunselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 AND countryid = '".$unselected."' AND categoryid=".$catid;
+				$sqlunselect = "INSERT INTO `".WPSC_TABLE_CATEGORY_TM."` SET visible = 0 AND countryid = '".$unselected."' AND categoryid=".$catid;
 				$wpdb->query($sqlunselect);
 			} 
 	
 			//find the countries that are selected
 			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
 			foreach($selectedCountries as $selected){
-				$sqlselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 AND countryid = '".$selected."' AND categoryid=".$catid;
+				$sqlselect = "INSERT INTO `".WPSC_TABLE_CATEGORY_TM."` SET visible = 1 AND countryid = '".$selected."' AND categoryid=".$catid;
 
 				$wpdb->query($sqlselect);
 			}
@@ -267,7 +267,7 @@ function display_category_row($category,$subcategory_level = 0) {
 if($AllSelected != true){
     	//exit('Work in Progress.<br /><pre>'.print_r($_POST, true).'</pre>');
 			//find the countries not selected 
-		  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+		  	$sql = "SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`";
 	    	$countryList = $wpdb->get_col($sql);
 			$unselectedCountries = array_diff($countryList,$_POST['countrylist2']);
 			exit('<pre>'.print_r($unselectedCountries, true).'</pre>');
@@ -279,7 +279,7 @@ if($AllSelected != true){
 			//find the countries that are selected
 			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
 			foreach($selectedCountries as $selected){
-			//	$wpdb->query("UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
+			//	$wpdb->query("UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
 			}
 
  		}*/
@@ -307,7 +307,7 @@ if($AllSelected != true){
       }
     
     if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
-      $imagesql = "SELECT `image` FROM `".$wpdb->prefix."product_categories` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1";
+      $imagesql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1";
       $imagedata = $wpdb->get_results($imagesql,ARRAY_A);
       if($imagedata[0]['image'] != null) {
         $height = $_POST['height'];
@@ -318,7 +318,7 @@ if($AllSelected != true){
 			}
 		}
    
-    $category_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_categories` WHERE `id` IN ('".(int)$_POST['prodid']."')", ARRAY_A);
+    $category_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$_POST['prodid']."')", ARRAY_A);
     
     if(($_POST['title'] != $category_data['name']) && (trim($_POST['title']) != null)) {
       $category_name = $_POST['title'];
@@ -329,7 +329,7 @@ if($AllSelected != true){
       $tidied_name = strtolower($tidied_name);
       $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
       if($url_name != $category_data['nice-name']) {
-        $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".$wpdb->prefix."product_categories` WHERE `nice-name` REGEXP '^($url_name){1}(0-9)*$' AND `id` NOT IN ('".(int)$category_data['id']."') ",ARRAY_A);
+        $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(0-9)*$' AND `id` NOT IN ('".(int)$category_data['id']."') ",ARRAY_A);
         //exit("<pre>".print_r($similar_names,true)."</pre>");
         $extension_number = '';
         if($similar_names['count'] > 0) {
@@ -351,20 +351,20 @@ if($AllSelected != true){
     	$catid = $wpdb->escape($_POST['prodid']);
     	if(in_array('all',$_POST['countrylist2'])){
     		//get category id, counrtylist, 
-    		$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+    		$sql = "SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`";
     		$countryList = $wpdb->get_col($sql);
     		foreach($countryList as $country){
- 				$sql ="UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 WHERE categoryid=".$catid." AND countryid=".$country;
+ 				$sql ="UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET visible = 1 WHERE categoryid=".$catid." AND countryid=".$country;
     		//	exit($sql);
     			$wpdb->query($sql);
     		}
 			$AllSelected = true;
     	}
     	if(in_array('none', $_POST['countrylist2'])){
-    	  	$sql = "SELECT `id` FROM  `".$wpdb->prefix."currency_list`";
+    	  	$sql = "SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`";
 	    	$countryList = $wpdb->get_col($sql);
     		foreach($countryList as $country){
-    			$sql ="UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE categoryid=".$catid." AND countryid=".$country;
+    			$sql ="UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET visible = 0 WHERE categoryid=".$catid." AND countryid=".$country;
     		//exit($sql);
     		$wpdb->query($sql);
     		
@@ -372,17 +372,17 @@ if($AllSelected != true){
 			$AllSelected = true;
     	}
       	if($AllSelected != true){
-			$countrylist = $wpdb->get_col("SELECT id FROM `".$wpdb->prefix."currency_list` ORDER BY country ASC ");
+			$countrylist = $wpdb->get_col("SELECT id FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ");
 			//find the countries not selected 
 		
 			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
 				//exit(count($_POST['countrylist2']).' + '.count($unselectedCountries).' = '.count($countrylist));
 			foreach($unselectedCountries as $unselected){
-				$sqlunselect = "UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 0 WHERE countryid = '".$unselected."' AND categoryid=".$catid;
+				$sqlunselect = "UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET visible = 0 WHERE countryid = '".$unselected."' AND categoryid=".$catid;
 				
 				$success = $wpdb->query($sqlunselect);
 				if(!$success){
-    				$sqlunselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm` (visible, countryid, categoryid) VALUES (0,'".$unselected."', '".$catid."' )";
+    				$sqlunselect = "INSERT INTO `".WPSC_TABLE_CATEGORY_TM."` (visible, countryid, categoryid) VALUES (0,'".$unselected."', '".$catid."' )";
     				//exit($sqlunselect);
     				$wpdb->query($sqlunselect);
     			}
@@ -391,11 +391,11 @@ if($AllSelected != true){
 			//find the countries that are selected
 			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
 			foreach($selectedCountries as $selected){
-				$sqlselect = "UPDATE `".$wpdb->prefix."wpsc_category_tm` SET visible = 1 WHERE countryid = '".$selected."' AND categoryid=".$catid;
+				$sqlselect = "UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET visible = 1 WHERE countryid = '".$selected."' AND categoryid=".$catid;
 
 				$success = $wpdb->query($sqlselect);
 				if(!$success){
-    				$sqlselect = "INSERT INTO `".$wpdb->prefix."wpsc_category_tm`(visible, countryid, categoryid) VALUES (0,'".$selected."', '".$catid.".' )";
+    				$sqlselect = "INSERT INTO `".WPSC_TABLE_CATEGORY_TM."`(visible, countryid, categoryid) VALUES (0,'".$selected."', '".$catid.".' )";
     				$wpdb->query($sqlselect);
 				}
 			}
@@ -461,14 +461,14 @@ if($AllSelected != true){
 
     if(count($category_sql_list) > 0) {
       $category_sql = implode(", ",$category_sql_list);
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_categories` SET $category_sql WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET $category_sql WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
       $wp_rewrite->flush_rules(); 
 		}
     echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORYHASBEENEDITED."</p></div>";
 	}
   
 if($_POST['submit_action'] == "add_categorisation") {  
-  $wpdb->query("INSERT INTO `{$wpdb->prefix}wpsc_categorisation_groups` ( `name`, `description`, `active`, `default`) VALUES ( '".$wpdb->escape(stripslashes($_POST['name']))."', '".$wpdb->escape(stripslashes($_POST['description']))."', '1', '0')");
+  $wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` ( `name`, `description`, `active`, `default`) VALUES ( '".$wpdb->escape(stripslashes($_POST['name']))."', '".$wpdb->escape(stripslashes($_POST['description']))."', '1', '0')");
 	echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORISATIONHASBEENADDED."</p></div>";  
 
 }
@@ -478,25 +478,25 @@ if($_POST['submit_action'] == "add_categorisation") {
 if($_POST['submit_action'] == "edit_categorisation") {  
   $edit_group_id = $_POST['group_id'];
   
-  $wpdb->query("UPDATE `{$wpdb->prefix}wpsc_categorisation_groups` SET `name` = '".$wpdb->escape(stripslashes($_POST['name']))."', `description` = '".$wpdb->escape(stripslashes($_POST['description']))."' WHERE `id` IN('$edit_group_id') LIMIT 1 ");
+  $wpdb->query("UPDATE `".WPSC_TABLE_CATEGORISATION_GROUPS."` SET `name` = '".$wpdb->escape(stripslashes($_POST['name']))."', `description` = '".$wpdb->escape(stripslashes($_POST['description']))."' WHERE `id` IN('$edit_group_id') LIMIT 1 ");
 	
 	
 	echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORISATIONHASBEENEDITED."</p></div>";  
 	
 		
 	if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
-		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
+		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
 	} else {
-		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."wpsc_categorisation_groups` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
+		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
 	}
 }
 
 
 if(is_numeric($_GET['category_delete_id'])) {
   $delete_id = (int)$_GET['category_delete_id'];
-  $deletesql = "UPDATE `".$wpdb->prefix."wpsc_categorisation_groups` SET `active` = '0' WHERE `id`='{$delete_id}' AND `default` IN ('0') LIMIT 1";
+  $deletesql = "UPDATE `".WPSC_TABLE_CATEGORISATION_GROUPS."` SET `active` = '0' WHERE `id`='{$delete_id}' AND `default` IN ('0') LIMIT 1";
   $wpdb->query($deletesql);
-  $delete_subcat_sql = "UPDATE `".$wpdb->prefix."product_categories` SET `active` = '0', `nice-name` = '' WHERE `group_id`='{$delete_id}'";
+  $delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `group_id`='{$delete_id}'";
   $wpdb->query($delete_subcat_sql);
 	$wp_rewrite->flush_rules(); 
 }
@@ -504,15 +504,15 @@ if(is_numeric($_GET['category_delete_id'])) {
 
 if(is_numeric($_GET['deleteid'])) {
   $delete_id = (int)$_GET['deleteid'];
-  $deletesql = "UPDATE `".$wpdb->prefix."product_categories` SET `active` = '0', `nice-name` = '' WHERE `id`='{$delete_id}' LIMIT 1";
+  $deletesql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `id`='{$delete_id}' LIMIT 1";
   if($wpdb->query($deletesql)) {
-		$delete_subcat_sql = "UPDATE `".$wpdb->prefix."product_categories` SET `active` = '0', `nice-name` = '' WHERE `category_parent`='{$delete_id}'";
+		$delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `category_parent`='{$delete_id}'";
 		$wpdb->query($delete_subcat_sql);
 		// if this is the default category, we need to find a new default category
 		if($delete_id == get_option('wpsc_default_category')) {
 			// select the category that is not deleted with the greatest number of products in it
-			$new_default = $wpdb->get_var("SELECT `cat`.`id` FROM `{$wpdb->prefix}product_categories` AS `cat`
-				LEFT JOIN `{$wpdb->prefix}item_category_associations` AS `assoc` ON `cat`.`id` = `assoc`.`category_id`
+			$new_default = $wpdb->get_var("SELECT `cat`.`id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` AS `cat`
+				LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `assoc` ON `cat`.`id` = `assoc`.`category_id`
 				WHERE `cat`.`active` IN ( '1' )
 				GROUP BY `cat`.`id`
 				ORDER BY COUNT( `assoc`.`id` ) DESC
@@ -573,7 +573,7 @@ function categorisation_conf() {
 	  <form action='' method='GET' id='submit_categorisation_form' >
 	  <input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
 	  <?php
-	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wpsc_categorisation_groups` WHERE `active` IN ('1')", ARRAY_A);
+	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 		//echo "<ul class='categorisation_links'>\n\r";
 		echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":&nbsp;&nbsp;</label>";
 		echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 

@@ -3,7 +3,7 @@ function variationlist($curent_variation) {
   global $wpdb;
   $options = "";
   //$options .= "<option value=''>".TXT_WPSC_SELECTAVARIATION."</option>\r\n";
-  $values = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_categories` ORDER BY `id` ASC",ARRAY_A);
+  $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` ORDER BY `id` ASC",ARRAY_A);
   foreach($values as $option) {
     if($curent_variation == $option['id']) {
       $selected = "selected='selected'";
@@ -35,21 +35,21 @@ function display_variation_row($variation) {
  /*  delete variation_value */  
   if($_GET['delete_value'] == 'true') {
    if(is_numeric($_GET['variation_id']) && is_numeric($_GET['value_id'])) {
-			//exit("DELETE FROM `".$wpdb->prefix."variation_values_associations` WHERE `value_id` = '".$_GET['value_id']."'");
-			$wpdb->query("DELETE FROM `".$wpdb->prefix."variation_values_associations` WHERE `value_id` = '".$_GET['value_id']."'");
-			$wpdb->query("DELETE FROM `".$wpdb->prefix."variation_values` WHERE `id` = '".$_GET['value_id']."' AND `variation_id` = '".$_GET['variation_id']."' LIMIT 1");
+			//exit("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `value_id` = '".$_GET['value_id']."'");
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `value_id` = '".$_GET['value_id']."'");
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".$_GET['value_id']."' AND `variation_id` = '".$_GET['variation_id']."' LIMIT 1");
 		}
 	}  
   
  /* add variation */
   if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>");
-    $variation_sql = "INSERT INTO `".$wpdb->prefix."product_variations` (`name`, `variation_association`) VALUES ( '".$_POST['name']."', 0);";
+    $variation_sql = "INSERT INTO `".WPSC_TABLE_PRODUCT_VARIATIONS."` (`name`, `variation_association`) VALUES ( '".$_POST['name']."', 0);";
     if($wpdb->query($variation_sql)) {
-      $variation_id = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_variations` LIMIT 1",ARRAY_A);
+      $variation_id = $wpdb->get_results("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` LIMIT 1",ARRAY_A);
       $variation_id = $variation_id[0]['id'];
       $variation_values = $_POST['variation_values'];
-      $variation_value_sql ="INSERT INTO `".$wpdb->prefix."variation_values` ( `name` , `variation_id` )
+      $variation_value_sql ="INSERT INTO `".WPSC_TABLE_VARIATION_VALUES."` ( `name` , `variation_id` )
   VALUES ";
       $num = 0;
       foreach($variation_values as $variation_value) {
@@ -81,16 +81,16 @@ function display_variation_row($variation) {
     $variation_id = $_POST['prodid'];
     foreach($_POST['variation_values'] as $variation_value_id => $variation_value) {
       if(is_numeric($variation_value_id)) {
-        $variation_value_state = $wpdb->get_results("SELECT `name` FROM `".$wpdb->prefix."variation_values` WHERE `id` = '$variation_value_id' AND `variation_id` = '$variation_id' LIMIT 1",ARRAY_A);
+        $variation_value_state = $wpdb->get_results("SELECT `name` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$variation_value_id' AND `variation_id` = '$variation_id' LIMIT 1",ARRAY_A);
         $variation_value_state = $variation_value_state[0]['name'];
 			}
         
       if($variation_value_state != $variation_value) {
-        $wpdb->query("UPDATE `".$wpdb->prefix."variation_values` SET `name` = '".$wpdb->escape($variation_value)."' WHERE `id` = '$variation_value_id' AND `variation_id` = '".$variation_id."' LIMIT 1;");
+        $wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_VALUES."` SET `name` = '".$wpdb->escape($variation_value)."' WHERE `id` = '$variation_value_id' AND `variation_id` = '".$variation_id."' LIMIT 1;");
 			}
 		}
     
-    $variation_value_sql ="INSERT INTO `".$wpdb->prefix."variation_values` ( `name` , `variation_id` )
+    $variation_value_sql ="INSERT INTO `".WPSC_TABLE_VARIATION_VALUES."` ( `name` , `variation_id` )
 VALUES ";
     $num = 0; 
     if($_POST['new_variation_values'] != null) {
@@ -112,7 +112,7 @@ VALUES ";
       $wpdb->query($variation_value_sql);  
 		}
     
-    $updatesql = "UPDATE `".$wpdb->prefix."product_variations` SET `name` = '".$wpdb->escape($_POST['title'])."' WHERE `id`='".$variation_id."' LIMIT 1";
+    $updatesql = "UPDATE `".WPSC_TABLE_PRODUCT_VARIATIONS."` SET `name` = '".$wpdb->escape($_POST['title'])."' WHERE `id`='".$variation_id."' LIMIT 1";
     $wpdb->query($updatesql);
   
     echo "<div class='updated'><p align='center'>".TXT_WPSC_VARIATIONHASBEENEDITED."</p></div>";
@@ -121,10 +121,10 @@ VALUES ";
 
 if(is_numeric($_GET['deleteid']))
   {
-  $delete_value_assoc_sql = "DELETE FROM `".$wpdb->prefix."variation_values_associations` WHERE `variation_id` = '".$_GET['deleteid']."'";
-  $delete_variation_assoc_sql = "DELETE FROM `".$wpdb->prefix."variation_associations` WHERE `variation_id` = '".$_GET['deleteid']."'";
-  $delete_values_sql = "DELETE FROM `".$wpdb->prefix."variation_values` WHERE `variation_id` = '".$_GET['deleteid']."';";
-  $delete_variation_sql = "DELETE FROM `".$wpdb->prefix."product_variations` WHERE `id`='".$_GET['deleteid']."' LIMIT 1";
+  $delete_value_assoc_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` = '".$_GET['deleteid']."'";
+  $delete_variation_assoc_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `variation_id` = '".$_GET['deleteid']."'";
+  $delete_values_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` = '".$_GET['deleteid']."';";
+  $delete_variation_sql = "DELETE FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='".$_GET['deleteid']."' LIMIT 1";
   $wpdb->query($delete_value_assoc_sql);
   $wpdb->query($delete_variation_assoc_sql);
   $wpdb->query($delete_values_sql);
@@ -200,7 +200,7 @@ echo TXT_WPSC_EDIT;
 echo "          </td>\n\r";
 
 echo "        </tr>\n\r";
-$variation_sql = "SELECT * FROM `".$wpdb->prefix."product_variations` ORDER BY `id`";
+$variation_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` ORDER BY `id`";
 $variation_list = $wpdb->get_results($variation_sql,ARRAY_A);
 if($variation_list != null) {
   foreach($variation_list as $variation) {

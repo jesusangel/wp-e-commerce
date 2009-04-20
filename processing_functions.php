@@ -7,18 +7,18 @@
 */
 function wpsc_decrement_claimed_stock($purchase_log_id) {
   global $wpdb;
-  $all_claimed_stock = $wpdb->get_results($wpdb->prepare("SELECT * FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN('%s') AND `cart_submitted` IN('1')", $purchase_log_id), ARRAY_A);
+  $all_claimed_stock = $wpdb->get_results($wpdb->prepare("SELECT * FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN('%s') AND `cart_submitted` IN('1')", $purchase_log_id), ARRAY_A);
 	
 	foreach($all_claimed_stock as $claimed_stock) {
 	  // for people to have claimed stock, it must have been available to take, no need to look at the existing stock, just subtract from it
 	  // If this is ever wrong, and you get negative stock, do not fix it here, go find the real cause of the problem 
 		if($claimed_stock['variation_stock_id'] > 0) {
-			$wpdb->query($wpdb->prepare("UPDATE `{$wpdb->prefix}variation_priceandstock` SET `stock` = (`stock` - %s)  WHERE `id` = '%d' LIMIT 1", $claimed_stock['stock_claimed'], $claimed_stock['variation_stock_id']));
+			$wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_VARIATION_PROPERTIES."` SET `stock` = (`stock` - %s)  WHERE `id` = '%d' LIMIT 1", $claimed_stock['stock_claimed'], $claimed_stock['variation_stock_id']));
 		} else {
-			$wpdb->query($wpdb->prepare("UPDATE `{$wpdb->prefix}product_list` SET `quantity` = (`quantity` - %s)  WHERE `id` = '%d' LIMIT 1", $claimed_stock['stock_claimed'], $claimed_stock['product_id']));
+			$wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `quantity` = (`quantity` - %s)  WHERE `id` = '%d' LIMIT 1", $claimed_stock['stock_claimed'], $claimed_stock['product_id']));
 		}
 	}
-	$wpdb->query($wpdb->prepare("DELETE FROM `{$wpdb->prefix}wpsc_claimed_stock` WHERE `cart_id` IN ('%s')", $purchase_log_id));
+	$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $purchase_log_id));
 }
   
   
@@ -35,7 +35,7 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
   $currency_sign_location = get_option('currency_sign_location');
   $currency_type = get_option('currency_type');
   if(count($wpsc_currency_data) < 3) {
-		$wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".$wpdb->prefix."currency_list` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
+		$wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
   }
   $price_out = null;
 
@@ -86,19 +86,19 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
   function nzshpcrt_find_total_price($purchase_id,$country_code) {
     global $wpdb;
     if(is_numeric($purchase_id)) {
-      $purch_sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `id`='".$purchase_id."'";
+      $purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
       $purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 
-      $cartsql = "SELECT * FROM `".$wpdb->prefix."cart_contents` WHERE `purchaseid`=".$purchase_id."";
+      $cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
       $cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
       if($cart_log != null) {
         $all_donations = true;
         $all_no_shipping = true;
         foreach($cart_log as $cart_row) {
-          $productsql= "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`=".$cart_row['prodid']."";
+          $productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
           $product_data = $wpdb->get_results($productsql,ARRAY_A); 
         
-          $variation_sql = "SELECT * FROM `".$wpdb->prefix."cart_item_variations` WHERE `cart_id`='".$cart_row['id']."'";
+          $variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$cart_row['id']."'";
           $variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
           $variation_count = count($variation_data);
           $price = ($cart_row['price'] * $cart_row['quantity']);          
@@ -148,7 +148,7 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
 	function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code) {    
     global $wpdb;
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
-      $sql = "SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='$product_id' LIMIT 1";
+      $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$product_id' LIMIT 1";
       $product_list = $wpdb->get_row($sql,ARRAY_A) ;
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping
@@ -219,11 +219,11 @@ function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
   global $wpdb;
   if(($start_timestamp != '') && ($end_timestamp != ''))
     {
-    $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` > '1' AND `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
+    $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
     }
     else
       {
-      $sql = "SELECT * FROM `".$wpdb->prefix."purchase_logs` WHERE `processed` > '1' AND `date` != ''";
+      $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` != ''";
       }
   $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
   $total = 0;
@@ -231,7 +231,7 @@ function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
     {
     foreach($purchase_log as $purchase)
       {
-//       $country_sql = "SELECT * FROM `".$wpdb->prefix."submited_form_data` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+//       $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
 //       $country_data = $wpdb->get_results($country_sql,ARRAY_A);
 //       $country = $country_data[0]['value'];
 //       $total += nzshpcrt_find_total_price($purchase['id'],$country);
@@ -256,20 +256,20 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
     if($variation_count >= 1) {
       // if we have variations, grab the individual price for them. 
       
-      $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variations)."')");
+      $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variations)."')");
       asort($variation_ids);         
       $all_variation_ids = implode(",", $variation_ids);
       
       
-      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
       
       
    
       
       
-      $price = $wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+      $price = $wpdb->get_var("SELECT `price` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
     } else {
-      $product_data = $wpdb->get_row("SELECT `price`,`special`,`special_price` FROM `".$wpdb->prefix."product_list` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
+      $product_data = $wpdb->get_row("SELECT `price`,`special`,`special_price` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
       if($product_data['special_price'] > 0) {
         $price = $product_data['price'] - $product_data['special_price'];
       } else {
@@ -285,7 +285,7 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
 function check_in_stock($product_id, $variations, $item_quantity = 1) {
   global $wpdb;
   $product_id = (int)$product_id;
-  $item_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_list` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+  $item_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
   
   $item_stock = null;
   $variation_count = count($variations);
@@ -297,14 +297,14 @@ function check_in_stock($product_id, $variations, $item_quantity = 1) {
 		}
     if(count($variation_ids) > 0) {
       
-        $actual_variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variation_ids)."')");
+        $actual_variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variation_ids)."')");
         asort($actual_variation_ids);         
         $all_variation_ids = implode(",", $actual_variation_ids);
     
     
-      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".$wpdb->prefix."wpsc_variation_combinations` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
+      $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '".implode("', '",$variation_ids )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."' LIMIT 1");
       
-      $variation_stock_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+      $variation_stock_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
       
       $item_stock = $variation_stock_data['stock'];
 		}
@@ -400,7 +400,7 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 				image_processing($new_image_path, (WPSC_THUMBNAIL_DIR.$image_name), $width, $height);
 			}
 			
-			$updatelink_sql = "UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$image_name."', `thumbnail_image` = '".$thumbnail_image."'  WHERE `id` = '$id'";
+			$updatelink_sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$image_name."', `thumbnail_image` = '".$thumbnail_image."'  WHERE `id` = '$id'";
 			$wpdb->query($updatelink_sql);
 			
 			if(function_exists('getimagesize')) {
@@ -441,14 +441,14 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			$image = $wpdb->escape($image_name);
 		}
 	} else {
-			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".$wpdb->prefix."product_list` WHERE `id`='".(int)$id."' LIMIT 1",ARRAY_A);
+			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$id."' LIMIT 1",ARRAY_A);
 			//exit("<pre>".print_r($image_data,true)."</pre>");
 			
 		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
 			$imagefield='thumbnailImage';
 			$image=image_processing($_FILES['thumbnailImage']['tmp_name'], WPSC_THUMBNAIL_DIR.$_FILES['thumbnailImage']['name'],null,null,$imagefield);
 			$thumbnail_image = $image;
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");
 			$stat = stat( dirname( (WPSC_THUMBNAIL_DIR.$image_data['image']) ));
 			$perms = $stat['mode'] & 0000775;
 			@ chmod( (WPSC_THUMBNAIL_DIR.$image_data['image']), $perms );	
@@ -460,7 +460,7 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 
 function wpsc_item_process_file($mode = 'add') {
   global $wpdb;
-  	$files = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}product_files ORDER BY id ASC", ARRAY_A);
+  	$files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." ORDER BY id ASC", ARRAY_A);
 		if (is_array($files)){
 			foreach($files as $file){
 				$file_names[] = $file['filename'];
@@ -475,14 +475,14 @@ function wpsc_item_process_file($mode = 'add') {
 			case 'edit':
 	   		/* if we are editing, grab the current file and ID hash */ 
 			$product_id = $_POST['prodid'];
-			$fileid_data = $wpdb->get_results("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+			$fileid_data = $wpdb->get_results("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 			
 			case 'add':
 			default:
 			/* if we are adding, make a new file row and get the ID of it */
 			$timestamp = time();
-			$query_results = $wpdb->query("INSERT INTO `".$wpdb->prefix."product_files` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '', '', '', '$timestamp');");
-			$fileid = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `".$wpdb->prefix."product_files`");
+			$query_results = $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '', '', '', '$timestamp');");
+			$fileid = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `".WPSC_TABLE_PRODUCT_FILES."`");
 			break;
 		}
 	
@@ -534,17 +534,17 @@ function wpsc_item_process_file($mode = 'add') {
 					$preview_mimetype = wpsc_get_mimetype($_FILES['preview_file']['tmp_name']);
 					copy($_FILES['preview_file']['tmp_name'], (WPSC_PREVIEW_DIR.$preview_filename));
 					$preview_filepath = (WPSC_PREVIEW_DIR.$preview_filename);
-					$wpdb->query("UPDATE `".$wpdb->prefix."product_files` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '$fileid' LIMIT 1");
+					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '$fileid' LIMIT 1");
 				}
 				$stat = stat( dirname($preview_filepath));
 				$perms = $stat['mode'] & 0000666;
 				@ chmod( $preview_filepath, $perms );	
 			}
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_files` SET `filename` = '".$wpdb->escape($filename)."', `mimetype` = '$mimetype', `idhash` = '$idhash' WHERE `id` = '$fileid' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `filename` = '".$wpdb->escape($filename)."', `mimetype` = '$mimetype', `idhash` = '$idhash' WHERE `id` = '$fileid' LIMIT 1");
 		}
 		if($mode == 'edit') {			
       //if we are editing, update the file ID in the product row, this cannot be done for add because the row does not exist yet.
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
 		}
 		return $fileid;
   } else {
@@ -561,14 +561,14 @@ function wpsc_item_reassign_file($selected_product_file, $mode = 'add') {
 		$product_id = (int)$_POST['prodid'];
 		if($selected_product_file == '.none.') {
 			// unlikely that anyone will ever upload a file called .none., so its the value used to signify clearing the product association
-			$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `file` = '0' WHERE `id` = '$product_id' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '0' WHERE `id` = '$product_id' LIMIT 1");
 			return null;
 		}
 		
 		// if we already use this file, there is no point doing anything more.
-		$current_fileid = $wpdb->get_var("SELECT `file` FROM `".$wpdb->prefix."product_list` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+		$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 		if($current_fileid > 0) {
-			$current_file_data = $wpdb->get_row("SELECT `id`,`idhash` FROM `".$wpdb->prefix."product_files` WHERE `id` = '$current_fileid' LIMIT 1",ARRAY_A);
+			$current_file_data = $wpdb->get_row("SELECT `id`,`idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` = '$current_fileid' LIMIT 1",ARRAY_A);
 			if(basename($selected_product_file) == $file_data['idhash']) {
 				return $current_fileid;
 			}
@@ -579,18 +579,18 @@ function wpsc_item_reassign_file($selected_product_file, $mode = 'add') {
 	$selected_product_file = basename($selected_product_file);
 	if(file_exists(WPSC_FILE_DIR.$selected_product_file)) {
 		$timestamp = time();
-		$file_data = $wpdb->get_row("SELECT * FROM `".$wpdb->prefix."product_files` WHERE `idhash` IN('".$wpdb->escape($selected_product_file)."') LIMIT 1", ARRAY_A);
+		$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` IN('".$wpdb->escape($selected_product_file)."') LIMIT 1", ARRAY_A);
 		$fileid = (int)$file_data['id'];
 		if($fileid < 1) { // if the file does not have a database row, add one.
 		  $mimetype = wpsc_get_mimetype(WPSC_FILE_DIR.$selected_product_file);
 		  $filename = $idhash = $selected_product_file;
 			$timestamp = time();
-			$wpdb->query("INSERT INTO `{$wpdb->prefix}product_files` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
-			$fileid = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."product_files` WHERE `date` = '{$timestamp}' AND `filename` IN ('{$filename}')");
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
+			$fileid = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `date` = '{$timestamp}' AND `filename` IN ('{$filename}')");
 		}
 		if($mode == 'edit') {
       //if we are editing, update the file ID in the product row, this cannot be done for add because the row does not exist yet.
-      $wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
 		}
 	}	
 	return $fileid;
@@ -634,16 +634,16 @@ function shopping_cart_total_weight() {
 	  $weight = array();
 		$variations = $item->product_variations;
 		if(count($variations) > 0) {
-			$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_values` WHERE `id` IN ('".implode("','",$variations)."')");
+			$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variations)."')");
 			asort($variation_ids);
 			$all_variation_ids = implode(",", $variation_ids);
-			$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '".(int)$item->product_id."' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
-			$weight = $wpdb->get_row("SELECT `weight`, `weight_unit` FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+			$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '".(int)$item->product_id."' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('{$all_variation_ids}') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+			$weight = $wpdb->get_row("SELECT `weight`, `weight_unit` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
 			
 		}
 		
 		if(($weight == null) || ($weight['weight'] == null) && ($weight['weight_unit'] == null)) {
-			$weight=$wpdb->get_row("SELECT `weight`, `weight_unit` FROM `{$wpdb->prefix}product_list` WHERE id='{$item->product_id}'", ARRAY_A);
+			$weight=$wpdb->get_row("SELECT `weight`, `weight_unit` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE id='{$item->product_id}'", ARRAY_A);
 		}
 		
 		switch($weight['weight_unit']) {
@@ -733,7 +733,7 @@ function wpsc_add_product($product_values) {
 		$success = false;
 		
 		
-		$insertsql = "INSERT INTO `".$wpdb->prefix."product_list` SET";
+		$insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_LIST."` SET";
 		$insertsql .= "`name` = '".$wpdb->escape($product_values['name'])."',";
 		$insertsql .= "`description`  = '".$wpdb->escape($product_values['description'])."',";
 		$insertsql .= "`additional_description`  = '".$wpdb->escape($product_values['additional_description'])."',";
@@ -765,7 +765,7 @@ function wpsc_add_product($product_values) {
 		//Insert the data
 		if($wpdb->query($insertsql)) {  
 		  // if we succeeded, we have a product id, we wants it for the next stuff
-			$product_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".$wpdb->prefix."product_list` LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
 			
 			// add the tags
 			if(function_exists('wp_insert_term')) {
@@ -783,7 +783,7 @@ function wpsc_add_product($product_values) {
 			$image = wpsc_item_process_image($product_id, $product_values['image_path'], basename($product_values['image_path']), $product_values['width'], $product_values['height'], $product_values['image_resize']);
 						
 			if(($image != null)) {
-				$wpdb->query("UPDATE `".$wpdb->prefix."product_list` SET `image` = '".$wpdb->escape($image)."' WHERE `id`='".$product_id."' LIMIT 1");
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$wpdb->escape($image)."' WHERE `id`='".$product_id."' LIMIT 1");
 			}
 		
 			
@@ -812,7 +812,7 @@ function wpsc_add_product($product_values) {
 			$tidied_name = trim($product_values['name']);
 			$tidied_name = strtolower($tidied_name);
 			$url_name = preg_replace(array("/(\s)+/","/[^\w-]+/i"), array("-", ''), $tidied_name);
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '".$wpdb->escape($url_name)."', '')) AS `max_number` FROM `".$wpdb->prefix."wpsc_productmeta` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape($url_name)."){1}(\d)*$' ",ARRAY_A);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '".$wpdb->escape($url_name)."', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape($url_name)."){1}(\d)*$' ",ARRAY_A);
 			$extension_number = '';
 			if($similar_names['count'] > 0) {
 				$extension_number = (int)$similar_names['max_number']+1;
@@ -835,9 +835,9 @@ function wpsc_add_product($product_values) {
 			if(count($product_values['category']) > 0) {
 				foreach($product_values['category'] as $category_id) {
 				  $category_id = (int)$category_id;
-					$check_existing = $wpdb->get_var("SELECT `id` FROM `".$wpdb->prefix."item_category_associations` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
+					$check_existing = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = ".$product_id." AND `category_id` = '$category_id' LIMIT 1");
 					if($check_existing == null) {
-						$wpdb->query("INSERT INTO `".$wpdb->prefix."item_category_associations` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
+						$wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ( `product_id` , `category_id` ) VALUES ( '".$product_id."', '".$category_id."');");        
 					}
 				}
 			}
@@ -865,7 +865,7 @@ function wpsc_check_stock($state, $product) {
 	if($product['quantity_limited'] == 1) {
 	  $excluded_values = '';
 	  // get the variation IDs  associated with this product
-		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
+		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
 		// if there are any, look through them for items out of stock
 		if(count($variation_ids) > 0) { 
 		  // sort and comma seperate them
@@ -873,13 +873,13 @@ function wpsc_check_stock($state, $product) {
 			$all_variation_ids = implode(",", $variation_ids);
 			
 			// get the visible variation values associated with this product
-			$enabled_values = $wpdb->get_col("SELECT `value_id` FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('1')");
+			$enabled_values = $wpdb->get_col("SELECT `value_id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('1')");
 			
 			// get the priceandstock IDs using the variation and variation value IDs
-			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
+			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
 			
 			// count the variation combinations with a stock of zero
-			$items_out_of_stock = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `stock` IN (0)");
+			$items_out_of_stock = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `stock` IN (0)");
 			if($items_out_of_stock > 0) {
 				$out_of_stock = true;
 			}
@@ -908,7 +908,7 @@ function wpsc_check_weight($state, $product) {
 	if((array_search('ups', $custom_shipping) !== false) && ($product['no_shipping'] != 1)) {
 		$excluded_values = '';
 		// get the variation IDs  associated with this product
-		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `{$wpdb->prefix}variation_associations` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
+		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
 		// if there are any, look through them for itemswith no weight
 		if(count($variation_ids) > 0) { 
 			// sort and comma seperate them
@@ -916,13 +916,13 @@ function wpsc_check_weight($state, $product) {
 			$all_variation_ids = implode(",", $variation_ids);
 			
 			// get the visible variation values associated with this product
-			$enabled_values = $wpdb->get_col("SELECT `value_id` FROM `{$wpdb->prefix}variation_values_associations` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('1')");
+			$enabled_values = $wpdb->get_col("SELECT `value_id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` IN('{$product['id']}') AND `visible` IN ('1')");
 			
 			// get the priceandstock IDs using the variation and variation value IDs
-			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `{$wpdb->prefix}wpsc_variation_combinations` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
+			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
 			
 			// count the variation combinations with a weight of zero
-			$unweighted_items = $wpdb->get_var("SELECT COUNT(*) FROM `{$wpdb->prefix}variation_priceandstock` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `weight` IN (0)");
+			$unweighted_items = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `weight` IN (0)");
 			if($unweighted_items > 0) {
 				$has_no_weight = true;
 			}

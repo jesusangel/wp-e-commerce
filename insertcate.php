@@ -27,7 +27,7 @@ $pluginURL = get_settings('siteurl') . $plugindir;
 	
 	$fns = ''; $options = '';
 	$no = ($i==0)?'':($i+1);
-	$cate_sql = "SELECT * FROM ".$wpdb->prefix."product_categories";
+	$cate_sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES."";
 	$result = $wpdb->get_results($cate_sql,ARRAY_A);
 	foreach($result as $category){
 		$options .= '<option value="'.$category['id'].'">'.$category['name'].'</option>';
