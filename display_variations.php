@@ -35,8 +35,8 @@ function display_variation_row($variation) {
  /*  delete variation_value */  
   if($_GET['delete_value'] == 'true') {
    if(is_numeric($_GET['variation_id']) && is_numeric($_GET['value_id'])) {
-			//exit("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `value_id` = '".$_GET['value_id']."'");
-			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `value_id` = '".$_GET['value_id']."'");
+			//exit("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `value_id` = '".$_GET['value_id']."'");
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `value_id` = '".$_GET['value_id']."'");
 			$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".$_GET['value_id']."' AND `variation_id` = '".$_GET['variation_id']."' LIMIT 1");
 		}
 	}  
@@ -121,7 +121,7 @@ VALUES ";
 
 if(is_numeric($_GET['deleteid']))
   {
-  $delete_value_assoc_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` = '".$_GET['deleteid']."'";
+  $delete_value_assoc_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `variation_id` = '".$_GET['deleteid']."'";
   $delete_variation_assoc_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `variation_id` = '".$_GET['deleteid']."'";
   $delete_values_sql = "DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` = '".$_GET['deleteid']."';";
   $delete_variation_sql = "DELETE FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='".$_GET['deleteid']."' LIMIT 1";

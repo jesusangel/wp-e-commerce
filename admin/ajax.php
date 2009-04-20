@@ -162,7 +162,7 @@ function wpsc_admin_ajax() {
 	}
       
 	if(($_POST['remove_variation_value'] == "true") && is_numeric($_POST['variation_value_id'])) {
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `value_id` = '".$_POST['variation_value_id']."'");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `value_id` = '".$_POST['variation_value_id']."'");
 		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".$_POST['variation_value_id']."' LIMIT 1");
 		exit();
 	}
