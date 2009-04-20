@@ -294,8 +294,6 @@ function wpsc_submit_checkout() {
 		// check that the submitted gateway is in the list of selected ones
 		if(array_search($submitted_gateway,$selected_gateways) !== false) {
 		
-  
-		
 			$sessionid = (mt_rand(100,999).time());
 			$subtotal = $wpsc_cart->calculate_subtotal();
 			$base_shipping= $wpsc_cart->calculate_base_shipping();

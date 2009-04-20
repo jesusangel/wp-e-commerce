@@ -733,6 +733,8 @@ function wpsc_create_or_update_tables($debug = false) {
   // creates or updates the structure of the shopping cart tables
   
   include('updates/database_template.php');
+  // I need to break this while I work on the template file
+  return true;
   
   $template_hash = sha1(serialize($wpsc_database_template));
   
