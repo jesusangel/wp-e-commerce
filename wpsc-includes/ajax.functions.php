@@ -197,6 +197,24 @@ if(($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])
 
 
 /**
+	* update_product_page_price function, used through ajax with variations
+	* No parameters, returns nothing
+*/
+function wpsc_update_product_price() {
+  global $wpdb, $wpsc_cart;
+  $prodid = $_POST['product_id'];
+	$data = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `productid` = '".$prodid."'",ARRAY_A) ;
+	echo $data[0]['count'].",".$prodid;
+	exit();
+}
+// execute on POST and GET
+if(($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_id'])) {
+	add_action('init', 'wpsc_get_rating_count');
+}
+
+
+
+/**
 	* update quantity function, used through ajax and in normal page loading.
 	* No parameters, returns nothing
 */

@@ -727,7 +727,10 @@ function wpsc_create_upload_directories() {
 	}
 }
 
-
+/**
+* wpsc_create_or_update_tables count function,
+* * @return boolean true on success, false on failure
+*/
 function wpsc_create_or_update_tables($debug = false) {
   global $wpdb;
   // creates or updates the structure of the shopping cart tables
@@ -743,7 +746,8 @@ function wpsc_create_or_update_tables($debug = false) {
   $failure_reasons = array();
   $upgrade_failed = false;
   foreach((array)$wpsc_database_template as $table_name => $table_data) {
-    if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && !$wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'")) {
+    // check that the table does not exist under the correct name, then checkk if there was a previous name, if there was, check for the table under that name too.
+    if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && (!isset($table_data['previous_names']) || (isset($table_data['previous_names']) && !$wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'")) )) {
       //if the table does not exixt, create the table
       $constructed_sql_parts = array();
       $constructed_sql = "CREATE TABLE `{$table_name}` (\n";
@@ -773,7 +777,7 @@ function wpsc_create_or_update_tables($debug = false) {
       //echo "<pre>$constructed_sql</pre>";
     } else {
       // check to see if the new table name is in use
-			if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && $wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'")) {
+			if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && (isset($table_data['previous_names']) && $wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'"))) {
 				$wpdb->query("RENAME TABLE `{$table_data['previous_names']}`  TO `{$table_name}`;");
 				$failure_reasons[] = $wpdb->last_error;
 			}
@@ -851,7 +855,7 @@ function wpsc_create_or_update_tables($debug = false) {
   }
   
 	if($upgrade_failed !== true) {
-		//update_option('wpsc_database_check', $template_hash);
+		update_option('wpsc_database_check', $template_hash);
 		return true;
 	} else {
 	  return false;

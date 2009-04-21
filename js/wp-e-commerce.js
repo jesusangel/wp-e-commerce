@@ -53,6 +53,18 @@ jQuery(document).ready(function () {
     jQuery('.additional_description',parent_element).toggle();
 		return false;
 	});
+	
+	
+  // update the price when the variations are altered.
+  jQuery("div.wpsc_variation_forms .wpsc_select_variation").change(function() {
+    parent_form = jQuery(this).parents("form.product_form");
+    form_values =jQuery("input[name=product_id],div.wpsc_variation_forms .wpsc_select_variation",parent_form).serialize( );
+    //alert(form_values);
+  
+  
+		return false;
+	});
+	
 });
 
 

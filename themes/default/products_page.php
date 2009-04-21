@@ -106,7 +106,7 @@ global $wpsc_query, $wpdb;
 					
 					
 					<?php /** the variation group HTML and loop */?>
-					<p class="wpsc_variation_forms">
+					<div class="wpsc_variation_forms">
 						<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
 							<p>
 								<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
@@ -118,7 +118,7 @@ global $wpsc_query, $wpdb;
 								</select> 
 							</p>
 						<?php endwhile; ?>
-					</p>
+					</div>
 					<?php /** the variation group HTML and loop ends here */?>
 					
 					<p class="wpsc_extras_forms"/>
