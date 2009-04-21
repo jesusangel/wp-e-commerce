@@ -1,12 +1,12 @@
 /*
-Theme Name: Default Theme
+Theme Name: iShop Theme
 Theme URI: http://instinct.co.nz
-Description: Default Theme
+Description: Mac Style Theme
 Version: 3.5
 Author: Thomas Howard
 Author URI: http://instinct.co.nz
 */
-
+ 
 /*
  * If you delete this file, you can expect your WP e-Commerce installation to break in some manner
  * to create your own theme copy, and paste this file, change the names and alter to your tastes
@@ -14,7 +14,6 @@ Author URI: http://instinct.co.nz
 
 .wpsc_container{
   position: relative;
-  _zoom: 1;
   } 
 
 div.productdisplay img {
@@ -23,9 +22,7 @@ div.productdisplay img {
  border: none;
  }
 
- 
- 
- 
+  
 /*
  * shopping cart styling
  * lots of styling for lots of different ways of displaying it.
@@ -72,12 +69,7 @@ div#sideshoppingcart div h2{
  display: inline;
  }
  
-input.wpsc_buy_button{
- }
- 
-a.wpsc_product_title{
- display: block;
- } 
+
 
 table.shoppingcart{
  margin-left: -2px;
@@ -92,7 +84,7 @@ div#widgetshoppingcart{
  }
 
 div#widgetshoppingcart div{
- height: 100%;
+/*  height: 100%; */
  width: 100%;
  text-align: left;
  }
@@ -146,14 +138,13 @@ strong.prodtitles{
  display: block;
  margin-bottom: -15px;
  }
-
-h2.prodtitles{
+ 
+ h2.prodtitles{
  font-size:1em;
- margin: 0px;
+ margin-top: 0px;
 }
 
-
-span.items{
+pan.items{
  display:block;
  margin:0 0 15px 0;
 }
@@ -190,6 +181,14 @@ p.empty,p.visitshop{
 /*
  * end shopping cart styling
  */
+
+
+
+
+
+
+
+
  
 /*
  * product default display styling
@@ -200,29 +199,20 @@ div.productdisplay{
  clear:both;
  top:0px;
  left: 0px;
- margin-bottom: 12px;
- padding: 0px;
+/* margin-top: 10px; */
+ margin-bottom: 20px;
+
  width: 100%;
  text-align: left !important;
-/*   border: 1px solid red; */
  }
 
 
-div.imagecol{
- position:relative;
- float:left;
- top:0px;
- left: 0px;
- padding-right: 5px;
- margin-right: 5px;
- border: 0px solid #fff;
-/*  border: 1px solid blue; */
- }
+
  
 div.productdisplay div.imagecol img{
-border: 0px solid #fff;
+	/* width: 300px; */
+	border: 0px solid #ffffff;
  }
-
 
 div.textcol{
  position:relative;
@@ -232,31 +222,41 @@ div.textcol{
  padding: 0px;
  padding-bottom: 10px;
  margin: 0px;
-/* Adjust this width according to your layout*/
-/*  width: 77%; */
+ /* Adjust this width according to your layout*/
+ /*  width: 77%; */
  text-align: left !important;
-/*   border: 1px solid green; */
-  _display: inline;
- }
- 
-div.textcol form{
-	text-align: left !important;
 }
 
-div.single_product_display div.textcol{
-/* Adjust this width according to your layout*/
-/*  width:41%; */
- margin-right: 0;
-}
+
+div.imagecol{
+ position:absolute;
+ float:left;
+ top:0px;
+ left: 0px;
+ padding-right: 5px;
+ margin-right: 0px;
+/*  border: 0px solid #fff; */
+ }
 
 div.producttext{
- font-size: 10pt;
+ color: #757575;
+ font-size: 8pt;
  width: 100%;
- text-align: left !important;
+ text-align: left !important; 
+ font-style: 'Lucida Grande',Geneva,Arial,Verdana,Helvetica,sans-serif;
+ margin: 0px 0px 30px 5px
  }
+  
+a.wpsc_product_title{
+ color:#44555f;
+ border-bottom: 1px solid #c8d2de;
+ display: block;
+ font-size: 11pt;
+ margin: 0px 0px 5px 0px;
+ } 
  
-p.description{
- margin: 0px 0px 6px 0px;
+a.wpsc_product_title:hover{
+ text-decoration: none;
  } 
  
 p.wpsc_description{
@@ -268,20 +268,49 @@ p.wpsc_variation_forms{
  }
 
 p.wpsc_variation_forms label{
+ color: #333333;
+ font-size: 9pt;
+ font-weight: bold;
+ }
+
+p.wpsc_extras_forms label{
+ color: #333333;
+ font-size: 9pt;
+ font-weight: bold;
  }
  
- p.wpsc_product_price{
- margin: 0px 0px 0px 0px;
+p.wpsc_product_price{
+ margin: 10px 0px 10px 0px;
+ color: #333333;
+ font-size: 9pt;
+ font-weight: bold;
  }
- 
- p.wpsc_product_extra_content{
- margin: 0px 0px 0px 0px;
+  
+p.wpsc_product_extra_content{
+ margin: 10px 0px 10px 0px;
+ color: #333333;
+ font-size: 9pt;
+ font-weight: bold;
  }
- 
+
  p.galleryheading{
 	font-weight:bold;
 }
-  
+ 
+ input.wpsc_buy_button{
+ background-image: url(images/buy_button.gif);
+ border: none;
+ width: 76px;
+ height: 25px;
+ text-align: center;
+/*  vertical-align: top; */
+ padding: 0px 0px 0px 0px;
+ font-size: 8pt;
+ margin-top: 3px;
+ color: #6a6c74;
+ }
+
+ 
  
 /* styles the additional description */
 span.additional_description{
@@ -434,33 +463,16 @@ table.list_productdisplay tr.list_view_description td div{
  
 
 div.select_country{
-	margin-bottom: 5px;
-}
-
-div.select_country input, div.select_country select{
-	vertical-align: top;
-  _height: 20px;
-  margin: 0px;
-}
+ margin-bottom: 5px;
+ }
  
 div.select_country form{
  text-align: left;
  }
 
-
-table.wpsc_checkout_table input.text, table.wpsc_checkout_table textarea, table.wpsc_checkout_table select {
-	margin-right:0;
-	width:260px;
-	font-family:"Verdana","Lucida Fax","Lucida Grande","Lucida Sans Unicode",Arial,sans-serif;
-	font-size: 10pt;
-}
-table.wpsc_checkout_table select {
-	width:271px !important;
-}
- 
 tr.product_shipping td h2{
  margin-bottom: 15px;
- margin-top: 5px;
+/*  margin-top: 5px; */
  }
  
 div#homepage_products{
@@ -544,17 +556,8 @@ table.productcart tr.firstrow td.firstcol{
 
 table.productcart tr.product_shipping td{
  vertical-align: middle;
-/*  border-top: 1px solid #E1DAB7 !important; */
+ border-top: 1px solid #999999 !important;
  padding-top: 4px;
- }
-
-button.remove_button {
-  margin: 0px !important;
-}
-
-
-#coupon_num{
-  width: 134px !important;
  }
 
 table.productcart tr.total_price td{
@@ -588,16 +591,6 @@ a.termsandconds
  {
  text-decoration: underline;
  }
- 
- .validation-error input, .validation-error textarea {
-   border: 1px solid red;
- }
- 
- p.validation-error {
-  color: red;
-  margin-bottom: 0px;
- }
- 
 /* end Verify your Order styling */
 
 
@@ -648,7 +641,7 @@ a.termsandconds
  }
   
 .PeCatsBrands ul li{
- margin: 0px 0px 0px 0px !important;
+ margin-left: 0px;
  }
   
 .PeCatsBrands  ul.SubCategories{
@@ -724,7 +717,8 @@ img.catimage{
 
 strong.cattitles{
  display: block;
- z-index:1;
+ position: relative;
+ margin: 6px 0px 0px 0px;
 /* margin-bottom: -15px; */
  }
 
@@ -825,14 +819,12 @@ div.wpsc_page_numbers{
  
 /*
  * checkout registration styling
- */
+ */  
     
 table.wpsc_checkout_table tr td{
  text-align: left;
  }
-  
-  
-  
+ 
 div#checkout_login_box{
   display: none;
 /*  border: 1px solid #339933;
@@ -861,25 +853,25 @@ div#checkout_login_box form{
  * single category view styling
  */  
   
- div.category_view_product{
-  width: 280px;
+div.category_view_product{
+  width: 100%;
   float: left;
   text-align: left;
-  margin: 0px 0px 10px 0px
+  margin: 0px 0px 30px 0px;
   }
  
-  div.category_view_product a img.product_image{
+div.category_view_product a img.product_image{
   float: left;
   margin-right: 6px;
   }
  
  
-  div.category_view_product div.product_details{
+div.category_view_product div.product_details{
   display: block;
   float: left;
   }
  
-  div.category_view_product div.product_details form{
+div.category_view_product div.product_details form{
   text-align: left;
   }
    
@@ -890,11 +882,13 @@ p.wpsc_also_bought_header{
   display:block;
   width: 100%;
   margin:0px 0px 5px;  
+  color:#44555F;  
   font-size: 11pt;
+  border-bottom:1px solid #C8D2DE;
   font-weight: bold;
   margin-bottom: 10px;
-  } 
- 
+  }
+   
  div.wpsc_also_bought{
   width: 100%;
   position: relative;
@@ -921,6 +915,7 @@ p.wpsc_also_bought a.preview_link{
   }
  
 p.wpsc_also_bought a.wpsc_product_name{
+  color:#44555f;
   font-size: 11pt;
   }
   
@@ -938,6 +933,9 @@ a.categorylink{
 
 span.pricedisplay{
  white-space: nowrap;
+ color: #333333;
+ font-size: 9pt;
+/*  font-weight: bold; */
  }
  
 td.totals{
@@ -946,6 +944,33 @@ td.totals{
 
 form#specials{
  display: inline;
+ }
+ 
+strong.special{
+ color: #607090;
+ }
+
+div.wpsc_product_search{
+ background-color: #eff2f3;
+ display: block;
+ height: 22px;
+ _height: 30px;
+ padding: 4px;
+ }
+
+div.wpsc_product_search input.wpsc_product_search{
+ float: right;
+ height: 19px;
+ width: 144px;
+ _width: 144px;
+ margin: 2px 10px 0px 0px;
+ padding: 0px 14px 0px 20px;
+ background: url(images/iShop_search.png) no-repeat; 
+ border: none;
+ }
+
+div.wpsc_product_search .submit{
+ display: none;
  }
  
  /*
@@ -984,65 +1009,25 @@ table.products{
 td.product_img{
 	width:35px;
 }
-
-div.wpsc_product_search input.wpsc_product_search{
- float: right;
- height: 19px;
- width: 110px;
- _width: 144px;
- font-size: 11px;
- margin: 2px 10px 0px 0px;
- padding: 2px 14px 0px 20px;
- background: url(../iShop/images/iShop_search.png) no-repeat; 
- border: none;
- }
-
-div.wpsc_product_search .submit{
- display: none;
- }
-
-div.wpsc_product_search{
- background-color: #eff2f3;
- display: block;
- height: 22px;
- _height: 30px;
- padding: 4px;
- margin: 20px 0px 12px 0px;
- }
-  
-table.productdisplay tr td {
-  position: relative;
- }
+/*
+div.item_image {
+	background-image:url(images/itembg.gif);
+	height:86px;
+	width:116px;
+}*/
+ 
+div#sidebar div.item_image img {
+	border:medium none;
+	max-width:none !important;
+	padding:8px 0pt 0pt 9px;
+}
 
 div.breadcrumb {
   margin: 0px 0px 10px 0px;
 }
-
-
-table.logdisplay {
-
-}
-
-select#current_country {
-  width: 204px;
-}
-
-input#zipcode {
-  margin: 0px;
-}
-
-
  /*
 End of modified By allen
 */
-
-/* Verify your Order styling */
-td.shipping_header {
-	background-color:#E5E5E5;
-	text-transform: uppercase;
-	font-weight:bold;
-}
-
 /* Main Flora Style Sheet for jQuery UI ui-datepicker */
 #ui-datepicker-div, .ui-datepicker-inline {
 	font-family: Arial,Helvetica,sans-serif;
@@ -1259,11 +1244,8 @@ img.ui-datepicker-trigger {
 	width: 193px;
 	height: 200px;
 }
-
-.checkout_forms_hidden {
-  display: none;
-}
-
-div.custom_meta {
-  clear: both;
+td.shipping_header {
+	background-color:#E5E5E5;
+	text-transform: uppercase;
+	font-weight:bold;
 }
