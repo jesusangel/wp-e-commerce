@@ -163,6 +163,7 @@ if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSI
 function wpsc_initialisation() {
   global $wpsc_cart;
   // set the theme directory constant
+  $theme_path = WPSC_FILE_PATH . "/themes/";
 	if(!file_exists($theme_path.get_option('wpsc_selected_theme'))) {
 		$theme_dir = 'default';
 	} else {

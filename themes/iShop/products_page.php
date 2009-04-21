@@ -145,7 +145,7 @@ global $wpsc_query, $wpdb;
 					<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
 					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
 					<?php if(wpsc_product_has_stock()) : ?>
-						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+						<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
 					<?php else : ?>
 						<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
 					<?php endif ; ?>
