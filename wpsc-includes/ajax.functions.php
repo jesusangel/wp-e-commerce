@@ -6,7 +6,6 @@
  *
  * @package wp-e-commerce
  * @since 3.7
- * @subpackage wpsc-cart-classes 
  */
  
  

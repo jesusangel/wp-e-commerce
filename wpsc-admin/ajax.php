@@ -1,4 +1,12 @@
 <?php
+/**
+ * WP eCommerce Admin AJAX functions
+ *
+ * These are the WPSC Admin AJAX functions
+ *
+ * @package wp-e-commerce
+ * @since 3.7
+ */
 function wpsc_purchase_log_csv() {
   global $wpdb,$user_level,$wp_rewrite;
   get_currentuserinfo();

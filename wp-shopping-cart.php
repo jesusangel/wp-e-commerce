@@ -29,12 +29,14 @@ define('IS_WP25', version_compare($v1[0], '2.5', '>=') );
 define('IS_WP27', version_compare($v1[0], '2.7', '>=') );
 
 // // we need to know where we are, rather than assuming where we are
+
+//Define the path to the plugin folder
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
 $siteurl = get_option('siteurl');
 
-// thanks to ikool for this fix
+//Define the URL to the plugin folder
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
 
@@ -42,13 +44,14 @@ if(isset($wpmu_version)) {
     define('IS_WPMU', 1);
 }
 
+// include the selected language file
 if(get_option('language_setting') != '') {
   require(WPSC_FILE_PATH.'/languages/'.get_option('language_setting'));
 } else {
   require(WPSC_FILE_PATH.'/languages/EN_en.php');
 }
 
-
+// Define the database table names
 define('WPSC_TABLE_CATEGORY_TM', "{$wpdb->prefix}wpsc_category_tm"); 
 define('WPSC_TABLE_ALSO_BOUGHT', "{$wpdb->prefix}wpsc_also_bought"); 
 define('WPSC_TABLE_CART_CONTENTS', "{$wpdb->prefix}wpsc_cart_contents"); 
@@ -81,7 +84,7 @@ define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wpdb->prefix}wpsc_variation_combi
 define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock"); 
 
 
-
+// start including the rest of the plugin here
 require(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
@@ -98,6 +101,25 @@ if (!IS_WP25) {
 } else { 
 	require(WPSC_FILE_PATH.'/js/tinymce3/tinymce.php');
 }
+
+
+/// OLD CODE INCLUDED HERE
+include_once('wp-shopping-cart.old.php');
+
+// if the gold cart file is present, include it, this must be done before the admin file is included
+if(is_file(WPSC_FILE_PATH.'/gold_shopping_cart.php')) {
+  require_once(WPSC_FILE_PATH.'/gold_shopping_cart.php');
+}
+
+// if we are in the admin section, include the admin code
+if(WP_ADMIN == true) {
+	require_once(WPSC_FILE_PATH."/wpsc-admin/admin.php");
+}
+
+
+/**
+* Code to define where the uploaded files are stored starts here
+*/
 
 if(IS_WPMU == 1) {
 		$upload_url = get_option('siteurl').'/files';
@@ -150,6 +172,10 @@ define('WPSC_CATEGORY_URL', $wpsc_category_url);
 define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 define('WPSC_CACHE_URL', $wpsc_cache_url);
 
+/**
+* Code to define where the uploaded files are stored ends here
+*/
+
 
 
 
@@ -189,7 +215,7 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
   
-/*
+/**
  * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
  */  
 function wpsc_serialize_shopping_cart() {
@@ -209,12 +235,6 @@ function wpsc_serialize_shopping_cart() {
   return true;
 }  
 add_action('shutdown','wpsc_serialize_shopping_cart');
-
-
-
-/// OLD CODE INCLUDED HERE
-include_once('wp-shopping-cart.old.php');
-
 
 
 /// Include javascript here
