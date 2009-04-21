@@ -59,9 +59,19 @@ jQuery(document).ready(function () {
   jQuery("div.wpsc_variation_forms .wpsc_select_variation").change(function() {
     parent_form = jQuery(this).parents("form.product_form");
     form_values =jQuery("input[name=product_id],div.wpsc_variation_forms .wpsc_select_variation",parent_form).serialize( );
-    //alert(form_values);
-  
-  
+		jQuery.post( 'index.php?update_product_price=true', form_values, function(returned_data) {
+			eval(returned_data);
+      if(product_id != null) {
+        target_id = "product_price_"+product_id;
+				buynow_id = "BB_BuyButtonForm"+product_id;
+				//document.getElementById(target_id).firstChild.innerHTML = price;			
+				if(jQuery("input#"+target_id).attr('type') == 'text') {
+				  jQuery("input#"+target_id).val(numeric_price);
+				} else {
+				  jQuery("#"+target_id+" span.pricedisplay").html(price);
+				}
+			}
+		});
 		return false;
 	});
 	

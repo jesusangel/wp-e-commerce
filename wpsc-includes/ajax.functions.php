@@ -202,14 +202,21 @@ if(($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])
 */
 function wpsc_update_product_price() {
   global $wpdb, $wpsc_cart;
-  $prodid = $_POST['product_id'];
-	$data = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `productid` = '".$prodid."'",ARRAY_A) ;
-	echo $data[0]['count'].",".$prodid;
+	foreach((array)$_POST['variation'] as $variation) {
+		if(is_numeric($variation)) {
+			$variations[] = (int)$variation;
+		}
+	}
+	$pm=$_POST['pm'];
+	echo "product_id=".(int)$_POST['product_id'].";\n";
+	
+	echo "price=\"".nzshpcrt_currency_display(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), $notax, true)."\";\n";
+	echo "numeric_price=\"".number_format(calculate_product_price((int)$_POST['product_id'], $variations,'stay',$extras), 2)."\";\n";
 	exit();
 }
 // execute on POST and GET
 if(($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_id'])) {
-	add_action('init', 'wpsc_get_rating_count');
+	add_action('init', 'wpsc_update_product_price');
 }
 
 
