@@ -70,17 +70,17 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
           //show product count for each category
           $count_sql = "SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')";
           $count = $wpdb->get_var($count_sql);
-          $addCount =  " [".$count."]";
+          $addCount =  " (".$count.")";
         } //end get_option
         // No more mootools
         if (get_option('catsprods_display_type') == 1){ 
-          $output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
+          $output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</strong>";
         }else{
         // Adrian - otherwise create normal category text with or without product count
 		if (!$image) {
-			$output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
+			$output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</strong>";
 		} else {
-			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name']).$addCount."</a></strong>";
+			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</strong>";
 		}
 	}//end get_option
         $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
