@@ -552,21 +552,21 @@ ul.PeCategories{
   color:#0066CC;
   }
   
-li.MainCategory strong.category{
+li.MainCategory span.category{
   margin-top: 5px;
   font-size: 8pt;
   }
   
-li.MainCategory strong.category a.productlink{
+li.MainCategory span.category a.productlink{
   color:#0066CC;
   font-size: 8pt;
   }
   
-li.MainCategory strong.category a.productlink:visited{
+li.MainCategory span.category a.productlink:visited{
   color:#0066CC;
   }
   
-li.MainCategory strong.category a.productlink:hover{
+li.MainCategory span.category a.productlink:hover{
   color:#114477;
   }
 

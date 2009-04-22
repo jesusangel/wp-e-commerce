@@ -74,13 +74,13 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
         } //end get_option
         // No more mootools
         if (get_option('catsprods_display_type') == 1){ 
-          $output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</strong>";
+          $output .= "<li class='MainCategory'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
         }else{
         // Adrian - otherwise create normal category text with or without product count
 		if (!$image) {
-			$output .= "<li class='MainCategory'><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</strong>";
+			$output .= "<li class='MainCategory'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
 		} else {
-			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><strong class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</strong>";
+			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
 		}
 	}//end get_option
         $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
