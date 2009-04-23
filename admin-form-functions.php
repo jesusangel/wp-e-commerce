@@ -73,19 +73,21 @@ function nzshpcrt_getproductform($prodid)
 	$output .= "				   <h4>Shortcodes</h4>\n\r";
 
 	$output .= "				     <dl>\n\r";
+	$output .= "				       <dt>".TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE.": </dt><dd> [wpsc_products product_id='{$product['id']}']</dd>\n\r";
 	$output .= "				       <dt>".TXT_WPSC_BUY_NOW_SHORTCODE.": </dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_ADD_TO_CART_SHORTCODE.":: </dt><dd>[add_to_cart={$product['id']}]</dd>\n\r";
+	$output .= "				       <dt>".TXT_WPSC_ADD_TO_CART_SHORTCODE.": </dt><dd>[add_to_cart={$product['id']}]</dd>\n\r";
 	$output .= "				     </dl>\n\r";
 
 	$output .= "				   <h4>Template Tags</h4>\n\r";
 	
 	$output .= "				     <dl>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_BUY_NOW_PHP.":: </dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_ADD_TO_CART_PHP.":: </dt><dd>&lt;?php echo wpsc_add_to_cart_button({$product['id']}); ?&gt;</dd>\n\r";
+	$output .= "				       <dt>".TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG.": </dt><dd> &lt;?php echo wpsc_display_products('product_id={$product['id']}'); ?&gt;</dd>\n\r";
+	$output .= "				       <dt>".TXT_WPSC_BUY_NOW_PHP.": </dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
+	$output .= "				       <dt>".TXT_WPSC_ADD_TO_CART_PHP.": </dt><dd>&lt;?php echo wpsc_add_to_cart_button({$product['id']}); ?&gt;</dd>\n\r";
 	$output .= "				     </dl>\n\r";
 	
 	$output .= "				     <p>\n\r";
-	$output .= "More Shortcodes and Template Tags will be available in 3.7. In the meantime <a href='http://www.instinct.co.nz/more-shortcodes-for-37/'>tell us which ones you'd like</a> to see added to 3.7";
+
 	$output .= "				     </p>\n\r";
 	$output .= "				   </div>\n\r";
 	

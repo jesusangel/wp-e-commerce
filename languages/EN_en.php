@@ -3,6 +3,10 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
+define('TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG','Display Product Template Tag');
+define('TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE','Display Product Shortcode');
+
+
 define('TXT_WPSC_CATEGORY_TARGETMARKET','Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above.');
 define('TXT_WPSC_UPLOAD_A_FILE', 'Upload a File');
 define('TXT_WPSC_UPLOAD_A_FILE_DESCRIPTION', 'Select a file from your computer to include with this purchase.  ');

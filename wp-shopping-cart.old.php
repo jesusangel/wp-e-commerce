@@ -1766,8 +1766,9 @@ function wpsc_refresh_page_urls($content) {
 							$parent_categories = array();
 						}
 						$parent_categories[] = $category['nice-name'];
-						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/?$')] = 'index.php?pagename='.$page_name.'&product_category='.$category['id'];
-						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-]+)/?$')] = 'index.php?pagename='.$page_name.'&product_category='.$category['id'].'&product_name=$matches[1]';
+						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'];
+						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&product_url_name=$matches[1]';
+						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/page/([0-9]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&wpsc_page=$matches[1]';
 						// recurses here
 						$sub_rules = wpsc_rewrite_categories($page_name, $category['id'], ($level+1), $parent_categories, $is_index);
 						array_pop($parent_categories);
@@ -1789,8 +1790,11 @@ function wpsc_refresh_page_urls($content) {
 
 
 function wpsc_query_vars($vars) {
-  $vars[] = "product_category";
-  $vars[] = "product_name";
+	//   $vars[] = "product_category";
+	//   $vars[] = "product_name";
+  $vars[] = "category_id";
+  $vars[] = "product_url_name";
+  $vars[] = "wpsc_page";
   return $vars;
   }
 
@@ -1919,39 +1923,7 @@ if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
 
 add_filter('single_post_title','wpsc_post_title_seo');
    
-function nzshpcrt_enable_page_filters($excerpt = ''){
-  global $wp_query;
-  add_filter('the_content', 'add_to_cart_shortcode', 12);//Used for add_to_cart_button shortcode
-  add_filter('the_content', 'nzshpcrt_products_page', 12);
-  add_filter('the_content', 'nzshpcrt_shopping_cart', 12);
-  add_filter('the_content', 'nzshpcrt_transaction_results', 12);
-  add_filter('the_content', 'nzshpcrt_checkout', 12);
-  add_filter('the_content', 'nszhpcrt_homepage_products', 12);
-  add_filter('the_content', 'nzshpcrt_user_log', 12);
-  add_filter('the_content', 'nszhpcrt_category_tag', 12);
-  add_filter('the_content', 'nzshpcrt_show_categories', 12);
-  add_filter('the_content', 'nzshpcrt_substitute_buy_now_button', 12);
-  return $excerpt;
-}
 
-function nzshpcrt_disable_page_filters($excerpt = '') {
-	remove_filter('the_content', 'add_to_cart_shortcode');//Used for add_to_cart_button shortcode
-  remove_filter('the_content', 'nzshpcrt_products_page');
-  remove_filter('the_content', 'nzshpcrt_shopping_cart');
-  remove_filter('the_content', 'nzshpcrt_transaction_results');
-  remove_filter('the_content', 'nzshpcrt_checkout');
-  remove_filter('the_content', 'nszhpcrt_homepage_products');
-  remove_filter('the_content', 'nzshpcrt_user_log');
-  remove_filter('the_content', 'nszhpcrt_category_tag');
-  remove_filter('the_content', 'nzshpcrt_show_categories');
-  remove_filter('the_content', 'nzshpcrt_substitute_buy_now_button');
-  return $excerpt;
-}
-
-nzshpcrt_enable_page_filters();
-
-add_filter('get_the_excerpt', 'nzshpcrt_disable_page_filters', -1000000);
-add_filter('get_the_excerpt', 'nzshpcrt_enable_page_filters', 1000000);
  
 function wpsc_include_css_and_javascript() {
   // This must be weapped in a function in order to selectively prevent it from running using filters
@@ -1982,12 +1954,6 @@ add_action('init', 'nzshpcrt_display_preview_image');
 if(stristr($_GET['page'], WPSC_DIR_NAME)) {
   add_action('admin_notices', 'wpsc_admin_notices');
 }
-function wpsc_start_the_query() {
-  global $wp_query, $wpsc_query;
-  $wpsc_query = new WPSC_query();
-}
-
-add_action('init', 'wpsc_start_the_query', 0);
 
 function wpsc_admin_notices() {
   global $wpdb;

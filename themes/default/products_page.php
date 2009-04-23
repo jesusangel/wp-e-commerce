@@ -1,5 +1,6 @@
 <?php
 global $wpsc_query, $wpdb;
+//echo acos(1.01);
 ?>
 
 <div id='products_page_container' class="wrap wpsc_container">
@@ -38,7 +39,7 @@ global $wpsc_query, $wpdb;
 		<div class="textcol">
 			<div class="imagecol">
 				<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-					<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="Mandelbrot" title="Mandelbrot" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+					<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
 				</a>
 			</div>
 			<form class='product_form'  enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >

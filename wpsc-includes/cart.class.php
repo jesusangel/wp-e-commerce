@@ -407,13 +407,17 @@ class wpsc_cart {
 			$shipping_quotes = null;
 			if($this->selected_shipping_method != null) {
 				// use the selected shipping module
-				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+				if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+				}
 			} else {
 				// otherwise select the first one with any quotes
 				foreach((array)$custom_shipping as $shipping_module) {
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
 					$this->selected_shipping_method = $shipping_module;
-					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+					if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+						$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+					}
 					if(count($this->shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
 						break;
 					}

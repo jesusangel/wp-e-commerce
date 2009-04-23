@@ -88,11 +88,13 @@ define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock");
 require(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
 require(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
+
+require(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
+require(WPSC_FILE_PATH.'/wpsc-includes/shortcode.functions.php');
 //coupons
 require(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
 
@@ -177,6 +179,15 @@ define('WPSC_CACHE_URL', $wpsc_cache_url);
 */
 
 
+
+
+
+function wpsc_start_the_query() {
+  global $wp_query, $wpsc_query;
+  $wpsc_query = new WPSC_query();
+}
+// after init and after when the wp query string is parsed but before anything is displayed
+add_action('template_redirect', 'wpsc_start_the_query', 0);
 
 
 /**

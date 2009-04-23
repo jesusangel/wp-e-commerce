@@ -9,7 +9,7 @@
 */
 function wpsc_this_page_url() {
 	global $wpsc_query;
-	//echo "<pre>".print_r($wpsc_query->category,true)."</pre>";
+	//echo "<pr".print_r($wpsc_query->category,true)."</pre>";
 	if($wpsc_query->is_single === true) {
 		return wpsc_product_url($wpsc_query->product['id']);
 	} else {
@@ -580,6 +580,7 @@ function wpsc_breadcrumb_url() {
 		return $wpsc_query->breadcrumb['url'];
 	}
 }
+
 /**
 * wpsc currency sign function
 * @return string - the selected currency sign for the store
@@ -591,6 +592,7 @@ function wpsc_currency_sign() {
 	$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
 	return $currency_symbol;
 }
+
 /**
 * wpsc has pages function
 * @return boolean - true if we have pages
@@ -651,6 +653,12 @@ function wpsc_page_url() {
 	return $wpsc_query->page['url'];
 }
 
+
+/**
+ * The WPSC Query class.
+ *
+ * @since 3.7
+ */
 class WPSC_Query {
 
 	var $query;
@@ -704,17 +712,61 @@ class WPSC_Query {
 	var $current_page = -1;
 	var $page;
 	
-	
-	
-	
 	var $found_products = 0;
 	var $max_num_pages = 0;
 	
 	var $is_single = false;
 	var $is_search = false;
-	var $is_feed = false;
-	var $is_404 = false;
-	
+
+	/**
+	 * The WPSC query constructor, if no query is passed to it, it makes one from the WP_Query data
+	 *
+	 * @since 3.7
+	 *
+	 * @param string $query URL query string.
+	 * @return WPSC_Query
+	 */
+	function WPSC_Query ($query = '') {
+		if (empty($query)) {
+			$query = $this->create_default_query();
+		}
+		$this->parse_query($query);
+		
+    //echo("<pre>".print_r($this,true)."</pre>");
+	}
+
+
+  function create_default_query() {
+    global $wp_query;
+    
+    // get the product_url_name
+		if($wp_query->query_vars['product_url_name']) {
+			$query['product_url_name'] = $wp_query->query_vars['product_url_name'];
+		}
+    
+    
+    // get the category ID
+		if($wp_query->query_vars['category_id'] > 0) {
+			$query['category_id'] = $wp_query->query_vars['category_id'];
+		} else if(is_numeric($_GET['category'])) {
+			$query['category_id'] = $_GET['category'];
+		}
+        
+    
+    // get the category ID
+		if($wp_query->query_vars['wpsc_page'] > 0) {
+			$query['page'] = $wp_query->query_vars['wpsc_page'];
+		} else if(is_numeric($_GET['page_number'])) {
+			$query['page'] = $_GET['page_number'];
+		}
+    return $query;
+  }
+
+	/**
+	* Resets query flags to false.
+	*
+	* The query flags are what page info wp-eCommerce was able to figure out, same as the equivalent method on WordPress
+	**/
 	function init_query_flags() {
     $this->is_search = false;
     $this->is_feed = false;
@@ -722,6 +774,12 @@ class WPSC_Query {
 	}
 	
 	
+	/**
+	 * Initiates object properties and sets default values, same as the equivalent method on WordPress
+	 *
+	 * @since 3.7
+	 * @access public
+	**/
 	function init () {
 	  $this->category = null;
 		unset($this->products);
@@ -747,19 +805,116 @@ class WPSC_Query {
 		
 		$this->pages = null;
 		$this->page = null;
-
-
+		
 		$this->init_query_flags();
+	}	
+	
+	/**
+	 * Fills in the query variables, which do not exist within the parameter.
+	 *
+	 * @since 3.7
+	 * @access public
+	 *
+	 * @param array $array Defined query variables.
+	 * @return array Complete query variables with undefined ones filled in empty.
+	 */
+	function fill_query_vars($array) {
+	
+	  /// remove the comments at the ends of lines in this array once all of these work, until then, only the ones with "// works" work
+		$keys = array(
+			'product_id'  // works
+			, 'product_url_name'  // works
+			, 'product_name'  
+			, 'category_id'  // works
+			, 'category_url_name'  // works
+			, 'tag'
+			, 'price'
+			, 'limit_of_items'
+			, 'sort_order'
+			, 'number_per_page'  // works
+			, 'page'
+			//, 'sku'
+		);
+		
+		foreach ($keys as $key) {
+			if ( !isset($array[$key]))
+				$array[$key] = '';
+		}
+		
+		return $array;
 	}
+	
+	/**
+	 * Parse a query string and set query type booleans.
+	 *
+	 * @since 3.7
+	 * @access public
+	 *
+	 * @param string|array $query
+	 */
+	function parse_query ($query) {
+		if ( !empty($query) || !isset($this->query) ) {
+			$this->init();
+			if ( is_array($query) )
+				$this->query_vars = $query;
+			else
+				parse_str($query, $this->query_vars);
+			$this->query = $query;
+		}
+
+		$this->query_vars = $this->fill_query_vars($this->query_vars);
+		$qv = &$this->query_vars;
+		
+		
+		// we need a category ID
+		if(!($qv['category_id'] > 0) && ($qv['category_url_name'] == '')) {
+			$qv['category_id'] = get_option('wpsc_default_category');
+		}
+		
+		// we need a number of items per page
+		if(!($qv['number_per_page'] > 0)) {
+			$qv['number_per_page'] = get_option('wpsc_products_per_page');
+		}
+		
+		
+		
+		
+		
+		
+		$qv['product_id'] = absint($qv['product_id']);
+		$qv['product_url_name'] = trim($qv['product_url_name']);
+		$qv['product_name'] = trim($qv['product_name']);
+		$qv['category_id'] = absint($qv['category_id']);
+		$qv['category_url_name'] = trim($qv['category_url_name']);
+		$qv['tag'] = trim($qv['tag']);
+		$qv['price'] = absint($qv['price']);
+		$qv['limit_of_items'] = absint($qv['limit_of_items']);
+		$qv['sort_order'] = trim($qv['sort_order']);
+		$qv['number_per_page'] = absint($qv['number_per_page']);
+		$qv['page'] = absint($qv['page']);
+		
+}
+	
 	
   function &get_products() {
     global $wpdb, $wp_query;
   
 		do_action_ref_array('pre_get_products', array(&$this));
-		if($wp_query->query_vars['product_name'] != null){
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+		
+		
+		
+        		//exit("<pre>".print_r($this->query_vars, true)."</pre>");
+		if(($this->query_vars['category_url_name'] != '')){
+			$this->query_vars['category_id'] = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `nice-name` = '{$this->query_vars['category_url_name']}' LIMIT 1");
+			$this->category = $this->query_vars['category_id'];
+		}
+		
+		
+		
+		if($this->query_vars['product_url_name'] != null){
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$this->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 		} else {
-			$product_id = $_GET['product_id'];
+			$product_id = absint($_GET['product_id']);
 		}
 		
 		if(($product_id > 0)) {
@@ -770,40 +925,29 @@ class WPSC_Query {
 		  // if is a single product
 			$this->is_single = true;
 		  $this->products = $product_list;
-			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
-				if($wp_query->query_vars['product_category'] != null) {
-					$catid = $wp_query->query_vars['product_category'];
-					} else if(is_numeric($_GET['category'])) {
-						$catid = $_GET['category'];
-					} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
-						$catid = $GLOBALS['wpsc_category_id'];
-					} else {
-						$catid = get_option('wpsc_default_category');
-					}
-			  $this->category = $catid;
-			}
+		  
+			$this->category = $this->query_vars['category_id'];
+			
 		} else {
 		  // Otherwise
-		  $products_per_page =  get_option('posts_per_page');
-		
-			if((get_option('use_pagination') == 1)) {
-				$products_per_page = get_option('wpsc_products_per_page');
-				if (isset($_REQUEST['items_per_page'])){
-					$products_per_page = $_REQUEST['items_per_page'];
-				}
-				if(($_GET['page_number'] > 0)) {
-					$startnum = ($_GET['page_number']-1)*$products_per_page;
-				} else {
-					$startnum = 0;
-				}
+		  
+		  
+		//if we are using pages, how many items per page and what page?
+		if((get_option('use_pagination') == 1)) {
+			$products_per_page = $this->query_vars['number_per_page'];
+			if($this->query_vars['page'] > 0) {
+				$startnum = ($this->query_vars['page']-1)*$products_per_page;
 			} else {
 				$startnum = 0;
 			}
+		} else {
+			$startnum = 0;
+		}
 			
 			
 			
 			
-			
+	  // search section is done here
 		if(function_exists('gold_shpcrt_search_sql') && ($_GET['product_search'] != '')) {
 			$search_sql = gold_shpcrt_search_sql();
 			if($search_sql != '') {
@@ -820,6 +964,7 @@ class WPSC_Query {
 				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special` DESC LIMIT $startnum, $products_per_page";
 			}
 		} else if (($wp_query->query_vars['ptag'] != null) || ( $_GET['ptag']!=null)) {
+		  // search by tags is done here
 			if($wp_query->query_vars['ptag'] != null) {
 				$tag = $wp_query->query_vars['ptag'];
 			} else {
@@ -844,25 +989,20 @@ class WPSC_Query {
 		
 			$sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$product_id.") AND `publish` IN('1') AND `active` IN('1')"; //Transom - added publish & active
 		} else {
-			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
-				if($wp_query->query_vars['product_category'] != null) {
-					$catid = $wp_query->query_vars['product_category'];
-					} else if(is_numeric($_GET['category'])) {
-						$catid = $_GET['category'];
-					} else if(is_numeric($GLOBALS['wpsc_category_id'])) {
-						$catid = $GLOBALS['wpsc_category_id'];
-					} else {
-						$catid = get_option('wpsc_default_category');
-					}
+		  // select by category is done here
+		  
+		  
+		  
+		  
+			if(is_numeric($this->query_vars['category_id'])) {
 					
-			  $this->category = $catid;
 				/*
 					* The reason this is so complicated is because of the product ordering, it is done by category/product association
 					* If you can see a way of simplifying it and speeding it up, then go for it.
 					*/
 					
 					
-				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$catid."') $no_donations_sql");
+				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$this->query_vars['category_id']."') $no_donations_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
 				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
@@ -884,8 +1024,11 @@ class WPSC_Query {
 					$order_by = " `order_state` DESC,`".WPSC_TABLE_PRODUCT_ORDER."`.`order` $order, `".WPSC_TABLE_PRODUCT_LIST."`.`id` DESC";
 				}
 				
-				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.*, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( ( `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` ) AND ( `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` ) ) WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$catid."') $no_donations_sql ORDER BY $order_by LIMIT $startnum, $products_per_page";
+				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.*, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( ( `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` ) AND ( `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` ) ) WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$this->query_vars['category_id']."') $no_donations_sql ORDER BY $order_by LIMIT $startnum, $products_per_page";
+				
 			} else {
+			
+			
 				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
@@ -901,6 +1044,7 @@ class WPSC_Query {
 					
 		// shows page numbers, probably fairly obviously
 	// exit($sql);
+		$this->category = $this->query_vars['category_id'];
 		$this->products = $wpdb->get_results($sql,ARRAY_A);
 		
 		if($rowcount > $products_per_page) {
@@ -918,7 +1062,7 @@ class WPSC_Query {
 		} else {
 			$seperator ="&amp;";
 		}
-		$product_view_url = wpsc_category_url($catid).$seperator;
+		$product_view_url = wpsc_category_url($this->category).$seperator;
 
     if(is_numeric($_GET['category'])) {
 		} else if(is_numeric($_GET['brand'])) {
@@ -945,8 +1089,15 @@ class WPSC_Query {
 			} else {
         $selected = false;
 			}
+			
+			if(get_option('permalink_structure')) {
+			  //exit("<pre>".print_r($this,true)."</pre>");
+				$page_url = wpsc_category_url($this->category)."page/$i/";
+			} else {
+				$page_url = $product_view_url."page_number=$i";
+			}
 			$this->pages[$i-1]['number'] = $i;
-			$this->pages[$i-1]['url'] = $product_view_url."page_number=$i";
+			$this->pages[$i-1]['url'] = $page_url;
 			$this->pages[$i-1]['selected'] = $selected;
 		}    
     
@@ -962,6 +1113,15 @@ class WPSC_Query {
 		
 		// get the breadcrumbs
 		$this->get_breadcrumbs();
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return $this->products;
   }
 
@@ -1259,17 +1419,7 @@ class WPSC_Query {
     return $this->product['name'];
 	}
   
-	function WPSC_Query ($query = '') {
-		if (! empty($query)) {
-			$this->query($query);
-		}
-	}
+
 }
 			
-		/*
-			SELECT SQL_CALC_FOUND_ROWS  wp_posts.* FROM wp_posts  WHERE 1=1  AND wp_posts.post_type = 'post' AND (wp_posts.post_status = 'publish' OR wp_posts.post_status = 'private')  ORDER BY wp_posts.post_date DESC LIMIT 0, 5
-
-      SELECT SQL_CALC_FOUND_ROWS  wp_posts.* FROM wp_posts  WHERE 1=1  AND wp_posts.post_type = 'post' AND (wp_posts.post_status = 'publish' OR wp_posts.post_status = 'private')  ORDER BY wp_posts.post_date DESC LIMIT 5, 5
-			
-    */
 ?>
