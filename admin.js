@@ -425,13 +425,12 @@ function fillbrandform(catid) {
 	ajax.post("index.php",getresults,"ajax=true&admin=true&brandid="+catid);
 }
 
-var gercurrency=function(results)
-  {
+var gercurrency=function(results) {
   document.getElementById('cslchar1').innerHTML = results;
   document.getElementById('cslchar2').innerHTML = results;
   document.getElementById('cslchar3').innerHTML = results;
   document.getElementById('cslchar4').innerHTML = results;
-  }
+}
 
 function getcurrency(id) {
 	ajax.post("index.php",gercurrency,"ajax=true&currencyid="+id);

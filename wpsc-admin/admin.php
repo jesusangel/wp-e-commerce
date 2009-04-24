@@ -9,6 +9,7 @@
  */
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 
 function wpsc_admin_pages(){
   global $userdata;
@@ -59,6 +60,8 @@ function wpsc_admin_pages(){
 			//end of written by allen
 			
 			$display_items_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
+			
+			$display_items_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
 			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {

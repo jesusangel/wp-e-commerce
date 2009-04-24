@@ -732,6 +732,7 @@ class WPSC_Query {
 		}
 		$this->parse_query($query);
 		
+		$this->get_products();
     //echo("<pre>".print_r($this,true)."</pre>");
 	}
 
@@ -902,8 +903,6 @@ class WPSC_Query {
 		do_action_ref_array('pre_get_products', array(&$this));
 		
 		
-		
-        		//exit("<pre>".print_r($this->query_vars, true)."</pre>");
 		if(($this->query_vars['category_url_name'] != '')){
 			$this->query_vars['category_id'] = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `nice-name` = '{$this->query_vars['category_url_name']}' LIMIT 1");
 			$this->category = $this->query_vars['category_id'];
@@ -914,7 +913,7 @@ class WPSC_Query {
 		if($this->query_vars['product_url_name'] != null){
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$this->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 		} else {
-			$product_id = absint($_GET['product_id']);
+			$product_id = absint($this->query_vars['product_id']);
 		}
 		
 		if(($product_id > 0)) {
@@ -1082,7 +1081,7 @@ class WPSC_Query {
     
     
     for($i=1;$i<=$pages;++$i) {
-      if(($_GET['page_number'] == $i) || (!is_numeric($_GET['page_number']) && ($i == 1))) {
+      if(($this->query_vars['page'] == $i) || (!is_numeric($this->query_vars['page']) && ($i == 1))) {
         if($_GET['view_all'] != 'true') {
           $selected = true;
 				}

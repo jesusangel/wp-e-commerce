@@ -85,23 +85,24 @@ define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock");
 
 
 // start including the rest of the plugin here
-require(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
+require_once(WPSC_FILE_PATH . '/wpsc-includes/display.functions.php');
 
-require(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
-require(WPSC_FILE_PATH.'/wpsc-includes/shortcode.functions.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/shortcode.functions.php');
 //coupons
-require(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
 
 if (!IS_WP25) {
-	require(WPSC_FILE_PATH.'/editor.php');
+	require_once(WPSC_FILE_PATH.'/editor.php');
 } else { 
-	require(WPSC_FILE_PATH.'/js/tinymce3/tinymce.php');
+	require_once(WPSC_FILE_PATH.'/js/tinymce3/tinymce.php');
 }
 
 

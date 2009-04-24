@@ -1865,7 +1865,6 @@ if(get_option('wpsc_replace_page_title') == 1) {
   add_filter('wp_title', 'wpsc_replace_wp_title', 10, 2);
 }
 
-require_once(WPSC_FILE_PATH . '/product_display_functions.php');
 
 
 // need to sort the merchants here, after the gold ones are included. 

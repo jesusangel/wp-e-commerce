@@ -19,7 +19,8 @@ if(get_option('payment_gateway') == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
 } else {
 	if(function_exists('decrypt_dps_response') && !is_numeric($sessionid)) {
-		$sessionid = decrypt_dps_response(); 
+		$sessionid = decrypt_dps_response();
+		transaction_results($sessionid); 
 	} else {
 		echo transaction_results($sessionid, true);
 	}
