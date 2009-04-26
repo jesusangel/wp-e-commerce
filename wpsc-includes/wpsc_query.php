@@ -993,7 +993,7 @@ class WPSC_Query {
 		  
 		  
 		  
-			if(is_numeric($this->query_vars['category_id'])) {
+			if(is_numeric($this->query_vars['category_id']) && ($this->query_vars['category_id'] > 0)) {
 					
 				/*
 					* The reason this is so complicated is because of the product ordering, it is done by category/product association
@@ -1041,8 +1041,8 @@ class WPSC_Query {
 		
 	
 					
-		// shows page numbers, probably fairly obviously
-	// exit($sql);
+	
+	 //exit($sql);
 		$this->category = $this->query_vars['category_id'];
 		$this->products = $wpdb->get_results($sql,ARRAY_A);
 		
