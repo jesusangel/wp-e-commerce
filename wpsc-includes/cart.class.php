@@ -1232,7 +1232,9 @@ class wpsc_cart_item {
 		}
 		
 		
-	  $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
+			$this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+	  }
 	  // update the claimed stock here
 	  $this->update_claimed_stock();
 	}
@@ -1251,7 +1253,10 @@ class wpsc_cart_item {
     if($method === null) {
       $method = $this->cart->selected_shipping_method;
     }
-    $shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+    
+		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
+			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+    }
     if($method == $this->cart->selected_shipping_method) {
     $this->shipping = $shipping;
     }
@@ -1341,7 +1346,10 @@ class wpsc_cart_item {
 	*/
 	function save_to_db($purchase_log_id) {
 		global $wpdb, $wpsc_shipping_modules;
-    $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
+		
+		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
+			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
+		}
     
 		if($this->apply_tax == true) {
 			$tax = $this->unit_price * ($this->cart->tax_percentage/100);
