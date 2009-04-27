@@ -14,6 +14,7 @@ if(is_numeric($_GET['id']) && is_numeric($_GET['value'])) {
   $wpdb->query($update_sql);
   if(($newvalue > $log_data['processed']) && ($log_data['processed'] <=1)) {
     transaction_results($log_data['sessionid'], false);
+    //exit()
 	}
 }
 
@@ -190,7 +191,7 @@ if(is_numeric($_GET['email_buyer_id'])) {
 				
 				
 				
-				$message = str_replace('%product_list%',$product_list,$message);
+		$message = str_replace('%product_list%',$product_list,$message);
         $message = str_replace('%total_shipping%',$total_shipping_email,$message);
         $message = str_replace('%total_price%',$total_price_email,$message);
         //$message = str_replace('%order_status%',get_option('blogname'),$message);
@@ -469,8 +470,6 @@ if($_GET['filter'] !== 'true') {
       $form_data = $wpdb->get_results($form_sql,ARRAY_A);
       
       $col_count = 5 + count($form_data);
-      
-      $i = 0;
       echo "<table class='logdisplay'>";
 
       //exit("<pre>".print_r($date_list,true)."</pre>");
@@ -530,10 +529,6 @@ if($_GET['filter'] !== 'true') {
             echo " <td>";
             echo TXT_WPSC_VIEWDETAILS;
             echo " </td>";
-
-						//echo "<td width='1%'>";
-						//echo TXT_WPSC_STORENAME;
-						//echo "<td>";
 
             echo "</tr>";
 

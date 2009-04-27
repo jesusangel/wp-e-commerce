@@ -9,7 +9,7 @@ function wpsc_decrement_claimed_stock($purchase_log_id) {
   global $wpdb;
   $all_claimed_stock = $wpdb->get_results($wpdb->prepare("SELECT * FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN('%s') AND `cart_submitted` IN('1')", $purchase_log_id), ARRAY_A);
 	
-	foreach($all_claimed_stock as $claimed_stock) {
+	foreach((array)$all_claimed_stock as $claimed_stock) {
 	  // for people to have claimed stock, it must have been available to take, no need to look at the existing stock, just subtract from it
 	  // If this is ever wrong, and you get negative stock, do not fix it here, go find the real cause of the problem 
 		if($claimed_stock['variation_stock_id'] > 0) {

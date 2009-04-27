@@ -85,6 +85,8 @@ define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock");
 
 
 // start including the rest of the plugin here
+
+require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');

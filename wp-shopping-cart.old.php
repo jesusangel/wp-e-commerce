@@ -318,8 +318,7 @@ function wpsc_admin_css() {
 
 <link href='<?php echo WPSC_URL; ?>/js/jquery.ui.tabs.css' rel="stylesheet" type="text/css" />
 <?php
-
-if (($_GET['page'] == WPSC_DIR_NAME.'/display-log.php') || ($_GET['page'] == WPSC_DIR_NAME.'/gold_cart_files/affiliates.php')) {
+if (($_GET['page'] == WPSC_DIR_NAME.'/display-log.php') || ($_GET['page'] == WPSC_DIR_NAME.'/gold_cart_files/affiliates.php') || ($_GET['page'] == WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php')) {
 	?>
 		<link href='<?php echo $siteurl; ?>/wp-admin/css/dashboard.css?ver=2.6' rel="stylesheet" type="text/css" />
 	<?php
@@ -332,7 +331,7 @@ if (($_GET['page'] == WPSC_DIR_NAME.'/display-log.php') || ($_GET['page'] == WPS
 <!--		<script src="http://dev.jquery.com/view/tags/ui/latest/ui/ui.core.js"></script>
 <script src="http://dev.jquery.com/view/tags/ui/latest/ui/ui.sortable.js"></script>-->
 <script language='JavaScript' type='text/javascript'>
-
+//<![CDATA[
 /* base url */
 var base_url = "<?php echo $siteurl; ?>";
 var WPSC_URL = "<?php echo WPSC_URL; ?>";
@@ -383,6 +382,7 @@ var borderSize = 10;
     echo "var TXT_WPSC_IF_PRICE_IS = '".TXT_WPSC_IF_PRICE_IS."';\n\r";
     echo "var TXT_WPSC_IF_WEIGHT_IS = '".TXT_WPSC_IF_WEIGHT_IS."';\n\r";
 ?>
+//]]>
 /* custom admin functions end*/
 </script>
 <!--<script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/thickbox.js"></script>-->
