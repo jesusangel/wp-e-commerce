@@ -1305,6 +1305,8 @@ jQuery(document).ready(function(){
 			jQuery(this).attr("id",jQuery(this).parent().attr('id'));
 		}
 	);
+	
+	
  	jQuery("table#itemlist .pricedisplay").editable(base_url+"/wp-admin/admin.php?inline_price=true", {
          indicator : "Saving...",
          tooltip   : 'Click to edit...'

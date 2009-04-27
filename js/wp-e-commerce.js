@@ -1,8 +1,6 @@
 // This is the wp-e-commerce front end javascript "library"
-//jQuery.noConflict();
+
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
-
-
 // these functions are bound to events on elements when the page is fully loaded.
 function wpsc_bind_to_events() {
 	// empty the cart using ajax when the form is submitted,  

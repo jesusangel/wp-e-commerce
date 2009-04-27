@@ -11,6 +11,14 @@
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 
+
+
+
+
+/**
+	* wpsc_admin_pages function, all the definitons of admin pages are stores here.
+	* No parameters, returns nothing
+*/
 function wpsc_admin_pages(){
   global $userdata;
     /*
@@ -20,7 +28,6 @@ function wpsc_admin_pages(){
      *
      * If the permissions are changed here, they will likewise need to be changed for the other secions of the admin that either use ajax
      * or bypass the normal download system.
-     * its in an object because nobody has moved it out of the object yet.
      */
     if(function_exists('add_options_page')) {
 				//       if(get_option('nzshpcrt_first_load') == 0) {
@@ -61,9 +68,11 @@ function wpsc_admin_pages(){
 			//end of written by allen
 			//Jeffs code
 			add_submenu_page($base_page,TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
-			$display_items_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
+			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
-			$display_items_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
+			
+			
 			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
@@ -102,10 +111,24 @@ function wpsc_admin_pages(){
 			do_action('wpsc_add_submenu');
 //       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
 		}
+		
+		
+		// Include the javascript and CSS for this page
+		foreach($page_hooks as $page_hook) {
+			add_action("load-$page_hook", 'wpsc_admin_css_and_js');
+		}
 		return;
-  
-  
   }
+  
+  
+
+/**
+	* wpsc_admin_css_and_js function, includes the wosc_admin CSS and JS
+	* No parameters, returns nothing
+*/
+function  wpsc_admin_css_and_js() {
+	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), WPSC_VERSION.WPSC_MINOR_VERSION);
+}
   
   
 add_action('admin_menu', 'wpsc_admin_pages');

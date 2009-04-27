@@ -23,10 +23,31 @@ function wpsc_display_products_page() {
 	?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
-		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
-		<?php
-			wpsc_admin_products_list();
-		?>
+		<h2 style='_color: #ff0000;'><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
+		<form id="posts-filter" action="" method="get">
+			<div class="tablenav">
+			
+				<p class="search-box">
+					<label class="hidden" for="page-search-input"><?php _e( 'Search Pages' ); ?>:</label>
+					<input type="text" class="search-input" id="page-search-input" name="s" value="<?php _admin_search_query(); ?>" />
+					<input type="submit" value="<?php _e( 'Search Pages' ); ?>" class="button" />
+				</p>
+			
+			
+				<div class="alignleft actions">
+					<select name="action">
+						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
+						<option value="edit"><?php _e('Edit'); ?></option>
+						<option value="delete"><?php _e('Delete'); ?></option>
+					</select>
+				<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
+				<?php wp_nonce_field('bulk-pages'); ?>
+				</div>
+			</div>
+			<?php
+				wpsc_admin_products_list($category_id);
+			?>
+		</form>
 	</div>
 	<?php
 }
@@ -75,7 +96,7 @@ function wpsc_admin_products_list($category_id = 0) {
   
   
 	?>
-	<table class="widefat page fixed" cellspacing="0">
+	<table class="widefat page fixed" id='wpsc_product_list' cellspacing="0">
 		<thead>
 			<tr>
 		<?php print_column_headers('display-product-list'); ?>
@@ -121,7 +142,7 @@ function wpsc_admin_products_list($category_id = 0) {
 							
 				
 				?>
-					<tr class="iedit" id="product-23">
+					<tr class="product-edit" id="product-<?php echo $product['id']?>">
 							<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id']?>' /></th>
 							
 							
@@ -133,12 +154,16 @@ function wpsc_admin_products_list($category_id = 0) {
 							
 								<div class="wpsc-row-actions">
 									<span class="edit">
-										<a title="Edit this post" style="cursor:pointer;" onclick="filleditform('.$product['id'].');return false;">Edit</a>
+										<a title="Edit this post" style="cursor:pointer;">Edit</a>
 									</span> |
 									<span class="delete">
+									<?php
+									/*
 									<a onclick="if ( confirm(\'Are you sure to delete this product?\') ) { return true;}return false;" href="?page='.WPSC_DIR_NAME.'/display-items.php&deleteid='.$product['id'].'" title="Delete this product">Delete</a>
+									*/
+									?>
 									</span> |
-								<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="'.wpsc_product_url($product['id']).'">View</a></span> |
+								<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php wpsc_product_url($product['id']); ?>">View</a></span> |
 								<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="#">Duplicate</a></span>
 						   </div>
 							</td>

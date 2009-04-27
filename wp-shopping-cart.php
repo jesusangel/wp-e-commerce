@@ -12,7 +12,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
  * @package wp-e-commerce
 */
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '0');
+define('WPSC_MINOR_VERSION', '3');
 
 
 define('WPSC_PRESENTABLE_VERSION', '3.7 Development Version');
@@ -180,11 +180,6 @@ define('WPSC_CACHE_URL', $wpsc_cache_url);
 /**
 * Code to define where the uploaded files are stored ends here
 */
-
-
-
-
-
 function wpsc_start_the_query() {
   global $wp_query, $wpsc_query;
   $wpsc_query = new WPSC_query();
@@ -252,5 +247,5 @@ add_action('shutdown','wpsc_serialize_shopping_cart');
 
 
 /// Include javascript here
-wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js');
+wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
 ?>

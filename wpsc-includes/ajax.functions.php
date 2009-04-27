@@ -1,8 +1,8 @@
 <?php
 /**
- * WP eCommerce AJAX functions
+ * WP eCommerce AJAX and Init functions
  *
- * These are the WPSC AJAX functions
+ * These are the WPSC AJAX and Init functions
  *
  * @package wp-e-commerce
  * @since 3.7
