@@ -1016,14 +1016,28 @@ class WPSC_Query {
 				
 				
 				if (get_option('wpsc_sort_by')=='name') {
-					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`name` $order";
+					$order_by = "`products`.`name` $order";
 				} else if (get_option('wpsc_sort_by') == 'price') {
-					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`price` $order";
+					$order_by = "`products`.`price` $order";
 				} else {
-					$order_by = " `order_state` DESC,`".WPSC_TABLE_PRODUCT_ORDER."`.`order` $order, `".WPSC_TABLE_PRODUCT_LIST."`.`id` DESC";
+					$order_by = " `order_state` DESC,`order`.`order` $order, `products`.`id` DESC";
 				}
 				
-				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.*, `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id`,`".WPSC_TABLE_PRODUCT_ORDER."`.`order`, IF(ISNULL(`".WPSC_TABLE_PRODUCT_ORDER."`.`order`), 0, 1) AS `order_state` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON ( ( `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id` ) AND ( `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`category_id` ) ) WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$this->query_vars['category_id']."') $no_donations_sql ORDER BY $order_by LIMIT $startnum, $products_per_page";
+				$sql = "SELECT DISTINCT `products`.*, `category`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state` 
+				FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products`
+				LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `category`
+				   ON `products`.`id` = `category`.`product_id` 
+				LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."`  AS `order`
+				  ON (
+				     ( `products`.`id` = `order`.`product_id` )
+				     AND
+				     ( `category`.`category_id` = `order`.`category_id` ) 
+					) 
+				WHERE `products`.`publish`='1'
+				AND `products`.`active` = '1'
+				AND `category`.`category_id` IN ('".(int)$this->query_vars['category_id']."') $no_donations_sql
+				ORDER BY $order_by LIMIT $startnum, $products_per_page";
+			
 				
 			} else {
 			

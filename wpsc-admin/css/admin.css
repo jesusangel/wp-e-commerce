@@ -1,0 +1,66 @@
+/*
+* This is the new WPSC Admin CSS file 
+*/
+
+/* 
+/*
+	* Display Products CSS starts here
+	*/
+	
+	
+	#wpsc_product_list {
+		width: 410px;
+	}
+		
+	#wpsc_product_list tbody {
+		width: 410px;
+		border-collapse:collapse;
+	}
+	
+	#wpsc_product_list .column-image{
+		width: 35px;
+	}
+	
+	#wpsc_product_list .column-price{
+		width: 40px;
+	}
+	
+	#wpsc_product_list .column-categories{
+		width: 84px;
+	}
+	
+	
+	#wpsc_product_list tbody tr td.column-title {
+		border-right:none;
+	}
+	#wpsc_product_list tbody tr td.product-image img {
+		cursor:move;
+	}
+		
+	#wpsc_product_list .ui-sortable-helper{
+		width: 410px;
+	  margin-left: -1px;
+	}
+	
+	#wpsc_product_list .ui-sortable-helper td, #wpsc_product_list .ui-sortable-helper th{
+	  border-top: 1px solid #DFDFDF;
+	}
+		#wpsc_product_list tbody tr.ui-sortable-helper td.product-title {
+			width: 169px;
+		}
+		#wpsc_product_list tbody tr.ui-sortable-helper td.product-price {
+			width: 40px;
+		}
+		
+div.product-placeholder {
+	border-width: 1px;
+	border-style: dashed;
+  z-index: 900;
+	border-color: #bbb;
+	background-color: #f5f5f5;
+  margin: -2px 0 0 -2px;
+}
+	
+	/*
+	* Display Products CSS ends here
+*/

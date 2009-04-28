@@ -20,10 +20,40 @@ function wpsc_display_products_page() {
 		'categories' => 'Categories',
 	);
 	register_column_headers('display-product-list', $columns);	
+	
+// 	wpsc_modify_products();
+	
 	?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
 		<h2 style='_color: #ff0000;'><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
+		
+		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ) { ?>
+			<div id="message" class="updated fade"><p>
+			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
+				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				unset($_GET['updated']);
+			}
+			
+			if ( isset($_GET['skipped']) && (int) $_GET['skipped'] )
+				unset($_GET['skipped']);
+			
+			if ( isset($_GET['locked']) && (int) $_GET['locked'] ) {
+				printf( __ngettext( '%s product not updated, somebody is editing it.', '%s products not updated, somebody is editing them.', $_GET['locked'] ), number_format_i18n( $_GET['locked'] ) );
+				unset($_GET['locked']);
+			}
+			
+			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
+				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				unset($_GET['deleted']);
+			}
+			
+			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted'), $_SERVER['REQUEST_URI'] );
+			?>
+		</p></div>
+		<?php } ?>
+		
+		
 		<form id="posts-filter" action="" method="get">
 			<div class="tablenav">
 			
@@ -37,18 +67,37 @@ function wpsc_display_products_page() {
 				<div class="alignleft actions">
 					<select name="action">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
-						<option value="edit"><?php _e('Edit'); ?></option>
 						<option value="delete"><?php _e('Delete'); ?></option>
 					</select>
+				<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
 				<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
-				<?php wp_nonce_field('bulk-pages'); ?>
+				<?php wp_nonce_field('bulk-products'); ?>
 				</div>
 			</div>
 			<?php
 				wpsc_admin_products_list($category_id);
 			?>
 		</form>
+		
+		
+		
 	</div>
+	
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	(function($){
+		$(document).ready(function(){
+			$('#doaction, #doaction2').click(function(){
+				if ( $('select[name^="action"]').val() == 'delete' ) {
+					var m = '<?php echo js_escape(__("You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
+					return showNotice.warn(m);
+				}
+			});
+		});
+	})(jQuery);
+	columns.init('edit');
+	/* ]]> */
+	</script>
 	<?php
 }
 
@@ -96,16 +145,17 @@ function wpsc_admin_products_list($category_id = 0) {
   
   
 	?>
+	<input type='hidden' id='products_page_category_id'  name='category_id' value='<?php echo $category_id; ?>' />
 	<table class="widefat page fixed" id='wpsc_product_list' cellspacing="0">
 		<thead>
 			<tr>
-		<?php print_column_headers('display-product-list'); ?>
+				<?php print_column_headers('display-product-list'); ?>
 			</tr>
 		</thead>
 	
 		<tfoot>
 			<tr>
-		<?php print_column_headers('display-product-list', false); ?>
+				<?php print_column_headers('display-product-list', false); ?>
 			</tr>
 		</tfoot>
 	
@@ -143,7 +193,7 @@ function wpsc_admin_products_list($category_id = 0) {
 				
 				?>
 					<tr class="product-edit" id="product-<?php echo $product['id']?>">
-							<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id']?>' /></th>
+							<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' /></th>
 							
 							
 							<td class="product-image ">
@@ -157,11 +207,7 @@ function wpsc_admin_products_list($category_id = 0) {
 										<a title="Edit this post" style="cursor:pointer;">Edit</a>
 									</span> |
 									<span class="delete">
-									<?php
-									/*
-									<a onclick="if ( confirm(\'Are you sure to delete this product?\') ) { return true;}return false;" href="?page='.WPSC_DIR_NAME.'/display-items.php&deleteid='.$product['id'].'" title="Delete this product">Delete</a>
-									*/
-									?>
+										<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this page')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
 									</span> |
 								<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php wpsc_product_url($product['id']); ?>">View</a></span> |
 								<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="#">Duplicate</a></span>
@@ -169,15 +215,18 @@ function wpsc_admin_products_list($category_id = 0) {
 							</td>
 							
 							<td class="product-price column-price"><?php echo nzshpcrt_currency_display($product['price'], 1); ?></td>
-							<td class="comments column-comments"><?php echo $category_html; ?></td>
+							<td class="column-categories"><?php echo $category_html; ?></td>
 					</tr>
 				<?php
 			}
-			?>
+			?>			
 		</tbody>
 	</table>
 	<?php
 }
+
+
+
 
 
 

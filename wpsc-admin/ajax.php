@@ -7,6 +7,115 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+ 
+ 
+ 
+function wpsc_save_product_order() {
+  global $wpdb;
+	if(is_numeric($_POST['category_id'])) {
+		$category_id = (int)$_POST['category_id'];
+		$products = $_POST['product'];
+		$order=1;
+		foreach($products as $product_id) {
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order`=$order WHERE `product_id`=".(int)$product_id." AND `category_id`=".(int)$category_id." LIMIT 1");
+			$order++;
+		} 
+		$success = true;
+	} else {
+		$success = false; 
+	}
+	exit((string)$success);
+}
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'save_product_order') {
+	add_action('admin_init', 'wpsc_save_product_order');
+}
+ 
+ 
+ 
+ 
+ 
+
+function wpsc_bulk_modify_products() {
+  global $wpdb;
+  $doaction = $_GET['action'];
+  
+  switch ( $doaction ) {
+		case 'delete':
+		  //echo "<pre>".print_r($_GET,true)."</pre>";
+			if ( isset($_GET['product']) && ! isset($_GET['bulk_edit']) && (isset($doaction) || isset($_GET['doaction2'])) ) {
+			
+		  //echo "<pre>".print_r($_GET,true)."</pre>";
+				check_admin_referer('bulk-products');
+				$deleted = 0;
+				foreach( (array) $_GET['product'] as $product_id ) {
+				  $product_id = absint($product_id);
+					if($wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='{$product_id}' LIMIT 1")) {
+						$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '{$product_id}' AND `meta_key` IN ('url_name')");  
+						product_tag_init();
+						$term = wp_get_object_terms($product_id, 'product_tag');
+						if ($term->errors == '') {
+							wp_delete_object_term_relationships($product_id, 'product_tag');
+						}
+	
+						$deleted++;
+					}
+				}
+			}
+			break;
+	}
+	
+	$sendback = wp_get_referer();
+	if ( isset($deleted) ) {
+		$sendback = add_query_arg('deleted', $deleted, $sendback);
+	}
+	wp_redirect($sendback);
+	
+	exit();
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'bulk_modify') {
+	add_action('admin_init', 'wpsc_bulk_modify_products');
+}
+ 
+ 
+ 
+function wpsc_delete_product() {
+  global $wpdb;
+  
+	$deleted = 0;
+	$product_id = absint($_GET['product']);
+  check_admin_referer('delete_product_' .  $product_id);
+	if($wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='{$product_id}' LIMIT 1")) {
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '{$product_id}' AND `meta_key` IN ('url_name')");  
+		product_tag_init();
+		$term = wp_get_object_terms($product_id, 'product_tag');
+		if ($term->errors == '') {
+			wp_delete_object_term_relationships($product_id, 'product_tag');
+		}
+		$deleted = 1;
+	}
+	
+	$sendback = wp_get_referer();
+	if ( isset($deleted) ) {
+		$sendback = add_query_arg('deleted', $deleted, $sendback);
+	}
+	wp_redirect($sendback);
+	
+	exit();
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'delete_product') {
+	add_action('admin_init', 'wpsc_delete_product');
+}
+ 
+ 
+ 
 function wpsc_purchase_log_csv() {
   global $wpdb,$user_level,$wp_rewrite;
   get_currentuserinfo();
@@ -95,6 +204,14 @@ function wpsc_purchase_log_csv() {
 }
 
 
+
+
+
+
+
+
+
+
 function wpsc_admin_ajax() {
   global $wpdb,$user_level,$wp_rewrite;
   get_currentuserinfo();  
@@ -147,19 +264,6 @@ function wpsc_admin_ajax() {
 		$wpdb->query("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=".$_POST['del_file_hash']);
 		unlink(WPSC_FILE_DIR.$_POST['del_file_hash']);
 		exit();
-	}
-	
-      
-	
-	if(($_POST['changeorder'] == "true") && is_numeric($_POST['category_id'])) {
-		$category_id = (int)$_POST['category_id'];
-		$hash=explode(',', $_POST['sort1']);
-		$order=1;
-		foreach($hash as $id) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order`=$order WHERE `product_id`=".(int)$id." AND `category_id`=".(int)$category_id." LIMIT 1");
-			$order++;
-		}  
-	exit("");
 	}
 		
 	if(($_POST['save_image_upload_state'] == "true") && is_numeric($_POST['image_upload_state'])) {

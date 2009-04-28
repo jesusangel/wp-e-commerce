@@ -58,16 +58,14 @@ function wpsc_admin_pages(){
 			}
 
 
-			
 
-			add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
+				add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
 				//         }
 			//written by allen
 			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
 			//exit(ABSPATH.'wp-admin/users.php');
 			//end of written by allen
-			//Jeffs code
-			add_submenu_page($base_page,TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
+			
 			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
@@ -127,7 +125,9 @@ function wpsc_admin_pages(){
 	* No parameters, returns nothing
 */
 function  wpsc_admin_css_and_js() {
-	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), WPSC_VERSION.WPSC_MINOR_VERSION);
+  $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
+	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 }
   
   

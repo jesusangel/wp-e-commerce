@@ -52,41 +52,39 @@ if(get_option('language_setting') != '') {
 }
 
 // Define the database table names
-define('WPSC_TABLE_CATEGORY_TM', "{$wpdb->prefix}wpsc_category_tm"); 
-define('WPSC_TABLE_ALSO_BOUGHT', "{$wpdb->prefix}wpsc_also_bought"); 
-define('WPSC_TABLE_CART_CONTENTS', "{$wpdb->prefix}wpsc_cart_contents"); 
-define('WPSC_TABLE_CART_ITEM_EXTRAS', "{$wpdb->prefix}wpsc_cart_item_extras"); 
-define('WPSC_TABLE_CART_ITEM_VARIATIONS', "{$wpdb->prefix}wpsc_cart_item_variations"); 
-define('WPSC_TABLE_CHECKOUT_FORMS', "{$wpdb->prefix}wpsc_checkout_forms"); 
-define('WPSC_TABLE_CURRENCY_LIST', "{$wpdb->prefix}wpsc_currency_list"); 
-define('WPSC_TABLE_DOWNLOAD_STATUS', "{$wpdb->prefix}wpsc_download_status"); 
-define('WPSC_TABLE_ITEM_CATEGORY_ASSOC', "{$wpdb->prefix}wpsc_item_category_assoc"); 
-define('WPSC_TABLE_PRODUCT_CATEGORIES', "{$wpdb->prefix}wpsc_product_categories"); 
-define('WPSC_TABLE_PRODUCT_FILES', "{$wpdb->prefix}wpsc_product_files"); 
-define('WPSC_TABLE_PRODUCT_IMAGES', "{$wpdb->prefix}wpsc_product_images"); 
-define('WPSC_TABLE_PRODUCT_LIST', "{$wpdb->prefix}wpsc_product_list"); 
-define('WPSC_TABLE_PRODUCT_ORDER', "{$wpdb->prefix}wpsc_product_order"); 
-define('WPSC_TABLE_PRODUCT_RATING', "{$wpdb->prefix}wpsc_product_rating"); 
-define('WPSC_TABLE_PRODUCT_VARIATIONS', "{$wpdb->prefix}wpsc_product_variations"); 
-define('WPSC_TABLE_PURCHASE_LOGS', "{$wpdb->prefix}wpsc_purchase_logs"); 
-define('WPSC_TABLE_PURCHASE_STATUSES', "{$wpdb->prefix}wpsc_purchase_statuses"); 
-define('WPSC_TABLE_REGION_TAX', "{$wpdb->prefix}wpsc_region_tax"); 
-define('WPSC_TABLE_SUBMITED_FORM_DATA', "{$wpdb->prefix}wpsc_submited_form_data"); 
-define('WPSC_TABLE_VARIATION_ASSOC', "{$wpdb->prefix}wpsc_variation_assoc"); 
-define('WPSC_TABLE_VARIATION_PROPERTIES', "{$wpdb->prefix}wpsc_variation_properties"); 
-define('WPSC_TABLE_VARIATION_VALUES', "{$wpdb->prefix}wpsc_variation_values"); 
-define('WPSC_TABLE_VARIATION_VALUES_ASSOC', "{$wpdb->prefix}wpsc_variation_values_assoc"); 
-define('WPSC_TABLE_COUPON_CODES', "{$wpdb->prefix}wpsc_coupon_codes"); 
-define('WPSC_TABLE_LOGGED_SUBSCRIPTIONS', "{$wpdb->prefix}wpsc_logged_subscriptions"); 
-define('WPSC_TABLE_PRODUCTMETA', "{$wpdb->prefix}wpsc_productmeta"); 
-define('WPSC_TABLE_CATEGORISATION_GROUPS', "{$wpdb->prefix}wpsc_categorisation_groups"); 
-define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wpdb->prefix}wpsc_variation_combinations"); 
-define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock"); 
+define('WPSC_TABLE_CATEGORY_TM', "{$wpdb->prefix}wpsc_category_tm");
+define('WPSC_TABLE_ALSO_BOUGHT', "{$wpdb->prefix}wpsc_also_bought");
+define('WPSC_TABLE_CART_CONTENTS', "{$wpdb->prefix}wpsc_cart_contents");
+define('WPSC_TABLE_CART_ITEM_EXTRAS', "{$wpdb->prefix}wpsc_cart_item_extras");
+define('WPSC_TABLE_CART_ITEM_VARIATIONS', "{$wpdb->prefix}wpsc_cart_item_variations");
+define('WPSC_TABLE_CHECKOUT_FORMS', "{$wpdb->prefix}wpsc_checkout_forms");
+define('WPSC_TABLE_CURRENCY_LIST', "{$wpdb->prefix}wpsc_currency_list");
+define('WPSC_TABLE_DOWNLOAD_STATUS', "{$wpdb->prefix}wpsc_download_status");
+define('WPSC_TABLE_ITEM_CATEGORY_ASSOC', "{$wpdb->prefix}wpsc_item_category_assoc");
+define('WPSC_TABLE_PRODUCT_CATEGORIES', "{$wpdb->prefix}wpsc_product_categories");
+define('WPSC_TABLE_PRODUCT_FILES', "{$wpdb->prefix}wpsc_product_files");
+define('WPSC_TABLE_PRODUCT_IMAGES', "{$wpdb->prefix}wpsc_product_images");
+define('WPSC_TABLE_PRODUCT_LIST', "{$wpdb->prefix}wpsc_product_list");
+define('WPSC_TABLE_PRODUCT_ORDER', "{$wpdb->prefix}wpsc_product_order");
+define('WPSC_TABLE_PRODUCT_RATING', "{$wpdb->prefix}wpsc_product_rating");
+define('WPSC_TABLE_PRODUCT_VARIATIONS', "{$wpdb->prefix}wpsc_product_variations");
+define('WPSC_TABLE_PURCHASE_LOGS', "{$wpdb->prefix}wpsc_purchase_logs");
+define('WPSC_TABLE_PURCHASE_STATUSES', "{$wpdb->prefix}wpsc_purchase_statuses");
+define('WPSC_TABLE_REGION_TAX', "{$wpdb->prefix}wpsc_region_tax");
+define('WPSC_TABLE_SUBMITED_FORM_DATA', "{$wpdb->prefix}wpsc_submited_form_data");
+define('WPSC_TABLE_VARIATION_ASSOC', "{$wpdb->prefix}wpsc_variation_assoc");
+define('WPSC_TABLE_VARIATION_PROPERTIES', "{$wpdb->prefix}wpsc_variation_properties");
+define('WPSC_TABLE_VARIATION_VALUES', "{$wpdb->prefix}wpsc_variation_values");
+define('WPSC_TABLE_VARIATION_VALUES_ASSOC', "{$wpdb->prefix}wpsc_variation_values_assoc");
+define('WPSC_TABLE_COUPON_CODES', "{$wpdb->prefix}wpsc_coupon_codes");
+define('WPSC_TABLE_LOGGED_SUBSCRIPTIONS', "{$wpdb->prefix}wpsc_logged_subscriptions");
+define('WPSC_TABLE_PRODUCTMETA', "{$wpdb->prefix}wpsc_productmeta");
+define('WPSC_TABLE_CATEGORISATION_GROUPS', "{$wpdb->prefix}wpsc_categorisation_groups");
+define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wpdb->prefix}wpsc_variation_combinations");
+define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock");
 
 
 // start including the rest of the plugin here
-
-require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
