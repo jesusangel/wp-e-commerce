@@ -11,6 +11,7 @@
  function display_sales_logs(){
 	  $purchlogs = new wpsc_purchaselogs();
 	  $columns = array(
+	  	'cb' => '<input type="checkbox" />',
 		'date' => 'Date',
 		'name' => '',
 		'amount' => 'Amount',
@@ -212,38 +213,51 @@
  function wpsc_purchaselogs_displaylist(){
  
   ?>
- 	<table class="widefat page fixed" cellspacing="0">
-		<thead>
-			<tr>
-		<?php print_column_headers('display-sales-list'); ?>
-			</tr>
-		</thead>
-	
-		<tfoot>
-			<tr>
-		<?php print_column_headers('display-sales-list', false); ?>
-			</tr>
-		</tfoot>
-	
-		<tbody>
-		<?php get_purchaselogs_content(); ?>
-		</tbody>
-	</table>
-
+  	<form method='post' action=''>
+	 	<table class="widefat page fixed" cellspacing="0">
+			<thead>
+				<tr>
+			<?php print_column_headers('display-sales-list'); ?>
+				</tr>
+			</thead>
+		
+			<tfoot>
+				<tr>
+			<?php print_column_headers('display-sales-list', false); ?>
+				</tr>
+			</tfoot>
+		
+			<tbody>
+			<?php get_purchaselogs_content(); ?>
+			</tbody>
+		</table>
+	</form>
 <?php
  
  }
  function get_purchaselogs_content(){
- 	?>	
+ 
+ 	while(wpsc_have_purch_items()) : wpsc_the_purch_item();	
+ 	?>
  	<tr>
- 		<td></td> <!--Date -->
- 		<td></td> <!--Name/email -->
- 		<td></td><!-- Amount -->
- 		<td></td><!-- Details -->
- 		<td></td><!-- Status -->
- 		<td></td><!-- Delete -->
+ 		<th class="check-column" scope="row"><input type='checkbox' name='purchlogids[]' class='editcheckbox' value='<?php echo wpsc_the_purch_item_id(); ?>' /></th>
+ 		<td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
+ 		<td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
+ 		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
+ 		<td><?php echo wpsc_the_purch_item_details();?> Items</td><!-- Details -->
+ 		<td>
+ 	
+ 			<select onchange='' >
+ 			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
+ 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> ><?php echo wpsc_the_purch_status_name(); ?> </option>
+ 			<?php endwhile; ?>
+ 			</select>
+ 	
+ 		</td><!-- Status -->
+ 		<td><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />Delete</td><!-- Delete -->
  	</tr>
  	<?php
+ 	endwhile;
  }
  display_sales_logs();
  ?>
