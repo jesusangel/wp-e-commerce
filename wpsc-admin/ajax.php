@@ -7,22 +7,37 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+ //call to change view for purchase log
+ 
+ function wpsc_purchlog_view_by(){
+exit(print_r($_POST, true));
+ 	wpsc_change_purchlog_view();
+ } 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'purchlog_view_by') {
+	add_action('admin_init', 'wpsc_purchlog_view_by');
+}
  //bulk actions for purchase log
 function wpsc_purchlog_bulk_modify(){
 	if($_POST['purchlog_multiple_status_change'] != -1){
 		if(is_numeric($_POST['purchlog_multiple_status_change'])){
 			foreach((array)$_POST['purchlogids'] as $purchlogid){
 				wpsc_purchlog_edit_status($purchlogid, $_POST['purchlog_multiple_status_change']);
+				$updated++;
 			}
+			
 		}elseif($_POST['purchlog_multiple_status_change'] == 'delete'){
-			$deleted = 1;
 			foreach((array)$_POST['purchlogids'] as $purchlogid){
 				wpsc_delete_purchlog($purchlogid);
+				$deleted++;
 			}
 		}
 		
 	}
 	$sendback = wp_get_referer();
+	if ( isset($updated) ) {
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
 	if ( isset($deleted) ) {
 		$sendback = add_query_arg('deleted', $deleted, $sendback);
 	}
@@ -45,6 +60,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
 	$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed=".$purchlog_status." WHERE id=".$purchlog_id;
 	$wpdb->query($sql);
 }
+
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {
 	add_action('admin_init', 'wpsc_purchlog_edit_status');
 }

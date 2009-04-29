@@ -29,7 +29,7 @@
 			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
-				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				printf( __ngettext( '%s Purchase Log updated.', '%s Purchase Logs updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
 				unset($_GET['updated']);
 			}
 			
@@ -42,7 +42,7 @@
 			}
 			
 			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
-				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				printf( __ngettext( '%s Purchase Log deleted.', '%s Purchase Logs deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['deleted']);
 			}
 			
@@ -256,9 +256,10 @@
   		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
   		<?php /* View functions for purchlogs */?>
   		<label for='view_purchlogs_by'>View:</label>
-  			<?php //exit(print_r(wpsc_the_purch_status_getdates(), true)); ?>
-  		<select name='view_purchlogs_by'>
-  			
+
+  		<select id='view_purchlogs_by' name='view_purchlogs_by'>
+  			<option value='all' selected='selected'>All</option>
+  			<?php  echo wpsc_purchlogs_getfirstdates(); ?>
   		</select>
 	 	<table class="widefat page fixed" cellspacing="0">
 			<thead>

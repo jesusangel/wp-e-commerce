@@ -74,9 +74,18 @@ function wpsc_the_purch_status_name(){
 	//exit(print_r($purchlogs->purchstatus, true));
 	return $purchlogs->purchstatus->name;
 }
-function wpsc_the_purch_status_getdates(){
+function wpsc_purchlogs_getfirstdates(){
 	global $purchlogs;
-	return $purchlogs->getdates();
+	$dates = $purchlogs->getdates();
+	foreach($dates as $date){
+		$cleanDate = date('d M', $date['start']);
+		$fDate .= '<option value='.$date['start'].'_'.$date['end'].'>'.$cleanDate.'</option>';
+	}
+//	exit($i);
+	return $fDate;
+}
+function wpsc_change_purchlog_view(){
+
 }
 wpsc_test_purchlogs();
 
