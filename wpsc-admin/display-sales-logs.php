@@ -24,6 +24,33 @@
 	<div class="wrap">
 		<?php //screen_icon(); ?>
 		<h2><?php echo wp_specialchars( TXT_WPSC_PURCHASELOG ); ?> </h2>
+		
+		<?php 		///// start of update message section //////
+			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ) { ?>
+			<div id="message" class="updated fade"><p>
+			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
+				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				unset($_GET['updated']);
+			}
+			
+			if ( isset($_GET['skipped']) && (int) $_GET['skipped'] )
+				unset($_GET['skipped']);
+			
+			if ( isset($_GET['locked']) && (int) $_GET['locked'] ) {
+				printf( __ngettext( '%s product not updated, somebody is editing it.', '%s products not updated, somebody is editing them.', $_GET['locked'] ), number_format_i18n( $_GET['locked'] ) );
+				unset($_GET['locked']);
+			}
+			
+			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
+				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				unset($_GET['deleted']);
+			}
+			
+			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted'), $_SERVER['REQUEST_URI'] );
+			?>
+		</p></div>
+		<?php } 
+		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
 				<div id='side-info-column-wpsc' class='inner-sidebar'>
 					<div class='meta-box-sortables'>			
@@ -214,6 +241,25 @@
  
   ?>
   	<form method='post' action=''>
+  	&nbsp;<img src='<?php echo WPSC_URL."/images/cornerarrow.png"; ?>' alt='' />
+  	<label for='purchlog_multiple_status_change'>With Selected: </label>
+  		<select name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
+  			<option value='-1'><?php _e('Bulk Actions'); ?></option>
+  			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
+ 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> >
+ 					<?php echo wpsc_the_purch_status_name(); ?> 
+ 				</option>
+ 			<?php endwhile; ?>
+			<option value="delete"><?php _e('Delete'); ?></option>
+  		</select>
+  		<input type='hidden' value='purchlog_bulk_modify' name='wpsc_admin_action' />
+  		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
+  		<?php /* View functions for purchlogs */?>
+  		<label for='view_purchlogs_by'>View:</label>
+  			<?php //exit(print_r(wpsc_the_purch_status_getdates(), true)); ?>
+  		<select name='view_purchlogs_by'>
+  			
+  		</select>
 	 	<table class="widefat page fixed" cellspacing="0">
 			<thead>
 				<tr>
@@ -232,6 +278,22 @@
 			</tbody>
 		</table>
 	</form>
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	(function($){
+		$(document).ready(function(){
+			$('#doaction, #doaction2').click(function(){
+				if ( $('select[name^="purchlog_multiple_status_change"]').val() == 'delete' ) {
+					var m = '<?php echo js_escape(__("You are about to delete the selected purchase logs.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
+					return showNotice.warn(m);
+				}
+			});
+		});
+	})(jQuery);
+	columns.init('edit');
+	/* ]]> */
+	</script>
+
 <?php
  
  }
@@ -247,14 +309,14 @@
  		<td><?php echo wpsc_the_purch_item_details();?> Items</td><!-- Details -->
  		<td>
  	
- 			<select onchange='' >
+ 			<select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >
  			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
  				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> ><?php echo wpsc_the_purch_status_name(); ?> </option>
  			<?php endwhile; ?>
  			</select>
  	
  		</td><!-- Status -->
- 		<td><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />Delete</td><!-- Delete -->
+ 		<td><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
  	</tr>
  	<?php
  	endwhile;

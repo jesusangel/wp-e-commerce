@@ -27,7 +27,7 @@ function wpsc_the_purch_item_price(){
 function wpsc_the_purch_item_id(){
 	global $purchlogs;
 	//exit('<pre>'.print_r($purchlogs->purchitem,true).'</pre>');
-	return $purchlogs->currentitem;
+	return $purchlogs->purchitem->id;
 }
 function wpsc_the_purch_item_date(){
 	global $purchlogs;
@@ -73,6 +73,10 @@ function wpsc_the_purch_status_name(){
 	global $purchlogs;
 	//exit(print_r($purchlogs->purchstatus, true));
 	return $purchlogs->purchstatus->name;
+}
+function wpsc_the_purch_status_getdates(){
+	global $purchlogs;
+	return $purchlogs->getdates();
 }
 wpsc_test_purchlogs();
 

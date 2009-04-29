@@ -7,9 +7,48 @@
  * @package wp-e-commerce
  * @since 3.7
  */
- 
- 
- 
+ //bulk actions for purchase log
+function wpsc_purchlog_bulk_modify(){
+	if($_POST['purchlog_multiple_status_change'] != -1){
+		if(is_numeric($_POST['purchlog_multiple_status_change'])){
+			foreach((array)$_POST['purchlogids'] as $purchlogid){
+				wpsc_purchlog_edit_status($purchlogid, $_POST['purchlog_multiple_status_change']);
+			}
+		}elseif($_POST['purchlog_multiple_status_change'] == 'delete'){
+			$deleted = 1;
+			foreach((array)$_POST['purchlogids'] as $purchlogid){
+				wpsc_delete_purchlog($purchlogid);
+			}
+		}
+		
+	}
+	$sendback = wp_get_referer();
+	if ( isset($deleted) ) {
+		$sendback = add_query_arg('deleted', $deleted, $sendback);
+	}
+	wp_redirect($sendback);
+	
+	exit();
+}
+
+if($_REQUEST['wpsc_admin_action'] == 'purchlog_bulk_modify') {
+	add_action('admin_init', 'wpsc_purchlog_bulk_modify');
+}
+//edit purchase log status function
+function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
+	global $wpdb;
+	if(($purchlog_id =='') && ($purchlog_status == '')){
+		$purchlog_id = (int)$_POST['purchlog_id'];
+		$purchlog_status = (int)$_POST['purchlog_status'];
+	}
+	//exit($purchlog_id.' BEING TRIGGERED '.$purchlog_status);
+	$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed=".$purchlog_status." WHERE id=".$purchlog_id;
+	$wpdb->query($sql);
+}
+if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {
+	add_action('admin_init', 'wpsc_purchlog_edit_status');
+}
+
 function wpsc_save_product_order() {
   global $wpdb;
 	if(is_numeric($_POST['category_id'])) {
@@ -28,11 +67,52 @@ function wpsc_save_product_order() {
 }
  
  
- if($_REQUEST['wpsc_admin_action'] == 'save_product_order') {
+if($_REQUEST['wpsc_admin_action'] == 'save_product_order') {
 	add_action('admin_init', 'wpsc_save_product_order');
 }
  
+//delete a purchase log
+function wpsc_delete_purchlog($purchlog_id='') {
+	global $wpdb;
+	$deleted = 0;
+	if($purchlog_id == ''){
+		$purchlog_id = absint($_GET['purchlog_id']);
+		check_admin_referer('delete_purchlog_' .  $purchlog_id);
+  	}
+  
+  
+	///
+	if(is_numeric($purchlog_id)) {
+		  
+		  $delete_log_form_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$purchlog_id'";
+		  $cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
+		  foreach((array)$cart_content as $cart_item) {
+		    $cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
+			}
+		  $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$purchlog_id'");
+		  $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$purchlog_id')");
+		  $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$purchlog_id' LIMIT 1");
+		//  return '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
+		$deleted = 1;
+		}
  
+	////	
+	if(is_numeric($_GET['purchlog_id'])){
+		$sendback = wp_get_referer();
+		if ( isset($deleted) ) {
+			$sendback = add_query_arg('deleted', $deleted, $sendback);
+		}
+		wp_redirect($sendback);
+		
+		exit();
+	}
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'delete_purchlog') {
+	add_action('admin_init', 'wpsc_delete_purchlog');
+}
  
  
  

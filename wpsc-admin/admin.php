@@ -112,9 +112,13 @@ function wpsc_admin_pages(){
 		
 		
 		// Include the javascript and CSS for this page
-		foreach($page_hooks as $page_hook) {
+		/*
+foreach($page_hooks as $page_hook) {
+			
 			add_action("load-$page_hook", 'wpsc_admin_css_and_js');
 		}
+*/
+		
 		return;
   }
   
@@ -130,7 +134,7 @@ function  wpsc_admin_css_and_js() {
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 }
   
-  
+add_action("admin_init", 'wpsc_admin_css_and_js');  
 add_action('admin_menu', 'wpsc_admin_pages');
 
 
