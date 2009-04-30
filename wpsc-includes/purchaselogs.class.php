@@ -1,6 +1,8 @@
 <?php
 $purchlogs = new wpsc_purchaselogs();
+if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+}
 function wpsc_the_purch_total(){
 	global $purchlogs;
 	return $purchlogs->totalAmount;

@@ -37,6 +37,7 @@ if(isset($_POST) && is_array($_POST)) {
 			$coupon_data['expiry'] = $coupon_data['expiry']." 00:00:00";
 			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id'", ARRAY_A);
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
+		//	exit('<pre>'.print_r($coupon_data, true).'</pre>');
 			ksort($check_values); ksort($coupon_data);
 						
 			if($check_values != $coupon_data) {
@@ -257,6 +258,7 @@ if(isset($_POST) && is_array($_POST)) {
 			</span>
 		</div>
 	</div>
+</tr>
 </table>
 <br />
 </form>  

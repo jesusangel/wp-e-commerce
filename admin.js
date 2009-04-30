@@ -1251,7 +1251,7 @@ jQuery(document).ready(function(){
 		function() {
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "visible");
 		}
-	).mouseout(wpsc-row-actions
+	).mouseout(
 		function() {
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "hidden");
 		}

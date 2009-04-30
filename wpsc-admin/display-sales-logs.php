@@ -9,7 +9,7 @@
  */
 
  function wpsc_display_sales_logs(){
- 			$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+ 		//$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
  	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
@@ -82,7 +82,7 @@
 				</div>
 			</div>
 		</div>
-		<?php } //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG ?>
+		<?php }else{ //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG ?>
 		
 			<a href=''>BACK</a>
 		<?php
@@ -122,6 +122,7 @@
 
 				</div>
 			</div>
+			<?php }	?>
 	</div>
 	<?php
 

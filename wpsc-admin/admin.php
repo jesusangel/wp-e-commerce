@@ -13,6 +13,7 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php"); 
 
 
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php"); 
 
 
 /**
@@ -53,8 +54,9 @@ function wpsc_admin_pages(){
 			}
 
 				
-
+	
 				add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
+				$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
 				//         }
 			//written by allen
 			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
@@ -64,7 +66,7 @@ function wpsc_admin_pages(){
 			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
 			$page_hooks[] = add_submenu_page($base_page,__("Products (new)"), __("Products (new)"), 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
-			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
+			
 			
 			
 			
@@ -127,6 +129,7 @@ function  wpsc_admin_include_css_and_js() {
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_admin_css( 'dashboard' );
 	remove_action('admin_head', 'wpsc_admin_css');
 }
   
