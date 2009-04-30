@@ -242,8 +242,7 @@
   ?>
   	<form method='post' action=''>
   	&nbsp;<img src='<?php echo WPSC_URL."/images/cornerarrow.png"; ?>' alt='' />
-  	<label for='purchlog_multiple_status_change'>With Selected: </label>
-  		<select name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
+  		<select id='purchlog_multiple_status_change' name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
   			<option value='-1'><?php _e('Bulk Actions'); ?></option>
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
  				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> >
@@ -259,8 +258,24 @@
 
   		<select id='view_purchlogs_by' name='view_purchlogs_by'>
   			<option value='all' selected='selected'>All</option>
+			<option value='3mnths'>Three Months</option>
   			<?php  echo wpsc_purchlogs_getfirstdates(); ?>
   		</select>
+  		<select id='view_purchlogs_by_status' name='view_purchlogs_by_status'>
+  			<option value='-1'>Status: All</option>
+  			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
+ 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> >
+ 					<?php echo wpsc_the_purch_status_name(); ?> 
+ 				</option>
+ 			<?php endwhile; ?>
+
+  		</select>
+  		<input type='hidden' value='purchlog_filter_by' name='wpsc_admin_action' />
+  		<input type="submit" value="<?php _e('Filter'); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
+  		<?php if(wpsc_have_purch_items() ==false):  ?>
+  		<p style='color:red;'>Oops there are no purchase logs for your selection, please try again.</p>
+  		
+  		<?php endif;?>
 	 	<table class="widefat page fixed" cellspacing="0">
 			<thead>
 				<tr>

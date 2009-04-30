@@ -1,17 +1,6 @@
 <?php
 $purchlogs = new wpsc_purchaselogs();
-function wpsc_formdata(){
-	global $purchlogs;
-	$formdata = $purchlogs->getall_formdata();
-	//echo 'Form Data : <pre>'.print_r($formdata, true).'</pre>';
 
-}
-
-function wpsc_test_purchlogs(){
-	global $purchlogs;
-	wpsc_formdata();
-	//exit('purchase item: <pre>'.print_r($purchlogs->purchitem, true).'</pre>');
-}
 function wpsc_have_purch_items(){
 	global $purchlogs;
 	return $purchlogs->have_purch_items();
@@ -78,16 +67,41 @@ function wpsc_purchlogs_getfirstdates(){
 	global $purchlogs;
 	$dates = $purchlogs->getdates();
 	foreach($dates as $date){
-		$cleanDate = date('d M', $date['start']);
-		$fDate .= '<option value='.$date['start'].'_'.$date['end'].'>'.$cleanDate.'</option>';
+		$cleanDate = date('M Y', $date['start']);
+		$fDate .= '<option value="'.$date['start'].'_'.$date['end'].'">'.$cleanDate.'</option>';
 	}
 //	exit($i);
 	return $fDate;
 }
-function wpsc_change_purchlog_view(){
+function wpsc_change_purchlog_view($viewby, $status){
+	global $purchlogs;
+	
+		if($viewby == 'all'){
+			$dates = $purchlogs->getdates();
+			$purchaselogs = $purchlogs->get_purchlogs($dates, $status);
+			
+			$purchlogs->allpurchaselogs = $purchaselogs;
+		}elseif($viewby == '3mnths'){
+			$dates = $purchlogs->getdates();
 
+			$dates = array_slice($dates, 0, 3);
+		//	exit('<pre>'.print_r($dates,true).'</pre>');		
+			$newlogs = $purchlogs->get_purchlogs($dates, $status);
+			//exit('<pre>'.print_r($newlogs, true).'</pre>');
+			$purchlogs->allpurchaselogs = $newlogs;
+			//exit(print_r($date, true)."".$purchlogs->current_timestamp);
+		
+		}else{
+			$dates = explode('_', $viewby);
+			$date[0]['start'] = $dates[0];
+			$date[0]['end'] = $dates[1];
+			$newlogs = $purchlogs->get_purchlogs($date, $status);
+			//exit('<pre>'.print_r($newlogs, true).'</pre>');
+			$purchlogs->allpurchaselogs = $newlogs;
+		}
+	
+	//exit('View by '.$viewby);
 }
-wpsc_test_purchlogs();
 
 
 
@@ -125,33 +139,57 @@ class wpsc_purchaselogs{
 	
 	/* Constructor function*/
 	function wpsc_purchaselogs(){
+		$this->getall_formdata();
+		if(!isset($_POST['view_purchlogs_by'])){
 		$dates = $this->getdates();
 		$purchaselogs = $this->get_purchlogs($dates);
+		
 		$this->allpurchaselogs = $purchaselogs;
 	//	$this->the_purch_item();
+		}else{
+			$this->getdates();
+		}
 		$this->purch_item_count = count($this->allpurchaselogs);
 		$statuses = $this->the_purch_item_statuses();
 		
 	}
 	
-	function get_purchlogs($dates){
+	function get_purchlogs($dates, $status=''){
 		global $wpdb;
-	   foreach($dates as $date_pair){
-        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
-          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
-		  if ($paidlog) {
-				$sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed` >= '2' ORDER BY `date` DESC";
-		  } else if($_GET['filteremail']) {
-				$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` IN ( '".$wpdb->escape($_GET['filteremail'])."' ) AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `".WPSC_TABLE_PURCHASE_LOGS."`.`date` DESC;";
-		  } else if ($_GET['filter']=='affiliate') {
-				$sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `affiliate_id` IS NOT  NULL ORDER BY `date` DESC";
-		  }
-          $purchase_logs = $wpdb->get_results($sql) ;
-        
-		}
-	  }
-		//  exit('<pre>'.print_r($purchase_logs, true).'</pre>');
-		  return $purchase_logs;
+		//exit('<pre>'.print_r($dates, true).'</pre>');
+		$purchlog = array();
+		if($status=='' || $status=='-1'){
+			   foreach((array)$dates as $date_pair){
+			        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
+			          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
+			          $purchase_logs = $wpdb->get_results($sql) ;
+						array_push($purchlog, $purchase_logs);
+					}
+				}
+		}else{
+		   foreach((array)$dates as $date_pair){
+			        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
+			          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed`=".$status." ORDER BY `date` DESC";
+			          $purchase_logs = $wpdb->get_results($sql) ;
+			          array_push($purchlog, $purchase_logs);
+					}
+				}
+
+	  	
+	  	}
+	  	foreach($purchlog as $purch){
+	  		if(is_array($purch)){
+		  		foreach($purch as $log){
+		  			$newarray[] = $log;
+		  		}
+	  		}else{
+	  			exit('Else :'.print_r($purch));
+	  		}	  		
+	  	}
+	  //	exit('<pre>'.print_r($newarray,true).'<pre>');
+	   	$this->allpurchaselogs = $newarray;
+	   	$this->purch_item_count = count($this->allpurchaselogs);
+	  return $newarray;
 	}
 	
 	function  getall_formdata(){
@@ -189,19 +227,9 @@ class wpsc_purchaselogs{
 				}
 			}
 		}
+
+		//exit('<pre>'.print_r($date_list, true).'<pre>');
 		
-		if($_GET['filter'] !== 'true') {
-		  if(is_numeric($_GET['filter'])) {
-		    $max_number = $_GET['filter'];
-			} else {
-				if ($_GET['filter']=='paid') {
-					$paidlog=true;
-				}
-				$max_number = 3;
-			}
-		  
-		  $date_list = array_slice($date_list, 0, $max_number);
-		}
 		return $date_list;
 	}
 	
@@ -237,6 +265,7 @@ class wpsc_purchaselogs{
 	}
 	
 	function have_purch_items() {	
+		//exit($this->currentitem.' '.$this->purch_item_count);
 		if ($this->currentitem + 1 < $this->purch_item_count) {
 			return true;
 		} else if ($this->currentitem + 1 == $this->purch_item_count && $this->purch_item_count > 0) {
@@ -328,7 +357,7 @@ class wpsc_purchaselogs{
 		$fname = $wpdb->get_var($sql);
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$lNameformid;
 		$lname = $wpdb->get_var($sql);
-		$namestring = $fname.' '.$lname.' ('.$email.') ';
+		$namestring = $fname.' '.$lname.' (<a href="mailto:'.$email.'?subject=Message From '.get_option('siteurl').'">'.$email.'</a>) ';
 		//exit($fname.' '.$lname.' ('.$email.') ');
 		return $namestring;
 		/*

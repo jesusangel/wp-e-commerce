@@ -9,13 +9,12 @@
  */
  //call to change view for purchase log
  
- function wpsc_purchlog_view_by(){
-exit(print_r($_POST, true));
- 	wpsc_change_purchlog_view();
+ function wpsc_purchlog_filter_by(){
+ 	wpsc_change_purchlog_view($_POST['view_purchlogs_by'], $_POST['view_purchlogs_by_status']);
  } 
  
- if($_REQUEST['wpsc_admin_action'] == 'purchlog_view_by') {
-	add_action('admin_init', 'wpsc_purchlog_view_by');
+ if($_REQUEST['wpsc_admin_action'] == 'purchlog_filter_by') {
+	add_action('admin_init', 'wpsc_purchlog_filter_by');
 }
  //bulk actions for purchase log
 function wpsc_purchlog_bulk_modify(){
