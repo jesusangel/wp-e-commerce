@@ -10,7 +10,7 @@
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
-
+require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php"); 
 
 
 
@@ -30,11 +30,6 @@ function wpsc_admin_pages(){
      * or bypass the normal download system.
      */
     if(function_exists('add_options_page')) {
-				//       if(get_option('nzshpcrt_first_load') == 0) {
-				//         $base_page = WPSC_DIR_NAME.'/options.php';
-				//         add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 7, $base_page);
-				//         add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
-				//         } else {
 			$base_page = WPSC_DIR_NAME.'/display-log.php';
 			
 			
@@ -69,7 +64,7 @@ function wpsc_admin_pages(){
 			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
-			$page_hooks[] = add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
+			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
 			
 			
 			
@@ -112,12 +107,9 @@ function wpsc_admin_pages(){
 		
 		
 		// Include the javascript and CSS for this page
-		/*
-foreach($page_hooks as $page_hook) {
-			
+		foreach($page_hooks as $page_hook) {
 			add_action("load-$page_hook", 'wpsc_admin_css_and_js');
 		}
-*/
 		
 		return;
   }
@@ -132,9 +124,10 @@ function  wpsc_admin_css_and_js() {
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	remove_action('admin_head', 'wpsc_admin_css');
 }
   
-add_action("admin_init", 'wpsc_admin_css_and_js');  
+//add_action("admin_init", 'wpsc_admin_css_and_js');  
 add_action('admin_menu', 'wpsc_admin_pages');
 
 

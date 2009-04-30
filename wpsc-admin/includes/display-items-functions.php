@@ -1,10 +1,175 @@
 <?php
-
 $closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
-
 $variations_processor = new nzshpcrt_variations;
 
-function category_and_tag_box($product_data=''){
+
+
+function wpsc_display_product_form ($product_id = 0){
+  global $wpdb,$nzshpcrt_imagesize_info;
+  $product_id = absint($product_id);
+	$variations_processor = new nzshpcrt_variations;
+  if($product_id > 0) {
+
+		$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`={$product_id} LIMIT 1",ARRAY_A);
+
+		$product_data['meta']['external_link'] = get_product_meta($product_id,'external_link',true);
+		$product_data['meta']['merchant_notes'] = get_product_meta($product_id,'merchant_notes',true);
+		$product_data['meta']['sku'] = get_product_meta($product_id,'sku',true);
+		
+		$product_data['meta']['engrave'] = get_product_meta($product_id,'engraved',true);
+		$product_data['meta']['can_have_uploaded_image'] = get_product_meta($product_id,'can_have_uploaded_image',true);
+		
+		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
+		
+		
+		
+		if(function_exists('wp_insert_term')) {
+			$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = {$product_id}", ARRAY_A);
+			
+			foreach ((array)$term_relationships as $term_relationship) {
+				$tt_ids[] = $term_relationship['term_taxonomy_id'];
+			}
+			foreach ((array)$tt_ids as $tt_id) {
+				$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_taxonomy WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
+				$term_ids[] = $results[0]['term_id'];
+			}
+			foreach ((array)$term_ids as $term_id ) {
+				if ($term_id != NULL){
+				$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."terms WHERE term_id=".$term_id." ",ARRAY_A);
+				$tags[] = $results[0]['name'];
+				}
+			}
+			if ($tags != NULL){ 
+				$imtags = implode(',', $tags);
+			}
+		}
+	
+		$check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}'");
+		
+		
+		$current_user = wp_get_current_user();
+		$closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_editproduct');
+		wpsc_product_basic_details_form($product_data);
+		
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+function wpsc_product_basic_details_form(&$product_data) {
+  global $wpdb,$nzshpcrt_imagesize_info;
+  ?>
+	<h3 class='hndle'><?php echo  TXT_WPSC_PRODUCTDETAILS; ?> <?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE; ?></h3>
+	<div>
+		<table class='product_editform' style='width:100%;'>
+			<tr>
+				<td colspan='2' class='itemfirstcol'>  
+					<div class='admin_product_name'>
+						<input class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+										<a href='#' class='shorttag_toggle'></a>
+										<div class='admin_product_shorttags'>
+										<h4>Shortcodes</h4>
+				
+											<dl>
+												<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE; ?>: </dt><dd> [wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
+												<dt><?php echo TXT_WPSC_BUY_NOW_SHORTCODE; ?>: </dt><dd>[buy_now_button=<?php echo $product_data['id'];?>]</dd>
+												<dt><?php echo TXT_WPSC_ADD_TO_CART_SHORTCODE; ?>: </dt><dd>[add_to_cart=<?php echo $product_data['id'];?>]</dd>
+											</dl>
+				
+										<h4>Template Tags</h4>
+					
+											<dl>
+												<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG; ?>: </dt><dd> &lt;?php echo wpsc_display_products('product_id=<?php echo $product_data['id'];?>'); ?&gt;</dd>
+												<dt><?php echo TXT_WPSC_BUY_NOW_PHP; ?>: </dt><dd>&lt;?php echo wpsc_buy_now_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+												<dt><?php echo TXT_WPSC_ADD_TO_CART_PHP; ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+											</dl>
+					
+											<p>
+				
+											</p>
+										</div>
+							<div style='clear:both; height: 0px;'></div>	
+					</div>
+					
+				</td>
+			</tr>
+		
+		
+			<tr>
+				<td  class='skuandprice'>
+					<?php echo TXT_WPSC_SKU_FULL; ?> :<br />
+					<input size='30' type='text' class='text'  name='productmeta_values[sku]' value='<?php echo htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8'); ?>' />
+				</td>
+				<td  class='skuandprice'>
+					<?php echo TXT_WPSC_PRICE; ?> :<br />
+					<input type='text' class='text' size='30' name='price' value='<?php echo $product_data['price']; ?>'>
+				</td>
+			</tr>
+		
+			<tr>
+				<td colspan='2'>
+					<div id='editorcontainer'>
+						<textarea name='description' class='mceEditor' cols='40' rows='8' ><?php echo stripslashes($product_data['description']); ?></textarea>
+					</div>
+				</td>
+			</tr>
+		
+			<tr>
+				<td class='itemfirstcol' colspan='2'>
+					<strong ><?php echo TXT_WPSC_ADDITIONALDESCRIPTION; ?> :</strong><br />			
+					<textarea name='additional_description' cols='40' rows='8' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class='meta-box-sortables'  id='poststuff'>
+		<?php
+	
+	// 	$order = get_option('wpsc_product_page_order');
+	// 	if (($order == '') || (count($order ) < 6)){
+				$order=array("wpsc_product_category_and_tag", "wpsc_product_price_and_stock", "wpsc_product_shipping", "wpsc_product_variation", "wpsc_product_advanced", "wpsc_product_image", "wpsc_product_download");
+	// 	}
+		
+		update_option('wpsc_product_page_order', $order);
+		foreach((array)$order as $key => $forms) {
+			$box_function_name = $forms."_forms";
+			if(function_exists($box_function_name)) {
+				echo call_user_func($box_function_name,$product);
+			}
+		}
+		do_action('wpsc_product_form', $product_data['id']);
+		?>
+	</div>
+
+	<input type='hidden' name='prodid' id='prodid' value='<?php echo $product_data['id']; ?>' />
+	<input type='hidden' name='submit_action' value='edit' />
+	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php echo TXT_WPSC_EDIT_PRODUCT; ?>' />&nbsp;
+	<a class='delete_button' ' href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/display-items.php&amp;deleteid=<?php echo $product_data['id']; ?>' onclick="return conf();" ><?php echo TXT_WPSC_DELETE_PRODUCT; ?></a>
+	<?php
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function wpsc_product_category_and_tag_forms($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
 	$output = '';
 	if ($product_data == 'empty') {
@@ -79,7 +244,7 @@ $output .= "
 return $output;
 
 }
-function price_and_stock_box($product_data=''){
+function wpsc_product_price_and_stock_forms($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
 	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
 	$output = '';
@@ -194,7 +359,7 @@ return $output;
 
 }
 
-function variation_box($product_data=''){
+function wpsc_product_variation_forms($product_data=''){
 	global $closed_postboxes, $variations_processor;
 	$siteurl = get_option('siteurl');
 	$output='';
@@ -249,7 +414,7 @@ function variation_box($product_data=''){
 
 }
 
-function shipping_box($product_data=''){
+function wpsc_product_shipping_forms($product_data=''){
 	global $closed_postboxes;
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
@@ -313,7 +478,7 @@ function shipping_box($product_data=''){
     return $output;
 }
 
-function advanced_box($product_data='') {
+function wpsc_product_advanced_forms($product_data='') {
 	global $closed_postboxes,$wpdb;
 	$merchant_note = get_product_meta($product_data['id'], 'merchant_notes');
 	$engraved_text = get_product_meta($product_data['id'], 'engraved');
@@ -445,7 +610,7 @@ function advanced_box($product_data='') {
 	return $output;
 }
 
-function product_image_box($product_data='') {
+function wpsc_product_image_forms($product_data='') {
 	global $closed_postboxes;
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
@@ -776,7 +941,7 @@ function product_image_box($product_data='') {
   return $output;
 }
 
-function product_download_box($product_data='') {
+function wpsc_product_download_forms($product_data='') {
 	global $wpdb, $closed_postboxes;
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
@@ -837,10 +1002,10 @@ function product_download_box($product_data='') {
 	return $output;
 }
 
-function product_label_box(){
-global $closed_postboxes;
-?>
-<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
+function wpsc_product_label_forms(){
+	global $closed_postboxes;
+	?>
+	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
         <?php
     	if (function_exists('add_object_page')) {
     		echo "<h3 class='hndle'>";
@@ -892,18 +1057,20 @@ global $closed_postboxes;
       </td>
     </tr> 
 	</table></div></div>
-<?php
-}
-function wpsc_meta_boxes(){
-	add_meta_box('category_and_tag', 'Category and Tags', 'category_and_tag_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_box('price_and_stock', 'Price and Stock', 'price_and_stock_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_box('variation', 'Variations', 'variation_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_box('shipping', 'Shipping', 'shipping_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_box('advanced', 'Advanced Settings', 'advanced_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_box('product_download', 'Product Download', 'product_download_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_box('product_image', 'Product Images', 'product_image_box', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	<?php
 }
 
-add_action('admin_menu', 'wpsc_meta_boxes');
+
+function wpsc_meta_forms(){
+	add_meta_forms('category_and_tag', 'Category and Tags', 'wpsc_category_and_tag_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_forms('price_and_stock', 'Price and Stock', 'wpsc_price_and_stock_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_forms('variation', 'Variations', 'wpsc_variation_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_forms('shipping', 'Shipping', 'wpsc_shipping_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_forms('advanced', 'Advanced Settings', 'wpsc_advanced_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_forms('product_download', 'Product Download', 'wpsc_product_download_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+	add_meta_forms('product_image', 'Product Images', 'wpsc_product_image_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
+}
+
+//add_action('admin_menu', 'wpsc_meta_forms');
 
 ?>

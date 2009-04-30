@@ -1452,22 +1452,6 @@ div.admin_product_name a.shorttag_toggle.toggled {
 }
 
 
-div.admin_product_name div.admin_product_shorttags {
-	width:93%;
-	min-width:396px;
-	max-width:558px;
-	
-  clear: both;
-  padding: 6px;
-  font-size: 8pt;
-  margin:0 0 0 6px !important;
-	border-left:1px solid #DFDFDF;
-	border-right:1px solid #DFDFDF;
-	border-bottom:1px solid #DFDFDF;
-/*   height: 28px; */
-  display: none;
-	_width:396px;
-}
 
 div.admin_product_name div.admin_product_shorttags h4{
   margin: 0px 0px 3px 0px;
@@ -1976,7 +1960,7 @@ table#itemlist tr {
 	vertical-align: top;
 }
 
-input.wpsc_product_name {
+/*input.wpsc_product_name {
 	padding: 3px 4px;
 	border-width: 1px;
 	border-style: solid;
@@ -1985,7 +1969,7 @@ input.wpsc_product_name {
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
 	font-size: 1.7em;
-}
+}*/
 
 form.additem input, form.edititem input {
 /* 	-moz-border-radius: 6px; */

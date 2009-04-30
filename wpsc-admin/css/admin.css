@@ -2,55 +2,55 @@
 * This is the new WPSC Admin CSS file 
 */
 
-/* 
 /*
 	* Display Products CSS starts here
 	*/
+#wpsc_product_list {
+	width: 410px;
+}
+	
+#wpsc_product_list tbody {
+	width: 410px;
+	border-collapse:collapse;
+}
+
+#wpsc_product_list .column-image{
+	width: 35px;
+}
+
+#wpsc_product_list .column-price{
+	width: 40px;
+}
+
+#wpsc_product_list .column-categories{
+	width: 84px;
+}
+
+
+#wpsc_product_list tbody tr td.column-title {
+	border-right:none;
+}
+#wpsc_product_list tbody tr td.product-image img {
+	cursor:move;
+}
+	
+/*  Product details form styling */
 	
 	
-	#wpsc_product_list {
-		width: 410px;
-	}
-		
-	#wpsc_product_list tbody {
-		width: 410px;
-		border-collapse:collapse;
-	}
-	
-	#wpsc_product_list .column-image{
-		width: 35px;
-	}
-	
-	#wpsc_product_list .column-price{
-		width: 40px;
-	}
-	
-	#wpsc_product_list .column-categories{
-		width: 84px;
-	}
-	
-	
-	#wpsc_product_list tbody tr td.column-title {
-		border-right:none;
-	}
-	#wpsc_product_list tbody tr td.product-image img {
-		cursor:move;
-	}
-		
-	#wpsc_product_list .ui-sortable-helper{
-		width: 410px;
-	  margin-left: -1px;
-	}
-	
-	#wpsc_product_list .ui-sortable-helper td, #wpsc_product_list .ui-sortable-helper th{
-	  border-top: 1px solid #DFDFDF;
-	}
-		#wpsc_product_list tbody tr.ui-sortable-helper td.product-title {
-			width: 169px;
-		}
-		#wpsc_product_list tbody tr.ui-sortable-helper td.product-price {
-			width: 40px;
-		}
+#wpsc_product_list .ui-sortable-helper{
+	width: 410px;
+	margin-left: -1px;
+}
+
+#wpsc_product_list .ui-sortable-helper td, #wpsc_product_list .ui-sortable-helper th{
+	border-top: 1px solid #DFDFDF;
+}
+#wpsc_product_list tbody tr.ui-sortable-helper td.product-title {
+	width: 169px;
+}
+#wpsc_product_list tbody tr.ui-sortable-helper td.product-price {
+	width: 40px;
+}
 		
 div.product-placeholder {
 	border-width: 1px;
@@ -60,6 +60,68 @@ div.product-placeholder {
 	background-color: #f5f5f5;
   margin: -2px 0 0 -2px;
 }
+
+
+/*  Product details form styling */
+
+
+input.wpsc_product_name {
+	float:left;
+	width:93%;
+	min-width:396px;
+	max-width:566px;
+	
+  height:  36px;
+  max-height: 36px;
+  margin-bottom:0px;
+  padding: 3px 4px;
+	
+	border: 1px solid #dfdfdf;
+	-moz-border-radius: 6px;
+	-khtml-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	font-size: 1.7em;
+	
+	/*disable right rounded borders */
+	-moz-border-radius-topright:0px;
+	-moz-border-radius-bottomright:0px;
+	
+	-khtml-border-radius-topright:0px;
+	-khtml-border-radius-bottomright:0px;
+	
+	-webkit-border-top-right-radius:0px;
+	-webkit-border-bottom-right-radius:0px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	
+	/* IE 6 hacks */
+  _height: 28px;
+	_border:1px solid #DFDFDF;
+	_width:396px;
+}
+
+
+
+
+div.admin_product_name div.admin_product_shorttags {
+	width:93%;
+	min-width:396px;
+	max-width:558px;
+	
+  clear: both;
+  padding: 6px;
+  font-size: 8pt;
+  margin:0 0 0 6px !important;
+	border-left:1px solid #DFDFDF;
+	border-right:1px solid #DFDFDF;
+	border-bottom:1px solid #DFDFDF;
+/*   height: 28px; */
+  display: none;
+	_width:396px;
+ background-color: #ffffff;
+}
+
 	
 	/*
 	* Display Products CSS ends here

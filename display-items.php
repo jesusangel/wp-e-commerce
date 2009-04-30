@@ -1213,7 +1213,8 @@ if (function_exists('add_object_page')){
 	if(function_exists('add_object_page')) {
 		echo "<div class='inside'>";
 	}
-?><table class='additem' style='width:100%;'>
+?>
+<table style='width:100%;'>
     <tr>
       <td colspan="2" class='itemfirstcol'>
       
@@ -1267,20 +1268,20 @@ if (function_exists('add_object_page')){
 	if (function_exists('add_object_page')){
 		echo "<div id='normal-sortables' class='meta-box-sortables'>";
 	}
-	$order = get_option('wpsc_product_page_order');
+	//$order = get_option('wpsc_product_page_order');
 	
 	//echo "<pre>".print_r($order,true)."</pre>";
-	if (($order == '') || ($order[0]=='') || (count($order) < 6)){
-		$order=array("category_and_tag", "price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
-	}
+// 	if (($order == '') || ($order[0]=='') || (count($order) < 6)){
+		$order=array("wpsc_product_category_and_tag", "wpsc_product_price_and_stock", "wpsc_product_shipping", "wpsc_product_variation", "wpsc_product_advanced", "wpsc_product_product_image", "wpsc_product_product_download");
+// 	}
 	foreach((array)$order as $key => $box) {
-		$box_function_name = $box."_box";
+		$box_function_name = $box."_forms";
 		$output = call_user_func($box_function_name, null);
 		echo $output;
 		if(!function_exists('add_object_page') && ($key!=count($order)-1)) {
 			echo "</td></tr>";
-  			echo "<tr><td colspan='2'>";
-  		}
+			echo "<tr><td colspan='2'>";
+		}
 	}
 	
 // 	ob_start();
