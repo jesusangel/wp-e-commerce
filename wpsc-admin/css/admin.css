@@ -33,6 +33,18 @@
 #wpsc_product_list tbody tr td.product-image img {
 	cursor:move;
 }
+
+
+#wpsc_product_list tbody tr td .wpsc-row-actions {
+	font-size: 10px;
+	visibility: hidden;
+}
+	
+
+#wpsc_product_list tbody tr:hover td .wpsc-row-actions {
+	font-size: 10px;
+	visibility: visible;
+}
 	
 /*  Product details form styling */
 	

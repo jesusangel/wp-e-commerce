@@ -11,7 +11,7 @@
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php"); 
-require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php"); 
+
 
 
 
@@ -63,8 +63,8 @@ function wpsc_admin_pages(){
 		
 			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
-			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
+			$page_hooks[] = add_submenu_page($base_page,__("Products (new)"), __("Products (new)"), 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
+			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
 			
 			
 			
@@ -107,8 +107,9 @@ function wpsc_admin_pages(){
 		
 		
 		// Include the javascript and CSS for this page
+		
 		foreach($page_hooks as $page_hook) {
-			add_action("load-$page_hook", 'wpsc_admin_css_and_js', $page_hook);
+			add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
 		}
 		
 		return;
@@ -120,15 +121,78 @@ function wpsc_admin_pages(){
 	* wpsc_admin_css_and_js function, includes the wosc_admin CSS and JS
 	* No parameters, returns nothing
 */
-function  wpsc_admin_css_and_js($page_hook = null) {
+function  wpsc_admin_include_css_and_js() {
+  $siteurl = get_option('siteurl'); 
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-	wp_admin_css( 'dashboard' );
 	remove_action('admin_head', 'wpsc_admin_css');
-	//exit($page_hook);
 }
   
+  
+  
+function wpsc_admin_dynamic_js() { 
+ 	header('Content-Type: text/javascript');      
+ 	/* 	
+ 	Expires: Wed, 11 Jan 1984 05:00:00 GMT
+	Cache-Control: no-cache, must-revalidate, max-age=0
+ 	*/
+  $siteurl = get_option('siteurl'); 
+	$hidden_boxes = get_option('wpsc_hidden_box');
+	$hidden_boxes = implode(',', (array)$hidden_boxes);
+	
+	echo "var base_url = '".$siteurl."';\n\r";
+	echo "var WPSC_URL = '". WPSC_URL."';\n\r";
+	echo "var WPSC_IMAGE_URL = '".WPSC_IMAGE_URL."';\n\r";
+	echo "var WPSC_DIR_NAME = '".WPSC_DIR_NAME."';\n\r";
+	echo "var WPSC_IMAGE_URL = '".WPSC_IMAGE_URL."';\n\r";
+	
+	// LightBox Configuration start
+	echo "var fileLoadingImage = '".WPSC_URL."/images/loading.gif';\n\r";
+	echo "var fileBottomNavCloseImage = '".WPSC_URL."/images/closelabel.gif';\n\r";
+	echo "var fileThickboxLoadingImage = '".WPSC_URL."/images/loadingAnimation.gif';\n\r";
+	
+	echo "var resizeSpeed = 9;\n\r";
+	
+	echo "var borderSize = 10;\n\r";
+	
+	echo "var hidden_boxes = '".$hidden_boxes."';\n\r";
+	echo "var IS_WP27 = '".IS_WP27."';\n\r";
+	echo "var TXT_WPSC_DELETE = '".TXT_WPSC_DELETE."';\n\r";
+	echo "var TXT_WPSC_TEXT = '".TXT_WPSC_TEXT."';\n\r";
+	echo "var TXT_WPSC_EMAIL = '".TXT_WPSC_EMAIL."';\n\r";
+	echo "var TXT_WPSC_COUNTRY = '".TXT_WPSC_COUNTRY."';\n\r";
+	echo "var TXT_WPSC_TEXTAREA = '".TXT_WPSC_TEXTAREA."';\n\r";
+	echo "var TXT_WPSC_HEADING = '".TXT_WPSC_HEADING."';\n\r";
+	echo "var TXT_WPSC_COUPON = '".TXT_WPSC_COUPON."';\n\r";
+	echo "var HTML_FORM_FIELD_TYPES =\"<option value='text' >".TXT_WPSC_TEXT."</option>";
+	echo "<option value='email' >".TXT_WPSC_EMAIL."</option>";
+	echo "<option value='address' >".TXT_WPSC_ADDRESS."</option>";
+	echo "<option value='city' >".TXT_WPSC_CITY."</option>";
+	echo "<option value='country'>".TXT_WPSC_COUNTRY."</option>";
+	echo "<option value='delivery_address' >".TXT_WPSC_DELIVERY_ADDRESS."</option>";
+	echo "<option value='delivery_city' >".TXT_WPSC_DELIVERY_CITY."</option>";
+	echo "<option value='delivery_country'>".TXT_WPSC_DELIVERY_COUNTRY."</option>";
+	echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";    
+	echo "<option value='heading' >".TXT_WPSC_HEADING."</option>";
+	echo "<option value='coupon' >".TXT_WPSC_COUPON."</option>\";\n\r";
+	
+	echo "var TXT_WPSC_LABEL = '".TXT_WPSC_LABEL."';\n\r";
+	echo "var TXT_WPSC_LABEL_DESC = '".TXT_WPSC_LABEL_DESC."';\n\r";
+	echo "var TXT_WPSC_ITEM_NUMBER = '".TXT_WPSC_ITEM_NUMBER."';\n\r";
+	echo "var TXT_WPSC_LIFE_NUMBER = '".TXT_WPSC_LIFE_NUMBER."';\n\r";
+	echo "var TXT_WPSC_PRODUCT_CODE = '".TXT_WPSC_PRODUCT_CODE."';\n\r";
+	echo "var TXT_WPSC_PDF = '".TXT_WPSC_PDF."';\n\r";
+	
+	echo "var TXT_WPSC_AND_ABOVE = '".TXT_WPSC_AND_ABOVE."';\n\r";
+	echo "var TXT_WPSC_IF_PRICE_IS = '".TXT_WPSC_IF_PRICE_IS."';\n\r";
+	echo "var TXT_WPSC_IF_WEIGHT_IS = '".TXT_WPSC_IF_WEIGHT_IS."';\n\r";
+	exit();
+}
+if($_GET['wpsc_dynamic_js'] == 'true') {
+  add_action("admin_init", 'wpsc_admin_dynamic_js');  
+}
 //add_action("admin_init", 'wpsc_admin_css_and_js');  
 add_action('admin_menu', 'wpsc_admin_pages');
 

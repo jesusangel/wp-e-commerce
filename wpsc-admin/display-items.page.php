@@ -49,7 +49,6 @@ tinyMCE.init({
 	theme_advanced_resize_horizontal : false
 });
 	/* ]]> */
-
 </script>
 	
 	<div class="wrap">

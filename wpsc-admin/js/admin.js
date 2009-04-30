@@ -25,13 +25,13 @@ jQuery(document).ready( function () {
 	 		});
 	 });
 	 
-	/*
- jQuery('#view_purchlogs_by').change(function(){
-	 		purchlog_date = jQuery(this).val();
-	 		post_values = "purchlog_date="+purchlog_date;
-			jQuery.post( 'index.php?wpsc_admin_action=purchlog_view_by', post_values, function(returned_data) {
-	
-	 		});
-	 });
-*/
+
+	jQuery("tr.product-edit").hover(
+		function() {
+			jQuery(".wpsc-row-actions", this).css("visibility", "visible");
+		},	
+		function() {
+			jQuery(".wpsc-row-actions", this).css("visibility", "hidden");
+		}
+	);
  });

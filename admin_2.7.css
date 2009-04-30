@@ -1947,11 +1947,6 @@ h3.hndle {
 	display:none;
 }
 
-.wpsc-row-actions {
-	font-size: 10px;
-	visibility: hidden;
-}
-
 table#itemlist .pricedisplay, .category_link {
 	font-size: 11px;
 }

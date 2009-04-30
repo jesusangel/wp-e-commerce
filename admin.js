@@ -1,4 +1,5 @@
 
+
 var someresults=function()  {
 	document.getElementById('changenotice').innerHTML = "Thank you, your change has been saved";
 }
@@ -1250,7 +1251,7 @@ jQuery(document).ready(function(){
 		function() {
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "visible");
 		}
-	).mouseout(
+	).mouseout(wpsc-row-actions
 		function() {
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "hidden");
 		}
