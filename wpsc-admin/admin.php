@@ -11,7 +11,7 @@
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php"); 
-
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php"); 
 
 
 
@@ -64,7 +64,7 @@ function wpsc_admin_pages(){
 			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
-			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php');
+			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
 			
 			
 			
@@ -108,7 +108,7 @@ function wpsc_admin_pages(){
 		
 		// Include the javascript and CSS for this page
 		foreach($page_hooks as $page_hook) {
-			add_action("load-$page_hook", 'wpsc_admin_css_and_js');
+			add_action("load-$page_hook", 'wpsc_admin_css_and_js', $page_hook);
 		}
 		
 		return;
@@ -120,11 +120,13 @@ function wpsc_admin_pages(){
 	* wpsc_admin_css_and_js function, includes the wosc_admin CSS and JS
 	* No parameters, returns nothing
 */
-function  wpsc_admin_css_and_js() {
+function  wpsc_admin_css_and_js($page_hook = null) {
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_admin_css( 'dashboard' );
 	remove_action('admin_head', 'wpsc_admin_css');
+	//exit($page_hook);
 }
   
 //add_action("admin_init", 'wpsc_admin_css_and_js');  

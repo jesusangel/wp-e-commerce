@@ -8,7 +8,7 @@
  * @since 3.7
  */
 
- function display_sales_logs(){
+ function wpsc_display_sales_logs(){
 	  $purchlogs = new wpsc_purchaselogs();
 	  $columns = array(
 	  	'cb' => '<input type="checkbox" />',
@@ -337,5 +337,12 @@
  	<?php
  	endwhile;
  }
- display_sales_logs();
+ function wpsc_purchaselogs_searchbox(){
+ 	?>
+ 	<form action='' method='post'>
+ 		<input type='text' name='purchlogs_searchbox' id='purchlogs_searchbox' />
+ 		<input type="submit" value="<?php _e('Search Logs'); ?>"  class="button-secondary action" />
+  	</form>
+ 	<?php
+ }
  ?>
