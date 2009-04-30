@@ -9,23 +9,25 @@
  */
 
  function wpsc_display_sales_logs(){
-	  $purchlogs = new wpsc_purchaselogs();
-	  $columns = array(
-	  	'cb' => '<input type="checkbox" />',
-		'date' => 'Date',
-		'name' => '',
-		'amount' => 'Amount',
-		'details' => 'Details',
-		'status' => 'Status',
-		'delete' => 'Delete'
-	);
-	register_column_headers('display-sales-list', $columns);	
+ 			$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
  	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
 		<h2><?php echo wp_specialchars( TXT_WPSC_PURCHASELOG ); ?> </h2>
-		
-		<?php 		///// start of update message section //////
+		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
+		<?php if(!isset($_REQUEST['purchaselog_id'])){
+				$purchlogs = new wpsc_purchaselogs();
+		  		$columns = array(
+		  			'cb' => '<input type="checkbox" />',
+					'date' => 'Date',
+					'name' => '',
+					'amount' => 'Amount',
+					'details' => 'Details',
+					'status' => 'Status',
+					'delete' => 'Delete'
+				);
+				register_column_headers('display-sales-list', $columns);	
+				///// start of update message section //////
 			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
@@ -73,11 +75,53 @@
 					if(function_exists('wpsc_right_now')) {
 						echo wpsc_right_now();
 				    }
-			   	
+			   		wpsc_purchaselogs_searchbox();
+			   		?> <br /><?php 
 					wpsc_purchaselogs_displaylist(); 
-					?> 				</div>
+					?> 				
+				</div>
 			</div>
 		</div>
+		<?php } //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG ?>
+		
+			<a href=''>BACK</a>
+		<?php
+
+			$columns = array(
+	  	'name' => 'Name',
+		'sku' => 'SKU',
+		'quantity' => 'Quantity',
+		'price' => 'Price',
+		'tax' => 'Tax',
+		'discount' => 'Discount',
+		'shipping' => 'Shipping',
+		'total' => 'Total'
+			);
+			register_column_headers('display-purchaselog-details', $columns); 
+		?>
+			<div id='post-body' class='has-sidebar' style='width:95%;'>
+				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
+				<?php wpsc_have_purchaselog_details(); ?>
+					<table class="widefat page fixed" cellspacing="0">
+						<thead>
+							<tr>
+						<?php print_column_headers('display-purchaselog-details'); ?>
+							</tr>
+						</thead>
+					
+						<tfoot>
+							<tr>
+						<?php print_column_headers('display-purchaselog-details', false); ?>
+							</tr>
+						</tfoot>
+					
+						<tbody>
+						<?php wpsc_display_purchlog_details(); ?>
+						</tbody>
+				</table>
+
+				</div>
+			</div>
 	</div>
 	<?php
 
@@ -293,6 +337,7 @@
 			<?php get_purchaselogs_content(); ?>
 			</tbody>
 		</table>
+		<p><strong>Total:</strong> <?php echo nzshpcrt_currency_display(wpsc_the_purch_total(), true); ?></p>
 	</form>
 	<script type="text/javascript">
 	/* <![CDATA[ */
@@ -322,7 +367,7 @@
  		<td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
  		<td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
  		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
- 		<td><?php echo wpsc_the_purch_item_details();?> Items</td><!-- Details -->
+ 		<td><a href='<?php echo add_query_arg('purchaselog_id', wpsc_the_purch_item_id()); ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
  		<td>
  	
  			<select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >
@@ -340,9 +385,27 @@
  function wpsc_purchaselogs_searchbox(){
  	?>
  	<form action='' method='post'>
- 		<input type='text' name='purchlogs_searchbox' id='purchlogs_searchbox' />
+ 		<input type='hidden' name='wpsc_admin_action' value='purchlogs_search' />
+ 		<input type='text' value='<?php if(isset($_POST['purchlogs_searchbox'])) echo $_POST['purchlogs_searchbox']; ?>' name='purchlogs_searchbox' id='purchlogs_searchbox' />
  		<input type="submit" value="<?php _e('Search Logs'); ?>"  class="button-secondary action" />
   	</form>
  	<?php
  }
+ function wpsc_display_purchlog_details(){
+ 	while(wpsc_have_purchaselog_details()) : wpsc_the_purchaselog_item();
+ 	?>
+ 	<tr>
+ 	<td><?php echo wpsc_purchaselog_details_name(); ?></td> <!-- NAME -->
+ 	<td></td> <!-- SKU -->
+ 	<td></td> <!-- QUANTITY-->
+ 	<td></td> <!-- PRICE -->
+ 	<td></td> <!-- TAX -->
+ 	<td></td> <!-- DISCOUNT -->
+ 	<td></td> <!-- SHIPPING -->
+ 	<td></td> <!-- TOTAL -->
+ 	</tr>
+ 	<?php
+ 	endwhile;
+ }
+
  ?>

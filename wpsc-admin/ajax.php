@@ -7,6 +7,20 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+ 
+ //call to view more details for purchase log
+ 
+ 
+ //call to search purchase logs
+ 
+  function wpsc_purchlog_search_by(){
+//  exit('<pre>'.print_r($_POST,true).'</pre>');
+ 	wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
+ } 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'purchlogs_search') {
+	add_action('admin_init', 'wpsc_purchlog_search_by');
+}
  //call to change view for purchase log
  
  function wpsc_purchlog_filter_by(){

@@ -1,6 +1,10 @@
 <?php
 $purchlogs = new wpsc_purchaselogs();
-
+$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+function wpsc_the_purch_total(){
+	global $purchlogs;
+	return $purchlogs->totalAmount;
+}
 function wpsc_have_purch_items(){
 	global $purchlogs;
 	return $purchlogs->have_purch_items();
@@ -11,6 +15,7 @@ function wpsc_the_purch_item(){
 }
 function wpsc_the_purch_item_price(){
 	global $purchlogs;
+	$purchlogs->totalAmount += $purchlogs->purchitem->totalprice;
 	return $purchlogs->purchitem->totalprice;
 }
 function wpsc_the_purch_item_id(){
@@ -102,9 +107,31 @@ function wpsc_change_purchlog_view($viewby, $status){
 	
 	//exit('View by '.$viewby);
 }
+function wpsc_search_purchlog_view($search){
+	global $purchlogs;
+	$newlogs = $purchlogs->search_purchlog_view($search);
+	$purchlogs->getDates();
+	$purchlogs->purch_item_count = count($newlogs);
+	$purchlogs->allpurchaselogs = $newlogs;
+	
+}
 
+function wpsc_have_purchaselog_details(){
+	global $purchlogitem;
+	//exit('HERe<pre>'.print_r($purchlogitem->allcartcontent,true).'</pre>');
+	return $purchlogitem->have_purch_item();
+	
+	
+}
 
-
+function wpsc_purchaselog_details_name(){
+	global $purchlogitem;
+	return $purchlogitem->purchitem->name;
+}
+function wpsc_the_purchaselog_item(){
+	global $purchlogitem;
+	return $purchlogitem->the_purch_item();
+}
 /**
  * WP eCommerce purchaselogs AND purchaselogs_items class
  *
@@ -137,10 +164,12 @@ class wpsc_purchaselogs{
 	var $purch_status_count;
 	var $allpurchaselogstatuses;
 	
+	//calculation of totals
+	var $totalAmount;
 	/* Constructor function*/
 	function wpsc_purchaselogs(){
 		$this->getall_formdata();
-		if(!isset($_POST['view_purchlogs_by'])){
+		if(!isset($_POST['view_purchlogs_by']) || !isset($_POST['purchlogs_searchbox'])){
 		$dates = $this->getdates();
 		$purchaselogs = $this->get_purchlogs($dates);
 		
@@ -374,16 +403,67 @@ class wpsc_purchaselogs{
 		return $sum;
 	
 	}
+	function search_purchlog_view($searchterm){
+		global $wpdb;
+		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` LIKE '%".$wpdb->escape($searchterm)."%' ";
+		$newlogs = $wpdb->get_results($sql);
+	//	exit('<pre>'.print_r($newlogs,true).'</pre>');
+		return $newlogs;
+	}
 }
 
 class wpsc_purchaselogs_items{
 
-
+	var $purchlogid;
+	//the loop
+	var $currentitem = -1;
+	var $purchitem;
+	var $allcartcontent;
+	var $purch_item_count;
 	
-	function wpsc_purchaselogs_items(){
-	
+	function wpsc_purchaselogs_items($id){
+		$this->purchlogid = $id;
+		$this->get_purchlog_details();
 	}
 	
+	function get_purchlog_details(){
+		global $wpdb;
+		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$this->purchlogid;
+		$cartcontent = $wpdb->get_results($cartsql);
+		$this->allcartcontent = $cartcontent;
+		$this->purch_item_count = count($cartcontent);
+//		exit('<pre>'.print_r($cartcontent, true).'</pre>');
+	}
+	
+	function next_purch_item(){
+		$this->currentitem++;
+		$this->purchitem = $this->allcartcontent[$this->currentitem];
+		return $this->purchitem ;
+	}
+	
+	function the_purch_item() {
+		$this->purchitem = $this->next_purch_item();
+		//if ( $this->currentitem == 0 ) // loop has just started
+
+	}
+	
+	function have_purch_item() {	
+		
+		if ($this->currentitem + 1 < $this->purch_item_count) {
+			return true;
+		} else if ($this->currentitem + 1 == $this->purch_item_count && $this->purch_item_count > 0) {
+			// Do some cleaning up after the loop,
+			$this->rewind_purch_item();
+		}
+		return false;
+	}
+	
+	function rewind_purch_item() {
+		$this->currentitem = -1;
+		if ($this->purch_item_count > 0) {
+			$this->purchitem = $this->allcartcontent[0];
+		}
+	}
 
 }
 ?>
