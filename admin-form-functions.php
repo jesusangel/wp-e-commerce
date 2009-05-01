@@ -504,6 +504,11 @@ function nzshpcrt_getvariationform($variation_id)
   } 
       
 function coupon_edit_form($coupon) {
+
+$conditions = unserialize($coupon['condition']);
+$conditions = $conditions[0];
+	//exit('<pre>'.print_r($conditions, true).'</pre>');
+	/**/
   $start_timestamp = strtotime($coupon['start']);
   $end_timestamp = strtotime($coupon['expiry']);
   $id = $coupon['id'];
@@ -523,18 +528,18 @@ function coupon_edit_form($coupon) {
   $output .= " </tr>\n\r";
   $output .= " <tr>\n\r";
   $output .= "  <td>\n\r";
-  $output .= "   <input type='text' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
+  $output .= "   <input type='text' size='8' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
-  $output .= "   <input type='text' value='".$coupon['value']."' size='3' name=edit_coupon[".$id."][value]' />\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][is-percentage]'>\n\r";
+  $output .= "   <input type='text' style='width:28px;' value='".$coupon['value']."'  name=edit_coupon[".$id."][value]' />";
+  $output .= "   <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
   $output .= "     <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
   $output .= "     <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
   $output .= "   </select>\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $coupon_start = explode(" ",$coupon['start']);
-  $output .= "<input type='text' class='pickdate' size='10' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
+  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
 /*  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";  
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
@@ -559,7 +564,7 @@ function coupon_edit_form($coupon) {
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $coupon_expiry = explode(" ",$coupon['expiry']);
-  $output .= "<input type='text' class='pickdate' size='10' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
+  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
   /*$output .= "   <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
@@ -603,11 +608,125 @@ function coupon_edit_form($coupon) {
   
   $output .= "  </td>\n\r";
   $output .= " </tr>\n\r";
+
+  if($conditions != null){
+  	  	
+	  $output .= "<tr>";
+	  $output .= "<th>";
+	  $output .= "Conditions";
+	  $output .= "</th>";
+	  $output .= "</tr>";
+	  $output .= "<th>";
+	  $output .= "Delete";
+	  $output .= "</th>";
+	  $output .= "<th>";
+	  $output .= "Property";
+	  $output .= "</th>";
+	  $output .= "<th>";
+	  $output .= "Logic";
+	  $output .= "</th>";
+	  $output .= "<th>";
+	  $output .= "Value";
+	  $output .= "</th>";
+	  $output .= " </tr>\n\r";
+	  $output .= "<tr>";  
+	  $output .= "<td>";
+	  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
+	  $output .= "<input type='submit' value='Delete' name='delete_condition' />";
+	  $output .= "</td>";
+	  $output .= "<td>";
+	  $output .= $conditions['property'];
+	  $output .= "</td>";
+	  $output .= "<td>";
+	  $output .= $conditions['logic'];
+	  $output .= "</td>";
+	  $output .= "<td>";
+	  $output .= $conditions['value'];
+	  $output .= "</td>";
+	  $output .= "</tr>";
+  }elseif($conditions == null){
+  	$output .=	wpsc_coupons_conditions( $id);
+  
+  }
+  ?>
+<!--
+  <tr><td colspan="8">
+	<div class="coupon_condition">
+		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/cross.png"/></button>
+			<select class="ruleprops" name="rules[property][]">
+				<option value="item_name" rel="order">Item name</option>
+				<option value="item_quantity" rel="order">Item quantity</option>
+				<option value="total_quantity" rel="order">Total quantity</option>
+				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+			</select>
+			<select name="rules[logic][]">
+				<option value="equal">Is equal to</option>
+				<option value="greater">Is greater than</option>
+				<option value="less">Is less than</option>
+				<option value="contains">Contains</option>
+				<option value="not_contain">Does not contain</option>
+				<option value="begins">Begins with</option>
+				<option value="ends">Ends with</option>
+			</select>
+			<span>
+				<input type="text" name="rules[value][]"/>
+			</span>
+			<span>
+				<button class="add" type="button">
+					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/add.png"/>
+				</button>
+			</span>
+		</div>
+	</div>
+</tr>
+-->
+
+  <?php
   $output .= "</table>\n\r";
   $output .= "</form>\n\r";
+  echo $output;
   return $output;
   }
-  
+function wpsc_coupons_conditions($id){
+?>
+
+<?php
+
+$output ='
+<input type="hidden" name="coupon_id" value="'.$id.'" />
+<tr><td colspan="3"><b>Conditions</b></td></tr>
+<tr><td colspan="8">
+	<div class="coupon_condition">
+		<div>
+			<select class="ruleprops" name="rules[property][]">
+				<option value="item_name" rel="order">Item name</option>
+				<option value="item_quantity" rel="order">Item quantity</option>
+				<option value="total_quantity" rel="order">Total quantity</option>
+				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+			</select>
+			<select name="rules[logic][]">
+				<option value="equal">Is equal to</option>
+				<option value="greater">Is greater than</option>
+				<option value="less">Is less than</option>
+				<option value="contains">Contains</option>
+				<option value="not_contain">Does not contain</option>
+				<option value="begins">Begins with</option>
+				<option value="ends">Ends with</option>
+			</select>
+			<span>
+				<input type="text" name="rules[value][]"/>
+			</span>
+			<span>
+				<input type="submit" value="add" name="submit_condition" />
+
+			</span>
+		</div>
+	</div>
+</tr>
+';
+return $output;
+
+}  
 function setting_button(){
 	$itemsFeedURL = "http://www.google.com/base/feeds/items";
 	$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/display-items.php";

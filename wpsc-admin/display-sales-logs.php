@@ -54,15 +54,15 @@
 		<?php } 
 		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
-				<div id='side-info-column-wpsc' class='inner-sidebar'>
+			 <div id='side-info-column-wpsc' class='inner-sidebar'> 
 					<div class='meta-box-sortables'>			
 						<?php
 							//$dates = $purchlogs->wpsc_getdates();
 							//exit('<pre>'.print_r($dates, true).'</pre>');
 							if(IS_WP27){
-								display_ecomm_admin_menu();
+								//display_ecomm_admin_menu();
 								display_ecomm_rss_feed();
-								wpsc_ordersummary();
+								//wpsc_ordersummary();
 							   
 							}
 						?>
@@ -76,33 +76,36 @@
 						echo wpsc_right_now();
 				    }
 			   		wpsc_purchaselogs_searchbox();
-			   		?> <br /><?php 
+			   		?> </div><br /><?php 
 					wpsc_purchaselogs_displaylist(); 
 					?> 				
-				</div>
+				
 			</div>
 		</div>
-		<?php }else{ //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG ?>
-		
-			<a href=''>BACK</a>
+		<?php }else{ //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG 
+		$page_back = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','purchaselog_id'), $_SERVER['REQUEST_URI'] );
+		?>
+			
+			<a href='<?php echo $page_back ?>'>BACK</a>
 		<?php
 
 			$columns = array(
-	  	'name' => 'Name',
+	  	'title' => 'Name',
 		'sku' => 'SKU',
 		'quantity' => 'Quantity',
 		'price' => 'Price',
 		'tax' => 'Tax',
 		'discount' => 'Discount',
-		'shipping' => 'Shipping',
 		'total' => 'Total'
 			);
 			register_column_headers('display-purchaselog-details', $columns); 
 		?>
 			<div id='post-body' class='has-sidebar' style='width:95%;'>
-				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
-				<?php wpsc_have_purchaselog_details(); ?>
-					<table class="widefat page fixed" cellspacing="0">
+			
+				<p><strong>Purchase Log Date: </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
+				<p><strong>Purchase Number: </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
+
+					<table class="widefat" cellspacing="0">
 						<thead>
 							<tr>
 						<?php print_column_headers('display-purchaselog-details'); ?>
@@ -111,15 +114,27 @@
 					
 						<tfoot>
 							<tr>
-						<?php print_column_headers('display-purchaselog-details', false); ?>
+						<?php// print_column_headers('display-purchaselog-details', false); ?>
 							</tr>
 						</tfoot>
 					
 						<tbody>
 						<?php wpsc_display_purchlog_details(); ?>
+						<tr></tr>
+						<tr>
+							<td colspan='5'></td>
+							<th>Shipping </th>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan='5'></td>
+							<th>Total </th>
+							<td></td>
+						</tr>
 						</tbody>
 				</table>
-
+				<h2>Customer Details</h2>
+				
 				</div>
 			</div>
 			<?php }	?>
@@ -176,57 +191,6 @@
     
    		 <div class='inside'> 
       <div class='order_summary_subsection'>
-      
-      <strong><?php echo TXT_WPSC_FILTER_ORDER; ?></strong>
-      <div class='order_filters'>
-      <form class='order_filters' method='get' action='' name='order_filters'>
-      <input type='hidden' name='page' value='<?php echo $_GET['page']?>' />
-      <?php
-      
-      switch($_GET['filter'])
-        {        
-        case "true":
-        $filter[1] = "checked='checked'";
-        break;
-			
-		case "affiliate":
-        $filter[4] = "checked='checked'";
-        break;
-        
-        case 3:
-        default:
-        $filter[0] = "checked='checked'";
-        break;
-        
-        case 1:
-        default:
-        $filter[2] = "checked='checked'";
-        break;
-        }
-      
-      
-      if (is_file(WPSC_DIR.'/gold_cart_files/affiliates.php')) {
-      	
-      ?>
-      <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[4];?> name='filter' value='affiliate' id='order_filter_affiliate' /> <label class='order_filters' for='order_filter_affiliate'><?php echo TXT_WPSC_LOG_AFFILIATES; ?></label>
-      <br />
-      <?php
-      }
-      ?>
-      
-      <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='1' id='order_filter_1' /> <label class='order_filters' for='order_filter_1'><?php echo TXT_WPSC_LOG_CURRENT_MONTH; ?></label>
-      <br />
-      <input class='order_filters' onclick='document.order_filters.submit();' type='radio' <?php echo $filter[0];?> name='filter' value='3' id='order_filter_3' /> <label class='order_filters' for='order_filter_3'><?php echo TXT_WPSC_LOG_PAST_THREE_MONTHS; ?></label>
-      <br />
-	<input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='paid' id='order_filter_paid' /> <label class='order_filters' for='order_filter_paid'><?php echo TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS; ?></label>
-      <br />
-      <input class='order_filters' onclick='document.order_filters.submit();'  type='radio' <?php echo $filter[1];?> name='filter' value='true' id='order_filter_none' /> <label class='order_filters' for='order_filter_none'><?php echo TXT_WPSC_LOG_ALL; ?></label>
-      <br />
-       <label class="order_filters"><?=TXT_WPSC_SEARCHEMAIL?>:</label> <input type='text' name='filteremail' />
-      </form>
-      <br />
-      </div>
-            
       <strong><?php echo TXT_WPSC_TOTAL_THIS_MONTH; ?></strong>
       <p id='log_total_month'>
       <?php 
@@ -397,13 +361,12 @@
  	?>
  	<tr>
  	<td><?php echo wpsc_purchaselog_details_name(); ?></td> <!-- NAME -->
- 	<td></td> <!-- SKU -->
- 	<td></td> <!-- QUANTITY-->
- 	<td></td> <!-- PRICE -->
- 	<td></td> <!-- TAX -->
- 	<td></td> <!-- DISCOUNT -->
- 	<td></td> <!-- SHIPPING -->
- 	<td></td> <!-- TOTAL -->
+ 	<td><?php //echo wpsc_purchaselog_details_SKU(); ?></td> <!-- SKU -->
+ 	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY-->
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE -->
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_tax(),true); ?></td> <!-- TAX -->
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT -->
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL -->
  	</tr>
  	<?php
  	endwhile;

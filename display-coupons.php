@@ -1,5 +1,6 @@
 <?php
-if(isset($_POST) && is_array($_POST)) {
+if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
+	//exit('<pre>'.print_r($_POST, true).'</pre>');
 	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
 		$coupon_code = $_POST['add_coupon_code'];
 		$discount = (double)$_POST['add_discount'];
@@ -26,7 +27,7 @@ if(isset($_POST) && is_array($_POST)) {
 			echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
 		}
 	}
-	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true')) {
+	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && ($_POST['delete_condition'] != 'Delete')) {
 		foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
 			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
 			$coupon_id = (int)$coupon_id;
@@ -56,6 +57,23 @@ if(isset($_POST) && is_array($_POST)) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
 				unset($insert_array);
+					$rules = $_POST['rules'];
+
+					foreach ($rules as $key => $rule) {
+						foreach ($rule as $k => $r) {
+							$new_rule[$k][$key] = $r;
+						}
+					}
+					foreach($new_rule as $key => $rule) {
+						if ($rule['value'] == '') {
+							unset($new_rule[$key]);
+						}
+					}
+					
+					$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
+					//exit($sql);
+					$wpdb->query($sql);
+					
 				//echo("<pre>".print_r($check_values,true)."</pre>");
 			}
 				//echo("<pre>".print_r($coupon_data,true)."</pre>");
@@ -65,7 +83,13 @@ if(isset($_POST) && is_array($_POST)) {
 			}
 		}
 	}
-  
+  if($_POST['delete_condition'] == 'Delete'){
+	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='' WHERE `id` = '".$_POST['coupon_id']."' LIMIT 1";
+					//exit($sql);
+	$wpdb->query($sql);
+
+  	//exit('<pre>'.print_r($_POST,true).'<pre>');
+  }
   if($_POST['change-settings'] == 'true') {
     if($_POST['wpsc_also_bought'] == 1) {
       update_option('wpsc_also_bought', 1);
@@ -360,10 +384,10 @@ foreach((array)$coupon_data as $coupon) {
   
   echo "  </tr>\n\r";
   echo "  <tr>\n\r";
-  echo "    <td colspan='7'>\n\r";
+  echo "    <td colspan='7'style='padding-left:0px;'>\n\r";
   //$status_style = "style='display: block;'";
   echo "      <div id='coupon_box_".$coupon['id']."' class='modify_coupon' $status_style>\n\r";  
-  echo coupon_edit_form($coupon);
+  coupon_edit_form($coupon);
   echo "      </div>\n\r";
   echo "    </td>\n\r";
   echo "  </tr>\n\r";

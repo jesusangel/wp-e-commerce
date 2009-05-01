@@ -694,7 +694,7 @@ if($_GET['filter'] !== 'true') {
               echo "  </ul>\n\r";
               //echo "  <input type='submit' name='log_state_submit' value='Save... &raquo;' class='button' /> \n\r";
               echo "  </form>\n\r";
-							echo "<li style='display:none;' id='track_id'>".TXT_WPSC_AT_THIS_MOMENT_TRACE_ID.": <form method='GET'><input type='text' siez='20' id='tracking_id_".$purchase['id']."' name='track_id' value=".$purchase['track_id']."><input type = 'button' value='".TXT_WPSC_SUBMIT."' onclick='save_tracking_id(".$purchase['id'].");'></form></li>";
+							echo "<li style='display:none;' id='track_id_form_group_".$purchase['id']."'>".TXT_WPSC_AT_THIS_MOMENT_TRACE_ID.": <form method='GET'><input type='text' size='20' id='tracking_id_".$purchase['id']."' name='track_id' value=".$purchase['track_id']."><input type = 'button' value='".TXT_WPSC_SUBMIT."' onclick='save_tracking_id(".$purchase['id'].");'></form></li>";
               if($purchase['transactid'] != '')
                 {
                 echo "  <span style='float:right; margin-right: 15px; '>".TXT_WPSC_TXN_ID.": ".$purchase['transactid']."</span>";

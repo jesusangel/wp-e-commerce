@@ -134,6 +134,48 @@ function wpsc_the_purchaselog_item(){
 	global $purchlogitem;
 	return $purchlogitem->the_purch_item();
 }
+function wpsc_purchaselog_details_SKU(){
+	global $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
+	return $purchlogitem->purchitem;
+}
+function wpsc_purchaselog_details_quantity(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
+	return $purchlogitem->purchitem->quantity;
+}
+function wpsc_purchaselog_details_price(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
+	return $purchlogitem->purchitem->price;
+}
+function wpsc_purchaselog_details_tax(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
+	return $purchlogitem->purchitem->tax_charged;
+}
+function wpsc_purchaselog_details_discount(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
+	return $purchlogitem->extrainfo->discount_value;
+}
+function wpsc_purchaselog_details_date(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
+	return date('jS M Y',$purchlogitem->extrainfo->date);
+	
+}
+function wpsc_purchaselog_details_total(){
+	global $purchlogitem;
+	$total = $purchlogitem->purchitem->price*$purchlogitem->purchitem->quantity+$purchlogitem->extrainfo->discount_value+$purchlogitem->purchitem->tax_charged;
+//	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
+	return $total;
+}
+function wpsc_purchaselog_details_purchnumber(){
+	global $purchlogitem;
+		//exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
+	return $purchlogitem->extrainfo->id;
+}
 /**
  * WP eCommerce purchaselogs AND purchaselogs_items class
  *
@@ -417,6 +459,7 @@ class wpsc_purchaselogs{
 class wpsc_purchaselogs_items{
 
 	var $purchlogid;
+	var $extrainfo;
 	//the loop
 	var $currentitem = -1;
 	var $purchitem;
@@ -431,6 +474,11 @@ class wpsc_purchaselogs_items{
 	function get_purchlog_details(){
 		global $wpdb;
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$this->purchlogid;
+		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
+		$extrainfo = $wpdb->get_results($sql);
+
+		$this->extrainfo = $extrainfo[0];
+		//exit('Value: <pre>'.print_r($this->extrainfo->discount_value,true).'</pre>');
 		$cartcontent = $wpdb->get_results($cartsql);
 		$this->allcartcontent = $cartcontent;
 		$this->purch_item_count = count($cartcontent);

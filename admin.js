@@ -721,9 +721,9 @@ function toggle_display_options(state) {
 function log_submitform(id) {
 	value1 = document.getElementById(id);
 	if (ajax.serialize(value1).search(/value=3/)!=-1) {
-    document.getElementById("track_id").style.display="block";
+    document.getElementById("track_id_"+id).style.display="block";
 	} else {
-    document.getElementById("track_id").style.display="none";
+    document.getElementById("track_id_"+id).style.display="none";
 	}
 	var get_log_results=function(results) {
     eval(results);
