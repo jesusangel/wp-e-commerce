@@ -843,7 +843,7 @@ if($_GET['inline_price']=='true') {
 	add_action('admin_init', 'wpsc_save_inline_price', 0);
 }
 
-
+//other actions are here
 if($_GET['display_invoice']=='true') {
   add_action('admin_init', 'wpsc_display_invoice', 0);
 }
@@ -852,6 +852,11 @@ if($_GET['display_invoice']=='true') {
 add_action('admin_init','wpsc_shipping_options');
 add_action('admin_init','wpsc_shipping_submits');
 add_action('init','wpsc_swfupload_images');
+
+ if($_REQUEST['wpsc_admin_action'] == 'edit_product') {
+	add_action('admin_init', 'wpsc_admin_submit_product');
+}
+ 
 
 if($_GET['action'] == "purchase_log") {
 	add_action('admin_init', 'wpsc_admin_sale_rss');

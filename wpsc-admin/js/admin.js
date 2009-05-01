@@ -34,4 +34,16 @@ jQuery(document).ready( function () {
 			jQuery(".wpsc-row-actions", this).css("visibility", "hidden");
 		}
 	);
+	
+	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
+		function () {
+			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');
+			return false;
+		},
+		function () {
+			//jQuery("div#admin_product_name a.shorttag_toggle").toggleClass('toggled');
+			jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'none');
+			return false;
+		}
+	);
  });

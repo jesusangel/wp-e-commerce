@@ -46,7 +46,7 @@
 	visibility: visible;
 }
 	
-/*  Product details form styling */
+/*  Sortable product styling*/
 	
 	
 #wpsc_product_list .ui-sortable-helper{
@@ -133,6 +133,29 @@ div.admin_product_name div.admin_product_shorttags {
 	_width:396px;
  background-color: #ffffff;
 }
+
+div.admin_product_name a.shorttag_toggle {
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topright:6px;
+	background:#FFFFFF url(../../images/info_icon.jpg) no-repeat scroll 5px 8px;
+	border-bottom:1px solid #DFDFDF;
+	border-right:1px solid #DFDFDF;
+	border-top:1px solid #DFDFDF;
+	display:block;
+	float:left;
+	height:28px;
+	margin-left:-1px;
+	margin-top:1px;
+	padding:3px;
+	width:18px;
+}
+
+#description {
+margin:0;
+width:100%;
+}
+
+
 
 	
 	/*

@@ -4,7 +4,7 @@ $variations_processor = new nzshpcrt_variations;
 
 
 
-function wpsc_display_product_form ($product_id = 0){
+function wpsc_display_product_form ($product_id = 0) {
   global $wpdb,$nzshpcrt_imagesize_info;
   $product_id = absint($product_id);
 	$variations_processor = new nzshpcrt_variations;
@@ -20,9 +20,7 @@ function wpsc_display_product_form ($product_id = 0){
 		$product_data['meta']['can_have_uploaded_image'] = get_product_meta($product_id,'can_have_uploaded_image',true);
 		
 		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
-		
-		
-		
+				
 		if(function_exists('wp_insert_term')) {
 			$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = {$product_id}", ARRAY_A);
 			
@@ -116,9 +114,16 @@ function wpsc_product_basic_details_form(&$product_data) {
 		
 			<tr>
 				<td colspan='2'>
-					<div id='editorcontainer'>
+					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
+				 <?php
+				 the_editor($product_data['description'], 'content', false, false);
+				 ?>
+				 </div>
+				 <?php
+					 /*<div id='editorcontainer'>
 						<textarea name='description' class='mceEditor' cols='40' rows='8' ><?php echo stripslashes($product_data['description']); ?></textarea>
-					</div>
+					</div>*/
+				 ?>
 				</td>
 			</tr>
 		
@@ -149,8 +154,11 @@ function wpsc_product_basic_details_form(&$product_data) {
 		?>
 	</div>
 
-	<input type='hidden' name='prodid' id='prodid' value='<?php echo $product_data['id']; ?>' />
+	<input type='hidden' name='product_id' id='product_id' value='<?php echo $product_data['id']; ?>' />
+	<input type='hidden' name='wpsc_admin_action' value='edit_product' />
+	<?php wp_nonce_field('edit-product'); ?>
 	<input type='hidden' name='submit_action' value='edit' />
+	
 	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php echo TXT_WPSC_EDIT_PRODUCT; ?>' />&nbsp;
 	<a class='delete_button' ' href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/display-items.php&amp;deleteid=<?php echo $product_data['id']; ?>' onclick="return conf();" ><?php echo TXT_WPSC_DELETE_PRODUCT; ?></a>
 	<?php

@@ -7,14 +7,16 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-
-require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
+ 
+ 
+/// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php"); 
+require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php"); 
 
+require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php"); 
-
 
 /**
 	* wpsc_admin_pages function, all the definitons of admin pages are stores here.
@@ -129,18 +131,27 @@ function  wpsc_admin_include_css_and_js() {
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+
+	
+	//wp_enqueue_script('post');
+ 	if ( user_can_richedit() )
+		wp_enqueue_script('editor');
+		
+	wp_enqueue_script('media-upload');
+	wp_enqueue_script('word-count');
 	wp_admin_css( 'dashboard' );
+		
+		
 	remove_action('admin_head', 'wpsc_admin_css');
 }
   
   
   
 function wpsc_admin_dynamic_js() { 
- 	header('Content-Type: text/javascript');      
- 	/* 	
- 	Expires: Wed, 11 Jan 1984 05:00:00 GMT
-	Cache-Control: no-cache, must-revalidate, max-age=0
- 	*/
+ 	header('Content-Type: text/javascript');
+ 	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
+ 	header('Cache-Control: private, must-revalidate, max-age=86400');
+ 	header('Pragma: private');
   $siteurl = get_option('siteurl'); 
 	$hidden_boxes = get_option('wpsc_hidden_box');
 	$hidden_boxes = implode(',', (array)$hidden_boxes);
@@ -196,6 +207,7 @@ function wpsc_admin_dynamic_js() {
 if($_GET['wpsc_dynamic_js'] == 'true') {
   add_action("admin_init", 'wpsc_admin_dynamic_js');  
 }
+add_action( 'admin_head', 'wp_tiny_mce' );
 //add_action("admin_init", 'wpsc_admin_css_and_js');  
 add_action('admin_menu', 'wpsc_admin_pages');
 
