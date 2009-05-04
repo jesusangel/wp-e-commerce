@@ -55,7 +55,6 @@ function wpsc_purchlog_bulk_modify(){
 		$sendback = add_query_arg('deleted', $deleted, $sendback);
 	}
 	wp_redirect($sendback);
-	
 	exit();
 }
 

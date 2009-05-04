@@ -147,7 +147,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		foreach((array)$order as $key => $forms) {
 			$box_function_name = $forms."_forms";
 			if(function_exists($box_function_name)) {
-				echo call_user_func($box_function_name,$product);
+				echo call_user_func($box_function_name,$product_data);
 			}
 		}
 		do_action('wpsc_product_form', $product_data['id']);
@@ -240,7 +240,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
      $output .= "</td>
      <td class='itemfirstcol product_tags'>
        ".TXT_WPSC_PRODUCT_TAGS.":<br />
-        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".TXT_WPSC_COMA_SEPARATED."</span>
+        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".__("These values are comma separated")."</span>
       </td>
     </tr>";
     

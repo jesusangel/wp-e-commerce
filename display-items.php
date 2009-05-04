@@ -509,7 +509,7 @@ if($_POST['submit_action'] == "edit") {
           $width  = $_POST['width'];
           break;
 				}
-			image_processing($imagepath, $image_output, $width, $height);
+				image_processing($imagepath, $image_output, $width, $height);
 				update_product_meta($id, 'thumbnail_width', $width);
 				update_product_meta($id, 'thumbnail_height', $height);
 			}

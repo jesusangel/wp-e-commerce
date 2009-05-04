@@ -53,9 +53,9 @@ function wpsc_display_products_page() {
   ?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
-		<h2 style='_color: #ff0000;'><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
+		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
 		
-		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ) { ?>
+		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) ) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
 				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
@@ -65,17 +65,20 @@ function wpsc_display_products_page() {
 			if ( isset($_GET['skipped']) && (int) $_GET['skipped'] )
 				unset($_GET['skipped']);
 			
-			if ( isset($_GET['locked']) && (int) $_GET['locked'] ) {
-				printf( __ngettext( '%s product not updated, somebody is editing it.', '%s products not updated, somebody is editing them.', $_GET['locked'] ), number_format_i18n( $_GET['locked'] ) );
-				unset($_GET['locked']);
-			}
-			
 			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
 				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['deleted']);
 			}
 			
-			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted'), $_SERVER['REQUEST_URI'] );
+			if ( isset($_GET['message']) ) {
+				$message = absint( $_GET['message'] );
+				$messages[1] =  __( 'Product updated.' );
+				echo $messages[$message];			
+				unset($_GET['message']);
+			}
+			
+			
+			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted', 'message'), $_SERVER['REQUEST_URI'] );
 			?>
 		</p></div>
 		<?php } ?>
