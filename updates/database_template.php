@@ -75,6 +75,7 @@ $wpsc_database_template[$table_name]['columns']['display_log'] = "char(1) NOT NU
 $wpsc_database_template[$table_name]['columns']['default'] = "varchar(128) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['active'] = "varchar(1) NOT NULL DEFAULT '1' ";
 $wpsc_database_template[$table_name]['columns']['order'] = "int(10) unsigned NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['unique_name'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['order'] = " KEY `order` ( `order` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}collect_data_forms";

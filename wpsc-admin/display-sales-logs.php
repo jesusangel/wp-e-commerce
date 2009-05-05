@@ -101,10 +101,25 @@
 			register_column_headers('display-purchaselog-details', $columns); 
 		?>
 			<div id='post-body' class='has-sidebar' style='width:95%;'>
-			
-				<p><strong>Purchase Log Date: </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
-				<p><strong>Purchase Number: </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
-
+				<div style='width:35%; float:right;border:1px #d3d3d3 solid; margin:.4em;padding:.6em;'>
+					<h3>Billing Details</h3>
+					<p><strong>Purchase Log Date: </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
+					<p><strong>Purchase Number: </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
+					<p><strong>Buyers Name: </strong><?php echo wpsc_display_purchlog_buyers_name(); ?></p>
+					<p><strong>Phone: </strong><?php echo wpsc_display_purchlog_buyers_phone(); ?></p>
+					<p><strong>Email: </strong><?php echo wpsc_display_purchlog_buyers_email(); ?></p>
+				</div>
+				<div style='width:45%; float:left;border:1px #d3d3d3 solid; margin:.4em;padding:.6em;'>	
+					<h3>Shipping Details</h3>
+					<p><strong><?php echo wpsc_display_purchlog_shipping_name(); ?></strong></p>
+					<p>
+					<?php echo wpsc_display_purchlog_shipping_address(); ?><br />
+					<?php echo wpsc_display_purchlog_shipping_city(); ?><br />
+					<?php echo wpsc_display_purchlog_shipping_state_and_postcode(); ?><br />
+					<?php echo wpsc_display_purchlog_shipping_country(); ?><br />
+					</p>
+				</div>
+				
 					<table class="widefat" cellspacing="0">
 						<thead>
 							<tr>
@@ -124,16 +139,16 @@
 						<tr>
 							<td colspan='5'></td>
 							<th>Shipping </th>
-							<td></td>
+							<td><?php echo wpsc_display_purchlog_shipping(); ?></td>
 						</tr>
 						<tr>
 							<td colspan='5'></td>
 							<th>Total </th>
-							<td></td>
+							<td><?php echo wpsc_display_purchlog_totalprice(); ?></td>
 						</tr>
 						</tbody>
 				</table>
-				<h2>Customer Details</h2>
+			
 				
 				</div>
 			</div>

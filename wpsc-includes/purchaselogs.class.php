@@ -168,13 +168,65 @@ function wpsc_purchaselog_details_date(){
 function wpsc_purchaselog_details_total(){
 	global $purchlogitem;
 	$total = $purchlogitem->purchitem->price*$purchlogitem->purchitem->quantity+$purchlogitem->extrainfo->discount_value+$purchlogitem->purchitem->tax_charged;
-//	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
+	$purchlogitem->totalAmount += $total;
 	return $total;
 }
 function wpsc_purchaselog_details_purchnumber(){
 	global $purchlogitem;
 		//exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
 	return $purchlogitem->extrainfo->id;
+}
+/*
+ *Returns base shipping should make a function to calculate items shipping as well
+ */
+function wpsc_display_purchlog_shipping(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem, true).'</pre>');
+	return nzshpcrt_currency_display($purchlogitem->extrainfo->base_shipping, true);
+}
+function wpsc_display_purchlog_totalprice(){
+	global $purchlogitem;
+	$purchlogitem->totalAmount += $purchlogitem->extrainfo->base_shipping;
+	return nzshpcrt_currency_display($purchlogitem->totalAmount, true);
+}
+function wpsc_display_purchlog_buyers_name(){
+	global $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem->userinfo,true).'</pre>');
+	return $purchlogitem->userinfo['billingfirstname']['value'].' '.$purchlogitem->userinfo['billinglastname']['value'];
+}
+function wpsc_display_purchlog_buyers_email(){
+	global $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem->userinfo,true).'</pre>');
+	return $purchlogitem->userinfo['billingemail']['value'];
+}
+function wpsc_display_purchlog_buyers_phone(){
+	global $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem->userinfo,true).'</pre>');
+	return $purchlogitem->userinfo['billingphone']['value'];
+}
+function wpsc_display_purchlog_shipping_name(){
+	global $purchlogitem;
+
+	return $purchlogitem->shippinginfo['shippingfirstname']['value'].' '.$purchlogitem->shippinginfo['shippinglastname']['value'];
+}
+function wpsc_display_purchlog_shipping_address(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
+	return $purchlogitem->shippinginfo['shippingaddress']['value'];
+}
+function wpsc_display_purchlog_shipping_city(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
+	return $purchlogitem->shippinginfo['shippingcity']['value'];
+}
+function wpsc_display_purchlog_shipping_state_and_postcode(){
+	global $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
+	return $purchlogitem->shippinginfo['shippingstate']['value'].', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
+}
+function wpsc_display_purchlog_shipping_country(){
+	global $purchlogitem;
+	return $purchlogitem->shippinginfo['shippingcountry']['value'];
 }
 /**
  * WP eCommerce purchaselogs AND purchaselogs_items class
@@ -411,30 +463,37 @@ class wpsc_purchaselogs{
 */
 	function the_purch_item_name(){
 		global $wpdb;
+			//exit('<pre>'.print_r($this->form_data, true).'</pre>');
+		$i=0;
 		foreach($this->form_data as $formdata){
-			if(in_array('Email', $formdata)){
+			if(in_array('billingemail', $formdata)){
 				$emailformid = $formdata['id'];
 			}
-			if(in_array('First Name', $formdata)){
+			if(in_array('billingfirstname', $formdata)){
 				$fNameformid = $formdata['id'];
 			}
-			if(in_array('Last Name', $formdata)){
+			if(in_array('billinglastname', $formdata)){
 				$lNameformid = $formdata['id'];
 			}
+			$i++;
 		}
-		//exit($emailformid.' '.$fNameformid.' '.$lNameformid);
+		
 		//$values = array();
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$emailformid;
 		$email = $wpdb->get_var($sql);
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$fNameformid;
 		$fname = $wpdb->get_var($sql);
+		if(!$fname){
+			exit($sql);
+		}
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$lNameformid;
 		$lname = $wpdb->get_var($sql);
 		$namestring = $fname.' '.$lname.' (<a href="mailto:'.$email.'?subject=Message From '.get_option('siteurl').'">'.$email.'</a>) ';
+
 		//exit($fname.' '.$lname.' ('.$email.') ');
 		return $namestring;
 		/*
-		exit($sql);
+	
 		exit('<pre>'.print_r($this->form_data, true).'</pre>');
 		*/
 	
@@ -465,6 +524,11 @@ class wpsc_purchaselogs_items{
 	var $purchitem;
 	var $allcartcontent;
 	var $purch_item_count;
+	//grand total
+	var $totalAmount;
+	//usersinfo
+	var $userinfo;
+	var $shippinginfo;
 	
 	function wpsc_purchaselogs_items($id){
 		$this->purchlogid = $id;
@@ -474,17 +538,29 @@ class wpsc_purchaselogs_items{
 	function get_purchlog_details(){
 		global $wpdb;
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$this->purchlogid;
-		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
-		$extrainfo = $wpdb->get_results($sql);
-
-		$this->extrainfo = $extrainfo[0];
-		//exit('Value: <pre>'.print_r($this->extrainfo->discount_value,true).'</pre>');
 		$cartcontent = $wpdb->get_results($cartsql);
 		$this->allcartcontent = $cartcontent;
+		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
+		$extrainfo = $wpdb->get_results($sql);
+		$this->extrainfo = $extrainfo[0];
+
+		$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_CHECKOUT_FORMS."`.`display_log`=1 AND `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$this->purchlogid." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
+		//exit($usersql);
+		$userinfo = $wpdb->get_results($usersql, ARRAY_A);
+		
+		foreach($userinfo as $input_row) {
+			if(stristr($input_row['unique_name'],'shipping')){
+			 	 $shippinginfo[$input_row['unique_name']] = $input_row;
+			}else{
+				 $billingdetails[$input_row['unique_name']] = $input_row;
+			}
+		}		
+		$this->userinfo = $billingdetails;
+		$this->shippinginfo= $shippinginfo;
 		$this->purch_item_count = count($cartcontent);
 //		exit('<pre>'.print_r($cartcontent, true).'</pre>');
 	}
-	
+
 	function next_purch_item(){
 		$this->currentitem++;
 		$this->purchitem = $this->allcartcontent[$this->currentitem];
@@ -516,4 +592,5 @@ class wpsc_purchaselogs_items{
 	}
 
 }
+
 ?>
