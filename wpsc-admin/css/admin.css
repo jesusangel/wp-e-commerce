@@ -188,9 +188,10 @@ ul#gallery_list{
 	list-style-type:none;
 	list-style-position: inside;
 	cursor: hand;
-/* 	min-height:70px; */
+	min-height:70px;
 	_height:70px;
 	padding-left:0px;
+  margin: 6px 0px 0px 6px;
 }
 
 ul#gallery_list li{
@@ -237,6 +238,17 @@ div#image_settings_box {
 	width:252px;
 	z-index:69;
 	_z-index:80;
+}
+
+a.thickbox img {
+	border:medium none;
+}
+
+img.previewimage {
+	cursor:move;
+	height:60px;
+	margin-right:4px;
+	width:60px;
 }
 
 div.lower_settings_box {
@@ -288,7 +300,6 @@ a.closeimagesettings{
 
 div.browser-image-uploader {
   
-
 }
 
 div.browser-image-uploader h4{

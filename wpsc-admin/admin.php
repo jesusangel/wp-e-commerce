@@ -136,6 +136,10 @@ function  wpsc_admin_include_css_and_js() {
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
+	//wp_enqueue_script('wp-e-commerce-swfuploader', WPSC_URL.'/wpsc-admin/js/wpsc-swfuploader.js', array('swfupload'), $version_identifier);
+	
+	
+	
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_dynamic_css=true" , false, $version_identifier, 'all' );
 

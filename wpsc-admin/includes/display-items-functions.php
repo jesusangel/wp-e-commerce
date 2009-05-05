@@ -666,6 +666,8 @@ function wpsc_product_image_forms($product_data='') {
 	<div id='product_image' class='postbox <?php echo ((array_search('product_image', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
 		<h3 class='hndle'> <?php echo	TXT_WPSC_PRODUCTIMAGES; ?></h3>
 		<div class='inside'>
+		
+		
 		  <div class='browser-image-uploader'>
 				<h4><?php _e("Select an image to upload:"); ?></h4>
 				<ul>  
@@ -696,11 +698,15 @@ function wpsc_product_image_forms($product_data='') {
 				</ul>
 				
 				<div id="add_additional_images"> </div>
-		
 				<a class="add_additional_image" onclick='add_image_upload_forms("add_");return false;' href="">Add Additional Image</a>
-			
-				
 			</div>
+			
+			<?php
+			edit_multiple_image_gallery($product_data);
+			?>
+			
+			
+			
 
 
 			
@@ -833,102 +839,73 @@ function wpsc_product_label_forms(){
 
 
 
-function edit_multiple_image_gallery($product_id) {
+function edit_multiple_image_gallery($product_data) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
-	$main_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
+	//$main_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
 	$timestamp = time();
 	
 	?>
-	<li class='first' id='0'>
-		<div class='previewimage' id='gallery_image_0'>
-			<?php if ($image != '') { ?><a id='extra_preview_link_0' href='<?php echo WPSC_IMAGE_URL.$image; ?>' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$image; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
-			<?php } ?>
-			
-			
-			<div id='image_settings_box'>
-				<div class='upper_settings_box'>
-					<div class='upper_image'><img src='<?php echo WPSC_URL; ?>/images/pencil.png'/></div>
-					<div class='upper_txt'><?php _e('Thumbnail Settings'); ?><a class='closeimagesettings'>X</a></div>
+	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
+	
+		
+		<li class='first' id='0'>
+			<div class='previewimage' id='gallery_image_0'>
+				<?php if ($product_data['image'] != '') { ?><a id='extra_preview_link_0' href='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
+				<?php } ?>
+				
+				
+				<div id='image_settings_box'>
+					<div class='upper_settings_box'>
+						<div class='upper_image'><img src='<?php echo WPSC_URL; ?>/images/pencil.png'/></div>
+						<div class='upper_txt'><?php _e('Thumbnail Settings'); ?><a class='closeimagesettings'>X</a></div>
+					</div>
+				
+					<div class='lower_settings_box'>
+					  <ul>
+					    <li>
+								<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='<?php echo  $product['thumbnail_image']; ?>' />";
+								<input type='radio' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?><br />
+							</li>
+							
+							
+					    <li>
+								<input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE; ?>(<abbr title='<?php echo TXT_WPSC_SETONSETTINGS; ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</abbr>)
+								</label>
+					    </li>
+							
+							
+							
+					    <li>
+								<input type='radio'  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>
+								<div class='heightWidth image_resize_extra_forms' style="display: none;">
+									<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'><?php echo TXT_WPSC_PXWIDTH; ?></label>
+									<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
+								</div>
+					    </li>
+							
+							
+							
+							
+					    <li>
+								<input type='radio'  name='gallery_resize' value='3' id='gallery_resize3' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize3'> <?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
+								<div class='browseThumb image_resize_extra_forms'>
+									<input type='file' name='thumbnailImage' size='15' value='' />
+								</div>
+							</li>
+							
+							<a href='#' class='delete_primary_image'>Delete this Image</a>
+						</ul>
+					</div>
 				</div>
-			
-				<div class='lower_settings_box'>
-		
-		<?php
-		/*
-		$output .= "<table>";// style='border: 1px solid black'
-		$output .= "  <tr>";
-		$output .= "    <td style='height: 1em;'>";
-		$output .= "<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='" . $product['thumbnail_image'] . "' />";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 0) {
-			$output .= "checked='true'";
-		}
-		$output .= " name='image_resize' value='0' id='image_resize0_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize0_$timestamp'> ".TXT_WPSC_DONOTRESIZEIMAGE."<br />";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-	
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 1) {
-			$output .= "checked='true'";
-		}
-		$output .= "name='image_resize' value='1' id='image_resize1_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize1_$timestamp'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-	
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 2) {
-			$output .= "checked='true'";
-		}
-		$output .= " name='image_resize' value='2' id='image_resize2_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize2_$timestamp'>".TXT_WPSC_USESPECIFICSIZE." </label>
-		<div class='heightWidth image_resize_extra_forms' style=\"display: none;\">
-		<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>
-		<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT." </label></div>";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 3) {
-			$output .= "checked='true'";
-		}
-		$output .= " name='image_resize' value='3' id='image_resize3_$timestamp' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='image_resize3_$timestamp'> ".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
-		$output .= "<div class='browseThumb image_resize_extra_forms' style='display: ";
-		
-		if($product['thumbnail_state'] == 3) {
-			$output .= "block";
-		} else {
-			$output .= "none";
-		}
-	
-		$output .= ";'>\n\r<input type='file' name='thumbnailImage' size='15' value='' />";
-		$output .= "</div>\n\r";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-		
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "    <a href='#' class='delete_primary_image'>Delete this Image</a>";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-		
-		$output .= "</table>";
-		*/
-		?>
-				</div>
+				<a class='editButton'>Edit   <img src='<?php echo WPSC_URL; ?>/images/pencil.png'/></a>
 			</div>
-			<a class='editButton'>Edit   <img src='".WPSC_URL."/images/pencil.png'/></a>
-		</div>
-	</li>
-	
+		</li>
+	</ul>
 	<?php
 	$num = 0;
 	if(function_exists('gold_shpcrt_display_gallery')) {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '$id' ORDER BY image_order ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_data['id']}' ORDER BY image_order ASC",ARRAY_A);
     if($values != null) {
       foreach($values as $image) {
         if(function_exists("getimagesize")) {

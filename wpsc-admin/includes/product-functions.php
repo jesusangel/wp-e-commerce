@@ -218,20 +218,21 @@ function wpsc_update_product_images($product_id, $post_data) {
   if(is_numeric($product_id)) {
 		if(($post_data['image_resize'] == 1 || $post_data['image_resize'] == 2) && ($image == '')) {
       /*  resize the image if directed to do so and no new image is supplied  */
-      $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$product_id." LIMIT 1",ARRAY_A);      
+      $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$product_id." LIMIT 1",ARRAY_A);
+      
       // prevent images from being replaced by those from other products
       $check_multiple_use = $wpdb->get_var("SELECT COUNT(`image`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `image`='".$image_data['image']."'");
       if($check_multiple_use > 1) {
         $new_filename = $image_data['id']."_".$image_data['image'];
         if(file_exists(WPSC_THUMBNAIL_DIR.$image_data['image']) && ($image_data['image'] != null)) {
           copy(WPSC_THUMBNAIL_DIR.$image_data['image'], WPSC_THUMBNAIL_DIR.$new_filename);
-          }
+				}
         if(file_exists(WPSC_IMAGE_DIR.$image_data['image']) && ($image_data['image'] != null)) {
           copy(WPSC_IMAGE_DIR.$image_data['image'], WPSC_IMAGE_DIR.$new_filename);
-          }
+				}
         $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$new_filename."' WHERE `id`='".$image_data['id']."' LIMIT 1");
         $image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$product_id." LIMIT 1",ARRAY_A);
-        }
+			}
         
         
       if(file_exists(WPSC_THUMBNAIL_DIR.$image_data['image']) && ($image_data['image'] != '')) {
