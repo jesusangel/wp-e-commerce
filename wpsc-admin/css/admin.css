@@ -98,10 +98,8 @@ input.wpsc_product_name {
 	/*disable right rounded borders */
 	-moz-border-radius-topright:0px;
 	-moz-border-radius-bottomright:0px;
-	
 	-khtml-border-radius-topright:0px;
-	-khtml-border-radius-bottomright:0px;
-	
+	-khtml-border-radius-bottomright:0px;	
 	-webkit-border-top-right-radius:0px;
 	-webkit-border-bottom-right-radius:0px;
 	border-top-right-radius: 0px;
@@ -155,6 +153,150 @@ margin:0;
 width:100%;
 }
 
+
+
+h4.product_action_link {
+	margin:4px 0px 0px 0px;
+	display:block;
+	font-weight:bold;
+}
+
+
+
+/* image form styling */
+table.flash-image-uploader tr td p {
+  clear: both;
+}
+
+button#add-product-image {
+  float: left;
+}
+
+div#swfupload_img_indicator {
+  float: left;
+  height: 20px;
+  width: 20px;
+  display: none;
+}
+
+div#swfupload_img_indicator img{
+ margin: 4px 2px 2px 4px;
+}
+
+ul#gallery_list{
+	clear:both;
+	list-style-type:none;
+	list-style-position: inside;
+	cursor: hand;
+/* 	min-height:70px; */
+	_height:70px;
+	padding-left:0px;
+}
+
+ul#gallery_list li{
+	float:left;
+}
+
+ul#gallery_list li *{
+	z-index:79;
+}
+ul#gallery_list li.first *{
+	z-index:80;
+}
+.ui-selected {
+	border:2px dashed #969696;
+}
+img.deleteButton {
+ 	display:none;
+	position:absolute;
+	margin-left:-16px;
+	top:-5px;
+	width:16px;
+	height:16px;
+	cursor:pointer;
+}
+a.editButton {
+	background:#FFFFFF none repeat scroll 0%;
+	height:20px;
+	display:none;
+	position:absolute;
+	margin-left:-50px;
+	top:0px;
+	padding-bottom:3px;
+	padding-left:3px;
+	cursor:pointer;
+}
+
+div#image_settings_box {
+	position:absolute;
+	width:150px;
+	display:none;
+  margin: -66px 0px 0px 36px;
+  _margin: 0px 0px 0px -30px;
+	padding-top:2px;
+	width:252px;
+	z-index:69;
+	_z-index:80;
+}
+
+div.lower_settings_box {
+	width:234px;
+	background-color:white;
+	border:1px solid black;
+	border-top:1px solid #CCCCCC;
+	float:right;
+  margin: -1px -6px 0px 0px;
+	background-color:#EAF3FA;
+}
+
+div.upper_settings_box {
+	width:250px;
+	background-color:white;
+	border:1px solid black;
+	padding:3px 1px 2px 5px;
+}
+
+div.upper_image {
+	float:left;
+/* 	border-bottom:1px solid black; */
+	padding-left:5px;
+	margin-left:-5px;
+	_margin-left:-3px;
+	margin-right:-7px;
+	padding-bottom:4px;
+	_padding-bottom:6px;
+	_margin-bottom:-2px;
+}
+
+div.upper_txt{
+	padding-left:22px;
+	color:#666666;
+}
+
+div.previewimage {
+	position:relative;
+}
+
+tr.edit_product_image *{
+	z-index:80;
+}
+
+a.closeimagesettings{
+	cursor:pointer;
+	margin-left:90px;
+}
+
+div.browser-image-uploader {
+  
+
+}
+
+div.browser-image-uploader h4{
+  margin-bottom: 8px;
+}
+
+
+/*  Product details form styling ends */
 
 
 	

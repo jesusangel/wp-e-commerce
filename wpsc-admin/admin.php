@@ -127,10 +127,17 @@ function wpsc_admin_pages(){
 */
 function  wpsc_admin_include_css_and_js() {
   $siteurl = get_option('siteurl'); 
+	
+	wp_enqueue_script('swfupload');
+	wp_enqueue_script('swfupload-swfobject');
+	wp_enqueue_script('swfupload-queue');
+	wp_enqueue_script('swfupload-handlers');
+
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_dynamic_css=true" , false, $version_identifier, 'all' );
 
 	
 	//wp_enqueue_script('post');
@@ -141,7 +148,6 @@ function  wpsc_admin_include_css_and_js() {
 	wp_enqueue_script('word-count');
 	wp_admin_css( 'dashboard' );
 		
-		
 	remove_action('admin_head', 'wpsc_admin_css');
 }
   
@@ -150,8 +156,8 @@ function  wpsc_admin_include_css_and_js() {
 function wpsc_admin_dynamic_js() { 
  	header('Content-Type: text/javascript');
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
- 	header('Cache-Control: private, must-revalidate, max-age=86400');
- 	header('Pragma: private');
+ 	header('Cache-Control: public, must-revalidate, max-age=86400');
+ 	header('Pragma: public');
   $siteurl = get_option('siteurl'); 
 	$hidden_boxes = get_option('wpsc_hidden_box');
 	$hidden_boxes = implode(',', (array)$hidden_boxes);
@@ -207,6 +213,45 @@ function wpsc_admin_dynamic_js() {
 if($_GET['wpsc_dynamic_js'] == 'true') {
   add_action("admin_init", 'wpsc_admin_dynamic_js');  
 }
+
+function wpsc_admin_dynamic_css() { 
+ 	header('Content-Type: text/css');
+ 	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
+ 	header('Cache-Control: public, must-revalidate, max-age=86400');
+ 	header('Pragma: public'); 	
+	if(get_option('wpsc_use_flash_uploader') == 1) {
+		?>
+		table.flash-image-uploader {
+			display: block;
+		}
+		
+		table.browser-image-uploader {
+			display: none;
+		}
+		<?php
+	} else {
+		?>
+		table.flash-image-uploader {
+			display: none;
+		}
+		
+		table.browser-image-uploader {
+			display: block;
+		}
+		<?php
+	}
+	exit();
+}
+
+if($_GET['wpsc_dynamic_css'] == 'true') {
+  add_action("admin_init", 'wpsc_admin_dynamic_css');  
+}
+
+
+
+
+
+
 add_action( 'admin_head', 'wp_tiny_mce' );
 //add_action("admin_init", 'wpsc_admin_css_and_js');  
 add_action('admin_menu', 'wpsc_admin_pages');

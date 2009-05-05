@@ -21,35 +21,8 @@ function wpsc_display_products_page() {
 	);
 	register_column_headers('display-product-list', $columns);	
 	
-// 	wpsc_modify_products();
-	
 	$baseurl = includes_url('js/tinymce');
-  /*
- <script type="text/javascript" src="<?php echo $baseurl; ?>/tiny_mce.js"></script>
- <script type="text/javascript" src="<?php echo $baseurl; ?>/langs/wp-langs-en.js"></script>
-<script language='javascript' type='text/javascript'>*/
-// 	/* <![CDATA[ */
-// tinyMCE.init({
-// 	theme : "advanced",
-// 	mode : "specific_textareas",
-// 	width : '100%',
-// 	height : '194px',
-// 	skin : 'wp_theme',
-// 	editor_selector : "mceEditor",
-// 	plugins : "spellchecker,pagebreak",
-// 	theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,pagebreak",
-// 	theme_advanced_buttons2 : "",
-// 	theme_advanced_buttons3 : "",
-// 	theme_advanced_toolbar_location : "top",
-// 	theme_advanced_toolbar_align : "left",
-// 	theme_advanced_statusbar_location : "bottom",
-// 	theme_advanced_resizing : true,
-// 	content_css : WPSC_URL+"/js/tinymce3/mce.css",
-// 	theme_advanced_resize_horizontal : false
-// });
-// 	/* ]]> */
-// </script>
-	
+
   ?>
 	<div class="wrap">
 		<?php screen_icon(); ?>
@@ -87,7 +60,7 @@ function wpsc_display_products_page() {
 		<div id="col-container" class='stuffbox'>
 			<div id="col-right">
 				<div id='poststuff' class="col-wrap">
-					<form id="modify-products" method="post" action="">
+					<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
 					<?php
 						$product_id = absint($_GET['product_id']);
 						wpsc_display_product_form($product_id);
@@ -237,7 +210,7 @@ function wpsc_admin_products_list($category_id = 0) {
 				}
 				
 				
-				$category_html .= "<a class='category_link' href='".add_query_arg('category_id', $category_row['id'])."'>".stripslashes($category_row['name'])."</a>";
+				$category_html .= "<a class='category_link' href='". remove_query_arg('product_id',add_query_arg('category_id', $category_row['id']))."'>".stripslashes($category_row['name'])."</a>";
 				$i++;
 			}        
 							
@@ -248,7 +221,7 @@ function wpsc_admin_products_list($category_id = 0) {
 							
 							
 							<td class="product-image ">
-								<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='35' height='35' />
+								<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
 							</td>
 							<td class="product-title column-title">
 								<a href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>				
