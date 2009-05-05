@@ -150,11 +150,3 @@ function hideOptionElement(id, option) {
 	prevOption = option;
 }
 
-
-
-
-
-
-
-
-
