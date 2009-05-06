@@ -196,7 +196,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 			</tr>
 		</table>
 	</div>
-	<div class='meta-box-sortables'  id='poststuff'>
+	<div class='meta-box-sortables'>
 		<?php
 	
 	// 	$order = get_option('wpsc_product_page_order');
@@ -571,7 +571,7 @@ function wpsc_product_advanced_forms($product_data='') {
 				
 				".TXT_WPSC_VALUE."
 				<textarea class='text' name='custom_meta[$i][value]' id='custom_meta_value_$i'>{$custom_field['meta_value']}</textarea>
-				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>&ndash;</a>
+				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>".__('Delete')."</a>
 				<br />
 			</div>
 			";
@@ -763,7 +763,11 @@ function wpsc_product_download_forms($product_data='') {
     	$output .= "            </td>\n\r";
     	$output .= "          </tr>\n\r";
     }
+    $output .="</table>";
 	if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player")) {    
+    $output .="<h4>".__("Select an MP3 file to upload as a preview")."</h4>";
+	
+    $output .="<table>";
 		$output .= "    <tr>\n\r";
 		$output .= "      <td>\n\r";
 		$output .= TXT_WPSC_PREVIEW_FILE.": ";
@@ -774,8 +778,9 @@ function wpsc_product_download_forms($product_data='') {
 		$output .= "<br />";
 		$output .= "      </td>\n\r";
 		$output .= "    </tr>\n\r";
+    $output .="</table>";
 	}
-	$output .="</table></div></div>";
+	$output .="</div></div>";
 	return $output;
 }
 

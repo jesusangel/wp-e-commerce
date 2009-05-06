@@ -48,7 +48,17 @@ jQuery(document).ready( function () {
 			return false;
 		}
 	);
-	
+	jQuery('#poststuff .postbox h3').click( function() {
+		jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
+			if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
+				jQuery('a.togbox',this).html('+');
+			} else {
+				jQuery('a.togbox',this).html('&ndash;');
+			}
+			wpsc_save_postboxes_state('editproduct', '#poststuff');
+	});
+
+
 	jQuery("#add-product-image").click(function(){
 		swfu.selectFiles();
 	});
@@ -122,7 +132,45 @@ jQuery(document).ready( function () {
 		}
 	);
 	
+	// delete upload
+	jQuery(".file_delete_button").click(
+		function() {
+			jQuery(this).parent().remove();
+			file_hash = jQuery(this).siblings("input").val();
+			post_values = "admin=true&del_file=true&del_file_hash="+file_hash;
+			jQuery.post( 'index.php?ajax=true', post_values, function(returned_data) { });
+		}
+	);
 });
+
+
+
+// function for adding more custom meta
+function add_more_meta(e) {
+  current_meta_forms = jQuery(e).parent().children("div.product_custom_meta:last");  // grab the form container
+  new_meta_forms = current_meta_forms.clone(true); // clone the form container
+  jQuery("label input", new_meta_forms).val(''); // reset all contained forms to empty
+  current_meta_forms.after(new_meta_forms);  // append it after the container of the clicked element
+  return false;
+}
+
+// function for removing custom meta
+function remove_meta(e, meta_id) {
+  current_meta_form = jQuery(e).parent("div.product_custom_meta");  // grab the form container
+  //meta_name = jQuery("input#custom_meta_name_"+meta_id, current_meta_form).val();
+  //meta_value = jQuery("input#custom_meta_value_"+meta_id, current_meta_form).val();
+	returned_value = jQuery.ajax({
+		type: "POST",
+		url: "admin.php?ajax=true",
+		data: "admin=true&remove_meta=true&meta_id="+meta_id+"",
+		success: function(results) {
+			if(results > 0) {
+			  jQuery("div#custom_meta_"+meta_id).remove();
+			}
+		}
+	}); 
+  return false;
+}
 
 
 // function for switching the state of the image upload forms
@@ -168,5 +216,16 @@ function hideOptionElement(id, option) {
 		jQuery('#'+id).css( 'display','block');
 	}
 	prevOption = option;
+}
+
+
+function wpsc_save_postboxes_state(page, container) {
+	var closed = jQuery(container+' .postbox').filter('.closed').map(function() { return this.id; }).get().join(',');
+	jQuery.post(postboxL10n.requestFile, {
+		action: 'closed-postboxes',
+		closed: closed,
+		closedpostboxesnonce: jQuery('#closedpostboxesnonce').val(),
+		page: page
+	});
 }
 
