@@ -108,6 +108,19 @@ jQuery(document).ready( function () {
 			jQuery(this).children('a.editButton').hide();
 		}
 	);
+	// display image editing menu
+	jQuery("a.editButton").click(
+		function(){
+			jQuery(this).hide();
+			jQuery('#image_settings_box').show('fast');
+		}
+	);
+	// hide image editing menu
+	jQuery("a.closeimagesettings").click(
+		function (e) {
+			jQuery("div#image_settings_box").hide();
+		}
+	);
 	
 });
 
@@ -127,6 +140,13 @@ function wpsc_upload_switcher(target_state) {
     jQuery.post( 'index.php?admin=true', "admin=true&ajax=true&save_image_upload_state=true&image_upload_state=0", function(returned_data) { });
     break;
   }
+}
+
+// function for switching the state of the extra resize forms
+function image_resize_extra_forms(option) {
+	container = jQuery(option).parent();
+	jQuery("div.image_resize_extra_forms").css('display', 'none');
+	jQuery("div.image_resize_extra_forms",container).css('display', 'block');
 }
 
 

@@ -391,14 +391,14 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 				$width  = get_option('product_image_width');
 				break;
 			}
-			if(($resize_method == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
-				$imagefield='thumbnailImage';
-				$image= image_processing($_FILES['thumbnailImage']['tmp_name'], (WPSC_THUMBNAIL_DIR.$image_name),null,null,$imagefield);
-				$thumbnail_image = $image;
-			} else {
+// 			if(($resize_method == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
+// 				$imagefield='thumbnailImage';
+// 				$image= image_processing($_FILES['thumbnailImage']['tmp_name'], (WPSC_THUMBNAIL_DIR.$image_name),null,null,$imagefield);
+// 				$thumbnail_image = $image;
+// 			} else {
 			  
 				image_processing($new_image_path, (WPSC_THUMBNAIL_DIR.$image_name), $width, $height);
-			}
+// 			}
 			
 			$updatelink_sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$image_name."', `thumbnail_image` = '".$thumbnail_image."'  WHERE `id` = '$id'";
 			$wpdb->query($updatelink_sql);
@@ -444,21 +444,21 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$id."' LIMIT 1",ARRAY_A);
 			//exit("<pre>".print_r($image_data,true)."</pre>");
 			
-		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
-			$imagefield='thumbnailImage';
-			$image=image_processing($_FILES['thumbnailImage']['tmp_name'], WPSC_THUMBNAIL_DIR.$_FILES['thumbnailImage']['name'],null,null,$imagefield);
-			$thumbnail_image = $image;
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");
-			$stat = stat( dirname( (WPSC_THUMBNAIL_DIR.$image_data['image']) ));
-			$perms = $stat['mode'] & 0000775;
-			@ chmod( (WPSC_THUMBNAIL_DIR.$image_data['image']), $perms );	
-		}
+// 		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
+// 			$imagefield='thumbnailImage';
+// 			$image=image_processing($_FILES['thumbnailImage']['tmp_name'], WPSC_THUMBNAIL_DIR.$_FILES['thumbnailImage']['name'],null,null,$imagefield);
+// 			$thumbnail_image = $image;
+// 			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");
+// 			$stat = stat( dirname( (WPSC_THUMBNAIL_DIR.$image_data['image']) ));
+// 			$perms = $stat['mode'] & 0000775;
+// 			@ chmod( (WPSC_THUMBNAIL_DIR.$image_data['image']), $perms );	
+// 		}
 		$image = false;
 	}
   return $image;
 }
 
-function wpsc_item_process_file($mode = 'add') {
+function old_wpsc_item_process_file($mode = 'add') {
   global $wpdb;
   	$files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." ORDER BY id ASC", ARRAY_A);
 		if (is_array($files)){
@@ -552,7 +552,7 @@ function wpsc_item_process_file($mode = 'add') {
   }
 }
 
-function wpsc_item_reassign_file($selected_product_file, $mode = 'add') {
+function old_wpsc_item_reassign_file($selected_product_file, $mode = 'add') {
   global $wpdb;
 	// initialise $idhash to null to prevent issues with undefined variables and error logs
 	$idhash = null;

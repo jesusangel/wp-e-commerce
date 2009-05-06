@@ -779,11 +779,11 @@ function wpsc_product_download_forms($product_data='') {
 	return $output;
 }
 
-function wpsc_product_label_forms(){
+function wpsc_product_label_forms() {
 	global $closed_postboxes;
 	?>
 	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
-        <?php
+		<?php
     	if (function_exists('add_object_page')) {
     		echo "<h3 class='hndle'>";
     	} else {
@@ -838,7 +838,6 @@ function wpsc_product_label_forms(){
 }
 
 
-
 function edit_multiple_image_gallery($product_data) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
@@ -862,39 +861,34 @@ function edit_multiple_image_gallery($product_data) {
 					</div>
 				
 					<div class='lower_settings_box'>
+						<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='<?php echo $product_data['thumbnail_image']; ?>' />
 					  <ul>
 					    <li>
-								<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='<?php echo  $product['thumbnail_image']; ?>' />";
-								<input type='radio' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?><br />
+								<input type='radio' checked='true' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?><br />
 							</li>
-							
 							
 					    <li>
 								<input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE; ?>(<abbr title='<?php echo TXT_WPSC_SETONSETTINGS; ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</abbr>)
 								</label>
 					    </li>
 							
-							
-							
 					    <li>
 								<input type='radio'  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>
-								<div class='heightWidth image_resize_extra_forms' style="display: none;">
-									<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'><?php echo TXT_WPSC_PXWIDTH; ?></label>
-									<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
+								<div class='heightWidth image_resize_extra_forms'>
+									<input id='gallery_image_width' type='text' size='4' name='gallery_width' value='' /><label for='gallery_image_resize2'><?php echo TXT_WPSC_PXWIDTH; ?></label>
+									<input id='gallery_image_height' type='text' size='4' name='gallery_height' value='' /><label for='gallery_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
 								</div>
 					    </li>
-							
-							
-							
 							
 					    <li>
 								<input type='radio'  name='gallery_resize' value='3' id='gallery_resize3' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize3'> <?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
 								<div class='browseThumb image_resize_extra_forms'>
-									<input type='file' name='thumbnailImage' size='15' value='' />
+									<input type='file' name='gallery_thumbnailImage' size='15' value='' />
 								</div>
 							</li>
-							
-							<a href='#' class='delete_primary_image'>Delete this Image</a>
+					    <li>
+								<a href='#' class='delete_primary_image'>Delete this Image</a>
+					    </li>
 						</ul>
 					</div>
 				</div>

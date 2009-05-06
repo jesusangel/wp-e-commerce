@@ -1370,12 +1370,6 @@ function wpsc_upload_switcher(target_state) {
 }
 
 
-function image_resize_extra_forms(option) {
-  container = jQuery(option).parent();
-  jQuery("div.image_resize_extra_forms").css('display', 'none');
-  jQuery("div.image_resize_extra_forms",container).css('display', 'block');
-
-}
 
 function open_variation_settings(element_id) {
   jQuery("tr#"+element_id+" td div.variation_settings").toggle();
