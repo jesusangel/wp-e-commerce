@@ -3,6 +3,10 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
+define('TXT_WPSC_CLEAR_IP_LOCKS', 'Release downloads locked to this IP address xxx xxx xxx xxx');
+define('TXT_WPSC_EMAIL_BUYER', 'Resend Receipt to Buyer');
+
+
 define('TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG','Display Product Template Tag');
 define('TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE','Display Product Shortcode');
 
@@ -210,11 +214,11 @@ define('TXT_WPSC_BROWSER_UPLOADER', 'You are using the Browser uploader.  Proble
 
 define('TXT_WPSC_ADMIN_REPORT', 'Admin Report');
 define('TXT_WPSC_TAGS_CAN_BE_USED', 'Tags can be used');
-define('TXT_WPSC_EMAIL_SETTINGS', 'Email Settings');
+define('TXT_WPSC_EMAIL_SETTINGS', 'Custom Messages');
 define('TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL', 'An Error Occured While Sending Email');
 define('TXT_WPSC_EMAIL_SENT', 'Email Sent');
 define('TXT_WPSC_ACTIONS', 'Actions');
-define('TXT_WPSC_EMAIL_BUYER', 'Email Buyer');
+
 
 define('TXT_WPSC_FILE_NAMES', 'File Names');
 define('TXT_WPSC_DOWNLOADS_LEFT', 'Downloads Left');
@@ -360,7 +364,7 @@ define('TXT_WPSC_UPLOAD_IMAGE_FOR', 'Upload Image for');
 
 define('TXT_WPSC_THUMBNAILSETTINGS', 'Thumbnail Settings');
 
-define('TXT_WPSC_CLEAR_IP_LOCKS', 'Free downloads locked to an IP number.');
+
 define('TXT_WPSC_THANKS_UNLOCKED', 'Thanks, the downloads that were locked to this users IP number have been freed.');
 
 

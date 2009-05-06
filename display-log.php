@@ -1021,19 +1021,21 @@ if($_GET['filter'] !== 'true') {
 					echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data[0]['phone']."</td></tr>\n\r";
 					echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data[0]['email']."</td></tr>\n\r";
 			}
-			
-			if(get_option('payment_method') == 2) {
 				$gateway_name = '';
 				foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+		
 					if($purch_data[0]['gateway'] != 'testmode') {
 						if($gateway['internalname'] == $purch_data[0]['gateway'] ) {
 							$gateway_name = $gateway['name'];
 						}
+						
 					} else {
+					
 						$gateway_name = "Manual Payment";
 					}
 				}
-			}
+			
+			
 			echo "  <tr><td colspan='2'></td></tr>\n\r";
 			echo "  <tr><td>".TXT_WPSC_PAYMENT_METHOD.":</td><td>".$gateway_name."</td></tr>\n\r";
 			echo "  <tr><td>".TXT_WPSC_PURCHASE_NUMBER.":</td><td>".$purch_data[0]['id']."</td></tr>\n\r";

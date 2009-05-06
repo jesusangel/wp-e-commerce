@@ -115,18 +115,26 @@ if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) 
 */
 function wpsc_coupon_price() {
   global $wpdb, $wpsc_cart, $wpsc_coupons;
-  $coupon = $wpdb->escape($_POST['coupon_num']);
-  $wpsc_coupons = new wpsc_coupons($coupon);
-  if($wpsc_coupons->validate_coupon()){
-  	$discountAmount = $wpsc_coupons->calculate_discount();
-  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
-  }else{
-  	echo 'coupon is not valid';
-  	$wpsc_cart->coupons_amount = 0;
+  if(isset($_POST['coupon_num']) && $_POST['coupon_num'] != ''){
+	  $coupon = $wpdb->escape($_POST['coupon_num']);
+	  $wpsc_coupons = new wpsc_coupons($coupon);
+	  if($wpsc_coupons->validate_coupon()){
+	  
+	  	$discountAmount = $wpsc_coupons->calculate_discount();
+	  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
+	  }else{
+	  	$wpsc_coupons->errormsg = 'coupon is not valid';
+	  	$wpsc_cart->coupons_amount = 0;
+	  	$wpsc_cart->coupons_name = '';
+	  }
+
+  }elseif($_POST['coupon_num'] == ''){
+  		$wpsc_cart->coupons_amount = 0;
+  		$wpsc_cart->coupons_name = '';
   }
+  
 	
  }
-
 // execute on POST and GET
 if(isset($_POST['coupon_num'])) {
 	add_action('init', 'wpsc_coupon_price');

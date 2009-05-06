@@ -15,6 +15,7 @@ function wpsc_the_purch_item(){
 	global $purchlogs;
 	return $purchlogs->the_purch_item();
 }
+
 function wpsc_the_purch_item_price(){
 	global $purchlogs;
 	$purchlogs->totalAmount += $purchlogs->purchitem->totalprice;
@@ -63,6 +64,7 @@ function wpsc_the_purch_status_id(){
 }
 function wpsc_is_checked_status(){
 	global $purchlogs;
+	
 	return $purchlogs->is_checked_status();
 }
 function wpsc_the_purch_status_name(){
@@ -86,12 +88,15 @@ function wpsc_change_purchlog_view($viewby, $status){
 		if($viewby == 'all'){
 			$dates = $purchlogs->getdates();
 			$purchaselogs = $purchlogs->get_purchlogs($dates, $status);
-			
+			$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
+			$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
 			$purchlogs->allpurchaselogs = $purchaselogs;
 		}elseif($viewby == '3mnths'){
 			$dates = $purchlogs->getdates();
 
 			$dates = array_slice($dates, 0, 3);
+			$purchlogs->current_start_timestamp = $dates[2]['start'];
+			$purchlogs->current_end_timestamp = $dates[0]['end'];
 		//	exit('<pre>'.print_r($dates,true).'</pre>');		
 			$newlogs = $purchlogs->get_purchlogs($dates, $status);
 			//exit('<pre>'.print_r($newlogs, true).'</pre>');
@@ -102,6 +107,8 @@ function wpsc_change_purchlog_view($viewby, $status){
 			$dates = explode('_', $viewby);
 			$date[0]['start'] = $dates[0];
 			$date[0]['end'] = $dates[1];
+			$purchlogs->current_start_timestamp = $dates[0];
+			$purchlogs->current_end_timestamp =  $dates[1];
 			$newlogs = $purchlogs->get_purchlogs($date, $status);
 			//exit('<pre>'.print_r($newlogs, true).'</pre>');
 			$purchlogs->allpurchaselogs = $newlogs;
@@ -136,8 +143,12 @@ function wpsc_the_purchaselog_item(){
 }
 function wpsc_purchaselog_details_SKU(){
 	global $purchlogitem;
-	//exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
-	return $purchlogitem->purchitem;
+	if($purchlogitem->purchitem->meta_value ==''){
+		return 'N/A';
+	}else{
+		return $purchlogitem->purchitem->meta_value;
+	}
+
 }
 function wpsc_purchaselog_details_quantity(){
 	global $purchlogitem;
@@ -228,6 +239,44 @@ function wpsc_display_purchlog_shipping_country(){
 	global $purchlogitem;
 	return $purchlogitem->shippinginfo['shippingcountry']['value'];
 }
+function wpsc_display_purchlog_shipping_method(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
+	return $purchlogitem->extrainfo->shipping_method;
+}
+function wpsc_display_purchlog_shipping_option(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
+	return $purchlogitem->extrainfo->shipping_option;
+}	
+function wpsc_display_purchlog_paymentmethod(){
+	global $purchlogitem;
+//	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
+	if($purchlogitem->extrainfo->gateway =='testmode'){
+		return 'Manual Payment';
+	}else{
+		return $purchlogitem->extrainfo->gateway;
+	}
+}
+function wpsc_has_purchlog_shipping(){
+	global $purchlogitem;
+	if($purchlogitem->shippinginfo['shippingfirstname']['value'] != ''){
+	 return true;
+	}else{
+	 return false;
+	}
+
+}
+function wpsc_purchlog_is_checked_status(){
+	global $purchlogitem, $purchlogs;
+	//exit('<pre>'.print_r($purchlogs,true).'</pre>');
+	if($purchlogs->purchstatus->id == $purchlogitem->extrainfo->processed){
+			return 'selected="selected"';
+		}else{
+			return '';
+		}
+//	exit('<pre>'.print_r($purchlogitem,true).'</pre>');
+}
 /**
  * WP eCommerce purchaselogs AND purchaselogs_items class
  *
@@ -262,6 +311,11 @@ class wpsc_purchaselogs{
 	
 	//calculation of totals
 	var $totalAmount;
+	
+	//used for csv 
+	var $current_start_timestamp;
+	var $current_end_timestamp;
+	
 	/* Constructor function*/
 	function wpsc_purchaselogs(){
 		$this->getall_formdata();
@@ -281,7 +335,7 @@ class wpsc_purchaselogs{
 	
 	function get_purchlogs($dates, $status=''){
 		global $wpdb;
-		//exit('<pre>'.print_r($dates, true).'</pre>');
+		
 		$purchlog = array();
 		if($status=='' || $status=='-1'){
 			   foreach((array)$dates as $date_pair){
@@ -448,6 +502,7 @@ class wpsc_purchaselogs{
 		}
 	}
 	function is_checked_status(){
+		
 		if($this->purchstatus->id == $this->purchitem->processed){
 			return 'selected="selected"';
 		}else{
@@ -537,9 +592,11 @@ class wpsc_purchaselogs_items{
 	
 	function get_purchlog_details(){
 		global $wpdb;
-		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$this->purchlogid;
+		
+		$cartsql = "SELECT DISTINCT `".WPSC_TABLE_CART_CONTENTS."`.*, `".WPSC_TABLE_PRODUCTMETA."`.`meta_value`  FROM `".WPSC_TABLE_CART_CONTENTS."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_CART_CONTENTS."`.`prodid` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid`=".$this->purchlogid." AND `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` = 'sku'";
 		$cartcontent = $wpdb->get_results($cartsql);
 		$this->allcartcontent = $cartcontent;
+		//exit('<pre>'.print_r($cartcontent, true).'</pre>');
 		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
 		$extrainfo = $wpdb->get_results($sql);
 		$this->extrainfo = $extrainfo[0];
@@ -548,7 +605,7 @@ class wpsc_purchaselogs_items{
 		//exit($usersql);
 		$userinfo = $wpdb->get_results($usersql, ARRAY_A);
 		
-		foreach($userinfo as $input_row) {
+		foreach((array)$userinfo as $input_row) {
 			if(stristr($input_row['unique_name'],'shipping')){
 			 	 $shippinginfo[$input_row['unique_name']] = $input_row;
 			}else{

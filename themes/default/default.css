@@ -24,7 +24,9 @@ div.productdisplay img {
  }
 
  
- 
+#change_country{
+ float:left;
+ }
  
 /*
  * shopping cart styling

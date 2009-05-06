@@ -290,7 +290,16 @@ function wpsc_shipping_quote_selected_state() {
 	}
 }
 
+function wpsc_have_morethanone_shipping_methods(){
+	global $wpsc_cart;
+	//return true;
 
+	if($wpsc_cart->shipping_methods > 1){
+		return true;
+	}else{
+		return false;
+	}
+}
 
 
 /**
@@ -395,7 +404,6 @@ class wpsc_cart {
     
 	  // set us up with a shipping method.
 		$custom_shipping = get_option('custom_shipping_options');
-		
 	  $this->shipping_methods = get_option('custom_shipping_options');
 	  $this->shipping_method_count = count($this->shipping_methods);
 		
@@ -1003,7 +1011,7 @@ class wpsc_cart {
     $this->shipping_quotes = array();
     $unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
     $num = 0;
-    foreach($unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
+    foreach((array)$unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
       
 			$per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
       $this->shipping_quotes[$num]['name'] = $shipping_key;
@@ -1045,11 +1053,13 @@ class wpsc_cart {
 	/**
 	 * Applying Coupons
 	 */
-	function apply_coupons($couponAmount, $coupons){
+	function apply_coupons($couponAmount='', $coupons=''){
 		//exit('coupon amount'.$couponAmount);
 		$this->clear_cache();
-		$this->coupons_name = $coupons;
-		$this->coupons_amount = $couponAmount;
+		if($couponAmount !='' && $coupons != ''){
+			$this->coupons_name = $coupons;
+			$this->coupons_amount = $couponAmount;
+		}
 		$this->calculate_total_price();
 	}
 }

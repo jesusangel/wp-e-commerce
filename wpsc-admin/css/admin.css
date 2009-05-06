@@ -3,8 +3,66 @@
 */
 
 /*
+ *Display Purchase log Details CSS is HERE
+ */
+#wpsc_items_ordered{
+	clear:both;
+}
+#wpsc_items_ordered h3{
+	margin-bottom:0em;
+}
+.wpsc_pushdown_img {
+float:left;
+}
+#wpsc_purchlogitems_links{
+	clear:both; 	
+ 
+}
+#wpsc_purchlog_order_status{
+	float:right;
+	width:250px;
+}
+#wpsc_purchlog_order_status .selector{
+	margin-top:-.2em;
+}
+.small{
+	line-height:.5em;
+}
+#wpsc_purchlogitems_links a{
+	text-decoration:none;
+	line-height:14pt;
+}
+#wpsc_purchlogitems_links img{
+	padding-top:2px;
+	float:left;
+}
+#wpsc_shipping_details_box{
+	width:45%; 
+	float:left;
+	border:1px #d3d3d3 solid; 
+	margin:.4em;
+	padding:.6em;
+	margin-right:5em;
+}
+#wpsc_billing_details_box{
+	width:35%; 
+	float:left;
+	margin:.4em;
+	padding:.6em;
+}
+#wpsc_purchlog_searchbox{
+width:100%;
+text-align:right;
+
+
+}
+/*
+ *Display Purchase log Details CSS ends HERE
+ */
+/*
 	* Display Products CSS starts here
 	*/
+
 #wpsc_product_list {
 	width: 410px;
 }

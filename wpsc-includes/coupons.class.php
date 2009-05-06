@@ -8,7 +8,14 @@ function wpsc_uses_coupons() {
 	global $wpsc_coupons;
 	return $wpsc_coupons->uses_coupons();
 }
-
+function wpsc_coupons_error(){
+	global $wpsc_coupons;
+	if($wpsc_coupons->errormsg != ''){
+		return false;
+	}else{
+		return $wpsc_coupons->errormsg;
+	}
+}
 /**
  * Coupons class.
  *
@@ -31,7 +38,8 @@ class wpsc_coupons {
 	var $is_used;
 	
 	var $discount;
-	
+		//for error message
+	var $errormessage;
 	/**
 	 * Coupons constractor
 	 *

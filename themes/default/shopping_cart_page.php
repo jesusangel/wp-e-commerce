@@ -45,10 +45,13 @@ $wpsc_coupons = new wpsc_coupons();
 	<?php endwhile; ?>
 	<?php //this HTML displays coupons if there are any active coupons to use ?>
 	<?php if(wpsc_uses_coupons()): ?>
+		<?php if(wpsc_coupons_error()): ?>
+			<tr><td><?php echo $wpsc_coupons->errormsg; ?></td></tr>
+		<?php endif; ?>
 		<tr>
 		<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
 		
-		<td colspan="2">Enter your coupon number:</td>
+		<td colspan="2"><?php _e('Enter your coupon number'); ?> :</td>
 		<td  colspan="2" align='left'>
 		<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>'>
 		</td>
@@ -73,7 +76,7 @@ $wpsc_coupons = new wpsc_coupons();
 			<tr>
 				<td colspan='5'>
 					 <p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
-					<form name='change_country' action='' method='POST'>
+					<form name='change_country' id='change_country' action='' method='POST'>
 						<?php echo wpsc_shipping_country_list();?>
 						<input type='hidden' name='wpsc_update_location' value='true' />
 					</form>
@@ -92,7 +95,9 @@ $wpsc_coupons = new wpsc_coupons();
 								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
 							</td>
 							<td style='text-align:center;'>
-								<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?> onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+							<?php// if(wpsc_have_morethanone_shipping_methods()): ?>
+								<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?>  onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+							<?php //endif; ?>
 							</td>
 						</tr>
 					<?php endwhile; ?>

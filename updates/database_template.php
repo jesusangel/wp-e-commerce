@@ -78,6 +78,7 @@ $wpsc_database_template[$table_name]['columns']['order'] = "int(10) unsigned NOT
 $wpsc_database_template[$table_name]['columns']['unique_name'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['order'] = " KEY `order` ( `order` )";
+$wpsc_database_template[$table_name]['actions']['after'][] = "wpsc_update_purchlog_unique_name_table";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}collect_data_forms";
 
 

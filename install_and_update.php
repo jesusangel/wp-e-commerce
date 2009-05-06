@@ -207,7 +207,9 @@ function nzshpcrt_install()
 		$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '".TXT_WPSC_PHONE."', 'text', '1', '0', '', '1', '8','billingphone');");
 	}
 		
-		
+
+	
+	
   add_option('show_thumbnails', 1, TXT_WPSC_SHOWTHUMBNAILS, "yes");
 
   add_option('product_image_width', '', TXT_WPSC_PRODUCTIMAGEWIDTH, 'yes');
@@ -726,7 +728,36 @@ function wpsc_create_upload_directories() {
 		@ chmod( WPSC_CACHE_DIR, 0775 );
 	}
 }
-
+/**
+ * UPDATE PURCHASE LOG TABLE
+ */
+function wpsc_update_purchlog_unique_name_table(){
+		global $wpdb;
+		$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET active=0";
+		$wpdb->query($sql);
+		$sqlinsert = "INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name`) VALUES ( '".TXT_WPSC_YOUR_BILLING_CONTACT_DETAILS."', 'heading', '0', '0', '', '1', 1,''),
+	( '".TXT_WPSC_FIRSTNAME."', 'text', '1', '1', '', '1', 2,'billingfirstname'),
+	( '".TXT_WPSC_LASTNAME."', 'text', '1', '1', '', '1', 3,'billinglastname'),
+	( '".TXT_WPSC_ADDRESS."', 'address', '1', '0', '', '1', 4,'billingaddress'),
+	( '".TXT_WPSC_CITY."', 'city', '1', '0', '', '1', 5,'billingcity'),
+	( '".TXT_WPSC_COUNTRY."', 'country', '1', '0', '', '1', 7,'billingcountry'),
+	( '".TXT_WPSC_POSTAL_CODE."', 'text', '0', '0', '', '1', 8,'billingpostcode'),
+	( '".TXT_WPSC_EMAIL."', 'email', '1', '1', '', '1', 6,'billingemail'),
+	( '".TXT_WPSC_DELIVER_TO_A_FRIEND."', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
+	( '".TXT_WPSC_FIRSTNAME."', 'text', '0', '0', '', '1', 11,'shippingfirstname'),
+	( '".TXT_WPSC_LASTNAME."', 'text', '0', '0', '', '1', 12,'shippinglastname'),
+	( '".TXT_WPSC_ADDRESS."', 'address', '0', '0', '', '1', 13,'shippingaddress'),
+	( '".TXT_WPSC_CITY."', 'city', '0', '0', '', '1', 14,'shippingcity'),
+	( '".TXT_WPSC_STATE."', 'text', '0', '0', '', '1', 15,'shippingstate'),
+	( '".TXT_WPSC_COUNTRY."', 'delivery_country', '0', '0', '', '1', 16,'shippingcountry'),
+	( '".TXT_WPSC_POSTAL_CODE."', 'text', '0', '0', '', '1', 17,'shippingpostcode');";
+		$wpdb->query($sqlinsert);  
+		update_option('country_form_field', $country_form_id[0]['id']);
+		update_option('email_form_field', $email_form_id[0]['id']);
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '".TXT_WPSC_PHONE."', 'text', '1', '0', '', '1', '9','billingphone');");
+	
+}	
+ 
 /**
 * wpsc_create_or_update_tables count function,
 * * @return boolean true on success, false on failure
