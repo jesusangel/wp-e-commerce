@@ -3,7 +3,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	global $wpdb,$wpsc_cart;
 	//$curgateway = get_option('payment_gateway');
 	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
-	$errorcode = '';
+	$errorcode = 0;
 	$order_status= 2;
 	$siteurl = get_option('siteurl');
 	
@@ -59,6 +59,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$stock_adjusted = false;
 		$previous_download_ids = array(0); 
 		$product_list='';
+	
 		if(($cart != null) && ($errorcode == 0)) {
 			foreach($cart as $row) {
 				$link = "";
@@ -69,7 +70,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				if (($purchase_log['processed'] >= 2)) {
 					//echo "SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
 					$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
-					
+						//exit('IM HERE'.$errorcode.'<pre>'.print_r($download_data).'</pre>');
 					if($download_data != null) {
 									if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
 											$link = $siteurl."?downloadid=".$download_data['id'];

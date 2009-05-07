@@ -9,9 +9,12 @@
  */
 function wpsc_purchlog_resend_email(){
 	global $wpdb;
+	
 	$log_id = $_GET['email_buyer_id'];
 	if(is_numeric($log_id)) {
+	
 		$selectsql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`= ".$log_id." LIMIT 1";
+
 		$purchase_log = $wpdb->get_row($selectsql,ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
@@ -41,15 +44,17 @@ function wpsc_purchlog_resend_email(){
 	
 		$previous_download_ids = array(0); 
 	
-		if(($cart != null) && ($errorcode == 0)) {
+		if(($cart != null)) {
 			foreach($cart as $row) {
 				$link = "";
 				$productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A) ;
+				
 				if($product_data[0]['file'] > 0) {
 					if($purchase_log['email_sent'] != 1) {
 						$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
 					}
+					
 					if (($purchase_log['processed'] >= 2)) {
 						$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR `cartid` IS NULL) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
 						if($download_data != null) {
@@ -184,7 +189,7 @@ function wpsc_purchlog_resend_email(){
         $message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
  
 				
-				
+			//	exit($message_html);
 				
 				if(($email != '')) {
 					if($purchase_log['processed'] < 2) {

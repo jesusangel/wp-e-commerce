@@ -1,6 +1,7 @@
 <?php
 global $wpsc_query, $wpdb;
 //echo acos(1.01);
+//echo '<pre>'.print_r($wpsc_query, true).'</pre>';
 ?>
 
 <div id='products_page_container' class="wrap wpsc_container">

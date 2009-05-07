@@ -283,24 +283,32 @@ function wpsc_shipping_quote_html_id() {
 function wpsc_shipping_quote_selected_state() {
 	global $wpsc_cart;
 	//
-	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method)&& ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name'])) {
+	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method)&& ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name']) || ($wpsc_cart->current_shipping_method + 1 == $wpsc_cart->shipping_method_count) ) {
+		//exit('<pre>'.print_r($wpsc_cart,true).'</pre>');
+		$wpsc_cart->calculate_base_shipping();
 		return "checked='checked'";
 	} else {
 		return "";
 	}
 }
 
-function wpsc_have_morethanone_shipping_methods(){
+function wpsc_have_morethanone_shipping_methods_and_quotes(){
 	global $wpsc_cart;
-	//return true;
 
-	if($wpsc_cart->shipping_methods > 1){
+	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1){
+		
 		return true;
 	}else{
+
 		return false;
 	}
 }
-
+function wpsc_update_shipping_single_method(){
+	global $wpsc_cart;
+//	exit('Count ->'.count($wpsc_cart->shipping_quotes));
+//	exit(wpsc_shipping_quote_name().' '.wpsc_shipping_method_internal_name());
+//	$wpsc_cart->update_shipping(wpsc_shipping_quote_name(), wpsc_shipping_method_internal_name()); 
+}
 
 /**
  * The WPSC Cart class
@@ -457,7 +465,7 @@ class wpsc_cart {
   function update_shipping($method, $option) {
     global $wpdb, $wpsc_shipping_modules;
 		$this->selected_shipping_method = $method;
-		
+		//exit((string)$wpsc_shipping_modules[$method]);
 		$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
 		
 		$this->selected_shipping_option = $option;
@@ -811,6 +819,7 @@ class wpsc_cart {
     global $wpdb, $wpsc_shipping_modules;
     if($this->uses_shipping()) {
 			if($this->base_shipping == null) {
+				
 				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 				$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
 				$this->base_shipping = $total;

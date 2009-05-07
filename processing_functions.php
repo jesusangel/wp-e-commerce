@@ -251,11 +251,10 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
       $variations = array_values($variations);
       array_walk($variations, 'wpsc_sanitise_keys');
 		}
-		
+	
     /// the start of the normal price determining code.
     if($variation_count >= 1) {
       // if we have variations, grab the individual price for them. 
-      
       $variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variations)."')");
       asort($variation_ids);         
       $all_variation_ids = implode(",", $variation_ids);
@@ -264,21 +263,21 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
       $priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '$product_id' AND `value_id` IN ( '".implode("', '",$variations )."' ) AND `all_variation_ids` IN('$all_variation_ids') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
       
       
-   
-      
-      
       $price = $wpdb->get_var("SELECT `price` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
-    } else {
+    } else {	
       $product_data = $wpdb->get_row("SELECT `price`,`special`,`special_price` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
+     // echo '<span style="color:#f00;">'.print_r($product_data, true).'</span><br />'.;
       if($product_data['special_price'] > 0) {
         $price = $product_data['price'] - $product_data['special_price'];
       } else {
         $price = $product_data['price'];
+       
       }
     }
 	} else {
 		$price = false;
 	}
+			
   return $price;
 }
   

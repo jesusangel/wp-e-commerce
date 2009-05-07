@@ -88,8 +88,7 @@ function wpsc_change_purchlog_view($viewby, $status){
 		if($viewby == 'all'){
 			$dates = $purchlogs->getdates();
 			$purchaselogs = $purchlogs->get_purchlogs($dates, $status);
-			$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
-			$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
+
 			$purchlogs->allpurchaselogs = $purchaselogs;
 		}elseif($viewby == '3mnths'){
 			$dates = $purchlogs->getdates();
@@ -277,6 +276,17 @@ function wpsc_purchlog_is_checked_status(){
 		}
 //	exit('<pre>'.print_r($purchlogitem,true).'</pre>');
 }
+
+function wpsc_purchlogs_have_downloads_locked(){
+	global $purchlogitem;
+	$ip = $purchlogitem->have_downloads_locked();
+	if($ip != ''){
+		return sprintf(TXT_WPSC_CLEAR_IP_LOCKS, $ip);
+	}else{
+		return false;
+	}
+	 
+}
 /**
  * WP eCommerce purchaselogs AND purchaselogs_items class
  *
@@ -318,6 +328,7 @@ class wpsc_purchaselogs{
 	
 	/* Constructor function*/
 	function wpsc_purchaselogs(){
+
 		$this->getall_formdata();
 		if(!isset($_POST['view_purchlogs_by']) || !isset($_POST['purchlogs_searchbox'])){
 		$dates = $this->getdates();
@@ -330,7 +341,7 @@ class wpsc_purchaselogs{
 		}
 		$this->purch_item_count = count($this->allpurchaselogs);
 		$statuses = $this->the_purch_item_statuses();
-		
+
 	}
 	
 	function get_purchlogs($dates, $status=''){
@@ -406,7 +417,8 @@ class wpsc_purchaselogs{
 				}
 			}
 		}
-
+		$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
+		$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
 		//exit('<pre>'.print_r($date_list, true).'<pre>');
 		
 		return $date_list;
@@ -646,6 +658,12 @@ class wpsc_purchaselogs_items{
 		if ($this->purch_item_count > 0) {
 			$this->purchitem = $this->allcartcontent[0];
 		}
+	}
+	function have_downloads_locked(){
+		global $wpdb;
+		$sql = "SELECT `ip_number` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE purchid=".$this->purchlogid;
+		$ip_number = $wpdb->get_var($sql);
+		return $ip_number;
 	}
 
 }

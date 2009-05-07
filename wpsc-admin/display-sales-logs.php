@@ -190,9 +190,10 @@
 				</div>
 				<div id='wpsc_purchlogitems_links'>
 				<h3><?php _e('Actions'); ?></h3>
-<img src='<?php echo WPSC_URL; ?>/images/lock_open.png'>&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo TXT_WPSC_CLEAR_IP_LOCKS; ?></a>
-		
-<br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/printer.png'>&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php echo TXT_WPSC_VIEW_PACKING_SLIP; ?></a>
+				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
+<img src='<?php echo WPSC_URL; ?>/images/lock_open.png'>&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
+				<?php endif; ?>
+<img src='<?php echo WPSC_URL; ?>/images/printer.png'>&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php echo TXT_WPSC_VIEW_PACKING_SLIP; ?></a>
 		
 <br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png'>&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php echo TXT_WPSC_EMAIL_BUYER; ?></a>
 		  
@@ -369,7 +370,11 @@
 			</tbody>
 		</table>
 		<p><strong><?php _e('Total:'); ?></strong> <?php echo nzshpcrt_currency_display(wpsc_the_purch_total(), true); ?></p>
-		<?php 
+		<?php 	
+			if(!isset($purchlogs->current_start_timestamp) && !isset($purchlogs->current_end_timestamp)){
+				$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
+				$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
+			}
 			$arr_params = array('wpsc_admin_action' => 'wpsc_downloadcsv',
 								'rss_key'			=> 'key',
 								 'start_timestamp'	=> $purchlogs->current_start_timestamp,

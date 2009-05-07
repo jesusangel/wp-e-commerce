@@ -95,9 +95,12 @@ $wpsc_coupons = new wpsc_coupons();
 								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
 							</td>
 							<td style='text-align:center;'>
-							<?php// if(wpsc_have_morethanone_shipping_methods()): ?>
+							<?php if(wpsc_have_morethanone_shipping_methods_and_quotes()): ?>
 								<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?>  onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
-							<?php //endif; ?>
+							<?php else: ?>
+								<input checked='checked' disabled='disabled' type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>'  value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+							
+							<?php endif; ?>
 							</td>
 						</tr>
 					<?php endwhile; ?>

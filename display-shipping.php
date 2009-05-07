@@ -261,7 +261,7 @@ function selectgateway() {
 					</p>
 					<br />
 					<p>
-						<?php echo TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES; ?>
+						<strong><?php echo TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES; ?></strong>
 					</p>
 					<?php
 					
@@ -280,7 +280,7 @@ function selectgateway() {
 					
 					<br />
 					<p>
-						<?php echo TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES; ?>
+						<strong><?php echo TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES; ?></strong>
 						<?php
 						if(!function_exists('curl_init')) {
 						 echo "<br /><span style='color: red; font-size:8pt; line-height:10pt;'>". TXT_WPSC_SHIPPING_BUT_NO_CURL."</span>";
@@ -338,7 +338,7 @@ function selectgateway() {
 					
 						<tr>
 							<td style='border-top: none;'>
-								<h4><?php echo TXT_WPSC_SHIPPING_MODULES;?></h4>
+								<h4><?php echo TXT_WPSC_SHIPPING_MODULES; ?></h4>
 							</td>
 							<td style='border-top: none;'>
 								<select name='shipping_gw' onChange='selectgateway();'>
