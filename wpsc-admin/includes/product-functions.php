@@ -60,6 +60,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 function wpsc_insert_product($post_data, $wpsc_error = false) {
   global $wpdb;
   //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
+  $adding = false;
   $update = false;
   if((int)$post_data['product_id'] > 0) {
 	  $product_id	= absint($post_data['product_id']);
@@ -107,7 +108,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 				return false;
 			}
 		}			
-  } else {  
+  } else {
 		if ( false === $wpdb->insert( WPSC_TABLE_PRODUCT_LIST, $update_values ) ) {
 			if ( $wp_error ) {
 				return new WP_Error('db_insert_error', __('Could not insert product into the database'), $wpdb->last_error);
@@ -115,6 +116,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 				return 0;
 			}
 		}
+		$adding = true;
 		$product_id = (int) $wpdb->insert_id;
   }
   
@@ -142,19 +144,29 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	}
 	
      
-	$variations_procesor = new nzshpcrt_variations;
+	$variations_processor = new nzshpcrt_variations;
+	
+	if(($adding === true) && ($_POST['variations'] != null)) {
+		foreach((array)$_POST['variations'] as $variation_id => $state) {
+			$variation_id = (int)$variation_id;
+			if($state == 1) {
+				$variation_values = $variations_processor->falsepost_variation_values($variation_id);
+				$variations_processor->add_to_existing_product($product_id,$variation_values);
+			}
+		}
+	}
 	
 	
 	if($post_data['edit_variation_values'] != null) {
-		$variations_procesor->edit_product_values($product_id,$post_data['edit_variation_values']);
+		$variations_processor->edit_product_values($product_id,$post_data['edit_variation_values']);
 	}
 	
 	if($post_data['edit_add_variation_values'] != null) {
-		$variations_procesor->edit_add_product_values($product_id,$post_data['edit_add_variation_values']);
+		$variations_processor->edit_add_product_values($product_id,$post_data['edit_add_variation_values']);
 	}
 		
 	if($post_data['variation_priceandstock'] != null) {
-		$variations_procesor->update_variation_values($product_id, $post_data['variation_priceandstock']);
+		$variations_processor->update_variation_values($product_id, $post_data['variation_priceandstock']);
 	}     
 	
 	
@@ -175,8 +187,8 @@ function wpsc_update_category_associations($product_id, $categories = array()) {
   
   $associated_categories = $wpdb->get_col($wpdb->prepare("SELECT `category_id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('%s')", $product_id));
   
-  $categories_to_add = array_diff($categories, $associated_categories);
-  $categories_to_delete = array_diff($associated_categories, $categories);
+  $categories_to_add = array_diff((array)$categories, (array)$associated_categories);
+  $categories_to_delete = array_diff((array)$associated_categories, (array)$categories);
   $insert_sections = array();
   foreach($categories_to_add as $category_id) {
     $insert_sections[] = $wpdb->prepare("( %d, %d)", $product_id, $category_id);

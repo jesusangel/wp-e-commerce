@@ -72,7 +72,7 @@ function variation_value_list(id, parent_element) {
     	if(id != '') {
     	  	jQuery("#edit_variations_container").html(edit_variation_combinations_html);
     	} else {
-    	  	jQuery("#add_product_variation_details").html(add_variation_combinations_html);
+    	  	jQuery("#edit_variations_container").html(add_variation_combinations_html);
     	}
 	}
 		selected_value = jQuery("input.variation_checkbox",parent_element).attr('checked');

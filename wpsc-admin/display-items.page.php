@@ -29,32 +29,68 @@ function wpsc_display_products_page() {
 		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
 		
 		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) ) { ?>
-			<div id="message" class="updated fade"><p>
-			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
-				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
-				unset($_GET['updated']);
-			}
-			
-			if ( isset($_GET['skipped']) && (int) $_GET['skipped'] )
-				unset($_GET['skipped']);
-			
-			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
-				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
-				unset($_GET['deleted']);
-			}
-			
-			if ( isset($_GET['message']) ) {
-				$message = absint( $_GET['message'] );
-				$messages[1] =  __( 'Product updated.' );
-				echo $messages[$message];			
-				unset($_GET['message']);
-			}
-			
-			
-			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted', 'message'), $_SERVER['REQUEST_URI'] );
-			?>
-		</p></div>
+			<div id="message" class="updated fade">
+				<p>
+				<?php if ( isset($_GET['updated'])) {
+					printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+					unset($_GET['updated']);
+				}
+				
+				if ( isset($_GET['skipped'])) {
+					unset($_GET['skipped']);
+				}
+				
+				if ( isset($_GET['deleted'])) {
+					printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+					unset($_GET['deleted']);
+				}
+				
+				if ( isset($_GET['duplicated']) ) {
+					printf( __ngettext( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
+					unset($_GET['duplicated']);
+				}
+				
+				if ( isset($_GET['message']) ) {
+					$message = absint( $_GET['message'] );
+					$messages[1] =  __( 'Product updated.' );
+					echo $messages[$message];			
+					unset($_GET['message']);
+				}
+				
+				
+				$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted', 'message', 'duplicated'), $_SERVER['REQUEST_URI'] );
+				?>
+			</p>
+		</div>
 		<?php } ?>
+		
+		<?php		 
+			$unwriteable_directories = Array();
+			
+			if(!is_writable(WPSC_FILE_DIR)) {
+				$unwriteable_directories[] = WPSC_FILE_DIR;
+			}
+			
+			if(!is_writable(WPSC_PREVIEW_DIR)) {
+				$unwriteable_directories[] = WPSC_PREVIEW_DIR;
+			}
+		
+			if(!is_writable(WPSC_IMAGE_DIR)) {
+				$unwriteable_directories[] = WPSC_IMAGE_DIR;
+			}
+			
+			if(!is_writable(WPSC_THUMBNAIL_DIR)) {
+				$unwriteable_directories[] = WPSC_THUMBNAIL_DIR;
+			}
+			
+			if(!is_writable(WPSC_CATEGORY_DIR)) {
+				$unwriteable_directories[] = WPSC_CATEGORY_DIR;
+			}
+				
+			if(count($unwriteable_directories) > 0) {
+				echo "<div class='error fade'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";
+			}
+	?>
 		
 		
 		<div id="col-container" class='stuffbox'>
@@ -224,7 +260,20 @@ function wpsc_admin_products_list($category_id = 0) {
 								<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
 							</td>
 							<td class="product-title column-title">
-								<a href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>				
+								<a href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>
+								  <?php
+								  $product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
+									if(count($product_alert['messages']) > 0) {
+										$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
+									}
+									if($product_alert['state'] === true) {
+									  ?>
+										<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_URL;?>/images/product-alert.jpg' alt='' title='' />
+										<?php
+									}
+									?>
+							
+							
 							
 								<div class="wpsc-row-actions">
 									<span class="edit">
@@ -233,8 +282,8 @@ function wpsc_admin_products_list($category_id = 0) {
 									<span class="delete">
 										<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
 									</span> |
-								<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php wpsc_product_url($product['id']); ?>">View</a></span> |
-								<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="<?php echo add_query_arg('product_id', $product['id']); ?>">Duplicate</a></span>
+								<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php echo wpsc_product_url($product['id']); ?>">View</a></span> |
+								<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="<?php echo wp_nonce_url("page.php?wpsc_admin_action=duplicate_product&amp;product={$product['id']}", 'duplicate_product_' . $product['id']); ?>">Duplicate</a></span>
 						   </div>
 							</td>
 							

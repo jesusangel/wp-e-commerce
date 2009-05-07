@@ -62,12 +62,11 @@ function wpsc_admin_pages(){
 				//         }
 			//written by allen
 			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
-			//exit(ABSPATH.'wp-admin/users.php');
-			//end of written by allen
-		
-			add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
 			
-			$page_hooks[] = add_submenu_page($base_page,__("Products (new)"), __("Products (new)"), 7, WPSC_DIR_NAME.'/wpsc-admin/display-items.page.php', 'wpsc_display_products_page');
+			
+			//add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
+			
+			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'edit-products', 'wpsc_display_products_page');
 			
 			
 			
@@ -114,6 +113,7 @@ function wpsc_admin_pages(){
 		
 		foreach($page_hooks as $page_hook) {
 			add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
+			//echo $page_hook."<br />";
 		}
 		
 		return;
@@ -121,26 +121,40 @@ function wpsc_admin_pages(){
   
   
 
+function wpsc_meta_boxes(){
+  $pagename = 'products_page_edit-products';
+	add_meta_box('category_and_tag', 'Category and Tags', 'wpsc_category_and_tag_forms', $pagename, 'normal', 'high');
+	add_meta_box('price_and_stock', 'Price and Stock', 'wpsc_price_and_stock_forms', $pagename, 'normal', 'high');
+	add_meta_box('variation', 'Variations', 'wpsc_variation_forms', $pagename, 'normal', 'high');
+	add_meta_box('shipping', 'Shipping', 'wpsc_shipping_forms', $pagename, 'normal', 'high');
+	add_meta_box('advanced', 'Advanced Settings', 'wpsc_advanced_forms', $pagename, 'normal', 'high');
+	add_meta_box('product_download', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high');
+	add_meta_box('product_image', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high');
+}
+
+add_action('admin_menu', 'wpsc_meta_boxes');
+
 /**
-	* wpsc_admin_css_and_js function, includes the wosc_admin CSS and JS
+	* wpsc_admin_css_and_js function, includes the wpsc_admin CSS and JS
 	* No parameters, returns nothing
 */
 function  wpsc_admin_include_css_and_js() {
   $siteurl = get_option('siteurl'); 
 	
+	
+	wp_enqueue_script('swfupload');
+	wp_enqueue_script('swfupload-swfobject');
+	wp_enqueue_script('swfupload-queue');
+	wp_enqueue_script('swfupload-handlers');
 
+	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
+	
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	
 	wp_enqueue_script('wp-e-commerce-legacy-ajax', WPSC_URL.'/wpsc-admin/js/ajax.js', $version_identifier); // needs removing
 	wp_enqueue_script('wp-e-commerce-variations', WPSC_URL.'/wpsc-admin/js/variations.js', array('jquery'), $version_identifier);
-	
-	wp_enqueue_script('swfupload');
-	wp_enqueue_script('swfupload-swfobject');
-	wp_enqueue_script('swfupload-queue');
-	wp_enqueue_script('swfupload-handlers');
-	wp_enqueue_script( 'postbox');
 	
 	//wp_enqueue_script('wp-e-commerce-swfuploader', WPSC_URL.'/wpsc-admin/js/wpsc-swfuploader.js', array('swfupload'), $version_identifier);
 	

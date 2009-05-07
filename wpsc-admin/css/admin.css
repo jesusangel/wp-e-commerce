@@ -25,9 +25,7 @@ float:left;
 #wpsc_purchlog_order_status .selector{
 	margin-top:-.2em;
 }
-.small{
-	line-height:.5em;
-}
+
 #wpsc_purchlogitems_links a{
 	text-decoration:none;
 	line-height:14pt;
@@ -62,6 +60,16 @@ text-align:right;
 /*
 	* Display Products CSS starts here
 	*/
+#poststuff h3.form_heading {
+	font-size:1.1em;
+  margin: 40px 0px 10px 0px;
+  padding-left: 0px;
+}
+
+#poststuff h3.form_heading span {
+	font-size:0.8em;
+}
+
 
 #wpsc_product_list {
 	width: 410px;
@@ -105,6 +113,10 @@ text-align:right;
 }
 	
 /*  Sortable product styling*/
+	
+table.product_editform {
+  margin-bottom: 20px;
+}
 	
 	
 #wpsc_product_list .ui-sortable-helper{
@@ -637,6 +649,15 @@ float:right;
 margin-top:-17px;
 }
 
+a.delete_button {
+border-color:-moz-use-text-color -moz-use-text-color #FF0000;
+border-style:none none solid;
+border-width:medium medium 1px;
+color:#FF0000;
+font-size:11px;
+padding:1px 2px;
+text-decoration:none;
+}
 	
 /*  Product details form styling ends */
 	/*

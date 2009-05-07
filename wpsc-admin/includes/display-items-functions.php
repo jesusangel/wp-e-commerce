@@ -5,8 +5,8 @@
  * @package wp-e-commerce
  * @since 3.7
  */
- 
-$closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products');
+
+//$closed_postboxes = (array)get_usermeta( $current_user->ID, 'editproduct');
 $variations_processor = new nzshpcrt_variations;
 
 
@@ -67,7 +67,7 @@ $wpsc_product_defaults =array (
 function wpsc_display_product_form ($product_id = 0) {
   global $wpdb, $wpsc_product_defaults;
   $product_id = absint($product_id);
-	$variations_processor = new nzshpcrt_variations;
+	//$variations_processor = new nzshpcrt_variations;
   if($product_id > 0) {
 
 		$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`={$product_id} LIMIT 1",ARRAY_A);
@@ -104,11 +104,14 @@ function wpsc_display_product_form ($product_id = 0) {
 	
 		$check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}'");
 		
-		$current_user = wp_get_current_user();
-		$closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_editproduct');
   } else {
 		$product_data =$wpsc_product_defaults;
   }
+	$current_user = wp_get_current_user();
+  
+  // we put the closed postboxes array into the product data to propagate it to each form without having it global.
+  $product_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products_page_edit-products');
+  $product_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_products_page_edit-products');
   
   if(count($product_data) > 0) {
 		wpsc_product_basic_details_form($product_data);
@@ -125,14 +128,25 @@ function wpsc_display_product_form ($product_id = 0) {
 
 function wpsc_product_basic_details_form(&$product_data) {
   global $wpdb,$nzshpcrt_imagesize_info;
+  
+	/*<h3 class='hndle'><?php echo  TXT_WPSC_PRODUCTDETAILS; ?> <?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE; ?></h3>*/
   ?>
-	<h3 class='hndle'><?php echo  TXT_WPSC_PRODUCTDETAILS; ?> <?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE; ?></h3>
+  <h3 class='form_heading'>
+ <?php
+  if($product_data['id'] > 0) {
+		echo __('Edit Product')." <span>(<a href='".remove_query_arg('product_id')."'>".__('Add new Product')."</a>)</span>";
+	} else {
+		_e('Add Product');
+	} 
+	?>
+	</h3>
 	<div>
 		<table class='product_editform' style='width:100%;'>
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
 					<div class='admin_product_name'>
-						<input class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+					  <label for="wpsc_product_name">Product Name</label>
+						<input id='wpsc_product_name' class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 										<a href='#' class='shorttag_toggle'></a>
 										<div class='admin_product_shorttags'>
 										<h4>Shortcodes</h4>
@@ -191,7 +205,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 			<tr>
 				<td class='itemfirstcol' colspan='2'>
 					<strong ><?php echo TXT_WPSC_ADDITIONALDESCRIPTION; ?> :</strong><br />			
-					<textarea name='additional_description' cols='40' rows='8' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
+					<textarea name='additional_description' cols='40' rows='5' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
 				</td>
 			</tr>
 		</table>
@@ -199,14 +213,23 @@ function wpsc_product_basic_details_form(&$product_data) {
 	<div class='meta-box-sortables'>
 		<?php
 	
-	// 	$order = get_option('wpsc_product_page_order');
-	// 	if (($order == '') || (count($order ) < 6)){
-				$order=array("wpsc_product_category_and_tag", "wpsc_product_price_and_stock", "wpsc_product_shipping", "wpsc_product_variation", "wpsc_product_advanced", "wpsc_product_image", "wpsc_product_download");
-	// 	}
+		$default_order=array("wpsc_product_category_and_tag_forms", "wpsc_product_price_and_stock_forms", "wpsc_product_shipping_forms", "wpsc_product_variation_forms", "wpsc_product_advanced_forms", "wpsc_product_image_forms", "wpsc_product_download_forms");
 		
+		
+	 	$order = get_option('wpsc_product_page_order');
+	 	//echo "<pre>".print_r($order,true)."</pre>";
+	 	if (($order == '') || (count($order ) < 6)){
+				$order = $default_order;
+	 	}
+	 	$check_missing_items = array_diff($default_order, $order);
+	 	
+	 	if(count($check_missing_items) > 0) {
+	 	  $order = array_merge($check_missing_items, $order);
+	 	}
+		
+	 	//echo "<pre>".print_r($order,true)."</pre>";
 		update_option('wpsc_product_page_order', $order);
-		foreach((array)$order as $key => $forms) {
-			$box_function_name = $forms."_forms";
+		foreach((array)$order as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
 			}
@@ -219,8 +242,10 @@ function wpsc_product_basic_details_form(&$product_data) {
 	<input type='hidden' name='wpsc_admin_action' value='edit_product' />
 	<?php wp_nonce_field('edit-product'); ?>
 	<input type='hidden' name='submit_action' value='edit' />
+	<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+	 
 	
-	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php echo TXT_WPSC_EDIT_PRODUCT; ?>' />&nbsp;
+	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Edit Product'); } else {	_e('Add Product');	} ?>' />&nbsp;
 	<a class='delete_button' ' href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/display-items.php&amp;deleteid=<?php echo $product_data['id']; ?>' onclick="return conf();" ><?php echo TXT_WPSC_DELETE_PRODUCT; ?></a>
 	<?php
   }
@@ -229,22 +254,14 @@ function wpsc_product_basic_details_form(&$product_data) {
 
 
 
-
-
-
-
-
-
-
-
-
 function wpsc_product_category_and_tag_forms($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
+	
 	$output = '';
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	$output .= "<div id='category_and_tag' class=' postbox ".((array_search('category_and_tag', $closed_postboxes) !== false) ? 'closed' : '')."' >";
+	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_category_and_tag_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." >";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -320,7 +337,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	$output .= "<div id='price_and_stock' class='price_and_stock postbox ".((array_search('price_and_stock', $closed_postboxes) !== false) ? 'closed' : '')."' >";
+	$output .= "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." >";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -389,8 +406,9 @@ function wpsc_product_price_and_stock_forms($product_data=''){
       <td style='width:430px;'>
       <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes'".(($product_data['quantity_limited'] == 1) ? 'checked="true"' : '')."name='quantity_limited'/>"; //onclick='hideelement(\"add_stock\")'
 	$output .= "&nbsp;<label for='add_form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
-	if ($product_data != ''){
-      	$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
+	if ($product_data['id'] > 0){
+			$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
+      
   		if($variations_output != '') {
   	    	$output .= "<div class='edit_stock' style='display: none;'>\n\r";
   	    	
@@ -437,7 +455,7 @@ function wpsc_product_variation_forms($product_data=''){
 	}
 	?>
 	
-	<div id='variation' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : '');	?>'>
+	<div id='wpsc_product_variation_forms' class='postbox <?php echo ((array_search('wpsc_product_variation_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '');	?>' <?php echo ((array_search('wpsc_product_variation_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?>>
 		<h3 class='hndle'><?php echo TXT_WPSC_VARIATION_CONTROL; ?></h3>
 		
 		<div class='inside'>
@@ -457,7 +475,7 @@ function wpsc_product_variation_forms($product_data=''){
 					<div id='add_product_variations'>
 						<?php echo $variations_processor->list_variations($product_data['id']); ?>
 					</div>
-					<div id='add_product_variation_details'>
+					<div id='edit_variations_container'>
 					</div>
 			<?php
 			} ?>
@@ -471,7 +489,7 @@ function wpsc_product_shipping_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
-	$output .= "<div class='postbox ".((array_search('shipping', $closed_postboxes) !== false) ? 'closed' : '')."' id='shipping'>";
+	$output .= "<div class='postbox ".((array_search('wpsc_product_shipping_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_shipping_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." id='wpsc_product_shipping_forms'>";
 
     	if (IS_WP27) {
     		$output .= "<h3 class='hndle'>";
@@ -547,7 +565,7 @@ function wpsc_product_advanced_forms($product_data='') {
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
-	$output .= "<div id='advanced' class='postbox ".((array_search('advanced', $closed_postboxes) !== false) ? 'closed' : '')."'>";
+	$output .= "<div id='wpsc_product_advanced_forms' class='postbox ".((array_search('wpsc_product_advanced_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_advanced_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
 
 		$output .= "<h3 class='hndle'>";
 		$output .= TXT_WPSC_ADVANCED_OPTIONS;
@@ -663,7 +681,7 @@ function wpsc_product_image_forms($product_data='') {
 		$display = "style='display:none;'";
 	}
 	?>
-	<div id='product_image' class='postbox <?php echo ((array_search('product_image', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
+	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> >
 		<h3 class='hndle'> <?php echo	TXT_WPSC_PRODUCTIMAGES; ?></h3>
 		<div class='inside'>
 		
@@ -725,7 +743,7 @@ function wpsc_product_download_forms($product_data='') {
 	}
 	$output ='';
 
- 	$output .= "<div id='product_download' class='postbox ".((array_search('product_download', $closed_postboxes) !== false) ? 'closed' : '')."'>";
+ 	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
     } else {
@@ -787,7 +805,7 @@ function wpsc_product_download_forms($product_data='') {
 function wpsc_product_label_forms() {
 	global $closed_postboxes;
 	?>
-	<div id='product_label' class='postbox <?php echo ((array_search('variation', $closed_postboxes) !== false) ? 'closed' : ''); ?>'>
+	<div id='wpsc_product_label_forms' class='postbox <?php echo ((array_search('wpsc_product_label_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>'>
 		<?php
     	if (function_exists('add_object_page')) {
     		echo "<h3 class='hndle'>";
@@ -925,20 +943,5 @@ function edit_multiple_image_gallery($product_data) {
   }
   //return $output;
 }
-
-
-
-
-function wpsc_meta_forms(){
-	add_meta_forms('category_and_tag', 'Category and Tags', 'wpsc_category_and_tag_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_forms('price_and_stock', 'Price and Stock', 'wpsc_price_and_stock_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_forms('variation', 'Variations', 'wpsc_variation_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_forms('shipping', 'Shipping', 'wpsc_shipping_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_forms('advanced', 'Advanced Settings', 'wpsc_advanced_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_forms('product_download', 'Product Download', 'wpsc_product_download_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-	add_meta_forms('product_image', 'Product Images', 'wpsc_product_image_forms', WPSC_DIR_NAME.'/display-items', 'normal', 'high');
-}
-
-//add_action('admin_menu', 'wpsc_meta_forms');
 
 ?>

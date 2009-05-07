@@ -758,6 +758,19 @@ function wpsc_update_purchlog_unique_name_table(){
 	
 }	
  
+ /* *
+  *wpsc_update_remove_product_nulls function,  converts values to decimal to satisfy mySQL strict mode
+ */
+function wpsc_update_remove_nulls($colname) {
+  global $wpdb;
+  //echo "UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `$colname` = CONVERT(`$colname`, DECIMAL)";
+	if($wpdb->query("UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `$colname` = 0 WHERE `$colname` NOT REGEXP '^[0-9]+(\.)*[0-9]*'")) {
+	  return true;
+	} else {
+		return false;
+	}
+}
+ 
 /**
 * wpsc_create_or_update_tables count function,
 * * @return boolean true on success, false on failure
@@ -824,6 +837,10 @@ function wpsc_create_or_update_tables($debug = false) {
 			}
       //get the column list
       $existing_table_column_data = $wpdb->get_results("SHOW FULL COLUMNS FROM `$table_name`", ARRAY_A);
+      
+      if(isset($table_data['actions']['before']['all']) && is_callable($table_data['actions']['before']['all'])) {
+				$table_data['actions']['before']['all']();
+			}
 
       foreach((array)$existing_table_column_data as $existing_table_column) {
         $column_name = $existing_table_column['Field'];
@@ -831,6 +848,9 @@ function wpsc_create_or_update_tables($debug = false) {
         
 				//echo "<pre>".print_r($existing_table_column,true)."</pre>";
         if(isset($table_data['columns'][$column_name]) && (stristr($table_data['columns'][$column_name], $existing_table_column['Type']) === false)) {
+          if(isset($table_data['actions']['before'][$column_name]) && is_callable($table_data['actions']['before'][$column_name])) {
+            $table_data['actions']['before'][$column_name]($column_name);
+          }        
           $wpdb->query("ALTER TABLE `$table_name` CHANGE `$column_name` `$column_name` {$table_data['columns'][$column_name]} ");
 				}
         

@@ -55,13 +55,92 @@ jQuery(document).ready( function () {
 			} else {
 				jQuery('a.togbox',this).html('&ndash;');
 			}
-			wpsc_save_postboxes_state('editproduct', '#poststuff');
+			wpsc_save_postboxes_state('products_page_edit-products', '#poststuff');
 	});
 
 
 	jQuery("#add-product-image").click(function(){
 		swfu.selectFiles();
 	});
+	
+	jQuery('.hide-postbox-tog').click( function() {
+		var box = jQuery(this).val();
+		if ( jQuery(this).attr('checked') ) {
+			jQuery('#' + box).show();
+			if ( jQuery.isFunction( postboxes.pbshow ) ) {
+				postboxes.pbshow( box );
+			}
+		} else {
+			jQuery('#' + box).hide();
+			if ( jQuery.isFunction( postboxes.pbhide ) ) {
+				postboxes.pbhide( box );
+			}
+		}
+		postboxes.save_state('products_page_edit-products');
+	} );
+	
+	
+	// postbox sorting
+	jQuery('.meta-box-sortables').sortable( {
+			placeholder: 'sortable-placeholder',
+			connectWith: [ '.meta-box-sortables' ],
+			items: '> .postbox',
+			handle: '.hndle',
+			distance: 2,
+			tolerance: 'pointer',
+			sort: function(e,ui) {
+				if ( jQuery(document).width() - e.clientX < 300 ) {
+					if ( ! jQuery('#post-body').hasClass('has-sidebar') ) {
+						var pos = jQuery('#side-sortables').offset();
+	
+						jQuery('#side-sortables').append(ui.item)
+						jQuery(ui.placeholder).css({'top':pos.top,'left':pos.left}).width(jQuery(ui.item).width())
+						postboxes.expandSidebar(1);
+					}
+				}
+			},
+			stop: function() {
+				var postVars = {
+					action: 'product-page-order',
+					ajax: 'true'
+				}
+				//jQuery(this).css("border","1px solid red");
+				jQuery(this).each( function() {
+					postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
+				} );
+				jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {
+					postboxes.expandSidebar();
+				} );
+			}
+	} );
+	
+	// show or hide the stock input forms
+	jQuery("input.limited_stock_checkbox").click( function ()  {
+    parent_form = jQuery(this).parents('form');
+    if(jQuery(this).attr('checked') == true) {
+			jQuery("div.edit_stock",parent_form).show();
+			jQuery("th.stock, td.stock", parent_form).show();
+    } else {
+			jQuery("div.edit_stock", parent_form).hide();
+			jQuery("th.stock, td.stock", parent_form).hide();
+    }
+  });
+	
+	jQuery("#table_rate_price").click(
+		function() {
+			if (this.checked) {
+				jQuery("#table_rate").show();
+			} else {
+				jQuery("#table_rate").hide();
+			}
+		}
+	);
+	
+	jQuery(".add_level").click(
+		function() {
+			added = jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td></tr>');
+		}
+	);
 	
 	// start off the gallery_list sortable
 	/*
@@ -229,3 +308,13 @@ function wpsc_save_postboxes_state(page, container) {
 	});
 }
 
+  
+function hideelement(id) {
+  state = document.getElementById(id).style.display;
+  //alert(document.getElementById(id).style.display);
+  if(state != 'block') {
+    document.getElementById(id).style.display = 'block';
+	} else {
+		document.getElementById(id).style.display = 'none';
+	}
+}

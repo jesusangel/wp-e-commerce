@@ -78,7 +78,7 @@ $wpsc_database_template[$table_name]['columns']['order'] = "int(10) unsigned NOT
 $wpsc_database_template[$table_name]['columns']['unique_name'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['order'] = " KEY `order` ( `order` )";
-$wpsc_database_template[$table_name]['actions']['after'][] = "wpsc_update_purchlog_unique_name_table";
+$wpsc_database_template[$table_name]['actions']['after']['all'] = "wpsc_update_purchlog_unique_name_table";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}collect_data_forms";
 
 
@@ -201,6 +201,8 @@ $wpsc_database_template[$table_name]['columns']['no_shipping'] = "varchar(1) NOT
 $wpsc_database_template[$table_name]['columns']['thumbnail_image'] = "text NULL ";
 $wpsc_database_template[$table_name]['columns']['thumbnail_state'] = "int(11) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
+$wpsc_database_template[$table_name]['actions']['before']['international_pnp'] = "wpsc_update_remove_nulls";
+$wpsc_database_template[$table_name]['actions']['before']['special_price'] = "wpsc_update_remove_nulls";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_list";
 
 

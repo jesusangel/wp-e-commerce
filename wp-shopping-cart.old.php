@@ -1103,7 +1103,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
       $sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1') ORDER BY `id` DESC $limit";
     }
     
-    include_once(WPSC_FILE_PATH."/product_display_functions.php");
+//     include_once(WPSC_FILE_PATH."/product_display_functions.php");
     include_once(WPSC_FILE_PATH."/show_cats_brands.php");
     
     
