@@ -438,7 +438,7 @@ function wpsc_admin_ajax() {
 					$selected_price = (float)$_POST['selected_price'];
       		
        		// variation values housekeeping
-      		$variation_processor->edit_product_values($product_id,$_POST['edit_variation_values'], $selected_price);
+      		$variation_processor->edit_product_values($product_id,$_POST['edit_var_val'], $selected_price);
       
 
       		// get all the currently associated variations from the database
@@ -464,7 +464,7 @@ function wpsc_admin_ajax() {
         		}
       		}
       		//echo "/* ".print_r($associated_variations,true)." */\n\r";
-					echo "edit_variation_combinations_html = \"".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view($product_id,  (array)$_POST['edit_variation_values'])))."\";\n";
+					echo "edit_variation_combinations_html = \"".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view($product_id,  (array)$_POST['edit_var_val'])))."\";\n";
 
     	} else {
       		if(count($variations_selected) > 0) {
@@ -478,7 +478,7 @@ function wpsc_admin_ajax() {
 							$limited_stock = true;
         		}
         		
-						echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, (array)$_POST['edit_variation_values'], $selected_price, $limited_stock)))."\";\n";
+						echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, (array)$_POST['edit_var_val'], $selected_price, $limited_stock)))."\";\n";
 
       		} else {
         		echo "add_variation_combinations_html = \"\";\n";

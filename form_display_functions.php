@@ -1,38 +1,4 @@
-<?php
-function categorylist($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0) {
-  /* Displays the category forms for adding and editing products
-   * Recurses to generate the branched view for subcategories
-	*/
-  global $wpdb;
-  if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
-  } else {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
-	}
-  foreach((array)$values as $option) {
-    if(is_numeric($product_id) && ($product_id > 0)) {
-      $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
-      //echo "<pre>".print_r($category_assoc,true)."</pre>";
-      if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0)) {
-        $selected = "checked='true'";
-			}
-		}
-    if(is_numeric($category_id) && ($iteration > 0)) {
-      if($iteration > 1) {
-        if($iteration > 3) {
-          $output .= str_repeat("&nbsp;", $iteration);
-				}
-        $output .= str_repeat("&nbsp;", $iteration);
-			}
-      $output .=   "-&nbsp;";
-		}
-    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' >".stripslashes($option['name'])."</label><br />";
-    $output .= categorylist($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
-    $selected = "";
-	}
-  return $output;
-}
-  
+<?php  
 function nzshpcrt_country_list($selected_country = null) {
   global $wpdb;
   $output = "<option value=''></option>";

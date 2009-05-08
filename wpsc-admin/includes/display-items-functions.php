@@ -308,9 +308,9 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
 						  $output .= "<strong>".$category_group_name.":</strong><br />";
 						  if ($product_data == '')
-						  	$output .= categorylist($categorisation_group['id'], false, 'add_');
+						  	$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
 						  else 
-						  	$output .= categorylist($categorisation_group['id'], $product_data['id'], 'edit_');
+						  	$output .= wpsc_category_list($categorisation_group['id'], $product_data['id'], 'edit_');
 						  $output .= "</p>";
 						}
 					}
@@ -942,6 +942,42 @@ function edit_multiple_image_gallery($product_data) {
     }
   }
   //return $output;
+}
+
+
+  /**
+	* Displays the category forms for adding and editing products
+	* Recurses to generate the branched view for subcategories
+	*/
+function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0) {
+  global $wpdb;
+  if(is_numeric($category_id)) {
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+  } else {
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+	}
+  foreach((array)$values as $option) {
+    if(is_numeric($product_id) && ($product_id > 0)) {
+      $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
+      //echo "<pre>".print_r($category_assoc,true)."</pre>";
+      if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0)) {
+        $selected = "checked='true'";
+			}
+		}
+    if(is_numeric($category_id) && ($iteration > 0)) {
+      if($iteration > 1) {
+        if($iteration > 3) {
+          $output .= str_repeat("&nbsp;", $iteration);
+				}
+        $output .= str_repeat("&nbsp;", $iteration);
+			}
+      $output .=   "-&nbsp;";
+		}
+    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' >".stripslashes($option['name'])."</label><br />";
+    $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
+    $selected = "";
+	}
+  return $output;
 }
 
 ?>
