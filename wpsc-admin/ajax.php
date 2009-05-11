@@ -8,6 +8,18 @@
  * @since 3.7
  */
 
+ function wpsc_ajax_load_product() {
+  global $wpdb;
+  
+	exit();
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'load_product') {
+	add_action('admin_init', 'wpsc_ajax_load_product');
+}
+ 
  
 
 function wpsc_bulk_modify_products() {

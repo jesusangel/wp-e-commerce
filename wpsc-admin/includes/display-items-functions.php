@@ -332,7 +332,7 @@ return $output;
 }
 function wpsc_product_price_and_stock_forms($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
-	$table_rate_price = get_product_meta($product['id'], 'table_rate_price');
+	$table_rate_price = get_product_meta($product_data['id'], 'table_rate_price');
 	$output = '';
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";

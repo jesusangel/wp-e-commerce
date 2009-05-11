@@ -93,7 +93,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   );
   
   foreach($product_columns as $column => $default) {
-    if($post_data[$column]) {
+    if(isset($post_data[$column]) || ($post_data[$column] !== null) ) {
 			$update_values[$column] = stripslashes($post_data[$column]);
     } else if(($update != true) && ($default !== null)) {
 			$update_values[$column] = stripslashes($default);

@@ -462,7 +462,9 @@ class wpsc_cart {
     global $wpdb, $wpsc_shipping_modules;
 		$this->selected_shipping_method = $method;
 		//exit((string)$wpsc_shipping_modules[$method]);
-		$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
+		if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+			$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
+		}
 		
 		$this->selected_shipping_option = $option;
 		
@@ -1203,6 +1205,19 @@ class wpsc_cart_item {
         }
         $price = $product['price'] - $sale_discount;
         $file_id = $product['file'];
+        
+        
+        // if we are using table rate price
+				$levels = get_product_meta($this->product_id, 'table_rate_price');
+				if ($levels != '') {
+					foreach($levels['quantity'] as $key => $qty) {
+						if ($this->quantity >= $qty) {
+							$unit_price = $levels['table_price'][$key];
+							if ($unit_price != '')
+								$price = $unit_price;
+						}
+					}
+				}
       }
 		}
 		// create the string containing the product name.

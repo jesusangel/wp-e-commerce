@@ -140,6 +140,11 @@ jQuery(document).ready( function () {
 		}
 	);
 	
+	jQuery(".remove_line").click(
+		function() {
+			jQuery(this).parent().parent('tr').remove();
+		}
+	);
 	// start off the gallery_list sortable
 	/*
 	jQuery("#gallery_list").sortable({
