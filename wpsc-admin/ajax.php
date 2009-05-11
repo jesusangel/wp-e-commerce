@@ -10,7 +10,8 @@
 
  function wpsc_ajax_load_product() {
   global $wpdb;
-  
+  $product_id = absint($_REQUEST['product_id']);
+	wpsc_display_product_form($product_id);
 	exit();
 }
  
