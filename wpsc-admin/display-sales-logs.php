@@ -51,7 +51,7 @@
 		
 			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] );
 			?>
-		</p></div>
+			</p></div>
 		<?php } 
 		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
@@ -66,22 +66,25 @@
 								//wpsc_ordersummary();
 							   
 							}
+						
 						?>
 					</div>
 			</div>
 			<?php /* end of sidebar start of main column */ ?>
 			<div id='post-body' class='has-sidebar' style='width:95%;'>
 				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
+			
 				<?php 
 					if(function_exists('wpsc_right_now')) {
 						echo wpsc_right_now();
 				    }
 			   	
-			   		?> </div><br /><div id='wpsc_purchlog_searchbox'><?php 
-			   			wpsc_purchaselogs_searchbox();
-			   			?></div><br /><?php
-					wpsc_purchaselogs_displaylist(); 
-					?> 				
+			   		?> 
+			   	</div><br />
+			   	<div id='wpsc_purchlog_searchbox'>
+			   		<?php wpsc_purchaselogs_searchbox(); ?>
+			   	</div><br />
+			   		<?php	wpsc_purchaselogs_displaylist(); ?> 				
 				
 			</div>
 		</div>
@@ -315,6 +318,7 @@
  }
  function wpsc_purchaselogs_displaylist(){
  	global $purchlogs;
+	$fixpage = get_option('siteurl').'/wp-admin/admin.php?page=trunk/wpsc-admin/purchlogs_upgrade.php';
   ?>
   	<form method='post' action=''>
   	&nbsp;<img src='<?php echo WPSC_URL."/images/cornerarrow.png"; ?>' alt='' />
@@ -348,6 +352,9 @@
   		</select>
   		<input type='hidden' value='purchlog_filter_by' name='wpsc_admin_action' />
   		<input type="submit" value="<?php _e('Filter'); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
+  		<?php if(get_option('wpsc_purchaselogs_fixed')== false){ ?>
+  		<span ><a style='color:#f00' href='<?php echo $fixpage; ?>'>FIX YOUR LOGS</a></span>
+  		<?php } ?>
   		<?php if(wpsc_have_purch_items() ==false):  ?>
   		<p style='color:red;'><?php _e('Oops there are no purchase logs for your selection, please try again.'); ?></p>
   		

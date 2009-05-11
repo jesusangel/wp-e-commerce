@@ -10,10 +10,11 @@ function wpsc_uses_coupons() {
 }
 function wpsc_coupons_error(){
 	global $wpsc_coupons;
-	if($wpsc_coupons->errormsg != ''){
-		return false;
+	//exit('<pre>'.print_r($wpsc_coupons, true).'</pre>');
+	if(isset($wpsc_coupons->errormsg) && $wpsc_coupons->errormsg == false){
+		return true;
 	}else{
-		return $wpsc_coupons->errormsg;
+		return false;
 	}
 }
 /**
@@ -39,7 +40,7 @@ class wpsc_coupons {
 	
 	var $discount;
 		//for error message
-	var $errormessage;
+	var $errormsg;
 	/**
 	 * Coupons constractor
 	 *
@@ -50,6 +51,7 @@ class wpsc_coupons {
 	 */
 	function wpsc_coupons($code = ''){
 		global $wpdb;
+	
 		if ($code == '') {
 			return false;
 		} else {
@@ -59,6 +61,7 @@ class wpsc_coupons {
 			$coupon_data = $coupon_data[0];
 			
 			if ($coupon_data == '' || $coupon_data == NULL) {
+				$this->errormsg = false;
 				return false;
 			} else {
 				$this->value = $coupon_data['value'];
@@ -69,6 +72,7 @@ class wpsc_coupons {
 				$this->use_once = $coupon_data['use-once'];
 				$this->start_date = $coupon_data['start'];
 				$this->end_date = $coupon_data['expiry'];
+				$this->errormsg = true;
 				$valid = $this->validate_coupon();
 				return $valid;
 			}
@@ -126,7 +130,15 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				foreach ($this->conditions as $c) {
 					
 					//Check if all the condictions are returning true, so it's an ALL logic, if anyone want to implement a ANY logic please do.
-					$match = $match && $this->compare_logic($c, $item);
+				
+					/* $match && */ $match =  $this->compare_logic($c, $item);
+					if($match){
+						$match = true;
+					//	exit('ture');
+					}else{
+						$match = false;
+					//	exit('false');
+					}
 				}
 				if ($match) {
 				    if ($this->is_percentage == '1') {
@@ -139,6 +151,11 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 						$item->discount = $this->value;
 						$return += $this->value;
 					}
+				}else{
+					//exit('match not found');
+					$this->discount = 0;
+					$item->discount = $this->discount;
+					$return += $this->discount;
 				}
 			}
 		}
@@ -179,7 +196,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				break;
 				
 				case 'contains'://Checks if the product name contains the condition value
-				preg_match("(.*)".$c['value']."(.*)", $product_data->name, $match);
+				preg_match("/(.*)".$c['value']."(.*)/", $product_data->name, $match);
 				if (!empty($match))
 					return true;
 				break;
@@ -197,7 +214,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				break;
 				
 				case 'ends'://Checks if the product name ends with condition value
-				preg_match("/^".$c['value']."/", $product_data->name, $match);
+				preg_match("/".$c['value']."$/", $product_data->name, $match);
 				if (!empty($match))
 					return true;
 				break;
@@ -206,27 +223,53 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				return false;
 			}
 		} else if ($c['property'] == 'item_quantity'){
+
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of a product in the cart equals condition value
-				if ($product->quantity == $c['value'])
+				exit($product_obj->quantity.'and'.$c['value']);
+				if ($product_obj->quantity == (int)$c['value'])
 					return true;
 				break;
 				
 				case 'greater'://Checks if the quantity of a product is greater than the condition value
-				if ($product->quantity > $c['value'])
+				if ($product_obj->quantity > $c['value'])
 					return true;
 				break;
 				
 				case 'less'://Checks if the quantity of a product is less than the condition value
-				if ($product->quantity < $c['value'])
+				if ($product_obj->quantity < $c['value'])
+					return true;
+				break;
+						
+				case 'contains'://Checks if the product name contains the condition value
+				preg_match("/(.*)".$c['value']."(.*)/", $product_obj->quantity, $match);
+				if (!empty($match))
 					return true;
 				break;
 				
+				case 'not_contain'://Checks if the product name contains the condition value
+				preg_match("/(.*)".$c['value']."(.*)/",$product_obj->quantity, $match);
+				if (empty($match))
+					return true;
+				break;
+				
+				case 'begins'://Checks if the product name begins with condition value
+				preg_match("/^".$c['value']."/", $product_obj->quantity, $match);
+				if (!empty($match))
+					return true;
+				break;
+				
+				case 'ends'://Checks if the product name ends with condition value
+				preg_match("/".$c['value']."$/",$product_obj->quantity, $match);
+				if (!empty($match))
+					return true;
+				break;
 				default:
 				return false;
 			}
 		} else if ($c['property'] == 'total_quantity'){
-			$total_quantity = shopping_cart_total_quantity();
+//			exit('<pre>'.print_r($product_obj, true).'</pre>');
+			$total_quantity = $product_obj->quantity;
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of products in the cart equals condition value
 				if ($total_quantity == $c['value'])
@@ -248,7 +291,9 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 			}
 		
 		} else if ($c['property'] == 'subtotal_amount'){
-			$subtotal = nzshpcrt_overall_total_price();
+		
+
+			$subtotal = $product_obj->cart->subtotal;
 			switch($c['logic']) {
 				case 'equal'://Checks if the subtotal of products in the cart equals condition value
 				if ($subtotal == $c['value'])
@@ -261,8 +306,13 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				break;
 				
 				case 'less'://Checks if the subtotal of the cart is less than the condition value
-				if ($subtotal < $c['value'])
+				if ($subtotal < $c['value']){
+					//exit('<pre>'.print_r($product_obj->cart->subtotal, true).'</pre>cValue'.$c['value']);
 					return true;
+				}else{
+					return false;
+				}
+
 				break;
 				
 				default:

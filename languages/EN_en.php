@@ -3,6 +3,8 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
+define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
+
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Release downloads locked to this IP address %s');
 define('TXT_WPSC_EMAIL_BUYER', 'Resend Receipt to Buyer');
 

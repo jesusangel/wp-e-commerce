@@ -272,7 +272,7 @@ jQuery(".add_level").click(
 	}
 );
 
-\
+
 jQuery("#add_label").click(
 	function(){
 		jQuery("#labels").append("<br><table><tr><td>"+TXT_WPSC_LABEL+" :</td><td><input type='text' name='productmeta_values[labels][]'></td></tr><tr><td>"+TXT_WPSC_LIFE_NUMBER+" :</td><td><input type='text' name='productmeta_values[life_number][]'></td></tr><tr><td>"+TXT_WPSC_ITEM_NUMBER+" :</td><td><input type='text' name='productmeta_values[item_number][]'></td></tr><tr><td>"+TXT_WPSC_PRODUCT_CODE+" :</td><td><input type='text' name='productmeta_values[product_code][]'></td></tr><tr><td>"+TXT_WPSC_PDF+" :</td><td><input type='file' name='productmeta_values[product_pdf][]'></td></tr></table>");

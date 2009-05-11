@@ -150,6 +150,7 @@ function wpsc_the_product_price() {
   global $wpsc_query;  
   $price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);  
   if(($product['special']==1) && ($variations_output[1] === null)) {
+  
     $output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],false,$wpsc_query->product['id']);
   } else {
     $output = nzshpcrt_currency_display($price, $wpsc_query->product['notax']);

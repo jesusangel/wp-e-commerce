@@ -184,7 +184,7 @@ function wpsc_purchase_log_csv() {
     $start_timestamp = $_GET['start_timestamp'];
     $end_timestamp = $_GET['end_timestamp'];
     $data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC",ARRAY_A);
-    
+         // exit('<pre>'.print_r($data, true).'</pre>');  
     header('Content-Type: text/csv');
     header('Content-Disposition: inline; filename="Purchase Log '.date("M-d-Y", $start_timestamp).' to '.date("M-d-Y", $end_timestamp).'.csv"');      
     
@@ -192,8 +192,8 @@ function wpsc_purchase_log_csv() {
       $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
       $country_data = $wpdb->get_results($country_sql,ARRAY_A);
       $country = $country_data[0]['value'];
-           
-      $output .= "\"".nzshpcrt_find_total_price($purchase['id'],$country) ."\",";
+   
+      $output .= "\"".$purchase['totalprice'] ."\",";
                 
       foreach($form_data as $form_field) {
         $collected_data_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
@@ -232,7 +232,10 @@ function wpsc_purchase_log_csv() {
       
       foreach($cart as $item) {
         $output .= ",";
-        $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$item['prodid']." LIMIT 1",ARRAY_A);        
+        $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$item['prodid']." LIMIT 1",ARRAY_A);    
+        $skusql = "SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key`= 'sku' AND `product_id` = ".$item['prodid'];  
+      //  exit($skusql);
+        $skuvalue = $wpdb->get_var($skusql);  
         $variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$item['id']."'";
         $variation_data = $wpdb->get_results($variation_sql,ARRAY_A);
          $variation_count = count($variation_data);
@@ -251,8 +254,9 @@ function wpsc_purchase_log_csv() {
             $variation_list .= ")";
 					}
         
-        
+      //  exit('<pre>'.print_r($item,true).'</pre>');
         $output .= "\"".$item['quantity']." ".$product['name'].$variation_list."\"";
+        $output .= ",".$skuvalue;
 			}
       $output .= "\n"; // terminates the row/line in the CSV file
 		}

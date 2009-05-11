@@ -33,7 +33,7 @@ function wpsc_admin_pages(){
      * or bypass the normal download system.
      */
     if(function_exists('add_options_page')) {
-			$base_page = WPSC_DIR_NAME.'/display-log.php';
+			$base_page = WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php';
 			
 			
 		if ($userdata->user_level <= 2) {
@@ -57,8 +57,8 @@ function wpsc_admin_pages(){
 
 				
 	
-				add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
-				$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG.'new', TXT_WPSC_PURCHASELOG.'new', 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
+				//add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
+				$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
 				//         }
 			//written by allen
 			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');

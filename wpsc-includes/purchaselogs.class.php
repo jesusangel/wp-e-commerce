@@ -532,7 +532,7 @@ class wpsc_purchaselogs{
 		global $wpdb;
 			//exit('<pre>'.print_r($this->form_data, true).'</pre>');
 		$i=0;
-		foreach($this->form_data as $formdata){
+		foreach((array)$this->form_data as $formdata){
 			if(in_array('billingemail', $formdata)){
 				$emailformid = $formdata['id'];
 			}
@@ -551,7 +551,7 @@ class wpsc_purchaselogs{
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$fNameformid;
 		$fname = $wpdb->get_var($sql);
 		if(!$fname){
-			exit($sql);
+			//exit($sql);
 		}
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$lNameformid;
 		$lname = $wpdb->get_var($sql);

@@ -59,12 +59,12 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 				unset($insert_array);
 					$rules = $_POST['rules'];
 
-					foreach ($rules as $key => $rule) {
+					foreach ((array)$rules as $key => $rule) {
 						foreach ($rule as $k => $r) {
 							$new_rule[$k][$key] = $r;
 						}
 					}
-					foreach($new_rule as $key => $rule) {
+					foreach((array)$new_rule as $key => $rule) {
 						if ($rule['value'] == '') {
 							unset($new_rule[$key]);
 						}

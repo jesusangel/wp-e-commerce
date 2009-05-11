@@ -63,7 +63,7 @@ function wpsc_add_to_cart() {
 		ob_end_clean();
 		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-		
+		 
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
     
 
@@ -100,6 +100,7 @@ function wpsc_empty_cart() {
 		ob_end_clean();
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
     echo "jQuery('div.shopping-cart-wrapper').html('$output');";
+    
 		exit();
   }
 }
@@ -113,24 +114,39 @@ if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) 
 	* coupons price, used through ajax and in normal page loading.
 	* No parameters, returns nothing
 */
-function wpsc_coupon_price() {
+function wpsc_coupon_price($currCoupon = '') {
   global $wpdb, $wpsc_cart, $wpsc_coupons;
   if(isset($_POST['coupon_num']) && $_POST['coupon_num'] != ''){
 	  $coupon = $wpdb->escape($_POST['coupon_num']);
+	  $_SESSION['coupon_numbers'] = $coupon;
 	  $wpsc_coupons = new wpsc_coupons($coupon);
+	  
 	  if($wpsc_coupons->validate_coupon()){
 	  
 	  	$discountAmount = $wpsc_coupons->calculate_discount();
 	  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
+	  	$wpsc_coupons->errormsg = false;
 	  }else{
-	  	$wpsc_coupons->errormsg = 'coupon is not valid';
+	  	$wpsc_coupons->errormsg = true;
 	  	$wpsc_cart->coupons_amount = 0;
 	  	$wpsc_cart->coupons_name = '';
 	  }
 
-  }elseif($_POST['coupon_num'] == ''){
-  		$wpsc_cart->coupons_amount = 0;
+  }elseif($_POST['coupon_num'] == '' && $currCoupon == ''){
+   		$wpsc_cart->coupons_amount = 0;
   		$wpsc_cart->coupons_name = '';
+  }elseif($currCoupon != ''){
+  	  $coupon = $wpdb->escape($currCoupon);
+	  $_SESSION['coupon_numbers'] = $coupon;
+	  $wpsc_coupons = new wpsc_coupons($coupon);
+	  
+	  if($wpsc_coupons->validate_coupon()){
+		 
+	  	$discountAmount = $wpsc_coupons->calculate_discount();
+	//  	exit('I have  calling'.$discountAmount);	 
+	  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
+	  	$wpsc_coupons->errormsg = false;
+	  }	
   }
   
 	
@@ -147,6 +163,7 @@ if(isset($_POST['coupon_num'])) {
 */
 function wpsc_update_item_quantity() {
   global $wpdb, $wpsc_cart;
+ 
   if(is_numeric($_POST['key'])) {
     $key = (int)$_POST['key'];
 		if($_POST['quantity'] > 0) {
@@ -157,7 +174,9 @@ function wpsc_update_item_quantity() {
 		  // if the quantity is 0, remove the item.
 			$wpsc_cart->remove_item($key);
 		}
+		wpsc_coupon_price($_SESSION['coupon_numbers']);
   }
+	
 }
   
 // execute on POST and GET

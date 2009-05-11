@@ -2,7 +2,7 @@
 global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway, $wpsc_coupons;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
-$wpsc_coupons = new wpsc_coupons();
+$wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 //echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 ?>
 
@@ -44,9 +44,11 @@ $wpsc_coupons = new wpsc_coupons();
 		</tr>
 	<?php endwhile; ?>
 	<?php //this HTML displays coupons if there are any active coupons to use ?>
+<?php //exit('<pre>'.print_r($wpsc_coupons, true).'</pre>'); ?>
 	<?php if(wpsc_uses_coupons()): ?>
+		
 		<?php if(wpsc_coupons_error()): ?>
-			<tr><td><?php echo $wpsc_coupons->errormsg; ?></td></tr>
+			<tr><td><?php echo TXT_WPSC_COUPONSINVALID; ?></td></tr>
 		<?php endif; ?>
 		<tr>
 		<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">

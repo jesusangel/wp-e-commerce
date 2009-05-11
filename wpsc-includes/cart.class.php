@@ -1061,12 +1061,9 @@ class wpsc_cart {
 	 * Applying Coupons
 	 */
 	function apply_coupons($couponAmount='', $coupons=''){
-		//exit('coupon amount'.$couponAmount);
 		$this->clear_cache();
-		if($couponAmount !='' && $coupons != ''){
-			$this->coupons_name = $coupons;
-			$this->coupons_amount = $couponAmount;
-		}
+		$this->coupons_name = $coupons;
+		$this->coupons_amount = $couponAmount;	
 		$this->calculate_total_price();
 	}
 }

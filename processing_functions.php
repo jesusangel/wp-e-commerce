@@ -199,7 +199,7 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
 			$_SESSION['quote_shipping_option'] = '';
 			}
 			if(($_SESSION['quote_shipping_option'] == null) && ($shipping_quotes != null)) {
-				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_slice($shipping_quotes[0],0,1)));
+				$_SESSION['quote_shipping_option'] = array_pop(array_keys(array_slice($shipping_quotes,0,1)));
 			}
 			foreach((array)$shipping_quotes as $shipping_quote) {
 				foreach((array)$shipping_quote as $key=>$quote) {

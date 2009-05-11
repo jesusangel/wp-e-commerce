@@ -156,6 +156,7 @@ if(isset($_POST['zipcode'])) {
 
 
 
+
 /**
  * The WPSC Checkout class
  */
@@ -178,10 +179,20 @@ class wpsc_checkout {
   }
   
   function form_name() {
+		if($this->form_name_is_required()){
+		return $this->checkout_item->name.' * ';
+	}else{
 		return $this->checkout_item->name;
-	}  
+	}
+  }  
    
-	
+	function form_name_is_required(){
+		if($this->checkout_item->mandatory == 0){
+			return false;
+		}else{
+			return true;
+		}
+	}
 	/**
 	* form_element_id method, returns the form html ID
 	* @access public
