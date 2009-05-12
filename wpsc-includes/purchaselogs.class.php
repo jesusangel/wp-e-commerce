@@ -533,13 +533,19 @@ class wpsc_purchaselogs{
 			//exit('<pre>'.print_r($this->form_data, true).'</pre>');
 		$i=0;
 		foreach((array)$this->form_data as $formdata){
-			if(in_array('billingemail', $formdata)){
+		if(in_array('billingemail', $formdata)){
+				$emailformid = $formdata['id'];
+			}elseif(in_array('email', $formdata)){
 				$emailformid = $formdata['id'];
 			}
 			if(in_array('billingfirstname', $formdata)){
 				$fNameformid = $formdata['id'];
+			}elseif(in_array('First Name', $formdata)){
+				$fNameformid = $formdata['id'];
 			}
 			if(in_array('billinglastname', $formdata)){
+				$lNameformid = $formdata['id'];
+			}elseif(in_array('Last Name', $formdata)){
 				$lNameformid = $formdata['id'];
 			}
 			$i++;

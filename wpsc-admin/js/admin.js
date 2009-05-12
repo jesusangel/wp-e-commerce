@@ -42,10 +42,12 @@ jQuery(document).ready( function () {
 	 jQuery('.edit-product').click(function(){	
 			product_id = jQuery(this).attr('href').match(/product_id=(\d{1,})/);
 	 		post_values = "product_id="+product_id[1]+"";
+	 		/*
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
 			  //jQuery('form#modify-products').html(returned_data);
 			});
 	 		//return false;
+	 		*/
 	 });
 	
 	jQuery("div.admin_product_name a.shorttag_toggle").toggle(

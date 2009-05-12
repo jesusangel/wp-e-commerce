@@ -97,14 +97,10 @@ function variation_value_list(id, parent_element) {
 	
 	post_values = "list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&limited_stock="+limited_stock+"&"+selected_variations+"";
 	
-	jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) { 
+	jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
+		jQuery("div.variation_box label input[@type='checkbox']").removeAttr("disabled", "true"); 
 		eval(returned_data);
-		jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").removeAttr("disabled", "true");
-		if(id != '') {
-				jQuery("#edit_variations_container").html(edit_variation_combinations_html);
-		} else {
-				jQuery("#edit_variations_container").html(add_variation_combinations_html);
-		}	
+		jQuery("#edit_variations_container").html(edit_variation_combinations_html );
 	});
 }  
 

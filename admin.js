@@ -1214,4 +1214,3 @@ function open_variation_settings(element_id) {
   jQuery("tr#"+element_id+" td div.variation_settings").toggle();
   return false;
 }
-

@@ -445,6 +445,11 @@ function wpsc_admin_ajax() {
 	if(($_POST['list_variation_values'] == "true")) {
    		// retrieve the forms for associating variations and their values with products
 		$variation_processor = new nzshpcrt_variations();
+		
+		
+		
+		
+		
 		$variations_selected = array();
     	foreach((array)$_POST['variations'] as $variation_id => $checked) {
     		$variations_selected[] = (int)$variation_id;
@@ -501,6 +506,10 @@ function wpsc_admin_ajax() {
         		echo "add_variation_combinations_html = \"\";\n";
       		}
 		}
+		
+		
+		
+		
 		exit();
 	}
 	
