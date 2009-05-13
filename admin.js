@@ -446,6 +446,48 @@ function update_preview_url(prodid) {
 }
 
 
+function add_variation_value(value_type) {
+  container_id = value_type+"_variation_values";
+  //alert(container_id);
+  last_element_id = document.getElementById(container_id).lastChild.id;
+//   last_element_id = last_element_id.split("_");
+//   last_element_id = last_element_id.reverse();
+  date = new Date;
+  new_element_id = "variation_value_"+date.getTime();
+
+
+  old_elements = document.getElementById(container_id).innerHTML;
+  new_element_contents = "";
+  if(value_type == "edit") {
+    new_element_contents += "<input type='text' class='text' name='new_variation_values[]' value='' />";
+        } else {
+                new_element_contents += "<input type='text' class='text' name='variation_values[]' value='' />";
+        }
+  new_element_contents += " <a class='image_link' href='#' onclick='remove_variation_value_field(\""+new_element_id+"\")'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a><br />";
+  //new_element_contents += "</span>";
+
+  new_element = document.createElement('span');
+  new_element.id = new_element_id;
+
+  document.getElementById(container_id).appendChild(new_element);
+  document.getElementById(new_element_id).innerHTML = new_element_contents;
+  return false;
+}
+
+function remove_variation_value(element,variation_value) {
+  var delete_variation_value=function(results)
+    {
+    }
+
+  element_count = jQuery("div#edit_variation_values span").size();
+  if(element_count > 1) {
+    ajax.post("index.php",delete_variation_value,"admin=true&ajax=true&remove_variation_value=true&variation_value_id="+variation_value);
+    jQuery(element).parent("span.variation_value").remove();
+        }
+  return false;
+}
+
+
 
 
 function checkimageresize() {

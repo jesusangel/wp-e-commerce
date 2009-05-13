@@ -170,8 +170,8 @@ class nzshpcrt_variations {
     $associated_variations = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` = '{$product_id}' ORDER BY `id` ASC",ARRAY_A);
     $variation_count = count($associated_variations);
 //  $grid_header = str_replace(Array(":variation1:", ":variation2:"),Array($variation_name1, $variation_name2) ,TXT_WPSC_VARIATION_GRID_CONTROL_PAIR);
-    
-    
+    //print_r("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` = '{$product_id}' ORDER BY `id` ASC");
+    //exit("$variation_count wut?");
     
     if($variation_count > 0) {
       $output .= "<table class='product_variation_grid'>\n\r";   
@@ -285,7 +285,7 @@ class nzshpcrt_variations {
 				$output .= "          </select>\n\r";
 
         $output .= "        </div>\n\r";
-        $output .= wpsc_select_variation_file($associated_variation_ids, $associated_variation_row['id']);
+        //$output .= wpsc_select_variation_file($associated_variation_ids, $associated_variation_row['id']);
         $output .= "      </div>\n\r";
         
         
@@ -409,7 +409,7 @@ class nzshpcrt_variations {
 			$output .= "          </select>\n\r";
 
 			$output .= "        </div>\n\r";
-      $output .= wpsc_select_variation_file($variation_ids);
+      //$output .= wpsc_select_variation_file($variation_ids);
       $output .= "      </div>\n\r";
       $output .= "    </td>\n\r";
       $output .= "  </tr>\n\r";
@@ -441,69 +441,76 @@ class nzshpcrt_variations {
 		$variation_id_list = array();
 		$modified_values = array();
 		$modified_value_variations = array();
-		
+		$all_variation_values = array();
 		// Edit or update the variation values association table
     foreach($variation_value_list as $variation_id => $submitted_variation_values) {
       $variation_id = absint($variation_id);
-      
-			if($wpdb->get_var("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}')") > 0) {
-				$existing_variation_values = $wpdb->get_col("SELECT `value_id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE  `product_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') AND `visible` IN('1')");
-			
-				$submitted_variation_values = array_keys($submitted_variation_values);
-				
-				// compare the submitted and existing arrays in various ways to find the added, removed and unchanged values 
-				$unchanged_values = array_intersect($submitted_variation_values, $existing_variation_values);
-				
-				$removed_values = array_diff($existing_variation_values, $submitted_variation_values);
-				$added_values = array_diff($submitted_variation_values, $existing_variation_values);
-				
-				
-				
-				$variation_values = array();;
-				// because we have to preserve PHP 4 compatibility, I cannot use array_fill_keys here.
-				foreach($removed_values as $value_id) {
-					$variation_values[$value_id] = 0;
-				}
-				foreach($added_values as $value_id) {
-					$variation_values[$value_id] = 1;
-				}
-			
-			   /*
-				echo "/*\n\r";
-				echo "\nunchanged\n";
-				print_r($unchanged_values);
-				
-				echo "\nremoved\n";
-				print_r($removed_values);
-				
-				echo "\nadded\n";
-				print_r($added_values);
-				
-				echo "\nfinal_array\n";
-				print_r($variation_values);
-				echo "* /\n\r";
-				// */
-			
-			
-				//continue;
-				foreach($variation_values as $variation_value_id => $variation_state) {
-					$variation_value_id = absint($variation_value_id); 
-					$visible_state = (int)(bool)$variation_state;
-					
-					if($wpdb->get_var("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}' AND `value_id` = '{$variation_value_id}'") > 0) {
-						// if is present, update it
-						$rows_changed = $wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` SET `visible` = '{$visible_state}' WHERE `product_id` = '{$product_id}' AND `value_id` = '".(int)$variation_value_id."' LIMIT 1 ;");
-					} else {
-						// otherwise, add it
-						$wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES ( '{$product_id}', '{$variation_value_id}', 0, 0, '{$visible_state}', '{$variation_id}')");
-					}
-					// we probably still need these to generate the combinations
-					$modified_values[] = $variation_value_id;
-					$modified_value_variations[$variation_value_id] = $variation_id;
-				}
-				// and this, too
-				$variation_id_list[] = $variation_id;
+			if(!$wpdb->get_var("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}')") > 0) {
+			  $wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_ASSOC."` ( `type` , `name` , `associated_id` , `variation_id` ) VALUES ( 'product', '', '{$product_id}', '{$variation_id}');");
 			}
+			$existing_variation_values = $wpdb->get_col("SELECT `value_id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE  `product_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') AND `visible` IN('1')");
+		
+			$submitted_variation_values = array_keys($submitted_variation_values);
+			
+			// compare the submitted and existing arrays in various ways to find the added, removed and unchanged values 
+			$unchanged_values = array_intersect($submitted_variation_values, $existing_variation_values);
+			
+			$removed_values = array_diff($existing_variation_values, $submitted_variation_values);
+			$added_values = array_diff($submitted_variation_values, $existing_variation_values);
+			
+			
+			
+			$variation_values = array();
+			// because we have to preserve PHP 4 compatibility, I cannot use array_fill_keys here.
+			foreach($removed_values as $value_id) {
+				$variation_values[$value_id] = 0;
+			}
+			foreach($added_values as $value_id) {
+				$variation_values[$value_id] = 1;
+			}
+			
+			
+			foreach($unchanged_values as $value_id) {
+				$all_variation_values[$value_id] = 1;
+			}
+			
+			$all_variation_values +=  $variation_values;
+			/*
+			echo "/*\n\r";
+			echo "\nunchanged\n";
+			print_r($unchanged_values);
+			
+			echo "\nremoved\n";
+			print_r($removed_values);
+			
+			echo "\nadded\n";
+			print_r($added_values);
+			
+			echo "\nfinal_array\n";
+			print_r($variation_values);
+			echo "* /\n\r";
+			// */
+		
+		
+			//continue;
+			foreach($variation_values as $variation_value_id => $variation_state) {
+				$variation_value_id = absint($variation_value_id); 
+				$visible_state = (int)(bool)$variation_state;
+				
+				if($wpdb->get_var("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}' AND `value_id` = '{$variation_value_id}'") > 0) {
+					// if is present, update it
+					$rows_changed = $wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` SET `visible` = '{$visible_state}' WHERE `product_id` = '{$product_id}' AND `value_id` = '".(int)$variation_value_id."' LIMIT 1 ;");
+				} else {
+					// otherwise, add it
+					$wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES ( '{$product_id}', '{$variation_value_id}', 0, 0, '{$visible_state}', '{$variation_id}')");
+				}
+				// we probably still need these to generate the combinations
+				$modified_values[] = $variation_value_id;
+				$modified_value_variations[$variation_value_id] = $variation_id;
+			}
+			// and this, too
+			$variation_id_list[] = $variation_id;
+			
 		}
 		
 		
@@ -511,10 +518,9 @@ class nzshpcrt_variations {
 		
 		
 		
-		
+		/*
 		// this will spit errors if there are no variation values, so don't run if there are none
-		if(count($modified_values) > 0) {
-		
+		if(count($modified_values) > 0) {		
 			$variation_id_list = array_unique($variation_id_list);
 			asort($variation_id_list);
 			$all_variation_ids = implode(",", $variation_id_list);
@@ -542,10 +548,10 @@ class nzshpcrt_variations {
 				
 				foreach((array)$variation_id_list as $variation) {
 					$variation = (int)$variation;
-					/* generate all the various bits of SQL to bind the tables together
-					 * the values are concatenated because we cannot use array_diff on an array of arrays, it simply does not work.
-					 * We concatenate the values in the SQL statments, is faster than looping through them later
-					*/
+					// * generate all the various bits of SQL to bind the tables together
+					// * the values are concatenated because we cannot use array_diff on an array of arrays, it simply does not work.
+					// * We concatenate the values in the SQL statments, is faster than looping through them later
+					
 					
 					
 					//$join_selected_cols[] = "`a{$variation}`.`value_id` AS `id_{$variation}`";
@@ -595,7 +601,9 @@ class nzshpcrt_variations {
 					$unmade_combinations = explode(",", $unmade_combination);				
 					
 					$wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_PROPERTIES."` ( `product_id` , `stock`, `price`, `weight`, `file` ) VALUES ('{$product_id}', '0', '{$price}', '0', '0');");
-					$variation_priceandstock_id = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` LIMIT 1");
+					$variation_priceandstock_id = $wpdb->insert_id;
+					
+					
 					foreach($unmade_combinations as $new_variation_value) {
 						if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$new_variation_value'") < 1) {
 							$variation_id = $wpdb->get_var("SELECT `".WPSC_TABLE_VARIATION_VALUES."`.`variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '{$new_variation_value}'");
@@ -605,15 +613,15 @@ class nzshpcrt_variations {
 				}
 			}
 		
-		}
-		return $output; 
+		} */
+		return $all_variation_values; 
 		exit();
 	}
     
-    /**
-    * this does nothing now, but is left to avoid fatal errors
-    */
-   function edit_add_product_values($product_id,$variation_value_list) {
+	/**
+	* this does nothing now, but is left to avoid fatal errors
+	*/
+	function edit_add_product_values($product_id,$variation_value_list) {
     global $wpdb;
     return $output;
 	}

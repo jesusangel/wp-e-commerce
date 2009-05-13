@@ -14,6 +14,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 define('WPSC_VERSION', '3.7');
 define('WPSC_MINOR_VERSION', '3');
 
+define('SAVEQUERIES', true);
 
 define('WPSC_PRESENTABLE_VERSION', '3.7 Development Version');
 

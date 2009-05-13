@@ -878,7 +878,9 @@ function wpsc_check_stock($state, $product) {
 			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
 			
 			// count the variation combinations with a stock of zero
-			$items_out_of_stock = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `stock` IN (0)");
+			if(count($priceandstock_ids) > 0) {
+				$items_out_of_stock = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `stock` IN (0)");
+			}
 			if($items_out_of_stock > 0) {
 				$out_of_stock = true;
 			}
