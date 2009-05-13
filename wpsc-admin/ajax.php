@@ -20,7 +20,37 @@
  if($_REQUEST['wpsc_admin_action'] == 'load_product') {
 	add_action('admin_init', 'wpsc_ajax_load_product');
 }
+ function wpsc_crop_thumb() {
+  global $wpdb;
+ if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	$targ_w = $targ_h = $_POST['thumbsize'];
+	$jpeg_quality = $_POST['jpegquality'];
+	$directory = WP_CONTENT_DIR.'/uploads/wpsc/product_images/'; 
+	
+	$imagename = $_POST['imagename'];
+	$src = $directory.$imagename;
+	$full_path =  $directory.'thumbnails/'.$imagename;
+	$img_r = imagecreatefromjpeg($src);
+	$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+//	exit($full_path);
+	//exit(' destination '.$dst_r.' resource '.$img_r.' destination X and Y 0 0  resource X and Y'.$_POST['x'].' '.$_POST['y'].'destination width and height '.$targ_w.' '. $targ_h.' resource width and height'.$_POST['w'].' '.$_POST['h']);
+	imagecopyresampled($dst_r,$img_r,0,0,$_POST['x'],$_POST['y'],$targ_w,$targ_h,$_POST['w'],$_POST['h']);
+//	imagejpeg($dst_r,$full_path);
+//	header('Content-type: image/jpeg');
+
+	imagejpeg($dst_r,$full_path,$jpeg_quality);
+
+	//exit();
+}
+}
  
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'crop_thumb') {
+	add_action('admin_init', 'wpsc_crop_thumb');
+} 
  
 
 function wpsc_bulk_modify_products() {

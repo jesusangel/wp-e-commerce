@@ -1781,27 +1781,32 @@ if($_GET['clean_categories'] == 'true') {
 										break;
 									}
 									?>
-									<input onclick='jQuery("#wpsc_enable_comments").show()'  type='radio' value='1' name='wpsc_enable_comments' id='use_pagination1' <?php echo $enable_comments1; ?> /> <label for='use_pagination1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-									<input onclick='jQuery("#wpsc_enable_comments").hide()' type='radio' value='0' name='wpsc_enable_comments' id='use_pagination2' <?php echo $enable_comments2; ?> /> <label for='use_pagination2'><?php echo TXT_WPSC_NO;?></label><br />
+									<input onclick='jQuery("#wpsc_enable_comments,.wpsc_comments_details").show()'  type='radio' value='1' name='wpsc_enable_comments' id='use_pagination1' <?php echo $enable_comments1; ?> /> <label for='use_pagination1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+									<input onclick='jQuery("#wpsc_enable_comments,.wpsc_comments_details").hide()' type='radio' value='0' name='wpsc_enable_comments' id='use_pagination2' <?php echo $enable_comments2; ?> /> <label for='use_pagination2'><?php echo TXT_WPSC_NO;?></label><br />
 									<div id='wpsc_enable_comments' <?php echo $intense_debate_account_id_display_state; ?> >
 									<?php echo TXT_WPSC_INTENSE_DEBATE_ACCOUNT_ID; ?>:<br/>
 									<input type='text' size='30' name='wpsc_intense_debate_account_id' value='<?php echo get_option('wpsc_intense_debate_account_id'); ?>' /><br/>
-									<small>Help on finding the Account ID</small>
+									<small><a href='http://intensedebate.com/sitekey/' title='Help finding the Account ID'><?php _e('Help on finding the Account ID'); ?></a></small>
 									</div>
 									</td>
 								</tr>
-								
+						
 								<tr>
+									
 									<th scope="row">
+									<div class='wpsc_comments_details' <?php $intense_debate_account_id_display_state ?> >
 										<?php echo TXT_WPSC_COMMENTS_WHICH_PRODUCTS;?>:
+									</div>
 									</th>
 									<td>
+									<div class='wpsc_comments_details' <?php $intense_debate_account_id_display_state ?> >
 										<input type='radio' value='1' name='wpsc_comments_which_products' id='wpsc_comments_which_products1' <?php if (get_option('wpsc_comments_which_products') == 1 || !get_option('wpsc_comments_which_products')) { echo "checked='true'"; } ?> /><label for='wpsc_comments_which_products1'>All Products</label>&nbsp;
 										<input type='radio' value='2' name='wpsc_comments_which_products' id='wpsc_comments_which_products2' <?php if (get_option('wpsc_comments_which_products') == 2) { echo "checked='true'"; } ?> /><label for='wpsc_comments_which_products2'>Per Product</label>&nbsp;
 										<br />
+									</div>
 									</td>
-								</tr> 
-								
+									
+								</tr>
 							</table> 
 							
 							<?php

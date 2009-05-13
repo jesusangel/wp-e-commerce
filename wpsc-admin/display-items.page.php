@@ -225,6 +225,12 @@ function wpsc_admin_products_list($category_id = 0) {
 					$image_path = WPSC_THUMBNAIL_URL.$product['thumbnail_image'];
 				} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
 					$image_path = WPSC_THUMBNAIL_URL.$product['image'];
+					
+				}else if(is_numeric($product['image'])){
+				//	exit('<pre>'.print_r($product, true).'</pre>');
+					$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$product['id']." AND `id`=".$product['image'];
+					$image_path = $wpdb->get_var($sql);
+					$image_path = WPSC_THUMBNAIL_URL.$image_path;
 				} else { // no image, display this fact
 					$image_path = WPSC_URL."/images/no-image-uploaded.gif";
 				}

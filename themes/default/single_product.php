@@ -141,8 +141,13 @@ $image_height = get_option('single_view_image_height');
 					<?php if(wpsc_product_is_customisable()) : ?>				
 						<input type="hidden" value="true" name="is_customisable"/>
 					<?php endif; ?>
-				
-				
+					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
+					<?php if(wpsc_has_multi_adding()): ?>
+						<label for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label><input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
+						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
+						<input type="hidden" name="wpsc_update_quantity" value="true"/>
+					<?php endif ;?>
+					<!-- END OF QUANTITY OPTION -->
 					<?php if(wpsc_product_has_stock()) : ?>
 						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 					<?php else : ?>

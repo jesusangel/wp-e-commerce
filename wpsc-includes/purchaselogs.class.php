@@ -530,7 +530,6 @@ class wpsc_purchaselogs{
 */
 	function the_purch_item_name(){
 		global $wpdb;
-			//exit('<pre>'.print_r($this->form_data, true).'</pre>');
 		$i=0;
 		foreach((array)$this->form_data as $formdata){
 		if(in_array('billingemail', $formdata)){

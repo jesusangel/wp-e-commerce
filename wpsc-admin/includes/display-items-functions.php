@@ -866,14 +866,23 @@ function edit_multiple_image_gallery($product_data) {
 	$siteurl = get_option('siteurl');
 	//$main_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
 	$timestamp = time();
-	
+
+	//exit('<pre>'.print_r($product_data, true).'</pre>');
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
 	
 		
 		<li class='first' id='0'>
 			<div class='previewimage' id='gallery_image_0'>
-				<?php if ($product_data['image'] != '') { ?><a id='extra_preview_link_0' href='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
+				<?php if ($product_data['image'] != '') { ?>
+					<?php if(is_numeric($product_data['image'])){
+				 $sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`='".$product_data['id']."' AND `id`= ".$product_data['image']." LIMIT 1";
+				$product_data['image'] = $wpdb->get_var($sql); 
+				}
+				$image_data = getimagesize(WPSC_IMAGE_URL.$product_data['image']);			
+				//exit('<pre>'.print_r($image_data, true).'</pre>');
+				?>
+				<a id='extra_preview_link_0' href='<?php echo WPSC_URL."/wpsc-admin/includes/crop.php?directory=".WPSC_IMAGE_URL."&imagename=".$product_data['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500"; ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
 				<?php } ?>
 				
 				
@@ -929,7 +938,7 @@ function edit_multiple_image_gallery($product_data) {
           if($image['image'] != '') {
             $num++;
             $imagepath = WPSC_IMAGE_DIR . $image['image'];
-            include('getimagesize.php');
+           // include('/../getimagesize.php');
             $output .= "<li id=".$image['id'].">";
             //  $output .= $image['image'];
             $output .= "<div class='previewimage' id='gallery_image_{$image['id']}'><a id='extra_preview_link_".$image['id']."' href='".WPSC_IMAGE_URL.$image['image']."' rel='product_extra_image_".$image['id']."' class='thickbox'><img class='previewimage' src='".WPSC_IMAGE_URL.$image['image']."' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' /></a>";

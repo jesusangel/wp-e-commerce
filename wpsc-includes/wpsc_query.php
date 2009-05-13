@@ -4,6 +4,17 @@
 */
 
 /**
+ * this is for the multi adding property, it checks to see whether multi adding is enabled;
+ * 
+ */
+function wpsc_has_multi_adding(){
+	if(get_option('multi_add') == 1){
+		return true;
+	}else{
+		return false;
+	}
+}
+/**
 *  this page url function, returns the URL of this page
 * @return string - the URL of the current page
 */
@@ -292,10 +303,15 @@ function wpsc_product_normal_price() {
 */
 function wpsc_the_product_image($width = null, $height = null) {
   // show the full sized image for the product, if supplied with dimensions, will resize image to those.
-	global $wpsc_query;
+	global $wpsc_query, $wpdb;
 	$image_file_name = null;
   if ($wpsc_query->product['image'] != null) {
-    $image_file_name = $wpsc_query->product['image'];
+  	 if(is_numeric($wpsc_query->product['image'])){
+		$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$wpsc_query->product['id']." AND `id`=".$wpsc_query->product['image'];
+		$image_file_name = $wpdb->get_var($sql);
+  	}else{
+    	$image_file_name = $wpsc_query->product['image'];
+    }
   }
   if($image_file_name != null) {
     if(($width > 0) && ($height > 0)) {
@@ -314,14 +330,19 @@ function wpsc_the_product_image($width = null, $height = null) {
 */
 function wpsc_the_product_thumbnail() {
   // show the thumbnail image for the product
-	global $wpsc_query;
+	global $wpsc_query, $wpdb;
 	 $image_file_name = null;
   if($wpsc_query->product['thumbnail_image'] != null) {
-    $image_file_name = $wpsc_query->product['thumbnail_image'];
+    	$image_file_name = $wpsc_query->product['thumbnail_image'];
   } else if ($wpsc_query->product['image'] != null) {
-    $image_file_name = $wpsc_query->product['image'];
+  	if(is_numeric($wpsc_query->product['image'])){
+		$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$wpsc_query->product['id']." AND `id`=".$wpsc_query->product['image'];
+		$image_file_name = $wpdb->get_var($sql);
+  	}else{
+    	$image_file_name = $wpsc_query->product['image'];
+    }
   }
-  
+
   if($image_file_name !== null) {
     return wpsc_product_image_html($image_file_name, $wpsc_query->product['id']);
   } else {

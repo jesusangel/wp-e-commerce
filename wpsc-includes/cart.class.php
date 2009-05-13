@@ -148,7 +148,11 @@ function wpsc_cart_item_quantity() {
 	global $wpsc_cart;
 	return $wpsc_cart->cart_item->quantity;
 }
-
+function wpsc_cart_item_quantity_single_prod($id) {
+	global $wpsc_cart;
+	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+	return $wpsc_cart;
+}
 /**
 * cart item price function, no parameters
 * @return string the cart item price multiplied by the quantity, with a currency sign
@@ -523,7 +527,7 @@ class wpsc_cart {
 	 * @param array parameters
 	 * @return boolean true on sucess, false on failure
 	*/
-  function set_item($product_id, $parameters) {
+  function set_item($product_id, $parameters, $updater = false) {
     // default action is adding
     
     if($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true) {
@@ -540,7 +544,12 @@ class wpsc_cart {
 					  ($cart_item->custom_message == $new_cart_item->custom_message) &&
 					  ($cart_item->custom_file == $new_cart_item->custom_file)) {
 						// if they are the same, increment the count, and break out;
-						$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
+						if(!$updater){
+							$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
+						}else{
+							$this->cart_items[$key]->quantity  = $new_cart_item->quantity;
+
+						}
 						$this->cart_items[$key]->refresh_item();
 						$add_item = false;
 						$edit_item = true;

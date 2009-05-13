@@ -173,6 +173,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 	 */
 	function compare_logic($c, $product_obj) {
 		global $wpdb;
+		
 		if ($c['property'] == 'item_name') {
 			$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$product_obj->product_id}'");
 			$product_data = $product_data[0];
@@ -291,8 +292,6 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 			}
 		
 		} else if ($c['property'] == 'subtotal_amount'){
-		
-
 			$subtotal = $product_obj->cart->subtotal;
 			switch($c['logic']) {
 				case 'equal'://Checks if the subtotal of products in the cart equals condition value

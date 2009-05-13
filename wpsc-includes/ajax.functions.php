@@ -32,8 +32,12 @@ function wpsc_add_to_cart() {
   foreach((array)$_POST['variation'] as $key => $variation) {
     $provided_parameters['variation_values'][(int)$key] = (int)$variation;
   }
-  if($_POST['quantity'] > 0) {
+  if($_POST['quantity'] > 0 && (!isset($_POST['wpsc_quantity_update']))) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
+  }elseif(isset($_POST['wpsc_quantity_update'])){
+  		//exit('<pre>'.print_r($wpsc_cart, true).'</pre>IM HERE');
+		 $wpsc_cart->remove_item($_POST['key']);
+  		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
   }
   if($_POST['is_customisable'] == 'true') {
 		$provided_parameters['is_customisable'] = true;
@@ -47,8 +51,11 @@ function wpsc_add_to_cart() {
 	}
   
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
-  
-	$state = $wpsc_cart->set_item($product_id,$parameters); 
+  	if(!isset($_POST['wpsc_quantity_update'])){
+		$state = $wpsc_cart->set_item($product_id,$parameters); 
+	}else{
+		$state = $wpsc_cart->set_item($product_id,$parameters, true); 	
+	}
   if($_GET['ajax'] == 'true') {
 		if(($product_id != null) &&(get_option('fancy_notifications') == 1)) {
 			echo "if(jQuery('#fancy_notification_content')) {\n\r";
@@ -65,7 +72,7 @@ function wpsc_add_to_cart() {
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
 		 
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
-    
+  //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 
     
     
@@ -117,12 +124,11 @@ if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) 
 function wpsc_coupon_price($currCoupon = '') {
   global $wpdb, $wpsc_cart, $wpsc_coupons;
   if(isset($_POST['coupon_num']) && $_POST['coupon_num'] != ''){
-	  $coupon = $wpdb->escape($_POST['coupon_num']);
+  	  $coupon = $wpdb->escape($_POST['coupon_num']);
 	  $_SESSION['coupon_numbers'] = $coupon;
 	  $wpsc_coupons = new wpsc_coupons($coupon);
 	  
 	  if($wpsc_coupons->validate_coupon()){
-	  
 	  	$discountAmount = $wpsc_coupons->calculate_discount();
 	  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
 	  	$wpsc_coupons->errormsg = false;
