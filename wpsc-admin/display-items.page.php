@@ -163,16 +163,17 @@ function wpsc_admin_products_list($category_id = 0) {
 		$is_sortable = true;
 	} else {
 		$itempp = 10;
-		if ($_GET['pageno']!='all') {
+		if (isset($_GET['pageno']) && $_GET['pageno']!='all') {
 			$page = absint($_GET['pageno']);
 			
 			$start = absint(($page * $itempp) - $itempp);
 			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
+			
 		} else {
 			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql";
 		}
 	}  
-			
+		
 	$product_list = $wpdb->get_results($sql,ARRAY_A);
 	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql");
 	
@@ -245,7 +246,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	
 		<tbody>
 			<?php
-			foreach($product_list as $product) {
+			foreach((array)$product_list as $product) {
 			
 				if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images
 					$image_path = WPSC_THUMBNAIL_URL.$product['thumbnail_image'];

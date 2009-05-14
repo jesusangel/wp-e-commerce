@@ -19,14 +19,10 @@ if ($width > 400){
 	$layoutlandscape = "wpsc_thumbnail_preview";
 }
 
-
-
-// If not a POST request, display page below:
-
 ?><html>
 	<head>
 
-		<script language="Javascript">
+		<script language="text/javascript">
 
 			jQuery(function(){
 

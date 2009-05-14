@@ -234,7 +234,7 @@ $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(128) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['variation_association'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
-$wpsc_database_template[$table_name]['indexes']['variation_association'] = " KEY `variation_association` ( `variation_association` )";
+$wpsc_database_template[$table_name]['indexes']['variation_association'] = " KEY `variation_association` ( `variation_association` ) ";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_variations";
 
 

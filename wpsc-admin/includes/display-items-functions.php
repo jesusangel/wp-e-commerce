@@ -873,8 +873,17 @@ function edit_multiple_image_gallery($product_data) {
 		
 		<li class='first' id='0'>
 			<div class='previewimage' id='gallery_image_0'>
-				<?php if ($product_data['image'] != '') { ?><a id='extra_preview_link_0' href='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
+				<?php if ($product_data['image'] != '') { ?>
+					<?php if(is_numeric($product_data['image'])){
+				 $sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`='".$product_data['id']."' AND `id`= ".$product_data['image']." LIMIT 1";
+				$product_data['image'] = $wpdb->get_var($sql); 
+				}
+				$image_data = getimagesize(WPSC_IMAGE_URL.$product_data['image']);			
+				//exit('<pre>'.print_r($image_data, true).'</pre>');
+				?>
+				<a id='extra_preview_link_0' href='<?php echo WPSC_URL."/wpsc-admin/includes/crop.php?directory=".WPSC_IMAGE_URL."&imagename=".$product_data['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500"; ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox' ><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
 				<?php } ?>
+
 				
 				
 				<div id='image_settings_box'>
