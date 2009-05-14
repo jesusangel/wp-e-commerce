@@ -108,28 +108,6 @@ function wpsc_display_products_page() {
 			<div id="col-left">
 				<div class="col-wrap">		
 					<form id="posts-filter" action="" method="get">
-						<div class="tablenav">
-						  <?php
-						  /*
-							<p class="search-box">
-								<label class="hidden" for="page-search-input"><?php _e( 'Search Pages' ); ?>:</label>
-								<input type="text" class="search-input" id="page-search-input" name="s" value="<?php _admin_search_query(); ?>" />
-								<input type="submit" value="<?php _e( 'Search Pages' ); ?>" class="button" />
-							</p>
-							*/
-							?>
-						
-						
-							<div class="alignleft actions">
-								<select name="action">
-									<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
-									<option value="delete"><?php _e('Delete'); ?></option>
-								</select>
-							<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
-							<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
-							<?php wp_nonce_field('bulk-products'); ?>
-							</div>
-						</div>
 						<?php
 							wpsc_admin_products_list($category_id);
 						?>
@@ -163,9 +141,9 @@ function wpsc_admin_products_list($category_id = 0) {
   global $wpdb,$_wp_column_headers;
   // set is_sortable to false to start with
   $is_sortable = false;
+  $page = null;
   
-  
-	if($category_id > 0) {    // if we are getting items from only one category, this is a monster SQL query to do this with the product order
+	if($category_id > 0) {  // if we are getting items from only one category, this is a monster SQL query to do this with the product order
 		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`
 			FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products`
 			LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `categories` ON `products`.`id` = `categories`.`product_id` 
@@ -184,11 +162,11 @@ function wpsc_admin_products_list($category_id = 0) {
 		// if we are selecting a category, set is_sortable to true
 		$is_sortable = true;
 	} else {
-		$itempp = 20;
-		if ($_GET['pnum']!='all') {
-			$page = (int)$_GET['pnum'];
+		$itempp = 10;
+		if ($_GET['pageno']!='all') {
+			$page = absint($_GET['pageno']);
 			
-			$start = $page * $itempp;
+			$start = absint(($page * $itempp) - $itempp);
 			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
 		} else {
 			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql";
@@ -197,12 +175,60 @@ function wpsc_admin_products_list($category_id = 0) {
 			
 	$product_list = $wpdb->get_results($sql,ARRAY_A);
 	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql");
-
-
+	
+	if (isset($itempp)) {
+		$num_pages = ceil($num_products/$itempp);
+	}
+	
+	if($page !== null) {
+		$page_links = paginate_links( array(
+			'base' => add_query_arg( 'pageno', '%#%' ),
+			'format' => '',
+			'prev_text' => __('&laquo;'),
+			'next_text' => __('&raquo;'),
+			'total' => $num_pages,
+			'current' => $page
+		));
+	}
 	$this_page_url = stripslashes($_SERVER['REQUEST_URI']);
   
   
 	?>
+	<div class="tablenav">
+		<?php
+		/*
+		<p class="search-box">
+			<label class="hidden" for="page-search-input"><?php _e( 'Search Pages' ); ?>:</label>
+			<input type="text" class="search-input" id="page-search-input" name="s" value="<?php _admin_search_query(); ?>" />
+			<input type="submit" value="<?php _e( 'Search Pages' ); ?>" class="button" />
+		</p>
+		*/
+		?>
+	
+	
+		<div class="alignleft actions">
+			<select name="action">
+				<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
+				<option value="delete"><?php _e('Delete'); ?></option>
+			</select>
+		<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
+		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
+		<?php wp_nonce_field('bulk-products'); ?>
+		</div>
+		<div class="tablenav-pages">
+			<?php /*<span class="displaying-num">Displaying 1–15 of 32</span>*/ ?>
+			<?php
+				echo $page_links;
+			/*
+			<span class="page-numbers current">1</span>
+			<a href="/wp_2.7/wp-admin/edit.php?paged=2" class="page-numbers">2</a>
+			<a href="/wp_2.7/wp-admin/edit.php?paged=3" class="page-numbers">3</a>
+			<a href="/wp_2.7/wp-admin/edit.php?paged=2" class="next page-numbers">»</a>
+			*/
+			?>	
+		</div>
+	</div>
+	
 	<input type='hidden' id='products_page_category_id'  name='category_id' value='<?php echo $category_id; ?>' />
 	<table class="widefat page fixed" id='wpsc_product_list' cellspacing="0">
 		<thead>

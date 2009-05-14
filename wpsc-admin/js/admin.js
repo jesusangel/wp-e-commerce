@@ -42,12 +42,16 @@ jQuery(document).ready( function () {
 	 jQuery('.edit-product').click(function(){	
 			product_id = jQuery(this).attr('href').match(/product_id=(\d{1,})/);
 	 		post_values = "product_id="+product_id[1]+"";
-	 		/*
+	 		///*
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
-			  //jQuery('form#modify-products').html(returned_data);
+			  jQuery('form#modify-products').html(returned_data);
+			  tinyMCE.init();
+
+
+				tinyMCE.execCommand("mceAddControl", false, "content");
 			});
-	 		//return false;
-	 		*/
+	 		return false;
+	 		// */
 	 });
 	
 	jQuery("div.admin_product_name a.shorttag_toggle").toggle(
@@ -335,4 +339,38 @@ function hideelement(id) {
 	} else {
 		document.getElementById(id).style.display = 'none';
 	}
+}
+
+/*
+ * Modified copy of the wordpress edToolbar function that does the same job, it uses document.write, we cannot.
+*/
+function wpsc_edToolbar() {
+	//document.write('<div id="ed_toolbar">');
+	output = '';
+	for (i = 0; i < edButtons.length; i++) {
+		output += 	wpsc_edShowButton(edButtons[i], i);
+	}
+	output += '<input type="button" id="ed_spell" class="ed_button" onclick="edSpell(edCanvas);" title="' + quicktagsL10n.dictionaryLookup + '" value="' + quicktagsL10n.lookup + '" />';
+	output += '<input type="button" id="ed_close" class="ed_button" onclick="edCloseAllTags();" title="' + quicktagsL10n.closeAllOpenTags + '" value="' + quicktagsL10n.closeTags + '" />';
+//	edShowLinks(); // disabled by default
+	//document.write('</div>');
+	jQuery('div#ed_toolbar').html(output);
+}
+
+
+/*
+ * Modified copy of the wordpress edShowButton function that does the same job, it uses document.write, we cannot.
+*/
+
+function wpsc_edShowButton(button, i) {
+	if (button.id == 'ed_img') {
+		output = '<input type="button" id="' + button.id + '" accesskey="' + button.access + '" class="ed_button" onclick="edInsertImage(edCanvas);" value="' + button.display + '" />';
+	}
+	else if (button.id == 'ed_link') {
+		output = '<input type="button" id="' + button.id + '" accesskey="' + button.access + '" class="ed_button" onclick="edInsertLink(edCanvas, ' + i + ');" value="' + button.display + '" />';
+	}
+	else {
+		output = '<input type="button" id="' + button.id + '" accesskey="' + button.access + '" class="ed_button" onclick="edInsertTag(edCanvas, ' + i + ');" value="' + button.display + '"  />';
+	}
+	return output;
 }

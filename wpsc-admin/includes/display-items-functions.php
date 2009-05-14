@@ -191,7 +191,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
 				 <?php
-				 the_editor($product_data['description'], 'content', false, false);
+				 wpsc_the_editor($product_data['description'], 'content', false, false);
 				 ?>
 				 </div>
 				 <?php
@@ -866,23 +866,14 @@ function edit_multiple_image_gallery($product_data) {
 	$siteurl = get_option('siteurl');
 	//$main_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
 	$timestamp = time();
-
-	//exit('<pre>'.print_r($product_data, true).'</pre>');
+	
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
 	
 		
 		<li class='first' id='0'>
 			<div class='previewimage' id='gallery_image_0'>
-				<?php if ($product_data['image'] != '') { ?>
-					<?php if(is_numeric($product_data['image'])){
-				 $sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`='".$product_data['id']."' AND `id`= ".$product_data['image']." LIMIT 1";
-				$product_data['image'] = $wpdb->get_var($sql); 
-				}
-				$image_data = getimagesize(WPSC_IMAGE_URL.$product_data['image']);			
-				//exit('<pre>'.print_r($image_data, true).'</pre>');
-				?>
-				<a id='extra_preview_link_0' href='<?php echo WPSC_URL."/wpsc-admin/includes/crop.php?directory=".WPSC_IMAGE_URL."&imagename=".$product_data['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500"; ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
+				<?php if ($product_data['image'] != '') { ?><a id='extra_preview_link_0' href='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' rel='product_extra_image_0' class='thickbox'><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
 				<?php } ?>
 				
 				
@@ -938,7 +929,7 @@ function edit_multiple_image_gallery($product_data) {
           if($image['image'] != '') {
             $num++;
             $imagepath = WPSC_IMAGE_DIR . $image['image'];
-           // include('/../getimagesize.php');
+            include('getimagesize.php');
             $output .= "<li id=".$image['id'].">";
             //  $output .= $image['image'];
             $output .= "<div class='previewimage' id='gallery_image_{$image['id']}'><a id='extra_preview_link_".$image['id']."' href='".WPSC_IMAGE_URL.$image['image']."' rel='product_extra_image_".$image['id']."' class='thickbox'><img class='previewimage' src='".WPSC_IMAGE_URL.$image['image']."' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' /></a>";
@@ -989,4 +980,98 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
   return $output;
 }
 
+/**
+ * Slightly modified copy of the Wordpress the_editor function
+ *
+ *  We have to use a modified version because the wordpress one calls javascript that uses document.write
+ *  When this javascript runs after being loaded through AJAX, it replaces the whole page.
+ *
+ * The amount of rows the text area will have for the content has to be between
+ * 3 and 100 or will default at 12. There is only one option used for all users,
+ * named 'default_post_edit_rows'.
+ *
+ * If the user can not use the rich editor (TinyMCE), then the switch button
+ * will not be displayed.
+ *
+ * @since 3.7
+ *
+ * @param string $content Textarea content.
+ * @param string $id HTML ID attribute value.
+ * @param string $prev_id HTML ID name for switching back and forth between visual editors.
+ * @param bool $media_buttons Optional, default is true. Whether to display media buttons.
+ * @param int $tab_index Optional, default is 2. Tabindex for textarea element.
+ */
+function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_buttons = true, $tab_index = 2) {
+	$rows = get_option('default_post_edit_rows');
+	if (($rows < 3) || ($rows > 100))
+		$rows = 12;
+
+	if ( !current_user_can( 'upload_files' ) )
+		$media_buttons = false;
+
+	$richedit =  user_can_richedit();
+	$rows = "rows='$rows'";
+
+	if ( $richedit || $media_buttons ) { ?>
+	<div id="editor-toolbar">
+	<?php if ( $richedit ) {
+		$wp_default_editor = wp_default_editor(); ?>
+		<div class="zerosize"><input accesskey="e" type="button" onclick="switchEditors.go('<?php echo $id; ?>')" /></div>
+		<?php if ( 'html' == $wp_default_editor ) {
+			add_filter('the_editor_content', 'wp_htmledit_pre'); ?>
+			<a id="edButtonHTML" class="active" onclick="switchEditors.go('<?php echo $id; ?>', 'html');"><?php _e('HTML'); ?></a>
+			<a id="edButtonPreview" onclick="switchEditors.go('<?php echo $id; ?>', 'tinymce');"><?php _e('Visual'); ?></a>
+		<?php } else {
+			add_filter('the_editor_content', 'wp_richedit_pre'); ?>
+			<a id="edButtonHTML" onclick="switchEditors.go('<?php echo $id; ?>', 'html');"><?php _e('HTML'); ?></a>
+			<a id="edButtonPreview" class="active" onclick="switchEditors.go('<?php echo $id; ?>', 'tinymce');"><?php _e('Visual'); ?></a>
+		<?php }
+		}
+
+		if ( $media_buttons ) { ?>
+			<div id="media-buttons" class="hide-if-no-js">
+			<?php do_action( 'media_buttons' ); ?>
+			</div>
+		<?php } ?>
+	</div>
+	<?php } ?>
+
+	<div id="quicktags">
+	<?php wp_print_scripts( 'quicktags' ); ?>
+		<div id="ed_toolbar">
+		</div>
+		<script type="text/javascript">wpsc_edToolbar()</script>
+	</div>
+
+	<?php $the_editor = apply_filters('the_editor', "<div id='editorcontainer'><textarea $rows cols='40' name='$id' tabindex='$tab_index' id='$id'>%s</textarea></div>\n");
+	$the_editor_content = apply_filters('the_editor_content', $content);
+
+	printf($the_editor, $the_editor_content);
+
+	?>
+	<script type="text/javascript">
+	// <![CDATA[
+	edCanvas = document.getElementById('<?php echo $id; ?>');
+	<?php if ( user_can_richedit() && $prev_id ) { ?>
+	var dotabkey = true;
+	// If tinyMCE is defined.
+	if ( typeof tinyMCE != 'undefined' ) {
+		// This code is meant to allow tabbing from Title to Post (TinyMCE).
+		jQuery('#<?php echo $prev_id; ?>')[jQuery.browser.opera ? 'keypress' : 'keydown'](function (e) {
+			if (e.which == 9 && !e.shiftKey && !e.controlKey && !e.altKey) {
+				if ( (jQuery("#post_ID").val() < 1) && (jQuery("#title").val().length > 0) ) { autosave(); }
+				if ( tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden() && dotabkey ) {
+					e.preventDefault();
+					dotabkey = false;
+					tinyMCE.activeEditor.focus();
+					return false;
+				}
+			}
+		});
+	}
+	<?php } ?>
+	// ]]>
+	</script>
+	<?php
+}
 ?>
