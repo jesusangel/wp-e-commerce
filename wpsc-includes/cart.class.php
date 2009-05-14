@@ -440,6 +440,8 @@ class wpsc_cart {
 				}
 			}
 		}
+		
+		//exit('<pre>'.print_r($this->shipping_methods).'</pre>');
   }
   
   /**
@@ -799,7 +801,8 @@ class wpsc_cart {
     global $wpdb;
     
 		foreach($this->cart_items as $key => $cart_item) {
-		  $total += $cart_item->weight;
+			//echo '<pre>'.print_r($cart_item, true).'</pre>';
+		  $total += $cart_item->weight*$cart_item->quantity;
 		}
 		return $total;
   }
@@ -827,10 +830,13 @@ class wpsc_cart {
     if($this->uses_shipping()) {
 			if($this->base_shipping == null) {
 				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+				if($this->selected_shipping_option == null){
+ 					$this->get_shipping_option();
+ 				}
 				$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
 				$this->base_shipping = $total;
+				//exit('base shipping '.$total);
 			} else {
-				
 				$total = $this->base_shipping;
 			}
 		} else {
@@ -1025,6 +1031,10 @@ class wpsc_cart {
   function get_shipping_quotes() {
     global $wpdb, $wpsc_shipping_modules;
     $this->shipping_quotes = array();
+ //   exit('<pre>'.print_r($this, true).'</pre>');
+ 	if($this->shipping_method == null){
+ 		$this->get_shipping_method();
+ 	}
     $unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
     $num = 0;
     foreach((array)$unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
@@ -1075,6 +1085,7 @@ class wpsc_cart {
 		$this->coupons_amount = $couponAmount;	
 		$this->calculate_total_price();
 	}
+	
 }
 
 

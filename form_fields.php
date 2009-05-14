@@ -135,7 +135,7 @@ if($_POST['submit_action'] == 'add')
   $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;";
   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
   //exit("<pre>".print_r($form_data,true)."</pre>");
-  foreach($form_data as $form_field) {
+  foreach((array)$form_data as $form_field) {
     echo "
     <div id='form_id_".$form_field['id']."'>
     <table>

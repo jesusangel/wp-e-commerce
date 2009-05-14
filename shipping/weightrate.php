@@ -58,11 +58,15 @@ class weightrate {
 	}
 	
 	function getQuote() {
-		global $wpdb;
-		$shopping_cart = $_SESSION['nzshpcrt_cart'];
-		$weight = shopping_cart_total_weight();
+		global $wpdb, $wpsc_cart;
+	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+		$weight = $wpsc_cart->calculate_total_weight();
+		
+	//	$shopping_cart = $_SESSION['nzshpcrt_cart'];
+	//	exit('<pre>'.print_r($shopping_cart,true).'</pre>');
+		//$weight = shopping_cart_total_weight();
 		$layers = get_option('weight_rate_layers');
-		//echo "<pre>".print_r($weight,true)."</pre>";
+		//echo "Weight <pre>".print_r($weight,true)."</pre>";
 		if ($layers != '') {
 			$layers = array_reverse($layers,true);
 			foreach ($layers as $key => $shipping) {
