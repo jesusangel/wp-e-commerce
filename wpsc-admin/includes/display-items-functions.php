@@ -938,7 +938,7 @@ function edit_multiple_image_gallery($product_data) {
           if($image['image'] != '') {
             $num++;
             $imagepath = WPSC_IMAGE_DIR . $image['image'];
-            include('getimagesize.php');
+            //include('getimagesize.php');
             $output .= "<li id=".$image['id'].">";
             //  $output .= $image['image'];
             $output .= "<div class='previewimage' id='gallery_image_{$image['id']}'><a id='extra_preview_link_".$image['id']."' href='".WPSC_IMAGE_URL.$image['image']."' rel='product_extra_image_".$image['id']."' class='thickbox'><img class='previewimage' src='".WPSC_IMAGE_URL.$image['image']."' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' /></a>";

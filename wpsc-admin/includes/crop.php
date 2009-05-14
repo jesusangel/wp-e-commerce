@@ -22,7 +22,7 @@ if ($width > 400){
 ?><html>
 	<head>
 
-		<script language="text/javascript">
+		<script language="javascript" type="text/javascript">
 
 			jQuery(function(){
 
