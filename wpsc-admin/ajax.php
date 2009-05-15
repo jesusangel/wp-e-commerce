@@ -8,7 +8,7 @@
  * @since 3.7
  */
 
- function wpsc_ajax_load_product() {
+function wpsc_ajax_load_product() {
   global $wpdb;
   $product_id = absint($_REQUEST['product_id']);
 	wpsc_display_product_form($product_id);
@@ -655,7 +655,7 @@ function wpsc_admin_ajax() {
 		exit();
 	}
     
-	if(isset($_POST['language_setting']) && ($_GET['page'] = WPSC_DIR_NAME.'/options.php')) {
+	if(isset($_POST['language_setting']) && ($_GET['page'] = WPSC_DIR_NAME.'/wpsc-admin/display-options.page.php')) {
 		if($user_level >= 7) {
 			update_option('language_setting', $_POST['language_setting']);
 		}
@@ -721,25 +721,25 @@ function wpsc_shipping_options(){
 function wpsc_shipping_submits(){
 	if ($_POST['shipping_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/display-shipping.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
 		exit();
 	}
 	
 	if ($_POST['gateway_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/gatewayoptions.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
 		exit();
 	}
 	
 	if ($_POST['checkout_submits']=='true'){
 		require_once(WPSC_FILE_PATH."/form_fields.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
+		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
 		exit();
 	}
 	
 // 	if ($_POST['gold_submits']=='true'){
 // 		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-// 		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/options.php");
+// 		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
 // 		exit();
 // 	}
 }
@@ -1226,8 +1226,27 @@ function wpsc_delete_purchlog($purchlog_id='') {
 
 
 
-
-
+/*
+ * Get Shipping Form for wp-admin 
+ */
+function wpsc_get_shipping_form() {
+  global $wpdb, $wpsc_shipping_modules;
+//  exit('<pre>'.print_r($wpsc_shipping_modules, true).'</pre>');
+  
+  $shippingname = $_REQUEST['shippingname'];
+  if(array_key_exists($shippingname, $wpsc_shipping_modules)){
+	$output = $wpsc_shipping_modules[$shippingname]->getForm();
+	exit($output);
+  	
+  }
+  exit();
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
+	add_action('admin_init', 'wpsc_get_shipping_form');
+}
 
 
 

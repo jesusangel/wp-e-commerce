@@ -74,6 +74,16 @@ if(($_POST['shipping_gw'] != null)) {
 		}
 	}
 }
+if(($_POST['shippingname'] != null)){
+	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
+		if($shipping->internal_name == $_POST['shippingname'])
+		 {
+//exit('yes');
+			$shipping->submit_form();
+			$changes_made = true;
+		}
+	}
+}
 
 if($changes_made == true) {
   //echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
@@ -93,6 +103,7 @@ $form = "";
 foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 	if($shipping->internal_name == $curgateway ) {
 		$selected = " selected='selected'";
+		$shippignname = '<input type="hidden" name="shippingname" value="'.$shipping->internal_name.'" />';
 		$form = $shipping->getForm();
 	} else {
 		$selected = '';
@@ -127,7 +138,7 @@ function selectgateway() {
 </script>
 <div class="wrap">
 <div class="metabox-holder">
-		<form name='shippingopt' method='POST' id='shipping_options' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
+		<form name='shippingopt' method='post' id='shipping_options' action='<?php echo $_SERVER['REQUEST_URI']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php";?>'>
 		<input type='hidden' name='shipping_submits' value='true'>
 	<?php 
 		if (get_option('custom_gateway') == 1){ 
@@ -270,18 +281,33 @@ function selectgateway() {
 // 						exit("<pre>".print_r($shipping,1)."</pre>");
 						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
 							echo "						";// add the whitespace to the html
-							echo "<div id='wpsc_shipping_options'><p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
-										?> 
+							echo "<div class='wpsc_shipping_options'>";
+											?> 
 							<div class="wpsc-shipping-actions">
 									| <span class="edit">
-										<a class='edit-shippping-module' title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shipping-module' rel="<?php echo $shipping->internal_name; ?>" onclick="event.preventDefault();" title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						   </div>
+							<?php
+							echo "<p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+										?> 
+					
    						   </div>
 							<?php
 						} else {
 							echo "						";
+									echo "<div class='wpsc_shipping_options'>";
+								?> 
+							<div class="wpsc-shipping-actions">
+									| <span class="edit">
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+									</span> |
+						   </div>
+								<?php
 							echo "<p><input name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+								?>
+							 </div>
+							 <?php
 						}
 					}
 					?>
@@ -306,18 +332,32 @@ function selectgateway() {
 
 						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
 							echo "						";// add the whitespace to the html
-							echo "<div id='wpsc_shipping_options'><p><input  $disabled name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
-							?> 
+							echo "<div class='wpsc_shipping_options'>";
+								?> 
 							<div class="wpsc-shipping-actions">
 									| <span class="edit">
-										<a class='edit-product' title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						   </div>
+								<?php
+							echo "<p><input  $disabled name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							?> 
    						   </div>
 							<?php
 						} else {
 							echo "						";
+							echo "<div class='wpsc_shipping_options'>";
+								?> 
+							<div class="wpsc-shipping-actions">
+									| <span class="edit">
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+									</span> |
+						   </div>
+								<?php
 							echo "<p><input $disabled name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							?>
+							 </div>
+							 <?php
 						}
 					}
 					?>
@@ -351,21 +391,12 @@ function selectgateway() {
 					</table>
 					<table class='form-table'>
 					<?php } ?>
-					
-						<tr>
-							<td style='border-top: none;'>
-								<h4><?php echo TXT_WPSC_SHIPPING_MODULES; ?></h4>
-							</td>
-							<td style='border-top: none;'>
-								<select name='shipping_gw' onChange='selectgateway();'>
-									<?php echo $shippinglist; ?>
-								</select>
-							</td>
-						</tr>
 						<?php echo $form; ?>
-					
+						
 					</table>
+					<?php	echo	$shippignname; ?>
 					<div class='submit'>
+					
 						<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption'/>
 					</div>
 					<?php

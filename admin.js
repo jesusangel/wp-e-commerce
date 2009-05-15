@@ -1245,10 +1245,6 @@ jQuery(document).ready(function(){
 		}
 	);
 });
-function wpsc_change_shipping_config_form(module){
-	alert(module);
-
-}
 
 
 

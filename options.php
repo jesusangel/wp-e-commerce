@@ -590,7 +590,7 @@ function options_categorylist() {
 */
   ?>
 
-				<form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
+				<form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/display-options.page.php'>
 		  <div id="wpsc_options" class="wrap">
 					<!-- <a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a> -->
             <ul id="tabs" class="ui-tabs-nav">

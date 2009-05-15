@@ -747,11 +747,12 @@ float: left;
 /* jCrop styling ends here */
 
 /* shipping options start here */
-#wpsc_shipping_options .wpsc-shipping-actions{
+.wpsc_shipping_options .wpsc-shipping-actions{
 visibility:hidden;
 font-size: 10px;
 margin-left:3em;
+float:right;
 }
-#wpsc_shipping_options:hover .wpsc-shipping-actions{
+.wpsc_shipping_options:hover .wpsc-shipping-actions{
 visibility:visible;
 }

@@ -472,7 +472,7 @@ if($_POST['do_not_use_shipping'] == 1) {
 	do_action('wpsc_options_update');
 
 	
-	//echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
+//	echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
 }
     
   if(get_option('nzshpcrt_first_load') == 0) {
@@ -503,7 +503,7 @@ if($_GET['update_page_urls'] == 'true') {
     update_option($option_key, $the_new_link);
 	}
   if($changes_made === true)  {
-    //echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";    
+    echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";    
 	}
 }
 
@@ -590,7 +590,7 @@ function wpsc_display_options_page(){
 	global $wpdb;
   ?>
 
-				<form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
+				<form name='cart_options' id='cart_options' method='post' action='<?php echo $_SERVER['REQUEST_URI']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php";?>'>
 		  <div id="wpsc_options" class="wrap">
 					<!-- <a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a> -->
             <ul id="tabs" class="ui-tabs-nav">
@@ -658,7 +658,7 @@ function wpsc_display_options_page(){
 									$region_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".get_option('base_country')."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`") ;
 									
 									if($country_data['has_regions'] == 1) {
-										echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page=".WPSC_DIR_NAME."/options.php&isocode=".get_option('base_country')."'>".$region_count." Regions</a>";
+										echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php&isocode=".get_option('base_country')."'>".$region_count." Regions</a>";
 									} else {
 										echo "<input type='hidden' name='country_id' value='".$country_data['id']."'>";
 										echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='country_tax' class='tax_forms' maxlength='5' size='5' value='".$country_data['tax']."'>%";
@@ -1962,8 +1962,8 @@ function wpsc_display_options_page(){
 										<td>
 										</td>
 										<td>
-										<a href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php&amp;update_page_urls=true'><?php echo TXT_WPSC_UPDATE_PAGE_URLS; ?></a> | 
-										<a href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php&amp;clean_categories=true'><?php echo TXT_WPSC_FIX_CATEGORY_PERMALINKS; ?></a>
+										<a href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/wpsc-admin/display-options.page.php&amp;update_page_urls=true'><?php echo TXT_WPSC_UPDATE_PAGE_URLS; ?></a> | 
+										<a href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/wpsc-admin/display-options.page.php&amp;clean_categories=true'><?php echo TXT_WPSC_FIX_CATEGORY_PERMALINKS; ?></a>
 										</td>
 									</tr>
 								</table>					  

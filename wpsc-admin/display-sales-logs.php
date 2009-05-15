@@ -219,7 +219,7 @@
  		<div class='postbox'> 
 			<h3 class='hndle'><?php echo TXT_WPSC_MENU; ?></h3>
 			<div class='inside'>
-				<a href="?page=<?php echo WPSC_DIR_NAME;?>/options.php"><?php echo TXT_WPSC_SHOP_SETTINGS; ?></a><br />
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/wpsc-admin/display-options.page.php"><?php echo TXT_WPSC_SHOP_SETTINGS; ?></a><br />
 				<a href="?page=<?php echo WPSC_DIR_NAME;?>/gatewayoptions.php"><?php echo TXT_WPSC_CHECKOUT_SETTINGS; ?></a><br />
 				<a href="?page=<?php echo WPSC_DIR_NAME;?>/form_fields.php"><?php echo TXT_WPSC_CHECKOUT_SETTINGS; ?></a><br />
 			</div>

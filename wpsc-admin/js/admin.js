@@ -195,6 +195,24 @@ jQuery(document).ready( function () {
 			jQuery(this).parent().parent('tr').remove();
 		});		
 	});
+	
+	// gets shipping form for admin page
+		// show or hide the stock input forms
+	jQuery(".wpsc-shipping-actions a").livequery(function(){
+	  jQuery(this).click( function ()  {
+		
+		var module = jQuery(this).attr('rel');
+		jQuery.ajax({
+			method: "post", url: "index.php", data: "wpsc_admin_action=get_shipping_form&shippingname="+module,
+			
+			success: function(html){
+				//jQuery(".gateway_settings").children(".form-table").html(html)
+				jQuery("td.gateway_settings table.form-table").html('<input type="hidden" name="shippingname" value="'+module+'" />'+html);
+			}
+		
+		})
+		});
+	});
 	// start off the gallery_list sortable
 	/*
 	jQuery("#gallery_list").sortable({
@@ -277,6 +295,8 @@ jQuery(document).ready( function () {
 				jQuery.post( 'index.php?ajax=true', post_values, function(returned_data) { });
 			});
 		});
+
+
 });
 
 
