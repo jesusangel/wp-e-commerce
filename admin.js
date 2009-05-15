@@ -1244,11 +1244,6 @@ jQuery(document).ready(function(){
 			window.location = new_url;
 		}
 	);
-	jQuery().click(
-		function(){
-			
-		}
-	);
 });
 function wpsc_change_shipping_config_form(module){
 	alert(module);

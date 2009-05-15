@@ -472,7 +472,7 @@ if($_POST['do_not_use_shipping'] == 1) {
 	do_action('wpsc_options_update');
 
 	
-	echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
+	//echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
 }
     
   if(get_option('nzshpcrt_first_load') == 0) {
@@ -503,7 +503,7 @@ if($_GET['update_page_urls'] == 'true') {
     update_option($option_key, $the_new_link);
 	}
   if($changes_made === true)  {
-    echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";    
+    //echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";    
 	}
 }
 

@@ -36,6 +36,12 @@ jQuery(document).ready( function () {
 	 });
 	 
 	 
+	jQuery("#submit_category_select").click(function() {
+			new_url = jQuery("#category_select option:selected").val();
+			//console.log(new_url);
+			window.location = new_url;
+			return false;
+	});
 	 
 	
   // this loads the edit-products page using javascript
@@ -59,6 +65,9 @@ jQuery(document).ready( function () {
 	 		// */
 	 });
 	
+	jQuery("a.thickbox").livequery(function(){
+	 tb_init(this);
+	});
 	
 	jQuery("div.admin_product_name a.shorttag_toggle").livequery(function(){
 	  jQuery(this).toggle(

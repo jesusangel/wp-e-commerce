@@ -308,7 +308,7 @@ function wpsc_update_product_images($product_id, $post_data) {
 function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, $height = 0, $custom_image = null) {
   global $wpdb;
 //	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
-	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `product_id` = '{$product_id}' LIMIT 1");
+	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}' LIMIT 1");
 	// check if there is an image that is supposed to be there.
 	if($image != '') {
 	  // check that is really there

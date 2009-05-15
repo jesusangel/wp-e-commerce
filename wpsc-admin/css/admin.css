@@ -70,6 +70,11 @@ text-align:right;
 	font-size:0.8em;
 }
 
+div.search-box input#page-search-input {
+  width: 115px;
+
+}
+
 
 #wpsc_product_list {
 	width:100%;
@@ -78,6 +83,11 @@ text-align:right;
 #wpsc_product_list tbody {
 	width: 410px;
 	border-collapse:collapse;
+}
+
+
+#wpsc_product_list .column-title{
+  width: 160px;
 }
 
 #wpsc_product_list .column-image{
@@ -92,10 +102,10 @@ text-align:right;
 	width: 84px;
 }
 
-
 #wpsc_product_list tbody tr td.column-title {
 	border-right:none;
 }
+
 #wpsc_product_list tbody tr td.product-image img {
 	cursor:move;
 }
@@ -157,6 +167,11 @@ div#poststuff textarea {
   width: 100%;
 }
 
+div.admin_product_name label {
+  display: block;
+  float: left;
+}
+
 input.wpsc_product_name {
 	float:left;
 	width:93%;
@@ -213,8 +228,6 @@ div.admin_product_name div.admin_product_shorttags {
 }
 
 div.admin_product_name a.shorttag_toggle {
-	-moz-border-radius-bottomright:6px;
-	-moz-border-radius-topright:6px;
 	background:#FFFFFF url(../../images/info_icon.jpg) no-repeat scroll 5px 8px;
 	border-bottom:1px solid #DFDFDF;
 	border-right:1px solid #DFDFDF;
@@ -226,6 +239,14 @@ div.admin_product_name a.shorttag_toggle {
 	margin-top:1px;
 	padding:3px;
 	width:18px;
+	
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topright:6px;
+	-webkit-border-top-right-radius:6px;
+	-webkit-border-bottom-right-radius:6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	
 }
 
 #description {

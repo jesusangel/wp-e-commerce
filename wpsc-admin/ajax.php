@@ -174,15 +174,12 @@ function wpsc_duplicate_product() {
 		
 		//Inserting duplicated image info
 		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='".$product_id."'", ARRAY_A);
-		$new_image_value = '';
+		$new_image_value = array();
 		if (count($image_values)>0){
 			foreach($image_values as $key => $image) {
-				$new_image_value .= "('".$new_id."','".$image['image']."','".$image['width']."','".$image['height']."','".$image['image_order']."','".$image['meta']."')";
-			
-				if (count($meta_values) != $key+1) {
-					$new_image_value .= ",";
-				}
+				$new_image_value[] = "('".$new_id."','".$image['image']."','".$image['width']."','".$image['height']."','".$image['image_order']."','".$image['meta']."')";
 			}
+			$new_image_value = implode(",", $new_image_value);
 			$sql = "INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
 			$wpdb->query($sql);
 		}

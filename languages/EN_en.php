@@ -690,7 +690,7 @@ define('TXT_WPSC_CATEGORYHASBEENEDITED', 'The product group has been edited.');
 define('TXT_WPSC_DISPLAYCATEGORIES', 'Display Product Groups');
 define('TXT_WPSC_ADDCATEGORY', 'Add Product Group');
 define('TXT_WPSC_EDITCATEGORY', 'Edit Product Group');
-define('TXT_WPSC_ALLCATEGORIES', 'View All Product Categories');
+define('TXT_WPSC_ALLCATEGORIES', 'View All Categories');
 
 define('TXT_WPSC_DISPLAYVARIATIONS', 'Display Variations');
 define('TXT_WPSC_ADDVARIATION', 'Add Variation Set');

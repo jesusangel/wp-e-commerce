@@ -11,13 +11,13 @@
  
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
-require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php"); 
-require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php"); 
+require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 
-require_once(WPSC_FILE_PATH."/wpsc-admin/display-options.page.php"); 
-require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php"); 
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-options.page.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php");
 
 /**
 	* wpsc_admin_pages function, all the definitons of admin pages are stores here.
@@ -190,8 +190,9 @@ function  wpsc_admin_include_css_and_js() {
 	
 	
 	//wp_enqueue_script('post');
- 	if ( user_can_richedit() )
+ 	if ( user_can_richedit() ) {
 		wp_enqueue_script('editor');
+	}
 		
 	wp_enqueue_script('media-upload');
 	wp_enqueue_script('word-count');
