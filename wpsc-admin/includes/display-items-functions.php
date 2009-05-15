@@ -59,11 +59,6 @@ $wpsc_product_defaults =array (
 
 
 
-
-
-
-
-
 function wpsc_display_product_form ($product_id = 0) {
   global $wpdb, $wpsc_product_defaults;
   $product_id = absint($product_id);

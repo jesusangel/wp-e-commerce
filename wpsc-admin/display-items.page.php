@@ -28,7 +28,7 @@ function wpsc_display_products_page() {
 		<?php screen_icon(); ?>
 		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
 		
-		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) ) { ?>
+		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated'])) { ?>
 			<div id="message" class="updated fade">
 				<p>
 				<?php if ( isset($_GET['updated'])) {
@@ -164,7 +164,11 @@ function wpsc_admin_products_list($category_id = 0) {
 	} else {
 		$itempp = 10;
 		if (isset($_GET['pageno']) && $_GET['pageno']!='all') {
-			$page = absint($_GET['pageno']);
+		  if($_GET['pageno'] > 0) {
+				$page = absint($_GET['pageno']);
+		  } else {
+		    $page = 1;
+		  }
 			
 			$start = absint(($page * $itempp) - $itempp);
 			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
@@ -252,12 +256,6 @@ function wpsc_admin_products_list($category_id = 0) {
 					$image_path = WPSC_THUMBNAIL_URL.$product['thumbnail_image'];
 				} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
 					$image_path = WPSC_THUMBNAIL_URL.$product['image'];
-					
-				}else if(is_numeric($product['image'])){
-				//	exit('<pre>'.print_r($product, true).'</pre>');
-					$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$product['id']." AND `id`=".$product['image'];
-					$image_path = $wpdb->get_var($sql);
-					$image_path = WPSC_THUMBNAIL_URL.$image_path;
 				} else { // no image, display this fact
 					$image_path = WPSC_URL."/images/no-image-uploaded.gif";
 				}
