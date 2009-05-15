@@ -274,7 +274,7 @@ function selectgateway() {
 										?> 
 							<div class="wpsc-shipping-actions">
 									| <span class="edit">
-										<a class='edit-product' title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						   </div>
    						   </div>
