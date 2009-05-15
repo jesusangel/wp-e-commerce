@@ -270,7 +270,15 @@ function selectgateway() {
 // 						exit("<pre>".print_r($shipping,1)."</pre>");
 						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
 							echo "						";// add the whitespace to the html
-							echo "<p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							echo "<div id='wpsc_shipping_options'><p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+										?> 
+							<div class="wpsc-shipping-actions">
+									| <span class="edit">
+										<a class='edit-product' title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+									</span> |
+						   </div>
+   						   </div>
+							<?php
 						} else {
 							echo "						";
 							echo "<p><input name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
@@ -298,7 +306,15 @@ function selectgateway() {
 
 						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) {
 							echo "						";// add the whitespace to the html
-							echo "<p><input $disabled name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							echo "<div id='wpsc_shipping_options'><p><input  $disabled name='custom_shipping_options[]' checked='checked' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";
+							?> 
+							<div class="wpsc-shipping-actions">
+									| <span class="edit">
+										<a class='edit-product' title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+									</span> |
+						   </div>
+   						   </div>
+							<?php
 						} else {
 							echo "						";
 							echo "<p><input $disabled name='custom_shipping_options[]' type='checkbox' value='{$shipping->internal_name}' id='{$shipping->internal_name}_id'><label for='{$shipping->internal_name}_id'>{$shipping->name}</label></p>\n\r";

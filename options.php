@@ -534,7 +534,8 @@ if($_GET['clean_categories'] == 'true') {
 
 
 
-  function options_categorylist() {
+  /*
+function options_categorylist() {
     global $wpdb;
     $current_default = get_option('wpsc_default_category');
     $group_sql = "SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active`='1'";
@@ -569,7 +570,9 @@ if($_GET['clean_categories'] == 'true') {
     $categorylist .= "</select>";
     return $categorylist;
 	}
-    
+*/
+   /*
+ 
   function country_list($selected_country = null) {
       global $wpdb;
       $output = "";
@@ -584,6 +587,7 @@ if($_GET['clean_categories'] == 'true') {
 			}
       return $output;
 		}
+*/
   ?>
 
 				<form name='cart_options' id='cart_options' method='POST' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>

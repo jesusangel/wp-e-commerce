@@ -16,6 +16,7 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-options.page.php"); 
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php"); 
 
 /**
@@ -68,7 +69,8 @@ function wpsc_admin_pages(){
 			
 			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'edit-products', 'wpsc_display_products_page');
 			
-			
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-options.page.php', 'wpsc_display_options_page');
+
 			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
@@ -99,8 +101,7 @@ function wpsc_admin_pages(){
 // 			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
 // 			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
 // 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
-			add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/options.php');
-			if(function_exists('gold_shpcrt_options')) {
+					if(function_exists('gold_shpcrt_options')) {
 				gold_shpcrt_options($base_page);
 			}
 			
@@ -112,8 +113,14 @@ function wpsc_admin_pages(){
 		// Include the javascript and CSS for this page
 		
 		foreach($page_hooks as $page_hook) {
-			add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
-			//echo $page_hook."<br />";
+			
+				add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
+			
+			if($page_hook == 'products_page_trunk/wpsc-admin/display-options.page'){
+//exit('Im here');
+				add_action("load-$page_hook", 'wpsc_admin_include_optionspage_css_and_js');
+			}
+
 		}
 		
 		return;
@@ -133,6 +140,21 @@ function wpsc_meta_boxes(){
 }
 
 add_action('admin_menu', 'wpsc_meta_boxes');
+
+/**
+	* wpsc_admin_css_and_js function, includes the wpsc_admin CSS and JS for the specific options page
+	* No parameters, returns nothing
+*/
+function wpsc_admin_include_optionspage_css_and_js(){
+	wp_enqueue_style( 'wp-e-commerce-ui-tabs', WPSC_URL.'/wpsc-admin/css/jquery.ui.tabs.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/admin_2.7.css', false, false, 'all' );
+
+	wp_enqueue_script('wp-e-commerce-js-ui-tabs', WPSC_URL.'/wpsc-admin/js/jquery-ui.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-dimensions', WPSC_URL.'/wpsc-admin/js/dimensions.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-tooltip', WPSC_URL.'/wpsc-admin/js/jquery.tooltip.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-admin', WPSC_URL.'/admin.js', false, $version_identifier);
+}
 
 /**
 	* wpsc_admin_css_and_js function, includes the wpsc_admin CSS and JS

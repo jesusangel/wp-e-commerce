@@ -1127,7 +1127,6 @@ function reloadresults(){
 }
 
 jQuery(document).ready(function(){
-	
 	jQuery(".wpsc-row-actions").parent().parent("tr").mouseover(
 		function() {
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "visible");
@@ -1137,6 +1136,21 @@ jQuery(document).ready(function(){
 			jQuery(this).children("td").children(".wpsc-row-actions").css("visibility", "hidden");
 		}
 	);
+/*
+	jQuery(".wpsc-shipping-actions").hide();
+	jQuery("#wpsc_shipping_options").hover(
+		function() {
+			alert('hovering');
+			jQuery(this).children(".wpsc-shipping-actions").css("visibility", "visible");
+		}
+	);
+*//*
+.mouseout(
+		function() {
+			jQuery(this).children(".wpsc-shipping-actions").css("visibility", "hidden");
+		}
+	);
+*/
 	jQuery("#table_rate_price").click(
 		function() {
 			if (this.checked) {
