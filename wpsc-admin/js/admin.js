@@ -195,7 +195,7 @@ jQuery(document).ready( function () {
 			jQuery(this).parent().parent('tr').remove();
 		});		
 	});
-	
+/* shipping options start */
 	// gets shipping form for admin page
 		// show or hide the stock input forms
 	jQuery(".wpsc-shipping-actions a").livequery(function(){
@@ -213,6 +213,39 @@ jQuery(document).ready( function () {
 		})
 		});
 	});
+	
+	jQuery('#addweightlayer').livequery(function(){
+		jQuery(this).click(function(){
+		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
+		bind_shipping_rate_deletion();
+		});
+	
+	})
+	
+	jQuery('#addlayer').livequery(function(){
+		jQuery(this).click(function(){
+		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
+		bind_shipping_rate_deletion();
+		});
+	
+	})
+	
+  jQuery('table#gateway_options a.delete_button').livequery(function(){
+  		jQuery(this).click(function () {
+    this_row = jQuery(this).parent('div');
+    if(jQuery(this).hasClass('nosubmit')) {
+			// if the row was added using JS, just scrap it
+			jQuery(this_row).remove();
+    } else {
+			// otherwise, empty it and submit it
+			jQuery('input', this_row).val('');
+			jQuery(this).parents('form').submit();
+    }
+    return false;
+	});
+	});
+
+/*shipping options end */
 	// start off the gallery_list sortable
 	/*
 	jQuery("#gallery_list").sortable({

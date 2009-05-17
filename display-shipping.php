@@ -78,7 +78,7 @@ if(($_POST['shippingname'] != null)){
 	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 		if($shipping->internal_name == $_POST['shippingname'])
 		 {
-//exit('yes');
+//exit($shipping->internal_name.'<pre>'.print_r($_POST,true).'</pre>');
 			$shipping->submit_form();
 			$changes_made = true;
 		}
@@ -103,7 +103,7 @@ $form = "";
 foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 	if($shipping->internal_name == $curgateway ) {
 		$selected = " selected='selected'";
-		$shippignname = '<input type="hidden" name="shippingname" value="'.$shipping->internal_name.'" />';
+		//$shippignname = '<input type="hidden" name="shippingname" value="'.$shipping->internal_name.'" />';
 		$form = $shipping->getForm();
 	} else {
 		$selected = '';

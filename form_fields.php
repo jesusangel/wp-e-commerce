@@ -146,7 +146,7 @@ if($_POST['submit_action'] == 'add')
     foreach($form_types as $form_type) {
       $selected = '';
       if($form_type === $form_field['type']) {
-        $selected = "selected='true'";
+        $selected = "selected='selected'";
       }
        // define('TXT_WPSC_TEXTAREA', 'Textarea');
       echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";

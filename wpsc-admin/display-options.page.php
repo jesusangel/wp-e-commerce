@@ -1,6 +1,15 @@
 <?php
    //$_SESSION['debug']=0;
-
+if(($_POST['shippingname'] != null)){
+	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
+		if($shipping->internal_name == $_POST['shippingname'])
+		 {
+//exit($shipping->internal_name.'<pre>'.print_r($_POST,true).'</pre>');
+			$shipping->submit_form();
+			$changes_made = true;
+		}
+	}
+}
 
 if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
   include('tax_and_shipping.php');
@@ -545,7 +554,7 @@ if($_GET['clean_categories'] == 'true') {
     $categorylist .= "<option value='none' ".$selected." >".TXT_WPSC_SELECTACATEGORY."</option>";
     
 		if(get_option('wpsc_default_category') == 'all')  {
-				$selected = "selected='true'";
+				$selected = "selected='selected'";
 			}
     
     $categorylist .= "<option value='all' ".$selected." >".TXT_WPSC_SELECTALLCATEGORIES."</option>";
@@ -558,7 +567,7 @@ if($_GET['clean_categories'] == 'true') {
 				$categorylist .= "<optgroup label='{$group['name']}'>";;
 				foreach((array)$category_data as $category)  {
 					if(get_option('wpsc_default_category') == $category['id'])  {
-						$selected = "selected='true'";
+						$selected = "selected='selected'";
 					} else {
 						$selected = "";
 					}
@@ -580,7 +589,7 @@ if($_GET['clean_categories'] == 'true') {
       foreach ((array)$country_data as $country) {
         $selected ='';
         if($selected_country == $country['isocode']) {
-          $selected = "selected='true'";
+          $selected = "selected='selected'";
 				}
         $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
 			}
@@ -590,7 +599,7 @@ function wpsc_display_options_page(){
 	global $wpdb;
   ?>
 
-				<form name='cart_options' id='cart_options' method='post' action='<?php echo $_SERVER['REQUEST_URI']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php";?>'>
+				<form name='cart_options' id='cart_options' method='post' action='<?php echo $_SERVER['REQUEST_URI']; ?>'>
 		  <div id="wpsc_options" class="wrap">
 					<!-- <a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a> -->
             <ul id="tabs" class="ui-tabs-nav">
@@ -632,7 +641,7 @@ function wpsc_display_options_page(){
 										echo "<select name='base_region'>\n\r";
 										foreach($region_list as $region) {
 											if(get_option('base_region')  == $region['id']) {
-												$selected = "selected='true'";
+												$selected = "selected='selected'";
 											} else {
 												$selected = "";
 											}
@@ -798,7 +807,7 @@ function wpsc_display_options_page(){
 											break;
 										}
 										if($language_setting == $language_file) {
-											echo "<option selected='true' value='".$language_file."'>".$language."</option>";
+											echo "<option selected='selected' value='".$language_file."'>".$language."</option>";
 										} else {
 											echo "<option value='".$language_file."'>".$language."</option>";            
 										}
@@ -938,7 +947,7 @@ function wpsc_display_options_page(){
 									$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
 									foreach($currency_data as $currency) {
 										if(get_option('currency_type') == $currency['id']) {
-											$selected = "selected='true'";
+											$selected = "selected='selected'";
 										} else {
 											$selected = "";
 										}

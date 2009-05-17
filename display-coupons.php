@@ -173,7 +173,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    <?php
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
-     if($i == date("d")) { $selected = "selected='true'"; }
+     if($i == date("d")) { $selected = "selected='selected'"; }
      echo "<option $selected value='$i'>$i</option>";
      }
    ?>
@@ -182,7 +182,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    <?php
    for($i = 1; $i <=12; ++$i) {
      $selected = '';
-     if($i == (int)date("m")) { $selected = "selected='true'"; }
+     if($i == (int)date("m")) { $selected = "selected='selected'"; }
      echo "<option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
      }
    ?>
