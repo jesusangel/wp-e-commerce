@@ -9,35 +9,35 @@ if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null
  global $wpdb;
  /* START OF TARGET MARKET SELECTION */					
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
-?>
-	<tr>
-		<td colspan="2"><h4>Target Market Restrictions</h4></td></tr><tr>
-		<td>
-		<?php echo TXT_WPSC_TM; ?>:
-		</td>
-		<td>
-		<div id='resizeable' class='ui-widget-content multiple-select'>
-		<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
-		<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
-		<?php
-		
-		foreach($countrylist as $country){
-			if($country['visible'] == 1){
-			echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />";
-			}else{
-			echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />";
+	?>
+		<tr>
+			<td colspan="2"><h4>Target Market Restrictions</h4></td></tr><tr>
+			<td>
+			<?php echo TXT_WPSC_TM; ?>:
+			</td>
+			<td>
+			<div id='resizeable' class='ui-widget-content multiple-select'>
+			<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
+			<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
+			<?php
+			
+			foreach($countrylist as $country){
+				if($country['visible'] == 1){
+				echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />";
+				}else{
+				echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />";
+				}
+					
 			}
-				
-		}
-
-		?>		
-		
-		</div><br />
-		Select the markets you are selling this category to.
-		</td>
 	
-	</tr>
-<?php
+			?>		
+			
+			</div><br />
+			Select the markets you are selling this category to.
+			</td>
+		
+		</tr>
+	<?php
 }
 function admin_categorylist($curent_category) {
   global $wpdb;
@@ -525,356 +525,363 @@ if(is_numeric($_GET['deleteid'])) {
 	}
 }
 
-?>
-<script language='javascript' type='text/javascript'>
-function conf() {
-  var check = confirm("<?php echo TXT_WPSC_SURETODELETECATEGORY;?>");
-  if(check) {
-    return true;
-	} else {
-	  return false;
-	}
-}
-function categorisation_conf() {
-  var check = confirm("<?php echo TXT_WPSC_SURETODELETECATEGORISATION;?>");
-  if(check) {
-    return true;
-	} else {
-	  return false;
-	}
-}
-
-<?php
-  if(is_numeric($_POST['prodid'])) {
-    echo "fillcategoryform(".$_POST['prodid'].");";
-	}
-?>
-</script>
-<div class="wrap">
-  <h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
-    <?php
-  
-  
-	if(function_exists('add_object_page')) {
-		echo "<div id='dashboard-widgets' class='metabox-holder'>";
-	}
-?>
-  <span><?php echo TXT_WPSC_CATEGORISATION_GROUPS_DESCR;?></span>
-  
-<?php
-	if (function_exists('add_object_page')) {
-		echo "<div class='wpsc_products_nav27'>";
-	} else {
-		echo "<div class='tablenav wpsc_groups_nav' >";
-	}
-?>
-
-	<div class="alignleft product_group" style='width: 500px;'>
-	  <form action='' method='GET' id='submit_categorisation_form' >
-	  <input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
-	  <?php
-	  $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
-		//echo "<ul class='categorisation_links'>\n\r";
-		echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":&nbsp;&nbsp;</label>";
-		echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 
-		foreach((array)$categorisation_groups as $categorisation_group) {
-			$selected = '';
-			if($current_categorisation['id'] == $categorisation_group['id']) {
-				//$selected = "class='selected'";
-				$selected = "selected='selected'";
-			}
-			echo "<option value='{$categorisation_group['id']}' $selected >{$categorisation_group['name']}</option>";
-			//echo "  <li $selected >\n\r";
-			//echo "    <a href='?page={$_GET['page']}&amp;category_group={$categorisation_group['id']}'>{$categorisation_group['name']}</a> ";
-			//echo "  </li>\n\r";
+function wpsc_display_groups_page() {
+	?>
+	
+	
+	<script language='javascript' type='text/javascript'>
+	function conf() {
+		var check = confirm("<?php echo TXT_WPSC_SURETODELETECATEGORY;?>");
+		if(check) {
+			return true;
+		} else {
+			return false;
 		}
-		echo "</select>"; 
-		//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
-		//echo "</ul>\n\r";
-	  ?>
+	}
+	function categorisation_conf() {
+		var check = confirm("<?php echo TXT_WPSC_SURETODELETECATEGORISATION;?>");
+		if(check) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	<?php
+		if(is_numeric($_POST['prodid'])) {
+			echo "fillcategoryform(".$_POST['prodid'].");";
+		}
+	?>
+	</script>
+	<div class="wrap">
+		<h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
+			<?php
 		
-		<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
-	  </form>
+		
+		if(function_exists('add_object_page')) {
+			echo "<div id='dashboard-widgets' class='metabox-holder'>";
+		}
+	?>
+		<span><?php echo TXT_WPSC_CATEGORISATION_GROUPS_DESCR;?></span>
+		
+	<?php
+		if (function_exists('add_object_page')) {
+			echo "<div class='wpsc_products_nav27'>";
+		} else {
+			echo "<div class='tablenav wpsc_groups_nav' >";
+		}
+	?>
+	
+		<div class="alignleft product_group" style='width: 500px;'>
+			<form action='' method='GET' id='submit_categorisation_form' >
+			<input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
+			<?php
+			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
+			//echo "<ul class='categorisation_links'>\n\r";
+			echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":&nbsp;&nbsp;</label>";
+			echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 
+			foreach((array)$categorisation_groups as $categorisation_group) {
+				$selected = '';
+				if($current_categorisation['id'] == $categorisation_group['id']) {
+					//$selected = "class='selected'";
+					$selected = "selected='selected'";
+				}
+				echo "<option value='{$categorisation_group['id']}' $selected >{$categorisation_group['name']}</option>";
+				//echo "  <li $selected >\n\r";
+				//echo "    <a href='?page={$_GET['page']}&amp;category_group={$categorisation_group['id']}'>{$categorisation_group['name']}</a> ";
+				//echo "  </li>\n\r";
+			}
+			echo "</select>"; 
+			//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
+			//echo "</ul>\n\r";
+			?>
+			
+			<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
+			</form>
+		</div>
+		
+			
+		<!--
+	<div class="alignright">
+			<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
+		</div>
+	-->
+		<br class="clear"/>
 	</div>
 	
-	  
-	<!--
-<div class="alignright">
-		<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
-	</div>
--->
-	<br class="clear"/>
-</div>
-
-
-
-
-<div id='add_categorisation'>
-  <strong><?php echo TXT_WPSC_ADD_CATEGORISATION;?></strong>
-	<form method='POST' enctype='multipart/form-data'>
-  
-		<fieldset>
-		<label for='add_categorisation_name'>Name</label>
-		<input type='text' name='name' value='' id='add_categorisation_name' />
-		</fieldset>
+	
+	
+	
+	<div id='add_categorisation'>
+		<strong><?php echo TXT_WPSC_ADD_CATEGORISATION;?></strong>
+		<form method='POST' enctype='multipart/form-data'>
 		
-		<fieldset>
-		<label for='add_categorisation_description'>Description</label>
-		<input type='text' name='description' value='' id='add_categorisation_description' />
-		</fieldset>
-		
-		<fieldset>
-		<label>&nbsp;</label>
-		
-		<input type='hidden' name='submit_action' value='add_categorisation' />
-		<input type='submit' name='submit_form' value='<?php echo TXT_WPSC_SUBMIT; ?>' />
-		</fieldset>
-	</form>
-	<br/>
-</div>
-
-<div id='edit_categorisation'>
-  <strong><?php echo TXT_WPSC_EDIT_CATEGORISATION;?></strong>
-  
-  <form method='POST' enctype='multipart/form-data'>
-  
-		<fieldset>
+			<fieldset>
 			<label for='add_categorisation_name'>Name</label>
-			<input type='text' name='name' value='<?php echo $current_categorisation['name']; ?>' id='add_categorisation_name' />
-		</fieldset>
-		
-		<fieldset>
+			<input type='text' name='name' value='' id='add_categorisation_name' />
+			</fieldset>
+			
+			<fieldset>
 			<label for='add_categorisation_description'>Description</label>
-			<input type='text' name='description' value='<?php echo $current_categorisation['description']; ?>' id='add_categorisation_description' />
-		</fieldset>
-		
-		<fieldset>
-			<label>&nbsp;</label>		
-			<input type='hidden' name='group_id' value='<?php echo $current_categorisation['id']; ?>' />
-			<input type='hidden' name='submit_action' value='edit_categorisation' />
+			<input type='text' name='description' value='' id='add_categorisation_description' />
+			</fieldset>
+			
+			<fieldset>
+			<label>&nbsp;</label>
+			
+			<input type='hidden' name='submit_action' value='add_categorisation' />
 			<input type='submit' name='submit_form' value='<?php echo TXT_WPSC_SUBMIT; ?>' />
-			<?php if($current_categorisation['default'] != 1) { ?>
-			<a href='<?php echo "?page={$_GET['page']}&amp;category_delete_id={$current_categorisation['id']}"  ?>' onclick='return categorisation_conf()' > <?php echo TXT_WPSC_DELETE; ?></a>
-			<?php 	} ?>
-		</fieldset>
-	</form>
-	<br/>
-</div>
-
-<?php
- 
-$num = 0;
-
-echo "  <table id='productpage' style='margin-top: 1ex;'>\n\r";
-echo "    <tr><td class='firstcol'>\n\r";
-if (function_exists('add_object_page')){
-	echo "<div class='postbox' style='margin-right: 15px; min-width:255px;'>";
-	echo "<h3 class='hndle'>".ucfirst(TXT_WPSC_GROUPCOUNT_PLURAL)."</h3>";
-	echo "<div class='inside'>";
-}
-//echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
-echo "      <table id='itemlist'>\n\r";
-if (function_exists('add_object_page')) {
-	echo "<tr></tr>";
-} else {
-	echo "        <tr class='firstrow categorisation_title'>\n\r";
-	echo "          <td>\n\r";
-	echo TXT_WPSC_IMAGE;
-	echo "          </td>\n\r";
+			</fieldset>
+		</form>
+		<br/>
+	</div>
 	
-	echo "          <td>\n\r";
-	echo TXT_WPSC_NAME;
-	echo "          </td>\n\r";
+	<div id='edit_categorisation'>
+		<strong><?php echo TXT_WPSC_EDIT_CATEGORISATION;?></strong>
+		
+		<form method='POST' enctype='multipart/form-data'>
+		
+			<fieldset>
+				<label for='add_categorisation_name'>Name</label>
+				<input type='text' name='name' value='<?php echo $current_categorisation['name']; ?>' id='add_categorisation_name' />
+			</fieldset>
+			
+			<fieldset>
+				<label for='add_categorisation_description'>Description</label>
+				<input type='text' name='description' value='<?php echo $current_categorisation['description']; ?>' id='add_categorisation_description' />
+			</fieldset>
+			
+			<fieldset>
+				<label>&nbsp;</label>		
+				<input type='hidden' name='group_id' value='<?php echo $current_categorisation['id']; ?>' />
+				<input type='hidden' name='submit_action' value='edit_categorisation' />
+				<input type='submit' name='submit_form' value='<?php echo TXT_WPSC_SUBMIT; ?>' />
+				<?php if($current_categorisation['default'] != 1) { ?>
+				<a href='<?php echo "?page={$_GET['page']}&amp;category_delete_id={$current_categorisation['id']}"  ?>' onclick='return categorisation_conf()' > <?php echo TXT_WPSC_DELETE; ?></a>
+				<?php 	} ?>
+			</fieldset>
+		</form>
+		<br/>
+	</div>
 	
-	echo "          <td>\n\r";
-	//echo TXT_WPSC_DESCRIPTION;
-	echo "          </td>\n\r";
+	<?php
 	
-	echo "          <td>\n\r";
-	echo TXT_WPSC_EDIT;
-	echo "          </td>\n\r";
+	$num = 0;
 	
-	echo "        </tr>\n\r";
-}
-
-
-
-echo "     <tr>\n\r";
-echo "       <td colspan='4' class='colspan'>\n\r";
-echo "<div class='editing_this_group'><p>";
-echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP);
-
-echo "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";
-
-echo "</p></div>";
-echo "<a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a>";
-echo "       </td>\n\r";
-echo "     <tr>\n\r";
-
-display_categories($current_categorisation['id']);
-if (function_exists('add_object_page')){
-	echo "</table>";
-	echo "</div>"; //class inside ends
-	echo "</div>"; //class postbox ends
-} else {
-	echo "</table>\n\r";
-}
-echo "      </td><td class='secondcol product_groups_page'>\n\r";
-echo "        <div id='productform' class='postbox'>";
-echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>\n\r";
-
-if (function_exists('add_object_page')) {
-	echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP)."</h3>";
-	echo "<div class='inside'>";
-} else {
-	echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_EDITDETAILS." </strong></div>\n\r";
-echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP) ."</p></div>";
-}
-
-
-echo "        <div id='formcontent'>\n\r";
-echo "        </div>\n\r";
-if (function_exists('add_object_page')) {
-	echo "</div>";
-}
-echo "</form>\n\r";
-echo "        </div>\n\r";
-?>
-
-<?php
-if (function_exists('add_object_page')) {
-	echo "<div id='additem' class='postbox'>";
-	echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP)."</h3>";
-	echo "<div class='inside'>";
-} else {
-	echo "<div id='additem'>";
-	echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_ADDDETAILS."</strong></div>";
-}
-?>
-  <form method='POST' enctype='multipart/form-data' class='additem'>
-	<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
-  <table class='category_forms'>
-    <tr>
-      <td>
-        <?php echo TXT_WPSC_NAME;?>:
-      </td>
-      <td>
-        <input type='text' class="text" name='name' value=''  />
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <?php echo TXT_WPSC_DESCRIPTION;?>:
-      </td>
-      <td>
-        <textarea name='description' rows='8'></textarea>
-      </td>
-    </tr>   
-    
-       <tr>
-      <td>
-        <?php echo TXT_WPSC_CATEGORY_PARENT;?>:
-      </td>
-      <td>
-        <?php echo wpsc_parent_category_list($current_categorisation['id'], 0,0); ?>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <?php echo TXT_WPSC_GROUP_IMAGE;?>:
-      </td>
-      <td>
-        <input type='file' name='image' value='' />
-      </td>
-    </tr>
-<?php
-if(function_exists("getimagesize")) {
-		?>
-		<tr>
-			<td>
-			</td>
-			<td>
-				<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br />
-				<span class='small'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
-			</td>
-		</tr>
-		<?php
-}
-?>
-	<?php  wpsc_category_tm(); //category target market checkbox ?> 
-    <tr>
-      <td colspan='2' class='category_presentation_settings'>
-        <h4><?php echo TXT_WPSC_PRESENTATIONSETTINGS;?></h4>
-        <span class='small'><?php echo TXT_WPSC_GROUP_PRESENTATION_TEXT; ?></span>
-      </td>
-		</tr>
-    
-    
-    
-    <tr>
-      <td>
-        <?php echo TXT_WPSC_CATALOG_VIEW;?>:
-      </td>
-      <td>
-    			<select name='product_view'>
-						<option value='default' <?php echo $product_view1; ?>><?php echo TXT_WPSC_DEFAULT;?></option>
-						<?php
-						if(function_exists('product_display_list')) {
-							?>
-							<option value='list' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
-							<?php      
-						}  else {
-							?>
-							<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+	echo "  <table id='productpage' style='margin-top: 1ex;'>\n\r";
+	echo "    <tr><td class='firstcol'>\n\r";
+	if (function_exists('add_object_page')){
+		echo "<div class='postbox' style='margin-right: 15px; min-width:255px;'>";
+		echo "<h3 class='hndle'>".ucfirst(TXT_WPSC_GROUPCOUNT_PLURAL)."</h3>";
+		echo "<div class='inside'>";
+	}
+	//echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
+	echo "      <table id='itemlist'>\n\r";
+	if (function_exists('add_object_page')) {
+		echo "<tr></tr>";
+	} else {
+		echo "        <tr class='firstrow categorisation_title'>\n\r";
+		echo "          <td>\n\r";
+		echo TXT_WPSC_IMAGE;
+		echo "          </td>\n\r";
+		
+		echo "          <td>\n\r";
+		echo TXT_WPSC_NAME;
+		echo "          </td>\n\r";
+		
+		echo "          <td>\n\r";
+		//echo TXT_WPSC_DESCRIPTION;
+		echo "          </td>\n\r";
+		
+		echo "          <td>\n\r";
+		echo TXT_WPSC_EDIT;
+		echo "          </td>\n\r";
+		
+		echo "        </tr>\n\r";
+	}
+	
+	
+	
+	echo "     <tr>\n\r";
+	echo "       <td colspan='4' class='colspan'>\n\r";
+	echo "<div class='editing_this_group'><p>";
+	echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP);
+	
+	echo "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";
+	
+	echo "</p></div>";
+	echo "<a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a>";
+	echo "       </td>\n\r";
+	echo "     <tr>\n\r";
+	
+	display_categories($current_categorisation['id']);
+	if (function_exists('add_object_page')){
+		echo "</table>";
+		echo "</div>"; //class inside ends
+		echo "</div>"; //class postbox ends
+	} else {
+		echo "</table>\n\r";
+	}
+	echo "      </td><td class='secondcol product_groups_page'>\n\r";
+	echo "        <div id='productform' class='postbox'>";
+	echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>\n\r";
+	
+	if (function_exists('add_object_page')) {
+		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP)."</h3>";
+		echo "<div class='inside'>";
+	} else {
+		echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_EDITDETAILS." </strong></div>\n\r";
+	echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP) ."</p></div>";
+	}
+	
+	
+	echo "        <div id='formcontent'>\n\r";
+	echo "        </div>\n\r";
+	if (function_exists('add_object_page')) {
+		echo "</div>";
+	}
+	echo "</form>\n\r";
+	echo "        </div>\n\r";
+	?>
+	
+	<?php
+	if (function_exists('add_object_page')) {
+		echo "<div id='additem' class='postbox'>";
+		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP)."</h3>";
+		echo "<div class='inside'>";
+	} else {
+		echo "<div id='additem'>";
+		echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_ADDDETAILS."</strong></div>";
+	}
+	?>
+		<form method='POST' enctype='multipart/form-data' class='additem'>
+		<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
+		<table class='category_forms'>
+			<tr>
+				<td>
+					<?php echo TXT_WPSC_NAME;?>:
+				</td>
+				<td>
+					<input type='text' class="text" name='name' value=''  />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php echo TXT_WPSC_DESCRIPTION;?>:
+				</td>
+				<td>
+					<textarea name='description' rows='8'></textarea>
+				</td>
+			</tr>   
+			
+				<tr>
+				<td>
+					<?php echo TXT_WPSC_CATEGORY_PARENT;?>:
+				</td>
+				<td>
+					<?php echo wpsc_parent_category_list($current_categorisation['id'], 0,0); ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php echo TXT_WPSC_GROUP_IMAGE;?>:
+				</td>
+				<td>
+					<input type='file' name='image' value='' />
+				</td>
+			</tr>
+	<?php
+	if(function_exists("getimagesize")) {
+			?>
+			<tr>
+				<td>
+				</td>
+				<td>
+					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br />
+					<span class='small'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
+				</td>
+			</tr>
+			<?php
+	}
+	?>
+		<?php  wpsc_category_tm(); //category target market checkbox ?> 
+			<tr>
+				<td colspan='2' class='category_presentation_settings'>
+					<h4><?php echo TXT_WPSC_PRESENTATIONSETTINGS;?></h4>
+					<span class='small'><?php echo TXT_WPSC_GROUP_PRESENTATION_TEXT; ?></span>
+				</td>
+			</tr>
+			
+			
+			
+			<tr>
+				<td>
+					<?php echo TXT_WPSC_CATALOG_VIEW;?>:
+				</td>
+				<td>
+						<select name='product_view'>
+							<option value='default' <?php echo $product_view1; ?>><?php echo TXT_WPSC_DEFAULT;?></option>
 							<?php
-						}
-						
-						if(function_exists('product_display_grid')) {
+							if(function_exists('product_display_list')) {
+								?>
+								<option value='list' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+								<?php      
+							}  else {
+								?>
+								<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+								<?php
+							}
+							
+							if(function_exists('product_display_grid')) {
+								?>
+							<option value='grid' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+								<?php   
+							} else {
+								?>
+							<option value='grid' disabled='disabled' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+								<?php 
+							}
 							?>
-						<option value='grid' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
-							<?php   
-						} else {
-							?>
-						<option value='grid' disabled='disabled' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
-							<?php 
-						}
-						?>
-					</select>
-      </td>
-    </tr>
-    
-		<tr>
-			<td>
-			<?php echo TXT_WPSC_THUMBNAIL_SIZE; ?>:
-			</td>
-			<td>
-				<?php echo TXT_WPSC_HEIGHT; ?>: <input type='text' value='' name='product_height' size='6'/>
-				<?php echo TXT_WPSC_WIDTH; ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
-			</td>
-		</tr>
-    
-    <tr>
-      <td>
-      </td>
-      <td>
-        <input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['id']; ?>' />
-        <input type='hidden' name='submit_action' value='add' />
-        <input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
-      </td>
-    </tr>
-    
+						</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+				<?php echo TXT_WPSC_THUMBNAIL_SIZE; ?>:
+				</td>
+				<td>
+					<?php echo TXT_WPSC_HEIGHT; ?>: <input type='text' value='' name='product_height' size='6'/>
+					<?php echo TXT_WPSC_WIDTH; ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+				</td>
+				<td>
+					<input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['id']; ?>' />
+					<input type='hidden' name='submit_action' value='add' />
+					<input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
+				</td>
+			</tr>
+			
+	
+	
+			
+		</table>
+		</form>
+	</div>
+	<?php
+	echo "      </td></tr>\n\r";
+	echo "     </table>\n\r";
+	if (function_exists('add_object_page')) {
+		echo "</div>";
+	}
+		?>
+	</div>
+	</div>
+	<?php
+  }
 
-
-    
-  </table>
-  </form>
-</div>
-<?php
-echo "      </td></tr>\n\r";
-echo "     </table>\n\r";
-if (function_exists('add_object_page')) {
-	echo "</div>";
-}
-  ?>
-</div>
-</div>
+?>
