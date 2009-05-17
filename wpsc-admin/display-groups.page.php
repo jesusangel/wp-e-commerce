@@ -1,9 +1,4 @@
 <?php
-if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
-  $current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
-} else {
-  $current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
-}
 
  function wpsc_category_tm(){
  global $wpdb;
@@ -130,6 +125,15 @@ function display_category_row($category,$subcategory_level = 0) {
 }
 
 
+
+
+function wpsc_display_groups_page() {
+  global $wpdb;
+	if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
+		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
+	} else {
+		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
+	}
   if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>"); 
     if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
@@ -525,7 +529,7 @@ if(is_numeric($_GET['deleteid'])) {
 	}
 }
 
-function wpsc_display_groups_page() {
+
 	?>
 	
 	

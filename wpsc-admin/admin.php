@@ -11,6 +11,7 @@
  
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-groups.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 
@@ -69,14 +70,14 @@ function wpsc_admin_pages(){
 			
 			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'edit-products', 'wpsc_display_products_page');
 			
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, WPSC_DIR_NAME.'/wpsc-admin/display-options.page.php', 'wpsc_display_options_page');
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'settings', 'wpsc_display_options_page');
 
 			
+			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'edit-groups', 'wpsc_display_groups_page');
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
 			}			//exit('-->'.$help);
-			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, WPSC_DIR_NAME.'/display-category.php');
 			if (function_exists('add_contextual_help')) {
 
 				add_contextual_help(WPSC_DIR_NAME.'/display-log',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/sales/'>About this page</a>");
