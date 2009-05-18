@@ -241,7 +241,7 @@ if($_GET['search']) {
 			</select>
 		<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
 		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
-		<?php wp_nonce_field('bulk-products'); ?>
+		<?php wp_nonce_field('bulk-products','bulk-products'); ?>
 		</div>
 		<div class="tablenav-pages">
 			<?php
@@ -314,7 +314,7 @@ if($_GET['search']) {
 									<img src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
 								</td>
 								<td class="product-title column-title">
-									<a class='edit-product' href='<?php echo urlencode(add_query_arg('product_id', $product['id'])); ?>'><?php echo $product_name; ?></a>
+									<a class='edit-product' href='<?php echo htmlspecialchars(add_query_arg('product_id', $product['id'])); ?>'><?php echo $product_name; ?></a>
 										<?php
 										$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
 										if(count($product_alert['messages']) > 0) {
@@ -331,7 +331,7 @@ if($_GET['search']) {
 								
 									<div class="wpsc-row-actions">
 										<span class="edit">
-											<a class='edit-product' title="Edit this post" href='<?php echo urlencode(add_query_arg('product_id', $product['id'])); ?>' style="cursor:pointer;">Edit</a>
+											<a class='edit-product' title="Edit this Product" href='<?php echo htmlspecialchars(add_query_arg('product_id', $product['id'])); ?>' style="cursor:pointer;">Edit</a>
 										</span> |
 										<span class="delete">
 											<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
