@@ -45,6 +45,9 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['donation'] = (int)(bool)$post_data['donation'];
 	$post_data['no_shipping'] = (int)(bool)$post_data['no_shipping'];
 	
+	if($post_data['special'] !== 1) {
+	  $post_data['special_price'] = 0;
+	}
 	
 	$post_data['files'] = $_FILES;
 
@@ -331,9 +334,17 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 					$height = get_option('product_image_height');
 					$width  = get_option('product_image_width');				
 				case 2:
-				  // if case 1, use the provided size
+				  // if case 2, use the provided size
 					$image_input = WPSC_IMAGE_DIR . $image;
 					$image_output = WPSC_THUMBNAIL_DIR . $image;
+					
+					if($width < 1) {
+						$width = 96;
+					}
+					if($height < 1) {
+						$height = 96;
+					}
+					
 					image_processing($image_input, $image_output, $width, $height);
 					update_product_meta($product_id, 'thumbnail_width', $width);
 					update_product_meta($product_id, 'thumbnail_height', $height);

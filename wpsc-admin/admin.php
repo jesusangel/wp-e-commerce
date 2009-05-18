@@ -73,7 +73,7 @@ function wpsc_admin_pages(){
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'settings', 'wpsc_display_options_page');
 
 			
-			add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'edit-groups', 'wpsc_display_groups_page');
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'edit-groups', 'wpsc_display_groups_page');
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));

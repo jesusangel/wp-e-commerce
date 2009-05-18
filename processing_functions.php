@@ -380,14 +380,14 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 
 
 				case 0:
-				$height = null;
-				$width  = null;
+				$height = (int)null;
+				$width  = (int)null;
 				break;
 
 				case 1:
 				default:
-				$height = get_option('product_image_height');
-				$width  = get_option('product_image_width');
+				$height = (int)get_option('product_image_height');
+				$width  = (int)get_option('product_image_width');
 				break;
 			}
 // 			if(($resize_method == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {

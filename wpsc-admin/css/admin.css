@@ -756,3 +756,261 @@ float:right;
 .wpsc_shipping_options:hover .wpsc-shipping-actions{
 visibility:visible;
 }
+
+
+
+
+
+/* 
+* Product Groups styles start here
+*/
+td.firstcol div.postbox div.inside{  
+  margin: 0px;
+  padding: 0px;
+}
+
+table#productpage{
+  width: 100%;
+  clear: both;
+  border-collapse: collapse; 
+}
+
+table#productpage tr td{
+  vertical-align: top; 
+/*   padding: 0px 0px 0px 6px; */
+}
+
+table#productpage tr td.secondcol{
+/*   width: 60%; */
+/*   margin-left: 20px; */
+  padding: 0px 2px 0px 16px;
+     
+}
+
+table#itemlist{
+	min-width: 280px;
+	width: 100%;
+	border-collapse:collapse;
+/* 	border:1px solid #bbb; */
+	border-top:none;
+}
+
+
+table#itemlist tr td{text-align: left; padding:10px 5px 8px 5px; }
+
+table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
+table#itemlist tr.productsalt td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
+
+table#itemlist tr td.imagecol{ padding: 4px;}
+ 
+table#itemlist tr td.colspan{ text-align: left; padding: 0px; }
+
+table#itemlist tr.firstrow td{ font-weight: bold; padding-left: 5px; padding-right: 5px; }
+
+
+
+
+div#productform{ display: none; width: 99.5%; }
+
+div#edititem27{ display: none; width: 586px; }
+
+div#productform table tr td{ height: 11px !important; }
+ 
+div#additem{ display: block;}
+
+/* div#additem table tr td{ height: 11px; } */
+
+div#productform td.itemfirstcol{ padding-left:4px;  vertical-align: top; }
+
+
+
+
+div#productform input.text, div#additem input.text{width:286px;border:1px solid #bbb;}
+
+div#edit_variation_values input.text{width:286px !important;border:1px solid #bbb;}
+
+input.image_resize{ position: relative; top: 4px; }
+ 
+div#additem table.additem input.wpsc_tag{
+	width:180px;
+}
+div#additem label{
+	font-style: normal;
+	font-size: 0.95em;
+}
+
+
+
+table#itemlist tr td.category_item_container {
+padding:0px 0px 0px 0px;
+border-left:1px solid #bbb;
+border-bottom:1px solid #bbb;
+border-right:1px solid #bbb;
+}
+
+.groupItem{
+ border-top:1px solid #bbb;
+ width:385px;
+ height:35px;
+ clear: both;
+/*  margin-left:-6px; */
+padding: 0px 0px 4px 0px;
+}
+
+.groupItem .itemHeader{
+	width:65px;
+	line-height: 15px;
+	color: #000;
+	padding: 4px;
+	cursor: move;
+	height: 35px;
+	position: relative;
+	clear: both;
+}
+
+.groupItem .itemHeader a{
+  margin: 4px 0px 4px 0px;
+	font-weight: normal;
+	font-size: 11px;
+	text-decoration: none;
+}
+.sortHelper{
+	border: 3px dashed #666;
+	width: auto;
+}
+.groupWrapper p{
+	height: 1px;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+
+table#productpage tr td.secondcol.product_groups_page {
+	padding-left: 16px;
+}
+
+td.product_groups_page #additem .inside, td.product_groups_page #productform .inside {
+	margin: 0px 0px 15px 0px;
+}
+
+div.editing_this_group {
+  margin-bottom: 8px;
+  border-bottom:1px dotted black;
+	width:100%;
+}
+
+td.product_groups_page h4 {
+  margin-bottom: 1ex;
+}
+
+
+
+td.product_groups_page td.category_presentation_settings {
+  padding-bottom: 1ex;
+}
+
+
+
+div.editing_this_group p {
+	font-size:8pt;
+	min-height:16px;
+	padding:4px 4px 4px 8px;
+  margin: 0px;
+}
+
+
+a.add_category_link{
+ display: block;
+ margin: 8px;
+}
+
+table#itemlist tr.categorisation_title td {
+	color: #dfdfdf;
+	font-size: 11px;
+	line-height:1.3em;
+	padding:9px 15px 6px 10px;
+	text-align:left;
+}
+
+
+label.select_categorisation_group, select#select_categorisation_group, a.add_categorisation_group, a.edit_categorisation_group {
+  display: block;
+  float: left;
+}
+
+label.select_categorisation_group {
+  padding-top: 4px;
+/*   color: #336699; */
+  font-size: 11px;
+}
+
+a.add_categorisation_group {
+	margin-left: 10px;
+}
+
+a.edit_categorisation_group {
+	margin-left: 30px;
+}
+
+
+
+div#add_categorisation, div#edit_categorisation{
+	display: none;
+  border: 1px solid #BBBBBB;
+  padding: 4px;
+  margin-top: 6px;
+}
+
+div#add_categorisation br, div#edit_categorisation br{
+  clear: both;
+}
+
+
+div#add_categorisation fieldset, div#edit_categorisation fieldset{
+  width: 230px;
+  float: left;
+  border: none;
+}
+
+div#add_categorisation fieldset label, div#edit_categorisation fieldset label{
+  display: block;
+}
+
+ul.categorisation_links{
+  list-style-type: none;
+  clear: both;
+  padding: 0px;
+}
+
+ul.categorisation_links li{
+  display: block;
+  float: left;
+  list-style-type: none;
+  margin: 0px;
+  font-size: 14px;
+  padding: 4px;
+}
+
+ul.categorisation_links li.selected a{
+color: #D54E21;
+}
+
+
+
+
+table.category_forms {
+  width: 100%;
+}
+table.category_forms tr td {
+ padding: 0px 8px ;
+}
+table.category_forms tr td textarea  {
+  width: 100%;
+}
+
+
+
+/* 
+* Product Groups styles end here
+*/

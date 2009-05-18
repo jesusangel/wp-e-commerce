@@ -129,7 +129,7 @@ function wpsc_product_basic_details_form(&$product_data) {
   <h3 class='form_heading'>
  <?php
   if($product_data['id'] > 0) {
-		echo __('Edit Product')." <span>(<a href='".remove_query_arg('product_id')."'>".__('Add new Product')."</a>)</span>";
+		echo __('Edit Product')." <span>(<a href='".add_query_arg('page','edit-products', remove_query_arg('product_id', 'admin.php'))."'>".__('Add new Product')."</a>)</span>";
 	} else {
 		_e('Add Product');
 	} 
