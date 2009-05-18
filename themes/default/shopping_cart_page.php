@@ -78,7 +78,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			<tr>
 				<td colspan='5'>
 					 <p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
-					<form name='change_country' id='change_country' action='' method='POST'>
+					<form name='change_country' id='change_country' action='' method='post'>
 						<?php echo wpsc_shipping_country_list();?>
 						<input type='hidden' name='wpsc_update_location' value='true' />
 					</form>

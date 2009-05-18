@@ -116,8 +116,8 @@ function wpsc_admin_pages(){
 		foreach($page_hooks as $page_hook) {
 			
 				add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
-			
-			if($page_hook == 'products_page_trunk/wpsc-admin/display-options.page'){
+			//echo $page_hook.'<br />';
+			if($page_hook == 'products_page_settings'){
 //exit('Im here');
 				add_action("load-$page_hook", 'wpsc_admin_include_optionspage_css_and_js');
 			}

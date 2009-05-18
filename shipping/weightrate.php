@@ -26,16 +26,18 @@ class weightrate {
 	}
 	
 	function getForm() {
+		$output ="<table>";
 		$output.="<tr><th>".TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
 		$layers = get_option("weight_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
 				$output.="<tr class='rate_row'><td >";
-				$output .="<div><i style='color: grey;'>".TXT_WPSC_IF_WEIGHT_IS."</i><input type='text' value='$key' name='weight_layer[]'size='10'><i style='color: grey;'>".TXT_WPSC_AND_ABOVE."</i></td><td><input type='text' value='{$shipping}' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a></div></td></tr>";
+				$output .="<div><i style='color: grey;'>".TXT_WPSC_IF_WEIGHT_IS."</i><input type='text' value='$key' name='weight_layer[]'size='4'><i style='color: grey;'>".TXT_WPSC_AND_ABOVE."</i></td><td><input type='text' value='{$shipping}' name='weight_shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a></div></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='weight'>";
 		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a style='cursor:pointer;' id='addweightlayer' >Add Layer</a></td></tr>";
+		$output .="</table>";
 		return $output;
 	}
 	

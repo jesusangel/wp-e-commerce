@@ -7,8 +7,7 @@
  */
 
 //$closed_postboxes = (array)get_usermeta( $current_user->ID, 'editproduct');
-$variations_processor = new nzshpcrt_variations;
-
+$variations_processor = new nzshpcrt_variations;	
 
 $wpsc_product_defaults =array (
   'id' => '0',
@@ -61,6 +60,7 @@ $wpsc_product_defaults =array (
 
 function wpsc_display_product_form ($product_id = 0) {
   global $wpdb, $wpsc_product_defaults;
+  
   $product_id = absint($product_id);
 	//$variations_processor = new nzshpcrt_variations;
   if($product_id > 0) {
@@ -141,7 +141,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2' class='itemfirstcol'>  
 					<label for="wpsc_product_name">Product Name</label>
 					<div class='admin_product_name'>
-						<input id='wpsc_product_name' class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+						<input id='wpsc_product_name' class='wpsc_product_name text' size='30' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 						<a href='#' class='shorttag_toggle'></a>
 					</div>
 					<div class='admin_product_shorttags'>
@@ -177,7 +177,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				</td>
 				<td  class='skuandprice'>
 					<?php echo TXT_WPSC_PRICE; ?> :<br />
-					<input type='text' class='text' size='30' name='price' value='<?php echo $product_data['price']; ?>'>
+					<input type='text' class='text' size='30' name='price' value='<?php echo $product_data['price']; ?>' />
 				</td>
 			</tr>
 		
@@ -206,8 +206,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 	</div>
 	<div class='meta-box-sortables'>
 		<?php
-		
-		
+			
 		$default_order=array(
 		  "wpsc_product_category_and_tag_forms",
 		  "wpsc_product_price_and_stock_forms",
@@ -251,7 +250,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 	 
 	
 	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Edit Product'); } else {	_e('Add Product');	} ?>' />&nbsp;
-	<a class='delete_button' ' href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/display-items.php&amp;deleteid=<?php echo $product_data['id']; ?>' onclick="return conf();" ><?php echo TXT_WPSC_DELETE_PRODUCT; ?></a>
+	<a class='delete_button' href='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/display-items.php&amp;deleteid=<?php echo $product_data['id']; ?>' onclick="return conf();" ><?php echo TXT_WPSC_DELETE_PRODUCT; ?></a>
 	<?php
   }
 
@@ -323,7 +322,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
      $output .= "</td>
      <td class='itemfirstcol product_tags'>
        ".TXT_WPSC_PRODUCT_TAGS.":<br />
-        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".__("These values are comma separated")."</span>
+        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag' /><br /><span class='small_italic'>".__("These values are comma separated")."</span>
       </td>
     </tr>";
     
@@ -368,7 +367,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     <tr>
 
        <td>
-          <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="true"' : '').">&nbsp;<label for='add_form_donation'>".TXT_WPSC_IS_DONATION."</label>
+          <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="true"' : '')." />&nbsp;<label for='add_form_donation'>".TXT_WPSC_IS_DONATION."</label>
        </td>
     </tr>
     <tr>
@@ -409,7 +408,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     </tr>
     <tr>
       <td style='width:430px;'>
-      <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes'".(($product_data['quantity_limited'] == 1) ? 'checked="true"' : '')."name='quantity_limited'/>"; //onclick='hideelement(\"add_stock\")'
+      <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' ".(($product_data['quantity_limited'] == 1) ? 'checked="true"' : '')." name='quantity_limited' />"; //onclick='hideelement(\"add_stock\")'
 	$output .= "&nbsp;<label for='add_form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
 	if ($product_data['id'] > 0){
 			$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
@@ -514,18 +513,18 @@ function wpsc_product_shipping_forms($product_data=''){
 			".TXT_WPSC_WEIGHT."
 		</td>
 		<td>
-			<input type='text' size='5' name='weight' value='".$product_data['weight']."'>
+			<input type='text' size='5' name='weight' value='".$product_data['weight']."' />
 			<select name='weight_unit'>
-				<option value='pound' ". (($product_data['weight_unit'] == 'pound') ? 'selected' : '') .">Pounds</option>
-				<option value='once' ". (($product_data['weight_unit'] == 'once') ? 'selected' : '') .">Ounces</option>
-				<option value='gram' ". (($product_data['weight_unit'] == 'gram') ? 'selected' : '') .">Grams</option>
-				<option value='kilogram' ". (($product_data['weight_unit'] == 'kilogram') ? 'selected' : '') .">Kilograms</option>
+				<option value='pound' ". (($product_data['weight_unit'] == 'pound') ? 'selected="selected"' : '') .">Pounds</option>
+				<option value='once' ". (($product_data['weight_unit'] == 'once') ? 'selected="selected"' : '') .">Ounces</option>
+				<option value='gram' ". (($product_data['weight_unit'] == 'gram') ? 'selected="selected"' : '') .">Grams</option>
+				<option value='kilogram' ". (($product_data['weight_unit'] == 'kilogram') ? 'selected="selected"' : '') .">Kilograms</option>
 			</select>
 		</td>
     </tr>
     <!--USPS shipping changes ends-->
 
-    <tr>
+
     <tr>
       <td colspan='2'>
       <strong>".TXT_WPSC_FLAT_RATE_SETTINGS."</strong> 
@@ -605,13 +604,13 @@ function wpsc_product_advanced_forms($product_data='') {
 		<input type='text' name='new_custom_meta[name][]' value='' class='text'/><br />
 		
 		".TXT_WPSC_DESCRIPTION.": <br />
-		<textarea name='new_custom_meta[value][]' value='' class='text' ></textarea>
-		<br /></td></tr>";
+		<textarea name='new_custom_meta[value][]' cols='40' rows='3' class='text' ></textarea>
+		<br /></div></td></tr>";
 		
 	    $output .= "<tr>
       <td class='itemfirstcol' colspan='2'><br /> <strong>". TXT_WPSC_ADMINNOTES .":</strong><br />
       
-        <textarea cols='40' rows='3' type='text' name='productmeta_value[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
+        <textarea cols='40' rows='3' name='productmeta_value[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
       	<small>".TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE."</small>
       </td>
     </tr>
@@ -619,8 +618,8 @@ function wpsc_product_advanced_forms($product_data='') {
     <tr>
       <td class='itemfirstcol' colspan='2'><br />
        <strong>". TXT_WPSC_PERSONALISATION_OPTIONS .":</strong><br />
-        <input type='hidden' name='productmeta_values[engraved]' id='add_engrave_text' value='0'>
-        <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="true"' : '')." id='add_engrave_text'>
+        <input type='hidden' name='productmeta_values[engraved]' id='add_engrave_text_checkbox' value='0' />
+        <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="true"' : '')." id='add_engrave_text' />
         <label for='add_engrave_text'> ".TXT_WPSC_ADMIN_ENGRAVE."</label>
         <br />
       </td>
@@ -628,8 +627,8 @@ function wpsc_product_advanced_forms($product_data='') {
     <tr>
       <td class='itemfirstcol' colspan='2'>
       
-        <input type='hidden' name='productmeta_values[can_have_uploaded_image]' id='add_engrave_text' value='0'>
-        <input type='checkbox' name='productmeta_values[can_have_uploaded_image]' ".(($can_have_uploaded_image == 'on') ? 'checked="true"' : '')." id='can_have_uploaded_image'>
+        <input type='hidden' name='productmeta_values[can_have_uploaded_image]' id='can_have_uploaded_image_checkbox' value='0' />
+        <input type='checkbox' name='productmeta_values[can_have_uploaded_image]' ".(($can_have_uploaded_image == 'on') ? 'checked="true"' : '')." id='can_have_uploaded_image' />
         <label for='can_have_uploaded_image'> ".TXT_WPSC_ALLOW_UPLOADING_IMAGE."</label>
         <br />
       </td>
@@ -658,7 +657,7 @@ function wpsc_product_advanced_forms($product_data='') {
        <strong>".TXT_WPSC_OFF_SITE_LINK.":</strong><br />
        <small>".TXT_WPSC_USEONLYEXTERNALLINK."</small><br /><br />
 		<label for='external_link'>".TXT_WPSC_EXTERNALLINK."</label>:<br />
-		  <input type='text' class='text' name='productmeta_values[external_link]' value='".$external_link."' id='external_link' size='40'> 
+		  <input type='text' class='text' name='productmeta_values[external_link]' value='".$external_link."' id='external_link' size='40' /> 
       </td>
     </tr>";
 	if (get_option('wpsc_enable_comments') == 1) {
@@ -698,10 +697,10 @@ function wpsc_product_image_forms($product_data='') {
 						<input type="file" value="" name="image" />
 					</li>
 					<li>
-						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize" /> <label for="add_image_resize0">do not resize thumbnail image</label>
+						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize"/> <label for="add_image_resize0">do not resize thumbnail image</label>
 					</li>
 					<li>
-						<input type="radio" onclick='hideOptionElement(null, "image_resize1");' class="image_resize" id="add_image_resize1" value="1" name="image_resize" checked="true"/> <label for="add_image_resize1">use default size(<abbr title="This is set on the Settings Page">96×96px</abbr>) </label>
+						<input type="radio" onclick='hideOptionElement(null, "image_resize1");' class="image_resize" id="add_image_resize1" value="1" name="image_resize" checked="checked"/> <label for="add_image_resize1">use default size(<abbr title="This is set on the Settings Page">96×96px</abbr>) </label>
 					</li>
 					<li>
 						<input type="radio" onclick='hideOptionElement("heightWidth", "image_resize2");' class="image_resize" id="add_image_resize2" value="2" name="image_resize"/>
@@ -724,11 +723,14 @@ function wpsc_product_image_forms($product_data='') {
 				<a class="add_additional_image" onclick='add_image_upload_forms("add_");return false;' href="">Add Additional Image</a>
 			</div>
 			
-			
-			
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
+			
+			
+			
+
+
 			
 <!-- 					<p>You are using the Browser uploader.  Problems?  Try the <a onclick='wpsc_upload_switcher("flash")' class="wpsc_upload_switcher">Flash uploader</a> instead.</p> -->
 
@@ -873,7 +875,7 @@ function edit_multiple_image_gallery($product_data) {
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
 	
 		
-		<li class='first' id='0'>
+		<li class='first' id='a0'>
 			<div class='previewimage' id='gallery_image_0'>
 				<?php if ($product_data['image'] != '') { ?>
 					<?php if(is_numeric($product_data['image'])){
@@ -890,7 +892,7 @@ function edit_multiple_image_gallery($product_data) {
 				
 				<div id='image_settings_box'>
 					<div class='upper_settings_box'>
-						<div class='upper_image'><img src='<?php echo WPSC_URL; ?>/images/pencil.png'/></div>
+						<div class='upper_image'><img src='<?php echo WPSC_URL; ?>/images/pencil.png' alt='Editing Options' /></div>
 						<div class='upper_txt'><?php _e('Thumbnail Settings'); ?><a class='closeimagesettings'>X</a></div>
 					</div>
 				
@@ -898,7 +900,7 @@ function edit_multiple_image_gallery($product_data) {
 						<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='<?php echo $product_data['thumbnail_image']; ?>' />
 					  <ul>
 					    <li>
-								<input type='radio' checked='true' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label><br />
+								<input type='radio' checked='checked' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label><br />
 							</li>
 							
 					    <li>
@@ -909,8 +911,8 @@ function edit_multiple_image_gallery($product_data) {
 					    <li>
 								<input type='radio'  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>
 								<div class='heightWidth image_resize_extra_forms'>
-									<input id='gallery_image_width' type='text' size='4' name='gallery_width' value='' /><label for='gallery_image_resize2'><?php echo TXT_WPSC_PXWIDTH; ?></label>
-									<input id='gallery_image_height' type='text' size='4' name='gallery_height' value='' /><label for='gallery_image_resize2'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
+									<input id='gallery_image_width' type='text' size='4' name='gallery_width' value='' /><label for='gallery_image_width'><?php echo TXT_WPSC_PXWIDTH; ?></label>
+									<input id='gallery_image_height' type='text' size='4' name='gallery_height' value='' /><label for='gallery_image_height'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
 								</div>
 					    </li>
 							
@@ -926,7 +928,7 @@ function edit_multiple_image_gallery($product_data) {
 						</ul>
 					</div>
 				</div>
-				<a class='editButton'>Edit   <img src='<?php echo WPSC_URL; ?>/images/pencil.png'/></a>
+				<a class='editButton'>Edit   <img src='<?php echo WPSC_URL; ?>/images/pencil.png' alt='' /></a>
 			</div>
 		</li>
 	</ul>
@@ -944,7 +946,7 @@ function edit_multiple_image_gallery($product_data) {
             $output .= "<li id=".$image['id'].">";
             //  $output .= $image['image'];
             $output .= "<div class='previewimage' id='gallery_image_{$image['id']}'><a id='extra_preview_link_".$image['id']."' href='".WPSC_IMAGE_URL.$image['image']."' rel='product_extra_image_".$image['id']."' class='thickbox'><img class='previewimage' src='".WPSC_IMAGE_URL.$image['image']."' alt='".TXT_WPSC_PREVIEW."' title='".TXT_WPSC_PREVIEW."' /></a>";
-            $output .= "<img alt='-' class='deleteButton' src='".WPSC_URL."/images/cross.png'/>";
+            $output .= "<img alt='X' class='deleteButton' src='".WPSC_URL."/images/cross.png'/>";
             $output .= "</div>";
             $output .= "</li>";
           }
@@ -972,7 +974,7 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
       $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
       //echo "<pre>".print_r($category_assoc,true)."</pre>";
       if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0)) {
-        $selected = "checked='true'";
+        $selected = "checked='checked'";
 			}
 		}
     if(is_numeric($category_id) && ($iteration > 0)) {
@@ -984,7 +986,7 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
 			}
       $output .=   "-&nbsp;";
 		}
-    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' >".stripslashes($option['name'])."</label><br />";
+    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."' /><label for='".$unique_id."category_form_".$option['id']."' >".stripslashes($option['name'])."</label><br />";
     $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
     $selected = "";
 	}

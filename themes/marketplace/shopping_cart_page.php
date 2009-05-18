@@ -140,7 +140,7 @@ $wpsc_coupons = new wpsc_coupons();
 	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
 	<?php echo TXT_WPSC_CREDITCARDHANDY; ?><br />
 	<?php echo TXT_WPSC_ASTERISK; ?>
-<form action='' method='POST' enctype="multipart/form-data">
+<form action='' method='post' enctype="multipart/form-data">
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
 		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
@@ -175,7 +175,7 @@ $wpsc_coupons = new wpsc_coupons();
 					<h3><?php echo TXT_WPSC_SELECTGATEWAY;?></h3>
 					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
 						<div class="custom_gateway">
-							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="true" name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="true" name="custom_gateway" class="custom_gateway" /><?php echo wpsc_gateway_name();?></label>
 							
 							<?php if(wpsc_gateway_form_fields()): ?> 
 								<table class='<?php echo wpsc_gateway_form_field_style();?>'>

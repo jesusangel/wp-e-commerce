@@ -562,6 +562,7 @@ function wpsc_admin_ajax() {
         $old_image_name =  $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$prodid}' LIMIT 1");
         $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='$new_image_name' WHERE `id`='{$prodid}' LIMIT 1");
         $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image`='$old_image_name' WHERE `id`='{$images[0]}' LIMIT 1");
+  
         $image= image_processing(WPSC_IMAGE_DIR.$new_image_name, (WPSC_THUMBNAIL_DIR.$new_image_name),$width,$height,'thumbnailImage');
 			}
 		} else {

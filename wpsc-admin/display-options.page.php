@@ -1,5 +1,6 @@
 <?php
    //$_SESSION['debug']=0;
+if(isset($_POST)){
 if(($_POST['shippingname'] != null)){
 	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 		if($shipping->internal_name == $_POST['shippingname'])
@@ -90,7 +91,9 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
     }
   
     if($_POST['product_image_height'] != get_option('product_image_height')) {
+    	    //	exit('product thumnail image defaul'.$_POST['product_image_height']);
       update_option('product_image_height', $_POST['product_image_height']);
+     // echo get_option('product_image_height');
     }
       
     if($_POST['product_image_width'] != get_option('product_image_width')) {
@@ -478,12 +481,12 @@ if($_POST['do_not_use_shipping'] == 1) {
 		update_option('shipwirepassword', $_POST['shipwirepassword']);
 	}
 
-	do_action('wpsc_options_update');
+	//do_action('wpsc_options_update');
 
 	
 //	echo "<div class='updated'><p align='center'>".TXT_WPSC_THANKSAPPLIED."</p></div>";
 }
-    
+    }
   if(get_option('nzshpcrt_first_load') == 0) {
     echo "<div class='updated'><p align='center'>".TXT_WPSC_INITIAL_SETUP."</p></div>";
     update_option('nzshpcrt_first_load', 1);
@@ -506,9 +509,11 @@ if($_GET['update_page_urls'] == 'true') {
   foreach($wpsc_pageurl_option as $option_key => $page_string) {
     $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$page_string%' LIMIT 1");
     $the_new_link = get_permalink($post_id);
+    echo $option_key;
     if(stristr(get_option($option_key), "https://")) {
       $the_new_link = str_replace('http://', "https://",$the_new_link);
-    }    
+    }
+       
     update_option($option_key, $the_new_link);
 	}
   if($changes_made === true)  {
@@ -597,6 +602,7 @@ if($_GET['clean_categories'] == 'true') {
 		}
 function wpsc_display_options_page(){
 	global $wpdb;
+
   ?>
 
 				<form name='cart_options' id='cart_options' method='post' action='<?php echo $_SERVER['REQUEST_URI']; ?>'>

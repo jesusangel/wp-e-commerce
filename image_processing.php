@@ -55,6 +55,7 @@ global $wpdb;
 				}
 	
 			// Create temp resized image
+//			exit(get_option('product_image_height'));
 			$temp_img = ImageCreateTrueColor( $temp_w, $temp_h );
 			$bgcolor = ImageColorAllocate( $temp_img, 255, 255, 255 );
 			ImageFilledRectangle( $temp_img, 0, 0, $width, $height, $bgcolor );

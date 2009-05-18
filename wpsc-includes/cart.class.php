@@ -453,8 +453,9 @@ class wpsc_cart {
     if(count($this->shipping_quotes) < 1) {
 			$this->selected_shipping_option = '';
 			}
-		if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, $this->shipping_quotes) === false)) {
-			//echo "<pre>".print_r(array_pop(array_keys(array_slice($this->shipping_quotes,0,1))),true)."</pre>";
+		
+		if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, array_keys($this->shipping_quotes)) === false)) {
+		//	echo "<pre>".print_r(array_pop(array_keys(array_slice($this->shipping_quotes,0,1))),true)."</pre>";
 			$this->selected_shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes,0,1)));
 		}
   }
@@ -467,11 +468,12 @@ class wpsc_cart {
   function update_shipping($method, $option) {
     global $wpdb, $wpsc_shipping_modules;
 		$this->selected_shipping_method = $method;
-		//exit((string)$wpsc_shipping_modules[$method]);
-		if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+		//exit($this->selected_shipping_method.'<pre>'.print_r($wpsc_shipping_modules, true).'</pre>');
+		//if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
 			$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
-		}
-		
+		//	exit('is callable');
+		//}
+		//exit('<pre>'.print_r($this->shipping_quotes,true).'</pre> quotes');
 		$this->selected_shipping_option = $option;
 		
 		foreach($this->cart_items as $key => $cart_item) {

@@ -327,7 +327,6 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 //  the function for processing images, takes a product_id, input_file outout file name, height and width
 	global $wpdb;
 	//$_FILES['image']['tmp_name']
-	
 	//$_FILES['image']['name']
 	if(preg_match("/\.(gif|jp(e)*g|png){1}$/i",$output_filename) && apply_filters( 'wpsc_filter_file', $input_file )) {
 		//$active_signup = apply_filters( 'wpsc_filter_file', $_FILES['image']['tmp_name'] );
@@ -395,16 +394,23 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 // 				$image= image_processing($_FILES['thumbnailImage']['tmp_name'], (WPSC_THUMBNAIL_DIR.$image_name),null,null,$imagefield);
 // 				$thumbnail_image = $image;
 // 			} else {
-			  
+			//	exit($height.' '.$width);	
+				// exit('Aha!'.(int)get_option('product_image_height'));	
+					if($width < 1) {
+						$width = 96;
+					}
+					if($height < 1) {
+						$height = 96;
+					}	     
 				image_processing($new_image_path, (WPSC_THUMBNAIL_DIR.$image_name), $width, $height);
 // 			}
-			
 			$sql = "INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` (`product_id`, `image`, `width`, `height`) VALUES ('{$id}', '{$image_name}', '{$width}', '{$height}' )";
 			$wpdb->query($sql);
 			$image_id = (int) $wpdb->insert_id;			
 			$updatelink_sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$image_id."', `thumbnail_image` = '".$thumbnail_image."'  WHERE `id` = '$id'";
 			$wpdb->query($updatelink_sql);
-			
+			//exit($sql.'<br />image is about to be stored in the DB<br />'.$updatelink_sql);
+
 			if(function_exists('getimagesize')) {
 				$imagetype = getimagesize(WPSC_THUMBNAIL_DIR.$image_name);
 				update_product_meta($id, 'thumbnail_width', $imagetype[0]);

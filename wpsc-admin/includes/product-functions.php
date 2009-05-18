@@ -13,6 +13,7 @@
 	* @return nothing
 */
 function wpsc_admin_submit_product() {
+
   //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
 	check_admin_referer('edit-product');
   $post_data = wpsc_sanitise_product_forms();
@@ -60,8 +61,11 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	* @param unknown 
 	* @return unknown
 */
+ // exit('Image height'.get_option('product_image_height'));	
 function wpsc_insert_product($post_data, $wpsc_error = false) {
   global $wpdb;
+  //exit($post_data.'<br /><pre>'.print_r($post_data, true).'</pre>');
+
   //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
   $adding = false;
   $update = false;
@@ -103,6 +107,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
     }
   }
    if($update === true) {
+   		//exit('being updated<pre>'.print_r($update_values,true).'</pre>');
 		$where = array( 'id' => $product_id );
 		if ( false === $wpdb->update( WPSC_TABLE_PRODUCT_LIST, $update_values, $where ) ) {
 			if ( $wpsc_error ) {
@@ -136,8 +141,9 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	
 	// and the custom meta
 	wpsc_update_custom_meta($product_id, $post_data);
-	
+
 	// and the images
+
 	wpsc_update_product_images($product_id, $post_data);
 	
 	if($post_data['files']['file']['tmp_name'] != '') {
@@ -312,8 +318,12 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
   global $wpdb;
 //	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
 	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}' LIMIT 1");
+	//exit($image);
 	// check if there is an image that is supposed to be there.
 	if($image != '') {
+		if(is_numeric($image)){
+			
+		}
 	  // check that is really there
 	  if(file_exists(WPSC_IMAGE_DIR.$image)) {
 			// if the width or height is less than 1, set the size to the default
@@ -365,7 +375,7 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 			$wpdb->query($sql);
 		} else {
 			//if it is not, we need to unset the associated image
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '' WHERE `id`='{$product_id}' LIMIT 1");
+			//$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '' WHERE `id`='{$product_id}' LIMIT 1");
 			//$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` (`product_id`, `image`, `width`, `height`) VALUES ('{$product_id}', '{$image}', '{$width}', '{$height}' )");	
 		}
 	}
@@ -384,6 +394,7 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 function wpsc_upload_image_thumbnail($product_id, $product_meta) {
 		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
 			$imagefield='thumbnailImage';
+	
 			$image=image_processing($_FILES['thumbnailImage']['tmp_name'], WPSC_THUMBNAIL_DIR.$_FILES['thumbnailImage']['name'],null,null,$imagefield);
 			$thumbnail_image = $image;
 			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");

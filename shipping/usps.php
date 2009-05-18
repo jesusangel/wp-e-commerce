@@ -44,11 +44,7 @@ class usps {
 						<input type='text' name='uspspw' value='".get_option("uspspw")."'>
 					</td>
 				</tr>
-				<tr>
-					<td colspan='2'>
-						<small>Known issue: USPS doesnt support shipping inside the US, cutomer zipcode needed, which we dont have before checkout.</small>
-					</td>
-				</tr>
+			
 				";
 		return $output;
 	}

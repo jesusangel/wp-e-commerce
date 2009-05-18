@@ -28,7 +28,7 @@ class flatrate {
 	
 	function getForm() {
 		$shipping = get_option('flat_rates');
-		$output = "<tr><td colspan='1'><strong>Base Local</strong></td>";
+		$output = "<tr><td colspan='2'><strong>Base Local</strong></td>";
 		
 		switch(get_option('base_country')) {
 		  case 'NZ':
