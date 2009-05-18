@@ -128,7 +128,7 @@ function display_category_row($category,$subcategory_level = 0) {
 
 
 function wpsc_display_groups_page() {
-  global $wpdb;
+  global $wpdb, $wp_rewrite;
 	if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
 		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
 	} else {

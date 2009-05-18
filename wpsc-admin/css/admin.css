@@ -158,6 +158,12 @@ div.product-placeholder {
 
 /*  Product details form styling */
 
+div#poststuff h4 {
+	font-size:11px;
+	margin:0.3em 0;
+}
+
+
 div#poststuff table tr td {
 	vertical-align:top;
 	font-size:11px;
@@ -172,44 +178,51 @@ div.admin_product_name label {
   float: left;
 }
 
-input.wpsc_product_name {
-	float:left;
-	width:93%;
-	min-width:396px;
-	max-width:566px;
-	
-  height:  36px;
-  max-height: 36px;
-  margin-bottom:0px;
-  padding: 3px 4px;
-	
+
+div.admin_product_name {
+  position: relative;
+  
+  height:  30px;
+  background: #ffffff;
+  
 	border: 1px solid #dfdfdf;
 	-moz-border-radius: 6px;
 	-khtml-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	border-radius: 6px;
+	border-radius: 6px;	
+}
+
+input.wpsc_product_name {
+	float:left;
+	width:100%;
+		
+	background: transparent;
+  height:  30px;
+  margin:0px;
+  padding: 3px 26px 3px 3px;
 	font-size: 1.7em;
-	
-	/*disable right rounded borders */
-	-moz-border-radius-topright:0px;
-	-moz-border-radius-bottomright:0px;
-	-khtml-border-radius-topright:0px;
-	-khtml-border-radius-bottomright:0px;	
-	-webkit-border-top-right-radius:0px;
-	-webkit-border-bottom-right-radius:0px;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px;
-	
-	/* IE 6 hacks */
-  _height: 28px;
-	_border:1px solid #DFDFDF;
-	_width:396px;
+}
+
+div.admin_product_name input.wpsc_product_name {
+	border: none;
+}
+
+div.admin_product_name a.shorttag_toggle {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+	background:url(../../images/info_icon.jpg) no-repeat scroll 5px 8px;
+	border-left:1px solid #DFDFDF;
+	display:block;
+	height:100%;
+	padding:0px 3px 0px 3px;
+	width:18px;
 }
 
 
 
 
-div.admin_product_name div.admin_product_shorttags {
+div.admin_product_shorttags {
 	width:93%;
 	min-width:396px;
 	max-width:558px;
@@ -225,28 +238,6 @@ div.admin_product_name div.admin_product_shorttags {
   display: none;
 	_width:396px;
  background-color: #ffffff;
-}
-
-div.admin_product_name a.shorttag_toggle {
-	background:#FFFFFF url(../../images/info_icon.jpg) no-repeat scroll 5px 8px;
-	border-bottom:1px solid #DFDFDF;
-	border-right:1px solid #DFDFDF;
-	border-top:1px solid #DFDFDF;
-	display:block;
-	float:left;
-	height:28px;
-	margin-left:-1px;
-	margin-top:1px;
-	padding:3px;
-	width:18px;
-	
-	-moz-border-radius-bottomright:6px;
-	-moz-border-radius-topright:6px;
-	-webkit-border-top-right-radius:6px;
-	-webkit-border-bottom-right-radius:6px;
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 6px;
-	
 }
 
 #description {
@@ -1009,6 +1000,18 @@ table.category_forms tr td textarea  {
   width: 100%;
 }
 
+.multiple-select {
+background:#FFFFFF none repeat scroll 0 0;
+border:1px solid #DFDFDF;
+display:inline-block;
+height:120px;
+margin:0;
+overflow-x:hidden;
+overflow-y:auto;
+padding:0;
+position:relative;
+width:250px;
+}
 
 
 /* 

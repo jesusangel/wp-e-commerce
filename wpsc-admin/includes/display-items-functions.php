@@ -139,34 +139,33 @@ function wpsc_product_basic_details_form(&$product_data) {
 		<table class='product_editform' style='width:100%;'>
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
+					<label for="wpsc_product_name">Product Name</label>
 					<div class='admin_product_name'>
-					  <label for="wpsc_product_name">Product Name</label>
 						<input id='wpsc_product_name' class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
-										<a href='#' class='shorttag_toggle'></a>
-										<div class='admin_product_shorttags'>
-										<h4>Shortcodes</h4>
-				
-											<dl>
-												<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE; ?>: </dt><dd> [wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
-												<dt><?php echo TXT_WPSC_BUY_NOW_SHORTCODE; ?>: </dt><dd>[buy_now_button=<?php echo $product_data['id'];?>]</dd>
-												<dt><?php echo TXT_WPSC_ADD_TO_CART_SHORTCODE; ?>: </dt><dd>[add_to_cart=<?php echo $product_data['id'];?>]</dd>
-											</dl>
-				
-										<h4>Template Tags</h4>
-					
-											<dl>
-												<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG; ?>: </dt><dd> &lt;?php echo wpsc_display_products('product_id=<?php echo $product_data['id'];?>'); ?&gt;</dd>
-												<dt><?php echo TXT_WPSC_BUY_NOW_PHP; ?>: </dt><dd>&lt;?php echo wpsc_buy_now_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
-												<dt><?php echo TXT_WPSC_ADD_TO_CART_PHP; ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
-											</dl>
-					
-											<p>
-				
-											</p>
-										</div>
-							<div style='clear:both; height: 0px;'></div>	
+						<a href='#' class='shorttag_toggle'></a>
 					</div>
-					
+					<div class='admin_product_shorttags'>
+						<h4>Shortcodes</h4>
+	
+						<dl>
+							<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE; ?>: </dt><dd> [wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
+							<dt><?php echo TXT_WPSC_BUY_NOW_SHORTCODE; ?>: </dt><dd>[buy_now_button=<?php echo $product_data['id'];?>]</dd>
+							<dt><?php echo TXT_WPSC_ADD_TO_CART_SHORTCODE; ?>: </dt><dd>[add_to_cart=<?php echo $product_data['id'];?>]</dd>
+						</dl>
+
+						<h4>Template Tags</h4>
+
+						<dl>
+							<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG; ?>: </dt><dd> &lt;?php echo wpsc_display_products('product_id=<?php echo $product_data['id'];?>'); ?&gt;</dd>
+							<dt><?php echo TXT_WPSC_BUY_NOW_PHP; ?>: </dt><dd>&lt;?php echo wpsc_buy_now_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+							<dt><?php echo TXT_WPSC_ADD_TO_CART_PHP; ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+						</dl>
+	
+						<p>
+	
+						</p>
+					</div>
+					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
 				</td>
 			</tr>
 		
@@ -207,8 +206,17 @@ function wpsc_product_basic_details_form(&$product_data) {
 	</div>
 	<div class='meta-box-sortables'>
 		<?php
-	
-		$default_order=array("wpsc_product_category_and_tag_forms", "wpsc_product_price_and_stock_forms", "wpsc_product_shipping_forms", "wpsc_product_variation_forms", "wpsc_product_advanced_forms", "wpsc_product_image_forms", "wpsc_product_download_forms");
+		
+		
+		$default_order=array(
+		  "wpsc_product_category_and_tag_forms",
+		  "wpsc_product_price_and_stock_forms",
+		  "wpsc_product_shipping_forms",
+		  "wpsc_product_variation_forms",
+		  "wpsc_product_advanced_forms",
+		  "wpsc_product_image_forms",
+		  "wpsc_product_download_forms"
+		  );
 		
 		
 	 	$order = get_option('wpsc_product_page_order');
@@ -229,7 +237,9 @@ function wpsc_product_basic_details_form(&$product_data) {
 				echo call_user_func($box_function_name,$product_data);
 			}
 		}
+		/*	
 		do_action('wpsc_product_form', $product_data['id']);
+		*/
 		?>
 	</div>
 
@@ -688,7 +698,7 @@ function wpsc_product_image_forms($product_data='') {
 						<input type="file" value="" name="image" />
 					</li>
 					<li>
-						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize"/> <label for="add_image_resize0">do not resize thumbnail image</label>
+						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize" /> <label for="add_image_resize0">do not resize thumbnail image</label>
 					</li>
 					<li>
 						<input type="radio" onclick='hideOptionElement(null, "image_resize1");' class="image_resize" id="add_image_resize1" value="1" name="image_resize" checked="true"/> <label for="add_image_resize1">use default size(<abbr title="This is set on the Settings Page">96×96px</abbr>) </label>
@@ -714,14 +724,11 @@ function wpsc_product_image_forms($product_data='') {
 				<a class="add_additional_image" onclick='add_image_upload_forms("add_");return false;' href="">Add Additional Image</a>
 			</div>
 			
+			
+			
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
-			
-			
-			
-
-
 			
 <!-- 					<p>You are using the Browser uploader.  Problems?  Try the <a onclick='wpsc_upload_switcher("flash")' class="wpsc_upload_switcher">Flash uploader</a> instead.</p> -->
 
@@ -891,7 +898,7 @@ function edit_multiple_image_gallery($product_data) {
 						<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='<?php echo $product_data['thumbnail_image']; ?>' />
 					  <ul>
 					    <li>
-								<input type='radio' checked='true' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?><br />
+								<input type='radio' checked='true' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label><br />
 							</li>
 							
 					    <li>

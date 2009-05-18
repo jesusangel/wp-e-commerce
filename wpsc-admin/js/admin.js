@@ -54,6 +54,8 @@ jQuery(document).ready( function () {
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
 				tinyMCE.execCommand("mceRemoveControl",false,"content"); 
 				jQuery('form#modify-products #content').remove();
+				
+				
 			  jQuery('form#modify-products').html(returned_data);
 			  
 				if ( getUserSetting( 'editor' ) != 'html' ) {
@@ -72,12 +74,12 @@ jQuery(document).ready( function () {
 	jQuery("div.admin_product_name a.shorttag_toggle").livequery(function(){
 	  jQuery(this).toggle(
 			function () {
-				jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'block');
+				jQuery("div.admin_product_shorttags", jQuery(this).parents("table.product_editform")).css('display', 'block');
 				return false;
 			},
 			function () {
 				//jQuery("div#admin_product_name a.shorttag_toggle").toggleClass('toggled');
-				jQuery("div.admin_product_shorttags", jQuery(this).parent("div.admin_product_name")).css('display', 'none');
+				jQuery("div.admin_product_shorttags", jQuery(this).parents("table.product_editform")).css('display', 'none');
 				return false;
 			}
 		);
@@ -96,6 +98,7 @@ jQuery(document).ready( function () {
 				wpsc_save_postboxes_state('products_page_edit-products', '#poststuff');
 		});		
 	});
+	
 
 
 	jQuery("#add-product-image").click(function(){
@@ -461,4 +464,24 @@ function wpsc_edShowButton(button, i) {
 		output = '<input type="button" id="' + button.id + '" accesskey="' + button.access + '" class="ed_button" onclick="edInsertTag(edCanvas, ' + i + ');" value="' + button.display + '"  />';
 	}
 	return output;
+}
+
+
+
+function fillcategoryform(catid) {
+  post_values = 'ajax=true&admin=true&catid='+catid;
+	jQuery.post( 'index.php', post_values, function(returned_data) {
+	  
+		jQuery('#formcontent').html( returned_data );
+		jQuery('form.edititem').css('display', 'block');
+		jQuery('#additem').css('display', 'none');
+		jQuery('#productform').css('display', 'block');
+		jQuery("#loadingindicator_span").css('visibility','hidden');
+	});
+}
+   
+function showaddform() {
+   document.getElementById('productform').style.display = 'none';
+   document.getElementById('additem').style.display = 'block';
+   return false;
 }

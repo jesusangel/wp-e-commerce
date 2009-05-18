@@ -197,7 +197,7 @@ function  wpsc_admin_include_css_and_js() {
 		
 	wp_enqueue_script('media-upload');
 	wp_enqueue_script('word-count');
-	wp_admin_css( 'dashboard' );
+// 	wp_admin_css( 'dashboard' );
 	
 	// remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action('admin_head', 'wpsc_admin_css');

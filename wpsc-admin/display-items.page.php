@@ -211,9 +211,9 @@ if($_GET['search']) {
 		<div class="alignright search-box">
 		  
 			<form action="" method="get">
-			<input type='hidden' name='page' value='edit-products'  />
-			<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
-			<input type="submit" value="<?php _e( 'Search' ); ?>" class="button" />
+				<input type='hidden' name='page' value='edit-products'  />
+				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
+				<input type="submit" value="<?php _e( 'Search' ); ?>" class="button" />
 			</form>
 		</div>
 		
