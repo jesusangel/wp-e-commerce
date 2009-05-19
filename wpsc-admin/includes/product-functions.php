@@ -15,7 +15,7 @@
 function wpsc_admin_submit_product() {
 
   //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
-	check_admin_referer('edit-product');
+	check_admin_referer('edit-product', 'wpsc-edit-product');
   $post_data = wpsc_sanitise_product_forms();
   wpsc_insert_product($post_data, true);
   

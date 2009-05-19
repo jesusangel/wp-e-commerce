@@ -71,7 +71,7 @@ text-align:right;
 }
 
 div.search-box input#page-search-input {
-  width: 115px;
+  width: 134px;
 
 }
 
@@ -343,11 +343,12 @@ ul#gallery_list li.first *{
 .ui-selected {
 	border:2px dashed #969696;
 }
+
 img.deleteButton {
  	display:none;
 	position:absolute;
-	margin-left:-16px;
 	top:-5px;
+  right: -1px;
 	width:16px;
 	height:16px;
 	cursor:pointer;

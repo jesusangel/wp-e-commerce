@@ -199,9 +199,11 @@ $wpsc_database_template[$table_name]['columns']['donation'] = "varchar(1) NOT NU
 $wpsc_database_template[$table_name]['columns']['no_shipping'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['thumbnail_image'] = "text NULL ";
 $wpsc_database_template[$table_name]['columns']['thumbnail_state'] = "int(11) NOT NULL DEFAULT '0' ";
+$wpsc_database_template[$table_name]['columns']['date_added'] = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['actions']['before']['international_pnp'] = "wpsc_update_remove_nulls";
 $wpsc_database_template[$table_name]['actions']['before']['special_price'] = "wpsc_update_remove_nulls";
+$wpsc_database_template[$table_name]['actions']['after']['date_added'] = "wpsc_set_product_creation_dates";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_list";
 
 

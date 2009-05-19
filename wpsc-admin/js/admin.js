@@ -48,9 +48,6 @@ jQuery(document).ready( function () {
 	 jQuery('.edit-product').click(function(){	
 			product_id = jQuery(this).attr('href').match(/product_id=(\d{1,})/);
 	 		post_values = "product_id="+product_id[1]+"";
-	 		
-	 		
-	 		///*
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
 				tinyMCE.execCommand("mceRemoveControl",false,"content"); 
 				jQuery('form#modify-products #content').remove();
@@ -160,6 +157,68 @@ jQuery(document).ready( function () {
 		});
 	});
 	
+	
+	
+	jQuery("#gallery_list").livequery(function(){
+	  jQuery(this).sortable({
+			revert: false,
+			placeholder: "ui-selected",
+			start: function(e,ui) {
+				jQuery('#image_settings_box').hide();
+				jQuery('a.editButton').hide();
+				jQuery('img.deleteButton').hide();
+				jQuery('ul#gallery_list').children('li').removeClass('first');
+			},
+			stop:function (e,ui) {
+				jQuery('ul#gallery_list').children('li:first').addClass('first');
+			},
+			update: function (e,ui){
+						input_set = jQuery.makeArray(jQuery("#gallery_list li:not(.ui-sortable-helper) input.image-id"));
+						//console.log(input_set);
+						set = new Array();
+						for( var i in input_set) {
+						  set[i] = jQuery(input_set[i]).val();
+						}
+						//console.log(set);
+												
+						img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
+						
+						jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
+						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+						jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
+						//for(i=1;i<set.length;i++) {
+						//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
+						//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+						//}
+						
+						for(i=1;i<set.length;i++) {
+							jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
+							jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+							
+							element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
+							if(element_id == 0) {
+								jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
+							}
+						}
+						
+						order = set.join(',');
+						product_id = jQuery('#product_id').val();
+						
+						
+						postVars = "admin=true&ajax=true&product_id="+product_id+"&imageorder=true&order="+order;
+						jQuery.post( 'index.php?admin=true&ajax=true', postVars, function(returned_data) {
+							  eval(returned_data);
+								jQuery('#gallery_image_'+ser).append(output);
+						});
+						
+					},
+			'opacity':0.5
+		});
+	});
+	
+	
+	
+	
 	// show or hide the stock input forms
 	jQuery("input.limited_stock_checkbox").livequery(function(){
 	  jQuery(this).click( function ()  {
@@ -219,7 +278,7 @@ jQuery(document).ready( function () {
 	
 	jQuery('#addweightlayer').livequery(function(){
 		jQuery(this).click(function(){
-		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='4'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
+		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
 		bind_shipping_rate_deletion();
 		});
 	
@@ -227,7 +286,7 @@ jQuery(document).ready( function () {
 	
 	jQuery('#addlayer').livequery(function(){
 		jQuery(this).click(function(){
-		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='4'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
+		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
 		bind_shipping_rate_deletion();
 		});
 	

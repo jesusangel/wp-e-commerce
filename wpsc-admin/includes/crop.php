@@ -9,7 +9,7 @@
 if(isset($_GET['imagename'])){
 	$imagename = $_GET['imagename'];
 }
-$directory = $_GET['directory'];//set directory
+$directory = WPSC_IMAGE_URL;//set directory
 $width = $_GET['imgwidth'];//set image dimensions
 $height = $_GET['imgheight'];
 $product_id = $_GET['product_id'];

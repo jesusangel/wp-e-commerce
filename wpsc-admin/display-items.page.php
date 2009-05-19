@@ -25,7 +25,7 @@ function wpsc_display_products_page() {
 
   ?>
 	<div class="wrap">
-		<?php //screen_icon(); ?>
+		<?php screen_icon(); ?>
 		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
 		
 		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated'])) { ?>
@@ -165,7 +165,7 @@ if($_GET['search']) {
 			IN (
 			'".$category_id."'
 			)
-			ORDER BY `order_state` DESC,`order`.`order` ASC,  `products`.`id` DESC";
+			ORDER BY `order_state` DESC,`order`.`order` ASC,  `products`.`date_added` DESC,  `products`.`id` DESC";
 	  
 		// if we are selecting a category, set is_sortable to true
 		$is_sortable = true;
@@ -179,10 +179,10 @@ if($_GET['search']) {
 		  }
 			
 			$start = (int)($page * $itempp) - $itempp;
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql LIMIT $start,$itempp";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql ORDER BY `date_added` DESC LIMIT $start,$itempp";
 			
 		} else {
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql  ORDER BY `date_added`";
 		}
 	}  
 	$product_list = $wpdb->get_results($sql,ARRAY_A);
@@ -208,49 +208,45 @@ if($_GET['search']) {
 	?>
 	<div class="tablenav">
 		
-		<div class="alignright search-box">
-		  
-			<form action="" method="get">
-				<input type='hidden' name='page' value='edit-products'  />
-				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
-				<input type="submit" value="<?php _e( 'Search' ); ?>" class="button" />
-			</form>
-		</div>
 		
 		
-		<div class="alignleft actions">
-			<form action="" method="get">
-				<?php
-						echo wpsc_admin_category_dropdown();
-				?>
-			</form>
-		</div>
 		
-	</div>
-	
-	
-	<div class="tablenav">
-		<?php
-		?>
-	
-	
-		<div class="alignleft actions">
-			<select name="action">
-				<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
-				<option value="delete"><?php _e('Delete'); ?></option>
-			</select>
-		<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
-		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
-		<?php wp_nonce_field('bulk-products','bulk-products'); ?>
-		</div>
+		
 		<div class="tablenav-pages">
 			<?php
 				echo $page_links;
 			?>	
 		</div>
+		
+		<div class="alignleft actions">
+			<form action="" method="get">
+				<?php
+					echo wpsc_admin_category_dropdown();
+				?>
+			</form>
+		</div>	
 	</div>
 	
+	
 	<form id="posts-filter" action="" method="get">
+		<div class="tablenav">	
+			<div class="alignright search-box">
+				<input type='hidden' name='page' value='edit-products'  />
+				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
+				<input type="submit" name='wpsc_search' value="<?php _e( 'Search' ); ?>" class="button" />
+			</div>
+		
+			<div class="alignleft actions">
+					<select name="action">
+						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
+						<option value="delete"><?php _e('Delete'); ?></option>
+					</select>
+					<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
+					<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
+					<?php wp_nonce_field('bulk-products', 'wpsc-bulk-products'); ?>
+			</div>
+		</div>
+	
 		<input type='hidden' id='products_page_category_id'  name='category_id' value='<?php echo $category_id; ?>' />
 		<table class="widefat page fixed" id='wpsc_product_list' cellspacing="0">
 			<thead>
@@ -268,18 +264,12 @@ if($_GET['search']) {
 			<tbody>
 				<?php
 				foreach((array)$product_list as $product) {
-					//exit('<pre>'.print_r($product,true).'</pre>');
+				
 					if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images
 						$image_path = WPSC_THUMBNAIL_URL.$product['thumbnail_image'];
 					} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
-							$image_path = WPSC_THUMBNAIL_URL.$product['image'];
-					
-					} else if(is_numeric($product['image'])){
-							$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$product['id']." AND `id`=".$product['image'];
-						//	exit($sql);
-							$image = $wpdb->get_var($sql);
-							$image_path = WPSC_THUMBNAIL_URL.$image;
-					}else { // no image, display this fact
+						$image_path = WPSC_THUMBNAIL_URL.$product['image'];
+					} else { // no image, display this fact
 						$image_path = WPSC_URL."/images/no-image-uploaded.gif";
 					}
 					
@@ -300,7 +290,7 @@ if($_GET['search']) {
 					}
 					
 					
-					$category_html .= "<a class='category_link' href='". urlencode(remove_query_arg('product_id',add_query_arg('category_id', $category_row['id'])))."'>".stripslashes($category_row['name'])."</a>";
+					$category_html .= "<a class='category_link' href='". remove_query_arg('product_id',add_query_arg('category_id', $category_row['id']))."'>".stripslashes($category_row['name'])."</a>";
 					$i++;
 				}        
 								
@@ -311,10 +301,10 @@ if($_GET['search']) {
 								
 								
 								<td class="product-image ">
-									<img src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
+									<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
 								</td>
 								<td class="product-title column-title">
-									<a class='edit-product' href='<?php echo htmlspecialchars(add_query_arg('product_id', $product['id'])); ?>'><?php echo $product_name; ?></a>
+									<a class='edit-product' href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>
 										<?php
 										$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
 										if(count($product_alert['messages']) > 0) {
@@ -331,7 +321,7 @@ if($_GET['search']) {
 								
 									<div class="wpsc-row-actions">
 										<span class="edit">
-											<a class='edit-product' title="Edit this Product" href='<?php echo htmlspecialchars(add_query_arg('product_id', $product['id'])); ?>' style="cursor:pointer;">Edit</a>
+											<a class='edit-product' title="Edit this post" href='<?php echo add_query_arg('product_id', $product['id']); ?>' style="cursor:pointer;">Edit</a>
 										</span> |
 										<span class="delete">
 											<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
@@ -359,7 +349,6 @@ function wpsc_admin_category_dropdown() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');
 	$url =  remove_query_arg(array('product_id','category_id'));
-	$url = urlencode($url);
 	$options = "";
 	$options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
 	$options .= wpsc_admin_category_dropdown_tree(null, 0, absint($_GET['category_id']));
@@ -376,7 +365,6 @@ function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, 
   global $wpdb;
   $siteurl = get_option('siteurl');
   $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
-
   if(is_numeric($category_id)) {
     $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
 	} else {
@@ -387,7 +375,6 @@ function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, 
       $selected = "selected='selected'";
     }
     $url = remove_query_arg('product_id',add_query_arg('category_id', $option['id']));
-    $url = urlencode($url);
     $output .= "<option $selected value='$url'>".str_repeat("-", $iteration).stripslashes($option['name'])."</option>\r\n";
     $output .= wpsc_admin_category_dropdown_tree($option['id'], $iteration+1, $selected_id);
     $selected = "";

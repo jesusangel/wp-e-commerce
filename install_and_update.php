@@ -735,13 +735,27 @@ function wpsc_create_upload_directories() {
 
 	
  
- /* *
+ /**
   *wpsc_update_remove_product_nulls function,  converts values to decimal to satisfy mySQL strict mode
+* * @return boolean true on success, false on failure
  */
 function wpsc_update_remove_nulls($colname) {
   global $wpdb;
   //echo "UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `$colname` = CONVERT(`$colname`, DECIMAL)";
 	if($wpdb->query("UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `$colname` = 0 WHERE `$colname` NOT REGEXP '^[0-9]+(\.)*[0-9]*'")) {
+	  return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+  *wpsc_set_product_creation_dates function,  converts values to decimal to satisfy mySQL strict mode
+* * @return boolean true on success, false on failure
+ */
+function wpsc_set_product_creation_dates($colname) {
+  global $wpdb;
+	if($wpdb->query("UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `$colname` = NOW() WHERE `$colname` = '0000-00-00 00:00:00'")) {
 	  return true;
 	} else {
 		return false;
@@ -850,6 +864,8 @@ function wpsc_create_or_update_tables($debug = false) {
               $upgrade_failed = true;
               $failure_reasons[] = $wpdb->last_error;
             }
+            // run updating functions to do more complex work with default values and the like
+            $table_data['actions']['after'][$missing_or_extra_table_column]($missing_or_extra_table_column);            
           }
         }
       }
