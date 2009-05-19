@@ -26,6 +26,7 @@ function wpsc_ajax_load_product() {
 {
 	$targ_w = $targ_h = $_POST['thumbsize'];
 	$jpeg_quality = $_POST['jpegquality'];
+	$product_id = $_POST['product_id'];
 	$directory = WP_CONTENT_DIR.'/uploads/wpsc/product_images/'; 
 	
 	$imagename = $_POST['imagename'];
@@ -41,7 +42,12 @@ function wpsc_ajax_load_product() {
 //	header('Content-type: image/jpeg');
 
 	imagejpeg($dst_r,$full_path,$jpeg_quality);
-
+	$cropped = true;
+	$sendback = wp_get_referer();
+ 	if($cropped){
+		$sendback = add_query_arg('product_id', $product_id, $sendback);
+	}
+	wp_redirect($sendback);
 	//exit();
 }
 }

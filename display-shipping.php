@@ -138,7 +138,7 @@ function selectgateway() {
 </script>
 <div class="wrap">
 <div class="metabox-holder">
-		<form name='shippingopt' method='post' id='shipping_options' action='<?php echo $_SERVER['REQUEST_URI']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php";?>'>
+		<form name='shippingopt' method='post' id='shipping_options' action=''>
 		<input type='hidden' name='shipping_submits' value='true'>
 	<?php 
 		if (get_option('custom_gateway') == 1){ 

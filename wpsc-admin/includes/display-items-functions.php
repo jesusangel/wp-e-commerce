@@ -885,7 +885,7 @@ function edit_multiple_image_gallery($product_data) {
 				$image_data = getimagesize(WPSC_IMAGE_URL.$product_data['image']);			
 				//exit('<pre>'.print_r($image_data, true).'</pre>');
 				?>
-				<a id='extra_preview_link_0' href='<?php echo WPSC_URL."/wpsc-admin/includes/crop.php?directory=".WPSC_IMAGE_URL."&imagename=".$product_data['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500"; ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox' ><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
+				<a id='extra_preview_link_0' href='<?php echo WPSC_URL."/wpsc-admin/includes/crop.php?directory=".WPSC_IMAGE_URL."&imagename=".$product_data['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']; ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox' ><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$product_data['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
 				<?php } ?>
 
 				

@@ -121,6 +121,7 @@ function bind_shipping_rate_deletion() {
 					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
 					jQuery('#gold_cart_form').attr('action', form_action); // stick it all back in the action attribute
 				}
+		
 			});
 		});
 	});

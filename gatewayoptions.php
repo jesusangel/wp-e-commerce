@@ -100,7 +100,7 @@ function selectgateway() {
 </script>
 <div class="wrap">
 <div class='metabox-holder'>
-		<form name='gatewayopt' method='POST' id='gateway_options_tbl' action='admin.php?page=<?php echo WPSC_DIR_NAME; ?>/options.php'>
+		<form name='gatewayopt' method='post' id='gateway_options_tbl' action='<?php echo $_SERVER['REQUEST_URI']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php";?>'>
 		<input type='hidden' name='gateway_submits' value='true'>
 	<?php 
 		if (get_option('custom_gateway') == 1){ 

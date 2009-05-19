@@ -12,7 +12,7 @@ if(isset($_GET['imagename'])){
 $directory = $_GET['directory'];//set directory
 $width = $_GET['imgwidth'];//set image dimensions
 $height = $_GET['imgheight'];
-
+$product_id = $_GET['product_id'];
 if ($width > 400){
 	$layoutlandscape = 'wpsc_thumbnail_preview_landscape';
 }else{
@@ -85,7 +85,7 @@ if ($width > 400){
 				<input type="hidden" id="w" name="w" />
 				<input type="hidden" id="imagename" name="imagename" value="<?php echo $imagename; ?>" />		
 				<input type="hidden" name="wpsc_admin_action" value="crop_thumb" />
-				
+				<input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
 				<p><label for="jpegquality">Jpeg Quality :</label><input size='2' type="text" id="jpegquality" name="jpegquality" value='70' /> %<br /></p>
 				<p><label for="thumbsize">Thumbnail Size :</label><input size='2' type="text" id="thumbsize" name="thumbsize" value='100' /> px<br /></p>
 				<p><input class="button-secondary action"  type="submit" value="Crop Image" /></p>

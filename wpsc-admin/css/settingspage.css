@@ -1,0 +1,41 @@
+#wpsc_options {
+	border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
+	border-style:solid;
+	border-width:1px;
+	margin:0pt 15% 0pt 15px;
+	padding:2px;
+  position: relative;
+}
+
+#wpsc_options a.about_this_page {
+ position: absolute;
+ top: 10px;
+ right: 12px;
+}
+
+table#gateway_options tr td{
+  padding: 0 0 8px 2px;
+  vertical-align: top;
+}
+td.gateway_settings {
+  padding-top: 0px !important;
+  width:90%;
+}
+.gateway_settings{
+
+}
+.wpsc_shipping_options{
+  border-top: 1px solid #e9e9e9;
+
+}
+td.select_gateway p {
+  margin: 0px 15px 4px 5px;
+}
+
+div#wpsc_shipwire_setting {
+  display: none;
+}
+table#gateway_options {
+margin:0;
+width:100%;
+}

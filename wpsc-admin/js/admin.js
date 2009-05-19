@@ -210,7 +210,7 @@ jQuery(document).ready( function () {
 			
 			success: function(html){
 				//jQuery(".gateway_settings").children(".form-table").html(html)
-				jQuery("td.gateway_settings table.form-table").html('<input type="hidden" name="shippingname" value="'+module+'" />'+html);
+				jQuery("td.gateway_settings table.form-table").html('<tr><td><input type="hidden" name="shippingname" value="'+module+'" /></td></tr>'+html);
 			}
 		
 		})
@@ -331,6 +331,65 @@ jQuery(document).ready( function () {
 				jQuery.post( 'index.php?ajax=true', post_values, function(returned_data) { });
 			});
 		});
+		
+	// Options page ajax tab display 
+	jQuery(function() {
+		  // set us up some mighty fine tabs for the options page
+		  
+		  if (typeof jQuery('#wpsc_options > ul#tabs').tabs != "undefined") {
+        $tabs = jQuery('#wpsc_options > ul#tabs').tabs();
+			}
+// 			current_tab = window.location.href.split('#');
+			
+			// this here code handles remembering what tab you were on
+			jQuery('#wpsc_options > ul').bind('tabsselect', function(event, ui) {
+				form_action = jQuery('#cart_options').attr('action').split('#');  //split at the #
+				form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+				jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
+// 				var current_tab = $tabs.data('selected.tabs');
+// 				alert(current_tab);
+// 				if (current_tab == '3') {
+// 					form_action = jQuery('#shipping_options').attr('action').split('#');  //split at the #
+// 					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+// 
+// 					jQuery('#shipping_options').attr('action', form_action); // stick it all back in the action attribute
+// 				}
+// 				if (current_tab == '4') {
+// 					form_action = jQuery('#gateway_options').attr('action').split('#');  //split at the #
+// 					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+// 					jQuery('#gateway_options').attr('action', form_action); // stick it all back in the action attribute
+// 				}
+			});
+			jQuery('#wpsc_options > ul').bind('tabsload', function(event, ui) {
+			  // bind_shipping_rate_deletion();
+// 				form_action = jQuery('#cart_options').attr('action').split('#');  //split at the #
+// 				form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+// 				jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
+				var current_tab = $tabs.data('selected.tabs');
+				if (current_tab == '3') {
+					form_action = jQuery('#shipping_options').attr('action').split('#');  //split at the #
+					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+					jQuery('#shipping_options').attr('action', form_action); // stick it all back in the action attribute
+				}
+				if (current_tab == '4') {
+					form_action = jQuery('#gateway_options_tbl').attr('action').split('#');  //split at the #
+					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+					jQuery('#gateway_options_tbl').attr('action', form_action); // stick it all back in the action attribute
+				}
+				if (current_tab == '5') {
+					form_action = jQuery('#chekcout_options_tbl').attr('action').split('#');  //split at the #
+					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+					jQuery('#chekcout_options_tbl').attr('action', form_action); // stick it all back in the action attribute
+				}
+				if (current_tab == '6') {
+					form_action = jQuery('#gold_cart_form').attr('action').split('#');  //split at the #
+					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
+					jQuery('#gold_cart_form').attr('action', form_action); // stick it all back in the action attribute
+				}
+					//alert(current_tab);
+			});
+		});
+
 
 
 });
