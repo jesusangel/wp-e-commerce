@@ -78,7 +78,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   
 	$total = nzshpcrt_overall_total_price($_SESSION['selected_country'],false,true);
 
-	$discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
+	//$discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
 	if(($discount > 0) && ($_SESSION['coupon_num'] != null)) {
 		$data['item_name_'.$i] = "Your Shopping Cart";
 		$data['amount_'.$i] = number_format(sprintf("%01.2f", $purchase_log['totalprice']),$decimal_places,'.','');

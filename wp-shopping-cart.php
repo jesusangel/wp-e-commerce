@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support. <br />Click here to to <a href='?wpsc_uninstall=ask'>Uninstall</a>.
-Version: 3.7 Development
+Version: 3.7 Beta 1
 Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 */
@@ -12,14 +12,14 @@ Author URI: http://www.instinct.co.nz/e-commerce/
  * @package wp-e-commerce
 */
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '3');
+define('WPSC_MINOR_VERSION', '8');
 
 define('SAVEQUERIES', true);
 
-define('WPSC_PRESENTABLE_VERSION', '3.7 Development Version');
+define('WPSC_PRESENTABLE_VERSION', '3.7 Beta 1');
 
 define('WPSC_DEBUG', false);
-define('WPSC_GATEWAY_DEBUG', true);
+define('WPSC_GATEWAY_DEBUG', false);
 
 $v1 = str_replace(array('_','-','+'),'.',strtolower($wp_version));
 $v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);

@@ -831,7 +831,10 @@ class wpsc_cart {
     global $wpdb, $wpsc_shipping_modules;
     if($this->uses_shipping()) {
 			if($this->base_shipping == null) {
-				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+			
+				if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+				}
 				if($this->selected_shipping_option == null){
  					$this->get_shipping_option();
  				}
@@ -1037,7 +1040,10 @@ class wpsc_cart {
  	if($this->shipping_method == null){
  		$this->get_shipping_method();
  	}
-    $unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+ 	
+		if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+			$unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+    }
     $num = 0;
     foreach((array)$unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
       
