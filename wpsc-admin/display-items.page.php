@@ -264,13 +264,16 @@ if($_GET['search']) {
 			<tbody>
 				<?php
 				foreach((array)$product_list as $product) {
-				
-					if(($product['thumbnail_image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['thumbnail_image'])) { // check for custom thumbnail images
-						$image_path = WPSC_THUMBNAIL_URL.$product['thumbnail_image'];
-					} else if(($product['image'] != null) && file_exists(WPSC_THUMBNAIL_DIR.$product['image'])) { // check for automatic thumbnail images
-						$image_path = WPSC_THUMBNAIL_URL.$product['image'];
-					} else { // no image, display this fact
-						$image_path = WPSC_URL."/images/no-image-uploaded.gif";
+				  	
+				  //first set the patch to the default
+					$image_path = WPSC_URL."/images/no-image-uploaded.gif";
+					if(is_numeric($product['image'])) { // check for automatic thumbnail images
+					  // file_exists(WPSC_THUMBNAIL_DIR.$product['image'])
+					  $product_image = $wpdb->get_var("SELECT `image` FROM  `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$product['image']}' LIMIT 1");
+					  // if the image exists, set the image path to it.
+					  if(($product_image != null) && file_exists(WPSC_THUMBNAIL_DIR.$product_image)) {
+					    $image_path = WPSC_THUMBNAIL_URL.$product_image;  
+					  }
 					}
 					
 					// get the  product name, unless there is no name, in which case, display text indicating so

@@ -42,34 +42,13 @@ function nzshpcrt_install()
     add_option('wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes');
 	}
 
-
-
-
-
   // run the create or update code here.
   wpsc_create_or_update_tables();
   
-
-
-
-
- 
   wpsc_create_upload_directories();
   
- 
 	require dirname(__FILE__) . "/currency_list.php";
 	
-	/*
-    if(get_option('wpsc_version') <= 3.5) {
-      include_once('updates/update-to-3.5.0.php');
-    }
-    include_once('updates/update-to-3.5.2.php');
-    
-    include_once('updates/update-to-3.5.2.php');
-    include_once('updates/update-to-3.6.0.php');
-    include_once('updates/update-to-3.6.4.php');
-    
-    */
   /* all code to add new database tables and columns must be above here */  
   if((get_option('wpsc_version') < WPSC_VERSION) || (get_option('wpsc_version') == WPSC_VERSION) && (get_option('wpsc_minor_version') < WPSC_MINOR_VERSION)) {
     update_option('wpsc_version', WPSC_VERSION);
@@ -263,7 +242,7 @@ function nzshpcrt_install()
 	add_option('google_id', 'none', TXT_WPSC_GOOGLEMECHANTID, 'yes');
  
    add_option('default_brand', 'none', TXT_WPSC_DEFAULTBRAND, 'yes');
-   add_option('wpsc_default_category', 'none', TXT_WPSC_DEFAULTCATEGORY, 'yes');
+   add_option('wpsc_default_category', 'all', TXT_WPSC_DEFAULTCATEGORY, 'yes');
    
    add_option('product_view', 'default', "", 'yes');
    add_option('add_plustax', 'default', "", '1');
@@ -747,7 +726,39 @@ function wpsc_update_remove_nulls($colname) {
 	} else {
 		return false;
 	}
+} 
+
+/**
+  *wpsc_update_image_records function,  moves product images to the images table
+* * @return boolean true on success, false on failure
+ */
+function wpsc_update_image_records($colname) {
+  global $wpdb;
+  $product_data = $wpdb->get_results("SELECT `id`, `image` FROM  `".WPSC_TABLE_PRODUCT_LIST."` WHERE `image` NOT REGEXP '^[0-9]+$'", ARRAY_A);
+  
+  foreach($product_data as $product_row) {
+		if(file_exists(WPSC_IMAGE_DIR.$product_row['image'])) {
+			$image_id = $wpdb->get_var("SELECT `id` FROM  `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_row['id']}' AND `image` LIKE '{$product_row['image']}' LIMIT 1");
+			if($image_id < 1) {
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` (`product_id`, `image`, `width`, `height`) VALUES ('{$product_row['id']}', '{$product_row['image']}', null, null )");			
+				$image_id = (int) $wpdb->insert_id;
+			}
+			if($image_id > 0) {
+			$success_state[] = 	$wpdb->query("UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$image_id}' WHERE `id` = '{$product_row['id']}' LIMIT 1");
+		  }
+		} else {
+		  $success_state[] = $wpdb->query("UPDATE  `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = null WHERE `id` = '{$product_row['id']}' LIMIT 1");
+		}
+  }
+  //echo "<pre>".print_r($success_state,true)."</pre>";
+  //exit();
+	// 	if() {
+	// 	  return true;
+	// 	} else {
+	// 		return false;
+	// 	}
 }
+
 
 /**
   *wpsc_set_product_creation_dates function,  converts values to decimal to satisfy mySQL strict mode
@@ -837,12 +848,29 @@ function wpsc_create_or_update_tables($debug = false) {
         $column_name = $existing_table_column['Field'];
         $existing_table_columns[] = $column_name;
         
-				//echo "<pre>".print_r($existing_table_column,true)."</pre>";
-        if(isset($table_data['columns'][$column_name]) && (stristr($table_data['columns'][$column_name], $existing_table_column['Type']) === false)) {
+        
+        $null_match = false;
+				if($existing_table_column['Null'] = 'NO') {
+				  if(stristr($table_data['columns'][$column_name], "NOT NULL") !== false) {
+				    $null_match = true;
+					}
+				} else {
+				  if(stristr($table_data['columns'][$column_name], "NOT NULL") === false) {
+				    $null_match = true;
+					}
+				}
+          
+         //echo "<pre>".print_r($existing_table_column['Null'],true)."</pre>";
+        if(isset($table_data['columns'][$column_name]) && ((stristr($table_data['columns'][$column_name], $existing_table_column['Type']) === false) || ($null_match != true))) {
           if(isset($table_data['actions']['before'][$column_name]) && is_callable($table_data['actions']['before'][$column_name])) {
             $table_data['actions']['before'][$column_name]($column_name);
           }        
-          $wpdb->query("ALTER TABLE `$table_name` CHANGE `$column_name` `$column_name` {$table_data['columns'][$column_name]} ");
+          if(!$wpdb->query("ALTER TABLE `$table_name` CHANGE `$column_name` `$column_name` {$table_data['columns'][$column_name]} ")) {
+						$upgrade_failed = true;
+						$failure_reasons[] = $wpdb->last_error;
+          }
+          //echo "<pre>".print_r($upgrade_failed,true)."</pre>";
+          //echo "ALTER TABLE `$table_name` CHANGE `$column_name` `$column_name` {$table_data['columns'][$column_name]} <br />";
 				}
         
       }

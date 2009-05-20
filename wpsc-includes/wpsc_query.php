@@ -306,9 +306,9 @@ function wpsc_the_product_image($width = null, $height = null) {
 	global $wpsc_query, $wpdb;
 	$image_file_name = null;
   if ($wpsc_query->product['image'] != null) {
-  	 if(is_numeric($wpsc_query->product['image'])){
-		$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$wpsc_query->product['id']." AND `id`=".$wpsc_query->product['image'];
-		$image_file_name = $wpdb->get_var($sql);
+			if(is_numeric($wpsc_query->product['image'])){
+		$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
+		//exit("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
   	}else{
     	$image_file_name = $wpsc_query->product['image'];
     }
@@ -336,8 +336,7 @@ function wpsc_the_product_thumbnail() {
     	$image_file_name = $wpsc_query->product['thumbnail_image'];
   } else if ($wpsc_query->product['image'] != null) {
   	if(is_numeric($wpsc_query->product['image'])){
-		$sql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id`=".$wpsc_query->product['id']." AND `id`=".$wpsc_query->product['image'];
-		$image_file_name = $wpdb->get_var($sql);
+			$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
   	}else{
     	$image_file_name = $wpsc_query->product['image'];
     }

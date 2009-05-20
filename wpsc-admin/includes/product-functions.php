@@ -84,7 +84,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'pnp' => null,
 		'international_pnp' => null,
 		'file' => null,
-		'image' => '',
+		'image' => '0',
 		'quantity_limited' => '',
 		'quantity' => null,
 		'special' => null,
@@ -206,9 +206,19 @@ function wpsc_update_category_associations($product_id, $categories = array()) {
     $wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` (`product_id`, `category_id`) VALUES ".implode(", ",$insert_sections)."");
   }
   
+  foreach($categories_to_add as $category_id) {
+		$check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category_id') AND `order` IN('0') LIMIT 1;",ARRAY_A);
+		if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category_id') AND `product_id` IN('$product_id') LIMIT 1")) {
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$category_id') AND `product_id` IN('$product_id') LIMIT 1;");
+		} else {				  
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category_id', '$product_id', 0)");
+		}
+		if($check_existing != null) {
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$category_id') AND `product_id` NOT IN('$product_id') AND `order` < '0'");
+		}
+  }
   if(count($categories_to_delete) > 0) {
     $wpdb->query($wpdb->prepare("DELETE FROM`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = %d AND `category_id` IN(%s)",$product_id,  implode($categories_to_delete)));
-  
   }
 }
   
@@ -251,6 +261,7 @@ function wpsc_update_product_meta($product_id, $product_meta) {
 }
 
 function wpsc_update_custom_meta($product_id, $post_data) {
+  global $wpdb;
     if($post_data['new_custom_meta'] != null) {
       foreach((array)$post_data['new_custom_meta']['name'] as $key => $name) {
 				$value = $post_data['new_custom_meta']['value'][(int)$key];

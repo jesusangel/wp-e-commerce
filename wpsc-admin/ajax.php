@@ -188,14 +188,26 @@ function wpsc_duplicate_product() {
 		if (count($category_assoc) > 0) {
 			foreach($category_assoc as $key => $category) {
 				$new_product_category .= "('".$new_id."','".$category."')";
-				
 				if (count($category_assoc) != $key+1) {
 					$new_product_category .= ",";
+				}
+				
+				$check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `order` IN('0') LIMIT 1;",ARRAY_A);
+				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1")) {
+					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1;");
+				} else {				  
+					$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category', '$product_id', 0))");
+				}
+				if($check_existing != null) {
+					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$category') AND `product_id` NOT IN('$product_id') AND `order` < '0'");
 				}
 			}
 			$sql = "INSERT INTO ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." (product_id, category_id) VALUES ".$new_product_category;
 			$wpdb->query($sql);
 		}
+	
+		
+	
 	
 		//Inserting duplicated meta info
 		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id='".$product_id."'", ARRAY_A);
@@ -219,11 +231,23 @@ function wpsc_duplicate_product() {
 		$new_image_value = array();
 		if (count($image_values)>0){
 			foreach($image_values as $key => $image) {
-				$new_image_value[] = "('".$new_id."','".$image['image']."','".$image['width']."','".$image['height']."','".$image['image_order']."','".$image['meta']."')";
+			  if($image['image'] != '') {
+			    if(is_numeric($image['width']) && is_numeric($image['height'])) {
+			      $image['width'] = absint($image['width']);
+			      $image['height'] = absint($image['height']);
+			    } else {
+			      $image['width'] = 'null';
+			      $image['height'] = 'null';
+			    }
+			  
+					$new_image_value[] = "('".$new_id."','".$image['image']."',".$image['width'].",".$image['height'].",'".$image['image_order']."','".$image['meta']."')";
+				}
 			}
-			$new_image_value = implode(",", $new_image_value);
-			$sql = "INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
-			$wpdb->query($sql);
+			if(count($new_image_value) > 0) {
+				$new_image_value = implode(",", $new_image_value);
+				$sql = "INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
+				$wpdb->query($sql);
+			}
 		}
 		
 	  $duplicated = true;
