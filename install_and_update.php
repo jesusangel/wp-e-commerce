@@ -700,14 +700,14 @@ function wpsc_create_upload_directories() {
 	
 	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
 	if(is_dir($wpsc_file_directory)) {
-	  // sort the permissions out in case they are not already sorted out.	  
-		@ chmod( ABSPATH.get_option('upload_path'), 0775 );			
-		@ chmod( $wpsc_file_directory, 0775 );			
-		@ chmod( WPSC_FILE_DIR, 0775 );			
-		@ chmod( WPSC_PREVIEW_DIR, 0775 );			
-		@ chmod( WPSC_IMAGE_DIR, 0775 );	
-		@ chmod( WPSC_CATEGORY_DIR, 0775 );	
-		@ chmod( WPSC_USER_UPLOADS_DIR, 0775 );	
+	  // sort the permissions out in case they are not already sorted out.
+		@ chmod( ABSPATH.get_option('upload_path'), 0775 );
+		@ chmod( $wpsc_file_directory, 0775 );
+		@ chmod( WPSC_FILE_DIR, 0775 );
+		@ chmod( WPSC_PREVIEW_DIR, 0775 );
+		@ chmod( WPSC_IMAGE_DIR, 0775 );
+		@ chmod( WPSC_CATEGORY_DIR, 0775 );
+		@ chmod( WPSC_USER_UPLOADS_DIR, 0775 );
 		@ chmod( WPSC_CACHE_DIR, 0775 );
 	}
 }
@@ -736,7 +736,7 @@ function wpsc_update_image_records($colname) {
   global $wpdb;
   $product_data = $wpdb->get_results("SELECT `id`, `image` FROM  `".WPSC_TABLE_PRODUCT_LIST."` WHERE `image` NOT REGEXP '^[0-9]+$'", ARRAY_A);
   
-  foreach($product_data as $product_row) {
+  foreach((array)$product_data as $product_row) {
 		if(file_exists(WPSC_IMAGE_DIR.$product_row['image'])) {
 			$image_id = $wpdb->get_var("SELECT `id` FROM  `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_row['id']}' AND `image` LIKE '{$product_row['image']}' LIMIT 1");
 			if($image_id < 1) {
