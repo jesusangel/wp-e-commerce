@@ -27,7 +27,7 @@ function form_testmode() {
 	// $output = "	<td>\n\r";
 	
 	$output .= "<strong>".TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR.":</strong><br />\n\r";
-	$output .= "<textarea cols='50' rows='9' name='payment_instructions'>".get_option('payment_instructions')."</textarea><br />\n\r";
+	$output .= "<textarea cols='40' rows='9' name='payment_instructions'>".get_option('payment_instructions')."</textarea><br />\n\r";
 	$output .= "<em>".TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR."</em>\n\r";
 	$output .= "	</td>\n\r";
 	$output .= "</tr>\n\r";

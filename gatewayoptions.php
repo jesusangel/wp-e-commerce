@@ -93,14 +93,14 @@ if ($_GET['payments_options']=='true') {
 ?>
 		
 		
-<script language='JavaScript' type='text/javascript'>
+<script language='Javascript' type='text/javascript'>
 function selectgateway() {
-	document.forms.gatewayopt.submit();
+	//document.forms.gatewayopt.submit();
 }
 </script>
 <div class="wrap">
 <div class='metabox-holder'>
-		<form name='gatewayopt' method='post' id='gateway_options_tbl' action='<?php echo $_SERVER['REQUEST_URI']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php";?>'>
+		<form name='gatewayopt' method='post' id='gateway_options_tbl' action=''>
 		<input type='hidden' name='gateway_submits' value='true'>
 	<?php 
 		if (get_option('custom_gateway') == 1){ 

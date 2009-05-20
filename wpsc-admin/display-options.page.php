@@ -605,7 +605,7 @@ function wpsc_display_options_page(){
 
   ?>
 
-				<form name='cart_options' id='cart_options' method='post' action='<?php echo $_SERVER['REQUEST_URI']; ?>'>
+				<form name='cart_options' id='cart_options' method='post' action='<?php echo get_option('siteurl'); ?>/wp-admin/admin.php?page=settings'>
 		  <div id="wpsc_options" class="wrap">
 					<!-- <a class="about_this_page" href="http://www.instinct.co.nz/e-commerce/integrated/" target="_blank"><span>About This Page</span> </a> -->
             <ul id="tabs" class="ui-tabs-nav">
