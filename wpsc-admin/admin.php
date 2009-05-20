@@ -167,7 +167,7 @@ wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_
 function  wpsc_admin_include_css_and_js() {
   $siteurl = get_option('siteurl'); 
 	
-	
+//	wp_admin_css( 'dashboard' );
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-swfobject');
 	wp_enqueue_script('swfupload-queue');

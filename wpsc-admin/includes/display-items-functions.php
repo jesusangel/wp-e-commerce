@@ -303,7 +303,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
     <table>";
     $output .= "<tr>
       <td class='itemfirstcol'>
-			".TXT_WPSC_CATEGORISATION.": <br />";
+			<span class='howto'>".TXT_WPSC_CATEGORISATION.": </span>";
         
          $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 					foreach($categorisation_groups as $categorisation_group){
@@ -322,8 +322,8 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 
      $output .= "</td>
      <td class='itemfirstcol product_tags'>
-       ".TXT_WPSC_PRODUCT_TAGS.":<br />
-        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".__("These values are comma separated")."</span>
+      <span class='howto'> ".TXT_WPSC_PRODUCT_TAGS.":
+        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".__("These values are comma separated")."</span></span>
       </td>
     </tr>";
     

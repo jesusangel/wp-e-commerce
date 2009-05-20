@@ -893,6 +893,7 @@ function wpsc_create_or_update_tables($debug = false) {
               $failure_reasons[] = $wpdb->last_error;
             }
             // run updating functions to do more complex work with default values and the like
+            //exit($missing_or_extra_table_column);
             $table_data['actions']['after'][$missing_or_extra_table_column]($missing_or_extra_table_column);            
           }
         }

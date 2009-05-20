@@ -2,7 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
-
+define('TXT_WPSC_PRODUCT_TAGS', 'Tags');
+define('TXT_WPSC_CATEGORISATION', 'Categories');
 define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
 
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Release downloads locked to this IP address %s');
@@ -403,7 +404,7 @@ define('TXT_WPSC_GOOGLEFINANCESTATUS', 'Financial Status');
 define('TXT_WPSC_GOOGLEFULFILLMENTSTATUS', 'Fulfillment Status');
 define('TXT_WPSC_SURETODELETECATEGORISATION', 'Are you sure you want to delete this product group? All categories it contains will be deleted too.');
 
-define('TXT_WPSC_CATEGORISATION', 'Groups');
+
 define('TXT_WPSC_CATEGORISATIONHASBEENADDED', 'The group has been added.');
 define('TXT_WPSC_CATEGORISATIONHASBEENEDITED', 'The group has been edited.');
 define('TXT_WPSC_ADD_CATEGORISATION', 'Add New Group');
@@ -1096,12 +1097,11 @@ define('TXT_WPSC_ACTIVE', 'Active');
 define('TXT_WPSC_COUPONHASBEENADDED', 'Thanks, the coupon has been added.');
 define('TXT_WPSC_COUPON', 'Coupon');
 define('TXT_WPSC_COUPON_DOESNT_EXIST', 'That coupon has expired or does not exist.');
-define('TXT_WPSC_PRODUCT_TAGS', 'Product Tags');
 
 define('TXT_WPSC_DROPSHOPDISPLAY', 'DropShop Display');
 define('TXT_WPSC_HIDEADDTOCARTBUTTON', 'Hide "Add to cart" button');
 
-define('TXT_WPSC_PRODUCT_TAGS', 'Product Tags');
+
 
 define('TXT_WPSC_SHOW_DROPSHOP_ALL', 'Show Dropshop on every page');
 define('TXT_WPSC_SHOW_DROPSHOP_PRODUCT', 'Show Dropshop only on product page');

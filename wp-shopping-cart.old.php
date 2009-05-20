@@ -2012,8 +2012,10 @@ global $wpdb;
 		echo "<p class='dashboardWidgetSpecial'>";
 		//echo "<span class='pricedisplay'>";
 		//calculates average sales amount per order for the month
-		$monthsAverage = ((int)admin_display_total_price($start_timestamp, $end_timestamp)/(int)$currentMonthOrders);
-		echo nzshpcrt_currency_display($monthsAverage,1);
+		if($currentMonthOrders > 0){
+			$monthsAverage = ((int)admin_display_total_price($start_timestamp, $end_timestamp)/(int)$currentMonthOrders);
+			echo nzshpcrt_currency_display($monthsAverage,1);
+		}
 		//echo "</span>";
 		echo "<span class='dashboardWidget'>".TXT_WPSC_AVGORDER_TITLE."</span>";
 		echo "</p>";

@@ -158,6 +158,10 @@ div.product-placeholder {
 
 /*  Product details form styling */
 
+td.product_tags{
+	padding-left:2em;
+}
+
 div#poststuff h4 {
 	font-size:11px;
 	margin:0.3em 0;
@@ -742,7 +746,7 @@ float: left;
 .wpsc_shipping_options .wpsc-shipping-actions{
 visibility:hidden;
 font-size: 10px;
-margin:5px 15em 0 0;
+margin:5px 12em 0 0;
 float:right;
 }
 .wpsc_shipping_options:hover .wpsc-shipping-actions{
