@@ -452,7 +452,14 @@ div.image_resize_extra_forms {
   display: none;
 }
 
+#wpsc_product_category_and_tag_forms table {
+  width: 100%;
+}
 
+#wpsc_product_category_and_tag_forms table td.itemfirstcol{
+	padding-left:3pt;
+  width: 50%;
+}
 
 /* variations CSS starts */
  

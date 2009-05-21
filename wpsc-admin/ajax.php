@@ -361,15 +361,6 @@ function wpsc_purchase_log_csv() {
  if($_REQUEST['wpsc_admin_action'] == 'wpsc_downloadcsv') {
 	add_action('admin_init', 'wpsc_purchase_log_csv');
 }
- 
- 
-
-
-
-
-
-
-
 
 
 function wpsc_admin_ajax() {

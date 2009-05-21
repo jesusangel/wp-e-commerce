@@ -301,43 +301,51 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 	</h3>
     <div class='inside'>
     <table>";
-    $output .= "<tr>
+    $output .= "
+      <tr>
       <td class='itemfirstcol'>
-			<span class='howto'>".TXT_WPSC_CATEGORISATION." </span>";
-        
-         $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
-         //exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
-					foreach($categorisation_groups as $categorisation_group){
-					  $category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
-					  if($category_count > 0) {
-							$output .= "<p>";
-						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
-						  if($category_group_name == 'Select Categories'){
-						  $output .= "All Categories:<br />";
-						  }else{
-							  $output .= "".$category_group_name.":<br />";
-						  }
-						  if ($product_data == '')
-						  	$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
-						  else 
-						  	$output .= wpsc_category_list($categorisation_group['id'], $product_data['id'], 'edit_');
-						  $output .= "</p>";
+				<span class='howto'>".TXT_WPSC_CATEGORISATION." </span>
+				<div id='categorydiv' >";
+					
+					$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
+					//exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
+						foreach($categorisation_groups as $categorisation_group){
+							$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
+							if($category_count > 0) {
+								$output .= "<p>";
+								$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
+								$output .= "".$category_group_name.":<br />";
+								if ($product_data == '')
+									$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
+								else 
+									$output .= wpsc_category_list($categorisation_group['id'], $product_data['id'], 'edit_');
+								$output .= "</p>";
+							}
 						}
-					}
 
-     $output .= "</td>
+     $output .= "
+			</div>
+     </td>
      <td class='itemfirstcol product_tags'>
-      <span class='howto'> ".TXT_WPSC_PRODUCT_TAGS."</span><br />
-        <input type='text' class='text wpsc_tag greytext' value='Add new tag' name='product_tags' id='product_tag'>   
-        <input class='button' type='submit' value='Add' name='wpsc_add_new_tag' />
-        <br /><span class='small_italic greytext'>".__("Separate tags with commas")."</span><br />
-     
-        <p>".$imtags."</p>
-      	<input type='hidden' value='".$imtags."' name='wpsc_existing_tags' />
+				<span class='howto'> ".TXT_WPSC_PRODUCT_TAGS."</span><br />
+				<p id='jaxtag'>
+					<label for='newtag' class='hidden'>".TXT_WPSC_PRODUCT_TAGS."</label>
+					<input type='text' value='".$imtags."' tabindex='3' size='40' id='tags-input' class='tags-input' name='product_tags'/>
+				</p>
+				<div id='tagchecklist'></div>
+
       </td>
       
     </tr>";
     
+//				<p class='hide-if-no-js' id='tagcloud-link'><a href='#'>Choose from the most popular tags</a></p>
+//       
+//         <input type='text' class='text wpsc_tag greytext' value='Add new tag' name='product_tags' id='product_tag'>   
+//         <input class='button' type='submit' value='Add' name='wpsc_add_new_tag' />
+//         <br /><span class='small_italic greytext'>".__("Separate tags with commas")."</span><br />
+//      
+//         <p>".$imtags."</p>
+//       	<input type='hidden' value='".$imtags."' name='wpsc_existing_tags' />
 $output .= "
   </table>
  </div>
@@ -991,6 +999,14 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
   } else {
     $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
 	}
+	
+	if($category_id < 1 ) {
+		$output .= "<ul class='list:category categorychecklist form-no-clear' id='categorychecklist'>\n\r";
+	} else {
+		$output .= "<ul class='children'>\n\r";
+	}
+		
+		
   foreach((array)$values as $option) {
     if(is_numeric($product_id) && ($product_id > 0)) {
       $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A); 
@@ -999,19 +1015,16 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
         $selected = "checked='true'";
 			}
 		}
-    if(is_numeric($category_id) && ($iteration > 0)) {
-      if($iteration > 1) {
-        if($iteration > 3) {
-          $output .= str_repeat("&nbsp;", $iteration);
-				}
-        $output .= str_repeat("&nbsp;", $iteration);
-			}
-      $output .=   "-&nbsp;";
-		}
-    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' class='greytext' >".stripslashes($option['name'])."</label><br />";
+		
+		$output .= "  <li id='category-".$option['id']."'>\n\r";
+    $output .= "    <label class='selectit'><input  id='in-category-{$unique_id}' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' class='greytext' >".stripslashes($option['name'])."</label>";
     $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
+    
+		$output .= "  </li>\n\r";
+    
     $selected = "";
 	}
+	$output .= "</ul>\n\r";
   return $output;
 }
 

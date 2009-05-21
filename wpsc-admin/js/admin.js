@@ -597,7 +597,10 @@ function fillcategoryform(catid) {
 		jQuery("#loadingindicator_span").css('visibility','hidden');
 	});
 }
-   
+  
+function submit_status_form(id) {
+  document.getElementById(id).submit();
+} 
 function showaddform() {
    document.getElementById('productform').style.display = 'none';
    document.getElementById('additem').style.display = 'block';
