@@ -39,3 +39,31 @@ table#gateway_options {
 margin:0;
 width:100%;
 }
+/* admin checkout page css */
+div#form_field_form_container{ padding: 0px; margin: 0px; }  
+
+div#form_field_form_container div, div#form_field_form_container div table{  padding: 0px;  margin: 0px;  width: 100%;  border-collapse: collapse; }  
+table#form_field_table tr td.namecol{ }
+  
+table#form_field_table tr *.namecol{ width: 170px; padding-right: 8px; }
+table#form_field_table tr *.namecol input{ width: 160px; }
+  
+table#form_field_table tr *.typecol{ width: 120px; }
+table#form_field_table tr *.typecol select{ width: 115px; }
+  
+table#form_field_table tr *.mandatorycol{ width: 90px; text-align: center; }
+table#form_field_table tr *.mandatorycol input{ }
+  
+table#form_field_table tr *.logdisplaycol{ width: 70px; text-align: center; }
+table#form_field_table tr *.logdisplaycol input{ }
+  
+table#form_field_table tr *.ordercol{ width: 70px; text-align: center; }
+table#form_field_table tr *.ordercol input{ }
+  
+table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
+  
+.flag_email{
+width:16px;
+float:right;
+
+}

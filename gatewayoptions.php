@@ -95,7 +95,7 @@ if ($_GET['payments_options']=='true') {
 		
 <script language='Javascript' type='text/javascript'>
 function selectgateway() {
-	//document.forms.gatewayopt.submit();
+	document.forms.gatewayopt.submit();
 }
 </script>
 <div class="wrap">

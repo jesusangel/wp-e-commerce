@@ -180,6 +180,7 @@ function wpsc_cart_item_url() {
 */
 function wpsc_cart_item_image($width = null, $height = null) {
 	global $wpsc_cart;
+	
 	if(($width > 0) && ($height > 0)) {
 		$image_path = "index.php?image_id=".$wpsc_cart->cart_item->image_id."&amp;thumbnail=true&amp;width=".$width."&amp;height=".$height."";
 	} else {

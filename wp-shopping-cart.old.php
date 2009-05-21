@@ -931,7 +931,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				$billing_country=$_POST['billing_country'];
 				$price = 0;
 				$tax = 0;
-				foreach($cart as $cart_item) {
+				foreach((array)$cart as $cart_item) {
 					$product_id = $cart_item->product_id;
 					$quantity = $cart_item->quantity;
 					//echo("<pre>".print_r($cart_item->product_variations,true)."</pre>");

@@ -170,9 +170,13 @@ if($_POST['submit_action'] == 'add')
     echo "      <td style='text-align: center; width: 12px;'><a class='image_link' href='#' onclick='return remove_form_field(\"form_id_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
     echo "</td>";
     
-    echo "<td>";
+   
     if($email_form_field['id'] == $form_field['id']) {
-      echo "<div class='flag_email'>".TXT_WPSC_RECIEPT_EMAIL_ADDRESS." </div>";
+     echo "<td>";
+      echo "<a title='".TXT_WPSC_RECIEPT_EMAIL_ADDRESS."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/exclamation.png' alt='' /> </a>";
+    }else{
+	 echo "<td style='width:16px'>";    
+    	echo "&nbsp;";
     }
     echo "</td>";
     

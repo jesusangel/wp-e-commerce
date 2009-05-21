@@ -95,7 +95,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 							<td colspan='3'>
 								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
 							</td>
-							<td>
+							<td style='text-align:center;'>
 								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
 							</td>
 							<td style='text-align:center;'>
