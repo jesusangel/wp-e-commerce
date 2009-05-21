@@ -204,8 +204,7 @@ function wpsc_initialisation() {
 	} else {
 		$theme_dir = get_option('wpsc_selected_theme');
 	}
-	define('WPSC_THEME_DIR', $theme_dir);
-	
+	define('WPSC_THEME_DIR', $theme_dir);	
   
   
   // initialise the cart session, if it exist, unserialize it, otherwise make it
@@ -217,6 +216,11 @@ function wpsc_initialisation() {
   } else {
     $GLOBALS['wpsc_cart'] = new wpsc_cart;
   }
+  
+  
+//   if(empty($GLOBALS['wpsc_cart']->selected_shipping_method) && (get_option('custom_shipping_options') != null)) {
+//     $GLOBALS['wpsc_cart']->get_shipping_method();
+//   }
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
@@ -234,6 +238,7 @@ function wpsc_serialize_shopping_cart() {
   $wpsc_cart->errors = array();
   $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
   /// Delete the old claims on stock
+//   echo "/*test */";
   //$session_timeout = @session_cache_expire()*60;
   //if($session_timeout <= 0) { 
 	$session_timeout = 60*60; // 180 * 60 = three hours in seconds

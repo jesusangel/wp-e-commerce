@@ -62,8 +62,8 @@ class weightrate {
 	
 	function getQuote() {
 		global $wpdb, $wpsc_cart;
-	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
 		$weight = $wpsc_cart->calculate_total_weight();
+	  //echo('<pre>'.print_r($weight, true).'</pre>');
 		
 	//	$shopping_cart = $_SESSION['nzshpcrt_cart'];
 	//	exit('<pre>'.print_r($shopping_cart,true).'</pre>');
