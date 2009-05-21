@@ -137,7 +137,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	wpsc_update_category_associations($product_id, $post_data['category']);
 	
 	// and the tags
-	wpsc_update_product_tags($product_id, $post_data['product_tags']);
+	wpsc_update_product_tags($product_id, $post_data['product_tags'], $post_data['wpsc_existing_tags']);
 	
 	// and the meta
 	wpsc_update_product_meta($product_id, $post_data['meta']);
@@ -231,9 +231,18 @@ function wpsc_update_category_associations($product_id, $categories = array()) {
  * @param integer product ID
  * @param string comma separated tags
  */
-function wpsc_update_product_tags($product_id, $product_tags) {
-
-	if(isset($product_tags)) {
+function wpsc_update_product_tags($product_id, $product_tags, $existing_tags) {
+	if(isset($existing_tags)){
+		$tags = explode(',',$existing_tags);
+		if(is_array($tags)){
+			foreach((array)$tags as $tag){
+				$tt = wp_insert_term((string)$tag, 'product_tag');
+			}
+		}
+	}
+	wp_set_object_terms($product_id, $tags, 'product_tag');
+	if(isset($product_tags) && $product_tags != 'Add new tag') {
+		
 		$tags = explode(',',$product_tags);
 		product_tag_init();
 		if(is_array($tags)) {

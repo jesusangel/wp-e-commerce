@@ -159,7 +159,7 @@ div.product-placeholder {
 /*  Product details form styling */
 
 td.product_tags{
-	padding-left:2em;
+	padding-left:3.5em;
 }
 
 div#poststuff h4 {
@@ -675,7 +675,12 @@ font-size:11px;
 padding:1px 2px;
 text-decoration:none;
 }
-
+.greytext{
+color:#666666;
+}
+span.small_italic{
+font-style: italic;
+}
 /*  Product details form styling ends */
 	/*
 	* Display Products CSS ends here

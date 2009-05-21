@@ -303,15 +303,20 @@ function wpsc_product_category_and_tag_forms($product_data=''){
     <table>";
     $output .= "<tr>
       <td class='itemfirstcol'>
-			<span class='howto'>".TXT_WPSC_CATEGORISATION.": </span>";
+			<span class='howto'>".TXT_WPSC_CATEGORISATION." </span>";
         
          $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
+         //exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
 					foreach($categorisation_groups as $categorisation_group){
 					  $category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
 					  if($category_count > 0) {
 							$output .= "<p>";
 						  $category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
-						  $output .= "<strong>".$category_group_name.":</strong><br />";
+						  if($category_group_name == 'Select Categories'){
+						  $output .= "All Categories:<br />";
+						  }else{
+							  $output .= "".$category_group_name.":<br />";
+						  }
 						  if ($product_data == '')
 						  	$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
 						  else 
@@ -322,9 +327,15 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 
      $output .= "</td>
      <td class='itemfirstcol product_tags'>
-      <span class='howto'> ".TXT_WPSC_PRODUCT_TAGS.":
-        <input type='text' class='text wpsc_tag' value='".$imtags."' name='product_tags' id='product_tag'><br /><span class='small_italic'>".__("These values are comma separated")."</span></span>
+      <span class='howto'> ".TXT_WPSC_PRODUCT_TAGS."</span><br />
+        <input type='text' class='text wpsc_tag greytext' value='Add new tag' name='product_tags' id='product_tag'>   
+        <input class='button' type='submit' value='Add' name='wpsc_add_new_tag' />
+        <br /><span class='small_italic greytext'>".__("Separate tags with commas")."</span><br />
+     
+        <p>".$imtags."</p>
+      	<input type='hidden' value='".$imtags."' name='wpsc_existing_tags' />
       </td>
+      
     </tr>";
     
 $output .= "
@@ -997,7 +1008,7 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
 			}
       $output .=   "-&nbsp;";
 		}
-    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' >".stripslashes($option['name'])."</label><br />";
+    $output .= "<input id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' class='greytext' >".stripslashes($option['name'])."</label><br />";
     $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
     $selected = "";
 	}
