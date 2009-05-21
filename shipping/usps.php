@@ -306,6 +306,7 @@ class usps {
 		}
 		$uspsQuote=$rates;
 		$wpsc_usps_quote = $rates;
+		//exit('<pre>'.print_r($uspsQuote,true).'</pre>');
 		return $uspsQuote;
 	}
 	

@@ -259,6 +259,7 @@ function wpsc_shipping_quote_name() {
 */
 function wpsc_shipping_quote_value($numeric = false) {
 	global $wpsc_cart;
+	//echo 'Shipping value'.$wpsc_cart->shipping_quote['value'];
 	if($numeric == true) {
 		return $wpsc_cart->shipping_quote['value'];
 	} else {
@@ -281,7 +282,8 @@ function wpsc_shipping_quote_html_id() {
 */
 function wpsc_shipping_quote_selected_state() {
 	global $wpsc_cart;
-	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method)&& ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name']) || ($wpsc_cart->current_shipping_method + 1 == $wpsc_cart->shipping_method_count) ) {
+	
+	if(($wpsc_cart->shipping_method == $wpsc_cart->shipping_methods[0]) && ($wpsc_cart->shipping_quotes[0] == $wpsc_cart->shipping_quote) ) {
 		return "checked='checked'";
 	} else {
 		return "";
@@ -291,8 +293,9 @@ function wpsc_shipping_quote_selected_state() {
 function wpsc_have_morethanone_shipping_methods_and_quotes(){
 	global $wpsc_cart;
 		
-	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1){
-		//$wpsc_cart->calculate_total_shipping();
+	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1 || count($wpsc_cart->shipping_quotes) == $wpsc_cart->shipping_quotes_count){
+
+		//$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
 		return true;
 	}else{
 		return false;
@@ -300,11 +303,18 @@ function wpsc_have_morethanone_shipping_methods_and_quotes(){
 }
 function wpsc_update_shipping_single_method(){
 	global $wpsc_cart;
+	//exit('<pre>'.print_r($wpsc_cart->shipping_method, true).'</pre>');
 	if(!empty($wpsc_cart->shipping_method)) {
-		//$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
+		$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
 	}
 }
-
+function wpsc_update_shipping_multiple_methods(){
+	global $wpsc_cart;
+//exit('<pre>'.print_r($wpsc_cart->shipping_method, true).'</pre>'.$wpsc_cart->shipping_methods[0]);
+	if(!empty($wpsc_cart->shipping_method)) {
+		$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
+	}
+}
 
 /**
  * The WPSC Cart class
@@ -392,7 +402,7 @@ class wpsc_cart {
      }   
    }
   
-    $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
+      $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
 	  $this->selected_country =& $_SESSION['wpsc_selected_country'];
 	  $this->delivery_region =& $_SESSION['wpsc_delivery_region'];
 	  $this->selected_region =& $_SESSION['wpsc_selected_region'];
@@ -430,10 +440,11 @@ class wpsc_cart {
 					if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
 						$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 					}
-					if(count($this->shipping_quotes) > 0) { // if we have any shipping quotes, break the loop.
+					if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
 						break;
 					}
 				}
+				
 			}
 		}
 		

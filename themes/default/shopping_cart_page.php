@@ -88,7 +88,9 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			
 			<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
 					<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
-					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote(); ?>
+					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();
+				
+					 ?>
 						<tr>
 							<td colspan='3'>
 								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
@@ -101,15 +103,16 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 								<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?>  onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
 							<?php else: ?>
 								<input <?php echo wpsc_shipping_quote_selected_state(); ?> disabled='disabled' type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>'  value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
-							
+									<?php wpsc_update_shipping_single_method(); ?>
 							<?php endif; ?>
 							</td>
 						</tr>
 			
 					<?php endwhile; ?>
-			<?php endwhile; ?>
+			<?php endwhile;  ?>
+			<?php wpsc_update_shipping_multiple_methods(); ?>
 		</table>
-	<?php endif; ?>
+	<?php endif;  ?>
 	
 	<table class="productcart">
 	<tr class="total_price total_tax">
@@ -129,7 +132,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
 	  </td>
 	  <?php endif ?>
-		<?php wpsc_update_shipping_single_method(); ?>
+		
 	
 	<tr class='total_price'>
 		<td colspan='3'>

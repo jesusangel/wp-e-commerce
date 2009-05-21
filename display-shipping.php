@@ -5,7 +5,7 @@ if (isset($_GET['googlecheckoutshipping'])) {
 	exit();
 }
 
-// exit("<pre>".print_r($_POST,1)."</pre>");
+ //exit("<pre>".print_r($_POST,1)."</pre>");
 
 $curgateway = get_option('shipping_gw');
 $changes_made = false;
@@ -74,13 +74,17 @@ if(($_POST['shipping_gw'] != null)) {
 		}
 	}
 }
-if(($_POST['shippingname'] != null)){
+if(($_POST['shipping_submits']) && isset($_POST['custom_shipping_options'])){
 	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
-		if($shipping->internal_name == $_POST['shippingname'])
-		 {
-//exit($shipping->internal_name.'<pre>'.print_r($_POST,true).'</pre>');
-			$shipping->submit_form();
-			$changes_made = true;
+		foreach((array)$_POST['custom_shipping_options'] as $shippingmethod){
+			
+			if($shipping->internal_name ==$shippingmethod)
+			 {
+	//exit($shipping->internal_name.'<pre>'.print_r($_POST,true).'</pre>');
+				//exit($shippingmethod);
+				$shipping->submit_form();
+				$changes_made = true;
+			}
 		}
 	}
 }
