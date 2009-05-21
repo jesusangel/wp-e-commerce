@@ -181,7 +181,7 @@ function wpsc_cart_item_url() {
 function wpsc_cart_item_image($width = null, $height = null) {
 	global $wpsc_cart;
 	if(($width > 0) && ($height > 0)) {
-		$image_path = "index.php?productid=".$wpsc_cart->cart_item->product_id."&amp;thumbnail=true&amp;width=".$width."&amp;height=".$height."";
+		$image_path = "index.php?image_id=".$wpsc_cart->cart_item->image_id."&amp;thumbnail=true&amp;width=".$width."&amp;height=".$height."";
 	} else {
 		$image_path = WPSC_THUMBNAIL_URL.$wpsc_cart->cart_item->thumbnail_image;	
 	}	
@@ -1136,7 +1136,7 @@ class wpsc_cart_item {
 	var $weight = 0;
 	var $shipping = 0;
 	var $product_url;
-	var $fullsize_image;
+	var $image_id;
 	var $thumbnail_image;
 	
 	var $is_donation = false;
@@ -1284,7 +1284,7 @@ class wpsc_cart_item {
 		}
 		$this->product_url = wpsc_product_url($this->product_id);
 		
-		$this->fullsize_image = $product['image'];
+		$this->image_id = $product['image'];
 		if($product['thumbnail_image'] != null) {
 			$this->thumbnail_image = $product['thumbnail_image'];
 		} else {

@@ -206,6 +206,8 @@ if($_GET['search']) {
   
   
 	?>
+	<div class="wpsc-separator"><br/></div>
+	
 	<div class="tablenav">
 		
 		

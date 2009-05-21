@@ -1362,7 +1362,11 @@ function nzshpcrt_display_preview_image() {
 				$width = $image_size[0];
 				$height = $image_size[1];
 			}
-			$cache_filename = basename("product_{$product_id}_{$height}x{$width}");
+			if($product_id > 0) {
+				$cache_filename = basename("product_{$product_id}_{$height}x{$width}");
+			} else {
+				$cache_filename = basename("product_img_{$image_id}_{$height}x{$width}");
+			}
 			include("image_preview.php");
 		}
 	}
