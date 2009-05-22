@@ -354,7 +354,7 @@ function form_chronopay()
 
 	$output = "
 		<tr>
-			<td>ChronoPay Product ID</td>
+			<td>Product ID</td>
 			<td><input type='text' size='40' value='".get_option('chronopay_product_id')."' name='chronopay_product_id' /></td>
 		</tr>
 		<tr>
@@ -363,7 +363,7 @@ function form_chronopay()
 			This is the ChronoPay product that all purchases will be processed against. The cost will be changed depending on the grand total of the users cart.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay Product Name</td>
+			<td>Product Name</td>
 			<td><input type='text' size='40' value='".get_option('chronopay_product_name')."' name='chronopay_product_name' /></td>
 		</tr>
 		<tr>
@@ -371,7 +371,7 @@ function form_chronopay()
 			<td><small>This is not important and is usually set to the name of the web shop. It is displayed on the ChronoPay secure processing page.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay Accepted Currency (USD, EUR)</td>
+			<td>Accepted Currency (USD, EUR)</td>
 			<td><select name='chronopay_curcode'>
 					<option ".$select_currency['USD']." value='USD'>USD - U.S. Dollar</option>
 					<option ".$select_currency['EUR']." value='EUR'>EUR - Euros</option>
@@ -383,7 +383,7 @@ function form_chronopay()
 			<td><small>The currency code that ChronoPay will process the payment in. All products must be set up in this currency.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay Language</td>
+			<td>Language</td>
 			<td><select name='chronopay_language'>
 					<option ".$select_language['EN']." value='EN'>Engish</option>
 					<option ".$select_language['ES']." value='ES'>Spanish</option>
@@ -397,7 +397,7 @@ function form_chronopay()
 			<td><small>The language that the ChronoPay secure processing page will be displayed in.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay processing URL</td>
+			<td>Processing URL</td>
 			<td><input type='text' size='40' value='".$chronopay_url."' name='chronopay_url' /></td>
 		</tr>
 		<tr>
@@ -405,7 +405,7 @@ function form_chronopay()
 			<td><small>URL of the secure payment page customers are sent to for payment processing. If unsure leave at default setting.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay return URL</td>
+			<td>Return URL</td>
 			<td><input type='text' size='40' value='".get_option('transact_url')."' name='chronopay_return_url' /></td>
 		</tr>
 		<tr>
@@ -413,7 +413,7 @@ function form_chronopay()
 			<td><small>Enter this URL in the ChronoPay web client against the Product ID that you have set up. This page is the transaction details page that you have configured in Shop Options.  It can not be edited on this page.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay Security Key</td>
+			<td>Security Key</td>
 			<td><input type='text' size='40' value='".$chronopay_salt."' name='chronopay_salt' /></td>
 		</tr>
 		<tr>
@@ -421,7 +421,7 @@ function form_chronopay()
 			<td><small>A bit of security... This is a keyword that is used to ensure transaction approval calls from ChronoPay to this application are real and were instigated from this server.  Enter a unique word into this field.</small></td>
 		</tr>
 		<tr>
-			<td>ChronoPay Debug Mode</td>
+			<td>Debug Mode</td>
 			<td>
 				<input type='radio' value='1' name='chronopay_debug' id='chronopay_debug1' ".$chronopay_debug1." /> <label for='chronopay_debug1'>".TXT_WPSC_YES."</label> &nbsp;
 				<input type='radio' value='0' name='chronopay_debug' id='chronopay_debug2' ".$chronopay_debug2." /> <label for='chronopay_debug2'>".TXT_WPSC_NO."</label>

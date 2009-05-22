@@ -90,29 +90,29 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
       update_option('terms_and_conditions', $_POST['terms_and_conditions']);
     }
   
-    if($_POST['product_image_height'] != get_option('product_image_height')) {
+    if($_POST['product_image_height'] != get_option('product_image_height') && ($_POST['product_image_height'] > 0 )) {
     	    //	exit('product thumnail image defaul'.$_POST['product_image_height']);
       update_option('product_image_height', $_POST['product_image_height']);
      // echo get_option('product_image_height');
     }
       
-    if($_POST['product_image_width'] != get_option('product_image_width')) {
+    if($_POST['product_image_width'] != get_option('product_image_width') && ($_POST['product_image_width'] > 0 ) ){
       update_option('product_image_width', $_POST['product_image_width']);
     }
   
-    if($_POST['category_image_height'] != get_option('category_image_height')) {
+    if($_POST['category_image_height'] != get_option('category_image_height') && ($_POST['category_image_height'] > 0 )) {
       update_option('category_image_height', $_POST['category_image_height']);
     }
   
-    if($_POST['category_image_width'] != get_option('category_image_width')) {
+    if($_POST['category_image_width'] != get_option('category_image_width') && ($_POST['category_image_width'] > 0 )) {
       update_option('category_image_width', $_POST['category_image_width']);
     }
   
-    if($_POST['single_view_image_height'] != get_option('single_view_image_height')) {
+    if($_POST['single_view_image_height'] != get_option('single_view_image_height') && ($_POST['single_view_image_height'] > 0 )) {
       update_option('single_view_image_height', $_POST['single_view_image_height']);
     }
   
-    if($_POST['single_view_image_width'] != get_option('single_view_image_width')) {
+    if($_POST['single_view_image_width'] != get_option('single_view_image_width') && ($_POST['single_view_image_width'] > 0 )) {
       update_option('single_view_image_width', $_POST['single_view_image_width']);
 		}
   
@@ -1813,12 +1813,12 @@ function wpsc_display_options_page(){
 								<tr>
 									
 									<th scope="row">
-									<div class='wpsc_comments_details' <?php $intense_debate_account_id_display_state ?> >
+									<div class='wpsc_comments_details' <?php echo $intense_debate_account_id_display_state ?> >
 										<?php echo TXT_WPSC_COMMENTS_WHICH_PRODUCTS;?>:
 									</div>
 									</th>
 									<td>
-									<div class='wpsc_comments_details' <?php $intense_debate_account_id_display_state ?> >
+									<div class='wpsc_comments_details' <?php echo $intense_debate_account_id_display_state ?> >
 										<input type='radio' value='1' name='wpsc_comments_which_products' id='wpsc_comments_which_products1' <?php if (get_option('wpsc_comments_which_products') == 1 || !get_option('wpsc_comments_which_products')) { echo "checked='true'"; } ?> /><label for='wpsc_comments_which_products1'>All Products</label>&nbsp;
 										<input type='radio' value='2' name='wpsc_comments_which_products' id='wpsc_comments_which_products2' <?php if (get_option('wpsc_comments_which_products') == 2) { echo "checked='true'"; } ?> /><label for='wpsc_comments_which_products2'>Per Product</label>&nbsp;
 										<br />

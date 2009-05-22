@@ -11,7 +11,6 @@ $curgateway = get_option('shipping_gw');
 $changes_made = false;
 
 
-
 if(is_numeric($_POST['payment_method']) && (get_option('payment_gateway') != $_POST['payment_method'])) {
 	update_option('payment_method', $_POST['payment_method']);
 	$changes_made = true;
@@ -261,7 +260,7 @@ function selectgateway() {
 				<td class='select_gateway'>
 					<?php if (IS_WP27) { ?>
 					<div class='postbox'>
-						<h3 class='hndle'><?=TXT_WPSC_SHIPPING_MODULES?></h3>
+						<h3 class='hndle'><?php echo TXT_WPSC_SHIPPING_MODULES ?></h3>
 						<div class='inside'>
 			
 					<?php } else { ?>
@@ -381,7 +380,7 @@ function selectgateway() {
 				<td class='gateway_settings' rowspan='2'>
 				<?php if (IS_WP27) { ?>
 					<div class='postbox'>
-						<h3 class='hndle'><?=TXT_WPSC_CONFIGURE_SHIPPING_MODULES?></h3>
+						<h3 class='hndle'><?php echo TXT_WPSC_CONFIGURE_SHIPPING_MODULES; ?></h3>
 						<div class='inside'>
 						<table class='form-table'>
 					<?php } else { ?>

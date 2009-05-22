@@ -26,7 +26,7 @@ class tablerate {
 	}
 	
 	function getForm() {
- 		$output.="<table>";
+ 	//	$output.="<table>";
 		$output.="<tr><th>".TXT_WPSC_TOTALPRICE."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
 		$layers = get_option("table_rate_layers");
 		if ($layers != '') {
@@ -36,7 +36,7 @@ class tablerate {
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";
 		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a href='#' style='cursor:pointer;' id='addlayer' >Add Layer</a></td></tr>";
-		$output.="</table>";
+	//	$output.="</table>";
 		return $output;
 	}
 	

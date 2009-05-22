@@ -97,6 +97,7 @@ if ($_GET['payments_options']=='true') {
 function selectgateway() {
 	document.forms.gatewayopt.submit();
 }
+
 </script>
 <div class="wrap">
 <div class='metabox-holder'>

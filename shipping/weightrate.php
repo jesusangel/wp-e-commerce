@@ -26,7 +26,7 @@ class weightrate {
 	}
 	
 	function getForm() {
-		$output ="<table>";
+	//	$output ="<table>";
 		$output.="<tr><th>".TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
 		$layers = get_option("weight_rate_layers");
 		if ($layers != '') {
@@ -37,7 +37,7 @@ class weightrate {
 		}
 		$output.="<input type='hidden' name='checkpage' value='weight'>";
 		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a style='cursor:pointer;' id='addweightlayer' >Add Layer</a></td></tr>";
-		$output .="</table>";
+	//	$output .="</table>";
 		return $output;
 	}
 	

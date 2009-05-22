@@ -55,7 +55,7 @@
 		<?php } 
 		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
-			 <div id='side-info-column-wpsc' class='inner-sidebar'> 
+			 <div class='inner-sidebar'> 
 					<div class='meta-box-sortables'>			
 						<?php
 							//$dates = $purchlogs->wpsc_getdates();

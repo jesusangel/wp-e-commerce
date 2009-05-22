@@ -1269,7 +1269,9 @@ function wpsc_get_shipping_form() {
   
   $shippingname = $_REQUEST['shippingname'];
   if(array_key_exists($shippingname, $wpsc_shipping_modules)){
+ // exit('<pre>'.print_r($wpsc_shipping_modules[$shippingname], true).'</pre>');
 	$output = $wpsc_shipping_modules[$shippingname]->getForm();
+	echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
 	exit($output);
   	
   }

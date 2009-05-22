@@ -251,7 +251,7 @@ define('TXT_WPSC_ENTEREMAILADDRESS', 'Enter the email address for the owner of t
 define('TXT_WPSC_SHIPPINGOPTIONS', 'Shipping Options');
 define('TXT_WPSC_SHIPPING_MODULES', 'Shipping Modules');
 define('TXT_WPSC_CHOOSE_SHIPPING_MODULES', 'Choose Shipping Modules');
-define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', 'Select a Shipping option below to configure it.');
+define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', 'To configure a shipping module select one on the left.');
 define('TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER', 'Select a Shipping Provider');
 
 define('TXT_WPSC_UPGRADE_TO_GOLD','Upgrade to Gold');

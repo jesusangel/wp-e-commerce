@@ -541,24 +541,21 @@ function form_paypal_certified()
   $select_currency[get_option('paypal_curcode')] = "selected='true'";
   $output = "
   <tr>
-      <td>
-      PayPal API Username
+      <td>API Username
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_certified_apiuser')."' name='paypal_certified_apiuser' />
       </td>
   </tr>
   <tr>
-      <td>
-      PayPal API Password
+      <td>API Password
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_certified_apipass')."' name='paypal_certified_apipass' />
       </td>
   </tr>
   <tr>
-     <td>
-	 PayPal API Signature
+     <td>API Signature
      </td>
      <td>
      <input type='text' size='70' value='".get_option('paypal_certified_apisign')."' name='paypal_certified_apisign' />
@@ -568,8 +565,7 @@ function form_paypal_certified()
   
 $output .= "
   <tr>
-      <td>
-      PayPal Accepted Currency (e.g. USD, AUD)
+      <td>Accepted Currency
       </td>
       <td>
         <select name='paypal_curcode'>

@@ -369,16 +369,14 @@ function form_paypal_multiple() {
   $select_currency[get_option('paypal_curcode')] = "selected='true'";
   $output = "
   <tr>
-      <td>
-      PayPal Username
+      <td>Username
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_multiple_business')."' name='paypal_multiple_business' />
       </td>
   </tr>
   <tr>
-      <td>
-      PayPal Url
+      <td>Url
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_multiple_url')."' name='paypal_multiple_url' /> <br />
@@ -403,8 +401,7 @@ function form_paypal_multiple() {
 		
 	$output .= "
    <tr>
-     <td>
-      PayPal IPN
+     <td>IPN
      </td>
      <td>
        <input type='radio' value='1' name='paypal_ipn' id='paypal_ipn1' ".$paypal_ipn1." /> <label for='paypal_ipn1'>".TXT_WPSC_YES."</label> &nbsp;
@@ -412,8 +409,7 @@ function form_paypal_multiple() {
      </td>
   </tr>
   <tr>
-      <td>
-      PayPal Accepted Currency (e.g. USD, AUD)
+      <td>Accepted Currency (e.g. USD, AUD)
       </td>
       <td>
         <select name='paypal_curcode'>

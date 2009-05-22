@@ -162,15 +162,13 @@ function form_google()
 	}
 	$output = "
 	<tr>
-		<td>
-		Google Checkout Merchant ID		</td>
+		<td>Merchant ID		</td>
 		<td>
 		<input type='text' size='40' value='".get_option('google_id')."' name='google_id' />
 		</td>
 	</tr>
 	<tr>
-		<td>
-		Google Checkout Merchant Key
+		<td>Merchant Key
 		</td>
 		<td>
 		<input type='text' size='40' value='".get_option('google_key')."' name='google_key' />
@@ -186,8 +184,7 @@ function form_google()
 		</td>
 	</tr>
 	<tr>
-		<td>
-		Google Checkout Server Type
+		<td>Server Type
 		</td>
 		<td>
 			<input $google_server_type1 type='radio' name='google_server_type' value='sandbox' /> Sandbox (For testing)
@@ -214,7 +211,7 @@ function form_google()
 
 	<tr>
 		<td>
-		Select Shipping Countries for Google Checkout
+		Select Shipping Countries
 		</td>
 		<td>
 		<a href='?page=".WPSC_DIR_NAME."/gatewayoptions.php&googlecheckoutshipping=1'>Set Shipping countries
@@ -222,8 +219,7 @@ function form_google()
 	</tr>
 
 	<tr>
-		  <td>
-		  Google Checkout Button Styles
+		  <td>Button Styles
 		  </td>
 			<td><div>Size:
 				<input $button_size1 type='radio' name='google_button_size' value='0' /> 180&times;46

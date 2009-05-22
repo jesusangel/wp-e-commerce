@@ -21,9 +21,16 @@ td.gateway_settings {
   padding-top: 0px !important;
   width:90%;
 }
-.gateway_settings{
-
+td.gateway_settings input[type=text]{
+width: 200px;
 }
+td.gateway_settings textarea{
+width:100%;
+}
+td.gateway_settings h4{
+margin-top:0;
+}
+
 .wpsc_shipping_options{
   border-top: 1px solid #e9e9e9;
 
