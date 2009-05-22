@@ -549,7 +549,7 @@ define('TXT_WPSC_PRODUCTNAME', 'Product Name');
 define('TXT_WPSC_PRODUCTDESCRIPTION', 'Product Description');
 define('TXT_WPSC_ADDITIONALDESCRIPTION', 'Additional Description');
 define('TXT_WPSC_PRICE', 'Price');
-define('TXT_WPSC_TAXALREADYINCLUDED', 'Do not include tax (tax is set in shop config)'); // this text has changed and needs updating
+define('TXT_WPSC_TAXALREADYINCLUDED', 'Do not include tax (tax is set in <a href="'. get_option('siteurl').'/wp-admin/admin.php?page=trunk/wpsc-admin/display-options.page.php">shop config</a>)'); // this text has changed and needs updating
 define('TXT_WPSC_SPECIAL', 'Special / Sale Price'); // this text has changed and needs updating
 define('TXT_WPSC_PRODUCT_DISPLAY', 'Product Display');
 
@@ -1022,7 +1022,7 @@ define('TXT_WPSC_ITEM_GONE_OUT_OF_STOCK', 'It appears that an item has gone out 
 define('TXT_WPSC_DISPLAY_FANCY_NOTIFICATIONS', 'Display Fancy Purchase Notifications');
 define('TXT_WPSC_IF_USER_CHECKOUT', 'If you have a user account, Please ');
 define('TXT_WPSC_LOG_IN', 'log in.');
-define('TXT_WPSC_IS_DONATION', 'This is a donation only show it in the donations widget');
+define('TXT_WPSC_IS_DONATION', 'This is a donation (only show it in the donations widget)');
 define('TXT_WPSC_DONATION', 'Donation');
 define('TXT_WPSC_DONATION_LC', 'donation');
 define('TXT_WPSC_DONATION_SHIPPING', 'No shipping for donations');
@@ -1068,7 +1068,7 @@ define('TXT_WPSC_IF_JUST_REGISTERED', 'If you have just registered, please check
 define('TXT_WPSC_SELECT_THEME', 'Select Theme');
 define('TXT_WPSC_NEW_ORDER_PENDING_SUBJECT', 'New pending order');
 define('TXT_WPSC_NEW_ORDER_PENDING_BODY', "There is a new order awaiting processing: \n\r ");
-define('TXT_WPSC_NO_SHIPPING', "Does not use Shipping");
+define('TXT_WPSC_NO_SHIPPING', "Disregard Shipping for this product");
 define('TXT_WPSC_DEFAULT_MEMBERS_ONLY', "This page is for members only, you must log in to access this page");
 define('TXT_WPSC_MEMBERSHIP_CONTROL', "Membership Control");
 define('TXT_WPSC_PRODUCT_MEMBER_STATUS', "Is this product a membership?");

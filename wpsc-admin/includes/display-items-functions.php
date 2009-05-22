@@ -392,9 +392,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     </tr>
     <tr>
 
-       <td>
-          <input id='add_form_no_shipping' type='checkbox' name='no_shipping' value='yes' ".(($product_data['no_shipping'] == 1) ? 'checked="true"' : '')."/>&nbsp;<label for='add_form_no_shipping'>".TXT_WPSC_NO_SHIPPING."</label>
-       </td>
+      
     </tr>
     <tr>
       <td>
@@ -526,7 +524,7 @@ function wpsc_product_shipping_forms($product_data=''){
 		</h3>
       <div class='inside'>
   <table>
-  
+
   	  <!--USPS shipping changes-->
 	<tr>
 		<td>
@@ -566,6 +564,12 @@ function wpsc_product_shipping_forms($product_data=''){
       <td>
         <input type='text' size='10' name='international_pnp' value='".$product_data['international_pnp']."' />
       </td>
+    </tr>
+    <tr>
+   		<td>
+   		<br />
+          <input id='add_form_no_shipping' type='checkbox' name='no_shipping' value='yes' ".(($product_data['no_shipping'] == 1) ? 'checked="true"' : '')."/>&nbsp;<label for='add_form_no_shipping'>".TXT_WPSC_NO_SHIPPING."</label>
+       </td>
     </tr>
     </table></div></div>";
     
@@ -716,6 +720,8 @@ function wpsc_product_image_forms($product_data='') {
 					<li>
 						<input type="file" value="" name="image" />
 					</li>
+					<li>			<?php echo wpsc_check_memory_limit(); ?> 
+</li>
 					<li>
 						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize" /> <label for="add_image_resize0">do not resize thumbnail image</label>
 					</li>
@@ -738,13 +744,11 @@ function wpsc_product_image_forms($product_data='') {
 						</div>
 					</li>
 				</ul>
+				<br />
 				
-				<div id="add_additional_images"> </div>
-				<a class="add_additional_image" onclick='add_image_upload_forms("add_");return false;' href="">Add Additional Image</a>
 			</div>
 			
-			
-			
+			<p><strong><?php _e('Manage your thumbnails'); ?></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
@@ -763,7 +767,7 @@ function wpsc_product_download_forms($product_data='') {
 		$display = "style='display:none;'";
 	}
 	$output ='';
-
+ 	$upload_max = wpsc_get_max_upload_size();
  	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -780,9 +784,10 @@ function wpsc_product_download_forms($product_data='') {
         ".TXT_WPSC_DOWNLOADABLEPRODUCT.":
       </td>
       <td>
-        <input type='file' name='file' value='' /><br />
+        <input type='file' name='file' value='' /><br />". __('Max Upload Size')." : <span>".$upload_max."</span><br /><br />
         ".wpsc_select_product_file($product_data['id'])."
         <br />
+        
       </td>
     </tr>";
 	if($product_data['file'] > 0) {
