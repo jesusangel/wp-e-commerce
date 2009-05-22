@@ -123,7 +123,7 @@ function wpsc_the_cart_item() {
  
 /**
 * cart item key function, no parameters
-* @return integer the cart item key from the array in the cart object
+* @return integer - the cart item key from the array in the cart object
 */
 function wpsc_the_cart_item_key() {
 	global $wpsc_cart;
@@ -138,7 +138,14 @@ function wpsc_cart_item_name() {
 	global $wpsc_cart;
 	return htmlentities(stripslashes($wpsc_cart->cart_item->product_name), ENT_QUOTES);
 }
- 
+ /**
+* cart item quantity function, no parameters
+* @return string the selected quantity of items
+*/
+function wpsc_cart_item_product_id() {
+	global $wpsc_cart;
+	return $wpsc_cart->cart_item->product_id;
+} 
  /**
 * cart item quantity function, no parameters
 * @return string the selected quantity of items
