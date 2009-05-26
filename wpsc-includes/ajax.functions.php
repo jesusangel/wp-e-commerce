@@ -276,11 +276,11 @@ function wpsc_update_location() {
 		
 		
 		if($_SESSION['wpsc_delivery_region'] == '') {
-			$_SESSION['wpsc_delivery_region'] = $_SESSION['selected_region'];
+			$_SESSION['wpsc_delivery_region'] = $_SESSION['wpsc_selected_region'];
 		}
 	}
 	
-	if($_POST['zipcode'] == '') {
+	if($_POST['zipcode'] != '') {
 		$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
 	}
 	

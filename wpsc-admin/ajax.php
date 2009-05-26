@@ -196,7 +196,7 @@ function wpsc_duplicate_product() {
 				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1")) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1;");
 				} else {				  
-					$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category', '$product_id', 0))");
+					$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category', '$product_id', 0)");
 				}
 				if($check_existing != null) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$category') AND `product_id` NOT IN('$product_id') AND `order` < '0'");
@@ -1146,7 +1146,8 @@ if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
  //bulk actions for purchase log
 function wpsc_purchlog_bulk_modify(){
 	if($_POST['purchlog_multiple_status_change'] != -1){
-		if(is_numeric($_POST['purchlog_multiple_status_change'])){
+		
+		if(is_numeric($_POST['purchlog_multiple_status_change']) && $_POST['purchlog_multiple_status_change'] != 'delete'){
 			foreach((array)$_POST['purchlogids'] as $purchlogid){
 				wpsc_purchlog_edit_status($purchlogid, $_POST['purchlog_multiple_status_change']);
 				$updated++;
@@ -1154,6 +1155,7 @@ function wpsc_purchlog_bulk_modify(){
 			
 		}elseif($_POST['purchlog_multiple_status_change'] == 'delete'){
 			foreach((array)$_POST['purchlogids'] as $purchlogid){
+		
 				wpsc_delete_purchlog($purchlogid);
 				$deleted++;
 			}
@@ -1171,7 +1173,7 @@ function wpsc_purchlog_bulk_modify(){
 	exit();
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'purchlog_bulk_modify') {
+if($_REQUEST['wpsc_admin_action2'] == 'purchlog_bulk_modify') {
 	add_action('admin_init', 'wpsc_purchlog_bulk_modify');
 }
 //edit purchase log status function

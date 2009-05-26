@@ -215,12 +215,12 @@ class wpsc_checkout {
 			break;
 			
 			case "country":
-			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['selected_country'], $_SESSION['selected_region']);
+			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region']);
 			break;
 
 			case "delivery_country":
-			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['delivery_country']."' LIMIT 1");
-			$output = "<input type='hidden' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['delivery_country']."'>".$country_name." ";
+			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
+			$output = "<input type='hidden' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' />".$country_name." ";
 			break;
 			
 			case "text":
@@ -287,9 +287,13 @@ class wpsc_checkout {
    
    
 		foreach($this->checkout_items as $form_data) {
-		  $value = $_POST['collected_data'][$form_data->id];		  
+		  $value = $_POST['collected_data'][$form_data->id];	
+		  if(is_array($value)){
+		  	$value = $value[0];
+		  }	  
 		  if($form_data->type != 'heading') {
-				//echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
+				echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
+				
 				$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 				
  			}

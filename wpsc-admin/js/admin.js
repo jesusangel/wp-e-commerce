@@ -606,3 +606,27 @@ function showaddform() {
    document.getElementById('additem').style.display = 'block';
    return false;
 }
+//used to add new form fields in the checkout setting page
+function add_form_field() {
+  time = new Date();
+  new_element_number = time.getTime();
+  new_element_id = "form_id_"+new_element_number;
+  
+  new_element_contents = "";
+  new_element_contents += " <table><tr>\n\r";
+  new_element_contents += "<td class='namecol'><input type='text' name='new_form_name["+new_element_number+"]' value='' /></td>\n\r";
+  new_element_contents += "<td class='typecol'><select name='new_form_type["+new_element_number+"]'>"+HTML_FORM_FIELD_TYPES+"</select></td>\n\r"; 
+  new_element_contents += "<td class='mandatorycol' style='text-align: center;'><input type='checkbox' name='new_form_mandatory["+new_element_number+"]' value='1' /></td>\n\r";
+  new_element_contents += "<td class='logdisplaycol' style='text-align: center;'><input type='checkbox' name='new_form_display_log["+new_element_number+"]' value='1' /></td>\n\r";
+  new_element_contents += "<td class='ordercol'><input type='text' size='3' name='new_form_order["+new_element_number+"]' value='' /></td>\n\r";
+  new_element_contents += "<td  style='text-align: center; width: 12px;'><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
+  new_element_contents += "<td></td>\n\r";
+  new_element_contents += "</tr></table>";
+  
+  new_element = document.createElement('div');
+  new_element.id = new_element_id;
+   
+  document.getElementById("form_field_form_container").appendChild(new_element);
+  document.getElementById(new_element_id).innerHTML = new_element_contents;
+  return false;
+}

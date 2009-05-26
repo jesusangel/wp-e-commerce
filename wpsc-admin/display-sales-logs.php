@@ -331,7 +331,7 @@
  			<?php endwhile; ?>
 			<option value="delete"><?php _e('Delete'); ?></option>
   		</select>
-  		<input type='hidden' value='purchlog_bulk_modify' name='wpsc_admin_action' />
+  		<input type='hidden' value='purchlog_bulk_modify' name='wpsc_admin_action2' />
   		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
   		<?php /* View functions for purchlogs */?>
   		<label for='view_purchlogs_by'><?php _e('View:'); ?></label>
