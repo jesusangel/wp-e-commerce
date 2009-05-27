@@ -186,7 +186,7 @@ function  wpsc_admin_include_css_and_js() {
 	wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
 	
 	
-	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_dynamic_js=true", false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 	
 	
@@ -197,7 +197,7 @@ function  wpsc_admin_include_css_and_js() {
 	
 	
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_dynamic_css=true" , false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_css=true" , false, $version_identifier, 'all' );
 	wp_enqueue_script('wp-e-commerce-tags', WPSC_URL.'/wpsc-admin/js/product_tagcloud.js', array('livequery'), $version_identifier);
 	wp_localize_script( 'wp-e-commerce-tags', 'postL10n', array(
 	'tagsUsed' =>  __('Tags used on this post:'),
@@ -277,7 +277,7 @@ function wpsc_admin_dynamic_js() {
 	echo "var TXT_WPSC_IF_WEIGHT_IS = '".TXT_WPSC_IF_WEIGHT_IS."';\n\r";
 	exit();
 }
-if($_GET['wpsc_dynamic_js'] == 'true') {
+if($_GET['wpsc_admin_dynamic_js'] == 'true') {
   add_action("admin_init", 'wpsc_admin_dynamic_js');  
 }
 
@@ -310,7 +310,7 @@ function wpsc_admin_dynamic_css() {
 	exit();
 }
 
-if($_GET['wpsc_dynamic_css'] == 'true') {
+if($_GET['wpsc_admin_dynamic_css'] == 'true') {
   add_action("admin_init", 'wpsc_admin_dynamic_css');  
 }
 

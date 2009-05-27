@@ -23,12 +23,12 @@ jQuery(document).ready(function () {
 	
 	// Submit the product form using AJAX
   jQuery("form.product_form").submit(function() {
-    // we cannot submit a file through AJAX, so this needs to return true to submit the form normaly if a file formfield is present
+    // we cannot submit a file through AJAX, so this needs to return true to submit the form normally if a file formfield is present
     file_upload_elements = jQuery.makeArray(jQuery('input[type=file]', jQuery(this)));
 		if(file_upload_elements.length > 0) {
 			return true;
 		} else {
-			form_values = jQuery(this).serialize( );
+			form_values = jQuery(this).serialize();
 			jQuery.post( 'index.php?ajax=true', form_values, function(returned_data) {
 				eval(returned_data);
 				wpsc_bind_to_events();
@@ -44,6 +44,14 @@ jQuery(document).ready(function () {
 		}
 	});
   
+  
+  //  this is for storing data with the product image, like the product ID, for things like dropshop and the the ike.
+  jQuery("form.product_form").load( function() {
+    product_id = jQuery('input[name=product_id]',this).val();
+    image_element_id = 'product_image_'+product_id;
+    jQuery("#"+image_element_id).data("product_id", product_id);
+  });
+  jQuery("form.product_form").trigger('load');
   
   // Toggle the additional description content  
   jQuery("a.additional_description_link").click(function() {

@@ -22,14 +22,14 @@ function nzshpcrt_latest_product($input = null) {
 		foreach($latest_product as $special) {			
 			$output.="<a href='".wpsc_product_url($special['id'],$special['category'])."'><div>";
 			$output .= "<div class='item_image'>";
-			if(($special['image'] != null) && file_exists(WPSC_IMAGE_DIR.$special['image'])) {
+			if(($special['image'] > 0)) {
 				if(get_option('wpsc_selected_theme') == 'marketplace') {
 					$src = WPSC_IMAGE_URL.$special['image'];
 							
-					$output .= "<img src='index.php?productid=".$special['id']."&amp;width=100&amp;height=70' title='".$special['name']."' alt='".$special['name']."' id='product_image_".$product['id']."' class='product_image'/>";
+					$output .= "<img src='index.php?image_id=".$special['image']."&amp;width=100&amp;height=70' title='".$special['name']."' alt='".$special['name']."' id='product_image_".$product['id']."' class='product_image'/>";
 					
 				} else {
-					$output .= "<img src='".WPSC_THUMBNAIL_URL.$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+					$output .= "<img src='". "index.php?image_id={$special['image']}&amp;width=45&amp;height=25' title='".$special['name']."' alt='".$special['name']."' /><br />";
 				}
 			} else {
 				//$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";

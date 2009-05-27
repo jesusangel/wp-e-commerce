@@ -8,6 +8,9 @@
  * @since 3.7
  */
 
+$purchlogs = new wpsc_purchaselogs();
+
+
  function wpsc_display_sales_logs(){
  		//$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
  		$purchlogs = new wpsc_purchaselogs();

@@ -1,5 +1,4 @@
 <?php
-$purchlogs = new wpsc_purchaselogs();
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
 }
@@ -346,7 +345,8 @@ class wpsc_purchaselogs{
 	
 	function get_purchlogs($dates, $status=''){
 		global $wpdb;
-		
+		//exit('tset?');
+// 		echo "<pre>".print_r(debug_backtrace(),true)."<pre>";
 		$purchlog = array();
 		if($status=='' || $status=='-1'){
 			   foreach((array)$dates as $date_pair){

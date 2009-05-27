@@ -52,7 +52,8 @@ if(get_option('wpsc_use_pnp_cols') != 'true') {
      
      
 /* adds nice names for permalinks for products */
-$check_product_names = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id`, `".WPSC_TABLE_PRODUCT_LIST."`.`name`, `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE (`".WPSC_TABLE_PRODUCTMETA."`.`meta_key` IN ('url_name') AND  `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` IN (''))  OR ISNULL(`".WPSC_TABLE_PRODUCTMETA."`.`meta_key`)");  
+
+$check_product_names = $wpdb->get_results("SELECT `products`.`id`, `products`.`name`, `meta`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta` ON `products`.`id` = `meta`.`product_id` WHERE `products`.`active` IN ('1') AND ((`meta`.`meta_key` IN ('url_name') AND  `meta`.`meta_value` IN (''))  OR ISNULL(`meta`.`meta_key`))");  
 if($check_product_names != null) {
   $sql_query = "SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1')";
   $sql_data = $wpdb->get_results($sql_query,ARRAY_A);    
@@ -309,6 +310,7 @@ if(get_option('wpsc_default_category') == null) {
 }
 
 // Move the variation ids for the combinations to the new table
+
 if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`") < 1) {
   $variation_priceandstock = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."`",ARRAY_A);
   
@@ -338,7 +340,7 @@ if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`"
   }
 }
 
-
+/*
 $product_ids = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1')");
 foreach($product_ids as $product_id) {
   if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}'") < 1 ) {
@@ -371,7 +373,7 @@ foreach($product_ids as $product_id) {
 		}
 	}
 }
-
+*/
 // Update the variation combinations table to have the all_variation_ids column
 if($wpdb->get_var("SELECT COUNT( * ) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `all_variation_ids` IN ( '' )") == $wpdb->get_var("SELECT COUNT( * ) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`")) {
   $variation_priceandstock_ids = $wpdb->get_col("SELECT DISTINCT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`");

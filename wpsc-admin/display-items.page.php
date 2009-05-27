@@ -138,18 +138,19 @@ function wpsc_admin_products_list($category_id = 0) {
   // set is_sortable to false to start with
   $is_sortable = false;
   $page = null;
+// //	$wpdb->get_results(" SELECT sleep( 1 )  ",ARRAY_A);
   
-if($_GET['search']) {
-	$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search']))."%";
-	$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search']))."%";
-	
-	$search_sql = "AND (`".WPSC_TABLE_PRODUCT_LIST."`.`name` LIKE '".$search_string_title."' OR `".WPSC_TABLE_PRODUCT_LIST."`.`description` LIKE '".$search_string_description."')";
-	
-	$search_string = $_GET['search'];
-} else {
-  $search_sql = '';
-  $search_string = '';
-}
+	if($_GET['search']) {
+		$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search']))."%";
+		$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search']))."%";
+		
+		$search_sql = "AND (`".WPSC_TABLE_PRODUCT_LIST."`.`name` LIKE '".$search_string_title."' OR `".WPSC_TABLE_PRODUCT_LIST."`.`description` LIKE '".$search_string_description."')";
+		
+		$search_string = $_GET['search'];
+	} else {
+		$search_sql = '';
+		$search_string = '';
+	}
 
 	if($category_id > 0) {  // if we are getting items from only one category, this is a monster SQL query to do this with the product order
 		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`

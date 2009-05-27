@@ -14,8 +14,6 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 define('WPSC_VERSION', '3.7');
 define('WPSC_MINOR_VERSION', '8');
 
-define('SAVEQUERIES', true);
-
 define('WPSC_PRESENTABLE_VERSION', '3.7 Beta 1');
 
 define('WPSC_DEBUG', false);
@@ -249,8 +247,4 @@ function wpsc_serialize_shopping_cart() {
   return true;
 }  
 add_action('shutdown','wpsc_serialize_shopping_cart');
-
-
-/// Include javascript here
-wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
 ?>

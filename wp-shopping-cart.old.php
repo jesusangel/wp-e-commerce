@@ -65,6 +65,7 @@ $nzshpcrt_log_states[2]['name'] = TXT_WPSC_PROCESSED;
 
 function nzshpcrt_style() {
   global $wpdb,$wp_query;
+  return;
   if(function_exists('xili_display4mobile')) {  //check for the function before using it
     if (xili_display4mobile() === true) {
       // instead of wrapping the whole block of code in brackets, resulting in mysterious brackets, simply break out of the function here.
@@ -306,6 +307,27 @@ jQuery(document).ready( function() {
     <?php
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function wpsc_admin_css() {
   $siteurl = get_option('siteurl'); 
   if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME) !== false) || ($_GET['mass_upload'] == 'true') || ((strpos($_SERVER['REQUEST_URI'], 'wp-admin/index.php') !== false) && !isset($_GET['page']))) {
@@ -426,6 +448,8 @@ var borderSize = 10;
 <?php
 	}
 }
+
+
 function nzshpcrt_submit_ajax()
   {
   global $wpdb,$user_level,$wp_rewrite;
@@ -1350,6 +1374,10 @@ function nzshpcrt_display_preview_image() {
 				$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
 				$imagepath = WPSC_IMAGE_DIR . $image;
 			}
+			
+			if(!is_file($imagepath)) {
+				$imagepath = WPSC_FILE_PATH."/images/no-image-uploaded.gif";
+			}
 			$image_size = @getimagesize($imagepath);
 			if(is_numeric($_GET['height']) && is_numeric($_GET['width'])) {
 				$height = (int)$_GET['height'];
@@ -1936,7 +1964,7 @@ function wpsc_include_css_and_javascript() {
   }
 }
 
-add_action('init', 'wpsc_include_css_and_javascript');
+//add_action('init', 'wpsc_include_css_and_javascript');
 add_action('wp_head', 'nzshpcrt_product_list_rss_feed');
 
 

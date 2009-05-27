@@ -75,7 +75,7 @@ function wpsc_add_to_cart() {
   //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 
     
-    
+		do_action('wpsc_alternate_cart_html');
     
     echo "wpsc_bind_to_events();\n";
 		exit();
@@ -107,6 +107,7 @@ function wpsc_empty_cart() {
 		ob_end_clean();
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
     echo "jQuery('div.shopping-cart-wrapper').html('$output');";
+		do_action('wpsc_alternate_cart_html');
     
 		exit();
   }

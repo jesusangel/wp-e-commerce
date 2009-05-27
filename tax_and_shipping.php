@@ -16,22 +16,22 @@ if(is_array($_POST['region_tax']))
     }
   }
   
-function country_list($selected_country = null)
-  {
-  global $wpdb;
-  $output = "";
-  $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
-  foreach ($country_data as $country)
-    {
-    $selected ='';
-    if($selected_country == $country['isocode'])
-      {
-      $selected = "selected='true'";
-      }
-    $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
-    }
-  return $output;
-  }
+// function country_list($selected_country = null)
+//   {
+//   global $wpdb;
+//   $output = "";
+//   $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+//   foreach ($country_data as $country)
+//     {
+//     $selected ='';
+//     if($selected_country == $country['isocode'])
+//       {
+//       $selected = "selected='true'";
+//       }
+//     $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
+//     }
+//   return $output;
+//   }
   
 if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode']))
   {

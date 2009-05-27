@@ -13,9 +13,9 @@ if(($_POST['shippingname'] != null)){
 }
 
 if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
-  include('tax_and_shipping.php');
+  //include(WPSC_FILE_PATH.'/tax_and_shipping.php');
 } else {
-  if($_POST != null) {
+  if(($_POST != null) && ($_GET['page'] != null)) {
   
       // Jeff 23-02-09 Used for target market options
 	   
@@ -569,6 +569,10 @@ function country_list($selected_country = null) {
 */
 function wpsc_display_options_page(){
 	global $wpdb;
+	if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
+		include(WPSC_FILE_PATH.'/tax_and_shipping.php');
+		return;
+  }
 
   ?>
 

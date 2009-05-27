@@ -2,7 +2,7 @@
 $imagetype = @getimagesize($imagepath);
 if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
 	header("Location: ".WPSC_CACHE_URL.$cache_filename.".png");
-	exit('asfdasdf');
+	exit('');
 } else {
 	switch($imagetype[2]) {
 		case IMAGETYPE_JPEG:
@@ -81,7 +81,7 @@ if(file_exists(WPSC_CACHE_DIR.$cache_filename.".png")) {
 		ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $bgcolor );
 		ImageAlphaBlending($dst_img, TRUE );
 		if (($imagetype[2]==IMAGETYPE_PNG) ||($imagetype[2]==IMAGETYPE_GIF)){
-			imagecolortransparent($dst_img, $bgcolor);
+			//imagecolortransparent($dst_img, $bgcolor);
 		}
 	
 		// X & Y Offset to crop image properly
