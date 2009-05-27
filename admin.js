@@ -412,9 +412,7 @@ var gercurrency=function(results) {
   document.getElementById('cslchar4').innerHTML = results;
 }
 
-function getcurrency(id) {
-	ajax.post("index.php",gercurrency,"ajax=true&currencyid="+id);
-}
+
   
 function country_list(id) {
   var country_list=function(results) {

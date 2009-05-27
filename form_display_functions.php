@@ -215,10 +215,10 @@ function wpsc_list_product_themes($theme_name = null) {
       $theme[$theme_file] = get_theme_data($theme_path.$theme_file."/".$theme_file.".css");
 		}
 	}  
-  $output .= "<select name='wpsc_theme_list'>\n\r";
+  $output .= "<select name='wpsc_options[wpsc_selected_theme]'>\n\r";
   foreach((array)$theme as $theme_file=>$theme_data) {
     if(stristr($theme_file, $selected_theme)) {
-      $selected = "selected='true'";
+      $selected = "selected='selected'";
 		} else {
 			$selected = "";
 		}

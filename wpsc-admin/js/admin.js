@@ -287,7 +287,7 @@ jQuery(document).ready( function () {
 	jQuery('#addlayer').livequery(function(){
 		jQuery(this).click(function(){
 		jQuery(this).parent().append("<tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='#' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr>");
-		bind_shipping_rate_deletion();
+		//bind_shipping_rate_deletion();
 		});
 	
 	})
@@ -629,4 +629,13 @@ function add_form_field() {
   document.getElementById("form_field_form_container").appendChild(new_element);
   document.getElementById(new_element_id).innerHTML = new_element_contents;
   return false;
+}
+
+function submit_change_country() {
+  document.cart_options.submit();
+  //document.cart_options.submit();
+}
+
+function getcurrency(id) {
+	//ajax.post("index.php",gercurrency,"wpsc_admin_action=change_currency&currencyid="+id);
 }

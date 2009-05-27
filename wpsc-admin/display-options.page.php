@@ -550,43 +550,9 @@ if($_GET['clean_categories'] == 'true') {
 
 
 
-  function options_categorylist() {
-    global $wpdb;
-    $current_default = get_option('wpsc_default_category');
-    $group_sql = "SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active`='1'";
-    $group_data = $wpdb->get_results($group_sql,ARRAY_A);
-    $categorylist .= "<select name='wpsc_default_category'>";
-    $categorylist .= "<option value='none' ".$selected." >".TXT_WPSC_SELECTACATEGORY."</option>";
-    
-		if(get_option('wpsc_default_category') == 'all')  {
-				$selected = "selected='selected'";
-			}
-    
-    $categorylist .= "<option value='all' ".$selected." >".TXT_WPSC_SELECTALLCATEGORIES."</option>";
-    foreach($group_data as $group) {
-			$cat_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
-			$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
-			if($category_data != null) {
-		    	  			
-				
-				$categorylist .= "<optgroup label='{$group['name']}'>";;
-				foreach((array)$category_data as $category)  {
-					if(get_option('wpsc_default_category') == $category['id'])  {
-						$selected = "selected='selected'";
-					} else {
-						$selected = "";
-					}
-					$categorylist .= "<option value='".$category['id']."' ".$selected." >".$category['name']."</option>";
-				}
-				$categorylist .= "</optgroup>";
-			}
-		}
 
-    $categorylist .= "</select>";
-    return $categorylist;
-	}
-    
-  function country_list($selected_country = null) {
+/* moved to new settings page
+function country_list($selected_country = null) {
       global $wpdb;
       $output = "";
       $output .= "<option value=''></option>";
@@ -599,7 +565,8 @@ if($_GET['clean_categories'] == 'true') {
         $output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
 			}
       return $output;
-		}
+}
+*/
 function wpsc_display_options_page(){
 	global $wpdb;
 

@@ -74,3 +74,14 @@ width:16px;
 float:right;
 
 }
+#wpsc_settingpage_nav_spacer{
+width:35%;
+float:right;
+height:30px;
+
+border-bottom:1px solid #dfdfdf;
+}
+#wpsc_settings_nav_bar{
+width:100%;
+
+}

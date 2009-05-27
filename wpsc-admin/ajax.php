@@ -1306,8 +1306,7 @@ if($_GET['display_invoice']=='true') {
 }
 
 
-add_action('admin_init','wpsc_shipping_options');
-add_action('admin_init','wpsc_shipping_submits');
+
 add_action('init','wpsc_swfupload_images');
 
  if($_REQUEST['wpsc_admin_action'] == 'edit_product') {
@@ -1328,4 +1327,164 @@ if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
 	add_action('admin_init', 'wpsc_admin_ajax');
 }
 
+//add_action('admin_init','wpsc_shipping_options');
+//add_action('admin_init','wpsc_shipping_submits');
+/*
+ *Submit Options from Settings Pages, 
+ *takes an array of options checks to see whether it is empty or the same as the exisiting values 
+ *and if its not it updates them. 
+ */
+function wpsc_submit_options() {
+  global $wpdb;
+  	//exit('<pre>'.print_r($_POST, true).'</pre>');
+	//This is to change the Overall target market selection
+	 if($_POST['countrylist2'] != null){
+    	$AllSelected = false;
+    	if(in_array('all',$_POST['countrylist2'])){
+    		$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = '1'");
+			$AllSelected = true;
+    	}
+    	if(in_array('none', $_POST['countrylist2'])){
+    		$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = '0'");
+			$AllSelected = true;
+    	}
+    	if($AllSelected != true){
+			$countrylist = $wpdb->get_col("SELECT id FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ");
+			//find the countries not selected 
+			$unselectedCountries = array_diff($countrylist, $_POST['countrylist2']);
+			foreach($unselectedCountries as $unselected){
+				$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = 0 WHERE id = '".$unselected."' LIMIT 1");
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countrylist, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+				$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = 1	WHERE id = '".$selected."' LIMIT 1");
+			}
+ 		}
+	} 
+  	//this is to change the base country and tax code for the shop
+  	 if((is_numeric($_POST['country_id']) && is_numeric($_POST['country_tax']))) {
+	      $wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET `tax` = '".$_POST['country_tax']."' WHERE `id` = '".$_POST['country_id']."' LIMIT 1 ;");
+	 }
+	//To update options
+    if(isset($_POST['wpsc_options'])){
+	  	foreach($_POST['wpsc_options'] as $key=>$value){
+	  		if(!is_array($value)){
+		  		if($value != get_option($key)){
+		  			update_option($key, $value);
+		  			$updated++;
+		  		}
+	  		}
+		}
+	}
+	$sendback = wp_get_referer();
+
+	if ( isset($updated) ) {
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+
+	wp_redirect($sendback);
+	exit();
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'submit_options') {
+	add_action('admin_init', 'wpsc_submit_options');
+}
+
+function wpsc_change_currency(){
+	if(is_numeric($_POST['currencyid'])){
+	      $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$_POST['currencyid']."' LIMIT 1",ARRAY_A) ;
+	      $price_out = null;
+	      if($currency_data[0]['symbol'] != '') {
+	        $currency_sign = $currency_data[0]['symbol_html'];
+				} else {
+					$currency_sign = $currency_data[0]['code'];
+				}
+	      echo $currency_sign;
+	    
+	}
+}
+ if($_REQUEST['wpsc_admin_action'] == 'change_currency') {
+	add_action('admin_init', 'wpsc_change_currency');
+}
+
+function wpsc_update_page_urls(){
+global $wpdb;
+
+  $wpsc_pageurl_option['product_list_url'] = '[productspage]';
+  $wpsc_pageurl_option['shopping_cart_url'] = '[shoppingcart]';
+  $check_chekout = $wpdb->get_var("SELECT `guid` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%[checkout]%' LIMIT 1");
+  if($check_chekout != null) {
+		$wpsc_pageurl_option['checkout_url'] = '[checkout]';
+	} else {
+		$wpsc_pageurl_option['checkout_url'] = '[checkout]';
+	}
+  $wpsc_pageurl_option['transact_url'] = '[transactionresults]';
+  $wpsc_pageurl_option['user_account_url'] = '[userlog]';
+  $changes_made = false;
+  foreach($wpsc_pageurl_option as $option_key => $page_string) {
+    $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$page_string%' LIMIT 1");
+    $the_new_link = get_permalink($post_id);
+    if(stristr(get_option($option_key), "https://")) {
+      $the_new_link = str_replace('http://', "https://",$the_new_link);
+    }
+       
+    update_option($option_key, $the_new_link);
+    $updated;
+	}
+	$sendback = wp_get_referer();
+
+	if ( isset($updated) ) {
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+
+	wp_redirect($sendback);
+
+exit();
+}
+ if($_REQUEST['wpsc_admin_action'] == 'update_page_urls') {
+	add_action('admin_init', 'wpsc_update_page_urls');
+}
+
+function wpsc_clean_categories(){
+global $wpdb, $wp_rewrite;
+  //exit("<pre>".print_r($check_category_names,true)."</pre>");
+  $sql_query = "SELECT `id`, `name`, `active` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."`";
+	$sql_data = $wpdb->get_results($sql_query,ARRAY_A);
+	foreach((array)$sql_data as $datarow) {
+	
+	  if($datarow['active'] == 1) {
+	    $tidied_name = trim($datarow['name']);
+			$tidied_name = strtolower($tidied_name);
+			$url_name = preg_replace(array("/(\s)+/","/[^\w-]+/"), array("-", ''), $tidied_name);            
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' AND `id` NOT IN ('{$datarow['id']}') ",ARRAY_A);
+			$extension_number = '';
+			if($similar_names['count'] > 0) {
+				$extension_number = (int)$similar_names['max_number']+2;
+			}
+			$url_name .= $extension_number;
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '$url_name' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
+			$updated;
+	  } else if($datarow['active'] == 0) {
+		  $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
+		  $updated;
+	  }
+	}
+	$wp_rewrite->flush_rules();
+	$sendback = wp_get_referer();
+
+	if ( isset($updated) ) {
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+
+	wp_redirect($sendback);
+
+exit();
+}
+ if($_REQUEST['wpsc_admin_action'] == 'clean_categories') {
+	add_action('admin_init', 'wpsc_clean_categories');
+}
 ?>
