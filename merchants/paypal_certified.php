@@ -538,7 +538,7 @@ function submit_paypal_certified()
 
 function form_paypal_certified()
   {
-  $select_currency[get_option('paypal_curcode')] = "selected='true'";
+  $select_currency[get_option('paypal_curcode')] = "selected='selected'";
   $output = "
   <tr>
       <td>API Username
@@ -600,7 +600,7 @@ $output .= "
 	
     <tr style='background: none;'>
       <td colspan='2'>
-				<h4>Forms Sent to Gateway</h2>
+				<h4>Forms Sent to Gateway</h4>
       </td>
 		</tr>
    

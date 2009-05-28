@@ -27,10 +27,11 @@ global $wpdb;
 							}
 					?>
 					<option value='<?php echo $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option>
+					
+		<?php			} ?>
 					</select>
-		<?php			}
 				   
-		  	 }	?>
+		<?php  	 }	?>
 				</span>
 				<br /><?php echo TXT_WPSC_SELECTYOURBUSINESSLOCATION;?>
 			</td>
@@ -44,7 +45,7 @@ global $wpdb;
 				echo $country_data['country'];
 				$region_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".get_option('base_country')."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`") ;
 				if($country_data['has_regions'] == 1) {
-					?>&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page="<?php echo WPSC_DIR_NAME; ?>/wpsc-admin/display-options-settings.page.php&amp;isocode="<?php echo get_option('base_country'); ?>'><?php echo $region_count ?> Regions</a>
+					?>&nbsp;&nbsp;&nbsp;&nbsp;<a href='?page=<?php echo WPSC_DIR_NAME; ?>/wpsc-admin/display-options-settings.page.php&amp;isocode=<?php echo get_option('base_country'); ?>'><?php echo $region_count ?> Regions</a>
 		<?php	} else { ?>
 					<input type='hidden' name='country_id' value='<?php echo $country_data['id']; ?>' />
 					&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='country_tax' class='tax_forms' maxlength='5' size='5' value='<?php echo $country_data['tax']; ?>' />%

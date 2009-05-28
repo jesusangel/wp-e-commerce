@@ -392,64 +392,20 @@ jQuery(document).ready( function () {
 		});
 		
 	// Options page ajax tab display 
-	jQuery(function() {
-		  // set us up some mighty fine tabs for the options page
-		  
-		  if (typeof jQuery('#wpsc_options > ul#tabs').tabs != "undefined") {
-        $tabs = jQuery('#wpsc_options > ul#tabs').tabs();
-			}
-// 			current_tab = window.location.href.split('#');
-			
-			// this here code handles remembering what tab you were on
-			jQuery('#wpsc_options > ul').bind('tabsselect', function(event, ui) {
-				form_action = jQuery('#cart_options').attr('action').split('#');  //split at the #
-				form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-				jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
-// 				var current_tab = $tabs.data('selected.tabs');
-// 				alert(current_tab);
-// 				if (current_tab == '3') {
-// 					form_action = jQuery('#shipping_options').attr('action').split('#');  //split at the #
-// 					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-// 
-// 					jQuery('#shipping_options').attr('action', form_action); // stick it all back in the action attribute
-// 				}
-// 				if (current_tab == '4') {
-// 					form_action = jQuery('#gateway_options').attr('action').split('#');  //split at the #
-// 					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-// 					jQuery('#gateway_options').attr('action', form_action); // stick it all back in the action attribute
-// 				}
-			});
-			jQuery('#wpsc_options > ul').bind('tabsload', function(event, ui) {
-			  // bind_shipping_rate_deletion();
-// 				form_action = jQuery('#cart_options').attr('action').split('#');  //split at the #
-// 				form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-// 				jQuery('#cart_options').attr('action', form_action); // stick it all back in the action attribute
-				var current_tab = $tabs.data('selected.tabs');
-				if (current_tab == '3') {
-					form_action = jQuery('#shipping_options').attr('action').split('#');  //split at the #
-					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-					jQuery('#shipping_options').attr('action', form_action); // stick it all back in the action attribute
-				}
-				if (current_tab == '4') {
-					form_action = jQuery('#gateway_options_tbl').attr('action').split('#');  //split at the #
-					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-					jQuery('#gateway_options_tbl').attr('action', form_action); // stick it all back in the action attribute
-				}
-				if (current_tab == '5') {
-					form_action = jQuery('#chekcout_options_tbl').attr('action').split('#');  //split at the #
-					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-					jQuery('#chekcout_options_tbl').attr('action', form_action); // stick it all back in the action attribute
-				}
-				if (current_tab == '6') {
-					form_action = jQuery('#gold_cart_form').attr('action').split('#');  //split at the #
-					form_action = form_action[0]+"#"+ui.panel.id; // get the first item, add the hash then our current tab ID
-					jQuery('#gold_cart_form').attr('action', form_action); // stick it all back in the action attribute
-				}
-					//alert(current_tab);
-			});
-		});
-
-
+	jQuery('#sidemenu li').click(function(){
+		 	page_title = jQuery(this).attr('id');
+		 	post_values = "wpsc_admin_action=settings_page_ajax&page_title="+page_title;
+		 	jQuery.post('admin.php?', post_values, function(html){
+		 	console.log(html);
+		 	jQuery('a.current').removeClass('current');
+		 	jQuery('#'+page_title+' a' ).addClass('current');
+		 	jQuery('#wpsc_options_page').html('');
+		 	jQuery('#wpsc_options_page').html(html);
+		 	
+		 	});
+		 	return false;
+		 	
+	 });
 
 });
 
@@ -639,3 +595,14 @@ function submit_change_country() {
 function getcurrency(id) {
 	//ajax.post("index.php",gercurrency,"wpsc_admin_action=change_currency&currencyid="+id);
 }
+//delete checkout fields from checkout settings page
+function remove_form_field(id,form_id) {
+  var delete_variation_value=function(results) { }
+  element_count = document.getElementById("form_field_form_container").childNodes.length;
+  if(element_count > 1) {
+    ajax.post("index.php",delete_variation_value,"admin=true&ajax=true&remove_form_field=true&form_id="+form_id);
+    target_element = document.getElementById(id);
+    document.getElementById("form_field_form_container").removeChild(target_element);
+  }
+  return false;
+} 

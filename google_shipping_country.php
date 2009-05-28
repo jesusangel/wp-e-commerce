@@ -1,18 +1,11 @@
 <?php
-	if (isset($_POST['submit'])) {
-		foreach($_POST['google_shipping'] as $key=>$country) {
-			if ($country=='on') {
-				$google_shipping_country[]=$key;
-			}
-		}
-		update_option('google_shipping_country',$google_shipping_country);
-		//header("Location: ?page=".$_GET['page']);
-	}
+global $wpdb;
+
 ?>
 
 <div class="wrap">
 <h2><?php echo TXT_WPSC_GOOGLESHIPPING;?></h2>
-<form action='?page=<?php echo $_GET['page']; ?>&amp;googlecheckoutshipping=1' method='POST'>
+<form action='' method='post'>
 <?php
 	$google_shipping_country = get_option("google_shipping_country");
 	$country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
@@ -25,7 +18,7 @@
 		echo "<table>\n\r";
 		foreach($country_col as $country) {
 			if (in_array($country['id'], (array)$google_shipping_country)) {
-				$checked="checked='true'";
+				$checked="checked='checked'";
 			} else {
 				$checked="";
 			}
@@ -45,7 +38,8 @@
 	echo "  </tr>\n\r";
 	echo "</table>\n\r";
 ?>
-	<a style="cursor:pointer;" onclick="jQuery('input[@type=\'checkbox\']').each(function() {this.checked = true; });">Select All</a>&emsp; <a style="cursor:pointer;" onclick="jQuery('input[@type=\'checkbox\']').each(function() {this.checked = false; });">Unselect All</a><br><br>
-		<input type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' /> <a href='?page=<?=$_GET['page']?>'>Go Back</a>
+	<a style="cursor:pointer;" onclick="jQuery('input[@type=\'checkbox\']').each(function() {this.checked = true; });">Select All</a>&emsp; <a style="cursor:pointer;" onclick="jQuery('input[@type=\'checkbox\']').each(function() {this.checked = false; });">Unselect All</a><br /><br />
+	<input type='hidden' name='wpsc_admin_action' value='google_shipping_settings' />
+		<input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' /> <a href='?page=<?=$_GET['page']?>'>Go Back</a>
 	</form>
 </div>

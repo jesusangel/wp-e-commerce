@@ -11,12 +11,22 @@ if(isset($_GET['tab'])){
 }else{
 	$page = 'general';
 }
+if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
+		include(WPSC_FILE_PATH.'/tax_and_shipping.php');
+		return;
+}
+if (isset($_GET['googlecheckoutshipping'])) {
+	include(WPSC_FILE_PATH.'/google_shipping_country.php');
+	return;
+	exit();
+}
+?> <div id='wpsc_options_page'> <?php
 switch($page) {
 	case "checkout";
 	require_once('includes/settings-pages/checkout.php');
 	wpsc_options_checkout();
 	break;
-	case "payment_opt";
+	case "gateway";
 	require_once('includes/settings-pages/gateway.php');
 	wpsc_options_gateway();
 	break;
@@ -41,7 +51,7 @@ switch($page) {
 	break;
 } ?>
 </div>
-
+</div>
 <?php
 }
 
@@ -54,7 +64,7 @@ function wpsc_settings_tabs() {
 		'presentation' => __('Presentation'),
 		'admin' => __('Admin'),
 		'shipping' => __('Shipping'),
-		'payment_opt' => __('Payment Options'),
+		'gateway' => __('Payment Options'),
 		'checkout' => __('Checkout')
 	);
 

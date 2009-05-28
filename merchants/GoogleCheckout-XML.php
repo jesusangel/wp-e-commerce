@@ -156,9 +156,9 @@ function form_google()
 	}
 
 	if (get_option('google_button_bg') == 'trans'){
-		$button_bg1="selected='true'";
+		$button_bg1="selected='selected'";
 	} else {
-		$button_bg2="selected='true'";
+		$button_bg2="selected='selected'";
 	}
 	$output = "
 	<tr>
@@ -199,14 +199,15 @@ function form_google()
 		  <select name='google_cur'>";
 		  	if (get_option('google_cur') == 'USD') {
 			$output.=
-			"<option selected value='USD'>USD</option>
+			"<option selected='selected' value='USD'>USD</option>
 		  	<option value='GBP'>GBP</option>";
 			} else {
 			$output.=
 			"<option value='USD'>USD</option>
-		  	<option value='GBP' selected>GBP</option>";
+		  	<option value='GBP' selected='selected'>GBP</option>";
 			}
 		  $output.="</select>
+		  </td>
 	</tr>
 
 	<tr>
@@ -214,7 +215,7 @@ function form_google()
 		Select Shipping Countries
 		</td>
 		<td>
-		<a href='?page=".WPSC_DIR_NAME."/gatewayoptions.php&googlecheckoutshipping=1'>Set Shipping countries
+		<a href='?page=".WPSC_DIR_NAME."%2Fwpsc-admin%2Fdisplay-options-settings.page.php&amp;tab=payment_opt&amp;googlecheckoutshipping=1'>Set Shipping countries</a>
 		</td>
 	</tr>
 
@@ -231,6 +232,7 @@ function form_google()
 		  <select name='google_button_bg'>
 		  <option $button_bg1 value='trans'>Transparent</option>
 		  <option $button_bg2 value='white'>White</option>
+		  </select>
 		  </div>				
 			</td>
 	</tr>

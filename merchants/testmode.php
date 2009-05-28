@@ -21,7 +21,6 @@ function submit_testmode() {
 
 function form_testmode() {  
 	$output = "<tr>\n\r";
-	$output .= "<tr>\n\r";
 	$output .= "	<td colspan='2'>\n\r";
 	// $output = "	</td>\n\r";
 	// $output = "	<td>\n\r";

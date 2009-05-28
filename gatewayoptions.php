@@ -1,9 +1,5 @@
 <?php
-if (isset($_GET['googlecheckoutshipping'])) {
-	include('google_shipping_country.php');
-	return;
-	exit();
-}
+
 	
 $curgateway = get_option('payment_gateway');
 $changes_made = false;

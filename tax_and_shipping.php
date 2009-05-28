@@ -1,20 +1,7 @@
 <?php
+global $wpdb;
 $changes_made = false;
-if(is_array($_POST['region_tax']))
-  {
-  foreach($_POST['region_tax'] as $region_id => $tax)
-    {
-    if(is_numeric($region_id) && is_numeric($tax))
-      {
-      $previous_tax = $wpdb->get_var("SELECT `tax` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` = '$region_id' LIMIT 1");
-      if($tax != $previous_tax)
-        {
-        $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
-        $changes_made = true;
-        }
-      }
-    }
-  }
+
   
 // function country_list($selected_country = null)
 //   {
@@ -51,7 +38,7 @@ $base_region = get_option('base_region');
     echo "Thanks, your changes have been made<br />";
     }
   ?>
-  <form action='?page=<?php echo $_GET['page']; ?>&amp;isocode=<?php echo $_GET['isocode']; ?>' method='post' name='regional_tax'>
+  <form action='' method='post' name='regional_tax'>
   <?php
   $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$country_isocode."') LIMIT 1",ARRAY_A);
   if(($country_data['has_regions'] == 1))
@@ -77,7 +64,7 @@ $base_region = get_option('base_region');
             {
             echo "    <td><label for='region_tax_".$region['id']."'>".$region['name'].":</label></td>\n\r";
             }
-        echo "    <td><input type='text' id='region_tax_".$region['id']."' name='region_tax[".$region['id']."]' value='".$tax_percentage."' class='tax_forms'  maxlength='5' size='5'/>%</td>\n\r";
+        echo "    <td><input type='text' id='region_tax_".$region['id']."' name='region_tax[".$region['id']."]' value='".$tax_percentage."' class='tax_forms'  maxlength='3' size='3'/>%</td>\n\r";
         echo "  </tr>\n\r";
         }      
       echo "</table>\n\r";
@@ -90,9 +77,10 @@ $base_region = get_option('base_region');
       {
       $tax_percentage =  $country_data['tax'];
       echo "<label for='country_tax'>Tax Rate:</label> ";
-      echo "<input type='text' id='country_tax' name='country_tax' value='".$tax_percentage."' class='tax_forms' maxlength='5' size='5'/>%";
+      echo "<input type='text' id='country_tax' name='country_tax' value='".$tax_percentage."' class='tax_forms' maxlength='3' size='3'/>%";
       }
   ?>
-  <input type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
+  <input type='hidden' name='wpsc_admin_action' value='change_region_tax' />
+  <input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
   </form>
 </div>

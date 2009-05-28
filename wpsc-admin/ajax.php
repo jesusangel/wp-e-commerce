@@ -1370,12 +1370,12 @@ function wpsc_submit_options() {
 	//To update options
     if(isset($_POST['wpsc_options'])){
 	  	foreach($_POST['wpsc_options'] as $key=>$value){
-	  		if(!is_array($value)){
+	  		//if(!is_array($value)){
 		  		if($value != get_option($key)){
 		  			update_option($key, $value);
 		  			$updated++;
 		  		}
-	  		}
+	  		//}
 		}
 	}
 	$sendback = wp_get_referer();
@@ -1383,7 +1383,9 @@ function wpsc_submit_options() {
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-
+	if(isset($_SESSION['wpsc_settings__curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+		}
 	wp_redirect($sendback);
 	exit();
 }
@@ -1440,7 +1442,9 @@ global $wpdb;
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-
+	if(isset($_SESSION['wpsc_settings__curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+		}
 	wp_redirect($sendback);
 
 exit();
@@ -1479,7 +1483,9 @@ global $wpdb, $wp_rewrite;
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-
+	if(isset($_SESSION['wpsc_settings__curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+	}
 	wp_redirect($sendback);
 
 exit();
@@ -1487,4 +1493,165 @@ exit();
  if($_REQUEST['wpsc_admin_action'] == 'clean_categories') {
 	add_action('admin_init', 'wpsc_clean_categories');
 }
+
+//change the regions tax settings
+function wpsc_change_region_tax(){
+global $wpdb; 
+	if(is_array($_POST['region_tax']))
+	  {
+	  foreach($_POST['region_tax'] as $region_id => $tax)
+	    {
+	    if(is_numeric($region_id) && is_numeric($tax))
+	      {
+	      $previous_tax = $wpdb->get_var("SELECT `tax` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` = '$region_id' LIMIT 1");
+	      if($tax != $previous_tax)
+	        {
+	        $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
+	        $changes_made = true;
+	        $sendback = wp_get_referer();
+	        $sendback = remove_query_arg('isocode', $sendback);
+	        wp_redirect($sendback);
+	        }
+	      }
+	    }
+	  }
+}
+  if($_REQUEST['wpsc_admin_action'] == 'change_region_tax') {
+	add_action('admin_init', 'wpsc_change_region_tax');
+}
+//change the gateway settings
+function wpsc_gateway_settings(){
+global $wpdb; 
+	//To update options
+    if(isset($_POST['wpsc_options'])){
+	  	foreach($_POST['wpsc_options'] as $key=>$value){
+	  		//if(!is_array($value)){
+		  		if($value != get_option($key)){
+		  			update_option($key, $value);
+		  			$updated++;
+		  		}
+	  		//}
+		}
+		unset($_POST['wpsc_options']);
+	}
+	//exit(get_option('payment_gateway').'<pre>'.print_r($_POST,true).'</pre>');
+	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
+		if($gateway['internalname'] == get_option('payment_gateway')) {
+			$gateway['submit_function']();
+			$changes_made = true;
+		}
+	}
+	if(($_POST['payment_gw'] != null)) {
+	  update_option('payment_gateway', $_POST['payment_gw']);
+	}
+	$sendback = wp_get_referer();
+
+	if ( isset($updated) ) {
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+	if(isset($_SESSION['wpsc_settings__curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+	}
+	wp_redirect($sendback);
+	exit();
+
+}
+  if($_REQUEST['wpsc_gateway_settings'] == 'gateway_settings') {
+	add_action('admin_init', 'wpsc_gateway_settings');
+}
+
+//handles the editing and adding of new checkout fields
+function wpsc_checkout_settings(){
+global $wpdb;
+
+if($_POST['form_name'] != null)
+    {
+    foreach($_POST['form_name'] as $form_id => $form_name) 
+      {
+      $form_type = $_POST['form_type'][$form_id];
+      $form_mandatory = 0;
+      if($_POST['form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
+      $form_display_log = 0;
+      if($_POST['form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
+      $form_order = $_POST['form_order'][$form_id];
+      $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log', `order` = '$form_order' WHERE `id` ='".$form_id."' LIMIT 1 ;");
+    
+      }
+    }
+  
+  if($_POST['new_form_name'] != null)
+    {
+    foreach($_POST['new_form_name'] as $form_id => $form_name) 
+      {
+      $form_type = $_POST['new_form_type'][$form_id];
+      $form_mandatory = 0;
+      if($_POST['new_form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
+      $form_display_log = 0;
+      if($_POST['new_form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
+      $max_order_sql = "SELECT MAX(`order`) AS `order` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
+      if($_POST['new_form_order'][$form_id] != '')
+        {
+        $order_number = $_POST['new_form_order'][$form_id];
+        }
+        else
+          {
+          $max_order_sql = $wpdb->get_results($max_order_sql,ARRAY_A);
+          $order_number = $max_order_sql[0]['order'] + 1;
+          }
+          $sql ="INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');";
+         // exit($sql);
+      $wpdb->query($sql);
+       // exit('called<pre>'.print_r($_POST, true).'</pre>');
+      }
+
+
+	}
+}
+if($_REQUEST['wpsc_admin_action'] == 'checkout_settings') {
+	add_action('admin_init', 'wpsc_checkout_settings');
+}
+function wpsc_google_shipping_settings(){
+	if (isset($_POST['submit'])) {
+		foreach((array)$_POST['google_shipping'] as $key=>$country) {
+			if ($country=='on') {
+				$google_shipping_country[]=$key;
+				$updated = 1;
+			}
+		}
+		update_option('google_shipping_country',$google_shipping_country);
+		$sendback = wp_get_referer();
+		$sendback = remove_query_arg('googlecheckoutshipping', $sendback);
+		
+	if ( isset($updated) ) {
+	
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+
+	wp_redirect($sendback);
+	exit();
+		//header("Location: ?page=".$_GET['page']);
+	}
+}
+
+if($_REQUEST['wpsc_admin_action'] == 'google_shipping_settings') {
+	add_action('admin_init', 'wpsc_google_shipping_settings');
+}
+
+function wpsc_settings_page_ajax(){
+  global $wpdb;
+  
+  	$functionname1 = str_replace("tab-","",$_POST['page_title']);
+  	require_once('includes/settings-pages/'.$functionname1.'.php');
+  	$functionname = "wpsc_options_".$functionname1;
+  	$html = $functionname();
+	$_SESSION['wpsc_settings__curr_page'] = $functionname1;
+	
+	exit($html);
+}
+  
+if($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') {
+	add_action('admin_init', 'wpsc_settings_page_ajax');
+
+}
+
 ?>

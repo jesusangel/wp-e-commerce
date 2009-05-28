@@ -366,7 +366,7 @@ function submit_paypal_multiple(){
 }
 
 function form_paypal_multiple() {
-  $select_currency[get_option('paypal_curcode')] = "selected='true'";
+  $select_currency[get_option('paypal_curcode')] = "selected='selected'";
   $output = "
   <tr>
       <td>Username
@@ -391,11 +391,11 @@ function form_paypal_multiple() {
 	$paypal_ipn2 = "";
 	switch($paypal_ipn) {
 		case 0:
-		$paypal_ipn2 = "checked ='true'";
+		$paypal_ipn2 = "checked ='checked'";
 		break;
 		
 		case 1:
-		$paypal_ipn1 = "checked ='true'";
+		$paypal_ipn1 = "checked ='checked'";
 		break;
 	}
 		
@@ -438,12 +438,12 @@ function form_paypal_multiple() {
 	$address_override2 = "";
 	switch($address_override) {
 		case 1:
-		$address_override1 = "checked ='true'";
+		$address_override1 = "checked ='checked'";
 		break;
 		
 		case 0:
 		default:
-		$address_override2 = "checked ='true'";
+		$address_override2 = "checked ='checked'";
 		break;
 	}
      

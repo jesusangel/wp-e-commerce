@@ -334,8 +334,8 @@ function submit_chronopay()
 
 function form_chronopay()
 {	
-	$select_currency[get_option('chronopay_curcode')] = "selected='true'";
-	$select_language[get_option('chronopay_language')] = "selected='true'";
+	$select_currency[get_option('chronopay_curcode')] = "selected='selected'";
+	$select_language[get_option('chronopay_language')] = "selected='selected'";
 	$chronopay_url = ( get_option('chronopay_url')=='' ? 'https://secure.chronopay.com/index_shop.cgi' : get_option('chronopay_url') );
 	$chronopay_salt = ( get_option('chronopay_salt')=='' ? 'changeme' : get_option('chronopay_salt') );
 	
@@ -345,10 +345,10 @@ function form_chronopay()
 	switch($chronopay_debug)
 	{
 		case 0:
-			$chronopay_debug2 = "checked ='true'";
+			$chronopay_debug2 = "checked ='checked'";
 			break;
 		case 1:
-			$chronopay_debug1 = "checked ='true'";
+			$chronopay_debug1 = "checked ='checked'";
 			break;
 	}
 

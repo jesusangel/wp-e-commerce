@@ -31,10 +31,10 @@ function selectgateway() {
 	<?php 
 		if (get_option('custom_gateway') == 1){ 
 			$custom_gateway_hide="style='display:block;'";
-			$custom_gateway1 = 'checked="true"';
+			$custom_gateway1 = 'checked="checked"';
 		} else {
 			$custom_gateway_hide="style='display:none;'";
-			$custom_gateway2 = 'checked="true"';
+			$custom_gateway2 = 'checked="checked"';
 		}
 	?>
   <h2 class='wpsc_special'><?php echo TXT_WPSC_SHIPPINGOPTIONS;?></h2>
@@ -74,16 +74,16 @@ function selectgateway() {
 					}
 							
 					?>
-							<input type='radio' value='1' name='wpsc_options["do_not_use_shipping"]' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
-					<input type='radio' value='0' name='wpsc_options["do_not_use_shipping"]' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
+							<input type='radio' value='1' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
+					<input type='radio' value='0' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
 							<?php echo TXT_WPSC_USE_SHIPPING_DESCRIPTION;?>
-				</td>
+					</td>
 				</tr>
 								
 				<tr>
 					<th>Zipcode:</th>
 					<td>
-						<input type='text' name='wpsc_options["base_zipcode"]' value='<?php echo get_option('base_zipcode'); ?>' />
+						<input type='text' name='wpsc_options[base_zipcode]' value='<?php echo get_option('base_zipcode'); ?>' />
 						<br /><?php echo TXT_WPSC_USPS_DESC; ?>
 					</td>
 				</tr>
@@ -109,20 +109,20 @@ function selectgateway() {
 						<?php echo TXT_WPSC_SHIPWIRESETTINGS;?><span style='color: red;'></span> :
 					</th>
 					<td>
-						<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='wpsc_options["shipwire"]' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-						<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='wpsc_options["shipwire"]' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php echo TXT_WPSC_NO;?></label>
+						<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").show()' value='1' name='wpsc_options[shipwire]' id='shipwire1' <?php echo $shipwire1; ?> /> <label for='shipwire1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+						<input type='radio' onclick='jQuery("#wpsc_shipwire_setting").hide()' value='0' name='wpsc_options[shipwire]' id='shipwire2' <?php echo $shipwire2; ?> /> <label for='shipwire2'><?php echo TXT_WPSC_NO;?></label>
 						<?php
 						$shipwireemail = get_option("shipwireemail");
 						$shipwirepassword = get_option("shipwirepassword");
 						?>
-				<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
-					<table>
-					<tr><td><?php echo TXT_WPSC_SHIPWIREEMAIL; ?> :</td><td> <input type="text" name='wpsc_options["shipwireemail"]' value="<?php echo $shipwireemail;?>" /></td></tr>
-					<tr><td><?php echo TXT_WPSC_SHIPWIREPASSWORD; ?> :</td><td><input type="text" name='wpsc_options["shipwirepassword"]' value="<?php echo $shipwirepassword;?>" /></td></tr>
-					<tr><td><a onclick='shipwire_sync()' style="cursor:pointer;">Sync product</a></td></tr>
-					</table>
-				</div>
-				</td>
+						<div id='wpsc_shipwire_setting' <?php echo $shipwire_settings; ?>>
+						<table>
+						<tr><td><?php echo TXT_WPSC_SHIPWIREEMAIL; ?> :</td><td> <input type="text" name='wpsc_options[shipwireemail]' value="<?php echo $shipwireemail;?>" /></td></tr>
+						<tr><td><?php echo TXT_WPSC_SHIPWIREPASSWORD; ?> :</td><td><input type="text" name='wpsc_options[shipwirepassword]' value="<?php echo $shipwirepassword;?>" /></td></tr>
+						<tr><td><a onclick='shipwire_sync()' style="cursor:pointer;">Sync product</a></td></tr>
+						</table>
+						</div>
+					</td>
 			   </tr>
 			   </table>
 				<?php if (IS_WP27) { ?>
@@ -159,7 +159,7 @@ function selectgateway() {
 							<div class='wpsc_shipping_options'>
 							<div class='wpsc-shipping-actions'>
 									| <span class="edit">
-										<a class='edit-shipping-module' rel="<?php echo $shipping->internal_name; ?>" onclick="event.preventDefault();" title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shipping-module' rel="<?php echo $shipping->internal_name; ?>" onclick="event.preventDefault();" title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->internal_name)); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						   </div>
 						
@@ -171,7 +171,7 @@ function selectgateway() {
 							<div class='wpsc_shipping_options'>
 							<div class='wpsc-shipping-actions'>
 									| <span class="edit">
-										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->internal_name)); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						   </div>
 							<p><input name='custom_shipping_options[]' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
@@ -203,7 +203,7 @@ function selectgateway() {
 						<div class='wpsc_shipping_options'>
 						<div class="wpsc-shipping-actions">
 									| <span class="edit">
-										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->internal_name)); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						</div>
 						<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' checked='checked' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
@@ -213,7 +213,7 @@ function selectgateway() {
 						<div class='wpsc_shipping_options'>
 						<div class="wpsc-shipping-actions">
 									| <span class="edit">
-										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo add_query_arg('shipping module', $shipping->internal_name); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->internal_name)); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						</div>
 						<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
@@ -250,13 +250,14 @@ function selectgateway() {
 					</table>
 					<table class='form-table'>
 					<?php } ?>
+					<tr><td>&nbsp;</td></tr>
 						<?php echo $form; ?>
 						
 					</table>
 					<?php	echo	$shippignname; ?>
-					<div class='submit'>
-						<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption' />
-					</div>
+						<div class='submit'>
+							<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption' />
+						</div>
 					<?php if (IS_WP27) { ?>
 					    </div>
 					    </div>
@@ -268,8 +269,9 @@ function selectgateway() {
 	</form>
 </div>
 		
-<?php if (IS_WP27){ ?>
+
 	</div>
-<?php }
+</form>
+<?php
 }
 ?>

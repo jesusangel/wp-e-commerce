@@ -506,16 +506,7 @@ function remove_new_form_field(id) {
   return false;
 }
   
-function remove_form_field(id,form_id) {
-  var delete_variation_value=function(results) { }
-  element_count = document.getElementById("form_field_form_container").childNodes.length;
-  if(element_count > 1) {
-    ajax.post("index.php",delete_variation_value,"admin=true&ajax=true&remove_form_field=true&form_id="+form_id);
-    target_element = document.getElementById(id);
-    document.getElementById("form_field_form_container").removeChild(target_element);
-  }
-  return false;
-} 
+
   
 function show_status_box(id,image_id) {
   state = document.getElementById(id).style.display; 
