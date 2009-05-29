@@ -93,7 +93,7 @@ function wpsc_display_products_page() {
 	?>
 		
 		<div id="col-container" class='stuffbox'>
-			<div id="col-right">			
+			<div id="wpsc-col-right">			
 				<div id='poststuff' class="col-wrap">
 					<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
 					<?php
@@ -104,7 +104,7 @@ function wpsc_display_products_page() {
 				</div>
 			</div>
 			
-			<div id="col-left">
+			<div id="wpsc-col-left">
 				<div class="col-wrap">		
 					<?php
 						wpsc_admin_products_list($category_id);
@@ -204,7 +204,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		));
 	}
 	$this_page_url = stripslashes($_SERVER['REQUEST_URI']);
-  
+  	if($product_list >0){
   
 	?>
 	<div class="wpsc-separator"><br/></div>
@@ -347,7 +347,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		</table>
 	</form>
 	<?php
-}
+}}
 
 //function 
 

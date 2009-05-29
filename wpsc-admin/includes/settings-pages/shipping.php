@@ -254,7 +254,6 @@ function selectgateway() {
 						<?php echo $form; ?>
 						
 					</table>
-					<?php	echo	$shippignname; ?>
 						<div class='submit'>
 							<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption' />
 						</div>

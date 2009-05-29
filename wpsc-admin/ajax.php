@@ -730,56 +730,6 @@ function wpsc_admin_sale_rss() {
 	}
 }
 
-function wpsc_shipping_options(){
-	if ($_GET['shipping_options']=='true'){
-		include(WPSC_FILE_PATH.'/display-shipping.php');
-		exit();
-	}
-	
-	if ($_GET['payments_options']=='true'){
-		include(WPSC_FILE_PATH.'/gatewayoptions.php');
-		exit();
-	}
-	
-	if ($_GET['checkout_options']=='true'){
-		include(WPSC_FILE_PATH.'/form_fields.php');
-		exit();
-	}
-	
-// 	if ($_GET['gold_options']=='true'){
-// 		include(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-// 		exit();
-// 	}
-}
-
-function wpsc_shipping_submits(){
-	if ($_POST['shipping_submits']=='true'){
-		require_once(WPSC_FILE_PATH."/display-shipping.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
-		exit();
-	}
-	
-	if ($_POST['gateway_submits']=='true'){
-		require_once(WPSC_FILE_PATH."/gatewayoptions.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
-		exit();
-	}
-	
-	if ($_POST['checkout_submits']=='true'){
-		require_once(WPSC_FILE_PATH."/form_fields.php");
-		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
-		exit();
-	}
-	
-// 	if ($_POST['gold_submits']=='true'){
-// 		require_once(WPSC_FILE_PATH.'/gold_cart_files/gold_options.php');
-// 		wp_redirect($_SERVER['PHP_SELF']."?page=".WPSC_DIR_NAME."/wpsc-admin/display-options.page.php");
-// 		exit();
-// 	}
-}
-
-
-
 function wpsc_swfupload_images() {
 	global $wpdb;
 	if ($_REQUEST['action']=='wpsc_add_image') {
@@ -1272,7 +1222,9 @@ function wpsc_get_shipping_form() {
   $shippingname = $_REQUEST['shippingname'];
   if(array_key_exists($shippingname, $wpsc_shipping_modules)){
  // exit('<pre>'.print_r($wpsc_shipping_modules[$shippingname], true).'</pre>');
+ 	$shippingmethod = '<input type="hidden" name="custom_shipping_options[]" value="'.$shippingname.'" />';
 	$output = $wpsc_shipping_modules[$shippingname]->getForm();
+	$output = $shippingmethod.$output;
 	echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
 	exit($output);
   	
@@ -1327,8 +1279,6 @@ if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
 	add_action('admin_init', 'wpsc_admin_ajax');
 }
 
-//add_action('admin_init','wpsc_shipping_options');
-//add_action('admin_init','wpsc_shipping_submits');
 /*
  *Submit Options from Settings Pages, 
  *takes an array of options checks to see whether it is empty or the same as the exisiting values 
@@ -1378,13 +1328,25 @@ function wpsc_submit_options() {
 	  		//}
 		}
 	}
+	//This is for submitting shipping details to the shipping module
+	if(isset($_POST['custom_shipping_options'])){
+		foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
+			foreach((array)$_POST['custom_shipping_options'] as $shippingoption){
+				//echo $shipping->internal_name.' == '.$shippingoption;
+				if($shipping->internal_name ==$shippingoption) {
+					$shipping->submit_form();
+					}
+			}
+	
+		}
+	}
 	$sendback = wp_get_referer();
 
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-	if(isset($_SESSION['wpsc_settings__curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+	if(isset($_SESSION['wpsc_settings_curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 		}
 	wp_redirect($sendback);
 	exit();
@@ -1442,8 +1404,8 @@ global $wpdb;
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-	if(isset($_SESSION['wpsc_settings__curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+	if(isset($_SESSION['wpsc_settings_curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 		}
 	wp_redirect($sendback);
 
@@ -1483,8 +1445,8 @@ global $wpdb, $wp_rewrite;
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-	if(isset($_SESSION['wpsc_settings__curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+	if(isset($_SESSION['wpsc_settings_curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 	}
 	wp_redirect($sendback);
 
@@ -1508,13 +1470,14 @@ global $wpdb;
 	        {
 	        $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
 	        $changes_made = true;
-	        $sendback = wp_get_referer();
-	        $sendback = remove_query_arg('isocode', $sendback);
-	        wp_redirect($sendback);
-	        }
+	  
 	      }
 	    }
 	  }
+      $sendback = wp_get_referer();
+	        $sendback = remove_query_arg('isocode', $sendback);
+	        wp_redirect($sendback);
+	        }
 }
   if($_REQUEST['wpsc_admin_action'] == 'change_region_tax') {
 	add_action('admin_init', 'wpsc_change_region_tax');
@@ -1549,8 +1512,8 @@ global $wpdb;
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
-	if(isset($_SESSION['wpsc_settings__curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings__curr_page'], $sendback);
+	if(isset($_SESSION['wpsc_settings_curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 	}
 	wp_redirect($sendback);
 	exit();
@@ -1606,6 +1569,16 @@ if($_POST['form_name'] != null)
 
 
 	}
+		$sendback = wp_get_referer();
+
+	if ( isset($updated) ) {
+		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+	if(isset($_SESSION['wpsc_settings_curr_page'])){
+			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
+	}
+	wp_redirect($sendback);
+	exit();
 }
 if($_REQUEST['wpsc_admin_action'] == 'checkout_settings') {
 	add_action('admin_init', 'wpsc_checkout_settings');
@@ -1637,6 +1610,7 @@ if($_REQUEST['wpsc_admin_action'] == 'google_shipping_settings') {
 	add_action('admin_init', 'wpsc_google_shipping_settings');
 }
 
+//for ajax call of settings page tabs
 function wpsc_settings_page_ajax(){
   global $wpdb;
   
@@ -1644,14 +1618,13 @@ function wpsc_settings_page_ajax(){
   	require_once('includes/settings-pages/'.$functionname1.'.php');
   	$functionname = "wpsc_options_".$functionname1;
   	$html = $functionname();
-	$_SESSION['wpsc_settings__curr_page'] = $functionname1;
+	$_SESSION['wpsc_settings_curr_page'] = $functionname1;
 	
 	exit($html);
 }
   
 if($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') {
 	add_action('admin_init', 'wpsc_settings_page_ajax');
-
 }
 
 ?>

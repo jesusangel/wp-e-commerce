@@ -24,6 +24,12 @@ td.gateway_settings {
 td.gateway_settings input[type=text]{
 width: 200px;
 }
+tr.rate_row td input[type=text]{
+width:50px;
+}
+div#wpsc_newlayer input[type=text]{
+width:50px;
+}
 td.gateway_settings textarea{
 width:100%;
 }

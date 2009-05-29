@@ -32,13 +32,13 @@ class flatrate {
 		
 		switch(get_option('base_country')) {
 		  case 'NZ':
-			$output .= "<tr><td>South Island</td><td>$<input type='text' size='4' name='shipping[southisland]' value='{$shipping['southisland']}'></td></tr>";
-			$output .= "<tr><td>North Island</td><td>$<input type='text' size='4' name='shipping[northisland]'  value='{$shipping['northisland']}'></td></tr>";
+			$output .= "<tr class='rate_row'><td>South Island</td><td>$<input type='text' size='4' name='shipping[southisland]' value='{$shipping['southisland']}'></td></tr>";
+			$output .= "<tr class='rate_row'><td>North Island</td><td>$<input type='text' size='4' name='shipping[northisland]'  value='{$shipping['northisland']}'></td></tr>";
 		  break;
 		  
 		  case 'US':
-			$output .= "<tr><td>Continental 48 States</td><td>$<input type='text' size='4' name='shipping[continental]' value='{$shipping['continental']}'></td></tr>";
-			$output .= "<tr><td>All 50 States</td><td>$<input type='text' size='4' name='shipping[all]'  value='{$shipping['all']}'></td></tr>";
+			$output .= "<tr class='rate_row'><td>Continental 48 States</td><td>$<input type='text' size='4' name='shipping[continental]' value='{$shipping['continental']}'></td></tr>";
+			$output .= "<tr class='rate_row'><td>All 50 States</td><td>$<input type='text' size='4' name='shipping[all]'  value='{$shipping['all']}'></td></tr>";
 		  break;
 		  
 		  default:
@@ -52,12 +52,12 @@ class flatrate {
 		if (get_option('base_country')=='NZ') {
 		} else {
 		}
-		$output.= "<tr><td colspan='2'><strong>International</strong></td></tr>";
-		$output .= "<tr><td>North America</td><td>$<input size='4' type='text' name='shipping[northamerica]'  value='{$shipping['northamerica']}'></td></tr>";
-		$output .= "<tr><td>South America</td><td>$<input size='4' type='text' name='shipping[southamerica]'  value='{$shipping['southamerica']}'></td></tr>";
-		$output .= "<tr><td>Asia and Pacific</td><td>$<input size='4' type='text' name='shipping[asiapacific]'  value='{$shipping['asiapacific']}'></td></tr>";
-		$output .= "<tr><td>Europe</td><td>$<input type='text' size='4' name='shipping[europe]'  value='{$shipping['europe']}'></td></tr>";
-		$output .= "<tr><td>Africa</td><td>$<input type='text' size='4' name='shipping[africa]'  value='{$shipping['africa']}'></td></tr>";
+		$output.= "<tr ><td colspan='2'><strong>International</strong></td></tr>";
+		$output .= "<tr class='rate_row'><td>North America</td><td>$<input size='4' type='text' name='shipping[northamerica]'  value='{$shipping['northamerica']}'></td></tr>";
+		$output .= "<tr class='rate_row'><td>South America</td><td>$<input size='4' type='text' name='shipping[southamerica]'  value='{$shipping['southamerica']}'></td></tr>";
+		$output .= "<tr class='rate_row'><td>Asia and Pacific</td><td>$<input size='4' type='text' name='shipping[asiapacific]'  value='{$shipping['asiapacific']}'></td></tr>";
+		$output .= "<tr class='rate_row'><td>Europe</td><td>$<input type='text' size='4' name='shipping[europe]'  value='{$shipping['europe']}'></td></tr>";
+		$output .= "<tr class='rate_row'><td>Africa</td><td>$<input type='text' size='4' name='shipping[africa]'  value='{$shipping['africa']}'></td></tr>";
 		return $output;
 	}
 	

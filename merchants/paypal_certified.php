@@ -1,6 +1,6 @@
 <?php
 
-$nzshpcrt_gateways[$num]['name'] = 'Paypal - Express Checkout';
+$nzshpcrt_gateways[$num]['name'] = 'Paypal Express Checkout';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_certified';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_certified';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_certified";

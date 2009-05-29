@@ -292,7 +292,7 @@ class wpsc_checkout {
 		  	$value = $value[0];
 		  }	  
 		  if($form_data->type != 'heading') {
-				echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
+				//echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
 				
 				$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 				

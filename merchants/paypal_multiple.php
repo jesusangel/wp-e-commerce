@@ -1,5 +1,5 @@
 <?php
-$nzshpcrt_gateways[$num]['name'] = 'Paypal';
+$nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Standard';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_multiple';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_multiple';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_multiple";

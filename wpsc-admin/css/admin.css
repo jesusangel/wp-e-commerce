@@ -135,6 +135,7 @@ div.search-box input#page-search-input {
 /*  Sortable product styling*/
 	
 table.product_editform {
+  width:auto;
   margin-bottom: 20px;
 }
 	
@@ -167,7 +168,19 @@ div.product-placeholder {
 
 
 /*  Product details form styling */
-
+#wpsc-col-right {
+clear:right;
+float:right;
+margin:0;
+padding:0;
+width:49%;
+}
+#wpsc-col-left {
+margin:0;
+overflow:hidden;
+padding:0;
+width:49%;
+}
 td.product_tags{
 	padding-left:3.5em;
 }

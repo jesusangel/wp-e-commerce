@@ -39,7 +39,7 @@ class tablerate {
 								<i style='color: grey;'> ".TXT_WPSC_AND_ABOVE."</i>
 							</td>
 							<td>
-								<br />
+								".wpsc_get_currency_symbol()."
 								<input type='text' value='{$shipping}' name='shipping[]'  size='4'>
 								&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a>
 							
@@ -48,7 +48,7 @@ class tablerate {
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";
-		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a href='#' style='cursor:pointer;' id='addlayer' >Add Layer</a></td></tr>";
+		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a href='' style='cursor:pointer;' id='addlayer' >Add Layer</a></td></tr>";
 	//	$output.="</table>";
 		return $output;
 	}

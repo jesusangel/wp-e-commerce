@@ -1,5 +1,5 @@
 <?php
-$nzshpcrt_gateways[$num]['name'] = 'Paypal - Pro';
+$nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Pro';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_pro';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_pro";

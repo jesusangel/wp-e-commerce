@@ -131,7 +131,7 @@ foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) {
 }
 
 
-$selected[get_option('payment_method')] = "checked='true'";
+$selected[get_option('payment_method')] = "checked='checked'";
 if ($_GET['shipping_options']=='true') {
 ?>
 <script language='JavaScript' type='text/javascript'>

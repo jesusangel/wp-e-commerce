@@ -258,6 +258,7 @@ function wpsc_display_purchlog_paymentmethod(){
 }
 function wpsc_has_purchlog_shipping(){
 	global $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 	if($purchlogitem->shippinginfo['shippingfirstname']['value'] != ''){
 	 return true;
 	}else{
@@ -618,10 +619,10 @@ class wpsc_purchaselogs_items{
 		$extrainfo = $wpdb->get_results($sql);
 		$this->extrainfo = $extrainfo[0];
 
-		$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_CHECKOUT_FORMS."`.`display_log`=1 AND `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$this->purchlogid." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
+		$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$this->purchlogid." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
 		//exit($usersql);
 		$userinfo = $wpdb->get_results($usersql, ARRAY_A);
-		
+		//exit('<pre>'.print_r($userinfo, true).'</pre>');
 		foreach((array)$userinfo as $input_row) {
 			if(stristr($input_row['unique_name'],'shipping')){
 			 	 $shippinginfo[$input_row['unique_name']] = $input_row;

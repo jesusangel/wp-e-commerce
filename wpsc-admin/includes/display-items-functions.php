@@ -129,14 +129,14 @@ function wpsc_product_basic_details_form(&$product_data) {
   <h3 class='form_heading'>
  <?php
   if($product_data['id'] > 0) {
-		echo __('Edit Product')." <span>(<a href='".add_query_arg('page','edit-products', remove_query_arg('product_id', 'admin.php'))."'>".__('Add new Product')."</a>)</span>";
+		echo __('Edit Product')." <span>(<a href='".add_query_arg('page','wpsc-edit-products', remove_query_arg('product_id', 'admin.php'))."'>".__('Add new Product')."</a>)</span>";
 	} else {
 		_e('Add Product');
 	} 
 	?>
 	</h3>
 	<div>
-		<table class='product_editform' style='width:100%;'>
+		<table class='product_editform' >
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
 					<label for="wpsc_product_name">Product Name</label>
@@ -183,7 +183,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		
 			<tr>
 				<td colspan='2'>
-					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
+					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
 				 <?php
 				 wpsc_the_editor($product_data['description'], 'content', false, false);
 				 ?>
@@ -747,10 +747,13 @@ function wpsc_product_image_forms($product_data='') {
 				<br />
 				
 			</div>
-			
-			<p><strong><?php _e('Manage your thumbnails'); ?></strong></p>
+			<?php 
+			//exit('<pre>'.print_r($product_data, true).'</pre>');
+			if($product_data['image'] != ''){ ?>
+			<p><strong <?php echo $display; ?>><?php _e('Manage your thumbnails'); ?></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
+			}
 			?>
 			
 <!-- 					<p>You are using the Browser uploader.  Problems?  Try the <a onclick='wpsc_upload_switcher("flash")' class="wpsc_upload_switcher">Flash uploader</a> instead.</p> -->
@@ -766,6 +769,7 @@ function wpsc_product_download_forms($product_data='') {
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
+
 	$output ='';
  	$upload_max = wpsc_get_max_upload_size();
  	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
@@ -895,7 +899,7 @@ function edit_multiple_image_gallery($product_data) {
 	$timestamp = time();
 	//echo "<pre>".print_r("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$main_image_id}' LIMIT 1",true)."</pre>";
 	//echo ;
-	
+
 	
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
@@ -947,7 +951,7 @@ function edit_multiple_image_gallery($product_data) {
 								</div>
 							</li>
 					    <li>
-								<a href='#' class='delete_primary_image'>Delete this Image</a>
+								<a href='' class='delete_primary_image'>Delete this Image</a>
 					    </li>
 						</ul>
 					</div>

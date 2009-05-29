@@ -51,20 +51,7 @@ function activate_resizable() {
 // 	});
 }
 
-function bind_shipping_rate_deletion() {
-  jQuery('table#gateway_options a.delete_button').click(function () {
-    this_row = jQuery(this).parents('tr.rate_row');
-    if(jQuery(this).hasClass('nosubmit')) {
-			// if the row was added using JS, just scrap it
-			jQuery(this_row).remove();
-    } else {
-			// otherwise, empty it and submit it
-			jQuery('td input', this_row).val('');
-			jQuery(this).parents('form').submit();
-    }
-    return false;
-	});
-}
+
 
 	jQuery(document).ready(function(){
 	  bind_shipping_rate_deletion();

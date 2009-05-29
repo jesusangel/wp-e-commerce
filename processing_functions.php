@@ -21,8 +21,16 @@ function wpsc_decrement_claimed_stock($purchase_log_id) {
 	$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $purchase_log_id));
 }
   
-  
-  
+/**
+ *	wpsc_get_currency_symbol
+ *	@param does not receive anything
+ *  @return returns the currency symbol used for the shop
+*/  
+function wpsc_get_currency_symbol(){
+	global $wpdb;
+	$currency_type = get_option('currency_type');
+	$wpsc_currency_data = $wpdb->get_var("SELECT `symbol` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
+	return  $wpsc_currency_data;}  
   
 /**
 * All the code below here needs commenting and looking at to see if it needs to be altered or disposed of.
