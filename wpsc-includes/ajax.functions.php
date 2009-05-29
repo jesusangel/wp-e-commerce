@@ -404,7 +404,7 @@ function wpsc_change_tax() {
   global $wpdb, $wpsc_cart;
   $form_id = absint($_POST['form_id']);
   $previous_country = $_SESSION['wpsc_selected_country'];
-	$_SESSION['wpsc_selected_country'] = absint($_POST['billing_country']);
+	$_SESSION['wpsc_selected_country'] =$_POST['billing_country'];
 	$_SESSION['wpsc_selected_region'] = absint($_POST['billing_region']);
 	
 	$check_country_code = $wpdb->get_var(" SELECT `country`.`isocode` FROM `".WPSC_TABLE_REGION_TAX."` AS `region` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `region`.`country_id` = `country`.`id` WHERE `region`.`id` = '".$_SESSION['wpsc_selected_region']."' LIMIT 1");
@@ -424,13 +424,18 @@ function wpsc_change_tax() {
 	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
 		
 	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
+	  
+	  
+	echo "\n/*
+	{$_POST['billing_country']}
+	{$previous_country}
+	*/\n";
+	  
 	
-	
-	
-// 	if($_POST['billing_country'] != $previous_country) {
+	if(($_POST['billing_country'] != 'undefined') && ($_POST['billing_country'] != $previous_country)) {
 		$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$_POST['billing_country']."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
 		if($region_list != null) {
-			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\\\"$html_form_id\\\", \\\"$form_id\\\");'>\n\r";
+			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
 			//$output .= "<option value=''>None</option>";
 			foreach($region_list as $region) {
 				if($_SESSION['selected_region'] == $region['id']) {
@@ -447,7 +452,7 @@ function wpsc_change_tax() {
 		} else {
 			echo  "jQuery('#region_select_$form_id').html('');\n\r";
 		}
-// 	}
+ 	}
 	
 	
 	

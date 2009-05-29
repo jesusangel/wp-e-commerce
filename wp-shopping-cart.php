@@ -11,6 +11,9 @@ Author URI: http://www.instinct.co.nz/e-commerce/
  * WP eCommerce Main Plugin File
  * @package wp-e-commerce
 */
+// this is to make sure it sets up the table name constants correctly on activation
+global $wpdb;
+
 define('WPSC_VERSION', '3.7');
 define('WPSC_MINOR_VERSION', '8');
 

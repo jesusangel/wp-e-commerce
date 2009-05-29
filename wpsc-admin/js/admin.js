@@ -428,7 +428,7 @@ jQuery(document).ready( function () {
 		 	page_title = jQuery(this).attr('id');
 		 	post_values = "wpsc_admin_action=settings_page_ajax&page_title="+page_title;
 		 	jQuery.post('admin.php?', post_values, function(html){
-		 	console.log(html);
+		 	//console.log(html);
 		 	jQuery('a.current').removeClass('current');
 		 	jQuery('#'+page_title+' a' ).addClass('current');
 		 	jQuery('#wpsc_options_page').html('');
