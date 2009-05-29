@@ -142,3 +142,20 @@ function wpsc_fancy_notification(parent_form){
     jQuery('#fancy_notification_content').css("display", 'none');  
 	}
 }
+
+
+  
+function set_billing_country(html_form_id, form_id){
+  var billing_region = '';
+  country = jQuery(("div#"+html_form_id+" select[@class=current_country]")).val();
+  region = jQuery(("div#"+html_form_id+" select[@class=current_region]")).val();
+  if(/[\d]{1,}/.test(region)) {
+    billing_region = "&billing_region="+region;
+	}
+	
+	form_values = "wpsc_ajax_action=change_tax&form_id="+form_id+"&billing_country="+country+billing_region;
+	jQuery.post( 'index.php', form_values, function(returned_data) {
+		eval(returned_data);
+	});
+  //ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
+}

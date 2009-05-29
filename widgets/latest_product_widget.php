@@ -5,9 +5,9 @@ function widget_latest_products($args) {
 	extract($args);
   $options = get_option('wpsc-widget_latest_products');   
 	$title = empty($options['title']) ? __(TXT_WPSC_LATEST_PRODUCTS) : $options['title'];
-	echo $before_widget."<br>";
+	echo $before_widget."<br />";
 	$full_title = $before_title . $title . $after_title;
-	echo $full_title."<br>";
+	echo $full_title."<br />";
 	
 	nzshpcrt_latest_product();
 	echo $after_widget;
@@ -20,23 +20,29 @@ function nzshpcrt_latest_product($input = null) {
 	if($latest_product != null) {
 		$output = "<div>";
 		foreach($latest_product as $special) {			
-			$output.="<a href='".wpsc_product_url($special['id'],$special['category'])."'><div>";
-			$output .= "<div class='item_image'>";
+			$output.="<div>";
+			$output .= "	<div class='item_image'>";
+ 			$output.="			<a href='".wpsc_product_url($special['id'],$special['category'])."'>";
 			if(($special['image'] > 0)) {
 				if(get_option('wpsc_selected_theme') == 'marketplace') {
 					$src = WPSC_IMAGE_URL.$special['image'];
 							
-					$output .= "<img src='index.php?image_id=".$special['image']."&amp;width=100&amp;height=70' title='".$special['name']."' alt='".$special['name']."' id='product_image_".$product['id']."' class='product_image'/>";
+					$output .= "				<img src='index.php?image_id=".$special['image']."&amp;width=100&amp;height=70' title='".$special['name']."' alt='".$special['name']."' id='product_image_".$product['id']."' class='product_image'/>";
 					
 				} else {
-					$output .= "<img src='". "index.php?image_id={$special['image']}&amp;width=45&amp;height=25' title='".$special['name']."' alt='".$special['name']."' /><br />";
+					$output .= "				<img src='". "index.php?image_id={$special['image']}&amp;width=45&amp;height=25' title='".$special['name']."' alt='".$special['name']."' /><br />";
 				}
 			} else {
 				//$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
 			}
-			$output .= "</div>";
-			$output .= "<strong>".stripslashes($special['name'])."</strong></a><br><br /> ";
 			
+ 			$output.="		</a>";
+			$output .= "	</div>";
+			
+ 			$output.="	<a href='".wpsc_product_url($special['id'],$special['category'])."'>";
+			$output .= "		<strong>".stripslashes($special['name'])."</strong><br />";
+			
+			$output .= "	</a>";
 			$output .= "</div>";
 		}
 		$output .= "</div>";

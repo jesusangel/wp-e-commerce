@@ -12,6 +12,7 @@
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-groups.page.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-variations.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 
@@ -62,19 +63,25 @@ function wpsc_admin_pages(){
 			}
 
 				
-	
-				//add_submenu_page(WPSC_DIR_NAME.'/display-log.php',TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/display-log.php');
-				$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
-				//         }
-			//written by allen
-			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');
+
+			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
+
+			
+			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
+			
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
 			
 			
-			//add_submenu_page($base_page,TXT_WPSC_PRODUCTS, TXT_WPSC_PRODUCTS, 7, WPSC_DIR_NAME.'/display-items.php');
+			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
+			//    $page_hooks[] = add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
 			
-			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'edit-products', 'wpsc_display_products_page');
 			
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'edit-groups', 'wpsc_display_groups_page');
+			
+			
+			
+			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');			
+			
+			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
@@ -91,10 +98,9 @@ function wpsc_admin_pages(){
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/admin-settings/'>Admin Options</a> <br />
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/shipping/'>Shipping Options</a> <br />
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment Options</a> <br />");
-				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");;
+				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			}
 
-			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
 			if (file_exists(dirname(__FILE__).'/gold_cart_files/csv_import.php')) {
 				add_submenu_page($base_page,TXT_WPSC_IMPORT_CSV, TXT_WPSC_IMPORT_CSV, 7, WPSC_DIR_NAME.'/gold_cart_files/csv_import.php');

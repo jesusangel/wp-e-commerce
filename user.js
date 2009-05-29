@@ -1,47 +1,42 @@
 var testsuccess = 0;
 var lnid = new Array();
-function categorylist(url)
-  {
-  self.location = url;
-  }
 
-var noresults=function(results)
-  {
+
+function categorylist(url) {
+  self.location = url;
+}
+
+var noresults=function(results) {
   return true;
-  }
+}
 
 function roundNumber(num, dec) {
 	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 	return result;
 }
-var getresults=function(results)
-  {
+
+
+var getresults=function(results) {
   eval(results);
-  if(window.drag_and_drop_cart_updater)
-    {
+  if(window.drag_and_drop_cart_updater) {
      drag_and_drop_cart_updater();
-    }
-  if(document.getElementById('loadingimage') != null)
-    {
+	}
+  if(document.getElementById('loadingimage') != null) {
     document.getElementById('loadingindicator').style.visibility = 'hidden';
-    }
-    else if(document.getElementById('alt_loadingimage') != null)
-    {
+	} else if(document.getElementById('alt_loadingimage') != null) {
     document.getElementById('alt_loadingindicator').style.visibility = 'hidden';
-    }
-  if((document.getElementById('sliding_cart') != null) && (document.getElementById('sliding_cart').style.display == 'none'))
-    {
+	}
+  if((document.getElementById('sliding_cart') != null) && (document.getElementById('sliding_cart').style.display == 'none')) {
     jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/minus.png"));
     jQuery("#sliding_cart").show("fast",function(){
     ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1"); });
-    }
-  if(document.getElementById('fancy_notification') != null)
-    {
+	}
+  if(document.getElementById('fancy_notification') != null) {
     jQuery('#loading_animation').css("display", 'none');
     //jQuery('#fancy_notificationimage').css("display", 'none');
-    }
-  }
-  
+	}
+}
+/*  
 function set_billing_country(html_form_id, form_id){
   var billing_region = '';
   country = jQuery(("div#"+html_form_id+" select[@class=current_country]")).val();
@@ -51,7 +46,7 @@ function set_billing_country(html_form_id, form_id){
 	}
   ajax.post("index.php",getresults,("ajax=true&changetax=true&form_id="+form_id+"&billing_country="+country+billing_region));
   //ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
-}
+}*/
 
 function submitform(frm, show_notification)
   {

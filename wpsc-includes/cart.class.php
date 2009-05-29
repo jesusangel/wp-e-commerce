@@ -53,6 +53,7 @@ function nzshpcrt_overall_total_price() {
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
 	$total += $wpsc_cart->calculate_total_tax();
+	$total -= $wpsc_cart->coupons_amount;
   return $total;
 }
 
@@ -410,10 +411,13 @@ class wpsc_cart {
      }   
    }
   
-      $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
+		$this->delivery_country =& $_SESSION['wpsc_delivery_country'];
 	  $this->selected_country =& $_SESSION['wpsc_selected_country'];
 	  $this->delivery_region =& $_SESSION['wpsc_delivery_region'];
 	  $this->selected_region =& $_SESSION['wpsc_selected_region'];
+	  
+	  
+	  $this->get_tax_rate();
 	}
 	
 	
@@ -544,7 +548,14 @@ class wpsc_cart {
 		if($add_tax !== true) {
 			$tax_percentage = 0;
 		}
-		$this->tax_percentage = $tax_percentage;
+		if($this->tax_percentage != $tax_percentage ) {
+			$this->clear_cache();
+			$this->tax_percentage = $tax_percentage;
+		
+			foreach($this->cart_items as $key => $cart_item) {
+				$this->cart_items[$key]->refresh_item();
+			}
+		}
   }
 
 

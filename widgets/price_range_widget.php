@@ -36,14 +36,14 @@ function nzshpcrt_price_range($input = null) {
 		for($i=0;$i<$final_count;$i++) {
 			$j=$i+1;
 			if ($i==$final_count-1) {
-				echo "<a href='".$product_page.$seperater."range=".$j."'>Over ".$ranges[$i]."</a><br>";
+				echo "<a href='".$product_page.$seperater."range=".$j."'>Over ".$ranges[$i]."</a><br/>";
 			} else if($ranges[$i]==0){ 
-				echo "<a href='".$product_page.$seperater."range=".$j."'>Under ".$ranges[$i+1]."</a><br>";
+				echo "<a href='".$product_page.$seperater."range=".$j."'>Under ".$ranges[$i+1]."</a><br/>";
 			}else {
-				echo "<a href='".$product_page.$seperater."range=".$j."'>".$ranges[$i]." - ".$ranges[$i+1]."</a><br>";
+				echo "<a href='".$product_page.$seperater."range=".$j."'>".$ranges[$i]." - ".$ranges[$i+1]."</a><br/>";
 			}
 		}
-		echo "<a href='".get_option("product_list_url")."'>".TXT_WPSC_SHOWALL."</a><br>";
+		echo "<a href='".get_option("product_list_url")."'>".TXT_WPSC_SHOWALL."</a><br/>";
 	}
 }
 

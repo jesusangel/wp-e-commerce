@@ -27,3 +27,7 @@ div.categorydisplay ul li:before{
 a.additional_description_link img {
   margin:0px 3px 0px 0px;
 }
+
+div.textcol form {
+  min-width: 300px;
+}

@@ -211,11 +211,11 @@ class wpsc_checkout {
 			case "address":
 			case "delivery_address":
 			case "textarea":
-			$output = "<textarea class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]'>".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
+			$output = "<textarea class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]' rows='3' cols='40' >".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
 			break;
 			
 			case "country":
-			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region']);
+			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id());
 			break;
 
 			case "delivery_country":

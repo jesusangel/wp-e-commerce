@@ -395,4 +395,77 @@ if($_REQUEST['wpsc_action'] == 'submit_checkout') {
 	add_action('init', 'wpsc_submit_checkout');
 }
 
+
+/**
+	* wpsc_change_tax function, used through ajax and in normal page loading.
+	* No parameters, returns nothing
+*/
+function wpsc_change_tax() {
+  global $wpdb, $wpsc_cart;
+  $form_id = absint($_POST['form_id']);
+  $previous_country = $_SESSION['wpsc_selected_country'];
+	$_SESSION['wpsc_selected_country'] = absint($_POST['billing_country']);
+	$_SESSION['wpsc_selected_region'] = absint($_POST['billing_region']);
+	
+	$check_country_code = $wpdb->get_var(" SELECT `country`.`isocode` FROM `".WPSC_TABLE_REGION_TAX."` AS `region` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `region`.`country_id` = `country`.`id` WHERE `region`.`id` = '".$_SESSION['wpsc_selected_region']."' LIMIT 1");
+	
+	if($_SESSION['wpsc_selected_country'] != $check_country_code) {
+		$_SESSION['wpsc_selected_region'] = null;
+	}
+  $wpsc_cart->update_location();
+  $tax = $wpsc_cart->calculate_total_tax();
+  $total = wpsc_cart_total();
+
+	ob_start();
+	include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	$output = ob_get_contents();
+	ob_end_clean();
+	//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
+	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+		
+	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
+	
+	
+	
+// 	if($_POST['billing_country'] != $previous_country) {
+		$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$_POST['billing_country']."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
+		if($region_list != null) {
+			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\\\"$html_form_id\\\", \\\"$form_id\\\");'>\n\r";
+			//$output .= "<option value=''>None</option>";
+			foreach($region_list as $region) {
+				if($_SESSION['selected_region'] == $region['id']) {
+					$selected = "selected='true'";
+				} else {
+					$selected = "";
+				}
+				$output .= "  <option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
+			}
+			$output .= "</select>\n\r";
+			
+			$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+			echo  "jQuery('#region_select_$form_id').html(\"".$output."\");\n\r";
+		} else {
+			echo  "jQuery('#region_select_$form_id').html('');\n\r";
+		}
+// 	}
+	
+	
+	
+	
+		
+	if($tax > 0) {
+		echo  "jQuery(\"tr.total_tax\").show();\n\r";
+	} else {
+		echo  "jQuery(\"tr.total_tax\").hide();\n\r";
+	}
+	echo  "jQuery('#checkout_tax').html(\"<span class='pricedisplay'>".wpsc_cart_tax()."</span>\");\n\r";
+	echo  "jQuery('#checkout_total').html(\"<span class='pricedisplay'>{$total}</span><input id='shopping_cart_total_price' type='hidden' value='{$total}' />\");\n\r";
+	//echo "\n\r/*\n\r{$wpsc_cart->tax_percentage}\n\r*/\n\r";
+	exit();
+}
+
+// execute on POST and GET
+if(($_REQUEST['wpsc_ajax_action'] == 'change_tax')) {
+	add_action('init', 'wpsc_change_tax');
+}
 ?>

@@ -1943,13 +1943,7 @@ if(count(explode(".",$current_version_number)) > 2) {
   $current_version_number = 0;
 }
 
-if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
-	include_once("install_and_update.php");
-  add_action('init', 'nzshpcrt_install');
-} else if(($current_version_number < WPSC_VERSION ) || (($current_version_number == WPSC_VERSION ) && (get_option('wpsc_minor_version') <= WPSC_MINOR_VERSION))) {
-	include_once("install_and_update.php");
-  add_action('init', 'wpsc_auto_update');
-}
+
 
 add_filter('single_post_title','wpsc_post_title_seo');
    

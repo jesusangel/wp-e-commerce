@@ -54,7 +54,7 @@ function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_t
   return $output;
   }
   
-function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null ) {
+function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null, $supplied_form_id = null) {
   global $wpdb;
   if($selected_country == null) {
     $selected_country = get_option('base_country');
@@ -67,17 +67,21 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
 	} else {
 		$html_form_id = 'region_country_form';
 	}
+	if($supplied_form_id != null) {
+	  $supplied_form_id = "id='$supplied_form_id'";
+	}
+	
   $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
   $output .= "<div id='$html_form_id'>\n\r";
-  $output .= "<select name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
+  $output .= "<select $supplied_form_id name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
   foreach ($country_data as $country) {
     $selected ='';
    if($country['visible'] == '1'){
   
 		if($selected_country == $country['isocode']) {
-		  $selected = "selected='true'";
+		  $selected = "selected='selected'";
 			}
-		$output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>\n\r";
+		$output .= "<option value='".$country['isocode']."' $selected>".htmlentities($country['country'])."</option>\n\r";
 		}  
 	}
 
@@ -91,11 +95,11 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
       //$output .= "<option value=''>None</option>";
       foreach($region_list as $region) {
         if($selected_region == $region['id']) {
-          $selected = "selected='true'";
+          $selected = "selected='selected'";
 				} else {
 					$selected = "";
 				}
-        $output .= "<option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
+        $output .= "<option value='".$region['id']."' $selected>".htmlentities($region['name'])."</option>\n\r";
 			}
       $output .= "</select>\n\r";
 		}

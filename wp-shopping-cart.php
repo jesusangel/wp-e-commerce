@@ -175,6 +175,27 @@ define('WPSC_CATEGORY_URL', $wpsc_category_url);
 define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 define('WPSC_CACHE_URL', $wpsc_cache_url);
 
+
+
+
+
+
+
+
+
+
+if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
+	include_once("install_and_update.php");
+ 	register_activation_hook(__FILE__, 'nzshpcrt_install'); 
+  //add_action('init', 'nzshpcrt_install');
+} else if(($current_version_number < WPSC_VERSION ) || (($current_version_number == WPSC_VERSION ) && (get_option('wpsc_minor_version') <= WPSC_MINOR_VERSION))) {
+	include_once("install_and_update.php");
+	register_activation_hook(__FILE__, 'wpsc_auto_update'); 
+  //add_action('init', 'wpsc_auto_update');
+}
+
+
+
 /**
 * Code to define where the uploaded files are stored ends here
 */

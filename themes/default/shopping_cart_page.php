@@ -51,16 +51,14 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			<tr><td><?php echo TXT_WPSC_COUPONSINVALID; ?></td></tr>
 		<?php endif; ?>
 		<tr>
-		<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
 		
 		<td colspan="2"><?php _e('Enter your coupon number'); ?> :</td>
-		<td  colspan="2" align='left'>
-		<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>'>
-		</td>
-		<td>
-		<input type='submit' value='<?php echo TXT_WPSC_APPLY ?>'>
-		</td>
+		<td  colspan="3" align='left'>
+		<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
+			<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>' />
+			<input type='submit' value='<?php echo TXT_WPSC_APPLY ?>' />
 		</form>
+		</td>
 		</tr>
 	<?php endif; ?>	
 	</table>
@@ -77,8 +75,16 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			
 			<tr>
 				<td colspan='5'>
-					 <p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
-					  <p class='validation-error'><?php echo $_SESSION['paypalproErrorMessage']; ?></p>
+					<?php if($_SESSION['categoryAndShippingCountryConflict'] != '') : ?>
+						<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
+					<?php
+					endif;
+					if($_SESSION['paypalproErrorMessage'] != '') :
+					?>
+						<p class='validation-error'><?php echo $_SESSION['paypalproErrorMessage']; ?></p>
+					<?php
+					endif;
+					?>
 
 					<form name='change_country' id='change_country' action='' method='post'>
 						<?php echo wpsc_shipping_country_list();?>
@@ -134,6 +140,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
 	  </td>
 	  <?php endif ?>
+	</tr>
 		
 	
 	<tr class='total_price'>
@@ -156,15 +163,15 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
 	<?php echo TXT_WPSC_CREDITCARDHANDY; ?><br />
 	<?php echo TXT_WPSC_ASTERISK; ?>
-<form action='' method='POST' enctype="multipart/form-data">
+<form action='' method='post' enctype="multipart/form-data">
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
 		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 		  <?php if(wpsc_checkout_form_is_header() == true) : ?>
 			<td colspan='2'>
-			   <h4>
+				<h4>
 					<?php echo wpsc_checkout_form_name();?>
-			   </h4>
+				</h4>
 			</td>
 		  <?php else: ?>
 			<td>
@@ -175,7 +182,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			<td>
 				<?php echo wpsc_checkout_form_field();?>
 				
-		  <?php if(wpsc_the_checkout_item_error()): ?>
+		  <?php if(wpsc_the_checkout_item_error() != ''): ?>
 		    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
 			<?php endif; ?>
 			</td>
@@ -191,7 +198,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 					<h3><?php echo TXT_WPSC_SELECTGATEWAY;?></h3>
 					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
 						<div class="custom_gateway">
-							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="true" name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="checked" name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
 							
 							<?php if(wpsc_gateway_form_fields()): ?> 
 								<table class='<?php echo wpsc_gateway_form_field_style();?>'>

@@ -83,6 +83,38 @@ jQuery(document).ready( function () {
 	});
 	
 	
+	jQuery('a.add_variation_item_form').livequery(function(){
+	  jQuery(this).click( function() {
+			form_field_container = jQuery(this).siblings('#variation_values');
+			form_field = jQuery("div.variation_value", form_field_container).eq(0).clone();
+			
+			jQuery('input.text',form_field).attr('name','new_variation_values[]');
+			jQuery('input.text',form_field).attr('value','');
+			
+			jQuery(form_field_container).append(form_field);
+		  return false;
+		});		
+	});
+	
+
+	jQuery('div.variation_value a.delete_variation_value').livequery(function(){
+	  jQuery(this).click( function() {
+			element_count = jQuery("#variation_values div").size();
+			
+			
+			if(element_count > 1) {
+						
+			  post_values = "admin=true&ajax	=true&remove_variation_value=true&variation_value_id="+variation_value_id;			
+				jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
+			
+				});
+				jQuery(this).parent("div.variation_value").remove();
+			}
+		  return false;
+		});		
+	});
+	
+	
 	
 	jQuery('#poststuff .postbox h3').livequery(function(){
 	  jQuery(this).click( function() {
@@ -606,3 +638,24 @@ function remove_form_field(id,form_id) {
   }
   return false;
 } 
+
+function showadd_categorisation_form() {
+	if(jQuery('div#add_categorisation').css('display') != 'block') {
+		jQuery('div#add_categorisation').css('display', 'block');
+		jQuery('div#edit_categorisation').css('display', 'none');
+	} else {
+		jQuery('div#add_categorisation').css('display', 'none');
+	}
+	return false;
+}
+
+
+function showedit_categorisation_form() {
+	if(jQuery('div#edit_categorisation').css('display') != 'block') {
+		jQuery('div#edit_categorisation').css('display', 'block');
+		jQuery('div#add_categorisation').css('display', 'none');
+	} else {
+		jQuery('div#edit_categorisation').css('display', 'none');
+	}
+	return false;
+}
