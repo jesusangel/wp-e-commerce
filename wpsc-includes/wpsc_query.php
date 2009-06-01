@@ -762,9 +762,11 @@ class WPSC_Query {
   function create_default_query() {
     global $wp_query;
     
-    // get the product_url_name
-		if($wp_query->query_vars['product_url_name']) {
+    // get the product_url_name or ID
+		if(isset($wp_query->query_vars['product_url_name']) && ($wp_query->query_vars['product_url_name'] != '')) {
 			$query['product_url_name'] = $wp_query->query_vars['product_url_name'];
+		} else if(is_numeric($_GET['category'])) {
+			$query['product_id'] = $_GET['product_id'];
 		}
     
     
@@ -774,9 +776,15 @@ class WPSC_Query {
 		} else if(is_numeric($_GET['category'])) {
 			$query['category_id'] = $_GET['category'];
 		}
+		
+    // get the category ID
+		if($wp_query->query_vars['category_id'] > 0) {
+			$query['category_id'] = $wp_query->query_vars['category_id'];
+		}
+        
         
     
-    // get the category ID
+    // get the page number
 		if($wp_query->query_vars['wpsc_page'] > 0) {
 			$query['page'] = $wp_query->query_vars['wpsc_page'];
 		} else if(is_numeric($_GET['page_number'])) {
