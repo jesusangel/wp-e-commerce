@@ -15,7 +15,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 global $wpdb;
 
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '8');
+define('WPSC_MINOR_VERSION', '10');
 
 define('WPSC_PRESENTABLE_VERSION', '3.7 Beta 1');
 
@@ -55,12 +55,7 @@ if(get_option('language_setting') != '') {
 
 
 
-/**
- * on some servers, these values are empty when the plugin is activated, if it is empty at that moment the tables get moved to the wrong place
- * if this happens, the plugin breaks because when this file runs in the normal scope, it does pick up on the correct table prefix and can no longer find its tables.
- * this could do unusual things on wordpress MU under the same conditions that cause it to break in wordpress on some servers.
-*/
-$wp_table_prefix = "wp_";
+
 if(!empty($wpdb->prefix)) {
   $wp_table_prefix = $wpdb->prefix;
 } else if(!empty($table_prefix)) {
