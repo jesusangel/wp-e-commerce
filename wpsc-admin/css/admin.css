@@ -169,17 +169,18 @@ div.product-placeholder {
 
 /*  Product details form styling */
 #wpsc-col-right {
-clear:right;
-float:right;
-margin:0;
-padding:0;
-width:49%;
+	clear:right;
+	float:right;
+	margin:0;
+	padding:0;
+	width:58%;
 }
+
 #wpsc-col-left {
-margin:0;
-overflow:hidden;
-padding:0;
-width:49%;
+	margin:0;
+	overflow:hidden;
+	padding:0;
+	width:40%;
 }
 td.product_tags{
 	padding-left:3.5em;
