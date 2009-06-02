@@ -53,37 +53,51 @@ if(get_option('language_setting') != '') {
   require(WPSC_FILE_PATH.'/languages/EN_en.php');
 }
 
+
+
+/**
+ * on some servers, these values are empty when the plugin is activated, if it is empty at that moment the tables get moved to the wrong place
+ * if this happens, the plugin breaks because when this file runs in the normal scope, it does pick up on the correct table prefix and can no longer find its tables.
+ * this could do unusual things on wordpress MU under the same conditions that cause it to break in wordpress on some servers.
+*/
+$wp_table_prefix = "wp_";
+if(!empty($wpdb->prefix)) {
+  $wp_table_prefix = $wpdb->prefix;
+} else if(!empty($table_prefix)) {
+  $wp_table_prefix = $table_prefix;
+}
+
 // Define the database table names
-define('WPSC_TABLE_CATEGORY_TM', "{$wpdb->prefix}wpsc_category_tm");
-define('WPSC_TABLE_ALSO_BOUGHT', "{$wpdb->prefix}wpsc_also_bought");
-define('WPSC_TABLE_CART_CONTENTS', "{$wpdb->prefix}wpsc_cart_contents");
-define('WPSC_TABLE_CART_ITEM_EXTRAS', "{$wpdb->prefix}wpsc_cart_item_extras");
-define('WPSC_TABLE_CART_ITEM_VARIATIONS', "{$wpdb->prefix}wpsc_cart_item_variations");
-define('WPSC_TABLE_CHECKOUT_FORMS', "{$wpdb->prefix}wpsc_checkout_forms");
-define('WPSC_TABLE_CURRENCY_LIST', "{$wpdb->prefix}wpsc_currency_list");
-define('WPSC_TABLE_DOWNLOAD_STATUS', "{$wpdb->prefix}wpsc_download_status");
-define('WPSC_TABLE_ITEM_CATEGORY_ASSOC', "{$wpdb->prefix}wpsc_item_category_assoc");
-define('WPSC_TABLE_PRODUCT_CATEGORIES', "{$wpdb->prefix}wpsc_product_categories");
-define('WPSC_TABLE_PRODUCT_FILES', "{$wpdb->prefix}wpsc_product_files");
-define('WPSC_TABLE_PRODUCT_IMAGES', "{$wpdb->prefix}wpsc_product_images");
-define('WPSC_TABLE_PRODUCT_LIST', "{$wpdb->prefix}wpsc_product_list");
-define('WPSC_TABLE_PRODUCT_ORDER', "{$wpdb->prefix}wpsc_product_order");
-define('WPSC_TABLE_PRODUCT_RATING', "{$wpdb->prefix}wpsc_product_rating");
-define('WPSC_TABLE_PRODUCT_VARIATIONS', "{$wpdb->prefix}wpsc_product_variations");
-define('WPSC_TABLE_PURCHASE_LOGS', "{$wpdb->prefix}wpsc_purchase_logs");
-define('WPSC_TABLE_PURCHASE_STATUSES', "{$wpdb->prefix}wpsc_purchase_statuses");
-define('WPSC_TABLE_REGION_TAX', "{$wpdb->prefix}wpsc_region_tax");
-define('WPSC_TABLE_SUBMITED_FORM_DATA', "{$wpdb->prefix}wpsc_submited_form_data");
-define('WPSC_TABLE_VARIATION_ASSOC', "{$wpdb->prefix}wpsc_variation_assoc");
-define('WPSC_TABLE_VARIATION_PROPERTIES', "{$wpdb->prefix}wpsc_variation_properties");
-define('WPSC_TABLE_VARIATION_VALUES', "{$wpdb->prefix}wpsc_variation_values");
-define('WPSC_TABLE_VARIATION_VALUES_ASSOC', "{$wpdb->prefix}wpsc_variation_values_assoc");
-define('WPSC_TABLE_COUPON_CODES', "{$wpdb->prefix}wpsc_coupon_codes");
-define('WPSC_TABLE_LOGGED_SUBSCRIPTIONS', "{$wpdb->prefix}wpsc_logged_subscriptions");
-define('WPSC_TABLE_PRODUCTMETA', "{$wpdb->prefix}wpsc_productmeta");
-define('WPSC_TABLE_CATEGORISATION_GROUPS', "{$wpdb->prefix}wpsc_categorisation_groups");
-define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wpdb->prefix}wpsc_variation_combinations");
-define('WPSC_TABLE_CLAIMED_STOCK', "{$wpdb->prefix}wpsc_claimed_stock");
+define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
+define('WPSC_TABLE_ALSO_BOUGHT', "{$wp_table_prefix}wpsc_also_bought");
+define('WPSC_TABLE_CART_CONTENTS', "{$wp_table_prefix}wpsc_cart_contents");
+define('WPSC_TABLE_CART_ITEM_EXTRAS', "{$wp_table_prefix}wpsc_cart_item_extras");
+define('WPSC_TABLE_CART_ITEM_VARIATIONS', "{$wp_table_prefix}wpsc_cart_item_variations");
+define('WPSC_TABLE_CHECKOUT_FORMS', "{$wp_table_prefix}wpsc_checkout_forms");
+define('WPSC_TABLE_CURRENCY_LIST', "{$wp_table_prefix}wpsc_currency_list");
+define('WPSC_TABLE_DOWNLOAD_STATUS', "{$wp_table_prefix}wpsc_download_status");
+define('WPSC_TABLE_ITEM_CATEGORY_ASSOC', "{$wp_table_prefix}wpsc_item_category_assoc");
+define('WPSC_TABLE_PRODUCT_CATEGORIES', "{$wp_table_prefix}wpsc_product_categories");
+define('WPSC_TABLE_PRODUCT_FILES', "{$wp_table_prefix}wpsc_product_files");
+define('WPSC_TABLE_PRODUCT_IMAGES', "{$wp_table_prefix}wpsc_product_images");
+define('WPSC_TABLE_PRODUCT_LIST', "{$wp_table_prefix}wpsc_product_list");
+define('WPSC_TABLE_PRODUCT_ORDER', "{$wp_table_prefix}wpsc_product_order");
+define('WPSC_TABLE_PRODUCT_RATING', "{$wp_table_prefix}wpsc_product_rating");
+define('WPSC_TABLE_PRODUCT_VARIATIONS', "{$wp_table_prefix}wpsc_product_variations");
+define('WPSC_TABLE_PURCHASE_LOGS', "{$wp_table_prefix}wpsc_purchase_logs");
+define('WPSC_TABLE_PURCHASE_STATUSES', "{$wp_table_prefix}wpsc_purchase_statuses");
+define('WPSC_TABLE_REGION_TAX', "{$wp_table_prefix}wpsc_region_tax");
+define('WPSC_TABLE_SUBMITED_FORM_DATA', "{$wp_table_prefixx}wpsc_submited_form_data");
+define('WPSC_TABLE_VARIATION_ASSOC', "{$wp_table_prefix}wpsc_variation_assoc");
+define('WPSC_TABLE_VARIATION_PROPERTIES', "{$wp_table_prefix}wpsc_variation_properties");
+define('WPSC_TABLE_VARIATION_VALUES', "{$wp_table_prefix}wpsc_variation_values");
+define('WPSC_TABLE_VARIATION_VALUES_ASSOC', "{$wp_table_prefix}wpsc_variation_values_assoc");
+define('WPSC_TABLE_COUPON_CODES', "{$wp_table_prefix}wpsc_coupon_codes");
+define('WPSC_TABLE_LOGGED_SUBSCRIPTIONS', "{$wp_table_prefix}wpsc_logged_subscriptions");
+define('WPSC_TABLE_PRODUCTMETA', "{$wp_table_prefix}wpsc_productmeta");
+define('WPSC_TABLE_CATEGORISATION_GROUPS', "{$wp_table_prefix}wpsc_categorisation_groups");
+define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wp_table_prefix}wpsc_variation_combinations");
+define('WPSC_TABLE_CLAIMED_STOCK', "{$wp_table_prefix}wpsc_claimed_stock");
 
 
 // start including the rest of the plugin here

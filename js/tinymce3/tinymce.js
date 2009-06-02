@@ -51,9 +51,9 @@ function insertWPSCLink() {
 		var visibles = visi.value;
 		if (categoryid > 0 ) {
 			if (visibles != '') {
-				tagtext = "[wpsc_slider_category=" + categoryid + "," + visibles + "]";
+				tagtext = "[wpsc_product_slider category_id='"+categoryid+"' visible_items='"+visibles+"']";
 			} else {
-				tagtext = "[wpsc_slider_category=" + categoryid + "]";
+				tagtext = "[wpsc_product_slider category_id='"+categoryid+"']";
 			}
 		} else {
 			tinyMCEPopup.close();
