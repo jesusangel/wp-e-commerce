@@ -726,7 +726,7 @@ function wpsc_product_image_forms($product_data='') {
 						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize" /> <label for="add_image_resize0">do not resize thumbnail image</label>
 					</li>
 					<li>
-						<input type="radio" onclick='hideOptionElement(null, "image_resize1");' class="image_resize" id="add_image_resize1" value="1" name="image_resize" checked="true"/> <label for="add_image_resize1">use default size(<abbr title="This is set on the Settings Page">96×96px</abbr>) </label>
+						<input type="radio" onclick='hideOptionElement(null, "image_resize1");' class="image_resize" id="add_image_resize1" value="1" name="image_resize" checked="true"/> <label for="add_image_resize1">use default size (<abbr title="This is set on the Settings Page"><?php echo get_option('product_image_width'); ?> × <?php echo get_option('product_image_height'); ?>px</abbr>) </label>
 					</li>
 					<li>
 						<input type="radio" onclick='hideOptionElement("heightWidth", "image_resize2");' class="image_resize" id="add_image_resize2" value="2" name="image_resize"/>
@@ -934,6 +934,7 @@ function edit_multiple_image_gallery($product_data) {
 					    <li>
 								<input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE; ?>(<abbr title='<?php echo TXT_WPSC_SETONSETTINGS; ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</abbr>)
 								</label>
+
 					    </li>
 							
 					    <li>
