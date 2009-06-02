@@ -780,9 +780,7 @@ class WPSC_Query {
     // get the category ID
 		if($wp_query->query_vars['category_id'] > 0) {
 			$query['category_id'] = $wp_query->query_vars['category_id'];
-		}
-        
-        
+		}        
     
     // get the page number
 		if($wp_query->query_vars['wpsc_page'] > 0) {

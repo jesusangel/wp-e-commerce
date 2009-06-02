@@ -16,6 +16,8 @@
 * enqueue all javascript and CSS for wp ecommerce
 */
 function wpsc_enqueue_user_script_and_css() {
+	global $wp_styles;
+	
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
   
 	if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
@@ -53,6 +55,13 @@ function wpsc_enqueue_user_script_and_css() {
 	wp_enqueue_style( 'wpsc-product-rater', WPSC_URL.'/product_rater.css', false, $version_identifier, 'all');
 	wp_enqueue_style( 'wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_css=true&category=$category_id" , false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wpsc-thickbox', WPSC_URL.'/thickbox.css', false, $version_identifier, 'all');
+	
+	
+	
+	
+	wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');
+	$wp_styles->add_data( 'wpsc-ie-fixes', 'conditional', 'lt IE 7' );
+	
 	
 }
 
@@ -118,6 +127,11 @@ if($_GET['wpsc_user_dynamic_js'] == 'true') {
 
 function wpsc_user_dynamic_css() {  
   global $wpdb;
+  /*
+  /var/www/apps.instinct.co.nz/wp_2.7/wp-content/themes/japan-style/header.php:	<!--[if IE]><link rel="stylesheet" type="text/css" href="<?php bloginfo('stylesheet_directory'); ?>/ie.css" media="screen" /><![endif]-->
+	/var/www/apps.instinct.co.nz/wp_2.7/wp-includes/script-loader.php:	$styles->add( 'ie', '/wp-admin/css/ie.css', array(), '20081210' );
+  */
+  
   header('Content-Type: text/css');
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
  	header('Cache-Control: public, must-revalidate, max-age=86400');
@@ -185,6 +199,9 @@ function wpsc_user_dynamic_css() {
 			div.product_grid_display div.item_no_image  {
 				width: <?php echo $thumbnail_width; ?>px;
 				height: <?php echo $thumbnail_height; ?>px;
+			}
+			div.product_grid_display div.item_no_image a  {
+				width: <?php echo $thumbnail_width; ?>px;
 			}
     <?php    
     }

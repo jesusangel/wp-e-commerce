@@ -21,6 +21,7 @@ global $wpdb;
 <head>
 	<title>WP Shopping Cart</title>
 <!-- 	<meta http-equiv="Content-Type" content="<?php// bloginfo('html_type'); ?>; charset=<?php //echo get_option('blog_charset'); ?>" /> -->
+	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/jquery/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/tiny_mce_popup.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/utils/mctabs.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/utils/form_utils.js"></script>
@@ -43,25 +44,29 @@ global $wpdb;
 		<div id="wpsc_category_panel" class="panel current">
 		<br />
 		<table border="0" cellpadding="4" cellspacing="0">
-         <tr>
-			<td nowrap="nowrap"><label for="wpsc_category"><?php _e("Select Category", 'wpsc_category'); ?></label></td>
-		<td><select id="wpsc_category" name="wpsc_category" style="width: 200px">
-			<option value="0"><?php _e("No Category", 'wpsc_category'); ?></option>
-				<?php
-				$categorylist = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." ORDER BY id ASC",ARRAY_A);
-				if(is_array($categorylist)) {
-					foreach($categorylist as $category) {
-						echo "<option value=".$category['id']." >".$category['name']."</option>"."\n";
-					}
-				}
-				?>
-            </select></td>
-          </tr>
-          <tr>
-						<td nowrap="nowrap" valign="top"><label for="showtype"><?php _e("Full Display", 'wpsc_category'); ?></label></td>
-            <td><label><input name="showtype" id='wpsc_fulldisplay' type="checkbox" checked="checked" /></label></td>
-          </tr>
-        </table>
+			<tr>
+				<td nowrap="nowrap"><label for="wpsc_category"><?php _e("Select Category", 'wpsc_category'); ?></label></td>
+				<td>
+					<select id="wpsc_category" name="wpsc_category" style="width: 150px">
+					<option value="0"><?php _e("No Category", 'wpsc_category'); ?></option>
+						<?php
+						$categorylist = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." ORDER BY id ASC",ARRAY_A);
+						if(is_array($categorylist)) {
+							foreach($categorylist as $category) {
+								echo "<option value=".$category['id']." >".$category['name']."</option>"."\n";
+							}
+						}
+						?>
+            </select>
+					</td>
+				</tr>
+				
+				<tr>
+					<td nowrap="nowrap" valign="top"><label for="wpsc_perpage"><?php _e("Number of items per Page", 'wpsc_category'); ?></label></td>
+					<td><input name="number_per_page" id='wpsc_perpage' type="text" value='6'  style="width: 80px" /></td>
+				</tr>
+				
+			</table>
 		</div>
 		<!-- gallery panel -->
 		<div id="product_slider_panel" class="panel">

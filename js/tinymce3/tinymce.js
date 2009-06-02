@@ -30,12 +30,15 @@ function insertWPSCLink() {
 	// who is active ?
 	if (select_category.className.indexOf('current') != -1) {
 		var categoryid = category.value;
-		var fulldisplay = document.getElementById('wpsc_fulldisplay').checked;
+		var items_per_page = 0;
+		items_per_page = jQuery('#wpsc_perpage').val();
+		
+		
 		if (categoryid > 0 ) {
-			if (fulldisplay)
-				tagtext = "[wpsc_category=" + categoryid + ",full]";
+			if (items_per_page > 0)
+				tagtext = "[wpsc_products category_id='"+categoryid+"' number_per_page='"+items_per_page+"']";
 			else
-				tagtext = "[wpsc_category=" + categoryid + "]";
+				tagtext = "[wpsc_products category_id='"+categoryid+"' ]";
 		} else {
 			tinyMCEPopup.close();
 		}
