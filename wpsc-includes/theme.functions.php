@@ -148,27 +148,45 @@ function wpsc_user_dynamic_css() {
       
       
     ?>
-    div.default_product_display div.textcol{
-        margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-        _margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
-        min-height: <?php echo $thumbnail_height;?>px;
-        _height: <?php echo $thumbnail_height;?>px;
-      }
-        
-        
-      div.default_product_display  div.textcol div.imagecol{
-        position:absolute;
-        top:0px;
-        left: 0px;
-        margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
-      }
-      
-      div.default_product_display  div.textcol div.imagecol a img {
-        width: <?php echo $thumbnail_width; ?>px;
-        height: <?php echo $thumbnail_height; ?>px;
-      }
+			div.default_product_display div.textcol{
+				margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
+				_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+				min-height: <?php echo $thumbnail_height;?>px;
+				_height: <?php echo $thumbnail_height;?>px;
+			}
+				
+				
+			div.default_product_display  div.textcol div.imagecol{
+				position:absolute;
+				top:0px;
+				left: 0px;
+				margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
+			}
+			
+			div.default_product_display  div.textcol div.imagecol a img {
+				width: <?php echo $thumbnail_width; ?>px;
+				height: <?php echo $thumbnail_height; ?>px;
+			}
+		
       
     <?php
+    }
+        
+    if($display_type == 'grid') {
+      $thumbnail_width = get_option('product_image_width');
+      if($thumbnail_width <= 0) {
+        $thumbnail_width = 96;
+      }
+      $thumbnail_height = get_option('product_image_height'); 
+      if($thumbnail_height <= 0) { 
+        $thumbnail_height = 96; 
+      }
+      ?>
+			div.product_grid_display div.item_no_image  {
+				width: <?php echo $thumbnail_width; ?>px;
+				height: <?php echo $thumbnail_height; ?>px;
+			}
+    <?php    
     }
         
       
@@ -177,26 +195,26 @@ function wpsc_user_dynamic_css() {
     if($single_thumbnail_width <= 0) {
       $single_thumbnail_width = 128;
     }
-    ?>
-      div.single_product_display div.textcol{
-        margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
-        _margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
-        min-height: <?php echo $single_thumbnail_height;?>px;
-        _height: <?php echo $single_thumbnail_height;?>px;
-      }
+	?>
+			div.single_product_display div.textcol{
+				margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
+				_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+				min-height: <?php echo $single_thumbnail_height;?>px;
+				_height: <?php echo $single_thumbnail_height;?>px;
+			}
         
         
-      div.single_product_display  div.textcol div.imagecol{
-        position:absolute;
-        top:0px;
-        left: 0px;
-        margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
-      }
+			div.single_product_display  div.textcol div.imagecol{
+				position:absolute;
+				top:0px;
+				left: 0px;
+				margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
+			}
       
-      div.single_product_display  div.textcol div.imagecol a img {
-        width: <?php echo $single_thumbnail_width; ?>px;
-        height: <?php echo $single_thumbnail_height; ?>px;
-      }
+			div.single_product_display  div.textcol div.imagecol a img {
+				width: <?php echo $single_thumbnail_width; ?>px;
+				height: <?php echo $single_thumbnail_height; ?>px;
+			}
       
     <?php
     $product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, `meta1`.`meta_value` AS `height`, `meta2`.`meta_value` AS `width` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` ON `products`.`id` = `meta1`.`product_id` = `meta2`.`product_id`  WHERE `products`.`thumbnail_state` IN(0,2,3) AND `meta1`.`meta_key` IN ('thumbnail_height') AND `meta2`.`meta_key` IN ('thumbnail_width')"); 

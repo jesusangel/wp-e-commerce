@@ -399,25 +399,30 @@ class wpsc_cart {
 	* update_location method, updates the location
 	* @access public
 	*/
-  function update_location() {
-   if(!isset($_SESSION['wpsc_selected_country']) && !isset($_SESSION['wpsc_delivery_country'])) {
+	function update_location() {
+		if(!isset($_SESSION['wpsc_selected_country']) && !isset($_SESSION['wpsc_delivery_country'])) {
 			$_SESSION['wpsc_selected_country'] = get_option('base_country');
 			$_SESSION['wpsc_delivery_country'] = get_option('base_country');   
-   } else {
-     if(!isset($_SESSION['wpsc_selected_country'])) {
-			$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_delivery_country'];
-     } else if(!isset($_SESSION['wpsc_delivery_country'])) {
-			$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_selected_country'];     
-     }   
-   }
-  
+		} else {
+			if(!isset($_SESSION['wpsc_selected_country'])) {
+				$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_delivery_country'];
+			} else if(!isset($_SESSION['wpsc_delivery_country'])) {
+				$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_selected_country'];     
+			}   
+		}
+		
+		if(!isset($_SESSION['wpsc_selected_region']) && !isset($_SESSION['wpsc_delivery_region'])) {
+			$_SESSION['wpsc_selected_region'] = get_option('base_region');
+			$_SESSION['wpsc_delivery_region'] = get_option('base_region');   
+		}
+	
 		$this->delivery_country =& $_SESSION['wpsc_delivery_country'];
-	  $this->selected_country =& $_SESSION['wpsc_selected_country'];
-	  $this->delivery_region =& $_SESSION['wpsc_delivery_region'];
-	  $this->selected_region =& $_SESSION['wpsc_selected_region'];
-	  
-	  
-	  $this->get_tax_rate();
+		$this->selected_country =& $_SESSION['wpsc_selected_country'];
+		$this->delivery_region =& $_SESSION['wpsc_delivery_region'];
+		$this->selected_region =& $_SESSION['wpsc_selected_region'];
+		
+		
+		$this->get_tax_rate();
 	}
 	
 	
