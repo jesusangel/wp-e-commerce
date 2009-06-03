@@ -6,6 +6,7 @@
 	$id = $wpdb->get_var($purchlog);
 	//exit($id);
 	$usersql = "SELECT DISTINCT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.* FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.log_id=".$id." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`" ;
+	//exit($usersql);
 	$formfields = $wpdb->get_results($usersql);
 	//echo '<pre>'.print_r($formfields, true).'</pre>';
 if(isset($_POST)){

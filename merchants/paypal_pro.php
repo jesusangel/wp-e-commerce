@@ -1,4 +1,7 @@
 <?php
+/*
+ * Some parts of this code were inspired by the shopp plugin and their paypal pro module. 
+ */
 $nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Pro';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_pro';
@@ -149,14 +152,14 @@ function gateway_paypal_pro($seperator, $sessionid){
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '2' WHERE `sessionid`=".$sessionid;
 		$wpdb->query($sql);
 		$transact_url = get_option('transact_url');
-		unset($_SESSION['paypalproErrorMessage']);
+		unset($_SESSION['WpscGatewayErrorMessage']);
 		header("Location: ".$transact_url.$seperator."sessionid=".$sessionid);
 	}else{
 		//redirect back to checkout page with errors
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '5' WHERE `sessionid`=".$sessionid;
 		$wpdb->query($sql);
 		$transact_url = get_option('checkout_url');
-		$_SESSION['paypalproErrorMessage'] = __('Sorry your transaction did not go through to Paypal successfully, please try again.');
+		$_SESSION['WpscGatewayErrorMessage'] = __('Sorry your transaction did not go through to Paypal successfully, please try again.');
 		header("Location: ".$transact_url);
 	}
 	//exit('<pre>'.print_r($response, true).'</pre>');

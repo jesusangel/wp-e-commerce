@@ -47,7 +47,7 @@ function nzshpcrt_install()
   
   wpsc_create_upload_directories();
   
-	require dirname(__FILE__) . "/currency_list.php";
+	require (dirname(__FILE__) . "/currency_list.php");
 	
   /* all code to add new database tables and columns must be above here */  
   if((get_option('wpsc_version') < WPSC_VERSION) || (get_option('wpsc_version') == WPSC_VERSION) && (get_option('wpsc_minor_version') < WPSC_MINOR_VERSION)) {
@@ -58,6 +58,7 @@ function nzshpcrt_install()
   $currency_data  = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_CURRENCY_LIST."`");
   if($currency_data == 0) {
     $currency_array = explode("\n",$currency_sql);
+ 
     foreach($currency_array as $currency_row) {
       $wpdb->query($currency_row);
 		}

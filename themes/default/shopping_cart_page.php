@@ -79,9 +79,9 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 						<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
 					<?php
 					endif;
-					if($_SESSION['paypalproErrorMessage'] != '') :
+					if($_SESSION['WpscGatewayErrorMessage'] != '') :
 					?>
-						<p class='validation-error'><?php echo $_SESSION['paypalproErrorMessage']; ?></p>
+						<p class='validation-error'><?php echo $_SESSION['WpscGatewayErrorMessage']; ?></p>
 					<?php
 					endif;
 					?>
