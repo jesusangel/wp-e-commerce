@@ -118,6 +118,34 @@ function country_list($selected_country = null) {
 			}
       return $output;
 }
+function wpsc_settings_page_update_notification(){
+if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['shipadd']) ) { ?>
+			<div id="message" class="updated fade"><p>
+			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
+				printf( __ngettext( ' Setting Options Updated. ' , ' %s Settings Options Updated. ', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				unset($_GET['updated']);
+			}
+						
+			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
+				printf( __ngettext( '%s Setting Option deleted. ', '%s Setting Option deleted. ', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				unset($_GET['deleted']);
+			}
+			if ( isset($_GET['shipadd']) && (int) $_GET['shipadd'] ) {
+				printf( __ngettext( ' Shipping Option Updated.', ' Shipping Option Updated.', $_GET['shipadd'] ), number_format_i18n( $_GET['shipadd'] ) );
+				unset($_GET['shipadd']);
+			}
+			if ( isset($_GET['added']) && (int) $_GET['added'] ) {
+				printf( __ngettext( '%s Checkout Field Added.', '%s Checkout Fields Added.', $_GET['added'] ), number_format_i18n( $_GET['added'] ) );
+				unset($_GET['added']);
+			}
 
+		
+			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] );
+			?>
+			</p></div>
+<?php
+
+}
+}
 
 ?>

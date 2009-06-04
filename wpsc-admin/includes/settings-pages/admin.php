@@ -5,6 +5,9 @@ global $wpdb;
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div id="options_admin">
 	  <h2><?php echo TXT_WPSC_OPTIONS_ADMIN_HEADER; ?></h2>
+  		<?php 
+		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
+		wpsc_settings_page_update_notification(); ?>
 			<table class='wpsc_options form-table'>            
 				<tr>
 					<th scope="row"><?php echo TXT_WPSC_MAXDOWNLOADSPERFILE;?>:	</th>

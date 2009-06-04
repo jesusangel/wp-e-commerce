@@ -69,7 +69,27 @@ function wpsc_checkout_form_field() {
 }
 
 
+function wpsc_shipping_region_list($selected_country, $selected_region){
+global $wpdb;
 
+	if ($selected_country == 'US') {
+		$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
+		$output .= "<select name='region'  id='region' onchange='submit_change_country();' >";
+		foreach ($region_data as $region) {
+			$selected ='';
+			if($selected_region == $region['id']) {
+				$selected = "selected='selected'";
+			}
+			$output .= "<option $selected value='{$region['id']}'>".htmlspecialchars($region['name'])."</option>";
+		}
+		$output .= "";
+		
+		$output .= "</select>";
+	} else {
+		$output .= " ";
+	}
+	return $output;
+}
 
 function wpsc_shipping_country_list() {
 	global $wpdb, $wpsc_shipping_modules;
@@ -90,30 +110,15 @@ function wpsc_shipping_country_list() {
 	 if($country['visible'] == '1'){
 		$selected ='';
 		if($selected_country == $country['isocode']) {
-			$selected = "selected='true'";
+			$selected = "selected='selected'";
 		}
-		$output .= "<option value='".$country['isocode']."' $selected>".$country['country']."</option>";
+		$output .= "<option value='".$country['isocode']."' $selected>".htmlspecialchars($country['country'])."</option>";
 	 }
 	}
 
 	$output .= "</select>";
 	
-	if ($selected_country == 'US') {
-		$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
-		$output .= "<select name='region'  onchange='submit_change_country();' >";
-		foreach ($region_data as $region) {
-			$selected ='';
-			if($selected_region == $region['id']) {
-				$selected = "selected='true'";
-			}
-			$output .= "<option $selected value='{$region['id']}'>{$region['name']}</option>";
-		}
-		$output .= "";
-		
-		$output .= "</select>";
-	} else {
-		$output .= " ";
-	}
+	$output .= wpsc_shipping_region_list($selected_country, $selected_region);
 	
 // 	$output .= "ZipCode:";
 if(isset($_POST['zipcode'])) {
@@ -220,7 +225,7 @@ class wpsc_checkout {
 
 			case "delivery_country":
 			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
-			$output = "<input type='hidden' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' />".$country_name." ";
+			$output = "<input type='hidden' id='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
 			break;
 			
 			case "text":

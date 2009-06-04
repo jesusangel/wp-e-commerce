@@ -5,6 +5,9 @@ global $wpdb;
 	<form name='cart_options' id='cart_options' method='post' action=''>
 	<div id="options_general">
 		<h2><?php echo TXT_WPSC_OPTIONS_GENERAL_HEADER; ?></h2>
+		<?php 
+		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
+		wpsc_settings_page_update_notification(); ?>
 		<table class='wpsc_options form-table'>
 		<tr>
 			<th scope="row"><?php echo TXT_WPSC_BASE_COUNTRY; ?>: </th>
@@ -291,6 +294,7 @@ global $wpdb;
 				<label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
 			</td>
 		</tr>
+
 		</table> 
 							
 		<h3 class="form_group"><?php echo TXT_WPSC_CURRENCYSETTINGS;?>:</h3>

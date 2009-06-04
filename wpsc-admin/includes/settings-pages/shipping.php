@@ -38,6 +38,9 @@ function selectgateway() {
 		}
 	?>
   <h2 class='wpsc_special'><?php echo TXT_WPSC_SHIPPINGOPTIONS;?></h2>
+  		<?php 
+		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
+		wpsc_settings_page_update_notification(); ?>
 			<?php if (IS_WP27) { ?>
 				<div class='postbox'>
 					<h3 class='hndle'><?=TXT_WPSC_OPTIONS_GENERAL_HEADER?></h3>

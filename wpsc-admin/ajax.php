@@ -1239,13 +1239,13 @@ function wpsc_crop_thumbnail_html() {
  
  
  
- 	if ($_REQUEST['wpsc_admin_action'] == 'crop_image') {
-		add_action('admin_init','wpsc_crop_thumbnail_html');
-	}
+if ($_REQUEST['wpsc_admin_action'] == 'crop_image') {
+	add_action('admin_init','wpsc_crop_thumbnail_html');
+}
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
+if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
 	add_action('admin_init', 'wpsc_get_shipping_form');
 }
 
@@ -1335,7 +1335,8 @@ function wpsc_submit_options() {
 				//echo $shipping->internal_name.' == '.$shippingoption;
 				if($shipping->internal_name ==$shippingoption) {
 					$shipping->submit_form();
-					}
+					$shipadd++;
+				}
 			}
 	
 		}
@@ -1344,6 +1345,9 @@ function wpsc_submit_options() {
 
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+	if ( isset($shipadd) ) {
+		$sendback = add_query_arg('shipadd', $shipadd, $sendback);
 	}
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
 			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
@@ -1538,8 +1542,9 @@ if($_POST['form_name'] != null)
       if($_POST['form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
       $form_order = $_POST['form_order'][$form_id];
       $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log', `order` = '$form_order' WHERE `id` ='".$form_id."' LIMIT 1 ;");
-    
+  
       }
+    $updated;
     }
   
   if($_POST['new_form_name'] != null)
@@ -1563,16 +1568,30 @@ if($_POST['form_name'] != null)
           }
           $sql ="INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');";
          // exit($sql);
+         $added++;
       $wpdb->query($sql);
        // exit('called<pre>'.print_r($_POST, true).'</pre>');
       }
 
 
 	}
+   if(isset($_POST['wpsc_options'])){
+	  	foreach($_POST['wpsc_options'] as $key=>$value){
+	  		//if(!is_array($value)){
+		  		if($value != get_option($key)){
+		  			update_option($key, $value);
+		  			$updated++;
+		  		}
+	  		//}
+		}
+	}
 		$sendback = wp_get_referer();
 
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
+	}
+	if ( isset($added) ) {
+		$sendback = add_query_arg('added', $added, $sendback);
 	}
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
 			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
@@ -1588,7 +1607,7 @@ function wpsc_google_shipping_settings(){
 		foreach((array)$_POST['google_shipping'] as $key=>$country) {
 			if ($country=='on') {
 				$google_shipping_country[]=$key;
-				$updated = 1;
+				$updated++;
 			}
 		}
 		update_option('google_shipping_country',$google_shipping_country);

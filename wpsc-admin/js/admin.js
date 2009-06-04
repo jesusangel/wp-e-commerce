@@ -1,7 +1,6 @@
 // This is the wp-e-commerce front end javascript "library"
 
 jQuery(document).ready( function () {
-
   // this makes the product list table sortable
   jQuery('table#wpsc_product_list').sortable({
 		update: function(event, ui) {
@@ -291,9 +290,11 @@ jQuery(document).ready( function () {
 /* shipping options start */
 	// gets shipping form for admin page
 		// show or hide the stock input forms
+
 	jQuery(".wpsc-shipping-actions a").livequery(function(){
+//				jQuery(this).css('border','1px solid red');
 	  jQuery(this).click( function ()  {
-		
+
 		var module = jQuery(this).attr('rel');
 		jQuery.ajax({
 			method: "post", url: "index.php", data: "wpsc_admin_action=get_shipping_form&shippingname="+module,
@@ -312,15 +313,16 @@ jQuery(document).ready( function () {
 		jQuery(this).parent().append("<div id='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
 		});
 	
-	})
+	});
 	
 	jQuery('#addlayer').livequery(function(){
 		jQuery(this).click(function(){
 		jQuery(this).parent().append("<div id='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
 		//bind_shipping_rate_deletion();
+		return false;
 		});
 	
-	})
+	});
 	
   jQuery('table#gateway_options a.delete_button').livequery(function(){
   		jQuery(this).click(function () {

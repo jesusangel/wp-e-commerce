@@ -40,6 +40,9 @@ global $wpdb;
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div id="options_presentation">
 		<h2><?php echo TXT_WPSC_OPTIONS_PRESENTATION_HEADER; ?></h2>
+		<?php 
+		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
+		wpsc_settings_page_update_notification(); ?>
 		<h3 class="form_group"><?php echo TXT_WPSC_PRODUCTS_PAGE_SETTINGS;?></h3>
 		<table class='wpsc_options form-table'>		
 		<tr>

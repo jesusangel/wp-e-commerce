@@ -6,6 +6,9 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div class="wrap">
   		<h2><?php echo TXT_WPSC_FORM_FIELDS;?></h2>  
+		<?php 
+		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
+		wpsc_settings_page_update_notification(); ?>
 		<form method='post' action='' id='chekcout_options_tbl'>
 			<input type='hidden' name='checkout_submits' value='true' />
 			<table>
@@ -28,14 +31,36 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 				    }
 		  
 		        ?>
-        		<input type='radio' value='1' name='require_register' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-      			<input type='radio' value='0' name='require_register' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo TXT_WPSC_NO;?></label>
+        		<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+      			<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo TXT_WPSC_NO;?></label>
       			</td>
 				<td>
 				 <a title='<?php echo TXT_WPSC_ANYONEREGISTER;?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/exclamation.png' alt='' /> </a>
 					
 				</td>
      		</tr>
+     				<tr>
+			<?php
+				$lock_tax = get_option('lock_tax');
+
+				switch($lock_tax) {
+					case 1:
+					$lock_tax1 = "checked ='checked'";
+					break;
+					
+					case 0:
+					$lock_tax2 = "checked ='checked'";
+					break;
+				}
+			?>
+			<td scope="row"><?php _e('Lock Tax to Billing Country'); ?>:</td>
+			<td>
+			<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
+			<label for='multi_adding1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+			<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
+			<label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
+			</td>
+		</tr>
 			</table>
   			<p><?php echo TXT_WPSC_CHECKOUT_FORM_FIELDS_DESCRIPTION;?></p>
   			<table id='form_field_table' style='border-collapse: collapse;'>

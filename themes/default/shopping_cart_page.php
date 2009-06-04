@@ -38,7 +38,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 					<input type="hidden" name="quantity" value="0"/>
 					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 					<input type="hidden" name="wpsc_update_quantity" value="true"/>
-					<button class='remove_button' type="submit"/><span><?php echo TXT_WPSC_REMOVE; ?></span></button>
+					<button class='remove_button' type="submit"><span><?php echo TXT_WPSC_REMOVE; ?></span></button>
 				</form>
 			</td>
 		</tr>
@@ -182,7 +182,7 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			<td>
 				<?php echo wpsc_checkout_form_field();?>
 				
-		  <?php if(wpsc_the_checkout_item_error() != ''): ?>
+		    <?php if(wpsc_the_checkout_item_error() != ''): ?>
 		    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
 			<?php endif; ?>
 			</td>

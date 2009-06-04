@@ -56,6 +56,9 @@ function selectgateway() {
 			}
 		?>
 		  <h2><?php echo TXT_WPSC_GATEWAY_OPTIONS;?></h2>
+  		<?php 
+		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
+		wpsc_settings_page_update_notification(); ?>
 		  <table id='gateway_options' >
             <tr>
 				<td class='select_gateway'>
