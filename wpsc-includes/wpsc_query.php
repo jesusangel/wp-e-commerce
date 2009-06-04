@@ -1132,7 +1132,6 @@ class WPSC_Query {
 			}
 			
 			if(get_option('permalink_structure')) {
-			  //exit("<pre>".print_r($this,true)."</pre>");
 				$page_url = wpsc_category_url($this->category)."page/$i/";
 			} else {
 				$page_url = $product_view_url."page_number=$i";

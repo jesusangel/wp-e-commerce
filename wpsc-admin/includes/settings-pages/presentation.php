@@ -135,14 +135,31 @@ global $wpdb;
 						<label for='list_view_options'><?php echo TXT_WPSC_ADJUSTABLE_QUANTITY;?></label>
 					</div>
 					<div id='grid_view_options' <?php echo $list_view_quantity_style;?> <?php if(is_null($product_view3)) { echo "style='display:none;'";} ?>>
+					
+						<input type='text'  name='wpsc_options[grid_number_per_row]' id='grid_number_per_row' size='1' value='<?php echo get_option('grid_number_per_row');?>' />
+						<label for='grid_number_per_row'><?php echo TXT_SHOW_GRID_PER_ROW;?></label><br />
+						
+						
+						<input type='hidden' value='0' name='wpsc_options[show_images_only]' />
 						<input type='checkbox' value='1' name='wpsc_options[show_images_only]' id='show_images_only' <?php echo $show_images_only_value;?> />
 						<label for='show_images_only'><?php echo TXT_SHOW_IMAGES_ONLY;?></label><br />
+						
+						
+						<input type='hidden' value='0' name='wpsc_options[display_variations]' />
 						<input type='checkbox' value='1' name='wpsc_options[display_variations]' id='display_variations' <?php echo $display_variations;?> />
 						<label for='display_variations'><?php echo TXT_DISPLAY_VARIATIONS;?></label><br />
+						
+						
+						<input type='hidden' value='0' name='wpsc_options[display_description]' />
 						<input type='checkbox' value='1' name='wpsc_options[display_description]' id='display_description' <?php echo $display_description;?> />
 						<label for='display_description'><?php echo TXT_DISPLAY_DESCRIPTION;?></label><br />
+						
+						
+						<input type='hidden' value='0' name='wpsc_options[display_addtocart]' />
 						<input type='checkbox' value='1' name='wpsc_options[display_addtocart]' id='display_addtocart' <?php echo $display_addtocart;?> />
 						<label for='display_addtocart'><?php echo TXT_DISPLAY_ADDTOCART;?></label><br />
+						
+						<input type='hidden' value='0' name='wpsc_options[display_moredetails]' />
 						<input type='checkbox' value='1' name='wpsc_options[display_moredetails]' id='display_moredetails' <?php echo $display_moredetails;?> />
 						<label for='display_moredetails'><?php echo TXT_DISPLAY_MOREDETAILS;?></label>
 

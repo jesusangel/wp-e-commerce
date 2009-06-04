@@ -367,7 +367,7 @@ function wpsc_submit_checkout() {
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
 			$wpsc_cart->save_to_db($purchase_log_id);
 			$wpsc_cart->submit_stock_claims($purchase_log_id);
-			
+			do_action('wpsc_submit_checkout', $purchase_log_id);
 			
 			if(get_option('permalink_structure') != '') {
 				$seperator = "?";

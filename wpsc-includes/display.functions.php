@@ -354,7 +354,80 @@ function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
 	} 
 }
 
+/**
+* wpsc_obtain_the_title function, for replaacing the page title with the category or product
+* @return string - the new page title
+*/
+function wpsc_obtain_the_title() {
+  global $wpdb, $wp_query, $wpsc_title_data;
+  $output = null;
+  //exit("<pre>".print_r($wp_query,true)."</pre>");
+  
+	if(is_numeric($wp_query->query_vars['category_id'])) {
+	  $category_id = $wp_query->query_vars['category_id'];
+	  if(isset($wpsc_title_data['category'][$category_id])) {
+			$output = $wpsc_title_data['category'][$category_id];
+	  } else {
+			$output = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
+			$wpsc_title_data['category'][$category_id] = $output;
+		}
+		
+	}
+	if(isset($wp_query->query_vars['product_url_name'])) {
+	  $product_name = $wp_query->query_vars['product_url_name'];
+	  if(isset($wpsc_title_data['product'][$product_name])) {
+	    $product_list = array();
+	    $product_list['name'] = $wpsc_title_data['product'][$product_name];
+	  } else {
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_url_name']}' ) ORDER BY `id` DESC LIMIT 1");
+			$product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+			$wpsc_title_data['product'][$product_name] = $product_list['name'];
+		}
+  }
+  if(isset($product_list ) && ($product_list != null)) {
+  	$output = htmlentities(stripslashes($product_list['name']), ENT_QUOTES);
+  }
+	return $output;
+}
+ 
 
+function wpsc_replace_the_title($input) {
+  global $wpdb, $wp_query;
+	$output = wpsc_obtain_the_title();
+	if($output != null) {
+		$backtrace = debug_backtrace();
+		if($backtrace[3]['function'] == 'get_the_title') {
+			return $output;
+		}
+	}
+	return $input;
+}
+
+function wpsc_replace_wp_title($input) {
+  global $wpdb, $wp_query;
+	$output = wpsc_obtain_the_title();
+	if($output != null) {
+		return $output;
+	}
+	return $input;
+}
+
+function wpsc_replace_bloginfo_title($input, $show) {
+  global $wpdb, $wp_query;
+  if($show == 'description') {
+		$output = wpsc_obtain_the_title();
+		if($output != null) {
+			return $output;
+		}
+	}
+	return $input;
+}
+ 
+if(get_option('wpsc_replace_page_title') == 1) {
+  add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
+  add_filter('wp_title', 'wpsc_replace_wp_title', 10, 2);
+  add_filter('bloginfo', 'wpsc_replace_bloginfo_title', 10, 2);
+}
 
 
 ?>

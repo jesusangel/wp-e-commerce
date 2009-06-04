@@ -218,8 +218,9 @@ function wpsc_product_basic_details_form(&$product_data) {
 		  "wpsc_product_download_forms"
 		  );
 		
-		
-	 	$order = get_option('wpsc_product_page_order');
+	 	$order = get_option('wpsc_product_page_order');	 	
+	  $order = apply_filters( 'wpsc_products_page_forms', $order);
+	  
 	 	//echo "<pre>".print_r($order,true)."</pre>";
 	 	if (($order == '') || (count($order ) < 6)){
 				$order = $default_order;

@@ -26,9 +26,17 @@ $image_height = get_option('single_view_image_height');
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
 					<div class="imagecol">
-						<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>"/>
-						</a>
+						<?php if(wpsc_the_product_thumbnail()) :?> 	   
+								<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
+									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>"/>
+								</a>
+						<?php else: ?> 
+							<div class="item_no_image">
+								<a href="<?php echo wpsc_the_product_permalink(); ?>">
+								<span>No Image Available</span>
+								</a>
+							</div>
+						<?php endif; ?> 
 					</div>
 		
 					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
@@ -141,6 +149,7 @@ $image_height = get_option('single_view_image_height');
 					<?php if(wpsc_product_is_customisable()) : ?>				
 						<input type="hidden" value="true" name="is_customisable"/>
 					<?php endif; ?>
+					
 					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
 					<?php if(wpsc_has_multi_adding()): ?>
 						<label for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label><input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
@@ -148,6 +157,7 @@ $image_height = get_option('single_view_image_height');
 						<input type="hidden" name="wpsc_update_quantity" value="true"/>
 					<?php endif ;?>
 					<!-- END OF QUANTITY OPTION -->
+					
 					<?php if(wpsc_product_has_stock()) : ?>
 						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 					<?php else : ?>

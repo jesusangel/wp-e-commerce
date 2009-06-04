@@ -155,8 +155,23 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
 
 function wpsc_category_url($category_id) {
   global $wpdb, $wp_rewrite;
+  $home_page_id = get_option('page_on_front');
+  
+	$products_page_details = $wpdb->get_row("SELECT `ID`, `post_name` FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A);
+	$products_page_name = '';
+	if($home_page_id == $products_page_details['ID']) {
+	  $products_page_name = $products_page_details['post_name'];
+	  if($category_id < 1) {
+	    $category_name[] = $products_page_name;
+	  }
+	}
+	
   $category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1", ARRAY_A);
-  $category_name[] = $category_data['nice-name'];
+  if($category_data['nice-name'] != '') {
+		$category_name[] = $category_data['nice-name'];
+  }
+  
+  
   if($category_data['category_parent'] > 0) {
     $num = 0;
     while($category_data['category_parent'] > 0) {
@@ -164,7 +179,7 @@ function wpsc_category_url($category_id) {
 			$category_name[] = $category_data['nice-name'];			
 			if($num > 10) { break; }
 			$num++;			
-      }
+		}
   }
   $category_name = array_reverse($category_name);
   if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {

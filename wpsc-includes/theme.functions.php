@@ -126,12 +126,7 @@ if($_GET['wpsc_user_dynamic_js'] == 'true') {
 
 
 function wpsc_user_dynamic_css() {  
-  global $wpdb;
-  /*
-  /var/www/apps.instinct.co.nz/wp_2.7/wp-content/themes/japan-style/header.php:	<!--[if IE]><link rel="stylesheet" type="text/css" href="<?php bloginfo('stylesheet_directory'); ?>/ie.css" media="screen" /><![endif]-->
-	/var/www/apps.instinct.co.nz/wp_2.7/wp-includes/script-loader.php:	$styles->add( 'ie', '/wp-admin/css/ie.css', array(), '20081210' );
-  */
-  
+  global $wpdb;  
   header('Content-Type: text/css');
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
  	header('Cache-Control: public, must-revalidate, max-age=86400');
@@ -150,88 +145,98 @@ function wpsc_user_dynamic_css() {
 	
 	
 	if(!defined('WPSC_DISABLE_IMAGE_SIZE_FIXES') || (constant('WPSC_DISABLE_IMAGE_SIZE_FIXES') != true)) {
-    if(($display_type == 'default') ||  ($display_type == '')) {
-      $thumbnail_width = get_option('product_image_width');
-      if($thumbnail_width <= 0) {
-        $thumbnail_width = 96;
-      }
-      $thumbnail_height = get_option('product_image_height'); 
-      if($thumbnail_height <= 0) { 
-        $thumbnail_height = 96; 
-      }
-      
-      
-    ?>
-			div.default_product_display div.textcol{
-				margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-				_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
-				min-height: <?php echo $thumbnail_height;?>px;
-				_height: <?php echo $thumbnail_height;?>px;
-			}
-				
-				
-			div.default_product_display  div.textcol div.imagecol{
-				position:absolute;
-				top:0px;
-				left: 0px;
-				margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
-			}
-			
-			div.default_product_display  div.textcol div.imagecol a img {
-				width: <?php echo $thumbnail_width; ?>px;
-				height: <?php echo $thumbnail_height; ?>px;
-			}
+		$thumbnail_width = get_option('product_image_width');
+		if($thumbnail_width <= 0) {
+			$thumbnail_width = 96;
+		}
+		$thumbnail_height = get_option('product_image_height'); 
+		if($thumbnail_height <= 0) { 
+			$thumbnail_height = 96; 
+		}
 		
-      
-    <?php
-    }
-        
-    if($display_type == 'grid') {
-      $thumbnail_width = get_option('product_image_width');
-      if($thumbnail_width <= 0) {
-        $thumbnail_width = 96;
-      }
-      $thumbnail_height = get_option('product_image_height'); 
-      if($thumbnail_height <= 0) { 
-        $thumbnail_height = 96; 
-      }
-      ?>
-			div.product_grid_display div.item_no_image  {
-				width: <?php echo $thumbnail_width; ?>px;
-				height: <?php echo $thumbnail_height; ?>px;
-			}
-			div.product_grid_display div.item_no_image a  {
-				width: <?php echo $thumbnail_width; ?>px;
-			}
-    <?php    
-    }
-        
-      
     $single_thumbnail_width = get_option('single_view_image_width');
     $single_thumbnail_height = get_option('single_view_image_height');
     if($single_thumbnail_width <= 0) {
       $single_thumbnail_width = 128;
     }
-	?>
-			div.single_product_display div.textcol{
-				margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
-				_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
-				min-height: <?php echo $single_thumbnail_height;?>px;
-				_height: <?php echo $single_thumbnail_height;?>px;
-			}
-        
-        
-			div.single_product_display  div.textcol div.imagecol{
-				position:absolute;
-				top:0px;
-				left: 0px;
-				margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
-			}
-      
-			div.single_product_display  div.textcol div.imagecol a img {
-				width: <?php echo $single_thumbnail_width; ?>px;
-				height: <?php echo $single_thumbnail_height; ?>px;
-			}
+		
+		?>
+		
+    /*
+     * Default View Styling
+     */
+		div.default_product_display div.textcol{
+			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
+			_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+			min-height: <?php echo $thumbnail_height;?>px;
+			_height: <?php echo $thumbnail_height;?>px;
+		}
+			
+		div.default_product_display  div.textcol div.imagecol{
+			position:absolute;
+			top:0px;
+			left: 0px;
+			margin-left: -<?php echo $thumbnail_width + 10; ?>px !important;
+		}
+		
+		div.default_product_display  div.textcol div.imagecol a img {
+			width: <?php echo $thumbnail_width; ?>px;
+			height: <?php echo $thumbnail_height; ?>px;
+		}
+		
+		div.default_product_display div.item_no_image  {
+			width: <?php echo $thumbnail_width-2; ?>px;
+			height: <?php echo $thumbnail_height-2; ?>px;
+		}
+		div.default_product_display div.item_no_image a  {
+			width: <?php echo $thumbnail_width-2; ?>px;
+		}
+
+
+    /*
+     * Grid View Styling
+     */
+		div.product_grid_display div.item_no_image  {
+			width: <?php echo $thumbnail_width-2; ?>px;
+			height: <?php echo $thumbnail_height-2; ?>px;
+		}
+		div.product_grid_display div.item_no_image a  {
+			width: <?php echo $thumbnail_width-2; ?>px;
+		}
+		
+		
+		
+    /*
+     * Single View Styling
+     */
+     
+		div.single_product_display div.item_no_image  {
+			width: <?php echo $single_thumbnail_width-2; ?>px;
+			height: <?php echo $single_thumbnail_height-2; ?>px;
+		}
+		div.single_product_display div.item_no_image a  {
+			width: <?php echo $single_thumbnail_width-2; ?>px;
+		}
+		
+		div.single_product_display div.textcol{
+			margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
+			_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+			min-height: <?php echo $single_thumbnail_height;?>px;
+			_height: <?php echo $single_thumbnail_height;?>px;
+		}
+			
+			
+		div.single_product_display  div.textcol div.imagecol{
+			position:absolute;
+			top:0px;
+			left: 0px;
+			margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
+		}
+		
+		div.single_product_display  div.textcol div.imagecol a img {
+			width: <?php echo $single_thumbnail_width; ?>px;
+			height: <?php echo $single_thumbnail_height; ?>px;
+		}
       
     <?php
     $product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, `meta1`.`meta_value` AS `height`, `meta2`.`meta_value` AS `width` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` ON `products`.`id` = `meta1`.`product_id` = `meta2`.`product_id`  WHERE `products`.`thumbnail_state` IN(0,2,3) AND `meta1`.`meta_key` IN ('thumbnail_height') AND `meta2`.`meta_key` IN ('thumbnail_width')"); 
@@ -378,9 +383,9 @@ function wpsc_products_page($content = '') {
 				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/single_product.php");
 			} else {
 			  // get the display type for the selected category
-				if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
-					if(is_numeric($wp_query->query_vars['product_category'])) {
-						$category_id =(int) $wp_query->query_vars['product_category'];
+				if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
+					if(is_numeric($wp_query->query_vars['category_id'])) {
+						$category_id =(int) $wp_query->query_vars['category_id'];
 					} else if(is_numeric($_GET['category'])) {
 						$category_id = (int)$_GET['category'];
 					} else { 
@@ -388,8 +393,8 @@ function wpsc_products_page($content = '') {
 					}
 				}			
 				$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
-			
-			
+			  //echo "SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1";
+			  //echo "<pre>".print_r($wp_query,true)."</pre>";
 			
 				if($display_type == '') {
 					$display_type = get_option('product_view');

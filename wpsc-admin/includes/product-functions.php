@@ -178,6 +178,22 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		$product_id = (int) $wpdb->insert_id;
   }
   
+  
+	/* Add tidy url name */
+	if($post_data['name'] != '') {
+		$tidied_name = trim($post_data['name']);
+		$tidied_name = strtolower($tidied_name);
+		
+		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
+		$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
+		$extension_number = '';
+		if($similar_names['count'] > 0) {
+			$extension_number = (int)$similar_names['max_number']+1;
+			}
+		$url_name .= $extension_number;
+		add_product_meta($product_id, 'url_name', $url_name,true);
+	}
+  
 	// if we succeed, we can do further editing
 	
 	// update the categories
@@ -197,11 +213,15 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	wpsc_update_product_images($product_id, $post_data);
 	
 	if($post_data['files']['file']['tmp_name'] != '') {
-		wpsc_item_process_file($product_id, $post_data['files']['file'], $post_data['files']['preview_file']);
+		wpsc_item_process_file($product_id, $post_data['files']['file']);
 	} else {
 	  wpsc_item_reassign_file($product_id, $post_data['select_product_file']);
 	}
 	
+	
+	if($post_data['files']['preview_file']['tmp_name'] != '') {
+ 		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
+	}
      
 	$variations_processor = new nzshpcrt_variations;
 	
@@ -484,6 +504,7 @@ function wpsc_upload_image_thumbnail($product_id, $product_meta) {
  */
 function wpsc_item_process_file($product_id, $submitted_file, $preview_file = null) {
   global $wpdb;
+  $preview_file = null; //break this, is done in a different function, now
 	$files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." ORDER BY id ASC", ARRAY_A);
 	
 	
@@ -586,7 +607,7 @@ function wpsc_item_reassign_file($product_id, $selected_file) {
 	}
 	
 	// if we already use this file, there is no point doing anything more.
-	$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+	$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
 	if($current_fileid > 0) {
 		$current_file_data = $wpdb->get_row("SELECT `id`,`idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` = '$current_fileid' LIMIT 1",ARRAY_A);
 		if(basename($selected_file) == $file_data['idhash']) {
@@ -613,4 +634,46 @@ function wpsc_item_reassign_file($product_id, $selected_file) {
 	}	
 	return $fileid;
 }
+
+
+
+ /**
+ * wpsc_item_add_preview_file function 
+ *
+ * @param integer product ID
+ * @param array the preview file array from $_FILES
+ */
+function wpsc_item_add_preview_file($product_id, $preview_file) {
+  global $wpdb;
+  
+	$current_file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
+	$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='{$current_file_id}' LIMIT 1",ARRAY_A);
+	
+	if(apply_filters( 'wpsc_filter_file', $preview_file['tmp_name'] )) {
+	  //echo "test?";
+		if(function_exists("make_mp3_preview"))	{
+			if($mimetype == "audio/mpeg" && (!isset($preview_file['tmp_name']))) {
+				// if we can generate a preview file, generate it (most can't due to sox being rare on servers and sox with MP3 support being even rarer), thus this needs to be enabled by editing code
+				make_mp3_preview((WPSC_FILE_DIR.$idhash), (WPSC_PREVIEW_DIR.$idhash.".mp3"));
+				$preview_filepath = (WPSC_PREVIEW_DIR.$idhash.".mp3");
+			} else if(file_exists($preview_file['tmp_name'])) {    
+				$preview_filename = basename($preview_file['name']);
+				$preview_mimetype = wpsc_get_mimetype($preview_file['tmp_name']);
+				copy($preview_file['tmp_name'], (WPSC_PREVIEW_DIR.$preview_filename));
+				$preview_filepath = (WPSC_PREVIEW_DIR.$preview_filename);
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '{$file_data['id']}' LIMIT 1");
+				//exit("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '{$file_data['id']}' LIMIT 1");
+			}
+			$stat = stat( dirname($preview_filepath));
+			$perms = $stat['mode'] & 0000666;
+			@ chmod( $preview_filepath, $perms );	
+		}
+		//exit("<pre>".print_r($preview_file,true)."</pre>");
+		return $fileid;
+   } else {
+ 		return false;
+   }
+   
+}
+
 ?>

@@ -37,9 +37,18 @@ global $wpsc_query, $wpdb;
 	<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
 		<div class="textcol">
 			<div class="imagecol">
-				<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-					<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
-				</a>
+				<?php if(wpsc_the_product_thumbnail()) :?> 	   
+					<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
+						<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+					</a>
+				<?php else: ?> 
+					<div class="item_no_image">
+						<a href="<?php echo wpsc_the_product_permalink(); ?>">
+						<span>No Image Available</span>
+						</a>
+					</div>
+				<?php endif; ?> 
+				
 			</div>
 			<form class='product_form'  enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 				<div class="producttext">
