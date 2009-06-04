@@ -39,7 +39,6 @@ $image_height = get_option('single_view_image_height');
 						<?php endif; ?> 
 					</div>
 		
-					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 		
 					<div class="producttext">
 						<h2 class="prodtitles"><?php echo wpsc_the_product_title(); ?></h2>
@@ -90,6 +89,7 @@ $image_height = get_option('single_view_image_height');
 					<?php /** the custom meta HTML and loop ends here */?>
 					
 					
+					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 					<?php if(wpsc_product_has_personal_text()) : ?>
 						<div class='custom_text'>
 							<h4><?php echo TXT_WPSC_PERSONALIZE_YOUR_PRODUCT; ?></h4>
@@ -156,12 +156,20 @@ $image_height = get_option('single_view_image_height');
 						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 						<input type="hidden" name="wpsc_update_quantity" value="true"/>
 					<?php endif ;?>
-					<!-- END OF QUANTITY OPTION -->
 					
-					<?php if(wpsc_product_has_stock()) : ?>
-						<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
-					<?php else : ?>
-						<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+					
+					<!-- END OF QUANTITY OPTION -->
+					<?php if(get_option('addtocart_or_buynow') !='1') : ?>
+						<?php if(wpsc_product_has_stock()) : ?>
+							<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+						<?php else : ?>
+							<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+						<?php endif ; ?>
+					<?php endif ; ?>
+					</form>
+					
+					<?php if(get_option('addtocart_or_buynow')=='1') : ?>
+						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>
 					<?php endif ; ?>
 					
 					<?php echo wpsc_product_rater(); ?>
@@ -175,7 +183,6 @@ $image_height = get_option('single_view_image_height');
 						endif;
 					?>
 					</div>
-					</form>
 		
 					<form onsubmit="submitform(this);return false;" action="http://www.instinct.co.nz/wordpress_2.6/products-page/?category=" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_extra_<?php echo wpsc_the_product_id(); ?>">
 						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>

@@ -64,15 +64,33 @@ function wpsc_add_to_cart() {
 			echo "  jQuery('#fancy_notification_content').css('display', 'block');\n\r";
 			echo "}\n\r";
 		}
+		
+		
 		ob_start();
 		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
 	  $output = ob_get_contents();
 		ob_end_clean();
-		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
 		 
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
   //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
+
+		if(wpsc_cart_item_count() > 0) {
+		  $_SESSION['slider_state'] = 1;
+		  echo "
+				jQuery('#sliding_cart').slideDown('fast',function(){
+					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
+				});
+		";
+		
+		} else {
+			$_SESSION['slider_state'] = 0;
+		  echo "
+				jQuery('#sliding_cart').slideUp('fast',function(){
+					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+				});
+		";
+		}
 
     
 		do_action('wpsc_alternate_cart_html');
@@ -109,6 +127,12 @@ function wpsc_empty_cart() {
     echo "jQuery('div.shopping-cart-wrapper').html('$output');";
 		do_action('wpsc_alternate_cart_html');
     
+		$_SESSION['slider_state'] = 0;
+		echo "
+			jQuery('#sliding_cart').slideUp('fast',function(){
+				jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+			});
+	";
 		exit();
   }
 }
@@ -183,7 +207,20 @@ function wpsc_update_item_quantity() {
 		}
 		wpsc_coupon_price($_SESSION['coupon_numbers']);
   }
+  
+ if($_REQUEST['ajax'] == 'true') {
+	ob_start();
+	include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	$output = ob_get_contents();
+	ob_end_clean();
+	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+		
+	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
+	do_action('wpsc_alternate_cart_html');
 	
+	echo "wpsc_bind_to_events();\n";
+	exit();
+ }
 }
   
 // execute on POST and GET
@@ -403,18 +440,15 @@ if($_REQUEST['wpsc_action'] == 'submit_checkout') {
 function wpsc_change_tax() {
   global $wpdb, $wpsc_cart;
   $form_id = absint($_POST['form_id']);
-
   $previous_country = $_SESSION['wpsc_selected_country'];
 	$_SESSION['wpsc_selected_country'] =$_POST['billing_country'];
-
 	$_SESSION['wpsc_selected_region'] = absint($_POST['billing_region']);
-
+	
 	$check_country_code = $wpdb->get_var(" SELECT `country`.`isocode` FROM `".WPSC_TABLE_REGION_TAX."` AS `region` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `region`.`country_id` = `country`.`id` WHERE `region`.`id` = '".$_SESSION['wpsc_selected_region']."' LIMIT 1");
 	
 	if($_SESSION['wpsc_selected_country'] != $check_country_code) {
 		$_SESSION['wpsc_selected_region'] = null;
 	}
-
   $wpsc_cart->update_location();
   $tax = $wpsc_cart->calculate_total_tax();
   $total = wpsc_cart_total();
@@ -425,58 +459,34 @@ function wpsc_change_tax() {
 	ob_end_clean();
 	//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-	if(get_option('lock_tax') == 1){
-		//echo "jQuery('#region').val(".$_SESSION['wpsc_delivery_region']."); \n";	
-		echo "jQuery('#current_country').val('".$_SESSION['wpsc_delivery_country']."'); \n";
-		if($_SESSION['wpsc_delivery_country']== 'US' && get_option('lock_tax') == 1){
-			//exit('<pre>'.print_r($_SESSION, true).'</pre>');
-			$output = wpsc_shipping_region_list($_SESSION['wpsc_delivery_country'], $_SESSION['wpsc_delivery_region']);
-		//	echo 'jQuery("#change_country").append(\''.$output.'\');\n\r';
-		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-			echo "jQuery('#region').remove();\n\r";
-			echo "jQuery('#change_country').append(\"".$output."\");\n\r";
 		
-		}
-			
-	}
 	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
-	if(get_option('lock_tax') == 1){
-		echo "jQuery('#shipping_country').val('".$_SESSION['wpsc_delivery_country']."') \n";  
-		$sql ="SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_selected_country']."'";
-		//exit($sql);
-		$country_name = $wpdb->get_var($sql);
-		echo "jQuery('.shipping_country_name').html('".$country_name."') \n";
-	}	  
+	  
+	  
 	echo "\n/*
 	{$_POST['billing_country']}
 	{$previous_country}
 	*/\n";
 	  
 	
-	if(($_POST['billing_country'] != 'undefined') ) {
+	if(($_POST['billing_country'] != 'undefined') && ($_POST['billing_country'] != $previous_country)) {
 		$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$_POST['billing_country']."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
 		if($region_list != null) {
-			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"region_country_form_$form_id\", \"$form_id\");'>\n\r";
+			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
 			//$output .= "<option value=''>None</option>";
-		
 			foreach($region_list as $region) {
-					//exit($_SESSION['wpsc_selected_region'].' '.$region['id']);
-				if($_SESSION['wpsc_selected_region'] == $region['id']) {
-					$selected = "selected='selected'";
+				if($_SESSION['selected_region'] == $region['id']) {
+					$selected = "selected='true'";
 				} else {
 					$selected = "";
 				}
-				$output .= "  <option value='".$region['id']."' $selected>".htmlspecialchars($region['name'])."</option>\n\r";
+				$output .= "  <option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
 			}
 			$output .= "</select>\n\r";
 			
 			$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
 			echo  "jQuery('#region_select_$form_id').html(\"".$output."\");\n\r";
-		
 		} else {
-			if(get_option('lock_tax') == 1){
-				echo "jQuery('#region').hide();";
-			}
 			echo  "jQuery('#region_select_$form_id').html('');\n\r";
 		}
  	}

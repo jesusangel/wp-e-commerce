@@ -258,26 +258,6 @@ function change_variation(product_id, variation_ids, special) {
 	}
   ajax.post("index.php",return_price,"ajax=true&get_updated_price=true&product_id="+product_id+value_ids);
 }
-  
-function shopping_cart_collapser() {
-  switch(jQuery("#sliding_cart").css("display")) {
-    case 'none':
-    jQuery("#sliding_cart").slideToggle("fast",function(){
-      ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1");
-      jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/minus.png"));
-		});
-    break;
-    
-    default:
-    jQuery("#sliding_cart").slideToggle("fast",function(){
-      ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=0");
-      jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/plus.png"));
-		});
-    break;
-	}
-  return false;
-}
-  
 function show_details_box(id,image_id) {
   state = document.getElementById(id).style.display; 
   if(state != 'block') {

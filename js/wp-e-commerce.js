@@ -143,7 +143,24 @@ function wpsc_fancy_notification(parent_form){
 	}
 }
 
-
+function shopping_cart_collapser() {
+  switch(jQuery("#sliding_cart").css("display")) {
+    case 'none':
+    jQuery("#sliding_cart").slideToggle("fast",function(){
+      ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1");
+      jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/minus.png"));
+		});
+    break;
+    
+    default:
+    jQuery("#sliding_cart").slideToggle("fast",function(){
+      ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=0");
+      jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/plus.png"));
+		});
+    break;
+	}
+  return false;
+}
   
 function set_billing_country(html_form_id, form_id){
   var billing_region = '';

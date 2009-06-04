@@ -162,6 +162,23 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 
 	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
 	<?php echo TXT_WPSC_CREDITCARDHANDY; ?><br />
+	
+	
+	 <?php if(!is_user_logged_in() && get_settings('users_can_register')) : ?>
+		<?php echo TXT_WPSC_IF_USER_CHECKOUT; ?><a href='#' onclick='jQuery("#checkout_login_box").slideToggle("fast"); return false;'><?php echo TXT_WPSC_LOG_IN; ?></a>
+		<div id='checkout_login_box'>
+			<form name="loginform" id="loginform" action="<?php echo get_option('siteurl'); ?>/wp-login.php" method="post">
+				<label>Username:<br /><input type="text" name="log" id="log" value="" size="20" tabindex="1" /></label>
+				<label>Password:<br /> <input type="password" name="pwd" id="pwd" value="" size="20" tabindex="2" /></label>
+				<input type="submit" name="submit" class="checkout_submit" value="Login &raquo;" tabindex="4" />
+				<input type="hidden" name="redirect_to" value="<?php echo get_option('shopping_cart_url'); ?>" />
+			</form>
+			<a class='thickbox' rel='<?php echo TXT_WPSC_REGISTER; ?>' href='<?php echo $siteurl; ?>?ajax=true&amp;action=register&amp;width=360&amp;height=300' ><?php echo TXT_WPSC_REGISTER; ?></a>
+		</div>
+			<br />
+	<?php endif; ?>
+	
+	
 	<?php echo TXT_WPSC_ASTERISK; ?>
 <form action='' method='post' enctype="multipart/form-data">
 	<table class='wpsc_checkout_table'>
@@ -223,8 +240,15 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 		</tr>
 		<tr>
 			<td colspan='2'>
-				<input type='hidden' value='submit_checkout' name='wpsc_action' />
-				<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
+				<?php if((is_user_logged_in() && (get_option('require_register') == 1)) xor (get_option('require_register') == 0)) : ?>
+					<input type='hidden' value='submit_checkout' name='wpsc_action' />
+					<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
+				<?php else: ?>
+				
+				<br /><strong><?php echo TXT_WPSC_PLEASE_LOGIN;?></strong><br />
+				<?php echo TXT_WPSC_IF_JUST_REGISTERED;?>
+				</td>
+				<?php endif; ?>				
 			</td>
 		</tr>
 	</table>

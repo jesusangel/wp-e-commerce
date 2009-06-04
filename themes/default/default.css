@@ -861,7 +861,16 @@ div#checkout_login_box{
   width: auto;
   padding: 5px 5px 5px 15px;
   margin: 20px 0px 0px 0px;
+	clear: both;
   }
+    
+div#checkout_login_box a{
+		clear: both;
+}
+    
+div#checkout_login_box input.checkout_submit{
+		clear: both;
+}
  
 div#checkout_login_box form{
   text-align: left;

@@ -5,7 +5,7 @@ function widget_wp_shopping_cart($args) {
       
 		if(get_option('show_sliding_cart') == 1)	{
 			if(is_numeric($_SESSION['slider_state']))	{
-				if($_SESSION['slider_state'] == 0) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
+			if($_SESSION['slider_state'] == 0) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
 				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 			} else {
 				if($_SESSION['nzshpcrt_cart'] == null) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
@@ -24,7 +24,13 @@ function widget_wp_shopping_cart($args) {
     echo $full_title;
     echo "<ul>\n\r";
     echo "  <li>\n\r";
-		echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
+    
+		$display_state = "";
+		
+		if(($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) {
+			$display_state = "style='display: none;'";
+		}
+		echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
 //     if(get_option('wpsc_use_theme_engine') == TRUE) {	    
 			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
     /*
