@@ -41,7 +41,7 @@
 	
 
 	
-	<form action='' method='POST' class='wpsc_empty_the_cart'>
+	<form action='' method='post' class='wpsc_empty_the_cart'>
 		<input type='hidden' name='wpsc_ajax_action' value='empty_cart' />
 		<span class='emptycart'>
 			<button type='submit'><span><?php echo TXT_WPSC_EMPTYYOURCART; ?></span></button>

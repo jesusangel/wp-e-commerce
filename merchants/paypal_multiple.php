@@ -8,7 +8,7 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_multiple";
 function gateway_paypal_multiple($seperator, $sessionid) {
   global $wpdb;
   $purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
-//exit(print_r($purchase_log,1));
+
 	if ($purchase_log['totalprice']==0) {
 		header("Location: ".get_option('transact_url').$seperator."sessionid=".$sessionid);
 		exit();
@@ -121,13 +121,15 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 			$local_currency_productprice = $item['price'];
 			$local_currency_shipping = $item['pnp'];
 			
-			//exit($local_currency_productprice . " " . $local_currency_code);
 			if($paypal_currency_code != $local_currency_code) {
 				$paypal_currency_productprice = $curr->convert($local_currency_productprice,$paypal_currency_code,$local_currency_code);
 				$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
+				//exit($paypal_currency_productprice . " " . $paypal_currency_shipping.' '.$local_currency_productprice . " " . $local_currency_code);
+				 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
 			} else {
 				$paypal_currency_productprice = $local_currency_productprice;
 				$paypal_currency_shipping = $local_currency_shipping;
+				$base_shipping = $purchase_log['base_shipping'];
 			}
 			//exit("---->".$paypal_currency_shipping);
 			$data['item_name_'.$i] = urlencode(stripslashes($item['name']));
@@ -154,7 +156,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	}
   $data['tax'] = '';
 
-  $base_shipping = $purchase_log['base_shipping'];
+ 
   //exit($base_shipping);
   if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false)) {
     $data['handling_cart'] = number_format($base_shipping,$decimal_places,'.','');
@@ -232,6 +234,8 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		}
 		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
+  	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
+  	exit("<pre>".print_r($data,true)."</pre>");
 	if(WPSC_GATEWAY_DEBUG == true ) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
   	exit("<pre>".print_r($data,true)."</pre>");
@@ -409,8 +413,16 @@ function form_paypal_multiple() {
      </td>
   </tr>
   <tr>
-      <td>Accepted Currency (e.g. USD, AUD)
-      </td>
+      <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
+     
+  </tr>
+  <tr>
+   <td colspan='2'>".__('If your website uses a currency not accepted by Paypal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using currency you choose below.')."</td>
+  </tr>
+  
+  <tr>
+  
+    <td>Convert to </td>
       <td>
         <select name='paypal_curcode'>
           <option ".$select_currency['USD']." value='USD'>U.S. Dollar</option>

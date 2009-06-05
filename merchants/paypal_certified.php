@@ -33,6 +33,7 @@ $_SESSION['paypalExpressMessage']= '	<h4>Transaction Canceled</h4>';
 //'------------------------------------
 //exit('<pre>'.print_r($_SESSION, true).'</pre>');
 $paymentAmount = nzshpcrt_overall_total_price($_SESSION['selected_country']);
+
 $_SESSION['paypalexpresssessionid'] = $sessionid;
 //'------------------------------------
 //' The currencyCodeType and paymentType 
@@ -707,7 +708,7 @@ $output .= "
 	' For the sandbox, the URL is       https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=
 	' For the live site, the URL is        https://www.paypal.com/webscr&cmd=_express-checkout&token=
 	*/
-	
+	//$SandboxFlag = true;
 	if ($SandboxFlag == true) 
 	{
 		$API_Endpoint = "https://api-3t.sandbox.paypal.com/nvp";
