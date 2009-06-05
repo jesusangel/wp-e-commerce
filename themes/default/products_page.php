@@ -174,8 +174,14 @@ global $wpsc_query, $wpdb;
 		</div>
 	</div>
 
-<?php endwhile; ?>
-<?php /** end the product loop here */?>
+	<?php endwhile; ?>
+	<?php /** end the product loop here */?>
+	
+	
+	<?php if(wpsc_product_count() < 1):?>
+		<p><?php  echo TXT_WPSC_NOITEMSINTHISGROUP; ?></p>
+	<?php endif ; ?>
+
 <?php
 
 if(function_exists('fancy_notifications')) {

@@ -6,6 +6,7 @@ define('TXT_SHOW_GRID_PER_ROW', 'Products Per Row');
 define('TXT_WPSC_PRODUCT_TAGS', 'Tags');
 define('TXT_WPSC_CATEGORISATION', 'Categories');
 define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
+define('TXT_WPSC_NOITEMSINTHISGROUP', 'There are no products in this group.');
 
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Release downloads locked to this IP address %s');
 define('TXT_WPSC_EMAIL_BUYER', 'Resend Receipt to Buyer');

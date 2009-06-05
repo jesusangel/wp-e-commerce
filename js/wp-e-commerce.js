@@ -50,6 +50,11 @@ jQuery(document).ready(function () {
     product_id = jQuery('input[name=product_id]',this).val();
     image_element_id = 'product_image_'+product_id;
     jQuery("#"+image_element_id).data("product_id", product_id);
+    
+    
+    parent_container = jQuery(this).parents('div.product_view_'+product_id);
+    
+    jQuery("div.item_no_image", parent_container).data("product_id", product_id);
   });
   jQuery("form.product_form").trigger('load');
   

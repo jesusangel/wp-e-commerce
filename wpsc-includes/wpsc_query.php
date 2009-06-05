@@ -666,7 +666,7 @@ function wpsc_page_is_selected() {
 }
 
 /**
-* wpsc papge URL function
+* wpsc page URL function
 * @return string - the page URL
 */
 function wpsc_page_url() {
@@ -675,6 +675,14 @@ function wpsc_page_url() {
 	return $wpsc_query->page['url'];
 }
 
+/**
+* wpsc product count function
+* @return string - the page URL
+*/
+function wpsc_product_count() {
+	global $wpsc_query;
+	return $wpsc_query->product_count;
+}
 
 /**
  * The WPSC Query class.

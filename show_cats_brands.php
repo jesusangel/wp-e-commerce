@@ -15,7 +15,12 @@ function display_subcategories($id) {
   if($subcategories != null) {
     $output .= "<ul class='SubCategories'>";
     foreach($subcategories as $subcategory) {
-      $output .= "<li><a class='categorylink' href='".wpsc_category_url($subcategory['id'])."'>".stripslashes($subcategory['name'])."</a>".display_subcategories($subcategory['id'])."</li>";
+			if (get_option('show_category_count') == 1) {
+				//show product count for each category
+				$count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$subcategory['id']}') AND `p`.`active` IN ('1')");
+				$addCount =  " (".$count.")";
+			} //end get_option
+      $output .= "<li><a class='categorylink' href='".wpsc_category_url($subcategory['id'])."'>".stripslashes($subcategory['name'])."</a>$addCount".display_subcategories($subcategory['id'])."</li>";
 		} 
     $output .= "</ul>";
 	} else {
@@ -56,38 +61,37 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
   $output .= "<div class='PeCatsBrands'>";
   
   
-  if((get_option('show_categorybrands') == 1 ) || (get_option('show_categorybrands') == 2))
-    {
+  if((get_option('show_categorybrands') == 1 ) || (get_option('show_categorybrands') == 2)) {
+  
+  
     $output .= "<div class='PeCategories categorydisplay'>";
     $categories = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '0' ORDER BY `".$wpdb->escape($order_by)."` ASC",ARRAY_A);
-    if($categories != null)
-    {
+    if($categories != null) {
       $output .= "<ul class='PeCategories'>";
-      foreach($categories as $option)
-      {
+      foreach($categories as $option) {
         // Adrian - check option for category count
-        if (get_option('show_category_count') == 1){
+        if (get_option('show_category_count') == 1) {
           //show product count for each category
-          $count_sql = "SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')";
-          $count = $wpdb->get_var($count_sql);
+          $count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')");
           $addCount =  " (".$count.")";
         } //end get_option
         // No more mootools
-        if (get_option('catsprods_display_type') == 1){ 
+        if (get_option('catsprods_display_type') == 1){
           $output .= "<li class='MainCategory'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
         }else{
         // Adrian - otherwise create normal category text with or without product count
-		if (!$image) {
-			$output .= "<li class='MainCategory'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
-		} else {
-			$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
-		}
-	}//end get_option
+					if (!$image) {
+						$output .= "<li class='MainCategory'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
+					} else {
+						$output .= "<li class='MainCategory'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
+					}
+				}//end get_option
+				
+				
         $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
         $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
-        if($subcategories != null)
-        {
-        $output .= display_subcategories($option['id']);
+        if($subcategories != null) {
+					$output .= display_subcategories($option['id']);
         } else {
           // Adrian - check if the user wants categories only or sliding categories
           if (get_option('permalink_structure')!=''){
@@ -108,7 +112,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
             $productIDs = $wpdb->get_results($product_sql,ARRAY_A);
             if($productIDs != null){
               $output .= "<ul>";
-              foreach($productIDs as $productID){
+              foreach($productIDs as $productID) {
                 $ID = $productID['product_id'];
                 $productName_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$ID."'";
                 $productName = $wpdb->get_results($productName_sql,ARRAY_A);
@@ -128,20 +132,15 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
   
   if((get_option('show_categorybrands') == 1 ) || (get_option('show_categorybrands') == 3))
   {
-    if(get_option('show_categorybrands')  == 1)
-      {
+    if(get_option('show_categorybrands')  == 1) {
       $output .= "<ul class='PeBrands branddisplay' style='display: none;'>";
-      }
-      else
-      {
+		} else {
       $output .= "<ul class='PeBrands branddisplay'>";
-      }
+		}
     //$output ='';
     $brands = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_brands` WHERE `active`='1' ORDER BY `order` ASC",ARRAY_A);
-    if($brands != null)
-    {
-      foreach($brands as $option)
-      {
+    if($brands != null) {
+      foreach($brands as $option) {
         $output .= "<li><a class='categorylink' href='".get_option('product_list_url').$seperator."brand=".$option['id']."'>".stripslashes($option['name'])."</a></li>";
       }
     }
