@@ -90,9 +90,10 @@ function wpsc_display_products_page() {
 			if(count($unwriteable_directories) > 0) {
 				echo "<div class='error fade'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";
 			}
+			// class='stuffbox'
 	?>
 		
-		<div id="col-container" class='stuffbox'>
+		<div id="col-container">
 			<div id="wpsc-col-right">			
 				<div id='poststuff' class="col-wrap">
 					<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
@@ -126,7 +127,7 @@ function wpsc_display_products_page() {
 			});
 		});
 	})(jQuery);
-	columns.init('edit');
+	//columns.init('edit');
 	/* ]]> */
 	</script>
 	<?php
@@ -204,7 +205,6 @@ function wpsc_admin_products_list($category_id = 0) {
 		));
 	}
 	$this_page_url = stripslashes($_SERVER['REQUEST_URI']);
-  	if($product_list >0){
   
 	?>
 	<div class="wpsc-separator"><br/></div>
@@ -266,88 +266,98 @@ function wpsc_admin_products_list($category_id = 0) {
 		
 			<tbody>
 				<?php
-				foreach((array)$product_list as $product) {
-				  	
-				  //first set the patch to the default
-					$image_path = WPSC_URL."/images/no-image-uploaded.gif";
-					if(is_numeric($product['image'])) { // check for automatic thumbnail images
-					  // file_exists(WPSC_THUMBNAIL_DIR.$product['image'])
-					  $product_image = $wpdb->get_var("SELECT `image` FROM  `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$product['image']}' LIMIT 1");
-					  // if the image exists, set the image path to it.
-					  if(($product_image != null) && file_exists(WPSC_THUMBNAIL_DIR.$product_image)) {
-					    $image_path = WPSC_THUMBNAIL_URL.$product_image;  
-					  }
-					}
-					
-					// get the  product name, unless there is no name, in which case, display text indicating so
-					if ($product['name']=='') {
-						$product_name = "(".TXT_WPSC_NONAME.")";
-					} else {
-						$product_name = htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8');
-					}
-					
-					
-				$category_html = '';	
-				$category_list = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id`,`".WPSC_TABLE_PRODUCT_CATEGORIES."`.`name` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product['id']."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1')",ARRAY_A);
-				$i = 0;
-				foreach((array)$category_list as $category_row) {
-					if($i > 0) {
-						$category_html .= "<br />";
-					}
-					
-					
-					$category_html .= "<a class='category_link' href='". remove_query_arg('product_id',add_query_arg('category_id', $category_row['id']))."'>".stripslashes($category_row['name'])."</a>";
-					$i++;
-				}        
-								
-					
-					?>
-						<tr class="product-edit" id="product-<?php echo $product['id']?>">
-								<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' /></th>
-								
-								
-								<td class="product-image ">
-									<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
-								</td>
-								<td class="product-title column-title">
-									<a class='edit-product' href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>
-										<?php
-										$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
-										if(count($product_alert['messages']) > 0) {
-											$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
-										}
-										if($product_alert['state'] === true) {
-											?>
-											<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_URL;?>/images/product-alert.jpg' alt='' title='' />
+				if(count($product_list) > 0) {
+					foreach((array)$product_list as $product) {
+							
+						//first set the patch to the default
+						$image_path = WPSC_URL."/images/no-image-uploaded.gif";
+						if(is_numeric($product['image'])) { // check for automatic thumbnail images
+							// file_exists(WPSC_THUMBNAIL_DIR.$product['image'])
+							$product_image = $wpdb->get_var("SELECT `image` FROM  `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$product['image']}' LIMIT 1");
+							// if the image exists, set the image path to it.
+							if(($product_image != null) && file_exists(WPSC_THUMBNAIL_DIR.$product_image)) {
+								$image_path = WPSC_THUMBNAIL_URL.$product_image;  
+							}
+						}
+						
+						// get the  product name, unless there is no name, in which case, display text indicating so
+						if ($product['name']=='') {
+							$product_name = "(".TXT_WPSC_NONAME.")";
+						} else {
+							$product_name = htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8');
+						}
+						
+						
+					$category_html = '';	
+					$category_list = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id`,`".WPSC_TABLE_PRODUCT_CATEGORIES."`.`name` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product['id']."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1')",ARRAY_A);
+					$i = 0;
+					foreach((array)$category_list as $category_row) {
+						if($i > 0) {
+							$category_html .= "<br />";
+						}
+						
+						
+						$category_html .= "<a class='category_link' href='". remove_query_arg('product_id',add_query_arg('category_id', $category_row['id']))."'>".stripslashes($category_row['name'])."</a>";
+						$i++;
+					}        
+									
+						
+						?>
+							<tr class="product-edit" id="product-<?php echo $product['id']?>">
+									<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' /></th>
+									
+									
+									<td class="product-image ">
+										<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
+									</td>
+									<td class="product-title column-title">
+										<a class='edit-product' href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>
 											<?php
-										}
-										?>
-								
-								
-								
-									<div class="wpsc-row-actions">
-										<span class="edit">
-											<a class='edit-product' title="Edit this post" href='<?php echo add_query_arg('product_id', $product['id']); ?>' style="cursor:pointer;">Edit</a>
-										</span> |
-										<span class="delete">
-											<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
-										</span> |
-									<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php echo wpsc_product_url($product['id']); ?>">View</a></span> |
-									<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="<?php echo wp_nonce_url("page.php?wpsc_admin_action=duplicate_product&amp;product={$product['id']}", 'duplicate_product_' . $product['id']); ?>">Duplicate</a></span>
-								</div>
-								</td>
-								
-								<td class="product-price column-price"><?php echo nzshpcrt_currency_display($product['price'], 1); ?></td>
-								<td class="column-categories"><?php echo $category_html; ?></td>
-						</tr>
-					<?php
+											$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
+											if(count($product_alert['messages']) > 0) {
+												$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
+											}
+											if($product_alert['state'] === true) {
+												?>
+												<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_URL;?>/images/product-alert.jpg' alt='' title='' />
+												<?php
+											}
+											?>
+									
+									
+									
+										<div class="wpsc-row-actions">
+											<span class="edit">
+												<a class='edit-product' title="Edit this post" href='<?php echo add_query_arg('product_id', $product['id']); ?>' style="cursor:pointer;">Edit</a>
+											</span> |
+											<span class="delete">
+												<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
+											</span> |
+										<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php echo wpsc_product_url($product['id']); ?>">View</a></span> |
+										<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="<?php echo wp_nonce_url("page.php?wpsc_admin_action=duplicate_product&amp;product={$product['id']}", 'duplicate_product_' . $product['id']); ?>">Duplicate</a></span>
+									</div>
+									</td>
+									
+									<td class="product-price column-price"><?php echo nzshpcrt_currency_display($product['price'], 1); ?></td>
+									<td class="column-categories"><?php echo $category_html; ?></td>
+							</tr>
+						<?php
+					}
+				} else {
+				?>
+				<tr>
+					<td colspan='5'>
+					  <?php _e("You have no products added."); ?>
+					</td>
+				</tr>
+				<?php
 				}
 				?>			
 			</tbody>
 		</table>
 	</form>
 	<?php
-}}
+}
 
 //function 
 

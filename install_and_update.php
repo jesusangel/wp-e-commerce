@@ -21,13 +21,7 @@ function nzshpcrt_install()
    {
    global $wpdb, $user_level, $wp_rewrite, $wp_version;
    $table_name = $wpdb->prefix . "product_list";
-   //$log_table_name = $wpdb->prefix . "sms_log";
-   if($wp_version < 2.1) {
-     get_currentuserinfo();
-     if($user_level < 8) {
-       return;
-    }
-  }
+
   $first_install = false;
   $result = mysql_list_tables(DB_NAME);
   $tables = array();
@@ -902,6 +896,9 @@ function wpsc_create_or_update_tables($debug = false) {
         }
       }
       
+      if(isset($table_data['actions']['after']['all']) && is_callable($table_data['actions']['after']['all'])) {
+				$table_data['actions']['after']['all']();
+			}
       // get the list of existing indexes
       $existing_table_index_data = $wpdb->get_results("SHOW INDEX FROM `$table_name`", ARRAY_A);
       $existing_table_indexes = array();
