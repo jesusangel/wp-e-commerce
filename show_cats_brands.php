@@ -3,8 +3,7 @@
 // To stick this in sidebar, main page (calling products_page.php) must be called before sidebar.php in the loop (think)
   
 function display_subcategories($id) {
-  global $wpdb;
-  
+  global $wpdb;  
   if(get_option('permalink_structure') != '') {
     $seperator ="?";
   } else {
@@ -177,10 +176,10 @@ function wpsc_category_url($category_id) {
 			$category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_data['category_parent']."') AND `active` IN('1') LIMIT 1", ARRAY_A);
 			$category_name[] = $category_data['nice-name'];			
 			if($num > 10) { break; }
-			$num++;			
+			$num++;
 		}
   }
-  $category_name = array_reverse($category_name);
+  $category_name = array_reverse((array)$category_name);
   if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
     if(!empty($category_name)) {
 			if(substr(get_option('product_list_url'), -1, 1) == '/') {

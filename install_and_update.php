@@ -819,7 +819,8 @@ function wpsc_create_or_update_tables($debug = false) {
     } else {
       // check to see if the new table name is in use
 			if(!$wpdb->get_var("SHOW TABLES LIKE '$table_name'") && (isset($table_data['previous_names']) && $wpdb->get_var("SHOW TABLES LIKE '{$table_data['previous_names']}'"))) {
-				$wpdb->query("RENAME TABLE `{$table_data['previous_names']}`  TO `{$table_name}`;");
+				$wpdb->query("ALTER TABLE  `{$table_data['previous_names']}` RENAME TO `{$table_name}`;");
+				//$wpdb->query("RENAME TABLE `{$table_data['previous_names']}`  TO `{$table_name}`;");
 				$failure_reasons[] = $wpdb->last_error;
 			}
     
