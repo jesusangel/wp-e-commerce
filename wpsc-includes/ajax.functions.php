@@ -343,6 +343,23 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 	* No parameters, returns nothing
 */
 function wpsc_submit_checkout() {
+  /*
+  Ideas for registration
+  
+  1. validate all details.  
+  2. register and log in if other details validate.
+  3. if registration fails, go back, do not run transaction 
+  4. if transaction fails, leave them logged in.
+  
+  
+  Also for user friendlyness 
+  
+  1. remember previous details.
+  2. remember previous gateway
+  
+  */
+
+
   global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways;
 	$wpsc_checkout = new wpsc_checkout();
 	//exit('coupons:'.$wpsc_cart->coupons_name);
@@ -351,7 +368,9 @@ function wpsc_submit_checkout() {
 	$form_validity = $wpsc_checkout->validate_forms();
 //	exit('<pre>'.print_r($form_validity, true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
-	//exit("<pre>".print_r($submitted_gateway,true)."</pre>");
+	
+	
+	exit("<pre>".print_r($_POST,true)."</pre>");
 	
 	
 	$selectedCountry = $_SESSION['wpsc_delivery_country'];
