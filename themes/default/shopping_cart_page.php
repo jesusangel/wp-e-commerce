@@ -235,9 +235,9 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 			  
 				<?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?>
 					<h3><?php echo TXT_WPSC_SELECTGATEWAY;?></h3>
-					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
+					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); //checked="checked" ?>
 						<div class="custom_gateway">
-							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" checked="checked" name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>"  name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
 							
 							<?php if(wpsc_gateway_form_fields()): ?> 
 								<table class='<?php echo wpsc_gateway_form_field_style();?>'>

@@ -343,23 +343,6 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 	* No parameters, returns nothing
 */
 function wpsc_submit_checkout() {
-  /*
-  Ideas for registration
-  
-  1. validate all details.  
-  2. register and log in if other details validate.
-  3. if registration fails, go back, do not run transaction 
-  4. if transaction fails, leave them logged in.
-  
-  
-  Also for user friendlyness 
-  
-  1. remember previous details.
-  2. remember previous gateway
-  
-  */
-
-
   global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways;
 	$wpsc_checkout = new wpsc_checkout();
 	//exit('coupons:'.$wpsc_cart->coupons_name);
@@ -368,7 +351,7 @@ function wpsc_submit_checkout() {
 	$form_validity = $wpsc_checkout->validate_forms();
 //	exit('<pre>'.print_r($form_validity, true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
-	if((isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email'])) && ($user_ID < 0) ) {
+ 	if(isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email']) ) {
 		$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);
 		$_SESSION['wpsc_checkout_user_error_messages'] = array();
 		if(is_callable(array($results, "get_error_code")) && $results->get_error_code()) {
@@ -380,13 +363,19 @@ function wpsc_submit_checkout() {
 			$is_valid = false;
 		}
 		if($results->ID > 0) {
-			$user_ID = $results->ID;
+			$our_user_id = $results->ID;
+		} else {
+			$is_valid = false;		
 		}
-  }
+   }
 	
-	$selectedCountry = $_SESSION['wpsc_delivery_country'];
-	$sql="SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$selectedCountry."'";
-	$selectedCountry = $wpdb->get_results($sql, ARRAY_A);
+	if($our_user_id < 1) {
+	  $our_user_id = $user_ID;
+	}
+	
+   //exit('<pre>'.print_r($results, true).'</pre>');
+	
+	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
 
 
    foreach($wpsc_cart->cart_items as $cartitem){
@@ -410,7 +399,7 @@ function wpsc_submit_checkout() {
   
 	//exit('<pre>'.print_r($is_valid, true).'</pre>');
 	if($is_valid == true) {
-	$_SESSION['categoryAndShippingCountryConflict']= '';
+		$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
 		if(array_search($submitted_gateway,$selected_gateways) !== false) {
 		
@@ -430,7 +419,7 @@ function wpsc_submit_checkout() {
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
 			$wpsc_cart->save_to_db($purchase_log_id);
 			$wpsc_cart->submit_stock_claims($purchase_log_id);
-			do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "user_ID" => $user_ID));
+			do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
 			
 			if(get_option('permalink_structure') != '') {
 				$seperator = "?";
