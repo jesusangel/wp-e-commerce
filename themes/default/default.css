@@ -473,6 +473,10 @@ form.wpsc_checkout_forms {
 
 }
 
+form.wpsc_checkout_forms .login_error {
+	color:red;
+}
+
 fieldset.wpsc_registration_form {
   border: none;
   text-align: left;

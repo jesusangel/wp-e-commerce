@@ -368,10 +368,21 @@ function wpsc_submit_checkout() {
 	$form_validity = $wpsc_checkout->validate_forms();
 //	exit('<pre>'.print_r($form_validity, true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
-	
-	
-	exit("<pre>".print_r($_POST,true)."</pre>");
-	
+	if((isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email'])) && ($user_ID < 0) ) {
+		$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);
+		$_SESSION['wpsc_checkout_user_error_messages'] = array();
+		if(is_callable(array($results, "get_error_code")) && $results->get_error_code()) {
+			foreach ( $results->get_error_codes() as $code ) {
+				foreach ( $results->get_error_messages($code) as $error ) {
+					$_SESSION['wpsc_checkout_user_error_messages'][] = $error;
+				}
+			}
+			$is_valid = false;
+		}
+		if($results->ID > 0) {
+			$user_ID = $results->ID;
+		}
+  }
 	
 	$selectedCountry = $_SESSION['wpsc_delivery_country'];
 	$sql="SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$selectedCountry."'";
@@ -388,20 +399,16 @@ function wpsc_submit_checkout() {
    			$countries = $wpdb->get_col($sql);
    			//exit(print_r($countries));
    			if(in_array($selectedCountry[0]['id'], (array)$countries)){
-   					$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
-   					
-
-   		//		exit($errormessage);
-	   				$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
+					$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
+					$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
 					$is_valid = false;
-   				}
-   			//   				exit( $sql.'<br /><pre>'.print_r($countries, true).'</pre><br />');
+				}
    		
    
    		}
     }
   
-	//exit('<pre>'.print_r($categoriesIDs, true).'</pre>');
+	//exit('<pre>'.print_r($is_valid, true).'</pre>');
 	if($is_valid == true) {
 	$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
@@ -423,7 +430,7 @@ function wpsc_submit_checkout() {
 			$wpsc_checkout->save_forms_to_db($purchase_log_id);
 			$wpsc_cart->save_to_db($purchase_log_id);
 			$wpsc_cart->submit_stock_claims($purchase_log_id);
-			do_action('wpsc_submit_checkout', $purchase_log_id);
+			do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "user_ID" => $user_ID));
 			
 			if(get_option('permalink_structure') != '') {
 				$seperator = "?";

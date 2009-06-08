@@ -15,7 +15,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 global $wpdb;
 
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '10');
+define('WPSC_MINOR_VERSION', '11');
 
 define('WPSC_PRESENTABLE_VERSION', '3.7 Beta 1');
 
@@ -99,6 +99,7 @@ define('WPSC_TABLE_CLAIMED_STOCK', "{$wp_table_prefix}wpsc_claimed_stock");
 require_once(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/misc.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');

@@ -180,6 +180,18 @@ $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 	 <?php if(!is_user_logged_in() && get_settings('users_can_register')) : ?>
 		<h2><?php _e('Not yet a member?');?></h2>
 		<p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
+		<?php	if(count($_SESSION['wpsc_checkout_user_error_messages']) > 0) : ?>
+			<div class="login_error"> 
+				<?php		  
+				foreach($_SESSION['wpsc_checkout_user_error_messages'] as $user_error ) {
+				  echo $user_error."<br />\n";
+				}
+				$_SESSION['wpsc_checkout_user_error_messages'] = array();
+				?>			
+		  </div>
+		<?php endif; ?>
+		
+		
 	  <fieldset class='wpsc_registration_form'>
 			<label><?php _e('Username'); ?>:</label><input type="text" name="log" id="log" value="" size="20"/>
 			<label><?php _e('Password'); ?>:</label><input type="password" name="pwd" id="pwd" value="" size="20" />
