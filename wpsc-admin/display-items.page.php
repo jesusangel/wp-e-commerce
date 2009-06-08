@@ -28,7 +28,21 @@ function wpsc_display_products_page() {
 		<?php screen_icon(); ?>
 		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
 		
-		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated'])) { ?>
+		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){?>
+				<div id="message" class="error fade">
+					<p>
+						<?php
+						foreach($_SESSION['product_error_messages'] as $error){
+							echo $error;
+						}
+						?>
+					</p>
+				</div>
+				<?php 	unset($_GET['ErrMessage']); ?>
+				<?php $_SESSION['product_error_messages'] = ''; ?>
+		<?php } ?>
+			
+		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated']) ) { ?>
 			<div id="message" class="updated fade">
 				<p>
 				<?php if ( isset($_GET['updated'])) {

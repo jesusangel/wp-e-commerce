@@ -62,13 +62,25 @@ function wpsc_get_max_upload_size(){
 function wpsc_admin_submit_product() {
 
   //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
-	check_admin_referer('edit-product', 'wpsc-edit-product');
+  check_admin_referer('edit-product', 'wpsc-edit-product');
   $post_data = wpsc_sanitise_product_forms();
-  wpsc_insert_product($post_data, true);
-  
-  
+//  exit('<pre>'.print_r($post_data,true).'</pre>');
+  if(isset($post_data['title']) && $post_data['title'] != '' && isset($post_data['category'])){
+	wpsc_insert_product($post_data, true);
 	$sendback = add_query_arg('message', 1);
 	wp_redirect($sendback);
+  }else{
+  	$_SESSION['product_error_messages'] = array();	
+  	if($post_data['title'] == ''){
+  		$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product name.<br />');
+  	}
+  	if(!isset($post_data['category'])){
+  		$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product Category.<br />');
+   	}
+   //	exit('<pre>'.print_r($_SESSION['product_error_messages'], true).'</pre>');
+  	$sendback = add_query_arg('ErrMessage', 1);
+	wp_redirect($sendback);
+  }
 	exit();
 }
  
@@ -83,6 +95,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$post_data = &$_POST;
 	}
 // 	$post_data['product_id'] = isset($post_data['product_id']) ? $post_data['product_id'] : '';
+//exit('<pre>'.print_r($post_data, true).'</pre>');
 	$post_data['name'] = isset($post_data['title']) ? $post_data['title'] : '';
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
 	$post_data['meta'] = isset($post_data['productmeta_values']) ? $post_data['productmeta_values'] : '';

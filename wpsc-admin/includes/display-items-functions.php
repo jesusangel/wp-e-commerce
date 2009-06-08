@@ -331,7 +331,8 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 				<span class='howto'> ".TXT_WPSC_PRODUCT_TAGS."</span><br />
 				<p id='jaxtag'>
 					<label for='newtag' class='hidden'>".TXT_WPSC_PRODUCT_TAGS."</label>
-					<input type='text' value='".$imtags."' tabindex='3' size='40' id='tags-input' class='tags-input' name='product_tags'/>
+					<input type='text' value='".$imtags."' tabindex='3' size='20' id='tags-input' class='tags-input' name='product_tags'/>
+				<span class='howto'>".__('Separate tags with commas')."</span>
 				</p>
 				<div id='tagchecklist'></div>
 

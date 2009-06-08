@@ -97,12 +97,14 @@ function tag_press_key( e ) {
 
 jQuery(document).ready( function($) {
 	tagCloud.init();
-	
-	jQuery('#tags-input').hide();
+		jQuery('#tags-input').livequery(function(){
+			jQuery(this).hide();
+
+		})	
 	tag_update_quickclicks();
 	// add the quickadd form
 	jQuery('#jaxtag').livequery(function(){
-		jQuery(this).prepend('<span id="ajaxtag"><input type="text" name="newtag" id="newtag" class="form-input-tip" size="16" autocomplete="off" value="'+postL10n.addTag+'" /><input type="button" class="button" id="tagadd" value="' + postL10n.add + '" tabindex="3" /><input type="hidden"/><input type="hidden"/><span class="howto">'+postL10n.separate+'</span></span>');
+		jQuery(this).prepend('<span id="ajaxtag"><input type="text" name="newtag" id="newtag" class="form-input-tip" size="16" autocomplete="off" value="'+postL10n.addTag+'" /><input type="button" class="button" id="tagadd" value="' + postL10n.add + '" tabindex="3" /><input type="hidden"/><input type="hidden"/></span>');
 	jQuery('#tagadd').click( tag_flush_to_text );
 	jQuery('#newtag').focus(function() {
 		if ( this.value == postL10n.addTag )
@@ -112,6 +114,7 @@ jQuery(document).ready( function($) {
 		if ( this.value == '' )
 			jQuery(this).val( postL10n.addTag ).addClass( 'form-input-tip' );
 	});
-	})
+	});
+
 });
 	

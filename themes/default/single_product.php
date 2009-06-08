@@ -177,9 +177,8 @@ $image_height = get_option('single_view_image_height');
 						
 					<?php
 						if(function_exists('gold_shpcrt_display_gallery')) :
-						?>
-						<?php
-							gold_shpcrt_display_gallery(wpsc_the_product_id());
+					
+							echo gold_shpcrt_display_gallery(wpsc_the_product_id());
 						endif;
 					?>
 					</div>

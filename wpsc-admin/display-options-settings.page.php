@@ -78,8 +78,8 @@ global $redir_tab;
 	$tabs = wpsc_settings_tabs();
 
 	if ( !empty($tabs) ) {
-		echo '<div id="wpsc_settings_nav_bar">';
-		echo "<ul id='sidemenu' style='width:65%;float:left;100%;margin:0 auto;padding-left:0;' >\n";
+		echo '<div id="wpsc_settings_nav_bar" style:"width:100%;">';
+		echo "<ul id='sidemenu' style='width:682px;float:left;margin:0 auto;padding-left:0;' >\n";
 		if ( isset($redir_tab) && array_key_exists($redir_tab, $tabs) )
 			$current = $redir_tab;
 		elseif ( isset($_GET['tab']) && array_key_exists($_GET['tab'], $tabs) )
@@ -96,9 +96,10 @@ global $redir_tab;
 			$link = "<a href='" . clean_url($href) . "'$class>$text</a>";
 			echo "\t<li id='" . attribute_escape("tab-$callback") . "'>$link</li>\n";
 		}
+		//echo "<li id='tab-spacer' ><a href='' alt='' style='width:33.4%;float:right;'>&nbsp;</a></li>";
 		echo "</ul>\n";
-
-		echo "<div id='wpsc_settingpage_nav_spacer'></div>";
+		echo "<div style='float:left;border:1px solid #DFDFDF;'></div>";
+		
 		echo '</div>';
 		echo "<div style='clear:both;'></div>";
 	}
