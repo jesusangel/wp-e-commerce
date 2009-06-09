@@ -5,6 +5,7 @@ $nzshpcrt_gateways[$num]['internalname'] = 'paypal_certified';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_certified';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_certified";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_certified";
+$nzshpcrt_gateways[$num]['payment_type'] = "paypal";
 
 
 if(in_array('paypal_certified',(array)get_option('custom_gateway_options')) ) {

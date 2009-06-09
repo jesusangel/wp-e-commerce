@@ -2,7 +2,8 @@
 function wpsc_options_gateway(){
 global $wpdb;
 $curgateway = get_option('payment_gateway');
-
+ 
+$payment_gateway_names = get_option('payment_gateway_names');
 
 if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 	$selected_gateways = get_option('custom_gateway_options');
@@ -10,12 +11,12 @@ if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 		if($gateway['internalname'] == $curgateway ) {
 			$selected = "selected='selected'";
 			$form = $gateway['form']();
+			$selected_gateway_data = $gateway;
 			//exit($form);
 		} else {
 			$selected = '';
 		}
-		
-		
+				
 		if(isset($gateway['admin_name'])) {
 			$gateway['name'] = $gateway['admin_name'];
 		}
@@ -29,11 +30,7 @@ if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 }
 $gatewaylist = "<option value='".$nogw."'>".TXT_WPSC_PLEASESELECTAPAYMENTGATEWAY."</option>" . $gatewaylist;
 
-
 ?>
-
-	
-						
 		
 <script language='javascript' type='text/javascript'>
 function selectgateway() {
@@ -47,7 +44,7 @@ function selectgateway() {
 		<input type='hidden' name='gateway_submits' value='true' />
 		<input type='hidden' name='wpsc_gateway_settings' value='gateway_settings' />
 		<?php 
-			if (get_option('custom_gateway') == 1){ 
+			if (get_option('custom_gateway') == 1){
 				$custom_gateway_hide="style='display:block;'";
 				$custom_gateway1 = 'checked="checked"';
 			} else {
@@ -121,11 +118,47 @@ function selectgateway() {
 							<h4><?php echo TXT_WPSC_PAYMENTGATEWAY2;?></h4>
 					  </td>
 					  <td style='border-top: none;'>
-					<select name='payment_gw' onchange='selectgateway();'>
-					<?php echo $gatewaylist; ?>
-					</select>
+							<select name='payment_gw' onchange='selectgateway();'>
+							<?php echo $gatewaylist; ?>
+							</select>
 						</td>
 					</tr>
+					
+					
+					<tr>
+					  <td style='border-top: none;'>
+					    <?php _e("Display Name");?>
+					  </td>
+					  <td style='border-top: none;'>
+					    <?php
+					    if($payment_gateway_names[$selected_gateway_data['internalname']] != '') {
+								$display_name = $payment_gateway_names[$selected_gateway_data['internalname']];					    
+					    } else {
+								switch($selected_gateway_data['payment_type']) {
+									case "paypal";
+										$display_name = "PayPal";
+									break;
+									
+									case "manual_payment":
+										$display_name = "Manual Payment";
+									break;
+									
+									case "google_checkout":
+										$display_name = "Google Checkout";
+									break;
+									
+									case "credit_card":
+									default:
+										$display_name = "Credit Card";
+									break;
+								}
+					    }
+					    ?>
+							<input type='text' name='user_defined_name[<?php echo $selected_gateway_data['internalname']; ?>]' value='<?php echo $display_name; ?>' /><br />
+							The text that people see when making a purchase
+						</td>
+					</tr>
+					
 					<?php echo $form; ?>   
 					
 					<tr class='update_gateway' >

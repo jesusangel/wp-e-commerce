@@ -4,6 +4,7 @@ $nzshpcrt_gateways[$num]['internalname'] = 'paypal_multiple';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_multiple';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_multiple";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_multiple";
+$nzshpcrt_gateways[$num]['payment_type'] = "paypal";
 
 function gateway_paypal_multiple($seperator, $sessionid) {
   global $wpdb;

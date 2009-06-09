@@ -105,7 +105,7 @@ function wpsc_admin_pages(){
 			if (file_exists(dirname(__FILE__).'/gold_cart_files/csv_import.php')) {
 				add_submenu_page($base_page,TXT_WPSC_IMPORT_CSV, TXT_WPSC_IMPORT_CSV, 7, WPSC_DIR_NAME.'/gold_cart_files/csv_import.php');
 			}
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'trunk/wpsc-admin/display-options-settings.page.php', 'wpsc_display_settings_page');
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
 // 			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
 // 			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
 // 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
@@ -122,7 +122,7 @@ function wpsc_admin_pages(){
 		
 		foreach($page_hooks as $page_hook) {
 			add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
-			if($page_hook == 'products_page_trunk/wpsc-admin/display-options.page' || $page_hook =='products_page_trunk/wpsc-admin/display-options-settings.page'){
+			if($page_hook == 'products_page_wpsc-settings'){
 				add_action("load-$page_hook", 'wpsc_admin_include_optionspage_css_and_js');
 			}
 

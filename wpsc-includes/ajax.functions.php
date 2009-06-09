@@ -348,6 +348,8 @@ function wpsc_submit_checkout() {
 	//exit('coupons:'.$wpsc_cart->coupons_name);
 	$selected_gateways = get_option('custom_gateway_options');
 	$submitted_gateway = $_POST['custom_gateway'];
+	
+	
 	$form_validity = $wpsc_checkout->validate_forms();
 //	exit('<pre>'.print_r($form_validity, true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
@@ -397,47 +399,53 @@ function wpsc_submit_checkout() {
    		}
     }
   
+  
+  if(array_search($submitted_gateway,$selected_gateways) !== false) {
+		$_SESSION['wpsc_previous_selected_gateway'] = $submitted_gateway;
+  } else {
+		$is_valid = false;
+  }
+  
+  
 	//exit('<pre>'.print_r($is_valid, true).'</pre>');
 	if($is_valid == true) {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
-		if(array_search($submitted_gateway,$selected_gateways) !== false) {
+	
+		$sessionid = (mt_rand(100,999).time());
+		$subtotal = $wpsc_cart->calculate_subtotal();
+		$base_shipping= $wpsc_cart->calculate_base_shipping();
+		$tax = $wpsc_cart->calculate_total_tax();
+		$total = $wpsc_cart->calculate_total_price();
 		
-			$sessionid = (mt_rand(100,999).time());
-			$subtotal = $wpsc_cart->calculate_subtotal();
-			$base_shipping= $wpsc_cart->calculate_base_shipping();
-			$tax = $wpsc_cart->calculate_total_tax();
-			$total = $wpsc_cart->calculate_total_price();
-			
-			    
+				
 
-			$wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')");
-			
-			
-			$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
-			//$purchase_log_id = 1;
-			$wpsc_checkout->save_forms_to_db($purchase_log_id);
-			$wpsc_cart->save_to_db($purchase_log_id);
-			$wpsc_cart->submit_stock_claims($purchase_log_id);
-			do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
-			
-			if(get_option('permalink_structure') != '') {
-				$seperator = "?";
-			} else {
-				$seperator = "&";
-			}
-			// submit to gateway
-			foreach($nzshpcrt_gateways as $gateway) {
-        if($gateway['internalname'] == $submitted_gateway ) {
-          $gateway_used = $gateway['internalname'];
-          $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
-          $gateway['function']($seperator, $sessionid);
-          break;
-        }
-      }
-			exit('');
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')");
+		
+		
+		$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
+		//$purchase_log_id = 1;
+		$wpsc_checkout->save_forms_to_db($purchase_log_id);
+		$wpsc_cart->save_to_db($purchase_log_id);
+		$wpsc_cart->submit_stock_claims($purchase_log_id);
+		do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
+		
+		if(get_option('permalink_structure') != '') {
+			$seperator = "?";
+		} else {
+			$seperator = "&";
 		}
-	} else {
+		// submit to gateway
+		foreach($nzshpcrt_gateways as $gateway) {
+			if($gateway['internalname'] == $submitted_gateway ) {
+				$gateway_used = $gateway['internalname'];
+				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
+				$gateway['function']($seperator, $sessionid);
+				break;
+			}
+		}
+		exit('');
+} else {
 	
 	}
 }

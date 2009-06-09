@@ -5,6 +5,7 @@ $nzshpcrt_gateways[$num]['internalname'] = 'testmode';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_testmode';
 $nzshpcrt_gateways[$num]['form'] = "form_testmode";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_testmode";
+$nzshpcrt_gateways[$num]['payment_type'] = "manual_payment";
 
 function gateway_testmode($seperator, $sessionid) {
   $transact_url = get_option('transact_url');

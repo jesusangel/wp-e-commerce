@@ -347,11 +347,6 @@ class wpsc_checkout {
 }
 
 
-
-
-
-
-
 /**
  * The WPSC Gateway functions
  */
@@ -374,17 +369,62 @@ function wpsc_the_gateway() {
 
 function wpsc_gateway_name() {
 	global $wpsc_gateway;
-	return $wpsc_gateway->gateway['name'];
+	$payment_gateway_names = get_option('payment_gateway_names');
+	if($payment_gateway_names[$wpsc_gateway->gateway['internalname']] != '') {
+		$display_name = $payment_gateway_names[$wpsc_gateway->gateway['internalname']];					    
+	} else {
+		switch($selected_gateway_data['payment_type']) {
+			case "paypal";
+				$display_name = "PayPal";
+			break;
+			
+			case "manual_payment":
+				$display_name = "Manual Payment";
+			break;
+			
+			case "google_checkout":
+				$display_name = "Google Checkout";
+			break;
+			
+			case "credit_card":
+			default:
+				$display_name = "Credit Card";
+			break;
+		}
+	}
+	return $display_name;
 }
 
 function wpsc_gateway_internal_name() {
 	global $wpsc_gateway;
 	return $wpsc_gateway->gateway['internalname'];
 }
+
+function wpsc_gateway_is_checked() {
+	global $wpsc_gateway;
+	$is_checked = false;
+	if(isset($_SESSION['wpsc_previous_selected_gateway'])) {
+	  if($wpsc_gateway->gateway['internalname'] == $_SESSION['wpsc_previous_selected_gateway']) {
+	    $is_checked = true;	  
+	  }
+	} else {
+	  if($wpsc_gateway->current_gateway == 0) {
+	    $is_checked = true;
+	  }
+	}
+	if($is_checked == true) {
+	  $output = 'checked="checked"';
+	} else {
+		$output = '';
+	}
+	return $output;
+}
+
 function wpsc_gateway_form_fields() {
 	global $wpsc_gateway, $gateway_checkout_form_fields;
 	return $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']];
 }
+
 function wpsc_gateway_form_field_style() {
  return "checkout_forms_hidden";
 }

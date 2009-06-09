@@ -4,6 +4,7 @@ $nzshpcrt_gateways[$num]['internalname'] = 'chronopay';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_chronopay';
 $nzshpcrt_gateways[$num]['form'] = "form_chronopay";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_chronopay";
+$nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 
 function gateway_chronopay($seperator, $sessionid)
 {

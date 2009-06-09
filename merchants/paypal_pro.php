@@ -7,6 +7,7 @@ $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_pro';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_pro";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_pro";
+$nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 
 if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "

@@ -15,6 +15,8 @@ $nzshpcrt_gateways[$num]['function'] = 'gateway_google';
 $nzshpcrt_gateways[$num]['form'] = "form_google";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_google";
 $nzshpcrt_gateways[$num]['is_exclusive'] = true;
+$nzshpcrt_gateways[$num]['payment_type'] = "google_checkout";
+
 
 function gateway_google($seperator, $sessionid)
 {

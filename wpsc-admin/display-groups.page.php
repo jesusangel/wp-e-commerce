@@ -8,29 +8,25 @@
 		<tr>
 			<td colspan="2"><h4>Target Market Restrictions</h4></td></tr><tr>
 			<td>
-			<?php echo TXT_WPSC_TM; ?>:
+				<?php echo TXT_WPSC_TM; ?>:
 			</td>
 			<td>
-			<div id='resizeable' class='ui-widget-content multiple-select'>
-			<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
-			<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
-			<?php
-			
-			foreach($countrylist as $country){
-				if($country['visible'] == 1){
-				echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />";
-				}else{
-				echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />";
-				}
-					
-			}
-	
-			?>		
-			
-			</div><br />
-			Select the markets you are selling this category to.
+				<div id='resizeable' class='ui-widget-content multiple-select'>
+					<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
+					<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
+					<?php
+					foreach($countrylist as $country){
+						if($country['visible'] == 1){
+							echo "					<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
+						}else{
+							echo "					<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";
+						}	
+					}
+					?>
+				</div>
+				<br />
+				Select the markets you are selling this category to.
 			</td>
-		
 		</tr>
 	<?php
 }
@@ -265,7 +261,6 @@ function wpsc_display_groups_page() {
 
 				$wpdb->query($sqlselect);
 			}
-		//	exit($sqlunselect.'<br />'.$sqlselect);
  		}
     	/*
 if($AllSelected != true){
@@ -567,7 +562,6 @@ if(is_numeric($_GET['deleteid'])) {
 		}
 	?>
 		<span><?php echo TXT_WPSC_CATEGORISATION_GROUPS_DESCR;?></span>
-		
 	<?php
 		if (function_exists('add_object_page')) {
 			echo "<div class='wpsc_products_nav27'>";

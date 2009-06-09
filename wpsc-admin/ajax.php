@@ -583,10 +583,6 @@ function wpsc_admin_ajax() {
         		echo "add_variation_combinations_html = \"\";\n";
       		}
 		}
-		
-		
-		
-		
 		exit();
 	}
 	
@@ -787,9 +783,6 @@ function wpsc_swfupload_images() {
       }
 		}
 		
-// 		$wpsc_swfupload_log = get_option('wpsc_swfupload_log');
-// 		$wpsc_swfupload_log .= $output;
-// 		update_option('wpsc_swfupload_log', $wpsc_swfupload_log);
 		exit($output);
 	}
 }
@@ -1364,15 +1357,14 @@ function wpsc_submit_options() {
 
 function wpsc_change_currency(){
 	if(is_numeric($_POST['currencyid'])){
-	      $currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$_POST['currencyid']."' LIMIT 1",ARRAY_A) ;
-	      $price_out = null;
-	      if($currency_data[0]['symbol'] != '') {
-	        $currency_sign = $currency_data[0]['symbol_html'];
-				} else {
-					$currency_sign = $currency_data[0]['code'];
-				}
-	      echo $currency_sign;
-	    
+		$currency_data = $wpdb->get_results("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$_POST['currencyid']."' LIMIT 1",ARRAY_A) ;
+		$price_out = null;
+		if($currency_data[0]['symbol'] != '') {
+			$currency_sign = $currency_data[0]['symbol_html'];
+		} else {
+			$currency_sign = $currency_data[0]['code'];
+		}
+		echo $currency_sign;
 	}
 }
  if($_REQUEST['wpsc_admin_action'] == 'change_currency') {
@@ -1380,7 +1372,7 @@ function wpsc_change_currency(){
 }
 
 function wpsc_update_page_urls(){
-global $wpdb;
+	global $wpdb;
 
   $wpsc_pageurl_option['product_list_url'] = '[productspage]';
   $wpsc_pageurl_option['shopping_cart_url'] = '[shoppingcart]';
@@ -1409,8 +1401,8 @@ global $wpdb;
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
-		}
+		$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
+	}
 	wp_redirect($sendback);
 
 exit();
@@ -1424,8 +1416,7 @@ global $wpdb, $wp_rewrite;
   //exit("<pre>".print_r($check_category_names,true)."</pre>");
   $sql_query = "SELECT `id`, `name`, `active` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."`";
 	$sql_data = $wpdb->get_results($sql_query,ARRAY_A);
-	foreach((array)$sql_data as $datarow) {
-	
+	foreach((array)$sql_data as $datarow) {	
 	  if($datarow['active'] == 1) {
 	    $tidied_name = trim($datarow['name']);
 			$tidied_name = strtolower($tidied_name);
@@ -1463,45 +1454,53 @@ exit();
 //change the regions tax settings
 function wpsc_change_region_tax(){
 global $wpdb; 
-	if(is_array($_POST['region_tax']))
-	  {
-	  foreach($_POST['region_tax'] as $region_id => $tax)
-	    {
-	    if(is_numeric($region_id) && is_numeric($tax))
-	      {
+	if(is_array($_POST['region_tax'])) {
+	  foreach($_POST['region_tax'] as $region_id => $tax) {
+	    if(is_numeric($region_id) && is_numeric($tax)) {
 	      $previous_tax = $wpdb->get_var("SELECT `tax` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` = '$region_id' LIMIT 1");
-	      if($tax != $previous_tax)
-	        {
+	      if($tax != $previous_tax) {
 	        $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
 	        $changes_made = true;
-	  
 	      }
 	    }
 	  }
-      $sendback = wp_get_referer();
-	        $sendback = remove_query_arg('isocode', $sendback);
-	        wp_redirect($sendback);
-	        }
+		$sendback = wp_get_referer();
+		$sendback = remove_query_arg('isocode', $sendback);
+		wp_redirect($sendback);
+	}
 }
-  if($_REQUEST['wpsc_admin_action'] == 'change_region_tax') {
+
+if($_REQUEST['wpsc_admin_action'] == 'change_region_tax') {
 	add_action('admin_init', 'wpsc_change_region_tax');
 }
+
 //change the gateway settings
 function wpsc_gateway_settings(){
-global $wpdb; 
+	global $wpdb;
 	//To update options
-    if(isset($_POST['wpsc_options'])){
-	  	foreach($_POST['wpsc_options'] as $key=>$value){
-	  		//if(!is_array($value)){
-		  		if($value != get_option($key)){
-		  			update_option($key, $value);
-		  			$updated++;
-		  		}
-	  		//}
+	if(isset($_POST['wpsc_options'])){
+		foreach($_POST['wpsc_options'] as $key=>$value){
+			if($value != get_option($key)){
+				update_option($key, $value);
+				$updated++;
+			}
 		}
 		unset($_POST['wpsc_options']);
 	}
-	//exit(get_option('payment_gateway').'<pre>'.print_r($_POST,true).'</pre>');
+	
+	
+	
+	if(is_array($_POST['user_defined_name'])) {
+		$payment_gateway_names = get_option('payment_gateway_names');
+		if(!is_array($payment_gateway_names)) {
+		  $payment_gateway_names = array();
+		}
+	  $payment_gateway_names = array_merge($payment_gateway_names, (array)$_POST['user_defined_name']);
+		update_option('payment_gateway_names', $payment_gateway_names);	
+	}
+	
+	//exit('<pre>'.print_r($payment_gateway_names,true).'</pre>');
+	
 	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
 		if($gateway['internalname'] == get_option('payment_gateway')) {
 			$gateway['submit_function']();
@@ -1517,7 +1516,7 @@ global $wpdb;
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
+		$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 	}
 	wp_redirect($sendback);
 	exit();
@@ -1529,12 +1528,9 @@ global $wpdb;
 
 //handles the editing and adding of new checkout fields
 function wpsc_checkout_settings(){
-global $wpdb;
-
-if($_POST['form_name'] != null)
-    {
-    foreach($_POST['form_name'] as $form_id => $form_name) 
-      {
+	global $wpdb;
+	if($_POST['form_name'] != null) {
+    foreach($_POST['form_name'] as $form_id => $form_name) {
       $form_type = $_POST['form_type'][$form_id];
       $form_mandatory = 0;
       if($_POST['form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
@@ -1542,47 +1538,36 @@ if($_POST['form_name'] != null)
       if($_POST['form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
       $form_order = $_POST['form_order'][$form_id];
       $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log', `order` = '$form_order' WHERE `id` ='".$form_id."' LIMIT 1 ;");
+		}
+	}
   
-      }
-    $updated;
-    }
-  
-  if($_POST['new_form_name'] != null)
-    {
-    foreach($_POST['new_form_name'] as $form_id => $form_name) 
-      {
+  if($_POST['new_form_name'] != null) {
+    foreach($_POST['new_form_name'] as $form_id => $form_name) {
       $form_type = $_POST['new_form_type'][$form_id];
       $form_mandatory = 0;
       if($_POST['new_form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
       $form_display_log = 0;
       if($_POST['new_form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
       $max_order_sql = "SELECT MAX(`order`) AS `order` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
-      if($_POST['new_form_order'][$form_id] != '')
-        {
+      
+      if($_POST['new_form_order'][$form_id] != '') {
         $order_number = $_POST['new_form_order'][$form_id];
-        }
-        else
-          {
-          $max_order_sql = $wpdb->get_results($max_order_sql,ARRAY_A);
-          $order_number = $max_order_sql[0]['order'] + 1;
-          }
-          $sql ="INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');";
-         // exit($sql);
-         $added++;
-      $wpdb->query($sql);
-       // exit('called<pre>'.print_r($_POST, true).'</pre>');
-      }
-
-
+			} else {
+				$max_order_sql = $wpdb->get_results($max_order_sql,ARRAY_A);
+				$order_number = $max_order_sql[0]['order'] + 1;
+			}
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` ) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."');");
+			$added++;
+		}
 	}
-   if(isset($_POST['wpsc_options'])){
-	  	foreach($_POST['wpsc_options'] as $key=>$value){
-	  		//if(!is_array($value)){
-		  		if($value != get_option($key)){
-		  			update_option($key, $value);
-		  			$updated++;
-		  		}
-	  		//}
+   
+   
+	if(isset($_POST['wpsc_options'])){
+		foreach($_POST['wpsc_options'] as $key=>$value){
+			if($value != get_option($key)){
+				update_option($key, $value);
+				$updated++;
+			}
 		}
 	}
 		$sendback = wp_get_referer();
@@ -1594,18 +1579,22 @@ if($_POST['form_name'] != null)
 		$sendback = add_query_arg('added', $added, $sendback);
 	}
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
+		$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 	}
 	wp_redirect($sendback);
 	exit();
 }
+
+
 if($_REQUEST['wpsc_admin_action'] == 'checkout_settings') {
 	add_action('admin_init', 'wpsc_checkout_settings');
 }
+
+
 function wpsc_google_shipping_settings(){
 	if (isset($_POST['submit'])) {
 		foreach((array)$_POST['google_shipping'] as $key=>$country) {
-			if ($country=='on') {
+			if ($country == 'on') {
 				$google_shipping_country[]=$key;
 				$updated++;
 			}
@@ -1614,14 +1603,12 @@ function wpsc_google_shipping_settings(){
 		$sendback = wp_get_referer();
 		$sendback = remove_query_arg('googlecheckoutshipping', $sendback);
 		
-	if ( isset($updated) ) {
+		if ( isset($updated) ) {
+			$sendback = add_query_arg('updated', $updated, $sendback);
+		}
 	
-		$sendback = add_query_arg('updated', $updated, $sendback);
-	}
-
-	wp_redirect($sendback);
-	exit();
-		//header("Location: ?page=".$_GET['page']);
+		wp_redirect($sendback);
+		exit();
 	}
 }
 
@@ -1633,17 +1620,15 @@ if($_REQUEST['wpsc_admin_action'] == 'google_shipping_settings') {
 function wpsc_settings_page_ajax(){
   global $wpdb;
   
-  	$functionname1 = str_replace("tab-","",$_POST['page_title']);
-  	require_once('includes/settings-pages/'.$functionname1.'.php');
-  	$functionname = "wpsc_options_".$functionname1;
-  	$html = $functionname();
+	$functionname1 = str_replace("tab-","",$_POST['page_title']);
+	require_once('includes/settings-pages/'.$functionname1.'.php');
+	$functionname = "wpsc_options_".$functionname1;
+	$html = $functionname();
 	$_SESSION['wpsc_settings_curr_page'] = $functionname1;
-	
 	exit($html);
 }
   
 if($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') {
 	add_action('admin_init', 'wpsc_settings_page_ajax');
 }
-
 ?>
