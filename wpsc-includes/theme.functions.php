@@ -90,6 +90,7 @@ function wpsc_user_dynamic_js() {
 	var borderSize = 10;  //if you adjust the padding in the CSS, you will need to update this variable
 	jQuery(document).ready( function() {
 		<?php
+		/*
 		if(get_option('show_sliding_cart') == 1) {
 			if(is_numeric($_SESSION['slider_state'])) {
 				if($_SESSION['slider_state'] == 0) {
@@ -113,6 +114,7 @@ function wpsc_user_dynamic_js() {
 				}
 			}
 		}
+		*/
 		?>
 	});
 <?php
@@ -436,7 +438,7 @@ function wpsc_products_page($content = '') {
 	}
 }
 
-function wpsc_shopping_cart($content = '') {
+function wpsc_place_shopping_cart($content = '') {
 		//exit($content);
   if(preg_match("/\[shoppingcart\]/",$content)) {
 //   if(get_option('wpsc_use_theme_engine') == TRUE) {
@@ -542,7 +544,7 @@ function wpsc_enable_page_filters($excerpt = ''){
   global $wp_query;
   add_filter('the_content', 'add_to_cart_shortcode', 12);//Used for add_to_cart_button shortcode
   add_filter('the_content', 'wpsc_products_page', 12);
-  add_filter('the_content', 'wpsc_shopping_cart', 12);
+  add_filter('the_content', 'wpsc_place_shopping_cart', 12);
   add_filter('the_content', 'wpsc_transaction_results', 12);
   add_filter('the_content', 'wpsc_checkout', 12);
   add_filter('the_content', 'nszhpcrt_homepage_products', 12);
@@ -556,7 +558,7 @@ function wpsc_enable_page_filters($excerpt = ''){
 function wpsc_disable_page_filters($excerpt = '') {
 	remove_filter('the_content', 'add_to_cart_shortcode');//Used for add_to_cart_button shortcode
   remove_filter('the_content', 'wpsc_products_page');
-  remove_filter('the_content', 'wpsc_shopping_cart');
+  remove_filter('the_content', 'wpsc_place_shopping_cart');
   remove_filter('the_content', 'wpsc_transaction_results');
   remove_filter('the_content', 'wpsc_checkout');
   remove_filter('the_content', 'nszhpcrt_homepage_products');

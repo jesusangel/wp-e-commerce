@@ -317,6 +317,10 @@ a.additional_description_link img{
 margin-right: 3px;
 }
 
+label.wpsc_quantity_update {
+  display: inline;
+}
+
     /*
     * product rating styling
     */ 

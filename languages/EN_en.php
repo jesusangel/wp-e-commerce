@@ -536,7 +536,7 @@ define('TXT_WPSC_DEFAULTBRAND', 'Default Brand');
 
 //define('TXT_WPSC_DEFAULTCATEGORY', 'Default Category');
 
-define('TXT_WPSC_DEFAULTCATEGORY', 'Select what product group you want to display on the products page by default.');
+define('TXT_WPSC_DEFAULTCATEGORY', 'Select what product group you want to display on the products page');
 
 define('TXT_WPSC_PAYPALBUSINESS', 'paypal business');
 define('TXT_WPSC_PAYPALURL', 'paypal url');

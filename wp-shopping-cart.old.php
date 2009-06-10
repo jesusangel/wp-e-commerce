@@ -213,11 +213,11 @@ function nzshpcrt_style() {
   
 function nzshpcrt_javascript()
   {
+      return null;
   $siteurl = get_option('siteurl'); 
   if(function_exists('xili_display4mobile')) {  //check for the function before using it
     if (xili_display4mobile() === true) {
       // instead of wrapping the whole block of code in brackets, resulting in mysterious brackets, simply break out of the function here.
-      return null;
     }
   }
   if(($_SESSION['nzshpcrt_cart'] == null) && (get_option('show_sliding_cart') == 1)) {
@@ -264,21 +264,21 @@ jQuery(document).ready( function() {
     if(is_numeric($_SESSION['slider_state'])) {
       if($_SESSION['slider_state'] == 0) {
         ?>
-        jQuery("#sliding_cart").css({ display: "none"});
+        //jQuery("#sliding_cart").css({ display: "none"});
         <?php
 			} else {
         ?>
-        jQuery("#sliding_cart").css({ display: "block"});  
+        //jQuery("#sliding_cart").css({ display: "block"});  
         <?php
 			}
     } else {
 			if($_SESSION['nzshpcrt_cart'] == null) {
 				?>
-				jQuery("#sliding_cart").css({ display: "none"});  
+				//jQuery("#sliding_cart").css({ display: "none"});  
 				<?php
 			} else {
 				?>
-				jQuery("#sliding_cart").css({ display: "block"});  
+				//jQuery("#sliding_cart").css({ display: "block"});  
 				<?php
 			}
 		}
@@ -730,9 +730,9 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 				}
 			  
 			  if($_SESSION['slider_state'] == 0) {
-				echo  'jQuery("#sliding_cart").css({ display: "none"});'."\n\r";
+				//echo  'jQuery("#sliding_cart").css({ display: "none"});'."\n\r";
 				} else {
-				echo  'jQuery("#sliding_cart").css({ display: "block"});'."\n\r";
+				//echo  'jQuery("#sliding_cart").css({ display: "block"});'."\n\r";
 				}
 			}
 		}

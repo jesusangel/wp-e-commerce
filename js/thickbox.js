@@ -160,7 +160,7 @@ function TB_show(caption, url, rel) {
           thumbPreloader[i] = new Image();
           thumbPreloader[i].onload = function() {
             //thumbPreloader[i].onload = null;    
-            }  
+					}  
         thumbPreloader[i].src = image.href;
         var thumbImgWidth = thumbPreloader[i].width;
         var thumbImgHeight = thumbPreloader[i].height;
@@ -170,8 +170,15 @@ function TB_show(caption, url, rel) {
           if (thumbImgHeight > thumb_y) { 
             thumbImgWidth = thumbImgWidth * (thumb_y / thumbImgHeight); 
             thumbImgHeight = thumb_y; 
-            }
-          }
+					}
+				}
+				if(thumbImgWidth < 1) {
+          thumbImgWidth = thumb_x				
+				}
+				
+				if(thumbImgHeight < 1) {
+          thumbImgHeight = 60				
+				}
         additional_links += "<a href='#' "+image_selected+" id='TB_ThumbnailLink_"+i+"' ><img class='TB_Thumbnail_Image' src='"+image.href+"' width='"+thumbImgWidth+"' height='"+thumbImgHeight+"' alt=''/></a>";
         }
         

@@ -1311,14 +1311,12 @@ function wpsc_submit_options() {
 	      $wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET `tax` = '".$_POST['country_tax']."' WHERE `id` = '".$_POST['country_id']."' LIMIT 1 ;");
 	 }
 	//To update options
-    if(isset($_POST['wpsc_options'])){
-	  	foreach($_POST['wpsc_options'] as $key=>$value){
-	  		//if(!is_array($value)){
-		  		if($value != get_option($key)){
-		  			update_option($key, $value);
-		  			$updated++;
-		  		}
-	  		//}
+	if(isset($_POST['wpsc_options'])){
+		foreach($_POST['wpsc_options'] as $key=>$value){
+			if($value != get_option($key)){
+				update_option($key, $value);
+				$updated++;
+			}
 		}
 	}
 	//This is for submitting shipping details to the shipping module
@@ -1331,7 +1329,6 @@ function wpsc_submit_options() {
 					$shipadd++;
 				}
 			}
-	
 		}
 	}
 	$sendback = wp_get_referer();

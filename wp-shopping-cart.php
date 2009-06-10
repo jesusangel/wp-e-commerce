@@ -156,6 +156,7 @@ $wpsc_thumbnail_dir = "{$upload_path}/wpsc/product_images/thumbnails/";
 $wpsc_category_dir = "{$upload_path}/wpsc/category_images/";
 $wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
 $wpsc_cache_dir = "{$upload_path}/wpsc/cache/";
+$wpsc_upgrades_dir = "{$upload_path}/wpsc/upgrades/";
 
 
 define('WPSC_FILE_DIR', $wpsc_file_dir);
@@ -165,6 +166,7 @@ define('WPSC_THUMBNAIL_DIR', $wpsc_thumbnail_dir);
 define('WPSC_CATEGORY_DIR', $wpsc_category_dir);
 define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
 define('WPSC_CACHE_DIR', $wpsc_cache_dir);
+define('WPSC_UPGRADES_DIR', $wpsc_upgrades_dir);
 
 
 /**

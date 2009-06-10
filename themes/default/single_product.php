@@ -21,7 +21,7 @@ $image_height = get_option('single_view_image_height');
 	
 	
 	<div class="productdisplay">
-<?php /** start the product loop here, this is single products view, sho there should be only one */?>
+	<?php /** start the product loop here, this is single products view, so there should be only one */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
@@ -123,6 +123,16 @@ $image_height = get_option('single_view_image_height');
 					</div>
 					<?php /** the variation group HTML and loop ends here */?>
 									
+					
+					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
+					<?php if(wpsc_has_multi_adding()): ?>
+						<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label>
+						
+						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
+						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
+						<input type="hidden" name="wpsc_update_quantity" value="true"/>
+					<?php endif ;?>
+					
 						<p class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>
 								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?></label><br />
@@ -149,13 +159,6 @@ $image_height = get_option('single_view_image_height');
 					<?php if(wpsc_product_is_customisable()) : ?>				
 						<input type="hidden" value="true" name="is_customisable"/>
 					<?php endif; ?>
-					
-					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
-					<?php if(wpsc_has_multi_adding()): ?>
-						<label for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label><input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
-						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
-						<input type="hidden" name="wpsc_update_quantity" value="true"/>
-					<?php endif ;?>
 					
 					
 					<!-- END OF QUANTITY OPTION -->

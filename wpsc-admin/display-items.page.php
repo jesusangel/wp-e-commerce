@@ -100,6 +100,10 @@ function wpsc_display_products_page() {
 			if(!is_writable(WPSC_CATEGORY_DIR)) {
 				$unwriteable_directories[] = WPSC_CATEGORY_DIR;
 			}
+			
+			if(!is_writable(WPSC_UPGRADES_DIR)) {
+				$unwriteable_directories[] = WPSC_UPGRADES_DIR;
+			}
 				
 			if(count($unwriteable_directories) > 0) {
 				echo "<div class='error fade'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";

@@ -252,27 +252,7 @@ global $wpdb;
 				<label for='addtocart_or_buynow2'><?php echo TXT_WPSC_BUYNOW;?></label>
 			</td>
 		</tr>
-		<tr>
-			<th scope="row"><?php echo TXT_WPSC_COMMENTS_NOTES_FIELD;?>:</th>
-			<td>
-				<?php
-					$commenting = get_option('commenting');
-					switch($commenting) {
-						case 1:
-						$commenting1 = "checked ='checked'";
-						break;
-						
-						case 0:
-						$commenting2 = "checked ='checked'";
-						break;
-					}
-				?>
-				<input type='radio' value='1' name='wpsc_options[commenting]' id='commenting1' <?php echo $commenting1; ?> /> 
-				<label for='commenting1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[commenting]' id='commenting2' <?php echo $commenting2; ?> /> 
-				<label for='commenting2'><?php echo TXT_WPSC_NO;?></label>
-			</td>
-		</tr>
+
 		<tr>
 			<th scope="row"><?php echo TXT_WPSC_MULTIPLE_ADDING_PRODUCTS;?>:</th>
 			<td>

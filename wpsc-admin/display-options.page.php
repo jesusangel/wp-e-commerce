@@ -463,7 +463,7 @@ if($_POST['do_not_use_shipping'] == 1) {
 	if($_POST['shipwire'] == 1) {
 		update_option('shipwire', 1);
 	} else {
-	update_option('shipwire', 0);
+		update_option('shipwire', 0);
 	}
 	
 	if($_POST['wpsc_ip_lock_downloads'] == 1) {
@@ -1695,6 +1695,17 @@ function wpsc_display_options_page(){
                       <input type='radio' value='0' name='show_gallery' id='show_gallery2' <?php echo $show_gallery2; ?> /> <label for='show_gallery2'><?php echo TXT_WPSC_NO;?></label>
                       </td>
                     </tr>
+                    
+										<tr>
+											<th scope="row">
+											<?php _e("Gallery Thumbnail Image Size");?>:
+											</th>
+											<td>
+											<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_gallery_image_height' value='<?php echo get_option('wpsc_gallery_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_gallery_image_width' value='<?php echo get_option('wpsc_gallery_image_width'); ?>' /> <br /><span class='small'></span></span>
+											</td>
+										</tr>
+                    
+                    
                   <?php
                   }
 								?>

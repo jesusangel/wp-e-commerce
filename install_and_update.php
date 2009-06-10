@@ -270,25 +270,27 @@ function nzshpcrt_install()
     add_option('wpsc_selected_theme', 'default', 'Selected Theme', 'yes');
     update_option('wpsc_selected_theme', "default");
 	}
-
-
 	
 	if(!get_option('product_image_height')) {
 		update_option('product_image_height', '96');
 		update_option('product_image_width', '96');
 	}
-		
-		
+			
 	if(!get_option('category_image_height')) {
 		update_option('category_image_height', '96');
 		update_option('category_image_width', '96');
 	}
-		
-		
+	
 	if(!get_option('single_view_image_height')) {
 		update_option('single_view_image_height', '128');
 		update_option('single_view_image_width', '128');
 	}
+	
+	if(!get_option('wpsc_gallery_image_height')) {
+		update_option('wpsc_gallery_image_height', '96');
+		update_option('wpsc_gallery_image_width', '96');
+	}
+		
   
   wpsc_product_files_htaccess();
   
@@ -692,7 +694,9 @@ function wpsc_create_upload_directories() {
 		@ mkdir(WPSC_CACHE_DIR, 0775);
 	}
 	
-	
+	if(!is_dir(WPSC_UPGRADES_DIR)) {
+		@ mkdir(WPSC_UPGRADES_DIR, 0775);
+	}
 	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
 	if(is_dir($wpsc_file_directory)) {
 	  // sort the permissions out in case they are not already sorted out.

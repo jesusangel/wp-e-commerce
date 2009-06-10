@@ -1,7 +1,6 @@
 <?php
-function nzshpcrt_shopping_basket($input = null, $override_state = null) {
-  global $wpdb;
-  
+function wpsc_shopping_cart($input = null, $override_state = null) {
+  global $wpdb;  
   if(is_numeric($override_state)) {
     $state = $override_state;
 	} else {
@@ -12,7 +11,7 @@ function nzshpcrt_shopping_basket($input = null, $override_state = null) {
     if($input != '') {
       $cart = $_SESSION['nzshpcrt_cart'];
       echo "<div id='sideshoppingcart'><div id='shoppingcartcontents'>";
-      echo nzshpcrt_shopping_basket_internals($cart);
+      echo wpsc_shopping_basket_internals($cart);
       echo "</div></div>";
 		}
   } else if(($state == 3) || ($state == 4)) {
@@ -20,28 +19,31 @@ function nzshpcrt_shopping_basket($input = null, $override_state = null) {
 		if($state == 4) {
 			#echo $input;
 			echo "<div id='widgetshoppingcart'><div id='shoppingcartcontents'>";
-			echo nzshpcrt_shopping_basket_internals($cart,false,true);
+			echo wpsc_shopping_basket_internals($cart,false,true);
 			echo "</div></div>";
 			$dont_add_input = true;
 		} else {
 			echo "<div id='sideshoppingcart'><div id='shoppingcartcontents'>";
-			echo nzshpcrt_shopping_basket_internals($cart);
+			echo wpsc_shopping_basket_internals($cart);
 			echo "</div></div>";
 		}
 	} else {
 		if(($GLOBALS['nzshpcrt_activateshpcrt'] === true)) {
 			$cart = $_SESSION['nzshpcrt_cart'];
 			echo "<div id='shoppingcart'><div id='shoppingcartcontents'>";
-			echo nzshpcrt_shopping_basket_internals($cart);
+			echo wpsc_shopping_basket_internals($cart);
 			echo "</div></div>";
 		}
 	}
-  
 	return $input;
 }
-  
 
-function nzshpcrt_shopping_basket_internals($cart,$quantity_limit = false, $no_title=false) {
+// preserved for backwards compatibility
+function nzshpcrt_shopping_basket($input = null, $override_state = null) {
+  return wpsc_shopping_cart($input, $override_state);
+}
+
+function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title=false) {
   global $wpdb;
   		echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
 //     if(get_option('wpsc_use_theme_engine') == TRUE) {	    

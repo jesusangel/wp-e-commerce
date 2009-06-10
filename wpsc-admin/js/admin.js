@@ -662,3 +662,31 @@ function showedit_categorisation_form() {
 	return false;
 }
 
+function hideelement1(id, item_value) {
+  //alert(value);  
+	if(item_value == 5) {
+		jQuery(document.getElementById(id)).css('display', 'block');
+	} else {
+		jQuery(document.getElementById(id)).css('display', 'none');
+	}
+}
+
+
+function toggle_display_options(state) {
+  switch(state) {
+    case 'list':
+    document.getElementById('grid_view_options').style.display = 'none';
+    document.getElementById('list_view_options').style.display = 'block';    
+    break;
+    
+    case 'grid':
+    document.getElementById('list_view_options').style.display = 'none';
+    document.getElementById('grid_view_options').style.display = 'block';
+    break;
+    
+    default:
+    document.getElementById('list_view_options').style.display = 'none';
+    document.getElementById('grid_view_options').style.display = 'none';
+    break;
+  }
+}

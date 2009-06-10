@@ -655,14 +655,15 @@ global $wpdb;
 				<tr>
 					<th scope="row"><?php echo TXT_WPSC_PRODUCTTHUMBNAILSIZE;?>:</th>
 					<td>
-					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[product_image_height]' value='<?php echo get_option('product_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[product_image_width]' value='<?php echo get_option('product_image_width'); ?>' /> <br /><span class='small'></span>	</td>
+					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[product_image_height]' value='<?php echo get_option('product_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[product_image_width]' value='<?php echo get_option('product_image_width'); ?>' /> <br />
+					</td>
 				</tr>
 				<tr>
 					<th scope="row">
 					<?php echo TXT_WPSC_CATEGORYTHUMBNAILSIZE;?>:
 					</th>
 					<td>
-					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[category_image_height]' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[category_image_width]' value='<?php echo get_option('category_image_width'); ?>' /> <span class='small'></span>
+					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[category_image_height]' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[category_image_width]' value='<?php echo get_option('category_image_width'); ?>' /> 
 					</td>
 				</tr>
 				
@@ -671,7 +672,7 @@ global $wpdb;
 					<?php echo TXT_WPSC_SINGLE_PRODUCTTHUMBNAILSIZE;?>:
 					</th>
 					<td>
-					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[single_view_image_height]' value='<?php echo get_option('single_view_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[single_view_image_width]' value='<?php echo get_option('single_view_image_width'); ?>' /> <span class='small'></span>
+					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[single_view_image_height]' value='<?php echo get_option('single_view_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[single_view_image_width]' value='<?php echo get_option('single_view_image_width'); ?>' /> 
 					</td>
 				</tr>
 		
@@ -702,33 +703,44 @@ global $wpdb;
 					</td>
 				</tr>
 				<?php
-	if(function_exists('gold_shpcrt_display_gallery')) {
-	?>
-	<tr>
-	  <th scope="row">
-	  <?php echo TXT_WPSC_SHOW_GALLERY;?>:
-	  </th>
-	  <td>
-	  <?php
-	  $display_pnp = get_option('show_gallery');
-	  $show_gallery1 = "";
-	  $show_gallery2 = "";
-	  switch($display_pnp) {
-	    case 0:
-	    $show_gallery2 = "checked ='checked'";
-	    break;
-	    
-	    case 1:
-	    $show_gallery1 = "checked ='checked'";
-	    break;
-	  }
-	  ?>
-	  <input type='radio' value='1' name='wpsc_options[show_gallery]' id='show_gallery1' <?php echo $show_gallery1; ?> /> <label for='show_gallery1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-	  <input type='radio' value='0' name='wpsc_options[show_gallery]' id='show_gallery2' <?php echo $show_gallery2; ?> /> <label for='show_gallery2'><?php echo TXT_WPSC_NO;?></label>
-	  </td>
-	</tr>
-	<?php
-	}
+					if(function_exists('gold_shpcrt_display_gallery')) {
+						?>
+						<tr>
+							<th scope="row">
+							<?php echo TXT_WPSC_SHOW_GALLERY;?>:
+							</th>
+							<td>
+							<?php
+							$display_pnp = get_option('show_gallery');
+							$show_gallery1 = "";
+							$show_gallery2 = "";
+							switch($display_pnp) {
+								case 0:
+								$show_gallery2 = "checked ='checked'";
+								break;
+								
+								case 1:
+								$show_gallery1 = "checked ='checked'";
+								break;
+							}
+							?>
+							<input type='radio' value='1' name='wpsc_options[show_gallery]' id='show_gallery1' <?php echo $show_gallery1; ?> /> <label for='show_gallery1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+							<input type='radio' value='0' name='wpsc_options[show_gallery]' id='show_gallery2' <?php echo $show_gallery2; ?> /> <label for='show_gallery2'><?php echo TXT_WPSC_NO;?></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<th scope="row">
+								<?php _e("Gallery Thumbnail Image Size");?>:
+							</th>
+							<td>
+								<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_height]' value='<?php echo get_option('wpsc_gallery_image_height'); ?>' />
+								<?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[wpsc_gallery_image_width]' value='<?php echo get_option('wpsc_gallery_image_width'); ?>' /> <br />
+								
+							</td>
+						</tr>
+						<?php
+					}
 				?>
 			</table>
 			
