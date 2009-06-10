@@ -41,8 +41,7 @@ function wpsc_admin_pages(){
      */
     if(function_exists('add_options_page')) {
 			$base_page = WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php';
-			
-			
+					
 		if ($userdata->user_level <= 2) {
 				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
 					add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/cart.png");
@@ -105,16 +104,12 @@ function wpsc_admin_pages(){
 			if (file_exists(dirname(__FILE__).'/gold_cart_files/csv_import.php')) {
 				add_submenu_page($base_page,TXT_WPSC_IMPORT_CSV, TXT_WPSC_IMPORT_CSV, 7, WPSC_DIR_NAME.'/gold_cart_files/csv_import.php');
 			}
+			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
-// 			add_submenu_page($base_page,TXT_WPSC_PAYMENTGATEWAYOPTIONS, TXT_WPSC_PAYMENTGATEWAYOPTIONS, 7, WPSC_DIR_NAME.'/gatewayoptions.php');
-// 			add_submenu_page($base_page,TXT_WPSC_SHIPPINGOPTIONS, TXT_WPSC_SHIPPINGOPTIONS, 7, WPSC_DIR_NAME.'/display-shipping.php');
-// 			add_submenu_page($base_page,TXT_WPSC_FORM_FIELDS, TXT_WPSC_FORM_FIELDS, 7, WPSC_DIR_NAME.'/form_fields.php');
-					if(function_exists('gold_shpcrt_options')) {
-				gold_shpcrt_options($base_page);
-			}
+
+			$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $base_page);
 			
 			do_action('wpsc_add_submenu');
-//       add_submenu_page($base_page,TXT_WPSC_HELPINSTALLATION, TXT_WPSC_HELPINSTALLATION, 7, WPSC_DIR_NAME.'/instructions.php');
 		}
 		
 		
@@ -159,12 +154,9 @@ wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_
 */
 	wp_enqueue_script('wp-e-commerce-js-ui-tabs', WPSC_URL.'/wpsc-admin/js/jquery-ui.js', false, $version_identifier);
 
-	
-//	wp_enqueue_script('wp-e-commerce-js-admin', WPSC_URL.'/admin.js', false, $version_identifier);
-
 	wp_enqueue_script('wp-e-commerce-js-dimensions', WPSC_URL.'/wpsc-admin/js/dimensions.js', false, $version_identifier);
-		wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/settingspage.css', false, false, 'all' );
-		wp_enqueue_style( 'wp-e-commerce-ui-tabs', WPSC_URL.'/wpsc-admin/css/jquery.ui.tabs.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/settingspage.css', false, false, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-ui-tabs', WPSC_URL.'/wpsc-admin/css/jquery.ui.tabs.css', false, $version_identifier, 'all' );
 }
 
 /**

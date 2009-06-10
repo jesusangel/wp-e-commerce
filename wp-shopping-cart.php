@@ -122,10 +122,7 @@ if (!IS_WP25) {
 /// OLD CODE INCLUDED HERE
 include_once('wp-shopping-cart.old.php');
 
-// if the gold cart file is present, include it, this must be done before the admin file is included
-if(is_file(WPSC_FILE_PATH.'/gold_shopping_cart.php')) {
-  require_once(WPSC_FILE_PATH.'/gold_shopping_cart.php');
-}
+
 
 // if we are in the admin section, include the admin code
 if(WP_ADMIN == true) {
@@ -142,8 +139,8 @@ if(IS_WPMU == 1) {
 		$upload_path = ABSPATH.get_option('upload_path');
 } else {
 	if ( !defined('WP_CONTENT_URL') ) {
-			define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
-		}
+		define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+	}
 	if ( !defined('WP_CONTENT_DIR') ) {
 		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content');
 	}
@@ -190,7 +187,10 @@ define('WPSC_CACHE_URL', $wpsc_cache_url);
 
 
 
-
+// if the gold cart file is present, include it, this must be done before the admin file is included
+if(is_file("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php")) {
+  require_once("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php");
+}
 
 
 if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
