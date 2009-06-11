@@ -935,7 +935,7 @@ class WPSC_Query {
 	
   function &get_products() {
     global $wpdb, $wp_query;
-  
+  	
 		do_action_ref_array('pre_get_products', array(&$this));
 		
 		
@@ -1025,10 +1025,10 @@ class WPSC_Query {
 			$sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$product_id.") AND `publish` IN('1') AND `active` IN('1')"; //Transom - added publish & active
 		} else {
 		  // select by category is done here
+		 
 		  
 		  
-		  
-		  
+		 
 			if(is_numeric($this->query_vars['category_id']) && ($this->query_vars['category_id'] > 0)) {
 					
 				/*
@@ -1043,15 +1043,21 @@ class WPSC_Query {
 				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
 					$startnum = $rowcount - $products_per_page;
 				}
-				if ($_REQUEST['order']==null) {
-					$order = 'ASC';
-				} elseif ($_REQUEST['order']=='DESC') {
+				if ($_REQUEST['order']=='DESC') {
 					$order = 'DESC';
+				} else {
+					$order = 'ASC';
 				}
 				
 				
 				
+
 				if (get_option('wpsc_sort_by')=='name') {
+					if(	$order == 'ASC'){
+						$order = 'DESC';
+					}else{
+						$order = 'ASC';
+					}
 					$order_by = "`products`.`name` $order";
 				} else if (get_option('wpsc_sort_by') == 'price') {
 					$order_by = "`products`.`price` $order";
@@ -1076,8 +1082,24 @@ class WPSC_Query {
 			
 				
 			} else {
-			
-			
+				if ($_REQUEST['order']=='DESC') {
+					$order = 'DESC';
+				} else {
+					$order = 'ASC';
+				}
+				
+				
+				
+				
+				
+
+				if (get_option('wpsc_sort_by')=='name') {
+					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`name` $order";
+				} else if (get_option('wpsc_sort_by') == 'price') {
+					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`price` $order";
+				} else {
+					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`id` $order";
+				}
 				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
@@ -1085,7 +1107,7 @@ class WPSC_Query {
 					$startnum = $rowcount - $products_per_page;
 				}
 				
-				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special`, `".WPSC_TABLE_PRODUCT_LIST."`.`id`  DESC LIMIT $startnum, $products_per_page";
+				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special`, $order_by LIMIT $startnum, $products_per_page";
 			}
 		}
 		
