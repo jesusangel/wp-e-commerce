@@ -75,21 +75,23 @@ function wpsc_add_to_cart() {
   //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 
     
-		if(wpsc_cart_item_count() > 0) {
-		  $_SESSION['slider_state'] = 1;
-		  echo "
-				jQuery('#sliding_cart').slideDown('fast',function(){
-					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
-				});
-		";
-		
-		} else {
-			$_SESSION['slider_state'] = 0;
-		  echo "
-				jQuery('#sliding_cart').slideUp('fast',function(){
-					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
-				});
-		";
+		if(get_option('show_sliding_cart') == 1)	{
+			if(wpsc_cart_item_count() > 0) {
+				$_SESSION['slider_state'] = 1;
+				echo "
+					jQuery('#sliding_cart').slideDown('fast',function(){
+						jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
+					});
+			";
+			
+			} else {
+				$_SESSION['slider_state'] = 0;
+				echo "
+					jQuery('#sliding_cart').slideUp('fast',function(){
+						jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+					});
+			";
+			}
 		}
 
 		do_action('wpsc_alternate_cart_html');
@@ -125,12 +127,15 @@ function wpsc_empty_cart() {
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
     echo "jQuery('div.shopping-cart-wrapper').html('$output');";
 		do_action('wpsc_alternate_cart_html');
-    	$_SESSION['slider_state'] = 0;
-		echo "
-			jQuery('#sliding_cart').slideUp('fast',function(){
-				jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
-			});
-	";
+		
+		if(get_option('show_sliding_cart') == 1)	{
+			$_SESSION['slider_state'] = 0;
+			echo "
+				jQuery('#sliding_cart').slideUp('fast',function(){
+					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+				});
+		";
+		}
 
 		exit();
   }
