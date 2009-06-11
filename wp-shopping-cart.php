@@ -195,14 +195,14 @@ if(is_file("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php"
 }
 
 
-if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
-	include_once("install_and_update.php");
-	if(($current_version_number < WPSC_VERSION ) || (($current_version_number == WPSC_VERSION ) && (get_option('wpsc_minor_version') <= WPSC_MINOR_VERSION))) {
-		register_activation_hook(__FILE__, 'wpsc_auto_update');
-	} else {
-		register_activation_hook(__FILE__, 'nzshpcrt_install');
-	}
+//if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
+include_once("install_and_update.php");
+if(($current_version_number < WPSC_VERSION ) || (($current_version_number == WPSC_VERSION ) && (get_option('wpsc_minor_version') <= WPSC_MINOR_VERSION))) {
+	register_activation_hook(__FILE__, 'wpsc_auto_update');
+} else {
+	register_activation_hook(__FILE__, 'nzshpcrt_install');
 }
+//}
 
 
 /**

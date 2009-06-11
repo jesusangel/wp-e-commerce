@@ -120,11 +120,12 @@ global $wpsc_query, $wpdb;
 								<p>
 									<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
 									<?php /** the variation HTML and loop */?>
-									<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
+									<!-- <select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>"> -->
 									<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
-										<option value="<?php echo wpsc_the_variation_id(); ?>"><?php echo wpsc_the_variation_name(); ?></option>
+												<!-- <option value="<?php echo wpsc_the_variation_id(); ?>"><?php echo wpsc_the_variation_name(); ?></option> -->
+												<label><input type='radio' class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id()."_".wpsc_the_variation_id(); ?>" value="<?php echo wpsc_the_variation_id(); ?>" /><?php echo wpsc_the_variation_name(); ?></label>
 									<?php endwhile; ?>
-									</select> 
+								<!--	</select>  -->
 								</p>
 							<?php endwhile; ?>
 						</div>
