@@ -78,6 +78,7 @@ $wpsc_database_template[$table_name]['columns']['order'] = "int(10) unsigned NOT
 $wpsc_database_template[$table_name]['columns']['unique_name'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['order'] = " KEY `order` ( `order` )";
+$wpsc_database_template[$table_name]['actions']['after']['all'] = "wpsc_add_checkout_fields";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}collect_data_forms";
 
 
@@ -95,6 +96,7 @@ $wpsc_database_template[$table_name]['columns']['tax'] = "varchar(8) NOT NULL DE
 $wpsc_database_template[$table_name]['columns']['continent'] = "varchar(20) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['visible'] = "varchar(1) NOT NULL DEFAULT '1' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
+$wpsc_database_template[$table_name]['actions']['after']['all'] = "wpsc_add_currency_list";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}currency_list";
 
 
@@ -291,6 +293,7 @@ $wpsc_database_template[$table_name]['columns']['code'] = "char(2) NOT NULL DEFA
 $wpsc_database_template[$table_name]['columns']['tax'] = "float NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['country_id'] = " KEY `country_id` ( `country_id` )";
+$wpsc_database_template[$table_name]['actions']['after']['all'] = "wpsc_add_region_list";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}region_tax";
 
 
