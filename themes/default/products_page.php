@@ -134,7 +134,7 @@ global $wpsc_query, $wpdb;
 						<p class="wpsc_product_price">
 								<?php if(wpsc_product_is_donation()) : ?>
 								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?></label><br />
-								<input type='text' id='product_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo wpsc_the_product_price(); ?>' size='6' /><br />
+								<input type='text' id='product_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='' size='6' /><br />
 								
 								
 								<?php else : ?>

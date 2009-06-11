@@ -27,7 +27,7 @@ function widget_wp_shopping_cart($args) {
     
 		$display_state = "";
 		
-		if(($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) {
+		if((($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
 			$display_state = "style='display: none;'";
 		}
 		echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
