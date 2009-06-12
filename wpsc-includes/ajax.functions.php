@@ -356,7 +356,7 @@ function wpsc_submit_checkout() {
 	
 	
 	$form_validity = $wpsc_checkout->validate_forms();
-//	exit('<pre>'.print_r($form_validity, true).'</pre>');
+	exit('<pre>'.print_r($form_validity, true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
  	if(isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email']) ) {
 		$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);

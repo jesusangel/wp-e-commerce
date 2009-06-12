@@ -127,6 +127,21 @@ jQuery(document).ready( function () {
 	});
 	
 
+	jQuery('img.deleteButton').livequery(function(){
+	  jQuery(this).click( function() {
+			var r=confirm("Please confirm deletion");
+			if (r==true) {
+				img_id = jQuery(this).parent().parent('li').attr('id');
+				jQuery(this).parent().parent('li').remove();
+				
+			  post_values = "admin=true&ajax=true&del_img=true&del_img_id="+img_id;
+				jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
+			
+				});
+			}
+	  });
+	});
+	
 
 	jQuery("#add-product-image").click(function(){
 		swfu.selectFiles();

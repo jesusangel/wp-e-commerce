@@ -404,9 +404,10 @@ function wpsc_admin_ajax() {
 	}
 	
 	if($_POST['del_img'] == 'true') {
-		$img_id = (int)$_POST['del_img_id'];
+	
+		$img_id = (int)str_replace("product_image_", '', $_POST['del_img_id']);
 		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$img_id}' LIMIT 1");
-		exit();
+		exit(true);
 	}
 	if ($_POST['del_file'] == 'true') {
 		$wpdb->query("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=".$_POST['del_file_hash']);
