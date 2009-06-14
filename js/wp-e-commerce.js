@@ -152,14 +152,14 @@ function shopping_cart_collapser() {
   switch(jQuery("#sliding_cart").css("display")) {
     case 'none':
     jQuery("#sliding_cart").slideToggle("fast",function(){
-      ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=1");
+			jQuery.post( 'index.php', "ajax=true&set_slider=true&state=1", function(returned_data) { });
       jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/minus.png"));
 		});
     break;
     
     default:
     jQuery("#sliding_cart").slideToggle("fast",function(){
-      ajax.post("index.php",noresults,"ajax=true&set_slider=true&state=0");
+			jQuery.post( 'index.php', "ajax=true&set_slider=true&state=0", function(returned_data) { });
       jQuery("#fancy_collapser").attr("src", (WPSC_URL+"/images/plus.png"));
 		});
     break;

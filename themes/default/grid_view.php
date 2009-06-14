@@ -17,7 +17,6 @@ global $wpsc_query, $wpdb;
 	<?php endif; ?>
 	
 	
-	
 	<?php if(wpsc_has_pages() && (get_option('wpsc_page_number_position') == (1 || 3)) ) : ?>
 		<div class='wpsc_page_numbers'>
 		  Pages: 

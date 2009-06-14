@@ -27,7 +27,7 @@ function admin_menu() {
 	$siteurl = get_option('siteurl');
 	echo "<ul id='set1'>";
 	echo "<li><a title='People come here to write new pages' href='".$siteurl."/wp-admin/page-new.php'>Add Pages</a></li>";
-	echo "<li><a title='People come here to add products' href='".$siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php'>Add Products</a></li>";
+	echo "<li><a title='People come here to add products' href='".$siteurl."/wp-admin/admin.php?page=wpsc-edit-products'>Add Products</a></li>";
 	echo "<li><a title='People come here to change themes and widgets settings' href='".$siteurl."/wp-admin/themes.php'>Presentation</a></li>";
 	echo "</ul>";
 }

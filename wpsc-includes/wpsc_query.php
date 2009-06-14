@@ -796,6 +796,25 @@ class WPSC_Query {
 		} else if(is_numeric($_GET['page_number'])) {
 			$query['page'] = $_GET['page_number'];
 		}
+		
+		if(isset($_GET['order'])) {
+			$query['sort_order'] = $_GET['order'];
+		  $_SESSION['wpsc_product_order'] = $_GET['order'];
+		} else if(isset($_SESSION['wpsc_product_order'])) {
+			$query['sort_order'] = $_SESSION['wpsc_product_order'];
+		}
+		
+		
+		if(isset($_GET['items_per_page'])) {
+			$query['number_per_page'] = $_GET['items_per_page'];
+		  $_SESSION['wpsc_number_per_page'] = $_GET['items_per_page'];
+		} else if(isset($_SESSION['wpsc_product_order'])) {
+			$query['number_per_page'] = $_SESSION['wpsc_number_per_page'];
+		}
+		
+		//$query['sort_order']
+		//$query['number_per_page']
+		
     return $query;
   }
 
@@ -939,14 +958,14 @@ class WPSC_Query {
 		do_action_ref_array('pre_get_products', array(&$this));
 		
 		
-		if(($this->query_vars['category_url_name'] != '')){
+		if(($this->query_vars['category_url_name'] != '')) {
 			$this->query_vars['category_id'] = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `nice-name` = '{$this->query_vars['category_url_name']}' LIMIT 1");
 			$this->category = $this->query_vars['category_id'];
 		}
 		
 		
 		
-		if($this->query_vars['product_url_name'] != null){
+		if($this->query_vars['product_url_name'] != null) {
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$this->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 		} else {
 			$product_id = absint($this->query_vars['product_id']);
@@ -992,11 +1011,13 @@ class WPSC_Query {
 				$products_per_page = $_SESSION['item_per_page'];
 				//exit($products_per_page);
 			if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
-				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
-					$startnum = $rowcount - $products_per_page;
-				}
+			
+			if($startnum >= $rowcount) {
+			  $startnum = 0;			
+			}
 				
 				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special` DESC LIMIT $startnum, $products_per_page";
+				echo $sql;
 			}
 		} else if (($wp_query->query_vars['ptag'] != null) || ( $_GET['ptag']!=null)) {
 		  // search by tags is done here
@@ -1040,10 +1061,11 @@ class WPSC_Query {
 				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".$this->query_vars['category_id']."') $no_donations_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
-				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
-					$startnum = $rowcount - $products_per_page;
+				if($startnum >= $rowcount) {
+					$startnum = 0;			
 				}
-				if ($_REQUEST['order']=='DESC') {
+				
+				if($this->query_vars['sort_order']=='DESC') {
 					$order = 'DESC';
 				} else {
 					$order = 'ASC';
@@ -1082,7 +1104,7 @@ class WPSC_Query {
 			
 				
 			} else {
-				if ($_REQUEST['order']=='DESC') {
+				if ($this->query_vars['sort_order']=='DESC') {
 					$order = 'DESC';
 				} else {
 					$order = 'ASC';
@@ -1103,8 +1125,8 @@ class WPSC_Query {
 				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql");
 				
 				if(!is_numeric($products_per_page) || ($products_per_page < 1)) { $products_per_page = $rowcount; }
-				if(($startnum >= $rowcount) && (($rowcount - $products_per_page) >= 0)) {
-					$startnum = $rowcount - $products_per_page;
+				if($startnum >= $rowcount) {
+					$startnum = 0;			
 				}
 				
 				$sql = "SELECT DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special`, $order_by LIMIT $startnum, $products_per_page";
@@ -1136,8 +1158,6 @@ class WPSC_Query {
 		$product_view_url = wpsc_category_url($this->category).$seperator;
 
     if(is_numeric($_GET['category'])) {
-		} else if(is_numeric($_GET['brand'])) {
-      $product_view_url .= "brand=".$_GET['brand']."&amp;";
 		} else if($_GET['product_search'] != '') {
       $product_view_url .= "product_search=".$_GET['product_search']."&amp;"."view_type=".$_GET['view_type']."&amp;"."item_per_page=".$_GET['item_per_page']."&amp;";
 		}

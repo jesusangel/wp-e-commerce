@@ -410,13 +410,6 @@ function autocomplete(event) {
 	}else if(event.which){
 		keyPressed=event.which;
 	}
-// 	if (keyPressed==8){
-// 		if (document.getElementById('blind_down').style.display!='none') {
-// 			jQuery('#blind_down').slideUp(100);
-// 		}
-// 		return false;
-// 	}
-	//document.getElementById('wpsc_search_autocomplete').style.display='block';
 	str = document.getElementById('wpsc_search_autocomplete').value;
 	if (str != '') {
 		ajax.post("index.php",autocomplete_results,"wpsc_live_search=true&keyword="+str);

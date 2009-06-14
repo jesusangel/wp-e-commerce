@@ -380,9 +380,11 @@ global $wpdb;
 				<input type='radio' onclick='jQuery("#wpsc_advanced_search").hide()' value='0' name='wpsc_options[show_search]' id='show_search2' <?php echo $show_search2; ?> /> <label for='show_search2'><?php echo TXT_WPSC_NO;?></label>
 				
 			<div <?php echo $dis;?> id='wpsc_advanced_search'>
-				<input  type='checkbox' name='wpsc_options[show_advanced_search]' id='show_advanced_search' <?php echo $show_advanced_search; ?> />
+				<input  type='hidden' name='wpsc_options[show_advanced_search]' value='0' />
+				<input  type='checkbox' name='wpsc_options[show_advanced_search]' id='show_advanced_search' <?php echo $show_advanced_search; ?>  value='1' />
 				<?php echo TXT_WPSC_SHOWADVANCEDSEARCH;?><br />
-				<input type='checkbox' name='wpsc_options[show_live_search]' id='show_live_search' <?php echo $show_live_search; ?> />
+				<input type='hidden' name='wpsc_options[show_live_search]' value='0' />
+				<input type='checkbox' name='wpsc_options[show_live_search]' id='show_live_search' <?php echo $show_live_search; ?> value='1' />
 				<?php echo TXT_WPSC_SHOWLIVESEARCH;?>
 			</div>
 			
@@ -418,48 +420,25 @@ global $wpdb;
 	
 			<tr>
 				<th scope="row"><?php echo TXT_WPSC_REPLACE_PAGE_TITLE;?>:</th>
-			<td>
-			<?php
-			$wpsc_replace_page_title = get_option('wpsc_replace_page_title');
-			$wpsc_replace_page_title1 = "";
-			$wpsc_replace_page_title2 = "";
-			switch($wpsc_replace_page_title) {
-			case 0:
-			$wpsc_replace_page_title2 = "checked ='checked'";
-			break;
-			
-			case 1:
-			$wpsc_replace_page_title1 = "checked ='checked'";
-			break;
-			}
-			?>
-			<input type='radio' value='1' name='wpsc_options[wpsc_replace_page_title]' id='wpsc_replace_page_title1' <?php echo $wpsc_replace_page_title1; ?> /> <label for='wpsc_replace_page_title1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-			<input type='radio' value='0' name='wpsc_options[wpsc_replace_page_title]' id='wpsc_replace_page_title2' <?php echo $wpsc_replace_page_title2; ?> /> <label for='wpsc_replace_page_title2'><?php echo TXT_WPSC_NO;?></label>
-			</td>
-			</tr>
-	
-			<tr>
-				<th scope="row"><?php echo TXT_WPSC_USE_THEME_ENGINE;?>:</th>
 				<td>
 				<?php
-				$wpsc_use_theme_engine = get_option('wpsc_use_theme_engine');
-				$wpsc_use_theme_engine1 = "";
-				$wpsc_use_theme_engine2 = "";
-				switch($wpsc_use_theme_engine) {
-					case 0:
-					$wpsc_use_theme_engine2 = "checked ='checked'";
-					break;
-					
-					case 1:
-					$wpsc_use_theme_engine1 = "checked ='checked'";
-					break;
+				$wpsc_replace_page_title = get_option('wpsc_replace_page_title');
+				$wpsc_replace_page_title1 = "";
+				$wpsc_replace_page_title2 = "";
+				switch($wpsc_replace_page_title) {
+				case 0:
+				$wpsc_replace_page_title2 = "checked ='checked'";
+				break;
+				
+				case 1:
+				$wpsc_replace_page_title1 = "checked ='checked'";
+				break;
 				}
 				?>
-				<input type='radio' value='1' name='wpsc_options[wpsc_use_theme_engine]' id='wpsc_use_theme_engine1' <?php echo $wpsc_use_theme_engine1; ?> /> <label for='wpsc_use_theme_engine1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[wpsc_use_theme_engine]' id='wpsc_use_theme_engine2' <?php echo $wpsc_use_theme_engine2; ?> /> <label for='wpsc_use_theme_engine2'><?php echo TXT_WPSC_NO;?></label>
+				<input type='radio' value='1' name='wpsc_options[wpsc_replace_page_title]' id='wpsc_replace_page_title1' <?php echo $wpsc_replace_page_title1; ?> /> <label for='wpsc_replace_page_title1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[wpsc_replace_page_title]' id='wpsc_replace_page_title2' <?php echo $wpsc_replace_page_title2; ?> /> <label for='wpsc_replace_page_title2'><?php echo TXT_WPSC_NO;?></label>
 				</td>
-			</tr>
-	
+			</tr>	
 		</table> 
 		
 		<h3 class="form_group"><?php echo TXT_WPSC_CARTSETTINGS;?></h3>

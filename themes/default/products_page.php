@@ -4,6 +4,7 @@ global $wpsc_query, $wpdb;
 
 <div id='products_page_container' class="wrap wpsc_container">
 	
+	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	<?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
