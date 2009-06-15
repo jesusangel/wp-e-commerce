@@ -9,6 +9,7 @@ require_once('library/googlemerchantcalculations.php');
 require_once('library/googleresult.php');
 require_once('library/googlerequest.php');
 
+
 $nzshpcrt_gateways[$num]['name'] = 'Google Checkout';
 $nzshpcrt_gateways[$num]['internalname'] = 'google';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_google';
@@ -17,15 +18,54 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_google";
 $nzshpcrt_gateways[$num]['is_exclusive'] = true;
 $nzshpcrt_gateways[$num]['payment_type'] = "google_checkout";
 
+function gateway_google(){
+	global $wpdb, $wpsc_cart, $wpsc_checkout,$current_user,  $purchlogs;	
+	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+	if(!isset($wpsc_checkout)){
+	$wpsc_checkout = new wpsc_checkout();
+	}
+	if(!isset($_SESSION['wpsc_sessionid'])){
+		$sessionid = (mt_rand(100,999).time());
+		$_SESSION['wpsc_sessionid'] = $sessionid;
+	}
+	//exit('<pre>'.print_r($_SESSION,true).'</pre>');
+		if($_SESSION['wpsc_delivery_region'] == null && $_SESSION['wpsc_selected_region'] == null){
+			$_SESSION['wpsc_delivery_region'] = get_option('base_region');
+			$_SESSION['wpsc_selected_region'] = get_option('base_region');
+		}
 
-function gateway_google($seperator, $sessionid)
-{
-	Usecase($seperator, $sessionid);
-	exit();
-}
+		$wpsc_cart->get_shipping_option();
+		$wpsc_cart->get_shipping_quotes();
+		$wpsc_cart->get_shipping_method();
+		$wpsc_cart->google_shipping_quotes();
+		$subtotal = $wpsc_cart->calculate_subtotal();
+		$base_shipping = $wpsc_cart->calculate_total_shipping();
+		$tax = $wpsc_cart->calculate_total_tax();
+		$total = $wpsc_cart->calculate_total_price();
+	//	exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+		if($total > 0 ){
+			$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `totalprice` = ".$total.", `statusno` = '0',`user_ID`=".(int)$user_ID.", `date`=UNIX_TIMESTAMP(), `gateway`='google', `billing_country`='".$wpsc_cart->delivery_country."', `shipping_country`='".$wpsc_cart->selected_country."', `base_shipping`= '".$base_shipping."', `shipping_method`='".$wpsc_cart->selected_shipping_method."', `shipping_option`= '".$wpsc_cart->selected_shipping_option."', `plugin_version`= '".WPSC_VERSION."' , `discount_value` = '".$wpsc_cart->coupons_amount."', `discount_data`='".$wpsc_cart->coupons_name."' WHERE `sessionid`=".$_SESSION['wpsc_sessionid']."";
+			if(! $wpdb->query($sql)){
+				$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '".$_SESSION['wpsc_sessionid']."', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '".$wpsc_cart->selected_shipping_method."', '".$wpsc_cart->selected_shipping_option."', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";
+				$wpdb->query($sql);
+				//exit($sql);
+			}	
+			
+			if(get_option('permalink_structure') != '') {
+				$seperator = "?";
+			} else {
+				$seperator = "&";
+			}
+			Usecase($seperator, $_SESSION['wpsc_sessionid']);
+			//exit();
+
+		}
+		
+		
+	}
 
  function Usecase($seperator, $sessionid) {
-	global $wpdb;
+	global $wpdb, $wpsc_cart;
 	$purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";
 	$purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
 	
@@ -36,77 +76,101 @@ function gateway_google($seperator, $sessionid)
 	$server_type = get_option('google_server_type');
 	$currency = get_option('google_cur');
 	$cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
-	$cart->SetContinueShoppingUrl(get_option('product_list_url'));
+	$transact_url = get_option('transact_url');
+	$returnURL =  $transact_url.$seperator."sessionid=".$sessionid."&gateway=google";
+	$cart->SetContinueShoppingUrl($returnURL);
 	$cart->SetEditCartUrl(get_option('shopping_cart_url'));
 	$no=1;
 	//exit("<pre>".print_r($wp_cart,true)."</pre>");
-	foreach($wp_cart as $item){
-		$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
-		$product_data = $product_data[0];
-		$prohibited = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='".$item['prodid']."' AND meta_key='google_prohibited' LIMIT 1",ARRAY_A);
-		$prohibited_data = $prohibited_data[0];
-		if (count($prohibited)>0){
-			$_SESSION['google_prohibited']='1';
-		} else {
-			$_SESSION['google_prohibited']='0';
+	
+	//new item code
+	$no = 0;
+//	$cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
+//	foreach($wpsc_cart->cart_items as $item){
+		//google prohibited items not implemented
+		while (wpsc_have_cart_items()) {
+			wpsc_the_cart_item();
+		//	exit('<pre>'.print_r(wpsc_cart_item_name(),true).'</pre>');
+			$cartitem["$no"] = new GoogleItem(wpsc_cart_item_name(),      // Item name
+			'', // Item description
+			wpsc_cart_item_quantity(), // Quantity
+			(wpsc_cart_item_price(false)/wpsc_cart_item_quantity())); // Unit price
+			$cart->AddItem($cartitem["$no"]);
+			$no++;
 		}
-		$variation_count = count($product_variations);
 		
-		$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$item['id']."'";
-		$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
-		$variation_count = count($variation_data);
-		
-		$extras_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_EXTRAS."` WHERE `cart_id`='".$item['id']."'";
-		$extras_data = $wpdb->get_results($extras_sql,ARRAY_A);
-		$extras_count = count($extras_data);
-		$price = nzshpcrt_calculate_tax($item['price'], $_SESSION['selected_country'], $_SESSION['selected_region']);
-			// 		if ($extras_count>0) {
-			// 			foreach ($extras_data as $extras_datum) {
-			// 				$price+=$wpdb->get_var("SELECT `price` FROM `".$wpdb->prefix."extras_values_associations` WHERE `product_id` = '".$item['prodid']."' AND `extras_id` = '".$extras_datum['extra_id']."' LIMIT 1");
-			// 			}
-			// 		}
-		//exit("------->".$price);
-		$local_currency_shipping = $item['pnp'];
-		$base_shipping = $purchase_log[0]['base_shipping'];
-		$total_shipping = $local_currency_shipping;//+$base_shipping;
-		$cartitem["$no"] = new GoogleItem($product_data['name'],      // Item name
-		$product_data['description'], // Item      description
-		$item['quantity'], // Quantity
-		$price); // Unit price
-		$cart->AddItem($cartitem["$no"]);
-		$no++;
-	}
+//	}
+
+
 	// Add shipping options
 	$Gfilter = new GoogleShippingFilters();
-	$Gfilter->SetAllowedCountryArea('ALL');
 	$google_checkout_shipping=get_option("google_shipping_country");
-	$google_shipping_country_ids = implode(",",$google_checkout_shipping);
-	$google_shipping_country = $wpdb->get_var("SELECT isocode FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
-	$Gfilter->AddAllowedPostalArea($google_shipping_country);
-	$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $total_shipping);
+	$googleshippingcountries = count($google_checkout_shipping);
+	//exit('<pre>'.print_r($googleshipping, true).'</pre>');
+	if($googleshippingcountries == 242){
+		$Gfilter->SetAllowedWorldArea(true);
+	
+	}else{
+		$google_shipping_country_ids = implode(",",$google_checkout_shipping);
+		$google_shipping_country = $wpdb->get_col("SELECT `isocode` FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
+		foreach($google_shipping_country as $isocode){
+			//exit($isocode);
+			$Gfilter->AddAllowedPostalArea($isocode);
+			if($isocode == 'US'){
+				$Gfilter->SetAllowedCountryArea('ALL');
+
+			}
+		}
+	}
+	
+	$Gfilter->SetAllowUsPoBox(false);
+	$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $wpsc_cart->base_shipping);
 	$ship_1->AddShippingRestrictions($Gfilter);
 	$cart->AddShipping($ship_1);
-
+	//wpsc_google_shipping_quotes();
       // Add tax rules
-	if ($_SESSION['selected_country']=='US'){
-		$tax_rule = new GoogleDefaultTaxRule(0.05);
-		$state_name = $wpdb->get_var("SELECT name FROM ".WPSC_TABLE_REGION_TAX." WHERE id='".$_SESSION['selected_region']."'");
-		$tax_rule->SetStateAreas(array($state_name));
+	if ($_SESSION['wpsc_selected_country']=='US'){
+		//set default tax
+		$sql = "SELECT `name`, `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE id='".$_SESSION['wpsc_delivery_region']."'";
+		//exit($sql);
+		$state_name = $wpdb->get_row($sql, ARRAY_A);
+		$defaultTax = $state_name['tax']/100;
+		$tax_rule = new GoogleDefaultTaxRule($defaultTax);
+		$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax` = ".$state_name['tax'];
+		$states = $wpdb->get_col($sql);
+		//exit('<pre>'.print_r($states, true).'</pre>');
+		$tax_rule->SetStateAreas((array)$states);
 		$cart->AddDefaultTaxRules($tax_rule);
+		//get alternative tax rates
+		$sql = "SELECT DISTINCT `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax` != 0 AND `tax` !=".$state_name['tax']." ORDER BY `tax`";
+		$othertax = $wpdb->get_col($sql);
+		$i = 1;
+		foreach($othertax as $altTax){
+			$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax`=".$altTax;
+			$alt = $wpdb->get_col($sql);
+			$altTax = $altTax/100;
+			$alt_google_tax = new GoogleDefaultTaxRule($altTax);
+
+			$alt_google_tax->SetStateAreas($alt);
+			//$g = new GoogleAlternateTaxTable('Alt Tax'.$i);
+			//$g->AddAlternateTaxRules($alt_google_tax);
+			$cart->AddDefaultTaxRules($alt_google_tax);
+//			exit(print_r($alt,true));
+			$i++;
+		}
+
 	}
-	$_SESSION['nzshpcrt_cart'] = null;
-	// Specify <edit-cart-url>
-	// $cart->SetEditCartUrl("https://www.example.com/cart/");
-	
-	// Specify "Return to xyz" link
-	//$cart->SetContinueShoppingUrl("https://www.example.com/goods/");
-	
-	// Request buyer's phone number
-	//$cart->SetRequestBuyerPhone(true);
-	
+		if (get_option('google_button_size') == '0'){
+			$google_button_size = 'BIG';
+		} elseif(get_option('google_button_size') == '1') {
+			$google_button_size = 'MEDIUM';
+		} elseif(get_option('google_button_size') == '2') {
+			$google_button_size = 'SMALL';
+		}
 	// Display Google Checkout button
-	
-	echo $cart->CheckoutButtonCode("BIG");
+	 //exit('<pre>'.print_r($_SESSION, true).'</pre>');
+	 unset($_SESSION['wpsc_sessionid']);
+	echo $cart->CheckoutButtonCode($google_button_size);
 }
 
 function submit_google() {
@@ -217,7 +281,7 @@ function form_google()
 		Select Shipping Countries
 		</td>
 		<td>
-		<a href='?page=".WPSC_DIR_NAME."%2Fwpsc-admin%2Fdisplay-options-settings.page.php&amp;tab=payment_opt&amp;googlecheckoutshipping=1'>Set Shipping countries</a>
+		<a href='".add_query_arg("googlecheckoutshipping", 1)."' alt='Set Shipping Options'>Set Shipping countries</a>
 		</td>
 	</tr>
 

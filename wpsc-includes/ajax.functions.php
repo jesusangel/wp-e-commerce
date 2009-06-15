@@ -296,7 +296,7 @@ if(($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_i
 
 
 /**
-	* update quantity function, used through ajax and in normal page loading.
+	* update location function, used through ajax and in normal page loading.
 	* No parameters, returns nothing
 */
 function wpsc_update_location() {
@@ -402,7 +402,7 @@ function wpsc_submit_checkout() {
    		
    
    		}
-    }
+   }
   
   
   if(array_search($submitted_gateway,$selected_gateways) !== false) {
@@ -418,6 +418,7 @@ function wpsc_submit_checkout() {
 		// check that the submitted gateway is in the list of selected ones
 	
 		$sessionid = (mt_rand(100,999).time());
+		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
 		$base_shipping= $wpsc_cart->calculate_base_shipping();
 		$tax = $wpsc_cart->calculate_total_tax();

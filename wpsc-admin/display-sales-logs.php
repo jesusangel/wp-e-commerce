@@ -8,12 +8,12 @@
  * @since 3.7
  */
 
-$purchlogs = new wpsc_purchaselogs();
+//$purchlogs = new wpsc_purchaselogs();
 
 
  function wpsc_display_sales_logs(){
  		//$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
- 		$purchlogs = new wpsc_purchaselogs();
+ 		//$purchlogs = new wpsc_purchaselogs();
   	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
@@ -230,7 +230,7 @@ $purchlogs = new wpsc_purchaselogs();
  		<div class='postbox'> 
 			<h3 class='hndle'><?php echo TXT_WPSC_MENU; ?></h3>
 			<div class='inside'>
-				<a href="?page=<?php echo WPSC_DIR_NAME;?>/wpsc-admin/display-options.page.php"><?php echo TXT_WPSC_SHOP_SETTINGS; ?></a><br />
+				<a href="?page=<?php echo WPSC_DIR_NAME;?>/wpsc-admin/display-options-settings.page.php"><?php echo TXT_WPSC_SHOP_SETTINGS; ?></a><br />
 				<a href="?page=<?php echo WPSC_DIR_NAME;?>/gatewayoptions.php"><?php echo TXT_WPSC_CHECKOUT_SETTINGS; ?></a><br />
 				<a href="?page=<?php echo WPSC_DIR_NAME;?>/form_fields.php"><?php echo TXT_WPSC_CHECKOUT_SETTINGS; ?></a><br />
 			</div>
@@ -258,7 +258,7 @@ $purchlogs = new wpsc_purchaselogs();
 					</ul>
 					<?php
 					if (!IS_WP27)
-					 echo "<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-log.php&#038;hide_news=true' id='close_news_box'>X</a>";
+					 echo "<a href='admin.php?page=<?php echo WPSC_DIR_NAME;?>/display-sales-log.php&#038;hide_news=true' id='close_news_box'>X</a>";
 					?>
 					</div>
 				</div>
@@ -331,7 +331,6 @@ $purchlogs = new wpsc_purchaselogs();
  	global $purchlogs;
   ?>
   	<form method='post' action=''>
-  	&nbsp;<img src='<?php echo WPSC_URL."/images/cornerarrow.png"; ?>' alt='' />
   		<select id='purchlog_multiple_status_change' name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
   			<option value='-1'><?php _e('Bulk Actions'); ?></option>
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
@@ -428,13 +427,15 @@ $purchlogs = new wpsc_purchaselogs();
  		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
  		<td><a href='<?php echo add_query_arg('purchaselog_id', wpsc_the_purch_item_id()); ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
  		<td>
- 	
+ 		<?php if(wpsc_purchlogs_is_google_checkout() == false){ ?>
  			<select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >
  			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
  				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> ><?php echo wpsc_the_purch_status_name(); ?> </option>
  			<?php endwhile; ?>
  			</select>
- 	
+ 		<?php }else { ?>
+ 			<a href='http://checkout.google.com/' rel=''><img class='google_checkout_logo' src='<?php echo WPSC_URL."/images/checkout_logo.jpg"; ?>' alt='google checkout' /></a>
+ 		<?php } ?>
  		</td><!-- Status -->
  		<td><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
  	</tr>

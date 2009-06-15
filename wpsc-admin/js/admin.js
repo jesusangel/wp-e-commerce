@@ -1,6 +1,34 @@
 // This is the wp-e-commerce front end javascript "library"
 
 jQuery(document).ready( function () {
+  //this makes the additional description textarea into a jWysiwyg field
+/*
+  jQuery('#enableWysiwyg').livequery(function(){
+  	jQuery(this).click(function (event){
+  		 jQuery('#additional_description').wysiwyg();
+  		 event.preventDefault();
+  	});
+  
+  });
+  jQuery('#disableWysiwyg').livequery(function(){
+  	jQuery(this).click(function (event){
+//		var x= document.getElementById("wysiwygBODY");
+//  		html =	jQuery('#additional_descriptionIFrame body').html();
+		//var x = document.getElementById("additional_descriptionIFrame").innerHTML();
+		var x = document.getElementById('additional_descriptionIFrame').contentDocument;
+		x = x.childNodes[0].nodeValue;
+  		alert(x);
+  		 jQuery('div.wysiwyg').remove('div.wysiwyg');
+  		 jQuery(this).append("<textarea name='additional_description' id='additional_description' style='width:200px;' cols='40' rows='5' >"+x+"</textarea>");
+  		 
+  		 
+  		 
+  		 event.preventDefault();
+  	});
+  
+  });
+*/
+  
   // this makes the product list table sortable
   jQuery('table#wpsc_product_list').sortable({
 		update: function(event, ui) {

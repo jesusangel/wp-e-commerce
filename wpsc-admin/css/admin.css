@@ -5,6 +5,15 @@
 /*
  *Display Purchase log Details CSS is HERE
  */
+th#details{
+width:75px;
+}
+th#amount{
+width:75px;
+}
+.google_checkout_logo{
+padding-right:10px;
+}
 #wpsc_items_ordered{
 	clear:both;
 }

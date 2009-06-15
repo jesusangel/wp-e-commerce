@@ -1081,6 +1081,7 @@ if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
  //call to change view for purchase log
  
  function wpsc_purchlog_filter_by(){
+ 	//exit('filter is triggered'.print_r($_POST, true));
  	wpsc_change_purchlog_view($_POST['view_purchlogs_by'], $_POST['view_purchlogs_by_status']);
  } 
  

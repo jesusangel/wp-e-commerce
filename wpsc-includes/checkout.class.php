@@ -8,7 +8,35 @@
  * @package wp-e-commerce
  * @subpackage wpsc-checkout-classes 
 */
+function wpsc_google_checkout_submit(){
+	global $wpdb,  $wpsc_cart, $current_user;
+	$wpsc_checkout = new wpsc_checkout();
+	$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$_SESSION['wpsc_sessionid']."') LIMIT 1") ;
+			//$purchase_log_id = 1;
+			get_currentuserinfo();
+		//	exit('<pre>'.print_r($current_user, true).'</pre>');
+			if($current_user->display_name != ''){
+				foreach($wpsc_checkout->checkout_items as $checkoutfield){
+				//	exit(print_r($checkoutfield,true));
+					if($checkoutfield->unique_name == 'billingfirstname'){
+						$checkoutfield->value = $current_user->display_name;
+					}
+				}	
+			}
+			if($current_user->user_email != ''){
+				foreach($wpsc_checkout->checkout_items as $checkoutfield){
+				//	exit(print_r($checkoutfield,true));
+					if($checkoutfield->unique_name == 'billingemail'){
+						$checkoutfield->value = $current_user->user_email;
+					}
+				}	
+			}
+		
+			$wpsc_checkout->save_forms_to_db($purchase_log_id);
+			$wpsc_cart->save_to_db($purchase_log_id);
+			$wpsc_cart->submit_stock_claims($purchase_log_id);
 
+}
 function wpsc_have_checkout_items() {
 	global $wpsc_checkout;
 	return $wpsc_checkout->have_checkout_items();
@@ -290,9 +318,13 @@ class wpsc_checkout {
   function save_forms_to_db($purchase_id) {
    global $wpdb;
    
-   
 		foreach($this->checkout_items as $form_data) {
-		  $value = $_POST['collected_data'][$form_data->id];	
+		
+		  $value = $_POST['collected_data'][$form_data->id];
+		  if($value == ''){
+		  	$value = $form_data->value;
+		  }	
+		 // echo '<pre>'.print_r($form_data,true).'</pre>';
 		  if(is_array($value)){
 		  	$value = $value[0];
 		  }	  

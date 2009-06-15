@@ -1,6 +1,18 @@
 <?php
+if(!isset($purchlog)){
+//echo 'yesa';
+	$purchlogs = new wpsc_purchaselogs();
+}
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+}
+function wpsc_purchlogs_is_google_checkout(){
+	global $purchlogs;
+	if($purchlogs->purchitem->gateway == 'google'){
+		return true;
+	}else{
+		return false;
+	}
 }
 function wpsc_the_purch_total(){
 	global $purchlogs;
@@ -83,36 +95,36 @@ function wpsc_purchlogs_getfirstdates(){
 }
 function wpsc_change_purchlog_view($viewby, $status){
 	global $purchlogs;
+	//exit('<pre>'.print_r($viewby,true).'</pre>');
+	if($viewby == 'all'){
+		$dates = $purchlogs->getdates();
+		$purchaselogs = $purchlogs->get_purchlogs($dates, $status);
+		$purchlogs->allpurchaselogs = $purchaselogs;
+	}elseif($viewby == '3mnths'){
+		$dates = $purchlogs->getdates();
+
+		$dates = array_slice($dates, 0, 3);
+		$purchlogs->current_start_timestamp = $dates[2]['start'];
+		$purchlogs->current_end_timestamp = $dates[0]['end'];
+	//	exit('<pre>'.print_r($dates,true).'</pre>');		
+		$newlogs = $purchlogs->get_purchlogs($dates, $status);
+		//exit('<pre>'.print_r($newlogs, true).'</pre>');
+		$purchlogs->allpurchaselogs = $newlogs;
+		//exit(print_r($date, true)."".$purchlogs->current_timestamp);
 	
-		if($viewby == 'all'){
-			$dates = $purchlogs->getdates();
-			$purchaselogs = $purchlogs->get_purchlogs($dates, $status);
-
-			$purchlogs->allpurchaselogs = $purchaselogs;
-		}elseif($viewby == '3mnths'){
-			$dates = $purchlogs->getdates();
-
-			$dates = array_slice($dates, 0, 3);
-			$purchlogs->current_start_timestamp = $dates[2]['start'];
-			$purchlogs->current_end_timestamp = $dates[0]['end'];
-		//	exit('<pre>'.print_r($dates,true).'</pre>');		
-			$newlogs = $purchlogs->get_purchlogs($dates, $status);
-			//exit('<pre>'.print_r($newlogs, true).'</pre>');
-			$purchlogs->allpurchaselogs = $newlogs;
-			//exit(print_r($date, true)."".$purchlogs->current_timestamp);
+	}else{
 		
-		}else{
-			$dates = explode('_', $viewby);
-			$date[0]['start'] = $dates[0];
-			$date[0]['end'] = $dates[1];
-			$purchlogs->current_start_timestamp = $dates[0];
-			$purchlogs->current_end_timestamp =  $dates[1];
-			$newlogs = $purchlogs->get_purchlogs($date, $status);
-			//exit('<pre>'.print_r($newlogs, true).'</pre>');
-			$purchlogs->allpurchaselogs = $newlogs;
-		}
-	
-	//exit('View by '.$viewby);
+		$dates = explode('_', $viewby);
+		$date[0]['start'] = $dates[0];
+		$date[0]['end'] = $dates[1];
+		$purchlogs->current_start_timestamp = $dates[0];
+		$purchlogs->current_end_timestamp =  $dates[1];
+		$newlogs = $purchlogs->get_purchlogs($date, $status);
+		//exit('<pre>'.print_r($newlogs, true).'</pre>');
+		$purchlogs->allpurchaselogs = $newlogs;
+	}
+
+	//exit('View by <pre>'.print_r($purchlogs,true).'</pre>');
 }
 function wpsc_search_purchlog_view($search){
 	global $purchlogs;
@@ -346,7 +358,7 @@ class wpsc_purchaselogs{
 	
 	function get_purchlogs($dates, $status=''){
 		global $wpdb;
-		//exit('tset?');
+	//	exit(print_r($dates,true).'tset?'.$status);
 // 		echo "<pre>".print_r(debug_backtrace(),true)."<pre>";
 		$purchlog = array();
 		if($status=='' || $status=='-1'){
@@ -377,7 +389,7 @@ class wpsc_purchaselogs{
 	  			exit('Else :'.print_r($purch));
 	  		}	  		
 	  	}
-	  //	exit('<pre>'.print_r($newarray,true).'<pre>');
+	 // 	exit('<pre>'.print_r($newarray,true).'<pre>');
 	   	$this->allpurchaselogs = $newarray;
 	   	$this->purch_item_count = count($this->allpurchaselogs);
 	  return $newarray;
@@ -532,6 +544,7 @@ class wpsc_purchaselogs{
 	function the_purch_item_name(){
 		global $wpdb;
 		$i=0;
+		//exit('<pre>'.print_r($this->form_data, true).'</pre>');
 		foreach((array)$this->form_data as $formdata){
 		if(in_array('billingemail', $formdata)){
 				$emailformid = $formdata['id'];
@@ -562,7 +575,9 @@ class wpsc_purchaselogs{
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$lNameformid;
 		$lname = $wpdb->get_var($sql);
 		$namestring = $fname.' '.$lname.' (<a href="mailto:'.$email.'?subject=Message From '.get_option('siteurl').'">'.$email.'</a>) ';
-
+		if($fname == '' && $lname == '' && $email == ''){
+			$namestring = 'N/A';
+		}
 		//exit($fname.' '.$lname.' ('.$email.') ');
 		return $namestring;
 		/*

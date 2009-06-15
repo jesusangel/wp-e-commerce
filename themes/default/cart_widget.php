@@ -59,4 +59,7 @@
 <?php endif; ?>
 
 <?php
+wpsc_google_checkout();
+
+
 ?>

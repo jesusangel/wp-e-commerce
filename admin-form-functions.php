@@ -221,7 +221,7 @@ function nzshpcrt_getproductform($prodid)
 		$output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
 		$output .= "<input type='hidden' name='submit_action' value='edit' />";
 		$output .= "<input  class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />";
-		$output .= "<a class='button delete_button' ' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
+		$output .= "<a class='button delete_button' ' href='admin.php?page=wpsc-edit-products&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
 		$output .= "            <td>\n\r";
 		$output .= "          </tr>\n\r";
 		$output .= "        </table>\n\r";
@@ -229,7 +229,7 @@ function nzshpcrt_getproductform($prodid)
 		$output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
 		$output .= "<input type='hidden' name='submit_action' value='edit' />";
 		$output .= "<input class='button-primary' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />&nbsp;";
-		$output .= "<a class='delete_button' ' href='admin.php?page=".WPSC_DIR_NAME."/display-items.php&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
+		$output .= "<a class='delete_button' ' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-products')."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
 	}
 		
 		$output .= "</div>";

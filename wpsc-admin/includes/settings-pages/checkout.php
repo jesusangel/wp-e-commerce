@@ -35,7 +35,7 @@ $form_types = Array("text","email","address","city","country","delivery_address"
       			<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo TXT_WPSC_NO;?></label>
       			</td>
 				<td>
-				 <a title='<?php echo TXT_WPSC_ANYONEREGISTER;?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/exclamation.png' alt='' /> </a>
+				 <a title='<?php echo TXT_WPSC_ANYONEREGISTER;?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
 					
 				</td>
      		</tr>
@@ -129,7 +129,7 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			   
 			    if($email_form_field['id'] == $form_field['id']) {
 			     echo "<td>";
-			      echo "<a title='".TXT_WPSC_RECIEPT_EMAIL_ADDRESS."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/exclamation.png' alt='' /> </a>";
+			      echo "<a title='".TXT_WPSC_RECIEPT_EMAIL_ADDRESS."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
 			    }else{
 				 echo "<td style='width:16px'>";    
 			    	echo "&nbsp;";

@@ -2,7 +2,9 @@
 global $wpdb, $user_ID;
 //$curgateway = get_option('payment_gateway');
 $sessionid = $_GET['sessionid'];
-
+if($_GET['gateway'] == 'google'){
+	wpsc_google_checkout_submit();
+}
 if(get_option('payment_gateway') == 'paypal_certified'){
 	$sessionid = $_SESSION['paypalexpresssessionid'];
 }

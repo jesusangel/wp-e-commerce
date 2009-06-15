@@ -29,7 +29,7 @@ global $wpdb;
 								$selected = "";
 							}
 					?>
-					<option value='<?php echo $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option>
+					<option value='<?php $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option>
 					
 		<?php			} ?>
 					</select>

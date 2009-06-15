@@ -63,6 +63,7 @@ function selectgateway() {
 					<td>
 					<?php
 					$do_not_use_shipping = get_option('do_not_use_shipping');
+				//	exit($do_not_use_shipping);
 					$do_not_use_shipping1 = "";
 					$do_not_use_shipping2 = "";
 					switch($do_not_use_shipping) {    
