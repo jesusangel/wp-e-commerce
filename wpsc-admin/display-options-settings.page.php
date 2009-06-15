@@ -2,6 +2,13 @@
 /*
  * Display Settings page
  */
+ 
+ // clear the previously selected shipping form session variable if you are not on the shipping page
+ if($_GET['tab'] != 'shipping') {
+   $_SESSION['previous_shipping_name'] = '';
+ }
+ 
+ 
 function wpsc_display_settings_page(){
 ?>
  <div id="wpsc_options" class="wrap">
@@ -54,6 +61,9 @@ switch($page) {
 </div>
 <?php
 }
+
+
+
 
 /*
  * Create settings page tabs 
@@ -119,6 +129,26 @@ function country_list($selected_country = null) {
 			}
       return $output;
 }
+
+
+
+/*
+ * Get Shipping Form for wp-admin 
+ */
+function wpsc_get_shipping_form($shippingname) {
+  global $wpdb, $wpsc_shipping_modules;
+  if(array_key_exists($shippingname, $wpsc_shipping_modules)){
+		$shipping_forms = $wpsc_shipping_modules[$shippingname]->getForm();
+		$shipping_module_name = $wpsc_shipping_modules[$shippingname]->name;
+		
+		$output = array('name' => $shipping_module_name, 'form_fields' => $shipping_forms, 'has_submit_button' => 1);
+  } else {
+		$output = array('name' => '&nbsp;', 'form_fields' => TXT_WPSC_CONFIGURE_SHIPPING_MODULES, 'has_submit_button' => 0);
+  }
+  return $output;
+}
+
+
 function wpsc_settings_page_update_notification(){
 if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['shipadd']) ) { ?>
 			<div id="message" class="updated fade"><p>

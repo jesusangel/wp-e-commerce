@@ -237,33 +237,22 @@ function selectgateway() {
 				</td>
 				
 				<td class='gateway_settings' rowspan='2'>
-				<?php if (IS_WP27) { ?>
 					<div class='postbox'>
-						<h3 class='hndle'><?php echo TXT_WPSC_CONFIGURE_SHIPPING_MODULES; ?></h3>
+					  <?php
+						$shipping_data =	wpsc_get_shipping_form($_SESSION['previous_shipping_name']);
+					  ?>
+						<h3 class='hndle'><?php echo $shipping_data['name']; ?></h3>
 						<div class='inside'>
 						<table class='form-table'>
-					<?php } else { ?>
-					<table class='form-table'>
-						<tr class="firstrowth">
-							<td colspan='2' style='border-bottom: none;'>
-								<strong class="form_group"><?php echo TXT_WPSC_CONFIGURE_SHIPPING_MODULES;?></strong>
-							</td>
-						</tr>
-						
-					</table>
-					<table class='form-table'>
-					<?php } ?>
-					<tr><td>&nbsp;</td></tr>
-						<?php echo $form; ?>
-						
-					</table>
-						<div class='submit'>
-							<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption' />
-						</div>
-					<?php if (IS_WP27) { ?>
-					    </div>
-					    </div>
-					<?php }	?>
+							<?php echo $shipping_data['form_fields']; ?>
+						</table>
+						<?php if( $shipping_data['has_submit_button'] == 0) {
+						 $update_button_css = 'style= "display: none;"';
+						 } ?>
+							<div class='submit' <?php echo $update_button_css; ?>>
+								<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON;?>' name='updateoption' />
+							</div>
+					</div>
 				</td>
 			</tr>
 		

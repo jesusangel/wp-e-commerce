@@ -1206,23 +1206,21 @@ function wpsc_delete_purchlog($purchlog_id='') {
 
 
 
+
 /*
- * Get Shipping Form for wp-admin 
+ * Get Shipping Form ajax call
  */
-function wpsc_get_shipping_form() {
+function wpsc_ajax_get_shipping_form() {
   global $wpdb, $wpsc_shipping_modules;
-//  exit('<pre>'.print_r($wpsc_shipping_modules, true).'</pre>');
-  
   $shippingname = $_REQUEST['shippingname'];
-  if(array_key_exists($shippingname, $wpsc_shipping_modules)){
- // exit('<pre>'.print_r($wpsc_shipping_modules[$shippingname], true).'</pre>');
- 	$shippingmethod = '<input type="hidden" name="custom_shipping_options[]" value="'.$shippingname.'" />';
-	$output = $wpsc_shipping_modules[$shippingname]->getForm();
-	$output = $shippingmethod.$output;
-	echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
-	exit($output);
-  	
-  }
+  $_SESSION['previous_shipping_name'] = $shippingname;
+  $shipping_data = wpsc_get_shipping_form($shippingname);
+	$html_shipping_name = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($shipping_data['name']));
+	$shipping_form = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($shipping_data['form_fields']));
+	echo "shipping_name_html = '$html_shipping_name'; \n\r";
+	echo "shipping_form_html = '$shipping_form'; \n\r";
+	echo "has_submit_button = '{$shipping_data['has_submit_button']}'; \n\r";
+		//echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
   exit();
 }
  
@@ -1240,7 +1238,7 @@ if ($_REQUEST['wpsc_admin_action'] == 'crop_image') {
  
  
 if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
-	add_action('admin_init', 'wpsc_get_shipping_form');
+	add_action('admin_init', 'wpsc_ajax_get_shipping_form');
 }
 
 
@@ -1320,8 +1318,14 @@ function wpsc_submit_options() {
 			}
 		}
 	}
+	
+	
+	
+	
+	
 	//This is for submitting shipping details to the shipping module
-	if(isset($_POST['custom_shipping_options'])){
+	if(isset($_POST['custom_shipping_options'])) {
+		update_option('custom_shipping_options', $_POST['custom_shipping_options']);
 		foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 			foreach((array)$_POST['custom_shipping_options'] as $shippingoption){
 				//echo $shipping->internal_name.' == '.$shippingoption;

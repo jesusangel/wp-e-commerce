@@ -306,22 +306,28 @@ jQuery(document).ready( function () {
 	// gets shipping form for admin page
 		// show or hide the stock input forms
 
-	jQuery(".wpsc-shipping-actions a").livequery(function(){
-//				jQuery(this).css('border','1px solid red');
-	  jQuery(this).click( function ()  {
-
+jQuery(".wpsc-shipping-actions a").livequery(function(){
+	jQuery(this).click( function ()  {
 		var module = jQuery(this).attr('rel');
-		jQuery.ajax({
-			method: "post", url: "index.php", data: "wpsc_admin_action=get_shipping_form&shippingname="+module,
-			
-			success: function(html){
-				//jQuery(".gateway_settings").children(".form-table").html(html)
-				jQuery("td.gateway_settings table.form-table").html('<tr><td><input type="hidden" name="shippingname" value="'+module+'" /></td></tr>'+html);
-			}
 		
-		})
+		jQuery.ajax({
+			method: "post",
+			url: "index.php",
+			data: "wpsc_admin_action=get_shipping_form&shippingname="+module,
+			success: function(returned_data){
+				eval(returned_data);
+				//jQuery(".gateway_settings").children(".form-table").html(html)
+				jQuery('.gateway_settings h3.hndle').html(shipping_name_html);
+				jQuery("td.gateway_settings table.form-table").html('<tr><td><input type="hidden" name="shippingname" value="'+module+'" /></td></tr>'+shipping_form_html);
+				if(has_submit_button != '') {
+					jQuery('.gateway_settings div.submit').css('display', 'block');
+				} else {
+					jQuery('.gateway_settings div.submit').css('display', 'none');
+				}			
+			}
 		});
 	});
+});
 	
 	jQuery('#addweightlayer').livequery(function(){
 		jQuery(this).click(function(){

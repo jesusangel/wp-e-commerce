@@ -83,10 +83,9 @@ function TB_show(caption, url, rel) {
 				if ( image.href == url ) {
 					foundSelf = true;
 					imageCount = "Image " + (i + 1) + " of "+ (imageGroup.length);
-          if(image.rel != null)     
-            {
+          if(image.rel != null) {
             imageTitle = image.rel.replace(/_/, " ");
-            }
+					}
 				} else {
 					// when we found ourself, the current is the next image
 					if ( foundSelf ) {
@@ -129,19 +128,16 @@ function TB_show(caption, url, rel) {
 			// End Resizing
 			
 			// TODO don't use globals
-      if(imageGroup.length > 1)
-        { 
+      if(imageGroup.length > 1) { 
         TB_WIDTH = imageWidth + 30 + 76 + 18;
         TB_HEIGHT = imageHeight + 60; 
         // Browser detection is bad and all, but hey, its better than things not working
-        if(jQuery.browser.msie)
-          {
+        if(jQuery.browser.msie) {
           TB_HEIGHT += 30; 
-          if(navigator.appVersion.match(/MSIE\s6\.0/) == "MSIE 6.0")
-            {
+          if(navigator.appVersion.match(/MSIE\s6\.0/) == "MSIE 6.0") {
             TB_WIDTH += 20;
-            }
-          }
+					}
+				}
         
         // make additional image links and containing div
         thumbPreloader = Array();

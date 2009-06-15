@@ -48,8 +48,7 @@ global $wpsc_query, $wpdb;
 						<span>No Image Available</span>
 						</a>
 					</div>
-				<?php endif; ?> 
-				
+				<?php endif; ?> 				
 			</div>
 				<div class="producttext">
 					<h2 class="prodtitles">

@@ -54,7 +54,7 @@ function activate_resizable() {
 
 
 	jQuery(document).ready(function(){
-	  bind_shipping_rate_deletion();
+// 	  bind_shipping_rate_deletion();
 		jQuery(function() {
 		  // set us up some mighty fine tabs for the options page
 		  
@@ -578,7 +578,7 @@ function save_tracking_id(id) {
 
 var select_min_height = 75;
 var select_max_height = 50;
-
+/*
 //ToolTip JavaScript
 jQuery('img').Tooltip(
 	{
@@ -587,7 +587,7 @@ jQuery('img').Tooltip(
 		delay: 200
 	}
 );
-
+*/
 jQuery(window).load( function () {
 
 	
