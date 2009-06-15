@@ -1,16 +1,20 @@
 <?php
-function widget_admin_menu($args)
-  {
-  global $wpdb, $table_prefix;
-  extract($args);
-  //$options = get_option('widget_wp_shopping_cart');
-  $title = empty($options['title']) ? __(TXT_WPSC_ADMINMENU) : $options['title'];
-  echo $before_widget;
-  $full_title = $before_title . $title . $after_title;
-  echo $full_title;
-  admin_menu();
-  echo $after_widget;
+function widget_admin_menu($args){
+  global $wpdb, $table_prefix, $current_user;
+	get_currentuserinfo();
+  
+  if($current_user->wp_capabilities['administrator'] == 1) {
+		extract($args);
+		//$options = get_option('widget_wp_shopping_cart');
+		$title = empty($options['title']) ? __(TXT_WPSC_ADMINMENU) : $options['title'];
+		echo $before_widget;
+		$full_title = $before_title . $title . $after_title;
+		echo $full_title;
+		admin_menu();
+		echo $after_widget;
+  
   }
+}
 
 function widget_admin_menu_control() { return null; }
 
@@ -31,6 +35,4 @@ function admin_menu() {
 	echo "<li><a title='People come here to change themes and widgets settings' href='".$siteurl."/wp-admin/themes.php'>Presentation</a></li>";
 	echo "</ul>";
 }
-
-
 ?>
