@@ -30,6 +30,7 @@
 		</tr>
 	<?php
 }
+
 function admin_categorylist($curent_category) {
   global $wpdb;
   $options = "";
@@ -74,14 +75,14 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "          <tr>\n\r";
   echo "            <td>\n\r";
   if($category['image'] !=null) {
-		echo "<img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='35' height='35' />";
+		echo "<img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='30' height='30' />";
 	} else {
-		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='35' height='35'  />";
+		echo "<img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='30' height='30'  />";
 	}
   echo "            </td>\n\r";
   
   echo "            <td>\n\r";
-  echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES, 'UTF-8')." (".$category['id'].")";
+  echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES, 'UTF-8')."";
   echo "            </td>\n\r";
   /*
   $displaydescription = substr(stripslashes($category['description']),0,44);
@@ -594,6 +595,8 @@ if(is_numeric($_GET['deleteid'])) {
 			//echo "</ul>\n\r";
 			?>
 			
+			 <span><?php _e('or');?></span>
+			 
 			<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
 			</form>
 		</div>
@@ -670,7 +673,7 @@ if(is_numeric($_GET['deleteid'])) {
 	echo "    <tr><td class='firstcol'>\n\r";
 	if (function_exists('add_object_page')){
 		echo "<div class='postbox' style='margin-right: 15px; min-width:255px;'>";
-		echo "<h3 class='hndle'>".ucfirst(TXT_WPSC_GROUPCOUNT_PLURAL)."</h3>";
+		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_CURRENT_GROUP)."</h3>";
 		echo "<div class='inside'>";
 	}
 	//echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
@@ -705,10 +708,10 @@ if(is_numeric($_GET['deleteid'])) {
 	echo "<div class='editing_this_group'><p>";
 	echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP);
 	
-	echo "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";
+	echo "  <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT."</a>";
 	
 	echo "</p></div>";
-	echo "<a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a>";
+	echo "<a href='' onclick='return showaddform()' class='add_category_link'><span>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDNEWCATEGORY)." </span></a>";
 	echo "       </td>\n\r";
 	echo "     <tr>\n\r";
 	
@@ -857,10 +860,11 @@ if(is_numeric($_GET['deleteid'])) {
 			<tr>
 				<td>
 				</td>
-				<td>
+				<td class='last_row'>
+				   
 					<input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['id']; ?>' />
 					<input type='hidden' name='submit_action' value='add' />
-					<input class='button' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
+					<input class='button-primary' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_GROUP;?>' />
 				</td>
 			</tr>
 			

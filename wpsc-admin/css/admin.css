@@ -837,7 +837,7 @@ table#itemlist{
 }
 
 
-table#itemlist tr td{text-align: left; padding:10px 5px 8px 5px; }
+table#itemlist tr td{text-align: left; padding:4px 5px 4px 5px; }
 
 table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
 table#itemlist tr.productsalt td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
@@ -866,7 +866,21 @@ div#productform td.itemfirstcol{ padding-left:4px;  vertical-align: top; }
 
 
 
-div#productform input.text, div#additem input.text{width:286px;border:1px solid #bbb;}
+div#productform input.text, div#additem input.text{
+	width:386px;
+	border:1px solid #bbb;
+}
+
+
+table.category_forms {
+  width: 100%;
+}
+table.category_forms tr td {
+ padding: 0px 8px ;
+}
+table.category_forms tr td textarea  {
+  width: 386px;
+}
 
 div#edit_variation_values input.text{width:286px !important;border:1px solid #bbb;}
 
@@ -931,13 +945,19 @@ table#productpage tr td.secondcol.product_groups_page {
 	padding-left: 16px;
 }
 
+table#productpage tr td.secondcol.product_groups_page h4 {
+ font-family: inherit;
+	margin-top: 20px;
+}
+
 td.product_groups_page #additem .inside, td.product_groups_page #productform .inside {
 	margin: 0px 0px 15px 0px;
 }
 
 div.editing_this_group {
+  margin-top: 8px;
   margin-bottom: 8px;
-  border-bottom:1px dotted black;
+/*   border-bottom:1px dotted black; */
 	width:100%;
 }
 
@@ -953,17 +973,26 @@ td.product_groups_page td.category_presentation_settings {
 
 
 
-div.editing_this_group p {
+div.editing_this_group {
 	font-size:8pt;
-	min-height:16px;
+}
+
+div.editing_this_group p {
 	padding:4px 4px 4px 8px;
-  margin: 0px;
+}
+
+div.editing_this_group dl {
+	padding:4px 4px 4px 8px;
 }
 
 
 a.add_category_link{
  display: block;
  margin: 8px;
+}
+
+div.product_group {
+  margin: 12px 0px 10px 0px;
 }
 
 table#itemlist tr.categorisation_title td {
@@ -974,10 +1003,29 @@ table#itemlist tr.categorisation_title td {
 	text-align:left;
 }
 
+table#itemlist td div.subcategory img.category_indenter {
+  float: left;
+  margin: 8px 0px 0px 0px;
+}
 
-label.select_categorisation_group, select#select_categorisation_group, a.add_categorisation_group, a.edit_categorisation_group {
+table#itemlist td div.subcategory table.itemlist {
+  float: left;
+}
+
+
+label.select_categorisation_group, select#select_categorisation_group, a.add_categorisation_group, a.edit_categorisation_group, #submit_categorisation_form span {
   display: block;
   float: left;
+}
+
+#submit_categorisation_form span {
+  display: block;
+  float: left;
+  margin-left: 10px;
+}
+
+#submit_categorisation_form a span {
+  margin-left: 0px;
 }
 
 label.select_categorisation_group {
@@ -1039,17 +1087,6 @@ color: #D54E21;
 
 
 
-
-table.category_forms {
-  width: 100%;
-}
-table.category_forms tr td {
- padding: 0px 8px ;
-}
-table.category_forms tr td textarea  {
-  width: 100%;
-}
-
 .multiple-select {
 background:#FFFFFF none repeat scroll 0 0;
 border:1px solid #DFDFDF;
@@ -1061,6 +1098,16 @@ overflow-y:auto;
 padding:0;
 position:relative;
 width:250px;
+}
+
+table.category_forms  a.delete_button {
+  display: block;
+  margin: 3px 0px 0px 8px;
+  float: left;
+}
+
+table.category_forms td.last_row {
+  padding: 16px 0px 0px 0px;
 }
 
 

@@ -322,7 +322,6 @@ function wpsc_product_image_html($image_name, $product_id) {
  * add cart button function used for php template tags and shortcodes
 */
 function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
-
 	global $wpdb;
 	if ($product_id > 0){
 		if(function_exists('wpsc_theme_html')) {

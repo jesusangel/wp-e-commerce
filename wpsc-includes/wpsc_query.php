@@ -971,9 +971,12 @@ class WPSC_Query {
 			$product_id = absint($this->query_vars['product_id']);
 		}
 		
+		
 		if(($product_id > 0)) {
-		  $product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `publish` IN('1') AND `active` IN('1') LIMIT 1",ARRAY_A);
+		  $product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `active` IN('1') LIMIT 1",ARRAY_A);
+		  // AND `publish` IN('1')
 		}
+		
 		
 		if(count($product_list) > 0) {
 		  // if is a single product

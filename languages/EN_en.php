@@ -2,6 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define('TXT_WPSC_EDIT_GROUP', 'Edit Group');
+define('TXT_WPSC_ADD_GROUP', 'Add Group');
 define('TXT_SHOW_GRID_PER_ROW', 'Products Per Row');
 define('TXT_WPSC_PRODUCT_TAGS', 'Tags');
 define('TXT_WPSC_CATEGORISATION', 'Categories');
@@ -117,7 +119,7 @@ define('TXT_WPSC_GROUP_SETTINGS', 'Product Group Settings');
 define('TXT_WPSC_GROUP_IMAGE', 'Group&nbsp;Image');
 define('TXT_WPSC_THUMBNAIL_SIZE', 'Thumbnail&nbsp;Size');
 define('TXT_WPSC_CATALOG_VIEW', 'Catalog View');
-define('TXT_WPSC_GROUP_IMAGE_TEXT', 'You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page='.WPSC_DIR_NAME.'/options.php#options_presentation">Presentation Settings</a>.');
+define('TXT_WPSC_GROUP_IMAGE_TEXT', 'You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings</a>.');
 
 
 
@@ -324,6 +326,7 @@ define('TXT_WPSC_ABOUT_THIS_PAGE', 'About This Page');
 define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Order Pending: Payment Required');
 define('TXT_WPSC_SELECTALLCATEGORIES', 'Show All Products');
 
+define('TXT_WPSC_CURRENT_GROUP', '[categorisation] group');
 define('TXT_WPSC_EDITING_GROUP', 'You are editing the [categorisation] group');
 define('TXT_WPSC_ADDING_TO_GROUP', 'You are adding a new item to the [categorisation] group');
 define('TXT_WPSC_EDITING_IN_GROUP', 'You are editing an item in the [categorisation] group');
@@ -376,7 +379,7 @@ define('TXT_WPSC_THANKS_UNLOCKED', 'Thanks, the downloads that were locked to th
 define('TXT_WPSC_SELECTGATEWAY', 'Select a payment gateway');
 define('TXT_WPSC_VARIATION_LIST', 'Select a Variation');
 
-define('TXT_WPSC_CATEGORISATION_GROUPS_DESCR', 'Groups help your visitors find your products. If you sell t-shirts, hats, and trousers you might want to setup a new group called clothing and then add the categories t-shirts, hats, and trousers to that group. Now you can associate individual products to their respective clothing group categories when you add or edit products.');
+define('TXT_WPSC_CATEGORISATION_GROUPS_DESCR', 'Categorizing your products into groups help your customers find them. For instance if you sell hats and trousers you  might want to setup a Group called clothes and add hats and trousers to that group.');
 define('TXT_WPSC_CATEGORISATION_DESCR', 'Product Grouping Widget');
 define('WPSC_DOWNLOAD_INVALID', 'This download is no longer valid.');
 define('TXT_WPSC_LOCK_DOWNLOADS_TO_IP', 'Lock downloads to IP address');
@@ -413,7 +416,7 @@ define('TXT_WPSC_ADD_CATEGORISATION', 'Add New Group');
 define('TXT_WPSC_EDIT_CATEGORISATION', 'Edit Group');
 define('TXT_WPSC_ADDDETAILS', 'Add Details');
 define('TXT_WPSC_EDITDETAILS', 'Edit Details');
-define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Item &raquo;');
+define('TXT_WPSC_ADDNEWCATEGORY', 'Add New [categorisation] &raquo;');
 define('TXT_WPSC_VALUE', 'Value');
 define('TXT_WPSC_CUSTOM_META', 'Custom Meta');
 define('TXT_WPSC_ADD_CUSTOM_FIELD', 'Add Custom Meta');
@@ -874,7 +877,7 @@ define('TXT_WPSC_PRODUCTDOWNLOAD', 'Product Download');
 define('TXT_WPSC_SHOWTHUMBNAILS', 'Show Thumbnails');
 define('TXT_WPSC_ADD_ADDITIONAL_IMAGE', 'Add Additional Image');
 define('TXT_WPSC_DELETE_IMAGE', 'Delete Image');
-define('TXT_WPSC_GOLD_OPTIONS', 'Gold Options');
+define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades');
 define('TXT_WPSC_ACTIVATE_SETTINGS', 'Activation Settings: Gold Cart');
 define('TXT_WPSC_ACTIVATION_KEY', 'Activation Key');
 define('TXT_WPSC_THANKSACTIVATED', 'Thanks, the gold shopping cart has been activated.');

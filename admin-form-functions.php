@@ -138,37 +138,7 @@ function nzshpcrt_getproductform($prodid)
  $output .= "<textarea name='additional_description' cols='40' rows='8' >".stripslashes($product['additional_description'])."</textarea>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
- /*    
-  $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol'>\n\r";
-  $output .= TXT_WPSC_PRODUCT_TAGS.": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td class='itemformcol'>\n\r";
-  $output .= "<input type='text' class='text'  name='product_tags' value='$imtags'><br /><span class='small_italic'>Seperate with commas</span>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
 
-//   $output .="<tr><td>&nbsp;</td></tr>";
-  $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol'>".TXT_WPSC_CATEGORISATION.":</td>\n\r";
-  $output .= "            <td>\n\r";
-  
-    $categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
-					
-	foreach((array)$categorisation_groups as $categorisation_group) {
-		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
-		if($category_count > 0) {
-			$output .= "<p>";
-			$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
-			$output .= "<strong>".$category_group_name.":</strong><br>";
-			$output .= categorylist($categorisation_group['id'], $product['id'], 'edit_');
-			$output .= "</p>\n\r";
-		}
-	} 
-
-	$output .= "            </td>\n\r";
-	$output .= "          </tr>\n\r";
-*/
 	if (IS_WP27) {
 		 $output .= "          </table>\n\r";
 	   $output .= "</div></div>";
@@ -239,16 +209,21 @@ function nzshpcrt_getproductform($prodid)
 function nzshpcrt_getcategoryform($catid)
   {
   global $wpdb,$nzshpcrt_imagesize_info;
-  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1";
-  $product_data = $wpdb->get_results($sql,ARRAY_A) ;
-  $product = $product_data[0];
+  $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1",ARRAY_A);
   $output = '';
-  $output .= "<div class='editing_this_group'><p>";
-	$output .= str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), TXT_WPSC_EDITING_GROUP);
+  $output .= "<div class='editing_this_group'>";
+	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), TXT_WPSC_EDITING_GROUP)."</p>\n\r";
+	
+	$output .="<dl>\n\r";
+	$output .="		<dt>Display Category Shortcode: </dt>\n\r";
+	$output .="		<dd> [wpsc_products category_url_name='{$product['nice-name']}']</dd>\n\r";
+	$output .="		<dt>Display Category Template Tag: </dt>\n\r";
+	$output .="		<dd> &lt;?php echo wpsc_display_products(array('category_url_name'=>'{$product['nice-name']}')); ?&gt;</dd>\n\r";
+	$output .="</dl>\n\r";
 	
 	//$output .= "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";
 	
-	$output .= "</p></div>";
+	$output .= "</div>";
   $output .= "        <table class='category_forms'>\n\r";
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
@@ -435,11 +410,11 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
+  $output .= "            <td class='last_row'>\n\r";
   $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input class='button' style='float:left;' type='submit' name='submit' value='".TXT_WPSC_EDIT."' />";
-	$output .= "<a class='button delete_button' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
+  $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".TXT_WPSC_EDIT_GROUP."' />";
+	$output .= "<a class='delete_button' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r"; 

@@ -309,6 +309,7 @@ function wpsc_display_products($query) {
   $temp_wpsc_query = new WPSC_query($query);
   list($wpsc_query, $temp_wpsc_query) = array($temp_wpsc_query, $wpsc_query); // swap the wpsc_query objects
   
+  
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	if(wpsc_is_single_product()) {
