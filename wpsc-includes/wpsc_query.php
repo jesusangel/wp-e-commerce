@@ -115,6 +115,21 @@ function wpsc_the_product_id() {
 }
 
 /**
+* wpsc edit the product link function
+* @return string - a link to edit this product
+*/
+function wpsc_edit_the_product_link() {
+	global $wpsc_query, $current_user;
+	$siteurl = get_option('siteurl');
+	get_currentuserinfo();
+	$output = '';
+  if($current_user->wp_capabilities['administrator'] == 1) {
+		$output = "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product_id={$wpsc_query->product['id']}'>".__('Edit')."</a>";
+  }
+	return $output;
+}
+
+/**
 * wpsc the product title function
 * @return string - the product title
 */

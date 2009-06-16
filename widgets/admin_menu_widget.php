@@ -2,7 +2,6 @@
 function widget_admin_menu($args){
   global $wpdb, $table_prefix, $current_user;
 	get_currentuserinfo();
-  
   if($current_user->wp_capabilities['administrator'] == 1) {
 		extract($args);
 		//$options = get_option('widget_wp_shopping_cart');

@@ -79,8 +79,24 @@ input.wpsc_buy_button{
  
 a.wpsc_product_title{
  display: block;
+ float: left;
+ } 
+ 
+a.wpsc_edit_product{
+ display: block;
+ float: left;
+ font-size: .8em;
+ margin: 0px 0px 0px 2px;
  } 
 
+div.wpsc_listen_button{
+ clear: both;
+ } 
+ 
+div.wpsc_description{
+ clear: both;
+ } 
+ 
 table.shoppingcart{
  margin-left: -2px;
  margin-bottom: 5px;
@@ -152,9 +168,14 @@ strong.prodtitles{
 h2.prodtitles{
  font-size:1em;
  margin: 0px;
+ clear:both;
 }
 
-
+h2.prodtitles span{
+  display: block;
+  float: left;
+	line-height:125%;
+}
 span.items{
  display:block;
  margin:0 0 15px 0;

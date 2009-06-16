@@ -53,6 +53,7 @@ global $wpsc_query, $wpdb;
 				<div class="producttext">
 					<h2 class="prodtitles">
 						<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>
+						<?php echo wpsc_edit_the_product_link(); ?>
 					</h2>
 					<?php
 						do_action('wpsc_product_addons', wpsc_the_product_id());

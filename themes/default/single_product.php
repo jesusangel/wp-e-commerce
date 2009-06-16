@@ -41,21 +41,22 @@ $image_height = get_option('single_view_image_height');
 		
 		
 					<div class="producttext">
-						<h2 class="prodtitles"><?php echo wpsc_the_product_title(); ?></h2>
-					<?php
-						do_action('wpsc_product_addons', wpsc_the_product_id());
-						
-						if((wpsc_product_has_file() == true)  && (function_exists('listen_button'))){
-							$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
-							if($file_data != null) {
-								echo listen_button($file_data['idhash'], $file_data['id']);
-							}
-						}
-				?>
+						<h2 class="prodtitles"><span><?php echo wpsc_the_product_title(); ?></span><?php echo wpsc_edit_the_product_link(); ?></h2>
+							<?php				
+								if((wpsc_product_has_file() == true)  && (function_exists('listen_button'))){
+									$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
+									if($file_data != null) {
+										echo listen_button($file_data['idhash'], $file_data['id']);
+									}
+								}
+						?>
 						
 						
-						<div class="description"><?php echo wpsc_the_product_description(); ?></div>
+						<div class="wpsc_description"><?php echo wpsc_the_product_description(); ?></div>
 		
+						<?php
+							do_action('wpsc_product_addons', wpsc_the_product_id());
+						?>
 						<?php if(wpsc_the_product_additional_description()) : ?>
 						<br clear="all" /><p class="single_additional_description">
             <?php
