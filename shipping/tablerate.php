@@ -54,8 +54,8 @@ class tablerate {
 	}
 	
 	function submit_form() {
-		$layers = $_POST['layer'];
-		$shippings = $_POST['shipping'];
+		$layers = (array)$_POST['layer'];
+		$shippings = (array)$_POST['shipping'];
 		if ($shippings != '') {
 			foreach($shippings as $key => $price) {
 				if ($price == '') {

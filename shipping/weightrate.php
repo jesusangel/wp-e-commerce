@@ -42,8 +42,8 @@ class weightrate {
 	}
 	
 	function submit_form() {
-		$layers = $_POST['weight_layer'];
-		$shippings = $_POST['weight_shipping'];
+		$layers = (array)$_POST['weight_layer'];
+		$shippings = (array)$_POST['weight_shipping'];
 		if ($shippings != ''){
 			foreach($shippings as $key => $price) {
 				if ($price == '') {

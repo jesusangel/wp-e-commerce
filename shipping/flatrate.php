@@ -63,8 +63,8 @@ class flatrate {
 	
 	function submit_form() {
 	  if($_POST['shipping'] != null) {
-			$shipping = get_option('flat_rates');
-			$submitted_shipping = $_POST['shipping'];
+			$shipping = (array)get_option('flat_rates');
+			$submitted_shipping = (array)$_POST['shipping'];
 			update_option('flat_rates',array_merge($shipping, $submitted_shipping));
 		}
 		return true;

@@ -78,8 +78,8 @@ function selectgateway() {
 					}
 							
 					?>
-							<input type='radio' value='1' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
-					<input type='radio' value='0' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
+							<input type='radio' value='0' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
+					<input type='radio' value='1' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php echo TXT_WPSC_NO;?></label><br />
 							<?php echo TXT_WPSC_USE_SHIPPING_DESCRIPTION;?>
 					</td>
 				</tr>
