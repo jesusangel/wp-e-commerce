@@ -68,7 +68,7 @@ global $wpdb;
 			<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
 			<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
 			<?php
-				foreach($countrylist as $country){
+				foreach((array)$countrylist as $country){
 					$country['country'] = htmlspecialchars($country['country']);
 					if($country['visible'] == 1){ ?>
 						<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  checked='checked' /><?php echo $country['country']; ?><br />

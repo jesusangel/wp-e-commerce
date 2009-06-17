@@ -312,7 +312,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 					
 					$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 					//exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
-						foreach($categorisation_groups as $categorisation_group){
+						foreach((array)$categorisation_groups as $categorisation_group){
 							$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
 							if($category_count > 0) {
 								$output .= "<p>";

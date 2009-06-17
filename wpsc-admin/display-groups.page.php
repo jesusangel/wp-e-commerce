@@ -15,7 +15,7 @@
 					<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
 					<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
 					<?php
-					foreach($countrylist as $country){
+					foreach((array)$countrylist as $country){
 						if($country['visible'] == 1){
 							echo "					<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
 						}else{
