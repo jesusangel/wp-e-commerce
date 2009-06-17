@@ -17,7 +17,7 @@ function wpsc_auto_update() {
 	}
 }
 
-function nzshpcrt_install()
+function wpsc_install()
    {
    global $wpdb, $user_level, $wp_rewrite, $wp_version;
    $table_name = $wpdb->prefix . "product_list";
