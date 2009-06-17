@@ -193,16 +193,8 @@ if(is_file("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php"
 
 
 
-function wpsc_uninstall_plugin() {
-  mail("thomas.howard@gmail.com", 'plugin is trying to delete its tables', 'yes it is');
-  /*
-  SELECT `option_name` FROM `wp_options` LIMIT 0 , 3000
- */
-}
-
 include_once("install_and_update.php");
 register_activation_hook(__FILE__, 'wpsc_install');
-register_uninstall_hook(__FILE__, 'wpsc_uninstall_plugin');
 
 
 
@@ -228,13 +220,13 @@ function wpsc_initialisation() {
   global $wpsc_cart;
   // set the theme directory constant
   $theme_path = WPSC_FILE_PATH . "/themes/";
-	if(!file_exists($theme_path.get_option('wpsc_selected_theme'))) {
+	if((get_option('wpsc_selected_theme') == null) || (!file_exists($theme_path.get_option('wpsc_selected_theme')))) {
 		$theme_dir = 'default';
 	} else {
 		$theme_dir = get_option('wpsc_selected_theme');
 	}
 	define('WPSC_THEME_DIR', $theme_dir);	
-  
+  //exit(WPSC_THEME_DIR);
   
   // initialise the cart session, if it exist, unserialize it, otherwise make it
   if(isset($_SESSION['wpsc_cart'])) {

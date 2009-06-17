@@ -184,6 +184,8 @@ function wpsc_the_product_price() {
   if(get_option('display_pnp') == 1) {
     //$output = nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
   }
+  //echo $price;
+  //echo "<pre>".print_r($wpsc_query->product,true)."</pre>";
   return $output;
 }
 

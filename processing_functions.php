@@ -68,12 +68,13 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
     $output = $price_out.' '.$currency_sign;
     break;
 
-    case 3:
-    $output = $currency_sign.$price_out;
-    break;
-
     case 4:
     $output = $currency_sign.'  '.$price_out;
+    break;
+    
+    case 3:
+    default:
+    $output = $currency_sign.$price_out;
     break;
 	}
 
