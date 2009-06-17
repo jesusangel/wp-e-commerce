@@ -15,7 +15,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 global $wpdb;
 
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '14');
+define('WPSC_MINOR_VERSION', '18');
 
 define('WPSC_PRESENTABLE_VERSION', '3.7 Beta 1');
 
@@ -103,14 +103,11 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/misc.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
-require_once(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
+//require_once(WPSC_FILE_PATH.'/wpsc-includes/xmlparser.php');
 require_once(WPSC_FILE_PATH . '/wpsc-includes/display.functions.php');
-
 require_once(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/shortcode.functions.php');
-//coupons
 require_once(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
-//purchaselogs
 require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 if (!IS_WP25) {
 	require_once(WPSC_FILE_PATH.'/editor.php');
@@ -195,14 +192,18 @@ if(is_file("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php"
 }
 
 
-//if(isset($_GET['activate']) && ($_GET['activate'] == 'true')) {
+
+function wpsc_uninstall_plugin() {
+  mail("thomas.howard@gmail.com", 'plugin is trying to delete its tables', 'yes it is');
+  /*
+  SELECT `option_name` FROM `wp_options` LIMIT 0 , 3000
+ */
+}
+
 include_once("install_and_update.php");
-// if(($current_version_number < WPSC_VERSION ) || (($current_version_number == WPSC_VERSION ) && (get_option('wpsc_minor_version') <= WPSC_MINOR_VERSION))) {
-// 	register_activation_hook(__FILE__, 'wpsc_auto_update');
-// } else {
-	register_activation_hook(__FILE__, 'nzshpcrt_install');
-// }
-//}
+register_activation_hook(__FILE__, 'wpsc_install');
+register_uninstall_hook(__FILE__, 'wpsc_uninstall_plugin');
+
 
 
 /**

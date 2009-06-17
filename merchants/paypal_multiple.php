@@ -243,11 +243,11 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   exit();
 }
   
-function nzshpcrt_paypal_ipn()
-  {
+function nzshpcrt_paypal_ipn() {
   global $wpdb;
   // needs to execute on page start
   // look at page 36
+  //exit(WPSC_GATEWAY_DEBUG );
   if(($_GET['ipn_request'] == 'true') && (get_option('paypal_ipn') == 1)) {
     // read the post from PayPal system and add 'cmd'
     $req = 'cmd=_notify-validate';
@@ -322,20 +322,21 @@ function nzshpcrt_paypal_ipn()
 			}
       fclose ($fp);
 		}
-    /*
-     * Detect use of sandbox mode, if sandbox mode is present, send debugging email.
-     */
-     if(stristr(get_option('paypal_multiple_url'), "sandbox") || (WPSC_GATEWAY_DEBUG == true )) {
-				$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
-				$message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
-				$message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";
-				$message .= "GET:\n\r".print_r($_GET,true)."\n\r\n\r";
-				$message .= "SERVER:\n\r".print_r($_SERVER,true)."\n\r\n\r";
-				//$wpdb->query("INSERT INTO `paypal_log` ( `id` , `text` , `date` ) VALUES ( '', '$message', NOW( ) );");
-				mail(get_option('purch_log_email'), "IPN Data", $message);
-			}    
-    }
-  }
+		/*
+		* Detect use of sandbox mode, if sandbox mode is present, send debugging email.
+		*/
+		if(stristr(get_option('paypal_multiple_url'), "sandbox") || (WPSC_GATEWAY_DEBUG == true )) {
+			$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
+			$message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
+			$message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";
+			$message .= "GET:\n\r".print_r($_GET,true)."\n\r\n\r";
+			$message .= "SERVER:\n\r".print_r($_SERVER,true)."\n\r\n\r";
+			//$wpdb->query("INSERT INTO `paypal_log` ( `id` , `text` , `date` ) VALUES ( '', '$message', NOW( ) );");
+			mail(get_option('purch_log_email'), "IPN Data", $message);
+		}    
+		exit();
+	}
+}
   
 
 function submit_paypal_multiple(){
