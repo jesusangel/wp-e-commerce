@@ -332,7 +332,7 @@ function wpsc_the_product_image($width = null, $height = null) {
   }
   if($image_file_name != null) {
     if(($width > 0) && ($height > 0)) {
-      return "index.php?productid=".$wpsc_query->product['id']."&amp;width=".$width."&amp;height=".$height;
+      return "index.php?image_id=".$wpsc_query->product['image']."&amp;width=".$width."&amp;height=".$height;
     } else {
       return WPSC_IMAGE_URL.$image_file_name;
     }

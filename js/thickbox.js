@@ -161,21 +161,25 @@ function TB_show(caption, url, rel) {
         var thumbImgWidth = thumbPreloader[i].width;
         var thumbImgHeight = thumbPreloader[i].height;
         if (thumbImgWidth > thumb_x) {
-          thumbImgHeight = thumbImgHeight * (thumb_x / thumbImgWidth); 
-          thumbImgWidth = thumb_x; 
+          thumbImgHeight = Math.floor(thumbImgHeight * (thumb_x / thumbImgWidth)); 
+          thumbImgWidth = Math.floor(thumb_x); 
           if (thumbImgHeight > thumb_y) { 
-            thumbImgWidth = thumbImgWidth * (thumb_y / thumbImgHeight); 
-            thumbImgHeight = thumb_y; 
+            thumbImgWidth = Math.floor(thumbImgWidth * (thumb_y / thumbImgHeight)); 
+            thumbImgHeight = Math.floor(thumb_y); 
 					}
 				}
 				if(thumbImgWidth < 1) {
-          thumbImgWidth = thumb_x				
+          thumbImgWidth = thumb_x;				
 				}
 				
 				if(thumbImgHeight < 1) {
           thumbImgHeight = 60				
 				}
-        additional_links += "<a href='#' "+image_selected+" id='TB_ThumbnailLink_"+i+"' ><img class='TB_Thumbnail_Image' src='"+image.href+"' width='"+thumbImgWidth+"' height='"+thumbImgHeight+"' alt=''/></a>";
+				
+				image_src = jQuery('img',image).attr('src');
+				image_src = image_src.replace(/width=(\d)*/, "width="+thumbImgWidth);
+				image_src = image_src.replace(/height=(\d)*/, "height="+thumbImgHeight);
+        additional_links += "<a href='#' "+image_selected+" id='TB_ThumbnailLink_"+i+"' ><img class='TB_Thumbnail_Image' src='"+image_src+"' width='"+thumbImgWidth+"' height='"+thumbImgHeight+"' alt=''/></a>";
         }
         
         additional_links += "</div>";

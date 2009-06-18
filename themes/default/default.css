@@ -321,6 +321,22 @@ p.wpsc_variation_forms label{
  margin: 0px 0px 0px 0px;
  }
  
+  div.wpsc_product_price{ 
+  }
+  
+ div.wpsc_product_price label{
+   display: inline;
+ }
+ 
+ div.wpsc_product_price input{
+/*    float: left; */
+ }
+ 
+ 
+  div.wpsc_product_price br{ 
+    clear: both;
+  }
+ 
  p.galleryheading{
 	font-weight:bold;
 }

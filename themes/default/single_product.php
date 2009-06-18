@@ -129,15 +129,16 @@ $image_height = get_option('single_view_image_height');
 					<?php if(wpsc_has_multi_adding()): ?>
 						<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label>
 						
-						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
+						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
 						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 						<input type="hidden" name="wpsc_update_quantity" value="true"/>
 					<?php endif ;?>
 					
-						<p class="wpsc_product_price">
+						<div class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>
-								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?></label><br />
-								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' /><br />
+								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?>:</label>
+								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' />
+								<br />
 							
 							
 							<?php else : ?>
@@ -149,7 +150,7 @@ $image_height = get_option('single_view_image_height');
 									<?php echo TXT_WPSC_PNP; ?>:  <span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><br />
 								<?php endif; ?>							
 							<?php endif; ?>
-						</p>
+						</div>
 					<?php if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {
 						echo wpsc_akst_share_link('return');
 					} ?>
@@ -212,5 +213,3 @@ $image_height = get_option('single_view_image_height');
 		<div class="clear"/>
 	</div>
 </div>
-
-
