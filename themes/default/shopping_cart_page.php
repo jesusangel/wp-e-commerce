@@ -204,7 +204,16 @@ if(wpsc_cart_item_count() > 0) :
 	<h2><?php echo TXT_WPSC_CONTACTDETAILS; ?></h2>
 	<?php/* echo TXT_WPSC_CREDITCARDHANDY; <br /> */?>
 	<?php echo TXT_WPSC_ASTERISK; ?>
-	
+	<?php
+	  if(count($_SESSION['wpsc_checkout_misc_error_messages']) > 0) {
+			echo "<div class='login_error'>\n\r";
+			foreach((array)$_SESSION['wpsc_checkout_misc_error_messages'] as $user_error ) {
+				echo $user_error."<br />\n";
+			}
+			echo "</div>\n\r";
+		}
+		$_SESSION['wpsc_checkout_misc_error_messages'] =array();
+	?>
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
 		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
@@ -230,6 +239,20 @@ if(wpsc_cart_item_count() > 0) :
 			<?php endif; ?>
 		</tr>
 		<?php endwhile; ?>
+		
+		<?php if (get_option('display_find_us') == '1') : ?>
+		<tr>
+			<td>How did you find us:</td>
+			<td>
+				<select name='how_find_us'>
+					<option value='Word of Mouth'>Word of mouth</option>
+					<option value='Advertisement'>Advertising</option>
+					<option value='Internet'>Internet</option>
+					<option value='Customer'>Existing Customer</option>
+				</select>
+			</td>
+		</tr>
+		<?php endif; ?>		
 		<tr>
 			<td colspan='2'>
 			
@@ -262,8 +285,19 @@ if(wpsc_cart_item_count() > 0) :
 				
 			</td>
 		</tr>
+		<?php if(get_option('terms_and_conditions') != '') : ?>
 		<tr>
 			<td colspan='2'>
+      <input type='checkbox' value='yes' name='agree' /> <?php echo TXT_WPSC_TERMS1;?><a class='thickbox' target='_blank' href='<?php
+      echo get_option('siteurl')."?termsandconds=true&amp;width=360&amp;height=400'"; ?>' class='termsandconds'><?php echo TXT_WPSC_TERMS2;?></a>
+      </td>
+    </tr>
+		<?php endif; ?>	
+		<tr>
+			<td colspan='2'>
+				<?php if(get_option('terms_and_conditions') == '') : ?>
+					<input type='hidden' value='yes' name='agree' />
+				<?php endif; ?>	
 				<?php/* if((is_user_logged_in() && (get_option('require_register') == 1)) xor (get_option('require_register') == 0)) : */?>
 					<input type='hidden' value='submit_checkout' name='wpsc_action' />
 					<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />

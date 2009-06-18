@@ -3,9 +3,8 @@
 if(isset($_POST)){
 if(($_POST['shippingname'] != null)){
 	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
-		if($shipping->internal_name == $_POST['shippingname'])
-		 {
-//exit($shipping->internal_name.'<pre>'.print_r($_POST,true).'</pre>');
+		if($shipping->internal_name == $_POST['shippingname']) {
+			//exit($shipping->internal_name.'<pre>'.print_r($_POST,true).'</pre>');
 			$shipping->submit_form();
 			$changes_made = true;
 		}

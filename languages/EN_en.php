@@ -774,7 +774,7 @@ define('TXT_WPSC_REPLYEMAIL', 'Reply Email');
 define('TXT_WPSC_BRANDNOCAP', 'brand');
 define('TXT_WPSC_CATEGORYNOCAP', 'category');
 define('TXT_WPSC_UDPATING', 'Updating');
-define('TXT_WPSC_UPDATING', 'Updating');
+define('TXT_WPSC_UDPATING_CART', 'Updating...');
 define('TXT_WPSC_MOREDETAILS', 'More Details');
 define('TXT_WPSC_ADDTOCART', 'Add To Cart');
 define('TXT_WPSC_AVGCUSTREVIEW', 'Avg. Customer Rating');
@@ -956,7 +956,7 @@ define('TXT_WPSC_PLEASEENTERAVALIDADDRESS', 'Please complete your address.');
 define('TXT_WPSC_PLEASEENTERAVALIDCITY', 'Please enter your town or city.');
 define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', 'Please enter a valid phone number.');
 define('TXT_WPSC_PLEASESELECTCOUNTRY', 'Please select your country from the list.');
-define('TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS', 'Please select the terms and conditions option.  Unfortunately we cannot process your order otherwise.');
+define('TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS', 'Please agree to the terms and conditions, otherwise we cannot process your order.');
 define('TXT_WPSC_POSITION', 'Position');
 
 define('TXT_WPSC_DELIVERY_REGION', 'Delivery Region');

@@ -31,3 +31,7 @@ a.additional_description_link img {
 div.textcol form {
   min-width: 300px;
 }
+
+div.wpsc_loading_animation {
+  visibility: hidden;
+}

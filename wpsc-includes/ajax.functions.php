@@ -349,6 +349,7 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 */
 function wpsc_submit_checkout() {
   global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways;
+	$_SESSION['wpsc_checkout_misc_error_messages'] = array();
 	$wpsc_checkout = new wpsc_checkout();
 	//exit('coupons:'.$wpsc_cart->coupons_name);
 	$selected_gateways = get_option('custom_gateway_options');
@@ -374,13 +375,18 @@ function wpsc_submit_checkout() {
 		} else {
 			$is_valid = false;		
 		}
-   }
+	}
+	
+	if($_POST['agree'] != 'yes') {
+		$_SESSION['wpsc_checkout_misc_error_messages'][] = TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS;
+		$is_valid = false;		
+	}
 	
 	if($our_user_id < 1) {
 	  $our_user_id = $user_ID;
 	}
 	
-   //exit('<pre>'.print_r($results, true).'</pre>');
+   //exit('<pre>'.print_r($_POST, true).'</pre>');
 	
 	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
 

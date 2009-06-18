@@ -14,6 +14,7 @@ $wpsc_database_template[$table_name]['columns']['visible'] = "int(2) unsigned NO
 $wpsc_database_template[$table_name]['columns']['countryid'] = "int(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['categoryid'] = "int(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
+$wpsc_database_template[$table_name]['indexes']['countryid_and_categoryid'] = "UNIQUE KEY `countryid_and_categoryid` (`countryid`,`categoryid`)";
 
 
 // code to create or update the {$wpdb->prefix}wpsc_also_bought table

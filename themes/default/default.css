@@ -75,6 +75,7 @@ div#sideshoppingcart div h2{
  }
  
 input.wpsc_buy_button{
+ float: left;
  }
  
 a.wpsc_product_title{
@@ -347,6 +348,7 @@ label.wpsc_quantity_update {
     */ 
     div.product_footer{
     position: relative;
+    clear: both;
     padding: 0px !important;
     width: 100%;
     border-top: 1px dashed #cccccc;
@@ -435,7 +437,20 @@ table.list_productdisplay tr.list_view_description td{
 table.list_productdisplay tr.list_view_description td div{
  display: none;
  padding: 3px;
- }  
+}  
+ 
+div.wpsc_buy_button_container {
+ overflow: auto;
+}
+ 
+div.wpsc_loading_animation {
+ margin-top: 3px;
+ margin-left: 6px;
+  float: left;
+}
+div.wpsc_loading_animation img {
+	margin-bottom:-3px;
+}
  
  /*
  * end list product display styling
