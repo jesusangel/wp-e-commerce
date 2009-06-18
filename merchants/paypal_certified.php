@@ -8,17 +8,6 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_certified";
 $nzshpcrt_gateways[$num]['payment_type'] = "paypal";
 
 
-if(in_array('paypal_certified',(array)get_option('custom_gateway_options')) ) {
-/*
-$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
-<form action='library/expresscheckout.php' METHOD='POST'>
-<input type='image' name='submit' src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif' border='0' align='top' alt='PayPal'/>
-</form>
-";
-*/
-
-}	
-
 function gateway_paypal_certified($seperator, $sessionid)
   {
 $_SESSION['paypalExpressMessage']= '	<h4>Transaction Canceled</h4>';
@@ -34,8 +23,10 @@ $_SESSION['paypalExpressMessage']= '	<h4>Transaction Canceled</h4>';
 //'------------------------------------
 //exit('<pre>'.print_r($_SESSION, true).'</pre>');
 $paymentAmount = nzshpcrt_overall_total_price($_SESSION['selected_country']);
-
+$_SESSION['paypalAmount'] = $paymentAmount;
 $_SESSION['paypalexpresssessionid'] = $sessionid;
+paypal_certified_currencyconverter();
+//exit($_SESSION['paypalAmount']);
 //'------------------------------------
 //' The currencyCodeType and paymentType 
 //' are set to the selections made on the Integration Assistant 
@@ -67,60 +58,51 @@ $cancelURL = $transact_url;
 //' it is included at the top of this file.
 //'-------------------------------------------------
 $resArray = CallShortcutExpressCheckout ($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL);
+//exit('<pre>'.print_r($resArray, true).'</pre>');
 $ack = strtoupper($resArray["ACK"]);
-if($ack=="SUCCESS")
-{
-	RedirectToPayPal ( $resArray["TOKEN"] );
-} 
-else  
-{
-	//Display a user friendly Error on the page using any of the following error information returned by PayPal
-	$ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
-	$ErrorShortMsg = urldecode($resArray["L_SHORTMESSAGE0"]);
-	$ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
-	$ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
-	
-	echo "SetExpressCheckout API call failed. ";
-	echo "Detailed Error Message: " . $ErrorLongMsg;
-	echo "Short Error Message: " . $ErrorShortMsg;
-	echo "Error Code: " . $ErrorCode;
-	echo "Error Severity Code: " . $ErrorSeverityCode;
+	if($ack=="SUCCESS")	{
+		RedirectToPayPal ( $resArray["TOKEN"] );
+	} else  {
+		//Display a user friendly Error on the page using any of the following error information returned by PayPal
+		$ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
+		$ErrorShortMsg = urldecode($resArray["L_SHORTMESSAGE0"]);
+		$ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
+		$ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
+		
+		echo "SetExpressCheckout API call failed. ";
+		echo "Detailed Error Message: " . $ErrorLongMsg;
+		echo "Short Error Message: " . $ErrorShortMsg;
+		echo "Error Code: " . $ErrorCode;
+		echo "Error Severity Code: " . $ErrorSeverityCode;
+	}
+
+
+ // header("Location: ".get_option('paypal_multiple_url')."?".$output);
+  exit();
 }
-/*
-
-
-  global $wpdb;
-  $purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";
-  $purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
-
-  $cart_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
-  $cart = $wpdb->get_results($cart_sql,ARRAY_A) ; 
-  
- // $transact_url = get_option('transact_url');
-  // paypal connection variables
-  $data['business'] = get_option('paypal_multiple_business');
-  $data['return'] = $transact_url.$seperator."sessionid=".$sessionid."&gateway=paypal";
-  $data['cancel_return'] = $transact_url;
-  $data['notify_url'] =get_option('siteurl')."/?ipn_request=true";
-  $data['rm'] = '2';
-  
-  // look up the currency codes and local price
-  $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
-  $local_currency_code = $currency_code[0]['code'];
-  $paypal_currency_code = get_option('paypal_curcode');
-
+function paypal_certified_currencyconverter(){
+	global $wpdb;
+	$currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
+	$local_currency_code = $currency_code[0]['code'];
+	$paypal_currency_code = get_option('paypal_curcode');
+	if($paypal_currency_code == '') {
+		$paypal_currency_code = 'US';
+  	}
+//exit(get_option('currency_type'). " ".$paypal_currency_code);
+	
   // Stupid paypal only accepts payments in one of 5 currencies. Convert from the currency of the users shopping cart to the curency which the user has specified in their paypal preferences.
   $curr=new CURRENCYCONVERTER();
-  
-  $data['currency_code'] = $paypal_currency_code;
-  $data['Ic'] = 'US';
-  $data['bn'] = 'toolkit-php';
-  $data['no_shipping'] = '2';
-  $data['address_override'] = '1';
-  $data['no_note'] = '1';
-  
-  switch($paypal_currency_code)
-    {
+	if($paypal_currency_code != $local_currency_code) {
+		$paypal_currency_productprice = $curr->convert($_SESSION['paypalAmount'],$paypal_currency_code,$local_currency_code);
+		$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
+		//exit($paypal_currency_productprice . " " . $paypal_currency_shipping.' '.$local_currency_productprice . " " . $local_currency_code);
+		 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
+	} else {
+		$paypal_currency_productprice = $local_currency_productprice;
+		$paypal_currency_shipping = $local_currency_shipping;
+		$base_shipping = $purchase_log['base_shipping'];
+	}
+	 switch($paypal_currency_code) {
     case "JPY":
     $decimal_places = 0;
     break;
@@ -131,22 +113,14 @@ else
     default:
     $decimal_places = 2;
     break;
-    }
-
- 	
-*/
-
-
-
+	}
+	$_SESSION['paypalAmount'] = number_format(sprintf("%01.2f", $paypal_currency_productprice),$decimal_places,'.','');
 
 	
- // header("Location: ".get_option('paypal_multiple_url')."?".$output);
-  exit();
-}
-  
+}  
 function processingfunctions()
 {
-global $wpdb;
+global $wpdb, $wpsc_cart;
 $sessionid = $_SESSION['paypalexpresssessionid'];
 
 	if($_REQUEST['act']=='error'){
@@ -236,8 +210,9 @@ $_SESSION['paypalExpressMessage']= '
 	   finalize the PayPal payment.  The variable nvpstr
 	   holds the name value pairs
 	   */
+	   //exit(wpsc_cart_total(false));
 	$token =urlencode($_REQUEST['token']);
-	$paymentAmount =urlencode ($_SESSION['nzshpcrt_totalprice']);
+	$paymentAmount =urlencode ($_SESSION['paypalAmount']);
 	$paymentType = urlencode($_SESSION['paymentType']);
 	$currCodeType = urlencode(get_option('paypal_curcode'));
 	$payerID = urlencode($_REQUEST['PayerID']);
@@ -262,24 +237,36 @@ $_SESSION['paypalExpressMessage']= '
 		$_SESSION['reshash']=$resArray;
 		$location = get_option('transact_url')."&act=error";
 			// header("Location: $location");
-				   }else{
-			if(isset($_POST['usePayPal'])){
-		$street = $_POST['shippingStreet'].' '.$_POST['shippingStreet2']; //form_id 12		   
-		$city = $_POST['shippingCity'];		   //form_id 13
-		$state = $_POST['shippingState']; // form_id 14
-		$country = $_POST['country']; //form_id 15
-		$postalCode = $_POST['postalCode'];//form_id 16
-
-		$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
-
-		 $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` = '".$street."' WHERE log_id=".$log_id." AND form_id = 12") ;  
-		 $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` ='".$city."' WHERE log_id=".$log_id." AND form_id = 13");  
-		  $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` ='".$state."' WHERE log_id=".$log_id." AND form_id = 14");  
-		 $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value` ='".$country."' WHERE log_id=".$log_id." AND form_id = 15"); 
-		  $wpdb->query("UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` SET `value`='".$postalCode."' WHERE log_id=".$log_id." AND form_id = 16"); 
-		  }
-				   }
+	}else{
+		if(isset($_POST['usePayPal'])){
+			$street = $_POST['shippingStreet'].' '.$_POST['shippingStreet2']; //form_id 12		   
+			$city = $_POST['shippingCity'];		   //form_id 13
+			$state = $_POST['shippingState']; // form_id 14
+			$country = $_POST['country']; //form_id 15
+			$postalCode = $_POST['postalCode'];//form_id 16
 	
+			$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
+			
+			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$street."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingaddress'";
+			$wpdb->query($sql);
+			
+			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$city."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingcity'";
+			$wpdb->query($sql);
+
+			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$state."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingstate'";
+			$wpdb->query($sql);
+			
+			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$country."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingcountry'";
+			$wpdb->query($sql);
+			
+			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$postalCode."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingpostcode'";
+			$wpdb->query($sql);	
+			
+			
+		
+		}
+	}
+	//exit('<pre>'.print_r($resArray, true).'</pre>');
 	$_SESSION['paypalExpressMessage'] ="
 		<h4>Transaction Accepted Please Keep these References Handy.</h4>
 		<table width ='400'>
@@ -301,6 +288,8 @@ $_SESSION['paypalExpressMessage']= '
 				@$_SESSION['nzshpcrt_serialized_cart'] = '';
 				$_SESSION['nzshpcrt_cart'] = '';
 				$_SESSION['nzshpcrt_cart'] = Array();	 
+				//exit('HERE');
+				$wpsc_cart->empty_cart();
 				
 } else if(isset($_REQUEST['paymentType']) || isset($_REQUEST['token'])){
 	$token = $_REQUEST['token'];
@@ -313,7 +302,7 @@ $_SESSION['paypalExpressMessage']= '
 		   portion of the URL that buyers will return to after authorizing payment
 		*/
 	
-		   $paymentAmount=$_SESSION['nzshpcrt_totalprice'];
+		   $paymentAmount=$_SESSION['paypalAmount'];
 		   $currencyCodeType=get_option('paypal_curcode');
 		   $paymentType='Sale';
 	
@@ -443,7 +432,7 @@ $_SESSION['paypalExpressMessage'] ="
             <tr>
                 <td align='left'><b>Order Total:</b></td>
                 <td align='left'>
-                  ".get_option('paypal_curcode').$_SESSION['nzshpcrt_totalprice']."</td>
+                  ".wpsc_cart_total()."</td>
             </tr>
 			<tr>
 			    <td align='left'><b>Shipping Address: </b></td>
@@ -485,7 +474,7 @@ $_SESSION['paypalExpressMessage'] ="
             <tr>
                 <td>";
 $_SESSION['paypalExpressMessage'] .="               
-                <input type='hidden' name='totalAmount' value='".$_SESSION['nzshpcrt_totalprice']."' />
+                <input type='hidden' name='totalAmount' value='".wpsc_cart_total()."' />
                 <input type='hidden' name='shippingStreet' value='".$resArray['SHIPTOSTREET']."' />          
                 <input type='hidden' name='shippingStreet2' value='".$resArray['SHIPTOSTREET2']."' />
                 <input type='hidden' name='shippingCity' value='".$resArray['SHIPTOCITY']."' />
@@ -531,7 +520,9 @@ function submit_paypal_certified()
     {
     update_option('paypal_certified_apisign', $_POST['paypal_certified_apisign']);
     }
-    
+  if($_POST['paypal_certified_server_type'] != null) {
+  	update_option('paypal_certified_server_type', $_POST['paypal_certified_server_type']);
+  } 
   foreach((array)$_POST['paypal_form'] as $form => $value) {
     update_option(('paypal_form_'.$form), $value);
 	}
@@ -541,6 +532,12 @@ function submit_paypal_certified()
 function form_paypal_certified()
   {
   $select_currency[get_option('paypal_curcode')] = "selected='selected'";
+  	if (get_option('paypal_certified_server_type') == 'sandbox'){
+		$serverType1="checked='checked'";
+	} elseif(get_option('paypal_certified_server_type') == 'production') {
+		$serverType2 ="checked='checked'";
+	}
+
   $output = "
   <tr>
       <td>API Username
@@ -562,6 +559,14 @@ function form_paypal_certified()
      <td>
      <input type='text' size='70' value='".get_option('paypal_certified_apisign')."' name='paypal_certified_apisign' />
      </td>
+  </tr>
+  <tr>
+     <td>Server Type
+     </td>
+     <td>
+		<input $serverType1 type='radio' name='paypal_certified_server_type' value='sandbox' /> Sandbox (For testing)
+		<input $serverType2 type='radio' name='paypal_certified_server_type' value='production' /> Production
+	 </td>
   </tr>
   ";
   
@@ -688,8 +693,6 @@ $output .= "
 	$PROXY_HOST = '127.0.0.1';
 	$PROXY_PORT = '808';
 
-	$SandboxFlag = false;
-
 	//'------------------------------------
 	//' PayPal API Credentials 
 	//'------------------------------------
@@ -710,6 +713,11 @@ $output .= "
 	' For the live site, the URL is        https://www.paypal.com/webscr&cmd=_express-checkout&token=
 	*/
 	//$SandboxFlag = true;
+  	if (get_option('paypal_certified_server_type') == 'sandbox'){
+		$SandboxFlag=true;
+	} elseif(get_option('paypal_certified_server_type') == 'production') {
+		$SandboxFlag=false;
+	}	
 	if ($SandboxFlag == true) 
 	{
 		$API_Endpoint = "https://api-3t.sandbox.paypal.com/nvp";

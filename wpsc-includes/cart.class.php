@@ -35,13 +35,17 @@ function wpsc_coupon_amount() {
 * cart total function, no parameters
 * @return string the total price of the cart, with a currency sign
 */
-function wpsc_cart_total() {
+function wpsc_cart_total($forDisplay=true) {
 	global $wpsc_cart;  
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
 	$total += $wpsc_cart->calculate_total_tax();
 	$total -= $wpsc_cart->coupons_amount;
-	return $wpsc_cart->process_as_currency($total);
+	if($forDisplay){
+		return $wpsc_cart->process_as_currency($total);
+	}else{
+		return $total;
+	}
 }
 
 /**
