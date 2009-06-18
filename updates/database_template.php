@@ -104,6 +104,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}currenc
 // code to create or update the {$wpdb->prefix}wpsc_download_status table
 $table_name = WPSC_TABLE_DOWNLOAD_STATUS;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
+$wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NULL";
 $wpsc_database_template[$table_name]['columns']['fileid'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['purchid'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['cartid'] = "bigint(20) unsigned NULL";
@@ -113,6 +114,7 @@ $wpsc_database_template[$table_name]['columns']['ip_number'] = "varchar(255) NOT
 $wpsc_database_template[$table_name]['columns']['active'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['datetime'] = "datetime NOT NULL";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
+$wpsc_database_template[$table_name]['indexes']['product_id'] = " KEY `product_id` ( `product_id` )";
 $wpsc_database_template[$table_name]['indexes']['uniqueid'] = "UNIQUE KEY `uniqueid` ( `uniqueid` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}download_status";
 
@@ -151,6 +153,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product
 // code to create or update the {$wpdb->prefix}wpsc_product_files table
 $table_name = WPSC_TABLE_PRODUCT_FILES;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
+$wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NULL";
 $wpsc_database_template[$table_name]['columns']['filename'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['mimetype'] = "varchar(128) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['idhash'] = "varchar(45) NOT NULL DEFAULT '' ";

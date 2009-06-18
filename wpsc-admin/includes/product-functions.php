@@ -77,6 +77,8 @@ function wpsc_admin_submit_product() {
   	if(!isset($post_data['category'])){
   		$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product Category.<br />');
    	}
+   	
+   	$_SESSION['wpsc_failed_product_post_data'] = $post_data;
    //	exit('<pre>'.print_r($_SESSION['product_error_messages'], true).'</pre>');
   	$sendback = add_query_arg('ErrMessage', 1);
 	wp_redirect($sendback);
@@ -88,7 +90,7 @@ function wpsc_admin_submit_product() {
   /**
 	* wpsc_insert_product function 
 	* 
-	* @return unknown
+	* @return array - Sanitised product details
 */
 function wpsc_sanitise_product_forms($post_data = null) {
 	if ( empty($post_data) ) {
@@ -113,6 +115,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	  $post_data['special_price'] = 0;
 	}
 	
+  //exit('<pre>'.print_r($post_data, true).'</pre>');
 	$post_data['files'] = $_FILES;
 
   return $post_data;
@@ -591,8 +594,10 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 				$old_idhash_id = array_search($submitted_file['name'],(array)$file_names);
 				$old_idhash = $file_hashes[$old_idhash_id];
 			}
-			copy(WPSC_FILE_DIR.$old_idhash, WPSC_FILE_DIR.$new_name);
-			unlink(WPSC_FILE_DIR.$old_idhash);
+			if(is_file(WPSC_FILE_DIR.$old_idhash)) {
+				copy(WPSC_FILE_DIR.$old_idhash, WPSC_FILE_DIR.$new_name);
+				unlink(WPSC_FILE_DIR.$old_idhash);
+			}
 		}
 		if(move_uploaded_file($submitted_file['tmp_name'],(WPSC_FILE_DIR.$idhash)))	{
 			$stat = stat( dirname( (WPSC_FILE_DIR.$idhash) ));

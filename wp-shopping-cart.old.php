@@ -311,23 +311,6 @@ jQuery(document).ready( function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function wpsc_admin_css() {
   $siteurl = get_option('siteurl'); 
   if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME) !== false) || ($_GET['mass_upload'] == 'true') || ((strpos($_SERVER['REQUEST_URI'], 'wp-admin/index.php') !== false) && !isset($_GET['page']))) {
@@ -1279,8 +1262,12 @@ function nzshpcrt_download_file() {
     //exit("<pre>".print_r($download_data,true)."</pre>");
    
     if($download_data != null) {
-      $file_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1",ARRAY_A) ;
-      $file_data = $file_data[0];      
+      if($download_data['product_id'] > 0) {
+				$product_file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$download_data['product_id']."' LIMIT 1");
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_file_id."' LIMIT 1", ARRAY_A);
+      } else {
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+			}
       
       if((int)$download_data['downloads'] >= 1) {
         $download_count = (int)$download_data['downloads'] - 1;
@@ -1312,6 +1299,7 @@ function nzshpcrt_download_file() {
 					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');       
 				}        
         $filename = WPSC_FILE_DIR.$file_data['idhash'];
+        // destroy the session to allow the file to be downloaded on some buggy browsers and webservers
         session_destroy();
         readfile_chunked($filename);   
         exit();
@@ -1342,8 +1330,8 @@ function nzshpcrt_download_file() {
 						header('Cache-Control: must-revalidate, post-check=0, pre-check=0');       
 					}             
 					$filename = WPSC_FILE_DIR.$file_data['idhash'];  
-					readfile_chunked($filename);   
 					session_destroy();
+					readfile_chunked($filename);   
 					exit();
 				}            
 			}

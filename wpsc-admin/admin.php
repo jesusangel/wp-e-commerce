@@ -19,6 +19,7 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-options-settings.page.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-debug.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php");
 
 //settings pages include
@@ -106,6 +107,13 @@ function wpsc_admin_pages(){
 			}
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
+			
+			
+			if(($_SESSION['wpsc_activate_debug_page'] == true) || (WPSC_ADD_DEBUG_PAGE == true)) {
+			  
+				$page_hooks[] = add_submenu_page($base_page,__('Debug'), __('Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');
+			
+			}
 
 			$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $base_page);
 			

@@ -100,7 +100,12 @@ function wpsc_display_product_form ($product_id = 0) {
 		$check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}'");
 		
   } else {
-		$product_data =$wpsc_product_defaults;
+    if(isset($_SESSION['wpsc_failed_product_post_data']) && (count($_SESSION['wpsc_failed_product_post_data']) > 0 )) {
+			$product_data = array_merge($wpsc_product_defaults, $_SESSION['wpsc_failed_product_post_data']);
+			$_SESSION['wpsc_failed_product_post_data'] = null;
+    } else {
+			$product_data = $wpsc_product_defaults;
+		}
   }
 	$current_user = wp_get_current_user();
   
