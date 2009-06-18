@@ -1322,21 +1322,27 @@ function wpsc_submit_options() {
 	
 	
 	
+		foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
+			$shipping->submit_form();
+		}
 	
 	
 	//This is for submitting shipping details to the shipping module
-	if(isset($_POST['custom_shipping_options'])) {
+// 	if(isset($_POST['custom_shipping_options'])) {
+
 		update_option('custom_shipping_options', $_POST['custom_shipping_options']);
+		
+		
 		foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 			foreach((array)$_POST['custom_shipping_options'] as $shippingoption){
 				//echo $shipping->internal_name.' == '.$shippingoption;
-				if($shipping->internal_name ==$shippingoption) {
-					$shipping->submit_form();
+				if($shipping->internal_name == $shippingoption) {
+ 					//$shipping->submit_form();
 					$shipadd++;
 				}
 			}
 		}
-	}
+// 	}
 	$sendback = wp_get_referer();
 
 	if ( isset($updated) ) {
