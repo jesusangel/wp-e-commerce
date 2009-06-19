@@ -179,7 +179,7 @@ if(wpsc_cart_item_count() > 0) :
 	   */
 	   ?>
 
-	 <?php if(!is_user_logged_in() && get_settings('users_can_register')) : ?>
+	 <?php if(!is_user_logged_in() && get_option('users_can_register') && get_option('require_register')) : ?>
 		<h2><?php _e('Not yet a member?');?></h2>
 		<p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
 		<?php	if(count($_SESSION['wpsc_checkout_user_error_messages']) > 0) : ?>

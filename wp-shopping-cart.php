@@ -229,16 +229,17 @@ function wpsc_initialisation() {
   //exit(WPSC_THEME_DIR);
   
   // initialise the cart session, if it exist, unserialize it, otherwise make it
-  if(isset($_SESSION['wpsc_cart'])) {
-		$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
-		if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
+//   if(WP_ADMIN == true) {
+		if(isset($_SESSION['wpsc_cart'])) {
+			$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
+			if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
+				$GLOBALS['wpsc_cart'] = new wpsc_cart;
+			}
+		} else {
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
-  } else {
-    $GLOBALS['wpsc_cart'] = new wpsc_cart;
-  }
-  
-  
+// 	}
+
 //   if(empty($GLOBALS['wpsc_cart']->selected_shipping_method) && (get_option('custom_shipping_options') != null)) {
 //     $GLOBALS['wpsc_cart']->get_shipping_method();
 //   }
