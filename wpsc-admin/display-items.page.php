@@ -14,8 +14,8 @@ function wpsc_display_products_page() {
 	
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
-		'image' => '',
-		'title' => 'Name',
+		'image' => 'Name',
+		'title' => '',
 		'price' => 'Price',
 		'categories' => 'Categories',
 	);
@@ -258,7 +258,7 @@ function wpsc_admin_products_list($category_id = 0) {
 			</div>
 		
 			<div class="alignleft actions">
-					<select name="action">
+					<select name="bulkAction">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
 						<option value="delete"><?php _e('Delete'); ?></option>
 					</select>

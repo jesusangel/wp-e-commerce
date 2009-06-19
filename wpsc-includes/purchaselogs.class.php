@@ -6,6 +6,47 @@ if(!isset($purchlog)){
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
 }
+function wpsc_purchlogs_has_customfields(){
+	global $purchlogitem;
+	//return true;
+
+	foreach($purchlogitem->allcartcontent as $cartitem){
+		if($cartitem->files != 'N;' || $cartitem->custom_message != ''){
+			return true;
+		}
+	}
+	return false;
+
+}
+function wpsc_purchlogs_custommessages(){
+	global $purchlogitem;
+	foreach($purchlogitem->allcartcontent as $cartitem){
+		if($cartitem->custom_message != ''){
+			//exit('<pre>'.print_r($cartitem,true).'</pre>');
+			$messages[] = $cartitem->name.' :'.$cartitem->custom_message;
+			//return true;
+		}
+	}
+	return $messages;
+}
+function wpsc_purchlogs_customfiles(){
+	global $purchlogitem;
+	foreach($purchlogitem->allcartcontent as $cartitem){
+		if($cartitem->files != 'N;'){
+			$file = unserialize($cartitem->files);
+			//exit('<pre>'.var_dump($file,true).'</pre>');
+			if($file["mime_type"] == "image/jpeg" ||$file["mime_type"] == "image/png"||$file["mime_type"] == "image/gif"){
+				$image= "<img src='".WPSC_USER_UPLOADS_URL.$file['file_name']."' height='100' width='100' alt='' />";
+				$files[] = $cartitem->name.' :'.$image;
+			}else{
+				$files[] = $cartitem->name.' :'.$file['file_name'];
+			}
+			
+			//return true;
+		}
+	}
+	return $files;
+}
 function wpsc_purchlogs_is_google_checkout(){
 	global $purchlogs;
 	if($purchlogs->purchitem->gateway == 'google'){

@@ -1110,7 +1110,7 @@ function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_b
 		<script type="text/javascript">wpsc_edToolbar()</script>
 	</div>
 
-	<?php $the_editor = apply_filters('the_editor', "<div id='editorcontainer'><textarea $rows cols='40' name='$id' tabindex='$tab_index' id='$id'>%s</textarea></div>\n");
+	<?php $the_editor = apply_filters('the_editor', "<div id='editorcontainer'><textarea $rows cols='40' style='width:200px;' name='$id' tabindex='$tab_index' id='$id'>%s</textarea></div>\n");
 	$the_editor_content = apply_filters('the_editor_content', $content);
 
 	printf($the_editor, $the_editor_content);

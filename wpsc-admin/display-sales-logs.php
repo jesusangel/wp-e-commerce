@@ -69,8 +69,6 @@
 			 <div class='inner-sidebar'> 
 					<div class='meta-box-sortables'>			
 						<?php
-							//$dates = $purchlogs->wpsc_getdates();
-							//exit('<pre>'.print_r($dates, true).'</pre>');
 							if(IS_WP27){
 								//display_ecomm_admin_menu();
 								display_ecomm_rss_feed();
@@ -200,8 +198,10 @@
 		 			</select></p>
 		 			</form>
  			</div>
+ 				<?php wpsc_purchlogs_custom_fields(); ?>
 				</div>
 				</div>
+			
 				<div id='wpsc_purchlogitems_links'>
 				<h3><?php _e('Actions'); ?></h3>
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
@@ -466,5 +466,28 @@
  	<?php
  	endwhile;
  }
+function wpsc_purchlogs_custom_fields(){
+	if(wpsc_purchlogs_has_customfields()){?>
+	<div class='metabox-holder'>
+		<div id='purchlogs_customfields' class='postbox'>
+		<h3 class='hndle'>Users Custom Fields</h3>
+		<div class='inside'>
+		<?php $messages = wpsc_purchlogs_custommessages(); ?>
+		<?php $files = wpsc_purchlogs_customfiles(); ?>
+		<h4>Cart Items with Custom Files:</h4>	
+		<?php
+		foreach($files as $file){ 
+			echo $file;
+		}?>
+		<h4>Cart Items with Custom Messages:</h4>	
+		<?php
+		foreach($messages as $message){ 
+			echo $message;
+		}?>
+		</div>
+		</div>
+		</div>
+<?php }
 
+}
  ?>

@@ -5,6 +5,9 @@
 /*
  *Display Purchase log Details CSS is HERE
  */
+#purchlogs_customfields{
+	clear:both; 
+}
 th#details{
 width:75px;
 }
@@ -69,8 +72,13 @@ text-align:right;
 /*
 	* Display Products CSS starts here
 	*/
-	
-	
+.tablenav select[name="bulkAction"] {
+width:100px;
+}
+textarea#additional_description{
+border: 1px solid #dfdfdf;
+/* width:465px !important; */
+}	
 .wpsc-separator {
 	background:transparent url(../../images/menu-arrows.gif) no-repeat scroll left 5px;
 	cursor:w-resize;
@@ -90,7 +98,7 @@ text-align:right;
 }
 
 div.search-box input#page-search-input {
-  width: 134px;
+  width: 80px;
 
 }
 
@@ -697,7 +705,7 @@ div.select_product_file, div.edit_select_product_file {
 	overflow-y:auto;
 	padding:2px 2px 6px;
 	position:relative;
-	width:300px;
+	width:360px;
 }
 
 img.file_delete_button {

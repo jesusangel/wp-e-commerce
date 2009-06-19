@@ -146,7 +146,7 @@ function wpsc_select_product_file($product_id = null) {
   $file_list = wpsc_uploaded_files();
   $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
   $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span>";
-  $output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
+  $output .= "<div class='ui-widget-content multiple-select  ".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
   //$output .= "<div class='select_product_file'>";
   $num = 0;
   $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='.none.' id='select_product_file_$num' ".((!is_numeric($file_id) || ($file_id < 1)) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".TXT_WPSC_SHOW_NO_PRODUCT."</label></p>";
