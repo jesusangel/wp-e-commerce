@@ -2098,7 +2098,7 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 // 	wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
 	
-		if($_GET['page'] == WPSC_DIR_NAME.'/display-items.php') {
+		if($_GET['page'] == 'wpsc-edit-products') {
 			wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
       wp_enqueue_script('new_swfupload', WPSC_URL.'/js/swfupload.js');
       wp_enqueue_script('new_swfupload.swfobject', WPSC_URL.'/js/swfupload/swfupload.swfobject.js');
@@ -2341,7 +2341,7 @@ function wpsc_fav_action($actions) {
     // remove the "Add new page" link
     // unset($actions['page-new.php']);
   	// add quick link to our favorite plugin
-    $actions['admin.php?page='.WPSC_DIR_NAME.'/display-items.php'] = array('New Product', 'manage_options');
+    $actions['admin.php?page=wpsc-edit-products'] = array('New Product', 'manage_options');
     return $actions;
 }
 
@@ -2401,7 +2401,7 @@ function wpsc_duplicate() {
 			$wpdb->query($sql);
 		}
 	}
-	wp_redirect('?page='.WPSC_DIR_NAME.'/display-items.php');
+	wp_redirect('?page=wpsc-edit-products');
 }
 
 if (isset($_GET['duplicate'])) {

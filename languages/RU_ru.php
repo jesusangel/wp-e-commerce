@@ -295,7 +295,7 @@ define('TXT_WPSC_PENDINGCOUNT_PLURAL','транзакции');
 define('TXT_WPSC_VARIATION_SINGULAR','вариация');
 define('TXT_WPSC_VARIATION_PLURAL','вариаций');
 
-define('TXT_WPSC_SALES_DASHBOARD', 'У вас <a href=\'admin.php?page=wp-shopping-cart/display-items.php\'>:productcount:</a>, состоящих в <a href=\'admin.php?page=wp-shopping-cart/display-category.php\'>:groupcount:</a>. В этом месяце вы продали :salecount: на общую сумму :monthtotal: и продано за все время :overaltotal:. У вас :pendingcount: ожидающих подтверждения.');
+define('TXT_WPSC_SALES_DASHBOARD', 'У вас <a href=\'admin.php?page=wpsc-edit-products\'>:productcount:</a>, состоящих в <a href=\'admin.php?page=wpsc-edit-groups\'>:groupcount:</a>. В этом месяце вы продали :salecount: на общую сумму :monthtotal: и продано за все время :overaltotal:. У вас :pendingcount: ожидающих подтверждения.');
 
 define('TXT_WPSC_YOUAREUSING', 'Вы используете :theme: тему. Это WP e-Commerce :versionnumber:.');
 define('TXT_WPSC_NO_SHORTCODE', 'Этот товар все еще ожидает добавления в каталог. Нет сокращений или тэгов на данный момент.');

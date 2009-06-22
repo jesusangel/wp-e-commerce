@@ -477,7 +477,7 @@ class wpsc_gateways {
 		
 		$gateway_options = get_option('custom_gateway_options');
 		foreach($nzshpcrt_gateways as $gateway) {
-			if(array_search($gateway['internalname'], $gateway_options) !== false) {
+			if(array_search($gateway['internalname'], (array)$gateway_options) !== false) {
 				$this->wpsc_gateways[] = $gateway;
 			}		
 		}

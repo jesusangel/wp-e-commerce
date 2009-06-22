@@ -317,7 +317,7 @@ define('TXT_WPSC_PENDINGCOUNT_PLURAL','transactions');
 define('TXT_WPSC_VARIATION_SINGULAR','variation');
 define('TXT_WPSC_VARIATION_PLURAL','variations');
 
-define('TXT_WPSC_SALES_DASHBOARD', 'You have <a href=\'admin.php?page='.WPSC_DIR_NAME.'/display-items.php\'>:productcount:</a>, contained within <a href=\'admin.php?page='.WPSC_DIR_NAME.'/display-category.php\'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.');
+define('TXT_WPSC_SALES_DASHBOARD', 'You have <a href=\'admin.php?page=wpsc-edit-products\'>:productcount:</a>, contained within <a href=\'admin.php?page=wpsc-edit-groups\'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.');
 
 define('TXT_WPSC_YOUAREUSING', 'You are using the :theme: style. This is WP e-Commerce :versionnumber:.');
 define('TXT_WPSC_NO_SHORTCODE', 'This item product is still waiting to be added to your catalogue. There are no shortcodes or tags available at this point.');

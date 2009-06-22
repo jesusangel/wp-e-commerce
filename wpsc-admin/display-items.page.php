@@ -398,7 +398,7 @@ function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, 
    */
   global $wpdb;
   $siteurl = get_option('siteurl');
-  $url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-items.php";
+  $url = $siteurl."/wp-admin/admin.php?page=wpsc-edit-products";
   if(is_numeric($category_id)) {
     $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
 	} else {
