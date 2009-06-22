@@ -1935,14 +1935,13 @@ if( IS_WP27 ) {
 }
 
 function wpsc_admin_latest_activity() {
-global $wpdb;
+	global $wpdb;
 		$totalOrders = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."`");
 	
 		 
 		/*
 		 * This is the right hand side for the past 30 days revenue on the wp dashboard
 		 */
-		
 		echo "<div id='leftDashboard'>";
 		echo "<strong class='dashboardHeading'>".TXT_WPSC_TOTAL_THIS_MONTH."</strong><br />";
 		echo "<p class='dashboardWidgetSpecial'>";
@@ -1998,7 +1997,11 @@ global $wpdb;
 		echo "<p class='dashboardWidgetSpecial'>";
 		//echo "<span class='pricedisplay'>";
 		//calculates average sales amount per order for the month
+		if((admin_display_total_price() > 0) && ($totalOrders > 0) ) {
 		$totalAverage = ((int)admin_display_total_price()/(int)$totalOrders);
+		} else {
+		  $totalAverage = 0;
+		}
 		echo nzshpcrt_currency_display($totalAverage,1);
 		//echo "</span>";
 		echo "<span class='dashboardWidget'>".TXT_WPSC_AVGORDER_TITLE."</span>";
@@ -2329,17 +2332,6 @@ echo "     </table>\n\r";
 	if ($_GET['thickbox_variations']) {
 		add_action('admin_init','thickbox_variation');
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

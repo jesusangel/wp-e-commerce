@@ -64,11 +64,15 @@ function wpsc_admin_submit_product() {
   //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
   check_admin_referer('edit-product', 'wpsc-edit-product');
   $post_data = wpsc_sanitise_product_forms();
-//  exit('<pre>'.print_r($post_data,true).'</pre>');
   if(isset($post_data['title']) && $post_data['title'] != '' && isset($post_data['category'])){
-	wpsc_insert_product($post_data, true);
-	$sendback = add_query_arg('message', 1);
-	wp_redirect($sendback);
+		$product_id = wpsc_insert_product($post_data, true);
+		if($product_id > 0) {
+			$sendback = add_query_arg('product_id', $product_id);
+		}
+		
+		$sendback = add_query_arg('message', 1, $sendback);
+  //exit('<pre>'.print_r($sendback,true).'</pre>');
+		wp_redirect($sendback);
   }else{
   	$_SESSION['product_error_messages'] = array();	
   	if($post_data['title'] == ''){
@@ -81,14 +85,14 @@ function wpsc_admin_submit_product() {
    	$_SESSION['wpsc_failed_product_post_data'] = $post_data;
    //	exit('<pre>'.print_r($_SESSION['product_error_messages'], true).'</pre>');
   	$sendback = add_query_arg('ErrMessage', 1);
-	wp_redirect($sendback);
+		wp_redirect($sendback);
   }
 	exit();
 }
  
  
   /**
-	* wpsc_insert_product function 
+	* wpsc_sanitise_product_forms function 
 	* 
 	* @return array - Sanitised product details
 */
@@ -263,11 +267,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	if($post_data['variation_priceandstock'] != null) {
 		$variations_processor->update_variation_values($product_id, $post_data['variation_priceandstock']);
 	}     
-	
-	
-	
-	
-	
+	return $product_id;
 }
 
 

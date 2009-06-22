@@ -224,7 +224,6 @@ function wpsc_strleft($s1, $s2) {
 	return  $values;
 }
 function wpsc_google_checkout(){
-//	exit('<pre>'.print_r($_SESSION, true).'</pre>');
 	$currpage = wpsc_selfURL();
 	if (array_search("google",(array)get_option('custom_gateway_options')) !== false && $currpage != get_option('checkout_url')) {
 		global $nzshpcrt_gateways;

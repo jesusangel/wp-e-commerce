@@ -1,13 +1,9 @@
 <?php
 function wpsc_auto_update() {
   global $wpdb;
-
-  wpsc_create_or_update_tables();
-  
-  include_once('updates/updating_tasks.php');
-  
+  wpsc_create_or_update_tables();  
+  include_once('updates/updating_tasks.php');  
   wpsc_create_upload_directories();
-
   wpsc_product_files_htaccess();  
   wpsc_check_and_copy_files();
   
@@ -17,10 +13,9 @@ function wpsc_auto_update() {
 	}
 }
 
-function wpsc_install()
-   {
-   global $wpdb, $user_level, $wp_rewrite, $wp_version;
-   $table_name = $wpdb->prefix . "product_list";
+function wpsc_install() {
+	global $wpdb, $user_level, $wp_rewrite, $wp_version;
+	$table_name = $wpdb->prefix . "product_list";
 
   $first_install = false;
   $result = mysql_list_tables(DB_NAME);
@@ -37,8 +32,7 @@ function wpsc_install()
 	}
 
   // run the create or update code here.
-  wpsc_create_or_update_tables();
-  
+  wpsc_create_or_update_tables();  
   wpsc_create_upload_directories();
   
 	
@@ -52,13 +46,11 @@ function wpsc_install()
   $add_initial_category = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."`;",ARRAY_A);
   if($add_initial_category[0]['count'] == 0) {
 		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (1, 'Categories', 'Product Categories', '1', '1')");
-		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");	
-		
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");			
     $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('1', '".TXT_WPSC_EXAMPLECATEGORY."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");    
     $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".TXT_WPSC_EXAMPLEBRAND."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");
 	}
   
-
   $purchase_statuses_data  = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PURCHASE_STATUSES."`",ARRAY_A);
   if($purchase_statuses_data[0]['count'] == 0) {
     $wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_STATUSES."` (`name` , `active` , `colour` ) 
@@ -184,6 +176,9 @@ function wpsc_install()
 		update_option('wpsc_gallery_image_width', '96');
 	}
 		
+	if(!is_array(get_option('custom_gateway_options'))) {
+		update_option('custom_gateway_options', array('testmode'));	
+	}
   
   wpsc_product_files_htaccess();
   

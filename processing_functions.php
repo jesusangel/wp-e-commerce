@@ -223,34 +223,17 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
     return $shipping;
 	}
   
-function admin_display_total_price($start_timestamp = '', $end_timestamp = '')
-  {
+function admin_display_total_price($start_timestamp = '', $end_timestamp = '') {
   global $wpdb;
-  if(($start_timestamp != '') && ($end_timestamp != ''))
-    {
-    $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
-    }
-    else
-      {
-      $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` != ''";
-      }
-  $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
-  $total = 0;
-  if($purchase_log != null)
-    {
-    foreach($purchase_log as $purchase)
-      {
-//       $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-//       $country_data = $wpdb->get_results($country_sql,ARRAY_A);
-//       $country = $country_data[0]['value'];
-//       $total += nzshpcrt_find_total_price($purchase['id'],$country);
-         $total += $purchase['totalprice'];
-      }
-    }
+  if(($start_timestamp != '') && ($end_timestamp != '')) {
+    $sql = "SELECT SUM(`totalprice`) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` BETWEEN '$start_timestamp' AND '$end_timestamp'";
+	} else {
+		$sql = "SELECT SUM(`totalprice`) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` != ''";
+	}
+  $total = $wpdb->get_var($sql);
   return $total;
-  }
+}
   
-
 
 function calculate_product_price($product_id, $variations = false, $pm='',$extras=false) {
   global $wpdb;
@@ -921,7 +904,7 @@ function wpsc_check_stock($state, $product) {
  */
 function wpsc_check_weight($state, $product) {
 	global $wpdb;
-	$custom_shipping = get_option('custom_shipping_options');
+	$custom_shipping = (array)get_option('custom_shipping_options');
 	$has_no_weight = false;
 	// only do anything if UPS is on and shipping is used
 	if((array_search('ups', $custom_shipping) !== false) && ($product['no_shipping'] != 1)) {

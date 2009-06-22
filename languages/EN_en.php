@@ -2,6 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
+define('TXT_WPSC_UPDATING', 'Loading');
 define('TXT_WPSC_EDIT_GROUP', 'Edit Group');
 define('TXT_WPSC_ADD_GROUP', 'Add Group');
 define('TXT_SHOW_GRID_PER_ROW', 'Products Per Row');

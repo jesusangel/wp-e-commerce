@@ -3,7 +3,7 @@ global $wpsc_query, $wpdb;
 ?>
 
 <div id='products_page_container' class="wrap wpsc_container">
-	
+	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	<?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
@@ -37,14 +37,22 @@ global $wpsc_query, $wpdb;
 	<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
 		<div class="textcol">
 			<div class="imagecol">
-				<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-					<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="Mandelbrot" title="Mandelbrot" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
-				</a>
+				<?php if(wpsc_the_product_thumbnail()) :?> 	   
+					<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
+						<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+					</a>
+				<?php else: ?> 
+					<div class="item_no_image">
+						<a href="<?php echo wpsc_the_product_permalink(); ?>">
+						<span>No Image Available</span>
+						</a>
+					</div>
+				<?php endif; ?> 				
 			</div>
-			<form class='product_form'  enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 				<div class="producttext">
 					<h2 class="prodtitles">
 						<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>
+						<?php echo wpsc_edit_the_product_link(); ?>
 					</h2>
 					<?php
 						do_action('wpsc_product_addons', wpsc_the_product_id());
@@ -91,41 +99,43 @@ global $wpsc_query, $wpdb;
 					</div>
 					<?php endif; ?>
 					
-					<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
-					
-					<?php /** the custom meta HTML and loop */?>
-					<div class="custom_meta">
-						<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
-							<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_name(); ?><br />
-						<?php endwhile; ?>
-					</div>
-					<?php /** the custom meta HTML and loop ends here */?>
-					
-					<?php /** add the comment link here */?>
-					<?php echo wpsc_product_comment_link();	?>
-					
-					
-					<?php /** the variation group HTML and loop */?>
-					<div class="wpsc_variation_forms">
-						<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
-							<p>
-								<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
-								<?php /** the variation HTML and loop */?>
-								<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
-								<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
-									<option value="<?php echo wpsc_the_variation_id(); ?>"><?php echo wpsc_the_variation_name(); ?></option>
-								<?php endwhile; ?>
-								</select> 
-							</p>
-						<?php endwhile; ?>
-					</div>
-					<?php /** the variation group HTML and loop ends here */?>
-					
-					<p class="wpsc_extras_forms"/>
-					<p class="wpsc_product_price">
+					<form class='product_form'  enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
+						<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
+						
+						<?php /** the custom meta HTML and loop */?>
+						<div class="custom_meta">
+							<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
+								<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_name(); ?><br />
+							<?php endwhile; ?>
+						</div>
+						<?php /** the custom meta HTML and loop ends here */?>
+						
+						<?php /** add the comment link here */?>
+						<?php echo wpsc_product_comment_link();	?>
+						
+						
+						<?php /** the variation group HTML and loop */?>
+						<div class="wpsc_variation_forms">
+							<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
+								<p>
+									<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
+									<?php /** the variation HTML and loop */?>
+									<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
+									<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
+										<option value="<?php echo wpsc_the_variation_id(); ?>"><?php echo wpsc_the_variation_name(); ?></option>
+									<?php endwhile; ?>
+									</select> 
+								</p>
+							<?php endwhile; ?>
+						</div>
+						<?php /** the variation group HTML and loop ends here */?>
+						
+						<p class="wpsc_extras_forms"/>
+						<div class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>
-							<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?></label><br />
-							<input type='text' id='product_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo wpsc_the_product_price(); ?>' size='6' /><br />
+								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?>:</label>
+								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' />
+								<br />
 							
 							
 							<?php else : ?>
@@ -137,27 +147,45 @@ global $wpsc_query, $wpdb;
 									<?php echo TXT_WPSC_PNP; ?>:  <span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><br />
 								<?php endif; ?>							
 							<?php endif; ?>
-					</p>  
-					<?php if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {
-						echo wpsc_akst_share_link('return');
-					} ?>
+						</div>
+						
+						<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
+						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
+				
+						<!-- END OF QUANTITY OPTION -->
+						<?php if(get_option('addtocart_or_buynow') !='1') : ?>
+							<?php if(wpsc_product_has_stock()) : ?>
+								<div class='wpsc_buy_button_container'>
+									<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
+									<div class='wpsc_loading_animation'>
+										<img title="Loading" alt="Loading" src="http://apps.instinct.co.nz/2.7.1/wp-content/plugins/3.6.13/images/indicator.gif" id="loadingimage"/>
+										<?php echo TXT_WPSC_UDPATING_CART; ?>
+									</div>
+								</div>
+							<?php else : ?>
+								<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+							<?php endif ; ?>
+						<?php endif ; ?>
+					</form>
 					
-					<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
-					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
-					<?php if(wpsc_product_has_stock()) : ?>
-						<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
-					<?php else : ?>
-						<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+					<?php if(get_option('addtocart_or_buynow')=='1') : ?>
+						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>
 					<?php endif ; ?>
+					
 					<?php echo wpsc_product_rater(); ?>
 					
 				</div>
-			</form>
 		</div>
 	</div>
 
-<?php endwhile; ?>
-<?php /** end the product loop here */?>
+	<?php endwhile; ?>
+	<?php /** end the product loop here */?>
+	
+	
+	<?php if(wpsc_product_count() < 1):?>
+		<p><?php  echo TXT_WPSC_NOITEMSINTHISGROUP; ?></p>
+	<?php endif ; ?>
+
 <?php
 
 if(function_exists('fancy_notifications')) {

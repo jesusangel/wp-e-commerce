@@ -1,5 +1,3 @@
-
-
 var someresults=function()  {
 	document.getElementById('changenotice').innerHTML = "Thank you, your change has been saved";
 }
@@ -174,7 +172,6 @@ jQuery('.meta-box-sortables').sortable( {
     	} );
     }
 } );
-
 
 
 jQuery("#gallery_list").sortable({

@@ -29,7 +29,9 @@ jQuery(document).ready(function () {
 			return true;
 		} else {
 			form_values = jQuery(this).serialize();
-			jQuery('div.wpsc_loading_animation',this).css('visibility', 'visible');
+			if(jQuery('#fancy_notification') == null) {
+				jQuery('div.wpsc_loading_animation',this).css('visibility', 'visible');
+			}
 			jQuery.post( 'index.php?ajax=true', form_values, function(returned_data) {
 				eval(returned_data);
 				wpsc_bind_to_events();

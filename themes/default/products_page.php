@@ -148,9 +148,6 @@ global $wpsc_query, $wpdb;
 								<?php endif; ?>							
 							<?php endif; ?>
 						</div>
-						<?php if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {
-							echo wpsc_akst_share_link('return');
-						} ?>
 						
 						<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
 						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>

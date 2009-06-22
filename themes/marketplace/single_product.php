@@ -21,34 +21,42 @@ $image_height = get_option('single_view_image_height');
 	
 	
 	<div class="productdisplay">
-<?php /** start the product loop here, this is single products view, sho there should be only one */?>
+	<?php /** start the product loop here, this is single products view, so there should be only one */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
 					<div class="imagecol">
-						<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>"/>
-						</a>
+						<?php if(wpsc_the_product_thumbnail()) :?> 	   
+								<a rel="<?php echo str_replace(" ", "_", wpsc_the_product_title()); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
+									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>"/>
+								</a>
+						<?php else: ?> 
+							<div class="item_no_image">
+								<a href="<?php echo wpsc_the_product_permalink(); ?>">
+								<span>No Image Available</span>
+								</a>
+							</div>
+						<?php endif; ?> 
 					</div>
 		
-					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 		
 					<div class="producttext">
-						<h2 class="prodtitles"><?php echo wpsc_the_product_title(); ?></h2>
-					<?php
-						do_action('wpsc_product_addons', wpsc_the_product_id());
-						
-						if((wpsc_product_has_file() == true)  && (function_exists('listen_button'))){
-							$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
-							if($file_data != null) {
-								echo listen_button($file_data['idhash'], $file_data['id']);
-							}
-						}
-				?>
+						<h2 class="prodtitles"><span><?php echo wpsc_the_product_title(); ?></span><?php echo wpsc_edit_the_product_link(); ?></h2>
+							<?php				
+								if((wpsc_product_has_file() == true)  && (function_exists('listen_button'))){
+									$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
+									if($file_data != null) {
+										echo listen_button($file_data['idhash'], $file_data['id']);
+									}
+								}
+						?>
 						
 						
-						<div class="description"><?php echo wpsc_the_product_description(); ?></div>
+						<div class="wpsc_description"><?php echo wpsc_the_product_description(); ?></div>
 		
+						<?php
+							do_action('wpsc_product_addons', wpsc_the_product_id());
+						?>
 						<?php if(wpsc_the_product_additional_description()) : ?>
 						<br clear="all" /><p class="single_additional_description">
             <?php
@@ -82,6 +90,7 @@ $image_height = get_option('single_view_image_height');
 					<?php /** the custom meta HTML and loop ends here */?>
 					
 					
+					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 					<?php if(wpsc_product_has_personal_text()) : ?>
 						<div class='custom_text'>
 							<h4><?php echo TXT_WPSC_PERSONALIZE_YOUR_PRODUCT; ?></h4>
@@ -115,10 +124,21 @@ $image_height = get_option('single_view_image_height');
 					</div>
 					<?php /** the variation group HTML and loop ends here */?>
 									
-						<p class="wpsc_product_price">
+					
+					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
+					<?php if(wpsc_has_multi_adding()): ?>
+						<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label>
+						
+						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
+						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
+						<input type="hidden" name="wpsc_update_quantity" value="true"/>
+					<?php endif ;?>
+					
+						<div class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>
-								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?></label><br />
-								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' /><br />
+								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo TXT_WPSC_DONATION; ?>:</label>
+								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' />
+								<br />
 							
 							
 							<?php else : ?>
@@ -130,7 +150,7 @@ $image_height = get_option('single_view_image_height');
 									<?php echo TXT_WPSC_PNP; ?>:  <span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><br />
 								<?php endif; ?>							
 							<?php endif; ?>
-						</p>
+						</div>
 					<?php if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {
 						echo wpsc_akst_share_link('return');
 					} ?>
@@ -141,12 +161,26 @@ $image_height = get_option('single_view_image_height');
 					<?php if(wpsc_product_is_customisable()) : ?>				
 						<input type="hidden" value="true" name="is_customisable"/>
 					<?php endif; ?>
-				
-				
-					<?php if(wpsc_product_has_stock()) : ?>
-						<input type='image' src='<?php echo WPSC_URL; ?>/themes/marketplace/images/atc.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
-					<?php else : ?>
-						<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+					
+					
+					<!-- END OF QUANTITY OPTION -->
+					<?php if(get_option('addtocart_or_buynow') !='1') : ?>
+						<?php if(wpsc_product_has_stock()) : ?>
+							<input type='image' src='<?php echo WPSC_URL; ?>/themes/marketplace/images/atc.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
+
+							<div class='wpsc_loading_animation'>
+								<img title="Loading" alt="Loading" src="http://apps.instinct.co.nz/2.7.1/wp-content/plugins/3.6.13/images/indicator.gif" id="loadingimage"/>
+								<?php echo TXT_WPSC_UDPATING_CART; ?>
+							</div>
+							
+						<?php else : ?>
+							<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+						<?php endif ; ?>
+					<?php endif ; ?>
+					</form>
+					
+					<?php if(get_option('addtocart_or_buynow')=='1') : ?>
+						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>
 					<?php endif ; ?>
 					
 					<?php echo wpsc_product_rater(); ?>
@@ -154,13 +188,11 @@ $image_height = get_option('single_view_image_height');
 						
 					<?php
 						if(function_exists('gold_shpcrt_display_gallery')) :
-						?>
-						<?php
-							gold_shpcrt_display_gallery(wpsc_the_product_id());
+					
+							echo gold_shpcrt_display_gallery(wpsc_the_product_id());
 						endif;
 					?>
 					</div>
-					</form>
 		
 					<form onsubmit="submitform(this);return false;" action="http://www.instinct.co.nz/wordpress_2.6/products-page/?category=" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_extra_<?php echo wpsc_the_product_id(); ?>">
 						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
@@ -182,5 +214,3 @@ $image_height = get_option('single_view_image_height');
 		<div class="clear"/>
 	</div>
 </div>
-
-

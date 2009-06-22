@@ -461,18 +461,18 @@ function wpsc_place_shopping_cart($content = '') {
 	}
 }
   
-
-function wpsc_checkout($content = '') {
-  if(preg_match("/\[checkout\]/",$content)) {
-    ob_start();
-    include_once(WPSC_FILE_PATH . "/checkout.php");
-    $output = ob_get_contents();
-    ob_end_clean();
-    return preg_replace("/(<p>)*\[checkout\](<\/p>)*/",$output, $content);
-	} else {
-    return $content;
-	}
-}
+/// wpsc_checkout is an obsolete function
+// function wpsc_checkout($content = '') {
+//   if(preg_match("/\[checkout\]/",$content)) {
+//     ob_start();
+//     include_once(WPSC_FILE_PATH . "/checkout.php");
+//     $output = ob_get_contents();
+//     ob_end_clean();
+//     return preg_replace("/(<p>)*\[checkout\](<\/p>)*/",$output, $content);
+// 	} else {
+//     return $content;
+// 	}
+// }
 
 function wpsc_transaction_results($content = '') {
   if(preg_match("/\[transactionresults\]/",$content)) {
@@ -547,7 +547,7 @@ function wpsc_enable_page_filters($excerpt = ''){
   add_filter('the_content', 'wpsc_products_page', 12);
   add_filter('the_content', 'wpsc_place_shopping_cart', 12);
   add_filter('the_content', 'wpsc_transaction_results', 12);
-  add_filter('the_content', 'wpsc_checkout', 12);
+  //add_filter('the_content', 'wpsc_checkout', 12);
   add_filter('the_content', 'nszhpcrt_homepage_products', 12);
   add_filter('the_content', 'wpsc_user_log', 12);
   add_filter('the_content', 'nszhpcrt_category_tag', 12);
@@ -561,7 +561,7 @@ function wpsc_disable_page_filters($excerpt = '') {
   remove_filter('the_content', 'wpsc_products_page');
   remove_filter('the_content', 'wpsc_place_shopping_cart');
   remove_filter('the_content', 'wpsc_transaction_results');
-  remove_filter('the_content', 'wpsc_checkout');
+  //remove_filter('the_content', 'wpsc_checkout');
   remove_filter('the_content', 'nszhpcrt_homepage_products');
   remove_filter('the_content', 'wpsc_user_log');
   remove_filter('the_content', 'wpsc_category_tag');

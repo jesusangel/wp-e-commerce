@@ -21,17 +21,17 @@ global $wpdb;
 				if($region_list != null) {
 				?>
 					<select name='wpsc_options[base_region]'>
-					<?php
-					foreach($region_list as $region) {
+						<?php
+						foreach($region_list as $region) {
 							if(get_option('base_region')  == $region['id']) {
 								$selected = "selected='selected'";
 							} else {
 								$selected = "";
 							}
-					?>
-					<option value='<?php $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option>
-					
-		<?php			} ?>
+						?>
+						<option value='<?php echo $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option>	<?php	
+						} 
+						?>
 					</select>
 				   
 		<?php  	 }	?>
