@@ -109,7 +109,7 @@ function wpsc_admin_pages(){
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
 			
 			
-			if(($_SESSION['wpsc_activate_debug_page'] == true) || (constant('WPSC_ADD_DEBUG_PAGE') == true)) {			  
+			if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
 				$page_hooks[] = add_submenu_page($base_page,__('Debug'), __('Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');			
 			}
 

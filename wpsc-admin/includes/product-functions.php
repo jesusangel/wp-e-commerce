@@ -209,7 +209,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		$extension_number = '';
 		if($similar_names['count'] > 0) {
 			$extension_number = (int)$similar_names['max_number']+1;
-			}
+		}
 		$url_name .= $extension_number;
 		add_product_meta($product_id, 'url_name', $url_name,true);
 	}
