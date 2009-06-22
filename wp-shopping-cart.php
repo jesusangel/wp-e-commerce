@@ -27,8 +27,8 @@ $v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);
 $v1 = preg_split("/([a-z]+)/i",$v1,-1, PREG_SPLIT_DELIM_CAPTURE);
 array_walk($v1, create_function('&$v', '$v = trim($v,". ");'));
 
-define('IS_WP25', version_compare($v1[0], '2.5', '>=') );
-define('IS_WP27', version_compare($v1[0], '2.7', '>=') );
+define('IS_WP25', version_compare($v1[0], '2.5', '>='));
+define('IS_WP27', version_compare($v1[0], '2.7', '>='));
 
 // // we need to know where we are, rather than assuming where we are
 

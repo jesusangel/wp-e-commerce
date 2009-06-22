@@ -21,8 +21,8 @@
 		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
 		<?php if(!isset($_REQUEST['purchaselog_id'])){
 				//$purchlogs = new wpsc_purchaselogs();
-		  		$columns = array(
-		  			'cb' => '<input type="checkbox" />',
+		  	$columns = array(
+		  		'cb' => '<input type="checkbox" />',
 					'date' => 'Date',
 					'name' => '',
 					'amount' => 'Amount',
@@ -70,12 +70,8 @@
 					<div class='meta-box-sortables'>			
 						<?php
 							if(IS_WP27){
-								//display_ecomm_admin_menu();
 								display_ecomm_rss_feed();
-								//wpsc_ordersummary();
-							   
 							}
-						
 						?>
 					</div>
 			</div>
@@ -86,7 +82,7 @@
 				<?php 
 					if(function_exists('wpsc_right_now')) {
 						echo wpsc_right_now();
-				    }
+					}
 			   	
 			   		?> 
 			   	</div><br />
@@ -265,6 +261,7 @@
 				<?php
 			}
     }
+    
     function wpsc_ordersummary(){
     ?>
     	<div class='postbox'> 
@@ -292,9 +289,7 @@
        echo nzshpcrt_currency_display(admin_display_total_price(),1);
        ?>
       </p>
-      </div>
-      
-      
+      </div> 
      
       <div class='order_summary_subsection'>
       <strong><?php echo TXT_WPSC_RSS_FEED_HEADER; ?></strong>
