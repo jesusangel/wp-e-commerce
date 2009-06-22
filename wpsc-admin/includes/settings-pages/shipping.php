@@ -43,13 +43,13 @@ function selectgateway() {
 		wpsc_settings_page_update_notification(); ?>
 			<?php if (IS_WP27) { ?>
 				<div class='postbox'>
-					<h3 class='hndle'><?=TXT_WPSC_OPTIONS_GENERAL_HEADER?></h3>
+					<h3 class='hndle'><?php echo TXT_WPSC_OPTIONS_GENERAL_HEADER; ?></h3>
 					<div class='inside'>
 			
 			<?php } else { ?>
 			<div class="categorisation_title">
 				<strong class="form_group">
-				    <?=TXT_WPSC_OPTIONS_GENERAL_HEADER?>
+				    <?php echo TXT_WPSC_OPTIONS_GENERAL_HEADER; ?>
 				</strong>
 				<br class="clear"/>
 			</div>

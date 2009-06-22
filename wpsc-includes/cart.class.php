@@ -85,7 +85,12 @@ function wpsc_cart_tax() {
 */
 function wpsc_uses_shipping() {
 	global $wpsc_cart;
-	return $wpsc_cart->uses_shipping();
+	if(count(get_option('custom_shipping_options')) > 0) {
+		$status = $wpsc_cart->uses_shipping();
+	} else {
+	  $status = false;
+	}
+	return $status;
 }
   
 /**

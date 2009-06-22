@@ -66,7 +66,7 @@ if(wpsc_cart_item_count() > 0) :
 	</table>
 	<?php  //this HTML dispalys the calculate your order HTML	?>
 	
-	<?php if(wpsc_uses_shipping()) : ?>
+	<?php if(wpsc_cart_has_shipping()) : ?>
 		<h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>
 		<table class="productcart">
 			<tr>
