@@ -164,7 +164,7 @@ $image_height = get_option('single_view_image_height');
 					
 					
 					<!-- END OF QUANTITY OPTION -->
-					<?php if(get_option('addtocart_or_buynow') !='1') : ?>
+					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : ?>
 						<?php if(wpsc_product_has_stock()) : ?>
 							<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 							<div class='wpsc_loading_animation'>
@@ -178,7 +178,7 @@ $image_height = get_option('single_view_image_height');
 					<?php endif ; ?>
 					</form>
 					
-					<?php if(get_option('addtocart_or_buynow')=='1') : ?>
+					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow')=='1')) : ?>
 						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>
 					<?php endif ; ?>
 					
@@ -186,8 +186,7 @@ $image_height = get_option('single_view_image_height');
 						
 						
 					<?php
-						if(function_exists('gold_shpcrt_display_gallery')) :
-					
+						if(function_exists('gold_shpcrt_display_gallery')) :					
 							echo gold_shpcrt_display_gallery(wpsc_the_product_id());
 						endif;
 					?>

@@ -43,6 +43,187 @@ global $wpdb;
 		<?php 
 		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 		wpsc_settings_page_update_notification(); ?>
+		
+		
+		<h3 class="form_group"><?php echo TXT_WPSC_BUTTON_SETTINGS;?></h3>
+		
+		<table class='wpsc_options form-table'>		
+			<tr>
+			<th scope="row"><?php echo TXT_WPSC_BUTTONTYPE;?>:</th>
+			<td>
+			<?php
+				$addtocart_or_buynow = get_option('addtocart_or_buynow');
+				$addtocart_or_buynow1 = "";
+				$addtocart_or_buynow2 = "";
+				switch($addtocart_or_buynow) {
+					case 0:
+					$addtocart_or_buynow1 = "checked ='checked'";
+					break;
+					
+					case 1:
+					$addtocart_or_buynow2 = "checked ='checked'";
+					break;
+				}
+		
+			?>
+				<input type='radio' value='0' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow1' <?php echo $addtocart_or_buynow1; ?> /> 
+				<label for='addtocart_or_buynow1'><?php echo TXT_WPSC_ADDTOCART;?></label> &nbsp;
+				<input type='radio' value='1' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow2' <?php echo $addtocart_or_buynow2; ?> /> 
+				<label for='addtocart_or_buynow2'><?php echo TXT_WPSC_BUYNOW;?></label>
+			</td>
+		</tr>
+		
+		<tr>      
+			<th scope="row"><?php echo TXT_WPSC_HIDEADDTOCARTBUTTON;?>:	</th>
+			<td>
+			<?php
+				$hide_addtocart_button = get_option('hide_addtocart_button');
+				$hide_addtocart_button1 = "";
+				$hide_addtocart_button2 = "";
+				switch($hide_addtocart_button) {
+					case 0:
+					$hide_addtocart_button2 = "checked ='checked'";
+					break;
+					
+					case 1:
+					$hide_addtocart_button1 = "checked ='checked'";
+					break;
+				}
+			?>
+				<input type='radio' value='1' name='wpsc_options[hide_addtocart_button]' id='hide_addtocart_button1' <?php echo $hide_addtocart_button1; ?> /> 				<label for='hide_addtocart_button1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[hide_addtocart_button]' id='hide_addtocart_button2' <?php echo $hide_addtocart_button2; ?> /> 				<label for='hide_addtocart_button2'><?php echo TXT_WPSC_NO;?></label>
+			</td>
+		</tr>
+		</table>
+		
+		
+		
+		
+		<h3 class="form_group"><?php echo TXT_WPSC_PRODUCT_DISPLAY_SETTINGS;?></h3>
+		
+		<table class='wpsc_options form-table'>		
+					
+			<tr>
+				<th scope="row"><?php echo TXT_WPSC_SHOWPRODUCTRATINGS;?>:</th>
+				<td>
+				<?php
+				$display_pnp = get_option('product_ratings');
+				$product_ratings1 = "";
+				$product_ratings2 = "";
+				switch($display_pnp) {
+					case 0:
+					$product_ratings2 = "checked ='checked'";
+					break;
+					
+					case 1:
+					$product_ratings1 = "checked ='checked'";
+					break;
+				}
+	
+				?>
+				<input type='radio' value='1' name='wpsc_options[product_ratings]' id='product_ratings1' <?php echo $product_ratings1; ?> /> <label for='product_ratings1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[product_ratings]' id='product_ratings2' <?php echo $product_ratings2; ?> /> <label for='product_ratings2'><?php echo TXT_WPSC_NO;?></label>
+				</td>
+			</tr>
+		
+			<tr>
+				<th scope="row">
+				<?php echo TXT_WPSC_DISPLAY_FANCY_NOTIFICATIONS;?>:
+				</th>
+				<td>
+				<?php
+				$fancy_notifications = get_option('fancy_notifications');
+				$fancy_notifications1 = "";
+				$fancy_notifications2 = "";
+				switch($fancy_notifications)
+					{
+					case 0:
+					$fancy_notifications2 = "checked ='checked'";
+					break;
+					
+					case 1:
+					$fancy_notifications1 = "checked ='checked'";
+					break;
+					}
+				?>
+				<input type='radio' value='1' name='wpsc_options[fancy_notifications]' id='fancy_notifications1' <?php echo $fancy_notifications1; ?> /> <label for='fancy_notifications1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[fancy_notifications]' id='fancy_notifications2' <?php echo $fancy_notifications2; ?> /> <label for='fancy_notifications2'><?php echo TXT_WPSC_NO;?></label>
+				</td>
+			</tr>  
+		
+					
+			<tr>
+				<th scope="row"><?php echo TXT_WPSC_SHOWPOSTAGEANDPACKAGING;?>:</th>
+				<td>
+				<?php
+				$display_pnp = get_option('display_pnp');
+				$display_pnp1 = "";
+				$display_pnp2 = "";
+				switch($display_pnp) {                                                                           
+					case 0:
+					$display_pnp2 = "checked ='checked'";
+					break;
+					
+					case 1:
+					$display_pnp1 = "checked ='checked'";
+					break;
+				}
+	
+				?>
+				<input type='radio' value='1' name='wpsc_options[display_pnp]' id='display_pnp1' <?php echo $display_pnp1; ?> /> <label for='display_pnp1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[display_pnp]' id='display_pnp2' <?php echo $display_pnp2; ?> /> <label for='display_pnp2'><?php echo TXT_WPSC_NO;?></label>
+				</td>
+			</tr>
+					
+			<tr>      
+				<th scope="row"><?php echo TXT_WPSC_HIDEADDNAMELINK;?>:	</th>
+				<td>
+				<?php
+					$hide_name_link = get_option('hide_name_link');
+					$hide_name_link1 = "";
+					$hide_name_link2 = "";
+					switch($hide_name_link) {
+						case 0:
+						$hide_name_link2 = "checked ='checked'";
+						break;
+						
+						case 1:
+						$hide_name_link1 = "checked ='checked'";
+						break;
+					}
+				?>
+					<input type='radio' value='1' name='wpsc_options[hide_name_link]' id='hide_name_link1' <?php echo $hide_name_link1; ?> /> 
+					<label for='hide_name_link1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[hide_name_link]' id='hide_name_link2' <?php echo $hide_name_link2; ?> /> 
+					<label for='hide_name_link2'><?php echo TXT_WPSC_NO;?></label>
+				</td>
+			</tr>
+		
+			<tr>
+				<th scope="row"><?php echo TXT_WPSC_MULTIPLE_ADDING_PRODUCTS;?>:</th>
+				<td>
+					<?php
+						$multi_adding = get_option('multi_add');
+						switch($multi_adding) {
+							case 1:
+							$multi_adding1 = "checked ='checked'";
+							break;
+							
+							case 0:
+							$multi_adding2 = "checked ='checked'";
+							break;
+						}
+					?>
+					<input type='radio' value='1' name='wpsc_options[multi_add]' id='multi_adding1' <?php echo $multi_adding1; ?> /> 
+					<label for='multi_adding1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[multi_add]' id='multi_adding2' <?php echo $multi_adding2; ?> /> 
+					<label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
+				</td>
+			</tr>
+		</table>
+		
+		
+		
 		<h3 class="form_group"><?php echo TXT_WPSC_PRODUCTS_PAGE_SETTINGS;?></h3>
 		<table class='wpsc_options form-table'>		
 		<tr>
@@ -217,30 +398,7 @@ global $wpdb;
 					</select>
 				</td>
 			</tr>
-			
-			<tr>
-				<th scope="row"><?php echo TXT_WPSC_SHOWPOSTAGEANDPACKAGING;?>:</th>
-				<td>
-				<?php
-				$display_pnp = get_option('display_pnp');
-				$display_pnp1 = "";
-				$display_pnp2 = "";
-				switch($display_pnp) {
-					case 0:
-					$display_pnp2 = "checked ='checked'";
-					break;
-					
-					case 1:
-					$display_pnp1 = "checked ='checked'";
-					break;
-				}
-	
-				?>
-				<input type='radio' value='1' name='wpsc_options[display_pnp]' id='display_pnp1' <?php echo $display_pnp1; ?> /> <label for='display_pnp1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[display_pnp]' id='display_pnp2' <?php echo $display_pnp2; ?> /> <label for='display_pnp2'><?php echo TXT_WPSC_NO;?></label>
-				</td>
-			</tr>
-				
+
 			<tr>
 				<th scope="row"><?php echo TXT_WPSC_SHOW_BREADCRUMBS;?>:</th>
 				<td>
@@ -263,30 +421,7 @@ global $wpdb;
 				<input type='radio' value='0' name='wpsc_options[show_breadcrumbs]' id='show_breadcrumbs2' <?php echo $show_breadcrumbs2; ?> /> <label for='show_breadcrumbs2'><?php echo TXT_WPSC_NO;?></label>
 				</td>
 			</tr>							
-				
-			<tr>
-				<th scope="row"><?php echo TXT_WPSC_SHOWPRODUCTRATINGS;?>:</th>
-				<td>
-				<?php
-				$display_pnp = get_option('product_ratings');
-				$product_ratings1 = "";
-				$product_ratings2 = "";
-				switch($display_pnp) {
-					case 0:
-					$product_ratings2 = "checked ='checked'";
-					break;
-					
-					case 1:
-					$product_ratings1 = "checked ='checked'";
-					break;
-				}
 	
-				?>
-				<input type='radio' value='1' name='wpsc_options[product_ratings]' id='product_ratings1' <?php echo $product_ratings1; ?> /> <label for='product_ratings1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[product_ratings]' id='product_ratings2' <?php echo $product_ratings2; ?> /> <label for='product_ratings2'><?php echo TXT_WPSC_NO;?></label>
-				</td>
-			</tr>
-
 	<!-- // Adrian - options for displaying number of products per category -->      
 				
 			<tr>
@@ -393,30 +528,7 @@ global $wpdb;
 		<?php
 		}
 	?>
-			<tr>
-				<th scope="row">
-				<?php echo TXT_WPSC_DISPLAY_FANCY_NOTIFICATIONS;?>:
-				</th>
-				<td>
-				<?php
-				$fancy_notifications = get_option('fancy_notifications');
-				$fancy_notifications1 = "";
-				$fancy_notifications2 = "";
-				switch($fancy_notifications)
-					{
-					case 0:
-					$fancy_notifications2 = "checked ='checked'";
-					break;
-					
-					case 1:
-					$fancy_notifications1 = "checked ='checked'";
-					break;
-					}
-				?>
-				<input type='radio' value='1' name='wpsc_options[fancy_notifications]' id='fancy_notifications1' <?php echo $fancy_notifications1; ?> /> <label for='fancy_notifications1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[fancy_notifications]' id='fancy_notifications2' <?php echo $fancy_notifications2; ?> /> <label for='fancy_notifications2'><?php echo TXT_WPSC_NO;?></label>
-				</td>
-			</tr>  
+
 	
 			<tr>
 				<th scope="row"><?php echo TXT_WPSC_REPLACE_PAGE_TITLE;?>:</th>

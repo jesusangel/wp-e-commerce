@@ -483,7 +483,7 @@ function coupon_edit_form($coupon) {
 $conditions = unserialize($coupon['condition']);
 $conditions = $conditions[0];
 	//exit('<pre>'.print_r($conditions, true).'</pre>');
-	/**/
+	
   $start_timestamp = strtotime($coupon['start']);
   $end_timestamp = strtotime($coupon['expiry']);
   $id = $coupon['id'];
@@ -790,7 +790,7 @@ function wpsc_right_now() {
 		$output .= ucfirst($product_unit);
 		$output .= "</td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=".WPSC_DIR_NAME."/wpsc-admin/display-sales-logs.php'>".$sales_count."</a>";
+		$output .= "<a href='?page=wpsc_display_sales_logs'>".$sales_count."</a>";
 		$output .= "</td>";
 		$output .= "<td class='last'>";
 		$output .= ucfirst($sales_unit);
@@ -805,9 +805,9 @@ function wpsc_right_now() {
 		$output .= ucfirst($group_unit);
 		$output .= "</td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=".WPSC_DIR_NAME."/wpsc-admin/display-sales-logs.php'>".$pending_sales."</a>";
+		$output .= "<a href='?page=wpsc_display_sales_logs'>".$pending_sales."</a>";
 		$output .= "</td>";
-		$output .= "<td class='last t waiting'>".TXT_WPSC_PENDING;
+		$output .= "<td class='last t waiting'>".TXT_WPSC_PENDING." ";
 		$output .= ucfirst($pending_sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
@@ -820,9 +820,9 @@ function wpsc_right_now() {
 		$output .= ucfirst($variation_unit);
 		$output .= "</td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=".WPSC_DIR_NAME."/wpsc-admin/display-log.php'>".$accept_sales."</a>";
+		$output .= "<a href='?page=wpsc_display_sales_logs'>".$accept_sales."</a>";
 		$output .= "</td>";
-		$output .= "<td class='last t approved'>".TXT_WPSC_CLOSED;
+		$output .= "<td class='last t approved'>".TXT_WPSC_CLOSED." ";
 		$output .= ucfirst($accept_sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
@@ -830,7 +830,7 @@ function wpsc_right_now() {
 		$output .= "</table>";
 		$output .= "</div>";
 		$output .= "<div class='versions'>";
-		$output .= "<p><a class='button rbutton' href='admin.php?page=wpsc-edit-products><strong>".TXT_WPSC_ADD_NEW_PRODUCT."</strong></a>".TXT_WPSC_HERE_YOU_CAN_ADD."</p>";
+		$output .= "<p><a class='button rbutton' href='admin.php?page=wpsc-edit-products'><strong>".TXT_WPSC_ADD_NEW_PRODUCT."</strong></a>".TXT_WPSC_HERE_YOU_CAN_ADD."</p>";
 		$output .= "</div>";
 		$output .= "</div>";
 		$output.="</div>";

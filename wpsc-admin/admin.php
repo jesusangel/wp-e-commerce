@@ -41,7 +41,7 @@ function wpsc_admin_pages(){
      * or bypass the normal download system.
      */
     if(function_exists('add_options_page')) {
-			$base_page = WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php';
+			$base_page = 'wpsc-sales-logs';
 					
 		if ($userdata->user_level <= 2) {
 				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
@@ -64,7 +64,9 @@ function wpsc_admin_pages(){
 
 				
 
-			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, WPSC_DIR_NAME.'/wpsc-admin/display-sales-logs.php', 'wpsc_display_sales_logs');
+			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
+
+
 
 			
 			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');

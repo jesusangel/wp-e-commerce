@@ -8,12 +8,22 @@
  * @since 3.7
  */
 
-//$purchlogs = new wpsc_purchaselogs();
+ function wpsc_display_sales_logs() {
+		$subpage = $_GET['subpage'];
+		switch($subpage) {
+			case 'upgrade-purchase-logs':
+				wpsc_upgrade_purchase_logs();   
+			break;
+		
+			default:
+				wpsc_display_sales_log_index();
+			break;
+		}
+	}
 
 
- function wpsc_display_sales_logs(){
- 		//$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
- 		//$purchlogs = new wpsc_purchaselogs();
+
+ function wpsc_display_sales_log_index() {
   	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
@@ -32,8 +42,10 @@
 				);
 				register_column_headers('display-sales-list', $columns);	
 				///// start of update message section //////
-				//update_option('wpsc_purchaselogs_fixed',false);
-				$fixpage = get_option('siteurl').'/wp-admin/admin.php?page='.WPSC_FOLDER.'/wpsc-admin/purchlogs_upgrade.php';
+				
+				//$fixpage = get_option('siteurl').'/wp-admin/admin.php?page='.WPSC_FOLDER.'/wpsc-admin/purchlogs_upgrade.php';
+				
+				$fixpage = get_option('siteurl').'/wp-admin/admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs';
 			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['locked']) ) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
@@ -114,16 +126,16 @@
 			<?php
 		$page_back = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','purchaselog_id'), $_SERVER['REQUEST_URI'] );
 
-			$columns = array(
+		$columns = array(
 	  	'title' => 'Name',
-		'sku' => 'SKU',
-		'quantity' => 'Quantity',
-		'price' => 'Price',
-		'tax' => 'Tax',
-		'discount' => 'Discount',
-		'total' => 'Total'
-			);
-			register_column_headers('display-purchaselog-details', $columns); 
+			'sku' => 'SKU',
+			'quantity' => 'Quantity',
+			'price' => 'Price',
+			'tax' => 'Tax',
+			'discount' => 'Discount',
+			'total' => 'Total'
+		);
+		register_column_headers('display-purchaselog-details', $columns); 
 		?>
 			<div id='post-body' class='has-sidebar' style='width:95%;'>
 				<?php if(wpsc_has_purchlog_shipping()) { ?>
@@ -485,4 +497,9 @@ function wpsc_purchlogs_custom_fields(){
 <?php }
 
 }
- ?>
+
+
+function wpsc_upgrade_purchase_logs() {
+	include(WPSC_FILE_PATH.'/wpsc-admin/includes/purchlogs_upgrade.php');
+}
+?>

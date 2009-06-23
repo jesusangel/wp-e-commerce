@@ -1,7 +1,9 @@
 <?php
 /*
-This is a language file for the WP Shopping Cart plugin version 3.6.10
+This is a language file for the WP Shopping Cart plugin version 3.7
 */
+define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Product Settings');
+define('TXT_WPSC_BUTTON_SETTINGS', 'Button Settings');
 define('TXT_WPSC_UPDATING', 'Loading');
 define('TXT_WPSC_EDIT_GROUP', 'Edit Group');
 define('TXT_WPSC_ADD_GROUP', 'Add Group');
@@ -468,7 +470,7 @@ define('TXT_WPSC_ENGRAVE', 'Engrave text');
 define('TXT_WPSC_FREETRIAL', 'One Month Free Trial');
 define('TXT_WPSC_PROHIBITED', 'Prohibited');
 define('TXT_WPSC_ADMINNOTES', 'Merchant Notes');
-define('TXT_WPSC_HIDEADDNAMELINK', 'Hide Product Name Links');
+define('TXT_WPSC_HIDEADDNAMELINK', 'Disable link in Title');
 define('TXT_WPSC_ADMINMENU', 'Admin Menu');
 define('TXT_WPSC_USEONLYEXTERNALLINK', 'If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.');
 define('TXT_WPSC_EXTERNALLINK', 'External Link');
