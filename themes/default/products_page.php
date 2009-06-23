@@ -72,7 +72,6 @@ global $wpsc_query, $wpdb;
 					
 					<div class='wpsc_description'><?php echo wpsc_the_product_description(); ?></div>
 					
-					
 					<?php if(wpsc_the_product_additional_description()) : ?>
 					<div class='additional_description_span'>
 						<a href='<?php echo wpsc_the_product_permalink(); ?>' class='additional_description_link'>
@@ -99,6 +98,7 @@ global $wpsc_query, $wpdb;
 								}
 							?>
 						</span>
+						
 						<br />
 					</div>
 					<?php endif; ?>

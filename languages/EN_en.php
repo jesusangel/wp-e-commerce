@@ -19,6 +19,7 @@ define('TXT_WPSC_EMAIL_BUYER', 'Resend Receipt to Buyer');
 
 define('TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG','Display Product Template Tag');
 define('TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE','Display Product Shortcode');
+define('TXT_WPSC_PRODUCT_SKU','Display Product SKU');
 
 
 define('TXT_WPSC_CATEGORY_TARGETMARKET','Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above.');

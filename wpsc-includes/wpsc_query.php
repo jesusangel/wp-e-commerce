@@ -7,6 +7,13 @@
  * this is for the multi adding property, it checks to see whether multi adding is enabled;
  * 
  */
+function wpsc_product_sku($id){
+	global $wpdb;
+	$sql = 'SELECT `meta_value` FROM `'.WPSC_TABLE_PRODUCTMETA.'` WHERE `product_id`='.$id.' AND `meta_key`="sku"';
+//	exit($sql);
+	$sku = $wpdb->get_var($sql);
+	return $sku;
+}
 function wpsc_has_multi_adding(){
 	if(get_option('multi_add') == 1){
 		return true;

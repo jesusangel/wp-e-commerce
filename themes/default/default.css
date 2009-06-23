@@ -456,7 +456,7 @@ table.list_productdisplay tr.list_view_description td div{
 }  
  
 div.wpsc_buy_button_container {
- overflow: auto;
+/*  overflow: auto; */
 }
  
 div.wpsc_loading_animation {

@@ -164,6 +164,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 							<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG; ?>: </dt><dd> &lt;?php echo wpsc_display_products('product_id=<?php echo $product_data['id'];?>'); ?&gt;</dd>
 							<dt><?php echo TXT_WPSC_BUY_NOW_PHP; ?>: </dt><dd>&lt;?php echo wpsc_buy_now_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
 							<dt><?php echo TXT_WPSC_ADD_TO_CART_PHP; ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+							<dt><?php echo TXT_WPSC_PRODUCT_SKU; ?>: </dt><dd>&lt;?php echo wpsc_product_sku(<?php echo $product_data['id'];?>); ?&gt;</dd>
 						</dl>
 	
 						<p>
