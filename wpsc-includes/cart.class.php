@@ -240,6 +240,13 @@ function wpsc_google_checkout(){
 		}
 	}
 }
+function wpsc_empty_google_logs(){
+	global $wpdb;
+	$sql="DELETE FROM  `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`=".$_SESSION['wpsc_sessionid'];
+	$wpdb->query($sql);
+	unset($_SESSION['wpsc_sessionid']);
+	
+}
 /**
 * have shipping methods function, no parameters
 * @return boolean
@@ -768,6 +775,11 @@ class wpsc_cart {
 	 * No parameters, nothing returned
 	*/
   function empty_cart() {
+  		if(isset($_SESSION['wpsc_sessionid']) && !isset($_GET['gateway'])){
+  		//	exit('google triggered');
+  			wpsc_empty_google_logs();
+  		}
+  	
 		$this->cart_items = array();
 		$this->cart_item = null;
 		$this->cart_item_count = 0;

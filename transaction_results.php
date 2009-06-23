@@ -4,6 +4,7 @@ global $wpdb, $user_ID;
 $sessionid = $_GET['sessionid'];
 if($_GET['gateway'] == 'google'){
 	wpsc_google_checkout_submit();
+	unset($_SESSION['wpsc_sessionid']);
 }
 if(get_option('payment_gateway') == 'paypal_certified'){
 	$sessionid = $_SESSION['paypalexpresssessionid'];

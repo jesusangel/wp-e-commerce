@@ -520,8 +520,11 @@ function submit_paypal_certified()
     {
     update_option('paypal_certified_apisign', $_POST['paypal_certified_apisign']);
     }
+
   if($_POST['paypal_certified_server_type'] != null) {
+  	
   	update_option('paypal_certified_server_type', $_POST['paypal_certified_server_type']);
+  	    //exit(get_option('paypal_certified_server_type').'<pre>'.print_r($_POST, true).'</pre>');
   } 
   foreach((array)$_POST['paypal_form'] as $form => $value) {
     update_option(('paypal_form_'.$form), $value);
@@ -713,6 +716,7 @@ $output .= "
 	' For the live site, the URL is        https://www.paypal.com/webscr&cmd=_express-checkout&token=
 	*/
 	//$SandboxFlag = true;
+	//exit(get_option('paypal_certified_server_type'));
   	if (get_option('paypal_certified_server_type') == 'sandbox'){
 		$SandboxFlag=true;
 	} elseif(get_option('paypal_certified_server_type') == 'production') {

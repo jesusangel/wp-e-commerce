@@ -44,11 +44,20 @@ function gateway_google(){
 		$total = $wpsc_cart->calculate_total_price();
 	//	exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
 		if($total > 0 ){
-			$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `totalprice` = ".$total.", `statusno` = '0',`user_ID`=".(int)$user_ID.", `date`=UNIX_TIMESTAMP(), `gateway`='google', `billing_country`='".$wpsc_cart->delivery_country."', `shipping_country`='".$wpsc_cart->selected_country."', `base_shipping`= '".$base_shipping."', `shipping_method`='".$wpsc_cart->selected_shipping_method."', `shipping_option`= '".$wpsc_cart->selected_shipping_option."', `plugin_version`= '".WPSC_VERSION."' , `discount_value` = '".$wpsc_cart->coupons_amount."', `discount_data`='".$wpsc_cart->coupons_name."' WHERE `sessionid`=".$_SESSION['wpsc_sessionid']."";
-			if(! $wpdb->query($sql)){
-				$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '".$_SESSION['wpsc_sessionid']."', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '".$wpsc_cart->selected_shipping_method."', '".$wpsc_cart->selected_shipping_option."', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";
+			$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `totalprice` = ".$total.", `statusno` = '0',`user_ID`=".(int)$user_ID.", `date`= UNIX_TIMESTAMP() , `gateway`='google', `billing_country`='".$wpsc_cart->delivery_country."', shipping_country='".$wpsc_cart->selected_country."', `base_shipping`= '".$base_shipping."', shipping_method = '".$wpsc_cart->selected_shipping_method."', shipping_option= '".$wpsc_cart->selected_shipping_option."', `plugin_version`= '".WPSC_VERSION."' , `discount_value` = '".$wpsc_cart->coupons_amount."', `discount_data`='".$wpsc_cart->coupons_name."' WHERE `sessionid`=".$_SESSION['wpsc_sessionid']."";
+		//	exit($sql);
+			$update = $wpdb->query($sql);
+			$sql = "SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE sessionid=".$_SESSION['wpsc_sessionid'];
+			$purchase_log_id = $wpdb->get_var($sql);
+			$sql = "DELETE FROM  `".WPSC_TABLE_CART_CONTENTS."` WHERE purchaseid = ".$purchase_log_id;
+			$wpdb->query($sql);
+			$wpsc_cart->save_to_db($purchase_log_id);
+			if(! $update){
+				$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '".$_SESSION['wpsc_sessionid']."', '".(int)$user_ID."', UNIX_TIMESTAMP(), 'google', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '".$wpsc_cart->selected_shipping_method."', '".$wpsc_cart->selected_shipping_option."', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";
 				$wpdb->query($sql);
-				//exit($sql);
+				$sql = "SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE sessionid=".$_SESSION['wpsc_sessionid'];
+				$purchase_log_id = $wpdb->get_var($sql);
+				$wpsc_cart->save_to_db($purchase_log_id);
 			}	
 			
 			if(get_option('permalink_structure') != '') {
@@ -169,7 +178,7 @@ function gateway_google(){
 		}
 	// Display Google Checkout button
 	 //exit('<pre>'.print_r($_SESSION, true).'</pre>');
-	 unset($_SESSION['wpsc_sessionid']);
+	 //unset($_SESSION['wpsc_sessionid']);
 	echo $cart->CheckoutButtonCode($google_button_size);
 }
 
