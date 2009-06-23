@@ -27,9 +27,14 @@ function wpsc_cart_item_count() {
 * coupon amount function, no parameters
 * * @return integer the item count
 */
-function wpsc_coupon_amount() {
+function wpsc_coupon_amount($forDisplay=true) {
 	global $wpsc_cart;
-	return $wpsc_cart->process_as_currency($wpsc_cart->coupons_amount);
+	if($forDisplay == true) {
+	  $output = $wpsc_cart->process_as_currency($wpsc_cart->coupons_amount);
+	} else {
+		$output = $wpsc_cart->coupons_amount;
+	}
+	return $output;
 }
 /**
 * cart total function, no parameters
@@ -628,7 +633,7 @@ class wpsc_cart {
   function set_item($product_id, $parameters, $updater = false) {
     // default action is adding
     
-    if($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true) {
+    if(($parameters['quantity'] > 0) && ($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true)) {
 			$new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
 			
 			$add_item = true;

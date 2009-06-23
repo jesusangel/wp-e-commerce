@@ -56,10 +56,17 @@ function wpsc_add_to_cart() {
 	}else{
 		$state = $wpsc_cart->set_item($product_id,$parameters, true); 	
 	}
+	
+	if($state == false) {
+	  if($parameters['quantity'] <= 0) {
+	    $reason = 'zero_quantity_requested';
+	  }
+	}
+	
   if($_GET['ajax'] == 'true') {
 		if(($product_id != null) &&(get_option('fancy_notifications') == 1)) {
 			echo "if(jQuery('#fancy_notification_content')) {\n\r";
-			echo "  jQuery('#fancy_notification_content').html(\"".str_replace(Array("\n","\r") , Array('\n','\r'),addslashes(fancy_notification_content($product_id, (!$state)))). "\");\n\r";
+			echo "  jQuery('#fancy_notification_content').html(\"".str_replace(Array("\n","\r") , Array('\n','\r'),addslashes(fancy_notification_content($product_id, $state, $reason))). "\");\n\r";
 			echo "  jQuery('#loading_animation').css('display', 'none');\n\r";
 			echo "  jQuery('#fancy_notification_content').css('display', 'block');\n\r";
 			echo "}\n\r";

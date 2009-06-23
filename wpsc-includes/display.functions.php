@@ -159,19 +159,26 @@ function fancy_notifications() {
   return $output;
 }
 
-function fancy_notification_content($product_id, $quantity_limit = false) {
+function fancy_notification_content($product_id, $success_state = true, $reason = null) {
   global $wpdb;
   $siteurl = get_option('siteurl');
   $instock = true;
   if(is_numeric($product_id)) {
     $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1";
     $product = $wpdb->get_row($sql,ARRAY_A);
-    //if($product['quantity_limited'] == 1) { }
     $output = "";
-    if($quantity_limit == false) {
+    if($success_state == true) {
       $output .= "<span>".str_replace("[product_name]", stripslashes($product['name']), TXT_WPSC_YOU_JUST_ADDED)."</span>";
 		} else {
-			$output .= "<span>".str_replace("[product_name]", $product['name'], TXT_WPSC_SORRY_NONE_LEFT)."</span>";
+		  switch($reason) {
+		    case "zero_quantity_requested":
+					$output .= "<span>".str_replace("[product_name]", $product['name'], TXT_WPSC_ZERO_QUANTITY_REQUESTED)."</span>";
+		    break;
+		  
+				default:
+					$output .= "<span>".str_replace("[product_name]", $product['name'], TXT_WPSC_SORRY_NONE_LEFT)."</span>";
+				break;
+		  }			
 		}
     $output .= "<a href='".get_option('shopping_cart_url')."' class='go_to_checkout'>".TXT_WPSC_GOTOCHECKOUT."</a>";
     $output .= "<a href='#' onclick='jQuery(\"#fancy_notification\").css(\"display\", \"none\"); return false;' class='continue_shopping'>".TXT_WPSC_CONTINUE_SHOPPING."</a>";
