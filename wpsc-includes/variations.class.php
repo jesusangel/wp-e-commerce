@@ -358,7 +358,7 @@ class nzshpcrt_variations {
 		
 		$variation_sets = array();
 		$i = 0;
-		foreach($associated_variation_values as $associated_variation_value_set) {
+		foreach((array)$associated_variation_values as $associated_variation_value_set) {
 		  foreach($variations as $variation) {
 		    $value_id = $associated_variation_value_set["id_$variation"];
 		    $name_id = $associated_variation_value_set["name_$variation"];

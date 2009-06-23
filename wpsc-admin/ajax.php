@@ -184,14 +184,11 @@ function wpsc_duplicate_product() {
 		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
 		
 		//Inserting duplicated category record.
-		$category_assoc = $wpdb->get_col("SELECT category_id FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id = '".$product_id."'");
-		$new_product_category = "";
+		$category_assoc = $wpdb->get_col("SELECT `category_id` FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id = '".$product_id."'");
+		$new_product_category = array();
 		if (count($category_assoc) > 0) {
 			foreach($category_assoc as $key => $category) {
-				$new_product_category .= "('".$new_id."','".$category."')";
-				if (count($category_assoc) != $key+1) {
-					$new_product_category .= ",";
-				}
+				$new_product_category[] = "('".$new_id."','".$category."')";
 				
 				$check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `order` IN('0') LIMIT 1;",ARRAY_A);
 				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1")) {
@@ -203,30 +200,39 @@ function wpsc_duplicate_product() {
 					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$category') AND `product_id` NOT IN('$product_id') AND `order` < '0'");
 				}
 			}
-			$sql = "INSERT INTO ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." (product_id, category_id) VALUES ".$new_product_category;
-			$wpdb->query($sql);
+			$wpdb->query("INSERT INTO ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." (product_id, category_id) VALUES ".implode(",",$new_product_category));
 		}
 	
 		
 	
 	
 		//Inserting duplicated meta info
-		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id='".$product_id."'", ARRAY_A);
-		$new_meta_value = '';
-		if (count($meta_values)>0){
+		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id='".$product_id."' AND  `meta_key` NOT IN ('url_name') ", ARRAY_A);
+		$new_meta_value = array();
+		if (count($meta_values)>0) {
 			foreach($meta_values as $key => $meta) {
-				$new_meta_value .= "('".$new_id."','".$meta['meta_key']."','".$meta['meta_value']."','".$meta['custom']."')";
-			
-				if (count($meta_values) != $key+1) {
-					$new_meta_value .= ",";
-				}
+				$new_meta_value[] = "('".$new_id."','".$meta['meta_key']."','".$meta['meta_value']."','".$meta['custom']."')";
 			}
-			$sql = "INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".$new_meta_value;
-			$wpdb->query($sql);
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".implode(",",$new_meta_value));
 		}
 		
 		
+	
+		$product_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$new_id' LIMIT 1");
+		if($product_name != '') {
+			$tidied_name = strtolower(trim($product_name));
+			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
+			$extension_number = '';
+			if($similar_names['count'] > 0) {
+				$extension_number = (int)$similar_names['max_number']+1;
+			}
+			$url_name .= $extension_number;
+			add_product_meta($new_id, 'url_name', $url_name,true);
+		}
 		
+		
+		            
 		//Inserting duplicated image info
 		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='".$product_id."'", ARRAY_A);
 		$new_image_value = array();
