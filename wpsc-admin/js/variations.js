@@ -71,34 +71,34 @@ function variation_value_list(id, parent_element) {
  		jQuery("div.variation_values_box",parent_element).css('display','block');
 		active_checkboxes = jQuery.makeArray(jQuery("div.variation_values_box input[checked]",parent_element));
 		if(active_checkboxes.length < 1) {
-			jQuery("div.variation_values_box input[@type='checkbox']",parent_element).attr('checked', 'true');
+			jQuery("div.variation_values_box input[type='checkbox']",parent_element).attr('checked', 'true');
 		}
  	} else {
  		jQuery("div.variation_values_box",parent_element).css('display','none');
-		jQuery("div.variation_values_box input[@type='checkbox']",parent_element).attr('checked', 'false');
+		jQuery("div.variation_values_box input[type='checkbox']",parent_element).attr('checked', 'false');
  	}
 	
-	selected_price = jQuery("input[@name='price']",jQuery(parent_element).parents('form')).val();
+	selected_price = jQuery("input[name='price']",jQuery(parent_element).parents('form')).val();
 	limited_stock = jQuery("input.limited_stock_checkbox",jQuery(parent_element).parents('form')).attr('checked');
 	
-	//current_variations = jQuery("label.variation_checkbox"+id+" input[@type='hidden'], label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
+	//current_variations = jQuery("label.variation_checkbox"+id+" input[type='hidden'], label.variation_checkbox"+id+" input[type='checkbox']").serialize();
 	
 	
 	
-	unselected_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
+	unselected_variations = jQuery("label.variation_checkbox"+id+" input[type='checkbox']").serialize();
 	
-	selected_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
+	selected_variations = jQuery("label.variation_checkbox"+id+" input[type='checkbox']").serialize();
 
 	
-	//current_variations = jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").serialize();
-	jQuery("label.variation_checkbox"+id+" input[@type='checkbox']").attr("disabled", "true");
+	//current_variations = jQuery("label.variation_checkbox"+id+" input[type='checkbox']").serialize();
+	jQuery("label.variation_checkbox"+id+" input[type='checkbox']").attr("disabled", "true");
 	
 	
 	
 	post_values = "list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&limited_stock="+limited_stock+"&"+selected_variations+"";
 	
 	jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
-		jQuery("div.variation_box label input[@type='checkbox']").removeAttr("disabled", "true"); 
+		jQuery("div.variation_box label input[type='checkbox']").removeAttr("disabled", "true"); 
 		eval(returned_data);
 		jQuery("#edit_variations_container").html(edit_variation_combinations_html );
 	});
@@ -127,7 +127,7 @@ function add_variation_value_list(id) {
         }
       jQuery("#add_product_variation_details").html(variation_subvalue_html);
     }
-		jQuery("#edit_product_variations input[@type='checkbox']").each(function() {
+		jQuery("#edit_product_variations input[type='checkbox']").each(function() {
 // 		  alert(this.id);
     });
 		//ajax.post("index.php",display_list_ajaxx,"ajax=true&list_variation_values_ajaxx=true");

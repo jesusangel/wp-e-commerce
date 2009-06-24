@@ -174,8 +174,8 @@ function shopping_cart_collapser() {
   
 function set_billing_country(html_form_id, form_id){
   var billing_region = '';
-  country = jQuery(("div#"+html_form_id+" select[@class=current_country]")).val();
-  region = jQuery(("div#"+html_form_id+" select[@class=current_region]")).val();
+  country = jQuery(("div#"+html_form_id+" select[class=current_country]")).val();
+  region = jQuery(("div#"+html_form_id+" select[class=current_region]")).val();
   if(/[\d]{1,}/.test(region)) {
     billing_region = "&billing_region="+region;
 	}
