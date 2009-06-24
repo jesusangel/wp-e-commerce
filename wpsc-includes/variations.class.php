@@ -328,7 +328,7 @@ class nzshpcrt_variations {
 		
 		
 		//echo "/* ".print_r($edit_variation_values,true)." */\n\r";
-		$excluded_values = array_keys((array)$variation_values, 0);
+		//$excluded_values = array_keys((array)$variation_values, 0);
     
     
     // Need to join the wp_variation_values variation_values`table to itself multiple times with no condition for joining, resulting in every combination of values being extracted
@@ -339,6 +339,9 @@ class nzshpcrt_variations {
 			if($product_id > 0 ) {
 			  $included_values = $wpdb->get_col("SELECT `value_id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` IN('{$product_id}') AND `variation_id` IN ('{$variation}') AND `visible` IN ('1')");
 				$included_values_sql = "AND `a{$variation}`.`id` IN('".implode("','", $included_values)."')";
+			} else if(count($variation_values) > 0) {
+				$included_values_sql = "AND `a{$variation}`.`id` IN('".implode("','", $variation_values)."')";
+			
 			}
 			
       
@@ -355,6 +358,8 @@ class nzshpcrt_variations {
     //echo "/*\nSELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions} \n*/ \n";
     // Assemble and execute the SQL query
     $associated_variation_values = $wpdb->get_results("SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}", ARRAY_A);
+    
+    //echo "/*\n\r"."SELECT {$join_selected_cols} FROM {$join_tables} WHERE {$join_conditions}"."\n\r*/";
 		
 		$variation_sets = array();
 		$i = 0;
@@ -438,6 +443,10 @@ class nzshpcrt_variations {
   */
   function edit_product_values($product_id,$variation_value_list, $price = 0) {
 		global $wpdb;
+		// 		if(function_exists('xdebug_start_trace')) {
+		// 			xdebug_start_trace('/var/www/xdebug/traces/edit_product_values');
+		// 		}
+		
 		$variation_id_list = array();
 		$modified_values = array();
 		$modified_value_variations = array();
@@ -475,24 +484,6 @@ class nzshpcrt_variations {
 			}
 			
 			$all_variation_values +=  $variation_values;
-			/*
-			echo "/*\n\r";
-			echo "\nunchanged\n";
-			print_r($unchanged_values);
-			
-			echo "\nremoved\n";
-			print_r($removed_values);
-			
-			echo "\nadded\n";
-			print_r($added_values);
-			
-			echo "\nfinal_array\n";
-			print_r($variation_values);
-			echo "* /\n\r";
-			// */
-		
-		
-			//continue;
 			foreach($variation_values as $variation_value_id => $variation_state) {
 				$variation_value_id = absint($variation_value_id); 
 				$visible_state = (int)(bool)$variation_state;
@@ -502,7 +493,7 @@ class nzshpcrt_variations {
 					$rows_changed = $wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` SET `visible` = '{$visible_state}' WHERE `product_id` = '{$product_id}' AND `value_id` = '".(int)$variation_value_id."' LIMIT 1 ;");
 				} else {
 					// otherwise, add it
-					$wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` ( `product_id` , `value_id` , `quantity` , `price` , `visible` , `variation_id` ) VALUES ( '{$product_id}', '{$variation_value_id}', 0, 0, '{$visible_state}', '{$variation_id}')");
+					$wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` ( `product_id` , `value_id` , `visible` , `variation_id` ) VALUES ( '{$product_id}', '{$variation_value_id}', '{$visible_state}', '{$variation_id}')");
 				}
 				// we probably still need these to generate the combinations
 				$modified_values[] = $variation_value_id;
@@ -513,10 +504,14 @@ class nzshpcrt_variations {
 			
 		}
 		
+// 		echo "/*\n\r";
+// 		echo print_r($modified_value_variations,true);
+// 		echo "*/\n\r";
 		
 		
-		
-		
+// 		echo "/*\n\r";
+// 		echo print_r($all_variation_values,true);
+// 		echo "*/\n\r";
 		
 		/*
 		// this will spit errors if there are no variation values, so don't run if there are none
@@ -613,7 +608,8 @@ class nzshpcrt_variations {
 				}
 			}
 		
-		} */
+		} 
+		//*/
 		return $all_variation_values; 
 		exit();
 	}

@@ -531,16 +531,15 @@ function wpsc_admin_ajax() {
 	}
   
 	if(($_POST['list_variation_values'] == "true")) {
-   		// retrieve the forms for associating variations and their values with products
+   	// retrieve the forms for associating variations and their values with products
 		$variation_processor = new nzshpcrt_variations();
-		
 		
 		$variations_selected = array();
     	foreach((array)$_POST['variations'] as $variation_id => $checked) {
     		$variations_selected[] = (int)$variation_id;
     	}
 
-    	if(is_numeric($_POST['product_id'])) {
+    	if(is_numeric($_POST['product_id']) && ($_POST['product_id'] > 0)) {
       		$product_id = (int)$_POST['product_id'];
 					$selected_price = (float)$_POST['selected_price'];
       		
@@ -579,16 +578,22 @@ function wpsc_admin_ajax() {
         		if((float)$_POST['selected_price'] > 0) {
           			$selected_price = (float)$_POST['selected_price'];
         		}
-        		
 						$limited_stock = false;
         		if($_POST['limited_stock'] == 'true') {
 							$limited_stock = true;
         		}
         		
-						echo "add_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, (array)$completed_variation_values, $selected_price, $limited_stock)))."\";\n";
+        		$selected_variation_values = array();
+        		foreach($_POST['edit_var_val'] as $variation_value_array) {
+							//echo "/* ".print_r($variation_value_array,true)." */\n\r";
+        		  $selected_variation_values = array_merge(array_keys($variation_value_array), $selected_variation_values);
+        		}
+        		
+						////echo "/* ".print_r($selected_variation_values,true)." */\n\r";
+						echo "edit_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock)))."\";\n";
 
       		} else {
-        		echo "add_variation_combinations_html = \"\";\n";
+        		echo "edit_variation_combinations_html = \"\";\n";
       		}
 		}
 		exit();

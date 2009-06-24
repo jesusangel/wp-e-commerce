@@ -256,8 +256,9 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
 function wpsc_serialize_shopping_cart() {
   global $wpdb, $wpsc_start_time, $wpsc_cart;
   //@$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
-  
-  $wpsc_cart->errors = array();
+  if(is_object($wpsc_cart)) {
+		$wpsc_cart->errors = array();
+  }
   $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
   /// Delete the old claims on stock
 //   echo "/*test */";

@@ -111,6 +111,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['notax'] = (int)(bool)$post_data['notax'];
 	$post_data['donation'] = (int)(bool)$post_data['donation'];
 	$post_data['no_shipping'] = (int)(bool)$post_data['no_shipping'];
+	$post_data['edit_variation_values'] = $post_data['edit_var_val'];
 	
 	$post_data['price'] = (float)$post_data['price'];
 	$post_data['special_price'] = (float)$post_data['special_price'];
