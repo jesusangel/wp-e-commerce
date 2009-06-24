@@ -649,7 +649,7 @@ class wpsc_cart {
 						// if they are the same, increment the count, and break out;
 						if(!$updater){
 							$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
-						}else{
+						} else {
 							$this->cart_items[$key]->quantity  = $new_cart_item->quantity;
 
 						}
@@ -736,7 +736,6 @@ class wpsc_cart {
 			}
 	    if($stock > 0) {
 				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
-				echo "/*".print_r($claimed_stock,true)."*/";
 				if(($claimed_stock + $quantity) <= $stock) {
 					$output = true;
 				} else {
@@ -751,6 +750,50 @@ class wpsc_cart {
     }
     return $output;
   }
+  
+	/**
+	 * get remaining quantity method
+	 * currently only checks remaining stock, in future will do claimed stock and quantity limits
+	 * will need to return errors, then, rather than true/false, maybe use the wp_error object?
+	 * @access public
+	 *
+	 * @param integer a product ID key
+	 * @param array  variations on the product
+	 * @return boolean true on sucess, false on failure
+	*/
+  function get_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
+    global $wpdb;
+		$quantity_data = $wpdb->get_row("SELECT `quantity_limited`, `quantity`  FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('$product_id') LIMIT 1", ARRAY_A);
+		// check to see if the product uses stock
+		if($quantity_data['quantity_limited'] == 1){
+			if(count($variations) > 0) { /// if so and we have variations, select the stock for the chosen variations
+				$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variations)."')");
+				asort($variation_ids);
+				$all_variation_ids = implode(",", $variation_ids);
+				
+				$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '".(int)$product_id."' AND `value_id` IN ( '".implode("', '",$variations )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
+				
+				$variation_stock_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
+				$stock = $variation_stock_data['stock'];
+				
+			} else { /// if so and we have no variations, select the stock for the product
+			  $stock = $quantity_data['quantity'];
+			  $priceandstock_id = 0;
+			}
+			
+			
+			
+	    if($stock > 0) {
+				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
+				$output = $stock - $claimed_stock;				
+		  } else {
+				$output = 0;
+		  }
+	     
+    }
+    return $output;
+  }
+  
   
 	/**
 	 * Remove Item method 

@@ -75,7 +75,7 @@ $image_height = get_option('single_view_image_height');
             	if( function_exists('wpsc_addl_desc_show') ) {
             		echo wpsc_addl_desc_show( $addl_descriptions );
             	} else {
-            	echo $value;
+								echo $the_addl_desc;
             	}
             ?>
 						</p>
@@ -168,7 +168,7 @@ $image_height = get_option('single_view_image_height');
 						<?php if(wpsc_product_has_stock()) : ?>
 							<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 							<div class='wpsc_loading_animation'>
-								<img title="Loading" alt="Loading" src="http://apps.instinct.co.nz/2.7.1/wp-content/plugins/3.6.13/images/indicator.gif" id="loadingimage"/>
+								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" id="loadingimage"/>
 								<?php echo TXT_WPSC_UDPATING_CART; ?>
 							</div>
 							
@@ -192,7 +192,7 @@ $image_height = get_option('single_view_image_height');
 					?>
 					</div>
 		
-					<form onsubmit="submitform(this);return false;" action="http://www.instinct.co.nz/wordpress_2.6/products-page/?category=" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_extra_<?php echo wpsc_the_product_id(); ?>">
+					<form onsubmit="submitform(this);return false;" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_extra_<?php echo wpsc_the_product_id(); ?>">
 						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
 						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item"/>
 					</form>

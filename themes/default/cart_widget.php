@@ -1,5 +1,12 @@
+<?php if(count($cart_messages) > 0) { ?>
+  <p>
+	<?php foreach((array)$cart_messages as $cart_message) { ?>
+	  <span><?php echo $cart_message; ?></span><br />
+	<?php } ?>
+	</p>
+<?php } ?>
 
-<?php if(wpsc_cart_item_count() > 0) : ?>
+<?php if(wpsc_cart_item_count() > 0): ?>
   <span class='items'>
 		<span class='numberitems'>
 			<?php echo TXT_WPSC_NUMBEROFITEMS; ?>:

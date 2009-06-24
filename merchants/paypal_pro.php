@@ -160,7 +160,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '5' WHERE `sessionid`=".$sessionid;
 		$wpdb->query($sql);
 		$transact_url = get_option('checkout_url');
-		$_SESSION['WpscGatewayErrorMessage'] = __('Sorry your transaction did not go through to Paypal successfully, please try again.');
+		$_SESSION['wpsc_checkout_misc_error_messages'][] = __('Sorry your transaction did not go through to Paypal successfully, please try again.');
 		header("Location: ".$transact_url);
 	}
 	//exit('<pre>'.print_r($response, true).'</pre>');

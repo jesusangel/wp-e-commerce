@@ -34,7 +34,7 @@ function wpsc_add_to_cart() {
   }
   if($_POST['quantity'] > 0 && (!isset($_POST['wpsc_quantity_update']))) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
-  }elseif(isset($_POST['wpsc_quantity_update'])){
+  }else if(isset($_POST['wpsc_quantity_update'])){
   		//exit('<pre>'.print_r($wpsc_cart, true).'</pre>IM HERE');
 		 $wpsc_cart->remove_item($_POST['key']);
   		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
@@ -51,25 +51,30 @@ function wpsc_add_to_cart() {
 	}
   
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
-  	if(!isset($_POST['wpsc_quantity_update'])){
-		$state = $wpsc_cart->set_item($product_id,$parameters); 
-	}else{
-		$state = $wpsc_cart->set_item($product_id,$parameters, true); 	
-	}
+	$state = $wpsc_cart->set_item($product_id,$parameters); 
 	
-	if($state == false) {
+	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
+  
+  if($state == true) {
+		$cart_messages[] = str_replace("[product_name]", stripslashes($product['name']), TXT_WPSC_YOU_JUST_ADDED);
+	} else {
 	  if($parameters['quantity'] <= 0) {
-	    $reason = 'zero_quantity_requested';
+	    $cart_messages[] = TXT_WPSC_ZERO_QUANTITY_REQUESTED;
+	  } else if($wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']) > 0) {
+			$cart_messages[] = str_replace("[number]", $wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']), TXT_WPSC_INSUFFICIENT_REMAINING);
+	  } else {
+	    $cart_messages[] = str_replace("[product_name]", $product['name'], TXT_WPSC_SORRY_NONE_LEFT);
 	  }
 	}
 	
   if($_GET['ajax'] == 'true') {
 		if(($product_id != null) &&(get_option('fancy_notifications') == 1)) {
 			echo "if(jQuery('#fancy_notification_content')) {\n\r";
-			echo "  jQuery('#fancy_notification_content').html(\"".str_replace(Array("\n","\r") , Array('\n','\r'),addslashes(fancy_notification_content($product_id, $state, $reason))). "\");\n\r";
+			echo "  jQuery('#fancy_notification_content').html(\"".str_replace(array("\n","\r") , array('\n','\r'), addslashes(fancy_notification_content($cart_messages))). "\");\n\r";
 			echo "  jQuery('#loading_animation').css('display', 'none');\n\r";
 			echo "  jQuery('#fancy_notification_content').css('display', 'block');\n\r";
 			echo "}\n\r";
+			$error_messages = array();
 		}
 		ob_start();
 		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
@@ -164,20 +169,20 @@ function wpsc_coupon_price($currCoupon = '') {
 	  $_SESSION['coupon_numbers'] = $coupon;
 	  $wpsc_coupons = new wpsc_coupons($coupon);
 	  
-	  if($wpsc_coupons->validate_coupon()){
+	  if ($wpsc_coupons->validate_coupon()){
 	  	$discountAmount = $wpsc_coupons->calculate_discount();
 	  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
 	  	$wpsc_coupons->errormsg = false;
-	  }else{
+	  } else {
 	  	$wpsc_coupons->errormsg = true;
 	  	$wpsc_cart->coupons_amount = 0;
 	  	$wpsc_cart->coupons_name = '';
 	  }
 
-  }elseif($_POST['coupon_num'] == '' && $currCoupon == ''){
+  } else if ($_POST['coupon_num'] == '' && $currCoupon == ''){
    		$wpsc_cart->coupons_amount = 0;
   		$wpsc_cart->coupons_name = '';
-  }elseif($currCoupon != ''){
+  } else if ($currCoupon != '') {
   	  $coupon = $wpdb->escape($currCoupon);
 	  $_SESSION['coupon_numbers'] = $coupon;
 	  $wpsc_coupons = new wpsc_coupons($coupon);
