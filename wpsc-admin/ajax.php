@@ -21,7 +21,6 @@ function wpsc_ajax_load_product() {
 	add_action('admin_init', 'wpsc_ajax_load_product');
 }
 
-
 function wpsc_crop_thumb() {
 	global $wpdb;
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -1256,34 +1255,6 @@ if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
 
 
 
-
-//other actions are here
-if($_GET['display_invoice']=='true') {
-  add_action('admin_init', 'wpsc_display_invoice', 0);
-}
-
-
-
-add_action('init','wpsc_swfupload_images');
-
- if($_REQUEST['wpsc_admin_action'] == 'edit_product') {
-	add_action('admin_init', 'wpsc_admin_submit_product');
-}
- 
-
-if($_GET['action'] == "purchase_log") {
-	add_action('admin_init', 'wpsc_admin_sale_rss');
-}
-
-
-if($_GET['purchase_log_csv'] == "true") {
-	add_action('admin_init', 'wpsc_purchase_log_csv');
-}
-
-if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
-	add_action('admin_init', 'wpsc_admin_ajax');
-}
-
 /*
  *Submit Options from Settings Pages, 
  *takes an array of options checks to see whether it is empty or the same as the exisiting values 
@@ -1652,4 +1623,69 @@ function wpsc_settings_page_ajax(){
 if($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') {
 	add_action('admin_init', 'wpsc_settings_page_ajax');
 }
+
+
+
+ 
+ 
+function wpsc_delete_variation_set() {
+  global $wpdb;
+  check_admin_referer('delete-variation');
+  
+	if(is_numeric($_GET['deleteid'])){
+	  $deleteid = absint($_GET['deleteid']);
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `variation_id` = '{$deleteid}'");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `variation_id` = '{$deleteid}'");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` = '{$deleteid}';");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='{$deleteid}' LIMIT 1");
+		$deleted = 1;
+	}
+	
+	$sendback = wp_get_referer();
+	if ( isset($deleted) ) {
+		$sendback = add_query_arg('deleted', $deleted, $sendback);
+	}
+	wp_redirect($sendback);	
+	exit();
+}
+ 
+ 
+
+//other actions are here
+if($_GET['display_invoice']=='true') {
+  add_action('admin_init', 'wpsc_display_invoice', 0);
+}
+
+
+
+add_action('init','wpsc_swfupload_images');
+
+ if($_REQUEST['wpsc_admin_action'] == 'edit_product') {
+	add_action('admin_init', 'wpsc_admin_submit_product');
+}
+ 
+
+if($_GET['action'] == "purchase_log") {
+	add_action('admin_init', 'wpsc_admin_sale_rss');
+}
+
+
+if($_GET['purchase_log_csv'] == "true") {
+	add_action('admin_init', 'wpsc_purchase_log_csv');
+}
+
+if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
+	add_action('admin_init', 'wpsc_admin_ajax');
+}
+
+  // Variation set deleting init code starts here
+ if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set') {
+	add_action('admin_init', 'wpsc_delete_variation_set');
+}
+
+ // Variation set adding init code starts here
+ if($_REQUEST['wpsc_admin_action'] == 'wpsc-variation-set') {
+	add_action('admin_init', 'wpsc_save_variation_set');
+}
+
 ?>

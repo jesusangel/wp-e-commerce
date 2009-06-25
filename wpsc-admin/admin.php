@@ -15,6 +15,7 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/display-groups.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-variations.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/includes/save-data.functions.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax.php");
 
@@ -74,8 +75,8 @@ function wpsc_admin_pages(){
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
 			//print_r($page_hooks);
 			
-			add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
-			//    $page_hooks[] = add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
+			//    add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
 			
 			
 			

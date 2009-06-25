@@ -2,32 +2,7 @@
 
 jQuery(document).ready( function () {
   //this makes the additional description textarea into a jWysiwyg field
-/*
-  jQuery('#enableWysiwyg').livequery(function(){
-  	jQuery(this).click(function (event){
-  		 jQuery('#additional_description').wysiwyg();
-  		 event.preventDefault();
-  	});
-  
-  });
-  jQuery('#disableWysiwyg').livequery(function(){
-  	jQuery(this).click(function (event){
-//		var x= document.getElementById("wysiwygBODY");
-//  		html =	jQuery('#additional_descriptionIFrame body').html();
-		//var x = document.getElementById("additional_descriptionIFrame").innerHTML();
-		var x = document.getElementById('additional_descriptionIFrame').contentDocument;
-		x = x.childNodes[0].nodeValue;
-  		alert(x);
-  		 jQuery('div.wysiwyg').remove('div.wysiwyg');
-  		 jQuery(this).append("<textarea name='additional_description' id='additional_description' style='width:200px;' cols='40' rows='5' >"+x+"</textarea>");
-  		 
-  		 
-  		 
-  		 event.preventDefault();
-  	});
-  
-  });
-*/
+
   
   // this makes the product list table sortable
   jQuery('table#wpsc_product_list').sortable({
@@ -129,9 +104,14 @@ jQuery(document).ready( function () {
 			
 			
 			if(element_count > 1) {
-						
-			  post_values = "admin=true&ajax	=true&remove_variation_value=true&variation_value_id="+variation_value_id;			
-				jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
+			
+			
+			  parent_element = jQuery(this).parent("div.variation_value");
+			  
+			  variation_value_id = jQuery("input.variation_values_id", parent_element).val();
+			  //console.log(variation_value_id);
+			  post_values = "remove_variation_value=true&variation_value_id="+variation_value_id;			
+				jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
 			
 				});
 				jQuery(this).parent("div.variation_value").remove();
