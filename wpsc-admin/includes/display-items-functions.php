@@ -191,7 +191,8 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
 				 <?php
-				 wpsc_the_editor($product_data['description'], 'content', false, false);
+					// wpsc_the_editor($product_data['description'], 'content', false, false);
+						wpsc_new_the_editor($product_data['description'], 'content', false, false);
 				 ?>
 				 </div>
 				 <?php
@@ -207,7 +208,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 					
 					<strong ><?php echo TXT_WPSC_ADDITIONALDESCRIPTION; ?> :</strong><br />			
 					
-					<textarea name='additional_description' id='additional_description'cols='40' rows='5' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
+					<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
 				</td>
 			</tr>
 		</table>
@@ -1137,4 +1138,67 @@ function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_b
 	</script>
 	<?php
 }
+
+
+
+function wpsc_new_the_editor($content, $id = 'content', $prev_id = 'title', $media_buttons = true, $tab_index = 2) {
+	$rows = get_option('default_post_edit_rows');
+	if (($rows < 3) || ($rows > 100))
+		$rows = 12;
+
+	if ( !current_user_can( 'upload_files' ) )
+		$media_buttons = false;
+
+	$richedit =  user_can_richedit();
+	$class = '';
+
+	if ( $richedit || $media_buttons ) { ?>
+	<div id="editor-toolbar">
+<?php
+	if ( $richedit ) {
+		$wp_default_editor = wp_default_editor(); ?>
+		<div class="zerosize"><input accesskey="e" type="button" onclick="switchEditors.go('<?php echo $id; ?>')" /></div>
+<?php	if ( 'html' == $wp_default_editor ) {
+			add_filter('the_editor_content', 'wp_htmledit_pre'); ?>
+			<a id="edButtonHTML" class="active hide-if-no-js" onclick="switchEditors.go('<?php echo $id; ?>', 'html');"><?php _e('HTML'); ?></a>
+			<a id="edButtonPreview" class="hide-if-no-js" onclick="switchEditors.go('<?php echo $id; ?>', 'tinymce');"><?php _e('Visual'); ?></a>
+<?php	} else {
+			$class = " class='theEditor'";
+			add_filter('the_editor_content', 'wp_richedit_pre'); ?>
+			<a id="edButtonHTML" class="hide-if-no-js" onclick="switchEditors.go('<?php echo $id; ?>', 'html');"><?php _e('HTML'); ?></a>
+			<a id="edButtonPreview" class="active hide-if-no-js" onclick="switchEditors.go('<?php echo $id; ?>', 'tinymce');"><?php _e('Visual'); ?></a>
+<?php	}
+	}
+
+	if ( $media_buttons ) { ?>
+		<div id="media-buttons" class="hide-if-no-js">
+<?php	do_action( 'media_buttons' ); ?>
+		</div>
+<?php
+	} ?>
+	</div>
+<?php
+	}
+?>
+	<div id="quicktags"><?php
+	wp_print_scripts( 'quicktags' ); ?>
+	  <div id="ed_toolbar">
+		</div>
+		<script type="text/javascript">wpsc_edToolbar()</script>
+
+	</div>
+
+<?php
+	$the_editor = apply_filters('the_editor', "<div id='editorcontainer'><textarea rows='$rows'$class cols='40' name='$id' tabindex='$tab_index' id='$id'>%s</textarea></div>\n");
+	$the_editor_content = apply_filters('the_editor_content', $content);
+
+	printf($the_editor, $the_editor_content);
+
+?>
+	<script type="text/javascript">
+	edCanvas = document.getElementById('<?php echo $id; ?>');
+	</script>
+<?php
+}
+
 ?>
