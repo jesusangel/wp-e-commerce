@@ -163,8 +163,8 @@ class usps {
 		$api_dll = 'shippingapi.dll';
 		
 		$url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
-		
-		$ch=curl_init(); 
+		//exit('URL '.$url);	
+			$ch=curl_init(); 
 		curl_setopt($ch, CURLOPT_URL, $url); 
 		curl_setopt($ch, CURLOPT_NOPROGRESS, 1); 
 		curl_setopt($ch, CURLOPT_VERBOSE, 1); 
@@ -173,7 +173,7 @@ class usps {
 		curl_setopt($ch, CURLOPT_USERAGENT, 'osCommerce'); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 		$body = curl_exec($ch);
-		
+	//	exit('<pre>'.print_r($body, true).'</pre>');
 		curl_close($ch);
 		$rates=array();
 		$response=array();

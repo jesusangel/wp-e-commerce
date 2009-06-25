@@ -120,7 +120,9 @@ function gateway_google(){
 		$Gfilter->SetAllowedWorldArea(true);
 	
 	}else{
+	if(is_array($google_checkout_shipping)){
 		$google_shipping_country_ids = implode(",",$google_checkout_shipping);
+	}
 		$google_shipping_country = $wpdb->get_col("SELECT `isocode` FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
 		foreach($google_shipping_country as $isocode){
 			//exit($isocode);
