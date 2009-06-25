@@ -239,9 +239,9 @@ function nzshpcrt_javascript()
 	}
   ?>
 <?php if (get_option('product_ratings') == 1){ ?>
-<link href='<?php echo WPSC_URL; ?>/product_rater.css' rel="stylesheet" type="text/css" />
+<link href='<?php echo WPSC_URL; ?>/js/product_rater.css' rel="stylesheet" type="text/css" />
 <?php } ?>
-<link href='<?php echo WPSC_URL; ?>/thickbox.css' rel="stylesheet" type="text/css" />
+<link href='<?php echo WPSC_URL; ?>/js/thickbox.css' rel="stylesheet" type="text/css" />
 <?php if (get_option('catsprods_display_type') == 1){ ?>
   <script language="JavaScript" type="text/javascript" src="<?php echo WPSC_URL; ?>/js/slideMenu.js"></script>
 <?php } ?>

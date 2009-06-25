@@ -441,6 +441,7 @@ function form_paypal_multiple() {
           <option ".$select_currency['PLN']." value='PLN'>Polish Zloty</option>
           <option ".$select_currency['NOK']." value='NOK'>Norwegian Krone</option>
           <option ".$select_currency['CZK']." value='CZK'>Czech Koruna</option>
+          <option ".$select_currency['MXN']." value='MXN'>Mexican Peso</option>
         </select> 
       </td>
    </tr>";

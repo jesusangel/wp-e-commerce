@@ -34,12 +34,12 @@ function wpsc_enqueue_user_script_and_css() {
   wp_enqueue_script( 'jQuery');
   
 	wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
-	wp_enqueue_script('wp-e-commerce-ajax-legacy', WPSC_URL.'/ajax.js', false, WPSC_VERSION.WPSC_MINOR_VERSION);
+	wp_enqueue_script('wp-e-commerce-ajax-legacy', WPSC_URL.'/js/ajax.js', false, WPSC_VERSION.WPSC_MINOR_VERSION);
 
 	wp_enqueue_script('wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_js=true", false, $version_identifier);
 	
 	
-	wp_enqueue_script('wp-e-commerce-legacy', WPSC_URL.'/user.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
+	wp_enqueue_script('wp-e-commerce-legacy', WPSC_URL.'/js/user.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
 	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
 
 	$theme_path = WPSC_FILE_PATH. '/themes/';
@@ -52,11 +52,9 @@ function wpsc_enqueue_user_script_and_css() {
 	
 	wp_enqueue_style( 'wpsc-theme-css', $theme_url, false, $version_identifier, 'all');
 	wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_URL. '/themes/compatibility.css', false, $version_identifier, 'all');
-	wp_enqueue_style( 'wpsc-product-rater', WPSC_URL.'/product_rater.css', false, $version_identifier, 'all');
+	wp_enqueue_style( 'wpsc-product-rater', WPSC_URL.'/js/product_rater.css', false, $version_identifier, 'all');
 	wp_enqueue_style( 'wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_css=true&category=$category_id" , false, $version_identifier, 'all' );
-	wp_enqueue_style( 'wpsc-thickbox', WPSC_URL.'/thickbox.css', false, $version_identifier, 'all');
-	
-	
+	wp_enqueue_style( 'wpsc-thickbox', WPSC_URL.'/js/thickbox.css', false, $version_identifier, 'all');
 	
 	
 	wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');

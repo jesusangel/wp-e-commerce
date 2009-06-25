@@ -266,7 +266,7 @@ if (IS_WP27) {
         <input type='text' class="text" name='variation_values[]' value='' />
         <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_2")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
         </span></div>
-       <a href='#' onclick='return add_variation_value("add")'><?php echo TXT_WPSC_ADD;?></a>
+       <a href='#' onclick='return add_variation_value("add")'>+ Add Value</a>
       </td>
     </tr>
     <tr>

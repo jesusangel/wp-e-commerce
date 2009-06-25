@@ -716,9 +716,9 @@ function setting_button(){
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
 	
-	$output.="<li><a href='admin.php?page=".WPSC_DIR_NAME."/options.php'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
-	$output.="<li><a href='admin.php?page=".WPSC_DIR_NAME."/options.php#ui-tabs-76'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
-	$output.="<li><a href='admin.php?page=".WPSC_DIR_NAME."/options.php#ui-tabs-78'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
+	$output.="<li><a href='admin.php?page=wpsc-settings'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
+	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=gateway'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
+	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=checkout'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
 	//$output.="<li><a href='?page=".WPSC_DIR_NAME."/instructions.php'>Help/Upgrade</a></li>";
 	//$output.="<li><a href='{$redirect_url}'>".TXT_WPSC_LOGIN_TO_GOOGLE_BASE."</a></li>";
 	$output.="</ul>";
