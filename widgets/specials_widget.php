@@ -25,9 +25,12 @@ function widget_specials($args) {
 			$output = "<div><div>";
 			foreach($product as $special) {
 				$output .= "<strong>".$special['name']."</strong><br /> ";
-				if($special['image'] != null) {
-					$output .= "<img src='".WPSC_THUMBNAIL_URL.$special['image']."' title='".$special['name']."' alt='".$special['name']."' /><br />";
-				}
+					if(is_numeric($special['image'])){
+						$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$special['image']."' LIMIT 1");
+						if($image_file_name != '') {
+							$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+						}
+					}
 				$output .= $special['description']."<br />";
 		
 				$variations_processor = new nzshpcrt_variations;

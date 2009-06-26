@@ -316,19 +316,11 @@ function wpsc_display_products($query) {
 		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/single_product.php");
 	} else {
 		// get the display type for the selected category
-		if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
-			if(is_numeric($wp_query->query_vars['product_category'])) {
-				$category_id =(int) $wp_query->query_vars['product_category'];
-			} else if(is_numeric($_GET['category'])) {
-				$category_id = (int)$_GET['category'];
-			} else { 
-				$category_id = (int)get_option('wpsc_default_category');
-			}
-		}			
-		$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
-	
-	
-	
+		if(is_numeric($wpsc_query->query_vars['category_id'])) {
+			$category_id =(int) $wpsc_query->query_vars['category_id'];
+			$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
+		} 
+		
 		if($display_type == '') {
 			$display_type = get_option('product_view');
 		}
