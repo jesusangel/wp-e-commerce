@@ -25,7 +25,7 @@ function wpsc_display_products_page() {
 
   ?>
 	<div class="wrap">
-		<?php screen_icon(); ?>
+		<?php // screen_icon(); ?>
 		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
 		
 		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){?>

@@ -71,9 +71,6 @@ function wpsc_group_and_update_download_links() {
 function wpsc_clean_product_url_names() {
 	global $wpdb;
 	
-	 //$check_product_names = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id`, `".WPSC_TABLE_PRODUCT_LIST."`.`name`, `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE (`".WPSC_TABLE_PRODUCTMETA."`.`meta_key` IN ('url_name') AND  `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` IN (''))  OR ISNULL(`".WPSC_TABLE_PRODUCTMETA."`.`meta_key`)");  
-
-	
 	$duplicated_meta_data = $wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('url_name') GROUP BY `meta_value` HAVING COUNT(`meta_value`) > 1 ");
 	
 	$product_data = $wpdb->get_results("SELECT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `meta`.`meta_key` IN('url_name') AND `meta`.`meta_value` IN('".implode("', '", $duplicated_meta_data)."') ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
@@ -89,8 +86,6 @@ function wpsc_clean_product_url_names() {
 			}
 			$url_name .= $extension_number;
 			update_product_meta($product_row['id'], 'url_name', $url_name);
-			//print_r($similar_names);
-			//echo $url_name."\n";
 		}
 	}	
 }

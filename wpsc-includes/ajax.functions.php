@@ -459,6 +459,7 @@ function wpsc_submit_checkout() {
 		} else {
 			$seperator = "&";
 		}
+// 		exit();
 		// submit to gateway
 		foreach($nzshpcrt_gateways as $gateway) {
 			if($gateway['internalname'] == $submitted_gateway ) {

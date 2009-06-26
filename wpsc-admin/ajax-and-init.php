@@ -1136,12 +1136,22 @@ if($_REQUEST['wpsc_admin_action2'] == 'purchlog_bulk_modify') {
 function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
 	global $wpdb;
 	if(($purchlog_id =='') && ($purchlog_status == '')){
-		$purchlog_id = (int)$_POST['purchlog_id'];
-		$purchlog_status = (int)$_POST['purchlog_status'];
+		$purchlog_id = absint($_POST['purchlog_id']);
+		$purchlog_status = absint($_POST['purchlog_status']);
+	
+		
+			$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);  
+			if (($purchlog_id==2) && function_exists('wpsc_member_activate_subscriptions')){
+				wpsc_member_activate_subscriptions($_POST['id']);
+			}
+			
+		$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'");
+		
+		if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] < 2)) {
+			transaction_results($log_data['sessionid'],false);
+		}      
+	
 	}
-	//exit($purchlog_id.' BEING TRIGGERED '.$purchlog_status);
-	$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed=".$purchlog_status." WHERE id=".$purchlog_id;
-	$wpdb->query($sql);
 }
 
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {

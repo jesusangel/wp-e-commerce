@@ -1,12 +1,16 @@
 <?php
-/*
-* this is the wpsc equivalent of the wp query class, needed for the wpsc templates to work
+/**
+ * WP eCommerce query class and product display functions
+ *
+ * This is the wpsc equivalent of the wp query class, needed for the wpsc templates to work
+ * The Cart class handles adding, removing and adjusting items in the cart, and totaling up the cost of the items in the cart.
+ * The Cart Items class handles the same, but for cart items themselves.
+ *
+ * @package wp-e-commerce
+ * @since 3.7
+ * @subpackage wpsc-cart-classes
 */
 
-/**
- * this is for the multi adding property, it checks to see whether multi adding is enabled;
- * 
- */
 function wpsc_product_sku($id){
 	global $wpdb;
 	$sql = 'SELECT `meta_value` FROM `'.WPSC_TABLE_PRODUCTMETA.'` WHERE `product_id`='.$id.' AND `meta_key`="sku"';
@@ -14,6 +18,11 @@ function wpsc_product_sku($id){
 	$sku = $wpdb->get_var($sql);
 	return $sku;
 }
+
+/**
+ * this is for the multi adding property, it checks to see whether multi adding is enabled;
+ * 
+ */
 function wpsc_has_multi_adding(){
 	if(get_option('multi_add') == 1){
 		return true;
@@ -150,9 +159,8 @@ function wpsc_the_product_title() {
 * @return string - the product description
 */
 function wpsc_the_product_description() {
-	global $wpsc_query;
-	//wptexturize( wp_kses( trim( $description[1] ), $themes_allowed_tags ) );
-		return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $themes_allowed_tags )));
+	global $wpsc_query, $allowedtags;
+	return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $allowedtags )));
 }
 
 /**

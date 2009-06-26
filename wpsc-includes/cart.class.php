@@ -825,7 +825,7 @@ class wpsc_cart {
   function empty_cart($fromwidget = true) {
   		if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
   		//	exit('google triggered');
-  			wpsc_empty_google_logs();
+  			///wpsc_empty_google_logs();
   		}
   	
 		$this->cart_items = array();
