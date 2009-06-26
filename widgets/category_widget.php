@@ -141,12 +141,12 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 	
 	foreach($categorisation_groups as $cat_group){
 	  $checked = '';
-	  //$checked = "checked='true'";
+	  //$checked = "checked='checked'";
 		$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$cat_group['id']}')");
 		//$category_group_name = str_replace("[categorisation]", , TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES);
 		
 		if($options[$number]['categorisation'][$cat_group['id']] == true) {
-			$checked = "checked='true'";
+			$checked = "checked='checked'";
 		}
 		
 		if($category_count <1) {
@@ -160,7 +160,7 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 		echo "	<br/>\n\r";
 	}
 	if ($options[$number]['image'] == true) {
-		$checked = "checked='true'";
+		$checked = "checked='checked'";
 	}
 	echo "<br />\n\r";
 	echo "	<label for='sidebar_category_image'>\n\r";

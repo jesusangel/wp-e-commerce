@@ -150,7 +150,7 @@ $date_list[0]['end'] = $end_timestamp;
             foreach((array)$stage_list_data as $stage) {
               $selected = '';
               if($stage['id'] == $purchase['processed']) {
-                $selected = "checked='true'";
+                $selected = "checked='checked'";
                 }
               $button_id = "button_".$purchase['id']."_".$stage['id'];
               echo "    <li><input readonly='true' type='radio' name='value' $selected value='".$stage['id']."' onclick='this.blur(); return false;' id='".$button_id."'/><label for='$button_id'>".$stage['name']."</label>\n\r";

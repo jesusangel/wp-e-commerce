@@ -19,17 +19,24 @@ if ($width > 400){
 	$layoutlandscape = "wpsc_thumbnail_preview";
 }
 
-?><html>
-	<head>
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Wp-e-Commerce jCrop</title>
 		<script language="javascript" type="text/javascript">
 
 			jQuery(function(){
 
 				jQuery('#cropbox').Jcrop({
 					aspectRatio: 1,
+					keySupport: false,
 					onSelect: showPreview,
 					onChange: updateCoords,
+					boxWidth:350,
+					boxHeight:350,
 				});
 	
 			});
@@ -68,11 +75,11 @@ if ($width > 400){
 
 	<div id="outer">
 		<?php if($layoutlandscape != 'wpsc_thumbnail_preview'){ ?>
-			<img src="<?php echo $directory.$imagename; ?>" id="cropbox" />
+			<img src="<?php echo $directory.$imagename; ?>" id="cropbox" alt="" />
 		<?php } ?>
 		<div id='<?php echo $layoutlandscape; ?>'>	
 			<div id='wpsc_crop_preview'>
-				<img src="<?php echo $directory.$imagename; ?>" id="preview" />
+				<img src="<?php echo $directory.$imagename; ?>" id="preview" alt="" />
 			</div>
 			<?php if($layoutlandscape == 'wpsc_thumbnail_preview'): ?>
 			<br style='clear:both' />
@@ -94,7 +101,7 @@ if ($width > 400){
 
 		<!-- This is the image we're attaching Jcrop to -->
 		<?php if($layoutlandscape == 'wpsc_thumbnail_preview'){ ?>
-		<img src="<?php echo $directory.$imagename; ?>" id="cropbox" />
+		<img src="<?php echo $directory.$imagename; ?>" id="cropbox" alt="" />
 		<?php } ?>
 	</div>
 	</body>

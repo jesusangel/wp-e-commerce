@@ -31,7 +31,7 @@ class nzshpcrt_variations {
         // if the product ID is greater than 0, check to see if the variation is associated.
         $check_variation = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation['id']}') LIMIT 1");
         if($check_variation > 0) {
-          $checked = "checked='true'";
+          $checked = "checked='checked'";
 					$values_box_state = "";
         }
       }
@@ -57,7 +57,7 @@ class nzshpcrt_variations {
 					$checked = '';
 					$variation_value['name'] = stripslashes($variation_value['name']);
 					if($variation_value['visible'] > 0) {
-						$checked = "checked='true'";
+						$checked = "checked='checked'";
 					}
 					$options .= "     <label class='variation_checkbox{$product_id}'><input type='checkbox' $checked value='1' onchange='{$if_adding}variation_value_list(\"{$product_id}\", jQuery(this).parents(\"div.variation_box\"));' name='edit_var_val[{$variation['id']}][{$variation_value['id']}]' />{$variation_value['name']}</label>\n\r";
 				}
@@ -256,7 +256,7 @@ class nzshpcrt_variations {
         }
         $file_checked = '';
         if((int)$associated_variation_row['file'] == 1) {
-          $file_checked = "checked='true'";
+          $file_checked = "checked='checked'";
         }
         
         $output .= "  <tr class='variation_row'>\n\r";

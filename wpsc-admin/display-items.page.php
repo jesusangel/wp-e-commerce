@@ -315,7 +315,7 @@ function wpsc_admin_products_list($category_id = 0) {
 						}
 						
 						
-						$category_html .= "<a class='category_link' href='". remove_query_arg('product_id',add_query_arg('category_id', $category_row['id']))."'>".stripslashes($category_row['name'])."</a>";
+						$category_html .= "<a class='category_link' href='". htmlentities(remove_query_arg('product_id',add_query_arg('category_id', $category_row['id'])))."'>".stripslashes($category_row['name'])."</a>";
 						$i++;
 					}        
 									
@@ -326,10 +326,10 @@ function wpsc_admin_products_list($category_id = 0) {
 									
 									
 									<td class="product-image ">
-										<img title='Drag to a new position' src='<?php echo $image_path; ?>' title='<?php echo $product['name']; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
+										<img title='Drag to a new position' src='<?php echo $image_path; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
 									</td>
 									<td class="product-title column-title">
-										<a class='edit-product' href='<?php echo add_query_arg('product_id', $product['id']); ?>'><?php echo $product_name; ?></a>
+										<a class='edit-product' href='<?php echo  htmlentities(add_query_arg('product_id', $product['id'])); ?>'><?php echo $product_name; ?></a>
 											<?php
 											$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
 											if(count($product_alert['messages']) > 0) {
@@ -337,7 +337,7 @@ function wpsc_admin_products_list($category_id = 0) {
 											}
 											if($product_alert['state'] === true) {
 												?>
-												<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_URL;?>/images/product-alert.jpg' alt='' title='' />
+												<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_URL;?>/images/product-alert.jpg' alt='' />
 												<?php
 											}
 											?>
@@ -346,7 +346,7 @@ function wpsc_admin_products_list($category_id = 0) {
 									
 										<div class="wpsc-row-actions">
 											<span class="edit">
-												<a class='edit-product' title="Edit this post" href='<?php echo add_query_arg('product_id', $product['id']); ?>' style="cursor:pointer;">Edit</a>
+												<a class='edit-product' title="Edit this post" href='<?php echo htmlentities(add_query_arg('product_id', $product['id'])); ?>' style="cursor:pointer;">Edit</a>
 											</span> |
 											<span class="delete">
 												<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
@@ -382,7 +382,7 @@ function wpsc_admin_products_list($category_id = 0) {
 function wpsc_admin_category_dropdown() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');
-	$url =  remove_query_arg(array('product_id','category_id'));
+	$url =  urlencode(remove_query_arg(array('product_id','category_id')));
 	$options = "";
 	$options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
 	$options .= wpsc_admin_category_dropdown_tree(null, 0, absint($_GET['category_id']));
@@ -408,7 +408,7 @@ function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, 
     if($selected_id == $option['id']) {
       $selected = "selected='selected'";
     }
-    $url = remove_query_arg('product_id',add_query_arg('category_id', $option['id']));
+    $url = htmlentities(remove_query_arg('product_id',add_query_arg('category_id', $option['id'])));
     $output .= "<option $selected value='$url'>".str_repeat("-", $iteration).stripslashes($option['name'])."</option>\r\n";
     $output .= wpsc_admin_category_dropdown_tree($option['id'], $iteration+1, $selected_id);
     $selected = "";

@@ -30,7 +30,7 @@
 			echo "</td>";
 			echo "<td>";
 			if ($user_subscription[0]['active']==1) {
-				echo "<input type='checkbox' checked='true' id='suspend_subs".$user_info[0]['ID']."' value='1' onclick='suspendsubs(".$user_info[0]['ID'].")' />";
+				echo "<input type='checkbox' checked='checked' id='suspend_subs".$user_info[0]['ID']."' value='1' onclick='suspendsubs(".$user_info[0]['ID'].")' />";
 			} else {
 				echo "<input type='checkbox' id='suspend_subs".$user_info[0]['ID']."' value='1' onclick='suspendsubs(".$user_info[0]['ID'].")' />";
 			}

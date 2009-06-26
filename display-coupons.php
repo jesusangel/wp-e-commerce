@@ -233,7 +233,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    </td>
    <td>
    <input type='hidden' value='0' name='add_active' />
-   <input type='checkbox' value='1' checked='true' name='add_active' />
+   <input type='checkbox' value='1' checked='checked' name='add_active' />
    </td>
    	<!--
 <td>

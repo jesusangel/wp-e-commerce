@@ -1028,33 +1028,33 @@ function wpsc_display_options_page(){
 									}
 									
 									if(get_option('list_view_quantity') == 1) {
-										$list_view_quantity_value = "checked='true'";
+										$list_view_quantity_value = "checked='checked'";
 									} else {
 										$list_view_quantity_value = '';
 									}
 						
 									if(get_option('show_images_only') == 1) {
-										$show_images_only_value = "checked='true'";
+										$show_images_only_value = "checked='checked'";
 									} else {
 										$show_images_only_value = '';
 									}
 									if(get_option('display_variations') == 1) {
-										$display_variations = "checked='true'";
+										$display_variations = "checked='checked'";
 									} else {
 										$display_variations = '';
 									}
 									if(get_option('display_description') == 1) {
-										$display_description = "checked='true'";
+										$display_description = "checked='checked'";
 									} else {
 										$display_description = '';
 									}
 									if(get_option('display_addtocart') == 1) {
-										$display_addtocart = "checked='true'";
+										$display_addtocart = "checked='checked'";
 									} else {
 										$display_addtocart = '';
 									}
 									if(get_option('display_moredetails') == 1) {
-										$display_moredetails= "checked='true'";
+										$display_moredetails= "checked='checked'";
 									} else {
 										$display_moredetails = '';
 									}

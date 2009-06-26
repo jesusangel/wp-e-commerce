@@ -46,14 +46,14 @@ class ups {
 		$output .= "	<td>\n\r";
 		switch($wpsc_ups_settings['49_residential']) {
 		  case '01':
-		  $checked[0] = "checked='true'";
+		  $checked[0] = "checked='checked'";
 		  $checked[1] = "";
 		  break;		  
 		  
 		  case '02':
 		  default:
 		  $checked[0] = "";
-		  $checked[1] = "checked='true'";
+		  $checked[1] = "checked='checked'";
 		  break;
 		}
 		$output .= "		<label><input type='radio' {$checked[0]} value='01' name='wpsc_ups_settings[49_residential]'/>".TXT_WPSC_UPS_DESTINATION_RESIDENTIAL."</label><br />\n\r";

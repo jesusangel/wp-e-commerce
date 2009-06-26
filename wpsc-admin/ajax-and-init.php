@@ -627,7 +627,7 @@ function wpsc_admin_ajax() {
 		$output .= "<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='" . $product['thumbnail_image'] . "' />";
 		$output .= "<input type='radio' ";
 		if ($product['thumbnail_state'] == 0) {
-			$output .= "checked='true'";
+			$output .= "checked='checked'";
 		}
 		$output .= " name='image_resize' value='0' id='image_resize0_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize0_$timestamp'> ".TXT_WPSC_DONOTRESIZEIMAGE."<br />";
 		$output .= "    </td>";
@@ -637,7 +637,7 @@ function wpsc_admin_ajax() {
 		$output .= "    <td>";
 		$output .= "<input type='radio' ";
 		if ($product['thumbnail_state'] == 1) {
-			$output .= "checked='true'";
+			$output .= "checked='checked'";
 		}
 		$output .= "name='image_resize' value='1' id='image_resize1_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize1_$timestamp'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
 		$output .= "    </td>";
@@ -647,7 +647,7 @@ function wpsc_admin_ajax() {
 		$output .= "    <td>";
 		$output .= "<input type='radio' ";
 		if ($product['thumbnail_state'] == 2) {
-			$output .= "checked='true'";
+			$output .= "checked='checked'";
 		}
 		$output .= " name='image_resize' value='2' id='image_resize2_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize2_$timestamp'>".TXT_WPSC_USESPECIFICSIZE." </label>
 				<div class='heightWidth image_resize_extra_forms' style=display: ";
@@ -667,7 +667,7 @@ function wpsc_admin_ajax() {
 		$output .= "    <td>";
 		$output .= "<input type='radio' ";
 		if ($product['thumbnail_state'] == 3) {
-			$output .= "checked='true'";
+			$output .= "checked='checked'";
 		}
 		$output .= " name='image_resize' value='3' id='image_resize3_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize3_$timestamp'> ".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
 		$output .= "<div class='browseThumb image_resize_extra_forms' style='display: ";
