@@ -1111,7 +1111,6 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     }
     
 //     include_once(WPSC_FILE_PATH."/product_display_functions.php");
-    include_once(WPSC_FILE_PATH."/show_cats_brands.php");
     
     
 		if(isset($_GET['category_id']) and is_numeric($_GET['category_id'])){
@@ -1855,7 +1854,6 @@ include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
 
 
 include_once(WPSC_FILE_PATH.'/image_processing.php');
-include_once(WPSC_FILE_PATH."/show_cats_brands.php");
 
 
 $theme_path = WPSC_FILE_PATH . '/themes/';

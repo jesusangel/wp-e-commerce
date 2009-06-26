@@ -317,7 +317,7 @@ function wpsc_product_postage_and_packaging() {
 */
 function wpsc_product_normal_price() {
 	global $wpsc_query;
-    $price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);  
+    $price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);  
   if(($product['special']==1) && ($variations_output[1] === null)) {
     $output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],false,$wpsc_query->product['id']);
   } else {

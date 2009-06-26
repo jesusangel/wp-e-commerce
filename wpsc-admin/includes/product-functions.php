@@ -114,7 +114,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['edit_variation_values'] = $post_data['edit_var_val'];
 	
 	$post_data['price'] = (float)$post_data['price'];
-	$post_data['special_price'] = (float)$post_data['special_price'];
+	$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
 	
 	if($post_data['special'] !== 1) {
 	  $post_data['special_price'] = 0;

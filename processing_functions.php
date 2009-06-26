@@ -235,7 +235,7 @@ function admin_display_total_price($start_timestamp = '', $end_timestamp = '') {
 }
   
 
-function calculate_product_price($product_id, $variations = false, $pm='',$extras=false) {
+function calculate_product_price($product_id, $variations = false, $no_special=false) {
   global $wpdb;
   if(is_numeric($product_id)) {
     if(is_array($variations) && (count($variations) >= 1)) {
@@ -259,7 +259,7 @@ function calculate_product_price($product_id, $variations = false, $pm='',$extra
     } else {	
       $product_data = $wpdb->get_row("SELECT `price`,`special`,`special_price` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
      // echo '<span style="color:#f00;">'.print_r($product_data, true).'</span><br />'.;
-      if($product_data['special_price'] > 0) {
+      if(($product_data['special_price'] > 0) && ($no_special == false)) {
         $price = $product_data['price'] - $product_data['special_price'];
       } else {
         $price = $product_data['price'];
