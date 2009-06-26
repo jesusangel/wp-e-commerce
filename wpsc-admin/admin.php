@@ -207,7 +207,10 @@ function  wpsc_admin_include_css_and_js() {
 	'addTag' => attribute_escape(__('Add new tag')),
 	'separate' => __('Separate tags with commas'),
 ) );
+if(WPSC_GOLD_DIR_NAME != ''){
+	wp_enqueue_style('gold_cart', WP_CONTENT_URL.'/uploads/wpsc/upgrades/gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
 
+}
 	//jQuery wysiwyg
 	/*
 wp_enqueue_style( 'jwysiwyg styles', WPSC_URL.'/wpsc-admin/css/jquery.wysiwyg.css', false, $version_identifier, 'all' );

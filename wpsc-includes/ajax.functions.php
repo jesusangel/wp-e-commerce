@@ -125,7 +125,7 @@ if($_REQUEST['wpsc_ajax_action'] == 'add_to_cart') {
 */
 function wpsc_empty_cart() {
   global $wpdb, $wpsc_cart;
-  $wpsc_cart->empty_cart();
+  $wpsc_cart->empty_cart(false);
   
   if($_REQUEST['ajax'] == 'true') {
 		ob_start();

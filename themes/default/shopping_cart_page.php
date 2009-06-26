@@ -311,11 +311,6 @@ if(wpsc_cart_item_count() > 0) :
 		</tr>
 	</table>
 </form>
-<?php 
-if(in_array('noca',(array)get_option('custom_gateway_options'))) {
-	wpsc_merchant_gateway_noca_form();
-}
-?>
 <?php
 else:
 	echo TXT_WPSC_BUYPRODUCTS;

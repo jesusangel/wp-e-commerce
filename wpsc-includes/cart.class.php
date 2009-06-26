@@ -822,8 +822,8 @@ class wpsc_cart {
 	 *
 	 * No parameters, nothing returned
 	*/
-  function empty_cart() {
-  		if(isset($_SESSION['wpsc_sessionid']) && !isset($_GET['gateway'])){
+  function empty_cart($fromwidget = true) {
+  		if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
   		//	exit('google triggered');
   			wpsc_empty_google_logs();
   		}

@@ -146,7 +146,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2' class='itemfirstcol'>  
 					<label for="wpsc_product_name">Product Name</label>
 					<div class='admin_product_name'>
-						<input id='wpsc_product_name' class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+						<input id='wpsc_product_name' class='wpsc_product_name text' size='30' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 						<a href='#' class='shorttag_toggle'></a>
 					</div>
 					<div class='admin_product_shorttags'>
@@ -183,7 +183,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				</td>
 				<td  class='skuandprice'>
 					<?php echo TXT_WPSC_PRICE; ?> :<br />
-					<input type='text' class='text' size='30' name='price' value='<?php echo $product_data['price']; ?>'>
+					<input type='text' class='text' size='30' name='price' value='<?php echo $product_data['price']; ?>' />
 				</td>
 			</tr>
 		
@@ -325,11 +325,12 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 								$output .= "<p>";
 								$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], TXT_WPSC_PRODUCT_CATEGORIES);
 								$output .= "".$category_group_name.":<br />";
+								$output .= "</p>";
 								if ($product_data == '')
 									$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
 								else 
 									$output .= wpsc_category_list($categorisation_group['id'], $product_data['id'], 'edit_');
-								$output .= "</p>";
+								
 							}
 						}
 
@@ -1016,9 +1017,9 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
     $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
 	}
 	
-	if($category_id < 1 ) {
-		$output .= "<ul class='list:category categorychecklist form-no-clear' id='categorychecklist'>\n\r";
-	} else {
+	if($category_id < 1) {
+		$output .= "<ul class='list:category categorychecklist form-no-clear'>\n\r";
+	} elseif((count($values) >0) ){
 		$output .= "<ul class='children'>\n\r";
 	}
 		
@@ -1033,14 +1034,16 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
 		}
 		
 		$output .= "  <li id='category-".$option['id']."'>\n\r";
-    $output .= "    <label class='selectit'><input  id='in-category-{$unique_id}' type='checkbox' $selected name='category[]' value='".$option['id']."'><label for='".$unique_id."category_form_".$option['id']."' class='greytext' >".stripslashes($option['name'])."</label>";
+    $output .= "    <label class='selectit'><input  id='in-category-{$unique_id}' type='checkbox' $selected name='category[]' value='".$option['id']."' /></label><label for='".$unique_id."category_form_".$option['id']."' class='greytext' >".stripslashes($option['name'])."</label>";
     $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
     
 		$output .= "  </li>\n\r";
     
     $selected = "";
 	}
-	$output .= "</ul>\n\r";
+	if((count($values) >0) ){
+		$output .= "</ul>\n\r";
+	}
   return $output;
 }
 
