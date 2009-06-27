@@ -90,7 +90,8 @@ function wpsc_cart_tax() {
 */
 function wpsc_uses_shipping() {
 	global $wpsc_cart;
-	if(count(get_option('custom_shipping_options')) > 1 && get_option('do_not_use_shipping') == 0) {
+	$shippingoptions = get_option('custom_shipping_options');
+	if(count($shippingoptions) >= 1 && $shippingoptions[0] != '' && get_option('do_not_use_shipping') == 0) {
 		$status = $wpsc_cart->uses_shipping();
 	} else {
 	  $status = false;
