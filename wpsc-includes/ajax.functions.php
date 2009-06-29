@@ -7,8 +7,15 @@
  * @package wp-e-commerce
  * @since 3.7
  */
- 
- 
+ function wpsc_special_widget(){
+ 	global $wpdb; 
+ 	wpsc_add_to_cart();
+ 	//exit();
+ }
+if($_REQUEST['wpsc_ajax_action'] == 'special_widget') {
+	add_action('init', 'wpsc_special_widget');
+}
+
 /**
 	* add_to_cart function, used through ajax and in normal page loading.
 	* No parameters, returns nothing

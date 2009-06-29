@@ -95,7 +95,7 @@ $image_height = get_option('single_view_image_height');
 						<div class='custom_text'>
 							<h4><?php echo TXT_WPSC_PERSONALIZE_YOUR_PRODUCT; ?></h4>
 							<?php echo TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION; ?><br />
-							<input type='text' name='custom_text' value='' />
+							<input type='text' name='custom_text' value=''  />
 						</div>
 					<?php endif; ?>
 					
@@ -103,7 +103,7 @@ $image_height = get_option('single_view_image_height');
 						<div class='custom_file'>
 							<h4><?php echo TXT_WPSC_UPLOAD_A_FILE; ?></h4>
 							<?php echo TXT_WPSC_UPLOAD_A_FILE_DESCRIPTION; ?><br />
-							<input type='file' name='custom_file' value='' />
+							<input type='file' name='custom_file' value=''  />
 						</div>
 					<?php endif; ?>
 					
@@ -129,9 +129,9 @@ $image_height = get_option('single_view_image_height');
 					<?php if(wpsc_has_multi_adding()): ?>
 						<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label>
 						
-						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1" />
-						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
-						<input type="hidden" name="wpsc_update_quantity" value="true" />
+						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
+						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
+						<input type="hidden" name="wpsc_update_quantity" value="true"/>
 					<?php endif ;?>
 					
 						<div class="wpsc_product_price">
@@ -145,7 +145,7 @@ $image_height = get_option('single_view_image_height');
 								<?php if(wpsc_product_on_special()) : ?>
 									<span class='oldprice'><?php echo TXT_WPSC_PRICE; ?>: <?php echo wpsc_product_normal_price(); ?></span><br />
 								<?php endif; ?>
-								<?php echo TXT_WPSC_PRICE; ?>:  <span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><br />
+								<?php echo TXT_WPSC_PRICE; ?>:  <span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><br/>
 								<?php if(get_option('display_pnp') == 1) : ?>
 									<?php echo TXT_WPSC_PNP; ?>:  <span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><br />
 								<?php endif; ?>							
@@ -155,20 +155,20 @@ $image_height = get_option('single_view_image_height');
 						echo wpsc_akst_share_link('return');
 					} ?>
 						
-					<input type="hidden" value="add_to_cart" name="wpsc_ajax_action" />
-					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id" />
+					<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
+					<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
 							
 					<?php if(wpsc_product_is_customisable()) : ?>				
-						<input type="hidden" value="true" name="is_customisable" />
+						<input type="hidden" value="true" name="is_customisable"/>
 					<?php endif; ?>
 					
 					
 					<!-- END OF QUANTITY OPTION -->
 					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : ?>
 						<?php if(wpsc_product_has_stock()) : ?>
-							<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
+							<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 							<div class='wpsc_loading_animation'>
-								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" id="loadingimage" />
+								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" class="loadingimage" />
 								<?php echo TXT_WPSC_UDPATING_CART; ?>
 							</div>
 							
@@ -192,9 +192,9 @@ $image_height = get_option('single_view_image_height');
 					?>
 					</div>
 		
-					<form onsubmit="submitform(this);return false;" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_extra_<?php echo wpsc_the_product_id(); ?>">
-						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid" />
-						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item" />
+					<form onsubmit="submitform(this);return false;" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_extra_<?php echo wpsc_the_product_id(); ?>">
+						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="prodid"/>
+						<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="item"/>
 					</form>
 				</div>
 			</div>
@@ -209,6 +209,6 @@ $image_height = get_option('single_view_image_height');
 			echo fancy_notifications();
 		}
 		?>
-		<div class="clear"/>
-	</div>
+	
+
 </div>

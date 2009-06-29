@@ -883,12 +883,12 @@ class WPSC_Query {
 		$this->current_product = -1;
 		$this->in_the_loop = false;
 
-    $this->variation_groups = null;
-    $this->variation_group = null;
-    
-    $this->variations = null;
-    $this->variation = null;
-    
+	    $this->variation_groups = null;
+	    $this->variation_group = null;
+	    
+	    $this->variations = null;
+	    $this->variation = null;
+	    
 		$this->custom_meta = null;
 		$this->custom_meta_values = null;
 		
@@ -1010,14 +1010,67 @@ class WPSC_Query {
 		
 		if(($product_id > 0)) {
 		  $product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `active` IN('1') LIMIT 1",ARRAY_A);
-		  // AND `publish` IN('1')
 		}
 		
-		
+		if(isset($_SESSION['price_range']) && isset($_GET['range'])){
+			if (is_numeric($_GET['range'])) {
+			    $ranges = $_SESSION['price_range'];
+		// 	    exit("<pre>".print_r($ranges,1)."</pre>");
+				switch($_GET['range']) {
+					case 1:
+						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` < ".$ranges[1]." AND `active` IN ('1')";
+						break;
+					
+					case 2: {
+						if (array_key_exists(2,$ranges)) {
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `price` < '".$ranges[2]."' AND `active` IN ('1')";
+						} else {
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `active` IN ('1')";
+						}
+					  break;
+					} 
+						
+					
+						case 3: {
+							if (array_key_exists(3,$ranges)) {
+								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `price` < '".$ranges[3]."' AND `active` IN ('1')";
+							} else {
+								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `active` IN ('1')";
+							}
+							break;
+						}
+					
+					case 4: {
+						if (array_key_exists(4,$ranges)) {
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `price` < '".$ranges[4]."' AND `active` IN ('1')";
+						} else {
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `active` IN ('1')";
+						}
+						break;
+					}
+					
+					case 5: {
+						if (array_key_exists(5,$ranges)) {
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `price` < '".$ranges[5]."' AND `active` IN ('1')";
+						} else {
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `active` IN ('1')";
+						}
+						break;
+					}
+					
+					case 6: 
+						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[5]."' AND `active` IN ('1')";
+					break;
+				}
+			//	exit($range_sql);
+				$product_list = $wpdb->get_results($range_sql,ARRAY_A);
+			}
+		}
+	//	exit('<pre>'.print_r($product_list, true).'</pre>');
 		if(count($product_list) > 0) {
 		  // if is a single product
 			$this->is_single = true;
-		  $this->products = $product_list;
+		    $this->products = $product_list;
 		  
 			$this->category = $this->query_vars['category_id'];
 			

@@ -702,7 +702,8 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					  }
 					";
 		
-			  if(($_POST['prodid'] != null) &&(get_option('fancy_notifications') == 1)) {
+	/*
+		  if(($_POST['prodid'] != null) &&(get_option('fancy_notifications') == 1)) {
 				echo "if(document.getElementById('fancy_notification_content') != null)
 					  {
 					  document.getElementById('fancy_notification_content').innerHTML = \"".str_replace(Array("\n","\r") , "",addslashes(fancy_notification_content($_POST['prodid'], $quantity_limit))). "\";
@@ -711,6 +712,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					  }
 					";
 				}
+*/
 			  
 			  if($_SESSION['slider_state'] == 0) {
 				//echo  'jQuery("#sliding_cart").css({ display: "none"});'."\n\r";
@@ -1920,130 +1922,6 @@ function wpsc_admin_notices() {
   }
 }
 
-
-/*
- *	Inserts the summary box on the WordPress Dashboard
- */
-
-//if(function_exists('wp_add_dashboard_widget')) {
-if( IS_WP27 ) {
-    add_action('wp_dashboard_setup','wpsc_dashboard_widget_setup');
-} else {
-    add_action('activity_box_end', 'wpsc_admin_dashboard_rightnow');
-}
-
-function wpsc_admin_latest_activity() {
-	global $wpdb;
-		$totalOrders = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."`");
-	
-		 
-		/*
-		 * This is the right hand side for the past 30 days revenue on the wp dashboard
-		 */
-		echo "<div id='leftDashboard'>";
-		echo "<strong class='dashboardHeading'>".TXT_WPSC_TOTAL_THIS_MONTH."</strong><br />";
-		echo "<p class='dashboardWidgetSpecial'>";
-		// calculates total amount of orders for the month
-		$year = date("Y");
-		$month = date("m");
-		$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
-		$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
-		$sql = "SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
-		$currentMonthOrders = $wpdb->get_var($sql);
-		
-		//calculates amount of money made for the month
-		$currentMonthsSales = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
-		echo $currentMonthsSales;
-		echo "<span class='dashboardWidget'>".TXT_WPSC_SALES_TITLE."</span>";
-		echo "</p>";
-		echo "<p class='dashboardWidgetSpecial'>";
-		echo "<span class='pricedisplay'>";
-		echo $currentMonthOrders;
-		echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_ORDERS_TITLE."</span>";
-		echo "</p>";
-		echo "<p class='dashboardWidgetSpecial'>";
-		//echo "<span class='pricedisplay'>";
-		//calculates average sales amount per order for the month
-		if($currentMonthOrders > 0){
-			$monthsAverage = ((int)admin_display_total_price($start_timestamp, $end_timestamp)/(int)$currentMonthOrders);
-			echo nzshpcrt_currency_display($monthsAverage,1);
-		}
-		//echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_AVGORDER_TITLE."</span>";
-		echo "</p>";
-		
-		
-		echo "</div>";
-		/*
-		 *This is the left side for the total life time revenue on the wp dashboard
-		 */
-		
-		echo "<div id='rightDashboard' >";
-		echo "<strong class='dashboardHeading'>".TXT_WPSC_TOTAL_INCOME."</strong><br />";
-
-		echo "<p class='dashboardWidgetSpecial'>";
-		echo nzshpcrt_currency_display(admin_display_total_price(),1);
-		echo "<span class='dashboardWidget'>".TXT_WPSC_SALES_TITLE."</span>";
-		echo "</p>";
-		echo "<p class='dashboardWidgetSpecial'>";
-		echo "<span class='pricedisplay'>";
-		echo $totalOrders;
-		echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_ORDERS_TITLE."</span>";
-		echo "</p>";
-		echo "<p class='dashboardWidgetSpecial'>";
-		//echo "<span class='pricedisplay'>";
-		//calculates average sales amount per order for the month
-		if((admin_display_total_price() > 0) && ($totalOrders > 0) ) {
-		$totalAverage = ((int)admin_display_total_price()/(int)$totalOrders);
-		} else {
-		  $totalAverage = 0;
-		}
-		echo nzshpcrt_currency_display($totalAverage,1);
-		//echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_AVGORDER_TITLE."</span>";
-		echo "</p>";
-		echo "</div>";
-		echo "<div style='clear:both'></div>";
-
-
-}
-add_action('wpsc_admin_pre_activity','wpsc_admin_latest_activity');
-
-/*
- *	Pre-2.7 Dashboard Information
- */
-
-function wpsc_admin_dashboard_rightnow() {
-  $user = wp_get_current_user();
-	if($user->user_level>9){
-		echo "<div>";
-		echo "<h3>".TXT_WPSC_E_COMMERCE."</h3>";
-		echo "<p>";
-		do_action('wpsc_admin_pre_activity');
-//		wpsc_admin_latest_activity();
-		do_action('wpsc_admin_post_activity');
-		echo "</div>";
-    }
-}
-		
-/*
- * Dashboard Widget for 2.7 (TRansom)
- */
-function wpsc_dashboard_widget_setup() {
-    wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
-}
-
-function wpsc_dashboard_widget() {
-    do_action('wpsc_admin_pre_activity');
-//    wpsc_admin_latest_activity();
-    do_action('wpsc_admin_post_activity');
-}
-
-/*
- * END - Dashboard Widget for 2.7
- */
 
 //this adds all the admin pages, before the code was a mess, now it is slightly less so.
 

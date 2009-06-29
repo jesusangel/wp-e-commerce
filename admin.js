@@ -343,14 +343,14 @@ jQuery(".remove_line").click(
 function filleditform(prodid)	{
 	jQuery(document).ready(function(){
 		ajax.post("index.php",getresults,"ajax=true&admin=true&prodid="+prodid);
-		jQuery('#loadingimage').attr('src', jQuery("#loadingimage").attr('src'));
+		jQuery('.loadingimage').attr('src', jQuery(".loadingimage").attr('src'));
 		jQuery('#loadingindicator_span').css('visibility','visible');
 	});
 }
    
 function fillvariationform(variation_id) {
   ajax.post("index.php",getresults,"ajax=true&admin=true&variation_id="+variation_id);
-	jQuery('#loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
+	jQuery('.loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
 	jQuery('#loadingindicator_span').css('visibility','visible');
 }
    

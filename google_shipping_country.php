@@ -38,7 +38,7 @@ global $wpdb;
 	echo "  </tr>\n\r";
 	echo "</table>\n\r";
 ?>
-	<a style="cursor:pointer;" onclick="jQuery('input[@type=\'checkbox\']').each(function() {this.checked = true; });">Select All</a>&emsp; <a style="cursor:pointer;" onclick="jQuery('input[@type=\'checkbox\']').each(function() {this.checked = false; });">Unselect All</a><br /><br />
+	<a style="cursor:pointer;" onclick="jQuery('input[type=\'checkbox\']').each(function() {this.checked = true; });">Select All</a>&emsp; <a style="cursor:pointer;" onclick="jQuery('input[type=\'checkbox\']').each(function() {this.checked = false; });">Unselect All</a><br /><br />
 	<input type='hidden' name='wpsc_admin_action' value='google_shipping_settings' />
 		<input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' /> <a href='?page=<?=$_GET['page']?>'>Go Back</a>
 	</form>

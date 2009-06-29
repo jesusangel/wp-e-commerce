@@ -158,7 +158,7 @@ global $wpsc_query, $wpdb;
 								<div class='wpsc_buy_button_container'>
 									<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
 									<div class='wpsc_loading_animation'>
-										<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" id="loadingimage"/>
+										<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
 										<?php echo TXT_WPSC_UDPATING_CART; ?>
 									</div>
 								</div>
