@@ -186,7 +186,11 @@ global $wpsc_query, $wpdb;
 					<?php endif ; ?>
 					
 					<?php echo wpsc_product_rater(); ?>
-					
+					<?php
+						if(function_exists('gold_shpcrt_display_gallery')) :					
+							echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
+						endif;
+						?>
 				</div>
 		</div>
 	</div>

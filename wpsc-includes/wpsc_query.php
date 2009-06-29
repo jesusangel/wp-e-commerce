@@ -40,7 +40,11 @@ function wpsc_this_page_url() {
 	if($wpsc_query->is_single === true) {
 		return wpsc_product_url($wpsc_query->product['id']);
 	} else {
-		return wpsc_category_url($wpsc_query->category);
+	  $output = wpsc_category_url($wpsc_query->category);
+	  if($wpsc_query->query_vars['page'] > 1) {
+			$output .= $output."page/{$wpsc_query->query_vars['page']}/";
+	  }
+	  return $output;
 	}
 }
 
@@ -1119,7 +1123,13 @@ class WPSC_Query {
 				} else if (get_option('wpsc_sort_by') == 'price') {
 					$order_by = "`products`.`price` $order";
 				} else {
-					$order_by = " `order_state` DESC,`order`.`order` $order, `products`.`id` DESC";
+				
+					if(	$order == 'ASC'){
+						$product_id_order = 'DESC';
+					}else{
+						$product_id_order = 'ASC';
+					}				
+					$order_by = " `order_state` DESC,`order`.`order` $order, `products`.`id` $product_id_order";
 				}
 				
 				$sql = "SELECT DISTINCT `products`.*, `category`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state` 
@@ -1170,8 +1180,7 @@ class WPSC_Query {
 		
 	
 					
-	
-	 //exit($sql);
+	  //echo "{$sql}";
 		$this->category = $this->query_vars['category_id'];
 		$this->products = $wpdb->get_results($sql,ARRAY_A);
 		

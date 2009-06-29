@@ -1,8 +1,10 @@
 <?php
 global $wpsc_query, $wpdb;
+//echo "<pre>".print_r($wpsc_query, true)."</pre>";
 ?>
 <div id='products_page_container' class="wpsc_container productdisplay example-category">
 	
+	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	<?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
@@ -59,7 +61,7 @@ global $wpsc_query, $wpdb;
 						<?php endif; ?>
 							
 							<br/>
-							Price: <span class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span>
+							Price: <span id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span>
 							
 						<?php if(get_option('display_moredetails') == 1) : ?>
 							<br />

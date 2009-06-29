@@ -176,7 +176,12 @@ function TB_show(caption, url, rel) {
           thumbImgHeight = 60				
 				}
 				
-				image_src = jQuery('img',image).attr('src');
+				if(jQuery('img',image).attr('src') == null) {
+					image_src = jQuery(image).attr('rev');
+				} else {
+					image_src = jQuery('img',image).attr('src');
+				}
+				
 				image_src = image_src.replace(/width=(\d)*/, "width="+thumbImgWidth);
 				image_src = image_src.replace(/height=(\d)*/, "height="+thumbImgHeight);
         additional_links += "<a href='#' "+image_selected+" id='TB_ThumbnailLink_"+i+"' ><img class='TB_Thumbnail_Image' src='"+image_src+"' width='"+thumbImgWidth+"' height='"+thumbImgHeight+"' alt=''/></a>";
