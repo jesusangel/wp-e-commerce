@@ -194,32 +194,35 @@ function wpsc_category_url($category_id) {
     if(!empty($category_name)) {
 			if(substr(get_option('product_list_url'), -1, 1) == '/') {
 				$category_url = get_option('product_list_url').implode($category_name,"/")."/";
-				} else {
+			} else {
 				$category_url = get_option('product_list_url')."/".implode($category_name,"/")."/";
-				}
-      } else {
-      $category_url = get_option('product_list_url');
-      }
-    } else {
-    $category_url = get_option('product_list_url')."&amp;category=".$category_id;
-    }
+			}
+		} else {
+			$category_url = get_option('product_list_url');
+		}
+	} else {
+	  if($category_id > 0) {
+			$category_url = add_query_arg('category', $category_id, get_option('product_list_url'));
+		} else {
+			$category_url = get_option('product_list_url');
+		}
+	}
   return $category_url;
-  }
+}
 
 function wpsc_category_description($category_id = null) {
   global $wpdb, $wp_query;
-  /*<?php echo wpsc_category_description(); ?> */
   if($category_id ==  null) {
     if($wp_query->query_vars['product_category'] != null) {
       $category_id = $wp_query->query_vars['product_category'];
-      } else if(is_numeric($_GET['category'])) {
+		} else if(is_numeric($_GET['category'])) {
       $category_id = $_GET['category'];
-      }
-    }
+		}
+	}
   
   $category_description = "<p>";
   $category_description .= $wpdb->get_var("SELECT `description` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1");
   $category_description .= "</p>";
   return $category_description;
-  }
+}
 ?>

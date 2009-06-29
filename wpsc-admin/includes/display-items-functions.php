@@ -189,15 +189,9 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
 				 <?php
-					// wpsc_the_editor($product_data['description'], 'content', false, false);
-						wpsc_new_the_editor($product_data['description'], 'content', false, false);
+						wpsc_the_editor($product_data['description'], 'content', false, false);
 				 ?>
 				 </div>
-				 <?php
-					 /*<div id='editorcontainer'>
-						<textarea name='description' class='mceEditor' cols='40' rows='8' ><?php echo stripslashes($product_data['description']); ?></textarea>
-					</div>*/
-				 ?>
 				</td>
 			</tr>
 		
@@ -1089,82 +1083,6 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
  * @param int $tab_index Optional, default is 2. Tabindex for textarea element.
  */
 function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_buttons = true, $tab_index = 2) {
-	$rows = get_option('default_post_edit_rows');
-	if (($rows < 3) || ($rows > 100))
-		$rows = 12;
-
-	if ( !current_user_can( 'upload_files' ) )
-		$media_buttons = false;
-
-	$richedit =  user_can_richedit();
-	$rows = "rows='$rows'";
-
-	if ( $richedit || $media_buttons ) { ?>
-	<div id="editor-toolbar">
-	<?php if ( $richedit ) {
-		$wp_default_editor = wp_default_editor(); ?>
-		<div class="zerosize"><input accesskey="e" type="button" onclick="switchEditors.go('<?php echo $id; ?>')" /></div>
-		<?php if ( 'html' == $wp_default_editor ) {
-			add_filter('the_editor_content', 'wp_htmledit_pre'); ?>
-			<a id="edButtonHTML" class="active" onclick="switchEditors.go('<?php echo $id; ?>', 'html');"><?php _e('HTML'); ?></a>
-			<a id="edButtonPreview" onclick="switchEditors.go('<?php echo $id; ?>', 'tinymce');"><?php _e('Visual'); ?></a>
-		<?php } else {
-			add_filter('the_editor_content', 'wp_richedit_pre'); ?>
-			<a id="edButtonHTML" onclick="switchEditors.go('<?php echo $id; ?>', 'html');"><?php _e('HTML'); ?></a>
-			<a id="edButtonPreview" class="active" onclick="switchEditors.go('<?php echo $id; ?>', 'tinymce');"><?php _e('Visual'); ?></a>
-		<?php }
-		}
-
-		if ( $media_buttons ) { ?>
-			<div id="media-buttons" class="hide-if-no-js">
-			<?php do_action( 'media_buttons' ); ?>
-			</div>
-		<?php } ?>
-	</div>
-	<?php } ?>
-
-	<div id="quicktags">
-	<?php wp_print_scripts( 'quicktags' ); ?>
-		<div id="ed_toolbar">
-		</div>
-		<script type="text/javascript">wpsc_edToolbar()</script>
-	</div>
-
-	<?php $the_editor = apply_filters('the_editor', "<div id='editorcontainer'><textarea $rows cols='40' style='width:200px;' name='$id' tabindex='$tab_index' id='$id'>%s</textarea></div>\n");
-	$the_editor_content = apply_filters('the_editor_content', $content);
-
-	printf($the_editor, $the_editor_content);
-
-	?>
-	<script type="text/javascript">
-	// <![CDATA[
-	edCanvas = document.getElementById('<?php echo $id; ?>');
-	<?php if ( user_can_richedit() && $prev_id ) { ?>
-	var dotabkey = true;
-	// If tinyMCE is defined.
-	if ( typeof tinyMCE != 'undefined' ) {
-		// This code is meant to allow tabbing from Title to Post (TinyMCE).
-		jQuery('#<?php echo $prev_id; ?>')[jQuery.browser.opera ? 'keypress' : 'keydown'](function (e) {
-			if (e.which == 9 && !e.shiftKey && !e.controlKey && !e.altKey) {
-				if ( (jQuery("#post_ID").val() < 1) && (jQuery("#title").val().length > 0) ) { autosave(); }
-				if ( tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden() && dotabkey ) {
-					e.preventDefault();
-					dotabkey = false;
-					tinyMCE.activeEditor.focus();
-					return false;
-				}
-			}
-		});
-	}
-	<?php } ?>
-	// ]]>
-	</script>
-	<?php
-}
-
-
-
-function wpsc_new_the_editor($content, $id = 'content', $prev_id = 'title', $media_buttons = true, $tab_index = 2) {
 	$rows = get_option('default_post_edit_rows');
 	if (($rows < 3) || ($rows > 100))
 		$rows = 12;
