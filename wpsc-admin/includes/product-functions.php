@@ -116,8 +116,14 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['price'] = (float)$post_data['price'];
 	$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
 	
+	// if special is unticked, wipe the special_price value
 	if($post_data['special'] !== 1) {
 	  $post_data['special_price'] = 0;
+	}
+	
+	// if table_rate_price is unticked, wipe the table rate prices
+	if($post_data['table_rate_price'] != 1) {
+		$post_data['meta']['table_rate_price'] = null;
 	}
 	
   //exit('<pre>'.print_r($post_data, true).'</pre>');

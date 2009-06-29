@@ -63,9 +63,23 @@
 
 
 
+/**
+ * WPSC product has variations function
+ * @since 3.7
+ * @param int product id
+ * @return bool true or false
+ */
 
-
-
+function wpsc_product_has_variations($product_id) {
+  global $wpdb;
+  if($product_id > 0) {
+		$variation_count = $wpdb->get_var("SELECT COUNT(`id`) FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN('product') AND `associated_id` IN('{$product_id}')");
+		if($variation_count > 0) {
+			return true;  
+		}
+  }
+	return false;  
+}
 
 
 

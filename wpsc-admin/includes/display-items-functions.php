@@ -65,7 +65,7 @@ function wpsc_display_product_form ($product_id = 0) {
 	//$variations_processor = new nzshpcrt_variations;
   if($product_id > 0) {
 
-		$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`={$product_id} LIMIT 1",ARRAY_A);
+		$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
 
 		$product_data['meta']['external_link'] = get_product_meta($product_id,'external_link',true);
 		$product_data['meta']['merchant_notes'] = get_product_meta($product_id,'merchant_notes',true);
@@ -77,19 +77,17 @@ function wpsc_display_product_form ($product_id = 0) {
 		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
 				
 		if(function_exists('wp_insert_term')) {
-			$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = {$product_id}", ARRAY_A);
+			$term_relationships = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_relationships WHERE object_id = '{$product_id}'", ARRAY_A);
 			
 			foreach ((array)$term_relationships as $term_relationship) {
 				$tt_ids[] = $term_relationship['term_taxonomy_id'];
 			}
 			foreach ((array)$tt_ids as $tt_id) {
-				$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_taxonomy WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
-				$term_ids[] = $results[0]['term_id'];
+				$term_ids[] = $wpdb->get_var("SELECT `term_id` FROM `{$wpdb->prefix}term_taxonomy` WHERE `term_taxonomy_id` = '{$tt_id}' AND `taxonomy` = 'product_tag' LIMIT 1");
 			}
 			foreach ((array)$term_ids as $term_id ) {
 				if ($term_id != NULL){
-				$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."terms WHERE term_id=".$term_id." ",ARRAY_A);
-				$tags[] = $results[0]['name'];
+					$tags[] = $wpdb->get_var("SELECT `name` FROM `{$wpdb->prefix}terms` WHERE `term_id`='{$term_id}' LIMIT 1");
 				}
 			}
 			if ($tags != NULL){ 
@@ -367,37 +365,37 @@ return $output;
 
 }
 function wpsc_product_price_and_stock_forms($product_data=''){
-	global $closed_postboxes, $wpdb, $variations_processor;
-	$table_rate_price = get_product_meta($product_data['id'], 'table_rate_price');
-	$output = '';
-	if ($product_data == 'empty') {
-		$display = "style='visibility:hidden;'";
-	}
-	$output .= "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." >";
+		global $closed_postboxes, $wpdb, $variations_processor;
+		$table_rate_price = get_product_meta($product_data['id'], 'table_rate_price');
+		
+		if ($product_data == 'empty') {
+			$display = "style='visibility:hidden;'";
+		}
+		echo "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." >";
 
-    if (IS_WP27) {
-        $output .= "<h3 class='hndle'>";
-    } else {
-        $output .= "<h3>
-	    <a class='togbox'>+</a>";
-    }
-    $output .= TXT_WPSC_PRICE_AND_STOCK_CONTROL;
-    $output .= "
+		echo "<h3 class='hndle'>";
+
+    echo TXT_WPSC_PRICE_AND_STOCK_CONTROL;
+    echo "
 	</h3>
     <div class='inside'>
     <table>
+    ";
+    
+    echo "
     <tr>
        <td>
           <input id='add_form_tax' type='checkbox' name='notax' value='yes' ".(($product_data['notax'] == 1) ? 'checked="true"' : '')."/>&nbsp;<label for='add_form_tax'>".TXT_WPSC_TAXALREADYINCLUDED."</label>
        </td>
-    </tr>
+    </tr>";
+    echo "
     <tr>
 
        <td>
           <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="true"' : '')." />&nbsp;<label for='add_form_donation'>".TXT_WPSC_IS_DONATION."</label>
        </td>
-    </tr>
-
+    </tr>";
+    echo "
     <tr>
       <td>
         <input type='checkbox' onclick='hideelement(\"add_special\")' value='yes' name='special' id='add_form_special' ".(($product_data['special'] == 1) ? 'checked="true"' : '')." />
@@ -406,69 +404,94 @@ function wpsc_product_price_and_stock_forms($product_data=''){
           <input type='text' size='10' value='".number_format(($product_data['price'] - $product_data['special_price']), 2)."' name='special_price'/>
         </div>
       </td>
-    </tr>
+    </tr>";
+    
+				
+    ?>
      <tr>
       <td>
-        <input type='checkbox' value='yes' name='table_rate_price' id='table_rate_price'/>
-        <label for='table_rate_price'>".TXT_WPSC_TABLE_RATED_PRICE."</label>
-        <div style='display:".(($table_rate_price != '') ? 'block' : 'none').";' id='table_rate'>
-          <a class='add_level' style='cursor:pointer;'>Add level</a><br />
+        <input type='checkbox' value='1' name='table_rate_price' id='table_rate_price'  <?php echo ((count($table_rate_price['quantity']) > 0) ? 'checked=\'checked\'' : ''); ?> <?php echo ((wpsc_product_has_variations($product_data['id'])) ? 'disabled=\'disabled\'' : ''); ?> />
+        <label for='table_rate_price'><?php echo TXT_WPSC_TABLE_RATED_PRICE; ?></label>
+        <div style='display:<?php echo ((($table_rate_price != '') &&  !wpsc_product_has_variations($product_data['id'])) ? 'block' : 'none'); ?>;' id='table_rate'>
+          <a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
           <table>
-          <tr><td>".TXT_WPSC_QUANTITY."</td><td>".TXT_WPSC_PRICE."</td></tr>";
-          
-          	if ($table_rate_price != '') {
-          		foreach($table_rate_price['quantity'] as $key => $qty) {
-					if ($qty != '')
-						$output .= '<tr><td><input type="text" size="10" value="'.$qty.'" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="'.$table_rate_price['table_price'][$key].'" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'.WPSC_URL.'/images/cross.png" class="remove_line"></td></tr>';
-				}
-			}
-          
-          $output .= "<tr><td><input type='text' size='10' value='' name='productmeta_values[table_rate_price][quantity][]'/> and above</td><td><input type='text' size='10' value='' name='productmeta_values[table_rate_price][table_price][]'/></td></tr>
+						<tr>
+							<td><?php echo TXT_WPSC_QUANTITY; ?></td>
+							<td><?php echo TXT_WPSC_PRICE; ?></td>
+						</tr>
+						<?php
+						//print_r($table_rate_price);
+						if($table_rate_price != '') {
+							foreach($table_rate_price['quantity'] as $key => $qty) {
+								if($qty != '') {
+									?>
+									<tr>
+										<td>
+											<input type="text" size="10" value="<?php echo $qty; ?>" name="productmeta_values[table_rate_price][quantity][]"/> and above
+										</td>
+										<td>
+											<input type="text" size="10" value="<?php echo $table_rate_price['table_price'][$key]; ?>" name="productmeta_values[table_rate_price][table_price][]" />
+										</td>
+										<td><img src="<?php echo WPSC_URL; ?>/images/cross.png" class="remove_line"></td>
+									</tr>
+									<?php
+								}
+							}
+						}
+						?>						
+						<tr>
+							<td><input type='text' size='10' value='' name='productmeta_values[table_rate_price][quantity][]'/> and above</td>
+							<td><input type='text' size='10' value='' name='productmeta_values[table_rate_price][table_price][]'/></td>
+						</tr>
           </table>
         </div>
       </td>
     </tr>
+    <?php
+    
+    echo "
     <tr>
       <td style='width:430px;'>
       <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' ".(($product_data['quantity_limited'] == 1) ? 'checked="true"' : '')." name='quantity_limited'/>"; //onclick='hideelement(\"add_stock\")'
-	$output .= "&nbsp;<label for='add_form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
-	if ($product_data['id'] > 0){
-			$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
-      
-  		if($variations_output != '') {
-  	    	$output .= "<div class='edit_stock' style='display: none;'>\n\r";
-  	    	
-  	    	$output .= "<input type='hidden' name='quantity' value='".$product_data['quantity']."' />";
-  	    	$output .= "</div>\n\r";
-  	    } else {
-  	    	switch($product_data['quantity_limited']) {
-  	    		case 1:
-  	    		$output .= "            <div class='edit_stock' style='display: block;'>\n\r";
-  	    		break;
-  	    		
-  	    		default:
-  	    		$output .= "            <div class='edit_stock' style='display: none;'>\n\r";
-  	    		break;
-  	    	}
-  	    	
-  	    	$output .= "<input type='text' name='quantity' size='10' value='".$product_data['quantity']."' />";
-  	    	$output .= "              </div>\n\r";
-  	    }
-	} else {
-  	  		$output .= "
-        <div style='display: none;' class='edit_stock'>
-          <input type='text' name='quantity' value='0' size='10' />
-        </div>";  
-  	}
-$output .= "
-      
-      </td>
-    </tr>
-  </table>
- </div>
+		echo "&nbsp;<label for='add_form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
+		if ($product_data['id'] > 0){
+				$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
+				
+				if(wpsc_product_has_variations($product_data['id'])) {
+						echo "<div class='edit_stock' style='display: none;'>\n\r";
+						
+						echo "<input type='hidden' name='quantity' value='".$product_data['quantity']."' />";
+						echo "</div>\n\r";
+					} else {
+						switch($product_data['quantity_limited']) {
+							case 1:
+							echo "            <div class='edit_stock' style='display: block;'>\n\r";
+							break;
+							
+							default:
+							echo "            <div class='edit_stock' style='display: none;'>\n\r";
+							break;
+						}
+						
+						echo "<input type='text' name='quantity' size='10' value='".$product_data['quantity']."' />";
+						echo "              </div>\n\r";
+					}
+		} else {
+						echo "
+					<div style='display: none;' class='edit_stock'>
+						<input type='text' name='quantity' value='0' size='10' />
+					</div>";  
+			}
+	echo "
+				
+				</td>
+			</tr>";
+	echo "
+		</table>
+	</div>
 </div>";
 
-return $output;
+//return $output;
 
 }
 
