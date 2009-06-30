@@ -64,12 +64,11 @@ function wpsc_admin_pages(){
 			}
 
 				
-
-			$page_hooks[] = add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
-
+			$page_hooks[] =  add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
 
 
-			
+
+			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
 			$page_hooks[] = add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
@@ -139,13 +138,14 @@ function wpsc_admin_pages(){
 
 function wpsc_meta_boxes(){
   $pagename = 'products_page_wpsc-edit-products';
-	add_meta_box('category_and_tag', 'Category and Tags', 'wpsc_category_and_tag_forms', $pagename, 'normal', 'high');
-	add_meta_box('price_and_stock', 'Price and Stock', 'wpsc_price_and_stock_forms', $pagename, 'normal', 'high');
-	add_meta_box('variation', 'Variations', 'wpsc_variation_forms', $pagename, 'normal', 'high');
-	add_meta_box('shipping', 'Shipping', 'wpsc_shipping_forms', $pagename, 'normal', 'high');
-	add_meta_box('advanced', 'Advanced Settings', 'wpsc_advanced_forms', $pagename, 'normal', 'high');
-	add_meta_box('product_download', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high');
-	add_meta_box('product_image', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high');
+ 
+	add_meta_box('wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high');
 }
 
 add_action('admin_menu', 'wpsc_meta_boxes');

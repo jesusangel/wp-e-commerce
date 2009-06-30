@@ -1960,20 +1960,21 @@ add_filter('mod_rewrite_rules', 'wpsc_refresh_page_urls');
 
 
 if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
-  wp_enqueue_script( 'jQuery', WPSC_URL.'/js/jquery.js', false, '1.2.3');
-	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
+  //wp_enqueue_script( 'jQuery', WPSC_URL.'/js/jquery.js', false, '1.2.3');
+	//wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
 } else {
-	wp_enqueue_script('thickbox');
+
+	//wp_enqueue_script('thickbox');
 	if(function_exists('wp_enqueue_style')) {  // DO NOT ALTER THIS!! This function is not present on older versions of wordpress
-		wp_enqueue_style( 'thickbox' );
+	//	wp_enqueue_style( 'thickbox' );
 	}
-	wp_enqueue_script('jEditable',WPSC_URL.'/js/jquery.jeditable.pack.js', array('jquery'), '2.7.4');
+//	wp_enqueue_script('jEditable',WPSC_URL.'/js/jquery.jeditable.pack.js', array('jquery'), '2.7.4');
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 		if($_GET['page'] == 'wpsc-edit-products') {
-			wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
-      wp_enqueue_script('new_swfupload', WPSC_URL.'/js/swfupload.js');
-      wp_enqueue_script('new_swfupload.swfobject', WPSC_URL.'/js/swfupload/swfupload.swfobject.js');
+		//	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
+     // wp_enqueue_script('new_swfupload', WPSC_URL.'/js/swfupload.js');
+     // wp_enqueue_script('new_swfupload.swfobject', WPSC_URL.'/js/swfupload/swfupload.swfobject.js');
 		}
 }
 
@@ -1993,25 +1994,25 @@ switch(get_option('cart_location')) {
   break;
   
   case 5:
-  //exit("<pre>".print_r($_SERVER,true)."</pre>");
-  if(function_exists('drag_and_drop_cart')) {
-    $shop_pages_only = 1;
-		add_action('init', 'drag_and_drop_cart_ajax');  
-		if (get_option('dropshop_display')=='product'){
-		  $url_prefix_array = explode("://", get_option('product_list_url'));
-		  $url_prefix = $url_prefix_array[0]."://";
-			if(stristr(($url_prefix.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
-			  
-				wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
-				add_action('wp_head', 'drag_and_drop_js');  
-				add_action('wp_footer', 'drag_and_drop_cart');  
-			}
-		} else {		  
-			wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
-			add_action('wp_head', 'drag_and_drop_js');  
-			add_action('wp_footer', 'drag_and_drop_cart');  
-		}
-	}
+//   //exit("<pre>".print_r($_SERVER,true)."</pre>");
+//   if(function_exists('drag_and_drop_cart')) {
+//     $shop_pages_only = 1;
+// 		add_action('init', 'drag_and_drop_cart_ajax');  
+// 		if (get_option('dropshop_display')=='product'){
+// 		  $url_prefix_array = explode("://", get_option('product_list_url'));
+// 		  $url_prefix = $url_prefix_array[0]."://";
+// 			if(stristr(($url_prefix.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
+// 			  
+// 				wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
+// 				add_action('wp_head', 'drag_and_drop_js');  
+// 				add_action('wp_footer', 'drag_and_drop_cart');  
+// 			}
+// 		} else {		  
+// 			wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
+// 			add_action('wp_head', 'drag_and_drop_js');  
+// 			add_action('wp_footer', 'drag_and_drop_cart');  
+// 		}
+// 	}
   break;
   
   case 3:

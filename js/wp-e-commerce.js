@@ -29,6 +29,7 @@ jQuery(document).ready(function () {
 			return true;
 		} else {
 			form_values = jQuery(this).serialize();
+// 			console.log(typeof(jQuery('#fancy_notification')));
 			if(jQuery('#fancy_notification') == null) {
 				jQuery('div.wpsc_loading_animation',this).css('visibility', 'visible');
 			}
@@ -52,14 +53,12 @@ jQuery(document).ready(function () {
   
   //  this is for storing data with the product image, like the product ID, for things like dropshop and the the ike.
 	jQuery("form.product_form").livequery(function(){
-	  jQuery(this).toggle( function() {
 			product_id = jQuery('input[name=product_id]',this).val();
 			image_element_id = 'product_image_'+product_id;
 			jQuery("#"+image_element_id).data("product_id", product_id);			
 			parent_container = jQuery(this).parents('div.product_view_'+product_id);
 			jQuery("div.item_no_image", parent_container).data("product_id", product_id);
-		});
-  });
+	});
   //jQuery("form.product_form").trigger('load');
   
   // Toggle the additional description content  

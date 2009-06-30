@@ -130,7 +130,7 @@ jQuery(document).ready( function () {
 				} else {
 					jQuery('a.togbox',this).html('&ndash;');
 				}
-				wpsc_save_postboxes_state('products_page_edit-products', '#poststuff');
+				wpsc_save_postboxes_state('products_page_wpsc-edit-products', '#poststuff');
 		});		
 	});
 	
@@ -169,7 +169,7 @@ jQuery(document).ready( function () {
 					postboxes.pbhide( box );
 				}
 			}
-			postboxes.save_state('products_page_edit-products');
+			postboxes.save_state('products_page_wpsc-edit-products');
 		});
 	});
 	
@@ -549,6 +549,7 @@ function hideOptionElement(id, option) {
 
 
 function wpsc_save_postboxes_state(page, container) {
+  //console.log(container);
 	var closed = jQuery(container+' .postbox').filter('.closed').map(function() { return this.id; }).get().join(',');
 	jQuery.post(postboxL10n.requestFile, {
 		action: 'closed-postboxes',

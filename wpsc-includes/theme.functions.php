@@ -8,16 +8,12 @@
  * @since 3.7
 */
 
-
-
-
 /**
 * wpsc_user_enqueues products function,
 * enqueue all javascript and CSS for wp ecommerce
 */
 function wpsc_enqueue_user_script_and_css() {
 	global $wp_styles;
-	
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
   
 	if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
@@ -25,22 +21,23 @@ function wpsc_enqueue_user_script_and_css() {
 			$category_id = $wp_query->query_vars['product_category'];
 		} else if(is_numeric($_GET['category'])) {
 			$category_id = $_GET['category'];
-		} else { 
+		} else {
 			$category_id = get_option('wpsc_default_category');
 		}
 	}
   
   
   wp_enqueue_script( 'jQuery');
-  
 	wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
 	wp_enqueue_script('wp-e-commerce-ajax-legacy', WPSC_URL.'/js/ajax.js', false, WPSC_VERSION.WPSC_MINOR_VERSION);
-
 	wp_enqueue_script('wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_js=true", false, $version_identifier);
-	
+	wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
+
 	
 	wp_enqueue_script('wp-e-commerce-legacy', WPSC_URL.'/js/user.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
-	wp_enqueue_script('ngg-thickbox',WPSC_URL.'/js/thickbox.js', 'jQuery', 'Instinct_e-commerce');
+
+	
+	wp_enqueue_script('wpsc-thickbox',WPSC_URL.'/js/thickbox.js', array('jquery'), 'Instinct_e-commerce');
 
 	$theme_path = WPSC_FILE_PATH. '/themes/';
 	$theme_url = WPSC_URL. '/themes/';
@@ -86,35 +83,6 @@ function wpsc_user_dynamic_js() {
 	var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";
 	var resizeSpeed = 9;  // controls the speed of the image resizing (1=slowest and 10=fastest)
 	var borderSize = 10;  //if you adjust the padding in the CSS, you will need to update this variable
-	jQuery(document).ready( function() {
-		<?php
-		/*
-		if(get_option('show_sliding_cart') == 1) {
-			if(is_numeric($_SESSION['slider_state'])) {
-				if($_SESSION['slider_state'] == 0) {
-					?>
-					jQuery("#sliding_cart").css({ display: "none"});
-					<?php
-				} else {
-					?>
-					jQuery("#sliding_cart").css({ display: "block"});  
-					<?php
-				}
-			} else {
-				if($_SESSION['nzshpcrt_cart'] == null) {
-					?>
-					jQuery("#sliding_cart").css({ display: "none"});  
-					<?php
-				} else {
-					?>
-					jQuery("#sliding_cart").css({ display: "block"});  
-					<?php
-				}
-			}
-		}
-		*/
-		?>
-	});
 <?php
   exit();
 }
