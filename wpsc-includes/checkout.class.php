@@ -455,6 +455,7 @@ function wpsc_gateway_is_checked() {
 function wpsc_gateway_form_fields() {
 	global $wpsc_gateway, $gateway_checkout_form_fields;
 	return $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']];
+
 }
 
 function wpsc_gateway_form_field_style() {

@@ -79,9 +79,13 @@ function wpsc_cart_weight_total() {
 * tax total function, no parameters
 * @return float the total weight of the cart
 */
-function wpsc_cart_tax() {
+function wpsc_cart_tax($forDisplay = true) {
 	global $wpsc_cart;
-	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+	if($forDisplay){
+		return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+	}else{
+		return $wpsc_cart->calculate_total_tax();
+	}
 }
 
 /**
@@ -170,6 +174,7 @@ function wpsc_cart_item_quantity() {
 	global $wpsc_cart;
 	return $wpsc_cart->cart_item->quantity;
 }
+
 function wpsc_cart_item_quantity_single_prod($id) {
 	global $wpsc_cart;
 	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');

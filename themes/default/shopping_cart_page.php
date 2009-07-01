@@ -262,7 +262,12 @@ if(wpsc_cart_item_count() > 0) :
 					<h3><?php echo TXT_WPSC_SELECTGATEWAY;?></h3>
 					<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
 						<div class="custom_gateway">
-							<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							<?php if(wpsc_gateway_internal_name() == 'noca'){ ?>
+								<label><input type="radio" id='noca_gateway' value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							<?php }else{ ?>
+								<label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+							<?php } ?>
+
 							
 							<?php if(wpsc_gateway_form_fields()): ?> 
 								<table class='<?php echo wpsc_gateway_form_field_style();?>'>
@@ -298,10 +303,11 @@ if(wpsc_cart_item_count() > 0) :
 				<?php if(get_option('terms_and_conditions') == '') : ?>
 					<input type='hidden' value='yes' name='agree' />
 				<?php endif; ?>	
-				<?php/* if((is_user_logged_in() && (get_option('require_register') == 1)) xor (get_option('require_register') == 0)) : */?>
+				<?php //exit('<pre>'.print_r($wpsc_gateway->wpsc_gateways[0]['name'], true).'</pre>');
+				 if(count($wpsc_gateway->wpsc_gateways) == 1 && $wpsc_gateway->wpsc_gateways[0]['name'] == 'Noca'){}else{?>
 					<input type='hidden' value='submit_checkout' name='wpsc_action' />
 					<input type='submit' value='<?php echo TXT_WPSC_MAKEPURCHASE;?>' name='submit' class='make_purchase' />
-				<?php /* else: ?>
+				<?php }/* else: ?>
 				
 				<br /><strong><?php echo TXT_WPSC_PLEASE_LOGIN;?></strong><br />
 				<?php echo TXT_WPSC_IF_JUST_REGISTERED;?>
@@ -315,4 +321,5 @@ if(wpsc_cart_item_count() > 0) :
 else:
 	echo TXT_WPSC_BUYPRODUCTS;
 endif;
+do_action('wpsc_bottom_of_shopping_cart');
 ?>

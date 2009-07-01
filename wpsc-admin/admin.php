@@ -7,8 +7,7 @@
  * @package wp-e-commerce
  * @since 3.7
  */
- 
- 
+		
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-groups.page.php");

@@ -1,8 +1,5 @@
 <?php
-if(!isset($purchlog)){
-//echo 'yesa';
-	$purchlogs = new wpsc_purchaselogs();
-}
+
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
 }
@@ -70,7 +67,10 @@ function wpsc_the_purch_item(){
 
 function wpsc_the_purch_item_price(){
 	global $purchlogs;
+	//	exit('<pre>'.print_r($purchlogs->purchitem, true).'</pre>');
+	if($purchlogs->purchitem->processed > 1 && $purchlogs->purchitem->processed != 5){
 	$purchlogs->totalAmount += $purchlogs->purchitem->totalprice;
+	}
 	return $purchlogs->purchitem->totalprice;
 }
 function wpsc_the_purch_item_id(){
@@ -136,10 +136,11 @@ function wpsc_purchlogs_getfirstdates(){
 }
 function wpsc_change_purchlog_view($viewby, $status){
 	global $purchlogs;
-	//exit('<pre>'.print_r($viewby,true).'</pre>');
+//	exit('<pre>'.print_r($status,true).'</pre>');
 	if($viewby == 'all'){
 		$dates = $purchlogs->getdates();
 		$purchaselogs = $purchlogs->get_purchlogs($dates, $status);
+		$_SESSION['newlogs'] = $purchaselogs;
 		$purchlogs->allpurchaselogs = $purchaselogs;
 	}elseif($viewby == '3mnths'){
 		$dates = $purchlogs->getdates();
@@ -149,6 +150,7 @@ function wpsc_change_purchlog_view($viewby, $status){
 		$purchlogs->current_end_timestamp = $dates[0]['end'];
 	//	exit('<pre>'.print_r($dates,true).'</pre>');		
 		$newlogs = $purchlogs->get_purchlogs($dates, $status);
+		$_SESSION['newlogs'] = $newlogs;
 		//exit('<pre>'.print_r($newlogs, true).'</pre>');
 		$purchlogs->allpurchaselogs = $newlogs;
 		//exit(print_r($date, true)."".$purchlogs->current_timestamp);
@@ -162,6 +164,7 @@ function wpsc_change_purchlog_view($viewby, $status){
 		$purchlogs->current_end_timestamp =  $dates[1];
 		$newlogs = $purchlogs->get_purchlogs($date, $status);
 		//exit('<pre>'.print_r($newlogs, true).'</pre>');
+		$_SESSION['newlogs'] = $newlogs;
 		$purchlogs->allpurchaselogs = $newlogs;
 	}
 
@@ -385,7 +388,12 @@ class wpsc_purchaselogs{
 		$this->getall_formdata();
 		if(!isset($_POST['view_purchlogs_by']) || !isset($_POST['purchlogs_searchbox'])){
 		$dates = $this->getdates();
-		$purchaselogs = $this->get_purchlogs($dates);
+		if(isset($_SESSION['newlogs'])){
+			$purchaselogs = $_SESSION['newlogs'];
+			unset($_SESSION['newlogs']);
+		}else{
+			$purchaselogs = $this->get_purchlogs($dates);
+		}
 		
 		$this->allpurchaselogs = $purchaselogs;
 	//	$this->the_purch_item();
@@ -401,27 +409,34 @@ class wpsc_purchaselogs{
 		global $wpdb;
 	//	exit(print_r($dates,true).'tset?'.$status);
 // 		echo "<pre>".print_r(debug_backtrace(),true)."<pre>";
-		$purchlog = array();
+		$purchlog2 = array();
 		if($status=='' || $status=='-1'){
 			   foreach((array)$dates as $date_pair){
 			        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
 			          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
 			          $purchase_logs = $wpdb->get_results($sql) ;
-						array_push($purchlog, $purchase_logs);
+						array_push($purchlog2, $purchase_logs);
 					}
 				}
 		}else{
 		   foreach((array)$dates as $date_pair){
 			        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
-			          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed`=".$status." ORDER BY `date` DESC";
+			          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' AND `processed`='".$status."' ORDER BY `date` DESC";
+			        // exit($sql);
 			          $purchase_logs = $wpdb->get_results($sql) ;
-			          array_push($purchlog, $purchase_logs);
+			          $purchlog2 = $purchase_logs;
+	          	  	  $this->allpurchaselogs = $purchlog2;
+	 				  $this->purch_item_count = count($this->allpurchaselogs);
+					  return $purchlog2;
+			        //  array_push($purchlog2, $purchase_logs);
+
 					}
 				}
 
 	  	
 	  	}
-	  	foreach($purchlog as $purch){
+	  	
+	  	foreach($purchlog2 as $purch){
 	  		if(is_array($purch)){
 		  		foreach($purch as $log){
 		  			$newarray[] = $log;
@@ -430,7 +445,7 @@ class wpsc_purchaselogs{
 	  			exit('Else :'.print_r($purch));
 	  		}	  		
 	  	}
-	 // 	exit('<pre>'.print_r($newarray,true).'<pre>');
+	//  	exit('<pre>'.print_r($newarray,true).'<pre>');
 	   	$this->allpurchaselogs = $newarray;
 	   	$this->purch_item_count = count($this->allpurchaselogs);
 	  return $newarray;

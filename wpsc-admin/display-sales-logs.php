@@ -7,7 +7,9 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-
+if(!isset($purchlogs)){
+	 $purchlogs = new wpsc_purchaselogs();
+}
  function wpsc_display_sales_logs() {
 		$subpage = $_GET['subpage'];
 		switch($subpage) {
@@ -30,7 +32,7 @@
 		<h2><?php echo wp_specialchars( TXT_WPSC_PURCHASELOG ); ?> </h2>
 		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
 		<?php if(!isset($_REQUEST['purchaselog_id'])){
-				//$purchlogs = new wpsc_purchaselogs();
+
 		  	$columns = array(
 		  		'cb' => '<input type="checkbox" />',
 					'date' => 'Date',
@@ -401,7 +403,7 @@
 								 'start_timestamp'	=> $purchlogs->current_start_timestamp,
 								 'end_timestamp'	=> $purchlogs->current_end_timestamp);
 		?>		
-		<p><a class='admin_download' href='<?php echo add_query_arg($arr_params) ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL; ?>/images/download.gif' alt='' title='' /> <span> <?php echo TXT_WPSC_DOWNLOAD_CSV; ?></span></a></p>
+		<p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL; ?>/images/download.gif' alt='' title='' /> <span> <?php echo TXT_WPSC_DOWNLOAD_CSV; ?></span></a></p>
 	</form>
 	<br />
 	<script type="text/javascript">
@@ -416,7 +418,7 @@
 			});
 		});
 	})(jQuery);
-	columns.init('edit');
+	//columns.init('edit');
 	/* ]]> */
 	</script>
 
@@ -432,7 +434,7 @@
  		<td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
  		<td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
  		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
- 		<td><a href='<?php echo add_query_arg('purchaselog_id', wpsc_the_purch_item_id()); ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
+ 		<td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id())) ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
  		<td>
  		<?php if(wpsc_purchlogs_is_google_checkout() == false){ ?>
  			<select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >

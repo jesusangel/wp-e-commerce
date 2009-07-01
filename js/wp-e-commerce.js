@@ -16,9 +16,25 @@ function wpsc_bind_to_events() {
 }    
     
 
-	
+function check_make_purchase_button(){
+	toggle = jQuery('#noca_gateway').attr('checked');
+	if(toggle == true){
+		jQuery('.make_purchase').hide();
+		jQuery('#OCPsubmit').show();
+	}else{
+		jQuery('.make_purchase').show();	
+		jQuery('#OCPsubmit').hide();		
+	}
+}	
 
 jQuery(document).ready(function () {
+
+	//jQuery hide Make Purchase Button and replace with text
+//	alert(toggle);
+	check_make_purchase_button();
+	jQuery('.custom_gateway').click(function(event){
+		check_make_purchase_button();
+	});
   wpsc_bind_to_events();
 	
 	// Submit the product form using AJAX
