@@ -1,11 +1,9 @@
 <?php
 global $wpsc_query, $wpdb;
-//echo "<pre>".print_r($wpsc_query, true)."</pre>";
 ?>
 <div id='products_page_container' class="wpsc_container productdisplay example-category">
 	
-	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
-	<?php if(wpsc_has_breadcrumbs()) : ?>
+<?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
 			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
@@ -18,8 +16,22 @@ global $wpsc_query, $wpdb;
 		</div>
 	<?php endif; ?>
 	
+	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	
-	<?php if(wpsc_has_pages() && (get_option('wpsc_page_number_position') == (1 || 3)) ) : ?>
+	<?php if(wpsc_is_in_category()) : ?>
+		<div class='wpsc_category_details'>
+			<?php if(get_option('show_category_thumbnails') && wpsc_category_image()) : ?>
+				<img src='<?php echo wpsc_category_image(); ?>' alt='<?php echo wpsc_category_name(); ?>' title='<?php echo wpsc_category_name(); ?>' />
+			<?php endif; ?>
+			
+			<?php if(get_option('wpsc_category_description') &&  wpsc_category_description()) : ?>
+				<?php echo wpsc_category_description(); ?>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+	
+	
+	<?php if(wpsc_has_pages() && ((get_option('wpsc_page_number_position') == 1 ) || (get_option('wpsc_page_number_position') == 3)))  : ?>
 		<div class='wpsc_page_numbers'>
 		  Pages: 
 			<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>

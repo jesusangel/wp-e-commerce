@@ -1150,7 +1150,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
 		if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] < 2)) {
 			transaction_results($log_data['sessionid'],false);
 		}      
-	
+	exit();
 	}
 }
 

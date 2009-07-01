@@ -42,7 +42,7 @@ function wpsc_debug_page() {
 		 }
 		?></pre>
 	</div>
-	<?
+	<?php
 }
 
 function wpsc_group_and_update_download_links() {

@@ -215,9 +215,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
+						wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')." <".get_option('return_email').">");
 					} else {
-						wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')."");
+						wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')." <".get_option('return_email').">");
 					}
 				}
 				$report_user = TXT_WPSC_CUSTOMERDETAILS."\n\r";
@@ -247,7 +247,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
 					//exit($report);
-					wp_mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')."");
+					wp_mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')." <".get_option('return_email').">");
 				}
 
 				if($purchase_log['processed'] < 2) {

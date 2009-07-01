@@ -1249,3 +1249,13 @@ td.shipping_header {
 	text-transform: uppercase;
 	font-weight:bold;
 }
+
+
+div.wpsc_category_details {
+  margin: 0px 0px 8px 0px;
+}
+
+div.wpsc_category_details img {
+  float: left;
+  margin: 0px 6px 12px 0px;
+}

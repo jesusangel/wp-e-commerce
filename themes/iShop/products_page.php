@@ -3,8 +3,8 @@ global $wpsc_query, $wpdb;
 ?>
 
 <div id='products_page_container' class="wrap wpsc_container">
-	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
-	<?php if(wpsc_has_breadcrumbs()) : ?>
+
+<?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
 			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
@@ -17,9 +17,21 @@ global $wpsc_query, $wpdb;
 		</div>
 	<?php endif; ?>
 	
+	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	
+	<?php if(wpsc_is_in_category()) : ?>
+		<div class='wpsc_category_details'>
+			<?php if(get_option('show_category_thumbnails') && wpsc_category_image()) : ?>
+				<img src='<?php echo wpsc_category_image(); ?>' alt='<?php echo wpsc_category_name(); ?>' title='<?php echo wpsc_category_name(); ?>' />
+			<?php endif; ?>
+			
+			<?php if(get_option('wpsc_category_description') &&  wpsc_category_description()) : ?>
+				<?php echo wpsc_category_description(); ?>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
 	
-	<?php if(wpsc_has_pages() && (get_option('wpsc_page_number_position') == (1 || 3)) ) : ?>
+	<?php if(wpsc_has_pages() && ((get_option('wpsc_page_number_position') == 1 ) || (get_option('wpsc_page_number_position') == 3)))  : ?>
 		<div class='wpsc_page_numbers'>
 		  Pages: 
 			<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>
@@ -31,24 +43,27 @@ global $wpsc_query, $wpdb;
 			<?php endwhile; ?>
 		</div>
 	<?php endif; ?>
-	
-<?php /** start the product loop here */?>
-<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
-	<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
-		<div class="textcol">
-			<div class="imagecol">
-				<?php if(wpsc_the_product_thumbnail()) :?> 	   
-					<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-						<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
-					</a>
-				<?php else: ?> 
-					<div class="item_no_image">
-						<a href="<?php echo wpsc_the_product_permalink(); ?>">
-						<span>No Image Available</span>
-						</a>
+	<?php /** start the product loop here */?>
+	<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
+		<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
+			<div class="textcol">
+			
+				<?php if(get_option('show_thumbnails')) :?>
+					<div class="imagecol">
+						<?php if(wpsc_the_product_thumbnail()) :?>
+							<a rel="<?php echo wpsc_the_product_title(); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
+								<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+							</a>
+						<?php else: ?>
+							<div class="item_no_image">
+								<a href="<?php echo wpsc_the_product_permalink(); ?>">
+								<span>No Image Available</span>
+								</a>
+							</div>
+						<?php endif; ?>
 					</div>
-				<?php endif; ?> 				
-			</div>
+				<?php endif; ?>
+				
 				<div class="producttext">
 					<h2 class="prodtitles">
 						<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a>

@@ -387,7 +387,7 @@ define('TXT_WPSC_VARIATION_LIST', 'Select a Variation');
 
 define('TXT_WPSC_CATEGORISATION_GROUPS_DESCR', 'Categorizing your products into groups help your customers find them. For instance if you sell hats and trousers you  might want to setup a Group called clothes and add hats and trousers to that group.');
 define('TXT_WPSC_CATEGORISATION_DESCR', 'Product Grouping Widget');
-define('WPSC_DOWNLOAD_INVALID', 'This download is no longer valid.');
+define('WPSC_DOWNLOAD_INVALID', 'This download is no longer valid, Please contact the site administrator for more information.');
 define('TXT_WPSC_LOCK_DOWNLOADS_TO_IP', 'Lock downloads to IP address');
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Unlock any downloads locked to an IP address for this order');
 define('TXT_WPSC_THANKS_UNLOCKED', 'Thanks, the downloads that were locked to this users IP number have been freed.');

@@ -29,8 +29,8 @@ jQuery(document).ready(function () {
 			return true;
 		} else {
 			form_values = jQuery(this).serialize();
-// 			console.log(typeof(jQuery('#fancy_notification')));
-			if(jQuery('#fancy_notification') == null) {
+			// Sometimes jQuery returns an object instead of null, using length tells us how many elements are in the object, which is more reliable than comparing the object to null
+			if(jQuery('#fancy_notification').length == 0) {
 				jQuery('div.wpsc_loading_animation',this).css('visibility', 'visible');
 			}
 			jQuery.post( 'index.php?ajax=true', form_values, function(returned_data) {

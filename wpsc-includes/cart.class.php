@@ -1376,6 +1376,11 @@ class wpsc_cart_item {
     global $wpdb, $wpsc_shipping_modules;
     $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
     $priceandstock_id = 0;
+
+    if(defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
+			$this->product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
+    }
+    
     if(count($this->variation_values) > 0) {
       // if there are variations, get the price of the combination and the names of the variations.
 			$variation_data = $wpdb->get_results("SELECT *FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$this->variation_values)."')", ARRAY_A);
@@ -1411,21 +1416,21 @@ class wpsc_cart_item {
 					$sale_discount = 0;
         }
         $price = $product['price'] - $sale_discount;
-        $file_id = $product['file'];
-        
-        
-        // if we are using table rate price
-				$levels = get_product_meta($this->product_id, 'table_rate_price');
-				if ($levels != '') {
-					foreach($levels['quantity'] as $key => $qty) {
-						if ($this->quantity >= $qty) {
-							$unit_price = $levels['table_price'][$key];
-							if ($unit_price != '')
-								$price = $unit_price;
-						}
+			}
+			$file_id = $product['file'];
+			
+			
+			// if we are using table rate price
+			$levels = get_product_meta($this->product_id, 'table_rate_price');
+			if ($levels != '') {
+				foreach($levels['quantity'] as $key => $qty) {
+					if ($this->quantity >= $qty) {
+						$unit_price = $levels['table_price'][$key];
+						if ($unit_price != '')
+							$price = $unit_price;
 					}
 				}
-      }
+			}
 		}
 		// create the string containing the product name.
 		$product_name = $product['name'];

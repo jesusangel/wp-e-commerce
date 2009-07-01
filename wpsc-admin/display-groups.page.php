@@ -241,7 +241,7 @@ function wpsc_display_groups_page() {
     if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
       if(function_exists("getimagesize")) {
       		if(((int)$_POST['width'] >= 10 && (int)$_POST['width'] <= 512) && ((int)$_POST['height'] >= 10 && (int)$_POST['height'] <= 512) ) {
-      		  $height = (int)$_POST['width'];
+      		  $width = (int)$_POST['width'];
       		  $height = (int)$_POST['height'];
 						image_processing($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']), $width, $height);
     		  } else {
@@ -257,13 +257,12 @@ function wpsc_display_groups_page() {
       }
     
     if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
-      $imagesql = "SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1";
-      $imagedata = $wpdb->get_results($imagesql,ARRAY_A);
+      $imagedata = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1");
       if($imagedata[0]['image'] != null) {
         $height = $_POST['height'];
         $width = $_POST['width'];
-        $imagepath = WPSC_CATEGORY_DIR . $imagedata[0]['image'];
-        $image_output = WPSC_CATEGORY_DIR . $imagedata[0]['image'];
+        $imagepath = WPSC_CATEGORY_DIR . $imagedata;
+        $image_output = WPSC_CATEGORY_DIR . $imagedata;
         image_processing($imagepath, $image_output, $width, $height);
 			}
 		}

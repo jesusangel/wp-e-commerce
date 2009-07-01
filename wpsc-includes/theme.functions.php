@@ -287,11 +287,34 @@ function wpsc_display_products($query) {
 		if(is_numeric($wpsc_query->query_vars['category_id'])) {
 			$category_id =(int) $wpsc_query->query_vars['category_id'];
 			$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
-		} 
+		}
 		
 		if($display_type == '') {
 			$display_type = get_option('product_view');
 		}
+
+		if(isset($_SESSION['wpsc_display_type'])) {
+		  $display_type = $_SESSION['wpsc_display_type'];
+		}
+
+		if(isset($_GET['view_type'])) {
+			switch($_GET['view_type']) {
+				case 'grid':
+				$display_type = 'grid';
+				$_SESSION['wpsc_display_type'] = $display_type;
+				break;
+				
+				case 'default':
+				$display_type = 'default';
+				$_SESSION['wpsc_display_type'] = $display_type;
+				break;
+
+			  default:
+			  break;
+			}
+		}
+
+		
 		//exit($display_type);
 		// switch the display type, based on the display type variable...
 		switch($display_type) {
@@ -374,12 +397,33 @@ function wpsc_products_page($content = '') {
 					}
 				}			
 				$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
-			  //echo "SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1";
 			
 				if($display_type == '') {
 					$display_type = get_option('product_view');
 				}
-				//exit($display_type);
+
+				if(isset($_SESSION['wpsc_display_type'])) {
+					$display_type = $_SESSION['wpsc_display_type'];
+				}
+
+				if(isset($_GET['view_type'])) {
+					switch($_GET['view_type']) {
+						case 'grid':
+						$display_type = 'grid';
+						$_SESSION['wpsc_display_type'] = $display_type;
+						break;
+						
+						case 'default':
+						$display_type = 'default';
+						$_SESSION['wpsc_display_type'] = $display_type;
+						break;
+
+						default:
+						break;
+					}
+				}
+
+				
 				// switch the display type, based on the display type variable...
 				switch($display_type) {
 					case "grid":

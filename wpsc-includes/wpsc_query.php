@@ -973,7 +973,7 @@ class WPSC_Query {
 		}
 		
 		// we need a number of items per page
-		if(!($qv['number_per_page'] > 0)) {
+		if(!($qv['number_per_page'] > 0) && ($qv['number_per_page'] != 'all')) {
 			$qv['number_per_page'] = get_option('wpsc_products_per_page');
 		}
 		

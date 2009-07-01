@@ -1305,6 +1305,8 @@ function nzshpcrt_download_file() {
         readfile_chunked($filename);   
         exit();
 			}
+		} else {
+			exit(WPSC_DOWNLOAD_INVALID);
 		}
 	} else {
 		if(($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {

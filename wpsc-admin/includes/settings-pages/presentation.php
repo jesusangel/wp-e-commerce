@@ -496,14 +496,14 @@ global $wpdb;
 					break;
 				}
 			
-				$display_ad_pnp = get_option('show_advanced_search');
+				$display_advanced_search = get_option('show_advanced_search');
 				$show_advanced_search = "";
-				if($display_ad_pnp == 1) {
+				if($display_advanced_search == 1) {
 					$show_advanced_search = "checked ='checked'";
 				}
 			
-				$display_live_pnp = get_option('show_live_search');
-				if($display_ad_pnp == 1) {
+				$display_live_search = get_option('show_live_search');
+				if($display_live_search == 1) {
 					$show_live_search = "checked ='checked'";
 				}
 			

@@ -20,8 +20,11 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/includes/save-data.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax-and-init.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-options-settings.page.php");
-require_once(WPSC_FILE_PATH."/wpsc-admin/display-debug.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php");
+
+if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {
+	require_once(WPSC_FILE_PATH."/wpsc-admin/display-debug.page.php");
+}
 
 //settings pages include
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/settings-pages/general.php");
@@ -40,7 +43,7 @@ function wpsc_admin_pages(){
      *
      * If the permissions are changed here, they will likewise need to be changed for the other sections of the admin that either use ajax
      * or bypass the normal download system.
-     */
+		*/
     if(function_exists('add_options_page')) {
 			$base_page = 'wpsc-sales-logs';
 					
@@ -158,11 +161,10 @@ function wpsc_admin_include_optionspage_css_and_js(){
 /*
 	wp_enqueue_style( 'wp-e-commerce-ui-tabs', WPSC_URL.'/wpsc-admin/css/jquery.ui.tabs.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/admin_2.7.css', false, false, 'all' );
-		wp_enqueue_script('wp-e-commerce-js-tooltip', WPSC_URL.'/wpsc-admin/js/jquery.tooltip.js', false, $version_identifier);
-wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-tooltip', WPSC_URL.'/wpsc-admin/js/jquery.tooltip.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_identifier);
 */
 	wp_enqueue_script('wp-e-commerce-js-ui-tabs', WPSC_URL.'/wpsc-admin/js/jquery-ui.js', false, $version_identifier);
-
 	wp_enqueue_script('wp-e-commerce-js-dimensions', WPSC_URL.'/wpsc-admin/js/dimensions.js', false, $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/settingspage.css', false, false, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-ui-tabs', WPSC_URL.'/wpsc-admin/css/jquery.ui.tabs.css', false, $version_identifier, 'all' );
