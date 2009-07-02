@@ -212,11 +212,11 @@ class wpsc_checkout {
   }
   
   function form_name() {
-		if($this->form_name_is_required()){
-		return $this->checkout_item->name.' * ';
-	}else{
-		return $this->checkout_item->name;
-	}
+		if($this->form_name_is_required() && ($this->checkout_item->type != 'heading')){
+			return $this->checkout_item->name.' * ';
+		}else{
+			return $this->checkout_item->name;
+		}
   }  
    
 	function form_name_is_required(){
@@ -290,9 +290,8 @@ class wpsc_checkout {
 					break;
 
 					case "delivery_country":
-					break;
-
 					case "country":
+					case "heading":
 					break;
 					
 					default:

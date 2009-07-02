@@ -194,7 +194,6 @@ if(is_file("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php"
 }
 
 
-
 include_once("install_and_update.php");
 register_activation_hook(__FILE__, 'wpsc_install');
 
@@ -206,6 +205,14 @@ register_activation_hook(__FILE__, 'wpsc_install');
 function wpsc_start_the_query() {
   global $wp_query, $wpsc_query;
   $wpsc_query = new WPSC_query();
+
+	$post_id = $wp_query->post->ID;
+	$page_url = get_permalink($post_id);
+	if(get_option('shopping_cart_url') == $page_url) {
+		$_SESSION['wpsc_has_been_to_checkout'] = true;
+		//echo $_SESSION['wpsc_has_been_to_checkout'];
+	}
+  
 }
 // after init and after when the wp query string is parsed but before anything is displayed
 add_action('template_redirect', 'wpsc_start_the_query', 0);
@@ -227,24 +234,17 @@ function wpsc_initialisation() {
 	} else {
 		$theme_dir = get_option('wpsc_selected_theme');
 	}
-	define('WPSC_THEME_DIR', $theme_dir);	
-  //exit(WPSC_THEME_DIR);
+	define('WPSC_THEME_DIR', $theme_dir);
   
   // initialise the cart session, if it exist, unserialize it, otherwise make it
-//   if(WP_ADMIN == true) {
-		if(isset($_SESSION['wpsc_cart'])) {
-			$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
-			if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
-				$GLOBALS['wpsc_cart'] = new wpsc_cart;
-			}
-		} else {
+	if(isset($_SESSION['wpsc_cart'])) {
+		$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
+		if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
-// 	}
-
-//   if(empty($GLOBALS['wpsc_cart']->selected_shipping_method) && (get_option('custom_shipping_options') != null)) {
-//     $GLOBALS['wpsc_cart']->get_shipping_method();
-//   }
+	} else {
+		$GLOBALS['wpsc_cart'] = new wpsc_cart;
+	}
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
@@ -257,15 +257,11 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
  */  
 function wpsc_serialize_shopping_cart() {
   global $wpdb, $wpsc_start_time, $wpsc_cart;
-  //@$_SESSION['nzshpcrt_serialized_cart'] = serialize($_SESSION['nzshpcrt_cart']);
   if(is_object($wpsc_cart)) {
 		$wpsc_cart->errors = array();
   }
   $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
   /// Delete the old claims on stock
-//   echo "/*test */";
-  //$session_timeout = @session_cache_expire()*60;
-  //if($session_timeout <= 0) { 
 	$session_timeout = 60*60; // 180 * 60 = three hours in seconds
   $old_claimed_stock_timestamp = time() - $session_timeout;
   $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);

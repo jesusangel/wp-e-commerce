@@ -2,6 +2,8 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
+define('TXT_WPSC_CATEGORY_LIST', 'Show list of product groups');
+define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Show all products + list');
 define('TXT_WPSC_INSUFFICIENT_REMAINING', 'Sorry, but there are only [number] of this item in stock.');
 define('TXT_WPSC_ZERO_QUANTITY_REQUESTED', 'Sorry, but you cannot add zero items to your cart');
 define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Product Settings');
@@ -883,7 +885,7 @@ define('TXT_WPSC_PRODUCTDOWNLOAD', 'Product Download');
 define('TXT_WPSC_SHOWTHUMBNAILS', 'Show Thumbnails');
 define('TXT_WPSC_ADD_ADDITIONAL_IMAGE', 'Add Additional Image');
 define('TXT_WPSC_DELETE_IMAGE', 'Delete Image');
-define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades');
+define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades');
 define('TXT_WPSC_ACTIVATE_SETTINGS', 'Gold Cart Activation');
 define('TXT_WPSC_ACTIVATION_KEY', 'API Key');
 define('TXT_WPSC_THANKSACTIVATED', 'Thanks, the gold shopping cart has been activated.');

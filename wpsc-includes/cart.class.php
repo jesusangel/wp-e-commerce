@@ -88,6 +88,21 @@ function wpsc_cart_tax($forDisplay = true) {
 	}
 }
 
+
+/**
+* wpsc_cart_show_plus_postage function, no parameters
+* For determining whether to show "+ Postage & tax" after the total price
+* @return boolean true or false, for use with an if statement
+*/
+function wpsc_cart_show_plus_postage() {
+	global $wpsc_cart;
+	if(($_SESSION['wpsc_has_been_to_checkout'] == null ) && (get_option('add_plustax') == 1)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 /**
 * uses shipping function, no parameters
 * @return boolean if true, all items in the cart do use shipping

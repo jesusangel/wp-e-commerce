@@ -1601,26 +1601,6 @@ function nzshpcrt_product_list_rss_feed() {
 
 
 
-// This function displays the category groups, it is used by the above function
-function nzshpcrt_display_categories_groups() {
-    global $wpdb;
-
-    if(get_option('permalink_structure') != '') {
-      $seperator ="?";
-    } else {
-      $seperator ="&amp;";
-    }
-
-    if(function_exists('gold_shpcrt_search_form') && get_option('show_search') == 1) {
-      echo gold_shpcrt_search_form();
-    }
-
-    //include("show_cats_brands.php");
-    if (get_option('cat_brand_loc') == 0) {
-      show_cats_brands();
-    }
-  }
-
 
 function add_product_meta($product_id, $key, $value, $unique = false, $custom = false) {
   global $wpdb, $post_meta_cache, $blog_id;

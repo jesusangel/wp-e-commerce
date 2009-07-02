@@ -7,11 +7,13 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+
 		
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-groups.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-variations.page.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-upgrades.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/save-data.functions.php");
@@ -112,6 +114,8 @@ function wpsc_admin_pages(){
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
 			
+			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_UPGRADES_PAGE, TXT_WPSC_UPGRADES_PAGE, 7, 'wpsc-upgrades', 'wpsc_display_upgrades_page');
+			//$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_GOLD_OPTIONS, TXT_WPSC_GOLD_OPTIONS, 7, 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
 			
 			if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
 				$page_hooks[] = add_submenu_page($base_page,__('Debug'), __('Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');			

@@ -272,4 +272,20 @@ function wpsc_category_name($category_id = null) {
   $category_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
   return $category_name;
 }
+
+
+
+// This function displays the category groups, it is used by the above function
+function nzshpcrt_display_categories_groups() {
+    global $wpdb;
+    if(get_option('permalink_structure') != '') {
+      $seperator ="?";
+    } else {
+      $seperator ="&amp;";
+    }
+
+    if (get_option('cat_brand_loc') == 0) {
+      show_cats_brands();
+    }
+  }
 ?>

@@ -358,7 +358,7 @@ function wpsc_products_page($content = '') {
   global $wpdb, $wp_query, $wpsc_query;
   //if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('nzshpcrt_products_page','start');}
   //exit(htmlentities($content));
-
+	$output = '';
   if(preg_match("/\[productspage\]/",$content)) {
   
       if(!(is_numeric(get_option('wpsc_default_category')) || (get_option('wpsc_default_category') == 'all'))) {
@@ -372,8 +372,12 @@ function wpsc_products_page($content = '') {
 				// if we have no categories, and no search, show the group list
 				// this does not use the theme engine because categories uses a recursive function, I have not yet thought of a way of making this work in a theme engine
 				if(!(is_numeric($category_id) || is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || (get_option('wpsc_default_category') == 'all') || ($_GET['product_search'] != ''))) {
-					return nzshpcrt_display_categories_groups();
-					exit();
+				  if(get_option('wpsc_default_category') == 'all+list') {
+						$output = nzshpcrt_display_categories_groups();
+				  } else { 
+						return nzshpcrt_display_categories_groups();
+						exit();
+					}
 				}
       
       }
@@ -444,7 +448,7 @@ function wpsc_products_page($content = '') {
 				  break;
 				}
 			}
-			$output = ob_get_contents();
+			$output .= ob_get_contents();
 			ob_end_clean();
 			$output = str_replace('$','\$', $output);
 //     } else {

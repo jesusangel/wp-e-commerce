@@ -1467,7 +1467,7 @@ global $wpdb;
 	    }
 	  }
 		$sendback = wp_get_referer();
-		$sendback = remove_query_arg('isocode', $sendback);
+		//$sendback = remove_query_arg('isocode', $sendback);
 		wp_redirect($sendback);
 	}
 }

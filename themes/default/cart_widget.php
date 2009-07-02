@@ -1,3 +1,6 @@
+<?php
+// echo "<pre>".print_r($GLOBALS['wpsc_cart'], true)."</pre>";
+?>
 <?php if(count($cart_messages) > 0) { ?>
   <p>
 	<?php foreach((array)$cart_messages as $cart_message) { ?>
@@ -43,7 +46,11 @@
 		<span class='totalhead'>
 			<?php echo TXT_WPSC_TOTAL; ?>:
 	  </span>
+	  
 		<span class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
+		<?php if(wpsc_cart_show_plus_postage()) : ?>
+		<span class='pluspostagetax'> + <?php echo TXT_WPSC_POSTAGE_AND_TAX; ?></span>
+	<?php endif; ?>
 	</span>
 	
 

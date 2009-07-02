@@ -84,6 +84,9 @@ function wpsc_category_class() {
 		$catid = $GLOBALS['wpsc_category_id'];
 	} else {
 		$catid = get_option('wpsc_default_category');
+		if($catid == 'all+list') {
+			$catid = 'all';
+		}
 	}
 	
 	if((int)$catid > 0) {
@@ -161,7 +164,8 @@ function wpsc_edit_the_product_link() {
 */
 function wpsc_the_product_title() {
 	global $wpsc_query;
-	return htmlentities(stripslashes($wpsc_query->the_product_title()), ENT_QUOTES);
+	//return stripslashes($wpsc_query->the_product_title());
+	return htmlentities(stripslashes($wpsc_query->the_product_title()), ENT_QUOTES, "UTF-8");
 }
 
 /**

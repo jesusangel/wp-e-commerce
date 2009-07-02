@@ -5,13 +5,30 @@ function options_categorylist() {
 	$group_sql = "SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active`='1'";
 	$group_data = $wpdb->get_results($group_sql,ARRAY_A);
 	$categorylist .= "<select name='wpsc_options[wpsc_default_category]'>";
-	$categorylist .= "<option value='none' ".$selected." >".TXT_WPSC_SELECTACATEGORY."</option>";
 	
-		if(get_option('wpsc_default_category') == 'all')  {
-				$selected = "selected='selected'";
-			}
-	
+	if(get_option('wpsc_default_category') == 'all')  {
+		$selected = "selected='selected'";
+	} else {
+		$selected = '';
+	}
 	$categorylist .= "<option value='all' ".$selected." >".TXT_WPSC_SELECTALLCATEGORIES."</option>";
+
+	if(get_option('wpsc_default_category') == 'list')  {
+		$selected = "selected='selected'";
+	} else {
+		$selected = '';
+	}
+	$categorylist .= "<option value='list' ".$selected." >".TXT_WPSC_CATEGORY_LIST."</option>";
+	
+
+	if(get_option('wpsc_default_category') == 'all+list')  {
+		$selected = "selected='selected'";
+	} else {
+		$selected = '';
+	}
+	$categorylist .= "<option value='all+list' ".$selected." >".TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST."</option>";
+
+	
 	foreach($group_data as $group) {
 			$cat_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
 			$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
