@@ -1020,15 +1020,15 @@ class WPSC_Query {
 			$product_id = absint($this->query_vars['product_id']);
 		}
 		
-		
+
 		if(($product_id > 0)) {
 			$product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `active` IN('1') LIMIT 1",ARRAY_A);
 		}
 		
 		if(isset($_SESSION['price_range']) && isset($_GET['range'])){
-			if (is_numeric($_GET['range'])) {
+			if (is_numeric($_GET['range']) || isset($_SESSION['price_range'])) {
 					$ranges = $_SESSION['price_range'];
-		// 			exit("<pre>".print_r($ranges,1)."</pre>");
+					//exit("Is still set<pre>".print_r($ranges,1)."</pre>");
 				switch($_GET['range']) {
 					case 1:
 						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` < ".$ranges[1]." AND `active` IN ('1')";
@@ -1079,15 +1079,22 @@ class WPSC_Query {
 				$product_list = $wpdb->get_results($range_sql,ARRAY_A);
 			}
 		}
-	//	exit('<pre>'.print_r($product_list, true).'</pre>');
-		if(count($product_list) > 0) {
+		//exit('Here:<pre>'.print_r($this->query_vars, true).'</pre>');
+		if(count($product_list) > 0 && !isset($_GET['range'])) {
 			// if is a single product
 			$this->is_single = true;
-				$this->products = $product_list;
+			$this->products = $product_list;
 			
 			$this->category = $this->query_vars['category_id'];
 			
-		} else {
+		} elseif(count($product_list) > 0 && isset($_GET['range'])) {
+		
+			$this->is_single = false;
+			$this->products = $product_list;
+			
+			$this->category = $this->query_vars['category_id'];
+			
+		}else{
 			// Otherwise
 			
 			
