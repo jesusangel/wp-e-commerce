@@ -9,39 +9,33 @@ function wpsc_display_upgrades_page() {
 			* ADDED 18-06-09
 			*/
 			?>
-			<strong><?php _e('WP e-Commerce Modules'); ?></strong><br />
-			<span><?php _e('Add more functionality to your e-Commerce site'); ?><input type='button' class='button-primary' onclick='window.open ("http://www.instinct.co.nz/shop/","mywindow"); ' value='Go to Shop' id='visitInstinct' name='visitInstinct' /></span>
+			<strong><?php _e('WP e-Commerce Upgrades'); ?></strong><br />
+			<span><?php _e('Add more functionality to your e-Commerce site. Prices may be subject to change.'); ?><input type='button' class='button-primary' onclick='window.open ("http://www.instinct.co.nz/shop/","mywindow"); ' value='Buy Now' id='visitInstinct' name='visitInstinct' /></span>
 			
 			<br />
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('Pure Gold'); ?></strong>
-				<p class='wpsc_gold_text'>Add Products search &amp; additional payment gateways to your e-Commerce install</p>
+				<p class='wpsc_gold_text'>Add product search, multiple image upload, gallery view, Grid View and multiple payment gateway options to your shop</p>
 				<span class='wpsc_gold_info'>$25</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('DropShop'); ?></strong>
-				<p class='wpsc_gold_text'>Impress your customers with a sliding DropShop </p>
+				<p class='wpsc_gold_text'>Impress your customers with our AJAX powered DropShop that lets your customers drag and drop products into their shopping cart</p>
 				<span class='wpsc_gold_info'>$75</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e('Grid View'); ?> </strong>
-				<p class='wpsc_gold_text'>Change the layout of your shop with this 960 inspired grid view.</p>
-				<span class='wpsc_gold_info'>$15</span>
-			</div>
-			<div class='wpsc_gold_module'>
-				<br />
 				<strong><?php _e('MP3 Player'); ?></strong>
-				<p class='wpsc_gold_text'>Selling music? Then this is the module for you!</p>
+				<p class='wpsc_gold_text'>Adding this module lets you upload and manage MP3 preview files that can be associated with your digital downloads.</p>
 				<span class='wpsc_gold_info'>$10</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('Members Only Module'); ?> </strong>
-				<p class='wpsc_gold_text'>Private Articles and Images are your business? Sell them with ease using this module.</p>
-				<span class='wpsc_gold_info'>$10</span>
+				<p class='wpsc_gold_text'>The Members modules lets you set private pages and posts that are only available to paying customers. Activating this module also adds a new option under "WordPress Users" menu that shop owners can use to manage their subscribers.</p>
+				<span class='wpsc_gold_info'>$25</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
@@ -57,12 +51,22 @@ function wpsc_display_upgrades_page() {
 			</div>
 		</div>
 
+		<h2><?php echo TXT_WPSC_UPGRADES_PAGE;?></h2>
 		<div class='wpsc_gold_float'>
 			<div class='metabox-holder'>
-				<h2><?php echo TXT_WPSC_UPGRADES_PAGE;?></h2>
 				<form method='post' id='gold_cart_form' action=''>
 				<?php
-					do_action('wpsc_gold_module_activation_forms');
+					if(defined('WPSC_GOLD_MODULE_PRESENT') && (constant('WPSC_GOLD_MODULE_PRESENT') == true)) {
+						do_action('wpsc_gold_module_activation_forms');
+					} else {
+					  ?>
+					  <div  class='form-wrap' >
+							<p>
+							Opps. You don't have any Upgrades yet!
+							</p>
+					  </div>
+					  <?php
+					}
 				?>
 				</form>
 			</div> 
