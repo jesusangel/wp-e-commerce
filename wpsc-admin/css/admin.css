@@ -1160,7 +1160,39 @@ table.category_forms td.last_row {
   padding: 16px 0px 0px 0px;
 }
 
+.wpsc_gold_float{
+	min-width:45%;
+	float:left;
+}
+.wpsc_gold_side{
+	margin-top:50px;
+	float:right;
+	width:40%;
+}
+.wpsc_gold_text{
+	width:70%;
+	float:left;
+}
 
+.wpsc_gold_info{
+	width:30%;
+	float:right;
+	text-align: center;
+	font-size:20px;
+}
+.wpsc_gold_module{
+	width:100%;
+	float:left;
+	border-bottom: 1px solid #DFDFDF;
+}
+#visitInstinct{
+	float:right;
+	margin:20px 20px 0 0;
+}
+
+#gold_cart_form .postbox p img{
+	padding-bottom:10px;
+}
 /* 
 * Product Groups styles end here
 */
