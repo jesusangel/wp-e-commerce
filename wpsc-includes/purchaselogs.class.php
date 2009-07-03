@@ -98,7 +98,7 @@ function wpsc_the_purch_item_name(){
 	global $purchlogs;
 	//exit('<pre>'.print_r($purchlogs, true).'</pre>');
 	if(wpsc_purchlogs_has_customfields(wpsc_the_purch_item_id())){
-		return $purchlogs->the_purch_item_name().'<img src="'.WPSC_URL.'/images/exclamation.png" title="This Purchase has custom user content" alt="exclamation icon" />';
+		return $purchlogs->the_purch_item_name().'<img src="'.WPSC_URL.'/images/info_icon.jpg" title="This Purchase has custom user content" alt="exclamation icon" />';
 	}else{
 		return $purchlogs->the_purch_item_name();
 	}
@@ -403,16 +403,16 @@ class wpsc_purchaselogs{
 
 		$this->getall_formdata();
 		if(!isset($_POST['view_purchlogs_by']) || !isset($_POST['purchlogs_searchbox'])){
-		$dates = $this->getdates();
-		if(isset($_SESSION['newlogs'])){
-			$purchaselogs = $_SESSION['newlogs'];
-			unset($_SESSION['newlogs']);
-		}else{
-			$purchaselogs = $this->get_purchlogs($dates);
-		}
+			$dates = $this->getdates();
+			if(isset($_SESSION['newlogs'])){
+				$purchaselogs = $_SESSION['newlogs'];
+				unset($_SESSION['newlogs']);
+			}else{
+				$firstDates[] = $dates[0]; 
+				$purchaselogs = $this->get_purchlogs($firstDates);
+			}
 		
-		$this->allpurchaselogs = $purchaselogs;
-	//	$this->the_purch_item();
+			$this->allpurchaselogs = $purchaselogs;
 		}else{
 			$this->getdates();
 		}
@@ -423,17 +423,15 @@ class wpsc_purchaselogs{
 	
 	function get_purchlogs($dates, $status=''){
 		global $wpdb;
-	//	exit(print_r($dates,true).'tset?'.$status);
-// 		echo "<pre>".print_r(debug_backtrace(),true)."<pre>";
 		$purchlog2 = array();
 		if($status=='' || $status=='-1'){
-			   foreach((array)$dates as $date_pair){
-			        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
-			          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
-			          $purchase_logs = $wpdb->get_results($sql) ;
-						array_push($purchlog2, $purchase_logs);
-					}
+		   foreach((array)$dates as $date_pair){
+		        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
+		          $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$date_pair['start']."' AND '".$date_pair['end']."' ORDER BY `date` DESC";
+		          $purchase_logs = $wpdb->get_results($sql) ;
+				  array_push($purchlog2, $purchase_logs);
 				}
+			}
 		}else{
 		   foreach((array)$dates as $date_pair){
 			        if(($date_pair['end'] >= $this->earliest_timestamp) && ($date_pair['start'] <= $this->current_timestamp)) {   
@@ -449,7 +447,6 @@ class wpsc_purchaselogs{
 					}
 				}
 
-	  	
 	  	}
 	  	
 	  	foreach($purchlog2 as $purch){

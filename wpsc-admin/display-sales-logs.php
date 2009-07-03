@@ -91,7 +91,7 @@ if(!isset($purchlogs)){
 					</div>
 			</div>
 			<?php /* end of sidebar start of main column */ ?>
-			<div id='post-body' class='has-sidebar' style='width:95%;'>
+			<div id='post-body' class='has-sidebar metabox-holder' style='width:95%;'>
 				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
 			
 				<?php 
@@ -403,7 +403,8 @@ if(!isset($purchlogs)){
 								'rss_key'			=> 'key',
 								 'start_timestamp'	=> $purchlogs->current_start_timestamp,
 								 'end_timestamp'	=> $purchlogs->current_end_timestamp);
-		?>		
+		?>	
+		<br />	
 		<p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL; ?>/images/download.gif' alt='' title='' /> <span> <?php echo TXT_WPSC_DOWNLOAD_CSV; ?></span></a></p>
 	</form>
 	<br />

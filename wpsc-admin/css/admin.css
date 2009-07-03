@@ -51,10 +51,13 @@ padding-right: 30px;
 	clear:both; 
 }
 th#details{
-width:75px;
+width:70px;
 }
 th#amount{
 width:75px;
+}
+th#name{
+width:220px;
 }
 .google_checkout_logo{
 padding-right:10px;
