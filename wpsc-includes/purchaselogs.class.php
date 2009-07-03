@@ -3,14 +3,24 @@
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
 }
-function wpsc_purchlogs_has_customfields(){
+function wpsc_purchlogs_has_customfields($id = ''){
 	global $purchlogitem;
 	//return true;
-
-	foreach($purchlogitem->allcartcontent as $cartitem){
-		if($cartitem->files != 'N;' || $cartitem->custom_message != ''){
-			return true;
+	if($id == ''){
+		foreach($purchlogitem->allcartcontent as $cartitem){
+			if($cartitem->files != 'N;' || $cartitem->custom_message != ''){
+				return true;
+			}
 		}
+		return false;
+	}else{
+		$purchlogitem = new wpsc_purchaselogs_items($id);
+		foreach($purchlogitem->allcartcontent as $cartitem){
+			if($cartitem->files != 'N;' || $cartitem->custom_message != ''){
+				return true;
+			}
+		}
+		return false;
 	}
 	return false;
 
@@ -20,7 +30,7 @@ function wpsc_purchlogs_custommessages(){
 	foreach($purchlogitem->allcartcontent as $cartitem){
 		if($cartitem->custom_message != ''){
 			//exit('<pre>'.print_r($cartitem,true).'</pre>');
-			$messages[] = $cartitem->name.' :'.$cartitem->custom_message;
+			$messages[] = $cartitem->name.' :<br />'.$cartitem->custom_message;
 			//return true;
 		}
 	}
@@ -33,10 +43,12 @@ function wpsc_purchlogs_customfiles(){
 			$file = unserialize($cartitem->files);
 			//exit('<pre>'.var_dump($file,true).'</pre>');
 			if($file["mime_type"] == "image/jpeg" ||$file["mime_type"] == "image/png"||$file["mime_type"] == "image/gif"){
-				$image= "<img src='".WPSC_USER_UPLOADS_URL.$file['file_name']."' height='100' width='100' alt='' />";
-				$files[] = $cartitem->name.' :'.$image;
+				$image  = "<a href='".WPSC_USER_UPLOADS_URL.$file['file_name']."' >";
+				$image .= "<img src='index.php?image_name=".$file['file_name']."' alt='' />";
+				$image .="</a>";
+				$files[] = $cartitem->name.' :<br />'.$image;
 			}else{
-				$files[] = $cartitem->name.' :'.$file['file_name'];
+				$files[] = $cartitem->name.' :<br />'.$file['file_name'];
 			}
 			
 			//return true;
@@ -84,7 +96,12 @@ function wpsc_the_purch_item_date(){
 }
 function wpsc_the_purch_item_name(){
 	global $purchlogs;
-	return $purchlogs->the_purch_item_name();
+	//exit('<pre>'.print_r($purchlogs, true).'</pre>');
+	if(wpsc_purchlogs_has_customfields(wpsc_the_purch_item_id())){
+		return $purchlogs->the_purch_item_name().'<img src="'.WPSC_URL.'/images/exclamation.png" title="This Purchase has custom user content" alt="exclamation icon" />';
+	}else{
+		return $purchlogs->the_purch_item_name();
+	}
 }
 function wpsc_the_purch_item_details(){
 	global $purchlogs;
@@ -256,7 +273,6 @@ function wpsc_display_purchlog_totalprice(){
 }
 function wpsc_display_purchlog_buyers_name(){
 	global $purchlogitem;
-	//exit('<pre>'.print_r($purchlogitem->userinfo,true).'</pre>');
 	return $purchlogitem->userinfo['billingfirstname']['value'].' '.$purchlogitem->userinfo['billinglastname']['value'];
 }
 function wpsc_display_purchlog_buyers_email(){

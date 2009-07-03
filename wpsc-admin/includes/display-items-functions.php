@@ -599,8 +599,9 @@ function wpsc_product_shipping_forms($product_data=''){
 
 function wpsc_product_advanced_forms($product_data='') {
 	global $closed_postboxes,$wpdb;
+	//exit('<pre>'.print_r($product_data, true).'</pre>');
 	$merchant_note = $product_data['meta']['metchant_notes'];
-	$engraved_text = $product_data['meta']['engraved'];
+	$engraved_text = $product_data['meta']['engrave'];
 	$can_have_uploaded_image = $product_data['meta']['can_have_uploaded_image'];
 	$external_link = $product_data['meta']['external_link'];
 	$enable_comments = $product_data['meta']['enable_comments'];
@@ -664,7 +665,7 @@ function wpsc_product_advanced_forms($product_data='') {
       <td class='itemfirstcol' colspan='2'><br />
        <strong>". TXT_WPSC_PERSONALISATION_OPTIONS .":</strong><br />
         <input type='hidden' name='productmeta_values[engraved]' value='0' />
-        <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="true"' : '')." id='add_engrave_text' />
+        <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="checked"' : '')." id='add_engrave_text' />
         <label for='add_engrave_text'> ".TXT_WPSC_ADMIN_ENGRAVE."</label>
         <br />
       </td>
@@ -673,7 +674,7 @@ function wpsc_product_advanced_forms($product_data='') {
       <td class='itemfirstcol' colspan='2'>
       
         <input type='hidden' name='productmeta_values[can_have_uploaded_image]' value='0' />
-        <input type='checkbox' name='productmeta_values[can_have_uploaded_image]' ".(($can_have_uploaded_image == 'on') ? 'checked="true"' : '')." id='can_have_uploaded_image' />
+        <input type='checkbox' name='productmeta_values[can_have_uploaded_image]' ".(($can_have_uploaded_image == 'on') ? 'checked="checked"' : '')." id='can_have_uploaded_image' />
         <label for='can_have_uploaded_image'> ".TXT_WPSC_ALLOW_UPLOADING_IMAGE."</label>
         <br />
       </td>

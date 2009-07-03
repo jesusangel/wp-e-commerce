@@ -1344,7 +1344,7 @@ function nzshpcrt_download_file() {
 
 function nzshpcrt_display_preview_image() {
 	  global $wpdb;
-	  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])) {
+	  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])|| isset($_GET['image_name'])) {
 		if(function_exists("getimagesize")) {
 			if(is_numeric($_GET['productid'])) {
 				$product_id = (int)$_GET['productid'];
@@ -1360,6 +1360,9 @@ function nzshpcrt_display_preview_image() {
 				$image_id = (int)$_GET['image_id'];
 				$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
 				$imagepath = WPSC_IMAGE_DIR . $image;
+			}elseif($_GET['image_name']){
+				$image = $_GET['image_name'];
+				$imagepath = WPSC_USER_UPLOADS_DIR . $image;
 			}
 			
 			if(!is_file($imagepath)) {

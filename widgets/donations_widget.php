@@ -19,21 +19,28 @@ function nzshpcrt_donations($input = null) {
 	$siteurl = get_option('siteurl');
 	$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `donation` IN ('1') AND `active` IN ('1')";
 	$products = $wpdb->get_results($sql,ARRAY_A);
+//	exit('<pre>'.print_r($products,true).'</pre>');
+	
+
 	if($products != null) {
 		$output = "<div><div>";
 		foreach($products as $product) {
+			$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`=".$product['image'];
+
+			$image = $wpdb->get_row($sql, ARRAY_A);
+//			exit($image);
 			$output .= "<strong>".$product['name']."</strong><br />";
 			if($product['image'] != null) {
-				$output .= "<img src='".WPSC_THUMBNAIL_URL.$product['image']."' title='".$product['name']."' alt='".$product['name']."' /><br />";
+				$output .= "<img src='".WPSC_THUMBNAIL_URL.$image['image']."' width='".$image['width']."' height='".$image['height']."' title='".$product['name']."' alt='".$product['name']."' /><br />";
 			}
 			$output .= $product['description']."<br />";
 		
-			$output .= "<form id='specials' name='$num' method='post' action='#' onsubmit='submitform(this);return false;' >";
+			$output .= "<form id='specials' name='$num' method='post' action='#' onsubmit='return false;' >";
 			$variations_processor = new nzshpcrt_variations;
 			$output .= $variations_processor->display_product_variations($product['id']);
 			$output .= "<input type='hidden' name='prodid' value='".$product['id']."'/>";
 			$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
-					
+			$output .= "<input type='hidden' name='wpsc_ajax_action' value='donations_widget' />";		
 			$currency_sign_location = get_option('currency_sign_location');
 			$currency_type = get_option('currency_type');
 			$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;

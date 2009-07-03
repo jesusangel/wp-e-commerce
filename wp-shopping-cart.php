@@ -157,7 +157,6 @@ $wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
 $wpsc_cache_dir = "{$upload_path}/wpsc/cache/";
 $wpsc_upgrades_dir = "{$upload_path}/wpsc/upgrades/";
 
-
 define('WPSC_FILE_DIR', $wpsc_file_dir);
 define('WPSC_PREVIEW_DIR', $wpsc_preview_dir);
 define('WPSC_IMAGE_DIR', $wpsc_image_dir);

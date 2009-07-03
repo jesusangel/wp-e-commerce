@@ -126,7 +126,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$post_data['meta']['table_rate_price'] = null;
 	}
 	
-  //exit('<pre>'.print_r($post_data, true).'</pre>');
 	$post_data['files'] = $_FILES;
 
   return $post_data;

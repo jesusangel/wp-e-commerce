@@ -7,6 +7,7 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+
 if(!isset($purchlogs)){
 	 $purchlogs = new wpsc_purchaselogs();
 }
@@ -77,7 +78,7 @@ if(!isset($purchlogs)){
 		
 			if(get_option('wpsc_purchaselogs_fixed')== false){ ?>
 				<div class='error' style='padding:8px;line-spacing:8px;'><span ><?php _e('When upgrading the Wp-E-Commerce Plugin from 3.6.* to 3.7 it is required that you associate your checkout form fields with the new Purchase Logs system. To do so please '); ?> <a href='<?php echo $fixpage; ?>'>Click Here</a></span></div>
-	<?php } 
+	<?php	 } 
 		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
 			 <div class='inner-sidebar'> 
@@ -483,16 +484,20 @@ function wpsc_purchlogs_custom_fields(){
 		<div class='inside'>
 		<?php $messages = wpsc_purchlogs_custommessages(); ?>
 		<?php $files = wpsc_purchlogs_customfiles(); ?>
+		<?php if(count($files) > 0){ ?>
 		<h4>Cart Items with Custom Files:</h4>	
 		<?php
-		foreach($files as $file){ 
-			echo $file;
+			foreach($files as $file){ 
+				echo $file;
+			}
 		}?>
+		<?php if(count($messages) > 0){ ?>
 		<h4>Cart Items with Custom Messages:</h4>	
 		<?php
-		foreach($messages as $message){ 
-			echo $message;
-		}?>
+			foreach($messages as $message){ 
+				echo $message;
+			}
+		} ?>
 		</div>
 		</div>
 		</div>

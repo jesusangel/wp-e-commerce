@@ -1003,7 +1003,8 @@ class WPSC_Query {
 	
 	function &get_products() {
 		global $wpdb, $wp_query;
-		
+		//set $no_donations_sql
+		//$no_donations_sql = " AND `products`.donation = '0' ";	
 		do_action_ref_array('pre_get_products', array(&$this));
 		
 		
@@ -1118,7 +1119,7 @@ class WPSC_Query {
 			$search_sql = gold_shpcrt_search_sql();
 			if($search_sql != '') {
 				// this cannot currently list products that are associated with no categories
-				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $search_sql");
+				$rowcount = $wpdb->get_var("SELECT DISTINCT COUNT(`".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` AND `".WPSC_TABLE_PRODUCT_LIST."`.donation = '0' $search_sql");
 				if (isset($_SESSION['item_per_page']))
 				$products_per_page = $_SESSION['item_per_page'];
 				//exit($products_per_page);
