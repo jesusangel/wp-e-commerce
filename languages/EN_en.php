@@ -2,7 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
-define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades (new)');
+define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades (3.7)');
 define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades');
 
 

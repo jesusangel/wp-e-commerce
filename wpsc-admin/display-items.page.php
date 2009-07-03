@@ -356,7 +356,17 @@ function wpsc_admin_products_list($category_id = 0) {
 									</div>
 									</td>
 									
-									<td class="product-price column-price"><?php echo nzshpcrt_currency_display($product['price'], 1); ?></td>
+									<td class="product-price column-price">
+
+									<?php echo nzshpcrt_currency_display($product['price'], 1); ?>
+									<div class='price-editing-fields' id='price-editing-fields-<?php echo $product['id']; ?>'>
+										<input type='text' class='the-product-price' name='product_price[<?php echo $product['id']; ?>][price]' value='<?php echo number_format($product['price'],2,'.',''); ?>' />
+										<input type='hidden' name='product_price[<?php echo $product['id']; ?>][id]' value='<?php echo $product['id']; ?>' />
+										<input type='hidden' name='product_price[<?php echo $product['id']; ?>][nonce]' value='<?php echo wp_create_nonce('edit-product_price-'.$product['id']); ?>' />
+										
+									
+									</div>
+									</td>
 									<td class="column-categories"><?php echo $category_html; ?></td>
 							</tr>
 						<?php

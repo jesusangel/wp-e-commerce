@@ -218,6 +218,15 @@ table.product_editform {
 #wpsc_product_list tbody tr.ui-sortable-helper td.product-price {
 	width: 40px;
 }
+
+
+div.price-editing-fields input.the-product-price {
+	width: 51px;
+}
+
+div.price-editing-fields {
+	display: none;
+}
 		
 div.product-placeholder {
 	border-width: 1px;
@@ -1024,7 +1033,9 @@ td.product_groups_page td.category_presentation_settings {
   padding-bottom: 1ex;
 }
 
-
+td.product-price .pricedisplay{
+  border-bottom: 1px dotted #333;
+}
 
 div.editing_this_group {
 	font-size:8pt;

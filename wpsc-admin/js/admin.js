@@ -70,6 +70,57 @@ jQuery(document).ready( function () {
 	 tb_init(this);
 	});
 	
+
+	// Code for using AJAX to change thr product price starts here
+	ajax_submit_price = function(event) {
+		target_element_id= event.data;
+
+		form_data = jQuery("#"+target_element_id+" input").serialize();
+		//console.log(form_data);
+		jQuery.ajax({
+				type: "POST",
+				url: "admin.php?wpsc_admin_action=modify_price",
+				data: form_data,
+				success: function(returned_data) {
+					eval(returned_data);
+				  if(success == 1) {
+						parent_container = jQuery("#"+target_element_id+"").parent('.product-price');
+						jQuery(".pricedisplay", parent_container).html(new_price);
+				  }
+					jQuery('span.pricedisplay').css('display', 'block');
+					jQuery('div.price-editing-fields').css('display', 'none');
+					jQuery('form#posts-filter').unbind('submit.disable');
+				}
+			});
+		jQuery('form#posts-filter').unbind('submit.disable');
+		return false;
+	};
+
+	
+	jQuery("table#wpsc_product_list .product-price").livequery(function(){
+		jQuery("span.pricedisplay", this).click( function(event) {
+			jQuery('span.pricedisplay').css('display', 'block');
+			jQuery('div.price-editing-fields').css('display', 'none');
+			jQuery(this).css('display', 'none');
+			jQuery('div.price-editing-fields', jQuery(this).parent('.product-price')).css('display', 'block');
+
+			target_element_id = jQuery('div.price-editing-fields', jQuery(this).parent('.product-price')).attr('id');
+			
+			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_price);
+		});
+		
+		jQuery('.the-product-price',this).keyup(function(event){
+		
+			target_element_id = jQuery(jQuery(this).parent('.price-editing-fields')).attr('id');
+			
+			if(event.keyCode == 13) {
+				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_price);
+			}
+		});
+	});
+
+// Code for using AJAX to change thr product price ends here
+	
 	jQuery("div.admin_product_name a.shorttag_toggle").livequery(function(){
 	  jQuery(this).toggle(
 			function () {
@@ -82,7 +133,7 @@ jQuery(document).ready( function () {
 				return false;
 			}
 		);
-	});
+	}); 
 	
 	jQuery('a.add_variation_item_form').livequery(function(){
 	  jQuery(this).click( function() {

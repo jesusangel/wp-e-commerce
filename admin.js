@@ -1139,10 +1139,10 @@ jQuery(document).ready(function(){
 	);
 	
 	
- 	jQuery("table#itemlist .pricedisplay").editable(base_url+"/wp-admin/admin.php?inline_price=true", {
-         indicator : "Saving...",
-         tooltip   : 'Click to edit...'
-    });
+//  	jQuery("table#itemlist .pricedisplay").editable(base_url+"/wp-admin/admin.php?inline_price=true", {
+//          indicator : "Saving...",
+//          tooltip   : 'Click to edit...'
+//     });
     jQuery('.meta-box-sortables').sortable( {
 	    placeholder: 'sortable-placeholder',
 	    connectWith: [ '.meta-box-sortables' ],

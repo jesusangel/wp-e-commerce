@@ -84,10 +84,10 @@ function wpsc_crop_thumb() {
 function wpsc_bulk_modify_products() {
   global $wpdb;
   
-  // exit("<pre>".print_r($_GET ,true)."</pre>");
   
-  $doaction = $_GET['action'];
+  $doaction = $_GET['bulkAction'];
   
+   //exit("<pre>".print_r($_GET ,true)."</pre>");
 	$sendback = wp_get_referer();
   switch ( $doaction ) {
 		case 'delete':
@@ -111,6 +111,8 @@ function wpsc_bulk_modify_products() {
 					}
 				}
 			}
+			
+   //exit("<pre></pre>");
 			if ( isset($deleted) ) {
 				$sendback = add_query_arg('deleted', $deleted, $sendback);
 			}
@@ -136,6 +138,34 @@ function wpsc_bulk_modify_products() {
  
  if($_REQUEST['wpsc_admin_action'] == 'bulk_modify') {
 	add_action('admin_init', 'wpsc_bulk_modify_products');
+}
+
+function wpsc_modify_product_price() {
+	global $wpdb;
+	$product_data = array_pop($_POST['product_price']);
+
+	//print_r($product_data);
+
+	$product_id = absint($product_data['id']);
+	$product_price = (float)$product_data['price'];
+	$product_nonce = $product_data['nonce'];
+
+	if(wp_verify_nonce($product_nonce, 'edit-product_price-'.$product_id) ) {
+		if($wpdb->query("UPDATE ".WPSC_TABLE_PRODUCT_LIST." SET price='{$product_price}' WHERE id='{$product_id}'")) {
+			echo "success = 1;\n\r";
+			echo "new_price = '".nzshpcrt_currency_display($product_price, 1, true)."';\n\r";
+		} else {
+			echo "success = 0;\n\r";
+		}
+	} else {
+		echo "success = 11;\n\r";
+	}
+	exit();
+}
+
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'modify_price') {
+	add_action('admin_init', 'wpsc_modify_product_price');
 }
  
  
@@ -1321,7 +1351,7 @@ function wpsc_submit_options() {
 	
 	
 	//This is for submitting shipping details to the shipping module
-// 	if(isset($_POST['custom_shipping_options'])) {
+ 	if($_POST['update_gateways'] == 'true') {
 
 		update_option('custom_shipping_options', $_POST['custom_shipping_options']);
 		
@@ -1335,7 +1365,7 @@ function wpsc_submit_options() {
 				}
 			}
 		}
-// 	}
+ 	}
 	$sendback = wp_get_referer();
 
 	if ( isset($updated) ) {
