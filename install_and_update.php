@@ -666,6 +666,9 @@ function wpsc_create_or_update_tables($debug = false) {
   
   $template_hash = sha1(serialize($wpsc_database_template));
   
+  // Filter for adding to or altering the wpsc database template, make sure you return the array your function gets passed, else you will break updating the database tables
+	$wpsc_database_template = apply_filters('wpsc_alter_database_template', $wpsc_database_template);
+  
   if((get_option('wpsc_database_check') == $template_hash) && ($debug == false)) {
     //return true;
   }
@@ -734,7 +737,6 @@ function wpsc_create_or_update_tables($debug = false) {
         $column_name = $existing_table_column['Field'];
         $existing_table_columns[] = $column_name;
         
-        
         $null_match = false;
 				if($existing_table_column['Null'] = 'NO') {
 				  if(stristr($table_data['columns'][$column_name], "NOT NULL") !== false) {
@@ -745,8 +747,7 @@ function wpsc_create_or_update_tables($debug = false) {
 				    $null_match = true;
 					}
 				}
-          
-         //echo "<pre>".print_r($existing_table_column['Null'],true)."</pre>";
+				
         if(isset($table_data['columns'][$column_name]) && ((stristr($table_data['columns'][$column_name], $existing_table_column['Type']) === false) || ($null_match != true))) {
           if(isset($table_data['actions']['before'][$column_name]) && is_callable($table_data['actions']['before'][$column_name])) {
             $table_data['actions']['before'][$column_name]($column_name);
@@ -755,8 +756,6 @@ function wpsc_create_or_update_tables($debug = false) {
 						$upgrade_failed = true;
 						$failure_reasons[] = $wpdb->last_error;
           }
-          //echo "<pre>".print_r($upgrade_failed,true)."</pre>";
-          //echo "ALTER TABLE `$table_name` CHANGE `$column_name` `$column_name` {$table_data['columns'][$column_name]} <br />";
 				}
         
       }
@@ -802,7 +801,6 @@ function wpsc_create_or_update_tables($debug = false) {
       
       // compare the supplied and existing indxes to find the differences
       $missing_or_extra_table_indexes = array_diff($supplied_table_indexes, $existing_table_indexes);
-      
       
       if(count($missing_or_extra_table_indexes) > 0) {
         foreach($missing_or_extra_table_indexes as $missing_or_extra_table_index) {
