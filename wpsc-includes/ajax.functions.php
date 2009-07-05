@@ -56,8 +56,12 @@ function wpsc_add_to_cart() {
 			$provided_parameters['file_data'] = $_FILES['custom_file'];
 		}
 	}
+	if(((float)$_POST['donation_price'] > 0)) {
+		$provided_parameters['provided_price'] = (float)$_POST['donation_price'];
+	}
   
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
+  echo "/*\n\r".print_r($parameters,true)."*/\n\r";
 	$state = $wpsc_cart->set_item($product_id,$parameters); 
 	
 	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);

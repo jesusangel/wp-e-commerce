@@ -1,5 +1,5 @@
 <?php
-// echo "<pre>".print_r($GLOBALS['wpsc_cart'], true)."</pre>";
+ //echo "<pre>".print_r($GLOBALS['wpsc_cart']->cart_items[0], true)."</pre>";
 ?>
 <?php if(count($cart_messages) > 0) { ?>
   <p>

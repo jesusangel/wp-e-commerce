@@ -74,7 +74,6 @@ jQuery(document).ready( function () {
 	// Code for using AJAX to change thr product price starts here
 	ajax_submit_price = function(event) {
 		target_element_id= event.data;
-
 		form_data = jQuery("#"+target_element_id+" input").serialize();
 		//console.log(form_data);
 		jQuery.ajax({
@@ -105,18 +104,23 @@ jQuery(document).ready( function () {
 			jQuery('div.price-editing-fields', jQuery(this).parent('.product-price')).css('display', 'block');
 
 			target_element_id = jQuery('div.price-editing-fields', jQuery(this).parent('.product-price')).attr('id');
-			
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_price);
+			
+			jQuery('div.price-editing-fields .the-product-price', jQuery(this).parent('.product-price')).focus();
 		});
 		
 		jQuery('.the-product-price',this).keyup(function(event){
-		
 			target_element_id = jQuery(jQuery(this).parent('.price-editing-fields')).attr('id');
-			
 			if(event.keyCode == 13) {
 				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_price);
 			}
 		});
+		
+// 		jQuery('.the-product-price',this).blur(function(event){
+// 		  console.log('was this blurred?');
+// 			target_element_id = jQuery(jQuery(this).parent('.price-editing-fields')).attr('id');
+// 			jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_price);
+// 		});
 	});
 
 // Code for using AJAX to change thr product price ends here
