@@ -441,8 +441,8 @@ function wpsc_submit_checkout() {
   }
   
   
-	//exit('<pre>'.print_r($is_valid, true).'</pre>');
-	if($is_valid == true) {
+	 //exit('Valid?<pre>'.print_r($is_valid, true).'</pre>');
+	if($is_valid == true || $_GET['gateway'] == 'noca') {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
 	
@@ -480,7 +480,13 @@ function wpsc_submit_checkout() {
 				break;
 			}
 		}
-		exit('');
+		
+		if(isset($_GET['gateway']) && $_GET['gateway'] == 'noca'){
+			//exit('HERE2');
+			echo transaction_results($sessionid, true);
+		}else{
+			exit('HERE');
+		}
 } else {
 	
 	}

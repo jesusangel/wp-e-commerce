@@ -5,10 +5,13 @@ $sessionid = $_GET['sessionid'];
 if($_GET['gateway'] == 'google'){
 	wpsc_google_checkout_submit();
 	unset($_SESSION['wpsc_sessionid']);
+}elseif($_GET['gateway'] == 'noca'){
+	wpsc_submit_checkout();
 }
 if(get_option('payment_gateway') == 'paypal_certified'){
 	$sessionid = $_SESSION['paypalexpresssessionid'];
 }
+
 $errorcode = '';
 $transactid = '';
 if($_REQUEST['eway']=='1') {
