@@ -48,14 +48,13 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
 		} else {
-			$country = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".get_option('country_form_field')."' LIMIT 1",ARRAY_A);
-			$billing_country = $country[0]['value'];
-			$shipping_country = $country[0]['value'];
+			$country = $wpdb->get_var("SELECT `value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".get_option('country_form_field')."' LIMIT 1");
+			$billing_country = $country;
+			$shipping_country = $country;
 		}
 	
 		$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
-		$email_address = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1",ARRAY_A);
-		$email = $email_address[0]['value'];
+		$email = $wpdb->get_var("SELECT `value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1");
 		$stock_adjusted = false;
 		$previous_download_ids = array(0); 
 		$product_list='';
@@ -67,6 +66,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				if($purchase_log['email_sent'] != 1) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
 				}
+
+				do_action('wpsc_transaction_result_cart_item', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
+
 				if (($purchase_log['processed'] >= 2)) {
 					//echo "SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1";
 					$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `active`='1' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR (`cartid` IS NULL AND `fileid` = '{$product_data['file']}') ) AND `id` NOT IN ('".implode("','",$previous_download_ids)."') LIMIT 1",ARRAY_A);
@@ -113,43 +115,30 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$gateway_name = "Manual Payment";
 				}
 				//echo "<pre>".print_r($variation_values,true)."</pre>";
-				if($variation_count > 1) {
-					$variation_list = " (";
-							$i = 0;
-							foreach($variation_values as $value_id) {
-								if($i > 0) {
-									$variation_list.= ", ";
-								}
-								$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-								$variation_list.= $value_data[0]['name'];
-								$i++;	
-							}
-							$variation_list .= ")";
-						} else {
-							if($variation_count == 1) {
-								$value_id = array_pop($variation_values);
-								$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-								$variation_list = " (".$value_data[0]['name'].")";
-							} else {
-								$variation_list = '';
-							}
-						}
-			
-						if($link != '') {
-							$product_list.= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":\n $link\n";
-							$product_list_html.= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_CLICKTODOWNLOAD."</a>\n";
-						} else {
-							$plural = '';
-							
-							if($row['quantity'] > 1) {
-								$plural = "s";
-							  }
-							$product_list.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-							$product_list_html.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n &nbsp; ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-						}
-						$report = get_option('wpsc_email_admin');
-						$report_product_list.= " - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n";
+				
+				$variation_list = '';
+				if($variation_count > 0) {
+					$value_names = $wpdb->get_col("SELECT `name` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variation_values)."')");
+					$variation_list = " (".stripslashes(implode(", ",$value_names)).")";
 				}
+			
+				if($link != '') {
+				  $additional_content = apply_filters('wpsc_transaction_result_content', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
+				  //echo $additional_content;
+				  
+					$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":\n $link\n".$additional_content;
+					$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_CLICKTODOWNLOAD."</a>\n". $additional_content;
+				} else {
+					$plural = '';
+					if($row['quantity'] > 1) {
+						$plural = "s";
+						}
+					$product_list.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+					$product_list_html.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n &nbsp; ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+				}
+				$report = get_option('wpsc_email_admin');
+				$report_product_list.= " - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n";
+			}
 			
 				// Decrement the stock here
 				if (($purchase_log['processed'] >= 2)) {
