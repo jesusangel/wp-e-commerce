@@ -52,7 +52,8 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 //   $data['lc'] = 'US';
   $data['lc'] = $paypal_currency_code;
   $data['bn'] = 'wp_e-commerce';
-  $data['no_shipping'] = '0';
+  
+  $data['no_shipping'] = get_option('paypal_ship');
   if(get_option('address_override') == 1) {
 		$data['address_override'] = '1';
 	}
@@ -362,10 +363,14 @@ function submit_paypal_multiple(){
   if($_POST['address_override'] != null) {
     update_option('address_override', (int)$_POST['address_override']);
 	}
+  if($_POST['paypal_ship'] != null) {
+    update_option('paypal_ship', (int)$_POST['paypal_ship']);
+	}  
     
   foreach((array)$_POST['paypal_form'] as $form => $value) {
     update_option(('paypal_form_'.$form), $value);
 	}
+	
   return true;
 }
 
@@ -402,7 +407,20 @@ function form_paypal_multiple() {
 		$paypal_ipn1 = "checked ='checked'";
 		break;
 	}
+	$paypal_ship = get_option('paypal_ship');
+	$paypal_ship1 = "";
+	$paypal_ship2 = "";	
+	switch($paypal_ship){
+		case 1:
+		$paypal_ship2 = "checked='checked'";
+		break;
 		
+		case 0:
+		default:
+		$paypal_ship1 = "checked='checked'";
+		break;
+	
+	}
 	$output .= "
    <tr>
      <td>IPN
@@ -410,6 +428,14 @@ function form_paypal_multiple() {
      <td>
        <input type='radio' value='1' name='paypal_ipn' id='paypal_ipn1' ".$paypal_ipn1." /> <label for='paypal_ipn1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='paypal_ipn' id='paypal_ipn2' ".$paypal_ipn2." /> <label for='paypal_ipn2'>".TXT_WPSC_NO."</label>
+     </td>
+  </tr>
+  <tr>
+     <td>Must send shipping address :
+     </td>
+     <td>
+       <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship2." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
+       <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship1." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
      </td>
   </tr>
   <tr>

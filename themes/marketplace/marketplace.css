@@ -1099,6 +1099,7 @@ span.soldoutgrid {
 	background-image:url(images/itembg.gif);
 	height:86px;
 	width:116px;
+	margin:0 auto;
 }
  
 div.item_image img {
