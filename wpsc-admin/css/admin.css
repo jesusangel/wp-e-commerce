@@ -1,6 +1,29 @@
 /*
 * This is the new WPSC Admin CSS file 
 */
+/*
+ *Start Flot CSS styling
+ */
+#flotplaceholder{
+	 width: 100%; 
+	 height: 200px; 
+	 position: relative;
+/* 	 margin-left:20px; */
+ }
+#flotproductlist{
+	 padding-left:43px;
+	 padding-top: 20px;
+	 padding-bottom:20px;
+}
+#flotHeader{
+	 padding-left:50px;
+
+}
+/*
+ *End of Flot CSS
+ */
+
+
 /**
  *Dashboard Widget CSS
  *

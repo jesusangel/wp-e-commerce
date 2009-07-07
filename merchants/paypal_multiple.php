@@ -157,7 +157,6 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		}
 	}
   $data['tax'] = '';
-
  
   //exit($base_shipping);
   if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false)) {
@@ -434,8 +433,8 @@ function form_paypal_multiple() {
      <td>Must send shipping address :
      </td>
      <td>
-       <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship2." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
-       <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship1." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
+       <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
+       <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
      </td>
   </tr>
   <tr>

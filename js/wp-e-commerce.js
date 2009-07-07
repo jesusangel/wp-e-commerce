@@ -31,10 +31,12 @@ jQuery(document).ready(function () {
 
 	//jQuery hide Make Purchase Button and replace with text
 //	alert(toggle);
+/*
 	check_make_purchase_button();
 	jQuery('.custom_gateway').click(function(event){
 		check_make_purchase_button();
 	});
+*/
   wpsc_bind_to_events();
 	
 	// Submit the product form using AJAX

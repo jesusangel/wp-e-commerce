@@ -164,9 +164,9 @@ function wpsc_admin_include_optionspage_css_and_js(){
 /*
 	wp_enqueue_style( 'wp-e-commerce-ui-tabs', WPSC_URL.'/wpsc-admin/css/jquery.ui.tabs.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/admin_2.7.css', false, false, 'all' );
-	wp_enqueue_script('wp-e-commerce-js-tooltip', WPSC_URL.'/wpsc-admin/js/jquery.tooltip.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-tooltip', WPSC_URL.'/wpsc-admin/js/jquery.tooltip.js', false, $version_identifier);*/
 	wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_identifier);
-*/
+
 	wp_enqueue_script('wp-e-commerce-js-ui-tabs', WPSC_URL.'/wpsc-admin/js/jquery-ui.js', false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-js-dimensions', WPSC_URL.'/wpsc-admin/js/dimensions.js', false, $version_identifier);
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/settingspage.css', false, false, 'all' );
@@ -179,7 +179,7 @@ function wpsc_admin_include_optionspage_css_and_js(){
 */
 function  wpsc_admin_include_css_and_js() {
   $siteurl = get_option('siteurl'); 
-	
+
 	wp_admin_css( 'dashboard' );
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-swfobject');
@@ -218,17 +218,17 @@ if(WPSC_GOLD_DIR_NAME != ''){
 }
 	//jQuery wysiwyg
 	/*
-wp_enqueue_style( 'jwysiwyg styles', WPSC_URL.'/wpsc-admin/css/jquery.wysiwyg.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'jwysiwyg styles', WPSC_URL.'/wpsc-admin/css/jquery.wysiwyg.css', false, $version_identifier, 'all' );
 	wp_enqueue_script('jwysiwyg', WPSC_URL.'/wpsc-admin/js/jquery.wysiwyg.js', array('jquery'), '0.5');
 	wp_enqueue_script('tooltip', WPSC_URL.'/wpsc-admin/js/jquery.tools.min.js', array('jquery'), '0.5');
-*/
+	*/
 	//wp_enqueue_script('post');
  	if ( user_can_richedit() ) {
 		wp_enqueue_script('editor');
 	}
 	wp_enqueue_script('media-upload');
 	wp_enqueue_script('word-count');
-// 	wp_admin_css( 'dashboard' );
+	// 	wp_admin_css( 'dashboard' );
 	
 	// remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action('admin_head', 'wpsc_admin_css');
@@ -241,7 +241,7 @@ function wpsc_admin_dynamic_js() {
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
  	header('Cache-Control: public, must-revalidate, max-age=86400');
  	header('Pragma: public');
-  $siteurl = get_option('siteurl'); 
+    $siteurl = get_option('siteurl'); 
 	$hidden_boxes = get_option('wpsc_hidden_box');
 	$hidden_boxes = implode(',', (array)$hidden_boxes);
 	
@@ -291,6 +291,7 @@ function wpsc_admin_dynamic_js() {
 	echo "var TXT_WPSC_AND_ABOVE = '".TXT_WPSC_AND_ABOVE."';\n\r";
 	echo "var TXT_WPSC_IF_PRICE_IS = '".TXT_WPSC_IF_PRICE_IS."';\n\r";
 	echo "var TXT_WPSC_IF_WEIGHT_IS = '".TXT_WPSC_IF_WEIGHT_IS."';\n\r";
+
 	exit();
 }
 if($_GET['wpsc_admin_dynamic_js'] == 'true') {
@@ -342,6 +343,7 @@ add_action('admin_menu', 'wpsc_admin_pages');
 //if(function_exists('wp_add_dashboard_widget')) {
 if( IS_WP27 ) {
     add_action('wp_dashboard_setup','wpsc_dashboard_widget_setup');
+    add_action('wp_dashboard_setup', 'wpsc_dashboard_quarterly_widget_setup');
 } else {
     add_action('activity_box_end', 'wpsc_admin_dashboard_rightnow');
 }
@@ -449,7 +451,19 @@ function wpsc_dashboard_widget_setup() {
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
     wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
 }
+if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
+	function wpsc_dashboard_quarterly_widget_setup() {
+		wp_enqueue_script('flot', WPSC_URL.'/wpsc-admin/js/jquery.flot.pack.js', array('jquery'), '0.9.8');
+		wp_enqueue_script('canvas', WPSC_URL.'/wpsc-admin/js/excanvas.pack.js', array('jquery', 'flot'), '0.9.8');
 
+	    wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
+	}
+	function wpsc_quarterly_dashboard_widget(){
+		require_once(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php");
+		$flot = new flot();
+	
+	}
+}
 function wpsc_dashboard_widget() {
     do_action('wpsc_admin_pre_activity');
 //    wpsc_admin_latest_activity();

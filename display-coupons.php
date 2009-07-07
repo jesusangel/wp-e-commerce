@@ -123,13 +123,14 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
   <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
+<form name='add_coupon' method='post' action=''>
 <table style="width: 100%;">
   <tr>
     <td id="coupon_data">
     
 
 <div id='add_coupon_box' class='modify_coupon' >
-<form name='add_coupon' method='post' action=''>
+
 <table class='add-coupon'>
  <tr>
    <th>
@@ -168,7 +169,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    </select>
    </td>
    <td>
-   <input type='text' class='pickdate' size='11' name='add_start'>
+   <input type='text' class='pickdate' size='11' name='add_start' />
    <!--<select name='add_start[day]'>
    <?php
    for($i = 1; $i <=31; ++$i) {
@@ -198,7 +199,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    </select>-->
    </td>
    <td>
-   <input type='text' class='pickdate' size='11' name='add_end'>
+   <input type='text' class='pickdate' size='11' name='add_end' />
    <!--<select name='add_end[day]'>
    <?php
    for($i = 1; $i <=31; ++$i) {
@@ -256,12 +257,12 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 <tr><td colspan='3'><b>Conditions</b></td></tr>
 <tr><td colspan="8">
 	<div class='coupon_condition'>
-		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/delete.png"/></button>
+		<div><img height="16" width="16" class="delete" alt="Delete" src="<?php echo WPSC_URL?>/images/delete.png"/>
 			<select class="ruleprops" name="rules[property][]">
-				<option value="item_name" rel="order">Item name</option>
-				<option value="item_quantity" rel="order">Item quantity</option>
-				<option value="total_quantity" rel="order">Total quantity</option>
-				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				<option value="item_name" title="order">Item name</option>
+				<option value="item_quantity" title="order">Item quantity</option>
+				<option value="total_quantity" title="order">Total quantity</option>
+				<option value="subtotal_amount" title="order">Subtotal amount</option>
 			</select>
 			<select name="rules[logic][]">
 				<option value="equal">Is equal to</option>
@@ -282,10 +283,11 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 			</span>
 		</div>
 	</div>
+	</td>
 </tr>
 </table>
 <br />
-</form>  
+
 </div>    
     
   <?php
@@ -321,7 +323,7 @@ echo "    </td>\n\r";
 echo "    <td>\n\r";
 echo TXT_WPSC_EDIT;
 echo "    </td>\n\r";
-
+echo "</tr>";
 $i=0;
 $coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` ",ARRAY_A);
 foreach((array)$coupon_data as $coupon) {
@@ -409,7 +411,7 @@ echo "</table>\n\r";
       
 <h2><?php echo TXT_WPSC_MARKETING_SETTINGS;?></h2>
 
-<form name='cart_options' method='POST' action=''>
+<form name='cart_options' method='post' action=''>
 <input type='hidden' value='true' name='change-settings' />
   <table>
     <tr>
@@ -423,11 +425,11 @@ echo "</table>\n\r";
         $wpsc_also_bought2 = "";
         switch($wpsc_also_bought) {
         case 0:
-        $wpsc_also_bought2 = "checked ='true'";
+        $wpsc_also_bought2 = "checked ='checked'";
         break;
         
         case 1:
-        $wpsc_also_bought1 = "checked ='true'";
+        $wpsc_also_bought1 = "checked ='checked'";
         break;
         }
         ?>
@@ -447,11 +449,11 @@ echo "</table>\n\r";
         $wpsc_share_this2 = "";
         switch($wpsc_share_this) {
           case 0:
-          $wpsc_share_this2 = "checked ='true'";
+          $wpsc_share_this2 = "checked ='checked'";
           break;
           
           case 1:
-          $wpsc_share_this1 = "checked ='true'";
+          $wpsc_share_this1 = "checked ='checked'";
           break;
           }
         ?>
@@ -470,7 +472,7 @@ echo "</table>\n\r";
 		}
 	?>
         <td>
-		<input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us'>
+		<input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' />
         </td>
       </tr>
       <tr>
@@ -488,16 +490,16 @@ echo "</table>\n\r";
 <table>
 	<tr>
 		<td colspan='2'>
-			<?=TXT_WPSC_RSSNOTE;?>
+			<?php echo TXT_WPSC_RSSNOTE;?>
 		</td>
 	</tr>
-	<tr><TD>&nbsp;</TD></tr>
+	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td>
 			RSS Feed Address:
 		</td>
 		<td>
-			<?php echo get_option('siteurl')."/index.php?rss=true&amp;action=product_list" ?>
+			<?php echo get_option('siteurl').urlencode("/index.php?rss=true&amp;action=product_list"); ?>
 		</td>
 	</tr>
 </table>
@@ -513,10 +515,11 @@ echo "</table>\n\r";
 				$itemsFeedURL = "http://www.google.com/base/feeds/items";
 				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wpsc-edit-products";
 				$redirect_url = 'https://www.google.com/accounts/AuthSubRequest?session=1';
-				$redirect_url .= '&next=';
+				$redirect_url .= '%26next=%3D';
 				$redirect_url .= urlencode($next_url);
-				$redirect_url .= "&scope=";
+				$redirect_url .= "%26scope%3D";
 				$redirect_url .= urlencode($itemsFeedURL);
+				$redirect_url .= urlencode($redirect_url);
 				echo " <a href='$redirect_url'>".TXT_WPSC_GRANT_ACCESS."</a>"; 
 			?>
 		</td>

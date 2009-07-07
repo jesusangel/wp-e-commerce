@@ -416,7 +416,7 @@ define('TXT_WPSC_NO_DEFAULT_PRODUCTS', 'Your "products page" is not currently se
 define('TXT_WPSC_FIX_CATEGORY_PERMALINKS', 'Fix Product Group Permalinks');
 define('TXT_WPSC_ADVANCED_OPTIONS', 'Advanced Options');
 define('TXT_WPSC_INVALID_COUPON', 'Invalid Coupon');
-define('TXT_WPSC_RSSNOTE', '<strong>Note:</strong> Not only can people use this RSS to keep update with your product list but you can also use this link to promote your products in your facebook profile. <br>Just add the <a href="http://apps.facebook.com/getshopped">getshopped! facebook application</a> to your facebook profile and follow the instructions.');
+define('TXT_WPSC_RSSNOTE', '<strong>Note:</strong> Not only can people use this RSS to keep update with your product list but you can also use this link to promote your products in your facebook profile. <br />Just add the <a href="http://apps.facebook.com/getshopped">getshopped! facebook application</a> to your facebook profile and follow the instructions.');
 define('TXT_WPSC_GOOGLEFINANCESTATUS', 'Financial Status');
 define('TXT_WPSC_GOOGLEFULFILLMENTSTATUS', 'Fulfillment Status');
 define('TXT_WPSC_SURETODELETECATEGORISATION', 'Are you sure you want to delete this product group? All categories it contains will be deleted too.');
