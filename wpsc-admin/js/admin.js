@@ -116,11 +116,9 @@ jQuery(document).ready( function () {
 			}
 		});
 		
-// 		jQuery('.the-product-price',this).blur(function(event){
-// 		  console.log('was this blurred?');
-// 			target_element_id = jQuery(jQuery(this).parent('.price-editing-fields')).attr('id');
-// 			jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_price);
-// 		});
+		target_element_id = jQuery('.price-editing-fields',this).attr('id');
+		
+ 		jQuery('.the-product-price',this).bind('blur', target_element_id, ajax_submit_price);
 	});
 
 // Code for using AJAX to change thr product price ends here

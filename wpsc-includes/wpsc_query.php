@@ -1293,8 +1293,8 @@ class WPSC_Query {
 		
 		
 		
-		for($i=1;$i<=$pages;++$i) {
-			if(($this->query_vars['page'] == $i) || (!is_numeric($this->query_vars['page']) && ($i == 1))) {
+		for($i=1;$i<=$pages;$i++) {
+			if(($this->query_vars['page'] == $i) || (($this->query_vars['page'] <= $i) && ($i <= 1))) {
 				if($_GET['view_all'] != 'true') {
 					$selected = true;
 				}
@@ -1324,14 +1324,6 @@ class WPSC_Query {
 		
 		// get the breadcrumbs
 		$this->get_breadcrumbs();
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		return $this->products;
 	}

@@ -81,6 +81,26 @@ function wpsc_product_has_variations($product_id) {
 	return false;  
 }
 
+/**
+ * WPSC canonical URL function
+ * Needs a recent version 
+ * @since 3.7
+ * @param int product id
+ * @return bool true or false
+ */
+function wpsc_change_canonical_url($url) {
+  global $wpdb, $wpsc_query;
+  if($wpsc_query->is_single == true) {
+		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpsc_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+		$url = wpsc_product_url($product_id);
 
-
+  } else {
+    if($wpsc_query->query_vars['category_id'] > 0) {
+      $url = wpsc_category_url($wpsc_query->query_vars['category_id']);
+    }
+  }
+  //echo "<pre>".print_r($wpsc_query,true)."</pre>";
+  return $url;
+}
+add_filter('aioseop_canonical_url', 'wpsc_change_canonical_url');
 ?>

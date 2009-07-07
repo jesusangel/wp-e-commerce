@@ -1391,3 +1391,7 @@ div.wpsc_category_details img {
   float: left;
   margin: 0px 6px 12px 0px;
 }
+
+div.wpsc_page_numbers a.selected {
+	text-decoration: underline;
+}

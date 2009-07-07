@@ -19,6 +19,7 @@ $image_height = get_option('single_view_image_height');
 		</div>
 	<?php endif; ?>
 	
+	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	
 	<div class="productdisplay">
 	<?php /** start the product loop here, this is single products view, so there should be only one */?>
