@@ -451,6 +451,7 @@ function wpsc_dashboard_widget_setup() {
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
     wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
 }
+/*
 if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
 	function wpsc_dashboard_quarterly_widget_setup() {
 		wp_enqueue_script('flot', WPSC_URL.'/wpsc-admin/js/jquery.flot.pack.js', array('jquery'), '0.9.8');
@@ -464,6 +465,7 @@ if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
 	
 	}
 }
+*/
 function wpsc_dashboard_widget() {
     do_action('wpsc_admin_pre_activity');
 //    wpsc_admin_latest_activity();

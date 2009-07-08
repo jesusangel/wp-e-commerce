@@ -66,8 +66,8 @@ if(wpsc_cart_item_count() > 0) :
 
 	<?php if(isset($_SESSION['nocamsg']) && isset($_GET['noca']) && $_GET['noca'] == 'confirm'): ?>
 		<p class='validation-error'><?php echo $_SESSION['nocamsg']; ?></p>
-	<?php endif; ?>
 	<?php do_action('wpsc_before_shipping_of_shopping_cart'); ?>
+	<?php endif; ?>
 	<div id='wpsc_shopping_cart_container'>
 	<?php if(wpsc_uses_shipping()) : ?>
 		<h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>

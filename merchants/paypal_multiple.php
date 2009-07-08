@@ -15,8 +15,6 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		exit();
 	}
 	
-// 	exit( nzshpcrt_overall_total_price($_SESSION['selected_country']));
-	
   $cart_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='".$purchase_log['id']."'";
   $cart = $wpdb->get_results($cart_sql,ARRAY_A) ;
   //written by allen
@@ -388,7 +386,7 @@ function form_paypal_multiple() {
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_multiple_url')."' name='paypal_multiple_url' /> <br />
-     <strong>Note:</strong>The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr
+    <span  class='description'> <strong>Note:</strong>The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr</span>
       </td>
   </tr>
   ";
@@ -411,12 +409,12 @@ function form_paypal_multiple() {
 	$paypal_ship2 = "";	
 	switch($paypal_ship){
 		case 1:
-		$paypal_ship2 = "checked='checked'";
+		$paypal_ship1 = "checked='checked'";
 		break;
 		
 		case 0:
 		default:
-		$paypal_ship1 = "checked='checked'";
+		$paypal_ship2 = "checked='checked'";
 		break;
 	
 	}
@@ -430,12 +428,17 @@ function form_paypal_multiple() {
      </td>
   </tr>
   <tr>
-     <td>Must send shipping address :
+     <td>Send shipping details:
      </td>
      <td>
        <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
      </td>
+  </tr>
+  <tr>
+  	<td colspan='2'><span  class='description'>
+  	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change this option to No.</span>
+  	</td>
   </tr>
   <tr>
       <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>

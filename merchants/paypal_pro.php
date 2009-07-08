@@ -1,7 +1,7 @@
 <?php
 /*
  * Some parts of this code were inspired by the shopp plugin and their paypal pro module. 
- */
+ **/
 $nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Pro';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_pro';
