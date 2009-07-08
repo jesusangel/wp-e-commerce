@@ -24,7 +24,7 @@ if($_REQUEST['eway']=='1') {
 if(get_option('payment_gateway') == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
 } else {
-	if(function_exists('decrypt_dps_response') && !is_numeric($sessionid)) {
+	if(function_exists('decrypt_dps_response') && get_option('payment_gateway')== 'dps') {
 		$sessionid = decrypt_dps_response();
 		transaction_results($sessionid); 
 	} else {

@@ -232,7 +232,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 	 	  $order = array_merge($check_missing_items, $order);
 	 	}
 		
-	 	//echo "<pre>".print_r($order,true)."</pre>";
+	 	echo "<pre>".print_r($order,true)."</pre>";
 		update_option('wpsc_product_page_order', $order);
 		foreach((array)$order as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
