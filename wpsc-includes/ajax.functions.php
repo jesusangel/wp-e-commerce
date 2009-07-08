@@ -99,7 +99,7 @@ function wpsc_add_to_cart() {
 
     
 		if(get_option('show_sliding_cart') == 1)	{
-			if(wpsc_cart_item_count() > 0) {
+			if((wpsc_cart_item_count() > 0) || (count($cart_messages) > 0)) {
 				$_SESSION['slider_state'] = 1;
 				echo "
 					jQuery('#sliding_cart').slideDown('fast',function(){
@@ -119,7 +119,7 @@ function wpsc_add_to_cart() {
 
 		do_action('wpsc_alternate_cart_html');
     
-    echo "wpsc_bind_to_events();\n";
+    
 		exit();
   }
 }
@@ -159,9 +159,11 @@ function wpsc_empty_cart() {
 				});
 		";
 		}
-
 		exit();
   }
+  
+	wp_redirect(remove_query_arg(array('wpsc_ajax_action','ajax')));
+	exit();
 }
 // execute on POST and GET
 if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) {
@@ -245,7 +247,7 @@ function wpsc_update_item_quantity() {
 	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
 	do_action('wpsc_alternate_cart_html');
 	
-	echo "wpsc_bind_to_events();\n";
+	
 	exit();
  }
 	

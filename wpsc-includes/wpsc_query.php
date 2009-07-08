@@ -6,6 +6,9 @@
  * The Cart class handles adding, removing and adjusting items in the cart, and totaling up the cost of the items in the cart.
  * The Cart Items class handles the same, but for cart items themselves.
  *
+ * This code contains modified methods from the wp_query object of WordPress, located in wp-includes/query.php, these parts are to do with the loops we use that mirror the functionality of the wordpress loop
+ * As such, they can be used in the same way, if needed.
+ * 
  * @package wp-e-commerce
  * @since 3.7
  * @subpackage wpsc-cart-classes
@@ -1340,8 +1343,9 @@ class WPSC_Query {
 		$this->product = $this->next_product();
 		$this->get_variation_groups();
 		$this->get_custom_meta();
-		if ( $this->current_product == 0 ) // loop has just started
+		if ( $this->current_product == 0 ) {
 			do_action('wpsc_loop_start');
+		}
 	}
 
 	function have_products() {
@@ -1349,7 +1353,6 @@ class WPSC_Query {
 			return true;
 		} else if ($this->current_product + 1 == $this->product_count && $this->product_count > 0) {
 			do_action('wpsc_loop_end');
-			// Do some cleaning up after the loop,
 			$this->rewind_products();
 		}
 
@@ -1389,17 +1392,11 @@ class WPSC_Query {
 	}
 
 	function have_variation_groups() {
-		//echo "<pre>".print_r($wpsc_query->variation_group_count,true)."</pre>";
-		//echo "<pre>".print_r($wpsc_query->current_variation_group,true)."</pre>";
 		if ($this->current_variation_group + 1 < $this->variation_group_count) {
 			return true;
 		} else if ($this->current_variation_group + 1 == $this->variation_group_count && $this->variation_group_count > 0) {
-			//do_action('wpsc_loop_end');
-			// Do some cleaning up after the loop,
 			$this->rewind_variation_groups();
 		}
-
-		//$this->in_the_loop = false;
 		return false;
 	}
 

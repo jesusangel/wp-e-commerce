@@ -258,7 +258,7 @@ function wpsc_display_groups_page() {
     
     if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
       $imagedata = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1");
-      if($imagedata[0]['image'] != null) {
+      if($imagedata != null) {
         $height = $_POST['height'];
         $width = $_POST['width'];
         $imagepath = WPSC_CATEGORY_DIR . $imagedata;

@@ -343,9 +343,11 @@ add_action('admin_menu', 'wpsc_admin_pages');
 //if(function_exists('wp_add_dashboard_widget')) {
 if( IS_WP27 ) {
     add_action('wp_dashboard_setup','wpsc_dashboard_widget_setup');
-    add_action('wp_dashboard_setup', 'wpsc_dashboard_quarterly_widget_setup');
+    if(function_exists('wpsc_dashboard_quarterly_widget_setup')) {
+			add_action('wp_dashboard_setup', 'wpsc_dashboard_quarterly_widget_setup');
+    }
 } else {
-    add_action('activity_box_end', 'wpsc_admin_dashboard_rightnow');
+	add_action('activity_box_end', 'wpsc_admin_dashboard_rightnow');
 }
 
 function wpsc_admin_latest_activity() {

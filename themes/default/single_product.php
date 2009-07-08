@@ -82,7 +82,9 @@ $image_height = get_option('single_view_image_height');
 						</p>
 					<?php endif; ?>
 				
-					<?php /** the custom meta HTML and loop */?>
+					<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
+
+					<?php /** the custom meta HTML and loop */ ?>
 					<div class="custom_meta">
 						<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
 							<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_name(); ?><br />

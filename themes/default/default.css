@@ -1395,3 +1395,13 @@ div.wpsc_category_details img {
 div.wpsc_page_numbers a.selected {
 	text-decoration: underline;
 }
+/*
+span.emptycart button {
+  border: none;
+  padding: 0px;
+  display: inline;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+}*/

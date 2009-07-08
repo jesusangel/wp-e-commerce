@@ -135,7 +135,7 @@ function wpsc_user_dynamic_css() {
      */
 		div.default_product_display div.textcol{
 			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-			_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;
+			<?php /*_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;  */ ?>
 			min-height: <?php echo $thumbnail_height;?>px;
 			_height: <?php echo $thumbnail_height;?>px;
 		}
@@ -188,7 +188,7 @@ function wpsc_user_dynamic_css() {
 		
 		div.single_product_display div.textcol{
 			margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
-			_margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important;
+			<?php /* _margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important; */ ?>
 			min-height: <?php echo $single_thumbnail_height;?>px;
 			_height: <?php echo $single_thumbnail_height;?>px;
 		}

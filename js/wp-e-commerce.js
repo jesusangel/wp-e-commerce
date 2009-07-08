@@ -2,20 +2,7 @@
 
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
 // these functions are bound to events on elements when the page is fully loaded.
-function wpsc_bind_to_events() {
-	// empty the cart using ajax when the form is submitted,  
-	jQuery("form.wpsc_empty_the_cart").submit(function() {
-		form_values = "ajax=true&";
-		form_values += jQuery(this).serialize( );
-		jQuery.post( 'index.php', form_values, function(returned_data) {
-			eval(returned_data);
-			wpsc_bind_to_events();
-		});
-		return false;
-	});
-}    
-    
-
+// empty the cart using ajax when the form is submitted,  
 function check_make_purchase_button(){
 	toggle = jQuery('#noca_gateway').attr('checked');
 	if(toggle == true){
@@ -28,17 +15,7 @@ function check_make_purchase_button(){
 }	
 
 jQuery(document).ready(function () {
-
-	//jQuery hide Make Purchase Button and replace with text
-//	alert(toggle);
-/*
-	check_make_purchase_button();
-	jQuery('.custom_gateway').click(function(event){
-		check_make_purchase_button();
-	});
-*/
-  wpsc_bind_to_events();
-	
+  
 	// Submit the product form using AJAX
   jQuery("form.product_form").submit(function() {
     // we cannot submit a file through AJAX, so this needs to return true to submit the form normally if a file formfield is present
@@ -53,7 +30,6 @@ jQuery(document).ready(function () {
 			}
 			jQuery.post( 'index.php?ajax=true', form_values, function(returned_data) {
 				eval(returned_data);
-				wpsc_bind_to_events();
 				jQuery('div.wpsc_loading_animation').css('visibility', 'hidden');
 				
 				if(jQuery('#fancy_notification') != null) {
@@ -63,7 +39,6 @@ jQuery(document).ready(function () {
 				
 			});
 			wpsc_fancy_notification(this);
-			
 			return false;
 		}
 	});
@@ -106,7 +81,32 @@ jQuery(document).ready(function () {
 		});
 		return false;
 	});
-	
+
+
+
+
+	jQuery("form.wpsc_empty_the_cart").livequery(function(){
+		jQuery(this).submit(function() {
+			form_values = "ajax=true&";
+			form_values += jQuery(this).serialize();
+			jQuery.post( 'index.php', form_values, function(returned_data) {
+				eval(returned_data);
+			});
+			return false;
+		});
+	});
+
+	jQuery("form.wpsc_empty_the_cart span.emptycart a").livequery(function(){
+		jQuery(this).click(function() {
+			parent_form = jQuery(this).parents("form.wpsc_empty_the_cart");
+			form_values = "ajax=true&";
+			form_values += jQuery(parent_form).serialize();
+			jQuery.post( 'index.php', form_values, function(returned_data) {
+				eval(returned_data);
+			});
+			return false;
+		});
+	}); 
 });
 
 
@@ -138,7 +138,7 @@ function wpsc_fancy_notification(parent_form){
       border: 1 ,
       padding: 1 ,
       scroll: 1 
-      };
+		};
 
     form_button_id = jQuery(parent_form).attr('id') + "_submit_button";
     //console.log(form_button_id);

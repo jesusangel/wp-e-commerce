@@ -22,8 +22,8 @@ function widget_wp_shopping_cart($args) {
     echo $before_widget;
     $full_title = $before_title . $title . $fancy_collapser . $after_title;    
     echo $full_title;
-    echo "<ul>\n\r";
-    echo "  <li>\n\r";
+//     echo "<ul>\n\r";
+//     echo "  <li>\n\r";
     
 		$display_state = "";
 		
@@ -38,8 +38,8 @@ function widget_wp_shopping_cart($args) {
 			nzshpcrt_shopping_basket("", 4);	  
 	  }*/
 		echo "    </div>";
-    echo "  </li>\n\r";
-    echo "</ul>\n\r";
+//     echo "  </li>\n\r";
+//     echo "</ul>\n\r";
     
     echo $after_widget;
 //     echo "<br style='clear:both;'>";
