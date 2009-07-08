@@ -207,10 +207,15 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   
 	/* Add tidy url name */
 	if($post_data['name'] != '') {
-		$tidied_name = trim($post_data['name']);
+	
+   
+    $tidied_name =$post_data['name'];
+	  $tidied_name = trim($tidied_name);
+	  //echo $tidied_name."<br />";
 		$tidied_name = strtolower($tidied_name);
-		
-		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
+		//echo $tidied_name."<br />";
+	  $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/"), array("-","-"), $tidied_name);
+		//echo $url_name."<br />";
 		$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
 		$extension_number = '';
 		if($similar_names['count'] > 0) {
@@ -218,6 +223,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		}
 		$url_name .= $extension_number;
 		add_product_meta($product_id, 'url_name', $url_name,true);
+		//exit($wpdb->escape($url_name));
 	}
   
 	// if we succeed, we can do further editing
@@ -719,6 +725,19 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
  		return false;
    }
    
+}
+
+function wpsc_send_to_google_base($product_data) {
+	require_once('google_base_functions.php');
+	if (isset($_GET['token']) || isset($_SESSION['google_base_sessionToken'])) {
+		if (isset($_GET['token'])) {
+			$sessionToken=exchangeToken($_GET['token']);
+			$_SESSION['google_base_sessionToken'] = $sessionToken;
+		}
+		if (isset($_SESSION['google_base_sessionToken']))
+			$sessionToken=$_SESSION['google_base_sessionToken'];
+		postItem($_POST['name'], $_POST['price'], $_POST['description'], $sessionToken);
+	}
 }
 
 ?>

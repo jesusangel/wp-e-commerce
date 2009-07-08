@@ -97,6 +97,9 @@ function wpsc_change_canonical_url($url) {
   } else {
     if($wpsc_query->query_vars['category_id'] > 0) {
       $url = wpsc_category_url($wpsc_query->query_vars['category_id']);
+			if(get_option('permalink_structure') && ($wpsc_query->query_vars['page'] > 1)) {
+				$url .= $url."page/{$wpsc_query->query_vars['page']}/";
+			}
     }
   }
   //echo "<pre>".print_r($wpsc_query,true)."</pre>";

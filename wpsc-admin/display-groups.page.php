@@ -139,7 +139,9 @@ function wpsc_display_groups_page() {
 		}
       
    
-    $url_name = sanitize_title($_POST['name']);
+    $tidied_name = sanitize_title($_POST['name']);
+		$tidied_name = strtolower($tidied_name);
+		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/"), array("-","-"), $tidied_name);
     $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
     $extension_number = '';
     if($similar_names['count'] > 0) {

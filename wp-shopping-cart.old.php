@@ -1612,8 +1612,10 @@ function add_product_meta($product_id, $key, $value, $unique = false, $custom = 
     if(($unique == true) && $wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
       return false;
 		}
-    
-    $value = $wpdb->escape(maybe_serialize($value));
+		if(!is_string($value)) {
+			$value = maybe_serialize($value);
+		}
+    $value = $wpdb->escape($value);
     
     if(!$wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
       $custom = (int)$custom;
