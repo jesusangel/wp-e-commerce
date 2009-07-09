@@ -15,8 +15,7 @@ if(get_option('payment_gateway') == 'paypal_certified'){
 $errorcode = '';
 $transactid = '';
 if($_REQUEST['eway']=='1') {
- 	echo $_SESSION['eway_message'];
- 	$_SESSION['eway_message']='';
+	$sessionid = $_GET['result'];
 } else if ($_REQUEST['payflow']=='1') {	
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';

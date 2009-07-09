@@ -1,9 +1,9 @@
 // This is the wp-e-commerce front end javascript "library"
 
 jQuery(document).ready( function () {
-  //this makes the additional description textarea into a jWysiwyg field
 
-  
+
+
   // this makes the product list table sortable
   jQuery('table#wpsc_product_list').sortable({
 		update: function(event, ui) {
@@ -290,7 +290,7 @@ jQuery(document).ready( function () {
 						img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 						
 						jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt ='' /></a>");
 						jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
 						//for(i=1;i<set.length;i++) {
 						//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();

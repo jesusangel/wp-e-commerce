@@ -113,6 +113,9 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 
 /*<strong><?php echo TXT_WPSC_ADD_COUPON; ?></strong>*/
 ?>
+<script type='text/javascript'>
+	jQuery(".pickdate").datepicker();
+</script>
 <div class="wrap">
   <h2><?php echo TXT_WPSC_DISPLAYCOUPONS;?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">

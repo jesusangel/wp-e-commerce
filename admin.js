@@ -191,7 +191,7 @@ jQuery("#gallery_list").sortable({
 				img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 				
 				jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-				jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+				jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt='' /></a>");
 				jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
 				//for(i=1;i<set.length;i++) {
 				//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
@@ -599,6 +599,7 @@ jQuery(window).load( function () {
 	});
 	
 	jQuery('a.closeEl').bind('click', toggleContent);
+/*
  	jQuery('div.groupWrapper').sortable( {
 			accept: 'groupItem',
  			helperclass: 'sortHelper',
@@ -620,6 +621,7 @@ jQuery(window).load( function () {
  			}
  		}
  	);
+*/
 
 	jQuery('a#close_news_box').click( function () {
 		jQuery('div.wpsc_news').css( 'display', 'none' );
@@ -1143,6 +1145,7 @@ jQuery(document).ready(function(){
 //          indicator : "Saving...",
 //          tooltip   : 'Click to edit...'
 //     });
+/*
     jQuery('.meta-box-sortables').sortable( {
 	    placeholder: 'sortable-placeholder',
 	    connectWith: [ '.meta-box-sortables' ],
@@ -1190,6 +1193,7 @@ jQuery(document).ready(function(){
 			}
 		}
 	}
+*/
 	jQuery("#submit_category_select").click(
 		function() {
 			new_url = jQuery("#category_select").children("option:selected").val();

@@ -254,6 +254,7 @@ function wpsc_display_groups_page() {
 					move_uploaded_file($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']));
 					$image = $wpdb->escape($_FILES['image']['name']);
         }
+      
       } else {
 				$image = '';
       }

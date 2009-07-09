@@ -37,7 +37,7 @@ class nzshpcrt_variations {
       }
     
       $options .= "  <div class='variation_box'>\n\r";
-      $options .= "    <label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list(\"{$product_id}\", jQuery(this).parents(\"div.variation_box\"));' value='1' name='variations[{$variation['id']}]' class='variation_checkbox' >{$variation['name']}</label>\n\r";
+      $options .= "    <label class='variation_checkbox{$product_id}'><input type='checkbox' $checked onchange='{$if_adding}variation_value_list(\"{$product_id}\", jQuery(this).parents(\"div.variation_box\"));' value='1' name='variations[{$variation['id']}]' class='variation_checkbox' />{$variation['name']}</label>\n\r";
       /**
       *  get the list of variation values
 			*  need different input names for editing and adding due to using different keys
