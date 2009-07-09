@@ -603,7 +603,9 @@ table.product_variation_grid th.variation_name{
  padding-bottom: 1px;
  }
  
-
+div#edit_variations_container {
+  margin-top: 12px;
+}
 table.product_variation_grid {
  border-collapse: collapse;
  margin-top: 0px;
