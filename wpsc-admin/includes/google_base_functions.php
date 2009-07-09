@@ -1,7 +1,8 @@
 <?php
 
 /* Our Google Base API developer key. */
-$developerKey = "ABQIAAAA6ggeUfjN1SpHwYsrpccTGhRuQWnos65R7rFyIjvnCKH4e1YArxSdx2HKFtraZCwQgrQplEXLG99isg";
+//$developerKey = "ABQIAAAA6ggeUfjN1SpHwYsrpccTGhRuQWnos65R7rFyIjvnCKH4e1YArxSdx2HKFtraZCwQgrQplEXLG99isg";
+$developerKey = "ABQIAAAAytglg4w-F970cu2wgEJJfBS0dHaC-2dNNjDFDkd1HH21BJ65AhT1FKTndoMPr-hz7ZR87MhvYqxlag";
 
 /* The items feed URL, used for queries, insertions and batch commands. */
 $itemsFeedURL = "http://www.google.com/base/feeds/items";
@@ -23,16 +24,6 @@ $cuisines = array('African', 'American', 'Asian', 'Caribbean', 'Chinese', 'Frenc
  */
 function buildInsertXML($name,$price,$description) {
 	$result = "<?xml version='1.0'?>" . "\n";
-// 	$result .= "<entry xmlns='http://www.w3.org/2005/Atom'" . " xmlns:g='http://base.google.com/ns/1.0'>" . "\n";
-// 	$result .= "<category scheme='http://base.google.com/categories/itemtypes'" . " term='Products'/>" . "\n";
-// 	$result .= "<title type='text'>" . 'pizza' . "</title>" . "\n";
-// // 	$result .= "<g:cuisine>" . 'Chinese' . "</g:cuisine>" . "\n";
-// 	$result .= "<g:item_type type='text'>Recipes</g:item_type>" . "\n";
-// // 	$result .= "<g:cooking_time type='intUnit'>" . $_POST['time_val'] . " " . $_POST['time_units'] . "</g:cooking_time>" . "\n";
-// // 	$result .= "<g:main_ingredient type='text'>" . $_POST['main_ingredient'] . "</g:main_ingredient>" . "\n";
-// // 	$result .= "<g:serving_count type='number'>" . $_POST['serves'] . "</g:serving_count>" . "\n";
-// 	$result .= "<content>" . 'whatever'. "</content>" . "\n";
-// 	$result .= "</entry>" . "\n";
 	
 	$result .= "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:g='http://base.google.com/ns/1.0'>
 				<category scheme='http://base.google.com/categories/itemtypes' term='Products'/>
