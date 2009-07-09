@@ -1,4 +1,4 @@
-<?php
+ <?php
 
  function wpsc_category_tm(){
  global $wpdb;

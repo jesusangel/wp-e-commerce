@@ -1,9 +1,110 @@
 <?php
 /*
-This is a language file for the WP shopping cart plugin version 3.6.10
+This is a language file for the WP shopping cart plugin version 3.7
 Language version in Dutch by http://level-level.com -> mail@level-level.com for questions and suggestions
-Februari 12 2009
+Rotterdam, July 9 2009
 */
+
+define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades (3.7)');
+define('TXT_WPSC_GOLD_OPTIONS', 'Gold cart opties');
+
+
+define('TXT_WPSC_CATEGORY_LIST', 'Toon lijst van productgroepen');
+define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Toon alle producten + lijst productgroepen');
+define('TXT_WPSC_INSUFFICIENT_REMAINING', 'Sorry, er zijn slechts [number] stuks van dit product op voorraad.');
+define('TXT_WPSC_ZERO_QUANTITY_REQUESTED', 'Sorry, het is niet mogelijk nul producten aan de winkelwagen toe te voegen');
+define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Instellingen productweergave');
+define('TXT_WPSC_BUTTON_SETTINGS', 'Instellingen aankoopknop');
+define('TXT_WPSC_UPDATING', 'Laden');
+define('TXT_WPSC_EDIT_GROUP', 'Groep bewerken');
+define('TXT_WPSC_ADD_GROUP', 'Groep toevoegen');
+define('TXT_SHOW_GRID_PER_ROW', 'Producten per rij');
+define('TXT_WPSC_PRODUCT_TAGS', 'Product termen');
+define('TXT_WPSC_CATEGORISATION', 'Product categorie&euml;n');
+define('TXT_WPSC_COUPONSINVALID', 'Deze couponcode is niet geldig.');
+define('TXT_WPSC_NOITEMSINTHISGROUP', 'Er bevinden zich geen producten binnen deze groep.');
+
+define('TXT_WPSC_CLEAR_IP_LOCKS', 'Aan dit IP adres gekoppelde downloads vrijgeven %s');
+define('TXT_WPSC_EMAIL_BUYER', 'Aankoop kwitantie opnieuw aan klant versturen');
+
+
+define('TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG','Toon product Template Tag ');
+define('TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE','Toon product Shortcode');
+define('TXT_WPSC_PRODUCT_SKU','Toon Product SKU (uniek ID)');
+
+
+define('TXT_WPSC_CATEGORY_TARGETMARKET','Oeps het product: %s kan niet worden verzonden naar %s. Verwijder dit product uit de lijst hierboven om door te gaan met uw transactie.');
+define('TXT_WPSC_UPLOAD_A_FILE', 'Upload een bestand');
+define('TXT_WPSC_UPLOAD_A_FILE_DESCRIPTION', 'Selecteer een bestand op je computer om aan dit product toe te voegen.');
+define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT', 'Dit product personaliseren');
+define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Gebruik dit formulier om een persoonlijk bericht aan dit product toe te voegen.');
+
+define("TXT_WPSC_ADDITIONAL_INFO", "3. Aanvullende informatie"); 
+define('TXT_WPSC_ECOMMERCE', 'Webshop'); 
+define('TXT_WPSC_PRODUCTS', 'Beheer producten'); 
+define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','GRAFIEK VERKOPEN PER JAAR');
+
+define('TXT_WPSC_COUPONS', 'Coupon Discount');
+define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
+define('TXT_WPSC_CUSTOM_TEXT', 'Custom Text');
+define('TXT_WPSC_COMMENTSETTINGS', 'Reageren instellingen');
+define('TXT_WPSC_ENABLE_COMMENTS', 'Gebruik reactiemogelijkheid via IntenseDebate');
+define('TXT_WPSC_COMMENTS_WHICH_PRODUCTS', 'Toon reacties op');
+define('TXT_WPSC_INTENSE_DEBATE_ACCOUNT_ID', 'IntenseDebate Account ID');
+
+define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS', 'Reageren mogelijk maken');
+define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS_INFO', 'Geef bezoekers de mogelijkheid op dit product te reageren.');
+
+
+
+
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_WOM", "Mond tot mond");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_ADV", "Via een advertentie");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_INT", "Internet");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_EC", "Ik was al klant");
+define("TXT_WPSC_COMMA_SEPARATED", "Scheiden dmv kommas");
+define("TXT_WPSC_AT_THIS_MOMENT_TRACE_ID", "Tracking ID");
+define("TXT_WPSC_AT_THIS_MOMENT_NO_TRANSACTION", "Geen transacties voor deze maand.");
+define("TXT_WPSC_MAIL_RESENDED", "De volgende kwitantie is opnieuw verzonden");
+define("TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL", "Er heeft zich een fout voorgedaan tijdens het verzenden van email");
+define("TXT_WPSC_UPDATE_BUTTON", "Opslaan &raquo;");
+define("TXT_WPSC_ABOUT_THIS_PAGE", "Over deze pagina");
+define("TXT_WPSC_PAGENUMBER_POSITION_TOP", "Bovenkant");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTTOM", "Onderkant");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTH", "Beide");
+define("TXT_WPSC_USE_THEME_ENGINE", "Gebruik maken van de experimentele Theme Engine");
+define("TXT_WPSC_TM", "Doelmarkten");
+define("TXT_WPSC_SHIPPING_DETAIL","Kies hieronder een land om uw verzendkosten te berekenen");
+define('TXT_WPSC_TOTAL_THIS_MONTH', 'Resultaten laatste 30 dagen');
+define('TXT_WPSC_TOTAL_INCOME', 'Resultaten levensduur winkel');
+define('TXT_WPSC_SALES_TITLE', 'Verkopen');
+define('TXT_WPSC_ORDERS_TITLE', 'Bestellingen');
+define('TXT_WPSC_AVGORDER_TITLE', 'Gemiddelde bestelling');
+define('TXT_WPSC_GATEWAY_SETTINGS', 'Instellingen betaalwijzen');
+define('TXT_WPSC_CHECKOUT_SETTINGS', 'Instellingen afrekenen');
+define('TXT_WPSC_ADD_NEW_PRODUCT', 'Nieuw product toevoegen');
+define("TXT_WPSC_HERE_YOU_CAN_ADD", "Hier kan je producten, groepen en variaties toevoegen");
+define("TXT_WPSC_CLOSED", "Gesloten");
+define("TXT_WPSC_PENDING", "In behandeling");
+define("TXT_WPSC_CURRENT_MONTH", "Huidige maand");
+define("TXT_WPSC_AT_A_GLANCE", "In een oogopslag");
+define("TXT_WPSC_CHECKOUT", "Afrekenen");
+define("TXT_WPSC_RECIEPT_EMAIL_ADDRESS", "Dit wordt het e-mailadres waarnaar de kwitantie wordt verzonden.");
+
+define("TXT_WPSC_OVER_UPS_WEIGHT", "Omdat uw bestelling zwaarder is dan 68 kg, zal de eigenaar van de winkel direct contact met u opnemen om de verzendkosten te bespreken.");
+define("TXT_WPSC_ADD_TO_CART_PHP", "\"Aan winkelwagen toevoegen\" PHP");
+define("TXT_WPSC_BUY_NOW_PHP", "\"Nu kopen\" PHP");
+
+define("TXT_WPSC_ADD_TO_CART_SHORTCODE", "Aan winkelwagen toevoegen Shortcode");
+define("TXT_WPSC_BUY_NOW_SHORTCODE", "Nu kopen Shortcode");
+
+define("TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS", "Totaal gewicht <br />(<abbr alt='U moet het gewicht in ponden opgeven, ongeacht wat u gebruikt bij uw producten' title='U moet het gewicht in ponden opgeven, ongeacht wat u gebruikt bij uw producten'>in pond(en)</abbr>)");
+define("TXT_WPSC_SHIPPING_PRICE", "Verzendkosten");
+define("TXT_WPSC_IF_PRICE_IS", "Wanneer prijs is ");
+define("TXT_WPSC_IF_WEIGHT_IS", "Wanneer gewicht is ");
+define("TXT_WPSC_AND_ABOVE", " en hoger");
+
+
 
 
 define("TXT_WPSC_DISPLAY_THE_GROUP_IMAGES", "Toon groep-miniatuurafbeeldingen in de zijbalk");
@@ -185,6 +286,7 @@ define('TXT_WPSC_YOUR_ORDER', 'Uw bestelling');
 define('TXT_WPSC_ABOUT_THIS_PAGE', 'Over deze pagina');
 define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Bestelling in behandeling: betaling vereist');
 define('TXT_WPSC_SELECTALLCATEGORIES', 'Toon alle producten');
+define('TXT_WPSC_CURRENT_GROUP', '[categorisation] groep');
 define('TXT_WPSC_EDITING_GROUP', 'Je bent nu de [categorisation] groep aan het bewerken');
 define('TXT_WPSC_ADDING_TO_GROUP', 'Je bent nu een nieuw item aan de [categorisation] groep aan het toevoegen');
 define('TXT_WPSC_EDITING_IN_GROUP', 'You are editing an item in the [categorisation] group');
@@ -233,16 +335,16 @@ define('TXT_WPSC_OPTIONS_PAYMENT_HEADER', 'Betalings instellingen');
 define('TXT_WPSC_OPTIONS_ADMIN_HEADER', 'Beheerders instellingen');
 define('TXT_WPSC_OPTIONS_MARKETING_HEADER', 'Marketing instellingen');
 define('TXT_WPSC_THUMBNAILSETTINGS', 'Instellingen voor miniatuur afbeeldingen');
-define('TXT_WPSC_CLEAR_IP_LOCKS', 'Ontkoppel alle aan een iP adres gekoppelde downloads.');
-define('TXT_WPSC_THANKS_UNLOCKED', 'Bedankt, de aan dit iP adres gekoppelde downloads zijn ontkoppeld.');
+define('TXT_WPSC_CLEAR_IP_LOCKS', 'Ontkoppel alle aan een IP adres gekoppelde downloads.');
+define('TXT_WPSC_THANKS_UNLOCKED', 'Bedankt, de aan dit IP adres gekoppelde downloads zijn ontkoppeld.');
 define('TXT_WPSC_SELECTGATEWAY', 'Selecteer een betaalwijze');
 define('TXT_WPSC_VARIATION_LIST', 'Selecteer een variatie');
 define('TXT_WPSC_CATEGORISATION_GROUPS_DESCR', 'Productgroepen kunnen je bezoekers helpen je producten te vinden. wanneer je bijvoorbeeld t-shirts, petten en broeken verkoopt zou de productgroep "Kleding" aangemaakt kunnen worden. vervolgens kunnen de categorie&euml;n t-shirts, petten en broeken aan de groep toegevoegd worden. individuele producten kunnen nu aan hun respectievelijke groep gekoppeld worden wanneer ze worden toegevoegd of bewerkt.');
 define('TXT_WPSC_CATEGORISATION_DESCR', 'Productgroepen widget');
 define('WPSC_DOWNLOAD_INVALID', 'Deze download is niet langer beschikbaar.');
-define('TXT_WPSC_LOCK_DOWNLOADS_TO_IP', 'Koppel downloads aan iP adres');
-define('TXT_WPSC_CLEAR_IP_LOCKS', 'Ontkoppel alle aan een iP adres gekoppelde downloads voor deze bestelling');
-define('TXT_WPSC_THANKS_UNLOCKED', 'Bedankt, de aan dit iP adres gekoppelde downloads zijn ontkoppeld.');
+define('TXT_WPSC_LOCK_DOWNLOADS_TO_IP', 'Koppel downloads aan IP adres');
+define('TXT_WPSC_CLEAR_IP_LOCKS', 'Ontkoppel alle aan een IP adres gekoppelde downloads voor deze bestelling');
+define('TXT_WPSC_THANKS_UNLOCKED', 'Bedankt, de aan dit IP adres gekoppelde downloads zijn ontkoppeld.');
 define('TXT_WPSC_USER_UNLOCKED_EMAIL', 'De beheerder heeft uw download vrijgegeven.');
 define('TXT_WPSC_USER_UNLOCKED_EMAIL_MESSAGE', 'Beste klant,
 
@@ -673,7 +775,6 @@ define('TXT_WPSC_PRODUCTDOWNLOAD', 'Product download');
 define('TXT_WPSC_SHOWTHUMBNAILS', 'Toon miniatuurafbeeldingen');
 define('TXT_WPSC_ADD_ADDITIONAL_IMAGE', 'Voeg extra afbeelding toe');
 define('TXT_WPSC_DELETE_IMAGE', 'Verwijder afbeelding');
-define('TXT_WPSC_GOLD_OPTIONS', 'Gold cart opties');
 define('TXT_WPSC_ACTIVATE_SETTINGS', 'Activeringsinstellingen: gold cart');
 define('TXT_WPSC_ACTIVATION_KEY', 'Activeringssleutel');
 define('TXT_WPSC_THANKSACTIVATED', 'Bedankt, de gold cart is geactiveerd.');
@@ -904,9 +1005,6 @@ define('TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS', 'Toon enkel geaccepteerde betalin
 define('TXT_WPSC_SEARCHEMAIL', 'Zoek op emailadres');
 define('TXT_WPSC_MANUALPAYMENT', 'Handmatig betalen / overmaken');
 define('TXT_WPSC_ABOUT_THIS_PAGE', 'Over deze pagina');
-define('TXT_WPSC_EDITING_GROUP', 'U bewerkt de [indeling] groep');
-define('TXT_WPSC_ADDING_TO_GROUP', 'U bent de toevoeging van een nieuw item aan de [indeling] groep');
-define('TXT_WPSC_EDITING_IN_GROUP', 'U bent het bewerken van een item in de [indeling] groep');
 define('TXT_WPSC_PURCHASE_UNAVAILABLE', 'Aankoop niet beschikbaar opties');
 define('TXT_WPSC_WE_RECOMMEND', 'We raden');
 define('TXT_WPSC_SELECT_PRODUCT_GROUP', 'Selecteer een groep');

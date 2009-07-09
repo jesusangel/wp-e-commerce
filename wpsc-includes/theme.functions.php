@@ -13,51 +13,59 @@
 * enqueue all javascript and CSS for wp ecommerce
 */
 function wpsc_enqueue_user_script_and_css() {
-	global $wp_styles;
-  $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
-  
-	if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
-		if(is_numeric($wp_query->query_vars['product_category'])) {
-			$category_id = $wp_query->query_vars['product_category'];
-		} else if(is_numeric($_GET['category'])) {
-			$category_id = $_GET['category'];
-		} else {
-			$category_id = get_option('wpsc_default_category');
-		}
-	}
-  
-  
-  wp_enqueue_script( 'jQuery');
-	wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
-	wp_enqueue_script('wp-e-commerce-ajax-legacy', WPSC_URL.'/js/ajax.js', false, WPSC_VERSION.WPSC_MINOR_VERSION);
-	wp_enqueue_script('wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_js=true", false, $version_identifier);
-	wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
-
-	
-	wp_enqueue_script('wp-e-commerce-legacy', WPSC_URL.'/js/user.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
-
-	
-	wp_enqueue_script('wpsc-thickbox',WPSC_URL.'/js/thickbox.js', array('jquery'), 'Instinct_e-commerce');
-
-	$theme_path = WPSC_FILE_PATH. '/themes/';
-	$theme_url = WPSC_URL. '/themes/';
-	if(file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css")) {
-		$theme_url = $theme_url.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css";
+	/**
+	* added by xiligroup.dev to be compatible with touchshop
+	*/
+	if (has_filter('wpsc_enqueue_user_script_and_css') && apply_filters('wpsc_mobile_scripts_css_filters',false)){
+	 		do_action('wpsc_enqueue_user_script_and_css'); 
 	} else {
-		$theme_url = $theme_url. '/default/default.css';
+		/**
+		* end of added by xiligroup.dev to be compatible with touchshop
+		*/
+		global $wp_styles;
+		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+		
+		if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
+			if(is_numeric($wp_query->query_vars['product_category'])) {
+				$category_id = $wp_query->query_vars['product_category'];
+			} else if(is_numeric($_GET['category'])) {
+				$category_id = $_GET['category'];
+			} else {
+				$category_id = get_option('wpsc_default_category');
+			}
+		}
+		
+		
+		wp_enqueue_script( 'jQuery');
+		wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
+		wp_enqueue_script('wp-e-commerce-ajax-legacy', WPSC_URL.'/js/ajax.js', false, WPSC_VERSION.WPSC_MINOR_VERSION);
+		wp_enqueue_script('wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_js=true", false, $version_identifier);
+		wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
+
+		
+		wp_enqueue_script('wp-e-commerce-legacy', WPSC_URL.'/js/user.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
+
+		
+		wp_enqueue_script('wpsc-thickbox',WPSC_URL.'/js/thickbox.js', array('jquery'), 'Instinct_e-commerce');
+
+		$theme_path = WPSC_FILE_PATH. '/themes/';
+		$theme_url = WPSC_URL. '/themes/';
+		if(file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css")) {
+			$theme_url = $theme_url.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css";
+		} else {
+			$theme_url = $theme_url. '/default/default.css';
+		}
+		
+		wp_enqueue_style( 'wpsc-theme-css', $theme_url, false, $version_identifier, 'all');
+		wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_URL. '/themes/compatibility.css', false, $version_identifier, 'all');
+		wp_enqueue_style( 'wpsc-product-rater', WPSC_URL.'/js/product_rater.css', false, $version_identifier, 'all');
+		wp_enqueue_style( 'wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_css=true&category=$category_id" , false, $version_identifier, 'all' );
+		wp_enqueue_style( 'wpsc-thickbox', WPSC_URL.'/js/thickbox.css', false, $version_identifier, 'all');
+		
+		
+		wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');
+		$wp_styles->add_data( 'wpsc-ie-fixes', 'conditional', 'lt IE 7' );
 	}
-	
-	wp_enqueue_style( 'wpsc-theme-css', $theme_url, false, $version_identifier, 'all');
-	wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_URL. '/themes/compatibility.css', false, $version_identifier, 'all');
-	wp_enqueue_style( 'wpsc-product-rater', WPSC_URL.'/js/product_rater.css', false, $version_identifier, 'all');
-	wp_enqueue_style( 'wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_css=true&category=$category_id" , false, $version_identifier, 'all' );
-	wp_enqueue_style( 'wpsc-thickbox', WPSC_URL.'/js/thickbox.css', false, $version_identifier, 'all');
-	
-	
-	wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');
-	$wp_styles->add_data( 'wpsc-ie-fixes', 'conditional', 'lt IE 7' );
-	
-	
 }
 
 if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
@@ -272,16 +280,18 @@ if($_GET['wpsc_user_dynamic_css'] == 'true') {
 */
 function wpsc_display_products($query) {
   global $wpdb, $wpsc_query;
+	
+	/// added by xiligroup.dev to be compatible with touchshop
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".WPSC_THEME_DIR);
+	/// end of added by xiligroup.dev to be compatible with touchshop
   
   $temp_wpsc_query = new WPSC_query($query);
   list($wpsc_query, $temp_wpsc_query) = array($temp_wpsc_query, $wpsc_query); // swap the wpsc_query objects
   
-  
-
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	if(wpsc_is_single_product()) {
-		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/single_product.php");
+		include_once($cur_wpsc_theme_folder."/single_product.php");
 	} else {
 		// get the display type for the selected category
 		if(is_numeric($wpsc_query->query_vars['category_id'])) {
@@ -319,20 +329,13 @@ function wpsc_display_products($query) {
 		// switch the display type, based on the display type variable...
 		switch($display_type) {
 			case "grid":
-			if(file_exists(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/grid_view.php")) {
-				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/grid_view.php");
+			if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
+				include_once($cur_wpsc_theme_folder."/grid_view.php");
 				break; // only break if we have the function;
 			}
-			/*
-			case "list":
-			if(function_exists('product_display_list')) {
-				echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
-				break; // only break if we have the function;
-			}
-			*/
 			case "default":  // this may be redundant :D
 			default:
-				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/products_page.php");
+				include_once($cur_wpsc_theme_folder."/products_page.php");
 			break;
 		}
 	}
@@ -344,20 +347,14 @@ function wpsc_display_products($query) {
 	return $output;
 }
 
-
-
-
-
-
-
-
-
 //handles replacing the tags in the pages
   
 function wpsc_products_page($content = '') {
   global $wpdb, $wp_query, $wpsc_query;
-  //if(WPSC_DEBUG === true) {wpsc_debug_start_subtimer('nzshpcrt_products_page','start');}
-  //exit(htmlentities($content));
+	/// added by xiligroup.dev to be compatible with touchshop
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".WPSC_THEME_DIR);
+	/// end of added by xiligroup.dev to be compatible with touchshop
+  
 	$output = '';
   if(preg_match("/\[productspage\]/",$content)) {
   
@@ -388,7 +385,7 @@ function wpsc_products_page($content = '') {
 			ob_start();
 			
 			if(wpsc_is_single_product()) {
-				include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/single_product.php");
+				include_once($cur_wpsc_theme_folder."/single_product.php");
 			} else {
 			  // get the display type for the selected category
 				if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
@@ -431,20 +428,13 @@ function wpsc_products_page($content = '') {
 				// switch the display type, based on the display type variable...
 				switch($display_type) {
 					case "grid":
-					if(file_exists(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/grid_view.php")) {
-						include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/grid_view.php");
+					if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
+						include_once($cur_wpsc_theme_folder."/grid_view.php");
 						break; // only break if we have the function;
 					}
-				  /*
-				  case "list":
-					if(function_exists('product_display_list')) {
-						echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
-						break; // only break if we have the function;
-					}
-				  */
 				  case "default":  // this may be redundant :D
 				  default:
-				    include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/products_page.php");
+				    include_once($cur_wpsc_theme_folder."/products_page.php");
 				  break;
 				}
 			}
@@ -465,21 +455,17 @@ function wpsc_products_page($content = '') {
 }
 
 function wpsc_place_shopping_cart($content = '') {
-		//exit($content);
+	/// added by xiligroup.dev to be compatible with touchshop
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".WPSC_THEME_DIR);
+	/// end of added by xiligroup.dev to be compatible with touchshop
+	
   if(preg_match("/\[shoppingcart\]/",$content)) {
-//   if(get_option('wpsc_use_theme_engine') == TRUE) {
-			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-			ob_start();
-			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/shopping_cart_page.php");
-			$output = ob_get_contents();
-			ob_end_clean();
-			$output = str_replace('$','\$', $output);
-//     } else {
-// 			ob_start();
-// 			include_once(WPSC_FILE_PATH . "/shopping_cart.php");
-// 			$output = ob_get_contents();
-// 			ob_end_clean();
-//     }
+		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+		ob_start();
+		include_once($cur_wpsc_theme_folder."/shopping_cart_page.php");
+		$output = ob_get_contents();
+		ob_end_clean();
+		$output = str_replace('$','\$', $output);
     return preg_replace("/(<p>)*\[shoppingcart\](<\/p>)*/",$output, $content);
 	} else {
     return $content;

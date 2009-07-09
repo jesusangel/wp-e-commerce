@@ -75,7 +75,7 @@ function variation_value_list(id, parent_element) {
 		}
  	} else {
  		jQuery("div.variation_values_box",parent_element).css('display','none');
-		jQuery("div.variation_values_box input[type='checkbox']",parent_element).attr('checked', 'false');
+		jQuery("div.variation_values_box input[type='checkbox']",parent_element).removeAttr('checked');
  	}
 	
 	selected_price = jQuery("input[name='price']",jQuery(parent_element).parents('form')).val();
