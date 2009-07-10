@@ -333,6 +333,15 @@ function wpsc_display_products($query) {
 				include_once($cur_wpsc_theme_folder."/grid_view.php");
 				break; // only break if we have the function;
 			}
+			
+			/*
+			case "list":
+			if(function_exists('product_display_list')) {
+				echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
+				break; // only break if we have the function;
+			}
+			*/
+			
 			case "default":  // this may be redundant :D
 			default:
 				include_once($cur_wpsc_theme_folder."/products_page.php");
@@ -432,6 +441,13 @@ function wpsc_products_page($content = '') {
 						include_once($cur_wpsc_theme_folder."/grid_view.php");
 						break; // only break if we have the function;
 					}
+					/*
+					case "list":
+					if(function_exists('product_display_list')) {
+						echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
+						break; // only break if we have the function;
+					}
+					*/
 				  case "default":  // this may be redundant :D
 				  default:
 				    include_once($cur_wpsc_theme_folder."/products_page.php");
