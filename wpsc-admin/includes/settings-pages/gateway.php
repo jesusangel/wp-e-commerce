@@ -155,7 +155,7 @@ function selectgateway() {
 					    }
 					    ?>
 							<input type='text' name='user_defined_name[<?php echo $selected_gateway_data['internalname']; ?>]' value='<?php echo $display_name; ?>' /><br />
-							The text that people see when making a purchase
+							<span class='small description'><?php __('The text that people see when making a purchase'); ?></span>
 						</td>
 					</tr>
 					

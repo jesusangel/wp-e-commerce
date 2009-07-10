@@ -1,6 +1,7 @@
 <?php
 /*
  * Some parts of this code were inspired by the shopp plugin and their paypal pro module. 
+ * and copyright Ingenesis Limited, 19 August, 2008.
  **/
 $nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Pro';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';
@@ -247,10 +248,39 @@ if(get_option('paypal_pro_testmode') == "on"){
 $output = '
 <tr>
 	<td>
-		<div><input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="'.get_option("paypal_pro_username").'" size="30" /><br /><label for="paypal_pro_username">'.__('Enter your PayPal API Username.').'</label></div>
-		<div><input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="'.get_option('paypal_pro_password').'" size="16" /><br /><label for="paypal_pro_password">'.__('Enter your PayPal API Password.').'</label></div>
-		<div><input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="'.get_option('paypal_pro_signature').'" size="48" /><br /><label for="paypal_pro_signature">'.__('Enter your PayPal API Signature.').'</label></div>
-		<div><input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" '.$selected.' /><label for="paypal_pro_testmode">'.__('Test Mode Enabled').'</label></div>						
+			<label for="paypal_pro_username">'.__('Username:').'</label>
+	</td>
+	<td>
+			<input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="'.get_option("paypal_pro_username").'" size="30" /><br />
+			<span class="wpscsmall description">'.__('Enter your PayPal API Username').'</span>
+				<br />
+	</td>
+</tr>
+<tr>
+	<td>
+			<label for="paypal_pro_password">'.__('Password:').'</label>
+	</td>
+	<td>
+			<input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="'.get_option('paypal_pro_password').'" size="16" /><br />
+			<span class="wpscsmall description">'.__('Enter your PayPal API Password').'</span>
+			<br />
+	</td>
+</tr>
+<tr>
+	<td>
+			<label for="paypal_pro_signature">'.__('Signature:').'</label>
+	</td>
+	<td>
+			<input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="'.get_option('paypal_pro_signature').'" size="48" /><br />
+			<span class="wpscsmall description">'.__('Enter your PayPal API Signature').'</span>
+			<br />
+	</td>
+</tr>
+<tr>
+	<td>
+			<label for="paypal_pro_testmode">'.__('Test Mode Enabled').'</label>
+			<input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" '.$selected.' />
+					
 	</td>
 </tr>';
 return $output;

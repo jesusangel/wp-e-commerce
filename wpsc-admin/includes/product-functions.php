@@ -38,7 +38,7 @@ function wpsc_check_memory_limit() {
 		foreach ($sizes as $size){
 			// very, very rough estimation
 			if ($freeMemory < round( $size['width'] * $size['height'] * 5.09 )) {
-            	$result = sprintf(  __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height']); 
+            	$result = '<span class="small description">'.sprintf(  __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height']).'</span>'; 
 				return $result;
 			}
 		}

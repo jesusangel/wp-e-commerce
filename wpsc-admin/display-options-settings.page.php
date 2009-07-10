@@ -88,7 +88,7 @@ global $redir_tab;
 	$tabs = wpsc_settings_tabs();
 
 	if ( !empty($tabs) ) {
-		echo '<div id="wpsc_settings_nav_bar" style:"width:100%;">';
+		echo '<div id="wpsc_settings_nav_bar" style="width:100%;">';
 		echo "<ul id='sidemenu' style='width:682px;float:left;margin:0 auto;padding-left:0;' >\n";
 		if ( isset($redir_tab) && array_key_exists($redir_tab, $tabs) )
 			$current = $redir_tab;

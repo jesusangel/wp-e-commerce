@@ -1,14 +1,16 @@
- <?php
-
+<?php
  function wpsc_category_tm(){
  global $wpdb;
  /* START OF TARGET MARKET SELECTION */					
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
 	?>
 		<tr>
-			<td colspan="2"><h4>Target Market Restrictions</h4></td></tr><tr>
+			<td colspan="2"><h4>Target Market Restrictions</h4></td>
+		</tr>
+		<tr>
 			<td>
 				<?php echo TXT_WPSC_TM; ?>:
+				<br />
 			</td>
 			<td>
 				<div id='resizeable' class='ui-widget-content multiple-select'>
@@ -24,8 +26,8 @@
 					}
 					?>
 				</div>
-				<br />
-				Select the markets you are selling this category to.
+				<br />				<br />
+				<span class='small description'><?php _e('Select the markets you are selling this category to.'); ?></span>
 			</td>
 		</tr>
 	<?php
@@ -721,7 +723,7 @@ if(is_numeric($_GET['deleteid'])) {
 				</td>
 				<td>
 					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br />
-					<span class='small'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
+					<span class='small description'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
 				</td>
 			</tr>
 			<?php

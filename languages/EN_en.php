@@ -176,7 +176,7 @@ define('TXT_WPSC_SHIPPING_BUT_NO_CURL', 'The following shipping modules all need
 define('TXT_WPSC_PLEASE_ENTER_ZIPCODE', 'Please enter a zipcode.');
 define('TXT_WPSC_PLEASE_SELECT_SHIPPING', 'Please select a shipping option.');
 define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ Add New Variations');
-define('TXT_WPSC_ADMIN_ENGRAVE', 'Users can personalize this product by leaving a message during checkout');
+define('TXT_WPSC_ADMIN_ENGRAVE', 'Users can personalize this product by leaving a message on single product page');
 define('TXT_WPSC_PERSONALISATION_OPTIONS','Personalisation Options');
 
 define('TXT_WPSC_CHOOSE_SHIPPING', "To enable shipping in WP e-Commerce you must select  which shipping methods you want to enable on your site");
@@ -372,7 +372,7 @@ define('TXT_WPSC_SHOW_BREADCRUMBS', 'Show Breadcrumbs');
 define('TXT_WPSC_PAYMENT_INSTRUCTIONS_DESCR', 'Enter the payment instructions that you wish to display to your customers when they make a purchase');
 define('TXT_WPSC_PAYMENT_INSTRUCTIONS_BELOW_DESCR', 'For example, this is where you the Shop Owner might enter your bank account details or address so that your customer can make their manual payment.');
 
-define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload images at checkout to purchase logs.');
+define('TXT_WPSC_ALLOW_UPLOADING_IMAGE', 'Users can upload images on single product page to purchase logs.');
 
 define('TXT_WPSC_OPTIONS_GENERAL_HEADER', 'General Settings');
 define('TXT_WPSC_OPTIONS_PRESENTATION_HEADER', 'Presentation Settings');
