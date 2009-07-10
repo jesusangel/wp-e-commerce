@@ -231,6 +231,12 @@ if(WPSC_GOLD_DIR_NAME != ''){
 	// 	wp_admin_css( 'dashboard' );
 	wp_enqueue_style('thickbox');
 
+
+	
+	wp_enqueue_script('swfupload');
+	wp_enqueue_script('swfupload-swfobject');
+	wp_enqueue_script('swfupload-queue');
+	wp_enqueue_script('swfupload-handlers');
 	
 	// remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action('admin_head', 'wpsc_admin_css');

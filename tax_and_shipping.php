@@ -64,7 +64,7 @@ $base_region = get_option('base_region');
             {
             echo "    <td><label for='region_tax_".$region['id']."'>".$region['name'].":</label></td>\n\r";
             }
-        echo "    <td><input type='text' id='region_tax_".$region['id']."' name='region_tax[".$region['id']."]' value='".$tax_percentage."' class='tax_forms'  maxlength='3' size='3'/>%</td>\n\r";
+        echo "    <td><input type='text' id='region_tax_".$region['id']."' name='region_tax[".$region['id']."]' value='".$tax_percentage."' class='tax_forms'  maxlength='5' size='5'/>%</td>\n\r";
         echo "  </tr>\n\r";
         }      
       echo "</table>\n\r";

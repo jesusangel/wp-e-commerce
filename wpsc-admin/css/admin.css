@@ -425,9 +425,11 @@ div.product_custom_meta br {
 }
 
 /* image form styling */
-table.flash-image-uploader tr td p {
-  clear: both;
+div.flash-image-uploader {
+  display: none;
 }
+
+
 
 button#add-product-image {
   float: left;
@@ -1235,6 +1237,13 @@ table.category_forms td.last_row {
 #gold_cart_form .postbox p img{
 	padding-bottom:10px;
 }
+
+#gold_cart_form .postbox p{
+  padding-left: 4px;
+}
+
+
+
 /* 
 * Product Groups styles end here
 */

@@ -38,7 +38,7 @@ function wpsc_check_memory_limit() {
 		foreach ($sizes as $size){
 			// very, very rough estimation
 			if ($freeMemory < round( $size['width'] * $size['height'] * 5.09 )) {
-            	$result = '<span class="small description">'.sprintf(  __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height']).'</span>'; 
+            	$result = sprintf(  __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height']); 
 				return $result;
 			}
 		}
@@ -278,7 +278,10 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		
 	if($post_data['variation_priceandstock'] != null) {
 		$variations_processor->update_variation_values($product_id, $post_data['variation_priceandstock']);
-	}     
+	}
+	// 	if($adding === true) {
+	//		wpsc_send_to_google_base($post_data);
+	// 	}
 	return $product_id;
 }
 
@@ -727,17 +730,20 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
    
 }
 
+
 function wpsc_send_to_google_base($product_data) {
 	require_once('google_base_functions.php');
-	if (isset($_GET['token']) || isset($_SESSION['google_base_sessionToken'])) {
-		if (isset($_GET['token'])) {
-			$sessionToken=exchangeToken($_GET['token']);
-			$_SESSION['google_base_sessionToken'] = $sessionToken;
-		}
-		if (isset($_SESSION['google_base_sessionToken']))
-			$sessionToken=$_SESSION['google_base_sessionToken'];
-		postItem($_POST['name'], $_POST['price'], $_POST['description'], $sessionToken);
+	if (strlen(get_option('wpsc_google_base_token')) > 0) {
+	  $token = get_option('wpsc_google_base_token');
+// 		if (isset($_SESSION['google_base_sessionToken'])) {
+// 			$sessionToken = $_SESSION['google_base_sessionToken'];
+// 		} else {
+			$sessionToken = exchangeToken($token);
+// 			$_SESSION['google_base_sessionToken'] = $sessionToken;
+// 		}
+		postItem($product_data['name'], $product_data['price'], $product_data['description'], $sessionToken);
 	}
 }
+
 
 ?>

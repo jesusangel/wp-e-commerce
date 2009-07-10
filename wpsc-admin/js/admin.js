@@ -559,14 +559,14 @@ function remove_meta(e, meta_id) {
 function wpsc_upload_switcher(target_state) {
   switch(target_state) {
     case 'flash':
-    jQuery("table.browser-image-uploader").css("display","none");
-    jQuery("table.flash-image-uploader").css("display","block");
+    jQuery("div.browser-image-uploader").css("display","none");
+    jQuery("div.flash-image-uploader").css("display","block");
     jQuery.post( 'index.php?admin=true', "admin=true&ajax=true&save_image_upload_state=true&image_upload_state=1", function(returned_data) { });
     break;
     
     case 'browser':
-    jQuery("table.flash-image-uploader").css("display","none");
-    jQuery("table.browser-image-uploader").css("display","block");
+    jQuery("div.flash-image-uploader").css("display","none");
+    jQuery("div.browser-image-uploader").css("display","block");
     jQuery.post( 'index.php?admin=true', "admin=true&ajax=true&save_image_upload_state=true&image_upload_state=0", function(returned_data) { });
     break;
   }

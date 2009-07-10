@@ -730,42 +730,94 @@ function wpsc_product_image_forms($product_data='') {
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
+
+
+	//As in WordPress,  If Mac and mod_security, no Flash
+	$flash = true;
+	if ( (false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac')) && apache_mod_loaded('mod_security') ) {
+		$flash = false;
+	}
+	
+	$flash = apply_filters('flash_uploader', $flash);
 	?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> >
 		<h3 class='hndle'> <?php echo	TXT_WPSC_PRODUCTIMAGES; ?></h3>
 		<div class='inside'>
 		
+		<?php if ( $flash ) : ?>
+			<script type="text/javascript" >
+			/* <![CDATA[ */
+			<?php /*
+			SWFUpload.onload = function() {
+				swfu = new SWFUpload({
+						button_text: '<span class="button"><?php _e('Select Files'); ?></span>',
+						button_text_style: '.button { text-align: center; font-weight: bold; font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }',
+						button_height: "24",
+						button_width: "132",
+						button_image_url: '<?php echo includes_url('images/upload.png'); ?>',
+						button_placeholder_id: "spanButtonPlaceholder",
+						upload_url : "<?php echo attribute_escape( $flash_action_url ); ?>",
+						flash_url : "<?php echo includes_url('js/swfupload/swfupload.swf'); ?>",
+						file_post_name: "async-upload",
+						file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
+						post_params : {
+							"post_id" : "<?php echo $post_id; ?>",
+							"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
+							"_wpnonce" : "<?php echo wp_create_nonce('media-form'); ?>",
+							"type" : "<?php echo $type; ?>",
+							"tab" : "<?php echo $tab; ?>",
+							"short" : "1"
+						},
+						file_size_limit : "<?php echo wp_max_upload_size(); ?>b",
+						file_dialog_start_handler : fileDialogStart,
+						file_queued_handler : fileQueued,
+						upload_start_handler : uploadStart,
+						upload_progress_handler : uploadProgress,
+						upload_error_handler : uploadError,
+						upload_success_handler : uploadSuccess,
+						upload_complete_handler : uploadComplete,
+						file_queue_error_handler : fileQueueError,
+						file_dialog_complete_handler : fileDialogComplete,
+						swfupload_pre_load_handler: swfuploadPreLoad,
+						swfupload_load_failed_handler: swfuploadLoadFailed,
+						custom_settings : {
+							degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
+							swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
+						},
+						debug: false
+					});
+			};
+			//*/?>
+		/* ]]> */
+		</script>
+		
+		<?php endif; ?>
+		
+    <div class='flash-image-uploader'>
+      <strong><?php _e('Coming in the Release Candidate 2'); ?></strong>
+			<span id='spanButtonPlaceholder'></span>
+				<div>
+					<?php/* <button id='add-product-image' name='add-image' class='button-secondary' type='button'><small>Add New Image</small></button>*/ ?>
+					<div id='swfupload_img_indicator'><img src='<?php echo WPSC_URL; ?>."/images/indicator.gif' alt='Loading' title='Loading' /></div>
+				</div>
+
+				<p><?php echo TXT_WPSC_FLASH_UPLOADER; ?></p>
+    </div>
+    
+    
 		
 		  <div class='browser-image-uploader'>
 				<h4><?php _e("Select an image to upload:"); ?></h4>
 				<ul>  
 					<li>
 						<input type="file" value="" name="image" />
-					</li>
-					<li>			<?php echo wpsc_check_memory_limit(); ?> 
-</li>
-					<li>
-						<input type="radio" onclick='hideOptionElement(null, "image_resize0");' class="image_resize" id="add_image_resize0" value="0" name="image_resize" /> <label for="add_image_resize0">do not resize thumbnail image</label>
+						<input type="hidden" value="1" name="image_resize" />
 					</li>
 					<li>
-						<input type="radio" onclick='hideOptionElement(null, "image_resize1");' class="image_resize" id="add_image_resize1" value="1" name="image_resize" checked="checked"/> <label for="add_image_resize1">use default size (<abbr title="This is set on the Settings Page"><?php echo get_option('product_image_width'); ?> × <?php echo get_option('product_image_height'); ?>px</abbr>) </label>
-					</li>
-					<li>
-						<input type="radio" onclick='hideOptionElement("heightWidth", "image_resize2");' class="image_resize" id="add_image_resize2" value="2" name="image_resize"/>
-						<label for="add_image_resize2">use specific size</label>        
-						<div style="display: none;" id="heightWidth">
-							<input type="text" value="" name="width" size="4"/><label for="add_image_resize2">px width</label>
-							<input type="text" value="" name="height" size="4"/><label for="add_image_resize2">px height</label>
-						</div>
-					</li>
-					<li>
-						<input type="radio" onclick='hideOptionElement("browseThumb", "image_resize3");' class="image_resize" id="add_image_resize3" value="3" name="image_resize"/>
-						<label for="add_image_resize3">use separate thumbnail</label><br/>
-						<div style="display: none;" id="browseThumb">
-							<input type="file" value="" name="thumbnailImage"/>
-						</div>
+						<?php echo wpsc_check_memory_limit(); ?>
 					</li>
 				</ul>
+				<p><?php echo TXT_WPSC_BROWSER_UPLOADER; ?></p>
 				<br />
 				
 			</div>

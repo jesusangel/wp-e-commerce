@@ -145,7 +145,6 @@ function wpsc_display_products_page() {
 			});
 		});
 	})(jQuery);
-	//columns.init('edit');
 	/* ]]> */
 	</script>
 	<?php

@@ -2,8 +2,13 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
-define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades (3.7)');
-define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades');
+
+define('TXT_WPSC_API_RESET_DESCRIPTION', 'Enter your API name and key to release it from an old site that you no longer use.');
+define('TXT_WPSC_API_HAS_BEEN_RESET', 'Your API key has been Reset');
+define('TXT_WPSC_API_RESET', 'API Key Reset');
+define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades');
+define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades (Old)');
+
 
 
 define('TXT_WPSC_CATEGORY_LIST', 'Show list of product groups');
@@ -1046,7 +1051,7 @@ define('TXT_WPSC_DOWNLOADABLEPRODUCT_URL', 'Product Filename');
 define('TXT_WPSC_FILETOBEPRODUCTURL', 'Note: Upload your file to the e-commerce files directory and enter the filename here.');
 define('TXT_WPSC_DONATIONS', 'Product Donations');
 define('TXT_WPSC_WRONG_FILE_PERMS', 'The following directories are not writable: :directory: You won\'t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.');
-define('TXT_WPSC_RESET_API', 'Reset API key');
+define('TXT_WPSC_RESET_API', 'Reset API Key');
 define('TXT_WPSC_PRODUCTS_PER_PAGE', 'Products per Page');
 define('TXT_WPSC_OPTION_PRODUCTS_PER_PAGE', 'number of products to show per page');
 define('TXT_WPSC_PAGE_NUMBER_POSITION', 'Page Number position');

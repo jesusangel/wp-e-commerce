@@ -57,26 +57,22 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
 				unset($insert_array);
-					$rules = $_POST['rules'];
+				$rules = $_POST['rules'];
 
-					foreach ((array)$rules as $key => $rule) {
-						foreach ($rule as $k => $r) {
-							$new_rule[$k][$key] = $r;
-						}
+				foreach ((array)$rules as $key => $rule) {
+					foreach ($rule as $k => $r) {
+						$new_rule[$k][$key] = $r;
 					}
-					foreach((array)$new_rule as $key => $rule) {
-						if ($rule['value'] == '') {
-							unset($new_rule[$key]);
-						}
+				}
+				foreach((array)$new_rule as $key => $rule) {
+					if ($rule['value'] == '') {
+						unset($new_rule[$key]);
 					}
-					
-					$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
-					//exit($sql);
-					$wpdb->query($sql);
-					
-				//echo("<pre>".print_r($check_values,true)."</pre>");
+				}
+
+				$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
+				$wpdb->query($sql);
 			}
-				//echo("<pre>".print_r($coupon_data,true)."</pre>");
 				
 			if($coupon_data['delete_coupon'] != '') {
 				$wpdb->query("DELETE FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id' LIMIT 1;");
@@ -84,32 +80,38 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		}
 	}
   if($_POST['delete_condition'] == 'Delete'){
-	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='' WHERE `id` = '".$_POST['coupon_id']."' LIMIT 1";
-					//exit($sql);
-	$wpdb->query($sql);
-
-  	//exit('<pre>'.print_r($_POST,true).'<pre>');
+	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+	  $wpdb->query($sql);
   }
   if($_POST['change-settings'] == 'true') {
     if($_POST['wpsc_also_bought'] == 1) {
       update_option('wpsc_also_bought', 1);
-      } else {
+		} else {
       update_option('wpsc_also_bought', 0);
-      }
+		}
 	
     if($_POST['display_find_us'] == 'on') {
       update_option('display_find_us', 1);
-      } else {
+		} else {
       update_option('display_find_us', 0);
-      }
+		}
       
     if($_POST['wpsc_share_this'] == 1) {
       update_option('wpsc_share_this', 1);
-      } else {
+		} else {
       update_option('wpsc_share_this', 0);
-      }
-    }
-  }
+		}
+	}
+}
+
+
+// taken the token to the token option for google base
+if(isset($_GET['token'])) {
+		update_option('wpsc_google_base_token', $_GET['token']);
+} else if(isset($_GET['destroy_token']) && ($_GET['destroy_token'] == 1)) {
+		update_option('wpsc_google_base_token', '');
+}
+
 
 /*<strong><?php echo TXT_WPSC_ADD_COUPON; ?></strong>*/
 ?>
@@ -238,12 +240,6 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    <input type='hidden' value='0' name='add_active' />
    <input type='checkbox' value='1' checked='checked' name='add_active' />
    </td>
-   	<!--
-<td>
-		   <input type='hidden' value='0' name='add_every_product' />
-			<input type="checkbox" value="1" name='add_every_product'/>
-		</td>
--->
 
    <td>
    
@@ -491,34 +487,30 @@ echo "</table>\n\r";
 <table>
 	<tr>
 		<td colspan='2'>
-			<?=TXT_WPSC_RSSNOTE;?>
+			<?php echo TXT_WPSC_RSSNOTE;?>
 		</td>
 	</tr>
-	<tr><TD>&nbsp;</TD></tr>
+	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td>
 			RSS Feed Address:
 		</td>
 		<td>
-			<?php echo get_option('siteurl')."/index.php?rss=true&amp;action=product_list" ?>
+			<?php echo get_option('siteurl')."/index.php?rss=true&amp;action=product_list"; ?>
 		</td>
 	</tr>
 </table>
 
-<h2><?php echo TXT_WPSC_GOOGLE_BASE;?></h2>
-<table>
-	<tr>
-		<td>
-			Login to Google Base:
-		</td>
-		<td>
-			<?php 
-				$itemsFeedURL = "http://www.google.com/base/feeds/items";
-				$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wpsc-edit-products";
-				$redirect_url = htmlentities("https://www.google.com/accounts/AuthSubRequest?next=".urlencode($next_url)."&scope=".urlencode($itemsFeedURL)."&session=1&secure=0");
-				echo " <a href='$redirect_url'>".TXT_WPSC_GRANT_ACCESS."</a>"; 
-			?>
-		</td>
-	</tr>
-</table>
+<h2><?php echo TXT_WPSC_GOOGLE_BASE; ?></h2>
+<?php
+if( strlen(get_option('wpsc_google_base_token')) > 0) {
+	_e('Your site has been granted access to google base.<br /> All future products will be submitted to google base.<br />');
+	echo "<a href='?page={$_GET['page']}&amp;destroy_token=1'>".__('Click here to remove access')."</a>";
+} else {
+	$itemsFeedURL = "http://www.google.com/base/feeds/items";
+	$next_url  = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}?page={$_GET['page']}";
+	$redirect_url = htmlentities("https://www.google.com/accounts/AuthSubRequest?next=".urlencode($next_url)."&scope=".urlencode($itemsFeedURL)."&session=1&secure=0");
+	echo " <a href='$redirect_url'>".TXT_WPSC_GRANT_ACCESS."</a>";
+}
+?>
 </div>
