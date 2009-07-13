@@ -13,7 +13,14 @@
  * @since 3.7
  * @subpackage wpsc-cart-classes
 */
-
+function wpsc_product_external_link($id){
+	global $wpdb, $wpsc_query;
+	$sql = 'SELECT `meta_value` FROM `'.WPSC_TABLE_PRODUCTMETA.'` WHERE `product_id`='.$id.' AND `meta_key`="external_link"';
+	//exit($sql);
+	$externalLink = $wpdb->get_var($sql);
+	return $externalLink;
+//	exit('<pre>'.print_r($wpsc_query, true).'</pre>');
+}
 function wpsc_product_sku($id){
 	global $wpdb;
 	$sql = 'SELECT `meta_value` FROM `'.WPSC_TABLE_PRODUCTMETA.'` WHERE `product_id`='.$id.' AND `meta_key`="sku"';

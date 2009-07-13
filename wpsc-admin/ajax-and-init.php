@@ -7,6 +7,24 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+function wpsc_ajax_sales_quarterly() {
+  	global $wpdb;
+  	$lastdate = $_POST['add_start'];
+  	$date = preg_split('/-/', $lastdate);
+  	$lastdate = mktime(0,0,0,$date[1], $date[2], $date[0]);
+  	$thirdquart =   date('M d y',mktime(0,0,0,$date[1]-3, $date[2], $date[0]));	
+  	$secondquart =   date('M d y',mktime(0,0,0,$date[1]-6, $date[2], $date[0]));
+  	$firstquart =   date('M d y',mktime(0,0,0,$date[1]-9, $date[2], $date[0]));
+  	$lastquart = date('M d y', $lastdate);
+	
+}
+ 
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') {
+	add_action('admin_init', 'wpsc_ajax_sales_quarterly');
+}
+
 
 function wpsc_ajax_load_product() {
   global $wpdb;

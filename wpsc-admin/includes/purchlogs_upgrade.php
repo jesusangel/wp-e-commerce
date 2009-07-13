@@ -88,7 +88,7 @@ function wpsc_select_options_purchlogs_fix($id){
 		}
 		
 	}
-	exit('<pre>'.print_r($duplicate, true).'</pre>');
+	//exit('<pre>'.print_r($duplicate, true).'</pre>');
 	?>
 	<input type='submit' value='Apply' class='button-secondary action' />
 </form>

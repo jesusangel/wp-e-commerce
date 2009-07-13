@@ -173,7 +173,7 @@ if(isset($_GET['token'])) {
    </select>
    </td>
    <td>
-   <input type='text' class='pickdate' size='11' name='add_start'>
+   <input type='text' class='pickdate' size='11' name='add_start' />
    <!--<select name='add_start[day]'>
    <?php
    for($i = 1; $i <=31; ++$i) {

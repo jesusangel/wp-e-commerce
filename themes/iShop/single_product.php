@@ -8,7 +8,7 @@ $image_height = get_option('single_view_image_height');
 	
 	<?php if(wpsc_has_breadcrumbs()) :?>
 		<div class='breadcrumb'>
-			<a href='<?php echo get_option('siteurl'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
+			<a href='<?php echo get_option('home'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
 			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
 				<?php if(wpsc_breadcrumb_url()) :?> 	   
 					<a href='<?php echo wpsc_breadcrumb_url(); ?>'><?php echo wpsc_breadcrumb_name(); ?></a> &raquo;
@@ -85,7 +85,7 @@ $image_height = get_option('single_view_image_height');
 					<?php /** the custom meta HTML and loop */?>
 					<div class="custom_meta">
 						<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
-							<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_name(); ?><br />
+							<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_value(); ?><br />
 						<?php endwhile; ?>
 					</div>
 					<?php /** the custom meta HTML and loop ends here */?>
@@ -167,8 +167,14 @@ $image_height = get_option('single_view_image_height');
 					<!-- END OF QUANTITY OPTION -->
 					<?php if(get_option('addtocart_or_buynow') !='1') : ?>
 						<?php if(wpsc_product_has_stock()) : ?>
-							<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
-							<div class='wpsc_loading_animation'>
+							<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
+										<?php	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
+										<input class="wpsc_buy_button" type='button' value='<?php echo TXT_WPSC_BUYNOW; ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
+										<?php else: ?>
+									<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
+
+										<?php endif; ?>
+														<div class='wpsc_loading_animation'>
 								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
 								<?php echo TXT_WPSC_UDPATING_CART; ?>
 							</div>

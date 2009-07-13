@@ -116,14 +116,6 @@ function wpsc_display_product_form ($product_id = 0) {
   }
 }
 
-
-
-
-
-
-
-
-
 function wpsc_product_basic_details_form(&$product_data) {
   global $wpdb,$nzshpcrt_imagesize_info;
   

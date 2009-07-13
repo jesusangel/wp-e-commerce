@@ -108,9 +108,7 @@ function wpsc_admin_pages(){
 			}
 
 			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
-			if (file_exists(dirname(__FILE__).'/gold_cart_files/csv_import.php')) {
-				add_submenu_page($base_page,TXT_WPSC_IMPORT_CSV, TXT_WPSC_IMPORT_CSV, 7, WPSC_DIR_NAME.'/gold_cart_files/csv_import.php');
-			}
+
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
 			
@@ -351,9 +349,6 @@ add_action('admin_menu', 'wpsc_admin_pages');
 //if(function_exists('wp_add_dashboard_widget')) {
 if( IS_WP27 ) {
     add_action('wp_dashboard_setup','wpsc_dashboard_widget_setup');
-    if(function_exists('wpsc_dashboard_quarterly_widget_setup')) {
-			add_action('wp_dashboard_setup', 'wpsc_dashboard_quarterly_widget_setup');
-    }
 } else {
 	add_action('activity_box_end', 'wpsc_admin_dashboard_rightnow');
 }
@@ -476,6 +471,54 @@ if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
 	}
 }
 */
+function wpsc_quarterly_dashboard_widget(){
+	if(get_option('wpsc_business_year_start') == false){
+		?>
+		<form action='' method='post'>
+		<label for='date_start'>Please enter your Financial Year End: </label>
+  			<input id='date_start' type='text' class='pickdate' size='11' name='add_start' />
+  			   <!--<select name='add_start[day]'>
+			   <?php
+			   for($i = 1; $i <=31; ++$i) {
+			     $selected = '';
+			     if($i == date("d")) { $selected = "selected='selected'"; }
+			     echo "<option $selected value='$i'>$i</option>";
+			     }
+			   ?>
+			   </select>
+			   <select name='add_start[month]'>
+			   <?php
+			   for($i = 1; $i <=12; ++$i) {
+			     $selected = '';
+			     if($i == (int)date("m")) { $selected = "selected='selected'"; }
+			     echo "<option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
+			     }
+			   ?>
+			   </select>
+			   <select name='add_start[year]'>
+			   <?php
+			   for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
+			     $selected = '';
+			     if($i == date("Y")) { $selected = "selected='true'"; }
+			     echo "<option $selected value='$i'>".$i."</option>";
+			     }
+			   ?>
+			   </select>-->
+  			<input type='hidden' name='wpsc_admin_action' value='wpsc_quarterly' />
+  			<input type='submit' class='button primary' value='Submit' name='wpsc_submit' />
+		</form>
+		<?php
+	}
+
+}
+function wpsc_quarterly_setup(){
+   // $siteurl = get_option('siteurl'); 
+    $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	wp_enqueue_script('datepicker-ui', WPSC_URL."/js/ui.datepicker.js",array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
+	wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
+}
+
+//add_action('wp_dashboard_setup', 'wpsc_quarterly_setup');
 function wpsc_dashboard_widget() {
     do_action('wpsc_admin_pre_activity');
 //    wpsc_admin_latest_activity();

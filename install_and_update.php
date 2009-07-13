@@ -25,6 +25,7 @@ function wpsc_install() {
 	}
   if(!in_array($table_name, $tables)) {
     $first_install = true;
+	add_option('wpsc_purchaselogs_fixed',true);
 	}    
 
   if(get_option('wpsc_version') == null) {

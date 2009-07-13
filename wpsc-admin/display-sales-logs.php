@@ -393,7 +393,7 @@ if(!isset($purchlogs)){
 			<?php get_purchaselogs_content(); ?>
 			</tbody>
 		</table>
-		<p><strong><?php _e('Total:'); ?></strong> <?php echo nzshpcrt_currency_display(wpsc_the_purch_total(), true); ?></p>
+		<p><strong style='float:left' ><?php _e('Total:'); ?></strong>  <?php echo nzshpcrt_currency_display(wpsc_the_purch_total(), true); ?></p>
 		<?php 	
 			if(!isset($purchlogs->current_start_timestamp) && !isset($purchlogs->current_end_timestamp)){
 				$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
