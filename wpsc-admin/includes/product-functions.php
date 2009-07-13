@@ -101,7 +101,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$post_data = &$_POST;
 	}
 // 	$post_data['product_id'] = isset($post_data['product_id']) ? $post_data['product_id'] : '';
-//exit('<pre>'.print_r($post_data, true).'</pre>');
 	$post_data['name'] = isset($post_data['title']) ? $post_data['title'] : '';
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
 	$post_data['meta'] = isset($post_data['productmeta_values']) ? $post_data['productmeta_values'] : '';
@@ -128,6 +127,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	$post_data['files'] = $_FILES;
 
+  //exit('<pre>'.print_r($post_data, true).'</pre>');
   return $post_data;
 }
   
@@ -401,8 +401,22 @@ function wpsc_update_custom_meta($product_id, $post_data) {
 */
 function wpsc_update_product_images($product_id, $post_data) {
   global $wpdb;
+  $uploaded_images = array();
+  
+  foreach($post_data['gallery_image_id'] as $added_image) {
+    $uploaded_images[] = absint($added_image);
+  }
+  if(count($uploaded_images) > 0) {
+		$uploaded_image_data = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` IN (".implode(', ', $uploaded_images).") AND `product_id` = '0'");
 
-/* Handle new image uploads here */
+		foreach($uploaded_image_data as $uploaded_image_id) {
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `product_id` = '$product_id' WHERE `id` = '{$uploaded_image_id}' LIMIT 1;");
+		}
+	}
+
+  
+
+	/* Handle new image uploads here */
   if($post_data['files']['image']['tmp_name'] != '') {
 		$image = wpsc_item_process_image($product_id, $post_data['files']['image']['tmp_name'], str_replace(" ", "_", $post_data['files']['image']['name']), $post_data['width'], $post_data['height'], $post_data['image_resize']);
 		

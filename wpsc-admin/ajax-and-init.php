@@ -91,10 +91,7 @@ function wpsc_bulk_modify_products() {
 	$sendback = wp_get_referer();
   switch ( $doaction ) {
 		case 'delete':
-		  //echo "<pre>".print_r($_GET,true)."</pre>";
 			if ( isset($_GET['product']) && ! isset($_GET['bulk_edit']) && (isset($doaction) || isset($_GET['doaction2'])) ) {
-			
-		  //echo "<pre>".print_r($_GET,true)."</pre>";
 				check_admin_referer('bulk-products', 'wpsc-bulk-products');
 				$deleted = 0;
 				foreach( (array) $_GET['product'] as $product_id ) {
@@ -158,7 +155,7 @@ function wpsc_modify_product_price() {
 			echo "success = 0;\n\r";
 		}
 	} else {
-		echo "success = 11;\n\r";
+		echo "success = -1;\n\r";
 	}
 	exit();
 }
@@ -769,64 +766,107 @@ function wpsc_admin_sale_rss() {
 }
 
 function wpsc_swfupload_images() {
-	global $wpdb;
-	if ($_REQUEST['action']=='wpsc_add_image') {
-		$file = $_FILES['Filedata'];
-		$pid = (int)$_POST['prodid'];
-		//mail('thomas.howard@gmail.com','swfuploader', print_r($_POST,true).print_r($_FILES,true));
-		if(function_exists('gold_shpcrt_display_gallery')) {
-		  // if more than one image is permitted
-      $existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='$pid'", ARRAY_A);
-      $order = (int)$existing_image_data['order'];
-      $count = $existing_image_data['count'];
-      
-      $previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$pid}' LIMIT 1");
-      if(($count >  0) || (strlen($previous_image) > 0)) {
-        // if there is more than one image
-        $success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
-				if ($pid == '') {
-					copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
-				}
-				$order++;
-				if ($success) {
-					if ($pid != '') {
-						$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$pid','".basename($file['name'])."', '0', '0',  '$order')");
-					}
-					$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
-					$src = $file['name'];
-					$output = "src='".$src."';id='".$id."';pid='$pid';";
-				} else {
-					$output = "file uploading error";
-				}
+	global $wpdb, $current_user;
+	$file = $_FILES['async-upload'];
+	$product_id = absint($_POST['product_id']);
+	$nonce = $_POST['_wpnonce'];
+  $output = '';
+	// Flash often fails to send cookies with the POST or upload, so we need to pass it in GET or POST instead, code is from wp-admin/async-upload.php
+	if ( is_ssl() && empty($_COOKIE[SECURE_AUTH_COOKIE]) && !empty($_REQUEST['auth_cookie']) ) {
+		$_COOKIE[SECURE_AUTH_COOKIE] = $_REQUEST['auth_cookie'];
+	} else if ( empty($_COOKIE[AUTH_COOKIE]) && !empty($_REQUEST['auth_cookie']) ) {
+		$_COOKIE[AUTH_COOKIE] = $_REQUEST['auth_cookie'];
+	}
+	unset($current_user);
+	require_once(ABSPATH . 'wp-admin/admin.php');
+
+	
+	if ( !current_user_can('upload_files') ) {
+			exit("status=-1;\n");
+	}
+	//mail('thomas.howard@gmail.com','swfuploader', print_r($_POST,true).print_r($_FILES,true));
+	
+	if(wp_verify_nonce($nonce, 'product-swfupload') ) {
+		//mail('thomas.howard@gmail.com','nonce check succeeded', "nonce check succeeded");
+	} else {
+		exit("status=-1;\n");
+	}
+
+	
+	if(function_exists('gold_shpcrt_display_gallery')) {
+		// if more than one image is permitted
+		$existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='{$product_id}'", ARRAY_A);
+		$order = (int)$existing_image_data['order'];
+		$count = $existing_image_data['count'];
+		
+		$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
+		if(($count >  0) || (strlen($previous_image) > 0)) {
+			// if there is more than one image
+			$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
+			if ($product_id == '') {
+				copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
+			}
+			$order++;
+			if ($success) {
+
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0',  '$order')");
+				$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
+
+				$src = $file['name'];
+				$output .= "upload_status=1;\n";
+				$output .= "image_src='".$src."';\n";
+				$output .= "image_id='$id';\n";
+				$output .= "product_id='$product_id';\n";
+				$output .= "replace_existing=0;";
 			} else {
-			  // if thereare no images
-				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
-				if($src != null) {
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-					$output = "src='".$src."';id='0';pid='$pid';";
-				} else {
-					$output = "file uploading error";
-				}
+				$output .= "status=0;\n";
 			}
 		} else {
-      // Otherwise...
-      $previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$pid}' LIMIT 1");
-      
-      $src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
-      if($src != null) {
-        $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$src}' WHERE `id`='{$pid}' LIMIT 1");
-        if(strlen($previous_image) > 0) {
-					$output = "replacement_src='".WPSC_IMAGE_URL.$src."';"; 
-        } else {
-					$output = "src='".$src."';id='0';pid='$pid';";        
-        }
-      } else {
-        $output = "file uploading error";
-      }
+			// if thereare no images
+			$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+			if($src != null) {
+			
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
+				$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
+				
+				if($product_id > 0) {
+					$previous_image = $wpdb->get_var("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$id}' WHERE `id`='{$product_id}' LIMIT 1");
+				}
+				$output .= "upload_status=1;\n";
+				$output .= "image_src='".$src."';\n";
+				$output .= "image_id='$id';\n";
+				$output .= "product_id='$product_id';\n";
+				$output .= "replace_existing=0;";
+			} else {
+				$output .= "status=0;\n";
+			}
 		}
+	} else {
+		// Otherwise...
+		$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
 		
-		exit($output);
+		$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+		if($src != null) {
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
+			$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
+			if($product_id > 0) {
+				$previous_image = $wpdb->get_var("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$id}' WHERE `id`='{$product_id}' LIMIT 1");
+			}
+			$output .= "upload_status=1;\n";
+			$output .= "image_src='".$src."';\n";
+			$output .= "image_id='$id';\n";
+			$output .= "product_id='$product_id';\n";
+			if(strlen($previous_image) > 0) {
+				$output .= "replace_existing=1;";
+			} else {
+				$output .= "replace_existing=0;";
+			}
+		} else {
+			$output .= "status=0;\n";
+		}
 	}
+
+	exit($output);
 }
 
 
@@ -1698,7 +1738,9 @@ if($_GET['display_invoice']=='true') {
 
 
 
-add_action('init','wpsc_swfupload_images');
+ if($_REQUEST['wpsc_admin_action'] == 'wpsc_add_image') {
+	add_action('admin_init','wpsc_swfupload_images');
+}
 
  if($_REQUEST['wpsc_admin_action'] == 'edit_product') {
 	add_action('admin_init', 'wpsc_admin_submit_product');

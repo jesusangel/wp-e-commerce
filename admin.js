@@ -1017,8 +1017,6 @@ function enablebuttons(){
 					jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
 					jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
 					
-          //alert(jQuery('#gallery_image_'+set[i]).parent('li').attr('id'));
-					  //alert(element_id);
 					if(element_id == 0) {
             jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
 					}

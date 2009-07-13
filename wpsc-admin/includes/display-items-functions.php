@@ -738,6 +738,7 @@ function wpsc_product_image_forms($product_data='') {
 		$flash = false;
 	}
 	
+	$flash_action_url = admin_url('async-upload.php');
 	$flash = apply_filters('flash_uploader', $flash);
 	?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> >
@@ -747,7 +748,6 @@ function wpsc_product_image_forms($product_data='') {
 		<?php if ( $flash ) : ?>
 			<script type="text/javascript" >
 			/* <![CDATA[ */
-			<?php /*
 			SWFUpload.onload = function() {
 				swfu = new SWFUpload({
 						button_text: '<span class="button"><?php _e('Select Files'); ?></span>',
@@ -761,46 +761,42 @@ function wpsc_product_image_forms($product_data='') {
 						file_post_name: "async-upload",
 						file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
 						post_params : {
-							"post_id" : "<?php echo $post_id; ?>",
+							"product_id" : "<?php echo absint($product_data['id']); ?>",
 							"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
-							"_wpnonce" : "<?php echo wp_create_nonce('media-form'); ?>",
-							"type" : "<?php echo $type; ?>",
-							"tab" : "<?php echo $tab; ?>",
-							"short" : "1"
+							"_wpnonce" : "<?php echo wp_create_nonce('product-swfupload'); ?>",
+							"wpsc_admin_action" : "wpsc_add_image"
 						},
 						file_size_limit : "<?php echo wp_max_upload_size(); ?>b",
-						file_dialog_start_handler : fileDialogStart,
-						file_queued_handler : fileQueued,
-						upload_start_handler : uploadStart,
-						upload_progress_handler : uploadProgress,
-						upload_error_handler : uploadError,
-						upload_success_handler : uploadSuccess,
-						upload_complete_handler : uploadComplete,
-						file_queue_error_handler : fileQueueError,
-						file_dialog_complete_handler : fileDialogComplete,
-						swfupload_pre_load_handler: swfuploadPreLoad,
-						swfupload_load_failed_handler: swfuploadLoadFailed,
+						file_dialog_start_handler : wpsc_fileDialogStart,
+						file_queued_handler : wpsc_fileQueued,
+						upload_start_handler : wpsc_uploadStart,
+						upload_progress_handler : wpsc_uploadProgress,
+						upload_error_handler : wpsc_uploadError,
+						upload_success_handler : wpsc_uploadSuccess,
+						upload_complete_handler : wpsc_uploadComplete,
+						file_queue_error_handler : wpsc_fileQueueError,
+						file_dialog_complete_handler : wpsc_fileDialogComplete,
+						swfupload_pre_load_handler: wpsc_swfuploadPreLoad,
+						swfupload_load_failed_handler: wpsc_swfuploadLoadFailed,
 						custom_settings : {
 							degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
 							swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
 						},
-						debug: false
+						debug: true
 					});
 			};
-			//*/?>
 		/* ]]> */
 		</script>
 		
 		<?php endif; ?>
 		
     <div class='flash-image-uploader'>
-      <strong><?php _e('Coming in the Release Candidate 2'); ?></strong>
 			<span id='spanButtonPlaceholder'></span>
 				<div>
 					<?php/* <button id='add-product-image' name='add-image' class='button-secondary' type='button'><small>Add New Image</small></button>*/ ?>
 					<div id='swfupload_img_indicator'><img src='<?php echo WPSC_URL; ?>."/images/indicator.gif' alt='Loading' title='Loading' /></div>
 				</div>
-
+				<div id='media-items'> </div>
 				<p><?php echo TXT_WPSC_FLASH_UPLOADER; ?></p>
     </div>
     
@@ -821,16 +817,10 @@ function wpsc_product_image_forms($product_data='') {
 				<br />
 				
 			</div>
-			<?php 
-			//exit('<pre>'.print_r($product_data, true).'</pre>');
-			if($product_data['image'] != ''){ ?>
 			<p><strong <?php echo $display; ?>><?php _e('Manage your thumbnails'); ?></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
-			}
 			?>
-			
-<!-- 					<p>You are using the Browser uploader.  Problems?  Try the <a onclick='wpsc_upload_switcher("flash")' class="wpsc_upload_switcher">Flash uploader</a> instead.</p> -->
 
 		</div>
 	</div>
@@ -971,10 +961,6 @@ function edit_multiple_image_gallery($product_data) {
 	$main_image = $wpdb->get_row("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_data['id']}' LIMIT 1", ARRAY_A);
 	
 	$timestamp = time();
-	//echo "<pre>".print_r("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$main_image_id}' LIMIT 1",true)."</pre>";
-	//echo ;
-
-	
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
 	
@@ -1050,7 +1036,7 @@ function edit_multiple_image_gallery($product_data) {
 						$image_data = getimagesize(WPSC_IMAGE_DIR.$image['image']);			
             ?>
             <li id="product_image_<?php echo $image['id']; ?>">
-							<input type='hidden' class='image-id'  name='gallery_product_id[]' value='<?php echo $image['id']; ?>' />
+							<input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image['id']; ?>' />
 							<div class='previewimage' id='gallery_image_<?php echo $image['id']; ?>'>
 							  <a id='extra_preview_link_<?php echo $image['id']; ?>' href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>' rel='product_extra_image_<?php echo $image['id']; ?>' class='thickbox'>
 							    <img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$image['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' />

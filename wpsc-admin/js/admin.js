@@ -252,7 +252,6 @@ jQuery(document).ready( function () {
 					action: 'product-page-order',
 					ajax: 'true'
 				}
-				//jQuery(this).css("border","1px solid red");
 				jQuery(this).each( function() {
 					postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
 				} );

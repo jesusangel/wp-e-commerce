@@ -181,11 +181,6 @@ function  wpsc_admin_include_css_and_js() {
   $siteurl = get_option('siteurl'); 
 
 	wp_admin_css( 'dashboard' );
-	wp_enqueue_script('swfupload');
-	wp_enqueue_script('swfupload-swfobject');
-	wp_enqueue_script('swfupload-queue');
-	wp_enqueue_script('swfupload-handlers');
-
 	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
 	
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
@@ -227,16 +222,18 @@ if(WPSC_GOLD_DIR_NAME != ''){
 		wp_enqueue_script('editor');
 	}
 	wp_enqueue_script('media-upload');
-	wp_enqueue_script('word-count');
+	//wp_enqueue_script('word-count');
 	// 	wp_admin_css( 'dashboard' );
-	wp_enqueue_style('thickbox');
+  wp_enqueue_style('thickbox');
 
-
-	
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-swfobject');
 	wp_enqueue_script('swfupload-queue');
-	wp_enqueue_script('swfupload-handlers');
+	wp_enqueue_script('wpsc-swfupload-handlers', WPSC_URL.'/wpsc-admin/js/wpsc-swfupload-handlers.js', false, $version_identifier);
+
+	// Prototype breaks dragging and dropping, I need it gone
+	wp_deregister_script('prototype');
+
 	
 	// remove the old javascript and CSS, we want it no more, it smells bad
 	remove_action('admin_head', 'wpsc_admin_css');
@@ -310,24 +307,27 @@ function wpsc_admin_dynamic_css() {
  	header('Content-Type: text/css');
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
  	header('Cache-Control: public, must-revalidate, max-age=86400');
- 	header('Pragma: public'); 	
-	if(get_option('wpsc_use_flash_uploader') == 1) {
+ 	header('Pragma: public');
+
+	$flash = apply_filters('flash_uploader', $flash);
+ 	
+	if($flash = 1) {
 		?>
-		table.flash-image-uploader {
+		div.flash-image-uploader {
 			display: block;
 		}
 		
-		table.browser-image-uploader {
+		div.browser-image-uploader {
 			display: none;
 		}
 		<?php
 	} else {
 		?>
-		table.flash-image-uploader {
+		div.flash-image-uploader {
 			display: none;
 		}
 		
-		table.browser-image-uploader {
+		div.browser-image-uploader {
 			display: block;
 		}
 		<?php
