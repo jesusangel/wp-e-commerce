@@ -114,7 +114,7 @@ function selectgateway() {
 						} 	
 					?>
 					<tr>
-					  <td style='border-top: none;'>
+					  <td class='wpsc_gateway_table'>
 							<h4><?php echo TXT_WPSC_PAYMENTGATEWAY2;?></h4>
 					  </td>
 					  <td style='border-top: none;'>

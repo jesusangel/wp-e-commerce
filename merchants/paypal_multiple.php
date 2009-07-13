@@ -391,7 +391,7 @@ function form_paypal_multiple() {
   </tr>
   <tr>
   	<td colspan='2'>
-  	 <span  class='wpscsmall description'>Note:The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr</span>
+  	 <span  class='wpscsmall description'>Note: The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr</span>
   	</td>
   </tr>
   ";
@@ -438,7 +438,10 @@ function form_paypal_multiple() {
      <td>
        <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
-<span  class='wpscsmall description'>
+     </td>
+  </tr>
+  <tr>
+  	<td colspan='2'><span  class='wpscsmall description'>
   	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change this option to No.</span>
   	</td>
   </tr>

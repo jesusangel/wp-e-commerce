@@ -51,6 +51,11 @@ switch($page) {
 	wpsc_options_presentation();
 	break;
 	
+	case "import";
+	require_once('includes/settings-pages/import.php');
+	wpsc_options_import();
+	break;
+	
 	default;
 	case "general";
 	require_once('includes/settings-pages/general.php');
@@ -75,6 +80,7 @@ function wpsc_settings_tabs() {
 		'admin' => __('Admin'),
 		'shipping' => __('Shipping'),
 		'gateway' => __('Payment Options'),
+		'import' => __('Import'),
 		'checkout' => __('Checkout')
 	);
 

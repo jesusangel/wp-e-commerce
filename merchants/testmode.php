@@ -12,6 +12,7 @@ function gateway_testmode($seperator, $sessionid) {
   // exit("Location: ".$transact_url.$seperator."sessionid=".$sessionid);
   //$_SESSION['nzshpcrt_cart'] = null;
   //$_SESSION['nzshpcrt_serialized_cart'] = null;
+  //exit($transact_url.$seperator."sessionid=".$sessionid);
   header("Location: ".$transact_url.$seperator."sessionid=".$sessionid);
   exit();
 }

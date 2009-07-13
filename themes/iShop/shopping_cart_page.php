@@ -91,6 +91,7 @@ if(wpsc_cart_item_count() > 0) :
 					<form name='change_country' id='change_country' action='' method='post'>
 						<?php echo wpsc_shipping_country_list();?>
 						<input type='hidden' name='wpsc_update_location' value='true' />
+						<input type='submit' name='wpsc_submit_zipcode' value='Submit' />
 					</form>
 				
 				</td>

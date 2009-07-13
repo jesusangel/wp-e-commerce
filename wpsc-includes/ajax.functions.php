@@ -379,7 +379,7 @@ function wpsc_submit_checkout() {
 	//exit('coupons:'.$wpsc_cart->coupons_name);
 	$selected_gateways = get_option('custom_gateway_options');
 	$submitted_gateway = $_POST['custom_gateway'];
-	
+
 	
 	$form_validity = $wpsc_checkout->validate_forms();
 	// 	exit('<pre>'.print_r($form_validity, true).'</pre>');
@@ -442,7 +442,7 @@ function wpsc_submit_checkout() {
 		$is_valid = false;
   }
   
-  
+
 	 //exit('Valid?<pre>'.print_r($is_valid, true).'</pre>');
 	if($is_valid == true || $_GET['gateway'] == 'noca') {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
@@ -456,7 +456,6 @@ function wpsc_submit_checkout() {
 		$total = $wpsc_cart->calculate_total_price();
 		
 				
-
 		$wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')");
 		
 		
@@ -466,7 +465,7 @@ function wpsc_submit_checkout() {
 		$wpsc_cart->save_to_db($purchase_log_id);
 		$wpsc_cart->submit_stock_claims($purchase_log_id);
 		do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
-		
+	
 		if(get_option('permalink_structure') != '') {
 			$seperator = "?";
 		} else {
@@ -482,7 +481,7 @@ function wpsc_submit_checkout() {
 				break;
 			}
 		}
-		
+
 		if(isset($_GET['gateway']) && $_GET['gateway'] == 'noca'){
 			//exit('HERE2');
 			echo transaction_results($sessionid, true);

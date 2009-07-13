@@ -6,7 +6,7 @@
 function check_make_purchase_button(){
 	toggle = jQuery('#noca_gateway').attr('checked');
 	if(toggle == true){
-		jQuery('.make_purchase').hide();
+		//jQuery('.make_purchase').hide();
 		jQuery('#OCPsubmit').show();
 	}else{
 		jQuery('.make_purchase').show();	
