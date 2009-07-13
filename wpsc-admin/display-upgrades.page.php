@@ -60,6 +60,7 @@ function wpsc_display_upgrades_page() {
 						do_action('wpsc_gold_module_activation_forms');
 					} else {
 					  ?>
+					  <div id='wpsc_gold_options_outside'>
 					  <div  class='form-wrap' >
 							<p>
 							Opps. You don't have any Upgrades yet!
@@ -72,6 +73,7 @@ function wpsc_display_upgrades_page() {
 							<p>
 								<?php echo TXT_WPSC_API_RESET_DESCRIPTION;?> <br /><br />
 							</p>
+					  </div>
 					  </div>
 						<div class='postbox'>
 							<h3 class='hndle'><?php echo TXT_WPSC_API_RESET;?></h3>

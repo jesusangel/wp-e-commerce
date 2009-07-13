@@ -1241,11 +1241,23 @@ table.category_forms td.last_row {
 #gold_cart_form .postbox p img{
 	padding-bottom:10px;
 }
-
+#wpsc_gold_options_outside{
+width:400px;
+}
 #gold_cart_form .postbox p{
   padding-left: 4px;
 }
-
+#gold_cart_form .postbox{
+	width:100%;
+	max-width:500px;
+}
+#gold_cart_form .postbox p{
+	padding-left:10px;
+}
+#gold_cart_form .postbox p label{
+	width:80px;
+	float:left;
+}
 
 
 /* 
