@@ -12,7 +12,7 @@ if($_GET['gateway'] == 'google'){
 if(get_option('payment_gateway') == 'paypal_certified'){
 	$sessionid = $_SESSION['paypalexpresssessionid'];
 }
-
+//exit("test!");
 $errorcode = '';
 $transactid = '';
 if($_REQUEST['eway']=='1') {

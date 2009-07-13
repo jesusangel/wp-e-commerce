@@ -18,31 +18,18 @@ function widget_wp_shopping_cart($args) {
       
     
     $title = empty($options['title']) ? __('Shopping Cart') : $options['title'];
-    //$title .= $fancy_collapser;
     echo $before_widget;
     $full_title = $before_title . $title . $fancy_collapser . $after_title;    
     echo $full_title;
-//     echo "<ul>\n\r";
-//     echo "  <li>\n\r";
-    
 		$display_state = "";
 		
 		if((($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
 			$display_state = "style='display: none;'";
 		}
 		echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-//     if(get_option('wpsc_use_theme_engine') == TRUE) {	    
 			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
-    /*
-	  } else {
-			nzshpcrt_shopping_basket("", 4);	  
-	  }*/
 		echo "    </div>";
-//     echo "  </li>\n\r";
-//     echo "</ul>\n\r";
-    
     echo $after_widget;
-//     echo "<br style='clear:both;'>";
     }
 
 function widget_wp_shopping_cart_control() {

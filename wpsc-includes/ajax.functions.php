@@ -161,9 +161,12 @@ function wpsc_empty_cart() {
 		}
 		exit();
   }
-  
-	wp_redirect(remove_query_arg(array('wpsc_ajax_action','ajax')));
-	exit();
+
+  // this if statement is needed, as this function also runs on returning from the gateway
+  if($_REQUEST['wpsc_ajax_action'] == 'empty_cart') { 
+		wp_redirect(remove_query_arg(array('wpsc_ajax_action','ajax')));
+		exit();
+	}
 }
 // execute on POST and GET
 if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) {
