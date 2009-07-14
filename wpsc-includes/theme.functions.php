@@ -9,6 +9,22 @@
 */
 
 /**
+	*select_wpsc_theme_functions function, provides a place to override the e-commece theme path
+  * add to switch "theme's functions file 
+  * © with xiligroup dev
+  */
+function wpsc_select_theme_functions() {
+  $theme_dir = WPSC_THEME_DIR; /* done by plugins_loaded */
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".$theme_dir);
+	
+	if((get_option('wpsc_selected_theme') != '') && (file_exists($cur_wpsc_theme_folder."/".$theme_dir.".php") )) { 
+		include_once($cur_wpsc_theme_folder.'/'.$theme_dir.'.php');
+	}
+  // end add by xiligroup.dev
+}
+add_action('wp','wpsc_select_theme_functions',10,1);
+
+/**
 * wpsc_user_enqueues products function,
 * enqueue all javascript and CSS for wp ecommerce
 */

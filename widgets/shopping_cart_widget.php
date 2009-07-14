@@ -21,8 +21,8 @@ function widget_wp_shopping_cart($args) {
     echo $before_widget;
     $full_title = $before_title . $title . $fancy_collapser . $after_title;    
     echo $full_title;
+    
 		$display_state = "";
-		
 		if((($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
 			$display_state = "style='display: none;'";
 		}

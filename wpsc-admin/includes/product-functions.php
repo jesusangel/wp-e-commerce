@@ -241,7 +241,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	wpsc_update_custom_meta($product_id, $post_data);
 
 	// and the images
-
 	wpsc_update_product_images($product_id, $post_data);
 	
 	if($post_data['files']['file']['tmp_name'] != '') {
@@ -279,9 +278,10 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	if($post_data['variation_priceandstock'] != null) {
 		$variations_processor->update_variation_values($product_id, $post_data['variation_priceandstock']);
 	}
-	// 	if($adding === true) {
-	//		wpsc_send_to_google_base($post_data);
-	// 	}
+
+	
+	do_action('wpsc_edit_product', $product_id);
+	wpsc_ping();
 	return $product_id;
 }
 
@@ -545,9 +545,6 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
  * @param string comma separated tags
  */
 function wpsc_upload_image_thumbnail($product_id, $product_meta) {
-  
-
-
 		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
 			$imagefield='thumbnailImage';
 	
@@ -572,8 +569,6 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
   global $wpdb;
   $preview_file = null; //break this, is done in a different function, now
 	$files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." ORDER BY id ASC", ARRAY_A);
-	
-	
 	
 	if (is_array($files)){
 		foreach($files as $file){

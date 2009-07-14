@@ -171,6 +171,7 @@ function wpsc_delete_product() {
 	$deleted = 0;
 	$product_id = absint($_GET['product']);
   check_admin_referer('delete_product_' .  $product_id);
+
 	if($wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='{$product_id}' LIMIT 1")) {
 		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '{$product_id}' AND `meta_key` IN ('url_name')");  
 		product_tag_init();
@@ -179,6 +180,7 @@ function wpsc_delete_product() {
 			wp_delete_object_term_relationships($product_id, 'product_tag');
 		}
 		$deleted = 1;
+		do_action('wpsc_delete_product', $product_id);
 	}
 	
 	$sendback = wp_get_referer();
@@ -186,7 +188,6 @@ function wpsc_delete_product() {
 		$sendback = add_query_arg('deleted', $deleted, $sendback);
 	}
 	wp_redirect($sendback);
-	
 	exit();
 }
  

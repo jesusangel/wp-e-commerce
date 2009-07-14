@@ -6,6 +6,20 @@ function wpsc_shopping_cart($input = null, $override_state = null) {
 	} else {
 		$state = get_option('cart_location');
 	}
+
+	
+	if(get_option('show_sliding_cart') == 1)	{
+		if(is_numeric($_SESSION['slider_state']))	{
+		if($_SESSION['slider_state'] == 0) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
+			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+		} else {
+			if($_SESSION['nzshpcrt_cart'] == null) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
+			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+		}
+	} else {
+		$fancy_collapser = "";
+	}
+
   
   if($state == 1) {
     if($input != '') {
@@ -18,21 +32,30 @@ function wpsc_shopping_cart($input = null, $override_state = null) {
 		$cart = $_SESSION['nzshpcrt_cart'];
 		if($state == 4) {
 			#echo $input;
-			echo "<div id='widgetshoppingcart'><div id='shoppingcartcontents'>";
+			echo "<div id='widgetshoppingcart'>";
+			echo "<h3>".__('Shopping Cart')."$fancy_collapser</h3>";
+			echo "  <div id='shoppingcartcontents'>";
 			echo wpsc_shopping_basket_internals($cart,false,true);
-			echo "</div></div>";
+			echo "  </div>";
+			echo "</div>";
 			$dont_add_input = true;
 		} else {
-			echo "<div id='sideshoppingcart'><div id='shoppingcartcontents'>";
-			echo wpsc_shopping_basket_internals($cart);
-			echo "</div></div>";
+			echo "<div id='sideshoppingcart'>";
+			echo "<h3>".__('Shopping Cart')."$fancy_collapser</h3>";
+			echo "  <div id='shoppingcartcontents'>";
+			echo wpsc_shopping_basket_internals($cart,false,true);
+			echo "  </div>";
+			echo "</div>";
 		}
 	} else {
 		if(($GLOBALS['nzshpcrt_activateshpcrt'] === true)) {
 			$cart = $_SESSION['nzshpcrt_cart'];
-			echo "<div id='shoppingcart'><div id='shoppingcartcontents'>";
-			echo wpsc_shopping_basket_internals($cart);
-			echo "</div></div>";
+			echo "<div id='shoppingcart'>";
+			echo "<h3>".__('Shopping Cart')."$fancy_collapser</h3>";
+			echo "  <div id='shoppingcartcontents'>";
+			echo wpsc_shopping_basket_internals($cart,false,true);
+			echo "  </div>";
+			echo "</div>";
 		}
 	}
 	return $input;
@@ -45,14 +68,13 @@ function nzshpcrt_shopping_basket($input = null, $override_state = null) {
 
 function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title=false) {
   global $wpdb;
-  		echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
-//     if(get_option('wpsc_use_theme_engine') == TRUE) {	    
-			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
-    /*
-	  } else {
-			nzshpcrt_shopping_basket("", 4);	  
-	  }*/
-		echo "    </div>";
+	$display_state = "";
+	if((($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
+		$display_state = "style='display: none;'";
+	}
+	echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
+	include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	echo "    </div>";
   return $output;
   }
   

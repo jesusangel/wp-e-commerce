@@ -118,8 +118,6 @@ function wpsc_add_to_cart() {
 		}
 
 		do_action('wpsc_alternate_cart_html');
-    
-    
 		exit();
   }
 }
