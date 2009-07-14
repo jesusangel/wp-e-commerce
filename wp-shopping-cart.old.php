@@ -1166,7 +1166,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     exit();
     }
     
-    require_once(WPSC_FILE_PATH . '/processing_functions.php');
+    
 
 
 /* 

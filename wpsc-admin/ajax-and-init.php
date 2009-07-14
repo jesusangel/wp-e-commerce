@@ -8,20 +8,19 @@
  * @since 3.7
  */
 function wpsc_ajax_sales_quarterly() {
-  	global $wpdb;
-  	$lastdate = $_POST['add_start'];
-  	$date = preg_split('/-/', $lastdate);
-  	$lastdate = mktime(0,0,0,$date[1], $date[2], $date[0]);
-  	$thirdquart =   date('M d y',mktime(0,0,0,$date[1]-3, $date[2], $date[0]));	
-  	$secondquart =   date('M d y',mktime(0,0,0,$date[1]-6, $date[2], $date[0]));
-  	$firstquart =   date('M d y',mktime(0,0,0,$date[1]-9, $date[2], $date[0]));
-  	$lastquart = date('M d y', $lastdate);
-	
+	global $wpdb;
+	$lastdate = $_POST['add_start'];
+	$date = preg_split('/-/', $lastdate);
+	$lastdate = mktime(0,0,0,$date[1], $date[2], $date[0]);
+	$thirdquart = date('M d y',mktime(0,0,0,$date[1]-3, $date[2], $date[0]));
+	$secondquart = date('M d y',mktime(0,0,0,$date[1]-6, $date[2], $date[0]));
+	$firstquart = date('M d y',mktime(0,0,0,$date[1]-9, $date[2], $date[0]));
+	$lastquart = date('M d y', $lastdate);
 }
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') {
+if($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') {
 	add_action('admin_init', 'wpsc_ajax_sales_quarterly');
 }
 
@@ -73,13 +72,7 @@ function wpsc_crop_thumb() {
 				break;
 			}
 			$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
-		
-		//	exit($full_path);
-			//exit(' destination '.$dst_r.' resource '.$img_r.' destination X and Y 0 0  resource X and Y'.$_POST['x'].' '.$_POST['y'].'destination width and height '.$targ_w.' '. $targ_h.' resource width and height'.$_POST['w'].' '.$_POST['h']);
 			imagecopyresampled($dst_r,$img_r,0,0,$image['x'],$image['y'],$targ_w,$targ_h,$image['w'],$image['h']);
-		//	imagejpeg($dst_r,$full_path);
-		//	header('Content-type: image/jpeg');
-		
 			imagejpeg($dst_r,$destination,$jpeg_quality);
 			$cropped = true;
 		}
@@ -101,11 +94,7 @@ function wpsc_crop_thumb() {
 
 function wpsc_bulk_modify_products() {
   global $wpdb;
-  
-  
   $doaction = $_GET['bulkAction'];
-  
-   //exit("<pre>".print_r($_GET ,true)."</pre>");
 	$sendback = wp_get_referer();
   switch ( $doaction ) {
 		case 'delete':
@@ -126,26 +115,19 @@ function wpsc_bulk_modify_products() {
 					}
 				}
 			}
-			
-   //exit("<pre></pre>");
 			if ( isset($deleted) ) {
 				$sendback = add_query_arg('deleted', $deleted, $sendback);
 			}
-			break;
+		break;
 			
-			default:
-				if(isset($_GET['search']) && !empty($_GET['search'])) {
+		default:
+			if(isset($_GET['search']) && !empty($_GET['search'])) {
 				$sendback = add_query_arg('search',$_GET['search'], $sendback);
-				
-				
-				}
-			
-			break;
-			
+			}
+		break;
 	}
 	
 	wp_redirect($sendback);
-	
 	exit();
 }
  
@@ -158,8 +140,6 @@ function wpsc_bulk_modify_products() {
 function wpsc_modify_product_price() {
 	global $wpdb;
 	$product_data = array_pop($_POST['product_price']);
-
-	//print_r($product_data);
 
 	$product_id = absint($product_data['id']);
 	$product_price = (float)$product_data['price'];
@@ -290,7 +270,6 @@ function wpsc_duplicate_product() {
 			      $image['width'] = 'null';
 			      $image['height'] = 'null';
 			    }
-			  
 					$new_image_value[] = "('".$new_id."','".$image['image']."',".$image['width'].",".$image['height'].",'".$image['image_order']."','".$image['meta']."')";
 				}
 			}
@@ -650,14 +629,19 @@ function wpsc_admin_ajax() {
 		$images = explode(",",$_POST['order']);
 		$product_id = absint($_POST['product_id']);
     $timestamp = time();
-		$new_main_image = (int)$images[0];
-		
+
+		$new_main_image = null;
 		$have_set_first_item = false;
-		for($i=0;$i<count($images); ++$i ) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image_order`='$i' WHERE `id`='".absint($images[$i])."' LIMIT 1");
-			if($have_set_first_item === false) {
-				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='".absint($images[$i])."' WHERE `id`='{$product_id}' LIMIT 1");
-				$have_set_first_item = true;
+		$i = 0;
+		foreach($images as $image) {
+			if($image > 0) {
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image_order`='$i' WHERE `id`='".absint($image)."' LIMIT 1");
+				if($have_set_first_item == false) {
+					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='".absint($image)."' WHERE `id`='{$product_id}' LIMIT 1");
+					$have_set_first_item = true;
+					$new_main_image = $image;
+				}
+				$i++;
 			}
 		}
 		
@@ -738,7 +722,6 @@ function wpsc_admin_ajax() {
 		$output .= "</div>";
 		echo "output='".str_replace(array("\n", "\r"), array('\n', '\r'), addslashes($output))."';\n\r";
 		echo "ser='".$images[0]."';\n\r";
-		
 		exit();
 	}
     
@@ -799,14 +782,11 @@ function wpsc_swfupload_images() {
 	require_once(ABSPATH . 'wp-admin/admin.php');
 
 	
-	if ( !current_user_can('upload_files') ) {
+	if(!current_user_can('upload_files') ) {
 			exit("status=-1;\n");
 	}
-	//mail('thomas.howard@gmail.com','swfuploader', print_r($_POST,true).print_r($_FILES,true));
 	
-	if(wp_verify_nonce($nonce, 'product-swfupload') ) {
-		//mail('thomas.howard@gmail.com','nonce check succeeded', "nonce check succeeded");
-	} else {
+	if(!wp_verify_nonce($nonce, 'product-swfupload') ) {
 		exit("status=-1;\n");
 	}
 

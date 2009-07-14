@@ -433,6 +433,15 @@ div.flash-image-uploader {
   display: none;
 }
 
+#wpbody-content div.flash-image-uploader #media-items {
+  position: relative;
+  border: none;
+}
+#wpbody-content div.flash-image-uploader #media-items .progress{
+  position: static;
+  margin:0 0 6px;
+  height: 16px;
+}
 
 
 button#add-product-image {

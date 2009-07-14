@@ -9,7 +9,7 @@ function wpsc_fileDialogStart() {
 // progress and success handlers for media multi uploads
 function wpsc_fileQueued(fileObj) {
 	// Create a progress bar containing the filename
-	jQuery('#media-items').append('<div id="media-item-' + fileObj.id + '" ><div class="progress"><div class="bar"></div></div><div class="filename original">' + fileObj.name + '</div></div>');
+	jQuery('#media-items').append('<div id="media-item-' + fileObj.id + '" ><div class="progress"><div class="bar"></div></div></div>');
 	// Display the progress div
 	jQuery('#media-item-' + fileObj.id + ' .progress').show();
 
@@ -21,10 +21,11 @@ function wpsc_uploadStart(fileObj) { return true; }
 
 function wpsc_uploadProgress(fileObj, bytesDone, bytesTotal) {
 	// Lengthen the progress bar
-	jQuery('#media-item-' + fileObj.id + ' .bar').width(620*bytesDone/bytesTotal);
+	jQuery('#media-item-' + fileObj.id + ' .bar').width(500*bytesDone/bytesTotal);
 
-	if ( bytesDone == bytesTotal )
+	if ( bytesDone == bytesTotal ) {
 		jQuery('#media-item-' + fileObj.id + ' .bar').html('<strong class="crunching"></strong>');
+	}
 }
 
 function wpsc_prepareMediaItem(fileObj, serverData) {
@@ -140,7 +141,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		return;
 	}
 	//console.log(fileObj);
-	console.log(serverData);
+	//console.log(serverData);
   eval(serverData);
 	if(upload_status == 1 ) {
 		output_html = "";
@@ -156,6 +157,10 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		jQuery("ul#gallery_list").append(output_html);
 	}
 
+		//jQuery('#media-item-' + fileObj.id + ' .progress').show();
+ 		//window.setInterval(function() {
+		jQuery("#media-item-" + fileObj.id + "").fadeOut("normal");
+ 		//}, 5000);
 
 	//prepareMediaItem(fileObj, serverData);
 	//updateMediaForm();

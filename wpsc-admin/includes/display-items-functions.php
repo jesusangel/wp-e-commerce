@@ -740,55 +740,52 @@ function wpsc_product_image_forms($product_data='') {
 		<?php if ( $flash ) : ?>
 			<script type="text/javascript" >
 			/* <![CDATA[ */
-			SWFUpload.onload = function() {
+			jQuery("span#spanButtonPlaceholder").livequery(function() {
 				swfu = new SWFUpload({
-						button_text: '<span class="button"><?php _e('Select Files'); ?></span>',
-						button_text_style: '.button { text-align: center; font-weight: bold; font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }',
-						button_height: "24",
-						button_width: "132",
-						button_image_url: '<?php echo includes_url('images/upload.png'); ?>',
-						button_placeholder_id: "spanButtonPlaceholder",
-						upload_url : "<?php echo attribute_escape( $flash_action_url ); ?>",
-						flash_url : "<?php echo includes_url('js/swfupload/swfupload.swf'); ?>",
-						file_post_name: "async-upload",
-						file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
-						post_params : {
-							"product_id" : "<?php echo absint($product_data['id']); ?>",
-							"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
-							"_wpnonce" : "<?php echo wp_create_nonce('product-swfupload'); ?>",
-							"wpsc_admin_action" : "wpsc_add_image"
-						},
-						file_size_limit : "<?php echo wp_max_upload_size(); ?>b",
-						file_dialog_start_handler : wpsc_fileDialogStart,
-						file_queued_handler : wpsc_fileQueued,
-						upload_start_handler : wpsc_uploadStart,
-						upload_progress_handler : wpsc_uploadProgress,
-						upload_error_handler : wpsc_uploadError,
-						upload_success_handler : wpsc_uploadSuccess,
-						upload_complete_handler : wpsc_uploadComplete,
-						file_queue_error_handler : wpsc_fileQueueError,
-						file_dialog_complete_handler : wpsc_fileDialogComplete,
-						swfupload_pre_load_handler: wpsc_swfuploadPreLoad,
-						swfupload_load_failed_handler: wpsc_swfuploadLoadFailed,
-						custom_settings : {
-							degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
-							swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
-						},
-						debug: true
-					});
-			};
+					button_text: '<span class="button"><?php _e('Select Files'); ?></span>',
+					button_text_style: '.button { text-align: center; font-weight: bold; font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }',
+					button_height: "24",
+					button_width: "132",
+					button_image_url: '<?php echo includes_url('images/upload.png'); ?>',
+					button_placeholder_id: "spanButtonPlaceholder",
+					upload_url : "<?php echo attribute_escape( $flash_action_url ); ?>",
+					flash_url : "<?php echo includes_url('js/swfupload/swfupload.swf'); ?>",
+					file_post_name: "async-upload",
+					file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
+					post_params : {
+						"product_id" : "<?php echo absint($product_data['id']); ?>",
+						"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
+						"_wpnonce" : "<?php echo wp_create_nonce('product-swfupload'); ?>",
+						"wpsc_admin_action" : "wpsc_add_image"
+					},
+					file_size_limit : "<?php echo wp_max_upload_size(); ?>b",
+					file_dialog_start_handler : wpsc_fileDialogStart,
+					file_queued_handler : wpsc_fileQueued,
+					upload_start_handler : wpsc_uploadStart,
+					upload_progress_handler : wpsc_uploadProgress,
+					upload_error_handler : wpsc_uploadError,
+					upload_success_handler : wpsc_uploadSuccess,
+					upload_complete_handler : wpsc_uploadComplete,
+					file_queue_error_handler : wpsc_fileQueueError,
+					file_dialog_complete_handler : wpsc_fileDialogComplete,
+					swfupload_pre_load_handler: wpsc_swfuploadPreLoad,
+					swfupload_load_failed_handler: wpsc_swfuploadLoadFailed,
+					custom_settings : {
+						degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
+						swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
+					},
+					debug: true
+				});
+			});
 		/* ]]> */
 		</script>
 		
 		<?php endif; ?>
 		
     <div class='flash-image-uploader'>
-			<span id='spanButtonPlaceholder'></span>
-				<div>
-					<?php/* <button id='add-product-image' name='add-image' class='button-secondary' type='button'><small>Add New Image</small></button>*/ ?>
-					<div id='swfupload_img_indicator'><img src='<?php echo WPSC_URL; ?>."/images/indicator.gif' alt='Loading' title='Loading' /></div>
-				</div>
+			<span id='spanButtonPlaceholder'></span><br />
 				<div id='media-items'> </div>
+				<p><?php echo wpsc_check_memory_limit(); ?></p>
 				<p><?php echo TXT_WPSC_FLASH_UPLOADER; ?></p>
     </div>
     
@@ -955,17 +952,16 @@ function edit_multiple_image_gallery($product_data) {
 	$timestamp = time();
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
-	
-		
 		<li class='first' id='product_image_<?php echo $main_image['id']; ?>'>
 			<input type='hidden' name='gallery_product_id[]' class='image-id' value='<?php echo $main_image['id']; ?>' />
 			<div class='previewimage' id='gallery_image_<?php echo $main_image['id']; ?>'>
 				<?php if ($main_image['image'] != '') { ?>
 					<?php
-				$image_data = getimagesize(WPSC_IMAGE_DIR.$main_image['image']);			
-				//exit('<pre>'.print_r($image_data, true).'</pre>');
-				?>
-				<a id='extra_preview_link_0' href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox' ><img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$main_image['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' /></a>
+					$image_data = getimagesize(WPSC_IMAGE_DIR.$main_image['image']);
+					?>
+					<a id='extra_preview_link_0' href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox' >
+					  <img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$main_image['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' />
+					</a>
 				<?php } ?>
 
 				
