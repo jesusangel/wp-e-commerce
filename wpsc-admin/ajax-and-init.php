@@ -197,7 +197,6 @@ function wpsc_delete_product() {
 	add_action('admin_init', 'wpsc_delete_product');
 }
  
- 
 function wpsc_duplicate_product() {
 	global $wpdb;
 	$product_id = absint($_GET['product']);
