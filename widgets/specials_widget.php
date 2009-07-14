@@ -24,15 +24,16 @@ function widget_specials($args) {
 		if($product != null) {
 			$output = "<div><div>";
 			foreach($product as $special) {
-				$output .= "<strong>".$special['name']."</strong><br /> ";
+				$output .= "<h2><a class='wpsc_product_title' href='".wpsc_product_url($special['id'],$special['category'])."'>".$special['name']."</a></h2><br /> ";
 					if(is_numeric($special['image'])){
 						$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$special['image']."' LIMIT 1");
 						if($image_file_name != '') {
 							$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$special['name']."' alt='".$special['name']."' /><br />";
 						}
 					}
-				$output .= $special['description']."<br />";
-		
+				if(get_option('wpsc_special_description') != '1'){
+					$output .= $special['description']."<br />";
+				}
 				$variations_processor = new nzshpcrt_variations;
 				$variations_output = $variations_processor->display_product_variations($special['id'],true, false, true);
 				$output .= $variations_output[0];
@@ -72,6 +73,16 @@ function widget_specials_control() {
 	if ( isset($_POST[$option_name]) ) {
 		$newoptions['title'] = strip_tags(stripslashes($_POST[$option_name]));
 	}
+	if(isset($_POST['wpsc_special_description'])){
+		update_option('wpsc_special_description', $_POST['wpsc_special_description']);
+	}else{
+		update_option('wpsc_special_description', '0');
+	}
+	if(get_option('wpsc_special_description') == '1'){
+		$checked = "checked='checked'";
+	}else{
+		$checked = '';
+	}
 	if ( $options != $newoptions ) {
 		$options = $newoptions;
 		update_option($option_name, $options);
@@ -80,6 +91,9 @@ function widget_specials_control() {
 	
 	echo "<p>\n\r";
 	echo "  <label for='{$option_name}'>"._e('Title:')."<input class='widefat' id='{$option_name}' name='{$option_name}' type='text' value='{$title}' /></label>\n\r";
+	echo "</p>\n\r";
+	echo "<p>\n\r";
+	echo "  <label for='{$option_name}'>"._e('Show Description:')."<input $checked id='wpsc_special_description' name='wpsc_special_description' type='checkbox' value='1' /></label>\n\r";
 	echo "</p>\n\r";
 }
 

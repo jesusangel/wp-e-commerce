@@ -72,7 +72,31 @@ padding-left:10px;
 padding-right: 30px;
 
 }
-
+span.wpsc_quart_left{
+width:40%;
+float:left;
+}
+p.atglance{
+color:#777777;
+font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+font-size:13px;
+font-style:italic;
+}
+span.wpsc_quart_right{
+width:60%;
+float:right;
+text-align: right;
+}
+#box span{
+border-bottom: 1px solid #999999;
+}
+p.quarterly{
+color:#21759B;
+font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+font-size:12px;
+line-height: 140%;
+margin:5px 0;
+}
 /* end of dashboard widget css */
 /*
  *Display Purchase log Details CSS is HERE
@@ -142,11 +166,9 @@ text-align:right;
 
 }
 /*
- *Display Purchase log Details CSS ends HERE
+ * Display Purchase log Details CSS ends HERE
+ * Display Products CSS starts here
  */
-/*
-	* Display Products CSS starts here
-	*/
 .tablenav select[name="bulkAction"] {
 width:100px;
 }

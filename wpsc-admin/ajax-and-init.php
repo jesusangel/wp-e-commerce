@@ -8,16 +8,28 @@
  * @since 3.7
  */
 function wpsc_ajax_sales_quarterly() {
-	global $wpdb;
-	$lastdate = $_POST['add_start'];
-	$date = preg_split('/-/', $lastdate);
-	$lastdate = mktime(0,0,0,$date[1], $date[2], $date[0]);
-	$thirdquart = date('M d y',mktime(0,0,0,$date[1]-3, $date[2], $date[0]));
-	$secondquart = date('M d y',mktime(0,0,0,$date[1]-6, $date[2], $date[0]));
-	$firstquart = date('M d y',mktime(0,0,0,$date[1]-9, $date[2], $date[0]));
-	$lastquart = date('M d y', $lastdate);
+  	global $wpdb;
+  	$lastdate = $_POST['add_start'];
+  	$date = preg_split('/-/', $lastdate);
+  	$lastquart = mktime(0,0,0,$date[1], $date[2], $date[0]);
+  	//$lastdate = date('M d y', $lastquart);
+  	if($lastquart != get_option('wpsc_last_quarter')){  		
+  		update_option('wpsc_last_date', $lastdate);
+  		update_option('wpsc_fourth_quart', $lastquart);
+  	 	$thirdquart =   mktime(0,0,0,$date[1]-3, $date[2], $date[0]); 		
+ 		update_option('wpsc_third_quart', $thirdquart);
+	  	$secondquart =  mktime(0,0,0,$date[1]-6, $date[2], $date[0]);
+ 		update_option('wpsc_second_quart', $secondquart);
+	  	$firstquart =   mktime(0,0,0,$date[1]-9, $date[2], $date[0]); 		
+  		update_option('wpsc_first_quart', $firstquart);
+  		$finalquart =  mktime(0,0,0,$date[1], $date[2], $date[0]-1); 		
+  		update_option('wpsc_final_quart', $finalquart);
+  		
+  	}
+	
+  	
+//	exit($lastquart.' '.$firstquart.' '.$secondquart.' '.$thirdquart);
 }
- 
  
  
 if($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') {
@@ -1172,7 +1184,7 @@ function wpsc_purchlog_bulk_modify(){
 	if($_POST['purchlog_multiple_status_change'] != -1){
 		if(is_numeric($_POST['purchlog_multiple_status_change']) && $_POST['purchlog_multiple_status_change'] != 'delete'){
 			foreach((array)$_POST['purchlogids'] as $purchlogid){
-				//	exit('<pre>'.print_r($purchlogid,true).'</pre>');
+				//exit('<pre>'.print_r($purchlogid,true).'</pre>');
 				wpsc_purchlog_edit_status($purchlogid, $_POST['purchlog_multiple_status_change']);
 				$updated++;
 			}
@@ -1218,7 +1230,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
 		if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] < 2)) {
 			transaction_results($log_data['sessionid'],false);
 		}      
-	exit();
+	//exit();
 	
 }
 

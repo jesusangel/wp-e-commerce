@@ -472,12 +472,26 @@ if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
 	}
 }
 */
+function wpsc_get_quarterly_summary(){
+	global $wpdb;
+	(int)$firstquarter = get_option('wpsc_first_quart');
+	(int)$secondquarter = get_option('wpsc_second_quart');
+	(int)$thirdquarter = get_option('wpsc_third_quart');
+	(int)$fourthquarter = get_option('wpsc_fourth_quart');
+	(int)$finalquarter = get_option('wpsc_final_quart');
+
+	$results[] = admin_display_total_price($thirdquarter+1, $fourthquarter);
+	$results[] = admin_display_total_price($secondquarter+1, $thirdquarter);
+	$results[] = admin_display_total_price($firstquarter+1, $secondquarter);
+	$results[] = admin_display_total_price($finalquarter, $firstquarter);
+	return $results;
+}
 function wpsc_quarterly_dashboard_widget(){
 	if(get_option('wpsc_business_year_start') == false){
 		?>
 		<form action='' method='post'>
-		<label for='date_start'>Please enter your Financial Year End: </label>
-  			<input id='date_start' type='text' class='pickdate' size='11' name='add_start' />
+		<label for='date_start'>Financial Year End: </label>
+  			<input id='date_start' type='text' class='pickdate' size='11' value='<?php echo get_option('wpsc_last_date'); ?>' name='add_start' />
   			   <!--<select name='add_start[day]'>
 			   <?php
 			   for($i = 1; $i <=31; ++$i) {
@@ -509,6 +523,45 @@ function wpsc_quarterly_dashboard_widget(){
   			<input type='submit' class='button primary' value='Submit' name='wpsc_submit' />
 		</form>
 		<?php
+	if(get_option('wpsc_first_quart') != ''){
+		$firstquarter = get_option('wpsc_first_quart');
+		$secondquarter = get_option('wpsc_second_quart');
+		$thirdquarter = get_option('wpsc_third_quart');
+		$fourthquarter = get_option('wpsc_fourth_quart');
+		$finalquarter = get_option('wpsc_final_quart');
+		$revenue = wpsc_get_quarterly_summary();
+		$currsymbol = wpsc_get_currency_symbol();
+		foreach($revenue as $rev){
+			if($rev == ''){
+				$totals[] = '0.00'; 
+			}else{
+				$totals[] = $rev;
+			}
+		}
+	?>
+		<div id='box'>
+				<p class='atglance'>
+					<span class='wpsc_quart_left'>At a Glance</span>
+					<span class='wpsc_quart_right'>Revenue</span>
+				</p>
+				<div style='clear:both'></div>
+				<p class='quarterly'>
+					<span class='wpsc_quart_left'><strong>01</strong>&nbsp; (<?php echo date('M Y',$thirdquarter).' - '.date('M Y',$fourthquarter); ?>)</span>
+					<span class='wpsc_quart_right'><?php echo $currsymbol.' '.$totals[0]; ?></span></p>
+				<p class='quarterly'>
+					<span class='wpsc_quart_left'><strong>02</strong>&nbsp; (<?php echo date('M Y',$secondquarter).' - '.date('M Y',$thirdquarter); ?>)</span>
+					<span class='wpsc_quart_right'><?php echo $currsymbol.' '.$totals[1]; ?></span></p>
+				<p class='quarterly'>
+					<span class='wpsc_quart_left'><strong>03</strong>&nbsp; (<?php echo date('M Y',$firstquarter).' - '.date('M Y',$secondquarter); ?>)</span>
+					<span class='wpsc_quart_right'><?php echo $currsymbol.' '.$totals[2]; ?></span></p>
+				<p class='quarterly'>
+					<span class='wpsc_quart_left'><strong>04</strong>&nbsp; (<?php echo date('M Y',$finalquarter).' - '.date('M Y',$firstquarter); ?>)</span>
+					<span class='wpsc_quart_right'><?php echo $currsymbol.' '.$totals[3]; ?></span>
+				</p>
+			<div style='clear:both'></div>
+		</div>
+	<?php
+	}
 	}
 
 }
@@ -519,7 +572,7 @@ function wpsc_quarterly_setup(){
 	wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
 }
 
-//add_action('wp_dashboard_setup', 'wpsc_quarterly_setup');
+add_action('wp_dashboard_setup', 'wpsc_quarterly_setup');
 function wpsc_dashboard_widget() {
     do_action('wpsc_admin_pre_activity');
 //    wpsc_admin_latest_activity();
