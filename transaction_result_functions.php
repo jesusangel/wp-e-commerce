@@ -156,8 +156,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					//$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
 			  $total_shipping += $purchase_log['base_shipping'];
 					
-				$total = (($total+$total_shipping) - $purchase_log['discount_value']);
-			// $message.= "\n\r";
+				$total = $purchase_log['totalprice'];
+				// echo $total;
+				// $message.= "\n\r";
 				$product_list.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
 				if($purchase_log['discount_value'] > 0) {
 					$discount_email.= TXT_WPSC_DISCOUNT."\n\r: ";
@@ -168,7 +169,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$product_list_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
 				if($purchase_log['discount_value'] > 0) {
 					$report.= $discount_email."\n\r";
-
 					$total_shipping_html.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
 				$total_shipping_html.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n";
@@ -182,6 +182,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
         
         
+				//echo "<pre>".print_r($purchase_log,true)."</pre>";
         $message = str_replace('%product_list%',$product_list,$message);
         $message = str_replace('%total_shipping%',$total_shipping_email,$message);
         $message = str_replace('%total_price%',$total_price_email,$message);

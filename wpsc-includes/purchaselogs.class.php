@@ -249,7 +249,10 @@ function wpsc_purchaselog_details_date(){
 }
 function wpsc_purchaselog_details_total(){
 	global $purchlogitem;
-	$total = $purchlogitem->purchitem->price*$purchlogitem->purchitem->quantity+$purchlogitem->extrainfo->discount_value+$purchlogitem->purchitem->tax_charged;
+	$total = 0;
+  $total += ($purchlogitem->purchitem->price*$purchlogitem->purchitem->quantity);
+  $total += ($purchlogitem->purchitem->tax_charged*$purchlogitem->purchitem->quantity);
+  $total += $purchlogitem->extrainfo->discount_value;
 	$purchlogitem->totalAmount += $total;
 	return $total;
 }
