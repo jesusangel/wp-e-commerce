@@ -184,6 +184,25 @@ function gateway_google(){
 	echo $cart->CheckoutButtonCode($google_button_size);
 }
 
+function wpsc_google_checkout_page(){
+	 $script = "<script type='text/javascript'>
+	 				jQuery(document).ready(
+  						function()
+ 						 {
+	 						jQuery('div#wpsc_shopping_cart_container h2').hide();
+	 						jQuery('div#wpsc_shopping_cart_container .wpsc_cart_shipping').hide();
+ 							jQuery('.wpsc_checkout_forms').hide();
+	 					});
+	 			</script>";
+	 $options = get_option('payment_gateway');
+	 if($options == 'google'){
+		echo $script;
+ 		gateway_google();
+	 }
+
+ 
+}
+add_action('wpsc_before_form_of_shopping_cart', 'wpsc_google_checkout_page');
 function submit_google() {
 	if($_POST['google_id'] != null) {
 		update_option('google_id', $_POST['google_id']);
