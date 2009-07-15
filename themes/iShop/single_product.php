@@ -81,6 +81,8 @@ $image_height = get_option('single_view_image_height');
             ?>
 						</p>
 					<?php endif; ?>
+
+					<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
 				
 					<?php /** the custom meta HTML and loop */?>
 					<div class="custom_meta">
@@ -165,7 +167,7 @@ $image_height = get_option('single_view_image_height');
 					
 					
 					<!-- END OF QUANTITY OPTION -->
-					<?php if(get_option('addtocart_or_buynow') !='1') : ?>
+					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : ?>
 						<?php if(wpsc_product_has_stock()) : ?>
 							<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 										<?php	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
@@ -185,7 +187,7 @@ $image_height = get_option('single_view_image_height');
 					<?php endif ; ?>
 					</form>
 					
-					<?php if(get_option('addtocart_or_buynow')=='1') : ?>
+					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : ?>
 						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>
 					<?php endif ; ?>
 					
@@ -217,6 +219,5 @@ $image_height = get_option('single_view_image_height');
 			echo fancy_notifications();
 		}
 		?>
-		<div class="clear"/>
-	</div>
+		<div class="clear"></div>
 </div>
