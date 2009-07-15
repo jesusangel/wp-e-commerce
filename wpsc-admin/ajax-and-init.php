@@ -833,10 +833,18 @@ function wpsc_swfupload_images() {
 			}
 		} else {
 			// if thereare no images
-			$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+			if($product_id > 0) {
+				$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+			} else {
+				$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
+				copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
+				$src = basename($file['name']);
+			}
+			
+			
 			if($src != null) {
 			
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
 				$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
 				
 				if($product_id > 0) {
@@ -854,19 +862,29 @@ function wpsc_swfupload_images() {
 	} else {
 		// Otherwise...
 		$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
-		
-		$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
-		if($src != null) {
+		$image_replaced = false;
+		if($product_id > 0) {
+			$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+		} else {
+			$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
+			copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
 			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
+			$src = basename($file['name']);
+		}
+			
+		//$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
+		if($src != null) {
+			//$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
 			$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
 			if($product_id > 0) {
 				$previous_image = $wpdb->get_var("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$id}' WHERE `id`='{$product_id}' LIMIT 1");
+				$image_replaced = true;
 			}
 			$output .= "upload_status=1;\n";
 			$output .= "image_src='".$src."';\n";
 			$output .= "image_id='$id';\n";
 			$output .= "product_id='$product_id';\n";
-			if(strlen($previous_image) > 0) {
+			if($image_replaced == true) {
 				$output .= "replace_existing=1;";
 			} else {
 				$output .= "replace_existing=0;";

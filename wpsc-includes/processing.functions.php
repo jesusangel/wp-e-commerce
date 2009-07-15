@@ -381,13 +381,6 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 				$width  = (int)get_option('product_image_width');
 				break;
 			}
-// 			if(($resize_method == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
-// 				$imagefield='thumbnailImage';
-// 				$image= image_processing($_FILES['thumbnailImage']['tmp_name'], (WPSC_THUMBNAIL_DIR.$image_name),null,null,$imagefield);
-// 				$thumbnail_image = $image;
-// 			} else {
-			//	exit($height.' '.$width);	
-				// exit('Aha!'.(int)get_option('product_image_height'));	
 					if($width < 1) {
 						$width = 96;
 					}
@@ -442,17 +435,7 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 		}
 	} else {
 			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$id."' LIMIT 1",ARRAY_A);
-			//exit("<pre>".print_r($image_data,true)."</pre>");
-			
-// 		if(($_POST['image_resize'] == 3) && ($_FILES['thumbnailImage'] != null) && file_exists($_FILES['thumbnailImage']['tmp_name'])) {
-// 			$imagefield='thumbnailImage';
-// 			$image=image_processing($_FILES['thumbnailImage']['tmp_name'], WPSC_THUMBNAIL_DIR.$_FILES['thumbnailImage']['name'],null,null,$imagefield);
-// 			$thumbnail_image = $image;
-// 			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `thumbnail_image` = '".$thumbnail_image."' WHERE `id` = '".$image_data['id']."'");
-// 			$stat = stat( dirname( (WPSC_THUMBNAIL_DIR.$image_data['image']) ));
-// 			$perms = $stat['mode'] & 0000775;
-// 			@ chmod( (WPSC_THUMBNAIL_DIR.$image_data['image']), $perms );	
-// 		}
+
 		$image = false;
 	}
   return $image;

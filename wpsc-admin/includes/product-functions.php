@@ -402,15 +402,29 @@ function wpsc_update_custom_meta($product_id, $post_data) {
 function wpsc_update_product_images($product_id, $post_data) {
   global $wpdb;
   $uploaded_images = array();
-  
+
+  // This segment is for associating the images uploaded using swfuploader when adding a product
   foreach((array)$post_data['gallery_image_id'] as $added_image) {
-    $uploaded_images[] = absint($added_image);
+		if($added_image > 0) {
+			$uploaded_images[] = absint($added_image);
+    }
   }
   if(count($uploaded_images) > 0) {
 		$uploaded_image_data = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` IN (".implode(', ', $uploaded_images).") AND `product_id` = '0'");
-
-		foreach($uploaded_image_data as $uploaded_image_id) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `product_id` = '$product_id' WHERE `id` = '{$uploaded_image_id}' LIMIT 1;");
+		if(count($uploaded_image_data) > 0) {
+			$first_image = null;
+			foreach($uploaded_image_data as $uploaded_image_id) {
+				if($first_image === null) {
+					$first_image = absint($uploaded_image_id);
+				}
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `product_id` = '$product_id' WHERE `id` = '{$uploaded_image_id}' LIMIT 1;");
+			}
+			
+			$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
+			if($previous_image == 0) {
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$first_image}' WHERE `id`='{$product_id}' LIMIT 1");
+			}
+			wpsc_resize_image_thumbnail($product_id, 1);
 		}
 	}
 
@@ -451,20 +465,15 @@ function wpsc_update_product_images($product_id, $post_data) {
  */
 function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, $height = 0, $custom_image = null) {
   global $wpdb;
-//	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
 	$image_id = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}' LIMIT 1");
 	$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
 	
-	
-	//exit($image);
 	// check if there is an image that is supposed to be there.
 	if($image != '') {
 		if(is_numeric($image)){			
 		}
 	  // check that is really there
-// 	  exit($image);
 	  if(file_exists(WPSC_IMAGE_DIR.$image)) {
-	     //exit((string)$image_action);
 			// if the width or height is less than 1, set the size to the default
 	    if((($width  < 1) || ($height < 1)) && ($image_action != 3)) {
 	      $image_action = 1;

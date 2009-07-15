@@ -445,7 +445,7 @@ function wpsc_submit_checkout() {
   } else {
 		$is_valid = false;
   }
-  	if((get_option('do_not_use_shipping') != 1) && (in_array('ups', $options)) && $_SESSION['wpsc_zipcode'] == '')	{
+  	if((get_option('do_not_use_shipping') != 1) && (in_array('ups', (array)$options)) && $_SESSION['wpsc_zipcode'] == '')	{
 		//exit('Not being called');
 		$_SESSION['categoryAndShippingCountryConflict'] = __('Please enter a Zipcode and click calculate to proceed');
 		$is_valid = false;		

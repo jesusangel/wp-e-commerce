@@ -154,7 +154,45 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		output_html += "	<img src='"+WPSC_URL+"/images/cross.png' class='deleteButton' alt='-' style='display: none;'/>\n";
 		output_html += "	</div>\n";
 		output_html += "</li>\n";
-		jQuery("ul#gallery_list").append(output_html);
+		if(replace_existing == 1) {
+			jQuery("ul#gallery_list").html(output_html);
+			
+			input_set = jQuery.makeArray(jQuery("#gallery_list li:not(.ui-sortable-helper) input.image-id"));
+			set = new Array();
+			for( var i in input_set) {
+				set[i] = jQuery(input_set[i]).val();
+			}
+			//console.log(set);
+
+			img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
+
+			jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
+			jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt ='' /></a>");
+			jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
+
+			for(i=1;i<set.length;i++) {
+				jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
+				jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+
+				element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
+				if(element_id == 0) {
+					jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
+				}
+			}
+
+			order = set.join(',');
+			product_id = jQuery('#product_id').val();
+
+
+			postVars = "admin=true&ajax=true&product_id="+product_id+"&imageorder=true&order="+order;
+			jQuery.post( 'index.php?admin=true&ajax=true', postVars, function(returned_data) {
+					eval(returned_data);
+					jQuery('#gallery_image_'+ser).append(output);
+			});
+		} else {
+			jQuery("ul#gallery_list").append(output_html);
+			///jQuery("#gallery_list").trigger( 'update' );
+		}
 	}
 
 		//jQuery('#media-item-' + fileObj.id + ' .progress').show();
