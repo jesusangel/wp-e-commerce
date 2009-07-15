@@ -1164,7 +1164,7 @@ table.logdisplay {
 }
 
 select#current_country {
-  width: 204px;
+margin-right:10px;
 }
 
 input#zipcode {

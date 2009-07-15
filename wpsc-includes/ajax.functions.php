@@ -374,16 +374,19 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 	* No parameters, returns nothing
 */
 function wpsc_submit_checkout() {
-  global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways;
+  global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways, $wpsc_shipping_modules;
 	$_SESSION['wpsc_checkout_misc_error_messages'] = array();
 	$wpsc_checkout = new wpsc_checkout();
 	//exit('coupons:'.$wpsc_cart->coupons_name);
 	$selected_gateways = get_option('custom_gateway_options');
 	$submitted_gateway = $_POST['custom_gateway'];
 
-	
+	$options = get_option('custom_shipping_options');
 	$form_validity = $wpsc_checkout->validate_forms();
-	// 	exit('<pre>'.print_r($form_validity, true).'</pre>');
+	
+	//exit('<pre>'.print_r($_POST, true).'</pre>');
+
+	//	exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
  	if(isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email']) ) {
 		$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);
@@ -442,9 +445,11 @@ function wpsc_submit_checkout() {
   } else {
 		$is_valid = false;
   }
-  
-
-	 //exit('Valid?<pre>'.print_r($is_valid, true).'</pre>');
+  	if((get_option('do_not_use_shipping') != 1) && (in_array('ups', $options)) && $_SESSION['wpsc_zipcode'] == '')	{
+		//exit('Not being called');
+		$_SESSION['categoryAndShippingCountryConflict'] = __('Please enter a Zipcode and click calculate to proceed');
+		$is_valid = false;		
+	}
 	if($is_valid == true || $_GET['gateway'] == 'noca') {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones

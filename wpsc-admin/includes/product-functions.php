@@ -403,7 +403,7 @@ function wpsc_update_product_images($product_id, $post_data) {
   global $wpdb;
   $uploaded_images = array();
   
-  foreach($post_data['gallery_image_id'] as $added_image) {
+  foreach((array)$post_data['gallery_image_id'] as $added_image) {
     $uploaded_images[] = absint($added_image);
   }
   if(count($uploaded_images) > 0) {

@@ -209,6 +209,7 @@ class ups {
 			$_SESSION['wpsc_shipping_cache_check']['weight'] = $weight;
 			$_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_list;
 		}
+		$shipping_list = array_reverse($shipping_list);
 		return $shipping_list;
 	}
 	

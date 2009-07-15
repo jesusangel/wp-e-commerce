@@ -68,6 +68,7 @@ if(wpsc_cart_item_count() > 0) :
 		<p class='validation-error'><?php echo $_SESSION['nocamsg']; ?></p>
 	<?php do_action('wpsc_before_shipping_of_shopping_cart'); ?>
 	<?php endif; ?>
+	
 	<div id='wpsc_shopping_cart_container'>
 	<?php if(wpsc_uses_shipping()) : ?>
 		<h2><?php echo TXT_WPSC_SHIPPING_COUNTRY; ?></h2>
@@ -94,7 +95,7 @@ if(wpsc_cart_item_count() > 0) :
 					<form name='change_country' id='change_country' action='' method='post'>
 						<?php echo wpsc_shipping_country_list();?>
 						<input type='hidden' name='wpsc_update_location' value='true' />
-						<input type='submit' name='wpsc_submit_zipcode' value='Submit' />
+						<input type='submit' name='wpsc_submit_zipcode' value='Calculate' />
 					</form>
 				
 				</td>

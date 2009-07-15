@@ -518,7 +518,7 @@ class wpsc_cart {
 	  $this->shipping_methods = get_option('custom_shipping_options');
 	  $this->shipping_method_count = count($this->shipping_methods);
 		
-		if((get_option('do_not_use_shipping') != 1) && (count($this->shipping_methods) > 0) ) {
+		if((get_option('do_not_use_shipping') != 1) && (count($this->shipping_methods) > 0)  ) {
 			if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
 				//unset($this->selected_shipping_method);
 			}
@@ -1209,6 +1209,7 @@ class wpsc_cart {
 			$unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
 
     }
+   // exit('<pre>'.print_r($unprocessed_shipping_quotes,true).'</pre>');
     $num = 0;
     foreach((array)$unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
       
@@ -1267,6 +1268,7 @@ class wpsc_cart {
 	
 	function the_shipping_quote() {
 		$this->shipping_quote = $this->next_shipping_quote();
+		
 	}
 	
 	function have_shipping_quotes() {
