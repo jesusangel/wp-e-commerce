@@ -63,15 +63,9 @@ class weightrate {
 	function getQuote() {
 		global $wpdb, $wpsc_cart;
 		$weight = $wpsc_cart->calculate_total_weight();
-	  //echo('<pre>'.print_r($weight, true).'</pre>');
-		
-	//	$shopping_cart = $_SESSION['nzshpcrt_cart'];
-	//	exit('<pre>'.print_r($shopping_cart,true).'</pre>');
-		//$weight = shopping_cart_total_weight();
 		$layers = get_option('weight_rate_layers');
-		//echo "Weight <pre>".print_r($weight,true)."</pre>";
 		if ($layers != '') {
-			$layers = array_reverse($layers,true);
+			krsort($layers);
 			foreach ($layers as $key => $shipping) {
 				if ($weight >= (float)$key) {
 					return array("Weight Rate"=>$shipping);
@@ -89,7 +83,7 @@ class weightrate {
 	function get_cart_shipping($total_price, $weight) {
 		$layers = get_option('weight_rate_layers');
 		if ($layers != '') {
-			$layers = array_reverse($layers,true);
+			krsort($layers);
 			foreach ($layers as $key => $shipping) {
 				if ($weight >= (float)$key) {
 					$output = $shipping;

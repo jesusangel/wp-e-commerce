@@ -22,7 +22,7 @@ define('TXT_WPSC_EDIT_GROUP', 'Edit Group');
 define('TXT_WPSC_ADD_GROUP', 'Add Group');
 define('TXT_SHOW_GRID_PER_ROW', 'Products Per Row');
 define('TXT_WPSC_PRODUCT_TAGS', 'Product Tags');
-define('TXT_WPSC_CATEGORISATION', 'Product Categories');
+define('TXT_WPSC_CATEGORISATION', 'Categories');
 define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
 define('TXT_WPSC_NOITEMSINTHISGROUP', 'There are no products in this group.');
 
@@ -343,10 +343,10 @@ define('TXT_WPSC_ABOUT_THIS_PAGE', 'About This Page');
 define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Order Pending: Payment Required');
 define('TXT_WPSC_SELECTALLCATEGORIES', 'Show All Products');
 
-define('TXT_WPSC_CURRENT_GROUP', '[categorisation] group');
-define('TXT_WPSC_EDITING_GROUP', 'You are editing the [categorisation] group');
-define('TXT_WPSC_ADDING_TO_GROUP', 'You are adding a new item to the [categorisation] group');
-define('TXT_WPSC_EDITING_IN_GROUP', 'You are editing an item in the [categorisation] group');
+define('TXT_WPSC_CURRENT_GROUP', '&quot;[categorisation]&quot; Group');
+define('TXT_WPSC_EDITING_GROUP', 'You are editing the &quot;[categorisation]&quot; Group');
+define('TXT_WPSC_ADDING_TO_GROUP', 'You are adding a new item to the &quot;[categorisation]&quot; Group');
+define('TXT_WPSC_EDITING_IN_GROUP', 'You are editing an item in the &quot;[categorisation]&quot; Group');
 
 
 define('TXT_WPSC_PURCHASE_UNAVAILABLE', 'Purchase unavailable options');
@@ -433,7 +433,9 @@ define('TXT_WPSC_ADD_CATEGORISATION', 'Add New Group');
 define('TXT_WPSC_EDIT_CATEGORISATION', 'Edit Group');
 define('TXT_WPSC_ADDDETAILS', 'Add Details');
 define('TXT_WPSC_EDITDETAILS', 'Edit Details');
-define('TXT_WPSC_ADDNEWCATEGORY', 'Add New [categorisation] &raquo;');
+define('TXT_WPSC_ADDING_A_NEW_CATEGORY', 'Adding a new category here will make it available when you add or edit a product.');
+define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'Add Category');
+define('TXT_WPSC_ADDNEWCATEGORY', '+ Add new category to the &quot;[categorisation]&quot; Group');
 define('TXT_WPSC_VALUE', 'Value');
 define('TXT_WPSC_CUSTOM_META', 'Custom Meta');
 define('TXT_WPSC_ADD_CUSTOM_FIELD', 'Add Custom Meta');
@@ -442,11 +444,11 @@ define('TXT_WPSC_SAVE', 'Save');
 
 
 
-define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', 'Display [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', 'Display &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
-define('TXT_WPSC_PRODUCT_CATEGORIES', 'Select [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_PRODUCT_CATEGORIES', 'Select &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
-define('TXT_WPSC_MANAGE_CATEGORISATION', 'Manage [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_MANAGE_CATEGORISATION', 'Manage &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
 
 
@@ -664,7 +666,7 @@ define('TXT_WPSC_PEOPLEGIVEN', 'people have given this image');
 define('TXT_WPSC_PEOPLEGIVEN2', 'stars.');
 define('TXT_WPSC_ITEMHASBEENADDED', 'The item has been added');
 define('TXT_WPSC_ITEMHASNOTBEENADDED', 'The item has not been added');
-define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Product Group');
+//define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Product Group');
 define('TXT_WPSC_SUBMIT', 'Submit');
 define('TXT_WPSC_SELECTAVALIDCATEGORY', 'Please select a valid Product Group');
 define('TXT_WPSC_PRODUCTNAME', 'Product Name');

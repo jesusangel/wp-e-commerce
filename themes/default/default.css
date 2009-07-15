@@ -907,9 +907,35 @@ div#form_field_form_container{ padding: 0px; margin: 0px; }
 
 div#form_field_form_container div, div#form_field_form_container div table{  padding: 0px;  margin: 0px;  width: 100%;  border-collapse: collapse; }  
 
-div#form_field_form_container div table tr td{ padding: 0px; margin: 0px; }  
+div#form_field_form_container div table tr td{ padding: 0px; margin: 0px; }
 
-div.order_status{ border: 1px solid #eeeeee; display: none; width: 100%; }
+table.logdisplay td.details {
+  padding: 0px;
+}
+
+div.order_status {
+	border-bottom: 1px solid #eeeeee;
+	display: none;
+	width: 100%;
+	text-align: left;
+	padding:13px 8px 1px 9px;
+}
+
+div.order_status table {
+  width: 97%;
+}
+
+div.order_status table.logdisplay{
+	margin: 4px 0px 4px 0px;
+}
+
+div.order_status table.customer_details {
+	margin: 4px 0px 4px 0px;
+}
+
+div.order_status table.customer_details tr td {
+	text-align: left;
+}
 
 div.order_status div{ width: 100%; padding:0px 0px 1ex 0px; display: block !important;}
   

@@ -85,7 +85,7 @@ class tablerate {
 		//echo "<pre>".print_r($layers,true)."</pre>";
 		
 		if ($layers != '') {
-			$layers = array_reverse($layers,true);
+			krsort($layers);
 			foreach ($layers as $key => $shipping) {
 				if ($price >= (float)$key) {
 				  //echo "<pre>$price $key</pre>";
@@ -128,7 +128,7 @@ class tablerate {
 	function get_cart_shipping($total_price, $weight) {
 		$layers = get_option('table_rate_layers');
 		if ($layers != '') {
-			$layers = array_reverse($layers,true);
+			krsort($layers);
 			foreach ($layers as $key => $shipping) {
 				if ($total_price >= (float)$key) {
 					$output = $shipping;

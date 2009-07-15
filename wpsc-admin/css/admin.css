@@ -983,10 +983,18 @@ div#productform{ display: none; width: 99.5%; }
 div#edititem27{ display: none; width: 586px; }
 
 div#productform table tr td{ height: 11px !important; }
- 
-div#additem{ display: block;}
 
-/* div#additem table tr td{ height: 11px; } */
+
+
+
+div#blank_item{ display: block;}
+ 
+#poststuff div#blank_item h3{
+	margin-top: 0px;
+
+}
+ 
+div#additem{ display: none;}
 
 div#productform td.itemfirstcol{ padding-left:4px;  vertical-align: top; }
 
@@ -1115,9 +1123,10 @@ div.editing_this_group dl {
 }
 
 
-a.add_category_link{
+#blank_item a.add_category_link{
  display: block;
- margin: 8px;
+ margin: 8px 8px 8px 0px;
+ text-decoration: underline;
 }
 
 div.product_group {

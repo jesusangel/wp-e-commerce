@@ -661,10 +661,10 @@ function wpsc_edShowButton(button, i) {
 function fillcategoryform(catid) {
   post_values = 'ajax=true&admin=true&catid='+catid;
 	jQuery.post( 'index.php', post_values, function(returned_data) {
-	  
 		jQuery('#formcontent').html( returned_data );
 		jQuery('form.edititem').css('display', 'block');
 		jQuery('#additem').css('display', 'none');
+		jQuery('#blank_item').css('display', 'none');
 		jQuery('#productform').css('display', 'block');
 		jQuery("#loadingindicator_span").css('visibility','hidden');
 	});
@@ -674,8 +674,9 @@ function submit_status_form(id) {
   document.getElementById(id).submit();
 } 
 function showaddform() {
-   document.getElementById('productform').style.display = 'none';
-   document.getElementById('additem').style.display = 'block';
+   jQuery('#blank_item').css('display', 'none');
+   jQuery('#productform').css('display', 'none');
+   jQuery('#additem').css('display', 'block');
    return false;
 }
 //used to add new form fields in the checkout setting page

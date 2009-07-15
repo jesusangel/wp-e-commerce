@@ -48,7 +48,7 @@ $date_list[0]['end'] = $end_timestamp;
         if($purchase_log != null) {
           echo "<tr class='toprow'>";
           
-          echo " <td'>";
+          echo " <td>";
           echo TXT_WPSC_STATUS;
           echo " </td>";
             
@@ -110,8 +110,8 @@ $date_list[0]['end'] = $end_timestamp;
               $billing_country = $country_data[0]['value'];
               $shipping_country = $country_data[0]['value'];
             }
-            echo nzshpcrt_currency_display(nzshpcrt_find_total_price($purchase['id'],$shipping_country),1);
-            $subtotal += nzshpcrt_find_total_price($purchase['id'],$shipping_country);
+            echo nzshpcrt_currency_display($purchase['totalprice'],1);
+            $subtotal += $purchase['totalprice'];
             echo " </td>\n\r";
       
             
@@ -133,70 +133,59 @@ $date_list[0]['end'] = $end_timestamp;
         
             echo "</tr>\n\r";
             
-            $stage_list_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` ORDER BY `id` ASC";
-            $stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);
-            
+            //$stage_list_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` ORDER BY `id` ASC";
+            //$stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);
+
             echo "<tr>\n\r";
-            echo " <td colspan='$col_count'>\n\r";
+            echo " <td colspan='$col_count' class='details'>\n\r";
             echo "  <div id='status_box_".$purchase['id']."' class='order_status' $status_style>\n\r";
             echo "  <div>\n\r";
 
             //order status code lies heret
             $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
             $stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
-            echo "  <strong class='form_group'>".TXT_WPSC_ORDER_STATUS."</strong>\n\r";
-            echo "  <form>\n\r";
-            echo "  <ul style='text-align:left;'>\n\r";
-            foreach((array)$stage_list_data as $stage) {
-              $selected = '';
-              if($stage['id'] == $purchase['processed']) {
-                $selected = "checked='checked'";
-                }
-              $button_id = "button_".$purchase['id']."_".$stage['id'];
-              echo "    <li><input readonly='true' type='radio' name='value' $selected value='".$stage['id']."' onclick='this.blur(); return false;' id='".$button_id."'/><label for='$button_id'>".$stage['name']."</label>\n\r";
-              }
-            echo "  </ul>\n\r";
-            echo "  </form>\n\r";
+            echo "  <strong class='form_group'>".TXT_WPSC_ORDER_STATUS.":</strong>\n\r";
+            echo $stage_data['name']."<br /><br />";
 
            //written by allen
-	$usps_id = get_option('usps_user_id');
-	if ($usps_id!=null) {
-		$XML1 = "<TrackFieldRequest USERID=\"$usps_id\"><TrackID ID=\"".$purchase['track_id']."\"></TrackID></TrackFieldRequest>";
-		//eecho cho  "--->".$purchase['track_id'];
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "http://secure.shippingapis.com/ShippingAPITest.dll?");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		$postdata = "API=TrackV2&XML=".$XML1;
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
-// 		$result = curl_exec($ch);
-		
-		$parser = new xml2array;
-		$parsed = $parser->parse($result);
-		$parsed = $parsed[0]['children'][0]['children'];
-		if($purchase['track_id'] != null){
-			echo "<br /><br />";
-			echo " <strong class='form_group'>".TXT_WPSC_SHIPPING_DETAILS."</strong>\n\r";
-			echo "<table>";
-			foreach((array)$parsed as $parse){
-				if ($parse['name'] == "TRACKSUMMARY")
-				foreach((array)$parse['children'] as $attrs){
-					if ($attrs['name']!="EVENT")
-					$attrs['name'] = str_replace("EVENT", "", $attrs['name']);
-					$bar = ucfirst(strtolower($attrs['name']));
-					echo "<tr><td>".$bar."</td><td>".$attrs['tagData']."</td></tr>";
-				}
-			}
-			echo "</table>";
-		}	
-	echo "<br /><br />";
-	}
-	   //end of written by allen
+					$usps_id = get_option('usps_user_id');
+					if ($usps_id!=null) {
+						$XML1 = "<TrackFieldRequest USERID=\"$usps_id\"><TrackID ID=\"".$purchase['track_id']."\"></TrackID></TrackFieldRequest>";
+						//eecho cho  "--->".$purchase['track_id'];
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, "http://secure.shippingapis.com/ShippingAPITest.dll?");
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+						curl_setopt($ch, CURLOPT_POST, 1);
+						curl_setopt($ch, CURLOPT_HEADER, 0);
+						$postdata = "API=TrackV2&XML=".$XML1;
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+				// 		$result = curl_exec($ch);
+
+						$parser = new xml2array;
+						$parsed = $parser->parse($result);
+						$parsed = $parsed[0]['children'][0]['children'];
+						if($purchase['track_id'] != null){
+							echo "<br /><br />";
+							echo " <strong class='form_group'>".TXT_WPSC_SHIPPING_DETAILS."</strong>\n\r";
+							echo "<table>";
+							foreach((array)$parsed as $parse){
+								if ($parse['name'] == "TRACKSUMMARY")
+								foreach((array)$parse['children'] as $attrs){
+									if ($attrs['name']!="EVENT")
+									$attrs['name'] = str_replace("EVENT", "", $attrs['name']);
+									$bar = ucfirst(strtolower($attrs['name']));
+									echo "<tr><td>".$bar."</td><td>".$attrs['tagData']."</td></tr>";
+								}
+							}
+							echo "</table>";
+						}
+					echo "<br /><br />";
+					}
+			//end of written by allen
 
 
 	     //cart contents display starts here;
-            echo "  <strong class='form_group'>".TXT_WPSC_ORDER_DETAILS."</strong>\n\r";
+            echo "  <strong class='form_group'>".TXT_WPSC_ORDER_DETAILS.":</strong>\n\r";
             $cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase['id']."";
             $cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
             $j = 0;
@@ -233,63 +222,51 @@ $date_list[0]['end'] = $end_timestamp;
       
               echo "</tr>";
               $endtotal = 0;
-              foreach((array)$cart_log as $cart_row)
-                {
+              foreach((array)$cart_log as $cart_row) {
                 $alternate = "";
                 $j++;
-                if(($j % 2) != 0)
-                  {
+                if(($j % 2) != 0) {
                   $alternate = "class='alt'";
-                  }
+								}
                 $productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
                 $product_data = $wpdb->get_results($productsql,ARRAY_A); 
               
                 $variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$cart_row['id']."'";
                 $variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
                 $variation_count = count($variation_data);
-                if($variation_count > 1)
-                  {
+                if($variation_count > 1) {
                   $variation_list = " (";
                   $i = 0;
-                  foreach((array)$variation_data as $variation)
-                    {
-                    if($i > 0)
-                      {
+                  foreach((array)$variation_data as $variation) {
+                    if($i > 0) {
                       $variation_list .= ", ";
-                      }
+										}
                     $value_id = $variation['value_id'];
                     $value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
                     $variation_list .= $value_data[0]['name'];              
                     $i++;
-                    }
+									}
                   $variation_list .= ")";
-                  }
-                  else if($variation_count == 1)
-                    {
-                    $value_id = $variation_data[0]['value_id'];
-                    $value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-                    $variation_list = " (".$value_data[0]['name'].")";
-                    }
-                    else
-                      {
-                      $variation_list = '';
-                      }
+								} else if($variation_count == 1) {
+									$value_id = $variation_data[0]['value_id'];
+									$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
+									$variation_list = " (".$value_data[0]['name'].")";
+								} else {
+									$variation_list = '';
+								}
                 
                                 
-                if($purch_data[0]['shipping_country'] != '')
-                  {            
+                if($purch_data[0]['shipping_country'] != '') {
                   $billing_country = $purch_data[0]['billing_country'];
                   $shipping_country = $purch_data[0]['shipping_country'];
-                  }
-                  else
-                    {          
-                    $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-                    $country_data = $wpdb->get_results($country_sql,ARRAY_A);
-                    $billing_country = $country_data[0]['value'];
-                    $shipping_country = $country_data[0]['value'];
-                    }
+								} else {
+									$country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+									$country_data = $wpdb->get_results($country_sql,ARRAY_A);
+									$billing_country = $country_data[0]['value'];
+									$shipping_country = $country_data[0]['value'];
+								}
                 
-                $shipping = nzshpcrt_determine_item_shipping($cart_row['prodid'], $cart_row['quantity'], $shipping_country);
+                $shipping = $cart_row['pnp'];
                 $total_shipping += $shipping;
                 echo "<tr $alternate>";
             
@@ -308,7 +285,9 @@ $date_list[0]['end'] = $end_timestamp;
                 echo " </td>";
             
                 echo " <td>";
-                $gst = $price - ($price  / (1+($cart_row['gst'] / 100)));
+                $gst = $cart_row['tax_charged'];
+                $endtotal += $gst * $cart_row['quantity'];
+                
                 echo nzshpcrt_currency_display($gst, 1);
                 echo " </td>";
             
@@ -318,11 +297,11 @@ $date_list[0]['end'] = $end_timestamp;
             
                 echo " <td>";
                 $endtotal += $price;
-                echo nzshpcrt_currency_display(($shipping + $price), 1);
+                echo nzshpcrt_currency_display(($shipping + $price + ($gst * $cart_row['quantity'])), 1);
                 echo " </td>";
                       
                 echo '</tr>';
-                }
+							}
               echo "<tr >";
             
               echo " <td>";
@@ -340,7 +319,7 @@ $date_list[0]['end'] = $end_timestamp;
               echo " </td>";
           
               echo " <td>";
-              $total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);      
+              $total_shipping = $purchase['base_shipping'];
               $endtotal += $total_shipping;    
               echo nzshpcrt_currency_display($total_shipping, 1) . "<br />";
               echo nzshpcrt_currency_display($endtotal,1);
@@ -354,45 +333,34 @@ $date_list[0]['end'] = $end_timestamp;
               
       
               
-              echo "<strong>".TXT_WPSC_CUSTOMERDETAILS."</strong>";
-              echo "<table>";
+              echo "<strong>".TXT_WPSC_CUSTOMERDETAILS.":</strong>";
+              echo "<table class='customer_details'>";
               $form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE  `log_id` = '".$purchase['id']."'";
               $input_data = $wpdb->get_results($form_sql,ARRAY_A);
               //exit("<pre>".print_r($input_data,true)."</pre>");
-              if($input_data != null)
-                {
-                foreach((array)$input_data as $form_field)
-                  {
+              if($input_data != null) {
+                foreach((array)$input_data as $form_field) {
                   $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `id` = '".$form_field['form_id']."' LIMIT 1";
                   $form_data = $wpdb->get_results($form_sql,ARRAY_A);
-                  if($form_data != null)
-                    {
+                  if($form_data != null) {
                     $form_data = $form_data[0];
-                    if($form_data['type'] == 'country' )
-                      {
-                      if($form_field['value'] != null)
-                        {
+                    if($form_data['type'] == 'country' ) {
+                      if($form_field['value'] != null) {
                         echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($form_field['value'])."</td></tr>";
-                        }
-                        else
-                          {
-                          echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($purchase['shipping_country'])."</td></tr>";                    
-                          }
-                      }
-                      else
-                        {
-                        echo "  <tr><td>".$form_data['name'].":</td><td>".$form_field['value']."</td></tr>";
-                        }
-                    }
-                  }
-                }
-                else
-                  {
-                  echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purchase['firstname']." ".$purchase['lastname']."</td></tr>";
-                  echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purchase['address']."</td></tr>";
-                  echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purchase['phone']."</td></tr>";
-                  echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purchase['email']."</td></tr>";
-                  }
+											} else {
+												echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($purchase['shipping_country'])."</td></tr>";
+											}
+										} else {
+											echo "  <tr><td>".$form_data['name'].":</td><td>".$form_field['value']."</td></tr>";
+										}
+									}
+								}
+							} else {
+								echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purchase['firstname']." ".$purchase['lastname']."</td></tr>";
+								echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purchase['address']."</td></tr>";
+								echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purchase['phone']."</td></tr>";
+								echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purchase['email']."</td></tr>";
+							}
               
               if(get_option('payment_method') == 2)
                 {
