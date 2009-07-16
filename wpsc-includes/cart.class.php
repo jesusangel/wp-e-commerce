@@ -1039,18 +1039,13 @@ class wpsc_cart {
     if($method == null) {
       $method = $this->selected_shipping_method;
     }
-		
-    if(($this->total_item_shipping == null) || ($method != $this->selected_shipping_method)) {
-			foreach((array)$this->cart_items as $cart_item) {
-				$total += $cart_item->calculate_shipping($method);
-			}
-			if($method == $this->selected_shipping_method) {
-				$this->total_item_shipping = $total;
-			}
-		} else {
-		  $total = $this->total_item_shipping;
+		foreach((array)$this->cart_items as $cart_item) {
+			$total += $cart_item->calculate_shipping($method);
 		}
-		//exit("<pre>".print_r($total,true)."<pre>");
+		if($method == $this->selected_shipping_method) {
+			$this->total_item_shipping = $total;
+		}
+		//echo("<pre>".print_r($method." ".$total,true)."</pre>");
 		return $total;
   }
   
@@ -1228,8 +1223,9 @@ class wpsc_cart {
    // exit('<pre>'.print_r($unprocessed_shipping_quotes,true).'</pre>');
     $num = 0;
     foreach((array)$unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
-      
-	  $per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
+      //$this->calculate_per_item_shipping();
+			$per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
+      //echo('<pre>'.print_r($unprocessed_shipping_quotes,true).'</pre>');
       $this->shipping_quotes[$num]['name'] = $shipping_key;
       $this->shipping_quotes[$num]['value'] = (float)$shipping_value+(float)$per_item_shipping;
       $num++;
@@ -1535,12 +1531,12 @@ class wpsc_cart_item {
     if($method === null) {
       $method = $this->cart->selected_shipping_method;
     }
-  		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			  $shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
-
+		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
+			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+			//echo("<pre>".print_r($shipping,true)."</pre>");
     }
     if($method == $this->cart->selected_shipping_method) {
-    $this->shipping = $shipping;
+			$this->shipping = $shipping;
     }
 	  return $shipping;
 	}

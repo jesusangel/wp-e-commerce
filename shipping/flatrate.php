@@ -131,6 +131,7 @@ class flatrate {
       $product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping
+        //exit("<pre>".print_r($country_code,true)."</pre>");
         if($country_code == get_option('base_country')) {
           $additional_shipping = $product_list['pnp'];
 				} else {
