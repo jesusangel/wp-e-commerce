@@ -60,7 +60,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	$data['VERSION']				= "52.0";
 	$data['METHOD']					= "DoDirectPayment";
 	$data['PAYMENTACTION']			= "Sale";
-	$data['IPADDRESS']				= $_SERVER["REMOTE_ADDR"];
+	$data['IPADDRESS']				= '127.12.12.123';//$_SERVER["REMOTE_ADDR"];
 	$data['RETURNFMFDETAILS']		= "1"; // optional - return fraud management filter data
 
 	foreach((array)$userinfo as $key => $value){
@@ -125,8 +125,8 @@ function gateway_paypal_pro($seperator, $sessionid){
 	
 	$data['AMT']			= number_format($wpsc_cart->total_price,2);
 	$data['ITEMAMT']		= number_format($wpsc_cart->subtotal,2);
-	$data['SHIPPINGAMT']	= number_format($wpsc_cart->base_shipping,2);
-	$data['TAXAMT']			= number_format($wpsc_cart->total_tax);
+	$data['SHIPPINGAMT']	= number_format($wpsc_cart->calculate_total_shipping(),2);
+	$data['TAXAMT']			= number_format($wpsc_cart->calculate_total_tax(), 2);
 	
 	// Ordered Items
 	foreach($wpsc_cart->cart_items as $i => $Item) {
@@ -150,6 +150,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	}
 //exit($transaction);
 	$response = send($transaction);
+	exit('<pre>'.print_r($data, true).'</pre>');
 	if($response->ack == 'Success' || $response->ack == 'SuccessWithWarning'){
 		//redirect to  transaction page and store in DB as a order with accepted payment
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '2' WHERE `sessionid`=".$sessionid;
