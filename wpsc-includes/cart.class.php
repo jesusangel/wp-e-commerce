@@ -1535,9 +1535,9 @@ class wpsc_cart_item {
     if($method === null) {
       $method = $this->cart->selected_shipping_method;
     }
-    
-		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+  		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
+			  $shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+
     }
     if($method == $this->cart->selected_shipping_method) {
     $this->shipping = $shipping;

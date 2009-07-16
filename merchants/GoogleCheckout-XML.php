@@ -135,7 +135,7 @@ function gateway_google(){
 	}
 	
 	$Gfilter->SetAllowUsPoBox(false);
-	$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $wpsc_cart->base_shipping);
+	$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $wpsc_cart->calculate_total_shipping());
 	$ship_1->AddShippingRestrictions($Gfilter);
 	$cart->AddShipping($ship_1);
 	//wpsc_google_shipping_quotes();
