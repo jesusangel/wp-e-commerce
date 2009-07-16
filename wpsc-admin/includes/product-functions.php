@@ -60,8 +60,6 @@ function wpsc_get_max_upload_size(){
 	* @return nothing
 */
 function wpsc_admin_submit_product() {
-
-  //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
   check_admin_referer('edit-product', 'wpsc-edit-product');
   $post_data = wpsc_sanitise_product_forms();
   if(isset($post_data['title']) && $post_data['title'] != '' && isset($post_data['category'])){
@@ -140,9 +138,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
  // exit('Image height'.get_option('product_image_height'));	
 function wpsc_insert_product($post_data, $wpsc_error = false) {
   global $wpdb;
-  //exit($post_data.'<br /><pre>'.print_r($post_data, true).'</pre>');
-
-  //echo "<pre>".print_r(wpsc_sanitise_product_forms(),true)."</pre>";
   $adding = false;
   $update = false;
   if((int)$post_data['product_id'] > 0) {
@@ -183,7 +178,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
     }
   }
    if($update === true) {
-   		//exit('being updated<pre>'.print_r($update_values,true).'</pre>');
 		$where = array( 'id' => $product_id );
 		if ( false === $wpdb->update( WPSC_TABLE_PRODUCT_LIST, $update_values, $where ) ) {
 			if ( $wpsc_error ) {
@@ -214,7 +208,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	  //echo $tidied_name."<br />";
 		$tidied_name = strtolower($tidied_name);
 		//echo $tidied_name."<br />";
-	  $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/"), array("-","-"), $tidied_name);
+	  $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
 		//echo $url_name."<br />";
 		$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
 		$extension_number = '';
@@ -222,7 +216,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 			$extension_number = (int)$similar_names['max_number']+1;
 		}
 		$url_name .= $extension_number;
-		add_product_meta($product_id, 'url_name', $url_name,true);
+		update_product_meta($product_id, 'url_name', $url_name);
 		//exit($wpdb->escape($url_name));
 	}
   

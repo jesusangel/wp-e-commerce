@@ -106,4 +106,111 @@ function wpsc_change_canonical_url($url) {
   return $url;
 }
 add_filter('aioseop_canonical_url', 'wpsc_change_canonical_url');
+
+
+
+
+
+
+
+
+
+function add_product_meta($product_id, $key, $value, $unique = false, $custom = false) {
+  global $wpdb, $post_meta_cache, $blog_id;
+  $product_id = (int)$product_id;
+  if($product_id > 0) {
+    if(($unique == true) && $wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
+      return false;
+		}
+		if(!is_string($value)) {
+			$value = maybe_serialize($value);
+		}
+    $value = $wpdb->escape($value);
+    
+    if(!$wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
+      $custom = (int)$custom;
+      $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (product_id,meta_key,meta_value, custom) VALUES ('$product_id','$key','$value', '$custom')");
+		} else {
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET meta_value = '$value' WHERE meta_key = '$key' AND product_id = '$product_id'");
+		}
+    return true;
+	}
+  return false; 
+}
+  
+function delete_product_meta($product_id, $key, $value = '') {
+  global $wpdb, $post_meta_cache, $blog_id;
+  $product_id = (int)$product_id;
+  if($product_id > 0) {
+    if ( empty($value) ) {
+      $meta_id = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key'");      
+      if(is_numeric($meta_id) && ($meta_id > 0)) {
+        $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key'");
+        }
+      } else {
+      $meta_id = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
+      if(is_numeric($meta_id) && ($meta_id > 0)) {
+        $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
+        }        
+      }
+  }
+  return true;
+}
+
+
+function get_product_meta($product_id, $key, $single = false) {
+  global $wpdb, $post_meta_cache, $blog_id;  
+  $product_id = (int)$product_id;
+  if($product_id > 0) {
+    $meta_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
+    if(is_numeric($meta_id) && ($meta_id > 0)) {      
+      if($single != false) {
+        $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
+			} else {
+        $meta_values = $wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'");
+				$meta_values = array_map('maybe_unserialize', $meta_values);
+			}
+		}
+	} else {
+    $meta_values = false;
+	}
+	
+	if (is_array($meta_values) && (count($meta_values) == 1)) {
+		return array_pop($meta_values);
+	} else {
+		return $meta_values;
+	}
+}
+
+function update_product_meta($product_id, $key, $value, $prev_value = '') {
+  global $wpdb, $blog_id;
+  $product_id = (int)$product_id;
+  if($product_id > 0) {
+		if(!is_string($value)) {
+			$value = $wpdb->escape(maybe_serialize($value));
+		}
+		
+	$value = $wpdb->escape($value);
+	
+	if(!empty($prev_value)) {
+    $prev_value = $wpdb->escape(maybe_serialize($prev_value));
+	}
+
+	
+	
+  if($wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND product_id = '$product_id'")) {
+    if (empty($prev_value)) {
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id'");
+      } else {
+      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id' AND meta_value = '$prev_value'");
+      }
+    } else {
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (product_id,meta_key,meta_value) VALUES ('$product_id','$key','$value')");
+    }
+  return true;
+  }
+}
+
+
+
 ?>

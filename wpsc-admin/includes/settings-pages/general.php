@@ -48,7 +48,7 @@ global $wpdb;
 				echo $country_data['country'];
 				$region_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".get_option('base_country')."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`") ;
 				if($country_data['has_regions'] == 1) {
-					?>&nbsp;&nbsp;&nbsp;&nbsp;<a href='<?php echo add_query_arg("isocode", get_option('base_country')); ?>'><?php echo $region_count ?> Regions</a>
+					?>&nbsp;&nbsp;&nbsp;&nbsp;<a href='<?php echo add_query_arg(array( 'page' => 'wpsc-settings', 'isocode' => get_option('base_country') )); ?>'><?php echo $region_count ?> Regions</a>
 		<?php	} else { ?>
 					<input type='hidden' name='country_id' value='<?php echo $country_data['id']; ?>' />
 					&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='country_tax' class='tax_forms' maxlength='5' size='5' value='<?php echo $country_data['tax']; ?>' />%

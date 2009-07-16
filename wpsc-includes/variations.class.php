@@ -165,6 +165,12 @@ class nzshpcrt_variations {
     if($product_data['quantity_limited'] == 0) {
       $stock_column_state = " style='display: none;'";
     }
+		$limited_stock = null;
+    if(isset($_POST['limited_stock'])) {
+      if($_POST['limited_stock'] == 'true') {
+				$limited_stock = true;
+      }
+    }
     
     
     $associated_variations = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` = '{$product_id}' ORDER BY `id` ASC",ARRAY_A);
@@ -227,7 +233,7 @@ class nzshpcrt_variations {
       // if there are no associated variations, run this function instead
       if(count($associated_variation_values) < 1) {
         $price = $wpdb->get_var("SELECT `price` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` ='{$product_id}' LIMIT 1");
-        return $this->variations_add_grid_view((array)$selected_variations, $variation_values, $price, null, $product_id);
+        return $this->variations_add_grid_view((array)$selected_variations, $variation_values, $price, $limited_stock, $product_id);
       }
       foreach((array)$associated_variation_values as $key => $associated_variation_row) {
         // generate the variation name and ID arrays

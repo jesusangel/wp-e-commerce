@@ -774,7 +774,7 @@ function wpsc_product_image_forms($product_data='') {
 						degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
 						swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
 					},
-					debug: true
+					debug: false
 				});
 			});
 		/* ]]> */

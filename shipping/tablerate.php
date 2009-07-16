@@ -77,7 +77,7 @@ class tablerate {
 		$shopping_cart = $_SESSION['nzshpcrt_cart'];
 
 		if(is_object($wpsc_cart)) {
-			$price = $wpsc_cart->calculate_subtotal();
+			$price = $wpsc_cart->calculate_subtotal(true);
 		}
 		//$price = nzshpcrt_overall_total_price();
 		$layers = get_option('table_rate_layers');

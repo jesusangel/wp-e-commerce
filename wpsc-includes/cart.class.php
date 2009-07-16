@@ -924,18 +924,28 @@ class wpsc_cart {
 	 * calculate_subtotal method 
 	 * @access public
 	 *
+	 * @param boolean for_shipping = exclude items with no shipping,
 	 * @return float returns the price as a floating point value
 	*/
-  function calculate_subtotal() {
+  function calculate_subtotal($for_shipping = false) {
     global $wpdb;
-    $total = 0;
-    if($this->subtotal == null) {
+    if($for_shipping == true ) {
+			$total = 0;
 			foreach($this->cart_items as $key => $cart_item) {
-				$total += $cart_item->total_price;
+			  if($cart_item->uses_shipping == 1) {
+					$total += $cart_item->total_price;
+				}
 			}
-			$this->subtotal = $total;
-		} else {
-		  $total = $this->subtotal;
+    } else {
+    $total = 0;
+			if($this->subtotal == null) {
+				foreach($this->cart_items as $key => $cart_item) {
+					$total += $cart_item->total_price;
+				}
+				$this->subtotal = $total;
+			} else {
+				$total = $this->subtotal;
+			}
 		}
 		return $total;
   }
@@ -943,7 +953,6 @@ class wpsc_cart {
   	/**
 	 * calculate total tax method 
 	 * @access public
-	 *
 	 * @return float returns the price as a floating point value
 	*/
   function calculate_total_tax() {
@@ -965,14 +974,21 @@ class wpsc_cart {
 	 * calculate_total_weight method 
 	 * @access public
 	 *
+	 * @param boolean for_shipping = exclude items with no shipping,
 	 * @return float returns the price as a floating point value
 	*/
-  function calculate_total_weight() {
+  function calculate_total_weight($for_shipping) {
     global $wpdb;
-    
-		foreach($this->cart_items as $key => $cart_item) {
-			//echo '<pre>'.print_r($cart_item, true).'</pre>';
-		  $total += $cart_item->weight*$cart_item->quantity;
+    if($for_shipping == true ) {
+			foreach($this->cart_items as $key => $cart_item) {
+				if($cart_item->uses_shipping == 1) {
+					$total += $cart_item->weight*$cart_item->quantity;
+				}
+			}
+    } else {
+			foreach($this->cart_items as $key => $cart_item) {
+				$total += $cart_item->weight*$cart_item->quantity;
+			}
 		}
 		return $total;
   }
