@@ -977,7 +977,7 @@ class wpsc_cart {
 	 * @param boolean for_shipping = exclude items with no shipping,
 	 * @return float returns the price as a floating point value
 	*/
-  function calculate_total_weight($for_shipping) {
+  function calculate_total_weight($for_shipping = false) {
     global $wpdb;
     if($for_shipping == true ) {
 			foreach($this->cart_items as $key => $cart_item) {
