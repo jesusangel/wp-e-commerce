@@ -362,6 +362,20 @@ function wpsc_purchlogs_have_downloads_locked(){
 	}
 	 
 }
+
+
+/* Start Order Notes (by Ben) */
+function wpsc_display_purchlog_notes() {
+	global $purchlogitem;
+	if ( isset($purchlogitem->extrainfo->notes) ) {
+		return $purchlogitem->extrainfo->notes;
+	} else {
+		return false;
+	}
+}
+/* End Order Notes (by Ben) */
+
+
 /**
  * WP eCommerce purchaselogs AND purchaselogs_items class
  *

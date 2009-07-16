@@ -210,9 +210,16 @@ if(!isset($purchlogs)){
 		 			</form>
  			</div>
  				<?php wpsc_purchlogs_custom_fields(); ?>
+ 				
+ 				
+ 				<!-- Start Order Notes (by Ben) -->
+ 				<?php wpsc_purchlogs_notes(); ?>
+				<!-- End Order Notes (by Ben) -->
+				
+ 				
 				</div>
 				</div>
-			
+				
 				<div id='wpsc_purchlogitems_links'>
 				<h3><?php _e('Actions'); ?></h3>
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
@@ -505,6 +512,28 @@ function wpsc_purchlogs_custom_fields(){
 <?php }
 
 }
+
+
+/* Start Order Notes (by Ben) */
+function wpsc_purchlogs_notes() {
+
+	if ( true ) { // Need to check if notes column exists in DB and plugin version? ?>
+	<div class="metabox-holder">
+		<div id="purchlogs_notes" class="postbox">
+		<h3 class='hndle'>Order Notes</h3>
+		<div class='inside'>
+			<form method="POST" action="">
+				<input type='hidden' name='wpsc_admin_action' value='purchlogs_update_notes' />
+				<input type='hidden' name='purchlog_id' value='<?php echo $_GET['purchaselog_id']; ?>' />
+				<p><textarea name="purchlog_notes" rows="3" wrap="virtual" id="purchlog_notes" style="width:100%;"><?php if ( isset($_POST['purchlog_notes']) ) { echo $_POST['purchlog_notes']; } else { echo wpsc_display_purchlog_notes(); } ?></textarea></p>
+				<p><input class="button" type="submit" name="button" id="button" value="Update Notes" /></p>
+			</form>
+		</div>
+	</div>
+	<?php }
+
+}
+/* End Order Notes (by Ben) */
 
 
 function wpsc_upgrade_purchase_logs() {

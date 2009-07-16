@@ -1277,6 +1277,23 @@ function wpsc_save_product_order() {
 if($_REQUEST['wpsc_admin_action'] == 'save_product_order') {
 	add_action('admin_init', 'wpsc_save_product_order');
 }
+
+
+/* Start Order Notes (by Ben) */
+function wpsc_purchlogs_update_notes($purchlog_id = '', $purchlog_notes = '' ) {
+	global $wpdb;
+	if ( ($purchlog_id == '') && ($purchlog_notes == '') ) {
+		$purchlog_id = absint($_POST['purchlog_id']);
+		$purchlog_notes = $wpdb->escape($_POST['purchlog_notes']);
+	}
+	$wpdb->query("UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET notes='{$purchlog_notes}' WHERE id='{$purchlog_id}'");
+}
+
+if ( $_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' ) {
+	add_action('admin_init', 'wpsc_purchlogs_update_notes');
+}
+/* End Order Notes (by Ben) */
+
  
 //delete a purchase log
 function wpsc_delete_purchlog($purchlog_id='') {
