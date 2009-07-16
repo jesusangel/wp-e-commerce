@@ -407,7 +407,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 						</tr>
 						<?php
 						//print_r($table_rate_price);
-						if($table_rate_price != '') {
+						if(count($table_rate_price) > 0 ) {
 							foreach($table_rate_price['quantity'] as $key => $qty) {
 								if($qty != '') {
 									?>
