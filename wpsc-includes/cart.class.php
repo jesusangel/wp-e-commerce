@@ -1461,7 +1461,7 @@ class wpsc_cart_item {
 			// if we are using table rate price
 			$levels = get_product_meta($this->product_id, 'table_rate_price');
 			if ($levels != '') {
-				foreach($levels['quantity'] as $key => $qty) {
+				foreach((array)$levels['quantity'] as $key => $qty) {
 					if ($this->quantity >= $qty) {
 						$unit_price = $levels['table_price'][$key];
 						if ($unit_price != '')

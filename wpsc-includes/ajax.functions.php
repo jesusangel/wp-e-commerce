@@ -502,7 +502,7 @@ function wpsc_submit_checkout() {
 			//exit('HERE2');
 			echo transaction_results($sessionid, true);
 		}else{
-			exit('HERE');
+			//exit('HERE');
 		}
 } else {
 	
