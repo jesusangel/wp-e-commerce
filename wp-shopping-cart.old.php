@@ -555,8 +555,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		
 		exit();
 	}
-
-
+  /*
 	if(($_GET['user'] == "true") && is_numeric($_POST['prodid'])) {
 		if(function_exists('wpsc_members_init')) {
 			$memberstatus = get_product_meta($_POST['prodid'],'is_membership',true);
@@ -603,7 +602,6 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
           $variation_stock_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
           
           $item_stock = $variation_stock_data['stock'];
-          //echo "/*".print_r($variation_stock_data,true)."*/";
         }				
 			}
 
@@ -696,23 +694,13 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 					exit('st');
 				}
 
+				//require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
 			  echo  "if(document.getElementById('shoppingcartcontents') != null)
 					  {
 					  document.getElementById('shoppingcartcontents').innerHTML = \"".str_replace(Array("\n","\r") , "",addslashes(nzshpcrt_shopping_basket_internals($cart,$quantity_limit))). "\";
 					  }
 					";
-		
-	/*
-		  if(($_POST['prodid'] != null) &&(get_option('fancy_notifications') == 1)) {
-				echo "if(document.getElementById('fancy_notification_content') != null)
-					  {
-					  document.getElementById('fancy_notification_content').innerHTML = \"".str_replace(Array("\n","\r") , "",addslashes(fancy_notification_content($_POST['prodid'], $quantity_limit))). "\";
-					  jQuery('#loading_animation').css('display', 'none');
-					  jQuery('#fancy_notification_content').css('display', 'block');  
-					  }
-					";
-				}
-*/
+
 			  
 			  if($_SESSION['slider_state'] == 0) {
 				//echo  'jQuery("#sliding_cart").css({ display: "none"});'."\n\r";
@@ -723,7 +711,6 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 		}
       exit();
 		} else if(($_POST['user'] == "true") && ($_POST['emptycart'] == "true")) {
-			//exit("/* \n\r ".get_option('shopping_cart_url')." \n\r ".print_r($_POST,true)." \n\r */");
 			$_SESSION['nzshpcrt_cart'] = '';			
 			$_SESSION['nzshpcrt_cart'] = Array();      
 			echo  "if(document.getElementById('shoppingcartcontents') != null) {   
@@ -734,7 +721,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
 			  echo "window.location = '".get_option('shopping_cart_url')."';\n\r"; // if we are on the checkout page, redirect back to it to clear the non-ajax cart too
 			}
 			exit();
-		}
+		}*/
 
 	if ($_POST['store_list']=="true") {
 		$map_data['address'] = $_POST['addr'];

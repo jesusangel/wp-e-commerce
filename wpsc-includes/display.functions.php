@@ -328,8 +328,9 @@ function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
 		$output .= "<form onsubmit='submitform(this);return false;'  action='' method='post'>";
 		if($variations_output != '') { //will always be set, may sometimes be an empty string 
 			$output .= "           <p>".$variations_output."</p>";
-		}
-		$output .= "<input type='hidden' name='prodid' value='".$product_id."' />";
+		}	
+		$output .= "<input type='hidden' name='wpsc_ajax_action' value='add_to_cart' />";
+		$output .= "<input type='hidden' name='product_id' value='".$product_id."' />";
 		$output .= "<input type='hidden' name='item' value='".$product_id."' />";
 		if(isset($wpsc_theme) && is_array($wpsc_theme) && ($wpsc_theme['html'] !='')) {
 				$output .= $wpsc_theme['html'];

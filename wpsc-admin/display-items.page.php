@@ -162,7 +162,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search']))."%";
 		$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search']))."%";
 		
-		$search_sql = "AND (`".WPSC_TABLE_PRODUCT_LIST."`.`name` LIKE '".$search_string_title."' OR `".WPSC_TABLE_PRODUCT_LIST."`.`description` LIKE '".$search_string_description."')";
+		$search_sql = "AND (`products`.`name` LIKE '".$search_string_title."' OR `products`.`description` LIKE '".$search_string_description."')";
 		
 		$search_string = $_GET['search'];
 	} else {
@@ -198,14 +198,14 @@ function wpsc_admin_products_list($category_id = 0) {
 		  }
 			
 			$start = (int)($page * $itempp) - $itempp;
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql ORDER BY `date_added` DESC LIMIT $start,$itempp";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql ORDER BY `products`.`date_added` DESC LIMIT $start,$itempp";
 			
 		} else {
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql  ORDER BY `date_added`";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql  ORDER BY `products`.`date_added`";
 		}
 	}  
 	$product_list = $wpdb->get_results($sql,ARRAY_A);
-	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`='1' $search_sql");
+	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql");
 	
 	if (isset($itempp)) {
 		$num_pages = ceil($num_products/$itempp);
