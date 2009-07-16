@@ -1,8 +1,7 @@
 <?php
 /*
  * Some parts of this code were inspired by the shopp plugin and their paypal pro module. 
- * and copyright Ingenesis Limited, 19 August, 2008.
- **/
+ */
 $nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Pro';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_pro';
@@ -32,10 +31,10 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 		<td>Card Type *</td>
 		<td>
 		<select name='cctype'>
-			<option value='visa'>Visa</option>
-			<option value='mastercard'>MasterCard</option>
-			<option value='discover'>Discover</option>
-			<option value='amex'>Amex</option>
+			<option value='Visa'>Visa</option>
+			<option value='Mastercard'>MasterCard</option>
+			<option value='Discover'>Discover</option>
+			<option value='Amex'>Amex</option>
 		</select>
 		</td>
 	</tr>
@@ -44,7 +43,6 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
   
 function gateway_paypal_pro($seperator, $sessionid){
 	global $wpdb, $wpsc_cart;
-	
 	$purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 	$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE  `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$purchase_log['id']." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
 		//exit($usersql);
@@ -60,7 +58,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	$data['VERSION']				= "52.0";
 	$data['METHOD']					= "DoDirectPayment";
 	$data['PAYMENTACTION']			= "Sale";
-	$data['IPADDRESS']				= '127.12.12.123';//$_SERVER["REMOTE_ADDR"];
+	$data['IPADDRESS']				= $_SERVER["REMOTE_ADDR"];
 	$data['RETURNFMFDETAILS']		= "1"; // optional - return fraud management filter data
 
 	foreach((array)$userinfo as $key => $value){
@@ -82,10 +80,12 @@ function gateway_paypal_pro($seperator, $sessionid){
 		if(($value['unique_name']=='billingcity') && $value['value'] != ''){
 			$data['CITY']	= $value['value'];
 		}
-		if(($value['unique_name']=='billingstate')){
-			
-		}	
-		$data['STATE']	= 'CA';	
+		if(($value['unique_name']=='billingstate') && $value['value'] != ''){
+			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `name` ='".$value['value']."' LIMIT 1";
+			$data['STATE'] = $wpdb->get_var($sql);
+		}else{	
+			$data['STATE']='CA';
+		}
 		if(($value['unique_name']=='billingcountry') && $value['value'] != ''){		
 		
 			$data['COUNTRYCODE']	= $value['value'];
@@ -105,8 +105,13 @@ function gateway_paypal_pro($seperator, $sessionid){
 		if(($value['unique_name']=='shippingcity') && $value['value'] != ''){
 			$data['SHIPTOCITY']	= $value['value'];
 		}	
+			//$data['SHIPTOCITY'] = 'CA';
 		if(($value['unique_name']=='shippingstate') && $value['value'] != ''){
-			$data['SHIPTOSTATE'] = $value['value'];
+		//	$data['SHIPTOSTATE'] = $value['value'];
+			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `name` ='".$value['value']."' LIMIT 1";
+			$data['SHIPTOSTATE'] = $wpdb->get_var($sql);
+		}else{
+			$data['SHIPTOSTATE'] = 'CA';
 		}	
 		if(($value['unique_name']=='shippingcountry') && $value['value'] != ''){
 			$data['SHIPTOCOUNTRY']	= $value['value'];
@@ -125,8 +130,8 @@ function gateway_paypal_pro($seperator, $sessionid){
 	
 	$data['AMT']			= number_format($wpsc_cart->total_price,2);
 	$data['ITEMAMT']		= number_format($wpsc_cart->subtotal,2);
-	$data['SHIPPINGAMT']	= number_format($wpsc_cart->calculate_total_shipping(),2);
-	$data['TAXAMT']			= number_format($wpsc_cart->calculate_total_tax(), 2);
+	$data['SHIPPINGAMT']	= number_format($wpsc_cart->base_shipping,2);
+	$data['TAXAMT']			= number_format($wpsc_cart->total_tax);
 	
 	// Ordered Items
 	foreach($wpsc_cart->cart_items as $i => $Item) {
@@ -150,7 +155,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	}
 //exit($transaction);
 	$response = send($transaction);
-	exit('<pre>'.print_r($data, true).'</pre>');
+	//exit('<pre>'.print_r($response, true).'</pre>');
 	if($response->ack == 'Success' || $response->ack == 'SuccessWithWarning'){
 		//redirect to  transaction page and store in DB as a order with accepted payment
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '2' WHERE `sessionid`=".$sessionid;
@@ -250,39 +255,10 @@ if(get_option('paypal_pro_testmode') == "on"){
 $output = '
 <tr>
 	<td>
-			<label for="paypal_pro_username">'.__('Username:').'</label>
-	</td>
-	<td>
-			<input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="'.get_option("paypal_pro_username").'" size="30" /><br />
-			<span class="wpscsmall description">'.__('Enter your PayPal API Username').'</span>
-				<br />
-	</td>
-</tr>
-<tr>
-	<td>
-			<label for="paypal_pro_password">'.__('Password:').'</label>
-	</td>
-	<td>
-			<input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="'.get_option('paypal_pro_password').'" size="16" /><br />
-			<span class="wpscsmall description">'.__('Enter your PayPal API Password').'</span>
-			<br />
-	</td>
-</tr>
-<tr>
-	<td>
-			<label for="paypal_pro_signature">'.__('Signature:').'</label>
-	</td>
-	<td>
-			<input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="'.get_option('paypal_pro_signature').'" size="48" /><br />
-			<span class="wpscsmall description">'.__('Enter your PayPal API Signature').'</span>
-			<br />
-	</td>
-</tr>
-<tr>
-	<td>
-			<label for="paypal_pro_testmode">'.__('Test Mode Enabled').'</label>
-			<input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" '.$selected.' />
-					
+		<div><input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="'.get_option("paypal_pro_username").'" size="30" /><br /><label for="paypal_pro_username">'.__('Enter your PayPal API Username.').'</label></div>
+		<div><input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="'.get_option('paypal_pro_password').'" size="16" /><br /><label for="paypal_pro_password">'.__('Enter your PayPal API Password.').'</label></div>
+		<div><input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="'.get_option('paypal_pro_signature').'" size="48" /><br /><label for="paypal_pro_signature">'.__('Enter your PayPal API Signature.').'</label></div>
+		<div><input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" '.$selected.' /><label for="paypal_pro_testmode">'.__('Test Mode Enabled').'</label></div>						
 	</td>
 </tr>';
 return $output;
