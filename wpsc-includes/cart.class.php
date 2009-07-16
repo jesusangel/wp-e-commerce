@@ -611,7 +611,7 @@ class wpsc_cart {
 		}
 		$add_tax = false;
 		if($this->selected_country == get_option('base_country')) {
-			if($this->selected_country == 'US' ) { // tax handling for US 
+			if(($this->selected_country == 'US' ) || ($this->selected_country == 'CA') ) { // tax handling for US (and canada?)
 				if($this->selected_region == get_option('base_region')) {
 					// if they in the state, they pay tax
 					$add_tax = true;
@@ -1474,6 +1474,8 @@ class wpsc_cart_item {
 		}
 		$this->weight = $weight;
 		$this->total_price = $this->unit_price * $this->quantity;
+
+		
 		if($this->apply_tax == true) {
 		  $this->taxable_price = $this->total_price;
 			$this->tax = $this->taxable_price * ($this->cart->tax_percentage/100);

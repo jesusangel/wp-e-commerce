@@ -99,9 +99,11 @@ function wpsc_checkout_form_field() {
 
 function wpsc_shipping_region_list($selected_country, $selected_region){
 global $wpdb;
+  
+		//$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
+	$region_data = $wpdb->get_results("SELECT `regions`.* FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape($selected_country)."')",ARRAY_A);
 
-	if ($selected_country == 'US') {
-		$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
+	if (count($region_data) > 0) {
 		$output .= "<select name='region'  id='region' onchange='submit_change_country();' >";
 		foreach ($region_data as $region) {
 			$selected ='';

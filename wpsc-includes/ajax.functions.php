@@ -61,7 +61,7 @@ function wpsc_add_to_cart() {
 	}
   
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
-  echo "/*\n\r".print_r($parameters,true)."*/\n\r";
+  //echo "/*\n\r".print_r($parameters,true)."*/\n\r";
 	$state = $wpsc_cart->set_item($product_id,$parameters); 
 	
 	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
@@ -351,6 +351,16 @@ function wpsc_update_location() {
 	
 	if($_POST['zipcode'] != '') {
 		$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+	}
+
+	$delivery_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape($_SESSION['wpsc_delivery_country'])."')");
+	if($delivery_region_count < 1) {
+		$_SESSION['wpsc_delivery_region'] = null;
+	}
+	
+	$selected_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape($_SESSION['wpsc_selected_country'])."')");
+	if($selected_region_count < 1) {
+		$_SESSION['wpsc_selected_region'] = null;
 	}
 	
 	$wpsc_cart->update_location();
