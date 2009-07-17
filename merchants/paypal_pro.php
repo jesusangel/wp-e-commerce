@@ -130,8 +130,8 @@ function gateway_paypal_pro($seperator, $sessionid){
 	
 	$data['AMT']			= number_format($wpsc_cart->total_price,2);
 	$data['ITEMAMT']		= number_format($wpsc_cart->subtotal,2);
-	$data['SHIPPINGAMT']	= number_format($wpsc_cart->base_shipping,2);
-	$data['TAXAMT']			= number_format($wpsc_cart->total_tax);
+	$data['SHIPPINGAMT']	= number_format($wpsc_cart->calculate_total_shipping(),2);
+	$data['TAXAMT']			= number_format($wpsc_cart->calculate_total_tax());
 	
 	// Ordered Items
 	foreach($wpsc_cart->cart_items as $i => $Item) {
@@ -153,7 +153,6 @@ function gateway_paypal_pro($seperator, $sessionid){
 			$transaction .= "$key=".urlencode($value);
 		}
 	}
-//exit($transaction);
 	$response = send($transaction);
 	//exit('<pre>'.print_r($response, true).'</pre>');
 	if($response->ack == 'Success' || $response->ack == 'SuccessWithWarning'){
