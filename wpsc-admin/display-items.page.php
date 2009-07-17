@@ -251,7 +251,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	<form id="posts-filter" action="" method="get">
 		<div class="tablenav">	
 			<div class="alignright search-box">
-				<input type='hidden' name='page' value='edit-products'  />
+				<input type='hidden' name='page' value='wpsc-edit-products'  />
 				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
 				<input type="submit" name='wpsc_search' value="<?php _e( 'Search' ); ?>" class="button" />
 			</div>
