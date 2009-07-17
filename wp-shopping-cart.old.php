@@ -1660,7 +1660,7 @@ function wpsc_refresh_page_urls($content) {
 						}
 						$parent_categories[] = $category['nice-name'];
 						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'];
-						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-_()%]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&product_url_name=$matches[1]';
+						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-\.\\\\_():;\'"%~|]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&product_url_name=$matches[1]';
 						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/page/([0-9]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&wpsc_page=$matches[1]';
 						// recurses here
 						$sub_rules = wpsc_rewrite_categories($page_name, $category['id'], ($level+1), $parent_categories, $is_index);

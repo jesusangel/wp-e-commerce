@@ -186,7 +186,8 @@ function wpsc_product_url($product_id, $category_id = null, $escape = true) {
 
   
   if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
-    $url_name = get_product_meta($product_id, 'url_name', true);	
+    $url_name = get_product_meta($product_id, 'url_name', true);
+    $url_name = htmlentities(stripslashes($url_name), ENT_QUOTES);
 		$product_url =wpsc_category_url($category_id).$url_name."/";
   } else {    
     if(!stristr(get_option('product_list_url'), "?")) {
