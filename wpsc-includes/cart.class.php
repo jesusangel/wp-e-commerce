@@ -1638,7 +1638,7 @@ class wpsc_cart_item {
 			$tax = 0;
 		}		
 		
-		$wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, $tax, $this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message, serialize($this->custom_file)));
+		$wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, (float)$tax, (float)$this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message, serialize($this->custom_file)));
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
 		
 		foreach((array)$this->variation_data as $variation_row) {
