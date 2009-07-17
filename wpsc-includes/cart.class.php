@@ -1625,7 +1625,10 @@ class wpsc_cart_item {
 	function save_to_db($purchase_log_id) {
 		global $wpdb, $wpsc_shipping_modules;
 		
-		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
+    if($method === null) {
+      $method = $this->cart->selected_shipping_method;
+    }
+		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
 			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
 		}
     

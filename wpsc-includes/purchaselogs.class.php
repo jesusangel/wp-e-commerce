@@ -264,14 +264,27 @@ function wpsc_purchaselog_details_purchnumber(){
 /*
  *Returns base shipping should make a function to calculate items shipping as well
  */
-function wpsc_display_purchlog_shipping(){
+function wpsc_display_purchlog_shipping($numeric = false){
 	global $purchlogitem;
-//	exit('<pre>'.print_r($purchlogitem, true).'</pre>');
-	return nzshpcrt_currency_display($purchlogitem->extrainfo->base_shipping, true);
+	$base_shipping = $purchlogitem->extrainfo->base_shipping;
+	$per_item_shipping = 0;
+	foreach((array)$purchlogitem->allcartcontent as $cart_item) {
+	  if($cart_item->pnp > 0) {
+			$per_item_shipping += ($cart_item->pnp * $cart_item->quantity);
+	  }
+	}
+	$total_shipping = $per_item_shipping + $base_shipping;
+	if($numeric == true) {
+		return $total_shipping;
+	} else {
+		return nzshpcrt_currency_display($total_shipping, true);
+	}
 }
 function wpsc_display_purchlog_totalprice(){
 	global $purchlogitem;
-	$purchlogitem->totalAmount += $purchlogitem->extrainfo->base_shipping;
+	
+	$purchlogitem->totalAmount += wpsc_display_purchlog_shipping(true);
+	//$purchlogitem->totalAmount += $purchlogitem->extrainfo->base_shipping;
 	return nzshpcrt_currency_display($purchlogitem->totalAmount, true);
 }
 function wpsc_display_purchlog_buyers_name(){
@@ -718,6 +731,7 @@ class wpsc_purchaselogs_items{
 		//exit('<pre>'.print_r($cartcontent, true).'</pre>');
 		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
 		$extrainfo = $wpdb->get_results($sql);
+
 		$this->extrainfo = $extrainfo[0];
 
 		$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$this->purchlogid." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
