@@ -33,7 +33,7 @@ global $wpsc_query, $wpdb;
 	
 	<?php if(wpsc_has_pages() && ((get_option('wpsc_page_number_position') == 1 ) || (get_option('wpsc_page_number_position') == 3)))  : ?>
 		<div class='wpsc_page_numbers'>
-		  Pages: 
+		  Pages:
 			<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>
 				<?php if(wpsc_page_is_selected()) :?> 	   
 					<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
@@ -102,7 +102,7 @@ global $wpsc_query, $wpdb;
 								if( is_serialized($the_addl_desc) ) {
 									$addl_descriptions = @unserialize($the_addl_desc);
 								} else {
-									$addl_descriptions = array('addl_desc', $the_addl_desc);
+									$addl_descriptions = array('addl_desc'=> $the_addl_desc);
 								}
 								
 								if( isset($addl_descriptions['addl_desc']) ) {

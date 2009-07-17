@@ -101,7 +101,7 @@ global $wpsc_query, $wpdb;
 								if( is_serialized($the_addl_desc) ) {
 									$addl_descriptions = @unserialize($the_addl_desc);
 								} else {
-									$addl_descriptions = array('addl_desc', $the_addl_desc);
+									$addl_descriptions = array('addl_desc'=> $the_addl_desc);
 								}
 								
 								if( isset($addl_descriptions['addl_desc']) ) {
