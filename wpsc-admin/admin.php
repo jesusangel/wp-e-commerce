@@ -454,8 +454,12 @@ function wpsc_admin_dashboard_rightnow() {
  * Dashboard Widget for 2.7 (TRansom)
  */
 function wpsc_dashboard_widget_setup() {
-	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	global $current_user;
+	get_currentuserinfo();
+	if($current_user->wp_capabilities['administrator'] == 1) {
+		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
     wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
+	}
 }
 /*
 if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
@@ -566,17 +570,23 @@ function wpsc_quarterly_dashboard_widget(){
 
 }
 function wpsc_quarterly_setup(){
-   // $siteurl = get_option('siteurl'); 
-    $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
-	wp_enqueue_script('datepicker-ui', WPSC_URL."/js/ui.datepicker.js",array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
-	wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
+	global $current_user;
+	get_currentuserinfo();
+	if($current_user->wp_capabilities['administrator'] == 1) {
+		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+		wp_enqueue_script('datepicker-ui', WPSC_URL."/js/ui.datepicker.js",array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
+		wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
+	}
 }
 
 add_action('wp_dashboard_setup', 'wpsc_quarterly_setup');
 function wpsc_dashboard_widget() {
+	global $current_user;
+	get_currentuserinfo();
+	if($current_user->wp_capabilities['administrator'] == 1) {
     do_action('wpsc_admin_pre_activity');
-//    wpsc_admin_latest_activity();
     do_action('wpsc_admin_post_activity');
+	}
 }
 
 /*
