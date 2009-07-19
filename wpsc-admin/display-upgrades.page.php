@@ -17,7 +17,7 @@ function wpsc_display_upgrades_page() {
 				<br />
 				<strong><?php _e('Pure Gold'); ?></strong>
 				<p class='wpsc_gold_text'>Add product search, multiple image upload, gallery view, Grid View and multiple payment gateway options to your shop</p>
-				<span class='wpsc_gold_info'>$25</span>
+				<span class='wpsc_gold_info'>$40</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
