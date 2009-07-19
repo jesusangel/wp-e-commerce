@@ -1585,119 +1585,7 @@ function nzshpcrt_product_list_rss_feed() {
   echo "<link rel='alternate' type='application/rss+xml' title='".get_option('blogname')." Product List RSS' href='".get_option('siteurl')."/index.php?rss=true&amp;action=product_list$selected_category'/>";
 }
 
-    
-function wpsc_refresh_page_urls($content) {
- global $wpdb;
- $wpsc_pageurl_option['product_list_url'] = '[productspage]';
- $wpsc_pageurl_option['shopping_cart_url'] = '[shoppingcart]';
- $check_chekout = $wpdb->get_var("SELECT `guid` FROM `".$wpdb->prefix."posts` WHERE `post_content` LIKE '%[checkout]%' AND `post_type` NOT IN('revision') LIMIT 1");
- if($check_chekout != null) {
-   $wpsc_pageurl_option['checkout_url'] = '[checkout]';
-   } else {
-   $wpsc_pageurl_option['checkout_url'] = '[checkout]';
-   }
- $wpsc_pageurl_option['transact_url'] = '[transactionresults]';
- $wpsc_pageurl_option['user_account_url'] = '[userlog]';
- $changes_made = false;
- foreach($wpsc_pageurl_option as $option_key => $page_string) {
-   $post_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->prefix."posts` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%$page_string%' AND `post_type` NOT IN('revision') LIMIT 1");
-   $the_new_link = get_permalink($post_id);
-   if(stristr(get_option($option_key), "https://")) {
-     $the_new_link = str_replace('http://', "https://",$the_new_link);
-   }    
-   update_option($option_key, $the_new_link);
-  }
- return $content;
-}
   
-
-		function wpsc_product_permalinks($rewrite_rules) {
-		global $wpdb, $wp_rewrite;  
-		
-		$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A);
-		$is_index = false;
-		if((get_option('page_on_front') == $page_details['ID']) && (get_option('show_on_front') == 'page')) {		
-		  $is_index = true;
-		}
-		
-		$first_post_name = $page_details['post_name'];
-		$page_name_array[] = $page_details['post_name'];
-		if($page_details['post_parent'] > 0) {
-		  $count = 0;
-		  while(($page_details['post_parent'] > 0) && ($count <= 20)) {
-				$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `ID` IN('{$page_details['post_parent']}') AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A);
-				$page_name_array[] = $page_details['post_name'];
-				$count ++;	  
-		  }		
-		}
-		
-		$page_name_array = array_reverse($page_name_array);
-		$page_name = implode("/",$page_name_array);
-		
-		if(!function_exists('wpsc_rewrite_categories')) {	 // to stop this function from being declared multiple times
-		  /*
-		   * This is the function for making the e-commerce rewrite rules, it is recursive
-		  */
-			function wpsc_rewrite_categories($page_name, $id = null, $level = 0, $parent_categories = array(), $is_index = false) {
-				global $wpdb,$category_data;
-				if($is_index == true) {
-				  $rewrite_page_name = '';				  
-				} else {
-				  $rewrite_page_name = $page_name.'/';
-				}
-				
-				if(is_numeric($id)) {
-					$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
-					$category_list = $wpdb->get_results($category_sql,ARRAY_A);
-				}	else {
-					$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0' ORDER BY `id`";
-					$category_list = $wpdb->get_results($category_sql,ARRAY_A);
-				}
-				if($category_list != null)	{
-					foreach($category_list as $category) {
-						if($level === 0) {
-							$parent_categories = array();
-						}
-						$parent_categories[] = $category['nice-name'];
-						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'];
-						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-\.\\\\_():;\'"%~|]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&product_url_name=$matches[1]';
-						$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/page/([0-9]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&wpsc_page=$matches[1]';
-						// recurses here
-						$sub_rules = wpsc_rewrite_categories($page_name, $category['id'], ($level+1), $parent_categories, $is_index);
-						array_pop($parent_categories);
-						$new_rules = array_merge((array)$new_rules, (array)$sub_rules);
-					}
-				}
-			return $new_rules;
-			}
-		}
-		
-		
-		$new_rules = wpsc_rewrite_categories($page_name, null, 0, null, $is_index);
-		$new_rules = array_reverse((array)$new_rules);
-	  //$new_rules[$page_name.'/product-tag/(.+?)/page/?([0-9]{1,})/?$'] = 'index.php?pagename='.$page_name.'&ptag=$matches[1]&paged=$matches[2]';
-	  
-		$new_rules[($first_post_name.'/page/([0-9]+)/?$')] = 'index.php?pagename='.$page_name.'&wpsc_page=$matches[1]';
-	  $new_rules[$page_name.'/tag/([A-Za-z0-9\-]+)?$'] = 'index.php?pagename='.$page_name.'&ptag=$matches[1]';
-		$new_rewrite_rules = array_merge((array)$new_rules,(array)$rewrite_rules);
-		return $new_rewrite_rules;
-	}
-
-
-function wpsc_query_vars($vars) {
-	//   $vars[] = "product_category";
-	//   $vars[] = "product_name";
-  $vars[] = "category_id";
-  $vars[] = "product_url_name";
-  $vars[] = "wpsc_page";
-  return $vars;
-  }
-
-add_filter('query_vars', 'wpsc_query_vars');
-
-// using page_rewrite_rules makes it so that odd permalink structures like /%category%/%postname%.htm do not override the plugin permalinks.
-add_filter('page_rewrite_rules', 'wpsc_product_permalinks');
- 
  
  
  
@@ -1847,9 +1735,6 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 }
 if(strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME.'') !== false) {
 		if($_GET['page'] == 'wpsc-edit-products') {
-		//	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
-     // wp_enqueue_script('new_swfupload', WPSC_URL.'/js/swfupload.js');
-     // wp_enqueue_script('new_swfupload.swfobject', WPSC_URL.'/js/swfupload/swfupload.swfobject.js');
 		}
 }
 
@@ -1869,25 +1754,6 @@ switch(get_option('cart_location')) {
   break;
   
   case 5:
-//   //exit("<pre>".print_r($_SERVER,true)."</pre>");
-//   if(function_exists('drag_and_drop_cart')) {
-//     $shop_pages_only = 1;
-// 		add_action('init', 'drag_and_drop_cart_ajax');  
-// 		if (get_option('dropshop_display')=='product'){
-// 		  $url_prefix_array = explode("://", get_option('product_list_url'));
-// 		  $url_prefix = $url_prefix_array[0]."://";
-// 			if(stristr(($url_prefix.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
-// 			  
-// 				wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
-// 				add_action('wp_head', 'drag_and_drop_js');  
-// 				add_action('wp_footer', 'drag_and_drop_cart');  
-// 			}
-// 		} else {		  
-// 			wp_enqueue_script('interface',WPSC_URL.'/js/interface.js', 'Interface');
-// 			add_action('wp_head', 'drag_and_drop_js');  
-// 			add_action('wp_footer', 'drag_and_drop_cart');  
-// 		}
-// 	}
   break;
   
   case 3:
@@ -2064,67 +1930,5 @@ function wpsc_fav_action($actions) {
     return $actions;
 }
 
-//duplicating a product
-function wpsc_duplicate() {
-	global $wpdb;
-	if (is_numeric($_GET['duplicate'])) {
-		$dup_id = $_GET['duplicate'];
-		$sql = " INSERT INTO ".WPSC_TABLE_PRODUCT_LIST."( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image` , `category` , `brand` , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = '".$dup_id."' ";
-		$wpdb->query($sql);
-		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
-		
-		//Inserting duplicated category record.
-		$category_assoc = $wpdb->get_col("SELECT category_id FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id = '".$dup_id."'");
-		$new_product_category = "";
-		if (count($category_assoc) > 0) {
-			foreach($category_assoc as $key => $category) {
-				$new_product_category .= "('".$new_id."','".$category."')";
-				
-				if (count($category_assoc) != $key+1) {
-					$new_product_category .= ",";
-				}
-			}
-			$sql = "INSERT INTO ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." (product_id, category_id) VALUES ".$new_product_category;
-			$wpdb->query($sql);
-		}
-	
-		//Inserting duplicated meta info
-		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id='".$dup_id."'", ARRAY_A);
-		$new_meta_value = '';
-		if (count($meta_values)>0){
-			foreach($meta_values as $key => $meta) {
-				$new_meta_value .= "('".$new_id."','".$meta['meta_key']."','".$meta['meta_value']."','".$meta['custom']."')";
-			
-				if (count($meta_values) != $key+1) {
-					$new_meta_value .= ",";
-				}
-			}
-			$sql = "INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".$new_meta_value;
-			$wpdb->query($sql);
-		}
-		
-		
-		
-		//Inserting duplicated image info
-		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='".$dup_id."'", ARRAY_A);
-		$new_image_value = '';
-		if (count($image_values)>0){
-			foreach($image_values as $key => $image) {
-				$new_image_value .= "('".$new_id."','".$image['image']."','".$image['width']."','".$image['height']."','".$image['image_order']."','".$image['meta']."')";
-			
-				if (count($meta_values) != $key+1) {
-					$new_image_value .= ",";
-				}
-			}
-			$sql = "INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
-			$wpdb->query($sql);
-		}
-	}
-	wp_redirect('?page=wpsc-edit-products');
-}
-
-if (isset($_GET['duplicate'])) {
-	add_action('admin_init', 'wpsc_duplicate');
-}
 //add_action('init', 'save_hidden_box');
 ?>
