@@ -19,7 +19,7 @@ if($_REQUEST['eway']=='1') {
 	$sessionid = $_GET['result'];
 }elseif($_REQUEST['eway']=='0'){
 	echo $_SESSION['eway_message'];
-}else if ($_REQUEST['payflow']=='1') {	
+}elseif ($_REQUEST['payflow']=='1') {	
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';
 }
