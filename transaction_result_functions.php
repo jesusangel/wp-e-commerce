@@ -219,7 +219,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1";
 						$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 						$form_data = $form_data[0];
-						
+						//delivery_country
+						// country
 						if($form_data['type'] == 'country' ) {
 							$report_user .= $form_data['name'].": ".get_country($form_field['value'])."\n";
 						} else {
@@ -236,7 +237,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
-					//exit($report);
 					wp_mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')." <".get_option('return_email').">");
 				}
 
@@ -248,7 +248,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				/// Empty the cart
 				$wpsc_cart->submit_stock_claims($purchase_log['id']);
 				$wpsc_cart->empty_cart();
-				//$wpsc_cart->cleanup();
 
 				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';

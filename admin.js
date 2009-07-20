@@ -480,16 +480,6 @@ function checkimageresize() {
       
   
 
-  
-function remove_new_form_field(id) {
-  element_count = document.getElementById("form_field_form_container").childNodes.length;
-  if(element_count > 1) {
-    target_element = document.getElementById(id);
-    document.getElementById("form_field_form_container").removeChild(target_element);
-  }
-  return false;
-}
-  
 
   
 function show_status_box(id,image_id) {

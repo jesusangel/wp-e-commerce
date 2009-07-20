@@ -265,6 +265,7 @@ $wpsc_database_template[$table_name]['columns']['stock_adjusted'] = "char(1) NOT
 $wpsc_database_template[$table_name]['columns']['discount_value'] = "decimal(11,2) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['discount_data'] = "text NULL";
 $wpsc_database_template[$table_name]['columns']['track_id'] = "varchar(50) NULL DEFAULT '' ";
+$wpsc_database_template[$table_name]['columns']['billing_region'] = "char(6) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['shipping_region'] = "char(6) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['find_us'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['engravetext'] = "varchar(255) NULL DEFAULT '' ";

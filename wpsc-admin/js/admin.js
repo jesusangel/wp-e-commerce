@@ -704,6 +704,18 @@ function add_form_field() {
   return false;
 }
 
+
+  
+function remove_new_form_field(id) {
+  element_count = document.getElementById("form_field_form_container").childNodes.length;
+  if(element_count > 1) {
+    target_element = document.getElementById(id);
+    document.getElementById("form_field_form_container").removeChild(target_element);
+  }
+  return false;
+}
+  
+
 function submit_change_country() {
   document.cart_options.submit();
   //document.cart_options.submit();
