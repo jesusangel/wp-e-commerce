@@ -1527,22 +1527,7 @@ function nzshpcrt_product_vote($prodid, $starcontainer_attributes = '')
       
       return Array($output,$type);
       } //*/
-  
 
- function get_country($country_code)  
-  {
-  global $wpdb;
-  $country = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN ('".$country_code."') LIMIT 1");
-  return $country; 
-  }
-
- function get_region($region_code)  
-  {
-  global $wpdb;
-  $region = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` IN('$region_code')");
-  return $region; 
-  }
-  
 function get_brand($brand_id) {  }
 
 

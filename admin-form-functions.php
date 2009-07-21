@@ -892,13 +892,13 @@ function wpsc_packing_slip($purchase_id) {
           switch($form_field['type']) {
             case 'country':
             if(is_numeric($purch_data['shipping_region'])) {
-              echo "  <tr><td>".TXT_WPSC_STATE.":</td><td>".get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+              echo "  <tr><td>".TXT_WPSC_STATE.":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
             }
-            echo "  <tr><td>".$form_field['name'].":</td><td>".get_country($purch_data['billing_country'])."</td></tr>\n\r";
+            echo "  <tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['billing_country'])."</td></tr>\n\r";
             break;
                 
             case 'delivery_country':
-            echo "  <tr><td>".$form_field['name'].":</td><td>".get_country($purch_data['shipping_country'])."</td></tr>\n\r";
+            echo "  <tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['shipping_country'])."</td></tr>\n\r";
             break;
                 
             case 'heading':

@@ -216,15 +216,22 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				
 				if($form_data != null) {
 					foreach($form_data as $form_field) {
-						$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1";
-						$form_data = $wpdb->get_results($form_sql,ARRAY_A);
-						$form_data = $form_data[0];
-						//delivery_country
-						// country
-						if($form_data['type'] == 'country' ) {
-							$report_user .= $form_data['name'].": ".get_country($form_field['value'])."\n";
-						} else {
+						$form_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1",ARRAY_A);
+
+						switch($form_data['type']) {
+							case "country":
+							$report_user .= $form_data['name'].": ".wpsc_get_country($form_field['value'])."\n";
+							$report_user .= TXT_WPSC_STATE.": ".wpsc_get_region($purchase_log['billing_region'])."\n";
+							break;
+							
+							case "delivery_country":
+							$report_user .= $form_data['name'].": ".wpsc_get_country($form_field['value'])."\n";
+							$report_user .= TXT_WPSC_DELIVERY_STATE.": ".wpsc_get_region($purchase_log['shipping_region'])."\n";
+							break;
+							
+							default:
 							$report_user .= $form_data['name'].": ".$form_field['value']."\n";
+							break;
 						}
 					}
 				}

@@ -346,9 +346,9 @@ $date_list[0]['end'] = $end_timestamp;
                     $form_data = $form_data[0];
                     if($form_data['type'] == 'country' ) {
                       if($form_field['value'] != null) {
-                        echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($form_field['value'])."</td></tr>";
+                        echo "  <tr><td>".$form_data['name'].":</td><td>".wpsc_get_country($form_field['value'])."</td></tr>";
 											} else {
-												echo "  <tr><td>".$form_data['name'].":</td><td>".get_country($purchase['shipping_country'])."</td></tr>";
+												echo "  <tr><td>".$form_data['name'].":</td><td>".wpsc_get_country($purchase['shipping_country'])."</td></tr>";
 											}
 										} else {
 											echo "  <tr><td>".$form_data['name'].":</td><td>".$form_field['value']."</td></tr>";

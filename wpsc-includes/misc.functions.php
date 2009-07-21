@@ -213,5 +213,20 @@ function update_product_meta($product_id, $key, $value, $prev_value = '') {
 }
 
 
+  
+
+ function wpsc_get_country($country_code) {
+  global $wpdb;
+  $country = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN ('".$country_code."') LIMIT 1");
+  return $country; 
+}
+
+ function wpsc_get_region($region_code) {
+  global $wpdb;
+  $region = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` IN('$region_code')");
+  return $region; 
+}
+  
+
 
 ?>
