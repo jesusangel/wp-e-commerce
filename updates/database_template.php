@@ -273,6 +273,7 @@ $wpsc_database_template[$table_name]['columns']['shipping_method'] = "VARCHAR(64
 $wpsc_database_template[$table_name]['columns']['shipping_option'] = "VARCHAR(128) NULL ";
 $wpsc_database_template[$table_name]['columns']['affiliate_id'] = "VARCHAR(32) NULL ";
 $wpsc_database_template[$table_name]['columns']['plugin_version'] = "VARCHAR(32) NULL ";
+$wpsc_database_template[$table_name]['columns']['notes'] = "text NULL";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['sessionid'] = "UNIQUE KEY `sessionid` ( `sessionid` )";
 $wpsc_database_template[$table_name]['indexes']['gateway'] = " KEY `gateway` ( `gateway` )";
