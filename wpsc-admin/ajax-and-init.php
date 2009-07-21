@@ -1282,11 +1282,13 @@ if($_REQUEST['wpsc_admin_action'] == 'save_product_order') {
 /* Start Order Notes (by Ben) */
 function wpsc_purchlogs_update_notes($purchlog_id = '', $purchlog_notes = '' ) {
 	global $wpdb;
-	if ( ($purchlog_id == '') && ($purchlog_notes == '') ) {
-		$purchlog_id = absint($_POST['purchlog_id']);
-		$purchlog_notes = $wpdb->escape($_POST['purchlog_notes']);
+	if ( wp_verify_nonce( $_POST['wpsc_purchlogs_update_notes_nonce'], 'wpsc_purchlogs_update_notes' ) ) {
+		if ( ($purchlog_id == '') && ($purchlog_notes == '') ) {
+			$purchlog_id = absint($_POST['purchlog_id']);
+			$purchlog_notes = $wpdb->escape($_POST['purchlog_notes']);
+		}
+		$wpdb->query("UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET notes='{$purchlog_notes}' WHERE id='{$purchlog_id}'");
 	}
-	$wpdb->query("UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET notes='{$purchlog_notes}' WHERE id='{$purchlog_id}'");
 }
 
 if ( $_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' ) {
