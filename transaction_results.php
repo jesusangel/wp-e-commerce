@@ -26,9 +26,15 @@ if($_REQUEST['eway']=='1') {
 if(get_option('payment_gateway') == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
 } else {
-	if(function_exists('decrypt_dps_response') && get_option('payment_gateway')== 'dps') {
+	if(get_option('payment_gateway')== 'dps') {
 		$sessionid = decrypt_dps_response();
-		transaction_results($sessionid); 
+		//exit($sessionid);
+		if($sessionid != ''){
+		//exit('<pre>'.print_r($sessionid, true).'</pre>');
+			transaction_results($sessionid, true); 
+		}else{
+			_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
+		}
 	} else {
 		echo transaction_results($sessionid, true);
 	}

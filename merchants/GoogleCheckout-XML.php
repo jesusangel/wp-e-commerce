@@ -142,20 +142,21 @@ function gateway_google(){
       // Add tax rules
 	if ($_SESSION['wpsc_selected_country']=='US'){
 		//set default tax
-		$sql = "SELECT `name`, `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE id='".$_SESSION['wpsc_delivery_region']."'";
-		//exit($sql);
+		$sql = "SELECT `name`, `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE id='".$_SESSION['wpsc_selected_region']."'";
+		//exit('<pre>'.print_r($sql, true).'</pre>');
 		$state_name = $wpdb->get_row($sql, ARRAY_A);
 		$defaultTax = $state_name['tax']/100;
 		$tax_rule = new GoogleDefaultTaxRule($defaultTax);
-		$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax` = ".$state_name['tax'];
+		$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `country_id`='136' AND `tax` = ".$state_name['tax'];
 		$states = $wpdb->get_col($sql);
 		//exit('<pre>'.print_r($states, true).'</pre>');
 		$tax_rule->SetStateAreas((array)$states);
 		$cart->AddDefaultTaxRules($tax_rule);
 		//get alternative tax rates
-		$sql = "SELECT DISTINCT `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax` != 0 AND `tax` !=".$state_name['tax']." ORDER BY `tax`";
+		$sql = "SELECT DISTINCT `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax` != 0 AND `tax` !=".$state_name['tax']."  AND `country_id`='136' ORDER BY `tax`";
 		$othertax = $wpdb->get_col($sql);
 		$i = 1;
+		//exit('<pre>'.print_r($othertax, true).'</pre>');
 		foreach($othertax as $altTax){
 			$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax`=".$altTax;
 			$alt = $wpdb->get_col($sql);
@@ -179,7 +180,7 @@ function gateway_google(){
 			$google_button_size = 'SMALL';
 		}
 	// Display Google Checkout button
-	 //exit('<pre>'.print_r($_SESSION, true).'</pre>');
+	// echo ('<pre>'.print_r($cart, true).'</pre>');
 	 //unset($_SESSION['wpsc_sessionid']);
 	echo $cart->CheckoutButtonCode($google_button_size);
 }
@@ -195,6 +196,7 @@ function wpsc_google_checkout_page(){
 	 					});
 	 			</script>";
 	 $options = get_option('payment_gateway');
+	// echo $options;
 	 if($options == 'google'){
 		echo $script;
  		gateway_google();

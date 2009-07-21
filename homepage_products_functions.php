@@ -64,7 +64,9 @@ function nszhpcrt_category_tag($content = '') {
 			$categories[$key]['id'] = $category_id;
 			$categories[$key]['display'] = $matches[2][$key];
 			$categories[$key]['original_string'] = $matches[0][$key];
+			$query = array('category_id' => $category_id);
 		}
+		return wpsc_display_products($query);
 
 	//echo("<pre>".print_r($categories,true)."</pre>");
 	$siteurl = get_option('siteurl');
