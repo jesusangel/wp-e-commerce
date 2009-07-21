@@ -452,6 +452,13 @@ function wpsc_create_upload_directories() {
 	if(!is_dir(WPSC_UPGRADES_DIR)) {
 		@ mkdir(WPSC_UPGRADES_DIR, 0775);
 	}
+	
+	if(!is_dir(WPSC_THEMES_PATH)) {
+		@ mkdir(WPSC_THEMES_PATH, 0775);
+		
+	}
+	wpsc_copy_themes_to_uploads();
+	
 	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
 	if(is_dir($wpsc_file_directory)) {
 	  // sort the permissions out in case they are not already sorted out.
@@ -463,7 +470,30 @@ function wpsc_create_upload_directories() {
 		@ chmod( WPSC_CATEGORY_DIR, 0775 );
 		@ chmod( WPSC_USER_UPLOADS_DIR, 0775 );
 		@ chmod( WPSC_CACHE_DIR, 0775 );
+		@ chmod( WPSC_THEME_DIR, 0775 );
 	}
+}
+
+
+function wpsc_copy_themes_to_uploads() {
+  $old_theme_path = WPSC_FILE_PATH . "/themes/";
+	$new_theme_path = WPSC_THEMES_PATH;
+  $new_dir = @ opendir($new_theme_path);
+  $num = 0;
+  $file_names = array();
+  while(($file = @ readdir($new_dir)) !== false) {
+    if(is_dir($new_theme_path.$file) && ($file != "..") && ($file != ".")){
+			$file_names[] = $file;
+    }
+  }
+  if(count($file_names) < 1) {
+    $old_dir = @ opendir($old_theme_path);
+		while(($file = @ readdir($old_dir)) !== false) {
+			if(is_dir($old_theme_path.$file) && ($file != "..") && ($file != ".")){
+				@ copy($old_theme_path.$file, $new_theme_path.$file);
+			}
+		}
+  }
 }
 
 	

@@ -92,7 +92,7 @@ global $wpdb;
 				$language_setting = "EN_en.php";
 			}
 			$languages_directory = WPSC_FILE_PATH.'/languages';
-			$language_files = nzshpcrt_listdir($languages_directory);
+			$language_files = wpsc_list_dir($languages_directory);
 			foreach($language_files as $language_file) {
 				switch($language_file) {
 					case "EN_en.php";

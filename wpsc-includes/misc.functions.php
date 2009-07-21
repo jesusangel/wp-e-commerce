@@ -226,6 +226,28 @@ function update_product_meta($product_id, $key, $value, $prev_value = '') {
   $region = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` IN('$region_code')");
   return $region; 
 }
+
+    
+function wpsc_list_dir($dirname) {
+  /*
+  lists the provided directory, was nzshpcrt_listdir
+  */
+  $dir = @opendir($dirname);
+  $num = 0;
+  while(($file = @readdir($dir)) !== false) {
+    //filter out the dots and any backup files, dont be tempted to correct the "spelling mistake", its to filter out a previous spelling mistake.
+    if(($file != "..") && ($file != ".") && !stristr($file, "~") && !stristr($file, "Chekcout") && !( strpos($file, ".") === 0 )) {
+      $dirlist[$num] = $file;
+      $num++;
+    }
+  }
+  if($dirlist == null) {
+    $dirlist[0] = "paypal.php";
+    $dirlist[1] = "testmode.php";
+  }
+  return $dirlist; 
+}
+    
   
 
 

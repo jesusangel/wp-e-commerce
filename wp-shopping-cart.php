@@ -156,6 +156,7 @@ $wpsc_category_dir = "{$upload_path}/wpsc/category_images/";
 $wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
 $wpsc_cache_dir = "{$upload_path}/wpsc/cache/";
 $wpsc_upgrades_dir = "{$upload_path}/wpsc/upgrades/";
+$wpsc_themes_dir = "{$upload_path}/wpsc/themes/";
 
 define('WPSC_FILE_DIR', $wpsc_file_dir);
 define('WPSC_PREVIEW_DIR', $wpsc_preview_dir);
@@ -165,6 +166,7 @@ define('WPSC_CATEGORY_DIR', $wpsc_category_dir);
 define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
 define('WPSC_CACHE_DIR', $wpsc_cache_dir);
 define('WPSC_UPGRADES_DIR', $wpsc_upgrades_dir);
+define('WPSC_THEMES_PATH', $wpsc_themes_dir);
 
 
 /**
@@ -177,6 +179,7 @@ $wpsc_thumbnail_url = "{$upload_url}/wpsc/product_images/thumbnails/";
 $wpsc_category_url = "{$upload_url}/wpsc/category_images/";
 $wpsc_user_uploads_url = "{$upload_url}/wpsc/user_uploads/";
 $wpsc_cache_url = "{$upload_url}/wpsc/cache/";
+$wpsc_themes_url = "{$upload_url}/wpsc/themes/";
 
 define('WPSC_PREVIEW_URL', $wpsc_preview_url);
 define('WPSC_IMAGE_URL', $wpsc_image_url);
@@ -184,6 +187,7 @@ define('WPSC_THUMBNAIL_URL', $wpsc_thumbnail_url);
 define('WPSC_CATEGORY_URL', $wpsc_category_url);
 define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 define('WPSC_CACHE_URL', $wpsc_cache_url);
+define('WPSC_THEMES_URL', $wpsc_themes_url);
 
 
 

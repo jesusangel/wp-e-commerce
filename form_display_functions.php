@@ -209,7 +209,7 @@ function wpsc_list_product_themes($theme_name = null) {
 	}
     
   $theme_path = WPSC_FILE_PATH.'/themes/';
-  $theme_list = nzshpcrt_listdir($theme_path);
+  $theme_list = wpsc_list_dir($theme_path);
   foreach($theme_list as $theme_file) {
     if(is_dir($theme_path.$theme_file) && is_file($theme_path.$theme_file."/".$theme_file.".css")) {
       $theme[$theme_file] = get_theme_data($theme_path.$theme_file."/".$theme_file.".css");

@@ -1157,7 +1157,7 @@ if($_GET['termsandconds'] === 'true'){
  * needs to search the merchants directory for merchants, the code to do this starts here
  */
 $gateway_directory = WPSC_FILE_PATH.'/merchants';
-$nzshpcrt_merchant_list = nzshpcrt_listdir($gateway_directory);
+$nzshpcrt_merchant_list = wpsc_list_dir($gateway_directory);
  //exit("<pre>".print_r($nzshpcrt_merchant_list,true)."</pre>");
 $num=0;
 foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
@@ -1172,7 +1172,7 @@ foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
  */
 // include shipping modules here.
 $shipping_directory = WPSC_FILE_PATH.'/shipping';
-$nzshpcrt_shipping_list = nzshpcrt_listdir($shipping_directory);
+$nzshpcrt_shipping_list = wpsc_list_dir($shipping_directory);
 foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
 	if(stristr( $nzshpcrt_shipping , '.php' )) {
 		require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);

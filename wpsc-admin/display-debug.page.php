@@ -27,6 +27,10 @@ function wpsc_debug_page() {
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=product_url_names'>Clean Duplicate Product URL names</a>
 			</li>
+			
+			<li>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_copying_themes'>Test Copying Themes to New Theme Directory</a>
+			</li>
 		</ul>
 	  
 		<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'><?php
@@ -39,11 +43,41 @@ function wpsc_debug_page() {
 		   case 'product_url_names':
 		   wpsc_clean_product_url_names();
 		   break;
+		   
+		   case 'test_copying_themes':
+		   wpsc_test_copying_themes();
+		   break;
 		 }
 		?></pre>
 	</div>
 	<?php
 }
+
+function wpsc_test_copying_themes() {
+  $old_theme_path = WPSC_FILE_PATH . "/themes/";
+	$new_theme_path = WPSC_THEMES_PATH;
+  $new_dir = @opendir($new_theme_path);
+  $num = 0;
+  $file_names = array();
+  while(($file = @readdir($new_dir)) !== false) {
+    if(is_dir($new_theme_path.$file) && ($file != "..") && ($file != ".")){
+			$file_names[] = $file;
+    }
+  }
+  if(count($file_names) < 1) {
+    $old_dir = @opendir($old_theme_path);
+		while(($file = @readdir($old_dir)) !== false) {
+			if(is_dir($old_theme_path.$file) && ($file != "..") && ($file != ".")){
+				$success = copy($old_theme_path.$file, $new_theme_path.$file);
+				echo "old_file:".$old_theme_path.$file."<br />";
+				echo "new_file:".$new_theme_path.$file."<br />";
+				echo "<pre>".print_r($success,true)."</pre>";
+			}
+		}
+  }
+
+}
+
 
 function wpsc_group_and_update_download_links() {
 	global $wpdb;
