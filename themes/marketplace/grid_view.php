@@ -104,7 +104,7 @@ global $wpsc_query, $wpdb;
 							
 							<?php if((get_option('display_addtocart') == 1) && (get_option('addtocart_or_buynow') !='1')) :?> 	   
 								<?php if(wpsc_product_has_stock()) : ?>
-									<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+									<input type="submit" value="&nbsp;" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 								<?php else : ?>
 									<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
 								<?php endif ; ?>
