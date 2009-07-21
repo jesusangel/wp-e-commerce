@@ -291,7 +291,7 @@ class nzshpcrt_variations {
 				$output .= "          </select>\n\r";
 
         $output .= "        </div>\n\r";
-        //$output .= wpsc_select_variation_file($associated_variation_ids, $associated_variation_row['id']);
+        $output .= wpsc_select_variation_file($associated_variation_ids, $associated_variation_row['id']);
         $output .= "      </div>\n\r";
         
         
@@ -420,7 +420,7 @@ class nzshpcrt_variations {
 			$output .= "          </select>\n\r";
 
 			$output .= "        </div>\n\r";
-      //$output .= wpsc_select_variation_file($variation_ids);
+      $output .= wpsc_select_variation_file($variation_ids);
       $output .= "      </div>\n\r";
       $output .= "    </td>\n\r";
       $output .= "  </tr>\n\r";
