@@ -68,7 +68,7 @@ function wpsc_test_copying_themes() {
     $old_dir = @opendir($old_theme_path);
 		while(($file = @readdir($old_dir)) !== false) {
 			if(is_dir($old_theme_path.$file) && ($file != "..") && ($file != ".")){
-				$success = copy($old_theme_path.$file, $new_theme_path.$file);
+				$success = wpsc_recursive_copy($old_theme_path.$file, $new_theme_path.$file);
 				echo "old_file:".$old_theme_path.$file."<br />";
 				echo "new_file:".$new_theme_path.$file."<br />";
 				echo "<pre>".print_r($success,true)."</pre>";

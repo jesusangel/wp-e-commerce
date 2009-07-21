@@ -247,8 +247,28 @@ function wpsc_list_dir($dirname) {
   }
   return $dirlist; 
 }
+
+/**
+ * wpsc_recursive_copy function, copied from here and renamed: http://nz.php.net/copy
+	* Why doesn't PHP have one of these built in?
+ 
+*/
     
-  
+ function wpsc_recursive_copy($src,$dst) {
+    $dir = opendir($src);
+    @mkdir($dst);
+    while(false !== ( $file = readdir($dir)) ) {
+			if (( $file != '.' ) && ( $file != '..' )) {
+				if ( is_dir($src . '/' . $file) ) {
+					wpsc_recursive_copy($src . '/' . $file,$dst . '/' . $file);
+				}
+				else {
+					@ copy($src . '/' . $file,$dst . '/' . $file);
+				}
+			}
+    }
+    closedir($dir);
+} 
 
 
 ?>

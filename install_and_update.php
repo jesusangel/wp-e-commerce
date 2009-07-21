@@ -490,7 +490,7 @@ function wpsc_copy_themes_to_uploads() {
     $old_dir = @ opendir($old_theme_path);
 		while(($file = @ readdir($old_dir)) !== false) {
 			if(is_dir($old_theme_path.$file) && ($file != "..") && ($file != ".")){
-				@ copy($old_theme_path.$file, $new_theme_path.$file);
+				@ wpsc_recursive_copy($old_theme_path.$file, $new_theme_path.$file);
 			}
 		}
   }
