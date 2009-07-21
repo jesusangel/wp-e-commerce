@@ -1584,7 +1584,6 @@ function wpsc_merchant_sort($a, $b) {
 } 
 uasort($nzshpcrt_gateways, 'wpsc_merchant_sort'); 
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
-require_once(WPSC_FILE_PATH."/form_display_functions.php"); 
 require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
 require_once(WPSC_FILE_PATH."/homepage_products_functions.php"); 
 require_once(WPSC_FILE_PATH."/transaction_result_functions.php"); 

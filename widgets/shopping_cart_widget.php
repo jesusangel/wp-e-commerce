@@ -1,5 +1,6 @@
 <?php
 function widget_wp_shopping_cart($args) {
+    global $wpsc_theme_path;
     extract($args);
     $options = get_option('widget_wp_shopping_cart');
       
@@ -27,7 +28,9 @@ function widget_wp_shopping_cart($args) {
 			$display_state = "style='display: none;'";
 		}
 		echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+		
+		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+		include_once($cur_wpsc_theme_folder."/cart_widget.php");
 		echo "    </div>";
     echo $after_widget;
     }

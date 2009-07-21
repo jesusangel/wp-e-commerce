@@ -21,7 +21,7 @@ if($_REQUEST['wpsc_ajax_action'] == 'special_widget') {
 	* No parameters, returns nothing
 */
 function wpsc_add_to_cart() {
-  global $wpdb, $wpsc_cart;
+  global $wpdb, $wpsc_cart, $wpsc_theme_path;
   /// default values
 	$default_parameters['variation_values'] = null;
 	$default_parameters['quantity'] = 1;
@@ -88,7 +88,8 @@ function wpsc_add_to_cart() {
 			$error_messages = array();
 		}
 		ob_start();
-		include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+		include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	  $output = ob_get_contents();
 		ob_end_clean();
 		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
@@ -133,13 +134,14 @@ if($_REQUEST['wpsc_ajax_action'] == 'add_to_cart') {
 	* No parameters, returns nothing
 */
 function wpsc_empty_cart() {
-  global $wpdb, $wpsc_cart;
+  global $wpdb, $wpsc_cart, $wpsc_theme_path;
   $wpsc_cart->empty_cart(false);
   
   if($_REQUEST['ajax'] == 'true') {
 		ob_start();
     if(get_option('wpsc_use_theme_engine') == TRUE) {	    
-			include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+		include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	  } else {
 			nzshpcrt_shopping_basket("", 4);
 	  }
@@ -223,7 +225,7 @@ if(isset($_POST['coupon_num'])) {
 	* No parameters, returns nothing
 */
 function wpsc_update_item_quantity() {
-  global $wpdb, $wpsc_cart;
+  global $wpdb, $wpsc_cart, $wpsc_theme_path;
  
   if(is_numeric($_POST['key'])) {
     $key = (int)$_POST['key'];
@@ -240,7 +242,8 @@ function wpsc_update_item_quantity() {
   
  if($_REQUEST['ajax'] == 'true') {
 	ob_start();
-	include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	$output = ob_get_contents();
 	ob_end_clean();
 	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
@@ -520,7 +523,7 @@ if($_REQUEST['wpsc_action'] == 'submit_checkout') {
 	* No parameters, returns nothing
 */
 function wpsc_change_tax() {
-  global $wpdb, $wpsc_cart;
+  global $wpdb, $wpsc_cart, $wpsc_theme_path;
   $form_id = absint($_POST['form_id']);
 
   $previous_country = $_SESSION['wpsc_selected_country'];
@@ -539,7 +542,8 @@ function wpsc_change_tax() {
   $total = wpsc_cart_total();
 
 	ob_start();
-	include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	$output = ob_get_contents();
 	ob_end_clean();
 	//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");

@@ -96,23 +96,6 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
 function wpsc_uploaded_files()
   {
   global $wpdb;
-  /*
-$product_files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST."", ARRAY_A);
-  foreach($product_files as $product_file){
-  	$filelist[] = $product_file['file'];
-  }
-  $filelist = implode(',', $filelist);
-  $files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE id IN ($filelist)", ARRAY_A);
-  $num = 0;
-  foreach ($files as $file_data) {
-  	if ($file_data != null){
-  		$dirlist[$num]['display_filename'] = $file_data['filename'];
-        $dirlist[$num]['file_id'] = $file_data['id'];
-		$dirlist[$num]['real_filename'] = $file_data['idhash'];
-  	}
-  	$num++;
-  }
-*/
   
   $dir = @opendir(WPSC_FILE_DIR);
   $num = 0;
@@ -202,13 +185,13 @@ function wpsc_select_variation_file($variation_ids, $variation_combination_id = 
   
   
 function wpsc_list_product_themes($theme_name = null) {
-  global $wpdb;
+  global $wpdb, $wpsc_theme_path;
   $selected_theme = get_option('wpsc_selected_theme');
   if($selected_theme == '') {
     $selected_theme = 'default';
 	}
     
-  $theme_path = WPSC_FILE_PATH.'/themes/';
+  $theme_path = $wpsc_theme_path;
   $theme_list = wpsc_list_dir($theme_path);
   foreach($theme_list as $theme_file) {
     if(is_dir($theme_path.$theme_file) && is_file($theme_path.$theme_file."/".$theme_file.".css")) {

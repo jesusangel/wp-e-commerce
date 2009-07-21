@@ -67,16 +67,17 @@ function nzshpcrt_shopping_basket($input = null, $override_state = null) {
 }
 
 function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title=false) {
-  global $wpdb;
+  global $wpdb, $wpsc_theme_path;
 	$display_state = "";
 	if((($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
 		$display_state = "style='display: none;'";
 	}
 	echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-	include_once(WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR."/cart_widget.php");
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	echo "    </div>";
   return $output;
-  }
+}
   
 function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null, $supplied_form_id = null) {
   global $wpdb;

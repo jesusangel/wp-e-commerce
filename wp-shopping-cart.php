@@ -110,6 +110,7 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 include_once(WPSC_FILE_PATH."/wpsc-includes/category.functions.php");
 include_once(WPSC_FILE_PATH."/wpsc-includes/processing.functions.php");
+require_once(WPSC_FILE_PATH."/wpsc-includes/form-display.functions.php");
 
 if (!IS_WP25) {
 	require_once(WPSC_FILE_PATH.'/editor.php');
@@ -229,10 +230,27 @@ if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSI
 }
 
 function wpsc_initialisation() {
-  global $wpsc_cart;
+  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url;
   // set the theme directory constant
-  $theme_path = WPSC_FILE_PATH . "/themes/";
-	if((get_option('wpsc_selected_theme') == null) || (!file_exists($theme_path.get_option('wpsc_selected_theme')))) {
+
+  $uploads_dir = @opendir(WPSC_THEMES_PATH);
+  $file_names = array();
+  while(($file = @readdir($uploads_dir)) !== false) {
+    //echo "<br />test".WPSC_THEMES_PATH.$file;
+    if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
+			$file_names[] = $file;
+    }
+  }
+  if(count($file_names) > 0) {
+		$wpsc_theme_path = WPSC_THEMES_PATH;
+		$wpsc_theme_url = WPSC_THEMES_URL;
+  } else {
+		$wpsc_theme_path = WPSC_FILE_PATH . "/themes/";
+		$wpsc_theme_url = WPSC_URL. '/themes/';
+  }
+  //$theme_path = WPSC_FILE_PATH . "/themes/";
+  //exit(print_r($file_names,true));
+	if((get_option('wpsc_selected_theme') == null) || (!file_exists($wpsc_theme_path.get_option('wpsc_selected_theme')))) {
 		$theme_dir = 'default';
 	} else {
 		$theme_dir = get_option('wpsc_selected_theme');

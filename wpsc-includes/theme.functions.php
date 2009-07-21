@@ -14,8 +14,9 @@
   * © with xiligroup dev
   */
 function wpsc_select_theme_functions() {
+  global $wpsc_theme_path;
   $theme_dir = WPSC_THEME_DIR; /* done by plugins_loaded */
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".$theme_dir);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.$theme_dir);
 	
 	if((get_option('wpsc_selected_theme') != '') && (file_exists($cur_wpsc_theme_folder."/".$theme_dir.".php") )) { 
 		include_once($cur_wpsc_theme_folder.'/'.$theme_dir.'.php');
@@ -29,6 +30,7 @@ add_action('wp','wpsc_select_theme_functions',10,1);
 * enqueue all javascript and CSS for wp ecommerce
 */
 function wpsc_enqueue_user_script_and_css() {
+  global $wp_styles, $wpsc_theme_url, $wpsc_theme_path;
 	/**
 	* added by xiligroup.dev to be compatible with touchshop
 	*/
@@ -38,7 +40,6 @@ function wpsc_enqueue_user_script_and_css() {
 		/**
 		* end of added by xiligroup.dev to be compatible with touchshop
 		*/
-		global $wp_styles;
 		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 		
 		if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
@@ -64,12 +65,10 @@ function wpsc_enqueue_user_script_and_css() {
 		
 		wp_enqueue_script('wpsc-thickbox',WPSC_URL.'/js/thickbox.js', array('jquery'), 'Instinct_e-commerce');
 
-		$theme_path = WPSC_FILE_PATH. '/themes/';
-		$theme_url = WPSC_URL. '/themes/';
-		if(file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css")) {
-			$theme_url = $theme_url.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css";
+		if(file_exists($wpsc_theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css")) {
+			$theme_url = $wpsc_theme_url.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css";
 		} else {
-			$theme_url = $theme_url. '/default/default.css';
+			$theme_url = $wpsc_theme_url. '/default/default.css';
 		}
 		
 		wp_enqueue_style( 'wpsc-theme-css', $theme_url, false, $version_identifier, 'all');
@@ -295,10 +294,10 @@ if($_GET['wpsc_user_dynamic_css'] == 'true') {
 * @return string - html displaying one or more products
 */
 function wpsc_display_products($query) {
-  global $wpdb, $wpsc_query;
+  global $wpdb, $wpsc_query, $wpsc_theme_path;
 	
 	/// added by xiligroup.dev to be compatible with touchshop
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	/// end of added by xiligroup.dev to be compatible with touchshop
   
   $temp_wpsc_query = new WPSC_query($query);
@@ -375,9 +374,9 @@ function wpsc_display_products($query) {
 //handles replacing the tags in the pages
   
 function wpsc_products_page($content = '') {
-  global $wpdb, $wp_query, $wpsc_query;
+  global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path;
 	/// added by xiligroup.dev to be compatible with touchshop
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	/// end of added by xiligroup.dev to be compatible with touchshop
   
 	$output = '';
@@ -487,8 +486,9 @@ function wpsc_products_page($content = '') {
 }
 
 function wpsc_place_shopping_cart($content = '') {
+  global $wpsc_theme_path;
 	/// added by xiligroup.dev to be compatible with touchshop
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',WPSC_FILE_PATH."/themes/".WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	/// end of added by xiligroup.dev to be compatible with touchshop
 	
   if(preg_match("/\[shoppingcart\]/",$content)) {
