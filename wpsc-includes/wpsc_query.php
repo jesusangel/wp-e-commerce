@@ -242,6 +242,20 @@ function wpsc_product_has_stock() {
 }
 
 /**
+* wpsc product remaining stock function
+* @return integer - the amount of remaining stock, or null if product is stockless
+*/
+function wpsc_product_remaining_stock() {
+	// how much stock is left?
+	global $wpsc_query;
+	if((count($wpsc_query->first_variations) == 0) && ($wpsc_query->product['quantity_limited'] == 1) && ($wpsc_query->product['quantity'] < 1)) {
+		return $wpsc_query->product['quantity'];
+	} else {
+		return null;
+	}
+}
+
+/**
 * wpsc is donation function
 * @return boolean - true if it is a donation, otherwise false
 */
