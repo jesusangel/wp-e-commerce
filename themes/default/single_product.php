@@ -5,7 +5,6 @@ $image_height = get_option('single_view_image_height');
 ?>
 <div id='products_page_container' class="wrap wpsc_container">
 	
-	
 	<?php if(wpsc_has_breadcrumbs()) :?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('home'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
@@ -27,9 +26,9 @@ $image_height = get_option('single_view_image_height');
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
 					<div class="imagecol">
-						<?php if(wpsc_the_product_thumbnail()) :?> 	   
-								<a rel="<?php echo str_replace(" ", "_", wpsc_the_product_title()); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
-									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>"/>
+						<?php if(wpsc_the_product_thumbnail()) :?>
+								<a rel="<?php echo str_replace(array(" ", '"', '&quot;'), array("_", "", ""), wpsc_the_product_title()); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
+									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>" />
 								</a>
 						<?php else: ?> 
 							<div class="item_no_image">

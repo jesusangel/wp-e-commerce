@@ -241,6 +241,9 @@ function wpsc_product_has_stock() {
 	}
 }
 
+
+
+
 /**
 * wpsc product remaining stock function
 * @return integer - the amount of remaining stock, or null if product is stockless
