@@ -7,7 +7,7 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_multiple";
 $nzshpcrt_gateways[$num]['payment_type'] = "paypal";
 
 function gateway_paypal_multiple($seperator, $sessionid) {
-  global $wpdb;
+  global $wpdb, $wpsc_cart;
   $purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 
 	if ($purchase_log['totalprice']==0) {
@@ -78,10 +78,11 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   
 	$total = nzshpcrt_overall_total_price($_SESSION['selected_country'],false,true);
 
-	//$discount = nzshpcrt_apply_coupon($total,$_SESSION['coupon_num']);
-	if(($discount > 0) && ($_SESSION['coupon_num'] != null)) {
+	$discount = $wpsc_cart->cart_item->discount;
+	//exit($discount);
+	if(($discount > 0)) {
 		$data['item_name_'.$i] = "Your Shopping Cart";
-		$data['amount_'.$i] = number_format(sprintf("%01.2f", $purchase_log['totalprice']),$decimal_places,'.','');
+		$data['amount_'.$i] = number_format(sprintf("%01.2f", $wpsc_cart->calculate_total_price()),$decimal_places,'.','');
 		$data['quantity_'.$i] = 1;
 		// $data['item_number_'.$i] = 0;
 		$data['shipping_'.$i] = 0;
@@ -96,28 +97,6 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 				continue;
 			}
 			$variation_count = count($product_variations);
-			/*
-			$variation_sql = "SELECT * FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id`='".$item['id']."'";
-			$variation_data = $wpdb->get_results($variation_sql,ARRAY_A); 
-			$variation_count = count($variation_data);
-			if($variation_count >= 1) {
-				$variation_list = " (";
-				$j = 0;
-				foreach($variation_data as $variation) {
-					if($j > 0) {
-						$variation_list .= ", ";
-					}
-					$value_id = $variation['value_id'];
-					$value_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id`='".$value_id."' LIMIT 1",ARRAY_A);
-					$variation_list .= $value_data[0]['name'];
-					$j++;
-				}
-				$variation_list .= ")";
-			} else {
-				$variation_list = '';
-			}
-			*/
-			
 			$local_currency_productprice = $item['price'];
 			$local_currency_shipping = $item['pnp'];
 			
@@ -131,7 +110,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 				$paypal_currency_shipping = $local_currency_shipping;
 				$base_shipping = $purchase_log['base_shipping'];
 			}
-			//exit("---->".$paypal_currency_shipping);
+			//exit("<pre>".print_r(, true).'</pre>');
 			$data['item_name_'.$i] = urlencode(stripslashes($item['name']));
 			$data['amount_'.$i] = number_format(sprintf("%01.2f", $paypal_currency_productprice),$decimal_places,'.','');
 			$data['tax_'.$i] = number_format(sprintf("%01.2f", $item['tax_charged']),$decimal_places,'.','');
@@ -155,7 +134,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		}
 	}
   $data['tax'] = '';
- 
+ 	
   //exit($base_shipping);
   if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false)) {
     $data['handling_cart'] = number_format($base_shipping,$decimal_places,'.','');
@@ -237,6 +216,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
   	exit("<pre>".print_r($data,true)."</pre>");
 	}
+	//exit('<pre>'.print_r($data, true).'</pre>');
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
 }
@@ -263,7 +243,6 @@ function nzshpcrt_paypal_ipn() {
     
     // post back to PayPal system to validate
     $header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
-
     $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
     $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
     $fp = fsockopen ($paypal_url, 80, $errno, $errstr, 30);
@@ -392,7 +371,7 @@ function form_paypal_multiple() {
   </tr>
   <tr>
   	<td colspan='2'>
-  	 <span  class='wpscsmall description'>Note: The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr</span>
+  	 <span  class='wpscsmall description'>Note:The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr</span>
   	</td>
   </tr>
   ";
@@ -439,10 +418,7 @@ function form_paypal_multiple() {
      <td>
        <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
-     </td>
-  </tr>
-  <tr>
-  	<td colspan='2'><span  class='wpscsmall description'>
+<span  class='wpscsmall description'>
   	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change this option to No.</span>
   	</td>
   </tr>
