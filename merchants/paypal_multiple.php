@@ -99,21 +99,24 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 			$variation_count = count($product_variations);
 			$local_currency_productprice = $item['price'];
 			$local_currency_shipping = $item['pnp'];
-			
+		
 			if($paypal_currency_code != $local_currency_code) {
 				$paypal_currency_productprice = $curr->convert($local_currency_productprice,$paypal_currency_code,$local_currency_code);
 				$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
 				//exit($paypal_currency_productprice . " " . $paypal_currency_shipping.' '.$local_currency_productprice . " " . $local_currency_code);
 				 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
+				 	//exit($paypal_currency_productprice.' Local>'.$local_currency_productprice.' Base shp'.$base_shipping);
+				 $tax_price = $curr->convert($item['tax_charged'],$paypal_currency_code, $local_currency_code);
 			} else {
 				$paypal_currency_productprice = $local_currency_productprice;
 				$paypal_currency_shipping = $local_currency_shipping;
 				$base_shipping = $purchase_log['base_shipping'];
+				 $tax_price = $item['tax_charged'];
 			}
 			//exit("<pre>".print_r(, true).'</pre>');
 			$data['item_name_'.$i] = urlencode(stripslashes($item['name']));
 			$data['amount_'.$i] = number_format(sprintf("%01.2f", $paypal_currency_productprice),$decimal_places,'.','');
-			$data['tax_'.$i] = number_format(sprintf("%01.2f", $item['tax_charged']),$decimal_places,'.','');
+			$data['tax_'.$i] = number_format(sprintf("%01.2f",$tax_price),$decimal_places,'.','');
 			$data['quantity_'.$i] = $item['quantity'];
 			$data['item_number_'.$i] = $product_data['id'];
 			if($item['donation'] !=1) {
@@ -355,24 +358,19 @@ function form_paypal_multiple() {
   $select_currency[get_option('paypal_curcode')] = "selected='selected'";
   $output = "
   <tr>
-      <td>Username
+      <td>Username:
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_multiple_business')."' name='paypal_multiple_business' />
       </td>
   </tr>
   <tr>
-      <td>Url
+      <td>Url:
       </td>
       <td>
       <input type='text' size='40' value='".get_option('paypal_multiple_url')."' name='paypal_multiple_url' /> <br />
    
       </td>
-  </tr>
-  <tr>
-  	<td colspan='2'>
-  	 <span  class='wpscsmall description'>Note:The URL to use for the paypal gateway is: https://www.paypal.com/cgi-bin/webscr</span>
-  	</td>
   </tr>
   ";
   
@@ -405,7 +403,7 @@ function form_paypal_multiple() {
 	}
 	$output .= "
    <tr>
-     <td>IPN
+     <td>IPN :
      </td>
      <td>
        <input type='radio' value='1' name='paypal_ipn' id='paypal_ipn1' ".$paypal_ipn1." /> <label for='paypal_ipn1'>".TXT_WPSC_YES."</label> &nbsp;
@@ -418,10 +416,24 @@ function form_paypal_multiple() {
      <td>
        <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
-<span  class='wpscsmall description'>
-  	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change this option to No.</span>
+
   	</td>
   </tr>
+  <tr>
+  	<td colspan='2'>
+  	<span  class='wpscsmall description'>
+  	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change Send shipping details option to No.</span>
+  	</td>
+  </tr>
+  <tr>
+     <td>
+      Override users paypal address:
+     </td>
+     <td>
+       <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".TXT_WPSC_YES."</label> &nbsp;
+       <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".TXT_WPSC_NO."</label>
+     </td>
+   </tr>
   <tr>
       <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
      
@@ -471,15 +483,7 @@ function form_paypal_multiple() {
 	}
      
 $output .= "
-   <tr>
-     <td>
-      Override the users address stored on paypal:
-     </td>
-     <td>
-       <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".TXT_WPSC_YES."</label> &nbsp;
-       <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".TXT_WPSC_NO."</label>
-     </td>
-   </tr>
+
    
    
    <tr class='update_gateway' >

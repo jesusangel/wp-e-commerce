@@ -95,8 +95,12 @@ function selectgateway() {
 				</div>
 				</div>
 				<?php } ?>		
+				<h4><?php echo TXT_WPSC_WE_RECOMMEND; ?></h4>
+						<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/paypal-referal.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly." /></a> <br /><br />
+						<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout" /></a>
+
 				</td>
-				
+
 				<td class='gateway_settings' rowspan='2'>										
 					<?php if (IS_WP27) { ?>
 						<div class='postbox'>
@@ -178,13 +182,7 @@ function selectgateway() {
       
       
       
-      <tr>
-        <td>
-					<h4><?php echo TXT_WPSC_WE_RECOMMEND; ?></h4>
-						<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/paypal-referal.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly." /></a> <br /><br />
-						<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout" /></a>
-        </td>
-      </tr>
+
 		</table>
 
   

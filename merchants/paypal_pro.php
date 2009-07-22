@@ -274,10 +274,34 @@ if(get_option('paypal_pro_testmode') == "on"){
 $output = '
 <tr>
 	<td>
-		<div><input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="'.get_option("paypal_pro_username").'" size="30" /><br /><label for="paypal_pro_username">'.__('Enter your PayPal API Username.').'</label></div>
-		<div><input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="'.get_option('paypal_pro_password').'" size="16" /><br /><label for="paypal_pro_password">'.__('Enter your PayPal API Password.').'</label></div>
-		<div><input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="'.get_option('paypal_pro_signature').'" size="48" /><br /><label for="paypal_pro_signature">'.__('Enter your PayPal API Signature.').'</label></div>
-		<div><input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" '.$selected.' /><label for="paypal_pro_testmode">'.__('Test Mode Enabled').'</label></div>						
+		<label for="paypal_pro_username">'.__('API Username:').'</label>
+	</td>
+	<td>
+		<input type="text" name="PayPalPro[username]" id="paypal_pro_username" value="'.get_option("paypal_pro_username").'" size="30" />
+	</td>
+</tr>
+<tr>
+	<td>
+		<label for="paypal_pro_password">'.__('API Password:').'</label>
+	</td>
+	<td>
+		<input type="password" name="PayPalPro[password]" id="paypal_pro_password" value="'.get_option('paypal_pro_password').'" size="16" />
+	</td>
+</tr>
+<tr>
+	<td>
+		<label for="paypal_pro_signature">'.__('API Signature:').'</label>
+	</td>
+	<td>
+		<input type="text" name="PayPalPro[signature]" id="paypal_pro_signature" value="'.get_option('paypal_pro_signature').'" size="48" />
+	</td>
+</tr>
+<tr>
+	<td>
+		<label for="paypal_pro_testmode">'.__('Test Mode Enabled:').'</label>
+	</td>
+	<td>
+		<input type="hidden" name="PayPalPro[testmode]" value="off" /><input type="checkbox" name="PayPalPro[testmode]" id="paypal_pro_testmode" value="on" '.$selected.' />					
 	</td>
 </tr>';
 return $output;

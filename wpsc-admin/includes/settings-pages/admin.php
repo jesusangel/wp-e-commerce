@@ -74,11 +74,11 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><?php echo TXT_WPSC_PURCHASERECEIPT;?></th>
-					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo get_option('wpsc_email_receipt');?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_receipt'));?></textarea></td>
 				</tr>
 				<tr>
 					<th><?php echo TXT_WPSC_ADMIN_REPORT;?></th>
-					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 100%; height: 200px;'><?php echo get_option('wpsc_email_admin');?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_admin'));?></textarea></td>
 				</tr>
 			</table>
 			<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>
