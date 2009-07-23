@@ -1255,15 +1255,19 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {
 	add_action('admin_init', 'wpsc_purchlog_edit_status');
 }
-
+/*
+SELECT DISTINCT `products`.*, `category`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state` FROM `wp_wpsc_product_list` AS `products` LEFT JOIN `wp_wpsc_item_category_assoc` AS `category` ON `products`.`id` = `category`.`product_id` LEFT JOIN `wp_wpsc_product_order` AS `order` ON ( ( `products`.`id` = `order`.`product_id` ) AND ( `category`.`category_id` = `order`.`category_id` ) ) WHERE `products`.`publish`='1' AND `products`.`active` = '1' AND `category`.`category_id` IN ('3') ORDER BY `order_state` DESC, `products`.`id` DESC,`order`.`order` ASC LIMIT 0, 8
+*/
 function wpsc_save_product_order() {
   global $wpdb;
 	if(is_numeric($_POST['category_id'])) {
-		$category_id = (int)$_POST['category_id'];
+		$category_id = absint($_POST['category_id']);
 		$products = $_POST['product'];
 		$order=1;
 		foreach($products as $product_id) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order`=$order WHERE `product_id`=".(int)$product_id." AND `category_id`=".(int)$category_id." LIMIT 1");
+			$product_id = absint($product_id);
+			$wpdb->query("REPLACE INTO `".WPSC_TABLE_PRODUCT_ORDER."`(`category_id`, `product_id`, `order`) VALUES ('{$category_id}', '{$product_id}', '{$order}' )");
+			//echo "/*  REPLACE INTO `".WPSC_TABLE_PRODUCT_ORDER."`(`category_id`, `product_id`, `order`) VALUES ('{$category_id}', '{$product_id}', '$order' ) */\n\r";
 			$order++;
 		} 
 		$success = true;

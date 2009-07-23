@@ -306,7 +306,7 @@ function wpsc_display_products($query) {
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	if(wpsc_is_single_product()) {
-		include_once($cur_wpsc_theme_folder."/single_product.php");
+		include($cur_wpsc_theme_folder."/single_product.php");
 	} else {
 		// get the display type for the selected category
 		if(is_numeric($wpsc_query->query_vars['category_id'])) {
@@ -345,7 +345,7 @@ function wpsc_display_products($query) {
 		switch($display_type) {
 			case "grid":
 			if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
-				include_once($cur_wpsc_theme_folder."/grid_view.php");
+				include($cur_wpsc_theme_folder."/grid_view.php");
 				break; // only break if we have the function;
 			}
 			
@@ -359,7 +359,7 @@ function wpsc_display_products($query) {
 			
 			case "default":  // this may be redundant :D
 			default:
-				include_once($cur_wpsc_theme_folder."/products_page.php");
+				include($cur_wpsc_theme_folder."/products_page.php");
 			break;
 		}
 	}
@@ -409,7 +409,7 @@ function wpsc_products_page($content = '') {
 			ob_start();
 			
 			if(wpsc_is_single_product()) {
-				include_once($cur_wpsc_theme_folder."/single_product.php");
+				include($cur_wpsc_theme_folder."/single_product.php");
 			} else {
 			  // get the display type for the selected category
 				if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
@@ -453,7 +453,7 @@ function wpsc_products_page($content = '') {
 				switch($display_type) {
 					case "grid":
 					if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
-						include_once($cur_wpsc_theme_folder."/grid_view.php");
+						include($cur_wpsc_theme_folder."/grid_view.php");
 						break; // only break if we have the function;
 					}
 					/*
@@ -465,7 +465,7 @@ function wpsc_products_page($content = '') {
 					*/
 				  case "default":  // this may be redundant :D
 				  default:
-				    include_once($cur_wpsc_theme_folder."/products_page.php");
+				    include($cur_wpsc_theme_folder."/products_page.php");
 				  break;
 				}
 			}

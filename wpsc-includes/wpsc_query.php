@@ -251,7 +251,7 @@ function wpsc_product_has_stock() {
 function wpsc_product_remaining_stock() {
 	// how much stock is left?
 	global $wpsc_query;
-	if((count($wpsc_query->first_variations) == 0) && ($wpsc_query->product['quantity_limited'] == 1) && ($wpsc_query->product['quantity'] < 1)) {
+	if((count($wpsc_query->first_variations) == 0) && ($wpsc_query->product['quantity_limited'] == 1) && ($wpsc_query->product['quantity'] > 0)) {
 		return $wpsc_query->product['quantity'];
 	} else {
 		return null;
@@ -1228,6 +1228,7 @@ class WPSC_Query {
 						$product_id_order = 'ASC';
 					}				
 					$order_by = " `order_state` DESC,`order`.`order` $order, `products`.`id` $product_id_order";
+					//$order_by = " `order_state` DESC, `products`.`id` $product_id_order,`order`.`order` $order";
 				}
 				
 				$sql = "SELECT DISTINCT `products`.*, `category`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state` 
@@ -1535,7 +1536,7 @@ class WPSC_Query {
 		$i = 0;
 		if( $this->category != null) {
 			if($this->is_single == true) {
-				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($this->product['name']), ENT_QUOTES);
+				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($this->product['name']), ENT_QUOTES, 'UTF-8');
 				$this->breadcrumbs[$i]['url'] = '';
 				$i++;
 			}
@@ -1549,10 +1550,9 @@ class WPSC_Query {
 			}
 			$i++;
 			
-			
 			while ($category_info['category_parent']!=0) {
 				$category_info =	$wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='{$category_info['category_parent']}'",ARRAY_A);			
-				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES);
+				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES, 'UTF-8');
 				$this->breadcrumbs[$i]['url'] = wpsc_category_url($category_info['id']);
 				$i++;
 			}

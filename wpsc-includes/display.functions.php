@@ -129,7 +129,7 @@ function wpsc_also_bought($product_id) {
           if(get_option('product_image_width') != '') {
             $output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".$also_bought_data['name']."' width='$image_display_height' height='$image_display_height' id='product_image_".$also_bought_data['id']."' class='product_image' />";
 					} else {
-            $output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES)."' id='product_image_".$also_bought_data['id']."' class='product_image' />";
+            $output .= "<img src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$also_bought_data['name']."' alt='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' id='product_image_".$also_bought_data['id']."' class='product_image' />";
 					}
 				}
 			}
@@ -187,7 +187,7 @@ function wpsc_product_url($product_id, $category_id = null, $escape = true) {
   
   if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
     $url_name = get_product_meta($product_id, 'url_name', true);
-    $url_name = htmlentities(stripslashes($url_name), ENT_QUOTES);
+    $url_name = htmlentities(stripslashes($url_name), ENT_QUOTES, 'UTF-8');
 		$product_url =wpsc_category_url($category_id).$url_name."/";
   } else {    
     if(!stristr(get_option('product_list_url'), "?")) {
@@ -421,7 +421,7 @@ function wpsc_product_permalinks($rewrite_rules) {
 					}
 					$parent_categories[] = $category['nice-name'];
 					$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'];
-					$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/([A-Za-z0-9\-\.\\\\_():;\'"%~|]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&product_url_name=$matches[1]';
+					$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/(.+?)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&product_url_name=$matches[1]';
 					$new_rules[($rewrite_page_name.implode($parent_categories,"/").'/page/([0-9]+)/?$')] = 'index.php?pagename='.$page_name.'&category_id='.$category['id'].'&wpsc_page=$matches[1]';
 					// recurses here
 					$sub_rules = wpsc_rewrite_categories($page_name, $category['id'], ($level+1), $parent_categories, $is_index);
@@ -490,7 +490,7 @@ function wpsc_obtain_the_title() {
 		}
   }
   if(isset($product_list ) && ($product_list != null)) {
-  	$output = htmlentities(stripslashes($product_list['name']), ENT_QUOTES);
+  	$output = htmlentities(stripslashes($product_list['name']), ENT_QUOTES, 'UTF-8');
   }
 	return $output;
 }

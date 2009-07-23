@@ -74,7 +74,7 @@ class usps {
 		$weight = wpsc_cart_weight_total();
 		$pound = floor($weight);
 		$ounce = ($weight-$pound)*16;
-		$machinable = true;
+		$machinable = 'true';
 		if (($ounce > 13) || ($pound > 1)) {
 			define('MODULE_SHIPPING_USPS_TYPES', "PRIORITY, EXPRESS, PARCEL POST");
 		} else {
