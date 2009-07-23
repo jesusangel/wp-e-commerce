@@ -246,7 +246,7 @@ class wpsc_checkout {
 			case "address":
 			case "delivery_address":
 			case "textarea":
-			$output = "<textarea class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]' rows='3' cols='40' >".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
+			$output = "<textarea title='".$this->checkout_item->unique_name."' class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]' rows='3' cols='40' >".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."</textarea>";
 			break;
 			
 			case "country":
@@ -255,7 +255,7 @@ class wpsc_checkout {
 
 			case "delivery_country":
 			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
-			$output = "<input type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
+			$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
 			break;
 			
 			case "text":
@@ -264,7 +264,7 @@ class wpsc_checkout {
 			case "email":
 			case "coupon":
 			default:
-			$output = "<input type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
+			$output = "<input title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
 			break;
 		}
 		return $output;

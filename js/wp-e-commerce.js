@@ -15,7 +15,47 @@ function check_make_purchase_button(){
 }	
 
 jQuery(document).ready(function () {
-  
+  	
+  	//this bit of code runs on the checkout page. If the checkbox is selected it copies the valus in the billing country and puts it in the shipping country form fields. 23.07.09
+     jQuery("#shippingSameBilling").click(function(){
+       
+        // If checked
+        jQuery("#shippingSameBilling").livequery(function(){
+        
+        	if(jQuery(this).is(":checked")){    
+	            var fname = jQuery("input[title='billingfirstname']").val();
+				var lname = jQuery("input[title='billinglastname']").val();            
+	            var addr = jQuery("textarea[title='billingaddress']").val();
+				var city = jQuery("input[title='billingcity']").val(); 
+	            var pcode = jQuery("input[title='billingpostcode']").val();
+				var phone = jQuery("input[title='billingphone']").val(); 
+	            var email = jQuery("input[title='billingfirstname']").val();
+	            var state = jQuery("select[title='billingregion'] :selected").text();
+				var country = jQuery("select[title='billingcountry'] :selected").text();
+				var countryID = jQuery("select[title='billingcountry'] :selected").val();             
+	
+				jQuery("input[title='shippingfirstname']").val(fname);
+				jQuery("input[title='shippinglastname']").val(lname); 
+				jQuery("textarea[title='shippingaddress']").val(addr);
+				jQuery("input[title='shippingcity']").val(city);
+				jQuery("input[title='shippingpostcode']").val(pcode);				
+				jQuery("input[title='shippingphone']").val(phone);				
+				jQuery("input[title='shippingemail']").val(email);		
+				jQuery("input[title='shippingstate']").val(state);														
+				jQuery("input.shipping_country").val(countryID);
+				jQuery("span.shipping_country_name").html(country);
+	
+				
+				if(jQuery("select[title='billingcountry'] :selected").val() != jQuery("select[name='country'] :selected").val()){
+					jQuery("select[name='country']").val(countryID);
+					submit_change_country();
+				}
+			}
+         
+            //otherwise, hide it
+            //jQuery("#extra").hide("fast");
+        });
+ 	 });
 	// Submit the product form using AJAX
   jQuery("form.product_form").submit(function() {
     // we cannot submit a file through AJAX, so this needs to return true to submit the form normally if a file formfield is present

@@ -209,6 +209,15 @@ if(wpsc_cart_item_count() > 0) :
 	?>
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
+			<?php if($wpsc_checkout->checkout_item->unique_name == 'delivertoafriend') : ?>
+					<tr>
+						<td colspan ='2'>
+							<br />
+							<label for='shippingSameBilling'>Shipping is the same as billing info</label>
+							<input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' />
+						</td>
+					</tr>
+			<?php endif; ?>
 		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 		  <?php if(wpsc_checkout_form_is_header() == true) : ?>
 			<td colspan='2'>
@@ -216,6 +225,7 @@ if(wpsc_cart_item_count() > 0) :
 					<?php echo wpsc_checkout_form_name();?>
 				</h4>
 			</td>
+				
 		  <?php else: ?>
 			<td>
 				<label for='<?php echo wpsc_checkout_form_element_id(); ?>'>

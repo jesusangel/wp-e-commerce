@@ -98,7 +98,7 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
 	
   $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
   $output .= "<div id='$html_form_id'>\n\r";
-  $output .= "<select $supplied_form_id name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
+  $output .= "<select $supplied_form_id title='billingcountry' name='collected_data[".$form_id."][0]' class='current_country' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");' >\n\r";
   foreach ($country_data as $country) {
     $selected ='';
    if($country['visible'] == '1'){
@@ -116,7 +116,7 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
   $region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$selected_country."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
     $output .= "<div id='region_select_$form_id'>";
     if($region_list != null) {
-      $output .= "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
+      $output .= "<select title='billingregion' name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
       //$output .= "<option value=''>None</option>";
       foreach($region_list as $region) {
         if($selected_region == $region['id']) {
