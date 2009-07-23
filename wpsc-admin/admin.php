@@ -146,8 +146,74 @@ function wpsc_admin_pages(){
 		
 		return;
   }
+
+
+  
+
+/**
+	* wpsc_admin_css_and_js function, includes the wpsc_admin CSS and JS
+	* No parameters, returns nothing
+*/
+function  wpsc_admin_include_css_and_js() {
+  $siteurl = get_option('siteurl'); 
+
+	wp_admin_css( 'dashboard' );
+	wp_admin_css( 'media' );
+	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
+	
+  $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	wp_enqueue_script('jCrop', WPSC_URL.'/wpsc-admin/js/jquery.Jcrop.min.js', array('jquery'), '0.9.8');
+	wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
+	
+	
+	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
+	
+	
+	
+	wp_enqueue_script('wp-e-commerce-legacy-ajax', WPSC_URL.'/wpsc-admin/js/ajax.js', false, $version_identifier); // needs removing
+	wp_enqueue_script('wp-e-commerce-variations', WPSC_URL.'/wpsc-admin/js/variations.js', array('jquery'), $version_identifier);
+	
+	
+	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_css=true" , false, $version_identifier, 'all' );
+	wp_localize_script( 'wp-e-commerce-tags', 'postL10n', array(
+		'tagsUsed' =>  __('Tags used on this post:'),
+		'add' => attribute_escape(__('Add')),
+		'addTag' => attribute_escape(__('Add new tag')),
+		'separate' => __('Separate tags with commas'),
+	));
+	if(WPSC_GOLD_DIR_NAME != ''){
+		wp_enqueue_style('gold_cart', WP_CONTENT_URL.'/uploads/wpsc/upgrades/gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
+	}
+	//jQuery wysiwyg
+	//  	if ( user_can_richedit() ) {
+	// 		wp_enqueue_script('editor');
+	// 	}
+	// 	wp_enqueue_script('media-upload');
+	//   wp_enqueue_style('thickbox');
+
+	// Prototype breaks dragging and dropping, I need it gone
+	wp_deregister_script('prototype');
+	// remove the old javascript and CSS, we want it no more, it smells bad
+	remove_action('admin_head', 'wpsc_admin_css');
+}
+  
+  
   
 function wpsc_admin_edit_products_page_js() {
+	wp_enqueue_script('wp-e-commerce-tags', WPSC_URL.'/wpsc-admin/js/product_tagcloud.js', array('livequery'), $version_identifier);
+ 	if ( user_can_richedit() ) {
+		wp_enqueue_script('editor');
+	}
+	wp_enqueue_script('media-upload');
+  wp_enqueue_style('thickbox');
+  
+	wp_enqueue_script('swfupload');
+	wp_enqueue_script('swfupload-swfobject');
+	wp_enqueue_script('swfupload-queue');
+	wp_enqueue_script('wpsc-swfupload-handlers', WPSC_URL.'/wpsc-admin/js/wpsc-swfupload-handlers.js', false, $version_identifier);
+	
 	add_action( 'admin_head', 'wp_tiny_mce' );
 	//add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
 	wp_enqueue_script('quicktags');
@@ -179,71 +245,6 @@ function wpsc_meta_boxes(){
 }
 
 add_action('admin_menu', 'wpsc_meta_boxes');
-
-
-/**
-	* wpsc_admin_css_and_js function, includes the wpsc_admin CSS and JS
-	* No parameters, returns nothing
-*/
-function  wpsc_admin_include_css_and_js() {
-  $siteurl = get_option('siteurl'); 
-
-	wp_admin_css( 'dashboard' );
-	wp_admin_css( 'media' );
-	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
-	
-  $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
-	wp_enqueue_script('jCrop', WPSC_URL.'/wpsc-admin/js/jquery.Jcrop.min.js', array('jquery'), '0.9.8');
-	wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
-	
-	
-	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
-	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
-	
-	
-	
-	wp_enqueue_script('wp-e-commerce-legacy-ajax', WPSC_URL.'/wpsc-admin/js/ajax.js', false, $version_identifier); // needs removing
-	wp_enqueue_script('wp-e-commerce-variations', WPSC_URL.'/wpsc-admin/js/variations.js', array('jquery'), $version_identifier);
-	//wp_enqueue_script('wp-e-commerce-swfuploader', WPSC_URL.'/wpsc-admin/js/wpsc-swfuploader.js', array('swfupload'), $version_identifier);
-	
-	
-	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_css=true" , false, $version_identifier, 'all' );
-	wp_enqueue_script('wp-e-commerce-tags', WPSC_URL.'/wpsc-admin/js/product_tagcloud.js', array('livequery'), $version_identifier);
-	wp_localize_script( 'wp-e-commerce-tags', 'postL10n', array(
-	'tagsUsed' =>  __('Tags used on this post:'),
-	'add' => attribute_escape(__('Add')),
-	'addTag' => attribute_escape(__('Add new tag')),
-	'separate' => __('Separate tags with commas'),
-) );
-if(WPSC_GOLD_DIR_NAME != ''){
-	wp_enqueue_style('gold_cart', WP_CONTENT_URL.'/uploads/wpsc/upgrades/gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
-
-}
-	//jQuery wysiwyg
-	//wp_enqueue_script('post');
- 	if ( user_can_richedit() ) {
-		wp_enqueue_script('editor');
-	}
-	wp_enqueue_script('media-upload');
-	//wp_enqueue_script('word-count');
-	// 	wp_admin_css( 'dashboard' );
-  wp_enqueue_style('thickbox');
-
-	wp_enqueue_script('swfupload');
-	wp_enqueue_script('swfupload-swfobject');
-	wp_enqueue_script('swfupload-queue');
-	wp_enqueue_script('wpsc-swfupload-handlers', WPSC_URL.'/wpsc-admin/js/wpsc-swfupload-handlers.js', false, $version_identifier);
-
-	// Prototype breaks dragging and dropping, I need it gone
-	wp_deregister_script('prototype');
-
-	
-	// remove the old javascript and CSS, we want it no more, it smells bad
-	remove_action('admin_head', 'wpsc_admin_css');
-}
-  
-  
   
 function wpsc_admin_dynamic_js() { 
  	header('Content-Type: text/javascript');
