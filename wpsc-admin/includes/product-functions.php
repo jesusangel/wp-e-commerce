@@ -102,13 +102,15 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['name'] = isset($post_data['title']) ? $post_data['title'] : '';
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
 	$post_data['meta'] = isset($post_data['productmeta_values']) ? $post_data['productmeta_values'] : '';
+	$post_data['edit_variation_values'] = $post_data['edit_var_val'];
 
+  // cast to boolean to convert to true or false, then cast to integer to convert to 1 or 0
 	$post_data['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
 	$post_data['special'] = (int)(bool)$post_data['special'];
 	$post_data['notax'] = (int)(bool)$post_data['notax'];
 	$post_data['donation'] = (int)(bool)$post_data['donation'];
 	$post_data['no_shipping'] = (int)(bool)$post_data['no_shipping'];
-	$post_data['edit_variation_values'] = $post_data['edit_var_val'];
+	$post_data['publish'] = (int)(bool)$post_data['publish']; 
 	
 	$post_data['price'] = (float)$post_data['price'];
 	$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
@@ -363,6 +365,71 @@ function wpsc_update_product_meta($product_id, $product_meta) {
 			}
 		}
 }
+
+/*
+/* Code to support Publish/No Publish (1bigidea)
+*/
+/**
+ * Toggle and return status of publish conditions
+ * @return string		'Hide' or 'Show'
+ * @param string 		$product_id
+ */
+function wpsc_get_publish_status($product_id) {
+
+	$status = ( wpsc_publish_status($product_id) ) ? __("Hide") : __("Show");
+	return $status;
+}
+/**
+ * set status of publish conditions
+ * @return 
+ * @param string 		$product_id
+ * @param bool			$status		Publish State 
+ */
+function wpsc_set_publish_status($product_id, $state) {
+	global $wpdb;
+	$status = (int) ( $state ) ? 1 : 0; // Cast the Publish flag
+	$result = $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `publish` = '{$status}' WHERE `id` = '{$product_id}'");
+}
+/**
+ * Toggle publish status and update product record
+ * @return bool		Publish status
+ * @param string	$product_id
+ */
+function wpsc_toggle_publish_status($product_id) {
+	global $wpdb;
+
+	$status = (int) ( wpsc_publish_status($product_id) ) ? 0 : 1; // Flip the Publish flag True <=> False
+	$sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `publish` = '{$status}' WHERE `id` = '{$product_id}'";
+	$result = $wpdb->query($sql);
+	return $status;
+}
+/**
+ * Returns publish status from product database
+ * @return bool		publish status
+ * @param string	$product_id
+ */
+function wpsc_publish_status($product_id) {
+	global $wpdb;
+	
+	$status = $wpdb->get_var("SELECT `publish` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}'");
+	return $status;
+}
+/**
+ * Called from javascript within product page to toggle publish status - AJAX
+ * @return bool	publish status
+ */
+function wpsc_ajax_toggle_publish() {
+/**
+ * @todo - Check Admin Referer
+ * @todo - Check Permissions
+ */
+	$status = (wpsc_toggle_publish_status($_REQUEST['productid'])) ? ('true') : ('false');
+	exit( $status );
+}
+add_action('wp_ajax_wpsc_toggle_publish','wpsc_ajax_toggle_publish');
+/*
+/*  END - Publish /No Publish functions
+*/
 
 function wpsc_update_custom_meta($product_id, $post_data) {
   global $wpdb;

@@ -42,7 +42,7 @@ function wpsc_display_products_page() {
 				<?php $_SESSION['product_error_messages'] = ''; ?>
 		<?php } ?>
 			
-		<?php if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated']) ) { ?>
+		<?php if (isset($_GET['flipped']) || isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated']) ) { ?>
 			<div id="message" class="updated fade">
 				<p>
 				<?php if ( isset($_GET['updated'])) {
@@ -62,6 +62,11 @@ function wpsc_display_products_page() {
 				if ( isset($_GET['duplicated']) ) {
 					printf( __ngettext( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
 					unset($_GET['duplicated']);
+				}
+				
+				if ( isset($_GET['flipped'])) {
+					printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['flipped'] ), number_format_i18n( $_GET['flipped'] ) );
+					unset($_GET['flipped']);
 				}
 				
 				if ( isset($_GET['message']) ) {
@@ -171,7 +176,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	}
 
 	if($category_id > 0) {  // if we are getting items from only one category, this is a monster SQL query to do this with the product order
-		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`
+		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`, `products`.`publish`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`
 			FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products`
 			LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `categories` ON `products`.`id` = `categories`.`product_id` 
 			LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` AS `order` ON ( 
@@ -196,16 +201,14 @@ function wpsc_admin_products_list($category_id = 0) {
 		  } else {
 		    $page = 1;
 		  }
-			
 			$start = (int)($page * $itempp) - $itempp;
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql ORDER BY `products`.`date_added` DESC LIMIT $start,$itempp";
-			
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' AND `products`.`publish` IN('1') $search_sql ORDER BY `products`.`date_added` DESC LIMIT $start,$itempp";
 		} else {
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql  ORDER BY `products`.`date_added`";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' AND `products`.`publish` IN('1') $search_sql ORDER BY `products`.`date_added`";
 		}
 	}  
 	$product_list = $wpdb->get_results($sql,ARRAY_A);
-	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql");
+	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' AND `products`.`publish` IN('1') $search_sql");
 	
 	if (isset($itempp)) {
 		$num_pages = ceil($num_products/$itempp);
@@ -285,7 +288,6 @@ function wpsc_admin_products_list($category_id = 0) {
 				<?php
 				if(count($product_list) > 0) {
 					foreach((array)$product_list as $product) {
-							
 						//first set the patch to the default
 						$image_path = WPSC_URL."/images/no-image-uploaded.gif";
 						if(is_numeric($product['image'])) { // check for automatic thumbnail images

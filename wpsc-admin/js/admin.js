@@ -29,6 +29,29 @@ jQuery(document).ready( function () {
 		}
 	);
 	
+	// Used on admin/display-items.page.php - toggles the publish status of a product (dims background for unpublished) - 1bigidea
+	// click logic from http://xplus3.net/2008/10/16/jquery-and-ajax-in-wordpress-plugins-administration-pages/
+	jQuery(document).ready(function(){
+		jQuery("span.publish_toggle a").click(function() {
+			var that = this;
+			var theRow = jQuery(this).parents('tr:first');
+			jQuery.post(jQuery(this).attr("href"), {
+					'cookie': encodeURIComponent(document.cookie)
+				}
+				, function(newstatus){
+					if (newstatus == 'true') {
+						jQuery(that).text('Hide');
+						jQuery(theRow).removeClass('wpsc_not_published').addClass('wpsc_published')
+					} else {
+						jQuery(that).text('Show');
+						jQuery(theRow).removeClass('wpsc_published').addClass('wpsc_not_published');
+					}
+				}
+			);
+			return false; // The click never happened - defeat the a tag
+		});
+	});
+
   // this changes the purchase log item status
 	 jQuery('.selector').change(function(){	
 			purchlog_id = jQuery(this).attr('title');

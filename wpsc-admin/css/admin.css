@@ -1299,7 +1299,12 @@ width:400px;
 	float:left;
 }
 
-
+table#itemlist tr.wpsc_published td{
+	background-color: #fff;
+}
+table#itemlist tr.wpsc_not_published td{
+	background-color: #F2F2F2;
+}
 /* 
 * Product Groups styles end here
 */

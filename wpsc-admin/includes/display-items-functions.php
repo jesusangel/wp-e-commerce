@@ -651,9 +651,22 @@ function wpsc_product_advanced_forms($product_data='') {
         <textarea cols='40' rows='3' name='productmeta_value[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
       	<small>".TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE."</small>
       </td>
-    </tr>
-	
-    <tr>
+    </tr>";
+			/*   Insert Publish /No Publish Option on Product Edit (1bigidea)
+			*/
+		$output .= '
+		<tr>
+			<td colspan="2" class="itemfirstcol"><br />
+						<strong>'.__("Publish:","wpsc").'</strong> <label for="publish_yes">'.__("Yes").'
+				</label><input name="publish" id="publish_yes" type="radio" value="1" '.((!is_array($product_data) || $product_data['publish']) ? 'checked="true" ' : '' ).'>
+				<label for="publish_no">'.__("No","wpsc").'
+			</label><input name="publish" id="publish_no" type="radio" value="0" '.((is_array($product_data) && !$product_data['publish']) ? 'checked="true" ' : '' ).'>
+			</td>
+		</tr>';
+			/*   End Publish /No Publish Fields
+			*/
+		$output .="
+		<tr>
       <td class='itemfirstcol' colspan='2'><br />
        <strong>". TXT_WPSC_PERSONALISATION_OPTIONS .":</strong><br />
         <input type='hidden' name='productmeta_values[engraved]' value='0' />
