@@ -1308,3 +1308,6 @@ table#itemlist tr.wpsc_not_published td{
 /* 
 * Product Groups styles end here
 */
+.wpsc_td_note{
+padding-bottom:0 !important;
+}

@@ -17,8 +17,9 @@ function check_make_purchase_button(){
 jQuery(document).ready(function () {
   	
   	//this bit of code runs on the checkout page. If the checkbox is selected it copies the valus in the billing country and puts it in the shipping country form fields. 23.07.09
+	jQuery('.wpsc_shipping_forms').hide();
      jQuery("#shippingSameBilling").click(function(){
-       
+       				jQuery('.wpsc_shipping_forms').show();
         // If checked
         jQuery("#shippingSameBilling").livequery(function(){
         
@@ -50,6 +51,9 @@ jQuery(document).ready(function () {
 					jQuery("select[name='country']").val(countryID);
 					submit_change_country();
 				}
+			}else{
+
+			
 			}
          
             //otherwise, hide it

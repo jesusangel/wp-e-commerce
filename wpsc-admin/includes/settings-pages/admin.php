@@ -73,7 +73,7 @@ global $wpdb;
 					<th colspan="2"><?php echo TXT_WPSC_TAGS_CAN_BE_USED;?>: %shop_name%,<!-- %order_status%,--> %product_list%, %total_price%, %total_shipping%</th>
 				</tr>
 				<tr>
-					<td colspan='2'>
+					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
 						Note: The purchase receipt is the message e-mailed to users after purchasing products from your shop.
 						</span>
@@ -84,9 +84,9 @@ global $wpdb;
 					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_receipt'));?></textarea></td>
 				</tr>
 				<tr>
-					<td colspan='2'>
+					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
-						Note: The Admin Report is the email sent to the administrator as soon as someone successfully buys a product.
+						Note: The Admin Report is the email sent to the e-mail address set above as soon as someone successfully buys a product.
 						</span>
 					</td>
 				</tr>

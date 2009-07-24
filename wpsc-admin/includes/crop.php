@@ -14,7 +14,7 @@ $width = $_GET['imgwidth'];//set image dimensions
 $height = $_GET['imgheight'];
 $product_id = $_GET['product_id'];
 if ($width > 400){
-	$layoutlandscape = 'wpsc_thumbnail_preview_landscape';
+	$layoutlandscape = 'wpsc_thumbnail_preview';
 }else{
 	$layoutlandscape = "wpsc_thumbnail_preview";
 }
@@ -74,16 +74,12 @@ if ($width > 400){
 	<body>
 
 	<div id="outer">
-		<?php if($layoutlandscape != 'wpsc_thumbnail_preview'){ ?>
-			<img src="<?php echo $directory.$imagename; ?>" id="cropbox" alt="" />
-		<?php } ?>
-		<div id='<?php echo $layoutlandscape; ?>'>	
+		<div id='wpsc_thumbnail_preview'>	
 			<div id='wpsc_crop_preview'>
 				<img src="<?php echo $directory.$imagename; ?>" id="preview" alt="" />
 			</div>
-			<?php if($layoutlandscape == 'wpsc_thumbnail_preview'): ?>
+
 			<br style='clear:both' />
-			<?php endif; ?>
 			<!-- This is the form that our event handler fills -->
 			<form action="" method="post" onsubmit="return checkCoords();">
 				<input type="hidden" id="x" name="x" />
@@ -93,16 +89,15 @@ if ($width > 400){
 				<input type="hidden" id="imagename" name="imagename" value="<?php echo $imagename; ?>" />		
 				<input type="hidden" name="wpsc_admin_action" value="crop_thumb" />
 				<input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
+				<p><label for="thumbsize">Thumbnail Size :</label><input size='2' type="text" id="thumbsize" name="thumbsize" value='<?php echo get_option('thumbnail_size'); ?>' /> px<br /></p>
 				<p><label for="jpegquality">Jpeg Quality :</label><input size='2' type="text" id="jpegquality" name="jpegquality" value='70' /> %<br /></p>
-				<p><label for="thumbsize">Thumbnail Size :</label><input size='2' type="text" id="thumbsize" name="thumbsize" value='100' /> px<br /></p>
 				<p><input class="button-secondary action"  type="submit" value="Crop Image" /></p>
 			</form>
 		</div>
 
 		<!-- This is the image we're attaching Jcrop to -->
-		<?php if($layoutlandscape == 'wpsc_thumbnail_preview'){ ?>
 		<img src="<?php echo $directory.$imagename; ?>" id="cropbox" alt="" />
-		<?php } ?>
+
 	</div>
 	</body>
 

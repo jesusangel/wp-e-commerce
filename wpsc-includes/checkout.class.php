@@ -46,7 +46,26 @@ function wpsc_the_checkout_item() {
 	global $wpsc_checkout;
 	return $wpsc_checkout->the_checkout_item();
 }
+function wpsc_is_shipping_details(){
+	global $wpsc_checkout;
+	if($wpsc_checkout->checkout_item->unique_name == 'delivertoafriend'){
 
+	return true;
+	}else{
+	return false;
+	}
+	
+}
+function wpsc_shipping_details(){
+	global $wpsc_checkout;
+	if(stristr($wpsc_checkout->checkout_item->unique_name, 'shipping') != false){
+
+	return "class='wpsc_shipping_forms'";
+	}else{
+	return "";
+	}
+	
+}
 function wpsc_the_checkout_item_error_class($as_attribute = true) {
 	global $wpsc_checkout;
 	if($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {

@@ -28,7 +28,6 @@ jQuery(document).ready( function () {
 			jQuery(".wpsc-row-actions", this).css("visibility", "hidden");
 		}
 	);
-	
 	// Used on admin/display-items.page.php - toggles the publish status of a product (dims background for unpublished) - 1bigidea
 	// click logic from http://xplus3.net/2008/10/16/jquery-and-ajax-in-wordpress-plugins-administration-pages/
 	jQuery(document).ready(function(){
@@ -52,14 +51,21 @@ jQuery(document).ready( function () {
 		});
 	});
 
+
+	jQuery('tr.wpsc_trackingid_row').hide();
   // this changes the purchase log item status
 	 jQuery('.selector').change(function(){	
 			purchlog_id = jQuery(this).attr('title');
 	 		purchlog_status = jQuery(this).val();
 	 		post_values = "purchlog_id="+purchlog_id+"&purchlog_status="+purchlog_status;
 			jQuery.post( 'index.php?wpsc_admin_action=purchlog_edit_status', post_values, function(returned_data) { });
-	 });
+
+		 	if(purchlog_status == 3){
+				jQuery('tr.log'+purchlog_id).show();
 	 
+	 		}
+	 });
+
 	 
 	jQuery("#submit_category_select").click(function() {
 			new_url = jQuery("#category_select option:selected").val();

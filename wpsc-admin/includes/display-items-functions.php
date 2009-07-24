@@ -371,20 +371,20 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     echo "
     <tr>
        <td>
-          <input id='add_form_tax' type='checkbox' name='notax' value='yes' ".(($product_data['notax'] == 1) ? 'checked="true"' : '')."/>&nbsp;<label for='add_form_tax'>".TXT_WPSC_TAXALREADYINCLUDED."</label>
+          <input id='add_form_tax' type='checkbox' name='notax' value='yes' ".(($product_data['notax'] == 1) ? 'checked="checked"' : '')."/>&nbsp;<label for='add_form_tax'>".TXT_WPSC_TAXALREADYINCLUDED."</label>
        </td>
     </tr>";
     echo "
     <tr>
 
        <td>
-          <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="true"' : '')." />&nbsp;<label for='add_form_donation'>".TXT_WPSC_IS_DONATION."</label>
+          <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".TXT_WPSC_IS_DONATION."</label>
        </td>
     </tr>";
     echo "
     <tr>
       <td>
-        <input type='checkbox' onclick='hideelement(\"add_special\")' value='yes' name='special' id='add_form_special' ".(($product_data['special'] == 1) ? 'checked="true"' : '')." />
+        <input type='checkbox' onclick='hideelement(\"add_special\")' value='yes' name='special' id='add_form_special' ".(($product_data['special'] == 1) ? 'checked="checked"' : '')." />
         <label for='add_form_special'>".TXT_WPSC_SPECIAL."</label>
         <div style='display:".(($product_data['special'] == 1) ? 'block' : 'none').";' id='add_special'>
           <input type='text' size='10' value='".number_format(($product_data['price'] - $product_data['special_price']), 2)."' name='special_price'/>
@@ -418,7 +418,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 										<td>
 											<input type="text" size="10" value="<?php echo $table_rate_price['table_price'][$key]; ?>" name="productmeta_values[table_rate_price][table_price][]" />
 										</td>
-										<td><img src="<?php echo WPSC_URL; ?>/images/cross.png" class="remove_line"></td>
+										<td><img src="<?php echo WPSC_URL; ?>/images/cross.png" class="remove_line" /></td>
 									</tr>
 									<?php
 								}
@@ -438,7 +438,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     echo "
     <tr>
       <td style='width:430px;'>
-      <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' ".(($product_data['quantity_limited'] == 1) ? 'checked="true"' : '')." name='quantity_limited'/>"; //onclick='hideelement(\"add_stock\")'
+      <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' ".(($product_data['quantity_limited'] == 1) ? 'checked="checked"' : '')." name='quantity_limited'/>"; //onclick='hideelement(\"add_stock\")'
 		echo "&nbsp;<label for='add_form_quantity_limited' class='small'>".TXT_WPSC_UNTICKBOX."</label>";
 		if ($product_data['id'] > 0){
 				$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
@@ -581,7 +581,7 @@ function wpsc_product_shipping_forms($product_data=''){
     <tr>
    		<td>
    		<br />
-          <input id='add_form_no_shipping' type='checkbox' name='no_shipping' value='yes' ".(($product_data['no_shipping'] == 1) ? 'checked="true"' : '')."/>&nbsp;<label for='add_form_no_shipping'>".TXT_WPSC_NO_SHIPPING."</label>
+          <input id='add_form_no_shipping' type='checkbox' name='no_shipping' value='yes' ".(($product_data['no_shipping'] == 1) ? 'checked="checked"' : '')."/>&nbsp;<label for='add_form_no_shipping'>".TXT_WPSC_NO_SHIPPING."</label>
        </td>
     </tr>
     </table></div></div>";
@@ -961,7 +961,6 @@ function edit_multiple_image_gallery($product_data) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
 	$main_image = $wpdb->get_row("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_data['id']}' LIMIT 1", ARRAY_A);
-	
 	$timestamp = time();
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
@@ -972,8 +971,8 @@ function edit_multiple_image_gallery($product_data) {
 					<?php
 					$image_data = getimagesize(WPSC_IMAGE_DIR.$main_image['image']);
 					?>
-					<a id='extra_preview_link_0' href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>'  title='Crop Image' rel='product_extra_image_0' class='thickbox' >
-					  <img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$main_image['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' />
+					<a id='extra_preview_link_0' href=''  title='' rel='product_extra_image_0'  >
+					  <img class='previewimage' onclick='return false;' src='<?php echo WPSC_IMAGE_URL.$main_image['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' />
 					</a>
 				<?php } ?>
 
@@ -1013,8 +1012,13 @@ function edit_multiple_image_gallery($product_data) {
 								</div>
 							</li>
 					    <li>
-								<a href='' class='delete_primary_image'>Delete this Image</a>
+							<a href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
+				
 					    </li>
+					    <li>
+							<a href='' class='delete_primary_image'>Delete this Image</a>
+					    </li>
+
 						</ul>
 					</div>
 				</div>
@@ -1039,7 +1043,7 @@ function edit_multiple_image_gallery($product_data) {
             <li id="product_image_<?php echo $image['id']; ?>">
 							<input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image['id']; ?>' />
 							<div class='previewimage' id='gallery_image_<?php echo $image['id']; ?>'>
-							  <a id='extra_preview_link_<?php echo $image['id']; ?>' href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>' rel='product_extra_image_<?php echo $image['id']; ?>' class='thickbox'>
+							  <a id='extra_preview_link_<?php echo $image['id']; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image['id']; ?>' >
 							    <img class='previewimage' src='<?php echo WPSC_IMAGE_URL.$image['image']; ?>' alt='<?php echo TXT_WPSC_PREVIEW; ?>' title='<?php echo TXT_WPSC_PREVIEW; ?>' />
 							  </a>
 								<img alt='-' class='deleteButton' src='<?php echo WPSC_URL; ?>/images/cross.png' />

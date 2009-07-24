@@ -176,7 +176,6 @@ function widget_wpsc_categorisation_register() {
 	$option_name = 'widget_wpsc_categorisation';
 	if ( !$options = get_option($option_name))
 		$options = array();
-
 	$widget_ops = array('classname' => 'widget_wpsc_categorisation', 'description' => __(TXT_WPSC_CATEGORISATION_DESCR));
 	$control_ops = array('width' => 232, 'height' => 350, 'id_base' => 'wpsc_categorisation');
 	$name = __(TXT_WPSC_CATEGORISATION);
@@ -186,7 +185,7 @@ function widget_wpsc_categorisation_register() {
 		// Old widgets can have null values for some reason
 		if ( !isset($options[$o]['title']) ) // we used 'something' above in our example.  Replace with with whatever your real data are.
 			continue;
-
+		
 		// $id should look like {$id_base}-{$o}
 		$id = "wpsc_categorisation-$o"; // Never never never translate an id
 		$registered = true;
