@@ -26,7 +26,7 @@ function display_subcategories($id) {
     foreach($subcategories as $subcategory) {
 			if (get_option('show_category_count') == 1) {
 				//show product count for each category
-				$count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$subcategory['id']}') AND `p`.`active` IN ('1')");
+				$count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$subcategory['id']}') AND `p`.`active` IN ('1') AND `p`.`publish` IN('1')");
 				$addCount =  " (".$count.")";
 			} //end get_option
       $output .= "<li class='cat-item'><a class='categorylink' href='".wpsc_category_url($subcategory['id'])."'>".stripslashes($subcategory['name'])."</a>$addCount".display_subcategories($subcategory['id'])."</li>";

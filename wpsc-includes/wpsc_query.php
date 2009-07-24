@@ -1048,7 +1048,7 @@ class WPSC_Query {
 		
 
 		if(($product_id > 0)) {
-			$product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `active` IN('1') LIMIT 1",ARRAY_A);
+			$product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$product_id."' AND `active` IN('1') AND `publish` IN('1') LIMIT 1",ARRAY_A);
 		}
 		
 		if(isset($_SESSION['price_range']) && isset($_GET['range'])){
@@ -1057,14 +1057,14 @@ class WPSC_Query {
 					//exit("Is still set<pre>".print_r($ranges,1)."</pre>");
 				switch($_GET['range']) {
 					case 1:
-						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` < ".$ranges[1]." AND `active` IN ('1')";
+						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` < ".$ranges[1]." AND `active` IN ('1') AND `publish` IN('1')";
 						break;
 					
 					case 2: {
 						if (array_key_exists(2,$ranges)) {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `price` < '".$ranges[2]."' AND `active` IN ('1')";
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `price` < '".$ranges[2]."' AND `active` IN ('1') AND `publish` IN('1')";
 						} else {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `active` IN ('1')";
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `active` IN ('1') AND `publish` IN('1')";
 						}
 						break;
 					} 
@@ -1072,35 +1072,36 @@ class WPSC_Query {
 					
 						case 3: {
 							if (array_key_exists(3,$ranges)) {
-								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `price` < '".$ranges[3]."' AND `active` IN ('1')";
+								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `price` < '".$ranges[3]."' AND `active` IN ('1') AND `publish` IN('1')";
 							} else {
-								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `active` IN ('1')";
+								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `active` IN ('1') AND `publish` IN('1')";
 							}
 							break;
 						}
 					
 					case 4: {
 						if (array_key_exists(4,$ranges)) {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `price` < '".$ranges[4]."' AND `active` IN ('1')";
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `price` < '".$ranges[4]."' AND `active` IN ('1') AND `publish` IN('1')";
 						} else {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `active` IN ('1')";
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `active` IN ('1') AND `publish` IN('1')";
 						}
 						break;
 					}
 					
 					case 5: {
 						if (array_key_exists(5,$ranges)) {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `price` < '".$ranges[5]."' AND `active` IN ('1')";
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `price` < '".$ranges[5]."' AND `active` IN ('1') AND `publish` IN('1')";
 						} else {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `active` IN ('1')";
+							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `active` IN ('1') AND `publish` IN('1')";
 						}
 						break;
 					}
 					
 					case 6: 
-						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[5]."' AND `active` IN ('1')";
+						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[5]."' AND `active` IN ('1') AND `publish` IN('1')";
 					break;
 				}
+
 			//	exit($range_sql);
 				$product_list = $wpdb->get_results($range_sql,ARRAY_A);
 			}

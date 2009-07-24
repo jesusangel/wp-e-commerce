@@ -161,7 +161,6 @@ function wpsc_admin_products_list($category_id = 0) {
   // set is_sortable to false to start with
   $is_sortable = false;
   $page = null;
-// //	$wpdb->get_results(" SELECT sleep( 1 )  ",ARRAY_A);
   
 	if($_GET['search']) {
 		$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search']))."%";
@@ -202,13 +201,13 @@ function wpsc_admin_products_list($category_id = 0) {
 		    $page = 1;
 		  }
 			$start = (int)($page * $itempp) - $itempp;
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' AND `products`.`publish` IN('1') $search_sql ORDER BY `products`.`date_added` DESC LIMIT $start,$itempp";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql ORDER BY `products`.`date_added` DESC LIMIT $start,$itempp";
 		} else {
-			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' AND `products`.`publish` IN('1') $search_sql ORDER BY `products`.`date_added`";
+			$sql = "SELECT DISTINCT * FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql ORDER BY `products`.`date_added`";
 		}
 	}  
 	$product_list = $wpdb->get_results($sql,ARRAY_A);
-	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' AND `products`.`publish` IN('1') $search_sql");
+	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` WHERE `products`.`active`='1' $search_sql");
 	
 	if (isset($itempp)) {
 		$num_pages = ceil($num_products/$itempp);
@@ -263,6 +262,9 @@ function wpsc_admin_products_list($category_id = 0) {
 					<select name="bulkAction">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
 						<option value="delete"><?php _e('Delete'); ?></option>
+						<option value="show"><?php _e('Show'); ?></option>
+						<option value="hide"><?php _e('Hide'); ?></option>
+
 					</select>
 					<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
 					<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
@@ -322,7 +324,7 @@ function wpsc_admin_products_list($category_id = 0) {
 									
 						
 						?>
-							<tr class="product-edit" id="product-<?php echo $product['id']?>">
+							<tr class="product-edit <?php echo ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published'; ?>" id="product-<?php echo $product['id']?>" >
 									<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' /></th>
 									
 									
@@ -354,6 +356,7 @@ function wpsc_admin_products_list($category_id = 0) {
 											</span> |
 										<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php echo wpsc_product_url($product['id']); ?>">View</a></span> |
 										<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=duplicate_product&amp;product={$product['id']}", 'duplicate_product_' . $product['id']); ?>">Duplicate</a></span>
+										| <span class="publish_toggle"><a title="Change publish status" style="cursor:pointer;" href="<?php echo wp_nonce_url(get_bloginfo("wpurl").'/wp-admin/admin-ajax.php?action=wpsc_toggle_publish&productid='.$product['id'], 'toggle_publish_'.$product['id']); ?>"><?php echo wpsc_get_publish_status($product['id']); ?></a></span>
 									</div>
 									</td>
 									

@@ -92,7 +92,7 @@ function wpsc_also_bought($product_id) {
   $image_display_height = 96; 
   $image_display_width = 96; 
   
-  $also_bought = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_ALSO_BOUGHT."`, `".WPSC_TABLE_PRODUCT_LIST."` WHERE `selected_product`='".$product_id."' AND `".WPSC_TABLE_ALSO_BOUGHT."`.`associated_product` = `".WPSC_TABLE_PRODUCT_LIST."`.`id` AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN('1') ORDER BY `".WPSC_TABLE_ALSO_BOUGHT."`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
+  $also_bought = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_ALSO_BOUGHT."`, `".WPSC_TABLE_PRODUCT_LIST."` WHERE `selected_product`='".$product_id."' AND `".WPSC_TABLE_ALSO_BOUGHT."`.`associated_product` = `".WPSC_TABLE_PRODUCT_LIST."`.`id` AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN('1') AND `".WPSC_TABLE_PRODUCT_LIST."`.`publish` IN ('1')ORDER BY `".WPSC_TABLE_ALSO_BOUGHT."`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
   if(count($also_bought) > 0) {
     $output = "<p class='wpsc_also_bought_header'>".TXT_WPSC_ALSO_BOUGHT."</p>";
     $output .= "<div class='wpsc_also_bought'>";

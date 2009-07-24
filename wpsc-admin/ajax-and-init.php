@@ -131,7 +131,26 @@ function wpsc_bulk_modify_products() {
 				$sendback = add_query_arg('deleted', $deleted, $sendback);
 			}
 		break;
-			
+		
+		case 'show':
+		case 'hide':
+			if ( isset($_GET['product']) && ! isset($_GET['bulk_edit']) && (isset($doaction) || isset($_GET['doaction2'])) ) {
+				check_admin_referer('bulk-products', 'wpsc-bulk-products');
+				$flipped = 0;
+				$status = array('show' => 1, 'hide' => 0);
+				if( !key_exists($_REQUEST['bulkAction'], $status) ) break; // Action not valid
+				$status_key = $_REQUEST['bulkAction'];
+				$status_value = $status[$status_key];
+				foreach( (array) $_GET['product'] as $product_id ) {
+				  $product_id = absint($product_id);
+				  $new_status = wpsc_set_publish_status($product_id, $status_value);
+				  $flipped++;
+				}
+			}
+			$sendback = add_query_arg('flipped', $flipped, $sendback);
+		break;
+
+		
 		default:
 			if(isset($_GET['search']) && !empty($_GET['search'])) {
 				$sendback = add_query_arg('search',$_GET['search'], $sendback);
@@ -214,7 +233,7 @@ function wpsc_duplicate_product() {
 	$product_id = absint($_GET['product']);
   check_admin_referer('duplicate_product_' .  $product_id);
 	if ($product_id > 0) {
-		$sql = " INSERT INTO ".WPSC_TABLE_PRODUCT_LIST."( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image`  , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image`  , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = '".$product_id."' ";
+		$sql = " INSERT INTO ".WPSC_TABLE_PRODUCT_LIST."( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image`  , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `publish`, `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image`  , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active`  , `publish`, `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = '".$product_id."' ";
 	//	exit($sql);
 		$wpdb->query($sql);
 		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
