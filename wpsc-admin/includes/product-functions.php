@@ -426,7 +426,7 @@ function wpsc_ajax_toggle_publish() {
 	$status = (wpsc_toggle_publish_status($_REQUEST['productid'])) ? ('true') : ('false');
 	exit( $status );
 }
-add_action('wp_ajax_wpsc_toggle_publish','wpsc_ajax_toggle_publish');
+//add_action('wp_ajax_wpsc_toggle_publish','wpsc_ajax_toggle_publish');
 /*
 /*  END - Publish /No Publish functions
 */

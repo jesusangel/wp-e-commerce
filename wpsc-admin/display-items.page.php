@@ -50,6 +50,11 @@ function wpsc_display_products_page() {
 					unset($_GET['updated']);
 				}
 				
+				if ( isset($_GET['flipped'])) {
+					printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['flipped'] ), number_format_i18n( $_GET['flipped'] ) );
+					unset($_GET['flipped']);
+				}
+				
 				if ( isset($_GET['skipped'])) {
 					unset($_GET['skipped']);
 				}
@@ -62,11 +67,6 @@ function wpsc_display_products_page() {
 				if ( isset($_GET['duplicated']) ) {
 					printf( __ngettext( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
 					unset($_GET['duplicated']);
-				}
-				
-				if ( isset($_GET['flipped'])) {
-					printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['flipped'] ), number_format_i18n( $_GET['flipped'] ) );
-					unset($_GET['flipped']);
 				}
 				
 				if ( isset($_GET['message']) ) {
