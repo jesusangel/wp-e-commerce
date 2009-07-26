@@ -7,6 +7,48 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+//exit('<pre>'.print_r($_POST, true).'</pre>');
+ function wpsc_ajax_add_tracking() {
+  	global $wpdb;
+  	foreach($_POST as $key=>$value){
+	  	if($value != ''){
+  		 	$parts = preg_split('/^wpsc_trackingid/', $key);
+	  		if(count($parts) > '1'){
+	  			$id = $parts[1];
+	  			$trackingid = $value;
+	  			$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `track_id`='".$trackingid."' WHERE `id`=".$id;
+	  			$wpdb->query($sql);
+	  		}
+	  	}
+  	}
+	
+}
+ 
+ 
+if($_REQUEST['submit'] == 'Add Tracking ID') {
+	add_action('admin_init', 'wpsc_ajax_add_tracking');
+}
+
+ function wpsc_purchlog_email_trackid() {
+  	global $wpdb;
+  	$id = $_POST['purchlog_id'];
+  	$sql = "SELECT `track_id` FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE `id`=".$id;
+  	$trackingid = $wpdb->get_var($sql);
+	$message = get_option('wpsc_trackingid_message');
+	$message = str_replace('%trackid%',$trackingid,$message);
+    $message = str_replace('%shop_name%',get_option('blogname'),$message);
+	$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
+	$email = $wpdb->get_var("SELECT `value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$purchase_log['id']." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1");
+    $subject = get_option('wpsc_trackingid_subject');;
+    wp_mail($email, $subject, $message,"From: ".get_option('return_email')." <".get_option('return_email').">");
+    exit($email.'<br /> '.$subject.'<br /> '. $message.'<br /> '."From: ".get_option('return_email')." <".get_option('return_email').">");
+}
+ 
+ 
+if($_REQUEST['wpsc_admin_action'] == 'purchlog_email_trackid') {
+	add_action('admin_init', 'wpsc_purchlog_email_trackid');
+}
+
 function wpsc_ajax_sales_quarterly() {
   	global $wpdb;
   	$lastdate = $_POST['add_start'];

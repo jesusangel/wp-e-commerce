@@ -8,8 +8,8 @@ define('TXT_WPSC_API_HAS_BEEN_RESET', 'Your API key has been Reset');
 define('TXT_WPSC_API_RESET', 'API Key Reset');
 define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades');
 define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades (Old)');
-
-
+define('TXT_WPSC_TRACKINGEMAIL', 'Tracking Email Message');
+define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Tracking Email Subject');
 
 define('TXT_WPSC_CATEGORY_LIST', 'Show list of product groups');
 define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Show all products + list');

@@ -51,8 +51,11 @@ jQuery(document).ready( function () {
 		});
 	});
 
+//jQuery('.selector :selected').val();
 
 	jQuery('tr.wpsc_trackingid_row').hide();
+	jQuery('tr.wpsc_hastracking').show();
+	
   // this changes the purchase log item status
 	 jQuery('.selector').change(function(){	
 			purchlog_id = jQuery(this).attr('title');
@@ -66,6 +69,12 @@ jQuery(document).ready( function () {
 	 		}
 	 });
 
+	jQuery('.sendTrackingEmail').click(function(event){
+		purchlog_id = jQuery(this).attr('title');
+		post_values = "purchlog_id="+purchlog_id;
+		jQuery.post( 'index.php?wpsc_admin_action=purchlog_email_trackid', post_values, function(returned_data) { });
+		event.preventDefault();
+	});
 	 
 	jQuery("#submit_category_select").click(function() {
 			new_url = jQuery("#category_select option:selected").val();

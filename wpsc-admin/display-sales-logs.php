@@ -457,16 +457,18 @@ if(!isset($purchlogs)){
  		</td><!-- Status -->
  		<td><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
  	</tr>
- 	<tr class='log<?php echo wpsc_the_purch_item_id(); ?> wpsc_trackingid_row'>
- 		<td class='wpsc_trackingid_row' colspan='3'>
- 			<span class='wpscsmall description'>Note: Oops Tracking ID functionality has not been fully implemented yet,, ETA 31-7-09</span>
+ 	<tr class='<?php echo wpsc_the_purch_item_has_track(); ?> log<?php echo wpsc_the_purch_item_id(); ?> wpsc_trackingid_row'>
+ 		<td class='wpsc_trackingid_row' colspan='1'>
  		</td>
  		<td class='wpsc_trackingid_row' >
- 			<label for='wpsc_trackingid'>Tracking ID:</label>
+ 			<label for='wpsc_trackingid<?php echo wpsc_the_purch_item_id(); ?>'>Tracking ID:</label>
  		</td>
- 		<td class='wpsc_trackingid_row' colspan='3'>
- 			<input type='text' name='wpsc_trackingid' size='20' />
+ 		<td class='wpsc_trackingid_row' colspan='2'>
+ 			<input type='text' name='wpsc_trackingid<?php echo wpsc_the_purch_item_id(); ?>' value='<?php echo wpsc_trackingid_value(); ?>' size='20' />
  			<input type='submit' name='submit' class='button' value='Add Tracking ID' />
+ 		</td>
+ 		<td colspan='3'>
+ 			<a href='' title='<?php echo wpsc_the_purch_item_id(); ?>' class='sendTrackingEmail'>Email Buyer</a>
  		</td>
  	</tr>
  	

@@ -25,6 +25,22 @@ function wpsc_purchlogs_has_customfields($id = ''){
 	return false;
 
 }
+
+function wpsc_trackingid_value(){
+	global $purchlogs;
+	return $purchlogs->purchitem->track_id;
+//	exit('<pre>'.print_r($purchlogs, true).'</pre>');
+}
+
+function wpsc_the_purch_item_has_track(){
+	global $purchlogs;
+	if($purchlogs->purchitem->processed == '3'){
+		return 'wpsc_hastracking';
+	}else{
+		return ;
+	}
+}
+
 function wpsc_purchlogs_custommessages(){
 	global $purchlogitem;
 	foreach($purchlogitem->allcartcontent as $cartitem){

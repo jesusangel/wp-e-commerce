@@ -80,7 +80,7 @@ global $wpdb;
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo TXT_WPSC_PURCHASERECEIPT;?></th>
+					<th><strong><?php echo TXT_WPSC_PURCHASERECEIPT;?></strong></th>
 					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_receipt'));?></textarea></td>
 				</tr>
 				<tr>
@@ -91,10 +91,24 @@ global $wpdb;
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo TXT_WPSC_ADMIN_REPORT;?></th>
+					<th><strong><?php echo TXT_WPSC_ADMIN_REPORT;?></strong></th>
 					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_admin'));?></textarea></td>
 				</tr>
-
+				<tr>
+					<td class='wpsc_td_note' colspan='2'>
+						<span class="wpscsmall description">
+						Note: The Tracking Subject, is the subject for The Tracking Message email. The Tracking Message is the message e-mailed to users when you click 'Email buyer' on the sales log. This option is only available for purchases with the status of 'Job Dispatched'.
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<th><strong><?php echo TXT_WPSC_TRACKINGEMAILSUBJECT;?></strong></th>
+					<td><input name="wpsc_options[wpsc_trackingid_subject]" type='text' value='<?php echo stripslashes(get_option('wpsc_trackingid_subject'));?>' /></td>
+				</tr>
+				<tr>
+					<th><strong><?php echo TXT_WPSC_TRACKINGEMAIL;?></strong></th>
+					<td><textarea name="wpsc_options[wpsc_trackingid_message]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_trackingid_message'));?></textarea></td>
+				</tr>
 			</table>
 			<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>
 			<table class='wpsc_options form-table'>
