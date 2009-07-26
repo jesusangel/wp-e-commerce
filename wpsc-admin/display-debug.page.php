@@ -29,7 +29,11 @@ function wpsc_debug_page() {
 			</li>
 			
 			<li>
-				<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_copying_themes'>Test Copying Themes to New Theme Directory</a>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=redo_product_url_names'>Redo Product URL names</a>
+			</li>
+			
+			<li>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_copying_themes'>Copy Themes to New Theme Directory</a>
 			</li>
 		</ul>
 	  
@@ -39,10 +43,14 @@ function wpsc_debug_page() {
 		   wpsc_group_and_update_download_links();
 		   break;
 		   
-		   
 		   case 'product_url_names':
 		   wpsc_clean_product_url_names();
 		   break;
+		   
+		   case 'redo_product_url_names':
+		   wpsc_redo_product_url_names();
+		   break;
+		   
 		   
 		   case 'test_copying_themes':
 		   wpsc_test_copying_themes();
@@ -101,26 +109,56 @@ function wpsc_group_and_update_download_links() {
 	}
 }
 
-
+/**
+* wpsc_clean_product_url_names, cleans dupicates
+*/
 function wpsc_clean_product_url_names() {
 	global $wpdb;
 	
 	$duplicated_meta_data = $wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('url_name') GROUP BY `meta_value` HAVING COUNT(`meta_value`) > 1 ");
 	
-	$product_data = $wpdb->get_results("SELECT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `meta`.`meta_key` IN('url_name') AND `meta`.`meta_value` IN('".implode("', '", $duplicated_meta_data)."') ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
+	$product_data = $wpdb->get_results("SELECT DISTINCT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `meta`.`meta_key` IN('url_name') AND `meta`.`meta_value` IN('".implode("', '", $duplicated_meta_data)."') AND `products`.`active` = '1' ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
 	
 	foreach((array)$product_data as $product_row) {
 		if($product_row['name'] != '') {
-			$tidied_name = strtolower(trim($product_row['name']));
-			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
+			$tidied_name = strtolower(trim(stripslashes($product_row['name'])));
+			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
 			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
 			$extension_number = '';
 			if($similar_names['count'] > 0) {
 				$extension_number = (int)$similar_names['max_number']+1;
 			}
 			$url_name .= $extension_number;
+			echo "{$product_row['name']} => {$url_name}\n\r";
 			update_product_meta($product_row['id'], 'url_name', $url_name);
 		}
 	}	
 }
+
+/**
+* wpsc_redo_product_url_names, deletes all product URL names, then remakes then
+*/
+
+function wpsc_redo_product_url_names() {
+	global $wpdb;
+	$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('url_name')");
+	
+	$product_data = $wpdb->get_results("SELECT DISTINCT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `products`.`active` = '1' ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
+	
+	foreach((array)$product_data as $product_row) {
+		if($product_row['name'] != '') {
+			$tidied_name = strtolower(trim(stripslashes($product_row['name'])));
+			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '".$wpdb->escape($url_name)."', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape($url_name)."){1}[[:digit:]]*$' ",ARRAY_A);
+			$extension_number = '';
+			if($similar_names['count'] > 0) {
+				$extension_number = (int)$similar_names['max_number']+1;
+			}
+			$url_name .= $extension_number;
+			echo "{$product_row['name']} => {$url_name}\n\r";
+			update_product_meta($product_row['id'], 'url_name', $url_name);
+		}
+	}	
+}
+
 ?>

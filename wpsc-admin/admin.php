@@ -45,6 +45,18 @@ function wpsc_admin_pages(){
      * If the permissions are changed here, they will likewise need to be changed for the other sections of the admin that either use ajax
      * or bypass the normal download system.
 		*/
+
+		/// Code to enable or disable the debug page
+		if(isset($_GET['wpsc_activate_debug_page'])) {
+			if($_GET['wpsc_activate_debug_page'] == 'true') {
+				// if true, enable it
+				$_SESSION['wpsc_activate_debug_page'] = true;
+			} else if($_GET['wpsc_activate_debug_page'] == 'false') {
+				// if false, disable it
+				$_SESSION['wpsc_activate_debug_page'] = false;
+			}
+		}
+		
     if(function_exists('add_options_page')) {
 			$base_page = 'wpsc-sales-logs';
 					
