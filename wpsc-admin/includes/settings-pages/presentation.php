@@ -240,6 +240,16 @@ global $wpdb;
 
 		<div class='themes_and_appearance'>
 			<h4><?php	 _e("Theme Customisation", 'wpsc');	?></h4>
+			  <?php
+			  if($_SESSION['wpsc_themes_copied'] == true) {
+					?>
+					<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+						<p><?php _e("Thanks, the themes have been copied."); ?></p>
+					</div>
+					<?php
+					$_SESSION['wpsc_themes_copied'] = false;
+			  }
+			  ?>
 			<?php
 			if(wpsc_count_themes_in_uploads_directory() > 0) {
 				?>
@@ -253,8 +263,6 @@ global $wpdb;
 						<li><?php _e("Copy the default directory and rename it 'newTheme'"); ?></li>
 						<li><?php _e("Rename the default.css file inside the 'newTheme' directory to 'newTheme.css'"); ?></li>
 					</ol>
-
-					
 				<?php
 			} else if(!is_writable(WPSC_THEMES_PATH)) {
 				?>

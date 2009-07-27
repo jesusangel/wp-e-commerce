@@ -524,9 +524,10 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 	  // check that is really there
 	  if(file_exists(WPSC_IMAGE_DIR.$image)) {
 			// if the width or height is less than 1, set the size to the default
-	    if((($width  < 1) || ($height < 1)) && ($image_action != 3)) {
-	      $image_action = 1;
-	    }
+
+			if((($width  < 1) || ($height < 1)) && ($image_action == 2)) {
+				$image_action = 1;
+			}
 			switch($image_action) {
 				case 0:
 					if(!file_exists(WPSC_THUMBNAIL_DIR.$image)) {
