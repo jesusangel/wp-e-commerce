@@ -49,8 +49,12 @@ if(get_option('wpsc_use_pnp_cols') != 'true') {
      
      
  */    
-     
-     
+if(get_option('wpsc_trackingid_message') == ''){
+	update_option('wpsc_trackingid_message', TXT_WPSC_TRACKINGEMAILMSG);
+}     
+if(get_option('wpsc_trackingid_subject') == ''){
+	update_option('wpsc_trackingid_subject', TXT_WPSC_TRACKINGEMAILSUBJECTMSG);
+}     
 /* adds nice names for permalinks for products */
 
 $check_product_names = $wpdb->get_results("SELECT `products`.`id`, `products`.`name`, `meta`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta` ON `products`.`id` = `meta`.`product_id` WHERE `products`.`active` IN ('1') AND ((`meta`.`meta_key` IN ('url_name') AND  `meta`.`meta_value` IN (''))  OR ISNULL(`meta`.`meta_key`))");  

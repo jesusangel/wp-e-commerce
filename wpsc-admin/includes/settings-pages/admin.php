@@ -97,7 +97,7 @@ global $wpdb;
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
-						Note: The Tracking Subject, is the subject for The Tracking Message email. The Tracking Message is the message e-mailed to users when you click 'Email buyer' on the sales log. This option is only available for purchases with the status of 'Job Dispatched'.
+						Note: The Tracking Subject, is the subject for The Tracking Message email. The Tracking Message is the message e-mailed to users when you click 'Email buyer' on the sales log. This option is only available for purchases with the status of 'Job Dispatched'. Tags you can use in the email message section are %trackid% and %shop_name%
 						</span>
 					</td>
 				</tr>

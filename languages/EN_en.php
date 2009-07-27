@@ -11,6 +11,10 @@ define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades (Old)');
 define('TXT_WPSC_TRACKINGEMAIL', 'Tracking Email Message');
 define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Tracking Email Subject');
 
+define('TXT_WPSC_TRACKINGEMAILMSG', 'Your purchase from %shop_name% has just been dispatched. It should arrive soon. To keep track of your products status a tracking id has been attached. \r\n your tracking id is: %trackid%' );
+define('TXT_WPSC_TRACKINGEMAILSUBJECTMSG','Your Order from %shop_name% has been dispatched');
+
+
 define('TXT_WPSC_CATEGORY_LIST', 'Show list of product groups');
 define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Show all products + list');
 define('TXT_WPSC_INSUFFICIENT_REMAINING', 'Sorry, but there are only [number] of this item in stock.');
