@@ -178,7 +178,7 @@ function widget_wpsc_categorisation_register() {
 		$options = array();
 	$widget_ops = array('classname' => 'widget_wpsc_categorisation', 'description' => __(TXT_WPSC_CATEGORISATION_DESCR));
 	$control_ops = array('width' => 232, 'height' => 350, 'id_base' => 'wpsc_categorisation');
-	$name = __(TXT_WPSC_CATEGORISATION);
+	$name = __("Product Categories", 'wpsc');
 
 	$registered = false;
 	foreach ( array_keys($options) as $o ) {
