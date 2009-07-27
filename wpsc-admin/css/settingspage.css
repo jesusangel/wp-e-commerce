@@ -13,6 +13,10 @@
  right: 12px;
 }
 
+#wpsc_options_page {
+	padding: 0px 0px 0px 5px;
+}
+
 table#gateway_options tr td{
   padding: 0 0 8px 2px;
   vertical-align: top;
@@ -76,18 +80,71 @@ table#form_field_table tr *.ordercol input{ }
 table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
   
 .flag_email{
-width:16px;
-float:right;
-
+	width:16px;
+	float:right;
 }
+
 #wpsc_settingpage_nav_spacer{
-width:35%;
-float:right;
-height:30px;
-
-border-bottom:1px solid #dfdfdf;
+	width:35%;
+	float:right;
+	height:30px;
+	border-bottom:1px solid #dfdfdf;
 }
-#wpsc_settings_nav_bar{
-width:100%;
 
+#wpsc_settings_nav_bar{
+	width:100%;
+}
+
+#wpsc_settings_nav_bar ul{
+	width:100%;
+	border-bottom: 1px solid #DFDFDF;
+	float:left;
+	margin:0 auto;
+	padding-left:0;
+	margin-top: -1px;
+}
+#wpsc_settings_nav_bar ul li a{
+	margin-bottom:-1px;
+}
+
+h3.form_group {
+  clear: both;
+}
+
+div.product_and_button_settings {
+  width: 450px;
+  float: left;
+  
+}
+
+div.themes_and_appearance {
+	border: 1px solid #DFDFDF;
+  width: 254px;
+  padding: 11px 12px;
+  margin:30px 0px 0px -58px;
+  float: left;
+}
+
+
+div.themes_and_appearance h4{
+  margin: 0px 0px 0px 0px;
+  
+}
+
+div.themes_and_appearance p {
+  font-size: 11px;
+}
+
+span.display-path {
+color:#666666;
+}
+
+div.themes_and_appearance ol {
+  font-size: 11px;
+  list-style-type:decimal;
+  list-style-position:inside;
+}
+
+div.themes_and_appearance ol li {
+  font-size: 11px;
 }

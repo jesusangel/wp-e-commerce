@@ -30,6 +30,7 @@ jQuery(document).ready( function () {
 	);
 	// Used on admin/display-items.page.php - toggles the publish status of a product (dims background for unpublished) - 1bigidea
 	// click logic from http://xplus3.net/2008/10/16/jquery-and-ajax-in-wordpress-plugins-administration-pages/
+	/*
 	jQuery(document).ready(function(){
 		jQuery("span.publish_toggle a").click(function() {
 			var that = this;
@@ -49,7 +50,7 @@ jQuery(document).ready( function () {
 			);
 			return false; // The click never happened - defeat the a tag
 		});
-	});
+	});*/
 
 //jQuery('.selector :selected').val();
 

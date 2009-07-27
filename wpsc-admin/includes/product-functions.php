@@ -370,19 +370,9 @@ function wpsc_update_product_meta($product_id, $product_meta) {
 /* Code to support Publish/No Publish (1bigidea)
 */
 /**
- * Toggle and return status of publish conditions
- * @return string		'Hide' or 'Show'
- * @param string 		$product_id
- */
-function wpsc_get_publish_status($product_id) {
-
-	$status = ( wpsc_publish_status($product_id) ) ? __("Hide") : __("Show");
-	return $status;
-}
-/**
  * set status of publish conditions
  * @return 
- * @param string 		$product_id
+ * @param string 	$product_id
  * @param bool			$status		Publish State 
  */
 function wpsc_set_publish_status($product_id, $state) {
@@ -397,7 +387,6 @@ function wpsc_set_publish_status($product_id, $state) {
  */
 function wpsc_toggle_publish_status($product_id) {
 	global $wpdb;
-
 	$status = (int) ( wpsc_publish_status($product_id) ) ? 0 : 1; // Flip the Publish flag True <=> False
 	$sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `publish` = '{$status}' WHERE `id` = '{$product_id}'";
 	$result = $wpdb->query($sql);
@@ -410,8 +399,7 @@ function wpsc_toggle_publish_status($product_id) {
  */
 function wpsc_publish_status($product_id) {
 	global $wpdb;
-	
-	$status = $wpdb->get_var("SELECT `publish` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}'");
+	$status = (bool)$wpdb->get_var("SELECT `publish` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}'");
 	return $status;
 }
 /**

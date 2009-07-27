@@ -334,6 +334,11 @@ function wpsc_admin_products_list($category_id = 0) {
 									<td class="product-title column-title">
 										<a class='edit-product' href='<?php echo  htmlentities(add_query_arg('product_id', $product['id'])); ?>'><?php echo $product_name; ?></a>
 											<?php
+											if($product['publish'] != 1 ) {
+												?> - <strong> <?php 	_e('Draft', 'wpsc'); ?>	</strong>	<?php
+											}
+											?>
+											<?php
 											$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
 											if(count($product_alert['messages']) > 0) {
 												$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
@@ -350,14 +355,45 @@ function wpsc_admin_products_list($category_id = 0) {
 										<div class="wpsc-row-actions">
 											<span class="edit">
 												<a class='edit-product' title="Edit this post" href='<?php echo htmlentities(add_query_arg('product_id', $product['id'])); ?>' style="cursor:pointer;">Edit</a>
-											</span> |
+											</span>
+											 |
 											<span class="delete">
-												<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
-											</span> |
-										<span class="view"><a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php echo wpsc_product_url($product['id']); ?>">View</a></span> |
-										<span class="view"><a rel="permalink" title='Duplicate <?php echo $product_name; ?>' href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=duplicate_product&amp;product={$product['id']}", 'duplicate_product_' . $product['id']); ?>">Duplicate</a></span>
-										| <span class="publish_toggle"><a title="Change publish status" style="cursor:pointer;" href="<?php echo wp_nonce_url(get_bloginfo("wpurl").'/wp-admin/admin-ajax.php?action=wpsc_toggle_publish&productid='.$product['id'], 'toggle_publish_'.$product['id']); ?>"><?php echo wpsc_get_publish_status($product['id']); ?></a></span>
-									</div>
+												<a class='submitdelete'
+													title='<?php echo attribute_escape(__('Delete this product', 'wpsc')); ?>'
+													href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>'
+													onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"
+													>
+													<?php _e('Delete') ?>
+												</a>
+											</span>
+											 |
+											<span class="view">
+												<a target="_blank" rel="permalink" title='View <?php echo $product_name; ?>' href="<?php echo wpsc_product_url($product['id']); ?>">View</a>
+											</span>
+											|
+											<span class="view">
+												<a rel="permalink"
+													title='Duplicate <?php echo $product_name; ?>'
+													href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=duplicate_product&amp;product={$product['id']}", 'duplicate_product_' . $product['id']); ?>
+													">
+													Duplicate
+												</a>
+											</span>
+											|
+											<span class="publish_toggle">
+												<a title="Change publish status"
+													href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=toggle_publish&product=".$product['id'], 'toggle_publish_'.$product['id']); ?>"
+													>
+													<?php
+													if($product['publish'] == 1 ) {
+														_e('Unpublish', 'wpsc');
+													} else {
+														_e('Publish', 'wpsc');
+													}
+													?>
+												</a>
+											</span>
+										</div>
 									</td>
 									
 									<td class="product-price column-price">

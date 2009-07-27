@@ -485,6 +485,20 @@ function wpsc_products_page($content = '') {
 	}
 }
 
+/**
+ * wpsc_count_themes_in_uploads_directory, does exactly what the name says
+*/
+function wpsc_count_themes_in_uploads_directory() {
+  $uploads_dir = @opendir(WPSC_THEMES_PATH);
+  $file_names = array();
+  while(($file = @readdir($uploads_dir)) !== false) {
+    if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
+			$file_names[] = $file;
+    }
+  }
+  return count($file_names);
+}
+
 function wpsc_place_shopping_cart($content = '') {
   global $wpsc_theme_path;
 	/// added by xiligroup.dev to be compatible with touchshop

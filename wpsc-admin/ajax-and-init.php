@@ -238,7 +238,9 @@ function wpsc_modify_product_price() {
 }
  
  
- 
+/**
+  Function and action for deleting single products 
+ */
 function wpsc_delete_product() {
   global $wpdb;
   
@@ -271,6 +273,30 @@ function wpsc_delete_product() {
 	add_action('admin_init', 'wpsc_delete_product');
 }
  
+/**
+  Function and action for publishing or unpublishing single products
+ */
+function wpsc_ajax_toggle_published() {
+  global $wpdb;
+  
+	$product_id = absint($_GET['product']);
+  check_admin_referer('toggle_publish_' . $product_id);
+  
+	$status = (wpsc_toggle_publish_status($product_id)) ? ('true') : ('false');
+	$sendback = add_query_arg('flipped', "1", wp_get_referer());
+	wp_redirect($sendback);
+	exit();
+}
+ 
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'toggle_publish') {
+	add_action('admin_init', 'wpsc_ajax_toggle_published');
+}
+
+  
+/**
+  Function and action for duplicating products,
+ */
 function wpsc_duplicate_product() {
 	global $wpdb;
 	$product_id = absint($_GET['product']);
@@ -1791,7 +1817,7 @@ function wpsc_google_shipping_settings(){
 		if ( isset($updated) ) {
 			$sendback = add_query_arg('updated', $updated, $sendback);
 		}
-	
+
 		wp_redirect($sendback);
 		exit();
 	}
@@ -1818,7 +1844,19 @@ if($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') {
 }
 
 
-
+function wpsc_trigger_copy_themes(){
+  global $wpdb;
+  check_admin_referer('copy_themes');
+  wpsc_copy_themes_to_uploads();
+  
+	$sendback = wp_get_referer();
+	wp_redirect($sendback);
+	exit();
+}
+  
+if($_REQUEST['wpsc_admin_action'] == 'copy_themes') {
+	add_action('admin_init', 'wpsc_trigger_copy_themes');
+}
  
  
 function wpsc_delete_variation_set() {
