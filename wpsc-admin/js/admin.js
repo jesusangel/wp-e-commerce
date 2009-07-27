@@ -55,8 +55,19 @@ jQuery(document).ready( function () {
 //jQuery('.selector :selected').val();
 
 	jQuery('tr.wpsc_trackingid_row').hide();
-	jQuery('tr.wpsc_hastracking').show();
-	
+	//jQuery('tr.wpsc_hastracking').show();
+
+	jQuery('.wpsc_show_trackingid').click(function(event){
+		purchlog_id = jQuery(this).attr('title');
+		if(jQuery('tr.log'+purchlog_id).hasClass('wpsc_hastracking')){
+			jQuery('tr.log'+purchlog_id).removeClass('wpsc_hastracking');
+			jQuery('tr.log'+purchlog_id).hide();		
+		}else{
+			jQuery('tr.log'+purchlog_id).addClass('wpsc_hastracking');
+			jQuery('tr.log'+purchlog_id).show();
+		}
+		event.preventDefault();
+	});
   // this changes the purchase log item status
 	 jQuery('.selector').change(function(){	
 			purchlog_id = jQuery(this).attr('title');

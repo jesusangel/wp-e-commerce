@@ -3,6 +3,46 @@
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
 }
+
+function wpsc_purchlogs_has_tracking(){
+	global $wpdb, $wpsc_shipping_modules, $purchlogitem;
+	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
+	$custom_shipping = get_option('custom_shipping_options');
+	if(in_array('nzpost', $custom_shipping) &&  $purchlogitem->extrainfo->track_id != ''){
+		return true;
+	}else{
+		return false;
+	}
+}
+function wpsc_purchlogitem_trackid(){
+	global $purchlogitem;
+	return $purchlogitem->extrainfo->track_id;
+}
+function wpsc_purchlogitem_trackstatus(){
+	global $wpdb, $wpsc_shipping_modules, $purchlogitem;
+	$custom_shipping = get_option('custom_shipping_options');
+	if(in_array('nzpost', $custom_shipping) &&  $purchlogitem->extrainfo->track_id != ''){
+		$status = $wpsc_shipping_modules['nzpost']->getStatus($purchlogitem->extrainfo->track_id);
+	}
+	
+	return $status;
+}
+function wpsc_purchlogitem_trackhistory(){
+	global $purchlogitem;
+	$output = '<ul>';
+	foreach($_SESSION['wpsc_nzpost_parsed'][0]['children'][0]['children'][1]['children'] as $history){
+		$outputs[] = '<li>'.$history['children'][0]['tagData']." : ".$history['children'][1]['tagData']." </li>";
+	//	exit('<pre>'.print_r($history,true).'</pre>');
+	}
+	$outputs = array_reverse($outputs);
+	foreach($outputs as $o){
+		$output .= $o;
+	}
+	$output .='</ul>';
+//	exit('<pre>'.print_r($_SESSION['wpsc_nzpost_parsed'][0]['children'][0]['children'][1]['children'],true).'</pre>');
+//	exit('<pre>'.print_r($_SESSION['wpsc_nzpost_parsed'],true).'</pre>');
+	return $output;
+}
 function wpsc_purchlogs_has_customfields($id = ''){
 	global $purchlogitem;
 	//return true;
@@ -32,14 +72,6 @@ function wpsc_trackingid_value(){
 //	exit('<pre>'.print_r($purchlogs, true).'</pre>');
 }
 
-function wpsc_the_purch_item_has_track(){
-	global $purchlogs;
-	if($purchlogs->purchitem->processed == '3'){
-		return 'wpsc_hastracking';
-	}else{
-		return ;
-	}
-}
 
 function wpsc_purchlogs_custommessages(){
 	global $purchlogitem;

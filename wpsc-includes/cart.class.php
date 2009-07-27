@@ -514,7 +514,7 @@ class wpsc_cart {
   function get_shipping_method() {
     global $wpdb, $wpsc_shipping_modules;
 	  // set us up with a shipping method.
-		$custom_shipping = get_option('custom_shipping_options');
+	  $custom_shipping = get_option('custom_shipping_options');
 	  $this->shipping_methods = get_option('custom_shipping_options');
 	  $this->shipping_method_count = count($this->shipping_methods);
 		

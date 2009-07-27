@@ -41,7 +41,8 @@ if(!isset($purchlogs)){
 					'amount' => 'Amount',
 					'details' => 'Details',
 					'status' => 'Status',
-					'delete' => 'Delete'
+					'delete' => 'Delete',
+					'track' => 'Track'
 				);
 				register_column_headers('display-sales-list', $columns);	
 				///// start of update message section //////
@@ -153,9 +154,14 @@ if(!isset($purchlogs)){
 					</p>
 					<strong><?php _e('Shipping Options'); ?></strong>
 					<p>
-					<?php _e('Shipping Method:'); ?> <?php echo wpsc_display_purchlog_shipping_method(); ?><br />
-					<?php _e('Shipping Option:'); ?> <?php echo wpsc_display_purchlog_shipping_option(); ?>
 					
+					<?php _e('Shipping Method:'); ?> <?php echo wpsc_display_purchlog_shipping_method(); ?><br />
+					<?php _e('Shipping Option:'); ?> <?php echo wpsc_display_purchlog_shipping_option(); ?><br />
+					<?php if(wpsc_purchlogs_has_tracking()) : ?>
+						<?php _e('Tracking ID:'); ?> <?php echo wpsc_purchlogitem_trackid(); ?><br />
+						<?php _e('Shipping Status:'); ?> <?php echo wpsc_purchlogitem_trackstatus(); ?><br />
+						<?php _e('Track History:'); ?> <?php echo wpsc_purchlogitem_trackhistory(); ?>
+					<?php endif; ?>
 					</p>
 				</div>
 				<?php } ?>
@@ -456,8 +462,11 @@ if(!isset($purchlogs)){
  		<?php } ?>
  		</td><!-- Status -->
  		<td><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
+ 		<td>
+ 			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''>+ tracking id</a>
+ 		</td>
  	</tr>
- 	<tr class='<?php echo wpsc_the_purch_item_has_track(); ?> log<?php echo wpsc_the_purch_item_id(); ?> wpsc_trackingid_row'>
+ 	<tr class='log<?php echo wpsc_the_purch_item_id(); ?> wpsc_trackingid_row'>
  		<td class='wpsc_trackingid_row' colspan='1'>
  		</td>
  		<td class='wpsc_trackingid_row' >
@@ -467,7 +476,7 @@ if(!isset($purchlogs)){
  			<input type='text' name='wpsc_trackingid<?php echo wpsc_the_purch_item_id(); ?>' value='<?php echo wpsc_trackingid_value(); ?>' size='20' />
  			<input type='submit' name='submit' class='button' value='Add Tracking ID' />
  		</td>
- 		<td colspan='3'>
+ 		<td colspan='4'>
  			<a href='' title='<?php echo wpsc_the_purch_item_id(); ?>' class='sendTrackingEmail'>Email Buyer</a>
  		</td>
  	</tr>

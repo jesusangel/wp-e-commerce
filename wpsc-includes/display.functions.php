@@ -17,10 +17,10 @@
 * @return string - html displaying one or more products
 */
 function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
-  global $wpdb, $wpsc_query;
+  global $wpdb, $wpsc_query, $wpsc_cart;
   $temp_wpsc_query = new WPSC_query(array('product_id' =>$product_id));
   list($wpsc_query, $temp_wpsc_query) = array($temp_wpsc_query, $wpsc_query); // swap the wpsc_query objects
-  
+//  exit('<pre>'.print_r($temp_wpsc_query, true).'</pre>');
   $selected_gateways = get_option('custom_gateway_options');
   if (in_array('google', (array)$selected_gateways)) {
 		$output .= google_buynow($product['id']);
@@ -30,12 +30,13 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 			while (wpsc_have_products()) :
 				wpsc_the_product();
 				$price =  calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations); 
+				$shipping = $wpsc_query->product['pnp'];
 				$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post' />
 					<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."' />
 					<input type='hidden' name='cmd' value='_xclick' />
 					<input type='hidden' name='item_name' value='".wpsc_the_product_title()."' />
 					<input type='hidden' id='item_number' name='item_number' value='".wpsc_the_product_id()."' />
-					<input type='hidden' id='amount' name='amount' value='".$price."' />
+					<input type='hidden' id='amount' name='amount' value='".($price+$pnp)."' />
 					<input type='hidden' id='unit' name='unit' value='".$price."' />
 					<input type='hidden' id='shipping' name='ship11' value='".$shipping."' />
 					<input type='hidden' name='handling' value='".get_option('base_local_shipping')."' />
