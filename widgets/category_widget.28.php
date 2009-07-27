@@ -1,8 +1,8 @@
 <?php
 /**
- * Categories widget class
+ * Product Categories widget class
  *
- * @since 2.8.0
+ * @since 3.7.1
  */
 class WP_Widget_Product_Categories extends WP_Widget {
 
