@@ -36,7 +36,19 @@ function wpsc_debug_page() {
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_copying_themes'>Copy Themes to New Theme Directory</a>
 			</li>
 		</ul>
-	  
+		<?php
+		if (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
+			?>
+			<h4>Development Code List</h4>
+			<p> And this code is probably useless for anything other than working out how to write better code to do the same thing,  unless you want to do that, leave it alone</p>
+			<ul>
+				<li>
+					<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_making_product_url_names'>Test Making Product URL Names</a>
+				</li>
+			</ul>
+			<?php
+		}
+		?>
 		<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'><?php
 		 switch($_GET['wpsc_debug_action']) {
 		   case 'download_links':
@@ -54,6 +66,10 @@ function wpsc_debug_page() {
 		   
 		   case 'test_copying_themes':
 		   wpsc_test_copying_themes();
+		   break;
+		   
+		   case 'test_making_product_url_names':
+		   wpsc_test_making_product_url_names();
 		   break;
 		 }
 		?></pre>
@@ -160,5 +176,44 @@ function wpsc_redo_product_url_names() {
 		}
 	}	
 }
+/**
+* wpsc_test_making_product_url_names, tests making URL names
+*/
 
+function wpsc_test_making_product_url_names() {
+	global $wpdb;
+	
+	$product_data = $wpdb->get_results("SELECT DISTINCT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `products`.`active` = '1' ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
+	
+	foreach((array)$product_data as $product_row) {
+	  $product_id = $product_row['id'];
+	  $post_data = $product_row;
+
+	  
+		if($post_data['name'] != '') {
+			$existing_name = get_product_meta($product_id, 'url_name');
+			$tidied_name = strtolower(trim(stripslashes($post_data['name'])));
+			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+			//exit($existing_name." ". $url_name);
+			echo "Existing Name: \t\t {$existing_name}\n";
+			echo "Inital URL Name: \t {$url_name}\n";
+  		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$product_id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
+				if(array_search($url_name, $similar_names) !== false) {
+				  $i = 0;
+				  do {
+				  	$i++;
+				  } while(array_search(($url_name.$i), $similar_names) !== false);
+				  $url_name .= $i;
+				} 
+				echo "Attempted Name: \t {$url_name}\n";
+				
+				print_r($similar_names);
+			if($existing_name != $url_name) {
+				update_product_meta($product_id, 'url_name', $url_name);
+			}
+			
+			echo "\n";
+		}
+	}	
+}
 ?>

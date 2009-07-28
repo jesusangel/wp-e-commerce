@@ -203,17 +203,26 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   
 	/* Add tidy url name */
 	if($post_data['name'] != '') {
-	  $existing_name = get_product_meta($product_id, 'url_name');
+		$existing_name = get_product_meta($product_id, 'url_name');
+		// strip slashes, trim whitespace, convert to lowercase
 		$tidied_name = strtolower(trim(stripslashes($post_data['name'])));
-	  $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
-	  exit($existing_name." ". $url_name);
-	  if($existing_name != $url_name) {
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
-			$extension_number = '';
-			if($similar_names['count'] > 0) {
-				$extension_number = (int)$similar_names['max_number']+1;
-			}
-			$url_name .= $extension_number;
+		// convert " - " to "-", all other spaces to dashes, and remove all foward slashes.
+		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+		// Select all similar names, using an escaped version of the URL name 
+		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$product_id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
+
+		// Check desired name is not taken
+		if(array_search($url_name, $similar_names) !== false) {
+		  // If it is, try to add a number to the end, if that is taken, try the next highest number...
+			$i = 0;
+			do {
+				$i++;
+			} while(array_search(($url_name.$i), $similar_names) !== false);
+			// Concatenate the first number found that wasn't taken
+			$url_name .= $i;
+		}
+	  // If our URL name is the same as the existing name, do othing more.
+		if($existing_name != $url_name) {
 			update_product_meta($product_id, 'url_name', $url_name);
 		}
 	}
