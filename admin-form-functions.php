@@ -864,12 +864,13 @@ function wpsc_packing_slip($purchase_id) {
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 			
-			
+
 	  //echo "<p style='padding-left: 5px;'><strong>".TXT_WPSC_DATE."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
 		$j = 0;
+	
 		if($cart_log != null) {
       echo "<div class='packing_slip'>\n\r";
 			echo "<h2>".TXT_WPSC_PACKING_SLIP."</h2>\n\r";
@@ -956,13 +957,14 @@ function wpsc_packing_slip($purchase_id) {
 				echo " <th>".TXT_WPSC_PRICE." </th>";
 				
 				echo " <th>".TXT_WPSC_SHIPPING." </th>";
-							
+				echo '<th>Tax</th>';
 				echo '</tr>';
 			$endtotal = 0;
 			$all_donations = true;
 			$all_no_shipping = true;
 			$file_link_list = array();
 			foreach($cart_log as $cart_row) {
+			
 				$alternate = "";
 				$j++;
 				if(($j % 2) != 0) {
@@ -1016,7 +1018,7 @@ function wpsc_packing_slip($purchase_id) {
 				if($gst > 0) {
 				  $tax_per_item = $gst / $cart_row['quantity'];
 				}
-				
+
 
 				echo "<tr $alternate>";
 		
@@ -1039,6 +1041,11 @@ function wpsc_packing_slip($purchase_id) {
 				echo nzshpcrt_currency_display($shipping, 1);
 				echo " </td>";
 							
+	
+
+				echo '<td>';
+				echo nzshpcrt_currency_display($cart_row['tax_charged'],1);
+				echo '<td>';
 				echo '</tr>';
 				}
 			echo "</table>";

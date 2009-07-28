@@ -244,6 +244,11 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	// and the images
 	wpsc_update_product_images($product_id, $post_data);
 	
+	//and the alt currency
+	foreach($post_data['newCurrency'] as $key =>$value){
+		wpsc_update_alt_product_currency($product_id, $value, $post_data['newCurrPrice'][$key]);
+	}
+	
 	if($post_data['files']['file']['tmp_name'] != '') {
 		wpsc_item_process_file($product_id, $post_data['files']['file']);
 	} else {
@@ -286,7 +291,18 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	return $product_id;
 }
 
-
+function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
+	global $wpdb;
+	$sql = "SELECT `isocode` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`=".$newCurrency;
+	$isocode = $wpdb->get_var($sql);
+	//exit($sql);
+	$newCurrency = 'currency['.$isocode.']';
+	
+	if($newPrice != ''){
+		update_product_meta($product_id, $newCurrency, $newPrice, $prev_value = '');
+	}
+	//exit('<pre>'.print_r($newCurrency, true).'</pre>'.$newPrice);
+}
 /**
  * wpsc_update_categories function 
  *

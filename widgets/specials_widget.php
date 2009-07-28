@@ -31,6 +31,7 @@ function widget_specials($args) {
 							$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$special['name']."' alt='".$special['name']."' /><br />";
 						}
 					}
+					//exit('Widget specisl'.get_option('wpsc_special_description'));
 				if(get_option('wpsc_special_description') != '1'){
 					$output .= $special['description']."<br />";
 				}

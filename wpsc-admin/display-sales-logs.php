@@ -477,7 +477,7 @@ if(!isset($purchlogs)){
  			<input type='submit' name='submit' class='button' value='Add Tracking ID' />
  		</td>
  		<td colspan='4'>
- 			<a href='' title='<?php echo wpsc_the_purch_item_id(); ?>' class='sendTrackingEmail'>Email Buyer</a>
+ 			<a href='' title='<?php echo wpsc_the_purch_item_id(); ?>' class='sendTrackingEmail'>Send Custom Message</a>
  		</td>
  	</tr>
  	

@@ -254,6 +254,13 @@ div.search-box input#page-search-input {
 	font-size: 10px;
 	visibility: visible;
 }
+.newCurrency{
+width:150px;
+}
+div.wpsc_floatleft{
+width:150px;
+float:left;
+}
 	
 /*  Sortable product styling*/
 	
@@ -300,6 +307,7 @@ div.product-placeholder {
 
 
 /*  Product details form styling */
+
 #wpsc-col-right {
 	clear:right;
 	float:right;

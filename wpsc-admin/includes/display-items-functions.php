@@ -75,7 +75,8 @@ function wpsc_display_product_form ($product_id = 0) {
 		$product_data['meta']['can_have_uploaded_image'] = get_product_meta($product_id,'can_have_uploaded_image',true);
 		
 		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
-				
+		$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
+		$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);		
 		if(function_exists('wp_insert_term')) {
 			$term_relationships = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_relationships WHERE object_id = '{$product_id}'", ARRAY_A);
 			
@@ -118,7 +119,6 @@ function wpsc_display_product_form ($product_id = 0) {
 
 function wpsc_product_basic_details_form(&$product_data) {
   global $wpdb,$nzshpcrt_imagesize_info;
-  
 	/*<h3 class='hndle'><?php echo  TXT_WPSC_PRODUCTDETAILS; ?> <?php echo TXT_WPSC_ENTERPRODUCTDETAILSHERE; ?></h3>*/
   ?>
   <h3 class='form_heading'>
@@ -136,7 +136,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2' class='itemfirstcol'>  
 					<label for="wpsc_product_name">Product Name</label>
 					<div class='admin_product_name'>
-						<input id='wpsc_product_name' class='wpsc_product_name text' size='30' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+						<input id='wpsc_product_name' class='wpsc_product_name text' size='15' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 						<a href='#' class='shorttag_toggle'></a>
 					</div>
 					<div class='admin_product_shorttags'>
@@ -167,16 +167,76 @@ function wpsc_product_basic_details_form(&$product_data) {
 		
 		
 			<tr>
-				<td  class='skuandprice'>
+				<td colspan='3' class='skuandprice'>
+					<div class='wpsc_floatleft'>
 					<?php echo TXT_WPSC_SKU_FULL; ?> :<br />
-					<input size='30' type='text' class='text'  name='productmeta_values[sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['sku']), ENT_QUOTES, 'UTF-8'); ?>' />
-				</td>
-				<td  class='skuandprice'>
+					<input size='17' type='text' class='text'  name='productmeta_values[sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['sku']), ENT_QUOTES, 'UTF-8'); ?>' />
+					</div>
+					<div class='wpsc_floatleft'>
 					<?php echo TXT_WPSC_PRICE; ?> :<br />
-					<input type='text' class='text' size='30' name='price' value='<?php echo $product_data['price']; ?>' />
+					<input type='text' class='text' size='17' name='price' value='<?php echo $product_data['price']; ?>' />
+					</div>
+					<div class='wpsc_floatleft'>
+    			   <label for='add_form_special'><?php echo TXT_WPSC_SPECIAL; ?></label>
+			       <div style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>' id='add_special'>
+        			  <input type='text' size='17' value='<?php echo number_format(($product_data['price'] - $product_data['special_price']), 2); ?>' name='special_price'/>
+			       </div>
+			       </div>
+
+      			</td>
+    
+	
+			</tr>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td ><a href='' class='wpsc_add_new_currency'>Add new Currency</a></td>
+			</tr>
+			<tr class='new_layer'>
+				<td>
 				</td>
 			</tr>
-		
+			<?php if(count($product_data['newCurr']) > 0) :
+				$i = 0;
+				foreach($product_data['newCurr'] as $newCurr){  
+				$i++;
+				$isocode = str_ireplace("currency[", "", $newCurr['meta_key']);
+				$isocode = str_ireplace("]", "", $isocode);				
+			//	exit('ere<pre>'.print_r($isocode, true).'</pre>'); 
+				
+				?>
+					<tr>
+						<td>
+						<label for='newCurrency[]'><?php echo TXT_WPSC_CURRENCYTYPE;?>:</label><br />
+						<select name='newCurrency[]' class='newCurrency'>
+						<?php
+						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+						foreach($currency_data as $currency) {
+							if($isocode == $currency['isocode']) {
+								$selected = "selected='selected'";
+							} else {
+								$selected = "";
+							} ?>
+							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
+				<?php	}  
+						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+						if($currency_data['symbol'] != '') {
+							$currency_sign = $currency_data['symbol_html'];
+						} else {
+							$currency_sign = $currency_data['code'];
+						}
+				?>
+						</select>
+						</td>
+						<td>
+						Price<?php //echo TXT_WPSC_PRICE; ?> :<br />
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
+						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'>Delete Layer</a>
+						</td>
+					</tr>
+			<?php } ?>
+			<?php endif; ?>
 			<tr>
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
@@ -381,16 +441,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
           <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".TXT_WPSC_IS_DONATION."</label>
        </td>
     </tr>";
-    echo "
-    <tr>
-      <td>
-        <input type='checkbox' onclick='hideelement(\"add_special\")' value='yes' name='special' id='add_form_special' ".(($product_data['special'] == 1) ? 'checked="checked"' : '')." />
-        <label for='add_form_special'>".TXT_WPSC_SPECIAL."</label>
-        <div style='display:".(($product_data['special'] == 1) ? 'block' : 'none').";' id='add_special'>
-          <input type='text' size='10' value='".number_format(($product_data['price'] - $product_data['special_price']), 2)."' name='special_price'/>
-        </div>
-      </td>
-    </tr>";
+  
     
 				
     ?>
@@ -408,7 +459,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 						<?php
 						//print_r($table_rate_price);
 						if(count($table_rate_price) > 0 ) {
-							foreach($table_rate_price['quantity'] as $key => $qty) {
+							foreach((array)$table_rate_price['quantity'] as $key => $qty) {
 								if($qty != '') {
 									?>
 									<tr>
@@ -658,9 +709,9 @@ function wpsc_product_advanced_forms($product_data='') {
 		<tr>
 			<td colspan="2" class="itemfirstcol"><br />
 						<strong>'.__("Publish:","wpsc").'</strong> <label for="publish_yes">'.__("Yes").'
-				</label><input name="publish" id="publish_yes" type="radio" value="1" '.((!is_array($product_data) || $product_data['publish']) ? 'checked="true" ' : '' ).'>
+				</label><input name="publish" id="publish_yes" type="radio" value="1" '.((!is_array($product_data) || $product_data['publish']) ? 'checked="checked" ' : '' ).' />
 				<label for="publish_no">'.__("No","wpsc").'
-			</label><input name="publish" id="publish_no" type="radio" value="0" '.((is_array($product_data) && !$product_data['publish']) ? 'checked="true" ' : '' ).'>
+			</label><input name="publish" id="publish_no" type="radio" value="0" '.((is_array($product_data) && !$product_data['publish']) ? 'checked="checked" ' : '' ).' />
 			</td>
 		</tr>';
 			/*   End Publish /No Publish Fields
