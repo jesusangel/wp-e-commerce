@@ -61,7 +61,9 @@ switch($page) {
 	require_once('includes/settings-pages/general.php');
 	wpsc_options_general();
 	break;
-} ?>
+}
+ $_SESSION['wpsc_settings_curr_page'] = $page;
+ ?>
 </div>
 </div>
 <?php

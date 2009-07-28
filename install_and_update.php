@@ -455,7 +455,7 @@ function wpsc_create_upload_directories() {
 		@ mkdir(WPSC_THEMES_PATH, 0775);
 		
 	}
-	wpsc_copy_themes_to_uploads();
+	//wpsc_copy_themes_to_uploads();
 	
 	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
 	if(is_dir($wpsc_file_directory)) {

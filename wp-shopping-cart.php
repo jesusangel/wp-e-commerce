@@ -123,6 +123,32 @@ if (!IS_WP25) {
 include_once('wp-shopping-cart.old.php');
 
 
+require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
+require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
+require_once(WPSC_FILE_PATH."/homepage_products_functions.php"); 
+require_once(WPSC_FILE_PATH."/transaction_result_functions.php"); 
+// include_once(WPSC_FILE_PATH.'/submit_checkout_function.php');
+require_once(WPSC_FILE_PATH."/admin-form-functions.php");
+require_once(WPSC_FILE_PATH."/shipwire_functions.php"); 
+
+/* widget_section */
+include_once(WPSC_FILE_PATH.'/widgets/product_tag_widget.php');
+include_once(WPSC_FILE_PATH.'/widgets/shopping_cart_widget.php');
+include_once(WPSC_FILE_PATH.'/widgets/donations_widget.php');
+include_once(WPSC_FILE_PATH.'/widgets/specials_widget.php');
+include_once(WPSC_FILE_PATH.'/widgets/latest_product_widget.php');
+include_once(WPSC_FILE_PATH.'/widgets/price_range_widget.php');
+include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
+
+ if (class_exists('WP_Widget')) {
+	include_once(WPSC_FILE_PATH.'/widgets/category_widget.28.php');
+} else {
+	include_once(WPSC_FILE_PATH.'/widgets/category_widget.27.php');
+}
+
+
+include_once(WPSC_FILE_PATH.'/image_processing.php');
+
 
 // if we are in the admin section, include the admin code
 if(WP_ADMIN == true) {

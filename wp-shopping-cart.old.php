@@ -1583,26 +1583,7 @@ function wpsc_merchant_sort($a, $b) {
   return strnatcmp(strtolower($a['name']), strtolower($b['name'])); 
 } 
 uasort($nzshpcrt_gateways, 'wpsc_merchant_sort'); 
-require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
-require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
-require_once(WPSC_FILE_PATH."/homepage_products_functions.php"); 
-require_once(WPSC_FILE_PATH."/transaction_result_functions.php"); 
-// include_once(WPSC_FILE_PATH.'/submit_checkout_function.php');
-require_once(WPSC_FILE_PATH."/admin-form-functions.php");
-require_once(WPSC_FILE_PATH."/shipwire_functions.php"); 
 
-/* widget_section */
-include_once(WPSC_FILE_PATH.'/widgets/product_tag_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/shopping_cart_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/category_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/donations_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/specials_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/latest_product_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/price_range_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
-
-
-include_once(WPSC_FILE_PATH.'/image_processing.php');
 
 
 $theme_path = WPSC_FILE_PATH . '/themes/';

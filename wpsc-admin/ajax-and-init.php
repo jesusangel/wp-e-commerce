@@ -1851,7 +1851,7 @@ function wpsc_trigger_copy_themes(){
 
   $_SESSION['wpsc_themes_copied'] = true;
 	$sendback = wp_get_referer();
-	//$sendback = add_query_arg('themes_copied', 1, $sendback);
+	$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], remove_query_arg('tab', $sendback));
 	wp_redirect($sendback);
 	exit();
 }
