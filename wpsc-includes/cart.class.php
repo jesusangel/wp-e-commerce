@@ -853,6 +853,8 @@ class wpsc_cart {
 		$this->cart_item = null;
 		$this->cart_item_count = 0;
 		$this->current_cart_item = -1;
+		unset($this->coupons_amount);
+		unset($this->coupons_name);
 		$this->clear_cache();
 		$this->cleanup();
   }
@@ -1129,8 +1131,6 @@ class wpsc_cart {
 		foreach($this->cart_items as $key => $cart_item) {
 		  $cart_item->save_to_db($purchase_log_id);
 		}
-		unset($this->coupons_amount);
-		unset($this->coupons_name);
   }
   
   /**

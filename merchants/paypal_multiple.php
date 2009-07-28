@@ -78,7 +78,8 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   
 	$total = nzshpcrt_overall_total_price($_SESSION['selected_country'],false,true);
 
-	$discount = $wpsc_cart->cart_item->discount;
+	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+	$discount = $wpsc_cart->coupons_amount;
 	//exit($discount);
 	if(($discount > 0)) {
 		$data['item_name_'.$i] = "Your Shopping Cart";

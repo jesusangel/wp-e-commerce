@@ -203,23 +203,19 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   
 	/* Add tidy url name */
 	if($post_data['name'] != '') {
-	
-   
-    $tidied_name =$post_data['name'];
-	  $tidied_name = trim($tidied_name);
-	  //echo $tidied_name."<br />";
-		$tidied_name = strtolower($tidied_name);
-		//echo $tidied_name."<br />";
+	  $existing_name = get_product_meta($product_id, 'url_name');
+		$tidied_name = strtolower(trim(stripslashes($post_data['name'])));
 	  $url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
-		//echo $url_name."<br />";
-		$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
-		$extension_number = '';
-		if($similar_names['count'] > 0) {
-			$extension_number = (int)$similar_names['max_number']+1;
+	  exit($existing_name." ". $url_name);
+	  if($existing_name != $url_name) {
+			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
+			$extension_number = '';
+			if($similar_names['count'] > 0) {
+				$extension_number = (int)$similar_names['max_number']+1;
+			}
+			$url_name .= $extension_number;
+			update_product_meta($product_id, 'url_name', $url_name);
 		}
-		$url_name .= $extension_number;
-		update_product_meta($product_id, 'url_name', $url_name);
-		//exit($wpdb->escape($url_name));
 	}
   
 	// if we succeed, we can do further editing
