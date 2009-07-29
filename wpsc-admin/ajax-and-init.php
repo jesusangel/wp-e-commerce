@@ -28,7 +28,19 @@
 if($_REQUEST['submit'] == 'Add Tracking ID') {
 	add_action('admin_init', 'wpsc_ajax_add_tracking');
 }
+ function wpsc_delete_currency_layer() {
+  	global $wpdb;
+  	$meta_key = 'currency['.$_POST['currSymbol'].']';
+  	$sql= "DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key`='".$meta_key."' LIMIT 1";
+  	$wpdb->query($sql);
+//	exit('<pre>'.print_r($_POST, true).'</pre>');
 
+}
+ 
+ 
+if($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer') {
+	add_action('admin_init', 'wpsc_delete_currency_layer');
+}
  function wpsc_purchlog_email_trackid() {
   	global $wpdb;
   	$id = $_POST['purchlog_id'];
@@ -1479,19 +1491,22 @@ if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
  *takes an array of options checks to see whether it is empty or the same as the exisiting values 
  *and if its not it updates them. 
  */
-function wpsc_submit_options() {
+function wpsc_submit_options($selected='') {
   global $wpdb;
   	//exit('<pre>'.print_r($_POST, true).'</pre>');
 	//This is to change the Overall target market selection
-	 if($_POST['countrylist2'] != null){
+
+	 if($_POST['countrylist2'] != null || $selected != ''){
     	$AllSelected = false;
-    	if(in_array('all',$_POST['countrylist2'])){
+    	if( $selected == 'all'){
     		$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = '1'");
 			$AllSelected = true;
+			return;
     	}
-    	if(in_array('none', $_POST['countrylist2'])){
+    	if( $selected == 'none'){
     		$wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET visible = '0'");
 			$AllSelected = true;
+			return;
     	}
     	if($AllSelected != true){
 			$countrylist = $wpdb->get_col("SELECT id FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ");
@@ -1561,7 +1576,7 @@ function wpsc_submit_options() {
 }
  
  
- 
+
  if($_REQUEST['wpsc_admin_action'] == 'submit_options') {
 	add_action('admin_init', 'wpsc_submit_options');
 }

@@ -69,6 +69,8 @@ class usps {
       $_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
     } else if(isset($_SESSION['wpsc_zipcode'])) {
       $zipcode = $_SESSION['wpsc_zipcode'];
+    }else{
+    	$zipcode = get_option('base_zipcode');
     }
 		$dest = $_SESSION['wpsc_delivery_country'];
 		$weight = wpsc_cart_weight_total();

@@ -8,26 +8,29 @@
 			<td colspan="2"><h4>Target Market Restrictions</h4></td>
 		</tr>
 		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
 			<td>
 				<?php echo TXT_WPSC_TM; ?>:
 				<br />
 			</td>
 			<td>
+				<span>Select: <a href='<?php echo add_query_arg(array('selected_all' => 'all'))?>' class='wpsc_select_all'>All</a>&nbsp; <a href='<?php echo add_query_arg(array('selected_all' => 'none'))?>' class='wpsc_select_none'>None</a></span><br />
 				<div id='resizeable' class='ui-widget-content multiple-select'>
-					<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
-					<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
+
 					<?php
 					foreach((array)$countrylist as $country){
 						if($country['visible'] == 1){
-							echo "					<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
+							echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
 						}else{
-							echo "					<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";
+							echo "<input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";
 						}	
 					}
 					?>
 				</div>
 				<br />				<br />
-				<span class='small description'><?php _e('Select the markets you are selling this category to.'); ?></span>
+				<span class='wpscsmall description'><?php _e('Select the markets you are selling this category to.'); ?></span>
 			</td>
 		</tr>
 	<?php
@@ -681,9 +684,10 @@ if(is_numeric($_GET['deleteid'])) {
 	<div id='additem' class='postbox'>
 		<h3 class='hndle'><?php echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP); ?></h3>
 		<div class='inside'>
-			<form method='POST' enctype='multipart/form-data' class='additem'>
+			<form method='post' enctype='multipart/form-data' class='additem'>
 				<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
-				<table class='category_forms'>
+	  			  
+				<table class='category_forms form_table'>
 					<tr>
 						<td>
 							<?php echo TXT_WPSC_NAME;?>:
@@ -725,7 +729,7 @@ if(is_numeric($_GET['deleteid'])) {
 						</td>
 						<td>
 							<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br />
-							<span class='small description'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
+							<span class='wpscsmall description'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
 						</td>
 					</tr>
 					<?php
@@ -774,10 +778,9 @@ if(is_numeric($_GET['deleteid'])) {
 					</tr>
 
 					<tr>
-						<td>
+						<td colspan='2'>
 						<?php echo TXT_WPSC_THUMBNAIL_SIZE; ?>:
-						</td>
-						<td>
+
 							<?php echo TXT_WPSC_HEIGHT; ?>: <input type='text' value='' name='product_height' size='6'/>
 							<?php echo TXT_WPSC_WIDTH; ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
 						</td>

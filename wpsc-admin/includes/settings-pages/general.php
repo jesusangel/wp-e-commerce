@@ -1,6 +1,7 @@
 <?php
 function wpsc_options_general(){
-global $wpdb;
+	global $wpdb;
+	$sendback = wp_get_referer();
 ?>
 	<form name='cart_options' id='cart_options' method='post' action=''>
 	<div id="options_general">
@@ -64,9 +65,9 @@ global $wpdb;
 			<?php echo TXT_WPSC_TM; ?>:
 			</th>
 			<td>
+			<span>Select: <a href='<?php echo add_query_arg(array('selected_all' => 'all'))?>' class='wpsc_select_all'>All</a>&nbsp; <a href='<?php echo add_query_arg(array( 'selected_all'=>'none'))?>' class='wpsc_select_none'>None</a></span><br />
 			<div id='resizeable' class='ui-widget-content multiple-select'>
-			<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />
-			<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />
+
 			<?php
 				foreach((array)$countrylist as $country){
 					$country['country'] = htmlspecialchars($country['country']);

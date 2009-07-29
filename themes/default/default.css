@@ -315,15 +315,21 @@ p.wpsc_variation_forms label{
  
  p.wpsc_product_price{
  margin: 0px 0px 0px 0px;
+
  }
- 
+ span.wpscsmall{
+ font-size:0.8em;
+ }
  p.wpsc_product_extra_content{
  margin: 0px 0px 0px 0px;
  }
  
   div.wpsc_product_price{ 
+   width:130px;
   }
-  
+  span.pricefloatright{
+
+  }
  div.wpsc_product_price label{
    display: inline;
  }
@@ -1078,6 +1084,8 @@ a.categorylink{
 
 span.pricedisplay{
  white-space: nowrap;
+ width: 80px;
+ float:right; 
  }
  
 td.totals{

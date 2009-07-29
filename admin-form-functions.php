@@ -211,9 +211,9 @@ function nzshpcrt_getcategoryform($catid)
   global $wpdb,$nzshpcrt_imagesize_info;
   $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1",ARRAY_A);
   $output = '';
-  $output .= "<div class='editing_this_group'>";
+  $output .= "<div class='editing_this_group form_table'>";
 	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), TXT_WPSC_EDITING_GROUP)."</p>\n\r";
-	
+	$output .= "<p><a href='' onclick='return showaddform()' class='add_category_link'><span>".str_replace("&quot;[categorisation]&quot;", "current", TXT_WPSC_ADDNEWCATEGORY)."</span></a></p>";
 	$output .="<dl>\n\r";
 	$output .="		<dt>Display Category Shortcode: </dt>\n\r";
 	$output .="		<dd> [wpsc_products category_url_name='{$product['nice-name']}']</dd>\n\r";
@@ -263,23 +263,23 @@ function nzshpcrt_getcategoryform($catid)
 	
 	switch($product['display_type']) {
 	  case "default":
-			$product_view1 = "selected ='true'";
+			$product_view1 = "selected ='selected'";
 		break;
 		
 		case "grid":
 		if(function_exists('product_display_grid')) {
-			$product_view3 = "selected ='true'";
+			$product_view3 = "selected ='selected'";
 			break;
 		}
 		
 		case "list":
 		if(function_exists('product_display_list')) {
-			$product_view2 = "selected ='true'";
+			$product_view2 = "selected ='selected'";
 			break;
 		}
 		
 		default:
-			$product_view0 = "selected ='true'";
+			$product_view0 = "selected ='selected'";
 		break;
 	}	
 	
@@ -303,8 +303,8 @@ function nzshpcrt_getcategoryform($catid)
       $output .= "            <td>\n\r";
       $output .= "            </td>\n\r";
       $output .= "            <td>\n\r";
-      $output .= TXT_WPSC_HEIGHT.":<input type='text' size='6' name='height' value='".$imagetype[1]."' /> ".TXT_WPSC_WIDTH.":<input type='text' size='6' name='width' value='".$imagetype[0]."' /><br /><span class='small'>$nzshpcrt_imagesize_info</span><br />\n\r";
-			$output .= "<span class='small'>".TXT_WPSC_GROUP_IMAGE_TEXT."</span>\n\r";
+      $output .= TXT_WPSC_HEIGHT.":<input type='text' size='6' name='height' value='".$imagetype[1]."' /> ".TXT_WPSC_WIDTH.":<input type='text' size='6' name='width' value='".$imagetype[0]."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
+			$output .= "<span class='wpscsmall description'>".TXT_WPSC_GROUP_IMAGE_TEXT."</span>\n\r";
       $output .= "            </td>\n\r";
       $output .= "          </tr>\n\r";
 		} else {
@@ -312,8 +312,8 @@ function nzshpcrt_getcategoryform($catid)
 			$output .= "            <td>\n\r";
 			$output .= "            </td>\n\r";
 			$output .= "            <td>\n\r";
-			$output .= TXT_WPSC_HEIGHT.":<input type='text' size='6' name='height' value='".get_option('product_image_height')."' /> ".TXT_WPSC_WIDTH.":<input type='text' size='6' name='width' value='".get_option('product_image_width')."' /><br /><span class='small'>$nzshpcrt_imagesize_info</span><br />\n\r";
-			$output .= "<span class='small'>".TXT_WPSC_GROUP_IMAGE_TEXT."</span>\n\r";
+			$output .= TXT_WPSC_HEIGHT.":<input type='text' size='6' name='height' value='".get_option('product_image_height')."' /> ".TXT_WPSC_WIDTH.":<input type='text' size='6' name='width' value='".get_option('product_image_width')."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
+			$output .= "<span class='wpscsmall description'>".TXT_WPSC_GROUP_IMAGE_TEXT."</span>\n\r";
 			$output .= "            </td>\n\r";
 			$output .= "          </tr>\n\r";
 		}
@@ -333,14 +333,14 @@ function nzshpcrt_getcategoryform($catid)
 	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$product['id']." AND visible= 1");
 //	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
 	$output .= " <tr>\n\r";
-	$output .= " 	<td colspan='2'><h4>Target Market Restrictions</h4></td></tr><tr>\n\r";
+	$output .= " 	<td colspan='2'><h4>Target Market Restrictions</h4></td></tr><tr><td>&nbsp;</td></tr><tr>\n\r";
 	$output .= " 	<td>\n\r";
 	$output .= TXT_WPSC_TM.":\n\r";
 	$output .= " 	</td>\n\r";
 	$output .= " 	<td>\n\r";
+	$output .= "<span>Select: <a href='' class='wpsc_select_all'>All</a>&nbsp; <a href='' class='wpsc_select_none'>None</a></span><br />";
 	$output .= " 	<div id='resizeable' class='ui-widget-content multiple-select'>\n\r";
-	$output .= " 	<input type='checkbox' name='countrylist2[]' value='all' />Select All<br />\n\r";
-	$output .= " 		<input type='checkbox' name='countrylist2[]' value='none' />Uncheck All<br />\n\r";
+
 	
 		
 		foreach($countrylist as $country){
@@ -355,8 +355,8 @@ function nzshpcrt_getcategoryform($catid)
 
 				
 		
-		$output .= " </div><br />\n\r";
-		$output .= " Select the markets you are selling this category to.\n\r";
+		$output .= " </div><br /><br />";
+		$output .= " <span class='wpscsmall description'>Select the markets you are selling this category to.<span>\n\r";
 		$output .= " </td>\n\r";
 	
 	$output .= " </tr>\n\r";

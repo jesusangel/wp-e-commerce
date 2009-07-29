@@ -172,8 +172,8 @@ function wpsc_shipping_country_list() {
 // 	$output .= "ZipCode:";
 if(isset($_POST['zipcode'])) {
 		if ($_POST['zipcode']=='') {
-			$zipvalue = 'Your Zipcode';
-			$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
+			$zipvalue = get_option('base_zipcode');
+			$_SESSION['wpsc_zipcode'] = get_option('base_zipcode');
 			$color = '#999';
 		} else {
 			$zipvalue = $_POST['zipcode'];
@@ -184,8 +184,8 @@ if(isset($_POST['zipcode'])) {
 			$zipvalue = $_SESSION['wpsc_zipcode'];
 			$color = '#000';
 	} else {
-		$zipvalue = 'Your Zipcode';
-		$_SESSION['wpsc_zipcode'] = '';
+		$zipvalue = get_option('base_zipcode');
+		$_SESSION['wpsc_zipcode'] = get_option('base_zipcode');
 		$color = '#999';
 	}
 	

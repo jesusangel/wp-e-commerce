@@ -1,9 +1,56 @@
 // This is the wp-e-commerce front end javascript "library"
 
 jQuery(document).ready( function () {
-
-
-
+  
+  //new currency JS in admin product page
+  jQuery('tr.new_layer').livequery(function(){
+  	jQuery(this).hide();
+  
+  });
+  var firstclick = true
+  jQuery('a.wpsc_add_new_currency').livequery(function(){
+  	jQuery(this).click(function(event){
+  		if(firstclick == true){
+		  	jQuery('tr.new_layer').show();
+  			html = jQuery('tr.new_layer').html();	  	
+		  	firstclick = false;
+  		}else{
+		  	jQuery('tr.new_layer').after('<tr>'+html+'</tr>');		
+  		}
+  		event.preventDefault();
+  	});
+	});
+  //delete currency layer in admin product page
+  jQuery('a.wpsc_delete_currency_layer').livequery(function(){
+  	jQuery(this).click(function(event){
+  	var currencySymbol = jQuery(this).attr('rel');
+  	jQuery(this).parent().parent('tr').hide();
+  	post_values = "currSymbol="+currencySymbol;
+  	jQuery.post('index.php?wpsc_admin_action=delete_currency_layer',post_values, function(returned_data){});
+  	//alert(currencySymbol);
+  	
+  	event.preventDefault();
+	});  	
+  });
+  
+  //select all target markets in general settings page
+  jQuery('a.wpsc_select_all').livequery(function(){
+  	jQuery(this).click(function(event){
+  		jQuery('div#resizeable input:checkbox').attr('checked', true);
+  		event.preventDefault();
+  		
+  	});
+  
+  });
+  //select all target markets in general settings page
+  jQuery('a.wpsc_select_none').livequery(function(){
+  	jQuery(this).click(function(event){
+  		jQuery('div#resizeable input:checkbox').attr('checked', false);
+  		event.preventDefault();
+  		
+  	});
+  
+  });
   // this makes the product list table sortable
   jQuery('table#wpsc_product_list').sortable({
 		update: function(event, ui) {
@@ -114,6 +161,7 @@ jQuery(document).ready( function () {
 			});
 	 		return false;
 	 		// */
+ 		
 	 });
 	
 	jQuery("a.thickbox").livequery(function(){

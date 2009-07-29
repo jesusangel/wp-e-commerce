@@ -190,15 +190,39 @@ function wpsc_product_basic_details_form(&$product_data) {
     
 	
 			</tr>
+		
 			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td ><a href='' class='wpsc_add_new_currency'>Add new Currency</a></td>
+				<td ><a href='' class='wpsc_add_new_currency'>+ New Currency</a></td>
 			</tr>
 			<tr class='new_layer'>
-				<td>
-				</td>
+					<td>
+						<label for='newCurrency[]'><?php echo TXT_WPSC_CURRENCYTYPE;?>:</label><br />
+						<select name='newCurrency[]' class='newCurrency'>
+						<?php
+						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+						foreach((array)$currency_data as $currency) {
+							if($isocode == $currency['isocode']) {
+								$selected = "selected='selected'";
+							} else {
+								$selected = "";
+							} ?>
+							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
+				<?php	}  
+						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+						if($currency_data['symbol'] != '') {
+							$currency_sign = $currency_data['symbol_html'];
+						} else {
+							$currency_sign = $currency_data['code'];
+						}
+				?>
+						</select>
+						</td>
+						<td>
+						Price<?php //echo TXT_WPSC_PRICE; ?> :<br />
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
+						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'>Delete Layer</a>
+						</td>
+
 			</tr>
 			<?php if(count($product_data['newCurr']) > 0) :
 				$i = 0;
@@ -235,7 +259,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 						<td>
 						Price<?php //echo TXT_WPSC_PRICE; ?> :<br />
 						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
-						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'>Delete Layer</a>
+						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'>Delete Layer</a>
 						</td>
 					</tr>
 			<?php } ?>

@@ -27,6 +27,10 @@ if (isset($_GET['googlecheckoutshipping'])) {
 	return;
 	exit();
 }
+
+if(isset($_GET['selected_all'])){
+	wpsc_submit_options($_GET['selected_all']);
+}
 ?> <div id='wpsc_options_page'> <?php
 switch($page) {
 	case "checkout";
