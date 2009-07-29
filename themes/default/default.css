@@ -170,6 +170,7 @@ h2.prodtitles{
  font-size:1em;
  margin: 0px;
  clear:both;
+ padding-top:0;
 }
 
 h2.prodtitles span{
