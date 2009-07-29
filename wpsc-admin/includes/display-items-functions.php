@@ -76,7 +76,10 @@ function wpsc_display_product_form ($product_id = 0) {
 		
 		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
 		$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
-		$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);		
+		$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
+
+		
+		//echo "<pre>".print_r($product_data,true)."</pre>";
 		if(function_exists('wp_insert_term')) {
 			$term_relationships = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_relationships WHERE object_id = '{$product_id}'", ARRAY_A);
 			
@@ -787,6 +790,7 @@ function wpsc_product_image_forms($product_data='') {
 		$display = "style='display:none;'";
 	}
 
+	 	//echo "<pre>".print_r($product_data,true)."</pre>";
 
 	//As in WordPress,  If Mac and mod_security, no Flash
 	$flash = true;
@@ -817,7 +821,7 @@ function wpsc_product_image_forms($product_data='') {
 					file_post_name: "async-upload",
 					file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
 					post_params : {
-						"product_id" : "<?php echo absint($product_data['id']); ?>",
+						"product_id" : parseInt(jQuery('#product_id').val()),
 						"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
 						"_wpnonce" : "<?php echo wp_create_nonce('product-swfupload'); ?>",
 						"wpsc_admin_action" : "wpsc_add_image"
@@ -838,7 +842,17 @@ function wpsc_product_image_forms($product_data='') {
 						degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
 						swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
 					},
-					debug: false
+					<?php
+					if(defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
+						?>
+						debug: true
+						<?php
+					} else {
+						?>
+						debug: false
+						<?php
+					}
+					?>
 				});
 			});
 		/* ]]> */
@@ -1011,7 +1025,9 @@ function wpsc_product_label_forms() {
 function edit_multiple_image_gallery($product_data) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
-	$main_image = $wpdb->get_row("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_data['id']}' LIMIT 1", ARRAY_A);
+	if($product_data['id'] > 0) {
+		$main_image = $wpdb->get_row("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_data['id']}' LIMIT 1", ARRAY_A);
+	}
 	$timestamp = time();
 	?>
 	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
@@ -1027,27 +1043,27 @@ function edit_multiple_image_gallery($product_data) {
 					</a>
 				<?php } ?>
 
-				
-				
+
+
 				<div id='image_settings_box'>
 					<div class='upper_settings_box'>
 						<div class='upper_image'><img src='<?php echo WPSC_URL; ?>/images/pencil.png' alt='' /></div>
 						<div class='upper_txt'><?php _e('Thumbnail Settings'); ?><a class='closeimagesettings'>X</a></div>
 					</div>
-				
+
 					<div class='lower_settings_box'>
 						<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='<?php echo $product_data['thumbnail_image']; ?>' />
 					  <ul>
 					    <li>
 								<input type='radio' checked='checked' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label><br />
 							</li>
-							
+
 					    <li>
 								<input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE; ?>(<abbr title='<?php echo TXT_WPSC_SETONSETTINGS; ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</abbr>)
 								</label>
 
 					    </li>
-							
+
 					    <li>
 								<input type='radio'  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>
 								<div class='heightWidth image_resize_extra_forms'>
@@ -1055,7 +1071,7 @@ function edit_multiple_image_gallery($product_data) {
 									<input id='gallery_image_height' type='text' size='4' name='gallery_height' value='' /><label for='gallery_image_height'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
 								</div>
 					    </li>
-							
+
 					    <li>
 								<input type='radio'  name='gallery_resize' value='3' id='gallery_resize3' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize3'> <?php echo TXT_WPSC_SEPARATETHUMBNAIL; ?></label><br />
 								<div class='browseThumb image_resize_extra_forms'>
@@ -1064,7 +1080,7 @@ function edit_multiple_image_gallery($product_data) {
 							</li>
 					    <li>
 							<a href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_data['id']); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
-				
+
 					    </li>
 					    <li>
 							<a href='' class='delete_primary_image'>Delete this Image</a>
@@ -1078,7 +1094,7 @@ function edit_multiple_image_gallery($product_data) {
 		</li>
 	<?php
 	$num = 0;
-	if(function_exists('gold_shpcrt_display_gallery')) {
+	if(function_exists('gold_shpcrt_display_gallery') && ($product_data['id'] > 0)) {
     $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_data['id']}' AND `id` NOT IN ('{$main_image['id']}') ORDER BY image_order ASC",ARRAY_A);
     
     //echo "<pre>".print_r($values,true)."</pre>";
@@ -1089,7 +1105,7 @@ function edit_multiple_image_gallery($product_data) {
           if($image['image'] != '') {
             $num++;
             $imagepath = WPSC_IMAGE_DIR . $image['image'];
-						$image_data = getimagesize(WPSC_IMAGE_DIR.$image['image']);			
+						$image_data = getimagesize(WPSC_IMAGE_DIR.$image['image']);
             ?>
             <li id="product_image_<?php echo $image['id']; ?>">
 							<input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image['id']; ?>' />

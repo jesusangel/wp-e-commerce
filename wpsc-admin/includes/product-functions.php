@@ -245,7 +245,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	wpsc_update_product_images($product_id, $post_data);
 	
 	//and the alt currency
-	foreach($post_data['newCurrency'] as $key =>$value){
+	foreach((array)$post_data['newCurrency'] as $key =>$value){
 		wpsc_update_alt_product_currency($product_id, $value, $post_data['newCurrPrice'][$key]);
 	}
 	

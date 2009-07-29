@@ -893,12 +893,12 @@ function wpsc_swfupload_images() {
 	
 	if(function_exists('gold_shpcrt_display_gallery')) {
 		// if more than one image is permitted
-		$existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='{$product_id}'", ARRAY_A);
+		$existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE `product_id`='{$product_id}' AND `image` NOT IN ('')", ARRAY_A);
 		$order = (int)$existing_image_data['order'];
 		$count = $existing_image_data['count'];
 		
 		$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
-		if(($count >  0) || (strlen($previous_image) > 0)) {
+		if(($count >  0) && (strlen($previous_image) > 0)) {
 			// if there is more than one image
 			$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
 			if ($product_id == '') {

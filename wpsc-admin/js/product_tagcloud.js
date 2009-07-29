@@ -34,7 +34,7 @@ function tag_update_quickclicks() {
 		}
 	});
 	if ( shown )
-		jQuery( '#tagchecklist' ).prepend( '<strong>'+postL10n.tagsUsed+'</strong><br />' );
+		jQuery( '#tagchecklist' ).prepend( '<strong>Tags Used</strong><br />' );
 }
 
 function tag_flush_to_text(e,a) {
@@ -104,7 +104,7 @@ jQuery(document).ready( function($) {
 	tag_update_quickclicks();
 	// add the quickadd form
 	jQuery('#jaxtag').livequery(function(){
-		jQuery(this).prepend('<span id="ajaxtag"><input type="text" name="newtag" id="newtag" class="form-input-tip" size="16" autocomplete="off" value="'+postL10n.addTag+'" /><input type="button" class="button" id="tagadd" value="' + postL10n.add + '" tabindex="3" /><input type="hidden"/><input type="hidden"/></span>');
+		jQuery(this).prepend('<span id="ajaxtag"><input type="text" name="newtag" id="newtag" class="form-input-tip" size="16" autocomplete="off" value="Add tag" /><input type="button" class="button" id="tagadd" value="Add" tabindex="3" /><input type="hidden"/><input type="hidden"/></span>');
 	jQuery('#tagadd').click( tag_flush_to_text );
 	jQuery('#newtag').focus(function() {
 		if ( this.value == postL10n.addTag )

@@ -35,6 +35,10 @@ function wpsc_debug_page() {
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_copying_themes'>Copy Themes to New Theme Directory</a>
 			</li>
+			
+			<li>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=phpinfo'>Display phpinfo</a>
+			</li>
 		</ul>
 		<?php
 		if (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
@@ -70,6 +74,12 @@ function wpsc_debug_page() {
 		   
 		   case 'test_making_product_url_names':
 		   wpsc_test_making_product_url_names();
+		   break;
+
+		   case 'phpinfo':
+		   echo "</pre>";
+		   phpinfo();
+		   echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
 		   break;
 		 }
 		?></pre>
