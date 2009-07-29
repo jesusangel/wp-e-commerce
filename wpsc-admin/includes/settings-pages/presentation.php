@@ -800,32 +800,34 @@ global $wpdb;
 			<table class='wpsc_options form-table'>
 			<?php
 				if(function_exists("getimagesize")) {
-				?>
-				<tr>
-					<th scope="row"><?php echo TXT_WPSC_PRODUCTTHUMBNAILSIZE;?>:</th>
-					<td>
-					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[product_image_height]' value='<?php echo get_option('product_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[product_image_width]' value='<?php echo get_option('product_image_width'); ?>' /> <br />
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-					<?php echo TXT_WPSC_CATEGORYTHUMBNAILSIZE;?>:
-					</th>
-					<td>
-					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[category_image_height]' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[category_image_width]' value='<?php echo get_option('category_image_width'); ?>' /> 
-					</td>
-				</tr>
-				
-				<tr>
-					<th scope="row">
-					<?php echo TXT_WPSC_SINGLE_PRODUCTTHUMBNAILSIZE;?>:
-					</th>
-					<td>
-					<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[single_view_image_height]' value='<?php echo get_option('single_view_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[single_view_image_width]' value='<?php echo get_option('single_view_image_width'); ?>' /> 
-					</td>
-				</tr>
-		
-			<?php
+					?>
+					<tr>
+						<th scope="row"><?php echo TXT_WPSC_PRODUCTTHUMBNAILSIZE;?>:</th>
+						<td>
+							<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[product_image_height]' value='<?php echo get_option('product_image_height'); ?>' />
+							<?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[product_image_width]' value='<?php echo get_option('product_image_width'); ?>' />
+							<a href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=mass_resize_thumbnails", 'mass_resize'); ?>" class='wpsc_mass_resize' ><?php _e("Resize Existing Thumbnails",'wpsc'); ?></a>
+						<br />
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+						<?php echo TXT_WPSC_CATEGORYTHUMBNAILSIZE;?>:
+						</th>
+						<td>
+						<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[category_image_height]' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[category_image_width]' value='<?php echo get_option('category_image_width'); ?>' /> 
+						</td>
+					</tr>
+					
+					<tr>
+						<th scope="row">
+						<?php echo TXT_WPSC_SINGLE_PRODUCTTHUMBNAILSIZE;?>:
+						</th>
+						<td>
+						<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[single_view_image_height]' value='<?php echo get_option('single_view_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[single_view_image_width]' value='<?php echo get_option('single_view_image_width'); ?>' /> 
+						</td>
+					</tr>
+					<?php
 				}
 			?>            
 		

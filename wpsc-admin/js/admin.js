@@ -23,15 +23,27 @@ jQuery(document).ready( function () {
   //delete currency layer in admin product page
   jQuery('a.wpsc_delete_currency_layer').livequery(function(){
   	jQuery(this).click(function(event){
-  	var currencySymbol = jQuery(this).attr('rel');
-  	jQuery(this).parent().parent('tr').hide();
-  	post_values = "currSymbol="+currencySymbol;
-  	jQuery.post('index.php?wpsc_admin_action=delete_currency_layer',post_values, function(returned_data){});
-  	//alert(currencySymbol);
-  	
-  	event.preventDefault();
-	});  	
-  });
+			var currencySymbol = jQuery(this).attr('rel');
+			jQuery(this).parent().parent('tr').hide();
+			post_values = "currSymbol="+currencySymbol;
+			jQuery.post('index.php?wpsc_admin_action=delete_currency_layer',post_values, function(returned_data){});
+			//alert(currencySymbol);
+			
+			event.preventDefault();
+		});  	
+	});
+
+  
+  //delete currency layer in admin product page
+  jQuery('a.wpsc_mass_resize').livequery(function(){
+  	jQuery(this).click(function(event){
+  		this_href = jQuery(this).attr('href');
+  		parent_element = jQuery(this).parent();
+  		extra_parameters = jQuery("input[type=text]", parent_element).serialize();
+  		window.location = this_href+"&"+extra_parameters;
+  		return false;
+		});  	
+	});
   
   //select all target markets in general settings page
   jQuery('a.wpsc_select_all').livequery(function(){

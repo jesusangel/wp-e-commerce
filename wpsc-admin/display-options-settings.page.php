@@ -31,6 +31,14 @@ if (isset($_GET['googlecheckoutshipping'])) {
 if(isset($_GET['selected_all'])){
 	wpsc_submit_options($_GET['selected_all']);
 }
+if($_SESSION['wpsc_thumbnails_resized'] == true) {
+	?>
+	<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+		<p><?php _e("Thanks, your thumbnail images have been resized."); ?></p>
+	</div>
+	<?php
+	$_SESSION['wpsc_thumbnails_resized'] = false;
+}
 ?> <div id='wpsc_options_page'> <?php
 switch($page) {
 	case "checkout";

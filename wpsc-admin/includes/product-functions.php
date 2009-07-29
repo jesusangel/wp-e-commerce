@@ -660,7 +660,7 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 	if(apply_filters( 'wpsc_filter_file', $submitted_file['tmp_name'] )) {
 	  // initialise $idhash to null to prevent issues with undefined variables and error logs
 	  $idhash = null;
-		$fileid_data = $wpdb->get_results("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+// 		$fileid_data = $wpdb->get_results("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 		/* if we are adding, make a new file row and get the ID of it */
 		$timestamp = time();
 		$query_results = $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '', '', '', '$timestamp');");

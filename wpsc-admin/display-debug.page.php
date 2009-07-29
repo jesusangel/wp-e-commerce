@@ -37,6 +37,10 @@ function wpsc_debug_page() {
 			</li>
 			
 			<li>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=resize_thumbnails'>Resize all Thumbnails and Clean Empty Image Records</a>
+			</li>
+			
+			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=phpinfo'>Display phpinfo</a>
 			</li>
 		</ul>
@@ -74,6 +78,10 @@ function wpsc_debug_page() {
 		   
 		   case 'test_making_product_url_names':
 		   wpsc_test_making_product_url_names();
+		   break;
+		   
+		   case 'resize_thumbnails':
+		   wpsc_mass_resize_thumbnails_and_clean_images();
 		   break;
 
 		   case 'phpinfo':
@@ -225,5 +233,27 @@ function wpsc_test_making_product_url_names() {
 			echo "\n";
 		}
 	}	
+}
+
+ function wpsc_mass_resize_thumbnails_and_clean_images(){
+  global $wpdb;
+	$height = get_option('product_image_height');
+	$width  = get_option('product_image_width');
+  
+	$product_data = $wpdb->get_results("SELECT `product`.`id`, `product`.`image` AS `image_id`, `images`.`image` AS `file`  FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `product` INNER JOIN  `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` ON `product`.`image` = `images`.`id` WHERE `product`.`image` > 0 ",ARRAY_A);
+	//print_r($product_data);
+	foreach((array)$product_data as $product) {
+		$image_input = WPSC_IMAGE_DIR . $product['file'];
+		$image_output = WPSC_THUMBNAIL_DIR . $product['file'];
+		if(($product['file'] != '') and file_exists($image_input)) {
+			image_processing($image_input, $image_output, $width, $height);
+			update_product_meta($product['id'], 'thumbnail_width', $width);
+			update_product_meta($product['id'], 'thumbnail_height', $height);
+		} else {
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` IN('{$product['image_id']}') LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = NULL WHERE `id` = '".$product['id']."' LIMIT 1");
+		}	
+	}
+	$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN('0')");
 }
 ?>
