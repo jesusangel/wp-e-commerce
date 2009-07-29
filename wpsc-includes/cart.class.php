@@ -171,7 +171,7 @@ function wpsc_the_cart_item_key() {
 */
 function wpsc_cart_item_name() {
 	global $wpsc_cart;
-	return htmlentities(stripslashes($wpsc_cart->cart_item->product_name), ENT_QUOTES);
+	return htmlentities(stripslashes($wpsc_cart->cart_item->product_name), ENT_QUOTES, "UTF-8");
 }
  /**
 * cart item quantity function, no parameters

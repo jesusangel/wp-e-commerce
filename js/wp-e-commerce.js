@@ -119,7 +119,7 @@ jQuery(document).ready(function () {
 				if(jQuery("input#"+target_id).attr('type') == 'text') {
 				  jQuery("input#"+target_id).val(numeric_price);
 				} else {
-				  jQuery("#"+target_id+" span.pricedisplay").html(price);
+				  jQuery("#"+target_id+".pricedisplay").html(price);
 				}
 			}
 		});

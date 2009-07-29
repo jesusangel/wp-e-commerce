@@ -214,9 +214,9 @@ function wpsc_the_product_price() {
 	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);	
 	if(($product['special']==1) && ($variations_output[1] === null)) {
 	
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],false,$wpsc_query->product['id']);
+		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],true, $wpsc_query->product['id']);
 	} else {
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax']);
+		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
 	}
 	if(get_option('display_pnp') == 1) {
 		//$output = nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
@@ -346,7 +346,7 @@ function wpsc_product_has_supplied_file() {
 */
 function wpsc_product_postage_and_packaging() {
 	global $wpsc_query;
-	return nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
+	return nzshpcrt_currency_display($wpsc_query->product['pnp'], 1, true);
 }
 
 /**
@@ -358,9 +358,9 @@ function wpsc_product_normal_price() {
 	global $wpsc_query;
 		$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);	
 	if(($product['special']==1) && ($variations_output[1] === null)) {
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],false,$wpsc_query->product['id']);
+		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],true,$wpsc_query->product['id']);
 	} else {
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax']);
+		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
 	}
 	return $output;
 }
