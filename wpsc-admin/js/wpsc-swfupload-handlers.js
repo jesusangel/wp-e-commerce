@@ -145,7 +145,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
   eval(serverData);
 	if(upload_status == 1 ) {
 		output_html = "";
-		output_html +="<li id='product_image_"+image_id+"'>\n";
+		output_html +="<li class='gallery_image' id='product_image_"+image_id+"'>\n";
 		output_html += "	<input type='hidden' value='"+image_id+"' name='gallery_image_id[]' class='image-id'/>\n";
 		output_html += "	<div id='gallery_image_"+image_id+"' class='previewimage'>\n";
 		output_html += "		<a class='thickbox' rel='product_extra_image_"+image_id+"' href='admin.php?wpsc_admin_action=crop_image&amp;imagename="+image_src+"&amp;imgheight=480&amp;imgwidth=600&amp;product_id=103&amp;width=640&amp;height=342' id='extra_preview_link_"+image_id+"'>\n";
@@ -154,7 +154,9 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		output_html += "	<img src='"+WPSC_URL+"/images/cross.png' class='deleteButton' alt='-' style='display: none;'/>\n";
 		output_html += "	</div>\n";
 		output_html += "</li>\n";
-		if(replace_existing == 1) {
+
+		
+// 		if(replace_existing == 1) {
 			jQuery("ul#gallery_list").html(output_html);
 			
 			input_set = jQuery.makeArray(jQuery("#gallery_list li:not(.ui-sortable-helper) input.image-id"));
@@ -168,7 +170,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 
 			jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
 			jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt ='' /></a>");
-			jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
+// 			jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
 
 			for(i=1;i<set.length;i++) {
 				jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
@@ -176,7 +178,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 
 				element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
 				if(element_id == 0) {
-					jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
+// 					jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
 				}
 			}
 
@@ -184,15 +186,17 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 			product_id = jQuery('#product_id').val();
 
 
-			postVars = "admin=true&ajax=true&product_id="+product_id+"&imageorder=true&order="+order;
-			jQuery.post( 'index.php?admin=true&ajax=true', postVars, function(returned_data) {
+			postVars = "product_id="+product_id+"&order="+order;
+			jQuery.post( 'index.php?wpsc_admin_action=rearrange_images', postVars, function(returned_data) {
 					eval(returned_data);
-					jQuery('#gallery_image_'+ser).append(output);
+					jQuery('#gallery_image_'+image_id).children('a.editButton').remove();
+					jQuery('#gallery_image_'+image_id).children('div.image_settings_box').remove();
+					jQuery('#gallery_image_'+image_id).append(image_menu);
 			});
-		} else {
-			jQuery("ul#gallery_list").append(output_html);
-			///jQuery("#gallery_list").trigger( 'update' );
-		}
+// 		} else {
+// 			jQuery("ul#gallery_list").append(output_html);
+// 			///jQuery("#gallery_list").trigger( 'update' );
+// 		}
 	}
 
 		//jQuery('#media-item-' + fileObj.id + ' .progress').show();

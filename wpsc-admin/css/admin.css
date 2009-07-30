@@ -560,7 +560,7 @@ a.editButton {
 	cursor:pointer;
 }
 
-div#image_settings_box {
+div.image_settings_box {
 	position:absolute;
 	width:150px;
 	display:none;

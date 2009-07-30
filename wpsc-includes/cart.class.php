@@ -1341,6 +1341,7 @@ class wpsc_cart_item {
 	var $product_url;
 	var $image_id;
 	var $thumbnail_image;
+	var $custom_tax_rate = null;
 	
 	var $is_donation = false;
 	var $apply_tax = true;
@@ -1490,7 +1491,13 @@ class wpsc_cart_item {
 		
 		if($this->apply_tax == true) {
 		  $this->taxable_price = $this->total_price;
-			$this->tax = $this->taxable_price * ($this->cart->tax_percentage/100);
+			$custom_tax = get_product_meta($this->product_id, 'custom_tax');
+			if(is_numeric($custom_tax)) {
+			  $this->custom_tax_rate = $custom_tax;
+			  $this->tax = $this->taxable_price * ($this->custom_tax_rate/100);
+			} else {
+			  $this->tax = $this->taxable_price * ($this->cart->tax_percentage/100);
+			}
 		}
 		$this->product_url = wpsc_product_url($this->product_id);
 		
@@ -1633,12 +1640,18 @@ class wpsc_cart_item {
 		}
     
 		if($this->apply_tax == true) {
-			$tax = $this->unit_price * ($this->cart->tax_percentage/100);
+			if(is_numeric($this->custom_tax_rate)) {
+				$tax_rate = $this->custom_tax_rate;
+			} else {
+				$tax_rate = $this->cart->tax_percentage;
+			}
+			$tax = $this->unit_price * ($tax_rate/100);
 		} else {
 			$tax = 0;
+			$tax_rate = 0;
 		}		
 		
-		$wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, (float)$tax, (float)$this->cart->tax_percentage, $this->quantity, $this->is_donation, $this->custom_message, serialize($this->custom_file)));
+		$wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (`prodid`, `name`, `purchaseid`, `price`, `pnp`,`tax_charged`, `gst`, `quantity`, `donation`, `no_shipping`, `custom_message`, `files`, `meta`) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)", $this->product_id, $this->product_name, $purchase_log_id, $this->unit_price, (float)$shipping, (float)$tax, (float)$tax_rate, $this->quantity, $this->is_donation, $this->custom_message, serialize($this->custom_file)));
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
 		
 		foreach((array)$this->variation_data as $variation_row) {

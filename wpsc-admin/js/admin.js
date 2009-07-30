@@ -320,23 +320,6 @@ jQuery(document).ready( function () {
 				wpsc_save_postboxes_state('products_page_wpsc-edit-products', '#poststuff');
 		});		
 	});
-	
-
-	jQuery('img.deleteButton').livequery(function(){
-	  jQuery(this).click( function() {
-			var r=confirm("Please confirm deletion");
-			if (r==true) {
-				img_id = jQuery(this).parent().parent('li').attr('id');
-				jQuery(this).parent().parent('li').remove();
-				
-			  post_values = "admin=true&ajax=true&del_img=true&del_img_id="+img_id;
-				jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
-			
-				});
-			}
-	  });
-	});
-	
 
 	jQuery("#add-product-image").click(function(){
 		swfu.selectFiles();
@@ -398,6 +381,33 @@ jQuery(document).ready( function () {
 	
 	
 	
+
+	jQuery('img.deleteButton, a.delete_primary_image').livequery(function(){
+	  jQuery(this).click( function() {
+			var r=confirm("Please confirm deletion");
+			if (r==true) {
+				img_id = jQuery(this).parents("li.gallery_image").attr('id');
+				
+			  post_values = "del_img_id="+img_id+"&product_id="+jQuery('#product_id').val();
+				jQuery.post( 'index.php?wpsc_admin_action=delete_images', post_values, function(returned_data) {
+				  console.log(returned_data);
+					eval(returned_data);
+					if(typeof(image_id) != "undefined") {
+						jQuery('#gallery_image_'+image_id).children('img.deleteButton').remove();
+						jQuery('#gallery_image_'+image_id).children('a.editButton').remove();
+						jQuery('#gallery_image_'+image_id).children('div.image_settings_box').remove();
+					}
+					if(typeof(image_menu) != "undefined") {
+						jQuery('#gallery_image_'+image_id).append(image_menu);
+					}
+					jQuery("#"+element_id).remove();
+				});
+				return false;
+			}
+	  });
+	});
+	
+	
 	jQuery("#gallery_list").livequery(function(){
 	  jQuery(this).sortable({
 			revert: false,
@@ -424,7 +434,7 @@ jQuery(document).ready( function () {
 						
 						jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
 						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt ='' /></a>");
-						jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
+// 						jQuery('#gallery_image_'+set[0]).parent('li').attr('id',  "product_image_"+img_id);
 						//for(i=1;i<set.length;i++) {
 						//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
 						//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
@@ -436,7 +446,7 @@ jQuery(document).ready( function () {
 							
 							element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
 							if(element_id == 0) {
-								jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
+// 								jQuery('#gallery_image_'+set[i]).parent('li').attr('id', "product_image_"+img_id);
 							}
 						}
 						
@@ -444,10 +454,12 @@ jQuery(document).ready( function () {
 						product_id = jQuery('#product_id').val();
 						
 						
-						postVars = "admin=true&ajax=true&product_id="+product_id+"&imageorder=true&order="+order;
-						jQuery.post( 'index.php?admin=true&ajax=true', postVars, function(returned_data) {
+						postVars = "product_id="+product_id+"&order="+order;
+						jQuery.post( 'index.php?wpsc_admin_action=rearrange_images', postVars, function(returned_data) {
 							  eval(returned_data);
-								jQuery('#gallery_image_'+ser).append(output);
+								jQuery('#gallery_image_'+image_id).children('a.editButton').remove();
+								jQuery('#gallery_image_'+image_id).children('div.image_settings_box').remove();
+								jQuery('#gallery_image_'+image_id).append(image_menu);
 						});
 						
 					},
@@ -483,6 +495,16 @@ jQuery(document).ready( function () {
 		});
 	});
 	
+		jQuery("#custom_tax_checkbox").livequery(function(){
+	  jQuery(this).click( function() {
+			if (this.checked) {
+				jQuery("#custom_tax").show();
+			} else {
+				jQuery("#custom_tax input").val('');
+				jQuery("#custom_tax").hide();
+			}
+		});
+	});
 	
 	jQuery(".add_level").livequery(function(){
 	  jQuery(this).click(function() {
@@ -556,56 +578,12 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	});
 	});
 
-/*shipping options end */
-	// start off the gallery_list sortable
-	/*
-	jQuery("#gallery_list").sortable({
-		revert: false,
-		placeholder: "ui-selected",
-		start: function(e,ui) {
-			jQuery('#image_settings_box').hide();
-			jQuery('a.editButton').hide();
-			jQuery('img.deleteButton').hide();
-			jQuery('ul#gallery_list').children('li').removeClass('first');
-		},
-		stop:function (e,ui) {
-			jQuery('ul#gallery_list').children('li:first').addClass('first');
-		},
-		update: function (e,ui){
-					set = jQuery("#gallery_list").sortable('toArray');
-					img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
-					
-					jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-					jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
-					jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
-					//for(i=1;i<set.length;i++) {
-					//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-					//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
-					//}
-					
-					for(i=1;i<set.length;i++) {
-						jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-						jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
-						
-									element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
-						if(element_id == 0) {
-										jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);
-						}
-					}
-					
-					order = set.join(',');
-					prodid = jQuery('#prodid').val();
-					ajax.post("index.php",imageorderresults,"admin=true&ajax=true&prodid="+prodid+"&imageorder=true&order="+order);
-				},
-		'opacity':0.5
-	});*/
-	
 	// hover for gallery view
 	jQuery("div.previewimage").livequery(function(){
 	  jQuery(this).hover(
 			function () {
 				jQuery(this).children('img.deleteButton').show();
-				if(jQuery('#image_settings_box').css('display')!='block')
+				if(jQuery('div.image_settings_box').css('display')!='block')
 					jQuery(this).children('a.editButton').show();
 			},
 			function () {
@@ -620,7 +598,7 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	jQuery("a.editButton").livequery(function(){
 	  jQuery(this).click( function(){
 			jQuery(this).hide();
-			jQuery('#image_settings_box').show('fast');
+			jQuery('div.image_settings_box').show('fast');
 		});	
 	});
 	// hide image editing menu

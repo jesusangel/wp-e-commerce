@@ -736,7 +736,7 @@ $output .= "
 	$USE_PROXY = false;
 	$version="2.3";
 
-	if (session_id() == "") 
+	if (session_id() == "")
 		session_start();
 
 	/* An express checkout transaction starts with a token, that

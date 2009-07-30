@@ -544,13 +544,8 @@ function wpsc_admin_ajax() {
 		}
 		exit();
 	}
+
 	
-	if($_POST['del_img'] == 'true') {
-	
-		$img_id = (int)str_replace("product_image_", '', $_POST['del_img_id']);
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$img_id}' LIMIT 1");
-		exit(true);
-	}
 	if ($_POST['del_file'] == 'true') {
 		$wpdb->query("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=".$_POST['del_file_hash']);
 		unlink(WPSC_FILE_DIR.$_POST['del_file_hash']);
@@ -734,108 +729,6 @@ function wpsc_admin_ajax() {
 		exit();
 	}
 	
-	
-	if ($_POST['imageorder']=='true') {
-		$height = get_option('product_image_height');
-		$width  = get_option('product_image_width');
-		$images = explode(",",$_POST['order']);
-		$product_id = absint($_POST['product_id']);
-    $timestamp = time();
-
-		$new_main_image = null;
-		$have_set_first_item = false;
-		$i = 0;
-		foreach($images as $image) {
-			if($image > 0) {
-				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image_order`='$i' WHERE `id`='".absint($image)."' LIMIT 1");
-				if($have_set_first_item == false) {
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='".absint($image)."' WHERE `id`='{$product_id}' LIMIT 1");
-					$have_set_first_item = true;
-					$new_main_image = $image;
-				}
-				$i++;
-			}
-		}
-		
-		$output .= "<div id='image_settings_box'>";
-		$output .= "<div class='upper_settings_box'>";
-		$output .= "<div class='upper_image'><img src='".WPSC_URL."/images/pencil.png'/></div><div class='upper_txt'>Thumbnail Settings<a class='closeimagesettings'>X</a></div>";
-		$output .= "</div>";
-		$output .= "<div class='lower_settings_box'>";
-		$output .= "<table>";// style='border: 1px solid black'
-		$output .= "  <tr>";
-		$output .= "    <td style='height: 1em;'>";
-		$output .= "<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='" . $product['thumbnail_image'] . "' />";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 0) {
-			$output .= "checked='checked'";
-		}
-		$output .= " name='image_resize' value='0' id='image_resize0_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize0_$timestamp'> ".TXT_WPSC_DONOTRESIZEIMAGE."<br />";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 1) {
-			$output .= "checked='checked'";
-		}
-		$output .= "name='image_resize' value='1' id='image_resize1_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize1_$timestamp'>".TXT_WPSC_USEDEFAULTSIZE."(<abbr title='".TXT_WPSC_SETONSETTINGS."'>".get_option('product_image_height') ."&times;".get_option('product_image_width')."px</abbr>)";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 2) {
-			$output .= "checked='checked'";
-		}
-		$output .= " name='image_resize' value='2' id='image_resize2_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize2_$timestamp'>".TXT_WPSC_USESPECIFICSIZE." </label>
-				<div class='heightWidth image_resize_extra_forms' style=display: ";
-
-		if ($product['thumbnail_state'] == 2) {
-			$output .= "block;";
-		} else {
-			$output .= "none;";
-		}
-
-		$output .= "'>
-				<input id='image_width' type='text' size='4' name='width' value='' /><label for='image_resize2'>".TXT_WPSC_PXWIDTH."</label>
-				<input id='image_height' type='text' size='4' name='height' value='' /><label for='image_resize2'>".TXT_WPSC_PXHEIGHT." </label></div>";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-		$output .= "  <tr>";
-		$output .= "    <td>";
-		$output .= "<input type='radio' ";
-		if ($product['thumbnail_state'] == 3) {
-			$output .= "checked='checked'";
-		}
-		$output .= " name='image_resize' value='3' id='image_resize3_$timestamp' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='image_resize3_$timestamp'> ".TXT_WPSC_SEPARATETHUMBNAIL."</label><br />";
-		$output .= "<div class='browseThumb image_resize_extra_forms' style='display: ";
-
-		if($product['thumbnail_state'] == 3) {
-			$output .= "block";
-		} else {
-			$output .= "none";
-		}
-
-		$output .= ";'>\n\r<input type='file' name='thumbnailImage' size='15' value='' />";
-		$output .= "</div>\n\r";
-		$output .= "    </td>";
-		$output .= "  </tr>";
-		
-    $output .= "  <tr>";
-    $output .= "    <td>";
-    $output .= "    <a href='#' class='delete_primary_image'>Delete this Image</a>";
-    $output .= "    </td>";
-    $output .= "  </tr>";
-		
-		$output .= "</table>";
-		$output .= "</div>";
-		echo "output='".str_replace(array("\n", "\r"), array('\n', '\r'), addslashes($output))."';\n\r";
-		echo "ser='".$images[0]."';\n\r";
-		exit();
-	}
     
 	if(isset($_POST['language_setting']) && ($_GET['page'] = WPSC_DIR_NAME.'/wpsc-admin/display-options.page.php')) {
 		if($user_level >= 7) {
@@ -1595,6 +1488,90 @@ function wpsc_change_currency(){
 }
  if($_REQUEST['wpsc_admin_action'] == 'change_currency') {
 	add_action('admin_init', 'wpsc_change_currency');
+}
+
+function wpsc_rearrange_images() {
+	global $wpdb;
+	$height = get_option('product_image_height');
+	$width  = get_option('product_image_width');
+	$images = explode(",",$_POST['order']);
+	$product_id = absint($_POST['product_id']);
+	$timestamp = time();
+
+	$new_main_image = null;
+	$have_set_first_item = false;
+	$i = 0;
+	foreach($images as $image) {
+		if($image > 0) {
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `image_order`='$i' WHERE `id`='".absint($image)."' LIMIT 1");
+			if($have_set_first_item == false) {
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image`='".absint($image)."' WHERE `id`='{$product_id}' LIMIT 1");
+				$have_set_first_item = true;
+				$new_main_image = $image;
+				$image_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image}' LIMIT 1", ARRAY_A);
+				
+				$image_input = WPSC_IMAGE_DIR . $image_data['file'];
+				$image_output = WPSC_THUMBNAIL_DIR . $image_data['file'];
+				if(($product['file'] != '') and file_exists($image_input)) {
+					image_processing($image_input, $image_output, $width, $height);
+					update_product_meta($product_id, 'thumbnail_width', $width);
+					update_product_meta($product_id, 'thumbnail_height', $height);
+				} 
+			}
+			$i++;
+		}
+	}
+	$output = wpsc_main_product_image_menu($product_id);
+	echo "image_menu='".str_replace(array("\n", "\r"), array('\n', '\r'), addslashes($output))."';\n\r";
+	echo "image_id='".$new_main_image."';\n\r";
+	exit();
+}
+if($_REQUEST['wpsc_admin_action'] == 'rearrange_images') {
+	add_action('admin_init', 'wpsc_rearrange_images');
+}
+
+
+function wpsc_delete_images() {
+	global $wpdb;
+	$product_id = absint($_POST['product_id']);
+	$element_id = $_POST['del_img_id'];
+	$image_id = absint(str_replace("product_image_", '', $element_id));
+	if($image_id > 0) {
+	  $deletion_success = $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$image_id}' LIMIT 1");
+		echo "element_id = '$element_id';\n";
+		echo "/*\n";
+		print_r($deletion_success);
+		echo "*/\n";
+	
+		if(($product_id > 0) && ($deletion_success == true)) {
+			$next_image = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_id}' ORDER BY `image_order` ASC LIMIT 1",ARRAY_A);
+			if(count($next_image) > 0) {
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$next_image['id']}' WHERE `id` = '{$product_id}' LIMIT 1");
+				$output = wpsc_main_product_image_menu($product_id);
+							
+				$height = get_option('product_image_height');
+				$width  = get_option('product_image_width');
+				
+				$image_input = WPSC_IMAGE_DIR . $next_image['file'];
+				$image_output = WPSC_THUMBNAIL_DIR . $next_image['file'];
+				if(($product['file'] != '') and file_exists($image_input)) {
+					image_processing($image_input, $image_output, $width, $height);
+					update_product_meta($product_id, 'thumbnail_width', $width);
+					update_product_meta($product_id, 'thumbnail_height', $height);
+				} 
+				echo "image_menu='".str_replace(array("\n", "\r"), array('\n', '\r'), addslashes($output))."';\n";
+				echo "image_id='".$next_image['id']."';\n";
+			} else {
+				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = NULL WHERE `id` = '{$product_id}' LIMIT 1");
+			}
+		}
+	}
+	
+	exit();
+}
+
+if($_REQUEST['wpsc_admin_action'] == 'delete_images') {
+	add_action('admin_init', 'wpsc_delete_images');
 }
 
 function wpsc_update_page_urls(){
