@@ -4,6 +4,14 @@
 /*
  *Start Flot CSS styling
  */
+input[type="radio"]{
+ outline:none;
+ border:0;
+}
+input[type="checkbox"]{
+ outline:none;
+ border:0;
+}
 #flotplaceholder{
 	 width: 100%; 
 	 height: 200px; 
@@ -939,7 +947,10 @@ float: left;
 /* jCrop styling ends here */
 
 /* shipping options start here */
-div.wpsc_shipping_options .wpsc-shipping-actions{
+div.wpsc_shipping_options{
+  width:100%;
+}
+.wpsc-shipping-actions{
 visibility:hidden;
 font-size: 10px;
 margin:2px 9em 0 0;

@@ -62,7 +62,7 @@ global $wpdb;
 					<?php echo TXT_WPSC_TERMS2;?>:
 					</th>
 					<td>
-					<textarea name='wpsc_options[terms_and_conditions]' cols='' rows='' style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('terms_and_conditions')); ?></textarea>
+					<textarea name='wpsc_options[terms_and_conditions]' cols='' rows='' style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('terms_and_conditions')); ?></textarea>
 					</td>
 				</tr>
 	
@@ -81,7 +81,7 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><strong><?php echo TXT_WPSC_PURCHASERECEIPT;?></strong></th>
-					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_receipt'));?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_email_receipt]" cols='' rows=''   style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_receipt'));?></textarea></td>
 				</tr>
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
@@ -92,7 +92,7 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><strong><?php echo TXT_WPSC_ADMIN_REPORT;?></strong></th>
-					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_admin'));?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_admin'));?></textarea></td>
 				</tr>
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
@@ -107,7 +107,7 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th><strong><?php echo TXT_WPSC_TRACKINGEMAIL;?></strong></th>
-					<td><textarea name="wpsc_options[wpsc_trackingid_message]" cols='' rows=''   style='width: 100%; height: 200px;'><?php echo stripslashes(get_option('wpsc_trackingid_message'));?></textarea></td>
+					<td><textarea name="wpsc_options[wpsc_trackingid_message]" cols='' rows=''   style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_trackingid_message'));?></textarea></td>
 				</tr>
 			</table>
 			<h3 class="form_group"><?php echo TXT_WPSC_URLSETTINGS;?>:</h3>

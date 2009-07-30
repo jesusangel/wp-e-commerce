@@ -24,6 +24,7 @@ table#gateway_options tr td{
 td.gateway_settings {
   padding-top: 0px !important;
   width:90%;
+  width:394px;
 }
 td.gateway_settings input[type=text]{
 width: 200px;
