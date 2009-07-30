@@ -5,6 +5,45 @@ Translation in French: contact@xiligroup.com  - 080921 MSC -
 - Version provisoire hors passerelle - beta release - double lines (one is commented by //)
 - éditer impérativement en fichier UTF-8 - use only in UTF-8 editor (like smultron)
 */
+
+d//efine('TXT_WPSC_AT_A_GLANCE', 'Tableau de bord');
+
+
+//Sales
+define("TXT_WPSC_CURRENT_MONTH", "Mois en cours");
+define("TXT_WPSC_AT_A_GLANCE", "Coup d\'oeil rapide");
+define("TXT_WPSC_PENDING", "En cours");
+define("TXT_WPSC_CLOSED", "Terminées");
+define('TXT_WPSC_VARIATION_PLURAL','Variations');
+define("TXT_WPSC_HERE_YOU_CAN_ADD", "Ici vous pouvez ajouter des produits, des groupes ou des variations");
+define('TXT_WPSC_ADD_NEW_PRODUCT', 'Ajouter de nouveaux produits');
+
+//Product
+define('TXT_WPSC_SKU_FULL', 'Réference unique produit');
+define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Catégories et Tags');
+define('TXT_WPSC_TABLE_RATED_PRICE', 'Table Rate Price');
+define('TXT_WPSC_FLAT_RATE_SETTINGS', "Tarif de base");
+define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ Ajouter une variante');
+define('TXT_WPSC_CUSTOM_META', 'Champs complémentaires');
+define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'Ces informations ne sont applicables que sur ce produits.');
+define('TXT_WPSC_PERSONALISATION_OPTIONS','Options de personalisation ');
+define('TXT_WPSC_ADMIN_ENGRAVE', 'Vous pouvez personnaliser votre produit en laissant un message d\'accompagnement');
+define('TXT_WPSC_OFF_SITE_LINK', "liens hors du ce site pour le produit");
+define('TXT_WPSC_FLASH_UPLOADER', 'Vous utilisez le transfert de fichier Flash.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.');
+
+//groupes
+define('TXT_WPSC_CURRENT_GROUP', '&quot;[categorisation]&quot; Group');
+define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'Ajouter un titre pour cette catégorie');
+define('TXT_WPSC_ADDNEWCATEGORY', '+ Ajouter la catégorie au &quot;[categorisation]&quot; Group');
+
+//Marketing
+define('TXT_WPSC_GOOGLE_BASE', 'Google Base');
+define('TXT_WPSC_GRANT_ACCESS', 'Donner l\'accès');
+
+//Add-ons
+define('TXT_WPSC_API_RESET', 'Remise à zero de la clé API');
+define('TXT_WPSC_API_RESET_DESCRIPTION', 'Entrez votre nom API et la clé afin de la désactiver de votre ancien site dont vous n\'avez plus l\'utilisation.'
+
 define('TXT_WPSC_PAYMENT_GATEWAYS', 'Passerelles de paiement');
 
 define('TXT_WPSC_PRODUCTCOUNT_SINGULAR','produit');
@@ -863,4 +902,61 @@ define('TXT_WPSC_WEIGHT', 'Poids');
 define('TXT_WPSC_LOG_TRANSACTIONACCEPTEDLOGS', 'Uniquement celles à paiement accepté');
 define('TXT_WPSC_SEARCHEMAIL', 'Chercher par courriel');
 
+
+define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'Note');
+define('TXT_WPSC_PERSONALISATION_OPTIONS', 'Personalisations');
+define('TXT_WPSC_OFF_SITE_LINK', 'url pour site hors ligne');
+define('TXT_WPSC_FLASH_UPLOADER', 'Ajout');
+define('TXT_WPSC_PENDING', 'Transactions en attente');
+define('TXT_WPSC_CLOSED', 'Transactions terminées');
+define('TXT_WPSC_CURRENT_MONTH', 'MOIS EN COURS');
+define('TXT_WPSC_SKU_FULL', 'Référence');
+define('TXT_WPSC_FLAT_RATE_SETTINGS', 'TRANSPORT');
+define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'CATÉGORIES');
+define('TXT_WPSC_TABLE_RATED_PRICE', 'LISTE DES TARIFS');
+define('TXT_WPSC_ADD_NEW_VARIATIONS', 'NOUVELLES VARIATIONS');
+define('TXT_WPSC_CUSTOM_META', 'CHAMP PERSONNALISÉ');
+define('TXT_WPSC_HERE_YOU_CAN_ADD', 'CHAMP D\'AJOUT');
+define('TXT_WPSC_VARIATION_PLURAL', 'VARIATIONS');
+define('TXT_WPSC_ADD_NEW_PRODUCT', 'AJOUTER UN PRODUIT');
+define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'AJOUTER UN TITRE DE CATÉGORIE');
+define('TXT_WPSC_ADDING_A_NEW_CATEGORY', 'AJOUTER UN SOUS GROUPE');
+define('TXT_WPSC_CURRENT_GROUP', 'GROUPE');
+define('TXT_WPSC_GOOGLE_BASE', 'COMPTE GOOGLE BASE');
+define('TXT_WPSC_GRANT_ACCESS', 'INSCRIPTION');
+define('TXT_WPSC_SELECTYOURBUSINESSLOCATION', 'Sélectionner votre Pays');
+define('TXT_WPSC_UPDATE_BUTTON', 'MISE À JOUR');
+define('TXT_WPSC_TM', 'SÉLECTION');
+define('TXT_WPSC_UPGRADES_PAGE', 'MISES À JOUR');
+define('TXT_WPSC_API_RESET', 'MISE À JOUR API');
+define('TXT_WPSC_API_RESET_DESCRIPTION', 'RÉGLAGES');
+define('TXT_WPSC_SELECTYOURBUSINESSLOCATION','Selectionnez le pays ou vous opérez principalement.');
+define("TXT_WPSC_TM", "Vos marchés cibles");
+define("TXT_WPSC_UPDATE_BUTTON", "Mettre à jours &raquo;");
+define('TXT_WPSC_UPGRADES_PAGE', 'Ajouts');
+define('TXT_WPSC_BUTTON_SETTINGS', 'Réglages des boutons');
+define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Réglages des produits');
+define('TXT_WPSC_MULTIPLE_ADDING_PRODUCTS', 'Ajout de la quantité avec chaque description de produits');
+define('TXT_WPSC_PRODUCTS_PAGE_SETTINGS', 'Réglages de la page des produits');
+define('TXT_WPSC_SORT_PRODUCT_BY', 'Trier les produits par');
+define('TXT_WPSC_TIME_UPLOADED', 'Heure de chargement');
+define('TXT_WPSC_REPLACE_PAGE_TITLE', 'Remplacer le titre de la page par le nom de la catégorie');
+define('TXT_WPSC_CARTSETTINGS', 'Réglages du panier');
+define('TXT_WPSC_GROUP_SETTINGS', 'Réglages des groupe de produits');
+define("TXT_WPSC_PAGENUMBER_POSITION_TOP", "Haut");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTTOM", "Bas");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTH", "Haut et Bas");
+define('TXT_WPSC_COMMENTSETTINGS', 'Réglages des commentaires');
+define('TXT_WPSC_ENABLE_COMMENTS', 'Utiliser les commentaires de IntenseDebate');
+define('TXT_WPSC_EMAIL_SETTINGS', 'Messages personnalisés');
+define('TXT_WPSC_TAGS_CAN_BE_USED', 'Tags pouvant être utilisés');
+define('TXT_WPSC_ADMIN_REPORT', 'Rapport pour l\'administrateur');
+define('TXT_WPSC_SHIPPINGOPTIONS', 'Options de transport');
+define('TXT_WPSC_USPS_DESC', 'Afin de pouvoir utiliser UPS et USPS vous devez entrer votre code postal. Utiliser le code postal de votre lieu d\opération.');
+define('TXT_WPSC_SHIPPING_MODULES', 'Services de transport');
+define('TXT_WPSC_CHOOSE_SHIPPING_MODULES', 'Choix du service de transport');
+define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', 'Pour régler un service de transport, veuillez le selectionner sur la colonne de gauche.');
+define('TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES', 'Calcul du transport vers l\'étranger');
+define('TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES', 'Calcul du transport domestic');
+define('TXT_WPSC_IMPORT_CSV', 'Importer des produits par .CSV');
 ?>
