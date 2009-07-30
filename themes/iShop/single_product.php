@@ -148,10 +148,13 @@ $image_height = get_option('single_view_image_height');
 								<?php if(wpsc_product_on_special()) : ?>
 									<span class='oldprice'><?php echo TXT_WPSC_PRICE; ?>: <?php echo wpsc_product_normal_price(); ?></span><br />
 								<?php endif; ?>
-								<?php echo TXT_WPSC_PRICE; ?>:  <span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><br/>
+								  <span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><?php echo TXT_WPSC_PRICE; ?>:<br/>
+								<?php if(wpsc_product_has_multicurrency()) : ?>
+									<?php echo wpsc_display_product_multicurrency(); ?>
+								<?php endif; ?>
 								<?php if(get_option('display_pnp') == 1) : ?>
-									<?php echo TXT_WPSC_PNP; ?>:  <span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><br />
-								<?php endif; ?>							
+									<span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><?php echo TXT_WPSC_PNP; ?>:  <br />
+								<?php endif; ?>						
 							<?php endif; ?>
 						</div>
 					<?php if(function_exists('wpsc_akst_share_link') && (get_option('wpsc_share_this') == 1)) {

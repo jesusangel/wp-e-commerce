@@ -21,7 +21,11 @@ div.productdisplay img {
 	padding: 8px 0 0 0;
 	border: none;
 }
-
+span.pricedisplay{
+ white-space: nowrap;
+ width: 80px;
+ float:right; 
+ }
 div.item_image {
 	background-image:url(images/itembg.gif);
 	height:86px;
@@ -361,7 +365,9 @@ p.wpsc_product_price{
  font-size: 9pt;
  font-weight: bold;
  }
-  
+ div.wpsc_product_price{ 
+   width:130px;
+ }
 p.wpsc_product_extra_content{
  margin: 10px 0px 10px 0px;
  color: #333333;
