@@ -25,18 +25,20 @@
 
 <?php if(wpsc_cart_has_shipping()) : ?>
 		<span class='total'>
+		  <span class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
 		<span class='totalhead'>
 			<?php echo TXT_WPSC_SHIPPING; ?>:
 	  </span>
-	  <span class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
+	
 	</span>
 	<?php endif; ?>
 	
 	<span class='total'>
+		<span class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
 		<span class='totalhead'>
 			<?php echo TXT_WPSC_TOTAL; ?>:
 	  </span>
-		<span class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
+	
 	</span>
 	
 

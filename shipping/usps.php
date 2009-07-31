@@ -122,26 +122,26 @@ class usps {
 				'<Machinable>' . $machinable . '</Machinable>' .
 				'</Package>';
 
-// 				if ($transit) {
-// 					$transitreq  = 'USERID="' . MODULE_SHIPPING_USPS_USERID .
-// 					 '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">' .
-// 					 '<OriginZip>' . STORE_ORIGIN_ZIP . '</OriginZip>' .
-// 					 '<DestinationZip>' . $dest_zip . '</DestinationZip>';
-// 
-// 					switch ($key) {
-// 						case 'EXPRESS':  $transreq[$key] = 'API=ExpressMail&XML=' .
-// 							urlencode( '<ExpressMailRequest ' . $transitreq . '</ExpressMailRequest>');
-// 							break;
-// 						case 'PRIORITY': $transreq[$key] = 'API=PriorityMail&XML=' .
-// 							urlencode( '<PriorityMailRequest ' . $transitreq . '</PriorityMailRequest>');
-// 							break;
-// 						case 'PARCEL':   $transreq[$key] = 'API=StandardB&XML=' .
-// 							urlencode( '<StandardBRequest ' . $transitreq . '</StandardBRequest>');
-// 							break;
-// 						default: $transreq[$key] = '';
-// 						break;
-// 					}
-// 				}
+ 				if ($transit) {
+ 					$transitreq  = 'USERID="' . MODULE_SHIPPING_USPS_USERID .
+ 					 '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">' .
+ 					 '<OriginZip>' . STORE_ORIGIN_ZIP . '</OriginZip>' .
+ 					 '<DestinationZip>' . $dest_zip . '</DestinationZip>';
+ 
+ 					switch ($key) {
+ 						case 'EXPRESS':  $transreq[$key] = 'API=ExpressMail&XML=' .
+ 							urlencode( '<ExpressMailRequest ' . $transitreq . '</ExpressMailRequest>');
+ 							break;
+ 						case 'PRIORITY': $transreq[$key] = 'API=PriorityMail&XML=' .
+ 							urlencode( '<PriorityMailRequest ' . $transitreq . '</PriorityMailRequest>');
+ 							break;
+ 						case 'PARCEL':   $transreq[$key] = 'API=StandardB&XML=' .
+ 							urlencode( '<StandardBRequest ' . $transitreq . '</StandardBRequest>');
+ 							break;
+ 						default: $transreq[$key] = '';
+ 						break;
+ 					}
+				}
 				$services_count++;
 			}
 			$request .= '</RateV3Request>'; //'</RateRequest>'; //Changed by Greg Deeth April 30, 2008

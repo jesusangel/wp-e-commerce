@@ -73,7 +73,7 @@ global $wpsc_query, $wpdb;
 						<?php endif; ?>
 							
 							<br/>
-							Price: <span id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span>
+							<span id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span>Price: 
 							
 						<?php if(get_option('display_moredetails') == 1) : ?>
 							<br />
