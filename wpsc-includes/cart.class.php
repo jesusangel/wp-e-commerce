@@ -21,8 +21,14 @@
 */
 function wpsc_cart_item_count() {
 	global $wpsc_cart;
-	return count($wpsc_cart->cart_items);
+	$count = 0;
+	foreach((array)$wpsc_cart->cart_items as $cart_item) {
+		$count += $cart_item->quantity;
+	}
+	return $count;
 }
+
+
 /**
 * coupon amount function, no parameters
 * * @return integer the item count
