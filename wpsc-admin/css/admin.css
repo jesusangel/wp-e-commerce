@@ -331,6 +331,10 @@ div.product-placeholder {
 	width:58%;
 }
 
+#wpsc-col-right .postbox .inside {
+  padding-left: 10px;
+}
+
 #wpsc-col-left {
 	margin:0;
 	overflow:hidden;
@@ -1284,6 +1288,8 @@ table.category_forms td.last_row {
 .wpsc_gold_float{
 	min-width:45%;
 	float:left;
+	max-width:500px;
+	_width:500px;
 }
 .wpsc_gold_side{
 	margin-top:50px;
@@ -1338,6 +1344,23 @@ table#itemlist tr.wpsc_published td{
 table#itemlist tr.wpsc_not_published td{
 	background-color: #F2F2F2;
 }
+
+
+a.admin_download {
+ display: block;
+ height: 26px;
+ border-bottom: none;
+ text-decoration: none;
+}
+ 
+a.admin_download img{
+ margin-right: 3px;
+}
+  
+a.admin_download span{
+ text-decoration: underline;
+}
+
 /* 
 * Product Groups styles end here
 */

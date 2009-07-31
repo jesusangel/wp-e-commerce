@@ -124,8 +124,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			
 				if($link != '') {
 				  $additional_content = apply_filters('wpsc_transaction_result_content', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
-				  //echo $additional_content;
-				  
+					if(!is_string($additional_content)) {
+				    $additional_content = '';
+				  }
 					$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":\n $link\n".$additional_content;
 					$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_CLICKTODOWNLOAD."</a>\n". $additional_content;
 				} else {

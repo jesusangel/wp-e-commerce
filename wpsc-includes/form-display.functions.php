@@ -74,7 +74,7 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
    * Recurses to generate the branched view for subcategories
    */
   global $wpdb;
-  $siteurl = get_option('siteurl'); 
+  $siteurl = get_option('siteurl');
   if(is_numeric($category_id)) {
     $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
 	} else {
@@ -93,32 +93,26 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
 }
   
 
-function wpsc_uploaded_files()
-  {
+function wpsc_uploaded_files() {
   global $wpdb;
   
   $dir = @opendir(WPSC_FILE_DIR);
   $num = 0;
-  while(($file = @readdir($dir)) !== false)
-    {
+  while(($file = @readdir($dir)) !== false) {
     //filter out the dots, macintosh hidden files and any backup files
-    if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old"))
-      {
+    if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old")) {
       $file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
-      if($file_data != null)
-        {
+      if($file_data != null) {
         $dirlist[$num]['display_filename'] = $file_data['filename'];
         $dirlist[$num]['file_id'] = $file_data['id'];
-        }
-        else
-        {
+			} else {
         $dirlist[$num]['display_filename'] = $file;
         $dirlist[$num]['file_id'] = null;
-        }        
+			}        
       $dirlist[$num]['real_filename'] = $file;
       $num++;
-      }
-    }
+		}
+	}
   return $dirlist;
   }
   
@@ -129,11 +123,11 @@ function wpsc_select_product_file($product_id = null) {
   $file_list = wpsc_uploaded_files();
   $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
   $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span>";
+	//$output .= "<pre>".print_r($file_list,true)."</pre>";
   $output .= "<div class='ui-widget-content multiple-select  ".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
   //$output .= "<div class='select_product_file'>";
   $num = 0;
   $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='.none.' id='select_product_file_$num' ".((!is_numeric($file_id) || ($file_id < 1)) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".TXT_WPSC_SHOW_NO_PRODUCT."</label></p>";
- //$output .= "<pre>".print_r($file_list,true)."</pre>";
   foreach((array)$file_list as $file) {
     $num++;
     $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='".$file['real_filename']."' id='select_product_file_$num' ".((is_numeric($file_id) && ($file_id == $file['file_id'])) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".$file['display_filename']."</label>  <img class='file_delete_button' src='".WPSC_URL."/images/cross.png' /></p>";
@@ -158,9 +152,7 @@ function wpsc_select_variation_file($variation_ids, $variation_combination_id = 
   } else {
     $variation_combination_id = 0;
   }
-  
   $unique_id_component = $variation_combination_id."_".str_replace(",","_",$variation_ids);
-  
   
   $output = "<div class='variation_settings_contents'>\n\r";
   $output .= "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS."</span>\n\r";
@@ -210,7 +202,5 @@ function wpsc_list_product_themes($theme_name = null) {
   $output .= "</select>\n\r";    
   return $output;
 }
-
-
 
 ?>

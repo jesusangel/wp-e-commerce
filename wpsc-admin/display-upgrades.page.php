@@ -94,6 +94,25 @@ function wpsc_display_upgrades_page() {
 					}
 				?>
 				</form>
+
+				
+				<h2><?php echo __("Upgrade Instructions", 'wpsc');?></h2>
+				<p>
+					<?php _e("Copy the gold_cart_files directory into the wp-content/uploads/wpsc/upgrades folder.", 'wpsc'); ?>
+				</p>
+				<p>
+					<?php _e("This folder should be automatically created when the e-commerce plugin is activated, but if it is not, you will have to create it yourself.", 'wpsc'); ?>
+				</p>
+				<p>
+					<?php _e("Now a new panel should appear in the Upgrades page where you must enter your API Username and API Key. ", 'wpsc'); ?>
+				</p>
+				<p>
+					<?php _e("For more information visit our documentation page.", 'wpsc'); ?>
+				</p>
+				<p>
+					<a href='http://www.instinct.co.nz/e-commerce/docs/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
+				</p>
+				
 			</div> 
 	</div>
 </div>

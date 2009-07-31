@@ -942,60 +942,29 @@ function wpsc_product_download_forms($product_data='') {
 	$output ='';
  	$upload_max = wpsc_get_max_upload_size();
  	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
-    if (IS_WP27) {
-        $output .= "<h3 class='hndle'>";
-    } else {
-        $output .= "<h3>
-	<a class='togbox'>+</a>";
-    }
-    $output .= TXT_WPSC_PRODUCTDOWNLOAD;
-	$output .= "</h3>
-	<div class='inside'>
-	<table>
-    <tr>
-      <td>
-        ".TXT_WPSC_DOWNLOADABLEPRODUCT.":
-      </td>
-      <td>
-        <input type='file' name='file' value='' /><br />". __('Max Upload Size')." : <span>".$upload_max."</span><br /><br />
-        ".wpsc_select_product_file($product_data['id'])."
-        <br />
-        
-      </td>
-    </tr>";
+ 	
+	$output .= "<h3 class='hndle'>".TXT_WPSC_PRODUCTDOWNLOAD."</h3>";
+	$output .= "<div class='inside'>";
+	
+	$output .= "<h4>".TXT_WPSC_DOWNLOADABLEPRODUCT.":</h4>";
+	$output .= "<input type='file' name='file' value='' /><br />". __('Max Upload Size')." : <span>".$upload_max."</span><br /><br />";
+	$output .= wpsc_select_product_file($product_data['id'])."<br />";
+    
 	if($product_data['file'] > 0) {
-    	$output .= "          <tr>\n\r";
-    	$output .= "            <td>\n\r";
     	$output .= TXT_WPSC_PREVIEW_FILE.": ";
-    	$output .= "            </td>\n\r";
-    	$output .= "            <td>\n\r";    
     	
     	$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product_data['id']."' style='float: left;' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
 		
     	$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_data['file']."' LIMIT 1",ARRAY_A);
     	if(($file_data != null) && (function_exists('listen_button'))) {
-    	  $output .= "".listen_button($file_data['idhash'], $file_data['id']);
+    	  $output .= "".listen_button($file_data['idhash'], $file_data['id'])."<br style='clear: both;' /><br />";
     	}
-    	  
-    	$output .= "            </td>\n\r";
-    	$output .= "          </tr>\n\r";
     }
-    $output .="</table>";
 	if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player")) {    
     $output .="<h4>".__("Select an MP3 file to upload as a preview")."</h4>";
 	
-    $output .="<table>";
-		$output .= "    <tr>\n\r";
-		$output .= "      <td>\n\r";
-		$output .= TXT_WPSC_PREVIEW_FILE.": ";
-		$output .= "      </td>\n\r";
-		$output .= "      <td>\n\r";
 		$output .= "<input type='file' name='preview_file' value='' /><br />";
 		$output .= "<br />";
-		$output .= "<br />";
-		$output .= "      </td>\n\r";
-		$output .= "    </tr>\n\r";
-    $output .="</table>";
 	}
 	$output .="</div></div>";
 	return $output;
@@ -1168,7 +1137,7 @@ function wpsc_main_product_image_menu($product_id) {
 
 				</li>
 				<li>
-				<a href='#' class='delete_primary_image'>Delete this Image</a>
+					<a href='#' class='delete_primary_image'>Delete this Image</a>
 				</li>
 
 			</ul>
