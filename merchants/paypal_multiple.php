@@ -51,7 +51,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['lc'] = $paypal_currency_code;
   $data['bn'] = 'wp_e-commerce';
   
-  $data['no_shipping'] = get_option('paypal_ship');
+  $data['no_shipping'] = (int)(bool)get_option('paypal_ship');
   if(get_option('address_override') == 1) {
 		$data['address_override'] = '1';
 	}
