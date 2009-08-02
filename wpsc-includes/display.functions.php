@@ -477,7 +477,6 @@ function wpsc_obtain_the_title() {
 			$output = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
 			$wpsc_title_data['category'][$category_id] = $output;
 		}
-		
 	}
 	if(isset($wp_query->query_vars['product_url_name'])) {
 	  $product_name = $wp_query->query_vars['product_url_name'];

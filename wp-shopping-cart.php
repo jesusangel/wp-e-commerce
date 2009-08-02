@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support.
-Version: 3.7.1 Beta
+Version: 3.7.1
 Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 */
@@ -15,9 +15,9 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 global $wpdb;
 
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '28');
+define('WPSC_MINOR_VERSION', '29');
 
-define('WPSC_PRESENTABLE_VERSION', '3.7.1 Beta');
+define('WPSC_PRESENTABLE_VERSION', '3.7.1');
 
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);
@@ -311,9 +311,11 @@ function wpsc_serialize_shopping_cart() {
   /// Delete the old claims on stock
 	$session_timeout = 60*60; // 180 * 60 = three hours in seconds
   $old_claimed_stock_timestamp = time() - $session_timeout;
-  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
-  $wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
   
+  $old_claimed_stock_timestamp = mktime((date('H') - 3), date('i'), date('s'), date('m'), date('d'), date('Y'));
+  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
+  //echo "$old_claimed_stock_timestamp <br /> DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')";
+  $wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
   return true;
 }  
 add_action('shutdown','wpsc_serialize_shopping_cart');

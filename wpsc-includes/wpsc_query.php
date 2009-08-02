@@ -213,7 +213,6 @@ function wpsc_the_product_price() {
 	global $wpsc_query;	
 	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);	
 	if(($product['special']==1) && ($variations_output[1] === null)) {
-	
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],true, $wpsc_query->product['id']);
 	} else {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
@@ -1077,7 +1076,8 @@ class WPSC_Query {
 		
 		
 		if($this->query_vars['product_url_name'] != null) {
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$this->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
+			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".stripslashes($this->query_vars['product_url_name'])."' ) ORDER BY `product_id` DESC LIMIT 1");
+			//echo "SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".stripslashes($this->query_vars['product_url_name'])."' ) ORDER BY `product_id` DESC LIMIT 1<br />";
 		} else {
 			$product_id = absint($this->query_vars['product_id']);
 		}

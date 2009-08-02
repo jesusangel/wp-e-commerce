@@ -41,10 +41,9 @@ function wpsc_add_to_cart() {
   }
   if($_POST['quantity'] > 0 && (!isset($_POST['wpsc_quantity_update']))) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
-  }else if(isset($_POST['wpsc_quantity_update'])){
-  		//exit('<pre>'.print_r($wpsc_cart, true).'</pre>IM HERE');
-		 $wpsc_cart->remove_item($_POST['key']);
-  		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
+  } else if (isset($_POST['wpsc_quantity_update'])) {
+		$wpsc_cart->remove_item($_POST['key']);
+		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
   }
   if($_POST['is_customisable'] == 'true') {
 		$provided_parameters['is_customisable'] = true;

@@ -716,8 +716,9 @@ class wpsc_cart {
 	*/
   function edit_item($key, $parameters) {
     if(isset($this->cart_items[$key])) {
-    
-			if($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true) {
+			$product_id = $this->cart_items[$key]->product_id;
+			$quantity = $parameters['quantity'] - $this->cart_items[$key]->quantity;
+			if($this->check_remaining_quantity($product_id, $this->cart_items[$key]->variation_values, $quantity) == true) {
 				foreach($parameters as $name => $value) {
 					$this->cart_items[$key]->$name = $value; 
 				}
@@ -744,6 +745,8 @@ class wpsc_cart {
 	*/
   function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
     global $wpdb;
+
+    
 		$quantity_data = $wpdb->get_row("SELECT `quantity_limited`, `quantity`  FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('$product_id') LIMIT 1", ARRAY_A);
 		// check to see if the product uses stock
 		if($quantity_data['quantity_limited'] == 1){

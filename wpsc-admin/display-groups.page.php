@@ -1,5 +1,5 @@
 <?php
- function wpsc_category_tm(){
+function wpsc_category_tm(){
  global $wpdb;
  /* START OF TARGET MARKET SELECTION */					
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
@@ -430,7 +430,7 @@ if(is_numeric($_GET['category_delete_id'])) {
 
 
 if(is_numeric($_GET['deleteid'])) {
-  $delete_id = (int)$_GET['deleteid'];
+  $delete_id = absint($_GET['deleteid']);
   $deletesql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `id`='{$delete_id}' LIMIT 1";
   if($wpdb->query($deletesql)) {
 		$delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `category_parent`='{$delete_id}'";
