@@ -22,7 +22,7 @@ define('WPSC_PRESENTABLE_VERSION', '3.7.1');
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);
 
-$v1 = str_replace(array('_','-','+'),'.',strtolower($wp_version));
+$v1 = str_replace(array('_','-','+'), '.', strtolower($wp_version));
 $v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);
 $v1 = preg_split("/([a-z]+)/i",$v1,-1, PREG_SPLIT_DELIM_CAPTURE);
 array_walk($v1, create_function('&$v', '$v = trim($v,". ");'));

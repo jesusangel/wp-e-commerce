@@ -241,7 +241,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		</div>
 		
 		<div class="alignleft actions">
-			<form action="" method="get">
+			<form action="admin.php" method="get">
 				<?php
 					echo wpsc_admin_category_dropdown();
 				?>
@@ -427,22 +427,23 @@ function wpsc_admin_products_list($category_id = 0) {
 	<?php
 }
 
-//function 
 
 function wpsc_admin_category_dropdown() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');
 	$url =  urlencode(remove_query_arg(array('product_id','category_id')));
-	$options = "";
-	$options .= "<option value='$url'>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
+	
+	$options = "<option value=''>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
 	$options .= wpsc_admin_category_dropdown_tree(null, 0, absint($_GET['category_id']));
-	$concat .= "<select name='category' id='category_select'>".$options."</select>\r\n";
-	$concat .= "<button class='button' id='submit_category_select'>Filter</button>";
+	
+	$concat = "<input type='hidden' name='page' value='{$_GET['page']}' />\r\n";
+	$concat .= "<select name='category_id' id='category_select'>".$options."</select>\r\n";
+	$concat .= "<button class='button' id='submit_category_select'>Filter</button>\r\n";
 	return $concat;
 }
 
 function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, $selected_id = null) {
-  /*
+		/*
    * Displays the category forms for adding and editing products
    * Recurses to generate the branched view for subcategories
    */
@@ -458,8 +459,8 @@ function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, 
     if($selected_id == $option['id']) {
       $selected = "selected='selected'";
     }
-    $url = htmlentities(remove_query_arg('product_id',add_query_arg('category_id', $option['id'])));
-    $output .= "<option $selected value='$url'>".str_repeat("-", $iteration).stripslashes($option['name'])."</option>\r\n";
+    //$url = htmlentities(remove_query_arg('product_id',add_query_arg('category_id', $option['id'])));
+    $output .= "<option $selected value='{$option['id']}'>".str_repeat("-", $iteration).stripslashes($option['name'])."</option>\r\n";
     $output .= wpsc_admin_category_dropdown_tree($option['id'], $iteration+1, $selected_id);
     $selected = "";
   }

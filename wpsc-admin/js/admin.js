@@ -171,12 +171,12 @@ jQuery(document).ready( function () {
 		event.preventDefault();
 	});
 	 
-	jQuery("#submit_category_select").click(function() {
-			new_url = jQuery("#category_select option:selected").val();
-			//console.log(new_url);
-			window.location = new_url;
-			return false;
-	});
+// 	jQuery("#submit_category_select").click(function() {
+// 			new_url = jQuery("#category_select option:selected").val();
+// 			//console.log(new_url);
+// 			window.location = new_url;
+// 			return false;
+// 	});
 	 
 	
   // this loads the edit-products page using javascript
