@@ -212,7 +212,7 @@ function wpsc_the_product_permalink() {
 function wpsc_the_product_price() {
 	global $wpsc_query;	
 	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);	
-	if(($product['special']==1) && ($variations_output[1] === null)) {
+	if(($wpsc_query->product['special_price'] > 0) && (($wpsc_query->product['price'] - $wpsc_query->product['special_price'] ) >= 0) && ($variations_output[1] === null)) {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],true, $wpsc_query->product['id']);
 	} else {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
@@ -278,7 +278,8 @@ function wpsc_product_is_donation() {
 function wpsc_product_on_special() {
 	// function to determine if the product is on special
 	global $wpsc_query;
-	if(($wpsc_query->product['special'] == 1) && (count($wpsc_query->first_variations) < 1)) {
+	//echo "<pre>".print_r($wpsc_query,true)."</pre>";
+	if(($wpsc_query->product['special_price'] > 0) && (($wpsc_query->product['price'] - $wpsc_query->product['special_price']) >= 0) && (count($wpsc_query->first_variations) < 1)) {
 		return true;
 	} else {
 		return false;
@@ -355,8 +356,9 @@ function wpsc_product_postage_and_packaging() {
 */
 function wpsc_product_normal_price() {
 	global $wpsc_query;
-		$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);	
-	if(($product['special']==1) && ($variations_output[1] === null)) {
+		$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);
+		
+	if(($wpsc_query->product['special_price'] > 0) && (($wpsc_query->product['price'] - $wpsc_query->product['special_price']) >= 0) && ($variations_output[1] === null)) {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],true,$wpsc_query->product['id']);
 	} else {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);

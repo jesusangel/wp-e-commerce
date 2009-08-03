@@ -259,7 +259,9 @@ function calculate_product_price($product_id, $variations = false, $no_special=f
     } else {	
       $product_data = $wpdb->get_row("SELECT `price`,`special`,`special_price` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
      // echo '<span style="color:#f00;">'.print_r($product_data, true).'</span><br />'.;
-      if(($product_data['special_price'] > 0) && ($no_special == false)) {
+
+     
+      if(($product_data['special_price'] > 0) && (($product_data['price'] - $product_data['special_price']) >= 0) && ($no_special == false)) {
         $price = $product_data['price'] - $product_data['special_price'];
       } else {
         $price = $product_data['price'];

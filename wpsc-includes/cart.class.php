@@ -1451,16 +1451,13 @@ class wpsc_cart_item {
 		  $priceandstock_id = 0;
 			$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
 		  // otherwise, just get the price.
-      if($product['special_price'] > 0) {
-        $price = $product['price'] - $product['special_price'];
-      } else {
-        if($product['special'] == 1) {
-          $sale_discount = (float)$product['special_price'];
-        } else {
-					$sale_discount = 0;
-        }
-        $price = $product['price'] - $sale_discount;
+			if(($product['special_price'] > 0) and (($product['price'] - $product['special_price']) >= 0)) {
+				$sale_discount = (float)$product['special_price'];
+			} else {
+				$sale_discount = 0;
 			}
+			$price = $product['price'] - $sale_discount;
+
 			$file_id = $product['file'];
 			
 			
