@@ -15,15 +15,14 @@
 */
 function wpsc_product_external_link($id){
 	global $wpdb, $wpsc_query;
-	$sql = 'SELECT `meta_value` FROM `'.WPSC_TABLE_PRODUCTMETA.'` WHERE `product_id`='.$id.' AND `meta_key`="external_link"';
-	//exit($sql);
-	$externalLink = $wpdb->get_var($sql);
+	$id = absint($id);
+	$externalLink = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='external_link' LIMIT 1");
 	return $externalLink;
 }
 function wpsc_product_sku($id){
 	global $wpdb;
-	$sql = 'SELECT `meta_value` FROM `'.WPSC_TABLE_PRODUCTMETA.'` WHERE `product_id`='.$id.' AND `meta_key`="sku"';
-	$sku = $wpdb->get_var($sql);
+	$id = absint($id);
+	$sku = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='sku' LIMIT 1");
 	return $sku;
 }
 
@@ -522,6 +521,7 @@ function wpsc_the_variation() {
 	$wpsc_query->the_variation();
 }
 
+
 function wpsc_product_has_multicurrency(){
 	global $wpdb, $wpsc_query;
 	$sql = "SELECT `meta_key`, `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`=".$wpsc_query->product['id']." AND `meta_key` LIKE 'currency%'";
@@ -606,6 +606,35 @@ function wpsc_the_variation_name() {
 function wpsc_the_variation_id() {
 	global $wpsc_query;
 	return $wpsc_query->variation['id'];
+}
+
+
+/**
+* wpsc the variation out_of_stock function
+* @return string - HTML attribute to disable select options and radio buttons
+*/
+function wpsc_the_variation_out_of_stock() {
+	global $wpsc_query, $wpdb;
+	$out_of_stock = false;
+	//$wpsc_query->the_variation();
+	if(($wpsc_query->variation_group_count == 1) && ($wpsc_query->product['quantity_limited'] == 1)) {
+		$product_id = $wpsc_query->product['id'];
+		$variation_group_id = $wpsc_query->variation_group['variation_id'];
+		$variation_id = $wpsc_query->variation['id'];
+		
+
+		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
+		
+		$variation_stock_data = $wpdb->get_var("SELECT `stock` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+		if($variation_stock_data <= 1) {
+			$out_of_stock = true;
+		}
+	}
+  if($out_of_stock == true) {
+		return "disabled='disabled'";
+  } else {
+		return '';
+  }
 }
 
 /**
@@ -1679,8 +1708,6 @@ class WPSC_Query {
 	function the_product_title() {
 		return $this->product['name'];
 	}
-	
-
 }
 			
 ?>

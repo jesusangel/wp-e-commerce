@@ -427,7 +427,6 @@ function wpsc_admin_products_list($category_id = 0) {
 	<?php
 }
 
-
 function wpsc_admin_category_dropdown() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');
