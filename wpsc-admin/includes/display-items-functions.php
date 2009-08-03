@@ -184,7 +184,12 @@ function wpsc_product_basic_details_form(&$product_data) {
 					<div class='wpsc_floatleft'>
     			   <label for='add_form_special'><?php echo TXT_WPSC_SPECIAL; ?></label>
 			       <div style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>' id='add_special'>
-        			  <input type='text' size='17' value='<?php echo number_format(($product_data['price'] - $product_data['special_price']), 2); ?>' name='special_price'/>
+								<?php
+								if(is_numeric($product_data['special_price'])) {
+									$special_price = number_format(($product_data['price'] - $product_data['special_price']), 2);
+								}
+								?>
+        			  <input type='text' size='17' value='<?php echo $special_price; ?>' name='special_price'/>
 			       </div>
 			       </div>
 

@@ -156,7 +156,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		output_html += "</li>\n";
 
 		
-// 		if(replace_existing == 1) {
+ 		if(replace_existing == 1) {
 			jQuery("ul#gallery_list").html(output_html);
 			
 			input_set = jQuery.makeArray(jQuery("#gallery_list li:not(.ui-sortable-helper) input.image-id"));
@@ -193,10 +193,10 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 					jQuery('#gallery_image_'+image_id).children('div.image_settings_box').remove();
 					jQuery('#gallery_image_'+image_id).append(image_menu);
 			});
-// 		} else {
-// 			jQuery("ul#gallery_list").append(output_html);
-// 			///jQuery("#gallery_list").trigger( 'update' );
-// 		}
+ 		} else {
+ 			jQuery("ul#gallery_list").append(output_html);
+ 			///jQuery("#gallery_list").trigger( 'update' );
+ 		}
 	}
 
 		//jQuery('#media-item-' + fileObj.id + ' .progress').show();

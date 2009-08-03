@@ -113,7 +113,11 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['publish'] = (int)(bool)$post_data['publish']; 
 	
 	$post_data['price'] = (float)$post_data['price'];
-	$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
+	if(is_numeric($post_data['special_price'])) {
+		$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
+	} else {
+		$post_data['special_price'] = 0;
+	}
 	
 	// if special is unticked, wipe the special_price value
 // 	if($post_data['special'] !== 1) {

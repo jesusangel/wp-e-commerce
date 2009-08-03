@@ -847,7 +847,7 @@ function wpsc_swfupload_images() {
 				$output .= "image_src='".$src."';\n";
 				$output .= "image_id='$id';\n";
 				$output .= "product_id='$product_id';\n";
-				$output .= "replace_existing=0;";
+				$output .= "replace_existing=1;";
 			} else {
 				$output .= "status=0;\n";
 			}
