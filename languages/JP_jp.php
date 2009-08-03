@@ -133,22 +133,19 @@ define('TXT_WPSC_ITEM_NUMBER', 'アイテム番号');
 define('TXT_WPSC_LABEL_DESC', 'ラベル説明');
 
 
-define('TXT_WPSC_DEFAULT_PURCHASE_RECEIPT', 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.
-All prices include tax and postage and packaging where applicable.
+define('TXT_WPSC_DEFAULT_PURCHASE_RECEIPT', '%shop_name%をご利用いただきありがとうございました。
+至急出荷の手配をさせていただきます。
+（ダウンロード可能商品の場合は、このページ下段のリンクから入手いただけます）。
 
-You ordered these items:
+お買い上げの商品:
 
 %product_list%
-
 %total_shipping%
-
 %total_price%');
 
 define('TXT_WPSC_DEFAULT_PURCHASE_REPORT', '
 %product_list%
-
 %total_shipping%
-
 %total_price%');
 
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'このバリエーションでダウンロード可能なファイルを選択してください');
@@ -260,7 +257,7 @@ define('TXT_WPSC_NO_SHORTCODE', 'This item product is still waiting to be added 
 define('TXT_WPSC_SKU', 'SKU');
 define('TXT_WPSC_YOUR_ORDER', '注文');
 define('TXT_WPSC_ABOUT_THIS_PAGE', 'このページについて');
-define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Order Pending: Payment Required');
+define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'ペンディング: 支払いが必要');
 define('TXT_WPSC_SELECTALLCATEGORIES', 'すべての商品を表示');
 
 define('TXT_WPSC_EDITING_GROUP', '[categorisation]グループを編集');
@@ -328,9 +325,9 @@ define('TXT_WPSC_USER_UNLOCKED_EMAIL_MESSAGE', 'ご注文ありがとうござ�
 ありがとうございました。');
 
 
-define('TXT_WPSC_ADMIN_EMPTY_CATEGORY', 'This group is set as your default product group, you should either add some items to it or switch your default product group to one that does contain items.');
+define('TXT_WPSC_ADMIN_EMPTY_CATEGORY', 'このグループは規定の商品グループとして設定されます。アイテムを追加するか、規定の商品グループを切り替えてください。');
 
-define('TXT_WPSC_USING_EXAMPLE_CATEGORY', 'You are using the example product group as your default group and it has no products in it, you should set the default group to something else, you can do so from your Shop Settings page.');
+define('TXT_WPSC_USING_EXAMPLE_CATEGORY', 'サンプルの商品グループを利用中ですが、そこに商品がありません。規定のグループをほかのものに切り替えてください。これはショップ設定ページで行うことができます。');
 
 define('TXT_WPSC_NO_DEFAULT_PRODUCTS', '商品ページで表示可能になっている商品がありません。既定で表示するグループを選択する必要があります。<br /> 商品ページで設定することができます。');
 
@@ -357,10 +354,10 @@ define('TXT_WPSC_SAVE', '保存');
 
 
 
-define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', 'Display [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', '[categorisation]を表示'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
 
-define('TXT_WPSC_MANAGE_CATEGORISATION', 'Manage [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_MANAGE_CATEGORISATION', '[categorisation]を管理'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
 
 
@@ -370,8 +367,8 @@ define('TXT_WPSC_AVS', '住所の確認');
 define('TXT_WPSC_DISPLAYVARIATIONSDESCRIPTION', 'バリエーションは商品のオプション属性を表します。例: サイズ、色など<br />たとえばＴシャツを販売しているならサイズというバリエーションを設定し以下のような値を設定できます... Small, Medium, Large...');
 
 define('TXT_WPSC_PERTICKED', 'すべての商品に適用');
-define('TXT_WPSC_EMAILALLOWED', 'Email Allowed');
-define('TXT_WPSC_EMAILNOTALLOWED', 'Email NOT Allowed');
+define('TXT_WPSC_EMAILALLOWED', 'メール可');
+define('TXT_WPSC_EMAILNOTALLOWED', 'メール不可');
 
 
 define('TXT_WPSC_GOOGLERISK', 'Eligible for Protection');
@@ -413,49 +410,49 @@ define('TXT_WPSC_GOOGLEMECHANTID', "Google Merchant ID");
 define('TXT_WPSC_IMAGESIZEINFO', /*'Note: if this is blank, the image will not be resized'*/'注意:ブランクにするとイメージはリサイズされません');
 define('TXT_WPSC_ENDLESSSUBSCRIPTION', 'Permanent subscription?');
 define('TXT_WPSC_RECEIVED', /*'Received'*/'受信');
-define('TXT_WPSC_ORDER_STATUS', '注文ステータス');       /* needs translation */
-define('TXT_WPSC_ORDER_SUMMARY', '注文サマリ');      /* needs translation */
-define('TXT_WPSC_LANGUAGE', '言語');       /* needs translation */
-define('TXT_WPSC_ACCEPTED_PAYMENT', '受諾済み支払');    /* needs translation */
-define('TXT_WPSC_JOB_DISPATCHED', '送信ジョブ');     /* needs translation */
+define('TXT_WPSC_ORDER_STATUS', '注文ステータス');
+define('TXT_WPSC_ORDER_SUMMARY', '注文サマリ');
+define('TXT_WPSC_LANGUAGE', '言語');
+define('TXT_WPSC_ACCEPTED_PAYMENT', '受諾済み支払');
+define('TXT_WPSC_JOB_DISPATCHED', '送信ジョブ');
 define('TXT_WPSC_PROCESSED', '完了オーダー');
 define('TXT_WPSC_ECOMMERCE', 'ショップ設定');
 define('TXT_WPSC_OPTIONS', '設定');
-define('TXT_WPSC_ADDPRODUCTS', /*'Add Products'*/'商品を追加');
-define('TXT_WPSC_SENDSMS', /*'Send SMS'*/'SMS送信');
-define('TXT_WPSC_PRODUCTS', /*'Products'*/'商品');
+define('TXT_WPSC_ADDPRODUCTS', '商品を追加');
+define('TXT_WPSC_SENDSMS', 'SMS送信');
+define('TXT_WPSC_PRODUCTS', '商品');
 define('TXT_WPSC_ADDCATEGORY', 'グループを追加');
-define('TXT_WPSC_CATEGORIES', /*'Categories'*/'カテゴリー');
+define('TXT_WPSC_CATEGORIES', 'カテゴリー');
 define('TXT_WPSC_BRANDS', 'ブランド');
-define('TXT_WPSC_VARIATIONS', /*'Variations'*/'バリエーション');
+define('TXT_WPSC_VARIATIONS', 'バリエーション');
 define('TXT_WPSC_PURCHASELOG', '販売状況');
-define('TXT_WPSC_ORDER_LOG', '注文');  /* needs translation */
-define('TXT_WPSC_OLDER_ORDERS', /*'Older Orders'*/'過去の注文');
-define('TXT_WPSC_ORDER', '表示順');  /* needs translation */
-define('TXT_WPSC_MONTHLY_REPORT', /*'Six Monthly Report'*/'過去半年のレポート');
-define('TXT_WPSC_TOTAL_INCOME', /*'Total Income'*/'売上の累計');
+define('TXT_WPSC_ORDER_LOG', '注文');
+define('TXT_WPSC_OLDER_ORDERS', '過去の注文');
+define('TXT_WPSC_ORDER', '表示順');
+define('TXT_WPSC_MONTHLY_REPORT', '過去半年のレポート');
+define('TXT_WPSC_TOTAL_INCOME', '売上の累計');
 define('TXT_WPSC_ACCEPTED_PAYMENTS', '(受領済み金額)'); //text has changed slightly
-define('TXT_WPSC_PAYMENTGATEWAYOPTIONS', /*'Payment Gateway Options'*/'支払い方法');
-define('TXT_WPSC_HELPINSTALLATION', 'ヘルプ/アップグレード');
-define('TXT_WPSC_EXAMPLECATEGORY', /*'Example category'*/'サンプルカテゴリー');
-define('TXT_WPSC_EXAMPLEDETAILS', /*'Example details'*/'サンプル詳細');
+define('TXT_WPSC_PAYMENTGATEWAYOPTIONS', '支払い方法');
+define('TXT_WPSC_HELPINSTALLATION', 'ヘルプ／アップグレード');
+define('TXT_WPSC_EXAMPLECATEGORY', 'サンプルカテゴリー');
+define('TXT_WPSC_EXAMPLEDETAILS', 'サンプル詳細');
 define('TXT_WPSC_EXAMPLEBRAND', 'サンプルブランド');
-define('TXT_WPSC_PRODUCTIMAGEWIDTH', /*'product image width'*/'商品イメージ（幅）');
-define('TXT_WPSC_PRODUCTIMAGEHEIGHT', /*'product image height'*/'商品イメージ（高さ）');
-define('TXT_WPSC_CATEGORYIMAGEWIDTH', 'グループイメージ（幅）');
-define('TXT_WPSC_CATEGORYIMAGEHEIGHT', 'グループイメージ（高さ）');
-define('TXT_WPSC_TRANSACTURL', /*'the location of the transaction detail page'*/'トランザクション詳細URL');
-define('TXT_WPSC_PAYMENTGATEWAY', /*'the payment gateway to use'*/'利用ペイペントゲートウェイ');
-define('TXT_WPSC_CARTLOCATION', /*'cart location'*/'カートの表示位置');
+define('TXT_WPSC_PRODUCTIMAGEWIDTH', '商品イメージ(w)');
+define('TXT_WPSC_PRODUCTIMAGEHEIGHT', '商品イメージ(h)');
+define('TXT_WPSC_CATEGORYIMAGEWIDTH', 'グループイメージ(w)');
+define('TXT_WPSC_CATEGORYIMAGEHEIGHT', 'グループイメージ(h)');
+define('TXT_WPSC_TRANSACTURL', 'トランザクション詳細URL');
+define('TXT_WPSC_PAYMENTGATEWAY', '利用ペイペントゲートウェイ');
+define('TXT_WPSC_CARTLOCATION', 'カートの表示位置');
 define('TXT_WPSC_SHOWCATEGORYBRANDS', 'カテゴリーとブランド表示');
-define('TXT_WPSC_CURRENCYTYPE', /*'Currency Type'*/'通貨タイプ');
-define('TXT_WPSC_CURRENCYSIGNLOCATION', /*'Currency Sign Location'*/'通貨シンボルの位置');
-define('TXT_WPSC_GSTRATE', /*'the GST rate'*/'GSTレート');
-define('TXT_WPSC_MAXDOWNLOADS', /*'the download limit'*/'ダウンロード制限値');
+define('TXT_WPSC_CURRENCYTYPE', '通貨タイプ');
+define('TXT_WPSC_CURRENCYSIGNLOCATION', '通貨シンボルの位置');
+define('TXT_WPSC_GSTRATE', 'GSTレート');
+define('TXT_WPSC_MAXDOWNLOADS', 'ダウンロード制限値');
 define('TXT_WPSC_DISPLAYPNP', 'Display or hide postage and packaging');
 define('TXT_WPSC_DISPLAYSPECIALS', 'Display or hide specials on the sidebar');
 define('TXT_WPSC_POSTAGEAND_PACKAGING', 'Default postage and packaging');
-define('TXT_WPSC_PURCHLOGEMAIL', /*'email address that purchase log is sent to'*/'購入ログの送信先メールアドレス');
+define('TXT_WPSC_PURCHLOGEMAIL', '購入ログの送信先メールアドレス');
 define('TXT_WPSC_RETURNEMAIL', '購入ログの送信元メールアドレス');
 define('TXT_WPSC_TERMSANDCONDITIONS', '利用条件をチェックアウト');
 define('TXT_WPSC_DEFAULTBRAND', '既定のブランド');
@@ -467,38 +464,38 @@ define('TXT_WPSC_DEFAULTCATEGORY', '既定のカテゴリー');
 define('TXT_WPSC_PAYPALBUSINESS', 'Paypal Business');
 define('TXT_WPSC_PAYPALURL', 'Paypal URL');
 define('TXT_WPSC_SHOWPRODUCTRATINGS', /*'Show Product Ratings'*/'商品の評価を表示');
-define('TXT_WPSC_PRODUCTSPAGE', /*'Products Page'*/'商品ページ');
+define('TXT_WPSC_PRODUCTSPAGE', '商品ページ');
 define('TXT_WPSC_CHECKOUT', 'チェックアウト');
-define('TXT_WPSC_ENTERDETAILS', /*'Enter Your Details'*/'詳細を入力してください');
-define('TXT_WPSC_TRANSACTIONRESULTS', /*'Transaction Results'*/'トランザクション結果');
+define('TXT_WPSC_ENTERDETAILS', '詳細を入力してください');
+define('TXT_WPSC_TRANSACTIONRESULTS', '取引結果');
 define('TXT_WPSC_SELECTACATEGORY', 'グループを選択');
 define('TXT_WPSC_SELECTABRAND', 'ブランドを選択');
-define('TXT_WPSC_PRODUCTNAME', /*'Product Name'*/'商品名');
-define('TXT_WPSC_PRODUCTDESCRIPTION', /*'Product Description'*/'商品の説明');
-define('TXT_WPSC_ADDITIONALDESCRIPTION', /*'Additional Description'*/'追加の説明');
+define('TXT_WPSC_PRODUCTNAME', '商品名');
+define('TXT_WPSC_PRODUCTDESCRIPTION', '商品の説明');
+define('TXT_WPSC_ADDITIONALDESCRIPTION', '追加の説明');
 define('TXT_WPSC_PRICE', /*'Price'*/'価格');
-define('TXT_WPSC_TAXALREADYINCLUDED', '消費税を除外(消費税はショップ管理で設定する)'); // this text has changed and needs updating
-define('TXT_WPSC_SPECIAL', '特別/セール価格'); // this text has changed and needs updating
+define('TXT_WPSC_TAXALREADYINCLUDED', '税込み'); // this text has changed and needs updating
+define('TXT_WPSC_SPECIAL', '特別価格'); // this text has changed and needs updating
 define('TXT_WPSC_PRODUCT_DISPLAY', '商品の表示方法');
 
-define('TXT_WPSC_PRODUCTSTOCK', /*'Product Stock'*/'在庫');
+define('TXT_WPSC_PRODUCTSTOCK', '在庫');
 
 define('TXT_WPSC_UNTICKBOX', '在庫僅少－在庫切れの場合このチェックボックスを解除するか在庫を追加するまでショップには表示されません');
 define('TXT_WPSC_LIMITED_STOCK', '在庫僅少');
 
-define('TXT_WPSC_CATEGORY', /*'Category'*/'カテゴリー');
+define('TXT_WPSC_CATEGORY', 'カテゴリー');
 define('TXT_WPSC_BRAND', 'ブランド');
-define('TXT_WPSC_PRODUCT_VARS', /*'Product Variations'*/'バリエーション');
-define('TXT_WPSC_ADD_VAR', /*'Add Variation Set'*/'バリエーションセットを追加');
-define('TXT_WPSC_EDIT_VAR', /*'Edit Variation Set'*/'バリエーションセットを編集');
-define('TXT_WPSC_SELECTAVARIATION', /*'Select a Variation'*/'バリエーションを選択');
-define('TXT_WPSC_NEW_VARIATION', /*'Create a new Variation'*/'バリエーションを新規作成');
+define('TXT_WPSC_PRODUCT_VARS', 'バリエーション');
+define('TXT_WPSC_ADD_VAR', 'バリエーションセットを追加');
+define('TXT_WPSC_EDIT_VAR', 'バリエーションセットを編集');
+define('TXT_WPSC_SELECTAVARIATION', 'バリエーションを選択');
+define('TXT_WPSC_NEW_VARIATION', 'バリエーションを新規作成');
 
-define('TXT_WPSC_PRODUCTATT', /*'Product Attachments'*/'商品への添付');
+define('TXT_WPSC_PRODUCTATT', '商品への添付');
 define('TXT_WPSC_DOWNLOADABLEPRODUCT', 'ファイルのアップロード');
-define('TXT_WPSC_FILETOBEPRODUCT',/* 'Note: if this is filled in, the file uploaded will be the product to be purchased.'*/'注意:ここに入力すると、アップロードされたファイルが購入する商品となります');
-define('TXT_WPSC_RESIZEIMAGE', /*'Resize Image'*/'イメージをリサイズ');
-define('TXT_WPSC_DONOTRESIZEIMAGE', /*'do not resize image.'*/'イメージをリサイズしない');
+define('TXT_WPSC_FILETOBEPRODUCT','注意:ここに入力すると、アップロードされたファイルが購入する商品となります');
+define('TXT_WPSC_RESIZEIMAGE', 'イメージをリサイズ');
+define('TXT_WPSC_DONOTRESIZEIMAGE', 'イメージをリサイズしない');
 // define('TXT_WPSC_USEDEFAULTHEIGHTANDWIDTH', 'use default height and width');
 // define('TXT_WPSC_USE', 'use');
 // define('TXT_WPSC_PXHEIGHTBY', 'px height by');
@@ -553,7 +550,7 @@ define('TXT_WPSC_VISITTHESHOP', /*'Visit the shop'*/'ショップを訪問する
 define('TXT_WPSC_PAGES', /*'Pages'*/'ページ');
 define('TXT_WPSC_OUTOF', '中');
 define('TXT_WPSC_VOTES', /*'votes.'*/'投票');
-define('TXT_WPSC_CLICKSTARSTORATE', /*'Click stars to rate'*/'評価するにはスターをクリックしてください');
+define('TXT_WPSC_CLICKSTARSTORATE', '評価するにはスターをクリックしてください');
 define('TXT_WPSC_AVERAGERATINGOF', /*'Average rating of'*/'平均レート');
 define('TXT_WPSC_YOURVOTE', 'あなたの評価');
 define('TXT_WPSC_AVERAGEVOTE', /*'Average vote'*/'平均');
@@ -570,12 +567,12 @@ define('TXT_WPSC_ITEMHASNOTBEENADDED', /*'The item has not been added'*/'アイ�
 define('TXT_WPSC_ADDNEWCATEGORY', '新しいグループを追加');
 define('TXT_WPSC_SUBMIT', /*'Submit'*/'送信');
 define('TXT_WPSC_SELECTAVALIDCATEGORY', '有効なグループを選択してください');
-define('TXT_WPSC_ADDNEWPRODUCT', /*'Add Product'*/'商品を追加');
+define('TXT_WPSC_ADDNEWPRODUCT', '商品を追加');
 define('TXT_WPSC_PRODUCTQUANTITY', /*'Productquantity'*/'商品の数量');
 define('TXT_WPSC_PRODUCTIMAGE', /*'Product Image'*/'商品のイメージ');
 define('TXT_WPSC_PRODUCTPRICE', /*'Product Price'*/'商品の価格');
-define('TXT_WPSC_NOTAX', /*'No tax'*/'消費税抜き');
-define('TXT_WPSC_ABOUT', /*'About'*/'...について');
+define('TXT_WPSC_NOTAX', '税抜き');
+define('TXT_WPSC_ABOUT', '...について');
 define('TXT_WPSC_ABOUTCONTENT', 'Welcome to the e-commerce panel. <br /><br /><strong>Note:</strong> on some setups, the shopping cart may empty on every page load, if this happens, you will have to add this line:<br /><br />session_start();<br /><br />to the index.php file in the base wordpress directory.<br />');
 define('TXT_WPSC_CONTACTDETAILS', /*'Please enter your contact details:'*/'連絡先を入力してください');
 define('TXT_WPSC_CREDITCARDHANDY', /*'Note, Once you press submit, you will need to have your Credit card handy.'*/'注意:「購入する」ボタンを押したら、クレジットカードを準備願います。<br>');
@@ -792,7 +789,7 @@ define('TXT_WPSC_DELETE_IMAGE', 'イメージを削除');
 define('TXT_WPSC_GOLD_OPTIONS', 'Goldオプション');
 define('TXT_WPSC_ACTIVATE_SETTINGS', '有効化設定: Gold Cart');
 define('TXT_WPSC_ACTIVATION_KEY', 'アクティベーションキー');
-define('TXT_WPSC_THANKSACTIVATED', 'Thanks, the gold shopping cart has been activated.');
+define('TXT_WPSC_THANKSACTIVATED', 'Gold Shopping Cartが有効化されました');
 define('TXT_WPSC_NOTACTIVATED', 'APIキーが正しくありません');
 
 define('TXT_WPSC_DEFAULT', '既定のビュー');
@@ -988,7 +985,7 @@ define('TXT_WPSC_PRODUCT_MEMBERSHIP_LENGTH', "メンバー期間");
 define('TXT_WPSC_DAYS', "日");
 define('TXT_WPSC_MONTHS', "月");
 define('TXT_WPSC_YEARS', "年");
-define('TXT_WPSC_MEMBERS_SUBSCRIPTION_ENDED', "Your subscription has ended.");
+define('TXT_WPSC_MEMBERS_SUBSCRIPTION_ENDED', "購読期間が終了しました");
 define('TXT_WPSC_ACTIVATE_SETTINGS_MEMBERS', 'Activation Settings: Members Module');
 define('TXT_WPSC_GOLD_CART', 'Gold Cart');
 define('TXT_WPSC_SHOW_CATEGORY_DESCRIPTION', 'グループの説明を表示');
@@ -1050,9 +1047,8 @@ define('TXT_WPSC_DELIVERY_STATE', '配送先－都道府県');
 define('TXT_WPSC_SHIPWIREEMAIL', 'ShipWireメール');
 define('TXT_WPSC_SHIPWIREPASSWORD', 'ShipWireパスワード');
 define('TXT_WPSC_SHIPWIRESETTINGS', 'ShipWire設定');
-define('TXT_WPSC_NO_DOWNLOADABLES', 'You have not purchased any downloadable products yet.');
+define('TXT_WPSC_NO_DOWNLOADABLES', 'ダウンロード商品を購入していません.');
 define('TXT_DISPLAY_VARIATIONS', 'バリエーションを表示');
-
 
 define('TXT_WPSC_NONAME', '名前がありません');
 define('TXT_WPSC_WEIGHT', '重さ');
@@ -1075,5 +1071,18 @@ define("TXT_WPSC_EDIT_GROUP", "グループ編集");
 define("TXT_WPSC_CURRENT_GROUP", "選択されているグループ");
 define("TXT_WPSC_ADD_GROUP", "グループを追加");
 
-
+/*
+Added by N. Sato / Tokyo dated July, 29th, 2009
+*/
+define("TXT_WPSC_UPGRADES_PAGE", "アップグレードページ");
+define("TXT_WPSC_ADDNEWCATEGORY_TITLE","カテゴリータイトルを追加");
+define("TXT_WPSC_ADDING_A_NEW_CATEGORY","カテゴリーのタイトルを追加します...");
+define("TXT_WPSC_CATEGORY_LIST","カテゴリーのリスト");
+define("TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST","全カテゴリー／商品のリスト");
+define("TXT_WPSC_API_RESET","API Keyをリセット");
+define("TXT_WPSC_API_RESET_DESCRIPTION","API Keyをリセットします");
+define("TXT_WPSC_API_HAS_BEEN_RESET","API Keyがリセットされました");
+define("TXT_WPSC_TRACKINGEMAILSUBJECT","トラッキングメールの件名");
+define("TXT_WPSC_TRACKINGEMAIL","トラッキングメール");
+define("TXT_WPSC_NOITEMSINTHISGROUP","このグループには商品がありません");
 ?>
