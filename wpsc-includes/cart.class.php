@@ -262,12 +262,13 @@ function wpsc_strleft($s1, $s2) {
 }
 function wpsc_google_checkout(){
 	$currpage = wpsc_selfURL();
-	if (array_search("google",(array)get_option('custom_gateway_options')) !== false && $currpage != get_option('checkout_url')) {
+	//exit('<pre>'.print_r(get_option('custom_gateway_options'), true).'</pre>');
+	if (array_search("google",(array)get_option('custom_gateway_options')) !== false && $currpage != get_option('shopping_cart_url')) {
 		global $nzshpcrt_gateways;
 		foreach($nzshpcrt_gateways as $gateway) {
 			if($gateway['internalname'] == 'google' ) {
 				$gateway_used = $gateway['internalname'];
-				$gateway['function']();
+				$gateway['function'](true);
 			}
 		}
 	}

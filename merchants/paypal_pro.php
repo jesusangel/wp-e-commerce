@@ -1,6 +1,7 @@
 <?php
 /*
  * Some parts of this code were inspired by the shopp plugin and their paypal pro module. 
+ * and copyright Ingenesis Limited, 19 August, 2008.
  */
 $nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Pro';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_pro';

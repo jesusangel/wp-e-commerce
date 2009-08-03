@@ -16,6 +16,21 @@ if($_REQUEST['wpsc_ajax_action'] == 'special_widget') {
 	add_action('init', 'wpsc_special_widget');
 }
 
+
+function wpsc_api_key_finder(){
+ 	global $wpdb; 
+ 	$transactid = $wpdb->escape($_POST['wpsc_transaction_id']);
+ 	$sql = 'SELECT `id` FROM `'.WPSC_TABLE_PURCHASE_LOGS.'` WHERE `transactid`='.$transactid;
+ 	$id = $wpdb->get_var($sql);
+ 	
+//exit('ID<pre>'.print_r($id, true).'</pre>');
+ 	//exit();
+}
+
+if($_REQUEST['wpsc_ajax_action'] == 'api_key_finder') {
+	add_action('init', 'wpsc_api_key_finder');
+}
+
 /**
 	* add_to_cart function, used through ajax and in normal page loading.
 	* No parameters, returns nothing
@@ -438,9 +453,7 @@ function wpsc_submit_checkout() {
    		
    		foreach((array)$categoriesIDs as $catid){
    			$sql ="SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE visible=0 AND categoryid=".$catid[0];
-   		//	exit($sql);
    			$countries = $wpdb->get_col($sql);
-   			//exit(print_r($countries));
    			if(in_array($selectedCountry[0]['id'], (array)$countries)){
 					$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
 					$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
@@ -473,12 +486,12 @@ function wpsc_submit_checkout() {
 		$tax = $wpsc_cart->calculate_total_tax();
 		$total = $wpsc_cart->calculate_total_price();
 		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}','{$wpsc_cart->selected_region}', '{$wpsc_cart->delivery_region}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";
+		
 		//exit($sql);		
 		$wpdb->query($sql);
 		
 		
 		$purchase_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
-		//$purchase_log_id = 1;
 		//exit('PurchLog id'.$purchase_log_id);
 		$wpsc_checkout->save_forms_to_db($purchase_log_id);
 		$wpsc_cart->save_to_db($purchase_log_id);
@@ -490,13 +503,20 @@ function wpsc_submit_checkout() {
 		} else {
 			$seperator = "&";
 		}
-// 		exit();
+		 		
 		// submit to gateway
 		foreach($nzshpcrt_gateways as $gateway) {
-			if($gateway['internalname'] == $submitted_gateway ) {
+			if($gateway['internalname'] == $submitted_gateway && $gateway['internalname'] != 'google') {
+
 				$gateway_used = $gateway['internalname'];
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 				$gateway['function']($seperator, $sessionid);
+				break;
+			}elseif($gateway['internalname'] == 'google' && $gateway['internalname'] == $submitted_gateway){
+				$gateway_used = $gateway['internalname'];
+				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
+				$_SESSION['gateway'] = 'google';
+				header('Location: '.get_option('shopping_cart_url'));
 				break;
 			}
 		}

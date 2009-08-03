@@ -137,6 +137,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		<table class='product_editform' >
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
+				<div style='width:470px'>
 					<label for="wpsc_product_name">Product Name</label>
 					<div class='admin_product_name'>
 						<input id='wpsc_product_name' class='wpsc_product_name text' size='15' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
@@ -163,6 +164,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 						<p>
 	
 						</p>
+					</div>
 					</div>
 					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
 				</td>

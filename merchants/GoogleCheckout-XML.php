@@ -18,9 +18,9 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_google";
 $nzshpcrt_gateways[$num]['is_exclusive'] = true;
 $nzshpcrt_gateways[$num]['payment_type'] = "google_checkout";
 
-function gateway_google(){
+function gateway_google($fromcheckout = false){
 	global $wpdb, $wpsc_cart, $wpsc_checkout,$current_user,  $purchlogs;	
-	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+	//exit('<pre>'.print_r($fromcheckout, true).'</pre>');
 	if(!isset($wpsc_checkout)){
 	$wpsc_checkout = new wpsc_checkout();
 	}
@@ -65,7 +65,7 @@ function gateway_google(){
 			} else {
 				$seperator = "&";
 			}
-			Usecase($seperator, $_SESSION['wpsc_sessionid']);
+			Usecase($seperator, $_SESSION['wpsc_sessionid'], $fromcheckout);
 			//exit();
 
 		}
@@ -73,7 +73,7 @@ function gateway_google(){
 		
 	}
 
- function Usecase($seperator, $sessionid) {
+ function Usecase($seperator, $sessionid, $fromcheckout) {
 	global $wpdb, $wpsc_cart;
 	$purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";
 	$purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
@@ -180,12 +180,15 @@ function gateway_google(){
 			$google_button_size = 'SMALL';
 		}
 	// Display Google Checkout button
-	// echo ('<pre>'.print_r($cart, true).'</pre>');
+	// echo ('<pre>'.print_r($fromCheckout, true).'</pre>');
 	 //unset($_SESSION['wpsc_sessionid']);
+	 //if($fromCheckout){
 	echo $cart->CheckoutButtonCode($google_button_size);
+	//}
 }
 
 function wpsc_google_checkout_page(){
+global $wpsc_gateway;
 	 $script = "<script type='text/javascript'>
 	 				jQuery(document).ready(
   						function()
@@ -196,10 +199,17 @@ function wpsc_google_checkout_page(){
 	 					});
 	 			</script>";
 	 $options = get_option('payment_gateway');
-	// echo $options;
-	 if($options == 'google'){
+// exit('HELLO<pre>'.print_r(get_option('custom_gateway_options'), true).'</pre>');
+
+	//foreach((array)get_option('custom_gateway_options') as $gateway){
+		if(in_array('google', (array)get_option('custom_gateway_options'))){
+			$options = 'google';
+		}
+//	}
+	 if($options == 'google' && isset($_SESSION['gateway'])){
+	 	unset($_SESSION['gateway']);
 		echo $script;
- 		gateway_google();
+ 		gateway_google(true);
 	 }
 
  
