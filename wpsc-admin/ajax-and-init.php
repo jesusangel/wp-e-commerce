@@ -871,8 +871,8 @@ function wpsc_swfupload_images() {
 			$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
 			if($product_id > 0) {
 				$previous_image = $wpdb->get_var("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$id}' WHERE `id`='{$product_id}' LIMIT 1");
-				$image_replaced = true;
 			}
+			$image_replaced = true;
 			$output .= "upload_status=1;\n";
 			$output .= "image_src='".$src."';\n";
 			$output .= "image_id='$id';\n";
