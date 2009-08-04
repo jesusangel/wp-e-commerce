@@ -3,6 +3,11 @@
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
 
+define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Manage your thumbnails');
+define('TXT_WPSC_MAX_UPLOAD_SIZE', 'Max Upload Size');
+define('TXT_WPSC_PUBLISH', 'Publish');
+define('TXT_WPSC_DELETE_LAYER', 'Delete Layer');
+define('TXT_WPSC_NEW_CURRENCY', 'New Currency');
 define('TXT_WPSC_API_RESET_DESCRIPTION', 'Enter your API name and key to release it from an old site that you no longer use.');
 define('TXT_WPSC_API_HAS_BEEN_RESET', 'Your API key has been Reset');
 define('TXT_WPSC_API_RESET', 'API Key Reset');
@@ -47,7 +52,6 @@ define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Complete this form to i
 
 define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information"); 
 define('TXT_WPSC_ECOMMERCE', 'Products'); 
-define('TXT_WPSC_PRODUCTS', 'Manage Products'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
 define('TXT_WPSC_COUPONS', 'Coupon Discount');

@@ -127,9 +127,9 @@ function wpsc_product_basic_details_form(&$product_data) {
   <h3 class='form_heading'>
  <?php
   if($product_data['id'] > 0) {
-		echo __('Edit Product')." <span>(<a href='".add_query_arg('page','wpsc-edit-products', remove_query_arg('product_id', 'admin.php'))."'>".__('Add new Product')."</a>)</span>";
+		echo TXT_WPSC_EDIT_PRODUCT." <span>(<a href='".add_query_arg('page','wpsc-edit-products', remove_query_arg('product_id', 'admin.php'))."'>".TXT_WPSC_ADDNEWPRODUCT."</a>)</span>";
 	} else {
-		_e('Add Product');
+		echo TXT_WPSC_ADDNEWPRODUCT;
 	} 
 	?>
 	</h3>
@@ -138,7 +138,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
 				<div style='width:470px'>
-					<label for="wpsc_product_name">Product Name</label>
+					<label for="wpsc_product_name"><?php echo TXT_WPSC_PRODUCTNAME?></label>
 					<div class='admin_product_name'>
 						<input id='wpsc_product_name' class='wpsc_product_name text' size='15' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 						<a href='#' class='shorttag_toggle'></a>
@@ -199,7 +199,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 			</tr>
 		
 			<tr>
-				<td ><a href='' class='wpsc_add_new_currency'>+ New Currency</a></td>
+				<td ><a href='' class='wpsc_add_new_currency'>+ <?php echo TXT_WPSC_NEW_CURRENCY;?></a></td>
 			</tr>
 			<tr class='new_layer'>
 					<td>
@@ -225,9 +225,9 @@ function wpsc_product_basic_details_form(&$product_data) {
 						</select>
 						</td>
 						<td>
-						Price<?php //echo TXT_WPSC_PRICE; ?> :<br />
+						<?php echo TXT_WPSC_PRICE;?> :<br />
 						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
-						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'>Delete Layer</a>
+						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo TXT_WPSC_DELETE_LAYER;?></a>
 						</td>
 
 			</tr>
@@ -756,9 +756,9 @@ function wpsc_product_advanced_forms($product_data='') {
 		$output .= '
 		<tr>
 			<td colspan="2" class="itemfirstcol"><br />
-						<strong>'.__("Publish:","wpsc").'</strong> <label for="publish_yes">'.__("Yes").'
+						<strong>'.__("Publish").': </strong> <label for="publish_yes">'.__("Yes").'
 				</label><input name="publish" id="publish_yes" type="radio" value="1" '.((!is_array($product_data) || $product_data['publish']) ? 'checked="checked" ' : '' ).' />
-				<label for="publish_no">'.__("No","wpsc").'
+				<label for="publish_no">'.__("No").'
 			</label><input name="publish" id="publish_no" type="radio" value="0" '.((is_array($product_data) && !$product_data['publish']) ? 'checked="checked" ' : '' ).' />
 			</td>
 		</tr>';
@@ -929,7 +929,7 @@ function wpsc_product_image_forms($product_data='') {
 				<br />
 				
 			</div>
-			<p><strong <?php echo $display; ?>><?php _e('Manage your thumbnails'); ?></strong></p>
+			<p><strong <?php echo $display; ?>><?php echo TXT_WPSC_MANAGE_YOUR_THUMBNAILS;?></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
@@ -954,13 +954,13 @@ function wpsc_product_download_forms($product_data='') {
 	$output .= "<div class='inside'>";
 	
 	$output .= "<h4>".TXT_WPSC_DOWNLOADABLEPRODUCT.":</h4>";
-	$output .= "<input type='file' name='file' value='' /><br />". __('Max Upload Size')." : <span>".$upload_max."</span><br /><br />";
+	$output .= "<input type='file' name='file' value='' /><br />".TXT_WPSC_MAX_UPLOAD_SIZE." : <span>".$upload_max."</span><br /><br />";
 	$output .= wpsc_select_product_file($product_data['id'])."<br />";
     
 	if($product_data['file'] > 0) {
     	$output .= TXT_WPSC_PREVIEW_FILE.": ";
     	
-    	$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product_data['id']."' style='float: left;' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
+    	$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product_data['id']."' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".TXT_WPSC_CLICKTODOWNLOAD."</span></a>";
 		
     	$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_data['file']."' LIMIT 1",ARRAY_A);
     	if(($file_data != null) && (function_exists('listen_button'))) {

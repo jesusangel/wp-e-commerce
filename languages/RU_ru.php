@@ -4,6 +4,11 @@ This is a language file for the WP Shopping Cart plugin version 3.6.10
 require(WPSC_FILE_PATH.'/languages/EN_en.php');
 */
 
+define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Управление Вашими миниатюрами');
+define('TXT_WPSC_MAX_UPLOAD_SIZE', 'Максимальный размер загружаемого файла');
+define('TXT_WPSC_PUBLISH', 'Опубликовать');
+define('TXT_WPSC_DELETE_LAYER', 'Удалить');
+define('TXT_WPSC_NEW_CURRENCY', 'Новая ценa');
 define('TXT_WPSC_UPGRADES_PAGE', 'Обновления');
 define('TXT_WPSC_API_RESET', 'Сброс API Ключа');
 define('TXT_WPSC_API_RESET_DESCRIPTION', 'Введите Ваши API имя и ключ для открепления его от вашего старого сайта, который Вы более не используете.');
@@ -31,7 +36,6 @@ define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Заполните жт
 
 define("TXT_WPSC_ADDITIONAL_INFO", "3. Дополнительная информация"); 
 define('TXT_WPSC_ECOMMERCE', 'Товары'); 
-define('TXT_WPSC_PRODUCTS', 'Управление товарами'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','Ежегодный график продаж');
 
 define('TXT_WPSC_COUPONS', 'Купон на скидку');
