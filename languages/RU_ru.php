@@ -1,9 +1,22 @@
 <?php
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
+require(WPSC_FILE_PATH.'/languages/EN_en.php');
 */
 
-define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
+define('TXT_WPSC_UPGRADES_PAGE', 'Обновления');
+define('TXT_WPSC_API_RESET', 'Сброс API Ключа');
+define('TXT_WPSC_API_RESET_DESCRIPTION', 'Введите Ваши API имя и ключ для открепления его от вашего старого сайта, который Вы более не используете.');
+define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'Добавить категорию');
+define('TXT_WPSC_ADDING_A_NEW_CATEGORY', 'Добавьте новую категорию и Вы сможете выбирать ее при добавлении новго продукта.');
+define('TXT_WPSC_CURRENT_GROUP', 'Группа &quot;[categorisation]&quot;');
+define('TXT_WPSC_BUTTON_SETTINGS', 'Настройки кнопок');
+define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Настройки товаров');
+define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Тема автоматических писем пользователям');
+define('TXT_WPSC_TRACKINGEMAILMSG', 'Ваши покупки из %shop_name% были отправлены Вам. Вы скоро должны ее получить. Для отслеживания Вашего товара используйте указанное ID. \r\n Ваше ID для отслеживания: %trackid%');
+define('TXT_WPSC_TRACKINGEMAIL', 'Текст автоматического письма');
+
+define('TXT_WPSC_COUPONSINVALID', 'Купон на скидку более не действует.');
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Скачивание файлов запрещено для єтих IP адресов %s');
 define('TXT_WPSC_EMAIL_BUYER', 'Отправить повторно заказ покупателю');
 
