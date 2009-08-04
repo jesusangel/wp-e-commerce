@@ -215,6 +215,7 @@ function wpsc_test_making_product_url_names() {
 			//exit($existing_name." ". $url_name);
 			echo "Existing Name: \t\t {$existing_name}\n";
 			echo "Inital URL Name: \t {$url_name}\n";
+			echo "Sanitised Name: \t ". sanitize_title($post_data['name'])."\n";
   		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$product_id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
 				if(array_search($url_name, $similar_names) !== false) {
 				  $i = 0;

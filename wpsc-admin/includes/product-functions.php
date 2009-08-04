@@ -211,7 +211,9 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		// strip slashes, trim whitespace, convert to lowercase
 		$tidied_name = strtolower(trim(stripslashes($post_data['name'])));
 		// convert " - " to "-", all other spaces to dashes, and remove all foward slashes.
-		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+		//$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+		$url_name =  sanitize_title($tidied_name);
+		
 		// Select all similar names, using an escaped version of the URL name 
 		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$product_id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
 
