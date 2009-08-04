@@ -122,7 +122,7 @@ function wpsc_select_product_file($product_id = null) {
   //return false;
   $file_list = wpsc_uploaded_files();
   $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
-  $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span>";
+  $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span><br>";
 	//$output .= "<pre>".print_r($file_list,true)."</pre>";
   $output .= "<div class='ui-widget-content multiple-select  ".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
   //$output .= "<div class='select_product_file'>";
