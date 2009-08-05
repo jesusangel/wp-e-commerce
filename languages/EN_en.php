@@ -3,6 +3,8 @@
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
 
+define('TXT_WPSC_LOCK_TAX', 'Lock Tax to Billing Country');
+define('TXT_WPSC_REVIEW_YOUR_ORDER', 'Please review your order');
 define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Manage your thumbnails');
 define('TXT_WPSC_MAX_UPLOAD_SIZE', 'Max Upload Size');
 define('TXT_WPSC_PUBLISH', 'Publish');
@@ -166,6 +168,7 @@ define('TXT_WPSC_UPS_DAILY_PICKUP', 'Daily Pickup');
 
 
 define('TXT_WPSC_IMPORT_CSV', 'Import Products CSV');
+define('TXT_WPSC_IMPORT_CSV_DESCRIPTION', '<p>You can import your products from a comma delimited text file.</p><p>An example of a cvs import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>');
 define('TXT_WPSC_MORE', 'More');
 
 define('TXT_WPSC_WEIGHT_SETTINGS', 'Weight Settings');
@@ -800,8 +803,8 @@ define('TXT_WPSC_PURCHASELOGEMAIL', 'Purchase Log Email');
 define('TXT_WPSC_REPLYEMAIL', 'Reply Email');
 define('TXT_WPSC_BRANDNOCAP', 'brand');
 define('TXT_WPSC_CATEGORYNOCAP', 'category');
-define('TXT_WPSC_UDPATING', 'Updating');
-define('TXT_WPSC_UDPATING_CART', 'Updating...');
+define('TXT_WPSC_UPDATING', 'Updating');
+define('TXT_WPSC_UPDATING_CART', 'Updating cart...');
 define('TXT_WPSC_MOREDETAILS', 'More Details');
 define('TXT_WPSC_ADDTOCART', 'Add To Cart');
 define('TXT_WPSC_AVGCUSTREVIEW', 'Avg. Customer Rating');

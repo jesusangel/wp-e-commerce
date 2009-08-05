@@ -198,7 +198,7 @@ global $wpsc_query, $wpdb;
 										<?php endif; ?>
 										<div class='wpsc_loading_animation'>
 										<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
-										<?php echo TXT_WPSC_UDPATING_CART; ?>
+										<?php echo TXT_WPSC_UPDATING_CART; ?>
 									</div>
 								</div>
 							<?php else : ?>

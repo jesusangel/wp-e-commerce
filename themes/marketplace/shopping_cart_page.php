@@ -5,7 +5,7 @@ $wpsc_gateway = new wpsc_gateways();
 $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 if(wpsc_cart_item_count() > 0) :
 ?>
-<p><?php _e("Please review your order"); ?></p>
+<p><?php echo TXT_WPSC_REVIEW_YOUR_ORDER; ?></p>
 <table class="productcart">
 	<tr class="firstrow">
 		<td class='firstcol'></td>

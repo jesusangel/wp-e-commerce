@@ -182,7 +182,7 @@ $image_height = get_option('single_view_image_height');
 							
 							<div class='wpsc_loading_animation'>
 								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" class="loadingimage" />
-								<?php echo TXT_WPSC_UDPATING_CART; ?>
+								<?php echo TXT_WPSC_UPDATING_CART; ?>
 							</div>
 							
 						<?php else : ?>

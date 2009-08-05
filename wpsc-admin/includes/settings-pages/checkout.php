@@ -53,7 +53,7 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 					break;
 				}
 			?>
-			<td scope="row"><?php _e('Lock Tax to Billing Country'); ?>:</td>
+			<td scope="row"><?php echo TXT_WPSC_LOCK_TAX; ?>:</td>
 			<td>
 			<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
 			<label for='multi_adding1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
