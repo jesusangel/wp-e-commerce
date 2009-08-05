@@ -471,7 +471,7 @@ function wpsc_products_page($content = '') {
 			}
 			$output .= ob_get_contents();
 			ob_end_clean();
-			$output = str_replace('$','\$', $output);
+// 			$output = str_replace('$','\$', $output);
 //     } else {
 // 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 // 			ob_start();
