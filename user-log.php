@@ -319,7 +319,7 @@ $date_list[0]['end'] = $end_timestamp;
               echo " </td>";
           
               echo " <td>";
-              $total_shipping = $purchase['base_shipping'];
+              $total_shipping += $purchase['base_shipping'];
               $endtotal += $total_shipping;    
               echo nzshpcrt_currency_display($total_shipping, 1) . "<br />";
               echo nzshpcrt_currency_display($endtotal,1);

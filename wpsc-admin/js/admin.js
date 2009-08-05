@@ -542,6 +542,8 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 				}			
 			}
 		});
+		return false;
+
 	});
 });
 	

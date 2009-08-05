@@ -161,8 +161,8 @@ class usps {
 			'</IntlRateRequest>';
 			$request = 'API=IntlRate&XML=' . urlencode($request);
 		}
-		$usps_server = 'production.shippingapis.com';
-		$api_dll = 'shippingapi.dll';
+		$usps_server = 'testing.shippingapis.com';
+		$api_dll = 'shippingapiTest.dll';
 		
 		$url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
 		//exit('URL '.$url);	
@@ -175,7 +175,7 @@ class usps {
 		curl_setopt($ch, CURLOPT_USERAGENT, 'osCommerce'); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 		$body = curl_exec($ch);
-	//	exit('<pre>'.print_r($body, true).'</pre>');
+		exit('<pre>'.print_r($body, true).'</pre>');
 		curl_close($ch);
 		$rates=array();
 		$response=array();
