@@ -54,7 +54,7 @@ function wpsc_enqueue_user_script_and_css() {
 		
 		
 		wp_enqueue_script( 'jQuery');
-		wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery', 'livequery'), WPSC_VERSION.WPSC_MINOR_VERSION);
+		wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
 		wp_enqueue_script('wp-e-commerce-ajax-legacy', WPSC_URL.'/js/ajax.js', false, WPSC_VERSION.WPSC_MINOR_VERSION);
 		wp_enqueue_script('wp-e-commerce-dynamic', $siteurl."/index.php?wpsc_user_dynamic_js=true", false, $version_identifier);
 		wp_enqueue_script('livequery', WPSC_URL.'/wpsc-admin/js/jquery.livequery.js', array('jquery'), '1.0.3');
@@ -365,7 +365,7 @@ function wpsc_display_products($query) {
 	}
 	$output = ob_get_contents();
 	ob_end_clean();
-	$output = str_replace('$','\$', $output);
+	//$output = str_replace('$','\$', $output);
 
 	list($temp_wpsc_query, $wpsc_query) = array($wpsc_query, $temp_wpsc_query); // swap the wpsc_query objects back
 	return $output;
@@ -471,7 +471,7 @@ function wpsc_products_page($content = '') {
 			}
 			$output .= ob_get_contents();
 			ob_end_clean();
-// 			$output = str_replace('$','\$', $output);
+ 			$output = str_replace('$','\$', $output);
 //     } else {
 // 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 // 			ob_start();
