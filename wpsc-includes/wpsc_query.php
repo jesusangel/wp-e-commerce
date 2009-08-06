@@ -626,7 +626,7 @@ function wpsc_the_variation_out_of_stock() {
 		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
 		
 		$variation_stock_data = $wpdb->get_var("SELECT `stock` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
-		if($variation_stock_data <= 1) {
+		if($variation_stock_data < 1) {
 			$out_of_stock = true;
 		}
 	}
