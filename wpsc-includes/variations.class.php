@@ -43,7 +43,17 @@ class nzshpcrt_variations {
 			*  need different input names for editing and adding due to using different keys
 			*/
       if(($product_id > 0) && ($check_variation > 0)) {
-				$variation_values = $wpdb->get_results("SELECT `a`.`visible`, `b`.*  FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a` JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `b` ON `a`.`value_id` = `b`.`id`  WHERE `a`.`product_id` IN('{$product_id}') AND `a`.`variation_id` IN('{$variation['id']}')",ARRAY_A);
+        $variation_values_sql = " SELECT `values`.`id`, `values`.`name`, `assoc`.`visible`";
+				$variation_values_sql .= "FROM `".WPSC_TABLE_VARIATION_VALUES."` AS `values`";
+				$variation_values_sql .= "LEFT JOIN `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `assoc`";
+				$variation_values_sql .= "ON `assoc`.`value_id` = `values`.`id` OR ISNULL(`assoc`.`value_id`)";
+				$variation_values_sql .= "WHERE `values`.`variation_id` IN ('{$variation['id']}')";
+				$variation_values_sql .= "AND (`assoc`.`product_id` IN ('{$product_id}') OR `assoc`.`id` IS NULL)";
+				$variation_values_sql .= "ORDER BY `values`.`id`";
+
+				$variation_values = $wpdb->get_results($variation_values_sql,ARRAY_A);
+				
+				//echo "SELECT `a`.`visible`, `b`.*  FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a` JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `b` ON `a`.`value_id` = `b`.`id`  WHERE `a`.`product_id` IN('{$product_id}') AND `a`.`variation_id` IN('{$variation['id']}')";
 			}
 			if(count($variation_values) < 1) {
 				$variation_values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` IN('{$variation['id']}')",ARRAY_A);
@@ -93,7 +103,7 @@ class nzshpcrt_variations {
       if($variation_values != null) {
         foreach($variation_values as $variation_value) {
           if(isset($_POST['edit_var_val'])) {
-            if($_POST['edit_var_val'][$variation_value['id']] == 1) {
+            if($_POST['edit_var_val'][$variation_id][$variation_value['id']] == 1) {
               $output_variation_values[$variation_id][$variation_value['id']]['active'] = 1;
             } else {
 							$output_variation_values[$variation_id][$variation_value['id']]['active'] = 0;
@@ -230,6 +240,7 @@ class nzshpcrt_variations {
       //exit("SELECT `a`.*, {$join_selected_cols} FROM  `".WPSC_TABLE_VARIATION_PROPERTIES."` AS `a` JOIN {$join_tables} ON {$join_on} WHERE `a`.`product_id` = '$product_id' AND {$join_conditions} ORDER BY {$join_order}");
       // Assemble and execute the SQL query
       $associated_variation_values = $wpdb->get_results("SELECT `a`.*, {$join_selected_cols} FROM  `".WPSC_TABLE_VARIATION_PROPERTIES."` AS `a` JOIN {$join_tables} ON {$join_on} WHERE `a`.`product_id` = '$product_id' AND {$join_conditions} ORDER BY {$join_order}", ARRAY_A);
+      //echo "SELECT `a`.*, {$join_selected_cols} FROM  `".WPSC_TABLE_VARIATION_PROPERTIES."` AS `a` JOIN {$join_tables} ON {$join_on} WHERE `a`.`product_id` = '$product_id' AND {$join_conditions} ORDER BY {$join_order}";
       // if there are no associated variations, run this function instead
       if(count($associated_variation_values) < 1) {
         $price = $wpdb->get_var("SELECT `price` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` ='{$product_id}' LIMIT 1");
@@ -460,7 +471,7 @@ class nzshpcrt_variations {
 		// Edit or update the variation values association table
     foreach($variation_value_list as $variation_id => $submitted_variation_values) {
       $variation_id = absint($variation_id);
-			if(!$wpdb->get_var("SELECT * FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}')") > 0) {
+			if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}')") < 1) {
 			  $wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_ASSOC."` ( `type` , `name` , `associated_id` , `variation_id` ) VALUES ( 'product', '', '{$product_id}', '{$variation_id}');");
 			}
 			$existing_variation_values = $wpdb->get_col("SELECT `value_id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE  `product_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') AND `visible` IN('1')");
@@ -494,7 +505,7 @@ class nzshpcrt_variations {
 				$variation_value_id = absint($variation_value_id); 
 				$visible_state = (int)(bool)$variation_state;
 				
-				if($wpdb->get_var("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}' AND `value_id` = '{$variation_value_id}'") > 0) {
+				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}' AND `value_id` = '{$variation_value_id}'") > 0) {
 					// if is present, update it
 					$rows_changed = $wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` SET `visible` = '{$visible_state}' WHERE `product_id` = '{$product_id}' AND `value_id` = '".(int)$variation_value_id."' LIMIT 1 ;");
 				} else {
@@ -510,14 +521,14 @@ class nzshpcrt_variations {
 			
 		}
 		
-// 		echo "/*\n\r";
-// 		echo print_r($modified_value_variations,true);
-// 		echo "*/\n\r";
-		
-		
-// 		echo "/*\n\r";
-// 		echo print_r($all_variation_values,true);
-// 		echo "*/\n\r";
+			//  		echo "/*\n\r";
+			//  		echo print_r($modified_value_variations,true);
+			//  		echo "*/\n\r";
+			// 		
+			// 		
+			//  		echo "/*\n\r";
+			//  		echo print_r($all_variation_values,true);
+			//  		echo "*/\n\r";
 		
 		/*
 		// this will spit errors if there are no variation values, so don't run if there are none

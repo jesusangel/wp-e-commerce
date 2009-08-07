@@ -670,7 +670,7 @@ function wpsc_admin_ajax() {
     	}
 
     	if(is_numeric($_POST['product_id']) && ($_POST['product_id'] > 0)) {
-      		$product_id = (int)$_POST['product_id'];
+      		$product_id = absint($_POST['product_id']);
 					$selected_price = (float)$_POST['selected_price'];
       		
        		// variation values housekeeping
@@ -699,7 +699,7 @@ function wpsc_admin_ajax() {
       	  			$variation_processor->add_to_existing_product($product_id,$variation_values);
         		}
       		}
-      		//echo "/* ".print_r($associated_variations,true)." */\n\r";
+      		//echo "/* ".print_r($variation_values,true)." */\n\r";
 					echo "edit_variation_combinations_html = \"".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view($product_id,  (array)$completed_variation_values)))."\";\n";
 
     	} else {
