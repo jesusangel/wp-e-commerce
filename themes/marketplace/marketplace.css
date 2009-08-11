@@ -1354,3 +1354,20 @@ div.wpsc_category_details img {
 div.wpsc_page_numbers a.selected {
 	text-decoration: underline;
 }
+div.item_no_image {
+  border: 2px solid #aaaaaa;
+  background: #cccccc;
+}
+
+div.item_no_image a, div.item_no_image div.link_substitute {
+  display: table-cell;
+  width: inherit;
+  height: inherit;
+  color: #666666;
+  text-align: center;
+  vertical-align: middle;
+}
+
+div.item_no_image a span, div.item_no_image div.link_substitute span {
+  display: block;
+}

@@ -9,6 +9,187 @@
  * @since 3.7
 */
 
+
+/// category template tags start here
+
+/**
+* wpsc starts category query function
+* gets passed the query and makes it into a global variable, then starts capturing the html for the category loop
+*/
+function wpsc_start_category_query($arguments = array()) {
+  global $wpdb, $wpsc_category_query;
+  $wpsc_category_query = $arguments;
+  ob_start();
+}
+
+/**
+* wpsc print category name function
+* places the shortcode for the category name
+*/
+function wpsc_print_category_name() {
+	echo "[wpsc_category_name]";
+}
+
+/**
+* wpsc print category description function
+* places the shortcode for the category description, accepts parameters for the description container
+* @param string starting HTML element
+* @param string ending HTML element
+*/
+function wpsc_print_category_description($start_element = '', $end_element = '') {
+  global $wpsc_category_query;
+  $wpsc_category_query['description_container'] = array('start_element' => $start_element, 'end_element' =>  $end_element);
+	echo "[wpsc_category_description]";
+}
+
+/**
+* wpsc print category url function
+* places the shortcode for the category URL
+*/
+function wpsc_print_category_url() {
+	echo "[wpsc_category_url]";
+}
+
+/**
+* wpsc print category id function
+* places the shortcode for the category URL
+*/
+function wpsc_print_category_id() {
+	echo "[wpsc_category_id]";
+}
+/**
+* wpsc print subcategory function
+* places the shortcode for the subcategories, accepts parameters for the subcategories container, have this as <ul> and </ul> if using a list
+* @param string starting HTML element
+* @param string ending HTML element
+*/
+function wpsc_print_subcategory($start_element = '', $end_element = '') {
+  global $wpsc_category_query;
+  $wpsc_category_query['subcategory_container'] = array('start_element' => $start_element, 'end_element' =>  $end_element);
+  echo "[wpsc_subcategory]";
+}
+/**
+* wpsc print category image function
+* places the shortcode for the category image, accepts parameters for width and height
+* @param integer width
+* @param integer height
+*/
+function wpsc_print_category_image($width = null, $height = null) {
+  global $wpsc_category_query;
+  $wpsc_category_query['image_size'] = array('width' => $width, 'height' =>  $height);
+	echo "[wpsc_category_image]";
+}
+
+/**
+* wpsc end category query function
+*/
+function wpsc_end_category_query() {
+	global $wpdb, $wpsc_category_query;
+  $category_html = ob_get_clean();
+  echo wpsc_display_category_loop($wpsc_category_query, $category_html);
+  unset($GLOBALS['wpsc_category_query']);
+}
+
+/**
+* wpsc category loop function
+* This function recursively loops throuh the categories to display the category tree.
+* WARNING: this function is recursive, be careful what you do with it.
+* @param array the category query
+* @param string the category html
+* @return string - the finished category html
+*/
+function wpsc_display_category_loop($query, $category_html){
+	global $wpdb;
+	$category_sql_segment = array();
+	$category_sql_segment[] = "`active`='1'";
+
+	if(is_numeric($query['category_group']) ) {
+	  $category_group = absint($query['category_group']);
+	} else {
+	  $category_group = 1;
+	}
+	$category_sql_segment[] = "`group_id`='$category_group'";
+	
+	/// select by parent category
+	$category_sql_segment[] = "`category_parent` = '".absint($query['parent_category_id'])."'";
+
+	if(!isset($query['order_by'])) {
+		$query['order_by'] = array("column" => 'name', "direction" =>'asc');
+	}
+  $column = $wpdb->escape($query['order_by']['column']);
+
+	if(strtolower($query['order_by']['direction']) == "desc") {
+		$order = "DESC";
+	} else {
+		$order = "ASC";
+	}
+  $category_data = $wpdb->get_results("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order",ARRAY_A);
+
+  $output ='';
+  foreach((array)$category_data as $category_row) {
+    $modified_query = $query;
+    $modified_query['parent_category_id'] = $category_row['id'];
+    
+    $category_description = '';
+		if($category_row['description'] != '') {
+      $start_emement = $query['description_container']['start_element'];
+      $end_emement = $query['description_container']['end_element'];
+			$category_description =  $start_emement.wpautop(wptexturize( wp_kses(stripslashes($category_row['description']), $allowedtags ))).$end_emement;
+		}
+    
+    $sub_categories = wpsc_display_category_loop($modified_query, $category_html);
+    if($sub_categories != '') {
+      $start_emement = $query['subcategory_container']['start_element'];
+      $end_emement = $query['subcategory_container']['end_element'];
+			$sub_categories = $start_emement.$sub_categories.$end_emement;
+    }
+    
+    $category_image = wpsc_place_category_image($category_row['id'], $modified_query);
+    
+    $width = $query['image_size']['width'] - 4;
+    $height = $query['image_size']['height'] - 4;
+    
+		$category_image_html = '';
+    if(($query['show_thumbnails'] == 1)) {
+      if(($category_row['image'] != '') && is_file(WPSC_CATEGORY_DIR.$category_row['image'])) {
+				$category_image_html = "<img src='$category_image' alt='{$category_row['name']}' title='{$category_row['name']}' class='wpsc_category_image' />";
+      } else {
+				$category_image_html = "";
+				$category_image_html .= "				<div class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
+				$category_image_html .= "					<div class='link_substitute' >\n\r";
+				$category_image_html .= "						<span>".__('N/A', 'wpsc')."</span>\n\r";
+				$category_image_html .= "					</div>\n\r";
+				$category_image_html .= "				</div>\n\r";
+      }
+      
+    }
+    
+    $tags_to_replace = array('[wpsc_category_name]', '[wpsc_category_description]', '[wpsc_category_url]', '[wpsc_category_id]', '[wpsc_category_image]', '[wpsc_subcategory]');
+    $content_to_place = array($category_row['name'], $category_description, wpsc_category_url($category_row['id']), $category_row['id'], $category_image_html, $sub_categories);
+		$output .= str_replace($tags_to_replace, $content_to_place ,$category_html);
+	}
+	return $output;
+}
+
+/**
+* wpsc category image function
+* if no parameters are passed, the category is not resized, otherwise it is resized to the specified dimensions
+* @param integer category id
+* @param array category query array
+* @return string - the category image URL, or the URL of the resized version
+*/
+function wpsc_place_category_image($category_id, $query) {
+	// show the full sized image for the product, if supplied with dimensions, will resize image to those.
+		global $wpsc_query, $wpdb;
+		$width = $query['image_size']['width'];
+		$height = $query['image_size']['height'];
+		return "index.php?wpsc_request_image=true&category_id=".$category_id."&amp;width=".$width."&amp;height=".$height;
+}
+
+
+/// category template tags end here
+
+
 // pe.{
 // To stick this in sidebar, main page (calling products_page.php) must be called before sidebar.php in the loop (think)
   
@@ -37,7 +218,9 @@ function display_subcategories($id) {
 	}
   return $output;
   }
- 
+
+
+ // Marked for elimination, evil, bad, nasty code, die, die, die
 function show_cats_brands($category_group = null , $display_method = null, $order_by = 'name', $image = null) {
   global $wpdb; 
   
@@ -285,7 +468,7 @@ function nzshpcrt_display_categories_groups() {
     }
 
     if (get_option('cat_brand_loc') == 0) {
-      show_cats_brands();
+      //show_cats_brands();
     }
   }
 ?>

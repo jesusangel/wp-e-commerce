@@ -1325,53 +1325,6 @@ function nzshpcrt_download_file() {
   }
 }
 
-function nzshpcrt_display_preview_image() {
-	  global $wpdb;
-	  if(is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])|| isset($_GET['image_name'])) {
-		if(function_exists("getimagesize")) {
-			if(is_numeric($_GET['productid'])) {
-				$product_id = (int)$_GET['productid'];
-				$image_data = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
-				
-				if(is_numeric($image_data)) {
-					$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_data}' LIMIT 1");
-					$imagepath = WPSC_IMAGE_DIR . $image;
-				} else {
-					$imagepath = WPSC_IMAGE_DIR . $imagedata['image'];
-				}
-			} else if($_GET['image_id']) {
-				$image_id = (int)$_GET['image_id'];
-				$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
-				$imagepath = WPSC_IMAGE_DIR . $image;
-			}elseif($_GET['image_name']){
-				$image = $_GET['image_name'];
-				$imagepath = WPSC_USER_UPLOADS_DIR . $image;
-			}
-			
-			if(!is_file($imagepath)) {
-				$imagepath = WPSC_FILE_PATH."/images/no-image-uploaded.gif";
-			}
-			$image_size = @getimagesize($imagepath);
-			if(is_numeric($_GET['height']) && is_numeric($_GET['width'])) {
-				$height = (int)$_GET['height'];
-				$width = (int)$_GET['width'];
-			} else {
-				$width = $image_size[0];
-				$height = $image_size[1];
-			}
-			if(!(($height > 0) && ($height <= 1024) && ($width > 0) && ($width <= 1024))) { 
-				$width = $image_size[0];
-				$height = $image_size[1];
-			}
-			if($product_id > 0) {
-				$cache_filename = basename("product_{$product_id}_{$height}x{$width}");
-			} else {
-				$cache_filename = basename("product_img_{$image_id}_{$height}x{$width}");
-			}
-			include("image_preview.php");
-		}
-	}
-}
 
 function nzshpcrt_listdir($dirname) {
   /*
@@ -1631,7 +1584,6 @@ if(($_POST['submitwpcheckout'] == 'true')) {
 }
 add_action('init', 'nzshpcrt_submit_ajax');
 add_action('init', 'nzshpcrt_download_file');
-add_action('init', 'nzshpcrt_display_preview_image');
 
 if(stristr($_GET['page'], WPSC_DIR_NAME)) {
   add_action('admin_notices', 'wpsc_admin_notices');

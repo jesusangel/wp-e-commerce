@@ -30,7 +30,7 @@ function widget_wp_shopping_cart($args) {
 		echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
 		
 		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-		include_once($cur_wpsc_theme_folder."/cart_widget.php");
+		include($cur_wpsc_theme_folder."/cart_widget.php");
 		echo "    </div>";
     echo $after_widget;
     }

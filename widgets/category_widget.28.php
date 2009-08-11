@@ -13,7 +13,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 	}
 
 	function widget( $args, $instance ) {
-	  global $wpdb;
+	  global $wpdb, $wpsc_theme_path;
 		extract( $args );
 
 		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Product Categories' ) : $instance['title']);
@@ -28,20 +28,24 @@ class WP_Widget_Product_Categories extends WP_Widget {
 				$selected_categorisations[$key] = (int)$selected_categorisation;
 			}
 			$selected_values = implode(',',$selected_categorisations);
-
-			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `id` IN ({$selected_values}) AND `active` IN ('1')", ARRAY_A);
-			foreach($categorisation_groups as $categorisation_group) {
-				echo "<div id='categorisation_group_".$categorisation_group['id']."'>\n\r";
-				if(count($categorisation_groups) > 1) {  // no title unless multiple category groups
-					echo "<h2 class='categorytitle'>{$categorisation_group['name']}</h2>\n\r";
-				}
-				show_cats_brands($categorisation_group['id'], 'sidebar', 'name', $instance['image']);
-				echo "\n\r";
-				echo "</div>\n\r";
-			}
-			//echo("<pre>".print_r($selected_categorisations,true)."</pre>");
 		} else {
-			show_cats_brands(null, 'sidebar');
+			$selected_values = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ");
+		}
+
+		// get the theme folder here
+		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+
+		$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `id` IN ({$selected_values}) AND `active` IN ('1')", ARRAY_A);
+		foreach($categorisation_groups as $categorisation_group) {
+			$category_settings = array();
+			$category_settings['category_group'] = $categorisation_group['id'];
+			$category_settings['show_thumbnails'] = $instance['image'];
+			$category_settings['order_by'] =  array("column" => 'name', "direction" =>'asc');
+			$provided_classes = array();
+			if($category_settings['show_thumbnails'] == 1) {
+				$provided_classes[] = "category_images";
+			}
+			include($cur_wpsc_theme_folder."/category_widget.php");
 		}
 
 		echo $after_widget;

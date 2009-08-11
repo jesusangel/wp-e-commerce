@@ -1,6 +1,5 @@
 <?php
 global $wpsc_query, $wpdb;
-
 ?>
 <div id='products_page_container' class="wrap wpsc_container">
 
@@ -18,6 +17,26 @@ global $wpsc_query, $wpdb;
 	<?php endif; ?>
 	
 	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
+
+
+  <ul class='wpsc_categories'>
+		<?php wpsc_start_category_query(array('category_group'=> 1, 'show_thumbnails'=> get_option('show_category_thumbnails'))); ?>
+				<li>
+					<?php wpsc_print_category_image(32, 32); ?>
+					
+					<a href="<?php wpsc_print_category_url();?>" class="productlink"><?php wpsc_print_category_name();?></a>
+					
+					<?php if(get_option('wpsc_category_description')) :?>
+						<?php wpsc_print_category_description("<div class='wpsc_subcategory'>", "</div>"); ?>				
+					<?php endif;?>
+					
+					<?php wpsc_print_subcategory("<ul>", "</ul>"); ?>
+				</li>
+		<?php wpsc_end_category_query(); ?>
+	</ul>
+
+  <?php
+  ?>
 	
 	<?php if(wpsc_is_in_category()) : ?>
 		<div class='wpsc_category_details'>
