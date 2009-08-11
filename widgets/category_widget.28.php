@@ -79,7 +79,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 			}
 			?>
 		</p>
-		
+
 		<p>
 			<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('image'); ?>" name="<?php echo $this->get_field_name('image'); ?>"<?php checked( $image ); ?> />
 			<label for="<?php echo $this->get_field_id('image'); ?>"><?php _e('Display the Group thumbnails in the sidebar', 'wpsc'); ?></label><br />

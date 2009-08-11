@@ -790,7 +790,7 @@ function wpsc_right_now() {
 		$output .= ucfirst($product_unit);
 		$output .= "</td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wpsc_display_sales_logs'>".$sales_count."</a>";
+		$output .= "<a href='?page=wpsc-sales-logs'>".$sales_count."</a>";
 		$output .= "</td>";
 		$output .= "<td class='last'>";
 		$output .= ucfirst($sales_unit);
@@ -805,7 +805,7 @@ function wpsc_right_now() {
 		$output .= ucfirst($group_unit);
 		$output .= "</td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wpsc_display_sales_logs'>".$pending_sales."</a>";
+		$output .= "<a href='?page=wpsc-sales-logs'>".$pending_sales."</a>";
 		$output .= "</td>";
 		$output .= "<td class='last t waiting'>".TXT_WPSC_PENDING." ";
 		$output .= ucfirst($pending_sales_unit);
@@ -814,13 +814,13 @@ function wpsc_right_now() {
 		
 		$output .= "<tr>";
 		$output .= "<td class='first b'>";
-		$output .= "<a href='?page=".WPSC_DIR_NAME."/display_variations.php'>".$variation_count."</a>";
+		$output .= "<a href='?page=wpsc-edit-variations'>".$variation_count."</a>";
 		$output .= "</td>";
 		$output .= "<td class='t'>";
 		$output .= ucfirst($variation_unit);
 		$output .= "</td>";
 		$output .= "<td class='b'>";
-		$output .= "<a href='?page=wpsc_display_sales_logs'>".$accept_sales."</a>";
+		$output .= "<a href='?page=wpsc-sales-logs'>".$accept_sales."</a>";
 		$output .= "</td>";
 		$output .= "<td class='last t approved'>".TXT_WPSC_CLOSED." ";
 		$output .= ucfirst($accept_sales_unit);

@@ -35,3 +35,8 @@ div.textcol form {
 div.wpsc_loading_animation {
   visibility: hidden;
 }
+
+#idc-container-parent{
+clear:both;
+
+}
