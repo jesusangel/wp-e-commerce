@@ -293,7 +293,7 @@ if($_GET['wpsc_user_dynamic_css'] == 'true') {
 * wpsc display products function
 * @return string - html displaying one or more products
 */
-function wpsc_display_products($query) {
+function wpsc_display_products_page($query) {
   global $wpdb, $wpsc_query, $wpsc_theme_path;
 	
 	/// added by xiligroup.dev to be compatible with touchshop
@@ -382,27 +382,6 @@ function wpsc_products_page($content = '') {
 	$output = '';
   if(preg_match("/\[productspage\]/",$content)) {
   
-      if(!(is_numeric(get_option('wpsc_default_category')) || (get_option('wpsc_default_category') == 'all'))) {
-        if(is_numeric($wp_query->query_vars['category_id'])) {
-					$category_id = $wp_query->query_vars['category_id'];
-				} else if(is_numeric($_GET['category'])) {
-					$category_id = $_GET['category'];
-				}
-				
-				//echo "<pre>".print_r($wp_query,true)."</pre>";
-				// if we have no categories, and no search, show the group list
-				// this does not use the theme engine because categories uses a recursive function, I have not yet thought of a way of making this work in a theme engine
-				if(!(is_numeric($category_id) || is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || (get_option('wpsc_default_category') == 'all') || ($_GET['product_search'] != ''))) {
-				  if(get_option('wpsc_default_category') == 'all+list') {
-						$output = nzshpcrt_display_categories_groups();
-				  } else { 
-						return nzshpcrt_display_categories_groups();
-						exit();
-					}
-				}
-      
-      }
-//     if(get_option('wpsc_use_theme_engine') == TRUE) {
 			$wpsc_query->get_products();
   
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;

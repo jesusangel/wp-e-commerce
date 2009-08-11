@@ -793,6 +793,31 @@ global $wpdb;
 					<input type='radio' value='0' name='wpsc_options[show_category_thumbnails]' id='show_category_thumbnails2' <?php echo $show_category_thumbnails2; ?> /> <label for='show_category_thumbnails2'><?php echo TXT_WPSC_NO;?></label>
 					</td>
 				</tr>
+
+				
+				<tr>
+					<th scope="row"><?php _e("Use Category Grid View",'wpsc');?>:</th>
+					<td>
+					<?php
+					$wpsc_category_grid_view = get_option('wpsc_category_grid_view');
+					$wpsc_category_grid_view1 = "";
+					$wpsc_category_grid_view2 = "";
+					switch($wpsc_category_grid_view) {
+						case '1':
+						$wpsc_category_grid_view1 = "checked ='checked'";
+						break;
+						
+						case '0':
+						default:
+						$wpsc_category_grid_view2 = "checked ='checked'";
+						break;
+					}
+		
+					?>
+					<input type='radio' value='1' name='wpsc_options[wpsc_category_grid_view]' id='wpsc_category_grid_view1' <?php echo $wpsc_category_grid_view1; ?> /> <label for='wpsc_category_grid_view1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[wpsc_category_grid_view]' id='wpsc_category_grid_view2' <?php echo $wpsc_category_grid_view2; ?> /> <label for='wpsc_category_grid_view2'><?php echo TXT_WPSC_NO;?></label>
+					</td>
+				</tr>
 			</table> 
 			
 			

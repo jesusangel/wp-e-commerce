@@ -3,6 +3,7 @@
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
 
+// define('TXT_WPSC_CATEGORY_GRID_VIEW', 'Lock Tax to Billing Country');
 define('TXT_WPSC_LOCK_TAX', 'Lock Tax to Billing Country');
 define('TXT_WPSC_REVIEW_YOUR_ORDER', 'Please review your order');
 define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Manage your thumbnails');

@@ -8,7 +8,7 @@
  * @since 3.7
  */
 
-function wpsc_display_products_page() {
+function wpsc_display_edit_products_page() {
   global $wpdb;
 	$category_id = absint($_GET['category_id']);
 	

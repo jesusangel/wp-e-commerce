@@ -165,7 +165,7 @@ function wpsc_display_category_loop($query, $category_html){
     }
     
     $tags_to_replace = array('[wpsc_category_name]', '[wpsc_category_description]', '[wpsc_category_url]', '[wpsc_category_id]', '[wpsc_category_image]', '[wpsc_subcategory]');
-    $content_to_place = array($category_row['name'], $category_description, wpsc_category_url($category_row['id']), $category_row['id'], $category_image_html, $sub_categories);
+    $content_to_place = array(htmlentities($category_row['name'],ENT_QUOTES, 'UTF-8'), $category_description, wpsc_category_url($category_row['id']), $category_row['id'], $category_image_html, $sub_categories);
 		$output .= str_replace($tags_to_replace, $content_to_place ,$category_html);
 	}
 	return $output;

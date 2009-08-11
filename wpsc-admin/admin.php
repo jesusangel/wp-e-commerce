@@ -85,7 +85,7 @@ function wpsc_admin_pages(){
 
 
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
-			$edit_products_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS,TXT_WPSC_PRODUCTS, 7, 'wpsc-edit-products', 'wpsc_display_products_page');
+			$edit_products_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS,TXT_WPSC_PRODUCTS, 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
 			$page_hooks[] = $edit_products_page;
 			
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');

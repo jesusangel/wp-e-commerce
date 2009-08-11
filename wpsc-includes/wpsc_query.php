@@ -13,30 +13,47 @@
  * @since 3.7
  * @subpackage wpsc-cart-classes
 */
-function wpsc_product_external_link($id){
-	global $wpdb, $wpsc_query;
-	$id = absint($id);
-	$externalLink = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='external_link' LIMIT 1");
-	return $externalLink;
-}
-function wpsc_product_sku($id){
-	global $wpdb;
-	$id = absint($id);
-	$sku = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='sku' LIMIT 1");
-	return $sku;
+
+
+/**
+* wpsc display categories function
+* Used to determine whether to display products on the page
+* @return boolean - true for yes, false for no
+*/
+function wpsc_display_categories() {
+  global $wp_query;
+  $output = false;
+	if(!is_numeric(get_option('wpsc_default_category'))) {
+		if(is_numeric($wp_query->query_vars['category_id'])) {
+			$category_id = $wp_query->query_vars['category_id'];
+		} else if(is_numeric($_GET['category'])) {
+			$category_id = $_GET['category'];
+		}
+		
+		// if we have no categories, and no search, show the group list
+		if(!(is_numeric($category_id) || is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || (get_option('wpsc_default_category') == 'all') || ($_GET['product_search'] != ''))) {
+		  $output = true;
+		}
+	}
+  return $output;
 }
 
 /**
- * this is for the multi adding property, it checks to see whether multi adding is enabled;
- * 
- */
-function wpsc_has_multi_adding(){
-	if(get_option('multi_add') == 1){
-		return true;
-	}else{
-		return false;
+* wpsc display products function
+* Used to determine whether to display products on the page
+* @return boolean - true for yes, false for no
+*/
+function wpsc_display_products() {
+	//we have to display something, if we are not displaying categories, then we must display products
+	$output = true;
+	if(wpsc_display_categories()) {
+		if(get_option('wpsc_default_category') != 'all+list') {
+			$output = false;
+		}
 	}
+  return $output;
 }
+
 /**
 *	this page url function, returns the URL of this page
 * @return string - the URL of the current page
@@ -222,6 +239,27 @@ function wpsc_the_product_price() {
 	//echo $price;
 	//echo "<pre>".print_r($wpsc_query->product,true)."</pre>";
 	return $output;
+}
+
+/**
+* wpsc external link function
+* @return string - the product price
+*/
+function wpsc_product_external_link($id){
+	global $wpdb, $wpsc_query;
+	$id = absint($id);
+	$externalLink = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='external_link' LIMIT 1");
+	return $externalLink;
+}
+/**
+* wpsc product sku function
+* @return string - the product price
+*/
+function wpsc_product_sku($id){
+	global $wpdb;
+	$id = absint($id);
+	$sku = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='sku' LIMIT 1");
+	return $sku;
 }
 
 /**
@@ -792,6 +830,17 @@ function wpsc_page_number() {
 	return $wpsc_query->page['number'];
 }
 
+/**
+ * this is for the multi adding property, it checks to see whether multi adding is enabled;
+ * 
+ */
+function wpsc_has_multi_adding(){
+	if(get_option('multi_add') == 1){
+		return true;
+	}else{
+		return false;
+	}
+}
 /**
 * wpsc page is selected function
 * @return boolean - true if the page is selected
