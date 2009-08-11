@@ -27,6 +27,7 @@ global $wpsc_query, $wpdb;
 					</a>
 					<?php wpsc_print_subcategory("", ""); ?>
 				<?php wpsc_end_category_query(); ?>
+				<div class='clear_category_group'></div>
 			</div>
 	  <?php else:?>
 			<ul class='wpsc_categories'>
