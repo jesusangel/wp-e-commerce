@@ -496,7 +496,20 @@ function wpsc_list_dir($dirname) {
 			}
     }
     closedir($dir);
-} 
+}
 
+
+
+/**
+ * wpsc_replace_reply_address function,
+ * Replace the email address for the purchase receipts
+*/
+function wpsc_replace_reply_address($input) {
+  $output = get_option('return_email');
+  if($output == '') {
+    $output = $input;
+  }
+  return $output;
+}
 
 ?>

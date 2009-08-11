@@ -51,12 +51,22 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th scope="row">
-					<?php echo TXT_WPSC_REPLYEMAIL;?>:
+					<?php _e('Purchase Receipt Reply Address');?>:
 					</th>
 					<td>
 					<input class='text' name='wpsc_options[return_email]' type='text' size='40' value='<?php echo get_option('return_email'); ?>'  />
 					</td>
 				</tr>
+
+				<tr>
+					<th scope="row">
+					<?php  _e('Purchase Receipt Reply Name');?>:
+					</th>
+					<td>
+					<input class='text' name='wpsc_options[return_name]' type='text' size='40' value='<?php echo get_option('return_name'); ?>'  />
+					</td>
+				</tr>
+				
 				<tr>
 					<th scope="row">
 					<?php echo TXT_WPSC_TERMS2;?>:

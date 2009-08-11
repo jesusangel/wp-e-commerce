@@ -203,21 +203,24 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
         
         
 				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
+				
+ 					add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')." <".get_option('return_email').">");
+						wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message);
 					} else {
-						wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')." <".get_option('return_email').">");
+						wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message);
 					}
 				}
+ 				remove_filter('wp_mail_from', 'wpsc_replace_reply_address');
 				$report_user = TXT_WPSC_CUSTOMERDETAILS."\n\r";
 				$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
 				$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 				
 				if($form_data != null) {
 					foreach($form_data as $form_field) {
-						$form_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1",ARRAY_A);
+						$form_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1", ARRAY_A);
 
 						switch($form_data['type']) {
 							case "country":
@@ -245,7 +248,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 	
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
-					wp_mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report, "From: ".get_option('return_email')." <".get_option('return_email').">");
+				
+					wp_mail(get_option('purch_log_email'), TXT_WPSC_PURCHASEREPORT, $report);
+					
 				}
 
 				if($purchase_log['processed'] < 2) {
