@@ -512,4 +512,16 @@ function wpsc_replace_reply_address($input) {
   return $output;
 }
 
+/**
+ * wpsc_replace_reply_address function,
+ * Replace the email address for the purchase receipts
+*/
+function wpsc_replace_reply_name($input) {
+  $output = get_option('return_name');
+  if($output == '') {
+    $output = $input;
+  }
+  return $output;
+}
+
 ?>

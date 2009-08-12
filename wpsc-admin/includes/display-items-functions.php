@@ -147,7 +147,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 						<h4>Shortcodes</h4>
 	
 						<dl>
-							<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE; ?>: </dt><dd> [wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
+							<dt><?php echo TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE; ?>: </dt><dd>[wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
 							<dt><?php echo TXT_WPSC_BUY_NOW_SHORTCODE; ?>: </dt><dd>[buy_now_button=<?php echo $product_data['id'];?>]</dd>
 							<dt><?php echo TXT_WPSC_ADD_TO_CART_SHORTCODE; ?>: </dt><dd>[add_to_cart=<?php echo $product_data['id'];?>]</dd>
 						</dl>

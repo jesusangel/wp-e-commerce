@@ -51,7 +51,7 @@ global $wpdb;
 				</tr>
 				<tr>
 					<th scope="row">
-					<?php _e('Purchase Receipt Reply Address');?>:
+					<?php _e('Purchase Receipt - Reply Address');?>:
 					</th>
 					<td>
 					<input class='text' name='wpsc_options[return_email]' type='text' size='40' value='<?php echo get_option('return_email'); ?>'  />
@@ -60,7 +60,7 @@ global $wpdb;
 
 				<tr>
 					<th scope="row">
-					<?php  _e('Purchase Receipt Reply Name');?>:
+					<?php  _e('Purchase Receipt - Reply Name');?>:
 					</th>
 					<td>
 					<input class='text' name='wpsc_options[return_name]' type='text' size='40' value='<?php echo get_option('return_name'); ?>'  />
