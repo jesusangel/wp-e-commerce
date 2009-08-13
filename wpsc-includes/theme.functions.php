@@ -487,7 +487,7 @@ function wpsc_place_shopping_cart($content = '') {
   if(preg_match("/\[shoppingcart\]/",$content)) {
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		ob_start();
-		include_once($cur_wpsc_theme_folder."/shopping_cart_page.php");
+		include($cur_wpsc_theme_folder."/shopping_cart_page.php");
 		$output = ob_get_contents();
 		ob_end_clean();
 		$output = str_replace('$','\$', $output);
@@ -513,7 +513,7 @@ function wpsc_place_shopping_cart($content = '') {
 function wpsc_transaction_results($content = '') {
   if(preg_match("/\[transactionresults\]/",$content)) {
     ob_start();
-    include_once(WPSC_FILE_PATH . "/transaction_results.php");
+    include(WPSC_FILE_PATH . "/transaction_results.php");
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[transactionresults\](<\/p>)*/",$output, $content);
@@ -525,7 +525,7 @@ function wpsc_transaction_results($content = '') {
 function wpsc_user_log($content = '') {
   if(preg_match("/\[userlog\]/",$content)) {
     ob_start();
-    include_once(WPSC_FILE_PATH . '/user-log.php');
+    include(WPSC_FILE_PATH . '/user-log.php');
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[userlog\](<\/p>)*/",$output, $content);

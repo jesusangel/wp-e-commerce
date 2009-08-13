@@ -303,8 +303,12 @@ function nzshpcrt_display_preview_image() {
 				}
 			}
 
-			if($use_cache ===true ) {
-				header("Location: ".WPSC_CACHE_URL.$cache_filename.$extension);
+			if($use_cache === true ) {
+				$cache_url = WPSC_CACHE_URL;
+				if(!empty($_SERVER['HTTPS'])) {
+					$cache_url = str_replace("http://", "https://", $cache_url);
+				}
+				header("Location: ".$cache_url.$cache_filename.$extension);
 				exit('');
 			} else {
 				switch($imagetype[2]) {

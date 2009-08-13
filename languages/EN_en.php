@@ -136,7 +136,7 @@ define("TXT_WPSC_DISPLAY_THE_GROUP", "Display the :category: Group");
 define('TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE', "UPS does not support products without a weight set.\n\r  Please either disable shipping for this product or give it a weight.");
 define('TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE', 'This product has no available stock');
 
-define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Opps. We have encountered a problem with the shipping details you provided. If this problem persists you should contact the site owner.');
+define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Oops. We have encountered a problem with the shipping details you provided. If this problem persists you should contact the site owner.');
 define('TXT_WPSC_UPS_AND_NO_WEIGHT', 'This product has a zero weight associated with it and you have UPS shipping enabled. UPS does not support products with zero weight, therefore if your product is a digital download, we would reccomend disabling shipping for this product.');
 
 define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Choose a Shipping Rate');
@@ -713,7 +713,7 @@ define('TXT_WPSC_TEXTAREA', 'Textarea');
 define('TXT_WPSC_HEADING', 'Heading');
 
 define('TXT_WPSC_MAKEPURCHASE', 'Make Purchase');
-define('TXT_WPSC_BUYPRODUCTS', 'Opps, there is nothing in your cart. <a href="'.get_option('product_list_url').'">Please visit our shop</a>');
+define('TXT_WPSC_BUYPRODUCTS', 'Oops, there is nothing in your cart. <a href="'.get_option('product_list_url').'">Please visit our shop</a>');
 define('TXT_WPSC_BRANDHASBEENEDITED', 'The brand has been edited.');
 define('TXT_WPSC_SURETODELETEPRODUCT', 'Are you sure you want to delete this product?');
 define('TXT_WPSC_ADDBRAND', 'Add Brand');

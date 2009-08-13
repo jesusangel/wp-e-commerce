@@ -426,7 +426,11 @@ function wpsc_the_product_image($width = null, $height = null) {
 		if(($width > 0) && ($height > 0)) {
 			return "index.php?image_id=".$wpsc_query->product['image']."&amp;width=".$width."&amp;height=".$height;
 		} else {
-			return WPSC_IMAGE_URL.$image_file_name;
+		  $image_url = WPSC_IMAGE_URL.$image_file_name;
+		  if(!empty($_SERVER['HTTPS'])) {
+		  	$image_url = str_replace("http://", "https://", $image_url);
+		  }
+			return $image_url;
 		}
 	} else {
 		return false;

@@ -306,6 +306,9 @@ function wpsc_product_image_html($image_name, $product_id) {
 		$image_path = "index.php?productid=".$product_id."&amp;thumbnail=".$use_thumbnail_image."&amp;width=".$category['width']."&amp;height=".$category['height']."";
 	} else {
 	  $image_path = WPSC_THUMBNAIL_URL.$image_name;
+		if(!empty($_SERVER['HTTPS'])) {
+			$image_path = str_replace("http://", "https://", $image_path);
+		}
 	}
   return $image_path;
 }

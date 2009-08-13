@@ -143,6 +143,11 @@ div#sliding_cart{
 span.oldprice{
  text-decoration: line-through;
  }
+ 
+ span.oldprice span{
+ text-decoration: line-through;
+ }
+ 
 span.special{
  color: #DD0000;
  font-weight:bold;
