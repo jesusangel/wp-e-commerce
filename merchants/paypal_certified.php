@@ -22,7 +22,7 @@ $_SESSION['paypalExpressMessage']= '	<h4>Transaction Canceled</h4>';
 //' by the shopping cart page
 //'------------------------------------
 //exit('<pre>'.print_r($_SESSION, true).'</pre>');
-$paymentAmount = nzshpcrt_overall_total_price($_SESSION['selected_country']);
+$paymentAmount = wpsc_cart_total(false);
 $_SESSION['paypalAmount'] = $paymentAmount;
 $_SESSION['paypalexpresssessionid'] = $sessionid;
 paypal_certified_currencyconverter();
@@ -57,8 +57,8 @@ $cancelURL = $transact_url;
 //' The CallShortcutExpressCheckout function is defined in the file PayPalFunctions.php,
 //' it is included at the top of this file.
 //'-------------------------------------------------
-$resArray = CallShortcutExpressCheckout ($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL);
-//exit('<pre>'.print_r($resArray, true).'</pre>');
+$resArray = CallShortcutExpressCheckout ($_SESSION['paypalAmount'], $currencyCodeType, $paymentType, $returnURL, $cancelURL);
+//exit('<pre>'.print_r($paymentAmount, true).'</pre>');
 $ack = strtoupper($resArray["ACK"]);
 	if($ack=="SUCCESS")	{
 		RedirectToPayPal ( $resArray["TOKEN"] );
@@ -98,7 +98,7 @@ function paypal_certified_currencyconverter(){
 		//exit($paypal_currency_productprice . " " . $paypal_currency_shipping.' '.$local_currency_productprice . " " . $local_currency_code);
 		 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
 	} else {
-		$paypal_currency_productprice = $local_currency_productprice;
+		$paypal_currency_productprice = $_SESSION['paypalAmount'];
 		$paypal_currency_shipping = $local_currency_shipping;
 		$base_shipping = $purchase_log['base_shipping'];
 	}
@@ -114,6 +114,7 @@ function paypal_certified_currencyconverter(){
     $decimal_places = 2;
     break;
 	}
+	//echo "$paypal_currency_code|$local_currency_code";
 	$_SESSION['paypalAmount'] = number_format(sprintf("%01.2f", $paypal_currency_productprice),$decimal_places,'.','');
 
 	
@@ -474,7 +475,7 @@ $_SESSION['paypalExpressMessage'] ="
             <tr>
                 <td>";
 $_SESSION['paypalExpressMessage'] .="               
-                <input type='hidden' name='totalAmount' value='".wpsc_cart_total()."' />
+                <input type='hidden' name='totalAmount' value='".wpsc_cart_total(false)."' />
                 <input type='hidden' name='shippingStreet' value='".$resArray['SHIPTOSTREET']."' />          
                 <input type='hidden' name='shippingStreet2' value='".$resArray['SHIPTOSTREET2']."' />
                 <input type='hidden' name='shippingCity' value='".$resArray['SHIPTOCITY']."' />

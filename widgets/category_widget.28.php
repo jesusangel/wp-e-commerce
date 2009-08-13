@@ -32,8 +32,6 @@ class WP_Widget_Product_Categories extends WP_Widget {
 			$selected_values = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ");
 		}
 
-		// get the theme folder here
-		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 
 		$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `id` IN ({$selected_values}) AND `active` IN ('1')", ARRAY_A);
 		foreach($categorisation_groups as $categorisation_group) {
@@ -45,7 +43,8 @@ class WP_Widget_Product_Categories extends WP_Widget {
 			if($category_settings['show_thumbnails'] == 1) {
 				$provided_classes[] = "category_images";
 			}
-			include($cur_wpsc_theme_folder."/category_widget.php");
+			//echo wpsc_get_theme_file_path("category_widget.php");
+			include(wpsc_get_theme_file_path("category_widget.php"));
 		}
 
 		echo $after_widget;

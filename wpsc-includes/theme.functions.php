@@ -9,6 +9,22 @@
 */
 
 /**
+	*wpsc_get_theme_file_path function, gets the path to the theme file, uses the plugin themes folder if the file is not in the uploads one
+  */
+function wpsc_get_theme_file_path($file) {
+	// get the theme folder here
+	$file = basename($file);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	if(is_file($cur_wpsc_theme_folder."/".$file)) {
+		$output = $cur_wpsc_theme_folder."/".$file;
+	} else {
+		$wpsc_theme_path = WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR;
+		$output =  $wpsc_theme_path."/".$file;
+	}
+	return $output;
+}
+
+/**
 	*select_wpsc_theme_functions function, provides a place to override the e-commece theme path
   * add to switch "theme's functions file 
   * © with xiligroup dev
