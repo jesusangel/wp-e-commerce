@@ -1435,7 +1435,7 @@ div.wpsc_page_numbers a.selected {
 	text-decoration: underline;
 }
 
-.wpsc_category_grid {
+#products_page_container .wpsc_category_grid {
   width: 50%;
 }
 

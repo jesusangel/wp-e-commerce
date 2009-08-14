@@ -467,8 +467,11 @@ function nzshpcrt_display_categories_groups() {
       $seperator ="&amp;";
     }
 
-    if (get_option('cat_brand_loc') == 0) {
-      //show_cats_brands();
-    }
+    ob_start();
+		$category_settings = array('category_group'=> 1, 'show_thumbnails'=> get_option('show_category_thumbnails'));
+		include(wpsc_get_theme_file_path("category_widget.php"));
+    $output = ob_get_contents();
+    ob_end_clean();
+    return $output;
   }
 ?>
