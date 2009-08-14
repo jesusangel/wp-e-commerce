@@ -3,8 +3,8 @@ Contributors: Dan Milward, Thomas Howard, Chris Beavan, Allen Han
 Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control
 Requires at least: 2.7
-Tested up to: 2.8.2
-Stable tag: 3.7.1
+Tested up to: 2.8.4
+Stable tag: 3.7.2
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
