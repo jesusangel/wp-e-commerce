@@ -15,7 +15,7 @@ function wpsc_auto_update() {
 
 function wpsc_install() {
 	global $wpdb, $user_level, $wp_rewrite, $wp_version;
-	$table_name = $wpdb->prefix . "product_list";
+	$table_name = $wpdb->prefix . "wpsc_product_list";
 
   $first_install = false;
   $result = mysql_list_tables(DB_NAME);
@@ -25,7 +25,7 @@ function wpsc_install() {
 	}
   if(!in_array($table_name, $tables)) {
     $first_install = true;
-	add_option('wpsc_purchaselogs_fixed',true);
+		add_option('wpsc_purchaselogs_fixed',true);
 	}    
 
   if(get_option('wpsc_version') == null) {

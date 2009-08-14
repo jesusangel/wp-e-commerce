@@ -1286,15 +1286,15 @@ class WPSC_Query {
 			}
 		
 		
-			$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}terms WHERE slug='$tag'");
+			$results = $wpdb->get_results("SELECT * FROM `{$wpdb->terms}` WHERE slug='$tag'");
 			
 			$term_id = $results[0]->term_id;
 			
-			$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_taxonomy WHERE term_id = '".$term_id."' AND taxonomy='product_tag'");
+			$results = $wpdb->get_results("SELECT * FROM `{$wpdb->term_taxonomy}` WHERE term_id = '".$term_id."' AND taxonomy='product_tag'");
 			
 			$taxonomy_id = $results[0]->term_taxonomy_id;
 			
-			$results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_relationships WHERE term_taxonomy_id = '".$taxonomy_id."'");
+			$results = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE term_taxonomy_id = '".$taxonomy_id."'");
 			
 			foreach ($results as $result) {
 				$product_ids[] = $result->object_id; 

@@ -11,7 +11,7 @@
 	if ($results != NULL){
 	$now = time();
 		foreach ($results as $user){
-			$user_info = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'users WHERE id='.$user['user_id'], ARRAY_A);
+			$user_info = $wpdb->get_results("SELECT * FROM `{$wpdb->users}` WHERE id={$user['user_id']}", ARRAY_A);
 			$user_subscription = $wpdb->get_results('SELECT active FROM '.$wpdb->prefix.'wpsc_logged_subscriptions WHERE user_id='.$user['user_id'].' AND start_time < '.$now.' AND (start_time+length) > '.$now.'',ARRAY_A);
 			
 			//echo "<pre>".print_r($user_info,true)."</pre>";

@@ -81,17 +81,17 @@ function wpsc_display_product_form ($product_id = 0) {
 		
 		//echo "<pre>".print_r($product_data,true)."</pre>";
 		if(function_exists('wp_insert_term')) {
-			$term_relationships = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}term_relationships WHERE object_id = '{$product_id}'", ARRAY_A);
+			$term_relationships = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE object_id = '{$product_id}'", ARRAY_A);
 			
 			foreach ((array)$term_relationships as $term_relationship) {
 				$tt_ids[] = $term_relationship['term_taxonomy_id'];
 			}
 			foreach ((array)$tt_ids as $tt_id) {
-				$term_ids[] = $wpdb->get_var("SELECT `term_id` FROM `{$wpdb->prefix}term_taxonomy` WHERE `term_taxonomy_id` = '{$tt_id}' AND `taxonomy` = 'product_tag' LIMIT 1");
+				$term_ids[] = $wpdb->get_var("SELECT `term_id` FROM `{$wpdb->term_taxonomy}` WHERE `term_taxonomy_id` = '{$tt_id}' AND `taxonomy` = 'product_tag' LIMIT 1");
 			}
 			foreach ((array)$term_ids as $term_id ) {
 				if ($term_id != NULL){
-					$tags[] = $wpdb->get_var("SELECT `name` FROM `{$wpdb->prefix}terms` WHERE `term_id`='{$term_id}' LIMIT 1");
+					$tags[] = $wpdb->get_var("SELECT `name` FROM `{$wpdb->terms}` WHERE `term_id`='{$term_id}' LIMIT 1");
 				}
 			}
 			if ($tags != NULL){ 
@@ -364,26 +364,24 @@ function wpsc_product_category_and_tag_forms($product_data=''){
     }
     $output .= TXT_WPSC_CATEGORY_AND_TAG_CONTROL;
     if ($product_data != '') {
-    	if(function_exists('wp_insert_term')) {
-				$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = ".$product_data['id'], ARRAY_A);
+			if(function_exists('wp_insert_term')) {
+				$term_relationships = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE object_id = '{$product_id}'", ARRAY_A);
 				
 				foreach ((array)$term_relationships as $term_relationship) {
 					$tt_ids[] = $term_relationship['term_taxonomy_id'];
 				}
 				foreach ((array)$tt_ids as $tt_id) {
-					$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_taxonomy WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
-					$term_ids[] = $results[0]['term_id'];
+					$term_ids[] = $wpdb->get_var("SELECT `term_id` FROM `{$wpdb->term_taxonomy}` WHERE `term_taxonomy_id` = '{$tt_id}' AND `taxonomy` = 'product_tag' LIMIT 1");
 				}
 				foreach ((array)$term_ids as $term_id ) {
 					if ($term_id != NULL){
-					$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."terms WHERE term_id=".$term_id." ",ARRAY_A);
-					$tags[] = $results[0]['name'];
+						$tags[] = $wpdb->get_var("SELECT `name` FROM `{$wpdb->terms}` WHERE `term_id`='{$term_id}' LIMIT 1");
 					}
 				}
 				if ($tags != NULL){ 
 					$imtags = implode(',', $tags);
 				}
-  		}
+			}
   	}
     $output .= "
 	</h3>
