@@ -299,13 +299,14 @@ function wpsc_product_image_html($image_name, $product_id) {
 	}
 	
 	//list($category['height'], $category['width']) =
-	 
-	$category = $wpdb->get_row("SELECT `image_height` AS `height`, `image_width` AS `width` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}')", ARRAY_A);
+if($category_id > 0) {
+	$category = $wpdb->get_row("SELECT `image_height` AS `height`, `image_width` AS `width` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}') LIMIT 1", ARRAY_A);
+	}
 	// if there is a height, width, and imagePNG function
 	if(($category['height'] != null) && ($category['width'] != null) && (function_exists('ImagePNG'))) {
 		$image_path = "index.php?productid=".$product_id."&amp;thumbnail=".$use_thumbnail_image."&amp;width=".$category['width']."&amp;height=".$category['height']."";
 	} else {
-	  $image_path = WPSC_THUMBNAIL_URL.$image_name;
+		$image_path = WPSC_THUMBNAIL_URL.$image_name;
 		if(!empty($_SERVER['HTTPS'])) {
 			$image_path = str_replace("http://", "https://", $image_path);
 		}
