@@ -1292,9 +1292,9 @@ table.category_forms td.last_row {
 	_width:450px;
 }
 .wpsc_gold_side{
-	margin-top:50px;
+	margin-top:90px;
 	float:right;
-	width:40%;
+	width:35%;
 }
 .wpsc_gold_text{
 	width:70%;
@@ -1316,6 +1316,7 @@ table.category_forms td.last_row {
 	float:right;
 	margin:5px 20px 0 0;
 }
+
 
 #gold_cart_form .postbox p img{
 	padding-bottom:10px;

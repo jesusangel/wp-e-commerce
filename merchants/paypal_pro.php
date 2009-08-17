@@ -12,23 +12,27 @@ $nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 
 if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
-	<tr>
+	<tr ".wpsc_the_checkout_CC_validation_class().">
 		<td>Credit Card Number *</td>
 		<td>
 			<input type='text' value='' name='card_number' />
+			<p class='validation-error'>".wpsc_the_checkout_CC_validation()."</p>
 		</td>
 	</tr>
-	<tr>
+	<tr ".wpsc_the_checkout_CCexpiry_validation_class().">
 		<td>Credit Card Expiry *</td>
 		<td>
 			<input type='text' size='2' value='' maxlength='2' name='expiry[month]' />/<input type='text' size='4'  maxlength='4' value='' name='expiry[year]' />
+			<p class='validation-error'>".wpsc_the_checkout_CCexpiry_validation()."</p>
 		</td>
 	</tr>
-	<tr>
+	<tr ".wpsc_the_checkout_CCcvv_validation_class().">
 		<td>CVV *</td>
-		<td><input type='text' size='4' value='' maxlength='4' name='card_code' /></td>
+		<td><input type='text' size='4' value='' maxlength='4' name='card_code' />
+		<p class='validation-error'>".wpsc_the_checkout_CCcvv_validation()."</p>
+		</td>
 	</tr>
-	<tr>
+	<tr ".wpsc_the_checkout_CCtype_validation_class().">
 		<td>Card Type *</td>
 		<td>
 		<select name='cctype'>
@@ -37,6 +41,7 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 			<option value='Discover'>Discover</option>
 			<option value='Amex'>Amex</option>
 		</select>
+		<p class='validation-error'>".wpsc_the_checkout_CCtype_validation()."</p>
 		</td>
 	</tr>
 ";
