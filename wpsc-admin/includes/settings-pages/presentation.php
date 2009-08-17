@@ -480,34 +480,7 @@ global $wpdb;
 				</td>
 			</tr>							
 	
-	<!-- // Adrian - options for displaying number of products per category -->      
-				
-			<tr>
-				<th scope="row">
-				<?php echo TXT_WPSC_SHOW_CATEGORY_COUNT;?>:
-				</th>
-				<td>
-				<?php
-				$display_pnp = get_option('show_category_count');
-				$show_category_count1 = "";
-				$show_category_count2 = "";
-				switch($display_pnp) {
-					case 0:
-					$show_category_count2 = "checked ='checked'";
-					break;
-					
-					case 1:
-					$show_category_count1 = "checked ='checked'";
-					break;
-				}
-	
-				?>
-				<input type='radio' value='1' name='wpsc_options[show_category_count]' id='show_category_count1' <?php echo $show_category_count1; ?> /> <label for='show_category_count1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[show_category_count]' id='show_category_count2' <?php echo $show_category_count2; ?> /> <label for='show_category_count2'><?php echo TXT_WPSC_NO;?></label>
-				</td>
-			</tr>
-				
-	<!-- // Adrian - options for displaying category display type -->      
+
 				
 			<tr>
 				<th scope="row">
@@ -793,7 +766,35 @@ global $wpdb;
 					<input type='radio' value='0' name='wpsc_options[show_category_thumbnails]' id='show_category_thumbnails2' <?php echo $show_category_thumbnails2; ?> /> <label for='show_category_thumbnails2'><?php echo TXT_WPSC_NO;?></label>
 					</td>
 				</tr>
-
+				
+				<!-- // Adrian - options for displaying number of products per category -->      
+					
+				<tr>
+					<th scope="row">
+					<?php echo TXT_WPSC_SHOW_CATEGORY_COUNT;?>:
+					</th>
+					<td>
+					<?php
+					$display_pnp = get_option('show_category_count');
+					$show_category_count1 = "";
+					$show_category_count2 = "";
+					switch($display_pnp) {
+						case 0:
+						$show_category_count2 = "checked ='checked'";
+						break;
+						
+						case 1:
+						$show_category_count1 = "checked ='checked'";
+						break;
+					}
+		
+					?>
+					<input type='radio' value='1' name='wpsc_options[show_category_count]' id='show_category_count1' <?php echo $show_category_count1; ?> /> <label for='show_category_count1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[show_category_count]' id='show_category_count2' <?php echo $show_category_count2; ?> /> <label for='show_category_count2'><?php echo TXT_WPSC_NO;?></label>
+					</td>
+				</tr>
+					
+				<!-- // Adrian - options for displaying category display type -->      
 				
 				<tr>
 					<th scope="row"><?php _e("Use Category Grid View",'wpsc');?>:</th>
