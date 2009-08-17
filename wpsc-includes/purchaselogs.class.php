@@ -262,10 +262,11 @@ function wpsc_the_purchaselog_item(){
 }
 function wpsc_purchaselog_details_SKU(){
 	global $purchlogitem;
-	if($purchlogitem->purchitem->meta_value ==''){
+	$meta_value = get_product_meta($purchlogitem->purchitem->productid, 'sku');
+	if($meta_value ==''){
 		return 'N/A';
 	}else{
-		return $purchlogitem->purchitem->meta_value;
+		return $meta_value;
 	}
 
 }
@@ -773,8 +774,10 @@ class wpsc_purchaselogs_items{
 	function get_purchlog_details(){
 		global $wpdb;
 		
-		$cartsql = "SELECT DISTINCT `".WPSC_TABLE_CART_CONTENTS."`.*, `".WPSC_TABLE_PRODUCTMETA."`.`meta_value`  FROM `".WPSC_TABLE_CART_CONTENTS."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_CART_CONTENTS."`.`prodid` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid`=".$this->purchlogid." AND `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` = 'sku'";
-		$cartcontent = $wpdb->get_results($cartsql);
+		$cartcontent = $wpdb->get_results("SELECT *  FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$this->purchlogid."");
+
+		
+		echo $cartsql;
 		$this->allcartcontent = $cartcontent;
 		//exit('<pre>'.print_r($cartcontent, true).'</pre>');
 		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
