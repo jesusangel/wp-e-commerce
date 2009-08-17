@@ -386,7 +386,7 @@ function wpsc_category_url($category_id) {
   $home_page_id = get_option('page_on_front');
 		
   if(((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) && ($category_id > 0)) {
-  	if(!isset($wpsc_category_url_cache[$category_id] )) {
+  	if(!isset($wpsc_category_url_cache[$category_id]) || ($wpsc_category_url_cache[$category_id] == '') ) {
   	
 			$category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1", ARRAY_A);
 			if($category_data['nice-name'] != '') {
@@ -410,7 +410,7 @@ function wpsc_category_url($category_id) {
 			$category_names = $wpsc_category_url_cache[$category_id];
 		}
 		
-		if(!empty($category_name)) {
+		if(!empty($category_names)) {
 			if(substr(get_option('product_list_url'), -1, 1) == '/') {
 				$category_url = get_option('product_list_url').$category_names."/";
 			} else {

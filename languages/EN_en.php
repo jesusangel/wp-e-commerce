@@ -326,7 +326,7 @@ define('TXT_WPSC_COMMISION', 'Commission to pay');
 define('TXT_WPSC_LOG_AFFILIATES', 'Display Affiliate Sales');
 define('TXT_WPSC_PRODUCTS_PAGE_SETTINGS', 'Product Page Settings');
 define('TXT_WPSC_CARTSETTINGS', 'Shopping Cart Settings');
-define('TXT_WPSC_REPLACE_PAGE_TITLE', 'Replace Page Title With Category Name');
+define('TXT_WPSC_REPLACE_PAGE_TITLE', 'Replace Page Title With Product/Category Name');
 define('TXT_WPSC_CATEGORY_PRODUCT_IMAGE', 'Product Image Size');
 define('TXT_WPSC_SETONSETTINGS', 'This is set on the Settings Page');
 define('TXT_WPSC_AFFILIATION', 'Affiliation');

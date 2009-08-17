@@ -301,9 +301,6 @@ if(!function_exists('wpsc_initialisation')){
 add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
-
-  
-
 /**
  * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
  */  
@@ -316,7 +313,7 @@ if(!function_exists('wpsc_serialize_shopping_cart')){
 	  $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
 
 		$previous_category_url_cache = get_option('wpsc_category_url_cache');
-		if(count($wpsc_category_url_cache) > count($previous_category_url_cache)) {
+		if($wpsc_category_url_cache != $previous_category_url_cache) {
 			update_option('wpsc_category_url_cache', $wpsc_category_url_cache);
 		}
 	  
