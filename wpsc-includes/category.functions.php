@@ -81,6 +81,18 @@ function wpsc_print_category_image($width = null, $height = null) {
 }
 
 /**
+* wpsc print category products count function
+* places the shortcode for the category product count, accepts parameters for the container element
+* @param string starting HTML element
+* @param string ending HTML element
+*/
+function wpsc_print_category_products_count($start_element = '', $end_element = '') {
+  global $wpsc_category_query;
+  $wpsc_category_query['products_count'] = array('start_element' => $start_element, 'end_element' =>  $end_element);
+	echo "[wpsc_category_products_count]";
+}
+
+/**
 * wpsc end category query function
 */
 function wpsc_end_category_query() {
@@ -129,19 +141,26 @@ function wpsc_display_category_loop($query, $category_html){
   foreach((array)$category_data as $category_row) {
     $modified_query = $query;
     $modified_query['parent_category_id'] = $category_row['id'];
+         
+    $category_count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$category_row['id']}') AND `p`.`active` IN ('1') AND `p`.`publish` IN('1')");
+
+		$start_element = $query['products_count']['start_element'];
+		$end_element = $query['products_count']['end_element'];
+    $category_count_html =  $start_element.$category_count.$end_element;
+
     
     $category_description = '';
 		if($category_row['description'] != '') {
-      $start_emement = $query['description_container']['start_element'];
-      $end_emement = $query['description_container']['end_element'];
-			$category_description =  $start_emement.wpautop(wptexturize( wp_kses(stripslashes($category_row['description']), $allowedtags ))).$end_emement;
+      $start_element = $query['description_container']['start_element'];
+      $end_element = $query['description_container']['end_element'];
+			$category_description =  $start_element.wpautop(wptexturize( wp_kses(stripslashes($category_row['description']), $allowedtags ))).$end_element;
 		}
     
     $sub_categories = wpsc_display_category_loop($modified_query, $category_html);
     if($sub_categories != '') {
-      $start_emement = $query['subcategory_container']['start_element'];
-      $end_emement = $query['subcategory_container']['end_element'];
-			$sub_categories = $start_emement.$sub_categories.$end_emement;
+      $start_element = $query['subcategory_container']['start_element'];
+      $end_element = $query['subcategory_container']['end_element'];
+			$sub_categories = $start_element.$sub_categories.$end_element;
     }
     
     $category_image = wpsc_place_category_image($category_row['id'], $modified_query);
@@ -163,10 +182,28 @@ function wpsc_display_category_loop($query, $category_html){
       }
       
     }
+
+    $tags_to_replace = array('[wpsc_category_name]',
+		'[wpsc_category_description]',
+		'[wpsc_category_url]',
+		'[wpsc_category_id]',
+		'[wpsc_category_image]',
+		'[wpsc_subcategory]',
+		'[wpsc_category_products_count]');
+
+    $content_to_place = array(
+    htmlentities($category_row['name'],ENT_QUOTES, 'UTF-8'),
+    $category_description,
+    wpsc_category_url($category_row['id']),
+    $category_row['id'],
+    $category_image_html,
+    $sub_categories,
+    $category_count_html);
+
     
-    $tags_to_replace = array('[wpsc_category_name]', '[wpsc_category_description]', '[wpsc_category_url]', '[wpsc_category_id]', '[wpsc_category_image]', '[wpsc_subcategory]');
-    $content_to_place = array(htmlentities($category_row['name'],ENT_QUOTES, 'UTF-8'), $category_description, wpsc_category_url($category_row['id']), $category_row['id'], $category_image_html, $sub_categories);
 		$output .= str_replace($tags_to_replace, $content_to_place ,$category_html);
+
+		
 	}
 	return $output;
 }
@@ -200,7 +237,7 @@ function display_subcategories($id) {
   } else {
     $seperator ="&amp;";
 	}   
-  $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
+  $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".absint($id)."'  ORDER BY `nice-name`";
   $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
   if($subcategories != null) {
     $output .= "<ul class='SubCategories'>";

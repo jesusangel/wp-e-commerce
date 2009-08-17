@@ -12,7 +12,12 @@
 							<?php wpsc_print_category_image(45, 25); ?>
 						</a>
 
-						<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_link"><?php wpsc_print_category_name();?></a>
+						<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_link">
+							<?php wpsc_print_category_name();?>
+							<?php if (get_option('show_category_count') == 1) : ?>
+								<?php wpsc_print_category_products_count("(",")"); ?>
+							<?php endif;?>
+						</a>
 
 						<?php/* if(get_option('wpsc_category_description')) :?>
 							<?php wpsc_print_category_description("<div class='wpsc_subcategory'>", "</div>"); ?>
