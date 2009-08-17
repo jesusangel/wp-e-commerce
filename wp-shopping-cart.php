@@ -231,7 +231,8 @@ register_activation_hook(__FILE__, 'wpsc_install');
 /**
 * Code to define where the uploaded files are stored ends here
 */
-if(!function_exists('wpsc_start_the_query')){
+
+if(!function_exists('wpsc_start_the_query')) {
 	function wpsc_start_the_query() {
 	  global $wp_query, $wpsc_query;
 	  $wpsc_query = new WPSC_query();
@@ -242,9 +243,9 @@ if(!function_exists('wpsc_start_the_query')){
 			$_SESSION['wpsc_has_been_to_checkout'] = true;
 			//echo $_SESSION['wpsc_has_been_to_checkout'];
 		}
-	  
 	}
 }
+
 // after init and after when the wp query string is parsed but before anything is displayed
 add_action('template_redirect', 'wpsc_start_the_query', 0);
 
@@ -257,7 +258,7 @@ if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSI
 }
 if(!function_exists('wpsc_initialisation')){
 	function wpsc_initialisation() {
-	  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url;
+	  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url, $wpsc_category_url_cache;
 	  // set the theme directory constant
 	
 	  $uploads_dir = @opendir(WPSC_THEMES_PATH);
@@ -294,6 +295,7 @@ if(!function_exists('wpsc_initialisation')){
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
 	}
+  $GLOBALS['wpsc_category_url_cache'] = get_option('wpsc_category_url_cache');
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
@@ -301,16 +303,23 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
   
+
 /**
  * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
  */  
 if(!function_exists('wpsc_serialize_shopping_cart')){
 	function wpsc_serialize_shopping_cart() {
-	  global $wpdb, $wpsc_start_time, $wpsc_cart;
+	  global $wpdb, $wpsc_start_time, $wpsc_cart, $wpsc_category_url_cache;
 	  if(is_object($wpsc_cart)) {
 			$wpsc_cart->errors = array();
 	  }
 	  $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
+
+		$previous_category_url_cache = get_option('wpsc_category_url_cache');
+		if(count($wpsc_category_url_cache) > count($previous_category_url_cache)) {
+			update_option('wpsc_category_url_cache', $wpsc_category_url_cache);
+		}
+	  
 	  /// Delete the old claims on stock
 		$session_timeout = 60*60; // 180 * 60 = three hours in seconds
 	  $old_claimed_stock_timestamp = time() - $session_timeout;

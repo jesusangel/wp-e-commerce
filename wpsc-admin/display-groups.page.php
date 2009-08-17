@@ -198,6 +198,8 @@ function wpsc_display_groups_page() {
       } else {
         echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
       }
+      
+			update_option('wpsc_category_url_cache', array());
       $wp_rewrite->flush_rules();
     } else {
       echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
@@ -298,6 +300,8 @@ function wpsc_display_groups_page() {
       if($url_name != $category_data['nice-name']) {
         $category_sql_list[] = "`nice-name` = '$url_name' ";
 			}
+			
+			update_option('wpsc_category_url_cache', array());
       $wp_rewrite->flush_rules(); 
 		}   
 	   // Jeff 15-04-09 Used for category target market options
@@ -389,6 +393,8 @@ function wpsc_display_groups_page() {
     if(count($category_sql_list) > 0) {
       $category_sql = implode(", ",$category_sql_list);
       $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET $category_sql WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+      
+			update_option('wpsc_category_url_cache', array());
       $wp_rewrite->flush_rules(); 
 		}
     echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORYHASBEENEDITED."</p></div>";
@@ -425,6 +431,7 @@ if(is_numeric($_GET['category_delete_id'])) {
   $wpdb->query($deletesql);
   $delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `group_id`='{$delete_id}'";
   $wpdb->query($delete_subcat_sql);
+	update_option('wpsc_category_url_cache', array());
 	$wp_rewrite->flush_rules(); 
 }
 
@@ -448,6 +455,8 @@ if(is_numeric($_GET['deleteid'])) {
 				update_option('wpsc_default_category', $new_default);
 			}
 		}
+		
+		update_option('wpsc_category_url_cache', array());
 		$wp_rewrite->flush_rules(); 
 	}
 }

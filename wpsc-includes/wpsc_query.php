@@ -444,19 +444,27 @@ function wpsc_the_product_image($width = null, $height = null) {
 function wpsc_the_product_thumbnail() {
 	// show the thumbnail image for the product
 	global $wpsc_query, $wpdb;
-	 $image_file_name = null;
+	$image_file_name = null;
 	if($wpsc_query->product['thumbnail_image'] != null) {
 			$image_file_name = $wpsc_query->product['thumbnail_image'];
 	} else if ($wpsc_query->product['image'] != null) {
-		if(is_numeric($wpsc_query->product['image'])){
+		if(is_numeric($wpsc_query->product['image'])) {
 			$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
-		}else{
+		} else {
 			$image_file_name = $wpsc_query->product['image'];
 		}
 	}
 
 	if($image_file_name !== null) {
-		return wpsc_product_image_html($image_file_name, $wpsc_query->product['id']);
+		if(($wpsc_query->category_product['image_height'] != null) && ($wpsc_query->category_product['image_width'] != null) && (function_exists('ImagePNG'))) {
+			$image_path = "index.php?productid=".$wpsc_query->product['id']."&amp;width=".$wpsc_query->category_product['image_width']."&amp;height=".$wpsc_query->category_product['image_height']."";
+		} else {
+			$image_path = WPSC_THUMBNAIL_URL.$image_file_name;
+			if(!empty($_SERVER['HTTPS'])) {
+				$image_path = str_replace("http://", "https://", $image_path);
+			}
+		}
+		return $image_path;
 	} else {
 		return false;
 	}
@@ -484,6 +492,7 @@ function wpsc_product_comment_link() {
 	}
 	return $output;
 }
+
 /**
 * wpsc product comments function
 * @return string - javascript for the intensedebate comments
@@ -889,7 +898,9 @@ class WPSC_Query {
 
 	// This selected category, for the breadcrumbs
 	var $category;
-
+	
+	var $category_product = array();
+	
 	// product loop variables.
 	var $products;
 	var $product_count = 0;
@@ -1147,17 +1158,20 @@ class WPSC_Query {
 	
 	function &get_products() {
 		global $wpdb, $wp_query;
-		//set $no_donations_sql
-		//$no_donations_sql = " AND `products`.donation = '0' ";	
 		do_action_ref_array('pre_get_products', array(&$this));
 		
-		
 		if(($this->query_vars['category_url_name'] != '')) {
-			$this->query_vars['category_id'] = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `nice-name` = '{$this->query_vars['category_url_name']}' LIMIT 1");
+			$category_data = $wpdb->get_row("SELECT `id`, `image_height`, `image_width` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `nice-name` = '{$this->query_vars['category_url_name']}' LIMIT 1", ARRAY_A);
+			
+			$this->query_vars['category_id'] = $category_data['id'];
 			$this->category = $this->query_vars['category_id'];
+		} else if($this->query_vars['category_id'] > 0) {
+			$category_data = $wpdb->get_row("SELECT `image_height`, `image_width` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `id` = '{$this->query_vars['category_id']}' LIMIT 1", ARRAY_A);
 		}
-		
-		
+		if(is_array($category_data)) {
+			$this->category_product['image_height'] = $category_data['image_height'];
+			$this->category_product['image_width'] = $category_data['image_width'];
+		}
 		
 		if($this->query_vars['product_url_name'] != null) {
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".stripslashes($this->query_vars['product_url_name'])."' ) ORDER BY `product_id` DESC LIMIT 1");

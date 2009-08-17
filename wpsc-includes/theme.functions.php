@@ -246,6 +246,7 @@ function wpsc_user_dynamic_css() {
 		}
       
     <?php
+    /*
     $product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, `meta1`.`meta_value` AS `height`, `meta2`.`meta_value` AS `width` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` ON `products`.`id` = `meta1`.`product_id` = `meta2`.`product_id`  WHERE `products`.`thumbnail_state` IN(0,2,3) AND `meta1`.`meta_key` IN ('thumbnail_height') AND `meta2`.`meta_key` IN ('thumbnail_width')", ARRAY_A); 
     foreach((array)$product_image_size_list as $product_image_sizes) {
       $individual_thumbnail_height = $product_image_sizes['height']; 
@@ -274,7 +275,8 @@ function wpsc_user_dynamic_css() {
           echo "            height: ".$individual_thumbnail_height."px;\n\r";
           echo "      }\n\r";
         }
-      }	
+      }
+      */
     }
     
   if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {

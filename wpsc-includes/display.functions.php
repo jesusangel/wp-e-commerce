@@ -286,9 +286,7 @@ function wpsc_product_image_html($image_name, $product_id) {
 	} else {
     $category_id = (int)get_option('wpsc_default_category');
 	}
-	// 	$options['height'] = get_option('product_image_height');
-	// 	$options['width']  = get_option('product_image_width');
-	// 
+	
 	$product['height'] = get_product_meta($id, 'thumbnail_height');	
 	$product['width']  = get_product_meta($id, 'thumbnail_width');
 	

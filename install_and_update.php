@@ -74,6 +74,7 @@ function wpsc_install() {
 
 	
 	
+
   add_option('show_thumbnails', 1, TXT_WPSC_SHOWTHUMBNAILS, "yes");
 
   add_option('product_image_width', '', TXT_WPSC_PRODUCTIMAGEWIDTH, 'yes');
@@ -180,6 +181,8 @@ function wpsc_install() {
 	if(!is_array(get_option('custom_gateway_options'))) {
 		update_option('custom_gateway_options', array('testmode'));	
 	}
+	
+  add_option("wpsc_category_url_cache", array(), '', 'yes');
   
   wpsc_product_files_htaccess();
   
