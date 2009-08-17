@@ -231,17 +231,19 @@ register_activation_hook(__FILE__, 'wpsc_install');
 /**
 * Code to define where the uploaded files are stored ends here
 */
-function wpsc_start_the_query() {
-  global $wp_query, $wpsc_query;
-  $wpsc_query = new WPSC_query();
-
-	$post_id = $wp_query->post->ID;
-	$page_url = get_permalink($post_id);
-	if(get_option('shopping_cart_url') == $page_url) {
-		$_SESSION['wpsc_has_been_to_checkout'] = true;
-		//echo $_SESSION['wpsc_has_been_to_checkout'];
+if(!function_exists('wpsc_start_the_query')){
+	function wpsc_start_the_query() {
+	  global $wp_query, $wpsc_query;
+	  $wpsc_query = new WPSC_query();
+	
+		$post_id = $wp_query->post->ID;
+		$page_url = get_permalink($post_id);
+		if(get_option('shopping_cart_url') == $page_url) {
+			$_SESSION['wpsc_has_been_to_checkout'] = true;
+			//echo $_SESSION['wpsc_has_been_to_checkout'];
+		}
+	  
 	}
-  
 }
 // after init and after when the wp query string is parsed but before anything is displayed
 add_action('template_redirect', 'wpsc_start_the_query', 0);
@@ -253,43 +255,44 @@ add_action('template_redirect', 'wpsc_start_the_query', 0);
 if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSION)) {
   session_start();
 }
-
-function wpsc_initialisation() {
-  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url;
-  // set the theme directory constant
-
-  $uploads_dir = @opendir(WPSC_THEMES_PATH);
-  $file_names = array();
-  while(($file = @readdir($uploads_dir)) !== false) {
-    //echo "<br />test".WPSC_THEMES_PATH.$file;
-    if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
-			$file_names[] = $file;
-    }
-  }
-  if(count($file_names) > 0) {
-		$wpsc_theme_path = WPSC_THEMES_PATH;
-		$wpsc_theme_url = WPSC_THEMES_URL;
-  } else {
-		$wpsc_theme_path = WPSC_FILE_PATH . "/themes/";
-		$wpsc_theme_url = WPSC_URL. '/themes/';
-  }
-  //$theme_path = WPSC_FILE_PATH . "/themes/";
-  //exit(print_r($file_names,true));
-	if((get_option('wpsc_selected_theme') == null) || (!file_exists($wpsc_theme_path.get_option('wpsc_selected_theme')))) {
-		$theme_dir = 'default';
-	} else {
-		$theme_dir = get_option('wpsc_selected_theme');
-	}
-	define('WPSC_THEME_DIR', $theme_dir);
-  
-  // initialise the cart session, if it exist, unserialize it, otherwise make it
-	if(isset($_SESSION['wpsc_cart'])) {
-		$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
-		if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
+if(!function_exists('wpsc_initialisation')){
+	function wpsc_initialisation() {
+	  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url;
+	  // set the theme directory constant
+	
+	  $uploads_dir = @opendir(WPSC_THEMES_PATH);
+	  $file_names = array();
+	  while(($file = @readdir($uploads_dir)) !== false) {
+	    //echo "<br />test".WPSC_THEMES_PATH.$file;
+	    if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
+				$file_names[] = $file;
+	    }
+	  }
+	  if(count($file_names) > 0) {
+			$wpsc_theme_path = WPSC_THEMES_PATH;
+			$wpsc_theme_url = WPSC_THEMES_URL;
+	  } else {
+			$wpsc_theme_path = WPSC_FILE_PATH . "/themes/";
+			$wpsc_theme_url = WPSC_URL. '/themes/';
+	  }
+	  //$theme_path = WPSC_FILE_PATH . "/themes/";
+	  //exit(print_r($file_names,true));
+		if((get_option('wpsc_selected_theme') == null) || (!file_exists($wpsc_theme_path.get_option('wpsc_selected_theme')))) {
+			$theme_dir = 'default';
+		} else {
+			$theme_dir = get_option('wpsc_selected_theme');
+		}
+		define('WPSC_THEME_DIR', $theme_dir);
+	  
+	  // initialise the cart session, if it exist, unserialize it, otherwise make it
+		if(isset($_SESSION['wpsc_cart'])) {
+			$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
+			if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
+				$GLOBALS['wpsc_cart'] = new wpsc_cart;
+			}
+		} else {
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
-	} else {
-		$GLOBALS['wpsc_cart'] = new wpsc_cart;
 	}
 }
 // first plugin hook in wordpress
@@ -301,21 +304,23 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
 /**
  * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
  */  
-function wpsc_serialize_shopping_cart() {
-  global $wpdb, $wpsc_start_time, $wpsc_cart;
-  if(is_object($wpsc_cart)) {
-		$wpsc_cart->errors = array();
-  }
-  $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
-  /// Delete the old claims on stock
-	$session_timeout = 60*60; // 180 * 60 = three hours in seconds
-  $old_claimed_stock_timestamp = time() - $session_timeout;
-  
-  $old_claimed_stock_timestamp = mktime((date('H') - 3), date('i'), date('s'), date('m'), date('d'), date('Y'));
-  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
-  //echo "$old_claimed_stock_timestamp <br /> DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')";
-  $wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
-  return true;
-}  
+if(!function_exists('wpsc_serialize_shopping_cart')){
+	function wpsc_serialize_shopping_cart() {
+	  global $wpdb, $wpsc_start_time, $wpsc_cart;
+	  if(is_object($wpsc_cart)) {
+			$wpsc_cart->errors = array();
+	  }
+	  $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
+	  /// Delete the old claims on stock
+		$session_timeout = 60*60; // 180 * 60 = three hours in seconds
+	  $old_claimed_stock_timestamp = time() - $session_timeout;
+	  
+	  $old_claimed_stock_timestamp = mktime((date('H') - 3), date('i'), date('s'), date('m'), date('d'), date('Y'));
+	  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
+	  //echo "$old_claimed_stock_timestamp <br /> DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')";
+	  $wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
+	  return true;
+	} 
+} 
 add_action('shutdown','wpsc_serialize_shopping_cart');
 ?>

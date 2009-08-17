@@ -264,7 +264,7 @@ function wpsc_install() {
    
    
    /* adds nice names for permalinks for products */
-   $check_product_names = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id`, `".WPSC_TABLE_PRODUCT_LIST."`.`name`, `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE (`".WPSC_TABLE_PRODUCTMETA."`.`meta_key` IN ('url_name') AND  `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` IN (''))  OR ISNULL(`".WPSC_TABLE_PRODUCTMETA."`.`meta_key`)");  
+   $check_product_names = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id`, `".WPSC_TABLE_PRODUCT_LIST."`.`name`, `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE (`".WPSC_TABLE_PRODUCTMETA."`.`meta_key` IN ('url_name') AND  `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` IN (''))  OR ISNULL(`".WPSC_TABLE_PRODUCTMETA."`.`meta_key`)", ARRAY_A);  
   if($check_product_names != null) {
     foreach((array)$check_product_names as $datarow) {
       $tidied_name = trim($datarow['name']);
