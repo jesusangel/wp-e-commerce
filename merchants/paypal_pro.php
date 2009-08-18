@@ -12,27 +12,27 @@ $nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 
 if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
-	<tr ".wpsc_the_checkout_CC_validation_class().">
+	<tr %s>
 		<td>Credit Card Number *</td>
 		<td>
 			<input type='text' value='' name='card_number' />
-			<p class='validation-error'>".wpsc_the_checkout_CC_validation()."</p>
+			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr ".wpsc_the_checkout_CCexpiry_validation_class().">
+	<tr %s>
 		<td>Credit Card Expiry *</td>
 		<td>
 			<input type='text' size='2' value='' maxlength='2' name='expiry[month]' />/<input type='text' size='4'  maxlength='4' value='' name='expiry[year]' />
-			<p class='validation-error'>".wpsc_the_checkout_CCexpiry_validation()."</p>
+			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr ".wpsc_the_checkout_CCcvv_validation_class().">
+	<tr %s>
 		<td>CVV *</td>
 		<td><input type='text' size='4' value='' maxlength='4' name='card_code' />
-		<p class='validation-error'>".wpsc_the_checkout_CCcvv_validation()."</p>
+		<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr ".wpsc_the_checkout_CCtype_validation_class().">
+	<tr %s>
 		<td>Card Type *</td>
 		<td>
 		<select name='cctype'>
@@ -41,11 +41,11 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 			<option value='Discover'>Discover</option>
 			<option value='Amex'>Amex</option>
 		</select>
-		<p class='validation-error'>".wpsc_the_checkout_CCtype_validation()."</p>
+		<p class='validation-error'>%s</p>
 		</td>
 	</tr>
 ";
-  }
+}
   
 function gateway_paypal_pro($seperator, $sessionid){
 	global $wpdb, $wpsc_cart;

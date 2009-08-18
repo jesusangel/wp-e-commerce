@@ -513,6 +513,7 @@ function wpsc_place_shopping_cart($content = '') {
 	} else {
     return $content;
 	}
+ 
 }
   
 /// wpsc_checkout is an obsolete function
