@@ -656,6 +656,9 @@ function shopping_cart_total_weight() {
 }
 
 function wpsc_convert_weights($weight, $unit) {
+	if (is_array($weight)) {
+		$weight = $weight['weight'];
+	}
 	switch($unit) {
 		case "kilogram":
 		$weight = $weight / 0.45359237;
@@ -671,7 +674,7 @@ function wpsc_convert_weights($weight, $unit) {
 		break;
 		
 		default:
-		$weight = $weight['weight'];
+		$weight = $weight;
 		break;
 	}
 	return $weight;

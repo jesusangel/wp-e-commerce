@@ -155,12 +155,9 @@ function wpsc_empty_cart() {
   
   if($_REQUEST['ajax'] == 'true') {
 		ob_start();
-    if(get_option('wpsc_use_theme_engine') == TRUE) {	    
 		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 		include_once($cur_wpsc_theme_folder."/cart_widget.php");
-	  } else {
-			nzshpcrt_shopping_basket("", 4);
-	  }
+
 		$output = ob_get_contents();
 		ob_end_clean();
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
@@ -184,6 +181,8 @@ function wpsc_empty_cart() {
 		exit();
 	}
 }
+
+
 // execute on POST and GET
 if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) {
 	add_action('init', 'wpsc_empty_cart');
