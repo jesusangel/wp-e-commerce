@@ -414,13 +414,15 @@ function wpsc_the_product_image($width = null, $height = null) {
 	// show the full sized image for the product, if supplied with dimensions, will resize image to those.
 	global $wpsc_query, $wpdb;
 	$image_file_name = null;
-	if ($wpsc_query->product['image'] != null) {
-			if(is_numeric($wpsc_query->product['image'])){
-		$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
-		//exit("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
+	if($wpsc_query->product['image_file'] != null) {
+		$image_file_name = $wpsc_query->product['image_file'];
+	} else if ($wpsc_query->product['image'] != null) {
+		if(is_numeric($wpsc_query->product['image'])){
+			$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
 		}else{
 			$image_file_name = $wpsc_query->product['image'];
 		}
+		$wpsc_query->product['image_file'] = $wpsc_query->product['image'];
 	}
 	if($image_file_name != null) {
 		if(($width > 0) && ($height > 0)) {
@@ -448,11 +450,18 @@ function wpsc_the_product_thumbnail() {
 	if($wpsc_query->product['thumbnail_image'] != null) {
 			$image_file_name = $wpsc_query->product['thumbnail_image'];
 	} else if ($wpsc_query->product['image'] != null) {
-		if(is_numeric($wpsc_query->product['image'])) {
-			$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
+	
+		if($wpsc_query->product['image_file'] != null) {
+			$image_file_name = $wpsc_query->product['image_file'];
 		} else {
-			$image_file_name = $wpsc_query->product['image'];
+			if(is_numeric($wpsc_query->product['image'])) {
+				$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
+			} else {
+				$image_file_name = $wpsc_query->product['image'];
+			}
+			$wpsc_query->product['image_file'] = $image_file_name;
 		}
+		$wpsc_query->product['thumbnail_image'] = $image_file_name;
 	}
 
 	if($image_file_name !== null) {
@@ -1464,7 +1473,8 @@ class WPSC_Query {
 			}
 			
 			if(get_option('permalink_structure')) {
-				$page_url = wpsc_category_url($this->category)."page/$i/";
+				//if()
+				$page_url = wpsc_category_url($this->category, true)."page/$i/";
 			} else {
 				$page_url = add_query_arg('page_number', $i, $product_view_url);
 			}
@@ -1491,14 +1501,15 @@ class WPSC_Query {
 
 	function next_product() {
 		$this->current_product++;
-		$this->product = $this->products[$this->current_product];
+		unset($this->product); // make sure it is unset
+		$this->product =& $this->products[$this->current_product];
 		return $this->product;
 	}
 
 	
 	function the_product() {
 		$this->in_the_loop = true;
-		$this->product = $this->next_product();
+		$this->next_product();
 		$this->get_variation_groups();
 		$this->get_custom_meta();
 		if ( $this->current_product == 0 ) {
@@ -1568,8 +1579,11 @@ class WPSC_Query {
 	function get_first_variations() {
 		global $wpdb;
 		$this->first_variations = array();
+		$this->all_associated_variations = array();
 		foreach((array)$this->variation_groups as $variation_group) {
-			$this->first_variations[] = $wpdb->get_var("SELECT `v`.`id` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a`JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('{$variation_group['variation_id']}') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC LIMIT 1");
+		  $variation_id = $variation_group['variation_id'];
+			$this->all_associated_variations[$variation_id] = $wpdb->get_results("SELECT `v`.* FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a`JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('$variation_id') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC", ARRAY_A);
+			$this->first_variations[] = $this->all_associated_variations[$variation_id][0]['id'];
 		}
 	}
 
@@ -1577,9 +1591,9 @@ class WPSC_Query {
 	function get_variations() {
 		global $wpdb;
 		//$this->variations	= $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
-		$this->variations = $wpdb->get_results("SELECT `v`.* FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a`JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('{$this->variation_group['variation_id']}') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC", ARRAY_A);
+		$this->variations = $this->all_associated_variations[$this->variation_group['variation_id']];
 		$this->variation_count = count($this->variations);
-		//echo "<pre>".print_r($this->variations,true)."</pre>";
+		//echo "<pre>".print_r($this->all_associated_variations,true)."</pre>";
 	}
 	
 	
