@@ -349,7 +349,7 @@ function wpsc_admin_products_list($category_id = 0) {
 												<?php
 											}
 											?>
-									
+											<img class='loadingImg' style='display:none;' src='<?php echo get_option('siteurl'); ?>/wp-admin/images/wpspin_light.gif' alt='loading' />
 									
 									
 										<div class="wpsc-row-actions">

@@ -463,6 +463,13 @@ function wpsc_submit_checkout() {
    		
    
    		}
+   		    //count number of items, and number of items using shipping
+           $num_items ++;
+           if($cartitem->uses_shipping != 1){
+               $disregard_shipping ++;
+           }else{
+               $use_shipping ++;
+           }
    }
   
   
@@ -473,8 +480,10 @@ function wpsc_submit_checkout() {
   }
   	if((get_option('do_not_use_shipping') != 1) && (in_array('ups', (array)$options)) && $_SESSION['wpsc_zipcode'] == '')	{
 		//exit('Not being called');
-		$_SESSION['categoryAndShippingCountryConflict'] = __('Please enter a Zipcode and click calculate to proceed');
-		$is_valid = false;		
+		if($num_items != $disregard_shipping){  //<-- new line of code
+			$_SESSION['categoryAndShippingCountryConflict'] = __('Please enter a Zipcode and click calculate to proceed');
+			$is_valid = false;		
+		}
 	}
 	if($is_valid == true || $_GET['gateway'] == 'noca') {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
