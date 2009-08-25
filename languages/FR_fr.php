@@ -110,7 +110,7 @@ define('TXT_WPSC_GRANT_ACCESS', 'Donner l\'accès');
 
 //Add-ons
 define('TXT_WPSC_API_RESET', 'Remise à zero de la clé API');
-define('TXT_WPSC_API_RESET_DESCRIPTION', 'Entrez votre nom API et la clé afin de la désactiver de votre ancien site dont vous n\'avez plus l\'utilisation.'
+define('TXT_WPSC_API_RESET_DESCRIPTION', 'Entrez votre nom API et la clé afin de la désactiver de votre ancien site dont vous n\'avez plus l\'utilisation.');
 
 define('TXT_WPSC_PAYMENT_GATEWAYS', 'Passerelles de paiement');
 

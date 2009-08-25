@@ -1361,8 +1361,7 @@ class WPSC_Query {
 				}
 				
 				
-				
-
+				// Invert this for alphabetical ordering.
 				if (get_option('wpsc_sort_by')=='name') {
 					if(	$order == 'ASC'){
 						$order = 'DESC';
