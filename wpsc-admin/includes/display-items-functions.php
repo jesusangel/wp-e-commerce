@@ -644,7 +644,7 @@ function wpsc_product_shipping_forms($product_data=''){
 			<input type='text' size='5' name='weight' value='".$product_data['weight']."' />
 			<select name='weight_unit'>
 				<option value='pound' ". (($product_data['weight_unit'] == 'pound') ? 'selected="selected"' : '') .">Pounds</option>
-				<option value='once' ". (($product_data['weight_unit'] == 'once') ? 'selected="selected"' : '') .">Ounces</option>
+				<option value='ounce' ". ((preg_match("/o(u)?nce/",$product_data['weight_unit'])) ? 'selected="selected"' : '') .">Ounces</option>
 				<option value='gram' ". (($product_data['weight_unit'] == 'gram') ? 'selected="selected"' : '') .">Grams</option>
 				<option value='kilogram' ". (($product_data['weight_unit'] == 'kilogram') ? 'selected="selected"' : '') .">Kilograms</option>
 			</select>

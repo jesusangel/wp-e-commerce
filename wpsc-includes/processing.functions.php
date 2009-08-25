@@ -641,7 +641,7 @@ function shopping_cart_total_weight() {
 			break;
 		
 			case "once":
-			case "ounces":
+			case "ounce":
 			$weight = $weight['weight'] / 16;
 			break;
 			
@@ -669,7 +669,7 @@ function wpsc_convert_weights($weight, $unit) {
 		break;
 	
 		case "once":
-		case "ounces":
+		case "ounce":
 		$weight = $weight / 16;
 		break;
 		

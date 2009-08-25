@@ -94,23 +94,30 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
   
 
 function wpsc_uploaded_files() {
-  global $wpdb;
+  global $wpdb, $wpsc_uploaded_file_cache;
   
   $dir = @opendir(WPSC_FILE_DIR);
   $num = 0;
-  while(($file = @readdir($dir)) !== false) {
-    //filter out the dots, macintosh hidden files and any backup files
-    if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old")) {
-      $file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
-      if($file_data != null) {
-        $dirlist[$num]['display_filename'] = $file_data['filename'];
-        $dirlist[$num]['file_id'] = $file_data['id'];
-			} else {
-        $dirlist[$num]['display_filename'] = $file;
-        $dirlist[$num]['file_id'] = null;
-			}        
-      $dirlist[$num]['real_filename'] = $file;
-      $num++;
+  if(count($wpsc_uploaded_file_cache) > 0) {
+    $dirlist = $wpsc_uploaded_file_cache;
+  } else {
+		while(($file = @readdir($dir)) !== false) {
+			//filter out the dots, macintosh hidden files and any backup files
+			if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old")) {
+				$file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
+				if($file_data != null) {
+					$dirlist[$num]['display_filename'] = $file_data['filename'];
+					$dirlist[$num]['file_id'] = $file_data['id'];
+				} else {
+					$dirlist[$num]['display_filename'] = $file;
+					$dirlist[$num]['file_id'] = null;
+				}        
+				$dirlist[$num]['real_filename'] = $file;
+				$num++;
+			}
+		}
+		if(count($dirlist) > 0) {
+			$wpsc_uploaded_file_cache = $dirlist;
 		}
 	}
   return $dirlist;
@@ -142,17 +149,11 @@ function wpsc_select_product_file($product_id = null) {
 }
   
   
-function wpsc_select_variation_file($variation_ids, $variation_combination_id = null) {
+function wpsc_select_variation_file($file_id, $variation_ids, $variation_combination_id = null) {
   global $wpdb;
   //return false;
   $file_list = wpsc_uploaded_files();
-  $file_id = 0;
-  if((int)$variation_combination_id > 0) {
-    $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '".(int)$variation_combination_id."' LIMIT 1");
-  } else {
-    $variation_combination_id = 0;
-  }
-  $unique_id_component = $variation_combination_id."_".str_replace(",","_",$variation_ids);
+  $unique_id_component = ((int)$variation_combination_id)."_".str_replace(",","_",$variation_ids);
   
   $output = "<div class='variation_settings_contents'>\n\r";
   $output .= "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS."</span>\n\r";

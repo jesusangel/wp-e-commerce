@@ -53,43 +53,61 @@ function wpsc_debug_page() {
 				<li>
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_making_product_url_names'>Test Making Product URL Names</a>
 				</li>
+				<li>
+					<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_variation_grid'>Test Variation Grid</a>
+				</li>
+
+				
 			</ul>
 			<?php
 		}
 		?>
 		<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'><?php
-		 switch($_GET['wpsc_debug_action']) {
-		   case 'download_links':
-		   wpsc_group_and_update_download_links();
-		   break;
-		   
-		   case 'product_url_names':
-		   wpsc_clean_product_url_names();
-		   break;
-		   
-		   case 'redo_product_url_names':
-		   wpsc_redo_product_url_names();
-		   break;
-		   
-		   
-		   case 'test_copying_themes':
-		   wpsc_test_copying_themes();
-		   break;
-		   
-		   case 'test_making_product_url_names':
-		   wpsc_test_making_product_url_names();
-		   break;
-		   
-		   case 'resize_thumbnails':
-		   wpsc_mass_resize_thumbnails_and_clean_images();
-		   break;
+		switch($_GET['wpsc_debug_action']) {
+			case 'download_links':
+			wpsc_group_and_update_download_links();
+			break;
 
-		   case 'phpinfo':
-		   echo "</pre>";
-		   phpinfo();
-		   echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
-		   break;
-		 }
+			case 'product_url_names':
+			wpsc_clean_product_url_names();
+			break;
+
+			case 'redo_product_url_names':
+			wpsc_redo_product_url_names();
+			break;
+
+
+			case 'test_copying_themes':
+			wpsc_test_copying_themes();
+			break;
+
+			case 'test_making_product_url_names':
+			wpsc_test_making_product_url_names();
+			break;
+
+			case 'resize_thumbnails':
+			wpsc_mass_resize_thumbnails_and_clean_images();
+			break;
+
+			case 'phpinfo':
+			echo "</pre>";
+			phpinfo();
+			echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
+			break;
+
+
+			case 'test_variation_grid':
+			$variations_processor = new nzshpcrt_variations;
+			$product_data['id'] = 33;
+
+			$product_data['id'] = 106;
+			 $output = $variations_processor->variations_grid_view($product_data['id']);
+ 			echo "</pre>";
+ 			echo $output;
+
+ 			echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
+			break;
+		}
 		?></pre>
 	</div>
 	<?php
