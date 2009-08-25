@@ -713,7 +713,7 @@ define('TXT_WPSC_TEXTAREA', 'Textarea');
 define('TXT_WPSC_HEADING', 'Heading');
 
 define('TXT_WPSC_MAKEPURCHASE', 'Make Purchase');
-define('TXT_WPSC_BUYPRODUCTS', 'Oops, there is nothing in your cart. <a href="'.get_option('product_list_url').'">Please visit our shop</a>');
+define('TXT_WPSC_BUYPRODUCTS', 'Oops, there is nothing in your cart. <a href="http://theblend.co.nz/x-fine/">Please visit our shop</a>');
 define('TXT_WPSC_BRANDHASBEENEDITED', 'The brand has been edited.');
 define('TXT_WPSC_SURETODELETEPRODUCT', 'Are you sure you want to delete this product?');
 define('TXT_WPSC_ADDBRAND', 'Add Brand');
