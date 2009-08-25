@@ -179,7 +179,7 @@ $discount = $wpsc_cart->cart_item->discount;
 	}
 //exit($transaction);
 	$response = send($transaction);
-	//exit('<pre>'.print_r($response, true).'</pre>');
+	//exit('<pre>'.print_r($response, true).'</pre><pre>'.print_r($data, true).'</pre>');
 	if($response->ack == 'Success' || $response->ack == 'SuccessWithWarning'){
 		//redirect to  transaction page and store in DB as a order with accepted payment
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '2' WHERE `sessionid`=".$sessionid;

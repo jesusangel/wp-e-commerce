@@ -669,6 +669,7 @@ class wpsc_cart {
 			
 			$add_item = true;
 			$edit_item = false;
+//exit('hello<pre>'.print_r($new_cart_item,true).'</pre>');
 			if((count($this->cart_items) > 0) && ($new_cart_item->is_donation != 1)) {
 				//loop through each cart item
 				foreach($this->cart_items as $key => $cart_item) {
@@ -843,11 +844,13 @@ class wpsc_cart {
 	    $this->cart_items = array_values($this->cart_items);
 			$this->cart_item_count = count($this->cart_items);
 	    $this->current_cart_item = -1;
+	    		$this->clear_cache();
 			return true;
 		} else {
+			$this->clear_cache();
 			return false;
 		}
-		$this->clear_cache();
+	
   }
   
 	/**

@@ -9,10 +9,11 @@
  */
  function wpsc_special_widget(){
  	global $wpdb; 
+
  	wpsc_add_to_cart();
  	//exit();
  }
-if($_REQUEST['wpsc_ajax_action'] == 'special_widget') {
+if($_REQUEST['wpsc_ajax_action'] == 'special_widget' || $_REQUEST['wpsc_ajax_action'] == 'donations_widget') {
 	add_action('init', 'wpsc_special_widget');
 }
 
@@ -75,13 +76,13 @@ function wpsc_add_to_cart() {
 	if(((float)$_POST['donation_price'] > 0)) {
 		$provided_parameters['provided_price'] = (float)$_POST['donation_price'];
 	}
-  
+ 
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
   //echo "/*\n\r".print_r($parameters,true)."*/\n\r";
 	$state = $wpsc_cart->set_item($product_id,$parameters); 
 	
 	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
-  
+   
   if($state == true) {
 		$cart_messages[] = str_replace("[product_name]", stripslashes($product['name']), TXT_WPSC_YOU_JUST_ADDED);
 	} else {
@@ -110,7 +111,7 @@ function wpsc_add_to_cart() {
 		ob_end_clean();
 		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-		 
+	//echo '<pre>'.print_r($parameters,true).'</pre>';
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
   //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 

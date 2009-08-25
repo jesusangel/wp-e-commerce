@@ -35,10 +35,10 @@ function nzshpcrt_donations($input = null) {
 			}
 			$output .= $product['description']."<br />";
 		
-			$output .= "<form id='specials' name='$num' method='post' action='#' onsubmit='return false;' >";
+			$output .= "<form id='specials' name='$num' method='post' action='' >";
 			$variations_processor = new nzshpcrt_variations;
 			$output .= $variations_processor->display_product_variations($product['id']);
-			$output .= "<input type='hidden' name='prodid' value='".$product['id']."'/>";
+			$output .= "<input type='hidden' name='product_id' value='".$product['id']."'/>";
 			$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
 			$output .= "<input type='hidden' name='wpsc_ajax_action' value='donations_widget' />";		
 			$currency_sign_location = get_option('currency_sign_location');

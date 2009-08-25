@@ -82,8 +82,19 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	$discount = $wpsc_cart->coupons_amount;
 	//exit($discount);
 	if(($discount > 0)) {
+		if($paypal_currency_code != $local_currency_code) {
+			$paypal_currency_productprice = $curr->convert( $wpsc_cart->calculate_total_price(),$paypal_currency_code,$local_currency_code);
+			$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
+			 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
+			 $tax_price = $curr->convert($item['tax_charged'],$paypal_currency_code, $local_currency_code);
+		} else {
+			$paypal_currency_productprice =  $wpsc_cart->calculate_total_price();
+			$paypal_currency_shipping = $local_currency_shipping;
+			$base_shipping = $purchase_log['base_shipping'];
+			 $tax_price = $item['tax_charged'];
+		}
 		$data['item_name_'.$i] = "Your Shopping Cart";
-		$data['amount_'.$i] = number_format(sprintf("%01.2f", $wpsc_cart->calculate_total_price()),$decimal_places,'.','');
+		$data['amount_'.$i] = number_format(sprintf("%01.2f",$paypal_currency_productprice),$decimal_places,'.','');
 		$data['quantity_'.$i] = 1;
 		// $data['item_number_'.$i] = 0;
 		$data['shipping_'.$i] = 0;
