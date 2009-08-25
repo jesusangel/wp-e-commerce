@@ -198,7 +198,15 @@ function wpsc_the_product_title() {
 */
 function wpsc_the_product_description() {
 	global $wpsc_query, $allowedtags;
-	return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $allowedtags )));
+	$description_allowed_tags = $allowedtags + array(
+		'img' => array(
+			'src' => array(),'width' => array(),'height' => array(),
+		),
+		'span' => array(
+			'style' => array()
+		),
+	);
+	return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $description_allowed_tags )));
 }
 
 /**
