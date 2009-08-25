@@ -476,9 +476,9 @@ function wpsc_category_image($category_id = null) {
   }
   $category_id = absint($category_id);
   $category_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
-  $category_path = WPSC_CATEGORY_DIR.$category_image;
-  $category_url = WPSC_CATEGORY_URL.$category_image;
-  if(file_exists($category_path)) {
+  $category_path = WPSC_CATEGORY_DIR.basename($category_image);
+  $category_url = WPSC_CATEGORY_URL.basename($category_image);
+  if(file_exists($category_path) && is_file($category_path)) {
     return $category_url;
   } else {
     return false;
