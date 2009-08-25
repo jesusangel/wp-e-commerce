@@ -1088,7 +1088,7 @@ a.categorylink{
  }
 
 span.pricedisplay{
- white-space: nowrap;
+/*  white-space: nowrap; */
  width: 80px;
  float:right; 
  }
@@ -1447,6 +1447,13 @@ div.wpsc_page_numbers a.selected {
 
 
 /* Widget CSS */
+
+.shopping-cart-wrapper form {
+  clear: both;
+}
+/*span.pluspostagetax {
+  float: right;
+}*/
 
 .widget_wpsc_categorisation .wpsc_categorisation_group {
 width:100%;

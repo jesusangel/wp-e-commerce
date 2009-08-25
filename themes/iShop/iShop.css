@@ -1290,3 +1290,53 @@ div.item_no_image a, div.item_no_image div.link_substitute {
 div.item_no_image a span, div.item_no_image div.link_substitute span {
   display: block;
 }
+
+
+/* Widget CSS */
+
+.shopping-cart-wrapper form {
+  clear: both;
+}
+/*span.pluspostagetax {
+  float: right;
+}*/
+
+.widget_wpsc_categorisation .wpsc_categorisation_group {
+width:100%;
+float:right;
+margin-bottom:10px;
+position:relative;
+}
+ .clear_category_group {
+	clear: both;
+}
+ .widget_wpsc_categorisation h4.wpsc_category_title {
+	margin-top: 4px;
+}
+
+ .widget_wpsc_categorisation ul.wpsc_top_level_categories {
+}
+
+.widget_wpsc_categorisation ul.category_images li {
+  background: none !important;
+  clear: both;
+}
+.widget_wpsc_categorisation ul.category_images li:before{
+  content: "" !important;
+  }
+
+.widget_wpsc_categorisation ul.category_images .wpsc_category_image_link {
+	margin: 0px 0px 4px 0px;
+  float: left;
+  font-size: 9px;
+  font-weight: normal;
+  
+}
+
+.widget_wpsc_categorisation ul.category_images a.wpsc_category_link {
+  display: block;
+	margin: 3px 0px 0px 4px;
+  float: left;
+}
+
+
