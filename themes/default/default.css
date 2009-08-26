@@ -1449,7 +1449,7 @@ div.wpsc_page_numbers a.selected {
 /* Widget CSS */
 
 .shopping-cart-wrapper form {
-  clear: both;
+  clear: right;
 }
 /*span.pluspostagetax {
   float: right;

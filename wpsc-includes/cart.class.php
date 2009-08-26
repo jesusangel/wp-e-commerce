@@ -955,16 +955,16 @@ class wpsc_cart {
 				}
 			}
     } else {
-    $total = 0;
-			if($this->subtotal == null) {
-				foreach($this->cart_items as $key => $cart_item) {
-					$total += $cart_item->total_price;
-				}
-				$this->subtotal = $total;
-			} else {
-				$total = $this->subtotal;
+  	  $total = 0;
+		if($this->subtotal == null) {
+			foreach($this->cart_items as $key => $cart_item) {
+				$total += $cart_item->total_price;
 			}
+			$this->subtotal = $total;
+		} else {
+			$total = $this->subtotal;
 		}
+	}
 		return $total;
   }
   
