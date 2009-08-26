@@ -19,6 +19,7 @@ define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades (Old)');
 define('TXT_WPSC_TRACKINGEMAIL', 'Tracking Email Message');
 define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Tracking Email Subject');
 
+define('TXT_WPSC_SHIPDISCOUNT', 'Enable Free Shipping Discount');
 define('TXT_WPSC_TRACKINGEMAILMSG', 'Your purchase from %shop_name% has just been dispatched. It should arrive soon. To keep track of your products status a tracking id has been attached. \r\n your tracking id is: %trackid%' );
 define('TXT_WPSC_TRACKINGEMAILSUBJECTMSG','Your Order from %shop_name% has been dispatched');
 

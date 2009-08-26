@@ -116,7 +116,7 @@ function wpsc_cart_show_plus_postage() {
 function wpsc_uses_shipping() {
 	global $wpsc_cart;
 	$shippingoptions = get_option('custom_shipping_options');
-	if(count($shippingoptions) >= 1 && $shippingoptions[0] != '' && get_option('do_not_use_shipping') == 0) {
+	if((get_option('shipping_discount')== 1)&& (get_option('shipping_discount_value') > $wpsc_cart->calculate_subtotal()) && count($shippingoptions) >= 1 && $shippingoptions[0] != '' && get_option('do_not_use_shipping') == 0) {
 		$status = $wpsc_cart->uses_shipping();
 	} else {
 	  $status = false;
@@ -1018,8 +1018,12 @@ class wpsc_cart {
 	 * @return float returns the shipping as a floating point value
 	*/
   function calculate_total_shipping() {
+  	if((get_option('shipping_discount')== 1)&& (get_option('shipping_discount_value') > $this->subtotal) ){
     $total = $this->calculate_base_shipping();
     $total += $this->calculate_per_item_shipping();
+    }else{
+    $total = 0;
+    }
     return $total;
   }
   

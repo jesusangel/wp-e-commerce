@@ -10,7 +10,12 @@ foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) {
 		$internal_shipping_modules[$key] = $module;
 	}
 }
-
+$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+if($currency_data['symbol'] != '') {
+	$currency_sign = $currency_data['symbol_html'];
+} else {
+	$currency_sign = $currency_data['code'];
+}
 //get shipping options that are selected
 $selected_shippings = get_option('custom_shipping_options');
 
@@ -127,6 +132,40 @@ function selectgateway() {
 						</table>
 						</div>
 					</td>
+			   </tr>
+			   <tr>
+			   	<th scope="row">
+			   		<?php echo TXT_WPSC_SHIPDISCOUNT; ?>
+			   	</th>
+			   	<td>
+			   		<?php if(get_option('shipping_discount') == 1){
+			   			$selected2 = '';
+			   			$selected1 = 'checked="checked"';
+			   		}else{
+			   			$selected2 = 'checked="checked"';
+			   			$selected1 = '';
+			   		}
+			   		?>
+			   		<input type='radio' onclick='jQuery("#shipping_discount_value").show()' value='1' name='wpsc_options[shipping_discount]' id='shipping_discount1' <?php echo $selected1; ?> /> <label for='shipping_discount1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+						<input type='radio' onclick='jQuery("#shipping_discount_value").hide()' value='0' name='wpsc_options[shipping_discount]' id='shipping_discount2' <?php echo $selected2; ?> /> <label for='shipping_discount2'><?php echo TXT_WPSC_NO;?></label>
+
+			   				   	</td>
+			   	</tr>
+			   	<tr>
+			   	<td>&nbsp;</td>
+			   	<td colspan="2">
+			   		<?php if(get_option('shipping_discount') == 1){ 
+			   			$value = get_option('shipping_discount_value');
+ 
+			   		?>
+					<div id='shipping_discount_value'>
+					
+						Sales over or equal to: <?php echo $currency_sign; ?><input type='text' size='6' name='wpsc_options[shipping_discount_value]' value='<?php echo $value; ?>' id='shipping_discount_value' /> will receive free shipping.
+					</div>
+							
+					<?php }	?>
+			   	</td>
+			   
 			   </tr>
 			   </table>
 				<?php if (IS_WP27) { ?>
