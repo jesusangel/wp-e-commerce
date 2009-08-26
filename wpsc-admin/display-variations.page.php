@@ -57,7 +57,7 @@ function wpsc_display_variations_page() {
 		</div>
 		<?php } ?>
 				
-		<div id="col-container" class='stuffbox'>
+		<div id="col-container" class=''>
 			<div id="col-right">			
 				<div id='poststuff' class="col-wrap">
 					<form id="modify-variation-groups" method="post" action="" enctype="multipart/form-data" >
