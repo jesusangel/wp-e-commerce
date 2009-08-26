@@ -8,7 +8,7 @@ function wpsc_purchlogs_has_tracking(){
 	global $wpdb, $wpsc_shipping_modules, $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 	$custom_shipping = get_option('custom_shipping_options');
-	if(in_array('nzpost', $custom_shipping) &&  $purchlogitem->extrainfo->track_id != ''){
+	if(in_array('nzpost', (array)$custom_shipping) &&  $purchlogitem->extrainfo->track_id != ''){
 		return true;
 	}else{
 		return false;
@@ -21,7 +21,7 @@ function wpsc_purchlogitem_trackid(){
 function wpsc_purchlogitem_trackstatus(){
 	global $wpdb, $wpsc_shipping_modules, $purchlogitem;
 	$custom_shipping = get_option('custom_shipping_options');
-	if(in_array('nzpost', $custom_shipping) &&  $purchlogitem->extrainfo->track_id != ''){
+	if(in_array('nzpost', (array)$custom_shipping) &&  $purchlogitem->extrainfo->track_id != ''){
 		$status = $wpsc_shipping_modules['nzpost']->getStatus($purchlogitem->extrainfo->track_id);
 	}
 	
@@ -30,7 +30,7 @@ function wpsc_purchlogitem_trackstatus(){
 function wpsc_purchlogitem_trackhistory(){
 	global $purchlogitem;
 	$output = '<ul>';
-	foreach($_SESSION['wpsc_nzpost_parsed'][0]['children'][0]['children'][1]['children'] as $history){
+	foreach((array)$_SESSION['wpsc_nzpost_parsed'][0]['children'][0]['children'][1]['children'] as $history){
 		$outputs[] = '<li>'.$history['children'][0]['tagData']." : ".$history['children'][1]['tagData']." </li>";
 	//	exit('<pre>'.print_r($history,true).'</pre>');
 	}
