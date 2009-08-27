@@ -1057,9 +1057,11 @@ function enablebuttons(){
     if(jQuery(this).attr('checked') == true) {
 			jQuery("div.edit_stock",parent_form).show();
 			jQuery("th.stock, td.stock", parent_form).show();
+			jQuery(".stock_limit_quantity", parent_form).show();
     } else {
 			jQuery("div.edit_stock", parent_form).hide();
 			jQuery("th.stock, td.stock", parent_form).hide();
+			jQuery(".stock_limit_quantity", parent_form).hide();
     }
   });
 }

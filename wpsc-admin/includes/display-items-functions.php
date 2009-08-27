@@ -543,7 +543,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 				if(wpsc_product_has_variations($product_data['id'])) {
 						echo "<div class='edit_stock' style='display: none;'>\n\r";
 						
-						echo "<input type='hidden' name='quantity' value='".$product_data['quantity']."' />";
+						echo "<input class='stock_limit_quantity' name='quantity' value='".$product_data['quantity']."' />";
 						echo "</div>\n\r";
 					} else {
 						switch($product_data['quantity_limited']) {
@@ -556,7 +556,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 							break;
 						}
 						
-						echo "<input type='text' name='quantity' size='10' value='".$product_data['quantity']."' />";
+						echo "<input type='text' class='stock_limit_quantity' name='quantity' size='10' value='".$product_data['quantity']."' />";
 						echo "              </div>\n\r";
 					}
 		} else {

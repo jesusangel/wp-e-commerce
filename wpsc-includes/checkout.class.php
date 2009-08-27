@@ -205,9 +205,13 @@ global $wpdb;
 	return $output;
 }
 
-function wpsc_shipping_country_list() {
+function wpsc_shipping_country_list($shippingdetails = false) {
 	global $wpdb, $wpsc_shipping_modules;
+	$js='';
+	if(!$shippingdetails){
 	$output = "<input type='hidden' name='wpsc_ajax_actions' value='update_location' />";
+	$js ="  onchange='submit_change_country();'";
+	}
 	$selected_country = $_SESSION['wpsc_delivery_country'];
 	$selected_region = $_SESSION['wpsc_delivery_region'];
 	if($selected_country == null) {
@@ -217,7 +221,7 @@ function wpsc_shipping_country_list() {
 		$selected_region = get_option('base_region');
 	}
 	$country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
-	$output .= "<select name='country' id='current_country' onchange='submit_change_country();' >";
+	$output .= "<select name='country' id='current_country' ".$js." >";
 	foreach ($country_data as $country) {
 	// 23-02-09 fix for custom target market by jeffry
 	// recon this should be taken out and put into a function somewhere maybe,,,
@@ -231,9 +235,9 @@ function wpsc_shipping_country_list() {
 	}
 
 	$output .= "</select>";
-	
+	if(!$shippingdetails){
 	$output .= wpsc_shipping_region_list($selected_country, $selected_region);
-	
+	}
 // 	$output .= "ZipCode:";
 if(isset($_POST['zipcode'])) {
 		if ($_POST['zipcode']=='') {
@@ -338,8 +342,13 @@ class wpsc_checkout {
 			break;
 
 			case "delivery_country":
+			if(wpsc_uses_shipping()){
 			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
 			$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
+			}else{
+			$checkoutfields = true;
+			$output = wpsc_shipping_country_list($checkoutfields);
+			}
 			break;
 			
 			case "text":

@@ -45,7 +45,7 @@ jQuery(document).ready(function () {
 				jQuery("input[title='shippingstate']").val(state);														
 				jQuery("input.shipping_country").val(countryID);
 				jQuery("span.shipping_country_name").html(country);
-	
+				jQuery("select#current_country").val(countryID);
 				
 				if(jQuery("select[title='billingcountry'] :selected").val() != jQuery("select[name='country'] :selected").val()){
 					jQuery("select[name='country']").val(countryID);
