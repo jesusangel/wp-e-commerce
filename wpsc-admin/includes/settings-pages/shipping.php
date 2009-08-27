@@ -141,9 +141,11 @@ function selectgateway() {
 			   		<?php if(get_option('shipping_discount') == 1){
 			   			$selected2 = '';
 			   			$selected1 = 'checked="checked"';
+			   			$shipping_discount_settings = 'style=\'display: block;\'';
 			   		}else{
 			   			$selected2 = 'checked="checked"';
 			   			$selected1 = '';
+			   			$shipping_discount_settings = '';
 			   		}
 			   		?>
 			   		<input type='radio' onclick='jQuery("#shipping_discount_value").show()' value='1' name='wpsc_options[shipping_discount]' id='shipping_discount1' <?php echo $selected1; ?> /> <label for='shipping_discount1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
@@ -154,16 +156,16 @@ function selectgateway() {
 			   	<tr>
 			   	<td>&nbsp;</td>
 			   	<td colspan="2">
-			   		<?php if(get_option('shipping_discount') == 1){ 
+			   		<?php
 			   			$value = get_option('shipping_discount_value');
  
 			   		?>
-					<div id='shipping_discount_value'>
+					<div <?php echo $shipping_discount_settings; ?> id='shipping_discount_value'>
 					
 						Sales over or equal to: <?php echo $currency_sign; ?><input type='text' size='6' name='wpsc_options[shipping_discount_value]' value='<?php echo $value; ?>' id='shipping_discount_value' /> will receive free shipping.
 					</div>
 							
-					<?php }	?>
+
 			   	</td>
 			   
 			   </tr>

@@ -50,9 +50,10 @@ td.select_gateway p {
   margin: 0px 15px 4px 5px;
 }
 
-div#wpsc_shipwire_setting {
+div#wpsc_shipwire_setting, div#shipping_discount_value {
   display: none;
 }
+
 table#gateway_options {
 margin:0;
 width:100%;

@@ -28,10 +28,10 @@ function nzshpcrt_donations($input = null) {
 			$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`=".$product['image'];
 
 			$image = $wpdb->get_row($sql, ARRAY_A);
-//			exit($image);
+			//exit('<pre>'.print_r($image,true).'</pre>');
 			$output .= "<strong>".$product['name']."</strong><br />";
 			if($product['image'] != null) {
-				$output .= "<img src='".WPSC_THUMBNAIL_URL.$image['image']."' width='".$image['width']."' height='".$image['height']."' title='".$product['name']."' alt='".$product['name']."' /><br />";
+				$output .= "<img src='".WPSC_THUMBNAIL_URL.$image['image']."' width='".get_option('product_image_width')."' height='".get_option('product_image_height')."' title='".$product['name']."' alt='".$product['name']."' /><br />";
 			}
 			$output .= $product['description']."<br />";
 		
