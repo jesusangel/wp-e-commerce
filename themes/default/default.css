@@ -1493,4 +1493,6 @@ position:relative;
   float: left;
 }
 
-
+.list_productdisplay .alt {
+	background-color: rgb(238, 238, 238);
+}
