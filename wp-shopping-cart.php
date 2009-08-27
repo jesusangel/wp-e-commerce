@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support.
-Version: 3.7.3
+Version: 3.7.4
 Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 */
@@ -14,9 +14,9 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '31');
+define('WPSC_MINOR_VERSION', '32');
 
-define('WPSC_PRESENTABLE_VERSION', '3.7.3');
+define('WPSC_PRESENTABLE_VERSION', '3.7.4');
 
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);
