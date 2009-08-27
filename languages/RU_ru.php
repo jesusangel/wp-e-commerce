@@ -4,6 +4,14 @@ This is a language file for the WP Shopping Cart plugin version 3.6.10
 require(WPSC_FILE_PATH.'/languages/EN_en.php');
 */
 
+define('TXT_WPSC_SHIPDISCOUNT', 'Использовать бесплатную доставку');
+define('TXT_WPSC_NOITEMSINTHISGROUP', 'В этой группе нет товаров.');
+define('TXT_WPSC_ADD_GROUP', 'Добавить группу');
+define('TXT_WPSC_EDIT_GROUP', 'Править группу');
+define('TXT_WPSC_SHIPPING_SAME_AS_BILLING', 'Использовать адрес доставки такой же как и платежа');
+define('TXT_SHOW_GRID_PER_ROW', 'Количество товаров в строке');
+define('TXT_WPSC_CATEGORY_LIST', 'Список групп товаров');
+define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Показывать все товары и список групп');
 define('TXT_WPSC_LOCK_TAX', 'Закрепить налог за страной покупателя');
 define('TXT_WPSC_REVIEW_YOUR_ORDER', 'Пожалуйста, проверьте Ваш заказ.');
 define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Управление Вашими миниатюрами');
