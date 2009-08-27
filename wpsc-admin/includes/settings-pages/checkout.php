@@ -56,9 +56,34 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			<td scope="row"><?php echo TXT_WPSC_LOCK_TAX; ?>:</td>
 			<td>
 			<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
-			<label for='multi_adding1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+			<label for='lock_tax1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
 			<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
-			<label for='multi_adding2'><?php echo TXT_WPSC_NO;?></label>
+			<label for='lock_tax2'><?php echo TXT_WPSC_NO;?></label>
+			</td>
+			
+
+			
+		</tr>
+		<tr>
+					<?php
+				$shippingBilling = get_option('shippingsameasbilling');
+
+				switch($shippingBilling) {
+					case 1:
+					$shippingBilling1 = "checked ='checked'";
+					break;
+					
+					case 0:
+					$shippingBilling2 = "checked ='checked'";
+					break;
+				}
+			?>
+			<td scope="row"><?php echo TXT_WPSC_SHIPPING_SAME_AS_BILLING; ?>:</td>
+			<td>
+			<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php echo $shippingBilling1; ?> /> 
+			<label for='shippingsameasbilling1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+			<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php echo $shippingBilling2; ?> /> 
+			<label for='shippingsameasbilling2'><?php echo TXT_WPSC_NO;?></label>
 			</td>
 		</tr>
 			</table>

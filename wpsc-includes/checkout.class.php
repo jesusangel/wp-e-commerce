@@ -48,7 +48,7 @@ function wpsc_the_checkout_item() {
 }
 function wpsc_is_shipping_details(){
 	global $wpsc_checkout;
-	if($wpsc_checkout->checkout_item->unique_name == 'delivertoafriend'){
+	if($wpsc_checkout->checkout_item->unique_name == 'delivertoafriend' && get_option('shippingsameasbilling') == '1'){
 
 	return true;
 	}else{

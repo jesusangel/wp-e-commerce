@@ -444,7 +444,7 @@ function wpsc_category_url($category_id, $permalink_compatibility = false) {
 		}
 	}
 	// if there is no trailing slash, add one
-	if(substr($category_url, -1, 1) != '/') {
+	if(substr($category_url, -1, 1) != '/' &&  (get_option('rewrite_rules') != null)) {
 	  $category_url .= "/";
 	}
   return $category_url;

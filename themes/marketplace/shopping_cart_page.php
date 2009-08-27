@@ -208,9 +208,20 @@ if(wpsc_cart_item_count() > 0) :
 	?>
 	<table class='wpsc_checkout_table'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
+			<?php if(wpsc_is_shipping_details()) : ?>
+			<tr>
+				<td colspan ='2'>
+					<br />
+					<input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' />
+					<label for='shippingSameBilling'>Shipping Address same as Billing Address?</label>
+				
+				</td>
+			</tr>
+			<?php endif; ?>
+		
 		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 		  <?php if(wpsc_checkout_form_is_header() == true) : ?>
-			<td colspan='2'>
+			<td <?php if(wpsc_is_shipping_details()) echo "class='wpsc_shipping_forms'"; ?> colspan='2'>
 				<h4>
 					<?php echo wpsc_checkout_form_name();?>
 				</h4>
