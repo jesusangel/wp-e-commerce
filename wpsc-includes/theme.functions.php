@@ -347,6 +347,11 @@ function wpsc_display_products_page($query) {
 				$_SESSION['wpsc_display_type'] = $display_type;
 				break;
 				
+				case 'list':
+				$display_type = 'list';
+				$_SESSION['wpsc_display_type'] = $display_type;
+				break;
+				
 				case 'default':
 				$display_type = 'default';
 				$_SESSION['wpsc_display_type'] = $display_type;
@@ -364,16 +369,14 @@ function wpsc_display_products_page($query) {
 			case "grid":
 			if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
 				include($cur_wpsc_theme_folder."/grid_view.php");
-				break; // only break if we have the function;
+				break; // only break if we have the file;
 			}
 			
-			/*
 			case "list":
-			if(function_exists('product_display_list')) {
-				echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
-				break; // only break if we have the function;
+			if(file_exists($cur_wpsc_theme_folder."/list_view.php")) {
+				include($cur_wpsc_theme_folder."/list_view.php");
+				break; // only break if we have the file;
 			}
-			*/
 			
 			case "default":  // this may be redundant :D
 			default:
@@ -435,6 +438,11 @@ function wpsc_products_page($content = '') {
 						$_SESSION['wpsc_display_type'] = $display_type;
 						break;
 						
+						case 'list':
+						$display_type = 'list';
+						$_SESSION['wpsc_display_type'] = $display_type;
+						break;
+						
 						case 'default':
 						$display_type = 'default';
 						$_SESSION['wpsc_display_type'] = $display_type;
@@ -453,13 +461,13 @@ function wpsc_products_page($content = '') {
 						include($cur_wpsc_theme_folder."/grid_view.php");
 						break; // only break if we have the function;
 					}
-					/*
+					
 					case "list":
-					if(function_exists('product_display_list')) {
-						echo product_display_list($product_list, $group_type, $group_sql, $search_sql);
-						break; // only break if we have the function;
+					if(file_exists($cur_wpsc_theme_folder."/list_view.php")) {
+						include($cur_wpsc_theme_folder."/list_view.php");
+						break; // only break if we have the file;
 					}
-					*/
+					
 				  case "default":  // this may be redundant :D
 				  default:
 				    include($cur_wpsc_theme_folder."/products_page.php");

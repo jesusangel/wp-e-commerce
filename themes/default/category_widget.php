@@ -18,6 +18,7 @@
 								<?php wpsc_print_category_products_count("(",")"); ?>
 							<?php endif;?>
 						</a>
+						<?php wpsc_print_product_list(); ?>
 						<?php wpsc_print_subcategory("<ul>", "</ul>"); ?>
 					</li>
 			<?php wpsc_end_category_query(); ?>

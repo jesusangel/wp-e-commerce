@@ -1496,3 +1496,7 @@ position:relative;
 .list_productdisplay .alt {
 	background-color: rgb(238, 238, 238);
 }
+
+.category-product-list {
+	display: none;
+}

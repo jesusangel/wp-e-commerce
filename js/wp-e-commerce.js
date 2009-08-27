@@ -86,7 +86,15 @@ jQuery(document).ready(function () {
 			return false;
 		}
 	});
-  
+
+
+	jQuery('a.wpsc_category_link, a.wpsc_category_image_link').click(function(){
+    product_list_count = jQuery.makeArray(jQuery('ul.category-product-list'));
+		if(product_list_count.length > 0) {
+			jQuery('ul.category-product-list', jQuery(this).parent()).toggle();
+			return false;
+		}
+	});
   
   //  this is for storing data with the product image, like the product ID, for things like dropshop and the the ike.
 	jQuery("form.product_form").livequery(function(){

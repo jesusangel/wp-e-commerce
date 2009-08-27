@@ -57,6 +57,21 @@ function wpsc_print_category_url() {
 function wpsc_print_category_id() {
 	echo "[wpsc_category_id]";
 }
+
+/**
+* wpsc print product list function
+* places the shortcode for the product list
+* @param string starting HTML element
+* @param string ending HTML element
+*/
+function wpsc_print_product_list() {
+  global $wpsc_category_query;
+	if (get_option('catsprods_display_type') == 1) {
+		echo "[wpsc_category_product_list]";
+  }
+}
+
+
 /**
 * wpsc print subcategory function
 * places the shortcode for the subcategories, accepts parameters for the subcategories container, have this as <ul> and </ul> if using a list
@@ -68,6 +83,8 @@ function wpsc_print_subcategory($start_element = '', $end_element = '') {
   $wpsc_category_query['subcategory_container'] = array('start_element' => $start_element, 'end_element' =>  $end_element);
   echo "[wpsc_subcategory]";
 }
+
+
 /**
 * wpsc print category image function
 * places the shortcode for the category image, accepts parameters for width and height
@@ -183,13 +200,16 @@ function wpsc_display_category_loop($query, $category_html){
       
     }
 
+    $category_product_list = wpsc_category_product_list($category_row['id']);
+    
     $tags_to_replace = array('[wpsc_category_name]',
 		'[wpsc_category_description]',
 		'[wpsc_category_url]',
 		'[wpsc_category_id]',
 		'[wpsc_category_image]',
 		'[wpsc_subcategory]',
-		'[wpsc_category_products_count]');
+		'[wpsc_category_products_count]',
+		'[wpsc_category_product_list]');
 
     $content_to_place = array(
     htmlentities($category_row['name'],ENT_QUOTES, 'UTF-8'),
@@ -198,7 +218,8 @@ function wpsc_display_category_loop($query, $category_html){
     $category_row['id'],
     $category_image_html,
     $sub_categories,
-    $category_count_html);
+    $category_count_html,
+    $category_product_list);
 
     
 		$output .= str_replace($tags_to_replace, $content_to_place ,$category_html);
@@ -221,6 +242,33 @@ function wpsc_place_category_image($category_id, $query) {
 		$width = $query['image_size']['width'];
 		$height = $query['image_size']['height'];
 		return "index.php?wpsc_request_image=true&category_id=".$category_id."&amp;width=".$width."&amp;height=".$height;
+}
+
+
+function wpsc_category_product_list($category_id) {
+	global $wpdb;
+	$output = '';
+	$category_id = (int)$category_id;
+
+	if (get_option('catsprods_display_type') == 1) {
+		$product_data = $wpdb->get_results("SELECT `products`.`id`, `products`.`name`
+			FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `cats`
+			JOIN `".WPSC_TABLE_PRODUCT_LIST."` as `products`
+			ON  `cats`.`product_id` = `products`.`id`
+			WHERE `cats`.`category_id` = '$category_id'
+			AND `products`.`publish`='1'
+			AND `products`.`active` = '1'
+			ORDER BY `products`.`name` ASC
+			", ARRAY_A);
+		if(count($product_data) > 0){
+			$output .= "<ul class='category-product-list'>\n\r";
+			foreach($product_data as $product_row) {
+				$output .= "<li class='cat-item'><a class='productlink' href='".wpsc_product_url($product_row['id'],$category_id)."'>".$product_row['name']."</a></li>\n\r";
+			} //end foreach
+			$output .= "</ul>\n\r";
+		} //end if productsIDs
+	}
+	return $output;
 }
 
 
@@ -257,7 +305,7 @@ function display_subcategories($id) {
   }
 
 
- // Marked for elimination, evil, bad, nasty code, die, die, die
+ // Marked for removal
 function show_cats_brands($category_group = null , $display_method = null, $order_by = 'name', $image = null) {
   global $wpdb; 
   
@@ -335,12 +383,12 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
           		$list_product=false;
           	}
           }
-          if ((get_option('catsprods_display_type') == 1) && (($option['id'] == $_GET['category']) || $list_product) ){     
+          if ((get_option('catsprods_display_type') == 1) && (($option['id'] == $_GET['category']) || $list_product) ){   
           // Adrian - display all products for that category          
             $product_sql = "SELECT product_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `category_id` = '".$option['id']."'";
             $productIDs = $wpdb->get_results($product_sql,ARRAY_A);
             if($productIDs != null){
-              $output .= "<ul>";
+              $output .= "<ul class='category-product-list'>";
               foreach($productIDs as $productID) {
                 $ID = $productID['product_id'];
                 $productName_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$ID."'";
@@ -444,7 +492,7 @@ function wpsc_category_url($category_id, $permalink_compatibility = false) {
 		}
 	}
 	// if there is no trailing slash, add one
-	if(substr($category_url, -1, 1) != '/' &&  (get_option('rewrite_rules') != null)) {
+	if(substr($category_url, -1, 1) != '/') {
 	  $category_url .= "/";
 	}
   return $category_url;
