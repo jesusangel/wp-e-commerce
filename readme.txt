@@ -4,7 +4,7 @@ Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
 Tested up to: 2.8.4
-Stable tag: 3.7.3
+Stable tag: 3.7.4
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -33,6 +33,14 @@ Simply copy the new files across and replace the old files saving saving ones yo
 When updating it is important that you do not overwrite the entire images folder. Instead you should copy over the contents of the new images folder into the existing images folder on your server - saving all the exiting product images you may have already uploaded.
 
 If you experience database errors try de-activating and re-activating your plugin. 
+
+
+== Changelog ==  
+  
+= 3.7.4 =  
+* Changes to shipping to fix the bugs from 3.7.3 with shipping and the new shipping_discount feature
+* Fixes for variations under grid view
+
 
 == Frequently Asked Questions ==
 
