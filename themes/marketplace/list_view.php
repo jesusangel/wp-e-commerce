@@ -90,7 +90,7 @@ global $wpsc_query, $wpdb;
 					
 					<td width="55%">
 						<a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>">
-							<strong>Trite Planiceps 2</strong>
+							<strong><?php echo wpsc_the_product_title(); ?></strong>
 						</a>
 					</td>
 					
