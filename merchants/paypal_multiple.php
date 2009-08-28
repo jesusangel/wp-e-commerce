@@ -38,6 +38,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
   $local_currency_code = $currency_code[0]['code'];
   $paypal_currency_code = get_option('paypal_curcode');
+  
   if($paypal_currency_code == '') {
 		$paypal_currency_code = 'US';
   }

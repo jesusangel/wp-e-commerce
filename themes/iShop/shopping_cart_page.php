@@ -226,6 +226,8 @@ if(wpsc_cart_item_count() > 0) :
 				</h4>
 			</td>
 		  <?php else: ?>
+		  <?php if((!wpsc_uses_shipping()) && $wpsc_checkout->checkout_item->unique_name == 'shippingstate'): ?>
+		  <?php else : ?>
 			<td>
 				<label for='<?php echo wpsc_checkout_form_element_id(); ?>'>
 				<?php echo wpsc_checkout_form_name();?>:
@@ -236,6 +238,7 @@ if(wpsc_cart_item_count() > 0) :
 				
 		    <?php if(wpsc_the_checkout_item_error() != ''): ?>
 		    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
+			<?php endif; ?>
 			<?php endif; ?>
 			</td>
 			<?php endif; ?>

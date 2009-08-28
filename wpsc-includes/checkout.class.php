@@ -181,14 +181,17 @@ function wpsc_checkout_form_field() {
 }
 
 
-function wpsc_shipping_region_list($selected_country, $selected_region){
+function wpsc_shipping_region_list($selected_country, $selected_region, $shippingdetails = false){
 global $wpdb;
   
 		//$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
 	$region_data = $wpdb->get_results("SELECT `regions`.* FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape($selected_country)."')",ARRAY_A);
-
+	$js = '';
+	if(!$shippingdetails){
+		$js = "onchange='submit_change_country();'";
+	}
 	if (count($region_data) > 0) {
-		$output .= "<select name='region'  id='region' onchange='submit_change_country();' >";
+		$output .= "<select name='region'  id='region' ".$js." >";
 		foreach ($region_data as $region) {
 			$selected ='';
 			if($selected_region == $region['id']) {
@@ -235,9 +238,9 @@ function wpsc_shipping_country_list($shippingdetails = false) {
 	}
 
 	$output .= "</select>";
-	if(!$shippingdetails){
-	$output .= wpsc_shipping_region_list($selected_country, $selected_region);
-	}
+//	if(!$shippingdetails){
+	$output .= wpsc_shipping_region_list($selected_country, $selected_region, $shippingdetails);
+//	}
 // 	$output .= "ZipCode:";
 if(isset($_POST['zipcode'])) {
 		if ($_POST['zipcode']=='') {
@@ -346,8 +349,9 @@ class wpsc_checkout {
 			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
 			$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
 			}else{
-			$checkoutfields = true;
-			$output = wpsc_shipping_country_list($checkoutfields);
+			//$checkoutfields = true;
+			//$output = wpsc_shipping_country_list($checkoutfields);
+			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id());
 			}
 			break;
 			
@@ -357,6 +361,7 @@ class wpsc_checkout {
 			case "email":
 			case "coupon":
 			default:
+
 			$output = "<input title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]."' name='collected_data[{$this->checkout_item->id}]' />";
 			break;
 		}

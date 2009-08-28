@@ -97,13 +97,26 @@ function gateway_google($fromcheckout = false){
 //	$cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 //	foreach($wpsc_cart->cart_items as $item){
 		//google prohibited items not implemented
+	    $curr=new CURRENCYCONVERTER();
+	    $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
+	    $local_currency_code = $currency_code[0]['code'];
+	    
+	    $google_curr = get_option('google_cur');
 		while (wpsc_have_cart_items()) {
 			wpsc_the_cart_item();
+			if($google_curr != $local_currency_code) {
+			$google_currency_productprice = $curr->convert( wpsc_cart_item_price(false)/wpsc_cart_item_quantity(),$google_curr,$local_currency_code);
+		
+		} else {
+			$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
+	
+		}
+
 		//	exit('<pre>'.print_r(wpsc_cart_item_name(),true).'</pre>');
 			$cartitem["$no"] = new GoogleItem(wpsc_cart_item_name(),      // Item name
 			'', // Item description
 			wpsc_cart_item_quantity(), // Quantity
-			(wpsc_cart_item_price(false)/wpsc_cart_item_quantity())); // Unit price
+			($google_currency_productprice)); // Unit price
 			$cart->AddItem($cartitem["$no"]);
 			$no++;
 		}
