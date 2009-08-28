@@ -79,7 +79,7 @@ function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title
   return $output;
 }
   
-function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null, $supplied_form_id = null) {
+function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null, $supplied_form_id = null, $checkoutfields = false) {
   global $wpdb;
   if($selected_country == null) {
     $selected_country = get_option('base_country');
@@ -114,9 +114,19 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
   
   
   $region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$selected_country."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
+  $sql ="SELECT `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `unique_name` = 'shippingstate' ";
+  $region_form_id = $wpdb->get_var($sql);
+  if($checkoutfields){
+  	$namevalue = "name='collected_data[".$region_form_id."]'"; 
+//  	$namevalue = "name='collected_data[".$form_id."][1]'"; 
+
+  }else{
+  	$namevalue = "name='collected_data[".$form_id."][1]'"; 
+  }
+ // exit('Not here? >'.$region_form_id.' ' .$sql);
     $output .= "<div id='region_select_$form_id'>";
     if($region_list != null) {
-      $output .= "<select title='billingregion' name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
+      $output .= "<select title='billingregion' ".$namevalue." class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
       //$output .= "<option value=''>None</option>";
       foreach($region_list as $region) {
         if($selected_region == $region['id']) {

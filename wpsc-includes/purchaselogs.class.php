@@ -368,6 +368,7 @@ function wpsc_display_purchlog_shipping_city(){
 function wpsc_display_purchlog_shipping_state_and_postcode(){
 	global $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
+	return $purchlogitem->shippingstate($purchlogitem->shippinginfo['shippingstate']['value']).', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 	return $purchlogitem->shippinginfo['shippingstate']['value'].', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 }
 function wpsc_display_purchlog_shipping_country(){
@@ -770,7 +771,16 @@ class wpsc_purchaselogs_items{
 		$this->purchlogid = $id;
 		$this->get_purchlog_details();
 	}
-	
+	function shippingstate($id){
+		global $wpdb;
+		if(is_numeric($id)){
+		$sql = "SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE id=".$id;
+		$name = $wpdb->get_var($sql);
+		return $name;
+		}else{
+		return $id;
+		}
+	}
 	function get_purchlog_details(){
 		global $wpdb;
 		
