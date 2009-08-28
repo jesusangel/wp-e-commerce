@@ -1012,13 +1012,12 @@ class wpsc_cart {
   }
   
   
-    /**
+   /**
 	* calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
 	* @access public
 	 * @return float returns the shipping as a floating point value
 	*/
   function calculate_total_shipping() {
-  
   	if( ! ( (get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $this->calculate_subtotal() ) ) ){
 			$total = $this->calculate_base_shipping();
 			$total += $this->calculate_per_item_shipping();
@@ -1028,6 +1027,19 @@ class wpsc_cart {
     return $total;
   }
   
+   /**
+	* calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
+	* @access public
+	 * @return float returns the shipping as a floating point value
+	*/
+  function has_total_shipping_discount() {
+  	if(get_option('shipping_discount')== 1) {
+  		if(get_option('shipping_discount_value') <= $this->calculate_subtotal() ) {
+				return true;
+  		}
+  	}
+    return false;
+  }
   
     /**
 	* calculate_base_shipping method, gets the shipping option from the selected method and associated quotes
@@ -1657,7 +1669,9 @@ class wpsc_cart_item {
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
 			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
 		}
-    
+    if($this->cart->has_total_shipping_discount()) {
+			$shipping = 0;
+    }
 		if($this->apply_tax == true) {
 			if(is_numeric($this->custom_tax_rate)) {
 				$tax_rate = $this->custom_tax_rate;

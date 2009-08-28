@@ -449,29 +449,27 @@ function wpsc_submit_checkout() {
 	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
 
 
-   foreach($wpsc_cart->cart_items as $cartitem){
-   //	exit('<pre>'.print_r($cartitem, true).'</pre>');
-   		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE product_id=".$cartitem->product_id);
-   		
-   		foreach((array)$categoriesIDs as $catid){
-   			$sql ="SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE visible=0 AND categoryid=".$catid[0];
-   			$countries = $wpdb->get_col($sql);
-   			if(in_array($selectedCountry[0]['id'], (array)$countries)){
-					$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
-					$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
-					$is_valid = false;
-				}
-   		
-   
-   		}
-   		    //count number of items, and number of items using shipping
-           $num_items ++;
-           if($cartitem->uses_shipping != 1){
-               $disregard_shipping ++;
-           }else{
-               $use_shipping ++;
-           }
-   }
+	foreach($wpsc_cart->cart_items as $cartitem){
+		//	exit('<pre>'.print_r($cartitem, true).'</pre>');
+		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE product_id=".$cartitem->product_id);
+		
+		foreach((array)$categoriesIDs as $catid){
+			$sql ="SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE visible=0 AND categoryid=".$catid[0];
+			$countries = $wpdb->get_col($sql);
+			if(in_array($selectedCountry[0]['id'], (array)$countries)){
+				$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
+				$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
+				$is_valid = false;
+			}
+		}
+		//count number of items, and number of items using shipping
+		$num_items ++;
+		if($cartitem->uses_shipping != 1){
+				$disregard_shipping ++;
+		}else{
+				$use_shipping ++;
+		}
+	}
   
   
   if(array_search($submitted_gateway,$selected_gateways) !== false) {
@@ -493,12 +491,16 @@ function wpsc_submit_checkout() {
 		$sessionid = (mt_rand(100,999).time());
 		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
-		$base_shipping= $wpsc_cart->calculate_base_shipping();
+		if($wpsc_cart->has_total_shipping_discount() == false) {
+			$base_shipping= $wpsc_cart->calculate_base_shipping();
+		} else {
+			$base_shipping = 0;
+		}
 		$tax = $wpsc_cart->calculate_total_tax();
 		$total = $wpsc_cart->calculate_total_price();
 		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}','{$wpsc_cart->selected_region}', '{$wpsc_cart->delivery_region}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";
 		
-		//exit($sql);		
+		//exit($sql);
 		$wpdb->query($sql);
 		
 		
@@ -585,14 +587,13 @@ function wpsc_change_tax() {
 		if($_SESSION['wpsc_delivery_country']== 'US' && get_option('lock_tax') == 1){
 			//exit('<pre>'.print_r($_SESSION, true).'</pre>');
 			$output = wpsc_shipping_region_list($_SESSION['wpsc_delivery_country'], $_SESSION['wpsc_delivery_region']);
-		//	echo 'jQuery("#change_country").append(\''.$output.'\');\n\r';
-		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+			//	echo 'jQuery("#change_country").append(\''.$output.'\');\n\r';
+			$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
 			echo "jQuery('#region').remove();\n\r";
 			echo "jQuery('#change_country').append(\"".$output."\");\n\r";
-		
 		}
-			
 	}
+	
 	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
 	if(get_option('lock_tax') == 1){
 		echo "jQuery('.shipping_country').val('".$_SESSION['wpsc_delivery_country']."') \n";  
