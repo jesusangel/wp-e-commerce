@@ -1019,7 +1019,7 @@ class wpsc_cart {
 	*/
   function calculate_total_shipping() {
   
-  	if(!((get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $this->calculate_subtotal())) ){
+  	if( ! ( (get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $this->calculate_subtotal() ) ) ){
 			$total = $this->calculate_base_shipping();
 			$total += $this->calculate_per_item_shipping();
     }else{
