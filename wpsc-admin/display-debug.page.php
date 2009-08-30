@@ -50,9 +50,9 @@ function wpsc_debug_page() {
 			<h4>Development Code List</h4>
 			<p> And this code is probably useless for anything other than working out how to write better code to do the same thing,  unless you want to do that, leave it alone</p>
 			<ul>
-				<li>
+<!--				<li>
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_making_product_url_names'>Test Making Product URL Names</a>
-				</li>
+				</li>-->
 				<li>
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_variation_grid'>Test Variation Grid</a>
 				</li>
@@ -191,32 +191,8 @@ function wpsc_clean_product_url_names() {
 * wpsc_redo_product_url_names, deletes all product URL names, then remakes then
 */
 
-function wpsc_redo_product_url_names() {
-	global $wpdb;
-	$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('url_name')");
-	
-	$product_data = $wpdb->get_results("SELECT DISTINCT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `products`.`active` = '1' ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
-	
-	foreach((array)$product_data as $product_row) {
-		if($product_row['name'] != '') {
-			$tidied_name = strtolower(trim(stripslashes($product_row['name'])));
-			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '".$wpdb->escape($url_name)."', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape($url_name)."){1}[[:digit:]]*$' ",ARRAY_A);
-			$extension_number = '';
-			if($similar_names['count'] > 0) {
-				$extension_number = (int)$similar_names['max_number']+1;
-			}
-			$url_name .= $extension_number;
-			echo "{$product_row['name']} => {$url_name}\n\r";
-			update_product_meta($product_row['id'], 'url_name', $url_name);
-		}
-	}	
-}
-/**
-* wpsc_test_making_product_url_names, tests making URL names
-*/
 
-function wpsc_test_making_product_url_names() {
+function wpsc_redo_product_url_names() {
 	global $wpdb;
 	
 	$product_data = $wpdb->get_results("SELECT DISTINCT `products`.* FROM `".WPSC_TABLE_PRODUCTMETA."` AS `meta` LEFT JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `products` ON `meta`.`product_id` =  `products`.`id` WHERE `products`.`active` = '1' ORDER BY `meta`.`meta_value` DESC", ARRAY_A);
@@ -229,22 +205,26 @@ function wpsc_test_making_product_url_names() {
 		if($post_data['name'] != '') {
 			$existing_name = get_product_meta($product_id, 'url_name');
 			$tidied_name = strtolower(trim(stripslashes($post_data['name'])));
-			$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
-			//exit($existing_name." ". $url_name);
-			echo "Existing Name: \t\t {$existing_name}\n";
-			echo "Inital URL Name: \t {$url_name}\n";
-			echo "Sanitised Name: \t ". sanitize_title($post_data['name'])."\n";
+			//$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+			$url_name =  sanitize_title($tidied_name);
+			
   		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$product_id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
-				if(array_search($url_name, $similar_names) !== false) {
-				  $i = 0;
-				  do {
-				  	$i++;
-				  } while(array_search(($url_name.$i), $similar_names) !== false);
-				  $url_name .= $i;
-				} 
-				echo "Attempted Name: \t {$url_name}\n";
-				
-				print_r($similar_names);
+
+			echo "<strong>Product {$product_id}:</strong> {$product_row['name']}\n";
+			echo "Current Name: {$existing_name}\n";
+			echo "Originally Proposed Name: {$url_name}\n";
+			
+			if(array_search($url_name, $similar_names) !== false) {
+				$i = 0;
+				do {
+					$i++;
+					echo "Proposed Name No.$i: ".($url_name.$i)."\n";
+				} while(array_search(($url_name.$i), $similar_names) !== false);
+				$url_name .= $i;
+			}
+			echo "Accepted Name: {$url_name}\n";
+
+		
 			if($existing_name != $url_name) {
 				update_product_meta($product_id, 'url_name', $url_name);
 			}
@@ -253,8 +233,53 @@ function wpsc_test_making_product_url_names() {
 		}
 	}	
 }
+ 
+function wpsc_recreate_product_url_names() {
+  global $wpdb;
+	$product_data = $wpdb->get_results("SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')", ARRAY_A);
+	//echo "<pre>".print_r($product_data,true)."</pre>";
+	echo "<pre>";
+	foreach($product_data as $product_row) {
+		$product_id = $product_row['id'];
+		$tidied_name = trim($product_row['name']);
+		$tidied_name = strtolower($tidied_name);
+		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/","/[^\w-]+/i"), array("-","-", ''), $tidied_name);
+		$url_name =  str_replace("---","-",$url_name);
 
- function wpsc_mass_resize_thumbnails_and_clean_images(){
+		echo "<strong>Product {$product_id}:</strong> {$product_row['name']}\n";
+
+		echo "Originally Proposed Name: {$url_name}\n";
+		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$product_id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
+
+		if(array_search($url_name, $similar_names) !== false) {
+			// If it is, try to add a number to the end, if that is taken, try the next highest number...
+			$i = 0;
+			do {
+				$i++;
+				if($i > 100) {
+					break;
+				}
+				echo "Proposed Name No.$i: ".($url_name.$i)."\n";
+			} while(array_search(($url_name.$i), $similar_names) !== false);
+			// Concatenate the first number found that wasn't taken
+			$url_name .= $i;
+		}
+
+		echo "Accepted Name: {$url_name}\n";
+		$existing_name = get_product_meta($product_id, 'url_name', true);
+		if(is_array($existing_name )) {
+			$existing_name = array_pop($existing_name);
+		}
+		if($existing_name != $url_name) {
+			update_product_meta($product_id, 'url_name', $url_name);
+		}
+
+		echo "\n\n\n";
+	}
+
+}
+ 
+function wpsc_mass_resize_thumbnails_and_clean_images(){
   global $wpdb;
 	$height = get_option('product_image_height');
 	$width  = get_option('product_image_width');
