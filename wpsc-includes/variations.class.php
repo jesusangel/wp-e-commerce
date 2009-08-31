@@ -231,7 +231,7 @@ class nzshpcrt_variations {
     
 		$join_selected_cols[] = "(
 			SELECT `priceandstock_id`
-			FROM `wp_wpsc_variation_combinations`
+			FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`
 			WHERE `product_id` = '{$product_id}'
 			AND `value_id`
 			IN ( {$join_subselect_cols} )
