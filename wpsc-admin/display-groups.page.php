@@ -1,4 +1,5 @@
 <?php
+global $wpsc_category_url_cache;
 function wpsc_category_tm(){
  global $wpdb;
  /* START OF TARGET MARKET SELECTION */					
@@ -431,6 +432,8 @@ if(is_numeric($_GET['category_delete_id'])) {
   $wpdb->query($deletesql);
   $delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `group_id`='{$delete_id}'";
   $wpdb->query($delete_subcat_sql);
+
+  
 	update_option('wpsc_category_url_cache', array());
 	$wp_rewrite->flush_rules(); 
 }
@@ -461,7 +464,8 @@ if(is_numeric($_GET['deleteid'])) {
 	}
 }
 
-
+unset($wpsc_category_url_cache);
+update_option('wpsc_category_url_cache', array());
 	?>
 	
 	
