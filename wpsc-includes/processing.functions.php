@@ -912,9 +912,11 @@ function wpsc_check_weight($state, $product) {
 			$priceandstock_ids = $wpdb->get_col("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product['id']}'  AND `all_variation_ids` IN('$all_variation_ids') AND `value_id` IN (".implode(",", $enabled_values).")  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variation_ids)."'");
 			
 			// count the variation combinations with a weight of zero
-			$unweighted_items = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `weight` IN (0)");
-			if($unweighted_items > 0) {
-				$has_no_weight = true;
+			if(count($priceandstock_ids) > 0) {
+				$unweighted_items = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` IN(".implode(",", $priceandstock_ids).") AND `weight` IN (0)");
+				if($unweighted_items > 0) {
+					$has_no_weight = true;
+				}
 			}
 		} else if(($product['weight'] == 0)) { // otherwise, use the stock from the products list table
 			$has_no_weight = true;
