@@ -839,12 +839,11 @@ class wpsc_cart {
 	*/
   function remove_item($key) {
     if(isset($this->cart_items[$key])) {
-			//$this->cart_items[$key]->empty_item();
 			unset($this->cart_items[$key]);
 	    $this->cart_items = array_values($this->cart_items);
 			$this->cart_item_count = count($this->cart_items);
 	    $this->current_cart_item = -1;
-	    		$this->clear_cache();
+			$this->clear_cache();
 			return true;
 		} else {
 			$this->clear_cache();
