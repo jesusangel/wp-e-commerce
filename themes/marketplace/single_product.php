@@ -76,7 +76,7 @@ $image_height = get_option('single_view_image_height');
             	if( function_exists('wpsc_addl_desc_show') ) {
             		echo wpsc_addl_desc_show( $addl_descriptions );
             	} else {
-            	echo $the_addl_desc;
+					echo wpautop($the_addl_desc, $br=1);
             	}
             ?>
 						</p>

@@ -137,7 +137,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	$data['AMT']			= number_format($wpsc_cart->total_price,2);
 	$data['ITEMAMT']		= number_format($wpsc_cart->subtotal,2);
 	$data['SHIPPINGAMT']	= number_format($wpsc_cart->base_shipping,2);
-	$data['TAXAMT']			= number_format($wpsc_cart->total_tax,2);
+	$data['TAXAMT']			= number_format($wpsc_cart->total_tax);
 	
 	// Ordered Items
 $discount = $wpsc_cart->cart_item->discount;

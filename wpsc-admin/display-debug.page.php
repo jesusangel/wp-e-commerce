@@ -23,7 +23,9 @@ function wpsc_debug_page() {
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=download_links'>Update Download Links</a>
 			</li>
-			
+			<li>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=images_reupload'>Image reassociate</a>
+			</li>
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=product_url_names'>Clean Duplicate Product URL names</a>
 			</li>
@@ -88,7 +90,11 @@ function wpsc_debug_page() {
 			case 'resize_thumbnails':
 			wpsc_mass_resize_thumbnails_and_clean_images();
 			break;
-
+		
+			case 'images_reupload':
+			wpsc_update_image_records(true);
+			break;
+			
 			case 'phpinfo':
 			echo "</pre>";
 			phpinfo();

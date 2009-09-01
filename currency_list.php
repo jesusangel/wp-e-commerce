@@ -177,7 +177,7 @@ INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (175, 'Portugal', 'PT', 'Euro'
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (176, 'Puerto Rico', 'PR', 'US Dollar', '$', '&#036;', 'USD', '0', '0','northamerica','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (177, 'Qatar', 'QA', 'Qatari Rial', '', '', 'QAR', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (178, 'Reunion (French)', 'RE', 'Euro', '€', '&#8364;', 'EUR', '0', '0','europe','1');
-INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (179, 'Romania', 'RO', 'Romanian Leu', '', '', 'ROL', '0', '0','europe','1');
+INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (179, 'Romania', 'RO', 'Romanian Leu', '', '', 'RON', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (180, 'Russia', 'RU', 'Russian Ruble', '', '', 'RUR', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (181, 'Rwanda', 'RW', 'Rwanda Franc', '', '', 'RWF', '0', '0','africa','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (182, 'Saint Helena', 'SH', 'St. Helena Pound', '', '', 'SHP', '0', '0','africa','1');

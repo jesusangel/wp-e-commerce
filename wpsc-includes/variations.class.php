@@ -257,7 +257,7 @@ class nzshpcrt_variations {
 
     // extract the price and stock IDs and make them into a comma seperated string.
 		$priceandstock_ids = array();
-		foreach($associated_variation_values as $variation_set) {
+		foreach((array)$associated_variation_values as $variation_set) {
 		  if($variation_set['priceandstock_id'] > 0) {
 				$priceandstock_ids[] = $variation_set['priceandstock_id'];
 		  }

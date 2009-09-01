@@ -102,10 +102,10 @@ class wpsc_coupons {
 	function calculate_discount() {
 		global $wpdb, $wpsc_cart;
 		
-		if ($this->conditions == '') {
+		if ($this->conditions == '' || count($this->conditions) == 0) {
 			//Calculates the discount for the whole cart if there is no condition on this coupon.
 			if ($this->is_percentage == '1') {
-				$total_price = $wpsc_cart->calculate_total_price();
+				$total_price = $wpsc_cart->calculate_subtotal();
 				$this->discount = $total_price*$this->value/100;
 				return $this->discount;
 			} else {
@@ -142,7 +142,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				}
 				if ($match) {
 				    if ($this->is_percentage == '1') {
-						$this->discount = $product_data->price*$item->quantity*$this->value/100;
+						$this->discount = $item->unit_price*$item->quantity*$this->value/100;
 					
 						$item->discount = $this->discount;
 						$return += $this->discount;
