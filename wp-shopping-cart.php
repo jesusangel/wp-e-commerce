@@ -311,13 +311,11 @@ if(!function_exists('wpsc_serialize_shopping_cart')){
 			$wpsc_cart->errors = array();
 	  }
 	  $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
-exit('incorrect file');
-	/*
-	$previous_category_url_cache = get_option('wpsc_category_url_cache');
+
+		$previous_category_url_cache = get_option('wpsc_category_url_cache');
 		if($wpsc_category_url_cache != $previous_category_url_cache) {
 			update_option('wpsc_category_url_cache', $wpsc_category_url_cache);
 		}
-*/
 	  
 	  /// Delete the old claims on stock
 		$session_timeout = 60*60; // 180 * 60 = three hours in seconds
