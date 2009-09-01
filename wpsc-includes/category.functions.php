@@ -484,16 +484,16 @@ function wpsc_category_url($category_id, $permalink_compatibility = false) {
 		} else {
 			$category_url = get_option('product_list_url');
 		}
+		// if there is no trailing slash, add one
+		if(substr($category_url, -1, 1) != '/') {
+			$category_url .= "/";
+		}
 	} else {
 	  if($category_id > 0) {
 			$category_url = add_query_arg('category', $category_id, get_option('product_list_url'));
 		} else {
 			$category_url = get_option('product_list_url');
 		}
-	}
-	// if there is no trailing slash, add one
-	if(substr($category_url, -1, 1) != '/') {
-	  $category_url .= "/";
 	}
   return $category_url;
 }

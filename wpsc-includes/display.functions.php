@@ -533,7 +533,7 @@ function wpsc_replace_bloginfo_title($input, $show) {
 if(get_option('wpsc_replace_page_title') == 1) {
   add_filter('the_title', 'wpsc_replace_the_title', 10, 2);
   add_filter('wp_title', 'wpsc_replace_wp_title', 10, 2);
-  add_filter('bloginfo', 'wpsc_replace_bloginfo_title', 10, 2);
+	//add_filter('bloginfo', 'wpsc_replace_bloginfo_title', 10, 2);
 }
 
 ?>

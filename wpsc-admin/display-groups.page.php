@@ -1,5 +1,5 @@
 <?php
-global $wpsc_category_url_cache;
+//global $wpsc_category_url_cache;
 function wpsc_category_tm(){
  global $wpdb;
  /* START OF TARGET MARKET SELECTION */					
@@ -464,7 +464,7 @@ if(is_numeric($_GET['deleteid'])) {
 	}
 }
 
-unset($wpsc_category_url_cache);
+unset($GLOBALS['wpsc_category_url_cache']);
 update_option('wpsc_category_url_cache', array());
 	?>
 	
