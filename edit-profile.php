@@ -2,45 +2,32 @@
 $any_bad_inputs = false;
 $changes_saved = false;
 $_SESSION['collected_data'] = null;
-if($_POST['collected_data'] != null)
-  {
-  foreach((array)$_POST['collected_data'] as $value_id => $value)
-    {
+if($_POST['collected_data'] != null) {
+  foreach((array)$_POST['collected_data'] as $value_id => $value) {
     $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '$value_id' LIMIT 1";
     $form_data = $wpdb->get_results($form_sql,ARRAY_A);
     $form_data = $form_data[0];
     $bad_input = false;
-    if($form_data['mandatory'] == 1)
-      {
-      switch($form_data['type'])
-        {
+    if($form_data['mandatory'] == 1) {
+      switch($form_data['type']) {
         case "email":
-        if(!preg_match("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,5}$/",$value))
-          {
+        if(!preg_match("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,5}$/",$value)) {
           $any_bad_inputs = true;
           $bad_input = true;
-          }
+				}
         break;
         
         case "delivery_country":
-        if(($value != null))
-          {
+        if(($value != null)) {
           $_SESSION['delivery_country'] == $value;
-          }
+				}
         break;
         
-        default:/*
-        if($value == null)
-          {
-          $any_bad_inputs = true;
-          $bad_input = true;
-          }*/
+        default:
         break;
         }
-      if($bad_input === true)
-        {
-        switch($form_data['name'])
-          {
+      if($bad_input === true) {
+        switch($form_data['name']) {
           case TXT_WPSC_FIRSTNAME:
           $bad_input_message .= TXT_WPSC_PLEASEENTERAVALIDNAME . "";
           break;
@@ -73,31 +60,28 @@ if($_POST['collected_data'] != null)
           default:
           $bad_input_message .= TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data['name']) . ".";
           break;
-          }
+				}
         $bad_input_message .= "<br />";
-        }
-        else
-          {
-          $meta_data[$value_id] = $value;
-          }
-      }
-    }
- 
+			} else {
+				$meta_data[$value_id] = $value;
+			}
+		} else {
+			$meta_data[$value_id] = $value;
+		}
+	}
+
   $saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
   $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
-  
+  //echo "<pre>".print_r($meta_data,true)."</pre>";
   $new_meta_data = serialize($meta_data);
-  if($saved_data != null)
-    {
+  if($saved_data != null) {
     $wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");
     $changes_saved = true;
-    }
-    else
-      {
-      $wpdb->query("INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
-      $changes_saved = true;
-      }  
-  } 
+	} else {
+		$wpdb->query("INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
+		$changes_saved = true;
+	}
+} 
 ?>
 <div class="wrap" style=''>
 <?php
@@ -105,14 +89,11 @@ echo " <div class='user-profile-links'><a href='".get_option('user_account_url')
 ?>
 <form method='POST'>
 <?php
-if($changes_saved == true)
-  {
+if($changes_saved == true) {
   echo TXT_WPSC_THANKS_SAVED;
-  }
-  else
-  {
+} else {
   echo $bad_input_message;
-  }
+}
 ?>
 <table>
 <?php
