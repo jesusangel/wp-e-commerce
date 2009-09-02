@@ -190,7 +190,7 @@ $image_height = get_option('single_view_image_height');
 					<?php endif ; ?>
 					</form>
 					
-					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : ?>
+					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') =='1')) : ?>
 						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>
 					<?php endif ; ?>
 					
