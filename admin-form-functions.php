@@ -23,18 +23,18 @@ function nzshpcrt_getproductform($prodid)
    $table_rate_price = get_product_meta($prodid,'table_rate_price',true);
 //    exit("<pre>".print_r($table_rate_price,1)."</pre>");
   if(function_exists('wp_insert_term')) {
-		$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_relationships WHERE object_id = $prodid", ARRAY_A);
+		$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->term_relationships." WHERE object_id = $prodid", ARRAY_A);
 		
 		foreach ((array)$term_relationships as $term_relationship) {
 			$tt_ids[] = $term_relationship['term_taxonomy_id'];
 		}
 		foreach ((array)$tt_ids as $tt_id) {
-			$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."term_taxonomy WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
+			$results = $wpdb->get_results("SELECT * FROM ".$wpdb->term_taxonomy." WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
 			$term_ids[] = $results[0]['term_id'];
 		}
 		foreach ((array)$term_ids as $term_id ) {
 			if ($term_id != NULL){
-			$results = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."terms WHERE term_id=".$term_id." ",ARRAY_A);
+			$results = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." WHERE term_id=".$term_id." ",ARRAY_A);
 			$tags[] = $results[0]['name'];
 			}
 		}

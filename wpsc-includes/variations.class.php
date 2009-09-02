@@ -381,7 +381,7 @@ class nzshpcrt_variations {
 		$modified_value_variations = array();
 		$all_variation_values = array();
 		// Edit or update the variation values association table
-    foreach($variation_value_list as $variation_id => $submitted_variation_values) {
+    foreach((array)$variation_value_list as $variation_id => $submitted_variation_values) {
       $variation_id = absint($variation_id);
 			if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}')") < 1) {
 			  $wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_ASSOC."` ( `type` , `name` , `associated_id` , `variation_id` ) VALUES ( 'product', '', '{$product_id}', '{$variation_id}');");

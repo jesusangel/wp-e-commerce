@@ -38,7 +38,37 @@ global $wpdb;
 						<input type='radio' value='1' name='wpsc_options[wpsc_ip_lock_downloads]' id='wpsc_ip_lock_downloads2' <?php echo $wpsc_ip_lock_downloads1; ?> /> <label for='wpsc_ip_lock_downloads2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
 						<input type='radio' value='0' name='wpsc_options[wpsc_ip_lock_downloads]' id='wpsc_ip_lock_downloads1' <?php echo $wpsc_ip_lock_downloads2; ?> /> <label for='wpsc_ip_lock_downloads1'><?php echo TXT_WPSC_NO;?></label><br />
 					</td>
-				</tr>     
+				</tr>
+
+				
+				<?php
+				$wpsc_check_mime_types1 = "";
+				$wpsc_check_mime_types2 = "";
+				switch(get_option('wpsc_check_mime_types')) {
+					case 1:
+					$wpsc_check_mime_types2 = "checked ='checked'";
+					break;
+							
+					case 0:
+					default:
+					$wpsc_check_mime_types1 = "checked ='checked'";
+					break;
+				}
+	
+				?>
+				<tr>
+					<th scope="row">
+					<?php echo TXT_WPSC_CHECK_MIME_TYPES;?>:
+					</th>
+					<td>
+						<input type='radio' value='0' name='wpsc_options[wpsc_check_mime_types]' id='wpsc_check_mime_types2' <?php echo $wpsc_check_mime_types1; ?> /> <label for='wpsc_check_mime_types2'><?php echo TXT_WPSC_YES;?></label>&nbsp;
+						<input type='radio' value='1' name='wpsc_options[wpsc_check_mime_types]' id='wpsc_check_mime_types1' <?php echo $wpsc_check_mime_types2; ?> /> <label for='wpsc_check_mime_types1'><?php echo TXT_WPSC_NO;?></label><br />
+
+						<span class="wpscsmall description">
+							<?php echo TXT_WPSC_CHECK_MIME_TYPES_WARNING; ?>
+						</span>
+					</td>
+				</tr> 
 				
 				
 				<tr>

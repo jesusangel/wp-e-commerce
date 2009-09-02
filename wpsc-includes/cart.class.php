@@ -1589,14 +1589,17 @@ class wpsc_cart_item {
 		$accepted_file_types['mime'][] = 'image/jpeg';
 		$accepted_file_types['mime'][] = 'image/gif';
 		$accepted_file_types['mime'][] = 'image/png';
-		$accepted_file_types['mime'][] = 'image/svg+xml';
+		
+		$accepted_file_types['mime'][] = 'image/pjpeg';  // Added for IE compatibility
+		$accepted_file_types['mime'][] = 'image/x-png';  // Added for IE compatibility
+		//$accepted_file_types['mime'][] = 'image/svg+xml';
 		
 		
 		$accepted_file_types['ext'][] = 'jpeg';
 		$accepted_file_types['ext'][] = 'jpg';
 		$accepted_file_types['ext'][] = 'gif';
 		$accepted_file_types['ext'][] = 'png';
-		$accepted_file_types['ext'][] = 'svg';
+		//$accepted_file_types['ext'][] = 'svg';
 		
 		
 		$can_have_uploaded_image = get_product_meta($this->product_id,'can_have_uploaded_image');
@@ -1612,7 +1615,7 @@ class wpsc_cart_item {
 		  }
 		  //echo( "<pre>".print_r($mime_type_data,true)."</pre>" );
 		  //exit( "<pre>".print_r($file_data,true)."</pre>" );
-			if((array_search($mime_type, $accepted_file_types['mime']) !== false) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
+			if((   (array_search($mime_type, $accepted_file_types['mime']) !== false) || (get_option('wpsc_check_mime_types') == 1) ) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
 			  if(is_file(WPSC_USER_UPLOADS_DIR.$file_data['name'])) {
 					$name_parts = explode('.',basename($file_data['name']));
 					$extension = array_pop($name_parts);

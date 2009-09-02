@@ -83,18 +83,18 @@ if($_POST['collected_data'] != null)
       }
     }
  
-  $saved_data_sql = "SELECT * FROM `".$wpdb->prefix."usermeta` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
+  $saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
   $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
   
   $new_meta_data = serialize($meta_data);
   if($saved_data != null)
     {
-    $wpdb->query("UPDATE `".$wpdb->prefix."usermeta` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");
+    $wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");
     $changes_saved = true;
     }
     else
       {
-      $wpdb->query("INSERT INTO `".$wpdb->prefix."usermeta` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
+      $wpdb->query("INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
       $changes_saved = true;
       }  
   } 
@@ -118,7 +118,7 @@ if($changes_saved == true)
 <?php
 // arr, this here be where the data will be saved
 $meta_data = null;
-$saved_data_sql = "SELECT * FROM `".$wpdb->prefix."usermeta` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
+$saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
 $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
 
 $meta_data = unserialize($saved_data['meta_value']);
