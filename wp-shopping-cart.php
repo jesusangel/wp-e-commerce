@@ -14,7 +14,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '32');
+define('WPSC_MINOR_VERSION', '33');
 
 define('WPSC_PRESENTABLE_VERSION', '3.7.4');
 
