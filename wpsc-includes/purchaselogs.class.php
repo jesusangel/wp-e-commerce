@@ -301,7 +301,7 @@ function wpsc_purchaselog_details_total(){
 	$total = 0;
   $total += ($purchlogitem->purchitem->price*$purchlogitem->purchitem->quantity);
   $total += ($purchlogitem->purchitem->tax_charged*$purchlogitem->purchitem->quantity);
-  $total += $purchlogitem->extrainfo->discount_value;
+  $total -= $purchlogitem->extrainfo->discount_value;
 	$purchlogitem->totalAmount += $total;
 	return $total;
 }
