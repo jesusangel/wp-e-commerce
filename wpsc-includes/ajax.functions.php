@@ -558,7 +558,7 @@ if($_REQUEST['wpsc_action'] == 'submit_checkout') {
 function wpsc_change_tax() {
   global $wpdb, $wpsc_cart, $wpsc_theme_path;
   $form_id = absint($_POST['form_id']);
-
+	//exit('Shipping<pre>'.print_r($_SESSION,true).'</pre>');
   $previous_country = $_SESSION['wpsc_selected_country'];
 	$_SESSION['wpsc_selected_country'] =$_POST['billing_country'];
 
@@ -568,6 +568,12 @@ function wpsc_change_tax() {
 	
 	if($_SESSION['wpsc_selected_country'] != $check_country_code) {
 		$_SESSION['wpsc_selected_region'] = null;
+	}
+	if(isset($_POST['shipping_country'])){
+	$_SESSION['wpsc_delivery_country'] = $_POST['shipping_country'];
+	}
+	if(isset($_POST['shipping_region'])){
+	$_SESSION['wpsc_delivery_region'] = $_POST['shipping_region'];
 	}
 
   $wpsc_cart->update_location();
@@ -608,7 +614,7 @@ function wpsc_change_tax() {
 // 	*/\n";
 	  
 	
-	if(($_POST['billing_country'] != 'undefined') ) {
+	if(($_POST['billing_country'] != 'undefined') && !isset($_POST['shipping_country'])) {
 		$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$_POST['billing_country']."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
 		if($region_list != null) {
 			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='set_billing_country(\"region_country_form_$form_id\", \"$form_id\");'>\n\r";

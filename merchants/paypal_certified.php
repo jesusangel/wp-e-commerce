@@ -58,7 +58,6 @@ $cancelURL = $transact_url;
 //' it is included at the top of this file.
 //'-------------------------------------------------
 $resArray = CallShortcutExpressCheckout ($_SESSION['paypalAmount'], $currencyCodeType, $paymentType, $returnURL, $cancelURL);
-//exit('<pre>'.print_r($paymentAmount, true).'</pre>');
 $ack = strtoupper($resArray["ACK"]);
 	if($ack=="SUCCESS")	{
 		RedirectToPayPal ( $resArray["TOKEN"] );

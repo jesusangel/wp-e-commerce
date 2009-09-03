@@ -271,3 +271,17 @@ function set_billing_country(html_form_id, form_id){
 	});
   //ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
 }
+function set_shipping_country(html_form_id, form_id){
+  var shipping_region = '';
+  country = jQuery(("div#"+html_form_id+" select[class=current_country]")).val();
+  region = jQuery(("div#"+html_form_id+" select[class=current_region]")).val();
+  if(/[\d]{1,}/.test(region)) {
+    shipping_region = "&shipping_region="+region;
+	}
+	
+	form_values = "wpsc_ajax_action=change_tax&form_id="+form_id+"&shipping_country="+country+shipping_region;
+	jQuery.post( 'index.php', form_values, function(returned_data) {
+		eval(returned_data);
+	});
+  //ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
+}

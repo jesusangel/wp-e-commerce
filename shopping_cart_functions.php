@@ -119,14 +119,15 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
   if($checkoutfields){
   	$namevalue = "name='collected_data[".$region_form_id."]'"; 
 //  	$namevalue = "name='collected_data[".$form_id."][1]'"; 
-
+	$js = "onchange='set_shipping_country(\"$html_form_id\", \"$form_id\");'";
   }else{
   	$namevalue = "name='collected_data[".$form_id."][1]'"; 
+  	$js= "onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'";
   }
  // exit('Not here? >'.$region_form_id.' ' .$sql);
     $output .= "<div id='region_select_$form_id'>";
     if($region_list != null) {
-      $output .= "<select title='billingregion' ".$namevalue." class='current_region' onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'>\n\r";
+      $output .= "<select title='billingregion' ".$namevalue." class='current_region' ".$js.">\n\r";
       //$output .= "<option value=''>None</option>";
       foreach($region_list as $region) {
         if($selected_region == $region['id']) {
