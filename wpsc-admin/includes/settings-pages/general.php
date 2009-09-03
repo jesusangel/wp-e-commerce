@@ -164,9 +164,15 @@ function wpsc_options_general(){
 					$language = "Danish";
 					break;
 					
+					case "RO_ro.php";
+					$language = "Romanian";
+					break;
+					
 					case "nn_NO.php";
 					$language = "Norwegian";
 					break;
+
+					
 					case "CZ_cz.php";
 					$language = "Czech";
 					break;

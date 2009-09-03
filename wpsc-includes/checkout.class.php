@@ -378,7 +378,7 @@ class wpsc_checkout {
 	* @access public
 	*/
   function validate_forms() {
-   global $wpdb;
+   global $wpdb, $user_ID;
    $any_bad_inputs = false;
    // Credit Card Number Validation for Paypal Pro and maybe others soon
    	  if(isset($_POST['card_number'])){
@@ -484,7 +484,21 @@ class wpsc_checkout {
 				}
 			}
 		}
-		     			   				//exit('card number '.$_SESSION['wpsc_gateway_error_messages']['card_number']);
+		if($any_bad_inputs == false) {
+			$saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
+			$saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
+			//echo "<pre>".print_r($meta_data,true)."</pre>";
+			$new_meta_data = serialize($_POST['collected_data']);
+			if($saved_data != null) {
+				$wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");
+				$changes_saved = true;
+			} else {
+				$wpdb->query("INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
+				$changes_saved = true;
+			}
+
+		}
+		
 		return array('is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message);
   }
   
