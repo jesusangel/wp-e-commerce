@@ -613,33 +613,55 @@ class wpsc_cart {
   function get_tax_rate() {
     global $wpdb;
     $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
-		if(($country_data['has_regions'] == 1)) {
-			$region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".get_option('base_region')."') ",ARRAY_A) ;
-			$tax_percentage =  $region_data['tax'];
-		} else {
-			$tax_percentage =  $country_data['tax'];
-		}
 		$add_tax = false;
+
+		
 		if($this->selected_country == get_option('base_country')) {
-			if(($this->selected_country == 'US' ) || ($this->selected_country == 'CA') ) { // tax handling for US (and canada?)
-				if($this->selected_region == get_option('base_region')) {
-					// if they in the state, they pay tax
-					$add_tax = true;
-				} else if($this->delivery_region == get_option('base_region')) {
-					// if they live outside the state, but are delivering to within the state, they pay tax also
-					$add_tax = true;
-				}
-			} else { // tax handling for everywhere else
-				if($country_data['has_regions'] == 1) {
-					if(get_option('base_region') == $region ) {
+		  // Tax rules for various countries go here, if your countries tax rules deviate from this, please supply code to add your region
+		  switch($this->selected_country) {
+		  	case 'US': // USA!
+					$tax_region = get_option('base_region');
+					if($this->selected_region == get_option('base_region')) {
+						// if they in the state, they pay tax
+						$add_tax = true;
+					} else if($this->delivery_region == get_option('base_region')) {
+						// if they live outside the state, but are delivering to within the state, they pay tax also
 						$add_tax = true;
 					}
-				} else {
+		  	break;
+
+		  	case 'CA': // Canada!
+		  	  // apparently in canada, the region that you are in is used for tax purposes
+		  	  if($this->selected_region != null) {
+						$tax_region = $this->selected_region;
+					} else {
+						$tax_region = get_option('base_region');
+					}
 					$add_tax = true;
-				}
-			}
+		  	break;
+
+		  	default: // Everywhere else!
+					$tax_region = get_option('base_region');
+					if($country_data['has_regions'] == 1) {
+						if(get_option('base_region') == $region ) {
+							$add_tax = true;
+						}
+					} else {
+						$add_tax = true;
+					}
+		  	break;
+		  }
 		}
-		if($add_tax !== true) {
+		
+		if($add_tax == true) {
+			if(($country_data['has_regions'] == 1)) {
+				$region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".$tax_region."') ",ARRAY_A) ;
+				$tax_percentage =  $region_data['tax'];
+			} else {
+				$tax_percentage =  $country_data['tax'];
+			}
+		} else {
+		  // no tax charged = tax equal to 0%
 			$tax_percentage = 0;
 		}
 		if($this->tax_percentage != $tax_percentage ) {

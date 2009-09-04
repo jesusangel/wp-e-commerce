@@ -68,7 +68,7 @@ function wpsc_this_page_url() {
 		if($wpsc_query->query_vars['page'] > 1) {
 			//
 			if(get_option('permalink_structure')) {
-				$output .= $output."page/{$wpsc_query->query_vars['page']}/";
+				$output .= "page/{$wpsc_query->query_vars['page']}/";
 			} else {
 				$output = add_query_arg('page_number', $wpsc_query->query_vars['page'], $output);
 			}

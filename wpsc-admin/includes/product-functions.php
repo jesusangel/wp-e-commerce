@@ -1,3 +1,4 @@
+
 <?php
 /**
  * WPSC Product modifying functions
