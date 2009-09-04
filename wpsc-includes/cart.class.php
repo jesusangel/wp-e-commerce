@@ -1720,7 +1720,7 @@ class wpsc_cart_item {
 			// if the file is downloadable, check that the file is real
 			if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('{$this->file_id}')")) {
 				$unique_id = sha1(uniqid(mt_rand(), true));
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` ( `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->file_id}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (`product_id` , `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->product_id}', '{$this->file_id}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
 			}
 		}
 		

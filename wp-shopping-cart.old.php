@@ -1250,7 +1250,10 @@ function nzshpcrt_download_file() {
 				$product_file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$download_data['product_id']."' LIMIT 1");
 				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_file_id."' LIMIT 1", ARRAY_A);
       } else {
-				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+				$old_file_data = $wpdb->get_row("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+				
+				$product_file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$old_file_data['product_id']."' LIMIT 1");
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_file_id."' LIMIT 1", ARRAY_A);
 			}
       
       if((int)$download_data['downloads'] >= 1) {

@@ -1,4 +1,3 @@
-
 <?php
 /**
  * WPSC Product modifying functions
@@ -730,7 +729,7 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 				$perms = $stat['mode'] & 0000666;
 				@ chmod( $preview_filepath, $perms );	
 			}
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `filename` = '".$wpdb->escape($filename)."', `mimetype` = '$mimetype', `idhash` = '$idhash' WHERE `id` = '$fileid' LIMIT 1");
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `product_id` = '{$product_id}', `filename` = '".$wpdb->escape($filename)."', `mimetype` = '$mimetype', `idhash` = '$idhash' WHERE `id` = '$fileid' LIMIT 1");
 		}
 		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
 		return $fileid;
@@ -776,7 +775,7 @@ function wpsc_item_reassign_file($product_id, $selected_file) {
 		  $mimetype = wpsc_get_mimetype(WPSC_FILE_DIR.$selected_file);
 		  $filename = $idhash = $selected_file;
 			$timestamp = time();
-			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
+			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` (`product_id`, `filename`  , `mimetype` , `idhash` , `date` ) VALUES ('{$product_id}', '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
 			$fileid = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `date` = '{$timestamp}' AND `filename` IN ('{$filename}')");
 		}
 		// update the entry in the product table
