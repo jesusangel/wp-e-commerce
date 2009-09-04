@@ -346,7 +346,6 @@ if(($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_i
 */
 function wpsc_update_location() {
   global $wpdb, $wpsc_cart;
-
 	if($_POST['country'] != null) {
 		$_SESSION['wpsc_delivery_country'] = $_POST['country'];
 		if($_SESSION['wpsc_selected_country'] == null) {
@@ -560,9 +559,12 @@ function wpsc_change_tax() {
   $form_id = absint($_POST['form_id']);
 	//exit('Shipping<pre>'.print_r($_SESSION,true).'</pre>');
   $previous_country = $_SESSION['wpsc_selected_country'];
+	if(isset($_POST['billing_country'])){ 
 	$_SESSION['wpsc_selected_country'] =$_POST['billing_country'];
-
+	}
+	if(isset($_POST['billing_region'])){	
 	$_SESSION['wpsc_selected_region'] = absint($_POST['billing_region']);
+	}
 
 	$check_country_code = $wpdb->get_var(" SELECT `country`.`isocode` FROM `".WPSC_TABLE_REGION_TAX."` AS `region` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `region`.`country_id` = `country`.`id` WHERE `region`.`id` = '".$_SESSION['wpsc_selected_region']."' LIMIT 1");
 	
@@ -575,11 +577,10 @@ function wpsc_change_tax() {
 	if(isset($_POST['shipping_region'])){
 	$_SESSION['wpsc_delivery_region'] = $_POST['shipping_region'];
 	}
-
+	//exit('1<pre>'.print_r($_POST,true).'</pre>');
   $wpsc_cart->update_location();
   $tax = $wpsc_cart->calculate_total_tax();
   $total = wpsc_cart_total();
-
 	ob_start();
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	include_once($cur_wpsc_theme_folder."/cart_widget.php");

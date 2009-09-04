@@ -82,7 +82,7 @@ function wpsc_display_product_form ($product_id = 0) {
 		//echo "<pre>".print_r($product_data,true)."</pre>";
 		if(function_exists('wp_insert_term')) {
 			$term_relationships = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE object_id = '{$product_id}'", ARRAY_A);
-			
+		
 			foreach ((array)$term_relationships as $term_relationship) {
 				$tt_ids[] = $term_relationship['term_taxonomy_id'];
 			}
@@ -98,6 +98,7 @@ function wpsc_display_product_form ($product_id = 0) {
 				$imtags = implode(',', $tags);
 			}
 		}
+		//exit('got called<pre>'.print_r($imtags,true).'</pre>');	
 	
 		$check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}'");
 		
@@ -365,8 +366,8 @@ function wpsc_product_category_and_tag_forms($product_data=''){
     $output .= TXT_WPSC_CATEGORY_AND_TAG_CONTROL;
     if ($product_data != '') {
 			if(function_exists('wp_insert_term')) {
-				$term_relationships = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE object_id = '{$product_id}'", ARRAY_A);
-				
+				$term_relationships = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE object_id = '{$product_data['id']}'", ARRAY_A);
+				//exit('HERE><pre>'.print_r($term_relationships,true).'</pre>');
 				foreach ((array)$term_relationships as $term_relationship) {
 					$tt_ids[] = $term_relationship['term_taxonomy_id'];
 				}
@@ -378,9 +379,11 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 						$tags[] = $wpdb->get_var("SELECT `name` FROM `{$wpdb->terms}` WHERE `term_id`='{$term_id}' LIMIT 1");
 					}
 				}
+				$imtags = '';
 				if ($tags != NULL){ 
 					$imtags = implode(',', $tags);
 				}
+				//exit('HERE<pre>'.print_r($imtags,true).'</pre>');
 			}
   	}
     $output .= "

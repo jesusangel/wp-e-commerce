@@ -163,7 +163,7 @@ class usps {
 		}
 		$usps_server = 'production.shippingapis.com';
 		$api_dll = 'shippingapi.dll';
-		
+	//	$url ='http://testing.shippingapis.com/ShippingAPITest.dll?'.$request;
 		$url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
 		//exit('URL '.$url);	
 			$ch=curl_init(); 
@@ -172,11 +172,12 @@ class usps {
 		curl_setopt($ch, CURLOPT_VERBOSE, 1); 
 		@ curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
 		curl_setopt($ch, CURLOPT_TIMEOUT, 120); 
-		curl_setopt($ch, CURLOPT_USERAGENT, 'osCommerce'); 
+		curl_setopt($ch, CURLOPT_USERAGENT, 'wp-e-commerce'); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 		$body = curl_exec($ch);
 		//exit('<pre>'.print_r($body, true).'</pre>');
 		curl_close($ch);
+		//exit($body);
 		$rates=array();
 		$response=array();
 		while (true) {

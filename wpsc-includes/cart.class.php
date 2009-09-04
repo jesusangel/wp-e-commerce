@@ -1462,7 +1462,7 @@ class wpsc_cart_item {
 	 * @return array array of monetary and other values
 	*/
 	function refresh_item() {
-    global $wpdb, $wpsc_shipping_modules;
+    global $wpdb, $wpsc_shipping_modules, $wpsc_cart;
     $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
     $priceandstock_id = 0;
 
@@ -1547,7 +1547,7 @@ class wpsc_cart_item {
 			  $this->custom_tax_rate = $custom_tax;
 			  $this->tax = $this->taxable_price * ($this->custom_tax_rate/100);
 			} else {
-			  $this->tax = $this->taxable_price * ($this->cart->tax_percentage/100);
+			  $this->tax = $this->taxable_price * ($wpsc_cart->tax_percentage/100);
 			}
 		}
 		$this->product_url = wpsc_product_url($this->product_id);
