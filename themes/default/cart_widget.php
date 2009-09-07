@@ -33,7 +33,7 @@
 		<?php endwhile; ?>
 	</table>
 
-<?php if(wpsc_cart_has_shipping() && !wpsc_cart_show_plus_postage()) : ?>
+<?php if(wpsc_cart_has_shipping() && wpsc_cart_show_plus_postage()) : ?>
 		<span class='total'>
 		  <span class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
 		<span class='totalhead'>
@@ -45,8 +45,8 @@
 	
 	<span class='total'>
 		<span class="pricedisplay checkout-total">
-			<?php echo wpsc_cart_total(); ?>
-			<?php if(wpsc_cart_show_plus_postage()) : ?>
+			<?php echo wpsc_cart_total_widget(); ?>
+			<?php if(!wpsc_cart_show_plus_postage()) : ?>
 				<span class='pluspostagetax'> + <?php echo TXT_WPSC_POSTAGE_AND_TAX; ?></span>
 			<?php endif; ?>
 		</span>

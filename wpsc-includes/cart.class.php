@@ -53,9 +53,23 @@ function wpsc_cart_total($forDisplay=true) {
 	$total += $wpsc_cart->calculate_total_tax();
 	$total -= $wpsc_cart->coupons_amount;
 	if($forDisplay){
+//	exit('abksd'.get_option('add_plustax'));
 		return $wpsc_cart->process_as_currency($total);
 	}else{
 		return $total;
+	}
+}
+
+function wpsc_cart_total_widget(){
+	global $wpsc_cart; 
+	$total = $wpsc_cart->calculate_subtotal();
+	$total += $wpsc_cart->calculate_total_shipping();
+	$total += $wpsc_cart->calculate_total_tax();
+	$total -= $wpsc_cart->coupons_amount;
+	if(get_option('add_plustax') == 1){
+		return $wpsc_cart->process_as_currency($wpsc_cart->calculate_subtotal());
+	}else{
+		return $wpsc_cart->process_as_currency($total);
 	}
 }
 
