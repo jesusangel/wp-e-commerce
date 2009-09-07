@@ -41,8 +41,10 @@ $siteurl = get_option('siteurl');
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
 
-if(isset($wpmu_version)) {
+if(isset($wpdb->blogid)) {
     define('IS_WPMU', 1);
+} else {
+	define('IS_WPMU', 0);
 }
 
 // include the selected language file
@@ -173,17 +175,19 @@ if(IS_WPMU == 1) {
 	$upload_path = WP_CONTENT_DIR."/uploads";
 	$upload_url = WP_CONTENT_URL."/uploads";
 }
+	
+$wpsc_upload_dir = "{$upload_path}/wpsc/";
+$wpsc_file_dir = "{$wpsc_upload_dir}downloadables/";
+$wpsc_preview_dir = "{$wpsc_upload_dir}previews/";
+$wpsc_image_dir = "{$wpsc_upload_dir}product_images/";
+$wpsc_thumbnail_dir = "{$wpsc_upload_dir}product_images/thumbnails/";
+$wpsc_category_dir = "{$wpsc_upload_dir}category_images/";
+$wpsc_user_uploads_dir = "{$wpsc_upload_dir}user_uploads/";
+$wpsc_cache_dir = "{$wpsc_upload_dir}cache/";
+$wpsc_upgrades_dir = "{$wpsc_upload_dir}upgrades/";
+$wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
 
-$wpsc_file_dir = "{$upload_path}/wpsc/downloadables/";
-$wpsc_preview_dir = "{$upload_path}/wpsc/previews/";
-$wpsc_image_dir = "{$upload_path}/wpsc/product_images/";
-$wpsc_thumbnail_dir = "{$upload_path}/wpsc/product_images/thumbnails/";
-$wpsc_category_dir = "{$upload_path}/wpsc/category_images/";
-$wpsc_user_uploads_dir = "{$upload_path}/wpsc/user_uploads/";
-$wpsc_cache_dir = "{$upload_path}/wpsc/cache/";
-$wpsc_upgrades_dir = "{$upload_path}/wpsc/upgrades/";
-$wpsc_themes_dir = "{$upload_path}/wpsc/themes/";
-
+define('WPSC_UPLOAD_DIR', $wpsc_upload_dir);
 define('WPSC_FILE_DIR', $wpsc_file_dir);
 define('WPSC_PREVIEW_DIR', $wpsc_preview_dir);
 define('WPSC_IMAGE_DIR', $wpsc_image_dir);
@@ -198,28 +202,31 @@ define('WPSC_THEMES_PATH', $wpsc_themes_dir);
 /**
 * files that are uploaded as part of digital products are not directly downloaded, therefore there is no need for a URL constant for them
 */
+$wpsc_upload_url = "{$upload_url}/wpsc/";
+$wpsc_preview_url = "{$wpsc_upload_url}previews/";
+$wpsc_image_url = "{$wpsc_upload_url}product_images/";
+$wpsc_thumbnail_url = "{$wpsc_upload_url}product_images/thumbnails/";
+$wpsc_category_url = "{$wpsc_upload_url}category_images/";
+$wpsc_user_uploads_url = "{$wpsc_upload_url}user_uploads/";
+$wpsc_cache_url = "{$wpsc_upload_url}cache/";
+$wpsc_upgrades_url = "{$wpsc_upload_url}upgrades/";
+$wpsc_themes_url = "{$wpsc_upload_url}themes/";
 
-$wpsc_preview_url = "{$upload_url}/wpsc/previews/";
-$wpsc_image_url = "{$upload_url}/wpsc/product_images/";
-$wpsc_thumbnail_url = "{$upload_url}/wpsc/product_images/thumbnails/";
-$wpsc_category_url = "{$upload_url}/wpsc/category_images/";
-$wpsc_user_uploads_url = "{$upload_url}/wpsc/user_uploads/";
-$wpsc_cache_url = "{$upload_url}/wpsc/cache/";
-$wpsc_themes_url = "{$upload_url}/wpsc/themes/";
-
+define('WPSC_UPLOAD_URL', $wpsc_upload_url);
 define('WPSC_PREVIEW_URL', $wpsc_preview_url);
 define('WPSC_IMAGE_URL', $wpsc_image_url);
 define('WPSC_THUMBNAIL_URL', $wpsc_thumbnail_url);
 define('WPSC_CATEGORY_URL', $wpsc_category_url);
 define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 define('WPSC_CACHE_URL', $wpsc_cache_url);
+define('WPSC_UPGRADES_URL', $wpsc_upgrades_url);
 define('WPSC_THEMES_URL', $wpsc_themes_url);
 
 
 
 // if the gold cart file is present, include it, this must be done before the admin file is included
-if(is_file("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php")) {
-  require_once("{$upload_path}/wpsc/upgrades/gold_cart_files/gold_shopping_cart.php");
+if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
+  require_once(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php");
 }
 
 

@@ -360,7 +360,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
 					if (!$image) {
 						$output .= "<li class='cat-item'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
 					} else {
-						$output .= "<li class='cat-item'><img src='".get_option('siteurl')."/wp-content/uploads/wpsc/category_images/".$option['image']."'><br><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
+						$output .= "<li class='cat-item'><img src='" . WPSC_CATEGORY_URL . $option['image']."'><br><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
 					}
 				}//end get_option
 				

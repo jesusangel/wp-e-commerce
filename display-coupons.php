@@ -10,8 +10,8 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		$every_product = (int)(bool)$_POST['add_every_product'];
 // 		$start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
 // 		$end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
-		$start_date = $_POST['add_start']." 00:00:00";
-		$end_date = $_POST['add_end']." 00:00:00";
+		$start_date = date('Y-m-d', strtotime($_POST['add_start'])) . " 00:00:00";
+		$end_date = date('Y-m-d', strtotime($_POST['add_end'])) . " 00:00:00";
 		$rules = $_POST['rules'];
 		foreach ($rules as $key => $rule) {
 			foreach ($rule as $k => $r) {

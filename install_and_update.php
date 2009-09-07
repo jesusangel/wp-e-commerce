@@ -411,68 +411,25 @@ function wpsc_check_and_copy_files() {
 
 
 function wpsc_create_upload_directories() {
-  $wpsc_files_directory = WP_CONTENT_DIR.'/uploads/wpsc/';
-  
-  if(!is_dir(WP_CONTENT_DIR.'/uploads')) {
-	  @ mkdir(WP_CONTENT_DIR.'/uploads', 0775);
-  }
 
-  if(!is_dir($wpsc_files_directory)) {
-	  @ mkdir($wpsc_files_directory, 0775);
+  // Create the required folders
+  $folders = array(
+  	WPSC_UPLOAD_DIR,
+  	WPSC_FILE_DIR,
+  	WPSC_PREVIEW_DIR,
+  	WPSC_IMAGE_DIR,
+  	WPSC_THUMBNAIL_DIR,
+  	WPSC_CATEGORY_DIR,
+  	WPSC_USER_UPLOADS_DIR,
+  	WPSC_CACHE_DIR,
+  	WPSC_UPGRADES_DIR,
+  	WPSC_THEMES_PATH,
+  );
+  foreach ($folders as $folder) {
+  	wp_mkdir_p($folder);
+  	@ chmod( $folder, 0775 );
   }
-  
-  if(!is_dir(WPSC_FILE_DIR)) {
-	  @ mkdir(WPSC_FILE_DIR, 0775);
-		wpsc_product_files_htaccess();  
-  }
-  
-	if(!is_dir(WPSC_PREVIEW_DIR)) {
-		@ mkdir(WPSC_PREVIEW_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_IMAGE_DIR)) {
-		@ mkdir(WPSC_IMAGE_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_THUMBNAIL_DIR)) {
-		@ mkdir(WPSC_THUMBNAIL_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_CATEGORY_DIR)) {
-		@ mkdir(WPSC_CATEGORY_DIR, 0775);
-	}
-		
-	if(!is_dir(WPSC_USER_UPLOADS_DIR)) {
-		@ mkdir(WPSC_USER_UPLOADS_DIR, 0775);
-	}
-	
-	if(!is_dir(WPSC_CACHE_DIR)) {
-		@ mkdir(WPSC_CACHE_DIR, 0775);
-	}
-	
-	if(!is_dir(WPSC_UPGRADES_DIR)) {
-		@ mkdir(WPSC_UPGRADES_DIR, 0775);
-	}
-	
-	if(!is_dir(WPSC_THEMES_PATH)) {
-		@ mkdir(WPSC_THEMES_PATH, 0775);
-		
-	}
 	//wpsc_copy_themes_to_uploads();
-	
-	$wpsc_file_directory = ABSPATH.get_option('upload_path').'/wpsc/';
-	if(is_dir($wpsc_file_directory)) {
-	  // sort the permissions out in case they are not already sorted out.
-		@ chmod( ABSPATH.get_option('upload_path'), 0775 );
-		@ chmod( $wpsc_file_directory, 0775 );
-		@ chmod( WPSC_FILE_DIR, 0775 );
-		@ chmod( WPSC_PREVIEW_DIR, 0775 );
-		@ chmod( WPSC_IMAGE_DIR, 0775 );
-		@ chmod( WPSC_CATEGORY_DIR, 0775 );
-		@ chmod( WPSC_USER_UPLOADS_DIR, 0775 );
-		@ chmod( WPSC_CACHE_DIR, 0775 );
-		@ chmod( WPSC_THEME_DIR, 0775 );
-	}
 }
 
 

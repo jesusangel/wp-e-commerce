@@ -536,19 +536,22 @@ function wpsc_admin_ajax() {
 	}
 	
 
-	if ($_POST['del_prod'] == 'true') {
-		$ids = $_POST['del_prod_id'];
-		$ids = explode(',',$ids);
-		foreach ($ids as $id) {
-			$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$id'");
-		}
-		exit();
-	}
+	// 	if ($_POST['del_prod'] == 'true') {
+	// 		$ids = $_POST['del_prod_id'];
+	// 		$ids = explode(',',$ids);
+	// 		foreach ($ids as $id) {
+	// 			$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=%d", $id));
+	// 		}
+	// 		exit();
+	// 	}
 
 	
 	if ($_POST['del_file'] == 'true') {
-		$wpdb->query("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=".$_POST['del_file_hash']);
-		unlink(WPSC_FILE_DIR.$_POST['del_file_hash']);
+		
+		if ($wpdb->query($wpdb->prepare("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=%s", $_POST['del_file_hash'])) == 1) {
+			// Only delete the file if the delete query above affected a single row. Prevents deletion of an arbirary file
+			unlink(WPSC_FILE_DIR.basename($_POST['del_file_hash']));
+		}
 		exit();
 	}
 		
@@ -560,8 +563,8 @@ function wpsc_admin_ajax() {
 	}
       
 	if(($_POST['remove_variation_value'] == "true") && is_numeric($_POST['variation_value_id'])) {
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `value_id` = '".$_POST['variation_value_id']."'");
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".$_POST['variation_value_id']."' LIMIT 1");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `value_id` = '".(int)$_POST['variation_value_id']."'");
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".(int)$_POST['variation_value_id']."' LIMIT 1");
 		exit();
 	}
 		
@@ -591,7 +594,7 @@ function wpsc_admin_ajax() {
 	if(($_POST['remove_form_field'] == "true") && is_numeric($_POST['form_id'])) {
 		//exit(print_r($user,true));
 		if(current_user_can('level_7')) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `active` = '0' WHERE `id` ='".$_POST['form_id']."' LIMIT 1 ;");
+			$wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `active` = '0' WHERE `id` = %d LIMIT 1 ;", $_POST['form_id']));
 			exit(' ');
 		}
 	}

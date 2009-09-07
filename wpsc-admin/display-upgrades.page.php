@@ -98,7 +98,7 @@ function wpsc_display_upgrades_page() {
 				
 				<h2><?php echo __("Upgrade Instructions", 'wpsc');?></h2>
 				<p>
-					<?php _e("Copy the gold_cart_files directory into the wp-content/uploads/wpsc/upgrades folder.", 'wpsc'); ?>
+					<?php printf(__("Copy the gold_cart_files directory into the %s folder.", 'wpsc'),  WPSC_UPGRADES_DIR ); ?>
 				</p>
 				<p>
 					<?php _e("This folder should be automatically created when the e-commerce plugin is activated, but if it is not, you will have to create it yourself.", 'wpsc'); ?>

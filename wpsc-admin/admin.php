@@ -137,6 +137,7 @@ function wpsc_admin_pages(){
 			do_action('wpsc_add_submenu');
 		}
 		
+		add_action('load-'.WPSC_DIR_NAME.'/display-coupons.php', 'wpsc_admin_include_coupon_js');
 		
 		// Include the javascript and CSS for this page
 		
@@ -159,7 +160,10 @@ function wpsc_admin_pages(){
 		return;
   }
 
-
+function wpsc_admin_include_coupon_js() {
+	$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	wp_enqueue_script('datepicker-ui', WPSC_URL."/js/ui.datepicker.js",array('jquery-ui-core'), $version_identifier);
+}
   
 
 /**
@@ -195,8 +199,8 @@ function  wpsc_admin_include_css_and_js() {
 		'addTag' => attribute_escape(__('Add new tag')),
 		'separate' => __('Separate tags with commas'),
 	));
-	if(WPSC_GOLD_DIR_NAME != ''){
-		wp_enqueue_style('gold_cart', WP_CONTENT_URL.'/uploads/wpsc/upgrades/gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
+	if(defined('WPSC_GOLD_DIR_NAME') && WPSC_GOLD_DIR_NAME != ''){
+		wp_enqueue_style('gold_cart', WPSC_UPGRADES_URL . 'gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
 	}
 	//jQuery wysiwyg
 	//  	if ( user_can_richedit() ) {
@@ -236,7 +240,7 @@ function wpsc_admin_edit_products_page_js() {
 */
 
 function wpsc_admin_include_optionspage_css_and_js(){
-	wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/ajax.js', false, $version_identifier);
+	wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/js/ajax.js', false, $version_identifier);
 
 	wp_enqueue_script('wp-e-commerce-js-ui-tabs', WPSC_URL.'/wpsc-admin/js/jquery-ui.js', false, $version_identifier);
 	wp_enqueue_script('wp-e-commerce-js-dimensions', WPSC_URL.'/wpsc-admin/js/dimensions.js', false, $version_identifier);

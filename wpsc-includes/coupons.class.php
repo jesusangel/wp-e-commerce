@@ -60,7 +60,8 @@ class wpsc_coupons {
 			$coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
 			$coupon_data = $coupon_data[0];
 			
-			if ($coupon_data == '' || $coupon_data == NULL) {
+			if ($coupon_data == '' || $coupon_data == NULL 
+				|| strtotime($coupon_data['expiry']) < time() ) {
 				$this->errormsg = false;
 				return false;
 			} else {
