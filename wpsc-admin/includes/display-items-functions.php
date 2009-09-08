@@ -936,6 +936,7 @@ function wpsc_product_image_forms($product_data='') {
 			?>
 
 		</div>
+		<div style='clear:both'></div>
 	</div>
 	<?php
   return $output;

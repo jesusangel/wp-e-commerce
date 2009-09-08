@@ -427,6 +427,7 @@ function wpsc_submit_checkout() {
 			}
 			$is_valid = false;
 		}
+	//	exit('<pre>'.print_r($results, true).'</pre>');
 		if($results->ID > 0) {
 			$our_user_id = $results->ID;
 		} else {
@@ -442,7 +443,10 @@ function wpsc_submit_checkout() {
 	if($our_user_id < 1) {
 	  $our_user_id = $user_ID;
 	}
-	
+	// check we have a user id
+	if($user_ID == 0 && $our_user_id > 0 ){
+		$user_ID = $our_user_id;
+	}
    //exit('<pre>'.print_r($_POST, true).'</pre>');
 	
 	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
@@ -486,7 +490,6 @@ function wpsc_submit_checkout() {
 	if($is_valid == true || $_GET['gateway'] == 'noca') {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
-	
 		$sessionid = (mt_rand(100,999).time());
 		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
@@ -495,6 +498,8 @@ function wpsc_submit_checkout() {
 		} else {
 			$base_shipping = 0;
 		}
+	
+
 		$tax = $wpsc_cart->calculate_total_tax();
 		$total = $wpsc_cart->calculate_total_price();
 		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}','{$wpsc_cart->selected_region}', '{$wpsc_cart->delivery_region}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}')";

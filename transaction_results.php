@@ -1,5 +1,5 @@
 <?php
-global $wpdb, $user_ID;
+global $wpdb, $user_ID, $nzshpcrt_gateways;
 //$curgateway = get_option('payment_gateway');
 
 $sessionid = $_GET['sessionid'];
@@ -9,9 +9,10 @@ if($_GET['gateway'] == 'google'){
 }elseif($_GET['gateway'] == 'noca'){
 	wpsc_submit_checkout();
 }
-if(get_option('payment_gateway') == 'paypal_certified'){
+if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 	$sessionid = $_SESSION['paypalexpresssessionid'];
 }
+
 //exit("test!");
 $errorcode = '';
 $transactid = '';
@@ -23,10 +24,12 @@ if($_REQUEST['eway']=='1') {
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';
 }
-if(get_option('payment_gateway') == 'paypal_certified'){
+	//exit('getting here?<pre>'.print_r($_SESSION[[wpsc_previous_selected_gateway], true).'</pre>'.get_option('payment_gateway'));
+if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
+
 } else {
-	if(get_option('payment_gateway')== 'dps') {
+	if($_SESSION['wpsc_previous_selected_gateway']== 'dps') {
 		$sessionid = decrypt_dps_response();
 		//exit($sessionid);
 		if($sessionid != ''){
@@ -36,6 +39,7 @@ if(get_option('payment_gateway') == 'paypal_certified'){
 			_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
 		}
 	} else {
+
 		echo transaction_results($sessionid, true);
 	}
 }
