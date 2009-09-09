@@ -68,6 +68,16 @@ if(wpsc_cart_item_count() > 0) :
 	<?php if(isset($_SESSION['nocamsg']) && isset($_GET['noca']) && $_GET['noca'] == 'confirm'): ?>
 		<p class='validation-error'><?php echo $_SESSION['nocamsg']; ?></p>
 	<?php endif; ?>
+	<?php if($_SESSION['categoryAndShippingCountryConflict'] != '') : ?>
+		<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
+	<?php
+	endif;
+	if($_SESSION['WpscGatewayErrorMessage'] != '') :
+	?>
+		<p class='validation-error'><?php echo $_SESSION['WpscGatewayErrorMessage']; ?></p>
+	<?php
+	endif;
+	?>
 	<?php do_action('wpsc_before_shipping_of_shopping_cart'); ?>
 	<div id='wpsc_shopping_cart_container'>
 	<?php if(wpsc_uses_shipping()) : ?>
@@ -81,17 +91,6 @@ if(wpsc_cart_item_count() > 0) :
 			
 			<tr>
 				<td colspan='5'>
-					<?php if($_SESSION['categoryAndShippingCountryConflict'] != '') : ?>
-						<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
-					<?php
-					endif;
-					if($_SESSION['WpscGatewayErrorMessage'] != '') :
-					?>
-						<p class='validation-error'><?php echo $_SESSION['WpscGatewayErrorMessage']; ?></p>
-					<?php
-					endif;
-					?>
-
 					<form name='change_country' id='change_country' action='' method='post'>
 						<?php echo wpsc_shipping_country_list();?>
 						<input type='hidden' name='wpsc_update_location' value='true' />
@@ -138,7 +137,7 @@ if(wpsc_cart_item_count() > 0) :
 			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 	  </td>
 	</tr>
-	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount() != 0)): ?>
+	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount() >= 0)): ?>
 	<tr class="total_price">
 		<td colspan="3">
 			<?php echo TXT_WPSC_COUPONS; ?>

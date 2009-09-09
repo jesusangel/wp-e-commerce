@@ -428,6 +428,7 @@ function wpsc_submit_checkout() {
 	
 	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
 
+//  exit('valid >'.$is_valid.'\r\n'.$_SESSION['wpsc_delivery_country']);
 
 	foreach($wpsc_cart->cart_items as $cartitem){
 		//	exit('<pre>'.print_r($cartitem, true).'</pre>');
@@ -451,7 +452,7 @@ function wpsc_submit_checkout() {
 		}
 	}
   
-  
+ // exit('valid >'.$is_valid);
   if(array_search($submitted_gateway,$selected_gateways) !== false) {
 		$_SESSION['wpsc_previous_selected_gateway'] = $submitted_gateway;
   } else {

@@ -72,7 +72,7 @@ if($_POST['collected_data'] != null) {
 
   $saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
   $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
-  //echo "<pre>".print_r($meta_data,true)."</pre>";
+ // echo "<pre>".print_r($meta_data,true)."</pre>";
   $new_meta_data = serialize($meta_data);
   if($saved_data != null) {
     $wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");

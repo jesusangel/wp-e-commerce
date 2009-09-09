@@ -423,7 +423,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 					<input type='text' value='".$imtags."' tabindex='3' size='20' id='tags-input' class='tags-input' name='product_tags'/>
 				<span class='howto'>".__('Separate tags with commas')."</span>
 				</p>
-				<div id='tagchecklist'></div>
+				<div id='tagchecklist' onload='tag_update_quickclicks();'></div>
 
       </td>
       
