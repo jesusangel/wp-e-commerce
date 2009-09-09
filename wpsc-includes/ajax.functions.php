@@ -416,37 +416,14 @@ function wpsc_submit_checkout() {
 
 	//	exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
- 	if(isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email']) ) {
-		$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);
-		$_SESSION['wpsc_checkout_user_error_messages'] = array();
-		if(is_callable(array($results, "get_error_code")) && $results->get_error_code()) {
-			foreach ( $results->get_error_codes() as $code ) {
-				foreach ( $results->get_error_messages($code) as $error ) {
-					$_SESSION['wpsc_checkout_user_error_messages'][] = $error;
-				}
-			}
-			$is_valid = false;
-		}
-	//	exit('<pre>'.print_r($results, true).'</pre>');
-		if($results->ID > 0) {
-			$our_user_id = $results->ID;
-		} else {
-			$is_valid = false;		
-		}
-	}
-	
+ 	//	exit('<pre>'.print_r($results, true).'</pre>');
+		
 	if($_POST['agree'] != 'yes') {
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS;
 		$is_valid = false;		
 	}
 	
-	if($our_user_id < 1) {
-	  $our_user_id = $user_ID;
-	}
-	// check we have a user id
-	if($user_ID == 0 && $our_user_id > 0 ){
-		$user_ID = $our_user_id;
-	}
+
    //exit('<pre>'.print_r($_POST, true).'</pre>');
 	
 	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);

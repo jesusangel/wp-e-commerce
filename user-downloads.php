@@ -13,14 +13,18 @@
 	}
 	//exit($products);
 	foreach ((array)$products as $key => $product){
-	  if($product['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
-	  	$links[] = get_option('siteurl')."?downloadid=".$product['id'];
-	  } else {
-	  	$links[] = get_option('siteurl')."?downloadid=".$product['uniqueid'];
-	  }	
+	  $sql = "SELECT `processed` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`=".$product['purchid'];
+	  $isOrderAccepted = $wpdb->get_var($sql);
+	 if($isOrderAccepted > 1){
+		if($product['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is 
+		  	$links[] = get_option('siteurl')."?downloadid=".$product['id'];
+		} else {
+			$links[] = get_option('siteurl')."?downloadid=".$product['uniqueid'];
+		}	
 		$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE id = ".(int)$product['fileid']."";
 		$file = $wpdb->get_results($sql,ARRAY_A) ;
 		$files[] = $file[0];
+	 }
 	}
 	
 	//exit("---------------<pre>".print_r($files,1)."</pre>");
@@ -40,7 +44,6 @@ if(count($files) > 0) {
 			</tr>
       <?php
         $i=0;
-        
         foreach((array)$files as $file){
           $alternate = "";
           if(($i % 2) != 1) {

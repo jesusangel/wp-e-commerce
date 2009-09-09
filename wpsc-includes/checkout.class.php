@@ -378,7 +378,7 @@ class wpsc_checkout {
 	* @access public
 	*/
   function validate_forms() {
-   global $wpdb, $user_ID;
+   global $wpdb, $current_user;
    $any_bad_inputs = false;
    // Credit Card Number Validation for Paypal Pro and maybe others soon
    	  if(isset($_POST['card_number'])){
@@ -451,6 +451,33 @@ class wpsc_checkout {
    	}
    
    }
+   	if(isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email']) ) {
+			$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);
+			$_SESSION['wpsc_checkout_user_error_messages'] = array();
+			if(is_callable(array($results, "get_error_code")) && $results->get_error_code()) {
+				foreach ( $results->get_error_codes() as $code ) {
+					foreach ( $results->get_error_messages($code) as $error ) {
+						$_SESSION['wpsc_checkout_user_error_messages'][] = $error;
+					}
+				
+					$any_bad_inputs = true;
+				}
+			}
+			//exit('<pre>'.print_r($results, true).'</pre>');
+				if($results->ID > 0) {
+					$our_user_id = $results->ID;
+				} else {
+					$any_bad_inputs = true;		
+				}
+	}
+	if($our_user_id < 1) {
+	  $our_user_id = $user_ID;
+	}
+	// check we have a user id
+	if( $our_user_id > 0 ){
+		$user_ID = $our_user_id;
+	}
+
     		//Basic Form field validation for billing and shipping details
   		foreach($this->checkout_items as $form_data) {
 			$value = $_POST['collected_data'][$form_data->id];
@@ -484,21 +511,27 @@ class wpsc_checkout {
 				}
 			}
 		}
+	
+
+ 		//exit('UserID >><pre>'.print_r($user_ID, true).'</pre>');
 		if($any_bad_inputs == false) {
 			$saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
 			$saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
 			//echo "<pre>".print_r($meta_data,true)."</pre>";
 			$new_meta_data = serialize($_POST['collected_data']);
 			if($saved_data != null) {
-				$wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");
+				$sql ="UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');";
+				$wpdb->query($sql);
 				$changes_saved = true;
+				//exit($sql);
 			} else {
-				$wpdb->query("INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
+			$sql = "INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');";
+				$wpdb->query($sql);
 				$changes_saved = true;
+				//exit($sql);
 			}
-
 		}
-		
+
 		return array('is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message);
   }
   

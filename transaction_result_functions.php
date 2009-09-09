@@ -79,9 +79,12 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 									} else {
 											$link = $siteurl."?downloadid=".$download_data['uniqueid'];
 									}
+						$order_status= 4;
+					}else{
+							$order_status= $purchase_log['processed'];
 					}
 					$previous_download_ids[] = $download_data['id'];
-					$order_status= 4;
+				
 				}
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
 		
