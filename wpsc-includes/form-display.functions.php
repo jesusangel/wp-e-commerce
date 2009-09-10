@@ -104,7 +104,7 @@ function wpsc_uploaded_files() {
 		while(($file = @readdir($dir)) !== false) {
 			//filter out the dots, macintosh hidden files and any backup files
 			if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old")) {
-				$file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$file."' LIMIT 1",ARRAY_A);
+				$file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$wpdb->escape($file)."' LIMIT 1",ARRAY_A);
 				if($file_data != null) {
 					$dirlist[$num]['display_filename'] = $file_data['filename'];
 					$dirlist[$num]['file_id'] = $file_data['id'];
