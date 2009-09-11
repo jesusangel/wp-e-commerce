@@ -1,5 +1,5 @@
 === WP e-Commerce ===
-Contributors: Dan Milward, Thomas Howard, Chris Beavan, Allen Han
+Contributors: Dan Milward, Thomas Howard, Jeffry Ghazally, Chris Beavan, Allen Han
 Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
@@ -36,6 +36,17 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog ==  
+
+= 3.7.5 Beta 1 =  
+* Shipping Discount Bug that stopped shipping working at all.
+* Categories Widget has had numerous changes –
+* Better MU support. 
+* Canadian Tax – Fixes
+* US Tax –Fixes
+* Product Categories Caching Issue  Resolved
+* Coupons – ‘Apply to all Products’ 
+* ‘Your Account’  done some fixes to it.
+* ‘Accepted Payment’ goes straight to ‘Closed Order’
   
 = 3.7.4 =  
 * Changes to shipping to fix the bugs from 3.7.3 with shipping and the new shipping_discount feature
