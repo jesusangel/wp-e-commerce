@@ -136,7 +136,7 @@ if(!isset($purchlogs)){
 			'quantity' => 'Quantity',
 			'price' => 'Price',
 			'tax' => 'Tax',
-			'discount' => 'Discount',
+// 			'discount' => 'Discount',
 			'total' => 'Total'
 		);
 		register_column_headers('display-purchaselog-details', $columns); 
@@ -194,13 +194,20 @@ if(!isset($purchlogs)){
 						<tbody>
 						<?php wpsc_display_purchlog_details(); ?>
 						<tr>&nbsp;</tr>
+
 						<tr>
-							<td colspan='5'></td>
+							<td colspan='4'></td>
+							<th><?php _e('Discount'); ?> </th>
+							<td><?php echo wpsc_display_purchlog_discount(); ?></td>
+						</tr>
+						
+						<tr>
+							<td colspan='4'></td>
 							<th><?php _e('Shipping'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_shipping(); ?></td>
 						</tr>
 						<tr>
-							<td colspan='5'></td>
+							<td colspan='4'></td>
 							<th><?php _e('Total'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_totalprice(); ?></td>
 						</tr>
@@ -493,6 +500,7 @@ if(!isset($purchlogs)){
   	</form>
  	<?php
  }
+ 
  function wpsc_display_purchlog_details(){
  	while(wpsc_have_purchaselog_details()) : wpsc_the_purchaselog_item();
  	?>
@@ -502,12 +510,13 @@ if(!isset($purchlogs)){
  	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY-->
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE -->
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_tax(),true); ?></td> <!-- TAX -->
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT -->
+ 	<?php /* <td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT --> */ ?>
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL -->
  	</tr>
  	<?php
  	endwhile;
  }
+ 
 function wpsc_purchlogs_custom_fields(){
 	if(wpsc_purchlogs_has_customfields()){?>
 	<div class='metabox-holder'>

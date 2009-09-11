@@ -275,33 +275,42 @@ function wpsc_purchaselog_details_quantity(){
 //	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
 	return $purchlogitem->purchitem->quantity;
 }
+
+
 function wpsc_purchaselog_details_price(){
 	global $purchlogitem;
 //	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
 	return $purchlogitem->purchitem->price;
 }
+
+
 function wpsc_purchaselog_details_tax(){
 	global $purchlogitem;
 //	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
 	return $purchlogitem->purchitem->tax_charged;
 }
+
+
 function wpsc_purchaselog_details_discount(){
 	global $purchlogitem;
 //	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
 	return $purchlogitem->extrainfo->discount_value;
 }
+
+
 function wpsc_purchaselog_details_date(){
 	global $purchlogitem;
 //	exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
 	return date('jS M Y',$purchlogitem->extrainfo->date);
 	
 }
+
 function wpsc_purchaselog_details_total(){
 	global $purchlogitem;
 	$total = 0;
   $total += ($purchlogitem->purchitem->price*$purchlogitem->purchitem->quantity);
   $total += ($purchlogitem->purchitem->tax_charged*$purchlogitem->purchitem->quantity);
-  $total -= $purchlogitem->extrainfo->discount_value;
+  //$total -= $purchlogitem->extrainfo->discount_value;
 	$purchlogitem->totalAmount += $total;
 	return $total;
 }
@@ -309,6 +318,19 @@ function wpsc_purchaselog_details_purchnumber(){
 	global $purchlogitem;
 		//exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
 	return $purchlogitem->extrainfo->id;
+}
+
+/*
+ *Returns base shipping should make a function to calculate items shipping as well
+ */
+function wpsc_display_purchlog_discount($numeric = false){
+	global $purchlogitem;
+	$discount = $purchlogitem->extrainfo->discount_value;
+	if($numeric == true) {
+		return $discount;
+	} else {
+		return nzshpcrt_currency_display($discount, true);
+	}
 }
 /*
  *Returns base shipping should make a function to calculate items shipping as well
@@ -332,6 +354,7 @@ function wpsc_display_purchlog_shipping($numeric = false){
 function wpsc_display_purchlog_totalprice(){
 	global $purchlogitem;
 	
+	$purchlogitem->totalAmount -= wpsc_display_purchlog_discount(true);
 	$purchlogitem->totalAmount += wpsc_display_purchlog_shipping(true);
 	//$purchlogitem->totalAmount += $purchlogitem->extrainfo->base_shipping;
 	return nzshpcrt_currency_display($purchlogitem->totalAmount, true);

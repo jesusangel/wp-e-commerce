@@ -378,7 +378,7 @@ class wpsc_checkout {
 	* @access public
 	*/
   function validate_forms() {
-   global $wpdb, $current_user;
+   global $wpdb, $current_user, $user_ID;
    $any_bad_inputs = false;
    // Credit Card Number Validation for Paypal Pro and maybe others soon
    	  if(isset($_POST['card_number'])){
@@ -525,7 +525,7 @@ class wpsc_checkout {
 				$changes_saved = true;
 				//exit($sql);
 			} else {
-			$sql = "INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');";
+				$sql = "INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');";
 				$wpdb->query($sql);
 				$changes_saved = true;
 				//exit($sql);
