@@ -34,6 +34,7 @@ class wpsc_coupons {
 	var $conditions;
 	var $start_date;
 	var $active;
+	var $every_product ;
 	var $end_date;
 	var $use_once;
 	var $is_used;
@@ -55,13 +56,11 @@ class wpsc_coupons {
 		if ($code == '') {
 			return false;
 		} else {
-			$this->code = $code;
+			$this->code = $wpdb->escape($code);
 			
-			$coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
-			$coupon_data = $coupon_data[0];
+			$coupon_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` WHERE coupon_code='$code' LIMIT 1", ARRAY_A);
 			
-			if ($coupon_data == '' || $coupon_data == NULL 
-				|| strtotime($coupon_data['expiry']) < time() ) {
+			if (($coupon_data == '') || ($coupon_data == null) || (strtotime($coupon_data['expiry']) < time()) ) {
 				$this->errormsg = false;
 				return false;
 			} else {
@@ -73,6 +72,7 @@ class wpsc_coupons {
 				$this->use_once = $coupon_data['use-once'];
 				$this->start_date = $coupon_data['start'];
 				$this->end_date = $coupon_data['expiry'];
+				$this->every_product = $coupon_data['every_product'];
 				$this->errormsg = true;
 				$valid = $this->validate_coupon();
 				return $valid;
@@ -110,7 +110,12 @@ class wpsc_coupons {
 				$this->discount = $total_price*$this->value/100;
 				return $this->discount;
 			} else {
-				return $this->value;
+			  if($this->every_product == 1) {
+					$item_count = (int)wpsc_cart_item_count();
+					return ($this->value * $item_count);
+			  } else {
+					return $this->value;
+				}
 			}
 		} else {
 		

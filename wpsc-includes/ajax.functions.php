@@ -222,7 +222,6 @@ function wpsc_coupon_price($currCoupon = '') {
 	  if($wpsc_coupons->validate_coupon()){
 		 
 	  	$discountAmount = $wpsc_coupons->calculate_discount();
-	//  	exit('I have  calling'.$discountAmount);	 
 	  	$wpsc_cart->apply_coupons($discountAmount, $coupon);
 	  	$wpsc_coupons->errormsg = false;
 	  }	
