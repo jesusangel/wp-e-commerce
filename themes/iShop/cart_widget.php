@@ -42,7 +42,7 @@
 	
 	</span>
 	<?php endif; ?>
-<?php if( !wpsc_cart_show_plus_postage()) : ?>
+<?php if((wpsc_cart_tax(false) >0) && !wpsc_cart_show_plus_postage()) : ?>
 		<span class='total'>
 		  <span class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 		<span class='totalhead'>
