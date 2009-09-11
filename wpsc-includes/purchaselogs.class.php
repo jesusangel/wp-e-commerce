@@ -3,7 +3,22 @@
 if(isset($_REQUEST['purchaselog_id'])){
 $purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
 }
+function wpsc_display_purchlog_howtheyfoundus(){
+	global $purchlogitem;
+	return $purchlogitem->extrainfo->find_us;
+//	exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 
+}
+function wpsc_display_purchlog_display_howtheyfoundus(){
+	global $purchlogitem;
+	if($purchlogitem->extrainfo->find_us != ''){
+		return true;
+	}else{
+		return false;
+	}
+//	exit('<pre>'.print_r($purchlogitem, true).'</pre>');
+
+}
 function wpsc_purchlogs_has_tracking(){
 	global $wpdb, $wpsc_shipping_modules, $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');

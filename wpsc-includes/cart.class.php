@@ -255,7 +255,7 @@ function wpsc_cart_item_image($width = null, $height = null) {
 		$image_path = "index.php?image_id=".$wpsc_cart->cart_item->image_id."&amp;thumbnail=true&amp;width=".$width."&amp;height=".$height."";
 	} else {
 		$image_path = WPSC_THUMBNAIL_URL.$wpsc_cart->cart_item->thumbnail_image;	
-		if(!empty($_SERVER['HTTPS'])) {
+		if(!empty($_SERVER['HTTPS'])|| strtolower($_SERVER['HTTPS']) != 'on') {
 			$image_path = str_replace("http://", "https://", $image_path);
 		}
 	}	

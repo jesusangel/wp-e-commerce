@@ -173,6 +173,9 @@ if(!isset($purchlogs)){
 					<p><strong><?php _e('Phone:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_phone(); ?></p>
 					<p><strong><?php _e('Email:'); ?> </strong><a href="mailto:<?php echo wpsc_display_purchlog_buyers_email(); ?>?subject=Message From '<?php echo get_option('siteurl'); ?>'"><?php echo wpsc_display_purchlog_buyers_email(); ?></a></p>
 					<p><strong><?php _e('Payment Method:'); ?> </strong><?php echo wpsc_display_purchlog_paymentmethod(); ?></p>
+					<?php if(wpsc_display_purchlog_display_howtheyfoundus()) : ?>
+					<p><strong><?php _e('How User Found Us:'); ?> </strong><?php echo wpsc_display_purchlog_howtheyfoundus(); ?></p>
+					<?php endif; ?>
 				</div>
 			
 				<div id='wpsc_items_ordered'>
