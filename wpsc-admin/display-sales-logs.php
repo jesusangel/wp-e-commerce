@@ -82,15 +82,17 @@ if(!isset($purchlogs)){
 	<?php	 } 
 		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
-			 <div class='inner-sidebar'> 
+			<!--
+ <div class='inner-sidebar'> 
 					<div class='meta-box-sortables'>			
 						<?php
-							if(IS_WP27){
-								display_ecomm_rss_feed();
-							}
+							//if(IS_WP27){
+							//	display_ecomm_rss_feed();
+							//}
 						?>
 					</div>
 			</div>
+-->
 			<?php /* end of sidebar start of main column */ ?>
 			<div id='post-body' class='has-sidebar metabox-holder' style='width:95%;'>
 				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
@@ -170,6 +172,8 @@ if(!isset($purchlogs)){
 					<p><strong><?php _e('Purchase Log Date:'); ?> </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
 					<p><strong><?php _e('Purchase Number:'); ?> </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
 					<p><strong><?php _e('Buyers Name:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_name(); ?></p>
+					<p><strong><?php _e('Address:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_address(); ?></p>
+
 					<p><strong><?php _e('Phone:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_phone(); ?></p>
 					<p><strong><?php _e('Email:'); ?> </strong><a href="mailto:<?php echo wpsc_display_purchlog_buyers_email(); ?>?subject=Message From '<?php echo get_option('siteurl'); ?>'"><?php echo wpsc_display_purchlog_buyers_email(); ?></a></p>
 					<p><strong><?php _e('Payment Method:'); ?> </strong><?php echo wpsc_display_purchlog_paymentmethod(); ?></p>
