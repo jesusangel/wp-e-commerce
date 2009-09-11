@@ -907,7 +907,7 @@ function wpsc_packing_slip($purchase_id) {
             break;
             
             default:
-            echo "  <tr><td>".$form_field['name'].":</td><td>".$rekeyed_input[$form_field['id']]['value']."</td></tr>\n\r";
+            echo "  <tr><td>".$form_field['name'].":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
             break;
           }
         }

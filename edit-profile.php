@@ -70,17 +70,8 @@ if($_POST['collected_data'] != null) {
 		}
 	}
 
-  $saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
-  $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
- // echo "<pre>".print_r($meta_data,true)."</pre>";
   $new_meta_data = serialize($meta_data);
-  if($saved_data != null) {
-    $wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_value` =  '$new_meta_data' WHERE `user_id` IN ('$user_ID') AND `meta_key` IN ('wpshpcrt_usr_profile');");
-    $changes_saved = true;
-	} else {
-		$wpdb->query("INSERT INTO `".$wpdb->usermeta."` ( `user_id` , `meta_key` , `meta_value` ) VALUES ( ".$user_ID.", 'wpshpcrt_usr_profile', '$new_meta_data');");
-		$changes_saved = true;
-	}
+  update_usermeta($user_ID, 'wpshpcrt_usr_profile', $meta_data);
 } 
 ?>
 <div class="wrap" style=''>
@@ -102,13 +93,14 @@ $meta_data = null;
 $saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
 $saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
 
-$meta_data = unserialize($saved_data['meta_value']);
+$meta_data = get_usermeta($user_ID, 'wpshpcrt_usr_profile');
 
 $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;";
 $form_data = $wpdb->get_results($form_sql,ARRAY_A);
 
 foreach($form_data as $form_field)
   {
+  $meta_data[$form_field['id']] = htmlentities(stripslashes($meta_data[$form_field['id']]), ENT_QUOTES);
   if($form_field['type'] == 'heading')
     {
     echo "
