@@ -30,6 +30,7 @@ function wpsc_display_categories() {
 			$category_id = $_GET['category'];
 		}
 		
+		
 		// if we have no categories, and no search, show the group list
 		if(!(is_numeric($category_id) || is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || (get_option('wpsc_default_category') == 'all') || ($_GET['product_search'] != ''))) {
 		  $output = true;
@@ -49,6 +50,9 @@ function wpsc_display_products() {
 	if(wpsc_display_categories()) {
 		if(get_option('wpsc_default_category') != 'all+list') {
 			$output = false;
+		}
+		if(isset($_GET['range'])){
+			$output = true;
 		}
 	}
   return $output;

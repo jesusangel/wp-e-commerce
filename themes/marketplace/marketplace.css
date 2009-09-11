@@ -1381,7 +1381,7 @@ div.item_no_image a span, div.item_no_image div.link_substitute span {
 /* Widget CSS */
 
 .shopping-cart-wrapper form {
-  clear: both;
+/*   clear: both; */
 }
 /*span.pluspostagetax {
   float: right;

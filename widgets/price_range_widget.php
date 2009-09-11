@@ -46,7 +46,12 @@ function nzshpcrt_price_range($input = null) {
 				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>".$ranges[$i]." - ".$ranges[$i+1]."</a><br/>";
 			}
 		}
-		echo "<a href='".get_option("product_list_url")."'>".TXT_WPSC_SHOWALL."</a><br/>";
+    	if(get_option('permalink_structure') != '') {
+	    	$seperator ="?";
+		} else {
+			$seperator ="&amp;";
+		}
+		echo "<a href='".get_option("product_list_url").$seperator."range=all'>".TXT_WPSC_SHOWALL."</a><br/>";
 	}
 }
 

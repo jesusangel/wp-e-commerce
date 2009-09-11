@@ -116,8 +116,11 @@ function wpsc_cart_tax($forDisplay = true) {
 */
 function wpsc_cart_show_plus_postage() {
 	global $wpsc_cart;
+//		exit($_SESSION['wpsc_has_been_to_checkout'] ."get_option('add_plustax')".get_option('add_plustax'));	
 	if(($_SESSION['wpsc_has_been_to_checkout'] == null ) && (get_option('add_plustax') == 1)) {
+
 		return true;
+
 	} else {
 		return false;
 	}

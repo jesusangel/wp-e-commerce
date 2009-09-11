@@ -164,6 +164,7 @@ span.numberitems{
 
 span.subtotal,span.total,span.discount,span.postage,span.tax,span.gocheckout{
 display:block;
+padding-bottom:5px;
 }
 
 span.totalhead,span.discounthead,span.subtotalhead,span.postagehead,span.taxhead{
@@ -1295,7 +1296,7 @@ div.item_no_image a span, div.item_no_image div.link_substitute span {
 /* Widget CSS */
 
 .shopping-cart-wrapper form {
-  clear: both;
+ /*  clear: both; */
 }
 /*span.pluspostagetax {
   float: right;
