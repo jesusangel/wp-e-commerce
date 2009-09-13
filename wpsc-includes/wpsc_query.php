@@ -481,7 +481,7 @@ function wpsc_the_product_thumbnail() {
 			$image_path = "index.php?productid=".$wpsc_query->product['id']."&amp;width=".$wpsc_query->category_product['image_width']."&amp;height=".$wpsc_query->category_product['image_height']."";
 		} else {
 			$image_path = WPSC_THUMBNAIL_URL.$image_file_name;
-			if(!empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) != 'on') {
+			if(!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'on' ) {
 				$image_path = str_replace("http://", "https://", $image_path);
 			}
 		}

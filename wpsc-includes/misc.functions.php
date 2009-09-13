@@ -164,6 +164,7 @@ function get_product_meta($product_id, $key, $single = false) {
   $product_id = (int)$product_id;
   if($product_id > 0) {
     $meta_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
+    //exit($meta_id);
     if(is_numeric($meta_id) && ($meta_id > 0)) {      
       if($single != false) {
         $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
@@ -175,7 +176,6 @@ function get_product_meta($product_id, $key, $single = false) {
 	} else {
     $meta_values = false;
 	}
-	
 	if (is_array($meta_values) && (count($meta_values) == 1)) {
 		return array_pop($meta_values);
 	} else {
@@ -305,7 +305,7 @@ function nzshpcrt_display_preview_image() {
 
 			if($use_cache === true ) {
 				$cache_url = WPSC_CACHE_URL;
-				if(!empty($_SERVER['HTTPS'])|| strtolower($_SERVER['HTTPS']) != 'on') {
+				if(!empty($_SERVER['HTTPS'])|| (strtolower($_SERVER['HTTPS']) != 'on')) {
 					$cache_url = str_replace("http://", "https://", $cache_url);
 				}
 				header("Location: ".$cache_url.$cache_filename.$extension);
