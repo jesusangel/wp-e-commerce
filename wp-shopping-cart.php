@@ -112,6 +112,7 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 include_once(WPSC_FILE_PATH."/wpsc-includes/category.functions.php");
 include_once(WPSC_FILE_PATH."/wpsc-includes/processing.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/form-display.functions.php");
+require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
 
 if (!IS_WP25) {
 	require_once(WPSC_FILE_PATH.'/editor.php');
@@ -122,7 +123,6 @@ if (!IS_WP25) {
 
 /// OLD CODE INCLUDED HERE
 include_once('wp-shopping-cart.old.php');
-
 
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
 require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
