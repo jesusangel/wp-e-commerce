@@ -112,7 +112,10 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 include_once(WPSC_FILE_PATH."/wpsc-includes/category.functions.php");
 include_once(WPSC_FILE_PATH."/wpsc-includes/processing.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/form-display.functions.php");
-require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
+//exit(print_r($v1,true));
+if($v1[0] >= 2.8){
+	require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
+}
 
 if (!IS_WP25) {
 	require_once(WPSC_FILE_PATH.'/editor.php');
@@ -230,10 +233,12 @@ if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
 }
 
 //if there are any upgrades present, include them., thanks to nielo.info and lsdev.biz
-$upgrades = get_upgrades();
-foreach ($upgrades as $path=>$upgrade) {
-	$upgrade_file = WPSC_UPGRADES_DIR . '/' . $path;
-	require_once($upgrade_file);
+if($v1[0] >= 2.8){
+	$upgrades = get_upgrades();
+	foreach ($upgrades as $path=>$upgrade) {
+		$upgrade_file = WPSC_UPGRADES_DIR . '/' . $path;
+		require_once($upgrade_file);
+	}
 }
 
 include_once("install_and_update.php");
