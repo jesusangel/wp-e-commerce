@@ -13,31 +13,28 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			<input type='hidden' name='checkout_submits' value='true' />
 			<table>
 			<tr>
-        		<td><?php echo TXT_WPSC_REQUIRE_REGISTRATION;?>:</td>
-        		<td>
-		        <?php
-				  $require_register = get_option('require_register');
-				  $require_register1 = "";
-				  $require_register2 = "";
-				  switch($require_register)
-				    {
-				    case 0:
-				    $require_register2 = "checked ='checked'";
-				    break;
-				    
-				    case 1:
-				    $require_register1 = "checked ='checked'";
-				    break;
-				    }
-		  
-		        ?>
-        		<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-      			<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo TXT_WPSC_NO;?></label>
-      			</td>
+				<td><?php echo TXT_WPSC_REQUIRE_REGISTRATION;?>:</td>
 				<td>
-				 <a title='<?php echo TXT_WPSC_ANYONEREGISTER;?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
-					
-				</td>
+					<?php
+						$require_register = get_option('require_register');
+						$require_register1 = "";
+						$require_register2 = "";
+						switch($require_register) {
+							case 0:
+							$require_register2 = "checked ='checked'";
+							break;
+    			
+							case 1:
+							$require_register1 = "checked ='checked'";
+							break;
+						}
+		        ?>
+						<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+						<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo TXT_WPSC_NO;?></label>
+					</td>
+					<td>
+						<a title='<?php echo TXT_WPSC_ANYONEREGISTER;?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+					</td>
      		</tr>
      				<tr>
 			<?php
@@ -55,10 +52,10 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			?>
 			<td scope="row"><?php echo TXT_WPSC_LOCK_TAX; ?>:</td>
 			<td>
-			<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
-			<label for='lock_tax1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-			<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
-			<label for='lock_tax2'><?php echo TXT_WPSC_NO;?></label>
+				<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
+				<label for='lock_tax1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
+				<label for='lock_tax2'><?php echo TXT_WPSC_NO;?></label>
 			</td>
 			
 

@@ -228,8 +228,13 @@ define('WPSC_THEMES_URL', $wpsc_themes_url);
 if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
   require_once(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php");
 }
-//if there are any upgrades present, include them.
-include_once("upgrades.php");
+
+//if there are any upgrades present, include them., thanks to nielo.info and lsdev.biz
+$upgrades = get_upgrades();
+foreach ($upgrades as $path=>$upgrade) {
+	$upgrade_file = WPSC_UPGRADES_DIR . '/' . $path;
+	require_once($upgrade_file);
+}
 
 include_once("install_and_update.php");
 register_activation_hook(__FILE__, 'wpsc_install');
