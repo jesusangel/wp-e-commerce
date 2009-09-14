@@ -25,7 +25,7 @@ $product_id = $_GET['product_id'];
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Wp-e-Commerce jCrop</title>
-		<script language="javascript" type="text/javascript">
+		<script type="text/javascript">
 
 			jQuery(function(){
 

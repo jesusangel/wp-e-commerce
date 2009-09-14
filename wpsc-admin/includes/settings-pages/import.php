@@ -31,7 +31,10 @@ if ($_FILES['csv_file']['name'] != '') {
 		}
 		//exit("<pre>".print_r($data1, 1)."</pre>");
 		$_SESSION['cvs_data'] = $data1;
+		$categories_sql = "SELECT `id`,`name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1'";
+		$categories = $wpdb->get_results($categories_sql, ARRAY_A);
 		?>
+		
 		<p>For each column, select the field it corresponds to in 'Belongs to'. You can upload as many products as you like.</p>
 		<div class='metabox-holder' style='width:90%'>
 		<input type='hidden' name='csv_action' value='import'>
@@ -69,8 +72,16 @@ if ($_FILES['csv_file']['name'] != '') {
 			</div>
 			</div>
 			<?php
+		} ?>
+		<label for='category'>Please select a category you would like to place all products from this CSV into:</label>
+		<select id='category' name='category'>
+		<?php
+		foreach($categories as $category){
+		echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+		
 		}
 		?>
+		</select>
 		<input type='submit' value='Import' class='button-primary'>
 		</div>
 	<?php
@@ -114,7 +125,7 @@ if($_POST['csv_action'] == 'import'){
 		$id = $wpdb->get_var("SELECT LAST_INSERT_ID() as id FROM `".WPSC_TABLE_PRODUCT_LIST."`");
 		$meta_query = "INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` VALUES ('', '$id', 'sku', '".$cvs_data2['sku'][$i]."', '0')";
 		$wpdb->query($meta_query);
-		$category_query = "INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` VALUES ('','{$id}','1')";
+		$category_query = "INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` VALUES ('','{$id}','".$wpdb->escape($_POST['category'])."')";
 		$wpdb->query($category_query);
 		}
 	
