@@ -723,7 +723,7 @@ function wpsc_admin_ajax() {
         		}
         		
 						////echo "/* ".print_r($selected_variation_values,true)." */\n\r";
-						echo "edit_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_add_grid_view((array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock)))."\";\n";
+						echo "edit_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view(0, (array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock)))."\";\n";
 
       		} else {
         		echo "edit_variation_combinations_html = \"\";\n";

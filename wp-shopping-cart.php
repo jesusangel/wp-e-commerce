@@ -295,7 +295,11 @@ if(!function_exists('wpsc_initialisation')){
 	  
 	  // initialise the cart session, if it exist, unserialize it, otherwise make it
 		if(isset($_SESSION['wpsc_cart'])) {
-			$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
+			if(is_object($_SESSION['wpsc_cart'])) {
+				$GLOBALS['wpsc_cart'] = $_SESSION['wpsc_cart'];
+			} else {
+				$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
+			}
 			if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
 				$GLOBALS['wpsc_cart'] = new wpsc_cart;
 			}

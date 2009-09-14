@@ -172,26 +172,45 @@ class nzshpcrt_variations {
    * This is one part of the code that displays the variation combination forms in the add and edit product pages.
    * If this fails to find any data about the variation combinations, it runs "variations_add_grid_view" instead
    */
-  function variations_grid_view($product_id, $variation_values = null) {
+  function variations_grid_view($product_id, $variation_ids = null,  $variation_values = null, $selected_price = null, $limited_stock = null) {
     global $wpdb;
-    $product_id = (int)$product_id;
-		$product_data = $wpdb->get_row("SELECT `price`, `quantity`, `quantity_limited`, `weight`, `weight_unit` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('{$product_id}') LIMIT 1", ARRAY_A);
-    $stock_column_state = '';
-    if($product_data['quantity_limited'] == 0) {
-      $stock_column_state = " style='display: none;'";
-    }
-		$limited_stock = null;
-    if(isset($_POST['limited_stock'])) {
-      if($_POST['limited_stock'] == 'true') {
-				$limited_stock = true;
-      }
-    }
-    
-    
-    $associated_variations = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` = '{$product_id}' ORDER BY `id` ASC");
-    $variation_count = count($associated_variations);
+    if($product_id > 0) { // if we have a product ID
+			$product_id = (int)$product_id;
+			$product_data = $wpdb->get_row("SELECT `price`, `quantity`, `quantity_limited`, `weight`, `weight_unit` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('{$product_id}') LIMIT 1", ARRAY_A);
+			$stock_column_state = '';
+			if($product_data['quantity_limited'] == 0) {
+				$stock_column_state = " style='display: none;'";
+			}
+			$limited_stock = null;
+			if(isset($_POST['limited_stock'])) {
+				if($_POST['limited_stock'] == 'true') {
+					$limited_stock = true;
+				}
+			}
+
+			$associated_variations = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` = '{$product_id}' ORDER BY `id` ASC");
+		} else {
+			$associated_variations = $variation_ids;
+			
+			$product_data['price'] = $selected_price;
+			//$product_data['quantity'];
+		
+			$stock_column_state = '';
+			if($limited_stock != true) {
+				$stock_column_state = " style='display: none;'";
+			}
+			$limited_stock = null;
+			if(isset($_POST['limited_stock'])) {
+				if($_POST['limited_stock'] == 'true') {
+					$limited_stock = true;
+				}
+			}
+
+		}
+		
+		$variation_count = count($associated_variations);
 		asort($associated_variations);
-    
+			
     if($variation_count > 0) {
       $output .= "<table class='product_variation_grid'>\n\r";   
       $output .= "  <tr>\n\r";
