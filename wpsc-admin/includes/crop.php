@@ -9,15 +9,14 @@
 if(isset($_GET['imagename'])){
 	$imagename = $_GET['imagename'];
 }
+
 $directory = WPSC_IMAGE_URL;//set directory
-$width = $_GET['imgwidth'];//set image dimensions
-$height = $_GET['imgheight'];
+$path = WPSC_IMAGE_DIR;
+$image_data = getimagesize($path.$imagename);
+//exit('<pre>'.print_r($image_data, true).'</pre>');
+$width = $image_data[0];//set image dimensions
+$height = $image_data[1];
 $product_id = $_GET['product_id'];
-if ($width > 400){
-	$layoutlandscape = 'wpsc_thumbnail_preview';
-}else{
-	$layoutlandscape = "wpsc_thumbnail_preview";
-}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -36,7 +35,7 @@ if ($width > 400){
 					onSelect: showPreview,
 					onChange: updateCoords,
 					boxWidth:350,
-					boxHeight:350,
+					boxHeight:350
 				});
 	
 			});
@@ -89,7 +88,7 @@ if ($width > 400){
 				<input type="hidden" id="imagename" name="imagename" value="<?php echo $imagename; ?>" />		
 				<input type="hidden" name="wpsc_admin_action" value="crop_thumb" />
 				<input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
-				<p><label for="thumbsize">Thumbnail Size :</label><input size='2' type="text" id="thumbsize" name="thumbsize" value='<?php echo get_option('thumbnail_size'); ?>' /> px<br /></p>
+				<p><input size='2' type="hidden" id="thumbsize" name="thumbsize" value='<?php echo get_option('product_image_height'); ?>' /> </p>
 				<p><label for="jpegquality">Jpeg Quality :</label><input size='2' type="text" id="jpegquality" name="jpegquality" value='70' /> %<br /></p>
 				<p><input class="button-secondary action"  type="submit" value="Crop Image" /></p>
 			</form>
