@@ -89,13 +89,13 @@ switch($page) {
  */
 function wpsc_settings_tabs() {
 	$_default_tabs = array(
-		'general' => __('General'), // handler action suffix => tab text
-		'presentation' => __('Presentation'),
-		'admin' => __('Admin'),
-		'shipping' => __('Shipping'),
-		'gateway' => __('Payment Options'),
-		'import' => __('Import'),
-		'checkout' => __('Checkout')
+		'general' => __('General', 'wpsc'), // handler action suffix => tab text
+		'presentation' => __('Presentation', 'wpsc'),
+		'admin' => __('Admin', 'wpsc'),
+		'shipping' => __('Shipping', 'wpsc'),
+		'gateway' => __('Payment Options', 'wpsc'),
+		'import' => __('Import', 'wpsc'),
+		'checkout' => __('Checkout', 'wpsc')
 	);
 
 	return apply_filters('wpsc_settings_tabs', $_default_tabs);
