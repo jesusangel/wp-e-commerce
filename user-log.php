@@ -362,14 +362,14 @@ $date_list[0]['end'] = $end_timestamp;
 								echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purchase['email']."</td></tr>";
 							}
               
-              if(get_option('payment_method') == 2)
-                {
+              //if(get_option('payment_method') == 2)
+                //{
                 $gateway_name = '';
                 foreach((array)$GLOBALS['nzshpcrt_gateways'] as $gateway)
                   {
-                  if($purch_data[0]['gateway'] != 'testmode')
+                  if($purchase_log[0]['gateway'] != 'testmode')
                     {
-                    if($gateway['internalname'] == $purchase['gateway'] )
+                    if($gateway['internalname'] == $purchase_log[0]['gateway'] )
                       {
                       $gateway_name = $gateway['name'];
                       }
@@ -379,7 +379,7 @@ $date_list[0]['end'] = $end_timestamp;
                       $gateway_name = "Manual Payment";
                       }
                   }
-                }
+                //}
               echo "  <tr><td>".TXT_WPSC_PAYMENT_METHOD.":</td><td>".$gateway_name."</td></tr>";
               echo "  <tr><td>".TXT_WPSC_PURCHASE_NUMBER.":</td><td>".$purchase['id']."</td></tr>";
               if($purchase['transactid'] != '')

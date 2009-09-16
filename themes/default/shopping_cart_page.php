@@ -137,7 +137,7 @@ if(wpsc_cart_item_count() > 0) :
 			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 	  </td>
 	</tr>
-	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount() >= 0)): ?>
+	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
 	<tr class="total_price">
 		<td colspan="3">
 			<?php echo TXT_WPSC_COUPONS; ?>

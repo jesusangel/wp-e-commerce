@@ -1223,6 +1223,7 @@ function nzshpcrt_download_file() {
   
   if(isset($_GET['downloadid'])) {
     // strip out anything that isnt 'a' to 'z' or '0' to '9'
+    //ini_set('max_execution_time',10800);
     $downloadid = preg_replace("/[^a-z0-9]+/i",'',strtolower($_GET['downloadid']));
     
 		$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `uniqueid` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' LIMIT 1",ARRAY_A);

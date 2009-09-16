@@ -927,7 +927,7 @@ if($_GET['inline_price']=='true') {
 */
 function wpsc_purchlog_resend_email(){
 	global $wpdb;
-	
+	$siteurl = get_option('siteurl');
 	$log_id = $_GET['email_buyer_id'];
 	if(is_numeric($log_id)) {
 	

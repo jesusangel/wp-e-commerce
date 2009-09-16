@@ -120,7 +120,22 @@ function gateway_google($fromcheckout = false){
 			$cart->AddItem($cartitem["$no"]);
 			$no++;
 		}
-		
+		//If there are coupons applied add coupon as a product with negative price
+		if($wpsc_cart->coupons_amount > 0){
+			if($google_curr != $local_currency_code) {
+				$google_currency_productprice = $curr->convert( $wpsc_cart->coupons_amount,$google_curr,$local_currency_code);	
+			} else {
+				$google_currency_productprice = $wpsc_cart->coupons_amount;
+			}
+			$cartitem[$no] = new GoogleItem('Discount',      // Item name
+			'Discount Price', // Item description
+			1, // Quantity
+			('-'.$google_currency_productprice)); // Unit price
+			$cart->AddItem($cartitem[$no]);
+
+
+		}
+
 //	}
 
 
