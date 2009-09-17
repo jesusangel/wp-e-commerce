@@ -62,6 +62,8 @@ define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information");
 define('TXT_WPSC_ECOMMERCE', 'Products'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
+define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering to the destination you selected is not available. Please contact us.');
+
 define('TXT_WPSC_COUPONS', 'Coupon Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
 define('TXT_WPSC_CUSTOM_TEXT', 'Custom Text');

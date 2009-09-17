@@ -124,6 +124,16 @@ if(wpsc_cart_item_count() > 0) :
 					<?php endwhile; ?>
 			<?php endwhile;  ?>
 			<?php wpsc_update_shipping_multiple_methods(); ?>
+			<?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
+				<tr>
+					<td colspan='5'><?php echo TXT_WPSC_NO_SHIPPING_QUOTES; ?></td>
+				</tr>
+			</table>
+			</div>
+			<?php 
+			return;
+			endif;  
+			?>
 		</table>
 	<?php endif;  ?>
 	

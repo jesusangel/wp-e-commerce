@@ -403,9 +403,22 @@ function wpsc_shipping_quote_selected_state() {
 function wpsc_have_morethanone_shipping_methods_and_quotes(){
 	global $wpsc_cart;
 		
-	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1 || count($wpsc_cart->shipping_quotes) == $wpsc_cart->shipping_quotes_count){
+	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1 || count($wpsc_cart->shipping_quotes) == $wpsc_cart->shipping_quote_count){
 
 		//$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
+		return true;
+	}else{
+		return false;
+	}
+}
+/**
+ * Whether or not there is a valid shipping quote/option
+ *
+ * @return bool
+ */
+function wpsc_have_shipping_quote(){
+	global $wpsc_cart;
+	if(count($wpsc_cart->shipping_quotes)){
 		return true;
 	}else{
 		return false;
