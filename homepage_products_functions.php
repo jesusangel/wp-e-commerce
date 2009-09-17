@@ -62,11 +62,16 @@ function nszhpcrt_category_tag($content = '') {
 	if(preg_match_all("/\[wpsc_category=([\d]+),*(full)?\]/", $content, $matches)) {
 		foreach($matches[1] as $key => $category_id) {
 			$categories[$key]['id'] = $category_id;
-			$categories[$key]['display'] = $matches[2][$key];
-			$categories[$key]['original_string'] = $matches[0][$key];
+			//$categories[$key]['display'] = $matches[2][$key];
+			$original_string = $matches[0][$key];
 			$query = array('category_id' => $category_id);
+
+			$content = str_replace($original_string, wpsc_display_products_page($query), $content);
+			
 		}
-		return wpsc_display_products($query);
+
+		
+		return $content;
 
 	//echo("<pre>".print_r($categories,true)."</pre>");
 	$siteurl = get_option('siteurl');
