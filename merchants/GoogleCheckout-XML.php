@@ -186,7 +186,7 @@ function gateway_google($fromcheckout = false){
 		$i = 1;
 		//exit('<pre>'.print_r($othertax, true).'</pre>');
 		foreach($othertax as $altTax){
-			$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `tax`=".$altTax;
+			$sql = "SELECT `code` FROM ".WPSC_TABLE_REGION_TAX." WHERE `country_id`='136' AND `tax`=".$altTax;
 			$alt = $wpdb->get_col($sql);
 			$altTax = $altTax/100;
 			$alt_google_tax = new GoogleDefaultTaxRule($altTax);
