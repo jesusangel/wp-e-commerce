@@ -134,10 +134,11 @@ function wpsc_display_category_loop($query, $category_html){
 
 	if(is_numeric($query['category_group']) ) {
 	  $category_group = absint($query['category_group']);
-	} else {
+      $category_sql_segment[] = "`group_id`='$category_group'";
+	} elseif($query['category_group']=='all' ||$query['category_group']=='all+list') {
 	  $category_group = 1;
 	}
-	$category_sql_segment[] = "`group_id`='$category_group'";
+
 	
 	/// select by parent category
 	$category_sql_segment[] = "`category_parent` = '".absint($query['parent_category_id'])."'";
@@ -152,6 +153,7 @@ function wpsc_display_category_loop($query, $category_html){
 	} else {
 		$order = "ASC";
 	}
+	//exit("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order");
   $category_data = $wpdb->get_results("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order",ARRAY_A);
 
   $output ='';

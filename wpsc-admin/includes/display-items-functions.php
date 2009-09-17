@@ -692,7 +692,7 @@ function wpsc_product_shipping_forms($product_data=''){
 function wpsc_product_advanced_forms($product_data='') {
 	global $closed_postboxes,$wpdb;
 	//exit('<pre>'.print_r($product_data, true).'</pre>');
-	$merchant_note = $product_data['meta']['metchant_notes'];
+	$merchant_note = $product_data['meta']['merchant_notes'];
 	$engraved_text = $product_data['meta']['engrave'];
 	$can_have_uploaded_image = $product_data['meta']['can_have_uploaded_image'];
 	$external_link = $product_data['meta']['external_link'];
@@ -748,7 +748,7 @@ function wpsc_product_advanced_forms($product_data='') {
 	    $output .= "<tr>
       <td class='itemfirstcol' colspan='2'><br /> <strong>". TXT_WPSC_ADMINNOTES .":</strong><br />
       
-        <textarea cols='40' rows='3' name='productmeta_value[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
+        <textarea cols='40' rows='3' name='productmeta_values[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
       	<small>".TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE."</small>
       </td>
     </tr>";

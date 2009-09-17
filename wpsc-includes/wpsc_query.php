@@ -35,6 +35,9 @@ function wpsc_display_categories() {
 		if(!(is_numeric($category_id) || is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || (get_option('wpsc_default_category') == 'all') || ($_GET['product_search'] != ''))) {
 		  $output = true;
 		}
+		if((get_option('wpsc_default_category') == 'all+list')|| (get_option('wpsc_default_category') == 'list')){
+		  $output = true;
+		}
 	}
   return $output;
 }

@@ -352,6 +352,7 @@ function submit_paypal_multiple(){
   if($_POST['paypal_ipn'] != null) {
     update_option('paypal_ipn', (int)$_POST['paypal_ipn']);
 	}
+
   if($_POST['address_override'] != null) {
     update_option('address_override', (int)$_POST['address_override']);
 	}
@@ -412,6 +413,19 @@ function form_paypal_multiple() {
 		$paypal_ship2 = "checked='checked'";
 		break;
 	
+	}
+	$address_override = get_option('address_override');
+	$address_override1 = "";
+	$address_override2 = "";
+	switch($address_override) {
+		case 1:
+		$address_override1 = "checked ='checked'";
+		break;
+		
+		case 0:
+		default:
+		$address_override2 = "checked ='checked'";
+		break;
 	}
 	$output .= "
    <tr>
@@ -480,19 +494,7 @@ function form_paypal_multiple() {
       </td>
    </tr>";
    
-	$address_override = get_option('address_override');
-	$address_override1 = "";
-	$address_override2 = "";
-	switch($address_override) {
-		case 1:
-		$address_override1 = "checked ='checked'";
-		break;
-		
-		case 0:
-		default:
-		$address_override2 = "checked ='checked'";
-		break;
-	}
+
      
 $output .= "
 
