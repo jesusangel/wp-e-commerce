@@ -35,7 +35,7 @@ function nzshpcrt_donations($input = null) {
 			}
 			$output .= $product['description']."<br />";
 		
-			$output .= "<form id='specials' name='$num' method='post' action='' >";
+			$output .= "<form name='$num' method='post' action='' >";
 			$variations_processor = new nzshpcrt_variations;
 			$output .= $variations_processor->display_product_variations($product['id']);
 			$output .= "<input type='hidden' name='product_id' value='".$product['id']."'/>";

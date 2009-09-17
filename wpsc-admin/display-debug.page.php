@@ -59,7 +59,9 @@ function wpsc_debug_page() {
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=test_variation_grid'>Test Variation Grid</a>
 				</li>
 
-				
+				<li>
+					<a href='?page=wpsc-debug&amp;wpsc_debug_action=wp_get_object_terms'>Test wp_get_object_terms</a>
+				</li>
 			</ul>
 			<?php
 		}
@@ -101,6 +103,16 @@ function wpsc_debug_page() {
 			phpinfo();
 			echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
 			break;
+			
+			case 'wp_get_object_terms':
+			global $wp_taxonomies;
+			//register_taxonomy('product_tag', 'product');
+			//print_r($wp_taxonomies);
+			$tags =  wp_get_object_terms(108, 'product_tag', array('fields' => 'names'));
+//  			 wp_set_object_terms(103, $tags, 'product_tag');
+			print_r($tags);
+			break;
+
 
 
 			case 'test_variation_grid':

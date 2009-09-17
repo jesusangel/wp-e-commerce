@@ -668,7 +668,7 @@ if(get_option('wpsc_email_admin') == '') {
 	}
 }
 
-if($wpdb->get_var("SELECT `option_id` FROM `{$wpdb->prefix}options` WHERE `option_name` LIKE 'custom_gateway_options'") < 1) {
+if($wpdb->get_var("SELECT `option_id` FROM `{$wpdb->options}` WHERE `option_name` LIKE 'custom_gateway_options'") < 1) {
 		update_option('custom_gateway_options', array('testmode'));
 }
 

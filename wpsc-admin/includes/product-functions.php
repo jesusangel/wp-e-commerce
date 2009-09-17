@@ -376,7 +376,7 @@ function wpsc_update_product_tags($product_id, $product_tags, $existing_tags) {
 }
 
  /**
- * wpsc_update_product_tags function 
+ * wpsc_update_product_meta function
  *
  * @param integer product ID
  * @param string comma separated tags

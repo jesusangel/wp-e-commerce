@@ -1,5 +1,6 @@
 <?php
 global $wpsc_query, $wpdb;
+//$wpsc_query = new WPSC_query("category_id=10");
 ?>
 <div id='products_page_container' class="wrap wpsc_container">
 

@@ -368,6 +368,8 @@ function wpsc_duplicate_product() {
 		}
 		
 		
+		$tags =  wp_get_object_terms($product_id, 'product_tag', array('fields' => 'names'));
+		wp_set_object_terms($new_id, $tags, 'product_tag');
 		            
 		//Inserting duplicated image info
 		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='".$product_id."'", ARRAY_A);

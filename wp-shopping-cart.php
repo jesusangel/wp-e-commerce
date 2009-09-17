@@ -261,6 +261,7 @@ if(!function_exists('wpsc_start_the_query')) {
 			$_SESSION['wpsc_has_been_to_checkout'] = true;
 			//echo $_SESSION['wpsc_has_been_to_checkout'];
 		}
+
 	}
 }
 
@@ -318,6 +319,9 @@ if(!function_exists('wpsc_initialisation')){
 		}
 	}
   $GLOBALS['wpsc_category_url_cache'] = get_option('wpsc_category_url_cache');
+
+  
+		register_taxonomy('product_tag', 'product');
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
