@@ -97,12 +97,15 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
 	}
 	if($checkoutfields){
 		$js = "onchange='set_shipping_country(\"$html_form_id\", \"$form_id\");'";
+		$title = 'shippingcountry';
 	}else{
+	
 		$js= "onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'";
+		$title = 'billingcountry';
 	}
   $country_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
   $output .= "<div id='$html_form_id'>\n\r";
-  $output .= "<select $supplied_form_id title='billingcountry' name='collected_data[".$form_id."][0]' class='current_country' $js >\n\r";
+  $output .= "<select $supplied_form_id title='$title' name='collected_data[".$form_id."][0]' class='current_country' $js >\n\r";
   foreach ($country_data as $country) {
     $selected ='';
    if($country['visible'] == '1'){
@@ -124,14 +127,16 @@ function wpsc_country_region_list($form_id = null, $ajax = false , $selected_cou
   	$namevalue = "name='collected_data[".$region_form_id."]'"; 
 //  	$namevalue = "name='collected_data[".$form_id."][1]'"; 
 	$js = "onchange='set_shipping_country(\"$html_form_id\", \"$form_id\");'";
+	$title = 'shippingregion';
   }else{
   	$namevalue = "name='collected_data[".$form_id."][1]'"; 
   	$js= "onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'";
+  	$title = 'billingregion';
   }
  // exit('Not here? >'.$region_form_id.' ' .$sql);
     $output .= "<div id='region_select_$form_id'>";
     if($region_list != null) {
-      $output .= "<select title='billingregion' ".$namevalue." class='current_region' ".$js.">\n\r";
+      $output .= "<select title='$title' ".$namevalue." class='current_region' ".$js.">\n\r";
       //$output .= "<option value=''>None</option>";
       foreach($region_list as $region) {
         if($selected_region == $region['id']) {
