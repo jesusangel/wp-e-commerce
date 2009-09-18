@@ -1092,7 +1092,7 @@ function wpsc_purchlog_resend_email(){
 				
 				
 				
-		$message = str_replace('%product_list%',$product_list,$message);
+				$message = str_replace('%product_list%',$product_list,$message);
         $message = str_replace('%total_shipping%',$total_shipping_email,$message);
         $message = str_replace('%total_price%',$total_price_email,$message);
         //$message = str_replace('%order_status%',get_option('blogname'),$message);
@@ -1112,15 +1112,19 @@ function wpsc_purchlog_resend_email(){
 			//	exit($message_html);
 				
 				if(($email != '')) {
+ 					add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
+ 					add_filter('wp_mail_from_name', 'wpsc_replace_reply_name', 0);
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						$resent = (bool)wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message, "From: ".get_option('return_email')."");
+						$resent = (bool)wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message);
 						$sent = 1;
 					} else {
-						$resent = (bool)wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message, "From: ".get_option('return_email')."");
+						$resent = (bool)wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message);
 						$sent = 1;
 					}
+					remove_filter('wp_mail_from_name', 'wpsc_replace_reply_name');
+					remove_filter('wp_mail_from', 'wpsc_replace_reply_address');
 				}
 		}
 	
