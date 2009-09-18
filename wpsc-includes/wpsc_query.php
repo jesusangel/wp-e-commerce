@@ -32,7 +32,8 @@ function wpsc_display_categories() {
 		
 		
 		// if we have no categories, and no search, show the group list
-		if(!(is_numeric($category_id) || is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || (get_option('wpsc_default_category') == 'all') || ($_GET['product_search'] != ''))) {
+		//exit('product id '.$product_id.' catid '.$category_id );
+		if(is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || ($_GET['product_search'] != '')) {
 		  $output = true;
 		}
 		if((get_option('wpsc_default_category') == 'all+list')|| (get_option('wpsc_default_category') == 'list')){

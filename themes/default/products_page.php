@@ -68,9 +68,9 @@ global $wpsc_query, $wpdb;
 				Pages:
 				<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>
 					<?php if(wpsc_page_is_selected()) :?> 	   
-						<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-					<?php else: ?> 
-						<a href='<?php echo wpsc_page_url(); ?>'><?php echo wpsc_page_number(); ?></a>
+					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
+				<?php else: ?> 
+					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>'><?php echo wpsc_page_number(); ?></a>
 					<?php endif; ?> 
 				<?php endwhile; ?>
 			</div>
@@ -154,7 +154,7 @@ global $wpsc_query, $wpdb;
 						<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 							<?php	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
 						<?php else: ?>
-							<?php	$action =  wpsc_this_page_url(); ?>						
+						<?php	$action =  htmlentities(wpsc_this_page_url(),ENT_QUOTES); ?>					
 						<?php endif; ?>
 						
 						<form class='product_form'  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
@@ -274,9 +274,9 @@ global $wpsc_query, $wpdb;
 				Pages:
 				<?php while ($wpsc_query->have_pages()) : $wpsc_query->the_page(); ?>
 					<?php if(wpsc_page_is_selected()) :?> 	   
-						<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-					<?php else: ?> 
-						<a href='<?php echo wpsc_page_url(); ?>'><?php echo wpsc_page_number(); ?></a>
+					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
+				<?php else: ?> 
+					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>'><?php echo wpsc_page_number(); ?></a>
 					<?php endif; ?> 
 				<?php endwhile; ?>
 			</div>

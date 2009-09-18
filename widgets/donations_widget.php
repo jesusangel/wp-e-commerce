@@ -35,7 +35,7 @@ function nzshpcrt_donations($input = null) {
 			}
 			$output .= $product['description']."<br />";
 		
-			$output .= "<form name='$num' method='post' action='' >";
+			$output .= "<form name='".$product['id']."' method='post' action='' >";
 			$variations_processor = new nzshpcrt_variations;
 			$output .= $variations_processor->display_product_variations($product['id']);
 			$output .= "<input type='hidden' name='product_id' value='".$product['id']."'/>";
@@ -44,7 +44,7 @@ function nzshpcrt_donations($input = null) {
 			$currency_sign_location = get_option('currency_sign_location');
 			$currency_type = get_option('currency_type');
 			$currency_symbol = $wpdb->get_var("SELECT `symbol_html` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
-			$output .= "<label for='donation_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='donation_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />"; 
+			$output .= "<label for='donation_widget_price_".$product['id']."'>".TXT_WPSC_DONATION.":</label> $currency_symbol<input type='text' id='donation_widget_price_".$product['id']."' name='donation_price' value='".number_format($product['price'],2)."' size='6' /><br />"; 
 			$output .= "<input type='submit' name='Buy' value='".TXT_WPSC_ADDTOCART."'  />";
 			$output .= "</form>";
 		}

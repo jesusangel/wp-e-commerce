@@ -27,7 +27,7 @@ function nzshpcrt_latest_product($input = null) {
 				if(get_option('wpsc_selected_theme') == 'marketplace') {
 					$src = WPSC_IMAGE_URL.$special['image'];
 							
-					$output .= "				<img src='index.php?image_id=".$special['image']."&amp;width=100&amp;height=70' title='".$special['name']."' alt='".$special['name']."' id='product_image_".$product['id']."' class='product_image'/>";
+					$output .= "				<img src='". "index.php?image_id={$special['image']}&amp;width=100&amp;height=75' title='".$special['name']."' alt='".$special['name']."' />";
 					
 				} else {
 					$output .= "				<img src='". "index.php?image_id={$special['image']}&amp;width=45&amp;height=25' title='".$special['name']."' alt='".$special['name']."' /><br />";

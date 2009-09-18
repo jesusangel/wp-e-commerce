@@ -59,7 +59,7 @@ function wpsc_shipping_details(){
 	global $wpsc_checkout;
 	if(stristr($wpsc_checkout->checkout_item->unique_name, 'shipping') != false){
 
-	return "class='wpsc_shipping_forms'";
+	return ' wpsc_shipping_forms';
 	}else{
 	return "";
 	}
@@ -71,7 +71,7 @@ function wpsc_the_checkout_item_error_class($as_attribute = true) {
 	  $class_name = 'validation-error';
 	}
 	if(($as_attribute == true)){
-	 $output = "class='$class_name'";
+	 $output = "class='".$class_name.wpsc_shipping_details()."'";
 	} else {
 		$output = $class_name;
 	}

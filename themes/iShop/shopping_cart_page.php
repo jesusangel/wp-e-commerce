@@ -154,8 +154,9 @@ if(wpsc_cart_item_count() > 0) :
 		<td colspan="2">
 			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
 	  </td>
+	  	</tr>
 	  <?php endif ?>
-	</tr>
+
 		
 	
 	<tr class='total_price'>
@@ -227,16 +228,19 @@ if(wpsc_cart_item_count() > 0) :
 				</td>
 			</tr>
 			<?php endif; ?>
-		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
+	
 		  <?php if(wpsc_checkout_form_is_header() == true) : ?>
+		  	<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 			<td <?php if(wpsc_is_shipping_details()) echo "class='wpsc_shipping_forms'"; ?> colspan='2'>
 				<h4>
 					<?php echo wpsc_checkout_form_name();?>
 				</h4>
 			</td>
+			</tr>
 		  <?php else: ?>
 		  <?php if((!wpsc_uses_shipping()) && $wpsc_checkout->checkout_item->unique_name == 'shippingstate'): ?>
 		  <?php else : ?>
+		  	<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 			<td>
 				<label for='<?php echo wpsc_checkout_form_element_id(); ?>'>
 				<?php echo wpsc_checkout_form_name();?>:
@@ -248,10 +252,12 @@ if(wpsc_cart_item_count() > 0) :
 		    <?php if(wpsc_the_checkout_item_error() != ''): ?>
 		    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
 			<?php endif; ?>
+				</td>
+				</tr>
 			<?php endif; ?>
-			</td>
+		
 			<?php endif; ?>
-		</tr>
+		
 		<?php endwhile; ?>
 		
 		<?php if (get_option('display_find_us') == '1') : ?>
