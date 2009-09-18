@@ -35,7 +35,21 @@ When updating it is important that you do not overwrite the entire images folder
 If you experience database errors try de-activating and re-activating your plugin. 
 
 
-== Changelog ==  
+== Changelog == 
+
+= 3.7.5 Beta 2 =
+* CSV has had some work done on it, it now takes larger files, and associates a CSV file to a single category of your choice. We'd love to be able to allow users to add the categories and images as part of the CSV file. We will look into it more at a later date.
+* SSL we fixed the image issue from beta1 and used James Collis recommended fix (using is_ssl() for our conditions) Thanks James!
+* ‘Show list of Product Groups’ shows all Groups <- there may be some backwards compatibility issues (we havent encountered any but nevertheless if you spot any let us know)
+* When duplicating products, their tags do not get duplicated for the new product. <- Oh yes they DO!
+* Google Checkout now sends off Discount Coupons As well. And we fixed the `name` vs `code` Issue people mentioned in the forum
+* Category shortcode backwards compatibility
+* Fix Purchlogs - We had a lot of users that somehow by passed the 'fix purchase logs' page when upgrading from 3.6, so we added some better conditions to the mix and added it on to the debug page (a powerful wp-e-commerce page that is hidden from most users as it's usage is very corrosive backing up your DB and files is strongly recommended if not necessary when you work with this page).
+* Valid XHTML for front end of wpec YAY!
+* Added code for upgrades/additions from nielo.info and lsdev.biz  we will be using this for new modules in the future.
+* Fixed adding variations when adding products
+* Sender from the 'resend email to buyer' link on the purchase log details page has been fixed
+
 
 = 3.7.5 Beta 1 =  
 * Shipping Discount Bug that stopped shipping working at all.
