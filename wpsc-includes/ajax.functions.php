@@ -63,6 +63,7 @@ function wpsc_add_to_cart() {
 		$wpsc_cart->remove_item($_POST['key']);
 		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
   }
+//  exit('<pre>'.print_r($_POST, true).'</pre>');
   if($_POST['is_customisable'] == 'true') {
 		$provided_parameters['is_customisable'] = true;
 		

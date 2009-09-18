@@ -19,6 +19,19 @@ function wpsc_display_purchlog_display_howtheyfoundus(){
 //	exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 
 }
+
+function wpsc_check_uniquenames(){
+	global $wpdb;
+	$sql = 'SELECT COUNT(`id`) FROM `'.WPSC_TABLE_CHECKOUT_FORMS.'` WHERE unique_name != "" ';
+	$check_unique_names = $wpdb->get_var($sql);
+//	exit($check_unique_names);
+	if($check_unique_names > 0){
+		return false;
+	}else{
+		return true;
+	}
+}
+
 function wpsc_purchlogs_has_tracking(){
 	global $wpdb, $wpsc_shipping_modules, $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');

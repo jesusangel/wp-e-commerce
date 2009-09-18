@@ -51,10 +51,10 @@ function wpsc_display_products() {
 	//we have to display something, if we are not displaying categories, then we must display products
 	$output = true;
 	if(wpsc_display_categories()) {
-		if(get_option('wpsc_default_category') != 'all+list') {
+		if(get_option('wpsc_default_category') == 'list') {
 			$output = false;
 		}
-		if(isset($_GET['range'])){
+		if(isset($_GET['range']) || isset($_GET['category'])){
 			$output = true;
 		}
 	}

@@ -1169,7 +1169,7 @@ class wpsc_cart {
 		if(count($wpsc_currency_data) < 3) {
 			$wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
 		}
-	
+		$price = round($price + pow(10, -2-1), 2);
 		$price =  number_format($price, 2, '.', ',');
 	
 		if($wpsc_currency_data['symbol'] != '') {
