@@ -8,6 +8,15 @@
 	$usersql = "SELECT DISTINCT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.* FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.log_id=".$id." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`" ;
 	//exit($usersql);
 	$formfields = $wpdb->get_results($usersql);
+	
+	
+	
+	if(count($formfields) < 1){
+		$usersql = "SELECT DISTINCT  `".WPSC_TABLE_CHECKOUT_FORMS."`.* FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` != 'heading'";
+		$formfields = $wpdb->get_results($usersql);
+	
+	}	
+	//exit('<pre>'.print_r($formfields,true).'</pre>');
 	//echo '<pre>'.print_r($formfields, true).'</pre>';
 if(isset($_POST)){
 	//echo '<pre>'.print_r($_POST, true).'</pre>';
@@ -20,6 +29,10 @@ if(isset($_POST)){
 		$numChaged++;
 		$numQueries ++;
 	}
+	
+	$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `unique_name`='delivertoafriend' WHERE `name` = '2. Shipping details'";
+	$wpdb->query($sql);
+	
 	add_option('wpsc_purchaselogs_fixed',true);
 }
 function wpsc_select_options_purchlogs_fix($id){

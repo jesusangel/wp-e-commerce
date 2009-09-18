@@ -11,6 +11,7 @@
 
 function wpsc_debug_page() {
 	global $wpdb;
+	$fixpage = get_option('siteurl').'/wp-admin/admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs';
 	?>
 	<div class="wrap">
 	  <h2>Debugging Page</h2>
@@ -44,6 +45,9 @@ function wpsc_debug_page() {
 			
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=phpinfo'>Display phpinfo</a>
+			</li>
+			<li>
+				<a href='<?php echo $fixpage; ?>'>Fix Purchaselogs</a>
 			</li>
 		</ul>
 		<?php
