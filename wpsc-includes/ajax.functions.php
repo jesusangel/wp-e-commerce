@@ -136,7 +136,7 @@ function wpsc_add_to_cart() {
 			}
 		}
 
-		do_action('wpsc_alternate_cart_html');
+		do_action('wpsc_alternate_cart_html', $cart_messages);
 		exit();
   }
 }
