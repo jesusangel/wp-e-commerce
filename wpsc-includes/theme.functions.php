@@ -67,7 +67,10 @@ function wpsc_enqueue_user_script_and_css() {
 				$category_id = get_option('wpsc_default_category');
 			}
 		}
-		
+		 
+		if(is_ssl()) {
+			$siteurl = str_replace("http://", "https://", $siteurl);
+		}
 		
 		wp_enqueue_script( 'jQuery');
 		wp_enqueue_script('wp-e-commerce', WPSC_URL.'/js/wp-e-commerce.js', array('jquery'), WPSC_VERSION.WPSC_MINOR_VERSION);
