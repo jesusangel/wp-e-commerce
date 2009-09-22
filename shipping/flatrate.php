@@ -52,7 +52,7 @@ class flatrate {
 		if (get_option('base_country')=='NZ') {
 		} else {
 		}
-		$output.= "<tr ><td colspan='2'><strong>International</strong></td></tr>";
+		$output.= "<tr ><td colspan='2'><strong>Base International</strong></td></tr>";
 		$output .= "<tr class='rate_row'><td>North America</td><td>$<input size='4' type='text' name='shipping[northamerica]'  value='{$shipping['northamerica']}'></td></tr>";
 		$output .= "<tr class='rate_row'><td>South America</td><td>$<input size='4' type='text' name='shipping[southamerica]'  value='{$shipping['southamerica']}'></td></tr>";
 		$output .= "<tr class='rate_row'><td>Asia and Pacific</td><td>$<input size='4' type='text' name='shipping[asiapacific]'  value='{$shipping['asiapacific']}'></td></tr>";
