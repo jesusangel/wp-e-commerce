@@ -59,6 +59,14 @@ function wpsc_print_category_id() {
 }
 
 /**
+* wpsc print category classes function
+* places classes for the category including selected state
+*/
+function wpsc_print_category_classes() {
+	echo "[wpsc_category_classes]";
+}
+
+/**
 * wpsc print product list function
 * places the shortcode for the product list
 * @param string starting HTML element
@@ -128,7 +136,7 @@ function wpsc_end_category_query() {
 * @return string - the finished category html
 */
 function wpsc_display_category_loop($query, $category_html){
-	global $wpdb;
+	global $wpdb, $wpsc_query;
 	$category_sql_segment = array();
 	$category_sql_segment[] = "`active`='1'";
 
@@ -174,7 +182,12 @@ function wpsc_display_category_loop($query, $category_html){
       $end_element = $query['description_container']['end_element'];
 			$category_description =  $start_element.wpautop(wptexturize( wp_kses(stripslashes($category_row['description']), $allowedtags ))).$end_element;
 		}
-    
+	
+	$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row['id'];
+	if ( $wpsc_query->query_vars['category_id'] == $category_row['id']) {
+		$category_classes .= ' wpsc-current-cat';
+	}
+	
     $sub_categories = wpsc_display_category_loop($modified_query, $category_html);
     if($sub_categories != '') {
       $start_element = $query['subcategory_container']['start_element'];
@@ -208,6 +221,7 @@ function wpsc_display_category_loop($query, $category_html){
 		'[wpsc_category_description]',
 		'[wpsc_category_url]',
 		'[wpsc_category_id]',
+		'[wpsc_category_classes]',
 		'[wpsc_category_image]',
 		'[wpsc_subcategory]',
 		'[wpsc_category_products_count]',
@@ -218,6 +232,7 @@ function wpsc_display_category_loop($query, $category_html){
     $category_description,
     wpsc_category_url($category_row['id']),
     $category_row['id'],
+    $category_classes,
     $category_image_html,
     $sub_categories,
     $category_count_html,
