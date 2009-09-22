@@ -41,6 +41,8 @@ if($_REQUEST['submit'] == 'Add Tracking ID') {
 if($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer') {
 	add_action('admin_init', 'wpsc_delete_currency_layer');
 }
+
+
  function wpsc_purchlog_email_trackid() {
   	global $wpdb;
   	$id = $_POST['purchlog_id'];
@@ -803,12 +805,13 @@ function wpsc_swfupload_images() {
 	
 	if(function_exists('gold_shpcrt_display_gallery')) {
 		// if more than one image is permitted
-		$existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE `product_id`='{$product_id}' AND `image` NOT IN ('')", ARRAY_A);
+		$existing_image_data = $wpdb->get_row("SELECT COUNT(*) AS `count`,  MAX(image_order) AS `order` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE `product_id`='".absint($product_id)."' AND `image` NOT IN ('')", ARRAY_A);
 		$order = (int)$existing_image_data['order'];
 		$count = $existing_image_data['count'];
 		
-		$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
-		if(($count >  0) && (strlen($previous_image) > 0)) {
+		$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".absint($product_id)."' LIMIT 1");
+		//echo "/* $count $previous_image */ ";
+		if(($count >  0) && ( (strlen($previous_image) > 0) || (absint($product_id) < 1) ) ) {
 			// if there is more than one image
 			$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
 			if ($product_id == '') {
@@ -816,7 +819,6 @@ function wpsc_swfupload_images() {
 			}
 			$order++;
 			if ($success) {
-
 				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0',  '$order')");
 				$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
 
@@ -869,11 +871,11 @@ function wpsc_swfupload_images() {
 			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
 			$src = basename($file['name']);
 		}
-			
 		//$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);
 		if($src != null) {
 			//$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
 			$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
+			
 			if($product_id > 0) {
 				$previous_image = $wpdb->get_var("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$id}' WHERE `id`='{$product_id}' LIMIT 1");
 			}
@@ -1548,9 +1550,9 @@ function wpsc_delete_images() {
 	if($image_id > 0) {
 	  $deletion_success = $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`='{$image_id}' LIMIT 1");
 		echo "element_id = '$element_id';\n";
-		echo "/*\n";
-		print_r($deletion_success);
-		echo "*/\n";
+		//echo "/*\n";
+		//print_r($deletion_success);
+		//echo "*/\n";
 	
 		if(($product_id > 0) && ($deletion_success == true)) {
 			$next_image = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_id}' ORDER BY `image_order` ASC LIMIT 1",ARRAY_A);
@@ -1856,7 +1858,7 @@ function wpsc_trigger_copy_themes(){
 	wp_redirect($sendback);
 	exit();
 }
-  
+
 if($_REQUEST['wpsc_admin_action'] == 'copy_themes') {
 	add_action('admin_init', 'wpsc_trigger_copy_themes');
 }
