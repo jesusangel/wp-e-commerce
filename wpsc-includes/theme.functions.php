@@ -13,6 +13,7 @@
   */
 function wpsc_get_theme_file_path($file) {
 	// get the theme folder here
+	global $wpsc_theme_path;
 	$file = basename($file);
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	if(is_file($cur_wpsc_theme_folder."/".$file)) {
