@@ -349,6 +349,22 @@ function wpsc_purchaselog_details_purchnumber(){
 }
 
 /*
+ * Has Discount Data?
+ */
+function wpsc_purchlog_has_discount_data() {
+	global $purchlogitem;
+	return !empty($purchlogitem->extrainfo->discount_data);
+}
+
+/*
+ * Returns Discount Code
+ */
+function wpsc_display_purchlog_discount_data( $numeric = false ) {
+	global $purchlogitem;
+	return $purchlogitem->extrainfo->discount_data;
+}
+
+/*
  *Returns base shipping should make a function to calculate items shipping as well
  */
 function wpsc_display_purchlog_discount($numeric = false){

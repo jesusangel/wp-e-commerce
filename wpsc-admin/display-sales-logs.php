@@ -203,7 +203,11 @@ if(!isset($purchlogs)){
 						<tr>&nbsp;</tr>
 
 						<tr>
-							<td colspan='4'></td>
+							<td colspan="4">
+								<?php if ( wpsc_purchlog_has_discount_data() ) { ?>
+								<?php _e('Coupon Code'); ?>: <?php echo wpsc_display_purchlog_discount_data(); ?>
+								<?php } ?>
+							</td>
 							<th><?php _e('Discount'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_discount(); ?></td>
 						</tr>
