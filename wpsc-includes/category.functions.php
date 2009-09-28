@@ -580,6 +580,31 @@ function wpsc_category_name($category_id = null) {
 
 
 
+/**
+ * WPSC Category Group
+ * @modified:     2009-09-28 by Ben
+ * @description:  Get a category's group id.
+ * @param:        $category_id = Category ID
+ * @return:       (Int) Group ID
+ */
+
+function wpsc_category_group( $category_id = null ) {
+	global $wpdb, $wp_query;
+	if ( $category_id < 1 ) {
+		if ( $wp_query->query_vars['category_id'] > 0 ) {
+			$category_id = $wp_query->query_vars['category_id'];
+		} else if ( isset($_GET['category']) && ($_GET['category'] > 0) ) {
+			$category_id = $_GET['category'];
+		}
+	}
+	$category_id = absint($category_id);
+	// Is it better for this DB query be loaded in the main query or cached?
+	$group_id = $wpdb->get_var("SELECT `group_id` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
+	return absint($group_id);
+}
+
+
+
 // This function displays the category groups, it is used by the above function
 function nzshpcrt_display_categories_groups() {
     global $wpdb;
