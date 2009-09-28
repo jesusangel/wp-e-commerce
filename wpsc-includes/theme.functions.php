@@ -646,7 +646,7 @@ add_filter('get_the_excerpt', 'wpsc_enable_page_filters', 1000000);
 
 /**
  * Body Class Filter
- * @modified:     2009-09-21 by Ben
+ * @modified:     2009-09-28 by Ben
  * @description:  Adds additional wpsc classes to the body tag.
  * @param:        $classes = Array of body classes
  * @return:       (Array) of classes
@@ -654,7 +654,7 @@ add_filter('get_the_excerpt', 'wpsc_enable_page_filters', 1000000);
 
 function wpsc_body_class( $classes ) {
 	
-	global $wp_query;
+	global $wp_query, $wpsc_query;
 	
 	$post_id = $wp_query->post->ID;
 	$page_url = get_permalink($post_id);
@@ -680,10 +680,21 @@ function wpsc_body_class( $classes ) {
 	 
 	if ( wpsc_is_single_product() ) {
 		$classes[] = 'wpsc-single-product';
+		if ( absint($wpsc_query->products[0]['id']) > 0) {
+			$classes[] = 'wpsc-single-product-' . $wpsc_query->products[0]['id'];
+		}
 	}
 	
 	if ( wpsc_is_in_category() && !wpsc_is_single_product() ) {
 		$classes[] = 'wpsc-category';
+	}
+	
+	if ( absint($wpsc_query->query_vars['category_id']) > 0) {
+		$classes[] = 'wpsc-category-' . $wpsc_query->query_vars['category_id'];
+	}
+	
+	if ( absint(wpsc_category_group()) > 0) {
+		$classes[] = 'wpsc-group-' . wpsc_category_group();
 	}
 	
 	return $classes;
