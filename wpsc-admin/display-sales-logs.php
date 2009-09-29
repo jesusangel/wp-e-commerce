@@ -70,9 +70,7 @@ if(!isset($purchlogs)){
 				unset($_GET['deleted']);
 			}
 		
-
-		
-			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] );
+			//$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] );
 			?>
 			</p></div>
 		<?php } 
@@ -123,10 +121,11 @@ if(!isset($purchlogs)){
 					printf( __ngettext( 'Receipt has been resent ', 'Receipt has been resent ', $_GET['sent'] ),  $_GET['sent']  );
 					unset($_GET['sent']);
 				}
+			?> </p></div>
+			<?php
 			}			
-			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','cleared'), $_SERVER['REQUEST_URI'] );
+			//$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','cleared'), $_SERVER['REQUEST_URI'] );
 			?>
-		</p></div>
 
 			
 			<?php
@@ -200,7 +199,7 @@ if(!isset($purchlogs)){
 					
 						<tbody>
 						<?php wpsc_display_purchlog_details(); ?>
-						<tr>&nbsp;</tr>
+						<tr> &nbsp;</tr>
 
 						<tr>
 							<td colspan="4">
@@ -240,6 +239,7 @@ if(!isset($purchlogs)){
  				<?php wpsc_purchlogs_notes(); ?>
 				<!-- End Order Notes (by Ben) -->
 				
+				<?php wpsc_custom_checkout_fields(); ?>
  				
 				</div>
 				</div>
@@ -247,11 +247,11 @@ if(!isset($purchlogs)){
 				<div id='wpsc_purchlogitems_links'>
 				<h3><?php _e('Actions'); ?></h3>
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
-<img src='<?php echo WPSC_URL; ?>/images/lock_open.png'>&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
+<img src='<?php echo WPSC_URL; ?>/images/lock_open.png' alt='clear lock icon' />&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
 				<?php endif; ?>
-<img src='<?php echo WPSC_URL; ?>/images/printer.png'>&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php echo TXT_WPSC_VIEW_PACKING_SLIP; ?></a>
+<img src='<?php echo WPSC_URL; ?>/images/printer.png' alt='printer icon' />&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php echo TXT_WPSC_VIEW_PACKING_SLIP; ?></a>
 		
-<br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png'>&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php echo TXT_WPSC_EMAIL_BUYER; ?></a>
+<br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php echo TXT_WPSC_EMAIL_BUYER; ?></a>
 		  
 <br /><br class='small' /><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php echo TXT_WPSC_REMOVE_LOG ?></a>
 
@@ -566,7 +566,7 @@ function wpsc_purchlogs_notes() {
 		<div id="purchlogs_notes" class="postbox">
 		<h3 class='hndle'>Order Notes</h3>
 		<div class='inside'>
-			<form method="POST" action="">
+			<form method="post" action="">
 				<input type='hidden' name='wpsc_admin_action' value='purchlogs_update_notes' />
 				<input type="hidden" name="wpsc_purchlogs_update_notes_nonce" id="wpsc_purchlogs_update_notes_nonce" value="<?php echo wp_create_nonce( 'wpsc_purchlogs_update_notes' ); ?>" />
 				<input type='hidden' name='purchlog_id' value='<?php echo $_GET['purchaselog_id']; ?>' />
@@ -574,12 +574,36 @@ function wpsc_purchlogs_notes() {
 				<p><input class="button" type="submit" name="button" id="button" value="Update Notes" /></p>
 			</form>
 		</div>
+		</div>
 	</div>
 	<?php }
 
 }
 /* End Order Notes (by Ben) */
+function wpsc_custom_checkout_fields(){
+	global $purchlogitem;
+	if(!empty($purchlogitem->customcheckoutfields)){
+	?>
+		<div class="metabox-holder">
+		<div id="custom_checkout_fields" class="postbox">
+		<h3 class='hndle'>Additional Checkout Fields</h3>
+		<div class='inside'>
+		<?php
+		foreach((array)$purchlogitem->customcheckoutfields as $key=>$value){
+		?>
+		<p><strong><?php echo $key; ?> :</strong> <?php echo $value['value']; ?></p>
+		<?php
+		
+		}
+		?>
+		</div>
+		</div>
+		</div>
+		<?php
+	}
+	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 
+}
 
 function wpsc_upgrade_purchase_logs() {
 	include(WPSC_FILE_PATH.'/wpsc-admin/includes/purchlogs_upgrade.php');

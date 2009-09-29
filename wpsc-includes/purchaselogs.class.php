@@ -839,6 +839,8 @@ class wpsc_purchaselogs_items{
 	//usersinfo
 	var $userinfo;
 	var $shippinginfo;
+	var $customcheckoutfields = array();
+	
 	
 	function wpsc_purchaselogs_items($id){
 		$this->purchlogid = $id;
@@ -860,7 +862,7 @@ class wpsc_purchaselogs_items{
 		$cartcontent = $wpdb->get_results("SELECT *  FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$this->purchlogid."");
 
 		
-		echo $cartsql;
+		//echo $cartsql;
 		$this->allcartcontent = $cartcontent;
 		//exit('<pre>'.print_r($cartcontent, true).'</pre>');
 		$sql = "SELECT DISTINCT `".WPSC_TABLE_PURCHASE_LOGS."` . * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`id`=".$this->purchlogid;
@@ -875,12 +877,15 @@ class wpsc_purchaselogs_items{
 		foreach((array)$userinfo as $input_row) {
 			if(stristr($input_row['unique_name'],'shipping')){
 			 	 $shippinginfo[$input_row['unique_name']] = $input_row;
-			}else{
+			}elseif(stristr($input_row['unique_name'],'billing')){
 				 $billingdetails[$input_row['unique_name']] = $input_row;
+			}else{
+				$additionaldetails[$input_row['name']] = $input_row;
 			}
 		}		
 		$this->userinfo = $billingdetails;
 		$this->shippinginfo= $shippinginfo;
+		$this->customcheckoutfields = $additionaldetails;
 		$this->purch_item_count = count($cartcontent);
 //		exit('<pre>'.print_r($cartcontent, true).'</pre>');
 	}
