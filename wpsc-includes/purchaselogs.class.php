@@ -290,7 +290,8 @@ function wpsc_the_purchaselog_item(){
 }
 function wpsc_purchaselog_details_SKU(){
 	global $purchlogitem;
-	$meta_value = get_product_meta($purchlogitem->purchitem->productid, 'sku');
+//	exit('<pre>'.print_r($purchlogitem->purchitem,true).'</pre>');
+	$meta_value = get_product_meta($purchlogitem->purchitem->prodid, 'sku');
 	if($meta_value ==''){
 		return 'N/A';
 	}else{

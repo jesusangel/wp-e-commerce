@@ -313,7 +313,14 @@ jQuery(document).ready( function() {
 
 function wpsc_admin_css() {
   $siteurl = get_option('siteurl'); 
-  if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME) !== false) || ($_GET['mass_upload'] == 'true') || ((strpos($_SERVER['REQUEST_URI'], 'wp-admin/index.php') !== false) && !isset($_GET['page']))) {
+//    exit('<pre>'.print_r($_SERVER, true).'</pre>');
+    if($_SERVER['REQUEST_URI'] == ''){
+	    $site_request_uri = $_SERVER['ORIG_PATH_INFO'].$_SERVER['QUERY_STRING'];
+    }else{
+    	$site_request_uri = $_SERVER['REQUEST_URI'];
+    }
+
+  if((strpos($_SERVER['REQUEST_URI'], WPSC_DIR_NAME) !== false) || ($_GET['mass_upload'] == 'true') || ((strpos($_SERVER['REQUEST_URI'], 'wp-admin/admin.php') !== false) && !isset($_GET['page']))) {
   	if(function_exists('add_object_page')) {
   		echo "<link href='".WPSC_URL."/admin_2.7.css' rel='stylesheet' type='text/css' />";
   	} else {
