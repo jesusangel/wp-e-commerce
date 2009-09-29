@@ -170,8 +170,10 @@ function wpsc_admin_include_coupon_js() {
 	* No parameters, returns nothing
 */
 function  wpsc_admin_include_css_and_js() {
-  $siteurl = get_option('siteurl'); 
-
+  $siteurl = get_option('siteurl');
+	if(is_ssl()) {
+		$siteurl = str_replace("http://", "https://", $siteurl);
+	}
 	wp_admin_css( 'dashboard' );
 	wp_admin_css( 'media' );
 	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));

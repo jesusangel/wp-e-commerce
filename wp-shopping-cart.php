@@ -35,11 +35,13 @@ define('IS_WP27', version_compare($v1[0], '2.7', '>='));
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
-$siteurl = get_option('siteurl');
-
+$wpsc_siteurl = get_option('siteurl');
+if(is_ssl()) {
+	$wpsc_siteurl = str_replace("http://", "https://", $wpsc_siteurl);
+}
 //Define the URL to the plugin folder
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
-define('WPSC_URL', get_option('siteurl').'/wp-content/plugins/' . WPSC_FOLDER);
+define('WPSC_URL', $wpsc_siteurl.'/wp-content/plugins/' . WPSC_FOLDER);
 
 if(isset($wpdb->blogid)) {
     define('IS_WPMU', 1);
@@ -177,6 +179,10 @@ if(IS_WPMU == 1) {
 	
 	$upload_path = WP_CONTENT_DIR."/uploads";
 	$upload_url = WP_CONTENT_URL."/uploads";
+}
+
+if(is_ssl()) {
+	 $upload_url = str_replace("http://", "https://", $upload_url);
 }
 	
 $wpsc_upload_dir = "{$upload_path}/wpsc/";
