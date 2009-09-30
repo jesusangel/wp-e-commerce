@@ -412,17 +412,16 @@ function wpsc_have_morethanone_shipping_methods_and_quotes(){
 	}
 }
 /**
- * Whether or not there is a valid shipping quote/option
+ * Whether or not there is a valid shipping quote/option available to the customer when checking out
  *
  * @return bool
  */
 function wpsc_have_shipping_quote(){
 	global $wpsc_cart;
-	if(count($wpsc_cart->shipping_quotes)){
+	if ($wpsc_cart->shipping_quote_count > 0 || count($wpsc_cart->shipping_quotes) > 0) {
 		return true;
-	}else{
-		return false;
 	}
+	return false;
 }
 function wpsc_update_shipping_single_method(){
 	global $wpsc_cart;

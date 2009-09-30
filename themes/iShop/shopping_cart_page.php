@@ -100,6 +100,10 @@ if(wpsc_cart_item_count() > 0) :
 			</tr>
 			
 			<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
+					<?php 
+					// Don't display shipping method if it doesn't have at least one quote
+					if (!wpsc_have_shipping_quotes()) continue; 
+					?>
 					<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
 					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();
 				

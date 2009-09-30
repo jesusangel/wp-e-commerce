@@ -90,7 +90,7 @@ function selectgateway() {
 				</tr>
 								
 				<tr>
-					<th>Zipcode:</th>
+					<th><?php echo TXT_WPSC_BASE_ZIPCODE; ?></th>
 					<td>
 						<input type='text' name='wpsc_options[base_zipcode]' value='<?php echo get_option('base_zipcode'); ?>' />
 						<br /><?php echo TXT_WPSC_USPS_DESC; ?>

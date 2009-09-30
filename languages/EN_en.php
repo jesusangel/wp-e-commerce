@@ -62,7 +62,7 @@ define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information");
 define('TXT_WPSC_ECOMMERCE', 'Products'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
-define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering to the destination you selected is not available. Please contact us.');
+define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering is unavailable to this destination and/or weight. Please contact us.');
 
 define('TXT_WPSC_COUPONS', 'Coupon Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
@@ -208,6 +208,7 @@ define('TXT_WPSC_FLAT_RATE_SETTINGS', "Flat Rate Settings");
 define('TXT_WPSC_OFF_SITE_LINK', "Off Site Product Link");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'These notes are only available here.');
 define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Categories and Tags');
+define('TXT_WPSC_BASE_ZIPCODE', 'Base Zipcode/Postcode:');
 define('TXT_WPSC_USPS_DESC', 'If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.');
 
 define('TXT_WPSC_SHIPPING_DETAILS', 'Shipping Details');
