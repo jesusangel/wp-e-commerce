@@ -461,38 +461,8 @@ function wpsc_the_product_image($width = null, $height = null) {
 */
 function wpsc_the_product_thumbnail() {
 	// show the thumbnail image for the product
-	global $wpsc_query, $wpdb;
-	$image_file_name = null;
-	if($wpsc_query->product['thumbnail_image'] != null) {
-			$image_file_name = $wpsc_query->product['thumbnail_image'];
-	} else if ($wpsc_query->product['image'] != null) {
-	
-		if($wpsc_query->product['image_file'] != null) {
-			$image_file_name = $wpsc_query->product['image_file'];
-		} else {
-			if(is_numeric($wpsc_query->product['image'])) {
-				$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
-			} else {
-				$image_file_name = $wpsc_query->product['image'];
-			}
-			$wpsc_query->product['image_file'] = $image_file_name;
-		}
-		$wpsc_query->product['thumbnail_image'] = $image_file_name;
-	}
-
-	if($image_file_name !== null) {
-		if(($wpsc_query->category_product['image_height'] != null) && ($wpsc_query->category_product['image_width'] != null) && (function_exists('ImagePNG'))) {
-			$image_path = "index.php?productid=".$wpsc_query->product['id']."&amp;width=".$wpsc_query->category_product['image_width']."&amp;height=".$wpsc_query->category_product['image_height']."";
-		} else {
-			$image_path = WPSC_THUMBNAIL_URL.$image_file_name;
-			if(is_ssl()) {
-				$image_path = str_replace("http://", "https://", $image_path);
-			}
-		}
-		return $image_path;
-	} else {
-		return false;
-	}
+	global $wpsc_query;
+	return $wpsc_query->the_product_thumbnail();
 }
 
 /**
@@ -1804,6 +1774,46 @@ class WPSC_Query {
 	function the_product_title() {
 		return $this->product['name'];
 	}
+	
+	
+	function the_product_thumbnail() {
+		
+		global $wpdb;
+		$image_file_name = null;
+		
+		if ( $this->product['thumbnail_image'] != null ) {
+			$image_file_name = $this->product['thumbnail_image'];
+		} else if ( $this->product['image'] != null ) {
+			if ( $this->product['image_file'] != null ) {
+				$image_file_name = $this->product['image_file'];
+			} else {
+				if ( is_numeric($this->product['image']) ) {
+					$image_file_name = $wpdb->get_var("SELECT `image` FROM `" . WPSC_TABLE_PRODUCT_IMAGES . "` WHERE `id`= '" . $this->product['image'] . "' LIMIT 1");
+				} else {
+					$image_file_name = $this->product['image'];
+				}
+				$this->product['image_file'] = $image_file_name;
+			}
+			$this->product['thumbnail_image'] = $image_file_name;
+		}
+		
+		if ( $image_file_name !== null ) {
+			if ( ($this->category_product['image_height'] != null) && ($this->category_product['image_width'] != null) && (function_exists('ImagePNG')) ) {
+				$image_path = "index.php?productid=" . $this->product['id'] . "&amp;width=" . $this->category_product['image_width']."&amp;height=" . $this->category_product['image_height'] . "";
+			} else {
+				$image_path = WPSC_THUMBNAIL_URL . $image_file_name;
+				if ( is_ssl() ) {
+					$image_path = str_replace("http://", "https://", $image_path);
+				}
+			}
+			return $image_path;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	
 }
 			
 ?>
