@@ -333,6 +333,24 @@ if(!function_exists('wpsc_initialisation')){
 add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
+
+
+
+
+
+
+if(is_ssl()) {
+	function wpsc_add_https_to_page_url_options($url) {
+		return str_replace("http://", "https://", $url);
+	}
+	add_filter('option_product_list_url', 'wpsc_add_https_to_page_url_options');
+	add_filter('option_shopping_cart_url', 'wpsc_add_https_to_page_url_options');
+	add_filter('option_transact_url', 'wpsc_add_https_to_page_url_options');
+	add_filter('option_user_account_url', 'wpsc_add_https_to_page_url_options');
+}
+
+
+
 /**
  * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
  */  

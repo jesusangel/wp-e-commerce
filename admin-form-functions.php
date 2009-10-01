@@ -1,210 +1,5 @@
 <?php
 // ini_set('display_errors','1');
-function nzshpcrt_getproductform($prodid)
-  {
-  global $wpdb,$nzshpcrt_imagesize_info;
-  $variations_processor = new nzshpcrt_variations;
- /*
-  * makes the product form
-  * has functions inside a function
-  */ 
-  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=$prodid LIMIT 1";
-  $product_data = $wpdb->get_results($sql,ARRAY_A);
-  $product = $product_data[0];
-  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`=$prodid AND meta_key='external_link' LIMIT 1";
-  $meta_data = $wpdb->get_results($sql,ARRAY_A);
-  $product['external_link'] = $meta_data[0]['meta_value'];
-  $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`=$prodid AND meta_key='merchant_notes' LIMIT 1";
-  $meta_data = $wpdb->get_results($sql,ARRAY_A);
-  $product['merchant_notes'] = $meta_data[0]['meta_value'];
-  $engrave = get_product_meta($prodid,'engraved',true);
-  $can_have_uploaded_image = get_product_meta($prodid,'can_have_uploaded_image',true);
-  
-   $table_rate_price = get_product_meta($prodid,'table_rate_price',true);
-//    exit("<pre>".print_r($table_rate_price,1)."</pre>");
-  if(function_exists('wp_insert_term')) {
-		$term_relationships = $wpdb->get_results("SELECT * FROM ".$wpdb->term_relationships." WHERE object_id = $prodid", ARRAY_A);
-		
-		foreach ((array)$term_relationships as $term_relationship) {
-			$tt_ids[] = $term_relationship['term_taxonomy_id'];
-		}
-		foreach ((array)$tt_ids as $tt_id) {
-			$results = $wpdb->get_results("SELECT * FROM ".$wpdb->term_taxonomy." WHERE term_taxonomy_id = ".$tt_id." AND taxonomy = 'product_tag'", ARRAY_A);
-			$term_ids[] = $results[0]['term_id'];
-		}
-		foreach ((array)$term_ids as $term_id ) {
-			if ($term_id != NULL){
-			$results = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." WHERE term_id=".$term_id." ",ARRAY_A);
-			$tags[] = $results[0]['name'];
-			}
-		}
-		if ($tags != NULL){ 
-			$imtags = implode(',', $tags);
-		}
-  }
-
-  $check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '".$product['id']."'");
-  
-  
-	$current_user = wp_get_current_user();
-	$closed_postboxes = (array)get_usermeta( $current_user->ID, 'closedpostboxes_editproduct');
-	if (IS_WP27){
-		$output .= "        <div id='productform'>";
-		$output .= "        <div id='productform27' class='postbox'>";
-		$output .= "<h3 class='hndle'>". TXT_WPSC_PRODUCTDETAILS." ".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</h3>";
-		$output .= "        <div class='inside'>";
-	} else {
-		$output .= "        <div id='productform'>";
-		$output .= "<div class='categorisation_title'><strong class='form_group'>". TXT_WPSC_PRODUCTDETAILS." <span>".TXT_WPSC_ENTERPRODUCTDETAILSHERE."</span></strong></div>";
-	}
-  $output .= "        <table class='product_editform' style='width:100%;'>\n\r";
-  $output .= "          <tr>\n\r";
-/*
-  $output .= "            <td class='itemformcol'>\n\r";
-  $output .= TXT_WPSC_PRODUCTNAME.": ";
-  $output .= "            </td>\n\r";
-*/
-  $output .= "            <td colspan='2' class='itemfirstcol'>\n\r";
-  
-	$output .= "        <div class='admin_product_name'>\n\r";
-  $output .= "          <input class='wpsc_product_name' size='30' type='text' class='text'  name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />\n\r";
-	$output .= "				   <a href='#' class='shorttag_toggle'></a>\n\r";
-	$output .= "				   <div class='admin_product_shorttags'>\n\r";
-	$output .= "				   <h4>Shortcodes</h4>\n\r";
-
-	$output .= "				     <dl>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE.": </dt><dd> [wpsc_products product_id='{$product['id']}']</dd>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_BUY_NOW_SHORTCODE.": </dt><dd>[buy_now_button={$product['id']}]</dd>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_ADD_TO_CART_SHORTCODE.": </dt><dd>[add_to_cart={$product['id']}]</dd>\n\r";
-	$output .= "				     </dl>\n\r";
-
-	$output .= "				   <h4>Template Tags</h4>\n\r";
-	
-	$output .= "				     <dl>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG.": </dt><dd> &lt;?php echo wpsc_display_products('product_id={$product['id']}'); ?&gt;</dd>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_BUY_NOW_PHP.": </dt><dd>&lt;?php echo wpsc_buy_now_button({$product['id']}); ?&gt;</dd>\n\r";
-	$output .= "				       <dt>".TXT_WPSC_ADD_TO_CART_PHP.": </dt><dd>&lt;?php echo wpsc_add_to_cart_button({$product['id']}); ?&gt;</dd>\n\r";
-	$output .= "				     </dl>\n\r";
-	
-	$output .= "				     <p>\n\r";
-
-	$output .= "				     </p>\n\r";
-	$output .= "				   </div>\n\r";
-	
-	$output .= "				   <div style='clear:both; height: 0px;'></div>\n\r";	
-	$output .= "        </div>\n\r";
-        
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  
-  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td  class='skuandprice'>\n\r";
-  $output .= TXT_WPSC_SKU_FULL." :<br />";
-/*
-  $output .= "            </td>\n\r";
-  $output .= "            <td class='itemformcol'>\n\r";
-*/
-  $sku = get_product_meta($product['id'], 'sku');
-  $output .= "<input size='30' type='text' class='text'  name='productmeta_values[sku]' value='".htmlentities(stripslashes($sku), ENT_QUOTES, 'UTF-8')."' />\n\r";
-  $output .= "            </td>\n\r";
-  $output .= "<td  class='skuandprice'>";
-  $output .= TXT_WPSC_PRICE." :<br />";
-  $output .= "<input type='text' class='text' size='30' name='price' value='".$product['price']."'>";
-  $output .= "</td>";
-  $output .= "          </tr>\n\r";
-  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td colspan='2'>\n\r";
-/*
-  $output .= TXT_WPSC_PRODUCTDESCRIPTION.": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td class='itemformcol'>\n\r";
-*/
-  $output .= "<div id='editorcontainer'>";
-  $output .= "<textarea name='description' class='mceEditor' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
-  $output .= "</div>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  
-  $output .= "          <tr>\n\r";
-  $output .= "            <td class='itemfirstcol' colspan='2'>\n\r";
-  $output .= "<strong >".TXT_WPSC_ADDITIONALDESCRIPTION." :</strong><br />";
-/*
-  $output .= "            </td>\n\r";
-  $output .= "            <td class='itemformcol'>\n\r";
-*/
-
- $output .= "<textarea name='additional_description' cols='40' rows='8' >".stripslashes($product['additional_description'])."</textarea>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-
-	if (IS_WP27) {
-		 $output .= "          </table>\n\r";
-	   $output .= "</div></div>";
-	   $output .= "<div class='meta-box-sortables'>";
-	} else {
-		$output .= "<table style='width:100%'>";
-		$output .= "<tr><td  colspan='2'>";
-	}
-	$order = get_option('wpsc_product_page_order');
-	if (($order == '') || (count($order ) < 6)){
-		$order=array("category_and_tag", "price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download");
-	}
-	
-	update_option('wpsc_product_page_order', $order);
-	foreach((array)$order as $key => $box) {
-		$box_function_name = $box."_box";
-		if(function_exists($box_function_name)) {
-			$output .= call_user_func($box_function_name,$product);
-		}
-		//echo $output;
-		if(!IS_WP27 && ($key!=count($order)-1)) {
-			$output .= "</td></tr>";
-			if ($box == "product_image") {
-				$output .= "<tr class='edit_product_image'><td colspan='2'>";
-			} else {
-  				$output .= "<tr><td colspan='2'>";
-  			}
-  			if ($box == "price_and_stock") {
-  				ob_start();
-				do_action('wpsc_product_form', $product['id']);
-				$output .= ob_get_contents();
-				ob_end_clean();
-  			}
-  		}
-	}
-	
-	ob_start();
-	do_action('wpsc_product_form', $product['id']);
-	$output .= ob_get_contents();
-	ob_end_clean();
-		
-		
-	if (!IS_WP27) {
-		$output .= "</td></tr>";
-		$output .= "          <tr>\n\r";
-		$output .= "            <td>\n\r";
-		$output .= "            </td>\n\r";
-		$output .= "            <td>\n\r";
-		$output .= "            <br />\n\r";
-		$output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
-		$output .= "<input type='hidden' name='submit_action' value='edit' />";
-		$output .= "<input  class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />";
-		$output .= "<a class='button delete_button' ' href='admin.php?page=wpsc-edit-products&amp;deleteid=".$product['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
-		$output .= "            <td>\n\r";
-		$output .= "          </tr>\n\r";
-		$output .= "        </table>\n\r";
-	} else {
-		$output .= "<input type='hidden' name='prodid' id='prodid' value='".$product['id']."' />";
-		$output .= "<input type='hidden' name='submit_action' value='edit' />";
-		$output .= "<input class='button-primary' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT_PRODUCT."' />&nbsp;";
-		$output .= "<a class='delete_button' ' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-products')."' onclick=\"return conf();\" >".TXT_WPSC_DELETE_PRODUCT."</a>";
-	}
-		
-		$output .= "</div>";
-		return $output;
-  }
 
 function nzshpcrt_getcategoryform($catid)
   {
@@ -476,19 +271,19 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r";
   return $output;
-  } 
-      
+  }
+
 function coupon_edit_form($coupon) {
 
 $conditions = unserialize($coupon['condition']);
 $conditions = $conditions[0];
 	//exit('<pre>'.print_r($conditions, true).'</pre>');
-	
+
   $start_timestamp = strtotime($coupon['start']);
   $end_timestamp = strtotime($coupon['expiry']);
   $id = $coupon['id'];
   $output = '';
-  $output .= "<form name='edit_coupon' method='post' action='".get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
+  $output .= "<form name='edit_coupon' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
     $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
   $output .= "<table class='add-coupon'>\n\r";
   $output .= " <tr>\n\r";
@@ -515,14 +310,14 @@ $conditions = $conditions[0];
   $output .= "  <td>\n\r";
   $coupon_start = explode(" ",$coupon['start']);
   $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
-/*  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";  
+/*  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";
    for($i = 1; $i <=31; ++$i) {
      $selected = '';
      if($i == date("d", $start_timestamp)) { $selected = "selected='true'"; }
      $output .= "    <option $selected value='$i'>$i</option>";
      }
   $output .= "   </select>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][start][month]'>\n\r";  
+  $output .= "   <select name='edit_coupon[".$id."][start][month]'>\n\r";
    for($i = 1; $i <=12; ++$i) {
      $selected = '';
      if($i == (int)date("m", $start_timestamp)) { $selected = "selected='true'"; }
@@ -580,12 +375,12 @@ $conditions = $conditions[0];
   //$output .= "   <input type='hidden' value='false' name='add_coupon' />\n\r";
   $output .= "   <input type='submit' value='".TXT_WPSC_SUBMIT."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
   $output .= "   <input type='submit' value='".TXT_WPSC_DELETE."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
-  
+
   $output .= "  </td>\n\r";
   $output .= " </tr>\n\r";
 
   if($conditions != null){
-  	  	
+
 	  $output .= "<tr>";
 	  $output .= "<th>";
 	  $output .= "Conditions";
@@ -604,7 +399,7 @@ $conditions = $conditions[0];
 	  $output .= "Value";
 	  $output .= "</th>";
 	  $output .= " </tr>\n\r";
-	  $output .= "<tr>";  
+	  $output .= "<tr>";
 	  $output .= "<td>";
 	  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
 	  $output .= "<input type='submit' value='Delete' name='delete_condition' />";
@@ -621,7 +416,7 @@ $conditions = $conditions[0];
 	  $output .= "</tr>";
   }elseif($conditions == null){
   	$output .=	wpsc_coupons_conditions( $id);
-  
+
   }
   ?>
 <!--

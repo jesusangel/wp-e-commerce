@@ -399,8 +399,8 @@ echo "</table>\n\r";
     </td>
   </tr>
 </table>
-<input type='hidden' value='true' name='is_edit_coupon' />
-</form>
+<!-- <input type='hidden' value='true' name='is_edit_coupon' /> -->
+<!-- </form> -->
 
 <br />
 
