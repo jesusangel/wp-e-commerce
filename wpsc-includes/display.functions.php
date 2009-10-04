@@ -341,6 +341,7 @@ function wpsc_add_to_cart_button($product_id, $replaced_shortcode = false) {
 		} else {
 			$output .= "<input type='submit' id='product_".$product['id']."_submit_button' class='wpsc_buy_button' name='Buy' value='".TXT_WPSC_ADDTOCART."'  />";
 		}
+		$output .= '</form>';
 		if($replaced_shortcode == true) {
 			return $output;
 		} else {
