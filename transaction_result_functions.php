@@ -13,6 +13,11 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	$echo_to_screen=(((!is_bool($echo_to_screen)))?((true)):(($echo_to_screen)));
 	//exit('triggered but with errors?'.$echo_to_screen);
 	if(is_numeric($sessionid)) {
+		
+		if ( $echo_to_screen ) {
+			echo apply_filters( 'wpsc_pre_transaction_results', '' );
+		}
+		
 		$purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
