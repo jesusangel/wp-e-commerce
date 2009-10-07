@@ -42,6 +42,9 @@ function wpsc_debug_page() {
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=resize_thumbnails'>Resize all Thumbnails and Clean Empty Image Records</a>
 			</li>
+			<li>
+				<a href='?page=wpsc-debug&amp;wpsc_debug_action=filters'>Display filters</a>
+			</li>
 			
 			<li>
 				<a href='?page=wpsc-debug&amp;wpsc_debug_action=phpinfo'>Display phpinfo</a>
@@ -100,6 +103,12 @@ function wpsc_debug_page() {
 			case 'images_reupload':
 			wpsc_update_image_records(true);
 			break;
+
+			case 'filters':
+			global $wp_filter, $merged_filters;
+			print_r($wp_filter);
+			
+			break;
 			
 			case 'phpinfo':
 			print_r($wpdb);
@@ -121,13 +130,10 @@ function wpsc_debug_page() {
 
 			case 'test_variation_grid':
 			$variations_processor = new nzshpcrt_variations;
-			$product_data['id'] = 33;
-
 			$product_data['id'] = 106;
 			 $output = $variations_processor->variations_grid_view($product_data['id']);
  			echo "</pre>";
  			echo $output;
-
  			echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
 			break;
 		}

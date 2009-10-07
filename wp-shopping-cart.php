@@ -233,10 +233,66 @@ define('WPSC_THEMES_URL', $wpsc_themes_url);
 
 
 
+/* 
+ * This plugin gets the merchants from the merchants directory and
+ * needs to search the merchants directory for merchants, the code to do this starts here
+ */
+$gateway_directory = WPSC_FILE_PATH.'/merchants';
+$nzshpcrt_merchant_list = wpsc_list_dir($gateway_directory);
+ //exit("<pre>".print_r($nzshpcrt_merchant_list,true)."</pre>");
+$num=0;
+foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
+  if(stristr( $nzshpcrt_merchant , '.php' )) {
+    //echo $nzshpcrt_merchant;
+    require(WPSC_FILE_PATH."/merchants/".$nzshpcrt_merchant);
+	}
+  $num++;
+}
+/* 
+ * and ends here
+ */
+// include shipping modules here.
+$shipping_directory = WPSC_FILE_PATH.'/shipping';
+$nzshpcrt_shipping_list = wpsc_list_dir($shipping_directory);
+foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
+	if(stristr( $nzshpcrt_shipping , '.php' )) {
+		require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
+	}
+}
+
 // if the gold cart file is present, include it, this must be done before the admin file is included
 if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
   require_once(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php");
 }
+
+// need to sort the merchants here, after the gold ones are included. 
+function wpsc_merchant_sort($a, $b) { 
+  return strnatcmp(strtolower($a['name']), strtolower($b['name'])); 
+} 
+uasort($nzshpcrt_gateways, 'wpsc_merchant_sort');
+
+// make an associative array of references to gateway data.
+$wpsc_gateways = array(); 
+foreach((array)$nzshpcrt_gateways as $key => $gateway) {
+	$wpsc_gateways[$gateway['internalname']] =& $nzshpcrt_gateways[$key];
+}
+
+
+$theme_path = WPSC_FILE_PATH . '/themes/';
+if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
+  include_once(WPSC_FILE_PATH.'/themes/'.get_option('wpsc_selected_theme').'/'.get_option('wpsc_selected_theme').'.php');
+}
+$current_version_number = get_option('wpsc_version');
+if(count(explode(".",$current_version_number)) > 2) {
+	// in a previous version, I accidentally had the major version number have two dots, and three numbers
+	// this code rectifies that mistake
+	$current_version_number_array = explode(".",$current_version_number);
+	array_pop($current_version_number_array);
+	$current_version_number = (float)implode(".", $current_version_number_array );
+} else if(!is_numeric(get_option('wpsc_version'))) {
+  $current_version_number = 0;
+}
+
 
 //if there are any upgrades present, include them., thanks to nielo.info and lsdev.biz
 if($v1[0] >= 2.8){
@@ -331,9 +387,6 @@ if(!function_exists('wpsc_initialisation')){
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
-
-
-
 
 
 

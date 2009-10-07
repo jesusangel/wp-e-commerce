@@ -185,7 +185,9 @@ jQuery(document).ready( function () {
 			product_id = jQuery(this).attr('href').match(/product_id=(\d{1,})/);
 	 		post_values = "product_id="+product_id[1]+"";
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
-				tinyMCE.execCommand("mceRemoveControl",false,"content"); 
+				if(typeof(tinyMCE) != "undefined") {
+					tinyMCE.execCommand("mceRemoveControl",false,"content");
+				}
 				jQuery('form#modify-products #content').remove();
 				
 				
@@ -193,7 +195,9 @@ jQuery(document).ready( function () {
 			  	jQuery('.loadingImg').attr('style', 'display:none;');
 				if ( getUserSetting( 'editor' ) != 'html' ) {
 					jQuery("#quicktags").css('display', "none");
-					tinyMCE.execCommand("mceAddControl", false, "content");
+					if(typeof(tinyMCE) != "undefined") {
+						tinyMCE.execCommand("mceAddControl", false, "content");
+					}
 				}
 			});
 	 		return false;

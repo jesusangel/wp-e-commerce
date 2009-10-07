@@ -59,21 +59,6 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 
 
 
-
-
-function wpsc_post_title_seo($title) {
-	global $wpdb, $page_id, $wp_query;
-	if($wp_query->query_vars['product_name'] != '') {
-		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpdb->escape($wp_query->query_vars['product_name'])."' ) LIMIT 1");			
-    $title = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN('".(int)$product_id."') LIMIT 1");
-	} else if(is_numeric($_GET['product_id'])) {
-		$title=$wpdb->get_var("SELECT `name` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN ('".(int)$_GET['product_id']."') LIMIT 1" );
-	}
-	return stripslashes($title);
-}
-
-
-
 function wpsc_also_bought($product_id) {
   /*
    * Displays products that were bought aling with the product defined by $product_id
@@ -498,6 +483,24 @@ function wpsc_obtain_the_title() {
 	return $output;
 }
  
+function wpsc_obtain_the_description() {
+  global $wpdb, $wp_query, $wpsc_title_data;
+  $output = null;
+  //exit("<pre>".print_r($wp_query,true)."</pre>");
+  
+	if(is_numeric($wp_query->query_vars['category_id'])) {
+	  $category_id = $wp_query->query_vars['category_id'];
+		$output = $wpdb->get_var("SELECT `description` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
+		
+	}
+	if(isset($wp_query->query_vars['product_url_name'])) {
+	  $product_name = $wp_query->query_vars['product_url_name'];
+		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_url_name']}' ) ORDER BY `id` DESC LIMIT 1");
+		$output = $wpdb->get_var("SELECT `description` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
+  }
+	return $output;
+}
+
 
 function wpsc_replace_the_title($input) {
   global $wpdb, $wp_query;

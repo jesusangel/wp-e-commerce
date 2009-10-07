@@ -1396,7 +1396,7 @@ if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
  *and if its not it updates them. 
  */
 function wpsc_submit_options($selected='') {
-  global $wpdb;
+  global $wpdb, $wpsc_gateways;
   	//exit('<pre>'.print_r($_POST, true).'</pre>');
 	//This is to change the Overall target market selection
 
@@ -1431,21 +1431,48 @@ function wpsc_submit_options($selected='') {
   	 if((is_numeric($_POST['country_id']) && is_numeric($_POST['country_tax']))) {
 	      $wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET `tax` = '".$_POST['country_tax']."' WHERE `id` = '".$_POST['country_id']."' LIMIT 1 ;");
 	 }
+
+
+	$previous_currency = get_option('currency_type');
+	 
 	//To update options
 	if(isset($_POST['wpsc_options'])){
 		foreach($_POST['wpsc_options'] as $key=>$value){
-			if($value != get_option($key)){
+			if($value != get_option($key)) {
 				update_option($key, $value);
 				$updated++;
 			}
 		}
 	}
 	
-	
-	
-		foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
-			$shipping->submit_form();
+ 	if($previous_currency != get_option('currency_type')) {
+		$currency_code = $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')");
+
+		$selected_gateways = get_option('custom_gateway_options');
+		$already_changed = array();
+		foreach($selected_gateways as $selected_gateway) {
+			if(isset($wpsc_gateways[$selected_gateway]['supported_currencies'])) {
+				if(in_array($currency_code, $wpsc_gateways[$selected_gateway]['supported_currencies']['currency_list'])) {
+				
+					$option_name = $wpsc_gateways[$selected_gateway]['supported_currencies']['option_name'];
+				
+					if(!in_array($option_name, $already_changed)) {
+						//echo $option_name;
+						update_option($option_name, $currency_code);
+						$already_changed[] = $option_name;
+					}
+				}
+			}
 		}
+
+		
+		//exit("<pre>".print_r($selected_gateways,true)."</pre>");
+
+ 	}
+	
+	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
+		$shipping->submit_form();
+	}
 	
 	
 	//This is for submitting shipping details to the shipping module

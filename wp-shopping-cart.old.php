@@ -1159,45 +1159,6 @@ if($_GET['termsandconds'] === 'true'){
 	exit();
 }
 
-/* 
- * This plugin gets the merchants from the merchants directory and
- * needs to search the merchants directory for merchants, the code to do this starts here
- */
-$gateway_directory = WPSC_FILE_PATH.'/merchants';
-$nzshpcrt_merchant_list = wpsc_list_dir($gateway_directory);
- //exit("<pre>".print_r($nzshpcrt_merchant_list,true)."</pre>");
-$num=0;
-foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
-  if(stristr( $nzshpcrt_merchant , '.php' )) {
-    //echo $nzshpcrt_merchant;
-    require(WPSC_FILE_PATH."/merchants/".$nzshpcrt_merchant);
-	}
-  $num++;
-}
-/* 
- * and ends here
- */
-// include shipping modules here.
-$shipping_directory = WPSC_FILE_PATH.'/shipping';
-$nzshpcrt_shipping_list = wpsc_list_dir($shipping_directory);
-foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
-	if(stristr( $nzshpcrt_shipping , '.php' )) {
-		require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
-	}
-}
-    
-    if(is_numeric($_GET['remove']) && ($_SESSION['nzshpcrt_cart'] != null)) {
-      $key = $_GET['remove'];
-      if(is_object($_SESSION['nzshpcrt_cart'][$key])){
-        $_SESSION['nzshpcrt_cart'][$key]->empty_item();
-			}
-      unset($_SESSION['nzshpcrt_cart'][$key]);
-		}
-    
-    if($_GET['cart']== 'empty') {
-      $_SESSION['nzshpcrt_cart'] = '';
-      $_SESSION['nzshpcrt_cart'] = Array();
-		}
       
 
 
@@ -1337,27 +1298,7 @@ function nzshpcrt_download_file() {
 }
 
 
-function nzshpcrt_listdir($dirname) {
-  /*
-  lists the merchant directory
-  */
-  $dir = @opendir($dirname);
-  $num = 0;
-  while(($file = @readdir($dir)) !== false) {
-    //filter out the dots and any backup files, dont be tempted to correct the "spelling mistake", its to filter out a previous spelling mistake.
-    if(($file != "..") && ($file != ".") && !stristr($file, "~") && !stristr($file, "Chekcout") && !( strpos($file, ".") === 0 )) {
-      $dirlist[$num] = $file;
-      $num++;
-    }
-  }
-  if($dirlist == null) {
-    $dirlist[0] = "paypal.php";
-    $dirlist[1] = "testmode.php";
-  }
-  return $dirlist; 
-}
-    
-    
+
 
 function nzshpcrt_product_rating($prodid)
       {
@@ -1537,39 +1478,25 @@ function nzshpcrt_product_list_rss_feed() {
   
  
  
- 
- 
- 
-  
-
-// need to sort the merchants here, after the gold ones are included. 
-function wpsc_merchant_sort($a, $b) { 
-  return strnatcmp(strtolower($a['name']), strtolower($b['name'])); 
-} 
-uasort($nzshpcrt_gateways, 'wpsc_merchant_sort'); 
-
-
-
-$theme_path = WPSC_FILE_PATH . '/themes/';
-if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
-  include_once(WPSC_FILE_PATH.'/themes/'.get_option('wpsc_selected_theme').'/'.get_option('wpsc_selected_theme').'.php');
+function nzshpcrt_listdir($dirname) {
+  /*
+  lists the merchant directory
+  */
+  $dir = @opendir($dirname);
+  $num = 0;
+  while(($file = @readdir($dir)) !== false) {
+    //filter out the dots and any backup files, dont be tempted to correct the "spelling mistake", its to filter out a previous spelling mistake.
+    if(($file != "..") && ($file != ".") && !stristr($file, "~") && !stristr($file, "Chekcout") && !( strpos($file, ".") === 0 )) {
+      $dirlist[$num] = $file;
+      $num++;
+    }
+  }
+  if($dirlist == null) {
+    $dirlist[0] = "paypal.php";
+    $dirlist[1] = "testmode.php";
+  }
+  return $dirlist; 
 }
-$current_version_number = get_option('wpsc_version');
-if(count(explode(".",$current_version_number)) > 2) {
-	// in a previous version, I accidentally had the major version number have two dots, and three numbers
-	// this code rectifies that mistake
-	$current_version_number_array = explode(".",$current_version_number);
-	array_pop($current_version_number_array);
-	$current_version_number = (float)implode(".", $current_version_number_array );
-} else if(!is_numeric(get_option('wpsc_version'))) {
-  $current_version_number = 0;
-}
-
-
-
-add_filter('single_post_title','wpsc_post_title_seo');
-   
-
  
 function wpsc_include_css_and_javascript() {
   // This must be weapped in a function in order to selectively prevent it from running using filters

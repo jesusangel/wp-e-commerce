@@ -7,6 +7,9 @@ $nzshpcrt_gateways[$num]['form'] = "form_paypal_certified";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_certified";
 $nzshpcrt_gateways[$num]['payment_type'] = "paypal";
 
+$nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD', 'CAD', 'AUD', 'EUR', 'GBP', 'JPY', 'NZD', 'CHF', 'HKD', 'SGD', 'SEK', 'HUF', 'DKK', 'PLN', 'NOK', 'CZK', 'MXN');
+$nzshpcrt_gateways[$num]['supported_currencies']['option_name'] = 'paypal_curcode';
+
 
 function gateway_paypal_certified($seperator, $sessionid)
   {
@@ -534,6 +537,7 @@ function submit_paypal_certified()
 
 function form_paypal_certified()
   {
+  global $wpdb, $wpsc_gateways;
   $select_currency[get_option('paypal_curcode')] = "selected='selected'";
   	if (get_option('paypal_certified_server_type') == 'sandbox'){
 		$serverType1="checked='checked'";
@@ -572,34 +576,42 @@ function form_paypal_certified()
 	 </td>
   </tr>
   ";
-  
-$output .= "
+
+	$store_currency_code = $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')");
+	$current_currency = get_option('paypal_curcode');
+	if($current_currency != $store_currency_code) {
+		$output .= "
   <tr>
-      <td>Accepted Currency
-      </td>
-      <td>
-        <select name='paypal_curcode'>
-          <option ".$select_currency['USD']." value='USD'>U.S. Dollar</option>
-          <option ".$select_currency['CAD']." value='CAD'>Canadian Dollar</option>
-          <option ".$select_currency['AUD']." value='AUD'>Australian Dollar</option>
-          <option ".$select_currency['EUR']." value='EUR'>Euro</option>
-          <option ".$select_currency['GBP']." value='GBP'>Pound Sterling</option>
-          <option ".$select_currency['JPY']." value='JPY'>Yen</option>
-          <option ".$select_currency['NZD']." value='NZD'>New Zealand Dollar</option>
-          <option ".$select_currency['CHF']." value='CHF'>Swiss Franc</option>
-          <option ".$select_currency['HKD']." value='HKD'>Hong Kong Dollar</option>
-          <option ".$select_currency['SGD']." value='SGD'>Singapore Dollar</option>
-          <option ".$select_currency['SEK']." value='SEK'>Swedish Krona</option>
-          <option ".$select_currency['HUF']." value='HUF'>Hungarian Forint</option>
-          <option ".$select_currency['DKK']." value='DKK'>Danish Krone</option>
-          <option ".$select_currency['PLN']." value='PLN'>Polish Zloty</option>
-          <option ".$select_currency['NOK']." value='NOK'>Norwegian Krone</option>
-          <option ".$select_currency['CZK']." value='CZK'>Czech Koruna</option>
-        </select> 
-      </td>
-   </tr>
+      <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
+  </tr>
+  <tr>
+		<td colspan='2'>".__('If your website uses a currency not accepted by Paypal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using currency you choose below.')."</td>
+		</tr>\n";
+		
+		$output .= "    <tr>\n";
+
+		
+		
+		$output .= "    <td>Convert to </td>\n";
+		$output .= "          <td>\n";
+		$output .= "            <select name='paypal_curcode'>\n";
+
+		$paypal_currency_list = $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'];
+
+		$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
+		foreach($currency_list as $currency_item) {
+			$selected_currency = '';
+			if($current_currency == $currency_item['code']) {
+				$selected_currency = "selected='selected'";
+			}
+			$output .= "<option ".$selected_currency." value='{$currency_item['code']}'>{$currency_item['currency']}</option>";
+		}
+		$output .= "            </select> \n";
+		$output .= "          </td>\n";
+		$output .= "       </tr>\n";
+	}
    
-   
+$output .= "
 	<tr class='update_gateway' >
 		<td colspan='2'>
 			<div class='submit'>

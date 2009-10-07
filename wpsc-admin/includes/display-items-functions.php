@@ -236,8 +236,8 @@ function wpsc_product_basic_details_form(&$product_data) {
 				$i = 0;
 				foreach($product_data['newCurr'] as $newCurr){  
 				$i++;
-				$isocode = str_ireplace("currency[", "", $newCurr['meta_key']);
-				$isocode = str_ireplace("]", "", $isocode);				
+				$isocode = str_replace("currency[", "", $newCurr['meta_key']);
+				$isocode = str_replace("]", "", $isocode);
 			//	exit('ere<pre>'.print_r($isocode, true).'</pre>'); 
 				
 				?>
