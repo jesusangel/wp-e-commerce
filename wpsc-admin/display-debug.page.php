@@ -111,7 +111,6 @@ function wpsc_debug_page() {
 			break;
 			
 			case 'phpinfo':
-			print_r($wpdb);
 			echo "</pre>";
 			phpinfo();
 			echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";

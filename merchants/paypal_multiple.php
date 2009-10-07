@@ -469,6 +469,12 @@ function form_paypal_multiple() {
 
 	$store_currency_data = $wpdb->get_row("SELECT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')", ARRAY_A);
 	$current_currency = get_option('paypal_curcode');
+	if(($current_currency == '') && in_array($store_currency_data['code'], $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'])) {
+		update_option('paypal_curcode', $store_currency_data['code']);
+		$current_currency = $store_currency_data['code'];
+	}
+
+	
 	if($current_currency != $store_currency_data['code']) {
 		$output .= "
   <tr>

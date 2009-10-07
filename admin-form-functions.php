@@ -133,11 +133,14 @@ function nzshpcrt_getcategoryform($catid)
 	$output .= TXT_WPSC_TM.":\n\r";
 	$output .= " 	</td>\n\r";
 	$output .= " 	<td>\n\r";
-	$output .= "<span>Select: <a href='' class='wpsc_select_all'>All</a>&nbsp; <a href='' class='wpsc_select_none'>None</a></span><br />";
-	$output .= " 	<div id='resizeable' class='ui-widget-content multiple-select'>\n\r";
 
-	
-		
+	if(@extension_loaded('suhosin')) {
+		$output .= "<em>".__("The Target Markets feature has been disabled because you have the Suhosin PHP extension installed on this server. If you need to use the Target Markets feature then disable the suhosin extension, if you can not do this, you will need to contact your hosting provider.
+			",'wpsc')."</em>";
+
+	} else {
+		$output .= "<span>Select: <a href='' class='wpsc_select_all'>All</a>&nbsp; <a href='' class='wpsc_select_none'>None</a></span><br />";
+		$output .= " 	<div id='resizeable' class='ui-widget-content multiple-select'>\n\r";
 		foreach($countrylist as $country){
 			if(in_array($country['id'], $selectedCountries))
 			/* if($country['visible'] == 1) */{
@@ -147,12 +150,11 @@ function nzshpcrt_getcategoryform($catid)
 			}
 				
 		}
-
-				
-		
 		$output .= " </div><br /><br />";
 		$output .= " <span class='wpscsmall description'>Select the markets you are selling this category to.<span>\n\r";
-		$output .= " </td>\n\r";
+	}
+
+	$output .= "   </td>\n\r";
 	
 	$output .= " </tr>\n\r";
 	////////

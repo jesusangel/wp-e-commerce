@@ -65,21 +65,32 @@ function wpsc_options_general(){
 			<?php echo TXT_WPSC_TM; ?>:
 			</th>
 			<td>
-			<span>Select: <a href='<?php echo add_query_arg(array('selected_all' => 'all'))?>' class='wpsc_select_all'>All</a>&nbsp; <a href='<?php echo add_query_arg(array( 'selected_all'=>'none'))?>' class='wpsc_select_none'>None</a></span><br />
-			<div id='resizeable' class='ui-widget-content multiple-select'>
+				<?php
+				// check for the suhosin module
+				if(@extension_loaded('suhosin') && (@ini_get('suhosin.post.max_vars') > 0) && (@ini_get('suhosin.post.max_vars') < 500)) {
+					echo "<em>".__("The Target Markets feature has been disabled because you have the Suhosin PHP extension installed on this server. If you need to use the Target Markets feature then disable the suhosin extension, if you can not do this, you will need to contact your hosting provider.
+			",'wpsc')."</em>";
+   		
+				} else {
+					?>
+					<span>Select: <a href='<?php echo add_query_arg(array('selected_all' => 'all'))?>' class='wpsc_select_all'>All</a>&nbsp; <a href='<?php echo add_query_arg(array( 'selected_all'=>'none'))?>' class='wpsc_select_none'>None</a></span><br />
 
-			<?php
-				foreach((array)$countrylist as $country){
-					$country['country'] = htmlspecialchars($country['country']);
-					if($country['visible'] == 1){ ?>
-						<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  checked='checked' /><?php echo $country['country']; ?><br />
-			<?php	}else{ ?>
-						<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  /><?php echo $country['country']; ?><br />
-			<?php	}
-						
-				}	?>		
-			</div><br />
-			Select the markets you are selling products to.
+					<div id='resizeable' class='ui-widget-content multiple-select'>
+						<?php
+							foreach((array)$countrylist as $country){
+								$country['country'] = htmlspecialchars($country['country']);
+								if($country['visible'] == 1){ ?>
+									<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  checked='checked' /><?php echo $country['country']; ?><br />
+						<?php	}else{ ?>
+									<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  /><?php echo $country['country']; ?><br />
+						<?php	}
+									
+							}	?>		
+					</div><br />
+					Select the markets you are selling products to.
+				<?php
+				}
+			?>
 			</td>
 		</tr>
 		<tr>
