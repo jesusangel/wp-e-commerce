@@ -655,6 +655,7 @@ global $wpdb;
 		<p>
 		<input type="radio" id="wpsc_dropshop_theme1" value="light" <?php if (get_option('wpsc_dropshop_theme') != 'dark') { echo "checked='checked'"; } ?> name="wpsc_options[wpsc_dropshop_theme]" /><label for="wpsc_dropshop_theme1"><?php echo TXT_WPSC_DROPSHOP_LIGHT;?></label>
 		<input type="radio" id="wpsc_dropshop_theme2" value="dark" <?php if (get_option('wpsc_dropshop_theme') == 'dark') { echo "checked='checked'"; } ?> name="wpsc_options[wpsc_dropshop_theme]"/><label for="wpsc_dropshop_theme2"><?php echo TXT_WPSC_DROPSHOP_DARK;?></label>
+		<input type="radio" id="wpsc_dropshop_theme3" value="craftyc" <?php if (get_option('wpsc_dropshop_theme') == 'craftyc') { echo "checked='checked'"; } ?> name="wpsc_options[wpsc_dropshop_theme]"/><label for="wpsc_dropshop_theme2"><?php echo TXT_WPSC_DROPSHOP_CRAFTYC;?></label>
 		
 		</p>
 		</div>
