@@ -37,7 +37,8 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
-= 3.7.5 Beta 2 =
+= 3.7.5 RC 1 =
+* All In One SEO Pack compatibility bugfixes and improvements.
 * CSV has had some work done on it, it now takes larger files, and associates a CSV file to a single category of your choice. We'd love to be able to allow users to add the categories and images as part of the CSV file. We will look into it more at a later date.
 * SSL we fixed the image issue from beta1 and used James Collis recommended fix (using is_ssl() for our conditions) Thanks James!
 * ‘Show list of Product Groups’ shows all Groups <- there may be some backwards compatibility issues (we havent encountered any but nevertheless if you spot any let us know)
@@ -49,9 +50,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * Added code for upgrades/additions from nielo.info and lsdev.biz  we will be using this for new modules in the future.
 * Fixed adding variations when adding products
 * Sender from the 'resend email to buyer' link on the purchase log details page has been fixed
-
-
-= 3.7.5 Beta 1 =  
 * Shipping Discount Bug that stopped shipping working at all.
 * Categories Widget has had numerous changes –
 * Better MU support. 
