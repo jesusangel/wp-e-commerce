@@ -2,7 +2,7 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
-
+define('TXT_WPSC_DROPSHOP_CRAFTYC','Crafty');
 define('TXT_WPSC_CHECK_MIME_TYPES_WARNING', 'Warning: Disabling this exposes your site to greater possibility of malicious files being uploaded, we reccomend installing the Fileinfo extention for PHP rather than disabling this.');
 define('TXT_WPSC_CHECK_MIME_TYPES', 'Check MIME types on file uploads');
 define('TXT_WPSC_SHIPPING_SAME_AS_BILLING', 'Enable Shipping Same as Billing Option: ');

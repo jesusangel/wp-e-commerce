@@ -213,6 +213,8 @@ function wpsc_the_product_description() {
 		'span' => array(
 			'style' => array()
 		),
+		'ul' => array(),
+		'li' => array(),
 	);
 	return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $description_allowed_tags )));
 }
