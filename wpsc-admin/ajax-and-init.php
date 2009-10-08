@@ -1112,7 +1112,6 @@ function wpsc_purchlog_resend_email(){
  
 				
 			//	exit($message_html);
-				
 				if(($email != '')) {
  					add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
  					add_filter('wp_mail_from_name', 'wpsc_replace_reply_name', 0);
@@ -1125,6 +1124,8 @@ function wpsc_purchlog_resend_email(){
 						$resent = (bool)wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message);
 						$sent = 1;
 					}
+					//echo "$message<br />";
+					//exit($email);
 					remove_filter('wp_mail_from_name', 'wpsc_replace_reply_name');
 					remove_filter('wp_mail_from', 'wpsc_replace_reply_address');
 				}
