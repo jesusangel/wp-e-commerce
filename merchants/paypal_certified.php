@@ -965,6 +965,7 @@ $output .= "
 
 		//setting the curl parameters.
 		$ch = curl_init();
+
 		curl_setopt($ch, CURLOPT_URL,$API_Endpoint);
 		curl_setopt($ch, CURLOPT_VERBOSE, 1);
 
@@ -985,10 +986,10 @@ $output .= "
 
 		//setting the nvpreq as POST FIELD to curl
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
-
+		//exit($nvpreq);
 		//getting response from server
 		$response = curl_exec($ch);
-
+		//exit('<pre>'.print_r($response, true).'</pre>');
 		//convrting NVPResponse to an Associative Array
 		$nvpResArray=deformatNVP($response);
 		$nvpReqArray=deformatNVP($nvpreq);

@@ -208,7 +208,7 @@ function gateway_google($fromcheckout = false){
 			$google_button_size = 'SMALL';
 		}
 	// Display Google Checkout button
-	// echo ('<pre>'.print_r($fromCheckout, true).'</pre>');
+	 echo '<pre>'.print_r($cart, true).'</pre>';
 	 //unset($_SESSION['wpsc_sessionid']);
 	 //if($fromCheckout){
 	echo $cart->CheckoutButtonCode($google_button_size);

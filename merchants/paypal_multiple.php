@@ -54,7 +54,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['currency_code'] = $paypal_currency_code;
 //   $data['lc'] = 'US';
   $data['lc'] = $paypal_currency_code;
-  $data['bn'] = 'wp_e-commerce';
+  $data['bn'] = 'wp-e-commerce';
   
   $data['no_shipping'] = (int)(bool)get_option('paypal_ship');
   if(get_option('address_override') == 1) {
@@ -186,23 +186,24 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	if($_POST['collected_data'][get_option('paypal_form_city')] != '') {
 		$data['city'] = urlencode($_POST['collected_data'][get_option('paypal_form_city')]); 
 	}
-    
-  if(preg_match("/^[a-zA-Z]{2}$/",$_SESSION['selected_country'])) {   
-    $data['country'] = $_SESSION['selected_country'];
+	
+    if($_POST['collected_data'][get_option('paypal_form_country')] != '') {   
+   		$data['country'] = urlencode($_POST['collected_data'][get_option('paypal_form_country')]); ;
 	}    
-    
-  if(is_numeric($_POST['collected_data'][get_option('paypal_form_post_code')])) {   
-    $data['zip'] =  urlencode($_POST['collected_data'][get_option('paypal_form_post_code')]); 
-	}    
-    
+    if($_POST['collected_data'][get_option('paypal_form_state')] != '') {   
+    	$data['state'] =  urlencode($_POST['collected_data'][get_option('paypal_form_state')]); 
+    }    
+    if(is_numeric($_POST['collected_data'][get_option('paypal_form_post_code')])) {
+    	$data['zip'] =  urlencode($_POST['collected_data'][get_option('paypal_form_post_code')]); 
+    }
   // Change suggested by waxfeet@gmail.com, if email to be sent is not there, dont send an email address        
-  $email_data = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1'",ARRAY_A);
-  foreach((array)$email_data as $email) {
-    $data['email'] = $_POST['collected_data'][$email['id']];
+  	$email_data = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1'",ARRAY_A);
+    foreach((array)$email_data as $email) {
+    	$data['email'] = $_POST['collected_data'][$email['id']];
 	}
     
-  if(($_POST['collected_data'][get_option('email_form_field')] != null) && ($data['email'] == null)) {
-    $data['email'] = $_POST['collected_data'][get_option('email_form_field')];
+    if(($_POST['collected_data'][get_option('email_form_field')] != null) && ($data['email'] == null)) {
+    	$data['email'] = $_POST['collected_data'][get_option('email_form_field')];
 	}
 	
   $data['upload'] = '1';
@@ -232,7 +233,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		}
 		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
-	if(WPSC_GATEWAY_DEBUG == true ) {
+	if(true == true ) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
   	exit("<pre>".print_r($data,true)."</pre>");
 	}
@@ -474,7 +475,7 @@ function form_paypal_multiple() {
 		$current_currency = $store_currency_data['code'];
 	}
 
-	
+		//	exit($current_currency.'<br />'.$store_currency_data['code']);
 	if($current_currency != $store_currency_data['code']) {
 		$output .= "
   <tr>
@@ -495,6 +496,7 @@ function form_paypal_multiple() {
 		$paypal_currency_list = $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'];
 
 		$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
+
 		foreach($currency_list as $currency_item) {
 			$selected_currency = '';
 			if($current_currency == $currency_item['code']) {
