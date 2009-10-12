@@ -152,8 +152,7 @@ global $wpsc_query, $wpdb;
 											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
 											<input class="wpsc_buy_button" type='button' value='<?php echo TXT_WPSC_BUYNOW; ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
 											<?php else: ?>
-										<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
-											<?php endif; ?>
+											<input type='image' src='<?php echo WPSC_URL; ?>/themes/marketplace/images/atc.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />											<?php endif; ?>
 										<div class='wpsc_loading_animation'>
 											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
 											<?php echo TXT_WPSC_UPDATING_CART; ?>
@@ -170,7 +169,7 @@ global $wpsc_query, $wpdb;
 
 				<tr class="list_view_description">
 					<td colspan="5">
-						<div id="list_description_20">
+						<div id="list_description_<?php echo wpsc_the_product_id(); ?>">
 							<?php echo wpsc_the_product_description(); ?>
 						</div>
 					</td>

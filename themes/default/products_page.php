@@ -125,7 +125,7 @@ global $wpsc_query, $wpdb;
 							<a href='<?php echo wpsc_the_product_permalink(); ?>' class='additional_description_link'>
 								<img class='additional_description_button'  src='<?php echo WPSC_URL; ?>/images/icon_window_expand.gif' title='Additional Description' alt='Additional Description' /><?php echo TXT_WPSC_MOREDETAILS; ?>
 							</a>
-							<span class='additional_description'><br />
+							<div class='additional_description'>
 								<?php
 									$value = '';
 									$the_addl_desc = wpsc_the_product_additional_description();
@@ -145,7 +145,7 @@ global $wpsc_query, $wpdb;
 										echo stripslashes( wpautop($the_addl_desc, $br=1));
 									}
 								?>
-							</span>
+							</div>
 							
 							<br />
 						</div>

@@ -170,7 +170,7 @@ global $wpsc_query, $wpdb;
 
 				<tr class="list_view_description">
 					<td colspan="5">
-						<div id="list_description_20">
+						<div id="list_description_<?php echo wpsc_the_product_id(); ?>">
 							<?php echo wpsc_the_product_description(); ?>
 						</div>
 					</td>

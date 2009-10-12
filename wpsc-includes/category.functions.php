@@ -206,11 +206,11 @@ function wpsc_display_category_loop($query, $category_html){
 				$category_image_html = "<img src='$category_image' alt='{$category_row['name']}' title='{$category_row['name']}' class='wpsc_category_image' />";
       } else {
 				$category_image_html = "";
-				$category_image_html .= "				<div class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
-				$category_image_html .= "					<div class='link_substitute' >\n\r";
+				$category_image_html .= "				<span class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
+				$category_image_html .= "					<span class='link_substitute' >\n\r";
 				$category_image_html .= "						<span>".__('N/A', 'wpsc')."</span>\n\r";
-				$category_image_html .= "					</div>\n\r";
-				$category_image_html .= "				</div>\n\r";
+				$category_image_html .= "					</span>\n\r";
+				$category_image_html .= "				</span>\n\r";
       }
       
     }
@@ -258,7 +258,9 @@ function wpsc_place_category_image($category_id, $query) {
 		global $wpsc_query, $wpdb;
 		$width = $query['image_size']['width'];
 		$height = $query['image_size']['height'];
-		return "index.php?wpsc_request_image=true&category_id=".$category_id."&amp;width=".$width."&amp;height=".$height;
+		//echo "<pre>".print_r($query, true)."</pre>";
+		$image_url = "index.php?wpsc_request_image=true&category_id=".$category_id."&width=".$width."&height=".$height;
+		return htmlspecialchars($image_url);
 }
 
 

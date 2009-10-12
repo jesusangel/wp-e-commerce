@@ -319,16 +319,12 @@ function wpsc_product_basic_details_form(&$product_data) {
 	 	  $order = array_merge($check_missing_items, $order);
 	 	}
 		
-	 	//echo "<pre>".print_r($order,true)."</pre>";
 		update_option('wpsc_product_page_order', $order);
 		foreach((array)$order as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
 			}
 		}
-		/*	
-		do_action('wpsc_product_form', $product_data['id']);
-		*/
 		?>
 	</div>
 
@@ -339,7 +335,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 	<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 	 
 	
-	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Edit Product'); } else {	_e('Add Product');	} ?>' />&nbsp;
+	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Update Product', 'wpsc'); } else {	_e('Add New Product', 'wpsc');	} ?>' />&nbsp;
 	<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
 	<?php
   }

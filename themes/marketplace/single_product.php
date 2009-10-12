@@ -58,8 +58,8 @@ $image_height = get_option('single_view_image_height');
 						<?php
 							do_action('wpsc_product_addons', wpsc_the_product_id());
 						?>
-						<?php if(wpsc_the_product_additional_description()) : ?>
-						<br clear="all" /><p class="single_additional_description">
+					<?php if(wpsc_the_product_additional_description()) : ?>
+						<div class="single_additional_description">
             <?php
 							$value = '';
 							$the_addl_desc = wpsc_the_product_additional_description();
@@ -76,10 +76,10 @@ $image_height = get_option('single_view_image_height');
             	if( function_exists('wpsc_addl_desc_show') ) {
             		echo wpsc_addl_desc_show( $addl_descriptions );
             	} else {
-					echo wpautop($the_addl_desc, $br=1);
+								echo stripslashes( wpautop($the_addl_desc, $br=1));
             	}
             ?>
-						</p>
+						</div>
 					<?php endif; ?>
 
 					<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>

@@ -1,5 +1,7 @@
 <?php
 global $wpsc_query, $wpdb;
+$image_width = get_option('product_image_width');
+$image_height = get_option('product_image_height');
 ?>
 <div id='products_page_container' class="wpsc_container productdisplay example-category">
 
@@ -82,7 +84,9 @@ global $wpsc_query, $wpdb;
 				  
 				<?php if(wpsc_the_product_thumbnail()) :?> 	   
 					<div class="item_image">
-						<a href="<?php echo wpsc_the_product_permalink(); ?>"><img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/></a>
+						<a href="<?php echo wpsc_the_product_permalink(); ?>">
+							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>" />
+						</a>
 					</div>
 				<?php else: ?> 
 					<div class="item_no_image">
@@ -137,7 +141,7 @@ global $wpsc_query, $wpdb;
 							
 							<?php if((get_option('display_addtocart') == 1) && (get_option('addtocart_or_buynow') !='1')) :?> 	   
 								<?php if(wpsc_product_has_stock()) : ?>
-									<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+									<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
 								<?php else : ?>
 									<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
 								<?php endif ; ?>

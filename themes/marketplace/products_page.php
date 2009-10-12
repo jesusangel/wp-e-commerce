@@ -22,7 +22,7 @@ global $wpsc_query, $wpdb;
 	  <?php if(get_option('wpsc_category_grid_view') == 1) :?>
 			<div class='wpsc_categories wpsc_category_grid'>
 				<?php wpsc_start_category_query(array('category_group'=>  get_option('wpsc_default_category'), 'show_thumbnails'=> 1)); ?>
-					<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_grid_item" title='<?php wpsc_print_category_name();?>'>
+					<a href="<?php wpsc_print_category_url(); ?>" class="wpsc_category_grid_item" title='<?php wpsc_print_category_name();?>'>
 						<?php wpsc_print_category_image(45, 45); ?>
 					</a>
 					<?php wpsc_print_subcategory("", ""); ?>
@@ -92,7 +92,7 @@ global $wpsc_query, $wpdb;
 						<?php else: ?>
 							<div class="item_no_image">
 								<a href="<?php echo wpsc_the_product_permalink(); ?>">
-								<span>No Image Available</span>
+									<span>No Image Available</span>
 								</a>
 							</div>
 						<?php endif; ?>
@@ -129,7 +129,7 @@ global $wpsc_query, $wpdb;
 						<a href='<?php echo wpsc_the_product_permalink(); ?>' class='additional_description_link'>
 							<img class='additional_description_button'  src='<?php echo WPSC_URL; ?>/images/icon_window_expand.gif' title='Additional Description' alt='Additional Description' /><?php echo TXT_WPSC_MOREDETAILS; ?>
 						</a>
-						<span class='additional_description'><br />
+						<div class='additional_description'><br />
 							<?php
 								$value = '';
 								$the_addl_desc = wpsc_the_product_additional_description();
@@ -149,7 +149,7 @@ global $wpsc_query, $wpdb;
 									echo stripslashes( wpautop($the_addl_desc, $br=1));
 								}
 							?>
-						</span>
+						</div>
 						<br />
 					</div>
 					<?php endif; ?>
@@ -227,7 +227,7 @@ global $wpsc_query, $wpdb;
 							<?php if(wpsc_product_has_stock()) : ?>
 								<div class='wpsc_buy_button_container'>
 								<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
-										<?php	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
+										<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
 										<input class="wpsc_buy_button" type='button' value='<?php echo TXT_WPSC_BUYNOW; ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
 										<?php else: ?>
 										<input type='image' src='<?php echo WPSC_URL; ?>/themes/marketplace/images/atc.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />

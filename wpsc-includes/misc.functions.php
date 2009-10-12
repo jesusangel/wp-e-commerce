@@ -345,6 +345,8 @@ function nzshpcrt_display_preview_image() {
 			} else {
 				$cache_filename = basename("product_img_{$image_id}_{$height}x{$width}");
 			}
+			//echo "<pre>".print_r($_GET, true)."</pre>";
+			//exit($cache_filename);
 			$imagetype = @getimagesize($imagepath);
 			$use_cache = false;
 			switch($imagetype[2]) {

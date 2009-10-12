@@ -148,16 +148,20 @@ global $wpsc_query, $wpdb;
 							<?php if((get_option('hide_addtocart_button') == 0) &&  (get_option('addtocart_or_buynow') !='1')) : ?>
 								<?php if(wpsc_product_has_stock()) : ?>
 									<div class='wpsc_buy_button_container'>
+
+
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
-											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-											<input class="wpsc_buy_button" type='button' value='<?php echo TXT_WPSC_BUYNOW; ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
+												<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
+												<input class="wpsc_buy_button" type='button' value='<?php echo TXT_WPSC_BUYNOW; ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
 											<?php else: ?>
-										<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+												<input type='image' src='<?php echo WPSC_URL; ?>/themes/iShop/images/buy_button.gif' id='product_<?php echo wpsc_the_product_id(); ?>_submit_button' class='wpsc_buy_button' name='Buy'  value="<?php echo TXT_WPSC_ADDTOCART; ?>" />
 											<?php endif; ?>
-										<div class='wpsc_loading_animation'>
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
-											<?php echo TXT_WPSC_UPDATING_CART; ?>
-										</div>
+
+											
+											<div class='wpsc_loading_animation'>
+												<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
+												<?php echo TXT_WPSC_UPDATING_CART; ?>
+											</div>
 									</div>
 								<?php else : ?>
 									<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
@@ -170,7 +174,7 @@ global $wpsc_query, $wpdb;
 
 				<tr class="list_view_description">
 					<td colspan="5">
-						<div id="list_description_20">
+						<div id="list_description_<?php echo wpsc_the_product_id(); ?>">
 							<?php echo wpsc_the_product_description(); ?>
 						</div>
 					</td>
