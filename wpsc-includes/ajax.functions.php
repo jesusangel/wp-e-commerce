@@ -435,7 +435,11 @@ function wpsc_submit_checkout() {
 		$categoriesIDs = $wpdb->get_col("SELECT category_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE product_id=".$cartitem->product_id);
 		
 		foreach((array)$categoriesIDs as $catid){
-			$sql ="SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE visible=0 AND categoryid=".$catid[0];
+			if(is_array($catid)){
+				$sql ="SELECT `countryid` FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE `visible`=0 AND `categoryid`=".$catid[0];
+			}else{
+				$sql ="SELECT `countryid` FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE `visible`=0 AND `categoryid`=".$catid;
+			}
 			$countries = $wpdb->get_col($sql);
 			if(in_array($selectedCountry[0]['id'], (array)$countries)){
 				$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
