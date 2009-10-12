@@ -51,6 +51,7 @@
 	
 	</span>
 	<?php endif; ?>
+		
 	<span class='total'>
 		<span class="pricedisplay checkout-total">
 			<?php echo wpsc_cart_total_widget(); ?>
@@ -68,7 +69,7 @@
 	<form action='' method='post' class='wpsc_empty_the_cart'>
 		<input type='hidden' name='wpsc_ajax_action' value='empty_cart' />
 		<span class='emptycart'>
-			<a href='<?php echo htmlentities(add_query_arg('wpsc_ajax_action', 'empty_cart', remove_query_arg('ajax')),ENT_QUOTES); ?>'><?php echo TXT_WPSC_EMPTYYOURCART; ?></a>
+			<a href='<?php echo htmlentities(add_query_arg('wpsc_ajax_action', 'empty_cart', remove_query_arg('ajax')), ENT_QUOTES); ?>'><?php echo TXT_WPSC_EMPTYYOURCART; ?></a>
 		</span>                                                                                             
 	</form>
 	
