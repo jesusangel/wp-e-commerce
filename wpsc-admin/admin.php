@@ -60,7 +60,8 @@ function wpsc_admin_pages(){
 			$base_page = 'wpsc-sales-logs';
 					
 		if ($userdata->user_level <= 2) {
-				if(file_exists(dirname(__FILE__).'/gold_cart_files/affiliates.php')) {
+				if(file_exists(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php')) {
+					require_once(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php');
 					add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/cart.png");
 				} else {
 					if (function_exists('add_object_page')) {

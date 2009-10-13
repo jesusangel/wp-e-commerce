@@ -7,9 +7,8 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-
 if(!isset($purchlogs)){
-	 $purchlogs = new wpsc_purchaselogs();
+	$purchlogs = new wpsc_purchaselogs();
 }
  function wpsc_display_sales_logs() {
 		$subpage = $_GET['subpage'];
@@ -23,8 +22,6 @@ if(!isset($purchlogs)){
 			break;
 		}
 	}
-
-
 
  function wpsc_display_sales_log_index() {
   	?>
@@ -370,6 +367,7 @@ if(!isset($purchlogs)){
  }
  function wpsc_purchaselogs_displaylist(){
  	global $purchlogs;
+ 	
   ?>
   	<form method='post' action=''>
   		<select id='purchlog_multiple_status_change' name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
@@ -459,8 +457,9 @@ if(!isset($purchlogs)){
  
  }
  function get_purchaselogs_content(){
- 
+ 	global $purchlogs;
  	while(wpsc_have_purch_items()) : wpsc_the_purch_item();	
+ 	//exit('<pre>'.print_r($_SESSION, true).'</pre>');
  	?>
  	<tr>
  		<th class="check-column" scope="row"><input type='checkbox' name='purchlogids[]' class='editcheckbox' value='<?php echo wpsc_the_purch_item_id(); ?>' /></th>

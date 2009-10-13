@@ -150,6 +150,10 @@ function wpsc_have_purch_items(){
 }
 function wpsc_the_purch_item(){
 	global $purchlogs;
+	if(isset($_SESSION['newlogs'])){
+		$purchlogs->allpurchaselogs = $_SESSION['newlogs'];
+		$purchlogs->purch_item_count = count( $_SESSION['newlogs']);
+	}
 	return $purchlogs->the_purch_item();
 }
 
@@ -555,11 +559,11 @@ class wpsc_purchaselogs{
 	function wpsc_purchaselogs(){
 
 		$this->getall_formdata();
-		if(!isset($_POST['view_purchlogs_by']) || !isset($_POST['purchlogs_searchbox'])){
+		if(!isset($_POST['view_purchlogs_by']) && !isset($_POST['purchlogs_searchbox'])){
 			$dates = $this->getdates();
 			if(isset($_SESSION['newlogs'])){
 				$purchaselogs = $_SESSION['newlogs'];
-				unset($_SESSION['newlogs']);
+				//unset($_SESSION['newlogs']);
 			}else{
 				$firstDates[] = $dates[0]; 
 				$purchaselogs = $this->get_purchlogs($firstDates);
@@ -568,10 +572,54 @@ class wpsc_purchaselogs{
 			$this->allpurchaselogs = $purchaselogs;
 		}else{
 			$this->getdates();
+			if(isset($_POST['view_purchlogs_by']) && isset($_POST['view_purchlogs_by_status'])){
+				//exit('Sorted');
+				$status = $_POST['view_purchlogs_by_status'];
+				$viewby = $_POST['view_purchlogs_by'];
+				if($viewby == 'all'){
+					$dates = $this->getdates();
+					$purchaselogs = $this->get_purchlogs($dates, $status);
+					$_SESSION['newlogs'] = $purchaselogs;
+					$this->allpurchaselogs = $purchaselogs;
+				}elseif($viewby == '3mnths'){
+					$dates = $this->getdates();
+			
+					$dates = array_slice($dates, 0, 3);
+					$this->current_start_timestamp = $dates[2]['start'];
+					$this->current_end_timestamp = $dates[0]['end'];
+				//	exit('<pre>'.print_r($dates,true).'</pre>');		
+					$newlogs = $this->get_purchlogs($dates, $status);
+					$_SESSION['newlogs'] = $newlogs;
+					//exit('<pre>'.print_r($newlogs, true).'</pre>');
+					$this->allpurchaselogs = $newlogs;
+					//exit(print_r($date, true)."".$this->current_timestamp);
+				
+				}else{
+					
+					$dates = explode('_', $viewby);
+					$date[0]['start'] = $dates[0];
+					$date[0]['end'] = $dates[1];
+					$this->current_start_timestamp = $dates[0];
+					$this->current_end_timestamp =  $dates[1];
+					$newlogs = $this->get_purchlogs($date, $status);
+					//exit('<pre>'.print_r($newlogs, true).'</pre>');
+					$_SESSION['newlogs'] = $newlogs;
+					$this->allpurchaselogs = $newlogs;
+				}
+
+			
+			}
 		}
 		$this->purch_item_count = count($this->allpurchaselogs);
 		$statuses = $this->the_purch_item_statuses();
-
+		
+		if(isset($_SESSION['newlogs'])){
+			$this->allpurchaselogs = $_SESSION['newlogs'];
+			$this->purch_item_count = count( $_SESSION['newlogs']);
+		}
+		
+		return;
+		//exit('<pre>'.print_r($this->purch_item_count, true).'</pre>');
 	}
 	
 	function get_purchlogs($dates, $status=''){
@@ -685,13 +733,13 @@ class wpsc_purchaselogs{
 	}
 	
 	function the_purch_item() {
+	
 		$this->purchitem = $this->next_purch_item();
 		//if ( $this->currentitem == 0 ) // loop has just started
 
 	}
 	
 	function have_purch_items() {	
-		//exit($this->currentitem.' '.$this->purch_item_count);
 		if ($this->currentitem + 1 < $this->purch_item_count) {
 			return true;
 		} else if ($this->currentitem + 1 == $this->purch_item_count && $this->purch_item_count > 0) {
@@ -903,7 +951,6 @@ class wpsc_purchaselogs_items{
 	}
 	
 	function have_purch_item() {	
-		
 		if ($this->currentitem + 1 < $this->purch_item_count) {
 			return true;
 		} else if ($this->currentitem + 1 == $this->purch_item_count && $this->purch_item_count > 0) {

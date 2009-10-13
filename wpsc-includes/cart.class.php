@@ -399,6 +399,24 @@ function wpsc_shipping_quote_selected_state() {
 		return "";
 	}
 }
+function wpsc_have_morethanone_shipping_quote(){
+	global $wpsc_cart;
+
+    // if it's fixed rate shipping, and all the prices are the same, then there aren't really options.
+    if (count($wpsc_cart->shipping_methods) == 1 && $wpsc_cart->shipping_methods[0] == 'flatrate') {
+        $last_price = false;
+        $first_quote_name = false;
+        foreach ($wpsc_cart->shipping_quotes as $name => $quote) {
+            if (!$first_quote_name) $first_quote_name = $name;
+            if ($last_price !== false && $quote != $last_price) return true;
+            $last_price = $quote;
+        }
+        $wpsc_cart->rewind_shipping_methods();
+        $wpsc_cart->update_shipping('flatrate', $name);
+        return false;
+    }
+    return true;
+}
 
 function wpsc_have_morethanone_shipping_methods_and_quotes(){
 	global $wpsc_cart;

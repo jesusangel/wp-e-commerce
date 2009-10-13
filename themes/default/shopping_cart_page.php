@@ -98,7 +98,7 @@ if(wpsc_cart_item_count() > 0) :
 				</td>
 			</tr>
 			
-			<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
+			<?php if (wpsc_have_morethanone_shipping_quote()) : while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
 					<?php 
 					// Don't display shipping method if it doesn't have at least one quote
 					if (!wpsc_have_shipping_quotes()) continue; 
@@ -125,7 +125,7 @@ if(wpsc_cart_item_count() > 0) :
 						</tr>
 			
 					<?php endwhile; ?>
-			<?php endwhile;  ?>
+			<?php endwhile;  endif; ?>
 			<?php wpsc_update_shipping_multiple_methods(); ?>
 			<?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
 				<tr>
@@ -149,6 +149,17 @@ if(wpsc_cart_item_count() > 0) :
 			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 		</td>
 	</tr>
+   <?php if(wpsc_uses_shipping()) : ?>
+	<tr class="total_price total_shipping">
+		<td colspan="3">
+			<?php echo TXT_WPSC_TOTALSHIPPING; ?>
+		</td>
+		<td colspan="2">
+			<span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
+	    </td>
+	</tr>
+    <?php endif; ?>
+
 	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
 	<tr class="total_price">
 		<td colspan="3">
