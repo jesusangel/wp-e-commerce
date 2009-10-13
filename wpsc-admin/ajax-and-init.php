@@ -424,9 +424,11 @@ function wpsc_purchase_log_csv() {
     $start_timestamp = $_GET['start_timestamp'];
     $end_timestamp = $_GET['end_timestamp'];
     $data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC",ARRAY_A);
-         // exit('<pre>'.print_r($data, true).'</pre>');  
+         // exit('<pre>'.print_r($data, true).'</pre>');
+
+         
     header('Content-Type: text/csv');
-    header('Content-Disposition: inline; filename="Purchase Log '.date("M-d-Y", $start_timestamp).' to '.date("M-d-Y", $end_timestamp).'.csv"');      
+    header('Content-Disposition: inline; filename="Purchase Log '.date("M-d-Y", $start_timestamp).' to '.date("M-d-Y", $end_timestamp).'.csv"');
     
     foreach((array)$data as $purchase) {
       $country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
@@ -435,7 +437,7 @@ function wpsc_purchase_log_csv() {
    
       $output .= "\"".$purchase['totalprice'] ."\",";
                 
-      foreach($form_data as $form_field) {
+      foreach((array)$form_data as $form_field) {
         $collected_data_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".$form_field['id']."' LIMIT 1";
         $collected_data = $wpdb->get_results($collected_data_sql,ARRAY_A);
         $collected_data = $collected_data[0];
@@ -470,7 +472,7 @@ function wpsc_purchase_log_csv() {
       $cart = $wpdb->get_results($cartsql,ARRAY_A) ; 
       //exit(nl2br(print_r($cart,true)));
       
-      foreach($cart as $item) {
+      foreach((array)$cart as $item) {
         $output .= ",";
         $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$item['prodid']." LIMIT 1",ARRAY_A);    
         $skusql = "SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key`= 'sku' AND `product_id` = ".$item['prodid'];  
@@ -495,7 +497,7 @@ function wpsc_purchase_log_csv() {
 					}
         
       //  exit('<pre>'.print_r($item,true).'</pre>');
-        $output .= "\"".$item['quantity']." ".$product['name'].$variation_list."\"";
+        $output .= "\"".$item['quantity']." ".str_replace('"', '\"',$product['name']).$variation_list."\"";
         $output .= ",".$skuvalue;
 			}
       $output .= "\n"; // terminates the row/line in the CSV file
