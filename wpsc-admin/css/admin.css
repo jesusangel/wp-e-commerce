@@ -235,8 +235,8 @@ div.search-box input#page-search-input {
   width:25px;
 }
 #wpsc_product_list  .column-cb input{
-  width:20px;
-  float:right;
+/*   width:20px; */
+/*   float:right; */
 }
 #wpsc_product_list .column-image{
 	width: 45px;
@@ -255,6 +255,7 @@ div.search-box input#page-search-input {
 }
 
 #wpsc_product_list tbody tr td.product-image img {
+  margin-top: 4px;
 	cursor:move;
 }
 

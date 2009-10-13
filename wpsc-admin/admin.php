@@ -232,6 +232,11 @@ function wpsc_admin_edit_products_page_js() {
 	wp_enqueue_script('wpsc-swfupload-handlers', WPSC_URL.'/wpsc-admin/js/wpsc-swfupload-handlers.js', false, $version_identifier);
 	
 	add_action( 'admin_head', 'wp_tiny_mce' );
+
+  // remove cforms timymce code  from running on the products page, because it breaks tinymce for us
+	remove_filter( 'mce_external_plugins', 'cforms_plugin');
+	remove_filter( 'mce_buttons', 'cforms_button');
+	
 	//add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
 	wp_enqueue_script('quicktags');
 }
