@@ -103,9 +103,12 @@ class wpsc_coupons {
 	function calculate_discount() {
 		global $wpdb, $wpsc_cart;
 		
+		//echo "<pre>".print_r($wpsc_cart,true)."</pre>";
+		$wpsc_cart->clear_cache();
 		if ($this->conditions == '' || count($this->conditions) == 0) {
 			//Calculates the discount for the whole cart if there is no condition on this coupon.
 			if ($this->is_percentage == '1') {
+			  
 				$total_price = $wpsc_cart->calculate_subtotal();
 				$this->discount = $total_price*$this->value/100;
 				return $this->discount;

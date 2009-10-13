@@ -30,7 +30,6 @@ function wpsc_display_categories() {
 			$category_id = $_GET['category'];
 		}
 		
-		
 		// if we have no categories, and no search, show the group list
 		//exit('product id '.$product_id.' catid '.$category_id );
 		if(is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || ($_GET['product_search'] != '')) {
@@ -1184,56 +1183,38 @@ class WPSC_Query {
 		
 		if(isset($_SESSION['price_range']) && isset($_GET['range'])){
 			if (is_numeric($_GET['range']) || isset($_SESSION['price_range'])) {
-					$ranges = $_SESSION['price_range'];
-					//exit("Is still set<pre>".print_r($ranges,1)."</pre>");
-				switch($_GET['range']) {
-					case 1:
-						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` < ".$ranges[1]." AND `active` IN ('1') AND `publish` IN('1')";
-						break;
-					
-					case 2: {
-						if (array_key_exists(2,$ranges)) {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `price` < '".$ranges[2]."' AND `active` IN ('1') AND `publish` IN('1')";
-						} else {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[1]."' AND `active` IN ('1') AND `publish` IN('1')";
-						}
-						break;
-					} 
-						
-					
-						case 3: {
-							if (array_key_exists(3,$ranges)) {
-								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `price` < '".$ranges[3]."' AND `active` IN ('1') AND `publish` IN('1')";
-							} else {
-								$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[2]."' AND `active` IN ('1') AND `publish` IN('1')";
-							}
-							break;
-						}
-					
-					case 4: {
-						if (array_key_exists(4,$ranges)) {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `price` < '".$ranges[4]."' AND `active` IN ('1') AND `publish` IN('1')";
-						} else {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[3]."' AND `active` IN ('1') AND `publish` IN('1')";
-						}
-						break;
-					}
-					
-					case 5: {
-						if (array_key_exists(5,$ranges)) {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `price` < '".$ranges[5]."' AND `active` IN ('1') AND `publish` IN('1')";
-						} else {
-							$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[4]."' AND `active` IN ('1') AND `publish` IN('1')";
-						}
-						break;
-					}
-					
-					case 6: 
-						$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `price` >= '".$ranges[5]."' AND `active` IN ('1') AND `publish` IN('1')";
-					break;
-				}
+					$price_ranges = $_SESSION['price_range'];
 
-			//	exit($range_sql);
+					$selected_price_point = absint($_GET['range']);
+					$next_price_point = $selected_price_point + 1;
+					//echo "<pre>".print_r($ranges,true)."</pre>";
+					$product_range_sql_parts = array();
+					$variation_sql_parts = array();
+					$product_sql_parts = array();
+					
+					if(isset($price_ranges[$selected_price_point])) {
+						$product_range_sql_parts[] = "(`price` - `special_price`) >= '".absint($price_ranges[$selected_price_point])."'";
+						$variation_sql_parts[] = "`price` >= '".absint($price_ranges[$selected_price_point])."'";
+						
+						if(isset($price_ranges[$next_price_point])) {
+							$product_range_sql_parts[] = "(`price` - `special_price`) < '".absint($price_ranges[$next_price_point])."'";
+							$variation_sql_parts[] = "`price` < '".absint($price_ranges[$next_price_point])."'";
+						}
+						$variation_product_ids = (array)$wpdb->get_col("SELECT DISTINCT `product_id` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE ".implode(" AND ", $variation_sql_parts)."");
+						if(count($variation_product_ids) > 0 ) {
+							$product_sql_parts[] = "( (".implode(" AND ", $product_range_sql_parts).") OR `id` IN('".implode("', '", $variation_product_ids)."') )";
+						} else {
+							$product_sql_parts += $product_range_sql_parts;
+						}
+					}
+
+				$product_sql_parts[] = "`active` IN ('1')";
+				$product_sql_parts[] = "`publish` IN('1')";
+										
+					
+				$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE ".implode(" AND ", $product_sql_parts)."";
+				//echo $range_sql;
+
 				$product_list = $wpdb->get_results($range_sql,ARRAY_A);
 			}
 		}

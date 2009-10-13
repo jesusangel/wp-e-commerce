@@ -64,7 +64,7 @@ define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
 define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.');
 
-define('TXT_WPSC_COUPONS', 'Coupon Discount');
+define('TXT_WPSC_COUPONS', 'Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
 define('TXT_WPSC_CUSTOM_TEXT', 'Custom Text');
 define('TXT_WPSC_COMMENTSETTINGS', 'Comment Settings');

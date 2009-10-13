@@ -36,7 +36,7 @@ function nzshpcrt_price_range($input = null) {
 		
 	//	echo('<pre>'.print_r($ranges, true).'</pre>');
 		for($i=0;$i<$final_count;$i++) {
-			$j=$i+1;
+			$j=$i;
 			
 			if ($i==$final_count-1) {
 				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>Over ".$ranges[$i]."</a><br/>";

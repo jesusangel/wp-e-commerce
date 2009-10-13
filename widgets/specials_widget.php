@@ -19,19 +19,24 @@ function widget_specials($args) {
 
 
  function nzshpcrt_specials($input = null) {
-   global $wpdb;
+	 global $wpdb;
+	 $image_width = get_option('product_image_width');
+	 $image_height = get_option('product_image_height');
    $siteurl = get_option('siteurl');
-   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `special_price` != '0.00'  AND `active` IN ('1')  ORDER BY RAND() LIMIT 1";
+   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `special_price` != '0.00'  AND `active` IN ('1') AND `id` IN('55')  ORDER BY RAND() LIMIT 1";
    $product = $wpdb->get_results($sql,ARRAY_A) ;
-   //exit('SPECIAL<pre>'.print_r($product, true).'</pre>');
 		if($product != null) {
-			$output = "<div><div>";
+			$output = "<div>";
 			foreach($product as $special) {
-				$output .= "<h2><a class='wpsc_product_title' href='".wpsc_product_url($special['id'],$special['category'])."'>".$special['name']."</a></h2><br /> ";
+			  $special['name'] =  htmlentities(stripslashes($special['name']), ENT_QUOTES, "UTF-8");
+				$output .= "<strong><a class='wpsc_product_title' href='".wpsc_product_url($special['id'],$special['category'])."'>".$special['name']."</a></strong><br /> ";
 					if(is_numeric($special['image'])){
 						$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$special['image']."' LIMIT 1");
 						if($image_file_name != '') {
-							$output .= "<img src='".WPSC_THUMBNAIL_URL.$image_file_name."' title='".$special['name']."' alt='".$special['name']."' /><br />";
+
+							$image_path = "index.php?productid=" . $special['id'] . "&amp;width=" . $image_width."&amp;height=" . $image_height. "";
+						
+							$output .= "<img src='".$image_path."' title='".$special['name']."' alt='".$special['name']."' /><br />";
 						}
 					}
 					//exit('Widget specisl'.get_option('wpsc_special_description'));
@@ -43,6 +48,7 @@ function widget_specials($args) {
 				$output .= $variations_output[0];
 				if($variations_output[1] !== null) {
 					$special['price'] = $variations_output[1];
+					$special['special_price'] = 0;
 				}
 				if($variations_output[1] == null) {
 					$output .= "<span class='oldprice'>".nzshpcrt_currency_display($special['price'], $special['notax'],false)."</span><br />";
@@ -64,7 +70,7 @@ function widget_specials($args) {
 				}
 				$output .= "</form>";
 			}
-			$output .= "</div></div>";
+			$output .= "</div>";
 		} else {
 			$output = '';
 		}

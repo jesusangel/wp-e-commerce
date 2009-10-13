@@ -1125,7 +1125,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     $output .= "    <description>This is the WP E-Commerce Product List RSS feed</description>\n\r";
     $output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
     $output .= "    <atom:link href='$self' rel='self' type='application/rss+xml' />";
-    foreach((array)$product_list as $product) {
+    foreach($product_list as $product) {
       $purchase_link = wpsc_product_url($product['id']);
       $output .= "    <item>\n\r";
       $output .= "      <title>".htmlentities(stripslashes($product['name']), ENT_NOQUOTES, 'UTF-8')."</title>\n\r";
@@ -1627,22 +1627,22 @@ switch(get_option('cart_location')) {
 
 
 function thickbox_variation() {
-	global $wpdb, $siteurl;
+	global $wpdb, $wpsc_siteurl;
 	$variations_processor = new nzshpcrt_variations;
 	echo "<head>";
-	echo "<link rel='stylesheet' href='{$siteurl}/wp-admin/wp-admin.css?ver=2.6.3' type='text/css' media='all' />
-	<link rel='stylesheet' href='{$siteurl}/wp-admin/css/colors-fresh.css?ver=2.6.3' type='text/css' media='all' />
-	<link href='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/admin.css' rel='stylesheet' type='text/css'/>
-	<link rel='stylesheet' href='{$siteurl}/wp-admin/css/global.css?ver=2.6.3' type='text/css' media='all' />";
-	echo "<script type='text/javascript' src='{$siteurl}/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>";
-	echo "<script type='text/javascript' src='{$siteurl}/wp-includes/js/thickbox/thickbox.js?ver=3.1-20080430'></script>
-	<script language='JavaScript' type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.tooltip.js'></script>
-<script type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery-ui.js?ver=1.6'></script>
-<script type='text/javascript' src='{$siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
-<script type='text/javascript' src='{$siteurl}/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
+	echo "<link rel='stylesheet' href='{$wpsc_siteurl}/wp-admin/wp-admin.css?ver=2.6.3' type='text/css' media='all' />
+	<link rel='stylesheet' href='{$wpsc_siteurl}/wp-admin/css/colors-fresh.css?ver=2.6.3' type='text/css' media='all' />
+	<link href='{$wpsc_siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/admin.css' rel='stylesheet' type='text/css'/>
+	<link rel='stylesheet' href='{$wpsc_siteurl}/wp-admin/css/global.css?ver=2.6.3' type='text/css' media='all' />";
+	echo "<script type='text/javascript' src='{$wpsc_siteurl}/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>";
+	echo "<script type='text/javascript' src='{$wpsc_siteurl}/wp-includes/js/thickbox/thickbox.js?ver=3.1-20080430'></script>
+	<script language='JavaScript' type='text/javascript' src='{$wpsc_siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.tooltip.js'></script>
+<script type='text/javascript' src='{$wpsc_siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery-ui.js?ver=1.6'></script>
+<script type='text/javascript' src='{$wpsc_siteurl}/wp-content/plugins/".WPSC_DIR_NAME."/js/jquery.jeditable.pack.js?ver=2.7.4'></script>
+<script type='text/javascript' src='{$wpsc_siteurl}/wp-includes/js/swfupload/swfupload.js?ver=2.0.2-20080430'></script>
 ";
 	echo "<script language='JavaScript' type='text/javascript'>
-			var base_url = '".$siteurl."';
+			var base_url = '".$wpsc_siteurl."';
 			var WPSC_URL = '".WPSC_URL."';
 			var WPSC_IMAGE_URL = '".WPSC_IMAGE_URL."';";
 		echo "var TXT_WPSC_DELETE = '".TXT_WPSC_DELETE."';\n\r";
@@ -1660,13 +1660,17 @@ function thickbox_variation() {
     echo "<option value='delivery_address' >".TXT_WPSC_DELIVERY_ADDRESS."</option>";
     echo "<option value='delivery_city' >".TXT_WPSC_DELIVERY_CITY."</option>";
     echo "<option value='delivery_country'>".TXT_WPSC_DELIVERY_COUNTRY."</option>";
-    echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";    
+    echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";
     echo "<option value='heading' >".TXT_WPSC_HEADING."</option>";
     echo "<option value='coupon' >".TXT_WPSC_COUPON."</option>\";\n\r";
 		
 	echo	"</script>";
 		
-	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/admin.js'></script></head>";
+	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/wpsc_admin/js/jquery.livequery.js'></script>";
+	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/wpsc_admin/js/admin.js'></script>";
+	echo "<script language='JavaScript' type='text/javascript' src='".WPSC_URL."/wpsc_admin/js/variations.js'></script>";
+	
+	echo "</head>";
 	if($_POST){
 				if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>");
@@ -1728,13 +1732,13 @@ function thickbox_variation() {
 		<strong class="form_group"><?php echo TXT_WPSC_ADDVARIATION;?></strong>
 	</div>
   <form method='POST' action='admin.php?thickbox_variations=true&amp;width=550'>
-  <table class='category_forms'>
+ <table class='category_forms'>
     <tr>
       <td>
         <?php echo TXT_WPSC_NAME;?>:
       </td>
       <td>
-        <input type='text'  class="text" name='name' value=''  />
+        <input type='text'  class="text" name='name' value='<?php echo $variation_name; ?>' />
       </td>
     </tr>
     <tr>
@@ -1742,22 +1746,61 @@ function thickbox_variation() {
         <?php echo TXT_WPSC_VARIATION_VALUES;?>:
       </td>
       <td>
-        <div id='add_variation_values'><span id='variation_value_1'>
-        <input type='text' class="text" name='variation_values[]' value='' />
-        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_1")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
-        </span><span id='variation_value_2'>
-        <input type='text' class="text" name='variation_values[]' value='' />
-        <a class='image_link' href='#' onclick='remove_variation_value_field("variation_value_2")'><img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' /></a><br />
-        </span></div>
-       <a href='#' onclick='return add_variation_value("add")'><?php echo TXT_WPSC_ADD;?></a>
+				<div id='variation_values'>
+					<?php 
+						if($variation_value_count > 0) {
+							$num = 0;
+							foreach($variation_values as $variation_value) {
+								?>
+								<div class='variation_value'>
+								<input type='text' class='text' name='variation_values[<?php echo $variation_value['id']; ?>]' value='<?php echo htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+								<input type='hidden' class='variation_values_id' name='variation_values_id[]' value='<?php echo $variation_value['id']; ?>' />
+								<?php if($variation_value_count > 1): ?>
+									<a class='image_link delete_variation_value' href='#'>
+									  <img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' />
+									</a>
+								<?php endif; ?>
+								</div>
+								<?php
+								$num++;
+							}
+						} else {
+							for($i = 0; $i <= $value_form_count; $i++) {
+								?>
+								<div class='variation_value'>
+									<input type='text' class="text" name='new_variation_values[]' value='' />
+										<a class='image_link delete_variation_value' href='#'>
+											<img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo TXT_WPSC_DELETE; ?>' title='<?php echo TXT_WPSC_DELETE; ?>' />
+										</a>
+								</div>
+								<?php 
+							}
+					}
+				?>
+				</div>
+				<a href='#' class='add_variation_item_form'>+ <?php _e('Add Value'); ?></a>
       </td>
     </tr>
     <tr>
       <td>
       </td>
       <td>
-        <input type='hidden' name='submit_action' value='add' />
-        <input class='button'  type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
+				<?php wp_nonce_field('edit-variation', 'wpsc-edit-variation'); ?>
+        <input type='hidden' name='wpsc_admin_action' value='wpsc-variation-set' />
+				
+				<?php if($variation_id > 0) { ?>
+					<input type='hidden' name='variation_id' value='<?php echo $variation_id; ?>' />
+					<input type='hidden' name='submit_action' value='edit' />
+					<input class='button' style='float:left;'  type='submit' name='submit' value='<?php echo TXT_WPSC_EDIT; ?>' />
+					<a class='button delete_button' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-variation-set&amp;deleteid={$variation_id}", 'delete-variation'); ?>' onclick="return conf();" ><?php echo TXT_WPSC_DELETE; ?></a>
+					
+					
+				<?php } else { ?>
+					<input type='hidden' name='submit_action' value='add' />
+					<input class='button'  type='submit' name='submit' value='<?php echo TXT_WPSC_ADD;?>' />
+				<?php } ?>
+        
+        
       </td>
     </tr>
   </table>

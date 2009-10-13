@@ -69,6 +69,10 @@ function wpsc_debug_page() {
 				<li>
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=wp_get_object_terms'>Test wp_get_object_terms</a>
 				</li>
+
+				<li>
+					<a href='?page=wpsc-debug&amp;wpsc_debug_action=create_also_bought_list'>Create also bought list</a>
+				</li>
 			</ul>
 			<?php
 		}
@@ -123,6 +127,11 @@ function wpsc_debug_page() {
 			$tags =  wp_get_object_terms(108, 'product_tag', array('fields' => 'names'));
 //  			 wp_set_object_terms(103, $tags, 'product_tag');
 			print_r($tags);
+			break;
+			
+			case 'create_also_bought_list':
+			//  wpsc_populate_also_bought_list();
+			
 			break;
 
 

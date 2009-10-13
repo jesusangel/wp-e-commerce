@@ -1361,3 +1361,10 @@ position:relative;
 	margin: 3px 0px 0px 4px;
   float: left;
 }
+
+#content .widget_specials strong a.wpsc_product_title {
+ font-weight: bold;
+}
+.widget_specials span.pricedisplay {
+  float: none;
+}

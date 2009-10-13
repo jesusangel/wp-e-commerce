@@ -80,36 +80,18 @@ function wpsc_also_bought($product_id) {
   
   $also_bought = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.* FROM `".WPSC_TABLE_ALSO_BOUGHT."`, `".WPSC_TABLE_PRODUCT_LIST."` WHERE `selected_product`='".$product_id."' AND `".WPSC_TABLE_ALSO_BOUGHT."`.`associated_product` = `".WPSC_TABLE_PRODUCT_LIST."`.`id` AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN('1') AND `".WPSC_TABLE_PRODUCT_LIST."`.`publish` IN ('1')ORDER BY `".WPSC_TABLE_ALSO_BOUGHT."`.`quantity` DESC LIMIT $also_bought_limit",ARRAY_A);
   if(count($also_bought) > 0) {
-    $output = "<p class='wpsc_also_bought_header'>".TXT_WPSC_ALSO_BOUGHT."</p>";
+    $output = "<h2 class='prodtitles wpsc_also_bought' >".TXT_WPSC_ALSO_BOUGHT."</h2>";
     $output .= "<div class='wpsc_also_bought'>";
     foreach((array)$also_bought as $also_bought_data) {
-      $output .= "<p class='wpsc_also_bought' style='width: ".$element_widths."px;'>";
+      $output .= "<div class='wpsc_also_bought_item' style='width: ".$element_widths."px;'>";
+      
       if(get_option('show_thumbnails') == 1) {
         if($also_bought_data['image'] !=null) {
-          $image_size = @getimagesize(WPSC_THUMBNAIL_DIR.$also_bought_data['image']);
-          $largest_dimension  = ($image_size[1] >= $image_size[0]) ? $image_size[1] : $image_size[0];
-          $size_multiplier = ($image_display_height / $largest_dimension);
-          // to only make images smaller, scaling up is ugly, also, if one is scaled, so must the other be scaled
-          if(($image_size[0] >= $image_display_width) || ($image_size[1] >= $image_display_height)) {
-            $resized_width  = $image_size[0]*$size_multiplier;
-            $resized_height =$image_size[1]*$size_multiplier;
-					} else {
-            $resized_width  = $image_size[0];
-            $resized_height =$image_size[1];
-					}            
-          $margin_top = floor((96 - $resized_height) / 2);
-          $margin_top = 0;
+
+          $output .= "<a href='".wpsc_product_url($also_bought_data['id'])."' class='preview_link'  rel='".str_replace(" ", "_",$also_bought_data['name'])."'>";
+					$image_path = "index.php?productid=" . $also_bought_data['id'] . "&amp;width=" . $image_display_width."&amp;height=" . $image_display_height. "";
           
-          $image_link = WPSC_IMAGE_URL.$also_bought_data['image'];          
-          if($also_bought_data['thumbnail_image'] != null) {
-            $image_file_name = $also_bought_data['thumbnail_image'];
-					} else {
-            $image_file_name = $also_bought_data['image'];
-					}           
-          
-          $output .= "<a href='".wpsc_product_url($also_bought_data['id'])."' class='preview_link'  rel='".str_replace(" ", "_",$also_bought_data['name'])."'>";          
-          $image_url = "index.php?productid=".$also_bought_data['id']."&amp;thumbnail=true&amp;width=".$resized_width."&amp;height=".$resized_height."";        
-          $output .= "<img src='$siteurl/$image_url' id='product_image_".$also_bought_data['id']."' class='product_image' style='margin-top: ".$margin_top."px'/>";
+          $output .= "<img src='$image_path' id='product_image_".$also_bought_data['id']."' class='product_image' style='margin-top: ".$margin_top."px'/>";
           $output .= "</a>";
 				} else {
           if(get_option('product_image_width') != '') {
@@ -119,9 +101,19 @@ function wpsc_also_bought($product_id) {
 					}
 				}
 			}
+
+			$variations_processor = new nzshpcrt_variations;
+			$variations_output = $variations_processor->display_product_variations($also_bought_data['id'],true, false, true);
+			//$output .= $variations_output[0];
+			if($variations_output[1] !== null) {
+				$also_bought_data['price'] = $variations_output[1];
+				$also_bought_data['special_price'] = 0;
+			}
+		
       $output .= "<a class='wpsc_product_name' href='".wpsc_product_url($also_bought_data['id'])."'>".$also_bought_data['name']."</a>";
+			$output .= nzshpcrt_currency_display(($also_bought_data['price'] - $also_bought_data['special_price']), $also_bought_data['notax'],false,$also_bought_data['id']);
       //$output .= "<a href='".wpsc_product_url($also_bought_data['id'])."'>".$also_bought_data['name']."</a>";
-      $output .= "</p>";
+      $output .= "</div>";
 		}
     $output .= "</div>";
     $output .= "<br clear='all' />";

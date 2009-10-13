@@ -591,7 +591,7 @@ function wpsc_product_variation_forms($product_data=''){
 		
 		<div class='inside'>
 			<strong><?php echo TXT_WPSC_ADD_VAR; ?></strong>
-			<h4 class='product_action_link'><a class='thickbox' href='admin.php?thickbox_variations=true&amp;width=550&amp;TB_iframe=true'><?php echo TXT_WPSC_ADD_NEW_VARIATIONS; ?></a></h4>
+			<h4 class='product_action_link'><a target='_blank' href='admin.php?page=wpsc-edit-variations'><?php echo TXT_WPSC_ADD_NEW_VARIATIONS; ?></a></h4>
 			<br />
 			
 			<?php 

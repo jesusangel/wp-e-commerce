@@ -1450,3 +1450,9 @@ position:relative;
 }
 
 
+#content .widget_specials strong a.wpsc_product_title {
+ font-weight: bold;
+}
+.widget_specials span.pricedisplay {
+  float: none;
+}

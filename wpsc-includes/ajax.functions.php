@@ -503,6 +503,11 @@ function wpsc_submit_checkout() {
 		$wpsc_checkout->save_forms_to_db($purchase_log_id);
 		$wpsc_cart->save_to_db($purchase_log_id);
 		$wpsc_cart->submit_stock_claims($purchase_log_id);
+
+		if(get_option('wpsc_also_bought') == 1) {
+			wpsc_populate_also_bought_list();
+		}
+		
 		do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
 	
 		if(get_option('permalink_structure') != '') {
