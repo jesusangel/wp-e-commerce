@@ -255,7 +255,7 @@ if(isset($_GET['token'])) {
 <tr><td colspan='3'><b>Conditions</b></td></tr>
 <tr><td colspan="8">
 	<div class='coupon_condition'>
-		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/delete.png"/></button>
+		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/cross.png"/></button>
 			<select class="ruleprops" name="rules[property][]">
 				<option value="item_name" rel="order">Item name</option>
 				<option value="item_quantity" rel="order">Item quantity</option>
@@ -276,7 +276,7 @@ if(isset($_GET['token'])) {
 			</span>
 			<span>
 				<button class="add" type="button">
-					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/add.png"/>
+					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/plus_icon.jpg"/>
 				</button>
 			</span>
 		</div>

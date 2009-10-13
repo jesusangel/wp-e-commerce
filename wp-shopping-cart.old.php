@@ -1125,7 +1125,7 @@ if(($_POST['ajax'] == "true") || ($_GET['ajax'] == "true")) {
     $output .= "    <description>This is the WP E-Commerce Product List RSS feed</description>\n\r";
     $output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
     $output .= "    <atom:link href='$self' rel='self' type='application/rss+xml' />";
-    foreach($product_list as $product) {
+    foreach((array)$product_list as $product) {
       $purchase_link = wpsc_product_url($product['id']);
       $output .= "    <item>\n\r";
       $output .= "      <title>".htmlentities(stripslashes($product['name']), ENT_NOQUOTES, 'UTF-8')."</title>\n\r";

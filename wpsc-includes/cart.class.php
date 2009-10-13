@@ -393,7 +393,7 @@ function wpsc_shipping_quote_html_id() {
 function wpsc_shipping_quote_selected_state() {
 	global $wpsc_cart;
 	
-	if(($wpsc_cart->shipping_method == $wpsc_cart->shipping_methods[0]) && ($wpsc_cart->shipping_quotes[0] == $wpsc_cart->shipping_quote) ) {
+	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method) && ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name']) ) { {
 		return "checked='checked'";
 	} else {
 		return "";
@@ -433,8 +433,8 @@ function wpsc_update_shipping_single_method(){
 function wpsc_update_shipping_multiple_methods(){
 	global $wpsc_cart;
 //exit('<pre>'.print_r($wpsc_cart->shipping_method, true).'</pre>'.$wpsc_cart->shipping_methods[0]);
-	if(!empty($wpsc_cart->shipping_method)) {
-		$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
+	if(!empty($wpsc_cart->selected_shipping_method)) {
+		$wpsc_cart->update_shipping($wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option);
 	}
 }
 
@@ -552,6 +552,15 @@ class wpsc_cart {
 	*/
   function get_shipping_method() {
     global $wpdb, $wpsc_shipping_modules;
+	// Reset all the shipping data in case the destination has changed
+	$this->selected_shipping_method = null;
+	$this->selected_shipping_option = null;
+	$this->shipping_option = null;
+	$this->shipping_method = null;
+	$this->shipping_methods = array();
+	$this->shipping_quotes = array();
+	$this->shipping_quote = null;
+	$this->shipping_method_count = 0;
 	  // set us up with a shipping method.
 	  $custom_shipping = get_option('custom_shipping_options');
 	  $this->shipping_methods = get_option('custom_shipping_options');
@@ -565,7 +574,7 @@ class wpsc_cart {
 			$shipping_quotes = null;
 			if($this->selected_shipping_method != null) {
 				// use the selected shipping module
-				if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+				if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
 					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 				}
 			} else {
@@ -573,7 +582,7 @@ class wpsc_cart {
 				foreach((array)$custom_shipping as $shipping_module) {
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
 					$this->selected_shipping_method = $shipping_module;
-					if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+					if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
 						$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 					}
 					if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
@@ -594,7 +603,7 @@ class wpsc_cart {
   function get_shipping_option() {
     global $wpdb, $wpsc_shipping_modules;
        
-		if((count($this->shipping_quotes) < 1) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+		if((count($this->shipping_quotes) < 1) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
 			$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 		}
     

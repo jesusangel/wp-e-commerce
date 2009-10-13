@@ -62,7 +62,7 @@ define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information");
 define('TXT_WPSC_ECOMMERCE', 'Products'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
-define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering is unavailable to this destination and/or weight. Please contact us.');
+define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.');
 
 define('TXT_WPSC_COUPONS', 'Coupon Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
@@ -994,6 +994,7 @@ define('TXT_WPSC_PLEASEENTERAVALIDEMAILADDRESS', 'Please enter a valid email add
 define('TXT_WPSC_PLEASEENTERAVALIDADDRESS', 'Please complete your address.');
 define('TXT_WPSC_PLEASEENTERAVALIDCITY', 'Please enter your town or city.');
 define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', 'Please enter a valid phone number.');
+define('TXT_WPSC_PLEASEASELECTSHIPPINGMETHOD', 'You must select a shipping method, otherwise we cannot process your order.');
 define('TXT_WPSC_PLEASESELECTCOUNTRY', 'Please select your country from the list.');
 define('TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS', 'Please agree to the terms and conditions, otherwise we cannot process your order.');
 define('TXT_WPSC_POSITION', 'Position');

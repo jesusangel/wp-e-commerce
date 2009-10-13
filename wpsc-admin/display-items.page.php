@@ -262,8 +262,8 @@ function wpsc_admin_products_list($category_id = 0) {
 					<select name="bulkAction">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
 						<option value="delete"><?php _e('Delete'); ?></option>
-						<option value="show"><?php _e('Show'); ?></option>
-						<option value="hide"><?php _e('Hide'); ?></option>
+						<option value="show"><?php _e('Publish'); ?></option>
+						<option value="hide"><?php _e('Draft'); ?></option>
 
 					</select>
 					<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />

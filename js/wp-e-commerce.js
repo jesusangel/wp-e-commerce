@@ -176,6 +176,15 @@ jQuery(document).ready(function () {
 			return false;
 		});
 	}); 
+	//Shipping bug fix by James Collins
+	var radios = jQuery(".productcart input:radio[name=shipping_method]");
+ 	if (radios.length == 1) {
+ 		// If there is only 1 shipping quote available during checkout, automatically select it
+ 		jQuery(radios).click();
+ 	} else if (radios.length > 1) {
+ 		// There are multiple shipping quotes, simulate a click on the checked one
+ 		jQuery(".productcart input:radio[name=shipping_method]:checked").click();
+ 	}
 });
 
 

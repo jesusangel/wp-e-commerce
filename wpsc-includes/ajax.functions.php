@@ -417,6 +417,10 @@ function wpsc_submit_checkout() {
 	//	exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
  	//	exit('<pre>'.print_r($results, true).'</pre>');
+	if (get_option('do_not_use_shipping') == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null)) {
+		$_SESSION['wpsc_checkout_misc_error_messages'][] = TXT_WPSC_PLEASEASELECTSHIPPINGMETHOD;
+		$is_valid = false;
+   	}
 		
 	if($_POST['agree'] != 'yes') {
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS;
