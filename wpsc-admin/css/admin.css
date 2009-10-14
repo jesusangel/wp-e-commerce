@@ -1373,3 +1373,8 @@ a.admin_download span{
 .wpsc_td_note{
 padding-bottom:0 !important;
 }
+
+.wpsc_purchaselogs_options {
+	margin: 0px 0px 8px 0px;
+
+}

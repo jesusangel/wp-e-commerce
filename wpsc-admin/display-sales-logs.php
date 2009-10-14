@@ -370,6 +370,7 @@ if(!isset($purchlogs)){
  	
   ?>
   	<form method='post' action=''>
+  	  <div class='wpsc_purchaselogs_options'>
   		<select id='purchlog_multiple_status_change' name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
   			<option value='-1'><?php _e('Bulk Actions'); ?></option>
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
@@ -422,7 +423,7 @@ if(!isset($purchlogs)){
   		</select>
   		<input type='hidden' value='purchlog_filter_by' name='wpsc_admin_action' />
   		<input type="submit" value="<?php _e('Filter'); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
-  	
+  	</div>
   		<?php if(wpsc_have_purch_items() ==false):  ?>
   		<p style='color:red;'><?php _e('Oops there are no purchase logs for your selection, please try again.'); ?></p>
   		
