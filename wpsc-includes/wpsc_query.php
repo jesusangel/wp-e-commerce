@@ -1334,6 +1334,7 @@ class WPSC_Query {
 					$order_by = "`products`.`price` $order";
 				} else {
 				
+					//$order = 'ASC';
 					if(	$order == 'ASC'){
 						$product_id_order = 'DESC';
 					}else{
@@ -1376,6 +1377,11 @@ class WPSC_Query {
 				} else if (get_option('wpsc_sort_by') == 'price') {
 					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`price` $order";
 				} else {
+					if(	$order == 'ASC'){
+						$order = 'DESC';
+					}else{
+						$order = 'ASC';
+					}				
 					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`id` $order";
 				}
 				$rowcount = $wpdb->get_var("SELECT COUNT( DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."`,`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` $no_donations_sql $group_sql");

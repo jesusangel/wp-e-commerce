@@ -229,25 +229,29 @@ div.search-box input#page-search-input {
 
 
 #wpsc_product_list .column-title{
-  width: 100px;
+  width:100%;
 }
 #wpsc_product_list  .column-cb{
-  width:25px;
+	width:24px;
+ vertical-align: middle;
 }
 #wpsc_product_list  .column-cb input{
 /*   width:20px; */
 /*   float:right; */
+
 }
-#wpsc_product_list .column-image{
-	width: 45px;
+#wpsc_product_list .column-image, #wpsc_product_list .product-image{
+  padding-right: 0px;
+	width: 42px;
 }
 
 #wpsc_product_list .column-price{
-	width: 40px;
+	width:60px;
 }
 
 #wpsc_product_list .column-categories{
 	width: 70px;
+	padding-right:18px;
 }
 
 #wpsc_product_list tbody tr td.column-title {
@@ -274,7 +278,7 @@ div.search-box input#page-search-input {
 width:150px;
 }
 div.wpsc_floatleft{
-width:150px;
+width:161px;
 float:left;
 }
 	

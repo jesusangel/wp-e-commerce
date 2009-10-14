@@ -25,26 +25,24 @@ if(wpsc_cart_item_count() > 0) :
 			</td>
 			<td>
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
-					<input type="text" name="quantity" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>"/>
-					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
-					<input type="hidden" name="wpsc_update_quantity" value="true"/>
-					<input type="submit" value="<?php echo TXT_WPSC_APPLY; ?>" name="submit"/>
+					<input type="text" name="quantity" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>" />
+					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
+					<input type="hidden" name="wpsc_update_quantity" value="true" />
+					<input type="submit" value="<?php echo TXT_WPSC_APPLY; ?>" name="submit" />
 				</form>
 			</td>
 			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
 			<td>
-			
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
-					<input type="hidden" name="quantity" value="0"/>
-					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
-					<input type="hidden" name="wpsc_update_quantity" value="true"/>
+					<input type="hidden" name="quantity" value="0" />
+					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
+					<input type="hidden" name="wpsc_update_quantity" value="true" />
 					<button class='remove_button' type="submit"><span><?php echo TXT_WPSC_REMOVE; ?></span></button>
 				</form>
 			</td>
 		</tr>
 	<?php endwhile; ?>
 	<?php //this HTML displays coupons if there are any active coupons to use ?>
-<?php //exit('<pre>'.print_r($wpsc_coupons, true).'</pre>'); ?>
 	<?php if(wpsc_uses_coupons()): ?>
 		
 		<?php if(wpsc_coupons_error()): ?>
@@ -53,10 +51,10 @@ if(wpsc_cart_item_count() > 0) :
 		<tr>
 			<td colspan="2"><?php _e('Enter your coupon number'); ?> :</td>
 			<td  colspan="3" align='left'>
-			<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
-				<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>' />
-				<input type='submit' value='<?php echo TXT_WPSC_APPLY ?>' />
-			</form>
+				<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
+					<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>' />
+					<input type='submit' value='<?php echo TXT_WPSC_APPLY ?>' />
+				</form>
 			</td>
 		</tr>
 	<?php endif; ?>	
@@ -70,6 +68,7 @@ if(wpsc_cart_item_count() > 0) :
 		<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
 	<?php
 	endif;
+	
 	if($_SESSION['WpscGatewayErrorMessage'] != '') :
 	?>
 		<p class='validation-error'><?php echo $_SESSION['WpscGatewayErrorMessage']; ?></p>
@@ -86,7 +85,24 @@ if(wpsc_cart_item_count() > 0) :
 					<?php echo TXT_WPSC_SHIPPING_DETAIL; ?>
 				</td>
 			</tr>
-			
+
+			<?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
+				<?php if (($_SESSION['wpsc_zipcode'] == '') || ($_SESSION['wpsc_zipcode'] == 'Your Zipcode')) : // No valid shipping quotes ?>
+					<?php if ($_SESSION['wpsc_update_location'] == true) :?>
+						<tr>
+							<td colspan='5' class='shipping_error' >
+								<?php echo TXT_WPSC_NO_ZIPCODE; ?>
+							</td>
+						</tr>
+					<?php endif; ?>
+				<?php else: ?>
+					<tr>
+						<td colspan='5' class='shipping_error' >
+							<?php echo TXT_WPSC_NO_SHIPPING_QUOTES; ?>
+						</td>
+					</tr>
+				<?php endif; ?>
+			<?php endif; ?>
 			<tr>
 				<td colspan='5'>
 					<form name='change_country' id='change_country' action='' method='post'>
@@ -94,49 +110,42 @@ if(wpsc_cart_item_count() > 0) :
 						<input type='hidden' name='wpsc_update_location' value='true' />
 						<input type='submit' name='wpsc_submit_zipcode' value='Calculate' />
 					</form>
-				
 				</td>
 			</tr>
 			
-			<?php if (wpsc_have_morethanone_shipping_quote()) : while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
-					<?php 
-					// Don't display shipping method if it doesn't have at least one quote
-					if (!wpsc_have_shipping_quotes()) continue; 
-					?>
-					<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
-					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();
-				
-					 ?>
-						<tr>
-							<td colspan='3'>
-								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
-							</td>
-							<td style='text-align:center;'>
-								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
-							</td>
-							<td style='text-align:center;'>
-							<?php if(wpsc_have_morethanone_shipping_methods_and_quotes()): ?>
-								<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?>  onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
-							<?php else: ?>
-								<input <?php echo wpsc_shipping_quote_selected_state(); ?> disabled='disabled' type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>'  value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
-									<?php wpsc_update_shipping_single_method(); ?>
-							<?php endif; ?>
-							</td>
-						</tr>
+			<?php if (wpsc_have_morethanone_shipping_quote()) :?>
+				<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
+						<?php 	if (!wpsc_have_shipping_quotes()) { continue; } // Don't display shipping method if it doesn't have at least one quote ?>
+						<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().TXT_WPSC_CHOOSE_A_SHIPPING_RATE; ?> </td></tr>
+						<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();	?>
+							<tr>
+								<td colspan='3'>
+									<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
+								</td>
+								<td style='text-align:center;'>
+									<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
+								</td>
+								<td style='text-align:center;'>
+									<?php if(wpsc_have_morethanone_shipping_methods_and_quotes()): ?>
+										<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?>  onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+									<?php else: ?>
+										<input <?php echo wpsc_shipping_quote_selected_state(); ?> disabled='disabled' type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>'  value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
+											<?php wpsc_update_shipping_single_method(); ?>
+									<?php endif; ?>
+								</td>
+							</tr>
+						<?php endwhile; ?>
+				<?php endwhile; ?>
+			<?php endif; ?>
 			
-					<?php endwhile; ?>
-			<?php endwhile;  endif; ?>
 			<?php wpsc_update_shipping_multiple_methods(); ?>
+
+			
 			<?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
-				<tr>
-					<td colspan='5'><?php echo TXT_WPSC_NO_SHIPPING_QUOTES; ?></td>
-				</tr>
-			</table>
-			</div>
-			<?php 
-			return;
-			endif;  
-			?>
+					</table>
+					</div>
+				<?php return; ?>
+			<?php endif; ?>
 		</table>
 	<?php endif;  ?>
 	

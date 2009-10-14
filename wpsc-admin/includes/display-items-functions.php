@@ -227,8 +227,8 @@ function wpsc_product_basic_details_form(&$product_data) {
 						</td>
 						<td>
 						<?php echo TXT_WPSC_PRICE;?> :<br />
-						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
-						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo TXT_WPSC_DELETE_LAYER;?></a>
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='0.00' />
+						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo TXT_WPSC_DELETE_CURRENCY;?></a>
 						</td>
 
 			</tr>
@@ -267,7 +267,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 						<td>
 						Price<?php //echo TXT_WPSC_PRICE; ?> :<br />
 						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
-						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'>Delete Layer</a>
+						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo TXT_WPSC_DELETE_CURRENCY;?></a>
 						</td>
 					</tr>
 			<?php } ?>

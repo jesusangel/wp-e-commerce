@@ -211,8 +211,8 @@ function wpsc_shipping_country_list($shippingdetails = false) {
 	global $wpdb, $wpsc_shipping_modules;
 	$js='';
 	if(!$shippingdetails){
-	$output = "<input type='hidden' name='wpsc_ajax_actions' value='update_location' />";
-	$js ="  onchange='submit_change_country();'";
+		$output = "<input type='hidden' name='wpsc_ajax_actions' value='update_location' />";
+		$js ="  onchange='submit_change_country();'";
 	}
 	$selected_country = $_SESSION['wpsc_delivery_country'];
 	$selected_region = $_SESSION['wpsc_delivery_region'];
@@ -228,45 +228,53 @@ function wpsc_shipping_country_list($shippingdetails = false) {
 	// 23-02-09 fix for custom target market by jeffry
 	// recon this should be taken out and put into a function somewhere maybe,,,
 	 if($country['visible'] == '1'){
-		$selected ='';
-		if($selected_country == $country['isocode']) {
-			$selected = "selected='selected'";
+			$selected ='';
+			if($selected_country == $country['isocode']) {
+				$selected = "selected='selected'";
+			}
+			$output .= "<option value='".$country['isocode']."' $selected>".htmlspecialchars($country['country'])."</option>";
 		}
-		$output .= "<option value='".$country['isocode']."' $selected>".htmlspecialchars($country['country'])."</option>";
-	 }
 	}
 
 	$output .= "</select>";
-//	if(!$shippingdetails){
+	
 	$output .= wpsc_shipping_region_list($selected_country, $selected_region, $shippingdetails);
-//	}
-// 	$output .= "ZipCode:";
-if(isset($_POST['zipcode'])) {
+
+	if($_POST['wpsc_update_location'] == 'true') {
+	  $_SESSION['wpsc_update_location'] = true;
+	} else {
+		$_SESSION['wpsc_update_location'] = false;
+	}
+	
+	if(isset($_POST['zipcode'])) {
 		if ($_POST['zipcode']=='') {
-			$zipvalue = get_option('base_zipcode');
-			$_SESSION['wpsc_zipcode'] = get_option('base_zipcode');
-			$color = '#999';
+			$zipvalue = '';
+			$_SESSION['wpsc_zipcode'] = '';
 		} else {
 			$zipvalue = $_POST['zipcode'];
 			$_SESSION['wpsc_zipcode'] = $_POST['zipcode'];
-			$color = '#000';
 		}
 	} else if(isset($_SESSION['wpsc_zipcode']) && ($_SESSION['wpsc_zipcode'] != '')) {
-			$zipvalue = $_SESSION['wpsc_zipcode'];
-			$color = '#000';
+		$zipvalue = $_SESSION['wpsc_zipcode'];
 	} else {
-		$zipvalue = get_option('base_zipcode');
-		$_SESSION['wpsc_zipcode'] = get_option('base_zipcode');
+		$zipvalue = '';
+		$_SESSION['wpsc_zipcode'] = '';
+	}
+	
+	if(($zipvalue != '') && ($zipvalue != 'Your Zipcode')) {
+		$color = '#000';
+	} else {
+		$zipvalue = 'Your Zipcode';
 		$color = '#999';
 	}
 	
-		$uses_zipcode = false;
-		$custom_shipping = get_option('custom_shipping_options');
-		foreach((array)$custom_shipping as $shipping) {
-		  if($wpsc_shipping_modules[$shipping]->needs_zipcode == true) {
-		    $uses_zipcode = true;
-		  }
+	$uses_zipcode = false;
+	$custom_shipping = get_option('custom_shipping_options');
+	foreach((array)$custom_shipping as $shipping) {
+		if($wpsc_shipping_modules[$shipping]->needs_zipcode == true) {
+			$uses_zipcode = true;
 		}
+	}
 	
 	if($uses_zipcode == true) {
 		$output .= " <input type='text' style='color:".$color.";' onclick='if (this.value==\"Your Zipcode\") {this.value=\"\";this.style.color=\"#000\";}' onblur='if (this.value==\"\") {this.style.color=\"#999\"; this.value=\"Your Zipcode\"; }' value='".$zipvalue."' size='10' name='zipcode' id='zipcode'>";
