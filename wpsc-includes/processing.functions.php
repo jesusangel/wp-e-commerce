@@ -799,7 +799,7 @@ function wpsc_add_product($product_values) {
 			// Add the tidy url name 
 			$tidied_name = trim($product_values['name']);
 			$tidied_name = strtolower($tidied_name);
-			$url_name = preg_replace(array("/(\s)+/","/[^\w-]+/i"), array("-", ''), $tidied_name);
+			$url_name = sanitize_title($tidied_name);
 			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '".$wpdb->escape($url_name)."', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape($url_name)."){1}(\d)*$' ",ARRAY_A);
 			$extension_number = '';
 			if($similar_names['count'] > 0) {
