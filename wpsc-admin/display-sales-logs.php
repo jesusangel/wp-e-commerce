@@ -385,14 +385,36 @@ if(!isset($purchlogs)){
   		<label for='view_purchlogs_by'><?php _e('View:'); ?></label>
 
   		<select id='view_purchlogs_by' name='view_purchlogs_by'>
-  			<option value='all' selected='selected'>All</option>
-			<option value='3mnths'>Three Months</option>
+  		  <?php
+				$date_is_selected['3mnths'] = '';
+				$date_is_selected['all'] = '';
+  		  switch($_GET['view_purchlogs_by']) {
+					case '3mnths':
+						$date_is_selected['3mnths'] = 'selected="selected"';
+					break;
+					
+					case '':
+					case 'all':
+						$date_is_selected['all'] = 'selected="selected"';
+					break;
+  		  }
+
+  		  ?>
+  			<option value='all' <?php echo $date_is_selected['all']; ?>>All</option>
+				<option value='3mnths' <?php echo $date_is_selected['3mnths']; ?>>Three Months</option>
   			<?php  echo wpsc_purchlogs_getfirstdates(); ?>
   		</select>
   		<select id='view_purchlogs_by_status' name='view_purchlogs_by_status'>
   			<option value='-1'>Status: All</option>
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
- 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> >
+  			<?php
+  			  $current_status = wpsc_the_purch_status_id();
+					$is_selected = '';
+					if($_GET['view_purchlogs_by_status'] == $current_status) {
+						$is_selected = 'selected="selected"';
+					}
+  			?>
+ 				<option value='<?php echo $current_status; ?>' <?php echo $is_selected; ?> >
  					<?php echo wpsc_the_purch_status_name(); ?> 
  				</option>
  			<?php endwhile; ?>

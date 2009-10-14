@@ -1188,7 +1188,7 @@ if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
  
   function wpsc_purchlog_search_by(){
 //  exit('<pre>'.print_r($_POST,true).'</pre>');
- 	wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
+ 	//wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
  } 
  
  if($_REQUEST['wpsc_admin_action'] == 'purchlogs_search') {
@@ -1230,6 +1230,12 @@ function wpsc_purchlog_bulk_modify(){
 	if ( isset($deleted) ) {
 		$sendback = add_query_arg('deleted', $deleted, $sendback);
 	}
+	if ( isset($_POST['view_purchlogs_by']) ) {
+		$sendback = add_query_arg('view_purchlogs_by', $_POST['view_purchlogs_by'], $sendback);
+  }
+	if ( isset($_POST['view_purchlogs_by_status']) ) {
+		$sendback = add_query_arg('view_purchlogs_by_status', $_POST['view_purchlogs_by_status'], $sendback);
+  }
 	wp_redirect($sendback);
 	exit();
 }
