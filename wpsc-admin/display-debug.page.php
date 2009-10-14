@@ -73,6 +73,9 @@ function wpsc_debug_page() {
 				<li>
 					<a href='?page=wpsc-debug&amp;wpsc_debug_action=create_also_bought_list'>Create also bought list</a>
 				</li>
+				<li>
+					<a href='?page=wpsc-debug&amp;wpsc_debug_action=paypal_test'>Paypal Test</a>
+				</li>
 			</ul>
 			<?php
 		}
@@ -133,6 +136,30 @@ function wpsc_debug_page() {
 			//  wpsc_populate_also_bought_list();
 			
 			break;
+			
+			case 'paypal_test':
+			//  wpsc_populate_also_bought_list();
+			$fields = "cmd=_notify-validate&mc_gross=0.10&invoice=7121255557327&protection_eligibility=Ineligible&address_status=unconfirmed&item_number1=105&payer_id=LCFQDE4F5F6U8&tax=0.00&address_street=2+Offa+RdBedford&payment_date=14%3A56%3A02+Oct+14%2C+2009+PDT&payment_status=Completed&charset=windows-1252&mc_tax1=0.00&address_zip=&mc_shipping=0.00&mc_handling=0.00&first_name=Thomas&mc_fee=0.10&address_country_code=NZ&address_name=test+test&notify_version=2.8&custom=&payer_status=verified&business=dan%40instinct.co.nz&address_country=New+Zealand&num_cart_items=1&mc_handling1=0.00&address_city=Bedfordshire&verify_sign=AGu.hbwMxRXoqDiyy-IJNOnULnvNAKaQoywaGolyEFLHTSZiM-w0YWH4&payer_email=thomas.howard%40gmail.com&mc_shipping1=0.00&tax1=0.00&txn_id=5014962043916743K&payment_type=instant&last_name=Howard&address_state=&item_name1=m%27a%2Fn.d%2Fe%22l%24%7Ct%2Fe%28s%7Et%29%3A%3B+%C3%85%C3%84%C3%96&receiver_email=dan%40instinct.co.nz&payment_fee=&quantity1=1&receiver_id=LENKCHY6CU2VY&txn_type=cart&mc!
+ _gross_1=0.10&mc_currency=NZD&residence_country=NZ&transaction_subject=Shopping+Cart&payment_gross=";
+			
+			  $ch=curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, get_option('paypal_multiple_url'));
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+				curl_setopt($ch, CURLOPT_NOPROGRESS, 1);
+				curl_setopt($ch, CURLOPT_VERBOSE, 1);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+				curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+				//  curl_setopt($ch, CURLOPT_REFERER, $referrer);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+				$buffer = curl_exec($ch);
+				curl_close($ch);
+				echo $buffer;
+			break;
+
 
 
 

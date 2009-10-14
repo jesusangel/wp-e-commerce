@@ -187,8 +187,13 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		$data['city'] = urlencode($_POST['collected_data'][get_option('paypal_form_city')]); 
 	}
 	
-    if($_POST['collected_data'][get_option('paypal_form_country')] != '') {   
-   		$data['country'] = urlencode($_POST['collected_data'][get_option('paypal_form_country')]); ;
+    if($_POST['collected_data'][get_option('paypal_form_country')] != '') {
+    	if(is_array($_POST['collected_data'][get_option('paypal_form_country')])) {
+    	  $country = $_POST['collected_data'][get_option('paypal_form_country')][0];
+    	} else {
+				$country = $_POST['collected_data'][get_option('paypal_form_country')];
+    	}
+   		$data['country'] = urlencode($country);
 	}    
     if($_POST['collected_data'][get_option('paypal_form_state')] != '') {   
     	$data['state'] =  urlencode($_POST['collected_data'][get_option('paypal_form_state')]); 
@@ -233,9 +238,11 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		}
 		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
-	if(true == true ) {
+	if(defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true) ) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
-  	exit("<pre>".print_r($data,true)."</pre>");
+  	echo "<pre>".print_r($data,true)."</pre>";
+  	echo "<pre>".print_r($_POST,true)."</pre>";
+  	exit();
 	}
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
@@ -248,24 +255,51 @@ function nzshpcrt_paypal_ipn() {
   //exit(WPSC_GATEWAY_DEBUG );
   if(($_GET['ipn_request'] == 'true') && (get_option('paypal_ipn') == 1)) {
     // read the post from PayPal system and add 'cmd'
-    $req = 'cmd=_notify-validate';
+    $fields = 'cmd=_notify-validate';
     $message = "";
     foreach ($_POST as $key => $value) {
       $value = urlencode(stripslashes($value));
-      $req .= "&$key=$value";
+      $fields .= "&$key=$value";
 		}
-    //$req .= "&ipn_request=true";
-    $replace_strings[0] = 'http://';
-    $replace_strings[1] = 'https://';
-    $replace_strings[2] = '/cgi-bin/webscr';
     
-    $paypal_url = str_replace($replace_strings, "",get_option('paypal_multiple_url'));
     
     // post back to PayPal system to validate
-    $header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
-    $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-    $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-    $fp = fsockopen ($paypal_url, 80, $errno, $errstr, 30);
+    $results = '';
+    if(function_exists('curl_init')) {
+      $ch=curl_init(); 
+			curl_setopt($ch, CURLOPT_URL, get_option('paypal_multiple_url'));
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_NOPROGRESS, 1);
+			curl_setopt($ch, CURLOPT_VERBOSE, 1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+			curl_setopt($ch, CURLOPT_USERAGENT, "WP e-Commerce ".WPSC_PRESENTABLE_VERSION);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+			$results = curl_exec($ch);
+			curl_close($ch);
+    } else {
+			$replace_strings[0] = 'http://';
+			$replace_strings[1] = 'https://';
+			$replace_strings[2] = '/cgi-bin/webscr';
+			
+			$paypal_url = str_replace($replace_strings, "",get_option('paypal_multiple_url'));
+			$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
+			$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
+			$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
+			$fp = fsockopen($paypal_url, 80, $errno, $errstr, 30);
+			if($fp) {
+				fputs ($fp, $header . $fields);
+				while (!feof($fp)) {
+					$res = fgets ($fp, 1024);
+					$results .= $fields;
+				}
+				fclose ($fp);
+			}
+    }
+    
     
     // assign posted variables to local variables
     $sessionid = $_POST['invoice'];
@@ -278,53 +312,45 @@ function nzshpcrt_paypal_ipn() {
     $verification_data['txn_id'] = $_POST['txn_id'];
     $verification_data['receiver_email'] = $_POST['receiver_email'];
     $verification_data['payer_email'] = $_POST['payer_email'];
-    
-    if(!$fp) {
-       //mail(get_option('purch_log_email'),'IPN CONNECTION FAILS IT',("Fix the paypal URL, it is currently:\n\r". $paypal_url));
-      // HTTP ERROR
-		} else {
-      fputs ($fp, $header . $req);
-      while (!feof($fp)) {
-        $res = fgets ($fp, 1024);
-        if(strcmp ($res, "VERIFIED") == 0){
-          switch($verification_data['payment_status']) {
-            case 'Processed': // I think this is mostly equivalent to Completed
-            case 'Completed':
-            $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
-            transaction_results($sessionid, false, $transaction_id);
-            break;
 
-            case 'Failed': // if it fails, delete it
-            $log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`='$sessionid' LIMIT 1");
-            $delete_log_form_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'";
-            $cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
-            foreach((array)$cart_content as $cart_item) {
-              $cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
-						}
-            $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'");
-            $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$log_id')");
-            $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$log_id' LIMIT 1");
-            break;
-            
-            case 'Pending':      // need to wait for "Completed" before processing
-            $sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1";
-            $wpdb->query($sql) ;
-            break;
-            
-            default: // if nothing, do nothing, safest course of action here.
-            break;            
-					}
-				} else if (strcmp ($res, "INVALID") == 0) {
-					// Its already logged, not much need to do more
+		if(strcmp ($results, "VERIFIED") == 0){
+			switch($verification_data['payment_status']) {
+				case 'Processed': // I think this is mostly equivalent to Completed
+				case 'Completed':
+				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
+				transaction_results($sessionid, false, $transaction_id);
+				break;
+
+				case 'Failed': // if it fails, delete it
+				$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`='$sessionid' LIMIT 1");
+				$delete_log_form_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'";
+				$cart_content = $wpdb->get_results($delete_log_form_sql,ARRAY_A);
+				foreach((array)$cart_content as $cart_item) {
+					$cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
 				}
+				$wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$log_id'");
+				$wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$log_id')");
+				$wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$log_id' LIMIT 1");
+				break;
+
+				case 'Pending':      // need to wait for "Completed" before processing
+				$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1";
+				$wpdb->query($sql) ;
+				break;
+
+				default: // if nothing, do nothing, safest course of action here.
+				break;
 			}
-      fclose ($fp);
+		} else if (strcmp ($results, "INVALID") == 0) {
+			// Its already logged, not much need to do more
 		}
+
 		/*
 		* Detect use of sandbox mode, if sandbox mode is present, send debugging email.
 		*/
-		if(stristr(get_option('paypal_multiple_url'), "sandbox") || (WPSC_GATEWAY_DEBUG == true )) {
+		if(stristr(get_option('paypal_multiple_url'), "sandbox") || (defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true)) ) {
 			$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
+			$message .= "RESULTS:\n\r".print_r($results,true)."\n\r\n\r";
 			$message .= "OUR_POST:\n\r".print_r($header . $req,true)."\n\r\n\r";
 			$message .= "THEIR_POST:\n\r".print_r($_POST,true)."\n\r\n\r";
 			$message .= "GET:\n\r".print_r($_GET,true)."\n\r\n\r";
