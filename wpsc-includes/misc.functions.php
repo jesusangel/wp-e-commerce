@@ -107,9 +107,13 @@ add_filter('single_post_title','wpsc_post_title_seo');
 function wpsc_change_canonical_url($url) {
   global $wpdb, $wpsc_query;
   if($wpsc_query->is_single == true) {
+  if(!is_numeric($_GET['product_id'])) {
 		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpsc_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
-		$url = wpsc_product_url($product_id);
-
+  } else {
+  	$product_id = absint($_GET['product_id']);
+	}
+	
+	$url = wpsc_product_url($product_id);
   } else {
     if($wpsc_query->query_vars['category_id'] > 0) {
       $url = wpsc_category_url($wpsc_query->query_vars['category_id']);
@@ -118,7 +122,7 @@ function wpsc_change_canonical_url($url) {
 			}
     }
   }
-  //echo "<pre>".print_r($wpsc_query,true)."</pre>";
+  //echo "<pre>".print_r($wpsc_query->is_single,true)."</pre>";
   return $url;
 }
 add_filter('aioseop_canonical_url', 'wpsc_change_canonical_url');
