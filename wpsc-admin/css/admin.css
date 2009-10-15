@@ -35,6 +35,11 @@ td.wpsc_gateway_table{
 width:130px;
 border-top: none;
 }
+
+#screen-meta .hidden {
+height:inherit;
+width:inherit;
+}
 /*
  *End of Flot CSS
  */

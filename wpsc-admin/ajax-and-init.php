@@ -1410,6 +1410,7 @@ function wpsc_submit_options($selected='') {
   global $wpdb, $wpsc_gateways;
 	check_admin_referer('update-options', 'wpsc-update-options');
 	//This is to change the Overall target market selection
+	check_admin_referer('update-options', 'wpsc-update-options');
 
 	 if($_POST['countrylist2'] != null || $selected != ''){
     	$AllSelected = false;
