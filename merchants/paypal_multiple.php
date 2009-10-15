@@ -468,9 +468,9 @@ function form_paypal_multiple() {
      </td>
   </tr>
   <tr>
-     <td>Send shipping details:
+     <td style='padding-bottom: 0px;'>Send shipping details:
      </td>
-     <td>
+     <td style='padding-bottom: 0px;'>
        <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
 
@@ -483,13 +483,20 @@ function form_paypal_multiple() {
   	</td>
   </tr>
   <tr>
-     <td>
-      Override users paypal address:
+     <td style='padding-bottom: 0px;'>
+      Address Override:
      </td>
-     <td>
+     <td style='padding-bottom: 0px;'>
        <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".TXT_WPSC_YES."</label> &nbsp;
        <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".TXT_WPSC_NO."</label>
      </td>
+   </tr>
+   <tr>
+  	<td colspan='2'>
+  	<span  class='wpscsmall description'>
+  	This setting affects your PayPal purchase log. If your customers already have a PayPal account PayPal will try to populate your PayPal Purchase Log with their PayPal address. This setting tries to replace the address in the PayPal purchase log with the Address customers enter on your Checkout page.
+  	</span>
+  	</td>
    </tr>\n";
 
 
