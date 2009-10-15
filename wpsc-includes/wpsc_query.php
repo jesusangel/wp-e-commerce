@@ -179,11 +179,11 @@ function wpsc_the_product_id() {
 * @return string - a link to edit this product
 */
 function wpsc_edit_the_product_link() {
-	global $wpsc_query, $current_user;
+	global $wpsc_query, $current_user, $table_prefix;
 	$siteurl = get_option('siteurl');
 	get_currentuserinfo();
 	$output = '';
-	if($current_user->wp_capabilities['administrator'] == 1) {
+	if($current_user->{$table_prefix . 'capabilities'}['administrator'] == 1) {
 		$output = "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product_id={$wpsc_query->product['id']}'>".__('Edit')."</a>";
 	}
 	return $output;
