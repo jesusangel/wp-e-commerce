@@ -125,6 +125,7 @@ global $redir_tab;
 				}
 			$href = add_query_arg(array('tab'=>$callback, 's'=>false, 'paged'=>false, 'post_mime_type'=>false, 'm'=>false));
 			$href = remove_query_arg('isocode', $href);
+			$href = wp_nonce_url($href, "tab-$callback");
 			$link = "<a href='" . clean_url($href) . "'$class>$text</a>";
 			echo "\t<li id='" . attribute_escape("tab-$callback") . "'>$link</li>\n";
 		}

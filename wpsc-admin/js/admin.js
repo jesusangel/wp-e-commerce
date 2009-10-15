@@ -638,7 +638,9 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	// Options page ajax tab display 
 	jQuery('#sidemenu li').click(function(){
 		 	page_title = jQuery(this).attr('id');
-		 	post_values = "wpsc_admin_action=settings_page_ajax&page_title="+page_title;
+		 	
+			wpnonce = jQuery('a',this).attr('href').match(/_wpnonce=(\w{1,})/);
+		 	post_values = "wpsc_admin_action=settings_page_ajax&page_title="+page_title+"&_wpnonce="+wpnonce[1];
 		 	jQuery.post('admin.php?', post_values, function(html){
 		 	//console.log(html);
 		 	jQuery('a.current').removeClass('current');

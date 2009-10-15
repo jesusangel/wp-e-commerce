@@ -1872,11 +1872,49 @@ if($_REQUEST['wpsc_admin_action'] == 'google_shipping_settings') {
 //for ajax call of settings page tabs
 function wpsc_settings_page_ajax(){
   global $wpdb;
-  
-	$functionname1 = str_replace("tab-","",$_POST['page_title']);
-	require_once('includes/settings-pages/'.$functionname1.'.php');
-	$functionname = "wpsc_options_".$functionname1;
-	$html = $functionname();
+  $modified_page_title = $_POST['page_title'];
+  check_admin_referer($modified_page_title);
+	$page_title = str_replace("tab-","",$modified_page_title);
+
+	
+	//require_once('includes/settings-pages/'.$functionname1.'.php');
+	//$functionname = "wpsc_options_".$functionname1;
+	//$html = $functionname();
+
+	switch($page_title) {
+		case "checkout";
+		require_once('includes/settings-pages/checkout.php');
+		wpsc_options_checkout();
+		break;
+		case "gateway";
+		require_once('includes/settings-pages/gateway.php');
+		wpsc_options_gateway();
+		break;
+		case "shipping";
+		require_once('includes/settings-pages/shipping.php');
+		wpsc_options_shipping();
+		break;
+		case "admin";
+		require_once('includes/settings-pages/admin.php');
+		wpsc_options_admin();
+		break;
+
+		case "presentation";
+		require_once('includes/settings-pages/presentation.php');
+		wpsc_options_presentation();
+		break;
+
+		case "import";
+		require_once('includes/settings-pages/import.php');
+		wpsc_options_import();
+		break;
+
+		default;
+		case "general";
+		require_once('includes/settings-pages/general.php');
+		wpsc_options_general();
+		break;
+	}	
 	$_SESSION['wpsc_settings_curr_page'] = $functionname1;
 	exit($html);
 }
