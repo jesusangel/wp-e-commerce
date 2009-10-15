@@ -2,21 +2,12 @@
 /*
 This is a language file for the WP shopping cart plugin version 3.7
 Language version in Dutch by http://level-level.com -> mail@level-level.com for questions and suggestions
-Rotterdam, July 31 2009
+Rotterdam, July 9 2009
 */
 
-define('TXT_WPSC_API_RESET_DESCRIPTION', 'Voer API naam en code in om deze op je andere website te deactiveren. Hiermee is het mogelijk de Gold cart API te verhuizen.');
-define('TXT_WPSC_API_HAS_BEEN_RESET', 'Je API is gereset');
-define('TXT_WPSC_API_RESET', 'API sleutel reset');
 define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades (3.7)');
 define('TXT_WPSC_GOLD_OPTIONS', 'Gold cart opties');
 
-define('TXT_WPSC_TRACKINGEMAIL', 'Tracking Email Bericht');
-define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Tracking Email Onderwerp');
-
-define('TXT_WPSC_ADDING_A_NEW_CATEGORY', 'Een nieuw toegevoegde categorie wordt zichtbaar wanneer je een product bijwerkt of toevoegt.');
-define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'Categorie toevoegen');
-define('TXT_WPSC_ADDNEWCATEGORY', '+ Voeg nieuwe categorie toe aan de &quot;[categorisation]&quot; groep');
 
 define('TXT_WPSC_CATEGORY_LIST', 'Toon lijst van productgroepen');
 define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Toon alle producten + lijst productgroepen');

@@ -1085,4 +1085,5 @@ define("TXT_WPSC_API_HAS_BEEN_RESET","API Keyがリセットされました");
 define("TXT_WPSC_TRACKINGEMAILSUBJECT","トラッキングメールの件名");
 define("TXT_WPSC_TRACKINGEMAIL","トラッキングメール");
 define("TXT_WPSC_NOITEMSINTHISGROUP","このグループには商品がありません");
+
 ?>

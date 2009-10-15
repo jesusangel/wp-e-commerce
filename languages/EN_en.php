@@ -2,33 +2,13 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
-define('TXT_WPSC_DELETE_CURRENCY','Delete Currency');
-define('TXT_WPSC_NO_ZIPCODE','Please provide a Zipcode and click Calculate in order to continue.');
 
-define('TXT_WPSC_DROPSHOP_CRAFTYC','Crafty');
-define('TXT_WPSC_CHECK_MIME_TYPES_WARNING', 'Warning: Disabling this exposes your site to greater possibility of malicious files being uploaded, we reccomend installing the Fileinfo extention for PHP rather than disabling this.');
-define('TXT_WPSC_CHECK_MIME_TYPES', 'Check MIME types on file uploads');
-define('TXT_WPSC_SHIPPING_SAME_AS_BILLING', 'Enable Shipping Same as Billing Option: ');
-define('TXT_WPSC_UDPATING_CART', 'Updating...');
-// define('TXT_WPSC_CATEGORY_GRID_VIEW', 'Lock Tax to Billing Country');
-define('TXT_WPSC_LOCK_TAX', 'Lock Tax to Billing Country');
-define('TXT_WPSC_REVIEW_YOUR_ORDER', 'Please review your order');
-define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Manage your thumbnails');
-define('TXT_WPSC_MAX_UPLOAD_SIZE', 'Max Upload Size');
-define('TXT_WPSC_PUBLISH', 'Publish');
-define('TXT_WPSC_DELETE_LAYER', 'Delete Layer');
-define('TXT_WPSC_NEW_CURRENCY', 'New Currency');
 define('TXT_WPSC_API_RESET_DESCRIPTION', 'Enter your API name and key to release it from an old site that you no longer use.');
 define('TXT_WPSC_API_HAS_BEEN_RESET', 'Your API key has been Reset');
 define('TXT_WPSC_API_RESET', 'API Key Reset');
 define('TXT_WPSC_UPGRADES_PAGE', 'Upgrades');
 define('TXT_WPSC_GOLD_OPTIONS', 'Upgrades (Old)');
-define('TXT_WPSC_TRACKINGEMAIL', 'Tracking Email Message');
-define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Tracking Email Subject');
 
-define('TXT_WPSC_SHIPDISCOUNT', 'Enable Free Shipping Discount');
-define('TXT_WPSC_TRACKINGEMAILMSG', 'Your purchase from %shop_name% has just been dispatched. It should arrive soon. To keep track of your products status a tracking id has been attached. \r\n your tracking id is: %trackid%' );
-define('TXT_WPSC_TRACKINGEMAILSUBJECTMSG','Your Order from %shop_name% has been dispatched');
 
 
 define('TXT_WPSC_CATEGORY_LIST', 'Show list of product groups');
@@ -63,11 +43,10 @@ define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Complete this form to i
 
 define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information"); 
 define('TXT_WPSC_ECOMMERCE', 'Products'); 
+define('TXT_WPSC_PRODUCTS', 'Manage Products'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
-define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.');
-
-define('TXT_WPSC_COUPONS', 'Discount');
+define('TXT_WPSC_COUPONS', 'Coupon Discount');
 define('TXT_WPSC_CUSTOM_FILE', 'Custom File');
 define('TXT_WPSC_CUSTOM_TEXT', 'Custom Text');
 define('TXT_WPSC_COMMENTSETTINGS', 'Comment Settings');
@@ -136,7 +115,7 @@ define("TXT_WPSC_ADD_TO_CART_SHORTCODE", "Add to Cart Shortcode");
 define("TXT_WPSC_BUY_NOW_SHORTCODE", "Buy Now Shortcode");
 
 define("TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS", "Total weight <br />(<abbr alt='You must enter the weight here in pounds, regardless of what you used on your products' title='You must enter the weight here in pounds, regardless of what you used on your products'>in Pounds</abbr>)");
-define("TXT_WPSC_SHIPPING_PRICE", "Shipping Price");
+define("TXT_WPSC_SHIPPING_PRICE", "Shipping price");
 define("TXT_WPSC_IF_PRICE_IS", "If price is ");
 define("TXT_WPSC_IF_WEIGHT_IS", "If weight is ");
 define("TXT_WPSC_AND_ABOVE", " and above");
@@ -146,7 +125,7 @@ define("TXT_WPSC_DISPLAY_THE_GROUP", "Display the :category: Group");
 define('TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE', "UPS does not support products without a weight set.\n\r  Please either disable shipping for this product or give it a weight.");
 define('TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE', 'This product has no available stock');
 
-define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Oops. We have encountered a problem with the shipping details you provided. If this problem persists you should contact the site owner.');
+define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Opps. We have encountered a problem with the shipping details you provided. If this problem persists you should contact the site owner.');
 define('TXT_WPSC_UPS_AND_NO_WEIGHT', 'This product has a zero weight associated with it and you have UPS shipping enabled. UPS does not support products with zero weight, therefore if your product is a digital download, we would reccomend disabling shipping for this product.');
 
 define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Choose a Shipping Rate');
@@ -179,7 +158,6 @@ define('TXT_WPSC_UPS_DAILY_PICKUP', 'Daily Pickup');
 
 
 define('TXT_WPSC_IMPORT_CSV', 'Import Products CSV');
-define('TXT_WPSC_IMPORT_CSV_DESCRIPTION', '<p>You can import your products from a comma delimited text file.</p><p>An example of a cvs import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>');
 define('TXT_WPSC_MORE', 'More');
 
 define('TXT_WPSC_WEIGHT_SETTINGS', 'Weight Settings');
@@ -211,7 +189,6 @@ define('TXT_WPSC_FLAT_RATE_SETTINGS', "Flat Rate Settings");
 define('TXT_WPSC_OFF_SITE_LINK', "Off Site Product Link");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', 'These notes are only available here.');
 define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Categories and Tags');
-define('TXT_WPSC_BASE_ZIPCODE', 'Base Zipcode/Postcode:');
 define('TXT_WPSC_USPS_DESC', 'If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.');
 
 define('TXT_WPSC_SHIPPING_DETAILS', 'Shipping Details');
@@ -337,7 +314,7 @@ define('TXT_WPSC_COMMISION', 'Commission to pay');
 define('TXT_WPSC_LOG_AFFILIATES', 'Display Affiliate Sales');
 define('TXT_WPSC_PRODUCTS_PAGE_SETTINGS', 'Product Page Settings');
 define('TXT_WPSC_CARTSETTINGS', 'Shopping Cart Settings');
-define('TXT_WPSC_REPLACE_PAGE_TITLE', 'Replace Page Title With Product/Category Name');
+define('TXT_WPSC_REPLACE_PAGE_TITLE', 'Replace Page Title With Category Name');
 define('TXT_WPSC_CATEGORY_PRODUCT_IMAGE', 'Product Image Size');
 define('TXT_WPSC_SETONSETTINGS', 'This is set on the Settings Page');
 define('TXT_WPSC_AFFILIATION', 'Affiliation');
@@ -502,8 +479,7 @@ define('TXT_WPSC_BASESHIPPING', 'Base Shipping');
 define('TXT_WPSC_RSS_ADDRESS', 'RSS Address');
 define('TXT_WPSC_STORENAME', 'Store Name');
 define('TXT_WPSC_CHECKBOX_VARIATIONS', 'Display Variations in Checkboxes');
-// define('TXT_WPSC_DISPLAY_PLUSTAX', 'Display "+tax"');
-define('TXT_WPSC_DISPLAY_PLUSTAX', 'Display "+ Postage & Tax"');
+define('TXT_WPSC_DISPLAY_PLUSTAX', 'Display "+tax"');
 define('TXT_WPSC_DISPLAYHOWCUSTOMERFINDUS', 'Display How Customer Found Us Survey');
 define('TXT_WPSC_HOWCUSTOMERFINDUS', 'How The Customer Found Us');
 define('TXT_WPSC_ENGRAVE', 'Engrave text');
@@ -598,7 +574,7 @@ define('TXT_WPSC_PRODUCTDESCRIPTION', 'Product Description');
 define('TXT_WPSC_ADDITIONALDESCRIPTION', 'Additional Description');
 define('TXT_WPSC_PRICE', 'Price');
 define('TXT_WPSC_TAXALREADYINCLUDED', 'Do not include tax (tax is set in <a href="'. get_option('siteurl').'/wp-admin/admin.php?page=trunk/wpsc-admin/display-options.page.php">shop config</a>)'); // this text has changed and needs updating
-define('TXT_WPSC_SPECIAL', 'Sale Price :'); // this text has changed and needs updating
+define('TXT_WPSC_SPECIAL', 'Special / Sale Price'); // this text has changed and needs updating
 define('TXT_WPSC_PRODUCT_DISPLAY', 'Product Display');
 
 define('TXT_WPSC_PRODUCTSTOCK', 'Product Stock');
@@ -725,7 +701,7 @@ define('TXT_WPSC_TEXTAREA', 'Textarea');
 define('TXT_WPSC_HEADING', 'Heading');
 
 define('TXT_WPSC_MAKEPURCHASE', 'Make Purchase');
-define('TXT_WPSC_BUYPRODUCTS', 'Oops, there is nothing in your cart. <a href="'.get_option('product_list_url').'">Please visit our shop</a>');
+define('TXT_WPSC_BUYPRODUCTS', 'Opps, there is nothing in your cart. <a href="'.get_option('product_list_url').'">Please visit our shop</a>');
 define('TXT_WPSC_BRANDHASBEENEDITED', 'The brand has been edited.');
 define('TXT_WPSC_SURETODELETEPRODUCT', 'Are you sure you want to delete this product?');
 define('TXT_WPSC_ADDBRAND', 'Add Brand');
@@ -816,8 +792,8 @@ define('TXT_WPSC_PURCHASELOGEMAIL', 'Purchase Log Email');
 define('TXT_WPSC_REPLYEMAIL', 'Reply Email');
 define('TXT_WPSC_BRANDNOCAP', 'brand');
 define('TXT_WPSC_CATEGORYNOCAP', 'category');
-define('TXT_WPSC_UPDATING', 'Updating');
-define('TXT_WPSC_UPDATING_CART', 'Updating cart...');
+define('TXT_WPSC_UDPATING', 'Updating');
+define('TXT_WPSC_UDPATING_CART', 'Updating...');
 define('TXT_WPSC_MOREDETAILS', 'More Details');
 define('TXT_WPSC_ADDTOCART', 'Add To Cart');
 define('TXT_WPSC_AVGCUSTREVIEW', 'Avg. Customer Rating');
@@ -997,7 +973,6 @@ define('TXT_WPSC_PLEASEENTERAVALIDEMAILADDRESS', 'Please enter a valid email add
 define('TXT_WPSC_PLEASEENTERAVALIDADDRESS', 'Please complete your address.');
 define('TXT_WPSC_PLEASEENTERAVALIDCITY', 'Please enter your town or city.');
 define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', 'Please enter a valid phone number.');
-define('TXT_WPSC_PLEASEASELECTSHIPPINGMETHOD', 'You must select a shipping method, otherwise we cannot process your order.');
 define('TXT_WPSC_PLEASESELECTCOUNTRY', 'Please select your country from the list.');
 define('TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS', 'Please agree to the terms and conditions, otherwise we cannot process your order.');
 define('TXT_WPSC_POSITION', 'Position');

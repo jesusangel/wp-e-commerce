@@ -1,16 +1,158 @@
 <?php
 /*
-This is a language file for the WP Shopping Cart plugin version 3.6.10
+This is a language file for the WP Shopping Cart plugin version 3.7
 Translate Chinese Author: Anson Ho 何烨 http://www.anson-ho.com
 */
 
+define('TXT_WPSC_SHIPPING_SAME_AS_BILLING', 'Enable Shipping Same as Billing Option: ');
+define('TXT_WPSC_UDPATING_CART', 'Updating...');
+// define('TXT_WPSC_CATEGORY_GRID_VIEW', 'Lock Tax to Billing Country');
+define('TXT_WPSC_LOCK_TAX', 'Lock Tax to Billing Country');
+define('TXT_WPSC_REVIEW_YOUR_ORDER', '请检查您的订单');
+define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', '管理您的缩略图');
+define('TXT_WPSC_MAX_UPLOAD_SIZE', '最大上传大小');
+define('TXT_WPSC_PUBLISH', '发布');
+define('TXT_WPSC_DELETE_LAYER', '删除图层');
+define('TXT_WPSC_NEW_CURRENCY', '新货币');
+define('TXT_WPSC_API_RESET_DESCRIPTION', '请输入您不再使用的旧网站的API名称和key以释放。');
+define('TXT_WPSC_API_HAS_BEEN_RESET', '你的API key已经重置');
+define('TXT_WPSC_API_RESET', '重置API Key');
+define('TXT_WPSC_UPGRADES_PAGE', '升级更新');
+define('TXT_WPSC_GOLD_OPTIONS', '升级 (旧)');
+define('TXT_WPSC_TRACKINGEMAIL', '追踪电子邮件讯息');
+define('TXT_WPSC_TRACKINGEMAILSUBJECT', '追踪电子邮件主题');
 
+define('TXT_WPSC_SHIPDISCOUNT', '启用免运费折扣');
+define('TXT_WPSC_TRACKINGEMAILMSG', '您从 %shop_name% 购买的商品已经发出。它应该很快到达。为了更好地让您跟踪商品的状态，我们生成了Tracking ID。 \r\n 您的Tracking ID是: %trackid%' );
+define('TXT_WPSC_TRACKINGEMAILSUBJECTMSG','您从 %shop_name% 购买的商品已经发出。');
+
+
+define('TXT_WPSC_CATEGORY_LIST', '查看商品类别列表');
+define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', '查看所有商品 + 清单');
+define('TXT_WPSC_INSUFFICIENT_REMAINING', '很抱歉，该商品的库存只有 [number] 。');
+define('TXT_WPSC_ZERO_QUANTITY_REQUESTED', '很抱歉，您不能添加零个商品到您的购物车');
+define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', '商品设置');
+define('TXT_WPSC_BUTTON_SETTINGS', '按钮设置');
+define('TXT_WPSC_UPDATING', 'Loading');
+define('TXT_WPSC_EDIT_GROUP', '编辑类别');
+define('TXT_WPSC_ADD_GROUP', '新增类别');
+define('TXT_SHOW_GRID_PER_ROW', '每行显示商品数');
+define('TXT_WPSC_PRODUCT_TAGS', '商品标签');
+define('TXT_WPSC_CATEGORISATION', '分类');
+define('TXT_WPSC_COUPONSINVALID', '无效优惠卷');
+define('TXT_WPSC_NOITEMSINTHISGROUP', '这个类别暂时没有商品');
+
+define('TXT_WPSC_CLEAR_IP_LOCKS', '发布下载锁定在此IP地址 %s');
+define('TXT_WPSC_EMAIL_BUYER', '重发收据给买家');
+
+
+define('TXT_WPSC_DISPLAY_PRODUCT_TEMPLATE_TAG','展示商品模板标签
+');
+define('TXT_WPSC_DISPLAY_PRODUCT_SHORTCODE','展示商品Shortcode');
+define('TXT_WPSC_PRODUCT_SKU','显示商品SKU码');
+
+
+define('TXT_WPSC_CATEGORY_TARGETMARKET','Oops the product : %s cannot be shipped to %s. 要继续你的交易，请移除上面列出这个商品。');
+define('TXT_WPSC_UPLOAD_A_FILE', '上传一个文件');
+define('TXT_WPSC_UPLOAD_A_FILE_DESCRIPTION', '从您的计算机选择一个文件用于销售。  ');
+define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT', '个性化定制您的商品');
+define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', '填写此表格，以包括您想要个性化定制信息。');
+
+define("TXT_WPSC_ADDITIONAL_INFO", "3. 附加信息"); 
+define('TXT_WPSC_ECOMMERCE', '商品'); 
+define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','年度销售图表');
+
+define('TXT_WPSC_COUPONS', '折扣优惠');
+define('TXT_WPSC_CUSTOM_FILE', '自定义文件');
+define('TXT_WPSC_CUSTOM_TEXT', '自定义文字');
+define('TXT_WPSC_COMMENTSETTINGS', '评论设置');
+define('TXT_WPSC_ENABLE_COMMENTS', '使用IntenseDebate评论');
+define('TXT_WPSC_COMMENTS_WHICH_PRODUCTS', '显示默认评论');
+define('TXT_WPSC_INTENSE_DEBATE_ACCOUNT_ID', 'IntenseDebate账号ID');
+
+define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS', '启动IntenseDebate 评论');
+define('TXT_WPSC_PRODUCT_ENABLE_COMMENTS_INFO', '允许用户对该商品发表评论');
+
+
+
+
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_WOM", "口耳相传");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_ADV", "广告");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_INT", "互联网");
+define("TXT_WPSC_HOW_DID_YOU_FIND_US_EC", "现有客户");
+
+
+define("TXT_WPSC_ABOUT_THIS_PAGE", "关于此页");
+define("TXT_WPSC_LOADING", "Loading");
+
+define("TXT_WPSC_COMMA_SEPARATED", "用英文逗号分隔");
+
+define("TXT_WPSC_AT_THIS_MOMENT_TRACE_ID", "Tracking ID");
+
+define("TXT_WPSC_AT_THIS_MOMENT_NO_TRANSACTION", "本月无交易。");
+define("TXT_WPSC_MAIL_RESENDED", "下列购物收据已经重寄");
+define("TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL", "邮件发送时出现一个错误");
+
+define("TXT_WPSC_UPDATE_BUTTON", "Update &raquo;");
+
+define("TXT_WPSC_ABOUT_THIS_PAGE", "关于此页");
+
+define("TXT_WPSC_PAGENUMBER_POSITION_TOP", "Top");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTTOM", "Bottom");
+define("TXT_WPSC_PAGENUMBER_POSITION_BOTH", "Both");
+
+
+
+define("TXT_WPSC_USE_THEME_ENGINE", "使用实验主题引擎");
+define("TXT_WPSC_TM", "目标市场");
+define("TXT_WPSC_SHIPPING_DETAIL","请选择以下一个国家来计算您的运输成本");
+define('TXT_WPSC_TOTAL_THIS_MONTH', '最后30天');
+define('TXT_WPSC_TOTAL_INCOME', 'Life Time');
+define('TXT_WPSC_SALES_TITLE', '销售');
+define('TXT_WPSC_ORDERS_TITLE', '订单');
+define('TXT_WPSC_AVGORDER_TITLE', '平均订单数');
+
+define('TXT_WPSC_GATEWAY_SETTINGS', '网关设置');
+define('TXT_WPSC_CHECKOUT_SETTINGS', 'Checkout Settings');
+define('TXT_WPSC_ADD_NEW_PRODUCT', '添加新产品');
+define("TXT_WPSC_HERE_YOU_CAN_ADD", "在这里您可以添加的商品，类别或可变属性");
+define("TXT_WPSC_CLOSED", "关闭");
+define("TXT_WPSC_PENDING", "处理中");
+define("TXT_WPSC_CURRENT_MONTH", "当月");
+define("TXT_WPSC_AT_A_GLANCE", "一览");
+define("TXT_WPSC_CHECKOUT", "Checkout");
+define("TXT_WPSC_RECIEPT_EMAIL_ADDRESS", "该电子邮件将收到购买收据。");
+
+define("TXT_WPSC_OVER_UPS_WEIGHT", "由于您的订单超过150lbs，网站会有专人直接联系您有关运费。");
+define("TXT_WPSC_ADD_TO_CART_PHP", "Add to Cart PHP");
+define("TXT_WPSC_BUY_NOW_PHP", "Buy Now PHP");
+
+define("TXT_WPSC_ADD_TO_CART_SHORTCODE", "Add to Cart Shortcode");
+define("TXT_WPSC_BUY_NOW_SHORTCODE", "Buy Now Shortcode");
+
+define("TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS", "Total weight <br />(<abbr alt='You must enter the weight here in pounds, regardless of what you used on your products' title='You must enter the weight here in pounds, regardless of what you used on your products'>in Pounds</abbr>)");
+define("TXT_WPSC_SHIPPING_PRICE", "运费");
+define("TXT_WPSC_IF_PRICE_IS", "If price is ");
+define("TXT_WPSC_IF_WEIGHT_IS", "If weight is ");
+define("TXT_WPSC_AND_ABOVE", " and above");
+define("TXT_WPSC_DISPLAY_THE_GROUP_IMAGES", "在侧边工具栏里显示类别缩略图");
+define("TXT_WPSC_DISPLAY_THE_GROUP", "显示 :category: Group");
+
+define('TXT_WPSC_UPS_AND_WEIGHT_ERROR_MESSAGE', "UPS不支持没有重量数的商品。\n\r  请先禁用此商品的运输或赋予它的重量值。");
+define('TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE', '该商品缺货');
+
+define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', '哎呀。我们遇到了一些运输的细节问题。如果这个问题仍然存在，请您联系网站管理员。');
+define('TXT_WPSC_UPS_AND_NO_WEIGHT', '该商品零重量并其关联的启动UPS运输。UPS不支持零重量商品，因此，如果您的产品是数字下载类型的，我们建议您关闭此商品的运输。');
+
+define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Choose a Shipping Rate');
+
+define('TXT_WPSC_CALCULATE', 'Calculate');
 define('TXT_WPSC_GROUP_PRESENTATION_TEXT', '您为这个组别可以输入您喜欢的设置，优先于显示设置的设定。');
 define('TXT_WPSC_GROUP_SETTINGS', '组别设置');
 define('TXT_WPSC_GROUP_IMAGE', '组别&nbsp;图片');
 define('TXT_WPSC_THUMBNAIL_SIZE', '缩略图&nbsp;尺寸');
 define('TXT_WPSC_CATALOG_VIEW', '商品目录外观');
-define('TXT_WPSC_GROUP_IMAGE_TEXT', '您可以为每一个组别上传缩略图。要在商店中显示组别说明，你必须在<a href="http://apps.instinct.co.nz/wp_2.7/wp-admin/admin.php?page=wp-shopping-cart/options.php#options_presentation">显示设置</a>配置选项。');
+define('TXT_WPSC_GROUP_IMAGE_TEXT', '您可以上载每组类别的缩略图。 如需在商店里显示类别的详细资料，您必须配置以下设置 <a href="admin.php?page=wpsc-settings&tab=presentation">显示设置</a>.');
 
 
 
@@ -32,12 +174,14 @@ define('TXT_WPSC_UPS_DAILY_PICKUP', '每日整理');
 
 
 define('TXT_WPSC_IMPORT_CSV', '导入商品到CSV');
+define('TXT_WPSC_IMPORT_CSV_DESCRIPTION', '<p>您可以从一个用逗号分隔的文本文件导入您的商品。</p><p>这是一个CVS导入文件的范例</p><p>说明,附加说明,商品名称,价格,型号,重量,重量单位,SKU,数量有限
+</p>');
 define('TXT_WPSC_MORE', '更多');
 
 define('TXT_WPSC_WEIGHT_SETTINGS', '重量设定');
 
 define('TXT_WPSC_PROMOTE_YOUR_SHOP', '
-<h2>线上推广</h2>
+<h2>在线推广</h2>
 <p>现在您的商店已经准备好了，您需要把他们展示出来。</p>
 
 <p>三个展示您的Wordpress e-Commerce站点的最好地方：</p>
@@ -47,7 +191,7 @@ define('TXT_WPSC_PROMOTE_YOUR_SHOP', '
 <a href=\'http://www.facebook.com/wordpress-e-commerce-plugin\'></a><br />
 </p>
 <p>
-您放在这些位置的链接，需要确认人们将浏览到网站。
+通过连接您的网站，这些网站是确保带来人气去会浏览您的网站。
 </p>
 ');
 
@@ -55,19 +199,19 @@ define('TXT_WPSC_SHIPPING_BUT_NO_CURL', '该服务器没有安装运送模块所
 define('TXT_WPSC_PLEASE_ENTER_ZIPCODE', '请输入邮政编码.');
 define('TXT_WPSC_PLEASE_SELECT_SHIPPING', '请选择运送选项.');
 define('TXT_WPSC_ADD_NEW_VARIATIONS', '+ 增加新的可选属性');
-define('TXT_WPSC_ADMIN_ENGRAVE', '用户可以在结帐的时候对商品进行评论');
-define('TXT_WPSC_PERSONALISATION_OPTIONS','个性化选项');
+define('TXT_WPSC_ADMIN_ENGRAVE', '用户可以通过留言的方式在单独商品页个性化定制商品');
+define('TXT_WPSC_PERSONALISATION_OPTIONS','个性化定制选项');
 
-define('TXT_WPSC_CHOOSE_SHIPPING', "要使用WP e-Commerce运送模块，你必须并激活一个你网站可以使用的运送模块");
+define('TXT_WPSC_CHOOSE_SHIPPING', "要使用WP e-Commerce运输模块，你必须选择并激活运输方式");
 define('TXT_WPSC_FLAT_RATE_SETTINGS', "统一费率设置");
-define('TXT_WPSC_OFF_SITE_LINK', "商品外网链接");
+define('TXT_WPSC_OFF_SITE_LINK', "外网商品链接");
 define('TXT_WPSC_NOTE_ONLY_AVAILABLE_HERE', '这些说明仅适用这里。');
 define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', '分类和标签');
-define('TXT_WPSC_USPS_DESC', '如果你是总部设在美国，那么你需要设置自己的邮政编码，提供给UPS和USPS工作。这邮政编码应该是您的经营所在地。');
+define('TXT_WPSC_USPS_DESC', '如果你是总部设在美国，那么你需要设置自己的邮政编码，提供给UPS和USPS使用。这邮政编码应该是您的经营所在地的。');
 
-define('TXT_WPSC_SHIPPING_DETAILS', '运送详细说明');
-define('TXT_WPSC_SHIPPING_METHOD', '运送方式');
-define('TXT_WPSC_SHIPPING_OPTION', '运送选项');
+define('TXT_WPSC_SHIPPING_DETAILS', '运输详细说明');
+define('TXT_WPSC_SHIPPING_METHOD', '运输方式');
+define('TXT_WPSC_SHIPPING_OPTION', '运输选项');
 define('TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES', '额外货运计算');
 define('TXT_WPSC_CHOOSE_INTERNAL_SHIPPING_MODULES', '国际货运计算');
 
@@ -92,16 +236,16 @@ define('TXT_WPSC_DEFAULT_PURCHASE_RECEIPT', '感谢您惠顾%shop_name%，您的
 
 %product_list%
 
-%total_price%
+%total_shipping%
 
-%total_shipping%');
+%total_price%');
 
 define('TXT_WPSC_DEFAULT_PURCHASE_REPORT', '
 %product_list%
 
-%total_price%
+%total_shipping%
 
-%total_shipping%');
+%total_price%');
 
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', '选择可选属性的下载文件');
 
@@ -116,7 +260,7 @@ define('TXT_WPSC_EMAIL_SETTINGS', 'Email设置');
 define('TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL', '发送电子邮件时出现错误');
 define('TXT_WPSC_EMAIL_SENT', 'Email已发送');
 define('TXT_WPSC_ACTIONS', 'Actions');
-define('TXT_WPSC_EMAIL_BUYER', '买家Email');
+
 
 define('TXT_WPSC_FILE_NAMES', '文件名');
 define('TXT_WPSC_DOWNLOADS_LEFT', 'Downloads Left');
@@ -138,16 +282,16 @@ define('TXT_WPSC_TIME_UPLOADED', '按照上传时间');
 
 define('TXT_WPSC_VIEW_PACKING_SLIP', 'View Packing Slip');
 define('TXT_WPSC_PACKING_SLIP', 'Packing Slip');
-define('TXT_WPSC_NO_STOCK', '缺货');
+define('TXT_WPSC_NO_STOCK', '没有库存');
 
-define('TXT_WPSC_SELECTYOURBUSINESSLOCATION','选择您的主要业务的地区。');
-define('TXT_WPSC_ENTEREMAILADDRESS', '输入email地址，本站站长会e-mail通知您的。');
+define('TXT_WPSC_SELECTYOURBUSINESSLOCATION','选择您的主营业务的地区。');
+define('TXT_WPSC_ENTEREMAILADDRESS', '输入email地址，管理员会email通知您的。');
 
-define('TXT_WPSC_SHIPPINGOPTIONS', '运送选项');
-define('TXT_WPSC_SHIPPING_MODULES', '运送模块');
-define('TXT_WPSC_CHOOSE_SHIPPING_MODULES', '选择运送模块');
-define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', '选择一个运送选项并配置它');
-define('TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER', '选择一个运送供应商');
+define('TXT_WPSC_SHIPPINGOPTIONS', '运输选项');
+define('TXT_WPSC_SHIPPING_MODULES', '运输模块');
+define('TXT_WPSC_CHOOSE_SHIPPING_MODULES', '选择运输模块');
+define('TXT_WPSC_CONFIGURE_SHIPPING_MODULES', '选择一个运输选项并配置它');
+define('TXT_WPSC_PLEASESELECTASHIPPINGPROVIDER', '选择一个运输供应商');
 
 define('TXT_WPSC_UPGRADE_TO_GOLD','升级到专业版Gold Cart');
 define('TXT_WPSC_UNLEASH_MORE',' 获得更多功能。<br /><br />☆☆<strong><a href="http://www.anson-ho.com">中文支持网站：Anson Ho何烨</a></ strong>');
@@ -217,15 +361,17 @@ define('TXT_WPSC_ABOUT_THIS_PAGE', '关于这页');
 define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', '订单处理：需要支付');
 define('TXT_WPSC_SELECTALLCATEGORIES', '显示所有商品');
 
-define('TXT_WPSC_EDITING_GROUP', '您正在编辑 [categorisation] 组别');
-define('TXT_WPSC_ADDING_TO_GROUP', '您正在增加一个单元到 [categorisation] 组别');
-define('TXT_WPSC_EDITING_IN_GROUP', '您正在编辑一个单元在 [categorisation] 组别');
+define('TXT_WPSC_CURRENT_GROUP', '&quot;[categorisation]&quot; 类别');
+define('TXT_WPSC_EDITING_GROUP', '您正在编辑 &quot;[categorisation]&quot; 类别');
+define('TXT_WPSC_ADDING_TO_GROUP', '您正在新增商品到 &quot;[categorisation]&quot; 类别');
+define('TXT_WPSC_EDITING_IN_GROUP', '您正在编辑商品在 &quot;[categorisation]&quot; 类别');
 
 
 define('TXT_WPSC_PURCHASE_UNAVAILABLE', '购买增值功能');
 define('TXT_WPSC_WE_RECOMMEND', '我们推荐');
-define('TXT_WPSC_SELECT_PRODUCT_GROUP', '管理一个组别');
-define('TXT_WPSC_EDIT_THIS_GROUP', '修改这个组别');
+define('TXT_WPSC_SELECT_PRODUCT_GROUP', '管理一个类别');
+define('TXT_WPSC_EDIT_THIS_GROUP', '修改这个类别');
+
 
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
 define('TXT_WPSC_PRODUCT_ID', '商品ID');
@@ -262,8 +408,8 @@ define('TXT_WPSC_UPLOAD_IMAGE_FOR', '上传图片到');
 
 define('TXT_WPSC_THUMBNAILSETTINGS', '缩略图设置');
 
-define('TXT_WPSC_CLEAR_IP_LOCKS', '免费下载锁定为一个IP号码。');
-define('TXT_WPSC_THANKS_UNLOCKED', '此用户IP的数量下载屏蔽已经解除。');
+
+define('TXT_WPSC_THANKS_UNLOCKED', '谢谢，此用户的IP下载屏蔽已经解除。');
 
 
 define('TXT_WPSC_SELECTGATEWAY', '选择一个支付网关');
@@ -299,14 +445,16 @@ define('TXT_WPSC_GOOGLEFINANCESTATUS', '财务状况');
 define('TXT_WPSC_GOOGLEFULFILLMENTSTATUS', '执行状况');
 define('TXT_WPSC_SURETODELETECATEGORISATION', '你是否确认删除该商品组别？所有这个组别下的分类也将会被删除。');
 
-define('TXT_WPSC_CATEGORISATION', '组别');
+
 define('TXT_WPSC_CATEGORISATIONHASBEENADDED', '组别已经添加。');
 define('TXT_WPSC_CATEGORISATIONHASBEENEDITED', '组别已经修改。');
 define('TXT_WPSC_ADD_CATEGORISATION', '增加新的组别');
 define('TXT_WPSC_EDIT_CATEGORISATION', '编辑组别');
 define('TXT_WPSC_ADDDETAILS', '增加说明');
 define('TXT_WPSC_EDITDETAILS', '编辑说明');
-define('TXT_WPSC_ADDNEWCATEGORY', '增加新单元 &raquo;');
+define('TXT_WPSC_ADDING_A_NEW_CATEGORY', '当你添加或编辑一个产品时，可在这里增加一个新的分类');
+define('TXT_WPSC_ADDNEWCATEGORY_TITLE', '新增分类');
+define('TXT_WPSC_ADDNEWCATEGORY', '+ Add new category to the &quot;[categorisation]&quot; Group');
 define('TXT_WPSC_VALUE', 'Value');
 define('TXT_WPSC_CUSTOM_META', '自定义Meta');
 define('TXT_WPSC_ADD_CUSTOM_FIELD', '增加自定义Meta');
@@ -315,11 +463,11 @@ define('TXT_WPSC_SAVE', '保存');
 
 
 
-define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', '显示 [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', '显示 &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
-define('TXT_WPSC_PRODUCT_CATEGORIES', '选择 [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_PRODUCT_CATEGORIES', '选择 &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
-define('TXT_WPSC_MANAGE_CATEGORISATION', '管理 [categorisation]'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+define('TXT_WPSC_MANAGE_CATEGORISATION', '管理 &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
 
 
@@ -341,8 +489,8 @@ define('TXT_WPSC_GOOGLEMARKETINGPREFERENCE', 'Google User Marketing Preference')
 
 define('TXT_WPSC_LATEST_PRODUCTS', '最新商品');
 define('TXT_WPSC_PICKUP', 'Pick up');
-define('TXT_WPSC_DELIVERY', '交货');
-define('TXT_WPSC_MENU', 'WP e-Commerce管理菜单');
+define('TXT_WPSC_DELIVERY', '配送');
+define('TXT_WPSC_MENU', 'e-Commerce管理菜单');
 define('TXT_WPSC_GOOGLESTORELOCATOR', 'Enable Google Store Locator');
 define('TXT_WPSC_GOOGLESHIPPING', 'Google Shipping Country');
 define('TXT_WPSC_POST_DEFAULT_MEMBERS_ONLY', '只限会员查看，请先登录。');
@@ -350,7 +498,8 @@ define('TXT_WPSC_BASESHIPPING', 'Base Shipping');
 define('TXT_WPSC_RSS_ADDRESS', 'RSS地址');
 define('TXT_WPSC_STORENAME', '商店名称');
 define('TXT_WPSC_CHECKBOX_VARIATIONS', '可选属性的复选框');
-define('TXT_WPSC_DISPLAY_PLUSTAX', '显示"+税"');
+// define('TXT_WPSC_DISPLAY_PLUSTAX', 'Display "+tax"');
+define('TXT_WPSC_DISPLAY_PLUSTAX', '显示 "+ 邮费 & 税费"');
 define('TXT_WPSC_DISPLAYHOWCUSTOMERFINDUS', '显示"客户是如何找到我们"的调查');
 define('TXT_WPSC_HOWCUSTOMERFINDUS', '客户是如何找到我们');
 define('TXT_WPSC_ENGRAVE', 'Engrave text');
@@ -368,6 +517,7 @@ define('TXT_WPSC_SHOWLIVESEARCH', '使用Live搜索');
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
 define('TXT_WPSC_USPS_PASSWORD', 'USPS Password');
 
+
 define('TXT_WPSC_SHIPPING_DETAILS', '货运详细说明');
 define('TXT_WPSC_SHOWADVANCEDSEARCH', '显示高级搜索');
 define('TXT_WPSC_GOOGLEMECHANTKEY', 'Google Merchant Key');
@@ -379,23 +529,23 @@ define('TXT_WPSC_ORDER_STATUS', '订单状态');
 define('TXT_WPSC_ORDER_SUMMARY', '订单总览');
 define('TXT_WPSC_LANGUAGE', '语言');
 define('TXT_WPSC_ACCEPTED_PAYMENT', '接受付款');
-define('TXT_WPSC_JOB_DISPATCHED', 'Job Dispatched');
+define('TXT_WPSC_JOB_DISPATCHED', '人才派遣');
 define('TXT_WPSC_PROCESSED', '关闭订单');
 define('TXT_WPSC_ECOMMERCE', 'e-Commerce');
 define('TXT_WPSC_OPTIONS', '设置');
-define('TXT_WPSC_ADDPRODUCTS', '增加商品');
+define('TXT_WPSC_ADDPRODUCTS', '添加商品');
 define('TXT_WPSC_SENDSMS', '发送SMS');
 define('TXT_WPSC_PRODUCTS', '商品');
-define('TXT_WPSC_ADDCATEGORY', '增加商品组别');
+define('TXT_WPSC_ADDCATEGORY', '新增商品类别');
 define('TXT_WPSC_CATEGORIES', '分类');
 define('TXT_WPSC_BRANDS', '品牌');
 define('TXT_WPSC_VARIATIONS', '可选属性');
 define('TXT_WPSC_PURCHASELOG', '销售');
-define('TXT_WPSC_ORDER_LOG', 'Orders');
+define('TXT_WPSC_ORDER_LOG', 'Order');
 define('TXT_WPSC_OLDER_ORDERS', '旧订单');
 define('TXT_WPSC_ORDER', '顺序');
-define('TXT_WPSC_TOTAL_THIS_MONTH', '本月收入');
-define('TXT_WPSC_MONTHLY_REPORT', '半年报告');
+define('TXT_WPSC_TOTAL_THIS_MONTH', '本月盈利');
+define('TXT_WPSC_MONTHLY_REPORT', '六个月报告');
 define('TXT_WPSC_TOTAL_INCOME', '所有收入');
 define('TXT_WPSC_ACCEPTED_PAYMENTS', '(接受付款)'); //text has changed slightly
 define('TXT_WPSC_PAYMENTGATEWAYOPTIONS', '支付选项');
@@ -405,8 +555,8 @@ define('TXT_WPSC_EXAMPLEDETAILS', '示范说明');
 define('TXT_WPSC_EXAMPLEBRAND', '示范品牌');
 define('TXT_WPSC_PRODUCTIMAGEWIDTH', '商品图片宽度');
 define('TXT_WPSC_PRODUCTIMAGEHEIGHT', '商品图片高度');
-define('TXT_WPSC_CATEGORYIMAGEWIDTH', '组别图片宽度');
-define('TXT_WPSC_CATEGORYIMAGEHEIGHT', '组别图片高度');
+define('TXT_WPSC_CATEGORYIMAGEWIDTH', '类别图片宽度');
+define('TXT_WPSC_CATEGORYIMAGEHEIGHT', '类别图片高度');
 define('TXT_WPSC_PRODUCTLISTURL', '商品列表位置');
 define('TXT_WPSC_SHOPPINGCARTURL', '购物车位置');
 define('TXT_WPSC_CHECKOUTURL', '结帐页位置');
@@ -438,15 +588,15 @@ define('TXT_WPSC_PRODUCTSPAGE', '商品页');
 define('TXT_WPSC_CHECKOUT', '确认您的订单');
 define('TXT_WPSC_ENTERDETAILS', '输入您的详细资料');
 define('TXT_WPSC_TRANSACTIONRESULTS', '交易结果');
-define('TXT_WPSC_SELECTACATEGORY', '选择一个组别');
+define('TXT_WPSC_SELECTACATEGORY', '选择一个类别');
 define('TXT_WPSC_SELECTABRAND', '选择一个品牌');
 define('TXT_WPSC_PRODUCTNAME', '商品名称');
 define('TXT_WPSC_PRODUCTDESCRIPTION', '商品简介');
 define('TXT_WPSC_ADDITIONALDESCRIPTION', '附加说明');
 define('TXT_WPSC_PRICE', '价格');
-define('TXT_WPSC_TAXALREADYINCLUDED', '不要包括税(税率是在常规设置里面)'); // this text has changed and needs updating
-define('TXT_WPSC_SPECIAL', '销售价/优惠价'); // this text has changed and needs updating
-define('TXT_WPSC_PRODUCT_DISPLAY', '商品显示');
+define('TXT_WPSC_TAXALREADYINCLUDED', '未含税 (税率是在 <a href="'. get_option('siteurl').'/wp-admin/admin.php?page=trunk/wpsc-admin/display-options.page.php">商店设置</a>)'); // this text has changed and needs updating
+define('TXT_WPSC_SPECIAL', '销售价/优惠价：'); // this text has changed and needs updating
+define('TXT_WPSC_PRODUCT_DISPLAY', '商品展示');
 
 define('TXT_WPSC_PRODUCTSTOCK', '商品库存');
 
@@ -507,7 +657,6 @@ define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', '请输入有效的电话号码'
 define('TXT_WPSC_TERMSANDCONDITIONS', '您还没有同意的条款和条件');
 define('TXT_WPSC_NOTHINGINYOURSHOPPINGCART', '没有任何东西在您的购物车');
 
-
 define('TXT_WPSC_PROCESSING_PROBLEM', '购买出现问题需要处理，请发送电子邮件至网站管理员。');
 
 
@@ -538,6 +687,7 @@ define('TXT_WPSC_PEOPLEGIVEN', '人们已给予此图片');
 define('TXT_WPSC_PEOPLEGIVEN2', '星。');
 define('TXT_WPSC_ITEMHASBEENADDED', '这个单元已添加');
 define('TXT_WPSC_ITEMHASNOTBEENADDED', '这个单元未添加');
+//define('TXT_WPSC_ADDNEWCATEGORY', 'Add New Product Group');
 define('TXT_WPSC_ADDNEWCATEGORY', '增加新组别');
 define('TXT_WPSC_SUBMIT', '提交');
 define('TXT_WPSC_SELECTAVALIDCATEGORY', '请选择有效的商品组别');
@@ -549,7 +699,7 @@ define('TXT_WPSC_PRODUCTIMAGE', '商品图片');
 define('TXT_WPSC_PRODUCTPRICE', '商品价格');
 define('TXT_WPSC_NOTAX', '不含税');
 define('TXT_WPSC_ABOUT', '关于');
-define('TXT_WPSC_ABOUTCONTENT', 'Welcome to the e-commerce panel. <br /><br /><strong>注意：</strong> 在某些设置下，购物车可能会在每一页上都为空，如果是这样，您必须添加这一行：<br /><br />session_start();<br /><br />到wordpress 根目录的index.php文件。<br />');
+define('TXT_WPSC_ABOUTCONTENT', '欢迎进入e-commerce控制面板。 <br /><br /><strong>注意：</strong> 在某些设置下，购物车可能会在每一页上都为空，如果是这样，您必须添加这一行：<br /><br />session_start();<br /><br />到wordpress 根目录的index.php文件。<br />');
 define('TXT_WPSC_CONTACTDETAILS', '请输入您的详细联系方式：');
 define('TXT_WPSC_CREDITCARDHANDY', '请注意，一旦您按下提交，将需要您的信用卡支付。');
 define('TXT_WPSC_ASTERISK', '有星号字段必须填写');
@@ -573,6 +723,9 @@ define('TXT_WPSC_TEXTAREA', '文字区域');
 define('TXT_WPSC_HEADING', '标题');
 
 define('TXT_WPSC_MAKEPURCHASE', '购买');
+define('TXT_WPSC_BUYPRODUCTS', '哦，没有商品在购物车里面<a href="'.get_option('product_list_url').'">请访问我们的商城</a>');
+define('TXT_WPSC_BRANDHASBEENEDITED', '品牌已修改。');
+define('TXT_WPSC_MAKEPURCHASE', '购买');
 define('TXT_WPSC_BUYPRODUCTS', '请购买某些商品，才能使用此页');
 define('TXT_WPSC_BRANDHASBEENEDITED', '品牌已修改。');
 define('TXT_WPSC_SURETODELETEPRODUCT', '您是否确认删除该商品?');
@@ -583,11 +736,11 @@ define('TXT_WPSC_ADD', 'Add');
 define('TXT_WPSC_ADD_NEW_FORM', '增加新的表单字段');
 define('TXT_WPSC_SAVE_CHANGES', '保存修改');
 
-define('TXT_WPSC_CATEGORYHASBEENEDITED', '组别已修改。');
-define('TXT_WPSC_DISPLAYCATEGORIES', '显示组别');
-define('TXT_WPSC_ADDCATEGORY', '增加商品组别');
-define('TXT_WPSC_EDITCATEGORY', '编辑商品组别');
-define('TXT_WPSC_ALLCATEGORIES', '查看所有商品分类');
+define('TXT_WPSC_CATEGORYHASBEENEDITED', '商品类别已经修改。');
+define('TXT_WPSC_DISPLAYCATEGORIES', '显示商品类别');
+define('TXT_WPSC_ADDCATEGORY', '新增商品类别');
+define('TXT_WPSC_EDITCATEGORY', '编辑商品类别');
+define('TXT_WPSC_ALLCATEGORIES', '查看所有分类');
 
 define('TXT_WPSC_DISPLAYVARIATIONS', '可选属性展示');
 define('TXT_WPSC_ADDVARIATION', '添加可选属性');
@@ -600,7 +753,7 @@ define('TXT_WPSC_SELECT_PARENT', '选择上级');
 define('TXT_WPSC_PRODUCTHASBEENEDITED', '商品已修改。');
 define('TXT_WPSC_ADDPRODUCT', '添加商品');
 define('TXT_WPSC_DISPLAYPRODUCTS', '商品显示');
-define('TXT_WPSC_PLEASESELECTACATEGORY', '请选择一个组别');
+define('TXT_WPSC_PLEASESELECTACATEGORY', '请选择一个类别');
 define('TXT_WPSC_STOCK', '库存');
 define('TXT_WPSC_PNP', 'P&amp;P');
 define('TXT_WPSC_EDITITEM', '编辑单元');
@@ -616,7 +769,7 @@ define('TXT_WPSC_DISPLAYPURCHASES', '购买记录');
 define('TXT_WPSC_ID', 'ID');
 define('TXT_WPSC_TRANSACTIONSTATUS', '交易状况');
 define('TXT_WPSC_DATE', '日期');
-define('TXT_WPSC_VIEWDETAILS', '说明'); //Text has changed - translation is needed 
+define('TXT_WPSC_VIEWDETAILS', '说明');  //Text has changed - translation is needed 
 define('TXT_WPSC_STATUS', '状态');
 define('TXT_WPSC_SUCCESSFUL', '成功');
 define('TXT_WPSC_FAILED', '失败');
@@ -665,7 +818,7 @@ define('TXT_WPSC_REPLYEMAIL', '回复Email');
 define('TXT_WPSC_BRANDNOCAP', '品牌');
 define('TXT_WPSC_CATEGORYNOCAP', '分类');
 define('TXT_WPSC_UDPATING', '更新');
-define('TXT_WPSC_UPDATING', '更新');
+define('TXT_WPSC_UPDATING_CART', '更新购物车...');
 define('TXT_WPSC_MOREDETAILS', '更多描述');
 define('TXT_WPSC_ADDTOCART', '添入购物车');
 define('TXT_WPSC_AVGCUSTREVIEW', '平均顾客评分');
@@ -680,7 +833,7 @@ define('TXT_WPSC_PLEASECHOOSEAGROUP', '请选择一个商品组别');
 define('TXT_WPSC_PRODUCT', '商品');
 define('TXT_WPSC_QUANTITY', '数量');
 define('TXT_WPSC_QUANTITY_SHORT', '数量'); //translation needed
-define('TXT_WPSC_APPLY', 'Apply');
+define('TXT_WPSC_APPLY', '更新');
 define('TXT_WPSC_MAKEPAYMENT', '付款');
 define('TXT_WPSC_EMPTYSHOPPINGCART', '清空购物车');
 define('TXT_WPSC_TOTALPRICE', '总金额');
@@ -758,7 +911,7 @@ define('TXT_WPSC_SHIPPING_NOTE', '注：产品无论订购的数量，只收取�
 define('TXT_WPSC_COUNTRY_FORM_FIELD', '国家表单字段');
 define('TXT_WPSC_COUNTRY_FORM_FIELD_EXPLANATION', '(选择结帐页面您所指定的国家的表单字段)');
 
-define('TXT_WPSC_SHIPPING', '运送');
+define('TXT_WPSC_SHIPPING', '运输');
 define('TXT_WPSC_EMAIL_FORM_FIELD', 'Email表单字段');
 define('TXT_WPSC_EMAIL_FORM_FIELD_EXPLANATION', '(选择结帐页面您所指定的Email地址的表单字段)');
 
@@ -875,7 +1028,7 @@ define('TXT_WPSC_PRODUCT_CATEGORIES', '选择分类');
 define('TXT_WPSC_THANKS_DELETED', '交易记录已经删除。');
 define('TXT_WPSC_PRODUCT_IMAGE_PREVIEW', '商品图片');
 define('TXT_WPSC_PRODUCT_THUMBNAIL_PREVIEW', '商品缩略图');
-define('TXT_WPSC_REMOVE_LOG', '移动这个记录');
+define('TXT_WPSC_REMOVE_LOG', '移除这条记录');
 define('TXT_WPSC_CATSANDBRAND', '分类 &amp; 品牌');
 define('TXT_WPSC_GOLD_DROPSHOP', 'DropShop');
 define('TXT_WPSC_NEEDTOENABLEDROPSHOP', '您需要安装Gold and DropShop插件才能使用。');
@@ -899,6 +1052,7 @@ define('TXT_WPSC_SINGLE_PRODUCTTHUMBNAILSIZE', '单个商品图片尺寸');
 define('TXT_WPSC_RESET', '重置');
 define('TXT_WPSC_ORDER_PENDING', '谢谢您！您购买在处理中。订单完成后，您将收到一封电子邮件。');
 define('TXT_WPSC_ORDER_FAILED', '对不起，您的订单未能通过，可能是由于您的资金不足。');
+
 // Adrian - added for the options I added
 define('TXT_WPSC_SHOW_CATEGORY_COUNT', '显示每个组别商品数量');
 define('TXT_WPSC_CATSPRODS_DISPLAY_TYPE', '显示商品/组别');
@@ -955,6 +1109,8 @@ define('TXT_WPSC_SHOW_NO_PRODUCT', '没有商品');
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT', '这商品选择一个可下载的文件：');
 define('TXT_WPSC_PLEASECHOOSE', '请选择');
 
+
+
 define('TXT_WPSC_VARIATION_CONTROL', '可选属性管理');
 define('TXT_WPSC_VARIATION_GRID_CONTROL_SINGLE', ':variation1: 管理');
 define('TXT_WPSC_VARIATION_GRID_CONTROL_PAIR', ':variation1: 和 :variation2: 管理');
@@ -999,7 +1155,7 @@ define('TXT_WPSC_PRODUCT_TAGS', '商品标签');
 define('TXT_WPSC_DROPSHOPDISPLAY', '显示DropShop');
 define('TXT_WPSC_HIDEADDTOCARTBUTTON', '隐藏"立即购买"按钮');
 
-define('TXT_WPSC_PRODUCT_TAGS', '商品标签');
+
 
 define('TXT_WPSC_SHOW_DROPSHOP_ALL', '每页显示Dropshop');
 define('TXT_WPSC_SHOW_DROPSHOP_PRODUCT', '只在产品页显示Dropshop');

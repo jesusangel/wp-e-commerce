@@ -1,37 +1,9 @@
 <?php
 /*
 This is a language file for the WP Shopping Cart plugin version 3.6.10
-require(WPSC_FILE_PATH.'/languages/EN_en.php');
 */
 
-define('TXT_WPSC_SHIPDISCOUNT', 'Использовать бесплатную доставку');
-define('TXT_WPSC_NOITEMSINTHISGROUP', 'В этой группе нет товаров.');
-define('TXT_WPSC_ADD_GROUP', 'Добавить группу');
-define('TXT_WPSC_EDIT_GROUP', 'Править группу');
-define('TXT_WPSC_SHIPPING_SAME_AS_BILLING', 'Использовать адрес доставки такой же как и платежа');
-define('TXT_SHOW_GRID_PER_ROW', 'Количество товаров в строке');
-define('TXT_WPSC_CATEGORY_LIST', 'Список групп товаров');
-define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Показывать все товары и список групп');
-define('TXT_WPSC_LOCK_TAX', 'Закрепить налог за страной покупателя');
-define('TXT_WPSC_REVIEW_YOUR_ORDER', 'Пожалуйста, проверьте Ваш заказ.');
-define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Управление Вашими миниатюрами');
-define('TXT_WPSC_MAX_UPLOAD_SIZE', 'Максимальный размер загружаемого файла');
-define('TXT_WPSC_PUBLISH', 'Опубликовать');
-define('TXT_WPSC_DELETE_LAYER', 'Удалить');
-define('TXT_WPSC_NEW_CURRENCY', 'Новая ценa');
-define('TXT_WPSC_UPGRADES_PAGE', 'Обновления');
-define('TXT_WPSC_API_RESET', 'Сброс API Ключа');
-define('TXT_WPSC_API_RESET_DESCRIPTION', 'Введите Ваши API имя и ключ для открепления его от вашего старого сайта, который Вы более не используете.');
-define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'Добавить категорию');
-define('TXT_WPSC_ADDING_A_NEW_CATEGORY', 'Добавьте новую категорию и Вы сможете выбирать ее при добавлении новго продукта.');
-define('TXT_WPSC_CURRENT_GROUP', 'Группа &quot;[categorisation]&quot;');
-define('TXT_WPSC_BUTTON_SETTINGS', 'Настройки кнопок');
-define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Настройки товаров');
-define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Тема автоматических писем пользователям');
-define('TXT_WPSC_TRACKINGEMAILMSG', 'Ваши покупки из %shop_name% были отправлены Вам. Вы скоро должны ее получить. Для отслеживания Вашего товара используйте указанное ID. \r\n Ваше ID для отслеживания: %trackid%');
-define('TXT_WPSC_TRACKINGEMAIL', 'Текст автоматического письма');
-
-define('TXT_WPSC_COUPONSINVALID', 'Купон на скидку более не действует.');
+define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Скачивание файлов запрещено для єтих IP адресов %s');
 define('TXT_WPSC_EMAIL_BUYER', 'Отправить повторно заказ покупателю');
 
@@ -46,6 +18,7 @@ define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Заполните жт
 
 define("TXT_WPSC_ADDITIONAL_INFO", "3. Дополнительная информация"); 
 define('TXT_WPSC_ECOMMERCE', 'Товары'); 
+define('TXT_WPSC_PRODUCTS', 'Управление товарами'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','Ежегодный график продаж');
 
 define('TXT_WPSC_COUPONS', 'Купон на скидку');
@@ -122,7 +95,7 @@ define('TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE', 'Этого товара нет н
 define('TXT_WPSC_SHIPPING_ERROR_MESSAGE', 'Внимание. Возникла проблема с данными о доставке, которые вы указали. Если проблема повторится - свжитесь с владельцем сайта.');
 define('TXT_WPSC_UPS_AND_NO_WEIGHT', 'Этот товар не имеет указанного веса и у вас включена доставка через UPS. UPS не поддерживает доставку товаров без указанного веса, однако если ваш продукт цифровой файл, мы рекомендуем отключить доставку товара.');
 
-define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', ' - Выберите способ доставки');
+define('TXT_WPSC_CHOOSE_A_SHIPPING_RATE', '- Выберите спооб доставки');
 
 define('TXT_WPSC_CALCULATE', 'Расчитать');
 define('TXT_WPSC_GROUP_PRESENTATION_TEXT', 'To over-ride the presentation settings for this group you can enter in your prefered settings here');
@@ -150,7 +123,6 @@ define('TXT_WPSC_UPS_DAILY_PICKUP', 'Daily Pickup');
 
 
 define('TXT_WPSC_IMPORT_CSV', 'Импорт товаров CSV');
-define('TXT_WPSC_IMPORT_CSV_DESCRIPTION', '<p>Вы можете импортировать свои продукты из файла разделяемого запятыми.</p><p>Пример файла может выглядеть так (порядок полей): </p><p>Описание, Дополнительное описание, Название товара, Цена, Код товара, Вес, Весовая единица, Количество на складе, Ограниченое ли количество</p>');
 define('TXT_WPSC_MORE', 'Далее');
 
 define('TXT_WPSC_WEIGHT_SETTINGS', 'НАстройки веса');
@@ -779,8 +751,7 @@ define('TXT_WPSC_PURCHASELOGEMAIL', 'Email для отправки журнал�
 define('TXT_WPSC_REPLYEMAIL', 'Email для ответа');
 define('TXT_WPSC_BRANDNOCAP', 'бренд(производитель)');
 define('TXT_WPSC_CATEGORYNOCAP', 'категория');
-define('TXT_WPSC_UPDATING', 'Обновление');
-define('TXT_WPSC_UPDATING_CART', 'Обновляем корзину...');
+define('TXT_WPSC_UDPATING', 'Обновление');
 define('TXT_WPSC_MOREDETAILS', 'Более детально');
 define('TXT_WPSC_ADDTOCART', 'Добавить в корзину');
 define('TXT_WPSC_AVGCUSTREVIEW', 'Средний рейтинг');
