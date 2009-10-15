@@ -554,10 +554,11 @@ function wpsc_admin_ajax() {
 
 	
 	if ($_POST['del_file'] == 'true') {
-		
-		if ($wpdb->query($wpdb->prepare("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=%s", $_POST['del_file_hash'])) == 1) {
-			// Only delete the file if the delete query above affected a single row. Prevents deletion of an arbirary file
-			unlink(WPSC_FILE_DIR.basename($_POST['del_file_hash']));
+		if(file_exists(WPSC_FILE_DIR.basename($_POST['del_file_hash'])) && is_file(WPSC_FILE_DIR.basename($_POST['del_file_hash']))) {
+			if ($wpdb->query($wpdb->prepare("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=%s", $_POST['del_file_hash'])) == 1) {
+				// Only delete the file if the delete query above affected a single row. Prevents deletion of an arbitrary file
+				unlink(WPSC_FILE_DIR.basename($_POST['del_file_hash']));
+			}
 		}
 		exit();
 	}
