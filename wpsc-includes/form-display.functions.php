@@ -137,7 +137,15 @@ function wpsc_select_product_file($product_id = null) {
   $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='.none.' id='select_product_file_$num' ".((!is_numeric($file_id) || ($file_id < 1)) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".TXT_WPSC_SHOW_NO_PRODUCT."</label></p>";
   foreach((array)$file_list as $file) {
     $num++;
-    $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='".$file['real_filename']."' id='select_product_file_$num' ".((is_numeric($file_id) && ($file_id == $file['file_id'])) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".$file['display_filename']."</label>  <img class='file_delete_button' src='".WPSC_URL."/images/cross.png' /></p>";
+		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_id=".$file['file_id'], 'delete_file_'.absint($file['file_id']));
+    
+    $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'").">\n";
+    $output .= "  <input type='radio' name='select_product_file' value='".$file['real_filename']."' id='select_product_file_$num' ".((is_numeric($file_id) && ($file_id == $file['file_id'])) ? "checked='checked'" : "")." />\n";
+    $output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
+    $output .= "  <a class='file_delete_button' href='{$deletion_url}'>\n";
+    $output .= "    <img src='".WPSC_URL."/images/cross.png' />\n";
+    $output .= "  </a>\n";
+    $output .= "</p>\n";
   }
   $output .= "</div>";
   $output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";

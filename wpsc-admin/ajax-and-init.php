@@ -155,10 +155,33 @@ function wpsc_crop_thumb() {
 	}
 }
  
- 
- 
+  
  if($_REQUEST['wpsc_admin_action'] == 'crop_thumb') {
 	add_action('admin_init', 'wpsc_crop_thumb');
+} 
+
+function wpsc_delete_file() {
+	global $wpdb;
+	$file_id = $_GET['file_id'];
+	$file_hash = $wpdb->get_var("SELECT `idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` LIKE '".$file_id."' LIMIT 1");
+	
+  check_admin_referer('delete_file_'.$file_id);
+	if(file_exists(WPSC_FILE_DIR.basename($file_hash)) && is_file(WPSC_FILE_DIR.basename($file_hash))) {
+		if($wpdb->query($wpdb->prepare("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=%s", $file_hash)) == 1) {
+			// Only delete the file if the delete query above affected a single row. Prevents deletion of an arbitrary file
+			unlink(WPSC_FILE_DIR.basename($file_hash));
+		}
+	}
+	if($_POST['ajax'] !== 'true') {
+		$sendback = wp_get_referer();
+		wp_redirect($sendback);
+	}
+	exit();
+}
+
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'delete_file') {
+	add_action('admin_init', 'wpsc_delete_file');
 } 
  
 
@@ -552,16 +575,6 @@ function wpsc_admin_ajax() {
 	// 		exit();
 	// 	}
 
-	
-	if ($_POST['del_file'] == 'true') {
-		if(file_exists(WPSC_FILE_DIR.basename($_POST['del_file_hash'])) && is_file(WPSC_FILE_DIR.basename($_POST['del_file_hash']))) {
-			if ($wpdb->query($wpdb->prepare("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=%s", $_POST['del_file_hash'])) == 1) {
-				// Only delete the file if the delete query above affected a single row. Prevents deletion of an arbitrary file
-				unlink(WPSC_FILE_DIR.basename($_POST['del_file_hash']));
-			}
-		}
-		exit();
-	}
 		
 	if(($_POST['save_image_upload_state'] == "true") && is_numeric($_POST['image_upload_state'])) {
 		//get_option('wpsc_image_upload_state');

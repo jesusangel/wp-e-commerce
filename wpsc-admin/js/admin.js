@@ -628,10 +628,11 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	// delete upload
 	jQuery(".file_delete_button").livequery(function(){
 			jQuery(this).click(function() {
+				url = jQuery(this).attr('href');
 				jQuery(this).parent().remove();
-				file_hash = jQuery(this).siblings("input").val();
-				post_values = "admin=true&del_file=true&del_file_hash="+file_hash;
-				jQuery.post( 'index.php?ajax=true', post_values, function(returned_data) { });
+				post_values = "ajax=true";
+				jQuery.post( url, post_values, function(returned_data) { });
+				return false;
 			});
 		});
 		
