@@ -120,8 +120,9 @@ global $redir_tab;
 		}
 		foreach ( $tabs as $callback => $text ) {
 			$class = '';
-			if ( $current == $callback )
+			if ( $current == $callback ) {
 				$class = " class='current'";
+				}
 			$href = add_query_arg(array('tab'=>$callback, 's'=>false, 'paged'=>false, 'post_mime_type'=>false, 'm'=>false));
 			$href = remove_query_arg('isocode', $href);
 			$link = "<a href='" . clean_url($href) . "'$class>$text</a>";
