@@ -186,7 +186,8 @@ jQuery(document).ready( function () {
 	 jQuery('.edit-product').click(function(){	
 	 		jQuery(this).next('.loadingImg').removeAttr('style');
 			product_id = jQuery(this).attr('href').match(/product_id=(\d{1,})/);
-	 		post_values = "product_id="+product_id[1]+"";
+			wpnonce = jQuery(this).attr('href').match(/_wpnonce=(\w{1,})/);
+	 		post_values = "product_id="+product_id[1]+"&_wpnonce="+wpnonce[1];
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {
 				if(typeof(tinyMCE) != "undefined") {
 					tinyMCE.execCommand("mceRemoveControl",false,"content");

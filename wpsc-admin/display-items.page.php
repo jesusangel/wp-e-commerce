@@ -332,7 +332,10 @@ function wpsc_admin_products_list($category_id = 0) {
 										<img title='Drag to a new position' src='<?php echo $image_path; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
 									</td>
 									<td class="product-title column-title">
-										<a class='edit-product' href='<?php echo  htmlentities(add_query_arg('product_id', $product['id'])); ?>'><?php echo $product_name; ?></a>
+									  <?php
+									  $edit_product_url = wp_nonce_url(htmlentities(add_query_arg('product_id', $product['id'])), 'edit_product_' . $product['id']);
+									  ?>
+										<a class='edit-product' href='<?php echo $edit_product_url; ?>'><?php echo $product_name; ?></a>
 											<?php
 											if($product['publish'] != 1 ) {
 												?> - <strong> <?php 	_e('Draft', 'wpsc'); ?>	</strong>	<?php
@@ -354,7 +357,7 @@ function wpsc_admin_products_list($category_id = 0) {
 									
 										<div class="wpsc-row-actions">
 											<span class="edit">
-												<a class='edit-product' title="Edit this post" href='<?php echo htmlentities(add_query_arg('product_id', $product['id'])); ?>' style="cursor:pointer;">Edit</a>
+												<a class='edit-product' title="Edit this post" href='<?php echo $edit_product_url; ?>' style="cursor:pointer;">Edit</a>
 											</span>
 											 |
 											<span class="delete">
