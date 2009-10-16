@@ -1665,6 +1665,7 @@ class WPSC_Query {
 			}
 			
 			$category_info =	$wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='".(int)$this->category."'",ARRAY_A);
+			$this->breadcrumbs[$i]['id'] = $category_info['id'];
 			$this->breadcrumbs[$i]['name'] = $category_info['name'];
 			if($i > 0) {
 				$this->breadcrumbs[$i]['url'] = wpsc_category_url($category_info['id']);
@@ -1675,6 +1676,7 @@ class WPSC_Query {
 			
 			while ($category_info['category_parent']!=0) {
 				$category_info =	$wpdb->get_row("SELECT * FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='{$category_info['category_parent']}'",ARRAY_A);			
+				$this->breadcrumbs[$i]['id'] = $category_info['id'];
 				$this->breadcrumbs[$i]['name'] = htmlentities(stripslashes($category_info['name']), ENT_QUOTES, 'UTF-8');
 				$this->breadcrumbs[$i]['url'] = wpsc_category_url($category_info['id']);
 				$i++;
