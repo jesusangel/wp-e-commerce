@@ -102,6 +102,23 @@ function wpsc_enqueue_user_script_and_css() {
 		wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');
 		$wp_styles->add_data( 'wpsc-ie-fixes', 'conditional', 'lt IE 7' );
 	}
+
+	
+	if(!defined('WPSC_MP3_MODULE_USES_HOOKS') and function_exists('listen_button') ) {
+			function wpsc_legacy_add_mp3_preview($product_id, &$product_data) {
+				global $wpdb;
+				//  echo "<pre>".print_r($product_data,true)."</pre>";
+				if(function_exists('listen_button')){
+					$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_data['file']."' LIMIT 1",ARRAY_A);
+					if($file_data != null) {
+						echo listen_button($file_data['idhash'], $file_data['id']);
+					}
+				}
+			}
+			add_action('wpsc_product_before_description', 'wpsc_legacy_add_mp3_preview', 10, 2);
+		}
+
+	
 }
 
 if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {

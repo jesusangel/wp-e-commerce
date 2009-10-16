@@ -241,7 +241,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	if(defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true) ) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";
   	echo "<pre>".print_r($data,true)."</pre>";
-  	echo "<pre>".print_r($_POST,true)."</pre>";
+		// 	echo "<pre>".print_r($_POST,true)."</pre>";
   	exit();
 	}
   header("Location: ".get_option('paypal_multiple_url')."?".$output);

@@ -510,7 +510,7 @@ function old_wpsc_item_process_file($mode = 'add') {
 			$perms = $stat['mode'] & 0000666;
 			@ chmod( (WPSC_FILE_DIR.$idhash), $perms );	
 			if(function_exists("make_mp3_preview"))	{
-				if($mimetype == "audio/mpeg" && (!isset($_FILES['preview_file']['tmp_name']))) {
+				if((!isset($_FILES['preview_file']['tmp_name']))) {
 				  // if we can generate a preview file, generate it (most can't due to sox being rare on servers and sox with MP3 support being even rarer), thus this needs to be enabled by editing code
 					make_mp3_preview((WPSC_FILE_DIR.$idhash), (WPSC_PREVIEW_DIR.$idhash.".mp3"));
 					$preview_filepath = (WPSC_PREVIEW_DIR.$idhash.".mp3");

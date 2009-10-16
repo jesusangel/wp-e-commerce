@@ -304,9 +304,12 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	//exit($sql);
 	$newCurrency = 'currency['.$isocode.']';
 	
-	if($newPrice != ''){
+	if(($newPrice != '') &&  ($newPrice > 0)){
 		update_product_meta($product_id, $newCurrency, $newPrice, $prev_value = '');
+	} else {
+		delete_product_meta($product_id, $newCurrency);
 	}
+	
 	//exit('<pre>'.print_r($newCurrency, true).'</pre>'.$newPrice);
 }
 /**
@@ -323,6 +326,12 @@ function wpsc_update_category_associations($product_id, $categories = array()) {
   $categories_to_add = array_diff((array)$categories, (array)$associated_categories);
   $categories_to_delete = array_diff((array)$associated_categories, (array)$categories);
   $insert_sections = array();
+  foreach($categories_to_delete as $key => $category_to_delete) {
+		$categories_to_delete[$key] = absint($category_to_delete);
+  }
+
+	//exit('<pre>'.print_r($categories_to_delete, true).'</pre>');
+
   foreach($categories_to_add as $category_id) {
     $insert_sections[] = $wpdb->prepare("( %d, %d)", $product_id, $category_id);
   }
@@ -342,7 +351,7 @@ function wpsc_update_category_associations($product_id, $categories = array()) {
 		}
   }
   if(count($categories_to_delete) > 0) {
-    $wpdb->query($wpdb->prepare("DELETE FROM`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = %d AND `category_id` IN(%s)",$product_id,  implode($categories_to_delete)));
+    $wpdb->query("DELETE FROM`".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` = {$product_id} AND `category_id` IN(".implode(",",$categories_to_delete).") LIMIT ".count($categories_to_delete)."");
   }
 }
   

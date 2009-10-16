@@ -373,7 +373,7 @@ if(!function_exists('wpsc_initialisation')){
 			} else {
 				$GLOBALS['wpsc_cart'] = unserialize($_SESSION['wpsc_cart']);
 			}
-			if(get_class($GLOBALS['wpsc_cart']) != "wpsc_cart") {
+			if(!is_object($GLOBALS['wpsc_cart']) || (get_class($GLOBALS['wpsc_cart']) != "wpsc_cart")) {
 				$GLOBALS['wpsc_cart'] = new wpsc_cart;
 			}
 		} else {

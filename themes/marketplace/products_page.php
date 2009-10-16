@@ -109,16 +109,11 @@ global $wpsc_query, $wpdb;
 
 						<?php echo wpsc_edit_the_product_link(); ?>
 					</h2>
-					<?php
-						do_action('wpsc_product_addons', wpsc_the_product_id());
+						<?php							
+							do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product);
+							do_action('wpsc_product_addons', wpsc_the_product_id());
+						?>
 						
-						if((wpsc_product_has_file() == true)  && (function_exists('listen_button'))){
-							$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$wpsc_query->product['file']."' LIMIT 1",ARRAY_A);
-							if($file_data != null) {
-								echo listen_button($file_data['idhash'], $file_data['id']);
-							}
-						}
-				?>
 					
 					
 					<div class='wpsc_description'><?php echo wpsc_the_product_description(); ?></div>
