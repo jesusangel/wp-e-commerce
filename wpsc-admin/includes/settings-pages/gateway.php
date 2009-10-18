@@ -168,6 +168,7 @@ function selectgateway() {
 					<tr class='update_gateway' >
 						<td colspan='2'>
 							<div class='submit'>
+								<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 								<input type='submit' value='<?php echo TXT_WPSC_UPDATE_BUTTON?>' name='updateoption' />
 							</div>
 						</td>

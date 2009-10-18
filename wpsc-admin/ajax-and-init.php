@@ -1259,25 +1259,30 @@ if($_REQUEST['wpsc_admin_action2'] == 'purchlog_bulk_modify') {
 	add_action('admin_init', 'wpsc_purchlog_bulk_modify');
 }
 //edit purchase log status function
-function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status=''){
+function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 	global $wpdb;
 	if(($purchlog_id =='') && ($purchlog_status == '')){
 		$purchlog_id = absint($_POST['purchlog_id']);
 		$purchlog_status = absint($_POST['purchlog_status']);
 	}
 		
-			$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);  
-			if (($purchlog_id==2) && function_exists('wpsc_member_activate_subscriptions')){
-				wpsc_member_activate_subscriptions($_POST['id']);
-			}
-			
-		$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'");
-		
-		if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] < 2)) {
-			transaction_results($log_data['sessionid'],false);
-		}      
-	//exit();
-	
+	$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);
+	if (($purchlog_id==2) && function_exists('wpsc_member_activate_subscriptions')){
+		wpsc_member_activate_subscriptions($_POST['id']);
+	}
+
+	// if the order is marked as failed, remove the claim on the stock
+	if($purchlog_status == 5) {
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'");
+		//echo "DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'";
+	}
+
+	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'");
+
+	if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] < 2)) {
+		transaction_results($log_data['sessionid'],false);
+	}
+	exit("1");
 }
 
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {
@@ -1421,7 +1426,6 @@ if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
  */
 function wpsc_submit_options($selected='') {
   global $wpdb, $wpsc_gateways;
-	check_admin_referer('update-options', 'wpsc-update-options');
 	//This is to change the Overall target market selection
 	check_admin_referer('update-options', 'wpsc-update-options');
 
@@ -1930,7 +1934,7 @@ function wpsc_settings_page_ajax(){
 		wpsc_options_general();
 		break;
 	}	
-	$_SESSION['wpsc_settings_curr_page'] = $functionname1;
+	$_SESSION['wpsc_settings_curr_page'] = $page_title;
 	exit($html);
 }
   

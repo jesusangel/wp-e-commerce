@@ -421,9 +421,6 @@ if(!function_exists('wpsc_serialize_shopping_cart')){
 		}
 	  
 	  /// Delete the old claims on stock
-		$session_timeout = 60*60; // 180 * 60 = three hours in seconds
-	  $old_claimed_stock_timestamp = time() - $session_timeout;
-	  
 	  $old_claimed_stock_timestamp = mktime((date('H') - 3), date('i'), date('s'), date('m'), date('d'), date('Y'));
 	  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
 	  //echo "$old_claimed_stock_timestamp <br /> DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')";

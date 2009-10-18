@@ -170,6 +170,8 @@ $form_types = Array("text","email","address","city","country","delivery_address"
     <tr>
       <td colspan='6' style='padding: 2px;'>
         <input type='hidden' name='wpsc_admin_action' value='checkout_settings' />
+        
+				<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
         <input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
         <a href='#' onclick='return add_form_field();'><?php echo TXT_WPSC_ADD_NEW_FORM;?></a>
       </td>

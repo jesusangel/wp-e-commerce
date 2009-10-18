@@ -6,7 +6,8 @@ global $wpdb;
 	<div class="wrap">
 		<h2><?php echo TXT_WPSC_IMPORT_CSV;?></h2>
 		<?php echo TXT_WPSC_IMPORT_CSV_DESCRIPTION;?>
-	
+		
+		<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 		<input type='hidden' name='MAX_FILE_SIZE' value='5000000' />
 		<input type='file' name='csv_file' />
 		<input type='submit' value='Import' class='button-primary'>
