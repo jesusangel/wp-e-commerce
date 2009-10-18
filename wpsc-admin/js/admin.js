@@ -286,7 +286,8 @@ jQuery(document).ready( function () {
 			form_field = jQuery("div.variation_value", form_field_container).eq(0).clone();
 			
 			jQuery('input.text',form_field).attr('name','new_variation_values[]');
-			jQuery('input.text',form_field).attr('value','');
+			jQuery('input.text',form_field).val('');
+			jQuery('input.variation_values_id',form_field).remove();
 			
 			jQuery(form_field_container).append(form_field);
 		  return false;
