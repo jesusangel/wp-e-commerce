@@ -31,6 +31,7 @@ function selectgateway() {
 <div class="metabox-holder">
 		<form name='shippingopt' method='post' id='shipping_options' action=''>
 		<input type='hidden' name='shipping_submits' value='true' />
+		<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 		<input type='hidden' name='wpsc_admin_action' value='submit_options' />
 		
 	<?php 
