@@ -565,14 +565,14 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	
 	jQuery('#addweightlayer').livequery(function(){
 		jQuery(this).click(function(){
-		jQuery(this).parent().append("<div id='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
+		jQuery(this).parent().append("<div class='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
 		});
 	
 	});
 	
 	jQuery('#addlayer').livequery(function(){
 		jQuery(this).click(function(){
-		jQuery(this).parent().append("<div id='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
+		jQuery(this).parent().append("<div class='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_PRICE_IS+"</i><input type='text' name='layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
 		//bind_shipping_rate_deletion();
 		return false;
 		});
@@ -581,11 +581,13 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	
   jQuery('table#gateway_options a.delete_button').livequery(function(){
   		jQuery(this).click(function () {
-  		//alert('here');
-    this_row = jQuery(this).parent('tr .rate_row');
+  		alert('here');
+    this_row = jQuery(this).parent().parent('tr .rate_row');
    // alert(this_row);
+   //jQuery(this_row).hide();
     if(jQuery(this).hasClass('nosubmit')) {
 			// if the row was added using JS, just scrap it
+			this_row = jQuery(this).parent('div .wpsc_newlayer');
 			jQuery(this_row).remove();
     } else {
 			// otherwise, empty it and submit it
