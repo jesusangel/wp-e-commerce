@@ -317,7 +317,7 @@ function check_in_stock($product_id, $variations, $item_quantity = 1) {
  
   
   
-function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0, $height = 0, $resize_method = 1) {
+function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0, $height = 0, $resize_method = 1, $return_imageid = false) {
 //  the function for processing images, takes a product_id, input_file outout file name, height and width
 	global $wpdb;
 	//$_FILES['image']['tmp_name']
@@ -437,10 +437,13 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 		}
 	} else {
 			$image_data = $wpdb->get_row("SELECT `id`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".(int)$id."' LIMIT 1",ARRAY_A);
-
-		$image = false;
+		  $image = false;
 	}
-  return $image;
+	if($return_imageid == true) {
+		return array('image_id' => $image_id, 'filename' => $image);
+	} else {
+		return $image;
+  }
 }
 
 function old_wpsc_item_process_file($mode = 'add') {
