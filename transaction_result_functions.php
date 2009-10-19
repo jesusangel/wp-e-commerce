@@ -84,7 +84,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 									} else {
 											$link = $siteurl."?downloadid=".$download_data['uniqueid'];
 									}
-						$order_status= 4;
+						//$order_status= 4;
 					}else{
 							$order_status= $purchase_log['processed'];
 					}

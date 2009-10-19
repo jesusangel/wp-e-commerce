@@ -1230,11 +1230,22 @@ function nzshpcrt_download_file() {
       } else {
         $download_count = 0;
       }
-      
-      
-      $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+          $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+	  $cart_contents = $wpdb->get_results('SELECT `'.WPSC_TABLE_CART_CONTENTS.'`.*,`'.WPSC_TABLE_PRODUCT_LIST.'`.`file` FROM `'.WPSC_TABLE_CART_CONTENTS.'` LEFT JOIN `'.WPSC_TABLE_PRODUCT_LIST.'` ON `'.WPSC_TABLE_CART_CONTENTS.'`.`prodid`= `'.WPSC_TABLE_PRODUCT_LIST.'`.`id` WHERE `purchaseid` ='.$download_data['purchid'], ARRAY_A);
+	    $dl = 0;
 
-      $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
+      foreach($cart_contents as $cart_content){
+      	if($cart_content['file'] == 1){
+      		$dl++;
+      	}
+      }
+      if(count($cart_contents) == $dl){
+    //  	exit('called');
+         $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
+      }
+
+	  //exit('<pre>'.print_r($cart_contents,true).'</pre>');
+   
       if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
         header('Content-Type: '.$file_data['mimetype']);      
         header('Content-Length: '.filesize(WPSC_FILE_DIR.$file_data['idhash']));
