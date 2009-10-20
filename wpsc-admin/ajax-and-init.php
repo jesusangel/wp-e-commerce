@@ -796,7 +796,6 @@ function wpsc_admin_sale_rss() {
 }
 
 function wpsc_swfupload_images() {
-	//xdebug_start_trace();
 	global $wpdb, $current_user;
 	$file = $_FILES['async-upload'];
 	$product_id = absint($_POST['product_id']);
