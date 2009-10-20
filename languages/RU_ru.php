@@ -3,7 +3,34 @@
 This is a language file for the WP Shopping Cart plugin version 3.6.10
 */
 
-define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
+define('TXT_WPSC_SHIPDISCOUNT', 'Использовать бесплатную доставку');
+define('TXT_WPSC_NOITEMSINTHISGROUP', 'В этой группе нет товаров.');
+define('TXT_WPSC_ADD_GROUP', 'Добавить группу');
+define('TXT_WPSC_EDIT_GROUP', 'Править группу');
+define('TXT_WPSC_SHIPPING_SAME_AS_BILLING', 'Использовать адрес доставки такой же как и платежа');
+define('TXT_SHOW_GRID_PER_ROW', 'Количество товаров в строке');
+define('TXT_WPSC_CATEGORY_LIST', 'Список групп товаров');
+define('TXT_WPSC_ALL_PRODUCTS_AND_CATEGORY_LIST', 'Показывать все товары и список групп');
+define('TXT_WPSC_LOCK_TAX', 'Закрепить налог за страной покупателя');
+define('TXT_WPSC_REVIEW_YOUR_ORDER', 'Пожалуйста, проверьте Ваш заказ.');
+define('TXT_WPSC_MANAGE_YOUR_THUMBNAILS', 'Управление Вашими миниатюрами');
+define('TXT_WPSC_MAX_UPLOAD_SIZE', 'Максимальный размер загружаемого файла');
+define('TXT_WPSC_PUBLISH', 'Опубликовать');
+define('TXT_WPSC_DELETE_LAYER', 'Удалить');
+define('TXT_WPSC_NEW_CURRENCY', 'Новая ценa');
+define('TXT_WPSC_UPGRADES_PAGE', 'Обновления');
+define('TXT_WPSC_API_RESET', 'Сброс API Ключа');
+define('TXT_WPSC_API_RESET_DESCRIPTION', 'Введите Ваши API имя и ключ для открепления его от вашего старого сайта, который Вы более не используете.');
+define('TXT_WPSC_ADDNEWCATEGORY_TITLE', 'Добавить категорию');
+define('TXT_WPSC_ADDING_A_NEW_CATEGORY', 'Добавьте новую категорию и Вы сможете выбирать ее при добавлении новго продукта.');
+define('TXT_WPSC_CURRENT_GROUP', 'Группа &quot;[categorisation]&quot;');
+define('TXT_WPSC_BUTTON_SETTINGS', 'Настройки кнопок');
+define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Настройки товаров');
+define('TXT_WPSC_TRACKINGEMAILSUBJECT', 'Тема автоматических писем пользователям');
+define('TXT_WPSC_TRACKINGEMAILMSG', 'Ваши покупки из %shop_name% были отправлены Вам. Вы скоро должны ее получить. Для отслеживания Вашего товара используйте указанное ID. \r\n Ваше ID для отслеживания: %trackid%');
+define('TXT_WPSC_TRACKINGEMAIL', 'Текст автоматического письма');
+
+define('TXT_WPSC_COUPONSINVALID', 'Купон на скидку более не действует.');
 define('TXT_WPSC_CLEAR_IP_LOCKS', 'Скачивание файлов запрещено для єтих IP адресов %s');
 define('TXT_WPSC_EMAIL_BUYER', 'Отправить повторно заказ покупателю');
 
