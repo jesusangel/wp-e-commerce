@@ -1070,7 +1070,7 @@ define('TXT_WPSC_ITEM_GONE_OUT_OF_STOCK', 'It appears that an item has gone out 
 define('TXT_WPSC_DISPLAY_FANCY_NOTIFICATIONS', 'Display Fancy Purchase Notifications');
 define('TXT_WPSC_IF_USER_CHECKOUT', 'If you have a user account, Please ');
 define('TXT_WPSC_LOG_IN', 'log in.');
-define('TXT_WPSC_IS_DONATION', 'This is a donation (only show it in the donations widget)');
+define('TXT_WPSC_IS_DONATION', 'This is a donation, checking this box populates the donations widget.');
 define('TXT_WPSC_DONATION', 'Donation');
 define('TXT_WPSC_DONATION_LC', 'donation');
 define('TXT_WPSC_DONATION_SHIPPING', 'No shipping for donations');
