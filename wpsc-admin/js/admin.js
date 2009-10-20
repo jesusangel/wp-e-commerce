@@ -581,7 +581,6 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	
   jQuery('table#gateway_options a.delete_button').livequery(function(){
   		jQuery(this).click(function () {
-  		alert('here');
     this_row = jQuery(this).parent().parent('tr .rate_row');
    // alert(this_row);
    //jQuery(this_row).hide();
