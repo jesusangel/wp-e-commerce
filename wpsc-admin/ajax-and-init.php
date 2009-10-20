@@ -1860,6 +1860,7 @@ function wpsc_checkout_settings(){
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
 		$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 	}
+	$sendback = add_query_arg('page', 'wpsc-settings', $sendback);
 	wp_redirect($sendback);
 	exit();
 }
