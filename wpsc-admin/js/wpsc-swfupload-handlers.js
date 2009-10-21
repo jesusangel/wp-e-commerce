@@ -159,8 +159,8 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		if(image_count < 1) {
 		  replace_existing = 1;
 		}
-		console.log(jQuery("ul#gallery_list li.gallery_image div a img.previewimage"));
-		console.log(image_count);
+		//console.log(jQuery("ul#gallery_list li.gallery_image div a img.previewimage"));
+		//console.log(image_count);
 		
  		if(replace_existing == 1) {
 			jQuery("ul#gallery_list").html(output_html);
