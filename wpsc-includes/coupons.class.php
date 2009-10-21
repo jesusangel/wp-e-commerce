@@ -301,7 +301,8 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 			}
 		
 		} else if ($c['property'] == 'subtotal_amount'){
-			$subtotal = $product_obj->cart->subtotal;
+			$subtotal = $product_obj->total_price;
+			//exit('<pre>'.print_r($product_obj,true).'</pre>');
 			switch($c['logic']) {
 				case 'equal'://Checks if the subtotal of products in the cart equals condition value
 				if ($subtotal == $c['value'])
@@ -309,6 +310,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				break;
 				
 				case 'greater'://Checks if the subtotal of the cart is greater than the condition value
+			//	exit('triggered here'.$subtotal.'>'.$c['value']);
 				if ($subtotal > $c['value'])
 					return true;
 				break;
