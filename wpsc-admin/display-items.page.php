@@ -174,6 +174,8 @@ function wpsc_admin_products_list($category_id = 0) {
 		$search_string = '';
 	}
 
+	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
+
 	if($category_id > 0) {  // if we are getting items from only one category, this is a monster SQL query to do this with the product order
 		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`, `products`.`publish`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`
 			FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products`
@@ -452,11 +454,18 @@ function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, 
   global $wpdb;
   $siteurl = get_option('siteurl');
   $url = $siteurl."/wp-admin/admin.php?page=wpsc-edit-products";
+
+	$search_sql = apply_filters('wpsc_admin_category_dropdown_tree_search_sql', '');
+
   if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '$category_id' ".$search_sql." ORDER BY `id` ASC";
 	} else {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0' ".$search_sql." ORDER BY `id` ASC";
 	}
+
+//	echo $sql;
+  $values = $wpdb->get_results($sql, ARRAY_A);
+
   foreach((array)$values as $option) {
     if($selected_id == $option['id']) {
       $selected = "selected='selected'";

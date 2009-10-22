@@ -391,8 +391,8 @@ function wpsc_product_category_and_tag_forms($product_data=''){
       <td class='itemfirstcol'>
 				<span class='howto'>".TXT_WPSC_CATEGORISATION." </span>
 				<div id='categorydiv' >";
-					
-					$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
+					$search_sql = apply_filters('wpsc_product_category_and_tag_forms_group_search_sql', '');
+					$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')".$search_sql, ARRAY_A);
 					//exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
 						foreach((array)$categorisation_groups as $categorisation_group){
 							$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
@@ -437,6 +437,7 @@ $output .= "
   </table>
  </div>
 </div>";
+$output = apply_filters('wpsc_product_category_and_tag_forms_output', $output);
 
 return $output;
 
