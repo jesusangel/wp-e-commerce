@@ -130,44 +130,58 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				echo '<pre>'.print_r($cart_item, true).'</pre>';
 			}
 */
-			foreach ($wpsc_cart->cart_items as $key => $item) {
-				$match = true;
-				
-				$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$item->product_id}'");
-				$product_data = $product_data[0];
+			//exit('<pre>'.print_r($this, true).'</pre>');
 			
-				foreach ($this->conditions as $c) {
+				foreach ($wpsc_cart->cart_items as $key => $item) {
+					$match = true;
 					
-					//Check if all the condictions are returning true, so it's an ALL logic, if anyone want to implement a ANY logic please do.
+					$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$item->product_id}'");
+					$product_data = $product_data[0];
 				
-					/* $match && */ $match =  $this->compare_logic($c, $item);
-					if($match){
-						$match = true;
-					//	exit('ture');
-					}else{
-						$match = false;
-					//	exit('false');
-					}
-				}
-				if ($match) {
-				    if ($this->is_percentage == '1') {
-						$this->discount = $item->unit_price*$item->quantity*$this->value/100;
+					foreach ($this->conditions as $c) {
+						
+						//Check if all the condictions are returning true, so it's an ALL logic, if anyone want to implement a ANY logic please do.
 					
+						/* $match && */ $match =  $this->compare_logic($c, $item);
+						if($match){
+							$match = true;
+						//	exit('ture');
+						}else{
+							$match = false;
+						//	exit('false');
+						}
+					}
+					if ($match) {
+					
+					    if ($this->is_percentage == '1') {
+							$this->discount = $item->unit_price*$item->quantity*$this->value/100;
+						
+							$item->discount = $this->discount;
+							if($this->every_product == 1){
+								$return += $this->discount;
+							}else{
+								return $this->discount;
+							}
+							//echo $item->discount."-";
+						} else {
+							$item->discount = $this->value;
+							if($this->every_product == 1){
+								$return += $this->discount;
+							}else{
+								//exit('<pre>'.print_r($this,true).'</pre>');
+								return $this->value;
+							}
+							//$return += $this->value;
+						}
+					}else{
+						//exit('match not found');
+						$this->discount = 0;
 						$item->discount = $this->discount;
 						$return += $this->discount;
-						//echo $item->discount."-";
-					} else {
-						$item->discount = $this->value;
-						$return += $this->value;
 					}
-				}else{
-					//exit('match not found');
-					$this->discount = 0;
-					$item->discount = $this->discount;
-					$return += $this->discount;
 				}
-			}
 		}
+		
 		return $return;
 	}
 	
@@ -301,8 +315,8 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 			}
 		
 		} else if ($c['property'] == 'subtotal_amount'){
-			$subtotal = $product_obj->total_price;
-			//exit('<pre>'.print_r($product_obj,true).'</pre>');
+			$subtotal = wpsc_cart_total(false);
+			//exit('<pre>'.print_r($subtotal,true).'</pre>');
 			switch($c['logic']) {
 				case 'equal'://Checks if the subtotal of products in the cart equals condition value
 				if ($subtotal == $c['value'])
