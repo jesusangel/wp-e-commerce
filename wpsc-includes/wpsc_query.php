@@ -178,13 +178,20 @@ function wpsc_the_product_id() {
 * wpsc edit the product link function
 * @return string - a link to edit this product
 */
-function wpsc_edit_the_product_link() {
+function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $id = 0 ) {
 	global $wpsc_query, $current_user, $table_prefix;
+	if ( $link == null ) {
+		$link = __('Edit');
+	}
+	$product_id = $wpsc_query->product['id'];
+	if ( $id > 0 ) {
+		$product_id = $id;
+	}
 	$siteurl = get_option('siteurl');
 	get_currentuserinfo();
 	$output = '';
 	if($current_user->{$table_prefix . 'capabilities'}['administrator'] == 1) {
-		$output = "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product_id={$wpsc_query->product['id']}'>".__('Edit')."</a>";
+		$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product_id={$product_id}'>" . $link . "</a>" . $after;
 	}
 	return $output;
 }
