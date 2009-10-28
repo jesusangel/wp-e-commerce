@@ -221,6 +221,17 @@ function wpsc_the_product_description() {
 		),
 		'ul' => array(),
 		'li' => array(),
+		'table' => array(),
+		'tr'=>array(
+			'class'=>array(),
+		),
+		'th' => array(
+			'class'=>array(),
+		),
+		'td' => array(
+			'class'=>array(),		
+		),
+
 	);
 	return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $description_allowed_tags )));
 }
