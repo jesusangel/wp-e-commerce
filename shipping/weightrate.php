@@ -61,8 +61,8 @@ class weightrate {
 	}
 	
 	function getQuote() {
-		global $wpdb, $wpsc_cart;
-		$weight = $wpsc_cart->calculate_total_weight(true);
+		global $wpdb;
+		$weight = wpsc_cart_weight_total();
 		$layers = get_option('weight_rate_layers');
 		if ($layers != '') {
 			krsort($layers);

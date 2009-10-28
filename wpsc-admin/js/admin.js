@@ -104,7 +104,6 @@ jQuery(document).ready( function () {
     containment: 'table#wpsc_product_list',
     placeholder: 'product-placeholder'
   });
-   
 	// this helps show the links in the product list table, it is partially done using CSS, but that breaks in IE6
 	jQuery("tr.product-edit").hover(
 		function() {
