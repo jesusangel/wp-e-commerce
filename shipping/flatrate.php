@@ -28,7 +28,8 @@ class flatrate {
 	
 	function getForm() {
 		$shipping = get_option('flat_rates');
-		$output = "<tr><td colspan='1'><strong>Base Local</strong></td>";
+		$output = "<tr><td colspan='2'>" . __('If you do not wish to ship to a particular region, leave the field blank. To offer free shipping to a region, enter 0.', 'wpsc') . "</td>";
+		$output .= "<tr><td colspan='1'><strong>Base Local</strong></td>";
 		
 		switch(get_option('base_country')) {
 		  case 'NZ':
@@ -92,25 +93,24 @@ class flatrate {
 					}
 				}
 			  
-				return array("Flat Rate"=>(float)$flatrates[$results]);
+				if (strlen($flatrates[$results]) > 0) return array("Flat Rate"=>(float)$flatrates[$results]);
 			}
 		} else {
 			$flatrates = get_option('flat_rates');
-
+			$shipping_quotes = array();
 			switch($country) {
 			  case 'NZ':
-				$shipping_quotes["North Island"] = (float)$flatrates['northisland'];
-				$shipping_quotes["South Island"] = (float)$flatrates['southisland'];
+				if (strlen($flatrates['northisland']) > 0) $shipping_quotes["North Island"] = (float)$flatrates['northisland'];
+				if (strlen($flatrates['southisland']) > 0) $shipping_quotes["South Island"] = (float)$flatrates['southisland'];
 			  break;
 			  
 			  case 'US':
-				$shipping_quotes["Continental 48 States"] = (float)$flatrates['continental'];
-				$shipping_quotes["All 50 States"] = (float)$flatrates['all'];
+				if (strlen($flatrates['continental']) > 0) $shipping_quotes["Continental 48 States"] = (float)$flatrates['continental'];
+				if (strlen($flatrates['all']) > 0) $shipping_quotes["All 50 States"] = (float)$flatrates['all'];
 			  break;
 			  
 			  default:
-				$shipping_quotes["Local Shipping"] = (float)$flatrates['local'];
-			  break;
+				if (strlen($flatrates['local']) > 0) $shipping_quotes["Local Shipping"] = (float)$flatrates['local'];			  break;
 			}
 			if($_SESSION['quote_shipping_method'] == $this->internal_name) {
 			  $shipping_options = array_keys($shipping_quotes);

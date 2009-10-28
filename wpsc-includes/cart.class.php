@@ -410,7 +410,7 @@ function wpsc_have_morethanone_shipping_quote(){
     if (count($wpsc_cart->shipping_methods) == 1 && $wpsc_cart->shipping_methods[0] == 'flatrate') {
         $last_price = false;
         $first_quote_name = false;
-        foreach ($wpsc_cart->shipping_quotes as $name => $quote) {
+        foreach ((array)$wpsc_cart->shipping_quotes as $name => $quote) {
             if (!$first_quote_name) $first_quote_name = $name;
             if ($last_price !== false && $quote != $last_price) return true;
             $last_price = $quote;

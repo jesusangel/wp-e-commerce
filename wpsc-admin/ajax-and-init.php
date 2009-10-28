@@ -1076,8 +1076,10 @@ function wpsc_purchlog_resend_email(){
 							if($row['quantity'] > 1) {
 								$plural = "s";
 							  }
-							$product_list.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-							$product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							$product_list.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n";
+							if ($shipping > 0) $product_list .= " - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							$product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n";
+							if ($shipping > 0) $product_list_html .= " - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
 						}
 						
 						$report.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";

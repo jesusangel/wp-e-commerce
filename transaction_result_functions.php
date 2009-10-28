@@ -142,8 +142,11 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if($row['quantity'] > 1) {
 						$plural = "s";
 						}
-					$product_list.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
-					$product_list_html.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r &nbsp; ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+					$product_list.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
+					if ($shipping > 0) $product_list .= " - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+					$product_list_html.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
+					if ($shipping > 0) $product_list_html .= " &nbsp; ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+
 				}
 				$report = get_option('wpsc_email_admin');
 				$report_product_list.= " - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n\r";
