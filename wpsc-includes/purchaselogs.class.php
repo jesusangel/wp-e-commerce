@@ -237,7 +237,7 @@ function wpsc_purchlogs_getfirstdates(){
 //	exit($i);
 	return $fDate;
 }
-function wpsc_change_purchlog_view($viewby, $status){
+function wpsc_change_purchlog_view($viewby, $status=''){
 	global $purchlogs;
 //	exit('<pre>'.print_r($status,true).'</pre>');
 	if($viewby == 'all'){

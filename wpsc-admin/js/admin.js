@@ -158,7 +158,7 @@ jQuery(document).ready( function () {
 			purchlog_id = jQuery(this).attr('title');
 	 		purchlog_status = jQuery(this).val();
 	 		post_values = "purchlog_id="+purchlog_id+"&purchlog_status="+purchlog_status;
-			jQuery.post( 'index.php?wpsc_admin_action=purchlog_edit_status', post_values, function(returned_data) { });
+			jQuery.post( 'index.php?ajax=true&wpsc_admin_action=purchlog_edit_status', post_values, function(returned_data) { });
 
 		 	if(purchlog_status == 3){
 				jQuery('tr.log'+purchlog_id).show();

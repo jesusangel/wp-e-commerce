@@ -8,7 +8,7 @@
  * @since 3.7
  */
 if(!isset($purchlogs)){
-	$purchlogs = new wpsc_purchaselogs();
+	$purchlogs = new wpsc_purchaselogs();	
 }
  function wpsc_display_sales_logs() {
 		$subpage = $_GET['subpage'];
@@ -477,7 +477,7 @@ if(!isset($purchlogs)){
 	</script>
 
 <?php
- 
+ unset($_SESSION['newlogs']);
  }
  function get_purchaselogs_content(){
  	global $purchlogs;

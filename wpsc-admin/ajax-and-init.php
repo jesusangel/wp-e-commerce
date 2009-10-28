@@ -1245,6 +1245,8 @@ function wpsc_purchlog_bulk_modify(){
 		}
 		
 	}
+//	$dates = $purchlogs->getdates();
+	wpsc_change_purchlog_view('all');
 	$sendback = wp_get_referer();
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
@@ -1273,7 +1275,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 		$purchlog_status = absint($_POST['purchlog_status']);
 	}
 		
-	$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);
+	$log_data = $wpdb->get_row("SELECT `processed` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);
 	if (($purchlog_id==2) && function_exists('wpsc_member_activate_subscriptions')){
 		wpsc_member_activate_subscriptions($_POST['id']);
 	}
@@ -1285,11 +1287,13 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 	}
 
 	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'");
-
 	if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] < 2)) {
 		transaction_results($log_data['sessionid'],false);
 	}
-	exit("1");
+	wpsc_change_purchlog_view('all');
+	if($_REQUEST['ajax'] == true){
+		exit("1");
+	}
 }
 
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {
@@ -1343,7 +1347,7 @@ if ( $_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' ) {
  
 //delete a purchase log
 function wpsc_delete_purchlog($purchlog_id='') {
-	global $wpdb;
+	global $wpdb, $purchlogs;
 	$deleted = 0;
 	if($purchlog_id == ''){
 		$purchlog_id = absint($_GET['purchlog_id']);
