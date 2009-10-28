@@ -292,7 +292,7 @@ function wpsc_have_purchaselog_details(){
 
 function wpsc_purchaselog_details_name(){
 	global $purchlogitem;
-	return $purchlogitem->purchitem->name;
+	return stripslashes($purchlogitem->purchitem->name);
 }
 function wpsc_the_purchaselog_item(){
 	global $purchlogitem;
