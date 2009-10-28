@@ -826,7 +826,7 @@ function wpsc_packing_slip($purchase_id) {
 				
 				echo " <td>";
 				echo $product_data[0]['name'];
-				echo $variation_list;
+				echo stripslashes($variation_list);
 				echo " </td>";
 				
 				
