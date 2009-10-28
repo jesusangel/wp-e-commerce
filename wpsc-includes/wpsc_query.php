@@ -650,7 +650,7 @@ function wpsc_vargrp_id() {
 */
 function wpsc_the_variation_name() {
 	global $wpsc_query;
-	return $wpsc_query->variation['name'];
+	return stripslashes($wpsc_query->variation['name']);
 }
 
 /**
