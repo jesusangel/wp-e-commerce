@@ -265,10 +265,13 @@ if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
   require_once(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php");
 }
 
-// need to sort the merchants here, after the gold ones are included. 
-function wpsc_merchant_sort($a, $b) { 
-  return strnatcmp(strtolower($a['name']), strtolower($b['name'])); 
-} 
+// need to sort the merchants here, after the gold ones are included.
+
+if(!function_exists('wpsc_merchant_sort')){
+	function wpsc_merchant_sort($a, $b) { 
+		return strnatcmp(strtolower($a['name']), strtolower($b['name']));
+	}
+}
 uasort($nzshpcrt_gateways, 'wpsc_merchant_sort');
 
 // make an associative array of references to gateway data.
