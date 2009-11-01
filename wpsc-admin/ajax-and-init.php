@@ -797,6 +797,7 @@ function wpsc_admin_sale_rss() {
 
 function wpsc_swfupload_images() {
 	global $wpdb, $current_user;
+	// xdebug_start_trace();
 	$file = $_FILES['async-upload'];
 	$product_id = absint($_POST['product_id']);
 	$nonce = $_POST['_wpnonce'];
@@ -810,7 +811,6 @@ function wpsc_swfupload_images() {
 	unset($current_user);
 	require_once(ABSPATH . 'wp-admin/admin.php');
 
-	
 	if(!current_user_can('upload_files') ) {
 			exit("status=-1;\n");
 	}

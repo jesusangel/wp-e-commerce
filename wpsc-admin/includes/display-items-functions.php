@@ -882,8 +882,8 @@ function wpsc_product_image_forms($product_data='') {
 					swfupload_pre_load_handler: wpsc_swfuploadPreLoad,
 					swfupload_load_failed_handler: wpsc_swfuploadLoadFailed,
 					custom_settings : {
-						degraded_element_id : "html-upload-ui", // id of the element displayed when swfupload is unavailable
-						swfupload_element_id : "flash-upload-ui" // id of the element displayed when swfupload is available
+						degraded_element_id : "browser-image-uploader", // id of the element displayed when swfupload is unavailable
+						swfupload_element_id : "flash-image-uploader" // id of the element displayed when swfupload is available
 					},
 					<?php
 					if(defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
@@ -908,6 +908,13 @@ function wpsc_product_image_forms($product_data='') {
 				<div id='media-items'> </div>
 				<p><?php echo wpsc_check_memory_limit(); ?></p>
 				<p><?php echo TXT_WPSC_FLASH_UPLOADER; ?></p>
+				<?php
+				if(! function_exists('gold_shpcrt_display_gallery') ) {
+					?>
+					<p><?php _e('To upload multiple product thumbnails you must <a href="http://www.instinct.co.nz/shop/">install the premium upgrade</a>'); ?></p>
+					<?php
+				}
+				?>
     </div>
     
     
