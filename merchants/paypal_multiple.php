@@ -250,7 +250,6 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		// 	echo "<pre>".print_r($_POST,true)."</pre>";
   	exit();
 	}
-	exit('<pre>'.print_r($data, true).'</pre>');
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
 }
