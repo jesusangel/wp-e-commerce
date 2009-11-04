@@ -7,7 +7,22 @@
  * @package wp-e-commerce
  * @since 3.7
  */
- 
+
+
+/**
+ * WPSC get state by id function, gets either state code or state name depending on param
+ *
+ * @since 3.7
+ * $param int $id the id for the region
+ * @param string $return_value either 'name' or 'code' depending on what you want returned
+ */
+function wpsc_get_state_by_id($id, $return_value){
+	global $wpdb;
+	
+	$sql = "SELECT `".$return_value."` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id`=".$id;
+	$value = $wpdb->get_var($sql);
+	return $value;
+}
  
 /**
  * WPSC add new user function, validates and adds a new user, for the 

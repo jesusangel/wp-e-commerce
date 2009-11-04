@@ -57,7 +57,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['bn'] = 'wp-e-commerce';
   
   $data['no_shipping'] = (int)(bool)get_option('paypal_ship');
-  if(get_option('address_override') == 1) {
+  if(get_option('address_override') == 0) {
 		$data['address_override'] = '1';
 	}
   $data['no_note'] = '1';
@@ -187,17 +187,23 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		$data['city'] = urlencode($_POST['collected_data'][get_option('paypal_form_city')]); 
 	}
 	
-    if($_POST['collected_data'][get_option('paypal_form_country')] != '') {
+     
+    if($_POST['collected_data'][get_option('paypal_form_state')] != '') {   
+    	$data['state'] =  urlencode($_POST['collected_data'][get_option('paypal_form_state')]); 
+    }   
+      if($_POST['collected_data'][get_option('paypal_form_country')] != '') {
     	if(is_array($_POST['collected_data'][get_option('paypal_form_country')])) {
     	  $country = $_POST['collected_data'][get_option('paypal_form_country')][0];
+    	  $id = $_POST['collected_data'][get_option('paypal_form_country')][1];
+    	  $state = wpsc_get_state_by_id($id, 'code');
     	} else {
 				$country = $_POST['collected_data'][get_option('paypal_form_country')];
     	}
    		$data['country'] = urlencode($country);
-	}    
-    if($_POST['collected_data'][get_option('paypal_form_state')] != '') {   
-    	$data['state'] =  urlencode($_POST['collected_data'][get_option('paypal_form_state')]); 
-    }    
+   		if($state != ''){
+   			$data['state'] = $state;
+   		}
+	}  
     if(is_numeric($_POST['collected_data'][get_option('paypal_form_post_code')])) {
     	$data['zip'] =  urlencode($_POST['collected_data'][get_option('paypal_form_post_code')]); 
     }
@@ -244,6 +250,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		// 	echo "<pre>".print_r($_POST,true)."</pre>";
   	exit();
 	}
+	exit('<pre>'.print_r($data, true).'</pre>');
   header("Location: ".get_option('paypal_multiple_url')."?".$output);
   exit();
 }
