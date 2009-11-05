@@ -81,21 +81,21 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $all_no_shipping = true;
   
   
-	$total = nzshpcrt_overall_total_price($_SESSION['selected_country'],false,true);
+	$total = $wpsc_cart->calculate_total_price();
 
-	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+	exit('<pre>'.print_r($total, true).'</pre>');
 	$discount = $wpsc_cart->coupons_amount;
 	//exit($discount);
 	if(($discount > 0)) {
 		if($paypal_currency_code != $local_currency_code) {
 			$paypal_currency_productprice = $curr->convert( $wpsc_cart->calculate_total_price(),$paypal_currency_code,$local_currency_code);
 			$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
-			 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
+			 $base_shipping = $curr->convert($wpsc_cart->calculate_total_shipping(),$paypal_currency_code, $local_currency_code);
 			 $tax_price = $curr->convert($item['tax_charged'],$paypal_currency_code, $local_currency_code);
 		} else {
 			$paypal_currency_productprice =  $wpsc_cart->calculate_total_price();
 			$paypal_currency_shipping = $local_currency_shipping;
-			$base_shipping = $purchase_log['base_shipping'];
+			$base_shipping = $wpsc_cart->calculate_total_shipping();
 			 $tax_price = $item['tax_charged'];
 		}
 		$data['item_name_'.$i] = "Your Shopping Cart";
