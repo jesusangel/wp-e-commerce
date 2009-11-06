@@ -1363,12 +1363,20 @@ function wpsc_delete_purchlog($purchlog_id='') {
 		  foreach((array)$cart_content as $cart_item) {
 		    $cart_item_variations = $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_ITEM_VARIATIONS."` WHERE `cart_id` = '".$cart_item['id']."'", ARRAY_A);
 			}
+			
+		//echo "DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'";
+	}
+	
+	$purchlog_status = $wpdb->get_var("SELECT `processed` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`=".$purchlog_id);
+	if($purchlog_status == 5 || $purchlog_status == 1) {
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'");
+	}
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$purchlog_id'");
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$purchlog_id')");
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$purchlog_id' LIMIT 1");
 		//  return '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
 		$deleted = 1;
-		}
+		
  
 	////	
 	if(is_numeric($_GET['purchlog_id'])){

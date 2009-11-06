@@ -823,7 +823,7 @@ global $wpdb;
 			</table> 
 			
 			
-			<h3 class="form_group"><?php echo TXT_WPSC_THUMBNAILSETTINGS;?></h3>
+			<h3 class="form_group"><a name='thumb_settings'><?php echo TXT_WPSC_THUMBNAILSETTINGS;?></a></h3>
 			<table class='wpsc_options form-table'>
 			<?php
 				if(function_exists("getimagesize")) {
@@ -831,9 +831,9 @@ global $wpdb;
 					<tr>
 						<th scope="row"><?php echo TXT_WPSC_PRODUCTTHUMBNAILSIZE;?>:</th>
 						<td>
-							<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[product_image_height]' value='<?php echo get_option('product_image_height'); ?>' />
-							<?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[product_image_width]' value='<?php echo get_option('product_image_width'); ?>' />
-							<a href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=mass_resize_thumbnails", 'mass_resize'); ?>" class='wpsc_mass_resize' ><?php _e("Resize Existing Thumbnails",'wpsc'); ?></a>
+							<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='wpsc_options[product_image_height]' class='wpsc_prod_thumb_option' value='<?php echo get_option('product_image_height'); ?>' />
+							<?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='wpsc_options[product_image_width]' class='wpsc_prod_thumb_option' value='<?php echo get_option('product_image_width'); ?>' />
+							<a href="<?php echo wp_nonce_url("admin.php?wpsc_admin_action=mass_resize_thumbnails", 'mass_resize'); ?>" style='visibility:hidden;' class='wpsc_mass_resize' ><?php _e("Resize Existing Thumbnails",'wpsc'); ?></a>
 						<br />
 						</td>
 					</tr>

@@ -112,7 +112,9 @@ table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
 h3.form_group {
   clear: both;
 }
-
+h3.form_group a{
+	color: #000;
+}
 div.product_and_button_settings {
   width: 450px;
   float: left;

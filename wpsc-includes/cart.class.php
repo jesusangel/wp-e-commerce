@@ -340,7 +340,7 @@ function wpsc_shipping_method_internal_name() {
 }
 
 
- /**
+/**
 * have shipping quotes function, no parameters
 * @return string the cart item url
 */

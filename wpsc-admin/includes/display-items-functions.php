@@ -1110,6 +1110,9 @@ function wpsc_main_product_image_menu($product_id) {
 	if($product_id > 0) {
 		$main_image = $wpdb->get_row("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_id}' LIMIT 1", ARRAY_A);
 	}
+	$sendback = wp_get_referer();
+	$presentation_link = add_query_arg('page','wpsc-settings', $sendback);
+	$presentation_link = add_query_arg('tab','presentation#thumb_settings', $presentation_link);
 	ob_start();
 	?>
 	<div class='image_settings_box'>
@@ -1120,17 +1123,17 @@ function wpsc_main_product_image_menu($product_id) {
 
 		<div class='lower_settings_box'>
 			<input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='S' />
-			<ul>
-				<li>
-					<input type='radio' checked='checked' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label><br />
-				</li>
+			<ul>		
 
 				<li>
-					<input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE; ?>(<abbr title='<?php echo TXT_WPSC_SETONSETTINGS; ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</abbr>)
+					<input type='radio' checked='checked' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo TXT_WPSC_USEDEFAULTSIZE; ?>(<a href='<?php echo $presentation_link; ?>' title='<?php echo TXT_WPSC_SETONSETTINGS; ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</a>)
 					</label>
 
 				</li>
-
+				
+				<li>
+					<input type='radio' name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo TXT_WPSC_DONOTRESIZEIMAGE; ?></label><br />
+				</li>
 				<li>
 					<input type='radio'  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>
 					<div class='heightWidth image_resize_extra_forms'>
@@ -1150,7 +1153,7 @@ function wpsc_main_product_image_menu($product_id) {
 
 				</li>
 				<li>
-					<a href='#' class='delete_primary_image'>Delete this Image</a>
+					<a href='#' class='delete_primary_image delete_button'>Delete this Image</a>
 				</li>
 
 			</ul>

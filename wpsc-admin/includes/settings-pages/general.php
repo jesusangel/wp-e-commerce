@@ -1,7 +1,6 @@
 <?php
 function wpsc_options_general(){
 	global $wpdb;
-	$sendback = wp_get_referer();
 ?>
 	<form name='cart_options' id='cart_options' method='post' action=''>
 	<div id="options_general">

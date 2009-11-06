@@ -1,7 +1,17 @@
 // This is the wp-e-commerce front end javascript "library"
 
 jQuery(document).ready( function () {
-  
+  //js for hide/show 'resize existing thumbnails link on presentation settings page
+  jQuery('.wpsc_prod_thumb_option').livequery(function(){
+	  jQuery(this).focus(function(){
+	 	jQuery('.wpsc_mass_resize').css('visibility', 'visible');
+	  });
+  });
+    jQuery('.wpsc_prod_thumb_option').livequery(function(){
+	  jQuery(this).blur(function(){
+	 	jQuery('.wpsc_mass_resize').css('visibility', 'hidden');
+	  });
+  });
   //grid view checkbox ajax to deselect show images only when other checkboxes are selected
   jQuery('#show_images_only').livequery(function(){
 	jQuery(this).click(function(){

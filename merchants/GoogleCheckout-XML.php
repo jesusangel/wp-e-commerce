@@ -90,55 +90,46 @@ function gateway_google($fromcheckout = false){
 	$cart->SetContinueShoppingUrl($returnURL);
 	$cart->SetEditCartUrl(get_option('shopping_cart_url'));
 	$no=1;
-	//exit("<pre>".print_r($wp_cart,true)."</pre>");
-	
-	//new item code
 	$no = 0;
-//	$cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
-//	foreach($wpsc_cart->cart_items as $item){
-		//google prohibited items not implemented
-	    $curr=new CURRENCYCONVERTER();
-	    $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
-	    $local_currency_code = $currency_code[0]['code'];
-	    
-	    $google_curr = get_option('google_cur');
-		while (wpsc_have_cart_items()) {
-			wpsc_the_cart_item();
-			if($google_curr != $local_currency_code) {
-			$google_currency_productprice = $curr->convert( wpsc_cart_item_price(false)/wpsc_cart_item_quantity(),$google_curr,$local_currency_code);
-		
-		} else {
-			$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
+	//google prohibited items not implemented
+    $curr=new CURRENCYCONVERTER();
+    $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
+    $local_currency_code = $currency_code[0]['code'];
+    
+    $google_curr = get_option('google_cur');
+	while (wpsc_have_cart_items()) {
+		wpsc_the_cart_item();
+		if($google_curr != $local_currency_code) {
+		$google_currency_productprice = $curr->convert( wpsc_cart_item_price(false)/wpsc_cart_item_quantity(),$google_curr,$local_currency_code);
 	
+	} else {
+		$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
+
+	}
+
+		$cartitem["$no"] = new GoogleItem(wpsc_cart_item_name(),      // Item name
+		'', // Item description
+		wpsc_cart_item_quantity(), // Quantity
+		($google_currency_productprice)); // Unit price
+		$cart->AddItem($cartitem["$no"]);
+		$no++;
+	}
+	//If there are coupons applied add coupon as a product with negative price
+	if($wpsc_cart->coupons_amount > 0){
+		if($google_curr != $local_currency_code) {
+			$google_currency_productprice = $curr->convert( $wpsc_cart->coupons_amount,$google_curr,$local_currency_code);	
+		} else {
+			$google_currency_productprice = $wpsc_cart->coupons_amount;
 		}
-
-		//	exit('<pre>'.print_r(wpsc_cart_item_name(),true).'</pre>');
-			$cartitem["$no"] = new GoogleItem(wpsc_cart_item_name(),      // Item name
-			'', // Item description
-			wpsc_cart_item_quantity(), // Quantity
-			($google_currency_productprice)); // Unit price
-			$cart->AddItem($cartitem["$no"]);
-			$no++;
-		}
-		//If there are coupons applied add coupon as a product with negative price
-		if($wpsc_cart->coupons_amount > 0){
-			if($google_curr != $local_currency_code) {
-				$google_currency_productprice = $curr->convert( $wpsc_cart->coupons_amount,$google_curr,$local_currency_code);	
-			} else {
-				$google_currency_productprice = $wpsc_cart->coupons_amount;
-			}
-			$cartitem[$no] = new GoogleItem('Discount',      // Item name
-			'Discount Price', // Item description
-			1, // Quantity
-			('-'.$google_currency_productprice)); // Unit price
-			$cart->AddItem($cartitem[$no]);
+		$cartitem[$no] = new GoogleItem('Discount',      // Item name
+		'Discount Price', // Item description
+		1, // Quantity
+		('-'.$google_currency_productprice)); // Unit price
+		$cart->AddItem($cartitem[$no]);
 
 
-		}
-
-//	}
-
-
+	}
+	
 	// Add shipping options
 	$Gfilter = new GoogleShippingFilters();
 	$google_checkout_shipping=get_option("google_shipping_country");
@@ -207,16 +198,13 @@ function gateway_google($fromcheckout = false){
 		} elseif(get_option('google_button_size') == '2') {
 			$google_button_size = 'SMALL';
 		}
-	// Display Google Checkout button
-	 //echo '<pre>'.print_r($cart, true).'</pre>';
-	 //unset($_SESSION['wpsc_sessionid']);
-	 //if($fromCheckout){
+
 	echo $cart->CheckoutButtonCode($google_button_size);
-	//}
+
 }
 
 function wpsc_google_checkout_page(){
-global $wpsc_gateway;
+	global $wpsc_gateway;
 	 $script = "<script type='text/javascript'>
 	 				jQuery(document).ready(
   						function()
@@ -227,13 +215,11 @@ global $wpsc_gateway;
 	 					});
 	 			</script>";
 	 $options = get_option('payment_gateway');
-// exit('HELLO<pre>'.print_r(get_option('custom_gateway_options'), true).'</pre>');
 
-	//foreach((array)get_option('custom_gateway_options') as $gateway){
-		if(in_array('google', (array)get_option('custom_gateway_options'))){
-			$options = 'google';
-		}
-//	}
+
+	if(in_array('google', (array)get_option('custom_gateway_options'))){
+		$options = 'google';
+	}
 	 if($options == 'google' && isset($_SESSION['gateway'])){
 	 	unset($_SESSION['gateway']);
 		echo $script;
@@ -243,6 +229,7 @@ global $wpsc_gateway;
  
 }
 add_action('wpsc_before_form_of_shopping_cart', 'wpsc_google_checkout_page');
+
 function submit_google() {
 	if($_POST['google_id'] != null) {
 		update_option('google_id', $_POST['google_id']);
