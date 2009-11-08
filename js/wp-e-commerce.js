@@ -124,6 +124,7 @@ jQuery(document).ready(function () {
 			eval(returned_data);
       if(product_id != null) {
         target_id = "product_price_"+product_id;
+        second_target_id = "donation_price_"+product_id;
 				buynow_id = "BB_BuyButtonForm"+product_id;
 				//document.getElementById(target_id).firstChild.innerHTML = price;			
 				if(jQuery("input#"+target_id).attr('type') == 'text') {
@@ -131,6 +132,7 @@ jQuery(document).ready(function () {
 				} else {
 				  jQuery("#"+target_id+".pricedisplay").html(price);
 				}
+				jQuery("input#"+second_target_id).val(numeric_price);
 			}
 		});
 		return false;
