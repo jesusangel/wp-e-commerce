@@ -99,8 +99,10 @@ function wpsc_enqueue_user_script_and_css() {
 		wp_enqueue_style( 'wpsc-thickbox', WPSC_URL.'/js/thickbox.css', false, $version_identifier, 'all');
 		
 		
-		wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');
+		/* IE conditional css 
+wp_enqueue_style( 'wpsc-ie-fixes', WPSC_URL.'/themes/wpsc-ie-fixes.css', false, $version_identifier, 'all');
 		$wp_styles->add_data( 'wpsc-ie-fixes', 'conditional', 'lt IE 7' );
+*/
 	}
 
 	
