@@ -941,11 +941,14 @@ class wpsc_cart {
 	 * No parameters, nothing returned
 	*/
   function empty_cart($fromwidget = true) {
-  		if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
-  		//	exit('google triggered');
-  			///wpsc_empty_google_logs();
-  		}
-  	
+  	global $wpdb;
+		if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
+		//	exit('google triggered');
+			///wpsc_empty_google_logs();
+		}
+		
+		$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s');", $this->unique_id));
+
 		$this->cart_items = array();
 		$this->cart_item = null;
 		$this->cart_item_count = 0;

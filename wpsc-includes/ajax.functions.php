@@ -112,9 +112,9 @@ function wpsc_add_to_cart() {
 		ob_end_clean();
 		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-	//echo '<pre>'.print_r($parameters,true).'</pre>';
+		//echo '<pre>'.print_r($parameters,true).'</pre>';
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
-  //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
+		//  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 
     
 		if(get_option('show_sliding_cart') == 1)	{
@@ -125,7 +125,6 @@ function wpsc_add_to_cart() {
 						jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
 					});
 			";
-			
 			} else {
 				$_SESSION['slider_state'] = 0;
 				echo "
@@ -140,12 +139,11 @@ function wpsc_add_to_cart() {
 		exit();
   }
 }
+
 // execute on POST and GET
 if($_REQUEST['wpsc_ajax_action'] == 'add_to_cart') {
 	add_action('init', 'wpsc_add_to_cart');
 }
-
-
 
 /**
 	* empty cart function, used through ajax and in normal page loading.

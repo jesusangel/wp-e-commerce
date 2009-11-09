@@ -156,9 +156,9 @@ function wpsc_display_groups_page() {
 		}
       
    
-    $tidied_name = sanitize_title($_POST['name']);
-		$tidied_name = strtolower($tidied_name);
-		$url_name = sanitize_title($tidied_name);
+    //$tidied_name = sanitize_title();
+		//$tidied_name = strtolower($tidied_name);
+		$url_name = sanitize_title($_POST['name']);
     $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
     $extension_number = '';
     if($similar_names['count'] > 0) {
@@ -201,6 +201,7 @@ function wpsc_display_groups_page() {
     }
     
     if(trim($_POST['name']) != null) {
+			//$_POST['name'] = "test";
       $insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
       
       $wp_rewrite->flush_rules(); 
@@ -219,7 +220,7 @@ function wpsc_display_groups_page() {
     
    // Jeff 15-04-09 Used for category target market options
 	   
-    if($_POST['countrylist2'] != null){
+    if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
     	$AllSelected = false;
     	
 			$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
@@ -296,9 +297,9 @@ function wpsc_display_groups_page() {
       $category_sql_list[] = "`name` = '$category_name' ";
       
       /* creates and checks the tidy URL name */     
-      $tidied_name = trim($category_name);
-      $tidied_name = strtolower($tidied_name);
-      $url_name = sanitize_title($tidied_name);
+//       $tidied_name = trim($category_name);
+//       $tidied_name = strtolower($tidied_name);
+      $url_name = sanitize_title($category_name);
       if($url_name != $category_data['nice-name']) {
         $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(0-9)*$' AND `id` NOT IN ('".(int)$category_data['id']."') ",ARRAY_A);
         //exit("<pre>".print_r($similar_names,true)."</pre>");

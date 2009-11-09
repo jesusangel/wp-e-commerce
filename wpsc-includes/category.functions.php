@@ -143,7 +143,7 @@ function wpsc_display_category_loop($query, $category_html){
 	if(is_numeric($query['category_group']) ) {
 	  $category_group = absint($query['category_group']);
       $category_sql_segment[] = "`group_id`='$category_group'";
-	} elseif($query['category_group']=='all' ||$query['category_group']=='all+list') {
+	} else if($query['category_group']=='all' ||$query['category_group']=='all+list') {
 	  $category_group = 1;
 	}
 
@@ -163,7 +163,11 @@ function wpsc_display_category_loop($query, $category_html){
 	}
 	//exit("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order");
 	$category_sql_segment = apply_filters('wpsc_display_category_loop_category_sql_segments', $category_sql_segment); 
+  
 
+  $category_data = $wpdb->get_results("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order",ARRAY_A);
+
+   //echo "<pre>".print_r($category_sql_segment, true)."</pre>";
   $output ='';
   foreach((array)$category_data as $category_row) {
     $modified_query = $query;
