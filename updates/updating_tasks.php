@@ -192,13 +192,13 @@ if($wpdb->get_results("SHOW FULL COLUMNS FROM `".WPSC_TABLE_REGION_TAX."` LIKE '
     $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `code` = 'WV' WHERE `name` IN('West Virginia') LIMIT 1 ;");
     $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `code` = 'WI' WHERE `name` IN('Wisconsin') LIMIT 1 ;");
     $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `code` = 'WY' WHERE `name` IN('Wyoming') LIMIT 1 ;");
+    
+
   }
 }
      
      
-     
-     
-     
+   
      
      
      
