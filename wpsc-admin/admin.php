@@ -31,6 +31,16 @@ if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_P
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/settings-pages/general.php");
 
 
+if(get_option('wpsc_checkout_form_fields') == ''){
+	$form_types = 	Array("text","email","address","city","country","delivery_address","delivery_city","delivery_country","textarea","heading","select","radio","checkbox");
+	update_option('wpsc_checkout_form_fields', $form_types);
+}
+
+if(get_option('wpsc_checkout_form_sets') == ''){
+	$form_sets = array('Default Checkout Forms');
+	update_option('wpsc_checkout_form_sets', $form_sets);
+}
+
 /**
 	* wpsc_admin_pages function, all the definitons of admin pages are stores here.
 	* No parameters, returns nothing
@@ -95,13 +105,6 @@ function wpsc_admin_pages(){
 			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
 			
 			
-			
-			
-			
-			add_submenu_page('users.php',TXT_WPSC_ECOMMERCE_SUBSCRIBERS, TXT_WPSC_ECOMMERCE_SUBSCRIBERS, 7, WPSC_DIR_NAME.'/display-ecommerce-subs.php');			
-			
-			
-			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
 			}			//exit('-->'.$help);
@@ -130,7 +133,7 @@ function wpsc_admin_pages(){
 			//$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_GOLD_OPTIONS, TXT_WPSC_GOLD_OPTIONS, 7, 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
 			
 			if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
-				$page_hooks[] = add_submenu_page($base_page,__('Debug'), __('Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');
+				$page_hooks[] = add_submenu_page($base_page,__('- Debug'), __('- Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');
 			}
 
 			$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $base_page);
@@ -240,6 +243,8 @@ function wpsc_admin_edit_products_page_js() {
 	
 	//add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
 	wp_enqueue_script('quicktags');
+	do_action('wpsc_admin_edit_products_js');
+	
 }
 /**
 	* wpsc_admin_include_optionspage_css_and_js function, includes the wpsc_admin CSS and JS for the specific options page
@@ -274,8 +279,24 @@ function wpsc_admin_dynamic_js() {
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
  	header('Cache-Control: public, must-revalidate, max-age=86400');
  	header('Pragma: public');
-    $siteurl = get_option('siteurl'); 
+ 	
+	$siteurl = get_option('siteurl');
 	$hidden_boxes = get_option('wpsc_hidden_box');
+
+	$form_types1 = get_option('wpsc_checkout_form_fields');
+	$unique_names1 = Array('billingfirstname', 'billinglastname', 'billingaddress', 'billingcity',
+	'billingcountry', 'billingemail', 'billingphone', 'billingpostcode',
+	'delivertoafriend', 'shippingfirstname', 'shippinglastname', 'shippingaddress',
+	'shippingcity', 'shippingstate', 'shippingcountry', 'shippingpostcode');
+	foreach($form_types1 as $form_type) {
+			$form_types .= "<option value='".$form_type."'>".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
+	}
+
+	$unique_names = "<option value='-1'>Select a Unique Name</option>";
+	foreach($unique_names1 as $unique_name){
+		$unique_names.= "<option value='".$unique_name."'>".$unique_name."</option>";
+	}
+
 	$hidden_boxes = implode(',', (array)$hidden_boxes);
 	
 	echo "var base_url = '".$siteurl."';\n\r";
@@ -302,17 +323,9 @@ function wpsc_admin_dynamic_js() {
 	echo "var TXT_WPSC_TEXTAREA = '".TXT_WPSC_TEXTAREA."';\n\r";
 	echo "var TXT_WPSC_HEADING = '".TXT_WPSC_HEADING."';\n\r";
 	echo "var TXT_WPSC_COUPON = '".TXT_WPSC_COUPON."';\n\r";
-	echo "var HTML_FORM_FIELD_TYPES =\"<option value='text' >".TXT_WPSC_TEXT."</option>";
-	echo "<option value='email' >".TXT_WPSC_EMAIL."</option>";
-	echo "<option value='address' >".TXT_WPSC_ADDRESS."</option>";
-	echo "<option value='city' >".TXT_WPSC_CITY."</option>";
-	echo "<option value='country'>".TXT_WPSC_COUNTRY."</option>";
-	echo "<option value='delivery_address' >".TXT_WPSC_DELIVERY_ADDRESS."</option>";
-	echo "<option value='delivery_city' >".TXT_WPSC_DELIVERY_CITY."</option>";
-	echo "<option value='delivery_country'>".TXT_WPSC_DELIVERY_COUNTRY."</option>";
-	echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";    
-	echo "<option value='heading' >".TXT_WPSC_HEADING."</option>";
-	echo "<option value='coupon' >".TXT_WPSC_COUPON."</option>\";\n\r";
+
+	echo "var HTML_FORM_FIELD_TYPES =\" ".$form_types."; \" \n\r";  
+	echo "var HTML_FORM_FIELD_UNIQUE_NAMES = \" ".$unique_names."; \" \n\r";
 	
 	echo "var TXT_WPSC_LABEL = '".TXT_WPSC_LABEL."';\n\r";
 	echo "var TXT_WPSC_LABEL_DESC = '".TXT_WPSC_LABEL_DESC."';\n\r";

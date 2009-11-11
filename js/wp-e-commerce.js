@@ -1,7 +1,6 @@
 // This is the wp-e-commerce front end javascript "library"
 
-// this function is for binding actions to events and rebinding them after they are replaced by AJAX
-// these functions are bound to events on elements when the page is fully loaded.
+
 // empty the cart using ajax when the form is submitted,  
 function check_make_purchase_button(){
 	toggle = jQuery('#noca_gateway').attr('checked');
@@ -13,7 +12,8 @@ function check_make_purchase_button(){
 		jQuery('#OCPsubmit').hide();		
 	}
 }	
-
+// this function is for binding actions to events and rebinding them after they are replaced by AJAX
+// these functions are bound to events on elements when the page is fully loaded.
 jQuery(document).ready(function () {
   	
   	//this bit of code runs on the checkout page. If the checkbox is selected it copies the valus in the billing country and puts it in the shipping country form fields. 23.07.09
@@ -126,11 +126,12 @@ jQuery(document).ready(function () {
         target_id = "product_price_"+product_id;
         second_target_id = "donation_price_"+product_id;
 				buynow_id = "BB_BuyButtonForm"+product_id;
-				//document.getElementById(target_id).firstChild.innerHTML = price;			
+				
+				//document.getElementById(target_id).firstChild.innerHTML = price;
 				if(jQuery("input#"+target_id).attr('type') == 'text') {
-				  jQuery("input#"+target_id).val(numeric_price);
+					jQuery("input#"+target_id).val(numeric_price);
 				} else {
-				  jQuery("#"+target_id+".pricedisplay").html(price);
+					jQuery("#"+target_id+".pricedisplay").html(price);
 				}
 				jQuery("input#"+second_target_id).val(numeric_price);
 			}

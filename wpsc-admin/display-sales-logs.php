@@ -127,13 +127,18 @@ if(!isset($purchlogs)){
 			
 			<?php
 		$page_back = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','purchaselog_id'), $_SERVER['REQUEST_URI'] );
+		 if(wpsc_tax_isincluded() == false){
+		 	$taxlabel = 'Tax';
+		 }else{
+		 	$taxlabel = 'Tax Included';
+		 }
 
 		$columns = array(
 	  	'title' => 'Name',
 			'sku' => 'SKU',
 			'quantity' => 'Quantity',
 			'price' => 'Price',
-			'tax' => 'Tax',
+			'tax' => $taxlabel,
 // 			'discount' => 'Discount',
 			'total' => 'Total'
 		);
@@ -542,7 +547,7 @@ if(!isset($purchlogs)){
  	<td><?php echo wpsc_purchaselog_details_SKU(); ?></td> <!-- SKU -->
  	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY-->
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE -->
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_tax(),true); ?></td> <!-- TAX -->
+ 	<td><?php echo wpsc_purchaselog_details_tax(); ?></td> <!-- TAX -->
  	<?php /* <td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT --> */ ?>
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL -->
  	</tr>
@@ -607,19 +612,27 @@ function wpsc_custom_checkout_fields(){
 	if(!empty($purchlogitem->customcheckoutfields)){
 	?>
 		<div class="metabox-holder">
-		<div id="custom_checkout_fields" class="postbox">
-		<h3 class='hndle'>Additional Checkout Fields</h3>
-		<div class='inside'>
-		<?php
-		foreach((array)$purchlogitem->customcheckoutfields as $key=>$value){
-		?>
-		<p><strong><?php echo $key; ?> :</strong> <?php echo $value['value']; ?></p>
-		<?php
-		
-		}
-		?>
-		</div>
-		</div>
+			<div id="custom_checkout_fields" class="postbox">
+				<h3 class='hndle'>Additional Checkout Fields</h3>
+				<div class='inside'>
+				<?php
+				foreach((array)$purchlogitem->customcheckoutfields as $key=>$value){
+					$value['value'] = maybe_unserialize($value['value']);	
+					if(is_array($value['value'])){
+						?>
+						<p><strong><?php echo $key; ?> :</strong> <?php echo implode($value['value'], ','); ?></p>
+						<?php
+						
+												
+					}else{
+						?>
+						<p><strong><?php echo $key; ?> :</strong> <?php echo $value['value']; ?></p>
+						<?php
+					}
+				}
+				?>
+				</div>
+			</div>
 		</div>
 		<?php
 	}

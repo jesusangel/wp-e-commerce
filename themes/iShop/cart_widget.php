@@ -46,7 +46,8 @@
 		<span class='total'>
 		  <span class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 		<span class='totalhead'>
-			<?php echo TXT_WPSC_TAX; ?>:
+			<?php echo wpsc_display_tax_label(true); ?>:
+
 	  </span>
 	
 	</span>

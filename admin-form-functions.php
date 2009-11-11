@@ -13,7 +13,7 @@ function nzshpcrt_getcategoryform($catid)
 	$output .="		<dt>Display Category Shortcode: </dt>\n\r";
 	$output .="		<dd> [wpsc_products category_url_name='{$product['nice-name']}']</dd>\n\r";
 	$output .="		<dt>Display Category Template Tag: </dt>\n\r";
-	$output .="		<dd> &lt;?php echo wpsc_display_products(array('category_url_name'=>'{$product['nice-name']}')); ?&gt;</dd>\n\r";
+	$output .="		<dd> &lt;?php echo wpsc_display_products_page(array('category_url_name'=>'{$product['nice-name']}')); ?&gt;</dd>\n\r";
 	$output .="</dl>\n\r";
 	
 	//$output .= "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";

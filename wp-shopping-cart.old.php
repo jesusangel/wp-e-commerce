@@ -360,6 +360,15 @@ var borderSize = 10;
 /* LightBox Configuration end*/
 /* custom admin functions start*/
 <?php
+	$form_types = get_option('wpsc_checkout_form_fields');
+
+	$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
+	 foreach($form_types as $form_type) {
+	      $form_types .= "<option value='".$form_type."'>".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
+	 }
+    foreach($unique_names as $unique_name){
+    	$unique_names.= "<option value='".$unique_name."'>".$unique_name."</option>";
+    }
 	$hidden_boxes = get_option('wpsc_hidden_box');
 	$hidden_boxes = implode(',', (array)$hidden_boxes);
 	echo "var hidden_boxes = '".$hidden_boxes."';";
@@ -371,18 +380,10 @@ var borderSize = 10;
     echo "var TXT_WPSC_TEXTAREA = '".TXT_WPSC_TEXTAREA."';\n\r";
     echo "var TXT_WPSC_HEADING = '".TXT_WPSC_HEADING."';\n\r";
     echo "var TXT_WPSC_COUPON = '".TXT_WPSC_COUPON."';\n\r";
-    echo "var HTML_FORM_FIELD_TYPES =\"<option value='text' >".TXT_WPSC_TEXT."</option>";
-    echo "<option value='email' >".TXT_WPSC_EMAIL."</option>";
-    echo "<option value='address' >".TXT_WPSC_ADDRESS."</option>";
-    echo "<option value='city' >".TXT_WPSC_CITY."</option>";
-    echo "<option value='country'>".TXT_WPSC_COUNTRY."</option>";
-    echo "<option value='delivery_address' >".TXT_WPSC_DELIVERY_ADDRESS."</option>";
-    echo "<option value='delivery_city' >".TXT_WPSC_DELIVERY_CITY."</option>";
-    echo "<option value='delivery_country'>".TXT_WPSC_DELIVERY_COUNTRY."</option>";
-    echo "<option value='textarea' >".TXT_WPSC_TEXTAREA."</option>";    
-    echo "<option value='heading' >".TXT_WPSC_HEADING."</option>";
-    echo "<option value='coupon' >".TXT_WPSC_COUPON."</option>\";\n\r";
+    echo "var HTML_FORM_FIELD_TYPES =\" ".$form_types."; \" \n\r";
     
+    echo "var HTML_FORM_FIELD_UNIQUE_NAMES = \" ".$unique_names."; \" \n\r";
+
     echo "var TXT_WPSC_LABEL = '".TXT_WPSC_LABEL."';\n\r";
     echo "var TXT_WPSC_LABEL_DESC = '".TXT_WPSC_LABEL_DESC."';\n\r";
     echo "var TXT_WPSC_ITEM_NUMBER = '".TXT_WPSC_ITEM_NUMBER."';\n\r";

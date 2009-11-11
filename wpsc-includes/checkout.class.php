@@ -37,6 +37,19 @@ function wpsc_google_checkout_submit(){
 	$wpsc_cart->submit_stock_claims($purchase_log_id);
 
 }
+function wpsc_display_tax_label($checkout = false){
+	global $wpsc_cart;
+	if(wpsc_tax_isincluded()){
+		if($checkout){
+			return "Tax Included (".$wpsc_cart->tax_percentage.'%)'; 
+		}else{
+			return "Tax Included";
+		}
+	}else{
+		return TXT_WPSC_TAX;
+	}
+
+}
 function wpsc_have_checkout_items() {
 	global $wpsc_checkout;
 	return $wpsc_checkout->have_checkout_items();
@@ -300,15 +313,34 @@ class wpsc_checkout {
 	var $checkout_item_count = 0;
 	var $current_checkout_item = -1;
 	var $in_the_loop = false;
+
+	//the ticket additions
+	var $additional_fields = array();
+	var $formfield_count =0;
    
 	/**
 	* wpsc_checkout method, gets the tax rate as a percentage, based on the selected country and region
 	* @access public
 	*/
-  function wpsc_checkout() {
+  function wpsc_checkout($checkout_set = 0) {
     global $wpdb;
-    $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;");
+    $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".$checkout_set."' ORDER BY `order`;");
     $this->checkout_item_count = count($this->checkout_items);
+    if(function_exists('wpsc_get_ticket_checkout_set')){
+    	$sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".wpsc_get_ticket_checkout_set()."' ORDER BY `order`;";
+    	$this->additional_fields = $wpdb->get_results($sql);
+    	$count = wpsc_ticket_checkoutfields();
+    	$j = 1;
+    	$fields = $this->additional_fields;
+    	$this->formfield_count = count($fields) + $this->checkout_item_count;
+    	while($j < $count){
+    		$this->additional_fields = array_merge((array)$this->additional_fields, (array)$fields);
+    		$j++;
+    	}
+    	//exit($sql.'<pre>'.print_r($this->additional_fields, true).'</pre>'.$count);
+    	$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->additional_fields);
+    	$this->checkout_item_count = count($this->checkout_items);
+    }
   }
   
   function form_name() {
@@ -333,7 +365,17 @@ class wpsc_checkout {
   function form_element_id() {
 		return 'wpsc_checkout_form_'.$this->checkout_item->id;
 	}  
-	
+	/**
+	* get_checkout_options, returns the form field options
+	* @access public
+	*/
+  function get_checkout_options($id){
+  		global $wpdb;
+  		$sql = 'SELECT `options` FROM `'.WPSC_TABLE_CHECKOUT_FORMS.'` WHERE `id`='.$id;
+  		$options = $wpdb->get_var($sql);
+  		$options = unserialize($options);
+  		return $options;
+  }
 	/**
 	* form_field method, returns the form html
 	* @access public
@@ -346,11 +388,30 @@ class wpsc_checkout {
 			$_SESSION['wpsc_checkout_saved_values'] = get_usermeta($user_ID, 'wpshpcrt_usr_profile');
 		}
 		$saved_form_data = htmlentities(stripslashes($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES);
+		//exit('<pre>'.print_r($this, true).'</pre>');
+		$an_array = '';
+		if(function_exists('wpsc_get_ticket_checkout_set')){
+			if($this->checkout_item->checkout_set == wpsc_get_ticket_checkout_set()){
+				$an_array = '[]';
+			}
+		}
 		switch($this->checkout_item->type) {
 			case "address":
 			case "delivery_address":
 			case "textarea":
-			$output = "<textarea title='".$this->checkout_item->unique_name."' class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]' rows='3' cols='40' >".$saved_form_data."</textarea>";
+				
+			$output = "<textarea title='".$this->checkout_item->unique_name."' class='text' id='".$this->form_element_id()."' name='collected_data[{$this->checkout_item->id}]".$an_array."' rows='3' cols='40' >".$saved_form_data."</textarea>";
+			break;
+			
+			case "checkbox":
+				$options = $this->get_checkout_options($this->checkout_item->id);	
+				if($options != ''){
+					$i = mt_rand();
+					foreach($options as $label=>$value){
+						$output .= "<input type='hidden' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='-1' name='collected_data[{$this->checkout_item->id}][".$i."]'/><input type='checkbox' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='".$value."' name='collected_data[{$this->checkout_item->id}][".$i."]'/> ";
+						$output .= "<label for='".$this->form_element_id()."'>".$label."</label>";
+					}
+				}
 			break;
 			
 			case "country":
@@ -358,24 +419,47 @@ class wpsc_checkout {
 			break;
 
 			case "delivery_country":
-			if(wpsc_uses_shipping()){
-			$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
-			$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
-			}else{
-			$checkoutfields = true;
-			//$output = wpsc_shipping_country_list($checkoutfields);
-			$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id(), $checkoutfields);
-			}
+				if(wpsc_uses_shipping()){
+				$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
+				$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
+				}else{
+				$checkoutfields = true;
+				//$output = wpsc_shipping_country_list($checkoutfields);
+				$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id(), $checkoutfields);
+				}
 			break;
-			
+			case "select":
+				$options = $this->get_checkout_options($this->checkout_item->id);
+				if($options != ''){
+				$output = "<select name='collected_data[{$this->checkout_item->id}]".$an_array."'>";
+				$output .= "<option value='-1'>Select an Option</option>";
+				foreach((array)$options as $label => $value){
+					$value = str_replace(' ', '',$value);
+					$output .="<option value='".$value."'>".$label."</option>\n\r";
+				}
+				$output .="</select>";
+				}
+			//echo ('<pre>'.print_r($output, true).'</pre>');
+			break;
+			case "radio":
+				$options = $this->get_checkout_options($this->checkout_item->id);			
+				if($options != ''){	
+					$i = mt_rand();
+					foreach((array)$options as $label => $value){
+					$output .= "<input type='radio' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."'value='".$value."' name='collected_data[{$this->checkout_item->id}][".$i."]'/> ";
+					$output .= "<label for='".$this->form_element_id()."'>".$label."</label>";
+					
+					}
+				}
+			break;
 			case "text":
 			case "city":
 			case "delivery_city":
 			case "email":
 			case "coupon":
 			default:
-
-			$output = "<input title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$saved_form_data."' name='collected_data[{$this->checkout_item->id}]' />";
+				$output = "<input title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$saved_form_data."' name='collected_data[{$this->checkout_item->id}]".$an_array."' />";
+				
 			break;
 		}
 		return $output;
@@ -485,7 +569,7 @@ class wpsc_checkout {
 	if( $our_user_id > 0 ){
 		$user_ID = $our_user_id;
 	}
-
+		//exit('<pre>'.print_r($_POST['collected_data'],true).'</pre>');
     		//Basic Form field validation for billing and shipping details
   		foreach($this->checkout_items as $form_data) {
 			$value = $_POST['collected_data'][$form_data->id];
@@ -505,7 +589,12 @@ class wpsc_checkout {
 					case "country":
 					case "heading":
 					break;
-					
+					case "select":
+					if($value == '-1'){
+						$any_bad_inputs = true;
+						$bad_input = true;					
+					}
+					break;
 					default:
 					if($value == null) {
 						$any_bad_inputs = true;
@@ -549,26 +638,52 @@ class wpsc_checkout {
 	*/
   function save_forms_to_db($purchase_id) {
    global $wpdb;
-   
+   		$count = $this->get_count_checkout_fields() + 1;
+  		//exit('<pre>'.print_r($_POST['collected_data'], true).'</pre>');
+		$i = 0;
 		foreach($this->checkout_items as $form_data) {
-		
+		 
 		  $value = $_POST['collected_data'][$form_data->id];
 		  if($value == ''){
 		  	$value = $form_data->value;
 		  }	
+   	      if($form_data->type != 'heading') {
 		 // echo '<pre>'.print_r($form_data,true).'</pre>';
-		  if(is_array($value)){
-		  	$value = $value[0];
-		  }	  
-		  if($form_data->type != 'heading') {
+		  	if(is_array($value) &&($form_data->type == 'country' ||$form_data->type == 'delivery_country') ){
+			  	$value = $value[0];
+			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+			}elseif(is_array($value)) {
+				echo('<pre>'.print_r($value, true).'</pre>');
+			  	foreach((array)$value as $v){
+			  	
+			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $v));
+			  	}
+			}else{
+					$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+			
+			}
+		
 				//echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
 				
-				$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+			
 				
- 			}
+ 			} 
+ 		  if($i == $count){
+		  	break;
+		  }
+ 			$i++;
 		}
   }
-  
+  /**
+   * Function that checks how many checkout fields are stored in checkout form fields table
+   */
+   function get_count_checkout_fields(){
+   		global $wpdb;
+   		$sql = "SELECT COUNT(*) FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` !='heading' AND `active`='1'";
+   		$count = $wpdb->get_var($sql);
+   		return $count;
+   
+   }
   /**
 	 * checkout loop methods
 	*/ 

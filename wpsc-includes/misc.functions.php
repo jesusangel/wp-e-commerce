@@ -7,8 +7,8 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-
-
+ 
+ 
 /**
  * WPSC get state by id function, gets either state code or state name depending on param
  *
@@ -23,7 +23,8 @@ function wpsc_get_state_by_id($id, $return_value){
 	$value = $wpdb->get_var($sql);
 	return $value;
 }
- 
+
+
 /**
  * WPSC add new user function, validates and adds a new user, for the 
  *
@@ -74,7 +75,6 @@ function wpsc_get_state_by_id($id, $return_value){
 
 	//wp_new_user_notification($user_id, $user_pass);
  }
-
 
 
 
@@ -663,4 +663,35 @@ function wpsc_replace_reply_name($input) {
   return $output;
 }
 
+/**
+* wpsc_object_to_array, recusively converts an object to an array, for usage with SOAP code
+
+* Copied from here, then modified:
+* http://www.phpro.org/examples/Convert-Object-To-Array-With-PHP.html
+
+*/
+
+function wpsc_object_to_array( $object ) {
+		if( !is_object( $object ) && !is_array( $object ) ) {
+				return $object;
+		} else if( is_object( $object ) )	{
+				$object = get_object_vars( $object );
+		}
+		return array_map( 'wpsc_object_to_array', $object );
+}
+
+
+/**
+* wpsc_clear_stock_claims, clears the stock claims, runs using wp-cron
+*/
+
+function wpsc_clear_stock_claims( ) {
+	global $wpdb;
+	wp_mail('thomas.howard@gmail.com', 'test hourly cron', 'wpsc_clear_stock_claims ran');
+	/// Delete the old claims on stock
+	$old_claimed_stock_timestamp = mktime((date('H') - 1), date('i'), date('s'), date('m'), date('d'), date('Y'));
+	$old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
+	$wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
+}
+add_action('wpsc_daily_cron_tasks', 'wpsc_clear_stock_claims');
 ?>

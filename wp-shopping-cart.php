@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.instinct.co.nz
 Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support.
-Version: 3.7.5
+Version: 3.7.6 Development
 Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 */
@@ -14,9 +14,9 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '41');
+define('WPSC_MINOR_VERSION', '42');
 
-define('WPSC_PRESENTABLE_VERSION', '3.7.5');
+define('WPSC_PRESENTABLE_VERSION', '3.7.6 Development');
 
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);
@@ -69,7 +69,7 @@ if(!empty($wpdb->prefix)) {
 define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
 define('WPSC_TABLE_ALSO_BOUGHT', "{$wp_table_prefix}wpsc_also_bought");
 define('WPSC_TABLE_CART_CONTENTS', "{$wp_table_prefix}wpsc_cart_contents");
-define('WPSC_TABLE_CART_ITEM_EXTRAS', "{$wp_table_prefix}wpsc_cart_item_extras");
+define('WPSC_TABLE_META', "{$wp_table_prefix}wpsc_meta");
 define('WPSC_TABLE_CART_ITEM_VARIATIONS', "{$wp_table_prefix}wpsc_cart_item_variations");
 define('WPSC_TABLE_CHECKOUT_FORMS', "{$wp_table_prefix}wpsc_checkout_forms");
 define('WPSC_TABLE_CURRENCY_LIST', "{$wp_table_prefix}wpsc_currency_list");
@@ -114,6 +114,8 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 include_once(WPSC_FILE_PATH."/wpsc-includes/category.functions.php");
 include_once(WPSC_FILE_PATH."/wpsc-includes/processing.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/form-display.functions.php");
+require_once(WPSC_FILE_PATH."/wpsc-includes/merchant.class.php");
+require_once(WPSC_FILE_PATH."/wpsc-includes/meta.functions.php");
 //exit(print_r($v1,true));
 if($v1[0] >= 2.8){
 	require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
@@ -265,9 +267,8 @@ if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
   require_once(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php");
 }
 
-// need to sort the merchants here, after the gold ones are included.
-
-if(!function_exists('wpsc_merchant_sort')){
+// need to sort the merchants here, after the gold ones are included. 
+if(!function_exists('wpsc_merchant_sort')) {
 	function wpsc_merchant_sort($a, $b) { 
 		return strnatcmp(strtolower($a['name']), strtolower($b['name']));
 	}
@@ -277,7 +278,7 @@ uasort($nzshpcrt_gateways, 'wpsc_merchant_sort');
 // make an associative array of references to gateway data.
 $wpsc_gateways = array(); 
 foreach((array)$nzshpcrt_gateways as $key => $gateway) {
-	$wpsc_gateways[$gateway['internalname']] =& $nzshpcrt_gateways[$key];
+	$wpsc_gateways[$gateway['internalname']] = &$nzshpcrt_gateways[$key];
 }
 
 
@@ -423,11 +424,6 @@ if(!function_exists('wpsc_serialize_shopping_cart')){
 			update_option('wpsc_category_url_cache', $wpsc_category_url_cache);
 		}
 	  
-	  /// Delete the old claims on stock
-	  $old_claimed_stock_timestamp = mktime((date('H') - 3), date('i'), date('s'), date('m'), date('d'), date('Y'));
-	  $old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);
-	  //echo "$old_claimed_stock_timestamp <br /> DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')";
-	  $wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
 	  return true;
 	} 
 } 

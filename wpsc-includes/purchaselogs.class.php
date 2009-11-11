@@ -176,7 +176,7 @@ function wpsc_the_purch_item_date(){
 }
 function wpsc_the_purch_item_name(){
 	global $purchlogs;
-	//exit('<pre>'.print_r($purchlogs, true).'</pre>');
+	//exit('<pre>'.print_r($purchlogs->the_purch_item_name(), true).'</pre>');
 	if(wpsc_purchlogs_has_customfields(wpsc_the_purch_item_id())){
 		return $purchlogs->the_purch_item_name().'<img src="'.WPSC_URL.'/images/info_icon.jpg" title="This Purchase has custom user content" alt="exclamation icon" />';
 	}else{
@@ -294,10 +294,18 @@ function wpsc_purchaselog_details_name(){
 	global $purchlogitem;
 	return stripslashes($purchlogitem->purchitem->name);
 }
+
+function wpsc_purchaselog_details_id(){
+	global $purchlogitem;
+	return $purchlogitem->purchitem->id;
+}
+
 function wpsc_the_purchaselog_item(){
 	global $purchlogitem;
 	return $purchlogitem->the_purch_item();
 }
+
+
 function wpsc_purchaselog_details_SKU(){
 	global $purchlogitem;
 //	exit('<pre>'.print_r($purchlogitem->purchitem,true).'</pre>');
@@ -324,9 +332,35 @@ function wpsc_purchaselog_details_price(){
 
 
 function wpsc_purchaselog_details_tax(){
-	global $purchlogitem;
+	global $purchlogitem,$wpsc_cart;
 //	exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
-	return $purchlogitem->purchitem->tax_charged;
+	if(wpsc_tax_isincluded() == false){
+			return nzshpcrt_currency_display($purchlogitem->purchitem->tax_charged,true);
+		}else{
+			//exit('<pre>'.print_r($purchlogitem,true).'</pre>');
+			if($purchlogitem->purchitem->notax == 0){
+				if($purchlogitem->purchitem->price == null && $id != null){
+					foreach((array)$purchlogitem->allcartcontent as $cartcontent){
+					//exit('<pre>'.print_r($cartcontent, true).'</pre>');
+						if(($cartcontent->prodid == $id) && ($cartcontent->notax == 1)){
+							return '-';
+						}
+					}
+					$price = $id;
+				}else{
+					$price = $purchlogitem->purchitem->price;
+				}
+				$tax = ($price/(100+$wpsc_cart->tax_percentage)*$wpsc_cart->tax_percentage);
+				$tax = $wpsc_cart->process_as_currency($tax);
+				return $tax.' ('.$wpsc_cart->tax_percentage.'%)';
+			}else{
+	//			$tax = 0;
+				return '-';
+			}
+			
+			
+		}
+	
 }
 
 
@@ -669,7 +703,7 @@ class wpsc_purchaselogs{
 	
 	function  getall_formdata(){
 		global $wpdb;
-		$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `display_log` = '1';";
+		$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
     	$form_data = $wpdb->get_results($form_sql,ARRAY_A);
     	$this->form_data = $form_data;
     	return $form_data;
@@ -816,21 +850,17 @@ class wpsc_purchaselogs{
 	function the_purch_item_name(){
 		global $wpdb;
 		$i=0;
-		//exit('<pre>'.print_r($this->form_data, true).'</pre>');
+		if($this->form_data == null){
+			$this->getall_formdata();
+		}
 		foreach((array)$this->form_data as $formdata){
 		if(in_array('billingemail', $formdata)){
-				$emailformid = $formdata['id'];
-			}elseif(in_array('email', $formdata)){
 				$emailformid = $formdata['id'];
 			}
 			if(in_array('billingfirstname', $formdata)){
 				$fNameformid = $formdata['id'];
-			}elseif(in_array('First Name', $formdata)){
-				$fNameformid = $formdata['id'];
 			}
 			if(in_array('billinglastname', $formdata)){
-				$lNameformid = $formdata['id'];
-			}elseif(in_array('Last Name', $formdata)){
 				$lNameformid = $formdata['id'];
 			}
 			$i++;
@@ -842,7 +872,7 @@ class wpsc_purchaselogs{
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$fNameformid;
 		$fname = $wpdb->get_var($sql);
 		if(!$fname){
-			//exit($sql);
+		//	exit($sql);
 		}
 		$sql = "SELECT value FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id=".$this->purchitem->id." AND form_id=".$lNameformid;
 		$lname = $wpdb->get_var($sql);

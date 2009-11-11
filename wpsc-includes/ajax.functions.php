@@ -112,9 +112,9 @@ function wpsc_add_to_cart() {
 		ob_end_clean();
 		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-		//echo '<pre>'.print_r($parameters,true).'</pre>';
+	//echo '<pre>'.print_r($parameters,true).'</pre>';
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
-		//  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
+  //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 
     
 		if(get_option('show_sliding_cart') == 1)	{
@@ -125,6 +125,7 @@ function wpsc_add_to_cart() {
 						jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
 					});
 			";
+			
 			} else {
 				$_SESSION['slider_state'] = 0;
 				echo "
@@ -139,11 +140,12 @@ function wpsc_add_to_cart() {
 		exit();
   }
 }
-
 // execute on POST and GET
 if($_REQUEST['wpsc_ajax_action'] == 'add_to_cart') {
 	add_action('init', 'wpsc_add_to_cart');
 }
+
+
 
 /**
 	* empty cart function, used through ajax and in normal page loading.
@@ -395,12 +397,19 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 }
 
 
+
+
+
+
+
+
 /**
 	* submit checkout function, used through ajax and in normal page loading.
 	* No parameters, returns nothing
 */
 function wpsc_submit_checkout() {
-  global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways, $wpsc_shipping_modules;
+  global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways, $wpsc_shipping_modules, $wpsc_gateways;
+  //echo "break redirect";
 	$_SESSION['wpsc_checkout_misc_error_messages'] = array();
 	$wpsc_checkout = new wpsc_checkout();
 	//exit('coupons:'.$wpsc_cart->coupons_name);
@@ -410,8 +419,7 @@ function wpsc_submit_checkout() {
 	$options = get_option('custom_shipping_options');
 	$form_validity = $wpsc_checkout->validate_forms();
 	
-	//exit('<pre>'.print_r($_POST, true).'</pre>');
-
+	//  exit('<pre>'.print_r($_POST, true).'</pre>');
 	//	exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
  	//	exit('<pre>'.print_r($results, true).'</pre>');
@@ -513,17 +521,25 @@ function wpsc_submit_checkout() {
 		} else {
 			$seperator = "&";
 		}
-		 		
-		// submit to gateway
-		foreach($nzshpcrt_gateways as $gateway) {
-			if($gateway['internalname'] == $submitted_gateway && $gateway['internalname'] != 'google') {
 
-				$gateway_used = $gateway['internalname'];
+
+		
+		/// submit to gateway
+		
+		$current_gateway_data = &$wpsc_gateways[$submitted_gateway];
+		if($current_gateway_data['api_version'] >= 2.0) {
+			$merchant_instance = new $current_gateway_data['class_name']($purchase_log_id);
+			$merchant_instance->construct_value_array();
+			$merchant_instance->submit();
+			//print_r($merchant_instance);
+		} else {
+			if(($current_gateway_data['internalname'] == $submitted_gateway) && ($current_gateway_data['internalname'] != 'google')) {
+				$gateway_used = $current_gateway_data['internalname'];
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
-				$gateway['function']($seperator, $sessionid);
+				$current_gateway_data['function']($seperator, $sessionid);
 				break;
-			}elseif($gateway['internalname'] == 'google' && $gateway['internalname'] == $submitted_gateway){
-				$gateway_used = $gateway['internalname'];
+			} else if (($current_gateway_data['internalname'] == 'google') && ($current_gateway_data['internalname'] == $submitted_gateway)){
+				$gateway_used = $current_gateway_data['internalname'];
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 				$_SESSION['gateway'] = 'google';
 				header('Location: '.get_option('shopping_cart_url'));
@@ -548,6 +564,29 @@ if($_REQUEST['wpsc_action'] == 'submit_checkout') {
 }
 
 
+
+
+
+function wpsc_gateway_notification() {
+	global $wpdb, $wpsc_gateways;
+	$gateway_name = $_GET['gateway'];
+	// work out what gateway we are getting the request from, run the appropriate code.
+	if(($gateway_name != null) && isset($wpsc_gateways[$gateway_name]['class_name'])) {
+		$merchant_class = $wpsc_gateways[$gateway_name]['class_name'];
+		$merchant_instance = new $merchant_class(null, true);
+		$merchant_instance->process_gateway_notification();
+	}
+	exit();
+}
+
+// execute on POST and GET
+if($_REQUEST['wpsc_action'] == 'gateway_notification') {
+	add_action('init', 'wpsc_gateway_notification');
+}
+
+
+
+
 /**
 	* wpsc_change_tax function, used through ajax and in normal page loading.
 	* No parameters, returns nothing
@@ -558,7 +597,7 @@ function wpsc_change_tax() {
 	//exit('Shipping<pre>'.print_r($_SESSION,true).'</pre>');
   $previous_country = $_SESSION['wpsc_selected_country'];
 	if(isset($_POST['billing_country'])){ 
-	$_SESSION['wpsc_selected_country'] =$_POST['billing_country'];
+	$_SESSION['wpsc_selected_country'] = $_POST['billing_country'];
 	}
 	if(isset($_POST['billing_region'])){	
 	$_SESSION['wpsc_selected_region'] = absint($_POST['billing_region']);

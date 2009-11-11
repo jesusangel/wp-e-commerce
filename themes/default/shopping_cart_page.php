@@ -152,7 +152,8 @@ if(wpsc_cart_item_count() > 0) :
 	<table class="productcart">
 	<tr class="total_price total_tax">
 		<td colspan="3">
-			<?php echo TXT_WPSC_TAX; ?>
+			<?php echo wpsc_display_tax_label(true); ?>
+
 		</td>
 		<td colspan="2">
 			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>

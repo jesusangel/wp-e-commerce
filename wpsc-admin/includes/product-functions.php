@@ -111,7 +111,8 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['donation'] = (int)(bool)$post_data['donation'];
 	$post_data['no_shipping'] = (int)(bool)$post_data['no_shipping'];
 	$post_data['publish'] = (int)(bool)$post_data['publish']; 
-	
+	$post_data['meta']['unpublish_oos'] = (int)(bool)$post_data['inform_when_oos'];
+
 	$post_data['price'] = (float)$post_data['price'];
 	if(is_numeric($post_data['special_price'])) {
 		$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
@@ -129,6 +130,11 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$post_data['meta']['table_rate_price'] = null;
 	}
 	
+	if(is_array($post_data['dimensions'])){
+		$post_data['meta']['dimensions'] = serialize($post_data['dimensions']);
+	}
+	
+
 	$post_data['files'] = $_FILES;
 
   //exit('<pre>'.print_r($post_data, true).'</pre>');

@@ -77,6 +77,8 @@ function wpsc_display_product_form ($product_id = 0) {
 		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
 		$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
 		$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
+ //dimensions
+		$product_data['dimensions'] = get_product_meta($product_id, 'dimensions',true);
 
 		
 		//echo "<pre>".print_r($product_data,true)."</pre>";
@@ -336,7 +338,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 	 
 	
 	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Update Product', 'wpsc'); } else {	_e('Add New Product', 'wpsc');	} ?>' />&nbsp;
-	<a class='submitdelete delete_button' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
+	<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
 	<?php
   }
 
@@ -541,9 +543,17 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 				$variations_output = $variations_processor->variations_grid_view($product_data['id']); 
 				
 				if(wpsc_product_has_variations($product_data['id'])) {
-						echo "<div class='edit_stock' style='display: none;'>\n\r";
-						
-						echo "<input class='stock_limit_quantity' name='quantity' value='".$product_data['quantity']."' />";
+						switch($product_data['quantity_limited']) {
+							case 1:
+							echo "            <div class='edit_stock' style='display: block;'>\n\r";
+							break;
+							
+							default:
+							echo "            <div class='edit_stock' style='display: none;'>\n\r";
+							break;
+						}						
+						echo "<input class='stock_limit_quantity' name='quantity' style='display:none;' value='".$product_data['quantity']."' />";
+						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' " . $unpublish_oos . " class='inform_when_oos' name='inform_when_oos' /> " . TXT_WPSC_UNPUBLISHIFOOS . "</div>";
 						echo "</div>\n\r";
 					} else {
 						switch($product_data['quantity_limited']) {
@@ -556,14 +566,16 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 							break;
 						}
 						
-						echo "<input type='text' class='stock_limit_quantity' name='quantity' size='10' value='".$product_data['quantity']."' />";
+						echo TXT_WPSC_STOCKQTY . " <input type='text' class='stock_limit_quantity' name='quantity' size='10' value='".$product_data['quantity']."' />";
+						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' " . $unpublish_oos . " class='inform_when_oos' name='inform_when_oos' /> " . TXT_WPSC_UNPUBLISHIFOOS . "</div>";
 						echo "              </div>\n\r";
 					}
 		} else {
 						echo "
 					<div style='display: none;' class='edit_stock'>
-						<input type='text' name='quantity' value='0' size='10' />
-					</div>";  
+						" .TXT_WPSC_STOCKQTY . " <input type='text' name='quantity' value='0' size='10' />";
+						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' class='inform_when_oos' name='inform_when_oos' /> " . TXT_WPSC_UNPUBLISHIFOOS . "</div>";
+					echo "</div>";  
 			}
 	echo "
 				
@@ -650,6 +662,53 @@ function wpsc_product_shipping_forms($product_data=''){
 			</select>
 		</td>
     </tr>
+      <!--dimension-->
+    <tr>
+		<td>
+			Height
+		</td>
+		<td>
+			<input type='text' size='5' name='dimensions[height]' value='".$product_data['dimensions']['height']."'>
+			<select name='dimensions[height_unit]'>
+				<option value='in' ". (($product_data['dimensions']['height_unit'] == 'in') ? 'selected' : '') .">inches</option>
+				<option value='cm' ". (($product_data['dimensions']['height_unit'] == 'cm') ? 'selected' : '') .">cm</option>
+				<option value='meter' ". (($product_data['dimensions']['height_unit'] == 'meter') ? 'selected' : '') .">meter</option>
+			</select>
+			</td>
+			</tr>
+			<tr>
+		<td>
+			Width
+		</td>
+		<td>
+			<input type='text' size='5' name='dimensions[width]' value='".$product_data['dimensions']['width']."'>
+			<select name='dimensions[width_unit]'>
+				<option value='in' ". (($product_data['dimensions']['width_unit'] == 'in') ? 'selected' : '') .">inches</option>
+				<option value='cm' ". (($product_data['dimensions']['width_unit'] == 'cm') ? 'selected' : '') .">cm</option>
+				<option value='meter' ". (($product_data['dimensions']['width_unit'] == 'meter') ? 'selected' : '') .">meter</option>
+			</select>
+			</td>
+			</tr>
+			<tr>
+		<td>
+			Length
+		</td>
+		<td>
+			<input type='text' size='5' name='dimensions[length]' value='".$product_data['dimensions']['length']."'>
+			<select name='dimensions[length_unit]'>
+				<option value='in' ". (($product_data['dimensions']['length_unit'] == 'in') ? 'selected' : '') .">inches</option>
+				<option value='cm' ". (($product_data['dimensions']['length_unit'] == 'cm') ? 'selected' : '') .">cm</option>
+				<option value='meter' ". (($product_data['dimensions']['length_unit'] == 'meter') ? 'selected' : '') .">meter</option>
+			</select>
+			</td>
+			</tr>
+
+    <!--//dimension-->
+
+
+    <!--USPS shipping changes ends-->
+
+
     <!--USPS shipping changes ends-->
 
  

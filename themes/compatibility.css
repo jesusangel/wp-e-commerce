@@ -40,3 +40,7 @@ div.wpsc_loading_animation {
 clear:both;
 
 }
+table.wpsc_checkout_table label{
+display:inline;
+padding-right:10px;
+}

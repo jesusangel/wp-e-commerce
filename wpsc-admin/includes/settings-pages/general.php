@@ -56,6 +56,25 @@ function wpsc_options_general(){
 				</span>
 			</td>
 		</tr>
+		<tr>
+			<th scope="row"><?php _e('Tax Included in prices','wpsc') ?>:</th>		
+			<td>
+				<?php
+					$tax_inprice0= '';
+					$tax_inprice1= '';
+				if(wpsc_tax_isincluded()){
+					$tax_inprice1= 'checked="checked"';
+				}else{
+					$tax_inprice0= 'checked="checked"';
+				}
+				?>
+				<input <?php echo $tax_inprice1; ?> type='radio' name='wpsc_options[tax_inprice]' value='1' id='tax_inprice1' />
+				<label for='tax_inprice1'><?php echo TXT_WPSC_YES; ?></label>
+				<input <?php echo $tax_inprice0; ?> type='radio' name='wpsc_options[tax_inprice]' value='0' id='tax_inprice0' />
+				<label for='tax_inprice1'><?php echo TXT_WPSC_NO; ?></label>
+			</td>
+		</tr>
+
 		<?php	/* START OF TARGET MARKET SELECTION */					
 		$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
 		?>

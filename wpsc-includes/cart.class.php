@@ -19,6 +19,18 @@
 * cart item count function, no parameters
 * * @return integer the item count
 */
+/**
+* tax is included function, no parameters
+* * @return boolean true or false depending on settings>general page
+*/
+function wpsc_tax_isincluded() {
+	if(get_option('tax_inprice') == false || get_option('tax_inprice') == '0'){
+		return false;
+	}elseif(get_option('tax_inprice')=='1'){
+		return true;
+	}
+}
+
 function wpsc_cart_item_count() {
 	global $wpsc_cart;
 	$count = 0;
@@ -50,7 +62,10 @@ function wpsc_cart_total($forDisplay=true) {
 	global $wpsc_cart;  
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
-	$total += $wpsc_cart->calculate_total_tax();
+	if(wpsc_tax_isincluded() == false){
+		$total += $wpsc_cart->calculate_total_tax();
+	}
+
 	$total -= $wpsc_cart->coupons_amount;
 	if($forDisplay){
 //	exit('abksd'.get_option('add_plustax'));
@@ -64,7 +79,10 @@ function wpsc_cart_total_widget(){
 	global $wpsc_cart; 
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
-	$total += $wpsc_cart->calculate_total_tax();
+	if(wpsc_tax_isincluded() == false){
+		$total += $wpsc_cart->calculate_total_tax();
+	}
+
 	$total -= $wpsc_cart->coupons_amount;
 	if(get_option('add_plustax') == 1){
 		return $wpsc_cart->process_as_currency($wpsc_cart->calculate_subtotal());
@@ -81,7 +99,9 @@ function nzshpcrt_overall_total_price() {
 	global $wpsc_cart;
 	$total = $wpsc_cart->calculate_subtotal();
 	$total += $wpsc_cart->calculate_total_shipping();
-	$total += $wpsc_cart->calculate_total_tax();
+	if(wpsc_tax_isincluded() == false){
+		$total += $wpsc_cart->calculate_total_tax();
+	}
 	$total -= $wpsc_cart->coupons_amount;
   return $total;
 }
@@ -106,7 +126,12 @@ function wpsc_cart_weight_total() {
 function wpsc_cart_tax($forDisplay = true) {
 	global $wpsc_cart;
 	if($forDisplay){
-		return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+	    if(wpsc_tax_isincluded() == false){
+			return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+		}else{
+			return '('.$wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax()).')';
+		}
+
 	}else{
 		return $wpsc_cart->calculate_total_tax();
 	}
@@ -941,12 +966,12 @@ class wpsc_cart {
 	 * No parameters, nothing returned
 	*/
   function empty_cart($fromwidget = true) {
-  	global $wpdb;
+		global $wpdb;
+
 		if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
 		//	exit('google triggered');
 			///wpsc_empty_google_logs();
 		}
-		
 		$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s');", $this->unique_id));
 
 		$this->cart_items = array();
@@ -1012,7 +1037,9 @@ class wpsc_cart {
     if($this->total_price == null) {
 			$total = $this->calculate_subtotal();
 			$total += $this->calculate_total_shipping();
-			$total += $this->calculate_total_tax();
+			if(wpsc_tax_isincluded() == false){
+				$total += $this->calculate_total_tax();
+			}	
 			$total -= $this->coupons_amount;
 			$this->total_price = $total;
 			//exit($this->coupons_amount);
@@ -1057,10 +1084,11 @@ class wpsc_cart {
 	 * @access public
 	 * @return float returns the price as a floating point value
 	*/
-  function calculate_total_tax() {
-    global $wpdb;
+   function calculate_total_tax() {
+    global $wpdb, $wpsc_cart;
     $total = 0;
-    if($this->total_tax == null) {
+	if(wpsc_tax_isincluded() == false){
+    	if($this->total_tax == null) {
 			foreach($this->cart_items as $key => $cart_item) {
 				$total += $cart_item->tax;
 			}
@@ -1068,8 +1096,21 @@ class wpsc_cart {
 		} else {
 		  $total = $this->total_tax;
 		}
+	}else{
+		if($this->total_tax == null) {
+			foreach($this->cart_items as $key => $cart_item) {
+				$total += $cart_item->taxable_price/(100+$wpsc_cart->tax_percentage)*$wpsc_cart->tax_percentage;
+			}
+			$this->total_tax = $total;
+		} else {
+		  $total = $this->total_tax;
+		}
+	
+	
+	}
 		return $total;
   }
+  
   
   
   	/**
@@ -1759,7 +1800,7 @@ class wpsc_cart_item {
     if($this->cart->has_total_shipping_discount()) {
 			$shipping = 0;
     }
-		if($this->apply_tax == true) {
+		if($this->apply_tax == true && wpsc_tax_isincluded() == false) {
 			if(is_numeric($this->custom_tax_rate)) {
 				$tax_rate = $this->custom_tax_rate;
 			} else {
@@ -1787,6 +1828,7 @@ class wpsc_cart_item {
 			}
 		}
 		
+		do_action('wpsc_save_cart_item', $cart_id, $this->product_id);
 	}
 	
 }

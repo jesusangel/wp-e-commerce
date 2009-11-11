@@ -2,6 +2,21 @@
 /*
 This is a language file for the WP Shopping Cart plugin version 3.7
 */
+
+/* Changes for QR code and no-stock products to draft products*/
+define('TXT_WPSC_UNPUBLISHIFOOS', 'If this product runs out of stock set status to Unpublished & email site owner');
+define('TXT_WPSC_OOS_EMAIL_SUBJ', ' is out of stock');
+define('TXT_WPSC_OOS_EMAIL1','Remaining stock of ');
+define('TXT_WPSC_OOS_EMAIL2',' is 0. Product variation was set to invisible.');
+define('TXT_WPSC_OOS_EMAIL3',' and its variations is 0. Product was unpublished.');
+define('TXT_WPSC_OOS_EMAIL4',' is 0. Product was unpublished.');
+define('TXT_WPSC_STOCKQTY', 'Stock Qty');
+
+define('TXT_WPSC_RADIO','Radio Button');
+define('TXT_WPSC_CHECKBOX','Checkbox');
+define('TXT_WPSC_SELECT','Select');
+
+define('TXT_WPSC_TICKETS','Tickets');
 define('TXT_WPSC_DELETE_CURRENCY','Delete Currency');
 define('TXT_WPSC_NO_ZIPCODE','Please provide a Zipcode and click Calculate in order to continue.');
 

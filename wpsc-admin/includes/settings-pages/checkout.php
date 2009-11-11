@@ -1,16 +1,40 @@
 <?php
 function wpsc_options_checkout(){
 global $wpdb;
-$form_types = Array("text","email","address","city","country","delivery_address","delivery_city","delivery_country","textarea","heading","coupon");
+$form_types = Array("text","email","address","city","country","delivery_address","delivery_city","delivery_country","textarea","heading","select","radio","checkbox");
+$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
+
+update_option('wpsc_checkout_form_fields', $form_types);
+if(get_option('wpsc_checkout_form_fields') == ''){
+	update_option('wpsc_checkout_form_fields', $form_types);
+}
+do_action('wpsc_checkout_form_fields_page');
+$columns = array(
+	'drag' => 'Drag',
+	'name' => 'Name',
+	'type' => 'Type',
+	'unique_names' => 'Unique Names',
+	'mandatory' => 'Mandatory',
+	'trash' => 'Trash',
+);
+register_column_headers('display-checkout-list', $columns);	
+$form_types = get_option('wpsc_checkout_form_fields');
+
 ?>
+
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div class="wrap">
   		<h2><?php echo TXT_WPSC_FORM_FIELDS;?></h2>  
 		<?php 
 		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 		wpsc_settings_page_update_notification(); ?>
+
 		<form method='post' action='' id='chekcout_options_tbl'>
+		<div class='metabox-holder' style='width:95%;'>
+			<div class='postbox'>
 			<input type='hidden' name='checkout_submits' value='true' />
+			<h3 class='hndle'>Misc Checkout Options</h3>
+			<div class='inside'>
 			<table>
 			<tr>
 				<td><?php echo TXT_WPSC_REQUIRE_REGISTRATION;?>:</td>
@@ -84,7 +108,116 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			</td>
 		</tr>
 			</table>
+		</div>
+		</div>
+		</div>
+			<h3>Form Fields</h3>
   			<p><?php echo TXT_WPSC_CHECKOUT_FORM_FIELDS_DESCRIPTION;?></p>
+  			<?php
+  			  if(!count(get_option('wpsc_checkout_form_sets')) <= 1){
+  			  ?>
+  			  <p>
+	  			  <label for='wpsc_form_set'>Select a Form Set :</label>
+	  			  <select id='wpsc_form_set' name='wpsc_form_set'>
+	  			<?php
+	  				$checkout_sets = get_option('wpsc_checkout_form_sets');
+	  				foreach((array)$checkout_sets as $key => $value){
+	  					if($_GET['checkout-set'] == $key){
+		  					echo "<option selected='selected' value='".$key."'>".$value."</option>";
+	  					}else{
+	  						echo "<option value='".$key."'>".$value."</option>";
+	  					}
+	  					
+	  				}	  			  	
+	  			?>
+	  			  </select>
+  			   	  <input type='submit' value='Filter' name='wpsc_checkout_set_filter' />
+  			  </p>
+  			  <?php
+  			  }
+  			//exit('<pre>'.print_r($_POST, true).'</pre>');
+			if(!isset($_GET['checkout-set'])){
+			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set`='".$filter."' ORDER BY `order`;";	
+			}else{
+			 $filter = (int)$wpdb->escape($_GET['checkout-set']);
+			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set`='".$filter."' ORDER BY `order`;";	
+			}
+  			 $email_form_field = $wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
+			  $email_form_field = $email_form_field[0];
+  		 		
+			  $form_data = $wpdb->get_results($form_sql,ARRAY_A);
+
+  			?>
+  			<table id="wpsc_checkout_list" class="widefat page fixed"  cellspacing="0">
+			<thead>
+				<tr>
+					<?php print_column_headers('display-checkout-list'); ?>
+				</tr>
+			</thead>
+		
+			<tfoot>
+				<tr>
+					<?php print_column_headers('display-checkout-list', false); ?>
+				</tr>
+			</tfoot>
+		
+			<tbody id='wpsc_checkout_list_body'>
+			<?php
+					foreach((array)$form_data as $form_field) {
+			    echo "
+			    <tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
+			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="'.WPSC_URL.'/images/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
+			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
+			    
+			    echo "      <td class='typecol'><select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";
+			    foreach($form_types as $form_type) {
+			      $selected = '';
+			      if($form_type === $form_field['type']) {
+			        $selected = "selected='selected'";
+			      }
+			       // define('TXT_WPSC_TEXTAREA', 'Textarea');
+			      echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
+			    }
+			 
+			    echo "</select>";
+			   if(in_array($form_field['type'], array('select','radio','checkbox'))){
+			    	   echo "<a class='wpsc_edit_checkout_options' rel='form_options[".$form_field['id']."]' href=''>more options</a>";			   
+			    }
+			    echo "</td>";
+			    $checked = "";
+			    echo "<td><select name='unique_names[".$form_field['id']."]'>";
+			    echo "<option value='-1'>Select a Unique Name</option>";
+			    foreach($unique_names as $unique_name){
+			       $selected = "";
+			      if($unique_name == $form_field['unique_name']) {
+			        $selected = "selected='selected'";
+			      }
+			    	echo "<option ".$selected." value='".$unique_name."'>".$unique_name."</option>";
+			    }
+			    echo "</select></td>";
+			    if($form_field['mandatory']) {
+			      $checked = "checked='checked'";
+			    }
+			    echo "      <td class='mandatorycol'><input $checked type='checkbox' name='form_mandatory[".$form_field['id']."]' value='1' /></td>";
+			   
+			    
+			    echo "      <td><a class='image_link' href='#' onclick='return remove_form_field(\"checkout_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
+		   
+			    if($email_form_field['id'] == $form_field['id']) {
+			      echo "<a title='".TXT_WPSC_RECIEPT_EMAIL_ADDRESS."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
+			    }
+			    echo "</td>";
+			    
+			    echo "
+			    </tr>";
+			 
+			    }
+			    ?>
+
+			</tbody>
+			</table>
+		 <?php /*
+
   			<table id='form_field_table' style='border-collapse: collapse;'>
 		    <tr>
 		      <th class='namecol'>
@@ -108,19 +241,15 @@ $form_types = Array("text","email","address","city","country","delivery_address"
      			 <div id='form_field_form_container'>
 			  <?php
 			  
-			  $email_form_field = $wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
-			  $email_form_field = $email_form_field[0];
-			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' ORDER BY `order`;";
-			  $form_data = $wpdb->get_results($form_sql,ARRAY_A);
-			  //exit("<pre>".print_r($form_data,true)."</pre>");
-			  foreach((array)$form_data as $form_field) {
+			 			  //exit("<pre>".print_r($form_data,true)."</pre>");
+  foreach((array)$form_data as $form_field) {
 			    echo "
 			    <div id='form_id_".$form_field['id']."'>
 			    <table>
 			    <tr>\n\r";
 			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
 			    
-			    echo "      <td class='typecol'><select name='form_type[".$form_field['id']."]'>";
+			    echo "      <td class='typecol'><select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";
 			    foreach($form_types as $form_type) {
 			      $selected = '';
 			      if($form_type === $form_field['type']) {
@@ -129,8 +258,9 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			       // define('TXT_WPSC_TEXTAREA', 'Textarea');
 			      echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
 			    }
+
 			    echo "</select></td>";
-			    
+			   
 			    
 			    $checked = "";
 			    if($form_field['mandatory']) {
@@ -159,25 +289,26 @@ $form_types = Array("text","email","address","city","country","delivery_address"
 			    echo "</td>";
 			    
 			    echo "
-			    </tr>
-			    </table>
+			    </tr>";
+			    if(in_array($form_field['type'], array('select','radio','checkbox'))){
+			    	echo "";
+			    	echo "<tr><th>Label</th><th>Value</th></tr>";
+			    }
+			    echo "</table>
 			    </div>";
 			    }
 			  ?>
     </div>
     </td>
-  </tr>
-    <tr>
-      <td colspan='6' style='padding: 2px;'>
+*/
+?>
+<p>
         <input type='hidden' name='wpsc_admin_action' value='checkout_settings' />
         
 				<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
         <input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
         <a href='#' onclick='return add_form_field();'><?php echo TXT_WPSC_ADD_NEW_FORM;?></a>
-      </td>
-    </tr>
-  </table>
-
+  </p>
   </form>
 </div>
 </form>
