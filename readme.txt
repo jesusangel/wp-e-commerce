@@ -3,8 +3,8 @@ Contributors: Dan Milward, Thomas Howard, Jeffry Ghazally, Chris Beavan, Allen H
 Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
-Tested up to: 2.8.4
-Stable tag: 3.7.4
+Tested up to: 2.8.5
+Stable tag: 3.7.5
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -37,7 +37,8 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
-= 3.7.5 RC 1 =
+= 3.7.5 =
+* Added code for upgrades/additions from nielo.info and lsdev.biz,  we will be using this for new modules in the future.
 * All In One SEO Pack compatibility bugfixes and improvements.
 * CSV has had some work done on it, it now takes larger files, and associates a CSV file to a single category of your choice. We'd love to be able to allow users to add the categories and images as part of the CSV file. We will look into it more at a later date.
 * SSL we fixed the image issue from beta1 and used James Collis recommended fix (using is_ssl() for our conditions) Thanks James!
@@ -47,7 +48,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * Category shortcode backwards compatibility
 * Fix Purchlogs - We had a lot of users that somehow by passed the 'fix purchase logs' page when upgrading from 3.6, so we added some better conditions to the mix and added it on to the debug page (a powerful wp-e-commerce page that is hidden from most users as it's usage is very corrosive backing up your DB and files is strongly recommended if not necessary when you work with this page).
 * Valid XHTML for front end of wpec YAY!
-* Added code for upgrades/additions from nielo.info and lsdev.biz  we will be using this for new modules in the future.
 * Fixed adding variations when adding products
 * Sender from the 'resend email to buyer' link on the purchase log details page has been fixed
 * Shipping Discount Bug that stopped shipping working at all.
@@ -56,10 +56,16 @@ If you experience database errors try de-activating and re-activating your plugi
 * Canadian Tax – Fixes
 * US Tax –Fixes
 * Product Categories Caching Issue  Resolved
-* Coupons – ‘Apply to all Products’ 
+* Coupons – ‘Apply to all Products’ and numerous bug fixes
 * ‘Your Account’  done some fixes to it.
 * ‘Accepted Payment’ goes straight to ‘Closed Order’
-  
+* Stock claims are now cleared when the cart is emptied
+* Purchase log bulk actions now work
+* PayPal gateway module fixes and improvements
+* HTML Tables can now be added to product descriptions
+* Flat Rate and Weight Rate improvements
+
+
 = 3.7.4 =  
 * Changes to shipping to fix the bugs from 3.7.3 with shipping and the new shipping_discount feature
 * Fixes for variations under grid view
