@@ -23,7 +23,7 @@ function widget_specials($args) {
 	 $image_width = get_option('product_image_width');
 	 $image_height = get_option('product_image_height');
    $siteurl = get_option('siteurl');
-   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `special_price` != '0.00'  AND `active` IN ('1') AND `id` IN('55')  ORDER BY RAND() LIMIT 1";
+   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `special_price` != '0.00'  AND `active` IN ('1') ORDER BY RAND() LIMIT 1";
    $product = $wpdb->get_results($sql,ARRAY_A) ;
 		if($product != null) {
 			$output = "<div>";
