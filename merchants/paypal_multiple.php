@@ -83,7 +83,6 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   
 	$total = $wpsc_cart->calculate_total_price();
 
-	exit('<pre>'.print_r($total, true).'</pre>');
 	$discount = $wpsc_cart->coupons_amount;
 	//exit($discount);
 	if(($discount > 0)) {
