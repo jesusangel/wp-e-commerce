@@ -1562,6 +1562,7 @@ if((get_option('wpsc_share_this') == 1) && (get_option('product_list_url') != ''
   }
 }
  
+/*
 add_filter('option_update_plugins', 'wpsc_plugin_no_upgrade');
 function wpsc_plugin_no_upgrade($option) {
 	$this_plugin = plugin_basename(__FILE__);
@@ -1571,6 +1572,7 @@ function wpsc_plugin_no_upgrade($option) {
 	}
 	return $option;
 }
+*/
 
 // if(get_option('cat_brand_loc') != 0) {
 //   add_action('wp_list_pages', 'show_cats_brands');
