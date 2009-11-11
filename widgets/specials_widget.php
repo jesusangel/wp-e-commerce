@@ -58,7 +58,7 @@ function widget_specials($args) {
 				$output .= nzshpcrt_currency_display(($special['price'] - $special['special_price']), $special['notax'],false,$product['id']);
 				$output .= "</span></span><br />";
 				
-				$output .= "<form id='specials_".$special['id']."' name='' method='post' action='#' onsubmit='submitform(this, null);return false;' >";
+				$output .= "<form id='specials_".$special['id']."' method='post' action='' onsubmit='submitform(this, null);return false;' >";
 				$output .= "<input type='hidden' name='product_id' value='".$special['id']."'/>";
 				$output .= "<input type='hidden' name='item' value='".$special['id']."' />";
 				$output .= "<input type='hidden' name='wpsc_ajax_action' value='special_widget' />";			
