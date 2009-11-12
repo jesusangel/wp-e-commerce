@@ -498,7 +498,7 @@ function wpsc_admin_dashboard_rightnow() {
 function wpsc_dashboard_widget_setup() {
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->wp_capabilities['administrator'] == 1) {
+	if($current_user->user_level>9) {
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
     wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
 	}
@@ -614,7 +614,7 @@ function wpsc_quarterly_dashboard_widget(){
 function wpsc_quarterly_setup(){
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->wp_capabilities['administrator'] == 1) {
+	if($current_user->user_level>9) {
 		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 		wp_enqueue_script('datepicker-ui', WPSC_URL."/js/ui.datepicker.js",array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
 		wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
@@ -625,7 +625,7 @@ add_action('wp_dashboard_setup', 'wpsc_quarterly_setup');
 function wpsc_dashboard_widget() {
 	global $current_user;
 	get_currentuserinfo();
-	if($current_user->wp_capabilities['administrator'] == 1) {
+	if($current_user->user_level>9) {
     do_action('wpsc_admin_pre_activity');
     do_action('wpsc_admin_post_activity');
 	}
@@ -635,6 +635,94 @@ function wpsc_dashboard_widget() {
  * END - Dashboard Widget for 2.7
  */
 
+
+/*
+ * Dashboard Widget Last Four Month Sales.
+ */
+ 
+function wpsc_dashboard_4months_widget(){
+	global $wpdb;
+	
+	$this_year = date("Y");	//get current year and month
+	$this_month = date("n");
+	
+	$months[] = mktime(0, 0, 0, $this_month-3, 1, $this_year); //generate  unix time stamps fo 4 last months
+	$months[] = mktime(0, 0, 0, $this_month-2, 1, $this_year);
+	$months[] = mktime(0, 0, 0, $this_month-1, 1, $this_year);
+	$months[] = mktime(0, 0, 0, $this_month, 1, $this_year);
+	
+	$prodsql = "SELECT `".WPSC_TABLE_CART_CONTENTS."`.`prodid` FROM `".WPSC_TABLE_CART_CONTENTS."` INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`processed` >= 2 AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` >= ".$months[0]." GROUP BY `".WPSC_TABLE_CART_CONTENTS."`.`prodid` ORDER BY SUM(`".WPSC_TABLE_CART_CONTENTS."`.`price` * `".WPSC_TABLE_CART_CONTENTS."`.`quantity`) DESC LIMIT 4";
+	$products = $wpdb->get_results($prodsql,ARRAY_A); //get 4 products with top income in 4 last months.
+	
+	$timeranges[0]["start"]= mktime(0, 0, 0, $this_month-3, 1, $this_year); //make array of time ranges
+	$timeranges[0]["end"]= mktime(0, 0, 0, $this_month-2, 1, $this_year);
+	$timeranges[1]["start"]= mktime(0, 0, 0, $this_month-2, 1, $this_year);
+	$timeranges[1]["end"]= mktime(0, 0, 0, $this_month-1, 1, $this_year);	
+	$timeranges[2]["start"]= mktime(0, 0, 0, $this_month-1, 1, $this_year);	
+	$timeranges[2]["end"]= mktime(0, 0, 0, $this_month, 1, $this_year);
+	$timeranges[3]["start"]= mktime(0, 0, 0, $this_month, 1, $this_year);
+	$timeranges[3]["end"]= mktime();
+	
+	foreach ($products as $product){ //run trough products and get each product income amounts and name
+		foreach ($timeranges as $timerange){ //run trough time ranges of product, and get its income over each time range
+			$prodsql = "SELECT SUM(`".WPSC_TABLE_CART_CONTENTS."`.`price` * `".WPSC_TABLE_CART_CONTENTS."`.`quantity`) AS sum FROM `".WPSC_TABLE_CART_CONTENTS."` INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`processed` >= 2 AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` >= ".$timerange["start"]." AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` < ".$timerange["end"]." AND `".WPSC_TABLE_CART_CONTENTS."`.`prodid` = ".$product['prodid']." GROUP BY `".WPSC_TABLE_CART_CONTENTS."`.`prodid` LIMIT 1"; //get the amount of income that current product has generaterd over current time range
+			$sum = $wpdb->get_results($prodsql,ARRAY_A);
+			$sums[]=$sum[0]["sum"]; //push amount to array
+		}
+		$namesql = "SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`id` = ".$product['prodid'];
+		$name = $wpdb->get_results($namesql,ARRAY_A);
+		$prod_data[]=array($sums, $name[0]["name"]); //result: array of 2: $prod_data[0] = array(income)
+		$sums=array(); //reset array				//$prod_data[1] = product name	
+	}
+	
+	$tablerow=1;
+	$output.='<div style="padding-bottom:15px; ">Last four months of sales on a per product basis:</div>
+    <table style="width:100%" border="0" cellspacing="0">
+    	<tr style="font-style:italic; color:#666;" height="20">
+    		<td colspan="2" style=" font-family:\'Times New Roman\', Times, serif; font-size:15px; border-bottom:solid 1px #000;">At a Glance</td>';
+	foreach ($months as $mnth) {
+		$output.='<td align="center" style=" font-family:\'Times New Roman\'; font-size:15px; border-bottom:solid 1px #000;">' . date("M", $mnth) . '</td>';
+	}
+    $output.='</tr>';
+    foreach($prod_data as $product) {
+		$output.='<tr height="20">
+				<td width="20" style="font-weight:bold; color:#008080; border-bottom:solid 1px #000;">' . $tablerow . '</td>
+				<td style="border-bottom:solid 1px #000;width:60px">' . $product[1] . '</td>';
+		$currsymbol=wpsc_get_currency_symbol();
+		$tablerow++;
+		foreach ($product[0] as $amount) { 
+			$output.= '<td align="center" style="border-bottom:solid 1px #000;">' . $currsymbol . number_format(absint($amount),2) . '</td>';
+		}
+		$output.='</tr>';
+    }
+    $output.='</table>';
+	echo $output;
+}
+
+function wpsc_dashboard_4months_widget_setup() {
+	global $current_user;
+	get_currentuserinfo();
+	if($current_user->user_level == 10) {
+    wp_add_dashboard_widget('wpsc_dashboard_4months_widget', __('Sales by'),'wpsc_dashboard_4months_widget');
+	}
+}
+
+function wpsc_admin_4months_widget_rightnow() {
+  $user = wp_get_current_user();
+	if($user->user_level>9){
+		echo "<div>";
+		echo "<h3>".TXT_WPSC_E_COMMERCE."</h3>";
+		echo "<p>";
+		wpsc_dashboard_4months_widget();
+		echo "</div>";
+    }
+}
+
+if( IS_WP27 ) {
+    add_action('wp_dashboard_setup','wpsc_dashboard_4months_widget_setup');
+} else {
+	add_action('activity_box_end', 'wpsc_admin_4months_widget_rightnow');
+}
 
 
 ?>
