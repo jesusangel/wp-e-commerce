@@ -166,7 +166,7 @@ class usps {
 	//	$url ='http://testing.shippingapis.com/ShippingAPITest.dll?'.$request;
 		$url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
 		//exit('URL '.$url);	
-			$ch=curl_init(); 
+		$ch=curl_init(); 
 		curl_setopt($ch, CURLOPT_URL, $url); 
 		curl_setopt($ch, CURLOPT_NOPROGRESS, 1); 
 		curl_setopt($ch, CURLOPT_VERBOSE, 1); 

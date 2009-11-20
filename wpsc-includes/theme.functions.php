@@ -270,18 +270,20 @@ function wpsc_user_dynamic_css() {
 		}
       
     <?php
-    /*
-    $product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, `meta1`.`meta_value` AS `height`, `meta2`.`meta_value` AS `width` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` ON `products`.`id` = `meta1`.`product_id` = `meta2`.`product_id`  WHERE `products`.`thumbnail_state` IN(0,2,3) AND `meta1`.`meta_key` IN ('thumbnail_height') AND `meta2`.`meta_key` IN ('thumbnail_width')", ARRAY_A); 
+    
+    $product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, `meta1`.`meta_value` AS `height`, `meta2`.`meta_value` AS `width` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` ON `products`.`id` = `meta1`.`product_id` AND  `products`.`id` = `meta2`.`product_id`  WHERE `products`.`thumbnail_state` IN(0,2,3) AND `meta1`.`meta_key` IN ('thumbnail_height') AND `meta2`.`meta_key` IN ('thumbnail_width')", ARRAY_A);
+    //print_r($product_image_size_list);
     foreach((array)$product_image_size_list as $product_image_sizes) {
       $individual_thumbnail_height = $product_image_sizes['height']; 
       $individual_thumbnail_width = $product_image_sizes['width'];     
-      if($individual_thumbnail_height> $thumbnail_height) { 
-        echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r"; 
+      $product_id = $product_image_sizes['id'];
+      if($individual_thumbnail_height > $thumbnail_height) { 
+        echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r";
         echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
         echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
         echo "      }\n\r";
       } 
-      if($individual_thumbnail_width> $thumbnail_width) {
+      if($individual_thumbnail_width > $thumbnail_width) {
           echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
           echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
           echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
@@ -293,14 +295,17 @@ function wpsc_user_dynamic_css() {
           echo "            left: 0px;\n\r";
           echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
           echo "      }\n\r";
-  
-          echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
-          echo "            width: ".$individual_thumbnail_width."px;\n\r";
-          echo "            height: ".$individual_thumbnail_height."px;\n\r";
-          echo "      }\n\r";
         }
+
+        
+				if(($individual_thumbnail_width > $thumbnail_width) || ($individual_thumbnail_height > $thumbnail_height)) {
+						echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
+						echo "            width: ".$individual_thumbnail_width."px;\n\r";
+						echo "            height: ".$individual_thumbnail_height."px;\n\r";
+						echo "      }\n\r";
+				}
       }
-      */
+      
     }
     
   if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {
@@ -536,6 +541,7 @@ function wpsc_place_shopping_cart($content = '') {
 	
   if(preg_match("/\[shoppingcart\]/",$content)) {
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+		define('DONOTCACHEPAGE', true);
 		ob_start();
 		include($cur_wpsc_theme_folder."/shopping_cart_page.php");
 		$output = ob_get_contents();
@@ -563,6 +569,7 @@ function wpsc_place_shopping_cart($content = '') {
 
 function wpsc_transaction_results($content = '') {
   if(preg_match("/\[transactionresults\]/",$content)) {
+		define('DONOTCACHEPAGE', true);
     ob_start();
     include(WPSC_FILE_PATH . "/transaction_results.php");
     $output = ob_get_contents();
@@ -575,6 +582,7 @@ function wpsc_transaction_results($content = '') {
   
 function wpsc_user_log($content = '') {
   if(preg_match("/\[userlog\]/",$content)) {
+		define('DONOTCACHEPAGE', true);
     ob_start();
     include(WPSC_FILE_PATH . '/user-log.php');
     $output = ob_get_contents();

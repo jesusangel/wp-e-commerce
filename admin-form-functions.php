@@ -187,7 +187,6 @@ function nzshpcrt_getcategoryform($catid)
 	$output .= "          		</select>\n\r";	
 	$output .= "          	</td>\n\r";
 	$output .= "          </tr>\n\r";
-	$output .= "          <tr>\n\r";
 	
 	
   if(function_exists("getimagesize")) {
@@ -200,9 +199,18 @@ function nzshpcrt_getcategoryform($catid)
 		$output .= TXT_WPSC_WIDTH.": <input type='text' value='".$product['image_width']."' name='product_width' size='6'/> <br/>";
 		$output .= "            </td>\n\r";
 		$output .= "          </tr>\n\r";
-		$output .= "          </tr>\n\r";
 	}
 
+		$uses_additional_forms = (bool)wpsc_get_categorymeta($product['id'], 'uses_additonal_forms');
+		$output .= "          <tr>\n\r";
+		$output .= "            <td>\n\r";
+		$output .= __("This category requires additional checkout form fields",'wpsc').": ";
+		$output .= "            </td>\n\r";
+		$output .= "            <td>\n\r";
+    $output .= "            <label><input type='radio' value='1' name='uses_additonal_forms' ".(($uses_additional_forms == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
+		$output .= "            <label><input type='radio' value='0' name='uses_additonal_forms' ".(($uses_additional_forms != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
+		$output .= "            </td>\n\r";
+		$output .= "          </tr>\n\r";
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";

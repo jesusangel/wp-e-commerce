@@ -39,6 +39,10 @@ function wpsc_display_categories() {
 		  $output = true;
 		}
 	}
+	
+	if($category_id > 0) {
+		$output = false;
+	}
   return $output;
 }
 

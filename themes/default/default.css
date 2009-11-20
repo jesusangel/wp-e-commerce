@@ -1518,3 +1518,39 @@ position:relative;
 .widget_specials span.pricedisplay {
   float: none;
 }
+
+/* html object cart for super cache */
+
+div.shopping-cart-wrapper iframe, div.shopping-cart-wrapper object {
+ border: none;
+ width: 100%;
+ overflow: visible;
+ height:200px;
+ border: 0px;
+}
+
+div.shopping_cart_container {
+ text-align: left !important;
+ font-family:'Lucida Grande',Verdana,Arial,Sans-Serif;
+	font-size:1em;
+	line-height:normal;
+  width: 190px;
+}
+
+div.shopping_cart_container form {
+	margin:0px;
+}
+
+div.shopping_cart_container table, div.shopping_cart_container table tr, div.shopping_cart_container table tr td, div.shopping_cart_container table tr th  {
+	font-size: inherit;
+}
+
+div.shopping_cart_container table tr th {
+	text-align: left;
+	font-family:'Lucida Grande',Verdana,Arial,Sans-Serif;
+	font-size:1em;
+  font-weight: bold;
+}
+
+
+

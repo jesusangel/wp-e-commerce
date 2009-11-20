@@ -1,6 +1,6 @@
 <?php
 function widget_wp_shopping_cart($args) {
-    global $wpsc_theme_path;
+    global $wpsc_theme_path, $cache_enabled;
     extract($args);
     $options = get_option('widget_wp_shopping_cart');
       
@@ -27,11 +27,27 @@ function widget_wp_shopping_cart($args) {
 		if((($_SESSION['slider_state'] == 0) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
 			$display_state = "style='display: none;'";
 		}
-		echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-		
-		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-		include($cur_wpsc_theme_folder."/cart_widget.php");
-		echo "    </div>";
+
+		$use_object_frame = false;
+		if($cache_enabled == true) {
+			echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
+			if((strstr($_SERVER['HTTP_USER_AGENT'], "MSIE") == false) && ($use_object_frame == true)) {
+				?>
+				<object codetype="text/html" type="text/html" data="index.php?wpsc_action=cart_html_page"  border='0px'>
+					<p><?php _e('Loading...', 'wpsc'); ?></p>
+				</object>
+				<?php
+			} else {
+			?>
+			<div class='wpsc_cart_loading'><p><?php _e('Loading...', 'wpsc'); ?></p>
+			<?php
+			}
+			echo "    </div>";
+		} else {
+			echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
+			include(wpsc_get_theme_file_path("cart_widget.php"));
+			echo "    </div>";
+		}
     echo $after_widget;
     }
 

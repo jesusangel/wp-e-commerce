@@ -1882,7 +1882,6 @@ function wpsc_checkout_settings(){
 	    	}
 	
 	    }    
-	  //exit('<pre>'.print_r($_POST, true).'</pre>');
 		if($_POST['form_name'] != null) {
 		    foreach($_POST['form_name'] as $form_id => $form_name) {
 		      $form_type = $_POST['form_type'][$form_id];
@@ -1918,6 +1917,8 @@ function wpsc_checkout_settings(){
 				$added++;
 			}
 		}
+		//echo "INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` , `unique_name`, `checkout_set`) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."','".$form_unique_name."','".$filter."');";
+	  //exit('<pre>'.print_r($_POST, true).'</pre>');
 	   
 	   
 		if(isset($_POST['wpsc_options'])){
@@ -1931,7 +1932,7 @@ function wpsc_checkout_settings(){
 	}
 	$sendback = wp_get_referer();
 	if(isset($_POST['wpsc_form_set'])){   
-    	$filter = (int)$_POST['wpsc_form_set'];
+    	$filter = $_POST['wpsc_form_set'];
 		$sendback = add_query_arg('checkout-set', $filter, $sendback);
 	}
 	if ( isset($updated) ) {

@@ -105,16 +105,14 @@ function wpsc_add_to_cart() {
 			echo "}\n\r";
 			$error_messages = array();
 		}
+		
 		ob_start();
 		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 		include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	  $output = ob_get_contents();
 		ob_end_clean();
-		//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 		$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-	//echo '<pre>'.print_r($parameters,true).'</pre>';
     echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
-  //  echo "jQuery('#wpsc_quantity_update').val('".$provided_parameters['quantity']."');\n";
 
     
 		if(get_option('show_sliding_cart') == 1)	{
@@ -145,6 +143,45 @@ if($_REQUEST['wpsc_ajax_action'] == 'add_to_cart') {
 	add_action('init', 'wpsc_add_to_cart');
 }
 
+
+function wpsc_get_cart() {
+  global $wpdb, $wpsc_cart, $wpsc_theme_path;
+	ob_start();
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	include_once($cur_wpsc_theme_folder."/cart_widget.php");
+	$output = ob_get_contents();
+	ob_end_clean();
+	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
+
+	
+	if(get_option('show_sliding_cart') == 1)	{
+		if((wpsc_cart_item_count() > 0) || (count($cart_messages) > 0)) {
+			$_SESSION['slider_state'] = 1;
+			echo "
+				jQuery('#sliding_cart').slideDown('fast',function(){
+					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
+				});
+		";
+
+		} else {
+			$_SESSION['slider_state'] = 0;
+			echo "
+				jQuery('#sliding_cart').slideUp('fast',function(){
+					jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+				});
+		";
+		}
+	}
+
+	
+	do_action('wpsc_alternate_cart_html', '');
+	exit();
+}
+
+if($_REQUEST['wpsc_ajax_action'] == 'get_cart') {
+	add_action('init', 'wpsc_get_cart');
+}
 
 
 /**
@@ -397,6 +434,17 @@ if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
 }
 
 
+
+
+function wpsc_cart_html_page() {
+	require_once(WPSC_FILE_PATH."/wpsc-includes/shopping_cart_container.php");
+	exit();
+}
+
+// execute on POST and GET
+if($_REQUEST['wpsc_action'] == 'cart_html_page') {
+	add_action('init', 'wpsc_cart_html_page', 10000);
+}
 
 
 

@@ -134,4 +134,25 @@ function wpsc_delete_cartmeta( $cart_id, $meta_key, $meta_value = '' ) {
  * Cart meta functions end here.
 */
 
+/**
+ * category meta functions are as follows:
+*/
+
+
+function wpsc_get_categorymeta( $cart_id, $meta_key ) {
+	return wpsc_get_meta( $cart_id, $meta_key, 'wpsc_category' );
+}
+
+function wpsc_update_categorymeta( $cart_id, $meta_key, $meta_value ) {
+	return wpsc_update_meta( $cart_id, $meta_key, $meta_value, 'wpsc_category' );
+}
+
+function wpsc_delete_categorymeta( $cart_id, $meta_key, $meta_value = '' ) {
+	return wpsc_delete_meta( $cart_id, $meta_key, $meta_value, 'wpsc_category' );
+}
+/**
+ * category meta functions end here.
+*/
+
+
 ?>

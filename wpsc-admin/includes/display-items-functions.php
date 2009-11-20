@@ -1172,6 +1172,14 @@ function wpsc_main_product_image_menu($product_id) {
 	$sendback = wp_get_referer();
 	$presentation_link = add_query_arg('page','wpsc-settings', $sendback);
 	$presentation_link = add_query_arg('tab','presentation#thumb_settings', $presentation_link);
+	$thumbnail_image_height = get_product_meta($product_id, 'thumbnail_height');
+	$thumbnail_image_width = get_product_meta($product_id, 'thumbnail_width');
+
+
+	
+// 	echo $thumbnail_image_height;
+// 	echo "|";
+// 	echo $thumbnail_image_width;
 	ob_start();
 	?>
 	<div class='image_settings_box'>
@@ -1196,8 +1204,8 @@ function wpsc_main_product_image_menu($product_id) {
 				<li>
 					<input type='radio'  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo TXT_WPSC_USESPECIFICSIZE; ?> </label>
 					<div class='heightWidth image_resize_extra_forms'>
-						<input id='gallery_image_width' type='text' size='4' name='gallery_width' value='' /><label for='gallery_image_width'><?php echo TXT_WPSC_PXWIDTH; ?></label>
-						<input id='gallery_image_height' type='text' size='4' name='gallery_height' value='' /><label for='gallery_image_height'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
+						<input id='gallery_image_width' type='text' size='4' name='gallery_width' value='<?php echo $thumbnail_image_width; ?>' /><label for='gallery_image_width'><?php echo TXT_WPSC_PXWIDTH; ?></label>
+						<input id='gallery_image_height' type='text' size='4' name='gallery_height' value='<?php echo $thumbnail_image_height; ?>' /><label for='gallery_image_height'><?php echo TXT_WPSC_PXHEIGHT; ?> </label>
 					</div>
 				</li>
 

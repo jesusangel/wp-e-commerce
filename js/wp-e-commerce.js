@@ -138,8 +138,21 @@ jQuery(document).ready(function () {
 		});
 		return false;
 	});
+	
+	// Object frame destroying code.
+	jQuery("div.shopping_cart_container").livequery(function(){
+		object_html = jQuery(this).html();
+		window.parent.jQuery("div.shopping-cart-wrapper").html(object_html);
+	});
 
-
+	
+	// Ajax cart loading code.
+	jQuery("div.wpsc_cart_loading").livequery(function(){
+		form_values = "ajax=true"
+		jQuery.post( 'index.php?wpsc_ajax_action=get_cart', form_values, function(returned_data) {
+			eval(returned_data);
+		});
+	});
 
 /*
 	jQuery('form#specials').livequery(function(){

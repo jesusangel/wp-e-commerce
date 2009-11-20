@@ -325,7 +325,12 @@ class wpsc_checkout {
   function wpsc_checkout($checkout_set = 0) {
     global $wpdb;
     $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".$checkout_set."' ORDER BY `order`;");
-    $this->checkout_item_count = count($this->checkout_items);
+    
+		$category_list = wpsc_cart_item_categories();
+		
+    $this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $category_list)."') ORDER BY `order`;");
+
+		$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
     if(function_exists('wpsc_get_ticket_checkout_set')){
     	$sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".wpsc_get_ticket_checkout_set()."' ORDER BY `order`;";
     	$this->additional_fields = $wpdb->get_results($sql);
@@ -339,8 +344,9 @@ class wpsc_checkout {
     	}
     	//exit($sql.'<pre>'.print_r($this->additional_fields, true).'</pre>'.$count);
     	$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->additional_fields);
-    	$this->checkout_item_count = count($this->checkout_items);
     }
+
+    $this->checkout_item_count = count($this->checkout_items);
   }
   
   function form_name() {
@@ -611,7 +617,7 @@ class wpsc_checkout {
 	
 
  		//exit('UserID >><pre>'.print_r($user_ID, true).'</pre>');
-		if($any_bad_inputs == false) {
+		if(($any_bad_inputs == false) && ($user_ID > 0)) {
 			$saved_data_sql = "SELECT * FROM `".$wpdb->usermeta."` WHERE `user_id` = '".$user_ID."' AND `meta_key` = 'wpshpcrt_usr_profile';";
 			$saved_data = $wpdb->get_row($saved_data_sql,ARRAY_A);
 			//echo "<pre>".print_r($meta_data,true)."</pre>";

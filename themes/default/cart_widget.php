@@ -69,15 +69,15 @@
 	<form action='' method='post' class='wpsc_empty_the_cart'>
 		<input type='hidden' name='wpsc_ajax_action' value='empty_cart' />
 		<span class='emptycart'>
-			<a href='<?php echo htmlentities(add_query_arg('wpsc_ajax_action', 'empty_cart', remove_query_arg('ajax')), ENT_QUOTES); ?>'><?php echo TXT_WPSC_EMPTYYOURCART; ?></a>
+			<a target='_parent' href='<?php echo htmlentities(add_query_arg('wpsc_ajax_action', 'empty_cart', remove_query_arg('ajax')), ENT_QUOTES); ?>'><?php echo TXT_WPSC_EMPTYYOURCART; ?></a>
 		</span>                                                                                             
 	</form>
 	
-	<span class='gocheckout'><a href='<?php echo get_option('shopping_cart_url'); ?>'><?php echo TXT_WPSC_GOTOCHECKOUT; ?></a></span>
+	<span class='gocheckout'><a target='_parent' href='<?php echo get_option('shopping_cart_url'); ?>'><?php echo TXT_WPSC_GOTOCHECKOUT; ?></a></span>
 <?php else: ?>
 	<p class="empty"><?php echo TXT_WPSC_YOURSHOPPINGCARTISEMPTY; ?></p>
 	<p class="visitshop">
-	  <a href="<?php echo get_option('product_list_url'); ?>"><?php echo TXT_WPSC_VISITTHESHOP; ?></a>
+	  <a target='_parent' href="<?php echo get_option('product_list_url'); ?>"><?php echo TXT_WPSC_VISITTHESHOP; ?></a>
 	</p>
 <?php endif; ?>
 

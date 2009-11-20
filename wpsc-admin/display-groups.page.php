@@ -207,6 +207,25 @@ function wpsc_display_groups_page() {
       $wp_rewrite->flush_rules(); 
       if($wpdb->query($insertsql)) {
 				$category_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` LIMIT 1");
+
+
+			if((bool)(int)$_POST['uses_additonal_forms'] == true) {
+				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 1);
+				$uses_additional_forms = true;
+			} else {
+				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 0);
+				$uses_additional_forms = false;
+			}
+
+			if($uses_additional_forms == true) {
+				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
+				$checkout_form_sets[$url_name] = $wpdb->escape(stripslashes($_POST['name']));
+				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
+			}
+
+
+
+				
         echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
       } else {
         echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
@@ -232,6 +251,7 @@ function wpsc_display_groups_page() {
     		}
 				$AllSelected = true;
     	}
+    	
     	
     	if(in_array('none', $_POST['countrylist2'])){
     		foreach($countryList as $country){
@@ -406,8 +426,31 @@ function wpsc_display_groups_page() {
     if(count($category_sql_list) > 0) {
       $category_sql = implode(", ",$category_sql_list);
       $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET $category_sql WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
+      $category_id = absint($_POST['prodid']);
       
 			update_option('wpsc_category_url_cache', array());
+
+
+			if((bool)(int)$_POST['uses_additonal_forms'] == true) {
+				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 1);
+				$uses_additional_forms = true;
+			} else {
+				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 0);
+				$uses_additional_forms = false;
+			}
+			
+			
+			if($uses_additional_forms == true) {
+				$category_name = $wpdb->escape(stripslashes($_POST['title']));
+				$url_name = sanitize_title($category_name);
+				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
+				$checkout_form_sets[$url_name] = $category_name;
+				//print_r($checkout_form_sets);
+				//exit();
+				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
+			}
+
+			
       $wp_rewrite->flush_rules(); 
 		}
     echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORYHASBEENEDITED."</p></div>";
@@ -810,6 +853,16 @@ update_option('wpsc_category_url_cache', array());
 							<?php echo TXT_WPSC_WIDTH; ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
 						</td>
 					</tr>
+
+
+					<tr>
+            <td><?php _e("This category requires additional checkout form fields",'wpsc'); ?>:</td>
+
+            <td>
+							<label><input type="radio" name="uses_additonal_forms" value="1"/><?php _e("Yes",'wpsc'); ?></label>
+							<label><input type="radio" checked="checked" name="uses_additonal_forms" value="0"/><?php _e("No",'wpsc'); ?></label>
+            </td>
+          </tr>
 
 					<tr>
 						<td>

@@ -192,6 +192,21 @@ function wpsc_cart_shipping() {
 	global $wpsc_cart;
 	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_shipping());
 }
+
+
+/**
+* cart item categories function, no parameters
+* @return array array of the categories
+*/
+function wpsc_cart_item_categories() {
+	global $wpsc_cart;
+	if(is_object($wpsc_cart)) {
+		return $wpsc_cart->get_item_categories();
+	} else {
+		return array();
+	}
+}
+
 /**
 * have cart items function, no parameters
 * @return boolean true if there are cart items left
@@ -1048,6 +1063,8 @@ class wpsc_cart {
 		}
 		return $total;
   }
+
+
   
   /**
 	 * calculate_subtotal method 
@@ -1136,6 +1153,20 @@ class wpsc_cart {
 		return $total;
   }
   
+  /**
+	 * calculate total price method 
+	 * @access public
+	 *
+	 * @return float returns the price as a floating point value
+	*/
+  function get_item_categories() {
+  	$category_list = array();
+		foreach($this->cart_items as $key => $cart_item) {
+			$category_list  += $cart_item->category_list;
+		}
+		return $category_list;
+  }
+
   
    /**
 	* calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
@@ -1490,6 +1521,7 @@ class wpsc_cart_item {
 	
 	//values from the database
 	var $product_name;
+	var $category_list;
 	var $unit_price;
 	var $total_price;
 	var $taxable_price = 0;
@@ -1627,6 +1659,7 @@ class wpsc_cart_item {
 		if(count($variation_names) > 0) {
 			$product_name .= " (".implode(", ",$variation_names).")";
 		}
+
 		$this->product_name = $product_name;
 		$this->priceandstock_id = $priceandstock_id;
 		$this->is_donation = (bool)$product['donation'];
@@ -1643,6 +1676,7 @@ class wpsc_cart_item {
 		$this->weight = $weight;
 		$this->total_price = $this->unit_price * $this->quantity;
 
+		$this->category_list = $wpdb->get_col("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`nice-name` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product['id']."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1')");
 		
 		if($this->apply_tax == true) {
 		  $this->taxable_price = $this->total_price;
