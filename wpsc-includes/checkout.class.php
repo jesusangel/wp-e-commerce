@@ -327,8 +327,8 @@ class wpsc_checkout {
     $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".$checkout_set."' ORDER BY `order`;");
     
 		$category_list = wpsc_cart_item_categories();
-		
-    $this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $category_list)."') ORDER BY `order`;");
+		//echo "<pre>".print_r($category_list,true)."</pre>";
+    $this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $category_list)."') ORDER BY `checkout_set`, `order`;");
 
 		$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
     if(function_exists('wpsc_get_ticket_checkout_set')){

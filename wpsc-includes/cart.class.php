@@ -1162,7 +1162,7 @@ class wpsc_cart {
   function get_item_categories() {
   	$category_list = array();
 		foreach($this->cart_items as $key => $cart_item) {
-			$category_list  += $cart_item->category_list;
+			$category_list = array_merge((array)$cart_item->category_list, $category_list);
 		}
 		return $category_list;
   }

@@ -137,10 +137,11 @@ $form_types = get_option('wpsc_checkout_form_fields');
   			  }
   			//exit('<pre>'.print_r($_POST, true).'</pre>');
 			if(!isset($_GET['checkout-set'])){
-			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set`='".$filter."' ORDER BY `order`;";	
+				$filter = 0;
+			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') ORDER BY `order`;";	
 			}else{
-			 $filter = $wpdb->escape($_GET['checkout-set']);
-			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set`='".$filter."' ORDER BY `order`;";	
+				$filter = $wpdb->escape($_GET['checkout-set']);
+			  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') ORDER BY `order`;";
 			}
   			 $email_form_field = $wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
 			  $email_form_field = $email_form_field[0];
