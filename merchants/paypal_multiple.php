@@ -9,7 +9,6 @@ $nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD',
 $nzshpcrt_gateways[$num]['supported_currencies']['option_name'] = 'paypal_curcode';
 
 
-
 function gateway_paypal_multiple($seperator, $sessionid) {
   global $wpdb, $wpsc_cart;
   $purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
@@ -57,7 +56,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['bn'] = 'wp-e-commerce';
   
   $data['no_shipping'] = (int)(bool)get_option('paypal_ship');
-  if(get_option('address_override') == 0) {
+  if(get_option('address_override') == 1) {
 		$data['address_override'] = '1';
 	}
   $data['no_note'] = '1';
@@ -83,7 +82,6 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   
 	$total = $wpsc_cart->calculate_total_price();
 
-// 	exit('<pre>'.print_r($total, true).'</pre>');
 	$discount = $wpsc_cart->coupons_amount;
 	//exit($discount);
 	if(($discount > 0)) {
