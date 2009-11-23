@@ -29,7 +29,7 @@ function widget_wp_shopping_cart($args) {
 		}
 
 		$use_object_frame = false;
-		if($cache_enabled == true) {
+		if(($cache_enabled == true) && (!defined('DONOTCACHEPAGE') || (constant('DONOTCACHEPAGE') !== true))) {
 			echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
 			if((strstr($_SERVER['HTTP_USER_AGENT'], "MSIE") == false) && ($use_object_frame == true)) {
 				?>
