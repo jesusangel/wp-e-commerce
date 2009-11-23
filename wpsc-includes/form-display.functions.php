@@ -129,18 +129,31 @@ function wpsc_select_product_file($product_id = null) {
   //return false;
   $file_list = wpsc_uploaded_files();
   $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
+ $product_files = $wpdb->get_row("SELECT `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` FROM  `wppwpsc_productmeta` WHERE `wppwpsc_productmeta`.`product_id` = '".$product_id."' AND `wppwpsc_productmeta`.`meta_key` = 'product_files'", ARRAY_A); 
   $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span><br>";
+  $product_files=unserialize($product_files["meta_value"]);
 	//$output .= "<pre>".print_r($file_list,true)."</pre>";
   $output .= "<div class='ui-widget-content multiple-select  ".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
   //$output .= "<div class='select_product_file'>";
   $num = 0;
-  $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")."><input type='radio' name='select_product_file' value='.none.' id='select_product_file_$num' ".((!is_numeric($file_id) || ($file_id < 1)) ? "checked='checked'" : "")." /><label for='select_product_file_$num'>".TXT_WPSC_SHOW_NO_PRODUCT."</label></p>";
   foreach((array)$file_list as $file) {
     $num++;
+	if(is_array($product_files)){
+		if (in_array($file['file_id'], $product_files)){
+			$checked_curr_file="checked='checked'";
+		}
+		else{$checked_curr_file="";}
+	}
+	else{
+		if(is_numeric($file_id) && ($file_id == $file['file_id'])){
+			$checked_curr_file="checked='checked'";
+		}
+		else{$checked_curr_file="";}
+	}
 		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_id=".$file['file_id'], 'delete_file_'.absint($file['file_id']));
     
     $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'").">\n";
-    $output .= "  <input type='radio' name='select_product_file' value='".$file['real_filename']."' id='select_product_file_$num' ".((is_numeric($file_id) && ($file_id == $file['file_id'])) ? "checked='checked'" : "")." />\n";
+    $output .= "  <input type='checkbox' name='select_product_file[]' value='".$file['real_filename']."' id='select_product_file_$num' ".$checked_curr_file." />\n";
     $output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
     $output .= "  <a class='file_delete_button' href='{$deletion_url}'>\n";
     $output .= "    <img src='".WPSC_URL."/images/cross.png' />\n";

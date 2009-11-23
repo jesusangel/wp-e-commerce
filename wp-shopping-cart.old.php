@@ -1216,14 +1216,11 @@ function nzshpcrt_download_file() {
     //exit("<pre>".print_r($download_data,true)."</pre>");
    
     if($download_data != null) {
-      if($download_data['product_id'] > 0) {
-				$product_file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$download_data['product_id']."' LIMIT 1");
-				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_file_id."' LIMIT 1", ARRAY_A);
+			if($download_data['fileid'] > 0) {
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
       } else {
 				$old_file_data = $wpdb->get_row("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
-				
-				$product_file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$old_file_data['product_id']."' LIMIT 1");
-				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_file_id."' LIMIT 1", ARRAY_A);
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
 			}
       
       if((int)$download_data['downloads'] >= 1) {
