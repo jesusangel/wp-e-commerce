@@ -94,8 +94,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						foreach($download_data as $single_download){
 							if($single_download['uniqueid'] == null){// if the uniqueid is not equal to null, its "valid", regardless of what it is
 								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" =>$single_download["filename"]);	
-							}
-							else{
+							}	else {
 								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" =>$single_download["filename"]);
 							}
 						}

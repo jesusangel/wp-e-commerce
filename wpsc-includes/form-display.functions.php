@@ -127,14 +127,15 @@ function wpsc_uploaded_files() {
 function wpsc_select_product_file($product_id = null) {
   global $wpdb;
   //return false;
+  $product_id = absint($product_id);
   $file_list = wpsc_uploaded_files();
   $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
- $product_files = $wpdb->get_row("SELECT `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` FROM  `wppwpsc_productmeta` WHERE `wppwpsc_productmeta`.`product_id` = '".$product_id."' AND `wppwpsc_productmeta`.`meta_key` = 'product_files'", ARRAY_A); 
+  
+	//$product_files = $wpdb->get_row("SELECT `meta_value` FROM  `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '".$product_id."' AND `meta_key` = 'product_files'", ARRAY_A);
+	
+	$product_files = get_product_meta($product_id, 'product_files');
   $output = "<span class='admin_product_notes select_product_note '>".TXT_WPSC_CHOOSE_DOWNLOADABLE_PRODUCT."</span><br>";
-  $product_files=unserialize($product_files["meta_value"]);
-	//$output .= "<pre>".print_r($file_list,true)."</pre>";
   $output .= "<div class='ui-widget-content multiple-select  ".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
-  //$output .= "<div class='select_product_file'>";
   $num = 0;
   foreach((array)$file_list as $file) {
     $num++;

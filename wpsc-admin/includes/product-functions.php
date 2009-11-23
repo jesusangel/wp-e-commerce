@@ -71,7 +71,7 @@ function wpsc_admin_submit_product() {
 		$sendback = add_query_arg('message', 1, $sendback);
   //exit('<pre>'.print_r($sendback,true).'</pre>');
 		wp_redirect($sendback);
-  }else{
+  } else {
   	$_SESSION['product_error_messages'] = array();	
   	if($post_data['title'] == ''){
   		$_SESSION['product_error_messages'][] = __('<strong>ERROR</strong>: Please enter a Product name.<br />');
@@ -182,6 +182,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'thumbnail_state' => null
   );
   
+
   foreach($product_columns as $column => $default) {
     if(isset($post_data[$column]) || ($post_data[$column] !== null) ) {
 			$update_values[$column] = stripslashes($post_data[$column]);
@@ -267,7 +268,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	  wpsc_item_reassign_file($product_id, $post_data['select_product_file']);
 	}
 	
-	
+	//exit('<pre>'.print_r($post_data, true).'</pre>');
 	if($post_data['files']['preview_file']['tmp_name'] != '') {
  		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
 	}
@@ -769,36 +770,38 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '0' WHERE `id` = '$product_id' LIMIT 1");
 		return null;
 	}
-	foreach($selected_files as $selected_file){
-	// if we already use this file, there is no point doing anything more.
-	$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
-	if($current_fileid > 0) {
-		$current_file_data = $wpdb->get_row("SELECT `id`,`idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` = '$current_fileid' LIMIT 1",ARRAY_A);
-		if(basename($selected_file) == $file_data['idhash']) {
-			return $current_fileid;
+	foreach($selected_files as $selected_file) {
+		// if we already use this file, there is no point doing anything more.
+		$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
+		if($current_fileid > 0) {
+			$current_file_data = $wpdb->get_row("SELECT `id`,`idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` = '$current_fileid' LIMIT 1",ARRAY_A);
+			if(basename($selected_file) == $file_data['idhash']) {
+				//$product_file_list[] = $current_fileid;
+				//return $current_fileid;
+			}
 		}
-	}
-
-	
-	$selected_file = basename($selected_file);
-	if(file_exists(WPSC_FILE_DIR.$selected_file)) {
-		$timestamp = time();
-		$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` IN('".$wpdb->escape($selected_file)."') LIMIT 1", ARRAY_A);
-		$fileid = (int)$file_data['id'];
-		// if the file does not have a database row, add one.
-		if($fileid < 1) {
-		  $mimetype = wpsc_get_mimetype(WPSC_FILE_DIR.$selected_file);
-		  $filename = $idhash = $selected_file;
-			$timestamp = time();
-			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` (`product_id`, `filename`  , `mimetype` , `idhash` , `date` ) VALUES ('{$product_id}', '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
-			$fileid = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `date` = '{$timestamp}' AND `filename` IN ('{$filename}')");
-		}
-		// update the entry in the product table
-		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
-		$product_file_list[]=$fileid;
 		
-	}	
+		$selected_file = basename($selected_file);
+		if(file_exists(WPSC_FILE_DIR.$selected_file)) {
+			$timestamp = time();
+			$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` IN('".$wpdb->escape($selected_file)."') LIMIT 1", ARRAY_A);
+			$fileid = (int)$file_data['id'];
+			// if the file does not have a database row, add one.
+			if($fileid < 1) {
+				$mimetype = wpsc_get_mimetype(WPSC_FILE_DIR.$selected_file);
+				$filename = $idhash = $selected_file;
+				$timestamp = time();
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` (`product_id`, `filename`  , `mimetype` , `idhash` , `date` ) VALUES ('{$product_id}', '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
+				$fileid = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `date` = '{$timestamp}' AND `filename` IN ('{$filename}')");
+			}
+			// update the entry in the product table
+			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
+			$product_file_list[] = $fileid;
+		}	
   }
+
+  
+	//exit('<pre>'.print_r($product_file_list, true).'</pre>');
   update_product_meta($product_id, 'product_files', $product_file_list);
 	return $fileid;
 }
