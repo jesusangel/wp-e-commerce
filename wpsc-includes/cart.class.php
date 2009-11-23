@@ -1696,8 +1696,15 @@ class wpsc_cart_item {
 		} else {
 			$this->thumbnail_image = $product['image'];
 		}
+
+
+		$product_files = $wpdb->get_row("SELECT `".WPSC_TABLE_PRODUCTMETA."`.`meta_value`
+		FROM  `".WPSC_TABLE_PRODUCTMETA."`
+		WHERE `".WPSC_TABLE_PRODUCTMETA."`.`product_id` = '".$this->product_id."'
+		AND `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` = 'product_files'", ARRAY_A);
 		
-		if($file_id > 0) {
+		$product_files = unserialize($product_files["meta_value"]);
+		if($file_id > 0 || sizeof($product_files) > 0) {
 			$this->file_id = (int)$file_id;
 			$this->is_downloadable = true;
 		} else {
@@ -1855,12 +1862,25 @@ class wpsc_cart_item {
 		
     $downloads = get_option('max_downloads');
 		if($this->is_downloadable == true) {
-			// if the file is downloadable, check that the file is real
-			if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('{$this->file_id}')")) {
-				$unique_id = sha1(uniqid(mt_rand(), true));
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (`product_id` , `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->product_id}', '{$this->file_id}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+			$product_files = $wpdb->get_row("SELECT `".WPSC_TABLE_PRODUCTMETA."`.`meta_value` FROM  `wppwpsc_productmeta` WHERE `wppwpsc_productmeta`.`product_id` = '".$this->product_id."' AND `wppwpsc_productmeta`.`meta_key` = 'product_files'", ARRAY_A);
+			$product_files = unserialize($product_files["meta_value"]);
+			if(!($product_files)){			
+				// if the file is downloadable, check that the file is real
+				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('{$this->file_id}')")) {
+					$unique_id = sha1(uniqid(mt_rand(), true));
+					$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (`product_id` , `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->product_id}', '{$this->file_id}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+				}
+			}	else {
+				foreach($product_files as $file){
+					// if the file is downloadable, check that the file is real
+					if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('{$file}')")) {
+						$unique_id = sha1(uniqid(mt_rand(), true));
+						$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (`product_id` , `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->product_id}', '{$file}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
+					}
+				}
 			}
 		}
+
 		
 		do_action('wpsc_save_cart_item', $cart_id, $this->product_id);
 	}

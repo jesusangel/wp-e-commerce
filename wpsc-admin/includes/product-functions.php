@@ -26,13 +26,13 @@ function wpsc_check_memory_limit() {
 		
 		// build the test sizes
 		$sizes = array();
-		$sizes[] = array ( 'width' => 800, 'height' => 600);
-		$sizes[] = array ( 'width' => 1024, 'height' => 768);
-		$sizes[] = array ( 'width' => 1280, 'height' => 960);  // 1MP	
-		$sizes[] = array ( 'width' => 1600, 'height' => 1200); // 2MP
-		$sizes[] = array ( 'width' => 2016, 'height' => 1512); // 3MP
-		$sizes[] = array ( 'width' => 2272, 'height' => 1704); // 4MP
-		$sizes[] = array ( 'width' => 2560, 'height' => 1920); // 5MP
+		$sizes[] = array ( 'width' => 800, 'height' => 600 );
+		$sizes[] = array ( 'width' => 1024, 'height' => 768 );
+		$sizes[] = array ( 'width' => 1280, 'height' => 960 );  // 1MP	
+		$sizes[] = array ( 'width' => 1600, 'height' => 1200 ); // 2MP
+		$sizes[] = array ( 'width' => 2016, 'height' => 1512 ); // 3MP
+		$sizes[] = array ( 'width' => 2272, 'height' => 1704 ); // 4MP
+		$sizes[] = array ( 'width' => 2560, 'height' => 1920 ); // 5MP
 		
 		// test the classic sizes
 		foreach ($sizes as $size){
@@ -752,24 +752,24 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 		return false;
   }
 }
-
  /**
  * wpsc_item_reassign_file function 
  *
  * @param integer product ID
  * @param string the selected file name;
  */
-function wpsc_item_reassign_file($product_id, $selected_file) {
+function wpsc_item_reassign_file($product_id, $selected_files) {
   global $wpdb;
+  $product_file_list=array();
 	// initialise $idhash to null to prevent issues with undefined variables and error logs
 	$idhash = null;
 	/* if we are editing, grab the current file and ID hash */ 
-	if($selected_file == '.none.') {
+	if(!$selected_files) {
 		// unlikely that anyone will ever upload a file called .none., so its the value used to signify clearing the product association
 		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '0' WHERE `id` = '$product_id' LIMIT 1");
 		return null;
 	}
-	
+	foreach($selected_files as $selected_file){
 	// if we already use this file, there is no point doing anything more.
 	$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
 	if($current_fileid > 0) {
@@ -795,7 +795,11 @@ function wpsc_item_reassign_file($product_id, $selected_file) {
 		}
 		// update the entry in the product table
 		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
+		$product_file_list[]=$fileid;
+		
 	}	
+  }
+  update_product_meta($product_id, 'product_files', $product_file_list);
 	return $fileid;
 }
 
@@ -835,9 +839,8 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
 		//exit("<pre>".print_r($preview_file,true)."</pre>");
 		return $fileid;
    } else {
- 		return false;
-   }
-   
+ 		return $selected_files;
+   }  
 }
 
 

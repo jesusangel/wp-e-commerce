@@ -1000,12 +1000,28 @@ function wpsc_purchlog_resend_email(){
 					}
 					
 					if (($purchase_log['processed'] >= 2)) {
-						$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `fileid`='".$product_data[0]['file']."' AND `purchid`='".$purchase_log['id']."' AND (`cartid` = '".$row['id']."' OR `cartid` IS NULL) AND `id` NOT IN (".make_csv($previous_download_ids).") LIMIT 1",ARRAY_A);
-						if($download_data != null) {
-              if($download_data['uniqueid'] == null) {  // if the uniqueid is not equal to null, its "valid", regardless of what it is
-                $link = $siteurl."?downloadid=".$download_data['id'];
-              } else {
-                $link = $siteurl."?downloadid=".$download_data['uniqueid'];
+						$download_data = $wpdb->get_results("SELECT *
+						FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` INNER JOIN `".WPSC_TABLE_PRODUCT_FILES."`
+						ON `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = `".WPSC_TABLE_PRODUCT_FILES."`.`id`
+						WHERE `".WPSC_TABLE_DOWNLOAD_STATUS."`.`active`='1'
+						AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`purchid`='".$purchase_log['id']."'
+						AND (
+							`".WPSC_TABLE_DOWNLOAD_STATUS."`.`cartid` = '".$row['id']."'
+							OR (
+								`".WPSC_TABLE_DOWNLOAD_STATUS."`.`cartid` IS NULL
+								AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = '{$product_data['file']}'
+							)
+						)
+						 AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`id` NOT IN ('".implode("','",$previous_download_ids)."')",ARRAY_A);
+						$link=array();
+							//exit('IM HERE'.$errorcode.'<pre>'.print_r($download_data).'</pre>');
+						if(sizeof($download_data) != 0) {
+							foreach($download_data as $single_download){
+								if($single_download['uniqueid'] == null){// if the uniqueid is not equal to null, its "valid", regardless of what it is
+									$link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" =>$single_download["filename"]);	
+								} else {
+									$link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" =>$single_download["filename"]);
+								}
               }
 						}
 						$previous_download_ids[] = $download_data['id'];
@@ -1068,8 +1084,12 @@ function wpsc_purchlog_resend_email(){
 						}
 			
 						if($link != '') {
-							$product_list.= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":\n $link\n";
-							$product_list_html.= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".TXT_WPSC_CLICKTODOWNLOAD."</a>\n";
+							$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":";
+							$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".TXT_WPSC_CLICKTODOWNLOAD.":\n\r";
+							foreach($link as $single_link) {
+								$product_list .= "\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
+								$product_list_html .= "<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
+							}
 						} else {
 							$plural = '';
 							
