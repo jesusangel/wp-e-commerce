@@ -286,7 +286,7 @@ function wpsc_user_dynamic_css() {
       if($individual_thumbnail_width > $thumbnail_width) {
           echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
           echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
-          echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
+          //echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
           echo "      }\n\r";
   
           echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
