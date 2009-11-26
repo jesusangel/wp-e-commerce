@@ -687,7 +687,7 @@ function wpsc_object_to_array( $object ) {
 
 function wpsc_clear_stock_claims( ) {
 	global $wpdb;
-	wp_mail('thomas.howard@gmail.com', 'test hourly cron', 'wpsc_clear_stock_claims ran');
+	///wp_mail('thomas.howard@gmail.com', 'test hourly cron', 'wpsc_clear_stock_claims ran');
 	/// Delete the old claims on stock
 	$old_claimed_stock_timestamp = mktime((date('H') - 1), date('i'), date('s'), date('m'), date('d'), date('Y'));
 	$old_claimed_stock_datetime = date("Y-m-d H:i:s", $old_claimed_stock_timestamp);

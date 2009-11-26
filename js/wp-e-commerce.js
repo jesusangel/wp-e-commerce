@@ -154,22 +154,17 @@ jQuery(document).ready(function () {
 		});
 	});
 
-/*
-	jQuery('form#specials').livequery(function(){
-		jQuery(this).submit(function(){
-		alert('submitted');
-		form_values = "ajax=true&";
-		form_values += jQuery(this).serialize();
-			jQuery.post( 'index.php', form_values, function(returned_data) {
-				//eval(returned_data);
-			});
-
-				//return false;
 	
-		});
+	
 
+	// Object frame destroying code.
+	jQuery("form.wpsc_product_rating").livequery(function(){
+    jQuery(this).rating();
 	});
-*/
+
+
+
+
 	jQuery("form.wpsc_empty_the_cart").livequery(function(){
 		jQuery(this).submit(function() {
 			form_values = "ajax=true&";

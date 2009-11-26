@@ -735,25 +735,72 @@ function wpsc_product_rater() {
 
 		$output .= "<div class='product_average_vote'>";
 		$output .= "<strong>".TXT_WPSC_AVGCUSTREVIEW.":</strong>";
-		$output .= nzshpcrt_product_rating($wpsc_query->product['id']);
+		$output .= wpsc_product_existing_rating($wpsc_query->product['id']);
 		$output .= "</div>";
 		
 		$output .= "<div class='product_user_vote'>";
-		$vote_output = nzshpcrt_product_vote($wpsc_query->product['id'],"onmouseover='hide_save_indicator(\"saved_".$wpsc_query->product['id']."_text\");'");
-		if($vote_output[1] == 'voted') {
-			$output .= "<strong><span id='rating_".$wpsc_query->product['id']."_text'>".TXT_WPSC_YOURRATING.":</span>";
-			$output .= "<span class='rating_saved' id='saved_".$wpsc_query->product['id']."_text'> ".TXT_WPSC_RATING_SAVED."</span>";
-			$output .= "</strong>";
-		} else if($vote_output[1] == 'voting') {
-			$output .= "<strong><span id='rating_".$wpsc_query->product['id']."_text'>".TXT_WPSC_RATETHISITEM.":</span>";
-			$output .= "<span class='rating_saved' id='saved_".$wpsc_query->product['id']."_text'> ".TXT_WPSC_RATING_SAVED."</span>";
-			$output .= "</strong>";
-		}
-		$output .= $vote_output[0];
+
+		//$vote_output = nzshpcrt_product_vote($wpsc_query->product['id'],"onmouseover='hide_save_indicator(\"saved_".$wpsc_query->product['id']."_text\");'");
+		$output .= "<strong><span id='rating_".$wpsc_query->product['id']."_text'>".TXT_WPSC_RATETHISITEM.":</span>";
+		$output .= "<span class='rating_saved' id='saved_".$wpsc_query->product['id']."_text'> ".TXT_WPSC_RATING_SAVED."</span>";
+		$output .= "</strong>";
+		
+		$output .= wpsc_product_new_rating($wpsc_query->product['id']);
 		$output .= "</div>";
 		$output .= "</div>";
 	}
 	return	$output;
+}
+
+
+function wpsc_product_existing_rating($product_id) {
+	global $wpdb;
+	$get_average = $wpdb->get_results("SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `productid`='".$product_id."'",ARRAY_A);
+	$average = floor($get_average[0]['average']);
+	$count = $get_average[0]['count'];
+	$output .= "  <span class='votetext'>";
+	for($l=1; $l<=$average; ++$l) {
+		$output .= "<img class='goldstar' src='". WPSC_URL."/images/gold-star.gif' alt='$l' title='$l' />";
+	}
+	$remainder = 5 - $average;
+	for($l=1; $l<=$remainder; ++$l) {
+		$output .= "<img class='goldstar' src='". WPSC_URL."/images/grey-star.gif' alt='$l' title='$l' />";
+	}
+	$output .=  "<span class='vote_total'>&nbsp;(<span id='vote_total_$prodid'>".$count."</span>)</span> \r\n";
+	$output .=  "</span> \r\n";
+	return $output;
+}
+
+
+function wpsc_product_new_rating($product_id) {
+	global $wpdb;
+	$cookie_data = explode(",",$_COOKIE['voting_cookie'][$product_id]);
+	$vote_id = 0;
+	if(is_numeric($cookie_data[0])){
+			$vote_id = absint($cookie_data[0]);
+	}
+	$previous_vote = 1;
+	if($vote_id > 0) {
+		$previous_vote = $wpdb->get_var("SELECT `rated` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `id`='".$vote_id."' LIMIT 1");
+	}
+	
+	
+	//print("<pre>".print_r($previous_vote, true)."</pre>");
+	//print("<pre>".print_r(func_get_args(), true)."</pre>");
+	$output = "<form class='wpsc_product_rating' method='post'>\n";
+	//$output .= "			<input type='hidden' name='product_id' value='{$product_id}' />\n";
+	$output .= "			<input type='hidden' name='wpsc_ajax_action' value='rate_product' />\n";
+	$output .= "			<input type='hidden' class='wpsc_rating_product_id' name='product_id' value='{$product_id}' />\n";
+	$output .= "			<select class='wpsc_select_product_rating' name='product_rating'>\n";
+	$output .= "					<option ". (($previous_vote == '1') ? "selected='selected'" : '')." value='1'>1</option>\n";
+	$output .= "					<option ". (($previous_vote == '2') ? "selected='selected'" : '')." value='2'>2</option>\n";
+	$output .= "					<option ". (($previous_vote == '3') ? "selected='selected'" : '')." value='3'>3</option>\n";
+	$output .= "					<option ". (($previous_vote == '4') ? "selected='selected'" : '')." value='4'>4</option>\n";
+	$output .= "					<option ". (($previous_vote == '5') ? "selected='selected'" : '')." value='5'>5</option>\n";
+	$output .= "			</select>\n";
+	$output .= "			<input type='submit' value='".__('Save','wpsc')."'>";
+	$output .= "	</form>";
+	return $output;
 }
 
 /**

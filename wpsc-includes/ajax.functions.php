@@ -316,6 +316,40 @@ if($_REQUEST['wpsc_update_quantity'] == 'true') {
 }
 
 
+
+function wpsc_update_product_rating() {
+	global $wpdb;
+	//exit("<pre>".print_r($_POST, true)."</pre>");
+	$nowtime = time();
+	$product_id = absint($_POST['product_id']);
+	$ip_number = $wpdb->escape($_SERVER['REMOTE_ADDR']);
+	$rating = absint($_POST['product_rating']);
+
+	$cookie_data = explode(",",$_COOKIE['voting_cookie'][$product_id]);
+
+	if(is_numeric($cookie_data[0]) && ($cookie_data[0] > 0)) {
+		$vote_id = absint($cookie_data[0]);
+		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_RATING."` SET `rated` = '".$rating."' WHERE `id` ='".$vote_id."' LIMIT 1 ;");
+	} else {
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_RATING."` ( `ipnum`  , `productid` , `rated`, `time`) VALUES ( '".$ip_number."', '".$product_id."', '".$rating."', '".$nowtime."');");
+		
+		$data = $wpdb->get_results("SELECT `id`,`rated` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `ipnum`='".$ip_number."' AND `productid` = '".$product_id."'  AND `rated` = '".$rating."' AND `time` = '".$nowtime."' ORDER BY `id` DESC LIMIT 1",ARRAY_A) ;
+
+		$vote_id = $data[0]['id'];
+		setcookie("voting_cookie[$prodid]", ($vote_id.",".$rating),time()+(60*60*24*360));
+	}
+	if($_POST['ajax'] == 'true') {
+	  
+		exit();
+	}
+}
+  
+// execute on POST and GET
+if($_REQUEST['wpsc_ajax_action'] == 'rate_product') {
+	add_action('init', 'wpsc_update_product_rating');
+}
+
+
 /**
 	* update_shipping_price function, used through ajax and in normal page loading.
 	* No parameters, returns nothing
@@ -585,13 +619,13 @@ function wpsc_submit_checkout() {
 				$gateway_used = $current_gateway_data['internalname'];
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 				$current_gateway_data['function']($seperator, $sessionid);
-				break;
+				//break;
 			} else if (($current_gateway_data['internalname'] == 'google') && ($current_gateway_data['internalname'] == $submitted_gateway)){
 				$gateway_used = $current_gateway_data['internalname'];
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 				$_SESSION['gateway'] = 'google';
 				header('Location: '.get_option('shopping_cart_url'));
-				break;
+				//break;
 			}
 		}
 
