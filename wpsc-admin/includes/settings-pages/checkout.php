@@ -24,7 +24,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div class="wrap">
-  		<h2><?php echo TXT_WPSC_FORM_FIELDS;?></h2>  
+  		<h2><?php echo __('Checkout Options', 'wpsc');?></h2>  
 		<?php 
 		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 		wpsc_settings_page_update_notification(); ?>
@@ -37,7 +37,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<div class='inside'>
 			<table>
 			<tr>
-				<td><?php echo TXT_WPSC_REQUIRE_REGISTRATION;?>:</td>
+				<td><?php echo __('Users must register before checking out', 'wpsc');?>:</td>
 				<td>
 					<?php
 						$require_register = get_option('require_register');
@@ -53,11 +53,11 @@ $form_types = get_option('wpsc_checkout_form_fields');
 							break;
 						}
 		        ?>
-						<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-						<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo TXT_WPSC_NO;?></label>
+						<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+						<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo __('No', 'wpsc');?></label>
 					</td>
 					<td>
-						<a title='<?php echo TXT_WPSC_ANYONEREGISTER;?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+						<a title='<?php echo __('If yes then you must also turn on the wordpress option "Any one can register"', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
 					</td>
      		</tr>
      				<tr>
@@ -74,12 +74,12 @@ $form_types = get_option('wpsc_checkout_form_fields');
 					break;
 				}
 			?>
-			<td scope="row"><?php echo TXT_WPSC_LOCK_TAX; ?>:</td>
+			<td scope="row"><?php echo __('Lock Tax to Billing Country', 'wpsc'); ?>:</td>
 			<td>
 				<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
-				<label for='lock_tax1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+				<label for='lock_tax1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
 				<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
-				<label for='lock_tax2'><?php echo TXT_WPSC_NO;?></label>
+				<label for='lock_tax2'><?php echo __('No', 'wpsc');?></label>
 			</td>
 			
 
@@ -99,12 +99,12 @@ $form_types = get_option('wpsc_checkout_form_fields');
 					break;
 				}
 			?>
-			<td scope="row"><?php echo TXT_WPSC_SHIPPING_SAME_AS_BILLING; ?>:</td>
+			<td scope="row"><?php echo __('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
 			<td>
 			<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php echo $shippingBilling1; ?> /> 
-			<label for='shippingsameasbilling1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
+			<label for='shippingsameasbilling1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
 			<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php echo $shippingBilling2; ?> /> 
-			<label for='shippingsameasbilling2'><?php echo TXT_WPSC_NO;?></label>
+			<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
 			</td>
 		</tr>
 			</table>
@@ -112,7 +112,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 		</div>
 		</div>
 			<h3>Form Fields</h3>
-  			<p><?php echo TXT_WPSC_CHECKOUT_FORM_FIELDS_DESCRIPTION;?></p>
+  			<p><?php echo __('Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name...', 'wpsc');?></p>
   			<?php
   			  if(!count(get_option('wpsc_checkout_form_sets')) <= 1){
   			  ?>
@@ -176,7 +176,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			      if($form_type === $form_field['type']) {
 			        $selected = "selected='selected'";
 			      }
-			       // define('TXT_WPSC_TEXTAREA', 'Textarea');
+			       // define('__('Textarea', 'wpsc')', 'Textarea');
 			      echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
 			    }
 			 
@@ -202,10 +202,10 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			    echo "      <td class='mandatorycol'><input $checked type='checkbox' name='form_mandatory[".$form_field['id']."]' value='1' /></td>";
 			   
 			    
-			    echo "      <td><a class='image_link' href='#' onclick='return remove_form_field(\"checkout_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
+			    echo "      <td><a class='image_link' href='#' onclick='return remove_form_field(\"checkout_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
 		   
 			    if($email_form_field['id'] == $form_field['id']) {
-			      echo "<a title='".TXT_WPSC_RECIEPT_EMAIL_ADDRESS."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
+			      echo "<a title='".__('This will be the Email address that the Purchase Reciept is sent to.', 'wpsc')."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
 			    }
 			    echo "</td>";
 			    
@@ -222,19 +222,19 @@ $form_types = get_option('wpsc_checkout_form_fields');
   			<table id='form_field_table' style='border-collapse: collapse;'>
 		    <tr>
 		      <th class='namecol'>
-		      <?php echo TXT_WPSC_NAME; ?>
+		      <?php echo __('Name', 'wpsc'); ?>
 		      </th>
 		      <th class='typecol'>
-		      <?php echo TXT_WPSC_TYPE; ?>
+		      <?php echo __('Type', 'wpsc'); ?>
 		      </th>
 		      <th class='mandatorycol'>
-		      <?php echo TXT_WPSC_MANDATORY; ?>
+		      <?php echo __('Mandatory', 'wpsc'); ?>
 		      </th>
 		      <th class='logdisplaycol'>
-		       <?php echo TXT_WPSC_DISPLAY_IN_LOG; ?>      
+		       <?php echo __('Display<br /> in Log', 'wpsc'); ?>      
 		      </th>
 		      <th class='ordercol'>
-		       <?php echo TXT_WPSC_ORDER; ?>      
+		       <?php echo __('Order', 'wpsc'); ?>      
 		      </th>
 		    </tr>
     		<tr>
@@ -256,7 +256,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			      if($form_type === $form_field['type']) {
 			        $selected = "selected='selected'";
 			      }
-			       // define('TXT_WPSC_TEXTAREA', 'Textarea');
+			       // define('__('Textarea', 'wpsc')', 'Textarea');
 			      echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
 			    }
 
@@ -276,13 +276,13 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			    
 			    echo "      <td class='ordercol'><input type='text' size='3' name='form_order[".$form_field['id']."]' value='".$form_field['order']."' /></td>";
 			    
-			    echo "      <td style='text-align: center; width: 12px;'><a class='image_link' href='#' onclick='return remove_form_field(\"form_id_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
+			    echo "      <td style='text-align: center; width: 12px;'><a class='image_link' href='#' onclick='return remove_form_field(\"form_id_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
 			    echo "</td>";
 			    
 			   
 			    if($email_form_field['id'] == $form_field['id']) {
 			     echo "<td>";
-			      echo "<a title='".TXT_WPSC_RECIEPT_EMAIL_ADDRESS."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
+			      echo "<a title='".__('This will be the Email address that the Purchase Reciept is sent to.', 'wpsc')."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
 			    }else{
 				 echo "<td style='width:16px'>";    
 			    	echo "&nbsp;";
@@ -307,8 +307,8 @@ $form_types = get_option('wpsc_checkout_form_fields');
         <input type='hidden' name='wpsc_admin_action' value='checkout_settings' />
         
 				<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
-        <input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
-        <a href='#' onclick='return add_form_field();'><?php echo TXT_WPSC_ADD_NEW_FORM;?></a>
+        <input class='button-secondary' type='submit' name='submit' value='<?php echo __('Save Changes', 'wpsc');?>' />
+        <a href='#' onclick='return add_form_field();'><?php echo __('Add New Form Field', 'wpsc');?></a>
   </p>
   </form>
 </div>

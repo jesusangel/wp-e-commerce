@@ -4,8 +4,8 @@ global $wpdb;
 ?>
 	<form name='cart_options' enctype='multipart/form-data' id='cart_options' method='post' action='<?php echo 'admin.php?page=wpsc-settings&tab=import'; ?>'>
 	<div class="wrap">
-		<h2><?php echo TXT_WPSC_IMPORT_CSV;?></h2>
-		<?php echo TXT_WPSC_IMPORT_CSV_DESCRIPTION;?>
+		<h2><?php echo __('Import Products CSV', 'wpsc');?></h2>
+		<?php echo __('<p>You can import your products from a comma delimited text file.</p><p>An example of a cvs import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>', 'wpsc');?>
 		
 		<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 		<input type='hidden' name='MAX_FILE_SIZE' value='5000000' />

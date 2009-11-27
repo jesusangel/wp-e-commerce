@@ -31,18 +31,18 @@ class ups {
 	function getForm() {
 		$wpsc_ups_settings = get_option("wpsc_ups_settings");
 		
-		$packaging_options['02'] = TXT_WPSC_UPS_PACKAGING_YOURS;
-		$packaging_options['01'] = TXT_WPSC_UPS_PACKAGING_LETTER;
-		$packaging_options['21S'] = TXT_WPSC_UPS_PACKAGING_UEB_SMALL;
-		$packaging_options['21M'] = TXT_WPSC_UPS_PACKAGING_UEB_MEDIUM;
-		$packaging_options['21L'] = TXT_WPSC_UPS_PACKAGING_UEB_LARGE;
-		$packaging_options['03'] = TXT_WPSC_UPS_PACKAGING_TUBE;
-		$packaging_options['04'] = TXT_WPSC_UPS_PACKAGING_PAK;
+		$packaging_options['02'] = __('Your Packaging', 'wpsc');
+		$packaging_options['01'] = __('UPS Letter', 'wpsc');
+		$packaging_options['21S'] = __('UPS Express Box - Small', 'wpsc');
+		$packaging_options['21M'] = __('UPS Express Box - Medium', 'wpsc');
+		$packaging_options['21L'] = __('UPS Express Box - Large', 'wpsc');
+		$packaging_options['03'] = __('UPS Tube', 'wpsc');
+		$packaging_options['04'] = __('UPS Pak', 'wpsc');
 		
 		
 		
 		$output = "<tr>\n\r";
-		$output .= "	<td>".TXT_WPSC_UPS_DESTINATION."</td>\n\r";
+		$output .= "	<td>".__('Destination Type', 'wpsc')."</td>\n\r";
 		$output .= "	<td>\n\r";
 		switch($wpsc_ups_settings['49_residential']) {
 		  case '01':
@@ -56,14 +56,14 @@ class ups {
 		  $checked[1] = "checked='checked'";
 		  break;
 		}
-		$output .= "		<label><input type='radio' {$checked[0]} value='01' name='wpsc_ups_settings[49_residential]'/>".TXT_WPSC_UPS_DESTINATION_RESIDENTIAL."</label><br />\n\r";
-		$output .= "		<label><input type='radio' {$checked[1]} value='02' name='wpsc_ups_settings[49_residential]'/>".TXT_WPSC_UPS_DESTINATION_COMMERCIAL."</label>\n\r";
+		$output .= "		<label><input type='radio' {$checked[0]} value='01' name='wpsc_ups_settings[49_residential]'/>".__('Residential Address', 'wpsc')."</label><br />\n\r";
+		$output .= "		<label><input type='radio' {$checked[1]} value='02' name='wpsc_ups_settings[49_residential]'/>".__('Commercial Address', 'wpsc')."</label>\n\r";
 		$output .= "	</td>\n\r";
 		$output .= "</tr>\n\r";
 		
 		
 		$output .= "<tr>\n\r";
-		$output .= "	<td>".TXT_WPSC_UPS_PACKAGING."</td>\n\r";
+		$output .= "	<td>".__('Packaging', 'wpsc')."</td>\n\r";
 		$output .= "	<td>\n\r";
 		$output .= "		<select name='wpsc_ups_settings[48_container]'>\n\r";
 		foreach($packaging_options as $key => $name) {
@@ -155,7 +155,7 @@ class ups {
 		//this is where shipping breaks out of UPS if weight is higher than 150 LBS
 		if($weight > 150){
 			unset($_SESSION['quote_shipping_method']);
-			$shipping_quotes[TXT_WPSC_OVER_UPS_WEIGHT] = 0;
+			$shipping_quotes[__('Because your order is over 150lbs, the SIte Owner will contact you directly about shipping rates.', 'wpsc')] = 0;
 			$_SESSION['wpsc_shipping_cache_check']['weight'] = $weight;
 			$_SESSION['wpsc_shipping_cache'][$this->internal_name] = $shipping_quotes;
 			$_SESSION['quote_shipping_method'] = $this->internal_name;

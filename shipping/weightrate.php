@@ -27,12 +27,12 @@ class weightrate {
 	
 	function getForm() {
 	//	$output ="<table>";
-		$output.="<tr><th>".TXT_WPSC_TOTAL_WEIGHT_IN_POUNDS."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
+		$output.="<tr><th>".__('Total weight <br />(<abbr alt="You must enter the weight here in pounds, regardless of what you used on your products" title="You must enter the weight here in pounds, regardless of what you used on your products">in Pounds</abbr>)', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
 		$layers = get_option("weight_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
 				$output.="<tr class='rate_row'><td >";
-				$output .="<i style='color: grey;'>".TXT_WPSC_IF_WEIGHT_IS."</i><input type='text' value='$key' name='weight_layer[]'size='4'><i style='color: grey;'>".TXT_WPSC_AND_ABOVE."</i></td><td>".wpsc_get_currency_symbol()."<input type='text' value='{$shipping}' name='weight_shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a></td></tr>";
+				$output .="<i style='color: grey;'>".__('If weight is ', 'wpsc')."</i><input type='text' value='$key' name='weight_layer[]'size='4'><i style='color: grey;'>".__(' and above', 'wpsc')."</i></td><td>".wpsc_get_currency_symbol()."<input type='text' value='{$shipping}' name='weight_shipping[]' size='4'>&nbsp;&nbsp;<a href='#' class='delete_button' >".__('Delete', 'wpsc')."</a></td></tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='weight'>";

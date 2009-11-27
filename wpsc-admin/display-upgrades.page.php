@@ -51,7 +51,7 @@ function wpsc_display_upgrades_page() {
 			</div>
 		</div>
 
-		<h2><?php echo TXT_WPSC_UPGRADES_PAGE;?></h2>
+		<h2><?php echo __('Upgrades', 'wpsc');?></h2>
 		<div class='wpsc_gold_float'>
 			<div class='metabox-holder'>
 				<form method='post' id='gold_cart_form' action=''>
@@ -68,26 +68,26 @@ function wpsc_display_upgrades_page() {
 					  </div>
 
 					  
-						<h2><?php echo TXT_WPSC_API_RESET;?></h2>
+						<h2><?php echo __('API Key Reset', 'wpsc');?></h2>
 					  <div class='form-wrap' >
 							<p>
-								<?php echo TXT_WPSC_API_RESET_DESCRIPTION;?> <br /><br />
+								<?php echo __('Enter your API name and key to release it from an old site that you no longer use.', 'wpsc');?> <br /><br />
 							</p>
 					  </div>
 					  </div>
 						<div class='postbox'>
-							<h3 class='hndle'><?php echo TXT_WPSC_API_RESET;?></h3>
+							<h3 class='hndle'><?php echo __('API Key Reset', 'wpsc');?></h3>
 							<p>
-										<label for='activation_name'><?php echo TXT_WPSC_NAME;?>:</label>
+										<label for='activation_name'><?php echo __('Name', 'wpsc');?>:</label>
 										<input class='text' type='text' size='40' value='<?php echo get_option('activation_name'); ?>' name='activation_name' id='activation_name' />
 							</p>
 							<p>
-										<label for='activation_key'><?php echo TXT_WPSC_ACTIVATION_KEY;?>:</label>
+										<label for='activation_key'><?php echo __('API Key', 'wpsc');?>:</label>
 										<input class='text' type='text' size='40' value='<?php echo get_option('activation_key'); ?>' name='activation_key' id='activation_key' />
 							</p>
 							<p>
 										<input type='hidden' value='true' name='reset_api_key' />
-										<input type='submit' class='button-primary' value='<?php echo TXT_WPSC_RESET_API;?>' name='submit_values' />
+										<input type='submit' class='button-primary' value='<?php echo __('Reset API Key', 'wpsc');?>' name='submit_values' />
 							</p>
 						</div>
 						<?php
@@ -154,7 +154,7 @@ if($_POST['reset_api_key'] == 'true') {
 		$returned_value = (int)trim($response[1]);
 		update_option('activation_name', "");
 		update_option('activation_key', "");
-		echo "<div class='updated'><p align='center'>".TXT_WPSC_API_HAS_BEEN_RESET."</p></div>";
+		echo "<div class='updated'><p align='center'>".__('Your API key has been Reset', 'wpsc')."</p></div>";
 
 		}
 	}

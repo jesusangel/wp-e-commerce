@@ -819,7 +819,7 @@ class wpsc_cart {
 				$this->cart_items[] = $new_cart_item;
 			}
 		} else {
-			//$errors[] = new WP_Error('no_stock_available', __(TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE));
+			//$errors[] = new WP_Error('no_stock_available', __(__('This product has no available stock', 'wpsc')));
 		}
     
 		
@@ -852,7 +852,7 @@ class wpsc_cart {
 				$this->cart_items[$key]->refresh_item();
 				$this->clear_cache();
 			} else {
-				//$errors[] = new WP_Error('no_stock_available', __(TXT_WPSC_OUT_OF_STOCK_ERROR_MESSAGE));
+				//$errors[] = new WP_Error('no_stock_available', __(__('This product has no available stock', 'wpsc')));
 			}
       return true;
     } else {

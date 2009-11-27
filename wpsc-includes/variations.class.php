@@ -214,11 +214,11 @@ class nzshpcrt_variations {
     if($variation_count > 0) {
       $output .= "<table class='product_variation_grid'>\n\r";   
       $output .= "  <tr>\n\r";
-      $output .= "    <th class='variations titles'>".TXT_WPSC_VARIATION."</th>\n\r";
-      $output .= "    <th class='titles stock' $stock_column_state >".TXT_WPSC_STOCK."</th>\n\r";
-      $output .= "    <th class='titles price'>".TXT_WPSC_PRICE."</th>\n\r";
-      //$output .= "    <th class='titles weight'>".TXT_WPSC_WEIGHT."</th>\n\r";
-      $output .= "    <th class='titles'>".TXT_WPSC_MORE."&nbsp;</th>\n\r";
+      $output .= "    <th class='variations titles'>".__('Variation', 'wpsc')."</th>\n\r";
+      $output .= "    <th class='titles stock' $stock_column_state >".__('Stock', 'wpsc')."</th>\n\r";
+      $output .= "    <th class='titles price'>".__('Price', 'wpsc')."</th>\n\r";
+      //$output .= "    <th class='titles weight'>".__('Weight', 'wpsc')."</th>\n\r";
+      $output .= "    <th class='titles'>".__('More', 'wpsc')."&nbsp;</th>\n\r";
       $output .= "  </tr>\n\r";
       
 
@@ -337,7 +337,7 @@ class nzshpcrt_variations {
 	//       $output .= "    <td class='weight'><input type='text' name='variation_priceandstock[{$variation_ids}][weight]' value='' size='3' /></td>\n\r";
 				
 				$output .= "    <td>\n\r";
-				$output .= "      <a href='#' class='variation_edit_button' onclick='return open_variation_settings(\"variation_settings_$variation_settings_uniqueid\")' ><img src='".WPSC_URL."/images/gear__plus.png' alt='".TXT_WPSC_EDIT."' title='".TXT_WPSC_EDIT."'></a>\n\r";
+				$output .= "      <a href='#' class='variation_edit_button' onclick='return open_variation_settings(\"variation_settings_$variation_settings_uniqueid\")' ><img src='".WPSC_URL."/images/gear__plus.png' alt='".__('Edit', 'wpsc')."' title='".__('Edit', 'wpsc')."'></a>\n\r";
 				$output .= "    </td>\n\r";
 				
 				$output .= "  </tr>\n\r";
@@ -346,7 +346,7 @@ class nzshpcrt_variations {
 				$output .= "      <div class='variation_settings'>\n\r";
 				
 				$output .= "        <div class='variation_weight'>\n\r";
-				$output .= "          <strong>".TXT_WPSC_WEIGHT_SETTINGS."</strong><br />";
+				$output .= "          <strong>".__('Weight Settings', 'wpsc')."</strong><br />";
 				$output .= "          <input type='text' name='variation_priceandstock[{$variation_ids}][weight]' value='{$product_weight}' size='3' />";
 
 				$output .= "          <select name='variation_priceandstock[{$variation_ids}][weight_unit]'>\n\r";
@@ -545,7 +545,7 @@ class nzshpcrt_variations {
 						$output .= "<input type='checkbox' id='variation[".$value_association['id']."]' name='variation[".$variation_data['name']."][]'".$default_topping." value='".$value_association['id']."' onclick='manage_topping(".$product_id.",".$value_association['id'].",".$special.")'>".stripslashes($value_association['name'])."<br>";
 					} else {
 						if(($check_stock == true) && ($stock < 1)) {
-							//$output .= "<option value='".$value_association['id']."' disabled='true'>".stripslashes($value_association['name'])." - ".TXT_WPSC_NO_STOCK."</option>";
+							//$output .= "<option value='".$value_association['id']."' disabled='true'>".stripslashes($value_association['name'])." - ".__('No Stock', 'wpsc')."</option>";
 						} else {
 							$output .= "<option value='".$value_association['value_id']."'>".stripslashes($value_association['name'])."</option>";
 							if($saved_variation_price == 0) {

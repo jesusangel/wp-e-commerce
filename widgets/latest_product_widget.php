@@ -4,7 +4,7 @@ function widget_latest_products($args) {
 	global $wpdb, $table_prefix;
 	extract($args);
   $options = get_option('wpsc-widget_latest_products');   
-	$title = empty($options['title']) ? __(TXT_WPSC_LATEST_PRODUCTS) : $options['title'];
+	$title = empty($options['title']) ? __(__('Latest Products', 'wpsc')) : $options['title'];
 	echo $before_widget."<br />";
 	$full_title = $before_title . $title . $after_title;
 	echo $full_title."<br />";
@@ -84,8 +84,8 @@ function widget_latest_products_control() {
 
 function widget_latest_products_init() {
 	if(function_exists('register_sidebar_widget')) {
-		register_sidebar_widget(TXT_WPSC_LATEST_PRODUCTS, 'widget_latest_products');
-		register_widget_control(TXT_WPSC_LATEST_PRODUCTS, 'widget_latest_products_control');
+		register_sidebar_widget(__('Latest Products', 'wpsc'), 'widget_latest_products');
+		register_widget_control(__('Latest Products', 'wpsc'), 'widget_latest_products_control');
 	}
 	return;
 }

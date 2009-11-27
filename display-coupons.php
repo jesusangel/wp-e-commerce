@@ -24,7 +24,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 			}
 		}
 		if($wpdb->query("INSERT INTO `".WPSC_TABLE_COUPON_CODES."` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
-			echo "<div class='updated'><p align='center'>".TXT_WPSC_COUPONHASBEENADDED."</p></div>";
+			echo "<div class='updated'><p align='center'>".__('Thanks, the coupon has been added.', 'wpsc')."</p></div>";
 		}
 	}
 	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && ($_POST['delete_condition'] != 'Delete')) {
@@ -119,11 +119,11 @@ if(isset($_GET['token'])) {
 	jQuery(".pickdate").datepicker();
 </script>
 <div class="wrap">
-  <h2><?php echo TXT_WPSC_DISPLAYCOUPONS;?></h2>
+  <h2><?php echo __('Coupons', 'wpsc');?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
   <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
 
-  <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo TXT_WPSC_ADD; ?>' title='<?php echo TXT_WPSC_ADD; ?>' />&nbsp;<span><?php echo TXT_WPSC_ADD_COUPON;?></span></a>
+  <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo __('Add', 'wpsc'); ?>' title='<?php echo __('Add', 'wpsc'); ?>' />&nbsp;<span><?php echo __('Add Coupon', 'wpsc');?></span></a>
   
   <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span>
 </div>
@@ -138,26 +138,26 @@ if(isset($_GET['token'])) {
 <table class='add-coupon'>
  <tr>
    <th>
-   <?php echo TXT_WPSC_COUPON_CODE; ?>
+   <?php echo __('Coupon Code', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo TXT_WPSC_DISCOUNT; ?>
+   <?php echo __('Discount', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo TXT_WPSC_START; ?>
+   <?php echo __('Start', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo TXT_WPSC_EXPIRY; ?>
+   <?php echo __('Expiry', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo TXT_WPSC_USE_ONCE; ?>
+   <?php echo __('Use Once', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo TXT_WPSC_ACTIVE; ?>
+   <?php echo __('Active', 'wpsc'); ?>
    </th>
   <!--
  <th>
-   <?php echo TXT_WPSC_PERTICKED; ?>
+   <?php echo __('Apply On All Products', 'wpsc'); ?>
    </th>
 -->
  </tr>
@@ -250,7 +250,7 @@ if(isset($_GET['token'])) {
  <tr><td colspan="2">
 		   <input type='hidden' value='0' name='add_every_product' />
 			<input type="checkbox" value="1" name='add_every_product'/>
-		<?=TXT_WPSC_PERTICKED?></td></tr>
+		<?=__('Apply On All Products', 'wpsc')?></td></tr>
 
 <tr><td colspan='3'><b>Conditions</b></td></tr>
 <tr><td colspan="8">
@@ -294,31 +294,31 @@ echo "<table class='coupon-list'>\n\r";
 echo "  <tr class='toprow'>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_COUPON_CODE;
+echo __('Coupon Code', 'wpsc');
 echo "    </td>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_DISCOUNT;
+echo __('Discount', 'wpsc');
 echo "    </td>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_START;
+echo __('Start', 'wpsc');
 echo "    </td>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_EXPIRY;
+echo __('Expiry', 'wpsc');
 echo "    </td>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_ACTIVE;
+echo __('Active', 'wpsc');
 echo "    </td>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_PERTICKED;
+echo __('Apply On All Products', 'wpsc');
 echo "    </td>\n\r";
 
 echo "    <td>\n\r";
-echo TXT_WPSC_EDIT;
+echo __('Edit', 'wpsc');
 echo "    </td>\n\r";
 
 $i=0;
@@ -378,7 +378,7 @@ foreach((array)$coupon_data as $coupon) {
   
   
   echo "    <td>\n\r";
-  echo "<a href='#' onclick='return show_status_box(\"coupon_box_".$coupon['id']."\",\"coupon_box_".$coupon['id']."\");' >".TXT_WPSC_EDIT."</a>";
+  echo "<a href='#' onclick='return show_status_box(\"coupon_box_".$coupon['id']."\",\"coupon_box_".$coupon['id']."\");' >".__('Edit', 'wpsc')."</a>";
   echo "    </td>\n\r";
   
   echo "  </tr>\n\r";
@@ -394,7 +394,7 @@ foreach((array)$coupon_data as $coupon) {
 echo "</table>\n\r";
   ?>
   <p style='margin: 0px 0px 5px 0px;'>
-  	 <?php echo TXT_WPSC_PAYPALNOTE;?>
+  	 <?php echo __('<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.', 'wpsc');?>
   </p>
     </td>
   </tr>
@@ -406,14 +406,14 @@ echo "</table>\n\r";
 
 
       
-<h2><?php echo TXT_WPSC_MARKETING_SETTINGS;?></h2>
+<h2><?php echo __('Marketing Settings', 'wpsc');?></h2>
 
 <form name='cart_options' method='POST' action=''>
 <input type='hidden' value='true' name='change-settings' />
   <table>
     <tr>
       <td>
-        <?php echo TXT_WPSC_OPTION_ALSO_BOUGHT;?>:
+        <?php echo __('Display Cross Sales', 'wpsc');?>:
       </td>
       <td>
         <?php
@@ -430,14 +430,14 @@ echo "</table>\n\r";
         break;
         }
         ?>
-        <input type='radio' value='1' name='wpsc_also_bought' id='wpsc_also_bought1' <?php echo $wpsc_also_bought1; ?> /> <label for='wpsc_also_bought1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-        <input type='radio' value='0' name='wpsc_also_bought' id='wpsc_also_bought2' <?php echo $wpsc_also_bought2; ?> /> <label for='wpsc_also_bought2'><?php echo TXT_WPSC_NO;?></label>
+        <input type='radio' value='1' name='wpsc_also_bought' id='wpsc_also_bought1' <?php echo $wpsc_also_bought1; ?> /> <label for='wpsc_also_bought1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+        <input type='radio' value='0' name='wpsc_also_bought' id='wpsc_also_bought2' <?php echo $wpsc_also_bought2; ?> /> <label for='wpsc_also_bought2'><?php echo __('No', 'wpsc');?></label>
       </td>
     </tr>
     
     <tr>
       <td>
-      <?php echo TXT_WPSC_SHOW_SHARE_THIS;?>:
+      <?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?>:
       </td>
       <td>
         <?php
@@ -454,13 +454,13 @@ echo "</table>\n\r";
           break;
           }
         ?>
-        <input type='radio' value='1' name='wpsc_share_this' id='wpsc_share_this1' <?php echo $wpsc_share_this1; ?> /> <label for='wpsc_share_this1'><?php echo TXT_WPSC_YES;?></label> &nbsp;
-        <input type='radio' value='0' name='wpsc_share_this' id='wpsc_share_this2' <?php echo $wpsc_share_this2; ?> /> <label for='wpsc_share_this2'><?php echo TXT_WPSC_NO;?></label>
+        <input type='radio' value='1' name='wpsc_share_this' id='wpsc_share_this1' <?php echo $wpsc_share_this1; ?> /> <label for='wpsc_share_this1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+        <input type='radio' value='0' name='wpsc_share_this' id='wpsc_share_this2' <?php echo $wpsc_share_this2; ?> /> <label for='wpsc_share_this2'><?php echo __('No', 'wpsc');?></label>
       </td>
     </tr>
 	<tr>
         <td>
-		<?php echo TXT_WPSC_DISPLAYHOWCUSTOMERFINDUS?>
+		<?php echo __('Display How Customer Found Us Survey', 'wpsc')?>
         </td>
 	<?php
 		$display_find_us = get_option('display_find_us');
@@ -477,17 +477,17 @@ echo "</table>\n\r";
 	
         </td>
         <td>
-        <input  type='submit' value='<?php echo TXT_WPSC_SUBMIT;?>' name='form_submit' />
+        <input  type='submit' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' />
         </td>
       </tr>
   </table>
 </form>
 
-<h2><?php echo TXT_WPSC_RSS_ADDRESS;?></h2>
+<h2><?php echo __('RSS Address', 'wpsc');?></h2>
 <table>
 	<tr>
 		<td colspan='2'>
-			<?php echo TXT_WPSC_RSSNOTE;?>
+			<?php echo __('<strong>Note:</strong> Not only can people use this RSS to keep update with your product list but you can also use this link to promote your products in your facebook profile. <br />Just add the <a href="http://apps.facebook.com/getshopped">getshopped! facebook application</a> to your facebook profile and follow the instructions.', 'wpsc');?>
 		</td>
 	</tr>
 	<tr><td>&nbsp;</td></tr>
@@ -501,7 +501,7 @@ echo "</table>\n\r";
 	</tr>
 </table>
 
-<h2><?php echo TXT_WPSC_GOOGLE_BASE; ?></h2>
+<h2><?php echo __('Google Base', 'wpsc'); ?></h2>
 <?php
 if( strlen(get_option('wpsc_google_base_token')) > 0) {
 	_e('Your site has been granted access to google base.<br /> All future products will be submitted to google base.<br />');
@@ -510,7 +510,7 @@ if( strlen(get_option('wpsc_google_base_token')) > 0) {
 	$itemsFeedURL = "http://www.google.com/base/feeds/items";
 	$next_url  = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}?page={$_GET['page']}";
 	$redirect_url = htmlentities("https://www.google.com/accounts/AuthSubRequest?next=".urlencode($next_url)."&scope=".urlencode($itemsFeedURL)."&session=1&secure=0");
-	echo " <a href='$redirect_url'>".TXT_WPSC_GRANT_ACCESS."</a>";
+	echo " <a href='$redirect_url'>".__('Grant Access', 'wpsc')."</a>";
 }
 ?>
 </div>

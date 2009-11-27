@@ -7,8 +7,8 @@ function nzshpcrt_getcategoryform($catid)
   $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1",ARRAY_A);
   $output = '';
   $output .= "<div class='editing_this_group form_table'>";
-	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), TXT_WPSC_EDITING_GROUP)."</p>\n\r";
-	$output .= "<p><a href='' onclick='return showaddform()' class='add_category_link'><span>".str_replace("&quot;[categorisation]&quot;", "current", TXT_WPSC_ADDNEWCATEGORY)."</span></a></p>";
+	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), __('You are editing the &quot;[categorisation]&quot; Group', 'wpsc'))."</p>\n\r";
+	$output .= "<p><a href='' onclick='return showaddform()' class='add_category_link'><span>".str_replace("&quot;[categorisation]&quot;", "current", __('+ Add new category to the &quot;[categorisation]&quot; Group', 'wpsc'))."</span></a></p>";
 	$output .="<dl>\n\r";
 	$output .="		<dt>Display Category Shortcode: </dt>\n\r";
 	$output .="		<dd> [wpsc_products category_url_name='{$product['nice-name']}']</dd>\n\r";
@@ -16,13 +16,13 @@ function nzshpcrt_getcategoryform($catid)
 	$output .="		<dd> &lt;?php echo wpsc_display_products_page(array('category_url_name'=>'{$product['nice-name']}')); ?&gt;</dd>\n\r";
 	$output .="</dl>\n\r";
 	
-	//$output .= "       [ <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT_THIS_GROUP."</a> ]";
+	//$output .= "       [ <a href='#' onclick='return showedit_categorisation_form()'>".__('Edit This Group', 'wpsc')."</a> ]";
 	
 	$output .= "</div>";
   $output .= "        <table class='category_forms'>\n\r";
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_NAME.": ";
+  $output .= __('Name', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<input type='text' class='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
@@ -31,7 +31,7 @@ function nzshpcrt_getcategoryform($catid)
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_DESCRIPTION.": ";
+  $output .= __('Description', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<textarea name='description' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
@@ -41,7 +41,7 @@ function nzshpcrt_getcategoryform($catid)
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_CATEGORY_PARENT.": ";
+  $output .= __('Group Parent', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= wpsc_parent_category_list($product['group_id'], $product['id'], $product['category_parent']);
@@ -82,7 +82,7 @@ function nzshpcrt_getcategoryform($catid)
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_GROUP_IMAGE.": ";
+  $output .= __('Group&nbsp;Image', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<input type='file' name='image' value='' />";
@@ -98,8 +98,8 @@ function nzshpcrt_getcategoryform($catid)
       $output .= "            <td>\n\r";
       $output .= "            </td>\n\r";
       $output .= "            <td>\n\r";
-      $output .= TXT_WPSC_HEIGHT.":<input type='text' size='6' name='height' value='".$imagetype[1]."' /> ".TXT_WPSC_WIDTH.":<input type='text' size='6' name='width' value='".$imagetype[0]."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
-			$output .= "<span class='wpscsmall description'>".TXT_WPSC_GROUP_IMAGE_TEXT."</span>\n\r";
+      $output .= __('Height', 'wpsc').":<input type='text' size='6' name='height' value='".$imagetype[1]."' /> ".__('Width', 'wpsc').":<input type='text' size='6' name='width' value='".$imagetype[0]."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
+			$output .= "<span class='wpscsmall description'>".__('You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings</a>.', 'wpsc')."</span>\n\r";
       $output .= "            </td>\n\r";
       $output .= "          </tr>\n\r";
 		} else {
@@ -107,8 +107,8 @@ function nzshpcrt_getcategoryform($catid)
 			$output .= "            <td>\n\r";
 			$output .= "            </td>\n\r";
 			$output .= "            <td>\n\r";
-			$output .= TXT_WPSC_HEIGHT.":<input type='text' size='6' name='height' value='".get_option('product_image_height')."' /> ".TXT_WPSC_WIDTH.":<input type='text' size='6' name='width' value='".get_option('product_image_width')."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
-			$output .= "<span class='wpscsmall description'>".TXT_WPSC_GROUP_IMAGE_TEXT."</span>\n\r";
+			$output .= __('Height', 'wpsc').":<input type='text' size='6' name='height' value='".get_option('product_image_height')."' /> ".__('Width', 'wpsc').":<input type='text' size='6' name='width' value='".get_option('product_image_width')."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
+			$output .= "<span class='wpscsmall description'>".__('You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings</a>.', 'wpsc')."</span>\n\r";
 			$output .= "            </td>\n\r";
 			$output .= "          </tr>\n\r";
 		}
@@ -116,7 +116,7 @@ function nzshpcrt_getcategoryform($catid)
 	
 	$output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_DELETEIMAGE.": ";
+  $output .= __('Delete Image', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<input type='checkbox' name='deleteimage' value='1' />";
@@ -130,7 +130,7 @@ function nzshpcrt_getcategoryform($catid)
 	$output .= " <tr>\n\r";
 	$output .= " 	<td colspan='2'><h4>Target Market Restrictions</h4></td></tr><tr><td>&nbsp;</td></tr><tr>\n\r";
 	$output .= " 	<td>\n\r";
-	$output .= TXT_WPSC_TM.":\n\r";
+	$output .= __('Target Markets', 'wpsc').":\n\r";
 	$output .= " 	</td>\n\r";
 	$output .= " 	<td>\n\r";
 
@@ -161,28 +161,28 @@ function nzshpcrt_getcategoryform($catid)
 
 	$output .= "          <tr>\n\r";
 	$output .= "          	<td colspan='2' class='category_presentation_settings'>\n\r";
-	$output .= "          		<h4>".TXT_WPSC_PRESENTATIONSETTINGS."</h4>\n\r";
-	$output .= "          		<span class='small'>".TXT_WPSC_GROUP_PRESENTATION_TEXT."</span>\n\r";
+	$output .= "          		<h4>".__('Presentation Settings', 'wpsc')."</h4>\n\r";
+	$output .= "          		<span class='small'>".__('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc')."</span>\n\r";
 	$output .= "          	</td>\n\r";
 	$output .= "          </tr>\n\r";
 	
 	$output .= "          <tr>\n\r";
 	$output .= "          	<td>\n\r";
-	$output .= "          	". TXT_WPSC_CATALOG_VIEW.":\n\r";
+	$output .= "          	". __('Catalog View', 'wpsc').":\n\r";
 	$output .= "          	</td>\n\r";
 	$output .= "          	<td>\n\r";
 	$output .= "          		<select name='display_type'>\n\r";	
-	$output .= "          			<option value='' $product_view0 >".TXT_WPSC_PLEASE_SELECT."</option>\n\r";	
-	$output .= "          			<option value='default' $product_view1 >".TXT_WPSC_DEFAULT."</option>\n\r";	
+	$output .= "          			<option value='' $product_view0 >".__('Please select', 'wpsc')."</option>\n\r";	
+	$output .= "          			<option value='default' $product_view1 >".__('Default View', 'wpsc')."</option>\n\r";	
 	if(function_exists('product_display_list')) {
-		$output .= "          			<option value='list' ". $product_view2.">". TXT_WPSC_LIST."</option>\n\r"; 
+		$output .= "          			<option value='list' ". $product_view2.">". __('List View', 'wpsc')."</option>\n\r"; 
 	} else {
-		$output .= "          			<option value='list' disabled='disabled' ". $product_view2.">". TXT_WPSC_LIST."</option>\n\r";
+		$output .= "          			<option value='list' disabled='disabled' ". $product_view2.">". __('List View', 'wpsc')."</option>\n\r";
 	}	
 	if(function_exists('product_display_grid')) {
-		$output .= "          			<option value='grid' ". $product_view3.">". TXT_WPSC_GRID."</option>\n\r";
+		$output .= "          			<option value='grid' ". $product_view3.">". __('Grid View', 'wpsc')."</option>\n\r";
 	} else {
-		$output .= "          			<option value='grid' disabled='disabled' ". $product_view3.">". TXT_WPSC_GRID."</option>\n\r";
+		$output .= "          			<option value='grid' disabled='disabled' ". $product_view3.">". __('Grid View', 'wpsc')."</option>\n\r";
 	}	
 	$output .= "          		</select>\n\r";	
 	$output .= "          	</td>\n\r";
@@ -192,11 +192,11 @@ function nzshpcrt_getcategoryform($catid)
   if(function_exists("getimagesize")) {
 		$output .= "          <tr>\n\r";
 		$output .= "            <td>\n\r";
-		$output .= TXT_WPSC_THUMBNAIL_SIZE.": ";
+		$output .= __('Thumbnail&nbsp;Size', 'wpsc').": ";
 		$output .= "            </td>\n\r";
 		$output .= "            <td>\n\r";
-		$output .= TXT_WPSC_HEIGHT.": <input type='text' value='".$product['image_height']."' name='product_height' size='6'/> ";
-		$output .= TXT_WPSC_WIDTH.": <input type='text' value='".$product['image_width']."' name='product_width' size='6'/> <br/>";
+		$output .= __('Height', 'wpsc').": <input type='text' value='".$product['image_height']."' name='product_height' size='6'/> ";
+		$output .= __('Width', 'wpsc').": <input type='text' value='".$product['image_width']."' name='product_width' size='6'/> <br/>";
 		$output .= "            </td>\n\r";
 		$output .= "          </tr>\n\r";
 	}
@@ -218,8 +218,8 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "            <td class='last_row'>\n\r";
   $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".TXT_WPSC_EDIT_GROUP."' />";
-	$output .= "<a class='delete_button' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
+  $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".__('Edit Group', 'wpsc')."' />";
+	$output .= "<a class='delete_button' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r"; 
@@ -236,7 +236,7 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= "        <table class='category_forms' >\n\r";
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_NAME.": ";
+  $output .= __('Name', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<input type='text'  class='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."' />";
@@ -245,7 +245,7 @@ function nzshpcrt_getvariationform($variation_id)
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= TXT_WPSC_VARIATION_VALUES.": ";
+  $output .= __('Variation Values', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $variation_values_sql = "SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id`='$variation_id' ORDER BY `id` ASC";
@@ -257,14 +257,14 @@ function nzshpcrt_getvariationform($variation_id)
     $output .= "<span class='variation_value'>";
     $output .= "<input type='text' class='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8')."' />";
     if($variation_value_count > 1) {
-      $output .= " <a  class='image_link' onclick='return remove_variation_value(this,".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a>";
+      $output .= " <a  class='image_link' onclick='return remove_variation_value(this,".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
 		}
     $output .= "<br />";
     $output .= "</span>";
     $num++;
 	}
   $output .= "</div>";
-  $output .= "<a href='#'  onclick='return add_variation_value(\"edit\")'>".TXT_WPSC_ADD."</a>";
+  $output .= "<a href='#'  onclick='return add_variation_value(\"edit\")'>".__('Add', 'wpsc')."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   $output .= "          </tr>\n\r";
@@ -275,8 +275,8 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= "            <td>\n\r";
   $output .= "<input type='hidden' name='prodid' value='".$variation['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input class='button' style='float:left;'  type='submit' name='submit' value='".TXT_WPSC_EDIT."' />";
-  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;deleteid=".$variation['id']."' onclick=\"return conf();\" >".TXT_WPSC_DELETE."</a>";
+  $output .= "<input class='button' style='float:left;'  type='submit' name='submit' value='".__('Edit', 'wpsc')."' />";
+  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;deleteid=".$variation['id']."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r";
@@ -297,13 +297,13 @@ $conditions = $conditions[0];
     $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
   $output .= "<table class='add-coupon'>\n\r";
   $output .= " <tr>\n\r";
-  $output .= "   <th>".TXT_WPSC_COUPON_CODE."</th>\n\r";
-  $output .= "   <th>".TXT_WPSC_DISCOUNT."</th>\n\r";
-  $output .= "   <th>".TXT_WPSC_START."</th>\n\r";
-  $output .= "   <th>".TXT_WPSC_EXPIRY."</th>\n\r";
-  $output .= "   <th>".TXT_WPSC_USE_ONCE."</th>\n\r";
-  $output .= "   <th>".TXT_WPSC_ACTIVE."</th>\n\r";
-	$output .= "   <th>".TXT_WPSC_PERTICKED."</th>\n\r";
+  $output .= "   <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Discount', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Start', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Expiry', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Use Once', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Active', 'wpsc')."</th>\n\r";
+	$output .= "   <th>".__('Apply On All Products', 'wpsc')."</th>\n\r";
   $output .= "   <th></th>\n\r";
   $output .= " </tr>\n\r";
   $output .= " <tr>\n\r";
@@ -383,8 +383,8 @@ $conditions = $conditions[0];
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
   //$output .= "   <input type='hidden' value='false' name='add_coupon' />\n\r";
-  $output .= "   <input type='submit' value='".TXT_WPSC_SUBMIT."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
-  $output .= "   <input type='submit' value='".TXT_WPSC_DELETE."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
+  $output .= "   <input type='submit' value='".__('Submit', 'wpsc')."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
+  $output .= "   <input type='submit' value='".__('Delete', 'wpsc')."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
 
   $output .= "  </td>\n\r";
   $output .= " </tr>\n\r";
@@ -517,15 +517,15 @@ function setting_button(){
 	$redirect_url .= urlencode($itemsFeedURL);
 	
 // 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/".WPSC_DIR_NAME."/images/settings_button.jpg' onclick='display_settings_button()'>";
-	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>".TXT_WPSC_SETTINGS." &raquo;</a>";
+	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>".__('Settings', 'wpsc')." &raquo;</a>";
 	$output.="<span id='settings_button' style='width:180px;background-color:#f1f1f1;position:absolute; right: 10px; border:1px solid black; display:none;'>";
 	$output.="<ul class='settings_button'>";
 	
-	$output.="<li><a href='admin.php?page=wpsc-settings'>".TXT_WPSC_SHOP_SETTINGS."</a></li>";
-	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=gateway'>".TXT_WPSC_MONEY_AND_PAYMENT."</a></li>";
-	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=checkout'>".TXT_WPSC_CHECKOUT_PAGE_SETTINGS."</a></li>";
+	$output.="<li><a href='admin.php?page=wpsc-settings'>".__('Shop Settings', 'wpsc')."</a></li>";
+	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=gateway'>".__('Money and Payment', 'wpsc')."</a></li>";
+	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=checkout'>".__('Checkout Page Settings', 'wpsc')."</a></li>";
 	//$output.="<li><a href='?page=".WPSC_DIR_NAME."/instructions.php'>Help/Upgrade</a></li>";
-	//$output.="<li><a href='{$redirect_url}'>".TXT_WPSC_LOGIN_TO_GOOGLE_BASE."</a></li>";
+	//$output.="<li><a href='{$redirect_url}'>".__('Login to Google base', 'wpsc')."</a></li>";
 	$output.="</ul>";
 //	$output.="<div>Checkout Settings</div>";
 	$output.="</span>&emsp;&emsp;</div>";
@@ -542,32 +542,32 @@ function wpsc_right_now() {
 
   $replace_values[":productcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')");
   $product_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')");
-  $replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
-  $product_unit = (($replace_values[":productcount:"] == 1) ? TXT_WPSC_PRODUCTCOUNT_SINGULAR : TXT_WPSC_PRODUCTCOUNT_PLURAL);
+  $replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
+  $product_unit = (($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
   
   $replace_values[":groupcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1')");
   $group_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1')");
-  $replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
-  $group_unit = (($replace_values[":groupcount:"] == 1) ? TXT_WPSC_GROUPCOUNT_SINGULAR : TXT_WPSC_GROUPCOUNT_PLURAL);
+  $replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
+  $group_unit = (($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
   
   $replace_values[":salecount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
   $sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
-  $replace_values[":salecount:"] .= " ".(($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
-  $sales_unit = (($replace_values[":salecount:"] == 1) ? TXT_WPSC_SALECOUNT_SINGULAR : TXT_WPSC_SALECOUNT_PLURAL);
+  $replace_values[":salecount:"] .= " ".(($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
+  $sales_unit = (($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
 		
   $replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
   $replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
   
   $variation_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."`");
-  $variation_unit = (($variation_count == 1) ? TXT_WPSC_VARIATION_SINGULAR : TXT_WPSC_VARIATION_PLURAL);
+  $variation_unit = (($variation_count == 1) ? __('variation', 'wpsc') : __('variations', 'wpsc'));
   
   $replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
   $pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
-  $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
-  $pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
+  $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
+  $pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
   
   $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
-  $accept_sales_unit = (($accept_sales == 1) ? TXT_WPSC_PENDINGCOUNT_SINGULAR : TXT_WPSC_PENDINGCOUNT_PLURAL);
+  $accept_sales_unit = (($accept_sales == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
 
   
   $replace_values[":theme:"] = get_option('wpsc_selected_theme');
@@ -577,13 +577,13 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='dashboard_right_now' class='postbox'>";
 		$output.="	<h3 class='hndle'>";
-		$output.="		<span>".TXT_WPSC_CURRENT_MONTH."</span>";
+		$output.="		<span>".__('Current Month', 'wpsc')."</span>";
 		$output.="		<br class='clear'/>";
 		$output.="	</h3>";
 		
 		$output .= "<div class='inside'>";
-		$output .= "<p class='sub'>".TXT_WPSC_AT_A_GLANCE."</p>";
-		//$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>";
+		$output .= "<p class='sub'>".__('At a Glance', 'wpsc')."</p>";
+		//$output.="<p class='youhave'>".__('You have <a href='admin.php?page=wpsc-edit-products'>:productcount:</a>, contained within <a href='admin.php?page=wpsc-edit-groups'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>";
 		$output .= "<div class='table'>";
 		$output .= "<table>";
 		
@@ -612,7 +612,7 @@ function wpsc_right_now() {
 		$output .= "<td class='b'>";
 		$output .= "<a href='?page=wpsc-sales-logs'>".$pending_sales."</a>";
 		$output .= "</td>";
-		$output .= "<td class='last t waiting'>".TXT_WPSC_PENDING." ";
+		$output .= "<td class='last t waiting'>".__('Pending', 'wpsc')." ";
 		$output .= ucfirst($pending_sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
@@ -627,7 +627,7 @@ function wpsc_right_now() {
 		$output .= "<td class='b'>";
 		$output .= "<a href='?page=wpsc-sales-logs'>".$accept_sales."</a>";
 		$output .= "</td>";
-		$output .= "<td class='last t approved'>".TXT_WPSC_CLOSED." ";
+		$output .= "<td class='last t approved'>".__('Closed', 'wpsc')." ";
 		$output .= ucfirst($accept_sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
@@ -635,7 +635,7 @@ function wpsc_right_now() {
 		$output .= "</table>";
 		$output .= "</div>";
 		$output .= "<div class='versions'>";
-		$output .= "<p><a class='button rbutton' href='admin.php?page=wpsc-edit-products'><strong>".TXT_WPSC_ADD_NEW_PRODUCT."</strong></a>".TXT_WPSC_HERE_YOU_CAN_ADD."</p>";
+		$output .= "<p><a class='button rbutton' href='admin.php?page=wpsc-edit-products'><strong>".__('Add New Product', 'wpsc')."</strong></a>".__('Here you can add products, groups or variations', 'wpsc')."</p>";
 		$output .= "</div>";
 		$output .= "</div>";
 		$output.="</div>";
@@ -643,15 +643,15 @@ function wpsc_right_now() {
 		$output="";	
 		$output.="<div id='rightnow'>\n\r";
 		$output.="	<h3 class='reallynow'>\n\r";
-		$output.="		<a class='rbutton' href='admin.php?page=wpsc-edit-products'><strong>".TXT_WPSC_ADD_NEW_PRODUCT."</strong></a>\n\r";
+		$output.="		<a class='rbutton' href='admin.php?page=wpsc-edit-products'><strong>".__('Add New Product', 'wpsc')."</strong></a>\n\r";
 		$output.="		<span>"._('Right Now')."</span>\n\r";
 		
 		//$output.="		<br class='clear'/>\n\r";
 		$output.="	</h3>\n\r";
 		
-		$output.="<p class='youhave'>".TXT_WPSC_SALES_DASHBOARD."</p>\n\r";
+		$output.="<p class='youhave'>".__('You have <a href="admin.php?page=wpsc-edit-products">:productcount:</a>, contained within <a href="admin.php?page=wpsc-edit-groups">:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>\n\r";
 		$output.="	<p class='youare'>\n\r";
-		$output.="		".TXT_WPSC_YOUAREUSING."\n\r";
+		$output.="		".__('You are using the :theme: style. This is WP e-Commerce :versionnumber:.', 'wpsc')."\n\r";
 		//$output.="		<a class='rbutton' href='themes.php'>Change Theme</a>\n\r";
 		//$output.="<span id='wp-version-message'>This is WordPress version 2.6. <a class='rbutton' href='http://wordpress.org/download/'>Update to 2.6.1</a></span>\n\r";
 		$output.="		</p>\n\r";
@@ -670,7 +670,7 @@ function wpsc_packing_slip($purchase_id) {
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 			
 
-	  //echo "<p style='padding-left: 5px;'><strong>".TXT_WPSC_DATE."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
+	  //echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
@@ -678,8 +678,8 @@ function wpsc_packing_slip($purchase_id) {
 	
 		if($cart_log != null) {
       echo "<div class='packing_slip'>\n\r";
-			echo "<h2>".TXT_WPSC_PACKING_SLIP."</h2>\n\r";
-			echo "<strong>".TXT_WPSC_ORDER." #</strong> ".$purchase_id."<br /><br />\n\r";
+			echo "<h2>".__('Packing Slip', 'wpsc')."</h2>\n\r";
+			echo "<strong>".__('Order', 'wpsc')." #</strong> ".$purchase_id."<br /><br />\n\r";
 			
 			echo "<table>\n\r";
 			
@@ -698,7 +698,7 @@ function wpsc_packing_slip($purchase_id) {
           switch($form_field['type']) {
             case 'country':
             if(is_numeric($purch_data['shipping_region'])) {
-              echo "  <tr><td>".TXT_WPSC_STATE.":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+              echo "  <tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
             }
             echo "  <tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['billing_country'])."</td></tr>\n\r";
             break;
@@ -717,10 +717,10 @@ function wpsc_packing_slip($purchase_id) {
           }
         }
 			} else {
-        echo "  <tr><td>".TXT_WPSC_NAME.":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
-        echo "  <tr><td>".TXT_WPSC_ADDRESS.":</td><td>".$purch_data['address']."</td></tr>\n\r";
-        echo "  <tr><td>".TXT_WPSC_PHONE.":</td><td>".$purch_data['phone']."</td></tr>\n\r";
-        echo "  <tr><td>".TXT_WPSC_EMAIL.":</td><td>".$purch_data['email']."</td></tr>\n\r";
+        echo "  <tr><td>".__('Name', 'wpsc').":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
+        echo "  <tr><td>".__('Address', 'wpsc').":</td><td>".$purch_data['address']."</td></tr>\n\r";
+        echo "  <tr><td>".__('Phone', 'wpsc').":</td><td>".$purch_data['phone']."</td></tr>\n\r";
+        echo "  <tr><td>".__('Email', 'wpsc').":</td><td>".$purch_data['email']."</td></tr>\n\r";
 			}
 			
 			if(get_option('payment_method') == 2) {
@@ -736,15 +736,15 @@ function wpsc_packing_slip($purchase_id) {
 				}
 			}
 // 			echo "  <tr><td colspan='2'></td></tr>\n\r";
-// 			echo "  <tr><td>".TXT_WPSC_PAYMENT_METHOD.":</td><td>".$gateway_name."</td></tr>\n\r";
-// 			//echo "  <tr><td>".TXT_WPSC_PURCHASE_NUMBER.":</td><td>".$purch_data['id']."</td></tr>\n\r";
-// 			echo "  <tr><td>".TXT_WPSC_HOWCUSTOMERFINDUS.":</td><td>".$purch_data['find_us']."</td></tr>\n\r";
+// 			echo "  <tr><td>".__('Payment Method', 'wpsc').":</td><td>".$gateway_name."</td></tr>\n\r";
+// 			//echo "  <tr><td>".__('Purchase No.', 'wpsc').":</td><td>".$purch_data['id']."</td></tr>\n\r";
+// 			echo "  <tr><td>".__('How The Customer Found Us', 'wpsc').":</td><td>".$purch_data['find_us']."</td></tr>\n\r";
 // 			$engrave_line = explode(",",$purch_data['engravetext']);
-// 			echo "  <tr><td>".TXT_WPSC_ENGRAVE."</td><td></td></tr>\n\r";
-// 			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_ONE.":</td><td>".$engrave_line[0]."</td></tr>\n\r";
-// 			echo "  <tr><td>".TXT_WPSC_ENGRAVE_LINE_TWO.":</td><td>".$engrave_line[1]."</td></tr>\n\r";
+// 			echo "  <tr><td>".__('Engrave text', 'wpsc')."</td><td></td></tr>\n\r";
+// 			echo "  <tr><td>".__('Line 1', 'wpsc').":</td><td>".$engrave_line[0]."</td></tr>\n\r";
+// 			echo "  <tr><td>".__('Line 2', 'wpsc').":</td><td>".$engrave_line[1]."</td></tr>\n\r";
 // 			if($purch_data['transactid'] != '') {
-// 				echo "  <tr><td>".TXT_WPSC_TXN_ID.":</td><td>".$purch_data['transactid']."</td></tr>\n\r";
+// 				echo "  <tr><td>".__('Transaction Id', 'wpsc').":</td><td>".$purch_data['transactid']."</td></tr>\n\r";
 // 			}
 			echo "</table>\n\r";
 			
@@ -754,14 +754,14 @@ function wpsc_packing_slip($purchase_id) {
       echo "<table class='packing_slip'>";
 				
 				echo "<tr>";
-				echo " <th>".TXT_WPSC_QUANTITY." </th>";
+				echo " <th>".__('Quantity', 'wpsc')." </th>";
 				
-				echo " <th>".TXT_WPSC_NAME."</th>";
+				echo " <th>".__('Name', 'wpsc')."</th>";
 				
 				
-				echo " <th>".TXT_WPSC_PRICE." </th>";
+				echo " <th>".__('Price', 'wpsc')." </th>";
 				
-				echo " <th>".TXT_WPSC_SHIPPING." </th>";
+				echo " <th>".__('Shipping', 'wpsc')." </th>";
 				echo '<th>Tax</th>';
 				echo '</tr>';
 			$endtotal = 0;
@@ -856,7 +856,7 @@ function wpsc_packing_slip($purchase_id) {
 			echo "</table>";
 			echo "</div>\n\r";
 		} else {
-			echo "<br />".TXT_WPSC_USERSCARTWASEMPTY;
+			echo "<br />".__('This users cart was empty', 'wpsc');
 		}
 
 }

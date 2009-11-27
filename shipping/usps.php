@@ -30,7 +30,7 @@ class usps {
 	function getForm() {
 		$output="<tr>
 					<td>
-						".TXT_WPSC_USPS_USERID.":
+						".__('USPS ID', 'wpsc').":
 					</td>
 					<td>
 						<input type='text' name='uspsid' value='".get_option("uspsid")."'>
@@ -38,7 +38,7 @@ class usps {
 				</tr>
 				<tr>
 					<td>
-						".TXT_WPSC_USPS_PASSWORD.":
+						".__('USPS Password', 'wpsc').":
 					</td>
 					<td>
 						<input type='text' name='uspspw' value='".get_option("uspspw")."'>

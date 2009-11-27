@@ -135,7 +135,7 @@ global $wpsc_query, $wpdb;
 
 						
 							<?php if(wpsc_has_multi_adding()): ?>
-								<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo TXT_WPSC_QUANTITY; ?>:</label>
+								<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo __('Quantity', 'wpsc'); ?>:</label>
 								<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
 								<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 								<input type="hidden" name="wpsc_update_quantity" value="true"/>
@@ -150,17 +150,17 @@ global $wpsc_query, $wpdb;
 									<div class='wpsc_buy_button_container'>
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-											<input class="wpsc_buy_button" type='button' value='<?php echo TXT_WPSC_BUYNOW; ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
+											<input class="wpsc_buy_button" type='button' value='<?php echo __('Buy Now', 'wpsc'); ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
 											<?php else: ?>
-										<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+										<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
 										<div class='wpsc_loading_animation'>
 											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" class="loadingimage"/>
-											<?php echo TXT_WPSC_UPDATING_CART; ?>
+											<?php echo __('Updating cart...', 'wpsc'); ?>
 										</div>
 									</div>
 								<?php else : ?>
-									<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+									<p class='soldout'><?php echo __('This product has sold out.', 'wpsc'); ?></p>
 								<?php endif ; ?>
 							<?php endif ; ?>
 							
@@ -182,7 +182,7 @@ global $wpsc_query, $wpdb;
 		
 		
 		<?php if(wpsc_product_count() < 1):?>
-			<p><?php  echo TXT_WPSC_NOITEMSINTHISGROUP; ?></p>
+			<p><?php  echo __('There are no products in this group.', 'wpsc'); ?></p>
 		<?php endif ; ?>
 
 	<?php

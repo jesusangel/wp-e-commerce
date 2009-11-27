@@ -13,7 +13,7 @@ function wpsc_category_tm(){
 		</tr>
 		<tr>
 			<td>
-				<?php echo TXT_WPSC_TM; ?>:
+				<?php echo __('Target Markets', 'wpsc'); ?>:
 				<br />
 			</td>
 			<td>
@@ -51,7 +51,7 @@ function wpsc_category_tm(){
 function admin_categorylist($curent_category) {
   global $wpdb;
   $options = "";
-  //$options .= "<option value=''>".TXT_WPSC_SELECTACATEGORY."</option>\r\n";
+  //$options .= "<option value=''>".__('Select a Product Group', 'wpsc')."</option>\r\n";
   $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` ORDER BY `id` ASC",ARRAY_A);
   foreach($values as $option) {
     if($curent_category == $option['id']) {
@@ -103,7 +103,7 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "		            </td>\n\r";
 
   echo "		            <td>\n\r";
-  echo "		            		<a href='#' onclick='fillcategoryform(".$category['id'].");return false;'>".TXT_WPSC_EDIT."</a>\n\r";
+  echo "		            		<a href='#' onclick='fillcategoryform(".$category['id'].");return false;'>".__('Edit', 'wpsc')."</a>\n\r";
   echo "		            </td>\n\r";
   echo "		          </tr>\n\r";
   echo "		        </table>\n\r";
@@ -226,15 +226,15 @@ function wpsc_display_groups_page() {
 
 
 				
-        echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASBEENADDED."</p></div>";
+        echo "<div class='updated'><p align='center'>".__('The item has been added', 'wpsc')."</p></div>";
       } else {
-        echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
+        echo "<div class='updated'><p align='center'>".__('The item has not been added', 'wpsc')."</p></div>";
       }
       
 			update_option('wpsc_category_url_cache', array());
       $wp_rewrite->flush_rules();
     } else {
-      echo "<div class='updated'><p align='center'>".TXT_WPSC_ITEMHASNOTBEENADDED."</p></div>";
+      echo "<div class='updated'><p align='center'>".__('The item has not been added', 'wpsc')."</p></div>";
     }
     
    // Jeff 15-04-09 Used for category target market options
@@ -453,12 +453,12 @@ function wpsc_display_groups_page() {
 			
       $wp_rewrite->flush_rules(); 
 		}
-    echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORYHASBEENEDITED."</p></div>";
+    echo "<div class='updated'><p align='center'>".__('The product group has been edited.', 'wpsc')."</p></div>";
 	}
   
 if($_POST['submit_action'] == "add_categorisation") {  
   $wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` ( `name`, `description`, `active`, `default`) VALUES ( '".$wpdb->escape(stripslashes($_POST['name']))."', '".$wpdb->escape(stripslashes($_POST['description']))."', '1', '0')");
-	echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORISATIONHASBEENADDED."</p></div>";  
+	echo "<div class='updated'><p align='center'>".__('The group has been added.', 'wpsc')."</p></div>";  
 
 }
 
@@ -470,7 +470,7 @@ if($_POST['submit_action'] == "edit_categorisation") {
   $wpdb->query("UPDATE `".WPSC_TABLE_CATEGORISATION_GROUPS."` SET `name` = '".$wpdb->escape(stripslashes($_POST['name']))."', `description` = '".$wpdb->escape(stripslashes($_POST['description']))."' WHERE `id` IN('$edit_group_id') LIMIT 1 ");
 	
 	
-	echo "<div class='updated'><p align='center'>".TXT_WPSC_CATEGORISATIONHASBEENEDITED."</p></div>";  
+	echo "<div class='updated'><p align='center'>".__('The group has been edited.', 'wpsc')."</p></div>";  
 	
 		
 	if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
@@ -526,7 +526,7 @@ update_option('wpsc_category_url_cache', array());
 	
 	<script language='javascript' type='text/javascript'>
 	function conf() {
-		var check = confirm("<?php echo TXT_WPSC_SURETODELETECATEGORY;?>");
+		var check = confirm("<?php echo __('Are you sure you want to delete this category? If the category has any subcategories, they will be deleted too.', 'wpsc');?>");
 		if(check) {
 			return true;
 		} else {
@@ -534,7 +534,7 @@ update_option('wpsc_category_url_cache', array());
 		}
 	}
 	function categorisation_conf() {
-		var check = confirm("<?php echo TXT_WPSC_SURETODELETECATEGORISATION;?>");
+		var check = confirm("<?php echo __('Are you sure you want to delete this product group? All categories it contains will be deleted too.', 'wpsc');?>");
 		if(check) {
 			return true;
 		} else {
@@ -549,7 +549,7 @@ update_option('wpsc_category_url_cache', array());
 	?>
 	</script>
 	<div class="wrap">
-		<h2><?php echo TXT_WPSC_CATEGORISATION;?></h2>
+		<h2><?php echo __('Categories', 'wpsc');?></h2>
 			<?php
 		
 		
@@ -557,7 +557,7 @@ update_option('wpsc_category_url_cache', array());
 			echo "<div id='dashboard-widgets' class='metabox-holder'>";
 		}
 	?>
-		<span><?php echo TXT_WPSC_CATEGORISATION_GROUPS_DESCR;?></span>
+		<span><?php echo __('Categorizing your products into groups help your customers find them. For instance if you sell hats and trousers you  might want to setup a Group called clothes and add hats and trousers to that group.', 'wpsc');?></span>
 	<?php
 		if (function_exists('add_object_page')) {
 			echo "<div class='wpsc_products_nav27'>";
@@ -572,7 +572,7 @@ update_option('wpsc_category_url_cache', array());
 			<?php
 			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 			//echo "<ul class='categorisation_links'>\n\r";
-			echo "<label for='select_categorisation_group' class='select_categorisation_group'>".TXT_WPSC_SELECT_PRODUCT_GROUP.":&nbsp;&nbsp;</label>";
+			echo "<label for='select_categorisation_group' class='select_categorisation_group'>".__('Select a Group to Manage', 'wpsc').":&nbsp;&nbsp;</label>";
 			echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 
 			foreach((array)$categorisation_groups as $categorisation_group) {
 				$selected = '';
@@ -586,20 +586,20 @@ update_option('wpsc_category_url_cache', array());
 				//echo "  </li>\n\r";
 			}
 			echo "</select>"; 
-			//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a></li>";
+			//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".__('Add New Group', 'wpsc')."</span></a></li>";
 			//echo "</ul>\n\r";
 			?>
 			
 			 <span><?php _e('or');?></span>
 			 
-			<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".TXT_WPSC_ADD_CATEGORISATION."</span></a>"; ?>
+			<?php echo "<a class='button add_categorisation_group' href='#' onclick='return showadd_categorisation_form()'><span>".__('Add New Group', 'wpsc')."</span></a>"; ?>
 			</form>
 		</div>
 		
 			
 		<!--
 	<div class="alignright">
-			<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php echo TXT_WPSC_ABOUT_THIS_PAGE;?></span>&nbsp;</a>
+			<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php echo __('About This Page', 'wpsc');?></span>&nbsp;</a>
 		</div>
 	-->
 		<br class="clear"/>
@@ -609,7 +609,7 @@ update_option('wpsc_category_url_cache', array());
 	
 	
 	<div id='add_categorisation'>
-		<strong><?php echo TXT_WPSC_ADD_CATEGORISATION;?></strong>
+		<strong><?php echo __('Add New Group', 'wpsc');?></strong>
 		<form method='POST' enctype='multipart/form-data'>
 		
 			<fieldset>
@@ -626,14 +626,14 @@ update_option('wpsc_category_url_cache', array());
 			<label>&nbsp;</label>
 			
 			<input type='hidden' name='submit_action' value='add_categorisation' />
-			<input type='submit' name='submit_form' value='<?php echo TXT_WPSC_SUBMIT; ?>' />
+			<input type='submit' name='submit_form' value='<?php echo __('Submit', 'wpsc'); ?>' />
 			</fieldset>
 		</form>
 		<br/>
 	</div>
 	
 	<div id='edit_categorisation'>
-		<strong><?php echo TXT_WPSC_EDIT_CATEGORISATION;?></strong>
+		<strong><?php echo __('Edit Group', 'wpsc');?></strong>
 		
 		<form method='POST' enctype='multipart/form-data'>
 		
@@ -651,9 +651,9 @@ update_option('wpsc_category_url_cache', array());
 				<label>&nbsp;</label>		
 				<input type='hidden' name='group_id' value='<?php echo $current_categorisation['id']; ?>' />
 				<input type='hidden' name='submit_action' value='edit_categorisation' />
-				<input type='submit' name='submit_form' value='<?php echo TXT_WPSC_SUBMIT; ?>' />
+				<input type='submit' name='submit_form' value='<?php echo __('Submit', 'wpsc'); ?>' />
 				<?php if($current_categorisation['default'] != 1) { ?>
-				<a href='<?php echo "?page={$_GET['page']}&amp;category_delete_id={$current_categorisation['id']}"  ?>' onclick='return categorisation_conf()' > <?php echo TXT_WPSC_DELETE; ?></a>
+				<a href='<?php echo "?page={$_GET['page']}&amp;category_delete_id={$current_categorisation['id']}"  ?>' onclick='return categorisation_conf()' > <?php echo __('Delete', 'wpsc'); ?></a>
 				<?php 	} ?>
 			</fieldset>
 		</form>
@@ -668,29 +668,29 @@ update_option('wpsc_category_url_cache', array());
 	echo "    <tr><td class='firstcol' style='width: 297px;'>\n\r";
 	if (function_exists('add_object_page')){
 		echo "<div class='postbox' style='margin-right: 15px; min-width:255px;'>";
-		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_CURRENT_GROUP)."</h3>";
+		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], __('&quot;[categorisation]&quot; Group', 'wpsc'))."</h3>";
 		echo "<div class='inside'>";
 	}
-	//echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". TXT_WPSC_ADDNEWCATEGORY."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_MANAGE_CATEGORISATION)." <a href='#' onclick='return showedit_categorisation_form()'>[".TXT_WPSC_EDIT."]</a> </strong></div>";
+	//echo "<div class='categorisation_title'><a href='' onclick='return showaddform()' class='add_category_link'><span>". __('+ Add new category to the &quot;[categorisation]&quot; Group', 'wpsc')."</span></a><strong class='form_group'>".str_replace("[categorisation]", $current_categorisation['name'], __('Manage &quot;[categorisation]&quot;', 'wpsc'))." <a href='#' onclick='return showedit_categorisation_form()'>[".__('Edit', 'wpsc')."]</a> </strong></div>";
 	echo "      <table id='itemlist'>\n\r";
 	if (function_exists('add_object_page')) {
 		echo "<tr></tr>";
 	} else {
 		echo "        <tr class='firstrow categorisation_title'>\n\r";
 		echo "          <td>\n\r";
-		echo TXT_WPSC_IMAGE;
+		echo __('Image', 'wpsc');
 		echo "          </td>\n\r";
 		
 		echo "          <td>\n\r";
-		echo TXT_WPSC_NAME;
+		echo __('Name', 'wpsc');
 		echo "          </td>\n\r";
 		
 		echo "          <td>\n\r";
-		//echo TXT_WPSC_DESCRIPTION;
+		//echo __('Description', 'wpsc');
 		echo "          </td>\n\r";
 		
 		echo "          <td>\n\r";
-		echo TXT_WPSC_EDIT;
+		echo __('Edit', 'wpsc');
 		echo "          </td>\n\r";
 		
 		echo "        </tr>\n\r";
@@ -701,9 +701,9 @@ update_option('wpsc_category_url_cache', array());
 	echo "     <tr>\n\r";
 	echo "       <td colspan='4' class='colspan'>\n\r";
 	echo "<div class='editing_this_group'><p>";
-	echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_GROUP);
+	echo str_replace("[categorisation]", $current_categorisation['name'], __('You are editing the &quot;[categorisation]&quot; Group', 'wpsc'));
 	
-	echo "  <a href='#' onclick='return showedit_categorisation_form()'>".TXT_WPSC_EDIT."</a>";
+	echo "  <a href='#' onclick='return showedit_categorisation_form()'>".__('Edit', 'wpsc')."</a>";
 	
 	echo "</p></div>";
 	echo "       </td>\n\r";
@@ -722,11 +722,11 @@ update_option('wpsc_category_url_cache', array());
 	echo "<form method='POST'  enctype='multipart/form-data' name='editproduct$num'>\n\r";
 	
 	if (function_exists('add_object_page')) {
-		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP)."</h3>";
+		echo "<h3 class='hndle'>".str_replace("[categorisation]", $current_categorisation['name'], __('You are editing an item in the &quot;[categorisation]&quot; Group', 'wpsc'))."</h3>";
 		echo "<div class='inside'>";
 	} else {
-		echo "<div class='categorisation_title'><strong class='form_group'>".TXT_WPSC_EDITDETAILS." </strong></div>\n\r";
-	echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_EDITING_IN_GROUP) ."</p></div>";
+		echo "<div class='categorisation_title'><strong class='form_group'>".__('Edit Details', 'wpsc')." </strong></div>\n\r";
+	echo "<div class='editing_this_group'><p>".str_replace("[categorisation]", $current_categorisation['name'], __('You are editing an item in the &quot;[categorisation]&quot; Group', 'wpsc')) ."</p></div>";
 	}
 	
 	
@@ -741,24 +741,24 @@ update_option('wpsc_category_url_cache', array());
 
 	
 <div id="blank_item">
-	<h3 class="form_heading"><?php echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDNEWCATEGORY_TITLE); ?></h3>
+	<h3 class="form_heading"><?php echo str_replace("[categorisation]", $current_categorisation['name'], __('Add Category', 'wpsc')); ?></h3>
 	<div class="inside">
-	  <a href='' onclick='return showaddform()' class='add_category_link'><span><?php echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDNEWCATEGORY); ?> </span></a>
-	  <span class="setting-description"><?php echo TXT_WPSC_ADDING_A_NEW_CATEGORY;?></span>
+	  <a href='' onclick='return showaddform()' class='add_category_link'><span><?php echo str_replace("[categorisation]", $current_categorisation['name'], __('+ Add new category to the &quot;[categorisation]&quot; Group', 'wpsc')); ?> </span></a>
+	  <span class="setting-description"><?php echo __('Adding a new category here will make it available when you add or edit a product.', 'wpsc');?></span>
 	</div>
 </div>
 
 	
 	<div id='additem' class='postbox'>
-		<h3 class='hndle'><?php echo str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP); ?></h3>
+		<h3 class='hndle'><?php echo str_replace("[categorisation]", $current_categorisation['name'], __('You are adding a new item to the &quot;[categorisation]&quot; Group', 'wpsc')); ?></h3>
 		<div class='inside'>
 			<form method='post' enctype='multipart/form-data' class='additem'>
-				<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], TXT_WPSC_ADDING_TO_GROUP) .""; ?></p></div>
+				<div class='editing_this_group'><p> <?php echo "".str_replace("[categorisation]", $current_categorisation['name'], __('You are adding a new item to the &quot;[categorisation]&quot; Group', 'wpsc')) .""; ?></p></div>
 	  			  
 				<table class='category_forms form_table'>
 					<tr>
 						<td>
-							<?php echo TXT_WPSC_NAME;?>:
+							<?php echo __('Name', 'wpsc');?>:
 						</td>
 						<td>
 							<input type='text' class="text" name='name' value=''  />
@@ -766,7 +766,7 @@ update_option('wpsc_category_url_cache', array());
 					</tr>
 					<tr>
 						<td>
-							<?php echo TXT_WPSC_DESCRIPTION;?>:
+							<?php echo __('Description', 'wpsc');?>:
 						</td>
 						<td>
 							<textarea name='description' rows='8'></textarea>
@@ -775,7 +775,7 @@ update_option('wpsc_category_url_cache', array());
 
 						<tr>
 						<td>
-							<?php echo TXT_WPSC_CATEGORY_PARENT;?>:
+							<?php echo __('Group Parent', 'wpsc');?>:
 						</td>
 						<td>
 							<?php echo wpsc_parent_category_list($current_categorisation['id'], 0,0); ?>
@@ -783,7 +783,7 @@ update_option('wpsc_category_url_cache', array());
 					</tr>
 					<tr>
 						<td>
-							<?php echo TXT_WPSC_GROUP_IMAGE;?>:
+							<?php echo __('Group&nbsp;Image', 'wpsc');?>:
 						</td>
 						<td>
 							<input type='file' name='image' value='' />
@@ -796,8 +796,8 @@ update_option('wpsc_category_url_cache', array());
 						<td>
 						</td>
 						<td>
-							<?php echo TXT_WPSC_HEIGHT;?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo TXT_WPSC_WIDTH;?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br />
-							<span class='wpscsmall description'><?php echo TXT_WPSC_GROUP_IMAGE_TEXT; ?></span>
+							<?php echo __('Height', 'wpsc');?>:<input type='text' size='6' name='height' value='<?php echo get_option('category_image_height'); ?>' /> <?php echo __('Width', 'wpsc');?>:<input type='text' size='6' name='width' value='<?php echo get_option('category_image_width'); ?>' /> <br />
+							<span class='wpscsmall description'><?php echo __('You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings</a>.', 'wpsc'); ?></span>
 						</td>
 					</tr>
 					<?php
@@ -806,8 +806,8 @@ update_option('wpsc_category_url_cache', array());
 				<?php  wpsc_category_tm(); //category target market checkbox ?>
 					<tr>
 						<td colspan='2' class='category_presentation_settings'>
-							<h4><?php echo TXT_WPSC_PRESENTATIONSETTINGS;?></h4>
-							<span class='small'><?php echo TXT_WPSC_GROUP_PRESENTATION_TEXT; ?></span>
+							<h4><?php echo __('Presentation Settings', 'wpsc');?></h4>
+							<span class='small'><?php echo __('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span>
 						</td>
 					</tr>
 
@@ -815,29 +815,29 @@ update_option('wpsc_category_url_cache', array());
 
 					<tr>
 						<td>
-							<?php echo TXT_WPSC_CATALOG_VIEW;?>:
+							<?php echo __('Catalog View', 'wpsc');?>:
 						</td>
 						<td>
 								<select name='product_view'>
-									<option value='default' <?php echo $product_view1; ?>><?php echo TXT_WPSC_DEFAULT;?></option>
+									<option value='default' <?php echo $product_view1; ?>><?php echo __('Default View', 'wpsc');?></option>
 									<?php
 									if(function_exists('product_display_list')) {
 										?>
-										<option value='list' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+										<option value='list' <?php echo $product_view2; ?>><?php echo __('List View', 'wpsc');?></option>
 										<?php
 									}  else {
 										?>
-										<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo TXT_WPSC_LIST;?></option>
+										<option value='list' disabled='disabled' <?php echo $product_view2; ?>><?php echo __('List View', 'wpsc');?></option>
 										<?php
 									}
 
 									if(function_exists('product_display_grid')) {
 										?>
-									<option value='grid' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+									<option value='grid' <?php echo $product_view3; ?>><?php echo __('Grid View', 'wpsc');?></option>
 										<?php
 									} else {
 										?>
-									<option value='grid' disabled='disabled' <?php echo $product_view3; ?>><?php echo TXT_WPSC_GRID;?></option>
+									<option value='grid' disabled='disabled' <?php echo $product_view3; ?>><?php echo __('Grid View', 'wpsc');?></option>
 										<?php
 									}
 									?>
@@ -847,10 +847,10 @@ update_option('wpsc_category_url_cache', array());
 
 					<tr>
 						<td colspan='2'>
-						<?php echo TXT_WPSC_THUMBNAIL_SIZE; ?>:
+						<?php echo __('Thumbnail&nbsp;Size', 'wpsc'); ?>:
 
-							<?php echo TXT_WPSC_HEIGHT; ?>: <input type='text' value='' name='product_height' size='6'/>
-							<?php echo TXT_WPSC_WIDTH; ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
+							<?php echo __('Height', 'wpsc'); ?>: <input type='text' value='' name='product_height' size='6'/>
+							<?php echo __('Width', 'wpsc'); ?>: <input type='text' value='' name='product_width' size='6'/> <br/>
 						</td>
 					</tr>
 
@@ -871,7 +871,7 @@ update_option('wpsc_category_url_cache', array());
 
 							<input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['id']; ?>' />
 							<input type='hidden' name='submit_action' value='add' />
-							<input class='button-primary' type='submit' name='submit' value='<?php echo TXT_WPSC_ADD_GROUP;?>' />
+							<input class='button-primary' type='submit' name='submit' value='<?php echo __('Add Group', 'wpsc');?>' />
 						</td>
 					</tr>
 				</table>

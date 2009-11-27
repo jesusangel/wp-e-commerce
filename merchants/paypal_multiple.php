@@ -467,16 +467,16 @@ function form_paypal_multiple() {
      <td>IPN :
      </td>
      <td>
-       <input type='radio' value='1' name='paypal_ipn' id='paypal_ipn1' ".$paypal_ipn1." /> <label for='paypal_ipn1'>".TXT_WPSC_YES."</label> &nbsp;
-       <input type='radio' value='0' name='paypal_ipn' id='paypal_ipn2' ".$paypal_ipn2." /> <label for='paypal_ipn2'>".TXT_WPSC_NO."</label>
+       <input type='radio' value='1' name='paypal_ipn' id='paypal_ipn1' ".$paypal_ipn1." /> <label for='paypal_ipn1'>".__('Yes', 'wpsc')."</label> &nbsp;
+       <input type='radio' value='0' name='paypal_ipn' id='paypal_ipn2' ".$paypal_ipn2." /> <label for='paypal_ipn2'>".__('No', 'wpsc')."</label>
      </td>
   </tr>
   <tr>
      <td style='padding-bottom: 0px;'>Send shipping details:
      </td>
      <td style='padding-bottom: 0px;'>
-       <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".TXT_WPSC_YES."</label> &nbsp;
-       <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".TXT_WPSC_NO."</label>
+       <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".__('Yes', 'wpsc')."</label> &nbsp;
+       <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".__('No', 'wpsc')."</label>
 
   	</td>
   </tr>
@@ -491,8 +491,8 @@ function form_paypal_multiple() {
       Address Override:
      </td>
      <td style='padding-bottom: 0px;'>
-       <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".TXT_WPSC_YES."</label> &nbsp;
-       <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".TXT_WPSC_NO."</label>
+       <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".__('Yes', 'wpsc')."</label> &nbsp;
+       <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".__('No', 'wpsc')."</label>
      </td>
    </tr>
    <tr>
@@ -551,7 +551,7 @@ $output .= "
    <tr class='update_gateway' >
 		<td colspan='2'>
 			<div class='submit'>
-			<input type='submit' value='".TXT_WPSC_UPDATE_BUTTON."' name='updateoption'/>
+			<input type='submit' value='".__('Update &raquo;', 'wpsc')."' name='updateoption'/>
 		</div>
 		</td>
 	</tr>

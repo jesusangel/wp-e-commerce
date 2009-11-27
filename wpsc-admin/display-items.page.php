@@ -26,7 +26,7 @@ function wpsc_display_edit_products_page() {
   ?>
 	<div class="wrap">
 		<?php // screen_icon(); ?>
-		<h2><?php echo wp_specialchars( TXT_WPSC_DISPLAYPRODUCTS ); ?> </h2>
+		<h2><?php echo wp_specialchars( __('Display Products', 'wpsc') ); ?> </h2>
 		
 		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){ ?>
 				<div id="message" class="error fade">
@@ -111,7 +111,7 @@ function wpsc_display_edit_products_page() {
 			}
 				
 			if(count($unwriteable_directories) > 0) {
-				echo "<div class='error fade'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",TXT_WPSC_WRONG_FILE_PERMS)."</div>";
+				echo "<div class='error fade'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",__('The following directories are not writable: :directory: You won&#39;t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.', 'wpsc'))."</div>";
 			}
 			// class='stuffbox'
 	?>
@@ -305,7 +305,7 @@ function wpsc_admin_products_list($category_id = 0) {
 						
 						// get the  product name, unless there is no name, in which case, display text indicating so
 						if ($product['name']=='') {
-							$product_name = "(".TXT_WPSC_NONAME.")";
+							$product_name = "(".__('No Name', 'wpsc').")";
 						} else {
 							$product_name = htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8');
 						}
@@ -437,7 +437,7 @@ function wpsc_admin_category_dropdown() {
 	$siteurl = get_option('siteurl');
 	$url =  urlencode(remove_query_arg(array('product_id','category_id')));
 	
-	$options = "<option value=''>".TXT_WPSC_ALLCATEGORIES."</option>\r\n";
+	$options = "<option value=''>".__('View All Categories', 'wpsc')."</option>\r\n";
 	$options .= wpsc_admin_category_dropdown_tree(null, 0, absint($_GET['category_id']));
 	
 	$concat = "<input type='hidden' name='page' value='{$_GET['page']}' />\r\n";

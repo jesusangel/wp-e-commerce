@@ -744,7 +744,7 @@ function wpsc_admin_ajax() {
         		}
         		
 						////echo "/* ".print_r($selected_variation_values,true)." */\n\r";
-						echo "edit_variation_combinations_html = \"".TXT_WPSC_EDIT_VAR."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view(0, (array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock)))."\";\n";
+						echo "edit_variation_combinations_html = \"".__('Edit Variation Set', 'wpsc')."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view(0, (array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock)))."\";\n";
 
       		} else {
         		echo "edit_variation_combinations_html = \"\";\n";
@@ -963,7 +963,7 @@ function wpsc_purchlog_resend_email(){
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
 			$message = get_option("wpsc_email_receipt");
-			$message_html = "<h2  style='font-size:16px;font-weight:bold;color:#000;border:0px;padding-top: 0px;' >".TXT_WPSC_YOUR_ORDER."</h2>";
+			$message_html = "<h2  style='font-size:16px;font-weight:bold;color:#000;border:0px;padding-top: 0px;' >".__('Your Order', 'wpsc')."</h2>";
 		} else {
 			$message = get_option("wpsc_email_receipt");
 			$message_html = $message;
@@ -1084,8 +1084,8 @@ function wpsc_purchlog_resend_email(){
 						}
 			
 						if($link != '') {
-							$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".TXT_WPSC_CLICKTODOWNLOAD.":";
-							$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".TXT_WPSC_CLICKTODOWNLOAD.":\n\r";
+							$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
+							$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
 							foreach($link as $single_link) {
 								$product_list .= "\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
 								$product_list_html .= "<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
@@ -1098,9 +1098,9 @@ function wpsc_purchlog_resend_email(){
 							  }
 
 							$product_list.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n";
-							if ($shipping > 0) $product_list .= " - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							if ($shipping > 0) $product_list .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
 							$product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n";
-							if ($shipping > 0) $product_list_html .= " - ". TXT_WPSC_SHIPPING.":".$shipping_price ."\n\r";
+							if ($shipping > 0) $product_list_html .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
 						}
 						
 						$report.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
@@ -1119,20 +1119,20 @@ function wpsc_purchlog_resend_email(){
 			// $message.= "\n\r";
 			$product_list.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
 				if($purchase_log['discount_value'] > 0) {
-					$discount_email.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
+					$discount_email.= __('Discount', 'wpsc').": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
-				$total_shipping_email.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
-				$total_price_email.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total,1,true)."\n\r";
+				$total_shipping_email.= __('Total Shipping', 'wpsc').": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
+				$total_price_email.= __('Total', 'wpsc').": ".nzshpcrt_currency_display($total,1,true)."\n\r";
 				$product_list_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
 				if($purchase_log['discount_value'] > 0) {
-					$discount_html.= TXT_WPSC_DISCOUNT.": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
+					$discount_html.= __('Discount', 'wpsc').": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
-				$total_shipping_html.= TXT_WPSC_TOTALSHIPPING.": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
-				$total_price_html.= TXT_WPSC_TOTAL.": ".nzshpcrt_currency_display($total, 1,true)."\n\r";
+				$total_shipping_html.= __('Total Shipping', 'wpsc').": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
+				$total_price_html.= __('Total', 'wpsc').": ".nzshpcrt_currency_display($total, 1,true)."\n\r";
 				if(isset($_GET['ti'])) {
-					$message.= "\n\r".TXT_WPSC_YOURTRANSACTIONID.": " . $_GET['ti'];
-					$message_html.= "\n\r".TXT_WPSC_YOURTRANSACTIONID.": " . $_GET['ti'];
-					$report.= "\n\r".TXT_WPSC_TRANSACTIONID.": " . $_GET['ti'];
+					$message.= "\n\r".__('Your Transaction ID', 'wpsc').": " . $_GET['ti'];
+					$message_html.= "\n\r".__('Your Transaction ID', 'wpsc').": " . $_GET['ti'];
+					$report.= "\n\r".__('Transaction ID', 'wpsc').": " . $_GET['ti'];
 				} else {
 					$report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
 				}
@@ -1162,11 +1162,11 @@ function wpsc_purchlog_resend_email(){
  					add_filter('wp_mail_from_name', 'wpsc_replace_reply_name', 0);
 					if($purchase_log['processed'] < 2) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
-						$message = TXT_WPSC_ORDER_PENDING . "\n\r" . $payment_instructions ."\n\r". $message;
-						$resent = (bool)wp_mail($email, TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED, $message);
+						$message = __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "\n\r" . $payment_instructions ."\n\r". $message;
+						$resent = (bool)wp_mail($email, __('Order Pending: Payment Required', 'wpsc'), $message);
 						$sent = 1;
 					} else {
-						$resent = (bool)wp_mail($email, TXT_WPSC_PURCHASERECEIPT, $message);
+						$resent = (bool)wp_mail($email, __('Purchase Receipt', 'wpsc'), $message);
 						$sent = 1;
 					}
 					//echo "$message<br />";
@@ -1210,7 +1210,7 @@ function wpsc_purchlog_clear_download_items(){
 		}
 		
 		
-		wp_mail($email_address, TXT_WPSC_USER_UNLOCKED_EMAIL, str_replace("[download_links]", $download_links, TXT_WPSC_USER_UNLOCKED_EMAIL_MESSAGE), "From: ".get_option('return_email')."");
+		wp_mail($email_address, __('The administrator has unlocked your file', 'wpsc'), str_replace("[download_links]", $download_links, __('Dear CustomerWe are pleased to advise you that your order has been updated and your downloads are now active.Please download your purchase using the links provided below.[download_links]Thank you for your custom.', 'wpsc')), "From: ".get_option('return_email')."");
 	  
 
 	$sendback = wp_get_referer();
@@ -1410,7 +1410,7 @@ function wpsc_delete_purchlog($purchlog_id='') {
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$purchlog_id'");
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$purchlog_id')");
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$purchlog_id' LIMIT 1");
-		//  return '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
+		//  return '<div id="message" class="updated fade"><p>'.__('Thanks, the purchase log record has been deleted', 'wpsc').'</p></div>';
 		$deleted = 1;
 		
  
@@ -1865,7 +1865,7 @@ function wpsc_check_form_options(){
 		$output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options[".$id."]'>+ New Layer</a></td></tr>";
 
 		foreach((array)$options as $key=>$value){
-			$output .="<tr class='wpsc_grey'><td></td><td><input type='text' value='".$key."' name='wpsc_checkout_option_label[".$id."][]' /></td><td colspan='4'><input type='text' value='".$value."' name='wpsc_checkout_option_value[".$id."][]' />&nbsp;<a class='wpsc_delete_option' href='' <img src='".WPSC_URL."/images/trash.gif' alt='".TXT_WPSC_DELETE."' title='".TXT_WPSC_DELETE."' /></a></td></tr>";
+			$output .="<tr class='wpsc_grey'><td></td><td><input type='text' value='".$key."' name='wpsc_checkout_option_label[".$id."][]' /></td><td colspan='4'><input type='text' value='".$value."' name='wpsc_checkout_option_value[".$id."][]' />&nbsp;<a class='wpsc_delete_option' href='' <img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a></td></tr>";
 		
 		}
 

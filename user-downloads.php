@@ -38,9 +38,9 @@ if(count($files) > 0) {
     ?>
 		<table class='logdisplay'>
 			<tr>
-				<th><?php echo TXT_WPSC_FILE_NAMES; ?> </th>
-				<th><?php echo TXT_WPSC_DOWNLOADS_LEFT; ?> </th>
-				<th><?php echo TXT_WPSC_DATE; ?> </th>
+				<th><?php echo __('File Names', 'wpsc'); ?> </th>
+				<th><?php echo __('Downloads Left', 'wpsc'); ?> </th>
+				<th><?php echo __('Date', 'wpsc'); ?> </th>
 			</tr>
       <?php
         $i=0;
@@ -66,6 +66,6 @@ if(count($files) > 0) {
 		</table>
 	<?php
 } else {	
-	echo TXT_WPSC_NO_DOWNLOADABLES; 
+	echo __('You have not purchased any downloadable products yet.', 'wpsc'); 
 }
 ?>

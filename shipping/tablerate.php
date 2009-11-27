@@ -27,21 +27,21 @@ class tablerate {
 	
 	function getForm() {
  	//	$output.="<table>";
-		$output.="<tr><th>".TXT_WPSC_TOTALPRICE."</th><th>".TXT_WPSC_SHIPPING_PRICE."</th></tr>";
+		$output.="<tr><th>".__('Total Price', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
 		$layers = get_option("table_rate_layers");
 		if ($layers != '') {
 			foreach($layers as $key => $shipping) {
 				$output.="<tr class='rate_row'>
 							<td>
 						
-								<i style='color: grey;'>".TXT_WPSC_IF_PRICE_IS."</i>
+								<i style='color: grey;'>".__('If price is ', 'wpsc')."</i>
 								<input type='text' name='layer[]' value='$key' size='4' />
-								<i style='color: grey;'> ".TXT_WPSC_AND_ABOVE."</i>
+								<i style='color: grey;'> ".__(' and above', 'wpsc')."</i>
 							</td>
 							<td>
 								".wpsc_get_currency_symbol()."
 								<input type='text' value='{$shipping}' name='shipping[]'  size='4'>
-								&nbsp;&nbsp;<a href='#' class='delete_button' >".TXT_WPSC_DELETE."</a>
+								&nbsp;&nbsp;<a href='#' class='delete_button' >".__('Delete', 'wpsc')."</a>
 							
 							</td>
 						</tr>";

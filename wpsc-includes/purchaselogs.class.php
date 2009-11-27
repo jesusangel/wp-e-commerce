@@ -536,7 +536,7 @@ function wpsc_purchlogs_have_downloads_locked(){
 	global $purchlogitem;
 	$ip = $purchlogitem->have_downloads_locked();
 	if($ip != ''){
-		return sprintf(TXT_WPSC_CLEAR_IP_LOCKS, $ip);
+		return sprintf(__('Release downloads locked to this IP address %s', 'wpsc'), $ip);
 	}else{
 		return false;
 	}
@@ -756,7 +756,7 @@ class wpsc_purchaselogs{
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='$deleteid'");
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` IN ('$deleteid')");
 		  $wpdb->query("DELETE FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='$deleteid' LIMIT 1");
-		  return '<div id="message" class="updated fade"><p>'.TXT_WPSC_THANKS_DELETED.'</p></div>';
+		  return '<div id="message" class="updated fade"><p>'.__('Thanks, the purchase log record has been deleted', 'wpsc').'</p></div>';
 		}
 		
 	}

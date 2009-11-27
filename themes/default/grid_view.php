@@ -144,9 +144,9 @@ $image_height = get_option('product_image_height');
 							
 							<?php if((get_option('display_addtocart') == 1) && (get_option('addtocart_or_buynow') !='1')) :?> 	   
 								<?php if(wpsc_product_has_stock()) : ?>
-									<input type="submit" value="<?php echo TXT_WPSC_ADDTOCART; ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+									<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 								<?php else : ?>
-									<p class='soldout'><?php echo TXT_WPSC_PRODUCTSOLDOUT; ?></p>
+									<p class='soldout'><?php echo __('This product has sold out.', 'wpsc'); ?></p>
 								<?php endif ; ?>
 							<?php endif; ?>
 							
@@ -170,7 +170,7 @@ $image_height = get_option('product_image_height');
 		<?php endwhile; ?>
 		
 		<?php if(wpsc_product_count() < 1):?>
-			<p><?php  echo TXT_WPSC_NOITEMSINTHISGROUP; ?></p>
+			<p><?php  echo __('There are no products in this group.', 'wpsc'); ?></p>
 		<?php endif ; ?>
 		
 		

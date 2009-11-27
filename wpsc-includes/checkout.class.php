@@ -46,7 +46,7 @@ function wpsc_display_tax_label($checkout = false){
 			return "Tax Included";
 		}
 	}else{
-		return TXT_WPSC_TAX;
+		return __('Tax', 'wpsc');
 	}
 
 }
@@ -485,7 +485,7 @@ class wpsc_checkout {
    			if(!preg_match($ccregex, $_POST['card_number'])){
    				$any_bad_inputs = true;
 				$bad_input = true;
-				$_SESSION['wpsc_gateway_error_messages']['card_number'] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower('card number') . ".";
+				$_SESSION['wpsc_gateway_error_messages']['card_number'] = __('Please enter a valid', 'wpsc') . " " . strtolower('card number') . ".";
 				$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
    			}else{
    				$_SESSION['wpsc_gateway_error_messages']['card_number'] = '';
@@ -496,7 +496,7 @@ class wpsc_checkout {
 
    			$any_bad_inputs = true;
 			$bad_input = true;
-			$_SESSION['wpsc_gateway_error_messages']['card_number'] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower('card number') . ".";
+			$_SESSION['wpsc_gateway_error_messages']['card_number'] = __('Please enter a valid', 'wpsc') . " " . strtolower('card number') . ".";
 			$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
 
    		}   	
@@ -510,7 +510,7 @@ class wpsc_checkout {
    	
    			$any_bad_inputs = true;
 			$bad_input = true;
-			$_SESSION['wpsc_gateway_error_messages']['card_number'] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower('card number') . ".";
+			$_SESSION['wpsc_gateway_error_messages']['card_number'] = __('Please enter a valid', 'wpsc') . " " . strtolower('card number') . ".";
 			$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
 
    	}
@@ -521,7 +521,7 @@ class wpsc_checkout {
 	   	}else{
 			$any_bad_inputs = true;
 			$bad_input = true;
-			$_SESSION['wpsc_gateway_error_messages']['expdate'] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower('Expiry Date') . ".";
+			$_SESSION['wpsc_gateway_error_messages']['expdate'] = __('Please enter a valid', 'wpsc') . " " . strtolower('Expiry Date') . ".";
 			$_SESSION['wpsc_checkout_saved_values']['expdate'] = '';
 	   	}
 	
@@ -531,7 +531,7 @@ class wpsc_checkout {
    	if(($_POST['card_code'] == '') || (!is_numeric($_POST['card_code']))){
    		$any_bad_inputs = true;
 		$bad_input = true;
-		$_SESSION['wpsc_gateway_error_messages']['card_code'] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower('CVV') . ".";
+		$_SESSION['wpsc_gateway_error_messages']['card_code'] = __('Please enter a valid', 'wpsc') . " " . strtolower('CVV') . ".";
 		$_SESSION['wpsc_checkout_saved_values']['card_code'] = '';
    	}else{
    		$_SESSION['wpsc_gateway_error_messages']['card_code'] = '';
@@ -542,7 +542,7 @@ class wpsc_checkout {
    	if($_POST['cctype'] == ''){
    	   	$any_bad_inputs = true;
 		$bad_input = true;
-		$_SESSION['wpsc_gateway_error_messages']['cctype'] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower('CVV') . ".";
+		$_SESSION['wpsc_gateway_error_messages']['cctype'] = __('Please enter a valid', 'wpsc') . " " . strtolower('CVV') . ".";
 		$_SESSION['wpsc_checkout_saved_values']['cctype'] = '';
    	}else{
 		$_SESSION['wpsc_gateway_error_messages']['cctype'] = '';
@@ -609,7 +609,7 @@ class wpsc_checkout {
 					break;
 				}
 				if($bad_input === true) {
-					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = TXT_WPSC_PLEASEENTERAVALID . " " . strtolower($form_data->name) . ".";
+					$_SESSION['wpsc_checkout_error_messages'][$form_data->id] = __('Please enter a valid', 'wpsc') . " " . strtolower($form_data->name) . ".";
 					$_SESSION['wpsc_checkout_saved_values'][$form_data->id] = '';
 				}
 			}

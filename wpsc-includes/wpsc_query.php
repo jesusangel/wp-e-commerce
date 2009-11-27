@@ -750,15 +750,15 @@ function wpsc_product_rater() {
 		$output .= "<div class='product_footer'>";
 
 		$output .= "<div class='product_average_vote'>";
-		$output .= "<strong>".TXT_WPSC_AVGCUSTREVIEW.":</strong>";
+		$output .= "<strong>".__('Avg. Customer Rating', 'wpsc').":</strong>";
 		$output .= wpsc_product_existing_rating($wpsc_query->product['id']);
 		$output .= "</div>";
 		
 		$output .= "<div class='product_user_vote'>";
 
 		//$vote_output = nzshpcrt_product_vote($wpsc_query->product['id'],"onmouseover='hide_save_indicator(\"saved_".$wpsc_query->product['id']."_text\");'");
-		$output .= "<strong><span id='rating_".$wpsc_query->product['id']."_text'>".TXT_WPSC_RATETHISITEM.":</span>";
-		$output .= "<span class='rating_saved' id='saved_".$wpsc_query->product['id']."_text'> ".TXT_WPSC_RATING_SAVED."</span>";
+		$output .= "<strong><span id='rating_".$wpsc_query->product['id']."_text'>".__('Your Rating', 'wpsc').":</span>";
+		$output .= "<span class='rating_saved' id='saved_".$wpsc_query->product['id']."_text'> ".__('Saved', 'wpsc')."</span>";
 		$output .= "</strong>";
 		
 		$output .= wpsc_product_new_rating($wpsc_query->product['id']);

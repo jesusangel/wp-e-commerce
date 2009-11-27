@@ -351,7 +351,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
 
   switch(get_option('show_categorybrands')) {
     case 1:
-      $output .= "<ul id='PeCatsBrandsBoth' class='category_brand_header'><li id='PeSwitcherFirst'><a href='' onclick='return prodgroupswitch(\"categories\");'>".TXT_WPSC_CATEGORIES."</a> | <a href='' onclick='return prodgroupswitch(\"brands\");'>".TXT_WPSC_BRANDS."</a></li></ul>";
+      $output .= "<ul id='PeCatsBrandsBoth' class='category_brand_header'><li id='PeSwitcherFirst'><a href='' onclick='return prodgroupswitch(\"categories\");'>".__('Categories', 'wpsc')."</a> | <a href='' onclick='return prodgroupswitch(\"brands\");'>".__('Brands', 'wpsc')."</a></li></ul>";
       break;
   }
   $output .= "</div>";

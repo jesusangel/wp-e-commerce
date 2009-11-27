@@ -72,20 +72,20 @@ function wpsc_admin_pages(){
 		if ($userdata->user_level <= 2) {
 				if(file_exists(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php')) {
 					require_once(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php');
-					add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/cart.png");
+					add_object_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/cart.png");
 				} else {
 					if (function_exists('add_object_page')) {
-						add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
+						add_object_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/cart.png");
 					} else {
-						add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+						add_menu_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page);
 					}
 				}
 			} else {
 				if (function_exists('add_object_page')) {
-					add_object_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page,array(), WPSC_URL."/images/cart.png");
+					add_object_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/cart.png");
 					
 				} else {
-					add_menu_page(TXT_WPSC_ECOMMERCE, TXT_WPSC_ECOMMERCE, 2, $base_page);
+					add_menu_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page);
 				}
 			}
 
@@ -95,14 +95,14 @@ function wpsc_admin_pages(){
 
 
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
-			$edit_products_page = add_submenu_page($base_page,TXT_WPSC_PRODUCTS,TXT_WPSC_PRODUCTS, 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
+			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
 			$page_hooks[] = $edit_products_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_CATEGORISATION, TXT_WPSC_CATEGORISATION, 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
 			//print_r($page_hooks);
 			
-			//    add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, WPSC_DIR_NAME.'/display_variations.php');
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_VARIATIONS, TXT_WPSC_VARIATIONS, 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
+			//    add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, WPSC_DIR_NAME.'/display_variations.php');
+			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
 			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
@@ -123,14 +123,14 @@ function wpsc_admin_pages(){
 				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			}
 
-			add_submenu_page($base_page,TXT_WPSC_MARKETING, TXT_WPSC_MARKETING, 7, WPSC_DIR_NAME.'/display-coupons.php');
+			add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7, WPSC_DIR_NAME.'/display-coupons.php');
 
 			
-			$edit_options_page = add_submenu_page($base_page,TXT_WPSC_OPTIONS, TXT_WPSC_OPTIONS, 7, 'wpsc-settings', 'wpsc_display_settings_page');
+			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 7, 'wpsc-settings', 'wpsc_display_settings_page');
 			$page_hooks[] = $edit_options_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_UPGRADES_PAGE, TXT_WPSC_UPGRADES_PAGE, 7, 'wpsc-upgrades', 'wpsc_display_upgrades_page');
-			//$page_hooks[] = add_submenu_page($base_page,TXT_WPSC_GOLD_OPTIONS, TXT_WPSC_GOLD_OPTIONS, 7, 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Upgrades', 'wpsc'), __('Upgrades', 'wpsc'), 7, 'wpsc-upgrades', 'wpsc_display_upgrades_page');
+			//$page_hooks[] = add_submenu_page($base_page,__('Upgrades (Old)', 'wpsc'), __('Upgrades (Old)', 'wpsc'), 7, 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
 			
 			if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
 				$page_hooks[] = add_submenu_page($base_page,__('- Debug'), __('- Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');
@@ -325,27 +325,27 @@ function wpsc_admin_dynamic_js() {
 	
 	echo "var hidden_boxes = '".$hidden_boxes."';\n\r";
 	echo "var IS_WP27 = '".IS_WP27."';\n\r";
-	echo "var TXT_WPSC_DELETE = '".TXT_WPSC_DELETE."';\n\r";
-	echo "var TXT_WPSC_TEXT = '".TXT_WPSC_TEXT."';\n\r";
-	echo "var TXT_WPSC_EMAIL = '".TXT_WPSC_EMAIL."';\n\r";
-	echo "var TXT_WPSC_COUNTRY = '".TXT_WPSC_COUNTRY."';\n\r";
-	echo "var TXT_WPSC_TEXTAREA = '".TXT_WPSC_TEXTAREA."';\n\r";
-	echo "var TXT_WPSC_HEADING = '".TXT_WPSC_HEADING."';\n\r";
-	echo "var TXT_WPSC_COUPON = '".TXT_WPSC_COUPON."';\n\r";
+	echo "var __('Delete', 'wpsc') = '".__('Delete', 'wpsc')."';\n\r";
+	echo "var __('Text', 'wpsc') = '".__('Text', 'wpsc')."';\n\r";
+	echo "var __('Email', 'wpsc') = '".__('Email', 'wpsc')."';\n\r";
+	echo "var __('Country', 'wpsc') = '".__('Country', 'wpsc')."';\n\r";
+	echo "var __('Textarea', 'wpsc') = '".__('Textarea', 'wpsc')."';\n\r";
+	echo "var __('Heading', 'wpsc') = '".__('Heading', 'wpsc')."';\n\r";
+	echo "var __('Coupon', 'wpsc') = '".__('Coupon', 'wpsc')."';\n\r";
 
 	echo "var HTML_FORM_FIELD_TYPES =\" ".$form_types."; \" \n\r";  
 	echo "var HTML_FORM_FIELD_UNIQUE_NAMES = \" ".$unique_names."; \" \n\r";
 	
-	echo "var TXT_WPSC_LABEL = '".TXT_WPSC_LABEL."';\n\r";
-	echo "var TXT_WPSC_LABEL_DESC = '".TXT_WPSC_LABEL_DESC."';\n\r";
-	echo "var TXT_WPSC_ITEM_NUMBER = '".TXT_WPSC_ITEM_NUMBER."';\n\r";
-	echo "var TXT_WPSC_LIFE_NUMBER = '".TXT_WPSC_LIFE_NUMBER."';\n\r";
-	echo "var TXT_WPSC_PRODUCT_CODE = '".TXT_WPSC_PRODUCT_CODE."';\n\r";
-	echo "var TXT_WPSC_PDF = '".TXT_WPSC_PDF."';\n\r";
+	echo "var __('Label', 'wpsc') = '".__('Label', 'wpsc')."';\n\r";
+	echo "var __('Label Description', 'wpsc') = '".__('Label Description', 'wpsc')."';\n\r";
+	echo "var __('Item Number', 'wpsc') = '".__('Item Number', 'wpsc')."';\n\r";
+	echo "var __('Life Number', 'wpsc') = '".__('Life Number', 'wpsc')."';\n\r";
+	echo "var __('Product Code', 'wpsc') = '".__('Product Code', 'wpsc')."';\n\r";
+	echo "var __('PDF', 'wpsc') = '".__('PDF', 'wpsc')."';\n\r";
 	
-	echo "var TXT_WPSC_AND_ABOVE = '".TXT_WPSC_AND_ABOVE."';\n\r";
-	echo "var TXT_WPSC_IF_PRICE_IS = '".TXT_WPSC_IF_PRICE_IS."';\n\r";
-	echo "var TXT_WPSC_IF_WEIGHT_IS = '".TXT_WPSC_IF_WEIGHT_IS."';\n\r";
+	echo "var __(' and above', 'wpsc') = '".__(' and above', 'wpsc')."';\n\r";
+	echo "var __('If price is ', 'wpsc') = '".__('If price is ', 'wpsc')."';\n\r";
+	echo "var __('If weight is ', 'wpsc') = '".__('If weight is ', 'wpsc')."';\n\r";
 
 	exit();
 }
@@ -414,7 +414,7 @@ function wpsc_admin_latest_activity() {
 		 * This is the right hand side for the past 30 days revenue on the wp dashboard
 		 */
 		echo "<div id='leftDashboard'>";
-		echo "<strong class='dashboardHeading'>".TXT_WPSC_TOTAL_THIS_MONTH."</strong><br />";
+		echo "<strong class='dashboardHeading'>".__('Last 30 Days', 'wpsc')."</strong><br />";
 		echo "<p class='dashboardWidgetSpecial'>";
 		// calculates total amount of orders for the month
 		$year = date("Y");
@@ -427,13 +427,13 @@ function wpsc_admin_latest_activity() {
 		//calculates amount of money made for the month
 		$currentMonthsSales = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
 		echo $currentMonthsSales;
-		echo "<span class='dashboardWidget'>".TXT_WPSC_SALES_TITLE."</span>";
+		echo "<span class='dashboardWidget'>".__('Sales', 'wpsc')."</span>";
 		echo "</p>";
 		echo "<p class='dashboardWidgetSpecial'>";
 		echo "<span class='pricedisplay'>";
 		echo $currentMonthOrders;
 		echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_ORDERS_TITLE."</span>";
+		echo "<span class='dashboardWidget'>".__('Orders', 'wpsc')."</span>";
 		echo "</p>";
 		echo "<p class='dashboardWidgetSpecial'>";
 		//echo "<span class='pricedisplay'>";
@@ -443,7 +443,7 @@ function wpsc_admin_latest_activity() {
 			echo nzshpcrt_currency_display($monthsAverage,1);
 		}
 		//echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_AVGORDER_TITLE."</span>";
+		echo "<span class='dashboardWidget'>".__('Avg Orders', 'wpsc')."</span>";
 		echo "</p>";
 		
 		
@@ -453,17 +453,17 @@ function wpsc_admin_latest_activity() {
 		 */
 		
 		echo "<div id='rightDashboard' >";
-		echo "<strong class='dashboardHeading'>".TXT_WPSC_TOTAL_INCOME."</strong><br />";
+		echo "<strong class='dashboardHeading'>".__('Life Time', 'wpsc')."</strong><br />";
 
 		echo "<p class='dashboardWidgetSpecial'>";
 		echo nzshpcrt_currency_display(admin_display_total_price(),1);
-		echo "<span class='dashboardWidget'>".TXT_WPSC_SALES_TITLE."</span>";
+		echo "<span class='dashboardWidget'>".__('Sales', 'wpsc')."</span>";
 		echo "</p>";
 		echo "<p class='dashboardWidgetSpecial'>";
 		echo "<span class='pricedisplay'>";
 		echo $totalOrders;
 		echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_ORDERS_TITLE."</span>";
+		echo "<span class='dashboardWidget'>".__('Orders', 'wpsc')."</span>";
 		echo "</p>";
 		echo "<p class='dashboardWidgetSpecial'>";
 		//echo "<span class='pricedisplay'>";
@@ -475,7 +475,7 @@ function wpsc_admin_latest_activity() {
 		}
 		echo nzshpcrt_currency_display($totalAverage,1);
 		//echo "</span>";
-		echo "<span class='dashboardWidget'>".TXT_WPSC_AVGORDER_TITLE."</span>";
+		echo "<span class='dashboardWidget'>".__('Avg Orders', 'wpsc')."</span>";
 		echo "</p>";
 		echo "</div>";
 		echo "<div style='clear:both'></div>";
@@ -496,7 +496,7 @@ function wpsc_admin_dashboard_rightnow() {
   $user = wp_get_current_user();
 	if($user->user_level>9){
 		echo "<div>";
-		echo "<h3>".TXT_WPSC_E_COMMERCE."</h3>";
+		echo "<h3>".__('e-Commerce', 'wpsc')."</h3>";
 		echo "<p>";
 		do_action('wpsc_admin_pre_activity');
 //		wpsc_admin_latest_activity();
@@ -724,7 +724,7 @@ function wpsc_admin_4months_widget_rightnow() {
   $user = wp_get_current_user();
 	if($user->user_level>9){
 		echo "<div>";
-		echo "<h3>".TXT_WPSC_E_COMMERCE."</h3>";
+		echo "<h3>".__('e-Commerce', 'wpsc')."</h3>";
 		echo "<p>";
 		wpsc_dashboard_4months_widget();
 		echo "</div>";

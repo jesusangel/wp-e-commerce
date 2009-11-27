@@ -166,7 +166,7 @@ function wpsc_get_shipping_form($shippingname) {
 		
 		$output = array('name' => $shipping_module_name, 'form_fields' => $shipping_forms, 'has_submit_button' => 1);
   } else {
-		$output = array('name' => '&nbsp;', 'form_fields' => TXT_WPSC_CONFIGURE_SHIPPING_MODULES, 'has_submit_button' => 0);
+		$output = array('name' => '&nbsp;', 'form_fields' => __('To configure a shipping module select one on the left.', 'wpsc'), 'has_submit_button' => 0);
   }
   return $output;
 }

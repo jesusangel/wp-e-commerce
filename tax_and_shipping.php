@@ -31,7 +31,7 @@ if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode']))
 $base_region = get_option('base_region');
 ?>
 <div class="wrap">
-  <h2><?php echo TXT_WPSC_GSTTAXRATE;?></h2>
+  <h2><?php echo __('GST/Tax Rate', 'wpsc');?></h2>
   <?php
   if($changes_made === true)
     {
@@ -81,6 +81,6 @@ $base_region = get_option('base_region');
       }
   ?>
   <input type='hidden' name='wpsc_admin_action' value='change_region_tax' />
-  <input class='button-secondary' type='submit' name='submit' value='<?php echo TXT_WPSC_SAVE_CHANGES;?>' />
+  <input class='button-secondary' type='submit' name='submit' value='<?php echo __('Save Changes', 'wpsc');?>' />
   </form>
 </div>

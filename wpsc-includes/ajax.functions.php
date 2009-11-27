@@ -85,14 +85,14 @@ function wpsc_add_to_cart() {
 	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
    
   if($state == true) {
-		$cart_messages[] = str_replace("[product_name]", stripslashes($product['name']), TXT_WPSC_YOU_JUST_ADDED);
+		$cart_messages[] = str_replace("[product_name]", stripslashes($product['name']), __('You just added "[product_name]" to your cart.', 'wpsc'));
 	} else {
 	  if($parameters['quantity'] <= 0) {
-	    $cart_messages[] = TXT_WPSC_ZERO_QUANTITY_REQUESTED;
+	    $cart_messages[] = __('Sorry, but you cannot add zero items to your cart', 'wpsc');
 	  } else if($wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']) > 0) {
-			$cart_messages[] = str_replace("[number]", $wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']), TXT_WPSC_INSUFFICIENT_REMAINING);
+			$cart_messages[] = str_replace("[number]", $wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']), __('Sorry, but there are only [number] of this item in stock.', 'wpsc'));
 	  } else {
-	    $cart_messages[] = str_replace("[product_name]", $product['name'], TXT_WPSC_SORRY_NONE_LEFT);
+	    $cart_messages[] = str_replace("[product_name]", $product['name'], __('Sorry, but the item "[product_name]" is out of stock.', 'wpsc'));
 	  }
 	}
 	
@@ -506,12 +506,12 @@ function wpsc_submit_checkout() {
 	extract($form_validity); // extracts $is_valid and $error_messages
  	//	exit('<pre>'.print_r($results, true).'</pre>');
 	if (get_option('do_not_use_shipping') == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null)) {
-		$_SESSION['wpsc_checkout_misc_error_messages'][] = TXT_WPSC_PLEASEASELECTSHIPPINGMETHOD;
+		$_SESSION['wpsc_checkout_misc_error_messages'][] = __('You must select a shipping method, otherwise we cannot process your order.', 'wpsc');
 		$is_valid = false;
    	}
 		
 	if($_POST['agree'] != 'yes') {
-		$_SESSION['wpsc_checkout_misc_error_messages'][] = TXT_WPSC_PLEASEAGREETERMSANDCONDITIONS;
+		$_SESSION['wpsc_checkout_misc_error_messages'][] = __('Please agree to the terms and conditions, otherwise we cannot process your order.', 'wpsc');
 		$is_valid = false;		
 	}
 	
@@ -534,7 +534,7 @@ function wpsc_submit_checkout() {
 			}
 			$countries = $wpdb->get_col($sql);
 			if(in_array($selectedCountry[0]['id'], (array)$countries)){
-				$errormessage =sprintf(TXT_WPSC_CATEGORY_TARGETMARKET, $cartitem->product_name, $selectedCountry[0]['country']);
+				$errormessage =sprintf(__('Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above.', 'wpsc'), $cartitem->product_name, $selectedCountry[0]['country']);
 				$_SESSION['categoryAndShippingCountryConflict']= $errormessage;
 				$is_valid = false;
 			}
