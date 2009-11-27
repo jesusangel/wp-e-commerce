@@ -55,7 +55,11 @@ if(get_option('language_setting') != '') {
 } else {
   require(WPSC_FILE_PATH.'/languages/EN_en.php');
 }
-
+/* 
+  load plugin text domain for get_text files. Plugin language will be the same 
+  as wordpress language defined in wp-config.php line 67
+*/
+load_plugin_textdomain('wpsc', false, dirname( plugin_basename(__FILE__) ) . '/languages');
 
 
 
