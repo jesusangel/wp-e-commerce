@@ -90,7 +90,7 @@ function wpsc_admin_pages(){
 			}
 
 				
-			$purchase_log_page =  add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
+			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
 			$page_hooks[] = $purchase_log_page;
 
 
@@ -753,7 +753,7 @@ function wpsc_admin_notices() {
 		if((get_option('wpsc_default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".get_option('wpsc_default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
 			if(!$_POST['wpsc_default_category']) { // if we are not changing the default category
 				echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
-				echo "<p>".TXT_WPSC_NO_DEFAULT_PRODUCTS."</p>";
+				echo "<p>".__('Your "products page" is not currently set to display any products. You need to select a product grouping to display by default. <br /> This is set in the Shop Settings page.', 'wpsc')."</p>";
 				echo "</div>\n\r";
 			}
 		}

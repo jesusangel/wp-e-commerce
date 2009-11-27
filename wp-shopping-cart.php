@@ -133,10 +133,10 @@ if((get_option('wpsc_share_this') == 1) && (get_option('product_list_url') != ''
 
 $wpsc_currency_data = array();
 $wpsc_title_data = array();
-$GLOBALS['nzshpcrt_imagesize_info'] = TXT_WPSC_IMAGESIZEINFO;
-$nzshpcrt_log_states[0]['name'] = TXT_WPSC_RECEIVED;
+$GLOBALS['nzshpcrt_imagesize_info'] = __('Note: if this is blank, the image will not be resized', 'wpsc');
+$nzshpcrt_log_states[0]['name'] = __('Order Received', 'wpsc');
 $nzshpcrt_log_states[1]['name'] = TXT_WPSC_PROCESSING;
-$nzshpcrt_log_states[2]['name'] = TXT_WPSC_PROCESSED;
+$nzshpcrt_log_states[2]['name'] = __('Closed Order', 'wpsc');
 
 
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 

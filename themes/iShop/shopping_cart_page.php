@@ -154,7 +154,7 @@ if(wpsc_cart_item_count() > 0) :
 	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
 	<tr class="total_price">
 		<td colspan="3">
-			<?php echo TXT_WPSC_COUPONS; ?>
+			<?php echo __('Discount', 'wpsc'); ?>
 		</td>
 		<td colspan="2">
 			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
