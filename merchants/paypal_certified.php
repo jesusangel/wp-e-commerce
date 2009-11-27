@@ -434,8 +434,7 @@ $_SESSION['paypalExpressMessage'] ="
            <table width='400'>
             <tr>
                 <td align='left'><b>Order Total:</b></td>
-                <td align='left'>
-                  ".wpsc_cart_total()."</td>
+                <td align='left'>".$wpsc_cart->process_as_currency($_SESSION['paypalAmount']) ."</td>
             </tr>
 			<tr>
 			    <td align='left'><b>Shipping Address: </b></td>
