@@ -290,6 +290,7 @@ function wpsc_product_external_link($id){
 	$externalLink = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='external_link' LIMIT 1");
 	return $externalLink;
 }
+
 /**
 * wpsc product sku function
 * @return string - the product price
@@ -300,6 +301,21 @@ function wpsc_product_sku($id){
 	$sku = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='sku' LIMIT 1");
 	return $sku;
 }
+
+
+
+/**
+* wpsc product creation time function
+* @return string - the product price
+*/
+function wpsc_product_creation_time($format = null) {
+	global $wpsc_query;
+	if($format == null) {
+		$format = "Y-m-d H:i:s";
+	}
+	return mysql2date($format, $wpsc_query->product['date_added']);
+}
+
 
 /**
 * wpsc product has stock function

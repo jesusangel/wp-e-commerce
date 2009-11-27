@@ -477,7 +477,7 @@ function wpsc_cart_html_page() {
 
 // execute on POST and GET
 if($_REQUEST['wpsc_action'] == 'cart_html_page') {
-	add_action('init', 'wpsc_cart_html_page', 10000);
+	add_action('init', 'wpsc_cart_html_page', 110);
 }
 
 
@@ -645,7 +645,24 @@ if($_REQUEST['wpsc_action'] == 'submit_checkout') {
 	add_action('init', 'wpsc_submit_checkout');
 }
 
+if($_REQUEST['wpsc_action'] == 'gateway_notification') {
+	add_action('init', 'wpsc_gateway_notification');
+}
 
+
+function wpsc_product_rss() {
+	global $wpsc_query, $wpdb;
+	header("Content-Type: application/xml; charset=UTF-8");
+	header('Content-Disposition: inline; filename="E-Commerce_Product_List.rss"');
+  //echo "<pre>".print_r($wpsc_query,true)."</pre>";
+	require_once(WPSC_FILE_PATH.'/wpsc-includes/rss_template.php');
+	exit();
+}
+
+
+if($_REQUEST['wpsc_action'] == "rss") {
+	add_action('template_redirect', 'wpsc_product_rss', 80);
+}
 
 
 
@@ -666,6 +683,10 @@ if($_REQUEST['wpsc_action'] == 'gateway_notification') {
 	add_action('init', 'wpsc_gateway_notification');
 }
 
+if($_GET['termsandconds'] === 'true'){
+	echo stripslashes(get_option('terms_and_conditions'));
+	exit();
+}
 
 
 
@@ -781,4 +802,130 @@ function wpsc_change_tax() {
 if(($_REQUEST['wpsc_ajax_action'] == 'change_tax')) {
 	add_action('init', 'wpsc_change_tax');
 }
+
+
+
+
+      
+
+
+function nzshpcrt_download_file() {
+  global $wpdb,$user_level,$wp_rewrite; 
+  get_currentuserinfo();  
+
+  
+  if(isset($_GET['downloadid'])) {
+    // strip out anything that isnt 'a' to 'z' or '0' to '9'
+    //ini_set('max_execution_time',10800);
+    $downloadid = preg_replace("/[^a-z0-9]+/i",'',strtolower($_GET['downloadid']));
+    
+		$download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `uniqueid` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' LIMIT 1",ARRAY_A);
+		
+		if(($download_data == null) && is_numeric($downloadid)) {
+		  $download_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `id` = '".$downloadid."' AND `downloads` > '0' AND `active`='1' AND `uniqueid` IS NULL LIMIT 1",ARRAY_A);
+		}
+		
+		if((get_option('wpsc_ip_lock_downloads') == 1) && ($_SERVER['REMOTE_ADDR'] != null)) {
+		  $ip_number = $_SERVER['REMOTE_ADDR'];
+		  if($download_data['ip_number'] == '') {
+		    // if the IP number is not set, set it
+		    $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `ip_number` = '{$ip_number}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+		  } else if($ip_number != $download_data['ip_number']) {
+		    // if the IP number is set but does not match, fail here.
+				exit(WPSC_DOWNLOAD_INVALID);
+		  }
+		}
+   
+    if($download_data != null) {
+			if($download_data['fileid'] > 0) {
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+      } else {
+				$old_file_data = $wpdb->get_row("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+			}
+      
+      if((int)$download_data['downloads'] >= 1) {
+        $download_count = (int)$download_data['downloads'] - 1;
+      } else {
+        $download_count = 0;
+      }
+          $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+	  $cart_contents = $wpdb->get_results('SELECT `'.WPSC_TABLE_CART_CONTENTS.'`.*,`'.WPSC_TABLE_PRODUCT_LIST.'`.`file` FROM `'.WPSC_TABLE_CART_CONTENTS.'` LEFT JOIN `'.WPSC_TABLE_PRODUCT_LIST.'` ON `'.WPSC_TABLE_CART_CONTENTS.'`.`prodid`= `'.WPSC_TABLE_PRODUCT_LIST.'`.`id` WHERE `purchaseid` ='.$download_data['purchid'], ARRAY_A);
+	    $dl = 0;
+
+      foreach($cart_contents as $cart_content) {
+      	if($cart_content['file'] == 1) {
+      		$dl++;
+      	}
+      }
+      if(count($cart_contents) == $dl) {
+    //  	exit('called');
+         $wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
+      }
+
+	  //exit('<pre>'.print_r($cart_contents,true).'</pre>');
+   
+      if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
+        header('Content-Type: '.$file_data['mimetype']);      
+        header('Content-Length: '.filesize(WPSC_FILE_DIR.$file_data['idhash']));
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Disposition: attachment; filename="'.stripslashes($file_data['filename']).'"');
+        if(isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != '')) {
+          /*
+          There is a bug in how IE handles downloads from servers using HTTPS, this is part of the fix, you may also need:
+            session_cache_limiter('public');
+            session_cache_expire(30);
+          At the start of your index.php file or before the session is started
+          */
+          header("Pragma: public");
+          header("Expires: 0");      
+          header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+          header("Cache-Control: public"); 
+				} else {
+					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');       
+				}        
+        $filename = WPSC_FILE_DIR.$file_data['idhash'];
+        // destroy the session to allow the file to be downloaded on some buggy browsers and webservers
+        session_destroy();
+        wpsc_readfile_chunked($filename);   
+        exit();
+			}
+		} else {
+			exit(WPSC_DOWNLOAD_INVALID);
+		}
+	} else {
+		if(($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {
+			$product_id = $_GET['product_id'];
+			$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
+			if(is_numeric($product_data[0]['file']) && ($product_data[0]['file'] > 0)) {
+				$file_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_data[0]['file']."' LIMIT 1",ARRAY_A) ;
+				$file_data = $file_data[0];
+				if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
+					header('Content-Type: '.$file_data['mimetype']);
+					header('Content-Length: '.filesize(WPSC_FILE_DIR.$file_data['idhash']));
+					header('Content-Transfer-Encoding: binary');
+					if($_GET['preview_track'] != 'true') {
+						header('Content-Disposition: attachment; filename="'.$file_data['filename'].'"');
+					} else {
+						header('Content-Disposition: inline; filename="'.$file_data['filename'].'"');
+					}
+					if(isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != '')) {
+						header("Pragma: public");
+						header("Expires: 0");      
+						header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+						header("Cache-Control: public"); 
+					} else {
+						header('Cache-Control: must-revalidate, post-check=0, pre-check=0');       
+					}             
+					$filename = WPSC_FILE_DIR.$file_data['idhash'];  
+					session_destroy();
+					wpsc_readfile_chunked($filename);   
+					exit();
+				}            
+			}
+    }
+  }
+}
+
+add_action('init', 'nzshpcrt_download_file');
 ?>

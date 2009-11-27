@@ -90,8 +90,8 @@ function wpsc_admin_pages(){
 			}
 
 				
-			$page_hooks[] =  add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
-
+			$purchase_log_page =  add_submenu_page($base_page, TXT_WPSC_PURCHASELOG, TXT_WPSC_PURCHASELOG, 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
+			$page_hooks[] = $purchase_log_page;
 
 
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
@@ -152,16 +152,25 @@ function wpsc_admin_pages(){
 					add_action("load-$page_hook", 'wpsc_admin_edit_products_page_js');
 				break;
 
-				
 				case $edit_options_page:
 					add_action("load-$page_hook", 'wpsc_admin_include_optionspage_css_and_js');
 				break;
+
+				case $purchase_log_page:
+					add_action('admin_head', 'wpsc_product_log_rss_feed');
+				break;
+				
 			}
 
 		}
 		
 		return;
   }
+
+
+function wpsc_product_log_rss_feed() {
+  echo "<link type='application/rss+xml' href='".get_option('siteurl')."/wp-admin/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP E-Commerce Purchase Log RSS' rel='alternate'/>";
+}
 
 function wpsc_admin_include_coupon_js() {
 	$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
@@ -475,6 +484,10 @@ function wpsc_admin_latest_activity() {
 }
 add_action('wpsc_admin_pre_activity','wpsc_admin_latest_activity');
 
+
+
+
+
 /*
  *	Pre-2.7 Dashboard Information
  */
@@ -725,4 +738,29 @@ if( IS_WP27 ) {
 }
 
 
+
+
+function wpsc_fav_action($actions) {
+    $actions['admin.php?page=wpsc-edit-products'] = array('New Product', 'manage_options');
+    return $actions;
+}
+add_filter('favorite_actions', 'wpsc_fav_action');
+
+function wpsc_admin_notices() {
+  global $wpdb;
+//  exit(get_option('wpsc_default_category'));
+  if(get_option('wpsc_default_category') != 'all+list' && get_option('wpsc_default_category') != 'all' && get_option('wpsc_default_category') != 'list') {
+		if((get_option('wpsc_default_category') < 1) || $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".get_option('wpsc_default_category')."') AND `active` NOT IN ('1');")) {  // if there is no default category or it is deleted
+			if(!$_POST['wpsc_default_category']) { // if we are not changing the default category
+				echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
+				echo "<p>".TXT_WPSC_NO_DEFAULT_PRODUCTS."</p>";
+				echo "</div>\n\r";
+			}
+		}
+  }
+}
+
+if(stristr($_GET['page'], WPSC_DIR_NAME)) {
+  add_action('admin_notices', 'wpsc_admin_notices');
+}
 ?>

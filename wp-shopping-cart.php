@@ -127,9 +127,19 @@ if (!IS_WP25) {
 	require_once(WPSC_FILE_PATH.'/js/tinymce3/tinymce.php');
 }
 
+if((get_option('wpsc_share_this') == 1) && (get_option('product_list_url') != '')) {
+  if(stristr(("http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
+    include_once(WPSC_FILE_PATH."/share-this.php");
+  }
+}
 
-/// OLD CODE INCLUDED HERE
-include_once('wp-shopping-cart.old.php');
+$wpsc_currency_data = array();
+$wpsc_title_data = array();
+$GLOBALS['nzshpcrt_imagesize_info'] = TXT_WPSC_IMAGESIZEINFO;
+$nzshpcrt_log_states[0]['name'] = TXT_WPSC_RECEIVED;
+$nzshpcrt_log_states[1]['name'] = TXT_WPSC_PROCESSING;
+$nzshpcrt_log_states[2]['name'] = TXT_WPSC_PROCESSED;
+
 
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
 require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
@@ -392,6 +402,27 @@ if(!function_exists('wpsc_initialisation')){
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
 
+
+
+
+
+switch(get_option('cart_location')) {
+  case 1:
+  add_action('wp_list_pages','nzshpcrt_shopping_basket');
+  break;
+  
+  case 2:
+  add_action('the_content', 'nzshpcrt_shopping_basket' , 14);
+  break;
+  
+  default:
+  break;
+}
+add_action('plugins_loaded', 'widget_wp_shopping_cart_init', 10);
+
+
+// refresh page urls when permalinks are turned on or altered
+add_filter('mod_rewrite_rules', 'wpsc_refresh_page_urls');
 
 
 

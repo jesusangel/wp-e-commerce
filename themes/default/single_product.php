@@ -45,8 +45,6 @@ $image_height = get_option('single_view_image_height');
 							<?php				
 								do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product);
 							?>
-						
-						
 						<div class="wpsc_description"><?php echo wpsc_the_product_description(); ?></div>
 		
 						<?php

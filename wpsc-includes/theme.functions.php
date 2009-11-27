@@ -128,6 +128,13 @@ if(strpos($_SERVER['SCRIPT_NAME'], "wp-admin") === false) {
 	add_action('init', 'wpsc_enqueue_user_script_and_css');
 }
 
+function wpsc_product_list_rss_feed() {
+	$rss_url = add_query_arg('wpsc_action', 'rss');
+  echo "<link rel='alternate' type='application/rss+xml' title='".get_option('blogname')." Product List RSS' href='{$rss_url}'/>";
+}
+add_action('wp_head', 'wpsc_product_list_rss_feed');
+
+
 function wpsc_user_dynamic_js() { 
  	header('Content-Type: text/javascript');
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
@@ -682,9 +689,7 @@ add_filter('get_the_excerpt', 'wpsc_enable_page_filters', 1000000);
  */
 
 function wpsc_body_class( $classes ) {
-	
 	global $wp_query, $wpsc_query;
-	
 	$post_id = $wp_query->post->ID;
 	$page_url = get_permalink($post_id);
 	
@@ -694,9 +699,7 @@ function wpsc_body_class( $classes ) {
 		$classes[] = 'wpsc';
 	
 		if ( !is_array($wpsc_query->query) ) {
-	
 			$classes[] = 'wpsc-home';
-			
 		}
 	 
 		if ( wpsc_is_single_product() ) {
