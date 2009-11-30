@@ -203,6 +203,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 		unset($_SESSION['WpscGatewayErrorMessage']);
 		$_SESSION['paypalpro'] = 'success';
 		header("Location: ".get_option('transact_url').$seperator."sessionid=".$sessionid);
+		exit(); // on some servers, a header that is not followed up with an exit does nothing.
 	}else{
 		//redirect back to checkout page with errors
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '5' WHERE `sessionid`=".$sessionid;

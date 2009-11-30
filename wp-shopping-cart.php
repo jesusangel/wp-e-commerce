@@ -315,9 +315,9 @@ if($v1[0] >= 2.8){
 	}
 }
 
-include_once("install_and_update.php");
-register_activation_hook(__FILE__, 'wpsc_install');
 
+include_once(WPSC_FILE_PATH."/wpsc-includes/install_and_update.functions.php");
+register_activation_hook(__FILE__, 'wpsc_install');
 
 
 /**
