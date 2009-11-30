@@ -29,10 +29,10 @@ if(!isset($purchlogs)){
 		<?php //screen_icon(); ?>
 		<h2><?php echo wp_specialchars( __('Sales', 'wpsc') ); ?> </h2>
 		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
-		<?php if(!isset($_REQUEST['purchaselog_id'])){
-
-		  	$columns = array(
-		  		'cb' => '<input type="checkbox" />',
+		<?php
+			if(!isset($_REQUEST['purchaselog_id'])){
+				$columns = array(
+					'cb' => '<input type="checkbox" />',
 					'date' => 'Date',
 					'name' => '',
 					'amount' => 'Amount',
@@ -41,7 +41,7 @@ if(!isset($purchlogs)){
 					'delete' => 'Delete',
 					'track' => 'Track'
 				);
-				register_column_headers('display-sales-list', $columns);	
+				register_column_headers('display-sales-list', $columns);
 				///// start of update message section //////
 				
 				//$fixpage = get_option('siteurl').'/wp-admin/admin.php?page='.WPSC_FOLDER.'/wpsc-admin/purchlogs_upgrade.php';

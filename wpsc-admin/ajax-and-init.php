@@ -45,20 +45,24 @@ if($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer') {
 
  function wpsc_purchlog_email_trackid() {
   	global $wpdb;
-  	$id = $_POST['purchlog_id'];
-  	$sql = "SELECT `track_id` FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE `id`=".$id;
-  	$trackingid = $wpdb->get_var($sql);
-	$message = get_option('wpsc_trackingid_message');
-	$message = str_replace('%trackid%',$trackingid,$message);
+  	$id = absint($_POST['purchlog_id']);
+  	$trackingid = $wpdb->get_var("SELECT `track_id` FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE `id`={$id} LIMIT 1");
+
+		$message = get_option('wpsc_trackingid_message');
+		$message = str_replace('%trackid%',$trackingid,$message);
     $message = str_replace('%shop_name%',get_option('blogname'),$message);
-	$email_form_field = $wpdb->get_results("SELECT `id`,`type` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1",ARRAY_A);
-	$email = $wpdb->get_var("SELECT `value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$id." AND `form_id` = '".$email_form_field[0]['id']."' LIMIT 1");
+
+		$email_form_field = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1");
+		$email = $wpdb->get_var("SELECT `value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id`=".$id." AND `form_id` = '$email_form_field' LIMIT 1");
+
+		
     $subject = get_option('wpsc_trackingid_subject');
     $subject = str_replace('%shop_name%',get_option('blogname'),$subject);
     wp_mail($email, $subject, $message,"From: ".get_option('return_email')." <".get_option('return_email').">");
     //exit($email.'<br /> '.$subject.'<br /> '. $message.'<br /> '."From: ".get_option('return_email')." <".get_option('return_email').">");
+    exit(true);
 }
- 
+
  
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_email_trackid') {
 	add_action('admin_init', 'wpsc_purchlog_email_trackid');

@@ -163,7 +163,13 @@ function wpsc_admin_pages(){
 			}
 
 		}
+
 		
+		/// some updating code is run from here, is as good a place as any, and better than some
+		if((get_option('wpsc_trackingid_subject') ==  null) && (get_option('wpsc_trackingid_message') ==  null)) {
+			update_option('wpsc_trackingid_subject', __('Product Tracking Email', 'wpsc'));
+			update_option('wpsc_trackingid_message', __("Track & Trace means you may track the progress of your parcel with our online parcel tracker, just login to our website and enter the following Tracking ID to view the status of your order.\n\nTracking ID: %trackid%\n", 'wpsc'));
+		}
 		return;
   }
 

@@ -134,6 +134,10 @@ global $wpdb;
 					<th><strong><?php echo __('Admin Report', 'wpsc');?></strong></th>
 					<td><textarea name="wpsc_options[wpsc_email_admin]" cols='' rows='' style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_email_admin'));?></textarea></td>
 				</tr>
+			</table>
+			
+			<h3 class="form_group"><?php echo __("Track and Trace settings", 'wpsc');?>:</h3>
+			<table class='wpsc_options form-table'>
 				<tr>
 					<td class='wpsc_td_note' colspan='2'>
 						<span class="wpscsmall description">
