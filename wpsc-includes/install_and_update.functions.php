@@ -57,18 +57,18 @@ function wpsc_install() {
   if($add_initial_category[0]['count'] == 0) {
 		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (1, 'Categories', 'Product Categories', '1', '1')");
 		$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");			
-    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('1', '".TXT_WPSC_EXAMPLECATEGORY."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");    
-    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".TXT_WPSC_EXAMPLEBRAND."', '".TXT_WPSC_EXAMPLEDETAILS."', '1');");
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('1', '".__('Example category', 'wpsc')."', '".__('Example details', 'wpsc')."', '1');");    
+    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".__('Example Brand', 'wpsc')."', '".__('Example details', 'wpsc')."', '1');");
 	}
   
   $purchase_statuses_data  = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PURCHASE_STATUSES."`",ARRAY_A);
   if($purchase_statuses_data[0]['count'] == 0) {
     $wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_STATUSES."` (`name` , `active` , `colour` ) 
     VALUES
-    ('".TXT_WPSC_RECEIVED."', '1', ''),
-    ('".TXT_WPSC_ACCEPTED_PAYMENT."', '1', ''),
-    ('".TXT_WPSC_JOB_DISPATCHED."', '1', ''),
-    ('".TXT_WPSC_PROCESSED."', '1', '');");
+    ('".__('Order Received', 'wpsc')."', '1', ''),
+    ('".__('Accepted Payment', 'wpsc')."', '1', ''),
+    ('".__('Job Dispatched', 'wpsc')."', '1', ''),
+    ('".__('Closed Order', 'wpsc')."', '1', '');");
 	}
 
   $check_category_assoc = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`;",ARRAY_A);
@@ -84,56 +84,56 @@ function wpsc_install() {
 	
 	
 
-  add_option('show_thumbnails', 1, TXT_WPSC_SHOWTHUMBNAILS, "yes");
+  add_option('show_thumbnails', 1, __('Show Thumbnails', 'wpsc'), "yes");
 
-  add_option('product_image_width', '', TXT_WPSC_PRODUCTIMAGEWIDTH, 'yes');
-  add_option('product_image_height', '', TXT_WPSC_PRODUCTIMAGEHEIGHT, 'yes');
+  add_option('product_image_width', '', __('product image width', 'wpsc'), 'yes');
+  add_option('product_image_height', '', __('product image height', 'wpsc'), 'yes');
 
-  add_option('category_image_width', '', TXT_WPSC_CATEGORYIMAGEWIDTH, 'yes');
-  add_option('category_image_height', '', TXT_WPSC_CATEGORYIMAGEHEIGHT, 'yes');
+  add_option('category_image_width', '', __('product group image width', 'wpsc'), 'yes');
+  add_option('category_image_height', '', __('product group image height', 'wpsc'), 'yes');
 
-  add_option('product_list_url', '', TXT_WPSC_PRODUCTLISTURL, 'yes');
-  add_option('shopping_cart_url', '', TXT_WPSC_SHOPPINGCARTURL, 'yes');
-  add_option('checkout_url', '', TXT_WPSC_CHECKOUTURL, 'yes');
-  add_option('transact_url', '', TXT_WPSC_TRANSACTURL, 'yes');
-  add_option('payment_gateway', '', TXT_WPSC_PAYMENTGATEWAY, 'yes');
+  add_option('product_list_url', '', __('The location of the product list', 'wpsc'), 'yes');
+  add_option('shopping_cart_url', '', __('The location of the shopping cart', 'wpsc'), 'yes');
+  add_option('checkout_url', '', __('The location of the checkout page', 'wpsc'), 'yes');
+  add_option('transact_url', '', __('The location of the transaction detail page', 'wpsc'), 'yes');
+  add_option('payment_gateway', '', __('The payment gateway to use', 'wpsc'), 'yes');
   if(function_exists('register_sidebar') ) {
-    add_option('cart_location', '4', TXT_WPSC_CARTLOCATION, 'yes');
+    add_option('cart_location', '4', __('Cart Location', 'wpsc'), 'yes');
 	} else {
-    add_option('cart_location', '1', TXT_WPSC_CARTLOCATION, 'yes');
+    add_option('cart_location', '1', __('Cart Location', 'wpsc'), 'yes');
 	}
 
   if ( function_exists('register_sidebar') ) {
-    add_option('cart_location', '4', TXT_WPSC_CARTLOCATION, 'yes');
+    add_option('cart_location', '4', __('Cart Location', 'wpsc'), 'yes');
   } else {
-		add_option('cart_location', '1', TXT_WPSC_CARTLOCATION, 'yes');
+		add_option('cart_location', '1', __('Cart Location', 'wpsc'), 'yes');
   }
 
-  //add_option('show_categorybrands', '0', TXT_WPSC_SHOWCATEGORYBRANDS, 'yes');
+  //add_option('show_categorybrands', '0', __('Display categories or brands or both', 'wpsc'), 'yes');
 
-  add_option('currency_type', '156', TXT_WPSC_CURRENCYTYPE, 'yes');
-  add_option('currency_sign_location', '3', TXT_WPSC_CURRENCYSIGNLOCATION, 'yes');
+  add_option('currency_type', '156', __('Currency type', 'wpsc'), 'yes');
+  add_option('currency_sign_location', '3', __('Currency sign location', 'wpsc'), 'yes');
 
-  add_option('gst_rate', '1', TXT_WPSC_GSTRATE, 'yes');
+  add_option('gst_rate', '1', __('the GST rate', 'wpsc'), 'yes');
 
-  add_option('max_downloads', '1', TXT_WPSC_MAXDOWNLOADS, 'yes');
+  add_option('max_downloads', '1', __('the download limit', 'wpsc'), 'yes');
 
-  add_option('display_pnp', '1', TXT_WPSC_DISPLAYPNP, 'yes');
+  add_option('display_pnp', '1', __('Display or hide postage and packaging', 'wpsc'), 'yes');
 
-  add_option('display_specials', '1', TXT_WPSC_DISPLAYSPECIALS, 'yes');
+  add_option('display_specials', '1', __('Display or hide specials on the sidebar', 'wpsc'), 'yes');
   add_option('do_not_use_shipping', '0', 'do_not_use_shipping', 'yes');
 
-  add_option('postage_and_packaging', '0', TXT_WPSC_POSTAGEAND_PACKAGING, 'yes');
+  add_option('postage_and_packaging', '0', __('Default postage and packaging', 'wpsc'), 'yes');
   
-  add_option('purch_log_email', '', TXT_WPSC_PURCHLOGEMAIL, 'yes');
-  add_option('return_email', '', TXT_WPSC_RETURNEMAIL, 'yes');
-  add_option('terms_and_conditions', '', TXT_WPSC_TERMSANDCONDITIONS, 'yes');
+  add_option('purch_log_email', '', __('Email address that purchase log is sent to', 'wpsc'), 'yes');
+  add_option('return_email', '', __('Email address that purchase reports are sent from', 'wpsc'), 'yes');
+  add_option('terms_and_conditions', '', __('Checkout terms and conditions', 'wpsc'), 'yes');
 
-	add_option('google_key', 'none', TXT_WPSC_GOOGLEMECHANTKEY, 'yes');
-	add_option('google_id', 'none', TXT_WPSC_GOOGLEMECHANTID, 'yes');
+	add_option('google_key', 'none', __('Google Merchant Key', 'wpsc'), 'yes');
+	add_option('google_id', 'none', __('Google Merchant ID', 'wpsc'), 'yes');
  
-   add_option('default_brand', 'none', TXT_WPSC_DEFAULTBRAND, 'yes');
-   add_option('wpsc_default_category', 'all', TXT_WPSC_DEFAULTCATEGORY, 'yes');
+   add_option('default_brand', 'none', __('Default Brand', 'wpsc'), 'yes');
+   add_option('wpsc_default_category', 'all', __('Select what product group you want to display on the products page', 'wpsc'), 'yes');
    
    add_option('product_view', 'default', "", 'yes');
    add_option('add_plustax', 'default', "", '1');
@@ -144,24 +144,24 @@ function wpsc_install() {
   if(!((get_option('show_categorybrands') > 0) && (get_option('show_categorybrands') < 3))) {
     update_option('show_categorybrands', 2);
 	}
-  //add_option('show_categorybrands', '0', TXT_WPSC_SHOWCATEGORYBRANDS, 'yes');
+  //add_option('show_categorybrands', '0', __('Display categories or brands or both', 'wpsc'), 'yes');
   /* PayPal options */
-  add_option('paypal_business', '', TXT_WPSC_PAYPALBUSINESS, 'yes');
-  add_option('paypal_url', '', TXT_WPSC_PAYPALURL, 'yes');
-  add_option('paypal_ipn', '1', TXT_WPSC_PAYPALURL, 'yes');
+  add_option('paypal_business', '', __('paypal business', 'wpsc'), 'yes');
+  add_option('paypal_url', '', __('paypal url', 'wpsc'), 'yes');
+  add_option('paypal_ipn', '1', __('paypal url', 'wpsc'), 'yes');
   //update_option('paypal_url', "https://www.sandbox.paypal.com/xclick");
   
   
-  add_option('paypal_multiple_business', '', TXT_WPSC_PAYPALBUSINESS, 'yes');
+  add_option('paypal_multiple_business', '', __('paypal business', 'wpsc'), 'yes');
   
   if(get_option('paypal_multiple_url') == null) {
-    add_option('paypal_multiple_url', TXT_WPSC_PAYPALURL, 'yes');
+    add_option('paypal_multiple_url', __('paypal url', 'wpsc'), 'yes');
     update_option('paypal_multiple_url', "https://www.paypal.com/cgi-bin/webscr");
 	}
 
-  add_option('product_ratings', '0', TXT_WPSC_SHOWPRODUCTRATINGS, 'yes');
-  add_option('wpsc_email_receipt', TXT_WPSC_DEFAULT_PURCHASE_RECEIPT, 'yes');
-  add_option('wpsc_email_admin', TXT_WPSC_DEFAULT_PURCHASE_REPORT, 'yes');
+  add_option('product_ratings', '0', __('Show Product Ratings', 'wpsc'), 'yes');
+  add_option('wpsc_email_receipt', __('Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.All prices include tax and postage and packaging where applicable.You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc'), 'yes');
+  add_option('wpsc_email_admin', __('%product_list%%total_shipping%%total_price%', 'wpsc'), 'yes');
   if(get_option('wpsc_selected_theme') == '') {
     add_option('wpsc_selected_theme', 'default', 'Selected Theme', 'yes');
     update_option('wpsc_selected_theme', "default");
@@ -204,31 +204,31 @@ function wpsc_install() {
   
   $num=0;
   $pages[$num]['name'] = 'products-page';
-  $pages[$num]['title'] = TXT_WPSC_PRODUCTSPAGE;
+  $pages[$num]['title'] = __('Products Page', 'wpsc');
   $pages[$num]['tag'] = '[productspage]';
   $pages[$num]['option'] = 'product_list_url';
   
   $num++;
   $pages[$num]['name'] = 'checkout';
-  $pages[$num]['title'] = TXT_WPSC_CHECKOUT;
+  $pages[$num]['title'] = __('Checkout', 'wpsc');
   $pages[$num]['tag'] = '[shoppingcart]';
   $pages[$num]['option'] = 'shopping_cart_url';
   
 //   $num++;
 //   $pages[$num]['name'] = 'enter-details';
-//   $pages[$num]['title'] = TXT_WPSC_ENTERDETAILS;
+//   $pages[$num]['title'] = __('Enter Your Details', 'wpsc');
 //   $pages[$num]['tag'] = '[checkout]';
 //   $pages[2$num]['option'] = 'checkout_url';
 
   $num++;
   $pages[$num]['name'] = 'transaction-results';
-  $pages[$num]['title'] = TXT_WPSC_TRANSACTIONRESULTS;
+  $pages[$num]['title'] = __('Transaction Results', 'wpsc');
   $pages[$num]['tag'] = '[transactionresults]';
   $pages[$num]['option'] = 'transact_url';
   
   $num++;
   $pages[$num]['name'] = 'your-account';
-  $pages[$num]['title'] = TXT_WPSC_YOUR_ACCOUNT;
+  $pages[$num]['title'] = __('Your Account', 'wpsc');
   $pages[$num]['tag'] = '[userlog]';
   $pages[$num]['option'] = 'user_account_url';
   
@@ -644,27 +644,27 @@ function wpsc_add_checkout_fields() {
 	
 	if($data_forms[0]['count'] == 0) { 
 	
-   $sql = " INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name`) VALUES ( '".TXT_WPSC_YOUR_BILLING_CONTACT_DETAILS."', 'heading', '0', '0', '', '1', 1,''),
-	( '".TXT_WPSC_FIRSTNAME."', 'text', '1', '1', '', '1', 2,'billingfirstname'),
-	( '".TXT_WPSC_LASTNAME."', 'text', '1', '1', '', '1', 3,'billinglastname'),
-	( '".TXT_WPSC_ADDRESS."', 'address', '1', '0', '', '1', 4,'billingaddress'),
-	( '".TXT_WPSC_CITY."', 'city', '1', '0', '', '1', 5,'billingcity'),
-	( '".TXT_WPSC_COUNTRY."', 'country', '1', '0', '', '1', 7,'billingcountry'),
-	( '".TXT_WPSC_POSTAL_CODE."', 'text', '0', '0', '', '1', 8,'billingpostcode'),
-	( '".TXT_WPSC_EMAIL."', 'email', '1', '1', '', '1', 9,'billingemail'),
-	( '".TXT_WPSC_DELIVER_TO_A_FRIEND."', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
-	( '".TXT_WPSC_FIRSTNAME."', 'text', '0', '0', '', '1', 11,'shippingfirstname'),
-	( '".TXT_WPSC_LASTNAME."', 'text', '0', '0', '', '1', 12,'shippinglastname'),
-	( '".TXT_WPSC_ADDRESS."', 'address', '0', '0', '', '1', 13,'shippingaddress'),
-	( '".TXT_WPSC_CITY."', 'city', '0', '0', '', '1', 14,'shippingcity'),
-	( '".TXT_WPSC_STATE."', 'text', '0', '0', '', '1', 15,'shippingstate'),
-	( '".TXT_WPSC_COUNTRY."', 'delivery_country', '0', '0', '', '1', 16,'shippingcountry'),
-	( '".TXT_WPSC_POSTAL_CODE."', 'text', '0', '0', '', '1', 17,'shippingpostcode');";
+   $sql = " INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name`) VALUES ( '".__('1. Your billing/contact details', 'wpsc')."', 'heading', '0', '0', '', '1', 1,''),
+	( '".__('First Name', 'wpsc')."', 'text', '1', '1', '', '1', 2,'billingfirstname'),
+	( '".__('Last Name', 'wpsc')."', 'text', '1', '1', '', '1', 3,'billinglastname'),
+	( '".__('Address', 'wpsc')."', 'address', '1', '0', '', '1', 4,'billingaddress'),
+	( '".__('City', 'wpsc')."', 'city', '1', '0', '', '1', 5,'billingcity'),
+	( '".__('Country', 'wpsc')."', 'country', '1', '0', '', '1', 7,'billingcountry'),
+	( '".__('Postal Code', 'wpsc')."', 'text', '0', '0', '', '1', 8,'billingpostcode'),
+	( '".__('Email', 'wpsc')."', 'email', '1', '1', '', '1', 9,'billingemail'),
+	( '".__('2. Shipping details', 'wpsc')."', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
+	( '".__('First Name', 'wpsc')."', 'text', '0', '0', '', '1', 11,'shippingfirstname'),
+	( '".__('Last Name', 'wpsc')."', 'text', '0', '0', '', '1', 12,'shippinglastname'),
+	( '".__('Address', 'wpsc')."', 'address', '0', '0', '', '1', 13,'shippingaddress'),
+	( '".__('City', 'wpsc')."', 'city', '0', '0', '', '1', 14,'shippingcity'),
+	( '".__('State', 'wpsc')."', 'text', '0', '0', '', '1', 15,'shippingstate'),
+	( '".__('Country', 'wpsc')."', 'delivery_country', '0', '0', '', '1', 16,'shippingcountry'),
+	( '".__('Postal Code', 'wpsc')."', 'text', '0', '0', '', '1', 17,'shippingpostcode');";
 //	exit($sql);
 	$wpdb->query($sql);  
 		update_option('country_form_field', $country_form_id[0]['id']);
 		update_option('email_form_field', $email_form_id[0]['id']);
-		$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name` ) VALUES ( '".TXT_WPSC_PHONE."', 'text', '1', '0', '', '1', '8','billingphone');");
+		$wpdb->query("INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name` ) VALUES ( '".__('Phone', 'wpsc')."', 'text', '1', '0', '', '1', '8','billingphone');");
 	}
 		
 }
