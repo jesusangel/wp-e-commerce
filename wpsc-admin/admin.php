@@ -298,7 +298,7 @@ function wpsc_admin_dynamic_js() {
 	'delivertoafriend', 'shippingfirstname', 'shippinglastname', 'shippingaddress',
 	'shippingcity', 'shippingstate', 'shippingcountry', 'shippingpostcode');
 	foreach($form_types1 as $form_type) {
-			$form_types .= "<option value='".$form_type."'>".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
+			$form_types .= "<option value='".$form_type."'>".__($form_type, 'wpsc')."</option>";
 	}
 
 	$unique_names = "<option value='-1'>Select a Unique Name</option>";
@@ -325,27 +325,27 @@ function wpsc_admin_dynamic_js() {
 	
 	echo "var hidden_boxes = '".$hidden_boxes."';\n\r";
 	echo "var IS_WP27 = '".IS_WP27."';\n\r";
-	echo "var __('Delete', 'wpsc') = '".__('Delete', 'wpsc')."';\n\r";
-	echo "var __('Text', 'wpsc') = '".__('Text', 'wpsc')."';\n\r";
-	echo "var __('Email', 'wpsc') = '".__('Email', 'wpsc')."';\n\r";
-	echo "var __('Country', 'wpsc') = '".__('Country', 'wpsc')."';\n\r";
-	echo "var __('Textarea', 'wpsc') = '".__('Textarea', 'wpsc')."';\n\r";
-	echo "var __('Heading', 'wpsc') = '".__('Heading', 'wpsc')."';\n\r";
-	echo "var __('Coupon', 'wpsc') = '".__('Coupon', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_DELETE = '".__('Delete', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_TEXT = '".__('Text', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_EMAIL = '".__('Email', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_COUNTRY = '".__('Country', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_TEXTAREA = '".__('Textarea', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_HEADING = '".__('Heading', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_COUPON = '".__('Coupon', 'wpsc')."';\n\r";
 
 	echo "var HTML_FORM_FIELD_TYPES =\" ".$form_types."; \" \n\r";  
 	echo "var HTML_FORM_FIELD_UNIQUE_NAMES = \" ".$unique_names."; \" \n\r";
 	
-	echo "var __('Label', 'wpsc') = '".__('Label', 'wpsc')."';\n\r";
-	echo "var __('Label Description', 'wpsc') = '".__('Label Description', 'wpsc')."';\n\r";
-	echo "var __('Item Number', 'wpsc') = '".__('Item Number', 'wpsc')."';\n\r";
-	echo "var __('Life Number', 'wpsc') = '".__('Life Number', 'wpsc')."';\n\r";
-	echo "var __('Product Code', 'wpsc') = '".__('Product Code', 'wpsc')."';\n\r";
-	echo "var __('PDF', 'wpsc') = '".__('PDF', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_LABEL = '".__('Label', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_LABEL_DESC = '".__('Label Description', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_ITEM_NUMBER = '".__('Item Number', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_LIFE_NUMBER = '".__('Life Number', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_PRODUCT_CODE = '".__('Product Code', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_PDF = '".__('PDF', 'wpsc')."';\n\r";
 	
-	echo "var __(' and above', 'wpsc') = '".__(' and above', 'wpsc')."';\n\r";
-	echo "var __('If price is ', 'wpsc') = '".__('If price is ', 'wpsc')."';\n\r";
-	echo "var __('If weight is ', 'wpsc') = '".__('If weight is ', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_AND_ABOVE = '".__(' and above', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_IF_PRICE_IS = '".__('If price is ', 'wpsc')."';\n\r";
+	echo "var TXT_WPSC_IF_WEIGHT_IS = '".__('If weight is ', 'wpsc')."';\n\r";
 
 	exit();
 }
