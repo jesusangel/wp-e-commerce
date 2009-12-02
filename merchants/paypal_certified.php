@@ -61,6 +61,7 @@ $cancelURL = $transact_url;
 //' it is included at the top of this file.
 //'-------------------------------------------------
 $resArray = CallShortcutExpressCheckout ($_SESSION['paypalAmount'], $currencyCodeType, $paymentType, $returnURL, $cancelURL);
+//exit("<pre>".print_r($resArray,true)."</pre>");
 $ack = strtoupper($resArray["ACK"]);
 	if($ack=="SUCCESS")	{
 		RedirectToPayPal ( $resArray["TOKEN"] );
@@ -376,7 +377,6 @@ $_SESSION['paypalExpressMessage']= '
 	   $resArray=hash_call("GetExpressCheckoutDetails",$nvpstr);
 	   $_SESSION['reshash']=$resArray;
 	   $ack = strtoupper($resArray["ACK"]);
-	
 	   if($ack=="SUCCESS"){			
 			
 /********************************************************
@@ -429,71 +429,116 @@ else
 if(isset($_REQUEST['token']) && !isset($_REQUEST['PayerID'])){
 $_SESSION['paypalExpressMessage']= '<h4>TRANSACTION CANCELED</h4>';
 }else{
-$_SESSION['paypalExpressMessage'] ="
-	<form action=".get_option('transact_url')." method='post'>
-           <table width='400'>
+$output ="
+           <table width='400' class='paypal_express_form'>
             <tr>
-                <td align='left'><b>Order Total:</b></td>
+                <td align='left' class='firstcol'><b>Order Total:</b></td>
                 <td align='left'>".$wpsc_cart->process_as_currency($_SESSION['paypalAmount']) ."</td>
             </tr>
 			<tr>
 			    <td align='left'><b>Shipping Address: </b></td>
 			</tr>
             <tr>
-                <td align='left'>
+                <td align='left' class='firstcol'>
                     Street 1:</td>
                 <td align='left'>".$resArray['SHIPTOSTREET']."</td>
 
             </tr>
             <tr>
-                <td align='left'>
+                <td align='left' class='firstcol'>
                     Street 2:</td>
                 <td align='left'>".$resArray['SHIPTOSTREET2']."
                 </td>
             </tr>
             <tr>
-                <td align='left'>
+                <td align='left' class='firstcol'>
                     City:</td>
 
                 <td align='left'>".$resArray['SHIPTOCITY']."</td>
             </tr>
             <tr>
-                <td align='left'>
+                <td align='left' class='firstcol'>
                     State:</td>
                 <td align='left'>".$resArray['SHIPTOSTATE']."</td>
             </tr>
             <tr>
-                <td align='left'>
+                <td align='left' class='firstcol'>
                     Postal code:</td>
 
                 <td align='left'>".$resArray['SHIPTOZIP']."</td>
             </tr>
             <tr>
-                <td align='left'>
+                <td align='left' class='firstcol'>
                     Country:</td>
                 <td align='left'>".$resArray['SHIPTOCOUNTRYNAME']."</td>
             </tr>
             <tr>
                 <td>";
-$_SESSION['paypalExpressMessage'] .="               
-                <input type='hidden' name='totalAmount' value='".wpsc_cart_total(false)."' />
-                <input type='hidden' name='shippingStreet' value='".$resArray['SHIPTOSTREET']."' />          
-                <input type='hidden' name='shippingStreet2' value='".$resArray['SHIPTOSTREET2']."' />
-                <input type='hidden' name='shippingCity' value='".$resArray['SHIPTOCITY']."' />
-                <input type='hidden' name='shippingState' value='".$resArray['SHIPTOSTATE']."' />
-                <input type='hidden' name='postalCode' value='".$resArray['SHIPTOZIP']."' />
-                 <input type='hidden' name='country' value='".$resArray['SHIPTOCOUNTRYNAME']."' />
-                <input type='hidden' name='token' value='".$_SESSION['token']."' />
-					<input type='hidden' name='PayerID' value='".$_SESSION['payer_id']."' />
-					<input type='hidden' name='act' value='do' />
-					
-                   <p>  <label for='usePayPal'>Use PayPal Shipping Address: </label><input name='usePayPal' type='submit' value='Pay' /></p>
-                   <p>  <label for='useOther'>Use Previous Shipping Information:</label> <input name='useOther' type='submit' value='Pay' /></p>
-                </td>
+// 		$purchase_log = $wpdb->get_row("SELECT `id`,`billing_region` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= '".$wpdb->escape($_SESSION['paypalexpresssessionid']) ."' LIMIT 1", ARRAY_A) ;
+// 		$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE  `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$purchase_log['id']." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
+// 
+// 		$userinfo = $wpdb->get_results($usersql, ARRAY_A);
+//                 
+//  
+$output .= "<form action=".get_option('transact_url')." method='post'>\n";
+$output .= "	<input type='hidden' name='totalAmount' value='".wpsc_cart_total(false)."' />\n";
+$output .= "	<input type='hidden' name='shippingStreet' value='".$resArray['SHIPTOSTREET']."' />\n";
+$output .= "	<input type='hidden' name='shippingStreet2' value='".$resArray['SHIPTOSTREET2']."' />\n";
+$output .= "	<input type='hidden' name='shippingCity' value='".$resArray['SHIPTOCITY']."' />\n";
+$output .= "	<input type='hidden' name='shippingState' value='".$resArray['SHIPTOSTATE']."' />\n";
+$output .= "	<input type='hidden' name='postalCode' value='".$resArray['SHIPTOZIP']."' />\n";
+$output .= "	<input type='hidden' name='country' value='".$resArray['SHIPTOCOUNTRYNAME']."' />\n";
+$output .= "	<input type='hidden' name='token' value='".$_SESSION['token']."' />\n";
+$output .= "	<input type='hidden' name='PayerID' value='".$_SESSION['payer_id']."' />\n";
+$output .= "	<input type='hidden' name='act' value='do' />\n";
+$output .= "	<p>  <input name='usePayPal' type='submit' value='Make Payment' /></p>\n";
+$output .= "</form>";
+
+$output .= "<form action=".get_option('transact_url')." method='post'>\n";
+$output .= "	<input type='hidden' name='totalAmount' value='".wpsc_cart_total(false)."' />\n";
+
+// 		foreach((array)$userinfo as $key => $value){
+// 			if(($value['unique_name']=='billingfirstname') && $value['value'] != ''){
+// 				$data['SHIPTONAME']	= $value['value'];
+// 			}
+// 			if(($value['unique_name']=='billinglastname') && $value['value'] != ''){
+// 				$data['SHIPTONAME']	.= " ".$value['value'];
+// 			}
+// 
+// 			if(($value['unique_name']=='billingaddress') && $value['value'] != ''){
+// 				$data['SHIPTOSTREET']	= $value['value'];
+// 			}
+// 			if(($value['unique_name']=='billingcity') && $value['value'] != ''){
+// 				$data['SHIPTOCITY']	= $value['value'];
+// 			}
+// 			if(($value['unique_name']=='billingcountry') && $value['value'] != ''){
+// 				$data['SHIPTOCOUNTRYCODE']	= $value['value'];
+// 				$state =  $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='{$purchase_log['billing_region']}' LIMIT 1");
+// 				if($purchase_log['billing_region'] > 0) {
+// 					$data['SHIPTOSTATE'] = $state;
+// 				}
+// 			}
+// 			if(($value['unique_name']=='billingpostcode') && $value['value'] != ''){
+// 				$data['SHIPTOZIP']	= $value['value'];
+// 			}
+// 		}
+// 
+// $output .= "	<input type='text' name='shippingStreet' value='".$data['SHIPTOSTREET']."' />\n";
+// $output .= "	<input type='text' name='shippingCity' value='".$data['SHIPTOCITY']."' />\n";
+// $output .= "	<input type='text' name='shippingState' value='".$data['SHIPTOSTATE']."' />\n";
+// $output .= "	<input type='text' name='postalCode' value='".$data['SHIPTOZIP']."' />\n";
+// $output .= "	<input type='text' name='country' value='".$data['SHIPTOCOUNTRYCODE']."' />\n";
+// $output .= "	<input type='text' name='token' value='".$_SESSION['token']."' />\n";
+// $output .= "	<input type='text' name='PayerID' value='".$_SESSION['payer_id']."' />\n";
+// $output .= "	<input type='hidden' name='act' value='do' />\n";
+// $output .= "	<p>  <label for='useOther'>Use Previous Shipping Information:</label> <input name='useOther' type='submit' value='Make Payment' /></p>\n";
+// $output .= "</form>";
+$output .=" </td>
             </tr>
         </table>
     </center>
-    </form>";
+";
+$_SESSION['paypalExpressMessage'] = $output;
 		}
 		  }
 	}
@@ -745,7 +790,7 @@ $output .= "
 	}
 
 	$USE_PROXY = false;
-	$version="2.3";
+	$version="56.0";
 
 	if (session_id() == "")
 		session_start();
@@ -769,18 +814,62 @@ $output .= "
 	'		cancelURL:			the page where buyers return to when they cancel the payment review on PayPal
 	'--------------------------------------------------------------------------------------------------------------------------------------------	
 	*/
-	function CallShortcutExpressCheckout( $paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL) 
-	{
+	function CallShortcutExpressCheckout( $paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL) {
+	global $wpdb;
 		//------------------------------------------------------------------------------------------------------------------------------------
 		// Construct the parameter string that describes the SetExpressCheckout API call in the shortcut implementation
 		//exit($cancelURL);
+	$purchase_log = $wpdb->get_row("SELECT `id`,`billing_region` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= '".$wpdb->escape($_SESSION['paypalexpresssessionid']) ."' LIMIT 1", ARRAY_A) ;
+	$usersql = "SELECT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.`name`, `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE  `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id`=".$purchase_log['id']." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`";
+		//exit($usersql);
+		$userinfo = $wpdb->get_results($usersql, ARRAY_A);
+//		print("<pre>".print_r($usersql,true)."</pre>");
+//		print("<pre>".print_r($userinfo,true)."</pre>");
 
 		$nvpstr="&Amt=". $paymentAmount;
 		$nvpstr = $nvpstr . "&PAYMENTACTION=" . $paymentType;
 		$nvpstr = $nvpstr . "&RETURNURL=" . $returnURL;
 		$nvpstr = $nvpstr . "&CANCELURL=" . $cancelURL;
 		$nvpstr = $nvpstr . "&CURRENCYCODE=" . $currencyCodeType;
-	//	exit($nvpstr);
+		$data = array();
+		
+		foreach((array)$userinfo as $key => $value){
+			if(($value['unique_name']=='billingfirstname') && $value['value'] != ''){
+				$data['SHIPTONAME']	= $value['value'];
+			}
+			if(($value['unique_name']=='billinglastname') && $value['value'] != ''){
+				$data['SHIPTONAME']	.= " ".$value['value'];
+			}
+
+			if(($value['unique_name']=='billingaddress') && $value['value'] != ''){
+				$data['SHIPTOSTREET']	= $value['value'];
+			}
+			if(($value['unique_name']=='billingcity') && $value['value'] != ''){
+				$data['SHIPTOCITY']	= $value['value'];
+			}
+			if(($value['unique_name']=='billingcountry') && $value['value'] != ''){
+				$data['SHIPTOCOUNTRYCODE']	= $value['value'];
+				$state =  $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='{$purchase_log['billing_region']}' LIMIT 1");
+				if($purchase_log['billing_region'] > 0) {
+					$data['SHIPTOSTATE'] = $state;
+				}
+			}
+			if(($value['unique_name']=='billingpostcode') && $value['value'] != ''){
+				$data['SHIPTOZIP']	= $value['value'];
+			}
+		}
+
+	if(count($data) >= 4) {
+		//$data['ADDROVERRIDE'] = 1;
+		$temp_data = array();
+		foreach($data as $key => $value) {
+			$temp_data[] = $key."=".$value;
+		}
+		$nvpstr = $nvpstr . "&".implode("&",$temp_data);
+	}
+	
+		//print("<pre>".print_r($data,true)."</pre>");
+		//exit($nvpstr);
 		$_SESSION["currencyCodeType"] = $currencyCodeType;	  
 		$_SESSION["PaymentType"] = $paymentType;
 

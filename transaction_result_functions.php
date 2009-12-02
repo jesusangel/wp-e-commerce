@@ -273,7 +273,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 							break;
 							
 							default:
-							$report_user .= $form_data['name'].": ".$form_field['value']."\n";
+							$report_user .= wp_kses($form_data['name'], array()).": ".$form_field['value']."\n";
 							break;
 						}
 					}

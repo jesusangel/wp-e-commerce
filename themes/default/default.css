@@ -1594,3 +1594,14 @@ div.shopping_cart_container table tr th {
 .wpsc_product_rating .star a, .wpsc_product_rating .star a:focus {
 	outline: none;
 }
+
+
+.entry .paypal_express_form form {
+  text-align: left;
+}
+
+
+.paypal_express_form .firstcol {
+  text-align: left;
+  width: 200px;
+}

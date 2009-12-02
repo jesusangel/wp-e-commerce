@@ -1,7 +1,21 @@
 <?php
 function wpsc_options_checkout(){
 global $wpdb;
-$form_types = Array("text","email","address","city","country","delivery_address","delivery_city","delivery_country","textarea","heading","select","radio","checkbox");
+$form_types = Array("Text" => "text",
+	"Email Address" => "email",
+	"Street Address" => "address",
+	"City" => "city",
+	"Country" => "country",
+	"Delivery Address" => "delivery_address",
+	"Delivery City" => "delivery_city",
+	"Delivery Country" => "delivery_country",
+	"Text Area" => "textarea",
+	"Heading" => "heading",
+	"Select" => "select",
+	"Radio Button" => "radio",
+	"Checkbox" => "checkbox"
+);
+
 $unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
 
 update_option('wpsc_checkout_form_fields', $form_types);
@@ -12,6 +26,7 @@ do_action('wpsc_checkout_form_fields_page');
 $columns = array(
 	'drag' => 'Drag',
 	'name' => 'Name',
+	//'alt_name' => 'Alternate Name',
 	'type' => 'Type',
 	'unique_names' => 'Unique Names',
 	'mandatory' => 'Mandatory',
@@ -37,7 +52,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<div class='inside'>
 			<table>
 			<tr>
-				<td><?php echo __('Users must register before checking out', 'wpsc');?>:</td>
+				<td><?php echo __('Users must register before checking out', 'wpsc'); ?>:</td>
 				<td>
 					<?php
 						$require_register = get_option('require_register');
@@ -165,19 +180,21 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<tbody id='wpsc_checkout_list_body'>
 			<?php
 					foreach((array)$form_data as $form_field) {
-			    echo "
-			    <tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
+			    echo "<tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
 			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="'.WPSC_URL.'/images/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
-			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
+			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".htmlentities($form_field['name'], ENT_QUOTES, "UTF-8")."' /></td>";
+			  
+			    //echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
 			    
-			    echo "      <td class='typecol'><select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";
-			    foreach($form_types as $form_type) {
+			    echo "      <td class='typecol'>";
+			    echo "<select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";
+			    foreach($form_types as $form_type_name => $form_type) {
 			      $selected = '';
 			      if($form_type === $form_field['type']) {
 			        $selected = "selected='selected'";
 			      }
 			       // define('__('Textarea', 'wpsc')', 'Textarea');
-			      echo "<option value='".$form_type."' ".$selected.">".constant("TXT_WPSC_".strtoupper($form_type))."</option>";
+			      echo "<option value='".$form_type."' ".$selected.">".__($form_type_name, 'wpsc')."</option>";
 			    }
 			 
 			    echo "</select>";

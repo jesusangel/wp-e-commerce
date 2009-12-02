@@ -2,7 +2,7 @@
 function wpsc_auto_update() {
   global $wpdb;
   wpsc_create_or_update_tables();  
-  include_once('updates/updating_tasks.php');  
+  include(WPSC_FILE_PATH.'/updates/updating_tasks.php');
   wpsc_create_upload_directories();
   wpsc_product_files_htaccess();  
   wpsc_check_and_copy_files();
@@ -531,7 +531,7 @@ function wpsc_set_product_creation_dates($colname) {
  */
 function wpsc_add_currency_list() {
   global $wpdb;
-	require (dirname(__FILE__) . "/currency_list.php");
+  require_once(WPSC_FILE_PATH."/currency_list.php");
   $currency_data  = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_CURRENCY_LIST."`");
   if($currency_data == 0) {
     $currency_array = explode("\n",$currency_sql); 
@@ -674,10 +674,10 @@ function wpsc_add_checkout_fields() {
 * * @return boolean true on success, false on failure
 */
 function wpsc_create_or_update_tables($debug = false) {
-  global $wpdb;
+  global $wpdb;	
   // creates or updates the structure of the shopping cart tables
   
-  include('updates/database_template.php');
+  include(WPSC_FILE_PATH.'/updates/database_template.php');
   
   $template_hash = sha1(serialize($wpsc_database_template));
   

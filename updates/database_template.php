@@ -73,7 +73,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}cart_it
 // code to create or update the {$wpdb->prefix}wpsc_checkout_forms table
 $table_name = WPSC_TABLE_CHECKOUT_FORMS;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
-$wpsc_database_template[$table_name]['columns']['name'] = "varchar(255) NOT NULL DEFAULT '' ";
+$wpsc_database_template[$table_name]['columns']['name'] = "text NOT NULL";
 $wpsc_database_template[$table_name]['columns']['type'] = "varchar(64) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['mandatory'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['display_log'] = "char(1) NOT NULL DEFAULT '0' ";

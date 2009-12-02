@@ -1885,30 +1885,33 @@ if($_REQUEST['wpsc_admin_action']=='check_form_options'){
 //handles the editing and adding of new checkout fields
 function wpsc_checkout_settings(){
 	global $wpdb;
+	$wpdb->show_errors = true;
     if(isset($_POST['wpsc_form_set'])){
     	$filter = $wpdb->escape($_POST['wpsc_form_set']);
     }else{
     	$filter = 0;
     }
-    if(!isset($_POST['wpsc_checkout_set_filter'])){
+		//echo "<pre>".print_r($_POST,true)."</pre>";
+   // if(!isset($_POST['wpsc_checkout_set_filter'])){
 		// Save checkout options
 	    if(is_array($_POST['wpsc_checkout_option_label'])){
 	    	foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
 	    		$options = array();
-	 			foreach((array)$values as $key => $form_option){
-	 				$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
-	 			}
-			
-	    	$options = serialize($options);
-	    	$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id; 
-	//    	exit($sql);   	
-	    	$wpdb->query($sql);
+					foreach((array)$values as $key => $form_option){
+						$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
+					}
+				
+					$options = serialize($options);
+					$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id;
+					$wpdb->query($sql);
 	    	}
+	    }
+	    
 	
-	    }    
 		if($_POST['form_name'] != null) {
 		    foreach($_POST['form_name'] as $form_id => $form_name) {
-		      $form_type = $_POST['form_type'][$form_id];
+					$form_name = $wpdb->escape($form_name);
+		      $form_type = $wpdb->escape($_POST['form_type'][$form_id]);
 		      $form_mandatory = 0;
 		      if($_POST['form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
 		      $form_display_log = 0;
@@ -1917,9 +1920,14 @@ function wpsc_checkout_settings(){
 		      if($_POST['unique_names'][$form_id] != '-1'){ $unique_name = $_POST['unique_names'][$form_id];  }
 		    //  $form_order = $_POST['form_order'][$form_id];
 		      $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='".$unique_name."', `checkout_set`='".$filter."' WHERE `id` ='".$form_id."' LIMIT 1 ;");
+		      //echo "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='".$unique_name."', `checkout_set`='".$filter."' WHERE `id` ='".$form_id."' LIMIT 1 ;";
+
+		      //echo "<br />";
 			}
 		}
 	  
+
+		
 	  if($_POST['new_form_name'] != null) {
 	    foreach($_POST['new_form_name'] as $form_id => $form_name) {
 	      $form_type = $_POST['new_form_type'][$form_id];
@@ -1953,7 +1961,7 @@ function wpsc_checkout_settings(){
 				}
 			}
 		}
-	}
+	//}
 	$sendback = wp_get_referer();
 	if(isset($_POST['wpsc_form_set'])){   
     	$filter = $_POST['wpsc_form_set'];
