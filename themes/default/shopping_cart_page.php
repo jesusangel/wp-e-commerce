@@ -3,7 +3,8 @@ global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway, $wpsc_coupons;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
 $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
-//echo "<pre>".print_r(wpsc_cart_item_categories(), true)."</pre>";
+//echo "<pre>".print_r($wpsc_cart, true)."</pre>";
+//echo "<pre>".print_r($wpsc_gateway, true)."</pre>";
 if(wpsc_cart_item_count() > 0) :
 ?>
 <p><?php echo __('Please review your order', 'wpsc'); ?></p>

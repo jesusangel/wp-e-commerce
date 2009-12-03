@@ -625,4 +625,24 @@ function nzshpcrt_display_categories_groups() {
     ob_end_clean();
     return $output;
   }
+
+/** wpsc list subcategories function
+		used to get an array of all the subcategories of a category.
+
+*/
+function wpsc_list_subcategories($category_id = null) {
+  global $wpdb,$category_data;
+  if(is_numeric($category_id)) {
+    $category_list = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `category_parent` = '".$category_id."'");
+	}
+  if($category_list != null) {
+    foreach($category_list as $subcategory_id) {
+			$category_list = array_merge((array)$category_list, (array)wpsc_list_subcategories($subcategory_id));
+		}
+	}
+	return $category_list;
+}
+
+
+  
 ?>

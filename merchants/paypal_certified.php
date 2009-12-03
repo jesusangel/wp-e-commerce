@@ -236,56 +236,46 @@ $_SESSION['paypalExpressMessage']= '
 	   */
 	$ack = strtoupper($resArray["ACK"]);
 	
-	//exit('<pre>'.print_r($_POST, true).'</pre>');
-	if($ack!="SUCCESS"){
-		$_SESSION['reshash']=$resArray;
-		$location = get_option('transact_url')."&act=error";
-			// header("Location: $location");
-	}else{
-		if(isset($_POST['usePayPal'])){
-			$street = $_POST['shippingStreet'].' '.$_POST['shippingStreet2']; //form_id 12		   
-			$city = $_POST['shippingCity'];		   //form_id 13
-			$state = $_POST['shippingState']; // form_id 14
-			$country = $_POST['country']; //form_id 15
-			$postalCode = $_POST['postalCode'];//form_id 16
-	
-			$log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('".$sessionid."') LIMIT 1") ;
-			
-			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$street."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingaddress'";
-			$wpdb->query($sql);
-			
-			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$city."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingcity'";
-			$wpdb->query($sql);
+	//echo('<pre>'.print_r($resArray, true).'</re>');
+ 	if($ack!="SUCCESS"){
+ 		$_SESSION['reshash']=$resArray;
+ 		$location = get_option('transact_url')."&act=error";
+ 			// header("Location: $location");
+ 	}else{
+		$transaction_id = $wpdb->escape($resArray['TRANSACTIONID']);
+		switch($resArray['PAYMENTSTATUS']) {
+			case 'Processed': // I think this is mostly equivalent to Completed
+			case 'Completed':
+			$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '2' WHERE `sessionid` = ".$sessionid." LIMIT 1");
+			transaction_results($sessionid, false, $transaction_id);
+			break;
 
-			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$state."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingstate'";
-			$wpdb->query($sql);
-			
-			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$country."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingcountry'";
-			$wpdb->query($sql);
-			
-			$sql = "UPDATE `".WPSC_TABLE_SUBMITED_FORM_DATA."` LEFT JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` ON `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` = `".WPSC_TABLE_CHECKOUT_FORMS."`.`id` SET `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`value` ='".$postalCode."' WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`log_id` = '".$log_id."' AND `".WPSC_TABLE_CHECKOUT_FORMS."`.`unique_name`='shippingpostcode'";
-			$wpdb->query($sql);	
-			
-			
-		
+			case 'Pending': // need to wait for "Completed" before processing
+			$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1");
+			break;
 		}
-	}
+		$location = add_query_arg('sessionid', $sessionid, get_option('transact_url'));
+		//echo $location;
+		$_SESSION['paypalExpressMessage'] = null;
+		header("Location: $location");
+		exit();
+ 	}
 	//exit('<pre>'.print_r($resArray, true).'</pre>');
-	$_SESSION['paypalExpressMessage'] ="
-		<h4>Transaction Accepted Please Keep these References Handy.</h4>
-		<table width ='400'>
-			
-			<tr>
-				<td >
-					Transaction ID:</td>
-				<td>".$resArray['TRANSACTIONID']."</td>
-			</tr>
-			<tr>
-				<td >
-					Amount:</td>
-				<td>".$currCodeType." ".$resArray['AMT']."</td>
-			</tr>
-		</table>";
+// 	$_SESSION['paypalExpressMessage'] ="
+// 		<h4>Transaction Accepted Please Keep these References Handy.</h4>
+// 		<table class='' >
+// 			
+// 			<tr>
+// 				<td >
+// 					Transaction ID:</td>
+// 				<td>".$resArray['TRANSACTIONID']."</td>
+// 			</tr>
+// 			<tr>
+// 				<td >
+// 					Amount:</td>
+// 				<td>".$currCodeType." ".$resArray['AMT']."</td>
+// 			</tr>
+// 		</table>";
 
 
 				//unset session shopping cart
@@ -1121,26 +1111,24 @@ $output .= "
 	  * @nvpArray is Associative Array.
 	   ----------------------------------------------------------------------------------
 	  */
-	function deformatNVP($nvpstr)
-	{
-		$intial=0;
-	 	$nvpArray = array();
+function deformatNVP($nvpstr) {
+	$intial=0;
+	$nvpArray = array();
 
-		while(strlen($nvpstr))
-		{
-			//postion of Key
-			$keypos= strpos($nvpstr,'=');
-			//position of value
-			$valuepos = strpos($nvpstr,'&') ? strpos($nvpstr,'&'): strlen($nvpstr);
+	while(strlen($nvpstr)) {
+		//postion of Key
+		$keypos= strpos($nvpstr,'=');
+		//position of value
+		$valuepos = strpos($nvpstr,'&') ? strpos($nvpstr,'&'): strlen($nvpstr);
 
-			/*getting the Key and Value values and storing in a Associative Array*/
-			$keyval=substr($nvpstr,$intial,$keypos);
-			$valval=substr($nvpstr,$keypos+1,$valuepos-$keypos-1);
-			//decoding the respose
-			$nvpArray[urldecode($keyval)] =urldecode( $valval);
-			$nvpstr=substr($nvpstr,$valuepos+1,strlen($nvpstr));
-	     }
-		return $nvpArray;
+		/*getting the Key and Value values and storing in a Associative Array*/
+		$keyval=substr($nvpstr,$intial,$keypos);
+		$valval=substr($nvpstr,$keypos+1,$valuepos-$keypos-1);
+		//decoding the respose
+		$nvpArray[urldecode($keyval)] =urldecode( $valval);
+		$nvpstr=substr($nvpstr,$valuepos+1,strlen($nvpstr));
 	}
+	return $nvpArray;
+}
 add_action('init', 'processingfunctions');
 ?>
