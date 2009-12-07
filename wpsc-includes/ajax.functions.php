@@ -432,7 +432,6 @@ function wpsc_update_location() {
 			$_SESSION['wpsc_selected_region'] = get_option('base_region');
 		}
 		
-		
 		if($_SESSION['wpsc_delivery_region'] == '') {
 			$_SESSION['wpsc_delivery_region'] = $_SESSION['wpsc_selected_region'];
 		}
@@ -455,8 +454,12 @@ function wpsc_update_location() {
 	$wpsc_cart->update_location();
 	$wpsc_cart->get_shipping_method();
 	$wpsc_cart->get_shipping_option();
-	
-	
+	//echo $wpsc_cart->shipping_method;
+	if($wpsc_cart->selected_shipping_method != '') {
+		$wpsc_cart->update_shipping($wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option);
+	}
+	//echo "<pre>".print_r($wpsc_cart, true)."</pre>";
+	//exit();
 	if($_GET['ajax'] == 'true') {
 		exit();
 	}
@@ -719,6 +722,17 @@ function wpsc_change_tax() {
 	}
 	//exit('1<pre>'.print_r($_POST,true).'</pre>');
   $wpsc_cart->update_location();
+	$wpsc_cart->get_shipping_method();
+	$wpsc_cart->get_shipping_option();
+	//echo $wpsc_cart->shipping_method;
+	if($wpsc_cart->selected_shipping_method != '') {
+		$wpsc_cart->update_shipping($wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option);
+	}
+
+
+	
+
+  
   $tax = $wpsc_cart->calculate_total_tax();
   $total = wpsc_cart_total();
 	ob_start();
@@ -740,6 +754,14 @@ function wpsc_change_tax() {
 			echo "jQuery('#change_country').append(\"".$output."\");\n\r";
 		}
 	}
+
+	
+	foreach($wpsc_cart->cart_items as $key => $cart_item) {
+			echo "jQuery('#checkout_shipping').html(\"".$wpsc_cart->process_as_currency($cart_item->shipping)."\");\n\r";
+
+	}
+
+	echo "jQuery('#shipping_$key').html(\"".wpsc_cart_shipping()."\");\n\r";
 	
 	echo "jQuery('div.shopping-cart-wrapper').html('$output');\n";
 	if(get_option('lock_tax') == 1){

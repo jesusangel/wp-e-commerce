@@ -1605,3 +1605,16 @@ div.shopping_cart_container table tr th {
   text-align: left;
   width: 200px;
 }
+
+
+
+.wpsc_category_boundary {
+clear: both;
+}
+
+
+
+h3.wpsc_category_boundary {
+	margin: 0px 0px 5px 0px;
+  font-size: 1.4em;
+}

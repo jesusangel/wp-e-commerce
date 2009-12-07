@@ -217,6 +217,16 @@ function wpsc_display_groups_page() {
 				$uses_additional_forms = false;
 			}
 
+
+			if((bool)(int)$_POST['uses_billing_address'] == true) {
+				wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
+				$uses_additional_forms = true;
+			} else {
+				wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
+				$uses_additional_forms = false;
+			}
+
+			
 			if($uses_additional_forms == true) {
 				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
 				$checkout_form_sets[$url_name] = $wpdb->escape(stripslashes($_POST['name']));
@@ -439,6 +449,13 @@ function wpsc_display_groups_page() {
 				$uses_additional_forms = false;
 			}
 			
+			if((bool)(int)$_POST['uses_billing_address'] == true) {
+				wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
+				$uses_additional_forms = true;
+			} else {
+				wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
+				$uses_additional_forms = false;
+			}
 			
 			if($uses_additional_forms == true) {
 				$category_name = $wpdb->escape(stripslashes($_POST['title']));
@@ -857,10 +874,21 @@ update_option('wpsc_category_url_cache', array());
 
 					<tr>
             <td><?php _e("This category requires additional checkout form fields",'wpsc'); ?>:</td>
-
             <td>
 							<label><input type="radio" name="uses_additonal_forms" value="1"/><?php _e("Yes",'wpsc'); ?></label>
 							<label><input type="radio" checked="checked" name="uses_additonal_forms" value="0"/><?php _e("No",'wpsc'); ?></label>
+            </td>
+          </tr>
+          
+					<tr>
+						<td colspan='2'>						</td>
+          </tr>
+
+					<tr>
+            <td><?php _e("Products in this category use the billing address to calculate shipping",'wpsc'); ?>:</td>
+            <td>
+							<label><input type="radio" name="uses_billing_address" value="1"/><?php _e("Yes",'wpsc'); ?></label>
+							<label><input type="radio" checked="checked" name="uses_billing_address" value="0"/><?php _e("No",'wpsc'); ?></label>
             </td>
           </tr>
 

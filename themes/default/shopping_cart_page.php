@@ -3,7 +3,7 @@ global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway, $wpsc_coupons;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
 $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
-//echo "<pre>".print_r($wpsc_cart, true)."</pre>";
+ //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
 //echo "<pre>".print_r($wpsc_gateway, true)."</pre>";
 if(wpsc_cart_item_count() > 0) :
 ?>
@@ -14,6 +14,7 @@ if(wpsc_cart_item_count() > 0) :
 		<td><?php echo __('Product', 'wpsc'); ?>:</td>
 		<td><?php echo __('Quantity', 'wpsc'); ?>:</td>
 		<td><?php echo __('Price', 'wpsc'); ?>:</td>
+		<td><?php echo __('Shipping', 'wpsc'); ?>:</td>
 		<td></td>
 	</tr>
 	<?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
@@ -34,6 +35,7 @@ if(wpsc_cart_item_count() > 0) :
 				</form>
 			</td>
 			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
+			<td><span class="pricedisplay" id='shipping_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo wpsc_cart_item_shipping(); ?></span></td>
 			<td>
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
 					<input type="hidden" name="quantity" value="0" />

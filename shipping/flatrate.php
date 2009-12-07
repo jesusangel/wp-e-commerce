@@ -44,15 +44,9 @@ class flatrate {
 		  
 		  default:
 			$output .= "<td>$<input type='text' name='shipping[local]' size='4' value='{$shipping['local']}'></td></tr>";		  
-		  break;
-		  
-		
+		  break;	
 		}
-		
-		
-		if (get_option('base_country')=='NZ') {
-		} else {
-		}
+
 		$output.= "<tr ><td colspan='2'><strong>Base International</strong></td></tr>";
 		$output .= "<tr class='rate_row'><td>North America</td><td>$<input size='4' type='text' name='shipping[northamerica]'  value='{$shipping['northamerica']}'></td></tr>";
 		$output .= "<tr class='rate_row'><td>South America</td><td>$<input size='4' type='text' name='shipping[southamerica]'  value='{$shipping['southamerica']}'></td></tr>";
@@ -110,7 +104,8 @@ class flatrate {
 			  break;
 			  
 			  default:
-				if (strlen($flatrates['local']) > 0) $shipping_quotes["Local Shipping"] = (float)$flatrates['local'];			  break;
+				if (strlen($flatrates['local']) > 0) $shipping_quotes["Local Shipping"] = (float)$flatrates['local'];
+				break;
 			}
 			if($_SESSION['quote_shipping_method'] == $this->internal_name) {
 			  $shipping_options = array_keys($shipping_quotes);
@@ -124,14 +119,34 @@ class flatrate {
 	}
 	
 	
-	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
-		global $wpdb;
+	function get_item_shipping(&$cart_item) {
+		global $wpdb, $wpsc_cart;
+		$unit_price = $cart_item->unit_price;
+		$quantity = $cart_item->quantity;
+		$weight = $cart_item->weight;
+		$product_id = $cart_item->product_id;
+
+		
+		$uses_billing_address = false;
+		foreach($cart_item->category_id_list as $category_id) {
+			$uses_billing_address = (bool)wpsc_get_categorymeta($category_id, 'uses_billing_address');
+			if($uses_billing_address === true) {
+			  break; /// just one true value is sufficient
+			}
+		}
+		//$_SESSION['wpsc_selected_country']
+		
+		  //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
-			$country_code = $_SESSION['wpsc_delivery_country'];
+			if($uses_billing_address == true) {
+				$country_code = $wpsc_cart->selected_country;
+			} else {
+				$country_code = $wpsc_cart->delivery_country;
+			}
+			
       $product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping
-        //exit("<pre>".print_r($country_code,true)."</pre>");
         if($country_code == get_option('base_country')) {
           $additional_shipping = $product_list['pnp'];
 				} else {

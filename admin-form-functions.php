@@ -212,6 +212,22 @@ function nzshpcrt_getcategoryform($catid)
 		$output .= "            </td>\n\r";
 		$output .= "          </tr>\n\r";
 
+
+	$output .= "          <tr>";
+	$output .= "          	<td colspan='2'>						</td>";
+	$output .= "          </tr>";
+		
+		$uses_billing_address = (bool)wpsc_get_categorymeta($product['id'], 'uses_billing_address');
+		$output .= "          <tr>\n\r";
+		$output .= "            <td>\n\r";
+		$output .= __("Products in this category use the billing address to calculate shipping",'wpsc').": ";
+		$output .= "            </td>\n\r";
+		$output .= "            <td>\n\r";
+    $output .= "            <label><input type='radio' value='1' name='uses_billing_address' ".(($uses_billing_address == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
+		$output .= "            <label><input type='radio' value='0' name='uses_billing_address' ".(($uses_billing_address != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
+		$output .= "            </td>\n\r";
+		$output .= "          </tr>\n\r";
+
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
   $output .= "            </td>\n\r";

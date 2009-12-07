@@ -845,7 +845,23 @@ function wpsc_gateway_form_fields() {
 }
 
 function wpsc_gateway_form_field_style() {
- return "checkout_forms_hidden";
+	global $wpsc_gateway;
+	$is_checked = false;
+	if(isset($_SESSION['wpsc_previous_selected_gateway'])) {
+	  if($wpsc_gateway->gateway['internalname'] == $_SESSION['wpsc_previous_selected_gateway']) {
+	    $is_checked = true;	  
+	  }
+	} else {
+	  if($wpsc_gateway->current_gateway == 0) {
+	    $is_checked = true;
+	  }
+	}
+	if($is_checked == true) {
+	  $output = 'checkout_forms';
+	} else {
+		$output = 'checkout_forms_hidden';
+	}
+	return $output;
 }
 
 /**

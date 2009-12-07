@@ -78,6 +78,11 @@ global $wpsc_query, $wpdb;
 		
 		<?php /** start the product loop here */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
+			<?php if(wpsc_category_transition()) :?>
+		  	<h3 class='wpsc_category_boundary'>
+		    <?php echo wpsc_current_category_name(); ?>
+				</h3>
+			<?php endif; ?>
 			<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
 				<div class="textcol">
 				

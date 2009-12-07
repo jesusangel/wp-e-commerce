@@ -275,6 +275,20 @@ function wpsc_cart_item_price($forDisplay = true) {
 	}
 }
 
+/**
+* cart item shipping function, no parameters
+* @return string the cart item price multiplied by the quantity, with a currency sign
+*/
+function wpsc_cart_item_shipping($forDisplay = true) {
+	global $wpsc_cart;
+	if($forDisplay){
+		return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->shipping);
+	}else{
+		return $wpsc_cart->cart_item->shipping;
+	}
+}
+
+
 
 /**
 * cart item url function, no parameters
@@ -466,7 +480,6 @@ function wpsc_have_morethanone_shipping_methods_and_quotes(){
 	global $wpsc_cart;
 		
 	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1 || count($wpsc_cart->shipping_quotes) == $wpsc_cart->shipping_quote_count){
-
 		//$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
 		return true;
 	}else{
@@ -613,16 +626,16 @@ class wpsc_cart {
 	* @access public
 	*/
   function get_shipping_method() {
-    global $wpdb, $wpsc_shipping_modules;
-	// Reset all the shipping data in case the destination has changed
-	$this->selected_shipping_method = null;
-	$this->selected_shipping_option = null;
-	$this->shipping_option = null;
-	$this->shipping_method = null;
-	$this->shipping_methods = array();
-	$this->shipping_quotes = array();
-	$this->shipping_quote = null;
-	$this->shipping_method_count = 0;
+		global $wpdb, $wpsc_shipping_modules;
+		// Reset all the shipping data in case the destination has changed
+		$this->selected_shipping_method = null;
+		$this->selected_shipping_option = null;
+		$this->shipping_option = null;
+		$this->shipping_method = null;
+		$this->shipping_methods = array();
+		$this->shipping_quotes = array();
+		$this->shipping_quote = null;
+		$this->shipping_method_count = 0;
 	  // set us up with a shipping method.
 	  $custom_shipping = get_option('custom_shipping_options');
 	  
@@ -687,21 +700,15 @@ class wpsc_cart {
 	*/
   function update_shipping($method, $option) {
     global $wpdb, $wpsc_shipping_modules;
-    
-//     if($method == 'weightrate') {
-//      exit("<pre>".print_r(debug_backtrace(),true)."</pre>");
-//     }
 		$this->selected_shipping_method = $method;
-		//exit($this->selected_shipping_method.'<pre>'.print_r($wpsc_shipping_modules, true).'</pre>');
-		//if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+		
 			$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
-		//	exit('is callable');
-		//}
+			
 		//exit('<pre>'.print_r($this->shipping_quotes,true).'</pre> quotes');
 		$this->selected_shipping_option = $option;
 		
 		foreach($this->cart_items as $key => $cart_item) {
-			$this->cart_items[$key]->refresh_item();
+			$this->cart_items[$key]->calculate_shipping();
 		}
 		$this->clear_cache();
 		$this->get_shipping_option();	
@@ -1425,8 +1432,8 @@ class wpsc_cart {
   
   function google_shipping_quotes(){
   	global $wpsc_shipping_modules;
-  		$custom_shipping = get_option('custom_shipping_options');
-	if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
+		$custom_shipping = get_option('custom_shipping_options');
+		if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
 				//unset($this->selected_shipping_method);
 			}
 			
@@ -1522,7 +1529,8 @@ class wpsc_cart_item {
 	
 	//values from the database
 	var $product_name;
-	var $category_list;
+	var $category_list = array();
+	var $category_id_list = array();
 	var $unit_price;
 	var $total_price;
 	var $taxable_price = 0;
@@ -1556,12 +1564,11 @@ class wpsc_cart_item {
 	function wpsc_cart_item($product_id, $parameters, &$cart) {
     global $wpdb;
     // still need to add the ability to limit the number of an item in the cart at once.
-    // each cart item contains a reference to the cart that it is a member of, this makes that reference 
-    $this->cart =& $cart;
-    //$this->save_provided_file
-    //$this->
-    
-    //extract($parameters);
+    // each cart item contains a reference to the cart that it is a member of, this makes that reference
+    // The cart is in the cart item, which is in the cart, which is in the cart item, which is in the cart, which is in the cart item...
+    $this->cart = &$cart;
+
+
     foreach($parameters as $name => $value) {
 			$this->$name = $value;
     }
@@ -1649,8 +1656,9 @@ class wpsc_cart_item {
 				foreach((array)$levels['quantity'] as $key => $qty) {
 					if ($this->quantity >= $qty) {
 						$unit_price = $levels['table_price'][$key];
-						if ($unit_price != '')
+						if ($unit_price != '') {
 							$price = $unit_price;
+						}
 					}
 				}
 			}
@@ -1677,7 +1685,15 @@ class wpsc_cart_item {
 		$this->weight = $weight;
 		$this->total_price = $this->unit_price * $this->quantity;
 
-		$this->category_list = $wpdb->get_col("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`nice-name` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product['id']."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1')");
+		$category_data = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id`,`".WPSC_TABLE_PRODUCT_CATEGORIES."`.`nice-name`  FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product['id']."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1')", ARRAY_A);
+
+		$this->category_list = array();
+		$this->category_id_list = array();
+		
+		foreach($category_data as $category_row) {
+			$this->category_list[] = $category_row['nice-name'];
+			$this->category_id_list[] = $category_row['id'];
+		}
 		
 		if($this->apply_tax == true) {
 		  $this->taxable_price = $this->total_price;
@@ -1713,7 +1729,7 @@ class wpsc_cart_item {
 		
 		
 		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
-			$this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+			$this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 	  }
 	  // update the claimed stock here
 	  $this->update_claimed_stock();
@@ -1734,7 +1750,7 @@ class wpsc_cart_item {
       $method = $this->cart->selected_shipping_method;
     }
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, $this->quantity, $this->weight, $this->product_id);
+			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this);
 			//echo("<pre>".print_r($shipping,true)."</pre>");
     }
     if($method == $this->cart->selected_shipping_method) {
@@ -1805,6 +1821,7 @@ class wpsc_cart_item {
 			}
 		}
 	}
+
 		
 	/**
 	 * update_claimed_stock method
@@ -1835,7 +1852,7 @@ class wpsc_cart_item {
       $method = $this->cart->selected_shipping_method;
     }
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
+			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 		}
     if($this->cart->has_total_shipping_discount()) {
 			$shipping = 0;
