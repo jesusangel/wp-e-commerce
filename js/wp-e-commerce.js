@@ -47,10 +47,22 @@ jQuery(document).ready(function () {
 				jQuery("span.shipping_country_name").html(country);
 				jQuery("select#current_country").val(countryID);
 				
+				jQuery("select[title='shippingcountry']").val(countryID);
+				var html_form_id = jQuery("select[title='shippingcountry']").attr('id');
+				var form_id =  jQuery("select[title='shippingcountry']").attr('name');
+				form_id = form_id.replace("collected_data[", "");
+				form_id = form_id.replace("]", "");
+				form_id = form_id.replace("[0]", "");
+				set_shipping_country(html_form_id, form_id)
 				if(jQuery("select[title='billingcountry'] :selected").val() != jQuery("select[name='country'] :selected").val()){
-					jQuery("select[name='country']").val(countryID);
-					submit_change_country();
+					id = jQuery("select[name='country'] :selected").val();
+					if(id == 'undefined'){
+						jQuery("select[name='country']").val(countryID);
+						submit_change_country();
+					}
 				}
+				
+
 				
 				
 			}else{
@@ -294,7 +306,13 @@ function set_billing_country(html_form_id, form_id){
 function set_shipping_country(html_form_id, form_id){
   var shipping_region = '';
   country = jQuery(("div#"+html_form_id+" select[class=current_country]")).val();
-  region = jQuery(("div#"+html_form_id+" select[class=current_region]")).val();
+  
+  if(country == 'undefined'){
+//      alert(country);
+ 	country =  jQuery("select[title='billingcountry']").val();
+  }
+
+  region = jQuery(("div#"+html_form_id+" select[class=current_region]")).val();  
   if(/[\d]{1,}/.test(region)) {
     shipping_region = "&shipping_region="+region;
 	}
