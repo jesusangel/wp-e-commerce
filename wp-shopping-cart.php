@@ -41,10 +41,10 @@ if(is_ssl()) {
 }
 //Define the URL to the plugin folder
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
-define('WPSC_URL', $wpsc_siteurl.'/wp-content/plugins/' . WPSC_FOLDER);
+define('WPSC_URL', WP_CONTENT_URL.'/plugins/'.WPSC_FOLDER);
 
 if(isset($wpdb->blogid)) {
-    define('IS_WPMU', 1);
+   define('IS_WPMU', 1);
 } else {
 	define('IS_WPMU', 0);
 }
@@ -175,7 +175,7 @@ if(WP_ADMIN == true) {
 /**
 * Code to define where the uploaded files are stored starts here
 */
-
+/*
 if(IS_WPMU == 1) {
 		$upload_url = get_option('siteurl').'/files';
 		$upload_path = ABSPATH.get_option('upload_path');
@@ -189,7 +189,14 @@ if(IS_WPMU == 1) {
 	
 	$upload_path = WP_CONTENT_DIR."/uploads";
 	$upload_url = WP_CONTENT_URL."/uploads";
-}
+}*/
+
+
+
+$wp_upload_dir_data = wp_upload_dir();
+//echo "<pre>".print_r($wp_upload_dir_data, true)."</pre>";
+$upload_path = $wp_upload_dir_data['basedir'];
+$upload_url = $wp_upload_dir_data['baseurl'];
 
 if(is_ssl()) {
 	 $upload_url = str_replace("http://", "https://", $upload_url);

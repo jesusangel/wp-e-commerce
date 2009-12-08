@@ -30,6 +30,9 @@ if(!isset($purchlogs)){
 		<h2><?php echo wp_specialchars( __('Sales', 'wpsc') ); ?> </h2>
 		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
 		<?php
+		 if(isset($_GET['view_purchlogs_by']) || isset($_GET['view_purchlogs_by_status'])) {
+			wpsc_change_purchlog_view($_GET['view_purchlogs_by'], $_GET['view_purchlogs_by_status']);
+			}
 			if(!isset($_REQUEST['purchaselog_id'])){
 				$columns = array(
 					'cb' => '<input type="checkbox" />',
