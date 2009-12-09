@@ -729,10 +729,11 @@ class wpsc_cart {
 		  switch($this->selected_country) {
 		  	case 'US': // USA!
 					$tax_region = get_option('base_region');
-					if($this->selected_region == get_option('base_region')) {
+					if($this->selected_region == get_option('base_region') && (get_option('lock_tax_to_shipping') != '1')) {
 						// if they in the state, they pay tax
 						$add_tax = true;
 					} else if($this->delivery_region == get_option('base_region')) {
+		
 						// if they live outside the state, but are delivering to within the state, they pay tax also
 						$add_tax = true;
 					}

@@ -96,7 +96,30 @@ $form_types = get_option('wpsc_checkout_form_fields');
 				<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
 				<label for='lock_tax2'><?php echo __('No', 'wpsc');?></label>
 			</td>
-			
+			</tr>
+		<tr>
+			<!-- Disregard Billing State for Tax Calculations -->
+			<?php
+				$lock_tax_to_shipping = get_option('lock_tax_to_shipping');
+
+				switch($lock_tax_to_shipping) {
+					case 1:
+					$lock_tax_to_shipping1 = "checked ='checked'";
+					break;
+					
+					case 0:
+					$lock_tax_to_shipping2 = "checked ='checked'";
+					break;
+				}
+			?>
+			<td scope="row"><?php echo __(' Disregard Billing State for Tax Calculations', 'wpsc'); ?>:</td>
+			<td>
+				<input type='radio' value='1' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax1' <?php echo $lock_tax_to_shipping1; ?> /> 
+				<label for='lock_tax_to_shipping1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax2' <?php echo $lock_tax_to_shipping2; ?> /> 
+				<label for='lock_tax_to_shipping2'><?php echo __('No', 'wpsc');?></label>
+			</td>
+
 
 			
 		</tr>
