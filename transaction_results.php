@@ -3,6 +3,9 @@ global $wpdb, $user_ID, $nzshpcrt_gateways;
 //$curgateway = get_option('payment_gateway');
 
 $sessionid = $_GET['sessionid'];
+if(!isset($_GET['sessionid']) && isset($_GET['ms']) ){
+	$sessionid = $_GET['ms'];
+}
 if($_GET['gateway'] == 'google'){
 	wpsc_google_checkout_submit();
 	unset($_SESSION['wpsc_sessionid']);
