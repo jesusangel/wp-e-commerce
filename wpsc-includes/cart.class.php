@@ -198,10 +198,14 @@ function wpsc_cart_shipping() {
 * cart item categories function, no parameters
 * @return array array of the categories
 */
-function wpsc_cart_item_categories() {
+function wpsc_cart_item_categories($get_ids = false) {
 	global $wpsc_cart;
 	if(is_object($wpsc_cart)) {
-		return $wpsc_cart->get_item_categories();
+		if($get_ids == true) {
+			return $wpsc_cart->get_item_category_ids();
+		} else {
+			return $wpsc_cart->get_item_categories();
+		}
 	} else {
 		return array();
 	}
@@ -1163,7 +1167,7 @@ class wpsc_cart {
   }
   
   /**
-	 * calculate total price method 
+	 * get category url name  method
 	 * @access public
 	 *
 	 * @return float returns the price as a floating point value
@@ -1172,6 +1176,20 @@ class wpsc_cart {
   	$category_list = array();
 		foreach($this->cart_items as $key => $cart_item) {
 			$category_list = array_merge((array)$cart_item->category_list, $category_list);
+		}
+		return $category_list;
+  }
+
+  /**
+	 * get category IDs total price method
+	 * @access public
+	 *
+	 * @return float returns the price as a floating point value
+	*/
+  function get_item_category_ids() {
+  	$category_list = array();
+		foreach($this->cart_items as $key => $cart_item) {
+			$category_list = array_merge((array)$cart_item->category_id_list, $category_list);
 		}
 		return $category_list;
   }

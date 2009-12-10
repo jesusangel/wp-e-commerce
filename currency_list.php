@@ -171,7 +171,7 @@ INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (169, 'Paraguay', 'PY', 'Parag
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (170, 'Peru', 'PE', 'Peruvian Nuevo Sol', '', '', 'PEN', '0', '0','southamerica','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (171, 'Philippines', 'PH', 'Philippine Peso', '', '', 'PHP', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (172, 'Pitcairn Island', 'PN', 'New Zealand Dollar', '$', '&#036;', 'NZD', '0', '0','asiapacific','1');
-INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (173, 'Poland', 'PL', 'Polish Zloty', '', '', 'PLZ', '0', '0','europe','1');
+INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (173, 'Poland', 'PL', 'Polish Zloty', '', '', 'PLN', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (174, 'Polynesia (French)', 'PF', 'CFP Franc', '', '', 'XPF', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (175, 'Portugal', 'PT', 'Euro', '€', '&#8364;', 'EUR', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (176, 'Puerto Rico', 'PR', 'US Dollar', '$', '&#036;', 'USD', '0', '0','northamerica','1');

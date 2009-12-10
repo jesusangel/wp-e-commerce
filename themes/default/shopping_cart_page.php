@@ -4,7 +4,7 @@ $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
 $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
  //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
-//echo "<pre>".print_r($wpsc_gateway, true)."</pre>";
+// //echo "<pre>".print_r($wpsc_checkout, true)."</pre>";
 if(wpsc_cart_item_count() > 0) :
 ?>
 <p><?php echo __('Please review your order', 'wpsc'); ?></p>
@@ -154,25 +154,28 @@ if(wpsc_cart_item_count() > 0) :
 	<?php endif;  ?>
 	
 	<table class="productcart">
-	<tr class="total_price total_tax">
-		<td colspan="3">
-			<?php echo wpsc_display_tax_label(true); ?>
+	<?php if(wpsc_cart_tax(false) > 0) : ?>
+		<tr class="total_price total_tax">
+			<td colspan="3">
+				<?php echo wpsc_display_tax_label(true); ?>
 
-		</td>
-		<td colspan="2">
-			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
-		</td>
-	</tr>
-   <?php if(wpsc_uses_shipping()) : ?>
-	<tr class="total_price total_shipping">
-		<td colspan="3">
-			<?php echo __('Total Shipping', 'wpsc'); ?>
-		</td>
-		<td colspan="2">
-			<span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
-	    </td>
-	</tr>
-    <?php endif; ?>
+			</td>
+			<td colspan="2">
+				<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
+			</td>
+		</tr>
+	<?php endif; ?>
+	
+	<?php if(wpsc_uses_shipping()) : ?>
+		<tr class="total_price total_shipping">
+			<td colspan="3">
+				<?php echo __('Total Shipping', 'wpsc'); ?>
+			</td>
+			<td colspan="2">
+				<span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
+				</td>
+		</tr>
+	<?php endif; ?>
 
 	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
 	<tr class="total_price">

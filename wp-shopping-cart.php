@@ -39,9 +39,20 @@ $wpsc_siteurl = get_option('siteurl');
 if(is_ssl()) {
 	$wpsc_siteurl = str_replace("http://", "https://", $wpsc_siteurl);
 }
+
+$wpsc_plugin_url = WP_CONTENT_URL;
+if(is_ssl()) {
+  $plugin_url_parts = parse_url($wpsc_plugin_url);
+  $site_url_parts = parse_url($wpsc_siteurl);
+  if(stristr($plugin_url_parts['host'], $site_url_parts['host']) && stristr($site_url_parts['host'], $plugin_url_parts['host'])) {
+		$wpsc_plugin_url = str_replace("http://", "https://", $wpsc_plugin_url);
+	}
+}
+
+
 //Define the URL to the plugin folder
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
-define('WPSC_URL', WP_CONTENT_URL.'/plugins/'.WPSC_FOLDER);
+define('WPSC_URL', $wpsc_plugin_url.'/plugins/'.WPSC_FOLDER);
 
 if(isset($wpdb->blogid)) {
    define('IS_WPMU', 1);

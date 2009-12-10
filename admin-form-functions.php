@@ -201,14 +201,38 @@ function nzshpcrt_getcategoryform($catid)
 		$output .= "          </tr>\n\r";
 	}
 
-		$uses_additional_forms = (bool)wpsc_get_categorymeta($product['id'], 'uses_additonal_forms');
+
+
+	$output .= "          <tr>\n\r";
+	$output .= "          	<td colspan='2' class='category_presentation_settings'>\n\r";
+	$output .= "          		<h4>".__('Checkout Settings', 'wpsc')."</h4>\n\r";
+	//$output .= "          		<span class='small'>".__('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc')."</span>\n\r";
+	$output .= "          	</td>\n\r";
+	$output .= "          </tr>\n\r";
+
+	
+		$used_additonal_form_set = wpsc_get_categorymeta($product['id'], 'use_additonal_form_set');
 		$output .= "          <tr>\n\r";
 		$output .= "            <td>\n\r";
 		$output .= __("This category requires additional checkout form fields",'wpsc').": ";
 		$output .= "            </td>\n\r";
 		$output .= "            <td>\n\r";
-    $output .= "            <label><input type='radio' value='1' name='uses_additonal_forms' ".(($uses_additional_forms == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
-		$output .= "            <label><input type='radio' value='0' name='uses_additonal_forms' ".(($uses_additional_forms != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
+		
+		$output .= "            <select name='use_additonal_form_set'>\n\r";
+		$output .= "            	<option value=''>".__("None",'wpsc')."</option>\n\r";
+		
+		$checkout_sets = get_option('wpsc_checkout_form_sets');
+		unset($checkout_sets[0]);
+		foreach((array)$checkout_sets as $key => $value) {
+			$selected_state = "";
+			if($used_additonal_form_set == $key) {
+				$selected_state = "selected='selected'";
+			}
+			$output .= "            <option {$selected_state} value='{$key}'>".stripslashes($value)."</option>\n\r";
+		}
+		$output .= "            </select>\n\r";
+    //$output .= "            <label><input type='radio' value='1' name='uses_additonal_forms' ".(($uses_additional_forms == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
+		//$output .= "            <label><input type='radio' value='0' name='uses_additonal_forms' ".(($uses_additional_forms != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
 		$output .= "            </td>\n\r";
 		$output .= "          </tr>\n\r";
 

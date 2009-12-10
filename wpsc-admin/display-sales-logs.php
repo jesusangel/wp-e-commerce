@@ -141,6 +141,7 @@ if(!isset($purchlogs)){
 			'sku' => 'SKU',
 			'quantity' => 'Quantity',
 			'price' => 'Price',
+			'shipping' => 'Shipping',
 			'tax' => $taxlabel,
 // 			'discount' => 'Discount',
 			'total' => 'Total'
@@ -206,8 +207,8 @@ if(!isset($purchlogs)){
 						<?php wpsc_display_purchlog_details(); ?>
 						<tr> &nbsp;</tr>
 
-						<tr>
-							<td colspan="4">
+						<tr class="wpsc_purchaselog_start_totals">
+							<td colspan="5">
 								<?php if ( wpsc_purchlog_has_discount_data() ) { ?>
 								<?php _e('Coupon Code'); ?>: <?php echo wpsc_display_purchlog_discount_data(); ?>
 								<?php } ?>
@@ -217,12 +218,12 @@ if(!isset($purchlogs)){
 						</tr>
 						
 						<tr>
-							<td colspan='4'></td>
+							<td colspan='5'></td>
 							<th><?php _e('Shipping'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_shipping(); ?></td>
 						</tr>
 						<tr>
-							<td colspan='4'></td>
+							<td colspan='5'></td>
 							<th><?php _e('Total'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_totalprice(); ?></td>
 						</tr>
@@ -546,13 +547,14 @@ if(!isset($purchlogs)){
  	while(wpsc_have_purchaselog_details()) : wpsc_the_purchaselog_item();
  	?>
  	<tr>
- 	<td><?php echo wpsc_purchaselog_details_name(); ?></td> <!-- NAME -->
- 	<td><?php echo wpsc_purchaselog_details_SKU(); ?></td> <!-- SKU -->
- 	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY-->
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE -->
- 	<td><?php echo wpsc_purchaselog_details_tax(); ?></td> <!-- TAX -->
- 	<?php /* <td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT --> */ ?>
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL -->
+ 	<td><?php echo wpsc_purchaselog_details_name(); ?></td> <!-- NAME! -->
+ 	<td><?php echo wpsc_purchaselog_details_SKU(); ?></td> <!-- SKU! -->
+ 	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY! -->
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE! -->
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_shipping(),true); ?></td> <!-- SHIPPING! -->
+ 	<td><?php echo wpsc_purchaselog_details_tax(); ?></td> <!-- TAX! -->
+ 	<?php /* <td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT! --> */ ?>
+ 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL! -->
  	</tr>
  	<?php
  	endwhile;

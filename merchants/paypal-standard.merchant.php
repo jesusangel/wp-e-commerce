@@ -23,7 +23,7 @@ $nzshpcrt_gateways[$num] = array(
 	'submit_function' => 'submit_paypal_multiple',
 	'payment_type' => 'paypal',
 	'supported_currencies' => array(
-		'currency_list' => array('USD', 'CAD', 'AUD', 'EUR', 'GBP', 'JPY', 'NZD', 'CHF', 'HKD', 'SGD', 'SEK', 'HUF', 'DKK', 'PLN', 'NOK', 'CZK', 'MXN'),
+		'currency_list' =>  array('AUD', 'BRL', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'SEK', 'SGD', 'THB', 'TWD', 'USD'),
 		'option_name' => 'paypal_curcode'
 	)
 );

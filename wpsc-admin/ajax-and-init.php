@@ -1886,11 +1886,21 @@ if($_REQUEST['wpsc_admin_action']=='check_form_options'){
 function wpsc_checkout_settings(){
 	global $wpdb;
 	$wpdb->show_errors = true;
-    if(isset($_POST['wpsc_form_set'])){
-    	$filter = $wpdb->escape($_POST['wpsc_form_set']);
+    if(isset($_POST['selected_form_set'])){
+    	$filter = $wpdb->escape($_POST['selected_form_set']);
     }else{
     	$filter = 0;
     }
+	  
+	  if($_POST['new_form_set'] != null) {
+	  	$new_form_set = $wpdb->escape(stripslashes($_POST['new_form_set']));
+      $form_set_key = sanitize_title($new_form_set);
+			$checkout_sets = get_option('wpsc_checkout_form_sets');
+
+			$checkout_sets[$form_set_key] = $new_form_set;
+			update_option('wpsc_checkout_form_sets', $checkout_sets);
+	  }
+
 // 		echo "<pre>".print_r($_POST,true)."</pre>";
    // if(!isset($_POST['wpsc_checkout_set_filter'])){
 		// Save checkout options
@@ -1919,14 +1929,12 @@ function wpsc_checkout_settings(){
 		      $unique_name = '';
 		      if($_POST['unique_names'][$form_id] != '-1'){ $unique_name = $_POST['unique_names'][$form_id];  }
 		    //  $form_order = $_POST['form_order'][$form_id];
-		      $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='".$unique_name."', `checkout_set`='".$filter."' WHERE `id` ='".$form_id."' LIMIT 1 ;");
+		      $wpdb->query("UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='".$unique_name."' WHERE `id` ='".$form_id."' LIMIT 1 ;");
 		      //echo "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='".$unique_name."', `checkout_set`='".$filter."' WHERE `id` ='".$form_id."' LIMIT 1 ;";
 
 		      //echo "<br />";
 			}
 		}
-	  
-
 		
 	  if($_POST['new_form_name'] != null) {
 	    foreach($_POST['new_form_name'] as $form_id => $form_name) {
@@ -1963,10 +1971,13 @@ function wpsc_checkout_settings(){
 		}
 	//}
 	$sendback = wp_get_referer();
-	if(isset($_POST['wpsc_form_set'])){   
-    	$filter = $_POST['wpsc_form_set'];
+	if(isset($form_set_key)) {
+		$sendback = add_query_arg('checkout-set', $form_set_key, $sendback);
+	} else if(isset($_POST['wpsc_form_set'])){
+		$filter = $_POST['wpsc_form_set'];
 		$sendback = add_query_arg('checkout-set', $filter, $sendback);
 	}
+	
 	if ( isset($updated) ) {
 		$sendback = add_query_arg('updated', $updated, $sendback);
 	}

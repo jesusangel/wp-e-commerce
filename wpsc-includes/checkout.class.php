@@ -8,6 +8,7 @@
  * @package wp-e-commerce
  * @subpackage wpsc-checkout-classes 
 */
+
 function wpsc_google_checkout_submit(){
 	global $wpdb,  $wpsc_cart, $current_user;
 	$wpsc_checkout = new wpsc_checkout();
@@ -326,11 +327,17 @@ class wpsc_checkout {
     global $wpdb;
     $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".$checkout_set."' ORDER BY `order`;");
     
-		$category_list = wpsc_cart_item_categories();
-		//echo "<pre>".print_r($category_list,true)."</pre>";
-    $this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $category_list)."') ORDER BY `checkout_set`, `order`;");
-
-		$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
+		$category_list = wpsc_cart_item_categories(true);
+		$additional_form_list = array();
+		foreach($category_list as $category_id) {
+			$additional_form_list[] =  wpsc_get_categorymeta($category_id, 'use_additonal_form_set');
+		}
+		
+		//echo "<pre>".print_r($additional_form_list,true)."</pre>";
+		if(count($additional_form_list) > 0) {
+			$this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $additional_form_list)."') ORDER BY `checkout_set`, `order`;");
+			$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
+		}
     if(function_exists('wpsc_get_ticket_checkout_set')){
     	$sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".wpsc_get_ticket_checkout_set()."' ORDER BY `order`;";
     	$this->additional_fields = $wpdb->get_results($sql);
@@ -425,7 +432,8 @@ class wpsc_checkout {
 			break;
 
 			case "delivery_country":
-				if(wpsc_uses_shipping()){
+			  
+				if(true == true){ 
 				$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
 				$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' size='4' /><span class='shipping_country_name'>".$country_name."</span> ";
 				}else{

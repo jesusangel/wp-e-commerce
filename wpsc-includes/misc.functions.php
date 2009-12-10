@@ -143,6 +143,25 @@ function wpsc_change_canonical_url($url) {
 add_filter('aioseop_canonical_url', 'wpsc_change_canonical_url');
 
 
+
+function wpsc_insert_canonical_url() {
+	$wpsc_url = wpsc_change_canonical_url(null);
+	echo "<link rel='canonical' href='$wpsc_url' />\n";
+}
+
+function wpsc_canonical_url() {
+	$wpsc_url = wpsc_change_canonical_url(null);
+	if($wpsc_url != null) {
+		remove_action( 'wp_head', 'rel_canonical' );
+		add_action( 'wp_head', 'wpsc_insert_canonical_url');
+	}
+}
+add_action( 'template_redirect', 'wpsc_canonical_url' );
+
+
+
+
+
 // check for all in one SEO pack and the is_static_front_page function
 if(is_callable(array("All_in_One_SEO_Pack",  'is_static_front_page'))) {
   function wpsc_change_aioseop_home_title($title) {
@@ -581,11 +600,7 @@ function nzshpcrt_display_preview_image() {
 						default:
 						$pass_imgtype = false;
 						break;
-					}/*
-					header("Content-type: image/png");
-					ImagePNG($dst_img);
-					ImagePNG($dst_img, WPSC_CACHE_DIR.$cache_filename.".png");
-					@ chmod( WPSC_CACHE_DIR.$cache_filename.".png", 0775 );*/
+					}
 					exit();
 				}
 			}

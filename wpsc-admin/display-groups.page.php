@@ -208,13 +208,10 @@ function wpsc_display_groups_page() {
       if($wpdb->query($insertsql)) {
 				$category_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` LIMIT 1");
 
-
-			if((bool)(int)$_POST['uses_additonal_forms'] == true) {
-				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 1);
-				$uses_additional_forms = true;
+			if($_POST['use_additonal_form_set'] != '') {
+				wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
 			} else {
-				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 0);
-				$uses_additional_forms = false;
+				wpsc_delete_categorymeta($category_id, 'use_additonal_form_set');
 			}
 
 
@@ -227,11 +224,11 @@ function wpsc_display_groups_page() {
 			}
 
 			
-			if($uses_additional_forms == true) {
-				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
-				$checkout_form_sets[$url_name] = $wpdb->escape(stripslashes($_POST['name']));
-				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
-			}
+// 			if($uses_additional_forms == true) {
+// 				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
+// 				$checkout_form_sets[$url_name] = $wpdb->escape(stripslashes($_POST['name']));
+// 				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
+// 			}
 
 
 
@@ -440,14 +437,13 @@ function wpsc_display_groups_page() {
       
 			update_option('wpsc_category_url_cache', array());
 
-
-			if((bool)(int)$_POST['uses_additonal_forms'] == true) {
-				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 1);
-				$uses_additional_forms = true;
+			if($_POST['use_additonal_form_set'] != '') {
+				wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
 			} else {
-				wpsc_update_categorymeta($category_id, 'uses_additonal_forms', 0);
-				$uses_additional_forms = false;
+				wpsc_delete_categorymeta($category_id, 'use_additonal_form_set');
 			}
+			
+
 			
 			if((bool)(int)$_POST['uses_billing_address'] == true) {
 				wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
@@ -457,15 +453,15 @@ function wpsc_display_groups_page() {
 				$uses_additional_forms = false;
 			}
 			
-			if($uses_additional_forms == true) {
-				$category_name = $wpdb->escape(stripslashes($_POST['title']));
-				$url_name = sanitize_title($category_name);
-				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
-				$checkout_form_sets[$url_name] = $category_name;
-				//print_r($checkout_form_sets);
-				//exit();
-				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
-			}
+// 			if($uses_additional_forms == true) {
+// 				$category_name = $wpdb->escape(stripslashes($_POST['title']));
+// 				$url_name = sanitize_title($category_name);
+// 				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
+// 				$checkout_form_sets[$url_name] = $category_name;
+// 				//print_r($checkout_form_sets);
+// 				//exit();
+// 				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
+// 			}
 
 			
       $wp_rewrite->flush_rules(); 
@@ -871,12 +867,34 @@ update_option('wpsc_category_url_cache', array());
 						</td>
 					</tr>
 
+	          <tr>
+	          	<td colspan='2' class='category_presentation_settings'>
+	          		<h4><?php _e('Checkout Settings', 'wpsc'); ?></h4>
+	          		<?php /* <span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span> */ ?>
+	          	</td>
+	          </tr>
 
 					<tr>
             <td><?php _e("This category requires additional checkout form fields",'wpsc'); ?>:</td>
             <td>
-							<label><input type="radio" name="uses_additonal_forms" value="1"/><?php _e("Yes",'wpsc'); ?></label>
-							<label><input type="radio" checked="checked" name="uses_additonal_forms" value="0"/><?php _e("No",'wpsc'); ?></label>
+							<select name='use_additonal_form_set'>
+								<option value=''>None</option>
+								<?php
+									$checkout_sets = get_option('wpsc_checkout_form_sets');
+									unset($checkout_sets[0]);
+									foreach((array)$checkout_sets as $key => $value) {
+										$selected_state = "";
+										if($_GET['checkout-set'] == $key) {
+											$selected_state = "selected='selected'";
+										}
+										echo "<option {$selected_state} value='{$key}'>".stripslashes($value)."</option>";
+									}
+								?>
+							</select>
+							<?php
+							/*  <label><input type="radio" name="uses_additonal_forms" value="1"/><?php _e("Yes",'wpsc'); ?></label> */
+							/*  <label><input type="radio" checked="checked" name="uses_additonal_forms" value="0"/><?php _e("No",'wpsc'); ?></label>*/
+							?>
             </td>
           </tr>
           

@@ -476,9 +476,6 @@ function wpsc_product_price_and_stock_forms($product_data=''){
           <input id='add_form_donation' type='checkbox' name='donation' value='yes' ".(($product_data['donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
        </td>
     </tr>";
-  
-    
-				
     ?>
      <tr>
       <td>
@@ -488,8 +485,8 @@ function wpsc_product_price_and_stock_forms($product_data=''){
           <a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
           <table>
 						<tr>
-							<td><?php echo __('Quantity', 'wpsc'); ?></td>
-							<td><?php echo __('Price', 'wpsc'); ?></td>
+							<td><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
+							<td><?php echo __('Discounted Price', 'wpsc'); ?></td>
 						</tr>
 						<?php
 						if(count($table_rate_price) > 0 ) {

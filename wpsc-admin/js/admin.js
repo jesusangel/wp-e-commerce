@@ -432,6 +432,16 @@ jQuery(document).ready( function () {
 		});		
 	});
 
+
+
+	
+	jQuery('a.add_new_form_set').livequery(function(){
+	  jQuery(this).click( function() {
+			jQuery(".add_new_form_set_forms").toggle();
+		});		
+	});
+
+
 	jQuery("#add-product-image").click(function(){
 		swfu.selectFiles();
 	});
@@ -1000,7 +1010,6 @@ function hideelement1(id, item_value) {
 	}
 }
 
-
 function toggle_display_options(state) {
   switch(state) {
     case 'list':
@@ -1019,3 +1028,5 @@ function toggle_display_options(state) {
     break;
   }
 }
+
+
