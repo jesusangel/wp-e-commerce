@@ -1,5 +1,8 @@
 <?php
 global $wpsc_query, $wpdb;
+/*
+ * Most functions called in this page can be found in the wpsc_query.php file
+ */
 ?>
 
 <div id='products_page_container' class="wrap wpsc_container">
@@ -65,19 +68,16 @@ global $wpsc_query, $wpdb;
 		</div>
 	<?php endif; ?>
 	
-	<?php if(wpsc_has_pages() && ((get_option('wpsc_page_number_position') == 1 ) || (get_option('wpsc_page_number_position') == 3)))  : ?>
-		<div class='wpsc_page_numbers'>
-		  Pages:
-			<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>
-				<?php if(wpsc_page_is_selected()) :?> 	   
-					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-				<?php else: ?> 
-					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>'><?php echo wpsc_page_number(); ?></a>
-				<?php endif; ?> 
-			<?php endwhile; ?>
-		</div>
-	<?php endif; ?>
-	
+		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
+			<div class='wpsc_page_numbers'>
+				<?php
+				$display = new display;
+			//	exit('<pre>'.print_r($wpsc_query, true).'</pre>');
+				echo $display->pagination($wpsc_query->page_count, $wpsc_query->prodcuts_per_page(), $wpsc_query->query_vars['page'],$wpsc_query->a_page_url());
+				 ?>
+			</div>
+		<?php endif; ?>
+			
 	<?php /** start the product loop here */?>
 	<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 		<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
@@ -269,18 +269,15 @@ if(function_exists('fancy_notifications')) {
 }
 ?>
 
-	<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
-		<div class='wpsc_page_numbers'>
-		  Pages: 
-			<?php while ($wpsc_query->have_pages()) : $wpsc_query->the_page(); ?>
-				<?php if(wpsc_page_is_selected()) :?> 	   
-					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-				<?php else: ?> 
-					<a href='<?php echo htmlentities(wpsc_page_url(),ENT_QUOTES); ?>'><?php echo wpsc_page_number(); ?></a>
-				<?php endif; ?> 
-			<?php endwhile; ?>
-		</div>
-	<?php endif; ?>
+		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
+			<div class='wpsc_page_numbers'>
+				<?php
+				$display = new display;
+			//	exit('<pre>'.print_r($wpsc_query, true).'</pre>');
+				echo $display->pagination($wpsc_query->page_count, $wpsc_query->prodcuts_per_page(), $wpsc_query->query_vars['page'],$wpsc_query->a_page_url());
+				 ?>
+			</div>
+		<?php endif; ?>
 	<?php endif; ?>
 
 </div>

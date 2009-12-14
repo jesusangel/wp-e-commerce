@@ -30,5 +30,4 @@ add_action('wpsc_save_theme_options','wpsc_save_theme_options_default');
 		
 		
 add_action('wpsc_theme_options','wpsc_theme_options_default');
-
 ?>

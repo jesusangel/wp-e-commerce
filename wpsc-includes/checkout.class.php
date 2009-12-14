@@ -332,15 +332,22 @@ class wpsc_checkout {
 		foreach($category_list as $category_id) {
 			$additional_form_list[] =  wpsc_get_categorymeta($category_id, 'use_additonal_form_set');
 		}
+		if(function_exists('wpsc_get_ticket_checkout_set')){
 		
+			$checkout_form_fields_id = array_search(wpsc_get_ticket_checkout_set(),$additional_form_list);
+			unset($additional_form_list[$checkout_form_fields_id]);
+		}
+		//	exit('Checkout ticket set:'.wpsc_get_ticket_checkout_set().'additional checkout sets:<pre>'.print_r($additional_form_list, true).'</pre>');
 		//echo "<pre>".print_r($additional_form_list,true)."</pre>";
 		if(count($additional_form_list) > 0) {
 			$this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $additional_form_list)."') ORDER BY `checkout_set`, `order`;");
 			$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
 		}
+	//
     if(function_exists('wpsc_get_ticket_checkout_set')){
     	$sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".wpsc_get_ticket_checkout_set()."' ORDER BY `order`;";
     	$this->additional_fields = $wpdb->get_results($sql);
+    	//exit('<pre>'.print_r($this->additional_fields, true).'</pre>');
     	$count = wpsc_ticket_checkoutfields();
     	$j = 1;
     	$fields = $this->additional_fields;
@@ -350,7 +357,9 @@ class wpsc_checkout {
     		$j++;
     	}
     	//exit($sql.'<pre>'.print_r($this->additional_fields, true).'</pre>'.$count);
-    	$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->additional_fields);
+    	if(wpsc_ticket_checkoutfields() >0){
+    		$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->additional_fields);
+    	}
     }
 
     $this->checkout_item_count = count($this->checkout_items);
@@ -396,7 +405,7 @@ class wpsc_checkout {
   function form_field() {
 		global $wpdb, $user_ID;
 		//$meta_data[$form_field['id']]
-
+		//exit('<pre>'.print_r($this, true).'</pre>');
 		if((count($_SESSION['wpsc_checkout_saved_values']) <= 0) && ($user_ID > 0)) {
 			$_SESSION['wpsc_checkout_saved_values'] = get_usermeta($user_ID, 'wpshpcrt_usr_profile');
 		}
@@ -652,11 +661,11 @@ class wpsc_checkout {
 	*/
   function save_forms_to_db($purchase_id) {
    global $wpdb;
-   		$count = $this->get_count_checkout_fields() + 1;
-  		//exit('<pre>'.print_r($_POST['collected_data'], true).'</pre>');
+   		$count = $this->get_count_checkout_fields()+1;
+  		//exit($count.'<pre>'.print_r($this->checkout_items, true).'</pre>');
 		$i = 0;
-		foreach($this->checkout_items as $form_data) {
-		 
+		foreach( $this->checkout_items as $form_data) {
+		
 		  $value = $_POST['collected_data'][$form_data->id];
 		  if($value == ''){
 		  	$value = $form_data->value;
@@ -667,7 +676,7 @@ class wpsc_checkout {
 			  	$value = $value[0];
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 			}elseif(is_array($value)) {
-				echo('<pre>'.print_r($value, true).'</pre>');
+			//	echo('<pre>'.print_r($value, true).'</pre>');
 			  	foreach((array)$value as $v){
 			  	
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $v));
@@ -682,10 +691,12 @@ class wpsc_checkout {
 			
 				
  			} 
- 		  if($i == $count){
+ 		  if($i > $count){
 		  	break;
 		  }
+
  			$i++;
+		 
 		}
   }
   /**

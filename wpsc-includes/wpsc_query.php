@@ -15,6 +15,7 @@
 */
 
 
+
 /**
 * wpsc display categories function
 * Used to determine whether to display products on the page
@@ -1930,7 +1931,132 @@ class WPSC_Query {
 		}
 		
 	}
+	/** 
+ * NEW CODE SUPPLIED BY btray77 FOR AWESOME PAGINATION
+ */
+ ///////////////////////////////////////////////////////////////////////////////////////
+
+	function is_pagination_on()	{
+		if (get_option( 'use_pagination' ) == 1){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
+	function prodcuts_per_page()
+	{
+		return get_option( 'wpsc_products_per_page' );
+	}
+
+	function a_page_url($page=null) {
+	//exit('<pre>'.print_r($this, true).'</pre>');
+		$curpage = $this->query_vars['page'];
+		if($page != ''){
+			$this->query_vars['page'] = $page;
+		}
+		//global $wpsc_query;
+
+		if($this->is_single === true) {
+			$this->query_vars['page'] = $curpage;
+			return wpsc_product_url($this->product['id']);
+		} else {
+			$output = wpsc_category_url($this->category);
+				//exit('PAge <pre>'.print_r($this,true).'</pre>');
+
+			if($this->query_vars['page'] > 1) {
+				//
+				if(get_option('permalink_structure')) {
+					$output .= "page/{$this->query_vars['page']}/";
+				} else {
+					$output = add_query_arg('page_number', '', $output);
+				}
+			}
+		//	$this->query_vars['page'] = $urpage;
+		//	exit('Whats returned: '.$output);
+			return $output;
+		}
+	}
+	function pagination($totalpages, $per_page, $current_page, $page_link) {
+			if ($current_page ==''){
+			if(isset($_GET['page_number']) && is_numeric($_GET['page_number'])){
+			 $current_page = $_GET['page_number'];
+			}else{
+				$current_page=1;
+			}
+		
+		} 
+		if(!get_option('permalink_structure')) {
+			$page_link = get_option('product_list_url').'&page_number';
+			$seperator = '=';
+		}else{
+			$page_link = get_option('product_list_url');
+			$seperator = 'page/';
+		}
+			//exit($totalpages.'<br />'.$per_page.'<br />'.$current_page.'<br />'.$page_link);
+
+		// If there's only one page, return now and don't bother
+		if($totalpages == 1) return;
+		// Pagination Prefix
+		$output = "Pages: ";
+		// Should we show the FIRST PAGE link?
+		if($current_page > 1) {
+			$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> << First </a>";
+		}
+		// Should we show the PREVIOUS PAGE link?
+		if($current_page > 1) {
+			$previous_page = $current_page - 1;	
+			$output .= " <a href=\"". $page_link .$seperator. $previous_page ."\" title=\"Previous Page\"> < Previous </a>";
+		}
+		$i =$current_page - 5;
+		$count = 0;
+		if($i > 0){
+	//		exit($i.' '.$current_page);
+			while(($i) < $current_page){
+				if($i > 0){
+					$output .= " <a href=\"". $page_link .$seperator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+					$i++;
+				}
+			}
+		}else{
+	
+		}
+		if($current_page > 0) {
+		// Current Page Number
+		$output .= "<strong>[ ". $current_page ." ]</strong>";
+		// Should we show the NEXT PAGE link?
+		}
+		$i = $current_page+1;
+		$count = 0;
+		if($current_page + 5 <= $totalpages){
+			while(($i) < $totalpages){
+				if($count <=4 ){
+					$output .= " <a href=\"". $page_link .$seperator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+					$i++;
+				}else{
+					break;
+				}
+				$count ++;
+
+			}
+
+		
+		}
+		
+		if($current_page < $totalpages) {
+			$next_page = $current_page + 1;
+			$output .= "<a href=\"". $page_link  .$seperator. $next_page ."\" title=\"Next Page\"> Next > </a>";
+		}
+		// Should we show the LAST PAGE link?
+		if($current_page < $totalpages - 1) {
+			$output .= " <a href=\"". $page_link  .$seperator. $totalpages ."\" title=\"Last Page\"> Last >> </a>";
+		}
+		// Return the output.
+		return $output;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	/* 	END OF btray77 code for pagination */
 	
 }
 			
