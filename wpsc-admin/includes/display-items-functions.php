@@ -66,6 +66,8 @@ function wpsc_display_product_form ($product_id = 0) {
   if($product_id > 0) {
 
 		$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+	
+		$product_data['meta']['dimensions'] = get_product_meta($product_id, 'dimensions',true);
 
 		$product_data['meta']['external_link'] = get_product_meta($product_id,'external_link',true);
 		$product_data['meta']['merchant_notes'] = get_product_meta($product_id,'merchant_notes',true);
@@ -77,8 +79,7 @@ function wpsc_display_product_form ($product_id = 0) {
 		$product_data['meta']['table_rate_price'] = get_product_meta($product_id,'table_rate_price',true);
 		$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
 		$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
- //dimensions
-		$product_data['dimensions'] = get_product_meta($product_id, 'dimensions',true);
+
 
 		
 		//echo "<pre>".print_r($product_data,true)."</pre>";
@@ -662,40 +663,40 @@ function wpsc_product_shipping_forms($product_data=''){
       <!--dimension-->
     <tr>
 		<td>
-			Height
+			".__('Height', 'wpsc')."
 		</td>
 		<td>
-			<input type='text' size='5' name='dimensions[height]' value='".$product_data['dimensions']['height']."'>
-			<select name='dimensions[height_unit]'>
-				<option value='in' ". (($product_data['dimensions']['height_unit'] == 'in') ? 'selected' : '') .">inches</option>
-				<option value='cm' ". (($product_data['dimensions']['height_unit'] == 'cm') ? 'selected' : '') .">cm</option>
-				<option value='meter' ". (($product_data['dimensions']['height_unit'] == 'meter') ? 'selected' : '') .">meter</option>
+			<input type='text' size='5' name='productmeta_values[dimensions][height]' value='".$product_data['meta']['dimensions']['height']."'>
+			<select name='productmeta_values[dimensions][height_unit]'>
+				<option value='in' ". (($product_data['meta']['dimensions']['height_unit'] == 'in') ? 'selected' : '') .">inches</option>
+				<option value='cm' ". (($product_data['meta']['dimensions']['height_unit'] == 'cm') ? 'selected' : '') .">cm</option>
+				<option value='meter' ". (($product_data['meta']['dimensions']['height_unit'] == 'meter') ? 'selected' : '') .">meter</option>			</select>
+			</td>
+			</tr>
+			<tr>
+		<td>
+			".__('Width', 'wpsc')."
+		</td>
+		<td>
+		<input type='text' size='5' name='productmeta_values[dimensions][width]' value='".$product_data['meta']['dimensions']['width']."'>
+		<select name='productmeta_values[dimensions][width_unit]'>
+				<option value='in' ". (($product_data['meta']['dimensions']['width_unit'] == 'in') ? 'selected' : '') .">inches</option>
+				<option value='cm' ". (($product_data['meta']['dimensions']['width_unit'] == 'cm') ? 'selected' : '') .">cm</option>
+				<option value='meter' ". (($product_data['meta']['dimensions']['width_unit'] == 'meter') ? 'selected' : '') .">meter</option>
 			</select>
 			</td>
 			</tr>
 			<tr>
 		<td>
-			Width
+			".__('Length', 'wpsc')."
 		</td>
 		<td>
-			<input type='text' size='5' name='dimensions[width]' value='".$product_data['dimensions']['width']."'>
-			<select name='dimensions[width_unit]'>
-				<option value='in' ". (($product_data['dimensions']['width_unit'] == 'in') ? 'selected' : '') .">inches</option>
-				<option value='cm' ". (($product_data['dimensions']['width_unit'] == 'cm') ? 'selected' : '') .">cm</option>
-				<option value='meter' ". (($product_data['dimensions']['width_unit'] == 'meter') ? 'selected' : '') .">meter</option>
-			</select>
-			</td>
-			</tr>
-			<tr>
-		<td>
-			Length
-		</td>
-		<td>
-			<input type='text' size='5' name='dimensions[length]' value='".$product_data['dimensions']['length']."'>
-			<select name='dimensions[length_unit]'>
-				<option value='in' ". (($product_data['dimensions']['length_unit'] == 'in') ? 'selected' : '') .">inches</option>
-				<option value='cm' ". (($product_data['dimensions']['length_unit'] == 'cm') ? 'selected' : '') .">cm</option>
-				<option value='meter' ". (($product_data['dimensions']['length_unit'] == 'meter') ? 'selected' : '') .">meter</option>
+			<input type='text' size='5' name='productmeta_values[dimensions][length]' value='".$product_data['meta']['dimensions']['length']."'>
+			<select name='productmeta_values[dimensions][length_unit]'>
+				<option value='in' ". (($product_data['meta']['dimensions']['length_unit'] == 'in') ? 'selected' : '') .">inches</option>
+				<option value='cm' ". (($product_data['meta']['dimensions']['length_unit'] == 'cm') ? 'selected' : '') .">cm</option>
+				<option value='meter' ". (($product_data['meta']['dimensions']['length_unit'] == 'meter') ? 'selected' : '') .">meter</option>
+
 			</select>
 			</td>
 			</tr>

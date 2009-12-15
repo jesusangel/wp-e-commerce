@@ -129,11 +129,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	if($post_data['table_rate_price'] != 1) {
 		$post_data['meta']['table_rate_price'] = null;
 	}
-	
-	if(is_array($post_data['dimensions'])){
-		$post_data['meta']['dimensions'] = serialize($post_data['dimensions']);
-	}
-	
 
 	$post_data['files'] = $_FILES;
 
