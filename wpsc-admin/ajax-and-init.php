@@ -349,6 +349,26 @@ function wpsc_duplicate_product() {
 		$wpdb->query($sql);
 		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
 		
+		//Inserting duplicated variations record.
+		$variation_assocs = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE associated_id = ".$product_id, ARRAY_A);
+		if(count($variation_assocs))foreach($variation_assocs as $variation_assoc){
+			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_ASSOC." VALUES ('', '".$variation_assoc['type']."', '".$variation_assoc['name']."', '".$new_id."', '".$variation_assoc['variation_id']."');");
+		}
+		
+		$variation_combinations = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_COMBINATIONS." WHERE product_id = ".$product_id, ARRAY_A);
+		if(count($variation_combinations))foreach($variation_combinations as $variation_combination){
+			$variation_properties = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE id = ".$variation_combination['priceandstock_id'], ARRAY_A);
+			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_PROPERTIES." VALUES ('', '".$new_id."', '".$variation_properties[0]['stock']."', '".$variation_properties[0]['price']."', '".$variation_properties[0]['weight']."', '".$variation_properties[0]['weight_unit']."', '".$variation_properties[0]['visibility']."', '".$variation_properties[0]['file']."');");
+			$new_prop_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` LIMIT 1");
+			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_COMBINATIONS." VALUES ('".$new_id."', '".$new_prop_id."', '".$variation_combination['value_id']."', '".$variation_combination['variation_id']."', '".$variation_combination['all_variation_ids']."');");			
+		}
+		
+		$variation_values_assocs = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE product_id = ".$product_id, ARRAY_A);
+		if(count($variation_values_assocs))foreach($variation_values_assocs as $variation_values_assoc){
+			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_VALUES_ASSOC." VALUES ('', '".$new_id."', '".$variation_values_assoc['value_id']."', '".$variation_values_assoc['visible']."', '".$variation_values_assoc['variation_id']."');");
+		}
+		//end of variations
+
 		//Inserting duplicated category record.
 		$category_assoc = $wpdb->get_col("SELECT `category_id` FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id = '".$product_id."'");
 		$new_product_category = array();
