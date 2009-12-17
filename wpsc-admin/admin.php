@@ -243,7 +243,7 @@ function wpsc_admin_edit_products_page_js() {
 		wp_enqueue_script('editor');
 	}
 	wp_enqueue_script('media-upload');
-  wp_enqueue_style('thickbox');
+    wp_enqueue_style('thickbox');
   
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-swfobject');
