@@ -1,10 +1,10 @@
 === WP e-Commerce ===
-Contributors: Dan Milward, Thomas Howard, Jeffry Ghazally, Chris Beavan, Allen Han
+Contributors: Dan Milward, Tom Howard, Jeffry Ghazally, Chris Beavan, Allen Han
 Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
-Tested up to: 2.8.5
-Stable tag: 3.7.5.1
+Tested up to: 2.9
+Stable tag: 3.7.5.2
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -35,8 +35,16 @@ When updating it is important that you do not overwrite the entire images folder
 If you experience database errors try de-activating and re-activating your plugin. 
 
 
-== Changelog ==
+== Changelog == 
 
+
+= 3.7.5.2 =
+* More Fixes to the Paypal Pro merchant file
+* Image thumbnail size fixes
+* Updated readme to mark plugin as working with 2.9
+* Purchase log filtering bug fixed
+* Fix for a bug when no shipping module is used where the shipping country and region were not being changed
+* Remove button on checkout page now clears stock claims
 
 = 3.7.5.1 =
 * Fixes to the Paypal Pro merchant file
