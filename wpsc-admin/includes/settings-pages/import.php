@@ -14,7 +14,7 @@ global $wpdb;
 <?php
 //exit('<pre>'.print_r($_FILES, true).'</pre>');
 if ($_FILES['csv_file']['name'] != '') {
-
+ini_set("auto_detect_line_endings", 1);
 	$file = $_FILES['csv_file'];
 	//exit('<pre>'.print_r($file,true).'</pre>');
 	if(move_uploaded_file($file['tmp_name'],WPSC_FILE_DIR.$file['name'])){

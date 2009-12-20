@@ -682,7 +682,7 @@ function wpsc_dashboard_4months_widget(){
 	$timeranges[3]["start"]= mktime(0, 0, 0, $this_month, 1, $this_year);
 	$timeranges[3]["end"]= mktime();
 	
-	foreach ($products as $product){ //run trough products and get each product income amounts and name
+	foreach ((array)$products as $product){ //run trough products and get each product income amounts and name
 		foreach ($timeranges as $timerange){ //run trough time ranges of product, and get its income over each time range
 			$prodsql = "SELECT SUM(`".WPSC_TABLE_CART_CONTENTS."`.`price` * `".WPSC_TABLE_CART_CONTENTS."`.`quantity`) AS sum FROM `".WPSC_TABLE_CART_CONTENTS."` INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`processed` >= 2 AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` >= ".$timerange["start"]." AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` < ".$timerange["end"]." AND `".WPSC_TABLE_CART_CONTENTS."`.`prodid` = ".$product['prodid']." GROUP BY `".WPSC_TABLE_CART_CONTENTS."`.`prodid` LIMIT 1"; //get the amount of income that current product has generaterd over current time range
 			$sum = $wpdb->get_results($prodsql,ARRAY_A);
@@ -703,7 +703,7 @@ function wpsc_dashboard_4months_widget(){
 		$output.='<td align="center" style=" font-family:\'Times New Roman\'; font-size:15px; border-bottom:solid 1px #000;">' . date("M", $mnth) . '</td>';
 	}
     $output.='</tr>';
-    foreach($prod_data as $product) {
+    foreach((array)$prod_data as $product) {
 		$output.='<tr height="20">
 				<td width="20" style="font-weight:bold; color:#008080; border-bottom:solid 1px #000;">' . $tablerow . '</td>
 				<td style="border-bottom:solid 1px #000;width:60px">' . $product[1] . '</td>';
