@@ -326,7 +326,6 @@ function nzshpcrt_getvariationform($variation_id)
 function coupon_edit_form($coupon) {
 
 $conditions = unserialize($coupon['condition']);
-$conditions = $conditions[0];
 	//exit('<pre>'.print_r($conditions, true).'</pre>');
 
   $start_timestamp = strtotime($coupon['start']);
@@ -335,7 +334,7 @@ $conditions = $conditions[0];
   $output = '';
   $output .= "<form name='edit_coupon' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
     $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
-  $output .= "<table class='add-coupon'>\n\r";
+  $output .= "<table class='add-coupon' style='display:none;'>\n\r";
   $output .= " <tr>\n\r";
   $output .= "   <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
   $output .= "   <th>".__('Discount', 'wpsc')."</th>\n\r";
@@ -355,6 +354,7 @@ $conditions = $conditions[0];
   $output .= "   <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
   $output .= "     <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
   $output .= "     <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
+  $output .= "     <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
   $output .= "   </select>\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
@@ -430,7 +430,6 @@ $conditions = $conditions[0];
   $output .= " </tr>\n\r";
 
   if($conditions != null){
-
 	  $output .= "<tr>";
 	  $output .= "<th>";
 	  $output .= "Conditions";
@@ -449,21 +448,27 @@ $conditions = $conditions[0];
 	  $output .= "Value";
 	  $output .= "</th>";
 	  $output .= " </tr>\n\r";
-	  $output .= "<tr>";
-	  $output .= "<td>";
-	  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
-	  $output .= "<input type='submit' value='Delete' name='delete_condition' />";
-	  $output .= "</td>";
-	  $output .= "<td>";
-	  $output .= $conditions['property'];
-	  $output .= "</td>";
-	  $output .= "<td>";
-	  $output .= $conditions['logic'];
-	  $output .= "</td>";
-	  $output .= "<td>";
-	  $output .= $conditions['value'];
-	  $output .= "</td>";
-	  $output .= "</tr>";
+	  $i=0;
+	  foreach ($conditions as $condition){
+		  $output .= "<tr>";
+		  $output .= "<td>";
+		  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
+		  $output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
+		  $output .= "<span style='cursor:pointer;' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
+		  $output .= "</td>";
+		  $output .= "<td>";
+		  $output .= $condition['property'];
+		  $output .= "</td>";
+		  $output .= "<td>";
+		  $output .= $condition['logic'];
+		  $output .= "</td>";
+		  $output .= "<td>";
+		  $output .= $condition['value'];
+		  $output .= "</td>";
+		  $output .= "</tr>";
+		  $i++;
+	  }
+	  $output .=	wpsc_coupons_conditions( $id);
   }elseif($conditions == null){
   	$output .=	wpsc_coupons_conditions( $id);
 
@@ -514,7 +519,7 @@ function wpsc_coupons_conditions($id){
 
 $output ='
 <input type="hidden" name="coupon_id" value="'.$id.'" />
-<tr><td colspan="3"><b>Conditions</b></td></tr>
+<tr><td colspan="3"><b>Add Conditions</b></td></tr>
 <tr><td colspan="8">
 	<div class="coupon_condition">
 		<div>

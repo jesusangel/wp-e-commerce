@@ -5,7 +5,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		$coupon_code = $_POST['add_coupon_code'];
 		$discount = (double)$_POST['add_discount'];
 		// cast to boolean, then integer, prevents the value from being anything but 1 or 0
-		$discount_type = (int)(bool)$_POST['add_discount_type'];
+		$discount_type = (int)$_POST['add_discount_type'];
 		$use_once = (int)(bool)$_POST['add_use-once'];
 		$every_product = (int)(bool)$_POST['add_every_product'];
 // 		$start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
@@ -27,7 +27,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 			echo "<div class='updated'><p align='center'>".__('Thanks, the coupon has been added.', 'wpsc')."</p></div>";
 		}
 	}
-	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && ($_POST['delete_condition'] != 'Delete')) {
+	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && !(isset($_POST['delete_condition'])) && !(isset($_POST['submit_condition']))) {
 		foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
 			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
 			$coupon_id = (int)$coupon_id;
@@ -79,8 +79,23 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 			}
 		}
 	}
-  if($_POST['delete_condition'] == 'Delete'){
-	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+  if(isset($_POST['delete_condition'])){
+	  $conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
+	  $conditions=unserialize($conditions);
+	  unset($conditions[(int)$_POST['delete_condition']]);
+	  $conditions = array_values($conditions);
+	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+	  $wpdb->query($sql);
+  }
+  if(isset($_POST['submit_condition'])){
+	$conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
+	  $conditions=unserialize($conditions);
+	  $new_cond=array();
+	  $new_cond['property']=$_POST['rules']['property'][0];
+	  $new_cond['logic']=$_POST['rules']['logic'][0];
+	  $new_cond['value']=$_POST['rules']['value'][0];
+	  $conditions []= $new_cond;
+	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
 	  $wpdb->query($sql);
   }
   if($_POST['change-settings'] == 'true') {
@@ -125,7 +140,7 @@ if(isset($_GET['token'])) {
 
   <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo __('Add', 'wpsc'); ?>' title='<?php echo __('Add', 'wpsc'); ?>' />&nbsp;<span><?php echo __('Add Coupon', 'wpsc');?></span></a>
   
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' /></span>
+  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' style="display:none;" /></span>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
 <table style="width: 100%;">
@@ -135,7 +150,7 @@ if(isset($_GET['token'])) {
 
 <div id='add_coupon_box' class='modify_coupon' >
 <form name='add_coupon' method='post' action=''>
-<table class='add-coupon'>
+<table class='add-coupon' >
  <tr>
    <th>
    <?php echo __('Coupon Code', 'wpsc'); ?>
@@ -170,6 +185,7 @@ if(isset($_GET['token'])) {
    <select name='add_discount_type'>
      <option value='0' >$</option>
      <option value='1' >%</option>
+     <option value='2' >Free shipping</option>
    </select>
    </td>
    <td>
@@ -254,8 +270,8 @@ if(isset($_GET['token'])) {
 
 <tr><td colspan='3'><b>Conditions</b></td></tr>
 <tr><td colspan="8">
-	<div class='coupon_condition'>
-		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/cross.png"/></button>
+	<div class='coupon_condition' style="padding-left: 20px;">
+		<div>
 			<select class="ruleprops" name="rules[property][]">
 				<option value="item_name" rel="order">Item name</option>
 				<option value="item_quantity" rel="order">Item quantity</option>
@@ -275,7 +291,36 @@ if(isset($_GET['token'])) {
 				<input type="text" name="rules[value][]"/>
 			</span>
 			<span>
-				<button class="add" type="button">
+            	<script>
+				var coupon_number=1;
+				function add_another_property(this_button){
+					var new_property='<div class="coupon_condition">\n'+
+						'<div><img height="16" width="16" class="delete" alt="Delete" src="http://e-art.lt/wpecommerce/wp-content/plugins/e-commerce/images/cross.png" onclick="jQuery(this).parent().remove();"/> \n'+
+							'<select class="ruleprops" name="rules[property][]"> \n'+
+								'<option value="item_name" rel="order">Item name</option> \n'+
+								'<option value="item_quantity" rel="order">Item quantity</option>\n'+
+								'<option value="total_quantity" rel="order">Total quantity</option>\n'+ 
+								'<option value="subtotal_amount" rel="order">Subtotal amount</option>\n'+ 
+							'</select> \n'+
+							'<select name="rules[logic][]"> \n'+
+								'<option value="equal">Is equal to</option> \n'+
+								'<option value="greater">Is greater than</option> \n'+
+								'<option value="less">Is less than</option> \n'+
+								'<option value="contains">Contains</option> \n'+
+								'<option value="not_contain">Does not contain</option> \n'+
+								'<option value="begins">Begins with</option> \n'+
+								'<option value="ends">Ends with</option> \n'+
+							'</select> \n'+
+							'<span> \n'+
+								'<input type="text" name="rules[value][]"/> \n'+
+							'</span>  \n'+
+						'</div> \n'+
+					'</div> ';
+					this_button.parent().parent().parent().parent().append(new_property);
+					coupon_number++;
+				}
+				</script>
+				<button class="add" type="button" onclick="add_another_property(jQuery(this));">
 					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/plus_icon.jpg"/>
 				</button>
 			</span>
@@ -378,7 +423,7 @@ foreach((array)$coupon_data as $coupon) {
   
   
   echo "    <td>\n\r";
-  echo "<a href='#' onclick='return show_status_box(\"coupon_box_".$coupon['id']."\",\"coupon_box_".$coupon['id']."\");' >".__('Edit', 'wpsc')."</a>";
+  echo "<a href='javascript:void(0)' onclick='jQuery(this).parent().parent().next().children().children().children().children().show();' >".__('Edit', 'wpsc')."</a>";
   echo "    </td>\n\r";
   
   echo "  </tr>\n\r";

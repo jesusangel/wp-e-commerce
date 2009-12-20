@@ -107,6 +107,9 @@ class wpsc_coupons {
 		$wpsc_cart->clear_cache();
 		if ($this->conditions == '' || count($this->conditions) == 0) {
 			//Calculates the discount for the whole cart if there is no condition on this coupon.
+			if ($this->is_percentage == '2'){
+			return $wpsc_cart->calculate_total_shipping();	
+			}
 			if ($this->is_percentage == '1') {
 			  
 				$total_price = $wpsc_cart->calculate_subtotal();
@@ -148,7 +151,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 						//	exit('ture');
 						}else{
 							$match = false;
-						//	exit('false');
+							break('false');
 						}
 					}
 					if ($match) {
@@ -250,7 +253,6 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of a product in the cart equals condition value
-				exit($product_obj->quantity.'and'.$c['value']);
 				if ($product_obj->quantity == (int)$c['value'])
 					return true;
 				break;
