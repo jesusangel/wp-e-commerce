@@ -295,7 +295,7 @@ if(isset($_GET['token'])) {
 				var coupon_number=1;
 				function add_another_property(this_button){
 					var new_property='<div class="coupon_condition">\n'+
-						'<div><img height="16" width="16" class="delete" alt="Delete" src="http://e-art.lt/wpecommerce/wp-content/plugins/e-commerce/images/cross.png" onclick="jQuery(this).parent().remove();"/> \n'+
+						'<div><img height="16" width="16" class="delete" alt="Delete" src="<?php echo WPSC_URL; ?>/images/cross.png" onclick="jQuery(this).parent().remove();"/> \n'+
 							'<select class="ruleprops" name="rules[property][]"> \n'+
 								'<option value="item_name" rel="order">Item name</option> \n'+
 								'<option value="item_quantity" rel="order">Item quantity</option>\n'+
