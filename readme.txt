@@ -4,7 +4,7 @@ Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
 Tested up to: 2.9
-Stable tag: 3.7.5.2
+Stable tag: 3.7.5.3
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -37,6 +37,8 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
+= 3.7.5.3 =
+* Support for WordPress 2.9 canonical URLs for Products and Categories
 
 = 3.7.5.2 =
 * More Fixes to the Paypal Pro merchant file
