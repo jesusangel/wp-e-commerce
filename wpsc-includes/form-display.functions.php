@@ -62,7 +62,7 @@ function nzshpcrt_form_field_list($selected_field = null)
 function wpsc_parent_category_list($group_id, $category_id, $category_parent_id) {
   global $wpdb,$category_data;
   $options = "";
-  $options .= "<option value='0'>".__('Select Parent', 'wpsc')."</option>\r\n";
+  $options .= "<option value='".$group_id."'>".__('Select Parent', 'wpsc')."</option>\r\n";
   $options .= wpsc_category_options((int)$group_id, (int)$category_id, null, 0, (int)$category_parent_id);   
   $concat .= "<select name='category_parent'>".$options."</select>\r\n";    
   return $concat;
@@ -75,20 +75,17 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
    */
   global $wpdb;
   $siteurl = get_option('siteurl');
-  if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
-	} else {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` = '$group_id' AND `active`='1' AND `id` != '$this_category' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
-	}
+  $values=get_terms('wpsc_product_category', 'hide_empty=0&parent='.$group_id);
   foreach((array)$values as $option) {
-    if($selected_id == $option['id']) {
-      $selected = "selected='selected'";
-		}
-    
-    $output .= "<option $selected value='".$option['id']."'>".str_repeat("-", $iteration).stripslashes($option['name'])."</option>\r\n";
-    $output .= wpsc_category_options($group_id, $this_category, $option['id'], $iteration+1, $selected_id);
-    $selected = "";
+    if($option->term_id != $this_category){
+	  	if($selected_id == $option->term_id) {
+	      $selected = "selected='selected'";
+			}
+	    $output .= "<option $selected value='".$option->term_id."'>".str_repeat("-", $iteration).stripslashes($option->name)."</option>\r\n";
+	    $output .= wpsc_category_options($option->term_id, $this_category, $option->term_id, $iteration+1, $selected_id);
+	    $selected = "";
 	}
+  }
   return $output;
 }
   

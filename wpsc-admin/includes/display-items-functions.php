@@ -404,19 +404,20 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 				<span class='howto'>".__('Categories', 'wpsc')." </span>
 				<div id='categorydiv' >";
 					$search_sql = apply_filters('wpsc_product_category_and_tag_forms_group_search_sql', '');
-					$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')".$search_sql, ARRAY_A);
+					$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
 					//exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
 						foreach((array)$categorisation_groups as $categorisation_group){
-							$category_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('{$categorisation_group['id']}')");
-							if($category_count > 0) {
+							$categorisation_group=(array)($categorisation_group);
+							$category_count = get_terms('wpsc_product_category', "hide_empty=0&child_of=".$categorisation_group['term_id'], ARRAY_A);
+							if(count($category_count) > 0) {
 								$output .= "<p>";
 								$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], __('Select &quot;[categorisation]&quot;', 'wpsc'));
 								$output .= "".$category_group_name.":<br />";
 								$output .= "</p>";
 								if ($product_data == '') {
-									$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
+									$output .= wpsc_category_list($categorisation_group['term_id'], false, 'add_');
 								} else {
-									$output .= wpsc_category_list($categorisation_group['id'], $product_data['meta']['_wpsc_original_id'], 'edit_');
+									$output .= wpsc_category_list($categorisation_group['term_id'], $product_data['meta']['_wpsc_original_id'], 'edit_');
 								}
 							}
 						}
@@ -1244,9 +1245,9 @@ function wpsc_main_product_image_menu($product_id) {
 function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0) {
   global $wpdb;
   if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+    $values = get_terms('wpsc_product_category', "hide_empty=0&parent=".$category_id, ARRAY_A);
   } else {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+    $values = get_terms('wpsc_product_category', "hide_empty=0&parent=".$group_id, ARRAY_A);
 	}
 	
 	if($category_id < 1) {
@@ -1257,17 +1258,18 @@ function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $categ
 		
 	
   foreach((array)$values as $option) {
+  	$option=(array)$option;
     if(is_numeric($product_id) && ($product_id > 0)) {
-      $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['id']."')  LIMIT 1",ARRAY_A);
+      $category_assoc = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN('".$product_id."') AND `category_id` IN('".$option['term_id']."')  LIMIT 1",ARRAY_A);
       //echo "<pre>".print_r($category_assoc,true)."</pre>";
       if(is_numeric($category_assoc['id']) && ($category_assoc['id'] > 0)) {
         $selected = "checked='checked'";
 			}
 		}
 		
-		$output .= "  <li id='category-".$option['id']."'>\n\r";
-    $output .= "    <label class='selectit'><input  id='".$unique_id."category_form_".$option['id']."' type='checkbox' $selected name='category[]' value='".$option['id']."' /></label><label for='".$unique_id."category_form_".$option['id']."' class='greytext' >".stripslashes($option['name'])."</label>";
-    $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['id'], $iteration+1);
+		$output .= "  <li id='category-".$option['term_id']."'>\n\r";
+    $output .= "    <label class='selectit'><input  id='".$unique_id."category_form_".$option['term_id']."' type='checkbox' $selected name='category[]' value='".$option['term_id']."' /></label><label for='".$unique_id."category_form_".$option['term_id']."' class='greytext' >".stripslashes($option['name'])."</label>";
+    $output .= wpsc_category_list($group_id, $product_id, $unique_id, $option['term_id'], $iteration+1);
     
 		$output .= "  </li>\n\r";
     

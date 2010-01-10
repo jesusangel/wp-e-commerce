@@ -426,6 +426,7 @@ if(!function_exists('wpsc_initialisation')){
 
   
 		register_taxonomy('product_tag', 'product');
+		register_taxonomy('wpsc_product_category', 'product',array('hierarchical' => true));
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);

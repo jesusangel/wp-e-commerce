@@ -3,7 +3,13 @@
 
 function nzshpcrt_getcategoryform($catid) {
   global $wpdb,$nzshpcrt_imagesize_info;
-  $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1",ARRAY_A);
+  $product = get_term_by( 'id', $catid, 'wpsc_product_category', ARRAY_A);
+  $product['nice-name']=wpsc_get_categorymeta($product['term_id'], 'nice-name');
+  $product['description']=wpsc_get_categorymeta($product['term_id'], 'description');
+  $product['image']=wpsc_get_categorymeta($product['term_id'], 'image');
+  $product['fee']=wpsc_get_categorymeta($product['term_id'], 'fee');
+  $product['active']=wpsc_get_categorymeta($product['term_id'], 'active');
+  $product['order']=wpsc_get_categorymeta($product['term_id'], 'order');  
   $output = '';
   $output .= "<div class='editing_this_group form_table'>";
 	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), __('You are editing the &quot;[categorisation]&quot; Group', 'wpsc'))."</p>\n\r";
@@ -43,41 +49,15 @@ function nzshpcrt_getcategoryform($catid) {
   $output .= __('Group Parent', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
-  $output .= wpsc_parent_category_list($product['group_id'], $product['id'], $product['category_parent']);
+  $top_parent=$product;
+  while(absint($top_parent['parent']>0)){
+	$new=get_term_by('id', $top_parent['parent'], 'wpsc_product_category', ARRAY_A);
+	$top_parent=$new;
+  }
+  $output .= wpsc_parent_category_list($top_parent['term_id'], $product['term_id'], $product['parent']);
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
   $output .= "          </tr>\n\r";
-
-
-	if ($product['display_type'] == 'grid') {
-		$display_type1="selected='selected'";
-	} else if ($product['display_type'] == 'default') {
-		$display_type2="selected='selected'";
-	}
-	
-	switch($product['display_type']) {
-	  case "default":
-			$product_view1 = "selected ='selected'";
-		break;
-		
-		case "grid":
-		if(function_exists('product_display_grid')) {
-			$product_view3 = "selected ='selected'";
-			break;
-		}
-		
-		case "list":
-		if(function_exists('product_display_list')) {
-			$product_view2 = "selected ='selected'";
-			break;
-		}
-		
-		default:
-			$product_view0 = "selected ='selected'";
-		break;
-	}	
-	
-	
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
@@ -124,7 +104,7 @@ function nzshpcrt_getcategoryform($catid) {
   $output .= "          </tr>\n\r";
 	 /* START OF TARGET MARKET SELECTION */					
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
-	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$product['id']." AND visible= 1");
+	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$product['term_id']." AND visible= 1");
 //	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
 	$output .= " <tr>\n\r";
 	$output .= " 	<td colspan='2'><h4>Target Market Restrictions</h4></td></tr><tr><td>&nbsp;</td></tr><tr>\n\r";
@@ -170,6 +150,35 @@ function nzshpcrt_getcategoryform($catid) {
 	$output .= "          	". __('Catalog View', 'wpsc').":\n\r";
 	$output .= "          	</td>\n\r";
 	$output .= "          	<td>\n\r";
+
+	if ($product['display_type'] == 'grid') {
+		$display_type1="selected='selected'";
+	} else if ($product['display_type'] == 'default') {
+		$display_type2="selected='selected'";
+	}
+	
+	switch($product['display_type']) {
+	  case "default":
+			$product_view1 = "selected ='selected'";
+		break;
+		
+		case "grid":
+		if(function_exists('product_display_grid')) {
+			$product_view3 = "selected ='selected'";
+			break;
+		}
+		
+		case "list":
+		if(function_exists('product_display_list')) {
+			$product_view2 = "selected ='selected'";
+			break;
+		}
+		
+		default:
+			$product_view0 = "selected ='selected'";
+		break;
+	}	
+	
 	$output .= "          		<select name='display_type'>\n\r";	
 	$output .= "          			<option value='' $product_view0 >".__('Please select', 'wpsc')."</option>\n\r";	
 	$output .= "          			<option value='default' $product_view1 >".__('Default View', 'wpsc')."</option>\n\r";	
@@ -210,7 +219,7 @@ function nzshpcrt_getcategoryform($catid) {
 	$output .= "          </tr>\n\r";
 
 	
-		$used_additonal_form_set = wpsc_get_categorymeta($product['id'], 'use_additonal_form_set');
+		$used_additonal_form_set = wpsc_get_categorymeta($product['term_id'], 'use_additonal_form_set');
 		$output .= "          <tr>\n\r";
 		$output .= "            <td>\n\r";
 		$output .= __("This category requires additional checkout form fields",'wpsc').": ";
@@ -240,7 +249,7 @@ function nzshpcrt_getcategoryform($catid) {
 	$output .= "          	<td colspan='2'>						</td>";
 	$output .= "          </tr>";
 		
-		$uses_billing_address = (bool)wpsc_get_categorymeta($product['id'], 'uses_billing_address');
+		$uses_billing_address = (bool)wpsc_get_categorymeta($product['term_id'], 'uses_billing_address');
 		$output .= "          <tr>\n\r";
 		$output .= "            <td>\n\r";
 		$output .= __("Products in this category use the billing address to calculate shipping",'wpsc').": ";
@@ -255,10 +264,10 @@ function nzshpcrt_getcategoryform($catid) {
   $output .= "            <td>\n\r";
   $output .= "            </td>\n\r";
   $output .= "            <td class='last_row'>\n\r";
-  $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
+  $output .= "<input type='hidden' name='prodid' value='".$product['term_id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".__('Edit Group', 'wpsc')."' />";
-	$output .= "<a class='delete_button' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
+	$output .= "<a class='delete_button' href='".add_query_arg('category_delete_id', $product['term_id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r"; 
@@ -315,7 +324,7 @@ function nzshpcrt_getvariationform($variation_id)
   $output .= "<input type='hidden' name='prodid' value='".$variation['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
   $output .= "<input class='button' style='float:left;'  type='submit' name='submit' value='".__('Edit', 'wpsc')."' />";
-  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;deleteid=".$variation['id']."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
+  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;category_delete_id=".$variation['id']."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";
  $output .= "        </table>\n\r";

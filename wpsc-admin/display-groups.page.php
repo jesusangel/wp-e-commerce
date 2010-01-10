@@ -66,17 +66,11 @@ function admin_categorylist($curent_category) {
 
 function display_categories($group_id, $id = null, $level = 0) {
   global $wpdb,$category_data;
-  if(is_numeric($id)) {
-    $category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND `active`='1' AND `category_parent` = '".$id."' ORDER BY `id`";
-    $category_list = $wpdb->get_results($category_sql,ARRAY_A);
-	} else {
-		$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND `active`='1' AND `category_parent` = '0' ORDER BY `id`";
-		$category_list = $wpdb->get_results($category_sql,ARRAY_A);
-	}
+	$category_list = get_terms('wpsc_product_category','hide_empty=0&parent='.$group_id);
   if($category_list != null) {
-    foreach($category_list as $category) {
-      display_category_row($category, $level);
-      display_categories($group_id, $category['id'], ($level+1));
+    foreach((array)$category_list as $category) {
+    	display_category_row($category, $level);
+        display_categories($category->term_id, $id, ($level+1));
 		}
 	}
 }
@@ -91,19 +85,19 @@ function display_category_row($category,$subcategory_level = 0) {
   echo "		        <table class='itemlist'>\n\r";
   echo "		          <tr>\n\r";
   echo "		            <td>\n\r";
-  if($category['image'] !=null) {
+ /* if($category['image'] !=null) {
 		echo "		            <img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='30' height='30' />\n\r";
 	} else {
 		echo "		            <img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='30' height='30'  />\n\r";
-	}
+	}*/
   echo "		            </td>\n\r";
   
   echo "		            <td>\n\r";
-  echo "".htmlentities(stripslashes($category['name']), ENT_QUOTES, 'UTF-8')."";
+  echo "".htmlentities(stripslashes($category->name), ENT_QUOTES, 'UTF-8')."";
   echo "		            </td>\n\r";
 
   echo "		            <td>\n\r";
-  echo "		            		<a href='#' onclick='fillcategoryform(".$category['id'].");return false;'>".__('Edit', 'wpsc')."</a>\n\r";
+  echo "		            		<a href='#' onclick='fillcategoryform(".$category->term_id.");return false;'>".__('Edit', 'wpsc')."</a>\n\r";
   echo "		            </td>\n\r";
   echo "		          </tr>\n\r";
   echo "		        </table>\n\r";
@@ -121,9 +115,10 @@ function display_category_row($category,$subcategory_level = 0) {
 function wpsc_display_groups_page() {
   global $wpdb, $wp_rewrite;
 	if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
-		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
+		$default_cat=$wpdb->get_var('SELECT object_id FROM '.WPSC_TABLE_META.' WHERE object_type = "wpsc_category" AND meta_key = "default" AND meta_value = 1 AND object_id IN (SELECT object_id FROM '.WPSC_TABLE_META.' WHERE object_type = "wpsc_category" AND meta_key = "active" AND meta_value = 1) LIMIT 1');
+		$current_categorisation = get_term_by('id', $default_cat, 'wpsc_product_category', ARRAY_A);
 	} else {
-		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
+		$current_categorisation = get_term_by('id', $_GET['category_group'], 'wpsc_product_category', ARRAY_A);
 	}
   if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>"); 
@@ -149,24 +144,11 @@ function wpsc_display_groups_page() {
 			$image = '';
 		}
     
-    if(is_numeric($_POST['category_parent'])) {
+    if(is_numeric($_POST['category_parent']) && absint($_POST['category_parent'])>0) {
       $parent_category = (int)$_POST['category_parent'];
 		} else {
-      $parent_category = 0;
+      $parent_category = (int)$_POST['categorisation_group'];
 		}
-      
-   
-    //$tidied_name = sanitize_title();
-		//$tidied_name = strtolower($tidied_name);
-		$url_name = sanitize_title($_POST['name']);
-    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
-    $extension_number = '';
-    if($similar_names['count'] > 0) {
-      $extension_number = (int)$similar_names['max_number']+1;
-		}
-    $url_name .= $extension_number;
-    
-    
     
 		switch($_POST['display_type']) {
 			case "grid":
@@ -202,13 +184,21 @@ function wpsc_display_groups_page() {
     
     if(trim($_POST['name']) != null) {
 			//$_POST['name'] = "test";
-      $insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `nice-name` , `description`, `image`, `fee` , `active`, `category_parent`, `order` ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
+      $new_category = wp_insert_term( $wpdb->escape(stripslashes($_POST['name'])), 'wpsc_product_category', "parent=".$parent_category);
+      $category_id=$new_category['term_id'];
+      $term = get_term_by('id', $new_category['term_id'], 'wpsc_product_category');
+      $url_name=$term->slug;
+      //$insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` ,  ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
       
       $wp_rewrite->flush_rules(); 
-      if($wpdb->query($insertsql)) {
-				$category_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` LIMIT 1");
-
-			if($_POST['use_additonal_form_set'] != '') {
+      if($category_id) {
+      		wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
+      		wpsc_update_categorymeta($category_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
+      		wpsc_update_categorymeta($category_id, 'image', $image);
+      		wpsc_update_categorymeta($category_id, 'fee', '0');
+      		wpsc_update_categorymeta($category_id, 'active', '1');
+      		wpsc_update_categorymeta($category_id, 'order', '0');
+      		if($_POST['use_additonal_form_set'] != '') {
 				wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
 			} else {
 				wpsc_delete_categorymeta($category_id, 'use_additonal_form_set');
@@ -307,7 +297,7 @@ function wpsc_display_groups_page() {
       }
     
     if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
-      $imagedata = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=".(int)$_POST['prodid']." LIMIT 1");
+      	$imagedata = wpsc_get_categorymeta($category_id, 'image');
       if($imagedata != null) {
         $height = $_POST['height'];
         $width = $_POST['width'];
@@ -316,31 +306,19 @@ function wpsc_display_groups_page() {
         image_processing($imagepath, $image_output, $width, $height);
 			}
 		}
-   
-    $category_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$_POST['prodid']."')", ARRAY_A);
+  
+    $category_data = get_term_by( 'id', $category_id, 'wpsc_product_category', ARRAY_A);
+    $category_data['nice-name']=wpsc_get_categorymeta($category_id, 'nice-name');
+    $category_data['description']=wpsc_get_categorymeta($category_id, 'description');
+    $category_data['image']=wpsc_get_categorymeta($category_id, 'image');
+    $category_data['fee']=wpsc_get_categorymeta($category_id, 'fee');
+    $category_data['active']=wpsc_get_categorymeta($category_id, 'active');
+    $category_data['order']=wpsc_get_categorymeta($category_id, 'order');  
     
     if(($_POST['title'] != $category_data['name']) && (trim($_POST['title']) != null)) {
       $category_name = $_POST['title'];
-      $category_sql_list[] = "`name` = '$category_name' ";
-      
-      /* creates and checks the tidy URL name */     
-//       $tidied_name = trim($category_name);
-//       $tidied_name = strtolower($tidied_name);
-      $url_name = sanitize_title($category_name);
-      if($url_name != $category_data['nice-name']) {
-        $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(0-9)*$' AND `id` NOT IN ('".(int)$category_data['id']."') ",ARRAY_A);
-        //exit("<pre>".print_r($similar_names,true)."</pre>");
-        $extension_number = '';
-        if($similar_names['count'] > 0) {
-          $extension_number = (int)$similar_names['max_number']+1;
-				}
-        $url_name .= $extension_number;   
-			}
-      /* checks again, just in case */
-      if($url_name != $category_data['nice-name']) {
-        $category_sql_list[] = "`nice-name` = '$url_name' ";
-			}
-			
+      wp_update_term( $category_id, 'wpsc_product_category', array('name'=>$category_name) );
+        wpsc_update_categorymeta($category_id, 'nice-name', $category_data['slug']);  
 			update_option('wpsc_category_url_cache', array());
       $wp_rewrite->flush_rules(); 
 		}   
@@ -375,19 +353,19 @@ function wpsc_display_groups_page() {
     
     if($_POST['description'] != $category_data['description']) {
       $description = $_POST['description'];
-      $category_sql_list[] = "`description` = '$description' ";
+      wpsc_update_categorymeta($category_id, 'description', $description);
 		}
       
     if(is_numeric($_POST['category_parent']) and ($_POST['category_parent'] != $category_data['category_parent'])) {
       $parent_category = (int)$_POST['category_parent'];
-      $category_sql_list[] = "`category_parent` = '$parent_category' ";
-		}      
-    
+      wp_update_term( $category_id, 'wpsc_product_category', array('parent'=>$parent_category) );
+		} 
+
     if($_POST['deleteimage'] == 1) {
-      $category_sql_list[] = "`image` = ''";
+      wpsc_delete_categorymeta($category_id, 'image');
 		} else {
       if($image != null) {
-        $category_sql_list[] = "`image` = '$image'";
+      	wpsc_update_categorymeta($category_id, 'image', $image);
 			}
 		}
 
@@ -409,32 +387,23 @@ function wpsc_display_groups_page() {
 					$display_type = '';
 				break;
 			}
-      $category_sql_list[] = "`display_type` = '$display_type' ";
+		wpsc_update_categorymeta($category_id, 'display_type', $display_type);	
 		}
-
-		
-
-		  //echo "<pre>".print_r($category_sql_list,true)."</pre>";
 
     if($_POST['product_height'] > 0) {
       $product_height = (int)$_POST['product_height'];
     } else {
       $product_height = '';
     }
-		$category_sql_list[] = "`image_height` = '$product_height' ";
+	wpsc_update_categorymeta($category_id, 'image_height', $product_height);	
     
     if($_POST['product_width'] > 0) {
       $product_width = (int)$_POST['product_width'];
     } else {
       $product_width = '';
     }
-		$category_sql_list[] = "`image_width` = '$product_height' ";
-
-    if(count($category_sql_list) > 0) {
-      $category_sql = implode(", ",$category_sql_list);
-      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET $category_sql WHERE `id`='".(int)$_POST['prodid']."' LIMIT 1");
-      $category_id = absint($_POST['prodid']);
-      
+    wpsc_update_categorymeta($category_id, 'image_width', $product_width);
+ 
 			update_option('wpsc_category_url_cache', array());
 
 			if($_POST['use_additonal_form_set'] != '') {
@@ -445,12 +414,10 @@ function wpsc_display_groups_page() {
 			
 
 			
-			if((bool)(int)$_POST['uses_billing_address'] == true) {
+			if((int)$_POST['uses_billing_address'] == 1) {
 				wpsc_update_categorymeta($category_id, 'uses_billing_address', 1);
-				$uses_additional_forms = true;
 			} else {
 				wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
-				$uses_additional_forms = false;
 			}
 			
 // 			if($uses_additional_forms == true) {
@@ -465,13 +432,23 @@ function wpsc_display_groups_page() {
 
 			
       $wp_rewrite->flush_rules(); 
-		}
+		
     echo "<div class='updated'><p align='center'>".__('The product group has been edited.', 'wpsc')."</p></div>";
 	}
   
 if($_POST['submit_action'] == "add_categorisation") {  
+	$group = wp_insert_term($wpdb->escape(stripslashes($_POST['name'])), 'wpsc_product_category');
+	if($group["term_id"]){
+		echo "<div class='updated'><p align='center'>".__('The group has been added.', 'wpsc')."</p></div>";
+		wpsc_update_meta( $group["term_id"], 'description', $wpdb->escape(stripslashes($_POST['description'])), 'wpsc_category');
+		wpsc_update_meta( $group["term_id"], 'active', '1', 'wpsc_category');
+		wpsc_update_meta( $group["term_id"], 'default', '0', 'wpsc_category');
+	}else{
+		echo "<div class='updated'><p align='center'>".__('Error adding group.', 'wpsc')."</p></div>";
+	}
+	
   $wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` ( `name`, `description`, `active`, `default`) VALUES ( '".$wpdb->escape(stripslashes($_POST['name']))."', '".$wpdb->escape(stripslashes($_POST['description']))."', '1', '0')");
-	echo "<div class='updated'><p align='center'>".__('The group has been added.', 'wpsc')."</p></div>";  
+	  
 
 }
 
@@ -479,33 +456,32 @@ if($_POST['submit_action'] == "add_categorisation") {
   
 if($_POST['submit_action'] == "edit_categorisation") {  
   $edit_group_id = $_POST['group_id'];
-  
-  $wpdb->query("UPDATE `".WPSC_TABLE_CATEGORISATION_GROUPS."` SET `name` = '".$wpdb->escape(stripslashes($_POST['name']))."', `description` = '".$wpdb->escape(stripslashes($_POST['description']))."' WHERE `id` IN('$edit_group_id') LIMIT 1 ");
-	
+  wp_update_term($edit_group_id, 'wpsc_product_category', array('name'=>$wpdb->escape(stripslashes($_POST['name']))) );
+  wpsc_update_categorymeta($edit_group_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
 	
 	echo "<div class='updated'><p align='center'>".__('The group has been edited.', 'wpsc')."</p></div>";  
-	
-		
-	if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
-		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ",ARRAY_A);
-	} else {
-		$current_categorisation =  $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `id` IN ('".(int)$_GET['category_group']."') LIMIT 1 ",ARRAY_A);
-	}
 }
-
+//vales
+function wpsc_delete_term_cat($id){
+	global $wpdb, $wp_rewrite;
+	$term_id=absint($id);
+	$taxonomy='wpsc_product_category';
+	if($term_id){
+		wp_delete_term($term_id, $taxonomy);
+		$wpdb->query("DELETE FROM `".WPSC_TABLE_META."` WHERE object_id = '".$term_id."' AND object_type = 'wpsc_category'");
+	}
+	update_option('wpsc_category_url_cache', array());
+	$wp_rewrite->flush_rules();
+}
 
 if(is_numeric($_GET['category_delete_id'])) {
-  $delete_id = (int)$_GET['category_delete_id'];
-  $deletesql = "UPDATE `".WPSC_TABLE_CATEGORISATION_GROUPS."` SET `active` = '0' WHERE `id`='{$delete_id}' AND `default` IN ('0') LIMIT 1";
-  $wpdb->query($deletesql);
-  $delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `group_id`='{$delete_id}'";
-  $wpdb->query($delete_subcat_sql);
-
-  
-	update_option('wpsc_category_url_cache', array());
-	$wp_rewrite->flush_rules(); 
+	$cat_id=absint($_GET['category_delete_id']);
+	$children=get_terms('wpsc_product_category', "hide_empty=0&child_of=".$cat_id, ARRAY_A);
+	wpsc_delete_term_cat($cat_id);
+	foreach($children as $child){
+		wpsc_delete_term_cat($child->term_id);
+	}
 }
-
 
 if(is_numeric($_GET['deleteid'])) {
   $delete_id = absint($_GET['deleteid']);
@@ -583,20 +559,23 @@ update_option('wpsc_category_url_cache', array());
 			<form action='' method='GET' id='submit_categorisation_form' >
 			<input type='hidden' value='<?php echo $_GET['page']; ?>' name='page'  />
 			<?php
-			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
+			if(!is_numeric($_GET['category_group']) || ((int)$_GET['category_group'] == null)) {
+				$all_categorisation = get_terms('wpsc_product_category', 'parent=0&hide_empty=0&orderby=', ARRAY_A);
+				$current_categorisation=(array)($all_categorisation[0]);
+			} else {
+				$current_categorisation = get_term_by('id', $_GET['category_group'], 'wpsc_product_category', ARRAY_A);
+			}
+			$current_categorisation['description']=wpsc_get_categorymeta($current_categorisation['term_id'], 'description');
+			$categorisation_groups =  get_terms('wpsc_product_category', 'parent=0&hide_empty=0&orderby=');
 			//echo "<ul class='categorisation_links'>\n\r";
 			echo "<label for='select_categorisation_group' class='select_categorisation_group'>".__('Select a Group to Manage', 'wpsc').":&nbsp;&nbsp;</label>";
 			echo "<select name='category_group' id='select_categorisation_group' onchange='submit_status_form(\"submit_categorisation_form\")'>"; 
 			foreach((array)$categorisation_groups as $categorisation_group) {
 				$selected = '';
-				if($current_categorisation['id'] == $categorisation_group['id']) {
-					//$selected = "class='selected'";
-					$selected = "selected='selected'";
+				if($current_categorisation["term_id"] == $categorisation_group->term_id){
+					$selected = 'selected="selected"';
 				}
-				echo "<option value='{$categorisation_group['id']}' $selected >{$categorisation_group['name']}</option>";
-				//echo "  <li $selected >\n\r";
-				//echo "    <a href='?page={$_GET['page']}&amp;category_group={$categorisation_group['id']}'>{$categorisation_group['name']}</a> ";
-				//echo "  </li>\n\r";
+				echo "<option value='".$categorisation_group->term_id."' ".$selected." >".$categorisation_group->name."</option>";
 			}
 			echo "</select>"; 
 			//echo "<li>- <a href='' onclick='return showadd_categorisation_form()'><span>".__('Add New Group', 'wpsc')."</span></a></li>";
@@ -662,11 +641,11 @@ update_option('wpsc_category_url_cache', array());
 			
 			<fieldset>
 				<label>&nbsp;</label>		
-				<input type='hidden' name='group_id' value='<?php echo $current_categorisation['id']; ?>' />
+				<input type='hidden' name='group_id' value='<?php echo $current_categorisation['term_id']; ?>' />
 				<input type='hidden' name='submit_action' value='edit_categorisation' />
 				<input type='submit' name='submit_form' value='<?php echo __('Submit', 'wpsc'); ?>' />
 				<?php if($current_categorisation['default'] != 1) { ?>
-				<a href='<?php echo "?page={$_GET['page']}&amp;category_delete_id={$current_categorisation['id']}"  ?>' onclick='return categorisation_conf()' > <?php echo __('Delete', 'wpsc'); ?></a>
+				<a href='<?php echo "?page={$_GET['page']}&amp;category_delete_id={$current_categorisation['term_id']}"  ?>' onclick='return categorisation_conf()' > <?php echo __('Delete', 'wpsc'); ?></a>
 				<?php 	} ?>
 			</fieldset>
 		</form>
@@ -715,14 +694,13 @@ update_option('wpsc_category_url_cache', array());
 	echo "       <td colspan='4' class='colspan'>\n\r";
 	echo "<div class='editing_this_group'><p>";
 	echo str_replace("[categorisation]", $current_categorisation['name'], __('You are editing the &quot;[categorisation]&quot; Group', 'wpsc'));
-	
 	echo "  <a href='#' onclick='return showedit_categorisation_form()'>".__('Edit', 'wpsc')."</a>";
 	
 	echo "</p></div>";
 	echo "       </td>\n\r";
 	echo "     <tr>\n\r";
 	
-	display_categories($current_categorisation['id']);
+	display_categories($current_categorisation['term_id']);
 	if (function_exists('add_object_page')){
 		echo "</table>";
 		echo "</div>"; //class inside ends
@@ -791,7 +769,7 @@ update_option('wpsc_category_url_cache', array());
 							<?php echo __('Group Parent', 'wpsc');?>:
 						</td>
 						<td>
-							<?php echo wpsc_parent_category_list($current_categorisation['id'], 0,0); ?>
+							<?php echo wpsc_parent_category_list($current_categorisation['term_id'], 0,0); ?>
 						</td>
 					</tr>
 					<tr>
@@ -915,7 +893,7 @@ update_option('wpsc_category_url_cache', array());
 						</td>
 						<td class='last_row'>
 
-							<input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['id']; ?>' />
+							<input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['term_id']; ?>' />
 							<input type='hidden' name='submit_action' value='add' />
 							<input class='button-primary' type='submit' name='submit' value='<?php echo __('Add Group', 'wpsc');?>' />
 						</td>

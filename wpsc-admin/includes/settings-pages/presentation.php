@@ -2,8 +2,7 @@
 function options_categorylist() {
 	global $wpdb;
 	$current_default = get_option('wpsc_default_category');
-	$group_sql = "SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active`='1'";
-	$group_data = $wpdb->get_results($group_sql,ARRAY_A);
+	$group_data = get_terms('wpsc_product_category','hide_empty=0&parent=0', ARRAY_A);
 	$categorylist .= "<select name='wpsc_options[wpsc_default_category]'>";
 	
 	if(get_option('wpsc_default_category') == 'all')  {
@@ -28,19 +27,20 @@ function options_categorylist() {
 	$categorylist .= "<option value='all+list' ".$selected." >".__('Show all products + list', 'wpsc')."</option>";
 
 	foreach($group_data as $group) {
-			$cat_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
-			$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
+		$group=(array)$group;
+			$category_data = get_terms('wpsc_product_category','hide_empty=0&parent='.$group['term_id'], ARRAY_A);
 			if($category_data != null) {
 		    	  			
 				
 				$categorylist .= "<optgroup label='{$group['name']}'>";;
 				foreach((array)$category_data as $category)  {
-					if(get_option('wpsc_default_category') == $category['id'])  {
+					$category=(array)$category;
+					if(get_option('wpsc_default_category') == $category['term_id'])  {
 						$selected = "selected='selected'";
 					} else {
 						$selected = "";
 					}
-					$categorylist .= "<option value='".$category['id']."' ".$selected." >".$category['name']."</option>";
+					$categorylist .= "<option value='".$category['term_id']."' ".$selected." >".$category['name']."</option>";
 				}
 				$categorylist .= "</optgroup>";
 			}
