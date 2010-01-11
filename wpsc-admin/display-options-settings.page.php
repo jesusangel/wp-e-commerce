@@ -7,6 +7,7 @@
  if($_GET['tab'] != 'shipping') {
    $_SESSION['previous_shipping_name'] = '';
  }
+
  
  
 function wpsc_display_settings_page(){
@@ -18,7 +19,7 @@ function wpsc_display_settings_page(){
 		</div>
 	<?php
 }
-<?php wpsc_the_settings_tabs(); 
+ wpsc_the_settings_tabs(); 
 if(isset($_GET['tab'])){
 	$page = $_GET['tab'];
 }else{
@@ -206,21 +207,6 @@ if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']
 <?php
 
 }
-}
-function wpsc_check_theme_versions(){
-	$nag = false;
-	$theme_array = wpsc_get_themes();
-	//exit('<pre>'.print_r($theme_array, true).'</pre>');
-	foreach((array)$theme_array as $theme){
-	//	exit($theme['Version']);
-		if($theme['Name']=='Default Theme' ||$theme['Name']=='iShop Theme' ||$theme['Name']=='Marketplace Theme'  ){
-			if((float)$theme['Version'] < 3.5){
-				$nag = true;
-			}
-		}
-	}
-	return $nag;
-
 }
 
 ?>

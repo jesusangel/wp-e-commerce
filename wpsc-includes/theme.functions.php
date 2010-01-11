@@ -9,9 +9,90 @@
  * @since 3.7
 */
 
+function wpsc_check_theme_versions(){
+	$nag = false;
+	$theme_array = wpsc_get_themes();
+	//exit('<pre>'.print_r($theme_array, true).'</pre>');
+	foreach((array)$theme_array as $theme){
+	//	exit($theme['Version']);
+		if($theme['Name']=='Default Theme' ||$theme['Name']=='iShop Theme' ||$theme['Name']=='Marketplace Theme'  ){
+			if((float)$theme['Version'] < 3.5){
+				$nag = true;
+			}
+		}
+	}
+	return $nag;
+
+}
+
+function wpsc_get_themes($themes_folder = '') {
+
+	$wpsc_themes = array ();
+//	exit(WPSC_THEMES_PATH);
+	$themes_root = WPSC_THEMES_PATH;
+	if( !empty($themes_folder) ){}
+		//$themes_root .= $themes_folder;
+
+	// Files in wp-content/uploads/themes directory
+	//exit($themes_root);
+	$themes_dir =  opendir($themes_root);
+	$theme_files = array();
+
+	if ( $themes_dir ) {
+	//exit('her');
+		while (($file = readdir( $themes_dir ) ) !== false ) {
+		
+			if ( substr($file, 0, 1) == '.' )
+				continue;
+			if ( is_dir( $themes_root.'/'.$file ) ) {
+
+				$themes_subdir = @ opendir( $themes_root.'/'.$file );
+				if ( $themes_subdir ) {
+					while (($subfile = readdir( $themes_subdir ) ) !== false ) {
+						if ( substr($subfile, 0, 1) == '.' )
+							continue;
+						if ( substr($subfile, -4) == '.css' )
+							$theme_files[] = "$file/$subfile";
+					}
+				}
+			} else {
+				if ( substr($file, -4) == '.css' )
+					$theme_files[] = $file;
+			}
+		}
+	}
+	@closedir( $themes_dir );
+	@closedir( $themes_subdir );
+
+	if ( !$themes_dir || empty($theme_files) )
+		return $wpsc_themes;
+	foreach ( $theme_files as $theme_file ) {
+
+		if ( !is_readable( "$themes_root/$theme_file" ) )
+			continue;
+
+		$theme_data = get_theme_data( "$themes_root/$theme_file", false, false ); //Do not apply markup/translate as it'll be cached.
+
+
+		if ( empty ( $theme_data['Name'] ) )
+			continue;
+
+		$wpsc_themes[plugin_basename( $theme_file )] = $theme_data;
+	}
+
+	uasort( $wpsc_themes, create_function( '$a, $b', 'return strnatcasecmp( $a["Name"], $b["Name"] );' ));
+
+	//$cache_plugins[ $plugin_folder ] = $wp_plugins;
+	//wp_cache_set('plugins', $cache_plugins, 'plugins');
+
+	return $wpsc_themes;
+}
+
 /**
 	*wpsc_get_theme_file_path function, gets the path to the theme file, uses the plugin themes folder if the file is not in the uploads one
   */
+  
+  
 function wpsc_get_theme_file_path($file) {
 	// get the theme folder here
 	global $wpsc_theme_path;
