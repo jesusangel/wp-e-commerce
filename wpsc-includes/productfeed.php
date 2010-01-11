@@ -19,6 +19,9 @@ add_action('init', 'wpsc_feed_publisher');
 function wpsc_generate_product_feed() {
 
 	global $wpdb;
+	
+	// Don't cache feed under WP Super-Cache
+	define('DONOTCACHEPAGE',TRUE);
 
 	$siteurl = get_option('siteurl');
 
@@ -113,16 +116,21 @@ function wpsc_generate_product_feed() {
 
 		if ($product['thumbnail_image'] != null) {
 			$image_file_name = $product['thumbnail_image'];
+			$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/thumbnails/{$image_file_name}";
+			$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/thumbnails/".rawurlencode($image_file_name);
+
 		} else {
 			$image_file_name = $product['image'];
+			$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/{$image_file_name}";
+			$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/".rawurlencode($image_file_name);
 		}
 
-		$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/thumbnails/{$image_file_name}";
+		//$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/thumbnails/{$image_file_name}";
 
 		if (is_file($image_path) && (filesize($image_path) > 0)) {
 
 			$image_data = @getimagesize($image_path);
-			$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/thumbnails/".urlencode($image_file_name);
+		//	$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/thumbnails/".urlencode($image_file_name);
 
 			if ($_GET['xmlformat'] == 'google') {
 				$output .= "      <g:image_link>$image_link</g:image_link>\n\r";
@@ -135,7 +143,28 @@ function wpsc_generate_product_feed() {
 		if ($_GET['xmlformat'] == 'google') {
 
 			$output .= "      <g:price>".$product['price']."</g:price>\n\r";
-			$output .= "      <g:condition>new</g:condition>\n\r";
+			//$output .= "      <g:condition>new</g:condition>\n\r";
+		    $meta_sql = "SELECT *
+		                 FROM `".WPSC_TABLE_PRODUCTMETA."` pm
+                         WHERE `pm`.`product_id` = '".$product['id']."'
+                         AND `pm`.`meta_key` LIKE 'g:%'";
+
+                         $google_elements = $wpdb->get_results($meta_sql, ARRAY_A);
+
+                         $done_condition = FALSE;
+                         if (count($google_elements)) {
+                                 foreach ($google_elements as $gelement) {
+ 
+ 					$output .= "      <".$gelement['meta_key'].">";
+ 					$output .= "<![CDATA[".htmlentities($gelement['meta_value'])."]]>";
+ 					$output .= "</".$gelement['meta_key'].">\n\r";
+ 
+                                         if ($gelement['meta_key'] == 'g:condition')
+                                                 $done_condition = TRUE;
+                                 }
+                         }
+                         if (!$done_condition)
+                                 $output .= "      <g:condition>new</g:condition>\n\r";
 
 		} else {
 

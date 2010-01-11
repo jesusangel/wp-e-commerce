@@ -338,6 +338,9 @@ function wpsc_update_product_rating() {
 		$vote_id = $data[0]['id'];
 		setcookie("voting_cookie[$prodid]", ($vote_id.",".$rating),time()+(60*60*24*360));
 	}
+	
+	do_action('wpsc_rate_product', $product_id);
+	
 	if($_POST['ajax'] == 'true') {
 	  
 		exit();

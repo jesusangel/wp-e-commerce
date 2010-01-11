@@ -156,7 +156,11 @@ global $wpsc_query, $wpdb;
 						
 						<?php /** the custom meta HTML and loop */?>
 						<div class="custom_meta">
-							<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
+							<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	
+									if (stripos(wpsc_custom_meta_name(),'g:') !== FALSE){
+										continue;
+									}
+									?>
 								<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_value(); ?><br />
 							<?php endwhile; ?>
 						</div>
