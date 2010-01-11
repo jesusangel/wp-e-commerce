@@ -12,6 +12,12 @@
 function wpsc_display_settings_page(){
 ?>
  <div id="wpsc_options" class="wrap">
+	<?php if(wpsc_check_theme_versions()){ ?>
+		<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+			<p><?php _e("It looks like your wp-e-commerce theme files are out of date, this can cause potential problems with some gateways that require the new themes. <br /><strong>We recommend you download the latest version of wp-e-commerce unzip it, and copy the new themes folder into your 'uploads/wpsc/themes' folder on your site.</strong> <br />For more information please <a href=''>read here</a>.", "wpsc"); ?></p>
+		</div>
+	<?php
+}
 <?php wpsc_the_settings_tabs(); 
 if(isset($_GET['tab'])){
 	$page = $_GET['tab'];
@@ -200,6 +206,21 @@ if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']
 <?php
 
 }
+}
+function wpsc_check_theme_versions(){
+	$nag = false;
+	$theme_array = wpsc_get_themes();
+	//exit('<pre>'.print_r($theme_array, true).'</pre>');
+	foreach((array)$theme_array as $theme){
+	//	exit($theme['Version']);
+		if($theme['Name']=='Default Theme' ||$theme['Name']=='iShop Theme' ||$theme['Name']=='Marketplace Theme'  ){
+			if((float)$theme['Version'] < 3.5){
+				$nag = true;
+			}
+		}
+	}
+	return $nag;
+
 }
 
 ?>
