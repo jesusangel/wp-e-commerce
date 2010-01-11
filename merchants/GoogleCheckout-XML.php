@@ -175,7 +175,7 @@ function gateway_google($fromcheckout = false){
 		$state_name = $wpdb->get_row($sql, ARRAY_A);
 		$defaultTax = $state_name['tax']/100;
 		$tax_rule = new GoogleDefaultTaxRule($defaultTax);
-		$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `country_id`='136' AND `tax` = ".$state_name['tax'];
+		$sql = "SELECT `code` FROM ".WPSC_TABLE_REGION_TAX." WHERE `country_id`='136' AND `tax` = ".$state_name['tax'];
 		$states = $wpdb->get_col($sql);
 		//exit('<pre>'.print_r($states, true).'</pre>');
 		$tax_rule->SetStateAreas((array)$states);
