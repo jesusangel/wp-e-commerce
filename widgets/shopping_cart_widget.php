@@ -3,9 +3,11 @@ function widget_wp_shopping_cart($args) {
     global $wpsc_theme_path, $cache_enabled;
     extract($args);
     $options = get_option('widget_wp_shopping_cart');
-	if($options['hideonempty'] && (wpsc_cart_item_count() < 1)){
+  //  exit('count: '.wpsc_cart_item_count().' hideonempty<pre>'.print_r($options, true).'</pre>');
+    
+	if(($options['hideonempty']== 1) && (wpsc_cart_item_count() < 1))
 		return;
-	}
+	
     
       
 		if(get_option('show_sliding_cart') == 1)	{

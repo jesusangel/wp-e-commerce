@@ -465,9 +465,18 @@ function wpsc_display_purchlog_buyers_email(){
 }
 function wpsc_display_purchlog_buyers_address(){
 	global $purchlogitem;
-	return htmlentities(stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES);
+	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
+	$country = maybe_unserialize($purchlogitem->userinfo['billingcountry']['value']);
+	$country = (array)$country;
+	if($country[0] == 'US' && is_numeric($country[1]) ){
+		$country[1] = $purchlogitem->shippingstate($country[1]);
+	}
+	$address = $purchlogitem->userinfo['billingaddress']['value'].', '.$country[1].', '.$country[0];
+				
+	return htmlentities(stripslashes( $address ), ENT_QUOTES);
 
 }
+
 function wpsc_display_purchlog_buyers_phone(){
 	global $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem->userinfo,true).'</pre>');

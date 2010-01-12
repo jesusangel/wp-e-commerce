@@ -1769,7 +1769,7 @@ class wpsc_cart_item {
       $method = $this->cart->selected_shipping_method;
     }
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this);
+			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
 			//echo("<pre>".print_r($shipping,true)."</pre>");
     }
     if($method == $this->cart->selected_shipping_method) {
@@ -1871,7 +1871,7 @@ class wpsc_cart_item {
       $method = $this->cart->selected_shipping_method;
     }
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
+			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this->unit_price, 1, $this->weight, $this->product_id);
 		}
     if($this->cart->has_total_shipping_discount()) {
 			$shipping = 0;

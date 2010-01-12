@@ -662,7 +662,7 @@ class wpsc_checkout {
   function save_forms_to_db($purchase_id) {
    global $wpdb;
    		$count = $this->get_count_checkout_fields()+1;
-  		//exit($count.'<pre>'.print_r($this->checkout_items, true).'</pre>');
+  		//exit($count.'<pre>'.print_r( $_POST['collected_data'], true).'</pre>');
 		$i = 0;
 		foreach( $this->checkout_items as $form_data) {
 		
@@ -673,7 +673,7 @@ class wpsc_checkout {
    	      if($form_data->type != 'heading') {
 		 // echo '<pre>'.print_r($form_data,true).'</pre>';
 		  	if(is_array($value) &&($form_data->type == 'country' ||$form_data->type == 'delivery_country') ){
-			  	$value = $value[0];
+			  	$value = serialize($value);
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 			}elseif(is_array($value)) {
 			//	echo('<pre>'.print_r($value, true).'</pre>');

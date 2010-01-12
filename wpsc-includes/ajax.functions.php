@@ -815,7 +815,7 @@ function wpsc_change_tax() {
 			$output = "<select name='collected_data[".$form_id."][1]' class='current_region' onchange='$onchange_function(\"region_country_form_$form_id\", \"$form_id\");'>\n\r";
 		
 			foreach($region_list as $region) {
-				if($$form_selected_region == $region['id']) {
+				if($form_selected_region == $region['id']) {
 					$selected = "selected='selected'";
 				} else {
 					$selected = "";
