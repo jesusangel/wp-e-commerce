@@ -326,15 +326,15 @@ function nzshpcrt_getvariationform($variation_id)
 function coupon_edit_form($coupon) {
 
 $conditions = unserialize($coupon['condition']);
-	//exit('<pre>'.print_r($conditions, true).'</pre>');
+	//exit('<pre>'.print_r($coupon, true).'</pre>');
 
   $start_timestamp = strtotime($coupon['start']);
   $end_timestamp = strtotime($coupon['expiry']);
   $id = $coupon['id'];
   $output = '';
-  $output .= "<form name='edit_coupon' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
+  $output .= "<form class='displaynone' name='edit_coupon' id='".$coupon['coupon_code']."' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
     $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
-  $output .= "<table class='add-coupon' style='display:none;'>\n\r";
+  $output .= "<table class='add-coupon'>\n\r";
   $output .= " <tr>\n\r";
   $output .= "   <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
   $output .= "   <th>".__('Discount', 'wpsc')."</th>\n\r";
@@ -423,8 +423,10 @@ $conditions = unserialize($coupon['condition']);
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
   //$output .= "   <input type='hidden' value='false' name='add_coupon' />\n\r";
-  $output .= "   <input type='submit' value='".__('Submit', 'wpsc')."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
-  $output .= "   <input type='submit' value='".__('Delete', 'wpsc')."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
+ /*
+ $output .= "   <input type='submit' value='".__('Update Coupon', 'wpsc')."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
+  $output .= "   <input type='submit' value='".__('Delete Coupon', 'wpsc')."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
+*/
 
   $output .= "  </td>\n\r";
   $output .= " </tr>\n\r";
@@ -454,7 +456,7 @@ $conditions = unserialize($coupon['condition']);
 		  $output .= "<td>";
 		  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
 		  $output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
-		  $output .= "<span style='cursor:pointer;' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
+		  $output .= "<span style='cursor:pointer;' class='delete_button' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
 		  $output .= "</td>";
 		  $output .= "<td>";
 		  $output .= $condition['property'];
@@ -498,7 +500,7 @@ $conditions = unserialize($coupon['condition']);
 			</span>
 			<span>
 				<button class="add" type="button">
-					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/add.png"/>
+					<img height="16" width="16" alt="Add" src="<?php //WPSC_URL?>/images/add.png"/>
 				</button>
 			</span>
 		</div>
@@ -520,7 +522,7 @@ function wpsc_coupons_conditions($id){
 $output ='
 <input type="hidden" name="coupon_id" value="'.$id.'" />
 <tr><td colspan="3"><b>Add Conditions</b></td></tr>
-<tr><td colspan="8">
+<tr><td colspan="6">
 	<div class="coupon_condition">
 		<div>
 			<select class="ruleprops" name="rules[property][]">
@@ -541,12 +543,16 @@ $output ='
 			<span>
 				<input type="text" name="rules[value][]"/>
 			</span>
-			<span>
-				<input type="submit" value="add" name="submit_condition" />
+			
 
-			</span>
 		</div>
 	</div>
+	</td>
+	<td colspan="3">
+	
+		<input type="submit" value="'.__("Update Coupon", "wpsc").'" name="edit_coupon['.$id.'][submit_coupon]" />
+ 		<input type="submit" value="'.__("Delete Coupon", "wpsc").'" name="edit_coupon['.$id.'][delete_coupon]" />
+	</td>
 </tr>
 ';
 return $output;

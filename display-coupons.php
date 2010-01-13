@@ -1,6 +1,6 @@
 <?php
 if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
-	//exit('<pre>'.print_r($_POST, true).'</pre>');
+
 	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
 		$coupon_code = $_POST['add_coupon_code'];
 		$discount = (double)$_POST['add_discount'];
@@ -28,6 +28,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		}
 	}
 	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && !(isset($_POST['delete_condition'])) && !(isset($_POST['submit_condition']))) {
+			//exit('<pre>'.print_r($_POST, true).'</pre>');
 		foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
 			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
 			$coupon_id = (int)$coupon_id;
@@ -40,7 +41,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
 		//	exit('<pre>'.print_r($coupon_data, true).'</pre>');
 			ksort($check_values); ksort($coupon_data);
-						
+			
 			if($check_values != $coupon_data) {
 				$insert_array = array();
 				foreach($coupon_data as $coupon_key => $coupon_value) {
@@ -51,14 +52,14 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 						$insert_array[] = "`$coupon_key` = '$coupon_value'";
 					}
 				}
-					
-				//echo("<pre>".print_r($insert_array,true)."</pre>");
+				//if(in_array(mixed needle, array haystack [, bool strict]))	
+				//exit("<pre>".print_r($conditions,true)."</pre>");
 				if(count($insert_array) > 0) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
 				unset($insert_array);
 				$rules = $_POST['rules'];
-
+				
 				foreach ((array)$rules as $key => $rule) {
 					foreach ($rule as $k => $r) {
 						$new_rule[$k][$key] = $r;
@@ -70,8 +71,23 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 					}
 				}
 
-				$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
+				/*
+$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
 				$wpdb->query($sql);
+				
+*/
+			$conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
+				  $conditions=unserialize($conditions);
+				  $new_cond=array();
+				  if($_POST['rules']['value'][0] != ''){
+					  $new_cond['property']=$_POST['rules']['property'][0];
+					  $new_cond['logic']=$_POST['rules']['logic'][0];
+					  $new_cond['value']=$_POST['rules']['value'][0];
+					  $conditions []= $new_cond;
+				  }
+				  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+				  $wpdb->query($sql);
+
 			}
 				
 			if($coupon_data['delete_coupon'] != '') {
@@ -80,11 +96,16 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		}
 	}
   if(isset($_POST['delete_condition'])){
+
 	  $conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
 	  $conditions=unserialize($conditions);
+	    
 	  unset($conditions[(int)$_POST['delete_condition']]);
-	  $conditions = array_values($conditions);
+	  	
+	  //$conditions = array_values($conditions);
+	 //  exit('<pre>'.print_r($_POST, true).'</pre><pre>'.print_r($conditions, true).'</pre>'.$sql);
 	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+	
 	  $wpdb->query($sql);
   }
   if(isset($_POST['submit_condition'])){
@@ -132,15 +153,19 @@ if(isset($_GET['token'])) {
 ?>
 <script type='text/javascript'>
 	jQuery(".pickdate").datepicker();
+		/* jQuery datepicker selector */
+	if (typeof jQuery('.pickdate').datepicker != "undefined") {
+		jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
+	}
 </script>
 <div class="wrap">
   <h2><?php echo __('Coupons', 'wpsc');?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
   <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
 
-  <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo __('Add', 'wpsc'); ?>' title='<?php echo __('Add', 'wpsc'); ?>' />&nbsp;<span><?php echo __('Add Coupon', 'wpsc');?></span></a>
-  
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' style="display:none;" /></span>
+ 	<form action='' method='post'>
+		<input id='add_coupon_box_link' type='submit' class=' add_item_link button' name='add_coupon_button' value='<?php echo __('Create Coupon', 'wpsc');?>' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");return false;' />
+	</form>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
 <table style="width: 100%;">
@@ -260,18 +285,18 @@ if(isset($_GET['token'])) {
    <td>
    
    <input type='hidden' value='true' name='add_coupon' />
-   <input type='submit' value='Submit' name='submit_coupon' />
+   <input type='submit' value='Add Coupon' name='submit_coupon' />
    </td>
  </tr>
  <tr><td colspan="2">
 		   <input type='hidden' value='0' name='add_every_product' />
 			<input type="checkbox" value="1" name='add_every_product'/>
-		<?=__('Apply On All Products', 'wpsc')?></td></tr>
+		<?php _e('Apply On All Products', 'wpsc')?></td></tr>
 
-<tr><td colspan='3'><b>Conditions</b></td></tr>
+<tr><td colspan='3'><span id='table_header'>Conditions</span></td></tr>
 <tr><td colspan="8">
-	<div class='coupon_condition' style="padding-left: 20px;">
-		<div>
+	<div class='coupon_condition' >
+		<div class='first_condition'>
 			<select class="ruleprops" name="rules[property][]">
 				<option value="item_name" rel="order">Item name</option>
 				<option value="item_quantity" rel="order">Item quantity</option>
@@ -316,17 +341,20 @@ if(isset($_GET['token'])) {
 							'</span>  \n'+
 						'</div> \n'+
 					'</div> ';
-					this_button.parent().parent().parent().parent().append(new_property);
+		
+					jQuery('.coupon_condition :first').after(new_property);
 					coupon_number++;
 				}
 				</script>
-				<button class="add" type="button" onclick="add_another_property(jQuery(this));">
-					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/plus_icon.jpg"/>
-				</button>
+			
 			</span>
+			
 		</div>
 	</div>
 </tr>
+<tr><td>	<a class="wpsc_coupons_condition_add" onclick="add_another_property(jQuery(this));">
+					<?php _e('Add New Condition','wpsc'); ?>
+				</a></td></tr>
 </table>
 <br />
 </form>  
@@ -338,33 +366,33 @@ if(isset($_GET['token'])) {
 echo "<table class='coupon-list'>\n\r";
 echo "  <tr class='toprow'>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Coupon Code', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Discount', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Start', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Expiry', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Active', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Apply On All Products', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
-echo "    <td>\n\r";
+echo "    <th>\n\r";
 echo __('Edit', 'wpsc');
-echo "    </td>\n\r";
+echo "    </th>\n\r";
 
 $i=0;
 $coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` ",ARRAY_A);
@@ -423,14 +451,14 @@ foreach((array)$coupon_data as $coupon) {
   
   
   echo "    <td>\n\r";
-  echo "<a href='javascript:void(0)' onclick='jQuery(this).parent().parent().next().children().children().children().children().show();' >".__('Edit', 'wpsc')."</a>";
+  echo "<a title='".$coupon['coupon_code']."' href='javascript:void(0)' class='wpsc_edit_coupon'  >".__('Edit', 'wpsc')."</a>";
   echo "    </td>\n\r";
   
   echo "  </tr>\n\r";
   echo "  <tr>\n\r";
-  echo "    <td colspan='7'style='padding-left:0px;'>\n\r";
-  //$status_style = "style='display: block;'";
-  echo "      <div id='coupon_box_".$coupon['id']."' class='modify_coupon' $status_style>\n\r";  
+  echo "    <td colspan='7' style='padding-left:0px;'>\n\r";
+//  $status_style = "style='display: block;'";
+  echo "      <div id='coupon_box_".$coupon['id']."' class='modify_coupon' >\n\r";  
   coupon_edit_form($coupon);
   echo "      </div>\n\r";
   echo "    </td>\n\r";

@@ -588,6 +588,19 @@ jQuery(window).load( function () {
 	  wpsc_save_postboxes_state('products', '.additem');
 	});
 	
+	/* 	Coupon edit functionality */
+	jQuery('.modify_coupon').hide();
+	jQuery('.wpsc_edit_coupon').click(function(){
+		id = jQuery(this).attr('title');
+		if(jQuery('#'+id).hasClass('displaynone')){
+			jQuery('#'+id).parent('.modify_coupon').show();
+			jQuery('#'+id).removeClass('displaynone');		
+		}else{
+			jQuery('#'+id).addClass('displaynone');
+			jQuery('#'+id).parent('.modify_coupon').hide();
+		}
+
+	});
 	jQuery('a.closeEl').bind('click', toggleContent);
 /*
  	jQuery('div.groupWrapper').sortable( {
@@ -777,6 +790,7 @@ jQuery(document).ready(function(){
 		}
 	);
 	
+	/* jQuery datepicker selector */
 	if (typeof jQuery('.pickdate').datepicker != "undefined") {
 		jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
 	}
