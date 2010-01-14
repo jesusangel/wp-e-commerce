@@ -264,103 +264,6 @@ function wpsc_populate_also_bought_list() {
 
 
 
-function add_product_meta($product_id, $key, $value, $unique = false, $custom = false) {
-  global $wpdb, $post_meta_cache, $blog_id;
-  $product_id = (int)$product_id;
-  if($product_id > 0) {
-    if(($unique == true) && $wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
-      return false;
-		}
-		if(!is_string($value)) {
-			$value = maybe_serialize($value);
-		} else {
-			$value = $wpdb->escape($value);
-		}
-    
-    if(!$wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE meta_key = '$key' AND product_id = '$product_id'")) {
-      $custom = (int)$custom;
-      $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (product_id,meta_key,meta_value, custom) VALUES ('$product_id','$key','$value', '$custom')");
-		} else {
-      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET meta_value = '$value' WHERE meta_key = '$key' AND product_id = '$product_id'");
-		}
-    return true;
-	}
-  return false; 
-}
-  
-function delete_product_meta($product_id, $key, $value = '') {
-  global $wpdb, $post_meta_cache, $blog_id;
-  $product_id = (int)$product_id;
-  if($product_id > 0) {
-    if ( empty($value) ) {
-      $meta_id = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key'");      
-      if(is_numeric($meta_id) && ($meta_id > 0)) {
-        $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key'");
-        }
-      } else {
-      $meta_id = $wpdb->get_var("SELECT id FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
-      if(is_numeric($meta_id) && ($meta_id > 0)) {
-        $wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id = '$product_id' AND meta_key = '$key' AND meta_value = '$value'");
-        }        
-      }
-  }
-  return true;
-}
-
-
-function get_product_meta($product_id, $key, $single = false) {
-  global $wpdb, $post_meta_cache, $blog_id;  
-  $product_id = (int)$product_id;
-  if($product_id > 0) {
-    $meta_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1");
-    //exit($meta_id);
-    if(is_numeric($meta_id) && ($meta_id > 0)) {      
-      if($single != false) {
-        $meta_values = maybe_unserialize($wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id' LIMIT 1"));
-			} else {
-        $meta_values = $wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND `product_id` = '$product_id'");
-				$meta_values = array_map('maybe_unserialize', $meta_values);
-			}
-		}
-	} else {
-    $meta_values = false;
-	}
-	if (is_array($meta_values) && (count($meta_values) == 1)) {
-		return array_pop($meta_values);
-	} else {
-		return $meta_values;
-	}
-}
-
-function update_product_meta($product_id, $key, $value, $prev_value = '') {
-  global $wpdb, $blog_id;
-  $product_id = (int)$product_id;
-  if($product_id > 0) {
-		if(!is_string($value)) {
-			$value = $wpdb->escape(maybe_serialize($value));
-		} else {
-			$value = $wpdb->escape($value);
-		}
-	
-	if(!empty($prev_value)) {
-    $prev_value = $wpdb->escape(maybe_serialize($prev_value));
-	}
-
-	
-	
-  if($wpdb->get_var("SELECT meta_key FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN('$key') AND product_id = '$product_id'")) {
-    if (empty($prev_value)) {
-      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id'");
-      } else {
-      $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_value` = '$value' WHERE `meta_key` IN('$key') AND product_id = '$product_id' AND meta_value = '$prev_value'");
-      }
-    } else {
-    $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (product_id,meta_key,meta_value) VALUES ('$product_id','$key','$value')");
-    }
-  return true;
-  }
-}
-
 
   
 
@@ -730,4 +633,160 @@ function wpsc_clear_stock_claims( ) {
 	$wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
 }
 add_action('wpsc_daily_cron_tasks', 'wpsc_clear_stock_claims');
+
+
+/**
+ * Retrieve the list of tags for a product.
+ *
+ * Compatibility layer for themes and plugins. Also an easy layer of abstraction
+ * away from the complexity of the taxonomy layer. Copied from the Wordpress posts code
+ *
+ * @since 3.8.0
+ *
+ * @uses wp_get_object_terms() Retrieves the tags. Args details can be found here.
+ *
+ * @param int $product_id Optional. The Post ID.
+ * @param array $args Optional. Overwrite the defaults.
+ * @return array
+ */
+function wp_get_product_tags( $product_id = 0, $args = array() ) {
+	$product_id = (int) $product_id;
+
+	$defaults = array('fields' => 'ids');
+	$args = wp_parse_args( $args, $defaults );
+
+	$cats = wp_get_object_terms($product_id, 'product_tag');
+	return $cats;
+}
+
+
+/**
+ * Retrieve the list of categories for a product.
+ *
+ * Compatibility layer for themes and plugins. Also an easy layer of abstraction
+ * away from the complexity of the taxonomy layer. Copied from the Wordpress posts code
+ *
+ * @since 3.8.0
+ *
+ * @uses wp_get_object_terms() Retrieves the categories. Args details can be found here.
+ *
+ * @param int $post_id Optional. The Post ID.
+ * @param array $args Optional. Overwrite the defaults.
+ * @return array
+ */
+function wp_get_product_categories( $product_id = 0, $args = array() ) {
+	$product_id = (int) $product_id;
+
+	$defaults = array('fields' => 'ids');
+	$args = wp_parse_args( $args, $defaults );
+
+	$cats = wp_get_object_terms($product_id, 'wpsc_product_category');
+	return $cats;
+}
+
+
+/**
+ * Set categories for a product.
+ *
+ * If the post categories parameter is not set, then the default category is
+ * going used.  Copied from the Wordpress posts code
+ *
+ * @since 3.8.0
+ *
+ * @param int $post_ID Post ID.
+ * @param array $post_categories Optional. List of categories.
+ * @return bool|mixed
+ */
+ 
+ 
+function wp_set_product_categories($product_id, $post_categories = array()) {
+	$product_id = (int) $product_id;
+	// If $post_categories isn't already an array, make it one:
+	if (!is_array($post_categories) || 0 == count($post_categories) || empty($post_categories)) {
+		//$post_categories = array(get_option('default_category'));
+		return;
+	} else if ( 1 == count($post_categories) && '' == $post_categories[0] ) {
+		return true;
+	}
+
+	$post_categories = array_map('intval', $post_categories);
+	$post_categories = array_unique($post_categories);
+
+	return wp_set_object_terms($product_id, $post_categories, 'wpsc_product_category');
+}
+//*/
+
+
+
+
+/**
+ * Retrieve product categories. Copied from the corresponding wordpress function
+ *
+ * @since 3.8.0
+ *
+ * @param int $id Mandatory, the product ID
+ * @return array
+ */
+function get_the_product_category( $id ) {
+
+	$id = (int) $id;
+	
+	$categories = get_object_term_cache( $id, 'wpsc_product_category' );
+	if ( false === $categories ) {
+		$categories = wp_get_object_terms( $id, 'wpsc_product_category' );
+		wp_cache_add($id, $categories, 'product_category_relationships');
+	}
+
+	if ( !empty( $categories ) )
+		usort( $categories, '_usort_terms_by_name' );
+	else
+		$categories = array();
+
+	foreach ( (array) array_keys( $categories ) as $key ) {
+		_make_cat_compat( $categories[$key] );
+	}
+
+	return $categories;
+}
+
+
+/**
+ * Check the memory_limit and calculate a recommended memory size
+ * inspired by nextGenGallery Code
+ * 
+ * @return string message about recommended image size
+ */
+function wpsc_check_memory_limit() {
+
+	if ( (function_exists('memory_get_usage')) && (ini_get('memory_limit')) ) {
+		
+		// get memory limit
+		$memory_limit = ini_get('memory_limit');
+		if ($memory_limit != '')
+			$memory_limit = substr($memory_limit, 0, -1) * 1024 * 1024;
+		
+		// calculate the free memory 	
+		$freeMemory = $memory_limit - memory_get_usage();
+		
+		// build the test sizes
+		$sizes = array();
+		$sizes[] = array ( 'width' => 800, 'height' => 600 );
+		$sizes[] = array ( 'width' => 1024, 'height' => 768 );
+		$sizes[] = array ( 'width' => 1280, 'height' => 960 );  // 1MP	
+		$sizes[] = array ( 'width' => 1600, 'height' => 1200 ); // 2MP
+		$sizes[] = array ( 'width' => 2016, 'height' => 1512 ); // 3MP
+		$sizes[] = array ( 'width' => 2272, 'height' => 1704 ); // 4MP
+		$sizes[] = array ( 'width' => 2560, 'height' => 1920 ); // 5MP
+		
+		// test the classic sizes
+		foreach ($sizes as $size){
+			// very, very rough estimation
+			if ($freeMemory < round( $size['width'] * $size['height'] * 5.09 )) {
+            	$result = sprintf(  __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height']); 
+				return $result;
+			}
+		}
+	}
+	return;
+} 
 ?>

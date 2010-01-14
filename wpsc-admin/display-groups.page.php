@@ -1,4 +1,4 @@
-<?php
+	<?php
 //global $wpsc_category_url_cache;
 function wpsc_category_tm(){
  global $wpdb;
@@ -76,37 +76,40 @@ function display_categories($group_id, $id = null, $level = 0) {
 }
 
 function display_category_row($category,$subcategory_level = 0) {
-  echo "     <tr>\n\r";
-  echo "       <td colspan='4' class='colspan'>\n\r";
-  if($subcategory_level > 0) {
-    echo "        <div class='subcategory' style='padding-left: ".(1*$subcategory_level)."em;'>\n\r";
-    echo "		        <img class='category_indenter' src='".WPSC_URL."/images/indenter.gif' alt='' title='' />\n\r";
-	}
-  echo "		        <table class='itemlist'>\n\r";
-  echo "		          <tr>\n\r";
-  echo "		            <td>\n\r";
- /* if($category['image'] !=null) {
-		echo "		            <img src='".WPSC_CATEGORY_URL.$category['image']."' title='".$category['name']."' alt='".$category['name']."' width='30' height='30' />\n\r";
-	} else {
-		echo "		            <img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category['name']."' alt='".$category['name']."' width='30' height='30'  />\n\r";
-	}*/
-  echo "		            </td>\n\r";
-  
-  echo "		            <td>\n\r";
-  echo "".htmlentities(stripslashes($category->name), ENT_QUOTES, 'UTF-8')."";
-  echo "		            </td>\n\r";
+	//echo "<pre>".print_r($category,true)."</pre>";
+	$category_image = wpsc_get_categorymeta($category->term_id, 'image');
 
-  echo "		            <td>\n\r";
-  echo "		            		<a href='#' onclick='fillcategoryform(".$category->term_id.");return false;'>".__('Edit', 'wpsc')."</a>\n\r";
-  echo "		            </td>\n\r";
-  echo "		          </tr>\n\r";
-  echo "		        </table>\n\r";
-  
-  if($subcategory_level > 0) {
-    echo "		        </div>\n\r";
+	echo "     <tr>\n\r";
+	echo "       <td colspan='4' class='colspan'>\n\r";
+	if($subcategory_level > 0) {
+		echo "        <div class='subcategory' style='padding-left: ".(1*$subcategory_level)."em;'>\n\r";
+		echo "		        <img class='category_indenter' src='".WPSC_URL."/images/indenter.gif' alt='' title='' />\n\r";
 	}
-  echo "       </td>\n\r";
-  echo "      </tr>\n\r";
+	echo "		        <table class='itemlist'>\n\r";
+	echo "		          <tr>\n\r";
+	echo "		            <td>\n\r";
+	if($category_image !=null) {
+		echo "		            <img src='".WPSC_CATEGORY_URL.$category_image."' title='".$category->name."' alt='".$category->name."' width='30' height='30' />\n\r";
+	} else {
+		echo "		            <img style='border-style:solid; border-color: red' src='".WPSC_URL."/images/no-image-uploaded.gif' title='".$category->name."' alt='".$category->name."' width='30' height='30'  />\n\r";
+	}
+	echo "		            </td>\n\r";
+	
+	echo "		            <td>\n\r";
+	echo "".htmlentities(stripslashes($category->name), ENT_QUOTES, 'UTF-8')."";
+	echo "		            </td>\n\r";
+	
+	echo "		            <td>\n\r";
+	echo "		            		<a href='#' onclick='fillcategoryform(".$category->term_id.");return false;'>".__('Edit', 'wpsc')."</a>\n\r";
+	echo "		            </td>\n\r";
+	echo "		          </tr>\n\r";
+	echo "		        </table>\n\r";
+	
+	if($subcategory_level > 0) {
+		echo "		        </div>\n\r";
+	}
+	echo "       </td>\n\r";
+	echo "      </tr>\n\r";
 }
 
 

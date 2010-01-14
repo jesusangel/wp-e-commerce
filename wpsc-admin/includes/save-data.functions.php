@@ -3,7 +3,7 @@
 /**
  * WP eCommerce form and other data saving functions
  *
- * This is used for functions that save things like variation sets and product grpups that would be too large to have in the ajax.php file.
+ * This is used for functions that save things like variation sets and product groups that would be too large to have in the ajax.php file.
  *
  * @package wp-e-commerce
  * @since 3.7

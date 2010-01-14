@@ -1420,3 +1420,11 @@ td.product-image a img.attachment-thumbnail {
 	width: 38px;
 
 }
+
+#wpsc_product_category_and_tag_forms .tagchecklist {
+	font-size:11px;
+}
+
+#categorydiv div{
+ margin-top: 4px;
+}

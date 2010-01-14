@@ -655,7 +655,7 @@ function wpsc_convert_weights($weight, $unit) {
 
 
 
-function wpsc_convert_weight($in_weight, $in_unit, $out_unit) {
+function wpsc_convert_weight($in_weight, $in_unit, $out_unit = 'gram') {
 	if (is_array($weight)) {
 		$weight = $weight['weight'];
 	}

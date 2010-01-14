@@ -196,7 +196,7 @@ function wpsc_product_row(&$product) {
 				$attachment = array_pop($attachments);
 				$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$attachment->ID}&amp;width=38&amp;height=38&amp;crop=true";
 				?>
-					<img title='Drag to a new position' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' />
+					<img title='Drag to a new position' src=<?php echo $image_url; ?>' alt='<?php echo $title; ?>' />
 				<?php
 			} else {
 				$image_url = WPSC_URL."/images/no-image-uploaded.gif";
@@ -228,7 +228,7 @@ function wpsc_product_row(&$product) {
 		case 'categories':
 		?>
 		<td <?php echo $attributes ?>><?php
-			$categories = get_the_category();
+			$categories = get_the_product_category($product->ID);
 			if ( !empty( $categories ) ) {
 				$out = array();
 				foreach ( $categories as $c )

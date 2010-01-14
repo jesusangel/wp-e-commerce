@@ -6,53 +6,13 @@
  * @since 3.7
  */
 
-/**
- * Check the memory_limit and calculate a recommended memory size
- * inspired by nextGenGallery Code
- * 
- * @return string message about recommended image size
- */
-function wpsc_check_memory_limit() {
 
-	if ( (function_exists('memory_get_usage')) && (ini_get('memory_limit')) ) {
-		
-		// get memory limit
-		$memory_limit = ini_get('memory_limit');
-		if ($memory_limit != '')
-			$memory_limit = substr($memory_limit, 0, -1) * 1024 * 1024;
-		
-		// calculate the free memory 	
-		$freeMemory = $memory_limit - memory_get_usage();
-		
-		// build the test sizes
-		$sizes = array();
-		$sizes[] = array ( 'width' => 800, 'height' => 600 );
-		$sizes[] = array ( 'width' => 1024, 'height' => 768 );
-		$sizes[] = array ( 'width' => 1280, 'height' => 960 );  // 1MP	
-		$sizes[] = array ( 'width' => 1600, 'height' => 1200 ); // 2MP
-		$sizes[] = array ( 'width' => 2016, 'height' => 1512 ); // 3MP
-		$sizes[] = array ( 'width' => 2272, 'height' => 1704 ); // 4MP
-		$sizes[] = array ( 'width' => 2560, 'height' => 1920 ); // 5MP
-		
-		// test the classic sizes
-		foreach ($sizes as $size){
-			// very, very rough estimation
-			if ($freeMemory < round( $size['width'] * $size['height'] * 5.09 )) {
-            	$result = sprintf(  __( 'Please refrain from uploading images larger than <strong>%d x %d</strong> pixels' ), $size['width'], $size['height']); 
-				return $result;
-			}
-		}
-	}
-	return;
-} 
 
 function wpsc_get_max_upload_size(){
 // Get PHP Max Upload Size
 	if(ini_get('upload_max_filesize')) $upload_max = ini_get('upload_max_filesize');	
-	else $upload_max = __('N/A', 'nggallery');
-	
+	else $upload_max = __('N/A', 'wpsc');	
 	return $upload_max;
-
 }
  /**
 	* wpsc_admin_submit_product function 
@@ -62,11 +22,11 @@ function wpsc_get_max_upload_size(){
 function wpsc_admin_submit_product() {
   check_admin_referer('edit-product', 'wpsc-edit-product');
   $post_data = wpsc_sanitise_product_forms();
-  $post_data['category'] = 1;  /// remove this
+  //$post_data['category'] = 1;  /// remove this
   if(isset($post_data['title']) && $post_data['title'] != '' && isset($post_data['category'])){
 		$product_id = wpsc_insert_product($post_data, true);
 		if($product_id > 0) {
-			$sendback = add_query_arg('product_id', $product_id);
+			$sendback = add_query_arg('product', $product_id);
 		}
 		
 		$sendback = add_query_arg('message', 1, $sendback);
@@ -99,47 +59,80 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	if ( empty($post_data) ) {
 		$post_data = &$_POST;
 	}
-// 	$post_data['product_id'] = isset($post_data['product_id']) ? $post_data['product_id'] : '';
+	// 	$post_data['product_id'] = isset($post_data['product_id']) ? $post_data['product_id'] : '';
 	$post_data['name'] = isset($post_data['title']) ? $post_data['title'] : '';
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
-	$post_data['meta'] = isset($post_data['productmeta_values']) ? $post_data['productmeta_values'] : '';
-	$post_data['edit_variation_values'] = $post_data['edit_var_val'];
 
-  // cast to boolean to convert to true or false, then cast to integer to convert to 1 or 0
-	$post_data['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
-	$post_data['special'] = (int)(bool)$post_data['special'];
-	$post_data['notax'] = (int)(bool)$post_data['notax'];
-	$post_data['donation'] = (int)(bool)$post_data['donation'];
-	$post_data['no_shipping'] = (int)(bool)$post_data['no_shipping'];
 	$post_data['publish'] = (int)(bool)$post_data['publish']; 
-	$post_data['meta']['unpublish_oos'] = (int)(bool)$post_data['inform_when_oos'];
 
-	$post_data['price'] = (float)$post_data['price'];
+
+
+	$post_meta['meta'] = (array)$_POST['meta'];
+		
+	$post_data['meta']['_wpsc_price'] = (float)$post_data['meta']['_wpsc_price'];
+	$post_data['meta']['_wpsc_sku'] = $post_data['meta']['_wpsc_sku'];
+	$post_data['meta']['_wpsc_is_donation'] = (int)(bool)$post_data['meta']['_wpsc_is_donation'];
+	$post_data['meta']['_wpsc_stock'] = (int)$post_data['meta']['_wpsc_stock'];
+	
+	if((bool)$post_data['meta']['_wpsc_limited_stock'] != true) {
+	  $post_data['meta']['_wpsc_stock'] = false;
+	}
+	unset($post_data['meta']['_wpsc_limited_stock']);
+	
+	
+	$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
+	$post_data['meta']['_wpsc_product_metadata']['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
+	$post_data['meta']['_wpsc_product_metadata']['special'] = (int)(bool)$post_data['special'];
+	/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax'];; */
+	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['no_shipping'];
+	
+	// Product Weight
+	$weight = wpsc_convert_weight($post_data['meta']['_wpsc_product_metadata']['weight'], $post_data['meta']['_wpsc_product_metadata']['display_weight_as'], "gram");
+	$post_data['meta']['_wpsc_product_metadata']['weight'] = (float)$weight;
+	$post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = $post_data['meta']['_wpsc_product_metadata']['display_weight_as'];	
+	
+	
+	// table rate price
+	$post_data['meta']['_wpsc_product_metadata']['table_rate_price'] = $post_data['table_rate_price'];
+	// if table_rate_price is unticked, wipe the table rate prices
+	if($post_data['table_rate_price']['state'] != 1) {
+		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'] = null;
+		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_rate_price'] = null;
+	}
+	
+	if($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] == 1) {
+		$custom_tax_value = (float)$post_data['meta']['_wpsc_product_metadata']['custom_tax']['value'];
+	} else {
+		$custom_tax_value = null;
+	}
+	$post_data['meta']['_wpsc_product_metadata']['custom_tax'] = $custom_tax_value;
+	
+	
+	$post_data['meta']['_wpsc_product_metadata']['dimensions'] = $post_data['meta']['_wpsc_product_metadata']['dimensions'];
+
+
+	/*
 	if(is_numeric($post_data['special_price'])) {
 		$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
 	} else {
 		$post_data['special_price'] = 0;
 	}
+	*/
 	
+	/*
 	// if special is unticked, wipe the special_price value
-// 	if($post_data['special'] !== 1) {
-// 	  $post_data['special_price'] = 0;
-// 	}
-	
-	// if table_rate_price is unticked, wipe the table rate prices
-	if($post_data['table_rate_price'] != 1) {
-		$post_data['meta']['table_rate_price'] = null;
+	if($post_data['special'] !== 1) {
+	  $post_data['special_price'] = 0;
 	}
+	*/
 	
-	if(is_array($post_data['dimensions'])){
-		$post_data['meta']['dimensions'] = serialize($post_data['dimensions']);
-	}
+	
 	
 
 	$post_data['files'] = $_FILES;
 
-  //exit('<pre>'.print_r($post_data, true).'</pre>');
-  return $post_data;
+	//exit('<pre>'.print_r($post_data, true).'</pre>');
+	return $post_data;
 }
   
  /**
@@ -204,7 +197,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'post_name' => sanitize_title($post_data['name'])
 	);
 
-	
+		
 	//exit("<pre>".print_r(wp_update_post($product_post_values) , true)."</pre>");
 	if($sku != '') {
 		$product_post_array['guid'] = $sku;
@@ -271,8 +264,16 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	// if we succeed, we can do further editing
 	
 	// update the categories
-	wpsc_update_category_associations($product_id, $post_data['category']);
+	/* 	wpsc_update_category_associations($product_id, $post_data['category']); */
+	//wp_set_post_categories($product_id, $post_data['category']);
 	
+	//echo "<pre>".print_r($post_data['category'], true)."</pre>";	
+	wp_set_product_categories($product_id, $post_data['category']);
+	
+	//echo "<pre>".print_r($test, true)."</pre>";
+	//exit();
+	
+
 	// and the tags
 	wpsc_update_product_tags($product_id, $post_data['product_tags'], $post_data['wpsc_existing_tags']);
 	
@@ -427,14 +428,14 @@ function wpsc_update_product_tags($product_id, $product_tags, $existing_tags) {
  */
 function wpsc_update_product_meta($product_id, $product_meta) {
     if($product_meta != null) {
-      foreach((array)$product_meta as $key => $value) {
-        if(get_product_meta($product_id, $key) != false) {
-          update_product_meta($product_id, $key, $value);
-				} else {
-          add_product_meta($product_id, $key, $value);
-				}
+		foreach((array)$product_meta as $key => $value) {
+		    if(get_post_meta($product_id, $key) != false) {
+		      update_post_meta($product_id, $key, $value);
+			} else {
+		      add_post_meta($product_id, $key, $value);
 			}
 		}
+	}
 }
 
 /*

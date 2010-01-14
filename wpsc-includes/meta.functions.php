@@ -155,4 +155,37 @@ function wpsc_delete_categorymeta( $cart_id, $meta_key, $meta_value = '' ) {
 */
 
 
+/**
+ * product meta functions start here
+*/
+
+
+function add_product_meta($product_id, $key, $value, $unique = false, $custom = false) {
+	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
+	return add_post_meta($product_id, $key, $value);
+}
+  
+function delete_product_meta($product_id, $key, $value = '') {
+	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
+	return true;
+}
+
+
+function get_product_meta($product_id, $key, $single = false) {
+	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
+	return get_post_meta($product_id, $key);
+}
+
+function update_product_meta($product_id, $key, $value, $prev_value = '') {
+	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
+	return update_post_meta($product_id, $key, $value);
+}
+
+
+
+
+
+/**
+ * product meta functions end here
+*/
 ?>
