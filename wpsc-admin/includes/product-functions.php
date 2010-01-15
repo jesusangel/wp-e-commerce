@@ -84,7 +84,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['meta']['_wpsc_product_metadata']['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
 	$post_data['meta']['_wpsc_product_metadata']['special'] = (int)(bool)$post_data['special'];
 	/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax'];; */
-	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['no_shipping'];
+	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['no_shipping'];
 	
 	// Product Weight
 	$weight = wpsc_convert_weight($post_data['meta']['_wpsc_product_metadata']['weight'], $post_data['meta']['_wpsc_product_metadata']['display_weight_as'], "gram");
@@ -107,8 +107,11 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	}
 	$post_data['meta']['_wpsc_product_metadata']['custom_tax'] = $custom_tax_value;
 	
-	
-	$post_data['meta']['_wpsc_product_metadata']['dimensions'] = $post_data['meta']['_wpsc_product_metadata']['dimensions'];
+	$post_data['meta']['_wpsc_product_metadata']['shipping']['local'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['local'];
+	$post_data['meta']['_wpsc_product_metadata']['shipping']['international'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['international'];
+
+
+
 
 
 	/*
