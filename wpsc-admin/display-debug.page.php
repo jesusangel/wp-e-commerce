@@ -481,7 +481,6 @@ function wpsc_convert_products_to_posts() {
 		// yay, stars!
 		//echo "\n";
 		echo "<span style='font-size: 18pt;'>";
-		//echo "✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂✩❂\n";
 		echo "✩✪✫✬✭✮✯✰✲✱✳✴✵✶✷✸✹✺✻✼✽✾✿❀❁❂❃❄❅❆❇❈❉❊❋✖✗✘✙✚✛✜✡✥⚙☸❖\n";
 		//    
 		echo "</span>";

@@ -149,7 +149,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		output_html += "	<input type='hidden' value='"+image_id+"' name='gallery_image_id[]' class='image-id'/>\n";
 		output_html += "	<div id='gallery_image_"+image_id+"' class='previewimage'>\n";
 		output_html += "		<a class='thickbox' rel='product_extra_image_"+image_id+"' href='admin.php?wpsc_admin_action=crop_image&amp;imagename="+image_src+"&amp;imgheight=480&amp;imgwidth=600&amp;product_id=103&amp;width=640&amp;height=342' id='extra_preview_link_"+image_id+"'>\n";
-		output_html += "		<img title='Preview' alt='Preview' src='"+WPSC_IMAGE_URL+image_src+"' class='previewimage'/>\n";
+		output_html += "		<img title='Preview' alt='Preview' src='"+image_src+"' class='previewimage'/>\n";
 		output_html += "		</a>\n";
 		output_html += "	<img src='"+WPSC_URL+"/images/cross.png' class='deleteButton' alt='-' style='display: none;'/>\n";
 		output_html += "	</div>\n";
