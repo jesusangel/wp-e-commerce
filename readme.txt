@@ -1,5 +1,5 @@
 === WP e-Commerce ===
-Contributors: Dan Milward, Tom Howard, Jeffry Ghazally, Chris Beavan, Allen Han
+Contributors: Dan Milward, Tom Howard, Jeffry Ghazally, Chris Beavan, Allen Han, Gregory Gullett
 Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
@@ -36,6 +36,11 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog == 
+= 3.7.5.4 =
+* Implemented the new UPS Api for shipping calculation. The old API is being depricated
+* Added switch to specify use of the UPS testing environment
+* UPS API username, password and ID are now necessary for UPS rate quotes
+* Added ability to limit the UPS services that are shown to customers
 
 = 3.7.5.3 =
 * Support for WordPress 2.9 canonical URLs for Products and Categories
