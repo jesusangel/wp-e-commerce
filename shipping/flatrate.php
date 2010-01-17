@@ -128,15 +128,13 @@ class flatrate {
 
 		
 		$uses_billing_address = false;
-		foreach($cart_item->category_id_list as $category_id) {
+		foreach((array)$cart_item->category_id_list as $category_id) {
 			$uses_billing_address = (bool)wpsc_get_categorymeta($category_id, 'uses_billing_address');
 			if($uses_billing_address === true) {
 			  break; /// just one true value is sufficient
 			}
 		}
-		//$_SESSION['wpsc_selected_country']
-		
-		  //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
+
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
 			if($uses_billing_address == true) {
 				$country_code = $wpsc_cart->selected_country;

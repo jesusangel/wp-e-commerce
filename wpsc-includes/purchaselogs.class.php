@@ -498,13 +498,28 @@ function wpsc_display_purchlog_shipping_city(){
 }
 function wpsc_display_purchlog_shipping_state_and_postcode(){
 	global $purchlogitem;
-	//exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
-	return $purchlogitem->shippingstate($purchlogitem->shippinginfo['shippingstate']['value']).', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
+	$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
+	if(is_array($country) && is_numeric($country[0])){
+		$state = $purchlogitem->shippingstate($country[0]);
+		$country = $country[1];
+	}else{
+		$state = $purchlogitem->shippingstate($country[1]);
+		$country = $country[0];
+	}
+
+	
+	return $state.', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 	//return $purchlogitem->shippinginfo['shippingstate']['value'].', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 }
 function wpsc_display_purchlog_shipping_country(){
 	global $purchlogitem;
-	return htmlentities(stripslashes($purchlogitem->shippinginfo['shippingcountry']['value']), ENT_QUOTES);
+	$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
+	if(is_array($country) && is_numeric($country[0])){
+		$country = $country[1];
+	}else{
+		$country = $country[0];
+	}
+	return htmlentities(stripslashes($country), ENT_QUOTES);
 }
 function wpsc_display_purchlog_shipping_method(){
 	global $purchlogitem;

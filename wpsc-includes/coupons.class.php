@@ -198,7 +198,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 	 * @return bool True if all conditions are matched, False otherwise.
 	 */
 	function compare_logic($c, $product_obj) {
-		global $wpdb;
+		global $wpdb, $wpsc_cart;
 		
 		if ($c['property'] == 'item_name') {
 			$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$product_obj->product_id}'");
@@ -294,8 +294,10 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				return false;
 			}
 		} else if ($c['property'] == 'total_quantity'){
-//			exit('<pre>'.print_r($product_obj, true).'</pre>');
-			$total_quantity = $product_obj->quantity;
+
+			
+			$total_quantity = wpsc_cart_item_count();
+			//exit('Quantity :'.$total_quantity);
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of products in the cart equals condition value
 				if ($total_quantity == $c['value'])
