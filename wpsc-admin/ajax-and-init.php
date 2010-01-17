@@ -1812,10 +1812,17 @@ global $wpdb;
 	      if($tax != $previous_tax) {
 	        $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `tax` = '$tax' WHERE `id` = '$region_id' LIMIT 1");
 	        $changes_made = true;
+	        
 	      }
 	    }
 	  }
-		$sendback = wp_get_referer();
+	  $sendback = wp_get_referer();
+	   $sendback = remove_query_arg(array('isocode'),$sendback);
+	  if($changes_made){
+	  	$sendback = add_query_arg('updated', $changes_made, $sendback);
+	  }
+//		
+		     
 		//$sendback = remove_query_arg('isocode', $sendback);
 		wp_redirect($sendback);
 	}

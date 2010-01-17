@@ -6,7 +6,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	$errorcode = 0;
 	$order_status= 2;
 	$siteurl = get_option('siteurl');
-	
+
 	/*
 	 * {Notes} Double check that $Echo_To_Screen is a boolean value
 	 */
@@ -46,7 +46,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}*/
 			}
 		}
-
+		if(isset($_GET['ssl_result_message']) && $_GET['ssl_result_message'] == 'APPROVAL'){
+			$order_status= 2;
+			$purchase_log['processed'] = 2;
+		}
 		$cart = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='{$purchase_log['id']}'",ARRAY_A);
 		
 		if($purchase_log['shipping_country'] != '') {
@@ -63,9 +66,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$stock_adjusted = false;
 		$previous_download_ids = array(0); 
 		$product_list='';
-	
+		
 		if(($cart != null) && ($errorcode == 0)) {
-			foreach($cart as $row) {
+				foreach($cart as $row) {
 				$link = "";
 				$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$row['prodid']}' LIMIT 1", ARRAY_A) ;
 				if($purchase_log['email_sent'] != 1) {
@@ -256,8 +259,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$report_user = __('Customer Details', 'wpsc')."\n\r";
 				$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
 				$form_data = $wpdb->get_results($form_sql,ARRAY_A);
-				
+					
 				if($form_data != null) {
+				
 					foreach($form_data as $form_field) {
 						$form_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `id` = '".$form_field['form_id']."' LIMIT 1", ARRAY_A);
 

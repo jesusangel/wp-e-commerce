@@ -252,6 +252,7 @@ if(!isset($purchlogs)){
 				
 				<div id='wpsc_purchlogitems_links'>
 				<h3><?php _e('Actions'); ?></h3>
+				<?php do_action('wpsc-purchlogitem-links-start'); ?>
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
 <img src='<?php echo WPSC_URL; ?>/images/lock_open.png' alt='clear lock icon' />&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
 				<?php endif; ?>

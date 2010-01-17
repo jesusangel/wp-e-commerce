@@ -117,14 +117,13 @@ function wpsc_purchlogs_customfiles(){
 	foreach($purchlogitem->allcartcontent as $cartitem){
 		if($cartitem->files != 'N;'){
 			$file = unserialize($cartitem->files);
-			//exit('<pre>'.var_dump($file,true).'</pre>');
 			if($file["mime_type"] == "image/jpeg" ||$file["mime_type"] == "image/png"||$file["mime_type"] == "image/gif"){
 				$image  = "<a href='".WPSC_USER_UPLOADS_URL.$file['file_name']."' >";
-				$image .= "<img src='index.php?image_name=".$file['file_name']."' alt='' />";
+				$image .= $file["file_name"];
 				$image .="</a>";
-				$files[] = $cartitem->name.' :<br />'.$image;
+				$files[] = $cartitem->name.' :'.$image;
 			}else{
-				$files[] = $cartitem->name.' :<br />'.$file['file_name'];
+				$files[] = $cartitem->name.' :'.$file['file_name'];
 			}
 			
 			//return true;

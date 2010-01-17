@@ -5,6 +5,15 @@ global $wpdb, $user_ID, $nzshpcrt_gateways;
 $sessionid = $_GET['sessionid'];
 if(!isset($_GET['sessionid']) && isset($_GET['ms']) ){
 	$sessionid = $_GET['ms'];
+}elseif(isset($_GET['ssl_result_message']) && $_GET['ssl_result_message']== 'APPROVAL' ){
+	$sessionid = $_SESSION['wpsc_sessionid'];
+	if(get_option('permalink_structure') != '') {
+		$seperator = "?";
+	} else {
+		$seperator = "&";
+	}
+	//unset($_SESSION['wpsc_sessionid']);
+	//header('Location: '.get_option('transact_url').$seperator.'sessionid='.$sessionid);
 }
 if($_GET['gateway'] == 'google'){
 	wpsc_google_checkout_submit();
@@ -31,7 +40,10 @@ if($_REQUEST['eway']=='1') {
 if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
 
-} else {
+} elseif($sessionid == ''){
+	_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
+
+}else{
 	if($_SESSION['wpsc_previous_selected_gateway']== 'dps') {
 		$sessionid = decrypt_dps_response();
 		//exit($sessionid);

@@ -626,11 +626,12 @@ function wpsc_submit_checkout() {
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 				$current_gateway_data['function']($seperator, $sessionid);
 				//break;
-			} else if (($current_gateway_data['internalname'] == 'google') && ($current_gateway_data['internalname'] == $submitted_gateway)){
+			} else if ($_POST['custom_gateway'] == 'google'){
 				$gateway_used = $current_gateway_data['internalname'];
 				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `gateway` = '".$gateway_used."' WHERE `id` = '".$log_id."' LIMIT 1 ;");
 				$_SESSION['gateway'] = 'google';
 				header('Location: '.get_option('shopping_cart_url'));
+				exit();
 				//break;
 			}
 		}
