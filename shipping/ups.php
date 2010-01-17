@@ -407,6 +407,10 @@ class ups {
             $args['weight'] = wpsc_cart_weight_total();
             // Destination zip code
             $args['dest_ccode'] = $_SESSION['wpsc_delivery_country'];
+            if ($args['dest_ccode'] == "UK"){
+                // So, UPS is a little off the times
+                $args['dest_ccode'] = "GB";
+            }
 
             // If ths zip code is provided via a form post use it!
             if(isset($_POST['zipcode'])) {
