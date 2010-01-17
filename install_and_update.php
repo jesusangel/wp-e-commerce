@@ -121,7 +121,7 @@ function wpsc_install() {
   add_option('display_pnp', '1', __('Display or hide postage and packaging', 'wpsc'), 'yes');
 
   add_option('display_specials', '1', __('Display or hide specials on the sidebar', 'wpsc'), 'yes');
-  add_option('do_not_use_shipping', '0', 'do_not_use_shipping', 'yes');
+  add_option('do_not_use_shipping', '1', 'do_not_use_shipping', 'no');
 
   add_option('postage_and_packaging', '0', __('Default postage and packaging', 'wpsc'), 'yes');
   
