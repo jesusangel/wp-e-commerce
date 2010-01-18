@@ -294,8 +294,6 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				return false;
 			}
 		} else if ($c['property'] == 'total_quantity'){
-
-			
 			$total_quantity = wpsc_cart_item_count();
 			//exit('Quantity :'.$total_quantity);
 			switch($c['logic']) {
