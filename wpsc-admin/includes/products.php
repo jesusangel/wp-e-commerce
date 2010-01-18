@@ -27,7 +27,7 @@ function wpsc_admin_product_listing() {
 	foreach ( $wpsc_products as $product ) {
 		$product_ids[] = $product->ID;
 	}
-
+//	exit('<pre>'.print_r($wpsc_products, true).'</pre>');
 	foreach ( $wpsc_products as $product ) {
 		wpsc_product_row($product);
 	}
@@ -211,6 +211,7 @@ function wpsc_product_row(&$product) {
 		
 		case 'price':
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
+		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo nzshpcrt_currency_display($price, 1); ?>

@@ -21,6 +21,7 @@ function wpsc_get_max_upload_size(){
 */
 function wpsc_admin_submit_product() {
   check_admin_referer('edit-product', 'wpsc-edit-product');
+  $sendback = wp_get_referer();
   $post_data = wpsc_sanitise_product_forms();
   //$post_data['category'] = 1;  /// remove this
   if(isset($post_data['title']) && $post_data['title'] != '' && isset($post_data['category'])){
@@ -211,8 +212,9 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   
    if($update === true) {
 		$where = array( 'id' => $product_id );
-		
-		if (!wp_update_post($product_post_values) ) {
+		//exit('<pre>'.print_r($product_post_values,true).'</pre>');
+		$product_id = wp_update_post($product_post_values);
+		if ($product_id == 0) {
 			if ( $wpsc_error ) {
 				return new WP_Error('db_update_error', __('Could not update product in the database'), $wpdb->last_error);
 			} else {
@@ -224,8 +226,8 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		$product_post_values += array(
 			'post_date' => $product['date_added']
 		);
-  
-		if ( false === $wpdb->insert( WPSC_TABLE_PRODUCT_LIST, $update_values ) ) {
+  		 $product_id = wp_insert_post($product_post_values);
+		if ($product_id == 0 ) {
 			if ( $wp_error ) {
 				return new WP_Error('db_insert_error', __('Could not insert product into the database'), $wpdb->last_error);
 			} else {
@@ -233,7 +235,8 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 			}
 		}
 		$adding = true;
-		$product_id = (int) $wpdb->insert_id;
+		//$product_id = (int)$wpdb->insert_id;
+		//exit($product_id.' <-- IS the corresponding ID YAW');
   }
   
 	/* Add tidy url name */

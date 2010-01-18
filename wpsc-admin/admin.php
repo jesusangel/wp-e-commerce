@@ -72,20 +72,20 @@ function wpsc_admin_pages(){
 		if ($userdata->user_level <= 2) {
 				if(file_exists(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php')) {
 					require_once(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php');
-					add_object_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/cart.png");
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/credit_cards.png");
 				} else {
 					if (function_exists('add_object_page')) {
-						add_object_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/cart.png");
+						add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/credit_cards.png");
 					} else {
-						add_menu_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page);
+						add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
 					}
 				}
 			} else {
 				if (function_exists('add_object_page')) {
-					add_object_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/cart.png");
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/credit_cards.png");
 					
 				} else {
-					add_menu_page(__('Products', 'wpsc'), __('Products', 'wpsc'), 2, $base_page);
+					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
 				}
 			}
 
