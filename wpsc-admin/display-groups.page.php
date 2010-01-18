@@ -1,4 +1,4 @@
-	<?php
+<?php
 //global $wpsc_category_url_cache;
 function wpsc_category_tm(){
  global $wpdb;

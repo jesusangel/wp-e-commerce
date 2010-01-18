@@ -373,7 +373,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 	$output = '';
 	//echo "<pre>".print_r($product_data['tags'], true)."</pre>";
 	$tag_array = array();
-	foreach($product_data['tags'] as $tag) {
+	foreach((array)$product_data['tags'] as $tag) {
 	  $tag_array[] = $tag->name;
 	}
 	if ($product_data == 'empty') {

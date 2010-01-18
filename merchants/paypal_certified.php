@@ -782,8 +782,10 @@ $output .= "
 	$USE_PROXY = false;
 	$version="56.0";
 
-	if (session_id() == "")
+	/*
+if (session_id() == "")
 		session_start();
+*/
 
 	/* An express checkout transaction starts with a token, that
 	   identifies to PayPal your transaction
