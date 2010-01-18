@@ -610,6 +610,11 @@ function nzshpcrt_display_preview_image() {
 
 add_action('init', 'nzshpcrt_display_preview_image');
 
+//function added to preserve backwards compatibility
+function nzshpcrt_listdir($dirname){
+	return wpsc_list_dir($dirname);
+}
+
 function wpsc_list_dir($dirname) {
   /*
   lists the provided directory, was nzshpcrt_listdir
