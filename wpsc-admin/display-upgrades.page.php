@@ -106,9 +106,7 @@ function wpsc_display_upgrades_page() {
 				<p>
 					<?php _e("Now a new panel should appear in the Upgrades page where you must enter your API Username and API Key. ", 'wpsc'); ?>
 				</p>
-				<p>
-					<?php _e("For more information visit our documentation page.", 'wpsc'); ?>
-				</p>
+
 				<p>
 					<a href='http://www.instinct.co.nz/e-commerce/docs/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
 				</p>
