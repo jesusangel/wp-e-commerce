@@ -435,13 +435,13 @@ function wpsc_products_page($content = '') {
   
 	$output = '';
   if(preg_match("/\[productspage\]/",$content)) {
-  
 			$wpsc_query->get_products();
   
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			ob_start();
-			
-			if(wpsc_is_single_product()) {
+			if(count($wpsc_query->products) == 1) {			
+//			if(wpsc_is_single_product()) {
+//				exit('called');
 				include($cur_wpsc_theme_folder."/single_product.php");
 			} else {
 			  // get the display type for the selected category

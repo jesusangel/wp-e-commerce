@@ -71,10 +71,10 @@ function wpsc_display_products() {
 * @return string - the URL of the current page
 */
 function wpsc_this_page_url() {
-	global $wpsc_query;
+	global $wpsc_query, $wp_query;
 	//echo "<pr".print_r($wpsc_query->category,true)."</pre>";
 	if($wpsc_query->is_single === true) {
-		return wpsc_product_url($wpsc_query->product['id']);
+		return wpsc_product_url($wp_query->post->ID);
 	} else {
 		$output = wpsc_category_url($wpsc_query->category);
 		if($wpsc_query->query_vars['page'] > 1) {
@@ -96,7 +96,7 @@ function wpsc_this_page_url() {
 */
 function wpsc_is_single_product() {
 	global $wpsc_query;
-	if($wpsc_query->is_single === true) {
+	if($wpsc_query->is_single === 1) {
 		$state = true;
 	} else {
 		$state = false;
@@ -154,7 +154,7 @@ function wpsc_category_transition() {
 	$previous_product_index = ((int)$wpsc_query->current_product - 1);
 
 	if($previous_product_index >= 0) {
-		$previous_category_id = $wpsc_query->products[$previous_product_index]['category_id'];
+		$previous_category_id = $wpsc_query->products[$previous_product_index]->category_id;
 	} else {
 		$previous_category_id = 0;
 	}
@@ -175,6 +175,7 @@ function wpsc_category_transition() {
 */
 function wpsc_have_products() {
 	global $wpsc_query;
+//	 exit('alo<pre>'.print_r($wpsc_query, true).'</pre>'); 
 	return $wpsc_query->have_products();
 }
 
@@ -210,8 +211,9 @@ function wpsc_rewind_products() {
 * @return integer - the product ID
 */
 function wpsc_the_product_id() {
-	global $wpsc_query;
-	return $wpsc_query->product['id'];
+	global $wp_query;
+//	exit('Here'.$wp_query->post->ID);
+	return $wp_query->post->ID;
 }
 
 /**
@@ -219,14 +221,16 @@ function wpsc_the_product_id() {
 * @return string - a link to edit this product
 */
 function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $id = 0 ) {
-	global $wpsc_query, $current_user, $table_prefix;
+	global $wpsc_query, $current_user, $table_prefix, $wp_query;
 	if ( $link == null ) {
 		$link = __('Edit');
 	}
-	$product_id = $wpsc_query->product['id'];
+	$product_id = $wp_query->post->ID;
+		//exit('ID = '.$id.' ____<br /><pre>'.print_r($wp_query->post->ID,true).'</pre>');
 	if ( $id > 0 ) {
 		$product_id = $id;
 	}
+
 	$siteurl = get_option('siteurl');
 	get_currentuserinfo();
 	$output = '';
@@ -292,8 +296,8 @@ function wpsc_the_product_additional_description() {
 * @return string - the URL to the single product page for this product
 */
 function wpsc_the_product_permalink() {
-	global $wpsc_query;
-	return wpsc_product_url($wpsc_query->product['id']);
+	global $wp_query;
+	return wpsc_product_url($wp_query->post->ID);
 }
 
 /**
@@ -302,6 +306,7 @@ function wpsc_the_product_permalink() {
 */
 function wpsc_the_product_price() {
 	global $wpsc_query;
+//	exit('<pre>'.print_r($wpsc_query, true).'</pre>');
 	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);
 	$special_price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);	
 	if($special_price < $price) {
@@ -1001,7 +1006,7 @@ function wpsc_product_count() {
  *
  * @since 3.7
  */
-class WPSC_Query {
+class WPSC_Query Extends WP_Query{
 
 	var $query;
 	var $query_vars = array();
@@ -1072,13 +1077,29 @@ class WPSC_Query {
 	 * @return WPSC_Query
 	 */
 	function WPSC_Query ($query = '') {
-		if (empty($query)) {
-			$query = $this->create_default_query();
-		}
-		$this->parse_query($query);
+		global $wp_query;
+/*
+		$page_id = get_the_ID();
+		$page_data = get_page( $page_id );
+		// if it is the [productspage] or a single products page
+		if($page_data->post_type == 'wpsc-product'){
+		 wp_reset_query();
+		 $query['post_type'] = 'wpsc-product';
+		 $query = query_posts($query);
+		 $this->is_single = 1;
+		 $this->product_count = count($query);
+		 
+		}elseif(preg_match("/\[productspage\]/",$page_data->post_content)){
+		 wp_reset_query();
+		 $query['post_type'] = 'wpsc-product';
+		 $query = query_posts($query);
+		 $this->is_single = 0;		 
+		 $this->product_count = count($query);	
 		
-		$this->get_products();
-		//echo("<pre>".print_r($this,true)."</pre>");
+		}
+		exit('<pre>'.print_r($this->products, true).'</pre>'); 
+		 return $query;
+*/
 	}
 
 
@@ -1272,6 +1293,16 @@ class WPSC_Query {
 	
 	function &get_products() {
 		global $wpdb, $wp_query;
+//		exit('<pre>'.print_r($wp_query, true).'</pre>');
+		 wp_reset_query();
+		 $query['post_type'] = 'wpsc-product';
+		 $query = query_posts($query);
+		 $this->is_single = 1;
+		 $this->product_count = count($query);
+		 $this->products = $query;
+		//exit('<pre>'.print_r($this->products, true).'</pre>'); 
+	/*
+	 
 		do_action_ref_array('pre_get_products', array(&$this));
 		
 		if(($this->query_vars['category_url_name'] != '')) {
@@ -1425,7 +1456,7 @@ class WPSC_Query {
 				* The reason this is so complicated is because of the product ordering, it is done by category/product association
 				* If you can see a way of simplifying it and speeding it up, then go for it.
 				*/
-				$rowcount = $wpdb->get_var("SELECT COUNT( DISTINCT `products`.`id`) AS `count`
+			/*	$rowcount = $wpdb->get_var("SELECT COUNT( DISTINCT `products`.`id`) AS `count`
 				 FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products`
 				 LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `cat_assoc`
 				 ON `products`.`id` = `cat_assoc`.`product_id`
@@ -1618,24 +1649,34 @@ class WPSC_Query {
 		// get the breadcrumbs
 		$this->get_breadcrumbs();
 		
+*/
 		return $this->products;
 	}
 
 	function next_product() {
+		global $wp_query, $wpsc_query;
+//		echo('<pre>'.print_r($wp_query, true).'</pre>');
+		//$wpsc_query->product = $wp_query->post;
 		$this->current_product++;
 		unset($this->product); // make sure it is unset
-		$this->product =& $this->products[$this->current_product];
+//		$this->product = $wp_query->post;
+		//$this->product =& $this->products[$this->current_product];
+		
 		return $this->product;
 	}
 
 	
 	function the_product() {
+		global $wp_query;
 		$this->in_the_loop = true;
 		$this->next_product();
 		$this->get_variation_groups();
 		$this->get_custom_meta();
+		$wpsc_query->product->is_single = true;
 		if ( $this->current_product == 0 ) {
 			do_action('wpsc_loop_start');
+		}else{
+		$wp_query->next_post();
 		}
 	}
 
@@ -1911,14 +1952,36 @@ class WPSC_Query {
 	
 	
 	function the_product_title() {
-		return $this->product['name'];
+		global $wp_query;
+		//exit('<pre>'.print_r($wp_query, true).'</pre>');
+		return $wp_query->post->post_title;
 	}
 	
 	
 	function the_product_thumbnail() {
 		
-		global $wpdb;
+		global $wpdb, $wp_query;
 		$image_file_name = null;
+	//	$images =& get_children( 'post_type=attachment&post_mime_type=image' );
+//		exit('<pre>'.print_r($wp_query, true).'</pre>');
+		
+		$args = array(
+					'post_type' => 'attachment',
+					'numberposts' => -1,
+					'post_status' => null,
+					'post_parent' => $wp_query->post->ID
+					); 
+		$attachments = get_posts($args);
+		if ($attachments) {
+			foreach ($attachments as $attachment) {
+//				exit('<pre>'.print_r($attachment,true).'</pre>');
+				return $attachment->guid;
+				//echo apply_filters('the_title', $attachment->post_title);
+				//the_attachment_link($attachment->ID, false);
+			}
+		}
+//		exit('?!');
+		
 		
 		if ( $this->product['thumbnail_image'] != null ) {
 			$image_file_name = $this->product['thumbnail_image'];
