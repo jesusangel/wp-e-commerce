@@ -161,7 +161,6 @@ function wpsc_display_category_loop($query, $category_html){
 	} else {
 		$order = "ASC";
 	}
-	//exit("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order");
 	$category_sql_segment = apply_filters('wpsc_display_category_loop_category_sql_segments', $category_sql_segment); 
 
   $category_data = $wpdb->get_results("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segment)." ORDER BY `{$column}` $order",ARRAY_A);
@@ -186,10 +185,10 @@ function wpsc_display_category_loop($query, $category_html){
 		}
 	
 	$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row['id'];
+	
 	if ( $wpsc_query->query_vars['category_id'] == $category_row['id']) {
 		$category_classes .= ' wpsc-current-cat';
 	}
-	
     $sub_categories = wpsc_display_category_loop($modified_query, $category_html);
     if($sub_categories != '') {
       $start_element = $query['subcategory_container']['start_element'];
