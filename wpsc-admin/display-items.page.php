@@ -177,7 +177,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
 
 	if($category_id > 0) {  // if we are getting items from only one category, this is a monster SQL query to do this with the product order
-		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`, `products`.`publish`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`
+		$sql = "SELECT `products`.`id` , `products`.`name` , `products`.`price` , `products`.`image`,`products`.`weight` , `products`.`publish`, `categories`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state`
 			FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products`
 			LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `categories` ON `products`.`id` = `categories`.`product_id` 
 			LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` AS `order` ON ( 

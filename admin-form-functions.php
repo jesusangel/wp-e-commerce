@@ -7,7 +7,7 @@ function nzshpcrt_getcategoryform($catid)
   $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`=$catid LIMIT 1",ARRAY_A);
   $output = '';
   $output .= "<div class='editing_this_group form_table'>";
-	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), __('You are editing the &quot;[categorisation]&quot; Group', 'wpsc'))."</p>\n\r";
+	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), __('You are editing the &quot;[categorisation]&quot; Category', 'wpsc'))."</p>\n\r";
 	$output .= "<p><a href='' onclick='return showaddform()' class='add_category_link'><span>".str_replace("&quot;[categorisation]&quot;", "current", __('+ Add new category to the &quot;[categorisation]&quot; Group', 'wpsc'))."</span></a></p>";
 	$output .="<dl>\n\r";
 	$output .="		<dt>Display Category Shortcode: </dt>\n\r";
@@ -41,7 +41,7 @@ function nzshpcrt_getcategoryform($catid)
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= __('Group Parent', 'wpsc').": ";
+  $output .= __('Category Parent', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= wpsc_parent_category_list($product['group_id'], $product['id'], $product['category_parent']);
@@ -82,7 +82,7 @@ function nzshpcrt_getcategoryform($catid)
 
   $output .= "          <tr>\n\r";
   $output .= "            <td>\n\r";
-  $output .= __('Group&nbsp;Image', 'wpsc').": ";
+  $output .= __('Category&nbsp;Image', 'wpsc').": ";
   $output .= "            </td>\n\r";
   $output .= "            <td>\n\r";
   $output .= "<input type='file' name='image' value='' />";
@@ -258,7 +258,7 @@ function nzshpcrt_getcategoryform($catid)
   $output .= "            <td class='last_row'>\n\r";
   $output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
   $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".__('Edit Group', 'wpsc')."' />";
+  $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".__('Update Category', 'wpsc')."' />";
 	$output .= "<a class='delete_button' href='".add_query_arg('deleteid', $product['id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
   $output .= "            </td>\n\r";
   $output .= "          </tr>\n\r";

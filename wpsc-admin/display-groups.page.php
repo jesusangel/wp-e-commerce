@@ -612,7 +612,7 @@ update_option('wpsc_category_url_cache', array());
 			
 		<!--
 	<div class="alignright">
-			<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php echo __('About This Page', 'wpsc');?></span>&nbsp;</a>
+			<a target="_blank" href='http://www.instinct.co.nz/e-commerce/product-groups/' class='about_this_page'><span><?php //echo __('About This Page', 'wpsc');?></span>&nbsp;</a>
 		</div>
 	-->
 		<br class="clear"/>

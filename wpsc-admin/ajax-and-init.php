@@ -594,16 +594,6 @@ function wpsc_admin_ajax() {
 		exit(print_r($order,1));
 	}
 	
-
-	// 	if ($_POST['del_prod'] == 'true') {
-	// 		$ids = $_POST['del_prod_id'];
-	// 		$ids = explode(',',$ids);
-	// 		foreach ($ids as $id) {
-	// 			$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=%d", $id));
-	// 		}
-	// 		exit();
-	// 	}
-
 		
 	if(($_POST['save_image_upload_state'] == "true") && is_numeric($_POST['image_upload_state'])) {
 		//get_option('wpsc_image_upload_state');

@@ -209,7 +209,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 				<?php if($variation_id > 0) { ?>
 					<input type='hidden' name='variation_id' value='<?php echo $variation_id; ?>' />
 					<input type='hidden' name='submit_action' value='edit' />
-					<input class='button' style='float:left;'  type='submit' name='submit' value='<?php echo __('Edit', 'wpsc'); ?>' />
+					<input class='button' style='float:left;'  type='submit' name='submit' value='<?php echo __('Update Variations', 'wpsc'); ?>' />
 					<a class='button delete_button' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-variation-set&amp;deleteid={$variation_id}", 'delete-variation'); ?>' onclick="return conf();" ><?php echo __('Delete', 'wpsc'); ?></a>
 					
 					
