@@ -116,14 +116,14 @@ function wpsc_display_product_form ($product_id = 0) {
 	$current_user = wp_get_current_user();
   
   // we put the closed postboxes array into the product data to propagate it to each form without having it global.
-  $product_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products');
-  $product_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products');
+  $product_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_store_page_wpsc-edit-products');
+  $product_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_store_page_wpsc-edit-products');
   
   if(count($product_data) > 0) {
 		wpsc_product_basic_details_form($product_data);
   }
 }
-
+ 
 function wpsc_product_basic_details_form(&$product_data) {
   global $wpdb,$nzshpcrt_imagesize_info;
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/

@@ -97,6 +97,7 @@ function wpsc_admin_pages(){
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
 			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
 			$page_hooks[] = $edit_products_page;
+			//echo $edit_products_page;
 			
 			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
 			//print_r($page_hooks);
@@ -282,8 +283,9 @@ function wpsc_admin_include_optionspage_css_and_js(){
 }
 
 function wpsc_meta_boxes(){
-  $pagename = 'products_page_wpsc-edit-products';
+  	//$pagename = 'products_page_wpsc-edit-products';
  
+  	$pagename = 'store_page_wpsc-edit-products';
 	add_meta_box('wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high');

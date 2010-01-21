@@ -428,10 +428,10 @@ jQuery(document).ready( function () {
 				} else {
 					jQuery('a.togbox',this).html('&ndash;');
 				}
-				wpsc_save_postboxes_state('products_page_wpsc-edit-products', '#poststuff');
+				wpsc_save_postboxes_state('store_page_wpsc-edit-products', '#poststuff');
 		});		
 	});
-
+ 
 
 
 	
@@ -460,7 +460,7 @@ jQuery(document).ready( function () {
 					postboxes.pbhide( box );
 				}
 			}
-			postboxes.save_state('products_page_wpsc-edit-products');
+			postboxes.save_state('store_page_wpsc-edit-products');
 		});
 	});
 	
