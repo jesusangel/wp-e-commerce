@@ -107,7 +107,7 @@ $image_height = get_option('product_image_height');
 						<?php endif; ?>
 							
 							<br/>
-							<span class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span>Price: 
+							<span class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span>Price: 
 							
 						<?php if(get_option('display_moredetails') == 1) : ?>
 							<br />
