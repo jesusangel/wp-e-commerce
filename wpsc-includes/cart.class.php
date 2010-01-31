@@ -1119,17 +1119,13 @@ class wpsc_cart {
     global $wpdb, $wpsc_cart;
     $total = 0;
 	if(wpsc_tax_isincluded() == false){
-    	if($this->total_tax == null && $this->coupons_amount == null) {
+    	if($this->total_tax == null) {
 			foreach($this->cart_items as $key => $cart_item) {
 				$total += $cart_item->tax;
 			}
 			$this->total_tax = $total;
-		} elseif($this->coupons_amount == null) {
+		} else {
 		  $total = $this->total_tax;
-		}else{
-			//exit('<pre>'.print_r($this,true).'</pre>');
-			$total = $this->subtotal-$this->coupons_amount;
-			$total = $total /(100) *$wpsc_cart->tax_percentage;
 		}
 	}else{
 		if($this->total_tax == null) {
