@@ -1470,7 +1470,7 @@ function wpsc_ajax_get_shipping_form() {
 	echo "shipping_name_html = '$html_shipping_name'; \n\r";
 	echo "shipping_form_html = '$shipping_form'; \n\r";
 	echo "has_submit_button = '{$shipping_data['has_submit_button']}'; \n\r";
-		//echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
+		//echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->getName()."')})</script>";
   exit();
 }
  
@@ -1586,8 +1586,8 @@ function wpsc_submit_options($selected='') {
 
 		foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
 			foreach((array)$_POST['custom_shipping_options'] as $shippingoption){
-				//echo $shipping->internal_name.' == '.$shippingoption;
-				if($shipping->internal_name == $shippingoption) {
+				//echo $shipping->getInternalName().' == '.$shippingoption;
+				if($shipping->getInternalName() == $shippingoption) {
  					//$shipping->submit_form();
 					$shipadd++;
 				}

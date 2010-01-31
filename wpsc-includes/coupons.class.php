@@ -127,13 +127,6 @@ class wpsc_coupons {
 		
 			//Loop throught all products in the shopping cart, apply coupons on the ones match the conditions. 
 			$cart  =& $wpsc_cart->have_cart_items();
-		//	exit('<pre>'.print_r($cart->, true).'</pre>');
-			/*
-foreach($wpsc_cart->cart_items as $key => $cart_item) {
-				echo '<pre>'.print_r($cart_item, true).'</pre>';
-			}
-*/
-			//exit('<pre>'.print_r($this, true).'</pre>');
 			
 				foreach ($wpsc_cart->cart_items as $key => $item) {
 					$match = true;

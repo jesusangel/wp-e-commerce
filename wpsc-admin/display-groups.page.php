@@ -917,7 +917,7 @@ update_option('wpsc_category_url_cache', array());
 
 							<input type='hidden' name='categorisation_group' value='<?php echo $current_categorisation['id']; ?>' />
 							<input type='hidden' name='submit_action' value='add' />
-							<input class='button-primary' type='submit' name='submit' value='<?php echo __('Add Group', 'wpsc');?>' />
+							<input class='button-primary' type='submit' name='submit' value='<?php echo __('Add Category', 'wpsc');?>' />
 						</td>
 					</tr>
 				</table>

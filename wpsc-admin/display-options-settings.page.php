@@ -169,7 +169,7 @@ function wpsc_get_shipping_form($shippingname) {
   global $wpdb, $wpsc_shipping_modules;
   if(array_key_exists($shippingname, $wpsc_shipping_modules)){
 		$shipping_forms = $wpsc_shipping_modules[$shippingname]->getForm();
-		$shipping_module_name = $wpsc_shipping_modules[$shippingname]->name;
+		$shipping_module_name = $wpsc_shipping_modules[$shippingname]->getName();
 		
 		$output = array('name' => $shipping_module_name, 'form_fields' => $shipping_forms, 'has_submit_button' => 1);
   } else {

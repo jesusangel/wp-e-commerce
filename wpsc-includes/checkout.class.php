@@ -813,7 +813,7 @@ function wpsc_gateway_is_checked() {
 	    $is_checked = true;	  
 	  }
 	} else {
-	  if($wpsc_gateway->current_gateway == 0) {
+	  if($wpsc_gateway->current_gateway == 0 || ($wpsc_gateway->gateway['internalname'] == 'paypal_certified')) {
 	    $is_checked = true;
 	  }
 	}

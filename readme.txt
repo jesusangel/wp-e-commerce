@@ -1,5 +1,5 @@
 === WP e-Commerce ===
-Contributors: Dan Milward, Tom Howard, Jeffry Ghazally, Chris Beavan, Allen Han, Gregory Gullett
+Contributors: Dan Milward, Tom Howard, Jeffry Ghazally
 Donate link: http://www.instinct.co.nz/e-commerce
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
