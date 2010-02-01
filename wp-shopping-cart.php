@@ -258,6 +258,7 @@ define('WPSC_CATEGORY_URL', $wpsc_category_url);
 define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 define('WPSC_CACHE_URL', $wpsc_cache_url);
 define('WPSC_UPGRADES_URL', $wpsc_upgrades_url);
+
 define('WPSC_THEMES_URL', $wpsc_themes_url);
 
 

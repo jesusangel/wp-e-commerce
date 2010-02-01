@@ -259,7 +259,7 @@ function selectgateway() {
 						<div class='wpsc_shipping_options'>
 						<div class="wpsc-shipping-actions">
 									| <span class="edit">
-										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->getInternalName(); ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->getInternalName()); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->getInternalName(); ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->getInternalName())); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						</div>
 						<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' type='checkbox' value='<?php echo $shipping->getInternalName(); ?>' id='<?php echo $shipping->getInternalName(); ?>_id' /><label for='<?php echo $shipping->getInternalName(); ?>_id'><?php echo $shipping->getName(); ?></label></p>

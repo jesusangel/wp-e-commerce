@@ -351,8 +351,8 @@ function form_google()
 		Select Shipping Countries
 		</td>
 		<td>
-		<a href='".add_query_arg("googlecheckoutshipping", 1)."' alt='Set Shipping Options'>Set Shipping countries</a>
-		</td>
+		<a href='".add_query_arg(array("googlecheckoutshipping" =>  1, "page" =>
+"wpsc-settings"))."' alt='Set Shipping Options'>Set Shipping countries</a>		</td>
 	</tr>
 
 	<tr>
