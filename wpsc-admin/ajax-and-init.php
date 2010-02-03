@@ -8,12 +8,12 @@
  * @since 3.7
  */
 //exit('<pre>'.print_r($_POST, true).'</pre>');
- function wpsc_ajax_add_tracking() {
-  	global $wpdb;
-  	foreach($_POST as $key=>$value){
-	  	if($value != ''){
-  		 	$parts = preg_split('/^wpsc_trackingid/', $key);
-	  		if(count($parts) > '1'){
+function wpsc_ajax_add_tracking() {
+	global $wpdb;
+	foreach($_POST as $key=>$value){
+		if($value != ''){
+			$parts = preg_split('/^wpsc_trackingid/', $key);
+			if(count($parts) > '1'){
 	  			$id = $parts[1];
 	  			$trackingid = $value;
 	  			$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `track_id`='".$trackingid."' WHERE `id`=".$id;
@@ -21,7 +21,6 @@
 	  		}
 	  	}
   	}
-	
 }
  
  
@@ -99,9 +98,9 @@ if($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') {
 
 
 function wpsc_ajax_load_product() {
-  global $wpdb;
-  $product_id = absint($_REQUEST['product']);
-  check_admin_referer('edit-product_' .  $product_id);
+	global $wpdb;
+	$product_id = absint($_REQUEST['product']);
+	check_admin_referer('edit-product_' .  $product_id);
 	wpsc_display_product_form($product_id);
 	exit();
 }
@@ -166,20 +165,80 @@ function wpsc_crop_thumb() {
 
 function wpsc_delete_file() {
 	global $wpdb;
-	$file_id = $_GET['file_id'];
-	$file_hash = $wpdb->get_var("SELECT `idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` LIKE '".$file_id."' LIMIT 1");
+	$output = 0;
+	$row_number = absint($_GET['row_number']);
+	$product_id = absint($_GET['product_id']);
+	$file_name = basename($_GET['file_name']);
+	check_admin_referer('delete_file_'.$file_name);
 	
-  check_admin_referer('delete_file_'.$file_id);
-	if(file_exists(WPSC_FILE_DIR.basename($file_hash)) && is_file(WPSC_FILE_DIR.basename($file_hash))) {
-		if($wpdb->query($wpdb->prepare("DELETE FROM ".WPSC_TABLE_PRODUCT_FILES." WHERE idhash=%s", $file_hash)) == 1) {
-			// Only delete the file if the delete query above affected a single row. Prevents deletion of an arbitrary file
-			unlink(WPSC_FILE_DIR.basename($file_hash));
+	
+	$args = array(
+		'post_type' => 'wpsc-product-file',
+		'numberposts' => -1,
+		'post_status' => 'all'
+	);
+	
+	$attached_files = (array)get_posts($args);
+	
+	//echo "/*\n".print_r($attached_files, true)."*/\n";
+	
+	
+	$file_can_be_deleted = false;
+	$file_belongs_to_this_product = false;	
+	$product_id_list = array();
+	$product_ids_to_delete = array();
+	
+	foreach($attached_files as $attached_file) {
+		// first, determine what file is attached
+		if($attached_file->post_title == $file_name) {
+			if($attached_file->post_status == 'draft') {
+				// if its a draft, its been "deleted", add it to the list to delete properly
+				$product_ids_to_delete[] = $attached_file->ID;
+			} else { 
+				// otherwise, add it to the list to forbid deleting it
+				$product_id_list[] = $attached_file->post_parent;
+				if($attached_file->post_parent == $product_id) {
+					$file_belongs_to_this_product = true;
+				}
+			}
+		}		
+	}
+	
+	if(count($product_id_list) < 1) {
+		$file_can_be_deleted = true;
+	
+	} 
+ 	
+	
+	if($file_can_be_deleted == true) {
+		if(file_exists(WPSC_FILE_DIR.basename($file_name)) && is_file(WPSC_FILE_DIR.basename($file_name))) {
+			$unlink_status = unlink(WPSC_FILE_DIR.basename($file_name));
+			foreach($product_ids_to_delete as $product_id_to_delete) {
+				wp_delete_post($product_id_to_delete, true);
+			}
 		}
 	}
 	if($_POST['ajax'] !== 'true') {
 		$sendback = wp_get_referer();
 		wp_redirect($sendback);
 	}
+	
+	if(($file_can_be_deleted == true) && ($unlink_status == true)) {
+		echo "jQuery('#select_product_file_row_$row_number').fadeOut('fast',function() {\n";
+		echo "	jQuery(this).remove();\n";
+		echo "	jQuery('div.select_product_file p:even').removeClass('alt');\n";
+		echo "	jQuery('div.select_product_file p:odd').addClass('alt');\n";
+		echo "});\n";
+	} else {
+		if($file_belongs_to_this_product == true) {
+			$message = __("This file is used by this product, you must uncheck it before deleting it",'wpsc');
+		} else {
+			$message = __("This file is used by another product, you must uncheck it on that product before deleting it",'wpsc');		
+		}
+		echo "alert('{$message}');\n";
+	}
+	
+	
 	exit();
 }
 
@@ -190,10 +249,10 @@ function wpsc_delete_file() {
  
 
 function wpsc_bulk_modify_products() {
-  global $wpdb;
-  $doaction = $_GET['bulkAction'];
+	global $wpdb;
+	$doaction = $_GET['bulkAction'];
 	$sendback = wp_get_referer();
-  switch ( $doaction ) {
+	switch ( $doaction ) {
 		case 'delete':
 			if ( isset($_GET['product']) && ! isset($_GET['bulk_edit']) && (isset($doaction) || isset($_GET['doaction2'])) ) {
 				check_admin_referer('bulk-products', 'wpsc-bulk-products');
@@ -288,7 +347,7 @@ function wpsc_delete_product() {
   
 	$deleted = 0;
 	$product_id = absint($_GET['product']);
-  check_admin_referer('delete_product_' .  $product_id);
+	check_admin_referer('delete_product_' .  $product_id);
 
 	if($wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='{$product_id}' LIMIT 1")) {
 		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '{$product_id}' AND `meta_key` IN ('url_name')");  
@@ -319,11 +378,11 @@ function wpsc_delete_product() {
   Function and action for publishing or unpublishing single products
  */
 function wpsc_ajax_toggle_published() {
-  global $wpdb;
-  
+	global $wpdb;
+	
 	$product_id = absint($_GET['product']);
-  check_admin_referer('toggle_publish_' . $product_id);
-  
+	check_admin_referer('toggle_publish_' . $product_id);
+	
 	$status = (wpsc_toggle_publish_status($product_id)) ? ('true') : ('false');
 	$sendback = add_query_arg('flipped', "1", wp_get_referer());
 	wp_redirect($sendback);

@@ -703,91 +703,66 @@ function wpsc_upload_image_thumbnail($product_id, $product_meta) {
  * @param array the preview file array from $_FILES
  */
 function wpsc_item_process_file($product_id, $submitted_file, $preview_file = null) {
-  global $wpdb;
-  $preview_file = null; //break this, is done in a different function, now
-	$files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES." ORDER BY id ASC", ARRAY_A);
-	
-	if (is_array($files)){
-		foreach($files as $file){
-			$file_names[] = $file['filename'];
-			$file_hashes[] = $file['idhash'];
-		}
+	global $wpdb;
+	add_filter('upload_dir', 'wpsc_modify_upload_directory');
+	$overrides = array('test_form'=>false);
+
+	$time = current_time('mysql');
+	if ( $post = get_post($product_id) ) {
+		if ( substr( $post->post_date, 0, 4 ) > 0 )
+			$time = $post->post_date;
 	}
-		
-	if(apply_filters( 'wpsc_filter_file', $submitted_file['tmp_name'] )) {
-	  // initialise $idhash to null to prevent issues with undefined variables and error logs
-	  $idhash = null;
-// 		$fileid_data = $wpdb->get_results("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
-		/* if we are adding, make a new file row and get the ID of it */
-		$timestamp = time();
-		$query_results = $wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` ( `filename`  , `mimetype` , `idhash` , `date` ) VALUES ( '', '', '', '$timestamp');");
-		$fileid = $wpdb->get_var("SELECT LAST_INSERT_ID() FROM `".WPSC_TABLE_PRODUCT_FILES."`");
-			
-			
-		/* if there is no idhash, generate it */
-		if($idhash == null) {
-			$idhash = sha1($fileid);
-			if($idhash == '') {
-			  // if sha1 doesnt spit an error, but doesnt return anything either (it has done so on some servers)
-				$idhash = md5($fileid);
-			}
-		}
-		// if needed, we can add code here to stop hash doubleups in the unlikely event that they shoud occur
-	
-		$mimetype = wpsc_get_mimetype($submitted_file['tmp_name']);
-		
-		$filename = basename($submitted_file['name']);
-		
-		
-		if (in_array($submitted_file['name'],(array)$file_names)){
-			$i=0;
-			$new_name = $submitted_file['name'].".old";
-			while(file_exists(WPSC_FILE_DIR.$new_name)){
-				$new_name = $submitted_file['name'].".old_".$i;
-				$i++;
-			}
-			$old_idhash_id = array_search($submitted_file['name'],(array)$file_names);
-			$old_idhash = $file_hashes[$old_idhash_id];
-			while(!file_exists(WPSC_FILE_DIR.$old_idhash)){
-				unset($file_hashes[$old_idhash_id]);
-				unset($file_names[$old_idhash_id]);
-				
-				$old_idhash_id = array_search($submitted_file['name'],(array)$file_names);
-				$old_idhash = $file_hashes[$old_idhash_id];
-			}
-			if(is_file(WPSC_FILE_DIR.$old_idhash)) {
-				copy(WPSC_FILE_DIR.$old_idhash, WPSC_FILE_DIR.$new_name);
-				unlink(WPSC_FILE_DIR.$old_idhash);
-			}
-		}
-		if(move_uploaded_file($submitted_file['tmp_name'],(WPSC_FILE_DIR.$idhash)))	{
-			$stat = stat( dirname( (WPSC_FILE_DIR.$idhash) ));
-			$perms = $stat['mode'] & 0000666;
-			@ chmod( (WPSC_FILE_DIR.$idhash), $perms );	
-			if(function_exists("make_mp3_preview"))	{
-				if($mimetype == "audio/mpeg" && (!isset($preview_file['tmp_name']))) {
-				  // if we can generate a preview file, generate it (most can't due to sox being rare on servers and sox with MP3 support being even rarer), thus this needs to be enabled by editing code
-					make_mp3_preview((WPSC_FILE_DIR.$idhash), (WPSC_PREVIEW_DIR.$idhash.".mp3"));
-					$preview_filepath = (WPSC_PREVIEW_DIR.$idhash.".mp3");
-				} else if(file_exists($preview_file['tmp_name'])) {    
-					$preview_filename = basename($preview_file['name']);
-					$preview_mimetype = wpsc_get_mimetype($preview_file['tmp_name']);
-					copy($preview_file['tmp_name'], (WPSC_PREVIEW_DIR.$preview_filename));
-					$preview_filepath = (WPSC_PREVIEW_DIR.$preview_filename);
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '$fileid' LIMIT 1");
-				}
-				$stat = stat( dirname($preview_filepath));
-				$perms = $stat['mode'] & 0000666;
-				@ chmod( $preview_filepath, $perms );	
-			}
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `product_id` = '{$product_id}', `filename` = '".$wpdb->escape($filename)."', `mimetype` = '$mimetype', `idhash` = '$idhash' WHERE `id` = '$fileid' LIMIT 1");
-		}
-		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
-		return $fileid;
-  } else {
-		return false;
-  }
+
+	//$name = basename($submitted_file['name']);
+	$file = wp_handle_upload($submitted_file, $overrides, $time);
+
+	if ( isset($file['error']) )
+		return new WP_Error( 'upload_error', $file['error'] );
+
+	$name_parts = pathinfo($file['file']);
+	//$name = trim( substr( $name, 0, -(1 + strlen($name_parts['extension'])) ) );
+	$name = $name_parts['basename'];
+	//echo "<pre>".print_r($name_parts,true)."</pre>"; exit();
+
+	$url = $file['url'];
+	$type = $file['type'];
+	$file = $file['file'];
+	$title = $name;
+	$content = '';
+
+	// Construct the attachment array
+	$attachment = array(
+		'post_mime_type' => $type,
+		'guid' => $url,
+		'post_parent' => $product_id,
+		'post_title' => $title,
+		'post_content' => $content,
+		'post_type' => "wpsc-product-file",
+		'post_status' => 'inherit'		
+	);
+
+	// Save the data
+	$id = wp_insert_post($attachment, $file, $product_id);
+	remove_filter('upload_dir', 'wpsc_modify_upload_directory');
+	//return $id;
+	//exit($id);
 }
+
+function wpsc_modify_upload_directory($input) {
+	//echo "<pre>".print_r($input,true)."</pre>";
+	$previous_subdir = $input['subdir'];
+	$download_subdir = str_replace($input['basedir'], '', WPSC_FILE_DIR);
+	
+	$input['path'] = str_replace($previous_subdir, $download_subdir, $input['path']);
+	$input['url'] = str_replace($previous_subdir, $download_subdir, $input['url']);
+	$input['subdir'] = str_replace($previous_subdir, $download_subdir, $input['subdir']);
+	
+	//echo "<pre>".print_r($input,true)."</pre>";
+	return $input;
+}
+  
+  
+  
  /**
  * wpsc_item_reassign_file function 
  *
@@ -795,49 +770,86 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
  * @param string the selected file name;
  */
 function wpsc_item_reassign_file($product_id, $selected_files) {
-  global $wpdb;
-  $product_file_list=array();
+	global $wpdb;
+	$product_file_list = array();
 	// initialise $idhash to null to prevent issues with undefined variables and error logs
 	$idhash = null;
+	
+	$args = array(
+		'post_type' => 'wpsc-product-file',
+		'post_parent' => $product_id,
+		'numberposts' => -1,
+		'post_status' => 'any'
+	);
+	
+	$attached_files = (array)get_posts($args);
+	
+	foreach($attached_files as $key => $attached_file) {
+		$attached_files_by_file[$attached_file->post_title] = $attached_files[$key];
+	}
+
+
+	//echo "<pre>\n";
+	//echo print_r($attached_files,true);
+	//echo wp_insert_post($attachment);
+	//echo "</pre>\n";
+	
+	
 	/* if we are editing, grab the current file and ID hash */ 
 	if(!$selected_files) {
 		// unlikely that anyone will ever upload a file called .none., so its the value used to signify clearing the product association
-		$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '0' WHERE `id` = '$product_id' LIMIT 1");
+		//$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '0' WHERE `id` = '$product_id' LIMIT 1");
 		return null;
 	}
+	
+	
+
 	foreach($selected_files as $selected_file) {
 		// if we already use this file, there is no point doing anything more.
-		$current_fileid = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1");
-		if($current_fileid > 0) {
-			$current_file_data = $wpdb->get_row("SELECT `id`,`idhash` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` = '$current_fileid' LIMIT 1",ARRAY_A);
-			if(basename($selected_file) == $file_data['idhash']) {
-				//$product_file_list[] = $current_fileid;
-				//return $current_fileid;
-			}
+		$file_is_attached = false;		
+		$selected_file_path = WPSC_FILE_DIR.basename($selected_file);
+		
+		if(isset($attached_files_by_file[$selected_file])) {
+			$file_is_attached = true;
 		}
 		
-		$selected_file = basename($selected_file);
-		if(file_exists(WPSC_FILE_DIR.$selected_file)) {
-			$timestamp = time();
-			$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` IN('".$wpdb->escape($selected_file)."') LIMIT 1", ARRAY_A);
-			$fileid = (int)$file_data['id'];
-			// if the file does not have a database row, add one.
-			if($fileid < 1) {
-				$mimetype = wpsc_get_mimetype(WPSC_FILE_DIR.$selected_file);
-				$filename = $idhash = $selected_file;
-				$timestamp = time();
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_FILES."` (`product_id`, `filename`  , `mimetype` , `idhash` , `date` ) VALUES ('{$product_id}', '{$filename}', '{$mimetype}', '{$idhash}', '{$timestamp}');");
-				$fileid = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `date` = '{$timestamp}' AND `filename` IN ('{$filename}')");
+		if(is_file($selected_file_path)) {
+			if($file_is_attached == false ) {
+				$type = wpsc_get_mimetype($selected_file_path);
+				$attachment = array(
+					'post_mime_type' => $type,
+					'post_parent' => $product_id,
+					'post_title' => $selected_file,
+					'post_content' => '',
+					'post_type' => "wpsc-product-file",
+					'post_status' => 'inherit'
+				);
+				wp_insert_post($attachment);
+			} else {
+				$product_post_values = array(
+					'ID' => $attached_files_by_file[$selected_file]->ID,
+					'post_status' => 'inherit'
+				);
+				wp_update_post($product_post_values);			
 			}
-			// update the entry in the product table
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `file` = '$fileid' WHERE `id` = '$product_id' LIMIT 1");
-			$product_file_list[] = $fileid;
-		}	
-  }
-
-  
-	//exit('<pre>'.print_r($product_file_list, true).'</pre>');
-  update_product_meta($product_id, 'product_files', $product_file_list);
+		}
+	}
+	
+	
+	foreach($attached_files as $attached_file) {
+		if(!in_array($attached_file->post_title, $selected_files)) {
+			$product_post_values = array(
+				'ID' => $attached_file->ID,
+				'post_status' => 'draft'
+			);
+			wp_update_post($product_post_values);
+		}
+	}
+	
+	
+	//
+	//exit('<pre>'.print_r($attached_files, true).'</pre>');
+	//update_product_meta($product_id, 'product_files', $product_file_list);
 	return $fileid;
 }
 

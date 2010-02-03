@@ -17,55 +17,54 @@ function nzshpcrt_country_list($selected_country = null) {
 }
 
 function nzshpcrt_region_list($selected_country = null, $selected_region = null) {
-  global $wpdb;
-  if($selected_region == null) {
-    $selected_region = get_option('base_region');
+	global $wpdb;
+	if($selected_region == null) {
+		$selected_region = get_option('base_region');
 	}
-  $output = "";
-  $region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$selected_country."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
-  if($region_list != null) {
-    $output .= "<select name='base_region'>\n\r";
-    $output .= "<option value=''>None</option>";
-    foreach($region_list as $region) {
-      if($selected_region == $region['id']) {
-        $selected = "selected='true'";
+	$output = "";
+	$region_list = $wpdb->get_results("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".$selected_country."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`",ARRAY_A) ;
+	if($region_list != null) {
+		$output .= "<select name='base_region'>\n\r";
+		$output .= "<option value=''>None</option>";
+		foreach($region_list as $region) {
+			if($selected_region == $region['id']) {
+				$selected = "selected='true'";
 			} else {
 				$selected = "";
 			}
-      $output .= "<option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
+			$output .= "<option value='".$region['id']."' $selected>".$region['name']."</option>\n\r";
 		}
-    $output .= "</select>\n\r";    
+		$output .= "</select>\n\r";    
 	} else {
 		$output .= "<select name='base_region' disabled='true'><option value=''>None</option></select>\n\r";
 	}
-  return $output;
+	return $output;
 }
   
-function nzshpcrt_form_field_list($selected_field = null)
-  {
-  global $wpdb;
-  $output = "";
-  $output .= "<option value=''>Please choose</option>";
-  $form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
-  $form_data = $wpdb->get_results($form_sql,ARRAY_A);
-  foreach ((array)$form_data as $form) {
-    $selected ='';
-    if($selected_field == $form['id']) {
-      $selected = "selected='true'";
+function nzshpcrt_form_field_list($selected_field = null) {
+	global $wpdb;
+	$output = "";
+	$output .= "<option value=''>Please choose</option>";
+	$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
+	$form_data = $wpdb->get_results($form_sql,ARRAY_A);
+	foreach ((array)$form_data as $form) {
+		$selected ='';
+		if($selected_field == $form['id']) {
+			$selected = "selected='true'";
 		}
-    $output .= "<option value='".$form['id']."' $selected>".$form['name']."</option>";
+		$output .= "<option value='".$form['id']."' $selected>".$form['name']."</option>";
 	}
-  return $output;
+	return $output;
 }
   
   
 function wpsc_parent_category_list($group_id, $category_id, $category_parent_id) {
-  global $wpdb,$category_data;
-  $options = "";
-  $options .= "<option value='".$group_id."'>".__('Select Parent', 'wpsc')."</option>\r\n";
-  $options .= wpsc_category_options((int)$group_id, (int)$category_id, null, 0, (int)$category_parent_id);   
-  $concat .= "<select name='category_parent'>".$options."</select>\r\n";    
-  return $concat;
+	global $wpdb,$category_data;
+	$options = "";
+	$options .= "<option value='".$group_id."'>".__('Select Parent', 'wpsc')."</option>\r\n";
+	$options .= wpsc_category_options((int)$group_id, (int)$category_id, null, 0, (int)$category_parent_id);   
+	$concat .= "<select name='category_parent'>".$options."</select>\r\n";    
+	return $concat;
 }
 
 function wpsc_category_options($group_id, $this_category = null, $category_id = null, $iteration = 0, $selected_id = null) {
@@ -75,12 +74,12 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
    */
   global $wpdb;
   $siteurl = get_option('siteurl');
-  $values=get_terms('wpsc_product_category', 'hide_empty=0&parent='.$group_id);
+  $values = get_terms('wpsc_product_category', 'hide_empty=0&parent='.$group_id);
   foreach((array)$values as $option) {
     if($option->term_id != $this_category){
 	  	if($selected_id == $option->term_id) {
-	      $selected = "selected='selected'";
-			}
+			$selected = "selected='selected'";
+		}
 	    $output .= "<option $selected value='".$option->term_id."'>".str_repeat("-", $iteration).stripslashes($option->name)."</option>\r\n";
 	    $output .= wpsc_category_options($option->term_id, $this_category, $option->term_id, $iteration+1, $selected_id);
 	    $selected = "";
@@ -122,49 +121,50 @@ function wpsc_uploaded_files() {
   
   
 function wpsc_select_product_file($product_id = null) {
-  global $wpdb;
-  //return false;
-  $product_id = absint($product_id);
-  $file_list = wpsc_uploaded_files();
-  $file_id = $wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$product_id."' LIMIT 1");
-  
-	//$product_files = $wpdb->get_row("SELECT `meta_value` FROM  `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '".$product_id."' AND `meta_key` = 'product_files'", ARRAY_A);
+	global $wpdb;
+	//return false;
+	$product_id = absint($product_id);
+	$file_list = wpsc_uploaded_files();
 	
-	$product_files = get_product_meta($product_id, 'product_files');
-  $output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
-  $output .= "<div class='ui-widget-content multiple-select  ".((is_numeric($product_id)) ? "edit_" : "")."select_product_file'>";
-  $num = 0;
-  foreach((array)$file_list as $file) {
-    $num++;
-	if(is_array($product_files)){
-		if (in_array($file['file_id'], $product_files)){
-			$checked_curr_file="checked='checked'";
-		}
-		else{$checked_curr_file="";}
+	$args = array(
+		'post_type' => 'wpsc-product-file',
+		'post_parent' => $product_id,
+		'numberposts' => -1,
+		'post_status' => 'inherit'
+	);
+	
+	$attached_files = (array)get_posts($args);
+	
+	foreach($attached_files as $key => $attached_file) {
+		$attached_files_by_file[$attached_file->post_title] = $attached_files[$key];
 	}
-	else{
-		if(is_numeric($file_id) && ($file_id == $file['file_id'])){
-			$checked_curr_file="checked='checked'";
+	
+	$output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
+	$output .= "<div class='ui-widget-content multiple-select select_product_file'>";
+	$num = 0;
+	foreach((array)$file_list as $file) {
+		$num++;
+		$checked_curr_file = "";
+		if (isset($attached_files_by_file[$file['real_filename']])){
+			$checked_curr_file = "checked='checked'";
 		}
-		else{$checked_curr_file="";}
+		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_name={$file['real_filename']}&amp;product_id={$product_id}&amp;row_number={$num}", 'delete_file_'.$file['real_filename']);
+		
+		$output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")." id='select_product_file_row_$num'>\n";
+		$output .= "  <input type='checkbox' name='select_product_file[]' value='".$file['real_filename']."' id='select_product_file_$num' ".$checked_curr_file." />\n";
+		$output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
+		$output .= "  <a class='file_delete_button' href='{$deletion_url}' >\n";
+		$output .= "    <img src='".WPSC_URL."/images/cross.png' />\n";
+		$output .= "  </a>\n";
+		$output .= "</p>\n";
 	}
-		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_id=".$file['file_id'], 'delete_file_'.absint($file['file_id']));
-    
-    $output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'").">\n";
-    $output .= "  <input type='checkbox' name='select_product_file[]' value='".$file['real_filename']."' id='select_product_file_$num' ".$checked_curr_file." />\n";
-    $output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
-    $output .= "  <a class='file_delete_button' href='{$deletion_url}'>\n";
-    $output .= "    <img src='".WPSC_URL."/images/cross.png' />\n";
-    $output .= "  </a>\n";
-    $output .= "</p>\n";
-  }
-  $output .= "</div>";
-  $output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";
-  $output .= "<script type='text/javascript'>\n\r";
-  $output .= "var select_min_height = ".(25*3).";\n\r";
-  $output .= "var select_max_height = ".(25*($num+1)).";\n\r";  
-  $output .= "</script>";  
-  return $output;
+	$output .= "</div>";
+	$output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";
+	$output .= "<script type='text/javascript'>\n\r";
+	$output .= "var select_min_height = ".(25*3).";\n\r";
+	$output .= "var select_max_height = ".(25*($num+1)).";\n\r";  
+	$output .= "</script>";  
+	return $output;
 }
   
   

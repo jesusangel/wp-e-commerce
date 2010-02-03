@@ -742,9 +742,10 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	jQuery(".file_delete_button").livequery(function(){
 			jQuery(this).click(function() {
 				url = jQuery(this).attr('href');
-				jQuery(this).parent().remove();
 				post_values = "ajax=true";
-				jQuery.post( url, post_values, function(returned_data) { });
+				jQuery.post( url, post_values, function(returned_data) {
+					eval(returned_data);
+				});
 				return false;
 			});
 		});
