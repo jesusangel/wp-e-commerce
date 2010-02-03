@@ -410,7 +410,7 @@ class wpsc_checkout {
 			$_SESSION['wpsc_checkout_saved_values'] = get_usermeta($user_ID, 'wpshpcrt_usr_profile');
 		}
 		$saved_form_data = htmlentities(stripslashes($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES);
-		//exit('<pre>'.print_r($this, true).'</pre>');
+		//exit('<pre>'.print_r($_SESSION['wpsc_checkout_saved_values'], true).'</pre>');
 		$an_array = '';
 		if(function_exists('wpsc_get_ticket_checkout_set')){
 			if($this->checkout_item->checkout_set == wpsc_get_ticket_checkout_set()){
