@@ -601,7 +601,8 @@ function wpsc_submit_checkout() {
 		if(get_option('wpsc_also_bought') == 1) {
 			wpsc_populate_also_bought_list();
 		}
-		
+		wp_get_current_user();
+		$our_user_id = $user_ID;
 		do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
 	
 		if(get_option('permalink_structure') != '') {
