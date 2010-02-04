@@ -7,11 +7,13 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+
 if(!isset($purchlogs)){
 	$purchlogs = new wpsc_purchaselogs();	
 }
  function wpsc_display_sales_logs() {
 		$subpage = $_GET['subpage'];
+		//$wpdb->query($sql);
 		switch($subpage) {
 			case 'upgrade-purchase-logs':
 				wpsc_upgrade_purchase_logs();   

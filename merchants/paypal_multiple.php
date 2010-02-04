@@ -240,7 +240,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 		} else {
 			$permsub = '';
 		}
-		$output = 'cmd=_xclick-subscriptions&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
+			$output = 'cmd=_xclick-subscriptions&currency_code='.urlencode($data['currency_code']).'&lc='.urlencode($data['lc']).'&business='.urlencode($data['business']).'&no_note=1&item_name='.urlencode($data['item_name_1']).'&return='.urlencode($data['return']).'&cancel_return='.urlencode($data['cancel_return']).$permsub.'&a3='.urlencode($data['amount_1']).'&p3='.urlencode($membership_length['length']).'&t3='.urlencode(strtoupper($membership_length['unit']));
 	}
 	if(defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true) ) {
   	echo "<a href='".get_option('paypal_multiple_url')."?".$output."'>Test the URL here</a>";

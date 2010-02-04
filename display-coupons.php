@@ -1,4 +1,6 @@
 <?php
+function wpsc_display_coupons_page(){
+global $wpdb;
 if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 
 	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
@@ -587,3 +589,7 @@ if( strlen(get_option('wpsc_google_base_token')) > 0) {
 }
 ?>
 </div>
+
+<?php
+}
+?>
