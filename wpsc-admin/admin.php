@@ -17,11 +17,13 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/display-upgrades.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/save-data.functions.php");
-require_once(WPSC_FILE_PATH.'/display-coupons.php');
+
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax-and-init.php");
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-options-settings.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php");
+require_once(WPSC_FILE_PATH."/display-coupons.php");
+
 
 if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {
 	require_once(WPSC_FILE_PATH."/wpsc-admin/display-debug.page.php");
@@ -65,7 +67,7 @@ function wpsc_admin_pages(){
 				$_SESSION['wpsc_activate_debug_page'] = false;
 			}
 		}
-		
+		//exit(WPSC_DIR_NAME.'/display-coupons.php');
     if(function_exists('add_options_page')) {
 			$base_page = 'wpsc-sales-logs';
 					
@@ -104,8 +106,7 @@ function wpsc_admin_pages(){
 			
 			//    add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, WPSC_DIR_NAME.'/display_variations.php');
 			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
-			$edit_coupons_page = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7, 'display-coupons','wpsc_display_coupons_page');
-
+			
 			
 			foreach((array)get_option('wpsc_product_page_order') as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
@@ -124,8 +125,9 @@ function wpsc_admin_pages(){
 																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment Options</a> <br />");
 				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			}
-
-			
+			//exit('base page:'.$base_page);
+			$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7,'wpsc_display_coupons_page','wpsc_display_coupons_page');
+			//add_submenu_page('themes.php', 'Marketing', 'Marketing', 7, 'my_test_screen', 'my_test_screen');
 			
 			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 7, 'wpsc-settings', 'wpsc_display_settings_page');
 			$page_hooks[] = $edit_options_page;
@@ -141,10 +143,10 @@ function wpsc_admin_pages(){
 			do_action('wpsc_add_submenu');
 		}
 		
-		add_action('load-'.WPSC_DIR_NAME.'/display-coupons.php', 'wpsc_admin_include_coupon_js');
-		
+		//add_action('load-'.WPSC_DIR_NAME.'/display-coupons.php', 'wpsc_admin_include_coupon_js');
+	//	exit('<pre>'.print_r($page_hooks, true).'</pre>');
 		// Include the javascript and CSS for this page
-		
+			
 		foreach($page_hooks as $page_hook) {
 			add_action("load-$page_hook", 'wpsc_admin_include_css_and_js');
 
@@ -160,9 +162,8 @@ function wpsc_admin_pages(){
 				case $purchase_log_page:
 					add_action('admin_head', 'wpsc_product_log_rss_feed');
 				break;
-				case $edit_coupons_page:
-					exit('called');
-					add_action('admin_head','wpsc_admin_include_coupon_js');
+				case 'store_page_wpsc_display_coupons_page':
+					add_action("load-$page_hook", 'wpsc_admin_include_coupon_js');
 				break;
 				
 			}
@@ -185,6 +186,7 @@ function wpsc_product_log_rss_feed() {
 
 function wpsc_admin_include_coupon_js() {
 	$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	//exit('called');
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
 
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/settingspage.css', false, false, 'all' );

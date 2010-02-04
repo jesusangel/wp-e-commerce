@@ -361,10 +361,10 @@ if(isset($_GET['token'])) {
 <br />
 </form>  
 </div>    
-    
+
   <?php
   $num = 0;
-  
+
 echo "<table class='coupon-list'>\n\r";
 echo "  <tr class='toprow'>\n\r";
 
@@ -398,6 +398,7 @@ echo "    </th>\n\r";
 
 $i=0;
 $coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` ",ARRAY_A);
+//exit('Coupon Data<pre>'.print_r($coupon_data, true).'</pre>');
 foreach((array)$coupon_data as $coupon) {
   $alternate = "";
   $i++;
@@ -469,7 +470,7 @@ foreach((array)$coupon_data as $coupon) {
 echo "</table>\n\r";
   ?>
   <p style='margin: 0px 0px 5px 0px;'>
-  	 <?php echo __('<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.', 'wpsc');?>
+  	 <?php  _e('<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.', 'wpsc');?>
   </p>
     </td>
   </tr>
@@ -589,7 +590,6 @@ if( strlen(get_option('wpsc_google_base_token')) > 0) {
 }
 ?>
 </div>
-
 <?php
 }
 ?>
