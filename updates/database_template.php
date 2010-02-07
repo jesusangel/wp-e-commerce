@@ -44,6 +44,7 @@ $wpsc_database_template[$table_name]['columns']['custom_message'] = "text NOT NU
 $wpsc_database_template[$table_name]['columns']['files'] = "text NOT NULL ";
 $wpsc_database_template[$table_name]['columns']['meta'] = "longtext NULL ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY ( `id` )";
+$wpsc_database_template[$table_name]['indexes']['purchaseid'] = "KEY `purchaseid` ( `purchaseid` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}cart_contents";
 
 
@@ -239,6 +240,7 @@ $wpsc_database_template[$table_name]['columns']['productid'] = "bigint(20) unsig
 $wpsc_database_template[$table_name]['columns']['rated'] = "tinyint(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['time'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
+$wpsc_database_template[$table_name]['indexes']['rating_time'] = "KEY `rating_time` ( `time` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_rating";
 
 
@@ -284,6 +286,8 @@ $wpsc_database_template[$table_name]['columns']['notes'] = "text NULL";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['sessionid'] = "UNIQUE KEY `sessionid` ( `sessionid` )";
 $wpsc_database_template[$table_name]['indexes']['gateway'] = " KEY `gateway` ( `gateway` )";
+$wpsc_database_template[$table_name]['indexes']['date'] = " KEY `date` ( `date` )";
+$wpsc_database_template[$table_name]['indexes']['processed_and_date'] = " KEY `processed_and_date` ( `processed`,`date` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}purchase_logs";
 
 
