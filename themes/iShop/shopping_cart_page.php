@@ -12,6 +12,9 @@ if(wpsc_cart_item_count() > 0) :
 		<td class='firstcol'></td>
 		<td><?php echo __('Product', 'wpsc'); ?>:</td>
 		<td><?php echo __('Quantity', 'wpsc'); ?>:</td>
+		<?php if(wpsc_uses_shipping()): ?>
+			<td><?php echo __('Shipping', 'wpsc'); ?>:</td>
+		<?php endif; ?>
 		<td><?php echo __('Price', 'wpsc'); ?>:</td>
 		<td></td>
 	</tr>
@@ -32,6 +35,8 @@ if(wpsc_cart_item_count() > 0) :
 					<input type="submit" value="<?php echo __('Update', 'wpsc'); ?>" name="submit"/>
 				</form>
 			</td>
+			<?php if(wpsc_uses_shipping()): ?>
+			<td><span class="pricedisplay" id='shipping_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo wpsc_cart_item_shipping(); ?></span></td>
 			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
 			<td>
 			

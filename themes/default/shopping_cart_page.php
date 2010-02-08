@@ -13,8 +13,11 @@ if(wpsc_cart_item_count() > 0) :
 		<td class='firstcol'></td>
 		<td><?php echo __('Product', 'wpsc'); ?>:</td>
 		<td><?php echo __('Quantity', 'wpsc'); ?>:</td>
+		<?php if(wpsc_uses_shipping()): ?>
+			<td><?php echo __('Shipping', 'wpsc'); ?>:</td>
+		<?php endif; ?>
 		<td><?php echo __('Price', 'wpsc'); ?>:</td>
-		<td><?php echo __('Shipping', 'wpsc'); ?>:</td>
+
 		<td></td>
 	</tr>
 	<?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
@@ -34,8 +37,10 @@ if(wpsc_cart_item_count() > 0) :
 					<input type="submit" value="<?php echo __('Update', 'wpsc'); ?>" name="submit" />
 				</form>
 			</td>
-			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
+			<?php if(wpsc_uses_shipping()): ?>
 			<td><span class="pricedisplay" id='shipping_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo wpsc_cart_item_shipping(); ?></span></td>
+			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
+			
 			<td>
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
 					<input type="hidden" name="quantity" value="0" />
