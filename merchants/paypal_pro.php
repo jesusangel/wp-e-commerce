@@ -11,6 +11,14 @@ $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_pro";
 $nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 
 if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
+	$curryear = date('Y');
+	
+	//generate year options
+	for($i=0; $i < 7; $i++){
+		$years .= "<option value='".$curryear."'>".$curryear."</option>\r\n";
+		$curryear++;
+	}
+ 
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
 	<tr %s>
 		<td>Credit Card Number *</td>
@@ -22,7 +30,24 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	<tr %s>
 		<td>Credit Card Expiry *</td>
 		<td>
-			<input type='text' size='2' value='' maxlength='2' name='expiry[month]' />/<input type='text' size='4'  maxlength='4' value='' name='expiry[year]' />
+			<select class='wpsc_ccBox' name='expiry[month]'>
+			".$months."
+			<option value='01'>01</option>
+			<option value='02'>02</option>
+			<option value='03'>03</option>
+			<option value='04'>04</option>
+			<option value='05'>05</option>						
+			<option value='06'>06</option>						
+			<option value='07'>07</option>					
+			<option value='08'>08</option>						
+			<option value='09'>09</option>						
+			<option value='10'>10</option>						
+			<option value='11'>11</option>																			
+			<option value='12'>12</option>																			
+			</select>
+			<select class='wpsc_ccBox' name='expiry[year]'>
+			".$years."
+			</select>
 			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
@@ -35,7 +60,7 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	<tr %s>
 		<td>Card Type *</td>
 		<td>
-		<select name='cctype'>
+		<select class='wpsc_ccBox' name='cctype'>
 			<option value='Visa'>Visa</option>
 			<option value='Mastercard'>MasterCard</option>
 			<option value='Discover'>Discover</option>
@@ -46,6 +71,7 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	</tr>
 ";
 }
+  
   
 function gateway_paypal_pro($seperator, $sessionid){
 	global $wpdb, $wpsc_cart;
