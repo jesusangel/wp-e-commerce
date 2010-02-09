@@ -126,7 +126,11 @@ function wpsc_admin_pages(){
 				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
 			}
 			//exit('base page:'.$base_page);
-			$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7,'wpsc_display_coupons_page','wpsc_display_coupons_page');
+			if(IS_WPMU){
+				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 11,'wpsc_display_coupons_page','wpsc_display_coupons_page');
+			}else{
+				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7,'wpsc_display_coupons_page','wpsc_display_coupons_page');
+			}
 			//add_submenu_page('themes.php', 'Marketing', 'Marketing', 7, 'my_test_screen', 'my_test_screen');
 			
 			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 7, 'wpsc-settings', 'wpsc_display_settings_page');
