@@ -1,6 +1,20 @@
 /**
 *  This is a nearly exact copy of the corresponding wordpress file, we needed to copy and modify it for our use of swfupoader as the wordpress handler code is specific to posts
 */ 
+// define a global variable for swfupload here so that we can later do things to it.
+var swfu = null;
+
+
+jQuery().ajaxComplete(function(event,  XMLHttpRequest, ajaxOptions) {
+	// nonces are only regenerated on autosaving when ther product ID is created/changed
+	// we only want to edit the swfuploader parameters when that happens
+	if(/autosave-generate-nonces/.test(ajaxOptions.data)) {
+		window.swfu.removePostParam('product_id');
+		window.swfu.addPostParam('product_id', parseInt(jQuery('#post_ID').val()));
+	}
+	//console.log(jQuery('#post_ID').val());		
+});
+
 
 function wpsc_fileDialogStart() {
 	jQuery("#media-upload-error").empty();
@@ -17,7 +31,7 @@ function wpsc_fileQueued(fileObj) {
 	//jQuery('#insert-gallery').attr('disabled', 'disabled');
 }
 
-function wpsc_uploadStart(fileObj) { return true; }
+function wpsc_uploadStart(fileObj) {return true; }
 
 function wpsc_uploadProgress(fileObj, bytesDone, bytesTotal) {
 	// Lengthen the progress bar

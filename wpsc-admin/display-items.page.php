@@ -56,43 +56,48 @@ function wpsc_display_edit_products_page() {
 				<?php $_SESSION['product_error_messages'] = ''; ?>
 		<?php } ?>
 			
-		<?php if (isset($_GET['flipped']) || isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated']) ) { ?>
-			<div id="message" class="updated fade">
-				<p>
-				<?php if ( isset($_GET['updated'])) {
-					printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
-					unset($_GET['updated']);
-				}
-				
-				if ( isset($_GET['flipped'])) {
-					printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['flipped'] ), number_format_i18n( $_GET['flipped'] ) );
-					unset($_GET['flipped']);
-				}
-				
-				if ( isset($_GET['skipped'])) {
-					unset($_GET['skipped']);
-				}
-				
-				if ( isset($_GET['deleted'])) {
-					printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
-					unset($_GET['deleted']);
-				}
-				
-				if ( isset($_GET['duplicated']) ) {
-					printf( __ngettext( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
-					unset($_GET['duplicated']);
-				}
-				
-				if ( isset($_GET['message']) ) {
-					$message = absint( $_GET['message'] );
-					$messages[1] =  __( 'Product updated.' );
-					echo $messages[$message];			
-					unset($_GET['message']);
-				}
-				
-				
-				$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted', 'message', 'duplicated'), $_SERVER['REQUEST_URI'] );
-				?>
+		<?php if (isset($_GET['published']) || isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated']) ) { ?>
+		<div id="message" class="updated fade">
+			<p>
+			<?php if ( isset($_GET['updated'])) {
+				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				unset($_GET['updated']);
+			}
+			
+			if ( isset($_GET['published'])) {
+				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['published'] ), number_format_i18n( $_GET['published'] ) );
+				unset($_GET['published']);
+			}
+			
+			
+			if ( isset($_GET['skipped'])) {
+				unset($_GET['skipped']);
+			}
+			
+			if ( isset($_GET['deleted'])) {
+				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				unset($_GET['deleted']);
+			}
+			
+			if ( isset($_GET['trashed'])) {
+				printf( __ngettext( 'Product trashed.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				unset($_GET['trashed']);
+			}
+			
+			if ( isset($_GET['duplicated']) ) {
+				printf( __ngettext( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
+				unset($_GET['duplicated']);
+			}
+			
+			if ( isset($_GET['message']) ) {
+				$message = absint( $_GET['message'] );
+				$messages[1] =  __( 'Product updated.' );
+				echo $messages[$message];			
+				unset($_GET['message']);
+			}
+			
+			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted', 'message', 'duplicated', 'trashed'), $_SERVER['REQUEST_URI'] );
+			?>
 			</p>
 		</div>
 		<?php } ?>
@@ -171,7 +176,7 @@ function wpsc_display_edit_products_page() {
 
 
 function wpsc_admin_products_list($category_id = 0) {
-  global $wpdb,$_wp_column_headers;
+  global $wp_query,$wpdb,$_wp_column_headers;
   // set is_sortable to false to start with
   $is_sortable = false;
   $page = null;
@@ -190,11 +195,26 @@ function wpsc_admin_products_list($category_id = 0) {
 
 	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
 
-	$query = array('post_type' => 'wpsc-product', 'orderby' => 'menu_order title',
-	'posts_per_page' => -1, 'posts_per_archive_page' => -1, 'order' => 'asc');
-
-	wp($query);
+	$query = array(
+		'post_type' => 'wpsc-product',
+		'posts_per_page' => -1, 
+		'orderby' => 'menu_order post_title',
+		'order' => "ASC", 
+	);
 	
+	if(isset($_GET['category'])) {
+		$category_id = $_GET['category'];
+		$query['product_category'] = $category_id;
+	}
+	
+	
+	if(isset($_GET['search']) && (strlen($_GET['search']) > 0 )) {
+		$search = $_GET['search'];
+		$query['s'] = $search;
+	}
+	
+	//$posts = get_posts( $query );
+	wp($query);
 	if($page !== null) {
 		$page_links = paginate_links( array(
 			'base' => add_query_arg( 'pageno', '%#%' ),
@@ -206,7 +226,14 @@ function wpsc_admin_products_list($category_id = 0) {
 		));
 	}
 	$this_page_url = stripslashes($_SERVER['REQUEST_URI']);
+	
+	
+	
+	//$posts = get_object_taxonomies('wpsc-product');
+	
+	//echo "<pre>".print_r($posts, true)."</pre>";
   
+	$is_trash = isset($_GET['post_status']) && $_GET['post_status'] == 'trash';
 	?>
 	<div class="wpsc-separator"><br/></div>
 	
@@ -238,9 +265,16 @@ function wpsc_admin_products_list($category_id = 0) {
 			<div class="alignleft actions">
 					<select name="bulkAction">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
-						<option value="delete"><?php _e('Delete'); ?></option>
-						<option value="show"><?php _e('Publish'); ?></option>
-						<option value="hide"><?php _e('Draft'); ?></option>
+						<option value="publish"><?php _e('Publish', 'wpsc'); ?></option>
+						<option value="unpublish"><?php _e('Unpublish', 'wpsc'); ?></option>
+						<?php if ( $is_trash ) { ?>
+						<option value="untrash"><?php _e('Restore'); ?></option>
+						<?php } if ( $is_trash || !EMPTY_TRASH_DAYS ) { ?>
+						<option value="delete"><?php _e('Delete Permanently'); ?></option>
+						<?php } else { ?>
+						<option value="trash"><?php _e('Move to Trash'); ?></option>
+						<?php } ?>
+						
 
 					</select>
 					<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
@@ -264,9 +298,10 @@ function wpsc_admin_products_list($category_id = 0) {
 			</tfoot>
 		
 			<tbody>
-				<?php
-				wpsc_admin_product_listing();
-				if(count($wpsc_products) < 1) {
+			<?php
+			wpsc_admin_product_listing();
+			//echo "<pre>".print_r($wp_query, true)."</pre>";
+			if(count($wp_query->posts) < 1) {
 				?>
 				<tr>
 					<td colspan='5'>
@@ -274,8 +309,8 @@ function wpsc_admin_products_list($category_id = 0) {
 					</td>
 				</tr>
 				<?php
-				}
-				?>			
+			}
+			?>			
 			</tbody>
 		</table>
 	</form>
@@ -285,47 +320,39 @@ function wpsc_admin_products_list($category_id = 0) {
 function wpsc_admin_category_dropdown() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');
+	$category_slug = $_GET['category'];
+	
 	$url =  urlencode(remove_query_arg(array('product_id','category_id')));
 	
 	$options = "<option value=''>".__('View All Categories', 'wpsc')."</option>\r\n";
-	$options .= wpsc_admin_category_dropdown_tree(null, 0, absint($_GET['category_id']));
+	
+	$options .= wpsc_list_categories('wpsc_admin_category_options', $category_slug);
 	
 	$concat = "<input type='hidden' name='page' value='{$_GET['page']}' />\r\n";
-	$concat .= "<select name='category_id' id='category_select'>".$options."</select>\r\n";
+	$concat .= "<select name='category' id='category_select'>".$options."</select>\r\n";
 	$concat .= "<button class='button' id='submit_category_select'>Filter</button>\r\n";
 	return $concat;
 }
 
-function wpsc_admin_category_dropdown_tree($category_id = null, $iteration = 0, $selected_id = null) {
-		/*
-   * Displays the category forms for adding and editing products
-   * Recurses to generate the branched view for subcategories
-   */
-  global $wpdb;
-  $siteurl = get_option('siteurl');
-  $url = $siteurl."/wp-admin/admin.php?page=wpsc-edit-products";
 
-	$search_sql = apply_filters('wpsc_admin_category_dropdown_tree_search_sql', '');
 
-  if(is_numeric($category_id)) {
-    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '$category_id' ".$search_sql." ORDER BY `id` ASC";
+/*
+* Displays the category forms for adding and editing products
+* Recurses to generate the branched view for subcategories
+*/
+
+function wpsc_admin_category_options($category, $subcategory_level = 0, $category_slug = null) {
+	global $wpdb;
+	//echo "<pre>".print_r($category, true)."</pre>";
+	if($subcategory_level == 0) {
+		$output = array("<optgroup label=".stripslashes($category->name).">\n","</optgroup>\n");	
 	} else {
-    $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0' ".$search_sql." ORDER BY `id` ASC";
+		if($category_slug == $category->slug) {
+			$selected = "selected='selected'";
+		}
+		$output = "<option $selected value='{$category->slug}'>".str_repeat("-", $subcategory_level - 1).stripslashes($category->name)."</option>\n";
 	}
-
-//	echo $sql;
-  $values = $wpdb->get_results($sql, ARRAY_A);
-
-  foreach((array)$values as $option) {
-    if($selected_id == $option['id']) {
-      $selected = "selected='selected'";
-    }
-    //$url = htmlentities(remove_query_arg('product_id',add_query_arg('category_id', $option['id'])));
-    $output .= "<option $selected value='{$option['id']}'>".str_repeat("-", $iteration).stripslashes($option['name'])."</option>\r\n";
-    $output .= wpsc_admin_category_dropdown_tree($option['id'], $iteration+1, $selected_id);
-    $selected = "";
-  }
-  return $output;
+	return $output;
 }
 
 ?>

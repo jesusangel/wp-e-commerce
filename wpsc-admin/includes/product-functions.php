@@ -21,6 +21,7 @@ function wpsc_get_max_upload_size(){
 */
 function wpsc_admin_submit_product() {
   check_admin_referer('edit-product', 'wpsc-edit-product');
+  
   $sendback = wp_get_referer();
   $post_data = wpsc_sanitise_product_forms();
   //$post_data['category'] = 1;  /// remove this
@@ -60,11 +61,32 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	if ( empty($post_data) ) {
 		$post_data = &$_POST;
 	}
+	
+	$product = get_post(absint($post_data['post_ID']));
+	
+	
 	// 	$post_data['product_id'] = isset($post_data['product_id']) ? $post_data['product_id'] : '';
-	$post_data['name'] = isset($post_data['title']) ? $post_data['title'] : '';
+	$post_data['name'] = isset($post_data['post_title']) ? $post_data['post_title'] : '';
+	$post_data['title'] = $post_data['name'];
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
 
-	$post_data['publish'] = (int)(bool)$post_data['publish']; 
+	//$post_data['publish'] = (int)(bool)$post_data['publish']; 
+	if($product != null) {
+		$post_data['post_status'] = $product->post_status;
+	} else {
+		$post_data['post_status'] = 'draft';
+	
+	}
+	
+	
+	
+	if(isset($post_data['save'])) {
+		$post_data['post_status'] = $post_data['post_status'];
+	} else if(isset($post_data['publish'])) {
+		$post_data['post_status'] = 'publish';	
+	} else if(isset($post_data['unpublish'])) {
+		$post_data['post_status'] = 'draft';
+	}
 
 
 
@@ -110,6 +132,17 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	$post_data['meta']['_wpsc_product_metadata']['shipping']['local'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['local'];
 	$post_data['meta']['_wpsc_product_metadata']['shipping']['international'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['international'];
+	
+	
+	// Advanced Options
+	$post_data['meta']['_wpsc_product_metadata']['engraved'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['engraved'];	
+	$post_data['meta']['_wpsc_product_metadata']['can_have_uploaded_image'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['can_have_uploaded_image'];
+	$post_data['meta']['_wpsc_product_metadata']['google_prohibited'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['google_prohibited'];
+	$post_data['meta']['_wpsc_product_metadata']['external_link'] = (string)$post_data['meta']['_wpsc_product_metadata']['external_link'];
+	
+	$post_data['meta']['_wpsc_product_metadata']['enable_comments'] = $post_data['meta']['_wpsc_product_metadata']['enable_comments'];
+	$post_data['meta']['_wpsc_product_metadata']['merchant_notes'] = $post_data['meta']['_wpsc_product_metadata']['merchant_notes'];
+	
 
 
 
@@ -147,15 +180,22 @@ function wpsc_sanitise_product_forms($post_data = null) {
 */
  // exit('Image height'.get_option('product_image_height'));	
 function wpsc_insert_product($post_data, $wpsc_error = false) {
-  global $wpdb, $user_ID;
-  $adding = false;
-  $update = false;
-  if((int)$post_data['product_id'] > 0) {
-	  $product_id	= absint($post_data['product_id']);
-    $update = true;
-  }
+	global $wpdb, $user_ID;
+	$adding = false;
+	$update = false;
+	if((int)$post_data['post_ID'] > 0) {
+		$product_id	= absint($post_data['post_ID']);
+		$update = true;
+	} else if((int)$post_data['product_id'] > 0) {
+		$product_id	= absint($post_data['product_id']);
+		$update = true;
+	}
+	
+	
   
-  $product_columns = array(
+	//exit('<pre>'.print_r($product_id, true).'</pre>');
+	
+	$product_columns = array(
 		'name' => '',
 		'description' => '',
 		'additional_description' => '',
@@ -178,25 +218,25 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'no_shipping' => null,
 		'thumbnail_image' => null,
 		'thumbnail_state' => null
-  );
-  
-
-  foreach($product_columns as $column => $default) {
-    if(isset($post_data[$column]) || ($post_data[$column] !== null) ) {
+	);
+	
+	
+	foreach($product_columns as $column => $default) {
+		if(isset($post_data[$column]) || ($post_data[$column] !== null) ) {
 			$update_values[$column] = stripslashes($post_data[$column]);
-    } else if(($update != true) && ($default !== null)) {
+		} else if(($update != true) && ($default !== null)) {
 			$update_values[$column] = stripslashes($default);
-    }
-  }
+		}
+	}
 
 
   
 	$product_post_values = array(
-		'ID' => $post_data['product_id'],
+		'ID' => $product_id,
 		'post_author' => $user_ID,
 		'post_content' => $post_data['description'],
 		'post_title' => $post_data['name'],
-		'post_status' => "publish",
+		'post_status' => $post_data['post_status'],
 		'post_type' => "wpsc-product",
 		'post_name' => sanitize_title($post_data['name'])
 	);
@@ -501,23 +541,20 @@ function wpsc_update_custom_meta($product_id, $post_data) {
   global $wpdb;
     if($post_data['new_custom_meta'] != null) {
       foreach((array)$post_data['new_custom_meta']['name'] as $key => $name) {
-				$value = $post_data['new_custom_meta']['value'][(int)$key];
-        if(($name != '') && ($value != '')) {
-					add_product_meta($product_id, $name, $value, false, true);
-        }
+			$value = $post_data['new_custom_meta']['value'][(int)$key];
+	        if(($name != '') && ($value != '')) {
+				add_post_meta($product_id, $name, $value);
+	        }
+		}
+	}
+		
+	if($post_data['custom_meta'] != null) {
+		foreach((array)$post_data['custom_meta'] as $key => $values) {
+			if(($values['name'] != '') && ($values['value'] != '')) {
+        		update_post_meta($product_id, $name, $value);
 			}
 		}
-		
-		
-    if($post_data['custom_meta'] != null) {
-      foreach((array)$post_data['custom_meta'] as $key => $values) {
-        if(($values['name'] != '') && ($values['value'] != '')) {
-          $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_key` = '".$wpdb->escape($values['name'])."', `meta_value` = '".$wpdb->escape($values['value'])."' WHERE `id` IN ('".(int)$key."')LIMIT 1 ;");
-         // echo "UPDATE `".WPSC_TABLE_PRODUCTMETA."` SET `meta_key` = '".$wpdb->escape($values['name'])."', `meta_value` = '".$wpdb->escape($values['value'])."' WHERE `id` IN ('".(int)$key."') LIMIT 1 ;";
-					//add_product_meta($_POST['prodid'], $values['name'], $values['value'], false, true);
-        }
-			}
-		}
+	}
 }
 
 /**

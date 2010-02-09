@@ -222,6 +222,7 @@ function  wpsc_admin_include_css_and_js() {
 	if(defined('WPSC_GOLD_DIR_NAME') && WPSC_GOLD_DIR_NAME != ''){
 		wp_enqueue_style('gold_cart', WPSC_UPGRADES_URL . 'gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
 	}
+	
 	//jQuery wysiwyg
 	//  	if ( user_can_richedit() ) {
 	// 		wp_enqueue_script('editor');
@@ -244,6 +245,10 @@ function wpsc_admin_edit_products_page_js() {
 	}
 	wp_enqueue_script('media-upload');
     wp_enqueue_style('thickbox');
+    
+	wp_enqueue_script('post');
+	wp_enqueue_script('autosave');
+
   
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-swfobject');

@@ -71,6 +71,8 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 	$product_data['tags'] = wp_get_product_tags($product->ID);
 	$product_data['category_ids'] = array();
 	
+	$product_data['product_object'] = $product;
+	
 	foreach((array)$product_data['categories'] as $category_item) {
 		$product_data['category_ids'][] = (int)$category_item->term_id;  
 	}
@@ -145,7 +147,11 @@ function wpsc_display_product_form ($product_id = 0) {
 }
 
 function wpsc_product_basic_details_form(&$product_data) {
-  global $wpdb,$nzshpcrt_imagesize_info;
+  global $wpdb,$nzshpcrt_imagesize_info, $user_ID;
+  
+
+	$product = $product_data['product_object'];
+  
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
   ?>
   <h3 class='form_heading'>
@@ -164,7 +170,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<div style='width:470px'>
 					<label for="wpsc_product_name"><?php echo __('Product Name', 'wpsc')?></label>
 					<div class='admin_product_name'>
-						<input id='wpsc_product_name' class='wpsc_product_name text' size='15' type='text' name='title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
+						<input id='title' class='wpsc_product_name text' size='15' type='text' name='post_title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 						<a href='#' class='shorttag_toggle'></a>
 					</div>
 					<div class='admin_product_shorttags'>
@@ -350,16 +356,66 @@ function wpsc_product_basic_details_form(&$product_data) {
 		}
 		?>
 	</div>
-
+	
+	
+	
+	
+	
 	<input type='hidden' name='product_id' id='product_id' value='<?php echo $product_data['id']; ?>' />
 	<input type='hidden' name='wpsc_admin_action' value='edit_product' />
+		<input type='hidden' name='user_ID' id='user-id' value='<?php echo $user_ID; ?>' />
+	
+	<?php if(is_object($product)) { ?>
+		<input type='hidden' name='post_ID' id='post_ID' value='<?php echo $product_data['id']; ?>' />
+		<input type='hidden' id='post_author' name='post_author' value='<?php echo esc_attr( $product->post_author ); ?>' />
+		<input type='hidden' id='post_type' name='post_type' value='<?php echo esc_attr($product->post_type) ?>' />
+	<?php } else { ?> 
+		<?php $temp_ID = -1 * time();?> 
+		<input type='hidden' id='post_author' name='post_author' value='<?php echo $user_ID; ?>' />
+		<input type='hidden' id='post_type' name='post_type' value='wpsc-product' />
+		<input type='hidden' id='post_ID' name='temp_ID' value='<?php echo $temp_ID; ?>' />
+
+	<?php } ?>
+	<input type='hidden' id='original_post_status' name='original_post_status' value='<?php echo esc_attr($product->post_status) ?>' />
+	<input name='referredby' type='hidden' id='referredby' value='<?php echo esc_url(stripslashes(wp_get_referer())); ?>' />
+
+	
+
+	
+	
+	
+	
+	
+	
 	<?php wp_nonce_field('edit-product', 'wpsc-edit-product'); ?>
+	<?php wp_nonce_field( 'autosave', 'autosavenonce', false ); ?>
 	<input type='hidden' name='submit_action' value='edit' />
 	<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-	 
 	
+	
+	
+	
+	<?php /*
 	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Update Product', 'wpsc'); } else {	_e('Add New Product', 'wpsc');	} ?>' />&nbsp;
-	<a class='submitdelete' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_product&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Delete') ?></a>
+	*/ ?> 
+	
+	<div class="submitbox">
+		<?php
+		if($product->post_status == 'draft') {
+			?>
+			<input type='submit' value='<?php _e('Publish', 'wpsc'); ?>' id='publish' class='button-primary' name='publish' />
+			<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
+			<?php	
+		} else {
+			?>	
+			<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
+			<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
+			<?php
+		}
+		?>
+		
+		<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?></a>
+	</div>
 	<?php
   }
 
@@ -719,17 +775,19 @@ function wpsc_product_shipping_forms($product_data=''){
 
 function wpsc_product_advanced_forms($product_data='') {
 	global $closed_postboxes,$wpdb;
-	//exit('<pre>'.print_r($product_data, true).'</pre>');
-	$merchant_note = $product_data['meta']['_wpsc_merchant_notes'];
-	$engraved_text = $product_data['meta']['_wpsc_engrave'];
-	$can_have_uploaded_image = $product_data['meta']['_wpsc_can_have_uploaded_image'];
-	$external_link = $product_data['meta']['_wpsc_external_link'];
-	$enable_comments = $product_data['meta']['_wpsc_enable_comments'];
+	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
+	
+	$custom_fields = $wpdb->get_results( "
+	SELECT `meta_id`, `meta_key`, `meta_value`
+	FROM `{$wpdb->postmeta}`
+	WHERE `post_id` = {$product_data['id']}
+	AND `meta_key` NOT LIKE '\_%'
+	ORDER BY LOWER(meta_key)", ARRAY_A);
 	
 	
 	$output ='';
 	
-	$custom_fields =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` IN('{$product_data['id']}') AND `custom` IN('1') ",ARRAY_A);
+	//$custom_fields =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` IN('{$product_data['id']}') AND `custom` IN('1') ",ARRAY_A);
 
 
 	if ($product_data == 'empty') {
@@ -750,7 +808,7 @@ function wpsc_product_advanced_forms($product_data='') {
 			<a href='#' class='add_more_meta' onclick='return add_more_meta(this)'> + ".__('Add Custom Meta', 'wpsc')."</a><br /><br />
 		";
 		foreach((array)$custom_fields as $custom_field) {
-			$i = $custom_field['id'];
+			$i = $custom_field['meta_id'];
 			// for editing, the container needs an id, I can find no other tidyish method of passing a way to target this object through an ajax request
 			$output .= "
 			<div class='product_custom_meta'  id='custom_meta_$i'>
@@ -776,29 +834,17 @@ function wpsc_product_advanced_forms($product_data='') {
 	    $output .= "<tr>
       <td class='itemfirstcol' colspan='2'><br /> <strong>". __('Merchant Notes', 'wpsc') .":</strong><br />
       
-        <textarea cols='40' rows='3' name='productmeta_values[merchant_notes]' id='merchant_notes'>".stripslashes($merchant_note)."</textarea> 
+        <textarea cols='40' rows='3' name='meta[_wpsc_product_metadata][merchant_notes]' id='merchant_notes'>".stripslashes($product_meta['merchant_notes'])."</textarea> 
       	<small>".__('These notes are only available here.', 'wpsc')."</small>
       </td>
     </tr>";
-			/*   Insert Publish /No Publish Option on Product Edit (1bigidea)
-			*/
-		$output .= '
-		<tr>
-			<td colspan="2" class="itemfirstcol"><br />
-						<strong>'.__("Publish").': </strong> <label for="publish_yes">'.__("Yes").'
-				</label><input name="publish" id="publish_yes" type="radio" value="1" '.((!is_array($product_data) || $product_data['publish']) ? 'checked="checked" ' : '' ).' />
-				<label for="publish_no">'.__("No").'
-			</label><input name="publish" id="publish_no" type="radio" value="0" '.((is_array($product_data) && !$product_data['publish']) ? 'checked="checked" ' : '' ).' />
-			</td>
-		</tr>';
-			/*   End Publish /No Publish Fields
-			*/
+
 		$output .="
 		<tr>
       <td class='itemfirstcol' colspan='2'><br />
        <strong>". __('Personalisation Options', 'wpsc') .":</strong><br />
-        <input type='hidden' name='productmeta_values[engraved]' value='0' />
-        <input type='checkbox' name='productmeta_values[engraved]' ".(($engraved_text == 'on') ? 'checked="checked"' : '')." id='add_engrave_text' />
+        <input type='hidden' name='meta[_wpsc_product_metadata][engraved]' value='0' />
+        <input type='checkbox' name='meta[_wpsc_product_metadata][engraved]' ".(($product_meta['engraved'] == true) ? 'checked="checked"' : '')." id='add_engrave_text' />
         <label for='add_engrave_text'> ".__('Users can personalize this product by leaving a message on single product page', 'wpsc')."</label>
         <br />
       </td>
@@ -806,8 +852,8 @@ function wpsc_product_advanced_forms($product_data='') {
     <tr>
       <td class='itemfirstcol' colspan='2'>
       
-        <input type='hidden' name='productmeta_values[can_have_uploaded_image]' value='0' />
-        <input type='checkbox' name='productmeta_values[can_have_uploaded_image]' ".(($can_have_uploaded_image == 'on') ? 'checked="checked"' : '')." id='can_have_uploaded_image' />
+        <input type='hidden' name='meta[_wpsc_product_metadata][can_have_uploaded_image]' value='0' />
+        <input type='checkbox' name='meta[_wpsc_product_metadata][can_have_uploaded_image]' ".(($product_meta['can_have_uploaded_image'] == true) ? 'checked="checked"' : '')." id='can_have_uploaded_image' />
         <label for='can_have_uploaded_image'> ".__('Users can upload images on single product page to purchase logs.', 'wpsc')."</label>
         <br />
       </td>
@@ -818,7 +864,7 @@ function wpsc_product_advanced_forms($product_data='') {
 		$output .= "<tr>
       <td class='itemfirstcol' colspan='2'>
       
-        <input type='checkbox' name='productmeta_values[google_prohibited]' id='add_google_prohibited' /> <label for='add_google_prohibited'>
+        <input type='checkbox' ".$product_meta['google_prohibited']." name='meta[_wpsc_product_metadata][google_prohibited]' id='add_google_prohibited' /> <label for='add_google_prohibited'>
        ".__('Prohibited', 'wpsc')."
 	 <a href='http://checkout.google.com/support/sell/bin/answer.py?answer=75724'>by Google?</a></label><br />
       </td>
@@ -836,7 +882,7 @@ function wpsc_product_advanced_forms($product_data='') {
        <strong>".__('Off Site Product Link', 'wpsc').":</strong><br />
        <small>".__('If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.', 'wpsc')."</small><br /><br />
 		<label for='external_link'>".__('External Link', 'wpsc')."</label>:<br />
-		  <input type='text' class='text' name='productmeta_values[external_link]' value='".$external_link."' id='external_link' size='40' /> 
+		  <input type='text' class='text' name='meta[_wpsc_product_metadata][external_link]' value='".$product_meta['external_link']."' id='external_link' size='40' /> 
       </td>
     </tr>";
 	if (get_option('wpsc_enable_comments') == 1) {
@@ -844,10 +890,10 @@ function wpsc_product_advanced_forms($product_data='') {
 		<tr>
 			<td class='itemfirstcol' colspan='2'><br />
 				<strong>".__('Enable IntenseDebate Comments', 'wpsc').":</strong><br />
-			<select name='productmeta_values[enable_comments]'>
-				<option value='' ". (($enable_comments == '') ? 'selected' : '') .">Use Default</option>
-				<option value='yes' ". (($enable_comments == 'yes') ? 'selected' : '') .">Yes</option>
-				<option value='no' ". (($enable_comments == 'no') ? 'selected' : '') .">No</option>
+			<select name='meta[_wpsc_product_metadata][enable_comments]'>
+				<option value='' ".  (($product_meta['enable_comments'] == '' ) ? 'selected' : '') .">Use Default</option>
+				<option value='1' ". (($product_meta['enable_comments'] == '1') ? 'selected' : '') .">Yes</option>
+				<option value='0' ". (($product_meta['enable_comments'] == '0') ? 'selected' : '') .">No</option>
 			</select>
 			<br/>".__('Allow users to comment on this product.', 'wpsc')."
 			</td>
@@ -883,7 +929,7 @@ function wpsc_product_image_forms($product_data='') {
 			<script type="text/javascript" >
 			/* <![CDATA[ */
 			jQuery("span#spanButtonPlaceholder").livequery(function() {
-				swfu = new SWFUpload({
+				 window.swfu = new SWFUpload({
 					button_text: '<span class="button"><?php _e('Select Files'); ?></span>',
 					button_text_style: '.button { text-align: center; font-weight: bold; font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }',
 					button_height: "24",
@@ -895,7 +941,7 @@ function wpsc_product_image_forms($product_data='') {
 					file_post_name: "async-upload",
 					file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
 					post_params : {
-						"product_id" : parseInt(jQuery('#product_id').val()),
+						"product_id" : parseInt(jQuery('#post_ID').val()),
 						"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
 						"_wpnonce" : "<?php echo wp_create_nonce('product-swfupload'); ?>",
 						"wpsc_admin_action" : "wpsc_add_image"
@@ -929,6 +975,12 @@ function wpsc_product_image_forms($product_data='') {
 					?>
 				});
 			});
+			
+			
+			
+			//jQuery("span#spanButtonPlaceholder").livequery(function() {
+			//	console.log(window.swfu);
+			//});
 		/* ]]> */
 		</script>
 		
@@ -1076,6 +1128,9 @@ function wpsc_product_label_forms() {
 function edit_multiple_image_gallery($product_data) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
+	?>
+	<ul id="gallery_list" class="ui-sortable" style="position: relative;">
+	<?php
 	if($product_data['id'] > 0) {
 		$args = array(
 			'post_type' => 'attachment',
@@ -1087,52 +1142,42 @@ function edit_multiple_image_gallery($product_data) {
 		);
 		
 		$attached_images = (array)get_posts($args);
-		// echo "<pre>".print_r($args, true)."</pre>";
-		//echo "<pre>".print_r($attached_images, true)."</pre>";
-		?>
-		<ul id="gallery_list" class="ui-sortable" style="position: relative;">
-			<?php
-			if($attached_images != null) {
-				foreach($attached_images as $image) {
-					$image_meta = get_post_meta($image->ID, '');
-					foreach($image_meta as $meta_name => $meta_value) {
-						$image_meta[$meta_name] = maybe_unserialize(array_pop($meta_value));
-					}
+		if($attached_images != null) {
+			foreach($attached_images as $image) {
+				$image_meta = get_post_meta($image->ID, '');
+				foreach($image_meta as $meta_name => $meta_value) {
+					$image_meta[$meta_name] = maybe_unserialize(array_pop($meta_value));
+				}
 
-					 //echo "<pre>".print_r($image, true)."</pre>";
-					 //echo "<pre>".print_r($image_meta, true)."</pre>";
-				
-					if(function_exists("getimagesize")) {
-						$num++;
-						$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$image->ID}&amp;width=60&amp;height=60";
-						?>
-						<?
-
-						// index.php?wpsc_action=scale_image&attachment_id=232&width=60&height=60
-						?>
-							<li id="product_image_<?php echo $image->ID; ?>" class='gallery_image'>
-								<input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image->ID; ?>' />
-								<div class='previewimage' id='gallery_image_<?php echo $image->ID; ?>'>
-									<a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
-										<img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' /><br />
-									</a>
-									<?php
-									echo wpsc_main_product_image_menu($product_data['id']);
-									//<img alt='-' class='deleteButton' src='< ?php echo WPSC_URL; ? >/images/cross.png' />
-									?>
-								</div>
-							</li>
-						<?php
-					}
+				if(function_exists("getimagesize")) {
+					$num++;
+					$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$image->ID}&amp;width=60&amp;height=60";
+					?>
+					<li id="product_image_<?php echo $image->ID; ?>" class='gallery_image'>
+						<input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image->ID; ?>' />
+						<div class='previewimage' id='gallery_image_<?php echo $image->ID; ?>'>
+							<a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
+								<img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' /><br />
+							</a>
+							<?php echo wpsc_main_product_image_menu($product_data['id']); ?>
+						</div>
+					</li>
+					<?php
 				}
 			}
-			?>
-		</ul>
-		<?php
-
-		$main_image = $wpdb->get_row("SELECT `images`.* FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_data['id']}' LIMIT 1", ARRAY_A);
+		}
+		/*
+		$main_image = $wpdb->get_row("SELECT `images`.*
+		FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images`
+		JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product`
+		ON `product`.`image` = `images`.`id`
+		WHERE `product`.`id` = '{$product_data['id']}'
+		LIMIT 1", ARRAY_A);
+		*/
 	}
-  //return $output;
+	?>
+	</ul>
+	<?php
 }
 
 

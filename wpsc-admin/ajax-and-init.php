@@ -252,48 +252,80 @@ function wpsc_bulk_modify_products() {
 	global $wpdb;
 	$doaction = $_GET['bulkAction'];
 	$sendback = wp_get_referer();
+	$product_ids = $_GET['post'];
+	//exit( "<pre>".print_r($_GET,true)."</pre>");
 	switch ( $doaction ) {
-		case 'delete':
-			if ( isset($_GET['product']) && ! isset($_GET['bulk_edit']) && (isset($doaction) || isset($_GET['doaction2'])) ) {
-				check_admin_referer('bulk-products', 'wpsc-bulk-products');
-				$deleted = 0;
-				foreach( (array) $_GET['product'] as $product_id ) {
-				  $product_id = absint($product_id);
-					if($wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='{$product_id}' LIMIT 1")) {
-						$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '{$product_id}' AND `meta_key` IN ('url_name')");  
-						product_tag_init();
-						$term = wp_get_object_terms($product_id, 'product_tag');
-						if ($term->errors == '') {
-							wp_delete_object_term_relationships($product_id, 'product_tag');
-						}
-	
-						$deleted++;
-					}
-				}
+		
+		case 'publish':
+			foreach( (array) $product_ids as $product_id ) {
+			  $product_id = absint($product_id);
+			  wp_publish_post($product_id);
+			  $published++;
 			}
-			if ( isset($deleted) ) {
-				$sendback = add_query_arg('deleted', $deleted, $sendback);
-			}
+			$sendback = add_query_arg('published', $published, $sendback);
 		break;
 		
-		case 'show':
-		case 'hide':
-			if ( isset($_GET['product']) && ! isset($_GET['bulk_edit']) && (isset($doaction) || isset($_GET['doaction2'])) ) {
-				check_admin_referer('bulk-products', 'wpsc-bulk-products');
-				$flipped = 0;
-				$status = array('show' => 1, 'hide' => 0);
-				if( !key_exists($_REQUEST['bulkAction'], $status) ) break; // Action not valid
-				$status_key = $_REQUEST['bulkAction'];
-				$status_value = $status[$status_key];
-				foreach( (array) $_GET['product'] as $product_id ) {
-				  $product_id = absint($product_id);
-				  $new_status = wpsc_set_publish_status($product_id, $status_value);
-				  $flipped++;
-				}
+		case 'unpublish':
+			foreach( (array) $product_ids as $product_id ) {
+				$product_id = absint($product_id);
+				wp_update_post(array('ID' => $product_id, 'post_status' => 'draft'));
+				$published++;
 			}
-			$sendback = add_query_arg('flipped', $flipped, $sendback);
+			$sendback = add_query_arg('published', $published, $sendback);
+		break;
+		
+		
+		case 'trash':
+			$trashed = 0;
+			foreach( (array) $product_ids as $product_id ) {
+				if ( !current_user_can('delete_post', $product_id) ) {
+					wp_die( __('You are not allowed to move this product to the trash.', 'wpsc') );
+				}
+				if ( !wp_trash_post($product_id) ) {
+					wp_die( __('Error in moving to trash...') );
+				}						
+				$trashed++;
+			}
+			$sendback = add_query_arg( array('trashed' => $trashed, 'ids' => join(',', $product_ids)), $sendback );
 		break;
 
+		case 'untrash':
+			$untrashed = 0;
+			foreach( (array) $product_ids as $product_id ) {
+				if ( !current_user_can('delete_post', $product_id) ) {
+					wp_die( __('You are not allowed to restore this product from the trash.', 'wpsc') );
+				}
+				if ( !wp_untrash_post($product_id) ) {
+					wp_die( __('Error in restoring from trash...') );		
+				}
+				$untrashed++;
+			}
+			$sendback = add_query_arg('untrashed', $untrashed, $sendback);
+		break;
+
+		case 'delete':
+			$deleted = 0;
+			foreach( (array) $product_ids as $product_id ) {
+				$product_del = & get_post($product_id);
+				
+				if ( !current_user_can('delete_post', $product_id) ) {
+					wp_die( __('You are not allowed to delete this post.') );
+				}
+				
+				if ( $product_del->post_type == 'attachment' ) {
+					if ( ! wp_delete_attachment($product_id) ) {
+						wp_die( __('Error in deleting...') );
+					}
+				} else {
+					if ( !wp_delete_post($product_id) ) {
+						wp_die( __('Error in deleting...') );
+					}
+				}
+				$deleted++;
+			}
+			$sendback = add_query_arg('deleted', $deleted, $sendback);
+		break;
+		
 		
 		default:
 			if(isset($_GET['search']) && !empty($_GET['search'])) {
@@ -343,34 +375,34 @@ function wpsc_modify_product_price() {
   Function and action for deleting single products 
  */
 function wpsc_delete_product() {
-  global $wpdb;
+	global $wpdb;
   
 	$deleted = 0;
 	$product_id = absint($_GET['product']);
 	check_admin_referer('delete_product_' .  $product_id);
 
-	if($wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET  `active` = '0' WHERE `id`='{$product_id}' LIMIT 1")) {
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '{$product_id}' AND `meta_key` IN ('url_name')");  
-		product_tag_init();
-		$term = wp_get_object_terms($product_id, 'product_tag');
-		if ($term->errors == '') {
-			wp_delete_object_term_relationships($product_id, 'product_tag');
-		}
-		$deleted = 1;
-		do_action('wpsc_delete_product', $product_id);
+	
+	if ( !current_user_can('delete_post', $product_id) ) {
+		wp_die( __('You are not allowed to move this product to the trash.', 'wpsc') );
 	}
+	if ( !wp_trash_post($product_id) ) {
+		wp_die( __('Error in moving to trash...') );
+	}			
+	do_action('wpsc_delete_product', $product_id);
+	$deleted = true;
 	
 	$sendback = wp_get_referer();
 	if ( isset($deleted) ) {
 		$sendback = add_query_arg('deleted', $deleted, $sendback);
 	}
+	//exit($sendback);
 	wp_redirect($sendback);
 	exit();
 }
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'delete_product') {
+ if($_REQUEST['wpsc_admin_action'] == 'trash') {
 	add_action('admin_init', 'wpsc_delete_product');
 }
  
@@ -696,12 +728,9 @@ function wpsc_admin_ajax() {
 	
 	if(($_POST['remove_meta'] == 'true') && is_numeric($_POST['meta_id'])) {
 		$meta_id = (int)$_POST['meta_id'];
-		$selected_meta = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `id` IN('{$meta_id}') ",ARRAY_A);
-		if($selected_meta != null) {
-			if($wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `id` IN('{$meta_id}')  LIMIT 1")) {
-				echo $meta_id;
-				exit();
-			}
+		if(delete_meta($meta_id)) {
+			echo $meta_id;
+			exit();
 		}
 		echo 0;
 		exit();

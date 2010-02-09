@@ -76,7 +76,7 @@ function wpsc_product_row(&$product) {
 		<?php
 		break;
 
-		case 'date':
+		case 'date': /* !date case */
 			if ( '0000-00-00 00:00:00' == $product->post_date && 'date' == $column_name ) {
 				$t_time = $h_time = __('Unpublished');
 				$time_diff = 0;
@@ -112,7 +112,9 @@ function wpsc_product_row(&$product) {
 			echo '</td>';
 		break;
 
-		case 'title':
+
+
+		case 'title': /* !title case */
 			$attributes = 'class="post-title column-title"' . $style;
 			$edit_link = wp_nonce_url("admin.php?page=wpsc-edit-products&amp;product={$product->ID}", 'edit-product_'.$product->ID);
 		?>
@@ -124,7 +126,7 @@ function wpsc_product_row(&$product) {
 			<?php } else {
 				echo $title;
 			};
-			 _post_states($post);
+			 _post_states($product);
 			 ?>
 			</strong>
 			<?php
@@ -138,7 +140,7 @@ function wpsc_product_row(&$product) {
 				if ( 'trash' == $product->post_status ) {
 					$actions['untrash'] = "<a title='" . esc_attr(__('Restore this product from the Trash', 'wpsc')) . "' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=untrash&amp;product={$product->ID}", 'untrash-product_' . $product->ID) . "'>".__('Restore')."</a>";
 				} else if ( EMPTY_TRASH_DAYS ) {
-					$actions['trash'] = "<a class='submitdelete' title='".esc_attr(__('Move this product to the Trash', 'wpsc'))."' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=trash&amp;product={$product->ID}", 'trash-product_'.$product->ID) . "'>".__('Trash')."</a>";
+					$actions['trash'] = "<a class='submitdelete' title='".esc_attr(__('Move this product to the Trash', 'wpsc'))."' href='" . get_delete_post_link($product->ID) . "'>".__('Trash')."</a>";
 				}
 				
 				if ( 'trash' == $product->post_status || !EMPTY_TRASH_DAYS ) {
@@ -177,7 +179,7 @@ function wpsc_product_row(&$product) {
 
 
 
-		case 'image':
+		case 'image':  /* !image case */
 			?>
 			<td class="product-image ">
 			<?php
@@ -209,7 +211,9 @@ function wpsc_product_row(&$product) {
 			<?php
 		break;
 		
-		case 'price':
+		
+		
+		case 'price':  /* !price case */
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
@@ -226,14 +230,16 @@ function wpsc_product_row(&$product) {
 			<?php
 		break;
 
-		case 'categories':
+
+
+		case 'categories':  /* !categories case */
 		?>
 		<td <?php echo $attributes ?>><?php
 			$categories = get_the_product_category($product->ID);
 			if ( !empty( $categories ) ) {
 				$out = array();
 				foreach ( $categories as $c )
-					$out[] = "<a href='edit.php?category_name=$c->slug'> " . esc_html(sanitize_term_field('name', $c->name, $c->term_id, 'category', 'display')) . "</a>";
+					$out[] = "<a href='admin.php?page=wpsc-edit-products&amp;category={$c->slug}'> " . esc_html(sanitize_term_field('name', $c->name, $c->term_id, 'category', 'display')) . "</a>";
 					echo join( ', ', $out );
 			} else {
 				_e('Uncategorized');
@@ -242,7 +248,9 @@ function wpsc_product_row(&$product) {
 		<?php
 		break;
 
-		case 'tags':
+
+
+		case 'tags':  /* !tags case */
 		?>
 		<td <?php echo $attributes ?>><?php
 			$tags = get_the_tags($product->ID);
@@ -258,7 +266,10 @@ function wpsc_product_row(&$product) {
 		<?php
 		break;
 
-		case 'comments':
+
+
+
+		case 'comments':  /* !comments case */
 		?>
 		<td <?php echo $attributes ?>><div class="post-com-count-wrapper">
 		<?php
@@ -273,32 +284,40 @@ function wpsc_product_row(&$product) {
 		<?php
 		break;
 
-		case 'author':
+
+
+		case 'author':  /* !author case */
 		?>
 		<td <?php echo $attributes ?>><a href="edit.php?author=<?php the_author_meta('ID'); ?>"><?php the_author() ?></a></td>
 		<?php
 		break;
 
 		
-		case 'control_view':
+		case 'control_view':  /* !control view case */
 		?>
 		<td><a href="<?php the_permalink(); ?>" rel="permalink" class="view"><?php _e('View'); ?></a></td>
 		<?php
 		break;
 
-		case 'control_edit':
+
+
+		case 'control_edit':  /* !control edit case */
 		?>
 		<td><?php if ( current_user_can('edit_post', $product->ID) ) { echo "<a href='$edit_link' class='edit'>" . __('Edit') . "</a>"; } ?></td>
 		<?php
 		break;
 
-		case 'control_delete':
+
+
+		case 'control_delete':  /* !control delete case */
 		?>
 		<td><?php if ( current_user_can('delete_post', $product->ID) ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete') . "</a>"; } ?></td>
 		<?php
 		break;
 
-		default:
+
+
+		default:   /* !default case */
 		?>
 		<td <?php echo $attributes ?>><?php do_action('manage_posts_custom_column', $column_name, $product->ID); ?></td>
 		<?php

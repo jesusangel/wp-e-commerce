@@ -9,9 +9,74 @@
  * @since 3.7
 */
 
+
+
 /**
-	*wpsc_get_theme_file_path function, gets the path to the theme file, uses the plugin themes folder if the file is not in the uploads one
-  */
+ * wpsc_is_product function.
+ * 
+ * @access public
+ * @return boolean
+ */
+function wpsc_is_product() {
+	global $wp_query;
+	return $wp_query->is_product;
+}
+
+
+
+/**
+ * wpsc_get_product_template function.
+ * 
+ * @access public
+ * @return void
+ */
+function wpsc_get_product_template() {
+	return get_query_template('products');
+}
+
+
+
+/**
+ * wpsc_product_template_fallback function.
+ * 
+ * @access public
+ * @param mixed $template_path
+ * @return string - the corrected template path
+ */
+function wpsc_product_template_fallback($template_path) {
+	if(!file_exists($template_path)) {
+		exit($template_path);
+	}
+	return $template_path;
+}
+
+
+add_filter("product_template", 'wpsc_product_template_fallback');
+
+
+
+
+/**
+ * wpsc_template_loader function.
+ * 
+ * @access public
+ * @return void
+ */
+function wpsc_template_loader() {
+	if ( wpsc_is_product() && $template = wpsc_get_product_template() ) {
+		include($template);
+		exit();
+	}
+}
+
+
+
+
+add_action('template_redirect','wpsc_template_loader');
+
+/**
+ *wpsc_get_theme_file_path function, gets the path to the theme file, uses the plugin themes folder if the file is not in the uploads one
+ */
 function wpsc_get_theme_file_path($file) {
 	// get the theme folder here
 	global $wpsc_theme_path;

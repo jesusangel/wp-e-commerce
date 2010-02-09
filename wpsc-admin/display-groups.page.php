@@ -50,6 +50,7 @@ function wpsc_category_tm(){
 
 function admin_categorylist($curent_category) {
   global $wpdb;
+  /*
   $options = "";
   //$options .= "<option value=''>".__('Select a Product Group', 'wpsc')."</option>\r\n";
   $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` ORDER BY `id` ASC",ARRAY_A);
@@ -61,21 +62,11 @@ function admin_categorylist($curent_category) {
     $selected = "";
 	}
   $concat .= "<select name='category'>".$options."</select>\r\n";
-  return $concat;
+  return $concat;*/
 }
 
-function display_categories($group_id, $id = null, $level = 0) {
-  global $wpdb,$category_data;
-	$category_list = get_terms('wpsc_product_category','hide_empty=0&parent='.$group_id);
-  if($category_list != null) {
-    foreach((array)$category_list as $category) {
-    	display_category_row($category, $level);
-        display_categories($category->term_id, $id, ($level+1));
-		}
-	}
-}
 
-function display_category_row($category,$subcategory_level = 0) {
+function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 	//echo "<pre>".print_r($category,true)."</pre>";
 	$category_image = wpsc_get_categorymeta($category->term_id, 'image');
 
@@ -83,7 +74,7 @@ function display_category_row($category,$subcategory_level = 0) {
 	echo "       <td colspan='4' class='colspan'>\n\r";
 	if($subcategory_level > 0) {
 		echo "        <div class='subcategory' style='padding-left: ".(1*$subcategory_level)."em;'>\n\r";
-		echo "		        <img class='category_indenter' src='".WPSC_URL."/images/indenter.gif' alt='' title='' />\n\r";
+		echo "		  <img class='category_indenter' src='".WPSC_URL."/images/indenter.gif' alt='' title='' />\n\r";
 	}
 	echo "		        <table class='itemlist'>\n\r";
 	echo "		          <tr>\n\r";
@@ -191,7 +182,6 @@ function wpsc_display_groups_page() {
       $category_id=$new_category['term_id'];
       $term = get_term_by('id', $new_category['term_id'], 'wpsc_product_category');
       $url_name=$term->slug;
-      //$insertsql = "INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` ,  ) VALUES ( '".(int)$_POST['categorisation_group']."', '".$wpdb->escape(stripslashes($_POST['name']))."', '".$url_name."', '".$wpdb->escape(stripslashes($_POST['description']))."', '$image', '0', '1' ,'$parent_category', '0')";
       
       $wp_rewrite->flush_rules(); 
       if($category_id) {
@@ -215,15 +205,6 @@ function wpsc_display_groups_page() {
 				wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
 				$uses_additional_forms = false;
 			}
-
-			
-// 			if($uses_additional_forms == true) {
-// 				$checkout_form_sets = get_option('wpsc_checkout_form_sets');
-// 				$checkout_form_sets[$url_name] = $wpdb->escape(stripslashes($_POST['name']));
-// 				update_option('wpsc_checkout_form_sets', $checkout_form_sets);
-// 			}
-
-
 
 				
         echo "<div class='updated'><p align='center'>".__('The item has been added', 'wpsc')."</p></div>";
@@ -289,10 +270,10 @@ function wpsc_display_groups_page() {
     		  } else {
 						image_processing($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']));
     		  }  
-					$image = $wpdb->escape($_FILES['image']['name']);
+				$image = $wpdb->escape($_FILES['image']['name']);
         } else {
-					move_uploaded_file($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']));
-					$image = $wpdb->escape($_FILES['image']['name']);
+			move_uploaded_file($_FILES['image']['tmp_name'], (WPSC_CATEGORY_DIR.$_FILES['image']['name']));
+			$image = $wpdb->escape($_FILES['image']['name']);
         }
       
       } else {
@@ -301,14 +282,14 @@ function wpsc_display_groups_page() {
     
     if(is_numeric($_POST['height']) && is_numeric($_POST['width']) && ($image == null)) {
       	$imagedata = wpsc_get_categorymeta($category_id, 'image');
-      if($imagedata != null) {
-        $height = $_POST['height'];
-        $width = $_POST['width'];
-        $imagepath = WPSC_CATEGORY_DIR . $imagedata;
-        $image_output = WPSC_CATEGORY_DIR . $imagedata;
-        image_processing($imagepath, $image_output, $width, $height);
-			}
+		if($imagedata != null) {
+			$height = $_POST['height'];
+			$width = $_POST['width'];
+			$imagepath = WPSC_CATEGORY_DIR . $imagedata;
+			$image_output = WPSC_CATEGORY_DIR . $imagedata;
+			image_processing($imagepath, $image_output, $width, $height);
 		}
+	}
   
     $category_data = get_term_by( 'id', $category_id, 'wpsc_product_category', ARRAY_A);
     $category_data['nice-name']=wpsc_get_categorymeta($category_id, 'nice-name');
@@ -703,7 +684,7 @@ update_option('wpsc_category_url_cache', array());
 	echo "       </td>\n\r";
 	echo "     <tr>\n\r";
 	
-	display_categories($current_categorisation['term_id']);
+	wpsc_list_categories('wpsc_admin_display_category_row', null, $current_categorisation['term_id']);
 	if (function_exists('add_object_page')){
 		echo "</table>";
 		echo "</div>"; //class inside ends

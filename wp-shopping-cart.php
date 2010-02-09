@@ -422,22 +422,44 @@ if(!function_exists('wpsc_initialisation')){
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
 	}
-  $GLOBALS['wpsc_category_url_cache'] = get_option('wpsc_category_url_cache');
+	$GLOBALS['wpsc_category_url_cache'] = get_option('wpsc_category_url_cache');
 
-  
-		register_taxonomy('product_tag', 'product');
-		register_taxonomy('wpsc_product_category', 'product',array('hierarchical' => true));
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
 
+/**
+ * wpsc_query_modifier function.
+ * 
+ * @access public
+ * @param object - reference to $wp_query
+ * @return $query
+ */
+function wpsc_query_modifier($query) {
+	$query->is_product = true;
+	return $query;
+}
+
+add_filter('parse_query', 'wpsc_query_modifier');
+
 // Register the wpsc post types
 function wpsc_register_post_types() {
-	register_post_type( 'wpsc-product', array('exclude_from_search' => false) );
+	register_post_type( 'wpsc-product', array(
+	    '_edit_link' => 'admin.php?page=wpsc-edit-products&product=%d',
+	    'capability_type' => 'post',
+	    'hierarchical' => true,
+		'exclude_from_search' => false
+	));
+	register_taxonomy('product_tag', 'wpsc-product');
+	register_taxonomy('wpsc_product_category', 'wpsc-product',array(
+		'hierarchical' => true,
+		'query_var' => 'product_category',
+		'rewrite' => array('slug' => 'product_category')
+	));
 }
-add_action( 'init', 'wpsc_register_post_types', 0 ); // highest priority
+add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
 
 
 switch(get_option('cart_location')) {
