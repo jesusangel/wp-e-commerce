@@ -212,7 +212,7 @@ function calculate_product_price($product_id, $variations = false, $no_special=f
       $variations = array_values($variations);
       array_walk($variations, 'wpsc_sanitise_keys');
 		}
-	
+	$variation_count = 0;
     /// the start of the normal price determining code.
     if($variation_count >= 1) {
       // if we have variations, grab the individual price for them. 

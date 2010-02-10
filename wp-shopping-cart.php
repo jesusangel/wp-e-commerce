@@ -438,7 +438,11 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
  * @return $query
  */
 function wpsc_query_modifier($query) {
-	$query->is_product = true;
+	//echo "<pre>".print_r($query,true)."</pre>";
+	if($query->query_vars['taxonomy'] == 'wpsc_product_category') {
+		$query->is_product = true;
+	}
+	
 	return $query;
 }
 
@@ -455,8 +459,8 @@ function wpsc_register_post_types() {
 	register_taxonomy('product_tag', 'wpsc-product');
 	register_taxonomy('wpsc_product_category', 'wpsc-product',array(
 		'hierarchical' => true,
-		'query_var' => 'product_category',
-		'rewrite' => array('slug' => 'product_category')
+		'query_var' => 'products',
+		'rewrite' => array('slug' => 'products')
 	));
 }
 add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority

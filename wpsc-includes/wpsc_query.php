@@ -305,15 +305,17 @@ function wpsc_the_product_permalink() {
 * @return string - the product price
 */
 function wpsc_the_product_price() {
-	global $wpsc_query;
-//	exit('<pre>'.print_r($wpsc_query, true).'</pre>');
-	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);
-	$special_price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);	
+	global $wpsc_query;	
+	/*
 	if($special_price < $price) {
 		$output = nzshpcrt_currency_display($special_price, $wpsc_query->product['notax'],true, $wpsc_query->product['id']);
 	} else {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
 	}
+	*/
+	
+	$price = array_pop(get_post_meta(get_the_ID(), '_wpsc_price'));
+	$output = nzshpcrt_currency_display($price, 0, true);
 	return $output;
 }
 

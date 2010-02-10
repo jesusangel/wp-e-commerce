@@ -11,6 +11,49 @@
 
 
 
+
+/**
+ * wpsc_taxonomy_rewrite_rules function.
+ * modifies the rewrite rules for product URLs to add in the post type.
+ * 
+ * @access public
+ * @param array $rewrite_rules
+ * @return array - the modified rewrite rules
+ */
+function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
+	$target_string = "index.php?product";
+	$replacement_string = "index.php?post_type=wpsc-product&product";
+	foreach($rewrite_rules as $rewrite_key => $rewrite_result) {
+		if(stristr($rewrite_result, "index.php?product")) {
+			$rewrite_rules[$rewrite_key] = str_replace($target_string, $replacement_string, $rewrite_result);
+		}
+	}
+
+	return $rewrite_rules;
+}
+
+
+add_filter('rewrite_rules_array', 'wpsc_taxonomy_rewrite_rules');
+
+
+
+
+/**
+ * wpsc_query_vars function.
+ * adds in the post_type query var
+ * 
+ * @access public
+ * @param mixed $vars
+ * @return void
+ */
+function wpsc_query_vars($vars) {
+  $vars[] = "post_type";
+  return $vars;
+}
+add_filter('query_vars', 'wpsc_query_vars');
+
+
+
 /**
  * wpsc_is_product function.
  * 
@@ -18,7 +61,7 @@
  * @return boolean
  */
 function wpsc_is_product() {
-	global $wp_query;
+	global $wp_query, $rewrite_rules;
 	return $wp_query->is_product;
 }
 

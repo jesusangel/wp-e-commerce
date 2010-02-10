@@ -352,7 +352,10 @@ function wpsc_refresh_page_urls($content) {
   }
  return $content;
 }
-  
+
+
+
+ /*
 function wpsc_product_permalinks($rewrite_rules) {
 	global $wpdb, $wp_rewrite;
 
@@ -377,9 +380,9 @@ function wpsc_product_permalinks($rewrite_rules) {
 	$page_name = implode("/",$page_name_array);
 		
 	if(!function_exists('wpsc_rewrite_categories')) {	 // to stop this function from being declared multiple times
-		  /*
+		  *//*
 		   * This is the function for making the e-commerce rewrite rules, it is recursive
-		  */
+		  *//*
 		function wpsc_rewrite_categories($page_name, $id = null, $level = 0, $parent_categories = array(), $is_index = false) {
 			global $wpdb,$category_data;
 			if($is_index == true) {
@@ -395,6 +398,7 @@ function wpsc_product_permalinks($rewrite_rules) {
 				$category_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '0' ORDER BY `id`";
 				$category_list = $wpdb->get_results($category_sql,ARRAY_A);
 			}
+			
 			if($category_list != null)	{
 				foreach($category_list as $category) {
 					if($level === 0) {
@@ -439,22 +443,11 @@ function wpsc_product_permalinks($rewrite_rules) {
 }
 
 
-function wpsc_query_vars($vars) {
-	//   $vars[] = "product_category";
-	//   $vars[] = "product_name";
-  $vars[] = "category_id";
-  $vars[] = "product_url_name";
-  $vars[] = "wpsc_page";
-  return $vars;
-  }
-
-add_filter('query_vars', 'wpsc_query_vars');
-
 // using page_rewrite_rules makes it so that odd permalink structures like /%category%/%postname%.htm do not override the plugin permalinks.
 add_filter('page_rewrite_rules', 'wpsc_product_permalinks');
 
 
-
+*/
 
 /**
 * wpsc_obtain_the_title function, for replaacing the page title with the category or product
