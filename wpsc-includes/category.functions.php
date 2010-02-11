@@ -189,6 +189,14 @@ function wpsc_display_category_loop($query, $category_html){
 	if ( $wpsc_query->query_vars['category_id'] == $category_row['id']) {
 		$category_classes .= ' wpsc-current-cat';
 	}
+	foreach ( $wpsc_query->breadcrumbs as $breadcrumb ) {
+		if ( $breadcrumb['id'] == $category_row['id'] ) {
+			$category_classes .= ' wpsc-cat-ancestor';
+			break;
+		}
+	}
+	
+	
     $sub_categories = wpsc_display_category_loop($modified_query, $category_html);
     if($sub_categories != '') {
       $start_element = $query['subcategory_container']['start_element'];
