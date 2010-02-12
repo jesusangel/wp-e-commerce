@@ -204,7 +204,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	
 	if(isset($_GET['category'])) {
 		$category_id = $_GET['category'];
-		$query['product_category'] = $category_id;
+		$query['products'] = $category_id;
 	}
 	
 	

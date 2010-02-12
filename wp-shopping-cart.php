@@ -120,6 +120,7 @@ define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
 
 // start including the rest of the plugin here
 require_once(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/core.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/misc.functions.php');
@@ -437,7 +438,7 @@ add_action('plugins_loaded','wpsc_initialisation', 0);
  * @param object - reference to $wp_query
  * @return $query
  */
-function wpsc_query_modifier($query) {
+/*function wpsc_query_modifier($query) {
 	//echo "<pre>".print_r($query,true)."</pre>";
 	if($query->query_vars['taxonomy'] == 'wpsc_product_category') {
 		$query->is_product = true;
@@ -447,7 +448,7 @@ function wpsc_query_modifier($query) {
 }
 
 add_filter('parse_query', 'wpsc_query_modifier');
-
+*/
 // Register the wpsc post types
 function wpsc_register_post_types() {
 	register_post_type( 'wpsc-product', array(
@@ -460,7 +461,9 @@ function wpsc_register_post_types() {
 	register_taxonomy('wpsc_product_category', 'wpsc-product',array(
 		'hierarchical' => true,
 		'query_var' => 'products',
-		'rewrite' => array('slug' => 'products')
+		'rewrite' => array(
+			'slug' => 'products'
+		)
 	));
 }
 add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority

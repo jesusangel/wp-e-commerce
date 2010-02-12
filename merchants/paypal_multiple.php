@@ -1,4 +1,7 @@
 <?php
+return;
+exit();
+/*
 $nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Standard';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_multiple';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_multiple';
@@ -351,7 +354,7 @@ function nzshpcrt_paypal_ipn() {
 
 		/*
 		* Detect use of sandbox mode, if sandbox mode is present, send debugging email.
-		*/
+		*//*
 		if(stristr(get_option('paypal_multiple_url'), "sandbox") || (defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true)) ) {
 			$message = "This is a debugging message sent because it appears that you are using sandbox mode.\n\rIt is only sent if the paypal URL contains the word \"sandbox\"\n\r\n\r";
 			$message .= "RESULTS:\n\r".print_r($results,true)."\n\r\n\r";
@@ -637,5 +640,5 @@ $output .= "
 }
   
   
-add_action('init', 'nzshpcrt_paypal_ipn');
+add_action('init', 'nzshpcrt_paypal_ipn');*/
 ?>

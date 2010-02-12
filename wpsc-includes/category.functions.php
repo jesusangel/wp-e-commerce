@@ -30,7 +30,7 @@ function wpsc_list_categories($callback_function, $parameters = null, $category_
 		foreach((array)$category_list as $category) {
 			$callback_output = $callback_function($category, $level, $parameters);
 			if(is_array($callback_output)) {
-				$output .= $callback_output[0];
+				$output .= array_shift($callback_output);
 			} else {
 				$output .= $callback_output;  
 			}
@@ -175,9 +175,10 @@ function wpsc_end_category_query() {
 function wpsc_display_category_loop($query, $category_html, &$category_branch = null){
 	static $category_count_data = array(); // the array tree is stored in this
 	global $wpdb, $wpsc_query;
+	/*
 	$category_sql_segments = array();
-	$category_sql_segments[] = "`active`='1'";
 	
+	$category_sql_segments[] = "`active`='1'";
 	if(is_numeric($query['category_group']) ) {
 		$category_group = absint($query['category_group']);
 		$category_sql_segments[] = "`group_id`='$category_group'";
@@ -204,9 +205,16 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 	
 	// filter for other plugins
 	$category_sql_segments = apply_filters('wpsc_display_category_loop_category_sql_segments', $category_sql_segments); 
-	
 	$category_data = $wpdb->get_results("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segments)." ORDER BY `{$column}` $order",ARRAY_A);
+	//*/
 	
+	
+	$category_id = absint($query['parent_category_id']);
+	
+
+	//exit("<pre>".print_r($category_data,true)."</pre>");
+	$category_data = get_terms('wpsc_product_category','hide_empty=0&parent='.$category_id, OBJECT, 'display');
+	//print("<pre>".print_r($category_data,true)."</pre>");
 	$output ='';
 	
 	// if the category branch is identical to null, make it a reference to $category_count_data
@@ -220,51 +228,45 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 	
 		// modifys the query for the next round
 		$modified_query = $query;
-		$modified_query['parent_category_id'] = $category_row['id'];
+		$modified_query['parent_category_id'] = $category_row->term_id;
 		
 		// gets the count of products associated with this category
-		$category_count = $wpdb->get_var("SELECT COUNT(`p`.`id`)
-		FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` 
-		JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` 
-			ON `a`.`product_id` = `p`.`id` 
-		WHERE `a`.`category_id` IN ('{$category_row['id']}') 
-			AND `p`.`active` IN ('1') 
-			AND `p`.`publish` IN('1')");
+		$category_count = $category_row->count;
 		
 		
 		// Sticks the category description in
 		$category_description = '';
-		if($category_row['description'] != '') {
+		if($category_row->description != '') {
 			$start_element = $query['description_container']['start_element'];
 			$end_element = $query['description_container']['end_element'];
-			$category_description =  $start_element.wpautop(wptexturize( wp_kses(stripslashes($category_row['description']), $allowedtags ))).$end_element;
+			$category_description =  $start_element.wpautop(wptexturize( wp_kses(stripslashes($category_row->description), $allowedtags ))).$end_element;
 		}
 		
 		
 		// Creates the list of classes on the category item
-		$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row['id'];
-		if ( $wpsc_query->query_vars['category_id'] == $category_row['id']) {
+		$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row->term_id;
+		if ( $wpsc_query->query_vars['category_id'] == $category_row->term_id) {
 			$category_classes .= ' wpsc-current-cat';
 		}
 		
 		// Set the variables for this category
-		$category_branch[$category_row['id']]['children'] = array();
-		$category_branch[$category_row['id']]['count'] = (int)$category_count;
+		$category_branch[$category_row->term_id]['children'] = array();
+		$category_branch[$category_row->term_id]['count'] = (int)$category_count;
 		
 		
 		// Recurse into the next level of categories
-		$sub_categories = wpsc_display_category_loop($modified_query, $category_html, $category_branch[$category_row['id']]['children']);
+		$sub_categories = wpsc_display_category_loop($modified_query, $category_html, $category_branch[$category_row->term_id]['children']);
 		
 		// grab the product count from the subcategories		
-		foreach((array)$category_branch[$category_row['id']]['children'] as $child_category) {
-			$category_branch[$category_row['id']]['count'] += (int)$child_category['count'];
+		foreach((array)$category_branch[$category_row->term_id]['children'] as $child_category) {
+			$category_branch[$category_row->term_id]['count'] += (int)$child_category['count'];
 			//echo "<pre>".print_r($child_category, true)."</pre>";
 		}
 		
 		// stick the category count array together here
 		// this must run after the subcategories and the count of products belonging to them has been obtained
 
-		$category_count = $category_branch[$category_row['id']]['count'];
+		$category_count = $category_branch[$category_row->term_id]['count'];
 		
 		
 		$start_element = $query['products_count']['start_element'];
@@ -282,17 +284,17 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		
 		// get the category images
-		$category_image = wpsc_place_category_image($category_row['id'], $modified_query);
+		$category_image = wpsc_place_category_image($category_row->term_id, $modified_query);
 		
 		$width = $query['image_size']['width'] - 4;
 		$height = $query['image_size']['height'] - 4;
 		
 		$category_image_html = '';
 		if(($query['show_thumbnails'] == 1)) {
-			if(($category_row['image'] != '') && is_file(WPSC_CATEGORY_DIR.$category_row['image'])) {
-				$category_image_html = "<img src='$category_image' alt='{$category_row['name']}' title='{$category_row['name']}' class='wpsc_category_image' />";
+			if(($category_row['image'] != '') && is_file(WPSC_CATEGORY_DIR.$category_row->image)) {
+				$category_image_html = "<img src='$category_image' alt='{$category_row->name}' title='{$category_row->name}' class='wpsc_category_image' />";
 			} else {
-				$category_image_html = "";
+				$category_image_html  = "";
 				$category_image_html .= "				<span class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
 				$category_image_html .= "					<span class='link_substitute' >\n\r";
 				$category_image_html .= "						<span>".__('N/A', 'wpsc')."</span>\n\r";
@@ -304,7 +306,7 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		
 		// get the list of products associated with this category.
-		$category_product_list = wpsc_category_product_list($category_row['id']);
+		$category_product_list = wpsc_category_product_list($category_row->term_id);
 		$tags_to_replace = array('[wpsc_category_name]',
 		'[wpsc_category_description]',
 		'[wpsc_category_url]',
@@ -316,10 +318,10 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		'[wpsc_category_product_list]');
 		
 		$content_to_place = array(
-		htmlentities($category_row['name'],ENT_QUOTES, 'UTF-8'),
+		htmlentities($category_row->name,ENT_QUOTES, 'UTF-8'),
 		$category_description,
-		wpsc_category_url($category_row['id']),
-		$category_row['id'],
+		get_term_link($category_row->slug, 'wpsc_product_category'),
+		$category_row->term_id,
 		$category_classes,
 		$category_image_html,
 		$sub_categories,
