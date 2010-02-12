@@ -158,11 +158,11 @@ function wpsc_product_link($permalink, $post, $leavename) {
 		'%term_url%',
 		'%postname%'
 	);
-	$permalink = get_option('permalink_structure');
+	$permalink_structure = get_option('permalink_structure');
 	// This may become customiseable later
 	$our_permalink_structure = "%term_url%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product " 
-	if ( '' != $permalink && !in_array($post->post_status, array('draft', 'pending')) && ($post->post_type == 'wpsc-product') ) {
+	if ( '' != $permalink_structure && !in_array($post->post_status, array('draft', 'pending')) && ($post->post_type == 'wpsc-product') ) {
 		$product_categories = wp_get_object_terms($post->ID, 'wpsc_product_category');
 		
 		// If the product is associated with multiple categories, determine which one to pick	
@@ -200,7 +200,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 	return $permalink;
 }
 
-add_filter('post_link', 'wpsc_product_link', 10, 3);
+//add_filter('post_link', 'wpsc_product_link', 10, 3);
 
 
 /**
