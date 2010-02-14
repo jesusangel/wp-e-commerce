@@ -200,7 +200,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 	return $permalink;
 }
 
-//add_filter('post_link', 'wpsc_product_link', 10, 3);
+add_filter('post_link', 'wpsc_product_link', 10, 3);
 
 
 /**
