@@ -26,6 +26,7 @@ $image_height = get_option('single_view_image_height');
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
+					<?php if(get_option('show_thumbnails')) :?>
 					<div class="imagecol">
 						<?php if(wpsc_the_product_thumbnail()) :?> 	   
 								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
@@ -39,7 +40,7 @@ $image_height = get_option('single_view_image_height');
 							</div>
 						<?php endif; ?> 
 					</div>
-		
+					<?php endif; ?> 
 		
 					<div class="producttext">
 						<h2 class="prodtitles"><span><?php echo wpsc_the_product_title(); ?></span><?php echo wpsc_edit_the_product_link(); ?></h2>

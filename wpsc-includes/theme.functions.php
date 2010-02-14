@@ -279,19 +279,20 @@ function wpsc_user_dynamic_css() {
     if($single_thumbnail_width <= 0) {
       $single_thumbnail_width = 128;
     }
-		
+	$show_thumbnails = get_option('show_thumbnails');	
 		?>
-		
-    /*
+	    /*
      * Default View Styling
      */
+     	<?php if ($show_thumbnails) : ?>
+
 		div.default_product_display div.textcol{
 			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
 			<?php /*_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;  */ ?>
 			min-height: <?php echo $thumbnail_height;?>px;
 			_height: <?php echo $thumbnail_height;?>px;
 		}
-			
+		<?php endif; ?>	
 		div.default_product_display  div.textcol div.imagecol{
 			position:absolute;
 			top:0px;
