@@ -7,6 +7,9 @@ Author: Instinct Entertainment
 Author URI: http://getshopped.org
 */
 
+
+
+/* Products Page Styles */
 .wpsc-products {
 	margin-top: 30px;
 }
@@ -35,4 +38,224 @@ Author URI: http://getshopped.org
 
 .product-metadata {
 	clear: both;
+}
+
+
+/* Products Page ends */
+
+
+
+
+/* Checkout page  */
+
+
+
+
+
+/* Checkout Page Ends */
+
+
+/* Old CSS  */
+
+
+ 
+#change_country{
+ float:left;
+ }
+ 
+table.shoppingcart{
+ margin-left: -2px;
+ margin-bottom: 5px;
+ }
+
+table.shoppingcart tr td{
+ font-size: 8pt !important;
+ }
+ 
+div#sliding_cart{
+  margin: 0px;
+  padding: 0px;
+  background: none;
+  border: none;
+  }  
+
+span.items{
+ display:block;
+ margin:0 0 15px 0;
+}
+
+span.numberitems{
+ margin:0 5px 0 0;
+}
+
+span.total, span.gocheckout{
+display:block;
+}
+
+span.totalhead{
+font-weight:bold;
+margin-right:5px;
+}
+
+span.emptycart{
+ display:block;
+ margin:10px 0 0 0;
+}
+
+
+ span.wpsc{
+ font-size:0.8em;
+ }
+ 
+ 
+form.wpsc_checkout_forms {
+ text-align: left;
+
+}
+
+table.wpsc_checkout_table input.text, table.wpsc_checkout_table textarea, table.wpsc_checkout_table select, fieldset.wpsc_registration_form input {
+	margin-right:0;
+	width:260px;
+	font-family:"Verdana","Lucida Fax","Lucida Grande","Lucida Sans Unicode",Arial,sans-serif;
+	font-size: 10pt;
+}
+
+table.wpsc_checkout_table select {
+	width:271px !important;
+}
+
+
+
+table.productcart{
+ width: 100%;
+ margin-top: 10px;
+ margin-bottom: 10px;
+ padding: 0px;
+ border-collapse: collapse;
+ padding-top: 3px;
+ border: none;
+ font-size: inherit;
+ }
+
+table.productcart tr td{
+ padding-bottom: 5px;
+ font-size: 11px;
+ font-size: inherit;
+ }
+
+table.productcart tr.product_row td{
+ padding-bottom: 5px;
+ font-size: inherit;
+ vertical-align: middle !important;
+ }
+
+table.productcart tr.product_row td{
+ padding-bottom: 5px;
+ font-size: inherit;
+ vertical-align: middle !important;
+ }
+
+
+form.adjustform{
+ display: inline;
+ }
+
+table.productcart tr.firstrow td{
+ font-weight:bold;
+ background-color: #e5e5e5;
+ border-left: 2px solid white;
+ }
+
+table.productcart tr.firstrow td.firstcol{
+ border-left: none;
+ }
+
+
+button.remove_button {
+  margin: 0px !important;
+}
+
+
+table.productcart tr.total_price td{
+ border-top: 1px solid #999999 !important;
+ border-bottom: 1px solid #999999 !important;
+ font-weight: bold;
+ padding-top: 4px;
+ }
+
+ 
+ul.checkout_links li{
+ color: #000000 !important;
+ }
+ 
+a.termsandconds{
+ text-decoration: underline;
+ }
+
+
+.validation-error input, .validation-error textarea{
+border: 1px solid red;
+}
+
+p.validation-error{
+	color: red;
+	margin-bottom: 0px;
+} 
+    
+table.logdisplay tr{ background-color: #eeeeee; }
+ 
+
+    
+table.wpsc_checkout_table tr td{
+ text-align: left;
+ }
+  
+  
+span.pricedisplay{
+
+ width: 80px;
+ float:right; 
+ }
+ 
+select#current_country {
+  margin-right:10px;
+  width: 190px;
+}
+
+input#zip{
+  margin: 0px;
+}
+
+
+
+*html .ui-datepicker-prompt {
+	width: 185px;
+}
+.shopping-cart-wrapper form {
+  clear: right;
+}
+
+
+.widget_wpsc_categorisation .wpsc_categorisation_group {
+width:100%;
+float:right;
+margin-bottom:10px;
+position:relative;
+}
+
+ .clear_category_group {
+	clear: both;
+}
+
+div.shopping_cart_container table tr th {
+	text-align: left;
+	font-family:'Lucida Grande',Verdana,Arial,Sans-Serif;
+	font-size:1em;
+  font-weight: bold;
+}
+
+
+
+.wpsc_product_rating .star a{
+	outline: none;
 }

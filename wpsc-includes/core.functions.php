@@ -45,6 +45,8 @@ function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
 	$new_rewrite_rules['products/(.+?)/product/([^/]+)/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]';
 	$new_rewrite_rules['products/.+?/([^/]+)/page/?([0-9]{1,})?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&paged=$matches[2]';
 	$new_rewrite_rules['products/(.+?)/([^/]+)?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]';
+	$new_rewrite_rules['(products/checkout)(/[0-9]+)?/?$'] = 'index.php?pagename=$1&page=$2';
+
 	
 	$last_target_rule = array_pop($target_rule_set);
 	
@@ -93,11 +95,14 @@ add_filter('query_vars', 'wpsc_query_vars');
  */
  
 function wpsc_query_modifier($query) {
-
-	$products_page_id = 173; // setting for the products page needs be put in this variable
+	// These values are to be dynamically defined
+	$checkout_pagename = "products/checkout"; 
+	$products_pagename = "products"; 
 	
+	
+	// $products_page_id = 173; // setting for the products page needs be put in this variable
 	// Check if we are querying the products page, if so, prevent it from displaying the page contents, make it display products instead.
-	if(isset($query->queried_object_id) && $query->queried_object_id == $products_page_id ) {
+	if(isset($query->queried_object_id) && ($query->query_vars['pagename'] == $products_pagename )) {
 	    // modifying the page type
 		$query->is_page = false;
 		$query->is_singular = false;
@@ -123,6 +128,13 @@ function wpsc_query_modifier($query) {
 		}
 	
 	}
+	
+	if($query->query_vars['pagename'] == $checkout_pagename ) {
+		$query->is_checkout = true;
+	}
+	
+	//echo $query->query_vars['pagename'];
+	
 	return $query;
 }
 
@@ -138,6 +150,18 @@ add_filter('parse_query', 'wpsc_query_modifier');
 function wpsc_is_product() {
 	global $wp_query, $rewrite_rules;
 	return $wp_query->is_product;
+}
+
+/**
+ * wpsc_is_product function.
+ * 
+ * @since 3.8
+ * @access public
+ * @return boolean
+ */
+function wpsc_is_checkout() {
+	global $wp_query, $rewrite_rules;
+	return $wp_query->is_checkout;
 }
 
 
@@ -210,11 +234,9 @@ add_filter('post_link', 'wpsc_product_link', 10, 3);
  * @access public
  * @return void
  */
-function wpsc_get_product_template() {
-	return get_query_template('products');
+function wpsc_get_template($template) {
+	return get_query_template($template);
 }
-
-
 
 /**
  * wpsc_product_template_fallback function.
@@ -224,14 +246,31 @@ function wpsc_get_product_template() {
  * @param mixed $template_path
  * @return string - the corrected template path
  */
-function wpsc_product_template_fallback($template_path) {
-	if(!file_exists($template_path)) {
-		exit($template_path);
+function wpsc_template_fallback($template_path) {
+	global $wpsc_theme_path;
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	$prospective_file_name = basename("{$template_path}.php");
+	$prospective_file_path = trailingslashit($cur_wpsc_theme_folder).$prospective_file_name;
+	//exit($prospective_file_path);
+	
+	if(!file_exists($prospective_file_path)) {
+		exit($prospective_file_path);
 	}
-	return $template_path;
+	return $prospective_file_path;
 }
 
+
+function wpsc_product_template_fallback() {
+	return wpsc_template_fallback('product');
+
+}
 add_filter("product_template", 'wpsc_product_template_fallback');
+
+function wpsc_checkout_template_fallback() {
+	return wpsc_template_fallback('checkout');
+
+}
+add_filter("checkout_template", 'wpsc_checkout_template_fallback');
 
 
 /**
@@ -243,7 +282,11 @@ add_filter("product_template", 'wpsc_product_template_fallback');
  */
 function wpsc_template_loader() {
 	global $wp_query;
-	if ( wpsc_is_product() && $template = wpsc_get_product_template() ) {
+	if ( wpsc_is_product() && $template = wpsc_get_template('products') ) {
+		include($template);
+		exit();
+	}
+	if ( wpsc_is_checkout() && $template = wpsc_get_template('checkout') ) {
 		include($template);
 		exit();
 	}
@@ -285,6 +328,6 @@ function wpsc_select_theme_functions() {
 	}
   // end add by xiligroup.dev
 }
-add_action('wp','wpsc_select_theme_functions',10,1);
 
+add_action('wp','wpsc_select_theme_functions',10,1);
 ?>

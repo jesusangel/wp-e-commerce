@@ -14,7 +14,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.8');
-define('WPSC_MINOR_VERSION', '0');
+define('WPSC_MINOR_VERSION', '00000');
 
 define('WPSC_PRESENTABLE_VERSION', '3.8 Development');
 
@@ -378,7 +378,7 @@ add_action('template_redirect', 'wpsc_start_the_query', 0);
  * Check to see if the session exists, if not, start it
  */
 if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSION)) {
-/*   session_start(); */
+  session_start();
 }
 if(!function_exists('wpsc_initialisation')){
 	function wpsc_initialisation() {

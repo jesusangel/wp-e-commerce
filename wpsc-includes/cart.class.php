@@ -313,9 +313,11 @@ function wpsc_cart_item_url() {
 */
 function wpsc_cart_item_image($width = null, $height = null) {
 	global $wpsc_cart;
-	
+	$image_data = $wpsc_cart->cart_item->thumbnail_image;
+	//echo "<pre>".print_r($wpsc_cart->cart_item,true)."</pre>";
+
 	if(($width > 0) && ($height > 0)) {
-		$image_path = "index.php?image_id=".$wpsc_cart->cart_item->image_id."&amp;thumbnail=true&amp;width=".$width."&amp;height=".$height."";
+		$image_path = "index.php?wpsc_action=scale_image&amp;attachment_id={$image_data->ID}&amp;width=".$width."&amp;height=".$height."";
 	} else {
 		$image_path = WPSC_THUMBNAIL_URL.$wpsc_cart->cart_item->thumbnail_image;	
 		if(is_ssl()) {
@@ -1627,92 +1629,75 @@ class wpsc_cart_item {
 	 * @return array array of monetary and other values
 	*/
 	function refresh_item() {
-    global $wpdb, $wpsc_shipping_modules, $wpsc_cart;
-    $product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
-    $priceandstock_id = 0;
+		global $wpdb, $wpsc_shipping_modules, $wpsc_cart;
+		$product_id = $this->product_id;
+		//$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
+		$product = get_post($this->product_id);
+		$product_meta = get_metadata('post', $this->product_id);
+		//print("<pre>".print_r($product,true)."</pre>");
+		
+		$this->sku = get_post_meta($product_id, '_wpsc_sku', true);
+		$price = get_post_meta($product_id, '_wpsc_price', true);
+		$product_meta = get_post_meta($product_id, '_wpsc_product_metadata');
+		$this->stock = get_post_meta($product_id, '_wpsc_stock', true);
+		$this->is_donation = get_post_meta($product_id, '_wpsc_is_donation', true);
 
-    if(defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
-			$this->product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
-    }
-    
-    if(count($this->variation_values) > 0) {
-      // if there are variations, get the price of the combination and the names of the variations.
-			$variation_data = $wpdb->get_results("SELECT *FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$this->variation_values)."')", ARRAY_A);
-			$this->variation_data = $variation_data;
-			$variation_names = array();
-			$variation_ids = array();
-			foreach($variation_data as $variation_row) {
-				$variation_names[] = $variation_row['name'];
-				$variation_ids[] = $variation_row['variation_id'];
-			}
-			
-			asort($variation_ids);         
-			$variation_id_string = implode(",", $variation_ids);
-			
-			$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$this->product_id}' AND `value_id` IN ( '".implode("', '",$this->variation_values )."' ) AND `all_variation_ids` IN('$variation_id_string') GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($this->variation_values)."' LIMIT 1");	
-			
-			$priceandstock_values = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-			if(($priceandstock_values['special_price'] > 0) && ($priceandstock_values['special_price'] < $priceandstock_values['price'])) {
-				$price = $priceandstock_values['special_price'];
-			} else {
-				$price = $priceandstock_values['price'];
-			}
-			$sku = $priceandstock_values['sku'];
-						
-			$weight = wpsc_convert_weights($priceandstock_values['weight'], $priceandstock_values['weight_unit']);
-			$file_id = $priceandstock_values['file'];
-			
-		} else {
-		  $priceandstock_id = 0;
-			$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
-		  // otherwise, just get the price.
-			if(($product['special_price'] > 0) and (($product['price'] - $product['special_price']) >= 0)) {
-				$sale_discount = (float)$product['special_price'];
-			} else {
-				$sale_discount = 0;
-			}
-			$price = $product['price'] - $sale_discount;
-
-			$file_id = $product['file'];
-			$sku = get_product_meta($this->product_id, 'sku', true);
-			
-			
-			// if we are using table rate price
-			$levels = get_product_meta($this->product_id, 'table_rate_price');
-			if ($levels != '') {
-				foreach((array)$levels['quantity'] as $key => $qty) {
-					if ($this->quantity >= $qty) {
-						$unit_price = $levels['table_price'][$key];
-						if ($unit_price != '') {
-							$price = $unit_price;
-						}
+		
+		
+		
+		
+		//exit("<pre>".print_r($product_meta,true)."</pre>");
+		$priceandstock_id = 0;
+		//$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
+		
+		//$price = $product['price'];
+		
+		//$file_id = $product['file'];
+		//$sku = get_product_meta($this->product_id, 'sku', true);
+		
+		
+		// if we are using table rate price
+		$levels = get_product_meta($this->product_id, 'table_rate_price');
+		if ($levels != '') {
+			foreach((array)$levels['quantity'] as $key => $qty) {
+				if ($this->quantity >= $qty) {
+					$unit_price = $levels['table_price'][$key];
+					if ($unit_price != '') {
+						$price = $unit_price;
 					}
 				}
 			}
 		}
+		
 		// create the string containing the product name.
-		$product_name = $product['name'];
-		if(count($variation_names) > 0) {
-			$product_name .= " (".implode(", ",$variation_names).")";
-		}
+		$product_name = $product->post_title;
 
 		$this->product_name = $product_name;
 		$this->priceandstock_id = $priceandstock_id;
-		$this->is_donation = (bool)$product['donation'];
-		// change notax to boolean and invert it
-		$this->apply_tax = !(bool)$product['notax'];
+		
+		
+		if(is_numeric($product_meta['custom_tax'])) {
+			$this->tax_rate = $product_meta['custom_tax'];
+		} else {
+			$this->tax_rate = $wpsc_cart->tax_percentage;
+		
+		}
+		
+		
 		// change no_shipping to boolean and invert it
-		$this->uses_shipping = !(bool)$product['no_shipping'];
-		$this->has_limited_stock = (bool)(int)$product['quantity_limited'];
+		$this->uses_shipping = !(bool)$product_meta['no_shipping'];
+		$this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
+		
+		
 		if($this->is_donation == 1) {
 			$this->unit_price = $this->provided_price;
 		} else {
 			$this->unit_price = $price;
 		}
-		$this->weight = $weight;
+		
+		
 		$this->total_price = $this->unit_price * $this->quantity;
 
-		$this->sku = $sku;
 		
 		$category_data = $wpdb->get_results("SELECT `category`.`id`,
 		`category`.`nice-name`
@@ -1731,24 +1716,45 @@ class wpsc_cart_item {
 			$this->category_id_list[] = $category_row['id'];
 		}
 		
-		if($this->apply_tax == true) {
-		  $this->taxable_price = $this->total_price;
-			$custom_tax = get_product_meta($this->product_id, 'custom_tax');
-			if(is_numeric($custom_tax)) {
-			  $this->custom_tax_rate = $custom_tax;
-			  $this->tax = $this->taxable_price * ($this->custom_tax_rate/100);
-			} else {
-			  $this->tax = $this->taxable_price * ($wpsc_cart->tax_percentage/100);
-			}
-		}
-		$this->product_url = wpsc_product_url($this->product_id);
 		
-		$this->image_id = $product['image'];
-		if($product['thumbnail_image'] != null) {
-			$this->thumbnail_image = $product['thumbnail_image'];
-		} else {
-			$this->thumbnail_image = $product['image'];
+		
+		
+		
+		
+		if($this->tax_rate > 0) {
+		  $this->taxable_price = $this->total_price;
+		  $this->tax = $this->taxable_price * ($this->tax_rate/100);
 		}
+		
+		
+		$this->product_url = wpsc_product_url($product_id);
+		
+		
+		$attached_image = (array)get_posts(array(
+			'post_type' => 'attachment',
+			'numberposts' => 1,
+			'post_status' => null,
+			'post_parent' => get_the_ID(),
+			'orderby' => 'menu_order',
+			'order' => 'ASC'
+		));
+		
+		
+		if($attached_image != null) {
+			$this->thumbnail_image = array_shift($attached_image);
+			
+		}
+	
+	
+		
+		//$this->image_id = $product['image'];
+		//if($product['thumbnail_image'] != null) {
+		//} else {
+		///	$this->thumbnail_image = $product['image'];
+		//}
+
+
+
 
 		$product_files = (array)get_product_meta($this->product_id, 'product_files');
 		

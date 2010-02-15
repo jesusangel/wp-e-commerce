@@ -6,7 +6,11 @@
 */
 function wpsc_uses_coupons() {
 	global $wpsc_coupons;
-	return $wpsc_coupons->uses_coupons();
+	
+	if(is_object($wpsc_coupons)) {
+		return $wpsc_coupons->uses_coupons();
+	}
+	return false;
 }
 function wpsc_coupons_error(){
 	global $wpsc_coupons;
