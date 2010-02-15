@@ -929,7 +929,10 @@ function wpsc_check_weight($state, $product) {
 	$custom_shipping = (array)get_option('custom_shipping_options');
 	$has_no_weight = false;
 	// only do anything if UPS is on and shipping is used
-	if((array_search('ups', $custom_shipping) !== false) && ($product['no_shipping'] != 1)) {
+	$weightRelatedShippingModules = array('ups','usps','weightrate');
+
+	if((array_intersect($weightRelatedShippingModules, $custom_shipping))&& ($product['no_shipping'] != 1)) {
+	//	exit('true?');
 		$excluded_values = '';
 		// get the variation IDs  associated with this product
 		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `type` IN ('product') AND `associated_id` IN ('{$product['id']}')");
@@ -958,7 +961,7 @@ function wpsc_check_weight($state, $product) {
 		}
 		if($has_no_weight === true) {
 			$state['state'] = true;
-			$state['messages'][] = __('UPS does not support products without a weight set. Please either disable shipping for this product or give it a weight', 'wpsc');
+			$state['messages'][] = __('One or more of your shipping modules does not support products without a weight set. Please either disable shipping for this product or give it a weight', 'wpsc');
 		}
 	}
 	return array('state' => $state['state'], 'messages' => $state['messages']);

@@ -287,7 +287,7 @@ if(isset($_GET['token'])) {
    <td>
    
    <input type='hidden' value='true' name='add_coupon' />
-   <input type='submit' value='Add Coupon' name='submit_coupon' />
+   <input type='submit' value='Add Coupon' name='submit_coupon' class='button-primary' />
    </td>
  </tr>
  <tr><td colspan="2">

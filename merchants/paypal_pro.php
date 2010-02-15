@@ -116,7 +116,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `name` ='".$value['value']."' LIMIT 1";
 			$data['STATE'] = $wpdb->get_var($sql);
 		}else{
-			$data['STATE']='CA';
+		//	$data['STATE']='CA';
 		}
 		if(($value['unique_name']=='billingcountry') && $value['value'] != ''){
 		

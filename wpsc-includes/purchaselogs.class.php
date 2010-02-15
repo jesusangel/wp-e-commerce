@@ -498,15 +498,20 @@ function wpsc_display_purchlog_shipping_city(){
 }
 function wpsc_display_purchlog_shipping_state_and_postcode(){
 	global $purchlogitem;
-	$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
-	if(is_array($country) && is_numeric($country[0])){
-		$state = $purchlogitem->shippingstate($country[0]);
-		$country = $country[1];
+//	exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
+	if($purchlogitem->shippinginfo['shippingstate']['value'] != ''){
+		$state = $purchlogitem->shippingstate($purchlogitem->shippinginfo['shippingstate']['value']);
+		//exit('State: '.$state);
 	}else{
-		$state = $purchlogitem->shippingstate($country[1]);
-		$country = $country[0];
+		$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
+		if(is_array($country) && is_numeric($country[0])){
+			$state = $purchlogitem->shippingstate($country[0]);
+			$country = $country[1];
+		}else{
+			$state = $purchlogitem->shippingstate($country[1]);
+			$country = $country[0];
+		}
 	}
-
 	
 	return $state.', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 	//return $purchlogitem->shippinginfo['shippingstate']['value'].', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];

@@ -744,15 +744,15 @@ function wpsc_packing_slip($purchase_id) {
 			
 			if($input_data != null) {
         $form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
-        
+    // exit('<pre>'.print_r($purch_data, true).'</pre>');
         foreach($form_data as $form_field) {
           switch($form_field['type']) {
-					case 'country':
+			case 'country':
 
 						$delivery_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape( $purch_data['billing_country'])."')");
 
-            if(is_numeric($purch_data['shipping_region']) && ($delivery_region_count > 0)) {
-              echo "  <tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+            if(is_numeric($purch_data['billing_region']) && ($delivery_region_count > 0)) {
+              echo "  <tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['billing_region'])."</td></tr>\n\r";
             }
             echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".wpsc_get_country($purch_data['billing_country'])."</td></tr>\n\r";
             break;
@@ -766,7 +766,11 @@ function wpsc_packing_slip($purchase_id) {
             break;
             
             default:
-            echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+            if($form_field['unique_name'] == 'shippingstate'){
+            	echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+            }else{
+            	echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+            }
             break;
           }
         }
