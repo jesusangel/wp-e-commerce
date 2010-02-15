@@ -357,9 +357,9 @@ register_activation_hook(__FILE__, 'wpsc_install');
 
 if(!function_exists('wpsc_start_the_query')) {
 	function wpsc_start_the_query() {
-	  global $wp_query, $wpsc_query;
-	  $wpsc_query = new WPSC_query();
-	
+		global $wp_query, $wpsc_query;
+		$wpsc_query = new WPSC_query();
+			
 		$post_id = $wp_query->post->ID;
 		$page_url = get_permalink($post_id);
 		if(get_option('shopping_cart_url') == $page_url) {

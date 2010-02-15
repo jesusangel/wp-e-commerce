@@ -1080,6 +1080,8 @@ class WPSC_Query Extends WP_Query{
 	 */
 	function WPSC_Query ($query = '') {
 		global $wp_query;
+		
+		_deprecated_function( __FUNCTION__, '3.8', 'WPSC Query is deprecated, use WP Query' );
 /*
 		$page_id = get_the_ID();
 		$page_data = get_page( $page_id );
