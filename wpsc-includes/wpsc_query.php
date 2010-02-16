@@ -1001,6 +1001,15 @@ function wpsc_product_count() {
 }
 
 /**
+* wpsc total product count function
+* @return int - total number of products
+*/
+function wpsc_total_product_count() {
+	global $wpsc_query;
+	return $wpsc_query->total_product_count;
+}
+
+/**
  * The WPSC Query class.
  *
  * @since 3.7
@@ -1022,6 +1031,7 @@ class WPSC_Query {
 	// product loop variables.
 	var $products;
 	var $product_count = 0;
+	var $total_product_count = 0;
 	var $current_product = -1;
 	var $in_the_loop = false;
 	var $product;
@@ -1528,6 +1538,8 @@ class WPSC_Query {
 		//echo "{$sql}";
 		$this->category = $this->query_vars['category_id'];
 		$this->products = $wpdb->get_results($sql,ARRAY_A);
+		
+		$this->total_product_count = $rowcount;
 		
 		if($rowcount > $products_per_page) {
 				if($products_per_page > 0) {
