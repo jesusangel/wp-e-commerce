@@ -260,11 +260,11 @@ function wpsc_template_fallback($template_path) {
 }
 
 
-function wpsc_product_template_fallback() {
-	return wpsc_template_fallback('product');
+function wpsc_products_template_fallback() {
+	return wpsc_template_fallback('products');
 
 }
-add_filter("product_template", 'wpsc_product_template_fallback');
+add_filter("products_template", 'wpsc_products_template_fallback');
 
 function wpsc_checkout_template_fallback() {
 	return wpsc_template_fallback('checkout');

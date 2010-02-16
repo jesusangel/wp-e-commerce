@@ -42,9 +42,10 @@ get_header(); ?>
 					foreach($image_meta as $meta_name => $meta_value) {
 						$image_meta[$meta_name] = maybe_unserialize(array_pop($meta_value));
 					}
-					$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$primary_image->ID}&amp;width=120&amp;height=120";
+					//$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$primary_image->ID}&amp;width=120&amp;height=120";
+					//echo wpsc_product_image($primary_image->ID, 120, 120);
 					?>
-					<img class='product-image' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
+					<img class='product-image' src='<?php echo wpsc_product_image($primary_image->ID, 120, 120); ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
 					<?php
 				}
 				?>
@@ -54,9 +55,11 @@ get_header(); ?>
 	
 					<div class="entry">
 						<?php the_content('Read the rest of this entry &raquo;'); ?>
-					</div>
+					
 					
 					<span class="product-price"><?php echo __('Price', 'wpsc'); ?>: <?php echo wpsc_the_product_price(); ?></span>
+					</div>
+					
 					
 					<form id="product_<?php the_ID(); ?>" name="product_<?php the_ID(); ?>" method="post" action="https://sandbox.boiling-pukeko.geek.nz/products-page/" enctype="multipart/form-data" class="product_form">
 						<input type="hidden" name="wpsc_ajax_action" value="add_to_cart">

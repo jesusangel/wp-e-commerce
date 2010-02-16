@@ -119,8 +119,9 @@ define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
 // define('WPSC_TABLE_LOGGED_SUBSCRIPTIONS', "{$wp_table_prefix}wpsc_logged_subscriptions");
 
 // start including the rest of the plugin here
-require_once(WPSC_FILE_PATH.'/wpsc-includes/wpsc_query.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/core.functions.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/product-template.php');
+
 require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/misc.functions.php');
@@ -357,8 +358,8 @@ register_activation_hook(__FILE__, 'wpsc_install');
 
 if(!function_exists('wpsc_start_the_query')) {
 	function wpsc_start_the_query() {
-		global $wp_query, $wpsc_query;
-		$wpsc_query = new WPSC_query();
+		global $wp_query;
+		//$wpsc_query = new WPSC_query();
 			
 		$post_id = $wp_query->post->ID;
 		$page_url = get_permalink($post_id);
