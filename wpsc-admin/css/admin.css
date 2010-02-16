@@ -893,7 +893,7 @@ div.select_product_file, div.edit_select_product_file {
 a.file_delete_button {
 	cursor:pointer;
 	float:right;
-	margin-top:-17px;
+/* 	margin-top:-17px; */
 	display: block;
 }
 
