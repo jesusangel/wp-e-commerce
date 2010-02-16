@@ -545,7 +545,7 @@ jQuery(document).ready(
 		
 		jQuery("input.custom_gateway").change(
 			function() {
-				if(jQuery(this).attr('checked') == 'checked') {
+				if(jQuery(this).attr('checked') == true) {
 					parent_div = jQuery(this).parents("div.custom_gateway");
 					jQuery('table input',parent_div).attr( 'disabled', false);
 					jQuery('table',parent_div).css('display', 'block');

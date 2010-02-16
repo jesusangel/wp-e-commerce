@@ -429,9 +429,11 @@ class wpsc_checkout {
 				$options = $this->get_checkout_options($this->checkout_item->id);	
 				if($options != ''){
 					$i = mt_rand();
+					$j=0;
 					foreach($options as $label=>$value){
-						$output .= "<input type='hidden' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='-1' name='collected_data[{$this->checkout_item->id}][".$i."]'/><input type='checkbox' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='".$value."' name='collected_data[{$this->checkout_item->id}][".$i."]'/> ";
+						$output .= "<input type='hidden' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='-1' name='collected_data[{$this->checkout_item->id}][".$i."]'/><input type='checkbox' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='".$value."' name='collected_data[{$this->checkout_item->id}][".$i."][".$j."]'/> ";
 						$output .= "<label for='".$this->form_element_id()."'>".$label."</label>";
+						$j++;
 					}
 				}
 			break;
@@ -505,7 +507,9 @@ class wpsc_checkout {
    global $wpdb, $current_user, $user_ID;
    $any_bad_inputs = false;
    // Credit Card Number Validation for Paypal Pro and maybe others soon
-   	  if(isset($_POST['card_number'])){
+   if(wpsc_cart_total(false) != 0){
+
+   if(isset($_POST['card_number'])){
    		if($_POST['card_number'] != ''){
    			$ccregex='/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/';
    			if(!preg_match($ccregex, $_POST['card_number'])){
@@ -515,8 +519,7 @@ class wpsc_checkout {
 				$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
    			}else{
    				$_SESSION['wpsc_gateway_error_messages']['card_number'] = '';
-   			}
-   		
+   			}   		
    		}else{
 
 
@@ -529,17 +532,17 @@ class wpsc_checkout {
    }else{
    		$_SESSION['wpsc_gateway_error_messages']['card_number'] = '';
    }
-      	if(isset($_POST['card_number1']) && isset($_POST['card_number2']) && isset($_POST['card_number3']) && isset($_POST['card_number4'])){
+   if(isset($_POST['card_number1']) && isset($_POST['card_number2']) && isset($_POST['card_number3']) && isset($_POST['card_number4'])){
    		if($_POST['card_number1'] != '' && $_POST['card_number2'] != '' && $_POST['card_number3'] != '' && $_POST['card_number4'] != '' && is_numeric($_POST['card_number1']) && is_numeric($_POST['card_number2']) && is_numeric($_POST['card_number3']) && is_numeric($_POST['card_number4'])){
       		$_SESSION['wpsc_gateway_error_messages']['card_number'] = '';	
-   	}else{
-   	
-   			$any_bad_inputs = true;
-			$bad_input = true;
-			$_SESSION['wpsc_gateway_error_messages']['card_number'] = __('Please enter a valid', 'wpsc') . " " . strtolower('card number') . ".";
-			$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
-
-   	}
+	   	}else{
+	   	
+	   			$any_bad_inputs = true;
+				$bad_input = true;
+				$_SESSION['wpsc_gateway_error_messages']['card_number'] = __('Please enter a valid', 'wpsc') . " " . strtolower('card number') . ".";
+				$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
+	
+	   	}
    	}
     if(isset($_POST['expiry'])){
 	   	if(($_POST['expiry']['month'] != '') && ($_POST['expiry']['month'] != '') && is_numeric($_POST['expiry']['month']) && is_numeric($_POST['expiry']['year'])){
@@ -550,8 +553,6 @@ class wpsc_checkout {
 			$_SESSION['wpsc_gateway_error_messages']['expdate'] = __('Please enter a valid', 'wpsc') . " " . strtolower('Expiry Date') . ".";
 			$_SESSION['wpsc_checkout_saved_values']['expdate'] = '';
 	   	}
-	
-   
    }
    if(isset($_POST['card_code'])){
    	if(($_POST['card_code'] == '') || (!is_numeric($_POST['card_code']))){
@@ -575,6 +576,7 @@ class wpsc_checkout {
    	}
    
    }
+   }//closes main bracket
    	if(isset($_POST['log']) || isset($_POST['pwd']) || isset($_POST['user_email']) ) {
 			$results = wpsc_add_new_user($_POST['log'], $_POST['pwd'], $_POST['user_email']);
 			$_SESSION['wpsc_checkout_user_error_messages'] = array();
@@ -622,10 +624,25 @@ class wpsc_checkout {
 					case "heading":
 					break;
 					case "select":
-					if($value == '-1'){
-						$any_bad_inputs = true;
-						$bad_input = true;					
-					}
+					case 'checkbox':						
+						if(is_array($value)){
+							foreach($value as $v){
+								if($v == '-1'){
+									$select_bad_input++;				
+								}else{
+									$valid_select_input++;
+								}
+							}
+							if(count($value) == $select_bad_input){
+								$any_bad_inputs = true;
+								$bad_input = true;					
+							}
+						}else{
+							if($value == '-1'){
+								$any_bad_inputs = true;
+								$bad_input = true;					
+							}
+						}
 					break;
 					default:
 					if($value == null) {
@@ -687,7 +704,18 @@ class wpsc_checkout {
 			}elseif(is_array($value)) {
 			//	echo('<pre>'.print_r($value, true).'</pre>');
 			  	foreach((array)$value as $v){
-			  	
+			  		if(is_array($v)){
+			  			$options = array();
+//			  			exit('<pre>'.print_r($v, true).'</pre>');
+			  			foreach($v as $option){
+			  				if($value != '-1'){
+			  					$options[] = $option;
+			  				}
+			  			}
+			  			
+			  			$v = maybe_serialize($options);
+			  			$v = implode(',', $options);
+			  		}
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $v));
 			  	}
 			}else{

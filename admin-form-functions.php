@@ -332,7 +332,7 @@ $conditions = unserialize($coupon['condition']);
   $end_timestamp = strtotime($coupon['expiry']);
   $id = $coupon['id'];
   $output = '';
-  $output .= "<form class='displaynone' name='edit_coupon' id='".$coupon['coupon_code']."' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
+  $output .= "<form class='displaynone' name='edit_coupon' id='".$coupon['coupon_code']."' method='post' action=''>\n\r";
     $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
   $output .= "<table class='add-coupon'>\n\r";
   $output .= " <tr>\n\r";

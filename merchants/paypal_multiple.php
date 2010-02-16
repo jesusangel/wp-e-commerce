@@ -187,7 +187,9 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 	
      
     if($_POST['collected_data'][get_option('paypal_form_state')] != '') {   
-    	$data['state'] =  urlencode($_POST['collected_data'][get_option('paypal_form_state')]); 
+    	if(!is_array($_POST['collected_data'][get_option('paypal_form_state')])){
+    		$data['state'] =  urlencode($_POST['collected_data'][get_option('paypal_form_state')]); 
+    	}
     }   
       if($_POST['collected_data'][get_option('paypal_form_country')] != '') {
     	if(is_array($_POST['collected_data'][get_option('paypal_form_country')])) {

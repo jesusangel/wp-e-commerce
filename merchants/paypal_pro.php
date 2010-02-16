@@ -119,8 +119,11 @@ function gateway_paypal_pro($seperator, $sessionid){
 		//	$data['STATE']='CA';
 		}
 		if(($value['unique_name']=='billingcountry') && $value['value'] != ''){
-		
-			$data['COUNTRYCODE']	= $value['value'];
+			if($value['value'] == 'UK'){
+				$data['COUNTRYCODE'] = 'GB';
+			}else{
+				$data['COUNTRYCODE']	= $value['value'];
+			}
 		}		
 		if(($value['unique_name']=='billingpostcode') && $value['value'] != ''){
 			$data['ZIP']	= $value['value'];
@@ -148,7 +151,12 @@ function gateway_paypal_pro($seperator, $sessionid){
 		}else{
 		}	
 		if(($value['unique_name']=='shippingcountry') && $value['value'] != ''){
-			$data['SHIPTOCOUNTRY']	= $value['value'];
+			if($value['value'] == 'UK'){
+				$data['SHIPTOCOUNTRY'] = 'GB';
+			}else{
+				$data['SHIPTOCOUNTRY']	= $value['value'];
+			}
+			
 		}	
 		if(($value['unique_name']=='shippingpostcode') && $value['value'] != ''){
 			$data['SHIPTOZIP']	= $value['value'];
