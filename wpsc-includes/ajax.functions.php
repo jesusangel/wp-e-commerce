@@ -886,7 +886,7 @@ function nzshpcrt_download_file() {
 		    $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `ip_number` = '{$ip_number}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
 		  } else if($ip_number != $download_data['ip_number']) {
 		    // if the IP number is set but does not match, fail here.
-				exit(WPSC_DOWNLOAD_INVALID);
+				exit(_e('This download is no longer valid, Please contact the site administrator for more information.','wpsc'));
 		  }
 		}
    
@@ -945,7 +945,7 @@ function nzshpcrt_download_file() {
         exit();
 			}
 		} else {
-			exit(WPSC_DOWNLOAD_INVALID);
+			exit(_e('This download is no longer valid, Please contact the site administrator for more information.','wpsc'));
 		}
 	} else {
 		if(($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {
