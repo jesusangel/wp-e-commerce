@@ -106,9 +106,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 							$order_status= $purchase_log['processed'];
 					}
 					$previous_download_ids[] = $download_data['id'];
-				
+					do_action('wpsc_confirm_checkout', $purchase_log['id']);
 				}
-				do_action('wpsc_confirm_checkout', $purchase_log['id']);
+			//	do_action('wpsc_confirm_checkout', $purchase_log['id']);
 		
 				$shipping = $row['pnp']*$row['quantity'];
 				$total_shipping += $shipping;
