@@ -18,8 +18,7 @@ function nzshpcrt_latest_product($input = null) {
 	$siteurl = get_option('siteurl');
 	$options = get_option("wpsc-widget_latest_products");
 	$number = ($options["number"]==0)?5:$options["number"];
-	$latest_product = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1') ORDER BY `id` DESC LIMIT ".$number, ARRAY_A);
-
+	$latest_product = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1') AND `publish` IN ('1') ORDER BY `id` DESC LIMIT ".$number, ARRAY_A);
 	if($latest_product != null) {
 		$output = "<div>";
 		foreach($latest_product as $special) {			
