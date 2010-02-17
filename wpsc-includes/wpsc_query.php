@@ -2021,7 +2021,7 @@ class WPSC_Query {
 			$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> << First </a>";
 		}
 		// Should we show the PREVIOUS PAGE link?
-		if($current_page > 1) {
+		if($current_page > 1 && ($current_page-1) != 1) {
 			$previous_page = $current_page - 1;	
 			$output .= " <a href=\"". $page_link .$seperator. $previous_page ."\" title=\"Previous Page\"> < Previous </a>";
 		}
