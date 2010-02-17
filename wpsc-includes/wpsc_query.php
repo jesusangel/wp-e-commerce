@@ -1998,8 +1998,13 @@ class WPSC_Query {
 			}
 		
 		} 
+		//exit($pagelink.'<<<<<');
 		if(!get_option('permalink_structure')) {
-			$page_link = get_option('product_list_url').'&page_number';
+			$category = '';
+			if(isset($_GET['category']) && is_numeric($_GET['category'])){
+				$category = '&category='.$_GET['category'];
+			}
+			$page_link = get_option('product_list_url').$category.'&page_number';
 			$seperator = '=';
 		}else{
 			$page_link = get_option('product_list_url');
