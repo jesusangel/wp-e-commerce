@@ -431,8 +431,8 @@ class wpsc_checkout {
 					$i = mt_rand();
 					$j=0;
 					foreach($options as $label=>$value){
-						$output .= "<input type='hidden' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='-1' name='collected_data[{$this->checkout_item->id}][".$i."]'/><input type='checkbox' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='".$value."' name='collected_data[{$this->checkout_item->id}][".$i."][".$j."]'/> ";
-						$output .= "<label for='".$this->form_element_id()."'>".$label."</label>";
+						$output .= "<input type='hidden' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id().$j."' value='-1' name='collected_data[{$this->checkout_item->id}][".$i."][".$j."]'/><input type='checkbox' title='".$this->checkout_item->unique_name."' id='".$this->form_element_id()."' value='".$value."' name='collected_data[{$this->checkout_item->id}][".$i."][".$j."]'/> ";
+						$output .= "<label for='".$this->form_element_id().$j."'>".$label."</label><br />";
 						$j++;
 					}
 				}
@@ -708,7 +708,7 @@ class wpsc_checkout {
 			  			$options = array();
 //			  			exit('<pre>'.print_r($v, true).'</pre>');
 			  			foreach($v as $option){
-			  				if($value != '-1'){
+			  				if($option != '-1'){
 			  					$options[] = $option;
 			  				}
 			  			}
