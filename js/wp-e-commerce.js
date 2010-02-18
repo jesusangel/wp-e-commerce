@@ -32,6 +32,7 @@ jQuery(document).ready(function () {
 				var phone = jQuery("input[title='billingphone']").val(); 
 	            var email = jQuery("input[title='billingfirstname']").val();
 	            var state = jQuery("select[title='billingregion'] :selected").text();
+	            //var stateID = jQuery("select[title='billingregion'] :selected").val();
 				var country = jQuery("select[title='billingcountry'] :selected").text();
 				var countryID = jQuery("select[title='billingcountry'] :selected").val();             
 	
@@ -45,22 +46,26 @@ jQuery(document).ready(function () {
 				jQuery("input[title='shippingstate']").val(state);														
 				jQuery("input.shipping_country").val(countryID);
 				jQuery("span.shipping_country_name").html(country);
+			//	jQuery("input.shipping_region").val(countryID);
+				jQuery("span.shipping_region_name").html(state);
 				jQuery("select#current_country").val(countryID);
 				
-				jQuery("select[title='shippingcountry']").val(countryID);
-				var html_form_id = jQuery("select[title='shippingcountry']").attr('id');
-				var form_id =  jQuery("select[title='shippingcountry']").attr('name');
-				form_id = form_id.replace("collected_data[", "");
-				form_id = form_id.replace("]", "");
-				form_id = form_id.replace("[0]", "");
-				set_shipping_country(html_form_id, form_id)
-				if(jQuery("select[title='billingcountry'] :selected").val() != jQuery("select[name='country'] :selected").val()){
-					id = jQuery("select[name='country'] :selected").val();
-					if(id == 'undefined'){
-						jQuery("select[name='country']").val(countryID);
-						submit_change_country();
+				jQuery("select[title='shipping_country']").val(countryID);
+				var html_form_id = jQuery("select[title='shipping_country']").attr('id');
+				var form_id =  jQuery("select[title='shipping_country']").attr('name');
+			//	if(form_id != 'undefined'){
+					form_id = form_id.replace("collected_data[", "");
+					form_id = form_id.replace("]", "");
+					form_id = form_id.replace("[0]", "");
+					set_shipping_country(html_form_id, form_id)
+					if(jQuery("select[title='billingcountry'] :selected").val() != jQuery("select[name='country'] :selected").val()){
+						id = jQuery("select[name='country'] :selected").val();
+						if(id == 'undefined'){
+							jQuery("select[name='country']").val(countryID);
+							submit_change_country();
+						}
 					}
-				}
+			//	}
 				
 
 				

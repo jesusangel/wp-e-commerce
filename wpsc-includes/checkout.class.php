@@ -487,7 +487,7 @@ class wpsc_checkout {
 			  $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$_SESSION['wpsc_delivery_country']."') LIMIT 1",ARRAY_A);
 				if($this->checkout_item->unique_name == 'shippingstate' && (wpsc_uses_shipping())&&($country_data['has_regions'] == 1)){
 					$region_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id`='".$_SESSION['wpsc_delivery_region']."' LIMIT 1");
-				$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_region']."' size='4' /><span class='shipping_country_name'>".$region_name."</span> ";
+				$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_region' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_region']."' size='4' /><span class='shipping_region_name'>".$region_name."</span> ";
 
 				}else{
 					$output = "<input title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$saved_form_data."' name='collected_data[{$this->checkout_item->id}]".$an_array."' />";

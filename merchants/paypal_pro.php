@@ -14,7 +14,7 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	$curryear = date('Y');
 	
 	//generate year options
-	for($i=0; $i < 7; $i++){
+	for($i=0; $i < 10; $i++){
 		$years .= "<option value='".$curryear."'>".$curryear."</option>\r\n";
 		$curryear++;
 	}
@@ -113,16 +113,22 @@ function gateway_paypal_pro($seperator, $sessionid){
 			$data['CITY']	= $value['value'];
 		}
 		if(($value['unique_name']=='billingstate') && $value['value'] != ''){
-			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `name` ='".$value['value']."' LIMIT 1";
+			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='".$value['value']."' LIMIT 1";
 			$data['STATE'] = $wpdb->get_var($sql);
 		}else{
+			
 		//	$data['STATE']='CA';
 		}
 		if(($value['unique_name']=='billingcountry') && $value['value'] != ''){
-			if($value['value'] == 'UK'){
+			$value['value'] = maybe_unserialize($value['value']);
+			if($value['value'][0] == 'UK'){
 				$data['COUNTRYCODE'] = 'GB';
 			}else{
-				$data['COUNTRYCODE']	= $value['value'];
+				$data['COUNTRYCODE']	= $value['value'][0];
+			}
+			if(is_numeric($value['value'][1])){
+				$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='".$value['value'][1]."' LIMIT 1";
+				$data['STATE'] = $wpdb->get_var($sql);
 			}
 		}		
 		if(($value['unique_name']=='billingpostcode') && $value['value'] != ''){
@@ -146,13 +152,22 @@ function gateway_paypal_pro($seperator, $sessionid){
 			//$data['SHIPTOCITY'] = 'CA';
 		if(($value['unique_name']=='shippingstate') && $value['value'] != ''){
 		//	$data['SHIPTOSTATE'] = $value['value'];
-			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `name` ='".$value['value']."' LIMIT 1";
+			$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='".$value['value']."' LIMIT 1";
 			$data['SHIPTOSTATE'] = $wpdb->get_var($sql);
 		}else{
 		}	
 		if(($value['unique_name']=='shippingcountry') && $value['value'] != ''){
-			if($value['value'] == 'UK'){
+			$value['value'] = maybe_unserialize($value['value']);
+			if(is_array($value['value'])){
+			if($value['value'][0] == 'UK'){
 				$data['SHIPTOCOUNTRY'] = 'GB';
+			}else{
+				$data['SHIPTOCOUNTRY']	= $value['value'][0];
+			}
+			if(is_numeric($value['value'][1])){
+				$sql = "SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='".$value['value'][1]."' LIMIT 1";
+				$data['SHIPTOSTATE'] = $wpdb->get_var($sql);
+			}
 			}else{
 				$data['SHIPTOCOUNTRY']	= $value['value'];
 			}
@@ -164,7 +179,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 		//exit($key.' > '.print_r($value,true));
 	}
 	$data['SHIPTONAME'] = $data1['SHIPTONAME1'].' '.$data1['SHIPTONAME2'];
-
+	exit('<pre>'.print_r($data, true).'</pre>');
 	if( ($data['SHIPTONAME'] == null) || ($data['SHIPTOSTREET'] == null) || ($data['SHIPTOCITY'] == null) ||
 			($data['SHIPTOSTATE'] == null) || ($data['SHIPTOCOUNTRY'] == null) || ($data['SHIPTOZIP'] == null)) {
 			// if any shipping details are empty, the order will simply fail, this deletes them all if one is empty
@@ -228,7 +243,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	}
 //exit($transaction);
 	$response = send($transaction);
-	//exit('<pre>'.print_r($response, true).'</pre><pre>'.print_r($data, true).'</pre>');
+	exit('<pre>'.print_r($response, true).'</pre><pre>'.print_r($data, true).'</pre>');
 	if($response->ack == 'Success' || $response->ack == 'SuccessWithWarning'){
 		//redirect to  transaction page and store in DB as a order with accepted payment
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '2' WHERE `sessionid`=".$sessionid;

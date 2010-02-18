@@ -28,12 +28,16 @@ class usps {
 	}
 	
 	function getForm() {
+		$checked = '';
+		if(get_option("usps_test_server") == '1'){
+			$checked = 'checked = "checked"';
+		}
 		$output="<tr>
 					<td>
 						".__('USPS ID', 'wpsc').":
 					</td>
 					<td>
-						<input type='text' name='uspsid' value='".get_option("uspsid")."'>
+						<input type='text' name='uspsid' value='".get_option("uspsid")."' />
 					</td>
 				</tr>
 				<tr>
@@ -41,7 +45,15 @@ class usps {
 						".__('USPS Password', 'wpsc').":
 					</td>
 					<td>
-						<input type='text' name='uspspw' value='".get_option("uspspw")."'>
+						<input type='text' name='uspspw' value='".get_option("uspspw")."' />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						".__('Use Test Server:','wpsc')."
+					</td>
+					<td>
+						<input type='checkbox' ".$checked." name='usps_test_server' value='1' />
 					</td>
 				</tr>
 			
@@ -49,12 +61,18 @@ class usps {
 		return $output;
 	}
 	
-	function submit_form() {
+	function submit_form() {	
+	//	exit('<pre>'.print_r($_POST, true).'</pre>');
 		if ($_POST['uspsid'] != '') {
 			update_option('uspsid', $_POST['uspsid']);
 		}
 		if ($_POST['uspspw'] != '') {
 			update_option('uspspw', $_POST['uspspw']);
+		}
+		if($_POST['usps_test_server'] != ''){
+			update_option('usps_test_server', $_POST['usps_test_server']);
+		}else{
+			update_option('usps_test_server', '');
 		}
 		return true;
 	}
@@ -149,6 +167,10 @@ class usps {
 			$request = 'API=RateV3&XML=' . urlencode($request);
 		} else {
 			$dest=$wpdb->get_var("SELECT country FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE isocode='".$dest."'");
+			if($dest == 'U.K.'){
+				$dest = 'Great Britain and Northern Ireland';
+			}
+
 			$pound = round($pound,2);
 			$ounce = round($ounce,2);
 			$request  = '<IntlRateRequest USERID="' . get_option('uspsid') . '" PASSWORD="' . get_option('uspspw') . '">' .
@@ -163,8 +185,11 @@ class usps {
 		}
 		$usps_server = 'production.shippingapis.com';
 		$api_dll = 'shippingapi.dll';
-	//	$url ='http://testing.shippingapis.com/ShippingAPITest.dll?'.$request;
-		$url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
+		if(get_option('usps_test_server') == '1'){
+			$url ='http://testing.shippingapis.com/ShippingAPITest.dll?'.$request;
+		}else{
+			$url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
+		}
 		//exit('URL '.$url);	
 		$ch=curl_init(); 
 		curl_setopt($ch, CURLOPT_URL, $url); 
@@ -175,7 +200,7 @@ class usps {
 		curl_setopt($ch, CURLOPT_USERAGENT, 'wp-e-commerce'); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 		$body = curl_exec($ch);
-		//exit('<pre>'.print_r($body, true).'</pre>');
+		//exit('Response:<pre>'.print_r($body, true).'</pre>'.$url);
 		curl_close($ch);
 		//exit($body);
 		$rates=array();
