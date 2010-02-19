@@ -46,14 +46,21 @@ jQuery(document).ready(function () {
 				jQuery("input[title='shippingstate']").val(state);														
 				jQuery("input.shipping_country").val(countryID);
 				jQuery("span.shipping_country_name").html(country);
-			//	jQuery("input.shipping_region").val(countryID);
+				jQuery("input.shipping_region").val(countryID);
 				jQuery("span.shipping_region_name").html(state);
 				jQuery("select#current_country").val(countryID);
-				
+				if(state == ''){
+					jQuery("select#region").hide();				
+				}else{
+					if(jQuery("select#region").css('display') == 'none'){
+						jQuery("select#region").show();	
+					}
+					jQuery("select#region").val(state);
+				}
 				jQuery("select[title='shipping_country']").val(countryID);
 				var html_form_id = jQuery("select[title='shipping_country']").attr('id');
 				var form_id =  jQuery("select[title='shipping_country']").attr('name');
-			//	if(form_id != 'undefined'){
+				if(form_id != null){
 					form_id = form_id.replace("collected_data[", "");
 					form_id = form_id.replace("]", "");
 					form_id = form_id.replace("[0]", "");
@@ -62,11 +69,11 @@ jQuery(document).ready(function () {
 						id = jQuery("select[name='country'] :selected").val();
 						if(id == 'undefined'){
 							jQuery("select[name='country']").val(countryID);
-							submit_change_country();
+//							submit_change_country();
 						}
 					}
-			//	}
-				
+				}
+				submit_change_country();
 
 				
 				

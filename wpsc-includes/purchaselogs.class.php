@@ -466,12 +466,11 @@ function wpsc_display_purchlog_buyers_address(){
 	global $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 	$country = maybe_unserialize($purchlogitem->userinfo['billingcountry']['value']);
-	$country = (array)$country;
-	if($country[0] == 'US' && is_numeric($country[1]) ){
-		$country[1] = $purchlogitem->shippingstate($country[1]);
+	
+	if(wpsc_has_regions($country) ){
+		$country[1] = $purchlogitem->shippingstate($country[1]).', ';
 	}
-	$address = $purchlogitem->userinfo['billingaddress']['value'].', '.$country[1].', '.$country[0];
-				
+	$address = $purchlogitem->userinfo['billingaddress']['value'].', '.$country[1].$country[0];			
 	return htmlentities(stripslashes( $address ), ENT_QUOTES);
 
 }
@@ -496,33 +495,52 @@ function wpsc_display_purchlog_shipping_city(){
 //	exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
 	return htmlentities(stripslashes($purchlogitem->shippinginfo['shippingcity']['value']), ENT_QUOTES);
 }
-function wpsc_display_purchlog_shipping_state_and_postcode(){
-	global $purchlogitem;
-//	exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
-	if($purchlogitem->shippinginfo['shippingstate']['value'] != ''){
-		$state = $purchlogitem->shippingstate($purchlogitem->shippinginfo['shippingstate']['value']);
-		//exit('State: '.$state);
+function wpsc_has_regions($country){
+	global $wpdb;
+	if(is_array($country)){
+		$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$country[0]."') LIMIT 1",ARRAY_A);
 	}else{
-		$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
-		if(is_array($country) && is_numeric($country[0])){
-			$state = $purchlogitem->shippingstate($country[0]);
-			$country = $country[1];
+		$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$country."') LIMIT 1",ARRAY_A);
+	}
+	if($country_data['has_regions'] == 1){
+		return true;
+	}else{
+		return false;
+	}
+}
+function wpsc_display_purchlog_shipping_state_and_postcode(){
+	global $wpdb, $purchlogitem;
+	$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
+//	exit('<pre>'.print_r($country,true).'</pre>');
+	$state='';
+	if(wpsc_has_regions($country)){
+		if($purchlogitem->shippinginfo['shippingstate']['value'] != '' ){
+			$state = $purchlogitem->shippingstate($purchlogitem->shippinginfo['shippingstate']['value']).', ';
+			//exit('State: '.$state);
 		}else{
-			$state = $purchlogitem->shippingstate($country[1]);
-			$country = $country[0];
+			$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
+			if(is_array($country) && is_numeric($country[0])){
+				$state = $purchlogitem->shippingstate($country[0]).', ';
+				$country = $country[1];
+			}else{
+				$state = $purchlogitem->shippingstate($country[1]).', ';
+				$country = $country[0];
+			}
 		}
 	}
-	
-	return $state.', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
+	return $state.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 	//return $purchlogitem->shippinginfo['shippingstate']['value'].', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 }
 function wpsc_display_purchlog_shipping_country(){
 	global $purchlogitem;
 	$country = maybe_unserialize($purchlogitem->shippinginfo['shippingcountry']['value']);
-	if(is_array($country) && is_numeric($country[0])){
-		$country = $country[1];
-	}else{
-		$country = $country[0];
+//	exit('<pre>'.print_r($country, 1).'</pre>');
+	if(is_array($country)){
+		if(is_numeric($country[0])){
+			$country = $country[1];
+		}else{
+			$country = $country[0];
+		}
 	}
 	return htmlentities(stripslashes($country), ENT_QUOTES);
 }

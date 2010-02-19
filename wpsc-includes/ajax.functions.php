@@ -507,11 +507,9 @@ function wpsc_submit_checkout() {
 	$options = get_option('custom_shipping_options');
 	$form_validity = $wpsc_checkout->validate_forms();
 	
-	//  exit('<pre>'.print_r($_POST, true).'</pre>');
-	//	exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
- 	//	exit('<pre>'.print_r($results, true).'</pre>');
-	if (get_option('do_not_use_shipping') == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null)) {
+	
+	if (get_option('do_not_use_shipping') == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null) && $wpsc_cart->uses_shipping) {
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = __('You must select a shipping method, otherwise we cannot process your order.', 'wpsc');
 		$is_valid = false;
    	}
@@ -520,13 +518,10 @@ function wpsc_submit_checkout() {
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = __('Please agree to the terms and conditions, otherwise we cannot process your order.', 'wpsc');
 		$is_valid = false;		
 	}
-	
 
-   //exit('<pre>'.print_r($_POST, true).'</pre>');
 	
 	$selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
 
-//  exit('valid >'.$is_valid.'\r\n'.$_SESSION['wpsc_delivery_country']);
 
 	foreach($wpsc_cart->cart_items as $cartitem){
 		//	exit('<pre>'.print_r($cartitem, true).'</pre>');

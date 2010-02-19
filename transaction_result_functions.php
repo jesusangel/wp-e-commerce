@@ -170,9 +170,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if($row['quantity'] > 1) {
 						$plural = "s";
 						}
-					$product_list.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
+					$product_list.= $row['quantity']." - ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
-					$product_list_html.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
+					$product_list_html.= $row['quantity']." -  ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list_html .= " &nbsp; ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
 
 				}

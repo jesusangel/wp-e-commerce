@@ -10,42 +10,49 @@ function wpsc_display_upgrades_page() {
 			*/
 			?>
 			<strong><?php _e('WP e-Commerce Upgrades'); ?></strong><br />
-			<span><?php _e('Add more functionality to your e-Commerce site. Prices may be subject to change.'); ?><input type='button' class='button-primary' onclick='window.open ("http://www.instinct.co.nz/shop/","mywindow"); ' value='Buy Now' id='visitInstinct' name='visitInstinct' /></span>
+			<span><?php _e('Add more functionality to your e-Commerce site. Prices may be subject to change.'); ?><input type='button' class='button-primary' onclick='window.open ("http://getshopped.org/extend/premium-upgrades/","mywindow"); ' value='Buy Now' id='visitInstinct' name='visitInstinct' /></span>
 			
 			<br />
+			<div style='padding-top:40px;'></div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('Pure Gold'); ?></strong>
+				<br />
 				<p class='wpsc_gold_text'>Add product search, multiple image upload, gallery view, Grid View and multiple payment gateway options to your shop</p>
 				<span class='wpsc_gold_info'>$40</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('DropShop'); ?></strong>
+				<br />
 				<p class='wpsc_gold_text'>Impress your customers with our AJAX powered DropShop that lets your customers drag and drop products into their shopping cart</p>
-				<span class='wpsc_gold_info'>$75</span>
+				<span class='wpsc_gold_info'>$100</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('MP3 Player'); ?></strong>
+				<br />
 				<p class='wpsc_gold_text'>Adding this module lets you upload and manage MP3 preview files that can be associated with your digital downloads.</p>
 				<span class='wpsc_gold_info'>$10</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('Members Only Module'); ?> </strong>
+				<br />
 				<p class='wpsc_gold_text'>The Members modules lets you set private pages and posts that are only available to paying customers. Activating this module also adds a new option under "WordPress Users" menu that shop owners can use to manage their subscribers.</p>
 				<span class='wpsc_gold_info'>$25</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('Product Slider'); ?> </strong>
+				<br />
 				<p class='wpsc_gold_text'>Display your products in a new and fancy way using the "Product Slider" module.</p>
 				<span class='wpsc_gold_info'>$25</span>
 			</div>
 			<div class='wpsc_gold_module'>
 				<br />
 				<strong><?php _e('NextGen Gallery Buy Now Buttons'); ?> </strong>
+				<br />
 				<p class='wpsc_gold_text'>Make your Online photo gallery into an e-Commerce solution.</p>
 				<span class='wpsc_gold_info'>$10</span>
 			</div>
@@ -108,7 +115,7 @@ function wpsc_display_upgrades_page() {
 				</p>
 
 				<p>
-					<a href='http://www.instinct.co.nz/e-commerce/docs/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
+					<a href='http://getshopped.org/resources/docs/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
 				</p>
 				
 			</div> 
