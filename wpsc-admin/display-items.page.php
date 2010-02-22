@@ -327,7 +327,10 @@ function wpsc_admin_products_list($category_id = 0) {
 						
 						?>
 							<tr class="product-edit <?php echo ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published'; ?>" id="product-<?php echo $product['id']?>" >
-									<th class="check-column" scope="row"><input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' /></th>
+									<th class="check-column" scope="row">
+										<input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' />
+										<?php echo do_action('wpsc_admin_product_checkbox', $product['id']); ?>
+									</th>
 									
 									
 									<td class="product-image ">

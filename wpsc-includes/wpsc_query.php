@@ -53,9 +53,11 @@ function wpsc_display_categories() {
 * @return boolean - true for yes, false for no
 */
 function wpsc_display_products() {
+	global $wpsc_query;
 	//we have to display something, if we are not displaying categories, then we must display products
 	$output = true;
-	if(wpsc_display_categories()) {
+	
+	if(wpsc_display_categories() && ($wpsc_query->query_vars['custom_query'] == false)) {
 		if(get_option('wpsc_default_category') == 'list') {
 			$output = false;
 		}
@@ -515,14 +517,37 @@ function wpsc_the_product_image($width = null, $height = null) {
 		}
 		$wpsc_query->product['image_file'] = $wpsc_query->product['image'];
 	}
+	
+	$image_path = WPSC_IMAGE_DIR . $image_file_name;
+	$image_file_name_parts = explode(".",$image_file_name);
+	$extension = array_pop($image_file_name_parts);
+	
 	if($image_file_name != null) {
-		if(($width > 0) && ($height > 0)) {
-			return "index.php?image_id=".$wpsc_query->product['image']."&amp;width=".$width."&amp;height=".$height;
+		if(($width > 0) && ($height > 0) && ($width <= 1024) && ($height <= 1024)) {
+			$cache_filename = basename("product_img_{$image_id}_{$height}x{$width}");
+			
+			if(file_exists(WPSC_CACHE_DIR.$cache_filename.$extension)) {
+				$original_modification_time = filemtime($image_path);
+				$cache_modification_time = filemtime(WPSC_CACHE_DIR.$cache_filename.$extension);
+				if($original_modification_time < $cache_modification_time) {
+					$use_cache = true;
+				}
+			}
+			if($use_cache == true) {
+				$cache_url = WPSC_CACHE_URL;
+				if(is_ssl()) {
+					$cache_url = str_replace("http://", "https://", $cache_url);
+				}
+				$image_url = $cache_url.$cache_filename.$extension;
+			} else {
+				$image_url = "index.php?image_id=".$wpsc_query->product['image']."&amp;width=".$width."&amp;height=".$height;
+			}
+			return $image_url;
 		} else {
-		  $image_url = WPSC_IMAGE_URL.$image_file_name;
-		  if(is_ssl()) {
-		  	$image_url = str_replace("http://", "https://", $image_url);
-		  }
+			$image_url = WPSC_IMAGE_URL.$image_file_name;
+			if(is_ssl()) {
+				$image_url = str_replace("http://", "https://", $image_url);
+			}
 			return $image_url;
 		}
 	} else {
@@ -1221,6 +1246,7 @@ class WPSC_Query {
 			, 'sort_order'
 			, 'number_per_page'	// works
 			, 'page'
+			, 'custom_query'
 			//, 'sku'
 		);
 		
@@ -1280,6 +1306,8 @@ class WPSC_Query {
 		$qv['sort_order'] = trim($qv['sort_order']);
 		$qv['number_per_page'] = absint($qv['number_per_page']);
 		$qv['page'] = absint($qv['page']);
+		$qv['custom_query'] = (bool)$qv['custom_query'];
+
 		
 }
 	
