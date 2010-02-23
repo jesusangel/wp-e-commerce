@@ -498,6 +498,8 @@ if($_REQUEST['wpsc_action'] == 'cart_html_page') {
 function wpsc_submit_checkout() {
   global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways, $wpsc_shipping_modules, $wpsc_gateways;
   //echo "break redirect";
+   	do_action('wpsc_before_submit_checkout');
+
 	$_SESSION['wpsc_checkout_misc_error_messages'] = array();
 	$wpsc_checkout = new wpsc_checkout();
 	//exit('coupons:'.$wpsc_cart->coupons_name);

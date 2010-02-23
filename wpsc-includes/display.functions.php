@@ -141,7 +141,7 @@ function fancy_notification_content($cart_messages) {
   global $wpdb;
   $siteurl = get_option('siteurl');
 	foreach((array)$cart_messages as $cart_message) {
-		$output .= "<span>".$cart_message."</span><br />";
+		$output .= "<span>".$cart_message."</span>";
 	}
 	$output .= "<a href='".get_option('shopping_cart_url')."' class='go_to_checkout'>".__('Go to Checkout', 'wpsc')."</a>";
 	$output .= "<a href='#' onclick='jQuery(\"#fancy_notification\").css(\"display\", \"none\"); return false;' class='continue_shopping'>".__('Continue Shopping', 'wpsc')."</a>";

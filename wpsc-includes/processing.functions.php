@@ -302,7 +302,7 @@ function calculate_product_price($product_id, $variations = false, $no_special=f
 	} else {
 		$price = false;
 	}
-			
+  $price = apply_filters('wpsc_do_convert_price', $price);
   return $price;
 }
   

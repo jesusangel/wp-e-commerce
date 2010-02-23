@@ -574,6 +574,11 @@ class wpsc_cart {
 	var $coupons_name = '';
 	var $coupons_amount = 0;
 	
+	//currency values
+	var $currency_conversion = 0;
+	var $use_currency_converter = false;
+	var $selected_currency_code = '';
+
   function wpsc_cart() {
     global $wpdb, $wpsc_shipping_modules;
     $coupon = 'percentage'; 
@@ -1140,6 +1145,8 @@ class wpsc_cart {
 	
 	
 	}
+		$total = apply_filters('wpsc_convert_tax_prices', $total);
+
 		return $total;
   }
   
@@ -1209,6 +1216,9 @@ class wpsc_cart {
     }else{
 			$total = 0;
     }
+	 $total = apply_filters('wpsc_convert_total_shipping',$total);
+
+
     return $total;
   }
   
@@ -1334,7 +1344,7 @@ class wpsc_cart {
 			$output = $currency_sign.'  '.$price;
 			break;
 		}
-	
+		$output = apply_filters('wpsc_price_display_changer', $output);
 		return $output;  
   }
   
@@ -1684,6 +1694,7 @@ class wpsc_cart_item {
 				}
 			}
 		}
+		$price = apply_filters('wpsc_do_convert_price', $price);
 		// create the string containing the product name.
 		$product_name = $product['name'];
 		if(count($variation_names) > 0) {

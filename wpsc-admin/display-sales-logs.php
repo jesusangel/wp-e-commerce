@@ -500,7 +500,10 @@ if(!isset($purchlogs)){
  		<th class="check-column" scope="row"><input type='checkbox' name='purchlogids[]' class='editcheckbox' value='<?php echo wpsc_the_purch_item_id(); ?>' /></th>
  		<td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
  		<td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
- 		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
+ 		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); 
+ 		do_action('wpsc_additional_sales_amount_info',wpsc_the_purch_item_id());
+ 		?>
+</td><!-- Amount -->
  		<td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id())) ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
  		<td>
  		<?php if(wpsc_purchlogs_is_google_checkout() == false){ ?>
