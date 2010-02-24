@@ -33,6 +33,10 @@ function wpsc_get_themes($themes_folder = '') {
 	if( !empty($themes_folder) ){}
 		//$themes_root .= $themes_folder;
 
+	if ( !is_dir( $themes_root ) ) {
+		return $wpsc_themes;
+	}
+	
 	// Files in wp-content/uploads/themes directory
 	//exit($themes_root);
 	$themes_dir =  opendir($themes_root);
@@ -612,6 +616,11 @@ function wpsc_products_page($content = '') {
  * wpsc_count_themes_in_uploads_directory, does exactly what the name says
 */
 function wpsc_count_themes_in_uploads_directory() {
+
+	if ( !is_dir( WPSC_THEMES_PATH ) ) {
+		return 0;
+	}
+	
   $uploads_dir = @opendir(WPSC_THEMES_PATH);
   $file_names = array();
   while(($file = @readdir($uploads_dir)) !== false) {
