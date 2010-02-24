@@ -626,6 +626,7 @@ class wpsc_checkout {
 					case "select":
 					case 'checkbox':						
 						if(is_array($value)){
+							$select_bad_input = 0;
 							foreach($value as $v){
 								if($v == '-1'){
 									$select_bad_input++;				
@@ -645,10 +646,25 @@ class wpsc_checkout {
 						}
 					break;
 					default:
-					if($value == null) {
-						$any_bad_inputs = true;
-						$bad_input = true;
-					}
+						if(is_array($value)){
+							$select_bad_input = 0;
+							foreach($value as $v){
+								if($v == ''){
+									$select_bad_input++;				
+								}else{
+									$valid_select_input++;
+								}
+							}
+							if(count($value) == $select_bad_input){
+								$any_bad_inputs = true;
+								$bad_input = true;					
+							}
+						}else{
+							if($value == ''){
+								$any_bad_inputs = true;
+								$bad_input = true;					
+							}
+						}
 					break;
 				}
 				if($bad_input === true) {
