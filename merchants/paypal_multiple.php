@@ -119,13 +119,13 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 				$paypal_currency_productprice = $curr->convert($local_currency_productprice,$paypal_currency_code,$local_currency_code);
 				$paypal_currency_shipping = $curr->convert($local_currency_shipping,$paypal_currency_code,$local_currency_code);
 			//	exit($paypal_currency_productprice . " " . $paypal_currency_shipping.' '.$local_currency_productprice . " " . $local_currency_code);
-				 $base_shipping = $curr->convert($purchase_log['base_shipping'],$paypal_currency_code, $local_currency_code);
+				 $base_shipping = $curr->convert($wpsc_cart->calculate_total_shipping(),$paypal_currency_code, $local_currency_code);
 				 	//exit($paypal_currency_productprice.' Local>'.$local_currency_productprice.' Base shp'.$base_shipping);
 				 $tax_price = $curr->convert($item['tax_charged'],$paypal_currency_code, $local_currency_code);
 			} else {
 				$paypal_currency_productprice = $local_currency_productprice;
 				$paypal_currency_shipping = $local_currency_shipping;
-				$base_shipping = $purchase_log['base_shipping'];
+				$base_shipping = $wpsc_cart->calculate_total_shipping();
 				 $tax_price = $item['tax_charged'];
 			}
 			//exit("<pre>".print_r(, true).'</pre>');

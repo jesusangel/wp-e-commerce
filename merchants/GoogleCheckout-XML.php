@@ -111,7 +111,7 @@ function gateway_google($fromcheckout = false){
 		
 		} else {
 			$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
-	
+			$google_currency_shipping = $wpsc_cart->calculate_total_shipping();
 		}
 
 		//	exit('<pre>'.print_r(wpsc_cart_item_name(),true).'</pre>');
