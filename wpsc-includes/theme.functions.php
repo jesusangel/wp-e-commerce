@@ -393,98 +393,92 @@ function wpsc_display_products_page($query) {
 //handles replacing the tags in the pages
   
 function wpsc_products_page($content = '') {
-  global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path;
-	/// added by xiligroup.dev to be compatible with touchshop
+	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path;
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-	/// end of added by xiligroup.dev to be compatible with touchshop
+	
   
 	$output = '';
-  if(preg_match("/\[productspage\]/",$content)) {
-			$wpsc_query->get_products();
-  
-			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-			ob_start();
-			if(count($wpsc_query->products) == 1) {			
-//			if(wpsc_is_single_product()) {
-//				exit('called');
-				include($cur_wpsc_theme_folder."/single_product.php");
-			} else {
-			  // get the display type for the selected category
-				if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
-					if(is_numeric($wp_query->query_vars['category_id'])) {
-						$category_id =(int) $wp_query->query_vars['category_id'];
-					} else if(is_numeric($_GET['category'])) {
-						$category_id = (int)$_GET['category'];
-					} else { 
-						$category_id = (int)get_option('wpsc_default_category');
-					}
-				}			
-				$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
-			
-				if($display_type == '') {
-					$display_type = get_option('product_view');
+	if(preg_match("/\[productspage\]/",$content)) {	
+		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query objects
+		//exit("<pre>".print_r($wp_query,true)."</pre>");
+
+	
+		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+		ob_start();
+		if(count($wpsc_query->products) == 1) {			
+			include($cur_wpsc_theme_folder."/single_product.php");
+		} else {
+		  // get the display type for the selected category
+			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
+				if(is_numeric($wp_query->query_vars['category_id'])) {
+					$category_id =(int) $wp_query->query_vars['category_id'];
+				} else if(is_numeric($_GET['category'])) {
+					$category_id = (int)$_GET['category'];
+				} else { 
+					$category_id = (int)get_option('wpsc_default_category');
 				}
-
-				if(isset($_SESSION['wpsc_display_type'])) {
-					$display_type = $_SESSION['wpsc_display_type'];
-				}
-
-				if(isset($_GET['view_type'])) {
-					switch($_GET['view_type']) {
-						case 'grid':
-						$display_type = 'grid';
-						$_SESSION['wpsc_display_type'] = $display_type;
-						break;
-						
-						case 'list':
-						$display_type = 'list';
-						$_SESSION['wpsc_display_type'] = $display_type;
-						break;
-						
-						case 'default':
-						$display_type = 'default';
-						$_SESSION['wpsc_display_type'] = $display_type;
-						break;
-
-						default:
-						break;
-					}
-				}
-
-				
-				// switch the display type, based on the display type variable...
-				switch($display_type) {
-					case "grid":
-					if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
-						include($cur_wpsc_theme_folder."/grid_view.php");
-						break; // only break if we have the function;
-					}
+			}			
+			$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
+		
+			if($display_type == '') {
+				$display_type = get_option('product_view');
+			}
+	
+			if(isset($_SESSION['wpsc_display_type'])) {
+				$display_type = $_SESSION['wpsc_display_type'];
+			}
+	
+			if(isset($_GET['view_type'])) {
+				switch($_GET['view_type']) {
+					case 'grid':
+					$display_type = 'grid';
+					$_SESSION['wpsc_display_type'] = $display_type;
+					break;
 					
-					case "list":
-					if(file_exists($cur_wpsc_theme_folder."/list_view.php")) {
-						include($cur_wpsc_theme_folder."/list_view.php");
-						break; // only break if we have the file;
-					}
+					case 'list':
+					$display_type = 'list';
+					$_SESSION['wpsc_display_type'] = $display_type;
+					break;
 					
-				  case "default":  // this may be redundant :D
-				  default:
-				    include($cur_wpsc_theme_folder."/products_page.php");
-				  break;
+					case 'default':
+					$display_type = 'default';
+					$_SESSION['wpsc_display_type'] = $display_type;
+					break;
+	
+					default:
+					break;
 				}
 			}
-			$output .= ob_get_contents();
-			ob_end_clean();
- 			$output = str_replace('$','\$', $output);
-//     } else {
-// 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-// 			ob_start();
-// 			include_once(WPSC_FILE_PATH . "/products_page.php");
-// 			$output = ob_get_contents();
-// 			ob_end_clean();
-//     }
-    return preg_replace("/(<p>)*\[productspage\](<\/p>)*/",$output, $content);
+	
+			
+			// switch the display type, based on the display type variable...
+			switch($display_type) {
+				case "grid":
+				if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
+					include($cur_wpsc_theme_folder."/grid_view.php");
+					break; // only break if we have the function;
+				}
+				
+				case "list":
+				if(file_exists($cur_wpsc_theme_folder."/list_view.php")) {
+					include($cur_wpsc_theme_folder."/list_view.php");
+					break; // only break if we have the file;
+				}
+				
+			  case "default":  // this may be redundant :D
+			  default:
+			    include($cur_wpsc_theme_folder."/products_page.php");
+			  break;
+			}
+		}
+		$output .= ob_get_contents();
+		ob_end_clean();
+		$output = str_replace('$','\$', $output);
+		
+		list($wpsc_query, $wp_query) = array($wp_query, $wpsc_query); // swap the wpsc_query objects back
+	    return preg_replace("/(<p>)*\[productspage\](<\/p>)*/",$output, $content);
 	} else {
-    return $content;
+	    return $content;
 	}
 }
 

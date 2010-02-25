@@ -109,15 +109,14 @@ function wpsc_the_product_price() {
 * @return boolean - true for yes, false for no
 */
 function wpsc_display_categories() {
-  global $wp_query;
-  
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-  $output = false;
+	global $wp_query;
+	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+	$output = false;
 	if(!is_numeric(get_option('wpsc_default_category'))) {
-		if(is_numeric($wp_query->query_vars['category_id'])) {
-			$category_id = $wp_query->query_vars['category_id'];
-		} else if(is_numeric($_GET['category'])) {
-			$category_id = $_GET['category'];
+		if(isset($wp_query->query_vars['products'])) {
+			$category_id = $wp_query->query_vars['products'];
+		} else if(isset($_GET['products'])) {
+			$category_id = $_GET['products'];
 		}
 		
 		// if we have no categories, and no search, show the group list
@@ -142,7 +141,6 @@ function wpsc_display_categories() {
 * @return boolean - true for yes, false for no
 */
 function wpsc_display_products() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	//we have to display something, if we are not displaying categories, then we must display products
 	$output = true;
 	if(wpsc_display_categories()) {
@@ -161,7 +159,7 @@ function wpsc_display_products() {
 * @return string - the URL of the current page
 */
 function wpsc_this_page_url() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query, $wp_query;
 	//echo "<pr".print_r($wpsc_query->category,true)."</pre>";
 	if($wpsc_query->is_single === true) {
@@ -201,7 +199,7 @@ function wpsc_is_single_product() {
 * @return string - the class of the selected category
 */
 function wpsc_category_class() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpdb, $wp_query; 
 	
 	$category_nice_name = '';
@@ -269,10 +267,7 @@ function wpsc_category_transition() {
 * @return boolean true while we have products, otherwise, false
 */
 function wpsc_have_products() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-//	 exit('alo<pre>'.print_r($wpsc_query, true).'</pre>'); 
-	return $wpsc_query->have_products();
+	return have_posts();
 }
 
 /**
@@ -280,9 +275,7 @@ function wpsc_have_products() {
 * @return nothing
 */
 function wpsc_the_product() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	$wpsc_query->the_product();
+	the_post();
 }
 
 /**
@@ -302,7 +295,7 @@ function wpsc_in_the_loop() {
 function wpsc_rewind_products() {
 	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query;
-	return $wpsc_query->rewind_products();
+	return $wpsc_query->rewind_posts();
 }
 
 /**
@@ -310,10 +303,7 @@ function wpsc_rewind_products() {
 * @return integer - the product ID
 */
 function wpsc_the_product_id() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wp_query;
-//	exit('Here'.$wp_query->post->ID);
-	return $wp_query->post->ID;
+	return get_the_ID();
 }
 
 /**
@@ -321,13 +311,11 @@ function wpsc_the_product_id() {
 * @return string - a link to edit this product
 */
 function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $id = 0 ) {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query, $current_user, $table_prefix, $wp_query;
 	if ( $link == null ) {
-		$link = __('Edit');
+		$link = __('Edit', 'wpsc');
 	}
 	$product_id = $wp_query->post->ID;
-		//exit('ID = '.$id.' ____<br /><pre>'.print_r($wp_query->post->ID,true).'</pre>');
 	if ( $id > 0 ) {
 		$product_id = $id;
 	}
@@ -336,7 +324,7 @@ function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $i
 	get_currentuserinfo();
 	$output = '';
 	if($current_user->{$table_prefix . 'capabilities'}['administrator'] == 1) {
-		$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product_id={$product_id}'>" . $link . "</a>" . $after;
+		$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product={$product_id}'>" . $link . "</a>" . $after;
 	}
 	return $output;
 }
@@ -346,10 +334,7 @@ function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $i
 * @return string - the product title
 */
 function wpsc_the_product_title() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	//return stripslashes($wpsc_query->the_product_title());
-	return htmlentities(stripslashes($wpsc_query->the_product_title()), ENT_QUOTES, "UTF-8");
+	return get_the_title();
 }
 
 /**
@@ -357,30 +342,8 @@ function wpsc_the_product_title() {
 * @return string - the product description
 */
 function wpsc_the_product_description() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query, $allowedtags;
-	$description_allowed_tags = $allowedtags + array(
-		'img' => array(
-			'src' => array(),'width' => array(),'height' => array(),
-		),
-		'span' => array(
-			'style' => array()
-		),
-		'ul' => array(),
-		'li' => array(),
-		'table' => array(),
-		'tr'=>array(
-			'class'=>array(),
-		),
-		'th' => array(
-			'class'=>array(),
-		),
-		'td' => array(
-			'class'=>array(),		
-		),
-
-	);
-	return wpautop(wptexturize( wp_kses(stripslashes($wpsc_query->product['description']), $description_allowed_tags )));
+	return get_the_content('Read the rest of this entry &raquo;');
 }
 
 /**
@@ -389,9 +352,7 @@ function wpsc_the_product_description() {
 * @return string - the additional description
 */
 function wpsc_the_product_additional_description() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return $wpsc_query->product['additional_description'];
+	return get_the_excerpt();
 }
 
 
@@ -400,33 +361,38 @@ function wpsc_the_product_additional_description() {
 * @return string - the URL to the single product page for this product
 */
 function wpsc_the_product_permalink() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wp_query;
-	return wpsc_product_url($wp_query->post->ID);
+	return get_permalink();
 }
 
 /**
 * wpsc external link function
 * @return string - the product price
 */
-function wpsc_product_external_link($id){
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpdb, $wpsc_query;
-	$id = absint($id);
-	$externalLink = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='external_link' LIMIT 1");
-	return $externalLink;
+function wpsc_product_external_link($id = null){
+	if(is_numeric($id) && ($id > 0)) {
+		$id = absint($id);		
+	} else {
+		$id = get_the_ID();
+	}
+	$product_meta = get_post_meta($id, '_wpsc_product_metadata', true);
+	$external_link = $product_meta['external_link'];
+	return $external_link;
 }
 
 /**
 * wpsc product sku function
 * @return string - the product price
 */
-function wpsc_product_sku($id){
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpdb;
-	$id = absint($id);
-	$sku = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id`='{$id}' AND `meta_key`='sku' LIMIT 1");
-	return $sku;
+function wpsc_product_sku($id = null){
+	if(is_numeric($id) && ($id > 0)) {
+		$id = absint($id);		
+	} else {
+		$id = get_the_ID();
+	}
+
+	$product_sku = get_post_meta($id, '_wpsc_sku', true);
+	return $product_sku;
 }
 
 
@@ -436,7 +402,6 @@ function wpsc_product_sku($id){
 * @return string - the product price
 */
 function wpsc_product_creation_time($format = null) {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query;
 	if($format == null) {
 		$format = "Y-m-d H:i:s";
@@ -450,11 +415,14 @@ function wpsc_product_creation_time($format = null) {
 * TODO this may need modifying to work with variations, test this
 * @return boolean - true if the product has stock or does not use stock, false if it does not
 */
-function wpsc_product_has_stock() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
- // Is the product in stock?
-	global $wpsc_query;
-	if((count($wpsc_query->first_variations) == 0) && ($wpsc_query->product['quantity_limited'] == 1) && ($wpsc_query->product['quantity'] < 1)) {
+function wpsc_product_has_stock($id = null) {
+	if(is_numeric($id) && ($id > 0)) {
+		$id = absint($id);		
+	} else {
+		$id = get_the_ID();
+	}
+	$is_limited_stock = get_post_meta($id, '_wpsc_limited_stock', true);
+	if($is_limited_stock == 1) {
 		return false;
 	} else {
 		return true;
@@ -468,12 +436,16 @@ function wpsc_product_has_stock() {
 * wpsc product remaining stock function
 * @return integer - the amount of remaining stock, or null if product is stockless
 */
-function wpsc_product_remaining_stock() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	// how much stock is left?
-	global $wpsc_query;
-	if((count($wpsc_query->first_variations) == 0) && ($wpsc_query->product['quantity_limited'] == 1) && ($wpsc_query->product['quantity'] > 0)) {
-		return $wpsc_query->product['quantity'];
+function wpsc_product_remaining_stock($id = null){
+	if(is_numeric($id) && ($id > 0)) {
+		$id = absint($id);		
+	} else {
+		$id = get_the_ID();
+	}
+	$is_limited_stock = get_post_meta($id, '_wpsc_limited_stock', true);
+	if(($is_limited_stock == 1)) {
+		$product_stock = get_post_meta($id, '_wpsc_stock', true);
+		return $product_stock;
 	} else {
 		return null;
 	}
@@ -483,11 +455,15 @@ function wpsc_product_remaining_stock() {
 * wpsc is donation function
 * @return boolean - true if it is a donation, otherwise false
 */
-function wpsc_product_is_donation() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
- // Is the product a donation?
-	global $wpsc_query;
-	if($wpsc_query->product['donation'] == 1) {
+function wpsc_product_is_donation($id = null){
+	if(is_numeric($id) && ($id > 0)) {
+		$id = absint($id);		
+	} else {
+		$id = get_the_ID();
+	}
+
+	$is_donation = get_post_meta($id, '_wpsc_is_donation', true);
+	if($is_donation == 1) {
 		return true;
 	} else {
 		return false;
@@ -499,7 +475,7 @@ function wpsc_product_is_donation() {
 * @return boolean - true if the product is on special, otherwise false
 */
 function wpsc_product_on_special() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	// function to determine if the product is on special
 	global $wpsc_query;
 	//echo "<pre>".print_r($wpsc_query,true)."</pre>";
@@ -574,9 +550,18 @@ function wpsc_product_has_supplied_file() {
 * @return string - currently only valid for flat rate
 */
 function wpsc_product_postage_and_packaging() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return nzshpcrt_currency_display($wpsc_query->product['pnp'], 1, true);
+	if(is_numeric($id) && ($id > 0)) {
+		$id = absint($id);		
+	} else {
+		$id = get_the_ID();
+	}
+	$product_meta = get_post_meta($id, '_wpsc_product_metadata', true);
+	//echo "<pre>".print_r($product_meta, true)."</pre>";
+	if(is_array($product_meta['shipping'])) {
+		return nzshpcrt_currency_display($product_meta['shipping']['local'], 1, true);
+	} else {
+		return null;
+	}
 }
 
 /**
@@ -602,11 +587,29 @@ function wpsc_product_normal_price() {
 * wpsc product thumbnail function
 * @return string - the URL to the thumbnail image
 */
-function wpsc_the_product_thumbnail() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+function wpsc_the_product_thumbnail($width = null, $height = null) {
 	// show the thumbnail image for the product
-	global $wpsc_query;
-	return $wpsc_query->the_product_thumbnail();
+	
+	if(($width < 10) || ($width < 10)) {	
+		$width  = get_option('product_image_width');
+		$height = get_option('product_image_height');
+	}
+	
+	$attached_images = (array)get_posts(array(
+		'post_type' => 'attachment',
+		'numberposts' => 1,
+		'post_status' => null,
+		'post_parent' => get_the_ID(),
+		'orderby' => 'menu_order',
+		'order' => 'ASC'
+	));
+	
+	if($attached_images != null) {
+		$attached_image = $attached_images[0];
+		return wpsc_product_image($attached_image->ID, $width, $height);
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -614,19 +617,18 @@ function wpsc_the_product_thumbnail() {
 * @return string - javascript required to make the intense debate link work
 */
 function wpsc_product_comment_link() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
- // add the product comment link
+	// add the product comment link
 	global $wpsc_query;
 	
 	if (get_option('wpsc_enable_comments') == 1) {
-		$enable_for_product = get_product_meta($wpsc_query->product['id'], 'enable_comments');
+		$enable_for_product = get_product_meta(get_the_ID(), 'enable_comments');
 	
 		if ((get_option('wpsc_comments_which_products') == 1 && $enable_for_product == '') || $enable_for_product == 'yes') {
 			$original = array("&","'",":","/","@","?","=");
 			$entities = array("%26","%27","%3A","%2F","%40","%3F","%3D");
 	
 			$output = "<div class=\"clear comments\">
-						<script src='http://www.intensedebate.com/js/getCommentLink.php?acct=".get_option("wpsc_intense_debate_account_id")."&postid=product_".$wpsc_query->product['id']."&posttitle=".urlencode($wpsc_query->product['name'])."&posturl=".str_replace($original, $entities, wpsc_product_url($wpsc_query->product['id'], null, false))."&posttime=".urlencode(date('Y-m-d h:i:s', time()))."&postauthor=author_".$wpsc_query->product['id']."' type='text/javascript' defer='defer'></script>
+						<script src='http://www.intensedebate.com/js/getCommentLink.php?acct=".get_option("wpsc_intense_debate_account_id")."&postid=product_".$wpsc_query->product['id']."&posttitle=".urlencode(get_the_title())."&posturl=".str_replace($original, $entities, wpsc_product_url(get_the_ID(), null, false))."&posttime=".urlencode(date('Y-m-d h:i:s', time()))."&postauthor=author_".get_the_ID()."' type='text/javascript' defer='defer'></script>
 					</div>";
 		}
 	}
@@ -866,24 +868,23 @@ function wpsc_custom_meta_value() {
 * @return string - HTML to display the product rater
 */
 function wpsc_product_rater() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query;
+	$product_id =get_the_ID();
 	if(get_option('product_ratings') == 1) {
 		$output .= "<div class='product_footer'>";
 
 		$output .= "<div class='product_average_vote'>";
 		$output .= "<strong>".__('Avg. Customer Rating', 'wpsc').":</strong>";
-		$output .= wpsc_product_existing_rating($wpsc_query->product['id']);
+		$output .= wpsc_product_existing_rating($product_id);
 		$output .= "</div>";
 		
 		$output .= "<div class='product_user_vote'>";
 
-		//$vote_output = nzshpcrt_product_vote($wpsc_query->product['id'],"onmouseover='hide_save_indicator(\"saved_".$wpsc_query->product['id']."_text\");'");
-		$output .= "<strong><span id='rating_".$wpsc_query->product['id']."_text'>".__('Your Rating', 'wpsc').":</span>";
-		$output .= "<span class='rating_saved' id='saved_".$wpsc_query->product['id']."_text'> ".__('Saved', 'wpsc')."</span>";
+		$output .= "<strong><span id='rating_".$product_id."_text'>".__('Your Rating', 'wpsc').":</span>";
+		$output .= "<span class='rating_saved' id='saved_".$product_id."_text'> ".__('Saved', 'wpsc')."</span>";
 		$output .= "</strong>";
 		
-		$output .= wpsc_product_new_rating($wpsc_query->product['id']);
+		$output .= wpsc_product_new_rating($product_id);
 		$output .= "</div>";
 		$output .= "</div>";
 	}
@@ -892,7 +893,6 @@ function wpsc_product_rater() {
 
 
 function wpsc_product_existing_rating($product_id) {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpdb;
 	$get_average = $wpdb->get_results("SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_RATING."` WHERE `productid`='".$product_id."'",ARRAY_A);
 	$average = floor($get_average[0]['average']);
@@ -912,7 +912,6 @@ function wpsc_product_existing_rating($product_id) {
 
 
 function wpsc_product_new_rating($product_id) {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpdb;
 	$cookie_data = explode(",",$_COOKIE['voting_cookie'][$product_id]);
 	$vote_id = 0;
@@ -943,63 +942,6 @@ function wpsc_product_new_rating($product_id) {
 	return $output;
 }
 
-/**
-* wpsc has breadcrumbs function
-* @return boolean - true if we have and use them, false otherwise
-*/
-function wpsc_has_breadcrumbs() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;	
-	if(($wpsc_query->breadcrumb_count > 0) && (get_option("show_breadcrumbs") == 1)){
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
-* wpsc have breadcrumbs function
-* @return boolean - true if we have breadcrimbs to loop through
-*/
-function wpsc_have_breadcrumbs() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return $wpsc_query->have_breadcrumbs();
-}
-
-/**
-* wpsc the breadcrumbs function
-* @return nothing - iterate through the breadcrumbs
-*/
-function wpsc_the_breadcrumb() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	$wpsc_query->the_breadcrumb();
-}
-
-/**
-* wpsc breadcrumb name function
-* @return string - the breadcrumb name 
-*/
-function wpsc_breadcrumb_name() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return $wpsc_query->breadcrumb['name'];
-}
-
-/**
-* wpsc breadcrumb URL function
-* @return string - the breadcrumb URL
-*/
-function wpsc_breadcrumb_url() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	if($wpsc_query->breadcrumb['url'] == '') {
-		return false;
-	} else {
-		return $wpsc_query->breadcrumb['url'];
-	}
-}
 
 /**
 * wpsc currency sign function
@@ -1063,7 +1005,6 @@ function wpsc_page_number() {
  * 
  */
 function wpsc_has_multi_adding(){
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	if(get_option('multi_add') == 1){
 		return true;
 	}else{
@@ -1097,8 +1038,7 @@ function wpsc_page_url() {
 * @return string - the page URL
 */
 function wpsc_product_count() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return $wpsc_query->product_count;
+	global $wp_query;
+	return $wp_query->found_posts;
 }
 ?>

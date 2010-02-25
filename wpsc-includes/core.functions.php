@@ -9,10 +9,6 @@
  * @since 3.8
 */
 
-
-
-
-
 /**
  * wpsc_taxonomy_rewrite_rules function.
  * Adds in new rewrite rules for categories, products, category pages, and ambiguities (either categories or products)
@@ -94,28 +90,43 @@ add_filter('query_vars', 'wpsc_query_vars');
  * @return $query
  */
  
-function wpsc_query_modifier($query) {
+function wpsc_split_the_query($query) {
+	global $wpsc_query;
 	// These values are to be dynamically defined
-	$checkout_pagename = "products/checkout"; 
+	
 	$products_pagename = "products"; 
+	$checkout_pagename = "products/checkout";
 	
 	
-	// $products_page_id = 173; // setting for the products page needs be put in this variable
-	// Check if we are querying the products page, if so, prevent it from displaying the page contents, make it display products instead.
-	if(isset($query->queried_object_id) && ($query->query_vars['pagename'] == $products_pagename )) {
-	    // modifying the page type
-		$query->is_page = false;
-		$query->is_singular = false;
-		$query->is_product = true;
-		$query->is_archive = true;
-	    // modifying the query vars
-		$query->query_vars['pagename'] = null;
-		$query->query_vars['post_type'] = 'wpsc-product';
+	if (($query->query_vars['pagename'] == $products_pagename) || isset($query->query_vars['products'])) {
+		$query->query_vars['pagename'] = $products_pagename;
+		$query->query_vars['name'] = '';
+		$query->query_vars['post_type'] = '';
+		$query->is_singular = true;
+		$query->is_page = true;
+		$query->is_tax = false;
+		$query->is_archive = false;
+		$query->is_single = false;
+		
+		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
+		remove_filter('parse_query', 'wpsc_split_the_query');
+		add_filter('parse_query', 'wpsc_generate_product_query', 11);
+		
+		if($wpsc_query == null) {
+			$wpsc_query = new WP_Query($query->query);
+		}
 	}
-	if($query->query_vars['post_type'] == 'wpsc-product') {
-		$query->is_product = true;
+	
+	//echo "<pre>".print_r($query,true)."</pre>";
+	if($query->query_vars['pagename'] == $checkout_pagename ) {
+		$query->is_checkout = true;
 	}
 	
+	return $query;
+}
+
+
+function wpsc_generate_product_query($query) {
 	// If wpsc_item is not null, we are looking for a product or a product category, check for category
 	if($query->query_vars['wpsc_item'] != '') {
 		$test_term = get_term_by('slug', $query->query_vars['wpsc_item'], 'wpsc_product_category');
@@ -126,19 +137,49 @@ function wpsc_query_modifier($query) {
 			// otherwise set name to value of wpsc_item
 			$query->query_vars['name'] = $query->query_vars['wpsc_item'];
 		}
-	
+	}
+	if(($query->query_vars['products'] != null) && ($query->query_vars['name'] != null)) {
+        $query->query_vars['taxonomy'] = 'wpsc_product_category';
+        $query->query_vars['term'] = $query->query_vars['products'];
+		$query->is_tax = false;
+		$query->is_archive = true;
+		$query->is_singular = false;
+		$query->is_single = false;
 	}
 	
-	if($query->query_vars['pagename'] == $checkout_pagename ) {
-		$query->is_checkout = true;
-	}
 	
-	//echo $query->query_vars['pagename'];
 	
 	return $query;
 }
 
-add_filter('parse_query', 'wpsc_query_modifier');
+function wpsc_mark_product_query($query) {
+
+	if($query->query_vars['post_type'] == 'wpsc-product') {
+		$query->is_product = true;
+	}
+	return $query;
+}
+
+
+
+add_filter('parse_query', 'wpsc_split_the_query', 10);
+add_filter('parse_query', 'wpsc_mark_product_query', 12);
+
+
+
+
+function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
+	global $wp_query;
+	
+	if(stristr($requested_url, $redirect_url)) {
+		return false;
+	}
+	return $redirect_url;
+
+}
+
+//
+
 
 /**
  * wpsc_is_product function.

@@ -157,28 +157,65 @@ function wpsc_delete_categorymeta( $cart_id, $meta_key, $meta_value = '' ) {
 
 /**
  * product meta functions start here
+ * all these functions just prefix the key with the meta prefix, and pass the values through to the equivalent post meta function.
 */
 
-
+/**
+ * add_product_meta function.
+ * 
+ * @access public
+ * @param mixed $product_id
+ * @param mixed $key
+ * @param mixed $value
+ * @param bool $unique - obsolete
+ * @param bool $custom - obsolete
+ */
 function add_product_meta($product_id, $key, $value, $unique = false, $custom = false) {
-	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
+	$key = WPSC_META_PREFIX.$key;
 	return add_post_meta($product_id, $key, $value);
 }
-  
+
+/**
+ * delete_product_meta function.
+ * 
+ * @access public
+ * @param mixed $product_id
+ * @param mixed $key
+ * @param bool $value. (default: '')
+ */
 function delete_product_meta($product_id, $key, $value = '') {
-	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
-	return true;
+	$key = WPSC_META_PREFIX.$key;
+	return delete_post_meta($product_id, $key, $value = '');
 }
 
 
+/**
+ * get_product_meta function.
+ * 
+ * @access public
+ * @param mixed $product_id
+ * @param mixed $key
+ * @param bool $single. (default: false)
+ * @return void
+ */
 function get_product_meta($product_id, $key, $single = false) {
-	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
-	return get_post_meta($product_id, $key);
+	$key = WPSC_META_PREFIX.$key;
+	return get_post_meta($product_id, $key, $single);
 }
 
+/**
+ * update_product_meta function.
+ * 
+ * @access public
+ * @param mixed $product_id
+ * @param mixed $key
+ * @param mixed $value
+ * @param string $prev_value. (default: '')
+ * @return void
+ */
 function update_product_meta($product_id, $key, $value, $prev_value = '') {
-	_deprecated_function( __FUNCTION__, '3.8', 'product meta functions are deprecated, use post meta' );
-	return update_post_meta($product_id, $key, $value);
+	$key = WPSC_META_PREFIX.$key;
+	return update_post_meta($product_id, $key, $value, $prev_value = '');
 }
 
 

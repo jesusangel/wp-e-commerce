@@ -69,6 +69,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['name'] = isset($post_data['post_title']) ? $post_data['post_title'] : '';
 	$post_data['title'] = $post_data['name'];
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
+	$post_data['additional_description'] = isset($post_data['additional_description']) ? $post_data['additional_description'] : '';
 
 	//$post_data['publish'] = (int)(bool)$post_data['publish']; 
 	if($product != null) {
@@ -235,6 +236,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'ID' => $product_id,
 		'post_author' => $user_ID,
 		'post_content' => $post_data['description'],
+		'post_excerpt' => $post_data['additional_description'],
 		'post_title' => $post_data['name'],
 		'post_status' => $post_data['post_status'],
 		'post_type' => "wpsc-product",

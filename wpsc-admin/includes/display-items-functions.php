@@ -59,12 +59,12 @@ $wpsc_product_defaults =array (
 function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
   global $wpdb;
 	$product = get_post($product_id);
-	// print("<pre>" . print_r($product, true) . "</pre>");
+	 //print("<pre>" . print_r($product, true) . "</pre>");
 
 	$product_data['id'] = $product->ID;
 	$product_data['name'] = $product->post_title;
 	$product_data['description'] = $product->post_content;
-	
+	$product_data['additional_description'] = $product->post_excerpt;
 	// get the list of categories this product is associated with
 	
 	$product_data['categories'] = wp_get_product_categories($product->ID);
@@ -316,7 +316,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 					
 					<strong ><?php echo __('Additional Description', 'wpsc'); ?> :</strong><br />			
 					
-					<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes($product_data['meta']['_wpsc_additional_description']); ?></textarea>
+					<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
 				</td>
 			</tr>
 		</table>

@@ -50,9 +50,13 @@ if(is_ssl()) {
 }
 
 
+// the WPSC meta prefix, used for the product meta functions.
+define('WPSC_META_PREFIX', "_wpsc_");
+
 //Define the URL to the plugin folder
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WPSC_URL', $wpsc_plugin_url.'/plugins/'.WPSC_FOLDER);
+
 
 if(isset($wpdb->blogid)) {
    define('IS_WPMU', 1);
@@ -121,6 +125,7 @@ define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
 // start including the rest of the plugin here
 require_once(WPSC_FILE_PATH.'/wpsc-includes/core.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/product-template.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/breadcrumbs.class.php');
 
 require_once(WPSC_FILE_PATH.'/wpsc-includes/variations.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/ajax.functions.php');
@@ -358,9 +363,15 @@ register_activation_hook(__FILE__, 'wpsc_install');
 
 if(!function_exists('wpsc_start_the_query')) {
 	function wpsc_start_the_query() {
-		global $wp_query;
-		//$wpsc_query = new WPSC_query();
-			
+		global $wp_query, $wpsc_query;
+		
+		if($wpsc_query == null) {
+			$wpsc_query = new WP_Query(array(
+				'post_type' => 'wpsc-product',
+			));
+		}
+
+		
 		$post_id = $wp_query->post->ID;
 		$page_url = get_permalink($post_id);
 		if(get_option('shopping_cart_url') == $page_url) {
