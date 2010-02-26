@@ -65,13 +65,17 @@ global $wpsc_query, $wpdb;
 			</div>
 		<?php endif; ?>
 		
-		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
-			<div class='wpsc_page_numbers'>
-				<?php
-				echo $wpsc_query->pagination($wpsc_query->page_count, $wpsc_query->prodcuts_per_page(), $wpsc_query->query_vars['page'],$wpsc_query->a_page_url());
-				 ?>
+		
+		<!-- Start Pagination -->
+		<?php if ( ( get_option( 'use_pagination' ) == 1 && ( get_option( 'wpsc_page_number_position' ) == 1 || get_option( 'wpsc_page_number_position' ) == 3 ) ) ) : ?>
+			<div class="wpsc_page_numbers">
+				<?php if ( wpsc_has_pages() ) : ?>
+					Pages: <?php echo wpsc_first_products_link( '&laquo; First', true ); ?> <?php echo wpsc_previous_products_link( '&laquo; Previous', true ); ?> <?php echo wpsc_pagination( 10 ); ?> <?php echo wpsc_next_products_link( 'Next &raquo;', true ); ?> <?php echo wpsc_last_products_link( 'Last &raquo;', true ); ?>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>		
+		<!-- End Pagination -->
+		
 		
 		<?php /** start the product loop here */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
@@ -268,13 +272,18 @@ global $wpsc_query, $wpdb;
 		echo fancy_notifications();
 	}
 	?>
-<?php //exit('<pre>'.print_r($wpsc_query->a_page_url(),true).'</pre>'); ?>
-		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
-			<div class='wpsc_page_numbers'>
-				<?php
-				echo $wpsc_query->pagination($wpsc_query->page_count, $wpsc_query->prodcuts_per_page(), $wpsc_query->query_vars['page'],$wpsc_query->a_page_url());
-				 ?>
+		
+		
+		<!-- Start Pagination -->
+		<?php if ( ( get_option( 'use_pagination' ) == 1 && ( get_option( 'wpsc_page_number_position' ) == 2 || get_option( 'wpsc_page_number_position' ) == 3 ) ) ) : ?>
+			<div class="wpsc_page_numbers">
+				<?php if ( wpsc_has_pages() ) : ?>
+					Pages: <?php echo wpsc_first_products_link( '&laquo; First', true ); ?> <?php echo wpsc_previous_products_link( '&laquo; Previous', true ); ?> <?php echo wpsc_pagination( 10 ); ?> <?php echo wpsc_next_products_link( 'Next &raquo;', true ); ?> <?php echo wpsc_last_products_link( 'Last &raquo;', true ); ?>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>
+		<!-- End Pagination -->
+		
+		
 	<?php endif; ?>
 </div>

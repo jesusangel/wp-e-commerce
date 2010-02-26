@@ -63,19 +63,20 @@ global $wpsc_query, $wpdb;
 			</div>
 		<?php endif; ?>
 		
-		<?php if(wpsc_has_pages() && ((get_option('wpsc_page_number_position') == 1 ) || (get_option('wpsc_page_number_position') == 3)))  : ?>
-			<div class='wpsc_page_numbers'>
-				Pages:
-				<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>
-					<?php if(wpsc_page_is_selected()) :?> 	   
-						<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-					<?php else: ?> 
-						<a href='<?php echo wpsc_page_url(); ?>'><?php echo wpsc_page_number(); ?></a>
-					<?php endif; ?> 
-				<?php endwhile; ?>
+		
+		<!-- Start Pagination -->
+		<?php if ( ( get_option( 'use_pagination' ) == 1 && ( get_option( 'wpsc_page_number_position' ) == 1 || get_option( 'wpsc_page_number_position' ) == 3 ) ) ) : ?>
+			<div class="wpsc_page_numbers">
+				<?php if ( wpsc_has_pages() ) : ?>
+					Page <?php echo wpsc_showing_products_page(); ?>: <?php echo wpsc_first_products_link( '&laquo; First', true ); ?> <?php echo wpsc_previous_products_link( '&laquo; Previous', true ); ?> <?php echo wpsc_pagination( 10 ); ?> <?php echo wpsc_next_products_link( 'Next &raquo;', true ); ?> <?php echo wpsc_last_products_link( 'Last &raquo;', true ); ?>
+				<?php else : ?>
+					Showing all <?php echo wpsc_total_product_count(); ?> products
+				<?php endif; ?> 
 			</div>
 		<?php endif; ?>
-
+		<!-- End Pagination -->
+		
+		
 		<table class="list_productdisplay <?php echo wpsc_category_class(); ?>">
 			<?php /** start the product loop here */?>
 			<?php $alt = 0;	?>
@@ -190,18 +191,18 @@ global $wpsc_query, $wpdb;
 		echo fancy_notifications();
 	}
 	?>
-
-		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
-			<div class='wpsc_page_numbers'>
-				Pages:
-				<?php while ($wpsc_query->have_pages()) : $wpsc_query->the_page(); ?>
-					<?php if(wpsc_page_is_selected()) :?> 	   
-						<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-					<?php else: ?> 
-						<a href='<?php echo wpsc_page_url(); ?>'><?php echo wpsc_page_number(); ?></a>
-					<?php endif; ?> 
-				<?php endwhile; ?>
+		
+		
+		<!-- Start Pagination -->
+		<?php if ( ( get_option( 'use_pagination' ) == 1 && ( get_option( 'wpsc_page_number_position' ) == 2 || get_option( 'wpsc_page_number_position' ) == 3 ) ) ) : ?>
+			<div class="wpsc_page_numbers">
+				<?php if ( wpsc_has_pages() ) : ?>
+					Page <?php echo wpsc_showing_products_page(); ?>: <?php echo wpsc_first_products_link( '&laquo; First', true ); ?> <?php echo wpsc_previous_products_link( '&laquo; Previous', true ); ?> <?php echo wpsc_pagination( 10 ); ?> <?php echo wpsc_next_products_link( 'Next &raquo;', true ); ?> <?php echo wpsc_last_products_link( 'Last &raquo;', true ); ?>
+				<?php endif; ?> 
 			</div>
 		<?php endif; ?>
+		<!-- End Pagination -->
+		
+		
 	<?php endif; ?>
 </div>

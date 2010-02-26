@@ -116,6 +116,7 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/mimetype.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/display.functions.php');
+require_once(WPSC_FILE_PATH.'/wpsc-includes/pagination.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/shortcode.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');

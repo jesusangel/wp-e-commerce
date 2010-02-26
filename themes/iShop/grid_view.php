@@ -64,20 +64,20 @@ $image_height = get_option('product_image_height');
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
-	
-	<?php if(wpsc_has_pages() && ((get_option('wpsc_page_number_position') == 1 ) || (get_option('wpsc_page_number_position') == 3)))  : ?>
-		<div class='wpsc_page_numbers'>
-		  Pages: 
-			<?php while (wpsc_have_pages()) : wpsc_the_page(); ?>
-				<?php if(wpsc_page_is_selected()) :?> 	   
-					<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-				<?php else: ?> 
-					<a href='<?php echo wpsc_page_url(); ?>'><?php echo wpsc_page_number(); ?></a>
+		
+		
+		<!-- Start Pagination -->
+		<?php if ( ( get_option( 'use_pagination' ) == 1 && ( get_option( 'wpsc_page_number_position' ) == 1 || get_option( 'wpsc_page_number_position' ) == 3 ) ) ) : ?>
+			<div class="wpsc_page_numbers">
+				<?php if ( wpsc_has_pages() ) : ?>
+					<div class="pagination-products-showing">Showing <?php echo wpsc_showing_products(); ?> of <?php echo wpsc_total_product_count(); ?> products</div>
+					<div class="pagination-pages"><?php echo wpsc_first_products_link( '&laquo; First', true ); ?> <?php echo wpsc_previous_products_link( '&laquo; Previous', true ); ?> <?php echo wpsc_pagination( 10 ); ?> <?php echo wpsc_next_products_link( 'Next &raquo;', true ); ?> <?php echo wpsc_last_products_link( 'Last &raquo;', true ); ?></div>
 				<?php endif; ?> 
-			<?php endwhile; ?>
-		</div>
-	<?php endif; ?>
-
+			</div>
+		<?php endif; ?>
+		<!-- End Pagination -->
+		
+		
 	<div class="product_grid_display">
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			<div class="product_grid_item product_view_<?php echo wpsc_the_product_id(); ?>">
@@ -172,19 +172,19 @@ $image_height = get_option('product_image_height');
 		
 		
 	</div>
-	
-	<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
-	<div class='wpsc_page_numbers'>
-		Pages: 
-		<?php while ($wpsc_query->have_pages()) : $wpsc_query->the_page(); ?>
-			<?php if(wpsc_page_is_selected()) :?> 	   
-				<a href='<?php echo wpsc_page_url(); ?>' class='selected'><?php echo wpsc_page_number(); ?></a>
-			<?php else: ?> 
-				<a href='<?php echo wpsc_page_url(); ?>'><?php echo wpsc_page_number(); ?></a>
-			<?php endif; ?> 
-		<?php endwhile; ?>
-	</div>
-	<?php endif; ?>
+		
+		
+		<!-- Start Pagination -->
+		<?php if ( ( get_option( 'use_pagination' ) == 1 && ( get_option( 'wpsc_page_number_position' ) == 2 || get_option( 'wpsc_page_number_position' ) == 3 ) ) ) : ?>
+			<div class="wpsc_page_numbers">
+				<?php if ( wpsc_has_pages() ) : ?>
+					<div class="pagination-pages"><?php echo wpsc_first_products_link( '&laquo; First', true ); ?> <?php echo wpsc_previous_products_link( '&laquo; Previous', true ); ?> <?php echo wpsc_pagination( 10 ); ?> <?php echo wpsc_next_products_link( 'Next &raquo;', true ); ?> <?php echo wpsc_last_products_link( 'Last &raquo;', true ); ?></div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
+		<!-- End Pagination -->
+		
+		
 	<?php endif; ?>
 	
 	
