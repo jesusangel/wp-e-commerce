@@ -10,6 +10,7 @@ jQuery(document).ready( function () {
 	
     jQuery('.wpsc_prod_thumb_option').livequery(function(){
 	  jQuery(this).blur(function(){
+	  	if(jQuery('.wpsc_mass_resize').css('visibility') != 'hidden')
 	 	jQuery('.wpsc_mass_resize').css('visibility', 'hidden');
 	  });
 	});

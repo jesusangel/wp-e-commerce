@@ -53,7 +53,7 @@ function wpsc_add_to_cart() {
   
   
   /// sanitise submitted values
-  $product_id = (int)$_POST['product_id'];
+  $product_id = (int)$_REQUEST['product_id'];
   foreach((array)$_POST['variation'] as $key => $variation) {
     $provided_parameters['variation_values'][(int)$key] = (int)$variation;
   }
@@ -83,7 +83,7 @@ function wpsc_add_to_cart() {
 	$state = $wpsc_cart->set_item($product_id,$parameters); 
 	
 	$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$product_id."' LIMIT 1",ARRAY_A);
-   
+//   exit('<pre>'.print_r($product,true).'</pre>');
   if($state == true) {
 		$cart_messages[] = str_replace("[product_name]", stripslashes($product['name']), __('You just added "[product_name]" to your cart.', 'wpsc'));
 	} else {

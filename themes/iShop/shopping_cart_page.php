@@ -39,6 +39,7 @@ if(wpsc_cart_item_count() > 0) :
 			<td><span class="pricedisplay" id='shipping_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo wpsc_cart_item_shipping(); ?></span></td>
 			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
 			<td>
+			<?php endif; ?>
 			
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
 					<input type="hidden" name="quantity" value="0"/>
