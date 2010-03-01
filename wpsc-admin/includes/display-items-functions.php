@@ -405,9 +405,9 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 								$output .= "".$category_group_name.":<br />";
 								$output .= "</p>";
 								if ($product_data == '')
-									$output .= wpsc_category_list($categorisation_group['id'], false, 'add_');
+									$output .= wpsc_category_list($categorisation_group['id'], false, 'add_', null, 0, 'name' );
 								else 
-									$output .= wpsc_category_list($categorisation_group['id'], $product_data['id'], 'edit_');
+									$output .= wpsc_category_list($categorisation_group['id'], $product_data['id'], 'edit_', null, 0, 'name' );
 								
 							}
 						}
@@ -1240,12 +1240,12 @@ function wpsc_main_product_image_menu($product_id) {
 	* Displays the category forms for adding and editing products
 	* Recurses to generate the branched view for subcategories
 	*/
-function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0) {
+function wpsc_category_list($group_id, $product_id = '', $unique_id = '', $category_id = null, $iteration = 0, $orderby = 'id' ) {
   global $wpdb;
   if(is_numeric($category_id)) {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '$category_id'  ORDER BY `$orderby` ASC",ARRAY_A);
   } else {
-    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `id` ASC",ARRAY_A);
+    $values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$group_id') AND  `active`='1' AND `category_parent` = '0'  ORDER BY `$orderby` ASC",ARRAY_A);
 	}
 	
 	if($category_id < 1) {
