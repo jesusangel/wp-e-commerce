@@ -421,16 +421,18 @@ if(!function_exists('wpsc_initialisation')){
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
 	}
-  $GLOBALS['wpsc_category_url_cache'] = get_option('wpsc_category_url_cache');
-
-  
-		register_taxonomy('product_tag', 'product');
+	$GLOBALS['wpsc_category_url_cache'] = get_option('wpsc_category_url_cache');
+	//register_taxonomy('product_tag', 'product');
 }
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
 
 
 
+function wpsc_register_post_types() {
+	register_taxonomy('product_tag', 'wpsc-product');
+}
+add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
 
 
 switch(get_option('cart_location')) {
