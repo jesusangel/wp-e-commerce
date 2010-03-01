@@ -1,6 +1,6 @@
 <?php
 global $wpdb, $user_ID, $nzshpcrt_gateways;
-//$curgateway = get_option('payment_gateway');
+do_action('wpsc_transaction_results');
 
 $sessionid = $_GET['sessionid'];
 if(!isset($_GET['sessionid']) && isset($_GET['ms']) ){

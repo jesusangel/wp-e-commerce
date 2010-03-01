@@ -498,6 +498,7 @@ if($_REQUEST['wpsc_action'] == 'cart_html_page') {
 function wpsc_submit_checkout() {
   global $wpdb, $wpsc_cart, $user_ID,$nzshpcrt_gateways, $wpsc_shipping_modules, $wpsc_gateways;
   //echo "break redirect";
+//
    	do_action('wpsc_before_submit_checkout');
 
 	$_SESSION['wpsc_checkout_misc_error_messages'] = array();
@@ -507,6 +508,7 @@ function wpsc_submit_checkout() {
 	$submitted_gateway = $_POST['custom_gateway'];
 
 	$options = get_option('custom_shipping_options');
+
 	$form_validity = $wpsc_checkout->validate_forms();
 	
 	extract($form_validity); // extracts $is_valid and $error_messages

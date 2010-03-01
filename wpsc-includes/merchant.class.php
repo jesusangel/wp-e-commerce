@@ -115,7 +115,7 @@ class wpsc_merchant {
 			'billing' => array(),
 			'shipping' => array()
 		);
-		foreach($collected_form_data as $collected_form_row) {
+		foreach((array)$collected_form_data as $collected_form_row) {
 			$address_data_set = 'billing';
 			$address_key =  array_search($collected_form_row['unique_name'], $address_keys['billing']);
 			if($address_key === null) {
@@ -162,7 +162,7 @@ class wpsc_merchant {
 		$original_cart_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid` = {$purchase_id}", ARRAY_A);
 		//print_r($original_cart_data);
 		//return;
-		foreach($original_cart_data as $cart_row) {
+		foreach((array)$original_cart_data as $cart_row) {
 		  $is_downloadable = false;
 			if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` WHERE `cartid` = {$cart_row['id']}")) {
 				$is_downloadable = true;
@@ -240,7 +240,7 @@ class wpsc_merchant {
 		global $wpdb;
 		$transaction_id = $wpdb->escape($transaction_id);
 		$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."', `transactid` ='{$transaction_id}'  WHERE `id` = ".absint($this->purchase_id)." LIMIT 1");
-		//exit("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."', `transactid` ='{$transaction_id}'  WHERE `id` IN ('".absint($this->purchase_id)."') LIMIT 1");
+		//echo("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."', `transactid` ='{$transaction_id}'  WHERE `id` IN ('".absint($this->purchase_id)."') LIMIT 1");
   }
 	/**
 	* construct_value_array gateway specific data array, extended in merchant files
