@@ -36,10 +36,12 @@ function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
 	
 	//$new_rewrite_rules['products/.+?/[^/]+/attachment/([^/]+)/?$'] = 'index.php?attachment=$1';
 	//$new_rewrite_rules['products/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php??post_type=wpsc-product&products=$1&name=$2&cpage=$3';
+	//$new_rewrite_rules['products/.+?/([^/]+)/page/?([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&paged=$matches[2]';
 	
 	
+	$new_rewrite_rules['products/(.+?)/product/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]&cpage=$matches[3]';
 	$new_rewrite_rules['products/(.+?)/product/([^/]+)/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]';
-	$new_rewrite_rules['products/.+?/([^/]+)/page/?([0-9]{1,})?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&paged=$matches[2]';
+	$new_rewrite_rules['products/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]&cpage=$matches[3]';
 	$new_rewrite_rules['products/(.+?)/([^/]+)?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]';
 	$new_rewrite_rules['(products/checkout)(/[0-9]+)?/?$'] = 'index.php?pagename=$1&page=$2';
 
@@ -94,12 +96,14 @@ function wpsc_split_the_query($query) {
 	global $wpsc_query;
 	// These values are to be dynamically defined
 	
-	$products_pagename = "products"; 
+	$products_pages = array(
+		"products", 
+		"products-page"
+	); 
 	$checkout_pagename = "products/checkout";
 	
-	
-	if (($query->query_vars['pagename'] == $products_pagename) || isset($query->query_vars['products'])) {
-		$query->query_vars['pagename'] = $products_pagename;
+	if (in_array($query->query_vars['pagename'], $products_pages) || isset($query->query_vars['products'])) {
+		$query->query_vars['pagename'] = "products";
 		$query->query_vars['name'] = '';
 		$query->query_vars['post_type'] = '';
 		$query->is_singular = true;
@@ -110,6 +114,7 @@ function wpsc_split_the_query($query) {
 		
 		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
 		remove_filter('parse_query', 'wpsc_split_the_query');
+		
 		add_filter('parse_query', 'wpsc_generate_product_query', 11);
 		
 		if($wpsc_query == null) {
@@ -117,7 +122,7 @@ function wpsc_split_the_query($query) {
 		}
 	}
 	
-	//echo "<pre>".print_r($query,true)."</pre>";
+	//exit("<pre>".print_r($query,true)."</pre>");
 	if($query->query_vars['pagename'] == $checkout_pagename ) {
 		$query->is_checkout = true;
 	}
@@ -126,7 +131,26 @@ function wpsc_split_the_query($query) {
 }
 
 
+/**
+ * wpsc_generate_product_query function.
+ * 
+ * @access public
+ * @param mixed $query
+ * @return void
+ */
 function wpsc_generate_product_query($query) {
+
+	// default product selection
+	if($query->query_vars['pagename'] != '') {
+		$query->query_vars['post_type'] = 'wpsc-product';
+		$query->query_vars['pagename'] = '';
+		$query->is_page = false;
+		$query->is_tax = false;
+		$query->is_archive = true;
+		$query->is_singular = false;
+		$query->is_single = false;
+	}
+
 	// If wpsc_item is not null, we are looking for a product or a product category, check for category
 	if($query->query_vars['wpsc_item'] != '') {
 		$test_term = get_term_by('slug', $query->query_vars['wpsc_item'], 'wpsc_product_category');
@@ -146,9 +170,11 @@ function wpsc_generate_product_query($query) {
 		$query->is_singular = false;
 		$query->is_single = false;
 	}
+	if($query->is_tax == true) {
+		new wpsc_products_by_category($query);
+	} 
 	
-	
-	
+	//echo "<pre>".print_r($query, true)."</pre>";
 	return $query;
 }
 
@@ -166,6 +192,114 @@ add_filter('parse_query', 'wpsc_split_the_query', 10);
 add_filter('parse_query', 'wpsc_mark_product_query', 12);
 
 
+/**
+ * wpsc_products_by_category class.
+ * 
+ */
+class wpsc_products_by_category {
+	var $sql_components = array();
+
+	/**
+	 * wpsc_products_by_category function.
+	 * 
+	 * @access public
+	 * @param mixed $query
+	 * @return void
+	 */
+	function wpsc_products_by_category($query) {
+		global $wpdb;		
+		$q = $query->query_vars;
+		
+		//echo "<pre>".print_r($q, true)."</pre>";
+		// Category stuff for nice URLs
+		if ( ('' != $q['taxonomy']) && ('' != $q['term']) && !$query->is_singular ) {
+			$join = " INNER JOIN $wpdb->term_relationships 
+				ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id) 
+			INNER JOIN $wpdb->term_taxonomy 
+				ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
+			";
+			
+			$whichcat = " AND $wpdb->term_taxonomy.taxonomy = '{$q['taxonomy']}' ";
+			
+			$term_data = get_term_by('slug', $q['term'], $q['taxonomy']);
+			
+			$term_children_data = get_term_children( $term_data->term_id, $q['taxonomy'] );
+			
+			$in_cats = array($term_data->term_id);
+			$in_cats = array_reverse(array_merge($in_cats, $term_children_data));
+			
+			$in_cats = "'" . implode("', '", $in_cats) . "'";
+			$whichcat .= "AND $wpdb->term_taxonomy.term_id IN ($in_cats)";
+			$groupby = "{$wpdb->posts}.ID";
+		
+			$this->sql_components['join'] = $join;
+			$this->sql_components['where'] = $whichcat;
+			$this->sql_components['fields'] = "{$wpdb->posts}.*, {$wpdb->term_taxonomy}.term_id";
+			$this->sql_components['order_by'] = "{$wpdb->term_taxonomy}.term_id";
+			$this->sql_components['group_by'] = $groupby;
+		
+			add_filter('posts_join', array(&$this, 'join_sql'));
+			add_filter('posts_where', array(&$this, 'where_sql'));
+			add_filter('posts_fields', array(&$this, 'fields_sql'));
+			add_filter('posts_orderby', array(&$this, 'order_by_sql'));
+			add_filter('posts_groupby', array(&$this, 'group_by_sql'));
+			
+		}
+		//add_filter('posts_request', array(&$this, 'request_sql'));
+		
+	}
+	
+	function join_sql($sql) {
+		if(isset($this->sql_components['join'])) {
+			$sql = $this->sql_components['join'];
+		}
+		remove_filter('posts_join', array(&$this, 'join_sql'));
+		return $sql;
+	}
+
+	function where_sql($sql) {
+		if(isset($this->sql_components['where'])) {
+			$sql = $this->sql_components['where'];
+		}
+		remove_filter('posts_where', array(&$this, 'where_sql'));
+		return $sql;
+	}
+	
+	function order_by_sql($sql) {
+		$order_by_parts =array();
+		$order_by_parts[] = $sql;
+		if(isset($this->sql_components['order_by'])) {
+			$order_by_parts[] = $this->sql_components['order_by'];
+		}
+		$order_by_parts = array_reverse($order_by_parts);
+		$sql = implode(',', $order_by_parts);
+		remove_filter('posts_orderby', array(&$this, 'order_by_sql'));
+		return $sql;
+	}
+	
+	function fields_sql($sql) {
+		if(isset($this->sql_components['fields'])) {
+			$sql = $this->sql_components['fields'];
+		}
+		remove_filter('posts_fields', array(&$this, 'fields_sql'));
+		return $sql;
+	}
+	
+	function group_by_sql($sql) {
+		if(isset($this->sql_components['group_by'])) {
+			$sql = $this->sql_components['group_by'];
+		}
+		remove_filter('posts_groupby', array(&$this, 'group_by_sql'));
+		return $sql;
+	}
+	
+	function request_sql($sql) {
+		echo $sql ."<br />";
+		remove_filter('posts_request', array(&$this, 'request_sql'));
+		return $sql;
+	}
+	
+}
 
 
 function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
@@ -227,32 +361,35 @@ function wpsc_product_link($permalink, $post, $leavename) {
 	// This may become customiseable later
 	$our_permalink_structure = "%term_url%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product " 
-	if ( '' != $permalink_structure && !in_array($post->post_status, array('draft', 'pending')) && ($post->post_type == 'wpsc-product') ) {
+	if ( '' != $permalink_structure && !in_array($post->post_status, array('draft', 'pending')) ) {
 		$product_categories = wp_get_object_terms($post->ID, 'wpsc_product_category');
-		
+		$product_category_slugs = array();
+		foreach($product_categories as $product_category) {
+			$product_category_slugs[] = $product_category->slug;
+		}
+			
 		// If the product is associated with multiple categories, determine which one to pick	
 		if(count($product_categories) > 1) {
-			$product_category_slugs = array();
-			foreach($product_categories as $product_category) {
-				$product_category_slugs[] = $product_category->slug;
-			}
 			if(($wp_query->query_vars['products']!= null) && in_array($wp_query->query_vars['products'], $product_category_slugs)) {
 				$product_category = $wp_query->query_vars['products'];
 			} else  {
-				$product_category = array_shift($product_category_slugs);
+				$product_category = $product_category_slugs[0];
 			}
 			$category_slug = $product_category;
 			$term_url = get_term_link($category_slug, 'wpsc_product_category');
 		} else {
 			// If the product is associated with only one category, we only have one choice
-			$product_category = array_shift($product_categories);
+			$product_category = $product_categories[0];
 			$category_slug = $product_category->slug;
 			$term_url = get_term_link($category_slug, 'wpsc_product_category');
 		}
+		
+		//echo "'><pre>_".print_r($product_category_slugs, true)."_</pre>";
 		$post_name = $post->post_name;
-		if($post_name == $category_slug) {
+		if(in_array($post_name, $product_category_slugs)) {
 			$post_name = "product/{$post_name}";
 		}
+		
 		$rewritereplace = array(
 			untrailingslashit($term_url),
 			$post_name,
@@ -305,13 +442,13 @@ function wpsc_products_template_fallback() {
 	return wpsc_template_fallback('products');
 
 }
-add_filter("products_template", 'wpsc_products_template_fallback');
+//add_filter("products_template", 'wpsc_products_template_fallback');
 
 function wpsc_checkout_template_fallback() {
 	return wpsc_template_fallback('checkout');
 
 }
-add_filter("checkout_template", 'wpsc_checkout_template_fallback');
+//add_filter("checkout_template", 'wpsc_checkout_template_fallback');
 
 
 /**

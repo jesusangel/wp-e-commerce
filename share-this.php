@@ -412,13 +412,9 @@ function wpsc_akst_share_link($action = 'print') {
 		$permalink = get_permalink($post->ID);
 		if($wp_query->query_vars['product_url_name'] != null){
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
-			$product_link = wpsc_product_url($product_id);
+			$product_link = get_permalink(absint($product_id));
 		} else {
-			if(strstr($permalink, "?") !== false) {
-				$product_link = $permalink."&product_id=".$_REQUEST['product_id'];
-			} else {
-				$product_link = wpsc_product_url((int)$_REQUEST['product_id']);
-			}
+			$product_link = get_permalink(absint($_REQUEST['product_id']));
 		}
 // 		exit("<pre>".print_r($product_link,true)."</pre>");
 	$onclick = 'onclick="wpsc_akst_share(\''.$post->ID.'\', \''.urlencode($product_link).'\', \''.urlencode(get_the_title()).'\'); return false;"';
@@ -616,14 +612,9 @@ function wpsc_akst_send_mail() {
     //$message .= ak_decode_entities(get_the_title($post_id))."\n\n";
     if($wp_query->query_vars['product_url_name'] != '') {
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
-			$message .= wpsc_product_url($product_id);
+			$message .= get_permalink($product_id);
     } else {
-			if(strstr($permalink, "?") !== false) {
-				$message .= $permalink."&product_id=".$_REQUEST['wpsc_akst_product_id']."\n\n";
-			} else {
-				// $message .= $permalink."?product_id=".$_REQUEST['wpsc_akst_product_id']."\n\n";
-				$message .= wpsc_product_url((int)$_REQUEST['wpsc_akst_product_id'])."\n\n";
-			}
+    	$message .= get_permalink((int)$_REQUEST['wpsc_akst_product_id']);
     }
     $message .= __('Enjoy.', 'alexking.org')."\n\n";
     $message .= '--'."\n";

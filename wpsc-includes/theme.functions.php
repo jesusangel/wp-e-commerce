@@ -126,13 +126,13 @@ if($_GET['wpsc_user_dynamic_js'] == 'true') {
 
 
 function wpsc_user_dynamic_css() {  
-  global $wpdb;  
-  header('Content-Type: text/css');
- 	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
- 	header('Cache-Control: public, must-revalidate, max-age=86400');
- 	header('Pragma: public'); 	
- 	
-  $category_id = absint($_GET['category']);
+	global $wpdb;  
+	header('Content-Type: text/css');
+	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
+	header('Cache-Control: public, must-revalidate, max-age=86400');
+	header('Pragma: public'); 	
+	
+	$category_id = absint($_GET['category']);
 
 	$category_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1",ARRAY_A);
 	
@@ -154,11 +154,11 @@ function wpsc_user_dynamic_css() {
 			$thumbnail_height = 96; 
 		}
 		
-    $single_thumbnail_width = get_option('single_view_image_width');
-    $single_thumbnail_height = get_option('single_view_image_height');
-    if($single_thumbnail_width <= 0) {
-      $single_thumbnail_width = 128;
-    }
+		$single_thumbnail_width = get_option('single_view_image_width');
+		$single_thumbnail_height = get_option('single_view_image_height');
+		if($single_thumbnail_width <= 0) {
+			$single_thumbnail_width = 128;
+		}
 		
 		?>
 		
@@ -239,51 +239,59 @@ function wpsc_user_dynamic_css() {
 		}
       
     <?php
-    
-    $product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, `meta1`.`meta_value` AS `height`, `meta2`.`meta_value` AS `width` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` ON `products`.`id` = `meta1`.`product_id` AND  `products`.`id` = `meta2`.`product_id`  WHERE `products`.`thumbnail_state` IN(0,2,3) AND `meta1`.`meta_key` IN ('thumbnail_height') AND `meta2`.`meta_key` IN ('thumbnail_width')", ARRAY_A);
-    //print_r($product_image_size_list);
-    foreach((array)$product_image_size_list as $product_image_sizes) {
-      $individual_thumbnail_height = $product_image_sizes['height']; 
-      $individual_thumbnail_width = $product_image_sizes['width'];     
-      $product_id = $product_image_sizes['id'];
-      if($individual_thumbnail_height > $thumbnail_height) { 
-        echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r";
-        echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-        echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-        echo "      }\n\r";
-      } 
-      if($individual_thumbnail_width > $thumbnail_width) {
-          echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
-          echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
-          //echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
-          echo "      }\n\r";
-  
-          echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
-          echo "            position:absolute;\n\r";
-          echo "            top:0px;\n\r";
-          echo "            left: 0px;\n\r";
-          echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
-          echo "      }\n\r";
-        }
-
-        
-				if(($individual_thumbnail_width > $thumbnail_width) || ($individual_thumbnail_height > $thumbnail_height)) {
-						echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
-						echo "            width: ".$individual_thumbnail_width."px;\n\r";
-						echo "            height: ".$individual_thumbnail_height."px;\n\r";
-						echo "      }\n\r";
-				}
-      }
-      
-    }
-    
-  if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {
-    $brandstate = 'block';
-    $categorystate = 'none';
-  } else {
-    $brandstate = 'none';
-    $categorystate = 'block';
-  }
+	
+		$product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, 
+			`meta1`.`meta_value` AS `height`, 
+			`meta2`.`meta_value` AS `width` 
+		FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` 
+		INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` 
+		INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` 
+		ON `products`.`id` = `meta1`.`product_id` 
+			AND  `products`.`id` = `meta2`.`product_id`  
+		WHERE `products`.`thumbnail_state` IN(0,2,3) 
+			AND `meta1`.`meta_key` IN ('thumbnail_height') 
+			AND `meta2`.`meta_key` IN ('thumbnail_width')",
+		ARRAY_A);
+		//print_r($product_image_size_list);
+		foreach((array)$product_image_size_list as $product_image_sizes) {
+			$individual_thumbnail_height = $product_image_sizes['height']; 
+			$individual_thumbnail_width = $product_image_sizes['width'];     
+			$product_id = $product_image_sizes['id'];
+			if($individual_thumbnail_height > $thumbnail_height) { 
+				echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r";
+				echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+				echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+				echo "      }\n\r";
+			} 
+			if($individual_thumbnail_width > $thumbnail_width) {
+				echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
+				echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
+				//echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
+				echo "      }\n\r";
+				
+				echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
+				echo "            position:absolute;\n\r";
+				echo "            top:0px;\n\r";
+				echo "            left: 0px;\n\r";
+				echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
+				echo "      }\n\r";
+			}
+			
+			if(($individual_thumbnail_width > $thumbnail_width) || ($individual_thumbnail_height > $thumbnail_height)) {
+				echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
+				echo "            width: ".$individual_thumbnail_width."px;\n\r";
+				echo "            height: ".$individual_thumbnail_height."px;\n\r";
+				echo "      }\n\r";
+			}
+		}
+	}
+	if(is_numeric($_GET['brand']) || (get_option('show_categorybrands') == 3)) {
+		$brandstate = 'block';
+		$categorystate = 'none';
+	} else {
+		$brandstate = 'none';
+		$categorystate = 'block';
+	}
       
     ?>
     div#categorydisplay{
@@ -310,19 +318,24 @@ if($_GET['wpsc_user_dynamic_css'] == 'true') {
 * @return string - html displaying one or more products
 */
 function wpsc_display_products_page($query) {
-  global $wpdb, $wpsc_query, $wpsc_theme_path;
-	
+	global $wpdb, $wpsc_query, $wpsc_theme_path;
+	static $count = 0;
+	$count++;
+	if($count > 10) {
+		exit('fail');
+	}
 	/// added by xiligroup.dev to be compatible with touchshop
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	/// end of added by xiligroup.dev to be compatible with touchshop
   
-  $temp_wpsc_query = new WPSC_query($query);
-  list($wpsc_query, $temp_wpsc_query) = array($temp_wpsc_query, $wpsc_query); // swap the wpsc_query objects
-  
+	//$temp_wpsc_query = new wpsc_query($query);
+	list($wpsc_query, $temp_wpsc_query) = array($temp_wpsc_query, $wpsc_query); // swap the wpsc_query objects
+	
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	if(wpsc_is_single_product()) {
 		include($cur_wpsc_theme_folder."/single_product.php");
+		$is_single = true;
 	} else {
 		// get the display type for the selected category
 		if(is_numeric($wpsc_query->query_vars['category_id'])) {
@@ -381,12 +394,16 @@ function wpsc_display_products_page($query) {
 				include($cur_wpsc_theme_folder."/products_page.php");
 			break;
 		}
+			$is_single = false;
 	}
 	$output = ob_get_contents();
 	ob_end_clean();
 	//$output = str_replace('$','\$', $output);
 
 	list($temp_wpsc_query, $wpsc_query) = array($wpsc_query, $temp_wpsc_query); // swap the wpsc_query objects back
+	if($is_single == false) {
+		$GLOBALS['post'] = $wp_query->post;
+	}
 	return $output;
 }
 
@@ -395,18 +412,17 @@ function wpsc_display_products_page($query) {
 function wpsc_products_page($content = '') {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path;
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-	
-  
+		remove_filter('the_content', 'wpsc_products_page');
 	$output = '';
 	if(preg_match("/\[productspage\]/",$content)) {	
-		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query objects
-		//exit("<pre>".print_r($wp_query,true)."</pre>");
+		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query object
 
 	
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		ob_start();
-		if(count($wpsc_query->products) == 1) {			
+		if(count($wp_query->posts) == 1) {			
 			include($cur_wpsc_theme_folder."/single_product.php");
+			$is_single = true;
 		} else {
 		  // get the display type for the selected category
 			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
@@ -431,18 +447,18 @@ function wpsc_products_page($content = '') {
 			if(isset($_GET['view_type'])) {
 				switch($_GET['view_type']) {
 					case 'grid':
-					$display_type = 'grid';
-					$_SESSION['wpsc_display_type'] = $display_type;
+						$display_type = 'grid';
+						$_SESSION['wpsc_display_type'] = $display_type;
 					break;
 					
 					case 'list':
-					$display_type = 'list';
-					$_SESSION['wpsc_display_type'] = $display_type;
+						$display_type = 'list';
+						$_SESSION['wpsc_display_type'] = $display_type;
 					break;
 					
 					case 'default':
-					$display_type = 'default';
-					$_SESSION['wpsc_display_type'] = $display_type;
+						$display_type = 'default';
+						$_SESSION['wpsc_display_type'] = $display_type;
 					break;
 	
 					default:
@@ -465,17 +481,28 @@ function wpsc_products_page($content = '') {
 					break; // only break if we have the file;
 				}
 				
-			  case "default":  // this may be redundant :D
-			  default:
-			    include($cur_wpsc_theme_folder."/products_page.php");
-			  break;
+				case "default":  // this may be redundant :D
+				default:
+					include($cur_wpsc_theme_folder."/products_page.php");
+				break;
 			}
+			$is_single = false;
 		}
 		$output .= ob_get_contents();
 		ob_end_clean();
 		$output = str_replace('$','\$', $output);
 		
-		list($wpsc_query, $wp_query) = array($wp_query, $wpsc_query); // swap the wpsc_query objects back
+		$product_id = $wp_query->post->ID;
+		
+		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query objects back
+		
+		
+		$product_meta = get_post_meta($product_id, '_wpsc_product_metadata', true);
+		if(($is_single == false) || ($product_meta['enable_comments'] == '0')) {
+			$GLOBALS['post'] = $wp_query->post;
+		}
+		//echo "<pre>".print_r($product_meta['enable_comments'], true)."</pre>";
+		
 	    return preg_replace("/(<p>)*\[productspage\](<\/p>)*/",$output, $content);
 	} else {
 	    return $content;
@@ -600,38 +627,36 @@ function add_to_cart_shortcode($content = '') {
 
 
 function wpsc_enable_page_filters($excerpt = ''){
-  global $wp_query;
-  add_filter('the_content', 'add_to_cart_shortcode', 12);//Used for add_to_cart_button shortcode
-  add_filter('the_content', 'wpsc_products_page', 12);
-  add_filter('the_content', 'wpsc_place_shopping_cart', 12);
-  add_filter('the_content', 'wpsc_transaction_results', 12);
-  //add_filter('the_content', 'wpsc_checkout', 12);
-  add_filter('the_content', 'nszhpcrt_homepage_products', 12);
-  add_filter('the_content', 'wpsc_user_log', 12);
-  add_filter('the_content', 'nszhpcrt_category_tag', 12);
-  add_filter('the_content', 'wpsc_show_categories', 12);
-  add_filter('the_content', 'wpsc_substitute_buy_now_button', 12);
-  return $excerpt;
+	global $wp_query;
+	add_filter('the_content', 'add_to_cart_shortcode', 12);//Used for add_to_cart_button shortcode
+	add_filter('the_content', 'wpsc_products_page', 12);
+	add_filter('the_content', 'wpsc_place_shopping_cart', 12);
+	add_filter('the_content', 'wpsc_transaction_results', 12);
+	add_filter('the_content', 'nszhpcrt_homepage_products', 12);
+	add_filter('the_content', 'wpsc_user_log', 12);
+	add_filter('the_content', 'nszhpcrt_category_tag', 12);
+	add_filter('the_content', 'wpsc_show_categories', 12);
+	add_filter('the_content', 'wpsc_substitute_buy_now_button', 12);
+	return $excerpt;
 }
 
 function wpsc_disable_page_filters($excerpt = '') {
 	remove_filter('the_content', 'add_to_cart_shortcode');//Used for add_to_cart_button shortcode
-  remove_filter('the_content', 'wpsc_products_page');
-  remove_filter('the_content', 'wpsc_place_shopping_cart');
-  remove_filter('the_content', 'wpsc_transaction_results');
-  //remove_filter('the_content', 'wpsc_checkout');
-  remove_filter('the_content', 'nszhpcrt_homepage_products');
-  remove_filter('the_content', 'wpsc_user_log');
-  remove_filter('the_content', 'wpsc_category_tag');
-  remove_filter('the_content', 'wpsc_show_categories');
-  remove_filter('the_content', 'wpsc_substitute_buy_now_button');
-  return $excerpt;
+	remove_filter('the_content', 'wpsc_products_page');
+	remove_filter('the_content', 'wpsc_place_shopping_cart');
+	remove_filter('the_content', 'wpsc_transaction_results');
+	remove_filter('the_content', 'nszhpcrt_homepage_products');
+	remove_filter('the_content', 'wpsc_user_log');
+	remove_filter('the_content', 'wpsc_category_tag');
+	remove_filter('the_content', 'wpsc_show_categories');
+	remove_filter('the_content', 'wpsc_substitute_buy_now_button');
+	return $excerpt;
 }
 
 wpsc_enable_page_filters();
 
-add_filter('get_the_excerpt', 'wpsc_disable_page_filters', -1000000);
-add_filter('get_the_excerpt', 'wpsc_enable_page_filters', 1000000);
+//add_filter('get_the_excerpt', 'wpsc_disable_page_filters', -1000000);
+//add_filter('get_the_excerpt', 'wpsc_enable_page_filters', 1000000);
 
 
 

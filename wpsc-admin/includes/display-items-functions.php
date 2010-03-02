@@ -174,21 +174,21 @@ function wpsc_product_basic_details_form(&$product_data) {
 						<a href='#' class='shorttag_toggle'></a>
 					</div>
 					<div class='admin_product_shorttags'>
-						<h4>Shortcodes</h4>
+						<h4><?php _e('Shortcodes', 'wpsc'); ?></h4>
 	
 						<dl>
-							<dt><?php echo __('Display Product Shortcode', 'wpsc'); ?>: </dt><dd>[wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
-							<dt><?php echo __('Buy Now Shortcode', 'wpsc'); ?>: </dt><dd>[buy_now_button=<?php echo $product_data['id'];?>]</dd>
-							<dt><?php echo __('Add to Cart Shortcode', 'wpsc'); ?>: </dt><dd>[add_to_cart=<?php echo $product_data['id'];?>]</dd>
+							<dt><?php _e('Display Product Shortcode', 'wpsc'); ?>: </dt><dd>[wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
+							<dt><?php _e('Buy Now Shortcode', 'wpsc'); ?>: </dt><dd>[buy_now_button=<?php echo $product_data['id'];?>]</dd>
+							<dt><?php _e('Add to Cart Shortcode', 'wpsc'); ?>: </dt><dd>[add_to_cart=<?php echo $product_data['id'];?>]</dd>
 						</dl>
 
-						<h4>Template Tags</h4>
+						<h4><?php _e('Template Tags', 'wpsc'); ?></h4>
 
 						<dl>
-							<dt><?php echo __('Display Product Template Tag', 'wpsc'); ?>: </dt><dd> &lt;?php echo wpsc_display_products('product_id=<?php echo $product_data['id'];?>'); ?&gt;</dd>
-							<dt><?php echo __('Buy Now PHP', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_buy_now_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
-							<dt><?php echo __('Add to Cart PHP', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
-							<dt><?php echo __('Display Product SKU', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_product_sku(<?php echo $product_data['id'];?>); ?&gt;</dd>
+							<dt><?php _e('Display Product Template Tag', 'wpsc'); ?>: </dt><dd> &lt;?php echo wpsc_display_products('product_id=<?php echo $product_data['id'];?>'); ?&gt;</dd>
+							<dt><?php _e('Buy Now PHP', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_buy_now_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+							<dt><?php _e('Add to Cart PHP', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
+							<dt><?php _e('Display Product SKU', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_product_sku(<?php echo $product_data['id'];?>); ?&gt;</dd>
 						</dl>
 	
 						<p>
@@ -455,20 +455,10 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 				<strong >".__('Product Categories', 'wpsc')." </strong>
 				<div id='categorydiv' >";
 					$search_sql = apply_filters('wpsc_product_category_and_tag_forms_group_search_sql', '');
-					$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
-					//exit('<pre>'.print_r($categorisation_groups, true).'</pre>');
-						foreach((array)$categorisation_groups as $categorisation_group){
-							$categorisation_group=(array)($categorisation_group);
-							$category_count = get_terms('wpsc_product_category', "hide_empty=0&child_of=".$categorisation_group['term_id'], ARRAY_A);
-							if(count($category_count) > 0) {
-								$output .= "<div>";
-								$category_group_name = str_replace("[categorisation]", $categorisation_group['name'], __('Select [categorisation]', 'wpsc'));
-								$output .= "".$category_group_name.":<br />";
-								$output .= "</div>";
-								
-								$output .= wpsc_category_list($product_data, $categorisation_group['term_id'], $product_data['id'], 'edit_');
-							}
-						}
+					//$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
+				
+					$output .= wpsc_category_list($product_data, 0, $product_data['id'], 'edit_');
+						
 
      $output .= "
 			</div>
@@ -885,11 +875,11 @@ function wpsc_product_advanced_forms($product_data='') {
 		  <input type='text' class='text' name='meta[_wpsc_product_metadata][external_link]' value='".$product_meta['external_link']."' id='external_link' size='40' /> 
       </td>
     </tr>";
-	if (get_option('wpsc_enable_comments') == 1) {
+	//if (get_option('wpsc_enable_comments') == 1) {
 		$output .= "
 		<tr>
 			<td class='itemfirstcol' colspan='2'><br />
-				<strong>".__('Enable IntenseDebate Comments', 'wpsc').":</strong><br />
+				<strong>".__('Enable Comments', 'wpsc').":</strong><br />
 			<select name='meta[_wpsc_product_metadata][enable_comments]'>
 				<option value='' ".  (($product_meta['enable_comments'] == '' ) ? 'selected' : '') .">Use Default</option>
 				<option value='1' ". (($product_meta['enable_comments'] == '1') ? 'selected' : '') .">Yes</option>
@@ -898,7 +888,7 @@ function wpsc_product_advanced_forms($product_data='') {
 			<br/>".__('Allow users to comment on this product.', 'wpsc')."
 			</td>
 		</tr>";
-	}
+	//}
 	$output .= "
     </table></div></div>";
 	return $output;

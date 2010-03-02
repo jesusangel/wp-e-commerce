@@ -219,10 +219,60 @@ function update_product_meta($product_id, $key, $value, $prev_value = '') {
 }
 
 
-
-
-
 /**
  * product meta functions end here
 */
+
+class wpsc_custom_meta {
+	// Custom meta values
+	var $custom_meta;
+	var $custom_meta_count = 0;
+	var $current_custom_meta = -1;
+	var $custom_meta_values;
+
+	function wpsc_custom_meta($postid) {
+		global $wpdb;
+		
+		$this->custom_meta = $wpdb->get_results( $wpdb->prepare("SELECT meta_key, meta_value, meta_id, post_id
+			FROM $wpdb->postmeta 
+			WHERE post_id = %d
+			AND `meta_key` NOT REGEXP '^_'
+			ORDER BY meta_key,meta_id", $postid), ARRAY_A );
+		
+		$this->custom_meta_count = count($this->custom_meta);
+	}
+	
+
+	function have_custom_meta() {
+		if (($this->current_custom_meta + 1) < $this->custom_meta_count) {
+			return true;
+		} else if ($this->current_custom_meta + 1 == $this->custom_meta_count && $this->custom_meta_count > 0) {
+			$this->rewind_custom_meta();
+		}
+		return false;
+	}
+	
+	/*
+	 * Custom Meta Loop Code Starts here
+	*/
+	function next_custom_meta() {
+		$this->current_custom_meta++;
+		$this->custom_meta_values = $this->custom_meta[$this->current_custom_meta];
+		return $this->custom_meta_values;
+	}
+
+	
+	function the_custom_meta() {
+		$this->custom_meta_values = $this->next_custom_meta();
+		//echo "<pre>".print_r($this,true)."</pre>";
+		return $this->custom_meta_values;
+	}
+
+	function rewind_custom_meta() {
+		//$this->current_custom_meta = -1;
+		if ($this->custom_meta_count > 0) {
+			$this->custom_meta_values = $this->custom_meta[0];
+		}
+	}	
+}
 ?>

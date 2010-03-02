@@ -8,7 +8,7 @@ global $wpsc_query, $wpdb;
 
 <?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
-<!-- 			<a href='<?php echo get_option('home'); ?>'><?php echo get_option('blogname'); ?></a> &raquo; -->
+			<!-- <a href='<?php echo get_option('home'); ?>'><?php echo get_option('blogname'); ?></a> &raquo; -->
 			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
 				<?php if(wpsc_breadcrumb_url()) :?> 	   
 					<a href='<?php echo wpsc_breadcrumb_url(); ?>'><?php echo wpsc_breadcrumb_name(); ?></a> &raquo;
@@ -51,7 +51,7 @@ global $wpsc_query, $wpdb;
 <?php // */ ?>
 	
 	<?php if(wpsc_display_products()): ?>
-	<?php /*  ?>
+		
 		<?php if(wpsc_is_in_category()) : ?>
 			<div class='wpsc_category_details'>
 				<?php if(get_option('show_category_thumbnails') && wpsc_category_image()) : ?>
@@ -72,17 +72,18 @@ global $wpsc_query, $wpdb;
 			</div>
 		<?php endif; ?>		
 		
-	<?php // */ ?>
 	
 	
 		<?php /** start the product loop here */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			
-			<?php /* if(wpsc_category_transition()) :?>
+			<?php// echo "<pre>".print_r($wp_query,true)."</pre>"; ?>
+			
+			<?php if(wpsc_category_transition()) :?>
 		  	<h3 class='wpsc_category_boundary'>
 		    <?php echo wpsc_current_category_name(); ?>
 				</h3>
-			<?php endif; */ ?>
+			<?php endif; ?>
 			
 			
 			<div class="productdisplay default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?>">      
@@ -91,7 +92,7 @@ global $wpsc_query, $wpdb;
 					<?php if(get_option('show_thumbnails')) :?>
 						<div class="imagecol">
 							<?php if(wpsc_the_product_thumbnail()) :?>
-								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_thumbnail(); ?>">
+								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="thickbox preview_link" href="<?php echo wpsc_the_product_image(); ?>">
 									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
 								</a>
 							<?php else: ?>

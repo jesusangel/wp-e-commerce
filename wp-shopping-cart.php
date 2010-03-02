@@ -156,9 +156,9 @@ if (!IS_WP25) {
 }
 
 if((get_option('wpsc_share_this') == 1) && (get_option('product_list_url') != '')) {
-  if(stristr(("http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
+  //if(stristr(("http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']), get_option('product_list_url'))){
     include_once(WPSC_FILE_PATH."/share-this.php");
-  }
+  //}
 }
 
 $wpsc_currency_data = array();
@@ -469,6 +469,14 @@ function wpsc_register_post_types() {
 	    'hierarchical' => true,
 		'exclude_from_search' => false
 	));
+	
+	
+	register_post_type( 'wpsc-product-file', array(
+	    'capability_type' => 'post',
+	    'hierarchical' => false,
+		'exclude_from_search' => true
+	));
+
 	register_taxonomy('product_tag', 'wpsc-product');
 	register_taxonomy('wpsc_product_category', 'wpsc-product',array(
 		'hierarchical' => true,
@@ -519,18 +527,18 @@ if(is_ssl()) {
  */  
 if(!function_exists('wpsc_serialize_shopping_cart')){
 	function wpsc_serialize_shopping_cart() {
-	  global $wpdb, $wpsc_start_time, $wpsc_cart, $wpsc_category_url_cache;
-	  if(is_object($wpsc_cart)) {
+		global $wpdb, $wpsc_start_time, $wpsc_cart, $wpsc_category_url_cache;
+		if(is_object($wpsc_cart)) {
 			$wpsc_cart->errors = array();
-	  }
-	  $_SESSION['wpsc_cart'] = serialize($wpsc_cart);
-
+		}
+		$_SESSION['wpsc_cart'] = serialize($wpsc_cart);
+		
 		$previous_category_url_cache = get_option('wpsc_category_url_cache');
 		if($wpsc_category_url_cache != $previous_category_url_cache) {
 			update_option('wpsc_category_url_cache', $wpsc_category_url_cache);
 		}
-	  
-	  return true;
+		
+		return true;
 	} 
 } 
 add_action('shutdown','wpsc_serialize_shopping_cart');

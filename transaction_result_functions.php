@@ -75,31 +75,29 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				do_action('wpsc_transaction_result_cart_item', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
 
 				if (($purchase_log['processed'] >= 2)) {
-					$download_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_DOWNLOAD_STATUS."`
-					 INNER JOIN `".WPSC_TABLE_PRODUCT_FILES."`
-					  ON `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = `".WPSC_TABLE_PRODUCT_FILES."`.`id`
-					  WHERE `".WPSC_TABLE_DOWNLOAD_STATUS."`.`active`='1'
-					  AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`purchid`='".$purchase_log['id']."'
-					  AND (
-						`".WPSC_TABLE_DOWNLOAD_STATUS."`.`cartid` = '".$row['id']."'
-							OR (
-								`".WPSC_TABLE_DOWNLOAD_STATUS."`.`cartid` IS NULL
-								AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = '{$product_data['file']}'
-							)
-						)
-						AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`id` NOT IN ('".implode("','",$previous_download_ids)."')",ARRAY_A);
+				
+					$download_data = $wpdb->get_results("SELECT * 
+					FROM `".WPSC_TABLE_DOWNLOAD_STATUS."`
+					WHERE `active`='1'
+					AND `purchid`='".$purchase_log['id']."'
+					AND `cartid` = '".$row['id']."'",ARRAY_A);
+					
+					
 					$link=array();
-						//exit('IM HERE'.$errorcode.'<pre>'.print_r($download_data).'</pre>');
-					if(sizeof($download_data) != 0) {
+						
+					if(count($download_data) > 0) {
 						foreach($download_data as $single_download){
+							$file_data = get_post($single_download['fileid']);
+						
+							//print('<pre>'.print_r($file_data, true).'</pre>');
 							if($single_download['uniqueid'] == null){// if the uniqueid is not equal to null, its "valid", regardless of what it is
-								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" =>$single_download["filename"]);	
-							}	else {
-								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" =>$single_download["filename"]);
+								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" => $file_data->post_title);	
+							} else {
+								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" => $file_data->post_title);
 							}
 						}
 						//$order_status= 4;
-					}else{
+					} else {
 							$order_status= $purchase_log['processed'];
 					}
 					$previous_download_ids[] = $download_data['id'];
@@ -116,7 +114,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$price_modifier = 0;
 				}
 		
-				$total+=($row['price']*$row['quantity']);
+				$total += ($row['price'] * $row['quantity']);
 				$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), $product_data['notax'], true);
 
 				$shipping_price = nzshpcrt_currency_display($shipping, 1, true);
@@ -132,17 +130,13 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$variation_list = '';
 			
 				if($link != '') {
-				  $additional_content = apply_filters('wpsc_transaction_result_content', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
+					$additional_content = apply_filters('wpsc_transaction_result_content', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
 					if(!is_string($additional_content)) {
-				    $additional_content = '';
-				  }
+						$additional_content = '';
+					}
 
-				  
-					//$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":\n\r $link\n\r".$additional_content;
-					//$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".__('Click to download', 'wpsc')."</a>\n". $additional_content;
-
-					$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
-					$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
+					$product_list .= " - ". $row['name'] ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
+					$product_list_html .= " - ". $row['name'] ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
 					foreach($link as $single_link){
 						$product_list .= "\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
 						$product_list_html .= "<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
@@ -154,14 +148,14 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if($row['quantity'] > 1) {
 						$plural = "s";
 						}
-					$product_list.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
+					$product_list.= " - ".$row['quantity']." ". $row['name']."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
-					$product_list_html.= " - ".$row['quantity']." ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
+					$product_list_html.= " - ".$row['quantity']." ". $row['name']."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list_html .= " &nbsp; ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
 
 				}
 				$report = get_option('wpsc_email_admin');
-				$report_product_list.= " - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n\r";
+				$report_product_list.= " - ". $row['name']."  ".$message_price ."\n\r";
 			}
 			
 				// Decrement the stock here
@@ -175,10 +169,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `active`='0', `is-used`='1' WHERE `id`='".$coupon_data['id']."' LIMIT 1");
 					}
 				}
-				//$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
-				//if (!isset($_SESSION['quote_shipping']))
-					//$total_shipping = nzshpcrt_determine_base_shipping($total_shipping, $shipping_country);
-			  $total_shipping += $purchase_log['base_shipping'];
+				
+				$total_shipping += $purchase_log['base_shipping'];
 					
 				$total = $purchase_log['totalprice'];
 				// echo $total;
@@ -205,26 +197,21 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
 				}
         
-        
-				//echo "<pre>".print_r($purchase_log,true)."</pre>";
-        $message = str_replace('%product_list%',$product_list,$message);
-        $message = str_replace('%total_shipping%',$total_shipping_email,$message);
-        $message = str_replace('%total_price%',$total_price_email,$message);
-        //$message = str_replace('%order_status%',get_option('blogname'),$message);
-        $message = str_replace('%shop_name%',get_option('blogname'),$message);
-        
-        $report = str_replace('%product_list%',$report_product_list,$report);
-        $report = str_replace('%total_shipping%',$total_shipping_email,$report);
-        $report = str_replace('%total_price%',$total_price_email,$report);
-        $report = str_replace('%shop_name%',get_option('blogname'),$report);
-        
-        $message_html = str_replace('%product_list%',$product_list_html,$message_html);
-        $message_html = str_replace('%total_shipping%',$total_shipping_html,$message_html);
-        $message_html = str_replace('%total_price%',$total_price_email,$message_html);
-        $message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
-        //$message_html = str_replace('%order_status%',get_option('blogname'),$message_html);
-        
-        
+				$message = str_replace('%product_list%',$product_list,$message);
+				$message = str_replace('%total_shipping%',$total_shipping_email,$message);
+				$message = str_replace('%total_price%',$total_price_email,$message);
+				$message = str_replace('%shop_name%',get_option('blogname'),$message);
+				
+				$report = str_replace('%product_list%',$report_product_list,$report);
+				$report = str_replace('%total_shipping%',$total_shipping_email,$report);
+				$report = str_replace('%total_price%',$total_price_email,$report);
+				$report = str_replace('%shop_name%',get_option('blogname'),$report);
+				
+				$message_html = str_replace('%product_list%',$product_list_html,$message_html);
+				$message_html = str_replace('%total_shipping%',$total_shipping_html,$message_html);
+				$message_html = str_replace('%total_price%',$total_price_email,$message_html);
+				$message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
+				
 				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
 				
  					add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
@@ -240,6 +227,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 				remove_filter('wp_mail_from_name', 'wpsc_replace_reply_name');
  				remove_filter('wp_mail_from', 'wpsc_replace_reply_address');
+
 				$report_user = __('Customer Details', 'wpsc')."\n\r";
 				$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
 				$form_data = $wpdb->get_results($form_sql,ARRAY_A);

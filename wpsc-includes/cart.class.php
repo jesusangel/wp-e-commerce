@@ -1756,12 +1756,16 @@ class wpsc_cart_item {
 
 
 
-		$product_files = (array)get_product_meta($this->product_id, 'product_files');
+		//$product_files = (array)get_product_meta($this->product_id, 'product_files');
 		
-		if($file_id > 0 && ((count($product_files) <= 0) || (count($this->variation_values) > 0))) {
-			$this->file_id = (int)$file_id;
-			$this->is_downloadable = true;
-		} else if(count($product_files) > 0) {
+		$product_files = (array)get_posts(array(
+			'post_type' => 'wpsc-product-file',
+			'post_parent' => $this->product_id,
+			'numberposts' => -1,
+			'post_status' => 'inherit'
+		));
+	
+		if(count($product_files) > 0) {
 			$this->file_id = null;
 			$this->is_downloadable = true;
 		} else {
@@ -1876,7 +1880,15 @@ class wpsc_cart_item {
 		global $wpdb;
 		if($this->has_limited_stock == true) {
 			$current_datetime = date("Y-m-d H:i:s");
-			$wpdb->query($wpdb->prepare("REPLACE INTO`".WPSC_TABLE_CLAIMED_STOCK."` ( `product_id` , `variation_stock_id` , `stock_claimed` , `last_activity` , `cart_id` )VALUES ('%d', '%d', '%s', '%s', '%s');",$this->product_id, $this->priceandstock_id, $this->quantity, $current_datetime, $this->cart->unique_id));
+			$wpdb->query($wpdb->prepare("REPLACE INTO `".WPSC_TABLE_CLAIMED_STOCK."`
+			( `product_id` , `variation_stock_id` , `stock_claimed` , `last_activity` , `cart_id` ) 
+			VALUES
+			('%d', '%d', '%s', '%s', '%s');",
+			$this->product_id,
+			$this->priceandstock_id,
+			$this->quantity,
+			$current_datetime,
+			$this->cart->unique_id));
  		}
 	}
 		
@@ -1890,15 +1902,15 @@ class wpsc_cart_item {
 	function save_to_db($purchase_log_id) {
 		global $wpdb, $wpsc_shipping_modules;
 		
-    if($method === null) {
-      $method = $this->cart->selected_shipping_method;
-    }
+	    if($method === null) {
+	      $method = $this->cart->selected_shipping_method;
+	    }
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
 			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 		}
-    if($this->cart->has_total_shipping_discount()) {
-			$shipping = 0;
-    }
+	    if($this->cart->has_total_shipping_discount()) {
+				$shipping = 0;
+	    }
 		if($this->apply_tax == true && wpsc_tax_isincluded() == false) {
 			if(is_numeric($this->custom_tax_rate)) {
 				$tax_rate = $this->custom_tax_rate;
@@ -1916,46 +1928,51 @@ class wpsc_cart_item {
 			`prodid`, `name`, `purchaseid`,	`price`, `pnp`,
 			`tax_charged`, `gst`, `quantity`, `donation`,
 			`no_shipping`, `custom_message`, `files`, `meta`
-		 ) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)",
-		 $this->product_id,
-		 $this->product_name,
-		 $purchase_log_id,
-		 $this->unit_price,
-		 (float)$shipping,
-		 (float)$tax,
-		 (float)$tax_rate,
-		 $this->quantity,
-		 $this->is_donation,
-		 $this->custom_message,
-		 serialize($this->custom_file)
-		 ));
+		) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)",
+		$this->product_id,
+		$this->product_name,
+		$purchase_log_id,
+		$this->unit_price,
+		(float)$shipping,
+		(float)$tax,
+		(float)$tax_rate,
+		$this->quantity,
+		$this->is_donation,
+		$this->custom_message,
+		serialize($this->custom_file)
+		));
 		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
 		
 		wpsc_update_cartmeta($cart_id, 'sku', $this->sku);
 
 
 		
-    $downloads = get_option('max_downloads');
+	    $downloads = get_option('max_downloads');
 		if($this->is_downloadable == true) {
-			//$product_files = $wpdb->get_row("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` = '".$this->product_id."' AND `meta_key` = 'product_files'", ARRAY_A);
-			//$product_files = unserialize($product_files["meta_value"]);
-			$product_files = get_product_meta($this->product_id, 'product_files');
-			
-			if($this->file_id != null){
+		
+			$product_files = (array)get_posts(array(
+				'post_type' => 'wpsc-product-file',
+				'post_parent' => $this->product_id,
+				'numberposts' => -1,
+				'post_status' => 'inherit'
+			));
+					
+			foreach($product_files as $file){
 				// if the file is downloadable, check that the file is real
-				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('{$this->file_id}')")) {
-					$unique_id = sha1(uniqid(mt_rand(), true));
-					$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (`product_id` , `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->product_id}', '{$this->file_id}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
-				}
-			}	else {
-				foreach($product_files as $file){
-					// if the file is downloadable, check that the file is real
-					if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id` IN ('{$file}')")) {
-						$unique_id = sha1(uniqid(mt_rand(), true));
-						$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (`product_id` , `fileid` , `purchid` , `cartid`, `uniqueid`, `downloads` , `active` , `datetime` ) VALUES ( '{$this->product_id}', '{$file}', '{$purchase_log_id}', '{$cart_id}', '{$unique_id}', '$downloads', '0', NOW( ));");
-					}
-				}
+				$unique_id = sha1(uniqid(mt_rand(), true));
+				$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (
+					`product_id` , `fileid` , 
+					`purchid` , `cartid`, 
+					`uniqueid`, `downloads`, 
+					`active` , `datetime` 
+				) VALUES ( 
+					'{$this->product_id}', '{$file->ID}', 
+					'{$purchase_log_id}', '{$cart_id}', 
+					'{$unique_id}', '$downloads', 
+					'0', NOW()
+				);");
 			}
+		
 		}
 
 		

@@ -1,5 +1,5 @@
 <?php
-global $wpsc_query, $wpdb;
+global $wpsc_query, $wpdb, $wpsc_custom_meta;
 $image_width = get_option('single_view_image_width');
 $image_height = get_option('single_view_image_height');
 ?>
@@ -51,83 +51,86 @@ $image_height = get_option('single_view_image_height');
 							do_action('wpsc_product_addons', wpsc_the_product_id());
 						?>
 						<?php if(wpsc_the_product_additional_description()) : ?>
-						<div class="single_additional_description">
-            <?php
-							$value = '';
-							$the_addl_desc = wpsc_the_product_additional_description();
-							if( is_serialized($the_addl_desc) ) {
-								$addl_descriptions = @unserialize($the_addl_desc);
-							} else {
-								$addl_descriptions = array('addl_desc', $the_addl_desc);
-							}
-							
-							if( isset($addl_descriptions['addl_desc']) ) {
-								$value = $addl_descriptions['addl_desc'];
-							}
-
-            	if( function_exists('wpsc_addl_desc_show') ) {
-            		echo wpsc_addl_desc_show( $addl_descriptions );
-            	} else {
-								echo stripslashes( wpautop($the_addl_desc, $br=1));
-            	}
-            ?>
-						</div>
-					<?php endif; ?>
+							<div class="single_additional_description">
+				            <?php
+								$value = '';
+								$the_addl_desc = wpsc_the_product_additional_description();
+								if( is_serialized($the_addl_desc) ) {
+									$addl_descriptions = @unserialize($the_addl_desc);
+								} else {
+									$addl_descriptions = array('addl_desc', $the_addl_desc);
+								}
+								
+								if( isset($addl_descriptions['addl_desc']) ) {
+									$value = $addl_descriptions['addl_desc'];
+								}
 				
-					<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
-
-					<?php /** the custom meta HTML and loop */ ?>
-					<div class="custom_meta">
-						<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
-							<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_value(); ?><br />
-						<?php endwhile; ?>
-					</div>
-					<?php /** the custom meta HTML and loop ends here */?>
+				            	if( function_exists('wpsc_addl_desc_show') ) {
+				            		echo wpsc_addl_desc_show( $addl_descriptions );
+				            	} else {
+									echo stripslashes( wpautop($the_addl_desc, $br=1));
+				            	}
+				            ?>
+							</div>
+						<?php endif; ?>
 					
-					
-					<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
-					<?php if(wpsc_product_has_personal_text()) : ?>
-						<div class='custom_text'>
-							<h4><?php echo __('Personalize your product', 'wpsc'); ?></h4>
-							<?php echo __('Complete this form to include a personalized message with your purchase.', 'wpsc'); ?><br />
-							<input type='text' name='custom_text' value=''  />
+						<?php do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
+	
+						<?php /** the custom meta HTML and loop */ ?>
+						<?php 
+							$wpsc_custom_meta = new wpsc_custom_meta(get_the_ID());
+						?>
+						<div class="custom_meta">
+							<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
+								<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_value(); ?><br />
+							<?php endwhile; ?>
 						</div>
-					<?php endif; ?>
-					
-					<?php if(wpsc_product_has_supplied_file()) : ?>
-						<div class='custom_file'>
-							<h4><?php echo __('Upload a File', 'wpsc'); ?></h4>
-							<?php echo __('Select a file from your computer to include with this purchase.  ', 'wpsc'); ?><br />
-							<input type='file' name='custom_file' value=''  />
-						</div>
-					<?php endif; ?>
-					
-					
-					<?php /** the variation group HTML and loop */?>
-					<div class="wpsc_variation_forms">
-						<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
-							<p>
-								<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
-								<?php /** the variation HTML and loop */?>
-								<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
-								<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
-									<option value="<?php echo wpsc_the_variation_id(); ?>" <?php echo wpsc_the_variation_out_of_stock(); ?>><?php echo wpsc_the_variation_name(); ?></option>
-								<?php endwhile; ?>
-								</select> 
-							</p>
-						<?php endwhile; ?>
-					</div>
-					<?php /** the variation group HTML and loop ends here */?>
-									
-					
-					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
-					<?php if(wpsc_has_multi_adding()): ?>
-						<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo __('Quantity', 'wpsc'); ?>:</label>
+						<?php /** the custom meta HTML and loop ends here */?>
 						
-						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
-						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
-						<input type="hidden" name="wpsc_update_quantity" value="true"/>
-					<?php endif ;?>
+						
+						<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
+						<?php if(wpsc_product_has_personal_text()) : ?>
+							<div class='custom_text'>
+								<h4><?php echo __('Personalize your product', 'wpsc'); ?></h4>
+								<?php echo __('Complete this form to include a personalized message with your purchase.', 'wpsc'); ?><br />
+								<input type='text' name='custom_text' value=''  />
+							</div>
+						<?php endif; ?>
+						
+						<?php if(wpsc_product_has_supplied_file()) : ?>
+							<div class='custom_file'>
+								<h4><?php echo __('Upload a File', 'wpsc'); ?></h4>
+								<?php echo __('Select a file from your computer to include with this purchase.  ', 'wpsc'); ?><br />
+								<input type='file' name='custom_file' value=''  />
+							</div>
+						<?php endif; ?>
+						
+						
+						<?php /** the variation group HTML and loop */?>
+						<div class="wpsc_variation_forms">
+							<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
+								<p>
+									<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
+									<?php /** the variation HTML and loop */?>
+									<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
+									<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
+										<option value="<?php echo wpsc_the_variation_id(); ?>" <?php echo wpsc_the_variation_out_of_stock(); ?>><?php echo wpsc_the_variation_name(); ?></option>
+									<?php endwhile; ?>
+									</select> 
+								</p>
+							<?php endwhile; ?>
+						</div>
+						<?php /** the variation group HTML and loop ends here */?>
+										
+						
+						<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
+						<?php if(wpsc_has_multi_adding()): ?>
+							<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo __('Quantity', 'wpsc'); ?>:</label>
+							
+							<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
+							<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
+							<input type="hidden" name="wpsc_update_quantity" value="true"/>
+						<?php endif ;?>
 					
 						<div class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>

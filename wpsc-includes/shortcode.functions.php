@@ -33,7 +33,7 @@ function wpsc_products_shorttag($atts) {
 	return wpsc_display_products_page($query);
 }
 add_shortcode('wpsc_products', 'wpsc_products_shorttag');
-
+//add_shortcode('productspage', 'wpsc_products_shorttag');
 
 
 
