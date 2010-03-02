@@ -1243,7 +1243,7 @@ class wpsc_cart {
   function calculate_base_shipping() {
     global $wpdb, $wpsc_shipping_modules;
     if($this->uses_shipping()) {
-			if(empty($this->shipping_quotes) and is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+			if ( empty( $this->shipping_quotes ) && is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], 'getQuote' ) ) ) {
 				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 			}
 			if($this->selected_shipping_option == null){
@@ -1472,7 +1472,7 @@ class wpsc_cart {
 	//	exit('here');
 		$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 				// use the selected shipping module
-				if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+				if ( is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], 'getQuote' ) ) ) {
 				
 					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 				}
@@ -1484,7 +1484,7 @@ class wpsc_cart {
 					
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
 					$this->selected_shipping_method = $shipping_module;
-					if(is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+					if ( is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], 'getQuote' ) ) ) {
 					
 						$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 					}
@@ -1758,8 +1758,7 @@ class wpsc_cart_item {
 			$this->is_downloadable = false;
 		}
 		
-		
-		if(is_callable(array($wpsc_shipping_modules[$this->cart->selected_shipping_method]), "get_item_shipping"  )) {
+		if ( is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], 'get_item_shipping' ) ) ) {
 			$this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 	  }
 	  // update the claimed stock here
