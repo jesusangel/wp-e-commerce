@@ -1,4 +1,139 @@
 <?php	
+
+/**
+ * wpsc_currency_display function.
+ * 
+ * @access public
+ * @param mixed $price_in
+ * @param mixed $args
+ * @return void
+ */
+function wpsc_currency_display($price_in, $args) {
+	global $wpdb, $wpsc_currency_data;
+ 
+	
+	
+	$query = shortcode_atts(array(
+		'display_currency_symbol' => true,
+		'display_decimal_point' => true,
+		'display_currency_code' => true,
+		'display_as_html' => true
+	), $args);
+	//exit("<pre>".print_r($query,true)."</pre>");
+
+  
+  
+	
+	$currency_sign_location = get_option('currency_sign_location');
+	$currency_type = get_option('currency_type');
+	if(count($wpsc_currency_data) < 3) {
+		$wpsc_currency_data = $wpdb->get_row("
+		SELECT `symbol`, `symbol_html`, `code`
+		FROM `".WPSC_TABLE_CURRENCY_LIST."` 
+		WHERE `id`='".$currency_type."' 
+		LIMIT 1",
+		 ARRAY_A) ;
+	}
+	
+	
+	$price_out = null;
+	// default is 2
+	$decimals = 2;
+	
+	
+	
+	if($query['display_decimal_point'] == false) {
+		$decimals = 0;
+	}
+	
+	$price_out =  number_format($price_in, $decimals, '.', ',');
+	
+	
+	$currency_sign = '';
+	$currency_code = '';
+	if($query['display_currency_code'] == true) {
+		$currency_code = $wpsc_currency_data['code'];
+	}
+	
+	if($query['display_currency_symbol'] == true) {
+		if($wpsc_currency_data['symbol'] != '') {
+			if($query['display_as_html'] == false) {
+				$currency_sign = $wpsc_currency_data['symbol_html'];
+			} else {
+				$currency_sign = $wpsc_currency_data['symbol'];
+			}
+		} else {
+			$currency_sign = $wpsc_currency_data['code'];
+			$currency_code = '';
+		}
+	}
+	
+		
+	switch($currency_sign_location) {
+		case 1:
+			$format_string = '%3$s%1$s%2$s';
+		break;
+		
+		case 2:
+			$format_string = '%3$s %1$s%2$s';
+		break;
+		
+		case 4:
+			$format_string = '%1$s%2$s  %3$s';
+		break;
+		
+		case 3:
+		default:
+			$format_string = '%1$s %2$s%3$s';
+		break;
+	}
+	
+	$output = sprintf($format_string, $currency_code, $currency_sign, $price_out);
+	//$output = $currency_sign.$price_out;
+	if($no_dollar_sign == true) {
+		return $price_out;
+	}
+	return $output;
+}
+
+
+
+/**
+ * nzshpcrt_currency_display function.
+ * Obsolete, preserved for backwards compatibility
+ *
+ * @access public
+ * @param mixed $price_in
+ * @param mixed $tax_status
+ * @param bool $nohtml deprecated 
+ * @param bool $id. deprecated
+ * @param bool $no_dollar_sign. (default: false)
+ * @return void
+ */
+function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
+	//_deprecated_function( __FUNCTION__, '3.8', 'wpsc_currency_display' );
+	$output = wpsc_currency_display($price_in, array(
+		'display_currency_symbol' => !(bool)$no_dollar_sign,
+		'display_as_html' => !(bool)$nohtml,
+		'display_decimal_point' => true,
+		'display_currency_code' => false
+	));
+	if($nohtml == true) {
+		$output = "".$output."";
+	} else {
+		$output = "<span class='pricedisplay'>".$output."</span>";
+	//$output = "".$output."";
+	}
+	return $output;
+}
+
+
+
+
+
+
+
+
 /**
 	* wpsc_decrement_claimed_stock method 
 	*
@@ -27,14 +162,36 @@ function wpsc_decrement_claimed_stock($purchase_log_id) {
 				}
 				if ($real_stock == 0)
 				{
-					wp_mail(get_option('admin_email'), $product_data["name"] . __(' is out of stock', 'wpsc'), __('Remaining stock of ', 'wpsc') . $product_data["name"] . __(' and its variations is 0. Product was unpublished.', 'wpsc'));
+					wp_mail(
+						get_option('admin_email'),
+						$product_data["name"] . __(' is out of stock', 'wpsc'),
+						 __('Remaining stock of ', 'wpsc') . $product_data["name"] . __(' and its variations is 0. Product was unpublished.', 'wpsc')
+					);
 					$wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `publish` = '0'  WHERE `id` = '%d' LIMIT 1", $product_data['id']));
 				}
 				else{
-				$sql_query2 = "SELECT `".WPSC_TABLE_VARIATION_VALUES."`.`name`, `".WPSC_TABLE_VARIATION_COMBINATIONS."`.`value_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` INNER JOIN `".WPSC_TABLE_VARIATION_VALUES."` ON `".WPSC_TABLE_VARIATION_COMBINATIONS."`.`value_id`=`".WPSC_TABLE_VARIATION_VALUES."`.`id` WHERE `".WPSC_TABLE_VARIATION_COMBINATIONS."`.`priceandstock_id` = '" . $remaining_stock['id'] . "'";
+				$sql_query2 = "SELECT `values`.`name`,
+				 `combinations`.`value_id`
+				  FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` AS `combinations` 
+				  INNER JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `values` 
+				  ON `combinations`.`value_id`=`values`.`id` 
+				  WHERE `combinations`.`priceandstock_id` = '" . $remaining_stock['id'] . "'";
+				  
 				$variation_data = $wpdb->get_row($sql_query2, ARRAY_A);
-				wp_mail(get_option('admin_email'), $product_data["name"] . " " . $variation_data["name"] . __(' is out of stock', 'wpsc'), __('Remaining stock of ', 'wpsc') . $product_data["name"] . " " . $variation_data["name"] . __(' is 0. Product variation was set to invisible.', 'wpsc'));
-				$wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` SET `visible` = '0'  WHERE `value_id` = '%d' AND `product_id` = '%d' LIMIT 1", $variation_data['value_id'], $product_data["id"]));
+				wp_mail(
+					get_option('admin_email'),
+					$product_data["name"] . " " . $variation_data["name"] . __(' is out of stock', 'wpsc'), 
+					__('Remaining stock of ', 'wpsc') . $product_data["name"] . " " . $variation_data["name"] . __(' is 0. Product variation was set to invisible.', 'wpsc')
+				);
+				$wpdb->query($wpdb->prepare("
+					UPDATE `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` 
+					SET `visible` = '0'  
+					WHERE `value_id` = '%d' 
+					AND `product_id` = '%d' 
+					LIMIT 1", 
+					$variation_data['value_id'], 
+					$product_data["id"]
+				));
 				}
 			}
 		} 
@@ -61,66 +218,33 @@ function wpsc_get_currency_symbol(){
 	global $wpdb;
 	$currency_type = get_option('currency_type');
 	$wpsc_currency_data = $wpdb->get_var("SELECT `symbol` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1") ;
-	return  $wpsc_currency_data;}  
+	return  $wpsc_currency_data;
+}  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
 /**
 * All the code below here needs commenting and looking at to see if it needs to be altered or disposed of.
 * Correspondingly, all the code above here has been commented, uses the wpsc prefix, and has been made for or modified to work with the object oriented cart code.
 */
 
-
-function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
-  global $wpdb, $wpsc_currency_data;
-  $currency_sign_location = get_option('currency_sign_location');
-  $currency_type = get_option('currency_type');
-  if(count($wpsc_currency_data) < 3) {
-		$wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
-  }
-  $price_out = null;
-
-  $price_out =  number_format($price_in, 2, '.', ',');
-
-  if($wpsc_currency_data['symbol'] != '') {
-    if($nohtml == false) {
-      $currency_sign = $wpsc_currency_data['symbol_html'];
-		} else {
-			$currency_sign = $wpsc_currency_data['symbol'];
-		}
-	} else {
-		$currency_sign = $wpsc_currency_data['code'];
-	}
-
-  switch($currency_sign_location) {
-    case 1:
-    $output = $price_out.$currency_sign;
-    break;
-
-    case 2:
-    $output = $price_out.' '.$currency_sign;
-    break;
-
-    case 4:
-    $output = $currency_sign.'  '.$price_out;
-    break;
-    
-    case 3:
-    default:
-    $output = $currency_sign.$price_out;
-    break;
-	}
-
-  if($nohtml == true) {
-    $output = "".$output."";
-	} else {
-		$output = "<span class='pricedisplay'>".$output."</span>";
-    //$output = "".$output."";
-	}
-      
-  if($no_dollar_sign == true) {
-    return $price_out;
-	}
-  return $output;
-}
 	
 function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code) {
 	global $wpdb;

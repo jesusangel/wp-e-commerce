@@ -65,38 +65,17 @@ function wpsc_product_image($attachment_id, $width = null, $height = null) {
 */
 function wpsc_the_product_price() {
 	global $wpsc_query;	
-	/*
-	if($special_price < $price) {
-		$output = nzshpcrt_currency_display($special_price, $wpsc_query->product['notax'],true, $wpsc_query->product['id']);
-	} else {
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
-	}
-	*/
+
+	$full_price = get_post_meta(get_the_ID(), '_wpsc_price', true);
+	$special_price = get_post_meta(get_the_ID(), '_wpsc_special_price', true);
 	
-	$price = array_pop(get_post_meta(get_the_ID(), '_wpsc_price'));
-	$output = nzshpcrt_currency_display($price, 0, true);
+	$price = $full_price;
+	if(($full_price > $special_price) && ($special_price > 0)) {
+		$price = $special_price;
+	}
+	$output = nzshpcrt_currency_display($price, null, true);
 	return $output;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -120,7 +99,6 @@ function wpsc_display_categories() {
 		}
 		
 		// if we have no categories, and no search, show the group list
-		//exit('product id '.$product_id.' catid '.$category_id );
 		if(is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || ($_GET['product_search'] != '')) {
 		  $output = true;
 		}
@@ -475,12 +453,11 @@ function wpsc_product_is_donation($id = null){
 * @return boolean - true if the product is on special, otherwise false
 */
 function wpsc_product_on_special() {
-	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	// function to determine if the product is on special
 	global $wpsc_query;
-	//echo "<pre>".print_r($wpsc_query,true)."</pre>";
-	// && (count($wpsc_query->first_variations) < 1)
-	if(($wpsc_query->product['special_price'] > 0) && (($wpsc_query->product['price'] - $wpsc_query->product['special_price']) >= 0)) {
+	
+	$price = array_pop(get_post_meta(get_the_ID(), '_wpsc_price'));
+	$special_price = array_pop(get_post_meta(get_the_ID(), '_wpsc_special_price'));
+	if(($special_price > 0) && (($price - $special_price) >= 0)) {
 		return true;
 	} else {
 		return false;
@@ -568,14 +545,9 @@ function wpsc_product_postage_and_packaging() {
 * @return string - returns some form of product price
 */
 function wpsc_product_normal_price() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations, true);
-	if(($wpsc_query->product['special_price'] > 0) && (($wpsc_query->product['price'] - $wpsc_query->product['special_price']) >= 0)) {
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'],true,$wpsc_query->product['id']);
-	} else {
-		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
-	}
+	global $wpsc_query;	
+	$price = get_post_meta(get_the_ID(), '_wpsc_price', true);
+	$output = nzshpcrt_currency_display($price, null, true);
 	return $output;
 }
 

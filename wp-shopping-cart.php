@@ -14,7 +14,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.8');
-define('WPSC_MINOR_VERSION', '00000');
+define('WPSC_MINOR_VERSION', ('00000'.microtime(true)));
 
 define('WPSC_PRESENTABLE_VERSION', '3.8 Development');
 
@@ -463,6 +463,7 @@ add_filter('parse_query', 'wpsc_query_modifier');
 */
 // Register the wpsc post types
 function wpsc_register_post_types() {
+	// Products
 	register_post_type( 'wpsc-product', array(
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&product=%d',
 	    'capability_type' => 'post',
@@ -470,20 +471,30 @@ function wpsc_register_post_types() {
 		'exclude_from_search' => false
 	));
 	
-	
+	// Purchasable product files
 	register_post_type( 'wpsc-product-file', array(
 	    'capability_type' => 'post',
 	    'hierarchical' => false,
 		'exclude_from_search' => true
 	));
-
+	
+	// Product tags
 	register_taxonomy('product_tag', 'wpsc-product');
+	
+	// Product categories, is heirarchical and can use permalinks
 	register_taxonomy('wpsc_product_category', 'wpsc-product',array(
 		'hierarchical' => true,
 		'query_var' => 'products',
 		'rewrite' => array(
 			'slug' => 'products'
 		)
+	));
+	
+	// Product Variations, is internally heirarchical, externally, two separate types of items, one containing the other
+	register_taxonomy('wpsc-variation', 'wpsc-product', array(
+		'hierarchical' => true,
+		'query_var' => 'variations',
+		'rewrite' => false
 	));
 }
 add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority

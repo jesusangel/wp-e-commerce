@@ -119,37 +119,33 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 }
 
 function wpsc_display_product_form ($product_id = 0) {
-  global $wpdb, $wpsc_product_defaults;
-  $product_id = absint($product_id);
-	//$variations_processor = new nzshpcrt_variations;
-
-  if($product_id > 0) {
+	global $wpdb, $wpsc_product_defaults;
+	$product_id = absint($product_id);
+		
+	if($product_id > 0) {
 		$product_data = wpsc_populate_product_data($product_id, $wpsc_product_defaults);
-  } else {
-    if(isset($_SESSION['wpsc_failed_product_post_data']) && (count($_SESSION['wpsc_failed_product_post_data']) > 0 )) {
+	} else {
+		if(isset($_SESSION['wpsc_failed_product_post_data']) && (count($_SESSION['wpsc_failed_product_post_data']) > 0 )) {
 			$product_data = array_merge($wpsc_product_defaults, $_SESSION['wpsc_failed_product_post_data']);
 			$_SESSION['wpsc_failed_product_post_data'] = null;
-    } else {
+		} else {
 			$product_data = $wpsc_product_defaults;
 		}
-  }
-
-  
+	}
+	
 	$current_user = wp_get_current_user();
-  
-  // we put the closed postboxes array into the product data to propagate it to each form without having it global.
-  $product_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products');
-  $product_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products');
-  
-  if(count($product_data) > 0) {
+	
+	// we put the closed postboxes array into the product data to propagate it to each form without having it global.
+	$product_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products');
+	$product_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products');
+	
+	if(count($product_data) > 0) {
 		wpsc_product_basic_details_form($product_data);
-  }
+	}
 }
 
 function wpsc_product_basic_details_form(&$product_data) {
-  global $wpdb,$nzshpcrt_imagesize_info, $user_ID;
-  
-
+	global $wpdb,$nzshpcrt_imagesize_info, $user_ID;
 	$product = $product_data['product_object'];
   
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
@@ -160,7 +156,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		echo __('Edit Product', 'wpsc')." <span>(<a href='".add_query_arg('page','wpsc-edit-products', remove_query_arg('product_id', 'admin.php'))."'>".__('Add Product', 'wpsc')."</a>)</span>";
 	} else {
 		echo __('Add Product', 'wpsc');
-	} 
+	}
 	?>
 	</h3>
 	<div>
@@ -204,23 +200,20 @@ function wpsc_product_basic_details_form(&$product_data) {
 			<tr>
 				<td colspan='3' class='skuandprice'>
 					<div class='wpsc_floatleft'>
-					<?php echo __('Stock Keeping Unit', 'wpsc'); ?> :<br />
-					<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
+						<?php echo __('Stock Keeping Unit', 'wpsc'); ?> :<br />
+						<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
 					</div>
+					
 					<div class='wpsc_floatleft'>
 					<?php echo __('Price', 'wpsc'); ?> :<br />
-					<input type='text' class='text' size='17' name='meta[_wpsc_price]' value='<?php echo $product_data['meta']['_wpsc_price']; ?>' />
+					<input type='text' class='text' size='17' name='meta[_wpsc_price]' value='<?php echo number_format($product_data['meta']['_wpsc_price'], 2); ?>' />
 					</div>
-					<div class='wpsc_floatleft'>
-    			   <label for='add_form_special'><?php echo __('Sale Price :', 'wpsc'); ?></label>
-			       <div style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>' id='add_special'>
-								<?php
-								if(is_numeric($product_data['special_price'])) {
-									$special_price = number_format(($product_data['meta']['_wpsc_price'] - $product_data['meta']['_wpsc_special_price']), 2);
-								}
-								?>
-        			  <input type='text' size='17' value='<?php echo $special_price; ?>' name='special_price'/>
-			       </div>
+					
+					<div class='wpsc_floatleft' style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>'>
+	    			   <label for='add_form_special'><?php echo __('Sale Price :', 'wpsc'); ?></label>
+				       <div id='add_special'>		
+	        			  <input type='text' size='17' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2); ?>' name='meta[_wpsc_special_price]' />
+				       </div>
 			       </div>
 
       			</td>
@@ -401,7 +394,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 	
 	<div class="submitbox">
 		<?php
-		if($product->post_status == 'draft') {
+		if(($product->post_status == 'draft') || ($product->post_status == null)) {
 			?>
 			<input type='submit' value='<?php _e('Publish', 'wpsc'); ?>' id='publish' class='button-primary' name='publish' />
 			<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
