@@ -316,7 +316,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			} else {
 				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';
-					echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";
+					echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href='".get_option("product_list_url")."'>" . __('Please visit our shop', 'wpsc') . "</a>";
 					echo '</div>';
 				}
 			}

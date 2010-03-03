@@ -113,6 +113,9 @@ function wpsc_display_product_form ($product_id = 0) {
 			$product_data = $wpsc_product_defaults;
 		}
   }
+  
+	$product_data = apply_filters('wpsc_display_product_form_get', $product_data);
+  
 	$current_user = wp_get_current_user();
   
   // we put the closed postboxes array into the product data to propagate it to each form without having it global.
@@ -309,8 +312,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		  "wpsc_product_download_forms"
 		  );
 		
-	 	$order = get_option('wpsc_product_page_order');	 	
-	  $order = apply_filters( 'wpsc_products_page_forms', $order);
+	 	$order = apply_filters( 'wpsc_products_page_forms', get_option('wpsc_product_page_order'));
 	  
 	 	//echo "<pre>".print_r($order,true)."</pre>";
 	 	if (($order == '') || (count($order ) < 6)){
@@ -325,7 +327,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		update_option('wpsc_product_page_order', $order);
 		foreach((array)$order as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
-				echo call_user_func($box_function_name,$product_data);
+				echo call_user_func(apply_filters('wpsc_product_page_order_form_name', $box_function_name),$product_data);
 			}
 		}
 		?>

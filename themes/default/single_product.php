@@ -127,11 +127,13 @@ $image_height = get_option('single_view_image_height');
 					
 					<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
 					<?php if(wpsc_has_multi_adding()): ?>
-						<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo __('Quantity', 'wpsc'); ?>:</label>
+						<fieldset>
+						<label class='wpsc_quantity_update' for='wpsc_quantity_update_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo __('Quantity', 'wpsc'); ?>:</label>
 						
-						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
+						<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update_<?php echo wpsc_the_cart_item_key(); ?>" size="2" value="1"/>
 						<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 						<input type="hidden" name="wpsc_update_quantity" value="true"/>
+						</fieldset>
 					<?php endif ;?>
 					
 						<div class="wpsc_product_price">

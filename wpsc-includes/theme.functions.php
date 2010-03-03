@@ -115,6 +115,7 @@ function wpsc_get_theme_file_path($file) {
 	*select_wpsc_theme_functions function, provides a place to override the e-commece theme path
   * add to switch "theme's functions file 
   * © with xiligroup dev
+  * @todo - 1bigidea - shouldn't this load theme/functions.php rather than theme/theme.php???? (handy feature though)
   */
 function wpsc_select_theme_functions() {
   global $wpsc_theme_path;
@@ -126,7 +127,7 @@ function wpsc_select_theme_functions() {
 	}
   // end add by xiligroup.dev
 }
-add_action('wp','wpsc_select_theme_functions',10,1);
+add_action('init','wpsc_select_theme_functions',1);
 
 /**
 * wpsc_user_enqueues products function,

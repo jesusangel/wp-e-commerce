@@ -1016,6 +1016,8 @@ class wpsc_cart {
 		unset($this->coupons_name);
 		$this->clear_cache();
 		$this->cleanup();
+		
+		do_action('wpsc-empty-cart', &$this);
   }
   
   
