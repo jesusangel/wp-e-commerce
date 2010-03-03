@@ -96,6 +96,7 @@ function wpsc_add_to_cart() {
 	  }
 	}
 	
+  $cart_messages = apply_filters('wpsc_cart_messages',$cart_messages);
   if($_GET['ajax'] == 'true') {
 		if(($product_id != null) &&(get_option('fancy_notifications') == 1)) {
 			echo "if(jQuery('#fancy_notification_content')) {\n\r";
