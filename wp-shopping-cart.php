@@ -488,4 +488,18 @@ if(!function_exists('wpsc_serialize_shopping_cart')){
 	} 
 } 
 add_action('shutdown','wpsc_serialize_shopping_cart');
+
+
+function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
+	global $wp_query;
+	
+	if(is_numeric($wp_query->query_vars['category_id'] )) {
+		return false;
+	}
+	return $redirect_url;
+
+}
+
+add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
+
 ?>
