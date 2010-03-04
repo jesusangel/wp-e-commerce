@@ -230,7 +230,7 @@ INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (228, 'USA Minor Outlying Isla
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (229, 'Uzbekistan', 'UZ', 'Uzbekistan Sum', '', '', 'UZS', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (230, 'Vanuatu', 'VU', 'Vanuatu Vatu', '', '', 'VUV', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (231, 'Vatican', 'VA', 'Euro', '€', '&#8364;', 'EUR', '0', '0','europe','1');
-INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (232, 'Venezuela', 'VE', 'Venezuelan Bolivar', '', '', 'VUB', '0', '0','asiapacific','1');
+INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (232, 'Venezuela', 'VE', 'Venezuelan Bolivar', '', '', 'BsF', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (233, 'Vietnam', 'VN', 'Vietnamese Dong', '', '', 'VND', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (234, 'Virgin Islands (British)', 'VG', 'US Dollar', '$', '&#036;', 'USD', '0', '0','northamerica','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (235, 'Virgin Islands (USA)', 'VI', 'US Dollar', '$', '&#036;', 'USD', '0', '0','northamerica','1');

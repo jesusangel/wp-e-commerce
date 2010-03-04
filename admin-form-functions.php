@@ -769,7 +769,7 @@ function wpsc_packing_slip($purchase_id) {
             if($form_field['unique_name'] == 'shippingstate'){
             	echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
             }else{
-            	echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+            	echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES,'UTF-8')."</td></tr>\n\r";
             }
             break;
           }

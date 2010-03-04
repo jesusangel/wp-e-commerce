@@ -184,7 +184,7 @@ class usps {
 			$request = 'API=IntlRate&XML=' . urlencode($request);
 		}
 		$usps_server = 'production.shippingapis.com';
-		$api_dll = 'shippingapi.dll';
+		$api_dll = 'shippingAPI.dll';
 		if(get_option('usps_test_server') == '1'){
 			$url ='http://testing.shippingapis.com/ShippingAPITest.dll?'.$request;
 		}else{
