@@ -37,6 +37,7 @@ if(wpsc_cart_item_count() > 0) :
 			</td>
 			<?php if(wpsc_uses_shipping()): ?>
 			<td><span class="pricedisplay" id='shipping_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo wpsc_cart_item_shipping(); ?></span></td>
+			<?php endif; ?>
 			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
 			<td>
 			

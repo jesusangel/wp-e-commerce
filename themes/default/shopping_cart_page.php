@@ -210,7 +210,7 @@ if(wpsc_cart_item_count() > 0) :
 
 		<?php do_action('wpsc_before_form_of_shopping_cart'); ?>
 	
-	<form class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
+	<form id='wpsc_checkout_forms' name='wpsc_checkout_forms' class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
 	
 	   <?php 
 	   /**  
