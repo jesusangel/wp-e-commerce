@@ -869,10 +869,11 @@ label.variation_checkbox {
   display: block;
 }
 
-div.variation_box{
+div.variation_set{
 }
-div.variation_values_box{
+div.variation{
   padding-left: 10px;
+  display: none;
 }
 /* variations CSS ends */
 
@@ -1426,5 +1427,11 @@ td.product-image a img.attachment-thumbnail {
 }
 
 #categorydiv div{
- margin-top: 4px;
+	margin-top: 4px;
+}
+
+a.variation_handle {
+	color: #CCCCCC;
+	text-decoration: none;
+	font-size: 15px;
 }

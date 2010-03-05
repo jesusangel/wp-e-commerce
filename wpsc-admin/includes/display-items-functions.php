@@ -617,22 +617,48 @@ function wpsc_product_variation_forms($product_data=''){
 			<h4 class='product_action_link'><a target='_blank' href='admin.php?page=wpsc-edit-variations'><?php echo __('+ Add New Variations', 'wpsc'); ?></a></h4>
 			<br />
 			
-			<?php 
-			if ($product_data['meta']['_wpsc_original_id'] > 0) { ?>
-				<div id='edit_product_variations'>
-					<?php echo $variations_processor->list_variations($product_data['meta']['_wpsc_original_id']); ?>
+			<div id="product_variations">
+				<div class="variation_checkboxes">
+					<?php
+					$variation_sets = get_terms('wpsc-variation', array(
+						'hide_empty' => 0,
+						'parent' => 0
+					));
+					foreach((array)$variation_sets as $variation_set) {
+						?>
+						<div class="variation_set">						
+							<label class='set_label'>
+								<input type="checkbox" name="variations[<?php echo $variation_set->term_id; ?>]" value="1">
+								<?php echo $variation_set->name; ?>
+							</label>
+							<?php
+							$variations = get_terms('wpsc-variation', array(
+								'hide_empty' => 0,
+								'parent' => $variation_set->term_id
+							));
+							foreach((array)$variations as $variation) {
+								// style="display: block;"
+								?>
+								<div class="variation">
+									<label>
+										<input type="checkbox" name="edit_var_val[<?php echo $variation_set->term_id; ?>][<?php echo $variation->term_id; ?>]" value="1">
+										<?php echo $variation->name; ?>
+									</label>
+								</div>
+								<?php
+							}
+							?>
+								
+						</div>
+						<?php
+					}
+					?>
+					
+					
 				</div>
-				<div id='edit_variations_container'>
-					<?php echo $variations_processor->variations_grid_view($product_data['meta']['_wpsc_original_id']); ?>
-				</div>
-			<?php } else { ?>
-					<div id='add_product_variations'>
-						<?php echo $variations_processor->list_variations($product_data['meta']['_wpsc_original_id']); ?>
-					</div>
-					<div id='edit_variations_container'>
-					</div>
-			<?php
-			} ?>
+			</div>
+			
+			
 		</div>
 	</div>
 	<?php 

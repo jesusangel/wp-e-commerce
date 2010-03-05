@@ -6,18 +6,17 @@
  * @since 3.7
  */
 
-
-
 function wpsc_get_max_upload_size(){
 // Get PHP Max Upload Size
 	if(ini_get('upload_max_filesize')) $upload_max = ini_get('upload_max_filesize');	
 	else $upload_max = __('N/A', 'wpsc');	
 	return $upload_max;
 }
- /**
-	* wpsc_admin_submit_product function 
-	*
-	* @return nothing
+
+/**
+* wpsc_admin_submit_product function 
+*
+* @return nothing
 */
 function wpsc_admin_submit_product() {
 	check_admin_referer('edit-product', 'wpsc-edit-product');

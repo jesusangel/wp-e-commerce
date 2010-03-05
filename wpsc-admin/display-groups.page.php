@@ -300,12 +300,12 @@ function wpsc_display_groups_page() {
     $category_data['order']=wpsc_get_categorymeta($category_id, 'order');  
     
     if(($_POST['title'] != $category_data['name']) && (trim($_POST['title']) != null)) {
-      $category_name = $_POST['title'];
-      wp_update_term( $category_id, 'wpsc_product_category', array('name'=>$category_name) );
-        wpsc_update_categorymeta($category_id, 'nice-name', $category_data['slug']);  
-			update_option('wpsc_category_url_cache', array());
-      $wp_rewrite->flush_rules(); 
-		}   
+		$category_name = $_POST['title'];
+		wp_update_term( $category_id, 'wpsc_product_category', array('name'=>$category_name) );
+		wpsc_update_categorymeta($category_id, 'nice-name', $category_data['slug']);  
+		update_option('wpsc_category_url_cache', array());
+		$wp_rewrite->flush_rules(); 
+	}   
 	   // Jeff 15-04-09 Used for category target market options
 	   
     if($_POST['countrylist2'] != null){
@@ -315,76 +315,76 @@ function wpsc_display_groups_page() {
     		foreach($countryList as $country){
 					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$country}', '{$category_id}' )");
     		}
-				$AllSelected = true;
+			$AllSelected = true;
     	}
     	if(in_array('none', $_POST['countrylist2'])){
 				$wpdb->query("UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET `visible` = '0' WHERE `categoryid`='{$category_id}'");
 			$AllSelected = true;
     	}
-			if($AllSelected != true){
-				$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
-				foreach($unselectedCountries as $unselected){
-    				$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."` (`visible`, `countryid`, `categoryid`) VALUES (0,'{$unselected}', '{$category_id}' )");
-				} 
-		
-				//find the countries that are selected
-				$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
-				foreach($selectedCountries as $selected){
-					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$selected}', '{$category_id}' )");
-				}
+		if($AllSelected != true){
+			$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
+			foreach($unselectedCountries as $unselected){
+				$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."` (`visible`, `countryid`, `categoryid`) VALUES (0,'{$unselected}', '{$category_id}' )");
+			} 
+	
+			//find the countries that are selected
+			$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
+			foreach($selectedCountries as $selected){
+				$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$selected}', '{$category_id}' )");
 			}
 		}
+	}
     
     if($_POST['description'] != $category_data['description']) {
-      $description = $_POST['description'];
-      wpsc_update_categorymeta($category_id, 'description', $description);
-		}
+		$description = $_POST['description'];
+		wpsc_update_categorymeta($category_id, 'description', $description);
+	}
       
     if(is_numeric($_POST['category_parent']) and ($_POST['category_parent'] != $category_data['category_parent'])) {
-      $parent_category = (int)$_POST['category_parent'];
-      wp_update_term( $category_id, 'wpsc_product_category', array('parent'=>$parent_category) );
-		} 
+		$parent_category = (int)$_POST['category_parent'];
+		wp_update_term( $category_id, 'wpsc_product_category', array('parent'=>$parent_category) );
+	} 
 
     if($_POST['deleteimage'] == 1) {
-      wpsc_delete_categorymeta($category_id, 'image');
-		} else {
-      if($image != null) {
-      	wpsc_update_categorymeta($category_id, 'image', $image);
-			}
+		wpsc_delete_categorymeta($category_id, 'image');
+	} else {
+		if($image != null) {
+			wpsc_update_categorymeta($category_id, 'image', $image);
 		}
+	}
 
-		if($_POST['display_type'] != $category_data['display_type']) {
-			switch($_POST['display_type']) {
-				case "grid":
-					$display_type = 'grid';
-				break;
-				
-				case "list":
-					$display_type = 'list';
-				break;
-				
-				case "default":
-					$display_type = 'default';
-				break;
-				
-				default:
-					$display_type = '';
-				break;
-			}
-		wpsc_update_categorymeta($category_id, 'display_type', $display_type);	
+	if($_POST['display_type'] != $category_data['display_type']) {
+		switch($_POST['display_type']) {
+			case "grid":
+				$display_type = 'grid';
+			break;
+			
+			case "list":
+				$display_type = 'list';
+			break;
+			
+			case "default":
+				$display_type = 'default';
+			break;
+			
+			default:
+				$display_type = '';
+			break;
 		}
+		wpsc_update_categorymeta($category_id, 'display_type', $display_type);	
+	}
 
     if($_POST['product_height'] > 0) {
-      $product_height = (int)$_POST['product_height'];
+		$product_height = (int)$_POST['product_height'];
     } else {
-      $product_height = '';
+		$product_height = '';
     }
 	wpsc_update_categorymeta($category_id, 'image_height', $product_height);	
     
     if($_POST['product_width'] > 0) {
-      $product_width = (int)$_POST['product_width'];
+		$product_width = (int)$_POST['product_width'];
     } else {
-      $product_width = '';
+		$product_width = '';
     }
     wpsc_update_categorymeta($category_id, 'image_width', $product_width);
  

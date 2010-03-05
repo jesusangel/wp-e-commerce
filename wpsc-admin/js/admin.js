@@ -400,19 +400,18 @@ jQuery(document).ready( function () {
 	  jQuery(this).click( function() {
 			element_count = jQuery("#variation_values div").size();
 			
-			
 			if(element_count > 1) {
 			
-			
-			  parent_element = jQuery(this).parent("div.variation_value");
-			  
-			  variation_value_id = jQuery("input.variation_values_id", parent_element).val();
-			  //console.log(variation_value_id);
-			  post_values = "remove_variation_value=true&variation_value_id="+variation_value_id;			
-				jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
-			
+				parent_element = jQuery(this).parent("div.variation_value");
+				variation_value_id = jQuery("input.variation_values_id", parent_element).val();
+				
+				delete_url = jQuery(this).attr('href');
+				post_values = "remove_variation_value=true&variation_value_id="+variation_value_id;			
+				jQuery.post( delete_url, "ajax=true", function(returned_data) {
+					jQuery("#variation_row_"+returned_data).fadeOut('fast', function() {
+						jQuery(this).remove();
+					});
 				});
-				jQuery(this).parent("div.variation_value").remove();
 			}
 		  return false;
 		});		
@@ -421,14 +420,14 @@ jQuery(document).ready( function () {
 
 	
 	jQuery('#poststuff .postbox h3').livequery(function(){
-	  jQuery(this).click( function() {
+		jQuery(this).click( function() {
 			jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
-				if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
-					jQuery('a.togbox',this).html('+');
-				} else {
-					jQuery('a.togbox',this).html('&ndash;');
-				}
-				wpsc_save_postboxes_state('products_page_wpsc-edit-products', '#poststuff');
+			if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
+				jQuery('a.togbox',this).html('+');
+			} else {
+				jQuery('a.togbox',this).html('&ndash;');
+			}
+			wpsc_save_postboxes_state('products_page_wpsc-edit-products', '#poststuff');
 		});		
 	});
 

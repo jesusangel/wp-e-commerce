@@ -680,8 +680,8 @@ function wpsc_admin_ajax() {
 	}
       
 	if(($_POST['remove_variation_value'] == "true") && is_numeric($_POST['variation_value_id'])) {
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `value_id` = '".(int)$_POST['variation_value_id']."'");
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '".(int)$_POST['variation_value_id']."' LIMIT 1");
+		$value_id = absint($_GET['variation_value_id']);
+		echo wp_delete_term($value_id, 'wpsc-variation');
 		exit();
 	}
 		
@@ -2101,15 +2101,29 @@ if($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails') {
 }
  
 function wpsc_delete_variation_set() {
-  global $wpdb;
-  check_admin_referer('delete-variation');
-  
+	global $wpdb;
+	check_admin_referer('delete-variation');
+	
 	if(is_numeric($_GET['deleteid'])){
-	  $deleteid = absint($_GET['deleteid']);
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `variation_id` = '{$deleteid}'");
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_ASSOC."` WHERE `variation_id` = '{$deleteid}'");
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` = '{$deleteid}';");
-		$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='{$deleteid}' LIMIT 1");
+		$variation_id = absint($_GET['deleteid']);
+		
+		$variation_set = get_term($variation_id, 'wpsc-variation', ARRAY_A);
+		
+				
+		$variations = get_terms('wpsc-variation', array(
+			'hide_empty' => 0,
+			'parent' => $variation_id
+		));
+		
+		foreach((array)$variations as $variation) {
+			$return_value = wp_delete_term($variation->term_id, 'wpsc-variation');
+		}
+		
+		if(!empty($variation_set)) {
+			$return_value = wp_delete_term($variation_set['term_id'], 'wpsc-variation');
+		}
+		//echo "<pre>".print_r($variation_set, true)."</pre>";
+		//exit();
 		$deleted = 1;
 	}
 	
@@ -2117,6 +2131,11 @@ function wpsc_delete_variation_set() {
 	if ( isset($deleted) ) {
 		$sendback = add_query_arg('deleted', $deleted, $sendback);
 	}
+	$sendback = remove_query_arg(array(
+		'deleteid',
+		'variation_id'
+	), $sendback);
+	
 	wp_redirect($sendback);	
 	exit();
 }
@@ -2161,5 +2180,4 @@ if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
  if($_REQUEST['wpsc_admin_action'] == 'wpsc-variation-set') {
 	add_action('admin_init', 'wpsc_save_variation_set');
 }
-
 ?>
