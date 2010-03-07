@@ -1007,7 +1007,7 @@ function wpsc_page_number() {
  * 
  */
 function wpsc_has_multi_adding(){
-	if(get_option('multi_add') == 1){
+	if(get_option('multi_add') == 1 && (get_option('addtocart_or_buynow') != 1)){
 		return true;
 	}else{
 		return false;

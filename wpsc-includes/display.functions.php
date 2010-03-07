@@ -27,10 +27,12 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 	} else if (in_array('paypal_multiple', (array)$selected_gateways)) {
 		if ($product_id > 0){
 				//$output .= "<pre>".print_r($wpsc_query,true)."</pre>";
-			while (wpsc_have_products()) :
+				while (wpsc_have_products()) :
 				wpsc_the_product();
 				$price =  calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations); 
 				$shipping = $wpsc_query->product['pnp'];
+				if(wpsc_uses_shipping()){$handling = get_option('base_local_shipping');}else{$handling = $shipping;}
+
 				$output .= "<form onsubmit='log_paypal_buynow(this)' target='paypal' action='".get_option('paypal_multiple_url')."' method='post' />
 					<input type='hidden' name='business' value='".get_option('paypal_multiple_business')."' />
 					<input type='hidden' name='cmd' value='_xclick' />
@@ -39,10 +41,15 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 					<input type='hidden' id='amount' name='amount' value='".($price+$pnp)."' />
 					<input type='hidden' id='unit' name='unit' value='".$price."' />
 					<input type='hidden' id='shipping' name='ship11' value='".$shipping."' />
-					<input type='hidden' name='handling' value='".get_option('base_local_shipping')."' />
-					<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."' />
-					<input type='hidden' name='undefined_quantity' value='0' />
-					<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online' />
+					<input type='hidden' name='handling' value='".$handling."' />
+					<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."' />";
+				if(get_option('multi_add') == 1){
+					$output .="<label for='quantity'>".__('Quantity','wpsc')."</label>";
+					$output .="<input type='text' size='4' id='quantity' name='quantity' value='' /><br />";
+				}else{
+					$output .="<input type='hidden' name='undefined_quantity' value='0' />";
+				}
+					$output .="<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online' />
 					<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' />
 				</form>\n\r";
 			endwhile;
