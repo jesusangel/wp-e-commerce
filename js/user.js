@@ -466,7 +466,7 @@ var usps_method_switch=function (results){
 }
 
 function add_meta_box(results){
-	jQuery(".wpsc_buy_button").before(results);
+//	jQuery(".wpsc_buy_button").before(results);
 	jQuery('.time_requested').datepicker({ dateFormat: 'yy-mm-dd' });
 }
 

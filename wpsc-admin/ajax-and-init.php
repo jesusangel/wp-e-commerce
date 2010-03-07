@@ -1314,7 +1314,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 	}
 		
 	$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);
-	if (($purchlog_id==2) && function_exists('wpsc_member_activate_subscriptions')){
+	if (($purchlog_status==2) && function_exists('wpsc_member_activate_subscriptions')){
 		wpsc_member_activate_subscriptions($_POST['id']);
 	}
 
@@ -1326,7 +1326,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 
 	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'");
 
-	if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] <= 2)) {
+	if(($purchlog_status > $log_data['processed']) && ($log_data['processed'] <= 2)) {
 		transaction_results($log_data['sessionid'],false);
 	}
 	exit("1");

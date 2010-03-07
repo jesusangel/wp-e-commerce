@@ -42,9 +42,14 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 					<input type='hidden' id='unit' name='unit' value='".$price."' />
 					<input type='hidden' id='shipping' name='ship11' value='".$shipping."' />
 					<input type='hidden' name='handling' value='".$handling."' />
-					<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."' />
-					<input type='hidden' name='undefined_quantity' value='0' />
-					<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online' />
+					<input type='hidden' name='currency_code' value='".get_option('paypal_curcode')."' />";
+				if(get_option('multi_add') == 1){
+					$output .="<label for='quantity'>".__('Quantity','wpsc')."</label>";
+					$output .="<input type='text' size='4' id='quantity' name='quantity' value='' /><br />";
+				}else{
+					$output .="<input type='hidden' name='undefined_quantity' value='0' />";
+				}
+					$output .="<input type='image' name='submit' border='0' src='https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif' alt='PayPal - The safer, easier way to pay online' />
 					<img alt='' border='0' width='1' height='1' src='https://www.paypal.com/en_US/i/scr/pixel.gif' />
 				</form>\n\r";
 			endwhile;
