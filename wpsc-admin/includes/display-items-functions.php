@@ -167,10 +167,11 @@ function wpsc_product_basic_details_form(&$product_data) {
 							<dt><?php echo __('Add to Cart PHP', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_add_to_cart_button(<?php echo $product_data['id'];?>); ?&gt;</dd>
 							<dt><?php echo __('Display Product SKU', 'wpsc'); ?>: </dt><dd>&lt;?php echo wpsc_product_sku(<?php echo $product_data['id'];?>); ?&gt;</dd>
 						</dl>
-	
-						<p>
-	
-						</p>
+						
+						<?php if ( $product_data['id'] > 0 ) { ?>
+							<p><a href="<?php echo wpsc_product_url( $product_data['id'] ); ?>" target="_blank" class="button">View product</a></p>
+						<?php } ?>
+						
 					</div>
 					</div>
 					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
