@@ -76,7 +76,7 @@ function wpsc_purchlogs_has_customfields($id = ''){
 	//return true;
 	if($id == ''){
 		foreach((array)$purchlogitem->allcartcontent as $cartitem){
-			if($cartitem->files != 'N;' || $cartitem->custom_message != ''){
+			if ( ( $cartitem->files != 'N;' && $cartitem->files != '' ) || $cartitem->custom_message != '' ) {
 				return true;
 			}
 		}
@@ -84,7 +84,7 @@ function wpsc_purchlogs_has_customfields($id = ''){
 	}else{
 		$purchlogitem = new wpsc_purchaselogs_items($id);
 		foreach((array)$purchlogitem->allcartcontent as $cartitem){
-			if($cartitem->files != 'N;' || $cartitem->custom_message != ''){
+			if ( ( $cartitem->files != 'N;' && $cartitem->files != '' ) || $cartitem->custom_message != '' ) {
 				return true;
 			}
 		}
