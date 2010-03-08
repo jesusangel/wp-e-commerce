@@ -304,6 +304,7 @@ if(isset($_GET['token'])) {
 				<option value="item_quantity" rel="order">Item quantity</option>
 				<option value="total_quantity" rel="order">Total quantity</option>
 				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				<?php echo apply_filters( 'wpsc_coupon_rule_property_options', '' ); ?>
 			</select>
 			<select name="rules[logic][]">
 				<option value="equal">Is equal to</option>
@@ -328,6 +329,7 @@ if(isset($_GET['token'])) {
 								'<option value="item_quantity" rel="order">Item quantity</option>\n'+
 								'<option value="total_quantity" rel="order">Total quantity</option>\n'+ 
 								'<option value="subtotal_amount" rel="order">Subtotal amount</option>\n'+ 
+								'<?php echo apply_filters( 'wpsc_coupon_rule_property_options', '' ); ?>'+
 							'</select> \n'+
 							'<select name="rules[logic][]"> \n'+
 								'<option value="equal">Is equal to</option> \n'+

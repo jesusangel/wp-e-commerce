@@ -530,6 +530,7 @@ $output ='
 				<option value="item_quantity" rel="order">Item quantity</option>
 				<option value="total_quantity" rel="order">Total quantity</option>
 				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				' . apply_filters( 'wpsc_coupon_rule_property_options', '' ) . '
 			</select>
 			<select name="rules[logic][]">
 				<option value="equal">Is equal to</option>
