@@ -72,17 +72,17 @@ function wpsc_showing_products_page() {
 /**
  * wpsc pagination
  * Page numbers as links - limit by passing the $show parameter.
- * @param $show (int) Number of pages to show, zero shows all.
+ * @param $show (int) Number of pages to show, -1 shows all. Zero will be used to show default setting in a future release.
  * @return (string) Linked page numbers.
  */
-function wpsc_pagination( $show = 0 ) {
+function wpsc_pagination( $show = -1 ) {
 	
 	global $wpsc_query;
 	
 	$output = '';
 	$start = 1;
 	$end   = $wpsc_query->page_count;
-	$show  = absint($show);
+	$show  = intval( $show );
 	
 	$current_page = wpsc_current_page();
 	
