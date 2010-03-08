@@ -134,8 +134,8 @@ global $wpsc_query, $wpdb;
 
 						
 							<?php if(wpsc_has_multi_adding()): ?>
-								<label class='wpsc_quantity_update' for='wpsc_quantity_update_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo __('Quantity', 'wpsc'); ?>:</label>
-								<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update_<?php echo wpsc_the_cart_item_key(); ?>" size="2" value="1"/>
+								<label class='wpsc_quantity_update' for='wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>'><?php echo __('Quantity', 'wpsc'); ?>:</label>
+								<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>" size="2" value="1"/>
 								<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 								<input type="hidden" name="wpsc_update_quantity" value="true"/>
 							<?php endif ;?>
