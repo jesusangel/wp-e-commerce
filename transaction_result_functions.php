@@ -163,7 +163,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						$product_list .= "\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
 						$product_list_html .= "<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
 						$report_product_list .="\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
-						$report_product_list .="<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
+					//	$report_product_list .="<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
 					}
 					$product_list .= $additional_content;
 					$product_list_html .= $additional_content;
