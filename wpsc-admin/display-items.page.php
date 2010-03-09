@@ -175,8 +175,50 @@ function wpsc_display_edit_products_page() {
 }
 
 
+
+
+function wpsc_edit_variations_request_sql($sql) {
+	global $wpdb;
+
+	if(is_numeric($_GET['parent_product'])) {
+		$parent_product = absint($_GET['parent_product']);
+		$product_term_data = wp_get_object_terms($parent_product, 'wpsc-variation');
+		
+		$parent_terms = array();
+		foreach($product_term_data as $product_term_row) {
+			if($product_term_row->parent == 0) {
+				$parent_terms[] = $product_term_row->term_id;
+			}
+		}
+		
+		if(count($parent_terms) > 0) {
+			//echo "<pre>".print_r($parent_terms, true)."</pre>";
+			//echo $sql;
+			$term_count = count($parent_terms);
+			$parent_terms = implode(", ", $parent_terms);
+			$new_sql = "SELECT posts.*, COUNT(tr.object_id) AS `count`
+			FROM {$wpdb->term_relationships} AS tr
+			INNER JOIN {$wpdb->posts} AS posts
+			ON posts.ID = tr.object_id
+			INNER JOIN {$wpdb->term_taxonomy} AS tt
+			ON tr.term_taxonomy_id = tt.term_taxonomy_id
+			WHERE tt.taxonomy IN ('wpsc-variation')
+			AND tt.parent IN ($parent_terms)
+			GROUP BY tr.object_id
+			HAVING `count` = {$term_count}";
+			return $new_sql;
+			//echo "<br /><br />". $new_sql;
+		}
+		
+	}
+
+
+	return $sql;
+}
+
+
 function wpsc_admin_products_list($category_id = 0) {
-  global $wp_query,$wpdb,$_wp_column_headers;
+  global $wp_query, $wpdb, $_wp_column_headers;
   // set is_sortable to false to start with
   $is_sortable = false;
   $page = null;
@@ -195,26 +237,46 @@ function wpsc_admin_products_list($category_id = 0) {
 
 	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
 
-	$query = array(
-		'post_type' => 'wpsc-product',
-		'posts_per_page' => -1, 
-		'orderby' => 'menu_order post_title',
-		'order' => "ASC", 
-	);
-	
-	if(isset($_GET['category'])) {
-		$category_id = $_GET['category'];
-		$query['products'] = $category_id;
-	}
-	
-	
-	if(isset($_GET['search']) && (strlen($_GET['search']) > 0 )) {
-		$search = $_GET['search'];
-		$query['s'] = $search;
+	if(is_numeric($_GET['parent_product'])) {
+		$parent_product = absint($_GET['parent_product']);
+		
+		$query = array(
+			'post_type' => 'wpsc-product',
+			'posts_per_page' => -1, 
+			'orderby' => 'menu_order post_title',
+			'post_parent' => $parent_product,
+			'post_status' => 'all',
+			'order' => "ASC"
+		);
+		add_filter('posts_request', 'wpsc_edit_variations_request_sql');
+	} else { 
+		$query = array(
+			'post_type' => 'wpsc-product',
+			'posts_per_page' => -1, 
+			'orderby' => 'menu_order post_title',
+			'order' => "ASC"
+		);
+		
+		if(isset($_GET['category'])) {
+			$category_id = $_GET['category'];
+			$query['products'] = $category_id;
+		}
+		
+		
+		if(isset($_GET['search']) && (strlen($_GET['search']) > 0 )) {
+			$search = $_GET['search'];
+			$query['s'] = $search;
+		}
+		
 	}
 	
 	//$posts = get_posts( $query );
-	wp($query);
+	//wp($query);
+	$wp_query = new WP_Query($query);
+	remove_filter('posts_request', 'wpsc_edit_variations_request_sql');
+	
+	
+	//echo "<pre>".print_r($wp_query, true)."</pre>";
 	if($page !== null) {
 		$page_links = paginate_links( array(
 			'base' => add_query_arg( 'pageno', '%#%' ),

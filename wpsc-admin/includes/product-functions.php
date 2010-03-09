@@ -24,7 +24,7 @@ function wpsc_admin_submit_product() {
 	$sendback = wp_get_referer();
 	$post_data = wpsc_sanitise_product_forms();
 	//$post_data['category'] = 1;  /// remove this
-	if(isset($post_data['title']) && $post_data['title'] != '' && isset($post_data['category'])) {
+	if(isset($post_data['title']) && $post_data['title'] != '') {
 		$product_id = wpsc_insert_product($post_data, true);
 		if($product_id > 0) {
 			$sendback = add_query_arg('product', $product_id);

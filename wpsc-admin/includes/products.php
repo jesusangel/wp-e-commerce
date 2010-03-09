@@ -36,6 +36,7 @@ function wpsc_admin_product_listing() {
 function wpsc_product_row(&$product) {
 	global $wp_query, $wpsc_products, $mode, $current_user;
 	static $rowclass;
+	//echo "<pre>".print_r($product, true)."</pre>";
 
 	$global_product = $product;
 	setup_postdata($product);
@@ -116,7 +117,8 @@ function wpsc_product_row(&$product) {
 
 		case 'title': /* !title case */
 			$attributes = 'class="post-title column-title"' . $style;
-			$edit_link = wp_nonce_url("admin.php?page=wpsc-edit-products&amp;product={$product->ID}", 'edit-product_'.$product->ID);
+			$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'product' => $product->ID));
+			$edit_link = wp_nonce_url($edit_link, 'edit-product_'.$product->ID);
 		?>
 		<td <?php echo $attributes ?>>
 			<strong>
@@ -470,9 +472,6 @@ foreach((array)$category_list as $category_row) {
 		</tr>
 	<?php
 }
-
-
-
 
 /*
 
