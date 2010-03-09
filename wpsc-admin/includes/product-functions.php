@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * WPSC Product modifying functions
  *
@@ -162,15 +162,17 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	  $post_data['special_price'] = 0;
 	}
 	*/
+	//
 	
 	
 	
 
+	
 	$post_data['files'] = $_FILES;
-
-	//exit('<pre>'.print_r($post_data, true).'</pre>');
 	return $post_data;
 }
+  
+   
   
  /**
 	* wpsc_insert_product function 
@@ -327,6 +329,9 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	// and the meta
 	wpsc_update_product_meta($product_id, $post_data['meta']);
 	
+	// the variations too
+	wpsc_edit_product_variations($product_id, $post_data);
+	
 	// and the custom meta
 	wpsc_update_custom_meta($product_id, $post_data);
 
@@ -348,37 +353,199 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	if($post_data['files']['preview_file']['tmp_name'] != '') {
  		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
 	}
-     
-	$variations_processor = new nzshpcrt_variations;
-	
-	if(($adding === true) && ($_POST['variations'] != null)) {
-		foreach((array)$_POST['variations'] as $variation_id => $state) {
-			$variation_id = (int)$variation_id;
-			if($state == 1) {
-				$variation_values = $variations_processor->falsepost_variation_values($variation_id);
-				$variations_processor->add_to_existing_product($product_id,$variation_values);
-			}
-		}
-	}
-	
-	
-	if($post_data['edit_variation_values'] != null) {
-		$variations_processor->edit_product_values($product_id,$post_data['edit_variation_values']);
-	}
-	
-	if($post_data['edit_add_variation_values'] != null) {
-		$variations_processor->edit_add_product_values($product_id,$post_data['edit_add_variation_values']);
-	}
-		
-	if($post_data['variation_priceandstock'] != null) {
-		$variations_processor->update_variation_values($product_id, $post_data['variation_priceandstock']);
-	}
-
-	
+    
+    
 	do_action('wpsc_edit_product', $product_id);
 	wpsc_ping();
 	return $product_id;
 }
+
+
+
+
+
+/**
+ * wpsc_edit_product_variations function.
+ * this is the function to make child products using variations 
+ *
+ * @access public
+ * @param mixed $product_id
+ * @param mixed $post_data
+ * @return void
+ */
+function wpsc_edit_product_variations($product_id, $post_data) {
+	global $wpdb, $user_ID;
+
+	$variations = (array)$post_data['edit_var_val'];
+	// bail if the array is empty
+	if(count($variations) < 1) {
+		return false;
+	}
+	
+	
+	// Generate the arrays for variation sets, values and combinations
+    $wpsc_combinator = new wpsc_variation_combinator($variations);
+	// Retrieve the array containing the variation set IDs
+	$variation_sets = $wpsc_combinator->return_variation_sets();
+	
+	// Retrieve the array containing the combinations of each variation set to be associated with this product.
+	$variation_values = $wpsc_combinator->return_variation_values();
+	
+	// Retrieve the array containing the combinations of each variation set to be associated with this product.
+	$combinations = $wpsc_combinator->return_combinations();
+	
+	
+	$product_terms = wp_get_object_terms($product_id, 'wpsc-variation');
+	
+	$variation_sets_and_values = array_merge($variation_sets, $variation_values);
+	
+	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');
+	
+	print('<pre>'.print_r($variation_sets_and_values, true).'</pre>');
+	
+	$child_product_template = array(
+		'post_author' => $user_ID,
+		'post_content' => $post_data['description'],
+		'post_excerpt' => $post_data['additional_description'],
+		'post_title' => $post_data['name'],
+		'post_status' => 'inherit',
+		'post_type' => "wpsc-product",
+		'post_name' => sanitize_title($post_data['name']),
+		'post_parent' => $product_id
+	);
+	
+	// here we loop through the combinations, get the term data and generate custom product names
+	foreach($combinations as $combination) {
+		$term_names = array();
+		$term_ids = array();
+		$term_slugs = array();
+		$product_values = $child_product_template;
+
+		$combination_terms = get_terms('wpsc-variation', array(
+			'hide_empty' => 0,
+			'include' => implode(",", $combination),
+			'orderby' => 'parent',
+		));
+		foreach($combination_terms as $term) {
+			$term_ids[] = $term->term_id;
+			$term_slugs[] = $term->slug;
+			$term_names[] = $term->name;
+		}
+		$product_values['post_title'] .= " (".implode(", ", $term_names).")";
+		$product_values['post_name'] = sanitize_title($product_values['post_title']);
+		// wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array() ) {
+
+		$selected_post = get_posts(array(
+			//'numberposts' => 1,
+			'name' => $product_values['post_name'],
+			'post_parent' => $product_id,
+			'post_type' => "wpsc-product",
+			'post_status' => 'all',
+			'suppress_filters' => true
+		));
+		$selected_post = array_shift($selected_post);
+		
+		
+		$child_product_id = wpsc_get_child_object_in_terms($product_id, $term_ids, 'wpsc-variation');
+		
+		
+		
+		//echo "<pre>".print_r($child_product_id, true)."</pre>";
+		if($child_product_id == false) {
+			if($selected_post != null) {
+				$child_product_id = $selected_post->ID;
+			} else {
+				$child_product_id = wp_update_post($product_values);
+			}
+		} else {
+			// sometimes there have been problems saving the variations, this gets the correct product ID
+			if(($selected_post != null) && ($selected_post->ID != $child_product_id)) {
+				$child_product_id = $selected_post->ID;
+			}
+		}
+		if($child_product_id > 0) {
+			wp_set_object_terms($child_product_id, $term_slugs, 'wpsc-variation');
+		}
+		//echo "<pre>".print_r($child_product_id, true)."</pre>";
+		
+	}
+	
+	//exit('<pre>'.print_r($combinations, true).'</pre>');
+}
+
+/**
+ * wpsc_get_child_objects_in_term function.
+ * gets the 
+ * 
+ * @access public
+ * @param mixed $parent_id
+ * @param mixed $terms
+ * @param mixed $taxonomies
+ * @param array $args. (default: array())
+ * @return void
+ */
+function wpsc_get_child_object_in_terms($parent_id, $terms, $taxonomies, $args = array() ) {
+	global $wpdb;
+	$wpdb->show_errors = true;
+	$parent_id = absint($parent_id);
+
+	if ( !is_array( $terms) )
+		$terms = array($terms);
+
+	if ( !is_array($taxonomies) )
+		$taxonomies = array($taxonomies);
+
+	foreach ( (array) $taxonomies as $taxonomy ) {
+		if ( ! is_taxonomy($taxonomy) )
+			return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+	}
+
+	$defaults = array('order' => 'ASC');
+	$args = wp_parse_args( $args, $defaults );
+	extract($args, EXTR_SKIP);
+
+	$order = ( 'desc' == strtolower($order) ) ? 'DESC' : 'ASC';
+
+	$terms = array_map('intval', $terms);
+	
+	$taxonomy_count = count($taxonomies);
+	$term_count = count($terms);
+
+	$taxonomies = "'" . implode("', '", $taxonomies) . "'";
+	$terms = "'" . implode("', '", $terms) . "'";
+	
+	// This SQL statement finds the item associated with all variations in the selected combination that is a child of the target product
+	$object_sql = "SELECT tr.object_id, COUNT(tr.object_id) AS `count`
+	FROM {$wpdb->term_relationships} AS tr
+	INNER JOIN {$wpdb->posts} AS posts
+		ON posts.ID = tr.object_id
+	INNER JOIN {$wpdb->term_taxonomy} AS tt
+		ON tr.term_taxonomy_id = tt.term_taxonomy_id
+	WHERE posts.post_parent = {$parent_id}
+		AND tt.taxonomy IN ({$taxonomies})
+		AND tt.term_id IN ({$terms})
+		AND tt.parent > 0
+		AND ( 
+			SELECT COUNT(DISTINCT tt2.parent) FROM 
+			{$wpdb->term_relationships} AS tr2
+			INNER JOIN {$wpdb->term_taxonomy} AS tt2
+				ON tr2.term_taxonomy_id = tt2.term_taxonomy_id
+			WHERE tr2.object_id = tr.object_id
+			AND tt2.taxonomy IN ({$taxonomies})
+			AND tt2.parent > 0
+		) = {$term_count}
+	GROUP BY tr.object_id
+	HAVING `count` = {$term_count}";
+	//echo $object_sql;
+	$object_ids = $wpdb->get_row($object_sql, ARRAY_A);
+	if (count($object_ids) > 0) {
+		return $object_ids['object_id'];
+	} else {
+		return false;
+	}
+}
+
+
 
 function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	global $wpdb;
@@ -640,7 +807,6 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 	  // check that is really there
 	  if(file_exists(WPSC_IMAGE_DIR.$image)) {
 			// if the width or height is less than 1, set the size to the default
-
 			if((($width  < 1) || ($height < 1)) && ($image_action == 2)) {
 				$image_action = 1;
 			}
@@ -945,6 +1111,61 @@ function wpsc_send_to_google_base($product_data) {
 		postItem($product_data['name'], $product_data['price'], $product_data['description'], $sessionToken);
 	}
 }
+
+
+/**
+ * wpsc_variation_combinator class.
+ * Produces all combinations of variations selected for this product
+ * this class is based off the example code from here:
+ * http://www.php.net/manual/en/ref.array.php#94910
+ * Thanks, phektus, you are awesome, whoever you are.
+ */
+class wpsc_variation_combinator {
+	var $variation_sets = array();
+	var $variation_values = array();
+	var $reprocessed_array = array();
+	var $combinations= array();     
+	
+	function wpsc_variation_combinator($variation_sets) {		
+		foreach($variation_sets as $variation_set_id => $variation_set) {
+			$this->variation_sets[] = absint($variation_set_id);
+			$new_variation_set = array();
+			foreach($variation_set as $variation => $active) {
+				if($active == 1) {
+					$new_variation_set[] = array(absint($variation));
+					$this->variation_values[] = $variation;
+				}
+			}
+			$this->reprocessed_array[] = $new_variation_set;
+		}
+		$this->get_combinations(array(), $this->reprocessed_array, 0);
+	}
+	          
+	
+	function get_combinations($batch, $elements, $i)  {
+		//echo "<pre>".print_r($batch,true)."</pre>";
+        if ($i >= count($elements)) {
+            $this->combinations[] = $batch;
+        } else {     
+            foreach ($elements[$i] as $element) {
+                $this->get_combinations(array_merge($batch, $element), $elements, $i + 1);
+            }                       
+        } 
+	}
+	
+	function return_variation_sets() {
+		return $this->variation_sets;
+	}
+	
+	function return_variation_values() {
+		return $this->variation_values;
+	}
+	
+	function return_combinations() {
+		return $this->combinations;
+	
+	}
+}   
 
 
 ?>

@@ -6,7 +6,7 @@
  * @since 3.7
  */
 //$closed_postboxes = (array)get_usermeta( $current_user->ID, 'editproduct');
-$variations_processor = new nzshpcrt_variations;
+//$variations_processor = new nzshpcrt_variations;
 
 
 $wpsc_product_defaults =array (
@@ -274,20 +274,22 @@ function wpsc_product_basic_details_form(&$product_data) {
 								$selected = "selected='selected'";
 							} else {
 								$selected = "";
-							} ?>
+							}
+							?>
 							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
-				<?php	}  
+							<?php
+						}  
 						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
 						if($currency_data['symbol'] != '') {
 							$currency_sign = $currency_data['symbol_html'];
 						} else {
 							$currency_sign = $currency_data['code'];
 						}
-				?>
+						?>
 						</select>
 						</td>
 						<td>
-						Price<?php //echo __('Price', 'wpsc'); ?> :<br />
+						Price:<br />
 						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
 						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
 						</td>
@@ -607,6 +609,13 @@ function wpsc_product_variation_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
+	
+	$product_term_data = wp_get_object_terms($product_data['id'], 'wpsc-variation');
+	$product_terms = array();
+	foreach($product_term_data as $product_term) {
+		$product_terms[] = $product_term->term_id;
+	}
+	
 	?>
 	
 	<div id='wpsc_product_variation_forms' class='postbox <?php echo ((array_search('wpsc_product_variation_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '');	?>' <?php echo ((array_search('wpsc_product_variation_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?>>
@@ -616,7 +625,6 @@ function wpsc_product_variation_forms($product_data=''){
 			<strong><?php echo __('Add Variation Set', 'wpsc'); ?></strong>
 			<h4 class='product_action_link'><a target='_blank' href='admin.php?page=wpsc-edit-variations'><?php echo __('+ Add New Variations', 'wpsc'); ?></a></h4>
 			<br />
-			
 			<div id="product_variations">
 				<div class="variation_checkboxes">
 					<?php
@@ -625,10 +633,15 @@ function wpsc_product_variation_forms($product_data=''){
 						'parent' => 0
 					));
 					foreach((array)$variation_sets as $variation_set) {
+						$set_checked_state = '';
+						if(in_array($variation_set->term_id, $product_terms)) {
+							$set_checked_state = "checked='checked'";
+						}
+						//$product_terms
 						?>
 						<div class="variation_set">						
 							<label class='set_label'>
-								<input type="checkbox" name="variations[<?php echo $variation_set->term_id; ?>]" value="1">
+								<input type="checkbox" <?php echo $set_checked_state; ?> name="variations[<?php echo $variation_set->term_id; ?>]" value="1">
 								<?php echo $variation_set->name; ?>
 							</label>
 							<?php
@@ -637,11 +650,14 @@ function wpsc_product_variation_forms($product_data=''){
 								'parent' => $variation_set->term_id
 							));
 							foreach((array)$variations as $variation) {
-								// style="display: block;"
+								$checked_state = '';
+								if(in_array($variation->term_id, $product_terms)) {
+									$checked_state = "checked='checked'";
+								}
 								?>
 								<div class="variation">
 									<label>
-										<input type="checkbox" name="edit_var_val[<?php echo $variation_set->term_id; ?>][<?php echo $variation->term_id; ?>]" value="1">
+										<input type="checkbox" <?php echo $checked_state; ?> name="edit_var_val[<?php echo $variation_set->term_id; ?>][<?php echo $variation->term_id; ?>]" value="1">
 										<?php echo $variation->name; ?>
 									</label>
 								</div>
@@ -657,7 +673,7 @@ function wpsc_product_variation_forms($product_data=''){
 					
 				</div>
 			</div>
-			
+			<a href='<?php echo add_query_arg('parent_product', $product_data['id']); ?>'><?php _e('Edit Variations Products', 'wpsc'); ?></a>
 			
 		</div>
 	</div>

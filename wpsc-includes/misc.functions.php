@@ -8,7 +8,7 @@
  * @since 3.7
  */
  
- 
+
 /**
  * WPSC get state by id function, gets either state code or state name depending on param
  *

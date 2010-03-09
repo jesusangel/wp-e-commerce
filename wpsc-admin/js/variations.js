@@ -64,4 +64,22 @@ jQuery('.variation_checkboxes').livequery(function(){
 		}
 		
 	});
+	
+	
+	jQuery("div.variation_set>label input:checkbox", this).livequery(function(event){
+	});
+	
+	jQuery("div.variation input:checkbox", this).livequery(function(event){
+		is_checked = jQuery(this).attr('checked');
+		variation_set = jQuery(this).parents("div.variation_set");
+		checked_count = jQuery('div.variation input:checked', variation_set).length;
+		if(checked_count < 1) {
+			jQuery('div.variation', variation_set).hide();
+			jQuery('label.set_label input:checkbox', variation_set).attr('checked', false);
+		}
+	});
+	
 });
+
+
+
