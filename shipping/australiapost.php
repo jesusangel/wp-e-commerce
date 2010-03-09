@@ -209,7 +209,8 @@ class australiapost {
 			}
 			
 			
-			if ($response['response']['code'] != '200' || empty($response['body'])) continue;
+			// Silently ignore any API server errors
+			if ( is_wp_error($response) || $response['response']['code'] != '200' || empty($response['body']) ) continue;
 			
 			$lines = explode("\n", $response['body']);
 			

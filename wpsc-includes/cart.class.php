@@ -713,9 +713,9 @@ class wpsc_cart {
   function update_shipping($method, $option) {
     global $wpdb, $wpsc_shipping_modules;
 		$this->selected_shipping_method = $method;
-		
+		if(is_callable(array($wpsc_shipping_modules[$method]), "getQuote"  )) {		
 			$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
-			
+		}
 		//exit('<pre>'.print_r($this->shipping_quotes,true).'</pre> quotes');
 		$this->selected_shipping_option = $option;
 		
@@ -1245,21 +1245,56 @@ class wpsc_cart {
 	 * @return float returns the shipping as a floating point value
 	*/
   function calculate_base_shipping() {
-    global $wpdb, $wpsc_shipping_modules;
+    global $wpsc_shipping_modules;
+    $total = (float)0;
+    // make sure I have shipping quotes
     if($this->uses_shipping()) {
-			if ( empty( $this->shipping_quotes ) && is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], 'getQuote' ) ) ) {
-				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-			}
-			if($this->selected_shipping_option == null){
-				$this->get_shipping_option();
-			}
-			$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
-			$this->base_shipping = $total;
-		} else {
-			
-		  $total = 0;
+		if(empty($this->shipping_quotes) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
+		    $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+		    if ( $this->shipping_quotes == null ) return $total;
 		}
-		return $total;
+	
+		// make sure I have a selected shipping option
+		if($this->selected_shipping_option == null){
+		    $this->get_shipping_option();
+		    if ( $this->selected_shipping_option == null ) return $total;
+		}
+	
+		/*
+		 * The array 'shipping_quotes' is returned from the getQuote() function of the shipping module as an array of key/value pairs.
+		 *
+		 * The function get_shipping_quotes() in this class rewrites and stores this same information as an array of arrays , and smashes
+		 * the data format returned from the getQuote() function of the shipping module. 
+		 * In other words the same class variable (shipping_quotes) is used to store results in two different formats.  Some of the code 
+		 * expects it in one format and some in the other.
+		 *
+		 *  I am not sure why this is done, but the end result is that this class treats the contents of 
+		 * 'shipping_quotes' differently and expects different data formats, causing shipping quotes to be misread.
+		 *
+		 * CSN
+		 */
+	 			
+	
+		if (array_key_exists($this->selected_shipping_option, $this->shipping_quotes)) {
+		    // shipping quotes are stored as returned from shipping module getQuote() function
+		    $total = (float)$this->shipping_quotes[$this->selected_shipping_option];
+		} else {
+		    foreach ( $this->shipping_quotes as $key => $value ) {
+		        if ( strcmp ($value['name'], $this->selected_shipping_option) == 0 ) {
+			    	// shipping quotes have been reformatted by get_shipping_quotes()
+			    	$total = (float)$value['value'];
+			    	break;
+	 			}
+	
+		    }
+		}
+	
+		$this->base_shipping = $total;
+    }
+
+    return $total;
+
+
   }
   
     /**
