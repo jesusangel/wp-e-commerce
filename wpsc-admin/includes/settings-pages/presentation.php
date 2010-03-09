@@ -369,7 +369,7 @@ global $wpdb;
 				</select>
 				<?php 
 				if(!function_exists('product_display_grid')) {
-				?><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo __('Purchase unavailable options', 'wpsc'); ?></a> <?php 
+				?><a href='http://getshopped.org/extend/premium-upgrades/'><?php echo __('Purchase unavailable options', 'wpsc'); ?></a> <?php 
 				}
 				?>
 					<div id='list_view_options' <?php if(is_null($product_view2)) { echo "style='display:none;'";} ?> >

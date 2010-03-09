@@ -76,10 +76,49 @@ class weightrate {
 		}
 	}
 	
-	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
-	  return 0;
-	}
 	
+	function get_item_shipping(&$cart_item) {
+		global $wpdb, $wpsc_cart;
+		$unit_price = $cart_item->unit_price;
+		$quantity = $cart_item->quantity;
+		$weight = $cart_item->weight;
+		$product_id = $cart_item->product_id;
+
+		
+		$uses_billing_address = false;
+		foreach((array)$cart_item->category_id_list as $category_id) {
+			$uses_billing_address = (bool)wpsc_get_categorymeta($category_id, 'uses_billing_address');
+			if($uses_billing_address === true) {
+			  break; /// just one true value is sufficient
+			}
+		}
+
+    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+			if($uses_billing_address == true) {
+				$country_code = $wpsc_cart->selected_country;
+			} else {
+				$country_code = $wpsc_cart->delivery_country;
+			}
+			
+      $product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
+      if($product_list['no_shipping'] == 0) {
+        //if the item has shipping
+        if($country_code == get_option('base_country')) {
+          $additional_shipping = $product_list['pnp'];
+				} else {
+          $additional_shipping = $product_list['international_pnp'];
+				}          
+        $shipping = $quantity * $additional_shipping;
+			} else {
+        //if the item does not have shipping
+        $shipping = 0;
+			}
+		} else {
+      //if the item is invalid or all items do not have shipping
+			$shipping = 0;
+		}
+    return $shipping;	
+	}	
 	function get_cart_shipping($total_price, $weight) {
 		$layers = get_option('weight_rate_layers');
 		if ($layers != '') {

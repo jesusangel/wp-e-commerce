@@ -385,7 +385,9 @@ function wpsc_the_shipping_method() {
 */
 function wpsc_shipping_method_name(){
 	global $wpsc_cart, $wpsc_shipping_modules;
-	return $wpsc_shipping_modules[$wpsc_cart->shipping_method]->getName();
+	if(is_object($wpsc_shipping_modules[$wpsc_cart->shipping_method])){
+		return $wpsc_shipping_modules[$wpsc_cart->shipping_method]->getName();
+	}
 }
 
 
