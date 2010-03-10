@@ -14,7 +14,7 @@ Author URI: http://www.getshopped.org
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '44');
+define('WPSC_MINOR_VERSION', '47');
 
 define('WPSC_PRESENTABLE_VERSION', '3.7.6 Beta 2');
 
