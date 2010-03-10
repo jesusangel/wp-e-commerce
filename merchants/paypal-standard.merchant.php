@@ -219,7 +219,9 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			echo "<pre>".print_r($this->collected_gateway_data,true)."</pre>";
 			exit();
 		}
+		//exit('<pre>'.print_r($gateway_values, true).'</pre>');
 		header("Location: ".get_option('paypal_multiple_url')."?".$gateway_values);
+		exit();
 	}
 
 

@@ -229,7 +229,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 		$data['L_AMT'.$i]			= number_format($Item->unit_price,2);
 		$data['L_NUMBER'.$i]		= $i;
 		$data['L_QTY'.$i]			= $Item->quantity;
-		$data['L_TAXAMT'.$i]		= number_format($Item->tax,2);
+		//$data['L_TAXAMT'.$i]		= number_format($Item->tax,2);
 	}
 	}
 	$transaction = "";
@@ -246,7 +246,7 @@ function gateway_paypal_pro($seperator, $sessionid){
 	}
 //exit($transaction);
 	$response = send($transaction);
-//	exit('<pre>'.print_r($response, true).'</pre><pre>'.print_r($data, true).'</pre>');
+	exit('<pre>'.print_r($response, true).'</pre><pre>'.print_r($data, true).'</pre>');
 	if($response->ack == 'Success' || $response->ack == 'SuccessWithWarning'){
 		//redirect to  transaction page and store in DB as a order with accepted payment
 		$sql = "UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed`= '2' WHERE `sessionid`=".$sessionid;
@@ -288,6 +288,7 @@ function send ($transaction) {
 	$connection = curl_init();
 	if (get_option('paypal_pro_testmode') == "on"){
 		curl_setopt($connection,CURLOPT_URL,"https://api-3t.sandbox.paypal.com/nvp"); // Sandbox testing
+//		exit('sandbox is true');
 	}else{
 		curl_setopt($connection,CURLOPT_URL,"https://api-3t.paypal.com/nvp"); // Live
 	}

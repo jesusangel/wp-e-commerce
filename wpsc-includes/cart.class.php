@@ -459,6 +459,7 @@ function wpsc_shipping_quote_selected_state() {
 	global $wpsc_cart;
 	
 	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method) && ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name']) ) { 
+		$wpsc_cart->selected_shipping_amount = $wpsc_cart->base_shipping;
 		return "checked='checked'";
 	} else {
 		return "";
@@ -532,6 +533,8 @@ class wpsc_cart {
 	var $selected_shipping_method = null;
 // 	var $shipping_quotes = null;
 	var $selected_shipping_option = null;
+	
+	var $selected_shipping_amount = null;
 	
 	var $coupon;
 	var $tax_percentage;

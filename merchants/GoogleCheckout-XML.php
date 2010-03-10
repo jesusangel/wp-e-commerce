@@ -90,7 +90,7 @@ function gateway_google($fromcheckout = false){
 	$cart->SetContinueShoppingUrl($returnURL);
 	$cart->SetEditCartUrl(get_option('shopping_cart_url'));
 	$no=1;
-	//exit("<pre>".print_r($wp_cart,true)."</pre>");
+	//exit("<pre>".print_r($wpsc_cart,true)."</pre>");
 	
 	//new item code
 	$no = 0;
@@ -100,19 +100,19 @@ function gateway_google($fromcheckout = false){
 	    $curr=new CURRENCYCONVERTER();
 	    $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
 	    $local_currency_code = $currency_code[0]['code'];
-	    
+//	    exit('<pre>'.print_r($_REQUEST,true).'</pre>');
 	    $google_curr = get_option('google_cur');
 		while (wpsc_have_cart_items()) {
 			wpsc_the_cart_item();
 			if($google_curr != $local_currency_code) {
 			$google_currency_productprice = $curr->convert( wpsc_cart_item_price(false)/wpsc_cart_item_quantity(),$google_curr,$local_currency_code);
-			$google_currency_shipping = $curr->convert(  $wpsc_cart->calculate_total_shipping()/wpsc_cart_item_quantity(),$google_curr,$local_currency_code);
+			$google_currency_shipping = $curr->convert(  $wpsc_cart->selected_shipping_amount,$google_curr,$local_currency_code);
 			
 		
-		} else {
-			$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
-			$google_currency_shipping = $wpsc_cart->calculate_total_shipping();
-		}
+			} else {
+				$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
+				$google_currency_shipping = $wpsc_cart->selected_shipping_amount;
+			}
 
 		//	exit('<pre>'.print_r(wpsc_cart_item_name(),true).'</pre>');
 			$cartitem["$no"] = new GoogleItem(wpsc_cart_item_name(),      // Item name

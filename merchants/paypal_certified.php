@@ -780,7 +780,7 @@ $output .= "
 	}
 
 	$USE_PROXY = false;
-	$version="56.0";
+	$version="57.0";
 
 	if (session_id() == "")
 		session_start();
@@ -838,7 +838,8 @@ $output .= "
 				$data['SHIPTOCITY']	= $value['value'];
 			}
 			if(($value['unique_name']=='billingcountry') && $value['value'] != ''){
-				$data['SHIPTOCOUNTRYCODE']	= $value['value'];
+				$values = maybe_unserialize($value['value']);
+				$data['SHIPTOCOUNTRYCODE']	= $values[0];
 				$state =  $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id` ='{$purchase_log['billing_region']}' LIMIT 1");
 				if($purchase_log['billing_region'] > 0) {
 					$data['SHIPTOSTATE'] = $state;
@@ -1040,7 +1041,7 @@ $output .= "
 		global $USE_PROXY, $PROXY_HOST, $PROXY_PORT;
 		global $gv_ApiErrorURL;
 		global $sBNCode;
-
+		$version = 57;
 		//setting the curl parameters.
 		$ch = curl_init();
 
@@ -1061,7 +1062,7 @@ $output .= "
 
 		//NVPRequest for submitting to server
 		$nvpreq="METHOD=" . urlencode($methodName) . "&VERSION=" . urlencode($version) . "&PWD=" . urlencode($API_Password) . "&USER=" . urlencode($API_UserName) . "&SIGNATURE=" . urlencode($API_Signature) . $nvpStr . "&BUTTONSOURCE=" . urlencode($sBNCode);
-
+		//exit('<pre>'.print_r($nvpreq,true).'</true>');
 		//setting the nvpreq as POST FIELD to curl
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
 		//exit($nvpreq);

@@ -177,9 +177,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$product_list_html.= $row['quantity']." -  ". $product_data['name'].stripslashes($variation_list )."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list_html .= " &nbsp; ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
 
+					$report_product_list.= $row['quantity']." - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n\r";
 				}
 				$report = get_option('wpsc_email_admin');
-				$report_product_list.= $row['quantity']." - ". $product_data['name'] .stripslashes($variation_list)."  ".$message_price ."\n\r";
+				
 			}
 			
 				// Decrement the stock here
