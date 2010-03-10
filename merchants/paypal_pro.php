@@ -92,7 +92,10 @@ function gateway_paypal_pro($seperator, $sessionid){
 	$data['PAYMENTACTION']			= "Sale";
 	$data['IPADDRESS']				= $_SERVER["REMOTE_ADDR"];
 	$data['RETURNFMFDETAILS']		= "1"; // optional - return fraud management filter data
-
+    
+    $sql = 'SELECT `code` FROM `'.WPSC_TABLE_CURRENCY_LIST.'` WHERE `id`='.get_option('currency_type');
+    $data['CURRENCYCODE'] = $wpdb->get_var($sql);
+    
 	foreach((array)$userinfo as $key => $value){
 		if(($value['unique_name']=='billingfirstname') && $value['value'] != ''){
 			$data['FIRSTNAME']	= $value['value'];

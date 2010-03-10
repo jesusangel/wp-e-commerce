@@ -280,62 +280,64 @@ class ups {
             $wpsc_ups_services = get_option("wpsc_ups_services");
             // Initialize a DOM using the XML passed in!
             $objDOM = new DOMDocument();
-            $objDOM->loadXML($raw);
-
-            // Get the <ResponseStatusCode> from the UPS XML
-            $getStatusNode = $objDOM->getElementsByTagName("ResponseStatusCode");
-            // Get the value of the error code, 1 == No Error, 0 == Error !!!
-            $statusCode = $getStatusNode->item(0)->nodeValue;
-
-            if ($statusCode == "0"){
-                // Usually I dont leave debug stuff in but this is handy stuff!!
-                // it will print out the error message returned by UPS!
-                /*$getErrorDescNode = $objDOM->getElementsByTagName("ErrorDescription");
-                $ErrorDesc = $getErrorDescNode->item(0)->nodeValue;
-                echo "<br />Error : ".$ErrorDesc."<br />";*/
-                return false;
-            }else{
-                $RateBlocks = $objDOM->getElementsByTagName("RatedShipment");
-                foreach($RateBlocks as $rate_block){
-                    // Get the <Service> Node from the XML chunk
-                    $getServiceNode = $rate_block->getElementsByTagName("Service");
-                    $serviceNode = $getServiceNode->item(0);
-
-                    // Get the <Code> Node from the <Service> chunk
-                    $getServiceCodeNode = $serviceNode->getElementsByTagName("Code");
-                    // Get the value from <Code>
-                    $serviceCode = $getServiceCodeNode->item(0)->nodeValue;
-
-                    // Get the <TotalCharges> Node from the XML chunk
-                    $getChargeNodes = $rate_block->getElementsByTagName("TotalCharges");
-                    $chargeNode = $getChargeNodes->item(0);
-
-                    // Get the <CurrencyCode> from the <TotalCharge> chunk
-                    $getCurrNode= $chargeNode->getElementsByTagName("CurrencyCode");
-                    // Get the value of <CurrencyCode>
-                    $currCode = $getCurrNode->item(0)->nodeValue;
-
-                    // Get the <MonetaryValue> from the <TotalCharge> chunk
-                    $getMonetaryNode= $chargeNode->getElementsByTagName("MonetaryValue");
-                    // Get the value of <MonetaryValue>
-                    $price = $getMonetaryNode->item(0)->nodeValue;
-                    // If there are any services specified in the admin area
-                    // this will check that list and pass on adding any services that
-                    // are not explicitly defined.
-                    if (!empty($wpsc_ups_services)){
-                        if (is_array($wpsc_ups_services)){
-                            if (array_search($serviceCode, $wpsc_ups_services) === false){
-                                continue;
-                            }
-                        }else if ($wpsc_ups_services != $serviceCode){
-                            continue;
-                        }
-                    }
-                    if(array_key_exists($serviceCode,$this->Services)){
-                        $rate_table[$this->Services[$serviceCode]] = array($currCode,$price);
-                    }
-
-                } // End foreach rated shipment block
+            if($raw != '') {
+	            $objDOM->loadXML($raw);
+	
+	            // Get the <ResponseStatusCode> from the UPS XML
+	            $getStatusNode = $objDOM->getElementsByTagName("ResponseStatusCode");
+	            // Get the value of the error code, 1 == No Error, 0 == Error !!!
+	            $statusCode = $getStatusNode->item(0)->nodeValue;
+	
+	            if ($statusCode == "0"){
+	                // Usually I dont leave debug stuff in but this is handy stuff!!
+	                // it will print out the error message returned by UPS!
+	                /*$getErrorDescNode = $objDOM->getElementsByTagName("ErrorDescription");
+	                $ErrorDesc = $getErrorDescNode->item(0)->nodeValue;
+	                echo "<br />Error : ".$ErrorDesc."<br />";*/
+	                return false;
+	            }else{
+	                $RateBlocks = $objDOM->getElementsByTagName("RatedShipment");
+	                foreach($RateBlocks as $rate_block){
+	                    // Get the <Service> Node from the XML chunk
+	                    $getServiceNode = $rate_block->getElementsByTagName("Service");
+	                    $serviceNode = $getServiceNode->item(0);
+	
+	                    // Get the <Code> Node from the <Service> chunk
+	                    $getServiceCodeNode = $serviceNode->getElementsByTagName("Code");
+	                    // Get the value from <Code>
+	                    $serviceCode = $getServiceCodeNode->item(0)->nodeValue;
+	
+	                    // Get the <TotalCharges> Node from the XML chunk
+	                    $getChargeNodes = $rate_block->getElementsByTagName("TotalCharges");
+	                    $chargeNode = $getChargeNodes->item(0);
+	
+	                    // Get the <CurrencyCode> from the <TotalCharge> chunk
+	                    $getCurrNode= $chargeNode->getElementsByTagName("CurrencyCode");
+	                    // Get the value of <CurrencyCode>
+	                    $currCode = $getCurrNode->item(0)->nodeValue;
+	
+	                    // Get the <MonetaryValue> from the <TotalCharge> chunk
+	                    $getMonetaryNode= $chargeNode->getElementsByTagName("MonetaryValue");
+	                    // Get the value of <MonetaryValue>
+	                    $price = $getMonetaryNode->item(0)->nodeValue;
+	                    // If there are any services specified in the admin area
+	                    // this will check that list and pass on adding any services that
+	                    // are not explicitly defined.
+	                    if (!empty($wpsc_ups_services)){
+	                        if (is_array($wpsc_ups_services)){
+	                            if (array_search($serviceCode, $wpsc_ups_services) === false){
+	                                continue;
+	                            }
+	                        }else if ($wpsc_ups_services != $serviceCode){
+	                            continue;
+	                        }
+	                    }
+	                    if(array_key_exists($serviceCode,$this->Services)){
+	                        $rate_table[$this->Services[$serviceCode]] = array($currCode,$price);
+	                    }
+	
+	                } // End foreach rated shipment block
+	            }
             }
             // Revers sort the rate selection so it is cheapest First!
             asort($rate_table);
