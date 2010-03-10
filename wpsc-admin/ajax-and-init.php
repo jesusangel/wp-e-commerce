@@ -353,7 +353,7 @@ function wpsc_modify_product_price() {
 	$product_nonce = $product_data['nonce'];
 
 	if(wp_verify_nonce($product_nonce, 'edit-product_price-'.$product_id) ) {
-		if($wpdb->query("UPDATE ".WPSC_TABLE_PRODUCT_LIST." SET price='{$product_price}' WHERE id='{$product_id}'")) {
+		if(update_post_meta($product_id, '_wpsc_price', $product_price)) {
 			echo "success = 1;\n\r";
 			echo "new_price = '".nzshpcrt_currency_display($product_price, 1, true)."';\n\r";
 		} else {

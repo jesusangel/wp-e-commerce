@@ -64,10 +64,18 @@ function wpsc_product_image($attachment_id, $width = null, $height = null) {
 * @return string - the product price
 */
 function wpsc_the_product_price() {
-	global $wpsc_query;	
+	global $wpsc_query, $wpsc_variations;	
 
-	$full_price = get_post_meta(get_the_ID(), '_wpsc_price', true);
-	$special_price = get_post_meta(get_the_ID(), '_wpsc_special_price', true);
+	if(count($wpsc_variations->first_variations) > 0) {
+		$product_id = wpsc_get_child_object_in_terms(get_the_ID(), $wpsc_variations->first_variations,'wpsc-variation');
+		//echo "<pre>".print_r($variation_data, true)."</pre>";
+	} else {
+		$product_id = get_the_ID();
+	}
+	
+	$full_price = get_post_meta($product_id, '_wpsc_price', true);
+	$special_price = get_post_meta($product_id, '_wpsc_special_price', true);
+	
 	
 	$price = $full_price;
 	if(($full_price > $special_price) && ($special_price > 0)) {
@@ -77,6 +85,26 @@ function wpsc_the_product_price() {
 	return $output;
 }
 
+function wpsc_calculate_price($product_id, $variations, $special = false) {
+	if(count($variations) > 0) {
+		$product_id = wpsc_get_child_object_in_terms($product_id, $variations,'wpsc-variation');
+	} else {
+		$product_id = get_the_ID();
+	}
+	
+	if($special == true) {
+		$full_price = get_post_meta($product_id, '_wpsc_price', true);
+		$special_price = get_post_meta($product_id, '_wpsc_special_price', true);
+		
+		$price = $full_price;
+		if(($full_price > $special_price) && ($special_price > 0)) {
+			$price = $special_price;
+		}
+	} else {
+		$price = get_post_meta($product_id, '_wpsc_price', true);
+	}
+	return $price;
+}
 
 
 
@@ -253,7 +281,10 @@ function wpsc_have_products() {
 * @return nothing
 */
 function wpsc_the_product() {
+	global $wpsc_custom_meta, $wpsc_variations;
 	the_post();
+	$wpsc_custom_meta = new wpsc_custom_meta(get_the_ID());
+	$wpsc_variations = new wpsc_variations(get_the_ID());
 }
 
 /**
@@ -709,9 +740,8 @@ function wpsc_custom_meta_value() {
 * @return boolean - true while we have variation groups
 */
 function wpsc_have_variation_groups() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	//return $wpsc_query->have_variation_groups();
+	global $wpsc_variations;
+	return $wpsc_variations->have_variation_groups();
 }
 
 /**
@@ -719,9 +749,8 @@ function wpsc_have_variation_groups() {
 * @return nothing - iterate through the variation groups
 */
 function wpsc_the_variation_group() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	$wpsc_query->the_variation_group();
+	global $wpsc_variations;
+	$wpsc_variations->the_variation_group();
 }
 
 /**
@@ -729,9 +758,8 @@ function wpsc_the_variation_group() {
 * @return boolean - true while we have variations
 */
 function wpsc_have_variations() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	//return $wpsc_query->have_variations();
+	global $wpsc_variations;
+	return $wpsc_variations->have_variations();
 }
 
 /**
@@ -739,8 +767,8 @@ function wpsc_have_variations() {
 * @return nothing - iterate through the variations
 */
 function wpsc_the_variation() {
-	global $wpsc_query;
-	$wpsc_query->the_variation();
+	global $wpsc_variations;
+	$wpsc_variations->the_variation();
 }
 
 
@@ -788,10 +816,9 @@ function wpsc_display_product_multicurrency(){
 * @return string - the variaton group name
 */
 function wpsc_the_vargrp_name() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
  // get the variation group name;
-	global $wpsc_query;
-	return $wpsc_query->variation_group['name'];
+	global $wpsc_variations;
+	return $wpsc_variations->variation_group->name;
 }
 
 /**
@@ -800,9 +827,9 @@ function wpsc_the_vargrp_name() {
 */
 function wpsc_vargrp_form_id() {
  // generate the variation group form ID;
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	$form_id = "variation_select_{$wpsc_query->product['id']}_{$wpsc_query->variation_group['variation_id']}";
+	global $wpsc_variations;
+	$product_id = get_the_ID();
+	$form_id = "variation_select_{$product_id}_{$wpsc_query->variation_group->term_id}";
 	return $form_id;
 }
 
@@ -811,9 +838,8 @@ function wpsc_vargrp_form_id() {
 * @return integer - the variation group ID
 */
 function wpsc_vargrp_id() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return $wpsc_query->variation_group['variation_id'];
+	global $wpsc_variations;
+	return $wpsc_variations->variation_group->term_id;
 }
 
 /**
@@ -821,9 +847,8 @@ function wpsc_vargrp_id() {
 * @return string - the variation name
 */
 function wpsc_the_variation_name() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return stripslashes($wpsc_query->variation['name']);
+	global $wpsc_variations;
+	return stripslashes($wpsc_variations->variation->name);
 }
 
 /**
@@ -831,9 +856,8 @@ function wpsc_the_variation_name() {
 * @return integer - the variation ID
 */
 function wpsc_the_variation_id() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	return $wpsc_query->variation['id'];
+	global $wpsc_variations;
+	return $wpsc_variations->variation->term_id;
 }
 
 
@@ -842,14 +866,14 @@ function wpsc_the_variation_id() {
 * @return string - HTML attribute to disable select options and radio buttons
 */
 function wpsc_the_variation_out_of_stock() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query, $wpdb;
 	$out_of_stock = false;
 	//$wpsc_query->the_variation();
 	if(($wpsc_query->variation_group_count == 1) && ($wpsc_query->product['quantity_limited'] == 1)) {
 		$product_id = $wpsc_query->product['id'];
-		$variation_group_id = $wpsc_query->variation_group['variation_id'];
-		$variation_id = $wpsc_query->variation['id'];
+		$variation_group_id = $wpsc_query->variation_group->term_id;
+		$variation_id = $wpsc_query->variation->term_id;
 		
 
 		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");

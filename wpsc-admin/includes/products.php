@@ -12,7 +12,7 @@
  * wpsc_product_rows function, copies the functionality of the wordpress code for siplaying posts and pages, but is for products
  * 
  */
-function wpsc_admin_product_listing() {
+function wpsc_admin_product_listing($parent_product = null) {
 	global $wp_query, $wpsc_products, $mode;
 
 	add_filter('the_title','esc_html');
@@ -27,13 +27,15 @@ function wpsc_admin_product_listing() {
 	foreach ( $wpsc_products as $product ) {
 		$product_ids[] = $product->ID;
 	}
-//	exit('<pre>'.print_r($wpsc_products, true).'</pre>');
+	
+	
+	//	exit('<pre>'.print_r($wpsc_products, true).'</pre>');
 	foreach ( $wpsc_products as $product ) {
-		wpsc_product_row($product);
+		wpsc_product_row($product, $parent_product);
 	}
 }
 
-function wpsc_product_row(&$product) {
+function wpsc_product_row(&$product, $parent_product = null) {
 	global $wp_query, $wpsc_products, $mode, $current_user;
 	static $rowclass;
 	//echo "<pre>".print_r($product, true)."</pre>";
@@ -195,10 +197,14 @@ function wpsc_product_row(&$product) {
 				'order' => 'ASC'
 				);
 
-			$attachments = get_posts($args);
-			if (count($attachments) >= 1) {
-				$attachment = array_pop($attachments);
-				$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$attachment->ID}&amp;width=38&amp;height=38&amp;crop=true";
+			$attachments = (array)get_posts($args);
+			$product_image = array_shift($attachments);
+			if (($product_image == null) && ($product->post_parent > 0)) {
+				$product_image = $parent_product['image'];
+			}
+			if ($product_image != null) {
+
+				$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$product_image->ID}&amp;width=38&amp;height=38&amp;crop=true";
 				?>
 					<img title='Drag to a new position' src=<?php echo $image_url; ?>' alt='<?php echo $title; ?>' />
 				<?php

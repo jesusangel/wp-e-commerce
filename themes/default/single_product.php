@@ -78,7 +78,7 @@ $image_height = get_option('single_view_image_height');
 	
 						<?php /** the custom meta HTML and loop */ ?>
 						<?php 
-							$wpsc_custom_meta = new wpsc_custom_meta(get_the_ID());
+							
 						?>
 						<div class="custom_meta">
 							<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>

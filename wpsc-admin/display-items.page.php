@@ -174,8 +174,12 @@ function wpsc_display_edit_products_page() {
 	<?php
 }
 
-
-
+/*
+ * wpsc_edit_variations_request_sql function, modifies the wp-query SQL statement for displaying variations
+ * @todo will need refinement later to work with pagionation
+ * @param $sql
+ * @returns string - SQL statement
+ */
 
 function wpsc_edit_variations_request_sql($sql) {
 	global $wpdb;
@@ -185,9 +189,12 @@ function wpsc_edit_variations_request_sql($sql) {
 		$product_term_data = wp_get_object_terms($parent_product, 'wpsc-variation');
 		
 		$parent_terms = array();
+		$child_terms = array();
 		foreach($product_term_data as $product_term_row) {
 			if($product_term_row->parent == 0) {
 				$parent_terms[] = $product_term_row->term_id;
+			} else {
+				$child_terms[] = $product_term_row->term_id;
 			}
 		}
 		
@@ -195,6 +202,8 @@ function wpsc_edit_variations_request_sql($sql) {
 			//echo "<pre>".print_r($parent_terms, true)."</pre>";
 			//echo $sql;
 			$term_count = count($parent_terms);
+			$child_terms = implode(", ", $child_terms);
+			
 			$parent_terms = implode(", ", $parent_terms);
 			$new_sql = "SELECT posts.*, COUNT(tr.object_id) AS `count`
 			FROM {$wpdb->term_relationships} AS tr
@@ -203,7 +212,17 @@ function wpsc_edit_variations_request_sql($sql) {
 			INNER JOIN {$wpdb->term_taxonomy} AS tt
 			ON tr.term_taxonomy_id = tt.term_taxonomy_id
 			WHERE tt.taxonomy IN ('wpsc-variation')
-			AND tt.parent IN ($parent_terms)
+			AND tt.parent IN ({$parent_terms})
+			AND tt.term_id IN ({$child_terms})
+			AND ( 
+				SELECT COUNT(DISTINCT tt2.parent) FROM 
+				{$wpdb->term_relationships} AS tr2
+				INNER JOIN {$wpdb->term_taxonomy} AS tt2
+					ON tr2.term_taxonomy_id = tt2.term_taxonomy_id
+				WHERE tr2.object_id = tr.object_id
+				AND tt2.taxonomy IN ('wpsc-variation')
+				AND tt2.parent > 0
+			) = {$term_count}
 			GROUP BY tr.object_id
 			HAVING `count` = {$term_count}";
 			return $new_sql;
@@ -247,7 +266,20 @@ function wpsc_admin_products_list($category_id = 0) {
 			'post_parent' => $parent_product,
 			'post_status' => 'all',
 			'order' => "ASC"
-		);
+		);	
+		
+		$parent_product_data['post'] = get_post($parent_product);
+		$args = array(
+			'post_type' => 'attachment',
+			'numberposts' => 1,
+			'post_status' => null,
+			'post_parent' => $parent_product,
+			'orderby' => 'menu_order',
+			'order' => 'ASC'
+			);
+		$image_data = (array)get_posts($args);
+		$parent_product_data['image'] = array_shift($image_data);
+		
 		add_filter('posts_request', 'wpsc_edit_variations_request_sql');
 	} else { 
 		$query = array(
@@ -276,7 +308,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	remove_filter('posts_request', 'wpsc_edit_variations_request_sql');
 	
 	
-	//echo "<pre>".print_r($wp_query, true)."</pre>";
+	//echo "<pre>".print_r($parent_product_data, true)."</pre>";
 	if($page !== null) {
 		$page_links = paginate_links( array(
 			'base' => add_query_arg( 'pageno', '%#%' ),
@@ -361,7 +393,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		
 			<tbody>
 			<?php
-			wpsc_admin_product_listing();
+			wpsc_admin_product_listing($parent_product_data);
 			//echo "<pre>".print_r($wp_query, true)."</pre>";
 			if(count($wp_query->posts) < 1) {
 				?>

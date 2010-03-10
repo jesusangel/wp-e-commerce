@@ -327,7 +327,7 @@ jQuery(document).ready( function () {
 				success: function(returned_data) {
 					eval(returned_data);
 				  if(success == 1) {
-						parent_container = jQuery("#"+target_element_id+"").parent('.product-price');
+						parent_container = jQuery("#"+target_element_id+"").parent('.column-price');
 						jQuery(".pricedisplay", parent_container).html(new_price);
 				  }
 					jQuery('span.pricedisplay').css('display', 'block');
@@ -340,17 +340,17 @@ jQuery(document).ready( function () {
 	};
 
 	
-	jQuery("table#wpsc_product_list .product-price").livequery(function(){
+	jQuery("table#wpsc_product_list .column-price").livequery(function(){
 		jQuery("span.pricedisplay", this).click( function(event) {
 			jQuery('span.pricedisplay').css('display', 'block');
 			jQuery('div.price-editing-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
-			jQuery('div.price-editing-fields', jQuery(this).parent('.product-price')).css('display', 'block');
+			jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).css('display', 'block');
 
-			target_element_id = jQuery('div.price-editing-fields', jQuery(this).parent('.product-price')).attr('id');
+			target_element_id = jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).attr('id');
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_price);
 			
-			jQuery('div.price-editing-fields .the-product-price', jQuery(this).parent('.product-price')).focus();
+			jQuery('div.price-editing-fields .the-product-price', jQuery(this).parent('.column-price')).focus();
 		});
 		
 		jQuery('.the-product-price',this).keyup(function(event){

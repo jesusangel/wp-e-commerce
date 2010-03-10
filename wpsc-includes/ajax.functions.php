@@ -57,6 +57,15 @@ function wpsc_add_to_cart() {
   foreach((array)$_POST['variation'] as $key => $variation) {
     $provided_parameters['variation_values'][(int)$key] = (int)$variation;
   }
+  if(count($provided_parameters['variation_values']) > 0) {
+	$variation_product_id = wpsc_get_child_object_in_terms($product_id, $provided_parameters['variation_values'],'wpsc-variation');
+	if($variation_product_id > 0) {
+		$product_id = $variation_product_id;
+	}
+  }
+  
+  
+  
   if($_POST['quantity'] > 0 && (!isset($_POST['wpsc_quantity_update']))) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
   } else if (isset($_POST['wpsc_quantity_update'])) {
@@ -401,11 +410,11 @@ function wpsc_update_product_price() {
 	echo "product_id=".(int)$_POST['product_id'].";\n";
 
 
-	echo "old_price=\"".nzshpcrt_currency_display(calculate_product_price( (int) $_POST['product_id'], $variations,true), $notax, true)."\";\n";
-	echo "numeric_old_price=\"".number_format(calculate_product_price( (int) $_POST['product_id'], $variations,true), 2)."\";\n";
+	echo "old_price=\"".nzshpcrt_currency_display(wpsc_calculate_price( (int) $_POST['product_id'], $variations), $notax, true)."\";\n";
+	echo "numeric_old_price=\"".number_format(wpsc_calculate_price( (int) $_POST['product_id'], $variations), 2)."\";\n";
 	
-	echo "price=\"".nzshpcrt_currency_display(calculate_product_price( (int) $_POST['product_id'], $variations), $notax, true)."\";\n";
-	echo "numeric_price=\"".number_format(calculate_product_price( (int) $_POST['product_id'], $variations), 2)."\";\n";
+	echo "price=\"".nzshpcrt_currency_display(wpsc_calculate_price( (int) $_POST['product_id'], $variations, true), $notax, true)."\";\n";
+	echo "numeric_price=\"".number_format(wpsc_calculate_price( (int) $_POST['product_id'], $variations, true), 2)."\";\n";
 	exit();
 }
 // execute on POST and GET
