@@ -10,6 +10,7 @@
 
 		
 /// admin includes
+require_once(WPSC_FILE_PATH."/wpsc-admin/display-update.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-groups.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-variations.page.php");
@@ -17,6 +18,8 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/display-upgrades.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/display-items-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/save-data.functions.php");
+require_once(WPSC_FILE_PATH."/wpsc-admin/includes/updating.functions.php");
+
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax-and-init.php");
 
@@ -31,12 +34,12 @@ if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_P
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/settings-pages/general.php");
 
 
-if(get_option('wpsc_checkout_form_fields') == ''){
+if(get_option('wpsc_checkout_form_fields') == '') {
 	$form_types = 	Array("text","email","address","city","country","delivery_address","delivery_city","delivery_country","textarea","heading","select","radio","checkbox");
 	update_option('wpsc_checkout_form_fields', $form_types);
 }
 
-if(get_option('wpsc_checkout_form_sets') == ''){
+if(get_option('wpsc_checkout_form_sets') == '') {
 	$form_sets = array('Default Checkout Forms');
 	update_option('wpsc_checkout_form_sets', $form_sets);
 }
@@ -88,6 +91,12 @@ function wpsc_admin_pages(){
 					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
 				}
 			}
+
+
+
+
+			$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 7, 'wpsc-update', 'wpsc_display_update_page');
+
 
 				
 			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
