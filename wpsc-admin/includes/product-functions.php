@@ -605,7 +605,7 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 						$uploaded_image =  $_FILES['thumbnailImage']['tmp_name'];
 				   }
 				  if($uploaded_image !== null) {
-				  
+				  		$image = $image.uniqid();
 						move_uploaded_file($uploaded_image, WPSC_THUMBNAIL_DIR.$image);
 				    //exit($uploaded_image);
 				  
