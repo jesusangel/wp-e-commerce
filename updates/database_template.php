@@ -8,6 +8,7 @@
  */
  
 // code to create or update the {$wpdb->prefix}wpsc_category_tm table
+/*
 $table_name = WPSC_TABLE_CATEGORY_TM;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['visible'] = "int(2) unsigned NOT NULL DEFAULT '0' ";
@@ -15,10 +16,11 @@ $wpsc_database_template[$table_name]['columns']['countryid'] = "int(20) unsigned
 $wpsc_database_template[$table_name]['columns']['categoryid'] = "int(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['countryid_and_categoryid'] = "UNIQUE KEY `countryid_and_categoryid` (`countryid`,`categoryid`)";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_also_bought table
-$table_name = WPSC_TABLE_ALSO_BOUGHT;
+$table_name = WPSC_TABLE_ALSO_BOUGHT; /* !wpsc_also_bought */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['selected_product'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['associated_product'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -28,7 +30,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}also_bo
 
 
 // code to create or update the {$wpdb->prefix}wpsc_cart_contents table
-$table_name = WPSC_TABLE_CART_CONTENTS;
+$table_name = WPSC_TABLE_CART_CONTENTS; /* !wpsc_cart_contents */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['prodid'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(255) NOT NULL DEFAULT '' ";
@@ -49,7 +51,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}cart_co
 
 // code to create or update the {$wpdb->prefix}wpsc_meta table
 
-$table_name = WPSC_TABLE_META;
+$table_name = WPSC_TABLE_META; /* !wpsc_meta */
 $wpsc_database_template[$table_name]['columns']['meta_id'] = "bigint(20) NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['object_type'] = "varchar(24) NOT NULL default 'cart_Item'";
 $wpsc_database_template[$table_name]['columns']['object_id'] = "bigint(20) NOT NULL default '0'";
@@ -61,7 +63,7 @@ $wpsc_database_template[$table_name]['indexes']['object_type__object_id__meta_ke
 
 
 // code to create or update the {$wpdb->prefix}wpsc_checkout_forms table
-$table_name = WPSC_TABLE_CHECKOUT_FORMS;
+$table_name = WPSC_TABLE_CHECKOUT_FORMS; /* !wpsc_checkout_forms */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['name'] = "text NOT NULL";
 $wpsc_database_template[$table_name]['columns']['type'] = "varchar(64) NOT NULL DEFAULT '' ";
@@ -81,7 +83,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}collect
 
 
 // code to create or update the {$wpdb->prefix}wpsc_currency_list table
-$table_name = WPSC_TABLE_CURRENCY_LIST;
+$table_name = WPSC_TABLE_CURRENCY_LIST; /* !wpsc_currency_list */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['country'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['isocode'] = "char(2) NULL DEFAULT '' ";
@@ -98,6 +100,7 @@ $wpsc_database_template[$table_name]['actions']['after']['all'] = "wpsc_add_curr
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}currency_list";
 
 
+/*
 // code to create or update the {$wpdb->prefix}wpsc_download_status table
 $table_name = WPSC_TABLE_DOWNLOAD_STATUS;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
@@ -115,8 +118,10 @@ $wpsc_database_template[$table_name]['indexes']['product_id'] = " KEY `product_i
 $wpsc_database_template[$table_name]['indexes']['uniqueid'] = "UNIQUE KEY `uniqueid` ( `uniqueid` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}download_status";
 
+*/
 
 // code to create or update the {$wpdb->prefix}wpsc_item_category_assoc table
+/*
 $table_name = WPSC_TABLE_ITEM_CATEGORY_ASSOC;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -124,9 +129,11 @@ $wpsc_database_template[$table_name]['columns']['category_id'] = "bigint(20) uns
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['product_id'] = "UNIQUE KEY `product_id` (`product_id`,`category_id`)";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}item_category_associations";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_categories table
+/*
 $table_name = WPSC_TABLE_PRODUCT_CATEGORIES;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['group_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -145,9 +152,11 @@ $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id
 $wpsc_database_template[$table_name]['indexes']['group_id'] = " KEY `group_id` ( `group_id` )";
 $wpsc_database_template[$table_name]['indexes']['nice-name'] = " KEY `nice-name` ( `nice-name` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_categories";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_files table
+/*
 $table_name = WPSC_TABLE_PRODUCT_FILES;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NULL";
@@ -159,9 +168,11 @@ $wpsc_database_template[$table_name]['columns']['preview_mimetype'] = "varchar(1
 $wpsc_database_template[$table_name]['columns']['date'] = "varchar(255) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_files";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_images table
+/*
 $table_name = WPSC_TABLE_PRODUCT_IMAGES;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -173,9 +184,11 @@ $wpsc_database_template[$table_name]['columns']['meta'] = "longtext NULL";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['product_id'] = " KEY `product_id` ( `product_id` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_images";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_list table
+/*
 $table_name = WPSC_TABLE_PRODUCT_LIST;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['name'] = "text NOT NULL ";
@@ -207,9 +220,11 @@ $wpsc_database_template[$table_name]['actions']['before']['special_price'] = "wp
 $wpsc_database_template[$table_name]['actions']['before']['image'] = "wpsc_update_image_records";
 $wpsc_database_template[$table_name]['actions']['after']['date_added'] = "wpsc_set_product_creation_dates";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_list";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_order table
+/*
 $table_name = WPSC_TABLE_PRODUCT_ORDER;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['category_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -219,10 +234,11 @@ $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id
 $wpsc_database_template[$table_name]['indexes']['category_id'] = "UNIQUE KEY `category_id` (`category_id`,`product_id`)";
 $wpsc_database_template[$table_name]['indexes']['order'] = " KEY `order` ( `order` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_order";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_rating table
-$table_name = WPSC_TABLE_PRODUCT_RATING;
+$table_name = WPSC_TABLE_PRODUCT_RATING; /* !wpsc_product_rating */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['ipnum'] = "varchar(30) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['productid'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -233,6 +249,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product
 
 
 // code to create or update the {$wpdb->prefix}wpsc_product_variations table
+/*
 $table_name = WPSC_TABLE_PRODUCT_VARIATIONS;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(128) NOT NULL DEFAULT '' ";
@@ -240,10 +257,11 @@ $wpsc_database_template[$table_name]['columns']['variation_association'] = "bigi
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['variation_association'] = " KEY `variation_association` ( `variation_association` ) ";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}product_variations";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_purchase_logs table
-$table_name = WPSC_TABLE_PURCHASE_LOGS;
+$table_name = WPSC_TABLE_PURCHASE_LOGS;  /* !wpsc_purchase_logs */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['totalprice'] = "decimal(11,2) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['statusno'] = "smallint(6) NOT NULL DEFAULT '0' ";
@@ -278,7 +296,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}purchas
 
 
 // code to create or update the {$wpdb->prefix}wpsc_purchase_statuses table
-$table_name = WPSC_TABLE_PURCHASE_STATUSES;
+$table_name = WPSC_TABLE_PURCHASE_STATUSES;  /* !wpsc_purchase_statuses */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(128) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['active'] = "varchar(1) NOT NULL DEFAULT '0' ";
@@ -288,7 +306,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}purchas
 
 
 // code to create or update the {$wpdb->prefix}wpsc_region_tax table
-$table_name = WPSC_TABLE_REGION_TAX;
+$table_name = WPSC_TABLE_REGION_TAX;  /* !wpsc_region_tax */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['country_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(64) NOT NULL DEFAULT '' ";
@@ -301,7 +319,7 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}region_
 
 
 // code to create or update the {$wpdb->prefix}wpsc_submited_form_data table
-$table_name = WPSC_TABLE_SUBMITED_FORM_DATA;
+$table_name = WPSC_TABLE_SUBMITED_FORM_DATA; /* !wpsc_submitted_form_data */
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['log_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['form_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -311,6 +329,7 @@ $wpsc_database_template[$table_name]['indexes']['log_id'] = " KEY `log_id` ( `lo
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}submited_form_data";
 
 
+/*
 // code to create or update the {$wpdb->prefix}wpsc_variation_assoc table
 $table_name = WPSC_TABLE_VARIATION_ASSOC;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
@@ -322,7 +341,9 @@ $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id
 $wpsc_database_template[$table_name]['indexes']['associated_id'] = " KEY `associated_id` ( `associated_id` )";
 $wpsc_database_template[$table_name]['indexes']['variation_id'] = " KEY `variation_id` ( `variation_id` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}variation_associations";
+*/
 
+/*
 
 // code to create or update the {$wpdb->prefix}wpsc_variation_properties table
 $table_name = WPSC_TABLE_VARIATION_PROPERTIES;
@@ -362,6 +383,7 @@ $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id
 $wpsc_database_template[$table_name]['indexes']['product_id'] = " KEY `product_id` ( `product_id`, `value_id`, `variation_id` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}variation_values_associations";
 
+*/
 
 // code to create or update the {$wpdb->prefix}wpsc_coupon_codes table
 $table_name = WPSC_TABLE_COUPON_CODES;
@@ -398,6 +420,7 @@ $wpsc_database_template[$table_name]['indexes']['expiry'] = " KEY `expiry` ( `ex
 
 
 // code to create or update the {$wpdb->prefix}wpsc_productmeta table
+/*
 $table_name = WPSC_TABLE_PRODUCTMETA;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -408,9 +431,11 @@ $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id
 $wpsc_database_template[$table_name]['indexes']['product_id'] = " KEY `product_id` ( `product_id` )";
 $wpsc_database_template[$table_name]['indexes']['meta_key'] = " KEY `meta_key` ( `meta_key` )";
 $wpsc_database_template[$table_name]['indexes']['custom'] = " KEY `custom` ( `custom` )";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_categorisation_groups table
+/*
 $table_name = WPSC_TABLE_CATEGORISATION_GROUPS;
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(255) NOT NULL DEFAULT '' ";
@@ -419,10 +444,11 @@ $wpsc_database_template[$table_name]['columns']['active'] = "varchar(1) NOT NULL
 $wpsc_database_template[$table_name]['columns']['default'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['indexes']['group_name'] = " KEY `group_name` ( `name` )";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_variation_combinations table
-$table_name = WPSC_TABLE_VARIATION_COMBINATIONS;
+/* $table_name = WPSC_TABLE_VARIATION_COMBINATIONS;
 $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['priceandstock_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['value_id'] = "bigint(20) unsigned NOT NULL DEFAULT '0' ";
@@ -433,10 +459,11 @@ $wpsc_database_template[$table_name]['indexes']['priceandstock_id'] = " KEY `pri
 $wpsc_database_template[$table_name]['indexes']['value_id'] = " KEY `value_id` ( `value_id` )";
 $wpsc_database_template[$table_name]['indexes']['variation_id'] = " KEY `variation_id` ( `variation_id` )";
 $wpsc_database_template[$table_name]['indexes']['all_variation_ids'] = " KEY `all_variation_ids` ( `all_variation_ids` )";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_claimed_stock table
-$table_name = WPSC_TABLE_CLAIMED_STOCK;
+$table_name = WPSC_TABLE_CLAIMED_STOCK;  /* !wpsc_claimed_stock */
 $wpsc_database_template[$table_name]['columns']['product_id'] = "bigint(20) UNSIGNED NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['variation_stock_id'] = "bigint(20) UNSIGNED NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['stock_claimed'] = "FLOAT NOT NULL ";

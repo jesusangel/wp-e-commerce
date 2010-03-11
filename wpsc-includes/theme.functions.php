@@ -101,22 +101,24 @@ function wpsc_user_dynamic_js() {
  	header('Expires: '.gmdate('r',mktime(0,0,0,date('m'),(date('d')+12),date('Y'))).'');
  	header('Cache-Control: public, must-revalidate, max-age=86400');
  	header('Pragma: public');
-  $siteurl = get_option('siteurl'); 
-  ?>
-  jQuery.noConflict();
+	$siteurl = get_option('siteurl'); 
+	?>
+	jQuery.noConflict();
+	
 	/* base url */
 	var base_url = "<?php echo $siteurl; ?>";
 	var WPSC_URL = "<?php echo WPSC_URL; ?>";
 	var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
 	var WPSC_DIR_NAME = "<?php echo WPSC_DIR_NAME; ?>";
+	
 	/* LightBox Configuration start*/
 	var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
 	var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
 	var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";
 	var resizeSpeed = 9;  // controls the speed of the image resizing (1=slowest and 10=fastest)
 	var borderSize = 10;  //if you adjust the padding in the CSS, you will need to update this variable
-<?php
-  exit();
+	<?php
+	exit();
 }
 
 if($_GET['wpsc_user_dynamic_js'] == 'true') {
@@ -133,16 +135,6 @@ function wpsc_user_dynamic_css() {
 	header('Pragma: public'); 	
 	
 	$category_id = absint($_GET['category']);
-
-	$category_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1",ARRAY_A);
-	
-	
-	if($category_data['display_type'] != '') {
-		$display_type = $category_data['display_type'];
-	} else {
-		$display_type = get_option('product_view');
-	}
-	
 	
 	if(!defined('WPSC_DISABLE_IMAGE_SIZE_FIXES') || (constant('WPSC_DISABLE_IMAGE_SIZE_FIXES') != true)) {
 		$thumbnail_width = get_option('product_image_width');
@@ -167,7 +159,6 @@ function wpsc_user_dynamic_css() {
      */
 		div.default_product_display div.textcol{
 			margin-left: <?php echo $thumbnail_width + 10; ?>px !important;
-			<?php /*_margin-left: <?php echo ($thumbnail_width/2) + 5; ?>px !important;  */ ?>
 			min-height: <?php echo $thumbnail_height;?>px;
 			_height: <?php echo $thumbnail_height;?>px;
 		}
@@ -220,7 +211,6 @@ function wpsc_user_dynamic_css() {
 		
 		div.single_product_display div.textcol{
 			margin-left: <?php echo $single_thumbnail_width + 10; ?>px !important;
-			<?php /* _margin-left: <?php echo ($single_thumbnail_width/2) + 5; ?>px !important; */ ?>
 			min-height: <?php echo $single_thumbnail_height;?>px;
 			_height: <?php echo $single_thumbnail_height;?>px;
 		}
@@ -240,6 +230,7 @@ function wpsc_user_dynamic_css() {
       
     <?php
 	
+		/*
 		$product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, 
 			`meta1`.`meta_value` AS `height`, 
 			`meta2`.`meta_value` AS `width` 
@@ -252,36 +243,37 @@ function wpsc_user_dynamic_css() {
 			AND `meta1`.`meta_key` IN ('thumbnail_height') 
 			AND `meta2`.`meta_key` IN ('thumbnail_width')",
 		ARRAY_A);
+		*/
 		//print_r($product_image_size_list);
 		foreach((array)$product_image_size_list as $product_image_sizes) {
 			$individual_thumbnail_height = $product_image_sizes['height']; 
 			$individual_thumbnail_width = $product_image_sizes['width'];     
 			$product_id = $product_image_sizes['id'];
 			if($individual_thumbnail_height > $thumbnail_height) { 
-				echo "    div.default_product_display.product_view_$product_id div.textcol{\n\r";
-				echo "            min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-				echo "            _height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
-				echo "      }\n\r";
+				echo "		div.default_product_display.product_view_$product_id div.textcol{\n\r";
+				echo "			min-height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+				echo "			_height: ".($individual_thumbnail_height + 10)."px !important;\n\r"; 
+				echo "		}\n\r";
 			} 
+
 			if($individual_thumbnail_width > $thumbnail_width) {
-				echo "      div.default_product_display.product_view_$product_id div.textcol{\n\r";
-				echo "            margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
-				//echo "            _margin-left: ".(($individual_thumbnail_width/2) + 5)."px !important;\n\r";
-				echo "      }\n\r";
+				echo "		div.default_product_display.product_view_$product_id div.textcol{\n\r";
+				echo "			margin-left: ".($individual_thumbnail_width + 10)."px !important;\n\r";
+				echo "		}\n\r";
 				
-				echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
-				echo "            position:absolute;\n\r";
-				echo "            top:0px;\n\r";
-				echo "            left: 0px;\n\r";
-				echo "            margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
-				echo "      }\n\r";
+				echo "		div.default_product_display.product_view_$product_id  div.textcol div.imagecol{\n\r";
+				echo "			position:absolute;\n\r";
+				echo "			top:0px;\n\r";
+				echo "			left: 0px;\n\r";
+				echo "			margin-left: -".($individual_thumbnail_width + 10)."px !important;\n\r";
+				echo "		}\n\r";
 			}
 			
 			if(($individual_thumbnail_width > $thumbnail_width) || ($individual_thumbnail_height > $thumbnail_height)) {
-				echo "      div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
-				echo "            width: ".$individual_thumbnail_width."px;\n\r";
-				echo "            height: ".$individual_thumbnail_height."px;\n\r";
-				echo "      }\n\r";
+				echo "		div.default_product_display.product_view_$product_id  div.textcol div.imagecol a img{\n\r";
+				echo "			width: ".$individual_thumbnail_width."px;\n\r";
+				echo "			height: ".$individual_thumbnail_height."px;\n\r";
+				echo "		}\n\r";
 			}
 		}
 	}
@@ -294,13 +286,13 @@ function wpsc_user_dynamic_css() {
 	}
       
     ?>
-    div#categorydisplay{
-    display: <?php echo $categorystate; ?>;
-    }
+		div#categorydisplay{
+			display: <?php echo $categorystate; ?>;
+		}
     
-    div#branddisplay{
-    display: <?php echo $brandstate; ?>;
-    }
+		div#branddisplay{
+			display: <?php echo $brandstate; ?>;
+		}
     <?php
 	exit();
 }

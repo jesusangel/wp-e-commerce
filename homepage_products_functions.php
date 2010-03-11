@@ -8,7 +8,7 @@ function nszhpcrt_homepage_products($content = '') {
 		$seperator ="&amp;";
 	}
   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `display_frontpage` IN('1') AND `active` IN('1')";
-  $product_list = $wpdb->get_results($sql,ARRAY_A);
+  //$product_list = $wpdb->get_results($sql,ARRAY_A);
     
   $output = "<div id='homepage_products'>\n\r";
   foreach((array)$product_list as $product) {
