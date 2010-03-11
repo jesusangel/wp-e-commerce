@@ -286,7 +286,7 @@ jQuery(document).ready( function () {
   // this loads the edit-products page using javascript
 	 jQuery('.edit-product').click(function(){	
 	 		jQuery(this).next('.loadingImg').removeAttr('style');
-			product_id = jQuery(this).attr('href').match(/product=(\d{1,})/);
+			product_id = jQuery(this).attr('href').match(/(?:;|&)product=(\d{1,})/);
 			wpnonce = jQuery(this).attr('href').match(/_wpnonce=(\w{1,})/);
 	 		post_values = "product="+product_id[1]+"&_wpnonce="+wpnonce[1];
 			jQuery.post( 'index.php?wpsc_admin_action=load_product', post_values, function(returned_data) {

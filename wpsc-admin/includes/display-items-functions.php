@@ -331,7 +331,12 @@ function wpsc_product_basic_details_form(&$product_data) {
 		  );
 		
 	 	$order = get_option('wpsc_product_page_order');	 	
-	  $order = apply_filters( 'wpsc_products_page_forms', $order);
+	 	
+	 	
+
+	 	
+	 	
+		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  
 	 	//echo "<pre>".print_r($order,true)."</pre>";
 	 	if (($order == '') || (count($order ) < 6)){
@@ -344,6 +349,23 @@ function wpsc_product_basic_details_form(&$product_data) {
 	 	}
 		
 		update_option('wpsc_product_page_order', $order);
+		
+	 	// if this is a child product, we need to filter out the variations box here
+	 	if($product_data['product_object']->post_parent > 0) {
+	 		$variation_box_key = array_search('wpsc_product_variation_forms', $order);
+	 		if(is_numeric($variation_box_key) && isset($order[$variation_box_key])) {
+	 			unset($order[$variation_box_key]);
+	 		}
+	 		
+	 		
+	 		$category_box_key = array_search('wpsc_product_category_and_tag_forms', $order);
+	 		if(is_numeric($category_box_key) && isset($order[$category_box_key])) {
+	 			unset($order[$category_box_key]);
+	 		}
+	 		
+	 	}
+		
+		
 		foreach((array)$order as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
@@ -673,7 +695,8 @@ function wpsc_product_variation_forms($product_data=''){
 					
 				</div>
 			</div>
-			<a href='<?php echo add_query_arg('parent_product', $product_data['id']); ?>'><?php _e('Edit Variations Products', 'wpsc'); ?></a>
+			
+			<a href='<?php echo add_query_arg(array('page'=>'wpsc-edit-products', 'parent_product'=> $product_data['id']), "admin.php"); ?>'><?php _e('Edit Variations Products', 'wpsc'); ?></a>
 			
 		</div>
 	</div>
