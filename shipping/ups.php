@@ -456,6 +456,9 @@ class ups {
                 }
             }
             // return the final formatted array !
+  			$_SESSION['wpsc_shipping_cache_check']['zipcode'] = $args['dest_pcode'];
+			$_SESSION['wpsc_shipping_cache_check']['weight'] = $args['weight'];
+			$_SESSION['wpsc_shipping_cache'][$this->internal_name] = $rate_table;
             return $rate_table;
         }
 
