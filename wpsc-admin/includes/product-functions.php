@@ -131,7 +131,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	}
 
 	$post_data['files'] = $_FILES;
-
+//exit('<pre>'.print_r($post_data, true).'</pre><pre>'.print_r($_POST, true).'</pre>');
   //exit('<pre>'.print_r($post_data, true).'</pre>');
   return $post_data;
 }
@@ -605,7 +605,7 @@ function wpsc_resize_image_thumbnail($product_id, $image_action= 0, $width = 0, 
 						$uploaded_image =  $_FILES['thumbnailImage']['tmp_name'];
 				   }
 				  if($uploaded_image !== null) {
-				  		$image = $image.uniqid();
+				  		$image = uniqid().$image;
 						move_uploaded_file($uploaded_image, WPSC_THUMBNAIL_DIR.$image);
 				    //exit($uploaded_image);
 				  
