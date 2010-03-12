@@ -13,6 +13,17 @@ function wpsc_display_update_page() {
 	<div class="wrap">
 		<?php // screen_icon(); ?>
 		<h2><?php echo wp_specialchars( __('Update WP e-Commerce', 'wpsc') ); ?> </h2>
+		<?php
+		wpsc_convert_category_groups();
+		
+		
+		?>
+		<pre>
+		<?php
+		wpsc_convert_products_to_posts();
+		?>
+		
+		</pre>
 			
 	
 	

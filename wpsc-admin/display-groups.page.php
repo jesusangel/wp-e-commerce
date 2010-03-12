@@ -117,7 +117,7 @@ function wpsc_display_groups_page() {
   if($_POST['submit_action'] == "add") {
     //exit("<pre>".print_r($_POST,true)."</pre>"); 
     if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
-      if(function_exists("getimagesize")) {
+	      if(function_exists("getimagesize")) {
 				if(((int)$_POST['width'] > 10 && (int)$_POST['width'] < 512) && ((int)$_POST['height'] > 10 && (int)$_POST['height'] < 512) ) {
 					$width = (int)$_POST['width'];
 					$height = (int)$_POST['height'];
