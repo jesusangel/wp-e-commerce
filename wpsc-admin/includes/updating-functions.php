@@ -17,7 +17,7 @@ function wpsc_convert_category_groups() {
 	global $wpdb, $wp_rewrite, $user_ID;
 	$categorisation_groups = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')");
 	
-	foreach($categorisation_groups as $cat_group) {
+	foreach((array)$categorisation_groups as $cat_group) {
 		$category_id = wpsc_get_meta($cat_group->id, 'category_group_id', 'wpsc_category_group');
 		
 		if(!is_numeric($category_id) || ( $category_id < 1)) {
@@ -61,7 +61,7 @@ function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_ca
 	if($categorisation > 0) {
 		//echo "<pre>".print_r($categorisation, true)."</pre>";
 		//echo "<div style='margin-left: 6px;'>";
-		foreach($categorisation as $category) {
+		foreach((array)$categorisation as $category) {
 			$category_id = wpsc_get_meta($category->id, 'category_id', 'wpsc_old_category');
 			//echo "$category_id";		
 			if(!is_numeric($category_id) || ( $category_id < 1)) {
@@ -108,6 +108,44 @@ function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_ca
 
 
 
+function wpsc_convert_variation_sets() {
+	global $wpdb, $wp_rewrite, $user_ID;
+	$variation_sets = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."`");
+	
+	foreach((array)$variation_sets as $variation_set) {
+		$variation_set_id = wpsc_get_meta($variation_set->id, 'variation_set_id', 'wpsc_variation_set');
+		
+		if(!is_numeric($variation_set_id) || ( $variation_set_id < 1)) {
+			$new_variation_set = wp_insert_term( $variation_set->name, 'wpsc-variation',array('parent' => 0));
+			$variation_set_id = $new_variation_set['term_id'];
+		}
+		
+		if(is_numeric($variation_set_id)) {
+			wpsc_update_meta($variation_set->id, 'variation_set_id', $variation_set_id, 'wpsc_variation_set');
+			
+			
+			$variations = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id` IN ({$variation_set->id})");
+			foreach((array)$variations as $variation) {
+				$variation_id = wpsc_get_meta($variation->id, 'variation_id', 'wpsc_variation');
+				
+				if(!is_numeric($variation_id) || ( $variation_id < 1)) {
+					$new_variation = wp_insert_term( $variation->name, 'wpsc-variation',array('parent' => $variation_set_id));
+					$variation_id = $new_variation['term_id'];
+				}				
+				if(is_numeric($variation_id)) {
+					wpsc_update_meta($variation->id, 'variation_id', $variation_id, 'wpsc_variation');
+					
+					
+				}
+			}			
+		}	
+	}
+	//$wp_rewrite->flush_rules();
+}
+
+
+
+
 
 /**
  * wpsc_convert_products_to_posts function.
@@ -119,8 +157,8 @@ function wpsc_convert_products_to_posts() {
   global $wpdb, $wp_rewrite, $user_ID;
   // Select all products
   // print_r($wpdb);
-	$product_data = $wpdb->get_results("SELECT *  FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')", ARRAY_A);
-	foreach($product_data as $product) {
+	$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')", ARRAY_A);
+	foreach((array)$product_data as $product) {
 		$post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product['id'] ));
 		
 		// print_r(array($post_id));
@@ -159,7 +197,7 @@ function wpsc_convert_products_to_posts() {
 			AND `meta_value` NOT IN ( '' )
 			", ARRAY_A);
 
-		echo print_r($product_meta,true);
+		//echo print_r($product_meta,true);
 		
 		$post_data = array();
 		$post_data['_wpsc_original_id'] = (int)$product['id'];
@@ -300,8 +338,8 @@ function wpsc_convert_products_to_posts() {
 
 		// yay, stars!
 		//echo "\n";
-		echo "<span style='font-size: 18pt;'>";
-		echo "✩✪✫✬✭✮✯✰✲✱✳✴✵✶✷✸✹✺✻✼✽✾✿❀❁❂❃❄❅❆❇❈❉❊❋✖✗✘✙✚✛✜✡✥⚙☸❖\n";
+		echo "<span style='font-size: 12pt;'>";
+		echo "————————————————————————————————————————————————————————————————————————————\n";
 		//    
 		echo "</span>";
 	}

@@ -17,6 +17,8 @@ function wpsc_display_update_page() {
 		wpsc_convert_category_groups();
 		
 		
+		wpsc_convert_variation_sets();
+		
 		?>
 		<pre>
 		<?php
