@@ -31,6 +31,8 @@ function wpsc_display_edit_products_page() {
 		'image' => 'Name',
 		'title' => '',
 		'price' => 'Price',
+		'sale_price' => 'Sale Price',
+		'SKU' => 'SKU',
 		'categories' => 'Categories',
 	);
 	register_column_headers('display-product-list', $columns);	
@@ -214,19 +216,12 @@ function wpsc_edit_variations_request_sql($sql) {
 			WHERE tt.taxonomy IN ('wpsc-variation')
 			AND tt.parent IN ({$parent_terms})
 			AND tt.term_id IN ({$child_terms})
-			AND ( 
-				SELECT COUNT(DISTINCT tt2.parent) FROM 
-				{$wpdb->term_relationships} AS tr2
-				INNER JOIN {$wpdb->term_taxonomy} AS tt2
-					ON tr2.term_taxonomy_id = tt2.term_taxonomy_id
-				WHERE tr2.object_id = tr.object_id
-				AND tt2.taxonomy IN ('wpsc-variation')
-				AND tt2.parent > 0
-			) = {$term_count}
+			AND posts.post_parent = {$parent_product}
+			
 			GROUP BY tr.object_id
 			HAVING `count` = {$term_count}";
-			return $new_sql;
 			//echo "<br /><br />". $new_sql;
+			return $new_sql;
 		}
 		
 	}

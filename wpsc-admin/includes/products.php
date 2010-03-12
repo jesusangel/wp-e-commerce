@@ -58,7 +58,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	<?php
 	$posts_columns = get_column_headers('display-product-list');
 	$hidden = get_hidden_columns('display-product-list');
-
+	//exit('<pre>'.print_r($product,true).'</pre>');
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";
 
@@ -70,7 +70,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 		
-		//echo "<pre>".print_r($column_name,true)."</pre>";
+		//echo "<pre>".print_r($column_name,true)."</pre>".count($posts_columns);
 		switch ($column_name) {
 
 		case 'cb':
@@ -222,6 +222,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		
 		
 		case 'price':  /* !price case */
+	
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
@@ -273,8 +274,40 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		?></td>
 		<?php
 		break;
+		case 'SKU':
+			$sku = get_post_meta($product->ID, '_wpsc_sku', true);
+		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
+			?>
+				<td  <?php echo $attributes ?>>
+					<?php echo $sku; ?>
+					<div class='price-editing-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
+						<input type='text' class='the-product-price' name='product_price[<?php echo $product->ID; ?>][sku]' value='<?php echo number_format($price,2,'.',''); ?>' />
+						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
+						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-sku'.$product->ID); ?>' />
 
 
+					</div>
+				</td>
+			<?php
+		break;
+		case 'sale_price':
+		
+			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
+		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
+			?>
+				<td  <?php echo $attributes ?>>
+					<?php echo nzshpcrt_currency_display($price, 1); ?>
+					<div class='price-editing-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
+						<input type='text' class='the-product-price' name='product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format($price,2,'.',''); ?>' />
+						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
+						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('sale-edit-product_price-'.$product->ID); ?>' />
+
+
+					</div>
+				</td>
+			<?php
+
+		break;
 
 
 		case 'comments':  /* !comments case */

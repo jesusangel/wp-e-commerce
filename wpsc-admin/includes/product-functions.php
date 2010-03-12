@@ -401,7 +401,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');
 	
-	print('<pre>'.print_r($variation_sets_and_values, true).'</pre>');
+//	print('<pre>'.print_r($variation_sets_and_values, true).'</pre>');
 	
 	$child_product_template = array(
 		'post_author' => $user_ID,
