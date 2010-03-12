@@ -399,12 +399,16 @@ if(!function_exists('wpsc_initialisation')){
 	
 	  $uploads_dir = @opendir(WPSC_THEMES_PATH);
 	  $file_names = array();
-	  while(($file = @readdir($uploads_dir)) !== false) {
-	    //echo "<br />test".WPSC_THEMES_PATH.$file;
-	    if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
-				$file_names[] = $file;
-	    }
+	  
+	  if ( $uploads_dir ) {
+		  while(($file = @readdir($uploads_dir)) !== false) {
+			//echo "<br />test".WPSC_THEMES_PATH.$file;
+			if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
+					$file_names[] = $file;
+			}
+		  }
 	  }
+	  
 	  if(count($file_names) > 0) {
 			$wpsc_theme_path = WPSC_THEMES_PATH;
 			$wpsc_theme_url = WPSC_THEMES_URL;
