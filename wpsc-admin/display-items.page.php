@@ -328,7 +328,7 @@ function wpsc_admin_products_list($category_id = 0) {
 						?>
 							<tr class="product-edit <?php echo ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published'; ?>" id="product-<?php echo $product['id']?>" >
 									<th class="check-column" scope="row">
-										<input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' />
+										<input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' title="ID #<?php echo $product['id']; ?>" />
 										<?php echo do_action('wpsc_admin_product_checkbox', $product['id']); ?>
 									</th>
 									
@@ -340,7 +340,7 @@ function wpsc_admin_products_list($category_id = 0) {
 									  <?php
 									  $edit_product_url = wp_nonce_url(htmlentities(add_query_arg('product_id', $product['id'])), 'edit_product_' . $product['id']);
 									  ?>
-										<a class='edit-product' href='<?php echo $edit_product_url; ?>'><?php echo $product_name; ?></a>
+										<a class='edit-product' href='<?php echo $edit_product_url; ?>' title="ID #<?php echo $product['id']; ?>: <?php echo $product_name; ?>"><?php echo $product_name; ?></a>
 											<?php
 											if($product['publish'] != 1 ) {
 												?> - <strong> <?php 	_e('Draft', 'wpsc'); ?>	</strong>	<?php
