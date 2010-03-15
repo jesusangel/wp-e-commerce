@@ -57,11 +57,12 @@ function wpsc_add_to_cart() {
   foreach((array)$_POST['variation'] as $key => $variation) {
     $provided_parameters['variation_values'][(int)$key] = (int)$variation;
   }
+//exit('<pre>'.print_r($_POST['wpsc_quantity_update'][$_POST['product_id']], true).'</pre>');
   if($_POST['quantity'] > 0 && (!isset($_POST['wpsc_quantity_update']))) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
   } else if (isset($_POST['wpsc_quantity_update'])) {
 		$wpsc_cart->remove_item($_POST['key']);
-		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
+		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'][$_POST['product_id']];
   }
 //  exit('<pre>'.print_r($_POST, true).'</pre>');
   if($_POST['is_customisable'] == 'true') {
