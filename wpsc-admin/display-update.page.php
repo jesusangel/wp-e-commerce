@@ -19,24 +19,16 @@ function wpsc_display_update_page() {
 		
 		wpsc_convert_variation_sets();
 		
-		?>
-		<pre>
+		?><pre>
 		<?php
 		wpsc_convert_products_to_posts();
-		?>
+		?></pre>
+		<pre><?php 
 		
-		</pre>
-			
-	
-	
-	<?php
+		wpsc_convert_variation_combinations();
+		
+		?></pre>
+		<?php 
 }
-
-
-
-
-
-
-
 
 ?>

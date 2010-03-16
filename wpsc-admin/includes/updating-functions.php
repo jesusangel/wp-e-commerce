@@ -135,7 +135,6 @@ function wpsc_convert_variation_sets() {
 				if(is_numeric($variation_id)) {
 					wpsc_update_meta($variation->id, 'variation_id', $variation_id, 'wpsc_variation');
 					
-					
 				}
 			}			
 		}	
@@ -280,7 +279,7 @@ function wpsc_convert_products_to_posts() {
 
 		
 			//print_r($wpdb);
-		echo "Post ID:".$post_id."\n";
+		//echo "Post ID:".$post_id."\n";
 		
 		$product_data = get_post($post_id);
 		$image_data = $wpdb->get_results("SELECT *  FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN ('{$product['id']}') ORDER BY `image_order` ASC", ARRAY_A);
@@ -301,7 +300,7 @@ function wpsc_convert_products_to_posts() {
 			$image_url = WPSC_IMAGE_URL.$image_row['image'];
 			
 			$attachment_id = (int)$wpdb->get_var("SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_title` IN('$image_name') AND `post_parent` IN('$post_id') LIMIT 1");
-			echo "Image ID:".$attachment_id."\n";
+			// echo "Image ID:".$attachment_id."\n";
 			// get the image MIME type
 			$mime_type_data = wpsc_get_mimetype($full_image_path, true);
 			if((int)$attachment_id == 0 ) {
@@ -338,11 +337,133 @@ function wpsc_convert_products_to_posts() {
 
 		// yay, stars!
 		//echo "\n";
-		echo "<span style='font-size: 12pt;'>";
-		echo "————————————————————————————————————————————————————————————————————————————\n";
+		//echo "<span style='font-size: 12pt;'>";
+		//echo "————————————————————————————————————————————————————————————————————————————\n";
 		//    
-		echo "</span>";
+		//echo "</span>";
 	}
 }
 
+
+
+function wpsc_convert_variation_combinations() {
+	global $wpdb, $user_ID;
+	$query = array(
+		'post_type' => 'wpsc-product',
+		'posts_per_page' => -1, 
+		'orderby' => 'menu_order post_title',
+		'order' => "ASC"
+	);	
+	
+	// get the posts
+	$posts = get_posts( $query );
+
+    print_r($posts);
+	foreach((array)$posts as $post) {
+		//create a post template
+		$child_product_template = array(
+			'post_author' => $user_ID,
+			'post_content' => $post->post_content,
+			'post_excerpt' => $post->post_excerpt,
+			'post_title' => $post->post_title,
+			'post_status' => 'inherit',
+			'post_type' => "wpsc-product",
+			'post_name' => sanitize_title($post->post_title),
+			'post_parent' => $post->ID
+		);
+		
+		
+		
+		// select the original product ID
+		$original_id = get_post_meta($post->ID, '_wpsc_original_id', true);
+		
+		echo $original_id . " - " . $post->ID."\n";
+		
+		// select the variation set associations
+		$variation_set_associations = $wpdb->get_col("SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}'");
+		echo "SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}' \n";
+		
+		
+		// select the variation associations
+		//$variation_associations = $wpdb->get_col("SELECT `value_id` FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE `product_id` = '{$original_id}' AND `variation_id` IN(".implode(", ", $variation_set_associations).") AND `visible IN ('1')`");
+		//SELECT * FROM `wp_wpsc_variation_assoc` WHERE `associated_id` IN ( '109', '110', '111', '112' )
+		
+		//print_r($variation_set_associations);
+		
+		// select all variation "products"
+		$variation_items = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE `product_id` = '{$original_id}'");
+		foreach((array)$variation_items as $variation_item) {
+			// initialize the requisite arrays to empty
+			$variation_ids = array();
+			$term_data = array();
+			// make a temporary copy of the product teplate
+			$product_values = $child_product_template;
+			
+			// select all values this "product" is associated with, then loop through them, getting the term id of the variation using the value ID
+			$variation_associations = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_COMBINATIONS." WHERE `priceandstock_id` = '{$variation_item->id}' AND `product_id` = '{$original_id}'");
+			foreach((array)$variation_associations as $association) {
+				$variation_id = (int)wpsc_get_meta($association->value_id, 'variation_id', 'wpsc_variation');
+				// discard any values that are null, as they break the selecting of the terms
+				if($variation_id > 0) {
+					$variation_ids[] = $variation_id;
+				}
+			} 
+			
+			// if we have more than zero remaining terms, get the term data, then loop through it to convert it to a more useful set of arrays.
+			if(count($variation_ids) > 0) {
+				$combination_terms = get_terms('wpsc-variation', array(
+					'hide_empty' => 0,
+					'include' => implode(",", $variation_ids),
+					'orderby' => 'parent',
+				));
+				foreach($combination_terms as $term) {
+					$term_data['ids'][] = $term->term_id;
+					$term_data['slugs'][] = $term->slug;
+					$term_data['names'][] = $term->name;
+				}
+				
+				
+				
+				$product_values['post_title'] .= " (".implode(", ", $term_data['names']).")";
+				$product_values['post_name'] = sanitize_title($product_values['post_title']);
+				// wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array() ) {
+		
+				$selected_post = get_posts(array(
+					//'numberposts' => 1,
+					'name' => $product_values['post_name'],
+					'post_parent' => $post->ID,
+					'post_type' => "wpsc-product",
+					'post_status' => 'all',
+					'suppress_filters' => true
+				));
+				$selected_post = array_shift($selected_post);
+				
+				$child_product_id = wpsc_get_child_object_in_terms($post->ID, $term_data['ids'], 'wpsc-variation');
+				
+				
+				
+				//echo "<pre>".print_r($child_product_id, true)."</pre>";
+				if($child_product_id == false) {
+					if($selected_post != null) {
+						$child_product_id = $selected_post->ID;
+					} else {
+						$child_product_id = wp_update_post($product_values);
+					}
+				} else {
+					// sometimes there have been problems saving the variations, this gets the correct product ID
+					if(($selected_post != null) && ($selected_post->ID != $child_product_id)) {
+						$child_product_id = $selected_post->ID;
+					}
+				}
+				if($child_product_id > 0) {
+					wp_set_object_terms($child_product_id, $term_data['slugs'], 'wpsc-variation');
+				}
+				
+				//echo print_r($child_product_id, true);
+				unset($term_data);
+			}
+		}
+	}
+
+}
 ?>
