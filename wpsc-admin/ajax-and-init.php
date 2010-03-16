@@ -369,7 +369,64 @@ function wpsc_modify_product_price() {
  if($_REQUEST['wpsc_admin_action'] == 'modify_price') {
 	add_action('admin_init', 'wpsc_modify_product_price');
 }
+
+
+function wpsc_modify_sales_product_price() {
+	global $wpdb;
+//	exit('<pre>'.print_r($_POST, true).'</pre>');
+	$product_data = array_pop($_POST['sale_product_price']);
+
+	$product_id = absint($product_data['id']);
+	$product_price = (float)$product_data['price'];
+	$product_nonce = $product_data['nonce'];
+
+	if(wp_verify_nonce($product_nonce, 'sale-edit-product_price-'.$product_id) ) {
+		if(update_post_meta($product_id, '_wpsc_special_price', $product_price)) {
+			echo "success = 1;\n\r";
+			echo "new_price = '".nzshpcrt_currency_display($product_price, 1, true)."';\n\r";
+		} else {
+			echo "success = 0;\n\r";
+		}
+	} else {
+		echo "success = -1;\n\r";
+	}
+	exit();
+}
+
  
+ if($_REQUEST['wpsc_admin_action'] == 'modify_sales_price') {
+	add_action('admin_init', 'wpsc_modify_sales_product_price');
+}
+
+
+
+function wpsc_modify_sku() {
+	global $wpdb;
+//	exit('<pre>'.print_r($_POST, true).'</pre>');
+	$product_data = array_pop($_POST['sku_field']);
+
+	$product_id = absint($product_data['id']);
+	$sku = $product_data['sku'];
+	$product_nonce = $product_data['nonce'];
+
+	if(wp_verify_nonce($product_nonce, 'edit-sku-'.$product_id) ) {
+		if(update_post_meta($product_id, '_wpsc_sku', $sku)) {
+			echo "success = 1;\n\r";
+			echo "new_price = '".$sku."';\n\r";
+		} else {
+			echo "success = 0;\n\r";
+		}
+	} else {
+		echo "success = -1;\n\r";
+	}
+	exit();
+}
+
+ 
+ if($_REQUEST['wpsc_admin_action'] == 'modify_sku') {
+	add_action('admin_init', 'wpsc_modify_sku');
+}
+    
  
 /**
   Function and action for deleting single products 

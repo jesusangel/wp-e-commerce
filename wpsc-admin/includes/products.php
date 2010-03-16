@@ -276,14 +276,17 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		break;
 		case 'SKU':
 			$sku = get_post_meta($product->ID, '_wpsc_sku', true);
+			if($sku == ''){
+				$sku = 'N/A';
+			}
 		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
-					<?php echo $sku; ?>
-					<div class='price-editing-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text' class='the-product-price' name='product_price[<?php echo $product->ID; ?>][sku]' value='<?php echo number_format($price,2,'.',''); ?>' />
-						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
-						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-sku'.$product->ID); ?>' />
+					<span class="skudisplay"><?php echo $sku; ?></span>
+					<div class='sku-editing-fields' id='sku-editing-fields-<?php echo $product->ID; ?>'>
+						<input type='text' class='the-sku-fields' name='sku_field[<?php echo $product->ID; ?>][sku]' value='<?php echo $sku; ?>' />
+						<input type='hidden' name='sku_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
+						<input type='hidden' name='sku_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-sku-'.$product->ID); ?>' />
 
 
 					</div>
@@ -297,8 +300,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo nzshpcrt_currency_display($price, 1); ?>
-					<div class='price-editing-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text' class='the-product-price' name='product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format($price,2,'.',''); ?>' />
+					<div class='sales-price-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
+						<input type='text'  class='the-sale-price' name='sale_product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format($price,2,'.',''); ?>' />
 						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
 						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('sale-edit-product_price-'.$product->ID); ?>' />
 

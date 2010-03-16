@@ -365,8 +365,107 @@ jQuery(document).ready( function () {
  		jQuery('.the-product-price',this).bind('blur', target_element_id, ajax_submit_price);
 	});
 
+
+
 // Code for using AJAX to change thr product price ends here
 	
+// Code for using AJAX to change the sales price starts here
+	ajax_submit_sales_price = function(event) {
+		target_element_id= event.data;
+		form_data = jQuery("#"+target_element_id+" input").serialize();
+//		console.log(form_data);
+		jQuery.ajax({
+				type: "POST",
+				url: "admin.php?wpsc_admin_action=modify_sales_price",
+				data: form_data,
+				success: function(returned_data) {
+					eval(returned_data);
+				  if(success == 1) {
+						parent_container = jQuery("#"+target_element_id+"").parent('.column-sale_price');
+						jQuery(".pricedisplay", parent_container).html(new_price);
+				  }
+					jQuery('span.pricedisplay').css('display', 'block');
+					jQuery('div.sales-price-fields').css('display', 'none');
+					jQuery('form#posts-filter').unbind('submit.disable');
+				}
+			});
+		jQuery('form#posts-filter').unbind('submit.disable');
+		return false;
+	};
+	
+	jQuery("table#wpsc_product_list .column-sale_price").livequery(function(){
+		jQuery('span.pricedisplay',this).click(function(){
+			jQuery('span.pricedisplay').css('display', 'block');
+			jQuery('div.sales-price-fields').css('display', 'none');
+			jQuery(this).css('display', 'none');
+			jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).css('display', 'block');
+			target_element_id = jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).attr('id');		
+			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_sales_price);
+			jQuery('div.sales-price-fields .the-sale-price', jQuery(this).parent('.column-sale_price')).focus();
+		});
+		jQuery('.the-sale-price',this).keyup(function(event){
+			target_element_id = jQuery(jQuery(this).parent('.sales-price-fields')).attr('id');
+			if(event.keyCode == 13) {
+				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_sales_price);
+			}
+		});
+		
+		target_element_id = jQuery('.sales-price-fields',this).attr('id');
+		
+ 		jQuery('.the-sale-price',this).bind('blur', target_element_id, ajax_submit_sales_price);
+
+	});
+	
+// Code for using AJAX to change the sales price ends here	
+
+// Code for using AJAX to change the SKU starts here
+	ajax_submit_sku = function(event) {
+		target_element_id= event.data;
+		form_data = jQuery("#"+target_element_id+" input").serialize();
+//		console.log(form_data);
+		jQuery.ajax({
+				type: "POST",
+				url: "admin.php?wpsc_admin_action=modify_sku",
+				data: form_data,
+				success: function(returned_data) {
+					eval(returned_data);
+				  if(success == 1) {
+						parent_container = jQuery("#"+target_element_id+"").parent('.column-SKU');
+						jQuery(".skudisplay", parent_container).html(new_price);
+				  }
+					jQuery('span.skudisplay').css('display', 'block');
+					jQuery('div.sku-editing-fields').css('display', 'none');
+					jQuery('form#posts-filter').unbind('submit.disable');
+				}
+			});
+		jQuery('form#posts-filter').unbind('submit.disable');
+		return false;
+	};
+	
+	jQuery("table#wpsc_product_list .column-SKU").livequery(function(){
+		jQuery('span.skudisplay',this).click(function(){
+			jQuery('span.skudisplay').css('display', 'block');
+			jQuery('div.sku-editing-fields').css('display', 'none');
+			jQuery(this).css('display', 'none');
+			jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).css('display', 'block');
+			target_element_id = jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).attr('id');		
+			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_sku);
+			jQuery('div.sku-editing-fields .the-sku-fields', jQuery(this).parent('.column-SKU')).focus();
+		});
+		jQuery('.the-sku-fields',this).keyup(function(event){
+			target_element_id = jQuery(jQuery(this).parent('.sku-editing-fields')).attr('id');
+			if(event.keyCode == 13) {
+				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_sku);
+			}
+		});
+		
+		target_element_id = jQuery('.sku-editing-fields',this).attr('id');
+ 		jQuery('.the-sku-fields',this).bind('blur', target_element_id, ajax_submit_sku);
+
+	});
+	
+// Code for using AJAX to change the SKU ends here	
+
 	jQuery("div.admin_product_name a.shorttag_toggle").livequery(function(){
 	  jQuery(this).toggle(
 			function () {

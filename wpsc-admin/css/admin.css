@@ -333,9 +333,9 @@ div.price-editing-fields input.the-product-price {
 	width: 51px;
 }
 
-div.price-editing-fields {
+div.price-editing-fields,div.sales-price-fields,div.sku-editing-fields {
 	display: none;
-}
+} 
 		
 div.product-placeholder {
 	border-width: 1px;
