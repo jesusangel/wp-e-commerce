@@ -2,6 +2,51 @@
 
 jQuery(document).ready( function () {
 
+	
+	//Animateedit products columns
+	jQuery('.wpsc-separator').livequery(function(){
+		jQuery(this).click(function(){
+			if(jQuery('#wpsc-col-left').css('width') == '20px'){
+				left_col_width = '50%';
+				right_col_width = '48%';
+				
+			}else{
+				left_col_width = '20px';
+				right_col_width = '95%';
+			}
+			if(left_col_width == '50%'){
+				jQuery('.tablenav').show();
+				jQuery('#posts-filter').show();
+			}else{
+				jQuery('.tablenav').hide();
+				jQuery('#posts-filter').hide();
+			
+			}
+			//jQuery(this).css('background-position','0');
+			jQuery('#wpsc-col-left').animate(
+				{
+				width : left_col_width
+				},
+				50, 
+				function(){
+				//On complete
+						
+				}
+			);
+			jQuery('#wpsc-col-right').animate(
+				{
+				width : right_col_width
+				},
+				50, 
+				function(){
+				//On complete
+						
+				}
+			);
+		});
+	
+	});
+
 	jQuery('.wpsc_prod_thumb_option').livequery(function(){
 	  jQuery(this).focus(function(){
 	 	jQuery('.wpsc_mass_resize').css('visibility', 'visible');

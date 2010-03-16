@@ -353,10 +353,16 @@ div.product-placeholder {
 	clear:right;
 	float:right;
 	margin:0;
+	margin-right:5px;
 	padding:0;
-	width:58%;
+	width:48%;
 }
-
+th#image,th#SKU, th#sale_price{
+width:40px;
+}
+th#title{
+width:90px;
+}
 #wpsc-col-right .postbox .inside {
   padding-left: 10px;
 }
@@ -365,7 +371,7 @@ div.product-placeholder {
 	margin:0;
 	overflow:hidden;
 	padding:0;
-	width:40%;
+	width:50%;
 	
 }
 td.product_tags{
@@ -1163,14 +1169,21 @@ div.editing_this_group {
 td.product_groups_page h4 {
   margin-bottom: 1ex;
 }
-
-
-
+#poststuff #edButtonHTML{
+margin-right:5px;
+margin-left:15px;
+}
+#edButtonPreview, #edButtonHTML {
+float:left;
+}
+#editorcontainer{
+clear:both;
+}
 td.product_groups_page td.category_presentation_settings {
   padding-bottom: 1ex;
 }
 
-td.column-price .pricedisplay{
+td.column-price .pricedisplay, td.sale_price .pricedisplay, td.SKU .skudisplay{
   border-bottom: 1px dotted #333;
 }
 

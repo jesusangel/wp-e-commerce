@@ -423,7 +423,7 @@ function wpsc_modify_sku() {
 }
 
  
- if($_REQUEST['wpsc_admin_action'] == 'modify_sku') {
+if($_REQUEST['wpsc_admin_action'] == 'modify_sku') {
 	add_action('admin_init', 'wpsc_modify_sku');
 }
     
