@@ -25,7 +25,7 @@ function wpsc_display_update_page() {
 		?></pre>
 		<pre><?php 
 		
-		wpsc_convert_variation_combinations();
+		//wpsc_convert_variation_combinations();
 		
 		?></pre>
 		<?php 
