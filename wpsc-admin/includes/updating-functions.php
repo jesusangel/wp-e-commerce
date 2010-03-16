@@ -277,11 +277,21 @@ function wpsc_convert_products_to_posts() {
 		$wp_upload_basedir = $wp_upload_dir_data['basedir'];
 
 		
-			//print_r($wpdb);
+		//print_r($wpdb);
 		//echo "Post ID:".$post_id."\n";
 		
+		$category_ids = array();
+		$category_data = $wpdb->get_col("SELECT `category_id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN ('{$product['id']}')");
+		foreach($category_data as $old_category_id) {
+			$category_ids[] = wpsc_get_meta($old_category_id, 'category_id', 'wpsc_old_category');
+		
+		}
+		wp_set_product_categories($post_id, $category_ids);
+		
+		
+		
 		$product_data = get_post($post_id);
-		$image_data = $wpdb->get_results("SELECT *  FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN ('{$product['id']}') ORDER BY `image_order` ASC", ARRAY_A);
+		$image_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN ('{$product['id']}') ORDER BY `image_order` ASC", ARRAY_A);
 		//echo "SELECT *  FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN ('{$product['id']}') ORDER BY `image_order` ASC \n";
 		foreach((array)$image_data as $image_row) {
 			// Get the image path info
