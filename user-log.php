@@ -416,10 +416,12 @@ $date_list[0]['end'] = $end_timestamp;
           echo " </table>";
           }
       }
-      
-          
-    $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!=''";
-    $purchase_log = $wpdb->get_results($sql,ARRAY_A) ;
+			
+			// Commented out as this seemed to be breaking the Your Account layout.
+			// Doesn't seem to do anything, does it?
+			//$sql = "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `date` != ''";
+			//$purchase_log = $wpdb->get_results( $sql, ARRAY_A );
+			
     }
    else
      {
@@ -437,9 +439,8 @@ $date_list[0]['end'] = $end_timestamp;
   <input type="hidden" name="redirect_to" value="<?php echo get_option('user_account_url'); ?>" />
 </p>
 </form>
-     <?php
-     }
-  }
-?>
-
-</div>
+			<?php
+		}
+		?>
+	</div>
+<?php } ?>
