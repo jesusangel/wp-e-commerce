@@ -359,9 +359,14 @@ function wpsc_convert_variation_combinations() {
 	global $wpdb, $user_ID;
 
 	// get the posts
+	// I use a direct SQL query here because the get_posts function sometimes does not function for a reason that is not clear.
+	$posts = $wpdb->get_results("SELECT * FROM `{$wpdb->posts}` WHERE `post_type` IN('wpsc-product')");
+	
+	
 	$posts = get_posts( array(
-		'post_type' => 'wpsc-product',
-		'numberposts' => -1
+	'post_type' => 'wpsc-product',
+	'post_status' => 'all',
+	'numberposts' => -1
 	) );
 
     //print_r($posts);
@@ -390,7 +395,7 @@ function wpsc_convert_variation_combinations() {
 		
 		// select the variation set associations
 		$variation_set_associations = $wpdb->get_col("SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}'");
-		
+		print_r($variation_set_associations);
 		// select the variation associations if the count of variation sets is greater than zero
 		if(($original_id > 0) && (count($variation_set_associations) > 0)) {
 			$variation_associations = $wpdb->get_col("SELECT `value_id` FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE `product_id` = '{$original_id}' AND `variation_id` IN(".implode(", ", $variation_set_associations).") AND `visible` IN ('1')");

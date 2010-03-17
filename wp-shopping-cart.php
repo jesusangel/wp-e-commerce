@@ -502,6 +502,7 @@ function wpsc_register_post_types() {
 	));
 	$role = get_role('administrator');
 	$role->add_cap('read_wpsc-product');
+	$role->add_cap('read_wpsc-product-file');
 }
 add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
 

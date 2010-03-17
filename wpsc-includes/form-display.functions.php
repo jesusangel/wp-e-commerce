@@ -130,13 +130,14 @@ function wpsc_select_product_file($product_id = null) {
 		'post_type' => 'wpsc-product-file',
 		'post_parent' => $product_id,
 		'numberposts' => -1,
-		'post_status' => 'inherit'
+		'post_status' => 'all'
 	);
-	
+	//echo "<pre>".print_r($file_list, true)."<pre>";
 	$attached_files = (array)get_posts($args);
 	
+	//echo "<pre>".print_r($attached_files, true)."<pre>";
 	foreach($attached_files as $key => $attached_file) {
-		$attached_files_by_file[$attached_file->post_title] = $attached_files[$key];
+		$attached_files_by_file[$attached_file->post_name] = $attached_files[$key];
 	}
 	
 	$output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
