@@ -977,8 +977,16 @@ function wpsc_download_file() {
 			}
 		}
 		
+		if(wpsc_get_meta($download_data['id'], '_is_legacy', 'wpsc_downloads') == 'true') {			
+			$file_id = wpsc_get_meta($download_data['fileid'], '_new_file_id', 'wpsc_files');
+		} else {
+			$file_id = $download_data['fileid'];
 		
-		$file_data = get_post($download_data['fileid']);
+		}
+		
+		//exit($file_id. "-".$download_data['fileid']);
+		
+		$file_data = get_post($file_id);
 		
 		if($file_data == null) {
 			exit(WPSC_DOWNLOAD_INVALID);
@@ -1017,10 +1025,10 @@ function wpsc_download_file() {
 		}
 		
 		//exit('<pre>'.print_r($cart_contents,true).'</pre>');
-		$file_path = WPSC_FILE_DIR.basename($file_data->post_title);
+		$file_path = WPSC_FILE_DIR.basename($file_data->post_name);
 		$file_name = basename($file_data->post_title);
 		
-		//exit('<pre>'.print_r($file_data, true).'</pre>');
+		//exit('<pre>'.$file_path.print_r($file_data, true).'</pre>');
 
 		if(is_file($file_path)) {
 			header('Content-Type: '.$file_data->post_mime_type);      

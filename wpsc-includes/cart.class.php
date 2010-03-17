@@ -1971,6 +1971,9 @@ class wpsc_cart_item {
 					'{$unique_id}', '$downloads', 
 					'0', NOW()
 				);");
+				
+				$download_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` LIMIT 1");
+				wpsc_update_meta($download_id, '_is_legacy', 'false', 'wpsc_downloads');
 			}
 		
 		}

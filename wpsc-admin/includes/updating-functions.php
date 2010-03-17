@@ -429,7 +429,7 @@ function wpsc_convert_variation_combinations() {
 		// select all variation "products"
 		$variation_items = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE `product_id` = '{$original_id}'");
 		//print_r($variation_items);
-		echo "\n";
+		//echo "\n";
 		foreach((array)$variation_items as $variation_item) {
 			// initialize the requisite arrays to empty
 			$variation_ids = array();
@@ -488,6 +488,7 @@ function wpsc_convert_variation_combinations() {
 				if($parent_stock === false) {
 				  $post_data['_wpsc_stock'] = false;
 				}
+				$post_data['_wpsc_original_variation_id'] = (float)$variation_item->id;
 				
 				
 				$weight = wpsc_convert_weights($variation_item->weight, $variation_item->weight_unit);
@@ -505,7 +506,7 @@ function wpsc_convert_variation_combinations() {
 				
 				
 				
-				echo "<pre>".print_r($product_values, true)."</pre>";
+				//echo "<pre>".print_r($product_values, true)."</pre>";
 				if($child_product_id == false) {
 					if($selected_post != null) {
 						$child_product_id = $selected_post->ID;
@@ -536,5 +537,73 @@ function wpsc_convert_variation_combinations() {
 		}
 	}
 
+}
+
+
+function wpsc_update_files() {
+	global $wpdb, $user_ID; 
+	$product_files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES."");
+	
+	//$product_file_meta = get_product_meta($product_id, 'product_files');
+	//	$product_meta_files = $wpdb->get_results("
+	//	SELECT `product_id`, `meta_value`
+	//	FROM `".WPSC_TABLE_PRODUCTMETA."`
+	//	WHERE `meta_key` IN ('product_files' )
+	//	", ARRAY_A);
+	
+	//print_r($product_meta_files);
+	
+	foreach($product_files as $product_file) {
+		$variation_post_ids = array();
+		//echo print_r($product_file, true);
+		$product_post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product_file->product_id ));
+		
+		$variation_items = $wpdb->get_col("SELECT `id` FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE `file` = '{$product_file->id}'");
+		
+		if(count($variation_items) > 0) {
+			$variation_post_ids = $wpdb->get_col("SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = '_wpsc_original_variation_id' AND `meta_value` IN(".implode(", ", $variation_items).")");
+		}
+
+		$attachment_template = array(
+			'post_mime_type' => $product_file->mimetype,
+			'post_title' => $product_file->filename,
+			'post_name' => $product_file->idhash,
+			'post_content' => '',
+			'post_parent' => 0,
+			'post_type' => "wpsc-product-file",
+			'post_status' => 'inherit'
+		);
+		
+		
+		$file_id = wpsc_get_meta($product_file->id, '_new_file_id', 'wpsc_files');
+		
+		if($file_id == null) {
+			$file_data = $attachment_template;
+			$file_data['post_parent'] = $product_post_id;
+			$new_file_id = wp_insert_post($file_data);
+			wpsc_update_meta($product_file->id, '_new_file_id', $new_file_id, 'wpsc_files');
+		}
+		
+		if(count($variation_post_ids) > 0) {
+			foreach($variation_post_ids as $variation_post_id) {				
+				$old_file_id = get_product_meta($variation_post_id, 'old_file_id', true);
+				if($old_file_id == null) {
+					$file_data = $attachment_template;
+					$file_data['post_parent'] = $variation_post_id;
+					$new_file_id = wp_insert_post($file_data);
+					update_product_meta($variation_post_id, 'old_file_id', $product_file->id, 'wpsc_files');
+				}
+			}
+		}
+		
+	}
+	
+	
+	$download_ids = $wpdb->get_col("SELECT `id` FROM ".WPSC_TABLE_DOWNLOAD_STATUS."");
+	foreach($download_ids as $download_id) {
+		if(wpsc_get_meta($download_id, '_is_legacy', 'wpsc_downloads') !== 'false') {
+			wpsc_update_meta($download_id, '_is_legacy', 'true', 'wpsc_downloads');
+		}
+	}
 }
 ?>
