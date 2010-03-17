@@ -137,7 +137,7 @@ function wpsc_select_product_file($product_id = null) {
 	
 	//echo "<pre>".print_r($attached_files, true)."<pre>";
 	foreach($attached_files as $key => $attached_file) {
-		$attached_files_by_file[$attached_file->post_name] = $attached_files[$key];
+		$attached_files_by_file[$attached_file->post_title] = $attached_files[$key];
 	}
 	
 	$output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
@@ -146,7 +146,7 @@ function wpsc_select_product_file($product_id = null) {
 	foreach((array)$file_list as $file) {
 		$num++;
 		$checked_curr_file = "";
-		if (isset($attached_files_by_file[$file['real_filename']])){
+		if (isset($attached_files_by_file[$file['display_filename']])){
 			$checked_curr_file = "checked='checked'";
 		}
 		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_name={$file['real_filename']}&amp;product_id={$product_id}&amp;row_number={$num}", 'delete_file_'.$file['real_filename']);
