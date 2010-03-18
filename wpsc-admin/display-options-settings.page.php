@@ -15,7 +15,7 @@ function wpsc_display_settings_page(){
  <div id="wpsc_options" class="wrap">
 	<?php if(wpsc_check_theme_versions()){ ?>
 		<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
-			<p><?php _e("It looks like your wp-e-commerce theme files are out of date, this can cause potential problems with some gateways that require the new themes. <br /><strong>We recommend you download the latest version of wp-e-commerce unzip it, and copy the new themes folder into your 'uploads/wpsc/themes' folder on your site.</strong>", "wpsc"); ?></p>
+			<p><?php _e("It looks like your wp-e-commerce theme files are out of date, this can cause potential problems with some gateways and the appearances of the front end of your shop. <br /><strong>We recommend you download the latest version of wp-e-commerce unzip it, and copy the new themes folder into your 'uploads/wpsc/themes' folder on your site. Or port your changes across.</strong>", "wpsc"); ?></p>
 		</div>
 	<?php
 }
