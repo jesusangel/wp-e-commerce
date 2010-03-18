@@ -1490,11 +1490,6 @@ class WPSC_Query {
 				
 				// Invert this for alphabetical ordering.
 				if (get_option('wpsc_sort_by')=='name') {
-					if(	$order == 'ASC'){
-						$order = 'DESC';
-					}else{
-						$order = 'ASC';
-					}
 					$order_by = "`products`.`name` $order";
 				} else if (get_option('wpsc_sort_by') == 'price') {
 					$order_by = "`products`.`price` $order";
