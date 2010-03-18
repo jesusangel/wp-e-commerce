@@ -1525,6 +1525,7 @@ class WPSC_Query {
 				WHERE `products`.`publish` = '1'
 				AND `products`.`active` = '1'
 				AND `cat_assoc`.`category_id` IN ( '".implode("','", $this->category_id_list)."' ) $no_donations_sql
+				GROUP BY `products`.`id`
 				ORDER BY $order_by LIMIT $startnum, $products_per_page";
 				
 			} else {
