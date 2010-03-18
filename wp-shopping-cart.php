@@ -127,6 +127,9 @@ require_once(WPSC_FILE_PATH."/wpsc-includes/form-display.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/merchant.class.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/meta.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/productfeed.php");
+
+//Add deprecated functions in this file please
+require_once(WPSC_FILE_PATH."/wpsc-includes/deprecated.functions.php");
 //exit(print_r($v1,true));
 if($v1[0] >= 2.8){
 	require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");

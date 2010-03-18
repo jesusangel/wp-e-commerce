@@ -16,7 +16,7 @@ function wpsc_check_theme_versions(){
 	foreach((array)$theme_array as $theme){
 	//	exit($theme['Version']);
 		if($theme['Name']=='Default Theme' ||$theme['Name']=='iShop Theme' ||$theme['Name']=='Marketplace Theme'  ){
-			if((float)$theme['Version'] < 3.5){
+			if((float)$theme['Version'] < 3.6){
 				$nag = true;
 			}
 		}
