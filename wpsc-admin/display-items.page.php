@@ -356,6 +356,13 @@ function wpsc_admin_products_list($category_id = 0) {
 												<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_URL;?>/images/product-alert.jpg' alt='' />
 												<?php
 											}
+											
+											// If a product alert has stuff to display, show it.
+											// Can be used to add extra icons etc
+											if ( !empty( $product_alert['display'] ) ) {
+												echo $product_alert['display'];
+											}
+											
 											?>
 											<img class='loadingImg' style='display:none;' src='<?php echo get_option('siteurl'); ?>/wp-admin/images/wpspin_light.gif' alt='loading' />
 									
