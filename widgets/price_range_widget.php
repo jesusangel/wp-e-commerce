@@ -39,11 +39,11 @@ function nzshpcrt_price_range($input = null) {
 			$j=$i;
 			
 			if ($i==$final_count-1) {
-				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>Over ".$ranges[$i]."</a><br/>";
+				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>Over ".nzshpcrt_currency_display($ranges[$i],1,true)."</a><br/>";
 			} else if($ranges[$i]==0){ 
-				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>Under ".$ranges[$i+1]."</a><br/>";
+				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>Under ".nzshpcrt_currency_display($ranges[$i+1],1,true)."</a><br/>";
 			}else {
-				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>".$ranges[$i]." - ".$ranges[$i+1]."</a><br/>";
+				echo "<a href='".htmlentities($product_page.$seperater."range=".$j)."'>".nzshpcrt_currency_display($ranges[$i],1,true)." - ".nzshpcrt_currency_display($ranges[$i+1],1,true)."</a><br/>";
 			}
 		}
     	if(get_option('permalink_structure') != '') {
