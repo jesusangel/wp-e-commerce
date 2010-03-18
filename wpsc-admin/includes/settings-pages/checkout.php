@@ -178,7 +178,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 				<?php
 				if(!isset($_GET['checkout-set'])) {
 					$filter = 0;
-					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') AND `checkout_set`='' ORDER BY `order`;";
+					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') ORDER BY `order`;";
 				} else {
 					$filter = $wpdb->escape($_GET['checkout-set']);
 					$form_sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1' AND `checkout_set` IN ('".$filter."') ORDER BY `order`;";
