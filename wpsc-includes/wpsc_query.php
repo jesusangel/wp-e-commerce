@@ -1324,11 +1324,13 @@ class WPSC_Query {
 		} else if($this->query_vars['category_id'] > 0) {
 			$category_data = $wpdb->get_row("SELECT `image_height`, `image_width` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `id` = '{$this->query_vars['category_id']}' LIMIT 1", ARRAY_A);
 		}
-		$this->category_id_list = array($this->query_vars['category_id']);
-		if($this->query_vars['category_id'] > 0) {
-		  $this->category_id_list = array_merge((array)$this->category_id_list, (array)wpsc_list_subcategories($this->query_vars['category_id']));
+		
+		// Show subcategory products on parent category page?
+		$show_subcatsprods_in_cat = get_option( 'show_subcatsprods_in_cat' );
+		$this->category_id_list = array( $this->query_vars['category_id'] );
+		if ( $show_subcatsprods_in_cat && $this->query_vars['category_id'] > 0 ) {
+			$this->category_id_list = array_merge( (array)$this->category_id_list, (array)wpsc_list_subcategories( $this->query_vars['category_id'] ) );
 		}
-
 		
 		//exit('Here:<pre>'.print_r($category_id_list, true).'</pre>');
 		if(is_array($category_data)) {
