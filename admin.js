@@ -601,6 +601,13 @@ jQuery(window).load( function () {
 		}
 
 	});
+	jQuery("form[name='add_coupon'] input[name='submit_coupon']").click(function() {
+		var title = jQuery("form[name='add_coupon'] input[name='add_coupon_code']").val();
+		if ( title == '') {
+			alert('Please enter a coupon code.');
+			return false;
+		}
+	});
 	jQuery('a.closeEl').bind('click', toggleContent);
 /*
  	jQuery('div.groupWrapper').sortable( {
