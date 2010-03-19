@@ -293,9 +293,14 @@ function wpsc_the_product_additional_description() {
 * wpsc product permalink function
 * @return string - the URL to the single product page for this product
 */
-function wpsc_the_product_permalink() {
+function wpsc_the_product_permalink( $category_id = null ) {
 	global $wpsc_query;
-	return wpsc_product_url($wpsc_query->product['id']);
+	if ( !isset( $category_id ) || !absint( $category_id ) ) {
+		$category_id = $wpsc_query->category;
+	} else {
+		$category_id = absint( $category_id );
+	}
+	return wpsc_product_url( $wpsc_query->product['id'], $category_id );
 }
 
 /**
