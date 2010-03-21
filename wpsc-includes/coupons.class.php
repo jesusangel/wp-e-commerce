@@ -103,19 +103,26 @@ class wpsc_coupons {
 	function calculate_discount() {
 		global $wpdb, $wpsc_cart;
 		
-		//echo "<pre>".print_r($wpsc_cart,true)."</pre>";
 		$wpsc_cart->clear_cache();
+
+		//Calculates the discount for the whole cart if there is no condition on this coupon.
 		if ($this->conditions == '' || count($this->conditions) == 0) {
-			//Calculates the discount for the whole cart if there is no condition on this coupon.
+
+			// $this->is_percentage == '2' means "Free Shipping"
 			if ($this->is_percentage == '2'){
-			return $wpsc_cart->calculate_total_shipping();	
+				return $wpsc_cart->calculate_total_shipping();	
 			}
+
+			// $this->is_percentage == '1' means "%" discount
 			if ($this->is_percentage == '1') {
 			  
 				$total_price = $wpsc_cart->calculate_subtotal();
 				$this->discount = $total_price*$this->value/100;
 				return $this->discount;
+
+			// Anything else means "Fixed amount" discount
 			} else {
+
 			  if($this->every_product == 1) {
 					$item_count = (int)wpsc_cart_item_count();
 					return ($this->value * $item_count);
@@ -123,30 +130,29 @@ class wpsc_coupons {
 					return $this->value;
 				}
 			}
+
+		// The coupon has conditions so may not apply to all items
 		} else {
 		
 			//Loop throught all products in the shopping cart, apply coupons on the ones match the conditions. 
 			$cart  =& $wpsc_cart->have_cart_items();
 			
 				foreach ($wpsc_cart->cart_items as $key => $item) {
-					$match = true;
 					
 					$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$item->product_id}'");
 					$product_data = $product_data[0];
 				
+					$match = true;
 					foreach ($this->conditions as $c) {
 						
 						//Check if all the condictions are returning true, so it's an ALL logic, if anyone want to implement a ANY logic please do.
-					
-						/* $match && */ $match =  $this->compare_logic($c, $item);
-						if($match){
-							$match = true;
-						//	exit('ture');
-						}else{
+						if (!$this->compare_logic($c, $item)) {
 							$match = false;
-							break('false');
+							break;
 						}
 					}
+
+					// This product is eligible for discount
 					if ($match) {
 					
 					    if ($this->is_percentage == '1') {
@@ -158,19 +164,18 @@ class wpsc_coupons {
 							}else{
 								return $this->discount;
 							}
-							//echo $item->discount."-";
 						} else {
 							$item->discount = $this->value;
 							if($this->every_product == 1){
-								$return += $this->discount;
+								$return += $item->discount;
 							}else{
 								//exit('<pre>'.print_r($this,true).'</pre>');
-								return $this->value;
+								return $item->discount;
 							}
-							//$return += $this->value;
 						}
+
+					// This product is NOT eligible for discount
 					}else{
-						//exit('match not found');
 						$this->discount = 0;
 						$item->discount = $this->discount;
 						$return += $this->discount;
