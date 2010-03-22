@@ -120,8 +120,9 @@ add_filter('single_post_title','wpsc_post_title_seo');
  * @return bool true or false
  */
 function wpsc_change_canonical_url($url) {
-  global $wpdb, $wpsc_query;
-  if($wpsc_query->is_single == true) {
+  global $wpdb, $wpsc_query, $post;
+ // exit('<pre>'.print_r($post,true).'</pre>');
+  if(preg_match("/\[productspage\]/",$post->post_content)) {
   if(!is_numeric($_GET['product_id'])) {
 		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpsc_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
   } else {

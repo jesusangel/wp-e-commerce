@@ -364,8 +364,8 @@ function wpsc_update_shipping_price() {
  	$quote_shipping_method = $_POST['key1'];
  	$quote_shipping_option = $_POST['key'];
 	$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
-	echo "jQuery('.pricedisplay.checkout-shipping').html('".wpsc_cart_shipping()."');\n\r";
-	echo "jQuery('.pricedisplay.checkout-total').html('".wpsc_cart_total()."');\n\r";
+	echo "jQuery('.checkout-shipping').html('".wpsc_cart_shipping()."');\n\r";
+	echo "jQuery('.checkout-total').html('".wpsc_cart_total()."');\n\r";
 	exit();
 }
 // execute on POST and GET
@@ -459,11 +459,12 @@ function wpsc_update_location() {
 	$wpsc_cart->update_location();
 	$wpsc_cart->get_shipping_method();
 	$wpsc_cart->get_shipping_option();
-	//echo $wpsc_cart->shipping_method;
+//	echo $wpsc_cart->shipping_method.'<br />';
 	if($wpsc_cart->selected_shipping_method != '') {
 		$wpsc_cart->update_shipping($wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option);
-	}
 	//echo "<pre>".print_r($wpsc_cart, true)."</pre>";
+	}
+
 	//exit();
 	if($_GET['ajax'] == 'true') {
 		exit();

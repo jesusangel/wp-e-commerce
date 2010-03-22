@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
 				var phone = jQuery("input[title='billingphone']").val(); 
 	            var email = jQuery("input[title='billingfirstname']").val();
 	            var state = jQuery("select[title='billingregion'] :selected").text();
-	            //var stateID = jQuery("select[title='billingregion'] :selected").val();
+	            var stateID = jQuery("select[title='billingregion'] :selected").val();
 				var country = jQuery("select[title='billingcountry'] :selected").text();
 				var countryID = jQuery("select[title='billingcountry'] :selected").val();             
 	
@@ -43,7 +43,7 @@ jQuery(document).ready(function () {
 				jQuery("input[title='shippingpostcode']").val(pcode);				
 				jQuery("input[title='shippingphone']").val(phone);				
 				jQuery("input[title='shippingemail']").val(email);		
-				jQuery("input[title='shippingstate']").val(state);														
+				jQuery("input[title='shippingstate']").val(stateID);														
 				jQuery("input.shipping_country").val(countryID);
 				jQuery("span.shipping_country_name").html(country);
 				jQuery("input.shipping_region").val(countryID);
@@ -56,6 +56,7 @@ jQuery(document).ready(function () {
 						jQuery("select#region").show();	
 					}
 					jQuery("select#region").val(state);
+					jQuery('span.shipping_region_name').html(state);
 				}
 				jQuery("select[title='shipping_country']").val(countryID);
 				var html_form_id = jQuery("select[title='shipping_country']").attr('id');
@@ -73,7 +74,7 @@ jQuery(document).ready(function () {
 						}
 					}
 				}
-				submit_change_country();
+				submit_change_country(true);
 
 				
 				
@@ -236,8 +237,22 @@ function switchmethod(key,key1){
 }
 
 // submit the country forms.
-function submit_change_country(){
-  document.forms.change_country.submit();
+function submit_change_country(ajax){
+	if(!ajax){
+	  	document.forms.change_country.submit();
+	}else{
+		var country_code = jQuery('#current_country  :selected').val();
+		var params = 'ajax=true&wpsc_ajax_actions=update_location&country='+country_code;
+		var region_code = jQuery('#region :selected').val();
+		if(region_code != 'undefined'){
+			params += '&region='+region_code;
+		}
+		
+//		alert(params);
+		jQuery.post( 'index.php', params, function(returned_data) { console.log(returned_data); });
+		jQuery.post( 'index.php', 'wpsc_ajax_action=update_shipping_price', function(returned_data) { console.log(returned_data); });
+		
+	}
 }
 
 // submit the fancy notifications forms.
