@@ -1479,7 +1479,7 @@ margin-bottom:10px;
 position:relative;
 }
  .clear_category_group {
-	clear: both;
+/* 	clear: both; */
 }
  .widget_wpsc_categorisation h4.wpsc_category_title {
 	margin-top: 4px;
