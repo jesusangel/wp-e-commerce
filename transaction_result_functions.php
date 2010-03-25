@@ -1,6 +1,6 @@
 <?php
 function transaction_results($sessionid, $echo_to_screen = true, $transaction_id = null) {
-	global $wpdb,$wpsc_cart;
+	global $wpdb,$wpsc_cart, $wpsc_shipping_modules;
 	//$curgateway = get_option('payment_gateway');
 	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
 	$errorcode = 0;
@@ -109,8 +109,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					do_action('wpsc_confirm_checkout', $purchase_log['id']);
 				}
 			//	do_action('wpsc_confirm_checkout', $purchase_log['id']);
-		
-				$shipping = $row['pnp']*$row['quantity'];
+				$shipping = $row['pnp'];
 				$total_shipping += $shipping;
 		
 				if($product_data['special']==1) {

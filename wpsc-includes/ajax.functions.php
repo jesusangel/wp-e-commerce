@@ -363,9 +363,54 @@ function wpsc_update_shipping_price() {
   global $wpdb, $wpsc_cart;
  	$quote_shipping_method = $_POST['key1'];
  	$quote_shipping_option = $_POST['key'];
+ //	exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+ 	if($quote_shipping_method == '' && $quote_shipping_option == ''){
+ 		$quote_shipping_method = $wpsc_cart->selected_shipping_method;
+	
+ 	}
 	$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
-	echo "jQuery('.checkout-shipping').html('".wpsc_cart_shipping()."');\n\r";
-	echo "jQuery('.checkout-total').html('".wpsc_cart_total()."');\n\r";
+	if($_POST['key1'] == ''  && $_POST['key'] == ''){
+		$i=0;
+		foreach($wpsc_cart->cart_items as $cart_item){
+			$product_ship = $cart_item->calculate_shipping($quote_shipping_method);
+			
+			echo "jQuery('#shipping_".$i."').html('".htmlspecialchars(nzshpcrt_currency_display($product_ship, false,true))."');\n\r";
+			$i++;
+		}
+	}
+//	if(count($wpsc_cart->shipping_quotes) > 0 && $_POST['key1'] == ''  && $_POST['key'] == ''){
+		while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); 
+		 	if (!wpsc_have_shipping_quotes()) { continue; } // Don't display shipping method if it doesn't have at least one quote 
+				while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();	
+				$output .="<tr class='shipping_quotes'>";
+				$output .="<td colspan='3'>";
+				$output .="<label for='".wpsc_shipping_quote_html_id()."'>".wpsc_shipping_quote_name()."</label>";
+				$output .="</td>";
+				$output .="<td style='text-align:center;'>";
+				$output .="<label for='".wpsc_shipping_quote_html_id()."'>".wpsc_shipping_quote_value()."</label>
+								</td>
+								<td style='text-align:center;'>";
+				 	if(wpsc_have_morethanone_shipping_methods_and_quotes()): 
+						$output .="<input type='radio' id='".wpsc_shipping_quote_html_id()."'".wpsc_shipping_quote_selected_state()."  onclick='switchmethod(\"".wpsc_shipping_quote_name()."\", \"".wpsc_shipping_method_internal_name()."\")' value='". wpsc_shipping_quote_value(true)."' name='shipping_method' />";
+					else:
+						$output .="	<input ". wpsc_shipping_quote_selected_state()." disabled='disabled' type='radio' id='". wpsc_shipping_quote_html_id()."'  value='". wpsc_shipping_quote_value(true)."' name='shipping_method' />";
+							wpsc_update_shipping_single_method();
+					endif;
+				$output .="</td>";
+				$output .="</tr>";
+				endwhile;
+		endwhile; 
+	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
+	echo "jQuery('tr.shipping_quotes').remove();";
+	echo "jQuery('#wpsc_shopping_cart_container .productcart :first').append(\"".$output."\");\n\r";
+//	}
+	$tax = $wpsc_cart->calculate_total_tax();
+	if($tax >0){
+		echo  "jQuery(\"tr.total_tax\").show();\n\r";
+		echo  "jQuery('#checkout_tax').html(\"<span class='pricedisplay'>".wpsc_cart_tax()."</span>\");\n\r";
+	}
+	echo "jQuery('.pricedisplay.checkout-shipping').html('".wpsc_cart_shipping()."');\n\r";
+	echo "jQuery('.pricedisplay.checkout-total').html('".wpsc_cart_total()."');\n\r";
 	exit();
 }
 // execute on POST and GET

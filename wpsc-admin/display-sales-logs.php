@@ -396,7 +396,6 @@ if(!isset($purchlogs)){
   		<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
   		<?php /* View functions for purchlogs */?>
   		<label for='view_purchlogs_by'><?php _e('View:'); ?></label>
-
   		<select id='view_purchlogs_by' name='view_purchlogs_by'>
   		  <?php
 				$date_is_selected['3mnths'] = '';
@@ -406,8 +405,8 @@ if(!isset($purchlogs)){
 						$date_is_selected['3mnths'] = 'selected="selected"';
 					break;
 					
-					case '':
 					case 'all':
+					
 						$date_is_selected['all'] = 'selected="selected"';
 					break;
   		  }

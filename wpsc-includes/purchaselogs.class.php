@@ -223,17 +223,21 @@ function wpsc_the_purch_status_name(){
 function wpsc_purchlogs_getfirstdates(){
 	global $purchlogs;
 	$dates = $purchlogs->getdates();
-	
+	$i = 0;
 	foreach($dates as $date){
 		$is_selected = '';
 		$cleanDate = date('M Y', $date['start']);
 		$value = $date["start"]."_".$date["end"];
 		if($value == $_GET['view_purchlogs_by']) {
 			$is_selected = 'selected="selected"';
+		}elseif(!isset($_GET['view_purchlogs_by']) && $i == 0){
+			$is_selected = 'selected="selected"';			
 		}
+		
 		$fDate .= "<option value='{$value}' {$is_selected}>".$cleanDate."</option>";
+		$i++;
 	}
-//	exit($i);
+//	exit($i.' '.count($dates));
 	return $fDate;
 }
 function wpsc_change_purchlog_view($viewby, $status=''){

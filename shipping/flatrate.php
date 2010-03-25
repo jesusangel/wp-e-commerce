@@ -73,12 +73,13 @@ class flatrate {
 		} else {
 			$country = $_SESSION['wpsc_delivery_country'];
 		}
-		
-		
+								$_SESSION['quote_shipping_option'] = null;
+
 		if (get_option('base_country') != $country) {
 			$results = $wpdb->get_var("SELECT `continent` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('{$country}') LIMIT 1");
 			$flatrates = get_option('flat_rates');
-			
+				$_SESSION['quote_shipping_option'] = null;
+
 			if ($flatrates != '') {
 					
 				if($_SESSION['quote_shipping_method'] == $this->internal_name) {
@@ -113,7 +114,7 @@ class flatrate {
 					$_SESSION['quote_shipping_option'] = null;
 			  }
 			}
-			
+
 			return $shipping_quotes;
 		}
 	}

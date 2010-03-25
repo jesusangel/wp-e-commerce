@@ -110,12 +110,12 @@ class tablerate {
 		$quantity = $cart_item->quantity;
 		$weight = $cart_item->weight;
 		$product_id = $cart_item->product_id;
-		
     if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
       $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$product_id' LIMIT 1";
       $product_list = $wpdb->get_row($sql,ARRAY_A) ;
       if($product_list['no_shipping'] == 0) {
         //if the item has shipping
+       // exit('<pre>'.print_r($product_list, true).'</pre>');
         if($country_code == get_option('base_country')) {
           $additional_shipping = $product_list['pnp'];
 				} else {

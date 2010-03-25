@@ -35,7 +35,8 @@ jQuery(document).ready(function () {
 	            var stateID = jQuery("select[title='billingregion'] :selected").val();
 				var country = jQuery("select[title='billingcountry'] :selected").text();
 				var countryID = jQuery("select[title='billingcountry'] :selected").val();             
-	
+				var	shipID;
+				var shipName;
 				jQuery("input[title='shippingfirstname']").val(fname);
 				jQuery("input[title='shippinglastname']").val(lname); 
 				jQuery("textarea[title='shippingaddress']").val(addr);
@@ -50,12 +51,30 @@ jQuery(document).ready(function () {
 				jQuery("span.shipping_region_name").html(state);
 				jQuery("select#current_country").val(countryID);
 				if(state == ''){
-					jQuery("select#region").hide();				
-				}else{
-					if(jQuery("select#region").css('display') == 'none'){
+					state = jQuery("select.current_region :selected").text();
+	          		stateID = jQuery("select.current_region :selected").val();
+	          		if(state == ''){
+						jQuery("select#region").hide();	
+						shipName = jQuery('input.shipping_region').attr('name');
+						shipID = jQuery('input.shipping_region').attr('id');
+						jQuery('input.shipping_region').replaceWith('<input  class="shipping_region" type="text" value="'+state+'" name="'+shipName+'" id="'+shipName+'" />');	
+						jQuery('span.shipping_region_name').replaceWith('<span class="shipping_region_name"></span>');	
+					}else{
 						jQuery("select#region").show();	
+						
+						jQuery("select#region :selected").html(state).attr('selected','selected');
+						shipName = jQuery('input.shipping_region').attr('name');
+						shipID = jQuery('input.shipping_region').attr('id');
+						jQuery('input.shipping_region').replaceWith('<input type="hidden" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" class="shipping_region" />');	
+						jQuery('input.shipping_region').append('<span class="shipping_region_name"></span>');
+						jQuery('span.shipping_region_name').html(state);
 					}
-					jQuery("select#region").val(state);
+				}else{
+					jQuery("select#region").show();	
+					shipName = jQuery('input.shipping_region').attr('name');
+					shipID = jQuery('input.shipping_region').attr('id');
+					jQuery('input.shipping_region').replaceWith('<input type="hidden"  class="shipping_region" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" />');	
+					jQuery("select#region :selected").html(state).attr('selected','selected');
 					jQuery('span.shipping_region_name').html(state);
 				}
 				jQuery("select[title='shipping_country']").val(countryID);
@@ -75,12 +94,7 @@ jQuery(document).ready(function () {
 					}
 				}
 				submit_change_country(true);
-
-				
-				
-			}else{
-
-			
+	
 			}
          
             //otherwise, hide it
@@ -244,14 +258,15 @@ function submit_change_country(ajax){
 		var country_code = jQuery('#current_country  :selected').val();
 		var params = 'ajax=true&wpsc_ajax_actions=update_location&country='+country_code;
 		var region_code = jQuery('#region :selected').val();
-		if(region_code != 'undefined'){
+		if(typeof(region_code) != 'undefined'){
 			params += '&region='+region_code;
 		}
 		
-//		alert(params);
-		jQuery.post( 'index.php', params, function(returned_data) { console.log(returned_data); });
-		jQuery.post( 'index.php', 'wpsc_ajax_action=update_shipping_price', function(returned_data) { console.log(returned_data); });
-		
+		jQuery.post( 'index.php', params, function(returned_data) {  });
+		jQuery.post( 'index.php', 'wpsc_ajax_action=update_shipping_price', function(returned_data) { 
+			eval(returned_data);
+		});
+			
 	}
 }
 
@@ -318,8 +333,8 @@ function shopping_cart_collapser() {
   
 function set_billing_country(html_form_id, form_id){
   var billing_region = '';
-  country = jQuery(("div#"+html_form_id+" select[class=current_country]")).val();
-  region = jQuery(("div#"+html_form_id+" select[class=current_region]")).val();
+  country = jQuery(("select[class=current_country]")).val();
+  region = jQuery(("select[class=current_region]")).val();
   if(/[\d]{1,}/.test(region)) {
     billing_region = "&billing_region="+region;
 	}

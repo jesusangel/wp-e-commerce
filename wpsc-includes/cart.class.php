@@ -61,6 +61,7 @@ function wpsc_coupon_amount($forDisplay=true) {
 function wpsc_cart_total($forDisplay=true) {
 	global $wpsc_cart;  
 	$total = $wpsc_cart->calculate_subtotal();
+//	echo 'cart shipping total'.$wpsc_cart->calculate_total_shipping();
 	$total += $wpsc_cart->calculate_total_shipping();
 	$total -= $wpsc_cart->coupons_amount;
 	if(wpsc_tax_isincluded() == false){
@@ -625,12 +626,10 @@ class wpsc_cart {
 			$_SESSION['wpsc_delivery_region'] = get_option('base_region');   
 		}
 		
-		//exit('<pre>'.print_r($_SESSION, true).'</pre>');
 		$this->delivery_country =& $_SESSION['wpsc_delivery_country'];
 		$this->selected_country =& $_SESSION['wpsc_selected_country'];
 		$this->delivery_region =& $_SESSION['wpsc_delivery_region'];
 		$this->selected_region =& $_SESSION['wpsc_selected_region'];
-		
 		
 		$this->get_tax_rate();
 	}
@@ -1131,13 +1130,20 @@ class wpsc_cart {
     global $wpdb, $wpsc_cart;
     $total = 0;
 	if(wpsc_tax_isincluded() == false){
+
     	if($this->total_tax == null) {
 			foreach($this->cart_items as $key => $cart_item) {
 				$total += $cart_item->tax;
 			}
+	
 			$this->total_tax = $total;
+				//	exit('<pre>'.print_r($this,true).'</pre>');
 		} else {
 		  $total = $this->total_tax;
+		}
+		if($this->total_tax != null && $this->coupons_amount > 0){
+			$total = ($this->calculate_subtotal()-$this->coupons_amount)/$this->tax_percentage;
+			//exit(($this->calculate_subtotal()-$this->coupons_amount)/$wpsc_cart->tax_percentage);
 		}
 	}else{
 		if($this->total_tax == null) {
@@ -1218,12 +1224,14 @@ class wpsc_cart {
   function calculate_total_shipping() {
   	if( ! ( (get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $this->calculate_subtotal() ) ) ){
 			$total = $this->calculate_base_shipping();
+		//	echo 'Base shipping'.$total;
+		//	echo '<br /> Per Item:'.$this->calculate_per_item_shipping();
 			$total += $this->calculate_per_item_shipping();
     }else{
 			$total = 0;
     }
-	 $total = apply_filters('wpsc_convert_total_shipping',$total);
 
+	 $total = apply_filters('wpsc_convert_total_shipping',$total);
 
     return $total;
   }
@@ -1248,56 +1256,25 @@ class wpsc_cart {
 	 * @return float returns the shipping as a floating point value
 	*/
   function calculate_base_shipping() {
-    global $wpsc_shipping_modules;
-    $total = (float)0;
-    // make sure I have shipping quotes
-    if($this->uses_shipping()) {
-		if(empty($this->shipping_quotes) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
-		    $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-		    if ( $this->shipping_quotes == null ) return $total;
-		}
+       global $wpdb, $wpsc_shipping_modules;
+    	if($this->uses_shipping()) {
+			if(!empty($this->shipping_quotes) && !is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method]), "getQuote"  )) {
 	
-		// make sure I have a selected shipping option
-		if($this->selected_shipping_option == null){
-		    $this->get_shipping_option();
-		    if ( $this->selected_shipping_option == null ) return $total;
-		}
-	
-		/*
-		 * The array 'shipping_quotes' is returned from the getQuote() function of the shipping module as an array of key/value pairs.
-		 *
-		 * The function get_shipping_quotes() in this class rewrites and stores this same information as an array of arrays , and smashes
-		 * the data format returned from the getQuote() function of the shipping module. 
-		 * In other words the same class variable (shipping_quotes) is used to store results in two different formats.  Some of the code 
-		 * expects it in one format and some in the other.
-		 *
-		 *  I am not sure why this is done, but the end result is that this class treats the contents of 
-		 * 'shipping_quotes' differently and expects different data formats, causing shipping quotes to be misread.
-		 *
-		 * CSN
-		 */
-	 			
-	
-		if (array_key_exists($this->selected_shipping_option, $this->shipping_quotes)) {
-		    // shipping quotes are stored as returned from shipping module getQuote() function
-		    $total = (float)$this->shipping_quotes[$this->selected_shipping_option];
+				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+			//	exit('NOT EMPTY<pre>'.print_r($this, true).'</pre>');
+			}
+			if($this->selected_shipping_option == null){
+				$this->get_shipping_option();
+			}
+
+			$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
+
+			$this->base_shipping = $total;
 		} else {
-		    foreach ( $this->shipping_quotes as $key => $value ) {
-		        if ( strcmp ($value['name'], $this->selected_shipping_option) == 0 ) {
-			    	// shipping quotes have been reformatted by get_shipping_quotes()
-			    	$total = (float)$value['value'];
-			    	break;
-	 			}
-	
-		    }
+			
+		  $total = 0;
 		}
-	
-		$this->base_shipping = $total;
-    }
-
-    return $total;
-
-
+		return $total;
   }
   
     /**
@@ -1316,7 +1293,7 @@ class wpsc_cart {
 		if($method == $this->selected_shipping_method) {
 			$this->total_item_shipping = $total;
 		}
-		//echo("<pre>".print_r($method." ".$total,true)."</pre>");
+	//	echo("<pre>".print_r($this->selected_shipping_method." ".$method." ".$total,true)."</pre>");
 		return $total;
   }
   

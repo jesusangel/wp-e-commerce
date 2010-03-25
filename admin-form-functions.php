@@ -720,7 +720,7 @@ function wpsc_packing_slip($purchase_id) {
   global $wpdb;
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
-			
+			//exit('<pre>'.print_r($purch_data, true).'</pre>');
 
 	  //echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
@@ -912,7 +912,10 @@ function wpsc_packing_slip($purchase_id) {
 				echo '<td>';
 				echo '</tr>';
 				}
+			echo '<tr><td>Total Shipping</td><td>'.$purch_data['base_shipping'].'</td></tr>';
+			echo '<tr><td>Total Price</td><td>'.$purch_data['totalprice'].'</td></tr>';
 			echo "</table>";
+
 			echo "</div>\n\r";
 		} else {
 			echo "<br />".__('This users cart was empty', 'wpsc');
