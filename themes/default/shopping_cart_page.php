@@ -314,7 +314,7 @@ if(wpsc_cart_item_count() > 0) :
 		</tr>
 		<?php endif; ?>		
 		<tr>
-			<td colspan='2'>
+			<td colspan='2' class='wpsc_gateway_container'>
 			
 			<?php  //this HTML displays activated payment gateways?>
 			  
@@ -380,7 +380,7 @@ if(wpsc_cart_item_count() > 0) :
 </div>
 <?php
 else:
-	echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href='".get_option("product_list_url")."'>" . __('Please visit our shop', 'wpsc') . "</a>";
+	echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";
 endif;
 do_action('wpsc_bottom_of_shopping_cart');
 ?>

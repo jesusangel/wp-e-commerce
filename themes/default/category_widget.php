@@ -36,5 +36,5 @@
 			</div>
 	
 	<?php endif;?>
+	<div class='clear_category_group'></div>
 </div>
-<div class='clear_category_group'></div>

@@ -176,6 +176,30 @@ function wpsc_options_general(){
 				<label for='csl4'><span id='cslchar4'><?php echo $currency_sign; ?></span> 100</label>
 			</td>
 		</tr>
+		<tr>
+			<?php 
+			$decimals = get_option('wpsc_hide_decimals');
+			switch($decimals){
+				case '1':
+				$decimal1 = 'checked="checked"';
+				break;
+			
+				case '0':
+				default:
+				$decimal2 = 'checked="checked"';
+				break;
+			}
+			
+			?>
+			<th scope="row"><?php _e('Hide Decimals on Products Pages'); ?></th>
+			<td>
+			<input type='radio' value='1' name='wpsc_options[wpsc_hide_decimals]' id='hide_decimals1' <?php echo $decimal1; ?> />
+			<label for='hide_decimals1'><?php _e('Yes'); ?></label>
+
+			<input type='radio' value='0' name='wpsc_options[wpsc_hide_decimals]' id='hide_decimals2' <?php echo $decimal2; ?> />
+			<label for='hide_decimals2'><?php _e('No'); ?></label>
+			</td>
+		</tr>
 		</table> 
 		<div class="submit">
 			<input type='hidden' name='wpsc_admin_action' value='submit_options' />

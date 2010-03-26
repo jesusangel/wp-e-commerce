@@ -303,11 +303,12 @@ function wpsc_the_product_permalink( $category_id = null ) {
 	return wpsc_product_url( $wpsc_query->product['id'], $category_id );
 }
 
+
 /**
 * wpsc product price function
 * @return string - the product price
 */
-function wpsc_the_product_price() {
+function wpsc_the_product_price($no_decimals = false) {
 	global $wpsc_query;	
 	$price = calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations);	
 	if(($wpsc_query->product['special_price'] > 0) && (($wpsc_query->product['price'] - $wpsc_query->product['special_price'] ) >= 0) && ($variations_output[1] === null)) {
@@ -315,11 +316,10 @@ function wpsc_the_product_price() {
 	} else {
 		$output = nzshpcrt_currency_display($price, $wpsc_query->product['notax'], true);
 	}
-	if(get_option('display_pnp') == 1) {
-		//$output = nzshpcrt_currency_display($wpsc_query->product['pnp'], 1);
+	if($no_decimals == true) {
+		$output = array_shift(explode(".", $output));
 	}
-	//echo $price;
- 	 $output = apply_filters('wpsc_price_display_changer', $output);
+//	echo 'NO DECIMALS VALUE:'.$no_decimals;
 	//echo "<pre>".print_r($wpsc_query->product,true)."</pre>";
 	return $output;
 }
@@ -751,6 +751,52 @@ function wpsc_the_variation_name() {
 	return stripslashes($wpsc_query->variation['name']);
 }
 
+/**
+* wpsc the variation stock function
+* @return string - HTML attribute to disable select options and radio buttons
+*/
+function wpsc_the_variation_stock() {
+	global $wpsc_query, $wpdb;
+	$out_of_stock = false;
+	if(($wpsc_query->variation_group_count == 1) && ($wpsc_query->product['quantity_limited'] == 1)) {
+		$product_id = $wpsc_query->product['id'];
+		$variation_group_id = $wpsc_query->variation_group['variation_id'];
+		$variation_id = $wpsc_query->variation['id'];
+		
+
+		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
+		
+		$variation_stock_data = $wpdb->get_var("SELECT `stock` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+		
+	}
+	return $variation_stock_data;
+}
+
+
+/**
+* wpsc the variation price function
+* @return string - the variation price
+*/
+function wpsc_the_variation_price() {
+	global $wpdb, $wpsc_query;
+	
+    if(count($wpsc_query->variation_groups) == 1) {
+		//echo "<pre>".print_r($wpsc_query->variation, true)."</pre>";
+		$product_id = $wpsc_query->product['id'];
+		$variation_group_id = $wpsc_query->variation_group['variation_id'];
+		$variation_id = $wpsc_query->variation['id'];
+		
+		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
+		
+		$variation_price = $wpdb->get_var("SELECT `price` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+
+		$output = nzshpcrt_currency_display($variation_price, $wpsc_query->product['notax'], true);    		
+    } else {
+    	$output = false;
+    }
+
+	return $output;
+}
 /**
 * wpsc the variation ID function
 * @return integer - the variation ID
