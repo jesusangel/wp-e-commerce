@@ -111,10 +111,8 @@ if(wpsc_cart_item_count() > 0) :
 					if (!wpsc_have_shipping_quotes()) continue; 
 					?>
 					<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().__('- Choose a Shipping Rate', 'wpsc'); ?> </td></tr>
-					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();
-				
-					 ?>
-						<tr>
+					<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote(); ?>
+						<tr class='shipping_quotes'>
 							<td colspan='3'>
 								<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
 							</td>
