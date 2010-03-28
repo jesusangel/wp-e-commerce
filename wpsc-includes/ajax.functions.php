@@ -378,9 +378,10 @@ function wpsc_update_shipping_price() {
 			$i++;
 		}
 	}
-//	if(count($wpsc_cart->shipping_quotes) > 0 && $_POST['key1'] == ''  && $_POST['key'] == ''){
+	if(count($wpsc_cart->shipping_quotes) > 0 && $_POST['key1'] == ''  && $_POST['key'] == ''){
 		while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); 
 		 	if (!wpsc_have_shipping_quotes()) { continue; } // Don't display shipping method if it doesn't have at least one quote 
+				$output .="<tr><td class='shipping_header' colspan='5'>".wpsc_shipping_method_name().__('- Choose a Shipping Rate', 'wpsc')."</td></tr>";
 				while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();	
 				$output .="<tr class='shipping_quotes'>";
 				$output .="<td colspan='3'>";
@@ -401,9 +402,11 @@ function wpsc_update_shipping_price() {
 				endwhile;
 		endwhile; 
 	$output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));
-	echo "jQuery('tr.shipping_quotes').remove();";
-	echo "jQuery('#wpsc_shopping_cart_container .productcart :first').append(\"".$output."\");\n\r";
-//	}
+	echo "var shipping =jQuery('td.shipping_header').parent('tr');";
+	echo "shipping.nextAll('tr').remove();\n\r";
+	echo "shipping.parent().append(\"".$output."\");\n\r";
+	echo "shipping.empty();";
+	}
 	$tax = $wpsc_cart->calculate_total_tax();
 	if($tax >0){
 		echo  "jQuery(\"tr.total_tax\").show();\n\r";
