@@ -76,7 +76,9 @@ global $wpdb;
 					<?php echo __('Purchase Log Email', 'wpsc');?>:
 					</th>
 					<td>
-					<input class='text' name='wpsc_options[purch_log_email]' type='text' size='40' value='<?php echo get_option('purch_log_email'); ?>' />
+					<input class='text' name='wpsc_options[purch_log_email]' type='text' size='40' value='<?php echo get_option('purch_log_email'); ?>' /><br />
+					<?php _e('i.e. this is the address where your purchase reports are sent.','wpsc'); ?>
+					
 					</td>
 				</tr>
 				<tr>
@@ -85,6 +87,7 @@ global $wpdb;
 					</th>
 					<td>
 					<input class='text' name='wpsc_options[return_email]' type='text' size='40' value='<?php echo get_option('return_email'); ?>'  />
+					<?php _e('i.e. this is the reply address contained in the purchase receipt sent to the buyer.','wpsc'); ?>
 					</td>
 				</tr>
 
@@ -94,6 +97,8 @@ global $wpdb;
 					</th>
 					<td>
 					<input class='text' name='wpsc_options[return_name]' type='text' size='40' value='<?php echo get_option('return_name'); ?>'  />
+					<?php _e('i.e. this is the "from name" buyers will see in their purchase receipt. ','wpsc'); ?>
+					
 					</td>
 				</tr>
 				

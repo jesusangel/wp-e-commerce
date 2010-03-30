@@ -235,11 +235,13 @@ jQuery("div.previewimage").hover(
 	}
 );
 
-jQuery("a.closeimagesettings").click(
+jQuery(".closeimagesettings").click(
 	function (e) {
+		alert('uhuh');
 		jQuery("div#image_settings_box").hide();
 	}
 );
+
 
 jQuery("#table_rate_price").click(
 	function() {
@@ -1058,12 +1060,6 @@ function enablebuttons(){
 		function(){
 			jQuery(this).hide();
 			jQuery('#image_settings_box').show('fast');
-		}
-	);
-	
-	jQuery("a.closeimagesettings").click(
-		function (e) {
-			jQuery("div#image_settings_box").hide();
 		}
 	);
 	

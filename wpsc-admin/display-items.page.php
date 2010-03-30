@@ -373,7 +373,7 @@ function wpsc_admin_products_list($category_id = 0) {
 											</span>
 											 |
 											<span class="delete">
-												<a class='submitdelete'
+												<a class='submitdelete delete_button'
 													title='<?php echo attribute_escape(__('Delete this product', 'wpsc')); ?>'
 													href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_product&amp;product={$product['id']}", 'delete_product_' . $product['id']); ?>'
 													onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product['name'] )) ?>') ) { return true;}return false;"

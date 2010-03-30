@@ -530,7 +530,7 @@ jQuery(document).ready( function () {
 	  });
 	});
 
-	jQuery('a.closeimagesettings').livequery(function(){
+	jQuery('.closeimagesettings').livequery(function(){
 	  jQuery(this).click( function() {
 				jQuery('.image_settings_box').hide();
 	  });

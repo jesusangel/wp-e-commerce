@@ -26,14 +26,14 @@ function options_categorylist() {
 		$selected = '';
 	}
 	$categorylist .= "<option value='all+list' ".$selected." >".__('Show All Products + Category List', 'wpsc')."</option>";
-
+	$categorylist .="<optgroup label='Select a default Product Category:'></optgroup>";
 	foreach($group_data as $group) {
 			$cat_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ({$group['id']}) AND `active`='1'";
 			$category_data = $wpdb->get_results($cat_sql,ARRAY_A);
 			if($category_data != null) {
 		    	  			
 				
-				$categorylist .= "<optgroup label='{$group['name']}'>";;
+				$categorylist .= "<optgroup label='{$group['name']}'>";
 				foreach((array)$category_data as $category)  {
 					if(get_option('wpsc_default_category') == $category['id'])  {
 						$selected = "selected='selected'";
