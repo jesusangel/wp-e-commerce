@@ -73,7 +73,7 @@ jQuery(document).ready(function () {
 					jQuery("select#region").show();	
 					shipName = jQuery('input.shipping_region').attr('name');
 					shipID = jQuery('input.shipping_region').attr('id');
-					jQuery('input.shipping_region').replaceWith('<input type="hidden"  class="shipping_region" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" />');	
+					jQuery('input.shipping_region').replaceWith('<input type="hidden"  class="shipping_region" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" /><span class="shipping_region_name"></span>');	
 					jQuery("select#region :selected").html(state).attr('selected','selected');
 					jQuery('span.shipping_region_name').html(state);
 				}

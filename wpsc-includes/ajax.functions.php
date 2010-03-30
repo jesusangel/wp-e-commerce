@@ -363,24 +363,29 @@ function wpsc_update_shipping_price() {
   global $wpdb, $wpsc_cart;
  	$quote_shipping_method = $_POST['key1'];
  	$quote_shipping_option = $_POST['key'];
- //	exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+
+	//If no $_POST key variable means it is activated through shipping same as billing
  	if($quote_shipping_method == '' && $quote_shipping_option == ''){
  		$quote_shipping_method = $wpsc_cart->selected_shipping_method;
-	
- 	}
-	$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
-	if($_POST['key1'] == ''  && $_POST['key'] == ''){
-		$i=0;
+ 		$i=0;
+		//if it is from shipping same as billing then per item shipping may need to be calculated...
 		foreach($wpsc_cart->cart_items as $cart_item){
 			$product_ship = $cart_item->calculate_shipping($quote_shipping_method);
 			
 			echo "jQuery('#shipping_".$i."').html('".htmlspecialchars(nzshpcrt_currency_display($product_ship, false,true))."');\n\r";
 			$i++;
 		}
-	}
-	if(count($wpsc_cart->shipping_quotes) > 0 && $_POST['key1'] == ''  && $_POST['key'] == ''){
+ 	}else{
+ 		$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
+ 		echo "jQuery('.pricedisplay.checkout-shipping').html('".wpsc_cart_shipping()."');\n\r";
+		echo "jQuery('.pricedisplay.checkout-total').html('".wpsc_cart_total()."');\n\r";
+		exit();	
+ 	}
+	
+	//if(count($wpsc_cart->shipping_quotes) > 0 && $_POST['key1'] == ''  && $_POST['key'] == ''){
 		while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); 
 		 	if (!wpsc_have_shipping_quotes()) { continue; } // Don't display shipping method if it doesn't have at least one quote 
+		 		
 				$output .="<tr><td class='shipping_header' colspan='5'>".wpsc_shipping_method_name().__('- Choose a Shipping Rate', 'wpsc')."</td></tr>";
 				while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();	
 				$output .="<tr class='shipping_quotes'>";
@@ -406,9 +411,11 @@ function wpsc_update_shipping_price() {
 	echo "shipping.nextAll('tr').remove();\n\r";
 	echo "shipping.parent().append(\"".$output."\");\n\r";
 	echo "shipping.empty();";
-	}
-	$tax = $wpsc_cart->calculate_total_tax();
-	if($tax >0){
+//	}
+
+	$wpsc_cart->update_shipping($quote_shipping_method, $quote_shipping_option);
+	
+	if(wpsc_cart_tax(false) > 0){
 		echo  "jQuery(\"tr.total_tax\").show();\n\r";
 		echo  "jQuery('#checkout_tax').html(\"<span class='pricedisplay'>".wpsc_cart_tax()."</span>\");\n\r";
 	}
