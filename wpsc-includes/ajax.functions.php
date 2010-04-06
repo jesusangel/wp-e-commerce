@@ -213,6 +213,7 @@ function wpsc_empty_cart() {
 				});
 		";
 		}
+
 		exit();
   }
 
