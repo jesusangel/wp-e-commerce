@@ -251,7 +251,7 @@ if(wpsc_cart_item_count() > 0) :
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 			<td>
 				<label for='<?php echo wpsc_checkout_form_element_id(); ?>'>
-				<?php echo wpsc_checkout_form_name();?>:
+				<?php echo wpsc_checkout_form_name();?>
 				</label>
 			</td>
 			<td>

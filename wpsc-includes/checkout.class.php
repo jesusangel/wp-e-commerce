@@ -367,9 +367,9 @@ class wpsc_checkout {
   
   function form_name() {
 		if($this->form_name_is_required() && ($this->checkout_item->type != 'heading')){
-			return stripslashes($this->checkout_item->name).' * ';
+			return stripslashes($this->checkout_item->name).': * ';
 		}else{
-			return stripslashes($this->checkout_item->name);
+			return stripslashes($this->checkout_item->name).': ';
 		}
   }  
    
