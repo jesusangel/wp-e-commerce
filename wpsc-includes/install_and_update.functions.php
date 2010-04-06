@@ -436,9 +436,7 @@ function wpsc_create_upload_directories() {
   );
   foreach ($folders as $folder) {
   	wp_mkdir_p($folder);
-  	$stat = stat($folder);
-    $perms = $stat['mode'] & 0000666;
-    @ chmod( $folder, $perms );
+    @ chmod( $folder, 0775 );
   }
 	//wpsc_copy_themes_to_uploads();
 }
