@@ -993,59 +993,54 @@ function wpsc_download_file() {
 		}
 	
 		if($download_data != null) {
-		  /*
-			if($download_data['fileid'] > 0) {
-				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+			if((int)$download_data['downloads'] >= 1) {
+				$download_count = (int)$download_data['downloads'] - 1;
 			} else {
-				$old_file_data = $wpdb->get_row("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
-				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
+				$download_count = 0;
 			}
-			*/
-		
-		if((int)$download_data['downloads'] >= 1) {
-			$download_count = (int)$download_data['downloads'] - 1;
-		} else {
-			$download_count = 0;
-		}
-		
-		
-		$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
-		$cart_contents = $wpdb->get_results('SELECT `'.WPSC_TABLE_CART_CONTENTS.'`.*,`'.WPSC_TABLE_PRODUCT_LIST.'`.`file` FROM `'.WPSC_TABLE_CART_CONTENTS.'` LEFT JOIN `'.WPSC_TABLE_PRODUCT_LIST.'` ON `'.WPSC_TABLE_CART_CONTENTS.'`.`prodid`= `'.WPSC_TABLE_PRODUCT_LIST.'`.`id` WHERE `purchaseid` ='.$download_data['purchid'], ARRAY_A);
-		$dl = 0;
-		
-		
-		
-		foreach($cart_contents as $cart_content) {
-			if($cart_content['file'] == 1) {
-				$dl++;
+			
+			
+			$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
+			$cart_contents = $wpdb->get_results('SELECT `'.WPSC_TABLE_CART_CONTENTS.'`.*,`'.WPSC_TABLE_PRODUCT_LIST.'`.`file` FROM `'.WPSC_TABLE_CART_CONTENTS.'` LEFT JOIN `'.WPSC_TABLE_PRODUCT_LIST.'` ON `'.WPSC_TABLE_CART_CONTENTS.'`.`prodid`= `'.WPSC_TABLE_PRODUCT_LIST.'`.`id` WHERE `purchaseid` ='.$download_data['purchid'], ARRAY_A);
+			$dl = 0;
+			
+			
+			
+			foreach($cart_contents as $cart_content) {
+				if($cart_content['file'] == 1) {
+					$dl++;
+				}
 			}
-		}
-		if(count($cart_contents) == $dl) {
-			$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
-		}
-		
-		//exit('<pre>'.print_r($cart_contents,true).'</pre>');
-		$file_path = WPSC_FILE_DIR.basename($file_data->post_name);
-		$file_name = basename($file_data->post_title);
-		
-		//exit('<pre>'.$file_path.print_r($file_data, true).'</pre>');
-
-		if(is_file($file_path)) {
-			header('Content-Type: '.$file_data->post_mime_type);      
-			header('Content-Length: '.filesize($file_path));
-			header('Content-Transfer-Encoding: binary');
-			header('Content-Disposition: attachment; filename="'.stripslashes($file_name).'"');
-			if(isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != '')) {
-				/*
-				There is a bug in how IE handles downloads from servers using HTTPS, this is part of the fix, you may also need:
-				session_cache_limiter('public');
-				session_cache_expire(30);
-				At the start of your index.php file or before the session is started
-				*/
-				header("Pragma: public");
-				header("Expires: 0");      
-				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-				header("Cache-Control: public"); 
+			if(count($cart_contents) == $dl) {
+				$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '4' WHERE `id` = '".$download_data['purchid']."' LIMIT 1");
+			}
+			
+			
+			
+			do_action('wpsc_alter_download_action', $file_id);
+			
+			//exit('<pre>'.print_r($cart_contents,true).'</pre>');
+			$file_path = WPSC_FILE_DIR.basename($file_data->post_name);
+			$file_name = basename($file_data->post_title);
+			
+			
+	
+			if(is_file($file_path)) {
+				header('Content-Type: '.$file_data->post_mime_type);      
+				header('Content-Length: '.filesize($file_path));
+				header('Content-Transfer-Encoding: binary');
+				header('Content-Disposition: attachment; filename="'.stripslashes($file_name).'"');
+				if(isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != '')) {
+					/*
+					There is a bug in how IE handles downloads from servers using HTTPS, this is part of the fix, you may also need:
+					session_cache_limiter('public');
+					session_cache_expire(30);
+					At the start of your index.php file or before the session is started
+					*/
+					header("Pragma: public");
+					header("Expires: 0");      
+					header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+					header("Cache-Control: public"); 
 				} else {
 					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');       
 				}        
@@ -1064,6 +1059,9 @@ function wpsc_download_file() {
 			if(is_numeric($product_data[0]['file']) && ($product_data[0]['file'] > 0)) {
 				$file_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$product_data[0]['file']."' LIMIT 1",ARRAY_A) ;
 				$file_data = $file_data[0];
+				
+				do_action('wpsc_alter_download_action',$file_id);
+				
 				if(is_file(WPSC_FILE_DIR.$file_data['idhash'])) {
 					header('Content-Type: '.$file_data['mimetype']);
 					header('Content-Length: '.filesize(WPSC_FILE_DIR.$file_data['idhash']));

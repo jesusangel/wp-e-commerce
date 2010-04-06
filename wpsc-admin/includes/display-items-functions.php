@@ -331,10 +331,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 		  );
 		
 	 	$order = get_option('wpsc_product_page_order');	 	
-	 	
-	 	
 
-	 	
 	 	
 		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  

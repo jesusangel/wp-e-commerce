@@ -100,10 +100,21 @@ function wpsc_uploaded_files() {
 		while(($file = @readdir($dir)) !== false) {
 			//filter out the dots, macintosh hidden files and any backup files
 			if(($file != "..") && ($file != ".") && ($file != "product_files")  && ($file != "preview_clips") && !stristr($file, "~") && !( strpos($file, ".") === 0 ) && !strpos($file, ".old")) {
-				$file_data = $wpdb->get_row("SELECT `id`,`filename` FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `idhash` LIKE '".$wpdb->escape($file)."' LIMIT 1",ARRAY_A);
-				if($file_data != null) {
-					$dirlist[$num]['display_filename'] = $file_data['filename'];
-					$dirlist[$num]['file_id'] = $file_data['id'];
+				$file_data = null;
+				$args = array(
+					'post_type' => 'wpsc-product-file',
+					'post_name' => $file,
+					'numberposts' => 1,
+					'post_status' => 'all'
+				);
+				
+				//// @TODO broken, does not select by post_name, need to loop at wordpress API to fix.
+				//$file_data = (array)get_posts($args);
+				
+				
+				if($file_data[0] != null) {
+					$dirlist[$num]['display_filename'] = $file_data[0]->post_title;
+					$dirlist[$num]['file_id'] = $file_data[0]->ID;
 				} else {
 					$dirlist[$num]['display_filename'] = $file;
 					$dirlist[$num]['file_id'] = null;
@@ -116,8 +127,10 @@ function wpsc_uploaded_files() {
 			$wpsc_uploaded_file_cache = $dirlist;
 		}
 	}
-  return $dirlist;
-  }
+	
+	$dirlist = apply_filters( 'wpsc_downloadable_file_list', $dirlist);
+	return $dirlist;
+}
   
   
 function wpsc_select_product_file($product_id = null) {
@@ -137,7 +150,7 @@ function wpsc_select_product_file($product_id = null) {
 	
 	//echo "<pre>".print_r($attached_files, true)."<pre>";
 	foreach($attached_files as $key => $attached_file) {
-		$attached_files_by_file[$attached_file->post_title] = $attached_files[$key];
+		$attached_files_by_file[$attached_file->post_title] = & $attached_files[$key];
 	}
 	
 	$output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";

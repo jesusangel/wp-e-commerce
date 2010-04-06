@@ -945,7 +945,7 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 			$file_is_attached = true;
 		}
 		
-		if(is_file($selected_file_path)) {
+		//if(is_file($selected_file_path)) {
 			if($file_is_attached == false ) {
 				$type = wpsc_get_mimetype($selected_file_path);
 				$attachment = array(
@@ -964,7 +964,7 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 				);
 				wp_update_post($product_post_values);			
 			}
-		}
+		//}
 	}
 	
 	

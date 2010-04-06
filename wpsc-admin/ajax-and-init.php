@@ -32,8 +32,6 @@ if($_REQUEST['submit'] == 'Add Tracking ID') {
   	$meta_key = 'currency['.$_POST['currSymbol'].']';
   	$sql= "DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key`='".$meta_key."' LIMIT 1";
   	$wpdb->query($sql);
-//	exit('<pre>'.print_r($_POST, true).'</pre>');
-
 }
  
  
