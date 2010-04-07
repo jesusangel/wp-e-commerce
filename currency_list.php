@@ -84,7 +84,7 @@ INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (82, 'Czech Rep.', 'CZ', 'Czec
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (83, 'Cyprus', 'CY', 'Cyprus Pound', '', '', 'CYP', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (84, 'Cuba', 'CU', 'Cuban Peso', '', '', 'CUP', '0', '0','northamerica','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (85, 'Croatia', 'HR', 'Croatian Kuna', '', '', 'HRK', '0', '0','europe','1');
-INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (86, 'Costa Rica', 'CR', 'Costa Rican Colon', '', '', 'CRC', '0', '0','southamrica','1');
+INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (86, 'Costa Rica', 'CR', 'Costa Rican Colon', '', '', 'CRC', '0', '0','southamerica','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (87, 'Cook Islands', 'CK', 'New Zealand Dollar', '$', '&#036;', 'NZD', '0', '0' ,'asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (88, 'Congo', 'CG', 'CFA Franc BEAC', '', '', 'XAF', '0', '0','africa','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (89, 'Comoros', 'KM', 'Comoros Franc', '', '', 'KMF', '0', '0','africa','1');
