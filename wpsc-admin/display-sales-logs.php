@@ -50,7 +50,14 @@ if(!isset($purchlogs)){
 				///// start of update message section //////
 				
 				//$fixpage = get_option('siteurl').'/wp-admin/admin.php?page='.WPSC_FOLDER.'/wpsc-admin/purchlogs_upgrade.php';
-				
+				$current_user = wp_get_current_user();
+  
+			  // we put the closed postboxes array into the product data to propagate it to each form without having it global.
+			  $dashboard_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_store_page_wpscsalelogs');
+//			  exit('<pre>'.print_r($dashboard_data,true).'</pre>');
+//			  $dashboard_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_store_page_wpsc-edit-products');
+			  
+
 				$fixpage = get_option('siteurl').'/wp-admin/admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs';
 			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['locked']) ) { ?>
 			<div id="message" class="updated fade"><p>
@@ -81,11 +88,16 @@ if(!isset($purchlogs)){
 				<div class='error' style='padding:8px;line-spacing:8px;'><span ><?php _e('When upgrading the Wp-E-Commerce Plugin from 3.6.* to 3.7 it is required that you associate your checkout form fields with the new Purchase Logs system. To do so please '); ?> <a href='<?php echo $fixpage; ?>'>Click Here</a></span></div>
 	<?php	 } 
 		///// end of update message section //////?>
+		
+		
+		
 		<div id='dashboard-widgets' style='min-width: 825px;'>
 			<!--
  <div class='inner-sidebar'> 
 					<div class='meta-box-sortables'>			
 						<?php
+							
+				
 							//if(IS_WP27){
 							//	display_ecomm_rss_feed();
 							//}
@@ -96,12 +108,30 @@ if(!isset($purchlogs)){
 			<?php /* end of sidebar start of main column */ ?>
 			<div id='post-body' class='has-sidebar metabox-holder' style='width:95%;'>
 				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
+					<div class='postbox <?php  echo ((array_search('wpsc_getshopped_news', $dashboard_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' id="wpsc_getshopped_news">	 
+						<h3 class='hndle'>
+							<span><?php _e('GetShopped News', 'wpsc'); ?></span>
+							<br class='clear'/>
+						</h3>
+		
+						<div class='inside'>
+							<?php 
+							//			exit('Data:<pre>'.print_r($dashboard_data,true).'</pre>');
+							$rss = fetch_feed('http://getshopped.org/category/wp-e-commerce-plugin/'); 
+							$args = array('show_author' => 1, 'show_date' => 1, 'show_summary' => 1, 'items'=>3 );
+							wp_widget_rss_output($rss, $args); 
+							?>
+						</div>
+					</div>
+					<?php
+				//	add_meta_box("wpsc_getshopped_news", __('GetShopped News', 'wpsc'), "wpsc_getshopped_news_meta_box", "wpsc");
+				//	do_meta_boxes('wpsc','advanced',null);
 			
-				<?php 
+
 					if(function_exists('wpsc_right_now')) {
-						echo wpsc_right_now();
+						echo wpsc_right_now($dashboard_data['closed_postboxes'] );
 					}
-			   	
+					wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );   	
 			   		?> 
 			   	</div><br />
 			   	<div id='wpsc_purchlog_searchbox'>

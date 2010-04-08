@@ -55,7 +55,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['lc'] = $paypal_currency_code;
   $data['bn'] = 'wp-e-commerce';
   
-  $data['no_shipping'] = (int)(bool)get_option('paypal_ship');
+  $data['no_shipping'] =0;// (int)(bool)get_option('paypal_ship');
   if(get_option('address_override') == 1) {
 		$data['address_override'] = '1';
 	}
@@ -162,6 +162,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['invoice'] = $sessionid;
   
   // User details   
+  
   if($_POST['collected_data'][get_option('paypal_form_first_name')] != '') {
     $data['first_name'] = urlencode($_POST['collected_data'][get_option('paypal_form_first_name')]);
 	}

@@ -755,6 +755,12 @@ function wpsc_admin_4months_widget_rightnow() {
 		echo "</div>";
     }
 }
+function wpsc_getshopped_news_meta_box(){
+	$rss = fetch_feed('http://getshopped.org/category/community-plugins/feed/'); 
+	$args = array('show_author' => 1, 'show_date' => 1, 'show_summary' => 1, 'items'=>3 );
+	wp_widget_rss_output($rss, $args); 
+}
+
 
 if( IS_WP27 ) {
     add_action('wp_dashboard_setup','wpsc_dashboard_4months_widget_setup');

@@ -391,6 +391,7 @@ function wpsc_check_and_copy_files() {
 	$wpsc_dirs['categories']['old'] = ABSPATH."{$upload_path}/category_images/";
 	$wpsc_dirs['categories']['new'] = WPSC_CATEGORY_DIR;
 	$incomplete_file_transfer = false;
+	exit('called');
 	foreach($wpsc_dirs as $wpsc_dir) {
 	  if(is_dir($wpsc_dir['old'])) {
 	    $files_in_dir = glob($wpsc_dir['old']."*");
@@ -434,6 +435,7 @@ function wpsc_create_upload_directories() {
   	WPSC_UPGRADES_DIR,
   	WPSC_THEMES_PATH,
   );
+//  exit('<pre>'.print_r($folders, true).'</pre>');
   foreach ($folders as $folder) {
   	wp_mkdir_p($folder);
   	@ chmod( $folder, 0775 );

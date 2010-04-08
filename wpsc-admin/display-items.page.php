@@ -196,6 +196,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		$is_sortable = true;
 	} else {
 		$itempp = 10;
+		
 		if ($_GET['pageno']!='all') {
 		  if($_GET['pageno'] > 0) {
 				$page = absint($_GET['pageno']);

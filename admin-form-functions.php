@@ -585,7 +585,7 @@ function setting_button(){
 	return $output;
 }
 
-function wpsc_right_now() {
+function wpsc_right_now($hidden = '') {
   global $wpdb,$nzshpcrt_imagesize_info;
 	$year = date("Y");
 	$month = date("m");
@@ -624,10 +624,9 @@ function wpsc_right_now() {
   
   $replace_values[":theme:"] = get_option('wpsc_selected_theme');
   $replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
-  
 	if (function_exists('add_object_page')) {
 		$output="";	
-		$output.="<div id='dashboard_right_now' class='postbox'>";
+		$output.="<div id='dashboard_right_now' class='postbox ".((array_search('dashboard_right_now', $hidden) !== false) ? 'closed' : '')."'>";
 		$output.="	<h3 class='hndle'>";
 		$output.="		<span>".__('Current Month', 'wpsc')."</span>";
 		$output.="		<br class='clear'/>";

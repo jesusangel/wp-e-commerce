@@ -438,6 +438,10 @@ global $wpdb;
 					$wpsc_sort_by2 = "selected ='selected'";
 					break;
 					
+					case 'dragndrop':
+					$wpsc_sort_by4 = "selected='selected'";
+					break;
+					
 					case 'id':
 					default:
 					$wpsc_sort_by3 = "selected ='selected'";
@@ -452,9 +456,10 @@ global $wpdb;
 					<select name='wpsc_options[wpsc_sort_by]'>
 					<option <?php echo $wpsc_sort_by1; ?> value='name'><?php echo __('Name', 'wpsc');?></option>
 					<option <?php echo $wpsc_sort_by2; ?> value='price'><?php echo __('Price', 'wpsc');?></option>
+					<option <?php echo $wpsc_sort_by4; ?> value='dragndrop'><?php echo __('Drag &amp; Drop', 'wpsc');?></option>
 					<option <?php echo $wpsc_sort_by3; ?> value='id'><?php echo __('Time Uploaded', 'wpsc');?></option>
 					</select><br />
-					<?php _e('If you have used the drag-drop interface on the edit-products page to order your products then you must use the Time Uploaded option.','wpsc'); ?>
+					<?php _e('If you have used the drag-drop interface on the edit-products page to order your products then you must use the Drag &amp; Drop option.','wpsc'); ?>
 				</td>
 			</tr>
 			<tr>
