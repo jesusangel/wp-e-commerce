@@ -857,7 +857,7 @@ function hideOptionElement(id, option) {
 
 
 function wpsc_save_postboxes_state(page, container) {
-  console.log(container);
+//  console.log(container);
 	var closed = jQuery(container+' .postbox').filter('.closed').map(function() { return this.id; }).get().join(',');
 	jQuery.post(ajaxurl, {
 		action: 'closed-postboxes',
