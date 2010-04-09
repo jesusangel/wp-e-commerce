@@ -90,7 +90,7 @@ $image_height = get_option('product_image_height');
 						<a href="<?php echo wpsc_the_product_permalink(); ?>">
 							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>" />
 						</a>
-					</div>
+		
 				<?php else: ?> 
 					<div class="item_no_image">
 						<a href="<?php echo wpsc_the_product_permalink(); ?>">

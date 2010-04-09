@@ -40,10 +40,12 @@ if($_REQUEST['eway']=='1') {
 if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
 
+
 } elseif($sessionid == ''){
 	_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
 
 }else{
+
 	if($_SESSION['wpsc_previous_selected_gateway']== 'dps') {
 		$sessionid = decrypt_dps_response();
 		//exit($sessionid);
@@ -57,5 +59,9 @@ if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 
 		echo transaction_results($sessionid, true);
 	}
+}
+if($sessionid != ''){
+		//exit('<pre>'.print_r($sessionid, true).'</pre>');
+			transaction_results($sessionid, true); 
 }
 ?>

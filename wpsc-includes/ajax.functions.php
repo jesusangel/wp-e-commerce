@@ -522,14 +522,16 @@ function wpsc_update_location() {
 	}
 
 	//exit();
-	if($_GET['ajax'] == 'true') {
+	if($_REQUEST['ajax'] == 'true') {
 		exit();
 	}
 }
   
 // execute on POST and GET
+
 if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
-	add_action('init', 'wpsc_update_location');
+	add_action('init', 'wpsc_update_location',110);
+
 }
 
 
