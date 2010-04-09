@@ -1593,7 +1593,7 @@ class WPSC_Query {
 				} else if (get_option('wpsc_sort_by') == 'price') {
 					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`price` $order";
 				} elseif(get_option('wpsc_sort_by') == 'dragndrop'){
-					$order_by = "`".WPSC_TABLE_PRODUCT_ORDER."`.`order` DESC";
+					$order_by = "`".WPSC_TABLE_PRODUCT_ORDER."`.`order` ASC";
 				}else {
 					if(	$order == 'ASC'){
 						$order = 'DESC';
@@ -1614,6 +1614,9 @@ class WPSC_Query {
 				 LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id`
 				 LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCT_ORDER."`.`product_id`
 				 WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active`='1'  $no_donations_sql $group_sql ORDER BY `".WPSC_TABLE_PRODUCT_LIST."`.`special`, $order_by LIMIT $startnum, $products_per_page";
+				if(get_option('wpsc_sort_by') == 'dragndrop'){
+				$sql = "SELECT `products`.* FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` AS `order` ON `products`.`id`= `order`.`product_id` WHERE `products`.`active`='1' AND `order`.`category_id`='0' $search_sql ORDER BY `order`.`order`";
+			}
 			}
 		}
 		
@@ -1622,7 +1625,7 @@ class WPSC_Query {
 		//echo "{$sql}";
 		$this->category = $this->query_vars['category_id'];
 		$this->products = $wpdb->get_results($sql,ARRAY_A);
-		
+	//	exit('<pre>'.print_r($this->products,true).'</pre>');
 		$this->total_product_count = $rowcount;
 		
 		if($rowcount > $products_per_page) {
