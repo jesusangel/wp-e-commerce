@@ -393,7 +393,6 @@ $date_list[0]['end'] = $end_timestamp;
             echo " </td>\n\r";
             echo "</tr>\n\r";
             }
-          echo "</tr>";
           }
           else
             {
