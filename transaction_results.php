@@ -62,6 +62,6 @@ if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 }
 if($sessionid != ''){
 		//exit('<pre>'.print_r($sessionid, true).'</pre>');
-			transaction_results($sessionid, true); 
+			//transaction_results($sessionid, true); 
 }
 ?>
