@@ -291,7 +291,13 @@ $shipping_directory = WPSC_FILE_PATH.'/shipping';
 $nzshpcrt_shipping_list = wpsc_list_dir($shipping_directory);
 foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
 	if(stristr( $nzshpcrt_shipping , '.php' )) {
-		require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
+		if($nzshpcrt_shipping == 'ups.php'){
+			if (phpMinV('5')){
+			require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
+			}
+		}else{
+			require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
+		}
 	}
 }
 $wpsc_shipping_modules = apply_filters('wpsc_shipping_modules',$wpsc_shipping_modules);

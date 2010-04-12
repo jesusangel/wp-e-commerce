@@ -745,4 +745,28 @@ function wpsc_clear_stock_claims( ) {
 	$wpdb->query("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `last_activity` < '{$old_claimed_stock_datetime}' AND `cart_submitted` IN ('0')");
 }
 add_action('wpsc_daily_cron_tasks', 'wpsc_clear_stock_claims');
+
+/**
+ * Description Check PHP version to Compare
+ * @access public
+ *
+ * @param string of version to compare
+ * @return boolean true or false
+ */
+function phpMinV($v)
+{
+    $phpV = PHP_VERSION;
+
+    if ($phpV[0] >= $v[0]) {
+        if (empty($v[2]) || $v[2] == '*') {
+            return true;
+        } elseif ($phpV[2] >= $v[2]) {
+            if (empty($v[4]) || $v[4] == '*' || $phpV[4] >= $v[4]) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 ?>

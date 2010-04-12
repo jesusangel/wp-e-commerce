@@ -193,6 +193,7 @@ function selectgateway() {
 					
 					<p>
 						<?php echo __('To enable shipping in WP e-Commerce you must select  which shipping methods you want to enable on your site', 'wpsc'); ?>
+						<?php 	if (!phpMinV('5')){ echo __('<br /><strong>UPS has been deactivated because you are running PHP4, please upgrade to PHP5 to enable UPS.</strong>','wpsc'); } ?>
 					</p>
 					<br />
 					<p>
