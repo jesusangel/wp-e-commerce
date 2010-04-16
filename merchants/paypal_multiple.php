@@ -221,6 +221,8 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $data['upload'] = '1';
   $data['cmd'] = "_ext-enter";
   $data['redirect_cmd'] = "_cart";
+  $data = apply_filters('wpsc_paypal_standard_post_data',$data);
+
   $datacount = count($data);
   $num = 0;
   foreach($data as $key=>$value) {
