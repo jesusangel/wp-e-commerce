@@ -38,12 +38,11 @@ function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
 	//$new_rewrite_rules['products/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php??post_type=wpsc-product&products=$1&name=$2&cpage=$3';
 	//$new_rewrite_rules['products/.+?/([^/]+)/page/?([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&paged=$matches[2]';
 	
-	
+	//$new_rewrite_rules['(products/checkout)(/[0-9]+)?/?$'] = 'index.php?pagename=$1&page=$2';
 	$new_rewrite_rules['products/(.+?)/product/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]&cpage=$matches[3]';
 	$new_rewrite_rules['products/(.+?)/product/([^/]+)/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]';
 	$new_rewrite_rules['products/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]&cpage=$matches[3]';
 	$new_rewrite_rules['products/(.+?)/([^/]+)?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]';
-	$new_rewrite_rules['(products/checkout)(/[0-9]+)?/?$'] = 'index.php?pagename=$1&page=$2';
 
 	
 	$last_target_rule = array_pop($target_rule_set);
@@ -101,9 +100,10 @@ function wpsc_split_the_query($query) {
 		"products-page"
 	); 
 	$checkout_pagename = "products/checkout";
+	//$checkout_pagename = "product-page/checkout";
 	
 	if (in_array($query->query_vars['pagename'], $products_pages) || isset($query->query_vars['products'])) {
-		$query->query_vars['pagename'] = "products";
+		$query->query_vars['pagename'] = "products-page";
 		$query->query_vars['name'] = '';
 		$query->query_vars['post_type'] = '';
 		$query->is_singular = true;
@@ -305,6 +305,10 @@ class wpsc_products_by_category {
 function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
 	global $wp_query;
 	
+	//exit("<pre>".print_r($wp_query,true)."</pre>");
+	if(($wp_query->query_vars['products'] != '') || ($wp_query->query_vars['products'] != 'wpsc_item')) {
+		return false;
+	}
 	if(stristr($requested_url, $redirect_url)) {
 		return false;
 	}
