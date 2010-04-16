@@ -108,9 +108,9 @@ function wpsc_generate_product_feed() {
 		$purchase_link = wpsc_product_url($product['id']);
 
 		$output .= "    <item>\n\r";
-		$output .= "      <title><![CDATA[".htmlentities(stripslashes($product['name']), ENT_NOQUOTES, 'UTF-8')."]]></title>\n\r";
+		$output .= "      <title><![CDATA[".stripslashes($product['name'])."]]></title>\n\r";
 		$output .= "      <link>$purchase_link</link>\n\r";
-		$output .= "      <description><![CDATA[".htmlentities(stripslashes($product['description']), ENT_NOQUOTES, 'UTF-8')."]]></description>\n\r";
+		$output .= "      <description><![CDATA[".stripslashes($product['description'])."]]></description>\n\r";
 		$output .= "      <pubDate>".date("r")."</pubDate>\n\r";
 		$output .= "      <guid>$purchase_link</guid>\n\r";
 
@@ -156,7 +156,7 @@ function wpsc_generate_product_feed() {
                                  foreach ($google_elements as $gelement) {
  
  					$output .= "      <".$gelement['meta_key'].">";
- 					$output .= "<![CDATA[".htmlentities($gelement['meta_value'])."]]>";
+ 					$output .= "<![CDATA[".$gelement['meta_value']."]]>";
  					$output .= "</".$gelement['meta_key'].">\n\r";
  
                                          if ($gelement['meta_key'] == 'g:condition')
