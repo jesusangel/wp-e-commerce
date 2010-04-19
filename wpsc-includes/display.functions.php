@@ -169,7 +169,7 @@ function wpsc_product_url($product_id, $category_id = null, $escape = true) {
   }
   
 
-  
+//  exit('<pre>'.print_r($wp_query, true).'</pre>');
   if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
     $url_name = get_product_meta($product_id, 'url_name', true);
     $url_name = htmlentities(stripslashes($url_name), ENT_QUOTES, 'UTF-8');

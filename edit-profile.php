@@ -78,7 +78,7 @@ if($_POST['collected_data'] != null) {
 <?php
 echo " <div class='user-profile-links'><a href='".get_option('user_account_url')."'>Purchase History</a> | <a href='".get_option('user_account_url').$seperator."edit_profile=true'>Your Details</a> | <a href='".get_option('user_account_url').$seperator."downloads=true'>Your Downloads</a></div><br />";
 ?>
-<form method='POST'>
+<form method='post' action=''>
 <?php
 if($changes_saved == true) {
   echo __('Thanks, your changes have been saved.', 'wpsc');
@@ -190,3 +190,4 @@ foreach($form_data as $form_field)
     </tr>
 </table>
 </form>
+</div>

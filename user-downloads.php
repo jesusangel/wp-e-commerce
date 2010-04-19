@@ -67,5 +67,8 @@ if(count($files) > 0) {
 	<?php
 } else {	
 	echo __('You have not purchased any downloadable products yet.', 'wpsc'); 
-}
+}?>
+</div>
+<?php
+
 ?>

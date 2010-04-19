@@ -115,18 +115,28 @@ class wpsc_merchant {
 			'billing' => array(),
 			'shipping' => array()
 		);
+		
 		foreach((array)$collected_form_data as $collected_form_row) {
 			$address_data_set = 'billing';
 			$address_key =  array_search($collected_form_row['unique_name'], $address_keys['billing']);
-			if($address_key === null) {
+			if($address_key == null) {
 				$address_data_set = 'shipping';
+//					exit('<pre>'.print_r($collected_form_row,true).'</pre>');
 				$address_key =  array_search($collected_form_row['unique_name'], $address_keys['shipping']);
 			}
 			if($address_key == null) {
 				continue;
 			}
-			$address_data[$address_data_set][$address_key] = $collected_form_row['value'];
+			if($address_key == 'billingcountry' || $address_key == 'shippingcountry'){
+				$country = maybe_unserialize($collected_form_row['value']);
+				$address_data[$address_data_set][$address_key] =$country[0];
+			}elseif($collected_form_row['unique_name'] == 'shippingstate'){
+				$address_data[$address_data_set][$address_key] = wpsc_get_state_by_id($collected_form_row['value'], 'code');			
+			}else{
+				$address_data[$address_data_set][$address_key] = $collected_form_row['value'];
+			}
 		}
+//		exit('<pre>'.print_r($address_data,true).'</pre>');
 		if(count($address_data['shipping']) < 1) {
 			$address_data['shipping'] = $address_data['billing'];
 		}
