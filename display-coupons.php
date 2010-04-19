@@ -546,16 +546,8 @@ echo "</table>\n\r";
 	</tr>
 </table>
 
-<h2><?php echo __('Google Base', 'wpsc'); ?></h2>
-<?php
-if( strlen(get_option('wpsc_google_base_token')) > 0) {
-	_e('Your site has been granted access to google base.<br /> All future products will be submitted to google base.<br />');
-	echo "<a href='?page={$_GET['page']}&amp;destroy_token=1'>".__('Click here to remove access')."</a>";
-} else {
-	$itemsFeedURL = "http://www.google.com/base/feeds/items";
-	$next_url  = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}?page={$_GET['page']}";
-	$redirect_url = htmlentities("https://www.google.com/accounts/AuthSubRequest?next=".urlencode($next_url)."&scope=".urlencode($itemsFeedURL)."&session=1&secure=0");
-	echo " <a href='$redirect_url'>".__('Grant Access', 'wpsc')."</a>";
-}
-?>
+<h2><?php echo __('Google Merchant Centre / Google Product Search', 'wpsc'); ?></h2>
+<p>To import your products into <a href="http://www.google.com/merchants/" target="_blank">Google Merchant Centre</a> so that they appear within Google Product Search results, sign up for a Google Merchant Centre account and add a scheduled data feed with the following URL:</p>
+<?php $google_feed_url = get_option('siteurl')."/index.php?rss=true&amp;action=product_list&xmlformat=google"; ?>
+<a href="<?php echo $google_feed_url; ?>"><?php echo $google_feed_url; ?></a>
 </div>
