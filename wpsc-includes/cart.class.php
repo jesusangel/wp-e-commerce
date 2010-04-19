@@ -1048,6 +1048,7 @@ class wpsc_cart {
 		$this->subtotal = null;
 		$this->total_price = null;
 		$this->uses_shipping = null;
+		$this->shipping_quotes = null;
 		$this->get_shipping_option();	
 	}
   
