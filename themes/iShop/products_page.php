@@ -209,11 +209,11 @@ global $wpsc_query, $wpdb;
 							
 							<?php else : ?>
 								<?php if(wpsc_product_on_special()) : ?>
-									<span class='oldprice'><?php echo __('Price', 'wpsc'); ?>: <?php echo wpsc_product_normal_price(); ?></span><br />
+									<span class='oldprice'><?php echo __('Price', 'wpsc'); ?>: <?php echo wpsc_product_normal_price(get_option('wpsc_hide_decimals')); ?></span><br />
 								<?php endif; ?>
-								  <span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><?php echo __('Price', 'wpsc'); ?>:<br/>
+								  <span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(get_option('wpsc_hide_decimals')); ?></span><?php echo __('Price', 'wpsc'); ?>:<br/>
 								<?php if(get_option('display_pnp') == 1) : ?>
-									<span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><?php echo __('P&amp;P', 'wpsc'); ?>:  <br />
+									<span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(get_option('wpsc_hide_decimals')); ?></span><?php echo __('P&amp;P', 'wpsc'); ?>:  <br />
 								<?php endif; ?>							
 							<?php endif; ?>
 						</div>
