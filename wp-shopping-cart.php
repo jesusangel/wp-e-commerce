@@ -511,4 +511,28 @@ function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
 
 add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
 
+
+
+/**
+ * Update Notice
+ *
+ * Displays an update message below the auto-upgrade link in the WordPress admin
+ * to notify users that they should check the upgrade information and changelog
+ * before upgrading in case they need to may updates to their theme files.
+ *
+ * @package wp-e-commerce
+ * @since 3.7.6.1
+ */
+function wpsc_update_notice() {
+	$info_title = __( 'Please Note', 'wpsc' );
+	$info_text = sprintf( __( 'Before upgrading you should check the <a %s>upgrade information</a> and changelog as you may need to make updates to your template files.', 'wpsc' ), 'href="http://getshopped.org/resources/docs/upgrades/staying-current/" target="_blank"' );
+	echo '<div style="border-top:1px solid #CCC; margin-top:3px; padding-top:3px; font-weight:normal;"><strong style="color:#CC0000">' . strip_tags( $info_title ) . '</strong>: ' . strip_tags( $info_text, '<br><a><strong><em><span>' ) . '</div>';
+}
+
+if ( is_admin() ) {
+	add_action( 'in_plugin_update_message-' . plugin_basename( __FILE__ ), 'wpsc_update_notice' );
+}
+
+
+
 ?>
