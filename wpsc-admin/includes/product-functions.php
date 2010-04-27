@@ -841,20 +841,4 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
    }  
 }
 
-
-function wpsc_send_to_google_base($product_data) {
-	require_once('google_base_functions.php');
-	if (strlen(get_option('wpsc_google_base_token')) > 0) {
-	  $token = get_option('wpsc_google_base_token');
-// 		if (isset($_SESSION['google_base_sessionToken'])) {
-// 			$sessionToken = $_SESSION['google_base_sessionToken'];
-// 		} else {
-			$sessionToken = exchangeToken($token);
-// 			$_SESSION['google_base_sessionToken'] = $sessionToken;
-// 		}
-		postItem($product_data['name'], $product_data['price'], $product_data['description'], $sessionToken);
-	}
-}
-
-
 ?>

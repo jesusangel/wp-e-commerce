@@ -46,6 +46,7 @@ function wpsc_generate_product_feed() {
 		                ON `p`.`image` = `pi`.`id`
 		               AND `pi`.`product_id` = `p`.`id`
 		             WHERE `active` = '1'
+		               AND `publish` = '1'
 		               AND p.id = '".$_GET['product_id']."'
 		             LIMIT 1";
 
@@ -62,6 +63,7 @@ function wpsc_generate_product_feed() {
 		     LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ca
 		            ON `p`.`id` = `ca`.`product_id`
 		         WHERE `p`.`active` = '1'
+		           AND `p`.`publish` = '1'
 		           AND `ca`.`category_id` IN ('".$_GET['category_id']."')
 		        $limit";
 
@@ -74,6 +76,7 @@ function wpsc_generate_product_feed() {
 		            ON `p`.`image` = `pi`.`id`
 		           AND `pi`.`product_id` = `p`.`id`
 		         WHERE `active` ='1'
+		           AND `publish` = '1'
 		      ORDER BY `id`
 		          DESC $limit";
 
