@@ -119,15 +119,6 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 	}
 }
 
-
-// taken the token to the token option for google base
-if(isset($_GET['token'])) {
-		update_option('wpsc_google_base_token', $_GET['token']);
-} else if(isset($_GET['destroy_token']) && ($_GET['destroy_token'] == 1)) {
-		update_option('wpsc_google_base_token', '');
-}
-
-
 /*<strong><?php echo TXT_WPSC_ADD_COUPON; ?></strong>*/
 ?>
 <script type='text/javascript'>
@@ -541,7 +532,7 @@ echo "</table>\n\r";
 			RSS Feed Address:
 		</td>
 		<td>
-			<?php echo get_option('siteurl')."/index.php?rss=true&amp;action=product_list"; ?>
+			<?php echo get_bloginfo('url')."/index.php?rss=true&amp;action=product_list"; ?>
 		</td>
 	</tr>
 </table>
