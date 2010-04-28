@@ -195,7 +195,7 @@ jQuery(document).ready( function () {
 	    axis: 'y',
 	    containment: 'table#wpsc_checkout_list',
 	    placeholder: 'checkout-placeholder',
-	    handle: '.drag',
+	    handle: '.drag'
     	
 	  }); 
 	  jQuery(this).bind('sortupdate', function(event, ui) {
@@ -954,7 +954,8 @@ function add_form_field() {
   new_element = document.createElement('tr');
   new_element.id = new_element_id;
   document.getElementById("wpsc_checkout_list_body").appendChild(new_element);
-  document.getElementById(new_element_id).innerHTML = new_element_contents;
+  //document.getElementById(new_element_id).innerHTML = new_element_contents;
+  jQuery('#'+new_element_id).append(new_element_contents);
   jQuery('#'+new_element_id).addClass('checkout_form_field');
   return false;
 }

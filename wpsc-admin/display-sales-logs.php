@@ -108,6 +108,7 @@ if(!isset($purchlogs)){
 			<?php /* end of sidebar start of main column */ ?>
 			<div id='post-body' class='has-sidebar metabox-holder' style='width:95%;'>
 				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
+					<?php if(function_exists('fetch_feed')){ ?>
 					<div class='postbox <?php  echo ((array_search('wpsc_getshopped_news', $dashboard_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' id="wpsc_getshopped_news">	 
 						<h3 class='hndle'>
 							<span><?php _e('GetShopped News', 'wpsc'); ?></span>
@@ -124,6 +125,7 @@ if(!isset($purchlogs)){
 						</div>
 					</div>
 					<?php
+					}
 				//	add_meta_box("wpsc_getshopped_news", __('GetShopped News', 'wpsc'), "wpsc_getshopped_news_meta_box", "wpsc");
 				//	do_meta_boxes('wpsc','advanced',null);
 			
