@@ -238,7 +238,8 @@ jQuery(document).ready( function () {
 	    axis: 'y',
 	    containment: 'table#wpsc_checkout_list',
 	    placeholder: 'checkout-placeholder',
-    	
+	    handle: '.drag',
+	    
 	  }); 
 	  jQuery(this).bind('sortupdate', function(event, ui) {
 	  	
