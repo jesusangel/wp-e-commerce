@@ -156,8 +156,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					//$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":\n\r $link\n\r".$additional_content;
 					//$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;<a href='$link'>".__('Click to download', 'wpsc')."</a>\n". $additional_content;
 
-					$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
-					$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
+					$product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price;
+					$product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price;
 					foreach($link as $single_link){
 						$product_list .= "\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
 						$product_list_html .= "<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
