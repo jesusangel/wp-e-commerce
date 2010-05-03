@@ -455,7 +455,7 @@ function wpsc_display_purchlog_totalprice(){
 	$purchlogitem->totalAmount -= wpsc_display_purchlog_discount(true);
 	$purchlogitem->totalAmount += wpsc_display_purchlog_shipping(true);
 	//$purchlogitem->totalAmount += $purchlogitem->extrainfo->base_shipping;
-	return nzshpcrt_currency_display($purchlogitem->totalAmount, true);
+	return nzshpcrt_currency_display($purchlogitem->extrainfo->totalprice, true);
 }
 function wpsc_display_purchlog_buyers_name(){
 	global $purchlogitem;
