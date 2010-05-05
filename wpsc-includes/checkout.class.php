@@ -85,7 +85,7 @@ function wpsc_the_checkout_item_error_class($as_attribute = true) {
 	  $class_name = 'validation-error';
 	}
 	if(($as_attribute == true)){
-	 $output = "class='".$class_name.wpsc_shipping_details()."'";
+	 $output = "class='".$class_name.wpsc_shipping_details()." wpsc_checkout_field".$wpsc_checkout->checkout_item->id."'";
 	} else {
 		$output = $class_name;
 	}

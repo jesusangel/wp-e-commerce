@@ -1146,7 +1146,7 @@ function edit_multiple_image_gallery($product_data) {
           if($image['image'] != '') {
             $num++;
             $imagepath = WPSC_IMAGE_DIR . $image['image'];
-						$image_data = getimagesize(WPSC_IMAGE_DIR.$image['image']);
+						$image_data = @getimagesize(WPSC_IMAGE_DIR.$image['image']);
             ?>
             <li id="product_image_<?php echo $image['id']; ?>" class='gallery_image'>
 							<input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image['id']; ?>' />
