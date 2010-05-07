@@ -121,35 +121,43 @@ add_filter('single_post_title','wpsc_post_title_seo');
  */
 function wpsc_change_canonical_url($url) {
   global $wpdb, $wpsc_query, $post;
-//  exit('<pre>'.print_r($wpsc_query,true).'</pre>');
-  if(preg_match("/\[productspage\]/",$post->post_content) && $wpsc_query->query_vars['category_id'] == 0) {
-  if(!is_numeric($_GET['product_id'])) {
-		$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wpsc_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
-  } else {
-  	$product_id = absint($_GET['product_id']);
-	}
-	//exit('prod id'.$product_id);
-	if($product_id > 0){
-	$url = wpsc_product_url($product_id);
-	}else{
-	$url = get_option('product_list_url');
-	}
 
-  } else {
-    if($wpsc_query->query_vars['category_id'] > 0) {
-      $url = wpsc_category_url($wpsc_query->query_vars['category_id']);
-			
-			if ( $wpsc_query->query_vars['page'] > 1 ) {
-				if ( get_option( 'permalink_structure' ) ) {
-					$url .= "page/{$wpsc_query->query_vars['page']}/";
-				} else {
-					$url .= "&amp;page_number={$wpsc_query->query_vars['page']}";
-					$url = html_entity_decode( $url );
-				}
-			}
-    }
+  // Only change the URL is we're viewing a WP e-Commerce page
+  if(stristr($post->post_content,'[productspage]')) {
+
+        if (isset($wpsc_query->query_vars['product_url_name'])) {
+                $product_url_name = $wpsc_query->query_vars['product_url_name'];
+        } else {
+                $product_url_name = '';
+        }
+
+        // Viewing a single product page
+        if ($product_url_name != '') {
+                if(!is_numeric($_GET['product_id'])) {
+                        $product_id = $wpdb->get_var($wpdb->prepare("SELECT product_id FROM ".WPSC_TABLE_PRODUCTMETA." WHERE meta_key = 'url_name'  AND meta_value = %s ORDER BY product_id DESC LIMIT 1", $product_url_name));
+                } else {
+                        $product_id = absint($_GET['product_id']);
+                }
+                if($product_id > 0){
+                        $url = wpsc_product_url($product_id);
+                }else{
+                        $url = get_option('product_list_url');
+                }
+
+        // Viewing a category page
+        } elseif (absint($wpsc_query->query_vars['category_id']) > 0) {
+                $url = wpsc_category_url(absint($wpsc_query->query_vars['category_id']));
+
+                if ( $wpsc_query->query_vars['page'] > 1 ) {
+                        if ( get_option( 'permalink_structure' ) ) {
+                                $url .= "page/{$wpsc_query->query_vars['page']}/";
+                        } else {
+                                $url .= "&page_number={$wpsc_query->query_vars['page']}";
+                                $url = html_entity_decode( $url );
+                        }
+                }
+        }
   }
-  //echo "<pre>".print_r($wpsc_query->is_single,true)."</pre>";
   return $url;
 }
 add_filter('aioseop_canonical_url', 'wpsc_change_canonical_url');
