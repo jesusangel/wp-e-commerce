@@ -410,8 +410,18 @@ function nzshpcrt_display_preview_image() {
 				}
 			} else if($_GET['image_id']) {
 				$image_id = (int)$_GET['image_id'];
-				$image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
-				$imagepath = WPSC_IMAGE_DIR . $image;
+				$results = $wpdb->get_row("SELECT `image`,`product_id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` = '{$image_id}' LIMIT 1");
+				$image = $results->image;
+				$pid = $results->product_id;
+				$thumbnail_info = $wpdb->get_row("SELECT `thumbnail_state`,`image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$pid}' LIMIT 1");
+				$thumbnail_state = $thumbnail_info->thumbnail_state;
+				$thumbnail_image = $thumbnail_info->image;
+				if (($thumbnail_state == 3) && ($image_id == $thumbnail_image)) {
+					$imagepath = WPSC_THUMBNAIL_DIR . $image;
+				} else {
+					$imagepath = WPSC_IMAGE_DIR . $image;
+				}
+
 			} else if( $_GET['image_name']) {
 				$image = basename($_GET['image_name']);
 				$imagepath = WPSC_USER_UPLOADS_DIR . $image;

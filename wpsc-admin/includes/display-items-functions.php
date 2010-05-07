@@ -1122,10 +1122,10 @@ function edit_multiple_image_gallery($product_data) {
 			<div class='previewimage' id='gallery_image_<?php echo $main_image['id']; ?>'>
 				<?php if ($main_image['image'] != '') { ?>
 					<?php
-					$image_data = getimagesize(WPSC_IMAGE_DIR.$main_image['image']);
+					$image_data = getimagesize(WPSC_THUMBNAIL_DIR.$main_image['image']);
 					?>
 					<a id='extra_preview_link_0' href=''  title='' rel='product_extra_image_0'  >
-					  <img class='previewimage' onclick='return false;' src='<?php echo WPSC_IMAGE_URL.$main_image['image']; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
+					  <img class='previewimage' onclick='return false;' src='<?php echo WPSC_THUMBNAIL_URL.$main_image['image']; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
 					</a>
 				<?php } ?>
 				<?php

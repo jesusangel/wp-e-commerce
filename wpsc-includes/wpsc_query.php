@@ -524,10 +524,15 @@ function wpsc_the_product_image($width = null, $height = null) {
 		$wpsc_query->product['image_file'] = $wpsc_query->product['image'];
 	}
 	
-	$image_path = WPSC_IMAGE_DIR . $image_file_name;
+	if ($wpsc_query->product['thumbnail_state'] == 3) {
+		$image_path = WPSC_THUMBNAIL_DIR . $image_file_name;
+	} else {
+		$image_path = WPSC_IMAGE_DIR . $image_file_name;
+	}
+
 	$image_file_name_parts = explode(".",$image_file_name);
 	$extension = array_pop($image_file_name_parts);
-	
+
 	if($image_file_name != null) {
 		if(($width > 0) && ($height > 0) && ($width <= 1024) && ($height <= 1024)) {
 			$cache_filename = basename("product_img_{$image_id}_{$height}x{$width}");
@@ -1432,7 +1437,6 @@ class WPSC_Query {
 										
 					
 				$range_sql="SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE ".implode(" AND ", $product_sql_parts)."";
-				//echo $range_sql;
 
 				$product_list = $wpdb->get_results($range_sql,ARRAY_A);
 			}
