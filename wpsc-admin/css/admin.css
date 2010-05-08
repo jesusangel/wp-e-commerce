@@ -1447,3 +1447,9 @@ a.variation_handle {
 	text-decoration: none;
 	font-size: 15px;
 }
+
+.store_page_wpsc-edit-products .wrap h2
+	{
+		padding-bottom:0px;
+		border-bottom:1px solid #CCC;
+	}
