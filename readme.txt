@@ -1,6 +1,6 @@
 === WP e-Commerce ===
 Contributors: Dan Milward, Tom Howard, Jeffry Ghazally
-Donate link: http://www.instinct.co.nz/e-commerce
+Donate link: http://getshopped.org/
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
 Tested up to: 2.9
@@ -36,6 +36,15 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog == 
+= 3.7.6.1 = 
+* Bugfix release
+
+= 3.7.6 = 
+* Significant upgrade
+* New Pagination Implementation
+* Improved marketing, including Google Merchant Centre support
+* gettext implementation for themes
+
 = 3.7.5.4 =
 * Implemented the new UPS Api for shipping calculation. The old API is being depricated
 * Added switch to specify use of the UPS testing environment
@@ -100,7 +109,7 @@ If you experience database errors try de-activating and re-activating your plugi
 
 = Where do I find DropShop and Grid View =
 
-From the BlogShop of course http://www.instinct.co.nz/shop/
+From the BlogShop of course http://getshopped.org/extend/premium-upgrades/
 
 = How do I customize WP e-Commerce =
 
@@ -113,11 +122,4 @@ Advanced users can edit the CSS (and do just about anything). Not so advanced us
 We're taking this one step further. 
 
 Check out our flickr guides online
-www.flickr.com/photos/danmilward/sets/72157594425079473/detail/
-
-== Readme Validator ==
-
-This readme was made using:
-wordpress.org/extend/plugins/about/validator/
-
-Totally totally cool tool!!
+http://www.flickr.com/photos/danmilward/sets/72157594425079473/detail/

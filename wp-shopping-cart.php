@@ -320,6 +320,7 @@ $wpsc_gateways = array();
 foreach((array)$nzshpcrt_gateways as $key => $gateway) {
 	$wpsc_gateways[$gateway['internalname']] = &$nzshpcrt_gateways[$key];
 }
+$wpsc_gateways = apply_filters('wpsc_gateway_modules',$wpsc_gateways);
 
 
 $theme_path = WPSC_FILE_PATH . '/themes/';
