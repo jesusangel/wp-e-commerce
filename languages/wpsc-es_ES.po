@@ -1,23 +1,24 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: wpsc-es_ES\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-27 20:21+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: \n"
+"Language-Team: wikichaves.com <info@wikichaves.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: Argentina\n"
 
 #: wp-e-commerce/admin-form-functions.php:10
-#, fuzzy
 msgid "You are editing the &quot;[categorisation]&quot; Group"
-msgstr "Aï¿½adir nueva categorï¿½a"
+msgstr "Añadir nueva categoría"
 
 #: wp-e-commerce/admin-form-functions.php:11
 msgid "+ Add new category to the &quot;[categorisation]&quot; Group"
-msgstr "Aï¿½adir nueva categorï¿½a"
+msgstr "Añadir nueva categoría"
 
 #: wp-e-commerce/admin-form-functions.php:25
 #: wp-e-commerce/admin-form-functions.php:239
@@ -29,11 +30,11 @@ msgstr ""
 
 #: wp-e-commerce/admin-form-functions.php:34
 msgid "Description"
-msgstr "Descripciï¿½n"
+msgstr "Descripción"
 
 #: wp-e-commerce/admin-form-functions.php:44
 msgid "Group Parent"
-msgstr "Categorï¿½a padre"
+msgstr "Categoría padre"
 
 #: wp-e-commerce/admin-form-functions.php:85
 msgid "Group&nbsp;Image"
@@ -57,9 +58,8 @@ msgid "You can upload thumbnail images for each group. To display Group details 
 msgstr ""
 
 #: wp-e-commerce/admin-form-functions.php:119
-#, fuzzy
 msgid "Delete Image"
-msgstr "Reemplazar imagen"
+msgstr "Borrar imágen"
 
 #: wp-e-commerce/admin-form-functions.php:133
 msgid "Target Markets"
@@ -72,9 +72,8 @@ msgid ""
 msgstr ""
 
 #: wp-e-commerce/admin-form-functions.php:164
-#, fuzzy
 msgid "Presentation Settings"
-msgstr "Opciones de administraciï¿½n"
+msgstr "Opciones de presentación"
 
 #: wp-e-commerce/admin-form-functions.php:165
 msgid "To over-ride the presentation settings for this group you can enter in your prefered settings here"
@@ -100,9 +99,8 @@ msgstr "Lista"
 
 #: wp-e-commerce/admin-form-functions.php:183
 #: wp-e-commerce/admin-form-functions.php:185
-#, fuzzy
 msgid "Grid View"
-msgstr "Lista"
+msgstr "Vista en Grilla"
 
 #: wp-e-commerce/admin-form-functions.php:195
 msgid "Thumbnail&nbsp;Size"
@@ -125,9 +123,8 @@ msgid "No"
 msgstr "No"
 
 #: wp-e-commerce/admin-form-functions.php:221
-#, fuzzy
 msgid "Edit Group"
-msgstr "Editar categorï¿½a"
+msgstr "Editar grupo"
 
 #: wp-e-commerce/admin-form-functions.php:222
 #: wp-e-commerce/admin-form-functions.php:260
@@ -138,12 +135,12 @@ msgstr "Borrar"
 
 #: wp-e-commerce/admin-form-functions.php:248
 msgid "Variation Values"
-msgstr "Valores de la opciï¿½n"
+msgstr "Valores de la variación"
 
 #: wp-e-commerce/admin-form-functions.php:267
 #: wp-e-commerce/display-coupons.php:126
 msgid "Add"
-msgstr "Aï¿½adir"
+msgstr "Añadir"
 
 #: wp-e-commerce/admin-form-functions.php:278
 #: wp-e-commerce/display-coupons.php:321
@@ -191,7 +188,6 @@ msgstr ""
 #: wp-e-commerce/display-coupons.php:160
 #: wp-e-commerce/display-coupons.php:253
 #: wp-e-commerce/display-coupons.php:317
-#, fuzzy
 msgid "Apply On All Products"
 msgstr "Mostrar productos"
 
@@ -201,36 +197,30 @@ msgid "Submit"
 msgstr "Enviar"
 
 #: wp-e-commerce/admin-form-functions.php:520
-#, fuzzy
 msgid "Settings"
-msgstr "URL de opciones"
+msgstr "Configuración"
 
 #: wp-e-commerce/admin-form-functions.php:524
-#, fuzzy
 msgid "Shop Settings"
-msgstr "URL de opciones"
+msgstr "Configuracion de la Tienda"
 
 #: wp-e-commerce/admin-form-functions.php:525
-#, fuzzy
 msgid "Money and Payment"
-msgstr "Pagar"
+msgstr "Moneda y tipo de Pago"
 
 #: wp-e-commerce/admin-form-functions.php:526
-#, fuzzy
 msgid "Checkout Page Settings"
-msgstr "Opciones de validar compra"
+msgstr "Opciones de Checkout"
 
 #: wp-e-commerce/admin-form-functions.php:545
 #: wp-e-commerce/admin-form-functions.php:546
-#, fuzzy
 msgid "product"
-msgstr "Producto"
+msgstr "producto"
 
 #: wp-e-commerce/admin-form-functions.php:545
 #: wp-e-commerce/admin-form-functions.php:546
-#, fuzzy
 msgid "products"
-msgstr "Producto"
+msgstr "productos"
 
 #: wp-e-commerce/admin-form-functions.php:550
 #: wp-e-commerce/admin-form-functions.php:551
@@ -240,29 +230,25 @@ msgstr ""
 #: wp-e-commerce/admin-form-functions.php:550
 #: wp-e-commerce/admin-form-functions.php:551
 msgid "groups"
-msgstr ""
+msgstr "grupos"
 
 #: wp-e-commerce/admin-form-functions.php:555
 #: wp-e-commerce/admin-form-functions.php:556
-#, fuzzy
 msgid "sale"
-msgstr "Errï¿½neo"
+msgstr "oferta"
 
 #: wp-e-commerce/admin-form-functions.php:555
 #: wp-e-commerce/admin-form-functions.php:556
-#, fuzzy
 msgid "sales"
-msgstr "Pï¿½ginas"
+msgstr "ofertas"
 
 #: wp-e-commerce/admin-form-functions.php:562
-#, fuzzy
 msgid "variation"
-msgstr "Opciones del producto"
+msgstr "Variación"
 
 #: wp-e-commerce/admin-form-functions.php:562
-#, fuzzy
 msgid "variations"
-msgstr "Opciones del producto"
+msgstr "Variaciones"
 
 #: wp-e-commerce/admin-form-functions.php:566
 #: wp-e-commerce/admin-form-functions.php:567
@@ -274,34 +260,29 @@ msgstr "ID de pedido"
 #: wp-e-commerce/admin-form-functions.php:566
 #: wp-e-commerce/admin-form-functions.php:567
 #: wp-e-commerce/admin-form-functions.php:570
-#, fuzzy
 msgid "transactions"
-msgstr "ID de pedido"
+msgstr "transacciones"
 
 #: wp-e-commerce/admin-form-functions.php:580
-#, fuzzy
 msgid "Current Month"
-msgstr "Tipo de moneda"
+msgstr "Mes"
 
 #: wp-e-commerce/admin-form-functions.php:585
 msgid "At a Glance"
-msgstr ""
+msgstr "En este momento"
 
 #: wp-e-commerce/admin-form-functions.php:615
-#, fuzzy
 msgid "Pending"
-msgstr "Tï¿½tulo"
+msgstr "Pendientes"
 
 #: wp-e-commerce/admin-form-functions.php:630
-#, fuzzy
 msgid "Closed"
-msgstr "Pedido terminado"
+msgstr "Cerradas"
 
 #: wp-e-commerce/admin-form-functions.php:638
 #: wp-e-commerce/admin-form-functions.php:646
-#, fuzzy
 msgid "Add New Product"
-msgstr "Aï¿½adir Categorï¿½a"
+msgstr "Agregar producto"
 
 #: wp-e-commerce/admin-form-functions.php:638
 msgid "Here you can add products, groups or variations"
@@ -337,13 +318,13 @@ msgstr "Estado"
 #: wp-e-commerce/install_and_update.php:650
 #: wp-e-commerce/install_and_update.php:658
 msgid "Address"
-msgstr "Direcciï¿½n"
+msgstr "Dirección"
 
 #: wp-e-commerce/admin-form-functions.php:722
 #: wp-e-commerce/edit-profile.php:52
 #: wp-e-commerce/install_and_update.php:667
 msgid "Phone"
-msgstr "Telï¿½fono"
+msgstr "Teléfono"
 
 #: wp-e-commerce/admin-form-functions.php:723
 #: wp-e-commerce/display-ecommerce-subs.php:9
@@ -361,23 +342,20 @@ msgid "Price"
 msgstr "Precio"
 
 #: wp-e-commerce/admin-form-functions.php:764
-#, fuzzy
 msgid "Shipping"
-msgstr "Gastos de envï¿½o totales"
+msgstr "Envío"
 
 #: wp-e-commerce/admin-form-functions.php:859
 msgid "This users cart was empty"
-msgstr "Este carrito esta vacï¿½o"
+msgstr "Este Pedido está vacío"
 
 #: wp-e-commerce/display-coupons.php:27
-#, fuzzy
 msgid "Thanks, the coupon has been added."
-msgstr "El artï¿½culo se ha aï¿½adido"
+msgstr "El cupón se ha añadido"
 
 #: wp-e-commerce/display-coupons.php:122
-#, fuzzy
 msgid "Coupons"
-msgstr "Opciones de validar compra"
+msgstr "Cupones"
 
 #: wp-e-commerce/display-coupons.php:126
 msgid "Add Coupon"
@@ -388,14 +366,12 @@ msgid "<strong>Note:</strong> Due to a current limitation of PayPal, if your use
 msgstr ""
 
 #: wp-e-commerce/display-coupons.php:409
-#, fuzzy
 msgid "Marketing Settings"
-msgstr "Opciones de moneda"
+msgstr "Configuración de Marketing"
 
 #: wp-e-commerce/display-coupons.php:416
-#, fuzzy
 msgid "Display Cross Sales"
-msgstr "Mostrar marcas"
+msgstr ""
 
 #: wp-e-commerce/display-coupons.php:440
 msgid "Show Share This (Social Bookmarks)"
@@ -406,9 +382,8 @@ msgid "Display How Customer Found Us Survey"
 msgstr ""
 
 #: wp-e-commerce/display-coupons.php:486
-#, fuzzy
 msgid "RSS Address"
-msgstr "Direcciï¿½n"
+msgstr "Dirección RSS"
 
 #: wp-e-commerce/display-coupons.php:490
 msgid "<strong>Note:</strong> Not only can people use this RSS to keep update with your product list but you can also use this link to promote your products in your facebook profile. <br />Just add the <a href=\"http://apps.facebook.com/getshopped\">getshopped! facebook application</a> to your facebook profile and follow the instructions."
@@ -423,9 +398,8 @@ msgid "Your site has been granted access to google base.<br /> All future produc
 msgstr ""
 
 #: wp-e-commerce/display-coupons.php:508
-#, fuzzy
 msgid "Click here to remove access"
-msgstr "Aï¿½ada estrellas para calificar"
+msgstr "Remover acceso"
 
 #: wp-e-commerce/display-coupons.php:513
 msgid "Grant Access"
@@ -440,9 +414,8 @@ msgid "Registered Date"
 msgstr ""
 
 #: wp-e-commerce/display-ecommerce-subs.php:9
-#, fuzzy
 msgid "Suspend"
-msgstr "Usar"
+msgstr ""
 
 #: wp-e-commerce/display-ecommerce-subs.php:9
 msgid "Activate"
@@ -451,13 +424,12 @@ msgstr ""
 #: wp-e-commerce/edit-profile.php:31
 #: wp-e-commerce/install_and_update.php:648
 #: wp-e-commerce/install_and_update.php:656
-#, fuzzy
 msgid "First Name"
-msgstr "Nombre del producto"
+msgstr "Nombre"
 
 #: wp-e-commerce/edit-profile.php:32
 msgid "Please enter a valid name"
-msgstr "Por favor introduzca un nombre vï¿½lido"
+msgstr "Por favor introduzca un nombre válido"
 
 #: wp-e-commerce/edit-profile.php:35
 #: wp-e-commerce/install_and_update.php:649
@@ -467,23 +439,23 @@ msgstr ""
 
 #: wp-e-commerce/edit-profile.php:36
 msgid "Please enter a valid surname"
-msgstr "Por favor introduzca un apellido vï¿½lido"
+msgstr "Por favor introduzca un apellido válido"
 
 #: wp-e-commerce/edit-profile.php:40
 msgid "Please enter a valid email address"
-msgstr "Por favor introduzca una direcciï¿½n de correo vï¿½lida"
+msgstr "Por favor introduzca una dirección de correo válida"
 
 #: wp-e-commerce/edit-profile.php:43
 msgid "Address 1"
-msgstr "Direcciï¿½n 1"
+msgstr "Dirección 1"
 
 #: wp-e-commerce/edit-profile.php:44
 msgid "Address 2"
-msgstr "Direcciï¿½n 2"
+msgstr "Dirección 2"
 
 #: wp-e-commerce/edit-profile.php:45
 msgid "Please enter a valid address"
-msgstr "Por favor introduzca una direcciï¿½n vï¿½lida"
+msgstr "Por favor introduzca una dirección válida"
 
 #: wp-e-commerce/edit-profile.php:48
 #: wp-e-commerce/install_and_update.php:651
@@ -492,20 +464,18 @@ msgid "City"
 msgstr ""
 
 #: wp-e-commerce/edit-profile.php:49
-#, fuzzy
 msgid "Please enter your town or city."
-msgstr "Por favor introduzca sus datos de contacto:"
+msgstr "Por favor introduzca su ciudad"
 
 #: wp-e-commerce/edit-profile.php:53
 msgid "Please enter a valid phone number"
-msgstr "Por favor introduzca un nï¿½mero de telï¿½fono vï¿½lido"
+msgstr "Por favor introduzca un número de teléfono válido"
 
 #: wp-e-commerce/edit-profile.php:56
 #: wp-e-commerce/install_and_update.php:652
 #: wp-e-commerce/install_and_update.php:661
-#, fuzzy
 msgid "Country"
-msgstr "Paï¿½s"
+msgstr "País"
 
 #: wp-e-commerce/edit-profile.php:57
 #, fuzzy
@@ -531,9 +501,8 @@ msgid "placeholder for:"
 msgstr ""
 
 #: wp-e-commerce/editor.php:144
-#, fuzzy
 msgid "Your forms:"
-msgstr "Tu bï¿½squeda para"
+msgstr "Tus formularios"
 
 #: wp-e-commerce/editor.php:146
 #: wp-e-commerce/insertcate.php:87
@@ -560,11 +529,11 @@ msgstr "Opciones de producto"
 
 #: wp-e-commerce/homepage_products_functions.php:157
 msgid "More Details"
-msgstr "Mï¿½s detalles"
+msgstr "Más información"
 
 #: wp-e-commerce/homepage_products_functions.php:189
 msgid "Add To Cart"
-msgstr "Aï¿½adir al carrito"
+msgstr "Añadir a Pedido +"
 
 #: wp-e-commerce/homepage_products_functions.php:205
 msgid "Avg. Customer Rating"
@@ -581,21 +550,19 @@ msgstr "Guardado"
 
 #: wp-e-commerce/homepage_products_functions.php:216
 msgid "Rate This item"
-msgstr "Califica este artï¿½culo"
+msgstr "Califica este artículo"
 
 #: wp-e-commerce/insertcate.php:67
-#, fuzzy
 msgid "Pick a Category"
-msgstr "Categorï¿½a"
+msgstr "Elige una categoría"
 
 #: wp-e-commerce/insertcate.php:74
-#, fuzzy
 msgid "Your Categories:"
-msgstr "Mostrar categorï¿½as/marcas"
+msgstr "Tus categorías"
 
 #: wp-e-commerce/install_and_update.php:60
 msgid "Example category"
-msgstr "Categorï¿½a ejemplo"
+msgstr "Categoría ejemplo"
 
 #: wp-e-commerce/install_and_update.php:60
 #: wp-e-commerce/install_and_update.php:61
@@ -636,27 +603,27 @@ msgstr "Alto imagen producto"
 
 #: wp-e-commerce/install_and_update.php:92
 msgid "product group image width"
-msgstr "Ancho imagen categorï¿½a"
+msgstr "Ancho de la imágen del grupo"
 
 #: wp-e-commerce/install_and_update.php:93
 msgid "product group image height"
-msgstr "Alto imagen categorï¿½a"
+msgstr "Alto imagen categoría"
 
 #: wp-e-commerce/install_and_update.php:95
 msgid "The location of the product list"
-msgstr "Posiciï¿½n de la lista de productos"
+msgstr "Posición de la lista de productos"
 
 #: wp-e-commerce/install_and_update.php:96
 msgid "The location of the shopping cart"
-msgstr "Posiciï¿½n del carrito de compra"
+msgstr "Posoción del carrito de compra"
 
 #: wp-e-commerce/install_and_update.php:97
 msgid "The location of the checkout page"
-msgstr "Posiciï¿½n de la pï¿½gina de compra"
+msgstr "Posiciónn de la página de compra"
 
 #: wp-e-commerce/install_and_update.php:98
 msgid "The location of the transaction detail page"
-msgstr "Posiciï¿½n de la pï¿½gina de detalle de transacciï¿½n"
+msgstr "Posición de la página de detalle de transacción"
 
 #: wp-e-commerce/install_and_update.php:99
 msgid "The payment gateway to use"
@@ -667,7 +634,7 @@ msgstr "Pasarela de pago a usar"
 #: wp-e-commerce/install_and_update.php:107
 #: wp-e-commerce/install_and_update.php:109
 msgid "Cart Location"
-msgstr "Posiciï¿½n de carrito"
+msgstr "Posición de carrito"
 
 #: wp-e-commerce/install_and_update.php:114
 msgid "Currency type"
@@ -675,7 +642,7 @@ msgstr "Tipo de moneda"
 
 #: wp-e-commerce/install_and_update.php:115
 msgid "Currency sign location"
-msgstr "Posiciï¿½n del sï¿½mbolo de moneda"
+msgstr "Posición del símbolo de moneda"
 
 #: wp-e-commerce/install_and_update.php:117
 msgid "the GST rate"
@@ -683,7 +650,7 @@ msgstr ""
 
 #: wp-e-commerce/install_and_update.php:119
 msgid "the download limit"
-msgstr "Lï¿½mite de descarga"
+msgstr "Límite de descarga"
 
 #: wp-e-commerce/install_and_update.php:121
 msgid "Display or hide postage and packaging"
@@ -691,7 +658,7 @@ msgstr "Mostrar u ocultar franqueo y empaquetado"
 
 #: wp-e-commerce/install_and_update.php:123
 msgid "Display or hide specials on the sidebar"
-msgstr "Mostrar u ocultar ofertas en la barra de menï¿½"
+msgstr "Mostrar u ocultar ofertas en la barra de menú"
 
 #: wp-e-commerce/install_and_update.php:126
 msgid "Default postage and packaging"
@@ -699,11 +666,11 @@ msgstr "Franqueo y empaquetado por defecto"
 
 #: wp-e-commerce/install_and_update.php:128
 msgid "Email address that purchase log is sent to"
-msgstr "Direcciï¿½n de correo donde se envï¿½a el registro de compra"
+msgstr "Dirección de correo donde se envía el registro de compra"
 
 #: wp-e-commerce/install_and_update.php:129
 msgid "Email address that purchase reports are sent from"
-msgstr "Direcciï¿½n de correo desde donde se envï¿½an los informes"
+msgstr "Dirección de correo desde donde se envían los informes"
 
 #: wp-e-commerce/install_and_update.php:130
 msgid "Checkout terms and conditions"
@@ -723,7 +690,7 @@ msgstr "Tipo por defecto"
 
 #: wp-e-commerce/install_and_update.php:136
 msgid "Select what product group you want to display on the products page"
-msgstr "Categorï¿½a por defecto"
+msgstr "Categoría por defecto"
 
 #: wp-e-commerce/install_and_update.php:149
 #: wp-e-commerce/install_and_update.php:155
@@ -741,9 +708,8 @@ msgid "Show Product Ratings"
 msgstr "Mostrar tarifas de producto"
 
 #: wp-e-commerce/install_and_update.php:163
-#, fuzzy
 msgid "Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.All prices include tax and postage and packaging where applicable.You ordered these items:%product_list%%total_shipping%%total_price%"
-msgstr "Gracias, el pedido ha sido aceptado, ser� procesado y enviado lo m�s pronto posible, los elementos pueden ser descargados usando los enlaces"
+msgstr "Gracias por comprar con %shop_name%, el pedido ha sido aceptado, ser  procesado y enviado lo más pronto posible, los elementos pueden ser descargados usando los enlaces. Tu pedido es el siguente:%product_list%%total_shipping%%total_price%"
 
 #: wp-e-commerce/install_and_update.php:164
 msgid "%product_list%%total_shipping%%total_price%"
@@ -751,20 +717,19 @@ msgstr ""
 
 #: wp-e-commerce/install_and_update.php:207
 msgid "Products Page"
-msgstr "Pï¿½gina de productos"
+msgstr "Página de productos"
 
 #: wp-e-commerce/install_and_update.php:213
 msgid "Checkout"
-msgstr "Validar"
+msgstr "Checkout"
 
 #: wp-e-commerce/install_and_update.php:225
 msgid "Transaction Results"
-msgstr "Resultados de la transacciï¿½n"
+msgstr "Resultados de la transacción"
 
 #: wp-e-commerce/install_and_update.php:231
-#, fuzzy
 msgid "Your Account"
-msgstr "Su votaciï¿½n"
+msgstr "Tu cuenta"
 
 #: wp-e-commerce/install_and_update.php:647
 #, fuzzy
@@ -778,9 +743,8 @@ msgid "Postal Code"
 msgstr "Gastos de Envio"
 
 #: wp-e-commerce/install_and_update.php:655
-#, fuzzy
 msgid "2. Shipping details"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "2. Detalles de envío"
 
 #: wp-e-commerce/share-this.php:430
 msgid "E-mail this, post to del.icio.us, etc."
@@ -810,9 +774,8 @@ msgstr "E-mail"
 
 #: wp-e-commerce/share-this.php:505
 #: wp-e-commerce/share-this.php:868
-#, fuzzy
 msgid "To Address:"
-msgstr "Direcciï¿½n"
+msgstr "Dirección"
 
 #: wp-e-commerce/share-this.php:509
 #: wp-e-commerce/share-this.php:872
@@ -822,9 +785,8 @@ msgstr "Nombre del producto"
 
 #: wp-e-commerce/share-this.php:513
 #: wp-e-commerce/share-this.php:876
-#, fuzzy
 msgid "Your Address:"
-msgstr "Direcciï¿½n"
+msgstr "Dirección"
 
 #: wp-e-commerce/share-this.php:517
 #: wp-e-commerce/share-this.php:880
@@ -880,9 +842,8 @@ msgstr ""
 #: wp-e-commerce/shopping_cart_functions.php:36
 #: wp-e-commerce/shopping_cart_functions.php:44
 #: wp-e-commerce/shopping_cart_functions.php:54
-#, fuzzy
 msgid "Shopping Cart"
-msgstr "Vaciar carrito"
+msgstr "Pedido"
 
 #: wp-e-commerce/tagging_functions.php:79
 #, php-format
@@ -912,18 +873,18 @@ msgstr ""
 #: wp-e-commerce/transaction_result_functions.php:40
 #: wp-e-commerce/transaction_result_functions.php:249
 msgid "Thank you, your purchase is pending, you will be sent an email once the order clears."
-msgstr ""
+msgstr "Gracias por armar su pedido. Usted recibirá un email cuando el pedido sea confirmado."
 
 #: wp-e-commerce/transaction_result_functions.php:158
 #: wp-e-commerce/transaction_result_functions.php:159
 msgid "Click to download"
-msgstr "Pinche aquï¿½ para descargar"
+msgstr "Pinche aquí para descargar"
 
 #: wp-e-commerce/transaction_result_functions.php:205
 #: wp-e-commerce/transaction_result_functions.php:212
 #: wp-e-commerce/user-log.php:317
 msgid "Total Shipping"
-msgstr "Gastos de envï¿½o totales"
+msgstr "Gastos de envío"
 
 #: wp-e-commerce/transaction_result_functions.php:206
 #: wp-e-commerce/transaction_result_functions.php:213
@@ -934,7 +895,7 @@ msgstr "Total"
 #: wp-e-commerce/transaction_result_functions.php:215
 #: wp-e-commerce/transaction_result_functions.php:216
 msgid "Your Transaction ID"
-msgstr "Nï¿½mero de tu pedido"
+msgstr "Número de tu pedido"
 
 #: wp-e-commerce/transaction_result_functions.php:217
 msgid "Transaction ID"
@@ -942,7 +903,7 @@ msgstr "ID de pedido"
 
 #: wp-e-commerce/transaction_result_functions.php:250
 msgid "Order Pending: Payment Required"
-msgstr ""
+msgstr "Su pedido está siendo procesado ..."
 
 #: wp-e-commerce/transaction_result_functions.php:252
 msgid "Purchase Receipt"
@@ -964,16 +925,15 @@ msgstr "Informe de la compra"
 
 #: wp-e-commerce/transaction_result_functions.php:308
 msgid "The Transaction was successful"
-msgstr "Transacciï¿½n correcta"
+msgstr "Transacción correcta"
 
 #: wp-e-commerce/transaction_result_functions.php:316
-#, fuzzy
 msgid "Oops, there is nothing in your cart."
-msgstr "No hay nada en su carrito"
+msgstr "Todavía no hay nada en tu pedido. "
 
 #: wp-e-commerce/transaction_result_functions.php:316
 msgid "Please visit our shop"
-msgstr ""
+msgstr "Visitá la página de Productos."
 
 #: wp-e-commerce/user-downloads.php:41
 msgid "File Names"
@@ -1000,7 +960,7 @@ msgstr "Estado"
 #: wp-e-commerce/user-log.php:65
 #: wp-e-commerce/user-log.php:383
 msgid "Payment Method"
-msgstr "Mï¿½todo de pago"
+msgstr "Método de pago"
 
 #: wp-e-commerce/user-log.php:94
 msgid "Details"
@@ -1012,12 +972,11 @@ msgstr "Estado del pedido"
 
 #: wp-e-commerce/user-log.php:169
 msgid "Shipping Details"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/user-log.php:188
-#, fuzzy
 msgid "Order Details"
-msgstr "Mï¿½s detalles"
+msgstr "Más detalles"
 
 #: wp-e-commerce/user-log.php:212
 msgid "GST"
@@ -1055,7 +1014,7 @@ msgstr ""
 
 #: wp-e-commerce/wp-shopping-cart.old.php:57
 msgid "Note: if this is blank, the image will not be resized"
-msgstr "Nota: si estï¿½ en blanco, la imagen no serï¿½ dimensionada"
+msgstr "Nota: si está en blanco, la imagen no será dimensionada"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:377
 #: wp-e-commerce/wp-shopping-cart.old.php:1660
@@ -1067,13 +1026,13 @@ msgstr "Texto"
 #: wp-e-commerce/wp-shopping-cart.old.php:1663
 #: wp-e-commerce/wp-shopping-cart.old.php:1674
 msgid "Textarea"
-msgstr "ï¿½rea de texto"
+msgstr "Área de texto"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:381
 #: wp-e-commerce/wp-shopping-cart.old.php:1664
 #: wp-e-commerce/wp-shopping-cart.old.php:1675
 msgid "Heading"
-msgstr "Tï¿½tulo"
+msgstr "Titular"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:382
 #: wp-e-commerce/wp-shopping-cart.old.php:1665
@@ -1087,9 +1046,8 @@ msgid "Label"
 msgstr ""
 
 #: wp-e-commerce/wp-shopping-cart.old.php:388
-#, fuzzy
 msgid "Label Description"
-msgstr "Descripciï¿½n"
+msgstr "Descripción"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:389
 msgid "Item Number"
@@ -1192,11 +1150,11 @@ msgstr ""
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1401
 msgid "Click stars to rate"
-msgstr "Aï¿½ada estrellas para calificar"
+msgstr "Añada estrellas para calificar"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1406
 msgid "No Votes"
-msgstr "Ningï¿½n voto"
+msgstr "Ningún voto"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1410
 msgid "1 Vote"
@@ -1224,7 +1182,7 @@ msgstr ""
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1671
 msgid "Delivery Address"
-msgstr "Direcciï¿½n de envio"
+msgstr "Dirección de envio"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1672
 msgid "Delivery City"
@@ -1232,15 +1190,15 @@ msgstr "Ciudad"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1673
 msgid "Delivery Country"
-msgstr "Paï¿½s"
+msgstr "País"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1720
 msgid "The item has been added"
-msgstr "El artï¿½culo se ha aï¿½adido"
+msgstr "El arttículo se ha añadido"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1722
 msgid "The item has not been added"
-msgstr "El artï¿½culo no se ha aï¿½adido"
+msgstr "El artículo no se ha añadido"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1732
 #, fuzzy
@@ -1248,9 +1206,8 @@ msgid "Edit Variation Set"
 msgstr "Opciones de producto"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1743
-#, fuzzy
 msgid "Add Variation Set"
-msgstr "Opciones del producto"
+msgstr "Añadir variaciones"
 
 #: wp-e-commerce/wp-shopping-cart.old.php:1792
 msgid "Add Value"
@@ -1259,7 +1216,7 @@ msgstr ""
 #: wp-e-commerce/js/tinymce3/window.php:36
 #: wp-e-commerce/js/tinymce3/window.php:118
 msgid "Category"
-msgstr "Categorï¿½a"
+msgstr "Categoría"
 
 #: wp-e-commerce/js/tinymce3/window.php:37
 #, fuzzy
@@ -1267,32 +1224,27 @@ msgid "Product Slider"
 msgstr "Precio del producto"
 
 #: wp-e-commerce/js/tinymce3/window.php:38
-#, fuzzy
 msgid "Add Product"
-msgstr "Aï¿½adir Categorï¿½a"
+msgstr "Añadir producto"
 
 #: wp-e-commerce/js/tinymce3/window.php:48
 #: wp-e-commerce/js/tinymce3/window.php:76
-#, fuzzy
 msgid "Select Category"
-msgstr "Categorï¿½a"
+msgstr "Seleccionar categoría"
 
 #: wp-e-commerce/js/tinymce3/window.php:51
 #: wp-e-commerce/js/tinymce3/window.php:78
 #: wp-e-commerce/js/tinymce3/window.php:122
-#, fuzzy
 msgid "No Category"
-msgstr "Categorï¿½a"
+msgstr ""
 
 #: wp-e-commerce/js/tinymce3/window.php:65
-#, fuzzy
 msgid "Number of items per Page"
-msgstr "Nï¿½mero de artï¿½culos"
+msgstr "Número de items por página"
 
 #: wp-e-commerce/js/tinymce3/window.php:91
-#, fuzzy
 msgid "Number of visible items"
-msgstr "Nï¿½mero de artï¿½culos"
+msgstr "Número de Artículos"
 
 #: wp-e-commerce/merchants/authorize.merchant.php:278
 msgid "There was an error contacting the payment gateway, please try again later."
@@ -1300,14 +1252,12 @@ msgstr ""
 
 #: wp-e-commerce/merchants/chronopay.php:440
 #: wp-e-commerce/merchants/paypal_multiple.php:554
-#, fuzzy
 msgid "Update &raquo;"
-msgstr "Aplicar"
+msgstr "Aplicar &raquo;"
 
 #: wp-e-commerce/merchants/paypal-standard.merchant.php:134
-#, fuzzy
 msgid "Your Subscription"
-msgstr "Descripciï¿½n de producto"
+msgstr "Tu suscripción"
 
 #: wp-e-commerce/merchants/paypal_certified.php:585
 #: wp-e-commerce/merchants/paypal_multiple.php:519
@@ -1363,9 +1313,8 @@ msgstr "Precio total"
 
 #: wp-e-commerce/shipping/tablerate.php:30
 #: wp-e-commerce/shipping/weightrate.php:30
-#, fuzzy
 msgid "Shipping Price"
-msgstr "Elija su paï¿½s de envï¿½o:"
+msgstr "Costo de envío"
 
 #: wp-e-commerce/shipping/ups.php:34
 #, fuzzy
@@ -1401,9 +1350,8 @@ msgid "Destination Type"
 msgstr ""
 
 #: wp-e-commerce/shipping/ups.php:59
-#, fuzzy
 msgid "Residential Address"
-msgstr "Direcciï¿½n de envio"
+msgstr "Dirección de envío"
 
 #: wp-e-commerce/shipping/ups.php:60
 msgid "Commercial Address"
@@ -1431,7 +1379,7 @@ msgstr ""
 
 #: wp-e-commerce/themes/default/cart_widget.php:15
 msgid "Number of items"
-msgstr "Nï¿½mero de artï¿½culos"
+msgstr "Cantidad de artículos"
 
 #: wp-e-commerce/themes/default/cart_widget.php:23
 #: wp-e-commerce/themes/default/shopping_cart_page.php:13
@@ -1440,7 +1388,7 @@ msgstr "Producto"
 
 #: wp-e-commerce/themes/default/cart_widget.php:24
 msgid "Qty"
-msgstr "Cant"
+msgstr "Can"
 
 #: wp-e-commerce/themes/default/cart_widget.php:59
 #, fuzzy
@@ -1448,17 +1396,16 @@ msgid "Postage &amp; Tax "
 msgstr "Franqueo y embalaje por defecto"
 
 #: wp-e-commerce/themes/default/cart_widget.php:72
-#, fuzzy
 msgid "Empty your cart"
-msgstr "Vaciar carrito"
+msgstr "Vaciar Pedido X"
 
 #: wp-e-commerce/themes/default/cart_widget.php:76
 msgid "Go to Checkout"
-msgstr "Validar compra"
+msgstr "Finalizar Pedido »"
 
 #: wp-e-commerce/themes/default/cart_widget.php:78
 msgid "Your shopping cart is empty"
-msgstr "Su carrito de compra estï¿½ vacï¿½o"
+msgstr "Tu pedido está vacío."
 
 #: wp-e-commerce/themes/default/cart_widget.php:80
 msgid "Visit the shop"
@@ -1477,9 +1424,8 @@ msgstr "Este producto esta agotado."
 #: wp-e-commerce/themes/default/grid_view.php:173
 #: wp-e-commerce/themes/default/list_view.php:185
 #: wp-e-commerce/themes/default/products_page.php:256
-#, fuzzy
 msgid "There are no products in this group."
-msgstr "No hay ningï¿½n artï¿½culo en esta"
+msgstr "No hay productos en este grupo"
 
 #: wp-e-commerce/themes/default/list_view.php:153
 #: wp-e-commerce/themes/default/products_page.php:222
@@ -1496,9 +1442,8 @@ msgid "Donation"
 msgstr ""
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:9
-#, fuzzy
 msgid "Please review your order"
-msgstr "Suscrï¿½base a sus pedidos"
+msgstr "Por favor revisa tu Pedido"
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:32
 #: wp-e-commerce/themes/default/shopping_cart_page.php:57
@@ -1519,11 +1464,11 @@ msgstr ""
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:82
 msgid "Calculate Shipping Price"
-msgstr "Elija su paï¿½s de envï¿½o:"
+msgstr "Calcular costos de envío"
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:86
 msgid "Please choose a country below to calculate your shipping costs"
-msgstr ""
+msgstr "Seleccione la opción más adecuada para calcular los costos de envío"
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:95
 msgid "Please provide a Zipcode and click Calculate in order to continue."
@@ -1534,9 +1479,8 @@ msgid "Sorry, online ordering is unavailable to this destination and/or weight. 
 msgstr ""
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:120
-#, fuzzy
 msgid "- Choose a Shipping Rate"
-msgstr "Coste de envï¿½o local"
+msgstr ""
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:210
 msgid "Not yet a member?"
@@ -1577,7 +1521,7 @@ msgstr "Condiciones"
 
 #: wp-e-commerce/themes/default/shopping_cart_page.php:355
 msgid "Make Purchase"
-msgstr "Comprar"
+msgstr "Confirmar Pedido »"
 
 #: wp-e-commerce/themes/default/single_product.php:93
 #: wp-e-commerce/themes/iShop/single_product.php:94
@@ -1617,9 +1561,8 @@ msgstr ""
 
 #: wp-e-commerce/widgets/category_widget.27.php:19
 #: wp-e-commerce/wpsc-admin/admin.php:101
-#, fuzzy
 msgid "Categories"
-msgstr "Categorï¿½a"
+msgstr "Categorías"
 
 #: wp-e-commerce/widgets/category_widget.27.php:134
 #: wp-e-commerce/widgets/category_widget.28.php:69
@@ -1634,35 +1577,30 @@ msgstr ""
 
 #: wp-e-commerce/widgets/category_widget.27.php:159
 #: wp-e-commerce/widgets/category_widget.28.php:80
-#, fuzzy
 msgid "Display the :category: Group"
-msgstr "Mostrar categorï¿½as"
+msgstr "Mostrar el grupo :category:"
 
 #: wp-e-commerce/widgets/category_widget.27.php:168
 #: wp-e-commerce/widgets/category_widget.28.php:88
-#, fuzzy
 msgid "Display the Group thumbnails in the sidebar"
-msgstr "Mostrar u ocultar ofertas en la barra de menï¿½"
+msgstr "Mostrar u ocultar el grupo en el sidebar"
 
 #: wp-e-commerce/widgets/category_widget.27.php:179
 #: wp-e-commerce/widgets/category_widget.28.php:11
-#, fuzzy
 msgid "Product Grouping Widget"
-msgstr "Ancho imagen categorï¿½a"
+msgstr ""
 
 #: wp-e-commerce/widgets/category_widget.27.php:181
 #: wp-e-commerce/widgets/category_widget.28.php:12
 #: wp-e-commerce/widgets/category_widget.28.php:19
-#, fuzzy
 msgid "Product Categories"
-msgstr "Imï¿½genes de productos"
+msgstr "Imágenes de productos"
 
 #: wp-e-commerce/widgets/latest_product_widget.php:7
 #: wp-e-commerce/widgets/latest_product_widget.php:87
 #: wp-e-commerce/widgets/latest_product_widget.php:88
-#, fuzzy
 msgid "Latest Products"
-msgstr "Borrar Product"
+msgstr "Últimos Productos"
 
 #: wp-e-commerce/widgets/latest_product_widget.php:74
 msgid "Number of products to show:"
@@ -1682,9 +1620,8 @@ msgstr ""
 #: wp-e-commerce/widgets/product_tag_widget.php:9
 #: wp-e-commerce/widgets/product_tag_widget.php:38
 #: wp-e-commerce/widgets/product_tag_widget.php:39
-#, fuzzy
 msgid "Product Tags"
-msgstr "Imï¿½genes de productos"
+msgstr "Etiquetas de productos"
 
 #: wp-e-commerce/widgets/shopping_cart_widget.php:37
 #: wp-e-commerce/widgets/shopping_cart_widget.php:42
@@ -1699,9 +1636,8 @@ msgid "Product Specials"
 msgstr "Detalles del producto"
 
 #: wp-e-commerce/widgets/specials_widget.php:106
-#, fuzzy
 msgid "Show Description:"
-msgstr "Descripciï¿½n"
+msgstr "Mostrar descripción"
 
 #: wp-e-commerce/wpsc-admin/admin.php:75
 #: wp-e-commerce/wpsc-admin/admin.php:78
@@ -1709,29 +1645,26 @@ msgstr "Descripciï¿½n"
 #: wp-e-commerce/wpsc-admin/admin.php:85
 #: wp-e-commerce/wpsc-admin/admin.php:88
 #: wp-e-commerce/wpsc-admin/admin.php:98
-#, fuzzy
 msgid "Products"
-msgstr "Producto"
+msgstr "Productos"
 
 #: wp-e-commerce/wpsc-admin/admin.php:93
 #: wp-e-commerce/wpsc-admin/admin.php:421
 #: wp-e-commerce/wpsc-admin/admin.php:451
-#, fuzzy
 msgid "Sales"
 msgstr "Ofertas"
 
 #: wp-e-commerce/wpsc-admin/admin.php:105
 msgid "Variations"
-msgstr "Opciones del producto"
+msgstr "Variaciones"
 
 #: wp-e-commerce/wpsc-admin/admin.php:126
 msgid "Marketing"
-msgstr ""
+msgstr "Marketing"
 
 #: wp-e-commerce/wpsc-admin/admin.php:132
-#, fuzzy
 msgid "Upgrades"
-msgstr "Opciones de carrito oro"
+msgstr "Opciones GOLD"
 
 #: wp-e-commerce/wpsc-admin/admin.php:136
 msgid "- Debug"
@@ -1805,7 +1738,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:456
 msgid "The product group has been edited."
-msgstr "La categorï¿½a ha sido modificada"
+msgstr "La categoría ha sido modificada"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:461
 #, fuzzy
@@ -1822,9 +1755,8 @@ msgid "Are you sure you want to delete this category? If the category has any su
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:537
-#, fuzzy
 msgid "Are you sure you want to delete this product group? All categories it contains will be deleted too."
-msgstr "ï¿½Estï¿½ seguro que quiere eliminar este producto?"
+msgstr "Está seguro que quiere eliminar este producto?"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:560
 msgid "Categorizing your products into groups help your customers find them. For instance if you sell hats and trousers you  might want to setup a Group called clothes and add hats and trousers to that group."
@@ -1841,19 +1773,16 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:595
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:612
-#, fuzzy
 msgid "Add New Group"
-msgstr "Aï¿½adir Categorï¿½a"
+msgstr "Añadir Nuevo Grupo"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:602
-#, fuzzy
 msgid "About This Page"
-msgstr "Pï¿½gina de productos"
+msgstr "Página de productos"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:671
-#, fuzzy
 msgid "&quot;[categorisation]&quot; Group"
-msgstr "Aï¿½adir nueva categorï¿½a"
+msgstr "&quot;[categorisation]&quot; Grupo"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:681
 msgid "Image"
@@ -1861,9 +1790,8 @@ msgstr "Imagen"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:725
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:729
-#, fuzzy
 msgid "You are editing an item in the &quot;[categorisation]&quot; Group"
-msgstr "Aï¿½adir nueva categorï¿½a"
+msgstr "Estás editando el Grupo &quot;[categorisation]&quot;"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:728
 #, fuzzy
@@ -1871,9 +1799,8 @@ msgid "Edit Details"
 msgstr "Detalles del producto"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:744
-#, fuzzy
 msgid "Add Category"
-msgstr "Categorï¿½a"
+msgstr "Agregar Categoría"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:747
 msgid "Adding a new category here will make it available when you add or edit a product."
@@ -1881,14 +1808,12 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:753
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:756
-#, fuzzy
 msgid "You are adding a new item to the &quot;[categorisation]&quot; Group"
-msgstr "Aï¿½adir nueva categorï¿½a"
+msgstr "Estás agregando un nuevo item al grupo &quot;[categorisation]&quot;"
 
 #: wp-e-commerce/wpsc-admin/display-groups.page.php:874
-#, fuzzy
 msgid "Add Group"
-msgstr "Aï¿½adir Categorï¿½a"
+msgstr "Añadir Grupo"
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:29
 msgid "Display Products"
@@ -1896,9 +1821,8 @@ msgstr "Mostrar productos"
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:74
 #: wp-e-commerce/wpsc-admin/display-variations.page.php:49
-#, fuzzy
 msgid "Product updated."
-msgstr "Nombre del producto"
+msgstr "Producto actualizado"
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:114
 msgid "The following directories are not writable: :directory: You won&#39;t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable."
@@ -1936,9 +1860,8 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:268
 #: wp-e-commerce/wpsc-admin/display-items.page.php:343
-#, fuzzy
 msgid "Draft"
-msgstr "Fecha"
+msgstr "Borrador"
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:272
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:389
@@ -1946,9 +1869,8 @@ msgid "Apply"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:308
-#, fuzzy
 msgid "No Name"
-msgstr "Nombre del producto"
+msgstr "Sin nombre"
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:367
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:341
@@ -1975,7 +1897,7 @@ msgstr "Usted ha votado"
 
 #: wp-e-commerce/wpsc-admin/display-items.page.php:440
 msgid "View All Categories"
-msgstr "Todas las categorï¿½as"
+msgstr "Todas las categorías"
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:37
 #, fuzzy
@@ -1984,24 +1906,23 @@ msgstr "Gracias, sus cambios han sido guardados."
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:92
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:93
 msgid "Presentation"
-msgstr ""
+msgstr "Presentación"
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:94
 msgid "Admin"
-msgstr ""
+msgstr "Administración"
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:96
-#, fuzzy
 msgid "Payment Options"
-msgstr "Mï¿½todo de pago"
+msgstr "Método de pago"
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:97
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #: wp-e-commerce/wpsc-admin/display-options-settings.page.php:169
 msgid "To configure a shipping module select one on the left."
@@ -2012,19 +1933,16 @@ msgid "When upgrading the Wp-E-Commerce Plugin from 3.6.* to 3.7 it is required 
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:158
-#, fuzzy
 msgid "Shipping Options"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:161
-#, fuzzy
 msgid "Shipping Method:"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:162
-#, fuzzy
 msgid "Shipping Option:"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:164
 #, fuzzy
@@ -2032,18 +1950,16 @@ msgid "Tracking ID:"
 msgstr "ID de pedido"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:165
-#, fuzzy
 msgid "Shipping Status:"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:166
 msgid "Track History:"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:172
-#, fuzzy
 msgid "Billing Details"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:173
 #, fuzzy
@@ -2060,14 +1976,12 @@ msgid "Buyers Name:"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:176
-#, fuzzy
 msgid "Address:"
-msgstr "Direcciï¿½n"
+msgstr "Dirección"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:178
-#, fuzzy
 msgid "Phone:"
-msgstr "Telï¿½fono"
+msgstr "Teléfono"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:179
 #, fuzzy
@@ -2075,9 +1989,8 @@ msgid "Email:"
 msgstr "E-mail"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:180
-#, fuzzy
 msgid "Payment Method:"
-msgstr "Mï¿½todo de pago"
+msgstr "Método de pago"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:182
 msgid "How User Found Us:"
@@ -2150,11 +2063,11 @@ msgstr "(Metodos de Pago Aceptados)"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:343
 msgid "Subscribe to your orders"
-msgstr "Suscrï¿½base a sus pedidos"
+msgstr "Suscríbase a sus pedidos"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:345
 msgid "Subscribe to an RSS feed"
-msgstr "Subscrï¿½base a un RSS"
+msgstr "Subscríbase a un RSS"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:345
 msgid "of your orders"
@@ -2173,9 +2086,8 @@ msgid "This shop is powered by "
 msgstr "This shop is powered by "
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:360
-#, fuzzy
 msgid "Upgrade to Gold"
-msgstr "Opciones de carrito oro"
+msgstr "Opciones GOLD"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:360
 msgid " and unleash more functionality into your shop."
@@ -2186,9 +2098,8 @@ msgid "View:"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:430
-#, fuzzy
 msgid "Filter"
-msgstr "Errï¿½neo"
+msgstr "Filtro"
 
 #: wp-e-commerce/wpsc-admin/display-sales-logs.php:433
 msgid "Oops there are no purchase logs for your selection, please try again."
@@ -2244,9 +2155,8 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-upgrades.page.php:71
 #: wp-e-commerce/wpsc-admin/display-upgrades.page.php:79
-#, fuzzy
 msgid "API Key Reset"
-msgstr "KEY de activaciï¿½n"
+msgstr "KEY de activación"
 
 #: wp-e-commerce/wpsc-admin/display-upgrades.page.php:74
 msgid "Enter your API name and key to release it from an old site that you no longer use."
@@ -2254,12 +2164,11 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-upgrades.page.php:85
 msgid "API Key"
-msgstr "KEY de activaciï¿½n"
+msgstr "API Key de activación"
 
 #: wp-e-commerce/wpsc-admin/display-upgrades.page.php:90
-#, fuzzy
 msgid "Reset API Key"
-msgstr "KEY de activaciï¿½n"
+msgstr "KEY de activación"
 
 #: wp-e-commerce/wpsc-admin/display-upgrades.page.php:99
 msgid "Upgrade Instructions"
@@ -2289,7 +2198,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/display-variations.page.php:21
 msgid "Are you sure you want to delete this product?"
-msgstr "ï¿½Estï¿½ seguro que quiere eliminar este producto?"
+msgstr "¿Está seguro que quiere eliminar este producto?"
 
 #: wp-e-commerce/wpsc-admin/display-variations.page.php:37
 #, fuzzy
@@ -2301,27 +2210,24 @@ msgid "A variation can be anything \"optional\" about a product. ie: Size, Color
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:133
-#, fuzzy
 msgid "Edit Product"
-msgstr "Editar categorï¿½a"
+msgstr "Editar producto"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:144
 msgid "Product Name"
 msgstr "Nombre del producto"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:153
-#, fuzzy
 msgid "Display Product Shortcode"
-msgstr "Mostrar categorï¿½as"
+msgstr "Mostrar código de producto"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:154
 msgid "Buy Now Shortcode"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:155
-#, fuzzy
 msgid "Add to Cart Shortcode"
-msgstr "Aï¿½adir al carrito"
+msgstr "Añadir al carrito"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:161
 #, fuzzy
@@ -2333,9 +2239,8 @@ msgid "Buy Now PHP"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:163
-#, fuzzy
 msgid "Add to Cart PHP"
-msgstr "Aï¿½adir al carrito"
+msgstr "Añadir al carrito"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:164
 #, fuzzy
@@ -2363,7 +2268,7 @@ msgstr "Borrar Product"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:290
 msgid "Additional Description"
-msgstr "Descripciï¿½n adicional"
+msgstr "Descripciónn adicional"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:340
 #, fuzzy
@@ -2371,14 +2276,12 @@ msgid "Update Product"
 msgstr "Reemplazar producto"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:364
-#, fuzzy
 msgid "Categories and Tags"
-msgstr "Mostrar categorï¿½as/marcas"
+msgstr "Categorías y etiquetas"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:403
-#, fuzzy
 msgid "Select &quot;[categorisation]&quot;"
-msgstr "Aï¿½adir nueva categorï¿½a"
+msgstr "Seleccionar &quot;[categorisation]&quot;"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:459
 msgid "Price and Stock Control"
@@ -2404,7 +2307,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:541
 msgid "I have a limited number of this item in stock. If the stock runs out, this product will not be available on the shop unless you untick this box or add more stock."
-msgstr "Existe un nï¿½mero limitado de este artï¿½culo en stock. Si el sotck se agota, este producto no estarï¿½ disponible en la tienda a no ser que usted quite esta opciï¿½n o aï¿½ada mï¿½s stock."
+msgstr "Existe un númemero limitado de este artículo en stock. Si el sotck se agota, este producto no estará disponible en la tienda a no ser que usted quite esta opción o añada más stock."
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:556
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:570
@@ -2419,14 +2322,12 @@ msgid "Stock Qty"
 msgstr "Stock"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:603
-#, fuzzy
 msgid "Variation Control"
-msgstr "Opciones del producto"
+msgstr "Contro de Variaciones"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:607
-#, fuzzy
 msgid "+ Add New Variations"
-msgstr "Opciones del producto"
+msgstr "+ Añadir nueva variación"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:653
 #, fuzzy
@@ -2440,11 +2341,11 @@ msgstr "URL de opciones"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:722
 msgid "Local Shipping Fee"
-msgstr "Coste de envï¿½o local"
+msgstr "Coste de envío local"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:731
 msgid "International Shipping Fee"
-msgstr "Coste de envï¿½o internacional"
+msgstr "Coste de envío internacional"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:740
 msgid "Disregard Shipping for this product"
@@ -2515,7 +2416,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:907
 msgid "Product Images"
-msgstr "Imï¿½genes de productos"
+msgstr "Imágenes de productos"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:915
 #, fuzzy
@@ -2579,9 +2480,8 @@ msgid "Preview"
 msgstr "Previsualizar"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:1192
-#, fuzzy
 msgid "Thumbnail Settings"
-msgstr "Opciones de administraciï¿½n"
+msgstr "Opciones de administración"
 
 #: wp-e-commerce/wpsc-admin/includes/display-items-functions.php:1200
 #, fuzzy
@@ -2655,13 +2555,12 @@ msgid "Upgrading to WP e-Commerce 3.7 and later requires you to run this fix onc
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/admin.php:7
-#, fuzzy
 msgid "Admin Settings"
-msgstr "Opciones de administraciï¿½n"
+msgstr "Opciones de administración"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/admin.php:13
 msgid "Max downloads per file"
-msgstr "Descargas mï¿½ximas por fichero"
+msgstr "Descargas máximas por fichero"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/admin.php:35
 msgid "Lock downloads to IP address"
@@ -2717,7 +2616,7 @@ msgstr "URL de opciones"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/admin.php:184
 msgid "Transaction Details URL"
-msgstr "URL de detalles de la transacciï¿½n"
+msgstr "URL de detalles de la transacción"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/admin.php:195
 msgid "User Account URL"
@@ -2728,9 +2627,8 @@ msgid "Update Page URLs"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/admin.php:206
-#, fuzzy
 msgid "Fix Product Group Permalinks"
-msgstr "Editar categorï¿½a"
+msgstr "Corregir enlaces permanentes de productos"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/checkout.php:27
 msgid "Checkout Options"
@@ -2754,16 +2652,15 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/checkout.php:115
 msgid "Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name..."
-msgstr "Aquï¿½ usted puede personalizar las pasarelas de pago para que se muestren en su pï¿½gina de compra. La pï¿½gina de compra es donde usted recoge la informaciï¿½n de usuario necesaria que se guardarï¿½ en sus Logs de compra p. ej. la direcciï¿½n de compradores, y el nombre..."
+msgstr "Aquí usted puede personalizar las pasarelas de pago para que se muestren en su página de compra. La página de compra es donde usted recoge la información de usuario necesaria que se guardará en sus Logs de compra p. ej. la direccón de compradores, y el nombre..."
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/checkout.php:208
-#, fuzzy
 msgid "This will be the Email address that the Purchase Reciept is sent to."
-msgstr "Direcciï¿½n de correo donde se envï¿½a el registro de compra"
+msgstr "Dirección de correo donde se envía el registro de compra"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/checkout.php:311
 msgid "Add New Form Field"
-msgstr "Aï¿½adir nuevo campo en el formulario"
+msgstr "Añadir nuevo campo en el formulario"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/gateway.php:31
 msgid "Please Select A Payment Gateway"
@@ -2812,7 +2709,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/general.php:13
 msgid "Base Country/Region"
-msgstr "Paï¿½s base de envï¿½o"
+msgstr "País base de envío"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/general.php:39
 msgid "Select your primary business location."
@@ -2849,9 +2746,8 @@ msgid "Show All Products"
 msgstr "Mostrar tarifas de producto"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:21
-#, fuzzy
 msgid "Show list of product groups"
-msgstr "Seleccione una categorï¿½a"
+msgstr "Mostrar lista de grupos de productos"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:28
 #, fuzzy
@@ -2882,16 +2778,15 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:170
 msgid "Show Postage and Packaging"
-msgstr "Mostrar gastos de envï¿½o"
+msgstr "Mostrar gastos de envío"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:193
 msgid "Disable link in Title"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:217
-#, fuzzy
 msgid "Add quantity field to each product description"
-msgstr "Descripciï¿½n del producto adicional"
+msgstr "Descripción del producto adicional"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:242
 msgid "Theme Customisation"
@@ -2950,9 +2845,8 @@ msgid "Read Tutorials"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:285
-#, fuzzy
 msgid "Product Page Settings"
-msgstr "Pï¿½gina de productos"
+msgstr "Página de productos"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:288
 msgid "Product Display"
@@ -2967,18 +2861,16 @@ msgid "Show quantity form in list view"
 msgstr "Mostrar cantidades en modo lista"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:382
-#, fuzzy
 msgid "Products Per Row"
-msgstr "Pï¿½gina de productos"
+msgstr "Página de productos"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:387
 msgid "Show images only"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:397
-#, fuzzy
 msgid "Display Description"
-msgstr "Descripciï¿½n"
+msgstr "Descripción"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:402
 msgid "Display \"Add To Cart\" Button"
@@ -2986,7 +2878,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:406
 msgid "Display \"More Details\" Button"
-msgstr ""
+msgstr "Display \"Más Información\" Button"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:416
 #, fuzzy
@@ -3036,18 +2928,17 @@ msgid "Replace Page Title With Product/Category Name"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:587
-#, fuzzy
 msgid "Shopping Cart Settings"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:619
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:623
 msgid "Sidebar"
-msgstr "Barra de menï¿½"
+msgstr "Barra de menú"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:627
 msgid "Page"
-msgstr "Pï¿½gina"
+msgstr "Página"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:631
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:635
@@ -3073,9 +2964,8 @@ msgid "Show Dropshop on every page"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:653
-#, fuzzy
 msgid "Show Dropshop only on product page"
-msgstr "Mostrar en pï¿½gina principal"
+msgstr "Mostrar en página principal"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:656
 msgid "Use light Dropshop style"
@@ -3094,29 +2984,24 @@ msgid "Use Sliding Cart"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:693
-#, fuzzy
 msgid "Display \"+ Postage & Tax\""
-msgstr "Mostrar en pï¿½gina principal"
+msgstr "Mostrar en página principal"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:719
-#, fuzzy
 msgid "Product Group Settings"
-msgstr "Aï¿½adir Categorï¿½a"
+msgstr "Configuración de Grupos de productos"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:723
-#, fuzzy
 msgid "Show Product Group Description"
-msgstr "Descripciï¿½n de producto"
+msgstr "Descripción de producto"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:748
-#, fuzzy
 msgid "Show Product Group Thumbnails"
-msgstr "Tamaï¿½o por defecto del thumbnail categorï¿½a"
+msgstr "Tamaño por defecto del thumbnail grupo"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:775
-#, fuzzy
 msgid "Show Product Count per Product Group"
-msgstr "Seleccione una categorï¿½a"
+msgstr "Seleccione una categoría"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:801
 msgid "Use Category Grid View"
@@ -3124,7 +3009,7 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:832
 msgid "Default Product Thumbnail Size"
-msgstr "Tamaï¿½o por defecto del thumbnail producto"
+msgstr "Tamaño por defecto del thumbnail producto"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:836
 #, fuzzy
@@ -3133,7 +3018,7 @@ msgstr "Redimensionar Thumbnail"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:842
 msgid "Default Product Group Thumbnail Size"
-msgstr "Tamaï¿½o por defecto del thumbnail categorï¿½a"
+msgstr "Tamaño por defecto del thumbnail categoría"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:851
 #, fuzzy
@@ -3146,14 +3031,12 @@ msgid "Show Thumbnail Gallery"
 msgstr "Ver Thumbnails"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:912
-#, fuzzy
 msgid "Gallery Thumbnail Image Size"
-msgstr "Tamaï¿½o por defecto del thumbnail producto"
+msgstr "Tamaño por defecto del thumbnail producto"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:926
-#, fuzzy
 msgid "Pagination settings"
-msgstr "Opciones de administraciï¿½n"
+msgstr "Opciones de administración"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/presentation.php:930
 msgid "Use Pagination"
@@ -3197,9 +3080,8 @@ msgid "By Default Display Comments on"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:67
-#, fuzzy
 msgid "Use Shipping"
-msgstr "Localidad base de envï¿½o"
+msgstr "Localidad base de envío"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:89
 msgid "If you are only selling digital downloads, you should select no to disable the shipping on your site."
@@ -3219,9 +3101,8 @@ msgid "ShipWire Settings"
 msgstr "Opciones de moneda"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:130
-#, fuzzy
 msgid "ShipWire Email"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:131
 msgid "ShipWire Password"
@@ -3233,18 +3114,16 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:183
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:188
-#, fuzzy
 msgid "Shipping Modules"
-msgstr "Costes adicionales de envï¿½o"
+msgstr "Costes adicionales de envío"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:194
 msgid "To enable shipping in WP e-Commerce you must select  which shipping methods you want to enable on your site"
 msgstr ""
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:198
-#, fuzzy
 msgid "Internal Shipping Calculators"
-msgstr "Coste de envï¿½o internacional"
+msgstr "Coste de envío internacional"
 
 #: wp-e-commerce/wpsc-admin/includes/settings-pages/shipping.php:231
 msgid "External Shipping Calculators"
@@ -3256,20 +3135,19 @@ msgstr ""
 
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:88
 msgid "You just added \"[product_name]\" to your cart."
-msgstr ""
+msgstr "Acabás de agregar \"[product_name]\" a tu pedido."
 
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:91
 msgid "Sorry, but you cannot add zero items to your cart"
-msgstr ""
+msgstr "Debes agregar al menos un producto a tu pedido"
 
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:93
 msgid "Sorry, but there are only [number] of this item in stock."
 msgstr ""
 
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:95
-#, fuzzy
 msgid "Sorry, but the item \"[product_name]\" is out of stock."
-msgstr "Este producto estï¿½ fuera de stock"
+msgstr "Este producto está fuera de stock"
 
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:475
 msgid "You must select a shipping method, otherwise we cannot process your order."
@@ -3282,11 +3160,11 @@ msgstr ""
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:503
 #, php-format
 msgid "Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above."
-msgstr ""
+msgstr "El producto : %s no puede ser enviado a %s."
 
 #: wp-e-commerce/wpsc-includes/ajax.functions.php:526
 msgid "Please enter a Zipcode and click calculate to proceed"
-msgstr ""
+msgstr "Por favor seleccione su Barrio"
 
 #: wp-e-commerce/wpsc-includes/category.functions.php:354
 msgid "Brands"
@@ -3306,9 +3184,8 @@ msgid "Updating"
 msgstr "Aplicar"
 
 #: wp-e-commerce/wpsc-includes/display.functions.php:147
-#, fuzzy
 msgid "Continue Shopping"
-msgstr "Continuar comprando"
+msgstr "Agregar más productos al Pedido"
 
 #: wp-e-commerce/wpsc-includes/display.functions.php:248
 msgid "You are using the example product group as your default group and it has no products in it, you should set the default group to something else, you can do so from your Shop Settings page."
@@ -3342,9 +3219,8 @@ msgstr ""
 #: wp-e-commerce/wpsc-includes/processing.functions.php:30
 #: wp-e-commerce/wpsc-includes/processing.functions.php:36
 #: wp-e-commerce/wpsc-includes/processing.functions.php:46
-#, fuzzy
 msgid " is out of stock"
-msgstr "Este producto estï¿½ fuera de stock"
+msgstr "Este producto está fuera de stock"
 
 #: wp-e-commerce/wpsc-includes/processing.functions.php:30
 #: wp-e-commerce/wpsc-includes/processing.functions.php:36
@@ -3379,14 +3255,12 @@ msgid "Release downloads locked to this IP address %s"
 msgstr ""
 
 #: wp-e-commerce/wpsc-includes/purchaselogs.class.php:759
-#, fuzzy
 msgid "Thanks, the purchase log record has been deleted"
-msgstr "Gracias, el carrito de compra versiï¿½n oro ha sido activado."
+msgstr "Gracias, el carrito de compra versión GOLD ha sido activado."
 
 #: wp-e-commerce/wpsc-includes/upgrades.php:122
-#, fuzzy
 msgid "Visit upgrade homepage"
-msgstr "Visitar tienda"
+msgstr "Ver Productos"
 
 #: wp-e-commerce/wpsc-includes/upgrades.php:127
 #, fuzzy
@@ -3399,9 +3273,8 @@ msgid "By %s"
 msgstr ""
 
 #: wp-e-commerce/wpsc-includes/variations.class.php:217
-#, fuzzy
 msgid "Variation"
-msgstr "Opciones del producto"
+msgstr "Variación"
 
 #: wp-e-commerce/wpsc-includes/variations.class.php:218
 msgid "Stock"
@@ -3418,46 +3291,65 @@ msgstr "URL de opciones"
 
 #~ msgid "Older Orders"
 #~ msgstr "Pedidos antiguos"
+
 #~ msgid "Help/Upgrade"
 #~ msgstr "Ayuda/Actualizar"
+
 #~ msgid "Display categories or brands or both"
 #~ msgstr "Mostrar categorï¿½as o tipos o ambos"
+
 #~ msgid "Product Stock"
 #~ msgstr "Stock de producto"
+
 #~ msgid "Limited Stock"
 #~ msgstr "Stock limitado"
+
 #~ msgid "Type"
 #~ msgstr "Tipo"
+
 #~ msgid "Create a new Variation"
 #~ msgstr "Crear nueva opciï¿½n"
+
 #~ msgid "Product Attachments"
 #~ msgstr "Accesorios de producto"
+
 #~ msgid ""
 #~ "Note: if this is filled in, the file uploaded will be the product to be "
 #~ "purchased."
 #~ msgstr ""
 #~ "Nota: Si estï¿½ completado, el archivo subido serï¿½ el producto para ser "
 #~ "comprado."
+
 #~ msgid "Mandatory"
 #~ msgstr "Obligatorio"
+
 #~ msgid "Display<br /> in Log"
 #~ msgstr "Mostrar<br /> en Log"
+
 #~ msgid "Out of"
 #~ msgstr "Mï¿½s de"
+
 #~ msgid "votes."
 #~ msgstr "votos."
+
 #~ msgid "Average rating of"
 #~ msgstr "Grado medio de"
+
 #~ msgid "Average vote"
 #~ msgstr "Media de votos"
+
 #~ msgid "Please select a valid Product Group"
 #~ msgstr "Por favor seleccione una categorï¿½a vï¿½lida"
+
 #~ msgid "Productquantity"
 #~ msgstr "Cantidad del producto"
+
 #~ msgid "No tax"
 #~ msgstr "Sin Tasas"
+
 #~ msgid "About"
 #~ msgstr "Sobre nosotros"
+
 #~ msgid ""
 #~ "Welcome to the e-commerce panel. <br /><br /><strong>Note:</strong> on "
 #~ "some setups, the shopping cart may empty on every page load, if this "
@@ -3469,43 +3361,61 @@ msgstr "URL de opciones"
 #~ "carga de pï¿½gina, si esto sucede, tendrï¿½ que aï¿½adir esta lï¿½nea:"
 #~ "<br /><br />session_start();<br /><br />a index.php en el directorio base "
 #~ "de wordpress.<br />"
+
 #~ msgid ""
 #~ "Note, Once you press submit, you will need to have your Credit card handy."
 #~ msgstr "Tenga a mano su tarjeta de credito una vez que selecione Enviar."
+
 #~ msgid ""
 #~ "Oops, there is nothing in your cart. <a href=\"get_option"
 #~ "(\"product_list_url\")\">Please visit our shop</a>"
 #~ msgstr "Por favor compre algï¿½n producto antes de utilizar esta pï¿½gina"
+
 #~ msgid "The brand has been edited."
 #~ msgstr "La marca ha sido modificada."
+
 #~ msgid "Add Brand"
 #~ msgstr "Aï¿½adir mraca"
+
 #~ msgid "Edit Brand"
 #~ msgstr "Editar marca"
+
 #~ msgid "The variation has been edited."
 #~ msgstr "La opciï¿½n ha sido modificada"
+
 #~ msgid "Please Select a Product Group"
 #~ msgstr "Por favor seleccione una categorï¿½a"
+
 #~ msgid "Edit Item"
 #~ msgstr "Editar el articulo"
+
 #~ msgid "Select an Existing Product"
 #~ msgstr "Seleccione un producto existente"
+
 #~ msgid "(enter in your product details here)"
 #~ msgstr "(Introduzca su detalle del producto aquï¿½)"
+
 #~ msgid "Add Item"
 #~ msgstr "Aï¿½adir artï¿½culo"
+
 #~ msgid "Choose a Product Group"
 #~ msgstr "Elija una categorï¿½a"
+
 #~ msgid "Choose a Brand"
 #~ msgstr "Elija un tipo"
+
 #~ msgid "use the actual image. No resize."
 #~ msgstr "Use la imagen actual. No la dimensione."
+
 #~ msgid "ID"
 #~ msgstr "ID"
+
 #~ msgid "Transaction Status"
 #~ msgstr "Estado de la transacciï¿½n"
+
 #~ msgid "Successful"
 #~ msgstr "Exito"
+
 #~ msgid ""
 #~ "<strong>Note:</strong> This lite version of the e-Commerce plugin only "
 #~ "allows you to interface with PayPal.<br /><br />If you are looking for a "
@@ -3520,53 +3430,73 @@ msgstr "URL de opciones"
 #~ "instinct.co.nz/blogshop\">versiï¿½n e-Commerce oro </a> disponible con "
 #~ "pasarelas como authorize.net,  DPS (www.dps.co.nz), y paystation (www."
 #~ "paystation.co.nz)."
+
 #~ msgid "Show Specials in the Sidebar"
 #~ msgstr "Mostrar ofertas"
+
 #~ msgid "Reply Email"
 #~ msgstr "Repetir Email"
+
 #~ msgid "brand"
 #~ msgstr "marca"
+
 #~ msgid "category"
 #~ msgstr "categorï¿½a"
+
 #~ msgid "Category or Brand"
 #~ msgstr "Categorï¿½a o Marca"
+
 #~ msgid "There are no items in the shopping cart"
 #~ msgstr "No hay ningï¿½n artï¿½culo en el carrito"
+
 #~ msgid "The Transaction was not successful"
 #~ msgstr "Hubo un error en la transacciï¿½n"
+
 #~ msgid "Go back to the checkout"
 #~ msgstr "Volver a validar la compra"
+
 #~ msgid "Base International Shipping"
 #~ msgstr "Envï¿½os internacionales"
+
 #~ msgid "Note: charged only once per product regardless of quantity ordered."
 #~ msgstr ""
 #~ "Nota: cobrado sï¿½lo una vez por producto independientemente de la "
 #~ "cantidad pedida."
+
 #~ msgid "Country Form Field"
 #~ msgstr "Campo de formulario para el paï¿½s"
+
 #~ msgid ""
 #~ "(select which form field on the checkout page you want to use for "
 #~ "specifying the country)"
 #~ msgstr ""
 #~ "(seleccionar cual es el campo del formulario para especificar el paï¿½s)"
+
 #~ msgid "Email Form Field"
 #~ msgstr "Campo del formulario para el email"
+
 #~ msgid ""
 #~ "(select which form field on the checkout page you want to use for "
 #~ "specifying the email address)"
 #~ msgstr ""
 #~ "(seleccionar cual es el campo del formulario para especificar la "
 #~ "direcciï¿½n de correo)"
+
 #~ msgid "Add Additional Image"
 #~ msgstr "Aï¿½adir imagen adicional"
+
 #~ msgid "Gold Cart Activation"
 #~ msgstr "Opciones de activaciï¿½n"
+
 #~ msgid "Sorry, the API key was incorrect."
 #~ msgstr "Lo siento, la API key es incorrecta"
+
 #~ msgid "Additional Image"
 #~ msgstr "Imagen adicional"
+
 #~ msgid "Confirm your totals before making the payment:"
 #~ msgstr "Verifique sus totales antes de realizar el pedido:"
+
 #~ msgid ""
 #~ "Choose what payment options you want to make available in the checkout "
 #~ "page. By default purchasers can only pay for items using a credit card "
@@ -3579,20 +3509,28 @@ msgstr "URL de opciones"
 #~ "Transferencia. En el caso de que usted quisiera esta opciï¿½n, deberï¿½a "
 #~ "seleccionar la tarjeta de crï¿½dito mï¿½s la opciï¿½n de Cheque/"
 #~ "Transferencia."
+
 #~ msgid " only"
 #~ msgstr " solo"
+
 #~ msgid " plus manual payment option"
 #~ msgstr " opciï¿½n plus de pago Cheque/Transferencia"
+
 #~ msgid "Pay using"
 #~ msgstr "Pago usado"
+
 #~ msgid "Pay by Cheque/Bank Deposit"
 #~ msgstr "Pago por Cheque/Transferencia"
+
 #~ msgid "Credit Card"
 #~ msgstr "Tarjeta de crï¿½dito"
+
 #~ msgid "Created default options."
 #~ msgstr "Opciones por defecto creadas."
+
 #~ msgid "MP3 Settings"
 #~ msgstr "Configuraciï¿½n MP3"
+
 #~ msgid ""
 #~ "To create the 30 second MP3 file clips, this plugin needs <a href="
 #~ "\"http://sox.sourceforge.net/\">SoX</a> compiled with MP3 support, enter "
@@ -3600,8 +3538,9 @@ msgstr "URL de opciones"
 #~ msgstr ""
 #~ "Para crear MP3 de 30 segundos, este plugin necesita <a href=\"http://sox."
 #~ "sourceforge.net/\">SoX</a> introduzca la ruta al SoX aquï¿½."
+
 #~ msgid "returned no results."
 #~ msgstr "Sin resultados."
+
 #~ msgid "Subtotal"
 #~ msgstr "Subtotal"
-
