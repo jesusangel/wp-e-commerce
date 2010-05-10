@@ -60,16 +60,19 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			'currency_code' => $this->cart_data['store_currency'],
 			'lc' => $this->cart_data['store_currency'],
 			'bn' => $this->cart_data['software_name'],
-			'no_shipping' => (int)(bool)get_option('paypal_ship'),
+			
 			'no_note' => '1',
 			'charset' => 'utf-8'
 			);
 			
-		if(get_option('address_override') == 1) {
+		//used to send shipping
+		if((int)(bool)get_option('paypal_ship') == 1) {
 			$paypal_vars += array(
-				'address_override' => '1'
+				'address_override' => '1',
+				'no_shipping' => '0'
 			);
 		}
+
 
 		// User settings to be sent to paypal
 		$paypal_vars += array(
