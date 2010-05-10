@@ -119,7 +119,7 @@ function wpsc_generate_product_feed() {
 
 		$output .= "    <item>\n\r";
 		if ($google_checkout_note) {
-			$output .= "      <g:payment_notes>Google Checkout</g:payment_notes>";
+			$output .= "      <g:payment_notes>Google Checkout</g:payment_notes>\n\r";
 		}
 		$output .= "      <title><![CDATA[".stripslashes($product['name'])."]]></title>\n\r";
 		$output .= "      <link>$purchase_link</link>\n\r";
