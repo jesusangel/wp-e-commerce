@@ -91,6 +91,13 @@ function selectgateway() {
 				</tr>
 								
 				<tr>
+                    <th><?php echo __('Base City:', 'wpsc'); ?></th>
+                    <td>
+                            <input type='text' name='wpsc_options[base_city]' value='<?php echo get_option('base_city'); ?>' />
+                            <br /><?php echo __('Please provide for more accurate rates', 'wpsc'); ?>
+                    </td>
+				</tr>
+				<tr>
 					<th><?php echo __('Base Zipcode/Postcode:', 'wpsc'); ?></th>
 					<td>
 						<input type='text' name='wpsc_options[base_zipcode]' value='<?php echo get_option('base_zipcode'); ?>' />
