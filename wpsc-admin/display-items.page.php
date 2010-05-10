@@ -142,7 +142,22 @@ function wpsc_display_edit_products_page() {
 			// class='stuffbox'
 			
 			// Justin Sainton - 5.7.2010 - Re-ordered columns, applying jQuery to toggle divs on click.
-	?>
+	?>	
+<script type="text/javascript">
+	/* <![CDATA[ */
+	(function($){
+		$(document).ready(function(){
+		
+			$('#doaction, #doaction2').click(function(){
+				if ( $('select[name^="action"]').val() == 'delete' ) {
+					var m = '<?php echo js_escape(__("You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
+					return showNotice.warn(m);
+				}
+			});
+		});
+	})(jQuery);
+	/* ]]> */
+	</script>
 		
 		<div id='poststuff' class="metabox-holder has-right-sidebar">
 			<div id="wpsc-col-left">
@@ -164,46 +179,7 @@ function wpsc_display_edit_products_page() {
 	</div>
 
 	</div>
-	<script type="text/javascript">
-	/* <![CDATA[ */
-	(function($){
-		$(document).ready(function(){
-		
-			$('div#wpsc_product_variation_forms').appendTo('div#append-side');
-			$('div#wpsc_product_advanced_forms').appendTo('div#append-side');
-		
-			$('#doaction, #doaction2').click(function(){
-				if ( $('select[name^="action"]').val() == 'delete' ) {
-					var m = '<?php echo js_escape(__("You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
-					return showNotice.warn(m);
-				}
-			});
-			
-			$('a#manage').click(function() {
-			
-				$('#wpsc-col-right').hide();
-				$(this).addClass('nav-tab-active');
-				$('a#add').removeClass('nav-tab-active');
-				$('a#add').text('Add New');
-				$('#wpsc-col-left').show();
-				
-				return false;
-				
-			});
-			
-			$('a#add').click(function() {
-				
-				$('#wpsc-col-left').hide();
-				$(this).addClass('nav-tab-active');
-				$('a#manage').removeClass('nav-tab-active');
-				$(':input','#modify-products').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
-				$('#wpsc-col-right').show();
-				return false;
-			});
-		});
-	})(jQuery);
-	/* ]]> */
-	</script>
+
 	<?php
 }
 
@@ -401,7 +377,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		</div>
 	
 		<input type='hidden' id='products_page_category_id'  name='category_id' value='<?php echo $category_id; ?>' />
-		<table class="widefat page fixed" id='wpsc_product_list' cellspacing="0">
+		<table class="widefat page" id='wpsc_product_list' cellspacing="0">
 			<thead>
 				<tr>
 					<?php print_column_headers('display-product-list'); ?>

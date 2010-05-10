@@ -2,7 +2,38 @@
 
 jQuery(document).ready( function () {
 
-	
+
+//LiveQuery added to each of these	
+			jQuery('div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
+				jQuery(this).appendTo('div#append-side');
+			})
+		
+		jQuery('a#manage').livequery(function() {
+			jQuery(this).click(function() {
+			
+				jQuery('#wpsc-col-right').hide();
+				jQuery(this).addClass('nav-tab-active');
+				jQuery('a#add').removeClass('nav-tab-active');
+				jQuery('a#add').text('Add New');
+				jQuery('#wpsc-col-left').show();
+				
+				return false;
+				
+			});			
+		})
+			
+			jQuery('a#add').livequery(function() {
+				jQuery(this).click(function() {
+				
+				jQuery(':input','#wpsc-col-right').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
+				jQuery('#wpsc-col-left').hide();
+				jQuery(this).addClass('nav-tab-active');
+				jQuery('a#manage').removeClass('nav-tab-active');
+				jQuery('#wpsc-col-right').show();
+				return false;
+			});
+		});
+		
 	//Animateedit products columns
 	jQuery('.wpsc-separator').livequery(function(){
 		jQuery(this).click(function(){
@@ -328,7 +359,7 @@ jQuery(document).ready( function () {
 // 			return false;
 // 	});
 	 
-	
+
   // this loads the edit-products page using javascript
 	 jQuery('.edit-product, .row-title').click(function(){
 	 		jQuery(this).next('.loadingImg').removeAttr('style');
