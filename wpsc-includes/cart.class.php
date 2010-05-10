@@ -94,6 +94,32 @@ function wpsc_cart_total_widget(){
 }
 
 /**
+ * Cart Subtotal Widget
+ *
+ * Can be used to display the cart total excluding shipping and coupons.
+ *
+ * @since 3.7.6.2
+ *
+ * @return string The subtotal price of the cart, with a currency sign.
+ */
+function wpsc_cart_subtotal_widget() {
+
+	global $wpsc_cart;
+	
+	$total = $wpsc_cart->calculate_subtotal();
+	
+	if ( wpsc_tax_isincluded() == false ) {
+		$total += $wpsc_cart->calculate_total_tax();
+	}
+	if ( get_option( 'add_plustax' ) == 1 ) {
+		return $wpsc_cart->process_as_currency( $wpsc_cart->calculate_subtotal() );
+	}
+	
+	return $wpsc_cart->process_as_currency( $total );
+	
+}
+
+/**
 * nzshpcrt_overall_total_price function, no parameters
 * @return string the total price of the cart, with a currency sign
 */
