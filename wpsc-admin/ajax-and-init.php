@@ -424,6 +424,67 @@ function wpsc_modify_sku() {
 if($_REQUEST['wpsc_admin_action'] == 'modify_sku') {
 	add_action('admin_init', 'wpsc_modify_sku');
 }
+
+
+function wpsc_modify_weight() {
+	global $wpdb;
+//	exit('<pre>'.print_r($_POST, true).'</pre>');
+	$product_data = array_pop($_POST['weight_field']);
+
+	$product_id = absint($product_data['id']);
+	$weight = (float)($product_data['weight'] * 453.59237);
+	$product_nonce = $product_data['nonce'];
+
+	if(wp_verify_nonce($product_nonce, 'edit-weight-'.$product_id) ) {
+//Justin Sainton - 5.8.2010 - Not a huge fan of the way this works, I'd prefer that weight be it's own entry in the postmeta table, like price, sale price, SKU, stock level, etc.  Creates extra dimensions to the array, not real sure why at this point, but I've probably been staring at this too long :)		
+		$old_array = get_post_meta ( $product_id,  '_wpsc_product_metadata' );
+		$new_array = array ( 'weight' => $weight );
+		$new_array = array_replace_recursive ( $old_array, $new_array );
+	
+		if(update_post_meta($product_id, '_wpsc_product_metadata', $new_array)) {
+			echo "success = 1;\n\r";
+			echo "new_price = '".wpsc_convert_weight($weight, "gram", $old_array["weight_unit"])."';\n\r";
+		} else {
+			echo "success = 0;\n\r";
+		}
+	} else {
+		echo "success = -1;\n\r";
+	}
+	exit();
+}
+
+ 
+if($_REQUEST['wpsc_admin_action'] == 'modify_weight') {
+	add_action('admin_init', 'wpsc_modify_weight');
+}
+
+
+function wpsc_modify_stock() {
+	global $wpdb;
+//	exit('<pre>'.print_r($_POST, true).'</pre>');
+	$product_data = array_pop($_POST['stock_field']);
+
+	$product_id = absint($product_data['id']);
+	$stock = $product_data['stock'];
+	$product_nonce = $product_data['nonce'];
+
+	if(wp_verify_nonce($product_nonce, 'edit-stock-'.$product_id) ) {
+		if(update_post_meta($product_id, '_wpsc_stock', $stock)) {
+			echo "success = 1;\n\r";
+			echo "new_price = '".$stock."';\n\r";
+		} else {
+			echo "success = 0;\n\r";
+		}
+	} else {
+		echo "success = -1;\n\r";
+	}
+	exit();
+}
+
+ 
+if($_REQUEST['wpsc_admin_action'] == 'modify_stock') {
+	add_action('admin_init', 'wpsc_modify_stock');
+}
     
  
 /**

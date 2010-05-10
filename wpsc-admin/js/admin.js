@@ -330,7 +330,7 @@ jQuery(document).ready( function () {
 	 
 	
   // this loads the edit-products page using javascript
-	 jQuery('.edit-product').click(function(){	
+	 jQuery('.edit-product, .row-title').click(function(){
 	 		jQuery(this).next('.loadingImg').removeAttr('style');
 			product_id = jQuery(this).attr('href').match(/(?:;|&)product=(\d{1,})/);
 			wpnonce = jQuery(this).attr('href').match(/_wpnonce=(\w{1,})/);
@@ -341,7 +341,6 @@ jQuery(document).ready( function () {
 				}
 				jQuery('form#modify-products #content').remove();
 				
-				
 			  jQuery('form#modify-products').html(returned_data);
 			  	jQuery('.loadingImg').attr('style', 'display:none;');
 				if ( getUserSetting( 'editor' ) != 'html' ) {
@@ -350,7 +349,14 @@ jQuery(document).ready( function () {
 						tinyMCE.execCommand("mceAddControl", false, "content");
 					}
 				}
+				jQuery('a#add').addClass('nav-tab-active');
+				jQuery('a#manage').removeClass('nav-tab-active');
+				jQuery('#wpsc-col-left').hide()
+				jQuery('a#add').text('Edit Product');
+				jQuery('#wpsc-col-right').show();
 			});
+			//Justin Sainton - 5.8.2010 - Added to interface with tab navigation.	
+			
 	 		return false;
 	 		// */
  		
@@ -511,6 +517,115 @@ jQuery(document).ready( function () {
 	});
 	
 // Code for using AJAX to change the SKU ends here	
+
+
+
+
+
+
+// Code for using AJAX to change the Weight starts here
+	ajax_submit_weight= function(event) {
+		target_element_id= event.data;
+		form_data = jQuery("#"+target_element_id+" input").serialize();
+//		console.log(form_data);
+		jQuery.ajax({
+				type: "POST",
+				url: "admin.php?wpsc_admin_action=modify_weight",
+				data: form_data,
+				success: function(returned_data) {
+					eval(returned_data);
+				  if(success == 1) {
+						parent_container = jQuery("#"+target_element_id+"").parent('.column-weight');
+						jQuery(".weightdisplay", parent_container).html(new_price);
+				  }
+					jQuery('span.weightdisplay').css('display', 'block');
+					jQuery('div.weight-editing-fields').css('display', 'none');
+					jQuery('form#posts-filter').unbind('submit.disable');
+				}
+			});
+		jQuery('form#posts-filter').unbind('submit.disable');
+		return false;
+	};
+	
+	jQuery("table#wpsc_product_list .column-weight").livequery(function(){
+		jQuery('span.weightdisplay',this).click(function(){
+			jQuery('span.weightdisplay').css('display', 'block');
+			jQuery('div.weight-editing-fields').css('display', 'none');
+			jQuery(this).css('display', 'none');
+			jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).css('display', 'block');
+			target_element_id = jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).attr('id');		
+			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_weight);
+			jQuery('div.weight-editing-fields .the-weight-fields', jQuery(this).parent('.column-weight')).focus();
+		});
+		jQuery('.the-weight-fields',this).keyup(function(event){
+			target_element_id = jQuery(jQuery(this).parent('.weight-editing-fields')).attr('id');
+			if(event.keyCode == 13) {
+				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_weight);
+			}
+		});
+		
+		target_element_id = jQuery('.weight-editing-fields',this).attr('id');
+ 		jQuery('.the-weight-fields',this).bind('blur', target_element_id, ajax_submit_weight);
+
+	});
+	
+// Code for using AJAX to change the Weight ends here	
+
+
+
+
+
+
+// Code for using AJAX to change the Stock Levels starts here
+	ajax_submit_stock = function(event) {
+		target_element_id= event.data;
+		form_data = jQuery("#"+target_element_id+" input").serialize();
+//		console.log(form_data);
+		jQuery.ajax({
+				type: "POST",
+				url: "admin.php?wpsc_admin_action=modify_stock",
+				data: form_data,
+				success: function(returned_data) {
+					eval(returned_data);
+				  if(success == 1) {
+						parent_container = jQuery("#"+target_element_id+"").parent('.column-stock');
+						jQuery(".stockdisplay", parent_container).html(new_price);
+				  }
+					jQuery('span.stockdisplay').css('display', 'block');
+					jQuery('div.stock-editing-fields').css('display', 'none');
+					jQuery('form#posts-filter').unbind('submit.disable');
+				}
+			});
+		jQuery('form#posts-filter').unbind('submit.disable');
+		return false;
+	};
+	
+	jQuery("table#wpsc_product_list .column-stock").livequery(function(){
+		jQuery('span.stockdisplay',this).click(function(){
+			jQuery('span.stockdisplay').css('display', 'block');
+			jQuery('div.stock-editing-fields').css('display', 'none');
+			jQuery(this).css('display', 'none');
+			jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).css('display', 'block');
+			target_element_id = jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).attr('id');		
+			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_stock);
+			jQuery('div.stock-editing-fields .the-stock-fields', jQuery(this).parent('.column-stock')).focus();
+		});
+		jQuery('.the-stock-fields',this).keyup(function(event){
+			target_element_id = jQuery(jQuery(this).parent('.stock-editing-fields')).attr('id');
+			if(event.keyCode == 13) {
+				jQuery('form#posts-filter').bind('submit.disable', target_element_id, ajax_submit_stock);
+			}
+		});
+		
+		target_element_id = jQuery('.stock-editing-fields',this).attr('id');
+ 		jQuery('.the-stock-fields',this).bind('blur', target_element_id, ajax_submit_stock);
+
+	});
+	
+// Code for using AJAX to change the Stock Levels ends here	
+
+
+
 
 	jQuery("div.admin_product_name a.shorttag_toggle").livequery(function(){
 	  jQuery(this).toggle(

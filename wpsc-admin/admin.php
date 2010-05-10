@@ -290,8 +290,9 @@ function wpsc_admin_include_optionspage_css_and_js(){
 }
 
 function wpsc_meta_boxes(){
-  $pagename = 'products_page_wpsc-edit-products';
+  	//$pagename = 'products_page_wpsc-edit-products';
  
+  	$pagename = 'store_page_wpsc-edit-products';
 	add_meta_box('wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high');

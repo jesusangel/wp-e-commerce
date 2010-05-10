@@ -239,7 +239,54 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			<?php
 		break;
 
+	// 5.8.2010 - Justin Sainton - Addition of weight and stock cases to column header switch.
+	
+		case 'weight' :
+		
+			$product_data['meta'] = array();
+			$product_data['meta'] = get_post_meta($product->ID, '');
+				foreach($product_data['meta'] as $meta_name => $meta_value) {
+					$product_data['meta'][$meta_name] = maybe_unserialize(array_pop($meta_value));
+				}
+		$product_data['transformed'] = array();
+		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
+			$weight = $product_data['transformed']['weight'];
+			if($weight == ''){
+				$weight = 'None';
+			}
+			?>
+				<td  <?php echo $attributes ?>>
+					<span class="weightdisplay"><?php echo $weight; ?></span>
+					<div class='weight-editing-fields' id='weight-editing-fields-<?php echo $product->ID; ?>'>
+						<input type='text' class='the-weight-fields' name='weight_field[<?php echo $product->ID; ?>][weight]' value='<?php echo $weight; ?>' />
+						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
+						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-weight-'.$product->ID); ?>' />
 
+
+					</div>
+				</td>
+			<?php
+
+		break;
+		
+		case 'stock' :
+			$stock = get_post_meta($product->ID, '_wpsc_stock', true);
+			if($stock == ''){
+				$stock = '0';
+			}
+			?>
+				<td  <?php echo $attributes ?>>
+					<span class="stockdisplay"><?php echo $stock; ?></span>
+					<div class='stock-editing-fields' id='stock-editing-fields-<?php echo $product->ID; ?>'>
+						<input type='text' class='the-stock-fields' name='stock_field[<?php echo $product->ID; ?>][stock]' value='<?php echo $stock; ?>' />
+						<input type='hidden' name='stock_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
+						<input type='hidden' name='stock_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-stock-'.$product->ID); ?>' />
+
+
+					</div>
+				</td>
+	<?php
+		break;
 
 		case 'categories':  /* !categories case */
 		?>
@@ -373,16 +420,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 <?php
 	$product = $global_product;
 }
-
-
-
-
-
-
-
-
-
-
 
 function wpsc_old_product_row(&$product) {
 	global $wp_query, $wpsc_products, $mode;

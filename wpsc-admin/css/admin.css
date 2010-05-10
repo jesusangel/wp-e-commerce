@@ -234,7 +234,7 @@ border: 1px solid #dfdfdf;
 }
 
 div.search-box input#page-search-input {
-  width: 80px;
+  width: 129px;
 
 }
 
@@ -306,7 +306,7 @@ float:left;
 /*  Sortable product styling*/
 	
 table.product_editform {
-  width:auto;
+  width:100%;
   margin-bottom: 20px;
 }
 	
@@ -333,7 +333,7 @@ div.price-editing-fields input.the-product-price {
 	width: 51px;
 }
 
-div.price-editing-fields,div.sales-price-fields,div.sku-editing-fields {
+div.price-editing-fields,div.sales-price-fields,div.sku-editing-fields, div.weight-editing-fields, div.stock-editing-fields  {
 	display: none;
 } 
 		
@@ -350,18 +350,20 @@ div.product-placeholder {
 /*  Product details form styling */
 
 #wpsc-col-right {
-	clear:right;
-	float:right;
-	margin:0;
-	margin-right:5px;
-	padding:0;
-	width:48%;
+	clear: left;
+	float: left;
+	margin-right: -340px;
+	width: 100%;
 }
-th#image,th#SKU, th#sale_price{
-width:40px;
+th#image,th#SKU{
+width:50px;
 }
+th#sale_price
+	{
+		width:100px
+	}
 th#title{
-width:90px;
+width:450px;
 }
 #wpsc-col-right .postbox .inside {
   padding-left: 10px;
@@ -371,7 +373,7 @@ width:90px;
 	margin:0;
 	overflow:hidden;
 	padding:0;
-	width:50%;
+	width:100%;
 	
 }
 td.product_tags{
@@ -883,7 +885,9 @@ div.variation{
 /* variations CSS ends */
 
 
-
+div#side-sortables input[type="file"] {
+	width:250px;
+}
 div.select_product_file, div.edit_select_product_file {
 	background-color:#EEEEEE;
 	border:1px solid #B2B2B2;
@@ -893,7 +897,6 @@ div.select_product_file, div.edit_select_product_file {
 	overflow-y:auto;
 	padding:2px 2px 6px;
 	position:relative;
-	width:360px;
 }
 
 a.file_delete_button {
@@ -1183,7 +1186,7 @@ td.product_groups_page td.category_presentation_settings {
   padding-bottom: 1ex;
 }
 
-td.column-price .pricedisplay, td.sale_price .pricedisplay, td.SKU .skudisplay{
+td.column-price .pricedisplay, td.sale_price .pricedisplay, td.SKU .skudisplay, td.stock .stockdisplay, td.weight .weightdisplay{
   border-bottom: 1px dotted #333;
 }
 

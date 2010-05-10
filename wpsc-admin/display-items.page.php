@@ -28,8 +28,10 @@ function wpsc_display_edit_products_page() {
 	
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
-		'image' => 'Name',
-		'title' => '',
+		'image' => '',
+		'title' => 'Name',
+		'weight' => 'Weight',
+		'stock' => 'Stock Levels',
 		'price' => 'Price',
 		'sale_price' => 'Sale Price',
 		'SKU' => 'SKU',
@@ -42,8 +44,11 @@ function wpsc_display_edit_products_page() {
   ?>
 	<div class="wrap">
 		<?php // screen_icon(); ?>
-		<h2><?php echo wp_specialchars( __('Display Products', 'wpsc') ); ?> </h2>
-		
+		<div id="icon-themes" class="icon32"><br /></div>
+		<h2>
+				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo wp_specialchars( __('Manage Products', 'wpsc') ); ?></a>
+				<a href="admin.php?page=wpsc-edit-products#poststuff" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
+		</h2>		
 		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){ ?>
 				<div id="message" class="error fade">
 					<p>
@@ -135,20 +140,11 @@ function wpsc_display_edit_products_page() {
 				echo "<div class='error fade'>".str_replace(":directory:","<ul><li>".implode($unwriteable_directories, "</li><li>")."</li></ul>",__('The following directories are not writable: :directory: You won&#39;t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.', 'wpsc'))."</div>";
 			}
 			// class='stuffbox'
+			
+			// Justin Sainton - 5.7.2010 - Re-ordered columns, applying jQuery to toggle divs on click.
 	?>
 		
-		<div id="col-container">
-			<div id="wpsc-col-right">			
-				<div id='poststuff' class="col-wrap">
-					<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
-					<?php
-						$product_id = absint($_GET['product']);
-						wpsc_display_product_form($product_id);
-					?>
-					</form>
-				</div>
-			</div>
-			
+		<div id='poststuff' class="metabox-holder has-right-sidebar">
 			<div id="wpsc-col-left">
 				<div class="col-wrap">		
 					<?php
@@ -156,18 +152,53 @@ function wpsc_display_edit_products_page() {
 					?>
 				</div>
 			</div>
-		</div>
+			
+			<div id="wpsc-col-right" style="display:none">			
+					<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
+					<?php
+						$product_id = absint($_GET['product']);
+						wpsc_display_product_form($product_id);
+					?>
+					</form>
+			</div>		
+	</div>
 
 	</div>
 	<script type="text/javascript">
 	/* <![CDATA[ */
 	(function($){
 		$(document).ready(function(){
+		
+			$('div#wpsc_product_variation_forms').appendTo('div#append-side');
+			$('div#wpsc_product_advanced_forms').appendTo('div#append-side');
+		
 			$('#doaction, #doaction2').click(function(){
 				if ( $('select[name^="action"]').val() == 'delete' ) {
 					var m = '<?php echo js_escape(__("You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
 					return showNotice.warn(m);
 				}
+			});
+			
+			$('a#manage').click(function() {
+			
+				$('#wpsc-col-right').hide();
+				$(this).addClass('nav-tab-active');
+				$('a#add').removeClass('nav-tab-active');
+				$('a#add').text('Add New');
+				$('#wpsc-col-left').show();
+				
+				return false;
+				
+			});
+			
+			$('a#add').click(function() {
+				
+				$('#wpsc-col-left').hide();
+				$(this).addClass('nav-tab-active');
+				$('a#manage').removeClass('nav-tab-active');
+				$(':input','#modify-products').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
+				$('#wpsc-col-right').show();
+				return false;
 			});
 		});
 	})(jQuery);
@@ -323,35 +354,27 @@ function wpsc_admin_products_list($category_id = 0) {
 	//echo "<pre>".print_r($posts, true)."</pre>";
   
 	$is_trash = isset($_GET['post_status']) && $_GET['post_status'] == 'trash';
-	?>
-	<div class="wpsc-separator"><br/></div>
 	
+	// Justin Sainton - 5.7.2010 - Added conditional code below as blank space would show up if $page_links was NULL.  Now the area only shows up if page links exist.
+	
+	?>	
+	
+	<?php if ( $page_links ) { ?>
 	<div class="tablenav">
 		<div class="tablenav-pages">
 			<?php
 				echo $page_links;
 			?>	
 		</div>
-		
+	</div>
+<?php } ?>	
+			
+	<form id="posts-filter" action="" method="get">
+		<div class="tablenav">	
 		<div class="alignleft actions">
-			<form action="admin.php" method="get">
 				<?php
 					echo wpsc_admin_category_dropdown();
 				?>
-			</form>
-		</div>	
-	</div>
-	
-	
-	<form id="posts-filter" action="" method="get">
-		<div class="tablenav">	
-			<div class="alignright search-box">
-				<input type='hidden' name='page' value='wpsc-edit-products'  />
-				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
-				<input type="submit" name='wpsc_search' value="<?php _e( 'Search' ); ?>" class="button" />
-			</div>
-		
-			<div class="alignleft actions">
 					<select name="bulkAction">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
 						<option value="publish"><?php _e('Publish', 'wpsc'); ?></option>
@@ -369,6 +392,11 @@ function wpsc_admin_products_list($category_id = 0) {
 					<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
 					<input type="submit" value="<?php _e('Apply'); ?>" name="doaction" id="doaction" class="button-secondary action" />
 					<?php wp_nonce_field('bulk-products', 'wpsc-bulk-products'); ?>
+		</div>	
+			<div class="alignright search-box">
+				<input type='hidden' name='page' value='wpsc-edit-products'  />
+				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
+				<input type="submit" name='wpsc_search' value="<?php _e( 'Search Products' ); ?>" class="button" />
 			</div>
 		</div>
 	

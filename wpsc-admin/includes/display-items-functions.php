@@ -55,6 +55,49 @@ $wpsc_product_defaults =array (
     ),
   ),
 );
+// Justin Sainton - 5.8.2010 - Adding this function for backwards_compatible array_replace
+
+if (!function_exists('array_replace_recursive'))
+{
+  function array_replace_recursive($array, $array1)
+  {
+    function recurse($array, $array1)
+    {
+      foreach ($array1 as $key => $value)
+      {
+        // create new key in $array, if it is empty or not an array
+        if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key])))
+        {
+          $array[$key] = array();
+        }
+  
+        // overwrite the value in the base array
+        if (is_array($value))
+        {
+          $value = recurse($array[$key], $value);
+        }
+        $array[$key] = $value;
+      }
+      return $array;
+    }
+  
+    // handle the arguments, merge one by one
+    $args = func_get_args();
+    $array = $args[0];
+    if (!is_array($array))
+    {
+      return $array;
+    }
+    for ($i = 1; $i < count($args); $i++)
+    {
+      if (is_array($args[$i]))
+      {
+        $array = recurse($array, $args[$i]);
+      }
+    }
+    return $array;
+  }
+}
 
 function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
   global $wpdb;
@@ -150,20 +193,126 @@ function wpsc_product_basic_details_form(&$product_data) {
   
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
   ?>
-  <h3 class='form_heading'>
+  <h3 class='form_heading' style="display:none;">
  <?php
   if($product_data['id'] > 0) {
-		echo __('Edit Product', 'wpsc')." <span>(<a href='".add_query_arg('page','wpsc-edit-products', remove_query_arg('product_id', 'admin.php'))."'>".__('Add Product', 'wpsc')."</a>)</span>";
+		echo __('Edit Product', 'wpsc');
 	} else {
-		echo __('Add Product', 'wpsc');
+		echo __('Add New', 'wpsc');
 	}
 	?>
 	</h3>
-	<div>
+	<div id="side-info-column" class="inner-sidebar">
+		<div id="side-sortables" class='meta-box-sortables'>
+			<input type='hidden' name='product_id' id='product_id' value='<?php echo $product_data['id']; ?>' />
+			<input type='hidden' name='wpsc_admin_action' value='edit_product' />
+			<input type='hidden' name='user_ID' id='user-id' value='<?php echo $user_ID; ?>' />
+		
+	<?php if(is_object($product)) { ?>
+		<input type='hidden' name='post_ID' id='post_ID' value='<?php echo $product_data['id']; ?>' />
+		<input type='hidden' id='post_author' name='post_author' value='<?php echo esc_attr( $product->post_author ); ?>' />
+		<input type='hidden' id='post_type' name='post_type' value='<?php echo esc_attr($product->post_type) ?>' />
+	<?php } else { ?> 
+		<?php $temp_ID = -1 * time();?> 
+		<input type='hidden' id='post_author' name='post_author' value='<?php echo $user_ID; ?>' />
+		<input type='hidden' id='post_type' name='post_type' value='wpsc-product' />
+		<input type='hidden' id='post_ID' name='temp_ID' value='<?php echo $temp_ID; ?>' />
+
+	<?php } ?>
+	<input type='hidden' id='original_post_status' name='original_post_status' value='<?php echo esc_attr($product->post_status) ?>' />
+	<input name='referredby' type='hidden' id='referredby' value='<?php echo esc_url(stripslashes(wp_get_referer())); ?>' />
+	<?php wp_nonce_field('edit-product', 'wpsc-edit-product'); ?>
+	<?php wp_nonce_field( 'autosave', 'autosavenonce', false ); ?>
+	<input type='hidden' name='submit_action' value='edit' />
+	<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+		
+	<?php /*
+	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Update Product', 'wpsc'); } else {	_e('Add New Product', 'wpsc');	} ?>' />&nbsp;
+	*/ ?> 
+	
+	<div id="submitdiv" class="postbox">
+		<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span>Publish</span></h3>
+			<div class="inside">
+			<div class="submitbox" id="submitpost">
+		<?php
+		if(($product->post_status == 'draft') || ($product->post_status == null)) {
+			?>
+			<input type='submit' value='<?php _e('Publish', 'wpsc'); ?>' id='publish' class='button-primary' name='publish' />
+			<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
+			<?php	
+		} else {
+			?>	
+			<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
+			<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
+			<?php
+		}
+		?>
+		
+		<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?></a>
+		</div></div>
+	</div>
+	
+	
+		<?php
+		
+		
+		$default_order=array(
+		  "wpsc_product_category_and_tag_forms",
+		  "wpsc_product_price_and_stock_forms",
+		  "wpsc_product_shipping_forms",
+		  "wpsc_product_variation_forms",
+		  "wpsc_product_advanced_forms",
+		  "wpsc_product_image_forms",
+		  "wpsc_product_download_forms"
+		  );
+		
+	 	$order = get_option('wpsc_product_page_order');	 	
+
+	 	
+		$order = apply_filters( 'wpsc_products_page_forms', $order);
+	  
+	 	//echo "<pre>".print_r($order,true)."</pre>";
+	 	if (($order == '') || (count($order ) < 6)){
+				$order = $default_order;
+	 	}
+	 	$check_missing_items = array_diff($default_order, $order);
+	 	
+	 	if(count($check_missing_items) > 0) {
+	 	  $order = array_merge($check_missing_items, $order);
+	 	}
+		
+		update_option('wpsc_product_page_order', $order);
+		
+	 	// if this is a child product, we need to filter out the variations box here
+	 	if($product_data['product_object']->post_parent > 0) {
+	 		$variation_box_key = array_search('wpsc_product_variation_forms', $order);
+	 		if(is_numeric($variation_box_key) && isset($order[$variation_box_key])) {
+	 			unset($order[$variation_box_key]);
+	 		}
+	 		
+	 		
+	 		$category_box_key = array_search('wpsc_product_category_and_tag_forms', $order);
+	 		if(is_numeric($category_box_key) && isset($order[$category_box_key])) {
+	 			unset($order[$category_box_key]);
+	 		}
+	 		
+	 	}
+		
+		
+		foreach((array)$order as $key => $box_function_name) {
+			if(function_exists($box_function_name)) {
+				echo call_user_func($box_function_name,$product_data);
+			}
+		}
+		?>	
+	</div>
+	</div>
+
+<div id="post-body">
+	<div id="post-body-content">
 		<table class='product_editform' >
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
-				<div style='width:470px'>
 					<label for="wpsc_product_name"><?php echo __('Product Name', 'wpsc')?></label>
 					<div class='admin_product_name'>
 						<input id='title' class='wpsc_product_name text' size='15' type='text' name='post_title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
@@ -191,7 +340,6 @@ function wpsc_product_basic_details_form(&$product_data) {
 							<p><a href="<?php echo wpsc_product_url( $product_data['id'] ); ?>" target="_blank" class="button">View product</a></p>
 						<?php } ?>
 						
-					</div>
 					</div>
 					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
 				</td>
@@ -316,121 +464,11 @@ function wpsc_product_basic_details_form(&$product_data) {
 				</td>
 			</tr>
 		</table>
+		<div id="append-side">
+		
+		</div>
 	</div>
-	<div class='meta-box-sortables'>
-		<?php
-		
-		
-		$default_order=array(
-		  "wpsc_product_category_and_tag_forms",
-		  "wpsc_product_price_and_stock_forms",
-		  "wpsc_product_shipping_forms",
-		  "wpsc_product_variation_forms",
-		  "wpsc_product_advanced_forms",
-		  "wpsc_product_image_forms",
-		  "wpsc_product_download_forms"
-		  );
-		
-	 	$order = get_option('wpsc_product_page_order');	 	
-
-	 	
-		$order = apply_filters( 'wpsc_products_page_forms', $order);
-	  
-	 	//echo "<pre>".print_r($order,true)."</pre>";
-	 	if (($order == '') || (count($order ) < 6)){
-				$order = $default_order;
-	 	}
-	 	$check_missing_items = array_diff($default_order, $order);
-	 	
-	 	if(count($check_missing_items) > 0) {
-	 	  $order = array_merge($check_missing_items, $order);
-	 	}
-		
-		update_option('wpsc_product_page_order', $order);
-		
-	 	// if this is a child product, we need to filter out the variations box here
-	 	if($product_data['product_object']->post_parent > 0) {
-	 		$variation_box_key = array_search('wpsc_product_variation_forms', $order);
-	 		if(is_numeric($variation_box_key) && isset($order[$variation_box_key])) {
-	 			unset($order[$variation_box_key]);
-	 		}
-	 		
-	 		
-	 		$category_box_key = array_search('wpsc_product_category_and_tag_forms', $order);
-	 		if(is_numeric($category_box_key) && isset($order[$category_box_key])) {
-	 			unset($order[$category_box_key]);
-	 		}
-	 		
-	 	}
-		
-		
-		foreach((array)$order as $key => $box_function_name) {
-			if(function_exists($box_function_name)) {
-				echo call_user_func($box_function_name,$product_data);
-			}
-		}
-		?>
-	</div>
-	
-	
-	
-	
-	
-	<input type='hidden' name='product_id' id='product_id' value='<?php echo $product_data['id']; ?>' />
-	<input type='hidden' name='wpsc_admin_action' value='edit_product' />
-		<input type='hidden' name='user_ID' id='user-id' value='<?php echo $user_ID; ?>' />
-	
-	<?php if(is_object($product)) { ?>
-		<input type='hidden' name='post_ID' id='post_ID' value='<?php echo $product_data['id']; ?>' />
-		<input type='hidden' id='post_author' name='post_author' value='<?php echo esc_attr( $product->post_author ); ?>' />
-		<input type='hidden' id='post_type' name='post_type' value='<?php echo esc_attr($product->post_type) ?>' />
-	<?php } else { ?> 
-		<?php $temp_ID = -1 * time();?> 
-		<input type='hidden' id='post_author' name='post_author' value='<?php echo $user_ID; ?>' />
-		<input type='hidden' id='post_type' name='post_type' value='wpsc-product' />
-		<input type='hidden' id='post_ID' name='temp_ID' value='<?php echo $temp_ID; ?>' />
-
-	<?php } ?>
-	<input type='hidden' id='original_post_status' name='original_post_status' value='<?php echo esc_attr($product->post_status) ?>' />
-	<input name='referredby' type='hidden' id='referredby' value='<?php echo esc_url(stripslashes(wp_get_referer())); ?>' />
-
-	
-
-	
-	
-	
-	
-	
-	
-	<?php wp_nonce_field('edit-product', 'wpsc-edit-product'); ?>
-	<?php wp_nonce_field( 'autosave', 'autosavenonce', false ); ?>
-	<input type='hidden' name='submit_action' value='edit' />
-	<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-	
-	
-	
-	
-	<?php /*
-	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Update Product', 'wpsc'); } else {	_e('Add New Product', 'wpsc');	} ?>' />&nbsp;
-	*/ ?> 
-	
-	<div class="submitbox">
-		<?php
-		if(($product->post_status == 'draft') || ($product->post_status == null)) {
-			?>
-			<input type='submit' value='<?php _e('Publish', 'wpsc'); ?>' id='publish' class='button-primary' name='publish' />
-			<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
-			<?php	
-		} else {
-			?>	
-			<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
-			<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
-			<?php
-		}
-		?>
-		
-		<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?></a>
-	</div>
+</div>
 	<?php
   }
 
