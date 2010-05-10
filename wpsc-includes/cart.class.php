@@ -861,6 +861,7 @@ class wpsc_cart {
 		}	
 		$this->cart_item_count = count($this->cart_items);
 		$this->clear_cache();
+		do_action ("wpsc_cart_updated", &$this);
 		return $status;
 	}
   
