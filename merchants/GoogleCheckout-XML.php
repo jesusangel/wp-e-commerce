@@ -139,37 +139,40 @@ function gateway_google($fromcheckout = false){
 		}
 
 //	}
-
+	
 
 	// Add shipping options
-	$Gfilter = new GoogleShippingFilters();
-	$google_checkout_shipping=get_option("google_shipping_country");
-	$googleshippingcountries = count($google_checkout_shipping);
-	//exit('<pre>'.print_r($googleshipping, true).'</pre>');
-	if($googleshippingcountries == 242){
-		$Gfilter->SetAllowedWorldArea(true);
+	if(wpsc_uses_shipping() && $google_currency_shipping >0 ){
+		$Gfilter = new GoogleShippingFilters();
+		$google_checkout_shipping=get_option("google_shipping_country");
+		$googleshippingcountries = count($google_checkout_shipping);
+		//exit('<pre>'.print_r($googleshipping, true).'</pre>');
+		if($googleshippingcountries == 242){
+			$Gfilter->SetAllowedWorldArea(true);
+		
+		}else{
+		if(is_array($google_checkout_shipping)){
+			$google_shipping_country_ids = implode(",",$google_checkout_shipping);
+		}
+			$google_shipping_country = $wpdb->get_col("SELECT `isocode` FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
+			foreach($google_shipping_country as $isocode){
+				//exit($isocode);
+				$Gfilter->AddAllowedPostalArea($isocode);
+				if($isocode == 'US'){
+					$Gfilter->SetAllowedCountryArea('ALL');
 	
-	}else{
-	if(is_array($google_checkout_shipping)){
-		$google_shipping_country_ids = implode(",",$google_checkout_shipping);
-	}
-		$google_shipping_country = $wpdb->get_col("SELECT `isocode` FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
-		foreach($google_shipping_country as $isocode){
-			//exit($isocode);
-			$Gfilter->AddAllowedPostalArea($isocode);
-			if($isocode == 'US'){
-				$Gfilter->SetAllowedCountryArea('ALL');
-
+				}
 			}
 		}
+		
+		$Gfilter->SetAllowUsPoBox(false);
+		$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $google_currency_shipping);
+		$ship_1->AddShippingRestrictions($Gfilter);
+		$cart->AddShipping($ship_1);
 	}
-	
-	$Gfilter->SetAllowUsPoBox(false);
-	$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $google_currency_shipping);
-	$ship_1->AddShippingRestrictions($Gfilter);
-	$cart->AddShipping($ship_1);
 	//wpsc_google_shipping_quotes();
-      // Add tax rules
+
+    // Add tax rules
 	//if ($_SESSION['wpsc_selected_country']=='US'){
 		//set default tax
 		//exit('<pre>'.print_r($_SESSION,true).'</pre>');

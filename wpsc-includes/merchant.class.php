@@ -127,7 +127,7 @@ class wpsc_merchant {
 			if($address_key == null) {
 				continue;
 			}
-			if($address_key == 'billingcountry' || $address_key == 'shippingcountry'){
+			if($collected_form_row['unique_name'] == 'billingcountry' || $collected_form_row['unique_name'] == 'shippingcountry'){
 				$country = maybe_unserialize($collected_form_row['value']);
 				$address_data[$address_data_set][$address_key] =$country[0];
 			}elseif($collected_form_row['unique_name'] == 'shippingstate'){

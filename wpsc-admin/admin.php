@@ -238,14 +238,8 @@ function  wpsc_admin_include_css_and_js() {
 		'separate' => __('Separate tags with commas'),
 	));
 	if(defined('WPSC_GOLD_DIR_NAME') && WPSC_GOLD_DIR_NAME != ''){
-		wp_enqueue_style('gold_cart', WPSC_UPGRADES_URL . 'gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
+		wp_enqueue_style('gold_cart', WPSC_GOLD_FILE_URL.'/gold_cart.css',false, $version_identifier, 'all');
 	}
-	//jQuery wysiwyg
-	//  	if ( user_can_richedit() ) {
-	// 		wp_enqueue_script('editor');
-	// 	}
-	// 	wp_enqueue_script('media-upload');
-	//   wp_enqueue_style('thickbox');
 
 	// Prototype breaks dragging and dropping, I need it gone
 	wp_deregister_script('prototype');
