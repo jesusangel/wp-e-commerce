@@ -4,9 +4,17 @@ jQuery(document).ready( function () {
 
 
 //LiveQuery added to each of these	
-			jQuery('div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
+			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
 				jQuery(this).appendTo('div#append-side');
-			})
+			});
+			jQuery('div#wpsc_product_category_and_tag_forms').livequery(function() {
+				jQuery(this).insertAfter('div#submitdiv');
+			});
+			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
+				jQuery(this).insertAfter('div#wpsc_product_category_and_tag_forms');
+			});
+			
+			
 		
 		jQuery('a#manage').livequery(function() {
 			jQuery(this).click(function() {

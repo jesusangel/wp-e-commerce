@@ -368,6 +368,9 @@ width:450px;
 #wpsc-col-right .postbox .inside {
   padding-left: 10px;
 }
+#wpsc-col-right .postbox .publish {
+  padding-left: 0px;
+}
 
 #wpsc-col-left {
 	margin:0;

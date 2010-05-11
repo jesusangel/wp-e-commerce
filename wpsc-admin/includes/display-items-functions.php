@@ -232,25 +232,47 @@ function wpsc_product_basic_details_form(&$product_data) {
 	
 	<div id="submitdiv" class="postbox">
 		<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span>Publish</span></h3>
-			<div class="inside">
+			<div class="inside publish">
 			<div class="submitbox" id="submitpost">
-		<?php
-		if(($product->post_status == 'draft') || ($product->post_status == null)) {
-			?>
-			<input type='submit' value='<?php _e('Publish', 'wpsc'); ?>' id='publish' class='button-primary' name='publish' />
-			<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
-			<?php	
-		} else {
-			?>	
-			<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
-			<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
-			<?php
-		}
-		?>
-		
-		<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?></a>
-		</div></div>
+				<div id="minor-publishing">
+					<div id="minor-publishing-actions">
+						<div id="save-action">
+							<?php
+								if(($product->post_status == 'draft') || ($product->post_status == null)) {
+									?>
+									<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
+									<?php	
+								} else {
+									?>	
+									<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
+									<?php
+								}
+							?>
+						</div>
+					</div>
+				</div>
+				<div id="major-publishing-actions">
+				<div id="delete-action">
+					<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?></a>
+					</div>
+				<div id="publishing-action">
+					<?php
+					if(($product->post_status == 'draft') || ($product->post_status == null)) {
+						?>
+						<input type='submit' value='<?php _e('Publish', 'wpsc'); ?>' id='publish' class='button-primary' name='publish' />
+						<?php	
+					} else {
+						?>	
+						<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
+						<?php
+					}
+					?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
 	</div>
+</div>
 	
 	
 		<?php
@@ -471,11 +493,6 @@ function wpsc_product_basic_details_form(&$product_data) {
 </div>
 	<?php
   }
-
-
-
-
-
 function wpsc_product_category_and_tag_forms($product_data=''){
 	global $closed_postboxes, $wpdb, $variations_processor;
 	
@@ -1123,7 +1140,7 @@ function wpsc_product_download_forms($product_data='') {
  	$upload_max = wpsc_get_max_upload_size();
  	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
  	
-	$output .= "<h3 class='hndle'>".__('Product Download', 'wpsc')."</h3>";
+	$output .= "<h3 class='hndle'>".__('Product Downloads', 'wpsc')."</h3>";
 	$output .= "<div class='inside'>";
 	
 	$output .= "<h4>".__('Upload File', 'wpsc').":</h4>";
