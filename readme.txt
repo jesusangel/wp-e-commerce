@@ -36,6 +36,22 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog == 
+= 3.7.6.2 =
+* Paypal standard and Paypal standard 2.0 shipping send shipping details
+* Google Checkout do not send shipping if shipping is 0
+* New Spanish translations
+* Removed 'Click to Download' from purchase receipts and transaction results page
+* Removed old unused Google Base Code 
+* New changes to purchase logs totals and tax
+* Fixes to javascript errors from ratings.js
+* Image Thumbnail Patch submitted by the amazing leewillis77
+* Canonical URL / AISEOP fixes
+* Backwards compatibility for update quantity code
+* Encoded RSS URL so it validates
+* New update message display below the auto-upgrade link in the WordPress plugin page submitted by the awesome husobj
+* Image Cache fix should speed up those thumbnails
+
+
 = 3.7.6.1 = 
 * Bugfix release
 

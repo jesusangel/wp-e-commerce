@@ -519,6 +519,7 @@ function wpsc_the_product_image($width = null, $height = null) {
 		if(is_numeric($wpsc_query->product['image'])){
 			$image_file_name = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id`= '".$wpsc_query->product['image']."' LIMIT 1");
 		}else{
+
 			$image_file_name = $wpsc_query->product['image'];
 		}
 		$wpsc_query->product['image_file'] = $wpsc_query->product['image'];
@@ -535,11 +536,10 @@ function wpsc_the_product_image($width = null, $height = null) {
 
 	if($image_file_name != null) {
 		if(($width > 0) && ($height > 0) && ($width <= 1024) && ($height <= 1024)) {
-			$cache_filename = basename("product_img_{$image_id}_{$height}x{$width}");
-			
-			if(file_exists(WPSC_CACHE_DIR.$cache_filename.$extension)) {
+			$cache_filename = basename("product_img_{$wpsc_query->product['image']}_{$height}x{$width}");
+			if(file_exists(WPSC_CACHE_DIR.$cache_filename.'.'.$extension)) {
 				$original_modification_time = filemtime($image_path);
-				$cache_modification_time = filemtime(WPSC_CACHE_DIR.$cache_filename.$extension);
+				$cache_modification_time = filemtime(WPSC_CACHE_DIR.$cache_filename.'.'.$extension);
 				if($original_modification_time < $cache_modification_time) {
 					$use_cache = true;
 				}
@@ -549,7 +549,7 @@ function wpsc_the_product_image($width = null, $height = null) {
 				if(is_ssl()) {
 					$cache_url = str_replace("http://", "https://", $cache_url);
 				}
-				$image_url = $cache_url.$cache_filename.$extension;
+				$image_url = $cache_url.$cache_filename.'.'.$extension;
 			} else {
 				$image_url = "index.php?image_id=".$wpsc_query->product['image']."&amp;width=".$width."&amp;height=".$height;
 			}
