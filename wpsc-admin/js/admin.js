@@ -1,7 +1,35 @@
 // This is the wp-e-commerce front end javascript "library"
 
+
+
+
+
 jQuery(document).ready( function () {
 
+// JS - 5.10.2010, adding form clearing plugin for extensibility.
+
+jQuery.fn.clearForm = function() {
+  return this.each(function() {
+    if (this.tagName.toLowerCase() == "form") {
+      return jQuery(":input",this).clearForm();
+    }
+    switch (this.type) {
+      case "password":
+      case "textarea":
+      case "text":
+        this.value = "";
+        break;
+      case "select-multiple":
+      case "select-one":
+        this.selectedIndex = -1;
+        break;
+      case "radio":
+      case "checkbox":
+        this.checked = false;
+        break;
+    }
+  });
+};
 
 //LiveQuery added to each of these	
 			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
@@ -32,12 +60,11 @@ jQuery(document).ready( function () {
 			
 			jQuery('a#add').livequery(function() {
 				jQuery(this).click(function() {
-				
-				jQuery(':input','#wpsc-col-right').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
 				jQuery('#wpsc-col-left').hide();
 				jQuery(this).addClass('nav-tab-active');
 				jQuery('a#manage').removeClass('nav-tab-active');
 				jQuery('#wpsc-col-right').show();
+				jQuery('form#modify-products').clearForm();
 				return false;
 			});
 		});

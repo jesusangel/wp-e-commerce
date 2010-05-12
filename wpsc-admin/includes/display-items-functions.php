@@ -240,20 +240,29 @@ function wpsc_product_basic_details_form(&$product_data) {
 							<?php
 								if(($product->post_status == 'draft') || ($product->post_status == null)) {
 									?>
-									<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='save' />
+									<input type='submit' value='<?php _e('Save Draft', 'wpsc'); ?>' class='button button-highlighted' id="save-post" name='save' />
 									<?php	
 								} else {
 									?>	
-									<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
+								<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
 									<?php
 								}
 							?>
+						</div>
+						<div id="preview-action">
+							<a class="preview button" id="post-preview" href="<?php echo wpsc_product_url( $product_data['id'] ); ?>"><?php _e('View Product') ?></a>
+						</div>
+						<div class="clear"></div>
+						<div class="misc-pub-section">
+							<a style="padding:1px 2px; float:left" href="<?php echo htmlentities("admin.php?page=wpsc-edit-products&action=addnew"); ?>">Add New Product</a>
+						<div class="clear"></div>
 						</div>
 					</div>
 				</div>
 				<div id="major-publishing-actions">
 				<div id="delete-action">
-					<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?></a>
+					<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?>
+					</a><br />
 					</div>
 				<div id="publishing-action">
 					<?php
@@ -263,7 +272,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 						<?php	
 					} else {
 						?>	
-						<input type='submit' value='<?php _e('Unpublish', 'wpsc'); ?>' class='button button-highlighted' id='save-post' name='unpublish' />
+									<input type='submit' value='<?php _e('Update', 'wpsc'); ?>' id='publish' class='button-primary' name='save' />
 						<?php
 					}
 					?>

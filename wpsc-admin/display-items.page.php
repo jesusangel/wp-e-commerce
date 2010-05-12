@@ -154,6 +154,15 @@ function wpsc_display_edit_products_page() {
 					return showNotice.warn(m);
 				}
 			});
+			
+			<?php if ( $_GET["action"] == "addnew" ) { ?>
+				$('#wpsc-col-left').hide();
+				$('a#add').addClass('nav-tab-active');
+				$('a#manage').removeClass('nav-tab-active');
+				$('#wpsc-col-right').show();
+			<?php
+				}
+			?>
 		});
 	})(jQuery);
 	/* ]]> */

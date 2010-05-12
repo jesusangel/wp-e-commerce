@@ -267,7 +267,11 @@ div.search-box input#page-search-input {
 }
 
 #wpsc_product_list .column-price{
-/* 	width:60px; */
+	width:105px; 
+}
+
+#wpsc_product_list .column-sale_price{
+	width:105px; 
 }
 
 #wpsc_product_list .column-categories{
@@ -329,7 +333,8 @@ table.product_editform {
 }
 
 
-div.price-editing-fields input.the-product-price {
+div.price-editing-fields input.the-product-price,
+div.price-editing-fields input.the-sale-price  {
 	width: 51px;
 }
 
@@ -416,7 +421,11 @@ div.admin_product_name {
 	-webkit-border-radius: 6px;
 	border-radius: 6px;	
 }
-
+input.the-weight-fields,
+input.the-stock-fields
+	{
+		width:35px;
+	}
 input.wpsc_product_name {
 	float:left;
 	width:100%;
