@@ -6,6 +6,9 @@
 
 jQuery(document).ready( function () {
 
+//JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
+	jQuery('td.sale_price span.pricedisplay').removeClass('pricedisplay').addClass('salespricedisplay');
+
 // JS - 5.10.2010, adding form clearing plugin for extensibility.
 
 jQuery.fn.clearForm = function() {
@@ -57,17 +60,6 @@ jQuery.fn.clearForm = function() {
 				
 			});			
 		})
-			
-			jQuery('a#add').livequery(function() {
-				jQuery(this).click(function() {
-				jQuery('#wpsc-col-left').hide();
-				jQuery(this).addClass('nav-tab-active');
-				jQuery('a#manage').removeClass('nav-tab-active');
-				jQuery('#wpsc-col-right').show();
-				jQuery('form#modify-products').clearForm();
-				return false;
-			});
-		});
 		
 	//Animateedit products columns
 	jQuery('.wpsc-separator').livequery(function(){
@@ -500,9 +492,9 @@ jQuery.fn.clearForm = function() {
 					eval(returned_data);
 				  if(success == 1) {
 						parent_container = jQuery("#"+target_element_id+"").parent('.column-sale_price');
-						jQuery(".pricedisplay", parent_container).html(new_price);
+						jQuery(".salespricedisplay", parent_container).html(new_price);
 				  }
-					jQuery('span.pricedisplay').css('display', 'block');
+					jQuery('span.salespricedisplay').css('display', 'block');
 					jQuery('div.sales-price-fields').css('display', 'none');
 					jQuery('form#posts-filter').unbind('submit.disable');
 				}
@@ -512,8 +504,8 @@ jQuery.fn.clearForm = function() {
 	};
 	
 	jQuery("table#wpsc_product_list .column-sale_price").livequery(function(){
-		jQuery('span.pricedisplay',this).click(function(){
-			jQuery('span.pricedisplay').css('display', 'block');
+		jQuery('span.salespricedisplay',this).click(function(){
+			jQuery('span.salespricedisplay').css('display', 'block');
 			jQuery('div.sales-price-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
 			jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).css('display', 'block');

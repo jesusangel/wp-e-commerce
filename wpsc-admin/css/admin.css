@@ -86,7 +86,7 @@ float:right;
 text-align:right;
 
 }
-.pricedisplay{
+.pricedisplay, .salespricedisplay{
 /* width:40%; */
 float:left;
 }
@@ -1198,7 +1198,7 @@ td.product_groups_page td.category_presentation_settings {
   padding-bottom: 1ex;
 }
 
-td.column-price .pricedisplay, td.sale_price .pricedisplay, td.SKU .skudisplay, td.stock .stockdisplay, td.weight .weightdisplay{
+td.column-price .pricedisplay, td.sale_price .salespricedisplay, td.SKU .skudisplay, td.stock .stockdisplay, td.weight .weightdisplay{
   border-bottom: 1px dotted #333;
 }
 

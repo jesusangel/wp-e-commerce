@@ -47,7 +47,7 @@ function wpsc_display_edit_products_page() {
 		<div id="icon-themes" class="icon32"><br /></div>
 		<h2>
 				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo wp_specialchars( __('Manage Products', 'wpsc') ); ?></a>
-				<a href="admin.php?page=wpsc-edit-products#poststuff" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
+				<a href="admin.php?page=wpsc-edit-products&action=addnew" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
 		</h2>		
 		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){ ?>
 				<div id="message" class="error fade">
@@ -252,7 +252,14 @@ function wpsc_admin_products_list($category_id = 0) {
   // set is_sortable to false to start with
   $is_sortable = false;
   $page = null;
-  
+	// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
+	$itempp = 20;
+	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' $search_sql");
+	
+	if (isset($itempp)) {
+		$num_pages = ceil($num_products/$itempp);
+	}
+	
 	if($_GET['search']) {
 		$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search']))."%";
 		$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search']))."%";
@@ -267,6 +274,13 @@ function wpsc_admin_products_list($category_id = 0) {
 
 	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
 
+	 if($_GET['pageno'] > 0) {
+				$page = absint($_GET['pageno']);
+		  } else {
+		    $page = 1;
+		  }
+		  $start = (int)($page * $itempp) - $itempp;
+		  
 	if(is_numeric($_GET['parent_product'])) {
 		$parent_product = absint($_GET['parent_product']);
 		
@@ -297,7 +311,9 @@ function wpsc_admin_products_list($category_id = 0) {
 			'post_type' => 'wpsc-product',
 			'posts_per_page' => -1, 
 			'orderby' => 'menu_order post_title',
-			'order' => "ASC"
+			'order' => "ASC",
+			'posts_per_page' => $itempp,
+			'offset' => $start
 		);
 		
 		if(isset($_GET['category'])) {
@@ -320,6 +336,7 @@ function wpsc_admin_products_list($category_id = 0) {
 	
 	
 	//echo "<pre>".print_r($parent_product_data, true)."</pre>";
+	
 	if($page !== null) {
 		$page_links = paginate_links( array(
 			'base' => add_query_arg( 'pageno', '%#%' ),
@@ -330,6 +347,7 @@ function wpsc_admin_products_list($category_id = 0) {
 			'current' => $page
 		));
 	}
+	
 	$this_page_url = stripslashes($_SERVER['REQUEST_URI']);
 	
 	
@@ -337,14 +355,14 @@ function wpsc_admin_products_list($category_id = 0) {
 	//$posts = get_object_taxonomies('wpsc-product');
 	
 	//echo "<pre>".print_r($posts, true)."</pre>";
-  
+	
 	$is_trash = isset($_GET['post_status']) && $_GET['post_status'] == 'trash';
 	
 	// Justin Sainton - 5.7.2010 - Added conditional code below as blank space would show up if $page_links was NULL.  Now the area only shows up if page links exist.
 	
 	?>	
 	
-	<?php if ( $page_links ) { ?>
+	<?php if ( $page_links && get_option ( 'wpsc_sort_by' ) != 'dragndrop' ) { ?>
 	<div class="tablenav">
 		<div class="tablenav-pages">
 			<?php

@@ -9,7 +9,7 @@
  */
 
 /**
- * wpsc_product_rows function, copies the functionality of the wordpress code for siplaying posts and pages, but is for products
+ * wpsc_product_rows function, copies the functionality of the wordpress code for displaying posts and pages, but is for products
  * 
  */
 function wpsc_admin_product_listing($parent_product = null) {
@@ -27,7 +27,6 @@ function wpsc_admin_product_listing($parent_product = null) {
 	foreach ( $wpsc_products as $product ) {
 		$product_ids[] = $product->ID;
 	}
-	
 	
 	//	exit('<pre>'.print_r($wpsc_products, true).'</pre>');
 	foreach ( $wpsc_products as $product ) {
@@ -54,7 +53,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	
 	?>
 	
-	<tr id='post-<?php echo $product->ID; ?>' class='<?php echo trim( $rowclass . ' author-' . $post_owner . ' status-' . $product->post_status ); ?> iedit' valign="top">
+	<tr id='post-<?php echo $product->ID; ?>' class='<?php echo trim( $rowclass . ' author-' . $post_owner . ' status-' . $product->post_status ); ?> iedit <?php if ( get_option ( 'wpsc_sort_by' ) == 'dragndrop') { echo 'product-edit'; } ?>' valign="top">
 	<?php
 	$posts_columns = get_column_headers('display-product-list');
 	$hidden = get_hidden_columns('display-product-list');

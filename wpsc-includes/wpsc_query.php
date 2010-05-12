@@ -478,6 +478,8 @@ class WPSC_Query {
 					$order_by = "`products`.`name` $order";
 				} else if (get_option('wpsc_sort_by') == 'price') {
 					$order_by = "`products`.`price` $order";
+				} elseif(get_option('wpsc_sort_by') == 'dragndrop'){
+					$order_by = "`".WPSC_TABLE_PRODUCT_ORDER."`.`order` ASC";
 				} else {
 				
 					//$order = 'ASC';
