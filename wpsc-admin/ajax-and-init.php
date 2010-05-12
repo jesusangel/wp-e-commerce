@@ -1911,7 +1911,7 @@ if($_REQUEST['wpsc_admin_action']=='check_form_options'){
 function wpsc_checkout_settings(){
 	global $wpdb;
 	$wpdb->show_errors = true;
-    if(isset($_POST['selected_form_set'])){
+    if(!empty($_POST['selected_form_set'])){
     	$filter = $wpdb->escape($_POST['selected_form_set']);
     }else{
     	$filter = 0;
