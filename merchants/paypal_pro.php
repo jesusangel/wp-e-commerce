@@ -20,16 +20,28 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 	}
  
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
-	<tr %s>
-		<td>Credit Card Number: *</td>
-		<td>
+	<tr id='wpsc_pppro_cc_type' class='card_type' %s>
+		<td class='wpsc_pppro_cc_type1'>Card Type: *</td>
+		<td class='wpsc_pppro_cc_type2'>
+		<select class='wpsc_ccBox' name='cctype'>
+			<option value='Visa'>Visa</option>
+			<option value='Mastercard'>MasterCard</option>
+			<option value='Discover'>Discover</option>
+			<option value='Amex'>Amex</option>
+		</select>
+		<p class='validation-error'>%s</p>
+		</td>
+	</tr>
+	<tr id='wpsc_pppro_cc_number' %s>
+		<td class='wpsc_pppro_cc_number1'>Card Number: *</td>
+		<td class='wpsc_pppro_cc_number2'>
 			<input type='text' value='' name='card_number' />
 			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr %s>
-		<td>Credit Card Expiry: *</td>
-		<td>
+	<tr id='wpsc_pppro_cc_expiry' %s>
+		<td class='wpsc_pppro_cc_expiry1'>Expiry: *</td>
+		<td class='wpsc_pppro_cc_expiry2'>
 			<select class='wpsc_ccBox' name='expiry[month]'>
 			".$months."
 			<option value='01'>01</option>
@@ -51,24 +63,13 @@ if(in_array('paypal_pro',(array)get_option('custom_gateway_options'))) {
 			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr %s>
-		<td>CVV: *</td>
-		<td><input type='text' size='4' value='' maxlength='4' name='card_code' />
+	<tr id='wpsc_pppro_cc_code' class='card_cvv' %s>
+		<td class='wpsc_pppro_cc_code1'>CVV: *</td>
+		<td class='wpsc_pppro_cc_code2'><input type='text' size='4' value='' maxlength='4' name='card_code' />
 		<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr %s>
-		<td>Card Type: *</td>
-		<td>
-		<select class='wpsc_ccBox' name='cctype'>
-			<option value='Visa'>Visa</option>
-			<option value='Mastercard'>MasterCard</option>
-			<option value='Discover'>Discover</option>
-			<option value='Amex'>Amex</option>
-		</select>
-		<p class='validation-error'>%s</p>
-		</td>
-	</tr>
+
 ";
 }
   
