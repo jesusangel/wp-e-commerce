@@ -146,7 +146,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$variation_list = " (".stripslashes(implode(", ",$value_names)).")";
 				}
 			
-				if($link != '') {
+				if($link != '' && (!empty($link))) {
 				  $additional_content = apply_filters('wpsc_transaction_result_content', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
 					if(!is_string($additional_content)) {
 				    $additional_content = '';
