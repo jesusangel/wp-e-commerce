@@ -520,7 +520,7 @@ function wpsc_submit_checkout() {
 	//	exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract($form_validity); // extracts $is_valid and $error_messages
  	//	exit('<pre>'.print_r($results, true).'</pre>');
-	  print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
+	  //print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
 	if (get_option('do_not_use_shipping') == 0 && ($wpsc_cart->selected_shipping_method == null || $wpsc_cart->selected_shipping_option == null)) {
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = __('You must select a shipping method, otherwise we cannot process your order.', 'wpsc');
 		$is_valid = false;
@@ -584,7 +584,7 @@ function wpsc_submit_checkout() {
 	}
 
 	
-	  print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
+	//  print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
 	if($is_valid == true || $_GET['gateway'] == 'noca') {
 		$_SESSION['categoryAndShippingCountryConflict']= '';
 		// check that the submitted gateway is in the list of selected ones
@@ -637,7 +637,7 @@ function wpsc_submit_checkout() {
 			$merchant_instance = new $current_gateway_data['class_name']($purchase_log_id);
 			$merchant_instance->construct_value_array();
 			$merchant_instance->submit();
-			print_r($merchant_instance);
+		//	print_r($merchant_instance);
 			
 		} else {
 			if(($current_gateway_data['internalname'] == $submitted_gateway) && ($current_gateway_data['internalname'] != 'google')) {
