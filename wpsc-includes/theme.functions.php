@@ -332,7 +332,7 @@ function wpsc_display_products_page($query) {
 		// get the display type for the selected category
 		if(is_numeric($wpsc_query->query_vars['category_id'])) {
 			$category_id =(int) $wpsc_query->query_vars['category_id'];
-			$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
+			$display_type = wpsc_get_categorymeta($category_id, 'display_type');
 		}
 		
 		if($display_type == '') {
@@ -426,7 +426,7 @@ function wpsc_products_page($content = '') {
 					$category_id = (int)get_option('wpsc_default_category');
 				}
 			}			
-			$display_type = $wpdb->get_var("SELECT `display_type` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id`='{$category_id}' LIMIT 1");
+			$display_type = wpsc_get_categorymeta($category_id, 'display_type');
 		
 			if($display_type == '') {
 				$display_type = get_option('product_view');
@@ -687,10 +687,6 @@ function wpsc_body_class( $classes ) {
 		
 		if ( absint($wpsc_query->query_vars['category_id']) > 0) {
 			$classes[] = 'wpsc-category-' . $wpsc_query->query_vars['category_id'];
-		}
-		
-		if ( absint(wpsc_category_group()) > 0) {
-			$classes[] = 'wpsc-group-' . wpsc_category_group();
 		}
 		
 	}

@@ -4,7 +4,16 @@ function widget_specials($args) {
   extract($args);
   $options = get_option('wpsc-widget_specials');
 
-  $special_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `special_price` != '0.00'  AND `active` IN ('1')");   
+  $special_count = $wpdb->get_var("SELECT DISTINCT `p`.`ID`
+		FROM `".$wpdb->postmeta."` AS `m`
+		JOIN `w".$wpdb->posts."` AS `p` ON `m`.`post_id` = `p`.`ID`
+		WHERE `m`.`meta_key`
+		IN ('_wpsc_special_price')
+		AND `m`.`meta_value` >0
+		AND `p`.`post_status` = 'publish'
+		ORDER BY RAND( )
+		LIMIT 1");   
+  	 
   //exit('COUNT'.$special_count);
   if($special_count > 0) {
     $title = empty($options['title']) ? __(__('Product Specials', 'wpsc')) : $options['title'];
@@ -22,9 +31,24 @@ function widget_specials($args) {
 	 global $wpdb;
 	 $image_width = get_option('product_image_width');
 	 $image_height = get_option('product_image_height');
-   $siteurl = get_option('siteurl');
-   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `special_price` != '0.00'  AND `active` IN ('1') ORDER BY RAND() LIMIT 1";
-   $product = $wpdb->get_results($sql,ARRAY_A) ;
+     $siteurl = get_option('siteurl');
+   
+   
+
+
+	 $product = $wpdb->get_row("SELECT DISTINCT `p` . * , `m`.`meta_value` AS `special_price`
+		FROM `".$wpdb->postmeta."` AS `m`
+		JOIN `w".$wpdb->posts."` AS `p` ON `m`.`post_id` = `p`.`ID`
+		WHERE `m`.`meta_key`
+		IN (
+		'_wpsc_special_price'
+		)
+		AND `m`.`meta_value` >0
+		ORDER BY RAND( )
+		LIMIT 1", ARRAY_A) ;
+	 $product_id = $special_product_data['post_id'];
+	 $special_price = $special_product_data['meta_value'];
+	  
 		if($product != null) {
 			$output = "<div>";
 			foreach($product as $special) {
@@ -55,12 +79,12 @@ function widget_specials($args) {
 				}
 				
 				$output .= "<span id='special_product_price_".$special['id']."'><span class='pricedisplay'>";       
-				$output .= nzshpcrt_currency_display(($special['price'] - $special['special_price']), $special['notax'],false,$product['id']);
+				$output .= nzshpcrt_currency_display(($special['price'] - $special['special_price']), $special['notax'],false,$product_id);
 				$output .= "</span></span><br />";
 				
 				$output .= "<form id='specials_".$special['id']."' method='post' action='' onsubmit='submitform(this, null);return false;' >";
-				$output .= "<input type='hidden' name='product_id' value='".$special['id']."'/>";
-				$output .= "<input type='hidden' name='item' value='".$special['id']."' />";
+				$output .= "<input type='hidden' name='product_id' value='".$product_id."'/>";
+				$output .= "<input type='hidden' name='item' value='".$product_id."' />";
 				$output .= "<input type='hidden' name='wpsc_ajax_action' value='special_widget' />";			
 				if(($special['quantity_limited'] == 1) && ($special['quantity'] < 1)) {
 					$output .= __('This product has sold out.', 'wpsc')."";

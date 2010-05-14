@@ -591,9 +591,19 @@ function wpsc_update_product_meta($product_id, $product_meta) {
  */
 function wpsc_set_publish_status($product_id, $state) {
 	global $wpdb;
-	$status = (int) ( $state ) ? 1 : 0; // Cast the Publish flag
-	$result = $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `publish` = '{$status}' WHERE `id` = '{$product_id}'");
+	switch($state) {
+		case 'draft':
+		case 0:
+		$status = 'draft';
+		break;
+		
+		default:
+		$status = 'publish';
+		break;
+	}
+	$result = $wpdb->query("UPDATE `".$wpdb->posts."` SET `post_status` = '{$status}' WHERE `ID` = '{$product_id}'");
 }
+
 /**
  * Toggle publish status and update product record
  * @return bool		Publish status
@@ -601,9 +611,14 @@ function wpsc_set_publish_status($product_id, $state) {
  */
 function wpsc_toggle_publish_status($product_id) {
 	global $wpdb;
-	$status = (int) ( wpsc_publish_status($product_id) ) ? 0 : 1; // Flip the Publish flag True <=> False
-	$sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `publish` = '{$status}' WHERE `id` = '{$product_id}'";
-	$result = $wpdb->query($sql);
+	
+	if(wpsc_publish_status($product_id) == 'publish') {
+		$status = 'draft';
+	} else {
+		$status = 'publish';
+	}
+	
+	wpsc_set_publish_status($product_id, $status);
 	return $status;
 }
 /**
@@ -613,7 +628,7 @@ function wpsc_toggle_publish_status($product_id) {
  */
 function wpsc_publish_status($product_id) {
 	global $wpdb;
-	$status = (bool)$wpdb->get_var("SELECT `publish` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$product_id}'");
+	$status = $wpdb->get_var("SELECT `post_status` FROM `".$wpdb->posts."` WHERE `ID` = '{$product_id}'");
 	return $status;
 }
 /**
@@ -661,34 +676,7 @@ function wpsc_update_custom_meta($product_id, $post_data) {
 */
 function wpsc_update_product_images($product_id, $post_data) {
   global $wpdb;
-  $uploaded_images = array();
-
-  // This segment is for associating the images uploaded using swfuploader when adding a product
-  foreach((array)$post_data['gallery_image_id'] as $added_image) {
-		if($added_image > 0) {
-			$uploaded_images[] = absint($added_image);
-    }
-  }
-  if(count($uploaded_images) > 0) {
-		$uploaded_image_data = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `id` IN (".implode(', ', $uploaded_images).") AND `product_id` = '0'");
-		if(count($uploaded_image_data) > 0) {
-			$first_image = null;
-			foreach($uploaded_image_data as $uploaded_image_id) {
-				if($first_image === null) {
-					$first_image = absint($uploaded_image_id);
-				}
-				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_IMAGES."` SET `product_id` = '$product_id' WHERE `id` = '{$uploaded_image_id}' LIMIT 1;");
-			}
-			
-			$previous_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
-			if($previous_image == 0) {
-				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$first_image}' WHERE `id`='{$product_id}' LIMIT 1");
-			}
-			wpsc_resize_image_thumbnail($product_id, 1);
-		}
-	}
-
-  
+  $uploaded_images = array(); 
 
 	/* Handle new image uploads here */
   if($post_data['files']['image']['tmp_name'] != '') {

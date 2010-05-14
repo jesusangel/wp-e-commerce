@@ -88,7 +88,7 @@ function wpsc_admin_variation_group_list() {
   global $wpdb;
 	$variations = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` ORDER BY `id`",ARRAY_A);
 	?>
-		<table class="widefat page fixed" id='wpsc_variation_list' cellspacing="0">
+		<table class="widefat page" id='wpsc_variation_list' cellspacing="0">
 			<thead>
 				<tr>
 					<?php print_column_headers('display-variations-list'); ?>

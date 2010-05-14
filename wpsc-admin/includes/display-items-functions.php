@@ -155,9 +155,6 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 			$imtags = implode(',', $tags);
 		}
 	}
-	//exit('got called<pre>'.print_r($imtags,true).'</pre>');
-
-	$check_variation_value_count = $wpdb->get_var("SELECT COUNT(*) as `count` FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` WHERE `product_id` = '{$product_id}'");
 	return $product_data;
 }
 
@@ -1295,7 +1292,7 @@ function wpsc_main_product_image_menu($product_id) {
   global $wpdb;
   $thumbnail_state = 0;
 	if($product_id > 0) {
-		$main_image = $wpdb->get_row("SELECT `images`.*,  `product`.`thumbnail_state` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_id}' LIMIT 1", ARRAY_A);
+		//$main_image = $wpdb->get_row("SELECT `images`.*,  `product`.`thumbnail_state` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_id}' LIMIT 1", ARRAY_A);
 		$thumbnail_state = $main_image['thumbnail_state'];
 	} else {
 		$thumbnail_state = 1;

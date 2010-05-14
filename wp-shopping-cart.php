@@ -35,6 +35,10 @@ define('IS_WP27', version_compare($v1[0], '2.7', '>='));
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
+
+$wpdb->show_errors = true;
+
+
 $wpsc_siteurl = get_option('siteurl');
 if(is_ssl()) {
 	$wpsc_siteurl = str_replace("http://", "https://", $wpsc_siteurl);
@@ -327,6 +331,10 @@ foreach((array)$nzshpcrt_gateways as $key => $gateway) {
 }
 
 
+// set page title array for important WPSC pages 
+$wpsc_page_titles = wpsc_get_page_post_names();
+
+
 $theme_path = WPSC_FILE_PATH . '/themes/';
 if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
   include_once(WPSC_FILE_PATH.'/themes/'.get_option('wpsc_selected_theme').'/'.get_option('wpsc_selected_theme').'.php');
@@ -467,6 +475,7 @@ add_filter('parse_query', 'wpsc_query_modifier');
 */
 // Register the wpsc post types
 function wpsc_register_post_types() {
+	global $wpsc_page_titles;
 	// Products
 	register_post_type( 'wpsc-product', array(
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&product=%d',
@@ -490,7 +499,7 @@ function wpsc_register_post_types() {
 		'hierarchical' => true,
 		'query_var' => 'products',
 		'rewrite' => array(
-			'slug' => 'products'
+			'slug' => $wpsc_page_titles['products']
 		)
 	));
 	

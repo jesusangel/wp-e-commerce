@@ -20,7 +20,7 @@ function nzshpcrt_price_range($input = null) {
 	} else {
 		$seperater='?';
 	}
-	$result = $wpdb->get_results("SELECT DISTINCT `price` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `active` IN ('1') ORDER BY price ASC",ARRAY_A);
+	$result = $wpdb->get_results("SELECT DISTINCT CAST(`meta_value` AS DECIMAL) AS `price` FROM ".$wpdb->postmeta." AS `m` WHERE `meta_key` IN ('_wpsc_price') ORDER BY `price` ASC",ARRAY_A);
 	if($result != null) {
 		sort($result);
 		$count = count($result);

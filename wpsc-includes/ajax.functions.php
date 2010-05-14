@@ -86,13 +86,13 @@ function wpsc_add_to_cart() {
 	if(((float)$_POST['donation_price'] > 0)) {
 		$provided_parameters['provided_price'] = (float)$_POST['donation_price'];
 	}
- 
+    //exit();
   $parameters = array_merge($default_parameters, (array)$provided_parameters);
   //echo "/*\n\r".print_r($parameters,true)."*/\n\r";
 	$state = $wpsc_cart->set_item($product_id,$parameters); 
 	
 	$product = get_post($product_id);
-   
+
   if($state == true) {
 		$cart_messages[] = str_replace("[product_name]", stripslashes($product->post_title), __('You just added "[product_name]" to your cart.', 'wpsc'));
 	} else {

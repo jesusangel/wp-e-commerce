@@ -17,7 +17,7 @@
 
 /**
 * cart item count function, no parameters
-* * @return integer the item count
+* * @return integer the item countf
 */
 /**
 * tax is included function, no parameters
@@ -903,43 +903,29 @@ class wpsc_cart {
 	 * @param array  variations on the product
 	 * @return boolean true on sucess, false on failure
 	*/
-  function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
-    global $wpdb;
-
-    
-		$quantity_data = $wpdb->get_row("SELECT `quantity_limited`, `quantity`  FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('$product_id') LIMIT 1", ARRAY_A);
+	function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
+	    global $wpdb;
+		$stock = get_post_meta($product_id, '_wpsc_stock', true);
 		// check to see if the product uses stock
-		if($quantity_data['quantity_limited'] == 1){
-			if(count($variations) > 0) { /// if so and we have variations, select the stock for the chosen variations
-				$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variations)."')");
-				asort($variation_ids);
-				$all_variation_ids = implode(",", $variation_ids);
-				
-				$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '".(int)$product_id."' AND `value_id` IN ( '".implode("', '",$variations )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
-				
-				$variation_stock_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-				$stock = $variation_stock_data['stock'];
-				
-			} else { /// if so and we have no variations, select the stock for the product
-			  $stock = $quantity_data['quantity'];
-			  $priceandstock_id = 0;
-			}
-	    if($stock > 0) {
+		if(is_numeric($stock)){
+			$priceandstock_id = 0;
+			
+			if($stock > 0) {
 				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
 				if(($claimed_stock + $quantity) <= $stock) {
 					$output = true;
 				} else {
 					$output = false;
 				}
-		  } else {
+			} else {
 				$output = false;	    
-	    }
-	     
-    } else {
-      $output = true;
-    }
-    return $output;
-  }
+			}
+			     
+		} else {
+			$output = true;
+		}
+		return $output;
+	}
   
 	/**
 	 * get remaining quantity method
@@ -953,26 +939,10 @@ class wpsc_cart {
 	*/
   function get_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
     global $wpdb;
-		$quantity_data = $wpdb->get_row("SELECT `quantity_limited`, `quantity`  FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('$product_id') LIMIT 1", ARRAY_A);
+		$stock = get_post_meta($product_id, '_wpsc_stock', true);
 		// check to see if the product uses stock
-		if($quantity_data['quantity_limited'] == 1){
-			if(count($variations) > 0) { /// if so and we have variations, select the stock for the chosen variations
-				$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$variations)."')");
-				asort($variation_ids);
-				$all_variation_ids = implode(",", $variation_ids);
-				
-				$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '".(int)$product_id."' AND `value_id` IN ( '".implode("', '",$variations )."' )  AND `all_variation_ids` IN('$all_variation_ids')  GROUP BY `priceandstock_id` HAVING COUNT( `priceandstock_id` ) = '".count($variations)."' LIMIT 1");
-				
-				$variation_stock_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1", ARRAY_A);
-				$stock = $variation_stock_data['stock'];
-				
-			} else { /// if so and we have no variations, select the stock for the product
-			  $stock = $quantity_data['quantity'];
-			  $priceandstock_id = 0;
-			}
-			
-			
-			
+		if(is_numeric($stock)){
+		  $priceandstock_id = 0;
 	    if($stock > 0) {
 				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
 				$output = $stock - $claimed_stock;				
@@ -1717,21 +1687,16 @@ class wpsc_cart_item {
 		$this->total_price = $this->unit_price * $this->quantity;
 
 		
-		$category_data = $wpdb->get_results("SELECT `category`.`id`,
-		`category`.`nice-name`
-		FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `assoc`
-		JOIN `".WPSC_TABLE_PRODUCT_CATEGORIES."` AS `category`
-		ON `assoc`.`category_id` = `category`.`id`
-		WHERE `assoc`.`product_id` IN ('{$this->product_id}')
-		AND `category`.`active` IN('1')", ARRAY_A);
+		$category_data = get_the_product_category($product_id);
+		
 		
 
 		$this->category_list = array();
 		$this->category_id_list = array();
 		
 		foreach((array)$category_data as $category_row) {
-			$this->category_list[] = $category_row['nice-name'];
-			$this->category_id_list[] = $category_row['id'];
+			$this->category_list[] = $category_row->slug;
+			$this->category_id_list[] = $category_row->term_id;
 		}
 		
 		

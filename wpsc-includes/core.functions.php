@@ -20,6 +20,11 @@
  * @return array - the modified rewrite rules
  */
 function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
+	global $wpsc_page_titles;
+	
+	$products_page = $wpsc_page_titles['products'];
+	$checkout_page = $wpsc_page_titles['checkout'];
+	
 	$target_string = "index.php?product";
 	$replacement_string = "index.php?post_type=wpsc-product&product";
 	$target_rule_set_query_var = 'products';
@@ -39,10 +44,10 @@ function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
 	//$new_rewrite_rules['products/.+?/([^/]+)/page/?([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&paged=$matches[2]';
 	
 	//$new_rewrite_rules['(products/checkout)(/[0-9]+)?/?$'] = 'index.php?pagename=$1&page=$2';
-	$new_rewrite_rules['products/(.+?)/product/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]&cpage=$matches[3]';
-	$new_rewrite_rules['products/(.+?)/product/([^/]+)/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]';
-	$new_rewrite_rules['products/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]&cpage=$matches[3]';
-	$new_rewrite_rules['products/(.+?)/([^/]+)?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]';
+	$new_rewrite_rules[$products_page.'/(.+?)/product/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]&cpage=$matches[3]';
+	$new_rewrite_rules[$products_page.'/(.+?)/product/([^/]+)/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]';
+	$new_rewrite_rules[$products_page.'/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]&cpage=$matches[3]';
+	$new_rewrite_rules[$products_page.'/(.+?)/([^/]+)?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]';
 
 	
 	$last_target_rule = array_pop($target_rule_set);
@@ -92,18 +97,18 @@ add_filter('query_vars', 'wpsc_query_vars');
  */
  
 function wpsc_split_the_query($query) {
-	global $wpsc_query;
+	global $wpsc_page_titles, $wpsc_query;
 	// These values are to be dynamically defined
 	
-	$products_pages = array(
-		"products", 
-		"products-page"
-	); 
+	$products_page = $wpsc_page_titles['products'];
+	$checkout_page = "$products_page/{$wpsc_page_titles['checkout']}";
+	
+	
 	$checkout_pagename = "products/checkout";
 	//$checkout_pagename = "product-page/checkout";
 	
-	if (in_array($query->query_vars['pagename'], $products_pages) || isset($query->query_vars['products'])) {
-		$query->query_vars['pagename'] = "products-page";
+	if (($query->query_vars['pagename'] == $products_page) || isset($query->query_vars['products'])) {
+		$query->query_vars['pagename'] = "$products_page";
 		$query->query_vars['name'] = '';
 		$query->query_vars['post_type'] = '';
 		$query->is_singular = true;
@@ -123,7 +128,7 @@ function wpsc_split_the_query($query) {
 	}
 	
 	//exit("<pre>".print_r($query,true)."</pre>");
-	if($query->query_vars['pagename'] == $checkout_pagename ) {
+	if($query->query_vars['pagename'] == $checkout_page ) {
 		$query->is_checkout = true;
 	}
 	
@@ -453,6 +458,25 @@ function wpsc_checkout_template_fallback() {
 
 }
 //add_filter("checkout_template", 'wpsc_checkout_template_fallback');
+
+
+/**
+ * wpsc_get_page_post_names function.
+ * Seems that using just one SQL query and then processing the results is probably going to be around as efficient as just doing three separate queries
+ * But using three queries is a hell of a lot simpler to write and easier to read.
+ * @since 3.8
+ * @access public
+ * @return void
+ */
+function wpsc_get_page_post_names() {
+	global $wpdb;
+    $wpsc_page['products'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%'  AND `post_type` NOT IN('revision') LIMIT 1");
+    $wpsc_page['checkout'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[shoppingcart]%'  AND `post_type` NOT IN('revision') LIMIT 1");
+    $wpsc_page['transaction_results'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[transactionresults]%'  AND `post_type` NOT IN('revision') LIMIT 1");
+    return $wpsc_page;   
+}
+
+
 
 
 /**

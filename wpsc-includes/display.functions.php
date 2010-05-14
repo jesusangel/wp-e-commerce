@@ -2,7 +2,7 @@
 /**
  * WP eCommerce display functions
  *
- * These are functions for the wp-eCommerce theme engine, template tags and shortcodes
+ * These are functions for the wp-eCommerce themngine, template tags and shortcodes
  *
  * @package wp-e-commerce
  * @since 3.7
@@ -29,7 +29,7 @@ function wpsc_buy_now_button($product_id, $replaced_shortcode = false) {
 				//$output .= "<pre>".print_r($wpsc_query,true)."</pre>";
 				while (wpsc_have_products()) :
 				wpsc_the_product();
-				$price =  calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations); 
+				//$price =  calculate_product_price($wpsc_query->product['id'], $wpsc_query->first_variations); 
 				$shipping = $wpsc_query->product['pnp'];
 				if(wpsc_uses_shipping()){$handling = get_option('base_local_shipping');}else{$handling = $shipping;}
 

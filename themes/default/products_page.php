@@ -77,7 +77,6 @@ global $wpsc_query, $wpdb;
 		<?php /** start the product loop here */?>
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			
-			<?php// echo "<pre>".print_r($wp_query,true)."</pre>"; ?>
 			
 			<?php if(wpsc_category_transition()) :?>
 		  	<h3 class='wpsc_category_boundary'>

@@ -418,129 +418,6 @@ function display_subcategories($id) {
   }
 
 
- // Marked for removal
-function show_cats_brands($category_group = null , $display_method = null, $order_by = 'name', $image = null) {
-  global $wpdb; 
-  
-  if($category_group == null) {
-		$category_group =  $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1') AND `default` IN ('1') LIMIT 1 ");
-  } else {
-    $category_group = (int)$category_group;
-  }
-  
-  // Show cats & brands list if displaying on every page or if on a shop page (bit hacky but out of time).
-  if (get_option('cat_brand_loc') != 3 && !function_exists("nzshpcrt_display_categories_groups") && ($display_method != 'sidebar')) {
-    return;
-  }
-  
-  if(get_option('permalink_structure') != '') {
-    $seperator ="?";
-	} else {
-    $seperator ="&amp;";
-	}
-
-  $output = "<div class='PeSwitcher'>";
-
-  switch(get_option('show_categorybrands')) {
-    case 1:
-      $output .= "<ul id='PeCatsBrandsBoth' class='category_brand_header'><li id='PeSwitcherFirst'><a href='' onclick='return prodgroupswitch(\"categories\");'>".__('Categories', 'wpsc')."</a> | <a href='' onclick='return prodgroupswitch(\"brands\");'>".__('Brands', 'wpsc')."</a></li></ul>";
-      break;
-  }
-  $output .= "</div>";
-  
-  $output .= "<div class='PeCatsBrands'>";
-  
-  
-  if((get_option('show_categorybrands') == 1 ) || (get_option('show_categorybrands') == 2)) {
-  
-  
-    $output .= "<div class='PeCategories categorydisplay'>";
-    $categories = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '0' ORDER BY `".$wpdb->escape($order_by)."` ASC",ARRAY_A);
-    if($categories != null) {
-      $output .= "<ul class='PeCategories'>";
-      foreach($categories as $option) {
-        // Adrian - check option for category count
-        if (get_option('show_category_count') == 1) {
-          //show product count for each category
-          $count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$option['id']}') AND `p`.`active` IN ('1')");
-          $addCount =  " (".$count.")";
-        } //end get_option
-        // No more mootools
-        if (get_option('catsprods_display_type') == 1){
-          $output .= "<li class='cat-item'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
-        }else{
-        // Adrian - otherwise create normal category text with or without product count
-					if (!$image) {
-						$output .= "<li class='cat-item'><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
-					} else {
-						$output .= "<li class='cat-item'><img src='" . WPSC_CATEGORY_URL . $option['image']."'><br><span class='category'><a class='productlink' href='".wpsc_category_url($option['id'])."'>".stripslashes($option['name'])."</a>".$addCount."</span>";
-					}
-				}//end get_option
-				
-				
-        $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('$category_group') AND `active`='1' AND `category_parent` = '".$option['id']."' ORDER BY `id`";
-        $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
-        if($subcategories != null) {
-					$output .= display_subcategories($option['id']);
-        } else {
-          // Adrian - check if the user wants categories only or sliding categories
-          if (get_option('permalink_structure')!=''){
-          	$uri = $_SERVER['REQUEST_URI'];
-          	$category = explode('/',$uri);
-          	$count = count($category);
-          	$category_nice_name = $category[$count-2];
-          	$category_nice_name2 = $wpdb->get_var("SELECT `nice-name` FROM ".WPSC_TABLE_PRODUCT_CATEGORIES." WHERE id='{$option['id']}'");
-          	if ($category_nice_name == $category_nice_name2) {
-          		$list_product=true;
-          	} else {
-          		$list_product=false;
-          	}
-          }
-          if ((get_option('catsprods_display_type') == 1) && (($option['id'] == $_GET['category']) || $list_product) ){   
-          // Adrian - display all products for that category          
-            $product_sql = "SELECT product_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `category_id` = '".$option['id']."'";
-            $productIDs = $wpdb->get_results($product_sql,ARRAY_A);
-            if($productIDs != null){
-              $output .= "<ul class='category-product-list'>";
-              foreach($productIDs as $productID) {
-                $ID = $productID['product_id'];
-                $productName_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '".$ID."'";
-                $productName = $wpdb->get_results($productName_sql,ARRAY_A);
-                if ($productName[0]['active'])
-                	$output .= "<li class='cat-item'><a class='productlink' href='".wpsc_product_url($ID,$option['id'])."'>".$productName[0]['name']."</a></li>";
-              }//end foreach            
-            $output .= "</ul>";         
-            }//end if productsIDs
-          }//end if get_option        
-        }//end else
-      $output .= "</li>";
-      }
-      $output .= "</ul>";
-    }
-    $output .= "</div>";
-  }
-  
-  if((get_option('show_categorybrands') == 1 ) || (get_option('show_categorybrands') == 3))
-  {
-    if(get_option('show_categorybrands')  == 1) {
-      $output .= "<ul class='PeBrands branddisplay' style='display: none;'>";
-		} else {
-      $output .= "<ul class='PeBrands branddisplay'>";
-		}
-    //$output ='';
-    $brands = $wpdb->get_results("SELECT * FROM `".$wpdb->prefix."product_brands` WHERE `active`='1' ORDER BY `order` ASC",ARRAY_A);
-    if($brands != null) {
-      foreach($brands as $option) {
-        $output .= "<li><a class='categorylink' href='".get_option('product_list_url').$seperator."brand=".$option['id']."'>".stripslashes($option['name'])."</a></li>";
-      }
-    }
-    //$output .= $output;
-    $output .= "</ul>";
-  }
-  
-  $output .= "</div>";
-  echo $output;
-}
 
 /**
 * wpsc_category_url  function, makes permalink to the category or 
@@ -549,66 +426,7 @@ function show_cats_brands($category_group = null , $display_method = null, $orde
 */
 function wpsc_category_url($category_id, $permalink_compatibility = false) {
   global $wpdb, $wp_rewrite, $wpsc_category_url_cache;
-  $home_page_id = get_option('page_on_front');
-		
-  if(((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null))) {
-  	if(!isset($wpsc_category_url_cache[$category_id]) || ($wpsc_category_url_cache[$category_id] == '') ) {
-			if($category_id > 0) {
-				$category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_id."') AND `active` IN('1') LIMIT 1", ARRAY_A);
-				if($category_data['nice-name'] != '') {
-					$category_name[] = $category_data['nice-name'];
-				}
-				
-				
-				if($category_data['category_parent'] > 0) {
-					$num = 0;
-					while($category_data['category_parent'] > 0) {
-						$category_data = $wpdb->get_row("SELECT `nice-name`,`category_parent` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('".(int)$category_data['category_parent']."') AND `active` IN('1') LIMIT 1", ARRAY_A);
-						$category_name[] = $category_data['nice-name'];			
-						if($num > 10) { break; }
-						$num++;
-					}
-				}
-			} else {
-				$products_page_details = $wpdb->get_row("SELECT `ID`, `post_name` FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A);
-				$products_page_name = '';
-				if($home_page_id == $products_page_details['ID']) {
-				$products_page_name = $products_page_details['post_name'];
-						if($category_id < 1) {
-						$category_name[] = $products_page_name;
-					}
-				}
-			}
-			
-			$category_name_parts = array_reverse((array)$category_name);
-			$category_names = implode($category_name_parts,"/");
-			$wpsc_category_url_cache[$category_id] = $category_names;
-			
-		} else {
-			$category_names = $wpsc_category_url_cache[$category_id];
-		}
-		
-		if(!empty($category_names)) {
-			if(substr(get_option('product_list_url'), -1, 1) == '/') {
-				$category_url = get_option('product_list_url').$category_names."/";
-			} else {
-				$category_url = get_option('product_list_url')."/".$category_names."/";
-			}
-		} else {
-			$category_url = get_option('product_list_url');
-		}
-		// if there is no trailing slash, add one
-		if(substr($category_url, -1, 1) != '/') {
-			$category_url .= "/";
-		}
-	} else {
-	  if($category_id > 0) {
-			$category_url = add_query_arg('category', $category_id, get_option('product_list_url'));
-		} else {
-			$category_url = get_option('product_list_url');
-		}
-	}
-  return htmlentities($category_url, ENT_QUOTES);
+  return get_term_link( $category_id, 'wpsc_product_category');
 }
 
 
@@ -626,6 +444,11 @@ function wpsc_is_in_category() {
   return false;
 }
 
+/**
+* wpsc_category_image function, Gets the category image or returns false
+* @param integer category ID, can be 0
+* @param string url to the category image
+*/
 function wpsc_category_image($category_id = null) {
   global $wpdb, $wp_query;
   if($category_id < 1) {
@@ -636,7 +459,8 @@ function wpsc_category_image($category_id = null) {
 		}
   }
   $category_id = absint($category_id);
-  $category_image = $wpdb->get_var("SELECT `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
+  $category_image = wpsc_get_categorymeta($category_id, 'image');
+  
   $category_path = WPSC_CATEGORY_DIR.basename($category_image);
   $category_url = WPSC_CATEGORY_URL.basename($category_image);
   if(file_exists($category_path) && is_file($category_path)) {
@@ -646,6 +470,12 @@ function wpsc_category_image($category_id = null) {
   }
 }
 
+
+/**
+* wpsc_category_description function, Gets the category description
+* @param integer category ID, can be 0
+* @param string category description
+*/
 function wpsc_category_description($category_id = null) {
   global $wpdb, $wp_query;
   if($category_id < 1) {
@@ -656,7 +486,7 @@ function wpsc_category_description($category_id = null) {
 		}
   }
   $category_id = absint($category_id);
-  $category_description = $wpdb->get_var("SELECT `description` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
+  $category_description = wpsc_get_categorymeta($category_id, 'description');
   return $category_description;
 }
 
@@ -670,57 +500,21 @@ function wpsc_category_name($category_id = null) {
 		}
   }
   $category_id = absint($category_id);
-  $category_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
+  
+  $category_data = get_term_by('id', $category_id, 'wpsc_product_category', ARRAY_A);
+  
+  $category_name = $category_data['name'];
   return $category_name;
 }
 
-
-
-/**
- * WPSC Category Group
- * @modified:     2009-09-28 by Ben
- * @description:  Get a category's group id.
- * @param:        $category_id = Category ID
- * @return:       (Int) Group ID
- */
-
-function wpsc_category_group( $category_id = null ) {
-	global $wpdb, $wp_query;
-	if ( $category_id < 1 ) {
-		if ( $wp_query->query_vars['category_id'] > 0 ) {
-			$category_id = $wp_query->query_vars['category_id'];
-		} else if ( isset($_GET['category']) && ($_GET['category'] > 0) ) {
-			$category_id = $_GET['category'];
-		}
-	}
-	$category_id = absint($category_id);
-	// Is it better for this DB query be loaded in the main query or cached?
-	$group_id = $wpdb->get_var("SELECT `group_id` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` IN ('{$category_id}') AND `active` IN('1') LIMIT 1");
-	return absint($group_id);
-}
-
-
-
-// This function displays the category groups, it is used by the above function
 function nzshpcrt_display_categories_groups() {
     global $wpdb;
-    if(get_option('permalink_structure') != '') {
-      $seperator ="?";
-    } else {
-      $seperator ="&amp;";
-    }
 
-    ob_start();
-		$category_settings = array('category_group'=> 1, 'show_thumbnails'=> get_option('show_category_thumbnails'));
-		include(wpsc_get_theme_file_path("category_widget.php"));
-    $output = ob_get_contents();
-    ob_end_clean();
     return $output;
   }
 
 /** wpsc list subcategories function
 		used to get an array of all the subcategories of a category.
-
 */
 function wpsc_list_subcategories($category_id = null) {
   global $wpdb,$category_data;

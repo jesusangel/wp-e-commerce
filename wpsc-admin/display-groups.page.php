@@ -467,30 +467,6 @@ if(is_numeric($_GET['category_delete_id'])) {
 	}
 }
 
-if(is_numeric($_GET['deleteid'])) {
-  $delete_id = absint($_GET['deleteid']);
-  $deletesql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `id`='{$delete_id}' LIMIT 1";
-  if($wpdb->query($deletesql)) {
-		$delete_subcat_sql = "UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `active` = '0', `nice-name` = '' WHERE `category_parent`='{$delete_id}'";
-		$wpdb->query($delete_subcat_sql);
-		// if this is the default category, we need to find a new default category
-		if($delete_id == get_option('wpsc_default_category')) {
-			// select the category that is not deleted with the greatest number of products in it
-			$new_default = $wpdb->get_var("SELECT `cat`.`id` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` AS `cat`
-				LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `assoc` ON `cat`.`id` = `assoc`.`category_id`
-				WHERE `cat`.`active` IN ( '1' )
-				GROUP BY `cat`.`id`
-				ORDER BY COUNT( `assoc`.`id` ) DESC
-				LIMIT 1");
-			if($new_default > 0) {
-				update_option('wpsc_default_category', $new_default);
-			}
-		}
-		
-		update_option('wpsc_category_url_cache', array());
-		$wp_rewrite->flush_rules(); 
-	}
-}
 
 unset($GLOBALS['wpsc_category_url_cache']);
 update_option('wpsc_category_url_cache', array());
