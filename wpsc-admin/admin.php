@@ -71,7 +71,7 @@ function wpsc_admin_pages(){
 		
     if(function_exists('add_options_page')) {
 			$base_page = 'wpsc-sales-logs';
-					
+
 		if ($userdata->user_level <= 2) {
 				if(file_exists(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php')) {
 					require_once(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php');
@@ -83,25 +83,21 @@ function wpsc_admin_pages(){
 						add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
 					}
 				}
+
 			} else {
 				if (function_exists('add_object_page')) {
-					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/credit_cards.png");
-					
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/credit_cards.png");					
 				} else {
 					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
+
 				}
 			}
-
-
-
-
-			$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 7, 'wpsc-update', 'wpsc_display_update_page');
-
 
 				
 			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
 			$page_hooks[] = $purchase_log_page;
-
+			
+			$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 7, 'wpsc-update', 'wpsc_display_update_page');
 
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
 			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
