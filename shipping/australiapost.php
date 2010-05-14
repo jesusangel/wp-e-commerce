@@ -48,7 +48,7 @@ class australiapost {
 		$this->is_external = true;
 		$this->requires_weight = true;
 		$this->needs_zipcode = true;
-		$this->debug = false; // change to true to see the API URLs and responses for each active service
+		$this->debug = false; // change to true to log (to the PHP error log) the API URLs and responses for each active service
 		
 		// Initialise the list of available postage services
 		$this->services['STANDARD'] = __('Standard Parcel Post', 'wpsc');
@@ -151,6 +151,10 @@ class australiapost {
 		} else if(isset($_SESSION['wpsc_zipcode'])) {
 			$destzipcode = $_SESSION['wpsc_zipcode'];
 		}
+		if (strlen($destzipcode) != 4) {
+		    // No destination postcode entered yet, so just return an empty set of quotes
+		    return array();
+		}
  
 		//Calculate the total cart dimensions by adding the volume of each product then calculating the cubed root
 		$volume = 0;
@@ -191,10 +195,15 @@ class australiapost {
 		if ($cuberoot > 0) {
 			$height = $width = $length = $cuberoot;
 		}
+
+		// As per http://auspost.com.au/personal/parcel-dimensions.html: if the parcel is box-shaped, both its length and width must be at least 15cm.
+		if ($length < 150) $length = 150;
+		if ($width < 150) $width = 150;
 		
 		// API Documentation: http://drc.edeliver.com.au/
 		$url = "http://drc.edeliver.com.au/ratecalc.asp?Pickup_Postcode={$this->base_zipcode}&Destination_Postcode={$destzipcode}&Quantity=1&Weight={$weight}&Height={$height}&Width={$width}&Length={$length}&Country={$dest}";
-		
+
+		$log = '';
 		$methods = array();
 		foreach ($this->services as $code => $service) {
 			if (!$this->settings['services'][$code]) continue;
@@ -202,15 +211,13 @@ class australiapost {
 			$fullURL = "$url&Service_Type=$code";
 			
 			$response = wp_remote_get($fullURL);
-						
-			if ($this->debug) {
-				echo '<pre>';
-				echo "{$fullURL}\n{$response['body']}\n\n</pre>";
-			}
-			
 			
 			// Silently ignore any API server errors
 			if ( is_wp_error($response) || $response['response']['code'] != '200' || empty($response['body']) ) continue;
+
+			if ($this->debug) {
+			    $log .="  {$fullURL}\n    " . $response['body'] . "\n";
+			}
 			
 			$lines = explode("\n", $response['body']);
 			
@@ -232,6 +239,8 @@ class australiapost {
 			}
 			$methods[$code]['name'] = $this->services[$code];
 		}
+		if ($this->debug)
+		    error_log( 'WP e-Commerce Australia Post shipping quotes for ' . site_url() . ":\n----------\n$log----------" );
 		
 		// Allow another WordPress plugin to override the quoted method(s)/amount(s)
 		
