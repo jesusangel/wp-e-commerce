@@ -555,7 +555,11 @@ function wpsc_the_product_image($width = null, $height = null) {
 			}
 			return $image_url;
 		} else {
-			$image_url = WPSC_IMAGE_URL.$image_file_name;
+			if ($wpsc_query->product['thumbnail_state'] == 3) {
+				$image_url = WPSC_THUMBNAIL_URL.$image_file_name;
+			} else {
+				$image_url = WPSC_IMAGE_URL.$image_file_name;
+			}
 			if(is_ssl()) {
 				$image_url = str_replace("http://", "https://", $image_url);
 			}
