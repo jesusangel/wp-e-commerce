@@ -36,7 +36,6 @@ define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
 
-$wpdb->show_errors = true;
 
 
 $wpsc_siteurl = get_option('siteurl');
