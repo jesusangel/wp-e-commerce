@@ -1552,6 +1552,7 @@ class wpsc_cart_item {
 	var $image_id;
 	var $thumbnail_image;
 	var $custom_tax_rate = null;
+	var $meta = array();
 	
 	var $is_donation = false;
 	var $apply_tax = true;
@@ -1662,7 +1663,7 @@ class wpsc_cart_item {
 
 		$this->product_name = $product_name;
 		$this->priceandstock_id = $priceandstock_id;
-		
+		$this->meta = $product_meta;
 		
 		if(is_numeric($product_meta['custom_tax'])) {
 			$this->tax_rate = $product_meta['custom_tax'];

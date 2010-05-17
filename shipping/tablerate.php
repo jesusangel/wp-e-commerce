@@ -40,7 +40,7 @@ class tablerate {
 							</td>
 							<td>
 								".wpsc_get_currency_symbol()."
-								<input type='text' value='{$shipping}' name='shipping[]'  size='4'>
+								<input type='text' value='{$shipping}' name='shipping[]'	size='4'>
 								&nbsp;&nbsp;<a href='#' class='delete_button' >".__('Delete', 'wpsc')."</a>
 							
 							</td>
@@ -88,7 +88,7 @@ class tablerate {
 			krsort($layers);
 			foreach ($layers as $key => $shipping) {
 				if ($price >= (float)$key) {
-				  //echo "<pre>$price $key</pre>";
+					//echo "<pre>$price $key</pre>";
 					return array("Table Rate"=>$shipping);
 					exit();
 				}
@@ -103,24 +103,23 @@ class tablerate {
 		
 	
 	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
-	  global $wpdb;
-    if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
-      $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='$product_id' LIMIT 1";
-      $product_list = $wpdb->get_row($sql,ARRAY_A) ;
-      if($product_list['no_shipping'] == 0) {
-        //if the item has shipping
-        if($country_code == get_option('base_country')) {
-          $additional_shipping = $product_list['pnp'];
+		global $wpdb;
+		if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
+			if($cart_item->uses_shipping == true) {
+				//if the item has shipping
+				$shipping_values = $cart_item->meta['shipping'];
+				if($country_code == get_option('base_country')) {
+					$additional_shipping = $shipping_values['local'];
 				} else {
-          $additional_shipping = $product_list['international_pnp'];
-				}          
-        $shipping = $quantity * $additional_shipping;
+					$additional_shipping = $shipping_values['international'];
+				}				
+				$shipping = $quantity * $additional_shipping;
 			} else {
-        //if the item does not have shipping
-        $shipping = 0;
+				//if the item does not have shipping
+				$shipping = 0;
 			}
 		} else {
-      //if the item is invalid or all items do not have shipping
+			//if the item is invalid or all items do not have shipping
 			$shipping = 0;
 		}
 	}
@@ -135,7 +134,7 @@ class tablerate {
 				}
 			}
 		}
-	  return $output;
+		return $output;
 	}
 	
 	

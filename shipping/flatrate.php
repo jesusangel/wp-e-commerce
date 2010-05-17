@@ -145,12 +145,13 @@ class flatrate {
 			}
 			
 			//$product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
-			if($product_list['no_shipping'] == 0) {
+			if($cart_item->uses_shipping == true) {
 				//if the item has shipping
+				$shipping_values = $cart_item->meta['shipping'];
 				if($country_code == get_option('base_country')) {
-					$additional_shipping = $product_list['pnp'];
+					$additional_shipping = $shipping_values['local'];
 				} else {
-					$additional_shipping = $product_list['international_pnp'];
+					$additional_shipping = $shipping_values['international'];
 				}					
 				$shipping = $quantity * $additional_shipping;
 			} else {
