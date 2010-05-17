@@ -156,37 +156,15 @@ function fancy_notification_content($cart_messages) {
 }
 
 
+
+
+/*
+ * wpsc product url function, gets the URL of a product, 
+ * Deprecated, all parameters past the first unused. use get_permalink  
+ */
 function wpsc_product_url($product_id, $category_id = null, $escape = true) {
   global $wpdb, $wp_rewrite, $wp_query;
-  
-  if(!is_numeric($category_id) || ($category_id < 1)) {
-		if(is_numeric($wp_query->query_vars['product_category'])) {
-		  $category_id = $wp_query->query_vars['product_category'];
-		} else {
-			$category_list = $wpdb->get_row("SELECT `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id`, IF((`".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` = '".get_option('wpsc_default_category')."'), 0, 1) AS `order_state` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` , `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` IN ('".$product_id."') AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` = `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`id` AND `".WPSC_TABLE_PRODUCT_CATEGORIES."`.`active` IN('1') LIMIT 1",ARRAY_A);
-			$category_id = $category_list['id'];		
-		}
-  }
-  
-
-  
-  if((($wp_rewrite->rules != null) && ($wp_rewrite != null)) || (get_option('rewrite_rules') != null)) {
-    $url_name = get_product_meta($product_id, 'url_name', true);
-    $url_name = htmlentities(stripslashes($url_name), ENT_QUOTES, 'UTF-8');
-		$product_url =wpsc_category_url($category_id).$url_name."/";
-  } else {    
-    if(!stristr(get_option('product_list_url'), "?")) {
-      $initial_seperator = "?";
-    } else {
-      $initial_seperator = ($escape) ? "&amp;" : "&";
-    }
-    if(is_numeric($category_id) && ($category_id > 0)) {
-      $product_url = get_option('product_list_url').$initial_seperator."category=".$category_id.(($escape) ? "&amp;" : "&")."product_id=".$product_id;
-    } else {
-      $product_url = get_option('product_list_url').$initial_seperator."product_id=".$product_id;
-    }
-  }
-  return $product_url;
+  return get_permalink($product_id);
 }
 
 
