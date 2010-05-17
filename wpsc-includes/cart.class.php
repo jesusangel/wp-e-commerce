@@ -1563,7 +1563,7 @@ class wpsc_cart_item {
 	var $custom_file = null;
 	
 	
-	var $meta = array();
+	
 	/**
 	 * wpsc_cart_item constructor, requires a product ID and the parameters for the product
 	 * @access public
