@@ -428,7 +428,7 @@ function wpsc_display_groups_page() {
     } else {
       $product_width = '';
     }
-		$category_sql_list[] = "`image_width` = '$product_height' ";
+		$category_sql_list[] = "`image_width` = '$product_width' ";
 
     if(count($category_sql_list) > 0) {
       $category_sql = implode(", ",$category_sql_list);
