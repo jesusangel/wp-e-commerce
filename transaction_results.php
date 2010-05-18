@@ -1,7 +1,6 @@
 <?php
 global $wpdb, $user_ID, $nzshpcrt_gateways;
 do_action('wpsc_transaction_results');
-
 $sessionid = $_GET['sessionid'];
 if(!isset($_GET['sessionid']) && isset($_GET['ms']) ){
 	$sessionid = $_GET['ms'];
@@ -36,12 +35,14 @@ if($_REQUEST['eway']=='1') {
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';
 }
+	
 	//exit('getting here?<pre>'.print_r($_SESSION[[wpsc_previous_selected_gateway], true).'</pre>'.get_option('payment_gateway'));
 if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 	echo $_SESSION['paypalExpressMessage'];
 
 
-} elseif($sessionid == ''){
+} 
+if($sessionid == ''){
 	_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
 
 }else{

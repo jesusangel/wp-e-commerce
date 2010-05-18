@@ -240,6 +240,7 @@ $_SESSION['paypalExpressMessage']= '
  	if($ack!="SUCCESS"){
  		$_SESSION['reshash']=$resArray;
  		$location = get_option('transact_url')."&act=error";
+		$_SESSION['paypalExpressMessage'] = 'Completed';
  			// header("Location: $location");
  	}else{
 		$transaction_id = $wpdb->escape($resArray['TRANSACTIONID']);
@@ -254,9 +255,10 @@ $_SESSION['paypalExpressMessage']= '
 			$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `transactid` = '".$transaction_id."', `date` = '".time()."'  WHERE `sessionid` = ".$sessionid." LIMIT 1");
 			break;
 		}
+		$_SESSION['paypalExpressMessage'] = $resArray['PAYMENTSTATUS'];
 		$location = add_query_arg('sessionid', $sessionid, get_option('transact_url'));
 		//echo $location;
-		$_SESSION['paypalExpressMessage'] = null;
+
 		header("Location: $location");
 		exit();
  	}
