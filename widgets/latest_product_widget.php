@@ -18,36 +18,52 @@ function nzshpcrt_latest_product($input = null) {
 	$siteurl = get_option('siteurl');
 	$options = get_option("wpsc-widget_latest_products");
 	$number = ($options["number"]==0)?5:$options["number"];
-	$latest_product = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1') ORDER BY `id` DESC LIMIT ".$number, ARRAY_A);
-
+	//$latest_product = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1') ORDER BY `id` DESC LIMIT ".$number, ARRAY_A);
+	$latest_products = get_posts(array(
+		'post_type' => 'wpsc-product',
+		'posts_per_page' => 1, 
+		'orderby' => 'post_date',
+		'post_parent' => 0,
+		'post_status' => 'all',
+		'order' => "DESC"
+	));
+	$latest_product = $latest_products[0];
+	//exit( "<pre>".print_r($latest_product,true)."</pre>");
 	if($latest_product != null) {
-		$output = "<div>";
-		foreach($latest_product as $special) {			
-			$output.="<div>";
-			$output .= "	<div class='item_image'>";
- 			$output.="			<a href='".wpsc_product_url($special['id'],$special['category'])."'>";
-			if(($special['image'] > 0)) {
-				if(get_option('wpsc_selected_theme') == 'marketplace') {
-					$src = WPSC_IMAGE_URL.$special['image'];
-							
-					$output .= "				<img src='". "index.php?image_id={$special['image']}&amp;width=100&amp;height=75' title='".$special['name']."' alt='".$special['name']."' />";
-					
-				} else {
-					$output .= "				<img src='". "index.php?image_id={$special['image']}&amp;width=45&amp;height=25' title='".$special['name']."' alt='".$special['name']."' /><br />";
-				}
+		$output = "<div>";		
+		$output.="<div>";
+		$output .= "	<div class='item_image'>";
+ 		$output.="			<a href='".wpsc_product_url($latest_product->ID, null)."'>";
+	 	$attached_images = (array)get_posts(array(
+			'post_type' => 'attachment',
+			'numberposts' => 1,
+			'post_status' => null,
+			'post_parent' => $latest_product->ID,
+			'orderby' => 'menu_order',
+			'order' => 'ASC'
+		));
+		$attached_image = $attached_images[0]; 
+		if(($attached_image->ID > 0)) {
+			if(get_option('wpsc_selected_theme') == 'marketplace') {
+				$src = WPSC_IMAGE_URL.$special['image'];
+						
+				$output .= "	<img src='". wpsc_product_image($attached_image->ID, 100, 75)."' title='".$latest_product->post_title."' alt='".$latest_product->post_title."' />";
+				
 			} else {
-				//$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
+				$output .= "	<img src='". wpsc_product_image($attached_image->ID, 45, 25)."' title='".$latest_product->post_title."' alt='".$latest_product->post_title."' /><br />";
 			}
-			
- 			$output.="		</a>";
-			$output .= "	</div>";
-			
- 			$output.="	<a href='".wpsc_product_url($special['id'],$special['category'])."'>";
-			$output .= "		<strong>".stripslashes($special['name'])."</strong><br />";
-			
-			$output .= "	</a>";
-			$output .= "</div>";
+		} else {
+			//$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
 		}
+		
+ 		$output .= "		</a>";
+		$output .= "	</div>";
+		
+ 		$output .= "	<a href='".wpsc_product_url($latest_product->ID, null)."'>";
+		$output .= "		<strong>".stripslashes($latest_product->post_title)."</strong><br />";
+		$output .= "	</a>";
+		$output .= "</div>";
+	
 		$output .= "</div>";
 	} else {
 		$output = '';

@@ -6,14 +6,14 @@ function widget_specials($args) {
 
   $special_count = $wpdb->get_var("SELECT DISTINCT `p`.`ID`
 		FROM `".$wpdb->postmeta."` AS `m`
-		JOIN `w".$wpdb->posts."` AS `p` ON `m`.`post_id` = `p`.`ID`
+		JOIN `".$wpdb->posts."` AS `p` ON `m`.`post_id` = `p`.`ID`
 		WHERE `m`.`meta_key`
 		IN ('_wpsc_special_price')
 		AND `m`.`meta_value` >0
 		AND `p`.`post_status` = 'publish'
 		ORDER BY RAND( )
 		LIMIT 1");   
-  	 
+  	  
   //exit('COUNT'.$special_count);
   if($special_count > 0) {
     $title = empty($options['title']) ? __(__('Product Specials', 'wpsc')) : $options['title'];
@@ -38,7 +38,7 @@ function widget_specials($args) {
 
 	 $product = $wpdb->get_row("SELECT DISTINCT `p` . * , `m`.`meta_value` AS `special_price`
 		FROM `".$wpdb->postmeta."` AS `m`
-		JOIN `w".$wpdb->posts."` AS `p` ON `m`.`post_id` = `p`.`ID`
+		JOIN `".$wpdb->posts."` AS `p` ON `m`.`post_id` = `p`.`ID`
 		WHERE `m`.`meta_key`
 		IN (
 		'_wpsc_special_price'
@@ -49,7 +49,7 @@ function widget_specials($args) {
 	 $product_id = $special_product_data['post_id'];
 	 $special_price = $special_product_data['meta_value'];
 	  
-		if($product != null) {
+		if($product == null) {
 			$output = "<div>";
 			foreach($product as $special) {
 			  $special['name'] =  htmlentities(stripslashes($special['name']), ENT_QUOTES, "UTF-8");
