@@ -6,61 +6,11 @@ if(get_option('wpsc_trackingid_message') == ''){
 if(get_option('wpsc_trackingid_subject') == ''){
 	update_option('wpsc_trackingid_subject', __('Your Order from %shop_name% has been dispatched', 'wpsc'));
 }     
-/* adds nice names for permalinks for products */
-
-$check_product_names = $wpdb->get_results("SELECT `products`.`id`, `products`.`name`, `meta`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta` ON `products`.`id` = `meta`.`product_id` WHERE `products`.`active` IN ('1') AND ((`meta`.`meta_key` IN ('url_name') AND  `meta`.`meta_value` IN (''))  OR ISNULL(`meta`.`meta_key`))");  
-if($check_product_names != null) {
-  $sql_query = "SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1')";
-  $sql_data = $wpdb->get_results($sql_query,ARRAY_A);    
-  foreach((array)$sql_data as $datarow) {
-    $tidied_name = trim($datarow['name']);
-    $tidied_name = strtolower($tidied_name);
-		$url_name = sanitize_title($tidied_name);
-    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` LIKE 'url_name' AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
-    $extension_number = '';
-    if($similar_names['count'] > 0) {
-      $extension_number = (int)$similar_names['max_number']+1;
-		}
-    if(get_product_meta($datarow['id'], 'url_name') != false) {
-      $current_url_name = get_product_meta($datarow['id'], 'url_name');
-      if($current_url_name != $url_name) {
-        $url_name .= $extension_number;
-        // Buggy, sometimes results in the url name swapping on every page load.
-        // update_product_meta($datarow['id'], 'url_name', $url_name);
-			}
-		} else {
-      $url_name .= $extension_number;
-      add_product_meta($datarow['id'], 'url_name', $url_name, true);
-		}
-	}
-}
-     
-  
-/* adds nice names for permalinks for categories */
-$check_category_names = $wpdb->get_results("SELECT DISTINCT `nice-name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` NOT IN ('')  AND `active` IN ('1')");
-if($check_category_names == null) {
-  $sql_query = "SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN('1')";
-  $sql_data = $wpdb->get_results($sql_query,ARRAY_A);    
-  foreach((array)$sql_data as $datarow) {
-    $tidied_name = trim($datarow['name']);
-    $tidied_name = strtolower($tidied_name);
-		$url_name = sanitize_title($tidied_name);     
-    $similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
-    $extension_number = '';
-    if($similar_names['count'] > 0) {
-      $extension_number = (int)$similar_names['max_number']+1;
-    }
-    $url_name .= $extension_number;
-    $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '$url_name' WHERE `id` = '".$datarow['id']."' LIMIT 1 ;");
-  }
-}
-  
 
 
-
-  
+  /*
 if(!$wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_ALSO_BOUGHT."`")) {
-  /* inserts data on what was bought with what however many times */
+  // inserts data on what was bought with what however many times 
   $product_ids = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1')");
   foreach((array)$product_ids as $prodid) {
     $cart_ids = $wpdb->get_results("SELECT `purchaseid` FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `prodid` IN ('$prodid')", ARRAY_A);
@@ -79,7 +29,7 @@ if(!$wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_ALSO_BOUGHT."`")) {
       $wpdb->query("INSERT INTO `".WPSC_TABLE_ALSO_BOUGHT."` ( `id` , `selected_product` , `associated_product` , `quantity` ) VALUES ('', '$prodid', '".$assoc_prodid."', '".$quantity."' );");
     }
   }
-}
+}*/
 
 if($wpdb->get_results("SHOW FULL COLUMNS FROM `".WPSC_TABLE_REGION_TAX."` LIKE 'code';",ARRAY_A)) {
 	//$wpdb->query("ALTER TABLE `".WPSC_TABLE_REGION_TAX."` ADD `code` char(2) NOT NULL default '' AFTER `name`;");    
@@ -139,44 +89,6 @@ if($wpdb->get_results("SHOW FULL COLUMNS FROM `".WPSC_TABLE_REGION_TAX."` LIKE '
   }
 }
 
-// if there are no default product categorisations, add them
-if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."`") < 1) {
-  $wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (1, 'Categories', 'Product Categories', '1', '1')");
-  $wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");
-}
-
-
-$brand_group = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `name` IN ( 'Brands' ) ",ARRAY_A);
-$converted_brand_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN({$brand_group['id']}) AND `active` IN('1') ");
-
-
-if(($converted_brand_count <= 0) && ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}product_brands'") == ($wpdb->prefix."product_brands"))) {
-	$brands = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}product_brands` ",ARRAY_A);
-	if(count($brands) > 0 ) {
-		foreach($brands as $brand) {
-			
-			$tidied_name = trim($brand['name']);
-			$tidied_name = strtolower($tidied_name);
-			$url_name = sanitize_title($tidied_name);
-			if($url_name != $category_data['nice-name']) {
-				$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(0-9)*$' AND `id` NOT IN ('".(int)$category_data['id']."') ",ARRAY_A);
-				
-				$extension_number = '';
-				if($similar_names['count'] > 0) {
-					$extension_number = (int)$similar_names['max_number']+1;
-				}
-				$url_name .= $extension_number;   
-			}
-			
-			$wpdb->query( "INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` ( `group_id`, `name`, `nice-name`, `description`, `image`, `fee`, `active`, `category_parent`, `order`) VALUES ( {$brand_group['id']}, '{$brand['name']}', '{$url_name}', '{$brand['description']}', '', '0', '1', 0, 0)");
-		}  
-	}
-}
-
-$unassociated_categories = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `group_id` IN ('0')");
-if($unassociated_categories > 0) {
-  $wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `group_id` = '1' WHERE `group_id` IN ('0')");
-}
 
 
 // here is the code to update the payment gateway options.
@@ -248,59 +160,6 @@ if(get_option('payment_method') != null) {
 // switch this variable over to our own option name, seems default_category was used by wordpress
 if(get_option('wpsc_default_category') == null) {
   update_option('wpsc_default_category', get_option('default_category'));
-}
-
-// Move the variation ids for the combinations to the new table
-
-if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`") < 1) {
-  $variation_priceandstock = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."`",ARRAY_A);
-  
-  foreach((array)$variation_priceandstock_items as $variation_priceandstock_item) {
-    $keys = array();
-    $keys[] = $variation_priceandstock_item['variation_id_1'];
-    $keys[] = $variation_priceandstock_item['variation_id_2'];
-    
-    asort($keys);    
-    $all_value_ids = implode(",", $keys);
-			
-			
-		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$keys)."')");
-		asort($variation_ids);
-		$all_variation_ids = implode(",", $variation_ids);
-    
-    $variation_priceandstock_id = $variation_priceandstock_item['id'];
-    $product_id = $variation_priceandstock_item['product_id'];
-    foreach((array)$keys as $key) {
-      if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `priceandstock_id` = '{$variation_priceandstock_id}' AND `value_id` = '$key'") < 1) {
-        $variation_id = $wpdb->get_var("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '{$key}'");
-        if($variation_id > 0) {
-          $wpdb->query("INSERT INTO `".WPSC_TABLE_VARIATION_COMBINATIONS."` ( `product_id` , `priceandstock_id` , `value_id`, `variation_id`, `all_value_ids` ) VALUES ( '$product_id', '{$variation_priceandstock_id}', '$key', '$variation_id', '$all_variation_ids' )");
-        }
-      }
-    }
-  }
-}
-
-// Update the variation combinations table to have the all_variation_ids column
-if($wpdb->get_var("SELECT COUNT( * ) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `all_variation_ids` IN ( '' )") == $wpdb->get_var("SELECT COUNT( * ) FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`")) {
-  $variation_priceandstock_ids = $wpdb->get_col("SELECT DISTINCT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."`");
-  foreach($variation_priceandstock_ids as $variation_priceandstock_id) {
-    $variation_priceandstock_rows = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `priceandstock_id` IN ('$variation_priceandstock_id')", ARRAY_A);
-    $all_value_array = array();
-    foreach($variation_priceandstock_rows as $variation_priceandstock_row) {
-      $all_value_array[] = $variation_priceandstock_row['variation_id'];
-    }
-    asort($all_value_array);    
-    
-		$variation_ids = $wpdb->get_col("SELECT `variation_id` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` IN ('".implode("','",$all_value_array)."')");
-		asort($variation_ids);
-		$all_variation_ids = implode(",", $variation_ids);
-		
-    $update_sql = "UPDATE `".WPSC_TABLE_VARIATION_COMBINATIONS."` SET `all_variation_ids` = '".$all_variation_ids."' WHERE `priceandstock_id` IN( '$variation_priceandstock_id' ) AND `all_variation_ids` IN( '' );";
-    
-    //echo "<pre>".print_r($update_sql,true)."</pre>";
-    //$wpdb->query($update_sql);
-  }
 }
 
 if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `continent` NOT IN ('')") <230) {
@@ -574,23 +433,6 @@ if(get_option('wpsc_email_admin') == '') {
 if($wpdb->get_var("SELECT `option_id` FROM `{$wpdb->options}` WHERE `option_name` LIKE 'custom_gateway_options'") < 1) {
 		update_option('custom_gateway_options', array('testmode'));
 }
-
-$coldata  = $wpdb->get_row("SHOW COLUMNS FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` LIKE 'file'",ARRAY_A);
-if($coldata['Type'] != "bigint(20) unsigned")	{
-  $wpdb->query("ALTER TABLE `".WPSC_TABLE_VARIATION_PROPERTIES."` CHANGE `file` `file` bigint(20) unsigned DEFAULT '0' NOT NULL");
-  $variations_to_upgrade = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `file` IN ('1')",ARRAY_A);
-  foreach((array)$variations_to_upgrade as $variation) {
-    $new_file_id = (int)$wpdb->get_var("SELECT `file` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` IN ('{$variation['product_id']}') LIMIT 1");
-    $wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_PROPERTIES."` SET `file` = '{$new_file_id}' WHERE `id` IN ('{$variation['id']}') LIMIT 1");
-  }
-   
-}
-
-//   echo "<pre>".print_r(geast_option('flat_rates'),true)."</pre>";
-
-
-// update_option('base_local_shipping',8);
-// 	update_option('base_international_shipping',12);
 
 if((get_option('flat_rates') == null) || (count(get_option('flat_rates')) < 1)) {
 	$local_shipping = get_option('base_local_shipping');

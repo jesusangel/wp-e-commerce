@@ -58,8 +58,7 @@ function wpsc_install() {
 		//$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (1, 'Categories', 'Product Categories', '1', '1')");
 		//$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORISATION_GROUPS."` (`id`, `name`, `description`, `active`, `default`) VALUES (2, 'Brands', 'Product Brands', '1', '0')");			
 		//$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('1', '".__('Example category', 'wpsc')."', '".__('Example details', 'wpsc')."', '1');");		
-		//ok
-		enj$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".__('Example Brand', 'wpsc')."', '".__('Example details', 'wpsc')."', '1');");
+		//$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_CATEGORIES."` (`group_id`, `name` , `description`, `active`) VALUES ('2', '".__('Example Brand', 'wpsc')."', '".__('Example details', 'wpsc')."', '1');");
 	}
 	
 	$purchase_statuses_data	= $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PURCHASE_STATUSES."`",ARRAY_A);
@@ -70,15 +69,6 @@ function wpsc_install() {
 		('".__('Accepted Payment', 'wpsc')."', '1', ''),
 		('".__('Job Dispatched', 'wpsc')."', '1', ''),
 		('".__('Closed Order', 'wpsc')."', '1', '');");
-	}
-
-	$check_category_assoc = $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`;",ARRAY_A);
-	if($check_category_assoc[0]['count'] == 0) {
-		$sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active`=1";
-		$product_list = $wpdb->get_results($sql,ARRAY_A);
-		foreach((array)$product_list as $product) {
-			$results = $wpdb->query("INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` (`product_id` , `category_id` ) VALUES ('".$product['id']."', '".$product['category']."');");
-		}
 	}
 		
 
@@ -275,89 +265,6 @@ function wpsc_install() {
 		$wp_rewrite->flush_rules();
 	}
 	 
-	 
-	 /* adds nice names for permalinks for products */
-	 $check_product_names = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`id`, `".WPSC_TABLE_PRODUCT_LIST."`.`name`, `".WPSC_TABLE_PRODUCTMETA."`.`meta_key` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCTMETA."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_PRODUCTMETA."`.`product_id` WHERE (`".WPSC_TABLE_PRODUCTMETA."`.`meta_key` IN ('url_name') AND	`".WPSC_TABLE_PRODUCTMETA."`.`meta_value` IN (''))	OR ISNULL(`".WPSC_TABLE_PRODUCTMETA."`.`meta_key`)", ARRAY_A);	
-	if($check_product_names != null) {
-		foreach((array)$check_product_names as $datarow) {
-			$tidied_name = trim($datarow['name']);
-			$tidied_name = strtolower($tidied_name);
-			$url_name = sanitize_title($tidied_name);
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` LIKE 'url_name' AND `meta_value` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
-			$extension_number = '';
-			if($similar_names['count'] > 0) {
-				$extension_number = (int)$similar_names['max_number']+1;
-			}			
-			if(get_product_meta($datarow['id'], 'url_name') != false) {
-				$current_url_name = get_product_meta($datarow['id'], 'url_name');
-				if($current_url_name != $url_name) {
-					$url_name .= $extension_number;
-					update_product_meta($datarow['id'], 'url_name', $url_name);
-				}
-			} else {
-				$url_name .= $extension_number;
-				add_product_meta($datarow['id'], 'url_name', $url_name, true);
-			}
-		}
-	}
-		
-	
-	/* adds nice names for permalinks for categories */
-	$check_category_names = $wpdb->get_results("SELECT DISTINCT `nice-name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` IN ('') AND `active` IN ('1')");
-	if($check_category_names != null) {
-		$sql_query = "SELECT `id`, `name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN('1')";
-		$sql_data = $wpdb->get_results($sql_query,ARRAY_A);		
-		foreach((array)$sql_data as $datarow) {
-			$tidied_name = trim($datarow['name']);
-			$tidied_name = strtolower($tidied_name);
-			$url_name = sanitize_title($tidied_name);		
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' ",ARRAY_A);
-			$extension_number = '';
-			if($similar_names['count'] > 0) {
-				$extension_number = (int)$similar_names['max_number']+1;
-			}
-			$url_name .= $extension_number;
-			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '$url_name' WHERE `id` = '".$datarow['id']."' LIMIT 1 ;");
-		}
-		$wp_rewrite->flush_rules();
-	}
-		
-		
-	
-	/* Moves images to thumbnails directory */
-	 // this code should no longer be needed, as most people will be using a sufficiently new version
-	$image_dir = WPSC_FILE_PATH."/images/";
-	$product_images = WPSC_IMAGE_DIR;
-	$product_thumbnails = WPSC_THUMBNAIL_DIR;
-	if(!is_dir($product_thumbnails)) {
-		@ mkdir($product_thumbnails, 0775);
-	}
-	$product_list = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `image` != ''",ARRAY_A);
-	foreach((array)$product_list as $product) {
-		if(!glob($product_thumbnails.$product['image'])) {
-			$new_filename = $product['id']."_".$product['image'];
-			if(file_exists($image_dir.$product['image'])) {
-				copy($image_dir.$product['image'], $product_thumbnails.$new_filename);
-				if(file_exists($product_images.$product['image'])) {
-					copy($product_images.$product['image'], $product_images.$new_filename);
-				}
-				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$new_filename."' WHERE `id`='".$product['id']."' LIMIT 1");
-			} else {
-				$imagedir = $product_thumbnails;
-				$name = $new_filename;
-				$new_image_path = $product_images.$product['image'];
-				$imagepath = $product['image'];
-				$height = get_option('product_image_height');
-				$width	= get_option('product_image_width');
-				if(file_exists($product_images.$product['image'])) {
-					include("extra_image_processing.php");
-					copy($product_images.$product['image'], $product_images.$new_filename);
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$new_filename."' WHERE `id`='".$product['id']."' LIMIT 1");
-				}
-			}
-		}
-	}	// */
-	 
 }
 
 
@@ -479,37 +386,6 @@ function wpsc_update_remove_nulls($colname) {
 		return false;
 	}
 } 
-
-/**
-	*wpsc_update_image_records function,	moves product images to the images table
-* * @return boolean true on success, false on failure
- */
-function wpsc_update_image_records($colname) {
-	global $wpdb;
-	$product_data = $wpdb->get_results("SELECT `id`, `image` FROM	`".WPSC_TABLE_PRODUCT_LIST."` WHERE `image` NOT REGEXP '^[0-9]+$'", ARRAY_A);
-	
-	foreach((array)$product_data as $product_row) {
-		if(file_exists(WPSC_IMAGE_DIR.$product_row['image'])) {
-			$image_id = $wpdb->get_var("SELECT `id` FROM	`".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` = '{$product_row['id']}' AND `image` LIKE '{$product_row['image']}' LIMIT 1");
-			if($image_id < 1) {
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` (`product_id`, `image`, `width`, `height`) VALUES ('{$product_row['id']}', '{$product_row['image']}', null, null )");			
-				$image_id = (int) $wpdb->insert_id;
-			}
-			if($image_id > 0) {
-			$success_state[] = 	$wpdb->query("UPDATE	`".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '{$image_id}' WHERE `id` = '{$product_row['id']}' LIMIT 1");
-			}
-		} else {
-			$success_state[] = $wpdb->query("UPDATE	`".WPSC_TABLE_PRODUCT_LIST."` SET `image` = null WHERE `id` = '{$product_row['id']}' LIMIT 1");
-		}
-	}
-	//echo "<pre>".print_r($success_state,true)."</pre>";
-	//exit();
-	// 	if() {
-	// 		return true;
-	// 	} else {
-	// 		return false;
-	// 	}
-}
 
 
 /**
