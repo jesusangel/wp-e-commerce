@@ -190,6 +190,21 @@ function wpsc_product_basic_details_form(&$product_data) {
   
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
   ?>
+  <script defer="defer" type="text/javascript">
+  jQuery(document).ready( function () {
+
+  //LiveQuery added to each of these	
+			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
+				jQuery(this).appendTo('div#append-side');
+			});
+			jQuery('div#wpsc_product_category_and_tag_forms').livequery(function() {
+				jQuery(this).insertAfter('div#submitdiv');
+			});
+			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
+				jQuery(this).insertAfter('div#wpsc_product_category_and_tag_forms');
+			});
+});			
+  </script>
   <h3 class='form_heading' style="display:none;">
  <?php
   if($product_data['id'] > 0) {
@@ -197,10 +212,35 @@ function wpsc_product_basic_details_form(&$product_data) {
 	} else {
 		echo __('Add New', 'wpsc');
 	}
-	?>
+?>
 	</h3>
+<?php
+	$post_ID = $product_data['id'];
+	if ( 0 == $post_ID ) {
+	$form_action = 'post';
+	$temp_ID = -1 * time(); // don't change this formula without looking at wp_write_post()
+	$form_extra = "<input type='hidden' id='post_ID' name='temp_ID' value='" . esc_attr($temp_ID) . "' />";
+	$autosave = false;
+} else {
+	$form_action = 'editpost';
+	$form_extra = "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($post_ID) . "' />";
+	$autosave = wp_get_post_autosave( $post_ID );
+
+	// Detect if there exists an autosave newer than the post and if that autosave is different than the post
+	if ( $autosave && mysql2date( 'U', $autosave->post_modified_gmt, false ) > mysql2date( 'U', $post->post_modified_gmt, false ) ) {
+		foreach ( _wp_post_revision_fields() as $autosave_field => $_autosave_field ) {
+			if ( normalize_whitespace( $autosave->$autosave_field ) != normalize_whitespace( $post->$autosave_field ) ) {
+				$notice = sprintf( __( 'There is an autosave of this post that is more recent than the version below.  <a href="%s">View the autosave</a>.' ), get_edit_post_link( $autosave->ID ) );
+				break;
+			}
+		}
+		unset($autosave_field, $_autosave_field);
+	}
+}
+
+	?>
 	<div id="side-info-column" class="inner-sidebar">
-		<div id="side-sortables" class='meta-box-sortables'>
+		<div id="side-sortables" class='meta-box-sortables ui-sortable'>
 			<input type='hidden' name='product_id' id='product_id' value='<?php echo $product_data['id']; ?>' />
 			<input type='hidden' name='wpsc_admin_action' value='edit_product' />
 			<input type='hidden' name='user_ID' id='user-id' value='<?php echo $user_ID; ?>' />
@@ -341,7 +381,6 @@ function wpsc_product_basic_details_form(&$product_data) {
 		<table class='product_editform' >
 			<tr>
 				<td colspan='2' class='itemfirstcol'>  
-					<label for="wpsc_product_name"><?php echo __('Product Name', 'wpsc')?></label>
 					<div class='admin_product_name'>
 						<input id='title' class='wpsc_product_name text' size='15' type='text' name='post_title' value='<?php echo htmlentities(stripslashes($product_data['name']), ENT_QUOTES, 'UTF-8'); ?>' />
 						<a href='#' class='shorttag_toggle'></a>
@@ -477,7 +516,7 @@ function wpsc_product_basic_details_form(&$product_data) {
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
 				 <?php
-						wpsc_the_editor($product_data['description'], 'content', false, false);
+						wpsc_the_editor($product_data['description'], 'content',true, true);
 				 ?>
 				 </div>
 				</td>
@@ -492,10 +531,11 @@ function wpsc_product_basic_details_form(&$product_data) {
 				</td>
 			</tr>
 		</table>
-		<div id="append-side">
+		<div id="append-side normal-sortables" class="meta-box-sortables ui-sortable">
 		
 		</div>
 	</div>
+	<div id="advanced-sortables" class="meta-box-sortables ui-sortable"></div>
 </div>
 	<?php
   }
@@ -1413,7 +1453,13 @@ function wpsc_category_list(&$product_data, $group_id, $unique_id = '', $categor
 }
 
 
+/**
+* Adding function to change text for media buttons
+*/
 
+function change_context() {
+	return __('Upload Image%s');
+}
 
 /**
  * Slightly modified copy of the Wordpress the_editor function
@@ -1447,7 +1493,10 @@ function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_b
 	$richedit =  user_can_richedit();
 	$class = '';
 
-	if ( $richedit || $media_buttons ) { ?>
+	if ( $richedit || $media_buttons ) {
+	//Justin Sainton - 5.19.2010 - Adding filters/actions for the media goodness :)
+	add_filter('media_buttons_context','change_context');
+ ?>
 	<div id="editor-toolbar">
 <?php
 	if ( $richedit ) {
@@ -1479,7 +1528,7 @@ function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_b
 	wp_print_scripts( 'quicktags' ); ?>
 	  <div id="ed_toolbar">
 		</div>
-		<script type="text/javascript">wpsc_edToolbar()</script>
+		<script type="text/javascript" defer="defer'">wpsc_edToolbar()</script>
 
 	</div>
 
@@ -1494,8 +1543,5 @@ function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_b
 	edCanvas = document.getElementById('<?php echo $id; ?>');
 	</script>
 <?php
-}
-
-
-
+	}
 ?>

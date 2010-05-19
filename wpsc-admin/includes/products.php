@@ -67,8 +67,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		$attributes = "$class$style";
 
-
-		
 		//echo "<pre>".print_r($column_name,true)."</pre>".count($posts_columns);
 		switch ($column_name) {
 

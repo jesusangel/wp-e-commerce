@@ -1,9 +1,5 @@
 // This is the wp-e-commerce front end javascript "library"
 
-
-
-
-
 jQuery(document).ready( function () {
 
 //JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
@@ -34,19 +30,6 @@ jQuery.fn.clearForm = function() {
   });
 };
 
-//LiveQuery added to each of these	
-			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
-				jQuery(this).appendTo('div#append-side');
-			});
-			jQuery('div#wpsc_product_category_and_tag_forms').livequery(function() {
-				jQuery(this).insertAfter('div#submitdiv');
-			});
-			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
-				jQuery(this).insertAfter('div#wpsc_product_category_and_tag_forms');
-			});
-			
-			
-		
 		jQuery('a#manage').livequery(function() {
 			jQuery(this).click(function() {
 			
@@ -816,9 +799,17 @@ jQuery.fn.clearForm = function() {
 			}
 		});
 	});
-	
-	
-	
+
+  //LiveQuery added to each of these	
+			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
+				jQuery(this).appendTo('div#append-side');
+			});
+			jQuery('div#wpsc_product_category_and_tag_forms').livequery(function() {
+				jQuery(this).insertAfter('div#submitdiv');
+			});
+			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
+				jQuery(this).insertAfter('div#wpsc_product_category_and_tag_forms');
+			});
 
 	jQuery('img.deleteButton, a.delete_primary_image').livequery(function(){
 	  jQuery(this).click( function() {

@@ -44,7 +44,7 @@ function wpsc_display_edit_products_page() {
   ?>
 	<div class="wrap">
 		<?php // screen_icon(); ?>
-		<div id="icon-themes" class="icon32"><br /></div>
+		<div id="icon_card"><br /></div>
 		<h2>
 				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo wp_specialchars( __('Manage Products', 'wpsc') ); ?></a>
 				<a href="admin.php?page=wpsc-edit-products&action=addnew" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
@@ -177,13 +177,15 @@ function wpsc_display_edit_products_page() {
 				</div>
 			</div>
 			
-			<div id="wpsc-col-right" style="display:none">			
-					<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
-					<?php
-						$product_id = absint($_GET['product']);
-						wpsc_display_product_form($product_id);
-					?>
-					</form>
+			<div id="wpsc-col-right" style="display:none">
+					<div id="poststuff" class="metabox-holder has-right-sidebar">
+						<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
+						<?php
+							$product_id = absint($_GET['product']);
+							wpsc_display_product_form($product_id);
+						?>
+						</form>
+					</div>
 			</div>		
 	</div>
 

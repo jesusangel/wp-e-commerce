@@ -396,7 +396,6 @@ div#poststuff h4 {
 
 div#poststuff table tr td {
 	vertical-align:top;
-	font-size:11px;
 }
 
 div#poststuff textarea {
@@ -453,8 +452,14 @@ div.admin_product_name a.shorttag_toggle {
 	width:18px;
 }
 
-
-
+div#icon_card
+	{
+		float: left;
+		height: 36px;
+		margin: 14px 6px 0px 0px;
+		width: 36px;
+		background: url(icon.png) no-repeat
+	}
 
 div.admin_product_shorttags {
 	width:93%;
@@ -1184,13 +1189,6 @@ div.editing_this_group {
 td.product_groups_page h4 {
   margin-bottom: 1ex;
 }
-#poststuff #edButtonHTML{
-margin-right:5px;
-margin-left:15px;
-}
-#edButtonPreview, #edButtonHTML {
-float:left;
-}
 #editorcontainer{
 clear:both;
 }
@@ -1468,3 +1466,12 @@ a.variation_handle {
 		padding-bottom:0px;
 		border-bottom:1px solid #CCC;
 	}
+#post-body #advanced-sortables
+	{
+		margin-right:300px
+	}
+#media-buttons #add_audio, 
+#media-buttons #add_video, 
+#media-buttons #add_media {
+	display:none;
+} 

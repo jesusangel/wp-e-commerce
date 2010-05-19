@@ -451,7 +451,7 @@ class WPSC_Query {
 				/*
 					* The reason this is so complicated is because of the product ordering, it is done by category/product association
 					* If you can see a way of simplifying it and speeding it up, then go for it.
-					*/
+				*/
 					
 					
 				$rowcount = $wpdb->get_var("SELECT COUNT( DISTINCT `".WPSC_TABLE_PRODUCT_LIST."`.`id`) AS `count` FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` ON `".WPSC_TABLE_PRODUCT_LIST."`.`id` = `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`product_id` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`publish`='1' AND `".WPSC_TABLE_PRODUCT_LIST."`.`active` = '1' AND `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."`.`category_id` IN ('".implode("','", $this->category_id_list)."') $no_donations_sql");
@@ -516,11 +516,6 @@ class WPSC_Query {
 					$order = 'ASC';
 				}
 				
-				
-				
-				
-				
-
 				if (get_option('wpsc_sort_by')=='name') {
 					$order_by = "`".WPSC_TABLE_PRODUCT_LIST."`.`name` $order";
 				} else if (get_option('wpsc_sort_by') == 'price') {

@@ -200,7 +200,6 @@ function  wpsc_admin_include_css_and_js() {
 	}
 	wp_admin_css( 'dashboard' );
 	wp_admin_css( 'media' );
-	wp_enqueue_script( 'postbox', '/wp-admin/js/postbox.js', array('jquery'));
 	
   $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('jCrop', WPSC_URL.'/wpsc-admin/js/jquery.Jcrop.min.js', array('jquery'), '0.9.8');
@@ -208,7 +207,7 @@ function  wpsc_admin_include_css_and_js() {
 	
 	
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
-	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier);
+	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier, true);
 	
 	
 	
