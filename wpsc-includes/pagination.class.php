@@ -101,10 +101,12 @@ function wpsc_pagination( $show = -1 ) {
 	}
 	while ( wpsc_have_pages() ) : wpsc_the_page();
 		if ( wpsc_page_number() >= $start && wpsc_page_number() <= $end ) {
+			$page_url = wpsc_page_url();
+			$page_url = wpsc_product_search_url( $page_url );
 			if ( wpsc_page_is_selected() ) :
-				$output .= '<a href="' . wpsc_page_url() . '" class="selected">' . wpsc_page_number() . '</a> ';
+				$output .= '<a href="' . $page_url . '" class="selected">' . wpsc_page_number() . '</a> ';
 			else :
-				$output .= '<a href="' . wpsc_page_url() . '">' . wpsc_page_number() . '</a> ';
+				$output .= '<a href="' . $page_url . '">' . wpsc_page_number() . '</a> ';
 			endif;
 		}
 	endwhile;
@@ -113,6 +115,26 @@ function wpsc_pagination( $show = -1 ) {
 	
 	return $output;
 	
+}
+
+/**
+ * wpsc product search url
+ * Add product_search parameter if required.
+ * @param $url (string) URL.
+ * @return (string) URL.
+ */
+function wpsc_product_search_url( $url ) {
+			
+	if ( isset( $_GET['product_search'] ) ) {
+		if ( strrpos( $url, '?') ) {
+			$url .= '&product_search=' . $_GET['product_search'];
+		} else {
+			$url .= '?product_search=' . $_GET['product_search'];
+		}
+	}
+	
+	return $url;
+
 }
 
 /**
@@ -136,6 +158,7 @@ function wpsc_adjacent_products_url( $n ) {
 	while ( wpsc_have_pages() ) : wpsc_the_page();
 		if ( wpsc_page_number() == $n ) {
 			$url = wpsc_page_url();
+			$url = wpsc_product_search_url( $url );
 			$wpsc_query->rewind_pages();
 			return $url;
 		}
@@ -213,6 +236,8 @@ function wpsc_first_products_link( $text = 'First', $show_disabled = false ) {
 	
 	$wpsc_query->rewind_pages();
 	
+	$page_url = wpsc_product_search_url( $page_url );
+	
 	if ( $page_url && wpsc_current_page() > 1 ) {
 		return '<a href="' . $page_url . '">' . $text . '</a>';
 	}
@@ -243,6 +268,8 @@ function wpsc_last_products_link( $text = 'Last', $show_disabled = false ) {
 	endwhile;
 	
 	$wpsc_query->rewind_pages();
+	
+	$page_url = wpsc_product_search_url( $page_url );
 	
 	if ( $page_url && wpsc_current_page() < $wpsc_query->page_count ) {
 		return '<a href="' . $page_url . '">' . $text . '</a>';
