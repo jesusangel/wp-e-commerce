@@ -680,8 +680,16 @@ function wpsc_dashboard_4months_widget(){
 	$months[] = mktime(0, 0, 0, $this_month-1, 1, $this_year);
 	$months[] = mktime(0, 0, 0, $this_month, 1, $this_year);
 	
-	$prodsql = "SELECT `".WPSC_TABLE_CART_CONTENTS."`.`prodid` FROM `".WPSC_TABLE_CART_CONTENTS."` INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`processed` >= 2 AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` >= ".$months[0]." GROUP BY `".WPSC_TABLE_CART_CONTENTS."`.`prodid` ORDER BY SUM(`".WPSC_TABLE_CART_CONTENTS."`.`price` * `".WPSC_TABLE_CART_CONTENTS."`.`quantity`) DESC LIMIT 4";
-	$products = $wpdb->get_results($prodsql,ARRAY_A); //get 4 products with top income in 4 last months.
+	$products = $wpdb->get_results("SELECT `cart`.`prodid`,
+	 `cart`.`name` 
+	 FROM `".WPSC_TABLE_CART_CONTENTS."` AS `cart` 
+	 INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` AS `logs` 
+	 ON `cart`.`purchaseid` = `logs`.`id` 
+	 WHERE `logs`.`processed` >= 2 
+	 AND `logs`.`date` >= ".$months[0]." 
+	 GROUP BY `cart`.`prodid` 
+	 ORDER BY SUM(`cart`.`price` * `cart`.`quantity`) DESC 
+	 LIMIT 4",ARRAY_A); //get 4 products with top income in 4 last months.
 	
 	$timeranges[0]["start"]= mktime(0, 0, 0, $this_month-3, 1, $this_year); //make array of time ranges
 	$timeranges[0]["end"]= mktime(0, 0, 0, $this_month-2, 1, $this_year);
@@ -692,15 +700,28 @@ function wpsc_dashboard_4months_widget(){
 	$timeranges[3]["start"]= mktime(0, 0, 0, $this_month, 1, $this_year);
 	$timeranges[3]["end"]= mktime();
 	
-	foreach ((array)$products as $product){ //run trough products and get each product income amounts and name
-		foreach ($timeranges as $timerange){ //run trough time ranges of product, and get its income over each time range
-			$prodsql = "SELECT SUM(`".WPSC_TABLE_CART_CONTENTS."`.`price` * `".WPSC_TABLE_CART_CONTENTS."`.`quantity`) AS sum FROM `".WPSC_TABLE_CART_CONTENTS."` INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` ON `".WPSC_TABLE_CART_CONTENTS."`.`purchaseid` = `".WPSC_TABLE_PURCHASE_LOGS."`.`id` WHERE `".WPSC_TABLE_PURCHASE_LOGS."`.`processed` >= 2 AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` >= ".$timerange["start"]." AND `".WPSC_TABLE_PURCHASE_LOGS."`.`date` < ".$timerange["end"]." AND `".WPSC_TABLE_CART_CONTENTS."`.`prodid` = ".$product['prodid']." GROUP BY `".WPSC_TABLE_CART_CONTENTS."`.`prodid` LIMIT 1"; //get the amount of income that current product has generaterd over current time range
-			$sum = $wpdb->get_results($prodsql,ARRAY_A);
-			$sums[]=$sum[0]["sum"]; //push amount to array
+	
+	$prod_data = array();
+	foreach ((array)$products as $product){ //run through products and get each product income amounts and name
+		$sale_totals = array();
+		foreach ($timeranges as $timerange){ //run through time ranges of product, and get its income over each time range
+			$prodsql = "SELECT 
+			SUM(`cart`.`price` * `cart`.`quantity`) AS sum 			
+			FROM `".WPSC_TABLE_CART_CONTENTS."` AS `cart` 
+			INNER JOIN `".WPSC_TABLE_PURCHASE_LOGS."` AS `logs`  
+				ON `cart`.`purchaseid` = `logs`.`id` 
+			WHERE `logs`.`processed` >= 2 
+				AND `logs`.`date` >= ".$timerange["start"]." 
+				AND `logs`.`date` < ".$timerange["end"]." 
+				AND `cart`.`prodid` = ".$product['prodid']." 
+			GROUP BY `cart`.`prodid`"; //get the amount of income that current product has generaterd over current time range
+			$sale_totals[]= $wpdb->get_var($prodsql); //push amount to array
 		}
-		$namesql = "SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`id` = ".$product['prodid'];
-		$name = $wpdb->get_results($namesql,ARRAY_A);
-		$prod_data[]=array($sums, $name[0]["name"]); //result: array of 2: $prod_data[0] = array(income)
+		//$namesql = "SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`id` = ".$product['prodid'];
+		//$name = $wpdb->get_results($namesql,ARRAY_A);
+		$prod_data[]=array(
+		'sale_totals' => $sale_totals, 
+		'product_name' => $product['name']); //result: array of 2: $prod_data[0] = array(income)
 		$sums=array(); //reset array				//$prod_data[1] = product name	
 	}
 	
@@ -713,13 +734,13 @@ function wpsc_dashboard_4months_widget(){
 		$output.='<td align="center" style=" font-family:\'Times New Roman\'; font-size:15px; border-bottom:solid 1px #000;">' . date("M", $mnth) . '</td>';
 	}
     $output.='</tr>';
-    foreach((array)$prod_data as $product) {
+    foreach((array)$prod_data as $sales_data) {
 		$output.='<tr height="20">
 				<td width="20" style="font-weight:bold; color:#008080; border-bottom:solid 1px #000;">' . $tablerow . '</td>
-				<td style="border-bottom:solid 1px #000;width:60px">' . $product[1] . '</td>';
+				<td style="border-bottom:solid 1px #000;width:60px">' . $sales_data['product_name'] . '</td>';
 		$currsymbol=wpsc_get_currency_symbol();
 		$tablerow++;
-		foreach ($product[0] as $amount) { 
+		foreach ($sales_data['sale_totals'] as $amount) { 
 			$output.= '<td align="center" style="border-bottom:solid 1px #000;">' . $currsymbol . number_format(absint($amount),2) . '</td>';
 		}
 		$output.='</tr>';

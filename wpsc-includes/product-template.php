@@ -85,7 +85,7 @@ function wpsc_the_product_price() {
 	return $output;
 }
 
-function wpsc_calculate_price($product_id, $variations, $special = false) {
+function wpsc_calculate_price($product_id, $variations = null, $special = true) {
 	if(count($variations) > 0) {
 		$product_id = wpsc_get_child_object_in_terms($product_id, $variations,'wpsc-variation');
 	} else {

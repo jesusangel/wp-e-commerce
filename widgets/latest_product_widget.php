@@ -1,10 +1,14 @@
 <?php
-
+/*
+ * Latest Product widget function, 
+ * @todo make this use the new widget API
+ * takes the settings, works out if there is anything to display, if so, displays it	
+ */
 function widget_latest_products($args) {
 	global $wpdb, $table_prefix;
 	extract($args);
   $options = get_option('wpsc-widget_latest_products');   
-	$title = empty($options['title']) ? __(__('Latest Products', 'wpsc')) : $options['title'];
+	$title = empty($options['title']) ?__('Latest Product', 'wpsc') : $options['title'];
 	echo $before_widget."<br />";
 	$full_title = $before_title . $title . $after_title;
 	echo $full_title."<br />";
@@ -13,6 +17,11 @@ function widget_latest_products($args) {
 	echo $after_widget;
 }
  
+/*
+ * Latest Product Widget content function
+ * Displays the products
+ * @todo make this use wp_query and a theme file
+ */
 function nzshpcrt_latest_product($input = null) {
 	global $wpdb;
 	$siteurl = get_option('siteurl');
@@ -71,6 +80,10 @@ function nzshpcrt_latest_product($input = null) {
 	echo $input.$output;
 }
 
+/*
+ * Latest Product Widget control function
+ * Displays the products
+ */
 function widget_latest_products_control() {
   $option_name = 'wpsc-widget_latest_products';  // because I want to only change this to reuse the code.
 	$options = $newoptions = get_option($option_name);
@@ -98,6 +111,10 @@ function widget_latest_products_control() {
 	echo "</p>\n\r";
 }
 
+/*
+ * Latest Product Widget init function
+ * Displays the products
+ */
 function widget_latest_products_init() {
 	if(function_exists('register_sidebar_widget')) {
 		register_sidebar_widget(__('Latest Products', 'wpsc'), 'widget_latest_products');

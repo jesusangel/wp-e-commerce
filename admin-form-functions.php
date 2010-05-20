@@ -2,16 +2,16 @@
 // ini_set('display_errors','1');
 
 function nzshpcrt_getcategoryform($catid) {
-  global $wpdb,$nzshpcrt_imagesize_info;
-  $product = get_term_by( 'id', $catid, 'wpsc_product_category', ARRAY_A);
-  $product['nice-name']=wpsc_get_categorymeta($product['term_id'], 'nice-name');
-  $product['description']=wpsc_get_categorymeta($product['term_id'], 'description');
-  $product['image']=wpsc_get_categorymeta($product['term_id'], 'image');
-  $product['fee']=wpsc_get_categorymeta($product['term_id'], 'fee');
-  $product['active']=wpsc_get_categorymeta($product['term_id'], 'active');
-  $product['order']=wpsc_get_categorymeta($product['term_id'], 'order');  
-  $output = '';
-  $output .= "<div class='editing_this_group form_table'>";
+	global $wpdb,$nzshpcrt_imagesize_info;
+	$product = get_term_by( 'id', $catid, 'wpsc_product_category', ARRAY_A);
+	$product['nice-name']=wpsc_get_categorymeta($product['term_id'], 'nice-name');
+	$product['description']=wpsc_get_categorymeta($product['term_id'], 'description');
+	$product['image']=wpsc_get_categorymeta($product['term_id'], 'image');
+	$product['fee']=wpsc_get_categorymeta($product['term_id'], 'fee');
+	$product['active']=wpsc_get_categorymeta($product['term_id'], 'active');
+	$product['order']=wpsc_get_categorymeta($product['term_id'], 'order');	
+	$output = '';
+	$output .= "<div class='editing_this_group form_table'>";
 	$output .= "<p>".str_replace("[categorisation]", htmlentities(stripslashes($product['name'])), __('You are editing the &quot;[categorisation]&quot; Group', 'wpsc'))."</p>\n\r";
 	$output .= "<p><a href='' onclick='return showaddform()' class='add_category_link'><span>".str_replace("&quot;[categorisation]&quot;", "current", __('+ Add new category to the &quot;[categorisation]&quot; Group', 'wpsc'))."</span></a></p>";
 	$output .="<dl>\n\r";
@@ -21,87 +21,87 @@ function nzshpcrt_getcategoryform($catid) {
 	$output .="		<dd> &lt;?php echo wpsc_display_products_page(array('category_url_name'=>'{$product['nice-name']}')); ?&gt;</dd>\n\r";
 	$output .="</dl>\n\r";
 	
-	//$output .= "       [ <a href='#' onclick='return showedit_categorisation_form()'>".__('Edit This Group', 'wpsc')."</a> ]";
+	//$output .= "			 [ <a href='#' onclick='return showedit_categorisation_form()'>".__('Edit This Group', 'wpsc')."</a> ]";
 	
 	$output .= "</div>";
-  $output .= "        <table class='category_forms'>\n\r";
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Name', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input type='text' class='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
+	$output .= "				<table class='category_forms'>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Name', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "<input type='text' class='text' name='title' value='".htmlentities(stripslashes($product['name']), ENT_QUOTES, 'UTF-8')."' />";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
 
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Description', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<textarea name='description' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  $output .= "          </tr>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Description', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "<textarea name='description' cols='40' rows='8' >".stripslashes($product['description'])."</textarea>";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+	$output .= "					</tr>\n\r";
 
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Group Parent', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $top_parent=$product;
-  while(absint($top_parent['parent']>0)){
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Group Parent', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$top_parent=$product;
+	while(absint($top_parent['parent']>0)){
 	$new=get_term_by('id', $top_parent['parent'], 'wpsc_product_category', ARRAY_A);
 	$top_parent=$new;
-  }
-  $output .= wpsc_parent_category_list($top_parent['term_id'], $product['term_id'], $product['parent']);
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  $output .= "          </tr>\n\r";
+	}
+	$output .= wpsc_parent_category_list($top_parent['term_id'], $product['term_id'], $product['parent']);
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+	$output .= "					</tr>\n\r";
 
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Group&nbsp;Image', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input type='file' name='image' value='' />";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  $output .= "          </tr>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Group&nbsp;Image', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "<input type='file' name='image' value='' />";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+	$output .= "					</tr>\n\r";
 
-  if(function_exists("getimagesize")) {
-    if($product['image'] != '') {
-      $imagepath = WPSC_CATEGORY_DIR . $product['image'];
-      $imagetype = @getimagesize($imagepath); //previously exif_imagetype()
-      $output .= "          <tr>\n\r";
-      $output .= "            <td>\n\r";
-      $output .= "            </td>\n\r";
-      $output .= "            <td>\n\r";
-      $output .= __('Height', 'wpsc').":<input type='text' size='6' name='height' value='".$imagetype[1]."' /> ".__('Width', 'wpsc').":<input type='text' size='6' name='width' value='".$imagetype[0]."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
+	if(function_exists("getimagesize")) {
+		if($product['image'] != '') {
+			$imagepath = WPSC_CATEGORY_DIR . $product['image'];
+			$imagetype = @getimagesize($imagepath); //previously exif_imagetype()
+			$output .= "					<tr>\n\r";
+			$output .= "						<td>\n\r";
+			$output .= "						</td>\n\r";
+			$output .= "						<td>\n\r";
+			$output .= __('Height', 'wpsc').":<input type='text' size='6' name='height' value='".$imagetype[1]."' /> ".__('Width', 'wpsc').":<input type='text' size='6' name='width' value='".$imagetype[0]."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
 			$output .= "<span class='wpscsmall description'>".__('You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings</a>.', 'wpsc')."</span>\n\r";
-      $output .= "            </td>\n\r";
-      $output .= "          </tr>\n\r";
+			$output .= "						</td>\n\r";
+			$output .= "					</tr>\n\r";
 		} else {
-			$output .= "          <tr>\n\r";
-			$output .= "            <td>\n\r";
-			$output .= "            </td>\n\r";
-			$output .= "            <td>\n\r";
+			$output .= "					<tr>\n\r";
+			$output .= "						<td>\n\r";
+			$output .= "						</td>\n\r";
+			$output .= "						<td>\n\r";
 			$output .= __('Height', 'wpsc').":<input type='text' size='6' name='height' value='".get_option('product_image_height')."' /> ".__('Width', 'wpsc').":<input type='text' size='6' name='width' value='".get_option('product_image_width')."' /><br /><span class='wpscsmall description'>$nzshpcrt_imagesize_info</span><br />\n\r";
 			$output .= "<span class='wpscsmall description'>".__('You can upload thumbnail images for each group. To display Group details in your shop you must configure these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings</a>.', 'wpsc')."</span>\n\r";
-			$output .= "            </td>\n\r";
-			$output .= "          </tr>\n\r";
+			$output .= "						</td>\n\r";
+			$output .= "					</tr>\n\r";
 		}
 	}
 	
-	$output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Delete Image', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input type='checkbox' name='deleteimage' value='1' />";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  $output .= "          </tr>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Delete Image', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "<input type='checkbox' name='deleteimage' value='1' />";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+	$output .= "					</tr>\n\r";
 	 /* START OF TARGET MARKET SELECTION */					
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
 	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$product['term_id']." AND visible= 1");
@@ -123,9 +123,9 @@ function nzshpcrt_getcategoryform($catid) {
 		foreach($countrylist as $country){
 			if(in_array($country['id'], $selectedCountries))
 			/* if($country['visible'] == 1) */{
-			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
+			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'	checked='".$country['visible']."' />".$country['country']."<br />\n\r";
 			}else{
-			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";
+			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'	/>".$country['country']."<br />\n\r";
 			}
 				
 		}
@@ -133,23 +133,23 @@ function nzshpcrt_getcategoryform($catid) {
 		$output .= " <span class='wpscsmall description'>Select the markets you are selling this category to.<span>\n\r";
 	}
 
-	$output .= "   </td>\n\r";
+	$output .= "	 </td>\n\r";
 	
 	$output .= " </tr>\n\r";
 	////////
 
-	$output .= "          <tr>\n\r";
-	$output .= "          	<td colspan='2' class='category_presentation_settings'>\n\r";
-	$output .= "          		<h4>".__('Presentation Settings', 'wpsc')."</h4>\n\r";
-	$output .= "          		<span class='small'>".__('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc')."</span>\n\r";
-	$output .= "          	</td>\n\r";
-	$output .= "          </tr>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td colspan='2' class='category_presentation_settings'>\n\r";
+	$output .= "							<h4>".__('Presentation Settings', 'wpsc')."</h4>\n\r";
+	$output .= "							<span class='small'>".__('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc')."</span>\n\r";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
 	
-	$output .= "          <tr>\n\r";
-	$output .= "          	<td>\n\r";
-	$output .= "          	". __('Catalog View', 'wpsc').":\n\r";
-	$output .= "          	</td>\n\r";
-	$output .= "          	<td>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "						". __('Catalog View', 'wpsc').":\n\r";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
 
 	if ($product['display_type'] == 'grid') {
 		$display_type1="selected='selected'";
@@ -158,7 +158,7 @@ function nzshpcrt_getcategoryform($catid) {
 	}
 	
 	switch($product['display_type']) {
-	  case "default":
+		case "default":
 			$product_view1 = "selected ='selected'";
 		break;
 		
@@ -179,55 +179,55 @@ function nzshpcrt_getcategoryform($catid) {
 		break;
 	}	
 	
-	$output .= "          		<select name='display_type'>\n\r";	
-	$output .= "          			<option value='' $product_view0 >".__('Please select', 'wpsc')."</option>\n\r";	
-	$output .= "          			<option value='default' $product_view1 >".__('Default View', 'wpsc')."</option>\n\r";	
+	$output .= "							<select name='display_type'>\n\r";	
+	$output .= "								<option value='' $product_view0 >".__('Please select', 'wpsc')."</option>\n\r";	
+	$output .= "								<option value='default' $product_view1 >".__('Default View', 'wpsc')."</option>\n\r";	
 	if(function_exists('product_display_list')) {
-		$output .= "          			<option value='list' ". $product_view2.">". __('List View', 'wpsc')."</option>\n\r"; 
+		$output .= "								<option value='list' ". $product_view2.">". __('List View', 'wpsc')."</option>\n\r"; 
 	} else {
-		$output .= "          			<option value='list' disabled='disabled' ". $product_view2.">". __('List View', 'wpsc')."</option>\n\r";
+		$output .= "								<option value='list' disabled='disabled' ". $product_view2.">". __('List View', 'wpsc')."</option>\n\r";
 	}	
 	if(function_exists('product_display_grid')) {
-		$output .= "          			<option value='grid' ". $product_view3.">". __('Grid View', 'wpsc')."</option>\n\r";
+		$output .= "								<option value='grid' ". $product_view3.">". __('Grid View', 'wpsc')."</option>\n\r";
 	} else {
-		$output .= "          			<option value='grid' disabled='disabled' ". $product_view3.">". __('Grid View', 'wpsc')."</option>\n\r";
+		$output .= "								<option value='grid' disabled='disabled' ". $product_view3.">". __('Grid View', 'wpsc')."</option>\n\r";
 	}	
-	$output .= "          		</select>\n\r";	
-	$output .= "          	</td>\n\r";
-	$output .= "          </tr>\n\r";
+	$output .= "							</select>\n\r";	
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
 	
 	
-  if(function_exists("getimagesize")) {
-		$output .= "          <tr>\n\r";
-		$output .= "            <td>\n\r";
+	if(function_exists("getimagesize")) {
+		$output .= "					<tr>\n\r";
+		$output .= "						<td>\n\r";
 		$output .= __('Thumbnail&nbsp;Size', 'wpsc').": ";
-		$output .= "            </td>\n\r";
-		$output .= "            <td>\n\r";
+		$output .= "						</td>\n\r";
+		$output .= "						<td>\n\r";
 		$output .= __('Height', 'wpsc').": <input type='text' value='".$product['image_height']."' name='product_height' size='6'/> ";
 		$output .= __('Width', 'wpsc').": <input type='text' value='".$product['image_width']."' name='product_width' size='6'/> <br/>";
-		$output .= "            </td>\n\r";
-		$output .= "          </tr>\n\r";
+		$output .= "						</td>\n\r";
+		$output .= "					</tr>\n\r";
 	}
 
 
 
-	$output .= "          <tr>\n\r";
-	$output .= "          	<td colspan='2' class='category_presentation_settings'>\n\r";
-	$output .= "          		<h4>".__('Checkout Settings', 'wpsc')."</h4>\n\r";
-	//$output .= "          		<span class='small'>".__('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc')."</span>\n\r";
-	$output .= "          	</td>\n\r";
-	$output .= "          </tr>\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td colspan='2' class='category_presentation_settings'>\n\r";
+	$output .= "							<h4>".__('Checkout Settings', 'wpsc')."</h4>\n\r";
+	//$output .= "							<span class='small'>".__('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc')."</span>\n\r";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
 
 	
 		$used_additonal_form_set = wpsc_get_categorymeta($product['term_id'], 'use_additonal_form_set');
-		$output .= "          <tr>\n\r";
-		$output .= "            <td>\n\r";
+		$output .= "					<tr>\n\r";
+		$output .= "						<td>\n\r";
 		$output .= __("This category requires additional checkout form fields",'wpsc').": ";
-		$output .= "            </td>\n\r";
-		$output .= "            <td>\n\r";
+		$output .= "						</td>\n\r";
+		$output .= "						<td>\n\r";
 		
-		$output .= "            <select name='use_additonal_form_set'>\n\r";
-		$output .= "            	<option value=''>".__("None",'wpsc')."</option>\n\r";
+		$output .= "						<select name='use_additonal_form_set'>\n\r";
+		$output .= "							<option value=''>".__("None",'wpsc')."</option>\n\r";
 		
 		$checkout_sets = get_option('wpsc_checkout_form_sets');
 		unset($checkout_sets[0]);
@@ -236,254 +236,254 @@ function nzshpcrt_getcategoryform($catid) {
 			if($used_additonal_form_set == $key) {
 				$selected_state = "selected='selected'";
 			}
-			$output .= "            <option {$selected_state} value='{$key}'>".stripslashes($value)."</option>\n\r";
+			$output .= "						<option {$selected_state} value='{$key}'>".stripslashes($value)."</option>\n\r";
 		}
-		$output .= "            </select>\n\r";
-    //$output .= "            <label><input type='radio' value='1' name='uses_additonal_forms' ".(($uses_additional_forms == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
-		//$output .= "            <label><input type='radio' value='0' name='uses_additonal_forms' ".(($uses_additional_forms != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
-		$output .= "            </td>\n\r";
-		$output .= "          </tr>\n\r";
+		$output .= "						</select>\n\r";
+		//$output .= "						<label><input type='radio' value='1' name='uses_additonal_forms' ".(($uses_additional_forms == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
+		//$output .= "						<label><input type='radio' value='0' name='uses_additonal_forms' ".(($uses_additional_forms != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
+		$output .= "						</td>\n\r";
+		$output .= "					</tr>\n\r";
 
 
-	$output .= "          <tr>";
-	$output .= "          	<td colspan='2'>						</td>";
-	$output .= "          </tr>";
+	$output .= "					<tr>";
+	$output .= "						<td colspan='2'>						</td>";
+	$output .= "					</tr>";
 		
 		$uses_billing_address = (bool)wpsc_get_categorymeta($product['term_id'], 'uses_billing_address');
-		$output .= "          <tr>\n\r";
-		$output .= "            <td>\n\r";
+		$output .= "					<tr>\n\r";
+		$output .= "						<td>\n\r";
 		$output .= __("Products in this category use the billing address to calculate shipping",'wpsc').": ";
-		$output .= "            </td>\n\r";
-		$output .= "            <td>\n\r";
-    $output .= "            <label><input type='radio' value='1' name='uses_billing_address' ".(($uses_billing_address == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
-		$output .= "            <label><input type='radio' value='0' name='uses_billing_address' ".(($uses_billing_address != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
-		$output .= "            </td>\n\r";
-		$output .= "          </tr>\n\r";
+		$output .= "						</td>\n\r";
+		$output .= "						<td>\n\r";
+		$output .= "						<label><input type='radio' value='1' name='uses_billing_address' ".(($uses_billing_address == true) ? "checked='checked'" : "")." />".__("Yes",'wpsc')."</label>";
+		$output .= "						<label><input type='radio' value='0' name='uses_billing_address' ".(($uses_billing_address != true) ? "checked='checked'" : "")." />".__("No",'wpsc')."</label>";
+		$output .= "						</td>\n\r";
+		$output .= "					</tr>\n\r";
 
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "            </td>\n\r";
-  $output .= "            <td class='last_row'>\n\r";
-  $output .= "<input type='hidden' name='prodid' value='".$product['term_id']."' />";
-  $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".__('Edit Group', 'wpsc')."' />";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "						</td>\n\r";
+	$output .= "						<td class='last_row'>\n\r";
+	$output .= "<input type='hidden' name='prodid' value='".$product['term_id']."' />";
+	$output .= "<input type='hidden' name='submit_action' value='edit' />";
+	$output .= "<input class='button-primary' style='float:left;' type='submit' name='submit' value='".__('Edit Group', 'wpsc')."' />";
 	$output .= "<a class='delete_button' href='".add_query_arg('category_delete_id', $product['term_id'], 'admin.php?page=wpsc-edit-groups')."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
- $output .= "        </table>\n\r"; 
-  return $output;
-  }
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+ $output .= "				</table>\n\r"; 
+	return $output;
+	}
 
 function nzshpcrt_getvariationform($variation_id)
-  {
-  global $wpdb,$nzshpcrt_imagesize_info;
+	{
+	global $wpdb,$nzshpcrt_imagesize_info;
 
-  $variation_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='$variation_id' LIMIT 1";
-  $variation_data = $wpdb->get_results($variation_sql,ARRAY_A) ;
-  $variation = $variation_data[0];
-  $output .= "        <table class='category_forms' >\n\r";
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Name', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input type='text'  class='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."' />";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
+	$variation_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='$variation_id' LIMIT 1";
+	$variation_data = $wpdb->get_results($variation_sql,ARRAY_A) ;
+	$variation = $variation_data[0];
+	$output .= "				<table class='category_forms' >\n\r";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Name', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "<input type='text'	class='text' name='title' value='".htmlentities(stripslashes($variation['name']), ENT_QUOTES, 'UTF-8')."' />";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
 
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= __('Variation Values', 'wpsc').": ";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $variation_values_sql = "SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id`='$variation_id' ORDER BY `id` ASC";
-  $variation_values = $wpdb->get_results($variation_values_sql,ARRAY_A);
-  $variation_value_count = count($variation_values);
-  $output .= "<div id='edit_variation_values'>";
-  $num = 0;
-  foreach($variation_values as $variation_value) {
-    $output .= "<span class='variation_value'>";
-    $output .= "<input type='text' class='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8')."' />";
-    if($variation_value_count > 1) {
-      $output .= " <a  class='image_link' onclick='return remove_variation_value(this,".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= __('Variation Values', 'wpsc').": ";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$variation_values_sql = "SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id`='$variation_id' ORDER BY `id` ASC";
+	$variation_values = $wpdb->get_results($variation_values_sql,ARRAY_A);
+	$variation_value_count = count($variation_values);
+	$output .= "<div id='edit_variation_values'>";
+	$num = 0;
+	foreach($variation_values as $variation_value) {
+		$output .= "<span class='variation_value'>";
+		$output .= "<input type='text' class='text' name='variation_values[".$variation_value['id']."]' value='".htmlentities(stripslashes($variation_value['name']), ENT_QUOTES, 'UTF-8')."' />";
+		if($variation_value_count > 1) {
+			$output .= " <a	class='image_link' onclick='return remove_variation_value(this,".$variation_value['id'].")' href='#'><img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
 		}
-    $output .= "<br />";
-    $output .= "</span>";
-    $num++;
+		$output .= "<br />";
+		$output .= "</span>";
+		$num++;
 	}
-  $output .= "</div>";
-  $output .= "<a href='#'  onclick='return add_variation_value(\"edit\")'>".__('Add', 'wpsc')."</a>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
-  $output .= "          </tr>\n\r";
+	$output .= "</div>";
+	$output .= "<a href='#'	onclick='return add_variation_value(\"edit\")'>".__('Add', 'wpsc')."</a>";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+	$output .= "					</tr>\n\r";
 
-  $output .= "          <tr>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "            </td>\n\r";
-  $output .= "            <td>\n\r";
-  $output .= "<input type='hidden' name='prodid' value='".$variation['id']."' />";
-  $output .= "<input type='hidden' name='submit_action' value='edit' />";
-  $output .= "<input class='button' style='float:left;'  type='submit' name='submit' value='".__('Edit', 'wpsc')."' />";
-  $output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;category_delete_id=".$variation['id']."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
-  $output .= "            </td>\n\r";
-  $output .= "          </tr>\n\r";
- $output .= "        </table>\n\r";
-  return $output;
-  }
+	$output .= "					<tr>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "						</td>\n\r";
+	$output .= "						<td>\n\r";
+	$output .= "<input type='hidden' name='prodid' value='".$variation['id']."' />";
+	$output .= "<input type='hidden' name='submit_action' value='edit' />";
+	$output .= "<input class='button' style='float:left;'	type='submit' name='submit' value='".__('Edit', 'wpsc')."' />";
+	$output .= "<a class='button delete_button' href='admin.php?page=".WPSC_DIR_NAME."/display_variations.php&amp;category_delete_id=".$variation['id']."' onclick=\"return conf();\" >".__('Delete', 'wpsc')."</a>";
+	$output .= "						</td>\n\r";
+	$output .= "					</tr>\n\r";
+ $output .= "				</table>\n\r";
+	return $output;
+	}
 
 function coupon_edit_form($coupon) {
 
 $conditions = unserialize($coupon['condition']);
 	//exit('<pre>'.print_r($conditions, true).'</pre>');
 
-  $start_timestamp = strtotime($coupon['start']);
-  $end_timestamp = strtotime($coupon['expiry']);
-  $id = $coupon['id'];
-  $output = '';
-  $output .= "<form name='edit_coupon' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
-    $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
-  $output .= "<table class='add-coupon' style='display:none;'>\n\r";
-  $output .= " <tr>\n\r";
-  $output .= "   <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
-  $output .= "   <th>".__('Discount', 'wpsc')."</th>\n\r";
-  $output .= "   <th>".__('Start', 'wpsc')."</th>\n\r";
-  $output .= "   <th>".__('Expiry', 'wpsc')."</th>\n\r";
-  $output .= "   <th>".__('Use Once', 'wpsc')."</th>\n\r";
-  $output .= "   <th>".__('Active', 'wpsc')."</th>\n\r";
-	$output .= "   <th>".__('Apply On All Products', 'wpsc')."</th>\n\r";
-  $output .= "   <th></th>\n\r";
-  $output .= " </tr>\n\r";
-  $output .= " <tr>\n\r";
-  $output .= "  <td>\n\r";
-  $output .= "   <input type='text' size='8' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $output .= "   <input type='text' style='width:28px;' value='".$coupon['value']."'  name=edit_coupon[".$id."][value]' />";
-  $output .= "   <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
-  $output .= "     <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
-  $output .= "     <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
-  $output .= "     <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
-  $output .= "   </select>\n\r";
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $coupon_start = explode(" ",$coupon['start']);
-  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
-/*  $output .= "   <select name='edit_coupon[".$id."][start][day]'>\n\r";
-   for($i = 1; $i <=31; ++$i) {
-     $selected = '';
-     if($i == date("d", $start_timestamp)) { $selected = "selected='true'"; }
-     $output .= "    <option $selected value='$i'>$i</option>";
-     }
-  $output .= "   </select>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][start][month]'>\n\r";
-   for($i = 1; $i <=12; ++$i) {
-     $selected = '';
-     if($i == (int)date("m", $start_timestamp)) { $selected = "selected='true'"; }
-     $output .= "    <option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
-     }
-  $output .= "   </select>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][start][year]'>\n\r";
-   for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
-     $selected = '';
-     if($i == date("Y", $start_timestamp)) { $selected = "selected='true'"; }
-     $output .= "    <option $selected value='$i'>".$i."</option>";
-     }
-  $output .= "   </select>\n\r";*/
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $coupon_expiry = explode(" ",$coupon['expiry']);
-  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
-  /*$output .= "   <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
-   for($i = 1; $i <=31; ++$i) {
-     $selected = '';
-     if($i == date("d", $end_timestamp)) { $selected = "selected='true'"; }
-     $output .= "    <option $selected value='$i'>$i</option>";
-     }
-  $output .= "   </select>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][expiry][month]'>\n\r";
+	$start_timestamp = strtotime($coupon['start']);
+	$end_timestamp = strtotime($coupon['expiry']);
+	$id = $coupon['id'];
+	$output = '';
+	$output .= "<form name='edit_coupon' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
+		$output .= "	 <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
+	$output .= "<table class='add-coupon' style='display:none;'>\n\r";
+	$output .= " <tr>\n\r";
+	$output .= "	 <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
+	$output .= "	 <th>".__('Discount', 'wpsc')."</th>\n\r";
+	$output .= "	 <th>".__('Start', 'wpsc')."</th>\n\r";
+	$output .= "	 <th>".__('Expiry', 'wpsc')."</th>\n\r";
+	$output .= "	 <th>".__('Use Once', 'wpsc')."</th>\n\r";
+	$output .= "	 <th>".__('Active', 'wpsc')."</th>\n\r";
+	$output .= "	 <th>".__('Apply On All Products', 'wpsc')."</th>\n\r";
+	$output .= "	 <th></th>\n\r";
+	$output .= " </tr>\n\r";
+	$output .= " <tr>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "	 <input type='text' size='8' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "	 <input type='text' style='width:28px;' value='".$coupon['value']."'	name=edit_coupon[".$id."][value]' />";
+	$output .= "	 <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
+	$output .= "		 <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
+	$output .= "		 <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
+	$output .= "		 <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
+	$output .= "	 </select>\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$coupon_start = explode(" ",$coupon['start']);
+	$output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
+/*	$output .= "	 <select name='edit_coupon[".$id."][start][day]'>\n\r";
+	 for($i = 1; $i <=31; ++$i) {
+		 $selected = '';
+		 if($i == date("d", $start_timestamp)) { $selected = "selected='true'"; }
+		 $output .= "		<option $selected value='$i'>$i</option>";
+		 }
+	$output .= "	 </select>\n\r";
+	$output .= "	 <select name='edit_coupon[".$id."][start][month]'>\n\r";
+	 for($i = 1; $i <=12; ++$i) {
+		 $selected = '';
+		 if($i == (int)date("m", $start_timestamp)) { $selected = "selected='true'"; }
+		 $output .= "		<option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
+		 }
+	$output .= "	 </select>\n\r";
+	$output .= "	 <select name='edit_coupon[".$id."][start][year]'>\n\r";
+	 for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
+		 $selected = '';
+		 if($i == date("Y", $start_timestamp)) { $selected = "selected='true'"; }
+		 $output .= "		<option $selected value='$i'>".$i."</option>";
+		 }
+	$output .= "	 </select>\n\r";*/
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$coupon_expiry = explode(" ",$coupon['expiry']);
+	$output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
+	/*$output .= "	 <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
+	 for($i = 1; $i <=31; ++$i) {
+		 $selected = '';
+		 if($i == date("d", $end_timestamp)) { $selected = "selected='true'"; }
+		 $output .= "		<option $selected value='$i'>$i</option>";
+		 }
+	$output .= "	 </select>\n\r";
+	$output .= "	 <select name='edit_coupon[".$id."][expiry][month]'>\n\r";
 
-   for($i = 1; $i <=12; ++$i) {
-     $selected = '';
-     if($i == (int)date("m", $end_timestamp)) { $selected = "selected='true'"; }
-     $output .= "    <option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
-     }
-  $output .= "   </select>\n\r";
-  $output .= "   <select name='edit_coupon[".$id."][expiry][year]'>\n\r";
-   for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
-     $selected = '';
-     if($i == (date("Y", $end_timestamp))) { $selected = "selected='true'"; }
-     $output .= "    <option $selected value='$i'>".$i."</option>\n\r";
-     }
-  $output .= "   </select>\n\r";*/
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";
-  $output .= "   <input type='checkbox' value='1' ".(($coupon['use-once'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][use-once]' />\n\r";
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][active]' />\n\r";
-  $output .= "   <input type='checkbox' value='1' ".(($coupon['active'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][active]' />\n\r";
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][every_product]' />\n\r";
-  $output .= "   <input type='checkbox' value='1' ".(($coupon['every_product'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][every_product]' />\n\r";
-  $output .= "  </td>\n\r";
-  $output .= "  <td>\n\r";
-  $output .= "   <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
-  //$output .= "   <input type='hidden' value='false' name='add_coupon' />\n\r";
-  $output .= "   <input type='submit' value='".__('Submit', 'wpsc')."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
-  $output .= "   <input type='submit' value='".__('Delete', 'wpsc')."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
+	 for($i = 1; $i <=12; ++$i) {
+		 $selected = '';
+		 if($i == (int)date("m", $end_timestamp)) { $selected = "selected='true'"; }
+		 $output .= "		<option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
+		 }
+	$output .= "	 </select>\n\r";
+	$output .= "	 <select name='edit_coupon[".$id."][expiry][year]'>\n\r";
+	 for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
+		 $selected = '';
+		 if($i == (date("Y", $end_timestamp))) { $selected = "selected='true'"; }
+		 $output .= "		<option $selected value='$i'>".$i."</option>\n\r";
+		 }
+	$output .= "	 </select>\n\r";*/
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "	 <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";
+	$output .= "	 <input type='checkbox' value='1' ".(($coupon['use-once'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][use-once]' />\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "	 <input type='hidden' value='0' name='edit_coupon[".$id."][active]' />\n\r";
+	$output .= "	 <input type='checkbox' value='1' ".(($coupon['active'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][active]' />\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "	 <input type='hidden' value='0' name='edit_coupon[".$id."][every_product]' />\n\r";
+	$output .= "	 <input type='checkbox' value='1' ".(($coupon['every_product'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][every_product]' />\n\r";
+	$output .= "	</td>\n\r";
+	$output .= "	<td>\n\r";
+	$output .= "	 <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
+	//$output .= "	 <input type='hidden' value='false' name='add_coupon' />\n\r";
+	$output .= "	 <input type='submit' value='".__('Submit', 'wpsc')."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
+	$output .= "	 <input type='submit' value='".__('Delete', 'wpsc')."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
 
-  $output .= "  </td>\n\r";
-  $output .= " </tr>\n\r";
+	$output .= "	</td>\n\r";
+	$output .= " </tr>\n\r";
 
-  if($conditions != null){
-	  $output .= "<tr>";
-	  $output .= "<th>";
-	  $output .= "Conditions";
-	  $output .= "</th>";
-	  $output .= "</tr>";
-	  $output .= "<th>";
-	  $output .= "Delete";
-	  $output .= "</th>";
-	  $output .= "<th>";
-	  $output .= "Property";
-	  $output .= "</th>";
-	  $output .= "<th>";
-	  $output .= "Logic";
-	  $output .= "</th>";
-	  $output .= "<th>";
-	  $output .= "Value";
-	  $output .= "</th>";
-	  $output .= " </tr>\n\r";
-	  $i=0;
-	  foreach ($conditions as $condition){
-		  $output .= "<tr>";
-		  $output .= "<td>";
-		  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
-		  $output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
-		  $output .= "<span style='cursor:pointer;' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
-		  $output .= "</td>";
-		  $output .= "<td>";
-		  $output .= $condition['property'];
-		  $output .= "</td>";
-		  $output .= "<td>";
-		  $output .= $condition['logic'];
-		  $output .= "</td>";
-		  $output .= "<td>";
-		  $output .= $condition['value'];
-		  $output .= "</td>";
-		  $output .= "</tr>";
-		  $i++;
-	  }
-	  $output .=	wpsc_coupons_conditions( $id);
-  }elseif($conditions == null){
-  	$output .=	wpsc_coupons_conditions( $id);
+	if($conditions != null){
+		$output .= "<tr>";
+		$output .= "<th>";
+		$output .= "Conditions";
+		$output .= "</th>";
+		$output .= "</tr>";
+		$output .= "<th>";
+		$output .= "Delete";
+		$output .= "</th>";
+		$output .= "<th>";
+		$output .= "Property";
+		$output .= "</th>";
+		$output .= "<th>";
+		$output .= "Logic";
+		$output .= "</th>";
+		$output .= "<th>";
+		$output .= "Value";
+		$output .= "</th>";
+		$output .= " </tr>\n\r";
+		$i=0;
+		foreach ($conditions as $condition){
+			$output .= "<tr>";
+			$output .= "<td>";
+			$output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
+			$output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
+			$output .= "<span style='cursor:pointer;' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
+			$output .= "</td>";
+			$output .= "<td>";
+			$output .= $condition['property'];
+			$output .= "</td>";
+			$output .= "<td>";
+			$output .= $condition['logic'];
+			$output .= "</td>";
+			$output .= "<td>";
+			$output .= $condition['value'];
+			$output .= "</td>";
+			$output .= "</tr>";
+			$i++;
+		}
+		$output .=	wpsc_coupons_conditions( $id);
+	}elseif($conditions == null){
+		$output .=	wpsc_coupons_conditions( $id);
 
-  }
-  ?>
+	}
+	?>
 <!--
-  <tr><td colspan="8">
+	<tr><td colspan="8">
 	<div class="coupon_condition">
 		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/cross.png"/></button>
 			<select class="ruleprops" name="rules[property][]">
@@ -514,12 +514,12 @@ $conditions = unserialize($coupon['condition']);
 </tr>
 -->
 
-  <?php
-  $output .= "</table>\n\r";
-  $output .= "</form>\n\r";
-  echo $output;
-  return $output;
-  }
+	<?php
+	$output .= "</table>\n\r";
+	$output .= "</form>\n\r";
+	echo $output;
+	return $output;
+	}
 function wpsc_coupons_conditions($id){
 ?>
 
@@ -559,9 +559,9 @@ $output ='
 ';
 return $output;
 
-}  
+}	
 function setting_button(){
-	$next_url  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wpsc-edit-products";
+	$next_url	= 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wpsc-edit-products";
 	
 // 	$output.="<div><img src='".get_option('siteurl')."/wp-content/plugins/".WPSC_DIR_NAME."/images/settings_button.jpg' onclick='display_settings_button()'>";
 	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>".__('Settings', 'wpsc')." &raquo;</a>";
@@ -580,45 +580,61 @@ function setting_button(){
 }
 
 function wpsc_right_now() {
-  global $wpdb,$nzshpcrt_imagesize_info;
+	global $wpdb,$nzshpcrt_imagesize_info;
 	$year = date("Y");
 	$month = date("m");
 	$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
 	$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
+	
+	
+	$product_count = $wpdb->get_var("SELECT COUNT(*)
+		FROM `".$wpdb->posts."` 
+		WHERE `post_status` = 'publish'
+		AND `post_type` IN ('wpsc-product')"
+	);
+	$replace_values[":productcount:"] = $product_count;
+	
 
-  $replace_values[":productcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')");
-  $product_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')");
-  $replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
-  $product_unit = (($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
-  
-  $replace_values[":groupcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1')");
-  $group_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active` IN ('1')");
-  $replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
-  $group_unit = (($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
-  
-  $replace_values[":salecount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
-  $sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
-  $replace_values[":salecount:"] .= " ".(($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
-  $sales_unit = (($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
+	$replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
+	$product_unit = (($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
+	
+	
+	
+	$group_count = count(get_terms("wpsc_product_category"));
+	$replace_values[":groupcount:"] = $group_count;
+	
+	
+	
+	$replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
+	$group_unit = (($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
+	
+	
+	
+	$sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
+	$replace_values[":salecount:"] = $sales_count. " ".(($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
+	$sales_unit = (($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
 		
-  $replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
-  $replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
-  
-  $variation_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."`");
-  $variation_unit = (($variation_count == 1) ? __('variation', 'wpsc') : __('variations', 'wpsc'));
-  
-  $replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
-  $pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
-  $replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
-  $pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
-  
-  $accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
-  $accept_sales_unit = (($accept_sales == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
+	$replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
+	$replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
+	
+	
+	
+	
+	$variation_count = count(get_terms("wpsc-variation", array('parent' => 0)));
+	$variation_unit = (($variation_count == 1) ? __('variation', 'wpsc') : __('variations', 'wpsc'));
+	
+	$replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
+	$pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
+	$replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
+	$pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
+	
+	$accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
+	$accept_sales_unit = (($accept_sales == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
 
-  
-  $replace_values[":theme:"] = get_option('wpsc_selected_theme');
-  $replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
-  
+	
+	$replace_values[":theme:"] = get_option('wpsc_selected_theme');
+	$replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
+	
 	if (function_exists('add_object_page')) {
 		$output="";	
 		$output.="<div id='dashboard_right_now' class='postbox'>";
@@ -685,7 +701,7 @@ function wpsc_right_now() {
 		$output .= "</div>";
 		$output .= "</div>";
 		$output.="</div>";
-	} else {  
+	} else {	
 		$output="";	
 		$output.="<div id='rightnow'>\n\r";
 		$output.="	<h3 class='reallynow'>\n\r";
@@ -711,65 +727,65 @@ function wpsc_right_now() {
 
 
 function wpsc_packing_slip($purchase_id) {
-  global $wpdb;
+	global $wpdb;
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 			
 
-	  //echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
+		//echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
 		$j = 0;
 	
 		if($cart_log != null) {
-      echo "<div class='packing_slip'>\n\r";
+			echo "<div class='packing_slip'>\n\r";
 			echo "<h2>".__('Packing Slip', 'wpsc')."</h2>\n\r";
 			echo "<strong>".__('Order', 'wpsc')." #</strong> ".$purchase_id."<br /><br />\n\r";
 			
 			echo "<table>\n\r";
 			
-			$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE  `log_id` = '".(int)$purchase_id."'";
+			$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE	`log_id` = '".(int)$purchase_id."'";
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
 			
 			foreach($input_data as $input_row) {
-			  $rekeyed_input[$input_row['form_id']] = $input_row;
+				$rekeyed_input[$input_row['form_id']] = $input_row;
 			}
 			
 			
 			if($input_data != null) {
-        $form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
-        
-        foreach($form_data as $form_field) {
-          switch($form_field['type']) {
+				$form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
+				
+				foreach($form_data as $form_field) {
+					switch($form_field['type']) {
 					case 'country':
 
 						$delivery_region_count = $wpdb->get_var("SELECT COUNT(`regions`.`id`) FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape( $purch_data['billing_country'])."')");
 
-            if(is_numeric($purch_data['shipping_region']) && ($delivery_region_count > 0)) {
-              echo "  <tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
-            }
-            echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".wpsc_get_country($purch_data['billing_country'])."</td></tr>\n\r";
-            break;
-                
-            case 'delivery_country':
-            echo "  <tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['shipping_country'])."</td></tr>\n\r";
-            break;
-                
-            case 'heading':
-            echo "  <tr><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
-            break;
-            
-            default:
-            echo "  <tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
-            break;
-          }
-        }
+						if(is_numeric($purch_data['shipping_region']) && ($delivery_region_count > 0)) {
+							echo "	<tr><td>".__('State', 'wpsc').":</td><td>".wpsc_get_region($purch_data['shipping_region'])."</td></tr>\n\r";
+						}
+						echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".wpsc_get_country($purch_data['billing_country'])."</td></tr>\n\r";
+						break;
+								
+						case 'delivery_country':
+						echo "	<tr><td>".$form_field['name'].":</td><td>".wpsc_get_country($purch_data['shipping_country'])."</td></tr>\n\r";
+						break;
+								
+						case 'heading':
+						echo "	<tr><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
+						break;
+						
+						default:
+						echo "	<tr><td>".wp_kses($form_field['name'], array() ).":</td><td>".htmlentities(stripslashes($rekeyed_input[$form_field['id']]['value']), ENT_QUOTES)."</td></tr>\n\r";
+						break;
+					}
+				}
 			} else {
-        echo "  <tr><td>".__('Name', 'wpsc').":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
-        echo "  <tr><td>".__('Address', 'wpsc').":</td><td>".$purch_data['address']."</td></tr>\n\r";
-        echo "  <tr><td>".__('Phone', 'wpsc').":</td><td>".$purch_data['phone']."</td></tr>\n\r";
-        echo "  <tr><td>".__('Email', 'wpsc').":</td><td>".$purch_data['email']."</td></tr>\n\r";
+				echo "	<tr><td>".__('Name', 'wpsc').":</td><td>".$purch_data['firstname']." ".$purch_data['lastname']."</td></tr>\n\r";
+				echo "	<tr><td>".__('Address', 'wpsc').":</td><td>".$purch_data['address']."</td></tr>\n\r";
+				echo "	<tr><td>".__('Phone', 'wpsc').":</td><td>".$purch_data['phone']."</td></tr>\n\r";
+				echo "	<tr><td>".__('Email', 'wpsc').":</td><td>".$purch_data['email']."</td></tr>\n\r";
 			}
 			
 			if(get_option('payment_method') == 2) {
@@ -784,23 +800,23 @@ function wpsc_packing_slip($purchase_id) {
 					}
 				}
 			}
-// 			echo "  <tr><td colspan='2'></td></tr>\n\r";
-// 			echo "  <tr><td>".__('Payment Method', 'wpsc').":</td><td>".$gateway_name."</td></tr>\n\r";
-// 			//echo "  <tr><td>".__('Purchase No.', 'wpsc').":</td><td>".$purch_data['id']."</td></tr>\n\r";
-// 			echo "  <tr><td>".__('How The Customer Found Us', 'wpsc').":</td><td>".$purch_data['find_us']."</td></tr>\n\r";
+// 			echo "	<tr><td colspan='2'></td></tr>\n\r";
+// 			echo "	<tr><td>".__('Payment Method', 'wpsc').":</td><td>".$gateway_name."</td></tr>\n\r";
+// 			//echo "	<tr><td>".__('Purchase No.', 'wpsc').":</td><td>".$purch_data['id']."</td></tr>\n\r";
+// 			echo "	<tr><td>".__('How The Customer Found Us', 'wpsc').":</td><td>".$purch_data['find_us']."</td></tr>\n\r";
 // 			$engrave_line = explode(",",$purch_data['engravetext']);
-// 			echo "  <tr><td>".__('Engrave text', 'wpsc')."</td><td></td></tr>\n\r";
-// 			echo "  <tr><td>".__('Line 1', 'wpsc').":</td><td>".$engrave_line[0]."</td></tr>\n\r";
-// 			echo "  <tr><td>".__('Line 2', 'wpsc').":</td><td>".$engrave_line[1]."</td></tr>\n\r";
+// 			echo "	<tr><td>".__('Engrave text', 'wpsc')."</td><td></td></tr>\n\r";
+// 			echo "	<tr><td>".__('Line 1', 'wpsc').":</td><td>".$engrave_line[0]."</td></tr>\n\r";
+// 			echo "	<tr><td>".__('Line 2', 'wpsc').":</td><td>".$engrave_line[1]."</td></tr>\n\r";
 // 			if($purch_data['transactid'] != '') {
-// 				echo "  <tr><td>".__('Transaction Id', 'wpsc').":</td><td>".$purch_data['transactid']."</td></tr>\n\r";
+// 				echo "	<tr><td>".__('Transaction Id', 'wpsc').":</td><td>".$purch_data['transactid']."</td></tr>\n\r";
 // 			}
 			echo "</table>\n\r";
 			
 			
 			
 			
-      echo "<table class='packing_slip'>";
+			echo "<table class='packing_slip'>";
 				
 				echo "<tr>";
 				echo " <th>".__('Quantity', 'wpsc')." </th>";
@@ -823,7 +839,7 @@ function wpsc_packing_slip($purchase_id) {
 				$j++;
 				if(($j % 2) != 0) {
 					$alternate = "class='alt'";
-        }
+				}
 				$productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
 				$product_data = $wpdb->get_results($productsql,ARRAY_A);
 				
@@ -835,17 +851,17 @@ function wpsc_packing_slip($purchase_id) {
 				
 				if($cart_row['no_shipping'] != 1) {
 					$shipping = $cart_row['pnp'] * $cart_row['quantity'];
-					$total_shipping += $shipping;            
+					$total_shipping += $shipping;						
 					$all_no_shipping = false;
 				} else {
 					$shipping = 0;
 				}
 				
 				$price = $cart_row['price'] * $cart_row['quantity'];
-				$gst = $price - ($price  / (1+($cart_row['gst'] / 100)));
+				$gst = $price - ($price	/ (1+($cart_row['gst'] / 100)));
 				
 				if($gst > 0) {
-				  $tax_per_item = $gst / $cart_row['quantity'];
+					$tax_per_item = $gst / $cart_row['quantity'];
 				}
 
 
@@ -886,7 +902,7 @@ function wpsc_packing_slip($purchase_id) {
 }
 
 
-    
+		
 
 
 function wpsc_product_item_row() {
