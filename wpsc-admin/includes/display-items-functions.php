@@ -217,7 +217,6 @@ function wpsc_product_basic_details_form(&$product_data) {
   ?>
   <script defer="defer" type="text/javascript">
   jQuery(document).ready( function () {
-
   //LiveQuery added to each of these	
 			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
 				jQuery(this).appendTo('div#append-side');

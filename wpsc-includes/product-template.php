@@ -181,6 +181,11 @@ function wpsc_this_page_url() {
 			}
 			
 		}
+	if ( is_object ( $output ) ) 
+		{
+			$output = serialize($output);
+		}	
+		
 		return $output;
 	}
 }
@@ -333,7 +338,7 @@ function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $i
 	get_currentuserinfo();
 	$output = '';
 	if($current_user->{$table_prefix . 'capabilities'}['administrator'] == 1) {
-		$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;product={$product_id}'>" . $link . "</a>" . $after;
+		$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit&amp;product={$product_id}'>" . $link . "</a>" . $after;
 	}
 	return $output;
 }
