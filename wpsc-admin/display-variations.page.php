@@ -84,9 +84,15 @@ function wpsc_display_variations_page() {
 	<?php
 }
 
+
+/*
+ * wpsc_admin_variation_group_list, prints the left hand side of the edit variations page
+ * no parameters
+ * nothing returned
+ */
+
 function wpsc_admin_variation_group_list() {
   global $wpdb;
-	$variations = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` ORDER BY `id`",ARRAY_A);
 	?>
 		<table class="widefat page" id='wpsc_variation_list' cellspacing="0">
 			<thead>
@@ -125,7 +131,11 @@ function wpsc_admin_variation_group_list() {
 }
 
 
-
+/*
+ * wpsc_admin_variation_group_list, prints the right hand side of the edit variations page
+ * @param int $variation_id the variation ID
+ * nothing returned
+ */
 function wpsc_admin_variation_forms($variation_id =  null) {
 	global $wpdb;
 	$variation_value_count = 0;

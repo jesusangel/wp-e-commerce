@@ -67,9 +67,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		if(($cart != null) && ($errorcode == 0)) {
 			foreach($cart as $row) {
 				$link = "";
-				$product_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$row['prodid']}' LIMIT 1", ARRAY_A) ;
 				if($purchase_log['email_sent'] != 1) {
-					$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE (`fileid` = '{$product_data['file']}' OR `cartid` = '{$row['id']}' ) AND `purchid` = '{$purchase_log['id']}'");
+					$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `cartid` = '{$row['id']}' AND `purchid` = '{$purchase_log['id']}'");
 				}
 
 				do_action('wpsc_transaction_result_cart_item', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
@@ -108,14 +107,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$shipping = $row['pnp']*$row['quantity'];
 				$total_shipping += $shipping;
 		
-				if($product_data['special']==1) {
-					$price_modifier = $product_data['special_price'];
-				} else {
-					$price_modifier = 0;
-				}
 		
 				$total += ($row['price'] * $row['quantity']);
-				$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), $product_data['notax'], true);
+				$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), true);
 
 				$shipping_price = nzshpcrt_currency_display($shipping, 1, true);
 				
