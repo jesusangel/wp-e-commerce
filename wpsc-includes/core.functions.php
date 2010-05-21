@@ -101,13 +101,45 @@ function wpsc_split_the_query($query) {
 	// These values are to be dynamically defined
 	
 	$products_page = $wpsc_page_titles['products'];
-	$checkout_page = "$products_page/{$wpsc_page_titles['checkout']}";
+	$checkout_page = $wpsc_page_titles['checkout'];
+	$transaction_results_page = $wpsc_page_titles['transaction_results'];
 	
 	
-	$checkout_pagename = "products/checkout";
-	//$checkout_pagename = "product-page/checkout";
-	
-	if (($query->query_vars['pagename'] == $products_page) || isset($query->query_vars['products'])) {
+	// check if we are viewing the checkout page, if so, override the query and make sure we see that page
+	if(($query->query_vars['products'] == $checkout_page)) {
+		$query->is_checkout = true;
+		$query->query_vars['pagename'] = "$products_page/$checkout_page";
+		$query->query_vars['name'] = '';
+		$query->query_vars['post_type'] = '';
+		$query->is_singular = true;
+		$query->is_page = true;
+		$query->is_tax = false;
+		$query->is_archive = false;
+		$query->is_single = false;
+		
+		unset($query->query_vars['products']);
+		
+		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
+		remove_filter('parse_query', 'wpsc_split_the_query');
+	} 
+	// check if we are viewing the transaction results page, if so, override the query and make sure we see that page
+	else if (($query->query_vars['products'] == $transaction_results_page)) {
+		$query->query_vars['pagename'] = "$products_page/$transaction_results_page";
+		$query->query_vars['name'] = '';
+		$query->query_vars['post_type'] = '';
+		$query->is_singular = true;
+		$query->is_page = true;
+		$query->is_tax = false;
+		$query->is_archive = false;
+		$query->is_single = false;
+		
+		unset($query->query_vars['products']);
+		
+		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
+		remove_filter('parse_query', 'wpsc_split_the_query');
+	} 
+	// otherwise, check if we are looking at a product, if so, duplicate the query and swap the old one out for a products page request 
+	else if (($query->query_vars['pagename'] == $products_page) || isset($query->query_vars['products'])) {
 		$query->query_vars['pagename'] = "$products_page";
 		$query->query_vars['name'] = '';
 		$query->query_vars['post_type'] = '';
@@ -128,9 +160,6 @@ function wpsc_split_the_query($query) {
 	}
 	
 	//exit("<pre>".print_r($query,true)."</pre>");
-	if($query->query_vars['pagename'] == $checkout_page ) {
-		$query->is_checkout = true;
-	}
 	
 	return $query;
 }
@@ -167,6 +196,7 @@ function wpsc_generate_product_query($query) {
 			$query->query_vars['name'] = $query->query_vars['wpsc_item'];
 		}
 	}
+	
 	if(($query->query_vars['products'] != null) && ($query->query_vars['name'] != null)) {
         $query->query_vars['taxonomy'] = 'wpsc_product_category';
         $query->query_vars['term'] = $query->query_vars['products'];
@@ -175,6 +205,7 @@ function wpsc_generate_product_query($query) {
 		$query->is_singular = false;
 		$query->is_single = false;
 	}
+	
 	if($query->is_tax == true) {
 		new wpsc_products_by_category($query);
 	} 
