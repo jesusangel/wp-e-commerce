@@ -20,11 +20,8 @@ if($_GET['gateway'] == 'google'){
 }elseif($_GET['gateway'] == 'noca'){
 	wpsc_submit_checkout();
 }
-if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
-	$sessionid = $_SESSION['paypalexpresssessionid'];
-}
 
-//exit("test!");
+
 $errorcode = '';
 $transactid = '';
 if($_REQUEST['eway']=='1') {
@@ -35,34 +32,24 @@ if($_REQUEST['eway']=='1') {
 	echo $_SESSION['payflow_message'];
 	$_SESSION['payflow_message']='';
 }
-	
-	//exit('getting here?<pre>'.print_r($_SESSION[[wpsc_previous_selected_gateway], true).'</pre>'.get_option('payment_gateway'));
-if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
+if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified' && $_SESSION['paypalExpressMessage'] != 'Completed'){
 	echo $_SESSION['paypalExpressMessage'];
+	$sessionid = $_SESSION['paypalexpresssessionid'];
 
-
-} 
-if($sessionid == ''){
+}elseif($sessionid == ''){
 	_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
 
 }else{
 
 	if($_SESSION['wpsc_previous_selected_gateway']== 'dps') {
 		$sessionid = decrypt_dps_response();
-		//exit($sessionid);
 		if($sessionid != ''){
-		//exit('<pre>'.print_r($sessionid, true).'</pre>');
 			transaction_results($sessionid, true); 
 		}else{
 			_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
 		}
 	} else {
-
 		echo transaction_results($sessionid, true);
 	}
-}
-if($sessionid != ''){
-		//exit('<pre>'.print_r($sessionid, true).'</pre>');
-			//transaction_results($sessionid, true); 
 }
 ?>
