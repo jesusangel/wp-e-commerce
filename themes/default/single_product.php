@@ -87,7 +87,6 @@ $image_height = get_option('single_view_image_height');
 						</div>
 						<?php /** the custom meta HTML and loop ends here */?>
 						
-						
 						<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 						<?php if(wpsc_product_has_personal_text()) : ?>
 							<div class='custom_text'>
