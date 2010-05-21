@@ -42,9 +42,9 @@ function wpsc_display_tax_label($checkout = false){
 	global $wpsc_cart;
 	if(wpsc_tax_isincluded()){
 		if($checkout){
-			return "Tax Included (".$wpsc_cart->tax_percentage.'%)'; 
+			return  sprintf(__('Tax Included (%s%%)', 'wpsc'), $wpsc_cart->tax_percentage); 
 		}else{
-			return "Tax Included";
+			return __('Tax Included', 'wpsc');
 		}
 	}else{
 		return __('Tax', 'wpsc');
