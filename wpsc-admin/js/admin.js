@@ -5,45 +5,6 @@ jQuery(document).ready( function () {
 //JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
 	jQuery('td.sale_price span.pricedisplay').removeClass('pricedisplay').addClass('salespricedisplay');
 
-// JS - 5.10.2010, adding form clearing plugin for extensibility.
-
-jQuery.fn.clearForm = function() {
-  return this.each(function() {
-    if (this.tagName.toLowerCase() == "form") {
-      return jQuery(":input",this).clearForm();
-    }
-    switch (this.type) {
-      case "password":
-      case "textarea":
-      case "text":
-        this.value = "";
-        break;
-      case "select-multiple":
-      case "select-one":
-        this.selectedIndex = -1;
-        break;
-      case "radio":
-      case "checkbox":
-        this.checked = false;
-        break;
-    }
-  });
-};
-
-		jQuery('a#manage').livequery(function() {
-			jQuery(this).click(function() {
-			
-				jQuery('#wpsc-col-right').hide();
-				jQuery(this).addClass('nav-tab-active');
-				jQuery('a#add').removeClass('nav-tab-active');
-				jQuery('a#add').text('Add New');
-				jQuery('#wpsc-col-left').show();
-				
-				return false;
-				
-			});			
-		})
-		
 	//Animateedit products columns
 	jQuery('.wpsc-separator').livequery(function(){
 		jQuery(this).click(function(){
@@ -390,15 +351,8 @@ jQuery.fn.clearForm = function() {
 						tinyMCE.execCommand("mceAddControl", false, "content");
 					}
 				}
-				jQuery('a#add').addClass('nav-tab-active');
-				jQuery('a#manage').removeClass('nav-tab-active');
-				jQuery('#wpsc-col-left').hide()
-				jQuery('a#add').text('Edit Product');
-				jQuery('#wpsc-col-right').show();
 			});
-			//Justin Sainton - 5.8.2010 - Added to interface with tab navigation.	
 			
-	 		return false;
 	 		// */
  		
 	 });
@@ -1290,7 +1244,7 @@ function remove_form_field(id,form_id) {
 } 
 
 function showadd_categorisation_form() {
-	if(jQuery('div#add_categorisation').css('display') != 'block') {
+	if(jQuery('div_categorisation').css('display') != 'block') {
 		jQuery('div#add_categorisation').css('display', 'block');
 		jQuery('div#edit_categorisation').css('display', 'none');
 	} else {

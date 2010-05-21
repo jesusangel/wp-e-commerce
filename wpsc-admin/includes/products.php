@@ -116,7 +116,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'title': /* !title case */
 			$attributes = 'class="post-title column-title"' . $style;
-			$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'product' => $product->ID));
+			$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID));
 			$edit_link = wp_nonce_url($edit_link, 'edit-product_'.$product->ID);
 		?>
 		<td <?php echo $attributes ?>>

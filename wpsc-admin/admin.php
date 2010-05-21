@@ -257,6 +257,7 @@ function wpsc_admin_edit_products_page_js() {
 	wp_enqueue_script('swfupload');
 	wp_enqueue_script('swfupload-swfobject');
 	wp_enqueue_script('swfupload-queue');
+	wp_deregister_script('swfupload-handlers');
 	wp_enqueue_script('wpsc-swfupload-handlers', WPSC_URL.'/wpsc-admin/js/wpsc-swfupload-handlers.js', false, $version_identifier);
 	
 	add_action( 'admin_head', 'wp_tiny_mce' );
@@ -800,4 +801,6 @@ function wpsc_admin_notices() {
 if(stristr($_GET['page'], WPSC_DIR_NAME)) {
   add_action('admin_notices', 'wpsc_admin_notices');
 }
+
+ 
 ?>

@@ -106,6 +106,8 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 
 	$product_data['id'] = $product->ID;
 	$product_data['name'] = $product->post_title;
+	$product_data['post_type'] = $product->post_type;
+	$product_data['post_status'] = $product->post_status;
 	$product_data['description'] = $product->post_content;
 	$product_data['additional_description'] = $product->post_excerpt;
 	// get the list of categories this product is associated with
@@ -124,10 +126,11 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 	// Meta Values come straight from the meta table
 	$product_data['meta'] = array();
 	$product_data['meta'] = get_post_meta($product->ID, '');
+	if ( is_array ( $product_data['meta'] ) ) {
 	foreach($product_data['meta'] as $meta_name => $meta_value) {
 		$product_data['meta'][$meta_name] = maybe_unserialize(array_pop($meta_value));
 	}
-
+}
 	$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
 	$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
 	$product_data['dimensions'] = get_product_meta($product_id, 'dimensions',true);
@@ -183,11 +186,33 @@ function wpsc_display_product_form ($product_id = 0) {
 		wpsc_product_basic_details_form($product_data);
 	}
 }
+/*
+	Stop-gap function replicating native WP functionality
+*/
 
+function add_new_product_id() {
+	global $wpdb;
+	$prod_id = $wpdb->get_var($wpdb->prepare("SELECT MAX( ID ) FROM  $wpdb->posts"));
+	$prod_id = $prod_id + 1;
+	
+	$wpdb->query( $wpdb->prepare( "INSERT INTO $wpdb->posts ( post_author, post_date, post_date_gmt, post_title, post_status, post_parent, post_type)
+	VALUES ( %d, %s, %s, %s, %s, %d, %s )", 
+        1, 'CURDATE()', 'CURDATE()', 'stopgap', 'inherit', $prod_id, 'attachment' ) );
+
+	return $prod_id;
+}
+
+function delete_stopgap() {
+global $wpdb;
+	$wpdb->query( "DELETE FROM $wpdb->posts WHERE post_parent = $uploading_iframe_ID AND post_title = 'stopgap'" );
+}
+if($product_data['id'] > 0) {
+	add_action('transition_post_status', 'delete_stopgap');
+}
 function wpsc_product_basic_details_form(&$product_data) {
 	global $wpdb,$nzshpcrt_imagesize_info, $user_ID;
 	$product = $product_data['product_object'];
-  
+	$post_ID = (int) $product_data["id"];
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
   ?>
   <script defer="defer" type="text/javascript">
@@ -211,62 +236,49 @@ function wpsc_product_basic_details_form(&$product_data) {
 		echo __('Edit Product', 'wpsc');
 	} else {
 		echo __('Add New', 'wpsc');
+		$product_data["id"] = $_GET["product"] = add_new_product_id(); 
 	}
-?>
-	</h3>
-<?php
-	$post_ID = $product_data['id'];
-	if ( 0 == $post_ID ) {
-	$form_action = 'post';
-	$temp_ID = -1 * time(); // don't change this formula without looking at wp_write_post()
-	$form_extra = "<input type='hidden' id='post_ID' name='temp_ID' value='" . esc_attr($temp_ID) . "' />";
+	$form_extra = '';
+if ( 'auto-draft' == $product->post_status ) {
+	if ( 'edit' == $action )
+		$product->post_title = '';
 	$autosave = false;
+	$form_extra .= "<input type='hidden' id='auto_draft' name='auto_draft' value='1' />";
 } else {
-	$form_action = 'editpost';
-	$form_extra = "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($post_ID) . "' />";
-	$autosave = wp_get_post_autosave( $post_ID );
-
-	// Detect if there exists an autosave newer than the post and if that autosave is different than the post
-	if ( $autosave && mysql2date( 'U', $autosave->post_modified_gmt, false ) > mysql2date( 'U', $post->post_modified_gmt, false ) ) {
-		foreach ( _wp_post_revision_fields() as $autosave_field => $_autosave_field ) {
-			if ( normalize_whitespace( $autosave->$autosave_field ) != normalize_whitespace( $post->$autosave_field ) ) {
-				$notice = sprintf( __( 'There is an autosave of this post that is more recent than the version below.  <a href="%s">View the autosave</a>.' ), get_edit_post_link( $autosave->ID ) );
-				break;
-			}
-		}
-		unset($autosave_field, $_autosave_field);
-	}
+	$autosave = wp_get_post_autosave( $product_data["id"] );
 }
 
-	?>
+$nonce_action = 'update-' . $product->post_type . '_' . $product_data["id"];
+$form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($product_data["id"]) . "' />";
+?>
+	</h3>
 	<div id="side-info-column" class="inner-sidebar">
 		<div id="side-sortables" class='meta-box-sortables ui-sortable'>
-			<input type='hidden' name='product_id' id='product_id' value='<?php echo $product_data['id']; ?>' />
-			<input type='hidden' name='wpsc_admin_action' value='edit_product' />
-			<input type='hidden' name='user_ID' id='user-id' value='<?php echo $user_ID; ?>' />
-		
-	<?php if(is_object($product)) { ?>
-		<input type='hidden' name='post_ID' id='post_ID' value='<?php echo $product_data['id']; ?>' />
-		<input type='hidden' id='post_author' name='post_author' value='<?php echo esc_attr( $product->post_author ); ?>' />
-		<input type='hidden' id='post_type' name='post_type' value='<?php echo esc_attr($product->post_type) ?>' />
-	<?php } else { ?> 
-		<?php $temp_ID = -1 * time();?> 
-		<input type='hidden' id='post_author' name='post_author' value='<?php echo $user_ID; ?>' />
-		<input type='hidden' id='post_type' name='post_type' value='wpsc-product' />
-		<input type='hidden' id='post_ID' name='temp_ID' value='<?php echo $temp_ID; ?>' />
+		<?php wp_nonce_field($nonce_action); ?>
+		<input type="hidden" id="user-id" name="user_ID" value="<?php echo (int) $user_ID ?>" />
+		<input type="hidden" id="hiddenaction" name="action" value="<?php echo esc_attr($form_action) ?>" />
+		<input type="hidden" id="originalaction" name="originalaction" value="<?php echo esc_attr($form_action) ?>" />
+		<input type="hidden" id="post_author" name="post_author" value="<?php echo esc_attr( $product->post_author ); ?>" />
+		<input type="hidden" id="post_type" name="post_type" value="<?php echo esc_attr($product->post_type) ?>" />
+		<input type="hidden" id="original_post_status" name="original_post_status" value="<?php echo esc_attr($product->post_status) ?>" />
+		<input type="hidden" id="referredby" name="referredby" value="<?php echo esc_url(stripslashes(wp_get_referer())); ?>" />
+		<?php
+		if ( 'draft' != $product->post_status )
+		wp_original_referer_field(true, 'previous');
 
-	<?php } ?>
-	<input type='hidden' id='original_post_status' name='original_post_status' value='<?php echo esc_attr($product->post_status) ?>' />
-	<input name='referredby' type='hidden' id='referredby' value='<?php echo esc_url(stripslashes(wp_get_referer())); ?>' />
-	<?php wp_nonce_field('edit-product', 'wpsc-edit-product'); ?>
-	<?php wp_nonce_field( 'autosave', 'autosavenonce', false ); ?>
-	<input type='hidden' name='submit_action' value='edit' />
-	<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-		
+		echo $form_extra;
+
+		wp_nonce_field( 'autosave', 'autosavenonce', false );
+		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+		?>
+		<input type='hidden' name='product_id' id='product_id' value='<?php echo (int) $product_data["id"]; ?>' />
+		<input type='hidden' name='wpsc_admin_action' value='edit_product' />
+		<?php wp_nonce_field('edit-product', 'wpsc-edit-product'); ?>
+	
 	<?php /*
 	<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) { 	_e('Update Product', 'wpsc'); } else {	_e('Add New Product', 'wpsc');	} ?>' />&nbsp;
 	*/ ?> 
-	
 	<div id="submitdiv" class="postbox">
 		<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span>Publish</span></h3>
 			<div class="inside publish">
@@ -518,6 +530,12 @@ function wpsc_product_basic_details_form(&$product_data) {
 				 <?php
 						wpsc_the_editor($product_data['description'], 'content',true, true);
 				 ?>
+				 <table id="post-status-info" cellspacing="0"><tbody><tr>
+	<td id="wp-word-count"></td>
+	<td class="autosave-info">
+	<span id="autosave">&nbsp;</span>
+	</td>
+</tr></tbody></table>
 				 </div>
 				</td>
 			</tr>
@@ -801,7 +819,27 @@ function wpsc_product_variation_forms($product_data=''){
 	</div>
 	<?php 
 }
+/**
+* Adding function to change text for media buttons
+*/
 
+function change_context() {
+	return __('Upload Image%s');
+}
+
+function change_link($product_data='') {
+//Since we're hacking this all together anyway until the complete integration of custom_post_types, we'll go ahead and add the attachment to the db here as well.
+	$uploading_iframe_ID = $_GET["product"]; 
+	$media_upload_iframe_src = "media-upload.php?post_id=$uploading_iframe_ID";		
+	return $media_upload_iframe_src."&amp;type=image";
+}
+	$uploading_iframe_ID = $_GET["product"]; 
+
+	//Justin Sainton - 5.19.2010 - Adding filters/actions for the media goodness :) Conditions important to not kill media functionality elsewhere
+if ( $_GET["page"] == "wpsc-edit-products" ) {
+	add_filter('media_buttons_context','change_context');
+	add_filter('image_upload_iframe_src', "change_link");
+}
 function wpsc_product_shipping_forms($product_data=''){
 	global $closed_postboxes;
 	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
@@ -1058,7 +1096,7 @@ function wpsc_product_image_forms($product_data='') {
 	}
 
 	 	//echo "<pre>".print_r($product_data,true)."</pre>";
-
+/* Removing all this goodness in place of the Upload Image Above - justin - 5.20
 	//As in WordPress,  If Mac and mod_security, no Flash
 	$flash = true;
 	if ( (false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac')) && apache_mod_loaded('mod_security') ) {
@@ -1067,104 +1105,12 @@ function wpsc_product_image_forms($product_data='') {
 	
 	$flash_action_url = admin_url('async-upload.php');
 	$flash = apply_filters('flash_uploader', $flash);
-	?>
+*/
+?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> >
 		<h3 class='hndle'> <?php echo	__('Product Images', 'wpsc'); ?></h3>
-		<div class='inside'>
-		<strong><?php _e('Add images from your computer','wpsc'); ?></strong>
-		<?php if ( $flash ) : ?>
-			<script type="text/javascript" >
-			/* <![CDATA[ */
-			jQuery("span#spanButtonPlaceholder").livequery(function() {
-				 window.swfu = new SWFUpload({
-					button_text: '<span class="button"><?php _e('Select Files'); ?></span>',
-					button_text_style: '.button { text-align: center; font-weight: bold; font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }',
-					button_height: "24",
-					button_width: "132",
-					button_image_url: '<?php echo includes_url('images/upload.png'); ?>',
-					button_placeholder_id: "spanButtonPlaceholder",
-					upload_url : "<?php echo attribute_escape( $flash_action_url ); ?>",
-					flash_url : "<?php echo includes_url('js/swfupload/swfupload.swf'); ?>",
-					file_post_name: "async-upload",
-					file_types: "<?php echo apply_filters('upload_file_glob', '*.*'); ?>",
-					post_params : {
-						"product_id" : parseInt(jQuery('#post_ID').val()),
-						"auth_cookie" : "<?php if ( is_ssl() ) echo $_COOKIE[SECURE_AUTH_COOKIE]; else echo $_COOKIE[AUTH_COOKIE]; ?>",
-						"_wpnonce" : "<?php echo wp_create_nonce('product-swfupload'); ?>",
-						"wpsc_admin_action" : "wpsc_add_image"
-					},
-					file_size_limit : "<?php echo wp_max_upload_size(); ?>b",
-					file_dialog_start_handler : wpsc_fileDialogStart,
-					file_queued_handler : wpsc_fileQueued,
-					upload_start_handler : wpsc_uploadStart,
-					upload_progress_handler : wpsc_uploadProgress,
-					upload_error_handler : wpsc_uploadError,
-					upload_success_handler : wpsc_uploadSuccess,
-					upload_complete_handler : wpsc_uploadComplete,
-					file_queue_error_handler : wpsc_fileQueueError,
-					file_dialog_complete_handler : wpsc_fileDialogComplete,
-					swfupload_pre_load_handler: wpsc_swfuploadPreLoad,
-					swfupload_load_failed_handler: wpsc_swfuploadLoadFailed,
-					custom_settings : {
-						degraded_element_id : "browser-image-uploader", // id of the element displayed when swfupload is unavailable
-						swfupload_element_id : "flash-image-uploader" // id of the element displayed when swfupload is available
-					},
-					<?php
-					if(defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true)) {
-						?>
-						debug: true
-						<?php
-					} else {
-						?>
-						debug: false
-						<?php
-					}
-					?>
-				});
-			});
-			
-			
-			
-			//jQuery("span#spanButtonPlaceholder").livequery(function() {
-			//	console.log(window.swfu);
-			//});
-		/* ]]> */
-		</script>
-		
-		<?php endif; ?>
-		
-    <div class='flash-image-uploader'><?php _e('Choose files to upload ','wpsc'); ?>
-			<span id='spanButtonPlaceholder'></span><br />
-				<div id='media-items'> </div>
-				<p><?php echo wpsc_check_memory_limit(); ?></p>
-				<p><?php echo __('You are using the Flash uploader.  Problems?  Try the <a class="wpsc_upload_switcher" onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.', 'wpsc'); ?></p>
-				<?php
-				if(! function_exists('gold_shpcrt_display_gallery') ) {
-					?>
-					<p><?php _e('To upload multiple product thumbnails you must <a href="http://www.instinct.co.nz/shop/">install the premium upgrade</a>'); ?></p>
-					<?php
-				}
-				?>
-    </div>
-    
-    
-		
-		  <div class='browser-image-uploader'>
-				<h4><?php _e("Select an image to upload:"); ?></h4>
-				<ul>  
-					<li>
-						<input type="file" value="" name="image" />
-						<input type="hidden" value="1" name="image_resize" />
-					</li>
-					<li>
-						<?php echo wpsc_check_memory_limit(); ?>
-					</li>
-				</ul>
-				<p><?php echo __('You are using the Browser uploader.  Problems?  Try the <a class="wpsc_upload_switcher" onclick=\'wpsc_upload_switcher("flash")\'>Flash uploader</a> instead.', 'wpsc'); ?></p>
-				<br />
-				
-			</div>
-			<p><strong <?php echo $display; ?>><?php echo __('Manage your thumbnails', 'wpsc');?></strong></p>
+		<div class='inside'>		
+ 			<p><strong <?php echo $display; ?>><?php echo __('Manage your thumbnails', 'wpsc');?></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
@@ -1452,15 +1398,6 @@ function wpsc_category_list(&$product_data, $group_id, $unique_id = '', $categor
 	return $output;
 }
 
-
-/**
-* Adding function to change text for media buttons
-*/
-
-function change_context() {
-	return __('Upload Image%s');
-}
-
 /**
  * Slightly modified copy of the Wordpress the_editor function
  *
@@ -1494,8 +1431,6 @@ function wpsc_the_editor($content, $id = 'content', $prev_id = 'title', $media_b
 	$class = '';
 
 	if ( $richedit || $media_buttons ) {
-	//Justin Sainton - 5.19.2010 - Adding filters/actions for the media goodness :)
-	add_filter('media_buttons_context','change_context');
  ?>
 	<div id="editor-toolbar">
 <?php

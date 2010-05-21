@@ -47,7 +47,7 @@ function wpsc_display_edit_products_page() {
 		<div id="icon_card"><br /></div>
 		<h2>
 				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo wp_specialchars( __('Manage Products', 'wpsc') ); ?></a>
-				<a href="admin.php?page=wpsc-edit-products&action=addnew" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
+				<a href="<?php echo wp_nonce_url("admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product"); ?>" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
 		</h2>		
 		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){ ?>
 				<div id="message" class="error fade">
@@ -155,20 +155,11 @@ function wpsc_display_edit_products_page() {
 				}
 			});
 			
-			<?php if ( $_GET["action"] == "addnew" ) { ?>
-				$('#wpsc-col-left').hide();
-				$('a#add').addClass('nav-tab-active');
-				$('a#manage').removeClass('nav-tab-active');
-				$('#wpsc-col-right').show();
-			<?php
-				}
-			?>
 		});
 	})(jQuery);
 	/* ]]> */
 	</script>
-		
-		<div id='poststuff' class="metabox-holder has-right-sidebar">
+		<?php if ( $_GET["action"] != "wpsc_add_edit" ) { ?>
 			<div id="wpsc-col-left">
 				<div class="col-wrap">		
 					<?php
@@ -176,8 +167,20 @@ function wpsc_display_edit_products_page() {
 					?>
 				</div>
 			</div>
-			
-			<div id="wpsc-col-right" style="display:none">
+		<?php } else { ?>
+		<script type="text/javascript">	
+		/* <![CDATA[ */
+	(function($){
+		$(document).ready(function(){
+		
+					jQuery('#wpsc-col-left').hide();
+					jQuery(this).addClass('nav-tab-active');
+					jQuery('a#manage').removeClass('nav-tab-active');
+			});
+	})(jQuery);
+	/* ]]> */
+		</script>
+			<div id="wpsc-col-right">
 					<div id="poststuff" class="metabox-holder has-right-sidebar">
 						<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
 						<?php
@@ -186,9 +189,8 @@ function wpsc_display_edit_products_page() {
 						?>
 						</form>
 					</div>
-			</div>		
-	</div>
-
+			</div>	
+		<?php } ?>
 	</div>
 
 	<?php
