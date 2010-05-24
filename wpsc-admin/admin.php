@@ -103,7 +103,7 @@ function wpsc_admin_pages(){
 			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
 			$page_hooks[] = $edit_products_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 7, 'wpsc-edit-groups', 'wpsc_display_groups_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 7, 'wpsc-edit-groups', 'wpsc_display_categories_page');
 			//print_r($page_hooks);
 			
 			//    add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, WPSC_DIR_NAME.'/display_variations.php');

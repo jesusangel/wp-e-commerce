@@ -33,7 +33,7 @@ function wpsc_display_variations_page() {
 	</noscript>
 	
 	<div class="wrap">
-		<?php// screen_icon(); ?>
+		<?php // screen_icon(); ?>
 		<h2><?php echo wp_specialchars( __('Display Variations', 'wpsc') ); ?> </h2>
 		<p>	
 				<?php echo __('A variation can be anything "optional" about a product. ie: Size, Color, etc <br />For example: if you are selling t-shirts you might setup a variation set called size with the values small, medium, large...', 'wpsc');?>

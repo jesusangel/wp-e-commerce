@@ -1045,27 +1045,25 @@ table#productpage tr td.secondcol{
      
 }
 
-table#itemlist{
-	min-width: 280px;
-	width: 100%;
-	border-collapse:collapse;
-/* 	border:1px solid #bbb; */
-	border-top:none;
+
+
+
+table#wpsc_category_list th#title {
+	
+	
 }
 
+table.category-edit {
+	border-collapse: collapse;
+	width: 100%;
+}
 
-table#itemlist tr td{text-align: left; padding:4px 5px 4px 5px; }
-
-table#itemlist tr.products td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
-table#itemlist tr.productsalt td{text-align: left;padding-top:8px; vertical-align: top ; border-top:1px solid #bbb;border-bottom:1px solid #bbb;}
-
-table#itemlist tr td.imagecol{ padding: 4px;}
- 
-table#itemlist tr td.colspan{ text-align: left; padding: 0px; }
-
-table#itemlist tr.firstrow td{ font-weight: bold; padding-left: 5px; padding-right: 5px; }
-
-
+table.category-edit tr td {
+	border: none;
+}
+table.category-edit tr td.column-title {
+	width: 450px;
+}
 
 
 div#productform{ display: none; width: 99.5%; }
@@ -1121,12 +1119,7 @@ div#additem label{
 
 
 
-table#itemlist tr td.category_item_container {
-padding:0px 0px 0px 0px;
-border-left:1px solid #bbb;
-border-bottom:1px solid #bbb;
-border-right:1px solid #bbb;
-}
+
 
 .groupItem{
  border-top:1px solid #bbb;
@@ -1223,20 +1216,13 @@ div.product_group {
   margin: 12px 0px 10px 0px;
 }
 
-table#itemlist tr.categorisation_title td {
-	color: #dfdfdf;
-	font-size: 11px;
-	line-height:1.3em;
-	padding:9px 15px 6px 10px;
-	text-align:left;
-}
 
-table#itemlist td div.subcategory img.category_indenter {
+table#wpsc_category_list td div.subcategory img.category_indenter {
   float: left;
   margin: 8px 0px 0px 0px;
 }
 
-table#itemlist td div.subcategory table.itemlist {
+table#wpsc_category_list td div.subcategory table.itemlist {
   float: left;
 }
 
@@ -1391,14 +1377,6 @@ width:400px;
 	width:80px;
 	float:left;
 }
-
-table#itemlist tr.wpsc_published td{
-	background-color: #fff;
-}
-table#itemlist tr.wpsc_not_published td{
-	background-color: #F2F2F2;
-}
-
 
 a.admin_download {
  display: block;
