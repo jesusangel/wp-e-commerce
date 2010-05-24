@@ -169,8 +169,8 @@ function wpsc_this_page_url() {
 	global $wpsc_query, $wp_query;
 	//echo "<pr".print_r($wpsc_query->category,true)."</pre>";
 	if($wpsc_query->is_single === true) {
-		return wpsc_product_url($wp_query->post->ID);
-	} else {
+		$output = wpsc_product_url($wp_query->post->ID);
+	} else if($wpsc_query->category != null) {
 		$output = wpsc_category_url($wpsc_query->category);
 		if($wpsc_query->query_vars['page'] > 1) {
 			//
@@ -179,15 +179,11 @@ function wpsc_this_page_url() {
 			} else {
 				$output = add_query_arg('page_number', $wpsc_query->query_vars['page'], $output);
 			}
-			
 		}
-	if ( is_object ( $output ) ) 
-		{
-			$output = serialize($output);
-		}	
-		
-		return $output;
-	}
+	} else {
+		$output = get_permalink($id);	
+	}	
+	return $output;
 }
 
 /**
