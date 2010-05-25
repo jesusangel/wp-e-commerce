@@ -1046,13 +1046,6 @@ table#productpage tr td.secondcol{
 }
 
 
-
-
-table#wpsc_category_list th#title {
-	
-	
-}
-
 table.category-edit {
 	border-collapse: collapse;
 	width: 100%;
@@ -1064,6 +1057,23 @@ table.category-edit tr td {
 table.category-edit tr td.column-title {
 	width: 450px;
 }
+
+
+div.category-image-container {
+	width: 55px;
+	height: 30px;
+	
+}
+
+div.category-image-container img {
+	float: left;	
+}
+div.category-image-container img.category_indenter {
+	margin-right: 3px;
+}
+
+
+
 
 
 div#productform{ display: none; width: 99.5%; }

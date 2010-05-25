@@ -53,12 +53,17 @@ function wpsc_display_categories_page() {
 			<div id="message" class="updated fade">
 				<p>
 				<?php		
+				if (isset($_GET['deleted']) ) {
+					_e("Thanks, the category has been deleted", 'wpsc');
+					unset($_GET['deleted']);
+				}
+				
+				
 				if (isset($_GET['message']) ) {
-					$message = absint( $_GET['message'] );
-					$messages[1] =  __( 'Category updated.', 'wpsc');
-					echo $messages[$message];
+					_e("Thanks, the category has been edited", 'wpsc');
 					unset($_GET['message']);
 				}
+				
 				
 				$_SERVER['REQUEST_URI'] = remove_query_arg( array('deleted', 'message'), $_SERVER['REQUEST_URI'] );
 				?>
@@ -71,8 +76,6 @@ function wpsc_display_categories_page() {
 				<div id='poststuff' class="col-wrap">
 					<form id="modify-category-groups" method="post" action="" enctype="multipart/form-data" >
 					<?php
-						//$product_id = absint($_GET['product_id']);
-						//wpsc_display_product_form($product_id);
 						wpsc_admin_category_forms($_GET['category_id']);
 					?>
 					</form>
@@ -139,22 +142,22 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 	?>
 	<tr>
 		<td colspan='3' class='colspan'>
-			<?php if($subcategory_level > 0) {
-				$css_modifier = (8*$subcategory_level); 
-				$padding = $css_modifier;
-				$width = 416 - $css_modifier;
-				?>
-				<div class='subcategory' style='width:  <?php echo $width; ?>px; padding-left: <?php echo $css_modifier; ?>px;'>
-				<img class='category_indenter' src='<?php echo WPSC_URL; ?>/images/indenter.gif' alt='' title='' />
-			<?php } ?>
 			<table  class="category-edit" id="category-<?php echo $category->term_id; ?>">
 				<tr>
 					<td class='manage-column column-img'>
-					<?php if($category_image !=null) { ?>
-						<img src='<?php echo WPSC_CATEGORY_URL.$category_image; ?>' title='".$category->name; ?>' alt='".$category->name; ?>' width='30' height='30' />
-					<?php } else { ?>
-						<img style='border-style:solid; border-color: red' src='<?php echo WPSC_URL; ?>/images/no-image-uploaded.gif' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30'	/>
-					<?php } ?>
+						<?php if($subcategory_level > 0) { ?>
+							<div class='category-image-container' style='margin-left: <?php echo (1*$subcategory_level) -1; ?>em;'>
+								<img class='category_indenter' src='<?php echo WPSC_URL; ?>/images/indenter.gif' alt='' title='' />
+							<?php } ?>
+							
+							<?php if($category_image !=null) { ?>
+								<img src='<?php echo WPSC_CATEGORY_URL.$category_image; ?>' title='".$category->name; ?>' alt='".$category->name; ?>' width='30' height='30' />
+							<?php } else { ?>
+								<img src='<?php echo WPSC_URL; ?>/images/no-image-uploaded.gif' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30'	/>
+							<?php } ?>
+						<?php if($subcategory_level > 0) { ?>
+							</div>
+						<?php } ?>
 					</td>
 					
 					<td class='manage-column column-title'>
@@ -166,10 +169,6 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 					</td>
 				</tr>
 			</table>
-			
-			<?php if($subcategory_level > 0) { ?>
-				</div>
-			<?php } ?>
 		</td>
 	</tr>
 	<?php
@@ -338,18 +337,18 @@ function wpsc_admin_category_forms($category_id =  null) {
 				}	
 				?>
 				<select name='display_type'>	
-					<option value='' $category_view0 ><?php _e('Please select', 'wpsc'); ?></option>	
-					<option value='default' $category_view1 ><?php _e('Default View', 'wpsc'); ?></option>	
+					<option value=''<?php echo $category_view0; ?> ><?php _e('Please select', 'wpsc'); ?></option>	
+					<option value='default' <?php echo $category_view1; ?> ><?php _e('Default View', 'wpsc'); ?></option>	
 					<?php	if(function_exists('product_display_list')) {?> 
 						<option value='list' <?php echo  $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option> 
 					<?php	} else { ?>
 						<option value='list' disabled='disabled' <?php echo $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option>
-						<?php	} ?>
-						<?php if(function_exists('product_display_grid')) { ?>
-							<option value='grid' <?php echo  $category_view3; ?>><?php _e('Grid View', 'wpsc'); ?></option>
-						<?php	} else { ?>
-							<option value='grid' disabled='disabled' <?php echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
-						<?php	} ?>	
+					<?php	} ?>
+					<?php if(function_exists('product_display_grid')) { ?>
+						<option value='grid' <?php echo  $category_view3; ?>><?php _e('Grid View', 'wpsc'); ?></option>
+					<?php	} else { ?>
+						<option value='grid' disabled='disabled' <?php echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
+					<?php	} ?>	
 				</select>	
 			</td>
 		</tr>
@@ -427,7 +426,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 				
 				<?php if($category_id > 0) { ?>
 					<?php
-					$nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category-set&amp;deleteid={$category_id}", 'delete-category');
+					$nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category&amp;deleteid={$category_id}", 'delete-category');
 					?>
 					<input type='hidden' name='category_id' value='<?php echo $category_id; ?>' />
 					<input type='hidden' name='submit_action' value='edit' />

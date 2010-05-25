@@ -2216,6 +2216,9 @@ if($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails') {
 	add_action('admin_init', 'wpsc_mass_resize_thumbnails');
 }
  
+
+
+
 function wpsc_delete_variation_set() {
 	global $wpdb;
 	check_admin_referer('delete-variation');
@@ -2255,8 +2258,41 @@ function wpsc_delete_variation_set() {
 	wp_redirect($sendback);	
 	exit();
 }
+
+
+function wpsc_delete_category() {
+	global $wpdb, $wp_rewrite;
+	check_admin_referer('delete-category');
+	
+	if(is_numeric($_GET['deleteid'])){
+		$category_id = absint($_GET['deleteid']);
+		$taxonomy='wpsc_product_category';
+		if($category_id > 0){
+			wp_delete_term($category_id, $taxonomy);
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_META."` WHERE object_id = '".$category_id."' AND object_type = 'wpsc_category'");
+		}
+		update_option('wpsc_category_url_cache', array());
+		$wp_rewrite->flush_rules();
+		
+		$deleted = 1;
+	}
+	
+	$sendback = wp_get_referer();
+	if ( isset($deleted) ) {
+		$sendback = add_query_arg('deleted', $deleted, $sendback);
+	}
+	$sendback = remove_query_arg(array(
+		'deleteid',
+		'category_id'
+	), $sendback);
+	
+	wp_redirect($sendback);	
+	exit();
+}
+  
  
- 
+
+
 
 //other actions are here
 if($_GET['display_invoice']=='true') {
@@ -2287,13 +2323,18 @@ if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
 	add_action('admin_init', 'wpsc_admin_ajax');
 }
 
-  // Variation set deleting init code starts here
- if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set') {
+// Variation set deleting init code starts here
+if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set') {
 	add_action('admin_init', 'wpsc_delete_variation_set');
 }
 
- // Variation set adding init code starts here
- if($_REQUEST['wpsc_admin_action'] == 'wpsc-variation-set') {
-	add_action('admin_init', 'wpsc_save_variation_set');
+// Variation set deleting init code starts here
+if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-category') {
+	add_action('admin_init', 'wpsc-delete-category');
+}
+
+// Category modification init code starts here
+if($_REQUEST['wpsc_admin_action'] == 'wpsc-category-set') {
+	add_action('admin_init', 'wpsc_save_category_set');
 }
 ?>
