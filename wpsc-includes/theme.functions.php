@@ -325,7 +325,7 @@ function wpsc_display_products_page($query) {
 	
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
-	if(wpsc_is_single_product()) {
+	if(wpsc_is_single_product() == true) {
 		include($cur_wpsc_theme_folder."/single_product.php");
 		$is_single = true;
 	} else {
