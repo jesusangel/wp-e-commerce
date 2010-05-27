@@ -131,8 +131,8 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 		$product_data['meta'][$meta_name] = maybe_unserialize(array_pop($meta_value));
 	}
 }
-	$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
-	$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
+	//$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
+	//$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
 	$product_data['dimensions'] = get_product_meta($product_id, 'dimensions',true);
 
 	// Transformed Values have been altered in some way since being extracted from some data source

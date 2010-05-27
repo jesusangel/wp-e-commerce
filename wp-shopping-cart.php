@@ -21,13 +21,19 @@ define('WPSC_PRESENTABLE_VERSION', '3.8 Development');
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);
 
-$v1 = str_replace(array('_','-','+'), '.', strtolower($wp_version));
-$v1 = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $v1);
-$v1 = preg_split("/([a-z]+)/i",$v1,-1, PREG_SPLIT_DELIM_CAPTURE);
-array_walk($v1, create_function('&$v', '$v = trim($v,". ");'));
 
-define('IS_WP25', version_compare($v1[0], '2.5', '>='));
-define('IS_WP27', version_compare($v1[0], '2.7', '>='));
+// Get the wordpress version number
+$version_processing = str_replace(array('_','-','+'), '.', strtolower($wp_version));
+$version_processing = str_replace(array('alpha','beta','gamma'), array('a','b','g'), $version_processing);
+$version_processing = preg_split("/([a-z]+)/i",$version_processing,-1, PREG_SPLIT_DELIM_CAPTURE);
+array_walk($version_processing, create_function('&$v', '$v = trim($v,". ");'));
+
+define('IS_WP25', version_compare($version_processing[0], '2.5', '>='));
+define('IS_WP27', version_compare($version_processing[0], '2.7', '>='));
+define('IS_WP29', version_compare($version_processing[0], '2.9', '>='));
+define('IS_WP30', version_compare($version_processing[0], '3.0', '>='));
+
+
 
 // // we need to know where we are, rather than assuming where we are
 
@@ -365,19 +371,27 @@ register_activation_hook(__FILE__, 'wpsc_install');
 
 
 /**
-* Code to define where the uploaded files are stored ends here
-*/
-
+ * wpsc_start_the_query
+ */
 if(!function_exists('wpsc_start_the_query')) {
 	function wpsc_start_the_query() {
-		global $wp_query, $wpsc_query;
+		global $wp_query, $wpsc_query, $wpsc_query_vars;
 		
+		  
 		if($wpsc_query == null) {
-			$wpsc_query = new WP_Query(array(
-				'post_type' => 'wpsc-product',
-			));
+			if(count($wpsc_query_vars) < 1) {
+				$wpsc_query_vars = array(
+					'post_type' => 'wpsc-product',
+					'post_parent' => 0
+				);
+			}
+			
+			add_filter('pre_get_posts', 'wpsc_generate_product_query', 11);
+			$wpsc_query = new WP_Query($wpsc_query_vars);
 		}
-
+		
+		//echo "<pre>".print_r($wpsc_query_vars,true)."</pre>";
+		//echo "<pre>".print_r($wpsc_query,true)."</pre>";
 		
 		$post_id = $wp_query->post->ID;
 		$page_url = get_permalink($post_id);
@@ -388,7 +402,6 @@ if(!function_exists('wpsc_start_the_query')) {
 
 	}
 }
-
 // after init and after when the wp query string is parsed but before anything is displayed
 add_action('template_redirect', 'wpsc_start_the_query', 0);
 
@@ -401,7 +414,14 @@ if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSI
 }
 if(!function_exists('wpsc_initialisation')){
 	function wpsc_initialisation() {
-	  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url, $wpsc_category_url_cache;
+	  global $wpsc_cart,  $wpsc_theme_path, $wpsc_theme_url, $wpsc_category_url_cache, $wpsc_query_vars;
+	  
+	  // initialize the wpsc query fats, must be a global variable as we cannot start it off from within the wp query object,
+	  // starting it in wp_query results in intractable infinite loops in 3.0
+	  $wpsc_query_vars = array();
+	  
+	  
+	  
 	  // set the theme directory constant
 	
 	  $uploads_dir = @opendir(WPSC_THEMES_PATH);
@@ -480,14 +500,16 @@ function wpsc_register_post_types() {
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit&product=%d',
 	    'capability_type' => 'post',
 	    'hierarchical' => true,
-		'exclude_from_search' => false
+		'exclude_from_search' => false,
+		'rewrite' => false
 	));
 	
 	// Purchasable product files
 	register_post_type( 'wpsc-product-file', array(
 	    'capability_type' => 'post',
 	    'hierarchical' => false,
-		'exclude_from_search' => true
+		'exclude_from_search' => true,
+		'rewrite' => false
 	));
 	
 	// Product tags

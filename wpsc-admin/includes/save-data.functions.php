@@ -208,7 +208,7 @@ function wpsc_save_category_set() {
 				} else {
 					wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
 					$uses_additional_forms = false;
-				}	
+				}
 			}
 		}
 		
@@ -220,7 +220,7 @@ function wpsc_save_category_set() {
 			
 			$name = $_POST['name'];
 			
-			
+			 
 			if($category->name != $name) {
 				wp_update_term($category_id, 'wpsc_product_category', array(
 					'name' => $name

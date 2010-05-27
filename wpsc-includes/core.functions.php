@@ -97,7 +97,7 @@ add_filter('query_vars', 'wpsc_query_vars');
  */
  
 function wpsc_split_the_query($query) {
-	global $wpsc_page_titles, $wpsc_query;
+	global $wpsc_page_titles, $wpsc_query, $wpsc_query_vars;
 	// These values are to be dynamically defined
 	
 	$products_page = $wpsc_page_titles['products'];
@@ -108,9 +108,24 @@ function wpsc_split_the_query($query) {
 	// check if we are viewing the checkout page, if so, override the query and make sure we see that page
 	if(($query->query_vars['products'] == $checkout_page)) {
 		$query->is_checkout = true;
+		
+		$query->query['pagename'] = "$products_page/$checkout_page";
 		$query->query_vars['pagename'] = "$products_page/$checkout_page";
 		$query->query_vars['name'] = '';
+		$query->query_vars['taxonomy'] = '';
+		$query->query_vars['term'] = '';
 		$query->query_vars['post_type'] = '';
+		
+		
+		$query->queried_object =& get_page_by_path($query->query['pagename']);
+		
+		if ( !empty($query->queried_object) ) {
+			$query->queried_object_id = (int) $query->queried_object->ID;
+		} else {
+			unset($query->queried_object);
+		}
+		
+		
 		$query->is_singular = true;
 		$query->is_page = true;
 		$query->is_tax = false;
@@ -118,15 +133,26 @@ function wpsc_split_the_query($query) {
 		$query->is_single = false;
 		
 		unset($query->query_vars['products']);
-		
-		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
-		remove_filter('parse_query', 'wpsc_split_the_query');
 	} 
 	// check if we are viewing the transaction results page, if so, override the query and make sure we see that page
 	else if (($query->query_vars['products'] == $transaction_results_page)) {
+		$query->query['pagename'] = "$products_page/$transaction_results_page";
 		$query->query_vars['pagename'] = "$products_page/$transaction_results_page";
 		$query->query_vars['name'] = '';
+		$query->query_vars['taxonomy'] = '';
+		$query->query_vars['term'] = '';
 		$query->query_vars['post_type'] = '';
+		
+		
+		$query->queried_object =& get_page_by_path($query->query['pagename']);
+		
+		if ( !empty($query->queried_object) ) {
+			$query->queried_object_id = (int) $query->queried_object->ID;
+		} else {
+			unset($query->queried_object);
+		}
+		
+		
 		$query->is_singular = true;
 		$query->is_page = true;
 		$query->is_tax = false;
@@ -135,33 +161,54 @@ function wpsc_split_the_query($query) {
 		
 		unset($query->query_vars['products']);
 		
-		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
-		remove_filter('parse_query', 'wpsc_split_the_query');
 	} 
 	// otherwise, check if we are looking at a product, if so, duplicate the query and swap the old one out for a products page request 
 	else if (($query->query_vars['pagename'] == $products_page) || isset($query->query_vars['products'])) {
+		// store a copy of the wordpress query
+		$wpsc_query_data = $query->query;
+		
+		// wipe and replace the query vars
+		$query->query = array();
+		$query->query['pagename'] = "$products_page";
 		$query->query_vars['pagename'] = "$products_page";
 		$query->query_vars['name'] = '';
 		$query->query_vars['post_type'] = '';
+		
+		$query->queried_object =& get_page_by_path($query->query['pagename']);
+		
+		if ( !empty($query->queried_object) ) {
+			$query->queried_object_id = (int) $query->queried_object->ID;
+		} else {
+			unset($query->queried_object);
+		}
+		
+		unset($query->query_vars['products']);
+		unset($query->query_vars['name']);
+		unset($query->query_vars['taxonomy']);
+		unset($query->query_vars['term']);
+		unset($query->query_vars['wpsc_item']);
+		
+		
 		$query->is_singular = true;
 		$query->is_page = true;
 		$query->is_tax = false;
 		$query->is_archive = false;
 		$query->is_single = false;
+		//$post = get_post($post_id);
 		
-		add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
-		remove_filter('parse_query', 'wpsc_split_the_query');
+		//$query->get_posts();
 		
-		add_filter('parse_query', 'wpsc_generate_product_query', 11);
 		
-		if($wpsc_query == null) {
-			$wpsc_query = new WP_Query($query->query);
+		if(($wpsc_query_vars == null)) {
+			unset($wpsc_query_data['pagename']);
+			$wpsc_query_vars = $wpsc_query_data;
 		}
 	}
 	
-	//exit("<pre>".print_r($query,true)."</pre>");
 	
-	return $query;
+	add_filter('redirect_canonical', 'wpsc_break_canonical_redirects', 10, 2);
+	remove_filter('pre_get_posts', 'wpsc_split_the_query', 8);
+	//return $query;
 }
 
 
@@ -173,6 +220,12 @@ function wpsc_split_the_query($query) {
  * @return void
  */
 function wpsc_generate_product_query($query) {
+	remove_filter('pre_get_posts', 'wpsc_generate_product_query', 11);
+	
+	//exit("<pre>".print_r($query, true)."</pre>");
+	$query->query_vars['taxonomy'] = null;
+	$query->query_vars['term'] = null;
+	
 
 	// default product selection
 	if($query->query_vars['pagename'] != '') {
@@ -198,19 +251,20 @@ function wpsc_generate_product_query($query) {
 	}
 	
 	if(($query->query_vars['products'] != null) && ($query->query_vars['name'] != null)) {
-        $query->query_vars['taxonomy'] = 'wpsc_product_category';
-        $query->query_vars['term'] = $query->query_vars['products'];
+        unset($query->query_vars['taxonomy']);
+        unset($query->query_vars['term']);
+		$query->query_vars['post_type'] = 'wpsc-product';
 		$query->is_tax = false;
 		$query->is_archive = true;
 		$query->is_singular = false;
 		$query->is_single = false;
 	}
 	
+	//exit("<pre>".print_r($query, true)."</pre>");
 	if($query->is_tax == true) {
 		new wpsc_products_by_category($query);
 	} 
 	
-	//echo "<pre>".print_r($query, true)."</pre>";
 	return $query;
 }
 
@@ -224,7 +278,7 @@ function wpsc_mark_product_query($query) {
 
 
 
-add_filter('parse_query', 'wpsc_split_the_query', 10);
+add_filter('pre_get_posts', 'wpsc_split_the_query', 8);
 add_filter('parse_query', 'wpsc_mark_product_query', 12);
 
 
@@ -397,12 +451,23 @@ function wpsc_product_link($permalink, $post, $leavename) {
 		'%term_url%',
 		'%postname%'
 	);
+	if( is_object($post)) {
+		// In wordpress 2.9 we got a post object
+		$post_id = $post->ID;
+	} else {
+		// In wordpress 3.0 we get a post ID
+		$post_id = $post;	
+		$post = get_post($post_id);
+	}  
+	
+	//echo "'><pre>_".print_r($post, true)."_</pre>";
 	$permalink_structure = get_option('permalink_structure');
 	// This may become customiseable later
 	$our_permalink_structure = "%term_url%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product " 
+	
 	if ( '' != $permalink_structure && !in_array($post->post_status, array('draft', 'pending')) ) {
-		$product_categories = wp_get_object_terms($post->ID, 'wpsc_product_category');
+		$product_categories = wp_get_object_terms($post_id, 'wpsc_product_category');
 		$product_category_slugs = array();
 		foreach($product_categories as $product_category) {
 			$product_category_slugs[] = $product_category->slug;
@@ -424,7 +489,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 			$term_url = get_term_link($category_slug, 'wpsc_product_category');
 		}
 		
-		//echo "'><pre>_".print_r($product_category_slugs, true)."_</pre>";
+		//echo "'><pre>_".print_r($product_categories, true)."_</pre>";
 		$post_name = $post->post_name;
 		if(in_array($post_name, $product_category_slugs)) {
 			$post_name = "product/{$post_name}";
@@ -442,7 +507,17 @@ function wpsc_product_link($permalink, $post, $leavename) {
 	return $permalink;
 }
 
-add_filter('post_link', 'wpsc_product_link', 10, 3);
+
+if(IS_WP30 == true) {
+	// for wordpress 3.0
+	add_filter('post_type_link', 'wpsc_product_link', 10, 3);
+} else {
+	// for wordpress 2.9
+	add_filter('post_link', 'wpsc_product_link', 10, 3);
+}
+//
+
+
 
 
 /**

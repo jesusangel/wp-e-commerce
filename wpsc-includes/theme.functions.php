@@ -402,7 +402,7 @@ function wpsc_display_products_page($query) {
 //handles replacing the tags in the pages
   
 function wpsc_products_page($content = '') {
-	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path;
+	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path, $wpsc_query_vars;
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 		remove_filter('the_content', 'wpsc_products_page');
 	$output = '';
