@@ -1767,13 +1767,14 @@ global $wpdb, $wp_rewrite;
 	  if($datarow['active'] == 1) {
 	    $tidied_name = trim($datarow['name']);
 			$tidied_name = strtolower($tidied_name);
-			$url_name = sanitize_title($tidied_name);            
+			$url_name = apply_filters('editable_slug',$tidied_name);
 			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`nice-name`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `nice-name` REGEXP '^($url_name){1}(\d)*$' AND `id` NOT IN ('{$datarow['id']}') ",ARRAY_A);
 			$extension_number = '';
 			if($similar_names['count'] > 0) {
 				$extension_number = (int)$similar_names['max_number']+2;
 			}
 			$url_name .= $extension_number;
+		
 			$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_CATEGORIES."` SET `nice-name` = '$url_name' WHERE `id` = '{$datarow['id']}' LIMIT 1 ;");
 			$updated;
 	  } else if($datarow['active'] == 0) {

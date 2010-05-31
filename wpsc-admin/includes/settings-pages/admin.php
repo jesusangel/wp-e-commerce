@@ -209,10 +209,11 @@ global $wpdb;
 				</tr>
 			<?php
 			}
+			$sendback = wp_get_referer();
 			?>
 				<tr class='merged'>
-					<td colspan="2"><a href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=update_page_urls"); ?>' ><?php echo __('Update Page URLs', 'wpsc'); ?></a> &nbsp; | &nbsp;
-					<a href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=clean_categories"); ?>'><?php echo __('Fix Product Group Permalinks', 'wpsc'); ?></a>
+					<td colspan="2"><a href='<?php echo wp_nonce_url($sendback."&wpsc_admin_action=update_page_urls"); ?>' ><?php echo __('Update Page URLs', 'wpsc'); ?></a> &nbsp; | &nbsp;
+					<a href='<?php echo wp_nonce_url($sendback."&wpsc_admin_action=clean_categories"); ?>'><?php echo __('Fix Product Group Permalinks', 'wpsc'); ?></a>
 					</td>
 				</tr>
 			</table>					  
