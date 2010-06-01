@@ -686,6 +686,10 @@ function wpsc_submit_checkout() {
 		}
 
 
+		if($total <= 0){
+			$transaction_url_with_sessionid = add_query_arg('sessionid', $session_id, get_option('transact_url'));
+			wp_redirect($transaction_url_with_sessionid);
+		}
 		
 		/// submit to gateway
 		

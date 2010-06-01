@@ -1154,26 +1154,23 @@ class wpsc_cart {
 	 * calculate total tax method 
 	 * @access public
 	 * @return float returns the price as a floating point value
-	*/
+	 */
    function calculate_total_tax() {
     global $wpdb, $wpsc_cart;
     $total = 0;
 	if(wpsc_tax_isincluded() == false){
-
     	if($this->total_tax == null) {
 			foreach($this->cart_items as $key => $cart_item) {
 				$total += $cart_item->tax;
 			}
-	
 			$this->total_tax = $total;
-				//	exit('<pre>'.print_r($this,true).'</pre>');
 		} else {
 		  $total = $this->total_tax;
 		}
 		if($this->total_tax != null && $this->coupons_amount > 0){
 			$total = ($this->calculate_subtotal()-$this->coupons_amount)/$this->tax_percentage;
-			//exit(($this->calculate_subtotal()-$this->coupons_amount)/$wpsc_cart->tax_percentage);
 		}
+		
 	}else{
 		if($this->total_tax == null) {
 			foreach($this->cart_items as $key => $cart_item) {
@@ -1183,11 +1180,13 @@ class wpsc_cart {
 		} else {
 		  $total = $this->total_tax;
 		}
-	
-	
 	}
 		$total = apply_filters('wpsc_convert_tax_prices', $total);
+		//If coupon is larger or equal to the total price, then the tax should be 0 as the product is going to be free.
 
+		if($this->coupons_amount >= $this->total_price && !empty($this->coupons_amount)){
+			$total = 0;
+		}
 		return $total;
   }
   
@@ -1583,6 +1582,11 @@ class wpsc_cart {
 		$this->coupons_name = $coupons;
 		$this->coupons_amount = $couponAmount;	
 		$this->calculate_total_price();
+		if ( $this->total_price < 0 ) {
+			$this->coupons_amount += $this->total_price;
+			$this->total_price = null;
+			$this->calculate_total_price();
+		}
 	}
 	
 }
@@ -1665,7 +1669,7 @@ class wpsc_cart_item {
 		$this->refresh_item();
 	}
 
-		/**
+	/**
 	 * update item method, currently can only update the quantity
 	 * will require the parameters to update (no, you cannot change the product ID, delete the item and make a new one)
 	 * @access public
