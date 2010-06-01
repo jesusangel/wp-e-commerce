@@ -48,7 +48,7 @@ jQuery(document).ready(function () {
 				jQuery("input.shipping_country").val(countryID);
 				jQuery("span.shipping_country_name").html(country);
 				jQuery("input.shipping_region").val(countryID);
-				jQuery("span.shipping_region_name").html(state);
+				//jQuery("span.shipping_region_name").html(state);
 				jQuery("select#current_country").val(countryID);
 				if(state == ''){
 					state = jQuery("select.current_region :selected").text();
@@ -61,21 +61,22 @@ jQuery(document).ready(function () {
 						jQuery('span.shipping_region_name').replaceWith('<span class="shipping_region_name"></span>');	
 					}else{
 						jQuery("select#region").show();	
-						
 						jQuery("select#region :selected").html(state).attr('selected','selected');
 						shipName = jQuery('input.shipping_region').attr('name');
 						shipID = jQuery('input.shipping_region').attr('id');
 						jQuery('input.shipping_region').replaceWith('<input type="hidden" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" class="shipping_region" />');	
-						jQuery('input.shipping_region').append('<span class="shipping_region_name"></span>');
-						jQuery('span.shipping_region_name').html(state);
+						jQuery('input.shipping_region').append('<span class="shipping_region_name">'+state+'</span>');
+//						jQuery('span.shipping_region_name').html(state);
 					}
 				}else{
 					jQuery("select#region").show();	
 					shipName = jQuery('input.shipping_region').attr('name');
 					shipID = jQuery('input.shipping_region').attr('id');
-					jQuery('input.shipping_region').replaceWith('<input type="hidden"  class="shipping_region" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" /><span class="shipping_region_name"></span>');	
+					jQuery('input.shipping_region').replaceWith('<input type="hidden"  class="shipping_region" value="'+stateID+'" name="'+shipName+'" id="'+shipName+'" />');	
+					jQuery('.shipping_region_name').replaceWith('<span class="shipping_region_name">'+state+'</span>');
 					jQuery("select#region :selected").html(state).attr('selected','selected');
-					jQuery('span.shipping_region_name').html(state);
+					jQuery("select[title='shippingregion']").val(stateID);
+					//jQuery('span.shipping_region_name').html(state);
 				}
 				jQuery("select[title='shipping_country']").val(countryID);
 				var html_form_id = jQuery("select[title='shipping_country']").attr('id');
