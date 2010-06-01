@@ -77,6 +77,7 @@ if(wpsc_cart_item_count() > 0) :
 	<?php if($_SESSION['categoryAndShippingCountryConflict'] != '') : ?>
 		<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
 	<?php
+		$_SESSION['categoryAndShippingCountryConflict'] = '';
 	endif;
 	if($_SESSION['WpscGatewayErrorMessage'] != '') :
 	?>
