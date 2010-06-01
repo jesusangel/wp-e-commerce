@@ -1,6 +1,7 @@
 <?php
 function transaction_results($sessionid, $echo_to_screen = true, $transaction_id = null) {
 	global $wpdb,$wpsc_cart, $wpsc_shipping_modules;
+
 	//$curgateway = get_option('payment_gateway');
 	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
 	$errorcode = 0;
@@ -19,7 +20,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		}
 		
 		$purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
-		
+		$thepurchlogitem = new wpsc_purchaselogs_items((int)$purchase_log['id']);
+
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
 			$message = get_option('wpsc_email_receipt');
 			$message_html = $message;
@@ -28,7 +30,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			$message_html = $message;
 		}
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
-
 		if(($_GET['ipn_request'] != 'true') and (get_option('paypal_ipn') == 1)) {
 			if($purchase_log == null) {
 				echo __('We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc');
@@ -220,7 +221,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$message_html.= "\n\r".__('Your Transaction ID', 'wpsc').": " . $_GET['ti'];
 					$report.= "\n\r".__('Transaction ID', 'wpsc').": " . $_GET['ti'];
 				} else {
-					$report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
+					$report_id = "Purchase # ".$purchase_log['id']."\n\r";
 				}
         
         
@@ -262,7 +263,56 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				remove_filter('wp_mail_from_name', 'wpsc_replace_reply_name');
  				remove_filter('wp_mail_from', 'wpsc_replace_reply_address');
 				$report_user = __('Customer Details', 'wpsc')."\n\r";
-				$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
+						$report_user .= "Billing Info \n\r";
+			foreach((array)$thepurchlogitem->userinfo as $userinfo){
+				if($userinfo['unique_name'] != 'billingcountry'){
+					$report_user .= "".$userinfo['name'].": ".$userinfo['value']."\n";
+				}else{
+					$userinfo['value'] = maybe_unserialize($userinfo['value']);
+					if(is_array($userinfo['value'] )){
+						if(!empty($userinfo['value'][1]) && !is_numeric($userinfo['value'][1])){
+							$report_user .= "State: ".$userinfo['value'][1]."\n";
+						}elseif(is_numeric($userinfo['value'][1])){
+							$report_user .= "State: ".wpsc_get_state_by_id($userinfo['value'][1],'name')."\n";
+						}
+						if(!empty($userinfo['value'][0])){
+							$report_user .= "Country: ".$userinfo['value'][0]."\n";
+						}
+					}else{
+						$report_user .= "".$userinfo['name'].": ".$userinfo['value']."\n";	
+					}
+				}
+			}
+			
+			$report_user .= "\n\rShipping Info \n\r";
+			foreach((array)$thepurchlogitem->shippinginfo as $userinfo){
+				if($userinfo['unique_name'] != 'shippingcountry' && $userinfo['unique_name'] != 'shippingstate'){
+					$report_user .= "".$userinfo['name'].": ".$userinfo['value']."\n";
+				}elseif($userinfo['unique_name'] == 'shippingcountry'){
+					$userinfo['value'] = maybe_unserialize($userinfo['value']);
+					if(is_array($userinfo['value'] )){
+						if(!empty($userinfo['value'][1]) && !is_numeric($userinfo['value'][1])){
+							$report_user .= "State: ".$userinfo['value'][1]."\n";
+						}elseif(is_numeric($userinfo['value'][1])){
+							$report_user .= "State: ".wpsc_get_state_by_id($userinfo['value'][1],'name')."\n";
+						}
+						if(!empty($userinfo['value'][0])){
+							$report_user .= "Country: ".$userinfo['value'][0]."\n";
+						}
+					}else{
+						$report_user .= "".$userinfo['name'].": ".$userinfo['value']."\n";	
+					}
+				}elseif($userinfo['unique_name'] == 'shippingstate'){
+					if(!empty($userinfo['value']) && !is_numeric($userinfo['value'])){
+						$report_user .= "".$userinfo['name'].": ".$userinfo['value']."\n";
+					}elseif(is_numeric($userinfo['value'])){
+							$report_user .= "State: ".wpsc_get_state_by_id($userinfo['value'],'name')."\n";
+					}
+				}
+			}
+			$report_user .= "\n\r";
+				/*
+$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
 				$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 					
 				if($form_data != null) {
@@ -289,6 +339,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 	
 				$report_user .= "\n\r";
+*/
 				$report = $report_user. $report_id . $report;
 				
 				if($stock_adjusted == true) {

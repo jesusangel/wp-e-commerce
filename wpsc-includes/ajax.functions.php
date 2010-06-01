@@ -650,7 +650,17 @@ function wpsc_submit_checkout() {
 
 		$tax = $wpsc_cart->calculate_total_tax();
 		$total = $wpsc_cart->calculate_total_price();
-		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`,`find_us`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}','{$wpsc_cart->selected_region}', '{$wpsc_cart->delivery_region}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}', '{$find_us}')";
+		// Make sure delivery and selected region are onlly saved if the country does have regions 
+		// Im unsure how this would effect countries that HAVE regions, i.e if you select Canada as country,, will your 			// region be alabama if no region was selected?
+		$wpsc_cart->update_location();
+		if(!wpsc_has_regions($wpsc_cart->selected_country)){
+			$wpsc_cart->selected_region = '';
+		}
+		if(!wpsc_has_regions($wpsc_cart->delivery_country)){
+			$wpsc_cart->delivery_region = '';
+		}
+
+		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`,`find_us`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->selected_country}', '{$wpsc_cart->delivery_country}','{$wpsc_cart->selected_region}', '{$wpsc_cart->delivery_region}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}', '{$find_us}')";
 		
 		//exit($sql);
 		$wpdb->query($sql);

@@ -359,6 +359,7 @@ function wpsc_purchaselog_details_tax(){
 					$price = $purchlogitem->purchitem->price;
 				}
 				$tax = ($price/(100+$wpsc_cart->tax_percentage)*$wpsc_cart->tax_percentage);
+
 				$tax = $wpsc_cart->process_as_currency($tax);
 				return $tax.' ('.$wpsc_cart->tax_percentage.'%)';
 			}else{

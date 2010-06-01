@@ -709,10 +709,14 @@ function wpsc_right_now($hidden = '') {
 
 
 function wpsc_packing_slip($purchase_id) {
-  global $wpdb;
+  global $wpdb, $purchlogitem, $wpsc_cart,$purchlog;
+  if(isset($_REQUEST['purchaselog_id'])){
+	$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+  }
+
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
-			//exit('<pre>'.print_r($purch_data, true).'</pre>');
+			
 
 	  //echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
@@ -726,11 +730,63 @@ function wpsc_packing_slip($purchase_id) {
 			echo "<strong>".__('Order', 'wpsc')." #</strong> ".$purchase_id."<br /><br />\n\r";
 			
 			echo "<table>\n\r";
-			
+	/*
+		
 			$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE  `log_id` = '".(int)$purchase_id."'";
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
+	
+*/		
+			echo "<tr><td colspan='2'><strong>Billing Info</strong></td></tr>";
+			foreach((array)$purchlogitem->userinfo as $userinfo){
+				if($userinfo['unique_name'] != 'billingcountry'){
+					echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";
+				}else{
+					$userinfo['value'] = maybe_unserialize($userinfo['value']);
+					if(is_array($userinfo['value'] )){
+						if(!empty($userinfo['value'][1]) && !is_numeric($userinfo['value'][1])){
+							echo "<tr><td>State: </td><td>".$userinfo['value'][1]."</td></tr>";
+						}elseif(is_numeric($userinfo['value'][1])){
+							echo "<tr><td>State: </td><td>".wpsc_get_state_by_id($userinfo['value'][1],'name')."</td></tr>";
+						}
+						if(!empty($userinfo['value'][0])){
+							echo "<tr><td>Country: </td><td>".$userinfo['value'][0]."</td></tr>";
+						}
+					}else{
+						echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";	
+					}
+				}
+			}
 			
-			foreach($input_data as $input_row) {
+			echo "<tr><td colspan='2'><strong>Shipping Info</strong></td></tr>";
+			foreach((array)$purchlogitem->shippinginfo as $userinfo){
+				if($userinfo['unique_name'] != 'shippingcountry' && $userinfo['unique_name'] != 'shippingstate'){
+					echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";
+				}elseif($userinfo['unique_name'] == 'shippingcountry'){
+					$userinfo['value'] = maybe_unserialize($userinfo['value']);
+					if(is_array($userinfo['value'] )){
+						if(!empty($userinfo['value'][1]) && !is_numeric($userinfo['value'][1])){
+							echo "<tr><td>State: </td><td>".$userinfo['value'][1]."</td></tr>";
+						}elseif(is_numeric($userinfo['value'][1])){
+							echo "<tr><td>State: </td><td>".wpsc_get_state_by_id($userinfo['value'][1],'name')."</td></tr>";
+						}
+						if(!empty($userinfo['value'][0])){
+							echo "<tr><td>Country: </td><td>".$userinfo['value'][0]."</td></tr>";
+						}
+					}else{
+						echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";	
+					}
+				}elseif($userinfo['unique_name'] == 'shippingstate'){
+					if(!empty($userinfo['value']) && !is_numeric($userinfo['value'])){
+						echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td</tr>>";
+					}elseif(is_numeric($userinfo['value'])){
+							echo "<tr><td>State: </td><td>".wpsc_get_state_by_id($userinfo['value'],'name')."</td></tr>";
+					}
+				}
+			}
+	//		echo('<pre>'.print_r($purchlogitem,true).'</pre>');
+			
+		/*
+	foreach($input_data as $input_row) {
 			  $rekeyed_input[$input_row['form_id']] = $input_row;
 			}
 			
@@ -773,6 +829,7 @@ function wpsc_packing_slip($purchase_id) {
         echo "  <tr><td>".__('Phone', 'wpsc').":</td><td>".$purch_data['phone']."</td></tr>\n\r";
         echo "  <tr><td>".__('Email', 'wpsc').":</td><td>".$purch_data['email']."</td></tr>\n\r";
 			}
+*/
 			
 			if(get_option('payment_method') == 2) {
 				$gateway_name = '';
@@ -813,14 +870,16 @@ function wpsc_packing_slip($purchase_id) {
 				echo " <th>".__('Price', 'wpsc')." </th>";
 				
 				echo " <th>".__('Shipping', 'wpsc')." </th>";
-				echo '<th>Tax</th>';
+				echo "<th>".wpsc_display_tax_label(false)."</th>";
 				echo '</tr>';
 			$endtotal = 0;
 			$all_donations = true;
 			$all_no_shipping = true;
 			$file_link_list = array();
+//			exit('<pre>'.print_r($cart_log,true).'</pre>');
 			foreach($cart_log as $cart_row) {
-			
+			$purchlogitem->the_purch_item();
+//			exit('<pre>'.print_r, true).'</pre>');
 				$alternate = "";
 				$j++;
 				if(($j % 2) != 0) {
@@ -900,7 +959,11 @@ function wpsc_packing_slip($purchase_id) {
 	
 
 				echo '<td>';
-				echo nzshpcrt_currency_display($cart_row['tax_charged'],1);
+				if(wpsc_tax_isincluded()){
+					echo (wpsc_purchaselog_details_tax());
+				}else{
+					echo nzshpcrt_currency_display($cart_row['tax_charged'],1);
+				}
 				echo '<td>';
 				echo '</tr>';
 				}
