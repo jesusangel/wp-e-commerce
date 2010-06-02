@@ -3,7 +3,7 @@
 Plugin Name:WP Shopping Cart
 Plugin URI: http://www.getshopped.org
 Description: A plugin that provides a WordPress Shopping Cart. Visit the <a href='http://getshopped.org/forums'>getshopped forums</a> for support.
-Version: 3.7.6.2
+Version: 3.7.6.3
 Author: Instinct
 Author URI: http://www.getshopped.org
 */
@@ -14,9 +14,9 @@ Author URI: http://www.getshopped.org
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
 define('WPSC_VERSION', '3.7');
-define('WPSC_MINOR_VERSION', '52');
+define('WPSC_MINOR_VERSION', '53');
 
-define('WPSC_PRESENTABLE_VERSION', '3.7.6.2');
+define('WPSC_PRESENTABLE_VERSION', '3.7.6.3');
 
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);

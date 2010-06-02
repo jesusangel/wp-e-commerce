@@ -36,6 +36,23 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog == 
+=3.7.6.3 =
+* Bugfix release
+* Reset categoryAndShippingCountryConflist SESSION after each page load
+* Stock not freed up when items are removed from the cart
+* Permalinks broken when using nordic characters
+* Tax included text strings aren't translated
+* Total Amount is no longer negative is a discount used is larger than the total amount
+* Norwegian translation
+* Product list not showing in admin email report
+* State shows Alabama (or other default region) if the country does not have states
+* Shipping same as billing bug revisited
+* Share this Fixes
+* Added %find_us% tag so you can include how the customer found the website in your purchase report
+* Fix pagination to work with search results.
+
+
+
 = 3.7.6.2 =
 * Paypal standard and Paypal standard 2.0 shipping send shipping details
 * Google Checkout do not send shipping if shipping is 0
