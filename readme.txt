@@ -36,7 +36,7 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog == 
-=3.7.6.3 =
+= 3.7.6.3 =
 * Bugfix release
 * Reset categoryAndShippingCountryConflist SESSION after each page load
 * Stock not freed up when items are removed from the cart
