@@ -564,6 +564,13 @@ function wpsc_packing_slip($purchase_id) {
 				echo '</tr>';
 				}
 			echo "</table>";
+			
+			echo '<table class="packing-slip-totals">';
+			echo '<tr><th>Base Shipping</th><td>' . nzshpcrt_currency_display( $purch_data['base_shipping'], 1 ) . '</td></tr>';
+			echo '<tr><th>Total Shipping</th><td>' . nzshpcrt_currency_display( $purch_data['base_shipping'] + $total_shipping, 1 ) . '</td></tr>';
+			echo '<tr><th>Total Price</th><td>' . nzshpcrt_currency_display( $purch_data['totalprice'], 1 ) . '</td></tr>';
+			echo '</table>';
+			
 			echo "</div>\n\r";
 		} else {
 			echo "<br />".__('This users cart was empty', 'wpsc');
