@@ -1420,26 +1420,22 @@ SELECT DISTINCT `products`.*, `category`.`category_id`,`order`.`order`, IF(ISNUL
 */
 function wpsc_save_product_order() {
   global $wpdb;
-	if(is_numeric($_POST['category_id'])) {
-		$category_id = absint($_POST['category_id']);
+  
 		$products = array();
-		foreach($_POST['product'] as $product) {
-			$products[] = absint($product);
-		}
-
-		$product_order_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('{$category_id}') AND `product_id` IN ('".implode("', '", $products)."') ORDER BY `order` ASC LIMIT ".count($products)."", ARRAY_A);
 		
-		print_r($product_order_data);
-		$order=1;
-		foreach($products as $product_id) {
-			$wpdb->query("REPLACE INTO `".WPSC_TABLE_PRODUCT_ORDER."`(`category_id`, `product_id`, `order`) VALUES ('{$category_id}', '{$product_id}', '{$order}' )");
-      //echo "REPLACE INTO `".WPSC_TABLE_PRODUCT_ORDER."`(`category_id`, `product_id`, `order`) VALUES ('{$category_id}', '{$product_id}', '{$order}' )\n";
-			$order++;
+		foreach($_POST['post'] as $product) {
+			$products[] = absint($product);
+		}		
+		
+		print_r($products);
+		
+		foreach($products as $order=>$product_id) {
+	
+			$wpdb->query($wpdb->prepare("UPDATE `{$wpdb->posts}` SET `menu_order`='%d' WHERE `ID`='%d' LIMIT 1", $order, $product_id));
+
 		} 
 		$success = true;
-	} else {
-		$success = false; 
-	}
+
 	exit((string)$success);
 }
  
