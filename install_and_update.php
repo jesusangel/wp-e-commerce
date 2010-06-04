@@ -391,7 +391,6 @@ function wpsc_check_and_copy_files() {
 	$wpsc_dirs['categories']['old'] = ABSPATH."{$upload_path}/category_images/";
 	$wpsc_dirs['categories']['new'] = WPSC_CATEGORY_DIR;
 	$incomplete_file_transfer = false;
-	exit('called');
 	foreach($wpsc_dirs as $wpsc_dir) {
 	  if(is_dir($wpsc_dir['old'])) {
 	    $files_in_dir = glob($wpsc_dir['old']."*");

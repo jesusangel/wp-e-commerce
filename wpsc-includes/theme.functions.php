@@ -244,7 +244,7 @@ function wpsc_user_dynamic_js() {
   exit();
 }
 
-if($_GET['wpsc_user_dynamic_js'] == 'true') {
+if(isset($_GET['wpsc_user_dynamic_js']) && $_GET['wpsc_user_dynamic_js'] == 'true') {
   add_action("init", 'wpsc_user_dynamic_js');  
 }
 
@@ -422,7 +422,7 @@ function wpsc_user_dynamic_css() {
 	exit();
 }
 
-if($_GET['wpsc_user_dynamic_css'] == 'true') {
+if(isset($_GET['wpsc_user_dynamic_css']) && $_GET['wpsc_user_dynamic_css'] == 'true') {
   add_action("init", 'wpsc_user_dynamic_css');  
 }
 

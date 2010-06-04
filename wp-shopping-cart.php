@@ -117,7 +117,7 @@ require_once(WPSC_FILE_PATH.'/wpsc-includes/cart.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/checkout.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/display.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/pagination.class.php');
-require_once(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
+
 require_once(WPSC_FILE_PATH.'/wpsc-includes/shortcode.functions.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/coupons.class.php');
 require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
@@ -128,8 +128,6 @@ require_once(WPSC_FILE_PATH."/wpsc-includes/merchant.class.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/meta.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/productfeed.php");
 
-//Add deprecated functions in this file please
-require_once(WPSC_FILE_PATH."/wpsc-includes/deprecated.functions.php");
 //exit(print_r($v1,true));
 if($v1[0] >= 2.8){
 	require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
@@ -264,8 +262,10 @@ define('WPSC_CACHE_URL', $wpsc_cache_url);
 define('WPSC_UPGRADES_URL', $wpsc_upgrades_url);
 
 define('WPSC_THEMES_URL', $wpsc_themes_url);
+require_once(WPSC_FILE_PATH.'/wpsc-includes/theme.functions.php');
 
-
+//Add deprecated functions in this file please
+require_once(WPSC_FILE_PATH."/wpsc-includes/deprecated.functions.php");
 
 /* 
  * This plugin gets the merchants from the merchants directory and

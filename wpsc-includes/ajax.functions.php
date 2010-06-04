@@ -7,6 +7,17 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+ if(!isset($_REQUEST['wpsc_ajax_action'])){
+ 	$_REQUEST['wpsc_ajax_action'] = '';
+ }
+ if(!isset($_REQUEST['wpsc_ajax_actions'])){
+ 	$_REQUEST['wpsc_ajax_actions'] = '';
+ }
+
+ if(!isset($_REQUEST['wpsc_action'])){
+ 	$_REQUEST['wpsc_action'] = '';
+ }
+
  function wpsc_special_widget(){
  	global $wpdb; 
 
@@ -230,7 +241,7 @@ function wpsc_empty_cart() {
 
 
 // execute on POST and GET
-if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) {
+if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || (isset($_GET['sessionid']) && $_GET['sessionid'] > 0)) {
 	add_action('init', 'wpsc_empty_cart');
 }
 
@@ -318,7 +329,7 @@ function wpsc_update_item_quantity() {
 }
   
 // execute on POST and GET
-if($_REQUEST['wpsc_update_quantity'] == 'true') {
+if(isset($_REQUEST['wpsc_update_quantity']) && $_REQUEST['wpsc_update_quantity'] == 'true') {
 	add_action('init', 'wpsc_update_item_quantity');
 }
 
@@ -446,7 +457,7 @@ function wpsc_get_rating_count() {
 	exit();
 }
 // execute on POST and GET
-if(($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])) {
+if(isset($_REQUEST['get_rating_count']) && ($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])) {
 	add_action('init', 'wpsc_get_rating_count');
 }
 
@@ -470,7 +481,7 @@ function wpsc_update_product_price() {
 	exit();
 }
 // execute on POST and GET
-if(($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_id'])) {
+if(isset($_REQUEST['update_product_price']) && ($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_id'])) {
 	add_action('init', 'wpsc_update_product_price');
 }
 
@@ -769,7 +780,7 @@ if($_REQUEST['wpsc_action'] == 'gateway_notification') {
 	add_action('init', 'wpsc_gateway_notification');
 }
 
-if($_GET['termsandconds'] === 'true'){
+if(isset($_GET['termsandconds']) && $_GET['termsandconds'] === 'true'){
 	echo stripslashes(get_option('terms_and_conditions'));
 	exit();
 }
