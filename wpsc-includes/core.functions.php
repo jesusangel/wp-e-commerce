@@ -162,8 +162,9 @@ function wpsc_split_the_query($query) {
 		unset($query->query_vars['products']);
 		
 	} 
-	// otherwise, check if we are looking at a product, if so, duplicate the query and swap the old one out for a products page request 
-	else if (($query->query_vars['pagename'] == $products_page) || isset($query->query_vars['products'])) {
+	// otherwise, check if we are looking at a product, if so, duplicate the query and swap the old one out for a products page request
+		// JS - 6.4.1020 - Added is_admin condition, as the products condition broke categories in backend
+	else if (($query->query_vars['pagename'] == $products_page) || isset($query->query_vars['products']) && !is_admin()) {
 		// store a copy of the wordpress query
 		$wpsc_query_data = $query->query;
 		

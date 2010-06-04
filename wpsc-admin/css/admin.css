@@ -334,7 +334,8 @@ table.product_editform {
 
 
 div.price-editing-fields input.the-product-price,
-div.price-editing-fields input.the-sale-price  {
+div.sales-price-fields input.the-sale-price,
+div.sku-editing-fields input.the-sku-fields  {
 	width: 51px;
 }
 

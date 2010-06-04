@@ -121,7 +121,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		?>
 		<td <?php echo $attributes ?>>
 			<strong>
-
 			<?php if ( current_user_can('edit_post', $product->ID) && $product->post_status != 'trash' ) { ?>
 				<a class="row-title" href="<?php echo $edit_link; ?>" title="<?php echo esc_attr(sprintf(__('Edit &#8220;%s&#8221;'), $title)); ?>"><?php echo $title ?></a>
 			<?php } else {
@@ -134,7 +133,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
-				$actions['edit'] = '<a  class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';
+				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';				
+				$actions['quick_edit'] = "<a class='wpsc-quickedit' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
 			}
 
 			if ( current_user_can('delete_post', $product->ID) ) {
@@ -249,11 +249,12 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
 			$weight = $product_data['transformed']['weight'];
 			if($weight == ''){
-				$weight = 'None';
+				$weight = '0';
 			}
+			$unit = $product_data['meta']['_wpsc_product_metadata']['weight_unit'];
 			?>
 				<td  <?php echo $attributes ?>>
-					<span class="weightdisplay"><?php echo $weight; ?></span>
+					<span class="weightdisplay"><?php echo $weight; ?></span><?php echo $unit; ?>
 					<div class='weight-editing-fields' id='weight-editing-fields-<?php echo $product->ID; ?>'>
 						<input type='text' class='the-weight-fields' name='weight_field[<?php echo $product->ID; ?>][weight]' value='<?php echo $weight; ?>' />
 						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />

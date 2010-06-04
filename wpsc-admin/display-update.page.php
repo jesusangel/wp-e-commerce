@@ -23,24 +23,26 @@ function wpsc_display_update_page() {
 		
 		- click here to run the first part of the update (updating categories) <br />
 		<?php
-		wpsc_convert_category_groups();
+			wpsc_convert_category_groups();
 		?>
 		- click here to run the next part of the update (updating variation groups and variations) <br />
 		<?php
-		wpsc_convert_variation_sets();
+			wpsc_convert_variation_sets();
 		?>
 		- click here to run the next part of the update (updating products and product images) <br />
 		<pre><?php
-		wpsc_convert_products_to_posts();
+			wpsc_convert_products_to_posts();
 		?></pre>
 		- click here to run the next part of the update (updating variation combinations into child products) <br />
 		<pre><?php 
 		- wpsc_convert_variation_combinations();
 		?></pre>
 		- click here to run the next part of the update (updating product files) <br />
-		<pre><?php
-		wpsc_update_files();
-		?></pre>
+		<pre>
+			<?php
+				wpsc_update_files();
+			?>
+		</pre>
 	</div>
 		<?php 
 }

@@ -154,7 +154,7 @@ function wpsc_display_edit_products_page() {
 					return showNotice.warn(m);
 				}
 			});
-			
+		$('form#filt_cat').insertAfter('input#doaction').css("display", "inline")	
 		});
 	})(jQuery);
 	/* ]]> */
@@ -174,7 +174,7 @@ function wpsc_display_edit_products_page() {
 		$(document).ready(function(){
 		
 					jQuery('#wpsc-col-left').hide();
-					jQuery(this).addClass('nav-tab-active');
+					jQuery('a#add').addClass('nav-tab-active');
 					jQuery('a#manage').removeClass('nav-tab-active');
 			});
 	})(jQuery);
@@ -311,9 +311,9 @@ function wpsc_admin_products_list($category_id = 0) {
 		
 		add_filter('posts_request', 'wpsc_edit_variations_request_sql');
 	} else { 
+
 		$query = array(
 			'post_type' => 'wpsc-product',
-			'posts_per_page' => -1, 
 			'orderby' => 'menu_order post_title',
 			'order' => "ASC",
 			'posts_per_page' => $itempp,
@@ -337,9 +337,6 @@ function wpsc_admin_products_list($category_id = 0) {
 	//wp($query);
 	$wp_query = new WP_Query($query);
 	remove_filter('posts_request', 'wpsc_edit_variations_request_sql');
-	
-	
-	//echo "<pre>".print_r($parent_product_data, true)."</pre>";
 	
 	if($page !== null) {
 		$page_links = paginate_links( array(
@@ -375,14 +372,16 @@ function wpsc_admin_products_list($category_id = 0) {
 		</div>
 	</div>
 <?php } ?>	
-			
-	<form id="posts-filter" action="" method="get">
-		<div class="tablenav">	
-		<div class="alignleft actions">
-				<?php
+		<form action="admin.php?page=wpsc-edit-products" method="get" id="filt_cat">
+			<?php
 					echo wpsc_admin_category_dropdown();
 				?>
-					<select name="bulkAction">
+		</form>
+	<form id="posts-filter" action="admin.php?page=wpsc-edit-products" method="get">
+		<div class="tablenav">	
+		<div class="alignleft actions">
+				
+					<select id="bulkaction" name="bulkAction">
 						<option value="-1" selected="selected"><?php _e('Bulk Actions'); ?></option>
 						<option value="publish"><?php _e('Publish', 'wpsc'); ?></option>
 						<option value="unpublish"><?php _e('Unpublish', 'wpsc'); ?></option>
@@ -454,7 +453,7 @@ function wpsc_admin_category_dropdown() {
 	
 	$concat = "<input type='hidden' name='page' value='{$_GET['page']}' />\r\n";
 	$concat .= "<select name='category' id='category_select'>".$options."</select>\r\n";
-	$concat .= "<button class='button' id='submit_category_select'>Filter</button>\r\n";
+	$concat .= "<input type='submit' value='Filter' class='button-secondary action' id='post-query-submit' />\r\n";
 	return $concat;
 }
 

@@ -9,10 +9,6 @@
  * @since 3.7
 */
 
-
-
-
-
 /**
  * wpsc_list_categories function.
  * 

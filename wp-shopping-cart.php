@@ -516,7 +516,7 @@ function wpsc_register_post_types() {
 	register_taxonomy('product_tag', 'wpsc-product');
 	
 	// Product categories, is heirarchical and can use permalinks
-	register_taxonomy('wpsc_product_category', 'wpsc-product',array(
+	register_taxonomy('wpsc_product_category', 'wpsc-product', array(
 		'hierarchical' => true,
 		'query_var' => 'products',
 		'rewrite' => array(

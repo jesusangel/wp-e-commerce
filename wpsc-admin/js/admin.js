@@ -332,7 +332,7 @@ jQuery(document).ready( function () {
 	 
 
   // this loads the edit-products page using javascript
-	 jQuery('.edit-product, .row-title').click(function(){
+/*	 jQuery('.edit-product, .row-title').click(function(){
 	 		jQuery(this).next('.loadingImg').removeAttr('style');
 			product_id = jQuery(this).attr('href').match(/(?:;|&)product=(\d{1,})/);
 			wpnonce = jQuery(this).attr('href').match(/_wpnonce=(\w{1,})/);
@@ -353,9 +353,9 @@ jQuery(document).ready( function () {
 				}
 			});
 			
-	 		// */
+	 		// 
  		
-	 });
+	 });*/
 	
 	jQuery("a.thickbox").livequery(function(){
 	 tb_init(this);
@@ -377,7 +377,7 @@ jQuery(document).ready( function () {
 						parent_container = jQuery("#"+target_element_id+"").parent('.column-price');
 						jQuery(".pricedisplay", parent_container).html(new_price);
 				  }
-					jQuery('span.pricedisplay').css('display', 'block');
+					jQuery('span.pricedisplay').css('display', 'inline-block');
 					jQuery('div.price-editing-fields').css('display', 'none');
 					jQuery('form#posts-filter').unbind('submit.disable');
 				}
@@ -386,13 +386,18 @@ jQuery(document).ready( function () {
 		return false;
 	};
 
-	
+jQuery("table#wpsc_product_list tr").livequery(function(){
+	jQuery("a.wpsc-quickedit", this).click( function(event) {
+		jQuery(this).parents("tr.product-edit").find("span.skudisplay,span.salespricedisplay, span.pricedisplay,span.stockdisplay,span.weightdisplay").click();
+	});
+});
+
 	jQuery("table#wpsc_product_list .column-price").livequery(function(){
 		jQuery("span.pricedisplay", this).click( function(event) {
-			jQuery('span.pricedisplay').css('display', 'block');
+			jQuery('span.pricedisplay').css('display', 'inline-block');
 			jQuery('div.price-editing-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
-			jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).css('display', 'block');
+			jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).css('display', 'inline-block');
 
 			target_element_id = jQuery('div.price-editing-fields', jQuery(this).parent('.column-price')).attr('id');
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_price);
@@ -431,7 +436,7 @@ jQuery(document).ready( function () {
 						parent_container = jQuery("#"+target_element_id+"").parent('.column-sale_price');
 						jQuery(".salespricedisplay", parent_container).html(new_price);
 				  }
-					jQuery('span.salespricedisplay').css('display', 'block');
+					jQuery('span.salespricedisplay').css('display', 'inline-block');
 					jQuery('div.sales-price-fields').css('display', 'none');
 					jQuery('form#posts-filter').unbind('submit.disable');
 				}
@@ -442,10 +447,10 @@ jQuery(document).ready( function () {
 	
 	jQuery("table#wpsc_product_list .column-sale_price").livequery(function(){
 		jQuery('span.salespricedisplay',this).click(function(){
-			jQuery('span.salespricedisplay').css('display', 'block');
+			jQuery('span.salespricedisplay').css('display', 'inline-block');
 			jQuery('div.sales-price-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
-			jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).css('display', 'block');
+			jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).css('display', 'inline-block');
 			target_element_id = jQuery('div.sales-price-fields', jQuery(this).parent('.column-sale_price')).attr('id');		
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_sales_price);
 			jQuery('div.sales-price-fields .the-sale-price', jQuery(this).parent('.column-sale_price')).focus();
@@ -480,7 +485,7 @@ jQuery(document).ready( function () {
 						parent_container = jQuery("#"+target_element_id+"").parent('.column-SKU');
 						jQuery(".skudisplay", parent_container).html(new_price);
 				  }
-					jQuery('span.skudisplay').css('display', 'block');
+					jQuery('span.skudisplay').css('display', 'inline-block');
 					jQuery('div.sku-editing-fields').css('display', 'none');
 					jQuery('form#posts-filter').unbind('submit.disable');
 				}
@@ -491,10 +496,10 @@ jQuery(document).ready( function () {
 	
 	jQuery("table#wpsc_product_list .column-SKU").livequery(function(){
 		jQuery('span.skudisplay',this).click(function(){
-			jQuery('span.skudisplay').css('display', 'block');
+			jQuery('span.skudisplay').css('display', 'inline-block');
 			jQuery('div.sku-editing-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
-			jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).css('display', 'block');
+			jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).css('display', 'inline-block');
 			target_element_id = jQuery('div.sku-editing-fields', jQuery(this).parent('.column-SKU')).attr('id');		
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_sku);
 			jQuery('div.sku-editing-fields .the-sku-fields', jQuery(this).parent('.column-SKU')).focus();
@@ -533,7 +538,7 @@ jQuery(document).ready( function () {
 						parent_container = jQuery("#"+target_element_id+"").parent('.column-weight');
 						jQuery(".weightdisplay", parent_container).html(new_price);
 				  }
-					jQuery('span.weightdisplay').css('display', 'block');
+					jQuery('span.weightdisplay').css('display', 'inline-block');
 					jQuery('div.weight-editing-fields').css('display', 'none');
 					jQuery('form#posts-filter').unbind('submit.disable');
 				}
@@ -544,10 +549,10 @@ jQuery(document).ready( function () {
 	
 	jQuery("table#wpsc_product_list .column-weight").livequery(function(){
 		jQuery('span.weightdisplay',this).click(function(){
-			jQuery('span.weightdisplay').css('display', 'block');
+			jQuery('span.weightdisplay').css('display', 'inline-block');
 			jQuery('div.weight-editing-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
-			jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).css('display', 'block');
+			jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).css('display', 'inline-block');
 			target_element_id = jQuery('div.weight-editing-fields', jQuery(this).parent('.column-weight')).attr('id');		
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_weight);
 			jQuery('div.weight-editing-fields .the-weight-fields', jQuery(this).parent('.column-weight')).focus();
@@ -586,7 +591,7 @@ jQuery(document).ready( function () {
 						parent_container = jQuery("#"+target_element_id+"").parent('.column-stock');
 						jQuery(".stockdisplay", parent_container).html(new_price);
 				  }
-					jQuery('span.stockdisplay').css('display', 'block');
+					jQuery('span.stockdisplay').css('display', 'inline-block');
 					jQuery('div.stock-editing-fields').css('display', 'none');
 					jQuery('form#posts-filter').unbind('submit.disable');
 				}
@@ -597,10 +602,10 @@ jQuery(document).ready( function () {
 	
 	jQuery("table#wpsc_product_list .column-stock").livequery(function(){
 		jQuery('span.stockdisplay',this).click(function(){
-			jQuery('span.stockdisplay').css('display', 'block');
+			jQuery('span.stockdisplay').css('display', 'inline-block');
 			jQuery('div.stock-editing-fields').css('display', 'none');
 			jQuery(this).css('display', 'none');
-			jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).css('display', 'block');
+			jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).css('display', 'inline-block');
 			target_element_id = jQuery('div.stock-editing-fields', jQuery(this).parent('.column-stock')).attr('id');		
 			jQuery('form#posts-filter').bind('submit.disable',target_element_id, ajax_submit_stock);
 			jQuery('div.stock-editing-fields .the-stock-fields', jQuery(this).parent('.column-stock')).focus();
@@ -753,17 +758,6 @@ jQuery(document).ready( function () {
 			}
 		});
 	});
-
-  //LiveQuery added to each of these	
-			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
-				jQuery(this).appendTo('div#append-side');
-			});
-			jQuery('div#wpsc_product_category_and_tag_forms').livequery(function() {
-				jQuery(this).insertAfter('div#submitdiv');
-			});
-			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
-				jQuery(this).insertAfter('div#wpsc_product_category_and_tag_forms');
-			});
 
 	jQuery('img.deleteButton, a.delete_primary_image').livequery(function(){
 	  jQuery(this).click( function() {

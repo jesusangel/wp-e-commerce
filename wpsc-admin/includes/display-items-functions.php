@@ -221,7 +221,8 @@ function wpsc_product_basic_details_form(&$product_data) {
 			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
 				jQuery(this).appendTo('div#append-side');
 			});
-			jQuery('div#wpsc_product_category_and_tag_forms').livequery(function() {
+			jQuery('div#
+			').livequery(function() {
 				jQuery(this).insertAfter('div#submitdiv');
 			});
 			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
@@ -346,7 +347,6 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 		  );
 		
 	 	$order = get_option('wpsc_product_page_order');	 	
-
 	 	
 		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  
@@ -548,11 +548,8 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 				</td>
 			</tr>
 		</table>
-		<div id="append-side normal-sortables" class="meta-box-sortables ui-sortable">
-		
-		</div>
 	</div>
-	<div id="advanced-sortables" class="meta-box-sortables ui-sortable"></div>
+	<div id="advanced-sortables" class="meta-box-sortables ui-sortable"><div id="append-side normal-sortables" class="meta-box-sortables ui-sortable"></div></div>
 </div>
 	<?php
   }
@@ -568,7 +565,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_category_and_tag_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." >";
+	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_category_and_tag_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -626,7 +623,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	echo "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." >";
+	echo "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
 	echo "<h3 class='hndle'>";
 
@@ -756,7 +753,7 @@ function wpsc_product_variation_forms($product_data=''){
 	
 	?>
 	
-	<div id='wpsc_product_variation_forms' class='postbox <?php echo ((array_search('wpsc_product_variation_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '');	?>' <?php echo ((array_search('wpsc_product_variation_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?>>
+	<div id='wpsc_product_variation_forms' class='postbox <?php echo ((array_search('wpsc_product_variation_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '');	?>' <?php echo ((array_search('wpsc_product_variation_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?>><div class="handlediv" title="Click to toggle"><br></div>
 		<h3 class='hndle'><?php echo __('Variation Control', 'wpsc'); ?></h3>
 		
 		<div class='inside'>
@@ -845,7 +842,7 @@ function wpsc_product_shipping_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
-	$output .= "<div class='postbox ".((array_search('wpsc_product_shipping_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_shipping_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." id='wpsc_product_shipping_forms'>";
+	$output .= "<div class='postbox ".((array_search('wpsc_product_shipping_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_shipping_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." id='wpsc_product_shipping_forms'><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
     	if (IS_WP27) {
     		$output .= "<h3 class='hndle'>";
@@ -977,7 +974,7 @@ function wpsc_product_advanced_forms($product_data='') {
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
 	}
-	$output .= "<div id='wpsc_product_advanced_forms' class='postbox ".((array_search('wpsc_product_advanced_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_advanced_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
+	$output .= "<div id='wpsc_product_advanced_forms' class='postbox ".((array_search('wpsc_product_advanced_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_advanced_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')."><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
 		$output .= "<h3 class='hndle'>";
 		$output .= __('Advanced Options', 'wpsc');
@@ -1106,7 +1103,7 @@ function wpsc_product_image_forms($product_data='') {
 	$flash = apply_filters('flash_uploader', $flash);
 */
 ?>
-	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> >
+	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
 		<h3 class='hndle'> <?php echo	__('Product Images', 'wpsc'); ?></h3>
 		<div class='inside'>		
  			<p><strong <?php echo $display; ?>><?php echo __('Manage your thumbnails', 'wpsc');?></strong></p>
@@ -1129,7 +1126,7 @@ function wpsc_product_download_forms($product_data='') {
 
 	$output ='';
  	$upload_max = wpsc_get_max_upload_size();
- 	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '').">";
+ 	$output .= "<div id='wpsc_product_download_forms' class='postbox ".((array_search('wpsc_product_download_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_download_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')."><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
  	
 	$output .= "<h3 class='hndle'>".__('Product Downloads', 'wpsc')."</h3>";
 	$output .= "<div class='inside'>";
@@ -1161,7 +1158,7 @@ function wpsc_product_download_forms($product_data='') {
 function wpsc_product_label_forms() {
 	global $closed_postboxes;
 	?>
-	<div id='wpsc_product_label_forms' class='postbox <?php echo ((array_search('wpsc_product_label_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>'>
+	<div id='wpsc_product_label_forms' class='postbox <?php echo ((array_search('wpsc_product_label_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>'><div class="handlediv" title="Click to toggle"><br></div>
 		<?php
     	if (function_exists('add_object_page')) {
     		echo "<h3 class='hndle'>";
