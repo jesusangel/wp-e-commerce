@@ -966,6 +966,7 @@ function wpsc_packing_slip($purchase_id) {
 				}
 				echo '<td>';
 				echo '</tr>';
+			}
 			echo "</table>";
 			
 			echo '<table class="packing-slip-totals">';
