@@ -213,8 +213,8 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		// strip slashes, trim whitespace, convert to lowercase
 		$tidied_name = strtolower(trim(stripslashes($post_data['name'])));
 		// convert " - " to "-", all other spaces to dashes, and remove all foward slashes.
-		//$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
-		//$url_name =  sanitize_title($tidied_name);
+		$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
+		$url_name =  sanitize_title($tidied_name);
 		$url_name = apply_filters('editable_slug',$tidied_name);
 
 		// Select all similar names, using an escaped version of the URL name 
