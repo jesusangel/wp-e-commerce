@@ -523,8 +523,7 @@ function wpsc_category_url($category_id, $permalink_compatibility = false) {
 			$category_url = get_option('product_list_url');
 		}
 	}
-	return $category_url;
-//  return htmlentities($category_url, ENT_QUOTES);
+  return htmlentities($category_url, ENT_QUOTES);
 }
 
 
