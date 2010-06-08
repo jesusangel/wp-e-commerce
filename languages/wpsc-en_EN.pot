@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-e-commerce\n"
-"POT-Creation-Date: 2010-06-02 01:51+0000\n"
+"POT-Creation-Date: 2010-06-08 02:28+0000\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 msgid "You are editing the &quot;[categorisation]&quot; Category"
 msgstr ""
 
-#: admin-form-functions.php:11 wpsc-admin/display-groups.page.php:760
+#: admin-form-functions.php:11 wpsc-admin/display-groups.page.php:759
 msgid "+ Add new category to the &quot;[categorisation]&quot; Group"
 msgstr ""
 
 #: admin-form-functions.php:25 admin-form-functions.php:279
 #: admin-form-functions.php:867 display-ecommerce-subs.php:9
 #: js/tinymce3/window.php:105 user-log.php:200 user-log.php:359
-#: wpsc-admin/display-groups.page.php:699
-#: wpsc-admin/display-groups.page.php:775
+#: wpsc-admin/display-groups.page.php:698
+#: wpsc-admin/display-groups.page.php:774
 #: wpsc-admin/display-upgrades.page.php:88
 #: wpsc-admin/display-variations.page.php:13
 #: wpsc-admin/display-variations.page.php:156
@@ -40,7 +40,7 @@ msgid "Name"
 msgstr ""
 
 #: admin-form-functions.php:34 js/tinymce3/window.php:109
-#: wpsc-admin/display-groups.page.php:783
+#: wpsc-admin/display-groups.page.php:782
 #: wpsc-admin/includes/display-items-functions.php:807
 msgid "Description"
 msgstr ""
@@ -54,8 +54,8 @@ msgid "Category&nbsp;Image"
 msgstr ""
 
 #: admin-form-functions.php:101 admin-form-functions.php:110
-#: admin-form-functions.php:198 wpsc-admin/display-groups.page.php:813
-#: wpsc-admin/display-groups.page.php:866
+#: admin-form-functions.php:198 wpsc-admin/display-groups.page.php:812
+#: wpsc-admin/display-groups.page.php:865
 #: wpsc-admin/includes/display-items-functions.php:675
 #: wpsc-admin/includes/settings-pages/presentation.php:864
 #: wpsc-admin/includes/settings-pages/presentation.php:875
@@ -65,8 +65,8 @@ msgid "Height"
 msgstr ""
 
 #: admin-form-functions.php:101 admin-form-functions.php:110
-#: admin-form-functions.php:199 wpsc-admin/display-groups.page.php:813
-#: wpsc-admin/display-groups.page.php:867
+#: admin-form-functions.php:199 wpsc-admin/display-groups.page.php:812
+#: wpsc-admin/display-groups.page.php:866
 #: wpsc-admin/includes/display-items-functions.php:687
 #: wpsc-admin/includes/settings-pages/presentation.php:865
 #: wpsc-admin/includes/settings-pages/presentation.php:875
@@ -76,7 +76,7 @@ msgid "Width"
 msgstr ""
 
 #: admin-form-functions.php:102 admin-form-functions.php:111
-#: wpsc-admin/display-groups.page.php:814
+#: wpsc-admin/display-groups.page.php:813
 msgid ""
 "You can upload thumbnail images for each group. To display Group details in "
 "your shop you must configure these settings under <a href=\"admin.php?"
@@ -102,18 +102,18 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: admin-form-functions.php:164 wpsc-admin/display-groups.page.php:823
+#: admin-form-functions.php:164 wpsc-admin/display-groups.page.php:822
 #: wpsc-admin/includes/settings-pages/presentation.php:57
 msgid "Presentation Settings"
 msgstr ""
 
-#: admin-form-functions.php:165 wpsc-admin/display-groups.page.php:824
+#: admin-form-functions.php:165 wpsc-admin/display-groups.page.php:823
 msgid ""
 "To over-ride the presentation settings for this group you can enter in your "
 "prefered settings here"
 msgstr ""
 
-#: admin-form-functions.php:171 wpsc-admin/display-groups.page.php:832
+#: admin-form-functions.php:171 wpsc-admin/display-groups.page.php:831
 #: wpsc-admin/includes/settings-pages/presentation.php:288
 msgid "Catalog View"
 msgstr ""
@@ -122,37 +122,37 @@ msgstr ""
 msgid "Please select"
 msgstr ""
 
-#: admin-form-functions.php:176 wpsc-admin/display-groups.page.php:836
+#: admin-form-functions.php:176 wpsc-admin/display-groups.page.php:835
 #: wpsc-admin/includes/settings-pages/presentation.php:346
 msgid "Default View"
 msgstr ""
 
 #: admin-form-functions.php:178 admin-form-functions.php:180
-#: wpsc-admin/display-groups.page.php:840
-#: wpsc-admin/display-groups.page.php:844
+#: wpsc-admin/display-groups.page.php:839
+#: wpsc-admin/display-groups.page.php:843
 #: wpsc-admin/includes/settings-pages/presentation.php:350
 #: wpsc-admin/includes/settings-pages/presentation.php:354
 msgid "List View"
 msgstr ""
 
 #: admin-form-functions.php:183 admin-form-functions.php:185
-#: wpsc-admin/display-groups.page.php:850
-#: wpsc-admin/display-groups.page.php:854
+#: wpsc-admin/display-groups.page.php:849
+#: wpsc-admin/display-groups.page.php:853
 #: wpsc-admin/includes/settings-pages/presentation.php:361
 #: wpsc-admin/includes/settings-pages/presentation.php:365
 msgid "Grid View"
 msgstr ""
 
-#: admin-form-functions.php:195 wpsc-admin/display-groups.page.php:864
+#: admin-form-functions.php:195 wpsc-admin/display-groups.page.php:863
 msgid "Thumbnail&nbsp;Size"
 msgstr ""
 
-#: admin-form-functions.php:208 wpsc-admin/display-groups.page.php:873
+#: admin-form-functions.php:208 wpsc-admin/display-groups.page.php:872
 #: wpsc-admin/display-sales-logs.php:317 wpsc-admin/display-sales-logs.php:318
 msgid "Checkout Settings"
 msgstr ""
 
-#: admin-form-functions.php:217 wpsc-admin/display-groups.page.php:879
+#: admin-form-functions.php:217 wpsc-admin/display-groups.page.php:878
 msgid "This category requires additional checkout form fields"
 msgstr ""
 
@@ -160,14 +160,14 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: admin-form-functions.php:247 wpsc-admin/display-groups.page.php:907
+#: admin-form-functions.php:247 wpsc-admin/display-groups.page.php:906
 msgid "Products in this category use the billing address to calculate shipping"
 msgstr ""
 
 #: admin-form-functions.php:250 display-coupons.php:502
 #: display-coupons.php:526 merchants/chronopay.php:427
 #: merchants/paypal_multiple.php:478 merchants/paypal_multiple.php:486
-#: merchants/paypal_multiple.php:502 wpsc-admin/display-groups.page.php:909
+#: merchants/paypal_multiple.php:502 wpsc-admin/display-groups.page.php:908
 #: wpsc-admin/includes/display-items-functions.php:823
 #: wpsc-admin/includes/settings-pages/admin.php:38
 #: wpsc-admin/includes/settings-pages/admin.php:64
@@ -206,7 +206,7 @@ msgstr ""
 #: admin-form-functions.php:251 display-coupons.php:503
 #: display-coupons.php:527 merchants/chronopay.php:428
 #: merchants/paypal_multiple.php:479 merchants/paypal_multiple.php:487
-#: merchants/paypal_multiple.php:503 wpsc-admin/display-groups.page.php:910
+#: merchants/paypal_multiple.php:503 wpsc-admin/display-groups.page.php:909
 #: wpsc-admin/includes/display-items-functions.php:825
 #: wpsc-admin/includes/settings-pages/admin.php:39
 #: wpsc-admin/includes/settings-pages/admin.php:65
@@ -249,7 +249,7 @@ msgstr ""
 #: admin-form-functions.php:262 admin-form-functions.php:300
 #: admin-form-functions.php:319 shipping/tablerate.php:44
 #: shipping/weightrate.php:35 wpsc-admin/admin.php:347
-#: wpsc-admin/ajax-and-init.php:1898 wpsc-admin/display-groups.page.php:670
+#: wpsc-admin/ajax-and-init.php:1897 wpsc-admin/display-groups.page.php:669
 #: wpsc-admin/display-items.page.php:276 wpsc-admin/display-items.page.php:400
 #: wpsc-admin/display-sales-logs.php:425 wpsc-admin/display-sales-logs.php:550
 #: wpsc-admin/display-variations.page.php:178
@@ -273,8 +273,8 @@ msgstr ""
 
 #: admin-form-functions.php:318 display-coupons.php:389
 #: display-coupons.php:450 wpsc-admin/display-groups.page.php:106
-#: wpsc-admin/display-groups.page.php:707
-#: wpsc-admin/display-groups.page.php:720
+#: wpsc-admin/display-groups.page.php:706
+#: wpsc-admin/display-groups.page.php:719
 #: wpsc-admin/display-variations.page.php:14
 #: wpsc-admin/display-variations.page.php:111
 #: wpsc-includes/variations.class.php:343 wpsc-includes/wpsc_query.php:226
@@ -482,7 +482,7 @@ msgstr ""
 msgid "Shipping"
 msgstr ""
 
-#: admin-form-functions.php:976
+#: admin-form-functions.php:980
 msgid "This users cart was empty"
 msgstr ""
 
@@ -527,8 +527,8 @@ msgstr ""
 msgid "Display How Customer Found Us Survey"
 msgstr ""
 
-#: display-coupons.php:549 wpsc-admin/display-groups.page.php:643
-#: wpsc-admin/display-groups.page.php:668
+#: display-coupons.php:549 wpsc-admin/display-groups.page.php:642
+#: wpsc-admin/display-groups.page.php:667
 msgid "Submit"
 msgstr ""
 
@@ -553,9 +553,8 @@ msgstr ""
 msgid "User ID"
 msgstr ""
 
-#: display-ecommerce-subs.php:9 edit-profile.php:39 install_and_update.php:656
-#: user-log.php:362 wpsc-admin/admin.php:349
-#: wpsc-includes/install_and_update.functions.php:656
+#: display-ecommerce-subs.php:9 edit-profile.php:39 user-log.php:362
+#: wpsc-admin/admin.php:349 wpsc-includes/install_and_update.functions.php:656
 msgid "Email"
 msgstr ""
 
@@ -571,8 +570,7 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: edit-profile.php:31 install_and_update.php:650 install_and_update.php:658
-#: wpsc-includes/install_and_update.functions.php:650
+#: edit-profile.php:31 wpsc-includes/install_and_update.functions.php:650
 #: wpsc-includes/install_and_update.functions.php:658
 msgid "First Name"
 msgstr ""
@@ -581,8 +579,7 @@ msgstr ""
 msgid "Please enter a valid name"
 msgstr ""
 
-#: edit-profile.php:35 install_and_update.php:651 install_and_update.php:659
-#: wpsc-includes/install_and_update.functions.php:651
+#: edit-profile.php:35 wpsc-includes/install_and_update.functions.php:651
 #: wpsc-includes/install_and_update.functions.php:659
 msgid "Last Name"
 msgstr ""
@@ -607,8 +604,7 @@ msgstr ""
 msgid "Please enter a valid address"
 msgstr ""
 
-#: edit-profile.php:48 install_and_update.php:653 install_and_update.php:661
-#: wpsc-includes/install_and_update.functions.php:653
+#: edit-profile.php:48 wpsc-includes/install_and_update.functions.php:653
 #: wpsc-includes/install_and_update.functions.php:661
 msgid "City"
 msgstr ""
@@ -617,7 +613,7 @@ msgstr ""
 msgid "Please enter your town or city."
 msgstr ""
 
-#: edit-profile.php:52 install_and_update.php:669 user-log.php:361
+#: edit-profile.php:52 user-log.php:361
 #: wpsc-includes/install_and_update.functions.php:669
 msgid "Phone"
 msgstr ""
@@ -626,8 +622,8 @@ msgstr ""
 msgid "Please enter a valid phone number"
 msgstr ""
 
-#: edit-profile.php:56 install_and_update.php:654 install_and_update.php:663
-#: wpsc-admin/admin.php:350 wpsc-includes/install_and_update.functions.php:654
+#: edit-profile.php:56 wpsc-admin/admin.php:350
+#: wpsc-includes/install_and_update.functions.php:654
 #: wpsc-includes/install_and_update.functions.php:663
 msgid "Country"
 msgstr ""
@@ -723,250 +719,6 @@ msgstr ""
 
 #: insertcate.php:74
 msgid "Your Categories:"
-msgstr ""
-
-#: install_and_update.php:60 wpsc-includes/install_and_update.functions.php:60
-msgid "Example category"
-msgstr ""
-
-#: install_and_update.php:60 install_and_update.php:61
-#: wpsc-includes/install_and_update.functions.php:60
-#: wpsc-includes/install_and_update.functions.php:61
-msgid "Example details"
-msgstr ""
-
-#: install_and_update.php:61 wpsc-includes/install_and_update.functions.php:61
-msgid "Example Brand"
-msgstr ""
-
-#: install_and_update.php:68 wp-shopping-cart.php:153
-#: wpsc-includes/install_and_update.functions.php:68
-msgid "Order Received"
-msgstr ""
-
-#: install_and_update.php:69 wpsc-includes/install_and_update.functions.php:69
-msgid "Accepted Payment"
-msgstr ""
-
-#: install_and_update.php:70 wpsc-includes/install_and_update.functions.php:70
-msgid "Job Dispatched"
-msgstr ""
-
-#: install_and_update.php:71 wp-shopping-cart.php:155
-#: wpsc-includes/install_and_update.functions.php:71
-msgid "Closed Order"
-msgstr ""
-
-#: install_and_update.php:87
-#: wpsc-admin/includes/settings-pages/presentation.php:892
-#: wpsc-includes/install_and_update.functions.php:87
-msgid "Show Thumbnails"
-msgstr ""
-
-#: install_and_update.php:89 wpsc-includes/install_and_update.functions.php:89
-msgid "product image width"
-msgstr ""
-
-#: install_and_update.php:90 wpsc-includes/install_and_update.functions.php:90
-msgid "product image height"
-msgstr ""
-
-#: install_and_update.php:92 wpsc-includes/install_and_update.functions.php:92
-msgid "product group image width"
-msgstr ""
-
-#: install_and_update.php:93 wpsc-includes/install_and_update.functions.php:93
-msgid "product group image height"
-msgstr ""
-
-#: install_and_update.php:95 wpsc-admin/includes/settings-pages/admin.php:167
-#: wpsc-includes/install_and_update.functions.php:95
-msgid "The location of the product list"
-msgstr ""
-
-#: install_and_update.php:96 wpsc-admin/includes/settings-pages/admin.php:175
-#: wpsc-includes/install_and_update.functions.php:96
-msgid "The location of the shopping cart"
-msgstr ""
-
-#: install_and_update.php:97 wpsc-includes/install_and_update.functions.php:97
-msgid "The location of the checkout page"
-msgstr ""
-
-#: install_and_update.php:98 wpsc-includes/install_and_update.functions.php:98
-msgid "The location of the transaction detail page"
-msgstr ""
-
-#: install_and_update.php:99 wpsc-includes/install_and_update.functions.php:99
-msgid "The payment gateway to use"
-msgstr ""
-
-#: install_and_update.php:101 install_and_update.php:103
-#: install_and_update.php:107 install_and_update.php:109
-#: wpsc-admin/includes/settings-pages/presentation.php:620
-#: wpsc-includes/install_and_update.functions.php:101
-#: wpsc-includes/install_and_update.functions.php:103
-#: wpsc-includes/install_and_update.functions.php:107
-#: wpsc-includes/install_and_update.functions.php:109
-msgid "Cart Location"
-msgstr ""
-
-#: install_and_update.php:114
-#: wpsc-admin/includes/display-items-functions.php:220
-#: wpsc-admin/includes/display-items-functions.php:259
-#: wpsc-admin/includes/settings-pages/general.php:119
-#: wpsc-includes/install_and_update.functions.php:114
-msgid "Currency type"
-msgstr ""
-
-#: install_and_update.php:115
-#: wpsc-admin/includes/settings-pages/general.php:143
-#: wpsc-includes/install_and_update.functions.php:115
-msgid "Currency sign location"
-msgstr ""
-
-#: install_and_update.php:117
-#: wpsc-includes/install_and_update.functions.php:117
-msgid "the GST rate"
-msgstr ""
-
-#: install_and_update.php:119
-#: wpsc-includes/install_and_update.functions.php:119
-msgid "the download limit"
-msgstr ""
-
-#: install_and_update.php:121
-#: wpsc-includes/install_and_update.functions.php:121
-msgid "Display or hide postage and packaging"
-msgstr ""
-
-#: install_and_update.php:123
-#: wpsc-includes/install_and_update.functions.php:123
-msgid "Display or hide specials on the sidebar"
-msgstr ""
-
-#: install_and_update.php:126
-#: wpsc-includes/install_and_update.functions.php:126
-msgid "Default postage and packaging"
-msgstr ""
-
-#: install_and_update.php:128
-#: wpsc-includes/install_and_update.functions.php:128
-msgid "Email address that purchase log is sent to"
-msgstr ""
-
-#: install_and_update.php:129
-#: wpsc-includes/install_and_update.functions.php:129
-msgid "Email address that purchase reports are sent from"
-msgstr ""
-
-#: install_and_update.php:130
-#: wpsc-includes/install_and_update.functions.php:130
-msgid "Checkout terms and conditions"
-msgstr ""
-
-#: install_and_update.php:132
-#: wpsc-includes/install_and_update.functions.php:132
-msgid "Google Merchant Key"
-msgstr ""
-
-#: install_and_update.php:133
-#: wpsc-includes/install_and_update.functions.php:133
-msgid "Google Merchant ID"
-msgstr ""
-
-#: install_and_update.php:135
-#: wpsc-includes/install_and_update.functions.php:135
-msgid "Default Brand"
-msgstr ""
-
-#: install_and_update.php:136
-#: wpsc-includes/install_and_update.functions.php:136
-msgid "Select what product group you want to display on the products page"
-msgstr ""
-
-#: install_and_update.php:149 install_and_update.php:155
-#: wpsc-includes/install_and_update.functions.php:149
-#: wpsc-includes/install_and_update.functions.php:155
-msgid "paypal business"
-msgstr ""
-
-#: install_and_update.php:150 install_and_update.php:151
-#: install_and_update.php:158
-#: wpsc-includes/install_and_update.functions.php:150
-#: wpsc-includes/install_and_update.functions.php:151
-#: wpsc-includes/install_and_update.functions.php:158
-msgid "paypal url"
-msgstr ""
-
-#: install_and_update.php:162
-#: wpsc-admin/includes/settings-pages/presentation.php:122
-#: wpsc-includes/install_and_update.functions.php:162
-msgid "Show Product Ratings"
-msgstr ""
-
-#: install_and_update.php:163 updates/updating_tasks.php:653
-#: updates/updating_tasks.php:660
-#: wpsc-includes/install_and_update.functions.php:163
-msgid ""
-"Thank you for purchasing with %shop_name%, any items to be shipped will be "
-"processed as soon as possible, any items that can be downloaded can be "
-"downloaded using the links on this page.All prices include tax and postage "
-"and packaging where applicable.You ordered these items:%product_list%%"
-"total_shipping%%total_price%"
-msgstr ""
-
-#: install_and_update.php:164 updates/updating_tasks.php:654
-#: updates/updating_tasks.php:667
-#: wpsc-includes/install_and_update.functions.php:164
-msgid "%product_list%%total_shipping%%total_price%"
-msgstr ""
-
-#: install_and_update.php:207
-#: wpsc-includes/install_and_update.functions.php:207
-msgid "Products Page"
-msgstr ""
-
-#: install_and_update.php:213 wpsc-admin/display-options-settings.page.php:105
-#: wpsc-includes/install_and_update.functions.php:213
-msgid "Checkout"
-msgstr ""
-
-#: install_and_update.php:225
-#: wpsc-includes/install_and_update.functions.php:225
-msgid "Transaction Results"
-msgstr ""
-
-#: install_and_update.php:231
-#: wpsc-includes/install_and_update.functions.php:231
-msgid "Your Account"
-msgstr ""
-
-#: install_and_update.php:649
-#: wpsc-includes/install_and_update.functions.php:649
-msgid "1. Your billing/contact details"
-msgstr ""
-
-#: install_and_update.php:652 install_and_update.php:660 user-log.php:360
-#: wpsc-includes/install_and_update.functions.php:652
-#: wpsc-includes/install_and_update.functions.php:660
-msgid "Address"
-msgstr ""
-
-#: install_and_update.php:655 install_and_update.php:664
-#: wpsc-includes/install_and_update.functions.php:655
-#: wpsc-includes/install_and_update.functions.php:664
-msgid "Postal Code"
-msgstr ""
-
-#: install_and_update.php:657
-#: wpsc-includes/install_and_update.functions.php:657
-msgid "2. Shipping details"
-msgstr ""
-
-#: install_and_update.php:662
-#: wpsc-includes/install_and_update.functions.php:662
-msgid "State"
 msgstr ""
 
 #: js/tinymce3/window.php:36 js/tinymce3/window.php:118
@@ -1555,7 +1307,7 @@ msgstr ""
 #: themes/default/shopping_cart_page.php:130
 #: themes/iShop/shopping_cart_page.php:115
 #: themes/marketplace/shopping_cart_page.php:114
-#: wpsc-includes/ajax.functions.php:394
+#: wpsc-includes/ajax.functions.php:405
 msgid "- Choose a Shipping Rate"
 msgstr ""
 
@@ -1730,6 +1482,21 @@ msgstr ""
 msgid "Your Order from %shop_name% has been dispatched"
 msgstr ""
 
+#: updates/updating_tasks.php:653 updates/updating_tasks.php:660
+#: wpsc-includes/install_and_update.functions.php:163
+msgid ""
+"Thank you for purchasing with %shop_name%, any items to be shipped will be "
+"processed as soon as possible, any items that can be downloaded can be "
+"downloaded using the links on this page.All prices include tax and postage "
+"and packaging where applicable.You ordered these items:%product_list%%"
+"total_shipping%%total_price%"
+msgstr ""
+
+#: updates/updating_tasks.php:654 updates/updating_tasks.php:667
+#: wpsc-includes/install_and_update.functions.php:164
+msgid "%product_list%%total_shipping%%total_price%"
+msgstr ""
+
 #: user-downloads.php:41
 msgid "File Names"
 msgstr ""
@@ -1779,6 +1546,11 @@ msgstr ""
 msgid "Final Total"
 msgstr ""
 
+#: user-log.php:360 wpsc-includes/install_and_update.functions.php:652
+#: wpsc-includes/install_and_update.functions.php:660
+msgid "Address"
+msgstr ""
+
 #: user-log.php:384
 msgid "Purchase No."
 msgstr ""
@@ -1806,7 +1578,7 @@ msgid "Admin Menu"
 msgstr ""
 
 #: widgets/category_widget.27.php:19 wpsc-admin/admin.php:104
-#: wpsc-admin/display-groups.page.php:566
+#: wpsc-admin/display-groups.page.php:565
 #: wpsc-admin/includes/display-items-functions.php:404
 #: wpsc-includes/category.functions.php:361
 msgid "Categories"
@@ -1878,8 +1650,16 @@ msgstr ""
 msgid "Show Description:"
 msgstr ""
 
-#: wp-shopping-cart.php:152
+#: wp-shopping-cart.php:150
 msgid "Note: if this is blank, the image will not be resized"
+msgstr ""
+
+#: wp-shopping-cart.php:151 wpsc-includes/install_and_update.functions.php:68
+msgid "Order Received"
+msgstr ""
+
+#: wp-shopping-cart.php:153 wpsc-includes/install_and_update.functions.php:71
+msgid "Closed Order"
 msgstr ""
 
 #: wp-shopping-cart.php:526
@@ -2072,96 +1852,96 @@ msgstr ""
 msgid "The item has not been added"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:470
+#: wpsc-admin/display-groups.page.php:469
 msgid "The product group has been edited."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:475
+#: wpsc-admin/display-groups.page.php:474
 msgid "The group has been added."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:487
+#: wpsc-admin/display-groups.page.php:486
 msgid "The group has been edited."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:543
+#: wpsc-admin/display-groups.page.php:542
 msgid ""
 "Are you sure you want to delete this category? If the category has any "
 "subcategories, they will be deleted too."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:551
+#: wpsc-admin/display-groups.page.php:550
 msgid ""
 "Are you sure you want to delete this product group? All categories it "
 "contains will be deleted too."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:574
+#: wpsc-admin/display-groups.page.php:573
 msgid ""
 "Categorizing your products into groups help your customers find them. For "
 "instance if you sell hats and trousers you  might want to setup a Group "
 "called clothes and add hats and trousers to that group."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:589
+#: wpsc-admin/display-groups.page.php:588
 msgid "Select a Group to Manage"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:607
+#: wpsc-admin/display-groups.page.php:606
 msgid "or"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:609
-#: wpsc-admin/display-groups.page.php:626
+#: wpsc-admin/display-groups.page.php:608
+#: wpsc-admin/display-groups.page.php:625
 msgid "Add New Group"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:650
+#: wpsc-admin/display-groups.page.php:649
 msgid "Edit Group"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:685
+#: wpsc-admin/display-groups.page.php:684
 msgid "&quot;[categorisation]&quot; Group"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:695
+#: wpsc-admin/display-groups.page.php:694
 msgid "Image"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:718
+#: wpsc-admin/display-groups.page.php:717
 msgid "You are editing the &quot;[categorisation]&quot; Group"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:739
-#: wpsc-admin/display-groups.page.php:743
+#: wpsc-admin/display-groups.page.php:738
+#: wpsc-admin/display-groups.page.php:742
 msgid "You are editing an item in the &quot;[categorisation]&quot; Group"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:742
+#: wpsc-admin/display-groups.page.php:741
 msgid "Edit Details"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:758
-#: wpsc-admin/display-groups.page.php:921
+#: wpsc-admin/display-groups.page.php:757
+#: wpsc-admin/display-groups.page.php:920
 msgid "Add Category"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:761
+#: wpsc-admin/display-groups.page.php:760
 msgid ""
 "Adding a new category here will make it available when you add or edit a "
 "product."
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:767
-#: wpsc-admin/display-groups.page.php:770
+#: wpsc-admin/display-groups.page.php:766
+#: wpsc-admin/display-groups.page.php:769
 msgid "You are adding a new item to the &quot;[categorisation]&quot; Group"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:792
+#: wpsc-admin/display-groups.page.php:791
 msgid "Group Parent"
 msgstr ""
 
-#: wpsc-admin/display-groups.page.php:800
+#: wpsc-admin/display-groups.page.php:799
 msgid "Group&nbsp;Image"
 msgstr ""
 
@@ -2297,6 +2077,11 @@ msgstr ""
 
 #: wpsc-admin/display-options-settings.page.php:104
 msgid "Import"
+msgstr ""
+
+#: wpsc-admin/display-options-settings.page.php:105
+#: wpsc-includes/install_and_update.functions.php:213
+msgid "Checkout"
 msgstr ""
 
 #: wpsc-admin/display-options-settings.page.php:176
@@ -2720,6 +2505,13 @@ msgstr ""
 msgid "New Currency"
 msgstr ""
 
+#: wpsc-admin/includes/display-items-functions.php:220
+#: wpsc-admin/includes/display-items-functions.php:259
+#: wpsc-admin/includes/settings-pages/general.php:119
+#: wpsc-includes/install_and_update.functions.php:114
+msgid "Currency type"
+msgstr ""
+
 #: wpsc-admin/includes/display-items-functions.php:244
 #: wpsc-admin/includes/display-items-functions.php:283
 msgid "Delete Currency"
@@ -3125,6 +2917,16 @@ msgstr ""
 msgid "URL Settings"
 msgstr ""
 
+#: wpsc-admin/includes/settings-pages/admin.php:167
+#: wpsc-includes/install_and_update.functions.php:95
+msgid "The location of the product list"
+msgstr ""
+
+#: wpsc-admin/includes/settings-pages/admin.php:175
+#: wpsc-includes/install_and_update.functions.php:96
+msgid "The location of the shopping cart"
+msgstr ""
+
 #: wpsc-admin/includes/settings-pages/admin.php:193
 msgid "Transaction Details URL"
 msgstr ""
@@ -3256,6 +3058,11 @@ msgstr ""
 msgid "Currency Settings"
 msgstr ""
 
+#: wpsc-admin/includes/settings-pages/general.php:143
+#: wpsc-includes/install_and_update.functions.php:115
+msgid "Currency sign location"
+msgstr ""
+
 #: wpsc-admin/includes/settings-pages/general.php:194
 msgid "Hide Decimals on Products Pages"
 msgstr ""
@@ -3298,6 +3105,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:117
 msgid "Product Settings"
+msgstr ""
+
+#: wpsc-admin/includes/settings-pages/presentation.php:122
+#: wpsc-includes/install_and_update.functions.php:162
+msgid "Show Product Ratings"
 msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:146
@@ -3471,6 +3283,14 @@ msgstr ""
 msgid "Shopping Cart Settings"
 msgstr ""
 
+#: wpsc-admin/includes/settings-pages/presentation.php:620
+#: wpsc-includes/install_and_update.functions.php:101
+#: wpsc-includes/install_and_update.functions.php:103
+#: wpsc-includes/install_and_update.functions.php:107
+#: wpsc-includes/install_and_update.functions.php:109
+msgid "Cart Location"
+msgstr ""
+
 #: wpsc-admin/includes/settings-pages/presentation.php:649
 #: wpsc-admin/includes/settings-pages/presentation.php:653
 msgid "Sidebar"
@@ -3560,6 +3380,11 @@ msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:881
 msgid "Single Product Image Size"
+msgstr ""
+
+#: wpsc-admin/includes/settings-pages/presentation.php:892
+#: wpsc-includes/install_and_update.functions.php:87
+msgid "Show Thumbnails"
 msgstr ""
 
 #: wpsc-admin/includes/settings-pages/presentation.php:918
@@ -3681,45 +3506,45 @@ msgid ""
 "server, you may need to contact your web hosting provider to get it set up. "
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:93
+#: wpsc-includes/ajax.functions.php:104
 msgid "You just added \"[product_name]\" to your cart."
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:96
+#: wpsc-includes/ajax.functions.php:107
 msgid "Sorry, but you cannot add zero items to your cart"
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:98
+#: wpsc-includes/ajax.functions.php:109
 msgid "Sorry, but there are only [number] of this item in stock."
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:100
+#: wpsc-includes/ajax.functions.php:111
 msgid "Sorry, but the item \"[product_name]\" is out of stock."
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:582
+#: wpsc-includes/ajax.functions.php:593
 msgid ""
 "You must select a shipping method, otherwise we cannot process your order."
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:587
+#: wpsc-includes/ajax.functions.php:598
 msgid ""
 "Please agree to the terms and conditions, otherwise we cannot process your "
 "order."
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:607
+#: wpsc-includes/ajax.functions.php:618
 #, php-format
 msgid ""
 "Oops the product : %s cannot be shipped to %s. To continue with your "
 "transaction please remove this product from the list above."
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:630
+#: wpsc-includes/ajax.functions.php:641
 msgid "Please enter a Zipcode and click calculate to proceed"
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:969 wpsc-includes/ajax.functions.php:1028
+#: wpsc-includes/ajax.functions.php:980 wpsc-includes/ajax.functions.php:1039
 msgid ""
 "This download is no longer valid, Please contact the site administrator for "
 "more information."
@@ -3782,6 +3607,143 @@ msgstr ""
 
 #: wpsc-includes/form-display.functions.php:187
 msgid "No Product"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:60
+msgid "Example category"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:60
+#: wpsc-includes/install_and_update.functions.php:61
+msgid "Example details"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:61
+msgid "Example Brand"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:69
+msgid "Accepted Payment"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:70
+msgid "Job Dispatched"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:89
+msgid "product image width"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:90
+msgid "product image height"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:92
+msgid "product group image width"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:93
+msgid "product group image height"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:97
+msgid "The location of the checkout page"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:98
+msgid "The location of the transaction detail page"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:99
+msgid "The payment gateway to use"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:117
+msgid "the GST rate"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:119
+msgid "the download limit"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:121
+msgid "Display or hide postage and packaging"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:123
+msgid "Display or hide specials on the sidebar"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:126
+msgid "Default postage and packaging"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:128
+msgid "Email address that purchase log is sent to"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:129
+msgid "Email address that purchase reports are sent from"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:130
+msgid "Checkout terms and conditions"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:132
+msgid "Google Merchant Key"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:133
+msgid "Google Merchant ID"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:135
+msgid "Default Brand"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:136
+msgid "Select what product group you want to display on the products page"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:149
+#: wpsc-includes/install_and_update.functions.php:155
+msgid "paypal business"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:150
+#: wpsc-includes/install_and_update.functions.php:151
+#: wpsc-includes/install_and_update.functions.php:158
+msgid "paypal url"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:207
+msgid "Products Page"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:225
+msgid "Transaction Results"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:231
+msgid "Your Account"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:649
+msgid "1. Your billing/contact details"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:655
+#: wpsc-includes/install_and_update.functions.php:664
+msgid "Postal Code"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:657
+msgid "2. Shipping details"
+msgstr ""
+
+#: wpsc-includes/install_and_update.functions.php:662
+msgid "State"
 msgstr ""
 
 #: wpsc-includes/misc.functions.php:46
