@@ -36,6 +36,13 @@ If you experience database errors try de-activating and re-activating your plugi
 
 
 == Changelog == 
+
+= 3.7.6.4 =
+* Show Product Shipping and Base Shipping Costs on Packing Slip
+* Fix product permalinks that went astray in last upgrade
+* Fixed an issue with the currency converter
+* Removed unused install_and_update file from plugin folder
+
 = 3.7.6.3 =
 * Bugfix release
 * Reset categoryAndShippingCountryConflist SESSION after each page load

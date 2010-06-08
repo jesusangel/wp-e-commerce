@@ -5,9 +5,12 @@
  * Since 3.7.6rc2
  *
  */
+
+//// This language file is no longer used, but it is still included for
+//// users that have old (non gettext) WPEC themes
  if(!wpsc_check_theme_versions()){
 
-//	include_once(WPSC_FILE_PATH.'/languages/EN_en.php');
+	include_once(WPSC_FILE_PATH.'/languages/EN_en.php');
  }
 
 
