@@ -726,7 +726,7 @@ function wpsc_packing_slip($purchase_id) {
 	
 		if($cart_log != null) {
       echo "<div class='packing_slip'>\n\r";
-			echo "<h2>".__('Packing Slip', 'wpsc')."</h2>\n\r";
+			echo apply_filters( 'wpsc_packing_slip_header', '<h2>' . __( 'Packing Slip', 'wpsc' ) . "</h2>\n\r" );
 			echo "<strong>".__('Order', 'wpsc')." #</strong> ".$purchase_id."<br /><br />\n\r";
 			
 			echo "<table>\n\r";
@@ -736,7 +736,7 @@ function wpsc_packing_slip($purchase_id) {
 			$input_data = $wpdb->get_results($form_sql,ARRAY_A);
 	
 */		
-			echo "<tr><td colspan='2'><strong>Billing Info</strong></td></tr>";
+			echo "<tr class='heading'><td colspan='2'><strong>Billing Info</strong></td></tr>";
 			foreach((array)$purchlogitem->userinfo as $userinfo){
 				if($userinfo['unique_name'] != 'billingcountry'){
 					echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";
@@ -757,7 +757,7 @@ function wpsc_packing_slip($purchase_id) {
 				}
 			}
 			
-			echo "<tr><td colspan='2'><strong>Shipping Info</strong></td></tr>";
+			echo "<tr class='heading'><td colspan='2'><strong>Shipping Info</strong></td></tr>";
 			foreach((array)$purchlogitem->shippinginfo as $userinfo){
 				if($userinfo['unique_name'] != 'shippingcountry' && $userinfo['unique_name'] != 'shippingstate'){
 					echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";
