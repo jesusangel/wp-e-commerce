@@ -1055,6 +1055,10 @@ function wpsc_swfupload_images() {
 
 
 function wpsc_display_invoice() {
+
+	global $body_id;
+	
+	$body_id = 'wpsc-packing-slip';
   $purchase_id = (int)$_GET['purchaselog_id'];
   include_once(WPSC_FILE_PATH."/admin-form-functions.php");
   // echo "testing";

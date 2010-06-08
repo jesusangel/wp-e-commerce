@@ -410,7 +410,7 @@ function wpsc_packing_slip($purchase_id) {
 	
 		if($cart_log != null) {
 			echo "<div class='packing_slip'>\n\r";
-			echo "<h2>".__('Packing Slip', 'wpsc')."</h2>\n\r";
+			echo apply_filters( 'wpsc_packing_slip_header', '<h2>' . __( 'Packing Slip', 'wpsc' ) . "</h2>\n\r" );
 			echo "<strong>".__('Order', 'wpsc')." #</strong> ".$purchase_id."<br /><br />\n\r";
 			
 			echo "<table>\n\r";
@@ -443,7 +443,7 @@ function wpsc_packing_slip($purchase_id) {
 						break;
 								
 						case 'heading':
-						echo "	<tr><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
+						echo "	<tr class='heading'><td colspan='2'><strong>".wp_kses($form_field['name'], array()).":</strong></td></tr>\n\r";
 						break;
 						
 						default:
