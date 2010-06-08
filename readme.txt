@@ -4,7 +4,7 @@ Donate link: http://getshopped.org/
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
 Tested up to: 2.9
-Stable tag: 3.7.6.3
+Stable tag: 3.7.6.4
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -39,9 +39,11 @@ If you experience database errors try de-activating and re-activating your plugi
 
 = 3.7.6.4 =
 * Show Product Shipping and Base Shipping Costs on Packing Slip
-* Fix product permalinks that went astray in last upgrade
+* Fix product and category permalinks problems that occurred in v3.7.6.3. Note: any 3.7.6.3 users that have edited products and/or categories, they will need to re-edit them after upgrading.
 * Fixed an issue with the currency converter
+* Renamed (removed the space in the filename) and updated the POT file for translators (wpsc-en_EN.pot)
 * Removed unused install_and_update file from plugin folder
+* Fixed some PHP warnings / notices
 
 = 3.7.6.3 =
 * Bugfix release
@@ -144,6 +146,10 @@ If you experience database errors try de-activating and re-activating your plugi
 * Changes to shipping to fix the bugs from 3.7.3 with shipping and the new shipping_discount feature
 * Fixes for variations under grid view
 
+== Upgrade Notice ==
+
+= 3.7.6.4 =
+Fixes product/category permalink problems introduced in v3.7.6.3. All users that upgraded to 3.7.6.3 are encouraged to upgrade as soon as possible.
 
 == Frequently Asked Questions ==
 
