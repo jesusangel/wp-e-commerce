@@ -327,7 +327,8 @@ function wpsc_bulk_modify_products() {
 		
 		default:
 			if(isset($_GET['search']) && !empty($_GET['search'])) {
-				$sendback = add_query_arg('search',$_GET['search'], $sendback);
+				// urlencode the search query to allow for spaces, etc
+				$sendback = add_query_arg('search',urlencode(stripslashes($_GET['search'])), $sendback);
 			}
 		break;
 	}

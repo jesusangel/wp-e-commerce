@@ -264,16 +264,16 @@ function wpsc_admin_products_list($category_id = 0) {
 		$num_pages = ceil($num_products/$itempp);
 	}
 	
+	$search_input = '';
 	if($_GET['search']) {
-		$search_string_title = "%".$wpdb->escape(stripslashes($_GET['search']))."%";
-		$search_string_description = "% ".$wpdb->escape(stripslashes($_GET['search']))."%";
+		$search_input = stripslashes($_GET['search']);
+
+		$search_string = "%".$wpdb->escape($search_input)."%";
 		
-		$search_sql = "AND (`products`.`name` LIKE '".$search_string_title."' OR `products`.`description` LIKE '".$search_string_description."')";
-		
-		$search_string = $_GET['search'];
+		$search_sql = "AND (`products`.`name` LIKE '".$search_string."' OR `products`.`description` LIKE '".$search_string."')";
+
 	} else {
 		$search_sql = '';
-		$search_string = '';
 	}
 
 	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
@@ -401,7 +401,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		</div>	
 			<div class="alignright search-box">
 				<input type='hidden' name='page' value='wpsc-edit-products'  />
-				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $_GET['search']; ?>" />
+				<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $search_input; ?>" />
 				<input type="submit" name='wpsc_search' value="<?php _e( 'Search Products' ); ?>" class="button" />
 			</div>
 		</div>
