@@ -781,7 +781,7 @@ if($_REQUEST['wpsc_action'] == 'gateway_notification') {
 }
 
 if(isset($_GET['termsandconds']) && $_GET['termsandconds'] === 'true'){
-	echo stripslashes(nl2br(get_option('terms_and_conditions')));
+	echo stripslashes(get_option('terms_and_conditions'));
 	exit();
 
 }
