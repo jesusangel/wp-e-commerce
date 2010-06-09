@@ -104,7 +104,7 @@ $image_height = get_option('product_image_height');
 					<div class="grid_product_info">
 						<div class="product_text">
 
-							<div id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_the_product_price(true); ?></div> 
+							<div id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_the_product_price(get_option('wpsc_hide_decimals')); ?></div> 
 							<strong><?php echo wpsc_the_product_title(); ?></strong>
 							
 							<?php if(get_option('display_moredetails') == 1) : ?>

@@ -104,7 +104,7 @@ global $wpsc_query, $wpdb;
 					</td>
 					
 					<td width="10%">
-						<span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span>
+						<span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(get_option('wpsc_hide_decimals')); ?></span>
 					</td>
 					
 					<td width="20%">
