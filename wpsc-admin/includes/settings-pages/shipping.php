@@ -174,7 +174,7 @@ function selectgateway() {
 				<?php if (IS_WP27) { ?>
 					</div>
 					</div>
-					<?php do_action('end-wpec-settings-shipping-general'); //1bigidea ?>
+					<?php do_action('wpsc_settings_shipping_general_end'); //1bigidea ?>
 				<?php }	?>
 		<table id='gateway_options' >
 			<tr>

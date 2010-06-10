@@ -15,10 +15,7 @@
  * The WPSC Cart API for templates
  */
 
-/**
-* cart item count function, no parameters
-* * @return integer the item count
-*/
+
 /**
 * tax is included function, no parameters
 * * @return boolean true or false depending on settings>general page
@@ -31,6 +28,10 @@ function wpsc_tax_isincluded() {
 	}
 }
 
+/**
+* cart item count function, no parameters
+* * @return integer the item count
+*/
 function wpsc_cart_item_count() {
 	global $wpsc_cart;
 	$count = 0;
@@ -1049,7 +1050,7 @@ class wpsc_cart {
 		$this->clear_cache();
 		$this->cleanup();
 		
-		do_action('wpsc-empty-cart', &$this);
+		do_action('wpsc_empty_cart', &$this);
   }
   
   
