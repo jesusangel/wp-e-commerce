@@ -2139,6 +2139,11 @@ function wpsc_settings_page_ajax(){
 		wpsc_options_presentation();
 		break;
 
+		case "taxes":
+		require_once('includes/settings-pages/taxes.php');
+		wpsc_options_taxes();	
+		break;
+
 		case "import";
 		require_once('includes/settings-pages/import.php');
 		wpsc_options_import();

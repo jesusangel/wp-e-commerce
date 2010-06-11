@@ -18,6 +18,7 @@ if(isset($_GET['tab'])){
 }else{
 	$page = 'general';
 }
+
 if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		include(WPSC_FILE_PATH.'/tax_and_shipping.php');
 		return;
@@ -45,14 +46,17 @@ switch($page) {
 	require_once('includes/settings-pages/checkout.php');
 	wpsc_options_checkout();
 	break;
+	
 	case "gateway";
 	require_once('includes/settings-pages/gateway.php');
 	wpsc_options_gateway();
 	break;
+	
 	case "shipping";
 	require_once('includes/settings-pages/shipping.php');
 	wpsc_options_shipping();
 	break;
+	
 	case "admin";
 	require_once('includes/settings-pages/admin.php');
 	wpsc_options_admin();
@@ -61,6 +65,11 @@ switch($page) {
 	case "presentation";
 	require_once('includes/settings-pages/presentation.php');
 	wpsc_options_presentation();
+	break;
+	
+	case "taxes":
+	require_once('includes/settings-pages/taxes.php');
+	wpsc_options_taxes();	
 	break;
 	
 	case "import";
@@ -92,10 +101,11 @@ function wpsc_settings_tabs() {
 		'general' => __('General', 'wpsc'), // handler action suffix => tab text
 		'presentation' => __('Presentation', 'wpsc'),
 		'admin' => __('Admin', 'wpsc'),
+		'taxes' => __('Taxes','wpsc'),
 		'shipping' => __('Shipping', 'wpsc'),
-		'gateway' => __('Payment Options', 'wpsc'),
-		'import' => __('Import', 'wpsc'),
-		'checkout' => __('Checkout', 'wpsc')
+		'gateway' => __('Payments', 'wpsc'),
+		'checkout' => __('Checkout', 'wpsc'),
+		'import' => __('Import', 'wpsc')
 	);
 
 	return apply_filters('wpsc_settings_tabs', $_default_tabs);

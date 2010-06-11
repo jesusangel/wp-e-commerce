@@ -52,7 +52,7 @@ function selectgateway() {
 				$custom_gateway2 = 'checked="checked"';
 			}
 		?>
-		  <h2><?php echo __('Gateway Options', 'wpsc');?></h2>
+		  <h2><?php echo __('Payment Options', 'wpsc');?></h2>
   		<?php 
 		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 		wpsc_settings_page_update_notification(); ?>
