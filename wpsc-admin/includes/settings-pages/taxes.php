@@ -21,6 +21,23 @@ global $wpdb;
 		</label>
 
 	</p>
+	<p>
+
+		<label for='wpsc_tax_inprice1'>
+			<input type="radio" value='1' checked='checked' id='wpsc_tax_inprice1' name='wpsc_options[tax_inprice]' />
+			Product prices are tax exclusive - add tax to the price during checkout
+		</label>
+
+	</p>
+	<p>
+
+		<label for='wpsc_tax_inprice2'>
+			<input type="radio" value='0' checked='checked' id='wpsc_tax_inprice2' name='wpsc_options[tax_inprice]' />
+			Product prices are tax inclusive - during checkout the total price doesn't increase but tax is shown as a line item
+		</label>
+
+	</p>	
+	
 	<h4>Product Specific Tax</h4>
 	<p>
 		<label for='wpsc_tax_product_1'>
@@ -80,7 +97,7 @@ global $wpdb;
 	<a href=''>Delete</a>
 	</p>
 	<p>
-		<a href=''>Add new Tax Rate</a>
+		<a href=''>Add New Tax Rate</a>
 	</p>
 	<p>
 		<input type='submit' class='button-primary' value='Save Changes' name='submit_tax' />
