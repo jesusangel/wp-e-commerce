@@ -981,7 +981,6 @@ function nzshpcrt_download_file() {
 				exit(_e('This download is no longer valid, Please contact the site administrator for more information.','wpsc'));
 		  }
 		}
-   
     if($download_data != null) {
 			if($download_data['fileid'] > 0) {
 				$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='".$download_data['fileid']."' LIMIT 1", ARRAY_A);
