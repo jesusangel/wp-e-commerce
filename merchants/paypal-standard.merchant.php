@@ -183,10 +183,13 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 					++$i;
 				}
 			}
-			
-		// Payment Type settings to be sent to paypal
-
 		
+		//set base shipping
+		$paypal_vars += array(
+			"handling_cart" => $this->cart_data['base_shipping']
+		);		
+		
+		// Payment Type settings to be sent to paypal
 		if($this->cart_data['is_subscription'] == true) {
 			$paypal_vars += array(
 				'cmd'=> '_xclick-subscriptions'

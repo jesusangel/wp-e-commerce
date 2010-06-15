@@ -151,6 +151,7 @@ class wpsc_merchant {
 			'transaction_results_url' => get_option('transact_url'),
 			'shopping_cart_url' => get_option('shopping_cart_url'),
 			'products_page_url' => get_option('product_list_url'),
+			'base_shipping' => $purchase_logs['base_shipping'],
 			'total_price' => $purchase_logs['totalprice'],
 			'session_id' => $purchase_logs['sessionid'],
  			'transaction_id' => $purchase_logs['transaction_id'], // Transaction ID might not  be set yet
@@ -169,7 +170,6 @@ class wpsc_merchant {
 		global $wpdb;
 		$purchase_id = & $this->purchase_id;
 		$original_cart_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid` = {$purchase_id}", ARRAY_A);
-		//print_r($original_cart_data);
 		//return;
 		foreach((array)$original_cart_data as $cart_row) {
 		  $is_downloadable = false;

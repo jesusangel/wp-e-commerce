@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name:WP Shopping Cart
+Plugin Name: WP e-Commerce Plugin
 Plugin URI: http://www.getshopped.org
 Description: A plugin that provides a WordPress Shopping Cart. Visit the <a href='http://getshopped.org/forums'>getshopped forums</a> for support.
 Version: 3.7.6.5
