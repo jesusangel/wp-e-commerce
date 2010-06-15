@@ -104,14 +104,22 @@ function wpsc_display_upgrades_page() {
 
 				
 				<h2><?php echo __("Upgrade Instructions", 'wpsc');?></h2>
+				<h4><?php _e(''); ?></h4>
 				<p>
-					<?php printf(__("Copy the gold_cart_files directory into the %s folder.", 'wpsc'),  WPSC_UPGRADES_DIR ); ?>
+					<?php printf(__("If your gold cart files are called 'gold_cart_files': Copy the gold_cart_files directory into the %s folder.", 'wpsc'),  WPSC_UPGRADES_DIR ); ?>
 				</p>
 				<p>
 					<?php _e("This folder should be automatically created when the e-commerce plugin is activated, but if it is not, you will have to create it yourself.", 'wpsc'); ?>
 				</p>
 				<p>
-					<?php _e("Now a new panel should appear in the Upgrades page where you must enter your API Username and API Key. ", 'wpsc'); ?>
+					<?php printf(__("Otherwise If your gold cart files are called 'gold_cart_files_plugin': Copy the gold_cart_files_plugin directory into the %s folder.", 'wpsc'),  WP_PLUGIN_DIR ); ?>
+				</p>
+				<p>
+					<?php _e('You can find more information on installing Gold Cart in your readme.txt inside the gold cart folder. ');?>
+				</p>
+
+				<p>
+					<?php _e("Once you have done the above a new panel should appear on the Upgrades page where you must enter your API Username and API Key. ", 'wpsc'); ?>
 				</p>
 
 				<p>

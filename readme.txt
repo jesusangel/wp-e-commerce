@@ -37,6 +37,19 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
+= 3.7.6.5 =
+* Fix Problem with Deprecated Theme files showing WPSC_TXT instead of their proper values.
+* Fixed Integration with Gold Cart Plugin so Payment Gateways Show up on the Gateway Options page
+* Added new nn_NO Translation Files
+* Removed debug page from Paypal Standard 2.0
+* Renamed Rogue Filters to align with Wp-e-Commerce Naming Conventions
+* Fix admin product search so it works with multiple words.
+* New Filters added to packing slip to allow better customization
+* Changed working on Upgrades page to acknowledge Gold Cart Plugin difference
+* :NOTE: For the theme file changes to take effect you will need to use the theme files from the wp-e-commerce directory, or replace the theme files in your uploads/wpsc/themes directory with the wp-e-commerce/themes folder
+* Theme File Changes : Fixed Terms and Conditions over SSL
+* Theme File Changes : Fixed Grid and List View to use hide_decimals options (so you can show/hide decimals on products-page)
+
 = 3.7.6.4 =
 * Show Product Shipping and Base Shipping Costs on Packing Slip
 * Fix product and category permalinks problems that occurred in v3.7.6.3. Note: any 3.7.6.3 users that have edited products and/or categories, they will need to re-edit them after upgrading.
@@ -147,6 +160,10 @@ If you experience database errors try de-activating and re-activating your plugi
 * Fixes for variations under grid view
 
 == Upgrade Notice ==
+
+= 3.7.6.5 =
+Fixes issue with deprecated WPSC_TXT constants being undefined and displaying in front end of site. All users encountering this issue are advised to upgrade. 
+Also Fixed the gateway issue where DPS or Authorize do not show up on the Payments Option Page even after activating Gold Cart.
 
 = 3.7.6.4 =
 Fixes product/category permalink problems introduced in v3.7.6.3. All users that upgraded to 3.7.6.3 are encouraged to upgrade as soon as possible.
