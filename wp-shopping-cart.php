@@ -275,7 +275,7 @@ define('WPSC_THEMES_URL', $wpsc_themes_url);
  */
 $gateway_directory = WPSC_FILE_PATH.'/merchants';
 $nzshpcrt_merchant_list = wpsc_list_dir($gateway_directory);
- //exit("<pre>".print_r($nzshpcrt_merchant_list,true)."</pre>");
+
 $num=0;
 foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
   if(stristr( $nzshpcrt_merchant , '.php' )) {
@@ -284,6 +284,8 @@ foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
 	}
   $num++;
 }
+
+$nzshpcrt_gateways = apply_filters('wpsc_gateway_modules',$nzshpcrt_gateways);
 /* 
  * and ends here
  */
@@ -321,7 +323,6 @@ $wpsc_gateways = array();
 foreach((array)$nzshpcrt_gateways as $key => $gateway) {
 	$wpsc_gateways[$gateway['internalname']] = &$nzshpcrt_gateways[$key];
 }
-
 
 $theme_path = WPSC_FILE_PATH . '/themes/';
 if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
