@@ -221,7 +221,7 @@ INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (219, 'Turkey', 'TR', 'Turkish
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (220, 'Turkmenistan', 'TM', 'Manat', '', '', 'TMM', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (221, 'Turks and Caicos Islands', 'TC', 'US Dollar', '$', '&#036;', 'USD', '0', '0', 'northamerica','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (222, 'Tuvalu', 'TV', 'Australian Dollar', '$', '&#036;', 'AUD', '0', '0','asiapacific','1');
-INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (223, 'U.K.', 'UK', 'Pound Sterling', '£', '&#163;', 'GBP', '0', '15','europe','1');
+INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (223, 'U.K.', 'UK', 'Pound Sterling', '£', '&#163;', 'GBP', '0', '17.5','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (224, 'Uganda', 'UG', 'Uganda Shilling', '', '', 'UGS', '0', '0','africa','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (225, 'Ukraine', 'UA', 'Ukraine Hryvnia', '', '', 'UAG', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (226, 'United Arab Emirates', 'AE', 'Arab Emirates Dirham', '', '', 'AED', '0', '0','asiapacific','1');
