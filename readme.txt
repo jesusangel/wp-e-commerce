@@ -41,6 +41,8 @@ If you experience database errors try de-activating and re-activating your plugi
 * Fix Problem with Deprecated Theme files showing WPSC_TXT instead of their proper values.
 * Fixed Integration with Gold Cart Plugin so Payment Gateways Show up on the Gateway Options page
 * Added new nn_NO Translation Files
+* Changed initial tax rate for UK to 17.5
+* Fixed doubling Paypal Standard shipping bug
 * Removed debug page from Paypal Standard 2.0
 * Renamed Rogue Filters to align with Wp-e-Commerce Naming Conventions
 * Fix admin product search so it works with multiple words.

@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the  package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
+#: wpsc-admin/display-upgrades.page.php:107
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-e-commerce\n"
-"POT-Creation-Date: 2010-06-08 02:28+0000\n"
+"POT-Creation-Date: 2010-06-15 23:21+0000\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -249,8 +250,8 @@ msgstr ""
 #: admin-form-functions.php:262 admin-form-functions.php:300
 #: admin-form-functions.php:319 shipping/tablerate.php:44
 #: shipping/weightrate.php:35 wpsc-admin/admin.php:347
-#: wpsc-admin/ajax-and-init.php:1897 wpsc-admin/display-groups.page.php:669
-#: wpsc-admin/display-items.page.php:276 wpsc-admin/display-items.page.php:400
+#: wpsc-admin/ajax-and-init.php:1902 wpsc-admin/display-groups.page.php:669
+#: wpsc-admin/display-items.page.php:277 wpsc-admin/display-items.page.php:401
 #: wpsc-admin/display-sales-logs.php:425 wpsc-admin/display-sales-logs.php:550
 #: wpsc-admin/display-variations.page.php:178
 #: wpsc-admin/display-variations.page.php:191
@@ -291,7 +292,7 @@ msgstr ""
 #: themes/iShop/shopping_cart_page.php:163
 #: themes/marketplace/shopping_cart_page.php:161
 #: transaction_result_functions.php:207 transaction_result_functions.php:215
-#: wpsc-admin/ajax-and-init.php:1141 wpsc-admin/ajax-and-init.php:1147
+#: wpsc-admin/ajax-and-init.php:1146 wpsc-admin/ajax-and-init.php:1152
 #: wpsc-admin/display-sales-logs.php:250
 msgid "Discount"
 msgstr ""
@@ -476,7 +477,7 @@ msgstr ""
 #: themes/marketplace/cart_widget.php:40
 #: themes/marketplace/shopping_cart_page.php:16
 #: transaction_result_functions.php:176 transaction_result_functions.php:178
-#: wpsc-admin/ajax-and-init.php:1120 wpsc-admin/ajax-and-init.php:1122
+#: wpsc-admin/ajax-and-init.php:1125 wpsc-admin/ajax-and-init.php:1127
 #: wpsc-admin/display-options-settings.page.php:102
 #: wpsc-admin/display-sales-logs.php:256
 msgid "Shipping"
@@ -1163,7 +1164,7 @@ msgstr ""
 #: themes/default/cart_widget.php:63 themes/iShop/cart_widget.php:64
 #: themes/marketplace/cart_widget.php:63 transaction_result_functions.php:211
 #: transaction_result_functions.php:218 user-log.php:220
-#: wpsc-admin/ajax-and-init.php:1144 wpsc-admin/ajax-and-init.php:1150
+#: wpsc-admin/ajax-and-init.php:1149 wpsc-admin/ajax-and-init.php:1155
 #: wpsc-admin/display-sales-logs.php:261
 msgid "Total"
 msgstr ""
@@ -1313,8 +1314,8 @@ msgstr ""
 
 #: themes/default/shopping_cart_page.php:179
 #: transaction_result_functions.php:210 transaction_result_functions.php:217
-#: user-log.php:317 wpsc-admin/ajax-and-init.php:1143
-#: wpsc-admin/ajax-and-init.php:1149
+#: user-log.php:317 wpsc-admin/ajax-and-init.php:1148
+#: wpsc-admin/ajax-and-init.php:1154
 msgid "Total Shipping"
 msgstr ""
 
@@ -1431,26 +1432,26 @@ msgid "There is a new order awaiting processing:"
 msgstr ""
 
 #: transaction_result_functions.php:41 transaction_result_functions.php:257
-#: wpsc-admin/ajax-and-init.php:1184
+#: wpsc-admin/ajax-and-init.php:1189
 msgid ""
 "Thank you, your purchase is pending, you will be sent an email once the "
 "order clears."
 msgstr ""
 
 #: transaction_result_functions.php:220 transaction_result_functions.php:221
-#: wpsc-admin/ajax-and-init.php:1152 wpsc-admin/ajax-and-init.php:1153
+#: wpsc-admin/ajax-and-init.php:1157 wpsc-admin/ajax-and-init.php:1158
 msgid "Your Transaction ID"
 msgstr ""
 
-#: transaction_result_functions.php:222 wpsc-admin/ajax-and-init.php:1154
+#: transaction_result_functions.php:222 wpsc-admin/ajax-and-init.php:1159
 msgid "Transaction ID"
 msgstr ""
 
-#: transaction_result_functions.php:258 wpsc-admin/ajax-and-init.php:1185
+#: transaction_result_functions.php:258 wpsc-admin/ajax-and-init.php:1190
 msgid "Order Pending: Payment Required"
 msgstr ""
 
-#: transaction_result_functions.php:260 wpsc-admin/ajax-and-init.php:1188
+#: transaction_result_functions.php:260 wpsc-admin/ajax-and-init.php:1193
 #: wpsc-admin/includes/settings-pages/admin.php:128
 msgid "Purchase Receipt"
 msgstr ""
@@ -1650,23 +1651,23 @@ msgstr ""
 msgid "Show Description:"
 msgstr ""
 
-#: wp-shopping-cart.php:150
+#: wp-shopping-cart.php:156
 msgid "Note: if this is blank, the image will not be resized"
 msgstr ""
 
-#: wp-shopping-cart.php:151 wpsc-includes/install_and_update.functions.php:68
+#: wp-shopping-cart.php:157 wpsc-includes/install_and_update.functions.php:68
 msgid "Order Received"
 msgstr ""
 
-#: wp-shopping-cart.php:153 wpsc-includes/install_and_update.functions.php:71
+#: wp-shopping-cart.php:159 wpsc-includes/install_and_update.functions.php:71
 msgid "Closed Order"
 msgstr ""
 
-#: wp-shopping-cart.php:526
+#: wp-shopping-cart.php:529
 msgid "Please Note"
 msgstr ""
 
-#: wp-shopping-cart.php:527
+#: wp-shopping-cart.php:530
 #, php-format
 msgid ""
 "Before upgrading you should check the <a %s>upgrade information</a> and "
@@ -1815,24 +1816,24 @@ msgid ""
 "in the Shop Settings page."
 msgstr ""
 
-#: wpsc-admin/ajax-and-init.php:766 wpsc-admin/display-variations.page.php:145
+#: wpsc-admin/ajax-and-init.php:767 wpsc-admin/display-variations.page.php:145
 msgid "Edit Variation Set"
 msgstr ""
 
-#: wpsc-admin/ajax-and-init.php:985
+#: wpsc-admin/ajax-and-init.php:990
 msgid "Your Order"
 msgstr ""
 
-#: wpsc-admin/ajax-and-init.php:1106 wpsc-admin/ajax-and-init.php:1107
+#: wpsc-admin/ajax-and-init.php:1111 wpsc-admin/ajax-and-init.php:1112
 #: wpsc-admin/includes/display-items-functions.php:1035
 msgid "Click to download"
 msgstr ""
 
-#: wpsc-admin/ajax-and-init.php:1232
+#: wpsc-admin/ajax-and-init.php:1237
 msgid "The administrator has unlocked your file"
 msgstr ""
 
-#: wpsc-admin/ajax-and-init.php:1232
+#: wpsc-admin/ajax-and-init.php:1237
 msgid ""
 "Dear CustomerWe are pleased to advise you that your order has been updated "
 "and your downloads are now active.Please download your purchase using the "
@@ -1988,45 +1989,45 @@ msgid ""
 "  'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:231
+#: wpsc-admin/display-items.page.php:232
 msgid "&laquo;"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:232
+#: wpsc-admin/display-items.page.php:233
 msgid "&raquo;"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:270
+#: wpsc-admin/display-items.page.php:271
 msgid "Search"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:275 wpsc-admin/display-sales-logs.php:419
+#: wpsc-admin/display-items.page.php:276 wpsc-admin/display-sales-logs.php:419
 msgid "Bulk Actions"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:277 wpsc-admin/display-items.page.php:425
+#: wpsc-admin/display-items.page.php:278 wpsc-admin/display-items.page.php:426
 #: wpsc-admin/includes/display-items-functions.php:823
 msgid "Publish"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:278 wpsc-admin/display-items.page.php:365
+#: wpsc-admin/display-items.page.php:279 wpsc-admin/display-items.page.php:366
 msgid "Draft"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:282 wpsc-admin/display-sales-logs.php:428
+#: wpsc-admin/display-items.page.php:283 wpsc-admin/display-sales-logs.php:428
 msgid "Apply"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:318
+#: wpsc-admin/display-items.page.php:319
 msgid "No Name"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:396
+#: wpsc-admin/display-items.page.php:397
 #: wpsc-admin/includes/display-items-functions.php:351
 msgid "Delete this product"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:398
+#: wpsc-admin/display-items.page.php:399
 #: wpsc-admin/includes/display-items-functions.php:351
 #, php-format
 msgid ""
@@ -2034,15 +2035,15 @@ msgid ""
 " 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:423
+#: wpsc-admin/display-items.page.php:424
 msgid "Unpublish"
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:452
+#: wpsc-admin/display-items.page.php:453
 msgid "You have no products added."
 msgstr ""
 
-#: wpsc-admin/display-items.page.php:469
+#: wpsc-admin/display-items.page.php:470
 msgid "View All Categories"
 msgstr ""
 
@@ -2403,28 +2404,43 @@ msgstr ""
 msgid "Upgrade Instructions"
 msgstr ""
 
-#: wpsc-admin/display-upgrades.page.php:108
+#: wpsc-admin/display-upgrades.page.php:109
 #, php-format
-msgid "Copy the gold_cart_files directory into the %s folder."
+msgid ""
+"If your gold cart files are called 'gold_cart_files': Copy the "
+"gold_cart_files directory into the %s folder."
 msgstr ""
 
-#: wpsc-admin/display-upgrades.page.php:111
+#: wpsc-admin/display-upgrades.page.php:112
 msgid ""
 "This folder should be automatically created when the e-commerce plugin is "
 "activated, but if it is not, you will have to create it yourself."
 msgstr ""
 
-#: wpsc-admin/display-upgrades.page.php:114
+#: wpsc-admin/display-upgrades.page.php:115
+#, php-format
 msgid ""
-"Now a new panel should appear in the Upgrades page where you must enter your "
-"API Username and API Key. "
+"Otherwise If your gold cart files are called 'gold_cart_files_plugin': Copy "
+"the gold_cart_files_plugin directory into the %s folder."
 msgstr ""
 
 #: wpsc-admin/display-upgrades.page.php:118
+msgid ""
+"You can find more information on installing Gold Cart in your readme.txt "
+"inside the gold cart folder. "
+msgstr ""
+
+#: wpsc-admin/display-upgrades.page.php:122
+msgid ""
+"Once you have done the above a new panel should appear on the Upgrades page "
+"where you must enter your API Username and API Key. "
+msgstr ""
+
+#: wpsc-admin/display-upgrades.page.php:126
 msgid "For more information visit our documentation page."
 msgstr ""
 
-#: wpsc-admin/display-upgrades.page.php:162
+#: wpsc-admin/display-upgrades.page.php:170
 msgid "Your API key has been Reset"
 msgstr ""
 
@@ -3544,7 +3560,7 @@ msgstr ""
 msgid "Please enter a Zipcode and click calculate to proceed"
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:980 wpsc-includes/ajax.functions.php:1039
+#: wpsc-includes/ajax.functions.php:981 wpsc-includes/ajax.functions.php:1039
 msgid ""
 "This download is no longer valid, Please contact the site administrator for "
 "more information."
