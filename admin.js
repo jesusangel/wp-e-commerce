@@ -129,16 +129,6 @@ var getresults=function(results) {
   jQuery('#productform').css('display', 'block');
 	jQuery("#loadingindicator_span").css('visibility','hidden');
 	enablebuttons();
-	
-jQuery('#formcontent .postbox h3').click( function() {
-	jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
-		if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
-			jQuery('a.togbox',this).html('+');
-		} else {
-			jQuery('a.togbox',this).html('&ndash;');
-		}
-	  wpsc_save_postboxes_state('editproduct', '#formcontent');
-});
 
 jQuery('.meta-box-sortables').sortable( {
     placeholder: 'sortable-placeholder',
@@ -576,17 +566,6 @@ jQuery('img').Tooltip(
 );
 */
 jQuery(window).load( function () {
-
-	
-	jQuery('.additem .postbox h3').click( function() {
-		jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
-		if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
-			jQuery('a.togbox',this).html('+');
-		} else {
-			jQuery('a.togbox',this).html('&ndash;');
-		}
-	  wpsc_save_postboxes_state('products', '.additem');
-	});
 	
 	jQuery('a.closeEl').bind('click', toggleContent);
 /*

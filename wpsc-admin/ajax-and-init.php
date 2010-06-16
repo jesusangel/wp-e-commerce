@@ -766,18 +766,38 @@ function wpsc_admin_ajax() {
 	
 	
 	if ($_POST['action'] == 'product-page-order'){
-		$order = $_POST['order'];
-		if(!isset($order[0])) {
-			$order = $order['normal'];
-		} else {
-			$order = $order[0];
-		}
+		$current_order = get_option('wpsc_product_page_order');
+		$new_order = $_POST['order'];			
 		
-		$order = array_unique(explode(',', $order));
-		update_option('wpsc_product_page_order', $order);
+			if ( isset ( $new_order["advanced"] ) ) {
+				$current_order["advanced"] = array_unique(explode(',', $new_order["advanced"]));
+			}
+			if ( isset ( $new_order["side"] ) ) {
+				$current_order["side"] = array_unique(explode(',', $new_order["side"]));
+			}
+		
+		update_option('wpsc_product_page_order', $current_order);
 		exit(print_r($order,1));
 	}
+
+	function wpec_close_box(&$value,$key, $p) {
+		if ( in_array($key, $p) ) {
+			$value = 0;
+		} else {
+			$value = 1;
+		}
+}
+	if ($_POST['action'] == 'closed-postboxes') {
+		$current_order = get_option('wpsc_product_page_order');
+
+		$closed = $_POST["closed"];
+		$closed = array_unique(explode(',', $closed));
+		
+		array_walk($current_order["closedboxes"], "wpec_close_box", $closed);
 	
+		update_option('wpsc_product_page_order', $current_order);
+		print_r($current_order);
+	}
 
 	// 	if ($_POST['del_prod'] == 'true') {
 	// 		$ids = $_POST['del_prod_id'];

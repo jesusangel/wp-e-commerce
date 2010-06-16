@@ -109,8 +109,11 @@ function wpsc_admin_pages(){
 			//    add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, WPSC_DIR_NAME.'/display_variations.php');
 			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, 'wpsc-edit-variations', 'wpsc_display_variations_page');
 			
-			
-			foreach((array)get_option('wpsc_product_page_order') as $box) {
+			$box_order = get_option('wpsc_product_page_order');
+			if ( is_array ($box_order["side"]) && is_array($box_order["advanced"]) ) {
+				$box_order = array_merge($box_order["side"], $box_order["advanced"]);
+			}
+			foreach((array)$box_order as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
 			}			//exit('-->'.$help);
 			if (function_exists('add_contextual_help')) {
@@ -207,13 +210,15 @@ function  wpsc_admin_include_css_and_js() {
 	
 	
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
-	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier, true);
+	wp_enqueue_script('wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/js/admin.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $version_identifier, false);
 	
 	
 	
 	wp_enqueue_script('wp-e-commerce-legacy-ajax', WPSC_URL.'/wpsc-admin/js/ajax.js', false, $version_identifier); // needs removing
 	wp_enqueue_script('wp-e-commerce-variations', WPSC_URL.'/wpsc-admin/js/variations.js', array('jquery'), $version_identifier);
 	
+	//This should DEFINITELY come out when we convert to custom post types in the backend
+	wp_deregister_script( 'postbox' );
 	
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_css=true" , false, $version_identifier, 'all' );
@@ -291,11 +296,11 @@ function wpsc_meta_boxes(){
   	$pagename = 'store_page_wpsc-edit-products';
 	add_meta_box('wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high');
-	add_meta_box('wpsc_product_variation_forms', 'Variations', 'wpsc_product_variation_forms', $pagename, 'normal', 'high');
-	add_meta_box('wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high');
-	add_meta_box('wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high');
 	add_meta_box('wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_variation_forms', 'Variation Control', 'wpsc_product_variation_forms', $pagename, 'normal', 'high');
+	add_meta_box('wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high');
 }
 
 add_action('admin_menu', 'wpsc_meta_boxes');
@@ -775,11 +780,18 @@ if( IS_WP27 ) {
 	add_action('activity_box_end', 'wpsc_admin_4months_widget_rightnow');
 }
 
+//Modification to allow for multiple column layout
 
-
-
+add_filter('screen_layout_columns', 'wpec_two_columns', 10, 2);
+ 
+function wpec_two_columns($columns, $screen) {
+	if ($screen == 'store_page_wpsc-edit-products') {
+		$columns['store_page_wpsc-edit-products'] = 2;
+	}
+	return $columns;
+}
 function wpsc_fav_action($actions) {
-    $actions['admin.php?page=wpsc-edit-products'] = array('New Product', 'manage_options');
+    $actions['admin.php?page=wpsc-edit-products&action=wpsc_add_edit'] = array('New Product', 'manage_options');
     return $actions;
 }
 add_filter('favorite_actions', 'wpsc_fav_action');

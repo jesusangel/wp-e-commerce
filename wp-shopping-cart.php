@@ -380,10 +380,30 @@ if(!function_exists('wpsc_start_the_query')) {
 		  
 		if($wpsc_query == null) {
 			if(count($wpsc_query_vars) < 1) {
+			
 				$wpsc_query_vars = array(
 					'post_type' => 'wpsc-product',
-					'post_parent' => 0
+					'post_parent' => 0,
+					'order' => 'ASC'
 				);
+				$orderby =  get_option ( 'wpsc_sort_by' );
+				switch($orderby) {
+				
+				case "dragndrop":
+					$wpsc_query_vars["orderby"] = 'menu_order';
+					break;
+				case "name":
+					$wpsc_query_vars["orderby"] = 'title';
+					break;
+				case "price":
+				//This only works in WP 3.0.
+					$wpsc_query_vars["meta_key"] = '_wpsc_price';
+					$wpsc_query_vars["orderby"] = 'meta_value_num';
+					break;
+				case "id":
+					$wpsc_query_vars["orderby"] = 'ID';
+					break;
+				}
 			}
 			
 			add_filter('pre_get_posts', 'wpsc_generate_product_query', 11);
@@ -501,7 +521,7 @@ function wpsc_register_post_types() {
 	    'capability_type' => 'post',
 	    'hierarchical' => true,
 		'exclude_from_search' => false,
-		'rewrite' => false
+		'publicly_queryable' => true
 	));
 	
 	// Purchasable product files

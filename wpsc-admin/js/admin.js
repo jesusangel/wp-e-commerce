@@ -676,24 +676,7 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 		  return false;
 		});		
 	});
-	
-
-	
-	jQuery('#poststuff .postbox h3').livequery(function(){
-		jQuery(this).click( function() {
-			jQuery(jQuery(this).parent('div.postbox')).toggleClass('closed');
-			if(jQuery(jQuery(this).parent('div.postbox')).hasClass('closed')) {
-				jQuery('a.togbox',this).html('+');
-			} else {
-				jQuery('a.togbox',this).html('&ndash;');
-			}
-			wpsc_save_postboxes_state('products_page_wpsc-edit-products', '#poststuff');
-		});		
-	});
-
-
-
-	
+		
 	jQuery('a.add_new_form_set').livequery(function(){
 	  jQuery(this).click( function() {
 			jQuery(".add_new_form_set_forms").toggle();
@@ -725,10 +708,10 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 	
 	
 	// postbox sorting
-	jQuery('.meta-box-sortables').livequery(function(){
+	jQuery('div#side-sortables, div#advanced-sortables').livequery(function(){
 	  jQuery(this).sortable({
 			placeholder: 'sortable-placeholder',
-			connectWith: [ '.meta-box-sortables' ],
+			connectWith: [ '.meta-box-sortables-wpec' ],
 			items: '> .postbox',
 			handle: '.hndle',
 			distance: 2,
@@ -749,9 +732,8 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 					action: 'product-page-order',
 					ajax: 'true'
 				}
-				jQuery(this).each( function() {
-					postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
-				} );
+					postVars["order[advanced]"] = jQuery('div#advanced-sortables').sortable( 'toArray' ).join(',');
+					postVars["order[side]"] = jQuery('div#side-sortables').sortable( 'toArray' ).join(',');
 				jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {
 					postboxes.expandSidebar();
 				} );
@@ -1103,9 +1085,9 @@ function hideOptionElement(id, option) {
 
 
 function wpsc_save_postboxes_state(page, container) {
-  //console.log(container);
+  console.log(container);
 	var closed = jQuery(container+' .postbox').filter('.closed').map(function() { return this.id; }).get().join(',');
-	jQuery.post(postboxL10n.requestFile, {
+	jQuery.post('index.php?admin=true&ajax=true', {
 		action: 'closed-postboxes',
 		closed: closed,
 		closedpostboxesnonce: jQuery('#closedpostboxesnonce').val(),

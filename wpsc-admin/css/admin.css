@@ -1464,3 +1464,6 @@ a.variation_handle {
 #media-buttons #add_media {
 	display:none;
 } 
+.meta-box-sortables-wpec .postbox:hover .handlediv {
+background: transparent url(menu-bits.gif) no-repeat scroll 0% -111px;
+}

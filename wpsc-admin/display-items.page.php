@@ -180,8 +180,12 @@ function wpsc_display_edit_products_page() {
 	})(jQuery);
 	/* ]]> */
 		</script>
-			<div id="wpsc-col-right">
-					<div id="poststuff" class="metabox-holder has-right-sidebar">
+			<div id="wpsc-col-right"> 
+			<?php global $screen_layout_columns;
+					wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+					wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+			?>
+					<div id="poststuff" class="metabox-holder<?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
 						<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
 						<?php
 							$product_id = absint($_GET['product']);

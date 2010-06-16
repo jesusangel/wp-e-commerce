@@ -13,7 +13,7 @@
 * enqueue all javascript and CSS for wp ecommerce
 */
 function wpsc_enqueue_user_script_and_css() {
-  global $wp_styles, $wpsc_theme_url, $wpsc_theme_path;
+  global $wp_styles, $wpsc_theme_url, $wpsc_theme_path, $wp_query;
 	/**
 	* added by xiligroup.dev to be compatible with touchshop
 	*/
@@ -408,8 +408,7 @@ function wpsc_products_page($content = '') {
 	$output = '';
 	if(preg_match("/\[productspage\]/",$content)) {	
 		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query object
-
-	
+		
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		ob_start();
 		if(count($wp_query->posts) == 1) {			
@@ -490,12 +489,14 @@ function wpsc_products_page($content = '') {
 		
 		
 		$product_meta = get_post_meta($product_id, '_wpsc_product_metadata', true);
+		
 		if(($is_single == false) || ($product_meta['enable_comments'] == '0')) {
 			$GLOBALS['post'] = $wp_query->post;
 		}
 		//echo "<pre>".print_r($product_meta['enable_comments'], true)."</pre>";
 		
 	    return preg_replace("/(<p>)*\[productspage\](<\/p>)*/",$output, $content);
+		
 	} else {
 	    return $content;
 	}

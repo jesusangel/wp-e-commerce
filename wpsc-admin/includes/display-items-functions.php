@@ -215,21 +215,6 @@ function wpsc_product_basic_details_form(&$product_data) {
 	$post_ID = (int) $product_data["id"];
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
   ?>
-  <script defer="defer" type="text/javascript">
-  jQuery(document).ready( function () {
-  //LiveQuery added to each of these	
-			jQuery('div#wpsc_product_shipping_forms, div#wpsc_product_variation_forms, div#wpsc_product_advanced_forms').livequery(function() {
-				jQuery(this).appendTo('div#append-side');
-			});
-			jQuery('div#
-			').livequery(function() {
-				jQuery(this).insertAfter('div#submitdiv');
-			});
-			jQuery('div#wpsc_product_price_and_stock_forms').livequery(function() {
-				jQuery(this).insertAfter('div#wpsc_product_category_and_tag_forms');
-			});
-});			
-  </script>
   <h3 class='form_heading' style="display:none;">
  <?php
   if($product_data['id'] > 0) {
@@ -253,7 +238,7 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 ?>
 	</h3>
 	<div id="side-info-column" class="inner-sidebar">
-		<div id="side-sortables" class='meta-box-sortables ui-sortable'>
+		<div id="side-sortables" class='meta-box-sortables-wpec ui-sortable'>
 		<?php wp_nonce_field($nonce_action); ?>
 		<input type="hidden" id="user-id" name="user_ID" value="<?php echo (int) $user_ID ?>" />
 		<input type="hidden" id="hiddenaction" name="action" value="<?php echo esc_attr($form_action) ?>" />
@@ -269,8 +254,6 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 		echo $form_extra;
 
 		wp_nonce_field( 'autosave', 'autosavenonce', false );
-		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
 		?>
 		<input type='hidden' name='product_id' id='product_id' value='<?php echo (int) $product_data["id"]; ?>' />
 		<input type='hidden' name='wpsc_admin_action' value='edit_product' />
@@ -302,10 +285,6 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 							<a class="preview button" id="post-preview" href="<?php echo wpsc_product_url( $product_data['id'] ); ?>"><?php _e('View Product') ?></a>
 						</div>
 						<div class="clear"></div>
-						<div class="misc-pub-section">
-							<a style="padding:1px 2px; float:left" href="<?php echo htmlentities("admin.php?page=wpsc-edit-products&action=addnew"); ?>">Add New Product</a>
-						<div class="clear"></div>
-						</div>
 					</div>
 				</div>
 				<div id="major-publishing-actions">
@@ -335,23 +314,34 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	
 		<?php
 		
-		
-		$default_order=array(
-		  "wpsc_product_category_and_tag_forms",
-		  "wpsc_product_price_and_stock_forms",
-		  "wpsc_product_shipping_forms",
-		  "wpsc_product_variation_forms",
-		  "wpsc_product_advanced_forms",
-		  "wpsc_product_image_forms",
-		  "wpsc_product_download_forms"
+		$default_order = array( 
+			"advanced" => array(				
+				"wpsc_product_shipping_forms",
+				"wpsc_product_variation_forms",
+				"wpsc_product_advanced_forms"
+				), 
+			"side" => array(
+				"wpsc_product_category_and_tag_forms",
+				"wpsc_product_price_and_stock_forms",
+				"wpsc_product_image_forms",
+				"wpsc_product_download_forms"
+				),
+			"closedboxes" => array(
+				"wpsc_product_shipping_forms" => 1,
+				"wpsc_product_variation_forms" => 1,
+				"wpsc_product_advanced_forms" => 1,
+				"wpsc_product_category_and_tag_forms" => 1,
+				"wpsc_product_price_and_stock_forms" => 1,
+				"wpsc_product_image_forms" => 1,
+				"wpsc_product_download_forms" => 1
+			)
 		  );
 		
 	 	$order = get_option('wpsc_product_page_order');	 	
 	 	
 		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  
-	 	//echo "<pre>".print_r($order,true)."</pre>";
-	 	if (($order == '') || (count($order ) < 6)){
+	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 16 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
 				$order = $default_order;
 	 	}
 	 	$check_missing_items = array_diff($default_order, $order);
@@ -369,16 +359,14 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	 			unset($order[$variation_box_key]);
 	 		}
 	 		
-	 		
 	 		$category_box_key = array_search('wpsc_product_category_and_tag_forms', $order);
 	 		if(is_numeric($category_box_key) && isset($order[$category_box_key])) {
 	 			unset($order[$category_box_key]);
 	 		}
 	 		
 	 	}
-		
-		
-		foreach((array)$order as $key => $box_function_name) {
+//		echo "<pre>"; print_r($order); echo "</pre>"; 
+		foreach((array)$order["side"] as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
 			}
@@ -386,8 +374,29 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 		?>	
 	</div>
 	</div>
-
-<div id="post-body">
+<script type="text/javascript">
+var makeSlugeditClickable;
+makeSlugeditClickable = null;
+	//<![CDATA[
+	jQuery(document).ready( function($) { 
+	<?php 
+		$closed_boxes = $order["closedboxes"];
+		foreach ($closed_boxes as $key=>$val) {
+			if ( $val == 0 ) {
+			?>
+				$('div#<?php echo $key; ?>').addClass('closed');
+			<?
+			}
+		}
+	?>
+	$('#poststuff .postbox h3, .postbox div.handlediv').click( function() {			
+			$(this).parent().toggleClass('closed');
+			wpsc_save_postboxes_state('store_page_wpsc-edit-products', '#poststuff');
+		});		
+        });
+	//]]>
+</script>
+<div id="post-body" class="has-sidebar">
 	<div id="post-body-content">
 		<table class='product_editform' >
 			<tr>
@@ -549,7 +558,15 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 			</tr>
 		</table>
 	</div>
-	<div id="advanced-sortables" class="meta-box-sortables ui-sortable"><div id="append-side normal-sortables" class="meta-box-sortables ui-sortable"></div></div>
+	<div id="advanced-sortables" class="meta-box-sortables-wpec ui-sortable">
+		<?php 
+					foreach((array)$order["advanced"] as $key => $box_function_name) {
+			if(function_exists($box_function_name)) {
+				echo call_user_func($box_function_name,$product_data);
+			}
+		}
+		?>
+	</div>
 </div>
 	<?php
   }
