@@ -105,9 +105,6 @@ function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_ca
 	//$wp_rewrite->flush_rules();
 }
 
-
-
-
 function wpsc_convert_variation_sets() {
 	global $wpdb, $wp_rewrite, $user_ID;
 	$variation_sets = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."`");
@@ -142,10 +139,6 @@ function wpsc_convert_variation_sets() {
 	//$wp_rewrite->flush_rules();
 }
 
-
-
-
-
 /**
  * wpsc_convert_products_to_posts function.
  * 
@@ -156,7 +149,9 @@ function wpsc_convert_products_to_posts() {
   global $wpdb, $wp_rewrite, $user_ID;
   // Select all products
   // print_r($wpdb);
-	$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1')", ARRAY_A);
+  
+	$product_data = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`. * , `".WPSC_TABLE_PRODUCT_ORDER."`.order FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON `".WPSC_TABLE_PRODUCT_LIST."`.id = `".WPSC_TABLE_PRODUCT_ORDER."`.product_id WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN ( '1' )
+GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 	foreach((array)$product_data as $product) {
 		$post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product['id'] ));
 		
@@ -177,7 +172,8 @@ function wpsc_convert_products_to_posts() {
 				'post_title' => $product['name'],
 				'post_status' => $post_status,
 				'post_type' => "wpsc-product",
-				'post_name' => sanitize_title($product['name'])
+				'post_name' => sanitize_title($product['name']),
+				'menu_order' => $product['order']
 			);
 			$post_id = wp_insert_post($product_post_values);
 		}
@@ -350,10 +346,19 @@ function wpsc_convert_products_to_posts() {
 		//    
 		//echo "</span>";
 	}
+	
+	//Just throwing the payment gateway update in here because it doesn't really warrant it's own function :)
+	
+	$custom_gateways = get_option('custom_gateway_options');
+	array_walk($custom_gateways, "wpec_update_gateway");
+	
 }
 
-
-
+function wpec_update_gateway(&$value,$key) {
+		if ( $value == "testmode" ) {
+			$value = "wpsc_merchant_testmode";
+		}	
+}
 function wpsc_convert_variation_combinations() {
 	global $wpdb, $user_ID;
 
@@ -543,7 +548,6 @@ function wpsc_convert_variation_combinations() {
 
 }
 
-
 function wpsc_update_files() {
 	global $wpdb, $user_ID; 
 	$product_files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES."");
@@ -610,4 +614,5 @@ function wpsc_update_files() {
 		}
 	}
 }
+
 ?>
