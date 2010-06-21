@@ -51,7 +51,7 @@ jQuery(document).ready( function () {
 		jQuery(this).click(function(event){
 			form_id = jQuery(this).attr('title');	
 			id = form_id.replace('form_options', '');
-			output = "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label["+id+"][]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value["+id+"][]' />&nbsp;<a class='wpsc_delete_option' href='' ><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td></tr>";
+			output = "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label"+id+"[]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value"+id+"[]' />&nbsp;<a class='wpsc_delete_option' href='' ><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td></tr>";
 			jQuery(this).parent().parent('tr').after(output);
   			event.preventDefault();
 		});

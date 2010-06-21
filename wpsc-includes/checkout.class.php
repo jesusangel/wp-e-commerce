@@ -327,23 +327,22 @@ class wpsc_checkout {
     global $wpdb;
     $this->checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".$checkout_set."' ORDER BY `order`;");
     
-		$category_list = wpsc_cart_item_categories(true);
-		$additional_form_list = array();
-		foreach($category_list as $category_id) {
-			$additional_form_list[] =  wpsc_get_categorymeta($category_id, 'use_additonal_form_set');
-		}
-		if(function_exists('wpsc_get_ticket_checkout_set')){
-		
-			$checkout_form_fields_id = array_search(wpsc_get_ticket_checkout_set(),$additional_form_list);
-			unset($additional_form_list[$checkout_form_fields_id]);
-		}
-		//	exit('Checkout ticket set:'.wpsc_get_ticket_checkout_set().'additional checkout sets:<pre>'.print_r($additional_form_list, true).'</pre>');
-		//echo "<pre>".print_r($additional_form_list,true)."</pre>";
-		if(count($additional_form_list) > 0) {
-			$this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $additional_form_list)."') ORDER BY `checkout_set`, `order`;");
-			$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
-		}
-	//
+	$category_list = wpsc_cart_item_categories(true);
+	$additional_form_list = array();
+	foreach($category_list as $category_id) {
+		$additional_form_list[] =  wpsc_get_categorymeta($category_id, 'use_additonal_form_set');
+	}
+	if(function_exists('wpsc_get_ticket_checkout_set')){
+	
+		$checkout_form_fields_id = array_search(wpsc_get_ticket_checkout_set(),$additional_form_list);
+		unset($additional_form_list[$checkout_form_fields_id]);
+	}
+	
+	if(count($additional_form_list) > 0) {
+		$this->category_checkout_items = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set` IN ('".implode("','", $additional_form_list)."') ORDER BY `checkout_set`, `order`;");
+		$this->checkout_items = array_merge((array)$this->checkout_items,(array)$this->category_checkout_items);
+	}
+
     if(function_exists('wpsc_get_ticket_checkout_set')){
     	$sql = "SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'  AND `checkout_set`='".wpsc_get_ticket_checkout_set()."' ORDER BY `order`;";
     	$this->additional_fields = $wpdb->get_results($sql);
@@ -404,14 +403,27 @@ class wpsc_checkout {
 	*/
   function form_field() {
 		global $wpdb, $user_ID;
-		//$meta_data[$form_field['id']]
-		//exit('<pre>'.print_r($_SESSION['wpsc_checkout_saved_values'], true).'</pre>');
+//		exit('<pre>'.print_r($_SESSION['wpsc_checkout_saved_values'], true).'</pre>');
 		
 		if((count($_SESSION['wpsc_checkout_saved_values']) <= 0) && ($user_ID > 0)) {
 			//$_SESSION['wpsc_checkout_saved_values'] = get_usermeta($user_ID, 'wpshpcrt_usr_profile');
 		}
-		$saved_form_data = htmlentities(stripslashes($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES, 'UTF-8');
-		//exit('<pre>HERE'.print_r($_POST, true).'</pre>');
+		if(is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id])){
+			if(function_exists('wpsc_get_ticket_checkout_set')){
+				if($this->checkout_item->checkout_set == wpsc_get_ticket_checkout_set()){
+					if(!isset($_SESSION['wpsc_tickets_saved_values_count'])){
+						$_SESSION['wpsc_tickets_saved_values_count'] = 0;
+						$count = $_SESSION['wpsc_tickets_saved_values_count'];
+					}else{
+						$count = $_SESSION['wpsc_tickets_saved_values_count']-1;
+					}
+					$saved_form_data = htmlentities(stripslashes($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][$count]), ENT_QUOTES, 'UTF-8');
+				}
+			}							
+		}else{
+			$saved_form_data = htmlentities(stripslashes($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES, 'UTF-8');
+		}
+		//make sure tickets are arrays for multiple ticket holders
 		$an_array = '';
 		if(function_exists('wpsc_get_ticket_checkout_set')){
 			if($this->checkout_item->checkout_set == wpsc_get_ticket_checkout_set()){
@@ -461,11 +473,16 @@ class wpsc_checkout {
 				$output .= "<option value='-1'>Select an Option</option>";
 				foreach((array)$options as $label => $value){
 					$value = str_replace(' ', '',$value);
-					$output .="<option value='".$value."'>".$label."</option>\n\r";
+					if($saved_form_data == $value){
+						$selected = 'selected="selected"';
+					}else{
+						$selected = '';
+					}
+					$output .="<option ".$selected. " value='".$value."'>".$label."</option>\n\r";
 				}
 				$output .="</select>";
 				}
-			//echo ('<pre>'.print_r($output, true).'</pre>');
+
 			break;
 			case "radio":
 				$options = $this->get_checkout_options($this->checkout_item->id);			

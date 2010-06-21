@@ -1931,25 +1931,24 @@ function wpsc_checkout_settings(){
 			update_option('wpsc_checkout_form_sets', $checkout_sets);
 	  }
 
-// 		echo "<pre>".print_r($_POST,true)."</pre>";
-   // if(!isset($_POST['wpsc_checkout_set_filter'])){
-   	//exit('<pre>'.print_r($_POST,true).'</pre>');
-		// Save checkout options
 	       $options = array();
 	    if(is_array($_POST['wpsc_checkout_option_label'])){
 		
 	    	foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
 
 					foreach((array)$values as $key => $form_option){
-						$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
+						$form_option = str_ireplace("'", "",$form_option);
+						$form_val = str_ireplace("'", "",sanitize_title($_POST['wpsc_checkout_option_value'][$form_id][$key]));
+						$options[$form_option] = $form_val;
 					}
 			}
 			
-	//		exit('<pre>'.print_r($options,true).'</pre>');
-			
+
+		//	exit('<pre>'.print_r($options,true).'</pre>');						
 			$options = serialize($options);
-			
+
 			$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id;
+
 			$wpdb->query($sql);
 
 	    }

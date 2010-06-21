@@ -536,5 +536,17 @@ if ( is_admin() ) {
 }
 
 
-
+/**
+ * Memory Increase 
+ *
+ * Increases users memory limit for better performance when installing and maintaining a wp-e-commerce shop 
+ *
+ * @package wp-e-commerce
+ * @since 3.7.6.5
+ */
+function wpsc_memory_increase() {
+	if ( current_user_can( 'manage_options' ) )
+		@ini_set( 'memory_limit', '64M' );
+}
+add_action( 'admin_init', 'wpsc_memory_increase' );
 ?>

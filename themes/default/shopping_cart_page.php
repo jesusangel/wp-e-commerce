@@ -3,6 +3,7 @@ global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway, $wpsc_coupons;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
 $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
+$j = 1;
  //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
 // //echo "<pre>".print_r($wpsc_checkout, true)."</pre>";
 if(wpsc_cart_item_count() > 0) :
@@ -273,7 +274,16 @@ if(wpsc_cart_item_count() > 0) :
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
 			<td <?php if(wpsc_is_shipping_details()) echo "class='wpsc_shipping_forms'"; ?> colspan='2'>
 				<h4>
+					<?php 
+
+					if(trim(wpsc_checkout_form_name()) == 'Ticket Holder:'):?>
+					<?php echo '#'.$j.' '.wpsc_checkout_form_name();					
+						$_SESSION['wpsc_tickets_saved_values_count'] = $j;
+						$j++; 
+						?>
+					<?php else: ?>
 					<?php echo wpsc_checkout_form_name();?>
+					<?php endif; ?>
 				</h4>
 			</td>
 				</tr>

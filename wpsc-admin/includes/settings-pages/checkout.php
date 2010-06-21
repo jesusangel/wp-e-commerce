@@ -205,13 +205,10 @@ $form_types = get_option('wpsc_checkout_form_fields');
 		
 			<tbody id='wpsc_checkout_list_body'>
 			<?php
-					foreach((array)$form_data as $form_field) {
+				foreach((array)$form_data as $form_field) {
 			    echo "<tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
 			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="'.WPSC_URL.'/images/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
 			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".htmlentities(stripslashes($form_field['name']), ENT_QUOTES, "UTF-8")."' /></td>";
-			  
-			    //echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
-			    
 			    echo "      <td class='typecol'>";
 			    echo "<select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";
 			    foreach($form_types as $form_type_name => $form_type) {
