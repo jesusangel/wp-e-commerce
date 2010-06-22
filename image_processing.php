@@ -100,7 +100,6 @@ global $wpdb;
 			// Final thumbnail cropped from the center out.
 			//ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
 			ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );
-			//mail('thomas.howard@gmail.com','lolwut',"ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );");
 			
 			$image_quality = wpsc_image_quality();
 			

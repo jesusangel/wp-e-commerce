@@ -309,7 +309,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		".print_r($this->cart_items, true)."
 		{$altered_count}
 		";
-		//mail('thomas.howard@gmail.com', "IPN Debugging", $message);
 	}
 
 
