@@ -305,6 +305,7 @@ $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_ru
 				<option value="not_contain">Does not contain</option>
 				<option value="begins">Begins with</option>
 				<option value="ends">Ends with</option>
+                		<option value="category">In Category</option>
 			</select>
 			<span>
 				<input type="text" name="rules[value][]"/>

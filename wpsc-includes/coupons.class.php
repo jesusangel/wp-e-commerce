@@ -244,6 +244,14 @@ class wpsc_coupons {
 					return true;
 				break;
 				
+				case 'category'://Checks if the product is in the category value
+					$category_flag = in_array( $c['value'] , $product_obj->category_id_list);
+					if ($category_flag == 1) { 
+						$match = array($category_flag);
+						return true; 
+						}
+				break;				
+				
 				default:
 				return false;
 			}
@@ -288,6 +296,13 @@ class wpsc_coupons {
 				if (!empty($match))
 					return true;
 				break;
+				
+				case 'category'://Checks if the product to see if its in the category
+				preg_match("/".$c['value']."$/",$product_obj->quantity, $match);
+				if (!empty($match))
+					return true;
+				break;				
+				
 				default:
 				return false;
 			}
