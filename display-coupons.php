@@ -447,14 +447,14 @@ foreach((array)$coupon_data as $coupon) {
   
   
   echo "    <td>\n\r";
-  echo "<a title='".$coupon['coupon_code']."' href='javascript:void(0)' class='wpsc_edit_coupon'  >".__('Edit', 'wpsc')."</a>";
+  echo "<a title='".$coupon['coupon_code']."' href='#' rel='".$coupon['id']."' class='wpsc_edit_coupon'  >".__('Edit', 'wpsc')."</a>";
   echo "    </td>\n\r";
   
   echo "  </tr>\n\r";
   echo "  <tr>\n\r";
   echo "    <td colspan='7' style='padding-left:0px;'>\n\r";
 //  $status_style = "style='display: block;'";
-  echo "      <div id='coupon_box_".$coupon['id']."' class='modify_coupon' >\n\r";  
+  echo "      <div id='coupon_box_".$coupon['id']."' class='displaynone modify_coupon' >\n\r";  
   coupon_edit_form($coupon);
   echo "      </div>\n\r";
   echo "    </td>\n\r";

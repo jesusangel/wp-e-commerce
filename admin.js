@@ -593,13 +593,14 @@ jQuery(window).load( function () {
 	/* 	Coupon edit functionality */
 	jQuery('.modify_coupon').hide();
 	jQuery('.wpsc_edit_coupon').click(function(){
-		id = jQuery(this).attr('title');
+		id = jQuery(this).attr('rel');
+		id = 'coupon_box_'+id;
 		if(jQuery('#'+id).hasClass('displaynone')){
-			jQuery('#'+id).parent('.modify_coupon').show();
+			jQuery('#'+id).show();
 			jQuery('#'+id).removeClass('displaynone');		
 		}else{
 			jQuery('#'+id).addClass('displaynone');
-			jQuery('#'+id).parent('.modify_coupon').hide();
+			jQuery('#'+id).hide();
 		}
 
 	});
