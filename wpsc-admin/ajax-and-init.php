@@ -1894,8 +1894,12 @@ function wpsc_check_form_options(){
 //	exit($sql);
 	$options = $wpdb->get_var($sql);
 	if($options != ''){
-	//exit('<pre>'.print_r($options,true).'</pre>');
+
 		$options = maybe_unserialize($options);
+		if(!is_array($options)){
+			$options = unserialize($options);		
+		}
+	//exit('<pre>'.print_r($options,true).'</pre>');
 		$output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options[".$id."]'>+ New Layer</a></td></tr>";
 	
 		foreach((array)$options as $key=>$value){
@@ -1933,7 +1937,7 @@ function wpsc_checkout_settings(){
 
 	       $options = array();
 	    if(is_array($_POST['wpsc_checkout_option_label'])){
-		
+	    		
 	    	foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
 
 					foreach((array)$values as $key => $form_option){
