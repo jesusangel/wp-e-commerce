@@ -23,10 +23,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$thepurchlogitem = new wpsc_purchaselogs_items((int)$purchase_log['id']);
 
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
-			$message = get_option('wpsc_email_receipt');
+			$message = stripslashes(get_option('wpsc_email_receipt'));
 			$message_html = $message;
 		} else {
-			$message = get_option('wpsc_email_receipt');
+			$message = stripslashes(get_option('wpsc_email_receipt'));
 			$message_html = $message;
 		}
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
@@ -38,7 +38,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 				return false;
 			} else if ($purchase_log['processed'] < 2) {  //added by Thomas on 20/6/2007
-				echo __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "<p style='margin: 1em 0px 0px 0px;' >".nl2br(get_option('payment_instructions'))."</p>";
+				echo __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "<p style='margin: 1em 0px 0px 0px;' >".nl2br(stripslashes(get_option('payment_instructions')))."</p>";
 				/*if($purchase_log['gateway'] != 'testmode') {
 					if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
 						mail(get_option('purch_log_email'), __('New pending order', 'wpsc'), __('There is a new order awaiting processing:', 'wpsc').$order_url, "From: ".get_option('return_email')."");
