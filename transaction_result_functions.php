@@ -21,10 +21,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 		
 		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 3))  {
-			$message = get_option('wpsc_email_receipt');
+			$message = stripslashes(get_option('wpsc_email_receipt'));
 			$message_html = $message;
 		} else {
-			$message = get_option('wpsc_email_receipt');
+			$message = stripslashes(get_option('wpsc_email_receipt'));
 			$message_html = $message;
 		}
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
