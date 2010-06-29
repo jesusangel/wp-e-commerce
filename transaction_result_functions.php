@@ -20,7 +20,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		
 		$purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 		
-		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 2))  {
+		if(($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 3))  {
 			$message = get_option('wpsc_email_receipt');
 			$message_html = $message;
 		} else {
@@ -36,7 +36,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					wp_mail(get_option('purch_log_email'), __('New pending order', 'wpsc'), __('There is a new order awaiting processing:', 'wpsc').$order_url, "From: ".get_option('return_email')."");
 				}
 				return false;
-			} else if ($purchase_log['processed'] < 2) {  //added by Thomas on 20/6/2007
+			} else if ($purchase_log['processed'] < 3) {  //added by Thomas on 20/6/2007
 				echo __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "<p style='margin: 1em 0px 0px 0px;' >".nl2br(get_option('payment_instructions'))."</p>";
 				/*if($purchase_log['gateway'] != 'testmode') {
 					if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
@@ -73,7 +73,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 
 				do_action('wpsc_transaction_result_cart_item', array("purchase_id" =>$purchase_log['id'], "cart_item"=>$row, "purchase_log"=>$purchase_log));
 
-				if (($purchase_log['processed'] >= 2)) {
+				if (($purchase_log['processed'] >= 3)) {
 				
 					$download_data = $wpdb->get_results("SELECT * 
 					FROM `".WPSC_TABLE_DOWNLOAD_STATUS."`
@@ -153,7 +153,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			}
 			
 				// Decrement the stock here
-				if (($purchase_log['processed'] >= 2)) {
+				if (($purchase_log['processed'] >= 3)) {
 					wpsc_decrement_claimed_stock($purchase_log['id']);
 				}
 				
@@ -211,7 +211,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
  					add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
  					add_filter('wp_mail_from_name', 'wpsc_replace_reply_name', 0);
  					
-					if($purchase_log['processed'] < 2) {
+					if($purchase_log['processed'] < 3) {
 						$payment_instructions = strip_tags(get_option('payment_instructions'));
 						$message = __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "\n\r" . $payment_instructions ."\n\r". $message;
 						wp_mail($email, __('Order Pending: Payment Required', 'wpsc'), $message);
@@ -261,7 +261,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					
 				}
 
-				if($purchase_log['processed'] < 2) {
+				if($purchase_log['processed'] < 3) {
 					echo "<br />" . nl2br(str_replace("$",'\$',$message_html));
 					return;
 				}

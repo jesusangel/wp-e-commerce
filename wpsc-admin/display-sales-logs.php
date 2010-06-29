@@ -36,7 +36,8 @@ if(!isset($purchlogs)){
 			if(!isset($_REQUEST['purchaselog_id'])){
 				$columns = array(
 					'cb' => '<input type="checkbox" />',
-					'date' => 'Date',
+					'purchid' => 'Order ID',
+					'date' => 'Date / Time',
 					'name' => '',
 					'amount' => 'Amount',
 					'details' => 'Details',
@@ -46,8 +47,6 @@ if(!isset($purchlogs)){
 				);
 				register_column_headers('display-sales-list', $columns);
 				///// start of update message section //////
-				
-				//$fixpage = get_option('siteurl').'/wp-admin/admin.php?page='.WPSC_FOLDER.'/wpsc-admin/purchlogs_upgrade.php';
 				
 				$fixpage = get_option('siteurl').'/wp-admin/admin.php?page=wpsc-sales-logs&amp;subpage=upgrade-purchase-logs';
 			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['locked']) ) { ?>
@@ -69,8 +68,6 @@ if(!isset($purchlogs)){
 				printf( __ngettext( '%s Purchase Log deleted.', '%s Purchase Logs deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['deleted']);
 			}
-		
-			//$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] );
 			?>
 			</p></div>
 		<?php } 
@@ -80,17 +77,6 @@ if(!isset($purchlogs)){
 	<?php	 } 
 		///// end of update message section //////?>
 		<div id='dashboard-widgets' style='min-width: 825px;'>
-			<!--
- <div class='inner-sidebar'> 
-					<div class='meta-box-sortables'>			
-						<?php
-							//if(IS_WP27){
-							//	display_ecomm_rss_feed();
-							//}
-						?>
-					</div>
-			</div>
--->
 			<?php /* end of sidebar start of main column */ ?>
 			<div id='post-body' class='has-sidebar metabox-holder' style='width:95%;'>
 				<div id='dashboard-widgets-main-content-wpsc' class='has-sidebar-content'>
@@ -124,7 +110,6 @@ if(!isset($purchlogs)){
 			?> </p></div>
 			<?php
 			}			
-			//$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','cleared'), $_SERVER['REQUEST_URI'] );
 			?>
 
 			
@@ -382,9 +367,9 @@ if(!isset($purchlogs)){
   	<form method='post' action=''>
   	  <div class='wpsc_purchaselogs_options'>
   		<select id='purchlog_multiple_status_change' name='purchlog_multiple_status_change' class='purchlog_multiple_status_change'>
-  			<option value='-1'><?php _e('Bulk Actions'); ?></option>
+  			<option selected='selected' value='-1'><?php _e('Bulk Actions'); ?></option>
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
- 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> >
+ 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' >
  					<?php echo wpsc_the_purch_status_name(); ?> 
  				</option>
  			<?php endwhile; ?>
@@ -416,12 +401,12 @@ if(!isset($purchlogs)){
   			<?php  echo wpsc_purchlogs_getfirstdates(); ?>
   		</select>
   		<select id='view_purchlogs_by_status' name='view_purchlogs_by_status'>
-  			<option value='-1'>Status: All</option>
+  			
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
   			<?php
-  			  $current_status = wpsc_the_purch_status_id();
+	  			    $current_status = wpsc_the_purch_status_id();
 					$is_selected = '';
-					if($_GET['view_purchlogs_by_status'] == $current_status) {
+					if(isset($_GET['view_purchlogs_by_status']) && $_GET['view_purchlogs_by_status'] == $current_status) {
 						$is_selected = 'selected="selected"';
 					}
   			?>
@@ -429,7 +414,12 @@ if(!isset($purchlogs)){
  					<?php echo wpsc_the_purch_status_name(); ?> 
  				</option>
  			<?php endwhile; ?>
-
+ 			<?php if(empty($is_selected)){ 
+					$is_selected = 'selected="selected"';
+			}else{
+					$is_selected = '';
+			 } ?>
+			<option <?php echo $is_selected; ?> value='-1'>Status: All</option>
   		</select>
   		<input type='hidden' value='purchlog_filter_by' name='wpsc_admin_action' />
   		<input type="submit" value="<?php _e('Filter'); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
@@ -490,18 +480,19 @@ if(!isset($purchlogs)){
  unset($_SESSION['newlogs']);
  }
  function get_purchaselogs_content(){
- 	global $purchlogs;
+ 	global $purchlogs,$wpsc_purchase_log_statuses;
  	while(wpsc_have_purch_items()) : wpsc_the_purch_item();	
  	//exit('<pre>'.print_r($_SESSION, true).'</pre>');
  	?>
  	<tr>
  		<th class="check-column" scope="row"><input type='checkbox' name='purchlogids[]' class='editcheckbox' value='<?php echo wpsc_the_purch_item_id(); ?>' /></th>
+ 		<td><?php echo wpsc_the_purch_item_id(); ?></td><!-- purchase ID -->
  		<td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
  		<td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
  		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
  		<td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id())) ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
  		<td>
- 		<?php if(wpsc_purchlogs_is_google_checkout() == false){ ?>
+ 		<?php if(!wpsc_purchlogs_is_google_checkout()){ ?>
  			<select class='selector' name='<?php echo wpsc_the_purch_item_id(); ?>' title='<?php echo wpsc_the_purch_item_id(); ?>' >
  			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
  				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_is_checked_status(); ?> ><?php echo wpsc_the_purch_status_name(); ?> </option>
@@ -603,7 +594,7 @@ function wpsc_purchlogs_notes() {
 				<input type='hidden' name='wpsc_admin_action' value='purchlogs_update_notes' />
 				<input type="hidden" name="wpsc_purchlogs_update_notes_nonce" id="wpsc_purchlogs_update_notes_nonce" value="<?php echo wp_create_nonce( 'wpsc_purchlogs_update_notes' ); ?>" />
 				<input type='hidden' name='purchlog_id' value='<?php echo $_GET['purchaselog_id']; ?>' />
-				<p><textarea name="purchlog_notes" rows="3" wrap="virtual" id="purchlog_notes" style="width:100%;"><?php if ( isset($_POST['purchlog_notes']) ) { echo $_POST['purchlog_notes']; } else { echo wpsc_display_purchlog_notes(); } ?></textarea></p>
+				<p><textarea name="purchlog_notes" rows="3" wrap="virtual" id="purchlog_notes" style="width:100%;"><?php if ( isset($_POST['purchlog_notes']) ) { echo stripslashes($_POST['purchlog_notes']); } else { echo wpsc_display_purchlog_notes(); } ?></textarea></p>
 				<p><input class="button" type="submit" name="button" id="button" value="Update Notes" /></p>
 			</form>
 		</div>

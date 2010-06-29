@@ -12,7 +12,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
  * @package wp-e-commerce
 */
 // this is to make sure it sets up the table name constants correctly on activation
-global $wpdb;
+global $wpdb, $wpsc_purchlog_statuses;
 define('WPSC_VERSION', '3.8');
 define('WPSC_MINOR_VERSION', ('00000'.microtime(true)));
 

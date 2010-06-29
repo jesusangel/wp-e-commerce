@@ -228,10 +228,18 @@ class wpsc_merchant {
 		global $wpdb;
 		$transaction_url_with_sessionid = add_query_arg('sessionid', $session_id, get_option('transact_url'));
 		wp_redirect($transaction_url_with_sessionid);
-    exit(); // follow the redirect with an exit, just to be sure.
+    	exit(); // follow the redirect with an exit, just to be sure.
   }
 
+  /**
+   * set_purchase_processed_by_purchid, this helps change the purchase log status
+   * $status = integer status order
+   */
+  function set_purchase_processed_by_purchid($status=1){
+  	global $wpdb;
+	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."' WHERE `id` = ".absint($this->purchase_id)." LIMIT 1");
 
+  }	
   
   /**
 	* set_transaction_details, maybe extended in merchant files

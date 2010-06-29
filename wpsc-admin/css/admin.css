@@ -134,6 +134,12 @@ margin:5px 0;
 #purchlogs_customfields{
 	clear:both; 
 }
+th#date{
+width:120px;
+}
+th#purchid{
+width:60px;
+}
 th#details{
 width:55px;
 }

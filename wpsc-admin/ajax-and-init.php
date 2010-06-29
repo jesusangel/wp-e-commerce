@@ -1431,10 +1431,9 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 
 	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'");
 
-	if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] <= 2)) {
-		transaction_results($log_data['sessionid'],false);
+	if(($purchlog_id > $log_data['processed']) && ($log_data['processed'] <= 2) && $log_data['email_sent'] == 0) {
+	//	transaction_results($log_data['sessionid'],false,null);
 	}
-	exit("1");
 }
 
 if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {

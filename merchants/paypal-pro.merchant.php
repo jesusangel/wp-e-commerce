@@ -203,7 +203,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		switch($parsed_response['ACK']) {
 			case 'Success': 
 			case 'SuccessWithWarning': 
-				$this->set_transaction_details($parsed_response['TRANSACTIONID'], 2);
+				$this->set_transaction_details($parsed_response['TRANSACTIONID'], 3);
 				//transaction_results($this->cart_data['session_id'], false);
 				$this->go_to_transaction_results($this->cart_data['session_id']);
 			break;
@@ -267,14 +267,14 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 				case 'cart':
 				case 'express_checkout':
 					if((float)$this->paypal_ipn_values['mc_gross'] == (float)$this->cart_data['total_price']) {
-						$this->set_transaction_details($this->paypal_ipn_values['txn_id'], 2);
+						$this->set_transaction_details($this->paypal_ipn_values['txn_id'], 3);
 						transaction_results($this->cart_data['session_id'],false);
 					}
 				break;
 
 				case 'subscr_signup':
 				case 'subscr_payment':
-					$this->set_transaction_details($this->paypal_ipn_values['subscr_id'], 2);
+					$this->set_transaction_details($this->paypal_ipn_values['subscr_id'], 3);
 					foreach($this->cart_items as $cart_row) {
 						if($cart_row['is_recurring'] == true) {
 							do_action('wpsc_activate_subscription', $cart_row['cart_item_id'], $this->paypal_ipn_values['subscr_id']);

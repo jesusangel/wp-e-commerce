@@ -220,6 +220,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			exit();
 		}
 		header("Location: ".get_option('paypal_multiple_url')."?".$gateway_values);
+		exit();
 	}
 
 
@@ -259,14 +260,14 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				case 'cart':
 				case 'express_checkout':
 					if((float)$this->paypal_ipn_values['mc_gross'] == (float)$this->cart_data['total_price']) {
-						$this->set_transaction_details($this->paypal_ipn_values['txn_id'], 2);
+						$this->set_transaction_details($this->paypal_ipn_values['txn_id'], 3);
 						transaction_results($this->cart_data['session_id'],false);
 					}
 				break;
 
 				case 'subscr_signup':
 				case 'subscr_payment':
-					$this->set_transaction_details($this->paypal_ipn_values['subscr_id'], 2);
+					$this->set_transaction_details($this->paypal_ipn_values['subscr_id'], 3);
 					foreach($this->cart_items as $cart_row) {
 						if($cart_row['is_recurring'] == true) {
 							do_action('wpsc_activate_subscription', $cart_row['cart_item_id'], $this->paypal_ipn_values['subscr_id']);
@@ -488,7 +489,7 @@ function form_paypal_multiple() {
 
 	$store_currency_data = $wpdb->get_row("SELECT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')", ARRAY_A);
 	$current_currency = get_option('paypal_curcode');
-	if(($current_currency == '') && in_array($store_currency_data['code'], $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'])) {
+	if(($current_currency == '') && in_array($store_currency_data['code'], $wpsc_gateways['wpsc_merchant_paypal_standard']['supported_currencies']['currency_list'])) {
 		update_option('paypal_curcode', $store_currency_data['code']);
 		$current_currency = $store_currency_data['code'];
 	}
@@ -511,7 +512,7 @@ function form_paypal_multiple() {
 		$output .= "          <td>\n";
 		$output .= "            <select name='paypal_curcode'>\n";
 
-		$paypal_currency_list = $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'];
+		$paypal_currency_list = $wpsc_gateways['wpsc_merchant_paypal_standard']['supported_currencies']['currency_list'];
 
 		$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
 

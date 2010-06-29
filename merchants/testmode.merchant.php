@@ -17,7 +17,7 @@ $nzshpcrt_gateways[$num] = array(
 	'wp_admin_cannot_cancel' => false,
 	'requirements' => array(
 		 /// so that you can restrict merchant modules to PHP 5, if you use PHP 5 features
-		'php_version' => 5.0,
+		///'php_version' => 5.0,
 	),
 	
 	'form' => 'form_testmode',
@@ -31,7 +31,8 @@ class wpsc_merchant_testmode extends wpsc_merchant {
 	var $name = 'Test Gateway';
 	
 	function submit() {
-
+		$this->set_purchase_processed_by_purchid(2);
+//		$this->set_transaction_details();
 	 	$this->go_to_transaction_results($this->cart_data['session_id']);
 	
 	 	exit();

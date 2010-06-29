@@ -172,7 +172,7 @@ function wpsc_the_purch_item_id(){
 }
 function wpsc_the_purch_item_date(){
 	global $purchlogs;
-	return date('M d Y',$purchlogs->purchitem->date);
+	return date('M d Y,g:i a',$purchlogs->purchitem->date);
 }
 function wpsc_the_purch_item_name(){
 	global $purchlogs;
@@ -209,7 +209,7 @@ function wpsc_the_purch_item_status(){
 function wpsc_the_purch_status_id(){
 	global $purchlogs;
 //	exit(print_r($purchlogs->purchstatus, true));
-	return $purchlogs->purchstatus->id;
+	return $purchlogs->purchstatus[order];
 }
 function wpsc_is_checked_status(){
 	global $purchlogs;
@@ -219,7 +219,7 @@ function wpsc_is_checked_status(){
 function wpsc_the_purch_status_name(){
 	global $purchlogs;
 	//exit(print_r($purchlogs->purchstatus, true));
-	return $purchlogs->purchstatus->name;
+	return $purchlogs->purchstatus[label];
 }
 function wpsc_purchlogs_getfirstdates(){
 	global $purchlogs;
@@ -824,18 +824,48 @@ class wpsc_purchaselogs{
 	}
 	
 	function the_purch_item_statuses(){
-		global $wpdb;
-		$sql = "SELECT name,id FROM ".WPSC_TABLE_PURCHASE_STATUSES;
-		$statuses = $wpdb->get_results($sql);
-		$this->purch_status_count = count($statuses);
-		$this->allpurchaselogstatuses = $statuses;
-		return $statuses;
+		global $wpdb,$wpsc_purchase_log_statuses;
+		//$sql = "SELECT name,id FROM ".WPSC_TABLE_PURCHASE_STATUSES;
+		//$statuses = $wpdb->get_results($sql);
+		$wpsc_purchase_log_statuses = array(
+	     	 array(
+		       'internalname' => 'incomplete_sale'  ,
+	           'label' => 'Incomplete Sale',
+	           'order' => 1,
+		     ),
+	     	 array(
+	           'internalname' =>'order_received',
+	           'label' => 'Order Received',
+	           'order' => 2,
+	     	),
+	     
+	     	array(
+		       'internalname' => 'accepted_payment',
+	           'label' => 'Accepted Payment',
+	           'is_transaction' => true,
+	           'order' => 3,
+	     	),
+	     	 array(
+		       'internalname' => 'job_dispatched',     	
+	           'label' => 'Job Dispatched',
+	           'is_transaction' => true,
+	           'order' => 4,
+		     ),
+		     array(
+		       'internalname' => 'closed_order',		     
+	           'label' => 'Closed Order',
+			   'is_transaction' => true,
+	           'order' => 5,
+		     ),
+			);
+		$this->purch_status_count = count($wpsc_purchase_log_statuses);
+		$this->allpurchaselogstatuses = $wpsc_purchase_log_statuses;
+		return $wpsc_purchase_log_statuses;
 	
 	}
 	// purchase status loop functions
 	function next_purch_status(){
 		$this->currentstatus++;
-		
 		$this->purchstatus = $this->allpurchaselogstatuses[$this->currentstatus];
 		return $this->purchstatus ;
 	}
@@ -864,8 +894,8 @@ class wpsc_purchaselogs{
 		}
 	}
 	function is_checked_status(){
-		
-		if($this->purchstatus->id == $this->purchitem->processed){
+
+		if($this->purchstatus['order'] == $this->purchitem->processed){
 			return 'selected="selected"';
 		}else{
 			return '';
