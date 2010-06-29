@@ -591,7 +591,7 @@ function wpsc_submit_checkout() {
 		$sessionid = (mt_rand(100,999).time());
 		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
-		if($wpsc_cart->has_total_shipping_discount() == false) {
+		if($wpsc_cart->has_total_shipping_discount() == false && wpsc_uses_shipping()) {
 			$base_shipping= $wpsc_cart->calculate_base_shipping();
 		} else {
 			$base_shipping = 0;
