@@ -591,19 +591,24 @@ function wpsc_submit_checkout() {
 		$sessionid = (mt_rand(100,999).time());
 		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
-		if($wpsc_cart->has_total_shipping_discount() == false && wpsc_uses_shipping()) {
+		if($wpsc_cart->has_total_shipping_discount() == false ) {
 			$base_shipping= $wpsc_cart->calculate_base_shipping();
+		
+		} else {
+			$base_shipping = 0;
+			
+		}
+		if(wpsc_uses_shipping()){
 			$shipping_method = $wpsc_cart->selected_shipping_method;
 			$shipping_option = $wpsc_cart->selected_shipping_option;
 			$delivery_country = $wpsc_cart->delivery_country;
 			$delivery_region = $wpsc_cart->delivery_region;
-		} else {
-			$base_shipping = 0;
+		}else{
 			$shipping_method = '';
 			$shipping_option = '';
 			$delivery_country = '';
 			$delivery_region = '';
-
+		
 		}
 		if(isset($_POST['how_find_us'])){
 			$find_us = $_POST['how_find_us'];

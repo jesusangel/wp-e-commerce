@@ -1202,9 +1202,9 @@ class wpsc_cart {
   }
   
    /**
-	* calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
+	* has_total_shipping_discount method, checks whether the carts subtotal is larger or equal to the shipping discount 		* value 
 	* @access public
-	 * @return float returns the shipping as a floating point value
+	* @return float returns true or false depending on whether the cart subtotal is larger or equal to the shipping 			* discount value.  
 	*/
   function has_total_shipping_discount() {
   	if(get_option('shipping_discount')== 1) {
