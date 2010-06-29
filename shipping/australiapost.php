@@ -151,8 +151,9 @@ class australiapost {
 		} else if(isset($_SESSION['wpsc_zipcode'])) {
 			$destzipcode = $_SESSION['wpsc_zipcode'];
 		}
-		if (strlen($destzipcode) != 4) {
-		    // No destination postcode entered yet, so just return an empty set of quotes
+
+		if ($dest == 'AU' && strlen($destzipcode) != 4) {
+		    // Invalid Australian Post Code entered, so just return an empty set of quotes instead of wasting time contactin the Aus Post API
 		    return array();
 		}
  
