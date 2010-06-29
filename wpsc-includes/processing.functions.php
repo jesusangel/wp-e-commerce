@@ -273,9 +273,9 @@ function nzshpcrt_determine_item_shipping($product_id, $quantity, $country_code)
 function admin_display_total_price($start_timestamp = '', $end_timestamp = '') {
   global $wpdb;
   if(($start_timestamp != '') && ($end_timestamp != '')) {
-    $sql = "SELECT SUM(`totalprice`) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` BETWEEN '$start_timestamp' AND '$end_timestamp'";
+    $sql = "SELECT SUM(`totalprice`) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN (2,3,4) AND `date` BETWEEN '$start_timestamp' AND '$end_timestamp'";
 	} else {
-		$sql = "SELECT SUM(`totalprice`) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` > '1' AND `date` != ''";
+		$sql = "SELECT SUM(`totalprice`) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN (2,3,4) AND `date` != ''";
 	}
   $total = $wpdb->get_var($sql);
   return $total;

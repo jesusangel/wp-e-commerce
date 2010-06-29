@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name:WP Shopping Cart
+Plugin Name:WP e-Commerce
 Plugin URI: http://www.instinct.co.nz
-Description: A plugin that provides a WordPress Shopping Cart. Contact <a href='http://www.instinct.co.nz/?p=16#support'>Instinct Entertainment</a> for support.
+Description: A Plugin that provides a WordPress Shopping Cart. Visit the <a href='http://getshopped.org/forums'>Getshopped Forums</a> for support.
 Version: 3.8 Development
 Author: Instinct Entertainment
 Author URI: http://www.instinct.co.nz/e-commerce/
 */
 /**
- * WP eCommerce Main Plugin File
+ * WP e-Commerce Main Plugin File
  * @package wp-e-commerce
 */
 // this is to make sure it sets up the table name constants correctly on activation
