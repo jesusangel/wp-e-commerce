@@ -593,8 +593,17 @@ function wpsc_submit_checkout() {
 		$subtotal = $wpsc_cart->calculate_subtotal();
 		if($wpsc_cart->has_total_shipping_discount() == false && wpsc_uses_shipping()) {
 			$base_shipping= $wpsc_cart->calculate_base_shipping();
+			$shipping_method = $wpsc_cart->selected_shipping_method;
+			$shipping_option = $wpsc_cart->selected_shipping_option;
+			$delivery_country = $wpsc_cart->delivery_country;
+			$delivery_region = $wpsc_cart->delivery_region;
 		} else {
 			$base_shipping = 0;
+			$shipping_method = '';
+			$shipping_option = '';
+			$delivery_country = '';
+			$delivery_region = '';
+
 		}
 		if(isset($_POST['how_find_us'])){
 			$find_us = $_POST['how_find_us'];
@@ -604,7 +613,7 @@ function wpsc_submit_checkout() {
 
 		$tax = $wpsc_cart->calculate_total_tax();
 		$total = $wpsc_cart->calculate_total_price();
-		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`,`find_us`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->delivery_country}', '{$wpsc_cart->selected_country}','{$wpsc_cart->selected_region}', '{$wpsc_cart->delivery_region}', '{$base_shipping}', '{$wpsc_cart->selected_shipping_method}', '{$wpsc_cart->selected_shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}', '{$find_us}')";
+		$sql = "INSERT INTO `".WPSC_TABLE_PURCHASE_LOGS."` (`totalprice`,`statusno`, `sessionid`, `user_ID`, `date`, `gateway`, `billing_country`,`shipping_country`, `billing_region`, `shipping_region`, `base_shipping`,`shipping_method`, `shipping_option`, `plugin_version`, `discount_value`, `discount_data`,`find_us`) VALUES ('$total' ,'0', '{$sessionid}', '".(int)$user_ID."', UNIX_TIMESTAMP(), '{$submitted_gateway}', '{$wpsc_cart->selected_country}', '{$delivery_country}','{$wpsc_cart->selected_region}', '{$delivery_region}', '{$base_shipping}', '{$shipping_method}', '{$shipping_option}', '".WPSC_VERSION."', '{$wpsc_cart->coupons_amount}','{$wpsc_cart->coupons_name}', '{$find_us}')";
 		
 		
 		$wpdb->query($sql);

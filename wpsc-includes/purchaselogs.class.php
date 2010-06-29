@@ -512,7 +512,9 @@ function wpsc_display_purchlog_shipping_city(){
 function wpsc_display_purchlog_shipping_state_and_postcode(){
 	global $purchlogitem;
 	//exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
+	if(!empty($purchlogitem->shippinginfo['shippingstate']['value']) && !empty($purchlogitem->shippinginfo['shippingpostcode']['value'])){
 	return $purchlogitem->shippingstate($purchlogitem->shippinginfo['shippingstate']['value']).', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
+	}
 	//return $purchlogitem->shippinginfo['shippingstate']['value'].', '.$purchlogitem->shippinginfo['shippingpostcode']['value'];
 }
 
