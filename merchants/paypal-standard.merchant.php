@@ -165,6 +165,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				
 			} else {
 				// Stick the cart item values together here
+				
 				$i = 1;
 				foreach($this->cart_items as $cart_row) {
 					$paypal_vars += array(
@@ -175,12 +176,14 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 						"item_number_$i" => $cart_row['product_id'],
 						"shipping_$i" => $this->format_price($cart_row['shipping']), // additional shipping for the the (first item / total of the items)
 						"shipping2_$i" => $this->format_price($cart_row['shipping']), // additional shipping beyond the first item
-						"handling_$i" => '',
 					);
 					++$i;
 				}
+				$paypal_vars += array(
+				'handling_1' => $this->cart_data['base_shipping'],
+				);
 			}
-			
+
 		// Payment Type settings to be sent to paypal
 
 		
@@ -195,7 +198,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				'redirect_cmd' => '_cart'
 			);
 		}
-
 
 		$this->collected_gateway_data = $paypal_vars;
 	}

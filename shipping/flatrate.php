@@ -126,7 +126,6 @@ class flatrate {
 		$weight = $cart_item->weight;
 		$product_id = $cart_item->product_id;
 
-		
 		$uses_billing_address = false;
 		foreach($cart_item->category_id_list as $category_id) {
 			$uses_billing_address = (bool)wpsc_get_categorymeta($category_id, 'uses_billing_address');
@@ -147,7 +146,7 @@ class flatrate {
 			//$product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
 			if($cart_item->uses_shipping == true) {
 				//if the item has shipping
-				$shipping_values = $cart_item->meta['shipping'];
+				$shipping_values = $cart_item->meta[0]['shipping'];
 				if($country_code == get_option('base_country')) {
 					$additional_shipping = $shipping_values['local'];
 				} else {

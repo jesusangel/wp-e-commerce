@@ -2001,19 +2001,17 @@ function wpsc_checkout_settings(){
 			update_option('wpsc_checkout_form_sets', $checkout_sets);
 	  }
 
-// 		echo "<pre>".print_r($_POST,true)."</pre>";
-   // if(!isset($_POST['wpsc_checkout_set_filter'])){
 		// Save checkout options
 	    if(is_array($_POST['wpsc_checkout_option_label'])){
 	    	foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
 	    		$options = array();
-					foreach((array)$values as $key => $form_option){
-						$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
-					}
-				
-					$options = serialize($options);
-					$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id;
-					$wpdb->query($sql);
+				foreach((array)$values as $key => $form_option){
+					$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
+				}
+			
+				$options = serialize($options);
+				$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id;
+				$wpdb->query($sql);
 	    	}
 	    }
 	    
@@ -2057,10 +2055,7 @@ function wpsc_checkout_settings(){
 				$added++;
 			}
 		}
-		//echo "INSERT INTO `".WPSC_TABLE_CHECKOUT_FORMS."` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order` , `unique_name`, `checkout_set`) VALUES ( '$form_name', '$form_type', '$form_mandatory', '$form_display_log', '', '1','".$order_number."','".$form_unique_name."','".$filter."');";
-	  //exit('<pre>'.print_r($_POST, true).'</pre>');
-	   
-	   
+			   
 		if(isset($_POST['wpsc_options'])){
 			foreach($_POST['wpsc_options'] as $key=>$value){
 				if($value != get_option($key)){
@@ -2069,7 +2064,7 @@ function wpsc_checkout_settings(){
 				}
 			}
 		}
-	//}
+
 	$sendback = wp_get_referer();
 	if(isset($form_set_key)) {
 		$sendback = add_query_arg('checkout-set', $form_set_key, $sendback);
@@ -2228,7 +2223,6 @@ function wpsc_mass_resize_thumbnails() {
 		}
 		
 	}
-	//$wpdb->query("DELETE FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN('0')");
 	
   $_SESSION['wpsc_thumbnails_resized'] = true;
 	$sendback = wp_get_referer();

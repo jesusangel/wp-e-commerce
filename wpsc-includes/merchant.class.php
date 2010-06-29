@@ -142,12 +142,13 @@ class wpsc_merchant {
 			'transaction_results_url' => get_option('transact_url'),
 			'shopping_cart_url' => get_option('shopping_cart_url'),
 			'products_page_url' => get_option('product_list_url'),
+			'base_shipping' => $purchase_logs['base_shipping'],
 			'total_price' => $purchase_logs['totalprice'],
 			'session_id' => $purchase_logs['sessionid'],
  			'transaction_id' => $purchase_logs['transaction_id'], // Transaction ID might not  be set yet
 			'email_address' => $email_address,
 			'billing_address' => $address_data['billing'],
-			'shipping_address' => $address_data['shipping']
+			'shipping_address' => $address_data['shipping'],
 		);
   }
 	

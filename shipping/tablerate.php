@@ -107,7 +107,7 @@ class tablerate {
 		if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
 			if($cart_item->uses_shipping == true) {
 				//if the item has shipping
-				$shipping_values = $cart_item->meta['shipping'];
+				$shipping_values = $cart_item->meta[0]['shipping'];
 				if($country_code == get_option('base_country')) {
 					$additional_shipping = $shipping_values['local'];
 				} else {

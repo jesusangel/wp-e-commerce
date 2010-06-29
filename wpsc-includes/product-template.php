@@ -567,7 +567,7 @@ function wpsc_product_postage_and_packaging() {
 	if(is_array($product_meta['shipping'])) {
 		return nzshpcrt_currency_display($product_meta['shipping']['local'], 1, true);
 	} else {
-		return null;
+		return nzshpcrt_currency_display(0,1,true);
 	}
 }
 
