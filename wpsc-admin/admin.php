@@ -440,7 +440,7 @@ function wpsc_admin_latest_activity() {
 		$month = date("m");
 		$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
 		$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
-		$sql = "SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC";
+		$sql = "SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' AND `processed` IN (2,3,4) ORDER BY `date` DESC";
 		$currentMonthOrders = $wpdb->get_var($sql);
 		
 		//calculates amount of money made for the month
