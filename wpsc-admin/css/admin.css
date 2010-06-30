@@ -1699,8 +1699,9 @@ table.coupon_data{
 table.add-coupon{width:100%;} 
 table.add-coupon tr th{ text-align: left; padding: 2px 5px 0px 5px; border: none;}
 table.add-coupon tr td{ text-align: left; padding: 2px 5px 2px 5px; border: none;}
-  
+table.add-coupon tr td p{padding:0;margin:5px;}  
 #table_header{
+	font-size:16px;
 	margin-top:20px;
 	font-weight: bold;
 }

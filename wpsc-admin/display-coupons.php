@@ -30,20 +30,14 @@ function wpsc_display_coupons_page(){
 		}
 	}
 	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && !(isset($_POST['delete_condition'])) && !(isset($_POST['submit_condition']))) {
-			//exit('<pre>'.print_r($_POST, true).'</pre>');
 		foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
-			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
 			$coupon_id = (int)$coupon_id;
-			// convert dates to a form that compares well and can be inserted into the database
-// 			$coupon_data['start'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['start']['month'], (int)$coupon_data['start']['day'], (int)$coupon_data['start']['year']));
-// 			$coupon_data['expiry'] = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$coupon_data['expiry']['month'], (int)$coupon_data['expiry']['day'], (int)$coupon_data['expiry']['year']));
 			$coupon_data['start'] = $coupon_data['start']." 00:00:00";
 			$coupon_data['expiry'] = $coupon_data['expiry']." 00:00:00";
 			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id'", ARRAY_A);
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
-		//	exit('<pre>'.print_r($coupon_data, true).'</pre>');
-			ksort($check_values); ksort($coupon_data);
-			
+
+			ksort($check_values); ksort($coupon_data);			
 			if($check_values != $coupon_data) {
 				$insert_array = array();
 				foreach($coupon_data as $coupon_key => $coupon_value) {
@@ -54,8 +48,6 @@ function wpsc_display_coupons_page(){
 						$insert_array[] = "`$coupon_key` = '$coupon_value'";
 					}
 				}
-				//if(in_array(mixed needle, array haystack [, bool strict]))	
-				//exit("<pre>".print_r($conditions,true)."</pre>");
 				if(count($insert_array) > 0) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
@@ -73,12 +65,7 @@ function wpsc_display_coupons_page(){
 					}
 				}
 
-				/*
-$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
-				$wpdb->query($sql);
-				
-*/
-			$conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
+				$conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
 				  $conditions=unserialize($conditions);
 				  $new_cond=array();
 				  if($_POST['rules']['value'][0] != ''){
@@ -182,14 +169,14 @@ $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_ru
    <th>
    <?php echo __('Expiry', 'wpsc'); ?>
    </th>
+<!--
    <th>
    <?php echo __('Use Once', 'wpsc'); ?>
    </th>
    <th>
    <?php echo __('Active', 'wpsc'); ?>
    </th>
-  <!--
- <th>
+   <th>
    <?php echo __('Apply On All Products', 'wpsc'); ?>
    </th>
 -->
@@ -203,7 +190,7 @@ $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_ru
    <select name='add_discount_type'>
      <option value='0' >$</option>
      <option value='1' >%</option>
-     <option value='2' >Free shipping</option>
+     <option value='2' ><?php _e('Free shipping','wpsc'); ?></option>
    </select>
    </td>
    <td>
@@ -267,45 +254,46 @@ $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_ru
    </select>-->
    </td>
    <td>
-   <input type='hidden' value='0' name='add_use-once' />
-   <input type='checkbox' value='1' name='add_use-once' />
-   </td>
-   <td>
-   <input type='hidden' value='0' name='add_active' />
-   <input type='checkbox' value='1' checked='checked' name='add_active' />
-   </td>
-
-   <td>
    
    <input type='hidden' value='true' name='add_coupon' />
    <input type='submit' value='Add Coupon' name='submit_coupon' class='button-primary' />
    </td>
  </tr>
  <tr><td colspan="2">
-		   <input type='hidden' value='0' name='add_every_product' />
-			<input type="checkbox" value="1" name='add_every_product'/>
-		<?php _e('Apply On All Products', 'wpsc')?></td></tr>
+   <p><span class='input_label'><?php _e('Active','wpsc'); ?></span><input type='hidden' value='0' name='add_active' />
+   <input type='checkbox' value='1' checked='checked' name='add_active' />
+	<?php _e('Activate Coupon on Creation ', 'wpsc')?></p></td></tr>
+ 
+ <tr><td colspan="2">
+   <p><span class='input_label'><?php _e('Use Once','wpsc'); ?></span><input type='hidden' value='0' name='add_use-once' />
+	<input type='checkbox' value='1' name='add_use-once' />
+	<?php _e('Deactivate Coupon after it has been used', 'wpsc')?></td></tr>
+
+ <tr><td colspan="2">
+   <p><span class='input_label'><?php _e('Apply On All Products','wpsc'); ?></span><input type='hidden' value='0' name='add_every_product' />
+	<input type="checkbox" value="1" name='add_every_product'/>
+	<?php _e('This Coupon Effects All Products', 'wpsc')?></td></tr>
 
 <tr><td colspan='3'><span id='table_header'>Conditions</span></td></tr>
 <tr><td colspan="8">
 	<div class='coupon_condition' >
 		<div class='first_condition'>
 			<select class="ruleprops" name="rules[property][]">
-				<option value="item_name" rel="order">Item name</option>
-				<option value="item_quantity" rel="order">Item quantity</option>
-				<option value="total_quantity" rel="order">Total quantity</option>
-				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				<option value="item_name" rel="order"><?php _e('Item name','wpsc'); ?></option>
+				<option value="item_quantity" rel="order"><?php _e('Item quantity','wpsc'); ?></option>
+				<option value="total_quantity" rel="order"><?php _e('Total quantity','wpsc'); ?></option>
+				<option value="subtotal_amount" rel="order"><?php _e('Subtotal amount','wpsc'); ?></option>
 				<?php echo apply_filters( 'wpsc_coupon_rule_property_options', '' ); ?>
 			</select>
 			<select name="rules[logic][]">
-				<option value="equal">Is equal to</option>
-				<option value="greater">Is greater than</option>
-				<option value="less">Is less than</option>
-				<option value="contains">Contains</option>
-				<option value="not_contain">Does not contain</option>
-				<option value="begins">Begins with</option>
-				<option value="ends">Ends with</option>
-                		<option value="category">In Category</option>
+				<option value="equal"><?php _e('Is equal to','wpsc');?></option>
+				<option value="greater"><?php _e('Is greater than','wpsc'); ?></option>
+				<option value="less"><?php _e('Is less than','wpsc'); ?></option>
+				<option value="contains"><?php _e('Contains','wpsc'); ?></option>
+				<option value="not_contain"><?php _e('Does not contain','wpsc'); ?></option>
+				<option value="begins"><?php _e('Begins with','wpsc'); ?></option>
+				<option value="ends"><?php _e('Ends with','wpsc'); ?></option>
+                		<option value="category"><?php _e('In Category','wpsc'); ?></option>
 			</select>
 			<span>
 				<input type="text" name="rules[value][]"/>
@@ -516,7 +504,7 @@ function wpsc_marketing_meta_box(){
 function wpsc_rss_address_meta_box(){
 ?>
 	<p><?php echo __('People can use this RSS feed to keep up to date with your product list.', 'wpsc');?></p>
-	<p>RSS Feed Address:	<?php echo get_bloginfo('url')."/index.php?rss=true&amp;action=product_list"; ?></p>
+	<p><?php _e('RSS Feed Address','wpsc') ?> :	<?php echo get_bloginfo('url')."/index.php?rss=true&amp;action=product_list"; ?></p>
 <?php
 }
 function wpsc_google_merch_center_meta_box(){
