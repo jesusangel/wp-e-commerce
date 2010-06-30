@@ -127,7 +127,7 @@ function wpsc_admin_pages(){
 			}
 			//exit('base page:'.$base_page);
 //			exit($GLOBALS['wp_version']);
-			if(IS_WPMU || $GLOBALS['wp_version'] == '3.0-alpha'){
+			if(IS_WPMU || $GLOBALS['wp_version'] == '3.0'){
 				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 10,'wpsc_display_coupons_page','wpsc_display_coupons_page');
 			}else{
 				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7,'wpsc_display_coupons_page','wpsc_display_coupons_page');

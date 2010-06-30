@@ -544,27 +544,7 @@ div.wpsc_listen_button{
   padding: 0px;
   }
  
-/* marketing / coupon page styling */
 
-div.modify_coupon{ border: 1px solid #eeeeee; display: none; width: 100%; }
-
-table.coupon_data{
- width: 100%;
-  }
-  
-table.add-coupon tr th{ text-align: left; padding: 2px 5px 0px 5px; }
-table.add-coupon tr td{ text-align: left; padding: 2px 5px 2px 5px; }
-  
-
-table.coupon-list{ width: 100%; }
-
-table.coupon-list tr.toprow td{ text-align: left; font-weight:bold; }
-  
-table.coupon-list tr td{ padding: 2px 5px 2px 5px; }
-  
-table.coupon-list tr.alt{ background-color: #eeeeee; }
-
-table.coupon-list tr.alt td{ background-color: #eeeeee; }
 
 td#order_summary_container{ width: 80px; }
 
