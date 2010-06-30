@@ -122,19 +122,19 @@ $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_ru
 	  $wpdb->query($sql);
   }
   if($_POST['change-settings'] == 'true') {
-    if($_POST['wpsc_also_bought'] == 1) {
+    if($_POST['wpsc_also_bought'] == 'on') {
       update_option('wpsc_also_bought', 1);
 		} else {
       update_option('wpsc_also_bought', 0);
 		}
-	
+
     if($_POST['display_find_us'] == 'on') {
       update_option('display_find_us', 1);
 		} else {
       update_option('display_find_us', 0);
 		}
       
-    if($_POST['wpsc_share_this'] == 1) {
+    if($_POST['wpsc_share_this'] == 'on') {
       update_option('wpsc_share_this', 1);
 		} else {
       update_option('wpsc_share_this', 0);
@@ -483,107 +483,45 @@ foreach((array)$coupon_data as $coupon) {
 }
 
 function wpsc_marketing_meta_box(){
+
+    $wpsc_also_bought = get_option('wpsc_also_bought');
+    $wpsc_also_bought1 = "";
+   	if ($wpsc_also_bought=='1') {
+		$wpsc_also_bought1 = "checked ='checked'";
+	}
+	$wpsc_share_this = get_option('wpsc_share_this');
+    $wpsc_share_this1 = "";
+    if ($wpsc_share_this=='1') {
+		$wpsc_share_this1 = "checked ='checked'";
+	}
+	$display_find_us = get_option('display_find_us');
+	$display_find_us1 = "";
+	if ($display_find_us=='1') {
+		$display_find_us1 = "checked ='checked'";
+	}
 ?>
 <form name='cart_options' method='post' action=''>
-<input type='hidden' value='true' name='change-settings' />
-  <table>
-    <tr>
-      <td>
-        <?php echo __('Display Cross Sales', 'wpsc');?>:
-      </td>
-      <td>
-        <?php
-        $wpsc_also_bought = get_option('wpsc_also_bought');
-        $wpsc_also_bought1 = "";
-        $wpsc_also_bought2 = "";
-        switch($wpsc_also_bought) {
-        case 0:
-        $wpsc_also_bought2 = "checked ='true'";
-        break;
-        
-        case 1:
-        $wpsc_also_bought1 = "checked ='true'";
-        break;
-        }
-        ?>
-        <input type='radio' value='1' name='wpsc_also_bought' id='wpsc_also_bought1' <?php echo $wpsc_also_bought1; ?> /> <label for='wpsc_also_bought1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-        <input type='radio' value='0' name='wpsc_also_bought' id='wpsc_also_bought2' <?php echo $wpsc_also_bought2; ?> /> <label for='wpsc_also_bought2'><?php echo __('No', 'wpsc');?></label>
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
-      <?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?>:
-      </td>
-      <td>
-        <?php
-        $wpsc_share_this = get_option('wpsc_share_this');
-        $wpsc_share_this1 = "";
-        $wpsc_share_this2 = "";
-        switch($wpsc_share_this) {
-          case 0:
-          $wpsc_share_this2 = "checked ='true'";
-          break;
-          
-          case 1:
-          $wpsc_share_this1 = "checked ='true'";
-          break;
-          }
-        ?>
-        <input type='radio' value='1' name='wpsc_share_this' id='wpsc_share_this1' <?php echo $wpsc_share_this1; ?> /> <label for='wpsc_share_this1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-        <input type='radio' value='0' name='wpsc_share_this' id='wpsc_share_this2' <?php echo $wpsc_share_this2; ?> /> <label for='wpsc_share_this2'><?php echo __('No', 'wpsc');?></label>
-      </td>
-    </tr>
-	<tr>
-        <td>
-		<?php echo __('Display How Customer Found Us Survey', 'wpsc')?>
-        </td>
-	<?php
-		$display_find_us = get_option('display_find_us');
-		if ($display_find_us=='1') {
-			$display_find_us1 = "checked ='checked'";
-		}
-	?>
-        <td>
-		<input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us'>
-        </td>
-      </tr>
-      <tr>
-        <td>
-	
-        </td>
-        <td>
-        <input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' />
-        </td>
-      </tr>
-  </table>
+	<input type='hidden' value='true' name='change-settings' />        
+    <p><span class='input_label'><?php echo __('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' /><?php echo __('Creates a \' Users who bought this also bought\' system. ', 'wpsc');?></p>
+ 
+   	<p><span class='input_label'><?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' />  <?php echo __('Adds a share this link on the single products page.', 'wpsc');?></p>
+
+	<p><span class='input_label'> <?php echo __('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' />  <?php echo __('Provides a \'How did you find out about us\' drop down box on checkout page.', 'wpsc')?></p>
+
+   	<p><input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' /></p>
 </form>
 
 <?php
 }
 function wpsc_rss_address_meta_box(){
 ?>
-<table>
-	<tr>
-		<td colspan='2'>
-			<?php echo __('<strong>Note:</strong> Not only can people use this RSS to keep update with your product list.', 'wpsc');?>
-		</td>
-	</tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr>
-		<td>
-			RSS Feed Address:
-		</td>
-		<td>
-			<?php echo get_bloginfo('url')."/index.php?rss=true&amp;action=product_list"; ?>
-		</td>
-	</tr>
-</table>
+	<p><?php echo __('People can use this RSS feed to keep up to date with your product list.', 'wpsc');?></p>
+	<p>RSS Feed Address:	<?php echo get_bloginfo('url')."/index.php?rss=true&amp;action=product_list"; ?></p>
 <?php
 }
 function wpsc_google_merch_center_meta_box(){
 ?>
-<p>To import your products into <a href="http://www.google.com/merchants/" target="_blank">Google Merchant Centre</a> so that they appear within Google Product Search results, sign up for a Google Merchant Centre account and add a scheduled data feed with the following URL:</p>
+<p><?php _e('To import your products into <a href="http://www.google.com/merchants/" target="_blank">Google Merchant Centre</a> so that they appear within Google Product Search results, sign up for a Google Merchant Centre account and add a scheduled data feed with the following URL:','wpsc'); ?></p>
 <?php $google_feed_url = get_bloginfo('url')."/index.php?rss=true&action=product_list&xmlformat=google"; ?>
 <a href="<?php echo htmlentities($google_feed_url); ?>"><?php echo htmlentities($google_feed_url); ?></a>
 <?php

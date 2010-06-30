@@ -1723,3 +1723,8 @@ font-size:11px;
 margin:3px 0 0 8px;
 text-decoration:underline;
 }
+p span.input_label{
+	font-size:1.2em;
+	width:280px;
+	float:left;
+}
