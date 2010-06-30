@@ -88,7 +88,7 @@ if(wpsc_cart_item_count() > 0) :
 	?>
 	<?php do_action('wpsc_before_shipping_of_shopping_cart'); ?>
 	<div id='wpsc_shopping_cart_container'>
-	<?php if(wpsc_uses_shipping()) : ?>
+	<?php if(wpsc_uses_shipping()  && wpsc_has_shipping_form()): ?>
 		<h2><?php echo __('Calculate Shipping Price', 'wpsc'); ?></h2>
 		<table class="productcart">
 			<tr>

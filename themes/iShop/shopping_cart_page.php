@@ -87,7 +87,7 @@ if(wpsc_cart_item_count() > 0) :
 	?>
 	<?php do_action('wpsc_before_shipping_of_shopping_cart'); ?>
 	<div id='wpsc_shopping_cart_container'>
-	<?php if(wpsc_uses_shipping()) : ?>
+	<?php if(wpsc_uses_shipping()  && wpsc_has_shipping_form()): ?>
 		<h2><?php echo __('Calculate Shipping Price', 'wpsc'); ?></h2>
 		<table class="productcart">
 			<tr>
@@ -148,15 +148,17 @@ if(wpsc_cart_item_count() > 0) :
 	<?php endif;  ?>
 	
 	<table class="productcart">
-	<tr class="total_price total_tax">
-		<td colspan="3">
-			<?php echo wpsc_display_tax_label(true); ?>
+	<?php if(wpsc_cart_tax(false) > 0) : ?>
+		<tr class="total_price total_tax">
+			<td colspan="3">
+				<?php echo wpsc_display_tax_label(true); ?>
 
-		</td>
-		<td colspan="2">
-			<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
-		</td>
-	</tr>
+			</td>
+			<td colspan="2">
+				<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
+			</td>
+		</tr>
+	<?php endif; ?>
 	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
 	<tr class="total_price">
 		<td colspan="3">

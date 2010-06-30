@@ -145,6 +145,30 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
 			</td>
 		</tr>
+		
+		<tr>
+			<?php
+				$billing_unless_shipping_setting = get_option('use_billing_unless_is_shipping');
+
+				switch($billing_unless_shipping_setting) {
+					case 1:
+					$billing_unless_shipping['on'] = "checked ='checked'";
+					break;
+					
+					case 0:
+					$billing_unless_shipping['off'] = "checked ='checked'";
+					break;
+				}
+			?>
+			<td scope="row"><?php echo __('Use The Billing country for Shipping unless a shipping form is present: ', 'wpsc'); ?>:</td>
+			<td>
+			<input type='radio' value='1' name='wpsc_options[use_billing_unless_is_shipping]' id='use_billing_unless_is_shipping1' <?php echo $billing_unless_shipping['on']; ?> /> 
+			<label for='use_billing_unless_is_shipping1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+			<input type='radio' value='0' name='wpsc_options[use_billing_unless_is_shipping]' id='use_billing_unless_is_shipping2' <?php echo $billing_unless_shipping['off']; ?> /> 
+			<label for='use_billing_unless_is_shipping2'><?php echo __('No', 'wpsc');?></label>
+			</td>
+		</tr>
+		
 			</table>
 		</div>
 		</div>

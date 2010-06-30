@@ -60,6 +60,7 @@ function wpsc_the_checkout_item() {
 	global $wpsc_checkout;
 	return $wpsc_checkout->the_checkout_item();
 }
+
 function wpsc_is_shipping_details(){
 	global $wpsc_checkout;
 	if($wpsc_checkout->checkout_item->unique_name == 'delivertoafriend' && get_option('shippingsameasbilling') == '1'){
@@ -69,13 +70,42 @@ function wpsc_is_shipping_details(){
 	}
 	
 }
+
+
+/*
+ * wpsc_has_shipping_form function 
+ * Checks to see if shipping is set to be the same as billing, and there is no shipping section
+ * If so, it disables the shipping select box.
+ * 
+ */
+
+function wpsc_has_shipping_form(){
+	global $wpsc_checkout;
+	if($wpsc_checkout == null) {
+		$wpsc_checkout = new wpsc_checkout();
+	}
+	
+	//echo "<pre>".print_r($wpsc_checkout, true)."</pre>";
+	$unique_name_list = array();
+	foreach($wpsc_checkout->checkout_items as $checkout_item) {
+		$unique_name_list[] = $checkout_item->unique_name;
+	}
+	if(in_array('shippingcountry', $unique_name_list) && (get_option('use_billing_unless_is_shipping') != '1')){
+		return true;
+	}else{
+		return false;
+	}
+	
+}
+
+
+
 function wpsc_shipping_details(){
 	global $wpsc_checkout;
 	if(stristr($wpsc_checkout->checkout_item->unique_name, 'shipping') != false){
-
-	return ' wpsc_shipping_forms';
+		return ' wpsc_shipping_forms';
 	}else{
-	return "";
+		return "";
 	}
 	
 }
@@ -456,13 +486,15 @@ class wpsc_checkout {
 			break;
 
 			case "delivery_country":  
-				if(wpsc_uses_shipping()){ 
-				$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
-				$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' /><span class='shipping_country_name'>".$country_name."</span> ";
-				}else{
-				$checkoutfields = true;
-				//$output = wpsc_shipping_country_list($checkoutfields);
-				$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id(), $checkoutfields);
+				if(wpsc_uses_shipping() && (get_option('use_billing_unless_is_shipping') != 1)) { 
+					$country_name = $wpdb->get_var("SELECT `country` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".$_SESSION['wpsc_delivery_country']."' LIMIT 1");
+					$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_country' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_country']."' /><span class='shipping_country_name'>".$country_name."</span> ";
+				} else if(get_option('use_billing_unless_is_shipping') == 1) {
+					$output = wpsc_shipping_country_list();
+				} else {
+					$checkoutfields = true;
+					//$output = wpsc_shipping_country_list($checkoutfields);
+					$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id(), $checkoutfields);
 				}
 			break;
 						
@@ -738,16 +770,16 @@ class wpsc_checkout {
 		  	$value = $form_data->value;
 		  }	
    	      if($form_data->type != 'heading') {
-		 // echo '<pre>'.print_r($form_data,true).'</pre>';
+		 	// echo '<pre>'.print_r($form_data,true).'</pre>';
 		  	if(is_array($value) &&($form_data->type == 'country' ||$form_data->type == 'delivery_country') ){
 			  	$value = serialize($value);
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
-			}elseif(is_array($value)) {
-			//	echo('<pre>'.print_r($value, true).'</pre>');
+			} else if(is_array($value)) {
+				//	echo('<pre>'.print_r($value, true).'</pre>');
 			  	foreach((array)$value as $v){
 			  		if(is_array($v)){
 			  			$options = array();
-//			  			exit('<pre>'.print_r($v, true).'</pre>');
+						// exit('<pre>'.print_r($v, true).'</pre>');
 			  			foreach($v as $option){
 			  				if($option != '-1'){
 			  					$options[] = $option;
@@ -759,7 +791,7 @@ class wpsc_checkout {
 			  		}
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $v));
 			  	}
-			}else{
+			} else {
 					$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 			
 			}

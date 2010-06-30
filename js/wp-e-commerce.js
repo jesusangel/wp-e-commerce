@@ -253,7 +253,7 @@ function switchmethod(key,key1){
 
 // submit the country forms.
 function submit_change_country(ajax){
-	if(!ajax){
+	if(!ajax && (document.forms.change_country)){
 	  	document.forms.change_country.submit();
 	}else{
 		var country_code = jQuery('#current_country  :selected').val();
