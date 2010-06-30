@@ -1,6 +1,8 @@
 <?php
-if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
-	//exit('<pre>'.print_r($_POST, true).'</pre>');
+function wpsc_display_coupons_page(){
+	global $wpdb;
+	if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
+
 	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
 		$coupon_code = $_POST['add_coupon_code'];
 		$discount = (double)$_POST['add_discount'];
@@ -28,6 +30,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		}
 	}
 	if(isset($_POST['is_edit_coupon']) && ($_POST['is_edit_coupon'] == 'true') && !(isset($_POST['delete_condition'])) && !(isset($_POST['submit_condition']))) {
+			//exit('<pre>'.print_r($_POST, true).'</pre>');
 		foreach((array)$_POST['edit_coupon'] as $coupon_id => $coupon_data) {
 			//echo('<pre>'.print_r($coupon_data,true)."</pre>");
 			$coupon_id = (int)$coupon_id;
@@ -40,7 +43,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
 		//	exit('<pre>'.print_r($coupon_data, true).'</pre>');
 			ksort($check_values); ksort($coupon_data);
-						
+			
 			if($check_values != $coupon_data) {
 				$insert_array = array();
 				foreach($coupon_data as $coupon_key => $coupon_value) {
@@ -51,14 +54,14 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 						$insert_array[] = "`$coupon_key` = '$coupon_value'";
 					}
 				}
-					
-				//echo("<pre>".print_r($insert_array,true)."</pre>");
+				//if(in_array(mixed needle, array haystack [, bool strict]))	
+				//exit("<pre>".print_r($conditions,true)."</pre>");
 				if(count($insert_array) > 0) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
 				unset($insert_array);
 				$rules = $_POST['rules'];
-
+				
 				foreach ((array)$rules as $key => $rule) {
 					foreach ($rule as $k => $r) {
 						$new_rule[$k][$key] = $r;
@@ -70,8 +73,23 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 					}
 				}
 
-				$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
+				/*
+$sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($new_rule)."' WHERE `id` = '$coupon_id' LIMIT 1";
 				$wpdb->query($sql);
+				
+*/
+			$conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
+				  $conditions=unserialize($conditions);
+				  $new_cond=array();
+				  if($_POST['rules']['value'][0] != ''){
+					  $new_cond['property']=$_POST['rules']['property'][0];
+					  $new_cond['logic']=$_POST['rules']['logic'][0];
+					  $new_cond['value']=$_POST['rules']['value'][0];
+					  $conditions []= $new_cond;
+				  }
+				  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+				  $wpdb->query($sql);
+
 			}
 				
 			if($coupon_data['delete_coupon'] != '') {
@@ -80,11 +98,16 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 		}
 	}
   if(isset($_POST['delete_condition'])){
+
 	  $conditions = $wpdb->get_var("SELECT `condition` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1");
 	  $conditions=unserialize($conditions);
+	    
 	  unset($conditions[(int)$_POST['delete_condition']]);
-	  $conditions = array_values($conditions);
+	  	
+	  //$conditions = array_values($conditions);
+	 //  exit('<pre>'.print_r($_POST, true).'</pre><pre>'.print_r($conditions, true).'</pre>'.$sql);
 	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
+	
 	  $wpdb->query($sql);
   }
   if(isset($_POST['submit_condition'])){
@@ -123,15 +146,19 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 ?>
 <script type='text/javascript'>
 	jQuery(".pickdate").datepicker();
+		/* jQuery datepicker selector */
+	if (typeof jQuery('.pickdate').datepicker != "undefined") {
+		jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
+	}
 </script>
 <div class="wrap">
   <h2><?php echo __('Coupons', 'wpsc');?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
   <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
 
-  <a href='' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");' class='add_item_link' id='add_coupon_box_link'><img src='<?php echo WPSC_URL; ?>/images/package_add.png' alt='<?php echo __('Add', 'wpsc'); ?>' title='<?php echo __('Add', 'wpsc'); ?>' />&nbsp;<span><?php echo __('Add Coupon', 'wpsc');?></span></a>
-  
-  <span id='loadingindicator_span'><img id='loadingimage' src='<?php echo WPSC_URL; ?>/images/indicator.gif' alt='Loading' title='Loading' style="display:none;" /></span>
+ 	<form action='' method='post'>
+		<input id='add_coupon_box_link' type='submit' class=' add_item_link button' name='add_coupon_button' value='<?php echo __('Create Coupon', 'wpsc');?>' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");return false;' />
+	</form>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
 <table style="width: 100%;">
@@ -251,23 +278,24 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
    <td>
    
    <input type='hidden' value='true' name='add_coupon' />
-   <input type='submit' value='Submit' name='submit_coupon' />
+   <input type='submit' value='Add Coupon' name='submit_coupon' class='button-primary' />
    </td>
  </tr>
  <tr><td colspan="2">
 		   <input type='hidden' value='0' name='add_every_product' />
 			<input type="checkbox" value="1" name='add_every_product'/>
-		<?=__('Apply On All Products', 'wpsc')?></td></tr>
+		<?php _e('Apply On All Products', 'wpsc')?></td></tr>
 
-<tr><td colspan='3'><b>Conditions</b></td></tr>
+<tr><td colspan='3'><span id='table_header'>Conditions</span></td></tr>
 <tr><td colspan="8">
-	<div class='coupon_condition' style="padding-left: 20px;">
-		<div>
+	<div class='coupon_condition' >
+		<div class='first_condition'>
 			<select class="ruleprops" name="rules[property][]">
 				<option value="item_name" rel="order">Item name</option>
 				<option value="item_quantity" rel="order">Item quantity</option>
 				<option value="total_quantity" rel="order">Total quantity</option>
 				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				<?php echo apply_filters( 'wpsc_coupon_rule_property_options', '' ); ?>
 			</select>
 			<select name="rules[logic][]">
 				<option value="equal">Is equal to</option>
@@ -277,6 +305,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 				<option value="not_contain">Does not contain</option>
 				<option value="begins">Begins with</option>
 				<option value="ends">Ends with</option>
+                		<option value="category">In Category</option>
 			</select>
 			<span>
 				<input type="text" name="rules[value][]"/>
@@ -292,6 +321,7 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 								'<option value="item_quantity" rel="order">Item quantity</option>\n'+
 								'<option value="total_quantity" rel="order">Total quantity</option>\n'+ 
 								'<option value="subtotal_amount" rel="order">Subtotal amount</option>\n'+ 
+								'<?php echo apply_filters( 'wpsc_coupon_rule_property_options', '' ); ?>'+
 							'</select> \n'+
 							'<select name="rules[logic][]"> \n'+
 								'<option value="equal">Is equal to</option> \n'+
@@ -307,58 +337,56 @@ if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 							'</span>  \n'+
 						'</div> \n'+
 					'</div> ';
-					this_button.parent().parent().parent().parent().append(new_property);
+		
+					jQuery('.coupon_condition :first').after(new_property);
 					coupon_number++;
 				}
 				</script>
-				<button class="add" type="button" onclick="add_another_property(jQuery(this));">
-					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/plus_icon.jpg"/>
-				</button>
+			
 			</span>
+			
 		</div>
 	</div>
 </tr>
+<tr><td>	<a class="wpsc_coupons_condition_add" onclick="add_another_property(jQuery(this));">
+					<?php _e('Add New Condition','wpsc'); ?>
+				</a></td></tr>
 </table>
+
 <br />
 </form>  
-</div>    
-    
+</table>
+
+
   <?php
-  $num = 0;
-  
-echo "<table class='coupon-list'>\n\r";
-echo "  <tr class='toprow'>\n\r";
-
-echo "    <td>\n\r";
-echo __('Coupon Code', 'wpsc');
-echo "    </td>\n\r";
-
-echo "    <td>\n\r";
-echo __('Discount', 'wpsc');
-echo "    </td>\n\r";
-
-echo "    <td>\n\r";
-echo __('Start', 'wpsc');
-echo "    </td>\n\r";
-
-echo "    <td>\n\r";
-echo __('Expiry', 'wpsc');
-echo "    </td>\n\r";
-
-echo "    <td>\n\r";
-echo __('Active', 'wpsc');
-echo "    </td>\n\r";
-
-echo "    <td>\n\r";
-echo __('Apply On All Products', 'wpsc');
-echo "    </td>\n\r";
-
-echo "    <td>\n\r";
-echo __('Edit', 'wpsc');
-echo "    </td>\n\r";
-
-$i=0;
+	$columns = array(
+  	'coupon_code' => __('Coupon Code', 'wpsc'),
+	'discount' => __('Discount', 'wpsc'),
+	'start' => __('Start', 'wpsc'),
+	'expiry' => __('Expiry', 'wpsc'),
+	'active' => __('Active', 'wpsc'),
+	'apply_on_prods' => __('Apply On All Products', 'wpsc'),
+	'edit' => __('Edit', 'wpsc')
+	);
+	register_column_headers('display-coupon-details', $columns); 
+	?>
+	<table class="coupon-list widefat" cellspacing="0">
+		<thead>
+			<tr>
+		<?php print_column_headers('display-coupon-details'); ?>
+			</tr>
+		</thead>
+	
+		<tfoot>
+			<tr>
+		<?php print_column_headers('display-coupon-details', false); ?>
+			</tr>
+		</tfoot>
+	
+		<tbody><?php
+		$i=0;
 $coupon_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_COUPON_CODES."` ",ARRAY_A);
+//exit('Coupon Data<pre>'.print_r($coupon_data, true).'</pre>');
 foreach((array)$coupon_data as $coupon) {
   $alternate = "";
   $i++;
@@ -414,23 +442,25 @@ foreach((array)$coupon_data as $coupon) {
   
   
   echo "    <td>\n\r";
-  echo "<a href='javascript:void(0)' onclick='jQuery(this).parent().parent().next().children().children().children().children().show();' >".__('Edit', 'wpsc')."</a>";
+  echo "<a title='".$coupon['coupon_code']."' href='#' rel='".$coupon['id']."' class='wpsc_edit_coupon'  >".__('Edit', 'wpsc')."</a>";
   echo "    </td>\n\r";
   
   echo "  </tr>\n\r";
-  echo "  <tr>\n\r";
-  echo "    <td colspan='7'style='padding-left:0px;'>\n\r";
-  //$status_style = "style='display: block;'";
-  echo "      <div id='coupon_box_".$coupon['id']."' class='modify_coupon' $status_style>\n\r";  
+  echo "  <tr class='coupon_edit'>\n\r";
+  echo "    <td colspan='7' style='padding-left:0px;'>\n\r";
+//  $status_style = "style='display: block;'";
+  echo "      <div id='coupon_box_".$coupon['id']."' class='displaynone modify_coupon' >\n\r";  
   coupon_edit_form($coupon);
   echo "      </div>\n\r";
   echo "    </td>\n\r";
   echo "  </tr>\n\r";
   }
-echo "</table>\n\r";
-  ?>
-  <p style='margin: 0px 0px 5px 0px;'>
-  	 <?php echo __('<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.', 'wpsc');?>
+?>
+		</tbody>
+		</table>
+
+  <p style='margin: 10px 0px 5px 0px;'>
+  	 <?php  _e('<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.', 'wpsc');?>
   </p>
     </td>
   </tr>
@@ -439,12 +469,22 @@ echo "</table>\n\r";
 <!-- </form> -->
 
 <br />
+<div class='metabox-holder'>
+<?php 
+	add_meta_box("wpsc_marketing_settings", __('Marketing Section', 'wpsc'), "wpsc_marketing_meta_box", "wpsc");
+	add_meta_box("wpsc_rss_address", __('RSS Address', 'wpsc'), "wpsc_rss_address_meta_box", "wpsc");
+	add_meta_box("wpsc_google_merch_center", __('Google Merchant Centre / Google Product Search', 'wpsc'), "wpsc_google_merch_center_meta_box", "wpsc");
+	do_meta_boxes('wpsc','advanced',null);
+?>
+</div>
+</div>
+</div>    
+<?php
+}
 
-
-      
-<h2><?php echo __('Marketing Settings', 'wpsc');?></h2>
-
-<form name='cart_options' method='POST' action=''>
+function wpsc_marketing_meta_box(){
+?>
+<form name='cart_options' method='post' action=''>
 <input type='hidden' value='true' name='change-settings' />
   <table>
     <tr>
@@ -513,17 +553,20 @@ echo "</table>\n\r";
 	
         </td>
         <td>
-        <input  type='submit' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' />
+        <input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' />
         </td>
       </tr>
   </table>
 </form>
 
-<h2><?php echo __('RSS Address', 'wpsc');?></h2>
+<?php
+}
+function wpsc_rss_address_meta_box(){
+?>
 <table>
 	<tr>
 		<td colspan='2'>
-			<?php echo __('<strong>Note:</strong> Not only can people use this RSS to keep update with your product list but you can also use this link to promote your products in your facebook profile. <br />Just add the <a href="http://apps.facebook.com/getshopped">getshopped! facebook application</a> to your facebook profile and follow the instructions.', 'wpsc');?>
+			<?php echo __('<strong>Note:</strong> Not only can people use this RSS to keep update with your product list.', 'wpsc');?>
 		</td>
 	</tr>
 	<tr><td>&nbsp;</td></tr>
@@ -536,9 +579,13 @@ echo "</table>\n\r";
 		</td>
 	</tr>
 </table>
-
-<h2><?php echo __('Google Merchant Centre / Google Product Search', 'wpsc'); ?></h2>
+<?php
+}
+function wpsc_google_merch_center_meta_box(){
+?>
 <p>To import your products into <a href="http://www.google.com/merchants/" target="_blank">Google Merchant Centre</a> so that they appear within Google Product Search results, sign up for a Google Merchant Centre account and add a scheduled data feed with the following URL:</p>
-<?php $google_feed_url = get_option('siteurl')."/index.php?rss=true&amp;action=product_list&xmlformat=google"; ?>
-<a href="<?php echo $google_feed_url; ?>"><?php echo $google_feed_url; ?></a>
-</div>
+<?php $google_feed_url = get_bloginfo('url')."/index.php?rss=true&action=product_list&xmlformat=google"; ?>
+<a href="<?php echo htmlentities($google_feed_url); ?>"><?php echo htmlentities($google_feed_url); ?></a>
+<?php
+}
+?>

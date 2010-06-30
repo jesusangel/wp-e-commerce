@@ -4,192 +4,111 @@
 function coupon_edit_form($coupon) {
 
 $conditions = unserialize($coupon['condition']);
-	//exit('<pre>'.print_r($conditions, true).'</pre>');
+	//exit('<pre>'.print_r($coupon, true).'</pre>');
 
-	$start_timestamp = strtotime($coupon['start']);
-	$end_timestamp = strtotime($coupon['expiry']);
-	$id = $coupon['id'];
-	$output = '';
-	$output .= "<form name='edit_coupon' method='post' action='admin.php?page=".WPSC_DIR_NAME."/display-coupons.php'>\n\r";
-		$output .= "	 <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
-	$output .= "<table class='add-coupon' style='display:none;'>\n\r";
-	$output .= " <tr>\n\r";
-	$output .= "	 <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
-	$output .= "	 <th>".__('Discount', 'wpsc')."</th>\n\r";
-	$output .= "	 <th>".__('Start', 'wpsc')."</th>\n\r";
-	$output .= "	 <th>".__('Expiry', 'wpsc')."</th>\n\r";
-	$output .= "	 <th>".__('Use Once', 'wpsc')."</th>\n\r";
-	$output .= "	 <th>".__('Active', 'wpsc')."</th>\n\r";
-	$output .= "	 <th>".__('Apply On All Products', 'wpsc')."</th>\n\r";
-	$output .= "	 <th></th>\n\r";
-	$output .= " </tr>\n\r";
-	$output .= " <tr>\n\r";
-	$output .= "	<td>\n\r";
-	$output .= "	 <input type='text' size='8' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$output .= "	 <input type='text' style='width:28px;' value='".$coupon['value']."'	name=edit_coupon[".$id."][value]' />";
-	$output .= "	 <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
-	$output .= "		 <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
-	$output .= "		 <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
-	$output .= "		 <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
-	$output .= "	 </select>\n\r";
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$coupon_start = explode(" ",$coupon['start']);
-	$output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
-/*	$output .= "	 <select name='edit_coupon[".$id."][start][day]'>\n\r";
-	 for($i = 1; $i <=31; ++$i) {
-		 $selected = '';
-		 if($i == date("d", $start_timestamp)) { $selected = "selected='true'"; }
-		 $output .= "		<option $selected value='$i'>$i</option>";
-		 }
-	$output .= "	 </select>\n\r";
-	$output .= "	 <select name='edit_coupon[".$id."][start][month]'>\n\r";
-	 for($i = 1; $i <=12; ++$i) {
-		 $selected = '';
-		 if($i == (int)date("m", $start_timestamp)) { $selected = "selected='true'"; }
-		 $output .= "		<option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
-		 }
-	$output .= "	 </select>\n\r";
-	$output .= "	 <select name='edit_coupon[".$id."][start][year]'>\n\r";
-	 for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
-		 $selected = '';
-		 if($i == date("Y", $start_timestamp)) { $selected = "selected='true'"; }
-		 $output .= "		<option $selected value='$i'>".$i."</option>";
-		 }
-	$output .= "	 </select>\n\r";*/
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$coupon_expiry = explode(" ",$coupon['expiry']);
-	$output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
-	/*$output .= "	 <select name='edit_coupon[".$id."][expiry][day]'>\n\r";
-	 for($i = 1; $i <=31; ++$i) {
-		 $selected = '';
-		 if($i == date("d", $end_timestamp)) { $selected = "selected='true'"; }
-		 $output .= "		<option $selected value='$i'>$i</option>";
-		 }
-	$output .= "	 </select>\n\r";
-	$output .= "	 <select name='edit_coupon[".$id."][expiry][month]'>\n\r";
+  $start_timestamp = strtotime($coupon['start']);
+  $end_timestamp = strtotime($coupon['expiry']);
+  $id = $coupon['id'];
+  $output = '';
+  $output .= "<form name='edit_coupon' id='".$coupon['coupon_code']."' method='post' action=''>\n\r";
+    $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
+  $output .= "<table class='add-coupon'>\n\r";
+  $output .= " <tr>\n\r";
+  $output .= "   <th>".__('Coupon Code', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Discount', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Start', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Expiry', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Use Once', 'wpsc')."</th>\n\r";
+  $output .= "   <th>".__('Active', 'wpsc')."</th>\n\r";
+	$output .= "   <th>".__('Apply On All Products', 'wpsc')."</th>\n\r";
+  $output .= "   <th></th>\n\r";
+  $output .= " </tr>\n\r";
+  $output .= " <tr>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='text' size='8' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='text' style='width:28px;' value='".$coupon['value']."'  name=edit_coupon[".$id."][value]' />";
+  $output .= "   <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
+  $output .= "     <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
+  $output .= "     <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
+  $output .= "     <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
+  $output .= "   </select>\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $coupon_start = explode(" ",$coupon['start']);
+  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $coupon_expiry = explode(" ",$coupon['expiry']);
+  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";
+  $output .= "   <input type='checkbox' value='1' ".(($coupon['use-once'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][use-once]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][active]' />\n\r";
+  $output .= "   <input type='checkbox' value='1' ".(($coupon['active'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][active]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][every_product]' />\n\r";
+  $output .= "   <input type='checkbox' value='1' ".(($coupon['every_product'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][every_product]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= "  <td>\n\r";
+  $output .= "   <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
+  $output .= "  </td>\n\r";
+  $output .= " </tr>\n\r";
 
-	 for($i = 1; $i <=12; ++$i) {
-		 $selected = '';
-		 if($i == (int)date("m", $end_timestamp)) { $selected = "selected='true'"; }
-		 $output .= "		<option $selected value='$i'>".date("M",mktime(0, 0, 0, $i, 1, date("Y")))."</option>";
-		 }
-	$output .= "	 </select>\n\r";
-	$output .= "	 <select name='edit_coupon[".$id."][expiry][year]'>\n\r";
-	 for($i = date("Y"); $i <= (date("Y") +12); ++$i) {
-		 $selected = '';
-		 if($i == (date("Y", $end_timestamp))) { $selected = "selected='true'"; }
-		 $output .= "		<option $selected value='$i'>".$i."</option>\n\r";
-		 }
-	$output .= "	 </select>\n\r";*/
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$output .= "	 <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";
-	$output .= "	 <input type='checkbox' value='1' ".(($coupon['use-once'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][use-once]' />\n\r";
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$output .= "	 <input type='hidden' value='0' name='edit_coupon[".$id."][active]' />\n\r";
-	$output .= "	 <input type='checkbox' value='1' ".(($coupon['active'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][active]' />\n\r";
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$output .= "	 <input type='hidden' value='0' name='edit_coupon[".$id."][every_product]' />\n\r";
-	$output .= "	 <input type='checkbox' value='1' ".(($coupon['every_product'] == 1) ? "checked='checked'" : '')." name='edit_coupon[".$id."][every_product]' />\n\r";
-	$output .= "	</td>\n\r";
-	$output .= "	<td>\n\r";
-	$output .= "	 <input type='hidden' value='".$id."' name='edit_coupon[".$id."][id]' />\n\r";
-	//$output .= "	 <input type='hidden' value='false' name='add_coupon' />\n\r";
-	$output .= "	 <input type='submit' value='".__('Submit', 'wpsc')."' name='edit_coupon[".$id."][submit_coupon]' />\n\r";
-	$output .= "	 <input type='submit' value='".__('Delete', 'wpsc')."' name='edit_coupon[".$id."][delete_coupon]' />\n\r";
+  if($conditions != null){
+	  $output .= "<tr>";
+	  $output .= "<th>";
+	  $output .= "Conditions";
+	  $output .= "</th>";
+	  $output .= "</tr>";
+	  $output .= "<th>";
+	  $output .= "Delete";
+	  $output .= "</th>";
+	  $output .= "<th>";
+	  $output .= "Property";
+	  $output .= "</th>";
+	  $output .= "<th>";
+	  $output .= "Logic";
+	  $output .= "</th>";
+	  $output .= "<th>";
+	  $output .= "Value";
+	  $output .= "</th>";
+	  $output .= " </tr>\n\r";
+	  $i=0;
+	  foreach ($conditions as $condition){
+		  $output .= "<tr>";
+		  $output .= "<td>";
+		  $output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
+		  $output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
+		  $output .= "<span style='cursor:pointer;' class='delete_button' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
+		  $output .= "</td>";
+		  $output .= "<td>";
+		  $output .= $condition['property'];
+		  $output .= "</td>";
+		  $output .= "<td>";
+		  $output .= $condition['logic'];
+		  $output .= "</td>";
+		  $output .= "<td>";
+		  $output .= $condition['value'];
+		  $output .= "</td>";
+		  $output .= "</tr>";
+		  $i++;
+	  }
+	  $output .=	wpsc_coupons_conditions( $id);
+  }elseif($conditions == null){
+  	$output .=	wpsc_coupons_conditions( $id);
 
-	$output .= "	</td>\n\r";
-	$output .= " </tr>\n\r";
-
-	if($conditions != null){
-		$output .= "<tr>";
-		$output .= "<th>";
-		$output .= "Conditions";
-		$output .= "</th>";
-		$output .= "</tr>";
-		$output .= "<th>";
-		$output .= "Delete";
-		$output .= "</th>";
-		$output .= "<th>";
-		$output .= "Property";
-		$output .= "</th>";
-		$output .= "<th>";
-		$output .= "Logic";
-		$output .= "</th>";
-		$output .= "<th>";
-		$output .= "Value";
-		$output .= "</th>";
-		$output .= " </tr>\n\r";
-		$i=0;
-		foreach ($conditions as $condition){
-			$output .= "<tr>";
-			$output .= "<td>";
-			$output .= "<input type='hidden' name='coupon_id' value='".$id."' />";
-			$output .= "<input type='submit' id='delete_condition".$i."' style='display:none;' value='".$i."' name='delete_condition' />";
-			$output .= "<span style='cursor:pointer;' onclick='jQuery(\"#delete_condition".$i."\").click()'>Delete</span>";
-			$output .= "</td>";
-			$output .= "<td>";
-			$output .= $condition['property'];
-			$output .= "</td>";
-			$output .= "<td>";
-			$output .= $condition['logic'];
-			$output .= "</td>";
-			$output .= "<td>";
-			$output .= $condition['value'];
-			$output .= "</td>";
-			$output .= "</tr>";
-			$i++;
-		}
-		$output .=	wpsc_coupons_conditions( $id);
-	}elseif($conditions == null){
-		$output .=	wpsc_coupons_conditions( $id);
-
-	}
-	?>
-<!--
-	<tr><td colspan="8">
-	<div class="coupon_condition">
-		<div><img height="16" width="16" class="delete" alt="Delete" src="<?=WPSC_URL?>/images/cross.png"/></button>
-			<select class="ruleprops" name="rules[property][]">
-				<option value="item_name" rel="order">Item name</option>
-				<option value="item_quantity" rel="order">Item quantity</option>
-				<option value="total_quantity" rel="order">Total quantity</option>
-				<option value="subtotal_amount" rel="order">Subtotal amount</option>
-			</select>
-			<select name="rules[logic][]">
-				<option value="equal">Is equal to</option>
-				<option value="greater">Is greater than</option>
-				<option value="less">Is less than</option>
-				<option value="contains">Contains</option>
-				<option value="not_contain">Does not contain</option>
-				<option value="begins">Begins with</option>
-				<option value="ends">Ends with</option>
-			</select>
-			<span>
-				<input type="text" name="rules[value][]"/>
-			</span>
-			<span>
-				<button class="add" type="button">
-					<img height="16" width="16" alt="Add" src="<?=WPSC_URL?>/images/add.png"/>
-				</button>
-			</span>
-		</div>
-	</div>
-</tr>
--->
-
-	<?php
-	$output .= "</table>\n\r";
-	$output .= "</form>\n\r";
-	echo $output;
-	return $output;
-	}
+  }
+  $output .= "</table>\n\r";
+  $output .= "</form>\n\r";
+  echo $output;
+  return $output;
+  }
 function wpsc_coupons_conditions($id){
 ?>
 
@@ -198,7 +117,7 @@ function wpsc_coupons_conditions($id){
 $output ='
 <input type="hidden" name="coupon_id" value="'.$id.'" />
 <tr><td colspan="3"><b>Add Conditions</b></td></tr>
-<tr><td colspan="8">
+<tr><td colspan="6">
 	<div class="coupon_condition">
 		<div>
 			<select class="ruleprops" name="rules[property][]">
@@ -206,6 +125,7 @@ $output ='
 				<option value="item_quantity" rel="order">Item quantity</option>
 				<option value="total_quantity" rel="order">Total quantity</option>
 				<option value="subtotal_amount" rel="order">Subtotal amount</option>
+				' . apply_filters( 'wpsc_coupon_rule_property_options', '' ) . '
 			</select>
 			<select name="rules[logic][]">
 				<option value="equal">Is equal to</option>
@@ -219,17 +139,21 @@ $output ='
 			<span>
 				<input type="text" name="rules[value][]"/>
 			</span>
-			<span>
-				<input type="submit" value="add" name="submit_condition" />
+			
 
-			</span>
 		</div>
 	</div>
+	</td>
+	<td colspan="3">
+	
+		<input type="submit" value="'.__("Update Coupon", "wpsc").'" class="button-primary" name="edit_coupon['.$id.'][submit_coupon]" />
+ 		<input type="submit" value="'.__("Delete Coupon", "wpsc").'" name="edit_coupon['.$id.'][delete_coupon]" />
+	</td>
 </tr>
 ';
 return $output;
 
-}	
+}  
 function setting_button(){
 	$next_url	= 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wpsc-edit-products";
 	

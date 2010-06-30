@@ -964,9 +964,11 @@ class wpsc_cart {
 	*/
   function remove_item($key) {
     if(isset($this->cart_items[$key])) {
-			unset($this->cart_items[$key]);
+	    $cart_item =& $this->cart_items[$key];
+		$cart_item->update_item(0);
+		unset($this->cart_items[$key]);
 	    $this->cart_items = array_values($this->cart_items);
-			$this->cart_item_count = count($this->cart_items);
+		$this->cart_item_count = count($this->cart_items);
 	    $this->current_cart_item = -1;
 			$this->clear_cache();
 			return true;
@@ -1610,8 +1612,11 @@ class wpsc_cart_item {
 	*/
 	function update_item($quantity) {
 		$this->quantity = (int)$quantity;
+		$this->refresh_item();
+		$this->update_claimed_stock();
 	}
-			/**
+
+	/**
 	 * refresh_item method, refreshes the item, calculates the prices, gets the name
 	 * @access public
 	 *

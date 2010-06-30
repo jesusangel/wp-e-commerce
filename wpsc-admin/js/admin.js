@@ -5,6 +5,27 @@ jQuery(document).ready( function () {
 //JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
 	jQuery('td.sale_price span.pricedisplay').removeClass('pricedisplay').addClass('salespricedisplay');
 
+	/* 	Coupon edit functionality */
+	jQuery('.modify_coupon').hide();
+	jQuery('.wpsc_edit_coupon').click(function(){
+		id = jQuery(this).attr('rel');
+		id = 'coupon_box_'+id;
+		if(jQuery('#'+id).hasClass('displaynone')){
+			jQuery('#'+id).show();
+			jQuery('#'+id).removeClass('displaynone');		
+		}else{
+			jQuery('#'+id).addClass('displaynone');
+			jQuery('#'+id).hide();
+		}
+
+	});
+	jQuery("form[name='add_coupon'] input[name='submit_coupon']").click(function() {
+		var title = jQuery("form[name='add_coupon'] input[name='add_coupon_code']").val();
+		if ( title == '') {
+			alert('Please enter a coupon code.');
+			return false;
+		}
+	});
 	//Animateedit products columns
 	jQuery('.wpsc-separator').livequery(function(){
 		jQuery(this).click(function(){

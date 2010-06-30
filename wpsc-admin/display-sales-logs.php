@@ -116,27 +116,27 @@ if(!isset($purchlogs)){
 			<?php
 		$page_back = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','purchaselog_id'), $_SERVER['REQUEST_URI'] );
 		 if(wpsc_tax_isincluded() == false){
-		 	$taxlabel = 'Tax';
+		 	$taxlabel = __('Tax','wpsc');
 		 }else{
-		 	$taxlabel = 'Tax Included';
+		 	$taxlabel = __('Tax Included','wpsc');
 		 }
 
 		$columns = array(
-	  	'title' => 'Name',
-			'sku' => 'SKU',
-			'quantity' => 'Quantity',
-			'price' => 'Price',
-			'shipping' => 'Shipping',
+	  	'title' => __('Name','wpsc'),
+			'sku' => __('SKU','wpsc'),
+			'quantity' => __('Quantity','wpsc'),
+			'price' => __('Price','wpsc'),
+			'shipping' => __('Shipping','wpsc'),
 			'tax' => $taxlabel,
 // 			'discount' => 'Discount',
-			'total' => 'Total'
+			'total' => __('Total','wpsc')
 		);
 		register_column_headers('display-purchaselog-details', $columns); 
 		?>
 			<div id='post-body' class='has-sidebar' style='width:95%;'>
 				<?php if(wpsc_has_purchlog_shipping()) { ?>
 				<div id='wpsc_shipping_details_box'>	
-					<h3><?php _e('Shipping Details'); ?></h3>
+					<h3><?php _e('Shipping Details','wpsc'); ?></h3>
 					<p><strong><?php echo wpsc_display_purchlog_shipping_name(); ?></strong></p>
 					<p>
 					<?php echo wpsc_display_purchlog_shipping_address(); ?><br />
@@ -144,37 +144,37 @@ if(!isset($purchlogs)){
 					<?php echo wpsc_display_purchlog_shipping_state_and_postcode(); ?><br />
 					<?php echo wpsc_display_purchlog_shipping_country(); ?><br />
 					</p>
-					<strong><?php _e('Shipping Options'); ?></strong>
+					<strong><?php _e('Shipping Options','wpsc'); ?></strong>
 					<p>
 					
-					<?php _e('Shipping Method:'); ?> <?php echo wpsc_display_purchlog_shipping_method(); ?><br />
-					<?php _e('Shipping Option:'); ?> <?php echo wpsc_display_purchlog_shipping_option(); ?><br />
+					<?php _e('Shipping Method:','wpsc'); ?> <?php echo wpsc_display_purchlog_shipping_method(); ?><br />
+					<?php _e('Shipping Option:','wpsc'); ?> <?php echo wpsc_display_purchlog_shipping_option(); ?><br />
 					<?php if(wpsc_purchlogs_has_tracking()) : ?>
-						<?php _e('Tracking ID:'); ?> <?php echo wpsc_purchlogitem_trackid(); ?><br />
-						<?php _e('Shipping Status:'); ?> <?php echo wpsc_purchlogitem_trackstatus(); ?><br />
-						<?php _e('Track History:'); ?> <?php echo wpsc_purchlogitem_trackhistory(); ?>
+						<?php _e('Tracking ID:','wpsc'); ?> <?php echo wpsc_purchlogitem_trackid(); ?><br />
+						<?php _e('Shipping Status:','wpsc'); ?> <?php echo wpsc_purchlogitem_trackstatus(); ?><br />
+						<?php _e('Track History:','wpsc'); ?> <?php echo wpsc_purchlogitem_trackhistory(); ?>
 					<?php endif; ?>
 					</p>
 				</div>
 				<?php } ?>
 				<div id='wpsc_billing_details_box'>
-					<h3><?php _e('Billing Details'); ?></h3>
-					<p><strong><?php _e('Purchase Log Date:'); ?> </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
-					<p><strong><?php _e('Purchase Number:'); ?> </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
-					<p><strong><?php _e('Buyers Name:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_name(); ?></p>
-					<p><strong><?php _e('Address:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_address(); ?></p>
+					<h3><?php _e('Billing Details','wpsc'); ?></h3>
+					<p><strong><?php _e('Purchase Log Date:','wpsc'); ?> </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
+					<p><strong><?php _e('Purchase Number:','wpsc'); ?> </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
+					<p><strong><?php _e('Buyers Name:','wpsc'); ?> </strong><?php echo wpsc_display_purchlog_buyers_name(); ?></p>
+					<p><strong><?php _e('Address:','wpsc'); ?> </strong><?php echo wpsc_display_purchlog_buyers_address(); ?></p>
 
-					<p><strong><?php _e('Phone:'); ?> </strong><?php echo wpsc_display_purchlog_buyers_phone(); ?></p>
-					<p><strong><?php _e('Email:'); ?> </strong><a href="mailto:<?php echo wpsc_display_purchlog_buyers_email(); ?>?subject=Message From '<?php echo get_option('siteurl'); ?>'"><?php echo wpsc_display_purchlog_buyers_email(); ?></a></p>
-					<p><strong><?php _e('Payment Method:'); ?> </strong><?php echo wpsc_display_purchlog_paymentmethod(); ?></p>
+					<p><strong><?php _e('Phone:','wpsc'); ?> </strong><?php echo wpsc_display_purchlog_buyers_phone(); ?></p>
+					<p><strong><?php _e('Email:','wpsc'); ?> </strong><a href="mailto:<?php echo wpsc_display_purchlog_buyers_email(); ?>?subject=Message From '<?php echo get_option('siteurl'); ?>'"><?php echo wpsc_display_purchlog_buyers_email(); ?></a></p>
+					<p><strong><?php _e('Payment Method:','wpsc'); ?> </strong><?php echo wpsc_display_purchlog_paymentmethod(); ?></p>
 					<?php if(wpsc_display_purchlog_display_howtheyfoundus()) : ?>
-					<p><strong><?php _e('How User Found Us:'); ?> </strong><?php echo wpsc_display_purchlog_howtheyfoundus(); ?></p>
+					<p><strong><?php _e('How User Found Us:','wpsc'); ?> </strong><?php echo wpsc_display_purchlog_howtheyfoundus(); ?></p>
 					<?php endif; ?>
 				</div>
 			
 				<div id='wpsc_items_ordered'>
 					<br />
-					<h3><?php _e('Items Ordered'); ?></h3>
+					<h3><?php _e('Items Ordered','wpsc'); ?></h3>
 					<table class="widefat" cellspacing="0">
 						<thead>
 							<tr>
@@ -195,28 +195,28 @@ if(!isset($purchlogs)){
 						<tr class="wpsc_purchaselog_start_totals">
 							<td colspan="5">
 								<?php if ( wpsc_purchlog_has_discount_data() ) { ?>
-								<?php _e('Coupon Code'); ?>: <?php echo wpsc_display_purchlog_discount_data(); ?>
+								<?php _e('Coupon Code','wpsc'); ?>: <?php echo wpsc_display_purchlog_discount_data(); ?>
 								<?php } ?>
 							</td>
-							<th><?php _e('Discount'); ?> </th>
+							<th><?php _e('Discount','wpsc'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_discount(); ?></td>
 						</tr>
 						
 						<tr>
 							<td colspan='5'></td>
-							<th><?php _e('Shipping'); ?> </th>
+							<th><?php _e('Shipping','wpsc'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_shipping(); ?></td>
 						</tr>
 						<tr>
 							<td colspan='5'></td>
-							<th><?php _e('Total'); ?> </th>
+							<th><?php _e('Total','wpsc'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_totalprice(); ?></td>
 						</tr>
 						</tbody>
 				</table>
 				<div id='wpsc_purchlog_order_status'>
 					<form action='' method='post'>
-					<p><label for='<?php echo $_GET['purchaselog_id']; ?>'><?php _e('Order Status:'); ?></label><select class='selector' name='<?php echo $_GET['purchaselog_id']; ?>' title='<?php echo $_GET['purchaselog_id']; ?>' >
+					<p><label for='<?php echo $_GET['purchaselog_id']; ?>'><?php _e('Order Status:','wpsc'); ?></label><select class='selector' name='<?php echo $_GET['purchaselog_id']; ?>' title='<?php echo $_GET['purchaselog_id']; ?>' >
 	 			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
 	 				<option value='<?php echo wpsc_the_purch_status_id(); ?>' <?php echo wpsc_purchlog_is_checked_status(); ?> ><?php echo wpsc_the_purch_status_name(); ?> </option>
 	 			<?php endwhile; ?>
@@ -236,7 +236,7 @@ if(!isset($purchlogs)){
 				</div>
 				
 				<div id='wpsc_purchlogitems_links'>
-				<h3><?php _e('Actions'); ?></h3>
+				<h3><?php _e('Actions','wpsc'); ?></h3>
 				<?php do_action( 'wpsc_purchlogitem_links_start' ); ?>
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
 <img src='<?php echo WPSC_URL; ?>/images/lock_open.png' alt='clear lock icon' />&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
@@ -245,7 +245,7 @@ if(!isset($purchlogs)){
 		
 <br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php echo __('Resend Receipt to Buyer', 'wpsc'); ?></a>
 		  
-<br /><br class='small' /><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php echo __('Remove this record', 'wpsc') ?></a>
+<br /><br class='small' /><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php echo __('Remove this record', 'wpsc') ?></a>
 
 <br /><br class='small' />&emsp;&ensp; 	<a href='<?php echo $page_back ?>'><?php echo __('Go Back', 'wpsc'); ?></a>
 <br /><br />
