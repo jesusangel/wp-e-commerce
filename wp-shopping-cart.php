@@ -278,7 +278,7 @@ $gateway_directory = WPSC_FILE_PATH.'/merchants';
 $nzshpcrt_merchant_list = wpsc_list_dir($gateway_directory);
 
 $num=0;
-foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
+foreach((array)$nzshpcrt_merchant_list as $nzshpcrt_merchant) {
   if(stristr( $nzshpcrt_merchant , '.php' )) {
     //echo $nzshpcrt_merchant;
     require(WPSC_FILE_PATH."/merchants/".$nzshpcrt_merchant);
@@ -294,7 +294,7 @@ $nzshpcrt_gateways = apply_filters('wpsc_gateway_modules',$nzshpcrt_gateways);
 // include shipping modules here.
 $shipping_directory = WPSC_FILE_PATH.'/shipping';
 $nzshpcrt_shipping_list = wpsc_list_dir($shipping_directory);
-foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
+foreach((array)$nzshpcrt_shipping_list as $nzshpcrt_shipping) {
 	if(stristr( $nzshpcrt_shipping , '.php' )) {
 		if($nzshpcrt_shipping == 'ups.php'){
 			if (phpMinV('5')){
