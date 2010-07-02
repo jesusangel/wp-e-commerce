@@ -63,7 +63,7 @@ function wpsc_product_image($attachment_id, $width = null, $height = null) {
 * wpsc product price function
 * @return string - the product price
 */
-function wpsc_the_product_price() {
+function wpsc_the_product_price($no_decimals = false) {
 	global $wpsc_query, $wpsc_variations;	
 
 	if(count($wpsc_variations->first_variations) > 0) {
@@ -82,6 +82,11 @@ function wpsc_the_product_price() {
 		$price = $special_price;
 	}
 	$output = nzshpcrt_currency_display($price, null, true);
+	
+	if($no_decimals == true) {
+		$output = array_shift(explode(".", $output));
+	}
+	
 	return $output;
 }
 
@@ -860,7 +865,6 @@ function wpsc_the_variation_id() {
 	global $wpsc_variations;
 	return $wpsc_variations->variation->term_id;
 }
-
 
 /**
 * wpsc the variation out_of_stock function

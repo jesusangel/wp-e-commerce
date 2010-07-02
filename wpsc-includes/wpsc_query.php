@@ -1083,6 +1083,53 @@ class WPSC_Query {
 	
 }
 
+//The following code was removed from WP 3.8, present in 3.7 - Not sure why it was removed and not re-written. (JS)
 
+
+/**
+* wpsc the variation price function
+* @return string - the variation price
+*/
+function wpsc_the_variation_price() {
+	global $wpdb, $wpsc_query;
+	
+    if(count($wpsc_query->variation_groups) == 1) {
+		//echo "<pre>".print_r($wpsc_query->variation, true)."</pre>";
+		$product_id = $wpsc_query->product['id'];
+		$variation_group_id = $wpsc_query->variation_group['variation_id'];
+		$variation_id = $wpsc_query->variation['id'];
+		
+		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
+		
+		$variation_price = $wpdb->get_var("SELECT `price` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+
+		$output = nzshpcrt_currency_display($variation_price, $wpsc_query->product['notax'], true);    		
+    } else {
+    	$output = false;
+    }
+
+	return $output;
+}
+
+/**
+* wpsc the variation stock function
+* @return string - HTML attribute to disable select options and radio buttons
+*/
+function wpsc_the_variation_stock() {
+	global $wpsc_query, $wpdb;
+	$out_of_stock = false;
+	if(($wpsc_query->variation_group_count == 1) && ($wpsc_query->product['quantity_limited'] == 1)) {
+		$product_id = $wpsc_query->product['id'];
+		$variation_group_id = $wpsc_query->variation_group['variation_id'];
+		$variation_id = $wpsc_query->variation['id'];
+		
+
+		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
+		
+		$variation_stock_data = $wpdb->get_var("SELECT `stock` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
+		
+	}
+	return $variation_stock_data;
+}
 			
 ?>

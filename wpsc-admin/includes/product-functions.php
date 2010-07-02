@@ -192,8 +192,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		$product_id	= absint($post_data['product_id']);
 		$update = true;
 	}
-	
-	
   
 	//exit('<pre>'.print_r($product_id, true).'</pre>');
 	
@@ -231,7 +229,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		}
 	}
 
-
   
 	$product_post_values = array(
 		'ID' => $product_id,
@@ -244,6 +241,11 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		'post_name' => sanitize_title($post_data['name'])
 	);
 
+	if ($post_data['meta']['_wpsc_product_metadata']['enable_comments'] == 0) {
+		$product_post_values["comment_status"] = "closed";
+	}else {
+		$product_post_values["comment_status"] = "open";
+	}
 		
 	//exit("<pre>".print_r(wp_update_post($product_post_values) , true)."</pre>");
 	if($sku != '') {
@@ -251,12 +253,16 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	}
 
 
-
   
    if($update === true) {
 		$where = array( 'id' => $product_id );
-		//exit('<pre>'.print_r($product_post_values,true).'</pre>');
+	//	exit('<pre>'.print_r($product_post_values).'</pre>');
 		$product_id = wp_update_post($product_post_values);
+		 if ( isset ( $post_data["sticky"] ) ) {
+			stick_post($product_id);
+		 }else {
+			unstick_post($product_id);
+		 }
 		if ($product_id == 0) {
 			if ( $wpsc_error ) {
 				return new WP_Error('db_update_error', __('Could not update product in the database'), $wpdb->last_error);
@@ -270,6 +276,11 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 			'post_date' => $product['date_added']
 		);
   		 $product_id = wp_insert_post($product_post_values);
+		 if ( isset ( $post_data["sticky"] ) ) {
+			stick_post($product_id);
+		 }else {
+			unstick_post($product_id);
+		 }
 		if ($product_id == 0 ) {
 			if ( $wp_error ) {
 				return new WP_Error('db_insert_error', __('Could not insert product into the database'), $wpdb->last_error);

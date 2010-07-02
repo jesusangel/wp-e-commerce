@@ -605,7 +605,7 @@ function wpsc_template_loader() {
 	}
 }
 
-add_action('template_redirect','wpsc_template_loader');
+// add_action('template_redirect','wpsc_template_loader');
 
 
 

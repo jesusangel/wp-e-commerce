@@ -441,7 +441,6 @@ if(!function_exists('wpsc_initialisation')){
 	  $wpsc_query_vars = array();
 	  
 	  
-	  
 	  // set the theme directory constant
 	
 	  $uploads_dir = @opendir(WPSC_THEMES_PATH);
@@ -518,10 +517,17 @@ function wpsc_register_post_types() {
 	// Products
 	register_post_type( 'wpsc-product', array(
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit&product=%d',
-	    'capability_type' => 'post',
+	    'capability_type' => 'page',
 	    'hierarchical' => true,
 		'exclude_from_search' => false,
-		'publicly_queryable' => true
+		'public' => true,
+		'show_ui' => false,
+		'show_in_nav_menus' => true,
+		'label' => __('Products'),  
+        'singular_label' => __('Product'),
+		'rewrite' => array(
+			'slug' => $wpsc_page_titles['products']
+		)
 	));
 	
 	// Purchasable product files
@@ -543,12 +549,25 @@ function wpsc_register_post_types() {
 			'slug' => $wpsc_page_titles['products']
 		)
 	));
-	
+$labels = array(
+    'name' => _x( 'Variations', 'taxonomy general name' ),
+    'singular_name' => _x( 'Variation', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Variations' ),
+    'all_items' => __( 'All Variations' ),
+    'parent_item' => __( 'Parent Variation' ),
+    'parent_item_colon' => __( 'Parent Variations:' ),
+    'edit_item' => __( 'Edit Variation' ), 
+    'update_item' => __( 'Update Variation' ),
+    'add_new_item' => __( 'Add New Variation' ),
+    'new_item_name' => __( 'New Variation Name' ),
+  ); 	
 	// Product Variations, is internally heirarchical, externally, two separate types of items, one containing the other
 	register_taxonomy('wpsc-variation', 'wpsc-product', array(
 		'hierarchical' => true,
 		'query_var' => 'variations',
-		'rewrite' => false
+		'rewrite' => false,
+		'public' =>	true,
+		'labels' => $labels
 	));
 	$role = get_role('administrator');
 	$role->add_cap('read_wpsc-product');
@@ -634,5 +653,174 @@ if ( is_admin() ) {
 }
 
 
+/**
+ * Featured Product
+ *
+ * Refactoring Featured Product Plugin to utilize Sticky Post Status, available since WP 2.7
+ * also utilizes Featured Image functionality, available as post_thumbnail since 2.9, Featured Image since 3.0
+ * Main differences - Removed 3.8 conditions, removed meta box from admin, changed meta_values
+ * Removes shortcode, as it automatically ties in to top_of_page hook if sticky AND featured product exists.
+ *
+ * @package wp-e-commerce
+ * @since 3.8
+ */ 
+
+function wpsc_the_sticky_image($product_id) {
+global $wpdb;
+//Previously checked product_meta, now get_vars guid from attachment with this post_parent, checking against _thumbnail_id   
+
+$sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM wp_posts p, wp_postmeta pm WHERE p.post_parent = $product_id AND pm.post_id = $product_id AND pm.meta_value = p.ID"));
+
+	if($sticky_product_image != ''){
+		return $sticky_product_image;
+	}else{
+		return wpsc_the_product_image(340, 260);
+	}
+}
+
+if (is_admin()) {
+ 	/**
+ 	 * wpsc_update_featured_products function.
+ 	 * 
+ 	 * @access public
+ 	 * @return void
+ 	 */
+
+ 	function wpsc_update_featured_products() { 	
+		global $wpdb;
+		$is_ajax = (int)(bool)$_POST['ajax'];
+		$product_id = absint($_GET['product_id']);
+		check_admin_referer('feature_product_' . $product_id);
+		$status = get_option( 'sticky_posts' );
+		
+		$new_status = (in_array($product_id, $status)) ? false : true;
+		
+		if ($new_status) {
+		
+			$status[] = $product_id;
+		
+		} else { 
+			$status = array_diff($status, array($product_id));
+			$status = array_values($status);
+		}
+		update_option('sticky_posts', $status);
+		
+		if($is_ajax == true) {
+			 if($new_status == true) :?>
+jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='gold-star' src='<?php echo WPSC_URL; ?>/images/gold-star.gif' alt='<?php _e('Unmark as Featured', 'wpsc'); ?>' title='<?php _e('Unmark as Featured', 'wpsc'); ?>' />");
+			<?php else: ?>
+jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='grey-star' src='<?php echo WPSC_URL; ?>/images/grey-star.gif' alt='<?php _e('Mark as Featured', 'wpsc'); ?>' title='<?php _e('Mark as Featured', 'wpsc'); ?>' />");
+			<?php endif; 
+			exit();
+		
+		}
+		//$sendback = add_query_arg('featured', "1", wp_get_referer());
+		wp_redirect(wp_get_referer());
+	 	exit();
+ 	}
+ 
+ 
+	if($_REQUEST['wpsc_admin_action'] == 'update_featured_product') {
+		add_action('admin_init', 'wpsc_update_featured_products');
+	}
+	
+	
+	/**
+	 * wpsc_featured_products_toggle function.
+	 * 
+	 * @access public
+	 * @param mixed $product_id
+	 * @return void
+	 */
+	function wpsc_featured_products_toggle($product_id) {
+		global $wpdb;							
+		$featured_product_url = wp_nonce_url("admin.php?wpsc_admin_action=update_featured_product&amp;product_id=$product_id}", 'feature_product_'.$product_id);
+		?>
+		<a class="wpsc_featured_product_toggle featured_toggle_<?php echo $product_id; ?>" href='<?php echo $featured_product_url; ?>' >
+			<?php if (in_array($product_id, get_option( 'sticky_posts' ))) :?>
+				<img class='gold-star' src='<?php echo WPSC_URL; ?>/images/gold-star.gif' alt='<?php _e('Unmark as Featured', 'wpsc'); ?>' title='<?php _e('Unmark as Featured', 'wpsc'); ?>' />
+			<?php else: ?>
+				<img class='grey-star' src='<?php echo WPSC_URL; ?>/images/grey-star.gif' alt='<?php _e('Mark as Featured', 'wpsc'); ?>' title='<?php _e('Mark as Featured', 'wpsc'); ?>' />
+			<?php endif; ?>
+		</a>
+		<?php	
+	}
+	
+	//add_filter('wpsc_products_page_forms', 'wpsc_add_featured_products');
+	
+	add_action('wpsc_admin_product_checkbox', 'wpsc_featured_products_toggle', 10, 1);
+}
+
+/**
+ * wpsc_display_products_page function.
+ * 
+ * @access public
+ * @param mixed $query
+ * @return void
+ */
+function wpsc_display_featured_products_page() {
+	global $wpdb, $wpsc_query;	
+	
+	
+
+	if ( is_front_page() || is_home() ) {  
+ 	$query = get_posts(array(
+			'post__in'  => get_option('sticky_posts'),
+			'post_type' => 'wpsc-product',
+			'orderby' => 'rand',
+			'meta_key' => '_thumbnail_id',
+			'numberposts' => 1
+		));
+
+		if ( count($query) > 0 ) { 
+
+			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+			$image_width = get_option('product_image_width');
+			$image_height = get_option('product_image_height');
+			//Begin outputting featured product.  We can worry about templating later, or folks can just CSS it up.
+			 foreach($query as $product) :
+			setup_postdata($product);
+?>
+
+<div class="wpsc_container wpsc_featured">
+		<div class="product_grid_display">
+			<div class="product_grid_item product_view_<?php the_ID(); ?>">
+				<div class="item_text">
+						<h3>
+							<a href='<?php echo get_permalink($product->ID); ?>'><?php echo get_the_title($product->ID); ?></a>
+						</h3> 
+						<div class="pricedisplay"><?php echo wpsc_the_product_price(); ?></div> 
+						<div class='wpsc_description'>
+							<?php the_excerpt(); ?>
+							<a href='<?php echo get_permalink($product->ID); ?>'>
+							  More Information&hellip;
+							</a>
+						</div>
+				</div>
+			
+				<?php if(wpsc_the_product_thumbnail()) :?> 	   
+					<div class="item_image">
+						<a href="<?php echo get_permalink($product->ID); ?>" style='background-image: url(<?php echo wpsc_the_sticky_image(wpsc_the_product_id()); ?>);'>
+						</a>
+					</div>
+				<?php else: ?> 
+					<div class="item_no_image">
+						<a href="<?php echo get_the_title($product->ID); ?>">
+						<span>No Image Available</span>
+						</a>
+					</div>
+				<?php endif; ?>
+				<div class="wpsc_clear"></div>
+			</div>
+	</div>
+</div>
+<?php
+		endforeach;
+		//End output	
+		}
+	}
+}
+
+add_action('wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12);
 
 ?>

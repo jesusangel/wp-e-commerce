@@ -160,7 +160,7 @@ function wpsc_canonical_url() {
 		add_action( 'wp_head', 'wpsc_insert_canonical_url');
 	}
 }
-add_action( 'template_redirect', 'wpsc_canonical_url' );
+//add_action( 'template_redirect', 'wpsc_canonical_url' );
 
 
 

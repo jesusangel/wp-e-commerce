@@ -72,7 +72,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'cb':
 		?>
-		<th scope="row" class="check-column"><?php if ( current_user_can( 'edit_post', $product->ID ) ) { ?><input type="checkbox" name="post[]" value="<?php the_ID(); ?>" /><?php } ?></th>
+		<th scope="row" class="check-column"><?php if ( current_user_can( 'edit_post', $product->ID ) ) { ?>
+		<input type="checkbox" name="post[]" value="<?php the_ID(); ?>" />										
+		<?php do_action('wpsc_admin_product_checkbox', $product->ID); ?>
+		
+<?php } ?></th>
 		<?php
 		break;
 

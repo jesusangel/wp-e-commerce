@@ -235,6 +235,11 @@ if ( 'auto-draft' == $product->post_status ) {
 
 $nonce_action = 'update-' . $product->post_type . '_' . $product_data["id"];
 $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($product_data["id"]) . "' />";
+
+$sticky = get_option( 'sticky_posts' );
+if ( in_array ( $product_data["id"], $sticky ) )
+$sticky_checked = 'checked="checked" '; 
+ 
 ?>
 	</h3>
 	<div id="side-info-column" class="inner-sidebar">
@@ -265,7 +270,8 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	<div id="submitdiv" class="postbox">
 		<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span>Publish</span></h3>
 			<div class="inside publish">
-			<div class="submitbox" id="submitpost">
+			<div class="submitbox" id="submitpost"><br />
+				<span id="sticky-span" style="display: inline; "><input id="sticky" name="sticky" type="checkbox" <?php echo $sticky_checked; ?>value="sticky" tabindex="4"> <label for="sticky" class="selectit">Stick this product to the front page</label><br></span>
 				<div id="minor-publishing">
 					<div id="minor-publishing-actions">
 						<div id="save-action">
@@ -365,12 +371,12 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	 		}
 	 		
 	 	}
-//		echo "<pre>"; print_r($order); echo "</pre>"; 
 		foreach((array)$order["side"] as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
 			}
 		}
+//		echo "<pre>"; print_r($order); echo "</pre>";
 		?>	
 	</div>
 	</div>

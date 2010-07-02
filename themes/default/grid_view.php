@@ -4,7 +4,6 @@ $image_width = get_option('product_image_width');
 $image_height = get_option('product_image_height');
 ?>
 <div id='products_page_container' class="wpsc_container productdisplay example-category">
-	
 <?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
 			<a href='<?php echo get_option('product_list_url'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
