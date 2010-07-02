@@ -694,7 +694,7 @@ function wpsc_packing_slip($purchase_id) {
 					}
 				}elseif($userinfo['unique_name'] == 'shippingstate'){
 					if(!empty($userinfo['value']) && !is_numeric($userinfo['value'])){
-						echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td</tr>>";
+						echo "<tr><td>".$userinfo['name'].": </td><td>".$userinfo['value']."</td></tr>";
 					}elseif(is_numeric($userinfo['value'])){
 							echo "<tr><td>State: </td><td>".wpsc_get_state_by_id($userinfo['value'],'name')."</td></tr>";
 					}
