@@ -545,7 +545,8 @@ function wpsc_convert_variation_combinations() {
 
 		}
 	}
-
++	delete_option("wpsc-variation_children");
++	_get_term_hierarchy('wpsc-variation');
 }
 
 function wpsc_update_files() {
