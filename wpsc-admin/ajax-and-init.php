@@ -1320,6 +1320,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 		
 	$log_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = '{$purchlog_id}' LIMIT 1",ARRAY_A);
 	if (($purchlog_status==2) && function_exists('wpsc_member_activate_subscriptions')){
+		do_action('wpsc_submit_checkout', array("purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id));
 		wpsc_member_activate_subscriptions($_POST['id']);
 	}
 

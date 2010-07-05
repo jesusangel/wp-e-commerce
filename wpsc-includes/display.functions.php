@@ -340,7 +340,7 @@ function wpsc_refresh_page_urls($content) {
  global $wpdb;
  $wpsc_pageurl_option['product_list_url'] = '[productspage]';
  $wpsc_pageurl_option['shopping_cart_url'] = '[shoppingcart]';
- $check_chekout = $wpdb->get_var("SELECT `guid` FROM `{$wpdb->posts}` WHERE `post_content` LIKE '%[checkout]%' AND `post_type` NOT IN('revision') LIMIT 1");
+ $check_chekout = $wpdb->get_var("SELECT `guid` FROM `{$wpdb->posts}` WHERE `post_content` LIKE '%[checkout]%' AND `post_type` NOT IN('revision','nav_menu_item') AND `post_type`='page' LIMIT 1");
  if($check_chekout != null) {
    $wpsc_pageurl_option['checkout_url'] = '[checkout]';
    } else {
