@@ -1729,3 +1729,89 @@ p span.input_label{
 	width:280px;
 	float:left;
 }
+a.wpsc_featured_product_toggle {
+    display: block;
+    height: 18px;
+    width: 18px;
+    margin: 4px 0px 0px 6px;
+}
+
+a.wpsc_featured_product_toggle img {
+    display: block;
+    margin: 0px auto 0px auto;
+    
+}
+
+div.wpsc_clear {
+    clear: both;
+}
+
+.wpsc_featured div.product_grid_display div.product_grid_item {
+    width: 100%;
+    height: auto !important;
+    margin: 4px 90px 8px 0;
+    position: relative;
+}
+
+
+.wpsc_featured .item_text {
+    float: left;
+    height: 240px;
+    width: auto;
+}
+
+.wpsc_featured .item_image {
+    float: left;
+    height: 240px;
+    width: 340px;
+    margin-left: 20px;
+}
+
+.wpsc_featured .item_image a {
+    display: block;
+    height: 240px;
+    width: 340px;
+    border: 1px solid #FEFAF1;
+    border-radius: 18px;
+    -moz-border-radius: 18px;
+    -webkit-border-radius: 18px;
+    background-repeat: no-repeat;
+}
+
+
+.wpsc_featured .item_text h3 {
+    font-size: 1.4em;
+    margin: 0px 0px 8px 0px;
+}
+
+.wpsc_featured .item_text div.pricedisplay {
+    color: #9B9A96;
+    line-height: normal;
+    display: block;
+    margin: 0px 0px 4px 0px;
+    
+}
+
+.wpsc_featured .item_text .wpsc_description {
+    font-size: 1em;
+    line-height:24px;
+    display:block;
+    float:left;
+    width: auto;
+    color: #9B9A96;
+    font-family: Georgia,"Bitstream Charter",serif;
+}
+
+.wpsc_featured .item_text .wpsc_description p {
+    margin-bottom: 0px;
+}
+
+
+.wpsc_featured .item_text .wpsc_description a {
+    color:#9B9A96;
+}
+
+ul.wpsc_categories {
+    clear: both;
+
+}
