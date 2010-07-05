@@ -643,4 +643,19 @@ function wpsc_select_theme_functions() {
 }
 
 add_action('wp','wpsc_select_theme_functions',10,1);
+
+/**
+ *if the user is on a checkout page, force SSL if that option is so set
+ */
+function wpsc_force_ssl() {
+	global $post;
+	if(get_option('wpsc_force_ssl') && !is_ssl() && strpos($post->post_content, '[shoppingcart]') !== FALSE) {
+		$sslurl = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		header('Location: '.$sslurl);
+		echo 'Redirecting';
+	}
+}
+add_action('get_header', 'wpsc_force_ssl');
+
+
 ?>

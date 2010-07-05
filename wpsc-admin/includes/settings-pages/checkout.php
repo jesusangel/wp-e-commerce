@@ -144,7 +144,33 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php echo $shippingBilling2; ?> /> 
 			<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
 			</td>
+			
 		</tr>
+		<tr>
+<td><?php echo __('Force users to use SSL', 'wpsc'); ?>:</td>
+<td>
+	<?php
+		$wpsc_force_ssl = get_option('wpsc_force_ssl');
+		$wpsc_force_ssl1 = "";
+		$wpsc_force_ssl2 = "";
+		switch($wpsc_force_ssl) {
+			case 0:
+			$wpsc_force_ssl2 = "checked ='checked'";
+			break;
+
+			case 1:
+			$wpsc_force_ssl1 = "checked ='checked'";
+			break;
+		}
+	        ?>
+		<input type='radio' value='1' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl1' <?php echo $wpsc_force_ssl1; ?> /> 					<label for='wpsc_force_ssl1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+		<input type='radio' value='0' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl2' <?php echo $wpsc_force_ssl2; ?> /> 					<label for='wpsc_force_ssl2'><?php echo __('No', 'wpsc');?></label>
+	</td>
+	<td>
+		<a title='<?php echo __('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+	</td>
+	</tr>
+
 			</table>
 		</div>
 		</div>
