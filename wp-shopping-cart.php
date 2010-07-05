@@ -315,6 +315,7 @@ foreach($nzshpcrt_shipping_list as $nzshpcrt_shipping) {
 		require(WPSC_FILE_PATH."/shipping/".$nzshpcrt_shipping);
 	}
 }
+$wpsc_shipping_modules = apply_filters('wpsc_shipping_modules',$wpsc_shipping_modules);
 
 // if the gold cart file is present, include it, this must be done before the admin file is included
 if(is_file(WPSC_UPGRADES_DIR . "gold_cart_files/gold_shopping_cart.php")) {
