@@ -208,6 +208,7 @@ global $wpdb;
 					</td>
 				</tr>
 			<?php
+			do_action('wpsc_admin_settings_page');
 			}
 			$sendback = wp_get_referer();
 			?>
