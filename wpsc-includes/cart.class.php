@@ -688,7 +688,7 @@ class wpsc_cart {
 					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 				}
 			} else {
-//				exit('Here <pre>'.print_r($custom_shipping, true).'</pre>');
+
 				// otherwise select the first one with any quotes
 				foreach((array)$custom_shipping as $shipping_module) {
 					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
@@ -703,9 +703,8 @@ class wpsc_cart {
 				
 			}
 		}
-		//		exit('<pre>'.print_r($this, true).'</pre>');
-		//echo('<pre>'.print_r($custom_shipping,true).'</pre>');
-  }
+
+		}
   
   /**
 	* get_shipping_option method, gets the shipping option from the selected method and associated quotes
@@ -1934,15 +1933,15 @@ class wpsc_cart_item {
 	function save_to_db($purchase_log_id) {
 		global $wpdb, $wpsc_shipping_modules;
 		
-    if($method === null) {
-      $method = $this->cart->selected_shipping_method;
-    }
+	    if($method === null) {
+	      $method = $this->cart->selected_shipping_method;
+	    }
 		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
 			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping( $this );
 		}
-    if($this->cart->has_total_shipping_discount()) {
-			$shipping = 0;
-    }
+	    if($this->cart->has_total_shipping_discount()) {
+				$shipping = 0;
+	    }
 		if($this->apply_tax == true && wpsc_tax_isincluded() == false) {
 			if(is_numeric($this->custom_tax_rate)) {
 				$tax_rate = $this->custom_tax_rate;

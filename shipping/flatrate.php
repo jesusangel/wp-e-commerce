@@ -73,7 +73,7 @@ class flatrate {
 		} else {
 			$country = $_SESSION['wpsc_delivery_country'];
 		}
-								$_SESSION['quote_shipping_option'] = null;
+		$_SESSION['quote_shipping_option'] = null;
 
 		if (get_option('base_country') != $country) {
 			$results = $wpdb->get_var("SELECT `continent` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('{$country}') LIMIT 1");
