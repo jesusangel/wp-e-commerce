@@ -13,7 +13,7 @@ Author URI: http://www.getshopped.org
 */
 // this is to make sure it sets up the table name constants correctly on activation
 global $wpdb;
-if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < 64 ) ) @ini_set('memory_limit', 64);
+if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < 64 ) ) @ini_set('memory_limit', '64M');
 define('WPSC_VERSION', '3.7');
 define('WPSC_MINOR_VERSION', '55');
 
