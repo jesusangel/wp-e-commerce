@@ -363,7 +363,7 @@ function wpsc_refresh_page_urls($content) {
 function wpsc_product_permalinks($rewrite_rules) {
 	global $wpdb, $wp_rewrite;
 
-	$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' AND `post_type` NOT IN('revision','nav_menu_item') LIMIT 1", ARRAY_A);
+	$page_details = $wpdb->get_row("SELECT * FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%' AND `post_type`= 'page' LIMIT 1", ARRAY_A);
 	$is_index = false;
 	if((get_option('page_on_front') == $page_details['ID']) && (get_option('show_on_front') == 'page')) {
 		$is_index = true;
