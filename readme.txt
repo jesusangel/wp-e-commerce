@@ -37,6 +37,19 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
+= 3.7.6.7 =
+* Edit Coupons Fixed and new Category Conditions added to the mix
+* Checkout Options for drop-down boxes, radio buttons Fixed
+* Added back the hourly Cron Job for clearing the Claimed Stock  
+* Stripslahses added to transaction results message and Order Notes (removes the / in front of ' and ")
+* Dashboard widget does not include sales that have been canceled by Paypal Pro
+* Australia Post Shipping Module, fix for International quotes
+* Fixed calculations on the Purchase Log and Shipping details pages
+* Fixed Broken HTML tag in Packing Slip
+* Permalinks Issue for WordPress 3.0 and the menu_nav_item custom post type conflict
+* Memory Bump to increase PHP's memory limit if running on 32MB to avoid fatal error out of memory issues
+
+
 = 3.7.6.5 =
 * Fix Problem with Deprecated Theme files showing WPSC_TXT instead of their proper values.
 * Fixed Integration with Gold Cart Plugin so Payment Gateways Show up on the Gateway Options page
