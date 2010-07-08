@@ -176,8 +176,8 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 						"tax_$i" => $this->format_price($cart_row['tax']),
 						"quantity_$i" => $cart_row['quantity'],
 						"item_number_$i" => $cart_row['product_id'],
-						"shipping_$i" => $this->format_price($cart_row['shipping']), // additional shipping for the the (first item / total of the items)
-						"shipping2_$i" => $this->format_price($cart_row['shipping']), // additional shipping beyond the first item
+						"shipping_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping for the the (first item / total of the items)
+						"shipping2_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping beyond the first item
 						"handling_$i" => '',
 					);
 					++$i;
@@ -225,7 +225,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			echo "<pre>".print_r($this->collected_gateway_data,true)."</pre>";
 			exit();
 		}
-		//exit('<pre>'.print_r($gateway_values, true).'</pre>');
 		header("Location: ".get_option('paypal_multiple_url')."?".$gateway_values);
 		exit();
 	}

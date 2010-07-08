@@ -116,7 +116,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 			}
 			$variation_count = count($product_variations);
 			$local_currency_productprice = $item['price'];
-			$local_currency_shipping = $item['pnp'];
+			$local_currency_shipping = $item['pnp']/$item['quantity'];
 			
 			if($paypal_currency_code != $local_currency_code) {
 				$paypal_currency_productprice = $curr->convert($local_currency_productprice,$paypal_currency_code,$local_currency_code);
@@ -228,6 +228,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
 
   $datacount = count($data);
   $num = 0;
+//  exit('<pre>'.print_r($data,true).'</pre>');
   foreach($data as $key=>$value) {
     $amp = '&';
     $num++;
