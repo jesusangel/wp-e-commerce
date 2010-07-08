@@ -4,7 +4,7 @@ Donate link: http://getshopped.org/
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
 Tested up to: 2.9
-Stable tag: 3.7.6.5
+Stable tag: 3.7.6.7
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -38,8 +38,6 @@ If you experience database errors try de-activating and re-activating your plugi
 == Changelog == 
 
 = 3.7.6.7 =
-* Edit Coupons Fixed and new Category Conditions added to the mix
-* Checkout Options for drop-down boxes, radio buttons Fixed
 * Added back the hourly Cron Job for clearing the Claimed Stock  
 * Stripslahses added to transaction results message and Order Notes (removes the / in front of ' and ")
 * Dashboard widget does not include sales that have been canceled by Paypal Pro
@@ -48,6 +46,10 @@ If you experience database errors try de-activating and re-activating your plugi
 * Fixed Broken HTML tag in Packing Slip
 * Permalinks Issue for WordPress 3.0 and the menu_nav_item custom post type conflict
 * Memory Bump to increase PHP's memory limit if running on 32MB to avoid fatal error out of memory issues
+
+= 3.7.6.6 =
+* Edit Coupons Fixed and new Category Conditions added to the mix
+* Checkout Options for drop-down boxes, radio buttons Fixed
 
 
 = 3.7.6.5 =

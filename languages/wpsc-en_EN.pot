@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-e-commerce\n"
-"POT-Creation-Date: 2010-06-15 23:21+0000\n"
+"POT-Creation-Date: 2010-07-08 04:18+0000\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "+ Add new category to the &quot;[categorisation]&quot; Group"
 msgstr ""
 
 #: admin-form-functions.php:25 admin-form-functions.php:279
-#: admin-form-functions.php:867 display-ecommerce-subs.php:9
+#: admin-form-functions.php:784 display-ecommerce-subs.php:9
 #: js/tinymce3/window.php:105 user-log.php:200 user-log.php:359
 #: wpsc-admin/display-groups.page.php:698
 #: wpsc-admin/display-groups.page.php:774
@@ -165,10 +165,10 @@ msgstr ""
 msgid "Products in this category use the billing address to calculate shipping"
 msgstr ""
 
-#: admin-form-functions.php:250 display-coupons.php:502
-#: display-coupons.php:526 merchants/chronopay.php:427
-#: merchants/paypal_multiple.php:478 merchants/paypal_multiple.php:486
-#: merchants/paypal_multiple.php:502 wpsc-admin/display-groups.page.php:908
+#: admin-form-functions.php:250 display-coupons.php:503
+#: display-coupons.php:527 merchants/chronopay.php:427
+#: merchants/paypal_multiple.php:479 merchants/paypal_multiple.php:487
+#: merchants/paypal_multiple.php:503 wpsc-admin/display-groups.page.php:908
 #: wpsc-admin/includes/display-items-functions.php:823
 #: wpsc-admin/includes/settings-pages/admin.php:38
 #: wpsc-admin/includes/settings-pages/admin.php:64
@@ -176,6 +176,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/checkout.php:95
 #: wpsc-admin/includes/settings-pages/checkout.php:118
 #: wpsc-admin/includes/settings-pages/checkout.php:143
+#: wpsc-admin/includes/settings-pages/checkout.php:166
 #: wpsc-admin/includes/settings-pages/general.php:72
 #: wpsc-admin/includes/settings-pages/general.php:197
 #: wpsc-admin/includes/settings-pages/presentation.php:108
@@ -204,10 +205,10 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: admin-form-functions.php:251 display-coupons.php:503
-#: display-coupons.php:527 merchants/chronopay.php:428
-#: merchants/paypal_multiple.php:479 merchants/paypal_multiple.php:487
-#: merchants/paypal_multiple.php:503 wpsc-admin/display-groups.page.php:909
+#: admin-form-functions.php:251 display-coupons.php:504
+#: display-coupons.php:528 merchants/chronopay.php:428
+#: merchants/paypal_multiple.php:480 merchants/paypal_multiple.php:488
+#: merchants/paypal_multiple.php:504 wpsc-admin/display-groups.page.php:909
 #: wpsc-admin/includes/display-items-functions.php:825
 #: wpsc-admin/includes/settings-pages/admin.php:39
 #: wpsc-admin/includes/settings-pages/admin.php:65
@@ -215,6 +216,7 @@ msgstr ""
 #: wpsc-admin/includes/settings-pages/checkout.php:97
 #: wpsc-admin/includes/settings-pages/checkout.php:120
 #: wpsc-admin/includes/settings-pages/checkout.php:145
+#: wpsc-admin/includes/settings-pages/checkout.php:168
 #: wpsc-admin/includes/settings-pages/general.php:74
 #: wpsc-admin/includes/settings-pages/general.php:200
 #: wpsc-admin/includes/settings-pages/presentation.php:109
@@ -250,7 +252,7 @@ msgstr ""
 #: admin-form-functions.php:262 admin-form-functions.php:300
 #: admin-form-functions.php:319 shipping/tablerate.php:44
 #: shipping/weightrate.php:35 wpsc-admin/admin.php:347
-#: wpsc-admin/ajax-and-init.php:1902 wpsc-admin/display-groups.page.php:669
+#: wpsc-admin/ajax-and-init.php:1907 wpsc-admin/display-groups.page.php:669
 #: wpsc-admin/display-items.page.php:277 wpsc-admin/display-items.page.php:401
 #: wpsc-admin/display-sales-logs.php:425 wpsc-admin/display-sales-logs.php:550
 #: wpsc-admin/display-variations.page.php:178
@@ -258,7 +260,7 @@ msgstr ""
 #: wpsc-admin/display-variations.page.php:213
 #: wpsc-admin/includes/display-items-functions.php:351
 #: wpsc-admin/includes/display-items-functions.php:797
-#: wpsc-admin/includes/settings-pages/checkout.php:248
+#: wpsc-admin/includes/settings-pages/checkout.php:269
 msgid "Delete"
 msgstr ""
 
@@ -268,12 +270,12 @@ msgstr ""
 
 #: admin-form-functions.php:307 wpsc-admin/admin.php:236
 #: wpsc-admin/display-variations.page.php:218
-#: wpsc-admin/includes/settings-pages/checkout.php:175
+#: wpsc-admin/includes/settings-pages/checkout.php:199
 msgid "Add"
 msgstr ""
 
-#: admin-form-functions.php:318 display-coupons.php:389
-#: display-coupons.php:450 wpsc-admin/display-groups.page.php:106
+#: admin-form-functions.php:318 display-coupons.php:390
+#: display-coupons.php:451 wpsc-admin/display-groups.page.php:106
 #: wpsc-admin/display-groups.page.php:706
 #: wpsc-admin/display-groups.page.php:719
 #: wpsc-admin/display-variations.page.php:14
@@ -283,14 +285,14 @@ msgid "Edit"
 msgstr ""
 
 #: admin-form-functions.php:339 display-coupons.php:174
-#: display-coupons.php:365 wpsc-admin/display-sales-logs.php:247
+#: display-coupons.php:366 wpsc-admin/display-sales-logs.php:247
 msgid "Coupon Code"
 msgstr ""
 
 #: admin-form-functions.php:340 display-coupons.php:177
-#: display-coupons.php:369 themes/default/shopping_cart_page.php:190
-#: themes/iShop/shopping_cart_page.php:163
-#: themes/marketplace/shopping_cart_page.php:161
+#: display-coupons.php:370 themes/default/shopping_cart_page.php:190
+#: themes/iShop/shopping_cart_page.php:165
+#: themes/marketplace/shopping_cart_page.php:164
 #: transaction_result_functions.php:207 transaction_result_functions.php:215
 #: wpsc-admin/ajax-and-init.php:1146 wpsc-admin/ajax-and-init.php:1152
 #: wpsc-admin/display-sales-logs.php:250
@@ -298,12 +300,12 @@ msgid "Discount"
 msgstr ""
 
 #: admin-form-functions.php:341 display-coupons.php:180
-#: display-coupons.php:373
+#: display-coupons.php:374
 msgid "Start"
 msgstr ""
 
 #: admin-form-functions.php:342 display-coupons.php:183
-#: display-coupons.php:377
+#: display-coupons.php:378
 msgid "Expiry"
 msgstr ""
 
@@ -312,111 +314,111 @@ msgid "Use Once"
 msgstr ""
 
 #: admin-form-functions.php:344 display-coupons.php:189
-#: display-coupons.php:381
+#: display-coupons.php:382
 msgid "Active"
 msgstr ""
 
 #: admin-form-functions.php:345 display-coupons.php:193
-#: display-coupons.php:287 display-coupons.php:385
+#: display-coupons.php:287 display-coupons.php:386
 msgid "Apply On All Products"
 msgstr ""
 
-#: admin-form-functions.php:554
+#: admin-form-functions.php:471
 msgid "Update Coupon"
 msgstr ""
 
-#: admin-form-functions.php:555
+#: admin-form-functions.php:472
 msgid "Delete Coupon"
 msgstr ""
 
-#: admin-form-functions.php:566 wpsc-admin/admin.php:137
+#: admin-form-functions.php:483 wpsc-admin/admin.php:137
 msgid "Settings"
 msgstr ""
 
-#: admin-form-functions.php:570 wpsc-admin/display-sales-logs.php:316
+#: admin-form-functions.php:487 wpsc-admin/display-sales-logs.php:316
 msgid "Shop Settings"
 msgstr ""
 
-#: admin-form-functions.php:571
+#: admin-form-functions.php:488
 msgid "Money and Payment"
 msgstr ""
 
-#: admin-form-functions.php:572
+#: admin-form-functions.php:489
 msgid "Checkout Page Settings"
 msgstr ""
 
-#: admin-form-functions.php:590 admin-form-functions.php:591
+#: admin-form-functions.php:507 admin-form-functions.php:508
 msgid "product"
 msgstr ""
 
-#: admin-form-functions.php:590 admin-form-functions.php:591
+#: admin-form-functions.php:507 admin-form-functions.php:508
 msgid "products"
 msgstr ""
 
-#: admin-form-functions.php:595 admin-form-functions.php:596
+#: admin-form-functions.php:512 admin-form-functions.php:513
 msgid "group"
 msgstr ""
 
-#: admin-form-functions.php:595 admin-form-functions.php:596
+#: admin-form-functions.php:512 admin-form-functions.php:513
 msgid "groups"
 msgstr ""
 
-#: admin-form-functions.php:600 admin-form-functions.php:601
+#: admin-form-functions.php:517 admin-form-functions.php:518
 msgid "sale"
 msgstr ""
 
-#: admin-form-functions.php:600 admin-form-functions.php:601
+#: admin-form-functions.php:517 admin-form-functions.php:518
 msgid "sales"
 msgstr ""
 
-#: admin-form-functions.php:607
+#: admin-form-functions.php:524
 msgid "variation"
 msgstr ""
 
-#: admin-form-functions.php:607
+#: admin-form-functions.php:524
 msgid "variations"
 msgstr ""
 
-#: admin-form-functions.php:611 admin-form-functions.php:612
-#: admin-form-functions.php:615
+#: admin-form-functions.php:528 admin-form-functions.php:529
+#: admin-form-functions.php:532
 msgid "transaction"
 msgstr ""
 
-#: admin-form-functions.php:611 admin-form-functions.php:612
-#: admin-form-functions.php:615
+#: admin-form-functions.php:528 admin-form-functions.php:529
+#: admin-form-functions.php:532
 msgid "transactions"
 msgstr ""
 
-#: admin-form-functions.php:624
+#: admin-form-functions.php:541
 msgid "Current Month"
 msgstr ""
 
-#: admin-form-functions.php:629
+#: admin-form-functions.php:546
 msgid "At a Glance"
 msgstr ""
 
-#: admin-form-functions.php:659
+#: admin-form-functions.php:576
 msgid "Pending"
 msgstr ""
 
-#: admin-form-functions.php:674
+#: admin-form-functions.php:591
 msgid "Closed"
 msgstr ""
 
-#: admin-form-functions.php:682 admin-form-functions.php:690
+#: admin-form-functions.php:599 admin-form-functions.php:607
 #: wpsc-admin/includes/display-items-functions.php:350
 msgid "Add New Product"
 msgstr ""
 
-#: admin-form-functions.php:682
+#: admin-form-functions.php:599
 msgid "Here you can add products, groups or variations"
 msgstr ""
 
-#: admin-form-functions.php:691
+#: admin-form-functions.php:608
 msgid "Right Now"
 msgstr ""
 
-#: admin-form-functions.php:696
+#: admin-form-functions.php:613
 msgid ""
 "You have <a href=\"admin.php?page=wpsc-edit-products\">:productcount:</a>, "
 "contained within <a href=\"admin.php?page=wpsc-edit-groups\">:groupcount:</"
@@ -425,19 +427,19 @@ msgid ""
 "approval."
 msgstr ""
 
-#: admin-form-functions.php:698
+#: admin-form-functions.php:615
 msgid "You are using the :theme: style. This is WP e-Commerce :versionnumber:."
 msgstr ""
 
-#: admin-form-functions.php:729
+#: admin-form-functions.php:646
 msgid "Packing Slip"
 msgstr ""
 
-#: admin-form-functions.php:730
+#: admin-form-functions.php:647
 msgid "Order"
 msgstr ""
 
-#: admin-form-functions.php:865 themes/default/list_view.php:137
+#: admin-form-functions.php:782 themes/default/list_view.php:137
 #: themes/default/products_page.php:197
 #: themes/default/shopping_cart_page.php:15
 #: themes/default/single_product.php:131 themes/iShop/list_view.php:138
@@ -450,7 +452,7 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-#: admin-form-functions.php:870 js/tinymce3/window.php:113
+#: admin-form-functions.php:787 js/tinymce3/window.php:113
 #: themes/default/cart_widget.php:25 themes/default/products_page.php:214
 #: themes/default/products_page.php:216
 #: themes/default/shopping_cart_page.php:19
@@ -471,7 +473,7 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: admin-form-functions.php:872 themes/default/cart_widget.php:40
+#: admin-form-functions.php:789 themes/default/cart_widget.php:40
 #: themes/default/shopping_cart_page.php:17 themes/iShop/cart_widget.php:40
 #: themes/iShop/shopping_cart_page.php:16
 #: themes/marketplace/cart_widget.php:40
@@ -483,7 +485,7 @@ msgstr ""
 msgid "Shipping"
 msgstr ""
 
-#: admin-form-functions.php:980
+#: admin-form-functions.php:897
 msgid "This users cart was empty"
 msgstr ""
 
@@ -499,11 +501,11 @@ msgstr ""
 msgid "Create Coupon"
 msgstr ""
 
-#: display-coupons.php:351
+#: display-coupons.php:352
 msgid "Add New Condition"
 msgstr ""
 
-#: display-coupons.php:466
+#: display-coupons.php:467
 msgid ""
 "<strong>Note:</strong> Due to a current limitation of PayPal, if your user "
 "makes a purchase and uses a coupon, we can not send a list of items through "
@@ -512,32 +514,32 @@ msgid ""
 "your shop name and the total amount of their purchase."
 msgstr ""
 
-#: display-coupons.php:478
+#: display-coupons.php:479
 msgid "Marketing Settings"
 msgstr ""
 
-#: display-coupons.php:485
+#: display-coupons.php:486
 msgid "Display Cross Sales"
 msgstr ""
 
-#: display-coupons.php:509
+#: display-coupons.php:510
 msgid "Show Share This (Social Bookmarks)"
 msgstr ""
 
-#: display-coupons.php:532
+#: display-coupons.php:533
 msgid "Display How Customer Found Us Survey"
 msgstr ""
 
-#: display-coupons.php:549 wpsc-admin/display-groups.page.php:642
+#: display-coupons.php:550 wpsc-admin/display-groups.page.php:642
 #: wpsc-admin/display-groups.page.php:667
 msgid "Submit"
 msgstr ""
 
-#: display-coupons.php:555
+#: display-coupons.php:556
 msgid "RSS Address"
 msgstr ""
 
-#: display-coupons.php:559
+#: display-coupons.php:560
 msgid ""
 "<strong>Note:</strong> Not only can people use this RSS to keep update with "
 "your product list but you can also use this link to promote your products in "
@@ -546,7 +548,7 @@ msgid ""
 "and follow the instructions."
 msgstr ""
 
-#: display-coupons.php:573
+#: display-coupons.php:574
 msgid "Google Merchant Centre / Google Product Search"
 msgstr ""
 
@@ -633,10 +635,10 @@ msgstr ""
 msgid "Please select your country from the list."
 msgstr ""
 
-#: edit-profile.php:61 wpsc-includes/checkout.class.php:536
-#: wpsc-includes/checkout.class.php:550 wpsc-includes/checkout.class.php:561
-#: wpsc-includes/checkout.class.php:569 wpsc-includes/checkout.class.php:580
-#: wpsc-includes/checkout.class.php:679
+#: edit-profile.php:61 wpsc-includes/checkout.class.php:585
+#: wpsc-includes/checkout.class.php:599 wpsc-includes/checkout.class.php:610
+#: wpsc-includes/checkout.class.php:618 wpsc-includes/checkout.class.php:629
+#: wpsc-includes/checkout.class.php:728
 msgid "Please enter a valid"
 msgstr ""
 
@@ -669,7 +671,7 @@ msgid "Google Shipping Country"
 msgstr ""
 
 #: google_shipping_country.php:43 tax_and_shipping.php:86
-#: wpsc-admin/includes/settings-pages/checkout.php:268
+#: wpsc-admin/includes/settings-pages/checkout.php:289
 msgid "Save Changes"
 msgstr ""
 
@@ -753,8 +755,8 @@ msgstr ""
 msgid "Number of visible items"
 msgstr ""
 
-#: merchants/chronopay.php:440 merchants/paypal_multiple.php:562
-#: wpsc-admin/includes/settings-pages/admin.php:227
+#: merchants/chronopay.php:440 merchants/paypal_multiple.php:563
+#: wpsc-admin/includes/settings-pages/admin.php:228
 #: wpsc-admin/includes/settings-pages/gateway.php:92
 #: wpsc-admin/includes/settings-pages/gateway.php:172
 #: wpsc-admin/includes/settings-pages/general.php:207
@@ -768,7 +770,7 @@ msgstr ""
 msgid "Your Subscription"
 msgstr ""
 
-#: merchants/paypal_certified.php:621 merchants/paypal_multiple.php:527
+#: merchants/paypal_certified.php:621 merchants/paypal_multiple.php:528
 msgid "Currency Converter"
 msgstr ""
 
@@ -780,7 +782,7 @@ msgid ""
 "using currency you choose below."
 msgstr ""
 
-#: merchants/paypal_multiple.php:530
+#: merchants/paypal_multiple.php:531
 #, php-format
 msgid ""
 "Your website uses <strong>%s</strong>. This currency is not supported by "
@@ -843,8 +845,8 @@ msgstr ""
 
 #: share-this.php:491 share-this.php:867
 #: themes/default/shopping_cart_page.php:242
-#: themes/iShop/shopping_cart_page.php:213
-#: themes/marketplace/shopping_cart_page.php:211
+#: themes/iShop/shopping_cart_page.php:215
+#: themes/marketplace/shopping_cart_page.php:214
 msgid "E-mail"
 msgstr ""
 
@@ -989,7 +991,7 @@ msgid ""
 "100mm x 100mm x 100mm will be used."
 msgstr ""
 
-#: shipping/australiapost.php:257
+#: shipping/australiapost.php:258
 #, php-format
 msgid "%1$s (estimated delivery time: %2$d business day)"
 msgid_plural "%1$s (estimated delivery time: %2$d business days)"
@@ -1003,8 +1005,8 @@ msgid ""
 msgstr ""
 
 #: shipping/tablerate.php:30 themes/default/shopping_cart_page.php:202
-#: themes/iShop/shopping_cart_page.php:175
-#: themes/marketplace/shopping_cart_page.php:173
+#: themes/iShop/shopping_cart_page.php:177
+#: themes/marketplace/shopping_cart_page.php:176
 msgid "Total Price"
 msgstr ""
 
@@ -1320,78 +1322,78 @@ msgid "Total Shipping"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:225
-#: themes/iShop/shopping_cart_page.php:196
-#: themes/marketplace/shopping_cart_page.php:194
+#: themes/iShop/shopping_cart_page.php:198
+#: themes/marketplace/shopping_cart_page.php:197
 msgid "Not yet a member?"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:226
-#: themes/iShop/shopping_cart_page.php:197
-#: themes/marketplace/shopping_cart_page.php:195
+#: themes/iShop/shopping_cart_page.php:199
+#: themes/marketplace/shopping_cart_page.php:198
 msgid ""
 "In order to buy from us, you'll need an account. Joining is free and easy. "
 "All you need is a username, password and valid email address."
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:240
-#: themes/iShop/shopping_cart_page.php:211
-#: themes/marketplace/shopping_cart_page.php:209
+#: themes/iShop/shopping_cart_page.php:213
+#: themes/marketplace/shopping_cart_page.php:212
 msgid "Username"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:241
-#: themes/iShop/shopping_cart_page.php:212
-#: themes/marketplace/shopping_cart_page.php:210
+#: themes/iShop/shopping_cart_page.php:214
+#: themes/marketplace/shopping_cart_page.php:213
 msgid "Password"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:246
-#: themes/iShop/shopping_cart_page.php:217
-#: themes/marketplace/shopping_cart_page.php:215
+#: themes/iShop/shopping_cart_page.php:219
+#: themes/marketplace/shopping_cart_page.php:218
 msgid "Please enter your contact details:"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:248
-#: themes/iShop/shopping_cart_page.php:219
-#: themes/marketplace/shopping_cart_page.php:217
+#: themes/iShop/shopping_cart_page.php:221
+#: themes/marketplace/shopping_cart_page.php:220
 msgid "Fields marked with an asterisk must be filled in."
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:323
-#: themes/iShop/shopping_cart_page.php:294
-#: themes/marketplace/shopping_cart_page.php:292
+#: themes/iShop/shopping_cart_page.php:296
+#: themes/marketplace/shopping_cart_page.php:295
 msgid "Select a payment gateway"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:357
-#: themes/iShop/shopping_cart_page.php:328
-#: themes/marketplace/shopping_cart_page.php:326
+#: themes/iShop/shopping_cart_page.php:330
+#: themes/marketplace/shopping_cart_page.php:329
 msgid "I agree to The "
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:358
-#: themes/iShop/shopping_cart_page.php:329
-#: themes/marketplace/shopping_cart_page.php:327
+#: themes/iShop/shopping_cart_page.php:331
+#: themes/marketplace/shopping_cart_page.php:330
 #: wpsc-admin/includes/settings-pages/admin.php:107
 msgid "Terms and Conditions"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:370
-#: themes/iShop/shopping_cart_page.php:341
-#: themes/marketplace/shopping_cart_page.php:339
+#: themes/iShop/shopping_cart_page.php:343
+#: themes/marketplace/shopping_cart_page.php:342
 msgid "Make Purchase"
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:384
-#: themes/iShop/shopping_cart_page.php:355
-#: themes/marketplace/shopping_cart_page.php:353
+#: themes/iShop/shopping_cart_page.php:357
+#: themes/marketplace/shopping_cart_page.php:356
 #: transaction_result_functions.php:375
 msgid "Oops, there is nothing in your cart."
 msgstr ""
 
 #: themes/default/shopping_cart_page.php:384
-#: themes/iShop/shopping_cart_page.php:355
-#: themes/marketplace/shopping_cart_page.php:353
+#: themes/iShop/shopping_cart_page.php:357
+#: themes/marketplace/shopping_cart_page.php:356
 #: transaction_result_functions.php:375
 msgid "Please visit our shop"
 msgstr ""
@@ -1468,7 +1470,7 @@ msgstr ""
 msgid "The Transaction was successful"
 msgstr ""
 
-#: transaction_results.php:40 transaction_results.php:49
+#: transaction_results.php:41
 msgid "Sorry your transaction was not accepted.<br /><a href="
 msgstr ""
 
@@ -1651,23 +1653,23 @@ msgstr ""
 msgid "Show Description:"
 msgstr ""
 
-#: wp-shopping-cart.php:156
+#: wp-shopping-cart.php:157
 msgid "Note: if this is blank, the image will not be resized"
 msgstr ""
 
-#: wp-shopping-cart.php:157 wpsc-includes/install_and_update.functions.php:68
+#: wp-shopping-cart.php:158 wpsc-includes/install_and_update.functions.php:68
 msgid "Order Received"
 msgstr ""
 
-#: wp-shopping-cart.php:159 wpsc-includes/install_and_update.functions.php:71
+#: wp-shopping-cart.php:160 wpsc-includes/install_and_update.functions.php:71
 msgid "Closed Order"
 msgstr ""
 
-#: wp-shopping-cart.php:529
+#: wp-shopping-cart.php:530
 msgid "Please Note"
 msgstr ""
 
-#: wp-shopping-cart.php:530
+#: wp-shopping-cart.php:531
 #, php-format
 msgid ""
 "Before upgrading you should check the <a %s>upgrade information</a> and "
@@ -2951,11 +2953,11 @@ msgstr ""
 msgid "User Account URL"
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/admin.php:215
+#: wpsc-admin/includes/settings-pages/admin.php:216
 msgid "Update Page URLs"
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/admin.php:216
+#: wpsc-admin/includes/settings-pages/admin.php:217
 msgid "Fix Product Group Permalinks"
 msgstr ""
 
@@ -2985,26 +2987,31 @@ msgstr ""
 msgid "Enable Shipping Same as Billing Option: "
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/checkout.php:153
+#: wpsc-admin/includes/settings-pages/checkout.php:163
+msgid ""
+"Use The Billing country for Shipping unless a shipping form is present: "
+msgstr ""
+
+#: wpsc-admin/includes/settings-pages/checkout.php:177
 msgid ""
 "Here you can customise the forms to be displayed in your checkout page. The "
 "checkout page is where you collect important user information that will show "
 "up in your purchase logs i.e. the buyers address, and name..."
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/checkout.php:170
+#: wpsc-admin/includes/settings-pages/checkout.php:194
 msgid "+ Add New Form Set"
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/checkout.php:174
+#: wpsc-admin/includes/settings-pages/checkout.php:198
 msgid "Add new Form Set"
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/checkout.php:251
+#: wpsc-admin/includes/settings-pages/checkout.php:272
 msgid "This will be the Email address that the Purchase Reciept is sent to."
 msgstr ""
 
-#: wpsc-admin/includes/settings-pages/checkout.php:269
+#: wpsc-admin/includes/settings-pages/checkout.php:290
 msgid "Add New Form Field"
 msgstr ""
 
@@ -3560,7 +3567,7 @@ msgstr ""
 msgid "Please enter a Zipcode and click calculate to proceed"
 msgstr ""
 
-#: wpsc-includes/ajax.functions.php:981 wpsc-includes/ajax.functions.php:1039
+#: wpsc-includes/ajax.functions.php:987 wpsc-includes/ajax.functions.php:1045
 msgid ""
 "This download is no longer valid, Please contact the site administrator for "
 "more information."
