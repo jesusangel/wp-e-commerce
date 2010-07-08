@@ -157,7 +157,7 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 		
 		// print_r(array($post_id));
 		$sku = get_product_meta($product['id'], 'sku', true);
-		$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
+		$weight = wpsc_convert_weight($product['weight'], $product['weight_unit']);
 		if($post_id == 0) {
 			$post_status = "publish";
 			if($product['publish'] != 1) {
@@ -500,7 +500,7 @@ function wpsc_convert_variation_combinations() {
 				$post_data['_wpsc_original_variation_id'] = (float)$variation_item->id;
 				
 				
-				$weight = wpsc_convert_weights($variation_item->weight, $variation_item->weight_unit);
+				$weight = wpsc_convert_weight($variation_item->weight, $variation_item->weight_unit);
 				
 				// Product Weight
 				$post_data['_wpsc_product_metadata']['weight'] = (float)($weight * 453.59237); // convert all weights to grams

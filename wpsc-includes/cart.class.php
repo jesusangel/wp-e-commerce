@@ -1704,10 +1704,6 @@ class wpsc_cart_item {
 		}
 		
 		
-		
-		
-		
-		
 		if($this->tax_rate > 0) {
 		  $this->taxable_price = $this->total_price;
 		  $this->tax = $this->taxable_price * ($this->tax_rate/100);
@@ -1716,15 +1712,16 @@ class wpsc_cart_item {
 		
 		$this->product_url = wpsc_product_url($product_id);
 		
-		
-		$attached_image = (array)get_posts(array(
+		$att_img_args = array(
 			'post_type' => 'attachment',
-			'numberposts' => 1,
+			'numberposts' => 10,
 			'post_status' => null,
-			'post_parent' => get_the_ID(),
+			'post_parent' => $product_id,
 			'orderby' => 'menu_order',
-			'order' => 'ASC'
-		));
+			'order' => 'DESC'
+		);
+				
+		$attached_image = get_posts($att_img_args);
 		
 		
 		if($attached_image != null) {

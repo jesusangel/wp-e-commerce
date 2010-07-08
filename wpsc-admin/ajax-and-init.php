@@ -1935,11 +1935,11 @@ function wpsc_gateway_settings(){
 		update_option('payment_gateway_names', $payment_gateway_names);	
 	}
 	
-	//exit('<pre>'.print_r($payment_gateway_names,true).'</pre>');
+	//exit('<pre>'.print_r($GLOBALS['nzshpcrt_gateways'],true).'</pre>');
 	
 	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
 		if($gateway['internalname'] == get_option('payment_gateway')) {
-			$gateway['submit_function']();
+			call_user_func_array($gateway['submit_function']);
 			$changes_made = true;
 		}
 	}
