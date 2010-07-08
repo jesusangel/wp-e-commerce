@@ -1636,14 +1636,12 @@ class wpsc_cart_item {
 		$this->stock = get_post_meta($product_id, '_wpsc_stock', true);
 		$this->is_donation = get_post_meta($product_id, '_wpsc_is_donation', true);
 
-		
-		
-		
-		
 		//exit("<pre>".print_r($product_meta,true)."</pre>");
 		$priceandstock_id = 0;
-		//$weight = wpsc_convert_weights($product['weight'], $product['weight_unit']);
+		$weight = wpsc_convert_weight($product_meta[0]["weight"], $product_meta[0]["display_weight_as"], 'pound');
 		
+		unset($this->weight);
+		$this->weight = $weight;
 		//$price = $product['price'];
 		
 		//$file_id = $product['file'];

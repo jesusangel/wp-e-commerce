@@ -1072,4 +1072,56 @@ function wpsc_product_count() {
 	global $wp_query;
 	return $wp_query->found_posts;
 }
+
+//The following code was removed from WP 3.8, present in 3.7 - Not sure why it was removed and not refactored. (JS)
+
+
+/**
+* wpsc the variation price function
+* @return string - the variation price
+*/
+function wpsc_the_variation_price() {
+	global $wpdb, $wpsc_variations;
+
+    if($wpsc_variations->variation_count > 1) {
+		
+		$product_id = get_the_ID();
+		$variation_id = $wpsc_variations->variation->term_id;
+
+		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM wp_term_relationships AS rel LEFT JOIN wp_posts AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
+		
+		$price = get_product_meta($variation_product_id, "price");
+		$price = $price[0];
+		
+		$output = nzshpcrt_currency_display($price, '', true);    		
+    } else {
+    	$output = false;
+    }
+	return $output;
+}
+
+/**
+* wpsc the variation stock function
+* @return string - HTML attribute to disable select options and radio buttons
+*/
+function wpsc_the_variation_stock() {
+	global $wpdb, $wpsc_variations;
+
+  if($wpsc_variations->variation_count > 1) {
+		
+		$product_id = get_the_ID();
+		$variation_id = $wpsc_variations->variation->term_id;
+				
+		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM wp_term_relationships AS rel LEFT JOIN wp_posts AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
+		
+		$stock = get_product_meta($variation_product_id, "stock");
+		$output = $stock[0];
+				
+    } else {
+    	$output = false;
+    }
+	return $output;
+}
+
+
 ?>

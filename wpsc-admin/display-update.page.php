@@ -8,40 +8,71 @@
  * @since 3.8
  */
 
+global $show_update_page;
+global $wpdb;
+$show_update_page = FALSE;
+if(get_option('wpsc_db_version') < 3.8 || !get_option('wpsc_db_version')) :
+	/////////////////////////////////////////////////////////////////////
+	// Check to see if there are any products... if they don't have any, they don't need to update
+	/////////////////////////////////////////////////////////////////////
+
+	$product_count = $wpdb->get_var("SELECT COUNT(*) FROM " . WPSC_TABLE_PRODUCT_LIST);
+	if($product_count > 0) :
+		$show_update_page = TRUE;
+		function wpsc_display_update_notice() {
+			echo "<div id='wpsc-warning' class='error fade'><p><strong>".__('WP e-Commerce is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">update your database</a> to import all of your products.'), "admin.php?page=wpsc-update")."</p></div>";
+		}
+		if($_GET['page'] != 'wpsc-update') :
+			add_action('admin_notices', 'wpsc_display_update_notice');
+		endif;
+			
+	else :
+		//there weren't any product, so mark the update as complete
+		update_option('wpsc_db_version', 3.8);
+		
+	endif; //product count > 0
+endif; //get_option('wpsc_db_version') < 3.8 || !get_option('wpsc_db_version')
+
+
+
 function wpsc_display_update_page() {
 	?>
 	<div class="wrap">
 		<?php // screen_icon(); ?>
 		<h2><?php echo wp_specialchars( __('Update WP e-Commerce', 'wpsc') ); ?> </h2>
+		<br />	
+	<?php 
+	if($_POST['run_updates']) :
+		echo 'Updating Categories...';
+		wpsc_convert_category_groups();
+		echo '<br />Updating Variations...';
+		wpsc_convert_variation_sets();
+		echo '<br />Updating Products...';
+		wpsc_convert_products_to_posts();
+		echo '<br />Updating Child Products...';
+		wpsc_convert_variation_combinations();
+		echo '<br />Updating Product Files...';
+		wpsc_update_files();
+		echo '<br /><br /><strong>WP e-Commerce updated successfully!</strong>';
+		update_option('wpsc_db_version', 3.8);
+	else:
+	?>
+
+		Your WP e-Commerce database needs to be updated for WP e-Commerce 3.8.  To perform this update, press the button below.  It is highly recommended that you back up your database before performing this update.
 		<br />
-		Currently this page runs when loaded and updates your site from previous versions of WP e-Commerce. However shortly this will be overhauled to run like the WordPress Database upgrade page.
 		<br />
-		A still pending 3.8 job is to turn the following into clickable links. In the meantime this should be stable. However some older servers may time out or run out of memory.
-		<br />
-		If the server times out or runs out of memory, it is safe to reload the page, the script keeps track of what it has updated, and will continue from where it stopped.
+		<em>Note: If the server times out or runs out of memory, just reload this page, the server will pick up where it left off.</em>
 		<br />
 		
-		- click here to run the first part of the update (updating categories) <br />
-		<?php
-		wpsc_convert_category_groups();
-		?>
-		- click here to run the next part of the update (updating variation groups and variations) <br />
-		<?php
-		wpsc_convert_variation_sets();
-		?>
-		- click here to run the next part of the update (updating products (including sort order) and product images) <br />
-		<pre><?php
-		wpsc_convert_products_to_posts();
-		?></pre>
-		- click here to run the next part of the update (updating variation combinations into child products) <br />
-		<pre><?php 
-		- wpsc_convert_variation_combinations();
-		?></pre>
-		- click here to run the next part of the update (updating product files) <br />
-		<pre><?php
-		wpsc_update_files();
-		?></pre>
+		<form action="" method="post" id="setup">
+			<input type="hidden" name="run_updates" value="true" id="run_updates">
+			<p class="step"><input type="submit" class="button" value="Update WP e-Commerce" name="Submit"></p>
+		</form>
+	<?php
+		endif;
+	?>
 	</div>
+
 		<?php 
 }
 
