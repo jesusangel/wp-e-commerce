@@ -1515,12 +1515,13 @@ class WPSC_Query {
 			
 			$results = $wpdb->get_results("SELECT * FROM `{$wpdb->term_relationships}` WHERE term_taxonomy_id = '".$taxonomy_id."'");
 			
-			foreach ($results as $result) {
+			foreach ((array)$results as $result) {
 				$product_ids[] = $result->object_id; 
 			}
-			$product_id = implode(",",$product_ids);
-		
-			$sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$product_id.") AND `publish` IN('1') AND `active` IN('1')"; //Transom - added publish & active
+			if(!empty($product_ids)){
+				$product_id = implode(",",$product_ids);
+				$sql = "SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id IN (".$product_id.") AND `publish` IN('1') AND `active` IN('1')"; //Transom - added publish & active
+			}
 		} else {
 			// select by category is done here
 		 
