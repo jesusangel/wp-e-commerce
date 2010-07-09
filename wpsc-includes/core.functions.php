@@ -447,9 +447,9 @@ function wpsc_is_checkout() {
  * @return void
  */
 function wpsc_product_link($permalink, $post, $leavename) {
-	global $wp_query;
+	global $wp_query, $wpsc_page_titles;
 	$rewritecode = array(
-		'%term_url%',
+		'%wpsc_product_category%',
 		'%postname%'
 	);
 	if( is_object($post)) {
@@ -464,7 +464,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 	//echo "'><pre>_".print_r($post, true)."_</pre>";
 	$permalink_structure = get_option('permalink_structure');
 	// This may become customiseable later
-	$our_permalink_structure = "%term_url%/%postname%/";
+	$our_permalink_structure = $wpsc_page_titles['products']."/%wpsc_product_category%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product " 
 	
 	if ( '' != $permalink_structure && !in_array($post->post_status, array('draft', 'pending')) ) {
@@ -473,7 +473,6 @@ function wpsc_product_link($permalink, $post, $leavename) {
 		foreach($product_categories as $product_category) {
 			$product_category_slugs[] = $product_category->slug;
 		}
-			
 		// If the product is associated with multiple categories, determine which one to pick	
 		if(count($product_categories) > 1) {
 			if(($wp_query->query_vars['products']!= null) && in_array($wp_query->query_vars['products'], $product_category_slugs)) {
@@ -497,8 +496,8 @@ function wpsc_product_link($permalink, $post, $leavename) {
 		}
 		
 		$rewritereplace = array(
-			untrailingslashit($term_url),
-			$post_name,
+			$category_slug,
+			$post_name
 		);
 		
 		$permalink = str_replace($rewritecode, $rewritereplace, $our_permalink_structure);
@@ -516,10 +515,6 @@ if(IS_WP30 == true) {
 	// for wordpress 2.9
 	add_filter('post_link', 'wpsc_product_link', 10, 3);
 }
-//
-
-
-
 
 /**
  * wpsc_get_product_template function.

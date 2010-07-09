@@ -492,8 +492,6 @@ if(!function_exists('wpsc_initialisation')){
 // first plugin hook in wordpress
 add_action('plugins_loaded','wpsc_initialisation', 0);
 
-
-
 /**
  * wpsc_query_modifier function.
  * 
@@ -518,7 +516,7 @@ function wpsc_register_post_types() {
 	// Products
 	register_post_type( 'wpsc-product', array(
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit&product=%d',
-	    'capability_type' => 'page',
+	    'capability_type' => 'post',
 	    'hierarchical' => true,
 		'exclude_from_search' => false,
 		'public' => true,
@@ -526,11 +524,12 @@ function wpsc_register_post_types() {
 		'show_in_nav_menus' => true,
 		'label' => __('Products'),  
         'singular_label' => __('Product'),
+		'query_var' => true,
 		'rewrite' => array(
-			'slug' => $wpsc_page_titles['products']
+			'slug' => $wpsc_page_titles['products'].'/%wpsc_product_category%',
+			'with_front' => false
 		)
 	));
-	
 	// Purchasable product files
 	register_post_type( 'wpsc-product-file', array(
 	    'capability_type' => 'post',
@@ -545,9 +544,9 @@ function wpsc_register_post_types() {
 	// Product categories, is heirarchical and can use permalinks
 	register_taxonomy('wpsc_product_category', 'wpsc-product', array(
 		'hierarchical' => true,
-		'query_var' => 'products',
 		'rewrite' => array(
-			'slug' => $wpsc_page_titles['products']
+			'slug' => $wpsc_page_titles['products'],
+			'with_front' => false
 		)
 	));
 $labels = array(

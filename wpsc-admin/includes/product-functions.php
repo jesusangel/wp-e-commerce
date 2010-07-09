@@ -110,10 +110,9 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['no_shipping'];
 	
 	// Product Weight
-	$weight = wpsc_convert_weight($post_data['meta']['_wpsc_product_metadata']['weight'], $post_data['meta']['_wpsc_product_metadata']['display_weight_as'], "gram");
+	$weight = wpsc_convert_weight($post_data['meta']['_wpsc_product_metadata']['weight'], $post_data['meta']['_wpsc_product_metadata']['weight_unit'], "gram");
 	$post_data['meta']['_wpsc_product_metadata']['weight'] = (float)$weight;
-	$post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = $post_data['meta']['_wpsc_product_metadata']['display_weight_as'];	
-	
+	$post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = $post_data['meta']['_wpsc_product_metadata']['weight_unit'];	
 	
 	// table rate price
 	$post_data['meta']['_wpsc_product_metadata']['table_rate_price'] = $post_data['table_rate_price'];
@@ -412,7 +411,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');
 	
-//	print('<pre>'.print_r($variation_sets_and_values, true).'</pre>');
+	//die('<pre>'.print_r($variation_sets_and_values, true).'</pre>');
 	
 	$child_product_template = array(
 		'post_author' => $user_ID,
@@ -424,6 +423,8 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		'post_name' => sanitize_title($post_data['name']),
 		'post_parent' => $product_id
 	);
+	
+	$child_product_meta = get_post_custom($product_id);
 	
 	// here we loop through the combinations, get the term data and generate custom product names
 	foreach($combinations as $combination) {
@@ -456,10 +457,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		));
 		$selected_post = array_shift($selected_post);
 		
-		
 		$child_product_id = wpsc_get_child_object_in_terms($product_id, $term_ids, 'wpsc-variation');
-		
-		
 		
 		//echo "<pre>".print_r($child_product_id, true)."</pre>";
 		if($child_product_id == false) {
@@ -477,11 +475,15 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		if($child_product_id > 0) {
 			wp_set_object_terms($child_product_id, $term_slugs, 'wpsc-variation');
 		}
-		//echo "<pre>".print_r($child_product_id, true)."</pre>";
+		//JS - 7.9 - Adding loop to include meta data in child product.
 		
+		foreach ($child_product_meta as $meta_key => $meta_value ) :
+		
+			add_post_meta($child_product_id, $meta_key, $meta_value[0]);
+		
+		endforeach;
 	}
 	
-	//exit('<pre>'.print_r($combinations, true).'</pre>');
 }
 
 

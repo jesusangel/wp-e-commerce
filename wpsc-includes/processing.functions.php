@@ -561,7 +561,7 @@ function wpsc_convert_weight($in_weight, $in_unit, $out_unit = 'gram') {
 		$weight = $intermediate_weight / 453.59237;
 		break;
 	}
-	return $weight;
+	return round($weight, 2);
 }
 
 
