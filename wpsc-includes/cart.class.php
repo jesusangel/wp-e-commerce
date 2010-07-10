@@ -1638,7 +1638,7 @@ class wpsc_cart_item {
 
 		//exit("<pre>".print_r($product_meta,true)."</pre>");
 		$priceandstock_id = 0;
-		$weight = wpsc_convert_weight($product_meta[0]["weight"], $product_meta[0]["display_weight_as"], 'pound');
+		$weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
 		
 		unset($this->weight);
 		$this->weight = $weight;

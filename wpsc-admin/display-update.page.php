@@ -11,6 +11,10 @@
 global $show_update_page;
 global $wpdb;
 $show_update_page = FALSE;
+if (count(get_option("wpsc-variation_children")) == 0) : //if there's nothing in the children variation cache, refresh it, just to make sure.
+	delete_option("wpsc-variation_children");
+	_get_term_hierarchy('wpsc-variation');
+endif;
 if(get_option('wpsc_version') < 3.8 || !get_option('wpsc_version')) :
 	/////////////////////////////////////////////////////////////////////
 	// Check to see if there are any products... if they don't have any, they don't need to update
@@ -27,7 +31,7 @@ if(get_option('wpsc_version') < 3.8 || !get_option('wpsc_version')) :
 		endif;
 			
 	else :
-		//there weren't any product, so mark the update as complete
+		//there weren't any products, so mark the update as complete
 		update_option('wpsc_version', '3.8');
 		
 	endif; //product count > 0
