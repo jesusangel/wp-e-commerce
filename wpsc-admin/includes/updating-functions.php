@@ -110,7 +110,7 @@ function wpsc_convert_variation_sets() {
 			$new_variation_set = wp_insert_term( $variation_set->name, 'wpsc-variation',array('parent' => 0));
 		
 
-				$variation_set_id = $new_variation['term_id'];		
+				$variation_set_id = $new_variation_set['term_id'];		
 		}
 		
 		if(is_numeric($variation_set_id)) {
@@ -459,8 +459,8 @@ function wpsc_convert_variation_combinations() {
 				$post_data['_wpsc_original_variation_id'] = (float)$variation_item->id;
 			
 				// Product Weight
-				$post_data['_wpsc_product_metadata']['weight'] = $variation_item->weight * 28.3495231;
- 				$post_data['_wpsc_product_metadata']['display_weight_as'] = $variation_item->weight_unit;
+				$post_data['_wpsc_product_metadata']['weight'] = wpsc_convert_weight($variation_item->weight, $variation_item->weight_unit, "gram");
+				$post_data['_wpsc_product_metadata']['display_weight_as'] = $variation_item->weight_unit;
 				$post_data['_wpsc_product_metadata']['weight_unit'] = $variation_item->weight_unit;
  	
             	//file

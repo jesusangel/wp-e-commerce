@@ -46,9 +46,7 @@ function wpsc_display_categories_page() {
 		<p>
 				<?php echo __('Categorizing your products into groups help your customers find them. '.
 				'For instance if you sell hats and trousers you	might want to setup a Group called clothes and add hats and trousers to that group.', 'wpsc');?>
-		</p>
-  
-		
+		</p>		
 		<?php if (isset($_GET['deleted']) || isset($_GET['message'])) { ?>
 			<div id="message" class="updated fade">
 				<p>
