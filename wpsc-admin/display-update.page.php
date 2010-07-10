@@ -11,7 +11,7 @@
 global $show_update_page;
 global $wpdb;
 $show_update_page = FALSE;
-if(get_option('wpsc_db_version') < 3.8 || !get_option('wpsc_db_version')) :
+if(get_option('wpsc_version') < 3.8 || !get_option('wpsc_version')) :
 	/////////////////////////////////////////////////////////////////////
 	// Check to see if there are any products... if they don't have any, they don't need to update
 	/////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ if(get_option('wpsc_db_version') < 3.8 || !get_option('wpsc_db_version')) :
 			
 	else :
 		//there weren't any product, so mark the update as complete
-		update_option('wpsc_db_version', 3.8);
+		update_option('wpsc_version', '3.8');
 		
 	endif; //product count > 0
 endif; //get_option('wpsc_db_version') < 3.8 || !get_option('wpsc_db_version')
@@ -54,7 +54,7 @@ function wpsc_display_update_page() {
 		echo '<br />Updating Product Files...';
 		wpsc_update_files();
 		echo '<br /><br /><strong>WP e-Commerce updated successfully!</strong>';
-		update_option('wpsc_db_version', 3.8);
+		update_option('wpsc_version', 3.8);
 	else:
 	?>
 

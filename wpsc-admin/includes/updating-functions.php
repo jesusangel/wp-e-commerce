@@ -21,6 +21,7 @@ function wpsc_convert_category_groups() {
 		
 		if(!is_numeric($category_id) || ( $category_id < 1)) {
 			$new_category = wp_insert_term( $cat_group->name, 'wpsc_product_category', array('description' => $cat_group->description));
+				if(!is_wp_error($new_category))
 				$category_id = $new_category['term_id'];
 				
 		}
@@ -32,9 +33,9 @@ function wpsc_convert_category_groups() {
 			wpsc_update_categorymeta($category_id, 'image', '');
 			wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
 		}	
+		if(!is_wp_error($new_category))
 		wpsc_convert_categories($category_id, $cat_group->id);
 	}
-	
 
 }
 
@@ -55,15 +56,14 @@ function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_ca
 	}
 	
 	if($categorisation > 0) {
-		//echo "<pre>".print_r($categorisation, true)."</pre>";
-		//echo "<div style='margin-left: 6px;'>";
+
 		foreach((array)$categorisation as $category) {
 			$category_id = wpsc_get_meta($category->id, 'category_id', 'wpsc_old_category');
-			//echo "$category_id";		
+
 			if(!is_numeric($category_id) || ( $category_id < 1)) {
 				$new_category = wp_insert_term( $category->name, 'wpsc_product_category', array('description' => $category->description, 'parent' => $new_parent_category));
-			
-					$category_id = $new_category['term_id'];			
+					if(!is_wp_error($new_category))
+						$category_id = $new_category['term_id'];			
 			}
 			
 			if(is_numeric($category_id)) {
@@ -94,9 +94,7 @@ function wpsc_convert_categories($new_parent_category, $group_id, $old_parent_ca
 			}
 				
 		}	
-		//echo "</div>";
-	}
-	
+	}	
 }
 
 function wpsc_convert_variation_sets() {
@@ -109,7 +107,7 @@ function wpsc_convert_variation_sets() {
 		if(!is_numeric($variation_set_id) || ( $variation_set_id < 1)) {
 			$new_variation_set = wp_insert_term( $variation_set->name, 'wpsc-variation',array('parent' => 0));
 		
-
+			if(!is_wp_error($new_variation_set))
 				$variation_set_id = $new_variation_set['term_id'];		
 		}
 		
@@ -123,7 +121,8 @@ function wpsc_convert_variation_sets() {
 				
 				if(!is_numeric($variation_id) || ( $variation_id < 1)) {
 					$new_variation = wp_insert_term( $variation->name, 'wpsc-variation',array('parent' => $variation_set_id));
-
+					
+					if(!is_wp_error($new_variation))
 						$variation_id = $new_variation['term_id'];				
 				}				
 				if(is_numeric($variation_id)) {
@@ -145,14 +144,12 @@ function wpsc_convert_variation_sets() {
 function wpsc_convert_products_to_posts() {
   global $wpdb, $wp_rewrite, $user_ID;
   // Select all products
-  // print_r($wpdb);
   
 	$product_data = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`. * , `".WPSC_TABLE_PRODUCT_ORDER."`.order FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON `".WPSC_TABLE_PRODUCT_LIST."`.id = `".WPSC_TABLE_PRODUCT_ORDER."`.product_id WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN ( '1' )
 GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 	foreach((array)$product_data as $product) {
 		$post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product['id'] ));
 		
-		// print_r(array($post_id));
 		$sku = get_product_meta($product['id'], 'sku', true);
 
 		if($post_id == 0) {
@@ -190,7 +187,6 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 		
 		$post_data = array();
 		
-		//		print_r($product_meta);
 		foreach($product_meta as $k => $pm) :
 			switch ($pm['meta_value']) { //if any values have changed, we'll handle 'em
 				case 'on': //"on" is now "1"
@@ -244,9 +240,6 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 		$wp_upload_dir_data = wp_upload_dir();
 		$wp_upload_basedir = $wp_upload_dir_data['basedir'];
 		
-		//print_r($wpdb);
-		//echo "Post ID:".$post_id."\n";
-		
 		$category_ids = array();
 		$category_data = $wpdb->get_col("SELECT `category_id` FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE `product_id` IN ('{$product['id']}')");
 		foreach($category_data as $old_category_id) {
@@ -274,7 +267,7 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 			$image_url = WPSC_IMAGE_URL.$image_row['image'];
 			
 			$attachment_id = (int)$wpdb->get_var("SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_title` IN('$image_name') AND `post_parent` IN('$post_id') LIMIT 1");
-			// echo "Image ID:".$attachment_id."\n";
+
 			// get the image MIME type
 			$mime_type_data = wpsc_get_mimetype($full_image_path, true);
 			if((int)$attachment_id == 0 ) {
@@ -295,7 +288,7 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 				$attachment_id = wp_insert_post($image_post_values);
 			}
 
-			$image_size_data = getimagesize($full_image_path);
+			$image_size_data = @getimagesize($full_image_path);
 			$image_metadata = array(
 				'width' => $image_size_data[0],
 				'height' => $image_size_data[1],
@@ -305,16 +298,9 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 		
 			update_post_meta( $attachment_id, '_wp_attached_file', $attached_file_path );
 			update_post_meta( $attachment_id, '_wp_attachment_metadata', $image_metadata);
-			//print_r($attached_file_path);
-			//print_r($image_post_values);
+
 		}
 
-		// yay, stars!
-		//echo "\n";
-		//echo "<span style='font-size: 12pt;'>";
-		//echo "————————————————————————————————\n";
-		//    
-		//echo "</span>";
 	}
 	
 	//Just throwing the payment gateway update in here because it doesn't really warrant it's own function :)
@@ -342,8 +328,6 @@ function wpsc_convert_variation_combinations() {
 	'post_status' => 'all',
 	'numberposts' => -1
 	) );
-
-    //print_r($posts);
     
     //return false;
 	foreach((array)$posts as $post) {
@@ -367,7 +351,7 @@ function wpsc_convert_variation_combinations() {
 		
 		// select the variation set associations
 		$variation_set_associations = $wpdb->get_col("SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}'");
-		//print_r($variation_set_associations);
+
 		// select the variation associations if the count of variation sets is greater than zero
 		if(($original_id > 0) && (count($variation_set_associations) > 0)) {
 			$variation_associations = $wpdb->get_col("SELECT `value_id` FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE `product_id` = '{$original_id}' AND `variation_id` IN(".implode(", ", $variation_set_associations).") AND `visible` IN ('1')");
@@ -375,7 +359,6 @@ function wpsc_convert_variation_combinations() {
 			// otherwise, we have no active variations, skip to the next product
 			continue;
 		}
-		//print_r($variation_set_associations);
 		
 		foreach($variation_set_associations as $variation_set_id) {
 			$base_product_terms[] = wpsc_get_meta($variation_set_id, 'variation_set_id', 'wpsc_variation_set');
@@ -402,8 +385,7 @@ function wpsc_convert_variation_combinations() {
 		
 		// select all variation "products"
 		$variation_items = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE `product_id` = '{$original_id}'");
-		//print_r($variation_items);
-		//echo "\n";
+
 		foreach((array)$variation_items as $variation_item) {
 			// initialize the requisite arrays to empty
 			$variation_ids = array();
@@ -436,10 +418,8 @@ function wpsc_convert_variation_combinations() {
 				
 				$product_values['post_title'] .= " (".implode(", ", $term_data['names']).")";
 				$product_values['post_name'] = sanitize_title($product_values['post_title']);
-				// wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array() ) {
 				
 				$selected_post = get_posts(array(
-					//'numberposts' => 1,
 					'name' => $product_values['post_name'],
 					'post_parent' => $post->ID,
 					'post_type' => "wpsc-product",
@@ -465,7 +445,6 @@ function wpsc_convert_variation_combinations() {
  	
             	//file
 	
-				//echo "<pre>".print_r($product_values, true)."</pre>";
 				if($child_product_id == false) {
 					if($selected_post != null) {
 						$child_product_id = $selected_post->ID;
@@ -489,7 +468,6 @@ function wpsc_convert_variation_combinations() {
 					wp_set_object_terms($child_product_id, $term_data['slugs'], 'wpsc-variation');
 				}
 				
-				//echo print_r($child_product_id, true);
 				unset($term_data);
 			}
 
@@ -505,18 +483,9 @@ function wpsc_update_files() {
 	global $wpdb, $user_ID; 
 	$product_files = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_FILES."");
 	
-	//$product_file_meta = get_product_meta($product_id, 'product_files');
-	//	$product_meta_files = $wpdb->get_results("
-	//	SELECT `product_id`, `meta_value`
-	//	FROM `".WPSC_TABLE_PRODUCTMETA."`
-	//	WHERE `meta_key` IN ('product_files' )
-	//	", ARRAY_A);
-	
-	//print_r($product_meta_files);
-	
 	foreach($product_files as $product_file) {
 		$variation_post_ids = array();
-		//echo print_r($product_file, true);
+
 		$product_post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product_file->product_id ));
 		
 		$variation_items = $wpdb->get_col("SELECT `id` FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE `file` = '{$product_file->id}'");
@@ -555,7 +524,6 @@ function wpsc_update_files() {
 				}
 			}
 		}
-		
 	}
 		
 	$download_ids = $wpdb->get_col("SELECT `id` FROM ".WPSC_TABLE_DOWNLOAD_STATUS."");
