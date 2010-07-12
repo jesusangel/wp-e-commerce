@@ -437,107 +437,6 @@ makeSlugeditClickable = null;
 					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
 				</td>
 			</tr>
-		
-		
-			<tr>
-				<td colspan='3' class='skuandprice'>
-					<div class='wpsc_floatleft'>
-						<?php echo __('Stock Keeping Unit', 'wpsc'); ?> :<br />
-						<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
-					</div>
-					
-					<div class='wpsc_floatleft'>
-					<?php echo __('Price', 'wpsc'); ?> :<br />
-					<input type='text' class='text' size='17' name='meta[_wpsc_price]' value='<?php echo number_format($product_data['meta']['_wpsc_price'], 2); ?>' />
-					</div>
-					
-					<div class='wpsc_floatleft' style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>'>
-	    			   <label for='add_form_special'><?php echo __('Sale Price :', 'wpsc'); ?></label>
-				       <div id='add_special'>		
-	        			  <input type='text' size='17' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2); ?>' name='meta[_wpsc_special_price]' />
-				       </div>
-			       </div>
-
-      			</td>
-    
-	
-			</tr>
-		
-			<tr>
-				<td ><a href='' class='wpsc_add_new_currency'>+ <?php echo __('New Currency', 'wpsc');?></a></td>
-			</tr>
-			<tr class='new_layer'>
-					<td>
-						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
-						<select name='newCurrency[]' class='newCurrency'>
-						<?php
-						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
-						foreach((array)$currency_data as $currency) {
-							if($isocode == $currency['isocode']) {
-								$selected = "selected='selected'";
-							} else {
-								$selected = "";
-							} ?>
-							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
-				<?php	}  
-						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
-						if($currency_data['symbol'] != '') {
-							$currency_sign = $currency_data['symbol_html'];
-						} else {
-							$currency_sign = $currency_data['code'];
-						}
-				?>
-						</select>
-						</td>
-						<td>
-						<?php echo __('Price', 'wpsc');?> :<br />
-						<input type='text' class='text' size='15' name='newCurrPrice[]' value='0.00' />
-						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
-						</td>
-
-			</tr>
-			<?php if(count($product_data['newCurr']) > 0) :
-				$i = 0;
-				foreach($product_data['newCurr'] as $newCurr){  
-				$i++;
-				$isocode = str_replace("currency[", "", $newCurr['meta_key']);
-				$isocode = str_replace("]", "", $isocode);
-			//	exit('ere<pre>'.print_r($isocode, true).'</pre>'); 
-				
-				?>
-					<tr>
-						<td>
-						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
-						<select name='newCurrency[]' class='newCurrency'>
-						<?php
-						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
-						foreach($currency_data as $currency) {
-							if($isocode == $currency['isocode']) {
-								$selected = "selected='selected'";
-							} else {
-								$selected = "";
-							}
-							?>
-							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
-							<?php
-						}  
-						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
-						if($currency_data['symbol'] != '') {
-							$currency_sign = $currency_data['symbol_html'];
-						} else {
-							$currency_sign = $currency_data['code'];
-						}
-						?>
-						</select>
-						</td>
-						<td>
-						Price:<br />
-						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
-						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
-						</td>
-					</tr>
-			<?php } ?>
-			<?php endif; ?>
 			<tr>
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
@@ -658,16 +557,116 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     ";
     echo "
     <tr>
-
        <td>
           <input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
        </td>
     </tr>";
     
    // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
-    ?>
+    ?><br />
+				<tr>
+				<td colspan='3' class='skuandprice'>
+					<br />
+<div class='wpsc_floatleft'>
+						<?php echo __('Stock Keeping Unit', 'wpsc'); ?> :<br />
+						<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
+					</div>
+					
+					<div class='wpsc_floatleft'>
+					<?php echo __('Price', 'wpsc'); ?> :<br />
+					<input type='text' class='text' size='17' name='meta[_wpsc_price]' value='<?php echo number_format($product_data['meta']['_wpsc_price'], 2); ?>' />
+					</div>
+					
+					<div class='wpsc_floatleft' style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>'>
+	    			   <label for='add_form_special'><?php echo __('Sale Price :', 'wpsc'); ?></label>
+				       <div id='add_special'>		
+	        			  <input type='text' size='17' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2); ?>' name='meta[_wpsc_special_price]' />
+				       </div>
+			       </div>
+
+      			</td>
+    
+	
+			</tr>
+		
+			<tr>
+				<td ><a href='' class='wpsc_add_new_currency'>+ <?php echo __('New Currency', 'wpsc');?></a></td>
+			</tr>
+			<tr class='new_layer'>
+					<td>
+						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
+						<select name='newCurrency[]' class='newCurrency'>
+						<?php
+						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+						foreach((array)$currency_data as $currency) {
+							if($isocode == $currency['isocode']) {
+								$selected = "selected='selected'";
+							} else {
+								$selected = "";
+							} ?>
+							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
+				<?php	}  
+						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+						if($currency_data['symbol'] != '') {
+							$currency_sign = $currency_data['symbol_html'];
+						} else {
+							$currency_sign = $currency_data['code'];
+						}
+				?>
+						</select>
+						</td>
+						<td>
+						<?php echo __('Price', 'wpsc');?> :<br />
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='0.00' />
+						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
+						</td>
+
+			</tr>
+			<?php if(count($product_data['newCurr']) > 0) :
+				$i = 0;
+				foreach($product_data['newCurr'] as $newCurr){  
+				$i++;
+				$isocode = str_replace("currency[", "", $newCurr['meta_key']);
+				$isocode = str_replace("]", "", $isocode);
+			//	exit('ere<pre>'.print_r($isocode, true).'</pre>'); 
+				
+				?>
+					<tr>
+						<td>
+						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
+						<select name='newCurrency[]' class='newCurrency'>
+						<?php
+						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+						foreach($currency_data as $currency) {
+							if($isocode == $currency['isocode']) {
+								$selected = "selected='selected'";
+							} else {
+								$selected = "";
+							}
+							?>
+							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
+							<?php
+						}  
+						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+						if($currency_data['symbol'] != '') {
+							$currency_sign = $currency_data['symbol_html'];
+						} else {
+							$currency_sign = $currency_data['code'];
+						}
+						?>
+						</select>
+						</td>
+						<td>
+						Price:<br />
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
+						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
+						</td>
+					</tr>
+			<?php } ?>
+			<?php endif; ?>
      <tr>
-      <td>
+      <td><br />
+
         <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo (((bool)$product_meta['table_rate_price']['state'] == true) ? 'checked=\'checked\'' : ''); ?> />
         
         
@@ -676,7 +675,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
           <a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
           <table>
 						<tr>
-							<td><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
+							<td><br /><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
 							<td><?php echo __('Discounted Price', 'wpsc'); ?></td>
 						</tr>
 						<?php
