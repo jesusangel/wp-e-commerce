@@ -13,7 +13,7 @@ WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and 
 The WP e-Commerce shopping cart plugin for WordPress is an elegant easy to use fully featured shopping cart application suitable for selling your products, services, and or fees online.
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
-
+ 
 Perfect for:
 
 * Bands & Record Labels
