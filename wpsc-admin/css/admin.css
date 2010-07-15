@@ -913,8 +913,6 @@ div#side-sortables input[type="file"] {
 	width:250px;
 }
 div.select_product_file, div.edit_select_product_file {
-	background-color:#EEEEEE;
-	border:1px solid #B2B2B2;
 	margin-bottom:0;
 	margin-top:3px;
 	overflow-x:hidden;
@@ -1316,11 +1314,13 @@ ul.categorisation_links li.selected a{
 color: #D54E21;
 }
 
-
+#table_rate 
+	{
+		display:none;
+	}
 
 .multiple-select {
 background:#FFFFFF none repeat scroll 0 0;
-border:1px solid #DFDFDF;
 display:inline-block;
 height:120px;
 margin:0;

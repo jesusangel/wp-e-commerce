@@ -170,74 +170,22 @@ function wpsc_delete_file() {
 	check_admin_referer('delete_file_'.$file_name);
 	
 	
-	$args = array(
-		'post_type' => 'wpsc-product-file',
-		'numberposts' => -1,
-		'post_status' => 'all'
-	);
+	$product_id_to_delete = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_title = '$file_name' AND post_parent = '$product_id' AND post_type ='wpsc-product-file'"));
 	
-	$attached_files = (array)get_posts($args);
-	
-	//echo "/*\n".print_r($attached_files, true)."*/\n";
-	
-	
-	$file_can_be_deleted = false;
-	$file_belongs_to_this_product = false;	
-	$product_id_list = array();
-	$product_ids_to_delete = array();
-	
-	foreach($attached_files as $attached_file) {
-		// first, determine what file is attached
-		if($attached_file->post_title == $file_name) {
-			if($attached_file->post_status == 'draft') {
-				// if its a draft, its been "deleted", add it to the list to delete properly
-				$product_ids_to_delete[] = $attached_file->ID;
-			} else { 
-				// otherwise, add it to the list to forbid deleting it
-				$product_id_list[] = $attached_file->post_parent;
-				if($attached_file->post_parent == $product_id) {
-					$file_belongs_to_this_product = true;
-				}
-			}
-		}		
-	}
-	
-	if(count($product_id_list) < 1) {
-		$file_can_be_deleted = true;
-	
-	} 
- 	
-	
-	if($file_can_be_deleted == true) {
-		if(file_exists(WPSC_FILE_DIR.basename($file_name)) && is_file(WPSC_FILE_DIR.basename($file_name))) {
-			$unlink_status = unlink(WPSC_FILE_DIR.basename($file_name));
-			foreach($product_ids_to_delete as $product_id_to_delete) {
-				wp_delete_post($product_id_to_delete, true);
-			}
-		}
-	}
+		wp_delete_post($product_id_to_delete, true);
+
 	if($_POST['ajax'] !== 'true') {
 		$sendback = wp_get_referer();
 		wp_redirect($sendback);
 	}
 	
-	if(($file_can_be_deleted == true) && ($unlink_status == true)) {
 		echo "jQuery('#select_product_file_row_$row_number').fadeOut('fast',function() {\n";
 		echo "	jQuery(this).remove();\n";
 		echo "	jQuery('div.select_product_file p:even').removeClass('alt');\n";
 		echo "	jQuery('div.select_product_file p:odd').addClass('alt');\n";
 		echo "});\n";
-	} else {
-		if($file_belongs_to_this_product == true) {
-			$message = __("This file is used by this product, you must uncheck it before deleting it",'wpsc');
-		} else {
-			$message = __("This file is used by another product, you must uncheck it on that product before deleting it",'wpsc');		
-		}
-		echo "alert('{$message}');\n";
-	}
 	
-	
-	exit();
+	exit("");
 }
 
  
@@ -783,6 +731,31 @@ function wpsc_admin_ajax() {
 		
 		update_option('wpsc_product_page_order', $current_order);
 		exit(print_r($order,1));
+	}
+	
+	
+function wpec_hide_box(&$value,$key, $p) {
+	
+	foreach ($p as $pkey => $val) {
+		if ( $key == $pkey ) {
+			$value = $val;
+		}
+	}
+		
+}
+	
+	if ($_POST['action'] == 'postbox-hide'){
+		$current_order = get_option('wpsc_product_page_order');
+
+		$hidden_key = $_POST["hidden_val"];
+		$hidden_val = $_POST["hidden"];
+
+		$hidden = array (  $hidden_key => $hidden_val );
+		
+		array_walk($current_order["hiddenboxes"], "wpec_hide_box", $hidden);
+			
+		update_option('wpsc_product_page_order', $current_order);
+		return print_r($current_order);
 	}
 
 	function wpec_close_box(&$value,$key, $p) {
@@ -1909,6 +1882,94 @@ global $wpdb;
 if($_REQUEST['wpsc_admin_action'] == 'change_region_tax') {
 	add_action('admin_init', 'wpsc_change_region_tax');
 }
+
+function wpsc_product_files_existing() {
+	global $wpdb;
+	
+	//List all product_files, with checkboxes
+
+	$product_id = absint($_GET["product_id"]);
+	$file_list = wpsc_uploaded_files();
+	
+	$args = array(
+		'post_type' => 'wpsc-product-file',
+		'post_parent' => $product_id,
+		'numberposts' => -1,
+		'post_status' => 'all'
+	);
+	//echo "<pre>".print_r($file_list, true)."<pre>";
+	$attached_files = (array)get_posts($args);
+	
+	//echo "<pre>".print_r($attached_files, true)."<pre>";
+	foreach($attached_files as $key => $attached_file) {
+		$attached_files_by_file[$attached_file->post_title] = & $attached_files[$key];
+	}
+	
+	$output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
+	$output .= "<div class='ui-widget-content multiple-select select_product_file'>";	
+	$output .= "<form method='post' class='product_upload'>";
+
+	$num = 0;
+	foreach((array)$file_list as $file) {
+		$num++;
+		$checked_curr_file = "";
+		if (isset($attached_files_by_file[$file['display_filename']])){
+			$checked_curr_file = "checked='checked'";
+		}
+		
+		$output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")." id='select_product_file_row_$num'>\n";
+		$output .= "  <input type='checkbox' name='select_product_file[]' value='".$file['real_filename']."' id='select_product_file_$num' ".$checked_curr_file." />\n";
+		$output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
+		$output .= "</p>\n";
+	}	
+	$output .= "<input type='hidden' id='hidden_id' value='$product_id' />";  
+	$output .= "<input type='submit' name='save' name='product_files_submit' class='button-primary prdfil' value='Save Product Files' />";  
+	$output .= "</form>";  
+	$output .= "</div>";
+	$output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";
+	$output .= "<script type='text/javascript'>\n\r";
+	$output .= "var select_min_height = ".(25*3).";\n\r";
+	$output .= "var select_max_height = ".(25*($num+1)).";\n\r";  
+	$output .= "</script>";  
+	
+	
+	echo $output;
+	
+}
+
+if($_REQUEST['wpsc_admin_action'] == 'product_files_existing') {
+	add_action('admin_init', 'wpsc_product_files_existing');
+}
+
+function prod_upload() {
+global $wpdb, $product_id;
+if($_REQUEST['wpsc_admin_action'] == 'product_files_upload')  {
+
+	foreach ($_REQUEST["select_product_file"] as $file) {
+				$duplicate = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE post_type = 'wpsc-product-file' AND post_title = '$file'", ARRAY_A);
+				
+				$type = $duplicate["post_mime_type"];
+				$url = $duplicate["guid"];
+				$title = $duplicate["post_title"];
+				$content = $duplicate["post_content"];
+					
+				// Construct the attachment array
+				$attachment = array(
+					'post_mime_type' => $type,
+					'guid' => $url,
+					'post_parent' => $_REQUEST["product_id"],
+					'post_title' => $title,
+					'post_content' => $content,
+					'post_type' => "wpsc-product-file",
+					'post_status' => 'inherit'		
+				);
+
+				// Save the data
+				$id = wp_insert_post($attachment);
+			}
+		}
+	}	
+add_action('admin_init', 'prod_upload');
 
 //change the gateway settings
 function wpsc_gateway_settings(){

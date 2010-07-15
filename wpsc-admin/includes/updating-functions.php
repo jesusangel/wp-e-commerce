@@ -14,8 +14,17 @@
  */
 function wpsc_convert_category_groups() {
 	global $wpdb, $wp_rewrite, $user_ID;
-	$categorisation_groups = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')");
-	
+
+	//if they're updating from 3.6, and they've got categories with no group, let's fix that problem, eh?
+ 	$categorisation_groups = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')");
+	if(count($categorisation_groups) == 0) {
+		$sql = "insert into `".WPSC_TABLE_CATEGORISATION_GROUPS."` set `id` = 1000, `name` = 'Default Group', `description` = 'This is your default category group', `active` = 1, `default` = 1;";
+	$wpdb->query($sql);
+		$sql = "update `".WPSC_TABLE_PRODUCT_CATEGORIES."` set group_id = 1000";
+		$wpdb->query($sql);
+		$categorisation_groups = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')");
+	}
+		
 	foreach((array)$categorisation_groups as $cat_group) {
 		$category_id = wpsc_get_meta($cat_group->id, 'category_group_id', 'wpsc_category_group');
 		

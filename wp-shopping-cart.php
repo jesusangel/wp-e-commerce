@@ -822,5 +822,4 @@ function wpsc_display_featured_products_page() {
 }
 
 add_action('wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12);
-
 ?>

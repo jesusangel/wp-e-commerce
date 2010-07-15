@@ -476,10 +476,13 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			wp_set_object_terms($child_product_id, $term_slugs, 'wpsc-variation');
 		}
 		//JS - 7.9 - Adding loop to include meta data in child product.
-		
+			//die("<pre>".print_r($child_product_meta)."</pre>");
 		foreach ($child_product_meta as $meta_key => $meta_value ) :
-		
-			add_post_meta($child_product_id, $meta_key, $meta_value[0]);
+			if ($meta_key == "_wpsc_product_metadata") {
+				update_post_meta($child_product_id, $meta_key, unserialize($meta_value[0]));
+			} else {
+				update_post_meta($child_product_id, $meta_key, $meta_value[0]);
+			}
 		
 		endforeach;
 	}

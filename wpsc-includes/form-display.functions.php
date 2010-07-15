@@ -132,7 +132,7 @@ function wpsc_uploaded_files() {
 	return $dirlist;
 }
   
-  
+  // JS - For 3.8, function re-worked to only show files attached to product, separate thickbox with all products, to be associated with product.
 function wpsc_select_product_file($product_id = null) {
 	global $wpdb;
 	//return false;
@@ -145,32 +145,25 @@ function wpsc_select_product_file($product_id = null) {
 		'numberposts' => -1,
 		'post_status' => 'all'
 	);
-	//echo "<pre>".print_r($file_list, true)."<pre>";
+
 	$attached_files = (array)get_posts($args);
-	
-	//echo "<pre>".print_r($attached_files, true)."<pre>";
-	foreach($attached_files as $key => $attached_file) {
-		$attached_files_by_file[$attached_file->post_title] = & $attached_files[$key];
-	}
-	
-	$output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
+
+	$output = "<span class='admin_product_notes select_product_note '>".__('File(s) attached: ', 'wpsc')."</span><br>";
 	$output .= "<div class='ui-widget-content multiple-select select_product_file'>";
 	$num = 0;
-	foreach((array)$file_list as $file) {
+	foreach((array)$attached_files as $file) {
 		$num++;
-		$checked_curr_file = "";
-		if (isset($attached_files_by_file[$file['display_filename']])){
-			$checked_curr_file = "checked='checked'";
-		}
-		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_name={$file['real_filename']}&amp;product_id={$product_id}&amp;row_number={$num}", 'delete_file_'.$file['real_filename']);
+		$deletion_url =  wp_nonce_url("admin.php?wpsc_admin_action=delete_file&amp;file_name={$file->post_title}&amp;product_id={$product_id}&amp;row_number={$num}", 'delete_file_'.$file->post_title);
 		
-		$output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")." id='select_product_file_row_$num'>\n";
-		$output .= "  <input type='checkbox' name='select_product_file[]' value='".$file['real_filename']."' id='select_product_file_$num' ".$checked_curr_file." />\n";
-		$output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
-		$output .= "  <a class='file_delete_button' href='{$deletion_url}' >\n";
+		$output .= "<p ".((($num % 2) > 0) ? '' : "class='alt'")." id='select_product_file_row_$num'>\n";		
+		$output .= "  <a class='file_delete_button' href='{$deletion_url}' >\n";		
 		$output .= "    <img src='".WPSC_URL."/images/cross.png' />\n";
 		$output .= "  </a>\n";
+		$output .= "  <label for='select_product_file_$num'>".$file->post_title."</label>\n";
 		$output .= "</p>\n";
+	}
+	if(!$attached_files) {
+		$output .= "<p>".__('There are no files attached to this product.  Upload a new file or select from other product files.', 'wpsc')."</p>";
 	}
 	$output .= "</div>";
 	$output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";

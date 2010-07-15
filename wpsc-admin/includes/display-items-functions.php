@@ -340,6 +340,15 @@ $sticky_checked = 'checked="checked" ';
 				"wpsc_product_price_and_stock_forms" => 1,
 				"wpsc_product_image_forms" => 1,
 				"wpsc_product_download_forms" => 1
+			),
+			"hiddenboxes" => array(
+				"wpsc_product_shipping_forms" => 1,
+				"wpsc_product_variation_forms" => 1,
+				"wpsc_product_advanced_forms" => 1,
+				"wpsc_product_category_and_tag_forms" => 1,
+				"wpsc_product_price_and_stock_forms" => 1,
+				"wpsc_product_image_forms" => 1,
+				"wpsc_product_download_forms" => 1
 			)
 		  );
 		
@@ -347,7 +356,7 @@ $sticky_checked = 'checked="checked" ';
 	 	
 		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  
-	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 16 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
+	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 24 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
 				$order = $default_order;
 	 	}
 	 	$check_missing_items = array_diff($default_order, $order);
@@ -376,7 +385,7 @@ $sticky_checked = 'checked="checked" ';
 				echo call_user_func($box_function_name,$product_data);
 			}
 		}
-//		echo "<pre>"; print_r($order); echo "</pre>";
+	//	echo "<pre>"; print_r($order); echo "</pre>";
 		?>	
 	</div>
 	</div>
@@ -398,7 +407,27 @@ makeSlugeditClickable = null;
 	$('#poststuff .postbox h3, .postbox div.handlediv').click( function() {			
 			$(this).parent().toggleClass('closed');
 			wpsc_save_postboxes_state('store_page_wpsc-edit-products', '#poststuff');
-		});		
+		});
+
+	<?php 
+		$hidden_boxes = $order["hiddenboxes"];
+		foreach ($hidden_boxes as $key=>$val) {
+			if ( $val == 0 ) {
+			?>
+				$('div#<?php echo $key; ?>').css('display', 'none');
+				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', false);
+			<?
+			}
+				elseif ($val == 1) {
+				
+				?>
+				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', true);
+
+			<?
+			
+			}
+		}
+	?>		
         });
 	//]]>
 </script>
@@ -554,20 +583,12 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 	</h3>
     <div class='inside'>
     <table>
-    ";
-    echo "
-    <tr>
-       <td>
-          <input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
-       </td>
-    </tr>";
-    
+    ";    
    // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
     ?><br />
 				<tr>
 				<td colspan='3' class='skuandprice'>
-					<br />
-<div class='wpsc_floatleft'>
+					<div class='wpsc_floatleft'>
 						<?php echo __('Stock Keeping Unit', 'wpsc'); ?> :<br />
 						<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
 					</div>
@@ -663,7 +684,15 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 						</td>
 					</tr>
 			<?php } ?>
-			<?php endif; ?>
+			<?php endif; 
+    echo "
+    <tr>
+       <td>
+          <br /><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
+       </td>
+    </tr>";
+?>
+			
      <tr>
       <td><br />
 
@@ -671,7 +700,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
         
         
         <label for='table_rate_price'><?php echo __('Table Rate Price', 'wpsc'); ?></label>
-        <div style='display:<?php echo (($product_meta['table_rate_price'] != '') ? 'block' : 'none'); ?>;' id='table_rate'>
+        <div id='table_rate'>
           <a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
           <table>
 						<tr>
@@ -1153,10 +1182,12 @@ function wpsc_product_download_forms($product_data='') {
 	$output .= "<h3 class='hndle'>".__('Product Downloads', 'wpsc')."</h3>";
 	$output .= "<div class='inside'>";
 	
-	$output .= "<h4>".__('Upload File', 'wpsc').":</h4>";
+	$output .= wpsc_select_product_file($product_data['id']);
+
+	$output .= "<h4>".__('Upload New File', 'wpsc').":</h4>";
 	$output .= "<input type='file' name='file' value='' /><br />".__('Max Upload Size', 'wpsc')." : <span>".$upload_max."</span><br /><br />";
-	$output .= wpsc_select_product_file($product_data['id'])."<br />";
-    
+	$output .= "<h4>".__('<a href="admin.php?wpsc_admin_action=product_files_existing&product_id='.$product_data['id'].'" class="thickbox" title="Select from all product files for '.$product_data['name'].'">Select from existing files</a>', 'wpsc')."</h4>";
+
 	if($product_data['file'] > 0) {
     	$output .= __('Preview File', 'wpsc').": ";
     	
@@ -1168,6 +1199,8 @@ function wpsc_product_download_forms($product_data='') {
     	}
     }
 	if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player")) {    
+
+	$output .= "<br />";
     $output .="<h4>".__("Select an MP3 file to upload as a preview")."</h4>";
 	
 		$output .= "<input type='file' name='preview_file' value='' /><br />";

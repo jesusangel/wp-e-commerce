@@ -1,5 +1,5 @@
 // This is the wp-e-commerce front end javascript "library"
-
+	var postboxes = function postboxes() {};
 jQuery(document).ready( function () {
 
 //JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
@@ -204,6 +204,21 @@ jQuery(document).ready( function () {
 			post_values = "currSymbol="+currencySymbol;
 			jQuery.post('index.php?wpsc_admin_action=delete_currency_layer',post_values, function(returned_data){});
 			//alert(currencySymbol);
+			
+			event.preventDefault();
+		});  	
+	});
+	
+  jQuery('form input.prdfil').livequery(function(){
+  	jQuery(this).click(function(event){
+			var products = jQuery(this).parent("form.product_upload").find('input').serialize();
+			var product_id = jQuery(this).parent("form.product_upload").find('input#hidden_id').val();
+			post_values = products + '&product_id=' + product_id;
+			jQuery.post('admin.php?wpsc_admin_action=product_files_upload',post_values, function(returned_data){ 
+				jQuery("#TB_closeWindowButton").click(TB_remove);
+				
+			});
+	//		alert(products);
 			
 			event.preventDefault();
 		});  	
@@ -723,10 +738,28 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 					postboxes.pbhide( box );
 				}
 			}
-			postboxes.save_state('products_page_wpsc-edit-products');
+		//	postboxes.save_state('products_page_wpsc-edit-products');
 		});
 	});
-	
+//postbox hiding
+
+	jQuery('div.metabox-prefs label input').livequery(function(){
+	jQuery(this).click(function() {
+			var hidden_val = jQuery(this).val();
+		if ( jQuery(this).is(':checked') ) {
+			var hidden =  1;
+		}
+		else {
+			var hidden = 0;
+			}
+			jQuery.post('index.php?admin=true&ajax=true', {
+				action: 'postbox-hide',
+				hidden: hidden,
+				hidden_val:  hidden_val
+			});	
+		});
+	});
+
 	
 	// postbox sorting
 	jQuery('div#side-sortables, div#advanced-sortables').livequery(function(){

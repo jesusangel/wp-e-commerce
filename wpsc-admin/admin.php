@@ -231,7 +231,7 @@ function  wpsc_admin_include_css_and_js() {
 	wp_enqueue_script('wp-e-commerce-legacy-ajax', WPSC_URL.'/wpsc-admin/js/ajax.js', false, $version_identifier); // needs removing
 	wp_enqueue_script('wp-e-commerce-variations', WPSC_URL.'/wpsc-admin/js/variations.js', array('jquery'), $version_identifier);
 	
-	//This should DEFINITELY come out when we convert to custom post types in the backend
+	//TODO - This should DEFINITELY come out when we convert to custom post types in the backend
 	wp_deregister_script( 'postbox' );
 	
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
