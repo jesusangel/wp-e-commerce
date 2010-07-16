@@ -1156,8 +1156,8 @@ function wpsc_product_image_forms($product_data='') {
 ?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
 		<h3 class='hndle'> <?php echo	__('Product Images', 'wpsc'); ?></h3>
-		<div class='inside'>		
- 			<p><strong <?php echo $display; ?>><?php echo __('Manage your thumbnails', 'wpsc');?></strong></p>
+		<div class='inside'>
+ 			<p><strong <?php echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage your images"><?php echo __('Manage your thumbnails', 'wpsc');?></a></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
@@ -1303,7 +1303,7 @@ function edit_multiple_image_gallery($product_data) {
 							<a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
 								<img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' /><br />
 							</a>
-							<?php echo wpsc_main_product_image_menu($product_data['id']); ?>
+							<?php // echo wpsc_main_product_image_menu($product_data['id']); ?>
 						</div>
 					</li>
 					<?php
@@ -1324,7 +1324,7 @@ function edit_multiple_image_gallery($product_data) {
 	<?php
 }
 
-
+/*
 function wpsc_main_product_image_menu($product_id) {
   global $wpdb;
   $thumbnail_state = 0;
@@ -1398,7 +1398,7 @@ function wpsc_main_product_image_menu($product_id) {
 	$output = ob_get_contents();
 	ob_end_clean();
 	return $output;
-}
+} /*
 
   /**
 	* Displays the category forms for adding and editing products

@@ -573,7 +573,21 @@ $labels = array(
 	$role->add_cap('read_wpsc-product');
 	$role->add_cap('read_wpsc-product-file');
 }
+
+function wpsc_check_for_theme() {
+
+	$file = get_template_directory()."/single-wpsc-product.php";
+	$wpsc_file = WPSC_FILE_PATH."/themes/single-wpsc-product.php";
+
+	//Check for single-wpsc-product.php in currently active theme dir
+	//If it doesn't exist, copy there from themes
+	if ( !file_exists($file) ) {
+		copy($wpsc_file, $file);
+	}
+}
+
 add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
+add_action( 'init', 'wpsc_check_for_theme', 8 ); // highest priority
 
 
 switch(get_option('cart_location')) {

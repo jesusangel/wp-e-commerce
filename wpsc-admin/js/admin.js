@@ -860,7 +860,7 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 						  set[i] = jQuery(input_set[i]).val();
 						}
 						//console.log(set);
-												
+/*												
 						img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 						
 						jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
@@ -880,10 +880,9 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 // 								jQuery('#gallery_image_'+set[i]).parent('li').attr('id', "product_image_"+img_id);
 							}
 						}
-						
+			*/			
 						order = set.join(',');
 						product_id = jQuery('#product_id').val();
-						
 						
 						postVars = "product_id="+product_id+"&order="+order;
 						jQuery.post( 'index.php?wpsc_admin_action=rearrange_images', postVars, function(returned_data) {
