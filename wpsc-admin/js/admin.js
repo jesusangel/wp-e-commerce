@@ -423,8 +423,20 @@ jQuery(document).ready( function () {
 	};
 
 jQuery("table#wpsc_product_list tr").livequery(function(){
+	var open = true;
 	jQuery("a.wpsc-quickedit", this).click( function(event) {
-		jQuery(this).parents("tr.product-edit").find("span.skudisplay,span.salespricedisplay, span.pricedisplay,span.stockdisplay,span.weightdisplay").click();
+	
+		if (open == true) {
+			jQuery(this).parents("tr.iedit").find("span.skudisplay,span.salespricedisplay, span.pricedisplay,span.stockdisplay").click();
+			jQuery(this).parents("tr.iedit").find("span.weightdisplay").click();
+			open = false;
+		} else {			
+			jQuery(this).parents("tr.iedit").find("div.price-editing-fields, div.sales-price-fields, div.weight-editing-fields, div.sku-editing-fields, div.stock-editing-fields").css("display", "none");
+			jQuery(this).parents("tr.iedit").find("span.weightdisplay, span.skudisplay,span.salespricedisplay, span.pricedisplay,span.stockdisplay").css("display", "inline-block");
+			open = true;
+		}
+		
+		return false;
 	});
 });
 

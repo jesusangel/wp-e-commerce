@@ -502,7 +502,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 		
 		$permalink = str_replace($rewritecode, $rewritereplace, $our_permalink_structure);
 		$permalink = user_trailingslashit($permalink, 'single');
-	
+		$permalink = home_url($permalink);
 	}
 	return $permalink;
 }

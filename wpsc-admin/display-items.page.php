@@ -262,7 +262,12 @@ function wpsc_admin_products_list($category_id = 0) {
   $page = null;
 	// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
 	$itempp = 20;
-	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' $search_sql");
+	
+	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= 0 $search_sql");
+		if(is_numeric($_GET['parent_product'])) {
+				$parent_product = absint($_GET['parent_product']);
+			$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= $parent_product $search_sql");			
+}
 	
 	if (isset($itempp)) {
 		$num_pages = ceil($num_products/$itempp);
@@ -294,11 +299,12 @@ function wpsc_admin_products_list($category_id = 0) {
 		
 		$query = array(
 			'post_type' => 'wpsc-product',
-			'posts_per_page' => -1, 
+			'posts_per_page' => $itempp, 
 			'orderby' => 'menu_order post_title',
 			'post_parent' => $parent_product,
 			'post_status' => 'all',
-			'order' => "ASC"
+			'order' => "ASC",
+			'offset' => $start
 		);	
 		
 		$parent_product_data['post'] = get_post($parent_product);

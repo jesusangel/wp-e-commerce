@@ -273,14 +273,12 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			}
 			?>
 				<td  <?php echo $attributes ?>>
-					<span class="weightdisplay"><?php echo $weight; ?></span><?php echo $unit; ?>
+					<span class="weightdisplay"><?php echo $weight; ?></span>
 					<div class='weight-editing-fields' id='weight-editing-fields-<?php echo $product->ID; ?>'>
 						<input type='text' class='the-weight-fields' name='weight_field[<?php echo $product->ID; ?>][weight]' value='<?php echo $weight; ?>' />
 						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
 						<input type='hidden' name='weight_field[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('edit-weight-'.$product->ID); ?>' />
-
-
-					</div>
+					</div><?php echo $unit; ?>
 				</td>
 			<?php
 
