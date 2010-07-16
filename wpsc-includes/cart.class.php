@@ -331,7 +331,7 @@ function wpsc_cart_item_url() {
 function wpsc_cart_item_image($width = null, $height = null) {
 	global $wpsc_cart;
 	$image_data = $wpsc_cart->cart_item->thumbnail_image;
-	//echo "<pre>".print_r($wpsc_cart->cart_item,true)."</pre>";
+//	echo "<pre>".print_r($wpsc_cart->cart_item)."</pre>";
 
 	if(($width > 0) && ($height > 0)) {
 		$image_path = "index.php?wpsc_action=scale_image&amp;attachment_id={$image_data->ID}&amp;width=".$width."&amp;height=".$height."";
@@ -1709,17 +1709,23 @@ class wpsc_cart_item {
 		  $this->tax = $this->taxable_price * ($this->tax_rate/100);
 		}
 		
-		
 		$this->product_url = wpsc_product_url($product_id);
+		
+		if(!is_array($this->variation_values)) {
+			$attach_parent = $product_id;
+		} else {
+			$attach_parent = $wpdb->get_var($wpdb->prepare("SELECT post_parent FROM $wpdb->posts WHERE ID = %d", $product_id));
+		}
 		
 		$att_img_args = array(
 			'post_type' => 'attachment',
-			'numberposts' => 10,
-			'post_status' => null,
-			'post_parent' => $product_id,
+			'numberposts' => 1,
+			'post_parent' => $attach_parent,
 			'orderby' => 'menu_order',
 			'order' => 'DESC'
 		);
+		
+		//die("<pre>".print_r($att_img_args)."</pre>");
 				
 		$attached_image = get_posts($att_img_args);
 		

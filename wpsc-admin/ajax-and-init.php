@@ -499,123 +499,158 @@ function wpsc_ajax_toggle_published() {
   
 /**
   Function and action for duplicating products,
+  Refactored for 3.8
+*Purposely not duplicating stick post status (logically, products are most often duplicated because they share many attributes, where products are generally 'featured' uniquely.)
  */
 function wpsc_duplicate_product() {
 	global $wpdb;
-	$product_id = absint($_GET['product']);
-  check_admin_referer('duplicate_product_' .  $product_id);
-	if ($product_id > 0) {
-		$sql = " INSERT INTO ".WPSC_TABLE_PRODUCT_LIST."( `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image`  , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active` , `publish`, `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` ) SELECT `name` , `description` , `additional_description` , `price` , `weight` , `weight_unit` , `pnp` , `international_pnp` , `file` , `image`  , `quantity_limited` , `quantity` , `special` , `special_price` , `display_frontpage` , `notax` , `active`  , `publish`, `donation` , `no_shipping` , `thumbnail_image` , `thumbnail_state` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id = '".$product_id."' ";
-	//	exit($sql);
-		$wpdb->query($sql);
-		$new_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` LIMIT 1");
-				
-		//Inserting duplicated variations record.
-		$variation_assocs = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE associated_id = ".$product_id, ARRAY_A);
-		if(count($variation_assocs))foreach($variation_assocs as $variation_assoc){
-			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_ASSOC." VALUES ('', '".$variation_assoc['type']."', '".$variation_assoc['name']."', '".$new_id."', '".$variation_assoc['variation_id']."');");
-		}
-		
-		$variation_combinations = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_COMBINATIONS." WHERE product_id = ".$product_id, ARRAY_A);
-		if(count($variation_combinations))foreach($variation_combinations as $variation_combination){
-			$variation_properties = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE id = ".$variation_combination['priceandstock_id'], ARRAY_A);
-			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_PROPERTIES." VALUES ('', '".$new_id."', '".$variation_properties[0]['stock']."', '".$variation_properties[0]['price']."', '".$variation_properties[0]['weight']."', '".$variation_properties[0]['weight_unit']."', '".$variation_properties[0]['visibility']."', '".$variation_properties[0]['file']."');");
-			$new_prop_id= $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` LIMIT 1");
-			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_COMBINATIONS." VALUES ('".$new_id."', '".$new_prop_id."', '".$variation_combination['value_id']."', '".$variation_combination['variation_id']."', '".$variation_combination['all_variation_ids']."');");			
-		}
-		
-		$variation_values_assocs = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_VARIATION_VALUES_ASSOC." WHERE product_id = ".$product_id, ARRAY_A);
-		if(count($variation_values_assocs))foreach($variation_values_assocs as $variation_values_assoc){
-			$wpdb->query("INSERT INTO ".WPSC_TABLE_VARIATION_VALUES_ASSOC." VALUES ('', '".$new_id."', '".$variation_values_assoc['value_id']."', '".$variation_values_assoc['visible']."', '".$variation_values_assoc['variation_id']."');");
-		}
-		//end of variations
-		
+	
+		// Get the original post
+	$id = absint($_GET['product']);	
+	$post = wpsc_duplicate_this_dangit($id);
 
-		//Inserting duplicated category record.
-		$category_assoc = $wpdb->get_col("SELECT `category_id` FROM ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." WHERE product_id = '".$product_id."'");
-		$new_product_category = array();
-		if (count($category_assoc) > 0) {
-			foreach($category_assoc as $key => $category) {
-				$new_product_category[] = "('".$new_id."','".$category."')";
-				
-				$check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `order` IN('0') LIMIT 1;",ARRAY_A);
-				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1")) {
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1;");
-				} else {				  
-					$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category', '$product_id', 0)");
-				}
-				if($check_existing != null) {
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = (`order` + 1) WHERE `category_id` IN('$category') AND `product_id` NOT IN('$product_id') AND `order` < '0'");
-				}
-			}
-			$wpdb->query("INSERT INTO ".WPSC_TABLE_ITEM_CATEGORY_ASSOC." (product_id, category_id) VALUES ".implode(",",$new_product_category));
-		}
-	
-		
-	
-	
-		//Inserting duplicated meta info
-		$meta_values = $wpdb->get_results("SELECT `meta_key`, `meta_value`, `custom` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE product_id='".$product_id."' AND  `meta_key` NOT IN ('url_name') ", ARRAY_A);
-		$new_meta_value = array();
-		if (count($meta_values)>0) {
-			foreach($meta_values as $key => $meta) {
-				$new_meta_value[] = "('".$new_id."','".$meta['meta_key']."','".$meta['meta_value']."','".$meta['custom']."')";
-			}
-			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` (`product_id`, `meta_key`, `meta_value`, `custom`) VALUES ".implode(",",$new_meta_value));
-		}
-		
-		
-	
-		$product_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$new_id' LIMIT 1");
-		if($product_name != '') {
-			$tidied_name = strtolower(trim($product_name));
-			$url_name = sanitize_title($tidied_name);
-			$similar_names = $wpdb->get_row("SELECT COUNT(*) AS `count`, MAX(REPLACE(`meta_value`, '$url_name', '')) AS `max_number` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ('url_name') AND `meta_value` REGEXP '^($url_name){1}[[:digit:]]*$' ",ARRAY_A);
-			$extension_number = '';
-			if($similar_names['count'] > 0) {
-				$extension_number = (int)$similar_names['max_number']+1;
-			}
-			$url_name .= $extension_number;
-			add_product_meta($new_id, 'url_name', $url_name,true);
-		}
-		
-		
-		$tags =  wp_get_object_terms($product_id, 'product_tag', array('fields' => 'names'));
-		wp_set_object_terms($new_id, $tags, 'product_tag');
-		            
-		//Inserting duplicated image info
-		$image_values = $wpdb->get_results("SELECT `image`, `width`, `height`, `image_order`, `meta` FROM ".WPSC_TABLE_PRODUCT_IMAGES." WHERE product_id='".$product_id."'", ARRAY_A);
-		$new_image_value = array();
-		if (count($image_values)>0){
-			foreach($image_values as $key => $image) {
-			  if($image['image'] != '') {
-			    if(is_numeric($image['width']) && is_numeric($image['height'])) {
-			      $image['width'] = absint($image['width']);
-			      $image['height'] = absint($image['height']);
-			    } else {
-			      $image['width'] = 'null';
-			      $image['height'] = 'null';
-			    }
-					$new_image_value[] = "('".$new_id."','".$image['image']."',".$image['width'].",".$image['height'].",'".$image['image_order']."','".$image['meta']."')";
-				}
-			}
-			if(count($new_image_value) > 0) {
-				$new_image_value = implode(",", $new_image_value);
-				$sql = "INSERT INTO ".WPSC_TABLE_PRODUCT_IMAGES." (`product_id`, `image`, `width`, `height`, `image_order`, `meta`) VALUES ".$new_image_value;
-				$wpdb->query($sql);
-			}
-		}
-		
-	  $duplicated = true;
-	}	
-	
+	// Copy the post and insert it
+	if ( isset ( $post ) && $post != null ) {
+		$new_id = wpsc_duplicate_product_process($post);
+
+	$duplicated = true;
 	$sendback = wp_get_referer();
-	if ( isset($duplicated) ) {
-		$sendback = add_query_arg('duplicated', (int)$duplicated, $sendback);
-	}
+	$sendback = add_query_arg('duplicated', (int)$duplicated, $sendback);
+
 	wp_redirect($sendback);
-	exit();
+	exit();		
+	
+	} else {
+		wp_die(__('Sorry, for some reason, we couldn\'t duplicate this product because it could not be found in the database, check there for this ID: ') . $id);
+	}
 }
+
+function wpsc_duplicate_this_dangit($id) {
+	global $wpdb;
+	$post = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID=$id");
+	if ($post->post_type == "revision"){
+		$id = $post->post_parent;
+		$post = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE ID=$id");
+	}
+	return $post[0];
+}
+
+function wpsc_duplicate_product_process($post) {
+	global $wpdb;
+
+	$new_post_date = $post->post_date;
+	$new_post_date_gmt = get_gmt_from_date($new_post_date);
+
+	$new_post_type 	= $post->post_type;
+	$post_content    = str_replace("'", "''", $post->post_content);
+	$post_content_filtered = str_replace("'", "''", $post->post_content_filtered);
+	$post_excerpt    = str_replace("'", "''", $post->post_excerpt);
+	$post_title      = str_replace("'", "''", $post->post_title)." (Duplicate)";
+	$post_name       = str_replace("'", "''", $post->post_name);
+	$comment_status  = str_replace("'", "''", $post->comment_status);
+	$ping_status     = str_replace("'", "''", $post->ping_status);
+
+	// Insert the new template in the post table
+	$wpdb->query(
+			"INSERT INTO $wpdb->posts
+			(post_author, post_date, post_date_gmt, post_content, post_content_filtered, post_title, post_excerpt,  post_status, post_type, comment_status, ping_status, post_password, to_ping, pinged, post_modified, post_modified_gmt, post_parent, menu_order, post_mime_type)
+			VALUES
+			('$post->post_author', '$new_post_date', '$new_post_date_gmt', '$post_content', '$post_content_filtered', '$post_title', '$post_excerpt', '$post->post_status', '$new_post_type', '$comment_status', '$ping_status', '$post->post_password', '$post->to_ping', '$post->pinged', '$new_post_date', '$new_post_date_gmt', '$post->post_parent', '$post->menu_order', '$post->post_mime_type')");
+
+	$new_post_id = $wpdb->insert_id;
+
+	// Copy the taxonomies
+	wpsc_duplicate_taxonomies($post->ID, $new_post_id, $post->post_type);
+
+	// Copy the meta information
+	wpsc_duplicate_product_meta($post->ID, $new_post_id);
+
+	// Finds children (Which includes product files AND product images), their meta values, and duplicates them.
+	wpsc_duplicate_children($post->ID, $new_post_id);
+
+	return $new_post_id;
+}
+
+/**
+ * Copy the taxonomies of a post to another post
+ */
+function wpsc_duplicate_taxonomies($id, $new_id, $post_type) {
+	global $wpdb;
+	if (isset($wpdb->terms)) {
+		// WordPress 2.3
+		$taxonomies = get_object_taxonomies($post_type); //array("category", "post_tag");
+		foreach ($taxonomies as $taxonomy) {
+			$post_terms = wp_get_object_terms($id, $taxonomy);
+			for ($i=0; $i<count($post_terms); $i++) {
+				wp_set_object_terms($new_id, $post_terms[$i]->slug, $taxonomy, true);
+			}
+		}
+	}
+}
+
+/**
+ * Copy the meta information of a post to another post
+ */
+function wpsc_duplicate_product_meta($id, $new_id) {
+	global $wpdb;
+	$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$id");
+
+	if ( count($post_meta_infos) != 0 ) {
+		$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+
+		foreach ($post_meta_infos as $meta_info) {
+			$meta_key = $meta_info->meta_key;
+			$meta_value = addslashes($meta_info->meta_value);
+
+				$sql_query_sel[]= "SELECT $new_id, '$meta_key', '$meta_value'";
+			
+		}
+		$sql_query.= implode(" UNION ALL ", $sql_query_sel);
+		$wpdb->query($sql_query);
+	}
+}
+
+/**
+ * Duplicates children product and children meta
+ */
+function wpsc_duplicate_children($old_parent_id, $new_parent_id) {
+	global $wpdb;
+	
+	//Get children products and duplicate them
+	$child_posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_parent = $old_parent_id");
+
+	foreach($child_posts as $child_post) {
+	
+		$new_post_date = $child_post->post_date;
+		$new_post_date_gmt = get_gmt_from_date($new_post_date);
+
+		$new_post_type 	= $child_post->post_type;
+		$post_content    = str_replace("'", "''", $child_post->post_content);
+		$post_content_filtered = str_replace("'", "''", $child_post->post_content_filtered);
+		$post_excerpt    = str_replace("'", "''", $child_post->post_excerpt);
+		$post_title      = str_replace("'", "''", $child_post->post_title);
+		$post_name       = str_replace("'", "''", $child_post->post_name);
+		$comment_status  = str_replace("'", "''", $child_post->comment_status);
+		$ping_status     = str_replace("'", "''", $child_post->ping_status);
+		
+		$wpdb->query(
+				"INSERT INTO $wpdb->posts
+				(post_author, post_date, post_date_gmt, post_content, post_content_filtered, post_title, post_excerpt,  post_status, post_type, comment_status, ping_status, post_password, to_ping, pinged, post_modified, post_modified_gmt, post_parent, menu_order, post_mime_type)
+				VALUES
+				('$child_post->post_author', '$new_post_date', '$new_post_date_gmt', '$post_content', '$post_content_filtered', '$post_title', '$post_excerpt', '$child_post->post_status', '$new_post_type', '$comment_status', '$ping_status', '$child_post->post_password', '$child_post->to_ping', '$child_post->pinged', '$new_post_date', '$new_post_date_gmt', '$new_parent_id', '$child_post->menu_order', '$child_post->post_mime_type')");
+			
+			$old_post_id = $child_post->ID;
+			$new_post_id = $wpdb->insert_id;
+			$child_meta = $wpdb->get_results("SELECT post_id, meta_key, meta_value FROM $wpdb->postmeta WHERE post_id = $old_post_id");
+			
+			foreach ($child_meta as $child_meta) {
+				$wpdb->query(
+						"INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
+						VALUES('$new_post_id', '$child_meta->meta_key', '$child_meta->meta_value')"
+					);
+			}
+		}
+	}
 
 if ($_GET['wpsc_admin_action'] == 'duplicate_product') {
 	add_action('admin_init', 'wpsc_duplicate_product');

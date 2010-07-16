@@ -516,7 +516,7 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_category_and_tag_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."'><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
