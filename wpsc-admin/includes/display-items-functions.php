@@ -416,14 +416,14 @@ makeSlugeditClickable = null;
 			?>
 				$('div#<?php echo $key; ?>').css('display', 'none');
 				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', false);
-			<?
+			<?php
 			}
 				elseif ($val == 1) {
 				
 				?>
 				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', true);
 
-			<?
+			<?php
 			
 			}
 		}
@@ -1237,27 +1237,27 @@ function wpsc_product_label_forms() {
       <div id="labels">
         <table>
         	<tr>
-        		<td><?=__('Label', 'wpsc')?> :</td>
+        		<td><?php _e('Label', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[labels][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('Label Description', 'wpsc')?> :</td>
+        		<td><?php _e('Label Description', 'wpsc')?> :</td>
         		<td><textarea name="productmeta_values[labels_desc][]"></textarea></td>
         	</tr>
         	<tr>
-        		<td><?=__('Life Number', 'wpsc')?> :</td>
+        		<td><?php _e('Life Number', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[life_number][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('Item Number', 'wpsc')?> :</td>
+        		<td><?php _e('Item Number', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[item_number][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('Product Code', 'wpsc')?> :</td>
+        		<td><?php _e('Product Code', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[product_code][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('PDF', 'wpsc')?> :</td>
+        		<td><?php _e('PDF', 'wpsc')?> :</td>
         		<td><input type="file" name="pdf[]"></td>
         	</tr>
         </table>

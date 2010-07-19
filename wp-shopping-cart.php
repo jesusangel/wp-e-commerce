@@ -33,8 +33,6 @@ define('IS_WP27', version_compare($version_processing[0], '2.7', '>='));
 define('IS_WP29', version_compare($version_processing[0], '2.9', '>='));
 define('IS_WP30', version_compare($version_processing[0], '3.0', '>='));
 
-
-
 // // we need to know where we are, rather than assuming where we are
 
 //Define the path to the plugin folder
