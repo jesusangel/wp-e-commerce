@@ -58,13 +58,22 @@ function nzshpcrt_form_field_list($selected_field = null) {
 }
   
   
-function wpsc_parent_category_list($group_id, $category_id, $category_parent_id) {
-	global $wpdb,$category_data;
-	$options = "";
-	$options .= "<option value='".$group_id."'>".__('Select Parent', 'wpsc')."</option>\r\n";
-	$options .= wpsc_category_options((int)$group_id, (int)$category_id, null, 0, (int)$category_parent_id);   
-	$concat .= "<select name='category_parent'>".$options."</select>\r\n";    
-	return $concat;
+
+function wpsc_parent_category_list($taxonomies, $args) {
+	
+	$myterms = get_terms($taxonomies, $args);
+	$output ="<select name='category_parent'>";
+	foreach($myterms as $term){
+		$root_url = get_bloginfo('url');
+		$term_taxonomy=$term->taxonomy;
+		$term_slug=$term->slug;
+		$term_name =$term->name;
+		$term_id =$term->term_id;
+		$output .="<option value='".$term_id."'>".$term_name."</option>";
+	}
+	$output .="</select>";
+return $output;
+
 }
 
 function wpsc_category_options($group_id, $this_category = null, $category_id = null, $iteration = 0, $selected_id = null) {

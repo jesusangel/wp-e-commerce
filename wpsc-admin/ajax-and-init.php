@@ -374,28 +374,28 @@ if($_REQUEST['wpsc_admin_action'] == 'modify_sku') {
 	add_action('admin_init', 'wpsc_modify_sku');
 }
 
-function wpsc_walk_weight(&$value,$key, $weight)
-	{
-		if ( $key == 'weight' ) {
-			$value = $weight ;
-		}
-	}	
-
 function wpsc_modify_weight() {	
 	global $wpdb;
-//	exit('<pre>'.print_r($_POST, true).'</pre>');
+	
 	$product_data = array_pop($_POST['weight_field']);
 
 	$product_id = absint($product_data['id']);
-	$weight = (float)($product_data['weight'] * 453.59237);
 	$product_nonce = $product_data['nonce'];
-
+	
 	if(wp_verify_nonce($product_nonce, 'edit-weight-'.$product_id) ) {
 
-		$old_array = get_product_meta ( $product_id,  'product_metadata' );
-		$new_array = array_walk($old_array, "wpsc_walk_weight", $weight);
+		$old_array = get_product_meta( $product_id,  'product_metadata' );
+		$old_array = array_pop($old_array);
 		
-		if(update_product_meta($product_id, 'product_metadata', $new_array)) {
+		$weight = wpsc_convert_weight($product_data['weight'], $old_array["weight_unit"], "gram");
+		
+		foreach ($old_array as $key=>$value) {
+			if($key == 'weight') {
+				$old_array[$key] = $weight;
+			}			
+		}	
+		
+		if(update_product_meta($product_id, 'product_metadata', $old_array)) {
 			echo "success = 1;\n\r";
 			echo "new_price = '".wpsc_convert_weight($weight, "gram", $old_array["weight_unit"])."';\n\r";
 		} else {
@@ -406,7 +406,6 @@ function wpsc_modify_weight() {
 	}
 	exit();
 }
-
  
 if($_REQUEST['wpsc_admin_action'] == 'modify_weight') {
 	add_action('admin_init', 'wpsc_modify_weight');

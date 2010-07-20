@@ -176,7 +176,7 @@ function wpsc_save_category_set() {
 			$name = $_POST['name'];
 			$term = get_term_by('name', $name, 'wpsc_product_category', ARRAY_A);
 			if(empty($term)) {
-				$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => 0));
+				$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
 			}
 			
 			$category_id= $term['term_id'];

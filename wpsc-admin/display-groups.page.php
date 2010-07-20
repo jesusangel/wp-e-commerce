@@ -70,7 +70,15 @@ function wpsc_display_categories_page() {
 		<?php } ?>
 				
 		<div id="col-container" class=''>
-			<div id="col-right">			
+		<div id="col-right">
+				<div class="col-wrap">		
+					<?php
+						wpsc_admin_category_group_list();
+					?>
+				</div>
+			</div>
+			
+			<div id="col-left">			
 				<div id='poststuff' class="col-wrap">
 					<form id="modify-category-groups" method="post" action="" enctype="multipart/form-data" >
 					<?php
@@ -80,13 +88,6 @@ function wpsc_display_categories_page() {
 				</div>
 			</div>
 			
-			<div id="col-left">
-				<div class="col-wrap">		
-					<?php
-						wpsc_admin_category_group_list();
-					?>
-				</div>
-			</div>
 		</div>
 				
 				
@@ -218,11 +219,10 @@ function wpsc_admin_category_forms($category_id =  null) {
 			</td>
 			<td>
 			<?php
-			$top_parent=$category;
-			while(absint($top_parent['parent']>0)){
-				$top_parent = get_term_by('id', $top_parent['parent'], 'wpsc_product_category', ARRAY_A);
-			}
-			 wpsc_parent_category_list($top_parent['term_id'], $category['term_id'], $category['parent']);
+				$taxonomies = array('wpsc_product_category');
+				$args = array('orderby'=>'name', 'hide_empty' => 0);
+				$select = wpsc_parent_category_list($taxonomies, $args);
+				echo $select;
 			?>
 		</td>
 		</tr>
@@ -292,14 +292,14 @@ function wpsc_admin_category_forms($category_id =  null) {
 				<input type='checkbox' name='deleteimage' value='1' />
 			</td>
 		</tr>
-
-		<tr>
-			<td colspan='2' class='category_presentation_settings'>
-				<h4><?php _e('Presentation Settings', 'wpsc'); ?></h4>
-				<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span>
-			</td>
-		</tr>
-
+	
+</table>	
+	<br />
+	<div class="postbox">
+		<h3 class="hndle"><?php _e('Presentation Settings', 'wpsc'); ?></h3>
+			<div class="inside">	
+			<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span><br /><br />
+	<table class='category_forms'>
 		<tr>
 			<td>
 			<?php _e('Catalog View', 'wpsc'); ?>
@@ -347,7 +347,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 					<?php	} else { ?>
 						<option value='grid' disabled='disabled' <?php echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
 					<?php	} ?>	
-				</select>	
+				</select>	<br /><br />
 			</td>
 		</tr>
 
@@ -363,17 +363,13 @@ function wpsc_admin_category_forms($category_id =  null) {
 				</td>
 			</tr>
 		<?php	} ?>
-
-
-
-		<tr>
-			<td colspan='2' class='category_presentation_settings'>
-				<h4><?php _e('Checkout Settings', 'wpsc'); ?></h4>
-
-			</td>
-		</tr>
-
-
+</table>
+</div>
+</div>
+<div class="postbox">
+<h3 class="hndle"><?php _e('Checkout Settings', 'wpsc'); ?></h3>
+<div class="inside">
+<table class='category_forms'>
 		<?php		$used_additonal_form_set = wpsc_get_categorymeta($category['term_id'], 'use_additonal_form_set'); ?>
 			<tr>
 				<td>
@@ -399,11 +395,6 @@ function wpsc_admin_category_forms($category_id =  null) {
 			</td>
 		</tr>
 
-
-		<tr>
-			<td colspan='2'>						</td>
-		</tr>
-
 			<?php $uses_billing_address = (bool)wpsc_get_categorymeta($category['term_id'], 'uses_billing_address'); ?>
 			<tr>
 				<td>
@@ -415,6 +406,9 @@ function wpsc_admin_category_forms($category_id =  null) {
 				</td>
 			</tr>
 
+	</table>
+	</div></div>
+	<table class="category_forms">
 		<tr>
 			<td>
 			</td>
