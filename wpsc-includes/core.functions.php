@@ -19,6 +19,7 @@
  * @param array $rewrite_rules
  * @return array - the modified rewrite rules
  */
+ 
 function wpsc_taxonomy_rewrite_rules($rewrite_rules) {
 	global $wpsc_page_titles;
 	
@@ -99,14 +100,15 @@ add_filter('query_vars', 'wpsc_query_vars');
 function wpsc_split_the_query($query) {
 	global $wpsc_page_titles, $wpsc_query, $wpsc_query_vars;
 	// These values are to be dynamically defined
-	
+//	echo "<pre>"; print_r($query); echo "</pre>";
 	$products_page = $wpsc_page_titles['products'];
 	$checkout_page = $wpsc_page_titles['checkout'];
+	$userlog_page = $wpsc_page_titles['userlog'];
 	$transaction_results_page = $wpsc_page_titles['transaction_results'];
 	
 	
 	// check if we are viewing the checkout page, if so, override the query and make sure we see that page
-	if(($query->query_vars['products'] == $checkout_page)) {
+	if(($query->query_vars['products'] == $checkout_page || $query->query_vars['wpsc_product_category'] == $checkout_page)) {
 		$query->is_checkout = true;
 		
 		$query->query['pagename'] = "$products_page/$checkout_page";
@@ -135,9 +137,35 @@ function wpsc_split_the_query($query) {
 		unset($query->query_vars['products']);
 	} 
 	// check if we are viewing the transaction results page, if so, override the query and make sure we see that page
-	else if (($query->query_vars['products'] == $transaction_results_page)) {
+	else if (($query->query_vars['products'] == $transaction_results_page || $query->query_vars['wpsc_product_category'] == $transaction_results_page)) {
 		$query->query['pagename'] = "$products_page/$transaction_results_page";
 		$query->query_vars['pagename'] = "$products_page/$transaction_results_page";
+		$query->query_vars['name'] = '';
+		$query->query_vars['taxonomy'] = '';
+		$query->query_vars['term'] = '';
+		$query->query_vars['post_type'] = '';
+		
+		
+		$query->queried_object =& get_page_by_path($query->query['pagename']);
+		
+		if ( !empty($query->queried_object) ) {
+			$query->queried_object_id = (int) $query->queried_object->ID;
+		} else {
+			unset($query->queried_object);
+		}
+		
+		
+		$query->is_singular = true;
+		$query->is_page = true;
+		$query->is_tax = false;
+		$query->is_archive = false;
+		$query->is_single = false;
+		
+		unset($query->query_vars['products']);
+		
+	} else if (($query->query_vars['products'] == $userlog_page || $query->query_vars['wpsc_product_category'] == $userlog_page)) {
+		$query->query['pagename'] = "$products_page/$userlog_page";
+		$query->query_vars['pagename'] = "$products_page/$userlog_page";
 		$query->query_vars['name'] = '';
 		$query->query_vars['taxonomy'] = '';
 		$query->query_vars['term'] = '';
@@ -464,6 +492,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 	//echo "'><pre>_".print_r($post, true)."_</pre>";
 	$permalink_structure = get_option('permalink_structure');
 	// This may become customiseable later
+	
 	$our_permalink_structure = $wpsc_page_titles['products']."/%wpsc_product_category%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product " 
 	
@@ -474,7 +503,10 @@ function wpsc_product_link($permalink, $post, $leavename) {
 			$product_category_slugs[] = $product_category->slug;
 		}
 		// If the product is associated with multiple categories, determine which one to pick	
-		if(count($product_categories) > 1) {
+		
+		if(count($product_categories) == 0) {
+			$category_slug = 'uncategorized';
+		} elseif(count($product_categories) > 1) {
 			if(($wp_query->query_vars['products']!= null) && in_array($wp_query->query_vars['products'], $product_category_slugs)) {
 				$product_category = $wp_query->query_vars['products'];
 			} else  {
@@ -575,6 +607,7 @@ function wpsc_get_page_post_names() {
     $wpsc_page['products'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[productspage]%'  AND `post_type` NOT IN('revision') LIMIT 1");
     $wpsc_page['checkout'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[shoppingcart]%'  AND `post_type` NOT IN('revision') LIMIT 1");
     $wpsc_page['transaction_results'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[transactionresults]%'  AND `post_type` NOT IN('revision') LIMIT 1");
+    $wpsc_page['userlog'] = $wpdb->get_var("SELECT post_name FROM `".$wpdb->posts."` WHERE `post_content` LIKE '%[userlog]%'  AND `post_type` NOT IN('revision') LIMIT 1");
     return $wpsc_page;   
 }
 
