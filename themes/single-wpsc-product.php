@@ -179,15 +179,24 @@ get_header();
 						<input type="hidden" value="true" name="is_customisable"/>
 					<?php endif; ?>
 					
-					<!-- END OF QUANTITY OPTION -->
-					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : ?>
-						<?php if(wpsc_product_has_stock()) : ?>
+					
+					
+					<?php if( wpsc_product_has_stock() ) : 
+							// Checks if has stock
+						?>
+						
 							<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
-										<?php	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-										<input class="wpsc_buy_button" type='button' value='<?php echo __('Buy Now', 'wpsc'); ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
-										<?php else: ?>
-									<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
-										<?php endif; ?>
+							<?php $action =  'onclick=\'gotoexternallink("'.wpsc_product_external_link(wpsc_the_product_id()).'")\''; 
+									endif;
+								?>
+					<!-- END OF QUANTITY OPTION -->
+					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : 
+							//Add to Cart button
+						?>
+						<input class="wpsc_buy_button" type='button' id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" value='<?php echo __('Add to Cart', 'wpsc'); ?>' <?php echo $action; ?>>
+						<?php else: ?>
+							<input type="submit" value="<?php echo __('Buy Now', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
+						<?php endif; ?>
 							
 							<div class='wpsc_loading_animation'>
 								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" class="loadingimage" />
@@ -197,10 +206,9 @@ get_header();
 		if(function_exists('fancy_notifications')) {
 			echo fancy_notifications();
 		}
-		?>
+		?>		
 						<?php else : ?>
 							<p class='soldout'><?php echo __('This product has sold out.', 'wpsc'); ?></p>
-						<?php endif ; ?>
 					<?php endif ; ?>
 					</form>
 										

@@ -1632,10 +1632,15 @@ class wpsc_cart_item {
 		
 		$this->sku = get_post_meta($product_id, '_wpsc_sku', true);
 		$price = get_post_meta($product_id, '_wpsc_price', true);
+		$special_price = get_post_meta($product_id, '_wpsc_special_price', true);
 		$product_meta = get_post_meta($product_id, '_wpsc_product_metadata');
 		$this->stock = get_post_meta($product_id, '_wpsc_stock', true);
 		$this->is_donation = get_post_meta($product_id, '_wpsc_is_donation', true);
-
+		
+		if ( isset($special_price) && $special_price < $price ) {
+			$price = $special_price;
+		}
+		
 		//exit("<pre>".print_r($product_meta,true)."</pre>");
 		$priceandstock_id = 0;
 		$weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
