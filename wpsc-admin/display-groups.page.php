@@ -70,7 +70,7 @@ function wpsc_display_categories_page() {
 		<?php } ?>
 				
 		<div id="col-container" class=''>
-		<div id="col-right">
+		<div id="col-right" style="width:39%">
 				<div class="col-wrap">		
 					<?php
 						wpsc_admin_category_group_list();
@@ -78,17 +78,38 @@ function wpsc_display_categories_page() {
 				</div>
 			</div>
 			
-			<div id="col-left">			
+			<div id="col-left" style="width:59%">			
 				<div id='poststuff' class="col-wrap">
+				<?php if ( isset( $_GET["category_id"] ) ) {
+?>
+<div class="postbox">
+<?php
+	  $product = get_term($_GET["category_id"], "wpsc_product_category" );
+
+	$output .= "<h3 class='hndle'>".str_replace("[categorisation]", htmlentities(stripslashes($product->name)), __('You are editing the &quot;[categorisation]&quot; Category', 'wpsc'))."</h3>\n\r";
+	$output .="<div class='inside'>\n\r";  
+	$output .= "<div class='editing_this_group form_table'>";
+	$output .="<dl>\n\r";
+	$output .="		<dt>Display Category Shortcode: </dt>\n\r";
+	$output .="		<dd> [wpsc_products category_url_name='{$product->slug}']</dd>\n\r";
+	$output .="		<dt>Display Category Template Tag: </dt>\n\r";
+	$output .="		<dd> &lt;?php echo wpsc_display_products_page(array('category_url_name'=>'{$product->slug}')); ?&gt;</dd>\n\r";
+	$output .="</dl>\n\r";
+	
+	$output .= "</div>";
+	
+	echo $output;
+} ?>
 					<form id="modify-category-groups" method="post" action="" enctype="multipart/form-data" >
 					<?php
 						wpsc_admin_category_forms($_GET['category_id']);
 					?>
 					</form>
+					<?php if ( isset( $_GET["category_id"] ) ) { echo "</div>";} ?>
 				</div>
 			</div>
-			
 		</div>
+	</div>
 				
 				
 	</div>
@@ -296,6 +317,49 @@ function wpsc_admin_category_forms($category_id =  null) {
 </table>	
 	<br />
 	<div class="postbox">
+		<h3 class="hndle"><?php _e('Target Market Restrictions'); ?></h3>
+		<div class="inside">
+		<?php
+	
+	 /* START OF TARGET MARKET SELECTION */					
+	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
+	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$_GET["category_id"]." AND visible= 1");
+//	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
+	$output .= " <tr>\n\r";
+	$output .= " 	<td>\n\r";
+	$output .= __('Target Markets', 'wpsc').":\n\r";
+	$output .= " 	</td>\n\r";
+	$output .= " 	<td>\n\r";
+
+	if(@extension_loaded('suhosin')) {
+		$output .= "<em>".__("The Target Markets feature has been disabled because you have the Suhosin PHP extension installed on this server. If you need to use the Target Markets feature then disable the suhosin extension, if you can not do this, you will need to contact your hosting provider.
+			",'wpsc')."</em>";
+
+	} else {
+		$output .= "<span>Select: <a href='' class='wpsc_select_all'>All</a>&nbsp; <a href='' class='wpsc_select_none'>None</a></span><br />";
+		$output .= " 	<div id='resizeable' class='ui-widget-content multiple-select'>\n\r";
+		foreach($countrylist as $country){
+			if(in_array($country['id'], $selectedCountries))
+			/* if($country['visible'] == 1) */{
+			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
+			}else{
+			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";
+			}
+				
+		}
+		$output .= " </div><br /><br />";
+		$output .= " <span class='wpscsmall description'>Select the markets you are selling this category to.<span>\n\r";
+	}
+
+	$output .= "   </td>\n\r";
+	
+	$output .= " </tr>\n\r";
+	////////
+	echo $output;
+	?>
+		</div>
+	</div>
+	<div class="postbox">
 		<h3 class="hndle"><?php _e('Presentation Settings', 'wpsc'); ?></h3>
 			<div class="inside">	
 			<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span><br /><br />
@@ -418,15 +482,15 @@ function wpsc_admin_category_forms($category_id =  null) {
 				
 				<?php if($category_id > 0) { ?>
 					<?php
-					$nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category&amp;deleteid={$category_id}", 'delete-category');
+						$nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-category&amp;deleteid={$category_id}", 'delete-category');
 					?>
 					<input type='hidden' name='category_id' value='<?php echo $category_id; ?>' />
 					<input type='hidden' name='submit_action' value='edit' />
-					<input class='button' style='float:left;'  type='submit' name='submit' value='<?php echo __('Edit', 'wpsc'); ?>' />
-					<a class='button delete_button' href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php echo __('Delete', 'wpsc'); ?></a>
+					<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php echo __('Edit Category', 'wpsc'); ?>' />
+					<a class='delete_button' style="text-decoration:none;" href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php echo __('Delete', 'wpsc'); ?></a>
 				<?php } else { ?>
 					<input type='hidden' name='submit_action' value='add' />
-					<input class='button'  type='submit' name='submit' value='<?php echo __('Add', 'wpsc');?>' />
+					<input class='button-primary'  type='submit' name='submit' value='<?php echo __('Add Category', 'wpsc');?>' />
 				<?php } ?>    
 			</td>
 		</tr>

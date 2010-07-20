@@ -2408,10 +2408,6 @@ function wpsc_delete_category() {
 	wp_redirect($sendback);	
 	exit();
 }
-  
- 
-
-
 
 //other actions are here
 if($_GET['display_invoice']=='true') {
@@ -2449,7 +2445,7 @@ if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set') {
 
 // Variation set deleting init code starts here
 if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-category') {
-	add_action('admin_init', 'wpsc-delete-category');
+	add_action('admin_init', 'wpsc_delete_category');
 }
 
 // Category modification init code starts here
