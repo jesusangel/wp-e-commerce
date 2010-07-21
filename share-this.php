@@ -477,6 +477,8 @@ function wpsc_akst_share_form() {
     
   if (isset($current_user)) {
     $user = get_currentuserinfo();
+    if (!isset($current_user->user_nicename)) $current_user->user_nicename = '';
+    if (!isset($current_user->user_email)) $current_user->user_email = '';
     $name = $current_user->user_nicename;
     $email = $current_user->user_email;
   }
@@ -526,8 +528,9 @@ function wpsc_akst_share_form() {
             </li>
           </ul>
           <input type="hidden" name="wpsc_akst_action" value="send_mail" />
-          <input type="hidden" name="wpsc_akst_post_id" id="wpsc_akst_post_id" value="<?php print($id); ?>" />
+          <input type="hidden" name="wpsc_akst_post_id" id="wpsc_akst_post_id" value="<?php if (isset($id)) print($id); ?>" />
           <?php
+          			if (!isset($wp_query->query_vars['product_url_name'])) $wp_query->query_vars['product_url_name'] = '';
 					if($wp_query->query_vars['product_url_name'] != '') {
 						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 					} else if(is_numeric($_GET['product_id'])){
