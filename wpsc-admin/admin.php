@@ -86,30 +86,30 @@ function wpsc_admin_pages(){
 
 			} else {
 				if (function_exists('add_object_page')) {
-					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page,array(), WPSC_URL."/images/credit_cards.png");					
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'administrator', $base_page,array(), WPSC_URL."/images/credit_cards.png");					
 				} else {
-					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page);
+					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'administrator', $base_page);
 
 				}
 			}
 
 				
-			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 'editor', 'wpsc-sales-logs', 'wpsc_display_sales_logs');
+			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 'administrator', 'wpsc-sales-logs', 'wpsc_display_sales_logs');
 			$page_hooks[] = $purchase_log_page;
 			
 			global $show_update_page; //this global is set in /wpsc-admin/display-update.page.php
 			if($show_update_page !== FALSE) :
-				$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 'editor', 'wpsc-update', 'wpsc_display_update_page');
+				$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 'administrator', 'wpsc-update', 'wpsc_display_update_page');
 			endif;
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 'editor', 'wpsc-edit-products', 'wpsc_display_products_page');
-			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 'editor', 'wpsc-edit-products', 'wpsc_display_edit_products_page');
+			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 'administrator', 'wpsc-edit-products', 'wpsc_display_edit_products_page');
 			$page_hooks[] = $edit_products_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 'editor', 'wpsc-edit-groups', 'wpsc_display_categories_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 'administrator', 'wpsc-edit-groups', 'wpsc_display_categories_page');
 			//print_r($page_hooks);
 			
 			//    add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, WPSC_DIR_NAME.'/display_variations.php');
-			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 'editor', 'edit-tags.php?taxonomy=wpsc-variation');
+			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 'administrator', 'edit-tags.php?taxonomy=wpsc-variation');
 			
 			$box_order = get_option('wpsc_product_page_order');
 			if ( is_array ($box_order["side"]) && is_array($box_order["advanced"]) ) {
@@ -136,13 +136,13 @@ function wpsc_admin_pages(){
 			if(IS_WPMU || $GLOBALS['wp_version'] == '3.0'){
 				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 'administrator','wpsc_display_coupons_page','wpsc_display_coupons_page');
 			}else{
-				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 'editor','wpsc_display_coupons_page','wpsc_display_coupons_page');
+				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 'administrator','wpsc_display_coupons_page','wpsc_display_coupons_page');
 			}
 			
-			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 'editor', 'wpsc-settings', 'wpsc_display_settings_page');
+			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 'administrator', 'wpsc-settings', 'wpsc_display_settings_page');
 			$page_hooks[] = $edit_options_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,__('Upgrades', 'wpsc'), __('Upgrades', 'wpsc'), 'editor', 'wpsc-upgrades', 'wpsc_display_upgrades_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Upgrades', 'wpsc'), __('Upgrades', 'wpsc'), 'administrator', 'wpsc-upgrades', 'wpsc_display_upgrades_page');
 			//$page_hooks[] = add_submenu_page($base_page,__('Upgrades (Old)', 'wpsc'), __('Upgrades (Old)', 'wpsc'), 'editor', 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
 			
 			if( (isset($_SESSION['wpsc_activate_debug_page']) && ($_SESSION['wpsc_activate_debug_page'] == true)) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
