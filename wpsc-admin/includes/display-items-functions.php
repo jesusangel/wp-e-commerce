@@ -101,6 +101,8 @@ if (!function_exists('array_replace_recursive'))
 
 function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
   global $wpdb, $product;
+  $tt_ids = array();
+  $term_ids = array();
 	$product = get_post($product_id);
 	 //print("<pre>" . print_r($product, true) . "</pre>");
 

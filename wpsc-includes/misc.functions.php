@@ -288,8 +288,11 @@ function wpsc_populate_also_bought_list() {
 
 function nzshpcrt_display_preview_image() {
 	  global $wpdb;
-	  if(isset($_GET['wpsc_request_image']) && isset($_GET['image_id']) && (($_GET['wpsc_request_image'] == 'true') || is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])|| isset($_GET['image_name']))) {
-
+	  if ( (isset($_GET['wpsc_request_image']) && ($_GET['wpsc_request_image'] == 'true'))
+	  	|| (isset($_GET['productid']) && is_numeric($_GET['productid'])) 
+	  	|| (isset($_GET['image_id']) && is_numeric($_GET['image_id'])) 
+	  	|| (isset($_GET['image_name']))
+	  	) {
 	  
 		if(function_exists("getimagesize")) {
 			if(is_numeric($_GET['productid'])) {

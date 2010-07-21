@@ -72,7 +72,7 @@ function wpsc_display_edit_products_page() {
 			<p>
 			<?php 
 			
-   			if(!isset($_GET['deleted'])) $_GET['deleted'] = '';
+   			if(!isset($_GET['deleted'])) $_GET['deleted'] = 0.00;
 			
 			if ( isset($_GET['updated'])) {
 				printf( _n( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );

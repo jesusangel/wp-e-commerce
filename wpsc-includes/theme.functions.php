@@ -26,7 +26,10 @@ function wpsc_enqueue_user_script_and_css() {
 		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 		//$version_identifier = '';
 		$category_id = '';
-		if(isset($_GET['category']) && defined($wp_query) && (is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category')))) {
+		if (   (isset($_GET['category']) && is_numeric($_GET['category']))
+			|| (defined($wp_query) && is_numeric($wp_query->query_vars['product_category'])) 
+			|| is_numeric(get_option('wpsc_default_category'))
+		) {
 			if(is_numeric($wp_query->query_vars['product_category'])) {
 				$category_id = $wp_query->query_vars['product_category'];
 			} else if(is_numeric($_GET['category'])) {
