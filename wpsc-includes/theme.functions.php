@@ -420,16 +420,18 @@ function wpsc_products_page($content = '') {
 			include($cur_wpsc_theme_folder."/single_product.php");
 			$is_single = true;
 		} else {
+		$category_id = '';
 		  // get the display type for the selected category
-			if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category'))) {
+			if ( (isset($_GET['category']) || isset($wp_query->query_vars['category_id']) )  && ( is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['category_id']) || is_numeric(get_option('wpsc_default_category')) ) ) {
 				if(is_numeric($wp_query->query_vars['category_id'])) {
-					$category_id =(int) $wp_query->query_vars['category_id'];
+					$category_id = (int) $wp_query->query_vars['category_id'];
 				} else if(is_numeric($_GET['category'])) {
 					$category_id = (int)$_GET['category'];
 				} else { 
 					$category_id = (int)get_option('wpsc_default_category');
 				}
-			}			
+			}
+
 			$display_type = wpsc_get_categorymeta($category_id, 'display_type');
 		
 			if($display_type == '') {
@@ -694,7 +696,7 @@ function wpsc_body_class( $classes ) {
 			$classes[] = 'wpsc-category';
 		}
 		
-		if ( absint($wpsc_query->query_vars['category_id']) > 0) {
+		if ( isset($wpsc_query->query_vars['category_id']) && absint($wpsc_query->query_vars['category_id']) > 0) {
 			$classes[] = 'wpsc-category-' . $wpsc_query->query_vars['category_id'];
 		}
 		

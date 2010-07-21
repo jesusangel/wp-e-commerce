@@ -429,7 +429,7 @@ function wpsc_category_url($category_id, $permalink_compatibility = false) {
 function wpsc_is_in_category() {
   global $wpdb, $wp_query;
   $category_id = null;
-  if($wp_query->query_vars['category_id'] > 0) {
+  if(isset($wp_query->query_vars['category_id'] ) && $wp_query->query_vars['category_id'] > 0) {
     $category_id = absint($wp_query->query_vars['category_id']);
   } else if(isset($_GET['category']) && ($_GET['category'] > 0)) {
     $category_id = absint($_GET['category']);

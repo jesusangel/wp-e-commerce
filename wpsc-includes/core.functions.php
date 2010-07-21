@@ -425,7 +425,7 @@ function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
 	global $wp_query;
 	
 	//exit("<pre>".print_r($wp_query,true)."</pre>");
-	if(($wp_query->query_vars['products'] != '') || ($wp_query->query_vars['products'] != 'wpsc_item')) {
+	if( ( isset($wp_query->query_vars['products']) && ($wp_query->query_vars['products'] != '') ) || ( isset($wp_query->query_vars['products']) && $wp_query->query_vars['products'] != 'wpsc_item')) {
 		return false;
 	}
 	if(stristr($requested_url, $redirect_url)) {

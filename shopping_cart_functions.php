@@ -76,7 +76,7 @@ function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	include_once($cur_wpsc_theme_folder."/cart_widget.php");
 	echo "    </div>";
-  return $output;
+// return $output;
 }
   
 function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null, $supplied_form_id = null, $checkoutfields = false) {

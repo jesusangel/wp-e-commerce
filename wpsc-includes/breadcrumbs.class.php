@@ -78,12 +78,12 @@ class wpsc_breadcrumbs {
 		global $wp_query;
 		$this->breadcrumbs = array();
 
-		
-		$query_data = array(
-			'category' =>  $wp_query->query_vars['products'],
-			'product' =>  $wp_query->query_vars['name']
-		);
-		
+		if ( isset($wp_query->query_vars['products']) && isset($wp_query->query_vars['name']) ) {
+			$query_data = array(
+				'category' =>  $wp_query->query_vars['products'],
+				'product' =>  $wp_query->query_vars['name']
+			);
+		}
 		
 		if(!empty($query_data['product']) && !empty($wp_query->post)) {
 			$this->breadcrumbs[] = array(
@@ -93,8 +93,11 @@ class wpsc_breadcrumbs {
 		
 		}
 		
-		
-		$term_data = get_term_by('slug', $query_data['category'], 'wpsc_product_category');
+		if(isset($query_data['category'])) {
+			$term_data = get_term_by('slug', $query_data['category'], 'wpsc_product_category');
+		} else {
+			$term_data = get_term_by('slug', 'uncategorized', 'wpsc_product_category');
+		}
 		if( $term_data != false) {
 			$this->breadcrumbs[] = array(
 				'name' => htmlentities( $term_data->name, ENT_QUOTES, 'UTF-8'),

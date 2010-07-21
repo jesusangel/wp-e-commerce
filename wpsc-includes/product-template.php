@@ -132,7 +132,7 @@ function wpsc_display_categories() {
 		}
 		
 		// if we have no categories, and no search, show the group list
-		if(is_numeric(get_option('wpsc_default_category')) || (is_numeric($product_id)) || ($_GET['product_search'] != '')) {
+		if(is_numeric(get_option('wpsc_default_category')) || (isset($product_id) && is_numeric($product_id)) || (isset($_GET['product_search']) && $_GET['product_search'] != '')) {
 		  $output = true;
 		}
 		if((get_option('wpsc_default_category') == 'all+list')|| (get_option('wpsc_default_category') == 'list')){
@@ -140,7 +140,7 @@ function wpsc_display_categories() {
 		}
 	}
 	
-	if($category_id > 0) {
+	if(isset($category_id) && $category_id > 0) {
 		$output = false;
 	}
   return $output;
@@ -992,9 +992,9 @@ function wpsc_currency_sign() {
 * @return boolean - true if we have pages
 */
 function wpsc_has_pages() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+//	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query;
-	if($wpsc_query->page_count > 0) {
+	if(isset($wpsc_query->page_count) && $wpsc_query->page_count > 0) {
 		return true;
 	} else {
 		return false;
