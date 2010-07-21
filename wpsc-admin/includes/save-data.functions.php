@@ -173,10 +173,16 @@ function wpsc_save_category_set() {
 		  
 		/* add category code */
 		if($_POST['submit_action'] == "add") {
-			$name = $_POST['name'];
+			$name = $_POST['name'];			
 			$term = get_term_by('name', $name, 'wpsc_product_category', ARRAY_A);
+						
 			if(empty($term)) {
 				$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
+			}
+
+			if (is_wp_error($term)) {
+				$_GET['message'] = $term->get_error_code();
+				return;
 			}
 			
 			$category_id= $term['term_id'];
@@ -259,7 +265,7 @@ function wpsc_save_category_set() {
 			
 			$name = $_POST['name'];
 			
-			 
+			$category = get_term_by('id', $category_id, 'wpsc_product_category');
 			if($category->name != $name) {
 				wp_update_term($category_id, 'wpsc_product_category', array(
 					'name' => $name
@@ -274,7 +280,7 @@ function wpsc_save_category_set() {
 			wpsc_update_categorymeta($category_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
 			
 			
-			if($_POST['deleteimage'] == 1) {
+			if(isset($_POST['deleteimage']) && $_POST['deleteimage'] == 1) {
 				wpsc_delete_categorymeta($category_id, 'image');
 			} else if($image != '') {
 				wpsc_update_categorymeta($category_id, 'image', $image);

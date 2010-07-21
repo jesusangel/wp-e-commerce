@@ -16,6 +16,7 @@
  */
 
 function wpsc_display_categories_page() {
+	$output = "";
 	$columns = array(
 		'img' =>  __('Image', 'wpsc'),
 		'title' => __('Name', 'wpsc'),
@@ -58,7 +59,11 @@ function wpsc_display_categories_page() {
 				
 				
 				if (isset($_GET['message']) ) {
-					_e("Thanks, the category has been edited", 'wpsc');
+					if ($_GET['message'] == 'empty_term_name')
+						_e("Please give a category name", 'wpsc');
+					else
+						_e("Thanks, the category has been edited", 'wpsc');
+
 					unset($_GET['message']);
 				}
 				

@@ -590,7 +590,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     if(!isset($product_data['meta']['_wpsc_is_donation'])) $product_data['meta']['_wpsc_is_donation'] = $wpsc_product_defaults['donation'];
     if(!isset($product_meta['table_rate_price']['state'])) $product_meta['table_rate_price']['state'] = null;
    
-    if(!isset($product_meta['custom_tax'])) $product_meta['custom_tax'] = '';
+    if(!isset($product_meta['custom_tax'])) $product_meta['custom_tax'] = 0.00;
    
     if(!isset($product_meta['table_rate_price']['quantity'])) $product_meta['table_rate_price']['quantity'] = $wpsc_product_defaults['meta']['table_rate_price']['quantity'][0];
    

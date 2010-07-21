@@ -2032,7 +2032,7 @@ function wpsc_gateway_settings(){
 		foreach($_POST['wpsc_options'] as $key=>$value){
 			if($value != get_option($key)){
 				update_option($key, $value);
-				$updated++;
+				//$updated++;
 			}
 		}
 		unset($_POST['wpsc_options']);
@@ -2052,9 +2052,12 @@ function wpsc_gateway_settings(){
 	//exit('<pre>'.print_r($GLOBALS['nzshpcrt_gateways'],true).'</pre>');
 	
 	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-		if($gateway['internalname'] == get_option('payment_gateway')) {
-			call_user_func_array($gateway['submit_function']);
-			$changes_made = true;
+		if($gateway['internalname'] == get_option('payment_gateway')) 
+		{
+			if(isset($gateway['submit_function'])) {
+				call_user_func_array($gateway['submit_function'], array());
+				$changes_made = true;
+			}
 		}
 	}
 	if(($_POST['payment_gw'] != null)) {

@@ -3,7 +3,7 @@ function wpsc_display_coupons_page(){
 	global $wpdb;
 	if(isset($_POST) && is_array($_POST) && !empty($_POST)) {
 
-	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!($_POST['is_edit_coupon'] == 'true'))) {
+	if(isset($_POST['add_coupon']) && ($_POST['add_coupon'] == 'true')&& (!isset($_POST['is_edit_coupon']) || !($_POST['is_edit_coupon'] == 'true'))) {
 		$coupon_code = $_POST['add_coupon_code'];
 		$discount = (double)$_POST['add_discount'];
 		// cast to boolean, then integer, prevents the value from being anything but 1 or 0
@@ -36,15 +36,18 @@ function wpsc_display_coupons_page(){
 			$coupon_data['expiry'] = $coupon_data['expiry']." 00:00:00";
 			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id'", ARRAY_A);
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
-
-			ksort($check_values); ksort($coupon_data);			
-			if($check_values != $coupon_data) {
+	
+			if($check_values != null)
+				ksort($check_values); 
+			ksort($coupon_data);			
+			if($check_values != $coupon_data) 
+			{
 				$insert_array = array();
 				foreach($coupon_data as $coupon_key => $coupon_value) {
 				  if(($coupon_key == "submit_coupon") || ($coupon_key == "delete_coupon")) {
 				    continue;
 				  }
-					if($coupon_value != $check_values[$coupon_key]) {
+					if(isset($check_values[$coupon_key]) && $coupon_value != $check_values[$coupon_key]) {
 						$insert_array[] = "`$coupon_key` = '$coupon_value'";
 					}
 				}
@@ -79,7 +82,7 @@ function wpsc_display_coupons_page(){
 
 			}
 				
-			if($coupon_data['delete_coupon'] != '') {
+			if(isset($coupon_data['delete_coupon']) && $coupon_data['delete_coupon'] != '') {
 				$wpdb->query("DELETE FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id' LIMIT 1;");
 			}
 		}
@@ -108,20 +111,20 @@ function wpsc_display_coupons_page(){
 	  $sql ="UPDATE `".WPSC_TABLE_COUPON_CODES."` SET `condition`='".serialize($conditions)."' WHERE `id` = '".(int)$_POST['coupon_id']."' LIMIT 1";
 	  $wpdb->query($sql);
   }
-  if($_POST['change-settings'] == 'true') {
-    if($_POST['wpsc_also_bought'] == 'on') {
+  if(isset($_POST['change-settings']) && $_POST['change-settings'] == 'true') {
+    if(isset($_POST['wpsc_also_bought']) && $_POST['wpsc_also_bought'] == 'on') {
       update_option('wpsc_also_bought', 1);
 		} else {
       update_option('wpsc_also_bought', 0);
 		}
 
-    if($_POST['display_find_us'] == 'on') {
+    if(isset($_POST['display_find_us']) && $_POST['display_find_us'] == 'on') {
       update_option('display_find_us', 1);
 		} else {
       update_option('display_find_us', 0);
 		}
       
-    if($_POST['wpsc_share_this'] == 'on') {
+    if(isset($_POST['wpsc_share_this']) && $_POST['wpsc_share_this'] == 'on') {
       update_option('wpsc_share_this', 1);
 		} else {
       update_option('wpsc_share_this', 0);
