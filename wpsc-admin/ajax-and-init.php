@@ -1724,8 +1724,7 @@ function wpsc_submit_options($selected='') {
 	if ( isset($shipadd) ) {
 		$sendback = add_query_arg('shipadd', $shipadd, $sendback);
 	}
-	
-	//if (!isset($_SESSION['wpsc_settings_curr_page'])) $_SESSION['wpsc_settings_curr_page'] = 'presentation';
+
 	if (!isset($_SESSION['wpsc_settings_curr_page'])) $_SESSION['wpsc_settings_curr_page'] = '';
 	if (!isset($_POST['page_title'])) $_POST['page_title'] = '';
 	if(isset($_SESSION['wpsc_settings_curr_page'])){

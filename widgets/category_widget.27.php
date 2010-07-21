@@ -189,13 +189,13 @@ function widget_wpsc_categorisation_register() {
 		// $id should look like {$id_base}-{$o}
 		$id = "wpsc_categorisation-$o"; // Never never never translate an id
 		$registered = true;
-		wp_register_widget_control( $id, $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => $o ) );
+		wp_register_sidebar_widget( $id, $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => $o ) );
 		wp_register_widget_control( $id, $name, 'widget_wpsc_categorisation_control', $control_ops, array( 'number' => $o ) );
 	}
 
 	// If there are none, we register the widget's existance with a generic template
 	if ( !$registered ) {
-		wp_register_widget_control( 'wpsc_categorisation-1', $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => -1 ) );
+		wp_register_sidebar_widget( 'wpsc_categorisation-1', $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => -1 ) );
 		wp_register_widget_control( 'wpsc_categorisation-1', $name, 'widget_wpsc_categorisation_control', $control_ops, array( 'number' => -1 ) );
 	}
 }

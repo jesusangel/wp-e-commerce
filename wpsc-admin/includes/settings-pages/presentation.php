@@ -1032,7 +1032,6 @@ global $wpdb;
 		  ?>
 			<div class="submit">
 				<input type='hidden' name='wpsc_admin_action' value='submit_options' />
-				<input type='hidden' name='mypage' value='presentation' />
 				<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 				<input type="submit" value="<?php echo __('Update &raquo;', 'wpsc');?>" name="updateoption" />
 			</div>

@@ -94,14 +94,19 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['meta']['_wpsc_price'] = (float)$post_data['meta']['_wpsc_price'];
 	$post_data['meta']['_wpsc_special_price'] = (float)$post_data['meta']['_wpsc_special_price'];
 	$post_data['meta']['_wpsc_sku'] = $post_data['meta']['_wpsc_sku'];
+	if (!isset($post_data['meta']['_wpsc_is_donation'])) $post_data['meta']['_wpsc_is_donation'] = '';
 	$post_data['meta']['_wpsc_is_donation'] = (int)(bool)$post_data['meta']['_wpsc_is_donation'];
 	$post_data['meta']['_wpsc_stock'] = (int)$post_data['meta']['_wpsc_stock'];
-	
+
+	if (!isset($post_data['meta']['_wpsc_limited_stock'])) $post_data['meta']['_wpsc_limited_stock'] = '';
 	if((bool)$post_data['meta']['_wpsc_limited_stock'] != true) {
 	  $post_data['meta']['_wpsc_stock'] = false;
 	}
 	unset($post_data['meta']['_wpsc_limited_stock']);
-	
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'])) $post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'] = '';
+    if(!isset($post_data['quantity_limited'])) $post_data['quantity_limited'] = '';
+    if(!isset($post_data['special'])) $post_data['special'] = '';
+    if(!isset($post_data['meta']['_wpsc_product_metadata']['no_shipping'])) $post_data['meta']['_wpsc_product_metadata']['no_shipping'] = '';
 	
 	$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
 	$post_data['meta']['_wpsc_product_metadata']['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
@@ -110,6 +115,9 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['no_shipping'];
 	
 	// Product Weight
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['display_weight_as'])) $post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = '';
+    if(!isset($post_data['meta']['_wpsc_product_metadata']['display_weight_as'])) $post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = '';
+	
 	$weight = wpsc_convert_weight($post_data['meta']['_wpsc_product_metadata']['weight'], $post_data['meta']['_wpsc_product_metadata']['weight_unit'], "gram");
 	$post_data['meta']['_wpsc_product_metadata']['weight'] = (float)$weight;
 	$post_data['meta']['_wpsc_product_metadata']['display_weight_as'] = $post_data['meta']['_wpsc_product_metadata']['weight_unit'];	
@@ -117,11 +125,13 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	// table rate price
 	$post_data['meta']['_wpsc_product_metadata']['table_rate_price'] = $post_data['table_rate_price'];
 	// if table_rate_price is unticked, wipe the table rate prices
+	if(!isset($post_data['table_rate_price']['state'])) $post_data['table_rate_price']['state'] = '';
 	if($post_data['table_rate_price']['state'] != 1) {
 		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'] = null;
 		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_rate_price'] = null;
 	}
 	
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'])) $post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] = '';
 	if($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] == 1) {
 		$custom_tax_value = (float)$post_data['meta']['_wpsc_product_metadata']['custom_tax']['value'];
 	} else {
@@ -136,6 +146,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	// Advanced Options
 	$post_data['meta']['_wpsc_product_metadata']['engraved'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['engraved'];	
 	$post_data['meta']['_wpsc_product_metadata']['can_have_uploaded_image'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['can_have_uploaded_image'];
+	if(!isset($post_data['meta']['_wpsc_product_metadata']['google_prohibited'])) $post_data['meta']['_wpsc_product_metadata']['google_prohibited'] = '';
 	$post_data['meta']['_wpsc_product_metadata']['google_prohibited'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['google_prohibited'];
 	$post_data['meta']['_wpsc_product_metadata']['external_link'] = (string)$post_data['meta']['_wpsc_product_metadata']['external_link'];
 	
@@ -220,8 +231,11 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	);
 	
 	
-	foreach($product_columns as $column => $default) {
-		if(isset($post_data[$column]) || ($post_data[$column] !== null) ) {
+	foreach($product_columns as $column => $default) 
+	{
+		if (!isset($post_data[$column])) $post_data[$column] = '';	
+		
+		if($post_data[$column] !== null) {
 			$update_values[$column] = stripslashes($post_data[$column]);
 		} else if(($update != true) && ($default !== null)) {
 			$update_values[$column] = stripslashes($default);
@@ -247,7 +261,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	}
 		
 	//exit("<pre>".print_r(wp_update_post($product_post_values) , true)."</pre>");
-	if($sku != '') {
+	if(isset($sku) && ($sku != '')) {
 		$product_post_array['guid'] = $sku;
 	}
 
@@ -326,7 +340,8 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	/* 	wpsc_update_category_associations($product_id, $post_data['category']); */
 	//wp_set_post_categories($product_id, $post_data['category']);
 	
-	//echo "<pre>".print_r($post_data['category'], true)."</pre>";	
+	//echo "<pre>".print_r($post_data['category'], true)."</pre>";
+	if (!isset($post_data['category'])) $post_data['category'] = array();	
 	wp_set_product_categories($product_id, $post_data['category']);
 	
 	//echo "<pre>".print_r($test, true)."</pre>";
@@ -334,6 +349,8 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	
 
 	// and the tags
+	if (!isset($post_data['product_tags'])) $post_data['product_tags'] = '';
+	if (!isset($post_data['wpsc_existing_tags'])) $post_data['wpsc_existing_tags'] = '';
 	wpsc_update_product_tags($product_id, $post_data['product_tags'], $post_data['wpsc_existing_tags']);
 	
 	// and the meta
@@ -356,11 +373,12 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	if($post_data['files']['file']['tmp_name'] != '') {
 		wpsc_item_process_file($product_id, $post_data['files']['file']);
 	} else {
-	  wpsc_item_reassign_file($product_id, $post_data['select_product_file']);
+		if (!isset($post_data['select_product_file'])) $post_data['select_product_file'] = null;
+	  	wpsc_item_reassign_file($product_id, $post_data['select_product_file']);
 	}
 	
 	//exit('<pre>'.print_r($post_data, true).'</pre>');
-	if($post_data['files']['preview_file']['tmp_name'] != '') {
+	if(isset($post_data['files']['preview_file']['tmp_name']) && ($post_data['files']['preview_file']['tmp_name'] != '')) {
  		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
 	}
     
@@ -385,7 +403,9 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
  */
 function wpsc_edit_product_variations($product_id, $post_data) {
 	global $wpdb, $user_ID;
-
+	$variations = array();
+	if (!isset($post_data['edit_var_val'])) $post_data['edit_var_val'] = '';
+	
 	$variations = (array)$post_data['edit_var_val'];
 	// bail if the array is empty
 	if(count($variations) < 1) {
@@ -675,6 +695,7 @@ function wpsc_update_custom_meta($product_id, $post_data) {
 		}
 	}
 		
+	if (!isset($post_data['custom_meta'])) $post_data['custom_meta'] = '';
 	if($post_data['custom_meta'] != null) {
 		foreach((array)$post_data['custom_meta'] as $key => $values) {
 			if(($values['name'] != '') && ($values['value'] != '')) {
@@ -694,8 +715,12 @@ function wpsc_update_product_images($product_id, $post_data) {
   global $wpdb;
   $uploaded_images = array(); 
 
+  if(!isset($post_data['gallery_resize'])) $post_data['gallery_resize'] = '';
+  if(!isset($post_data['gallery_width'])) $post_data['gallery_width'] = '';
+  if(!isset($post_data['gallery_height'])) $post_data['gallery_height'] = '';
+  
 	/* Handle new image uploads here */
-  if($post_data['files']['image']['tmp_name'] != '') {
+  if(isset($post_data['files']['image']['tmp_name']) && ($post_data['files']['image']['tmp_name'] != '')) {
 		$image = wpsc_item_process_image($product_id, $post_data['files']['image']['tmp_name'], str_replace(" ", "_", $post_data['files']['image']['name']), $post_data['width'], $post_data['height'], $post_data['image_resize']);
 		
 		$image_action = absint($post_data['image_resize']);

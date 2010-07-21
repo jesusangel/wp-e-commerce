@@ -239,7 +239,10 @@ $upload_url = '';
 
 if (isset($wp_upload_dir_data['basedir'])) {
 	$upload_path = $wp_upload_dir_data['basedir'];
-	$upload_url = $wp_upload_dir_data['baseurl'];
+}
+
+if (isset($wp_upload_dir_data['baseurl'])) {
+	$upload_url = $wp_upload_dir_data['baseurl'];	
 }
 
 if(is_ssl()) {

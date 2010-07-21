@@ -238,6 +238,11 @@ function wpsc_product_basic_details_form(&$product_data) {
 if(!isset($product->post_type)) $product->post_type = '';
 $nonce_action = 'update-' . $product->post_type . '_' . $product_data["id"];
 $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($product_data["id"]) . "' />";
+
+$sticky = get_option( 'sticky_posts' );
+if ( in_array ( $product_data["id"], $sticky ) )
+$sticky_checked = 'checked="checked" ';
+
 ?>
 	</h3>
 	<div id="side-info-column" class="inner-sidebar">
@@ -273,7 +278,8 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	<div id="submitdiv" class="postbox">
 		<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span>Publish</span></h3>
 			<div class="inside publish">
-			<div class="submitbox" id="submitpost">
+			<div class="submitbox" id="submitpost"><br />
+				<span id="sticky-span" style="display: inline; "><input id="sticky" name="sticky" type="checkbox" <?php if (isset($sticky_checked)) echo $sticky_checked; ?>value="sticky" tabindex="4"> <label for="sticky" class="selectit">Stick this product to the front page</label><br></span>
 				<div id="minor-publishing">
 					<div id="minor-publishing-actions">
 						<div id="save-action">
@@ -342,6 +348,15 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 				"wpsc_product_price_and_stock_forms" => 1,
 				"wpsc_product_image_forms" => 1,
 				"wpsc_product_download_forms" => 1
+			),
+			"hiddenboxes" => array(
+				"wpsc_product_shipping_forms" => 1,
+				"wpsc_product_variation_forms" => 1,
+				"wpsc_product_advanced_forms" => 1,
+				"wpsc_product_category_and_tag_forms" => 1,
+				"wpsc_product_price_and_stock_forms" => 1,
+				"wpsc_product_image_forms" => 1,
+				"wpsc_product_download_forms" => 1
 			)
 		  );
 		
@@ -349,7 +364,7 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	 	
 		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  
-	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 16 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
+	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 24 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
 				$order = $default_order;
 	 	}
 	 	$check_missing_items = array_diff($default_order, $order);
@@ -373,12 +388,13 @@ $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_
 	 		}
 	 		
 	 	}
-//		echo "<pre>"; print_r($order); echo "</pre>"; 
+ 
 		foreach((array)$order["side"] as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
 			}
 		}
+//		echo "<pre>"; print_r($order); echo "</pre>";		
 		?>	
 	</div>
 	</div>
@@ -400,7 +416,27 @@ makeSlugeditClickable = null;
 	$('#poststuff .postbox h3, .postbox div.handlediv').click( function() {			
 			$(this).parent().toggleClass('closed');
 			wpsc_save_postboxes_state('store_page_wpsc-edit-products', '#poststuff');
-		});		
+		});	
+
+	<?php 
+		$hidden_boxes = $order["hiddenboxes"];
+		foreach ($hidden_boxes as $key=>$val) {
+			if ( $val == 0 ) {
+			?>
+				$('div#<?php echo $key; ?>').css('display', 'none');
+				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', false);
+			<?php
+			}
+				elseif ($val == 1) {
+				
+				?>
+				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', true);
+
+			<?php
+			
+			}
+		}
+	?>	
         });
 	//]]>
 </script>
@@ -439,9 +475,141 @@ makeSlugeditClickable = null;
 					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
 				</td>
 			</tr>
-		
+			<tr>
+				<td colspan='2'>
+					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
+				 <?php
+						wpsc_the_editor($product_data['description'], 'content',true, true);
+				 ?>
+				 <table id="post-status-info" cellspacing="0"><tbody><tr>
+	<td id="wp-word-count"></td>
+	<td class="autosave-info">
+	<span id="autosave">&nbsp;</span>
+	</td>
+</tr></tbody></table>
+				 </div>
+				</td>
+			</tr>
 		
 			<tr>
+				<td class='itemfirstcol' colspan='2'>
+					
+					<strong ><?php echo __('Additional Description', 'wpsc'); ?> :</strong><br />			
+					
+					<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="advanced-sortables" class="meta-box-sortables-wpec ui-sortable">
+		<?php 
+					foreach((array)$order["advanced"] as $key => $box_function_name) {
+			if(function_exists($box_function_name)) {
+				echo call_user_func($box_function_name,$product_data);
+			}
+		}
+		?>
+	</div>
+</div>
+	<?php
+  }
+function wpsc_product_category_and_tag_forms($product_data=''){
+	global $closed_postboxes, $wpdb, $variations_processor;
+	
+	$output = '';
+	//echo "<pre>".print_r($product_data['tags'], true)."</pre>";
+	$tag_array = array();
+	if (!isset($product_data['tags'])) $product_data['tags'] = array();
+	foreach((array)$product_data['tags'] as $tag) {
+	  $tag_array[] = $tag->name;
+	}
+	if ($product_data == 'empty') {
+		$display = "style='visibility:hidden;'";
+	}
+	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."'><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+
+    if (IS_WP27) {
+        $output .= "<h3 class='hndle'>";
+    } else {
+        $output .= "<h3>
+	    <a class='togbox'>+</a>";
+    }
+    $output .= __('Categories and Tags', 'wpsc');
+
+    $output .= "
+	</h3>
+    <div class='inside'>
+    <table>";
+    $output .= "
+      <tr>
+      <td class='itemfirstcol'>
+				<strong >".__('Product Categories', 'wpsc')." </strong>
+				<div id='categorydiv' >";
+					$search_sql = apply_filters('wpsc_product_category_and_tag_forms_group_search_sql', '');
+					//$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
+				
+					$output .= wpsc_category_list($product_data, 0, $product_data['id'], 'edit_');
+						
+
+     $output .= "
+			</div>
+     </td>
+     <td class='itemfirstcol product_tags'>
+				<strong > ".__('Product Tags', 'wpsc')."</strong><br />
+				<p id='jaxtag'>
+					<label for='tags-input' class='hidden'>".__('Product Tags', 'wpsc')."</label>
+					<input type='text' value='".implode(',',$tag_array)."' tabindex='3' size='20' id='tags-input' class='tags-input' name='product_tags'/>
+				<span class='howto'>".__('Separate tags with commas')."</span>
+				</p>
+				<div id='tagchecklist' class='tagchecklist' onload='tag_update_quickclicks();'></div>
+
+      </td>
+      
+    </tr>";
+$output .= "
+  </table>
+ </div>
+</div>";
+$output = apply_filters('wpsc_product_category_and_tag_forms_output', $output);
+
+return $output;
+
+}
+function wpsc_product_price_and_stock_forms($product_data=''){
+	global $closed_postboxes, $wpdb, $variations_processor, $wpsc_product_defaults;
+	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
+	
+	if(!isset($product_data['meta']['_wpsc_table_rate_price'])) $product_data['meta']['_wpsc_table_rate_price'] = $wpsc_product_defaults['meta']['table_rate_price'];
+    $table_rate_price = $product_data['meta']['_wpsc_table_rate_price'];
+   
+    if(!isset($product_data['meta']['_wpsc_custom_tax'])) $product_data['meta']['_wpsc_custom_tax'] = '';
+    $custom_tax = $product_data['meta']['_wpsc_custom_tax'];
+   
+    if(!isset($product_data['meta']['_wpsc_is_donation'])) $product_data['meta']['_wpsc_is_donation'] = $wpsc_product_defaults['donation'];
+    if(!isset($product_meta['table_rate_price']['state'])) $product_meta['table_rate_price']['state'] = null;
+   
+    if(!isset($product_meta['custom_tax'])) $product_meta['custom_tax'] = '';
+   
+    if(!isset($product_meta['table_rate_price']['quantity'])) $product_meta['table_rate_price']['quantity'] = $wpsc_product_defaults['meta']['table_rate_price']['quantity'][0];
+   
+    if(!isset($product_meta['unpublish_when_none_left'])) $product_meta['unpublish_when_none_left'] = '';
+	
+	if ($product_data == 'empty') {
+		$display = "style='visibility:hidden;'";
+	}
+	echo "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+
+	echo "<h3 class='hndle'>";
+
+    echo __('Price and Stock Control', 'wpsc');
+    echo "
+	</h3>
+    <div class='inside'>
+    <table>
+    ";    
+   // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
+    ?><br />
+				<tr>
 				<td colspan='3' class='skuandprice'>
 					<div class='wpsc_floatleft'>
 						<?php echo __('Stock Keeping Unit', 'wpsc'); 
@@ -550,160 +718,28 @@ makeSlugeditClickable = null;
 						</td>
 					</tr>
 			<?php } ?>
-			<?php endif; ?>
-			<tr>
-				<td colspan='2'>
-					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
-				 <?php
-						wpsc_the_editor($product_data['description'], 'content',true, true);
-				 ?>
-				 <table id="post-status-info" cellspacing="0"><tbody><tr>
-	<td id="wp-word-count"></td>
-	<td class="autosave-info">
-	<span id="autosave">&nbsp;</span>
-	</td>
-</tr></tbody></table>
-				 </div>
-				</td>
-			</tr>
-		
-			<tr>
-				<td class='itemfirstcol' colspan='2'>
-					
-					<strong ><?php echo __('Additional Description', 'wpsc'); ?> :</strong><br />			
-					
-					<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes($product_data['additional_description']); ?></textarea>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div id="advanced-sortables" class="meta-box-sortables-wpec ui-sortable">
-		<?php 
-					foreach((array)$order["advanced"] as $key => $box_function_name) {
-			if(function_exists($box_function_name)) {
-				echo call_user_func($box_function_name,$product_data);
-			}
-		}
-		?>
-	</div>
-</div>
-	<?php
-  }
-function wpsc_product_category_and_tag_forms($product_data=''){
-	global $closed_postboxes, $wpdb, $variations_processor;
-	
-	$output = '';
-	//echo "<pre>".print_r($product_data['tags'], true)."</pre>";
-	$tag_array = array();
-	if(!isset($product_data['tags'])) $product_data['tags'] = array();
-	foreach((array)$product_data['tags'] as $tag) {
-	  $tag_array[] = $tag->name;
-	}
-	if ($product_data == 'empty') {
-		$display = "style='visibility:hidden;'";
-	}
-	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_category_and_tag_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
-
-    if (IS_WP27) {
-        $output .= "<h3 class='hndle'>";
-    } else {
-        $output .= "<h3>
-	    <a class='togbox'>+</a>";
-    }
-    $output .= __('Categories and Tags', 'wpsc');
-
-    $output .= "
-	</h3>
-    <div class='inside'>
-    <table>";
-    $output .= "
-      <tr>
-      <td class='itemfirstcol'>
-				<strong >".__('Product Categories', 'wpsc')." </strong>
-				<div id='categorydiv' >";
-					$search_sql = apply_filters('wpsc_product_category_and_tag_forms_group_search_sql', '');
-					//$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
-				
-					$output .= wpsc_category_list($product_data, 0, $product_data['id'], 'edit_');
-						
-
-     $output .= "
-			</div>
-     </td>
-     <td class='itemfirstcol product_tags'>
-				<strong > ".__('Product Tags', 'wpsc')."</strong><br />
-				<p id='jaxtag'>
-					<label for='tags-input' class='hidden'>".__('Product Tags', 'wpsc')."</label>
-					<input type='text' value='".implode(',',$tag_array)."' tabindex='3' size='20' id='tags-input' class='tags-input' name='product_tags'/>
-				<span class='howto'>".__('Separate tags with commas')."</span>
-				</p>
-				<div id='tagchecklist' class='tagchecklist' onload='tag_update_quickclicks();'></div>
-
-      </td>
-      
-    </tr>";
-$output .= "
-  </table>
- </div>
-</div>";
-$output = apply_filters('wpsc_product_category_and_tag_forms_output', $output);
-
-return $output;
-
-}
-function wpsc_product_price_and_stock_forms($product_data=''){
-	global $closed_postboxes, $wpdb, $variations_processor, $wpsc_product_defaults;
-	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
-	
-	if(!isset($product_data['meta']['_wpsc_table_rate_price'])) $product_data['meta']['_wpsc_table_rate_price'] = $wpsc_product_defaults['meta']['table_rate_price'];
-	$table_rate_price = $product_data['meta']['_wpsc_table_rate_price'];
-	
-	if(!isset($product_data['meta']['_wpsc_custom_tax'])) $product_data['meta']['_wpsc_custom_tax'] = '';
-	$custom_tax = $product_data['meta']['_wpsc_custom_tax'];
-	
-	if(!isset($product_data['meta']['_wpsc_is_donation'])) $product_data['meta']['_wpsc_is_donation'] = $wpsc_product_defaults['donation'];
-	if(!isset($product_meta['table_rate_price']['state'])) $product_meta['table_rate_price']['state'] = null;
-	
-	if(!isset($product_meta['custom_tax'])) $product_meta['custom_tax'] = '';
-	
-	if(!isset($product_meta['table_rate_price']['quantity'])) $product_meta['table_rate_price']['quantity'] = $wpsc_product_defaults['meta']['table_rate_price']['quantity'][0];
-	
-	if(!isset($product_meta['unpublish_when_none_left'])) $product_meta['unpublish_when_none_left'] = '';
-	
-	if ($product_data == 'empty') {
-		$display = "style='visibility:hidden;'";
-	}
-	echo "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox ".((array_search('wpsc_product_price_and_stock_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
-
-	echo "<h3 class='hndle'>";
-
-    echo __('Price and Stock Control', 'wpsc');
-    echo "
-	</h3>
-    <div class='inside'>
-    <table>
-    ";
+			<?php endif;
     echo "
     <tr>
-
        <td>
-          <input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
+          <br/><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
        </td>
     </tr>";
     
    // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
     ?>
      <tr>
-      <td>
+      <td><br/>
+
         <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo (((bool)$product_meta['table_rate_price']['state'] == true) ? 'checked=\'checked\'' : ''); ?> />
         
         
         <label for='table_rate_price'><?php echo __('Table Rate Price', 'wpsc'); ?></label>
-        <div style='display:<?php echo (($product_meta['table_rate_price'] != '') ? 'block' : 'none'); ?>;' id='table_rate'>
+        <div id='table_rate'>
           <a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
           <table>
 						<tr>
-							<td><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
+							<td><br /><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
 							<td><?php echo __('Discounted Price', 'wpsc'); ?></td>
 						</tr>
 						<?php
@@ -1160,8 +1196,8 @@ function wpsc_product_image_forms($product_data='') {
 ?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
 		<h3 class='hndle'> <?php echo	__('Product Images', 'wpsc'); ?></h3>
-		<div class='inside'>		
- 			<p><strong <?php if(isset($display)) echo $display; ?>><?php echo __('Manage your thumbnails', 'wpsc');?></strong></p>
+		<div class='inside'>
+			<p><strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage your images"><?php echo __('Manage your thumbnails', 'wpsc');?></a></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
@@ -1186,10 +1222,12 @@ function wpsc_product_download_forms($product_data='') {
 	$output .= "<h3 class='hndle'>".__('Product Downloads', 'wpsc')."</h3>";
 	$output .= "<div class='inside'>";
 	
-	$output .= "<h4>".__('Upload File', 'wpsc').":</h4>";
+	$output .= wpsc_select_product_file($product_data['id']);
+	
+	$output .= "<h4>".__('Upload New File', 'wpsc').":</h4>";
 	$output .= "<input type='file' name='file' value='' /><br />".__('Max Upload Size', 'wpsc')." : <span>".$upload_max."</span><br /><br />";
-	$output .= wpsc_select_product_file($product_data['id'])."<br />";
-    
+	$output .= "<h4>".__('<a href="admin.php?wpsc_admin_action=product_files_existing&product_id='.$product_data['id'].'" class="thickbox" title="Select from all product files for '.$product_data['name'].'">Select from existing files</a>', 'wpsc')."</h4>";
+	
 	if(isset($product_data['file']) && $product_data['file'] > 0) {
     	$output .= __('Preview File', 'wpsc').": ";
     	
@@ -1201,7 +1239,9 @@ function wpsc_product_download_forms($product_data='') {
     	}
     }
 	if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player")) {    
-    $output .="<h4>".__("Select an MP3 file to upload as a preview")."</h4>";
+
+	$output .= "<br />";
+	$output .="<h4>".__("Select an MP3 file to upload as a preview")."</h4>";
 	
 		$output .= "<input type='file' name='preview_file' value='' /><br />";
 		$output .= "<br />";
@@ -1237,27 +1277,27 @@ function wpsc_product_label_forms() {
       <div id="labels">
         <table>
         	<tr>
-        		<td><?=__('Label', 'wpsc')?> :</td>
+        		<td><?php _e('Label', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[labels][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('Label Description', 'wpsc')?> :</td>
+        		<td><?php _e('Label Description', 'wpsc')?> :</td>
         		<td><textarea name="productmeta_values[labels_desc][]"></textarea></td>
         	</tr>
         	<tr>
-        		<td><?=__('Life Number', 'wpsc')?> :</td>
+        		<td><?php _e('Life Number', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[life_number][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('Item Number', 'wpsc')?> :</td>
+        		<td><?php _e('Item Number', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[item_number][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('Product Code', 'wpsc')?> :</td>
+        		<td><?php _e('Product Code', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[product_code][]"></td>
         	</tr>
         	<tr>
-        		<td><?=__('PDF', 'wpsc')?> :</td>
+        		<td><?php _e('PDF', 'wpsc')?> :</td>
         		<td><input type="file" name="pdf[]"></td>
         	</tr>
         </table>
@@ -1303,7 +1343,7 @@ function edit_multiple_image_gallery($product_data) {
 							<a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
 								<img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' /><br />
 							</a>
-							<?php echo wpsc_main_product_image_menu($product_data['id']); ?>
+							<?php //echo wpsc_main_product_image_menu($product_data['id']); ?>
 						</div>
 					</li>
 					<?php
@@ -1324,14 +1364,14 @@ function edit_multiple_image_gallery($product_data) {
 	<?php
 }
 
-
+/*
 function wpsc_main_product_image_menu($product_id) {
   global $wpdb;
   $thumbnail_state = 0;
 	if($product_id > 0) 
 	{
 		//$main_image = $wpdb->get_row("SELECT `images`.*,  `product`.`thumbnail_state` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_id}' LIMIT 1", ARRAY_A);
-	//	$thumbnail_state = $main_image['thumbnail_state'];
+		$thumbnail_state = $main_image['thumbnail_state'];
 	} else {
 		$thumbnail_state = 1;
 	}
@@ -1384,7 +1424,7 @@ function wpsc_main_product_image_menu($product_id) {
 					</div>
 				</li>
 				<li>
-				<a href='<?php //echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_id); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
+				<a href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_id); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
 
 				</li>
 				<li>
@@ -1399,7 +1439,7 @@ function wpsc_main_product_image_menu($product_id) {
 	$output = ob_get_contents();
 	ob_end_clean();
 	return $output;
-}
+} */
 
   /**
 	* Displays the category forms for adding and editing products
