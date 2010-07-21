@@ -108,7 +108,7 @@ function wpsc_split_the_query($query) {
 	
 	
 	// check if we are viewing the checkout page, if so, override the query and make sure we see that page
-	if(($query->query_vars['products'] == $checkout_page || $query->query_vars['wpsc_product_category'] == $checkout_page)) {
+	if((isset($query->query_vars['products']) && ($query->query_vars['products'] == $checkout_page)) || (isset($query->query_vars['wpsc_product_category']) && ($query->query_vars['wpsc_product_category'] == $checkout_page))) {
 		$query->is_checkout = true;
 		
 		$query->query['pagename'] = "$products_page/$checkout_page";
@@ -137,7 +137,7 @@ function wpsc_split_the_query($query) {
 		unset($query->query_vars['products']);
 	} 
 	// check if we are viewing the transaction results page, if so, override the query and make sure we see that page
-	else if (($query->query_vars['products'] == $transaction_results_page || $query->query_vars['wpsc_product_category'] == $transaction_results_page)) {
+	else if ((isset($query->query_vars['products']) && ($query->query_vars['products'] == $transaction_results_page)) || (isset($query->query_vars['wpsc_product_category']) && ($query->query_vars['wpsc_product_category'] == $transaction_results_page))) {
 		$query->query['pagename'] = "$products_page/$transaction_results_page";
 		$query->query_vars['pagename'] = "$products_page/$transaction_results_page";
 		$query->query_vars['name'] = '';
@@ -163,7 +163,7 @@ function wpsc_split_the_query($query) {
 		
 		unset($query->query_vars['products']);
 		
-	} else if (($query->query_vars['products'] == $userlog_page || $query->query_vars['wpsc_product_category'] == $userlog_page)) {
+	} else if (((isset($query->query_vars['products']) && ($query->query_vars['products'] == $userlog_page)) || (isset($query->query_vars['wpsc_product_category']) && ($query->query_vars['wpsc_product_category'] == $userlog_page)))) {
 		$query->query['pagename'] = "$products_page/$userlog_page";
 		$query->query_vars['pagename'] = "$products_page/$userlog_page";
 		$query->query_vars['name'] = '';
@@ -268,7 +268,7 @@ function wpsc_generate_product_query($query) {
 	}
 
 	// If wpsc_item is not null, we are looking for a product or a product category, check for category
-	if($query->query_vars['wpsc_item'] != '') {
+	if(isset($query->query_vars['wpsc_item']) && ($query->query_vars['wpsc_item'] != '')) {
 		$test_term = get_term_by('slug', $query->query_vars['wpsc_item'], 'wpsc_product_category');
 		if($test_term->slug == $query->query_vars['wpsc_item']) {
 			// if category exists (slug matches slug), set products to value of wpsc_item
@@ -279,7 +279,7 @@ function wpsc_generate_product_query($query) {
 		}
 	}
 	
-	if(($query->query_vars['products'] != null) && ($query->query_vars['name'] != null)) {
+	if(isset($query->query_vars['products']) && ($query->query_vars['products'] != null) && ($query->query_vars['name'] != null)) {
         unset($query->query_vars['taxonomy']);
         unset($query->query_vars['term']);
 		$query->query_vars['post_type'] = 'wpsc-product';
@@ -299,7 +299,7 @@ function wpsc_generate_product_query($query) {
 
 function wpsc_mark_product_query($query) {
 
-	if($query->query_vars['post_type'] == 'wpsc-product') {
+	if(isset($query->query_vars['post_type']) && ($query->query_vars['post_type'] == 'wpsc-product')) {
 		$query->is_product = true;
 	}
 	return $query;
@@ -447,7 +447,10 @@ function wpsc_break_canonical_redirects($redirect_url, $requested_url) {
  */
 function wpsc_is_product() {
 	global $wp_query, $rewrite_rules;
-	return $wp_query->is_product;
+	$tmp = false;
+	if (isset($wp_query->is_product))
+		$tmp = $wp_query->is_product;
+	return $tmp;
 }
 
 /**
@@ -459,7 +462,10 @@ function wpsc_is_product() {
  */
 function wpsc_is_checkout() {
 	global $wp_query, $rewrite_rules;
-	return $wp_query->is_checkout;
+	$tmp = false;
+	if (isset($wp_query->is_checkout))
+		$tmp = $wp_query->is_checkout;
+	return $tmp;
 }
 
 
@@ -476,6 +482,7 @@ function wpsc_is_checkout() {
  */
 function wpsc_product_link($permalink, $post, $leavename) {
 	global $wp_query, $wpsc_page_titles;
+	$term_url = '';
 	$rewritecode = array(
 		'%wpsc_product_category%',
 		'%postname%'
@@ -516,8 +523,15 @@ function wpsc_product_link($permalink, $post, $leavename) {
 			$term_url = get_term_link($category_slug, 'wpsc_product_category');
 		} else {
 			// If the product is associated with only one category, we only have one choice
+			if(!isset($product_categories[0])) $product_categories[0] = '';
 			$product_category = $product_categories[0];
+			//if(!isset($product_category->slug)) $product_category->slug="";
+			
+			if (!is_object($product_category)) $product_category = new stdClass();
+			if (!isset($product_category->slug)) $product_category->slug = null;
+			
 			$category_slug = $product_category->slug;
+			
 			$term_url = get_term_link($category_slug, 'wpsc_product_category');
 		}
 		

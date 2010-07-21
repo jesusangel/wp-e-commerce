@@ -42,7 +42,7 @@ function wpsc_display_categories_page() {
 	
 	<div class="wrap">
 		<?php // screen_icon(); ?>
-		<h2><?php echo wp_specialchars( __('Display categories', 'wpsc') ); ?> </h2>
+		<h2><?php echo esc_html( __('Display categories', 'wpsc') ); ?> </h2>
 		<p>
 				<?php echo __('Categorizing your products into groups help your customers find them. '.
 				'For instance if you sell hats and trousers you	might want to setup a Group called clothes and add hats and trousers to that group.', 'wpsc');?>
@@ -102,10 +102,13 @@ function wpsc_display_categories_page() {
 } ?>
 					<form id="modify-category-groups" method="post" action="" enctype="multipart/form-data" >
 					<?php
-						wpsc_admin_category_forms($_GET['category_id']);
+						$category_id = null;
+						if (isset($_GET['category_id']))
+							$category_id = $_GET['category_id'];
+						wpsc_admin_category_forms($category_id);
 					?>
 					</form>
-					<?php if ( isset( $_GET["category_id"] ) ) { echo "</div>";} ?>
+					<?php if ( isset( $category_id ) ) { echo "</div>";} ?>
 				</div>
 			</div>
 		</div>
@@ -222,14 +225,14 @@ function wpsc_admin_category_forms($category_id =  null) {
 				<?php echo __('Name', 'wpsc'); ?>:
 			</td>
 			<td>
-				<input type='text'  class="text" name='name' value='<?php echo $category['name']; ?>' />
+				<input type='text'  class="text" name='name' value='<?php if(isset($category['name'])) echo $category['name']; ?>' />
 			</td>
 		</tr>
 		
 		<tr>
 			<td><?php _e('Description', 'wpsc'); ?> </td>
 			<td>
-			<textarea name='description' cols='40' rows='8' ><?php echo stripslashes($category['description']); ?></textarea>
+			<textarea name='description' cols='40' rows='8' ><?php if (isset($category['description'])) echo stripslashes($category['description']); ?></textarea>
 			</td>
 		</tr>
 		</tr>
@@ -259,7 +262,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 		</tr>
 		<?php
 		if(function_exists("getimagesize")) {
-			if($category['image'] != '') {
+			if(isset($category['image']) && ($category['image'] != '')) {
 			$imagepath = WPSC_CATEGORY_DIR . $category['image'];
 			$imagetype = @getimagesize($imagepath); //previously exif_imagetype()
 			?>
@@ -291,7 +294,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 						<?php _e('Width', 'wpsc'); ?>
 						<input type='text' size='6' name='width' value='<?php echo get_option('product_image_width'); ?>' />
 						<br />
-						<span class='wpscsmall description'><?php echo $nzshpcrt_imagesize_info; ?></span>
+						<span class='wpscsmall description'><?php if (isset($nzshpcrt_imagesize_info)) echo $nzshpcrt_imagesize_info; ?></span>
 						<br />
 						
 						<span class='wpscsmall description'>
@@ -321,10 +324,13 @@ function wpsc_admin_category_forms($category_id =  null) {
 		<div class="inside">
 		<?php
 	
-	 /* START OF TARGET MARKET SELECTION */					
+	 /* START OF TARGET MARKET SELECTION */
+	$category_id = '';	
+	if (isset($_GET["category_id"])) $category_id = $_GET["category_id"];		
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
-	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$_GET["category_id"]." AND visible= 1");
+	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$category_id." AND visible= 1");
 //	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
+	$output = '';
 	$output .= " <tr>\n\r";
 	$output .= " 	<td>\n\r";
 	$output .= __('Target Markets', 'wpsc').":\n\r";
@@ -370,6 +376,8 @@ function wpsc_admin_category_forms($category_id =  null) {
 			</td>
 			<td>
 			<?php
+				if (!isset($category['display_type'])) $category['display_type'] = '';
+				
 				if ($category['display_type'] == 'grid') {
 					$display_type1="selected='selected'";
 				} else if ($category['display_type'] == 'default') {
@@ -400,16 +408,16 @@ function wpsc_admin_category_forms($category_id =  null) {
 				?>
 				<select name='display_type'>	
 					<option value=''<?php echo $category_view0; ?> ><?php _e('Please select', 'wpsc'); ?></option>	
-					<option value='default' <?php echo $category_view1; ?> ><?php _e('Default View', 'wpsc'); ?></option>	
+					<option value='default' <?php if (isset($category_view1)) echo $category_view1; ?> ><?php _e('Default View', 'wpsc'); ?></option>	
 					<?php	if(function_exists('product_display_list')) {?> 
 						<option value='list' <?php echo  $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option> 
 					<?php	} else { ?>
-						<option value='list' disabled='disabled' <?php echo $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option>
+						<option value='list' disabled='disabled' <?php if (isset($category_view2)) echo $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option>
 					<?php	} ?>
 					<?php if(function_exists('product_display_grid')) { ?>
-						<option value='grid' <?php echo  $category_view3; ?>><?php _e('Grid View', 'wpsc'); ?></option>
+						<option value='grid' <?php if (isset($category_view3)) echo  $category_view3; ?>><?php _e('Grid View', 'wpsc'); ?></option>
 					<?php	} else { ?>
-						<option value='grid' disabled='disabled' <?php echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
+						<option value='grid' disabled='disabled' <?php if (isset($category_view3)) echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
 					<?php	} ?>	
 				</select>	<br /><br />
 			</td>
@@ -422,8 +430,8 @@ function wpsc_admin_category_forms($category_id =  null) {
 				<?php _e('Thumbnail&nbsp;Size', 'wpsc'); ?> 
 				</td>
 				<td>
-				<?php _e('Height', 'wpsc'); ?> <input type='text' value='<?php echo $category['image_height']; ?>' name='product_height' size='6'/> 
-				<?php _e('Width', 'wpsc'); ?> <input type='text' value='<?php echo $category['image_width']; ?>' name='product_width' size='6'/> <br/>
+				<?php _e('Height', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_height'])) echo $category['image_height']; ?>' name='product_height' size='6'/> 
+				<?php _e('Width', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_width'])) echo $category['image_width']; ?>' name='product_width' size='6'/> <br/>
 				</td>
 			</tr>
 		<?php	} ?>
@@ -434,7 +442,9 @@ function wpsc_admin_category_forms($category_id =  null) {
 <h3 class="hndle"><?php _e('Checkout Settings', 'wpsc'); ?></h3>
 <div class="inside">
 <table class='category_forms'>
-		<?php		$used_additonal_form_set = wpsc_get_categorymeta($category['term_id'], 'use_additonal_form_set'); ?>
+		<?php		
+		if (!isset($category['term_id'])) $category['term_id'] = '';
+		$used_additonal_form_set = wpsc_get_categorymeta($category['term_id'], 'use_additonal_form_set'); ?>
 			<tr>
 				<td>
 				<?php _e("This category requires additional checkout form fields",'wpsc'); ?>

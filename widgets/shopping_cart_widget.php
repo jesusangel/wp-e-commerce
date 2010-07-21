@@ -70,16 +70,16 @@ function widget_wp_shopping_cart_control() {
 }
 
  function widget_wp_shopping_cart_init() {
-   if(function_exists('register_sidebar_widget')) {
+   if(function_exists('wp_register_sidebar_widget')) {
 		$widget_ops['description'] = "Your most used tags in cloud format";
-    register_sidebar_widget('Shopping Cart', 'widget_wp_shopping_cart', $widget_ops);
-    register_widget_control('Shopping Cart', 'widget_wp_shopping_cart_control');
+    wp_register_sidebar_widget('widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart', $widget_ops);
+    wp_register_widget_control('widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart_control');
     $GLOBALS['wpsc_cart_widget'] = true;
     if(get_option('cart_location') == 1) {
       update_option('cart_location', 4);
       remove_action('wp_list_pages','nzshpcrt_shopping_basket');
 		}
-    #register_widget_control('Shopping Cart', 'widget_wp_shopping_cart_control', 300, 90);
+    #wp_register_widget_control('Shopping Cart', 'widget_wp_shopping_cart_control', 300, 90);
 	}
 	return;
 }

@@ -24,7 +24,7 @@ function wpsc_ajax_add_tracking() {
 }
  
  
-if($_REQUEST['submit'] == 'Add Tracking ID') {
+if(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'Add Tracking ID')) {
 	add_action('admin_init', 'wpsc_ajax_add_tracking');
 }
  function wpsc_delete_currency_layer() {
@@ -35,7 +35,7 @@ if($_REQUEST['submit'] == 'Add Tracking ID') {
 }
  
  
-if($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer')) {
 	add_action('admin_init', 'wpsc_delete_currency_layer');
 }
 
@@ -61,7 +61,7 @@ if($_REQUEST['wpsc_admin_action'] == 'delete_currency_layer') {
 }
 
  
-if($_REQUEST['wpsc_admin_action'] == 'purchlog_email_trackid') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'purchlog_email_trackid')) {
 	add_action('admin_init', 'wpsc_purchlog_email_trackid');
 }
 
@@ -69,6 +69,9 @@ function wpsc_ajax_sales_quarterly() {
   	global $wpdb;
   	$lastdate = $_POST['add_start'];
   	$date = preg_split('/-/', $lastdate);
+  	if (!isset($date[0])) $date[0] = 0;
+  	if (!isset($date[1])) $date[1] = 0;
+  	if (!isset($date[2])) $date[2] = 0;
   	$lastquart = mktime(0,0,0,$date[1], $date[2], $date[0]);
   	//$lastdate = date('M d y', $lastquart);
   	if($lastquart != get_option('wpsc_last_quarter')){  		
@@ -90,7 +93,7 @@ function wpsc_ajax_sales_quarterly() {
 }
  
  
-if($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly')) {
 	add_action('admin_init', 'wpsc_ajax_sales_quarterly');
 }
 
@@ -105,7 +108,7 @@ function wpsc_ajax_load_product() {
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'load_product') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'load_product')) {
 	add_action('admin_init', 'wpsc_ajax_load_product');
 }
 
@@ -157,7 +160,7 @@ function wpsc_crop_thumb() {
 }
  
   
- if($_REQUEST['wpsc_admin_action'] == 'crop_thumb') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'crop_thumb')) {
 	add_action('admin_init', 'wpsc_crop_thumb');
 } 
 
@@ -189,7 +192,7 @@ function wpsc_delete_file() {
 }
 
  
- if($_REQUEST['wpsc_admin_action'] == 'delete_file') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'delete_file')) {
 	add_action('admin_init', 'wpsc_delete_file');
 } 
  
@@ -287,7 +290,7 @@ function wpsc_bulk_modify_products() {
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'bulk_modify') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'bulk_modify')) {
 	add_action('admin_init', 'wpsc_bulk_modify_products');
 }
 
@@ -313,7 +316,7 @@ function wpsc_modify_product_price() {
 }
 
  
- if($_REQUEST['wpsc_admin_action'] == 'modify_price') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'modify_price')) {
 	add_action('admin_init', 'wpsc_modify_product_price');
 }
 
@@ -341,7 +344,7 @@ function wpsc_modify_sales_product_price() {
 }
 
  
- if($_REQUEST['wpsc_admin_action'] == 'modify_sales_price') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'modify_sales_price')) {
 	add_action('admin_init', 'wpsc_modify_sales_product_price');
 }
 
@@ -370,7 +373,7 @@ function wpsc_modify_sku() {
 }
 
  
-if($_REQUEST['wpsc_admin_action'] == 'modify_sku') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'modify_sku')) {
 	add_action('admin_init', 'wpsc_modify_sku');
 }
 
@@ -407,7 +410,7 @@ function wpsc_modify_weight() {
 	exit();
 }
  
-if($_REQUEST['wpsc_admin_action'] == 'modify_weight') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'modify_weight')) {
 	add_action('admin_init', 'wpsc_modify_weight');
 }
 
@@ -435,7 +438,7 @@ function wpsc_modify_stock() {
 }
 
  
-if($_REQUEST['wpsc_admin_action'] == 'modify_stock') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'modify_stock')) {
 	add_action('admin_init', 'wpsc_modify_stock');
 }
     
@@ -471,7 +474,7 @@ function wpsc_delete_product() {
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'trash') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'trash')) {
 	add_action('admin_init', 'wpsc_delete_product');
 }
  
@@ -491,7 +494,7 @@ function wpsc_ajax_toggle_published() {
 }
  
  
- if($_REQUEST['wpsc_admin_action'] == 'toggle_publish') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'toggle_publish')) {
 	add_action('admin_init', 'wpsc_ajax_toggle_published');
 }
 
@@ -651,7 +654,7 @@ function wpsc_duplicate_children($old_parent_id, $new_parent_id) {
 		}
 	}
 
-if ($_GET['wpsc_admin_action'] == 'duplicate_product') {
+if (isset($_GET['wpsc_admin_action']) && ($_GET['wpsc_admin_action'] == 'duplicate_product')) {
 	add_action('admin_init', 'wpsc_duplicate_product');
 }
  
@@ -730,7 +733,8 @@ function wpsc_purchase_log_csv() {
     exit();
 	}
 }
- if($_REQUEST['wpsc_admin_action'] == 'wpsc_downloadcsv') {
+
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_downloadcsv')) {
 	add_action('admin_init', 'wpsc_purchase_log_csv');
 }
 
@@ -1099,7 +1103,8 @@ function wpsc_display_invoice() {
   //wpsc_packing_slip($purchase_id);
   exit();
 }
- if($_REQUEST['wpsc_admin_action'] == 'wpsc_display_invoice') {
+
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_display_invoice')) {
 	add_action('admin_init', 'wpsc_display_invoice');
 }
  
@@ -1113,7 +1118,7 @@ function wpsc_save_inline_price() {
 	exit($new_price);
 }
 
-if($_GET['inline_price']=='true') {
+if(isset($_GET['inline_price']) && ($_GET['inline_price']=='true')) {
 	add_action('admin_init', 'wpsc_save_inline_price', 0);
 }
 
@@ -1359,7 +1364,7 @@ function wpsc_purchlog_clear_download_items(){
 	}
 
 }
-if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'clear_locks')) {
 	add_action('admin_init', 'wpsc_purchlog_clear_download_items');
 }
  
@@ -1370,7 +1375,7 @@ if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
  	//wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
  } 
  
- if($_REQUEST['wpsc_admin_action'] == 'purchlogs_search') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'purchlogs_search')) {
 	add_action('admin_init', 'wpsc_purchlog_search_by');
 }
  //call to change view for purchase log
@@ -1380,7 +1385,7 @@ if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
  	wpsc_change_purchlog_view($_POST['view_purchlogs_by'], $_POST['view_purchlogs_by_status']);
  } 
  
- if($_REQUEST['wpsc_admin_action'] == 'purchlog_filter_by') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'purchlog_filter_by')) {
 	add_action('admin_init', 'wpsc_purchlog_filter_by');
 }
  //bulk actions for purchase log
@@ -1419,7 +1424,7 @@ function wpsc_purchlog_bulk_modify(){
 	exit();
 }
 
-if($_REQUEST['wpsc_admin_action2'] == 'purchlog_bulk_modify') {
+if(isset($_REQUEST['wpsc_admin_action2']) && ($_REQUEST['wpsc_admin_action2'] == 'purchlog_bulk_modify')) {
 	add_action('admin_init', 'wpsc_purchlog_bulk_modify');
 }
 //edit purchase log status function
@@ -1448,7 +1453,7 @@ function wpsc_purchlog_edit_status($purchlog_id='', $purchlog_status='') {
 	}
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status')) {
 	add_action('admin_init', 'wpsc_purchlog_edit_status');
 }
 /*
@@ -1476,7 +1481,7 @@ function wpsc_save_product_order() {
 }
  
  
-if($_REQUEST['wpsc_admin_action'] == 'save_product_order') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'save_product_order')) {
 	add_action('admin_init', 'wpsc_save_product_order');
 }
 
@@ -1497,7 +1502,7 @@ function wpsc_save_checkout_order() {
 }
  
  
-if($_REQUEST['wpsc_admin_action'] == 'save_checkout_order') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'save_checkout_order')) {
 	add_action('admin_init', 'wpsc_save_checkout_order');
 }
 /* Start Order Notes (by Ben) */
@@ -1512,7 +1517,7 @@ function wpsc_purchlogs_update_notes($purchlog_id = '', $purchlog_notes = '' ) {
 	}
 }
 
-if ( $_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' ) {
+if (isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' )) {
 	add_action('admin_init', 'wpsc_purchlogs_update_notes');
 }
 /* End Order Notes (by Ben) */
@@ -1556,7 +1561,7 @@ function wpsc_delete_purchlog($purchlog_id='') {
  
  
  
- if($_REQUEST['wpsc_admin_action'] == 'delete_purchlog') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'delete_purchlog')) {
 	add_action('admin_init', 'wpsc_delete_purchlog');
 }
  
@@ -1589,13 +1594,13 @@ function wpsc_crop_thumbnail_html() {
  
  
  
-if ($_REQUEST['wpsc_admin_action'] == 'crop_image') {
+if (isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'crop_image')) {
 	add_action('admin_init','wpsc_crop_thumbnail_html');
 }
  
  
  
-if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'get_shipping_form')) {
 	add_action('admin_init', 'wpsc_ajax_get_shipping_form');
 }
 
@@ -1608,9 +1613,15 @@ if($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') {
  */
 function wpsc_submit_options($selected='') {
   global $wpdb, $wpsc_gateways;
+  $updated = 0;
+     
 	//This is to change the Overall target market selection
 	check_admin_referer('update-options', 'wpsc-update-options');
 
+	if (!isset($_POST['countrylist2'])) $_POST['countrylist2'] = '';
+	if (!isset($_POST['country_id'])) $_POST['country_id'] = '';
+	if (!isset($_POST['country_tax'])) $_POST['country_tax'] = '';
+	
 	 if($_POST['countrylist2'] != null || $selected != ''){
     	$AllSelected = false;
     	if( $selected == 'all'){
@@ -1682,11 +1693,14 @@ function wpsc_submit_options($selected='') {
  	}
 
 	foreach($GLOBALS['wpsc_shipping_modules'] as $shipping) {
-		$shipping->submit_form();
+		if (is_object($shipping))
+			$shipping->submit_form();
 	}
 
 
 	//This is for submitting shipping details to the shipping module
+	if (!isset($_POST['update_gateways'])) $_POST['update_gateways'] = '';
+	if(!isset($_POST['custom_shipping_options'])) $_POST['custom_shipping_options'] = null;
  	if($_POST['update_gateways'] == 'true') {
 
 		update_option('custom_shipping_options', $_POST['custom_shipping_options']);
@@ -1710,6 +1724,10 @@ function wpsc_submit_options($selected='') {
 	if ( isset($shipadd) ) {
 		$sendback = add_query_arg('shipadd', $shipadd, $sendback);
 	}
+	
+	//if (!isset($_SESSION['wpsc_settings_curr_page'])) $_SESSION['wpsc_settings_curr_page'] = 'presentation';
+	if (!isset($_SESSION['wpsc_settings_curr_page'])) $_SESSION['wpsc_settings_curr_page'] = '';
+	if (!isset($_POST['page_title'])) $_POST['page_title'] = '';
 	if(isset($_SESSION['wpsc_settings_curr_page'])){
 			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
 	}
@@ -1721,7 +1739,7 @@ function wpsc_submit_options($selected='') {
  
  
 
- if($_REQUEST['wpsc_admin_action'] == 'submit_options') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'submit_options')) {
 	add_action('admin_init', 'wpsc_submit_options');
 }
 
@@ -1737,7 +1755,7 @@ function wpsc_change_currency(){
 		echo $currency_sign;
 	}
 }
- if($_REQUEST['wpsc_admin_action'] == 'change_currency') {
+ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'change_currency')) {
 	add_action('admin_init', 'wpsc_change_currency');
 }
 
@@ -1766,7 +1784,7 @@ function wpsc_rearrange_images() {
 	echo "image_id = '".$new_main_image."';\n\r";
 	exit();
 }
-if($_REQUEST['wpsc_admin_action'] == 'rearrange_images') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'rearrange_images')) {
 	add_action('admin_init', 'wpsc_rearrange_images');
 }
 
@@ -1810,7 +1828,7 @@ function wpsc_delete_images() {
 	exit();
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'delete_images') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'delete_images')) {
 	add_action('admin_init', 'wpsc_delete_images');
 }
 
@@ -1850,7 +1868,8 @@ function wpsc_update_page_urls(){
 
 exit();
 }
- if($_REQUEST['wpsc_admin_action'] == 'update_page_urls') {
+
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'update_page_urls')) {
 	add_action('admin_init', 'wpsc_update_page_urls');
 }
 
@@ -1890,7 +1909,8 @@ global $wpdb, $wp_rewrite;
 
 exit();
 }
- if($_REQUEST['wpsc_admin_action'] == 'clean_categories') {
+
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'clean_categories')) {
 	add_action('admin_init', 'wpsc_clean_categories');
 }
 
@@ -1913,7 +1933,7 @@ global $wpdb;
 	}
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'change_region_tax') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'change_region_tax')) {
 	add_action('admin_init', 'wpsc_change_region_tax');
 }
 
@@ -1971,13 +1991,13 @@ function wpsc_product_files_existing() {
 	
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'product_files_existing') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'product_files_existing')) {
 	add_action('admin_init', 'wpsc_product_files_existing');
 }
 
 function prod_upload() {
 global $wpdb, $product_id;
-if($_REQUEST['wpsc_admin_action'] == 'product_files_upload')  {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'product_files_upload'))  {
 
 	foreach ($_REQUEST["select_product_file"] as $file) {
 				$duplicate = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE post_type = 'wpsc-product-file' AND post_title = '$file'", ARRAY_A);
@@ -2055,7 +2075,7 @@ function wpsc_gateway_settings(){
 	exit();
 
 }
-  if($_REQUEST['wpsc_gateway_settings'] == 'gateway_settings') {
+  if(isset($_REQUEST['wpsc_gateway_settings']) && ($_REQUEST['wpsc_gateway_settings'] == 'gateway_settings')) {
 	add_action('admin_init', 'wpsc_gateway_settings');
 }
 function wpsc_check_form_options(){
@@ -2078,7 +2098,7 @@ function wpsc_check_form_options(){
 	}
 	exit($output);
 }	
-if($_REQUEST['wpsc_admin_action']=='check_form_options'){
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action']=='check_form_options')){
 	add_action('admin_init','wpsc_check_form_options');
 }
 
@@ -2102,16 +2122,18 @@ function wpsc_checkout_settings(){
 	  }
 
 		// Save checkout options
+		if (!isset($_POST['wpsc_checkout_option_label'])) $_POST['wpsc_checkout_option_label'] = '';
+		
 	    if(is_array($_POST['wpsc_checkout_option_label'])){
 	    	foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
 	    		$options = array();
-				foreach((array)$values as $key => $form_option){
-					$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
-				}
-			
-				$options = serialize($options);
-				$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id;
-				$wpdb->query($sql);
+					foreach((array)$values as $key => $form_option){
+						$options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
+					}
+				
+					$options = serialize($options);
+					$sql = "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `options`='".$options."' WHERE id=".$form_id;
+					$wpdb->query($sql);
 	    	}
 	    }
 	    
@@ -2121,9 +2143,9 @@ function wpsc_checkout_settings(){
 					$form_name = $wpdb->escape($form_name);
 		      $form_type = $wpdb->escape($_POST['form_type'][$form_id]);
 		      $form_mandatory = 0;
-		      if($_POST['form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
+		      if(isset($_POST['form_mandatory'][$form_id]) && ($_POST['form_mandatory'][$form_id] == 1)) {  $form_mandatory = 1;  }
 		      $form_display_log = 0;
-		      if($_POST['form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }
+		      if(isset($_POST['form_display_log'][$form_id]) && ($_POST['form_display_log'][$form_id] == 1)) {  $form_display_log = 1;  }
 		      $unique_name = '';
 		      if($_POST['unique_names'][$form_id] != '-1'){ $unique_name = $_POST['unique_names'][$form_id];  }
 		    //  $form_order = $_POST['form_order'][$form_id];
@@ -2134,18 +2156,18 @@ function wpsc_checkout_settings(){
 			}
 		}
 		
-	  if($_POST['new_form_name'] != null) {
+	  if(isset($_POST['new_form_name'])) {
 	    foreach($_POST['new_form_name'] as $form_id => $form_name) {
 	      $form_type = $_POST['new_form_type'][$form_id];
 	      $form_mandatory = 0;
 	      if($_POST['new_form_mandatory'][$form_id] == 1) {  $form_mandatory = 1;  }
 	      $form_display_log = 0;
-	      if($_POST['new_form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }		 
+	      if(isset($_POST['new_form_display_log'][$form_id]) && $_POST['new_form_display_log'][$form_id] == 1) {  $form_display_log = 1;  }		 
 	      if($_POST['new_form_unique_name'][$form_id] != '-1') {  $form_unique_name = $_POST['new_form_unique_name'][$form_id];  }
 	    
 	      $max_order_sql = "SELECT MAX(`order`) AS `order` FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1';";
 	      
-	      if($_POST['new_form_order'][$form_id] != '') {
+	      if(isset($_POST['new_form_order'][$form_id]) && $_POST['new_form_order'][$form_id] != '') {
 	        $order_number = $_POST['new_form_order'][$form_id];
 				} else {
 					$max_order_sql = $wpdb->get_results($max_order_sql,ARRAY_A);
@@ -2188,7 +2210,7 @@ function wpsc_checkout_settings(){
 }
 
 
-if($_REQUEST['wpsc_admin_action'] == 'checkout_settings') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'checkout_settings')) {
 	add_action('admin_init', 'wpsc_checkout_settings');
 }
 
@@ -2214,7 +2236,7 @@ function wpsc_google_shipping_settings(){
 	}
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'google_shipping_settings') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'google_shipping_settings')) {
 	add_action('admin_init', 'wpsc_google_shipping_settings');
 }
 
@@ -2229,7 +2251,8 @@ function wpsc_settings_page_ajax(){
 	//require_once('includes/settings-pages/'.$functionname1.'.php');
 	//$functionname = "wpsc_options_".$functionname1;
 	//$html = $functionname();
-
+	$html = "";
+	
 	switch($page_title) {
 		case "checkout";
 		require_once('includes/settings-pages/checkout.php');
@@ -2269,11 +2292,12 @@ function wpsc_settings_page_ajax(){
 		wpsc_options_general();
 		break;
 	}	
+
 	$_SESSION['wpsc_settings_curr_page'] = $page_title;
 	exit($html);
 }
   
-if($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax')) {
 	add_action('admin_init', 'wpsc_settings_page_ajax');
 }
 
@@ -2290,7 +2314,7 @@ function wpsc_trigger_copy_themes(){
 	exit();
 }
 
-if($_REQUEST['wpsc_admin_action'] == 'copy_themes') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'copy_themes')) {
 	add_action('admin_init', 'wpsc_trigger_copy_themes');
 }
 
@@ -2331,7 +2355,7 @@ function wpsc_mass_resize_thumbnails() {
 	exit();
 }
   
-if($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails')) {
 	add_action('admin_init', 'wpsc_mass_resize_thumbnails');
 }
  
@@ -2410,46 +2434,46 @@ function wpsc_delete_category() {
 }
 
 //other actions are here
-if($_GET['display_invoice']=='true') {
+if(isset($_GET['display_invoice']) && ($_GET['display_invoice']=='true')) {
   add_action('admin_init', 'wpsc_display_invoice', 0);
 }
 
 
 
- if($_REQUEST['wpsc_admin_action'] == 'wpsc_add_image') {
+ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_add_image')) {
 	add_action('admin_init','wpsc_swfupload_images');
 }
 
- if($_REQUEST['wpsc_admin_action'] == 'edit_product') {
+ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'edit_product')) {
 	add_action('admin_init', 'wpsc_admin_submit_product');
 }
  
 
-if($_GET['action'] == "purchase_log") {
+if(isset($_GET['action']) && ($_GET['action'] == "purchase_log")) {
 	add_action('admin_init', 'wpsc_admin_sale_rss');
 }
 
 
-if($_GET['purchase_log_csv'] == "true") {
+if(isset($_GET['purchase_log_csv']) && ($_GET['purchase_log_csv'] == "true")) {
 	add_action('admin_init', 'wpsc_purchase_log_csv');
 }
 
-if(($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
+if(isset($_REQUEST['ajax']) && isset($_REQUEST['admin']) && ($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true")) {
 	add_action('admin_init', 'wpsc_admin_ajax');
 }
 
 // Variation set deleting init code starts here
-if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set')) {
 	add_action('admin_init', 'wpsc_delete_variation_set');
 }
 
 // Variation set deleting init code starts here
-if($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-category') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-category')) {
 	add_action('admin_init', 'wpsc_delete_category');
 }
 
 // Category modification init code starts here
-if($_REQUEST['wpsc_admin_action'] == 'wpsc-category-set') {
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-category-set')) {
 	add_action('admin_init', 'wpsc_save_category_set');
 }
 ?>

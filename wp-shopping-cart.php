@@ -152,7 +152,7 @@ require_once(WPSC_FILE_PATH."/wpsc-includes/merchant.class.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/meta.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/productfeed.php");
 //exit(print_r($v1,true));
-if($v1[0] >= 2.8){
+if(isset($v1[0]) && ($v1[0] >= 2.8)){
 	require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
 }
 
@@ -172,7 +172,9 @@ $wpsc_currency_data = array();
 $wpsc_title_data = array();
 $GLOBALS['nzshpcrt_imagesize_info'] = __('Note: if this is blank, the image will not be resized', 'wpsc');
 $nzshpcrt_log_states[0]['name'] = __('Order Received', 'wpsc');
-$nzshpcrt_log_states[1]['name'] = TXT_WPSC_PROCESSING;
+$nzshpcrt_log_states[1]['name'] = '';
+if (defined('TXT_WPSC_PROCESSING')) 
+	$nzshpcrt_log_states[1]['name'] = TXT_WPSC_PROCESSING;
 $nzshpcrt_log_states[2]['name'] = __('Closed Order', 'wpsc');
 
 
@@ -204,7 +206,7 @@ include_once(WPSC_FILE_PATH.'/image_processing.php');
 
 
 // if we are in the admin section, include the admin code
-if(WP_ADMIN == true) {
+if(defined('WP_ADMIN') && (WP_ADMIN == true)) {
 	require_once(WPSC_FILE_PATH."/wpsc-admin/admin.php");
 }
 
@@ -232,8 +234,13 @@ if(IS_WPMU == 1) {
 
 $wp_upload_dir_data = wp_upload_dir();
 //echo "<pre>".print_r($wp_upload_dir_data, true)."</pre>";
-$upload_path = $wp_upload_dir_data['basedir'];
-$upload_url = $wp_upload_dir_data['baseurl'];
+$upload_path = '';
+$upload_url = '';
+
+if (isset($wp_upload_dir_data['basedir'])) {
+	$upload_path = $wp_upload_dir_data['basedir'];
+	$upload_url = $wp_upload_dir_data['baseurl'];
+}
 
 if(is_ssl()) {
 	 $upload_url = str_replace("http://", "https://", $upload_url);
@@ -356,7 +363,7 @@ if(count(explode(".",$current_version_number)) > 2) {
 
 
 //if there are any upgrades present, include them., thanks to nielo.info and lsdev.biz
-if($v1[0] >= 2.8){
+if(isset($v1[0]) && ($v1[0] >= 2.8)){
 	$upgrades = get_upgrades();
 	foreach ($upgrades as $path=>$upgrade) {
 		$upgrade_file = WPSC_UPGRADES_DIR . '/' . $path;
@@ -375,7 +382,7 @@ register_activation_hook(__FILE__, 'wpsc_install');
 if(!function_exists('wpsc_start_the_query')) {
 	function wpsc_start_the_query() {
 		global $wp_query, $wpsc_query, $wpsc_query_vars;
-		
+		$post_id = 0;
 		  
 		if($wpsc_query == null) {
 			if(count($wpsc_query_vars) < 1) {
@@ -411,8 +418,8 @@ if(!function_exists('wpsc_start_the_query')) {
 		
 		//echo "<pre>".print_r($wpsc_query_vars,true)."</pre>";
 		//echo "<pre>".print_r($wpsc_query,true)."</pre>";
-		
-		$post_id = $wp_query->post->ID;
+		if(isset($wp_query->post->ID))
+			$post_id = $wp_query->post->ID;
 		$page_url = get_permalink($post_id);
 		if(get_option('shopping_cart_url') == $page_url) {
 			$_SESSION['wpsc_has_been_to_checkout'] = true;
@@ -428,6 +435,9 @@ add_action('template_redirect', 'wpsc_start_the_query', 0);
 /**
  * Check to see if the session exists, if not, start it
  */
+
+if (!isset($_SESSION)) $_SESSION = null;
+
 if((!is_array($_SESSION)) xor (!isset($_SESSION['nzshpcrt_cart'])) xor (!$_SESSION)) {
   session_start();
 }
@@ -732,7 +742,7 @@ jQuery('.featured_toggle_<?php echo $product_id; ?>').html("<img class='grey-sta
  	}
  
  
-	if($_REQUEST['wpsc_admin_action'] == 'update_featured_product') {
+	if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'update_featured_product')) {
 		add_action('admin_init', 'wpsc_update_featured_products');
 	}
 	

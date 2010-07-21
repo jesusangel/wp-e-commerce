@@ -125,9 +125,13 @@ function paypal_certified_currencyconverter(){
 function processingfunctions()
 {
 global $wpdb, $wpsc_cart;
-$sessionid = $_SESSION['paypalexpresssessionid'];
 
-	if($_REQUEST['act']=='error'){
+$sessionid = '';
+if (isset($_SESSION['paypalexpresssessionid'])) {
+	$sessionid = $_SESSION['paypalexpresssessionid'];
+}
+
+	if(isset($_REQUEST['act']) && ($_REQUEST['act']=='error')){
 		session_start();
 		$resArray=$_SESSION['reshash']; 
 $_SESSION['paypalExpressMessage']= '
@@ -207,7 +211,7 @@ $_SESSION['paypalExpressMessage']= '
 	</center>
 		</table>";
 
-}else if($_REQUEST['act']=='do'){
+}else if(isset($_REQUEST['act']) && ($_REQUEST['act']=='do')){
 	session_start();
 	
 	/* Gather the information to make the final call to
@@ -763,6 +767,7 @@ $output .= "
 	*/
 	//$SandboxFlag = true;
 	//exit(get_option('paypal_certified_server_type'));
+	$SandboxFlag = '';
   	if (get_option('paypal_certified_server_type') == 'sandbox'){
 		$SandboxFlag=true;
 	} elseif(get_option('paypal_certified_server_type') == 'production') {

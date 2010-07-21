@@ -31,7 +31,7 @@ function wpsc_list_categories($callback_function, $parameters = null, $category_
 				$output .= $callback_output;  
 			}
 			$output .= wpsc_list_categories($callback_function, $parameters , $category->term_id, ($level+1));
-			if(is_array($callback_output) && (count($callback_output > 1))) {
+			if(is_array($callback_output) && (isset($callback_output[1]))) {
 				$output .= $callback_output[1];
 			}
 		}

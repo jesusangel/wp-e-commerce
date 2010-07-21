@@ -25,7 +25,8 @@ function wpsc_enqueue_user_script_and_css() {
 		*/
 		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 		//$version_identifier = '';
-		if(is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category'))) {
+		$category_id = '';
+		if(isset($_GET['category']) && defined($wp_query) && (is_numeric($_GET['category']) || is_numeric($wp_query->query_vars['product_category']) || is_numeric(get_option('wpsc_default_category')))) {
 			if(is_numeric($wp_query->query_vars['product_category'])) {
 				$category_id = $wp_query->query_vars['product_category'];
 			} else if(is_numeric($_GET['category'])) {
@@ -34,7 +35,8 @@ function wpsc_enqueue_user_script_and_css() {
 				$category_id = get_option('wpsc_default_category');
 			}
 		}
-		 
+		
+		$siteurl = get_option('siteurl');
 		if(is_ssl()) {
 			$siteurl = str_replace("http://", "https://", $siteurl);
 		}
@@ -121,7 +123,7 @@ function wpsc_user_dynamic_js() {
 	exit();
 }
 
-if($_GET['wpsc_user_dynamic_js'] == 'true') {
+if(isset($_GET['wpsc_user_dynamic_js']) && ($_GET['wpsc_user_dynamic_js'] == 'true')) {
   add_action("init", 'wpsc_user_dynamic_js');  
 }
 
@@ -297,7 +299,7 @@ function wpsc_user_dynamic_css() {
 	exit();
 }
 
-if($_GET['wpsc_user_dynamic_css'] == 'true') {
+if(isset($_GET['wpsc_user_dynamic_css']) && ($_GET['wpsc_user_dynamic_css'] == 'true')) {
   add_action("init", 'wpsc_user_dynamic_css');  
 }
 
@@ -506,13 +508,14 @@ function wpsc_products_page($content = '') {
  * wpsc_count_themes_in_uploads_directory, does exactly what the name says
 */
 function wpsc_count_themes_in_uploads_directory() {
-  $uploads_dir = @opendir(WPSC_THEMES_PATH);
+  $uploads_dir = @opendir(WPSC_THEMES_PATH); // might cause problems if dir doesnt exist
   $file_names = array();
   while(($file = @readdir($uploads_dir)) !== false) {
     if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
 			$file_names[] = $file;
     }
   }
+  @closedir($uploads_dir);
   return count($file_names);
 }
 
@@ -663,7 +666,9 @@ wpsc_enable_page_filters();
 
 function wpsc_body_class( $classes ) {
 	global $wp_query, $wpsc_query;
-	$post_id = $wp_query->post->ID;
+	$post_id = 0;
+	if(isset($wp_query->post->ID))
+		$post_id = $wp_query->post->ID;
 	$page_url = get_permalink($post_id);
 	
 	// If on a product or category page...

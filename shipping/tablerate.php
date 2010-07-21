@@ -54,6 +54,8 @@ class tablerate {
 	}
 	
 	function submit_form() {
+		if (!isset($_POST['layer'])) $_POST['layer'] = '';
+		
 		$layers = (array)$_POST['layer'];
 		$shippings = (array)$_POST['shipping'];
 		if ($shippings != '') {
@@ -66,6 +68,7 @@ class tablerate {
 				}
 			}
 		}
+		if (!isset($_POST['checkpage'])) $_POST['checkpage'] = '';
 		if ($_POST['checkpage'] == 'table') {
 			update_option('table_rate_layers',$new_layer);
 		}

@@ -25,9 +25,12 @@ if (is_array($GLOBALS['nzshpcrt_gateways'])) {
 		  $disabled = "disabled='disabled'";
 		}
 		
+		if (!isset($gateway['internalname'])) $gateway['internalname'] = '';
+		$gatewaylist = '';
 		$gatewaylist .="<option $disabled value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>";
 	}
 }
+$nogw = '';
 $gatewaylist = "<option value='".$nogw."'>".__('Please Select A Payment Gateway', 'wpsc')."</option>" . $gatewaylist;
 
 ?>
@@ -135,9 +138,11 @@ function selectgateway() {
 					  </td>
 					  <td style='border-top: none;'>
 					    <?php
-					    if($payment_gateway_names[$selected_gateway_data['internalname']] != '') {
+					    if (!isset($selected_gateway_data['internalname'])) $selected_gateway_data['internalname'] = '';
+					    if(isset($payment_gateway_names[$selected_gateway_data['internalname']]) && $payment_gateway_names[$selected_gateway_data['internalname']] != '') {
 								$display_name = $payment_gateway_names[$selected_gateway_data['internalname']];					    
 					    } else {
+					    		if (!isset($selected_gateway_data['payment_type'])) $selected_gateway_data['payment_type'] = '';
 								switch($selected_gateway_data['payment_type']) {
 									case "paypal";
 										$display_name = "PayPal";
@@ -163,7 +168,11 @@ function selectgateway() {
 						</td>
 					</tr>
 					
-					<?php echo $form; ?>   
+					<?php 
+					if (!isset($form)) $form = '';
+					
+					echo $form;
+					 ?>   
 					
 					<tr class='update_gateway' >
 						<td colspan='2'>

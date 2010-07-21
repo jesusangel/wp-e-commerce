@@ -4,20 +4,24 @@
  */
  
  // clear the previously selected shipping form session variable if you are not on the shipping page
- if($_GET['tab'] != 'shipping') {
-   $_SESSION['previous_shipping_name'] = '';
- }
- 
- 
+
+if((!isset($_GET['tab']) || $_GET['tab'] != 'shipping') ) {
+	$_SESSION['previous_shipping_name'] = '';
+}
+
+
 function wpsc_display_settings_page(){
 ?>
  <div id="wpsc_options" class="wrap">
 <?php wpsc_the_settings_tabs(); 
+
 if(isset($_GET['tab'])){
 	$page = $_GET['tab'];
 }else{
 	$page = 'general';
 }
+
+if (!isset($_GET['isocode'])) $_GET['isocode'] = '';
 
 if(preg_match("/[a-zA-Z]{2,4}/",$_GET['isocode'])) {
 		include(WPSC_FILE_PATH.'/tax_and_shipping.php');
@@ -32,7 +36,7 @@ if (isset($_GET['googlecheckoutshipping'])) {
 if(isset($_GET['selected_all'])){
 	wpsc_submit_options($_GET['selected_all']);
 }
-if($_SESSION['wpsc_thumbnails_resized'] == true) {
+if(isset($_SESSION['wpsc_thumbnails_resized']) && ($_SESSION['wpsc_thumbnails_resized'] == true)) {
 	?>
 	<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
 		<p><?php _e("Thanks, your thumbnail images have been resized."); ?></p>
@@ -83,6 +87,7 @@ switch($page) {
 	wpsc_options_general();
 	break;
 }
+
  $_SESSION['wpsc_settings_curr_page'] = $page;
  ?>
 </div>
@@ -114,7 +119,7 @@ function wpsc_settings_tabs() {
  * Display settings tabs
  */
 function wpsc_the_settings_tabs(){
-global $redir_tab;
+	global $redir_tab;
 	$tabs = wpsc_settings_tabs();
 
 	if ( !empty($tabs) ) {
@@ -136,8 +141,8 @@ global $redir_tab;
 			$href = add_query_arg(array('tab'=>$callback, 's'=>false, 'paged'=>false, 'post_mime_type'=>false, 'm'=>false));
 			$href = remove_query_arg('isocode', $href);
 			$href = wp_nonce_url($href, "tab-$callback");
-			$link = "<a href='" . clean_url($href) . "'$class>$text</a>";
-			echo "\t<li id='" . attribute_escape("tab-$callback") . "'>$link</li>\n";
+			$link = "<a href='" . esc_url($href) . "'$class>$text</a>";
+			echo "\t<li id='" . esc_attr("tab-$callback") . "'>$link</li>\n";
 		}
 		//echo "<li id='tab-spacer' ><a href='' alt='' style='width:33.4%;float:right;'>&nbsp;</a></li>";
 		echo "</ul>\n";
@@ -186,20 +191,20 @@ function wpsc_settings_page_update_notification(){
 if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['shipadd']) ) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
-				printf( __ngettext( ' Setting Options Updated. ' , ' %s Settings Options Updated. ', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				printf( _n( ' Setting Options Updated. ' , ' %s Settings Options Updated. ', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
 				unset($_GET['updated']);
 			}
 						
 			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
-				printf( __ngettext( '%s Setting Option deleted. ', '%s Setting Option deleted. ', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				printf( _n( '%s Setting Option deleted. ', '%s Setting Option deleted. ', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['deleted']);
 			}
 			if ( isset($_GET['shipadd']) && (int) $_GET['shipadd'] ) {
-				printf( __ngettext( ' Shipping Option Updated.', ' Shipping Option Updated.', $_GET['shipadd'] ), number_format_i18n( $_GET['shipadd'] ) );
+				printf( _n( ' Shipping Option Updated.', ' Shipping Option Updated.', $_GET['shipadd'] ), number_format_i18n( $_GET['shipadd'] ) );
 				unset($_GET['shipadd']);
 			}
 			if ( isset($_GET['added']) && (int) $_GET['added'] ) {
-				printf( __ngettext( '%s Checkout Field Added.', '%s Checkout Fields Added.', $_GET['added'] ), number_format_i18n( $_GET['added'] ) );
+				printf( _n( '%s Checkout Field Added.', '%s Checkout Fields Added.', $_GET['added'] ), number_format_i18n( $_GET['added'] ) );
 				unset($_GET['added']);
 			}
 

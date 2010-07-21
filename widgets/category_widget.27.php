@@ -90,7 +90,7 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 			if ((!isset($widget_wpsc_categorisation_instance['title']) && isset($options[$widget_number])) || ($options[$widget_number]['check'] == 1))  {// user clicked cancel or no changes made
 				continue;
 			}
-			$options[$widget_number]['title'] = wp_specialchars($widget_wpsc_categorisation_instance['title']);
+			$options[$widget_number]['title'] = esc_html($widget_wpsc_categorisation_instance['title']);
 			$categorisation_groups =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CATEGORISATION_GROUPS."` WHERE `active` IN ('1')", ARRAY_A);
 			
 			
@@ -122,7 +122,7 @@ function widget_wpsc_categorisation_control( $widget_args = 1 ) {
 		$something = '';
 		$number = '%i%';
 	} else {
-		$title = attribute_escape($options[$number]['title']);
+		$title = esc_attr($options[$number]['title']);
 	}
   
   
@@ -189,13 +189,13 @@ function widget_wpsc_categorisation_register() {
 		// $id should look like {$id_base}-{$o}
 		$id = "wpsc_categorisation-$o"; // Never never never translate an id
 		$registered = true;
-		wp_register_sidebar_widget( $id, $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => $o ) );
+		wp_register_widget_control( $id, $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => $o ) );
 		wp_register_widget_control( $id, $name, 'widget_wpsc_categorisation_control', $control_ops, array( 'number' => $o ) );
 	}
 
 	// If there are none, we register the widget's existance with a generic template
 	if ( !$registered ) {
-		wp_register_sidebar_widget( 'wpsc_categorisation-1', $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => -1 ) );
+		wp_register_widget_control( 'wpsc_categorisation-1', $name, 'widget_wpsc_categorisation', $widget_ops, array( 'number' => -1 ) );
 		wp_register_widget_control( 'wpsc_categorisation-1', $name, 'widget_wpsc_categorisation_control', $control_ops, array( 'number' => -1 ) );
 	}
 }

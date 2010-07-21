@@ -124,7 +124,7 @@ function wpsc_display_upgrades_page() {
 
 
 function wpsc_reset_api_key() {
-if($_POST['reset_api_key'] == 'true') {
+if(isset($_POST['reset_api_key']) && ($_POST['reset_api_key'] == 'true')) {
   if($_POST['activation_name'] != null) {
 		$target = "http://instinct.co.nz/wp-goldcart-api/api_register.php?name=".$_POST['activation_name']."&key=".$_POST['activation_key']."&url=".get_option('siteurl')."";
 		//exit($target);

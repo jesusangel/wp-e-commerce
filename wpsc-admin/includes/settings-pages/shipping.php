@@ -3,8 +3,9 @@ function wpsc_options_shipping(){
 global $wpdb,$external_shipping_modules,$internal_shipping_modules;
 
 // sort into external and internal arrays.
-foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) {
-	if($module->is_external == true) {
+foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) 
+{
+	if(isset($module->is_external) && ($module->is_external == true)) {
 		$external_shipping_modules[$key] = $module;
 	} else {
 		$internal_shipping_modules[$key] = $module;
@@ -207,7 +208,9 @@ function selectgateway() {
 					<?php
 					foreach($internal_shipping_modules as $shipping) {
 // 						exit("<pre>".print_r($shipping,1)."</pre>");
-						if (in_array($shipping->getInternalName(), (array)$selected_shippings)) { ?>
+						
+							
+						if (is_object($shipping) && in_array($shipping->getInternalName(), (array)$selected_shippings)) { ?>
 						
 							<div class='wpsc_shipping_options'>
 							<div class='wpsc-shipping-actions'>
@@ -224,10 +227,10 @@ function selectgateway() {
 							<div class='wpsc_shipping_options'>
 							<div class='wpsc-shipping-actions'>
 									| <span class="edit">
-										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars(add_query_arg('shipping_module', $shipping->internal_name)); ?>' style="cursor:pointer;">Edit</a>
+										<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php if(isset($shipping->internal_name)) echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php if(isset($shipping->internal_name)) echo htmlspecialchars(add_query_arg('shipping_module', $shipping->internal_name)); ?>' style="cursor:pointer;">Edit</a>
 									</span> |
 						   </div>
-							<p><input name='custom_shipping_options[]' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
+							<p><input name='custom_shipping_options[]' type='checkbox' value='<?php if(isset($shipping->internal_name)) echo $shipping->internal_name; ?>' id='<?php if(isset($shipping->internal_name)) echo $shipping->internal_name; ?>_id' /><label for='<?php if(isset($shipping->internal_name)) echo $shipping->internal_name; ?>_id'><?php if(isset($shipping->internal_name)) echo $shipping->name; ?></label></p>
 						   </div>
 							 <?php
 						}
@@ -289,6 +292,10 @@ function selectgateway() {
 				<td class='gateway_settings' rowspan='2'>
 					<div class='postbox'>
 					  <?php
+					  
+					  	if(!isset($_SESSION['previous_shipping_name']))
+					  		$_SESSION['previous_shipping_name'] = "";
+					  
 						$shipping_data =	wpsc_get_shipping_form($_SESSION['previous_shipping_name']);
 					  ?>
 						<h3 class='hndle'><?php echo $shipping_data['name']; ?></h3>

@@ -24,7 +24,11 @@ function wpsc_image_downsize($id, $size) {
 
 function wpsc_display_edit_products_page() {
   global $wpdb, $wp_query, $wpsc_products;
-	$category_id = absint($_GET['category_id']);
+
+  
+  $category_id = 0;
+  if(isset($_GET['category_id']))
+		$category_id = absint($_GET['category_id']);
 	
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
@@ -46,10 +50,10 @@ function wpsc_display_edit_products_page() {
 		<?php // screen_icon(); ?>
 		<div id="icon_card"><br /></div>
 		<h2>
-				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo wp_specialchars( __('Manage Products', 'wpsc') ); ?></a>
-				<a href="<?php echo wp_nonce_url("admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product"); ?>" class="nav-tab" id="add"><?php echo wp_specialchars( __('Add New', 'wpsc') ); ?></a>
+				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo esc_html( __('Manage Products', 'wpsc') ); ?></a>
+				<a href="<?php echo wp_nonce_url("admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product"); ?>" class="nav-tab" id="add"><?php echo esc_html( __('Add New', 'wpsc') ); ?></a>
 		</h2>		
-		<?php if(isset($_GET['ErrMessage']) && is_array($_SESSION['product_error_messages'])){ ?>
+		<?php if(isset($_GET['ErrMessage']) && isset($_SESSION['product_error_messages']) && is_array($_SESSION['product_error_messages'])){ ?>
 				<div id="message" class="error fade">
 					<p>
 						<?php
@@ -66,13 +70,17 @@ function wpsc_display_edit_products_page() {
 		<?php if (isset($_GET['published']) || isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['message']) || isset($_GET['duplicated']) ) { ?>
 		<div id="message" class="updated fade">
 			<p>
-			<?php if ( isset($_GET['updated'])) {
-				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+			<?php 
+			
+   			if(!isset($_GET['deleted'])) $_GET['deleted'] = '';
+			
+			if ( isset($_GET['updated'])) {
+				printf( _n( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
 				unset($_GET['updated']);
 			}
 			
 			if ( isset($_GET['published'])) {
-				printf( __ngettext( '%s product updated.', '%s products updated.', $_GET['published'] ), number_format_i18n( $_GET['published'] ) );
+				printf( _n( '%s product updated.', '%s products updated.', $_GET['published'] ), number_format_i18n( $_GET['published'] ) );
 				unset($_GET['published']);
 			}
 			
@@ -82,17 +90,16 @@ function wpsc_display_edit_products_page() {
 			}
 			
 			if ( isset($_GET['deleted'])) {
-				printf( __ngettext( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				printf( _n( 'Product deleted.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['deleted']);
 			}
-			
-			if ( isset($_GET['trashed'])) {
-				printf( __ngettext( 'Product trashed.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+			if ( isset($_GET['trashed']) && isset( $_GET['deleted'])) {
+				printf( _n( 'Product trashed.', '%s products deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['trashed']);
 			}
 			
 			if ( isset($_GET['duplicated']) ) {
-				printf( __ngettext( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
+				printf( _n( 'Product duplicated.', '%s products duplicated.', $_GET['duplicated'] ), number_format_i18n( $_GET['duplicated'] ) );
 				unset($_GET['duplicated']);
 			}
 			
@@ -150,7 +157,7 @@ function wpsc_display_edit_products_page() {
 		
 			$('#doaction, #doaction2').click(function(){
 				if ( $('select[name^="action"]').val() == 'delete' ) {
-					var m = '<?php echo js_escape(__("You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
+					var m = '<?php echo esc_js(__("You are about to delete the selected products.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
 					return showNotice.warn(m);
 				}
 			});
@@ -159,7 +166,9 @@ function wpsc_display_edit_products_page() {
 	})(jQuery);
 	/* ]]> */
 	</script>
-		<?php if ( $_GET["action"] != "wpsc_add_edit" ) { ?>
+		<?php 
+			if(!isset($_GET["action"])) $_GET["action"] = '';		
+			if (($_GET["action"] != "wpsc_add_edit" )) { ?>
 			<div id="wpsc-col-left">
 				<div class="col-wrap">		
 					<?php
@@ -188,7 +197,9 @@ function wpsc_display_edit_products_page() {
 					<div id="poststuff" class="metabox-holder<?php echo 2 == $screen_layout_columns ? ' has-right-sidebar' : ''; ?>">
 						<form id="modify-products" method="post" action="" enctype="multipart/form-data" >
 						<?php
-							$product_id = absint($_GET['product']);
+							$product_id = 0;
+							if(isset($_GET['product']))
+								$product_id = absint($_GET['product']);
 							wpsc_display_product_form($product_id);
 						?>
 						</form>
@@ -259,12 +270,13 @@ function wpsc_admin_products_list($category_id = 0) {
   global $wp_query, $wpdb, $_wp_column_headers;
   // set is_sortable to false to start with
   $is_sortable = false;
+  $search_sql = '';
   $page = null;
 	// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
 	$itempp = 20;
 	
 	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= 0 $search_sql");
-		if(is_numeric($_GET['parent_product'])) {
+		if(isset($_GET['parent_product']) && (is_numeric($_GET['parent_product']))) {
 				$parent_product = absint($_GET['parent_product']);
 			$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= $parent_product $search_sql");			
 }
@@ -274,27 +286,29 @@ function wpsc_admin_products_list($category_id = 0) {
 	}
 	
 	$search_input = '';
-	if($_GET['search']) {
+	if(isset($_GET['search'])) {
 		$search_input = stripslashes($_GET['search']);
 
 		$search_string = "%".$wpdb->escape($search_input)."%";
 		
 		$search_sql = "AND (`products`.`name` LIKE '".$search_string."' OR `products`.`description` LIKE '".$search_string."')";
 
-	} else {
+	} 
+	else 
+	{
 		$search_sql = '';
 	}
 
 	$search_sql = apply_filters('wpsc_admin_products_list_search_sql', $search_sql);
 
-	 if($_GET['pageno'] > 0) {
+	 if(isset($_GET['pageno']) && ($_GET['pageno'] > 0)) {
 				$page = absint($_GET['pageno']);
 		  } else {
 		    $page = 1;
 		  }
 		  $start = (int)($page * $itempp) - $itempp;
 		  
-	if(is_numeric($_GET['parent_product'])) {
+	if( isset($_GET['parent_product']) && (is_numeric($_GET['parent_product']))) {
 		$parent_product = absint($_GET['parent_product']);
 		
 		$query = array(
@@ -432,6 +446,10 @@ function wpsc_admin_products_list($category_id = 0) {
 		
 			<tbody>
 			<?php
+
+			if(!isset($parent_product_data))
+				$parent_product_data = null;
+			
 			wpsc_admin_product_listing($parent_product_data);
 			//echo "<pre>".print_r($wp_query, true)."</pre>";
 			if(count($wp_query->posts) < 1) {
@@ -453,7 +471,9 @@ function wpsc_admin_products_list($category_id = 0) {
 function wpsc_admin_category_dropdown() {
 	global $wpdb,$category_data;
 	$siteurl = get_option('siteurl');
-	$category_slug = $_GET['category'];
+	$category_slug =0;
+	if(isset($_GET['category']))
+		$category_slug = $_GET['category'];
 	
 	$url =  urlencode(remove_query_arg(array('product_id','category_id')));
 	

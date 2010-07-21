@@ -58,9 +58,8 @@ function nzshpcrt_form_field_list($selected_field = null) {
 }
   
   
-
 function wpsc_parent_category_list($taxonomies, $args) {
-	
+
 	$myterms = get_terms($taxonomies, $args);
 	$output ="<select name='category_parent'>";
 	foreach($myterms as $term){
@@ -84,6 +83,8 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
   global $wpdb;
   $siteurl = get_option('siteurl');
   $values = get_terms('wpsc_product_category', 'hide_empty=0&parent='.$group_id);
+  $selected = "";
+  $output = "";
   foreach((array)$values as $option) {
     if($option->term_id != $this_category){
 	  	if($selected_id == $option->term_id) {
@@ -97,13 +98,18 @@ function wpsc_category_options($group_id, $this_category = null, $category_id = 
   return $output;
 }
   
-
+/*
+ * TODO: If the uploads directory of wordpress doesn't have the right permissions there
+ * is a memory exhausting problem in this function. 
+ */
 function wpsc_uploaded_files() {
   global $wpdb, $wpsc_uploaded_file_cache;
-  
+
   $dir = @opendir(WPSC_FILE_DIR);
   $num = 0;
-  if(count($wpsc_uploaded_file_cache) > 0) {
+  $dirlist = array();
+  if(count($wpsc_uploaded_file_cache) > 0) 
+  {
     $dirlist = $wpsc_uploaded_file_cache;
   } else {
 		while(($file = @readdir($dir)) !== false) {
@@ -116,15 +122,18 @@ function wpsc_uploaded_files() {
 					'numberposts' => 1,
 					'post_status' => 'all'
 				);
-				
+
 				//// @TODO broken, does not select by post_name, need to loop at wordpress API to fix.
 				//$file_data = (array)get_posts($args);
 				
 				
-				if($file_data[0] != null) {
+				if($file_data[0] != null) 
+				{
 					$dirlist[$num]['display_filename'] = $file_data[0]->post_title;
 					$dirlist[$num]['file_id'] = $file_data[0]->ID;
-				} else {
+				}
+				else 
+				{
 					$dirlist[$num]['display_filename'] = $file;
 					$dirlist[$num]['file_id'] = null;
 				}        
@@ -214,6 +223,7 @@ function wpsc_select_variation_file($file_id, $variation_ids, $variation_combina
   
 function wpsc_list_product_themes($theme_name = null) {
   global $wpdb, $wpsc_theme_path;
+  $output = '';
   $selected_theme = get_option('wpsc_selected_theme');
   if($selected_theme == '') {
     $selected_theme = 'default';

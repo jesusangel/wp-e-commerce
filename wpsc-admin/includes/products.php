@@ -164,7 +164,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			$actions['duplicate'] = "<a class='submitdelete' title='".esc_attr(__('Duplicate', 'wpsc'))."' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=duplicate_product&amp;product={$product->ID}", 'duplicate-product_'.$product->ID)."'>".__('Duplicate')."</a>";
 
 			
-			$actions = apply_filters('post_row_actions', $actions, $post);
+			$actions = apply_filters('post_row_actions', $actions, $product);
 			$action_count = count($actions);
 			$i = 0;
 			echo '<div class="row-actions">';
@@ -176,7 +176,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			}
 			
 			echo '</div>';
-			get_inline_data($post);
+			get_inline_data($product);
 		?>
 		</td>
 		<?php
@@ -250,6 +250,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 					$product_data['meta'][$meta_name] = maybe_unserialize(array_pop($meta_value));
 				}
 		$product_data['transformed'] = array();
+		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight'])) $product_data['meta']['_wpsc_product_metadata']['weight'] = "";
+		if(!isset($product_data['meta']['_wpsc_product_metadata']['weight_unit'])) $product_data['meta']['_wpsc_product_metadata']['weight_unit'] = "";
+		
 		$product_data['transformed']['weight'] = wpsc_convert_weight($product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['weight_unit']);
 			$weight = $product_data['transformed']['weight'];
 			if($weight == ''){

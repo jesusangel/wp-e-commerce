@@ -722,6 +722,7 @@ class wpsc_purchaselogs{
 			}
 		}
 	  	
+		$newarray = array();
 	  	foreach($purchlog2 as $purch){
 	  		if(is_array($purch)){
 		  		foreach($purch as $log){
@@ -750,7 +751,8 @@ class wpsc_purchaselogs{
 	 * or if there was a filter applied use the filter to sort the dates.
 	 */  
 	function getdates(){
-		global $wpdb;
+		global $wpdb, $purchlogs;
+
 		$earliest_record_sql = "SELECT MIN(`date`) AS `date` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!=''";
 		$earliest_record = $wpdb->get_results($earliest_record_sql,ARRAY_A) ;
 		
@@ -772,8 +774,10 @@ class wpsc_purchaselogs{
 				}
 			}
 		}
-		$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
-		$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
+		if (is_object($purchlogs)) {
+			$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
+			$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
+		}
 		//exit('<pre>'.print_r($date_list, true).'<pre>');
 		
 		return $date_list;
@@ -895,9 +899,10 @@ class wpsc_purchaselogs{
 			$this->purchstatus = $this->allpurchaselogstatuses[0];
 		}
 	}
-	function is_checked_status(){
-
-		if($this->purchstatus['order'] == $this->purchitem->processed){
+	
+	function is_checked_status(){		
+		if(isset($this->purchstatus['order']) && isset($this->purchitem->processed) && ($this->purchstatus['order'] == $this->purchitem->processed))
+		{
 			return 'selected="selected"';
 		}else{
 			return '';

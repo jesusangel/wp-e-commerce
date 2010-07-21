@@ -11,7 +11,7 @@ $tinyURI = get_option('siteurl').$tinyURI;
 
 $a = substr($filedir, strpos($filedir,'/wp-content/plugins/'));
 $plugindir = substr($a , 0, strpos($a,'/js') );
-$pluginURL = get_settings('siteurl') . $plugindir;
+$pluginURL = get_option('siteurl') . $plugindir;
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>

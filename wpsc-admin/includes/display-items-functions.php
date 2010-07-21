@@ -5,10 +5,10 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-//$closed_postboxes = (array)get_usermeta( $current_user->ID, 'editproduct');
+//$closed_postboxes = (array)get_user_meta( $current_user->ID, 'editproduct');
 //$variations_processor = new nzshpcrt_variations;
 
-
+global $wpsc_product_defaults;
 $wpsc_product_defaults =array (
   'id' => '0',
   'name' => '',
@@ -26,7 +26,7 @@ $wpsc_product_defaults =array (
   'quantity_limited' => '0',
   'quantity' => '0',
   'special' => '0',
-  'special_price' => '',
+  'special_price' => 0.00,
   'display_frontpage' => '0',
   'notax' => '0',
   'publish' => '1',
@@ -100,7 +100,7 @@ if (!function_exists('array_replace_recursive'))
 }
 
 function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
-  global $wpdb;
+  global $wpdb, $product;
 	$product = get_post($product_id);
 	 //print("<pre>" . print_r($product, true) . "</pre>");
 
@@ -154,7 +154,7 @@ function wpsc_populate_product_data($product_id, $wpsc_product_defaults) {
 				$tags[] = $wpdb->get_var("SELECT `name` FROM `{$wpdb->terms}` WHERE `term_id`='{$term_id}' LIMIT 1");
 			}
 		}
-		if ($tags != NULL){
+		if (isset($tags)){
 			$imtags = implode(',', $tags);
 		}
 	}
@@ -179,8 +179,8 @@ function wpsc_display_product_form ($product_id = 0) {
 	$current_user = wp_get_current_user();
 	
 	// we put the closed postboxes array into the product data to propagate it to each form without having it global.
-	$product_data['closed_postboxes'] = (array)get_usermeta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products');
-	$product_data['hidden_postboxes'] = (array)get_usermeta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products');
+	$product_data['closed_postboxes'] = (array)get_user_meta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products');
+	$product_data['hidden_postboxes'] = (array)get_user_meta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products');
 	
 	if(count($product_data) > 0) {
 		wpsc_product_basic_details_form($product_data);
@@ -206,11 +206,13 @@ function delete_stopgap() {
 global $wpdb;
 	$wpdb->query( "DELETE FROM $wpdb->posts WHERE post_parent = $uploading_iframe_ID AND post_title = 'stopgap'" );
 }
-if($product_data['id'] > 0) {
+if(isset($product_data['id']) && $product_data['id'] > 0) {
 	add_action('transition_post_status', 'delete_stopgap');
 }
 function wpsc_product_basic_details_form(&$product_data) {
 	global $wpdb,$nzshpcrt_imagesize_info, $user_ID;
+
+	if(!isset($product_data['product_object'])) $product_data['product_object'] = new stdClass();
 	$product = $product_data['product_object'];
 	$post_ID = (int) $product_data["id"];
 	/*<h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3>*/
@@ -224,7 +226,8 @@ function wpsc_product_basic_details_form(&$product_data) {
 		$product_data["id"] = $_GET["product"] = add_new_product_id(); 
 	}
 	$form_extra = '';
-if ( 'auto-draft' == $product->post_status ) {
+	if(!isset($product->post_status)) $product->post_status = '';
+	if ( 'auto-draft' == $product->post_status ) {
 	if ( 'edit' == $action )
 		$product->post_title = '';
 	$autosave = false;
@@ -232,19 +235,19 @@ if ( 'auto-draft' == $product->post_status ) {
 } else {
 	$autosave = wp_get_post_autosave( $product_data["id"] );
 }
-
+if(!isset($product->post_type)) $product->post_type = '';
 $nonce_action = 'update-' . $product->post_type . '_' . $product_data["id"];
 $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($product_data["id"]) . "' />";
-
-$sticky = get_option( 'sticky_posts' );
-if ( in_array ( $product_data["id"], $sticky ) )
-$sticky_checked = 'checked="checked" '; 
- 
 ?>
 	</h3>
 	<div id="side-info-column" class="inner-sidebar">
 		<div id="side-sortables" class='meta-box-sortables-wpec ui-sortable'>
-		<?php wp_nonce_field($nonce_action); ?>
+		<?php wp_nonce_field($nonce_action);
+		if(!isset($form_action)) $form_action = '';
+		if(!isset($product->post_author)) $product->post_author = '';
+		if(!isset($product->post_type)) $product->post_type = '';
+		if(!isset($product->post_status)) $product->post_status = '';
+		?>
 		<input type="hidden" id="user-id" name="user_ID" value="<?php echo (int) $user_ID ?>" />
 		<input type="hidden" id="hiddenaction" name="action" value="<?php echo esc_attr($form_action) ?>" />
 		<input type="hidden" id="originalaction" name="originalaction" value="<?php echo esc_attr($form_action) ?>" />
@@ -270,8 +273,7 @@ $sticky_checked = 'checked="checked" ';
 	<div id="submitdiv" class="postbox">
 		<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span>Publish</span></h3>
 			<div class="inside publish">
-			<div class="submitbox" id="submitpost"><br />
-				<span id="sticky-span" style="display: inline; "><input id="sticky" name="sticky" type="checkbox" <?php echo $sticky_checked; ?>value="sticky" tabindex="4"> <label for="sticky" class="selectit">Stick this product to the front page</label><br></span>
+			<div class="submitbox" id="submitpost">
 				<div id="minor-publishing">
 					<div id="minor-publishing-actions">
 						<div id="save-action">
@@ -295,7 +297,7 @@ $sticky_checked = 'checked="checked" ';
 				</div>
 				<div id="major-publishing-actions">
 				<div id="delete-action">
-					<a class='submitdelete deletion' title='<?php echo attribute_escape(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?>
+					<a class='submitdelete deletion' title='<?php echo esc_attr(__('Delete this product')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id']); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete."), $product_data['name'] )) ?>') ) { return true;}return false;"><?php _e('Move to Trash') ?>
 					</a><br />
 					</div>
 				<div id="publishing-action">
@@ -340,15 +342,6 @@ $sticky_checked = 'checked="checked" ';
 				"wpsc_product_price_and_stock_forms" => 1,
 				"wpsc_product_image_forms" => 1,
 				"wpsc_product_download_forms" => 1
-			),
-			"hiddenboxes" => array(
-				"wpsc_product_shipping_forms" => 1,
-				"wpsc_product_variation_forms" => 1,
-				"wpsc_product_advanced_forms" => 1,
-				"wpsc_product_category_and_tag_forms" => 1,
-				"wpsc_product_price_and_stock_forms" => 1,
-				"wpsc_product_image_forms" => 1,
-				"wpsc_product_download_forms" => 1
 			)
 		  );
 		
@@ -356,7 +349,7 @@ $sticky_checked = 'checked="checked" ';
 	 	
 		$order = apply_filters( 'wpsc_products_page_forms', $order);
 	  
-	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 24 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
+	 	if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 16 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
 				$order = $default_order;
 	 	}
 	 	$check_missing_items = array_diff($default_order, $order);
@@ -368,7 +361,7 @@ $sticky_checked = 'checked="checked" ';
 		update_option('wpsc_product_page_order', $order);
 		
 	 	// if this is a child product, we need to filter out the variations box here
-	 	if($product_data['product_object']->post_parent > 0) {
+	 	if(isset($product_data['product_object']->post_parent) && $product_data['product_object']->post_parent > 0) {
 	 		$variation_box_key = array_search('wpsc_product_variation_forms', $order);
 	 		if(is_numeric($variation_box_key) && isset($order[$variation_box_key])) {
 	 			unset($order[$variation_box_key]);
@@ -380,12 +373,12 @@ $sticky_checked = 'checked="checked" ';
 	 		}
 	 		
 	 	}
+//		echo "<pre>"; print_r($order); echo "</pre>"; 
 		foreach((array)$order["side"] as $key => $box_function_name) {
 			if(function_exists($box_function_name)) {
 				echo call_user_func($box_function_name,$product_data);
 			}
 		}
-	//	echo "<pre>"; print_r($order); echo "</pre>";
 		?>	
 	</div>
 	</div>
@@ -400,34 +393,14 @@ makeSlugeditClickable = null;
 			if ( $val == 0 ) {
 			?>
 				$('div#<?php echo $key; ?>').addClass('closed');
-			<?
+			<?php
 			}
 		}
 	?>
 	$('#poststuff .postbox h3, .postbox div.handlediv').click( function() {			
 			$(this).parent().toggleClass('closed');
 			wpsc_save_postboxes_state('store_page_wpsc-edit-products', '#poststuff');
-		});
-
-	<?php 
-		$hidden_boxes = $order["hiddenboxes"];
-		foreach ($hidden_boxes as $key=>$val) {
-			if ( $val == 0 ) {
-			?>
-				$('div#<?php echo $key; ?>').css('display', 'none');
-				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', false);
-			<?php
-			}
-				elseif ($val == 1) {
-				
-				?>
-				$('div.metabox-prefs label input[value=<?php echo $key; ?>]').attr('checked', true);
-
-			<?php
-			
-			}
-		}
-	?>		
+		});		
         });
 	//]]>
 </script>
@@ -441,7 +414,7 @@ makeSlugeditClickable = null;
 						<a href='#' class='shorttag_toggle'></a>
 					</div>
 					<div class='admin_product_shorttags'>
-						<h4><?php _e('Shortcodes', 'wpsc'); ?></h4>
+						<h4><?php _e('Shortcodes', 'wpsc'); global $wpsc_product_defaults;?></h4>
 	
 						<dl>
 							<dt><?php _e('Display Product Shortcode', 'wpsc'); ?>: </dt><dd>[wpsc_products product_id='<?php echo $product_data['id'];?>']</dd>
@@ -466,6 +439,118 @@ makeSlugeditClickable = null;
 					<div style='clear:both; height: 0px; margin-bottom: 15px;'></div>	
 				</td>
 			</tr>
+		
+		
+			<tr>
+				<td colspan='3' class='skuandprice'>
+					<div class='wpsc_floatleft'>
+						<?php echo __('Stock Keeping Unit', 'wpsc'); 
+						if(!isset($product_data['meta']['_wpsc_sku'])) $product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku'];
+						?> :<br />
+						<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
+					</div>
+					
+					<div class='wpsc_floatleft'>
+					<?php echo __('Price', 'wpsc'); 
+					if(!isset($product_data['meta']['_wpsc_price'])) $product_data['meta']['_wpsc_price'] = $wpsc_product_defaults['price'];
+					if(!isset($product_data['special'])) $product_data['special'] = $wpsc_product_defaults['special'];
+					if(!isset($product_data['meta']['_wpsc_special_price'])) $product_data['meta']['_wpsc_special_price'] = $wpsc_product_defaults['special_price'];
+					?> :<br />
+					<input type='text' class='text' size='17' name='meta[_wpsc_price]' value='<?php echo number_format($product_data['meta']['_wpsc_price'], 2); ?>' />
+					</div>
+					
+					<div class='wpsc_floatleft' style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>'>
+	    			   <label for='add_form_special'><?php echo __('Sale Price :', 'wpsc'); ?></label>
+				       <div id='add_special'>		
+	        			  <input type='text' size='17' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2); ?>' name='meta[_wpsc_special_price]' />
+				       </div>
+			       </div>
+
+      			</td>
+    
+	
+			</tr>
+		
+			<tr>
+				<td ><a href='' class='wpsc_add_new_currency'>+ <?php echo __('New Currency', 'wpsc');?></a></td>
+			</tr>
+			<tr class='new_layer'>
+					<td>
+						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
+						<select name='newCurrency[]' class='newCurrency'>
+						<?php
+						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+						
+
+						$isocode = ''; //needs to 
+						foreach((array)$currency_data as $currency) 
+						{
+							if($isocode == $currency['isocode']) {
+								$selected = "selected='selected'";
+							} else {
+								$selected = "";
+							} ?>
+							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
+				<?php	}  
+						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+						if($currency_data['symbol'] != '') {
+							$currency_sign = $currency_data['symbol_html'];
+						} else {
+							$currency_sign = $currency_data['code'];
+						}
+				?>
+						</select>
+						</td>
+						<td>
+						<?php echo __('Price', 'wpsc');?> :<br />
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='0.00' />
+						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
+						</td>
+
+			</tr>
+			<?php
+			if(isset($product_data['newCurr']) && count($product_data['newCurr']) > 0) :
+				$i = 0;
+				foreach($product_data['newCurr'] as $newCurr){  
+				$i++;
+				$isocode = str_replace("currency[", "", $newCurr['meta_key']);
+				$isocode = str_replace("]", "", $isocode);
+			//	exit('ere<pre>'.print_r($isocode, true).'</pre>'); 
+				
+				?>
+					<tr>
+						<td>
+						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
+						<select name='newCurrency[]' class='newCurrency'>
+						<?php
+						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
+						foreach($currency_data as $currency) {
+							if($isocode == $currency['isocode']) {
+								$selected = "selected='selected'";
+							} else {
+								$selected = "";
+							}
+							?>
+							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
+							<?php
+						}  
+						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
+						if($currency_data['symbol'] != '') {
+							$currency_sign = $currency_data['symbol_html'];
+						} else {
+							$currency_sign = $currency_data['code'];
+						}
+						?>
+						</select>
+						</td>
+						<td>
+						Price:<br />
+						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
+						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
+						</td>
+					</tr>
+			<?php } ?>
+			<?php endif; ?>
 			<tr>
 				<td colspan='2'>
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea" >
@@ -510,13 +595,14 @@ function wpsc_product_category_and_tag_forms($product_data=''){
 	$output = '';
 	//echo "<pre>".print_r($product_data['tags'], true)."</pre>";
 	$tag_array = array();
+	if(!isset($product_data['tags'])) $product_data['tags'] = array();
 	foreach((array)$product_data['tags'] as $tag) {
 	  $tag_array[] = $tag->name;
 	}
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
 	}
-	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."'><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+	$output .= "<div id='wpsc_product_category_and_tag_forms' class=' postbox ".((array_search('wpsc_product_category_and_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."' ".((array_search('wpsc_product_category_and_tag_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : '')." ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
     if (IS_WP27) {
         $output .= "<h3 class='hndle'>";
@@ -566,10 +652,23 @@ return $output;
 
 }
 function wpsc_product_price_and_stock_forms($product_data=''){
-	global $closed_postboxes, $wpdb, $variations_processor;
+	global $closed_postboxes, $wpdb, $variations_processor, $wpsc_product_defaults;
 	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
+	
+	if(!isset($product_data['meta']['_wpsc_table_rate_price'])) $product_data['meta']['_wpsc_table_rate_price'] = $wpsc_product_defaults['meta']['table_rate_price'];
 	$table_rate_price = $product_data['meta']['_wpsc_table_rate_price'];
+	
+	if(!isset($product_data['meta']['_wpsc_custom_tax'])) $product_data['meta']['_wpsc_custom_tax'] = '';
 	$custom_tax = $product_data['meta']['_wpsc_custom_tax'];
+	
+	if(!isset($product_data['meta']['_wpsc_is_donation'])) $product_data['meta']['_wpsc_is_donation'] = $wpsc_product_defaults['donation'];
+	if(!isset($product_meta['table_rate_price']['state'])) $product_meta['table_rate_price']['state'] = null;
+	
+	if(!isset($product_meta['custom_tax'])) $product_meta['custom_tax'] = '';
+	
+	if(!isset($product_meta['table_rate_price']['quantity'])) $product_meta['table_rate_price']['quantity'] = $wpsc_product_defaults['meta']['table_rate_price']['quantity'][0];
+	
+	if(!isset($product_meta['unpublish_when_none_left'])) $product_meta['unpublish_when_none_left'] = '';
 	
 	if ($product_data == 'empty') {
 		$display = "style='visibility:hidden;'";
@@ -583,128 +682,28 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 	</h3>
     <div class='inside'>
     <table>
-    ";    
-   // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
-    ?><br />
-				<tr>
-				<td colspan='3' class='skuandprice'>
-					<div class='wpsc_floatleft'>
-						<?php echo __('Stock Keeping Unit', 'wpsc'); ?> :<br />
-						<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
-					</div>
-					
-					<div class='wpsc_floatleft'>
-					<?php echo __('Price', 'wpsc'); ?> :<br />
-					<input type='text' class='text' size='17' name='meta[_wpsc_price]' value='<?php echo number_format($product_data['meta']['_wpsc_price'], 2); ?>' />
-					</div>
-					
-					<div class='wpsc_floatleft' style='display:<?php if(($product_data['special'] == 1) ? 'block' : 'none'); ?>'>
-	    			   <label for='add_form_special'><?php echo __('Sale Price :', 'wpsc'); ?></label>
-				       <div id='add_special'>		
-	        			  <input type='text' size='17' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2); ?>' name='meta[_wpsc_special_price]' />
-				       </div>
-			       </div>
-
-      			</td>
-    
-	
-			</tr>
-		
-			<tr>
-				<td ><a href='' class='wpsc_add_new_currency'>+ <?php echo __('New Currency', 'wpsc');?></a></td>
-			</tr>
-			<tr class='new_layer'>
-					<td>
-						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
-						<select name='newCurrency[]' class='newCurrency'>
-						<?php
-						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
-						foreach((array)$currency_data as $currency) {
-							if($isocode == $currency['isocode']) {
-								$selected = "selected='selected'";
-							} else {
-								$selected = "";
-							} ?>
-							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
-				<?php	}  
-						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
-						if($currency_data['symbol'] != '') {
-							$currency_sign = $currency_data['symbol_html'];
-						} else {
-							$currency_sign = $currency_data['code'];
-						}
-				?>
-						</select>
-						</td>
-						<td>
-						<?php echo __('Price', 'wpsc');?> :<br />
-						<input type='text' class='text' size='15' name='newCurrPrice[]' value='0.00' />
-						<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
-						</td>
-
-			</tr>
-			<?php if(count($product_data['newCurr']) > 0) :
-				$i = 0;
-				foreach($product_data['newCurr'] as $newCurr){  
-				$i++;
-				$isocode = str_replace("currency[", "", $newCurr['meta_key']);
-				$isocode = str_replace("]", "", $isocode);
-			//	exit('ere<pre>'.print_r($isocode, true).'</pre>'); 
-				
-				?>
-					<tr>
-						<td>
-						<label for='newCurrency[]'><?php echo __('Currency type', 'wpsc');?>:</label><br />
-						<select name='newCurrency[]' class='newCurrency'>
-						<?php
-						$currency_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY `country` ASC",ARRAY_A);
-						foreach($currency_data as $currency) {
-							if($isocode == $currency['isocode']) {
-								$selected = "selected='selected'";
-							} else {
-								$selected = "";
-							}
-							?>
-							<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars($currency['country']); ?> (<?php echo $currency['currency']; ?>)</option>
-							<?php
-						}  
-						$currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A) ;
-						if($currency_data['symbol'] != '') {
-							$currency_sign = $currency_data['symbol_html'];
-						} else {
-							$currency_sign = $currency_data['code'];
-						}
-						?>
-						</select>
-						</td>
-						<td>
-						Price:<br />
-						<input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' />
-						<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo __('Delete Currency', 'wpsc');?></a>
-						</td>
-					</tr>
-			<?php } ?>
-			<?php endif; 
+    ";
     echo "
     <tr>
+
        <td>
-          <br /><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
+          <input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' ".(($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '')." />&nbsp;<label for='add_form_donation'>".__('This is a donation, checking this box populates the donations widget.', 'wpsc')."</label>
        </td>
     </tr>";
-?>
-			
+    
+   // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
+    ?>
      <tr>
-      <td><br />
-
+      <td>
         <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo (((bool)$product_meta['table_rate_price']['state'] == true) ? 'checked=\'checked\'' : ''); ?> />
         
         
         <label for='table_rate_price'><?php echo __('Table Rate Price', 'wpsc'); ?></label>
-        <div id='table_rate'>
+        <div style='display:<?php echo (($product_meta['table_rate_price'] != '') ? 'block' : 'none'); ?>;' id='table_rate'>
           <a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
           <table>
 						<tr>
-							<td><br /><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
+							<td><?php echo __('Quantity In Cart', 'wpsc'); ?></td>
 							<td><?php echo __('Discounted Price', 'wpsc'); ?></td>
 						</tr>
 						<?php
@@ -749,6 +748,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 
     
     <?php
+    if(!isset($product_data['meta']['_wpsc_stock'])) $product_data['meta']['_wpsc_stock'] = '';
     echo "
     <tr>
       <td style='width:430px;'>
@@ -880,15 +880,18 @@ function change_link($product_data='') {
 	$media_upload_iframe_src = "media-upload.php?post_id=$uploading_iframe_ID";		
 	return $media_upload_iframe_src."&amp;type=image";
 }
+
+	if(!isset($_GET["product"])) $_GET["product"] = '';
 	$uploading_iframe_ID = $_GET["product"]; 
 
 	//Justin Sainton - 5.19.2010 - Adding filters/actions for the media goodness :) Conditions important to not kill media functionality elsewhere
-if ( $_GET["page"] == "wpsc-edit-products" ) {
+if (isset($_GET["page"]) && ($_GET["page"] == "wpsc-edit-products" )) {
 	add_filter('media_buttons_context','change_context');
 	add_filter('image_upload_iframe_src', "change_link");
 }
 function wpsc_product_shipping_forms($product_data=''){
 	global $closed_postboxes;
+	$output = '';
 	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
 	if ($product_data == 'empty') {
 		$display = "style='display:none;'";
@@ -902,6 +905,7 @@ function wpsc_product_shipping_forms($product_data=''){
 			<a class='togbox'>+</a>";
     	}
 		$output .= __('Shipping Details', 'wpsc');
+		if(!isset($product_data['transformed']['weight'])) $product_data['transformed']['weight'] = '';
 		$output .= "
 		</h3>
       <div class='inside'>
@@ -1156,8 +1160,8 @@ function wpsc_product_image_forms($product_data='') {
 ?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
 		<h3 class='hndle'> <?php echo	__('Product Images', 'wpsc'); ?></h3>
-		<div class='inside'>
- 			<p><strong <?php echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage your images"><?php echo __('Manage your thumbnails', 'wpsc');?></a></strong></p>
+		<div class='inside'>		
+ 			<p><strong <?php if(isset($display)) echo $display; ?>><?php echo __('Manage your thumbnails', 'wpsc');?></strong></p>
 			<?php
 			edit_multiple_image_gallery($product_data);
 			?>
@@ -1166,7 +1170,7 @@ function wpsc_product_image_forms($product_data='') {
 		<div style='clear:both'></div>
 	</div>
 	<?php
-  return $output;
+ // return $output;
 }
 
 function wpsc_product_download_forms($product_data='') {
@@ -1182,13 +1186,11 @@ function wpsc_product_download_forms($product_data='') {
 	$output .= "<h3 class='hndle'>".__('Product Downloads', 'wpsc')."</h3>";
 	$output .= "<div class='inside'>";
 	
-	$output .= wpsc_select_product_file($product_data['id']);
-
-	$output .= "<h4>".__('Upload New File', 'wpsc').":</h4>";
+	$output .= "<h4>".__('Upload File', 'wpsc').":</h4>";
 	$output .= "<input type='file' name='file' value='' /><br />".__('Max Upload Size', 'wpsc')." : <span>".$upload_max."</span><br /><br />";
-	$output .= "<h4>".__('<a href="admin.php?wpsc_admin_action=product_files_existing&product_id='.$product_data['id'].'" class="thickbox" title="Select from all product files for '.$product_data['name'].'">Select from existing files</a>', 'wpsc')."</h4>";
-
-	if($product_data['file'] > 0) {
+	$output .= wpsc_select_product_file($product_data['id'])."<br />";
+    
+	if(isset($product_data['file']) && $product_data['file'] > 0) {
     	$output .= __('Preview File', 'wpsc').": ";
     	
     	$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=".$product_data['id']."' ><img align='absmiddle' src='".WPSC_URL."/images/download.gif' alt='' title='' /><span>".__('Click to download', 'wpsc')."</span></a>";
@@ -1199,8 +1201,6 @@ function wpsc_product_download_forms($product_data='') {
     	}
     }
 	if(function_exists("make_mp3_preview") || function_exists("wpsc_media_player")) {    
-
-	$output .= "<br />";
     $output .="<h4>".__("Select an MP3 file to upload as a preview")."</h4>";
 	
 		$output .= "<input type='file' name='preview_file' value='' /><br />";
@@ -1237,27 +1237,27 @@ function wpsc_product_label_forms() {
       <div id="labels">
         <table>
         	<tr>
-        		<td><?php _e('Label', 'wpsc')?> :</td>
+        		<td><?=__('Label', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[labels][]"></td>
         	</tr>
         	<tr>
-        		<td><?php _e('Label Description', 'wpsc')?> :</td>
+        		<td><?=__('Label Description', 'wpsc')?> :</td>
         		<td><textarea name="productmeta_values[labels_desc][]"></textarea></td>
         	</tr>
         	<tr>
-        		<td><?php _e('Life Number', 'wpsc')?> :</td>
+        		<td><?=__('Life Number', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[life_number][]"></td>
         	</tr>
         	<tr>
-        		<td><?php _e('Item Number', 'wpsc')?> :</td>
+        		<td><?=__('Item Number', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[item_number][]"></td>
         	</tr>
         	<tr>
-        		<td><?php _e('Product Code', 'wpsc')?> :</td>
+        		<td><?=__('Product Code', 'wpsc')?> :</td>
         		<td><input type="text" name="productmeta_values[product_code][]"></td>
         	</tr>
         	<tr>
-        		<td><?php _e('PDF', 'wpsc')?> :</td>
+        		<td><?=__('PDF', 'wpsc')?> :</td>
         		<td><input type="file" name="pdf[]"></td>
         	</tr>
         </table>
@@ -1294,7 +1294,7 @@ function edit_multiple_image_gallery($product_data) {
 				}
 
 				if(function_exists("getimagesize")) {
-					$num++;
+				//	$num++;
 					$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$image->ID}&amp;width=60&amp;height=60";
 					?>
 					<li id="product_image_<?php echo $image->ID; ?>" class='gallery_image'>
@@ -1303,7 +1303,7 @@ function edit_multiple_image_gallery($product_data) {
 							<a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
 								<img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' /><br />
 							</a>
-							<?php // echo wpsc_main_product_image_menu($product_data['id']); ?>
+							<?php echo wpsc_main_product_image_menu($product_data['id']); ?>
 						</div>
 					</li>
 					<?php
@@ -1324,13 +1324,14 @@ function edit_multiple_image_gallery($product_data) {
 	<?php
 }
 
-/*
+
 function wpsc_main_product_image_menu($product_id) {
   global $wpdb;
   $thumbnail_state = 0;
-	if($product_id > 0) {
+	if($product_id > 0) 
+	{
 		//$main_image = $wpdb->get_row("SELECT `images`.*,  `product`.`thumbnail_state` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_id}' LIMIT 1", ARRAY_A);
-		$thumbnail_state = $main_image['thumbnail_state'];
+	//	$thumbnail_state = $main_image['thumbnail_state'];
 	} else {
 		$thumbnail_state = 1;
 	}
@@ -1383,7 +1384,7 @@ function wpsc_main_product_image_menu($product_id) {
 					</div>
 				</li>
 				<li>
-				<a href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_id); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
+				<a href='<?php //echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_id); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
 
 				</li>
 				<li>
@@ -1398,7 +1399,7 @@ function wpsc_main_product_image_menu($product_id) {
 	$output = ob_get_contents();
 	ob_end_clean();
 	return $output;
-} /*
+}
 
   /**
 	* Displays the category forms for adding and editing products
@@ -1408,6 +1409,8 @@ function wpsc_category_list(&$product_data, $group_id, $unique_id = '', $categor
 	global $wpdb;
     static $iteration = 0;
     $iteration++;	
+    $output = '';
+    $selected = '';
 	
 	if(is_numeric($category_id)) {
 		$values = get_terms('wpsc_product_category', "hide_empty=0&parent=".$category_id, ARRAY_A);
@@ -1426,7 +1429,7 @@ function wpsc_category_list(&$product_data, $group_id, $unique_id = '', $categor
 	foreach((array)$values as $option) {
 		$option=(array)$option;
 		
-		if(count($product_data['category_ids']) > 0) {
+		if(isset($product_data['category_ids']) && count($product_data['category_ids']) > 0) {
 			if(in_array($option['term_id'], $product_data['category_ids'])) {
 			    $selected = "checked='checked'";
 			}

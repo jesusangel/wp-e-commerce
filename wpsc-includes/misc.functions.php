@@ -127,7 +127,7 @@ function wpsc_change_canonical_url($url) {
 	
 	$url = wpsc_product_url($product_id);
   } else {
-    if($wpsc_query->query_vars['category_id'] > 0) {
+    if(isset($wpsc_query->query_vars['category_id']) && ($wpsc_query->query_vars['category_id'] > 0)) {
       $url = wpsc_category_url($wpsc_query->query_vars['category_id']);
 			
 			if ( $wpsc_query->query_vars['page'] > 1 ) {
@@ -288,7 +288,7 @@ function wpsc_populate_also_bought_list() {
 
 function nzshpcrt_display_preview_image() {
 	  global $wpdb;
-	  if(($_GET['wpsc_request_image'] == 'true') || is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])|| isset($_GET['image_name'])) {
+	  if(isset($_GET['wpsc_request_image']) && isset($_GET['image_id']) && (($_GET['wpsc_request_image'] == 'true') || is_numeric($_GET['productid']) || is_numeric($_GET['image_id'])|| isset($_GET['image_name']))) {
 
 	  
 		if(function_exists("getimagesize")) {

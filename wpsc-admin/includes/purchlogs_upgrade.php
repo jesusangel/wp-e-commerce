@@ -64,13 +64,13 @@ function wpsc_select_options_purchlogs_fix($id){
 	
 			<?php if ( $numChanged != 0 && $numQueries != 0 ) {
 				echo '<div id="message" class="updated fade"><p>';
-				printf( __ngettext( 'Check Out Form Fields updated.', 'Check Out Form Fields updated.', $numChanged, $numQueries ), $numChanged , $numQueries);
+				printf(_n( 'Check Out Form Fields updated.', 'Check Out Form Fields updated.', $numChanged, $numQueries ), $numChanged , $numQueries);
 				echo '</p></div>';
 			}
 	
 			?>
 			
-<h2><?php echo wp_specialchars( __('Sales', 'wpsc').' Upgrade Fix' ); ?> </h2>
+<h2><?php echo esc_html( __('Sales', 'wpsc').' Upgrade Fix' ); ?> </h2>
 <p><?php _e('Upgrading to WP e-Commerce 3.7 and later requires you to run this fix once.The following Boxes corresponds to the form fields in your current checkout page.  All you have to do is select from the drop-down menu box what each of the following fields represent. Sorry for any inconvenience caused, but we\'re sure you\'ll agree that the new purchase logs are worth this minor hassle. '); ?> </p>
 
 <div class="metabox-holder" style="width:700px">

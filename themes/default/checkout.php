@@ -256,7 +256,7 @@ get_header(); ?>
 					  <fieldset class='wpsc_registration_form'>
 							<label><?php _e('Username'); ?>:</label><input type="text" name="log" id="log" value="" size="20"/>
 							<label><?php _e('Password'); ?>:</label><input type="password" name="pwd" id="pwd" value="" size="20" />
-							<label><?php _e('E-mail'); ?>:</label><input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" />
+							<label><?php _e('E-mail'); ?>:</label><input type="text" name="user_email" id="user_email" value="<?php echo esc_attr(stripslashes($user_email)); ?>" size="20" />
 						</fieldset>
 					<?php endif; ?>
 				

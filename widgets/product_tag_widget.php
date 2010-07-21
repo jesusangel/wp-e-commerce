@@ -32,11 +32,11 @@ function widget_product_tag_control() {
 }
 
  function widget_product_tag_init() {
-   if(function_exists('register_sidebar_widget')) {
+   if(function_exists('wp_register_sidebar_widget')) {
 		//$widget_ops = array('classname' => 'widget_pages', 'description' => __( "Your blog's WordPress Pages") );
-		//wp_register_sidebar_widget('pages', __('Pages'), 'wp_widget_pages', $widget_ops);
-    register_sidebar_widget(__('Product Tags', 'wpsc'), 'widget_product_tag');
-    register_widget_control(__('Product Tags', 'wpsc'), 'widget_product_tag_control');
+		//wp_register_widget_control('pages', __('Pages'), 'wp_widget_pages', $widget_ops);
+    wp_register_sidebar_widget('widget_product_tag', __('Product Tags', 'wpsc'), 'widget_product_tag');
+    wp_register_widget_control('widget_product_tag', __('Product Tags', 'wpsc'), 'widget_product_tag_control');
 	}
 	return;
 }

@@ -42,6 +42,8 @@ class weightrate {
 	}
 	
 	function submit_form() {
+		if (!isset($_POST['weight_layer'])) $_POST['weight_layer'] = '';
+		if (!isset($_POST['weight_shipping'])) $_POST['weight_shipping'] = '';
 		$layers = (array)$_POST['weight_layer'];
 		$shippings = (array)$_POST['weight_shipping'];
 		if ($shippings != ''){

@@ -26,7 +26,7 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/ajax-and-init.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-options-settings.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-sales-logs.php");
 
-if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {
+if((isset($_SESSION['wpsc_activate_debug_page']) && ($_SESSION['wpsc_activate_debug_page'] == true)) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {
 	require_once(WPSC_FILE_PATH."/wpsc-admin/display-debug.page.php");
 }
 
@@ -75,41 +75,41 @@ function wpsc_admin_pages(){
 		if ($userdata->user_level <= 2) {
 				if(file_exists(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php')) {
 					require_once(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php');
-					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 0,  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/credit_cards.png");
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'subscriber',  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/credit_cards.png");
 				} else {
 					if (function_exists('add_object_page')) {
-						add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/credit_cards.png");
+						add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page,array(), WPSC_URL."/images/credit_cards.png");
 					} else {
-						add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
+						add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page);
 					}
 				}
 
 			} else {
 				if (function_exists('add_object_page')) {
-					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page,array(), WPSC_URL."/images/credit_cards.png");					
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page,array(), WPSC_URL."/images/credit_cards.png");					
 				} else {
-					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 2, $base_page);
+					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page);
 
 				}
 			}
 
 				
-			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 7, 'wpsc-sales-logs', 'wpsc_display_sales_logs');
+			$purchase_log_page =  add_submenu_page($base_page, __('Sales', 'wpsc'), __('Sales', 'wpsc'), 'editor', 'wpsc-sales-logs', 'wpsc_display_sales_logs');
 			$page_hooks[] = $purchase_log_page;
 			
 			global $show_update_page; //this global is set in /wpsc-admin/display-update.page.php
 			if($show_update_page !== FALSE) :
-				$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 7, 'wpsc-update', 'wpsc_display_update_page');
+				$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 'editor', 'wpsc-update', 'wpsc_display_update_page');
 			endif;
-			//echo add_submenu_page($base_page,__("Products"), __("Products"), 7, 'wpsc-edit-products', 'wpsc_display_products_page');
-			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 7, 'wpsc-edit-products', 'wpsc_display_edit_products_page');
+			//echo add_submenu_page($base_page,__("Products"), __("Products"), 'editor', 'wpsc-edit-products', 'wpsc_display_products_page');
+			$edit_products_page = add_submenu_page($base_page,__('Products', 'wpsc'),__('Products', 'wpsc'), 'editor', 'wpsc-edit-products', 'wpsc_display_edit_products_page');
 			$page_hooks[] = $edit_products_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 7, 'wpsc-edit-groups', 'wpsc_display_categories_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Categories', 'wpsc'), __('Categories', 'wpsc'), 'editor', 'wpsc-edit-groups', 'wpsc_display_categories_page');
 			//print_r($page_hooks);
 			
 			//    add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, WPSC_DIR_NAME.'/display_variations.php');
-			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 7, 'edit-tags.php?taxonomy=wpsc-variation');
+			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 'editor', 'edit-tags.php?taxonomy=wpsc-variation');
 			
 			$box_order = get_option('wpsc_product_page_order');
 			if ( is_array ($box_order["side"]) && is_array($box_order["advanced"]) ) {
@@ -134,19 +134,19 @@ function wpsc_admin_pages(){
 			}
 
 			if(IS_WPMU || $GLOBALS['wp_version'] == '3.0'){
-				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 10,'wpsc_display_coupons_page','wpsc_display_coupons_page');
+				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 'administrator','wpsc_display_coupons_page','wpsc_display_coupons_page');
 			}else{
-				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 7,'wpsc_display_coupons_page','wpsc_display_coupons_page');
+				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 'editor','wpsc_display_coupons_page','wpsc_display_coupons_page');
 			}
 			
-			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 7, 'wpsc-settings', 'wpsc_display_settings_page');
+			$edit_options_page = add_submenu_page($base_page,__('Settings', 'wpsc'), __('Settings', 'wpsc'), 'editor', 'wpsc-settings', 'wpsc_display_settings_page');
 			$page_hooks[] = $edit_options_page;
 			
-			$page_hooks[] = add_submenu_page($base_page,__('Upgrades', 'wpsc'), __('Upgrades', 'wpsc'), 7, 'wpsc-upgrades', 'wpsc_display_upgrades_page');
-			//$page_hooks[] = add_submenu_page($base_page,__('Upgrades (Old)', 'wpsc'), __('Upgrades (Old)', 'wpsc'), 7, 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
+			$page_hooks[] = add_submenu_page($base_page,__('Upgrades', 'wpsc'), __('Upgrades', 'wpsc'), 'editor', 'wpsc-upgrades', 'wpsc_display_upgrades_page');
+			//$page_hooks[] = add_submenu_page($base_page,__('Upgrades (Old)', 'wpsc'), __('Upgrades (Old)', 'wpsc'), 'editor', 'wpsc-gold-options','wpsc_gold_shpcrt_options_page');
 			
-			if(($_SESSION['wpsc_activate_debug_page'] == true) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
-				$page_hooks[] = add_submenu_page($base_page,__('- Debug'), __('- Debug'), 9, 'wpsc-debug', 'wpsc_debug_page');
+			if( (isset($_SESSION['wpsc_activate_debug_page']) && ($_SESSION['wpsc_activate_debug_page'] == true)) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
+				$page_hooks[] = add_submenu_page($base_page,__('- Debug'), __('- Debug'), 'administrator', 'wpsc-debug', 'wpsc_debug_page');
 			}
 
 			$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $base_page);
@@ -196,6 +196,7 @@ function wpsc_product_log_rss_feed() {
 
 function wpsc_admin_include_coupon_js() {
 	$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
+	$siteurl = get_option('siteurl');
 	wp_enqueue_script('wp-e-commerce-admin-parameters', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_js=true", false, $version_identifier);
 
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL.'/wpsc-admin/css/settingspage.css', false, false, 'all' );
@@ -238,8 +239,8 @@ function  wpsc_admin_include_css_and_js() {
 	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl."/wp-admin/admin.php?wpsc_admin_dynamic_css=true" , false, $version_identifier, 'all' );
 	wp_localize_script( 'wp-e-commerce-tags', 'postL10n', array(
 		'tagsUsed' =>  __('Tags used on this post:'),
-		'add' => attribute_escape(__('Add')),
-		'addTag' => attribute_escape(__('Add new tag')),
+		'add' => esc_attr(__('Add')),
+		'addTag' => esc_attr(__('Add new tag')),
 		'separate' => __('Separate tags with commas'),
 	));
 	if(defined('WPSC_GOLD_DIR_NAME') && WPSC_GOLD_DIR_NAME != ''){
@@ -262,6 +263,7 @@ function  wpsc_admin_include_css_and_js() {
   
   
 function wpsc_admin_edit_products_page_js() {
+	$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-tags', WPSC_URL.'/wpsc-admin/js/product_tagcloud.js', array('livequery'), $version_identifier);
  	if ( user_can_richedit() ) {
 		wp_enqueue_script('editor');
@@ -296,6 +298,7 @@ function wpsc_admin_edit_products_page_js() {
 */
 
 function wpsc_admin_include_optionspage_css_and_js(){
+	$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 	wp_enqueue_script('wp-e-commerce-js-ajax', WPSC_URL.'/js/ajax.js', false, $version_identifier);
 
 	wp_enqueue_script('wp-e-commerce-js-ui-tabs', WPSC_URL.'/wpsc-admin/js/jquery-ui.js', false, $version_identifier);
@@ -333,6 +336,7 @@ function wpsc_admin_dynamic_js() {
 	'billingcountry', 'billingemail', 'billingphone', 'billingpostcode',
 	'delivertoafriend', 'shippingfirstname', 'shippinglastname', 'shippingaddress',
 	'shippingcity', 'shippingstate', 'shippingcountry', 'shippingpostcode');
+	$form_types = '';
 	foreach($form_types1 as $form_type) {
 			$form_types .= "<option value='".$form_type."'>".__($form_type, 'wpsc')."</option>";
 	}
@@ -385,7 +389,7 @@ function wpsc_admin_dynamic_js() {
 
 	exit();
 }
-if($_GET['wpsc_admin_dynamic_js'] == 'true') {
+if(isset($_GET['wpsc_admin_dynamic_js']) && ($_GET['wpsc_admin_dynamic_js'] == 'true')) {
   add_action("admin_init", 'wpsc_admin_dynamic_js');  
 }
 
@@ -421,7 +425,7 @@ function wpsc_admin_dynamic_css() {
 	exit();
 }
 
-if($_GET['wpsc_admin_dynamic_css'] == 'true') {
+if(isset($_GET['wpsc_admin_dynamic_css']) && ($_GET['wpsc_admin_dynamic_css'] == 'true')) {
   add_action("admin_init", 'wpsc_admin_dynamic_css');  
 }
 
@@ -548,6 +552,7 @@ function wpsc_dashboard_widget_setup() {
 	global $current_user;
 	get_currentuserinfo();
 	if($current_user->user_level>9) {
+		$version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
     wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
 	}
@@ -746,6 +751,7 @@ function wpsc_dashboard_4months_widget(){
 	}
 	
 	$tablerow=1;
+	$output='';
 	$output.='<div style="padding-bottom:15px; ">Last four months of sales on a per product basis:</div>
     <table style="width:100%" border="0" cellspacing="0">
     	<tr style="font-style:italic; color:#666;" height="20">
@@ -824,7 +830,7 @@ function wpsc_admin_notices() {
   }
 }
 
-if(stristr($_GET['page'], WPSC_DIR_NAME)) {
+if(isset($_GET['page']) && (stristr($_GET['page'], WPSC_DIR_NAME))) {
   add_action('admin_notices', 'wpsc_admin_notices');
 }
 

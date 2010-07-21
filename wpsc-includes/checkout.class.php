@@ -407,7 +407,7 @@ class wpsc_checkout {
 		//$meta_data[$form_field['id']]
 		//exit('<pre>'.print_r($this, true).'</pre>');
 		if((count($_SESSION['wpsc_checkout_saved_values']) <= 0) && ($user_ID > 0)) {
-			$_SESSION['wpsc_checkout_saved_values'] = get_usermeta($user_ID, 'wpshpcrt_usr_profile');
+			$_SESSION['wpsc_checkout_saved_values'] = get_user_meta($user_ID, 'wpshpcrt_usr_profile');
 		}
 		$saved_form_data = htmlentities(stripslashes((string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES);
 		//exit('<pre>'.print_r($this, true).'</pre>');

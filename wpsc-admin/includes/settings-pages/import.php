@@ -13,7 +13,8 @@ global $wpdb;
 		<input type='submit' value='Import' class='button-primary'>
 <?php
 //exit('<pre>'.print_r($_FILES, true).'</pre>');
-if ($_FILES['csv_file']['name'] != '') {
+
+if (isset($_FILES['csv_file']['name']) && ($_FILES['csv_file']['name'] != '')) {
 ini_set("auto_detect_line_endings", 1);
 	$file = $_FILES['csv_file'];
 	//exit('<pre>'.print_r($file,true).'</pre>');
@@ -91,7 +92,7 @@ ini_set("auto_detect_line_endings", 1);
 
 	}
 }
-if($_POST['csv_action'] == 'import'){
+if(isset($_POST['csv_action']) && ($_POST['csv_action'] == 'import')) {
 	global $wpdb;
 
 	$cvs_data = $_SESSION['cvs_data'];

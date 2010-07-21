@@ -11,7 +11,11 @@ if(!isset($purchlogs)){
 	$purchlogs = new wpsc_purchaselogs();	
 }
  function wpsc_display_sales_logs() {
-		$subpage = $_GET['subpage'];
+ 	
+ 	$subpage ='';
+ 	if(isset($_GET['subpage']))
+ 		$subpage = $_GET['subpage'];
+		
 		switch($subpage) {
 			case 'upgrade-purchase-logs':
 				wpsc_upgrade_purchase_logs();   
@@ -21,13 +25,13 @@ if(!isset($purchlogs)){
 				wpsc_display_sales_log_index();
 			break;
 		}
-	}
+}
 
  function wpsc_display_sales_log_index() {
   	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
-		<h2><?php echo wp_specialchars( __('Sales', 'wpsc') ); ?> </h2>
+		<h2><?php echo esc_html( __('Sales', 'wpsc') ); ?> </h2>
 		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
 		<?php
 		 if(isset($_GET['view_purchlogs_by']) || isset($_GET['view_purchlogs_by_status'])) {
@@ -52,7 +56,7 @@ if(!isset($purchlogs)){
 			if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['locked']) ) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
-				printf( __ngettext( '%s Purchase Log updated.', '%s Purchase Logs updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+				printf( _n( '%s Purchase Log updated.', '%s Purchase Logs updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
 				unset($_GET['updated']);
 			}
 			
@@ -60,12 +64,12 @@ if(!isset($purchlogs)){
 				unset($_GET['skipped']);
 			
 			if ( isset($_GET['locked']) && (int) $_GET['locked'] ) {
-				printf( __ngettext( '%s product not updated, somebody is editing it.', '%s products not updated, somebody is editing them.', $_GET['locked'] ), number_format_i18n( $_GET['locked'] ) );
+				printf( _n( '%s product not updated, somebody is editing it.', '%s products not updated, somebody is editing them.', $_GET['locked'] ), number_format_i18n( $_GET['locked'] ) );
 				unset($_GET['locked']);
 			}
 			
 			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
-				printf( __ngettext( '%s Purchase Log deleted.', '%s Purchase Logs deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+				printf( _n( '%s Purchase Log deleted.', '%s Purchase Logs deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
 				unset($_GET['deleted']);
 			}
 			?>
@@ -100,11 +104,11 @@ if(!isset($purchlogs)){
 			<div id="message" class="updated fade"><p>
 			<?php 
 				if ( isset($_GET['cleared']) && $_GET['cleared']==true ) {
-					printf( __ngettext( 'Downloads for this log have been released.', 'Downloads for this log have been released.', $_GET['cleared'] ), $_GET['cleared']);
+					printf( _n( 'Downloads for this log have been released.', 'Downloads for this log have been released.', $_GET['cleared'] ), $_GET['cleared']);
 					unset($_GET['cleared']);
 				}
 				if ( isset($_GET['sent']) && (int) $_GET['sent'] ) {
-					printf( __ngettext( 'Receipt has been resent ', 'Receipt has been resent ', $_GET['sent'] ),  $_GET['sent']  );
+					printf( _n( 'Receipt has been resent ', 'Receipt has been resent ', $_GET['sent'] ),  $_GET['sent']  );
 					unset($_GET['sent']);
 				}
 			?> </p></div>
@@ -245,7 +249,7 @@ if(!isset($purchlogs)){
 		
 <br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php echo __('Resend Receipt to Buyer', 'wpsc'); ?></a>
 		  
-<br /><br class='small' /><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php echo __('Remove this record', 'wpsc') ?></a>
+<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php echo __('Remove this record', 'wpsc') ?></a>
 
 <br /><br class='small' />&emsp;&ensp; 	<a href='<?php echo $page_back ?>'><?php echo __('Go Back', 'wpsc'); ?></a>
 <br /><br />
@@ -466,7 +470,7 @@ if(!isset($purchlogs)){
 		$(document).ready(function(){
 			$('#doaction, #doaction2').click(function(){
 				if ( $('select[name^="purchlog_multiple_status_change"]').val() == 'delete' ) {
-					var m = '<?php echo js_escape(__("You are about to delete the selected purchase logs.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
+					var m = '<?php echo esc_js(__("You are about to delete the selected purchase logs.\n  'Cancel' to stop, 'OK' to delete.")); ?>';
 					return showNotice.warn(m);
 				}
 			});
@@ -502,7 +506,7 @@ if(!isset($purchlogs)){
  			<a href='http://checkout.google.com/' rel=''><img class='google_checkout_logo' src='<?php echo WPSC_URL."/images/checkout_logo.jpg"; ?>' alt='google checkout' /></a>
  		<?php } ?>
  		</td><!-- Status -->
- 		<td><a class='submitdelete' title='<?php echo attribute_escape(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo js_escape(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
+ 		<td><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("page.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
  		<td>
  			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''>+ tracking id</a>
  		</td>

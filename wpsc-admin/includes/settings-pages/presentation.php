@@ -1,6 +1,7 @@
 <?php
 function options_categorylist() {
 	global $wpdb;
+	$categorylist = "";
 	$current_default = get_option('wpsc_default_category');
 	$group_data = get_terms('wpsc_product_category','hide_empty=0&parent=0', ARRAY_A);
 	$categorylist .= "<select name='wpsc_options[wpsc_default_category]'>";
@@ -228,9 +229,9 @@ global $wpdb;
 								break;
 							}
 						?>
-						<input type='radio' value='1' name='wpsc_options[multi_add]' id='multi_adding1' <?php echo $multi_adding1; ?> /> 
+						<input type='radio' value='1' name='wpsc_options[multi_add]' id='multi_adding1' <?php if(isset($multi_adding1)) echo $multi_adding1; ?> /> 
 						<label for='multi_adding1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-						<input type='radio' value='0' name='wpsc_options[multi_add]' id='multi_adding2' <?php echo $multi_adding2; ?> /> 
+						<input type='radio' value='0' name='wpsc_options[multi_add]' id='multi_adding2' <?php if(isset($multi_adding2)) echo $multi_adding2; ?> /> 
 						<label for='multi_adding2'><?php echo __('No', 'wpsc');?></label>
 					</td>
 				</tr>
@@ -241,7 +242,7 @@ global $wpdb;
 		<div class='themes_and_appearance'>
 			<h4><?php	 _e("Theme Customisation", 'wpsc');	?></h4>
 			  <?php
-			  if($_SESSION['wpsc_themes_copied'] == true) {
+			  if(isset($_SESSION['wpsc_themes_copied']) && ($_SESSION['wpsc_themes_copied'] == true)) {
 					?>
 					<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
 						<p><?php _e("Thanks, the themes have been copied."); ?></p>
@@ -376,7 +377,7 @@ global $wpdb;
 						<input type='checkbox' value='1' name='wpsc_options[list_view_quantity]' id='list_view_quantity' <?php echo $list_view_quantity_value;?> />
 						<label for='list_view_options'><?php echo __('Show quantity form in list view', 'wpsc');?></label>
 					</div>
-					<div id='grid_view_options' <?php echo $list_view_quantity_style;?> <?php if(is_null($product_view3)) { echo "style='display:none;'";} ?>>
+					<div id='grid_view_options' <?php if(isset($list_view_quantity_style)) echo $list_view_quantity_style;?> <?php if(is_null($product_view3)) { echo "style='display:none;'";} ?>>
 					
 						<input type='text'  name='wpsc_options[grid_number_per_row]' id='grid_number_per_row' size='1' value='<?php echo get_option('grid_number_per_row');?>' />
 						<label for='grid_number_per_row'><?php echo __('Products Per Row', 'wpsc');?></label><br />
@@ -454,10 +455,10 @@ global $wpdb;
 				</th>
 				<td>
 					<select name='wpsc_options[wpsc_sort_by]'>
-					<option <?php echo $wpsc_sort_by1; ?> value='name'><?php echo __('Name', 'wpsc');?></option>
-					<option <?php echo $wpsc_sort_by2; ?> value='price'><?php echo __('Price', 'wpsc');?></option>
-					<option <?php echo $wpsc_sort_by4; ?> value='dragndrop'><?php echo __('Drag &amp; Drop', 'wpsc');?></option>
-					<option <?php echo $wpsc_sort_by3; ?> value='id'><?php echo __('Time Uploaded', 'wpsc');?></option>
+					<option <?php if(isset($wpsc_sort_by1)) echo $wpsc_sort_by1; ?> value='name'><?php echo __('Name', 'wpsc');?></option>
+					<option <?php if(isset($wpsc_sort_by2)) echo $wpsc_sort_by2; ?> value='price'><?php echo __('Price', 'wpsc');?></option>
+					<option <?php if(isset($wpsc_sort_by4)) echo $wpsc_sort_by4; ?> value='dragndrop'><?php echo __('Drag &amp; Drop', 'wpsc');?></option>
+					<option <?php if(isset($wpsc_sort_by3)) echo $wpsc_sort_by3; ?> value='id'><?php echo __('Time Uploaded', 'wpsc');?></option>
 					</select>
 				</td>
 			</tr>
@@ -619,7 +620,7 @@ global $wpdb;
 					$cart5 = "checked ='checked'";
 					break;
 				} 
-				if(function_exists('register_sidebar_widget')) {
+				if(function_exists('wp_register_sidebar_widget')) {
 					?>
 					<input type='radio' value='1' onclick='hideelement1("dropshop_option", this.value)' disabled='disabled'  name='wpsc_options[cart_location]' id='cart1' <?php echo $cart1; ?> /> <label style='color: #666666;' for='cart1'><?php echo __('Sidebar', 'wpsc');?></label> &nbsp;
 					<?php
@@ -631,7 +632,7 @@ global $wpdb;
 				?>
 				<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='2' name='wpsc_options[cart_location]' id='cart2' <?php echo $cart2; ?> /> <label for='cart2'><?php echo __('Page', 'wpsc');?></label> &nbsp;
 				<?php
-				if(function_exists('register_sidebar_widget')) {
+				if(function_exists('wp_register_sidebar_widget')) {
 					?>
 					<input type='radio' value='4' onclick='hideelement1("dropshop_option", this.value)' name='wpsc_options[cart_location]' id='cart4' <?php echo $cart4; ?> /> <label for='cart4'><?php echo __('Widget', 'wpsc');?></label> &nbsp;
 					<?php
@@ -647,11 +648,11 @@ global $wpdb;
 					<?php
 				} else {
 					?>
-					<input type='radio' disabled='disabled' value='5' name='wpsc_options[cart_location]' id='cart5' alt='<?php echo __('You need to enable the widgets plugin to use this', 'wpsc');?>' title='<?php echo __('You need to install the Gold and DropShop extentions to use this', 'wpsc');?>' <?php echo $cart5; ?> /> <label style='color: #666666;' for='cart5' title='<?php echo __('You need to install the Gold and DropShop extentions to use this', 'wpsc');?>'><?php echo __('DropShop', 'wpsc');?></label> &nbsp;
+					<input type='radio' disabled='disabled' value='5' name='wpsc_options[cart_location]' id='cart5' alt='<?php echo __('You need to enable the widgets plugin to use this', 'wpsc');?>' title='<?php echo __('You need to install the Gold and DropShop extentions to use this', 'wpsc');?>' <?php if(isset($cart5)) echo $cart5; ?> /> <label style='color: #666666;' for='cart5' title='<?php echo __('You need to install the Gold and DropShop extentions to use this', 'wpsc');?>'><?php echo __('DropShop', 'wpsc');?></label> &nbsp;
 					<?php
 				}
 					?>
-				<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='3' name='wpsc_options[cart_location]' id='cart3' <?php echo $cart3; ?> /> <label for='cart3'><?php echo __('Manual', 'wpsc');?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo nzshpcrt_shopping_basket(); ?&gt; )</span></label>
+				<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='3' name='wpsc_options[cart_location]' id='cart3' <?php if(isset($cart3)) echo $cart3; ?> /> <label for='cart3'><?php echo __('Manual', 'wpsc');?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo nzshpcrt_shopping_basket(); ?&gt; )</span></label>
 		<div  style='display: <?php if (isset($cart5)) { echo "block"; } else { echo "none"; } ?>;'  id='dropshop_option'>
 		<p>
 		<input type="radio" id="drop1" value="all" <?php if (get_option('dropshop_display') == 'all') { echo "checked='checked'"; } ?> name="wpsc_options[dropshop_display]" /><label for="drop1"><?php echo __('Show Dropshop on every page', 'wpsc');?></label>
@@ -1031,6 +1032,7 @@ global $wpdb;
 		  ?>
 			<div class="submit">
 				<input type='hidden' name='wpsc_admin_action' value='submit_options' />
+				<input type='hidden' name='mypage' value='presentation' />
 				<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 				<input type="submit" value="<?php echo __('Update &raquo;', 'wpsc');?>" name="updateoption" />
 			</div>

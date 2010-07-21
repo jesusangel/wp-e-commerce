@@ -43,7 +43,7 @@ function wpsc_display_update_page() {
 	?>
 	<div class="wrap">
 		<?php // screen_icon(); ?>
-		<h2><?php echo wp_specialchars( __('Update WP e-Commerce', 'wpsc') ); ?> </h2>
+		<h2><?php echo esc_html( __('Update WP e-Commerce', 'wpsc') ); ?> </h2>
 		<br />	
 	<?php 
 	if($_POST['run_updates']) :

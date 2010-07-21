@@ -442,6 +442,8 @@ function wpsc_obtain_the_title() {
   global $wpdb, $wp_query, $wpsc_title_data;
   $output = null;
 
+  	if (!isset($wp_query->query_vars['category_id'])) $wp_query->query_vars['category_id'] = 0;
+  	
 	if(is_numeric($wp_query->query_vars['category_id'])) {
 	  $category_id = $wp_query->query_vars['category_id'];
 	} else if($_GET['category']) {
@@ -455,6 +457,10 @@ function wpsc_obtain_the_title() {
 			$wpsc_title_data['category'][$category_id] = $output;
 		}
 	}
+	
+	if (!isset($_GET['product_id'])) $_GET['product_id'] = 0;
+	if (!isset($wp_query->query_vars['product_url_name'])) $wp_query->query_vars['product_url_name'] = '';
+	
 	if(isset($wp_query->query_vars['product_url_name']) || is_numeric($_GET['product_id'])) {
 	  $product_name = $wp_query->query_vars['product_url_name'];
 	  if(isset($wpsc_title_data['product'][$product_name])) {

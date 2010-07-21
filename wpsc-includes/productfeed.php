@@ -4,8 +4,8 @@
 function wpsc_feed_publisher() {
 
 	// If the user wants a product feed, then hook-in the product feed function
-	if ( $_GET["rss"] == "true" &&
-	     $_GET["action"] == "product_list" ) {
+	if ( isset($_GET["rss"]) && ($_GET["rss"] == "true") &&
+	     ($_GET["action"] == "product_list") ) {
 
     		add_action( 'wp', 'wpsc_generate_product_feed' );
 
@@ -26,7 +26,7 @@ function wpsc_generate_product_feed() {
 	$siteurl = get_option('siteurl');
 
 	// Allow limiting
-	if (is_numeric($_GET['limit'])) {
+	if (isset($_GET['limit']) && (is_numeric($_GET['limit']))) {
 		$limit = "LIMIT ".$_GET['limit']."";
 	} else {
 		$limit = '';
@@ -35,7 +35,7 @@ function wpsc_generate_product_feed() {
 	$selected_category = '';
 	$selected_product = '';
 
-	if (is_numeric($_GET['product_id'])) {
+	if (isset($_GET['product_id']) && (is_numeric($_GET['product_id']))) {
 
 		$selected_product = "&amp;product_id=".$_GET['product_id']."";
 
@@ -50,7 +50,7 @@ function wpsc_generate_product_feed() {
 		               AND p.id = '".$_GET['product_id']."'
 		             LIMIT 1";
 
-	} elseif (is_numeric($_GET['category_id'])) {
+	} elseif (isset($_GET['category_id']) && (is_numeric($_GET['category_id']))) {
 
 		$selected_category = "&amp;category_id=".$_GET['category_id']."";
 

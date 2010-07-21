@@ -703,6 +703,8 @@ class wpsc_cart {
   function get_shipping_option() {
     global $wpdb, $wpsc_shipping_modules;
        
+    	if (!isset($wpsc_shipping_modules[$this->selected_shipping_method])) $wpsc_shipping_modules[$this->selected_shipping_method] = '';
+    	
 		if((count($this->shipping_quotes) < 1) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
 			$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
 		}

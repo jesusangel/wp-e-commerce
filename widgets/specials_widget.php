@@ -133,9 +133,9 @@ function widget_specials_control() {
  * Displays the products
  */
 function widget_specials_init() {
-  if(function_exists('register_sidebar_widget')) {
-    register_sidebar_widget(__('Product Specials', 'wpsc'), 'widget_specials');
-    register_widget_control(__('Product Specials', 'wpsc'), 'widget_specials_control');
+  if(function_exists('wp_register_sidebar_widget')) {
+    wp_register_sidebar_widget('widget_specials', __('Product Specials', 'wpsc'), 'widget_specials');
+    wp_register_widget_control('widget_specials', __('Product Specials', 'wpsc'), 'widget_specials_control');
 	}
   return;
 }

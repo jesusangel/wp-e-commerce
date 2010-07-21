@@ -205,7 +205,7 @@ function wpsc_right_now() {
 	
 	
 	$sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
-	$replace_values[":salecount:"] = $sales_count. " ".(($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
+	$replace_values[":salecount:"] = $sales_count. " ".((isset($replace_values[":salecount:"]) && ($replace_values[":salecount:"] == 1)) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
 	$sales_unit = (($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
 		
 	$replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);

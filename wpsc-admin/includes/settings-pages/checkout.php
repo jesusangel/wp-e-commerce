@@ -91,9 +91,9 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			?>
 			<td scope="row"><?php echo __('Lock Tax to Billing Country', 'wpsc'); ?>:</td>
 			<td>
-				<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php echo $lock_tax1; ?> /> 
+				<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php if (isset($lock_tax1)) echo $lock_tax1; ?> /> 
 				<label for='lock_tax1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php echo $lock_tax2; ?> /> 
+				<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php if (isset($lock_tax2)) echo $lock_tax2; ?> /> 
 				<label for='lock_tax2'><?php echo __('No', 'wpsc');?></label>
 			</td>
 			</tr>
@@ -114,9 +114,9 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			?>
 			<td scope="row"><?php echo __(' Disregard Billing State for Tax Calculations', 'wpsc'); ?>:</td>
 			<td>
-				<input type='radio' value='1' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax1' <?php echo $lock_tax_to_shipping1; ?> /> 
+				<input type='radio' value='1' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax1' <?php if (isset($lock_tax_to_shipping1)) echo $lock_tax_to_shipping1; ?> /> 
 				<label for='lock_tax_to_shipping1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax2' <?php echo $lock_tax_to_shipping2; ?> /> 
+				<input type='radio' value='0' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax2' <?php if (isset($lock_tax_to_shipping2)) echo $lock_tax_to_shipping2; ?> /> 
 				<label for='lock_tax_to_shipping2'><?php echo __('No', 'wpsc');?></label>
 			</td>
 
@@ -139,9 +139,9 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			?>
 			<td scope="row"><?php echo __('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
 			<td>
-			<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php echo $shippingBilling1; ?> /> 
+			<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php if (isset($shippingBilling1)) echo $shippingBilling1; ?> /> 
 			<label for='shippingsameasbilling1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-			<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php echo $shippingBilling2; ?> /> 
+			<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php if (isset($shippingBilling2)) echo $shippingBilling2; ?> /> 
 			<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
 			</td>
 			
@@ -212,7 +212,9 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			  
   		 		
 			  $form_data = $wpdb->get_results($form_sql,ARRAY_A);
-				$selected_checkout_set = $_GET['checkout-set'];
+			  if (!isset($_GET['checkout-set'])) $_GET['checkout-set'] = '';
+			  
+			  $selected_checkout_set = $_GET['checkout-set'];
   			echo "<input type='hidden' name='selected_form_set' value='".$selected_checkout_set."' />";
   			?>
 			<table id="wpsc_checkout_list" class="widefat page fixed"  cellspacing="0">

@@ -13,7 +13,7 @@
  	//exit();
  }
  
-if($_REQUEST['wpsc_ajax_action'] == 'special_widget' || $_REQUEST['wpsc_ajax_action'] == 'donations_widget') {
+if (isset($_REQUEST['wpsc_ajax_action']) && ($_REQUEST['wpsc_ajax_action'] == 'special_widget' || $_REQUEST['wpsc_ajax_action'] == 'donations_widget')) {
 	add_action('init', 'wpsc_special_widget');
 }
 
@@ -148,7 +148,7 @@ function wpsc_add_to_cart() {
 	}
 }
 // execute on POST and GET
-if($_REQUEST['wpsc_ajax_action'] == 'add_to_cart') {
+if(isset($_REQUEST['wpsc_ajax_action']) && ($_REQUEST['wpsc_ajax_action'] == 'add_to_cart')) {
 	add_action('init', 'wpsc_add_to_cart');
 }
 
@@ -188,7 +188,7 @@ function wpsc_get_cart() {
 	exit();
 }
 
-if($_REQUEST['wpsc_ajax_action'] == 'get_cart') {
+if(isset($_REQUEST['wpsc_ajax_action']) && ($_REQUEST['wpsc_ajax_action'] == 'get_cart')) {
 	add_action('init', 'wpsc_get_cart');
 }
 
@@ -232,7 +232,7 @@ function wpsc_empty_cart() {
 
 
 // execute on POST and GET
-if(($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) {
+if(isset($_REQUEST['wpsc_ajax_action']) && (($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0))) {
 	add_action('init', 'wpsc_empty_cart');
 }
 
@@ -320,7 +320,7 @@ function wpsc_update_item_quantity() {
 }
 	
 // execute on POST and GET
-if($_REQUEST['wpsc_update_quantity'] == 'true') {
+if (isset($_REQUEST['wpsc_update_quantity']) && ($_REQUEST['wpsc_update_quantity'] == 'true')) {
 	add_action('init', 'wpsc_update_item_quantity');
 }
 
@@ -354,7 +354,7 @@ function wpsc_update_product_rating() {
 }
 	
 // execute on POST and GET
-if($_REQUEST['wpsc_ajax_action'] == 'rate_product') {
+if(isset($_REQUEST['wpsc_ajax_action']) && ($_REQUEST['wpsc_ajax_action'] == 'rate_product')) {
 	add_action('init', 'wpsc_update_product_rating');
 }
 
@@ -373,7 +373,7 @@ function wpsc_update_shipping_price() {
 	exit();
 }
 // execute on POST and GET
-if($_REQUEST['wpsc_ajax_action'] == 'update_shipping_price') {
+if (isset($_REQUEST['wpsc_ajax_action']) && ($_REQUEST['wpsc_ajax_action'] == 'update_shipping_price')) {
 	add_action('init', 'wpsc_update_shipping_price');
 }
 
@@ -390,7 +390,7 @@ function wpsc_get_rating_count() {
 	exit();
 }
 // execute on POST and GET
-if(($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])) {
+if(isset($_REQUEST['get_rating_count']) && ($_REQUEST['get_rating_count'] == 'true') && is_numeric($_POST['product_id'])) {
 	add_action('init', 'wpsc_get_rating_count');
 }
 
@@ -418,7 +418,7 @@ function wpsc_update_product_price() {
 	exit();
 }
 // execute on POST and GET
-if(($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_id'])) {
+if(isset($_REQUEST['update_product_price']) && ($_REQUEST['update_product_price'] == 'true') && is_numeric($_POST['product_id'])) {
 	add_action('init', 'wpsc_update_product_price');
 }
 
@@ -479,7 +479,7 @@ function wpsc_update_location() {
 }
 	
 // execute on POST and GET
-if($_REQUEST['wpsc_ajax_actions'] == 'update_location') {
+if(isset($_REQUEST['wpsc_ajax_actions']) && ($_REQUEST['wpsc_ajax_actions'] == 'update_location')) {
 	add_action('init', 'wpsc_update_location');
 }
 
@@ -492,7 +492,7 @@ function wpsc_cart_html_page() {
 }
 
 // execute on POST and GET
-if($_REQUEST['wpsc_action'] == 'cart_html_page') {
+if(isset($_REQUEST['wpsc_action']) && ($_REQUEST['wpsc_action'] == 'cart_html_page')) {
 	add_action('init', 'wpsc_cart_html_page', 110);
 }
 
@@ -564,7 +564,7 @@ function wpsc_submit_checkout() {
 		}
 	}
 	
- 		// exit('valid >'.$is_valid);
+ // exit('valid >'.$is_valid);
 		//print('<pre>'.print_r($_SESSION['wpsc_gateway_error_messages'], true).'</pre>');
 		//print('<pre>'.print_r($_SESSION['wpsc_checkout_error_messages'], true).'</pre>');
 		//print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
@@ -591,9 +591,8 @@ function wpsc_submit_checkout() {
 		$sessionid = (mt_rand(100,999).time());
 		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
-		if($wpsc_cart->has_total_shipping_discount() == false ) {
+		if($wpsc_cart->has_total_shipping_discount() == false) {
 			$base_shipping= $wpsc_cart->calculate_base_shipping();
-		
 		} else {
 			$base_shipping = 0;
 			
@@ -677,11 +676,11 @@ function wpsc_submit_checkout() {
 }
 
 // execute on POST and GET
-if($_REQUEST['wpsc_action'] == 'submit_checkout') {
+if(isset($_REQUEST['wpsc_action']) && ($_REQUEST['wpsc_action'] == 'submit_checkout')) {
 	add_action('init', 'wpsc_submit_checkout');
 }
 
-if($_REQUEST['wpsc_action'] == 'gateway_notification') {
+if(isset($_REQUEST['wpsc_action']) && ($_REQUEST['wpsc_action'] == 'gateway_notification')) {
 	add_action('init', 'wpsc_gateway_notification');
 }
 
@@ -696,7 +695,7 @@ function wpsc_product_rss() {
 }
 
 
-if($_REQUEST['wpsc_action'] == "rss") {
+if(isset($_REQUEST['wpsc_action']) && ($_REQUEST['wpsc_action'] == "rss")) {
 	add_action('template_redirect', 'wpsc_product_rss', 80);
 }
 
@@ -715,12 +714,12 @@ function wpsc_gateway_notification() {
 }
 
 // execute on POST and GET
-if($_REQUEST['wpsc_action'] == 'gateway_notification') {
+if(isset($_REQUEST['wpsc_action']) && ($_REQUEST['wpsc_action'] == 'gateway_notification')) {
 	add_action('init', 'wpsc_gateway_notification');
 }
 
-if($_GET['termsandconds'] === 'true'){
-	echo  wpautop(stripslashes(get_option('terms_and_conditions')));
+if(isset($_GET['termsandconds']) && ($_GET['termsandconds'] === 'true')){
+	echo wpautop(stripslashes(get_option('terms_and_conditions')));
 	exit();
 }
 
@@ -881,7 +880,7 @@ function wpsc_change_tax() {
 }
 
 // execute on POST and GET
-if($_REQUEST['wpsc_ajax_action'] == 'change_tax') {
+if(isset($_REQUEST['wpsc_ajax_action']) && ($_REQUEST['wpsc_ajax_action'] == 'change_tax')) {
 	add_action('init', 'wpsc_change_tax');
 }
 
@@ -896,28 +895,33 @@ function wpsc_scale_image() {
 	$attachment_id = absint($_REQUEST['attachment_id']);
 	$width =	absint($_REQUEST['width']);
 	$height =	absint($_REQUEST['height']);
-	
+	$intermediate_size = '';
+		
 	if((($width >= 10) && ($height >= 10)) && (($width <= 1024) && ($height <= 1024))) {
 		$intermediate_size = "wpsc-{$width}x{$height}";
 		$generate_thumbnail = true;
 	} else {
-		$intermediate_size = $wpdb->escape($_REQUEST['intermediate_size']);
+		if (isset($_REQUEST['intermediate_size']))
+			$intermediate_size = $wpdb->escape($_REQUEST['intermediate_size']);
 		$generate_thumbnail = false;
 	}
-	
 	
 	// If the attachment ID is greater than 0, and the width and height is greater than or equal to 10, and less than or equal to 1024
 	if(($attachment_id > 0) && ($intermediate_size != '')) {
 		// Get all the required information about the attachment
 		$uploads = wp_upload_dir();
 		
-		$image_meta = get_post_meta($attachment_id, '');
+		$image_meta = get_post_meta($attachment_id, '');		
 		$file_path = get_attached_file($attachment_id);
 		foreach($image_meta as $meta_name => $meta_value) { // clean up the meta array
 			$image_meta[$meta_name] = maybe_unserialize(array_pop($meta_value));
 		}
+		if (!isset($image_meta['_wp_attachment_metadata'])) $image_meta['_wp_attachment_metadata'] = '';
 		$attachment_metadata = $image_meta['_wp_attachment_metadata'];
 
+		if (!isset($attachment_metadata['sizes'])) $attachment_metadata['sizes'] = '';
+		if (!isset($attachment_metadata['sizes'][$intermediate_size])) $attachment_metadata['sizes'][$intermediate_size] = '';
+		
 		// determine if we already have an image of this size
 		if((count($attachment_metadata['sizes']) > 0) && ($attachment_metadata['sizes'][$intermediate_size])) {
 			$intermediate_image_data = image_get_intermediate_size($attachment_id, $intermediate_size);
@@ -957,7 +961,7 @@ function wpsc_scale_image() {
 }
 
 
-if(($_REQUEST['wpsc_action'] == 'scale_image') && is_numeric($_REQUEST['attachment_id'])) {
+if(isset($_REQUEST['wpsc_action']) && isset($_REQUEST['attachment_id']) && ($_REQUEST['wpsc_action'] == 'scale_image') && is_numeric($_REQUEST['attachment_id'])) {
 	add_action('init', 'wpsc_scale_image');
 }
 
@@ -1065,7 +1069,7 @@ function wpsc_download_file() {
 			exit(WPSC_DOWNLOAD_INVALID);
 		}
 	} else {
-		if(($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {
+		if(isset($_GET['admin_preview']) && ($_GET['admin_preview'] == "true") && is_numeric($_GET['product_id']) && current_user_can('edit_plugins')) {
 			$product_id = $_GET['product_id'];
 			$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '$product_id' LIMIT 1",ARRAY_A);
 			if(is_numeric($product_data[0]['file']) && ($product_data[0]['file'] > 0)) {

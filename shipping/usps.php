@@ -50,6 +50,9 @@ class usps {
 	}
 	
 	function submit_form() {
+		if (!isset($_POST['uspsid'])) $_POST['uspsid'] = '';
+		if (!isset($_POST['uspspw'])) $_POST['uspspw'] = '';
+		
 		if ($_POST['uspsid'] != '') {
 			update_option('uspsid', $_POST['uspsid']);
 		}

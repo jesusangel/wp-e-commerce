@@ -200,7 +200,7 @@ function nzshpcrt_chronopay_callback()
 	global $wpdb;
 	// needs to execute on page start
 	// look at page 36
-	if($_GET['chronopay_callback'] == 'true' && $_POST['cs2'] == 'chronopay')
+	if(isset($_GET['chronopay_callback']) && ($_GET['chronopay_callback'] == 'true') && ($_POST['cs2'] == 'chronopay'))
 	{
     	// This is a call from chronopay.  validate that it is from a chronopay server in the and process.
 		// validate cs3 variable to see if it makes sense for security
@@ -283,7 +283,7 @@ function nzshpcrt_chronopay_callback()
 function nzshpcrt_chronopay_results()
 {
 	// Function used to translate the ChronoPay returned cs1=sessionid POST variable into the recognised GET variable for the transaction results page.
-	if($_POST['cs1'] !='' && $_GET['sessionid'] == '')
+	if(isset($_POST['cs1']) && ($_POST['cs1'] !='') && ($_GET['sessionid'] == ''))
 	{
 		$_GET['sessionid'] = $_POST['cs1'];
 	}

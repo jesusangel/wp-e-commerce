@@ -73,9 +73,9 @@ function widget_price_range_control() {
 }
 
 function widget_price_range_init() {
-	if(function_exists('register_sidebar_widget')) {
-		register_sidebar_widget(__('Price Range', 'wpsc'), 'widget_price_range');
-		register_widget_control(__('Price Range', 'wpsc'), 'widget_price_range_control');
+	if(function_exists('wp_register_sidebar_widget')) {
+		wp_register_sidebar_widget('widget_price_range', __('Price Range', 'wpsc'), 'widget_price_range');
+		wp_register_widget_control('widget_price_range', __('Price Range', 'wpsc'), 'widget_price_range_control');
 	}
 	return;
 }

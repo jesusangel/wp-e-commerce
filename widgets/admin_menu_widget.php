@@ -18,8 +18,8 @@ function widget_admin_menu($args){
 function widget_admin_menu_control() { return null; }
 
 function widget_admin_menu_init() {
-	if(function_exists('register_sidebar_widget')) {
-		register_sidebar_widget(__('Admin Menu', 'wpsc'), 'widget_admin_menu');
+	if(function_exists('wp_register_sidebar_widget')) {
+		wp_register_sidebar_widget('widget_admin_menu', __('Admin Menu', 'wpsc'), 'widget_admin_menu');
 		#register_widget_control('Admin Menu', 'widget_admin_menu', 300, 90);
 	}
 	return;

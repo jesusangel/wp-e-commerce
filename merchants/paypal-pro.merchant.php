@@ -396,7 +396,8 @@ function form_paypal_pro(){
 	return $output;
 }
 
-
+$years = '';
+$months = '';
 if(in_array('wpsc_merchant_paypal_pro',(array)get_option('custom_gateway_options'))) {
 	$curryear = date('Y');
 	

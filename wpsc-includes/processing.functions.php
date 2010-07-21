@@ -88,7 +88,7 @@ function wpsc_currency_display($price_in, $args) {
 	
 	$output = sprintf($format_string, $currency_code, $currency_sign, $price_out);
 	//$output = $currency_sign.$price_out;
-	if($no_dollar_sign == true) {
+	if($query['display_currency_symbol'] == true) {
 		return $price_out;
 	}
 	return $output;
@@ -517,7 +517,7 @@ function wpsc_convert_weights($weight, $unit) {
 
 
 function wpsc_convert_weight($in_weight, $in_unit, $out_unit = 'gram') {
-	if (is_array($weight)) {
+	if (isset($weight) && is_array($weight)) {
 		$weight = $weight['weight'];
 	}
 	switch($in_unit) {
@@ -576,6 +576,7 @@ function wpsc_ping() {
 
 function wpsc_send_ping($server) {
 	global $wp_version;
+	$path = "";
 	include_once(ABSPATH . WPINC . '/class-IXR.php');
 
 	// using a timeout of 3 seconds should be enough to cover slow servers
