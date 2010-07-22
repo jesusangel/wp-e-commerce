@@ -187,15 +187,17 @@ get_header();
 						
 							<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 							<?php $action =  'onclick=\'gotoexternallink("'.wpsc_product_external_link(wpsc_the_product_id()).'")\''; 
+									else:
+									$action = '';
 									endif;
 								?>
 					<!-- END OF QUANTITY OPTION -->
 					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow') !='1')) : 
 							//Add to Cart button
 						?>
-						<input class="wpsc_buy_button" type='button' id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" value='<?php echo __('Add to Cart', 'wpsc'); ?>' <?php echo $action; ?>>
+						<input class="wpsc_buy_button" type='submit' id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" value='<?php echo __('Add to Cart', 'wpsc'); ?>' <?php echo $action; ?>>
 						<?php else: ?>
-							<input type="submit" value="<?php echo __('Buy Now', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
+							<input type="submit" value="<?php echo __('Buy Now:', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" <?php echo $action; ?> />
 						<?php endif; ?>
 							
 							<div class='wpsc_loading_animation'>

@@ -13,20 +13,23 @@ if(wpsc_cart_item_count() > 0) :
 		<td class='firstcol'></td>
 		<td><?php echo __('Product', 'wpsc'); ?>:</td>
 		<td><?php echo __('Quantity', 'wpsc'); ?>:</td>
+		<?php if(wpsc_uses_shipping()): ?>
+		<!-- 	<td><?php //echo __('Shipping', 'wpsc'); ?>:</td> -->
+		<?php endif; ?>
 		<td><?php echo __('Price', 'wpsc'); ?>:</td>
-		<td><?php echo __('Shipping', 'wpsc'); ?>:</td>
+
 		<td></td>
 	</tr>
 	<?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
 	
 	<?php  //this displays the confirm your order html	?>
 		
-		<tr class="product_row">
-			<td class="firstcol"><img src='<?php echo wpsc_cart_item_image(48,48); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
-			<td class="firstcol">
+		<tr class="product_row product_row_<?php echo wpsc_the_cart_item_key(); ?>">
+			<td class="firstcol wpsc_product_image wpsc_product_image_<?php echo wpsc_the_cart_item_key(); ?>"><img src='<?php echo wpsc_cart_item_image(48,48); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
+			<td class="firstcol wpsc_product_name wpsc_product_name_<?php echo wpsc_the_cart_item_key(); ?>">
 			<a href='<?php echo wpsc_cart_item_url();?>'><?php echo wpsc_cart_item_name(); ?></a>
 			</td>
-			<td>
+			<td class='wpsc_product_quantity wpsc_product_quantity_<?php echo wpsc_the_cart_item_key(); ?>'>
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
 					<input type="text" name="quantity" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>" />
 					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
@@ -34,9 +37,12 @@ if(wpsc_cart_item_count() > 0) :
 					<input type="submit" value="<?php echo __('Update', 'wpsc'); ?>" name="submit" />
 				</form>
 			</td>
-			<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
-			<td><span class="pricedisplay" id='shipping_<?php echo wpsc_the_cart_item_key(); ?>'><?php echo wpsc_cart_item_shipping(); ?></span></td>
-			<td>
+			<?php if(wpsc_uses_shipping()): ?>
+
+			<?php endif; ?>
+			<td class='wpsc_product_price wpsc_product_price_<?php echo wpsc_the_cart_item_key(); ?>'><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
+			
+			<td class='wpsc_product_remove wpsc_product_remove_<?php echo wpsc_the_cart_item_key(); ?>'>
 				<form action="<?php echo get_option('shopping_cart_url'); ?>" method="post" class="adjustform">
 					<input type="hidden" name="quantity" value="0" />
 					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
@@ -47,12 +53,15 @@ if(wpsc_cart_item_count() > 0) :
 		</tr>
 	<?php endwhile; ?>
 	<?php //this HTML displays coupons if there are any active coupons to use ?>
-	<?php if(wpsc_uses_coupons()): ?>
+	
+	<?php //echo "<pre>"; print_r($wpsc_cart); echo "</pre>"; echo "total cart weight: ".wpsc_cart_weight_total(); 
+
+ if(wpsc_uses_coupons()): ?>
 		
 		<?php if(wpsc_coupons_error()): ?>
-			<tr><td><?php echo __('Coupon is not valid.', 'wpsc'); ?></td></tr>
+			<tr class='wpsc_coupon_error_row'><td><?php echo __('Coupon is not valid.', 'wpsc'); ?></td></tr>
 		<?php endif; ?>
-		<tr>
+		<tr class='wpsc_coupon_row'>
 			<td colspan="2"><?php _e('Enter your coupon number'); ?> :</td>
 			<td  colspan="3" align='left'>
 				<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
@@ -63,6 +72,7 @@ if(wpsc_cart_item_count() > 0) :
 		</tr>
 	<?php endif; ?>	
 	</table>
+	<p class='wpsc_cost_before'><?php _e('Cost before shipping = ','wpsc'); ?> <?php echo wpsc_cart_total_widget(false,false,false);?></p>
 	<?php  //this HTML dispalys the calculate your order HTML	?>
 
 	<?php if(isset($_SESSION['nocamsg']) && isset($_GET['noca']) && $_GET['noca'] == 'confirm'): ?>
@@ -84,7 +94,7 @@ if(wpsc_cart_item_count() > 0) :
 	<?php if(wpsc_uses_shipping()) : ?>
 		<h2><?php echo __('Calculate Shipping Price', 'wpsc'); ?></h2>
 		<table class="productcart">
-			<tr>
+			<tr class='wpsc_shipping_info'>
 				<td colspan='5'>
 					<?php echo __('Please choose a country below to calculate your shipping costs', 'wpsc'); ?>
 				</td>
@@ -93,21 +103,21 @@ if(wpsc_cart_item_count() > 0) :
 			<?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
 				<?php if (($_SESSION['wpsc_zipcode'] == '') || ($_SESSION['wpsc_zipcode'] == 'Your Zipcode')) : // No valid shipping quotes ?>
 					<?php if ($_SESSION['wpsc_update_location'] == true) :?>
-						<tr>
+						<tr class='wpsc_update_location'>
 							<td colspan='5' class='shipping_error' >
 								<?php echo __('Please provide a Zipcode and click Calculate in order to continue.', 'wpsc'); ?>
 							</td>
 						</tr>
 					<?php endif; ?>
 				<?php else: ?>
-					<tr>
+					<tr class='wpsc_update_location_error'>
 						<td colspan='5' class='shipping_error' >
 							<?php echo __('Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.', 'wpsc'); ?>
 						</td>
 					</tr>
 				<?php endif; ?>
 			<?php endif; ?>
-			<tr>
+			<tr class='wpsc_change_country'>
 				<td colspan='5'>
 					<form name='change_country' id='change_country' action='' method='post'>
 						<?php echo wpsc_shipping_country_list();?>
@@ -120,16 +130,16 @@ if(wpsc_cart_item_count() > 0) :
 			<?php if (wpsc_have_morethanone_shipping_quote()) :?>
 				<?php while (wpsc_have_shipping_methods()) : wpsc_the_shipping_method(); ?>
 						<?php 	if (!wpsc_have_shipping_quotes()) { continue; } // Don't display shipping method if it doesn't have at least one quote ?>
-						<tr><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().__('- Choose a Shipping Rate', 'wpsc'); ?> </td></tr>
+						<tr class='wpsc_shipping_header'><td class='shipping_header' colspan='5'><?php echo wpsc_shipping_method_name().__('- Choose a Shipping Rate', 'wpsc'); ?> </td></tr>
 						<?php while (wpsc_have_shipping_quotes()) : wpsc_the_shipping_quote();	?>
-							<tr>
-								<td colspan='3'>
+							<tr class='<?php echo wpsc_shipping_quote_html_id(); ?>'>
+								<td class='wpsc_shipping_quote_name wpsc_shipping_quote_name_<?php echo wpsc_shipping_quote_html_id(); ?>' colspan='3'>
 									<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_name(); ?></label>
 								</td>
-								<td style='text-align:center;'>
+								<td class='wpsc_shipping_quote_price wpsc_shipping_quote_price_<?php echo wpsc_shipping_quote_html_id(); ?>' style='text-align:center;'>
 									<label for='<?php echo wpsc_shipping_quote_html_id(); ?>'><?php echo wpsc_shipping_quote_value(); ?></label>
 								</td>
-								<td style='text-align:center;'>
+								<td class='wpsc_shipping_quote_radio wpsc_shipping_quote_radio_<?php echo wpsc_shipping_quote_html_id(); ?>' style='text-align:center;'>
 									<?php if(wpsc_have_morethanone_shipping_methods_and_quotes()): ?>
 										<input type='radio' id='<?php echo wpsc_shipping_quote_html_id(); ?>' <?php echo wpsc_shipping_quote_selected_state(); ?>  onclick='switchmethod("<?php echo wpsc_shipping_quote_name(); ?>", "<?php echo wpsc_shipping_method_internal_name(); ?>")' value='<?php echo wpsc_shipping_quote_value(true); ?>' name='shipping_method' />
 									<?php else: ?>
@@ -164,44 +174,8 @@ if(wpsc_cart_item_count() > 0) :
 				<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 			</td>
 		</tr>
-	<?php endif; ?>
-	
-	<?php if(wpsc_uses_shipping()) : ?>
-		<tr class="total_price total_shipping">
-			<td colspan="3">
-				<?php echo __('Total Shipping', 'wpsc'); ?>
-			</td>
-			<td colspan="2">
-				<span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
-				</td>
-		</tr>
-	<?php endif; ?>
-
-	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
-	<tr class="total_price">
-		<td colspan="3">
-			<?php echo __('Discount', 'wpsc'); ?>
-		</td>
-		<td colspan="2">
-			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
-	    </td>
-   	</tr>
-	  <?php endif ?>
-
-		
-	
-	<tr class='total_price'>
-		<td colspan='3'>
-		<?php echo __('Total Price', 'wpsc'); ?>
-		</td>
-		<td colspan='2'>
-			<span id='checkout_total' class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
-		</td>
-	</tr>
-	
-	
+	<?php endif; ?>	
 	</table>
-
 		<?php do_action('wpsc_before_form_of_shopping_cart'); ?>
 	
 	<form class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
@@ -212,7 +186,9 @@ if(wpsc_cart_item_count() > 0) :
 	   */
 	   ?>
 
-	 <?php if(!is_user_logged_in() && get_option('users_can_register') && get_option('require_register')) : ?>
+	 <?php if(!is_user_logged_in() && get_option('users_can_register') && get_option('require_register')) :
+			 global $current_user;
+    		 get_currentuserinfo();	  ?>
 		<h2><?php _e('Not yet a member?');?></h2>
 		<p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
 		<?php	if(count($_SESSION['wpsc_checkout_user_error_messages']) > 0) : ?>
@@ -230,13 +206,15 @@ if(wpsc_cart_item_count() > 0) :
 	  <fieldset class='wpsc_registration_form'>
 			<label><?php _e('Username'); ?>:</label><input type="text" name="log" id="log" value="" size="20"/>
 			<label><?php _e('Password'); ?>:</label><input type="password" name="pwd" id="pwd" value="" size="20" />
-			<label><?php _e('E-mail'); ?>:</label><input type="text" name="user_email" id="user_email" value="<?php echo esc_attr(stripslashes($user_email)); ?>" size="20" />
+			<label><?php _e('E-mail'); ?>:</label><input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" />
 		</fieldset>
 	<?php endif; ?>
 
-	<h2><?php echo __('Please enter your contact details:', 'wpsc'); ?></h2>
+<!--
+	<h2><?php //exit('<pre>'.print_r($_SESSION,true).'</pre>');//echo __('Please enter your contact details:', 'wpsc'); ?></h2>
 	<?php/* echo __('Note, Once you press submit, you will need to have your Credit card handy.', 'wpsc'); <br /> */?>
-	<?php echo __('Fields marked with an asterisk must be filled in.', 'wpsc'); ?>
+	<p><?php //echo __('Fields marked with an asterisk must be filled in.', 'wpsc'); ?></p>
+-->
 	<?php
 	  if(count($_SESSION['wpsc_checkout_misc_error_messages']) > 0) {
 			echo "<div class='login_error'>\n\r";
@@ -246,46 +224,84 @@ if(wpsc_cart_item_count() > 0) :
 			echo "</div>\n\r";
 		}
 		$_SESSION['wpsc_checkout_misc_error_messages'] =array();
+	//	wpsc_has_correct_region($_SESSION['wpsc_delivery_country'],$_SESSION['wpsc_delivery_region']);
 	?>
-	<table class='wpsc_checkout_table'>
+	<table class='wpsc_checkout_table table-1'>
 		<?php while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
-			<?php if(wpsc_is_shipping_details()) : ?>
-					<tr>
-						<td colspan ='2'>
-							<br />
-							<input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' />
-							<label for='shippingSameBilling'>Shipping Address same as Billing Address?</label>
-						
-						</td>
-					</tr>
+		  <?php if(wpsc_checkout_form_is_header() == true) : $i++;?>
+			<?php if($i > 1):?>
+			</table>
+				<table class='wpsc_checkout_table table-<?php echo $i; ?>'>
 			<?php endif; ?>
-
-		  <?php if(wpsc_checkout_form_is_header() == true) : ?>
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
-			<td <?php if(wpsc_is_shipping_details()) echo "class='wpsc_shipping_forms'"; ?> colspan='2'>
-				<h4>
-					<?php echo wpsc_checkout_form_name();?>
-				</h4>
-			</td>
+					<td <?php if(wpsc_is_shipping_details()){ echo "class='wpsc_shipping_forms'";}else{echo "class='wpsc_billing_forms'";} ?> colspan='2'>
+						<h4><?php echo wpsc_checkout_form_name();?></h4>
+					</td>
 				</tr>
+				<?php if(!wpsc_is_shipping_details() && $i <= 1){?>	
+				<tr class='same_as_shipping_row'>
+					<td colspan ='2'>
+						<input type='checkbox' value='true' name='billing_same_as_shipping' id='billing_same_as_shipping' />
+						<label for='billing_same_as_shipping'><?php _e('Same as shipping address?','wpsc'); ?></label>
+					</td>
+				</tr>
+			<?php	} ?>
 		  <?php else: ?>
 		  <?php if((!wpsc_uses_shipping()) && $wpsc_checkout->checkout_item->unique_name == 'shippingstate'): ?>
+		  
+		  <?php elseif(wpsc_checkout_form_element_id() =='wpsc_checkout_form_8'): ?>
+				<div class='wpsc_email_address'>
+					<p class='<?php echo wpsc_checkout_form_element_id(); ?>'>
+						<label class='wpsc_email_address' for='<?php echo wpsc_checkout_form_element_id(); ?>'>
+						<?php echo wpsc_checkout_form_name();?>
+						
+						</label>
+					</span>
+					<p>
+						<?php echo wpsc_checkout_form_field();?>
+						
+				    <?php if(wpsc_the_checkout_item_error() != ''): ?>
+				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></span>
+				    
+					<?php endif; ?>
+					</p>
+				</div>
 		  <?php else : ?>
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
-			<td>
-				<label for='<?php echo wpsc_checkout_form_element_id(); ?>'>
-				<?php echo wpsc_checkout_form_name();?>:
-				</label>
-			</td>
-			<td>
-				<?php echo wpsc_checkout_form_field();?>
-				
-		    <?php if(wpsc_the_checkout_item_error() != ''): ?>
-		    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
-		    
-			<?php endif; ?>
-			</td>
-			</tr>
+		  		<?php // to get rid of shipping state label 
+		  		 if (wpsc_checkout_form_name() == 'State: '){ ?>
+					<td class='shippingstate' colspan='2'>
+						<?php if($wpsc_checkout->checkout_item->unique_name != 'shippingstate' || (wpsc_has_regions($_SESSION['wpsc_delivery_country']))){
+								echo wpsc_checkout_form_field();
+							}else{
+//								exit('<pre>'.print_r($_SESSION,true).'</pre>');
+								echo '&nbsp;';							
+							}
+						?>
+
+				    <?php if(wpsc_the_checkout_item_error() != ''): ?>
+				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
+				    
+					<?php endif; ?>
+					</td>	
+		<?php	}else{?>
+					<td class='<?php echo wpsc_checkout_form_element_id(); ?>'>
+						<label for='<?php echo wpsc_checkout_form_element_id(); ?>'>
+						<?php echo wpsc_checkout_form_name();?>
+						
+						</label>
+					</td>
+					<td>
+						<?php echo wpsc_checkout_form_field();?>
+						
+				    <?php if(wpsc_the_checkout_item_error() != ''): ?>
+				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
+				    
+					<?php endif; ?>
+					</td>
+		<?php 
+				} ?>
+				</tr>
 			<?php endif; ?>
 		
 			<?php endif; ?>
@@ -306,7 +322,7 @@ if(wpsc_cart_item_count() > 0) :
 		</tr>
 		<?php endif; ?>		
 		<tr>
-			<td colspan='2'>
+			<td colspan='2' class='wpsc_gateway_container'>
 			
 			<?php  //this HTML displays activated payment gateways?>
 			  
@@ -342,6 +358,7 @@ if(wpsc_cart_item_count() > 0) :
 				
 			</td>
 		</tr>
+		
 		<?php if(get_option('terms_and_conditions') != '') : ?>
 		<tr>
 			<td colspan='2'>
@@ -350,26 +367,70 @@ if(wpsc_cart_item_count() > 0) :
    		   </td>
  	   </tr>
 		<?php endif; ?>	
+		</table>
+		
+	<table  class='wpsc_checkout_table table-4'>
 		<tr>
-			<td colspan='2'>
+			<td class='wpsc_total_price_and_shipping'colspan='2'>
+				<h4><?php echo __('Total Price with Shipping','wpsc'); ?></h4>
+			</td>
+		</tr>
+		<?php if(wpsc_uses_shipping()) : ?>
+		<tr class="total_price total_shipping">
+			<td class='wpsc_totals'>
+				<?php echo __('Total Shipping', 'wpsc'); ?>
+			</td>
+			<td class='wpsc_totals'>
+				<span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
+			</td>
+		</tr>
+	<?php endif; ?>
+
+	  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
+	<tr class="total_price">
+		<td class='wpsc_totals'>
+			<?php echo __('Discount', 'wpsc'); ?>
+		</td>
+		<td class='wpsc_totals'>
+			<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
+	    </td>
+   	</tr>
+	  <?php endif ?>
+
+		
+	
+	<tr class='total_price'>
+		<td class='wpsc_totals'>
+		<?php echo __('Total Price', 'wpsc'); ?>
+		</td>
+		<td class='wpsc_totals'>
+			<span id='checkout_total' class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
+		</td>
+	</tr>
+	</table>	
+
+<!-- div for make purchase button -->
+		<div class='wpsc_make_purchase'>
+			<span>
 				<?php if(get_option('terms_and_conditions') == '') : ?>
 					<input type='hidden' value='yes' name='agree' />
 				<?php endif; ?>	
 				<?php //exit('<pre>'.print_r($wpsc_gateway->wpsc_gateways[0]['name'], true).'</pre>');
 				 if(count($wpsc_gateway->wpsc_gateways) == 1 && $wpsc_gateway->wpsc_gateways[0]['name'] == 'Noca'){}else{?>
 					<input type='hidden' value='submit_checkout' name='wpsc_action' />
-					<input type='submit' value='<?php echo __('Make Purchase', 'wpsc');?>' name='submit' class='make_purchase' />
+					<input type='submit' value='<?php echo __('Make Purchase', 'wpsc');?>' name='submit' class='make_purchase wpsc_buy_button' />
 				<?php }/* else: ?>
 				
 				<br /><strong><?php echo __('Please login or signup above to make your purchase', 'wpsc');?></strong><br />
 				<?php echo __('If you have just registered, please check your email and login before you make your purchase', 'wpsc');?>
 				</td>
 				<?php endif;  */?>				
-			</td>
-		</tr>
-	</table>
+			</span>
+		</div>
 </form>
 </div>
+
+<div class='clear'></div>
 <?php
 else:
 	echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";

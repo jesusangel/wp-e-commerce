@@ -536,6 +536,7 @@ function wpsc_register_post_types() {
 		'label' => __('Products'),  
         'singular_label' => __('Product'),
 		'query_var' => true,
+		'register_meta_box_cb' => 'wpsc_meta_boxes',
 		'rewrite' => array(
 			'slug' => $wpsc_page_titles['products'].'/%wpsc_product_category%',
 			'with_front' => false

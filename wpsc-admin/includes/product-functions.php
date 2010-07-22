@@ -1068,20 +1068,24 @@ class wpsc_variation_combinator {
 	var $reprocessed_array = array();
 	var $combinations= array();     
 	
-	function wpsc_variation_combinator($variation_sets) {		
+function wpsc_variation_combinator($variation_sets) {
+	if( $variation_sets ) {
 		foreach($variation_sets as $variation_set_id => $variation_set) {
 			$this->variation_sets[] = absint($variation_set_id);
 			$new_variation_set = array();
-			foreach($variation_set as $variation => $active) {
-				if($active == 1) {
-					$new_variation_set[] = array(absint($variation));
-					$this->variation_values[] = $variation;
+			if( $variation_set ) {
+				foreach($variation_set as $variation => $active) {
+					if($active == 1) {
+						$new_variation_set[] = array(absint($variation));
+						$this->variation_values[] = $variation;
+					}
 				}
 			}
 			$this->reprocessed_array[] = $new_variation_set;
 		}
 		$this->get_combinations(array(), $this->reprocessed_array, 0);
 	}
+}
 	          
 	
 	function get_combinations($batch, $elements, $i)  {
