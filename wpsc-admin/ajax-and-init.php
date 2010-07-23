@@ -2478,4 +2478,73 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
 if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-category-set')) {
 	add_action('admin_init', 'wpsc_save_category_set');
 }
+
+	add_action ( 'wpsc-variation_edit_form_fields', 'variation_price_field' );
+	add_action ( 'wpsc-variation_edit_form_fields', 'variation_price_field_check' );
+	add_action ( 'wpsc-variation_add_form_fields', 'variation_price_field' );
+
+function variation_price_field( $variation ) {
+
+	//If it doesn't exist, let's create a multi-dimensional associative array that will contain all of the term/price associations
+		
+	$term_prices = get_option( 'term_prices' );
+
+	if ( empty($term_prices) || !is_array($term_prices) )  {
+		
+		$term_id = $variation->term_id;
+		$term_prices = array();
+		$term_prices[$term_id] = array();
+		$term_prices[$term_id]["price"] = absint($_POST["variation_price"]);
+		$term_prices[$term_id]["checked"] = (isset($_POST["apply_to_current"])) ? "checked" : "unchecked";
+		add_option('term_prices', $term_prices);
+		
+	} 
+	
+	//check for existing featured ID
+	
+	$featured_id = '';
+	if ( is_array ( $term_prices ) && array_key_exists ( $variation->term_id, $term_prices ) ) {
+		$price = $term_prices[$variation->term_id]["price"] ;
+	}
+	
+?>
+
+    <tr class="form-field">
+        <th scope="row" valign="top"><label for="variation_price"><?php _e('Variation Price') ?></label></th>
+        <td>
+        	<input type="text" name="variation_price" id="variation_price" size="3" style="width:5%;" value="<?php echo $price; ?>"><br />
+            <span class="description">You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%)</span>
+	</div>
+	</td>
+	</tr>
+<?php
+}
+
+function variation_price_field_check( $variation ) {
+?>
+<tr class="form-field">
+        <th scope="row" valign="top"><label for="apply_to_current"><?php _e('Apply to current variations?') ?></label></th>
+        <td>
+            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" value="<?php echo $featured_id; ?>">By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created from now on.</span>
+        </td>
+    </tr>
+<?php
+	}
+
+add_action ( 'edited_wpsc-variation', 'tme_save_featured');
+add_action ( 'created_wpsc-variation', 'tme_save_featured');
+
+function tme_save_featured( $term_id ) {
+	if ( isset( $_POST['category_featured'] ) ) {
+
+		//load existing category featured option
+		$current_featured = get_option( 'category_featured' );
+
+		//set featured post ID to proper category ID in options array
+		$current_featured[$term_id] = intval( $_POST['category_featured'] );
+
+		//save the option array
+		update_option( 'category_featured', $current_featured );
+	}
+}
 ?>
