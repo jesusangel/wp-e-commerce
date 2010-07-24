@@ -6,8 +6,9 @@ require_once 'models/taxes.class.php';
 require_once 'controllers/taxes_controller.class.php';
 
 //include required js file
-wp_enqueue_script('wp-e-commerce-taxes-functions', WPSC_URL.'/wpec-taxes/view/js/taxes-functions.js', array('wp-e-commerce-admin'), $version_identifier, false);
-
+if(isset($version_identifier)) {
+	wp_enqueue_script('wp-e-commerce-taxes-functions', WPSC_URL.'/wpec-taxes/view/js/taxes-functions.js', array('wp-e-commerce-admin'), $version_identifier, false);
+}
 /**
  * @description: wpec_taxes_settings_page - used by wpec to display the admin settings page.
  * @param: void
@@ -157,7 +158,7 @@ function wpec_submit_taxes_options()
 **/
 add_action('wp_ajax_wpec_taxes_ajax', 'wpec_taxes_ajax_controller');
 
-if($_REQUEST['wpec_admin_action'] == 'submit_taxes_options'){
+if(isset($_REQUEST['wpec_admin_action']) && $_REQUEST['wpec_admin_action'] == 'submit_taxes_options'){
    add_action('admin_init', 'wpec_submit_taxes_options');
 }
 ?>

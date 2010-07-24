@@ -2489,10 +2489,11 @@ function variation_price_field( $variation ) {
 	//If it doesn't exist, let's create a multi-dimensional associative array that will contain all of the term/price associations
 		
 	$term_prices = get_option( 'term_prices' );
-
+	if(is_object($variation)) {
+		$term_id = $variation->term_id;
+	}
 	if ( empty($term_prices) || !is_array($term_prices) )  {
 		
-		$term_id = $variation->term_id;
 		$term_prices = array();
 		$term_prices[$term_id] = array();
 		$term_prices[$term_id]["price"] = '';
@@ -2500,10 +2501,12 @@ function variation_price_field( $variation ) {
 		add_option('term_prices', $term_prices);
 		
 	} 
-	
-	if ( is_array ( $term_prices ) && array_key_exists ( $variation->term_id, $term_prices ) ) {
-		$price = $term_prices[$variation->term_id]["price"] ;
-	}
+
+	if ( isset($term_id) && is_array ( $term_prices ) && array_key_exists ( $term_id, $term_prices ) ) {
+		$price = $term_prices[$term_id]["price"] ;
+	} else {
+		$price = '';
+	}	
 	
 ?>
 
