@@ -119,11 +119,6 @@ if(!isset($purchlogs)){
 			
 			<?php
 		$page_back = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','purchaselog_id'), $_SERVER['REQUEST_URI'] );
-		 if(wpsc_tax_isincluded() == false){
-		 	$taxlabel = __('Tax','wpsc');
-		 }else{
-		 	$taxlabel = __('Tax Included','wpsc');
-		 }
 
 		$columns = array(
 	  	'title' => __('Name','wpsc'),
@@ -131,10 +126,16 @@ if(!isset($purchlogs)){
 			'quantity' => __('Quantity','wpsc'),
 			'price' => __('Price','wpsc'),
 			'shipping' => __('Shipping','wpsc'),
-			'tax' => $taxlabel,
+			'tax' => '',
 // 			'discount' => 'Discount',
 			'total' => __('Total','wpsc')
 		);
+      
+      if(wpec_display_product_tax())
+      {
+         $columns['tax'] = __('Tax Included','wpsc');
+      }// if
+      
 		register_column_headers('display-purchaselog-details', $columns); 
 		?>
 			<div id='post-body' class='has-sidebar' style='width:95%;'>
@@ -205,7 +206,15 @@ if(!isset($purchlogs)){
 							<th><?php _e('Discount','wpsc'); ?> </th>
 							<td><?php echo wpsc_display_purchlog_discount(); ?></td>
 						</tr>
-						
+                  
+						<?php if(!wpec_display_product_tax()) { ?>
+                     <tr>
+                        <td colspan='5'></td>
+                        <th><?php _e('Taxes','wpsc'); ?> </th>
+                        <td><?php echo wpec_display_purchlog_taxes(); ?></td>
+                     </tr>
+                  <?php } ?>
+                  
 						<tr>
 							<td colspan='5'></td>
 							<th><?php _e('Shipping','wpsc'); ?> </th>
@@ -548,7 +557,7 @@ if(!isset($purchlogs)){
  	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY! -->
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE! -->
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_shipping(),true); ?></td> <!-- SHIPPING! -->
- 	<td><?php echo wpsc_purchaselog_details_tax(); ?></td> <!-- TAX! -->
+ 	<td><?php if(wpec_display_product_tax()) { echo wpsc_purchaselog_details_tax(); } ?></td> <!-- TAX! -->
  	<?php /* <td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT! --> */ ?>
  	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL! -->
  	</tr>
@@ -640,6 +649,16 @@ function wpsc_custom_checkout_fields(){
 	//exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 
 }
+
+/**
+ * @description: determines whether or not to display the product tax or not
+ * @return: boolean
+**/
+function wpec_display_product_tax()
+{
+   global $purchlogitem;      
+   return ($purchlogitem->extrainfo->wpec_taxes_total == 0.00) ? true : false;
+}// wpec_display_product_tax
 
 function wpsc_upgrade_purchase_logs() {
 	include(WPSC_FILE_PATH.'/wpsc-admin/includes/purchlogs_upgrade.php');

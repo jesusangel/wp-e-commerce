@@ -9,7 +9,7 @@
  *
  * @package wp-e-commerce
  * @since 3.7
- * @subpackage wpsc-cart-classes 
+ * @subpackage wpsc-cart-classes
 */
 /**
  * The WPSC Cart API for templates
@@ -24,20 +24,23 @@
 * * @return boolean true or false depending on settings>general page
 */
 function wpsc_tax_isincluded() {
-	if(get_option('tax_inprice') == false || get_option('tax_inprice') == '0'){
-		return false;
-	}elseif(get_option('tax_inprice')=='1'){
-		return true;
-	}
+   /*if(get_option('tax_inprice') == false || get_option('tax_inprice') == '0'){
+      return false;
+   }elseif(get_option('tax_inprice')=='1'){
+      return true;
+   }*/
+   //uses new wpec_taxes functionality now
+   $wpec_taxes_controller = new wpec_taxes_controller();
+   return $wpec_taxes_controller->wpec_taxes_isincluded();
 }
 
 function wpsc_cart_item_count() {
-	global $wpsc_cart;
-	$count = 0;
-	foreach((array)$wpsc_cart->cart_items as $cart_item) {
-		$count += $cart_item->quantity;
-	}
-	return $count;
+   global $wpsc_cart;
+   $count = 0;
+   foreach((array)$wpsc_cart->cart_items as $cart_item) {
+      $count += $cart_item->quantity;
+   }
+   return $count;
 }
 
 
@@ -46,13 +49,13 @@ function wpsc_cart_item_count() {
 * * @return integer the item count
 */
 function wpsc_coupon_amount($forDisplay=true) {
-	global $wpsc_cart;
-	if($forDisplay == true) {
-	  $output = $wpsc_cart->process_as_currency($wpsc_cart->coupons_amount);
-	} else {
-		$output = $wpsc_cart->coupons_amount;
-	}
-	return $output;
+   global $wpsc_cart;
+   if($forDisplay == true) {
+     $output = $wpsc_cart->process_as_currency($wpsc_cart->coupons_amount);
+   } else {
+      $output = $wpsc_cart->coupons_amount;
+   }
+   return $output;
 }
 
 /**
@@ -60,20 +63,20 @@ function wpsc_coupon_amount($forDisplay=true) {
 * @return string the total price of the cart, with a currency sign
 */
 function wpsc_cart_total($forDisplay=true) {
-	global $wpsc_cart;  
-	$total = $wpsc_cart->calculate_subtotal();
-	$total += $wpsc_cart->calculate_total_shipping();
-	if(wpsc_tax_isincluded() == false){
-		$total += $wpsc_cart->calculate_total_tax();
-	}
+   global $wpsc_cart;
+   $total = $wpsc_cart->calculate_subtotal();
+   $total += $wpsc_cart->calculate_total_shipping();
+   if(wpsc_tax_isincluded() == false){
+      $total += $wpsc_cart->calculate_total_tax();
+   }
 
-	$total -= $wpsc_cart->coupons_amount;
-	if($forDisplay){
-//	exit('abksd'.get_option('add_plustax'));
-		return $wpsc_cart->process_as_currency($total);
-	}else{
-		return $total;
-	}
+   $total -= $wpsc_cart->coupons_amount;
+   if($forDisplay){
+// exit('abksd'.get_option('add_plustax'));
+      return $wpsc_cart->process_as_currency($total);
+   }else{
+      return $total;
+   }
 }
 
 /**
@@ -86,27 +89,27 @@ function wpsc_cart_total($forDisplay=true) {
  * @return string The subtotal price of the cart, with a currency sign.
  */
 function wpsc_cart_total_widget( $shipping = true, $tax = true, $coupons = true ) {
-	
-	global $wpsc_cart; 
-	
-	$total = $wpsc_cart->calculate_subtotal();
-	
-	if ( $shipping ) {
-		$total += $wpsc_cart->calculate_total_shipping();
-	}
-	if ( $tax && wpsc_tax_isincluded() == false ) {
-		$total += $wpsc_cart->calculate_total_tax();
-	}
-	if ( $coupons ) {
-		$total -= $wpsc_cart->coupons_amount;
-	}
-	
-	if ( get_option( 'add_plustax' ) == 1 ) {
-		return $wpsc_cart->process_as_currency( $wpsc_cart->calculate_subtotal() );
-	} else {
-		return $wpsc_cart->process_as_currency( $total );
-	}
-	
+
+   global $wpsc_cart;
+
+   $total = $wpsc_cart->calculate_subtotal();
+
+   if ( $shipping ) {
+      $total += $wpsc_cart->calculate_total_shipping();
+   }
+   if ( $tax && wpsc_tax_isincluded() == false ) {
+      $total += $wpsc_cart->calculate_total_tax();
+   }
+   if ( $coupons ) {
+      $total -= $wpsc_cart->coupons_amount;
+   }
+
+   if ( get_option( 'add_plustax' ) == 1 ) {
+      return $wpsc_cart->process_as_currency( $wpsc_cart->calculate_subtotal() );
+   } else {
+      return $wpsc_cart->process_as_currency( $total );
+   }
+
 }
 
 /**
@@ -114,13 +117,13 @@ function wpsc_cart_total_widget( $shipping = true, $tax = true, $coupons = true 
 * @return string the total price of the cart, with a currency sign
 */
 function nzshpcrt_overall_total_price() {
-	global $wpsc_cart;
-	$total = $wpsc_cart->calculate_subtotal();
-	$total += $wpsc_cart->calculate_total_shipping();
-	if(wpsc_tax_isincluded() == false){
-		$total += $wpsc_cart->calculate_total_tax();
-	}
-	$total -= $wpsc_cart->coupons_amount;
+   global $wpsc_cart;
+   $total = $wpsc_cart->calculate_subtotal();
+   $total += $wpsc_cart->calculate_total_shipping();
+   if(wpsc_tax_isincluded() == false){
+      $total += $wpsc_cart->calculate_total_tax();
+   }
+   $total -= $wpsc_cart->coupons_amount;
   return $total;
 }
 
@@ -129,12 +132,12 @@ function nzshpcrt_overall_total_price() {
 * @return float the total weight of the cart
 */
 function wpsc_cart_weight_total() {
-	global $wpsc_cart;
-	if(is_object($wpsc_cart)) {
-		return $wpsc_cart->calculate_total_weight();
-	} else {
-		return 0;
-	}
+   global $wpsc_cart;
+   if(is_object($wpsc_cart)) {
+      return $wpsc_cart->calculate_total_weight();
+   } else {
+      return 0;
+   }
 }
 
 /**
@@ -142,17 +145,17 @@ function wpsc_cart_weight_total() {
 * @return float the total weight of the cart
 */
 function wpsc_cart_tax($forDisplay = true) {
-	global $wpsc_cart;
-	if($forDisplay){
-	    if(wpsc_tax_isincluded() == false){
-			return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
-		}else{
-			return '('.$wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax()).')';
-		}
+   global $wpsc_cart;
+   if($forDisplay){
+       if(wpsc_tax_isincluded() == false){
+         return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax());
+      }else{
+         return '('.$wpsc_cart->process_as_currency($wpsc_cart->calculate_total_tax()).')';
+      }
 
-	}else{
-		return $wpsc_cart->calculate_total_tax();
-	}
+   }else{
+      return $wpsc_cart->calculate_total_tax();
+   }
 }
 
 
@@ -162,15 +165,15 @@ function wpsc_cart_tax($forDisplay = true) {
 * @return boolean true or false, for use with an if statement
 */
 function wpsc_cart_show_plus_postage() {
-	global $wpsc_cart;
-//		exit($_SESSION['wpsc_has_been_to_checkout'] ."get_option('add_plustax')".get_option('add_plustax'));	
-	if(($_SESSION['wpsc_has_been_to_checkout'] == null ) && (get_option('add_plustax') == 1)) {
+   global $wpsc_cart;
+//    exit($_SESSION['wpsc_has_been_to_checkout'] ."get_option('add_plustax')".get_option('add_plustax'));
+   if(($_SESSION['wpsc_has_been_to_checkout'] == null ) && (get_option('add_plustax') == 1)) {
 
-		return true;
+      return true;
 
-	} else {
-		return false;
-	}
+   } else {
+      return false;
+   }
 }
 
 /**
@@ -178,28 +181,28 @@ function wpsc_cart_show_plus_postage() {
 * @return boolean if true, all items in the cart do use shipping
 */
 function wpsc_uses_shipping() {
-	global $wpsc_cart;
-	$shippingoptions = get_option('custom_shipping_options');
-	if( (!((get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $wpsc_cart->calculate_subtotal()))) && count($shippingoptions) >= 1 && $shippingoptions[0] != '' && get_option('do_not_use_shipping') == 0) {
-		$status = $wpsc_cart->uses_shipping();
-	} else {
-	  $status = false;
-	}
-	return $status;
+   global $wpsc_cart;
+   $shippingoptions = get_option('custom_shipping_options');
+   if( (!((get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $wpsc_cart->calculate_subtotal()))) && count($shippingoptions) >= 1 && $shippingoptions[0] != '' && get_option('do_not_use_shipping') == 0) {
+      $status = $wpsc_cart->uses_shipping();
+   } else {
+     $status = false;
+   }
+   return $status;
 }
-  
+
 /**
 * cart has shipping function, no parameters
 * @return boolean true for yes, false for no
 */
 function wpsc_cart_has_shipping() {
-	global $wpsc_cart;
-	if($wpsc_cart->calculate_total_shipping() > 0) {
-		$output = true;
-	} else {
-		$output = false;
-	}
-	return $output;
+   global $wpsc_cart;
+   if($wpsc_cart->calculate_total_shipping() > 0) {
+      $output = true;
+   } else {
+      $output = false;
+   }
+   return $output;
 }
 
 /**
@@ -207,8 +210,8 @@ function wpsc_cart_has_shipping() {
 * @return string the total shipping of the cart, with a currency sign
 */
 function wpsc_cart_shipping() {
-	global $wpsc_cart;
-	return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_shipping());
+   global $wpsc_cart;
+   return $wpsc_cart->process_as_currency($wpsc_cart->calculate_total_shipping());
 }
 
 
@@ -217,16 +220,16 @@ function wpsc_cart_shipping() {
 * @return array array of the categories
 */
 function wpsc_cart_item_categories($get_ids = false) {
-	global $wpsc_cart;
-	if(is_object($wpsc_cart)) {
-		if($get_ids == true) {
-			return $wpsc_cart->get_item_category_ids();
-		} else {
-			return $wpsc_cart->get_item_categories();
-		}
-	} else {
-		return array();
-	}
+   global $wpsc_cart;
+   if(is_object($wpsc_cart)) {
+      if($get_ids == true) {
+         return $wpsc_cart->get_item_category_ids();
+      } else {
+         return $wpsc_cart->get_item_categories();
+      }
+   } else {
+      return array();
+   }
 }
 
 /**
@@ -234,67 +237,67 @@ function wpsc_cart_item_categories($get_ids = false) {
 * @return boolean true if there are cart items left
 */
 function wpsc_have_cart_items() {
-	global $wpsc_cart;
-	return $wpsc_cart->have_cart_items();
+   global $wpsc_cart;
+   return $wpsc_cart->have_cart_items();
 }
 
 function wpsc_the_cart_item() {
-	global $wpsc_cart;
-	return $wpsc_cart->the_cart_item();
+   global $wpsc_cart;
+   return $wpsc_cart->the_cart_item();
 }
- 
- 
- 
+
+
+
 /**
 * cart item key function, no parameters
 * @return integer - the cart item key from the array in the cart object
 */
 function wpsc_the_cart_item_key() {
-	global $wpsc_cart;
-	return $wpsc_cart->current_cart_item;
+   global $wpsc_cart;
+   return $wpsc_cart->current_cart_item;
 }
- 
+
  /**
 * cart item name function, no parameters
 * @return string the cart item name
 */
 function wpsc_cart_item_name() {
-	global $wpsc_cart;
-	return htmlentities(stripslashes($wpsc_cart->cart_item->product_name), ENT_QUOTES, "UTF-8");
+   global $wpsc_cart;
+   return htmlentities(stripslashes($wpsc_cart->cart_item->product_name), ENT_QUOTES, "UTF-8");
 }
  /**
 * cart item quantity function, no parameters
 * @return string the selected quantity of items
 */
 function wpsc_cart_item_product_id() {
-	global $wpsc_cart;
-	return $wpsc_cart->cart_item->product_id;
-} 
+   global $wpsc_cart;
+   return $wpsc_cart->cart_item->product_id;
+}
  /**
 * cart item quantity function, no parameters
 * @return string the selected quantity of items
 */
 function wpsc_cart_item_quantity() {
-	global $wpsc_cart;
-	return $wpsc_cart->cart_item->quantity;
+   global $wpsc_cart;
+   return $wpsc_cart->cart_item->quantity;
 }
 
 function wpsc_cart_item_quantity_single_prod($id) {
-	global $wpsc_cart;
-	//exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
-	return $wpsc_cart;
+   global $wpsc_cart;
+   //exit('<pre>'.print_r($wpsc_cart, true).'</pre>');
+   return $wpsc_cart;
 }
 /**
 * cart item price function, no parameters
 * @return string the cart item price multiplied by the quantity, with a currency sign
 */
 function wpsc_cart_item_price($forDisplay = true) {
-	global $wpsc_cart;
-	if($forDisplay){
-		return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->total_price);
-	}else{
-		return $wpsc_cart->cart_item->total_price;
-	}
+   global $wpsc_cart;
+   if($forDisplay){
+      return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->total_price);
+   }else{
+      return $wpsc_cart->cart_item->total_price;
+   }
 }
 
 /**
@@ -302,12 +305,12 @@ function wpsc_cart_item_price($forDisplay = true) {
 * @return string the cart item price multiplied by the quantity, with a currency sign
 */
 function wpsc_cart_item_shipping($forDisplay = true) {
-	global $wpsc_cart;
-	if($forDisplay){
-		return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->shipping);
-	}else{
-		return $wpsc_cart->cart_item->shipping;
-	}
+   global $wpsc_cart;
+   if($forDisplay){
+      return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->shipping);
+   }else{
+      return $wpsc_cart->cart_item->shipping;
+   }
 }
 
 
@@ -317,8 +320,8 @@ function wpsc_cart_item_shipping($forDisplay = true) {
 * @return string the cart item url
 */
 function wpsc_cart_item_url() {
-	global $wpsc_cart;
-	return $wpsc_cart->cart_item->product_url;
+   global $wpsc_cart;
+   return $wpsc_cart->cart_item->product_url;
 }
 
 /**
@@ -329,19 +332,19 @@ function wpsc_cart_item_url() {
 * @return string url to the to the cart item thumbnail image
 */
 function wpsc_cart_item_image($width = null, $height = null) {
-	global $wpsc_cart;
-	$image_data = $wpsc_cart->cart_item->thumbnail_image;
-//	echo "<pre>".print_r($wpsc_cart->cart_item)."</pre>";
+   global $wpsc_cart;
+   $image_data = $wpsc_cart->cart_item->thumbnail_image;
+// echo "<pre>".print_r($wpsc_cart->cart_item)."</pre>";
 
-	if(($width > 0) && ($height > 0)) {
-		$image_path = "index.php?wpsc_action=scale_image&amp;attachment_id={$image_data->ID}&amp;width=".$width."&amp;height=".$height."";
-	} else {
-		$image_path = WPSC_THUMBNAIL_URL.$wpsc_cart->cart_item->thumbnail_image;	
-		if(is_ssl()) {
-			$image_path = str_replace("http://", "https://", $image_path);
-		}
-	}	
-	return $image_path;
+   if(($width > 0) && ($height > 0)) {
+      $image_path = "index.php?wpsc_action=scale_image&amp;attachment_id={$image_data->ID}&amp;width=".$width."&amp;height=".$height."";
+   } else {
+      $image_path = WPSC_THUMBNAIL_URL.$wpsc_cart->cart_item->thumbnail_image;
+      if(is_ssl()) {
+         $image_path = str_replace("http://", "https://", $image_path);
+      }
+   }
+   return $image_path;
 }
 
 /**
@@ -352,59 +355,59 @@ function wpsc_cart_item_image($width = null, $height = null) {
  * @return array of shipping options
  */
 function wpsc_selfURL() {
-	$s = empty($_SERVER["HTTPS"]) ? "" : ($_SERVER["HTTPS"] == "on") ? "s" : "";
-	$protocol = wpsc_strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s;
-	$port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]);
-	return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI'];
+   $s = empty($_SERVER["HTTPS"]) ? "" : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+   $protocol = wpsc_strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s;
+   $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]);
+   return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI'];
 }
 
 function wpsc_strleft($s1, $s2) {
-	$values = substr($s1, 0, strpos($s1, $s2));
-	return  $values;
+   $values = substr($s1, 0, strpos($s1, $s2));
+   return  $values;
 }
 function wpsc_google_checkout(){
-	$currpage = wpsc_selfURL();
-	//exit('<pre>'.print_r(get_option('custom_gateway_options'), true).'</pre>');
-	if (array_search("google",(array)get_option('custom_gateway_options')) !== false && $currpage != get_option('shopping_cart_url')) {
-		global $nzshpcrt_gateways;
-		foreach($nzshpcrt_gateways as $gateway) {
-			if($gateway['internalname'] == 'google' ) {
-				$gateway_used = $gateway['internalname'];
-				$gateway['function'](true);
-			}
-		}
-	}
+   $currpage = wpsc_selfURL();
+   //exit('<pre>'.print_r(get_option('custom_gateway_options'), true).'</pre>');
+   if (array_search("google",(array)get_option('custom_gateway_options')) !== false && $currpage != get_option('shopping_cart_url')) {
+      global $nzshpcrt_gateways;
+      foreach($nzshpcrt_gateways as $gateway) {
+         if($gateway['internalname'] == 'google' ) {
+            $gateway_used = $gateway['internalname'];
+            $gateway['function'](true);
+         }
+      }
+   }
 }
 function wpsc_empty_google_logs(){
-	global $wpdb;
-	$sql="DELETE FROM  `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`=".$_SESSION['wpsc_sessionid'];
-	$wpdb->query($sql);
-	unset($_SESSION['wpsc_sessionid']);
-	
+   global $wpdb;
+   $sql="DELETE FROM  `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`=".$_SESSION['wpsc_sessionid'];
+   $wpdb->query($sql);
+   unset($_SESSION['wpsc_sessionid']);
+
 }
 /**
 * have shipping methods function, no parameters
 * @return boolean
 */
 function wpsc_have_shipping_methods() {
-	global $wpsc_cart;
-	return $wpsc_cart->have_shipping_methods();
+   global $wpsc_cart;
+   return $wpsc_cart->have_shipping_methods();
 }
 /**
 * the shipping method function, no parameters
 * @return boolean
 */
 function wpsc_the_shipping_method() {
-	global $wpsc_cart;
-	return $wpsc_cart->the_shipping_method();
+   global $wpsc_cart;
+   return $wpsc_cart->the_shipping_method();
 }
 /**
 * the shipping method name function, no parameters
 * @return string shipping method name
 */
 function wpsc_shipping_method_name() {
-	global $wpsc_cart, $wpsc_shipping_modules;
-	return $wpsc_shipping_modules[$wpsc_cart->shipping_method]->name;
+   global $wpsc_cart, $wpsc_shipping_modules;
+   return $wpsc_shipping_modules[$wpsc_cart->shipping_method]->name;
 }
 
 
@@ -413,8 +416,8 @@ function wpsc_shipping_method_name() {
 * @return string shipping method internal name
 */
 function wpsc_shipping_method_internal_name() {
-	global $wpsc_cart, $wpsc_shipping_modules;
-	return $wpsc_cart->shipping_method;
+   global $wpsc_cart, $wpsc_shipping_modules;
+   return $wpsc_cart->shipping_method;
 }
 
 
@@ -423,8 +426,8 @@ function wpsc_shipping_method_internal_name() {
 * @return string the cart item url
 */
 function wpsc_have_shipping_quotes() {
-	global $wpsc_cart;
-	return $wpsc_cart->have_shipping_quotes();
+   global $wpsc_cart;
+   return $wpsc_cart->have_shipping_quotes();
 }
 
 /**
@@ -432,8 +435,8 @@ function wpsc_have_shipping_quotes() {
 * @return string the cart item url
 */
 function wpsc_the_shipping_quote() {
-	global $wpsc_cart;
-	return $wpsc_cart->the_shipping_quote();
+   global $wpsc_cart;
+   return $wpsc_cart->the_shipping_quote();
 }
 
 /**
@@ -441,8 +444,8 @@ function wpsc_the_shipping_quote() {
 * @return string shipping quote name
 */
 function wpsc_shipping_quote_name() {
-	global $wpsc_cart;
-	return $wpsc_cart->shipping_quote['name'];
+   global $wpsc_cart;
+   return $wpsc_cart->shipping_quote['name'];
 }
 
 /**
@@ -450,13 +453,13 @@ function wpsc_shipping_quote_name() {
 * @return string shipping quote value
 */
 function wpsc_shipping_quote_value($numeric = false) {
-	global $wpsc_cart;
-	//echo 'Shipping value'.$wpsc_cart->shipping_quote['value'];
-	if($numeric == true) {
-		return $wpsc_cart->shipping_quote['value'];
-	} else {
-		return $wpsc_cart->process_as_currency($wpsc_cart->shipping_quote['value']);
-	}
+   global $wpsc_cart;
+   //echo 'Shipping value'.$wpsc_cart->shipping_quote['value'];
+   if($numeric == true) {
+      return $wpsc_cart->shipping_quote['value'];
+   } else {
+      return $wpsc_cart->process_as_currency($wpsc_cart->shipping_quote['value']);
+   }
 }
 
 /**
@@ -464,8 +467,8 @@ function wpsc_shipping_quote_value($numeric = false) {
 * @return string shipping quote html ID
 */
 function wpsc_shipping_quote_html_id() {
-	global $wpsc_cart;
-	return $wpsc_cart->shipping_method."_".$wpsc_cart->current_shipping_quote;
+   global $wpsc_cart;
+   return $wpsc_cart->shipping_method."_".$wpsc_cart->current_shipping_quote;
 }
 
 /**
@@ -473,16 +476,16 @@ function wpsc_shipping_quote_html_id() {
 * @return string true or false
 */
 function wpsc_shipping_quote_selected_state() {
-	global $wpsc_cart;
-	
-	if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method) && ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name']) ) { 
-		return "checked='checked'";
-	} else {
-		return "";
-	}
+   global $wpsc_cart;
+
+   if(($wpsc_cart->selected_shipping_method == $wpsc_cart->shipping_method) && ($wpsc_cart->selected_shipping_option == $wpsc_cart->shipping_quote['name']) ) {
+      return "checked='checked'";
+   } else {
+      return "";
+   }
 }
 function wpsc_have_morethanone_shipping_quote(){
-	global $wpsc_cart;
+   global $wpsc_cart;
 
     // if it's fixed rate shipping, and all the prices are the same, then there aren't really options.
     if (count($wpsc_cart->shipping_methods) == 1 && $wpsc_cart->shipping_methods[0] == 'flatrate') {
@@ -501,14 +504,14 @@ function wpsc_have_morethanone_shipping_quote(){
 }
 
 function wpsc_have_morethanone_shipping_methods_and_quotes(){
-	global $wpsc_cart;
-		
-	if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1 || count($wpsc_cart->shipping_quotes) == $wpsc_cart->shipping_quote_count){
-		//$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
-		return true;
-	}else{
-		return false;
-	}
+   global $wpsc_cart;
+
+   if(count($wpsc_cart->shipping_quotes) > 1 || count($wpsc_cart->shipping_methods) > 1 || count($wpsc_cart->shipping_quotes) == $wpsc_cart->shipping_quote_count){
+      //$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
+      return true;
+   }else{
+      return false;
+   }
 }
 /**
  * Whether or not there is a valid shipping quote/option available to the customer when checking out
@@ -516,25 +519,25 @@ function wpsc_have_morethanone_shipping_methods_and_quotes(){
  * @return bool
  */
 function wpsc_have_shipping_quote(){
-	global $wpsc_cart;
-	if ($wpsc_cart->shipping_quote_count > 0 || count($wpsc_cart->shipping_quotes) > 0) {
-		return true;
-	}
-	return false;
+   global $wpsc_cart;
+   if ($wpsc_cart->shipping_quote_count > 0 || count($wpsc_cart->shipping_quotes) > 0) {
+      return true;
+   }
+   return false;
 }
 function wpsc_update_shipping_single_method(){
-	global $wpsc_cart;
-	//exit('<pre>'.print_r($wpsc_cart->shipping_method, true).'</pre>');
-	if(!empty($wpsc_cart->shipping_method)) {
-		$wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
-	}
+   global $wpsc_cart;
+   //exit('<pre>'.print_r($wpsc_cart->shipping_method, true).'</pre>');
+   if(!empty($wpsc_cart->shipping_method)) {
+      $wpsc_cart->update_shipping($wpsc_cart->shipping_method, $wpsc_cart->selected_shipping_option);
+   }
 }
 function wpsc_update_shipping_multiple_methods(){
-	global $wpsc_cart;
+   global $wpsc_cart;
 //exit('<pre>'.print_r($wpsc_cart->shipping_method, true).'</pre>'.$wpsc_cart->shipping_methods[0]);
-	if(!empty($wpsc_cart->selected_shipping_method)) {
-		$wpsc_cart->update_shipping($wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option);
-	}
+   if(!empty($wpsc_cart->selected_shipping_method)) {
+      $wpsc_cart->update_shipping($wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option);
+   }
 }
 
 /**
@@ -542,900 +545,942 @@ function wpsc_update_shipping_multiple_methods(){
  */
 class wpsc_cart {
   var $delivery_country;
-	var $selected_country;
-	var $delivery_region;
-	var $selected_region;
-	
-	var $selected_shipping_method = null;
-// 	var $shipping_quotes = null;
-	var $selected_shipping_option = null;
-	
-	var $coupon;
-	var $tax_percentage;
-	var $unique_id;
-	var $errors;
-	
-	
-	// caching of frequently used values, these are wiped when the cart is modified and then remade when needed
-	var $total_tax = null;
-	var $base_shipping = null;
-	var $total_item_shipping = null;
-	var $total_shipping = null;
-	var $subtotal = null;
-	var $total_price = null;
-	var $uses_shipping = null;
-	 
-	var $is_incomplete = true;
-	
-	// The cart loop variables
-	var $cart_items = array();
-	var $cart_item;
-	var $cart_item_count = 0;
-	var $current_cart_item = -1;
-	var $in_the_loop = false;
-   
-	// The shipping method loop variables
-	var $shipping_methods = array();
-	var $shipping_method;
-	var $shipping_method_count = 0;
-	var $current_shipping_method = -1;
-	var $in_the_method_loop = false;
-	
-	// The shipping quote loop variables
-	var $shipping_quotes = array();
-	var $shipping_quote;
-	var $shipping_quote_count = 0;
-	var $current_shipping_quote = -1;
-	var $in_the_quote_loop = false;
-	
-	//coupon variable
-	var $coupons_name = '';
-	var $coupons_amount = 0;
-	
+   var $selected_country;
+   var $delivery_region;
+   var $selected_region;
+
+   var $selected_shipping_method = null;
+//    var $shipping_quotes = null;
+   var $selected_shipping_option = null;
+
+   var $coupon;
+   var $tax_percentage;
+   var $unique_id;
+   var $errors;
+
+
+   // caching of frequently used values, these are wiped when the cart is modified and then remade when needed
+   var $total_tax = null;
+   var $base_shipping = null;
+   var $total_item_shipping = null;
+   var $total_shipping = null;
+   var $subtotal = null;
+   var $total_price = null;
+   var $uses_shipping = null;
+
+   var $is_incomplete = true;
+
+   // The cart loop variables
+   var $cart_items = array();
+   var $cart_item;
+   var $cart_item_count = 0;
+   var $current_cart_item = -1;
+   var $in_the_loop = false;
+
+   // The shipping method loop variables
+   var $shipping_methods = array();
+   var $shipping_method;
+   var $shipping_method_count = 0;
+   var $current_shipping_method = -1;
+   var $in_the_method_loop = false;
+
+   // The shipping quote loop variables
+   var $shipping_quotes = array();
+   var $shipping_quote;
+   var $shipping_quote_count = 0;
+   var $current_shipping_quote = -1;
+   var $in_the_quote_loop = false;
+
+   //coupon variable
+   var $coupons_name = '';
+   var $coupons_amount = 0;
+
   function wpsc_cart() {
     global $wpdb, $wpsc_shipping_modules;
-    $coupon = 'percentage'; 
+    $coupon = 'percentage';
     // this is here to stop extremely bizzare errors with $wpsc_cart somehow not ending up as a global variable, yet certain code being run from it that eventually expects it to be one
     if(!is_object($GLOBALS['wpsc_cart'])) {
-// 			$GLOBALS['wpsc_cart'] =& $this;
+//          $GLOBALS['wpsc_cart'] =& $this;
     }
-	  $this->update_location();
-	  $this->get_tax_rate();
-	  $this->unique_id = sha1(uniqid(rand(), true));
-	  
-	  $this->get_shipping_method();
+     $this->update_location();
+     //$this->get_tax_rate(); // replaced with wpec_taxes use wpsc_refresh_cart_items to refresh the cart
+     $this->wpsc_refresh_cart_items();
+     $this->unique_id = sha1(uniqid(rand(), true));
+
+     $this->get_shipping_method();
   }
-  
-    
+
+
   /**
-	* update_location method, updates the location
-	* @access public
-	*/
-	function update_location() {
-	
-		if(get_option('lock_tax') == 1){
-			$_SESSION['wpsc_selected_country'] =& $_SESSION['wpsc_delivery_country'];
-			$_SESSION['wpsc_selected_region'] =& $_SESSION['wpsc_delivery_region'];
-			//exit('<pre>'.print_r($_SESSION, true).'</pre>');
-		}
-		if(!isset($_SESSION['wpsc_selected_country']) && !isset($_SESSION['wpsc_delivery_country'])) {
-			$_SESSION['wpsc_selected_country'] = get_option('base_country');
-			$_SESSION['wpsc_delivery_country'] = get_option('base_country');   
-		} else {
-			if(!isset($_SESSION['wpsc_selected_country'])) {
-				$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_delivery_country'];
-			} else if(!isset($_SESSION['wpsc_delivery_country'])) {
-				$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_selected_country'];     
-			}   
-		}
-		
-		if(!isset($_SESSION['wpsc_selected_region']) && !isset($_SESSION['wpsc_delivery_region'])) {
-			$_SESSION['wpsc_selected_region'] = get_option('base_region');
-			$_SESSION['wpsc_delivery_region'] = get_option('base_region');   
-		}
-		
-		//exit('<pre>'.print_r($_SESSION, true).'</pre>');
-		$this->delivery_country =& $_SESSION['wpsc_delivery_country'];
-		$this->selected_country =& $_SESSION['wpsc_selected_country'];
-		$this->delivery_region =& $_SESSION['wpsc_delivery_region'];
-		$this->selected_region =& $_SESSION['wpsc_selected_region'];
-		
-		
-		$this->get_tax_rate();
-	}
-	
-	
+   * update_location method, updates the location
+   * @access public
+   */
+   function update_location() {
+
+      if(get_option('lock_tax') == 1){
+         $_SESSION['wpsc_selected_country'] =& $_SESSION['wpsc_delivery_country'];
+         $_SESSION['wpsc_selected_region'] =& $_SESSION['wpsc_delivery_region'];
+         //exit('<pre>'.print_r($_SESSION, true).'</pre>');
+      }
+      if(!isset($_SESSION['wpsc_selected_country']) && !isset($_SESSION['wpsc_delivery_country'])) {
+         $_SESSION['wpsc_selected_country'] = get_option('base_country');
+         $_SESSION['wpsc_delivery_country'] = get_option('base_country');
+      } else {
+         if(!isset($_SESSION['wpsc_selected_country'])) {
+            $_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_delivery_country'];
+         } else if(!isset($_SESSION['wpsc_delivery_country'])) {
+            $_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_selected_country'];
+         }
+      }
+
+      if(!isset($_SESSION['wpsc_selected_region']) && !isset($_SESSION['wpsc_delivery_region'])) {
+         $_SESSION['wpsc_selected_region'] = get_option('base_region');
+         $_SESSION['wpsc_delivery_region'] = get_option('base_region');
+      }
+
+      //exit('<pre>'.print_r($_SESSION, true).'</pre>');
+      $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
+      $this->selected_country =& $_SESSION['wpsc_selected_country'];
+      $this->delivery_region =& $_SESSION['wpsc_delivery_region'];
+      $this->selected_region =& $_SESSION['wpsc_selected_region'];
+
+
+      //$this->get_tax_rate();
+      //adding refresh item
+      $this->wpsc_refresh_cart_items();
+
+   }
+
+   /**
+    * @description: refresh all items in the cart
+    *
+    * @param: void
+    * @return: null
+   **/
+   function wpsc_refresh_cart_items()
+   {
+      global $wpsc_cart;
+
+      if(is_array($wpsc_cart->cart_items))
+      {
+         foreach($wpsc_cart->cart_items as &$cart_item)
+         {
+            $cart_item->refresh_item();
+         }// foreach
+      }
+   }// wpsc_refresh_cart_items
+
+
   /**
-	* get_shipping_rates method, gets the shipping rates
-	* @access public
-	*/
+   * get_shipping_rates method, gets the shipping rates
+   * @access public
+   */
   function get_shipping_method() {
-		global $wpdb, $wpsc_shipping_modules;
-		// Reset all the shipping data in case the destination has changed
-		$this->selected_shipping_method = null;
-		$this->selected_shipping_option = null;
-		$this->shipping_option = null;
-		$this->shipping_method = null;
-		$this->shipping_methods = array();
-		$this->shipping_quotes = array();
-		$this->shipping_quote = null;
-		$this->shipping_method_count = 0;
-	  // set us up with a shipping method.
-	  $custom_shipping = get_option('custom_shipping_options');
-	  
-	  $this->shipping_methods = get_option('custom_shipping_options');
-	  $this->shipping_method_count = count($this->shipping_methods);
-		
-		if((get_option('do_not_use_shipping') != 1) && (count($this->shipping_methods) > 0)  ) {
-			if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
-				//unset($this->selected_shipping_method);
-			}
-			
-			$shipping_quotes = null;
-			if($this->selected_shipping_method != null) {
-				// use the selected shipping module
-				if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
-					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-				}
-			} else {
-				// otherwise select the first one with any quotes
-				foreach((array)$custom_shipping as $shipping_module) {
-					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
-					$this->selected_shipping_method = $shipping_module;
-					if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
-						$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-					}
-					if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
-						break;
-					}
-				}
-				
-			}
-		}
-		
-		//echo('<pre>'.print_r($custom_shipping,true).'</pre>');
+      global $wpdb, $wpsc_shipping_modules;
+      // Reset all the shipping data in case the destination has changed
+      $this->selected_shipping_method = null;
+      $this->selected_shipping_option = null;
+      $this->shipping_option = null;
+      $this->shipping_method = null;
+      $this->shipping_methods = array();
+      $this->shipping_quotes = array();
+      $this->shipping_quote = null;
+      $this->shipping_method_count = 0;
+     // set us up with a shipping method.
+     $custom_shipping = get_option('custom_shipping_options');
+
+     $this->shipping_methods = get_option('custom_shipping_options');
+     $this->shipping_method_count = count($this->shipping_methods);
+
+      if((get_option('do_not_use_shipping') != 1) && (count($this->shipping_methods) > 0)  ) {
+         if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
+            //unset($this->selected_shipping_method);
+         }
+
+         $shipping_quotes = null;
+         if($this->selected_shipping_method != null) {
+            // use the selected shipping module
+            if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
+               $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+            }
+         } else {
+            // otherwise select the first one with any quotes
+            foreach((array)$custom_shipping as $shipping_module) {
+               // if the shipping module does not require a weight, or requires one and the weight is larger than zero
+               $this->selected_shipping_method = $shipping_module;
+               if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
+                  $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+               }
+               if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
+                  break;
+               }
+            }
+
+         }
+      }
+
+      //echo('<pre>'.print_r($custom_shipping,true).'</pre>');
   }
-  
+
   /**
-	* get_shipping_option method, gets the shipping option from the selected method and associated quotes
-	* @access public
-	*/
+   * get_shipping_option method, gets the shipping option from the selected method and associated quotes
+   * @access public
+   */
   function get_shipping_option() {
     global $wpdb, $wpsc_shipping_modules;
-       
-    	if (!isset($wpsc_shipping_modules[$this->selected_shipping_method])) $wpsc_shipping_modules[$this->selected_shipping_method] = '';
-    	
-		if((count($this->shipping_quotes) < 1) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
-			$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-		}
-    
-    
-   		if(count($this->shipping_quotes) < 1) {
-			$this->selected_shipping_option = '';
-		}
-		
-		if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, array_keys($this->shipping_quotes)) === false)) {
-			$this->selected_shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes,0,1)));
-		}
+
+      if (!isset($wpsc_shipping_modules[$this->selected_shipping_method])) $wpsc_shipping_modules[$this->selected_shipping_method] = '';
+
+      if((count($this->shipping_quotes) < 1) && is_callable(array($wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
+         $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+      }
+
+
+         if(count($this->shipping_quotes) < 1) {
+         $this->selected_shipping_option = '';
+      }
+
+      if(($this->shipping_quotes != null) && (array_search($this->selected_shipping_option, array_keys($this->shipping_quotes)) === false)) {
+         $this->selected_shipping_option = array_pop(array_keys(array_slice($this->shipping_quotes,0,1)));
+      }
   }
-  
+
 
   /**
-	* update_shipping method, updates the shipping
-	* @access public
-	*/
+   * update_shipping method, updates the shipping
+   * @access public
+   */
   function update_shipping($method, $option) {
     global $wpdb, $wpsc_shipping_modules;
-		$this->selected_shipping_method = $method;
-		
-			$this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
-			
-		//exit('<pre>'.print_r($this->shipping_quotes,true).'</pre> quotes');
-		$this->selected_shipping_option = $option;
-		
-		foreach($this->cart_items as $key => $cart_item) {
-			$this->cart_items[$key]->calculate_shipping();
-		}
-		$this->clear_cache();
-		$this->get_shipping_option();	
-	}
-  
-	/**
-	* get_tax_rate method, gets the tax rate as a percentage, based on the selected country and region
-	* @access public
-	*/
+      $this->selected_shipping_method = $method;
+
+         $this->shipping_quotes = $wpsc_shipping_modules[$method]->getQuote();
+
+      //exit('<pre>'.print_r($this->shipping_quotes,true).'</pre> quotes');
+      $this->selected_shipping_option = $option;
+
+      foreach($this->cart_items as $key => $cart_item) {
+         $this->cart_items[$key]->calculate_shipping();
+      }
+      $this->clear_cache();
+      $this->get_shipping_option();
+   }
+
+   /**
+   * get_tax_rate method, gets the tax rate as a percentage, based on the selected country and region
+   * * EDIT: Replaced with WPEC Taxes - this function should probably be deprecated
+   *         Note: to refresh cart items use wpsc_refresh_cart_items
+   * @access public
+   */
   function get_tax_rate() {
     global $wpdb;
+
     $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".get_option('base_country')."') LIMIT 1",ARRAY_A);
-		$add_tax = false;
+      $add_tax = false;
 
-		
-		if($this->selected_country == get_option('base_country')) {
-		  // Tax rules for various countries go here, if your countries tax rules deviate from this, please supply code to add your region
-		  switch($this->selected_country) {
-		  	case 'US': // USA!
-					$tax_region = get_option('base_region');
-					if($this->selected_region == get_option('base_region') && (get_option('lock_tax_to_shipping') != '1')) {
-						// if they in the state, they pay tax
-						$add_tax = true;
-					} else if($this->delivery_region == get_option('base_region')) {
-		
-						// if they live outside the state, but are delivering to within the state, they pay tax also
-						$add_tax = true;
-					}
-		  	break;
 
-		  	case 'CA': // Canada!
-		  	  // apparently in canada, the region that you are in is used for tax purposes
-		  	  if($this->selected_region != null) {
-						$tax_region = $this->selected_region;
-					} else {
-						$tax_region = get_option('base_region');
-					}
-					$add_tax = true;
-		  	break;
+      if($this->selected_country == get_option('base_country')) {
+        // Tax rules for various countries go here, if your countries tax rules deviate from this, please supply code to add your region
+        switch($this->selected_country) {
+         case 'US': // USA!
+               $tax_region = get_option('base_region');
+               if($this->selected_region == get_option('base_region') && (get_option('lock_tax_to_shipping') != '1')) {
+                  // if they in the state, they pay tax
+                  $add_tax = true;
+               } else if($this->delivery_region == get_option('base_region')) {
 
-		  	default: // Everywhere else!
-					$tax_region = get_option('base_region');
-					if($country_data['has_regions'] == 1) {
-						if(get_option('base_region') == $region ) {
-							$add_tax = true;
-						}
-					} else {
-						$add_tax = true;
-					}
-		  	break;
-		  }
-		}
-		
-		if($add_tax == true) {
-			if(($country_data['has_regions'] == 1)) {
-				$region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".$tax_region."') ",ARRAY_A) ;
-				$tax_percentage =  $region_data['tax'];
-			} else {
-				$tax_percentage =  $country_data['tax'];
-			}
-		} else {
-		  // no tax charged = tax equal to 0%
-			$tax_percentage = 0;
-		}
-		if($this->tax_percentage != $tax_percentage ) {
-			$this->clear_cache();
-			$this->tax_percentage = $tax_percentage;
-		
-			foreach($this->cart_items as $key => $cart_item) {
-				$this->cart_items[$key]->refresh_item();
-			}
-		}
+                  // if they live outside the state, but are delivering to within the state, they pay tax also
+                  $add_tax = true;
+               }
+         break;
+
+         case 'CA': // Canada!
+           // apparently in canada, the region that you are in is used for tax purposes
+           if($this->selected_region != null) {
+                  $tax_region = $this->selected_region;
+               } else {
+                  $tax_region = get_option('base_region');
+               }
+               $add_tax = true;
+         break;
+
+         default: // Everywhere else!
+               $tax_region = get_option('base_region');
+               if($country_data['has_regions'] == 1) {
+                  if(get_option('base_region') == $region ) {
+                     $add_tax = true;
+                  }
+               } else {
+                  $add_tax = true;
+               }
+         break;
+        }
+      }
+
+      if($add_tax == true) {
+         if(($country_data['has_regions'] == 1)) {
+            $region_data = $wpdb->get_row("SELECT `".WPSC_TABLE_REGION_TAX."`.* FROM `".WPSC_TABLE_REGION_TAX."` WHERE `".WPSC_TABLE_REGION_TAX."`.`country_id` IN('".$country_data['id']."') AND `".WPSC_TABLE_REGION_TAX."`.`id` IN('".$tax_region."') ",ARRAY_A) ;
+            $tax_percentage =  $region_data['tax'];
+         } else {
+            $tax_percentage =  $country_data['tax'];
+         }
+      } else {
+        // no tax charged = tax equal to 0%
+         $tax_percentage = 0;
+      }
+      if($this->tax_percentage != $tax_percentage ) {
+         $this->clear_cache();
+         $this->tax_percentage = $tax_percentage;
+
+         foreach($this->cart_items as $key => $cart_item) {
+            $this->cart_items[$key]->refresh_item();
+         }
+      }
   }
 
-
-	/**
-	 * Set Item method, requires a product ID and the parameters for the product
-	 * @access public
-	 *
-	 * @param integer the product ID
-	 * @param array parameters
-	 * @return boolean true on sucess, false on failure
-	*/
+   /**
+    * Set Item method, requires a product ID and the parameters for the product
+    * @access public
+    *
+    * @param integer the product ID
+    * @param array parameters
+    * @return boolean true on sucess, false on failure
+   */
   function set_item($product_id, $parameters, $updater = false) {
     // default action is adding
-    
-    if(($parameters['quantity'] > 0) && ($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true)) {
-			$new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
-			
-			$add_item = true;
-			$edit_item = false;
-//exit('hello<pre>'.print_r($new_cart_item,true).'</pre>');
-			if((count($this->cart_items) > 0) && ($new_cart_item->is_donation != 1)) {
-				//loop through each cart item
-				foreach($this->cart_items as $key => $cart_item) {
-					// compare product ids and variations.
-					if(($cart_item->product_id == $new_cart_item->product_id) &&
-					  ($cart_item->product_variations == $new_cart_item->product_variations) &&
-					  ($cart_item->custom_message == $new_cart_item->custom_message) &&
-					  ($cart_item->custom_file == $new_cart_item->custom_file)) {
-						// if they are the same, increment the count, and break out;
-						if(!$updater){
-							$this->cart_items[$key]->quantity  += $new_cart_item->quantity;
-						} else {
-							$this->cart_items[$key]->quantity  = $new_cart_item->quantity;
 
-						}
-						$this->cart_items[$key]->refresh_item();
-						$add_item = false;
-						$edit_item = true;
-					}
-				}
-			
-			}
-			// if we are still adding the item, add it
-			if($add_item === true) {
-				$this->cart_items[] = $new_cart_item;
-			}
-		} else {
-			//$errors[] = new WP_Error('no_stock_available', __(__('This product has no available stock', 'wpsc')));
-		}
-    
-		
-	  // if some action was performed, return true, otherwise, return false;
-	  $status = false;
-		if(($add_item == true) || ($edit_item == true)) {
-			$status = true;
-		}	
-		$this->cart_item_count = count($this->cart_items);
-		$this->clear_cache();
-		return $status;
-	}
-  
-	/**
-	 * Edit Item method
-	 * @access public
-	 *
-	 * @param integer a cart_items key
-	 * @param array an array of parameters to change
-	 * @return boolean true on sucess, false on failure
-	*/
+    if(($parameters['quantity'] > 0) && ($this->check_remaining_quantity($product_id, $parameters['variation_values'], $parameters['quantity']) == true)) {
+         $new_cart_item = new wpsc_cart_item($product_id,$parameters, $this);
+
+         $add_item = true;
+         $edit_item = false;
+//exit('hello<pre>'.print_r($new_cart_item,true).'</pre>');
+         if((count($this->cart_items) > 0) && ($new_cart_item->is_donation != 1)) {
+            //loop through each cart item
+            foreach($this->cart_items as $key => $cart_item) {
+               // compare product ids and variations.
+               if(($cart_item->product_id == $new_cart_item->product_id) &&
+                 ($cart_item->product_variations == $new_cart_item->product_variations) &&
+                 ($cart_item->custom_message == $new_cart_item->custom_message) &&
+                 ($cart_item->custom_file == $new_cart_item->custom_file)) {
+                  // if they are the same, increment the count, and break out;
+                  if(!$updater){
+                     $this->cart_items[$key]->quantity  += $new_cart_item->quantity;
+                  } else {
+                     $this->cart_items[$key]->quantity  = $new_cart_item->quantity;
+
+                  }
+                  $this->cart_items[$key]->refresh_item();
+                  $add_item = false;
+                  $edit_item = true;
+               }
+            }
+
+         }
+         // if we are still adding the item, add it
+         if($add_item === true) {
+            $this->cart_items[] = $new_cart_item;
+         }
+      } else {
+         //$errors[] = new WP_Error('no_stock_available', __(__('This product has no available stock', 'wpsc')));
+      }
+
+
+     // if some action was performed, return true, otherwise, return false;
+     $status = false;
+      if(($add_item == true) || ($edit_item == true)) {
+         $status = true;
+      }
+      $this->cart_item_count = count($this->cart_items);
+      $this->clear_cache();
+      return $status;
+   }
+
+   /**
+    * Edit Item method
+    * @access public
+    *
+    * @param integer a cart_items key
+    * @param array an array of parameters to change
+    * @return boolean true on sucess, false on failure
+   */
   function edit_item($key, $parameters) {
     if(isset($this->cart_items[$key])) {
-			$product_id = $this->cart_items[$key]->product_id;
-			$quantity = $parameters['quantity'] - $this->cart_items[$key]->quantity;
-			if($this->check_remaining_quantity($product_id, $this->cart_items[$key]->variation_values, $quantity) == true) {
-				foreach($parameters as $name => $value) {
-					$this->cart_items[$key]->$name = $value; 
-				}
-				$this->cart_items[$key]->refresh_item();
-				$this->clear_cache();
-			} else {
-				//$errors[] = new WP_Error('no_stock_available', __(__('This product has no available stock', 'wpsc')));
-			}
+         $product_id = $this->cart_items[$key]->product_id;
+         $quantity = $parameters['quantity'] - $this->cart_items[$key]->quantity;
+         if($this->check_remaining_quantity($product_id, $this->cart_items[$key]->variation_values, $quantity) == true) {
+            foreach($parameters as $name => $value) {
+               $this->cart_items[$key]->$name = $value;
+            }
+            $this->cart_items[$key]->refresh_item();
+            $this->clear_cache();
+         } else {
+            //$errors[] = new WP_Error('no_stock_available', __(__('This product has no available stock', 'wpsc')));
+         }
       return true;
     } else {
      return false;
     }
   }
-  
-	/**
-	 * check remaining quantity method
-	 * currently only checks remaining stock, in future will do claimed stock and quantity limits
-	 * will need to return errors, then, rather than true/false, maybe use the wp_error object?
-	 * @access public
-	 *
-	 * @param integer a product ID key
-	 * @param array  variations on the product
-	 * @return boolean true on sucess, false on failure
-	*/
-	function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
-	    global $wpdb;
-		$stock = get_post_meta($product_id, '_wpsc_stock', true);
-		// check to see if the product uses stock
-		if(is_numeric($stock)){
-			$priceandstock_id = 0;
-			
-			if($stock > 0) {
-				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
-				if(($claimed_stock + $quantity) <= $stock) {
-					$output = true;
-				} else {
-					$output = false;
-				}
-			} else {
-				$output = false;	    
-			}
-			     
-		} else {
-			$output = true;
-		}
-		return $output;
-	}
-  
-	/**
-	 * get remaining quantity method
-	 * currently only checks remaining stock, in future will do claimed stock and quantity limits
-	 * will need to return errors, then, rather than true/false, maybe use the wp_error object?
-	 * @access public
-	 *
-	 * @param integer a product ID key
-	 * @param array  variations on the product
-	 * @return boolean true on sucess, false on failure
-	*/
+
+   /**
+    * check remaining quantity method
+    * currently only checks remaining stock, in future will do claimed stock and quantity limits
+    * will need to return errors, then, rather than true/false, maybe use the wp_error object?
+    * @access public
+    *
+    * @param integer a product ID key
+    * @param array  variations on the product
+    * @return boolean true on sucess, false on failure
+   */
+   function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
+       global $wpdb;
+      $stock = get_post_meta($product_id, '_wpsc_stock', true);
+      // check to see if the product uses stock
+      if(is_numeric($stock)){
+         $priceandstock_id = 0;
+
+         if($stock > 0) {
+            $claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
+            if(($claimed_stock + $quantity) <= $stock) {
+               $output = true;
+            } else {
+               $output = false;
+            }
+         } else {
+            $output = false;
+         }
+
+      } else {
+         $output = true;
+      }
+      return $output;
+   }
+
+   /**
+    * get remaining quantity method
+    * currently only checks remaining stock, in future will do claimed stock and quantity limits
+    * will need to return errors, then, rather than true/false, maybe use the wp_error object?
+    * @access public
+    *
+    * @param integer a product ID key
+    * @param array  variations on the product
+    * @return boolean true on sucess, false on failure
+   */
   function get_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
     global $wpdb;
-		$stock = get_post_meta($product_id, '_wpsc_stock', true);
-		// check to see if the product uses stock
-		if(is_numeric($stock)){
-		  $priceandstock_id = 0;
-	    if($stock > 0) {
-				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
-				$output = $stock - $claimed_stock;				
-		  } else {
-				$output = 0;
-		  }
-	     
+      $stock = get_post_meta($product_id, '_wpsc_stock', true);
+      // check to see if the product uses stock
+      if(is_numeric($stock)){
+        $priceandstock_id = 0;
+       if($stock > 0) {
+            $claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN('$product_id') AND `variation_stock_id` IN('$priceandstock_id')");
+            $output = $stock - $claimed_stock;
+        } else {
+            $output = 0;
+        }
+
     }
     return $output;
   }
-  
-  
-	/**
-	 * Remove Item method 
-	 * @access public
-	 *
-	 * @param integer a cart_items key
-	 * @return boolean true on sucess, false on failure
-	*/
+
+
+   /**
+    * Remove Item method
+    * @access public
+    *
+    * @param integer a cart_items key
+    * @return boolean true on sucess, false on failure
+   */
   function remove_item($key) {
     if(isset($this->cart_items[$key])) {
-	    $cart_item =& $this->cart_items[$key];
-		$cart_item->update_item(0);
-		unset($this->cart_items[$key]);
-	    $this->cart_items = array_values($this->cart_items);
-		$this->cart_item_count = count($this->cart_items);
-	    $this->current_cart_item = -1;
-			$this->clear_cache();
-			return true;
-		} else {
-			$this->clear_cache();
-			return false;
-		}
-	
+       $cart_item =& $this->cart_items[$key];
+      $cart_item->update_item(0);
+      unset($this->cart_items[$key]);
+       $this->cart_items = array_values($this->cart_items);
+      $this->cart_item_count = count($this->cart_items);
+       $this->current_cart_item = -1;
+         $this->clear_cache();
+         return true;
+      } else {
+         $this->clear_cache();
+         return false;
+      }
+
   }
-  
-	/**
-	 * Empty Cart method 
-	 * @access public
-	 *
-	 * No parameters, nothing returned
-	*/
+
+   /**
+    * Empty Cart method
+    * @access public
+    *
+    * No parameters, nothing returned
+   */
   function empty_cart($fromwidget = true) {
-		global $wpdb;
+      global $wpdb;
 
-		if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
-		//	exit('google triggered');
-			///wpsc_empty_google_logs();
-		}
-		$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s');", $this->unique_id));
+      if(isset($_SESSION['wpsc_sessionid']) && !($fromwidget)){
+      // exit('google triggered');
+         ///wpsc_empty_google_logs();
+      }
+      $wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s');", $this->unique_id));
 
-		$this->cart_items = array();
-		$this->cart_item = null;
-		$this->cart_item_count = 0;
-		$this->current_cart_item = -1;
-		unset($this->coupons_amount);
-		unset($this->coupons_name);
-		$this->clear_cache();
-		$this->cleanup();
+      $this->cart_items = array();
+      $this->cart_item = null;
+      $this->cart_item_count = 0;
+      $this->current_cart_item = -1;
+      unset($this->coupons_amount);
+      unset($this->coupons_name);
+      $this->clear_cache();
+      $this->cleanup();
   }
-  
-  
-  
-	/**
-	 * Clear Cache method, used to clear the cached totals 
-	 * @access public
-	 *
-	 * No parameters, nothing returned
-	*/
+
+
+
+   /**
+    * Clear Cache method, used to clear the cached totals
+    * @access public
+    *
+    * No parameters, nothing returned
+   */
   function clear_cache() {
-		$this->total_tax = null;
-		$this->base_shipping = null;
-		$this->total_item_shipping = null;
-		$this->total_shipping = null;
-		$this->subtotal = null;
-		$this->total_price = null;
-		$this->uses_shipping = null;
-		$this->shipping_quotes = null;
-		$this->get_shipping_option();	
-	}
-  
- 	/**
-	 * submit_stock_claims method, changes the association of the stock claims from the cart unique to the purchase log ID
-	 * @access public
-	 *
-	 * No parameters, nothing returned
-	*/
+      $this->total_tax = null;
+      $this->base_shipping = null;
+      $this->total_item_shipping = null;
+      $this->total_shipping = null;
+      $this->subtotal = null;
+      $this->total_price = null;
+      $this->uses_shipping = null;
+      $this->shipping_quotes = null;
+      $this->get_shipping_option();
+   }
+
+   /**
+    * submit_stock_claims method, changes the association of the stock claims from the cart unique to the purchase log ID
+    * @access public
+    *
+    * No parameters, nothing returned
+   */
   function submit_stock_claims($purchase_log_id) {
     global $wpdb;
     //exit($wpdb->prepare("UPDATE `".WPSC_TABLE_CLAIMED_STOCK."` SET `cart_id` = '%d', `cart_submitted` = '1' WHERE `cart_id` IN('%s')", $purchase_log_id, $this->unique_id));
-		$wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_CLAIMED_STOCK."` SET `cart_id` = '%d', `cart_submitted` = '1' WHERE `cart_id` IN('%s')", $purchase_log_id, $this->unique_id));
-	}
-	
-	 	/**
-	 * cleanup method, cleans up the cart just before final destruction
-	 * @access public
-	 *
-	 * No parameters, nothing returned
-	*/
+      $wpdb->query($wpdb->prepare("UPDATE `".WPSC_TABLE_CLAIMED_STOCK."` SET `cart_id` = '%d', `cart_submitted` = '1' WHERE `cart_id` IN('%s')", $purchase_log_id, $this->unique_id));
+   }
+
+      /**
+    * cleanup method, cleans up the cart just before final destruction
+    * @access public
+    *
+    * No parameters, nothing returned
+   */
   function cleanup() {
     global $wpdb;
     //echo $wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $this->unique_id);
-		$wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $this->unique_id));
-	}
-	
+      $wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` IN ('%s')", $this->unique_id));
+   }
+
   /**
-	 * calculate total price method 
-	 * @access public
-	 *
-	 * @return float returns the price as a floating point value
-	*/
+    * calculate total price method
+    * @access public
+    *
+    * @return float returns the price as a floating point value
+   */
   function calculate_total_price() {
     if($this->total_price == null) {
-			$total = $this->calculate_subtotal();
-			$total += $this->calculate_total_shipping();
-			if(wpsc_tax_isincluded() == false){
-				$total += $this->calculate_total_tax();
-			}	
-			$total -= $this->coupons_amount;
-			$this->total_price = $total;
-			//exit($this->coupons_amount);
-		} else {
-		  $total = $this->total_price;
-		}
-		return $total;
+         $total = $this->calculate_subtotal();
+         $total += $this->calculate_total_shipping();
+         if(wpsc_tax_isincluded() == false){
+            $total += $this->calculate_total_tax();
+         }
+         $total -= $this->coupons_amount;
+         $this->total_price = $total;
+         //exit($this->coupons_amount);
+      } else {
+        $total = $this->total_price;
+      }
+      return $total;
   }
 
 
-  
+
   /**
-	 * calculate_subtotal method 
-	 * @access public
-	 *
-	 * @param boolean for_shipping = exclude items with no shipping,
-	 * @return float returns the price as a floating point value
-	*/
+    * calculate_subtotal method
+    * @access public
+    *
+    * @param boolean for_shipping = exclude items with no shipping,
+    * @return float returns the price as a floating point value
+   */
   function calculate_subtotal($for_shipping = false) {
     global $wpdb;
     if($for_shipping == true ) {
-			$total = 0;
-			foreach($this->cart_items as $key => $cart_item) {
-			  if($cart_item->uses_shipping == 1) {
-					$total += $cart_item->total_price;
-				}
-			}
+         $total = 0;
+         foreach($this->cart_items as $key => $cart_item) {
+           if($cart_item->uses_shipping == 1) {
+               $total += $cart_item->total_price;
+            }
+         }
     } else {
-  	  $total = 0;
-		if($this->subtotal == null) {
-			foreach($this->cart_items as $key => $cart_item) {
-				$total += $cart_item->total_price;
-			}
-			$this->subtotal = $total;
-		} else {
-			$total = $this->subtotal;
-		}
-	}
-		return $total;
+     $total = 0;
+      if($this->subtotal == null) {
+         foreach($this->cart_items as $key => $cart_item) {
+            $total += $cart_item->total_price;
+         }
+         $this->subtotal = $total;
+      } else {
+         $total = $this->subtotal;
+      }
+   }
+      return $total;
   }
-  
-  	/**
-	 * calculate total tax method 
-	 * @access public
-	 * @return float returns the price as a floating point value
-	*/
-   function calculate_total_tax() {
-    global $wpdb, $wpsc_cart;
-    $total = 0;
-	if(wpsc_tax_isincluded() == false){
-    	if($this->total_tax == null) {
-			foreach($this->cart_items as $key => $cart_item) {
-				$total += $cart_item->tax;
-			}
-			$this->total_tax = $total;
-		} else {
-		  $total = $this->total_tax;
-		}
-	}else{
-		if($this->total_tax == null) {
-			foreach($this->cart_items as $key => $cart_item) {
-				$total += $cart_item->taxable_price/(100+$wpsc_cart->tax_percentage)*$wpsc_cart->tax_percentage;
-			}
-			$this->total_tax = $total;
-		} else {
-		  $total = $this->total_tax;
-		}
-	
-	
-	}
-		return $total;
-  }
-  
-  
-  
-  	/**
-	 * calculate_total_weight method 
-	 * @access public
-	 *
-	 * @param boolean for_shipping = exclude items with no shipping,
-	 * @return float returns the price as a floating point value
-	*/
+
+   /**
+    * calculate total tax method
+    * @access public
+    * @return float returns the price as a floating point value
+   */
+   function calculate_total_tax()
+   {
+      //uses new wpec_taxes functionality
+      if(!isset($this->total_tax) || empty($this->total_tax))
+      {
+         $wpec_taxes_controller = new wpec_taxes_controller();
+         $taxes_total = $wpec_taxes_controller->wpec_taxes_calculate_total();
+         $this->total_tax = $taxes_total['total'];
+         if(isset($taxes_total['rate']))
+         {
+            $this->tax_percentage = $taxes_total['rate'];
+         }// if
+      }// if
+
+      return $this->total_tax;
+
+       /* OLD CODE PRESERVED
+       global $wpdb, $wpsc_cart;
+       $total = 0;
+      if(wpsc_tax_isincluded() == false){
+         if($this->total_tax == null) {
+            foreach($this->cart_items as $key => $cart_item) {
+               $total += $cart_item->tax;
+            }
+            $this->total_tax = $total;
+         } else {
+           $total = $this->total_tax;
+         }
+      }else{
+         if($this->total_tax == null) {
+            foreach($this->cart_items as $key => $cart_item) {
+               $total += $cart_item->taxable_price/(100+$wpsc_cart->tax_percentage)*$wpsc_cart->tax_percentage;
+            }
+            $this->total_tax = $total;
+         } else {
+           $total = $this->total_tax;
+         }
+
+
+      }
+         return $total;
+      */
+   }// calculate_total_tax
+
+
+
+   /**
+    * calculate_total_weight method
+    * @access public
+    *
+    * @param boolean for_shipping = exclude items with no shipping,
+    * @return float returns the price as a floating point value
+   */
   function calculate_total_weight($for_shipping = false) {
     global $wpdb;
     if($for_shipping == true ) {
-			foreach($this->cart_items as $key => $cart_item) {
-				if($cart_item->uses_shipping == 1) {
-					$total += $cart_item->weight*$cart_item->quantity;
-				}
-			}
+         foreach($this->cart_items as $key => $cart_item) {
+            if($cart_item->uses_shipping == 1) {
+               $total += $cart_item->weight*$cart_item->quantity;
+            }
+         }
     } else {
-			foreach($this->cart_items as $key => $cart_item) {
-				$total += $cart_item->weight*$cart_item->quantity;
-			}
-		}
-		return $total;
+         foreach($this->cart_items as $key => $cart_item) {
+            $total += $cart_item->weight*$cart_item->quantity;
+         }
+      }
+      return $total;
   }
-  
+
   /**
-	 * get category url name  method
-	 * @access public
-	 *
-	 * @return float returns the price as a floating point value
-	*/
+    * get category url name  method
+    * @access public
+    *
+    * @return float returns the price as a floating point value
+   */
   function get_item_categories() {
-  	$category_list = array();
-		foreach($this->cart_items as $key => $cart_item) {
-			$category_list = array_merge((array)$cart_item->category_list, $category_list);
-		}
-		return $category_list;
+   $category_list = array();
+      foreach($this->cart_items as $key => $cart_item) {
+         $category_list = array_merge((array)$cart_item->category_list, $category_list);
+      }
+      return $category_list;
   }
 
   /**
-	 * get category IDs total price method
-	 * @access public
-	 *
-	 * @return float returns the price as a floating point value
-	*/
+    * get category IDs total price method
+    * @access public
+    *
+    * @return float returns the price as a floating point value
+   */
   function get_item_category_ids() {
-  	$category_list = array();
-		foreach($this->cart_items as $key => $cart_item) {
-			$category_list = array_merge((array)$cart_item->category_id_list, $category_list);
-		}
-		return $category_list;
+   $category_list = array();
+      foreach($this->cart_items as $key => $cart_item) {
+         $category_list = array_merge((array)$cart_item->category_id_list, $category_list);
+      }
+      return $category_list;
   }
 
-  
+
    /**
-	* calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
-	* @access public
-	 * @return float returns the shipping as a floating point value
-	*/
+   * calculate_total_shipping method, gets the shipping option from the selected method and associated quotes
+   * @access public
+    * @return float returns the shipping as a floating point value
+   */
   function calculate_total_shipping() {
-  	if( ! ( (get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $this->calculate_subtotal() ) ) && wpsc_uses_shipping()){
-			$total = $this->calculate_base_shipping();
-			$total += $this->calculate_per_item_shipping();
+   if( ! ( (get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $this->calculate_subtotal() ) ) && wpsc_uses_shipping()){
+         $total = $this->calculate_base_shipping();
+         $total += $this->calculate_per_item_shipping();
     }else{
-			$total = 0;
+         $total = 0;
     }
     return $total;
   }
-  
+
    /**
-	* has_total_shipping_discount method, checks whether the carts subtotal is larger or equal to the shipping discount 		* value 
-	* @access public
-	* @return float returns true or false depending on whether the cart subtotal is larger or equal to the shipping 			* discount value.  
-	*/
+   * has_total_shipping_discount method, checks whether the carts subtotal is larger or equal to the shipping discount     * value
+   * @access public
+   * @return float returns true or false depending on whether the cart subtotal is larger or equal to the shipping         * discount value.
+   */
   function has_total_shipping_discount() {
-  	if(get_option('shipping_discount')== 1) {
-  		if(get_option('shipping_discount_value') <= $this->calculate_subtotal() ) {
-				return true;
-  		}
-  	}
+   if(get_option('shipping_discount')== 1) {
+      if(get_option('shipping_discount_value') <= $this->calculate_subtotal() ) {
+            return true;
+      }
+   }
     return false;
   }
-  
+
     /**
-	* calculate_base_shipping method, gets the shipping option from the selected method and associated quotes
-	* @access public
-	 * @return float returns the shipping as a floating point value
-	*/
+   * calculate_base_shipping method, gets the shipping option from the selected method and associated quotes
+   * @access public
+    * @return float returns the shipping as a floating point value
+   */
   function calculate_base_shipping() {
     global $wpdb, $wpsc_shipping_modules;
     if($this->uses_shipping()) {
-			if ( empty( $this->shipping_quotes ) && is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
-				$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-			}
-			if($this->selected_shipping_option == null){
-				$this->get_shipping_option();
-			}
-			$total = (float)$this->shipping_quotes[$this->selected_shipping_option];
-			$this->base_shipping = $total;
-		} else {
-			
-		  $total = 0;
-		}
-		return $total;
+         if ( empty( $this->shipping_quotes ) && is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
+            $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+         }
+         if($this->selected_shipping_option == null){
+            $this->get_shipping_option();
+         }
+         $total = (float)$this->shipping_quotes[$this->selected_shipping_option];
+         $this->base_shipping = $total;
+      } else {
+
+        $total = 0;
+      }
+      return $total;
   }
-  
+
     /**
-	* calculate_per_item_shipping method, gets the shipping option from the selected method and associated quotesing 
-	* @access public
-	 * @return float returns the shipping as a floating point value
-	*/
+   * calculate_per_item_shipping method, gets the shipping option from the selected method and associated quotesing
+   * @access public
+    * @return float returns the shipping as a floating point value
+   */
   function calculate_per_item_shipping($method = null) {
     global $wpdb, $wpsc_shipping_modules;
     if($method == null) {
       $method = $this->selected_shipping_method;
     }
-		foreach((array)$this->cart_items as $cart_item) {
-			$total += $cart_item->calculate_shipping($method);
-		}
-		if($method == $this->selected_shipping_method) {
-			$this->total_item_shipping = $total;
-		}
-		//echo("<pre>".print_r($method." ".$total,true)."</pre>");
-		return $total;
+      foreach((array)$this->cart_items as $cart_item) {
+         $total += $cart_item->calculate_shipping($method);
+      }
+      if($method == $this->selected_shipping_method) {
+         $this->total_item_shipping = $total;
+      }
+      //echo("<pre>".print_r($method." ".$total,true)."</pre>");
+      return $total;
   }
-  
-  
+
+
   /**
-	 * uses shipping method, to determine if shipping is used.
-	 * @access public
-	 *  (!(get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $wpsc_cart->calculate_subtotal()))
-	 * @return float returns the price as a floating point value
-	*/
+    * uses shipping method, to determine if shipping is used.
+    * @access public
+    *  (!(get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $wpsc_cart->calculate_subtotal()))
+    * @return float returns the price as a floating point value
+   */
   function uses_shipping() {
     global $wpdb;
     $uses_shipping = 0;
     if(($this->uses_shipping == null)) {
-			foreach($this->cart_items as $key => $cart_item) {
-				$uses_shipping += (int)$cart_item->uses_shipping;
-			}
-		  $uses_shipping = (bool)$uses_shipping;
-		} else {
-		  $uses_shipping = $this->uses_shipping;
-		}
-		return $uses_shipping;
+         foreach($this->cart_items as $key => $cart_item) {
+            $uses_shipping += (int)$cart_item->uses_shipping;
+         }
+        $uses_shipping = (bool)$uses_shipping;
+      } else {
+        $uses_shipping = $this->uses_shipping;
+      }
+      return $uses_shipping;
   }
-  
-	/**
-	 * process_as_currency method 
-	 * @access public
-	 *
-	 * @param float a price
-	 * @return string a price with a currency sign
-	*/
-	function process_as_currency($price) {
-		global $wpdb, $wpsc_currency_data;
-		$currency_type = get_option('currency_type');
-		if(count($wpsc_currency_data) < 3) {
-			$wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
-		}
-		$price = round($price + pow(10, -2-1), 2);
-		$price =  number_format($price, 2, '.', ',');
-	
-		if($wpsc_currency_data['symbol'] != '') {
-			if($nohtml == false) {
-				$currency_sign = $wpsc_currency_data['symbol_html'];
-			} else {
-				$currency_sign = $wpsc_currency_data['symbol'];
-			}
-		} else {
-			$currency_sign = $wpsc_currency_data['code'];
-		}
-	
-		$currency_sign_location = get_option('currency_sign_location');
-		switch($currency_sign_location) {
-			case 1:
-			$output = $price.$currency_sign;
-			break;
-	
-			case 2:
-			$output = $price.' '.$currency_sign;
-			break;
-	
-			case 3:
-			$output = $currency_sign.$price;
-			break;
-	
-			case 4:
-			$output = $currency_sign.'  '.$price;
-			break;
-		}
-	
-		return $output;  
+
+   /**
+    * process_as_currency method
+    * @access public
+    *
+    * @param float a price
+    * @return string a price with a currency sign
+   */
+   function process_as_currency($price) {
+      global $wpdb, $wpsc_currency_data;
+      $currency_type = get_option('currency_type');
+      if(count($wpsc_currency_data) < 3) {
+         $wpsc_currency_data = $wpdb->get_row("SELECT `symbol`,`symbol_html`,`code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".$currency_type."' LIMIT 1",ARRAY_A) ;
+      }
+      $price = round($price + pow(10, -2-1), 2);
+      $price =  number_format($price, 2, '.', ',');
+
+      if($wpsc_currency_data['symbol'] != '') {
+         if($nohtml == false) {
+            $currency_sign = $wpsc_currency_data['symbol_html'];
+         } else {
+            $currency_sign = $wpsc_currency_data['symbol'];
+         }
+      } else {
+         $currency_sign = $wpsc_currency_data['code'];
+      }
+
+      $currency_sign_location = get_option('currency_sign_location');
+      switch($currency_sign_location) {
+         case 1:
+         $output = $price.$currency_sign;
+         break;
+
+         case 2:
+         $output = $price.' '.$currency_sign;
+         break;
+
+         case 3:
+         $output = $currency_sign.$price;
+         break;
+
+         case 4:
+         $output = $currency_sign.'  '.$price;
+         break;
+      }
+
+      return $output;
   }
-  
-  	/**
-	 * save_to_db method, saves the cart to the database
-	 * @access public
-	 *
-	*/
+
+   /**
+    * save_to_db method, saves the cart to the database
+    * @access public
+    *
+   */
   function save_to_db($purchase_log_id) {
     global $wpdb;
-    
-		foreach($this->cart_items as $key => $cart_item) {
-		  $cart_item->save_to_db($purchase_log_id);
-		}
+
+      foreach($this->cart_items as $key => $cart_item) {
+        $cart_item->save_to_db($purchase_log_id);
+      }
   }
-  
+
   /**
-	 * cart loop methods
-	*/
- 
-  
+    * cart loop methods
+   */
+
+
   function next_cart_item() {
-		$this->current_cart_item++;
-		$this->cart_item = $this->cart_items[$this->current_cart_item];
-		return $this->cart_item;
-	}
+      $this->current_cart_item++;
+      $this->cart_item = $this->cart_items[$this->current_cart_item];
+      return $this->cart_item;
+   }
 
-  
+
   function the_cart_item() {
-		$this->in_the_loop = true;
-		$this->cart_item = $this->next_cart_item();
-		if ( $this->current_cart_item == 0 ) // loop has just started
-			do_action('wpsc_cart_loop_start');
-	}
+      $this->in_the_loop = true;
+      $this->cart_item = $this->next_cart_item();
+      if ( $this->current_cart_item == 0 ) // loop has just started
+         do_action('wpsc_cart_loop_start');
+   }
 
-	function have_cart_items() {
-		if ($this->current_cart_item + 1 < $this->cart_item_count) {
-			return true;
-		} else if ($this->current_cart_item + 1 == $this->cart_item_count && $this->cart_item_count > 0) {
-			do_action('wpsc_cart_loop_end');
-			// Do some cleaning up after the loop,
-			$this->rewind_cart_items();
-		}
+   function have_cart_items() {
+      if ($this->current_cart_item + 1 < $this->cart_item_count) {
+         return true;
+      } else if ($this->current_cart_item + 1 == $this->cart_item_count && $this->cart_item_count > 0) {
+         do_action('wpsc_cart_loop_end');
+         // Do some cleaning up after the loop,
+         $this->rewind_cart_items();
+      }
 
-		$this->in_the_loop = false;
-		return false;
-	}
+      $this->in_the_loop = false;
+      return false;
+   }
 
-	function rewind_cart_items() {
-		$this->current_cart_item = -1;
-		if ($this->cart_item_count > 0) {
-			$this->cart_item = $this->cart_items[0];
-		}
-	}
-  
+   function rewind_cart_items() {
+      $this->current_cart_item = -1;
+      if ($this->cart_item_count > 0) {
+         $this->cart_item = $this->cart_items[0];
+      }
+   }
+
   /**
-	 * shipping_methods methods
-	*/
-	function next_shipping_method() {
-		$this->current_shipping_method++;
-		$this->shipping_method = $this->shipping_methods[$this->current_shipping_method];
-		return $this->shipping_method;
-	}
-	
-	
-	function the_shipping_method() {
-		$this->shipping_method = $this->next_shipping_method();
-	 	$this->get_shipping_quotes();
-	}
-	
-	function have_shipping_methods() {
-		if ($this->current_shipping_method + 1 < $this->shipping_method_count) {
-			return true;
-		} else if ($this->current_shipping_method + 1 == $this->shipping_method_count && $this->shipping_method_count > 0) {
-			// Do some cleaning up after the loop,
-			$this->rewind_shipping_methods();
-		}
-		return false;
-	}
-	
-	function rewind_shipping_methods() {
-		$this->current_shipping_method = -1;
-		if ($this->shipping_method_count > 0) {
-			$this->shipping_method = $this->shipping_methods[0];
-		}
-	}
-	
-	/**
-	 * shipping_quotes methods
-	*/
+    * shipping_methods methods
+   */
+   function next_shipping_method() {
+      $this->current_shipping_method++;
+      $this->shipping_method = $this->shipping_methods[$this->current_shipping_method];
+      return $this->shipping_method;
+   }
+
+
+   function the_shipping_method() {
+      $this->shipping_method = $this->next_shipping_method();
+      $this->get_shipping_quotes();
+   }
+
+   function have_shipping_methods() {
+      if ($this->current_shipping_method + 1 < $this->shipping_method_count) {
+         return true;
+      } else if ($this->current_shipping_method + 1 == $this->shipping_method_count && $this->shipping_method_count > 0) {
+         // Do some cleaning up after the loop,
+         $this->rewind_shipping_methods();
+      }
+      return false;
+   }
+
+   function rewind_shipping_methods() {
+      $this->current_shipping_method = -1;
+      if ($this->shipping_method_count > 0) {
+         $this->shipping_method = $this->shipping_methods[0];
+      }
+   }
+
+   /**
+    * shipping_quotes methods
+   */
   function get_shipping_quotes() {
     global $wpdb, $wpsc_shipping_modules;
     $this->shipping_quotes = array();
  //   exit('<pre>'.print_r($this, true).'</pre>');
- 	if($this->shipping_method == null){
- 		$this->get_shipping_method();
- 	}
- 		//echo "<pre>".print_r($this->shipping_method,true)."<pre>";
- 		//echo "<pre>".print_r($wpsc_shipping_modules,true)."<pre>";
-		if(is_callable(array($wpsc_shipping_modules[$this->shipping_method], "getQuote"  ))) {
-			$unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
+   if($this->shipping_method == null){
+      $this->get_shipping_method();
+   }
+      //echo "<pre>".print_r($this->shipping_method,true)."<pre>";
+      //echo "<pre>".print_r($wpsc_shipping_modules,true)."<pre>";
+      if(is_callable(array($wpsc_shipping_modules[$this->shipping_method], "getQuote"  ))) {
+         $unprocessed_shipping_quotes = $wpsc_shipping_modules[$this->shipping_method]->getQuote();
 
     }
    // exit('<pre>'.print_r($unprocessed_shipping_quotes,true).'</pre>');
     $num = 0;
     foreach((array)$unprocessed_shipping_quotes as $shipping_key => $shipping_value) {
       //$this->calculate_per_item_shipping();
-			$per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
+         $per_item_shipping = $this->calculate_per_item_shipping($this->shipping_method);
       //echo('<pre>'.print_r($unprocessed_shipping_quotes,true).'</pre>');
       $this->shipping_quotes[$num]['name'] = $shipping_key;
       $this->shipping_quotes[$num]['value'] = (float)$shipping_value+(float)$per_item_shipping;
@@ -1443,85 +1488,85 @@ class wpsc_cart {
     }
     $this->shipping_quote_count = count($this->shipping_quotes);
   }
-  
+
   function google_shipping_quotes(){
-  	global $wpsc_shipping_modules;
-  	$shipping_quote_count = 0;
-		$custom_shipping = get_option('custom_shipping_options');
-		if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
-				//unset($this->selected_shipping_method);
-			}
-			
-			$shipping_quotes = null;
-			if($this->selected_shipping_method != null) {
-	//	exit('here');
-		$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-				// use the selected shipping module
-				if ( is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
-				
-					$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-				}
-			} else {
-			
-				//exit('here');
-				// otherwise select the first one with any quotes
-				foreach((array)$custom_shipping as $shipping_module) {
-					
-					// if the shipping module does not require a weight, or requires one and the weight is larger than zero
-					$this->selected_shipping_method = $shipping_module;
-					if ( is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
-					
-						$this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
-					}
-					if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
-					
-						break;
-					}
-				}
-				
-			}
+   global $wpsc_shipping_modules;
+   $shipping_quote_count = 0;
+      $custom_shipping = get_option('custom_shipping_options');
+      if(array_search($this->selected_shipping_method, (array)$this->shipping_methods) === false) {
+            //unset($this->selected_shipping_method);
+         }
+
+         $shipping_quotes = null;
+         if($this->selected_shipping_method != null) {
+   // exit('here');
+      $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+            // use the selected shipping module
+            if ( is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
+
+               $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+            }
+         } else {
+
+            //exit('here');
+            // otherwise select the first one with any quotes
+            foreach((array)$custom_shipping as $shipping_module) {
+
+               // if the shipping module does not require a weight, or requires one and the weight is larger than zero
+               $this->selected_shipping_method = $shipping_module;
+               if ( is_callable( array( $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote" ) ) ) {
+
+                  $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
+               }
+               if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
+
+                  break;
+               }
+            }
+
+         }
 
   }
-  
-	function next_shipping_quote() {
-		$this->current_shipping_quote++;
-		$this->shipping_quote = $this->shipping_quotes[$this->current_shipping_quote];
-		return $this->shipping_quote;
-	}
-	
-	
-	function the_shipping_quote() {
-		$this->shipping_quote = $this->next_shipping_quote();
-		
-	}
-	
-	function have_shipping_quotes() {
-		if ($this->current_shipping_quote + 1 < $this->shipping_quote_count) {
-			return true;
-		} else if ($this->current_shipping_quote + 1 == $this->shipping_quote_count && $this->shipping_quote_count > 0) {
-			// Do some cleaning up after the loop,
-			$this->rewind_shipping_quotes();
-		}
-		return false;
-	}
-	
-	function rewind_shipping_quotes() {
-		$this->current_shipping_quote = -1;
-		if ($this->shipping_quote_count > 0) {
-			$this->shipping_quote = $this->shipping_quotes[0];
-		}
-	}
-	
-	/**
-	 * Applying Coupons
-	 */
-	function apply_coupons($couponAmount='', $coupons=''){
-		$this->clear_cache();
-		$this->coupons_name = $coupons;
-		$this->coupons_amount = $couponAmount;	
-		$this->calculate_total_price();
-	}
-	
+
+   function next_shipping_quote() {
+      $this->current_shipping_quote++;
+      $this->shipping_quote = $this->shipping_quotes[$this->current_shipping_quote];
+      return $this->shipping_quote;
+   }
+
+
+   function the_shipping_quote() {
+      $this->shipping_quote = $this->next_shipping_quote();
+
+   }
+
+   function have_shipping_quotes() {
+      if ($this->current_shipping_quote + 1 < $this->shipping_quote_count) {
+         return true;
+      } else if ($this->current_shipping_quote + 1 == $this->shipping_quote_count && $this->shipping_quote_count > 0) {
+         // Do some cleaning up after the loop,
+         $this->rewind_shipping_quotes();
+      }
+      return false;
+   }
+
+   function rewind_shipping_quotes() {
+      $this->current_shipping_quote = -1;
+      if ($this->shipping_quote_count > 0) {
+         $this->shipping_quote = $this->shipping_quotes[0];
+      }
+   }
+
+   /**
+    * Applying Coupons
+    */
+   function apply_coupons($couponAmount='', $coupons=''){
+      $this->clear_cache();
+      $this->coupons_name = $coupons;
+      $this->coupons_amount = $couponAmount;
+      $this->calculate_total_price();
+   }
+
 }
 
 
@@ -1531,54 +1576,54 @@ class wpsc_cart {
  */
 class wpsc_cart_item {
   // each cart item contains a reference to the cart that it is a member of
-	var $cart;
-	
+   var $cart;
+
   // provided values
-	var $product_id;
-	var $variation_values;
-	var $product_variations;
-	var $variation_data;
-	var $quantity = 1;
-	var $provided_price;
-	
-	
-	//values from the database
-	var $product_name;
-	var $category_list = array();
-	var $category_id_list = array();
-	var $unit_price;
-	var $total_price;
-	var $taxable_price = 0;
-	var $tax = 0;
-	var $weight = 0;
-	var $shipping = 0;
-	var $sku = null;
-	var $product_url;
-	var $image_id;
-	var $thumbnail_image;
-	var $custom_tax_rate = null;
-	var $meta = array();
-	
-	var $is_donation = false;
-	var $apply_tax = true;
-	var $priceandstock_id;
-	
-	// user provided values
-	var $custom_message = null;
-	var $custom_file = null;
-	
-	
-	
-	/**
-	 * wpsc_cart_item constructor, requires a product ID and the parameters for the product
-	 * @access public
-	 *
-	 * @param integer the product ID
-	 * @param array parameters
-	 * @param objcet  the cart object
-	 * @return boolean true on sucess, false on failure
-	*/
-	function wpsc_cart_item($product_id, $parameters, &$cart) {
+   var $product_id;
+   var $variation_values;
+   var $product_variations;
+   var $variation_data;
+   var $quantity = 1;
+   var $provided_price;
+
+
+   //values from the database
+   var $product_name;
+   var $category_list = array();
+   var $category_id_list = array();
+   var $unit_price;
+   var $total_price;
+   var $taxable_price = 0;
+   var $tax = 0;
+   var $weight = 0;
+   var $shipping = 0;
+   var $sku = null;
+   var $product_url;
+   var $image_id;
+   var $thumbnail_image;
+   var $custom_tax_rate = null;
+   var $meta = array();
+
+   var $is_donation = false;
+   var $apply_tax = true;
+   var $priceandstock_id;
+
+   // user provided values
+   var $custom_message = null;
+   var $custom_file = null;
+
+
+
+   /**
+    * wpsc_cart_item constructor, requires a product ID and the parameters for the product
+    * @access public
+    *
+    * @param integer the product ID
+    * @param array parameters
+    * @param objcet  the cart object
+    * @return boolean true on sucess, false on failure
+   */
+   function wpsc_cart_item($product_id, $parameters, &$cart) {
     global $wpdb;
     // still need to add the ability to limit the number of an item in the cart at once.
     // each cart item contains a reference to the cart that it is a member of, this makes that reference
@@ -1587,398 +1632,424 @@ class wpsc_cart_item {
 
 
     foreach($parameters as $name => $value) {
-			$this->$name = $value;
+         $this->$name = $value;
     }
-    
-    
-		$this->product_id = absint($product_id);
-		// to preserve backwards compatibility, make product_variations a reference to variations.
-		$this->product_variations =& $this->variation_values;
-		
-		
-		
+
+
+      $this->product_id = absint($product_id);
+      // to preserve backwards compatibility, make product_variations a reference to variations.
+      $this->product_variations =& $this->variation_values;
+
+
+
     if(($parameters['is_customisable'] == true) && ($parameters['file_data'] != null)) {
       $this->save_provided_file($this->file_data);
     }
-		//$this->meta = $meta;
-		$this->refresh_item();
-	}
+      //$this->meta = $meta;
+      $this->refresh_item();
+   }
 
-		/**
-	 * update item method, currently can only update the quantity
-	 * will require the parameters to update (no, you cannot change the product ID, delete the item and make a new one)
-	 * @access public
-	 *
-	 * @param integer quantity
-	 * #@param array parameters
-	 * @return boolean true on sucess, false on failure
-	*/
-	function update_item($quantity) {
-		$this->quantity = (int)$quantity;
-		$this->refresh_item();
-		$this->update_claimed_stock();
-	}
+      /**
+    * update item method, currently can only update the quantity
+    * will require the parameters to update (no, you cannot change the product ID, delete the item and make a new one)
+    * @access public
+    *
+    * @param integer quantity
+    * #@param array parameters
+    * @return boolean true on sucess, false on failure
+   */
+   function update_item($quantity) {
+      $this->quantity = (int)$quantity;
+      $this->refresh_item();
+      $this->update_claimed_stock();
+   }
 
-	/**
-	 * refresh_item method, refreshes the item, calculates the prices, gets the name
-	 * @access public
-	 *
-	 * @return array array of monetary and other values
-	*/
-	function refresh_item() {
-		global $wpdb, $wpsc_shipping_modules, $wpsc_cart;
-		$product_id = $this->product_id;
-		//$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
-		$product = get_post($this->product_id);
-		$product_meta = get_metadata('post', $this->product_id);
-		//print("<pre>".print_r($product,true)."</pre>");
-		
-		$this->sku = get_post_meta($product_id, '_wpsc_sku', true);
-		$price = get_post_meta($product_id, '_wpsc_price', true);
-		$special_price = get_post_meta($product_id, '_wpsc_special_price', true);
-		$product_meta = get_post_meta($product_id, '_wpsc_product_metadata');
-		$this->stock = get_post_meta($product_id, '_wpsc_stock', true);
-		$this->is_donation = get_post_meta($product_id, '_wpsc_is_donation', true);
-		
-		if ( isset($special_price) && $special_price < $price ) {
-			$price = $special_price;
-		}
-		
-		//exit("<pre>".print_r($product_meta,true)."</pre>");
-		$priceandstock_id = 0;
-		$weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
-		
-		unset($this->weight);
-		$this->weight = $weight;
-		//$price = $product['price'];
-		
-		//$file_id = $product['file'];
-		//$sku = get_product_meta($this->product_id, 'sku', true);
-		
-		
-		// if we are using table rate price
-		$levels = get_product_meta($this->product_id, 'table_rate_price');
-		if ($levels != '') {
-			foreach((array)$levels['quantity'] as $key => $qty) {
-				if ($this->quantity >= $qty) {
-					$unit_price = $levels['table_price'][$key];
-					if ($unit_price != '') {
-						$price = $unit_price;
-					}
-				}
-			}
-		}
-		
-		// create the string containing the product name.
-		$product_name = $product->post_title;
+   /**
+    * refresh_item method, refreshes the item, calculates the prices, gets the name
+    * @access public
+    *
+    * @return array array of monetary and other values
+   */
+   function refresh_item() {
+      global $wpdb, $wpsc_shipping_modules, $wpsc_cart;
+      $product_id = $this->product_id;
+      //$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
+      $product = get_post($this->product_id);
+      $product_meta = get_metadata('post', $this->product_id);
+      //print("<pre>".print_r($product,true)."</pre>");
 
-		$this->product_name = $product_name;
-		$this->priceandstock_id = $priceandstock_id;
-		$this->meta = $product_meta;
-		
-		if(is_numeric($product_meta['custom_tax'])) {
-			$this->tax_rate = $product_meta['custom_tax'];
-		} else {
-			$this->tax_rate = $wpsc_cart->tax_percentage;
-		
-		}
-		
-		
-		// change no_shipping to boolean and invert it
-		$this->uses_shipping = !(bool)$product_meta['no_shipping'];
-		$this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
-		
-		
-		if($this->is_donation == 1) {
-			$this->unit_price = $this->provided_price;
-		} else {
-			$this->unit_price = $price;
-		}
-		
-		
-		$this->total_price = $this->unit_price * $this->quantity;
+      $this->sku = get_post_meta($product_id, '_wpsc_sku', true);
+      $price = get_post_meta($product_id, '_wpsc_price', true);
+      $special_price = get_post_meta($product_id, '_wpsc_special_price', true);
+      $product_meta = get_post_meta($product_id, '_wpsc_product_metadata');
+      $this->stock = get_post_meta($product_id, '_wpsc_stock', true);
+      $this->is_donation = get_post_meta($product_id, '_wpsc_is_donation', true);
 
-		
-		$category_data = get_the_product_category($product_id);
-		
-		
+      if ( isset($special_price) && $special_price < $price ) {
+         $price = $special_price;
+      }
 
-		$this->category_list = array();
-		$this->category_id_list = array();
-		
-		foreach((array)$category_data as $category_row) {
-			$this->category_list[] = $category_row->slug;
-			$this->category_id_list[] = $category_row->term_id;
-		}
-		
-		
-		if($this->tax_rate > 0) {
-		  $this->taxable_price = $this->total_price;
-		  $this->tax = $this->taxable_price * ($this->tax_rate/100);
-		}
-		
-		$this->product_url = wpsc_product_url($product_id);
-		
-		if(!is_array($this->variation_values)) {
-			$attach_parent = $product_id;
-		} else {
-			$attach_parent = $wpdb->get_var($wpdb->prepare("SELECT post_parent FROM $wpdb->posts WHERE ID = %d", $product_id));
-		}
-		
-		$att_img_args = array(
-			'post_type' => 'attachment',
-			'numberposts' => 1,
-			'post_parent' => $attach_parent,
-			'orderby' => 'menu_order',
-			'order' => 'DESC'
-		);
-		
-		//die("<pre>".print_r($att_img_args)."</pre>");
-				
-		$attached_image = get_posts($att_img_args);
-		
-		
-		if($attached_image != null) {
-			$this->thumbnail_image = array_shift($attached_image);
-			
-		}
-	
-	
-		
-		//$this->image_id = $product['image'];
-		//if($product['thumbnail_image'] != null) {
-		//} else {
-		///	$this->thumbnail_image = $product['image'];
-		//}
+      //exit("<pre>".print_r($product_meta,true)."</pre>");
+      $priceandstock_id = 0;
+      $weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
+
+      unset($this->weight);
+      $this->weight = $weight;
+      //$price = $product['price'];
+
+      //$file_id = $product['file'];
+      //$sku = get_product_meta($this->product_id, 'sku', true);
+
+
+      // if we are using table rate price
+      $levels = get_product_meta($this->product_id, 'table_rate_price');
+      if ($levels != '') {
+         foreach((array)$levels['quantity'] as $key => $qty) {
+            if ($this->quantity >= $qty) {
+               $unit_price = $levels['table_price'][$key];
+               if ($unit_price != '') {
+                  $price = $unit_price;
+               }
+            }
+         }
+      }
+
+      // create the string containing the product name.
+      $product_name = $product->post_title;
+
+      $this->product_name = $product_name;
+      $this->priceandstock_id = $priceandstock_id;
+      $this->meta = $product_meta;
+/* OLD CODE PRESERVED - see wpec taxes below
+      if(is_numeric($product_meta['custom_tax'])) {
+         $this->tax_rate = $product_meta['custom_tax'];
+      } else {
+         $this->tax_rate = $wpsc_cart->tax_percentage;
+
+      }
+*/
+
+      // change no_shipping to boolean and invert it
+      $this->uses_shipping = !(bool)$product_meta['no_shipping'];
+      $this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
+
+
+      if($this->is_donation == 1) {
+         $this->unit_price = $this->provided_price;
+      } else {
+         $this->unit_price = $price;
+      }
+
+
+      $this->total_price = $this->unit_price * $this->quantity;
+
+
+      $category_data = get_the_product_category($product_id);
 
 
 
+      $this->category_list = array();
+      $this->category_id_list = array();
 
-		//$product_files = (array)get_product_meta($this->product_id, 'product_files');
-		
-		$product_files = (array)get_posts(array(
-			'post_type' => 'wpsc-product-file',
-			'post_parent' => $this->product_id,
-			'numberposts' => -1,
-			'post_status' => 'inherit'
-		));
-	
-		if(count($product_files) > 0) {
-			$this->file_id = null;
-			$this->is_downloadable = true;
-		} else {
-			$this->file_id = null;
-			$this->is_downloadable = false;
-		}
-		
-		
-		if ( is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) ) {
-			$this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
-	  }
-	  // update the claimed stock here
-	  $this->update_claimed_stock();
-	}
-		
-	/**
-	 * Calculate shipping method
-	 * if no parameter passed, takes the currently selected method
-	 * @access public
-	 *
-	 * @param string shipping method
-	 * @return boolean true on sucess, false on failure
-	*/		
-		
-	function calculate_shipping($method = null) {
+      foreach((array)$category_data as $category_row) {
+         $this->category_list[] = $category_row->slug;
+         $this->category_id_list[] = $category_row->term_id;
+      }
+
+
+      //wpec_taxes - calculate product tax and add to total price
+      $wpec_taxes_controller = new wpec_taxes_controller();
+
+      if($wpec_taxes_controller->wpec_taxes_isincluded())
+      {
+         $taxes = $wpec_taxes_controller->wpec_taxes_calculate_included_tax($this);
+         $this->tax_rate = $taxes['rate'];
+         $this->tax = $taxes['tax'];
+         $this->total_price += $this->tax;
+      }// if
+
+      $this->product_url = wpsc_product_url($product_id);
+
+      if(!is_array($this->variation_values)) {
+         $attach_parent = $product_id;
+      } else {
+         $attach_parent = $wpdb->get_var($wpdb->prepare("SELECT post_parent FROM $wpdb->posts WHERE ID = %d", $product_id));
+      }
+
+      $att_img_args = array(
+         'post_type' => 'attachment',
+         'numberposts' => 1,
+         'post_parent' => $attach_parent,
+         'orderby' => 'menu_order',
+         'order' => 'DESC'
+      );
+
+      //die("<pre>".print_r($att_img_args)."</pre>");
+
+      $attached_image = get_posts($att_img_args);
+
+
+      if($attached_image != null) {
+         $this->thumbnail_image = array_shift($attached_image);
+
+      }
+
+
+
+      //$this->image_id = $product['image'];
+      //if($product['thumbnail_image'] != null) {
+      //} else {
+      ///   $this->thumbnail_image = $product['image'];
+      //}
+
+
+
+
+      //$product_files = (array)get_product_meta($this->product_id, 'product_files');
+
+      $product_files = (array)get_posts(array(
+         'post_type' => 'wpsc-product-file',
+         'post_parent' => $this->product_id,
+         'numberposts' => -1,
+         'post_status' => 'inherit'
+      ));
+
+      if(count($product_files) > 0) {
+         $this->file_id = null;
+         $this->is_downloadable = true;
+      } else {
+         $this->file_id = null;
+         $this->is_downloadable = false;
+      }
+
+
+      if ( is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) ) {
+         $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
+     }
+     // update the claimed stock here
+     $this->update_claimed_stock();
+   }
+
+   /**
+    * Calculate shipping method
+    * if no parameter passed, takes the currently selected method
+    * @access public
+    *
+    * @param string shipping method
+    * @return boolean true on sucess, false on failure
+   */
+
+   function calculate_shipping($method = null) {
     global $wpdb, $wpsc_shipping_modules;
     if($method === null) {
       $method = $this->cart->selected_shipping_method;
     }
-		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this);
-			//echo("<pre>".print_r($shipping,true)."</pre>");
+      if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
+         $shipping = $wpsc_shipping_modules[$method]->get_item_shipping($this);
+         //echo("<pre>".print_r($shipping,true)."</pre>");
     }
     if($method == $this->cart->selected_shipping_method) {
-			$this->shipping = $shipping;
+         $this->shipping = $shipping;
     }
-	  return $shipping;
-	}
-		
-	/**
-	 * user provided file method
-	 * @access public
-	 * @param string shipping method
-	 * @return boolean true on sucess, false on failure
-	*/		
-		
-	function save_provided_file($file_data) {
+     return $shipping;
+   }
+
+   /**
+    * user provided file method
+    * @access public
+    * @param string shipping method
+    * @return boolean true on sucess, false on failure
+   */
+
+   function save_provided_file($file_data) {
     global $wpdb;
-		$accepted_file_types['mime'][] = 'image/jpeg';
-		$accepted_file_types['mime'][] = 'image/gif';
-		$accepted_file_types['mime'][] = 'image/png';
-		
-		$accepted_file_types['mime'][] = 'image/pjpeg';  // Added for IE compatibility
-		$accepted_file_types['mime'][] = 'image/x-png';  // Added for IE compatibility
-		//$accepted_file_types['mime'][] = 'image/svg+xml';
-		
-		
-		$accepted_file_types['ext'][] = 'jpeg';
-		$accepted_file_types['ext'][] = 'jpg';
-		$accepted_file_types['ext'][] = 'gif';
-		$accepted_file_types['ext'][] = 'png';
-		//$accepted_file_types['ext'][] = 'svg';
-		
-		
-		$can_have_uploaded_image = get_product_meta($this->product_id,'can_have_uploaded_image');
-		if ($can_have_uploaded_image=='on') {
-		  $mime_type_data = wpsc_get_mimetype($file_data['tmp_name'], true);			
-			$name_parts = explode('.',basename($file_data['name']));
-			$extension = array_pop($name_parts);
-		  if($mime_type_data['is_reliable'] == true) {
-		    $mime_type = $mime_type_data['mime_type'];
-		  } else {
-		    // if we can't use what PHP provides us with, we have to trust the user as there aren't really any other choices.
-		    $mime_type = $file_data['type'];
-		  }
-		  //echo( "<pre>".print_r($mime_type_data,true)."</pre>" );
-		  //exit( "<pre>".print_r($file_data,true)."</pre>" );
-			if((   (array_search($mime_type, $accepted_file_types['mime']) !== false) || (get_option('wpsc_check_mime_types') == 1) ) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
-			  if(is_file(WPSC_USER_UPLOADS_DIR.$file_data['name'])) {
-					$name_parts = explode('.',basename($file_data['name']));
-					$extension = array_pop($name_parts);
-					$name_base = implode('.',$name_parts);
-					$file_data['name'] = null;
-					$num = 2;
-					//  loop till we find a free file name, first time I get to do a do loop in yonks
-					do {
-						$test_name = "{$name_base}-{$num}.{$extension}";
-						if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name)) {
-							$file_data['name'] = $test_name;
-						}
-						$num++;
-					} while ($file_data['name'] == null);
-			  }
-			  //exit($file_data['name']);
-			  $unique_id =  sha1(uniqid(rand(), true));
-				if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) ) {
-					$this->custom_file = array('file_name' => $file_data['name'], 'mime_type' => $mime_type, "unique_id" => $unique_id );			
-				}
-			}
-		}
-	}
+      $accepted_file_types['mime'][] = 'image/jpeg';
+      $accepted_file_types['mime'][] = 'image/gif';
+      $accepted_file_types['mime'][] = 'image/png';
 
-		
-	/**
-	 * update_claimed_stock method
-	 * Updates the claimed stock table, to prevent people from having more than the existing stock in their carts
-	 * @access public
-	 *
-	 * no parameters, nothing returned
-	*/
-	function update_claimed_stock() {
-		global $wpdb;
-		if($this->has_limited_stock == true) {
-			$current_datetime = date("Y-m-d H:i:s");
-			$wpdb->query($wpdb->prepare("REPLACE INTO `".WPSC_TABLE_CLAIMED_STOCK."`
-			( `product_id` , `variation_stock_id` , `stock_claimed` , `last_activity` , `cart_id` ) 
-			VALUES
-			('%d', '%d', '%s', '%s', '%s');",
-			$this->product_id,
-			$this->priceandstock_id,
-			$this->quantity,
-			$current_datetime,
-			$this->cart->unique_id));
- 		}
-	}
-		
-		
-	/**
-	 * save to database method
-	 * @access public
-	 *
-	 * @param integer purchase log id
-	*/
-	function save_to_db($purchase_log_id) {
-		global $wpdb, $wpsc_shipping_modules;
-		
-	    if($method === null) {
-	      $method = $this->cart->selected_shipping_method;
-	    }
-		if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
-			$shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
-		}
-	    if($this->cart->has_total_shipping_discount()) {
-				$shipping = 0;
-	    }
-		if($this->apply_tax == true && wpsc_tax_isincluded() == false) {
-			if(is_numeric($this->custom_tax_rate)) {
-				$tax_rate = $this->custom_tax_rate;
-			} else {
-				$tax_rate = $this->cart->tax_percentage;
-			}
-			$tax = $this->unit_price * ($tax_rate/100);
-		} else {
-			$tax = 0;
-			$tax_rate = 0;
-		}		
-		
-		$wpdb->query($wpdb->prepare(
-		"INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (
-			`prodid`, `name`, `purchaseid`,	`price`, `pnp`,
-			`tax_charged`, `gst`, `quantity`, `donation`,
-			`no_shipping`, `custom_message`, `files`, `meta`
-		) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)",
-		$this->product_id,
-		$this->product_name,
-		$purchase_log_id,
-		$this->unit_price,
-		(float)$shipping,
-		(float)$tax,
-		(float)$tax_rate,
-		$this->quantity,
-		$this->is_donation,
-		$this->custom_message,
-		serialize($this->custom_file)
-		));
-		$cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
-		
-		wpsc_update_cartmeta($cart_id, 'sku', $this->sku);
+      $accepted_file_types['mime'][] = 'image/pjpeg';  // Added for IE compatibility
+      $accepted_file_types['mime'][] = 'image/x-png';  // Added for IE compatibility
+      //$accepted_file_types['mime'][] = 'image/svg+xml';
 
 
-		
-	    $downloads = get_option('max_downloads');
-		if($this->is_downloadable == true) {
-		
-			$product_files = (array)get_posts(array(
-				'post_type' => 'wpsc-product-file',
-				'post_parent' => $this->product_id,
-				'numberposts' => -1,
-				'post_status' => 'inherit'
-			));
-					
-			foreach($product_files as $file){
-				// if the file is downloadable, check that the file is real
-				$unique_id = sha1(uniqid(mt_rand(), true));
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (
-					`product_id` , `fileid` , 
-					`purchid` , `cartid`, 
-					`uniqueid`, `downloads`, 
-					`active` , `datetime` 
-				) VALUES ( 
-					'{$this->product_id}', '{$file->ID}', 
-					'{$purchase_log_id}', '{$cart_id}', 
-					'{$unique_id}', '$downloads', 
-					'0', NOW()
-				);");
-				
-				$download_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` LIMIT 1");
-				wpsc_update_meta($download_id, '_is_legacy', 'false', 'wpsc_downloads');
-			}
-		
-		}
+      $accepted_file_types['ext'][] = 'jpeg';
+      $accepted_file_types['ext'][] = 'jpg';
+      $accepted_file_types['ext'][] = 'gif';
+      $accepted_file_types['ext'][] = 'png';
+      //$accepted_file_types['ext'][] = 'svg';
 
-		
-		do_action('wpsc_save_cart_item', $cart_id, $this->product_id);
-	}
-	
+
+      $can_have_uploaded_image = get_product_meta($this->product_id,'can_have_uploaded_image');
+      if ($can_have_uploaded_image=='on') {
+        $mime_type_data = wpsc_get_mimetype($file_data['tmp_name'], true);
+         $name_parts = explode('.',basename($file_data['name']));
+         $extension = array_pop($name_parts);
+        if($mime_type_data['is_reliable'] == true) {
+          $mime_type = $mime_type_data['mime_type'];
+        } else {
+          // if we can't use what PHP provides us with, we have to trust the user as there aren't really any other choices.
+          $mime_type = $file_data['type'];
+        }
+        //echo( "<pre>".print_r($mime_type_data,true)."</pre>" );
+        //exit( "<pre>".print_r($file_data,true)."</pre>" );
+         if((   (array_search($mime_type, $accepted_file_types['mime']) !== false) || (get_option('wpsc_check_mime_types') == 1) ) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
+           if(is_file(WPSC_USER_UPLOADS_DIR.$file_data['name'])) {
+               $name_parts = explode('.',basename($file_data['name']));
+               $extension = array_pop($name_parts);
+               $name_base = implode('.',$name_parts);
+               $file_data['name'] = null;
+               $num = 2;
+               //  loop till we find a free file name, first time I get to do a do loop in yonks
+               do {
+                  $test_name = "{$name_base}-{$num}.{$extension}";
+                  if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name)) {
+                     $file_data['name'] = $test_name;
+                  }
+                  $num++;
+               } while ($file_data['name'] == null);
+           }
+           //exit($file_data['name']);
+           $unique_id =  sha1(uniqid(rand(), true));
+            if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) ) {
+               $this->custom_file = array('file_name' => $file_data['name'], 'mime_type' => $mime_type, "unique_id" => $unique_id );
+            }
+         }
+      }
+   }
+
+
+   /**
+    * update_claimed_stock method
+    * Updates the claimed stock table, to prevent people from having more than the existing stock in their carts
+    * @access public
+    *
+    * no parameters, nothing returned
+   */
+   function update_claimed_stock() {
+      global $wpdb;
+      if($this->has_limited_stock == true) {
+         $current_datetime = date("Y-m-d H:i:s");
+         $wpdb->query($wpdb->prepare("REPLACE INTO `".WPSC_TABLE_CLAIMED_STOCK."`
+         ( `product_id` , `variation_stock_id` , `stock_claimed` , `last_activity` , `cart_id` )
+         VALUES
+         ('%d', '%d', '%s', '%s', '%s');",
+         $this->product_id,
+         $this->priceandstock_id,
+         $this->quantity,
+         $current_datetime,
+         $this->cart->unique_id));
+      }
+   }
+
+
+   /**
+    * save to database method
+    * @access public
+    *
+    * @param integer purchase log id
+   */
+   function save_to_db($purchase_log_id) {
+      global $wpdb, $wpsc_shipping_modules;
+
+       if($method === null) {
+         $method = $this->cart->selected_shipping_method;
+       }
+      if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
+         $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
+      }
+       if($this->cart->has_total_shipping_discount()) {
+            $shipping = 0;
+       }
+
+      //wpec_taxes
+      $wpec_taxes_controller = new wpec_taxes_controller();
+
+      //initialize tax variables
+      $tax = 0;
+      $tax_rate = 0;
+
+      //wpec_taxes - calculate product tax and add to total price
+      $wpec_taxes_controller = new wpec_taxes_controller();
+
+      if($wpec_taxes_controller->wpec_taxes_isincluded())
+      {
+         $taxes = $wpec_taxes_controller->wpec_taxes_calculate_included_tax($this);
+         $tax_rate = $taxes['rate'];
+         $tax = $taxes['tax'];
+      }// if
+
+/* OLD CODE PRESERVED
+      if($this->apply_tax == true && wpsc_tax_isincluded() == false) {
+         if(is_numeric($this->custom_tax_rate)) {
+            $tax_rate = $this->custom_tax_rate;
+         } else {
+            $tax_rate = $this->cart->tax_percentage;
+         }
+         $tax = $this->unit_price * ($tax_rate/100);
+      } else {
+         $tax = 0;
+         $tax_rate = 0;
+      }
+*/
+
+      $wpdb->query($wpdb->prepare(
+      "INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (
+         `prodid`, `name`, `purchaseid`,  `price`, `pnp`,
+         `tax_charged`, `gst`, `quantity`, `donation`,
+         `no_shipping`, `custom_message`, `files`, `meta`
+      ) VALUES ('%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '0', '%s', '%s', NULL)",
+      $this->product_id,
+      $this->product_name,
+      $purchase_log_id,
+      $this->unit_price,
+      (float)$shipping,
+      (float)$tax,
+      (float)$tax_rate,
+      $this->quantity,
+      $this->is_donation,
+      $this->custom_message,
+      serialize($this->custom_file)
+      ));
+      $cart_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_CART_CONTENTS."` LIMIT 1");
+
+      wpsc_update_cartmeta($cart_id, 'sku', $this->sku);
+
+
+
+       $downloads = get_option('max_downloads');
+      if($this->is_downloadable == true) {
+
+         $product_files = (array)get_posts(array(
+            'post_type' => 'wpsc-product-file',
+            'post_parent' => $this->product_id,
+            'numberposts' => -1,
+            'post_status' => 'inherit'
+         ));
+
+         foreach($product_files as $file){
+            // if the file is downloadable, check that the file is real
+            $unique_id = sha1(uniqid(mt_rand(), true));
+            $wpdb->query("INSERT INTO `".WPSC_TABLE_DOWNLOAD_STATUS."` (
+               `product_id` , `fileid` ,
+               `purchid` , `cartid`,
+               `uniqueid`, `downloads`,
+               `active` , `datetime`
+            ) VALUES (
+               '{$this->product_id}', '{$file->ID}',
+               '{$purchase_log_id}', '{$cart_id}',
+               '{$unique_id}', '$downloads',
+               '0', NOW()
+            );");
+
+            $download_id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` LIMIT 1");
+            wpsc_update_meta($download_id, '_is_legacy', 'false', 'wpsc_downloads');
+         }
+
+      }
+
+
+      do_action('wpsc_save_cart_item', $cart_id, $this->product_id);
+   }
+
 }
 ?>

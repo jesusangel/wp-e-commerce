@@ -2494,15 +2494,12 @@ function variation_price_field( $variation ) {
 		$term_id = $variation->term_id;
 		$term_prices = array();
 		$term_prices[$term_id] = array();
-		$term_prices[$term_id]["price"] = absint($_POST["variation_price"]);
-		$term_prices[$term_id]["checked"] = (isset($_POST["apply_to_current"])) ? "checked" : "unchecked";
+		$term_prices[$term_id]["price"] = '';
+		$term_prices[$term_id]["checked"] = '';
 		add_option('term_prices', $term_prices);
 		
 	} 
 	
-	//check for existing featured ID
-	
-	$featured_id = '';
 	if ( is_array ( $term_prices ) && array_key_exists ( $variation->term_id, $term_prices ) ) {
 		$price = $term_prices[$variation->term_id]["price"] ;
 	}
@@ -2512,39 +2509,53 @@ function variation_price_field( $variation ) {
     <tr class="form-field">
         <th scope="row" valign="top"><label for="variation_price"><?php _e('Variation Price') ?></label></th>
         <td>
-        	<input type="text" name="variation_price" id="variation_price" size="3" style="width:5%;" value="<?php echo $price; ?>"><br />
-            <span class="description">You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%)</span>
+        	<input type="text" name="variation_price" id="variation_price" style="width:50px;" value="<?php echo $price; ?>"><br />
+            <span class="description">You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).</span>
 	</div>
 	</td>
 	</tr>
 <?php
+
 }
 
 function variation_price_field_check( $variation ) {
+
+	$term_prices = get_option( 'term_prices' );
+	
+	if ( is_array ( $term_prices ) && array_key_exists ( $variation->term_id, $term_prices ) ) {
+		$checked = ($term_prices[$variation->term_id]["checked"] == 'checked') ? 'checked' : '';
+	}
+
 ?>
 <tr class="form-field">
         <th scope="row" valign="top"><label for="apply_to_current"><?php _e('Apply to current variations?') ?></label></th>
         <td>
-            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" value="<?php echo $featured_id; ?>">By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created from now on.</span>
+            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" <?php echo $checked; ?> />By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created or edited from now on.  Take note, this will apply this rule to <em>every</em> product using this variation.  If you need to overwrite it for any reason on a specific product, simply go to that product and change the price.</span>
         </td>
     </tr>
 <?php
 	}
 
-add_action ( 'edited_wpsc-variation', 'tme_save_featured');
-add_action ( 'created_wpsc-variation', 'tme_save_featured');
+add_action ( 'edited_wpsc-variation', 'save_term_prices');
+add_action ( 'created_wpsc-variation', 'save_term_prices');
 
-function tme_save_featured( $term_id ) {
-	if ( isset( $_POST['category_featured'] ) ) {
+function save_term_prices( $term_id ) {
 
-		//load existing category featured option
-		$current_featured = get_option( 'category_featured' );
+// First - Saves options from input
+	if ( isset( $_POST['variation_price'] ) || isset($_POST["apply_to_current"]) ) {
 
-		//set featured post ID to proper category ID in options array
-		$current_featured[$term_id] = intval( $_POST['category_featured'] );
+		$term_prices = get_option( 'term_prices' );
 
-		//save the option array
-		update_option( 'category_featured', $current_featured );
+		$term_prices[$term_id]["price"] = $_POST["variation_price"];
+		$term_prices[$term_id]["checked"] = (isset($_POST["apply_to_current"])) ? "checked" : "unchecked";
+
+		update_option( 'term_prices', $term_prices);
+		
 	}
+
+// Second - Checks if box was checked, if so, let's then check whether or not it was flat, differential, or percentile, then let's apply the pricing to every product appropriately
+
+
+	
 }
 ?>

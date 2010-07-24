@@ -131,6 +131,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_rate_price'] = null;
 	}
 	
+/*
 	if(!isset($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'])) $post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] = '';
 	if($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] == 1) {
 		$custom_tax_value = (float)$post_data['meta']['_wpsc_product_metadata']['custom_tax']['value'];
@@ -138,7 +139,8 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$custom_tax_value = null;
 	}
 	$post_data['meta']['_wpsc_product_metadata']['custom_tax'] = $custom_tax_value;
-	
+*/
+   
 	$post_data['meta']['_wpsc_product_metadata']['shipping']['local'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['local'];
 	$post_data['meta']['_wpsc_product_metadata']['shipping']['international'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['international'];
 	

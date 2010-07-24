@@ -41,11 +41,14 @@ function wpsc_google_checkout_submit(){
 function wpsc_display_tax_label($checkout = false){
 	global $wpsc_cart;
 	if(wpsc_tax_isincluded()){
-		if($checkout){
+		/* Percentages can be defined on a per product level - therefore cannot display a total percentage
+      if($checkout){
 			return  sprintf(__('Tax Included (%s%%)', 'wpsc'), $wpsc_cart->tax_percentage); 
 		}else{
 			return __('Tax Included', 'wpsc');
 		}
+      */
+      return __('Tax Included', 'wpsc');
 	}else{
 		return __('Tax', 'wpsc');
 	}

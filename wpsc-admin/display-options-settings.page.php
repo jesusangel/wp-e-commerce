@@ -72,8 +72,7 @@ switch($page) {
 	break;
 	
 	case "taxes":
-	require_once('includes/settings-pages/taxes.php');
-	wpsc_options_taxes();	
+   wpec_taxes_settings_page(); //see wpec-taxes view
 	break;
 	
 	case "import";
@@ -106,7 +105,7 @@ function wpsc_settings_tabs() {
 		'general' => __('General', 'wpsc'), // handler action suffix => tab text
 		'presentation' => __('Presentation', 'wpsc'),
 		'admin' => __('Admin', 'wpsc'),
-		'taxes' => __('Taxes','wpsc'),
+		'taxes' => __('Taxes','wpsc'), //perhaps add with filter in the future
 		'shipping' => __('Shipping', 'wpsc'),
 		'gateway' => __('Payments', 'wpsc'),
 		'checkout' => __('Checkout', 'wpsc'),
@@ -167,8 +166,6 @@ function country_list($selected_country = null) {
 			}
       return $output;
 }
-
-
 
 /*
  * Get Shipping Form for wp-admin 

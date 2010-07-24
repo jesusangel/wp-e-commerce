@@ -151,6 +151,10 @@ require_once(WPSC_FILE_PATH."/wpsc-includes/form-display.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/merchant.class.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/meta.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/productfeed.php");
+
+//add taxes
+require_once(WPSC_FILE_PATH."/wpec-taxes/taxes_module.php");
+
 //exit(print_r($v1,true));
 if(isset($v1[0]) && ($v1[0] >= 2.8)){
 	require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
