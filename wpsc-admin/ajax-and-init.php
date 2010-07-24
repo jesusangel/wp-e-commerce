@@ -2479,6 +2479,23 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
    add_action('admin_init', 'wpsc_save_category_set');
 }
 
+function flat_price($price) {
+
+	if (isset($price) && !empty($price) && strchr($price, '-') === false && strchr($price, '+') === false  && strchr($price, '%') === false)
+	return true;
+}
+
+function percentile_price($price) {
+	if(isset($price) && !empty($price) && ( strchr($price, '-')  || strchr($price, '+') )  && strchr($price, '%') )
+	return true;
+}
+
+function differential_price($price) {
+
+	if (isset($price) && !empty($price) && ( strchr($price, '-')  || strchr($price, '+') )  && strchr($price, '%') === false )
+	return true;
+
+}
 
 	add_action ( 'wpsc-variation_edit_form_fields', 'variation_price_field' );
 	add_action ( 'wpsc-variation_edit_form_fields', 'variation_price_field_check' );
@@ -2528,13 +2545,15 @@ function variation_price_field_check( $variation ) {
 	
 	if ( is_array ( $term_prices ) && array_key_exists ( $variation->term_id, $term_prices ) ) {
 		$checked = ($term_prices[$variation->term_id]["checked"] == 'checked') ? 'checked' : '';
+	} else {
+		$checked = '';
 	}
 
 ?>
 <tr class="form-field">
         <th scope="row" valign="top"><label for="apply_to_current"><?php _e('Apply to current variations?') ?></label></th>
         <td>
-            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" <?php echo $checked; ?> />By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created or edited from now on.  Take note, this will apply this rule to <em>every</em> product using this variation.  If you need to overwrite it for any reason on a specific product, simply go to that product and change the price.</span>
+            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" <?php echo $checked; ?> />By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created or edited from now on.  Take note, this will apply this rule to <strong>every</strong> product using this variation.  If you need to override it for any reason on a specific product, simply go to that product and change the price.</span>
         </td>
     </tr>
 <?php
@@ -2557,7 +2576,115 @@ function save_term_prices( $term_id ) {
 		
 	}
 
-// Second - Checks if box was checked, if so, let's then check whether or not it was flat, differential, or percentile, then let's apply the pricing to every product appropriately
+// Second - If box was checked, let's then check whether or not it was flat, differential, or percentile, then let's apply the pricing to every product appropriately
+
+	if ( isset( $_POST["apply_to_current"] ) ) {	
+	
+		//Check for flat, percentile or differential
+		$var_price_type = '';
+		
+		if (flat_price($_POST["variation_price"])) {
+			$var_price_type = 'flat';
+		} elseif ( differential_price($_POST["variation_price"]) ) {
+			$var_price_type = 'differential';
+		}elseif (percentile_price($_POST["variation_price"])) {
+			$var_price_type = 'percentile';
+		}
+		
+		//Now, find all products with this term_id, update their pricing structure (terms returned include only parents at this point, we'll grab relevent children soon)
+		
+		$products_to_mod = get_objects_in_term($term_id, "wpsc-variation");
+		
+		$product_parents = array();
+		
+		foreach ( (array) $products_to_mod as $get_parent ) {
+		
+				$post = get_post($get_parent);
+				
+				if (!$post->post_parent) {
+					$product_parents[] = $post->ID;
+				}
+				
+			}	
+			
+		//Now that we have all parent IDs with this term, we can get the children (only the ones that are also in $products_to_mod, we don't want to apply pricing to ALL kids)
+		
+		foreach($product_parents as $parent) {
+			$args = array(
+				'post_parent' => $parent,
+				'post_type' => 'wpsc-product'
+			);
+			$children = get_children($args, ARRAY_A);	
+			
+				foreach($children as $childrens) {
+					$parent = $childrens["post_parent"];
+					$children_ids[$parent][] = $childrens["ID"];	
+					$children_ids[$parent] = array_intersect($children_ids[$parent], $products_to_mod);
+				}
+		}
+		
+		//Got the right kids, let's grab their parent pricing and modify their pricing based on var_price_type
+		
+			foreach ( (array) $children_ids as $parents => $kids) {
+				
+				$kids = array_values($kids);
+				$parent_pricing = get_product_meta($parents, "price", true);
+				
+				foreach ($kids as $kiddos) {
+				
+					$child_pricing = get_product_meta($kiddos, "price", true);
+					
+					if ($var_price_type == 'flat') {
+					
+						update_product_meta($kiddos, "price", floatval($_POST["variation_price"]));
+					
+					} elseif ($var_price_type == 'percentile') {
+					
+						//Are we decreasing or increasing the price?
+						
+							if (strchr($_POST["variation_price"], '-') ) {
+								$negative = true;
+							} else {
+								$positive = true;
+							}
+							
+						//Now, let's get the parent product price, +/- by the percentage given
+							$percentage = (floatval($_POST["variation_price"]) / 100);
+							
+							if ($positive) {
+								$price = $parent_pricing + ($parent_pricing * $percentage);
+							} elseif ($negative) {
+								$price = $parent_pricing - ($parent_pricing * $percentage);
+							}
+							
+							update_product_meta($kiddos, "price", $price);
+
+					}elseif($var_price_type == 'differential') {
+					
+						//Are we decreasing or increasing the price?
+							if (strchr($_POST["variation_price"], '-') ) {
+								$negative = true;
+							} else {
+								$positive = true;
+							}
+						
+						//Now, let's get the parent product price, +/- by the differential given
+							$differential = (floatval($_POST["variation_price"]));
+							
+							if ($positive) {
+								$price = $parent_pricing + $differential;
+							} elseif ($negative) {
+								$price = $parent_pricing - $differential;
+							}
+							
+							update_product_meta($kiddos, "price", $price);
+					}
+				}
+			}
+		
+	//@todo - Should probably refactor this at some point - very procedural, WAY too many foreach loops for my liking :)  But it does the trick
+		
+	}
 
 	}
 ?>

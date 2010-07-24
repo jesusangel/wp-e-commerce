@@ -787,8 +787,10 @@ function wpsc_product_price_and_stock_forms($product_data=''){
                'name' => 'meta[_wpsc_product_metadata][wpec_taxes_band]',
                'label' => __('Custom Tax Band')
             );
-            echo $wpec_taxes_controller->wpec_taxes_display_tax_bands($band_select_settings, $product_meta['wpec_taxes_band']);
-         ?>
+			
+			echo $wpec_taxes_controller->wpec_taxes_display_tax_bands($band_select_settings, $product_meta['wpec_taxes_band']);
+			
+			?>
          </p>
         <!--<input type='checkbox' value='1' name='meta[_wpsc_product_metadata][custom_tax][state]' id='custom_tax_checkbox'  <?php echo ((is_numeric($product_meta['custom_tax']) > 0) ? 'checked=\'checked\'' : ''); ?>  />
         <label for='custom_tax_checkbox'><?php echo _e("Custom Tax Rate",'wpsc'); ?></label>
@@ -1124,7 +1126,11 @@ function wpsc_product_advanced_forms($product_data='') {
        $output .= "<tr>
       <td class='itemfirstcol' colspan='2'><br /> <strong>". __('Merchant Notes', 'wpsc') .":</strong><br />
 
-        <textarea cols='40' rows='3' name='meta[_wpsc_product_metadata][merchant_notes]' id='merchant_notes'>".stripslashes($product_meta['merchant_notes'])."</textarea>
+        <textarea cols='40' rows='3' name='meta[_wpsc_product_metadata][merchant_notes]' id='merchant_notes'>";
+			if (isset($product_meta['merchant_notes'])) {
+				$output .= stripslashes($product_meta['merchant_notes']);
+			}
+		$output .= "</textarea>
          <small>".__('These notes are only available here.', 'wpsc')."</small>
       </td>
     </tr>";
@@ -1172,7 +1178,11 @@ function wpsc_product_advanced_forms($product_data='') {
        <strong>".__('Off Site Product Link', 'wpsc').":</strong><br />
        <small>".__('If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.', 'wpsc')."</small><br /><br />
       <label for='external_link'>".__('External Link', 'wpsc')."</label>:<br />
-        <input type='text' class='text' name='meta[_wpsc_product_metadata][external_link]' value='".$product_meta['external_link']."' id='external_link' size='40' />
+        <input type='text' class='text' name='meta[_wpsc_product_metadata][external_link]' value='";
+			if(isset($product_meta['external_link'])) { 
+				$output .= $product_meta['external_link'];
+			}
+		$output .= "' id='external_link' size='40' />
       </td>
     </tr>";
    //if (get_option('wpsc_enable_comments') == 1) {
@@ -1181,9 +1191,9 @@ function wpsc_product_advanced_forms($product_data='') {
          <td class='itemfirstcol' colspan='2'><br />
             <strong>".__('Enable Comments', 'wpsc').":</strong><br />
          <select name='meta[_wpsc_product_metadata][enable_comments]'>
-            <option value='' ".  (($product_meta['enable_comments'] == '' ) ? 'selected' : '') .">Use Default</option>
-            <option value='1' ". (($product_meta['enable_comments'] == '1') ? 'selected' : '') .">Yes</option>
-            <option value='0' ". (($product_meta['enable_comments'] == '0') ? 'selected' : '') .">No</option>
+            <option value='' ".  ((isset($product_meta['enable_comments']) && $product_meta['enable_comments'] == '' ) ? 'selected' : '') .">Use Default</option>
+            <option value='1' ". ((isset($product_meta['enable_comments']) && $product_meta['enable_comments'] == '1') ? 'selected' : '') .">Yes</option>
+            <option value='0' ". ((isset($product_meta['enable_comments']) && $product_meta['enable_comments'] == '0') ? 'selected' : '') .">No</option>
          </select>
          <br/>".__('Allow users to comment on this product.', 'wpsc')."
          </td>
