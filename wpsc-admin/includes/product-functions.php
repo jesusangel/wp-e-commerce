@@ -391,6 +391,64 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 }
 
 
+/**
+ * term_id_price function 
+ * Retreives associated price, if any, with term_id
+ * @param integer term ID
+ * @param integer parent product price
+ * @return integer modified price for child product, based on term ID price and parent price
+ */
+
+function term_id_price($term_id, $parent_price) {
+
+	$term_price_arr = get_option( 'term_prices' );
+	
+	if ( isset($term_price_arr[$term_id]) ) {
+		$price = $term_price_arr[$term_id]["price"];	
+	} else {
+		$price = 0;
+	}
+	
+	//Check for flat, percentile or differential
+		$var_price_type = '';
+		
+		if (flat_price($price)) {
+			$var_price_type = 'flat';
+			$price = floatval($price);
+		} elseif ( differential_price($price) ) {
+			$var_price_type = 'differential';
+		} elseif (percentile_price($price)) {
+			$var_price_type = 'percentile';
+		}
+		
+		if (strchr($price, '-') ) {
+			$negative = true;
+		} else {
+			$positive = true;
+		}
+		
+		if ($positive) {
+		
+			if ( $var_price_type == 'differential' ) {
+				$differential = (floatval($price));
+				$price = $parent_price + $differential;
+			} elseif ( $var_price_type == 'percentile' ) {
+				$percentage = (floatval($price) / 100);
+				$price = $parent_price + ($parent_price * $percentage);
+			}
+			
+		} else {
+
+			if ( $var_price_type == 'differential' ) {						
+				$differential = (floatval($price));
+				$price = $parent_price - $differential;
+			} elseif ( $var_price_type == 'percentile' ) {
+				$percentage = (floatval($price) / 100);
+				$price = $parent_price - ($parent_price * $percentage);
+			}
+		}
+	return $price;
+}
 
 
 
@@ -465,8 +523,10 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			$term_slugs[] = $term->slug;
 			$term_names[] = $term->name;
 		}
+
 		$product_values['post_title'] .= " (".implode(", ", $term_names).")";
 		$product_values['post_name'] = sanitize_title($product_values['post_title']);
+
 		// wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array() ) {
 
 		$selected_post = get_posts(array(
@@ -505,13 +565,25 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			} else {
 				update_post_meta($child_product_id, $meta_key, $meta_value[0]);
 			}
-		
+			
 		endforeach;
+		
+//Adding this to check for a price on variations.  Applying the highest price, seems to make the most sense.		
+		if ( is_array ($term_ids) ) {
+		$price = array();
+			foreach ($term_ids as $term_id_price) {
+				$price[] = term_id_price($term_id_price, $child_product_meta["_wpsc_price"][0]);
+				//$price[] = $term_id_price;
+			}
+			rsort($price);
+			$price = $price[0];	
+		
+			if($price > 0) {
+				update_post_meta($child_product_id, "_wpsc_price", $price);
+			}
+		}
 	}
-	
 }
-
-
 
 function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	global $wpdb;
