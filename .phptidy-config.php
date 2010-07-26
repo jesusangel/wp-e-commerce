@@ -14,8 +14,10 @@
 	                       'wpsc-admin/includes/settings-pages/*.php');
 
 	$default_package = "WP e-Commerce";
-	$add_file_docblock = FALSE;
-	$add_functions_docblock = FALSE;
-	$add_doctags = FALSE;
+	$add_file_docblock = TRUE;
+	$add_functions_docblock = TRUE;
+	$add_doctags = TRUE;
+	$fix_docblock_format = TRUE;
+	$fix_docblock_space = TRUE;
 	
 ?>
