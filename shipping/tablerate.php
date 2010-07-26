@@ -1,20 +1,13 @@
 <?php
 class tablerate {
+
 	var $internal_name, $name;
+
 	function tablerate () {
 		$this->internal_name = "tablerate";
 		$this->name="Table Rate";
 		$this->is_external=false;
 		return true;
-	}
-	
-	function getId() {
-// 		return $this->usps_id;
-	}
-	
-	function setId($id) {
-// 		$usps_id = $id;
-// 		return true;
 	}
 	
 	function getName() {
@@ -26,14 +19,16 @@ class tablerate {
 	}
 	
 	function getForm() {
- 	//	$output.="<table>";
+
 		$output.="<tr><th>".__('Total Price', 'wpsc')."</th><th>".__('Shipping Price', 'wpsc')."</th></tr>";
 		$layers = get_option("table_rate_layers");
+
 		if ($layers != '') {
-			foreach($layers as $key => $shipping) {
+
+			foreach ($layers as $key => $shipping) {
+
 				$output.="<tr class='rate_row'>
 							<td>
-						
 								<i style='color: grey;'>".__('If price is ', 'wpsc')."</i>
 								<input type='text' name='layer[]' value='$key' size='4' />
 								<i style='color: grey;'> ".__(' and above', 'wpsc')."</i>
@@ -42,14 +37,12 @@ class tablerate {
 								".wpsc_get_currency_symbol()."
 								<input type='text' value='{$shipping}' name='shipping[]'	size='4'>
 								&nbsp;&nbsp;<a href='#' class='delete_button' >".__('Delete', 'wpsc')."</a>
-							
 							</td>
 						</tr>";
 			}
 		}
 		$output.="<input type='hidden' name='checkpage' value='table'>";
 		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a href='' style='cursor:pointer;' id='addlayer' >Add Layer</a></td></tr>";
-	//	$output.="</table>";
 		return $output;
 	}
 	
@@ -59,7 +52,7 @@ class tablerate {
 		$layers = (array)$_POST['layer'];
 		$shippings = (array)$_POST['shipping'];
 		if ($shippings != '') {
-			foreach($shippings as $key => $price) {
+			foreach ($shippings as $key => $price) {
 				if ($price == '') {
 					unset($shippings[$key]);
 					unset($layers[$key]);
@@ -68,42 +61,74 @@ class tablerate {
 				}
 			}
 		}
+		// Sort the data before it goes into the database. Makes the UI make more sense
+		if (isset($new_layer)) {
+			krsort($new_layer);
+		}
+
 		if (!isset($_POST['checkpage'])) $_POST['checkpage'] = '';
 		if ($_POST['checkpage'] == 'table') {
-			update_option('table_rate_layers',$new_layer);
+			update_option('table_rate_layers', $new_layer);
 		}
 		return true;
 	}
 	
-	function getQuotes() {
+	function getQuote() {
+
 		global $wpdb, $wpsc_cart;
+
 		$shopping_cart = $_SESSION['nzshpcrt_cart'];
 
 		if(is_object($wpsc_cart)) {
 			$price = $wpsc_cart->calculate_subtotal(true);
 		}
-		//$price = nzshpcrt_overall_total_price();
+
 		$layers = get_option('table_rate_layers');
 		
-		//echo "<pre>".print_r($layers,true)."</pre>";
-		
 		if ($layers != '') {
+
+			// At some point we should probably remove this as the sorting should be 
+			// done when we save the data to the database. But need to leave it here
+			// for people who have non-sorted settings in their database
 			krsort($layers);
+
 			foreach ($layers as $key => $shipping) {
+
 				if ($price >= (float)$key) {
-					//echo "<pre>$price $key</pre>";
-					return array("Table Rate"=>$shipping);
-					exit();
+
+					if (stristr($shipping, '%')) {
+
+						// Shipping should be a % of the cart total
+						$shipping = str_replace('%','',$shipping);
+						$shipping_amount = $price * ( $shipping / 100 );
+
+					} else {
+
+						// Shipping is an absolute value
+						$shipping_amount = $shipping;
+
+					}
+
+					return array("Table Rate"=>$shipping_amount);
+
 				}
+
 			}
-			return array("Table Rate"=>array_shift($layers));
+
+			$shipping = array_shift($layers);
+			
+			if (stristr($shipping, '%')) {
+				$shipping = str_replace('%','',$shipping);
+				$shipping_amount = $price * ( $shipping / 100 );
+			} else {
+				$shipping_amount = $shipping;
+			}
+
+			return array("Table Rate"=>$shipping_amount);
+
 		}
 	}
 	
-	function getQuote() {
-		return $this->getQuotes();
-	}
-		
 	
 	function get_item_shipping(&$cart_item) {
 
@@ -133,20 +158,6 @@ class tablerate {
 			$shipping = 0;
 		}
 	}
-	
-	function get_cart_shipping($total_price, $weight) {
-		$layers = get_option('table_rate_layers');
-		if ($layers != '') {
-			krsort($layers);
-			foreach ($layers as $key => $shipping) {
-				if ($total_price >= (float)$key) {
-					$output = $shipping;
-				}
-			}
-		}
-		return $output;
-	}
-	
 	
 }
 $tablerate = new tablerate();
