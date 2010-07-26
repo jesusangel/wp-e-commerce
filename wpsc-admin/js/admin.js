@@ -2,6 +2,13 @@
 	var postboxes = function postboxes() {};
 jQuery(document).ready( function () {
 
+jQuery('a.update_variations_action').click(function(){
+	
+	
+	
+	return false;
+});
+
 //JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
 	jQuery('td.sale_price span.pricedisplay').removeClass('pricedisplay').addClass('salespricedisplay');
 
@@ -176,7 +183,7 @@ jQuery(document).ready( function () {
 	});
   });
   //new currency JS in admin product page
-  jQuery('tr.new_layer').livequery(function(){
+  jQuery('div.new_layer').livequery(function(){
   	jQuery(this).hide();
   
   });
@@ -184,11 +191,11 @@ jQuery(document).ready( function () {
   jQuery('a.wpsc_add_new_currency').livequery(function(){
   	jQuery(this).click(function(event){
   		if(firstclick == true){
-		  	jQuery('tr.new_layer').show();
-  			html = jQuery('tr.new_layer').html();	  	
+		  	jQuery('div.new_layer').show();
+  			html = jQuery('div.new_layer').html();	  	
 		  	firstclick = false;
   		}else{
-		  	jQuery('tr.new_layer').after('<tr>'+html+'</tr>');		
+		  	jQuery('div.new_layer').after('<div>'+html+'</div>');		
   		}
   		event.preventDefault();
   	});

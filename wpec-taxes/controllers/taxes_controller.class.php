@@ -410,6 +410,7 @@ class wpec_taxes_controller
    function wpec_taxes_build_select_options($input_array, $option_value, $option_text, $option_selected=false, $select_settings='')
    {
       $returnable = '';
+	  $options = '';
 
       foreach($input_array as $value)
       {

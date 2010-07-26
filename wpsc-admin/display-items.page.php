@@ -39,8 +39,11 @@ function wpsc_display_edit_products_page() {
 		'price' => 'Price',
 		'sale_price' => 'Sale Price',
 		'SKU' => 'SKU',
-		'categories' => 'Categories',
+		'categories' => 'Categories'
 	);
+	if(isset($_GET["product"])) {
+		unset($columns["categories"]);
+	}
 	register_column_headers('display-product-list', $columns);	
 	
 	$baseurl = includes_url('js/tinymce');
@@ -51,7 +54,7 @@ function wpsc_display_edit_products_page() {
 		<div id="icon_card"><br /></div>
 		<h2>
 				<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo esc_html( __('Manage Products', 'wpsc') ); ?></a>
-				<a href="<?php echo wp_nonce_url("admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product"); ?>" class="nav-tab" id="add"><?php echo esc_html( __('Add New', 'wpsc') ); ?></a>
+				<a href="<?php echo wp_nonce_url("admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product"); ?>" class="nav-tab" id="add"><?php echo (isset($_GET['product'])) ? __('Add New', 'wpsc') :  __('Edit Product', 'wpsc') ; ?></a>
 		</h2>		
 		<?php if(isset($_GET['ErrMessage']) && isset($_SESSION['product_error_messages']) && is_array($_SESSION['product_error_messages'])){ ?>
 				<div id="message" class="error fade">
@@ -221,8 +224,8 @@ function wpsc_display_edit_products_page() {
 function wpsc_edit_variations_request_sql($sql) {
 	global $wpdb;
 
-	if(is_numeric($_GET['parent_product'])) {
-		$parent_product = absint($_GET['parent_product']);
+	if(is_numeric($_GET['product'])) {
+		$parent_product = absint($_GET['product']);
 		$product_term_data = wp_get_object_terms($parent_product, 'wpsc-variation');
 		
 		$parent_terms = array();
@@ -276,8 +279,8 @@ function wpsc_admin_products_list($category_id = 0) {
 	$itempp = 20;
 	
 	$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= 0 $search_sql");
-		if(isset($_GET['parent_product']) && (is_numeric($_GET['parent_product']))) {
-				$parent_product = absint($_GET['parent_product']);
+		if(isset($_GET['product']) && (is_numeric($_GET['product']))) {
+				$parent_product = absint($_GET['product']);
 			$num_products = $wpdb->get_var("SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= $parent_product $search_sql");			
 }
 	
@@ -307,34 +310,6 @@ function wpsc_admin_products_list($category_id = 0) {
 		    $page = 1;
 		  }
 		  $start = (int)($page * $itempp) - $itempp;
-		  
-	if( isset($_GET['parent_product']) && (is_numeric($_GET['parent_product']))) {
-		$parent_product = absint($_GET['parent_product']);
-		
-		$query = array(
-			'post_type' => 'wpsc-product',
-			'posts_per_page' => $itempp, 
-			'orderby' => 'menu_order post_title',
-			'post_parent' => $parent_product,
-			'post_status' => 'all',
-			'order' => "ASC",
-			'offset' => $start
-		);	
-		
-		$parent_product_data['post'] = get_post($parent_product);
-		$args = array(
-			'post_type' => 'attachment',
-			'numberposts' => 1,
-			'post_status' => null,
-			'post_parent' => $parent_product,
-			'orderby' => 'menu_order',
-			'order' => 'ASC'
-			);
-		$image_data = (array)get_posts($args);
-		$parent_product_data['image'] = array_shift($image_data);
-		
-		add_filter('posts_request', 'wpsc_edit_variations_request_sql');
-	} else { 
 
 		$query = array(
 			'post_type' => 'wpsc-product',
@@ -354,8 +329,6 @@ function wpsc_admin_products_list($category_id = 0) {
 			$search = $_GET['search'];
 			$query['s'] = $search;
 		}
-		
-	}
 	
 	//$posts = get_posts( $query );
 	//wp($query);
@@ -374,8 +347,6 @@ function wpsc_admin_products_list($category_id = 0) {
 	}
 	
 	$this_page_url = stripslashes($_SERVER['REQUEST_URI']);
-	
-	
 	
 	//$posts = get_object_taxonomies('wpsc-product');
 	

@@ -1814,5 +1814,13 @@ div.wpsc_clear {
 
 ul.wpsc_categories {
     clear: both;
+}
 
+a.update_variations, a.update_variations_action
+	{
+		float:left;
+		margin:10px;
+	}
+a.update_variations_action {
+	display:none;
 }

@@ -58,6 +58,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	$posts_columns = get_column_headers('display-product-list');
 	$hidden = get_hidden_columns('display-product-list');
 	//exit('<pre>'.print_r($product,true).'</pre>');
+
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";
 
@@ -120,7 +121,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'title': /* !title case */
 			$attributes = 'class="post-title column-title"' . $style;
-			$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID));
+			if(isset($_GET["product"])) {
+				$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID, 'product_parent' => $_GET["product"]));
+			} else {
+				$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID));
+			}
 			$edit_link = wp_nonce_url($edit_link, 'edit-product_'.$product->ID);
 		?>
 		<td <?php echo $attributes ?>>
@@ -157,12 +162,12 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				if ( current_user_can('edit_product', $product->ID) ) {
 					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $title)) . '" rel="permalink">'.__('Preview').'</a>';
 				}
-			} else if ( 'trash' != $product->post_status ) {
+			} else if ( 'trash' != $product->post_status && !isset($_GET["product"]) ) {
 				$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('View &#8220;%s&#8221;'), $title)).'" rel="permalink">'.__('View').'</a>';
 			}
-			
+			if(!isset($_GET["product"])) {
 			$actions['duplicate'] = "<a class='submitdelete' title='".esc_attr(__('Duplicate', 'wpsc'))."' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=duplicate_product&amp;product={$product->ID}", 'duplicate-product_'.$product->ID)."'>".__('Duplicate')."</a>";
-
+}
 			
 			$actions = apply_filters('post_row_actions', $actions, $product);
 			$action_count = count($actions);

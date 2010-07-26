@@ -10,8 +10,6 @@ $version_identifier = WPSC_VERSION.".".WPSC_MINOR_VERSION;
 //include required js file
 wp_enqueue_script('wp-e-commerce-taxes-functions', WPSC_URL.'/wpec-taxes/view/js/taxes-functions.js', array('wp-e-commerce-admin'), $version_identifier, false);
 
-
-
 /**
  * @description: wpec_taxes_settings_page - used by wpec to display the admin settings page.
  * @param: void
