@@ -596,8 +596,10 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		
 		foreach ($posted_term as $term=>$val) {
 				$posted_terms[] = $term;
-				foreach($val as $term2=>$val2) {
-					$posted_terms[] = $term2; 
+				if(is_array($val)) {
+					foreach($val as $term2=>$val2) {
+						$posted_terms[] = $term2; 
+					}
 				}
 		}
 		
