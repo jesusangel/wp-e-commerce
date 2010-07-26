@@ -105,8 +105,15 @@ class tablerate {
 	}
 		
 	
-	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
-		global $wpdb;
+	function get_item_shipping(&$cart_item) {
+
+		global $wpdb, $wpsc_cart;
+
+		$unit_price = $cart_item->unit_price;
+		$quantity = $cart_item->quantity;
+		$weight = $cart_item->weight;
+		$product_id = $cart_item->product_id;
+
 		if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
 			if($cart_item->uses_shipping == true) {
 				//if the item has shipping

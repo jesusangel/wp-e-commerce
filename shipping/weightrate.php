@@ -78,7 +78,7 @@ class weightrate {
 		}
 	}
 	
-	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
+	function get_item_shipping(&$cart_item) {
 	  return 0;
 	}
 	

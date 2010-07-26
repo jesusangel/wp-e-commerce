@@ -122,7 +122,9 @@ class flatrate {
 	
 	
 	function get_item_shipping(&$cart_item) {
+
 		global $wpdb, $wpsc_cart;
+
 		$unit_price = $cart_item->unit_price;
 		$quantity = $cart_item->quantity;
 		$weight = $cart_item->weight;
