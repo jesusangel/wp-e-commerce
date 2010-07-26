@@ -218,4 +218,70 @@ function wpsc_get_child_object_in_terms($parent_id, $terms, $taxonomies, $args =
 	}
 }
 
+
+/**
+ * wpsc_get_child_objects_in_term function.
+ * gets the 
+ * 
+ * @access public
+ * @param mixed $parent_id
+ * @param mixed $terms
+ * @param mixed $taxonomies
+ * @param array $args. (default: array())
+ * @return void
+ */
+function wpsc_get_child_object_in_terms_var($parent_id, $terms, $taxonomies, $args = array() ) {
+	global $wpdb, $current_version_number;
+	$wpdb->show_errors = true;
+	$parent_id = absint($parent_id);
+
+	if ( !is_array( $terms) )
+		$terms = array($terms);
+
+	if ( !is_array($taxonomies) )
+		$taxonomies = array($taxonomies);
+
+	foreach ( (array) $taxonomies as $taxonomy ) {
+		if ($current_version_number < 3.8) {
+			if ( ! is_taxonomy($taxonomy) )
+				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+			} else {
+			if ( !taxonomy_exists($taxonomy) )
+				return new WP_Error('invalid_taxonomy', __('Invalid Taxonomy'));
+			}
+			
+	}
+
+	$defaults = array('order' => 'ASC');
+	$args = wp_parse_args( $args, $defaults );
+	extract($args, EXTR_SKIP);
+
+	$order = ( 'desc' == strtolower($order) ) ? 'DESC' : 'ASC';
+
+	$terms = array_map('intval', $terms);
+
+	$taxonomies = "'" . implode("', '", $taxonomies) . "'";
+	$terms = "'" . implode("', '", $terms) . "'";
+	
+	// This SQL statement finds the item associated with all variations in the selected combination that is a child of the target product
+	$object_sql = "SELECT tr.object_id
+	FROM {$wpdb->term_relationships} AS tr
+	INNER JOIN {$wpdb->posts} AS posts
+		ON posts.ID = tr.object_id
+	INNER JOIN {$wpdb->term_taxonomy} AS tt
+		ON tr.term_taxonomy_id = tt.term_taxonomy_id
+	WHERE posts.post_parent = {$parent_id}
+		AND tt.taxonomy IN ({$taxonomies})
+		AND tt.term_id IN ({$terms})
+		AND tt.parent > 0
+	GROUP BY tr.object_id";
+	//echo $object_sql;
+	$object_ids = $wpdb->get_results($object_sql, ARRAY_A);
+	if (count($object_ids) > 0) {
+		return $object_ids;
+	} else {
+		return false;
+	}
+}
+
 ?>

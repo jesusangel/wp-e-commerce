@@ -41,7 +41,7 @@ function wpsc_product_image($attachment_id, $width = null, $height = null) {
 		$attachment_metadata = $image_meta['_wp_attachment_metadata'];
 
 		// determine if we already have an image of this size
-		if((count($attachment_metadata['sizes']) > 0) && ($attachment_metadata['sizes'][$intermediate_size])) {
+		if((count($attachment_metadata['sizes']) > 0) && (isset($attachment_metadata['sizes'][$intermediate_size]))) {
 			$intermediate_image_data = image_get_intermediate_size($attachment_id, $intermediate_size);
 			$image_exists = true;
 			$image_url = $intermediate_image_data['url'];

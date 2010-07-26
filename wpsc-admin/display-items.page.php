@@ -41,7 +41,7 @@ function wpsc_display_edit_products_page() {
 		'SKU' => 'SKU',
 		'categories' => 'Categories'
 	);
-	if(isset($_GET["product"])) {
+	if(isset($_GET["product"]) && $_GET["product"] != '') {
 		unset($columns["categories"]);
 	}
 	register_column_headers('display-product-list', $columns);	
@@ -321,7 +321,7 @@ function wpsc_admin_products_list($category_id = 0) {
 		
 		if(isset($_GET['category'])) {
 			$category_id = $_GET['category'];
-			$query['products'] = $category_id;
+			$query['wpsc_product_category'] = $category_id;
 		}
 		
 		
@@ -473,6 +473,8 @@ function wpsc_admin_category_options($category, $subcategory_level = 0, $categor
 	} else {
 		if($category_slug == $category->slug) {
 			$selected = "selected='selected'";
+		}else {
+			$selected = '';
 		}
 		$output = "<option $selected value='{$category->slug}'>".str_repeat("-", $subcategory_level - 1).stripslashes($category->name)."</option>\n";
 	}

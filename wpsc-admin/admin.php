@@ -112,7 +112,7 @@ function wpsc_admin_pages(){
 			$page_hooks[] = add_submenu_page($base_page,__('Variations', 'wpsc'), __('Variations', 'wpsc'), 'administrator', 'edit-tags.php?taxonomy=wpsc-variation');
 			
 			$box_order = get_option('wpsc_product_page_order');
-			if ( is_array ($box_order["side"]) && is_array($box_order["advanced"]) ) {
+			if ( isset($box_order["side"]) && is_array ($box_order["side"]) && is_array($box_order["advanced"]) ) {
 				$box_order = array_merge($box_order["side"], $box_order["advanced"]);
 			}
 			foreach((array)$box_order as $box) {

@@ -3,12 +3,22 @@
 jQuery(document).ready( function () {
 
 jQuery('a.update_variations_action').click(function(){
-	
-	
-	
+				jQuery("<img class='loading' src='images/loading.gif' height='15' width='15' />").insertAfter(this);
+					edit_var_val = jQuery('div.variation_checkboxes input:checked').serialize();
+					description = jQuery('iframe#content_ifr').text();
+					additional_description = jQuery('textarea#additional_description').text();
+					name = jQuery('input#title').val();
+					product_id = jQuery('input#product_id').val();;
+					post_values = edit_var_val+'&description='+description+'&additional_description='+additional_description+'&name='+name+'&product_id='+product_id;
+					
+					jQuery.post('index.php?wpsc_admin_action=wpsc_update_variations',post_values, function(returned_data){
+					var url = location.href;
+						jQuery('table#wpsc_product_list').fadeOut(500).load(url +' table#wpsc_product_list').fadeIn(500);
+						jQuery('img.loading').hide();
+					});				
 	return false;
-});
-
+	
+});				
 //JS - 5.12.2010 - Instead of modding functions, using JQuery to remove pricedisplay class from span.
 	jQuery('td.sale_price span.pricedisplay').removeClass('pricedisplay').addClass('salespricedisplay');
 

@@ -447,13 +447,13 @@ makeSlugeditClickable = null;
    //]]>
 </script>
 <?php 
-		if(isset($_GET["product_parent"])) {
+		if(isset($_GET["product_parent"]) && ($_GET["product_parent"] != '')) {
 				$parent_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $_GET["product_parent"]));
 				$parent_link = remove_query_arg('product_parent');
 				$parent_link = wp_nonce_url($parent_link, 'edit-product_'.$product->ID);
 			} 
 ?><?php 
-	if(isset($_GET["product_parent"])) { 
+	if(isset($_GET["product_parent"]) && ($_GET["product_parent"] != '')) { 
 ?>
 			<a class="button preview update_variations" href="<?php echo $parent_link?>">Back to Main Product</a>
 	<?php } ?>
@@ -623,58 +623,11 @@ function wpsc_product_price_and_stock_forms($product_data=''){
     echo "
    </h3>
     <div class='inside'>
-    <table>
     ";
    // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
     ?><br />
-	<div class="postbox" style="min-width:225px; width:96%">
-	<h3 class="hndle"><?php _e('Stock')?></h3>
-	<div class="inside">
-	 <div class='wpsc_floatleft'>
-                  <?php echo __('Stock Keeping Unit', 'wpsc');
-                  if(!isset($product_data['meta']['_wpsc_sku'])) $product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku'];
-                  ?> :<br />
-                  <input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
-               <br style="clear:both" />
-
-<?php
-  if(!isset($product_data['meta']['_wpsc_stock'])) $product_data['meta']['_wpsc_stock'] = '';
-    echo "
-      <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' ".((is_numeric($product_data['meta']['_wpsc_stock'])) ? 'checked="checked"' : '')." name='meta[_wpsc_limited_stock]'/>";
-       //onclick='hideelement(\"add_stock\")'
-      echo "&nbsp;<label for='add_form_quantity_limited' class='small'>".__('I have a limited number of this item in stock. If the stock runs out, this product will not be available on the shop unless you untick this box or add more stock.', 'wpsc')."</label>";
-      if ($product_data['id'] > 0){
-         if(is_numeric($product_data['meta']['_wpsc_stock'])) {
-            echo "            <div class='edit_stock' style='display: block;'>\n\r";
-         } else {
-            echo "            <div class='edit_stock' style='display: none;'>\n\r";
-         }
-
-         echo __('Stock Qty', 'wpsc') . " <input type='text' class='stock_limit_quantity' name='meta[_wpsc_stock]' size='10' value='".$product_data['meta']['_wpsc_stock']."' />";
-
-
-
-         echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' " . (($product_meta['unpublish_when_none_left'] == 1) ? 'checked="checked"' : '') . " class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> " . __('If this product runs out of stock set status to Unpublished & email site owner', 'wpsc') . "</div>";
-         echo "              </div>\n\r";
-   } else {
-                  echo "
-               <div style='display: none;' class='edit_stock'>
-                  " .__('Stock Qty', 'wpsc') . " <input type='text' name='meta[_wpsc_stock]' value='0' size='10' />";
-                  echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> " . __('If this product runs out of stock set status to Unpublished & email site owner', 'wpsc') . "</div>";
-               echo "</div>";
-         }
-
-?>
- </div>
- <br style="clear:both" />
-</div>
-	</div>
-	
-            <tr>
-			
-            <td colspan='3' class='skuandprice'>
              
-<div class="postbox">
+<div class="postbox" style="min-width:225px; width:96%">
 <h3 class="hndle"><?php _e('Price')?></h3>
 <div class="inside">
 		   <div class='wpsc_floatleft' style="width:85px;">
@@ -810,14 +763,55 @@ function wpsc_product_price_and_stock_forms($product_data=''){
                   </tr>
           </table>
         </div>
-      </td>
-    </tr>
 	<br style="clear:both" />
 </div>
+</div>	
+	<br style="clear:both" />
+	<div class="postbox" style="min-width:225px; width:96%">
+	<h3 class="hndle"><?php _e('Stock')?></h3>
+	<div class="inside">
+	 <div class='wpsc_floatleft'>
+                  <?php echo __('Stock Keeping Unit', 'wpsc');
+                  if(!isset($product_data['meta']['_wpsc_sku'])) $product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku'];
+                  ?> :<br />
+                  <input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities(stripslashes($product_data['meta']['_wpsc_sku']), ENT_QUOTES, 'UTF-8'); ?>' />
+               <br style="clear:both" />
+
+<?php
+  if(!isset($product_data['meta']['_wpsc_stock'])) $product_data['meta']['_wpsc_stock'] = '';
+    echo "
+      <input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' ".((is_numeric($product_data['meta']['_wpsc_stock'])) ? 'checked="checked"' : '')." name='meta[_wpsc_limited_stock]'/>";
+       //onclick='hideelement(\"add_stock\")'
+      echo "&nbsp;<label for='add_form_quantity_limited' class='small'>".__('I have a limited number of this item in stock. If the stock runs out, this product will not be available on the shop unless you untick this box or add more stock.', 'wpsc')."</label>";
+      if ($product_data['id'] > 0){
+         if(is_numeric($product_data['meta']['_wpsc_stock'])) {
+            echo "            <div class='edit_stock' style='display: block;'>\n\r";
+         } else {
+            echo "            <div class='edit_stock' style='display: none;'>\n\r";
+         }
+
+         echo __('Stock Qty', 'wpsc') . " <input type='text' class='stock_limit_quantity' name='meta[_wpsc_stock]' size='10' value='".$product_data['meta']['_wpsc_stock']."' />";
+
+
+
+         echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' " . (($product_meta['unpublish_when_none_left'] == 1) ? 'checked="checked"' : '') . " class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> " . __('If this product runs out of stock set status to Unpublished & email site owner', 'wpsc') . "</div>";
+         echo "              </div>\n\r";
+   } else {
+                  echo "
+               <div style='display: none;' class='edit_stock'>
+                  " .__('Stock Qty', 'wpsc') . " <input type='text' name='meta[_wpsc_stock]' value='0' size='10' />";
+                  echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> " . __('If this product runs out of stock set status to Unpublished & email site owner', 'wpsc') . "</div>";
+               echo "</div>";
+         }
+
+?>
+ </div>
+ <br style="clear:both" />
 </div>
-     <tr>
-      <td>
-	  <div class="postbox" style="min-width:225px;">
+	</div>
+	<br style="clear:both" />
+
+	  <div class="postbox" style="min-width:225px; width:96%">
           <h3 class="hndle"><?php _e('Taxes'); ?></h3>
 		  <div class="inside">
          <p>
@@ -843,14 +837,9 @@ function wpsc_product_price_and_stock_forms($product_data=''){
         </div>-->
 		</div>
 		 </div>
-      </td>
-    </tr>
-
-
-
+	<br style="clear:both" />
     <?php
    echo "
-      </table>
    </div>
 </div>";
 
@@ -867,6 +856,7 @@ function wpsc_product_variation_forms($product_data=''){
    }
 
    $product_term_data = wp_get_object_terms($product_data['id'], 'wpsc-variation');
+   
    $product_terms = array();
    foreach($product_term_data as $product_term) {
       $product_terms[] = $product_term->term_id;
@@ -878,10 +868,7 @@ function wpsc_product_variation_forms($product_data=''){
       <h3 class='hndle'><?php echo __('Variation Control', 'wpsc'); ?></h3>
 
       <div class='inside'>
-         <strong><?php echo __('Add Variation Set', 'wpsc'); ?></strong>
-         <h4 class='product_action_link'><a target='_blank' href='admin.php?page=wpsc-edit-variations'><?php echo __('+ Add New Variations', 'wpsc'); ?></a></h4>
-         <br />
-         <div id="product_variations">
+        <div id="product_variations">
             <div class="variation_checkboxes">
                <?php
                $variation_sets = get_terms('wpsc-variation', array(

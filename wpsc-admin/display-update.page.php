@@ -26,7 +26,7 @@ if(get_option('wpsc_version') < 3.8 || !get_option('wpsc_version')) :
 		function wpsc_display_update_notice() {
 			echo "<div id='wpsc-warning' class='error fade'><p><strong>".__('WP e-Commerce is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">update your database</a> to import all of your products.'), "admin.php?page=wpsc-update")."</p></div>";
 		}
-		if($_GET['page'] != 'wpsc-update') :
+		if(isset($_GET['page']) && $_GET['page'] != 'wpsc-update') :
 			add_action('admin_notices', 'wpsc_display_update_notice');
 		endif;
 			
@@ -46,7 +46,7 @@ function wpsc_display_update_page() {
 		<h2><?php echo esc_html( __('Update WP e-Commerce', 'wpsc') ); ?> </h2>
 		<br />	
 	<?php 
-	if($_POST['run_updates']) :
+	if(isset($_POST['run_updates'])) :
 		echo 'Updating Categories...';
 		wpsc_convert_category_groups();
 		echo '<br />Updating Variations...';

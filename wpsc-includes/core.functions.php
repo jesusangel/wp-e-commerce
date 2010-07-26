@@ -514,7 +514,7 @@ function wpsc_product_link($permalink, $post, $leavename) {
 		if(count($product_categories) == 0) {
 			$category_slug = 'uncategorized';
 		} elseif(count($product_categories) > 1) {
-			if(($wp_query->query_vars['products']!= null) && in_array($wp_query->query_vars['products'], $product_category_slugs)) {
+			if((isset($wp_query->query_vars['products']) && $wp_query->query_vars['products']!= null) && in_array($wp_query->query_vars['products'], $product_category_slugs)) {
 				$product_category = $wp_query->query_vars['products'];
 			} else  {
 				$product_category = $product_category_slugs[0];

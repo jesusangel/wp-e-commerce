@@ -129,7 +129,10 @@ function wpec_options_taxes()
          <div id='wpec-taxes-bands-container' class='postbox'>
             <h3 class='hndle' style='cursor: default'><?php echo __('Tax Bands'); ?></h3>
             <div id='wpec-taxes-bands' class='inside'>
+			
                <?php
+					echo '<p>'.__('Note: Tax Bands are special tax rules you can create and apply on a per-product basis.').'</p>';
+
                   //echo message regarding inclusive tax
                   if(!$wpec_taxes_controller->wpec_taxes_isincluded())
                   {

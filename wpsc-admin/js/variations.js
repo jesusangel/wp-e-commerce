@@ -32,6 +32,7 @@ jQuery('.variation_checkboxes').livequery(function(){
 			break;
 			
 			case false:
+				jQuery('div.variation input:checkbox', variation_set).attr('checked', false);
 				jQuery('div.variation', variation_set).hide();
 			break;
 		

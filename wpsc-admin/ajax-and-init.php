@@ -2363,6 +2363,32 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
 
 
 
+function wpsc_update_variations() {
+	global $wpdb, $user_ID, $wp_query, $wpsc_products, $mode;
+  
+  //Setup postdata
+  $post_data = array();
+  $post_data['edit_var_val'] = $_POST["edit_var_val"];
+  $post_data['description'] = $_POST["description"];
+  $post_data['additional_description'] =  $_POST['additional_description'];
+  $post_data['name'] = $_POST["name"];
+  $product_id = absint($_POST["product_id"]);
+  
+  //Add or delete variations
+  
+ wpsc_edit_product_variations($product_id, $post_data);
+  
+  // return admin table listing
+	return wpsc_admin_product_listing($product_id);
+	//return $post_data;
+}
+
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations')) {
+   add_action('admin_init', 'wpsc_update_variations', 50);
+}
+
+
+
 
 function wpsc_delete_variation_set() {
    global $wpdb;
@@ -2440,8 +2466,6 @@ if(isset($_GET['display_invoice']) && ($_GET['display_invoice']=='true')) {
   add_action('admin_init', 'wpsc_display_invoice', 0);
 }
 
-
-
  if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_add_image')) {
    add_action('admin_init','wpsc_swfupload_images');
 }
@@ -2512,9 +2536,11 @@ function variation_price_field( $variation ) {
 	if ( empty($term_prices) || !is_array($term_prices) )  {
 		
 		$term_prices = array();
-		$term_prices[$term_id] = array();
-		$term_prices[$term_id]["price"] = '';
-		$term_prices[$term_id]["checked"] = '';
+		if(isset($term_id)) {	
+			$term_prices[$term_id] = array();
+			$term_prices[$term_id]["price"] = '';
+			$term_prices[$term_id]["checked"] = '';	
+		}
 		add_option('term_prices', $term_prices);
 		
 	} 

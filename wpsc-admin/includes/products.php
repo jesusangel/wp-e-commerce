@@ -121,10 +121,12 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		case 'title': /* !title case */
 			$attributes = 'class="post-title column-title"' . $style;
-			if(isset($_GET["product"])) {
+			$_GET["product_parent"]  = '';
+			if( isset($_GET["product"]) && ($_GET["product_parent"] == '' )){
 				$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID, 'product_parent' => $_GET["product"]));
 			} else {
 				$edit_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $product->ID));
+				$edit_link = remove_query_arg( 'product_parent' );
 			}
 			$edit_link = wp_nonce_url($edit_link, 'edit-product_'.$product->ID);
 		?>
@@ -162,10 +164,10 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				if ( current_user_can('edit_product', $product->ID) ) {
 					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $title)) . '" rel="permalink">'.__('Preview').'</a>';
 				}
-			} else if ( 'trash' != $product->post_status && !isset($_GET["product"]) ) {
+			} else if ( 'trash' != $product->post_status && (!isset($_GET["product"]) && $_GET["product"] != "") ) {
 				$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('View &#8220;%s&#8221;'), $title)).'" rel="permalink">'.__('View').'</a>';
 			}
-			if(!isset($_GET["product"])) {
+			if(!isset($_GET["product"]) || $_GET["product"] == '' ) {
 			$actions['duplicate'] = "<a class='submitdelete' title='".esc_attr(__('Duplicate', 'wpsc'))."' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=duplicate_product&amp;product={$product->ID}", 'duplicate-product_'.$product->ID)."'>".__('Duplicate')."</a>";
 }
 			

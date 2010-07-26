@@ -171,7 +171,7 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 				'post_author' => $user_ID,
 				'post_date' => $product['date_added'],
 				'post_content' => $product['description'],
-				'post_excerpt' => $post_data['additional_description'],
+				'post_excerpt' => $product['additional_description'],
 				'post_title' => $product['name'],
 				'post_status' => $post_status,
 				'post_type' => "wpsc-product",
@@ -202,7 +202,11 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 					$pm['meta_value'] = 1;
 					break;
 				default:
-					$pm['meta_value'] = unserialize($pm['meta_value']);
+					if(is_serialized($pm['meta_value'])) {
+						$pm['meta_value'] = unserialize($pm['meta_value']);
+					} else {
+						$pm['meta_value'] = $pm['meta_value'];
+					}
 					break;
 			}
 
@@ -235,8 +239,9 @@ GROUP BY wp_wpsc_product_list.id", ARRAY_A);
 		
 		$post_data['_wpsc_product_metadata']['quantity_limited'] = (int)(bool)$product['quantity_limited'];
 		$post_data['_wpsc_product_metadata']['special'] = (int)(bool)$product['special'];
-		
-		$post_data['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
+		if(isset($post_data['meta'])) {
+			$post_data['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
+		}
 		/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax'];; */
 		$post_data['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$product['no_shipping'];
 						
@@ -325,7 +330,7 @@ function wpec_update_gateway(&$value,$key) {
 		}	
 }
 function wpsc_convert_variation_combinations() {
-	global $wpdb, $user_ID;
+	global $wpdb, $user_ID, $current_version_number;
 
 	// get the posts
 	// I use a direct SQL query here because the get_posts function sometimes does not function for a reason that is not clear.

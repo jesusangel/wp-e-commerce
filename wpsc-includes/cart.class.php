@@ -1662,6 +1662,8 @@ class wpsc_cart_item {
       $this->quantity = (int)$quantity;
       $this->refresh_item();
       $this->update_claimed_stock();
+
+	  
    }
 
    /**
@@ -1676,8 +1678,7 @@ class wpsc_cart_item {
       //$product = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id` = '{$this->product_id}' LIMIT 1", ARRAY_A);
       $product = get_post($this->product_id);
       $product_meta = get_metadata('post', $this->product_id);
-      //print("<pre>".print_r($product,true)."</pre>");
-
+   //  print("<pre>".print_r($product,true)."</pre>");
       $this->sku = get_post_meta($product_id, '_wpsc_sku', true);
       $price = get_post_meta($product_id, '_wpsc_price', true);
       $special_price = get_post_meta($product_id, '_wpsc_special_price', true);
@@ -1685,7 +1686,8 @@ class wpsc_cart_item {
       $this->stock = get_post_meta($product_id, '_wpsc_stock', true);
       $this->is_donation = get_post_meta($product_id, '_wpsc_is_donation', true);
 
-      if ( isset($special_price) && $special_price < $price ) {
+
+      if ( isset($special_price) && $special_price > 0 && $special_price < $price ) {
          $price = $special_price;
       }
 
@@ -1693,7 +1695,6 @@ class wpsc_cart_item {
       $priceandstock_id = 0;
       $weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
 
-      unset($this->weight);
       $this->weight = $weight;
       //$price = $product['price'];
 
@@ -1713,7 +1714,6 @@ class wpsc_cart_item {
             }
          }
       }
-
       // create the string containing the product name.
       $product_name = $product->post_title;
 
@@ -1739,7 +1739,6 @@ class wpsc_cart_item {
       } else {
          $this->unit_price = $price;
       }
-
 
       $this->total_price = $this->unit_price * $this->quantity;
 
@@ -1828,6 +1827,8 @@ class wpsc_cart_item {
      }
      // update the claimed stock here
      $this->update_claimed_stock();
+	 
+	 
    }
 
    /**
@@ -1840,7 +1841,7 @@ class wpsc_cart_item {
    */
 
    function calculate_shipping($method = null) {
-    global $wpdb, $wpsc_shipping_modules;
+    global $wpdb, $wpsc_cart, $wpsc_shipping_modules;
     if($method === null) {
       $method = $this->cart->selected_shipping_method;
     }
@@ -1851,6 +1852,8 @@ class wpsc_cart_item {
     if($method == $this->cart->selected_shipping_method) {
          $this->shipping = $shipping;
     }
+	// echo "<pre>".print_r($wpsc_cart->cart_item)."</pre>";
+
      return $shipping;
    }
 

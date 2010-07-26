@@ -415,10 +415,12 @@ class wpec_taxes_controller
       foreach($input_array as $value)
       {
          //if the selected value exists in the input array skip it and continue processing
-         if(($value[$option_value]==$option_selected[$option_value]) || ($value[$option_value]==$option_selected))
-         {
-            continue;
-         }// if
+		if(is_array($value) && is_array($option_selected)) {
+			 if(($value[$option_value]==$option_selected[$option_value]) || ($value[$option_value]==$option_selected))
+			 {
+				continue;
+			 }// if
+		}
          $options .= (is_array($value)) ? "<option value='{$value[$option_value]}'>{$value[$option_text]}</option>" :
                                           "<option value='{$value}'>{$value}</option>";
       }// foreach

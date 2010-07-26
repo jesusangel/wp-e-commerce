@@ -484,7 +484,6 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	// Retrieve the array containing the combinations of each variation set to be associated with this product.
 	$combinations = $wpsc_combinator->return_combinations();
 	
-	
 	$product_terms = wp_get_object_terms($product_id, 'wpsc-variation');
 	
 	$variation_sets_and_values = array_merge($variation_sets, $variation_values);
@@ -503,7 +502,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		'post_name' => sanitize_title($post_data['name']),
 		'post_parent' => $product_id
 	);
-	
+				
 	$child_product_meta = get_post_custom($product_id);
 	
 	// here we loop through the combinations, get the term data and generate custom product names
@@ -540,8 +539,8 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		$selected_post = array_shift($selected_post);
 		
 		$child_product_id = wpsc_get_child_object_in_terms($product_id, $term_ids, 'wpsc-variation');
-		
-		//echo "<pre>".print_r($child_product_id, true)."</pre>";
+	
+//	echo "<pre>".print_r($child_product_id, true)."</pre>";
 		if($child_product_id == false) {
 			if($selected_post != null) {
 				$child_product_id = $selected_post->ID;
@@ -583,6 +582,45 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			}
 		}
 	}
+	
+
+//For reasons unknown, this code did not previously deal with variation deletions.  Basically, we'll just check if any existing term associations are missing from the posted variables, delete if they are.
+	//Get posted terms (multi-dimensional array, first level = parent var, second level = child var)
+	$posted_term = $variations;
+	//Get currently associated terms
+	$currently_associated_var = $product_terms;
+	
+		foreach ($currently_associated_var as $current) {
+			$currently_associated_vars[] = $current->term_id;
+		}
+		
+		foreach ($posted_term as $term=>$val) {
+				$posted_terms[] = $term;
+				foreach($val as $term2=>$val2) {
+					$posted_terms[] = $term2; 
+				}
+		}
+		
+	//if currently associated > posted, get diff (current_associated - posted)
+	if(count($currently_associated_vars) > count($posted_terms) && isset($_REQUEST["product"]) ) {
+	
+		$post_ids_to_delete = array();
+		$term_ids_to_delete = array();
+		
+		$term_ids_to_delete = array_diff($currently_associated_vars, $posted_terms);
+
+	// Whatever remains, find child products of current product with that term, in the variation taxonomy, and delete
+	
+		$post_ids_to_delete = wpsc_get_child_object_in_terms_var($_REQUEST["product_id"], $term_ids_to_delete, 'wpsc-variation');	
+	if(is_array($post_ids_to_delete)) {
+		foreach($post_ids_to_delete as $object_ids) {
+				foreach($object_ids as $object_id) {
+					wp_delete_post($object_id);
+				}
+		}
+	}
+}	
+
 }
 
 function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
