@@ -528,7 +528,7 @@ function wpsc_list_dir($dirname) {
   $num = 0;
   while(($file = @readdir($dir)) !== false) {
     //filter out the dots and any backup files, dont be tempted to correct the "spelling mistake", its to filter out a previous spelling mistake.
-    if(($file != "..") && ($file != ".") && !stristr($file, "~") && !stristr($file, "Chekcout") && !( strpos($file, ".") === 0 )) {
+    if(($file != "..") && ($file != ".") && !stristr($file, "~") && !stristr($file, "Chekcout") && !stristr($file, "error_log") && !( strpos($file, ".") === 0 )) {
       $dirlist[$num] = $file;
       $num++;
     }
