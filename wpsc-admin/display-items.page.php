@@ -76,8 +76,8 @@ function wpsc_display_edit_products_page() {
 		<div id="message" class="updated fade">
 			<p>
 			<?php 
-			
-   			if(!isset($_GET['deleted'])) $_GET['deleted'] = 0.00;
+		//Not sure when or why this was added...seems to be the culprit for the constant deletion notice.  Just commenting out in case it's actually necessary.
+//   			if(!isset($_GET['deleted'])) $_GET['deleted'] = 0.00;
 			
 			if ( isset($_GET['updated'])) {
 				printf( _n( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );

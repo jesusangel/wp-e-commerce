@@ -9,11 +9,11 @@ function wpsc_shopping_cart($input = null, $override_state = null) {
 
 	
 	if(get_option('show_sliding_cart') == 1)	{
-		if(is_numeric($_SESSION['slider_state']))	{
+		if(isset($_SESSION['slider_state']) && is_numeric($_SESSION['slider_state']))	{
 		if($_SESSION['slider_state'] == 0) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
 			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 		} else {
-			if($_SESSION['nzshpcrt_cart'] == null) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
+			if(isset($_SESSION['nzshpcrt_cart'])) { $collapser_image = 'minus.png';} else { $collapser_image = 'plus.png'; }
 			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 		}
 	} else {
@@ -47,7 +47,9 @@ function wpsc_shopping_cart($input = null, $override_state = null) {
 			echo "<div id='sideshoppingcart'>";
 			echo "<h3>".__('Shopping Cart')."$fancy_collapser</h3>";
 			echo "  <div id='shoppingcartcontents'>";
-			echo wpsc_shopping_basket_internals($cart,false,true);
+			if (isset($cart)) {
+				echo wpsc_shopping_basket_internals($cart,false,true);
+			}
 			echo "  </div>";
 			echo "</div>";
 		}
