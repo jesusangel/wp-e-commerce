@@ -206,7 +206,7 @@ include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
 }
 
 
-include_once(WPSC_FILE_PATH.'/image_processing.php');
+//include_once(WPSC_FILE_PATH.'/image_processing.php');
 
 
 // if we are in the admin section, include the admin code

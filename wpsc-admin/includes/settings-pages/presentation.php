@@ -542,11 +542,17 @@ global $wpdb;
 				$display_live_search = get_option('show_live_search');
 				if($display_live_search == 1) {
 					$show_live_search = "checked ='checked'";
+				} else {
+					$show_live_search = "";
 				}
 			
 				if ($show_search1 != "checked ='checked'") {
 					$dis = "style='display:none;'";
+				} else {
+					$dis = "";
 				}
+				
+				
 				?>
 				<input type='radio' onclick='jQuery("#wpsc_advanced_search").show()' value='1' name='wpsc_options[show_search]' id='show_search1' <?php echo $show_search1; ?> /> <label for='show_search1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
 				<input type='radio' onclick='jQuery("#wpsc_advanced_search").hide()' value='0' name='wpsc_options[show_search]' id='show_search2' <?php echo $show_search2; ?> /> <label for='show_search2'><?php echo __('No', 'wpsc');?></label>
@@ -599,6 +605,9 @@ global $wpdb;
 				$cart_location = get_option('cart_location');
 				$cart1 = "";
 				$cart2 = "";
+				$cart3 = "";
+				$cart4 = "";
+				$cart5 = "";
 				switch($cart_location) {
 					case 1:
 					$cart1 = "checked ='checked'";
