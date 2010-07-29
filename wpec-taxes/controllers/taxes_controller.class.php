@@ -137,6 +137,9 @@ class wpec_taxes_controller
    **/
    function wpec_taxes_retrieve_region()
    {
+   
+      global $wpsc_cart;
+	  
       switch($this->wpec_taxes->wpec_taxes_get_logic())
       {
          case 'billing_shipping':

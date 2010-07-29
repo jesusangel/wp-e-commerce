@@ -56,6 +56,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	<tr id='post-<?php echo $product->ID; ?>' class='<?php echo trim( $rowclass . ' author-' . $post_owner . ' status-' . $product->post_status ); ?> iedit <?php if ( get_option ( 'wpsc_sort_by' ) == 'dragndrop') { echo 'product-edit'; } ?>' valign="top">
 	<?php
 	$posts_columns = get_column_headers('display-product-list');
+	$posts_columns = apply_filters( 'manage_display-product-list_columns', $posts_columns );
 	$hidden = get_hidden_columns('display-product-list');
 	//exit('<pre>'.print_r($product,true).'</pre>');
 
@@ -164,7 +165,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				if ( current_user_can('edit_product', $product->ID) ) {
 					$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $title)) . '" rel="permalink">'.__('Preview').'</a>';
 				}
-			} else if ( 'trash' != $product->post_status && (!isset($_GET["product"]) && $_GET["product"] != "") ) {
+			} else if ( 'trash' != $product->post_status ) {
 				$actions['view'] = '<a href="'.get_permalink($product->ID).'" title="'.esc_attr(sprintf(__('View &#8220;%s&#8221;'), $title)).'" rel="permalink">'.__('View').'</a>';
 			}
 			if(!isset($_GET["product"]) || $_GET["product"] == '' ) {

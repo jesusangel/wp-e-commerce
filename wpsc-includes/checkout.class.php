@@ -122,7 +122,10 @@ function wpsc_shipping_details(){
 }
 function wpsc_the_checkout_item_error_class($as_attribute = true) {
 	global $wpsc_checkout;
-	if($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
+
+	$class_name = '';
+	
+	if(isset($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id]) && $_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
 	  $class_name = 'validation-error';
 	}
 	if(($as_attribute == true)){
@@ -136,7 +139,7 @@ function wpsc_the_checkout_item_error_class($as_attribute = true) {
 function wpsc_the_checkout_item_error() {
 	global $wpsc_checkout;
 	$output = false;
-	if($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
+	if(isset($_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id]) && $_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id] != '') {
 	  $output = $_SESSION['wpsc_checkout_error_messages'][$wpsc_checkout->checkout_item->id];
 	}
 	
@@ -237,7 +240,7 @@ function wpsc_checkout_form_field() {
 
 function wpsc_shipping_region_list($selected_country, $selected_region, $shippingdetails = false){
 global $wpdb;
-  
+  $output = '';
 		//$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
 	$region_data = $wpdb->get_results("SELECT `regions`.* FROM `".WPSC_TABLE_REGION_TAX."` AS `regions` INNER JOIN `".WPSC_TABLE_CURRENCY_LIST."` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('".$wpdb->escape($selected_country)."')",ARRAY_A);
 	$js = '';
@@ -295,7 +298,7 @@ function wpsc_shipping_country_list($shippingdetails = false) {
 	
 	$output .= wpsc_shipping_region_list($selected_country, $selected_region, $shippingdetails);
 
-	if($_POST['wpsc_update_location'] == 'true') {
+	if(isset($_POST['wpsc_update_location']) && $_POST['wpsc_update_location'] == 'true') {
 	  $_SESSION['wpsc_update_location'] = true;
 	} else {
 		$_SESSION['wpsc_update_location'] = false;
@@ -326,7 +329,7 @@ function wpsc_shipping_country_list($shippingdetails = false) {
 	$uses_zipcode = false;
 	$custom_shipping = get_option('custom_shipping_options');
 	foreach((array)$custom_shipping as $shipping) {
-		if($wpsc_shipping_modules[$shipping]->needs_zipcode == true) {
+		if(isset($wpsc_shipping_modules[$shipping]->needs_zipcode) && $wpsc_shipping_modules[$shipping]->needs_zipcode == true) {
 			$uses_zipcode = true;
 		}
 	}
@@ -815,10 +818,13 @@ function wpsc_the_gateway() {
 
 function wpsc_gateway_name() {
 	global $wpsc_gateway;
+	$display_name = '';
+	
 	$payment_gateway_names = get_option('payment_gateway_names');
-	if($payment_gateway_names[$wpsc_gateway->gateway['internalname']] != '') {
+	
+	if(isset($payment_gateway_names[$wpsc_gateway->gateway['internalname']]) && $payment_gateway_names[$wpsc_gateway->gateway['internalname']] != '') {
 		$display_name = $payment_gateway_names[$wpsc_gateway->gateway['internalname']];					    
-	} else {
+	} elseif(isset($selected_gateway_data['payment_type'])) {
 		switch($selected_gateway_data['payment_type']) {
 			case "paypal";
 				$display_name = "PayPal";

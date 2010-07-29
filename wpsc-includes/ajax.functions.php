@@ -474,7 +474,7 @@ function wpsc_update_location() {
    //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
    //exit();
 
-   if($_GET['ajax'] == 'true') {
+   if(isset($_GET['ajax']) && $_GET['ajax'] == 'true') {
       exit();
    }
 }

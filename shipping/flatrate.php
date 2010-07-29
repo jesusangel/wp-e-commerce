@@ -109,7 +109,7 @@ class flatrate {
 				if (strlen($flatrates['local']) > 0) $shipping_quotes["Local Shipping"] = (float)$flatrates['local'];
 				break;
 			}
-			if($_SESSION['quote_shipping_method'] == $this->internal_name) {
+			if(isset($_SESSION['quote_shipping_method']) && $_SESSION['quote_shipping_method'] == $this->internal_name) {
 				$shipping_options = array_keys($shipping_quotes);
 				if(array_search($_SESSION['quote_shipping_option'], $shipping_options) === false) {
 					$_SESSION['quote_shipping_option'] = null;

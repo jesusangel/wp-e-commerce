@@ -85,6 +85,7 @@ function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title
   
 function wpsc_country_region_list($form_id = null, $ajax = false , $selected_country = null, $selected_region = null, $supplied_form_id = null, $checkoutfields = false) {
   global $wpdb;
+  $output = '';
   if($selected_country == null) {
     $selected_country = get_option('base_country');
 	}

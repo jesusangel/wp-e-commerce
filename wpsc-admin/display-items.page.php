@@ -44,6 +44,8 @@ function wpsc_display_edit_products_page() {
 	if(isset($_GET["product"]) && $_GET["product"] != '') {
 		unset($columns["categories"]);
 	}
+	$columns = apply_filters( 'manage_display-product-list_columns', $columns );
+
 	register_column_headers('display-product-list', $columns);	
 	
 	$baseurl = includes_url('js/tinymce');

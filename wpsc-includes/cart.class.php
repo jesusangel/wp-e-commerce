@@ -711,7 +711,7 @@ class wpsc_cart {
                if(is_callable(array(& $wpsc_shipping_modules[$this->selected_shipping_method], "getQuote"  ))) {
                   $this->shipping_quotes = $wpsc_shipping_modules[$this->selected_shipping_method]->getQuote();
                }
-               if(count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
+               if(isset($shipping_quote_count) && count($this->shipping_quotes) >  $shipping_quote_count) { // if we have any shipping quotes, break the loop.
                   break;
                }
             }
@@ -1192,6 +1192,7 @@ class wpsc_cart {
    */
   function calculate_total_weight($for_shipping = false) {
     global $wpdb;
+	$total = '';
     if($for_shipping == true ) {
          foreach($this->cart_items as $key => $cart_item) {
             if($cart_item->uses_shipping == 1) {
@@ -1294,6 +1295,7 @@ class wpsc_cart {
    */
   function calculate_per_item_shipping($method = null) {
     global $wpdb, $wpsc_shipping_modules;
+	$total ='';
     if($method == null) {
       $method = $this->selected_shipping_method;
     }
@@ -1345,10 +1347,10 @@ class wpsc_cart {
       $price =  number_format($price, 2, '.', ',');
 
       if($wpsc_currency_data['symbol'] != '') {
-         if($nohtml == false) {
-            $currency_sign = $wpsc_currency_data['symbol_html'];
-         } else {
+         if(isset($nohtml) && $nohtml == true) {
             $currency_sign = $wpsc_currency_data['symbol'];
+         } else {
+            $currency_sign = $wpsc_currency_data['symbol_html'];
          }
       } else {
          $currency_sign = $wpsc_currency_data['code'];
@@ -1704,7 +1706,7 @@ class wpsc_cart_item {
 
       // if we are using table rate price
       $levels = get_product_meta($this->product_id, 'table_rate_price');
-      if ($levels != '') {
+      if (isset($levels["quantity"]) && $levels["quantity"] != '') {
          foreach((array)$levels['quantity'] as $key => $qty) {
             if ($this->quantity >= $qty) {
                $unit_price = $levels['table_price'][$key];
@@ -1730,9 +1732,12 @@ class wpsc_cart_item {
 */
 
       // change no_shipping to boolean and invert it
-      $this->uses_shipping = !(bool)$product_meta['no_shipping'];
-      $this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
-
+	  if(isset($product_meta['no_shipping'])) {
+		$this->uses_shipping = !(bool)$product_meta['no_shipping'];
+	  }
+	  if(isset($product_meta['quantity_limited'])) {
+		$this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
+	}
 
       if($this->is_donation == 1) {
          $this->unit_price = $this->provided_price;
