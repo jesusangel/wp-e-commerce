@@ -208,8 +208,8 @@ function wpsc_the_purch_item_status(){
 }
 function wpsc_the_purch_status_id(){
    global $purchlogs;
-// exit(print_r($purchlogs->purchstatus, true));
-   return $purchlogs->purchstatus[order];
+//exit(print_r($purchlogs->purchstatus));
+   return $purchlogs->purchstatus['order'];
 }
 function wpsc_is_checked_status(){
    global $purchlogs;
@@ -219,7 +219,9 @@ function wpsc_is_checked_status(){
 function wpsc_the_purch_status_name(){
    global $purchlogs;
    //exit(print_r($purchlogs->purchstatus, true));
-   return $purchlogs->purchstatus[label];
+   if(isset($purchlogs->purchstatus['label'])) {
+	return $purchlogs->purchstatus['label'];
+   }
 }
 function wpsc_purchlogs_getfirstdates(){
    global $purchlogs;
@@ -1047,7 +1049,9 @@ class wpsc_purchaselogs_items{
       }
       $this->userinfo = $billingdetails;
       $this->shippinginfo= $shippinginfo;
-      $this->customcheckoutfields = $additionaldetails;
+	  if(isset($additionaldetails)) {
+		$this->customcheckoutfields = $additionaldetails;
+	  }
       $this->purch_item_count = count($cartcontent);
 //    exit('<pre>'.print_r($cartcontent, true).'</pre>');
    }

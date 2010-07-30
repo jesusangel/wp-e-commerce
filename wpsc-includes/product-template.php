@@ -41,7 +41,7 @@ function wpsc_product_image($attachment_id, $width = null, $height = null) {
 		$attachment_metadata = $image_meta['_wp_attachment_metadata'];
 
 		// determine if we already have an image of this size
-		if((count($attachment_metadata['sizes']) > 0) && (isset($attachment_metadata['sizes'][$intermediate_size]))) {
+		if(isset($attachment_metadata['sizes']) && (count($attachment_metadata['sizes']) > 0) && (isset($attachment_metadata['sizes'][$intermediate_size]))) {
 			$intermediate_image_data = image_get_intermediate_size($attachment_id, $intermediate_size);
 			$image_exists = true;
 			$image_url = $intermediate_image_data['url'];
@@ -175,7 +175,7 @@ function wpsc_this_page_url() {
 	//echo "<pr".print_r($wpsc_query->category,true)."</pre>";
 	if($wpsc_query->is_single === true) {
 		$output = wpsc_product_url($wp_query->post->ID);
-	} else if($wpsc_query->category != null) {
+	} else if(isset($wpsc_query->category) && $wpsc_query->category != null) {
 		$output = wpsc_category_url($wpsc_query->category);
 		if($wpsc_query->query_vars['page'] > 1) {
 			//
@@ -185,9 +185,11 @@ function wpsc_this_page_url() {
 				$output = add_query_arg('page_number', $wpsc_query->query_vars['page'], $output);
 			}
 		}
-	} else {
+	} elseif(isset($id)) {
 		$output = get_permalink($id);	
-	}	
+	}	else {
+		$output = get_permalink(get_the_ID());
+	}
 	return $output;
 }
 
@@ -391,8 +393,10 @@ function wpsc_product_external_link($id = null){
 		$id = get_the_ID();
 	}
 	$product_meta = get_post_meta($id, '_wpsc_product_metadata', true);
-	$external_link = $product_meta['external_link'];
+	if(isset($product_meta['external_link'])) {
+		$external_link = $product_meta['external_link'];
 	return $external_link;
+	}
 }
 
 /**
@@ -562,7 +566,7 @@ function wpsc_product_has_supplied_file() {
 * @return string - currently only valid for flat rate
 */
 function wpsc_product_postage_and_packaging() {
-	if(is_numeric($id) && ($id > 0)) {
+	if(isset($id) && is_numeric($id) && ($id > 0)) {
 		$id = absint($id);		
 	} else {
 		$id = get_the_ID();
@@ -666,8 +670,10 @@ function wpsc_product_comment_link() {
 * @return string - javascript for the intensedebate comments
 */
 function wpsc_product_comments() {
-	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
+//Commenting out deprecated functions - they aren't used properly, they need to specify the function that should be used.
+//	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query;
+	$output = '';
 	// add the product comments
 	if (get_option('wpsc_enable_comments') == 1) {
 		$enable_for_product = get_product_meta($wpsc_query->product['id'], 'enable_comments');
@@ -901,6 +907,7 @@ function wpsc_the_variation_out_of_stock() {
 function wpsc_product_rater() {
 	global $wpsc_query;
 	$product_id =get_the_ID();
+	$output = '';
 	if(get_option('product_ratings') == 1) {
 		$output .= "<div class='product_footer'>";
 
@@ -919,7 +926,7 @@ function wpsc_product_rater() {
 		$output .= "</div>";
 		$output .= "</div>";
 	}
-	return	$output;
+	return $output;
 }
 
 

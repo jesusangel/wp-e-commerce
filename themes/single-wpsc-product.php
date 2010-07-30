@@ -50,7 +50,9 @@ get_header();
 					<div class="producttext">
 						<h2 class="prodtitles">Purchase</h2>
 							<?php				
+							if(isset($wpsc_query->product)) {
 								do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product);
+							}
 							?>
 		
 						<?php
@@ -134,9 +136,9 @@ get_header();
 										<option value="<?php echo wpsc_the_variation_id(); ?>" <?php if (wpsc_the_variation_stock() < 1 ) { echo "disabled"; } ?>>
 											<?php echo wpsc_the_variation_name(); ?> 
 											
-											<?php/* if(wpsc_the_variation_price() != false) :  ?>
+											<?php /* if(wpsc_the_variation_price() != false) :  ?>
 												- <?php echo wpsc_the_variation_price(); ?>
-											<?php endif ; */?>
+											<?php endif ; */ ?>
 										</option>
 									<?php endwhile; ?>
 									</select> 

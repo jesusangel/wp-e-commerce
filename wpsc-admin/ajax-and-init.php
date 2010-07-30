@@ -1302,7 +1302,7 @@ function wpsc_purchlog_resend_email(){
                add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
                add_filter('wp_mail_from_name', 'wpsc_replace_reply_name', 0);
                if($purchase_log['processed'] < 2) {
-                  $payment_instructions = strip_tags(get_option('payment_instructions'));
+                  $payment_instructions = strip_tags(stripslashes(get_option('payment_instructions')));
                   $message = __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "\n\r" . $payment_instructions ."\n\r". $message;
                   $resent = (bool)wp_mail($email, __('Order Pending: Payment Required', 'wpsc'), $message);
                   $sent = 1;

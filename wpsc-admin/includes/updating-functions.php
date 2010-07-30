@@ -548,4 +548,21 @@ function wpsc_update_files() {
 	}
 }
 
+function wpsc_update_database() {
+	global $wpdb;
+	
+		$result = $wpdb->get_results("SHOW COLUMNS FROM ". WPSC_TABLE_PURCHASE_LOGS."", ARRAY_A);
+	if (!$result) {
+		echo 'Could not run query: ' . mysql_error();
+		exit;
+	}
+	foreach($result as $row_key=>$value) {
+		$has_taxes = ($value["Field"] == "wpec_taxes_total" || $value["Field"] == "wpec_taxes_rate") ? true: false;
+	}
+	if (!$has_taxes) {
+		$add_fields = $wpdb->query($wpdb->prepare("ALTER TABLE ".WPSC_TABLE_PURCHASE_LOGS." ADD wpec_taxes_total decimal(11,2)"));
+		$add_fields = $wpdb->query($wpdb->prepare("ALTER TABLE ".WPSC_TABLE_PURCHASE_LOGS." ADD wpec_taxes_rate decimal(11,2)"));
+	}	
+}
+
 ?>

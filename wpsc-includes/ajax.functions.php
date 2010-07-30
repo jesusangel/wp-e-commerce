@@ -258,7 +258,7 @@ function wpsc_coupon_price($currCoupon = '') {
          $wpsc_cart->coupons_name = '';
       }
 
-   } else if ($_POST['coupon_num'] == '' && $currCoupon == ''){
+   } else if ((!isset($_POST['coupon_num']) || $_POST['coupon_num'] == '') && $currCoupon == ''){
          $wpsc_cart->coupons_amount = 0;
          $wpsc_cart->coupons_name = '';
    } else if ($currCoupon != '') {
@@ -299,10 +299,12 @@ function wpsc_update_item_quantity() {
          // if the quantity is 0, remove the item.
          $wpsc_cart->remove_item($key);
       }
-      wpsc_coupon_price($_SESSION['coupon_numbers']);
+	  if(isset($_SESSION['coupon_numbers'])) {
+		wpsc_coupon_price($_SESSION['coupon_numbers']);
+	  }
    }
 
- if($_REQUEST['ajax'] == 'true') {
+ if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] == 'true') {
    ob_start();
    $cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
    include_once($cur_wpsc_theme_folder."/cart_widget.php");

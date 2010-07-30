@@ -76,9 +76,9 @@ class tablerate {
 	function getQuote() {
 
 		global $wpdb, $wpsc_cart;
-
-		$shopping_cart = $_SESSION['nzshpcrt_cart'];
-
+		if(isset($_SESSION['nzshpcrt_cart'])) {
+			$shopping_cart = $_SESSION['nzshpcrt_cart'];
+		}
 		if(is_object($wpsc_cart)) {
 			$price = $wpsc_cart->calculate_subtotal(true);
 		}
@@ -139,7 +139,7 @@ class tablerate {
 		$weight = $cart_item->weight;
 		$product_id = $cart_item->product_id;
 
-		if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && ($_SESSION['quote_shipping_method'] == 'flatrate')) {
+		if(is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && (isset($_SESSION['quote_shipping_method']) && $_SESSION['quote_shipping_method'] == 'flatrate')) {
 			if($cart_item->uses_shipping == true) {
 				//if the item has shipping
 				$shipping_values = $cart_item->meta[0]['shipping'];

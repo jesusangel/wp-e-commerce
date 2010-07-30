@@ -150,11 +150,16 @@ class flatrate {
 			//$product_list = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1",ARRAY_A);
 			if($cart_item->uses_shipping == true) {
 				//if the item has shipping
-				$shipping_values = $cart_item->meta[0]['shipping'];
-				if($country_code == get_option('base_country')) {
+				$additional_shipping = '';
+				if(isset($cart_item->meta[0]['shipping'])) {
+					$shipping_values = $cart_item->meta[0]['shipping'];
+				}
+				if(isset($shipping_values['local']) && $country_code == get_option('base_country')) {
 					$additional_shipping = $shipping_values['local'];
 				} else {
-					$additional_shipping = $shipping_values['international'];
+					if(isset($shipping_values['international'])) {
+						$additional_shipping = $shipping_values['international'];
+					}
 				}					
 				$shipping = $quantity * $additional_shipping;
 			} else {

@@ -185,8 +185,8 @@ function wpsc_uses_shipping() {
    global $wpsc_cart;
    $shippingoptions = get_option('custom_shipping_options');
    if( (!((get_option('shipping_discount')== 1) && (get_option('shipping_discount_value') <= $wpsc_cart->calculate_subtotal()))) || ( count($shippingoptions) >= 1 && $shippingoptions[0] != '' && get_option('do_not_use_shipping') == 0) ) {
-      //$status = $wpsc_cart->uses_shipping();
-		$status = true;
+		$status = (bool) $wpsc_cart->uses_shipping();
+//		$status = true;
    } else {
      $status = false;
    }
@@ -1325,10 +1325,12 @@ class wpsc_cart {
          foreach($this->cart_items as $key => $cart_item) {
             $uses_shipping += (int)$cart_item->uses_shipping;
          }
-        $uses_shipping = (bool)$uses_shipping;
       } else {
         $uses_shipping = $this->uses_shipping;
       }
+	  
+      $this->uses_shipping = $uses_shipping;
+		
       return $uses_shipping;
   }
 
@@ -1734,10 +1736,13 @@ class wpsc_cart_item {
 */
 
       // change no_shipping to boolean and invert it
-	  if(isset($product_meta['no_shipping'])) {
-		$this->uses_shipping = !(bool)$product_meta['no_shipping'];
+	  if(isset($product_meta[0]['no_shipping']) && $product_meta[0]['no_shipping'] == 1) {
+			$this->uses_shipping = 0 ;
+	  } else {
+		$this->uses_shipping = 1;
 	  }
-	  if(isset($product_meta['quantity_limited'])) {
+
+	  if(isset($product_meta[0]['quantity_limited'])) {
 		$this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
 	}
 

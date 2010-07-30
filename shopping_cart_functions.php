@@ -54,8 +54,13 @@ function wpsc_shopping_cart($input = null, $override_state = null) {
 			echo "</div>";
 		}
 	} else {
-		if(($GLOBALS['nzshpcrt_activateshpcrt'] === true)) {
-			$cart = $_SESSION['nzshpcrt_cart'];
+		if((isset($GLOBALS['nzshpcrt_activateshpcrt']) && $GLOBALS['nzshpcrt_activateshpcrt'] === true)) {
+		
+			$cart = $GLOBALS['nzshpcrt_activateshpcrt'];
+			
+			if(isset($_SESSION['nzshpcrt_cart'])) {
+				$cart = $_SESSION['nzshpcrt_cart'];
+			}
 			echo "<div id='shoppingcart'>";
 			echo "<h3>".__('Shopping Cart')."$fancy_collapser</h3>";
 			echo "  <div id='shoppingcartcontents'>";

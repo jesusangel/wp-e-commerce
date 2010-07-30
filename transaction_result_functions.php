@@ -29,7 +29,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		}
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
 
-		if(($_GET['ipn_request'] != 'true') and (get_option('paypal_ipn') == 1)) {
+		if((!isset($_GET['ipn_request']) || $_GET['ipn_request'] != 'true') && (get_option('paypal_ipn') == 1)) {
 			if($purchase_log == null) {
 				echo __('We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc');
 				if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
@@ -37,7 +37,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 				return false;
 			} else if ($purchase_log['processed'] < 3) {  //added by Thomas on 20/6/2007
-				echo __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "<p style='margin: 1em 0px 0px 0px;' >".nl2br(get_option('payment_instructions'))."</p>";
+				echo __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "<p style='margin: 1em 0px 0px 0px;' >".nl2br(stripslashes(get_option('payment_instructions')))."</p>";
 				/*if($purchase_log['gateway'] != 'testmode') {
 					if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
 						mail(get_option('purch_log_email'), __('New pending order', 'wpsc'), __('There is a new order awaiting processing:', 'wpsc').$order_url, "From: ".get_option('return_email')."");
@@ -103,17 +103,17 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				
 				}
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
-		
+				$total_shipping = '';
+				$total = '';
 				$shipping = $row['pnp']*$row['quantity'];
 				$total_shipping += $shipping;
-		
 		
 				$total += ($row['price'] * $row['quantity']);
 				$message_price = nzshpcrt_currency_display(($row['price']*$row['quantity']), true);
 
 				$shipping_price = nzshpcrt_currency_display($shipping, 1, true);
 				
-				if($purchase['gateway'] != 'testmode') {
+				if(isset($purchase['gateway']) && $purchase['gateway'] != 'testmode') {
 					if($gateway['internalname'] == $purch_data[0]['gateway'] ) {
 						$gateway_name = $gateway['name'];
 					}
@@ -128,7 +128,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if(!is_string($additional_content)) {
 						$additional_content = '';
 					}
-
 					$product_list .= " - ". $row['name'] ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
 					$product_list_html .= " - ". $row['name'] ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
 					foreach($link as $single_link){
@@ -138,6 +137,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$product_list .= $additional_content;
 					$product_list_html .= $additional_content;
 				} else {
+				
+				$product_list_html = '';
 					$plural = '';
 					if($row['quantity'] > 1) {
 						$plural = "s";
@@ -149,6 +150,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 
 				}
 				$report = get_option('wpsc_email_admin');
+				$report_product_list = '';
 				$report_product_list.= " - ". $row['name']."  ".$message_price ."\n\r";
 			}
 			
@@ -174,6 +176,10 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$discount_email.= __('Discount', 'wpsc')."\n\r: ";
 					$discount_email .=$purchase_log['discount_data'].' : '.nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
 				}
+				$total_price_email = '';
+				$total_price_html = '';
+				$total_shipping_html = '';
+				$total_shipping_email = '';
 				$total_shipping_email.= __('Total Shipping', 'wpsc').": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
 				$total_price_email.= __('Total', 'wpsc').": ".nzshpcrt_currency_display($total,1,true)."\n\r";
 				$product_list_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
@@ -212,7 +218,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
  					add_filter('wp_mail_from_name', 'wpsc_replace_reply_name', 0);
  					
 					if($purchase_log['processed'] < 3) {
-						$payment_instructions = strip_tags(get_option('payment_instructions'));
+						$payment_instructions = strip_tags(stripslashes(get_option('payment_instructions')));
 						$message = __('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "\n\r" . $payment_instructions ."\n\r". $message;
 						wp_mail($email, __('Order Pending: Payment Required', 'wpsc'), $message);
 					} else {
