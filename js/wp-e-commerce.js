@@ -179,6 +179,13 @@ jQuery(document).ready(function () {
 		return false;
 	});
 	
+	// Force variation price to update on page load
+	// Fixes issue where some browsers (IE and FF) default to selecting the first
+	// non-disabled menu item if the first variation is out of stock.
+	if ( jQuery("div.wpsc_variation_forms .wpsc_select_variation").length > 0 ) {
+		jQuery("div.wpsc_variation_forms .wpsc_select_variation:first").trigger("change");
+	}
+	
 	// Object frame destroying code.
 	jQuery("div.shopping_cart_container").livequery(function(){
 		object_html = jQuery(this).html();
