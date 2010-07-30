@@ -514,6 +514,9 @@ function wpsc_products_page($content = '') {
 */
 function wpsc_count_themes_in_uploads_directory() {
   $uploads_dir = @opendir(WPSC_THEMES_PATH); // might cause problems if dir doesnt exist
+  if (!$uploads_dir) {
+	  return FALSE;
+  }
   $file_names = array();
   while(($file = @readdir($uploads_dir)) !== false) {
     if(is_dir(WPSC_THEMES_PATH.$file) && ($file != "..") && ($file != ".") && ($file != ".svn")){
