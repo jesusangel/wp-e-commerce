@@ -592,7 +592,7 @@ $labels = array(
 
 function wpsc_check_for_theme() {
 
-	$file = get_template_directory()."/single-wpsc-product.php";
+	$file = get_stylesheet_directory()."/single-wpsc-product.php";
 	$wpsc_file = WPSC_FILE_PATH."/themes/single-wpsc-product.php";
 
 	//Check for single-wpsc-product.php in currently active theme dir
