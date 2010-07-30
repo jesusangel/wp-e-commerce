@@ -649,4 +649,29 @@ add_filter('wpsc_product_alert', 'wpsc_check_stock', 10, 2);
 add_filter('wpsc_product_alert', 'wpsc_check_weight', 10, 2);
 
 
+
+/**
+ * WPSC Image Quality
+ *
+ * Returns the value to use for image quality when creating jpeg images.
+ * By default the quality is set to 75%. It is then run through the main jpeg_quality WordPress filter
+ * to add compatibility with other plugins that customise image quality.
+ *
+ * It is then run through the wpsc_jpeg_quality filter so that it is possible to override
+ * the quality setting just for WPSC images.
+ *
+ * @since 3.7.6
+ *
+ * @param (int) $quality Optional. Image quality when creating jpeg images.
+ * @return (int) The image quality.
+ */
+function wpsc_image_quality( $quality = 75 ) {
+	
+	$quality = apply_filters( 'jpeg_quality', $quality );
+	return apply_filters( 'wpsc_jpeg_quality', $quality );
+	
+}
+
+
+
 ?>

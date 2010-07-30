@@ -70,11 +70,12 @@ if(file_exists($imagepath) && is_numeric($height) && is_numeric($width)) {
       ImageAlphaBlending($dst_img, false);
 		}
 
+    $image_quality = wpsc_image_quality();
     
     //ImageCopyResampled($dst_img,$src_img,0,0,0,0,$width,$height,$source_w,$source_h);
     switch($imagetype[2]) {
       case IMAGETYPE_JPEG:
-      ImageJPEG($dst_img, $image_output, 75);
+      ImageJPEG($dst_img, $image_output, $image_quality);
       break;
 
       case IMAGETYPE_GIF:
