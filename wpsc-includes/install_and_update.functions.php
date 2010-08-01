@@ -85,6 +85,7 @@ function wpsc_install() {
 	
 
   add_option('show_thumbnails', 1, __('Show Thumbnails', 'wpsc'), "yes");
+  add_option('show_products_rss', '1', __('Show Product List RSS', 'wpsc'), 'yes');
 
   add_option('product_image_width', '', __('product image width', 'wpsc'), 'yes');
   add_option('product_image_height', '', __('product image height', 'wpsc'), 'yes');

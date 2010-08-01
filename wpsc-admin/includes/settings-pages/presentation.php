@@ -283,7 +283,7 @@ global $wpdb;
 		<div style='clear:both;'></div>
 		
 		<h3 class="form_group"><?php echo __('Product Page Settings', 'wpsc');?></h3>
-		<table class='wpsc_options form-table'>		
+		<table class='wpsc_options form-table'>
 		<tr>
 			<th scope="row"><?php echo __('Catalog View', 'wpsc');?>:</th>
 			<td>
@@ -471,22 +471,35 @@ global $wpdb;
 				$show_breadcrumbs2 = "";
 				switch($show_breadcrumbs) {
 					case 0:
-					$show_breadcrumbs2 = "checked ='checked'";
-					break;
-					
+						$show_breadcrumbs2 = "checked ='checked'";
+						break;
 					case 1:
-					$show_breadcrumbs1 = "checked ='checked'";
-					break;
-				}
-	
-				?>
-				<input type='radio' value='1' name='wpsc_options[show_breadcrumbs]' id='show_breadcrumbs1' <?php echo $show_breadcrumbs1; ?> /> <label for='show_breadcrumbs1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[show_breadcrumbs]' id='show_breadcrumbs2' <?php echo $show_breadcrumbs2; ?> /> <label for='show_breadcrumbs2'><?php echo __('No', 'wpsc');?></label>
+						$show_breadcrumbs1 = "checked ='checked'";
+						break;
+				} ?>
+					<input type='radio' value='1' name='wpsc_options[show_breadcrumbs]' id='show_breadcrumbs1' <?php echo $show_breadcrumbs1; ?> /> <label for='show_breadcrumbs1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[show_breadcrumbs]' id='show_breadcrumbs2' <?php echo $show_breadcrumbs2; ?> /> <label for='show_breadcrumbs2'><?php echo __('No', 'wpsc');?></label>
 				</td>
-			</tr>							
-	
-
-				
+			</tr>
+			<tr>
+				<th scope="row"><?php echo __('Show Product List RSS', 'wpsc');?>:</th>
+				<td>
+				<?php
+				$show_rss = get_option('show_products_rss');
+				$show_rss1 = "";
+				$show_rss2 = "";
+				switch($show_rss) {
+					case 0:
+						$show_rss2 = "checked ='checked'";
+						break;
+					case 1:
+						$show_rss1 = "checked ='checked'";
+						break;
+					} ?>
+					<input type='radio' value='1' name='wpsc_options[show_products_rss]' id='show_rss1' <?php echo $show_rss1; ?> /> <label for='show_rss1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[show_products_rss]' id='show_rss2' <?php echo $show_rss2; ?> /> <label for='show_rss2'><?php echo __('No', 'wpsc');?></label>
+				</td>
+			</tr>
 			<tr>
 				<th scope="row">
 				<?php echo __('Product Groups/Products Display', 'wpsc');?>:
