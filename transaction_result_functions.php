@@ -6,8 +6,6 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
 	$errorcode = 0;
 	$order_status= 2;
-	$siteurl = get_option('siteurl');
-
 	/*
 	 * {Notes} Double check that $Echo_To_Screen is a boolean value
 	 */
@@ -29,7 +27,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 			$message = stripslashes(get_option('wpsc_email_receipt'));
 			$message_html = $message;
 		}
-		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
+		$order_url = site_url("/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id']);
 		if(($_GET['ipn_request'] != 'true') and (get_option('paypal_ipn') == 1)) {
 			if($purchase_log == null) {
 				echo __('We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc');
@@ -97,9 +95,9 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					if(sizeof($download_data) != 0) {
 						foreach($download_data as $single_download){
 							if($single_download['uniqueid'] == null){// if the uniqueid is not equal to null, its "valid", regardless of what it is
-								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" =>$single_download["filename"]);	
+								$link[] = array("url"=>site_url("?downloadid=".$single_download['id']), "name" =>$single_download["filename"]);	
 							}	else {
-								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" =>$single_download["filename"]);
+								$link[] = array("url"=>site_url("?downloadid=".$single_download['uniqueid']), "name" =>$single_download["filename"]);
 							}
 						}
 						//$order_status= 4;
@@ -229,24 +227,23 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
         $message = str_replace('%product_list%',$product_list,$message);
         $message = str_replace('%total_shipping%',$total_shipping_email,$message);
         $message = str_replace('%total_price%',$total_price_email,$message);
-        //$message = str_replace('%order_status%',get_option('blogname'),$message);
         $message = str_replace('%shop_name%',get_option('blogname'),$message);
-		$message = str_replace( '%find_us%', $purchase_log['find_us'], $message );
+        $message = str_replace( '%find_us%', $purchase_log['find_us'], $message );
+        //$message = str_replace('%order_status%',get_option('blogname'),$message);
         
         $report = str_replace('%product_list%',$report_product_list,$report);
         $report = str_replace('%total_shipping%',$total_shipping_email,$report);
         $report = str_replace('%total_price%',$total_price_email,$report);
         $report = str_replace('%shop_name%',get_option('blogname'),$report);
-		$report = str_replace( '%find_us%', $purchase_log['find_us'], $report );
-        
+        $report = str_replace( '%find_us%', $purchase_log['find_us'], $report );
+
         $message_html = str_replace('%product_list%',$product_list_html,$message_html);
         $message_html = str_replace('%total_shipping%',$total_shipping_html,$message_html);
         $message_html = str_replace('%total_price%',$total_price_email,$message_html);
         $message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
-		$message_html = str_replace( '%find_us%', $purchase_log['find_us'], $message_html );
+        $message_html = str_replace( '%find_us%', $purchase_log['find_us'], $message_html );
         //$message_html = str_replace('%order_status%',get_option('blogname'),$message_html);
-        
-        
+
 				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
 				
  					add_filter('wp_mail_from', 'wpsc_replace_reply_address', 0);
@@ -311,8 +308,8 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				}
 			}
 			$report_user .= "\n\r";
-				/*
-$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
+/*
+				$form_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase_log['id']."'";
 				$form_data = $wpdb->get_results($form_sql,ARRAY_A);
 					
 				if($form_data != null) {
