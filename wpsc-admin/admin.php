@@ -433,7 +433,7 @@ function wpsc_admin_latest_activity() {
 		 * This is the right hand side for the past 30 days revenue on the wp dashboard
 		 */
 		echo "<div id='leftDashboard'>";
-		echo "<strong class='dashboardHeading'>".__('Last 30 Days', 'wpsc')."</strong><br />";
+		echo "<strong class='dashboardHeading'>".__('This Month', 'wpsc')."</strong><br />";
 		echo "<p class='dashboardWidgetSpecial'>";
 		// calculates total amount of orders for the month
 		$year = date("Y");

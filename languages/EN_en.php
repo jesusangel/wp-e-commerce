@@ -126,7 +126,7 @@ define("TXT_WPSC_PAGENUMBER_POSITION_BOTH", "Both");
 define("TXT_WPSC_USE_THEME_ENGINE", "Use the experimental Theme Engine");
 define("TXT_WPSC_TM", "Target Markets");
 define("TXT_WPSC_SHIPPING_DETAIL","Please choose a country below to calculate your shipping costs");
-define('TXT_WPSC_TOTAL_THIS_MONTH', 'Last 30 Days');
+define('TXT_WPSC_TOTAL_THIS_MONTH', 'This Month');
 define('TXT_WPSC_TOTAL_INCOME', 'Life Time');
 define('TXT_WPSC_SALES_TITLE', 'Sales');
 define('TXT_WPSC_ORDERS_TITLE', 'Orders');
