@@ -123,7 +123,7 @@ function nszhpcrt_category_tag($content = '') {
 					$output .= "<tr>";
 					$output .= "<td class='imagecol'>";
 					}
-					$output .="<a href='".WPSC_IMAGE_URL.$product['image']."' class='thickbox preview_link'  rel='".str_replace(" ", "_",$product['name'])."'>";
+					$output .="<a href='".WPSC_IMAGE_URL.$product['image']."' class='" . wpsc_the_product_image_link_classes() . "  rel='".str_replace(" ", "_",$product['name'])."'>";
 					if($product['image'] != '') {
 						$output .= "<img class='product_image' src='".WPSC_THUMBNAIL_URL.$product['image']."' title='".$product['name']."' alt='".$product['name']."' />\n\r";
 					}

@@ -643,6 +643,27 @@ function wpsc_the_product_thumbnail($width = null, $height = null) {
 }
 
 /**
+ * Return the class(es) that should be applied to a product image's <a> tag.
+ *
+ * If the thickbox effect is enabled for product images (presentation setting), the thickbox class name is included
+ *
+ * This function is called from theme files when outputting product img tags
+ *
+ * @since 3.8
+ * @return string space-separated list of class names (for use in a class="") attribute
+ */
+function wpsc_the_product_image_link_classes() {
+    $classes = array();
+    if ( get_option( 'show_thumbnails_thickbox' ) ) {
+    	$classes[] = 'thickbox';
+    }
+    $classes[] = 'preview_link';
+
+    $classes = apply_filters( 'wpsc_the_product_image_link_classes', $classes );
+    return implode( ' ', $classes );
+}
+
+/**
 * wpsc product comment link function
 * @return string - javascript required to make the intense debate link work
 */

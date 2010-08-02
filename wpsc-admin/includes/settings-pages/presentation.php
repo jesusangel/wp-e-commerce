@@ -895,6 +895,29 @@ global $wpdb;
 					<input type='radio' value='0' name='wpsc_options[show_thumbnails]' id='show_thumbnails2' <?php echo $show_thumbnails2; ?> /> <label for='show_thumbnails2'><?php echo __('No', 'wpsc');?></label>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Use Thickbox Effect for product images', 'wpsc');?>:</th>
+					<td>
+					<?php
+					$show_thumbnails_thickbox = get_option('show_thumbnails_thickbox');
+					$show_thumbnails_thickbox1 = "";
+					$show_thumbnails_thickbox2 = "";
+					switch($show_thumbnails_thickbox) {
+						case 0:
+						$show_thumbnails_thickbox2 = "checked ='checked'";
+						break;
+
+						case 1:
+						$show_thumbnails_thickbox1 = "checked ='checked'";
+						break;
+					}
+
+					?>
+					<input type='radio' value='1' name='wpsc_options[show_thumbnails_thickbox]' id='show_thumbnails_thickbox1' <?php echo $show_thumbnails_thickbox1; ?> /> <label for='show_thumbnails_thickbox1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[show_thumbnails_thickbox]' id='show_thumbnails_thickbox2' <?php echo $show_thumbnails_thickbox2; ?> /> <label for='show_thumbnails_thickbox2'><?php echo __('No', 'wpsc');?></label><br />
+					<?php _e('Using thickbox means that when clicking on a product image, a larger version will be displayed in a "thickbox" style window. If you are using a plugin such as Shutter Reloaded, you may want to disable thickbox.', 'wpsc'); ?>
+					</td>
+				</tr>
 				<?php
 					if(function_exists('gold_shpcrt_display_gallery')) {
 						?>

@@ -101,6 +101,7 @@ function wpsc_install() {
 	
 
 	add_option('show_thumbnails', 1, __('Show Thumbnails', 'wpsc'), "yes");
+	add_option('show_thumbnails_thickbox', 1, __('Use Thickbox Effect for product images', 'wpsc'), "yes");
 
 	add_option('product_image_width', '', __('product image width', 'wpsc'), 'yes');
 	add_option('product_image_height', '', __('product image height', 'wpsc'), 'yes');
