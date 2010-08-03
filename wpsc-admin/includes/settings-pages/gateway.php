@@ -42,6 +42,7 @@ function selectgateway() {
 
 </script>
 <div class="wrap">
+<?php // global $nzshpcrt_gateways; print_r($nzshpcrt_gateways);?>
 	<div class='metabox-holder'>
 		<form name='gatewayopt' method='post' id='gateway_opt' action='' >
 		<input type='hidden' name='gateway_submits' value='true' />
@@ -83,10 +84,25 @@ function selectgateway() {
 					  }
 						if (in_array($gateway['internalname'], (array)$selected_gateways)) {
 					?>
-						<p><input name='wpsc_options[custom_gateway_options][]' checked='checked' type='checkbox' value='<?php echo $gateway['internalname']; ?>' id='<?php echo $gateway['internalname']; ?>_id' /><label for='<?php echo $gateway['internalname']; ?>_id'><?php echo $gateway['name']; ?></label></p>
-				<?php	} else { ?>
-						<p><input name='wpsc_options[custom_gateway_options][]' type='checkbox' value='<?php echo $gateway['internalname']; ?>' id='<?php echo $gateway['internalname']; ?>_id' />
+					
+						<div class="wpsc_shipping_options">
+							<div class='wpsc-shipping-actions wpsc-payment-actions'>
+									| <span class="edit">
+										<a class='edit-payment-module' rel="<?php echo $gateway['internalname']; ?>" onclick="event.preventDefault();" title="Edit this Payment Module" href='<?php echo htmlspecialchars(add_query_arg('payment_module', $gateway['internalname'])); ?>' style="cursor:pointer;">Edit</a>
+									</span> |
+						   </div>
+						<p><input name='wpsc_options[custom_gateway_options][]' checked='checked' type='checkbox' value='<?php echo $gateway['internalname']; ?>' id='<?php echo $gateway['internalname']; ?>_id' /> 
 						<label for='<?php echo $gateway['internalname']; ?>_id'><?php echo $gateway['name']; ?></label></p>
+						</div>
+				<?php	} else { ?>
+						<div class="wpsc_shipping_options">
+							<div class='wpsc-shipping-actions wpsc-payment-actions'>
+									| <span class="edit">
+										<a class='edit-payment-module' rel="<?php echo $gateway['internalname']; ?>" onclick="event.preventDefault();" title="Edit this Payment Module" href='<?php echo htmlspecialchars(add_query_arg('payment_module', $gateway['internalname'])); ?>' style="cursor:pointer;">Edit</a>
+									</span> |
+						   </div>
+						<p><input name='wpsc_options[custom_gateway_options][]' type='checkbox' value='<?php echo $gateway['internalname']; ?>' id='<?php echo $gateway['internalname']; ?>_id' />
+						<label for='<?php echo $gateway['internalname']; ?>_id'><?php echo $gateway['name']; ?></label></p></div>
 				<?php	}
 					}
 					?>
@@ -105,103 +121,38 @@ function selectgateway() {
 				</td>
 
 				<td class='gateway_settings' rowspan='2'>										
-					<?php if (IS_WP27) { ?>
-						<div class='postbox'>
-						<h3 class='hndle'><?=__(' Select a Payment Gateway below to configure it.', 'wpsc')?></h3>
-						<div  class='inside'>
+					<div class='postbox'>
+					  <?php
+					  
+					  	if(!isset($_SESSION['previous_payment_name']))
+					  		$_SESSION['previous_payment_name'] = "";
+					  
+						$payment_data = wpsc_get_payment_form($_SESSION['previous_payment_name']);
+					  ?>
+						<h3 class='hndle'><?php echo $payment_data['name']; ?></h3>
+						<div class='inside'>
 						<table class='form-table'>
-					<?php } else { ?>					
-					<table class='form-table'>
-					<tr class="firstrowth">
-					  <td colspan='2' style='border-bottom: none;'>
-					    <strong class="form_group"><?php echo __(' Select a Payment Gateway below to configure it.', 'wpsc');?></strong>
-					  </td>
-					</tr>
-					<?php 
-						} 	
-					?>
-					<tr>
-					  <td class='wpsc_gateway_table'>
-							<h4><?php echo __('Payment Gateway', 'wpsc');?></h4>
-					  </td>
-					  <td style='border-top: none;'>
-							<select name='payment_gw' onchange='selectgateway();'>
-							<?php echo $gatewaylist; ?>
-							</select>
-						</td>
-					</tr>
-					
-					
-					<tr>
-					  <td style='border-top: none;'>
-					    <?php _e("Display Name");?>
-					  </td>
-					  <td style='border-top: none;'>
-					    <?php
-					    if (!isset($selected_gateway_data['internalname'])) $selected_gateway_data['internalname'] = '';
-					    if(isset($payment_gateway_names[$selected_gateway_data['internalname']]) && $payment_gateway_names[$selected_gateway_data['internalname']] != '') {
-								$display_name = $payment_gateway_names[$selected_gateway_data['internalname']];					    
-					    } else {
-					    		if (!isset($selected_gateway_data['payment_type'])) $selected_gateway_data['payment_type'] = '';
-								switch($selected_gateway_data['payment_type']) {
-									case "paypal";
-										$display_name = "PayPal";
-									break;
-									
-									case "manual_payment":
-										$display_name = "Manual Payment";
-									break;
-									
-									case "google_checkout":
-										$display_name = "Google Checkout";
-									break;
-									
-									case "credit_card":
-									default:
-										$display_name = "Credit Card";
-									break;
-								}
-					    }
-					    ?>
-							<input type='text' name='user_defined_name[<?php echo $selected_gateway_data['internalname']; ?>]' value='<?php echo $display_name; ?>' /><br />
-							<span class='small description'><?php __('The text that people see when making a purchase'); ?></span>
-						</td>
-					</tr>
-					
-					<?php 
-					if (!isset($form)) $form = '';
-					
-					echo $form;
-					 ?>   
-					
-					<tr class='update_gateway' >
-						<td colspan='2'>
-							<div class='submit'>
+							<?php echo $payment_data['form_fields']; ?>
+						</table>
+						<?php
+							if ( $payment_data['has_submit_button'] == 0) {
+								$update_button_css = 'style= "display: none;"';
+							} else {
+								$update_button_css = '';
+							}		 
+						?>
+							<div class='submit' <?php echo $update_button_css; ?>>
 								<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
 								<input type='submit' value='<?php echo __('Update &raquo;', 'wpsc')?>' name='updateoption' />
 							</div>
-						</td>
-					</tr>
-					</table>
-					<?php if (IS_WP27){ ?>
 					</div>
-					</div>
-					<?php } ?>
 				</td>
       </tr>
-      
-      
-      
-
-		</table>
-
-  
-  
-  
+   	</table>
   </form>
 </div>
 </div>			
 	
 <?php
-}
+	}
 ?>

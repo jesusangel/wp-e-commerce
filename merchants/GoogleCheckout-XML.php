@@ -90,7 +90,7 @@ function gateway_google($fromcheckout = false){
 	$cart->SetContinueShoppingUrl($returnURL);
 	$cart->SetEditCartUrl(get_option('shopping_cart_url'));
 	$no=1;
-	//exit("<pre>".print_r($wp_cart,true)."</pre>");
+	//exit("<pre>".print_r($wpsc_cart,true)."</pre>");
 	
 	//new item code
 	$no = 0;
@@ -100,17 +100,19 @@ function gateway_google($fromcheckout = false){
 	    $curr=new CURRENCYCONVERTER();
 	    $currency_code = $wpdb->get_results("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1",ARRAY_A);
 	    $local_currency_code = $currency_code[0]['code'];
-	    
+//	    exit('<pre>'.print_r($_REQUEST,true).'</pre>');
 	    $google_curr = get_option('google_cur');
 		while (wpsc_have_cart_items()) {
 			wpsc_the_cart_item();
 			if($google_curr != $local_currency_code) {
 			$google_currency_productprice = $curr->convert( wpsc_cart_item_price(false)/wpsc_cart_item_quantity(),$google_curr,$local_currency_code);
+			$google_currency_shipping = $curr->convert(  $wpsc_cart->selected_shipping_amount,$google_curr,$local_currency_code);
+			
 		
-		} else {
-			$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
-	
-		}
+			} else {
+				$google_currency_productprice = wpsc_cart_item_price(false)/wpsc_cart_item_quantity();
+				$google_currency_shipping = $wpsc_cart->selected_shipping_amount;
+			}
 
 		//	exit('<pre>'.print_r(wpsc_cart_item_name(),true).'</pre>');
 			$cartitem["$no"] = new GoogleItem(wpsc_cart_item_name(),      // Item name
@@ -137,45 +139,50 @@ function gateway_google($fromcheckout = false){
 		}
 
 //	}
-
+	
 
 	// Add shipping options
-	$Gfilter = new GoogleShippingFilters();
-	$google_checkout_shipping=get_option("google_shipping_country");
-	$googleshippingcountries = count($google_checkout_shipping);
-	//exit('<pre>'.print_r($googleshipping, true).'</pre>');
-	if($googleshippingcountries == 242){
-		$Gfilter->SetAllowedWorldArea(true);
+	if(wpsc_uses_shipping() && $google_currency_shipping >0 ){
+		$Gfilter = new GoogleShippingFilters();
+		$google_checkout_shipping=get_option("google_shipping_country");
+		$googleshippingcountries = count($google_checkout_shipping);
+		//exit('<pre>'.print_r($googleshipping, true).'</pre>');
+		if($googleshippingcountries == 242){
+			$Gfilter->SetAllowedWorldArea(true);
+		
+		}else{
+		if(is_array($google_checkout_shipping)){
+			$google_shipping_country_ids = implode(",",$google_checkout_shipping);
+		}
+			$google_shipping_country = $wpdb->get_col("SELECT `isocode` FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
+			foreach($google_shipping_country as $isocode){
+				//exit($isocode);
+				$Gfilter->AddAllowedPostalArea($isocode);
+				if($isocode == 'US'){
+					$Gfilter->SetAllowedCountryArea('ALL');
 	
-	}else{
-	if(is_array($google_checkout_shipping)){
-		$google_shipping_country_ids = implode(",",$google_checkout_shipping);
-	}
-		$google_shipping_country = $wpdb->get_col("SELECT `isocode` FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE id IN (".$google_shipping_country_ids.")");
-		foreach($google_shipping_country as $isocode){
-			//exit($isocode);
-			$Gfilter->AddAllowedPostalArea($isocode);
-			if($isocode == 'US'){
-				$Gfilter->SetAllowedCountryArea('ALL');
-
+				}
 			}
 		}
+		
+		$Gfilter->SetAllowUsPoBox(false);
+		$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $google_currency_shipping);
+		$ship_1->AddShippingRestrictions($Gfilter);
+		$cart->AddShipping($ship_1);
 	}
-	
-	$Gfilter->SetAllowUsPoBox(false);
-	$ship_1 = new GoogleFlatRateShipping('Flat Rate Shipping', $wpsc_cart->calculate_total_shipping());
-	$ship_1->AddShippingRestrictions($Gfilter);
-	$cart->AddShipping($ship_1);
 	//wpsc_google_shipping_quotes();
-      // Add tax rules
-	if ($_SESSION['wpsc_selected_country']=='US'){
+
+    // Add tax rules
+	//if ($_SESSION['wpsc_selected_country']=='US'){
 		//set default tax
+		//exit('<pre>'.print_r($_SESSION,true).'</pre>');
 		$sql = "SELECT `name`, `tax` FROM ".WPSC_TABLE_REGION_TAX." WHERE id='".$_SESSION['wpsc_selected_region']."'";
 		//exit('<pre>'.print_r($sql, true).'</pre>');
 		$state_name = $wpdb->get_row($sql, ARRAY_A);
+		//exit('<pre>'.print_r($state_name, true).'</pre>');
 		$defaultTax = $state_name['tax']/100;
 		$tax_rule = new GoogleDefaultTaxRule($defaultTax);
-		$sql = "SELECT `name` FROM ".WPSC_TABLE_REGION_TAX." WHERE `country_id`='136' AND `tax` = ".$state_name['tax'];
+		$sql = "SELECT `code` FROM ".WPSC_TABLE_REGION_TAX." WHERE `country_id`='136' AND `tax` = ".$state_name['tax'];
 		$states = $wpdb->get_col($sql);
 		//exit('<pre>'.print_r($states, true).'</pre>');
 		$tax_rule->SetStateAreas((array)$states);
@@ -190,7 +197,6 @@ function gateway_google($fromcheckout = false){
 			$alt = $wpdb->get_col($sql);
 			$altTax = $altTax/100;
 			$alt_google_tax = new GoogleDefaultTaxRule($altTax);
-
 			$alt_google_tax->SetStateAreas($alt);
 			//$g = new GoogleAlternateTaxTable('Alt Tax'.$i);
 			//$g->AddAlternateTaxRules($alt_google_tax);
@@ -199,7 +205,7 @@ function gateway_google($fromcheckout = false){
 			$i++;
 		}
 
-	}
+	//}
 		if (get_option('google_button_size') == '0'){
 			$google_button_size = 'BIG';
 		} elseif(get_option('google_button_size') == '1') {
@@ -216,7 +222,7 @@ function gateway_google($fromcheckout = false){
 }
 
 function wpsc_google_checkout_page(){
-global $wpsc_gateway;
+	global $wpsc_gateway;
 	 $script = "<script type='text/javascript'>
 	 				jQuery(document).ready(
   						function()
@@ -351,8 +357,8 @@ function form_google()
 		Select Shipping Countries
 		</td>
 		<td>
-		<a href='".add_query_arg("googlecheckoutshipping", 1)."' alt='Set Shipping Options'>Set Shipping countries</a>
-		</td>
+		<a href='".add_query_arg(array("googlecheckoutshipping" =>  1, "page" =>
+"wpsc-settings"))."' alt='Set Shipping Options'>Set Shipping countries</a>		</td>
 	</tr>
 
 	<tr>

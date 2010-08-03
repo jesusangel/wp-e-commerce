@@ -1565,11 +1565,6 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
    add_action('admin_init', 'wpsc_delete_purchlog');
 }
 
-
-
-
-
-
 /*
  * Get Shipping Form ajax call
  */
@@ -1583,6 +1578,20 @@ function wpsc_ajax_get_shipping_form() {
    echo "shipping_name_html = '$html_shipping_name'; \n\r";
    echo "shipping_form_html = '$shipping_form'; \n\r";
    echo "has_submit_button = '{$shipping_data['has_submit_button']}'; \n\r";
+      //echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
+  exit();
+}
+
+function wpsc_ajax_get_payment_form() {
+  global $wpdb, $nzshpcrt_gateways;
+	$paymentname = $_REQUEST['paymentname'];
+	$_SESSION['previous_payment_name'] = $paymentname;
+	$payment_data = wpsc_get_payment_form($paymentname);
+   $html_payment_name = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($payment_data['name']));
+   $payment_form = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($payment_data['form_fields']));
+   echo "payment_name_html = '$html_payment_name'; \n\r";
+   echo "payment_form_html = '$payment_form'; \n\r";
+   echo "has_submit_button = '{$payment_data['has_submit_button']}'; \n\r";
       //echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
   exit();
 }
@@ -1602,6 +1611,10 @@ if (isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 
 
 if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'get_shipping_form')) {
    add_action('admin_init', 'wpsc_ajax_get_shipping_form');
+}
+
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'get_payment_form')) {
+   add_action('admin_init', 'wpsc_ajax_get_payment_form');
 }
 
 
@@ -2041,7 +2054,7 @@ function wpsc_gateway_settings(){
 
 
 
-   if(is_array($_POST['user_defined_name'])) {
+   if(isset($_POST['user_defined_name']) && is_array($_POST['user_defined_name'])) {
       $payment_gateway_names = get_option('payment_gateway_names');
       if(!is_array($payment_gateway_names)) {
         $payment_gateway_names = array();
@@ -2049,19 +2062,21 @@ function wpsc_gateway_settings(){
      $payment_gateway_names = array_merge($payment_gateway_names, (array)$_POST['user_defined_name']);
       update_option('payment_gateway_names', $payment_gateway_names);
    }
-
-   //exit('<pre>'.print_r($GLOBALS['nzshpcrt_gateways'],true).'</pre>');
+$custom_gateways = get_option('custom_gateway_options');
+ // exit('<pre>'.print_r($GLOBALS['nzshpcrt_gateways'],true).'</pre>');
 
    foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-      if($gateway['internalname'] == get_option('payment_gateway'))
+  //if($gateway['internalname'] == get_option('payment_gateway'))
+  if(in_array($gateway['internalname'], $custom_gateways))
       {
+		print_r($gateway);
          if(isset($gateway['submit_function'])) {
             call_user_func_array($gateway['submit_function'], array());
             $changes_made = true;
          }
       }
    }
-   if(($_POST['payment_gw'] != null)) {
+   if((isset($_POST['payment_gw'] ) && $_POST['payment_gw'] != null)) {
      update_option('payment_gateway', $_POST['payment_gw']);
    }
    $sendback = wp_get_referer();
@@ -2074,8 +2089,10 @@ function wpsc_gateway_settings(){
       $sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], $sendback);
    }
    //sexit($sendback);
+   
+//   exit('<pre>'.print_r($_POST).'</pre>');
    wp_redirect($sendback);
-   exit();
+  exit();
 
 }
   if(isset($_REQUEST['wpsc_gateway_settings']) && ($_REQUEST['wpsc_gateway_settings'] == 'gateway_settings')) {

@@ -1012,6 +1012,7 @@ float: left;
 /* shipping options start here */
 div.wpsc_shipping_options{
   width:100%;
+  padding:3px 0;
 }
 .wpsc-shipping-actions{
 visibility:hidden;

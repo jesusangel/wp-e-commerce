@@ -14,13 +14,16 @@ $nzshpcrt_gateways[$num] = array(
 		 /// for modules that may not be present, like curl
 		'extra_modules' => array()
 	),
+	'form' => 'form_paypal_pro',
+	'submit_function' => 'submit_paypal_pro',
+
 	
 	// this may be legacy, not yet decided
 	'internalname' => 'wpsc_merchant_paypal_pro',
 
 	// All array members below here are legacy, and use the code in paypal_multiple.php
-	'form' => 'form_paypal_multiple',
-	'submit_function' => 'submit_paypal_multiple',
+//	'form' => 'form_paypal_multiple',
+//	'submit_function' => 'submit_paypal_multiple',
 	'payment_type' => 'paypal',
 	'supported_currencies' => array(
 		'currency_list' =>  array('AUD', 'BRL', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'SEK', 'SGD', 'THB', 'TWD', 'USD'),
@@ -110,7 +113,8 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$i = 0;
 		$item_total = 0;
 		$tax_total = 0;	
-		$shipping_total = $this->cart_data['shipping_price'];
+	//	$shipping_total = $this->cart_data['shipping_price'];
+		$shipping_total = $this->cart_data['base_shipping'];
 		foreach($this->cart_items as $cart_row) {
 			$cart_items['L_NAME'.$i]		= $cart_row['name'];
 			$cart_items['L_AMT'.$i]			= $this->format_price($cart_row['price']);
@@ -137,7 +141,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		
 		
 
-		//exit("<pre>".print_r($data, true)."</pre>");
+		exit("<pre>".print_r($data, true)."</pre><br /><br /><pre>".print_r($this->cart_data, true)."</pre>");
 
 
 		$this->collected_gateway_data = $data;
@@ -150,7 +154,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 	function submit() {
 		
 		if (get_option('paypal_pro_testmode') == "on"){
-			$paypal_url = "https://api-3t.sandbox.paypal.com/nvp"; // Sandbox testing
+			$paypal_url = "https://api-3t.beta-sandbox.paypal.com/nvp"; // Sandbox testing
 		}else{
 			$paypal_url = "https://api-3t.paypal.com/nvp"; // Live
 		}
@@ -184,7 +188,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 					case 'ERRORCODE':
 					$error_data[$error_number]['error_code'] = $response_value;
 					if(in_array($response_value, $paypal_error_codes)) {
-						$error_data[$error_number]['error_message'] = __('There is a problem with your PayPal account configuration, please contact PayPal for further information.', 'wpsc');
+						$error_data[$error_number]['error_message'] = __('There is a problem with your PayPal account configuration, please contact PayPal for further information.', 'wpsc').$response_value;
 					
 						break 2;
 					}
@@ -227,16 +231,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 	function parse_gateway_notification() {
 		/// PayPal first expects the IPN variables to be returned to it within 30 seconds, so we do this first.
 		$paypal_url = get_option('paypal_multiple_url');
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		$received_values = array();
 		$received_values['cmd'] = '_notify-validate';
@@ -332,8 +326,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		return $price;
 	}
 
-
-	
 }
 
 
@@ -408,14 +400,13 @@ if(in_array('wpsc_merchant_paypal_pro',(array)get_option('custom_gateway_options
 	}
  
 	$gateway_checkout_form_fields[$nzshpcrt_gateways[$num]['internalname']] = "
-	<tr %s>
+	<tr>
 		<td class='wpsc_CC_details'>Credit Card Number *</td>
 		<td>
 			<input type='text' value='' name='card_number' />
-			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr %s>
+	<tr>
 		<td class='wpsc_CC_details'>Credit Card Expiry *</td>
 		<td>
 			<select class='wpsc_ccBox' name='expiry[month]'>
@@ -436,16 +427,14 @@ if(in_array('wpsc_merchant_paypal_pro',(array)get_option('custom_gateway_options
 			<select class='wpsc_ccBox' name='expiry[year]'>
 			".$years."
 			</select>
-			<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr %s>
+	<tr>
 		<td class='wpsc_CC_details'>CVV *</td>
 		<td><input type='text' size='4' value='' maxlength='4' name='card_code' />
-		<p class='validation-error'>%s</p>
 		</td>
 	</tr>
-	<tr %s>
+	<tr>
 		<td>Card Type *</td>
 		<td>
 		<select class='wpsc_ccBox' name='cctype'>
@@ -454,7 +443,6 @@ if(in_array('wpsc_merchant_paypal_pro',(array)get_option('custom_gateway_options
 			<option value='Discover'>Discover</option>
 			<option value='Amex'>Amex</option>
 		</select>
-		<p class='validation-error'>%s</p>
 		</td>
 	</tr>
 ";

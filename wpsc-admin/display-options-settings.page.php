@@ -183,6 +183,30 @@ function wpsc_get_shipping_form($shippingname) {
   return $output;
 }
 
+/*
+ * Get Payment Form for wp-admin 
+ */
+function wpsc_get_payment_form($paymentname) {
+  global $wpdb, $nzshpcrt_gateways;
+  $form = array();
+	foreach($nzshpcrt_gateways as $gateway) {
+		if($gateway["internalname"] != $paymentname) {
+			continue;
+		} else {
+			$form = $gateway;
+		}
+	}
+if($form) {
+		$payment_forms = $form["form"]();
+		$payment_module_name = $form["name"];
+		
+		$output = array('name' => $payment_module_name, 'form_fields' => $payment_forms, 'has_submit_button' => 1);
+  } else {
+		$output = array('name' => '&nbsp;', 'form_fields' => __('To configure a payment module select one on the left.', 'wpsc'), 'has_submit_button' => 0);
+  }
+  return $output;
+}
+
 
 function wpsc_settings_page_update_notification(){
 if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['shipadd']) ) { ?>

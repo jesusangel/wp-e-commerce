@@ -156,7 +156,7 @@ function wpsc_the_checkout_CC_validation(){
 }
 function wpsc_the_checkout_CC_validation_class(){
 	$output = '';
-	if ($_SESSION['wpsc_gateway_error_messages']['card_number'] != ''){
+	if (isset($_SESSION['wpsc_gateway_error_messages']) && $_SESSION['wpsc_gateway_error_messages']['card_number'] != ''){
 		$output = 'class="validation-error"';
 	}
 	return $output;
@@ -453,7 +453,8 @@ class wpsc_checkout {
 		if((count($_SESSION['wpsc_checkout_saved_values']) <= 0) && ($user_ID > 0)) {
 			$_SESSION['wpsc_checkout_saved_values'] = get_user_meta($user_ID, 'wpshpcrt_usr_profile');
 		}
-		$saved_form_data = htmlentities(stripslashes((string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES);
+
+		$saved_form_data = @htmlentities(stripslashes((string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]), ENT_QUOTES);
 		//exit('<pre>'.print_r($this, true).'</pre>');
 		$an_array = '';
 		if(function_exists('wpsc_get_ticket_checkout_set')){
@@ -627,6 +628,7 @@ class wpsc_checkout {
 					$our_user_id = $results->ID;
 				} else {
 					$any_bad_inputs = true;		
+					$our_user_id = '';
 				}
 	}
 	if($our_user_id < 1) {
@@ -826,7 +828,9 @@ function wpsc_gateway_name() {
 		$display_name = $payment_gateway_names[$wpsc_gateway->gateway['internalname']];					    
 	} elseif(isset($selected_gateway_data['payment_type'])) {
 		switch($selected_gateway_data['payment_type']) {
-			case "paypal";
+			case "paypal":
+			case "paypal_pro":
+			case "wpsc_merchant_paypal_pro";
 				$display_name = "PayPal";
 			break;
 			
@@ -843,6 +847,9 @@ function wpsc_gateway_name() {
 				$display_name = "Credit Card";
 			break;
 		}
+	}
+	if($display_name == '') {
+		$display_name = 'Credit Card';
 	}
 	return $display_name;
 }
@@ -887,7 +894,7 @@ function wpsc_gateway_form_fields() {
 		return $output;
 	}
 	if($wpsc_gateway->gateway['internalname'] == 'authorize' || $wpsc_gateway->gateway['internalname'] == 'paypal_payflow'){
-		$output = sprintf($gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']] ,wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
+		$output = @sprintf($gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']] ,wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
 						   wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate'],
 						   wpsc_the_checkout_CCcvv_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_code']
 		);

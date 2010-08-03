@@ -663,7 +663,7 @@ class wpsc_cart {
    {
       global $wpsc_cart;
 
-      if(is_array($wpsc_cart->cart_items))
+      if(is_object($wpsc_cart->cart_items))
       {
          foreach($wpsc_cart->cart_items as &$cart_item)
          {

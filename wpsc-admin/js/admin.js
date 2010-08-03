@@ -994,6 +994,32 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 	});
 });
 	
+jQuery(".wpsc-payment-actions a").livequery(function(){
+	jQuery(this).click( function ()  {
+		var module = jQuery(this).attr('rel');
+		console.log(module);
+		jQuery.ajax({
+			method: "post",
+			url: "index.php",
+			data: "wpsc_admin_action=get_payment_form&paymentname="+module,
+			success: function(returned_data){
+				console.log(returned_data);
+				eval(returned_data);
+				//jQuery(".gateway_settings").children(".form-table").html(html)
+				jQuery('.gateway_settings h3.hndle').html(payment_name_html);
+				jQuery("td.gateway_settings table.form-table").html('<tr><td><input type="hidden" name="paymentname" value="'+module+'" /></td></tr>'+payment_form_html);
+				if(has_submit_button != '') {
+					jQuery('.gateway_settings div.submit').css('display', 'block');
+				} else {
+					jQuery('.gateway_settings div.submit').css('display', 'none');
+				}			
+			}
+		});
+		return false;
+
+	});
+});
+	
 	jQuery('#addweightlayer').livequery(function(){
 		jQuery(this).click(function(){
 		jQuery(this).parent().append("<div class='wpsc_newlayer'><tr class='rate_row'><td><i style='color:grey'>"+TXT_WPSC_IF_WEIGHT_IS+"</i><input type='text' name='weight_layer[]' size='10'> <i style='color:grey'>"+TXT_WPSC_AND_ABOVE+"</i></td><td><input type='text' name='weight_shipping[]' size='10'>&nbsp;&nbsp;<a href='' class='delete_button nosubmit' >"+TXT_WPSC_DELETE+"</a></td></tr></div>");
