@@ -199,7 +199,7 @@ include_once(WPSC_FILE_PATH.'/widgets/latest_product_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/price_range_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
 //include_once(WPSC_FILE_PATH.'/widgets/api_key_widget.php');
-include_once(WPSC_FILE_PATH.'/widgets/category_widget.28.php');
+include_once(WPSC_FILE_PATH.'/widgets/category_widget.php');
 
 
 include_once(WPSC_FILE_PATH.'/image_processing.php');
