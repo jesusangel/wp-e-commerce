@@ -141,7 +141,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		
 		
 
-		exit("<pre>".print_r($data, true)."</pre><br /><br /><pre>".print_r($this->cart_data, true)."</pre>");
+//		exit("<pre>".print_r($data, true)."</pre><br /><br /><pre>".print_r($this->cart_data, true)."</pre>");
 
 
 		$this->collected_gateway_data = $data;
