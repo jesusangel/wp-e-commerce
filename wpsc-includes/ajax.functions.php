@@ -638,7 +638,7 @@ function wpsc_submit_checkout() {
       $wpdb->query($sql);
 
       $purchase_log_id = $wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid` IN('{$sessionid}') LIMIT 1") ;
-      //exit('PurchLog id'.$purchase_log_id);
+   //   exit('PurchLog id'.$purchase_log_id);
       $wpsc_checkout->save_forms_to_db($purchase_log_id);
       $wpsc_cart->save_to_db($purchase_log_id);
       $wpsc_cart->submit_stock_claims($purchase_log_id);
@@ -654,8 +654,6 @@ function wpsc_submit_checkout() {
       } else {
          $seperator = "&";
       }
-
-
 
       /// submit to gateway
       print_r($current_gateway_data);
