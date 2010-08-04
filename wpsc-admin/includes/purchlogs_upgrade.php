@@ -43,6 +43,7 @@ function wpsc_select_options_purchlogs_fix($id){
 		<option value='billinglastname'>Billing Last Name</option>
 		<option value='billingaddress'>Billing Address</option>
 		<option value='billingcity'>Billing City</option>
+		<option value='billingstate'>Billing State</option>
 		<option value='billingcountry'>Billing Country</option>
 		<option value='billingemail'>Billing Email</option>
 		<option value='billingphone'>Billing Phone</option>

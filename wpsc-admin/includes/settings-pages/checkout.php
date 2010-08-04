@@ -16,7 +16,7 @@ $form_types = Array("Text" => "text",
 	"Checkbox" => "checkbox"
 );
 
-$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
+$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingstate','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
 
 update_option('wpsc_checkout_form_fields', $form_types);
 if(get_option('wpsc_checkout_form_fields') == ''){

@@ -332,7 +332,7 @@ function wpsc_admin_dynamic_js() {
 	$hidden_boxes = get_option('wpsc_hidden_box');
 
 	$form_types1 = get_option('wpsc_checkout_form_fields');
-	$unique_names1 = Array('billingfirstname', 'billinglastname', 'billingaddress', 'billingcity',
+	$unique_names1 = Array('billingfirstname', 'billinglastname', 'billingaddress', 'billingcity', 'billingstate',
 	'billingcountry', 'billingemail', 'billingphone', 'billingpostcode',
 	'delivertoafriend', 'shippingfirstname', 'shippinglastname', 'shippingaddress',
 	'shippingcity', 'shippingstate', 'shippingcountry', 'shippingpostcode');
