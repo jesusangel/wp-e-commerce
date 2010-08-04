@@ -1,126 +1,186 @@
 <?php
-/*
- * Latest Product widget function, 
- * @todo make this use the new widget API
- * takes the settings, works out if there is anything to display, if so, displays it	
+
+
+
+/**
+ * Latest Product widget class
+ *
+ * Takes the settings, works out if there is anything to display, if so, displays it.
+ *
+ * @since 3.8
  */
-function widget_latest_products($args) {
-	global $wpdb, $table_prefix;
-	extract($args);
-  $options = get_option('wpsc-widget_latest_products');   
-	$title = empty($options['title']) ?__('Latest Product', 'wpsc') : $options['title'];
-	echo $before_widget."<br />";
-	$full_title = $before_title . $title . $after_title;
-	echo $full_title."<br />";
+class WP_Widget_Latest_Products extends WP_Widget {
 	
-	nzshpcrt_latest_product();
-	echo $after_widget;
+	/**
+	 * Widget Constuctor
+	 */
+	function WP_Widget_Latest_Products() {
+
+		$widget_ops = array(
+			'classname'   => 'widget_wpsc_latest_products',
+			'description' => __( 'Latest Products Widget', 'wpsc' )
+		);
+		
+		$this->WP_Widget( 'wpsc_latest_products', __( 'Latest Products', 'wpsc' ), $widget_ops );
+	
+	}
+
+	/**
+	 * Widget Output
+	 *
+	 * @param $args (array)
+	 * @param $instance (array) Widget values.
+	 */
+	function widget( $args, $instance ) {
+		
+		global $wpdb, $table_prefix;
+		
+		extract( $args );
+		
+		echo $before_widget;
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Latest Products' ) : $instance['title'] );
+		if ( $title ) {
+			echo $before_title . $title . $after_title;
+		}
+		nzshpcrt_latest_product();
+		echo $after_widget;
+	
+	}
+
+	/**
+	 * Update Widget
+	 *
+	 * @param $new_instance (array) New widget values.
+	 * @param $old_instance (array) Old widget values.
+	 *
+	 * @return (array) New values.
+	 */
+	function update( $new_instance, $old_instance ) {
+	
+		$instance = $old_instance;
+		$instance['title']  = strip_tags( $new_instance['title'] );
+		$instance['number'] = (int)$new_instance['number'];
+
+		return $instance;
+		
+	}
+
+	/**
+	 * Widget Options Form
+	 *
+	 * @param $instance (array) Widget values.
+	 */
+	function form( $instance ) {
+		
+		global $wpdb;
+		
+		// Defaults
+		$instance = wp_parse_args( (array)$instance, array( 'title' => '', 'number' => 5 ) );
+		
+		// Values
+		$title  = esc_attr( $instance['title'] );
+		$number = (int)$instance['number'];
+		
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of products to show', 'wpsc' ); ?></label>
+			<select id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>">
+				<?php
+				for ( $i = 1; $i <= 30; $i++ ) {
+					$selected = '';
+					if ( $i == $number ) $selected = ' selected="selected"';
+					echo '<option' . $selected . ' value="' . $i . '">' . $i . '</option>';
+				}
+				?>
+			</select>
+		</p>
+		<?php
+	}
+
 }
- 
-/*
+
+add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Widget_Latest_Products");' ) );
+
+/**
  * Latest Product Widget content function
- * Displays the products
- * @todo make this use wp_query and a theme file
+ *
+ * Displays the latest products.
+ *
+ * @todo Options need to be passed as a paramter from the widget - is the $input paramter is needed? Would be better if expect an array of arguments.
+ * @todo Make this use wp_query and a theme file (if no theme file present there should be a default output).
+ * @todo Remove marketplace theme specific code and maybe replce with a filter for the image output?
+ * @todo Should this latest products function live in a different file, seperate to the widget logic?
+ *
+ * Changes made in 3.8 that may affect users:
+ *
+ * 1. The product title link text does now not have a bold tag, it should be styled via css.
+ * 2. <br /> tags have been ommitted. Padding and margins should be applied via css.
+ * 3. Each product is enclosed in a <div> with a 'wpec-latest-product' class.
+ * 4. The product list is enclosed in a <div> with a 'wpec-latest-products' class.
  */
-function nzshpcrt_latest_product($input = null) {
+function nzshpcrt_latest_product( $input = null ) {
+	
 	global $wpdb;
-	$siteurl = get_option('siteurl');
-	$options = get_option("wpsc-widget_latest_products");
-	$number = ($options["number"]==0)?5:$options["number"];
-	//$latest_product = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN ('1') ORDER BY `id` DESC LIMIT ".$number, ARRAY_A);
-	$latest_products = get_posts(array(
-		'post_type' => 'wpsc-product',
-		'posts_per_page' => 1, 
-		'orderby' => 'post_date',
+	
+	$siteurl = get_option( 'siteurl' );
+	$options = get_option( 'wpsc-widget_latest_products' );
+	$number  = ( $options['number'] == 0 ) ? 5 : $options['number'];
+	
+	$latest_products = get_posts( array(
+		'post_type'   => 'wpsc-product',
+		'numberposts' => $number, 
+		'orderby'     => 'post_date',
 		'post_parent' => 0,
 		'post_status' => 'all',
-		'order' => "DESC"
-	));
-	$latest_product = $latest_products[0];
-	//exit( "<pre>".print_r($latest_product,true)."</pre>");
-	if($latest_product != null) {
-		$output = "<div>";		
-		$output.="<div>";
-		$output .= "	<div class='item_image'>";
- 		$output.="			<a href='".wpsc_product_url($latest_product->ID, null)."'>";
-	 	$attached_images = (array)get_posts(array(
-			'post_type' => 'attachment',
-			'numberposts' => 1,
-			'post_status' => null,
-			'post_parent' => $latest_product->ID,
-			'orderby' => 'menu_order',
-			'order' => 'ASC'
-		));
-		$attached_image = $attached_images[0]; 
-		if(($attached_image->ID > 0)) {
-			if(get_option('wpsc_selected_theme') == 'marketplace') {
-				$src = WPSC_IMAGE_URL.$special['image'];
-						
-				$output .= "	<img src='". wpsc_product_image($attached_image->ID, 100, 75)."' title='".$latest_product->post_title."' alt='".$latest_product->post_title."' />";
-				
-			} else {
-				$output .= "	<img src='". wpsc_product_image($attached_image->ID, 45, 25)."' title='".$latest_product->post_title."' alt='".$latest_product->post_title."' /><br />";
+		'order'       => 'DESC'
+	) );
+	
+	$output = '';
+	
+	if ( count( $latest_products ) > 0 ) {
+		$output .= '<div class="wpec-latest-products">';		
+		foreach ( $latest_products as $latest_product ) {
+			$output .= '<div class="wpec-latest-product">';
+			
+			// Image
+			$output .= '<div class="item_image">';
+			$output .= '<a href="' . wpsc_product_url( $latest_product->ID, null ) . '">';
+			$attached_images = (array)get_posts( array(
+				'post_type'   => 'attachment',
+				'numberposts' => 1,
+				'post_status' => null,
+				'post_parent' => $latest_product->ID,
+				'orderby'     => 'menu_order',
+				'order'       => 'ASC'
+			) );
+			$attached_image = $attached_images[0]; 
+			if ( $attached_image->ID > 0 ) {
+				if ( get_option( 'wpsc_selected_theme' ) == 'marketplace' ) {
+					$src = WPSC_IMAGE_URL . $special['image'];
+					$output .= '<img src="' . wpsc_product_image( $attached_image->ID, 100, 75 ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
+				} else {
+					$output .= '<img src="' . wpsc_product_image( $attached_image->ID, 45, 25 ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
+				}
 			}
-		} else {
-			//$output .= "<img src='$siteurl/wp-content/plugins/wp-shopping-cart/no-image-uploaded.gif' title='".$special['name']."' alt='".$special['name']."' /><br />";
-		}
+			$output .= '</a>';
+			$output .= '</div>';
+			
+			// Link
+			$output .= '<a href="' . wpsc_product_url( $latest_product->ID, null ) . '" class="wpec-product-title">';
+			$output .= stripslashes( $latest_product->post_title );
+			$output .= '</a>';
+			$output .= '</div>';
 		
- 		$output .= "		</a>";
-		$output .= "	</div>";
-		
- 		$output .= "	<a href='".wpsc_product_url($latest_product->ID, null)."'>";
-		$output .= "		<strong>".stripslashes($latest_product->post_title)."</strong><br />";
-		$output .= "	</a>";
-		$output .= "</div>";
-	
-		$output .= "</div>";
-	} else {
-		$output = '';
-	}
-	echo $input.$output;
-}
-
-/*
- * Latest Product Widget control function
- * Displays the products
- */
-function widget_latest_products_control() {
-  $option_name = 'wpsc-widget_latest_products';  // because I want to only change this to reuse the code.
-	$options = $newoptions = get_option($option_name);
-	if ( isset($_POST[$option_name]) ) {
-		$newoptions['title'] = strip_tags(stripslashes($_POST[$option_name]));
-		$newoptions['number'] = (absint($_POST['wpsc_lpwn']) == 0)? 5:absint($_POST['wpsc_lpwn']);
-
-	}
-	if ( $options != $newoptions ) {
-		$options = $newoptions;
-		update_option($option_name, $options);
-	}
-	$title = htmlspecialchars($options['title'], ENT_QUOTES);
-	
-	echo "<p>\n\r";
-	echo "  <label for='{$option_name}'>"._e('Title:')."<input class='widefat' id='{$option_name}' name='{$option_name}' type='text' value='{$title}' /></label>\n\r";
-	echo "  <label for='wpsc_lpwn'>"._e('Number of products to show:')."
-			<select id='wpsc_lpwn' name='wpsc_lpwn'>";
-	for($i = 1; $i <= 30; $i++){
-		$selected=''; if ($i==$options["number"]) $selected=" SELECTED ";  echo "<option".$selected." value='".$i."'>".$i."</option>";
 		}
-	echo "	</select>
-			</label>\n\r";
-
-	echo "</p>\n\r";
-}
-
-/*
- * Latest Product Widget init function
- * Displays the products
- */
-function widget_latest_products_init() {
-	if(function_exists('wp_register_sidebar_widget')) {
-		wp_register_sidebar_widget('widget_latest_products', __('Latest Products', 'wpsc'), 'widget_latest_products');
-		wp_register_widget_control('widget_latest_products', __('Latest Products', 'wpsc'), 'widget_latest_products_control');
+		$output .= "</div>";
 	}
-	return;
+	
+	echo $input . $output;
+	
 }
- add_action('plugins_loaded', 'widget_latest_products_init');
- ?>
+
+?>
