@@ -467,19 +467,18 @@ function wpsc_obtain_the_title() {
 	    $product_list = array();
 	    $full_product_name = $wpsc_title_data['product'][$product_name];
 	  } else if($product_name != '') {
-			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_url_name']}' ) ORDER BY `id` DESC LIMIT 1");
-			$full_product_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
+			$product_id = $wp_query->post->ID;
+			$full_product_name = $wpdb->get_var("SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1");
 			$wpsc_title_data['product'][$product_name] = $full_product_name;
 		} else {
 		  $product_id = absint($_GET['product_id']);
-			$product_name = $wpdb->get_var("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `product_id` IN ( '{$product_id}' ) LIMIT 1");
-			
-			$full_product_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='{$product_id}' LIMIT 1");
+			$product_name = $wpdb->get_var("SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1");
+			$full_product_name = $wpdb->get_var("SELECT `post_title` FROM `$wpdb->posts` WHERE `ID`='{$product_id}' LIMIT 1");
 			$wpsc_title_data['product'][$product_name] = $full_product_name;
 		}
   }
 
-  //exit("<pre>".print_r($wp_query,true)."</pre>");
+//  exit("<pre>".print_r($wp_query->post->ID,true)."</pre>");
   if(isset($full_product_name ) && ($full_product_name != null)) {
   	$output = htmlentities(stripslashes($full_product_name), ENT_QUOTES, 'UTF-8');
   }

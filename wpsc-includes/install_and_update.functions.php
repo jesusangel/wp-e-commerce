@@ -523,7 +523,7 @@ function wpsc_add_checkout_fields() {
 	( '".__('Last Name', 'wpsc')."', 'text', '1', '1', '', '1', 3,'billinglastname'),
 	( '".__('Address', 'wpsc')."', 'address', '1', '0', '', '1', 4,'billingaddress'),
 	( '".__('City', 'wpsc')."', 'city', '1', '0', '', '1', 5,'billingcity'),
-	( '".__('State', 'wpsc')."', 'text', '0', '0', '', '1', 15,'billingstate'),
+	( '".__('State', 'wpsc')."', 'text', '0', '0', '', '1', 6,'billingstate'),
 	( '".__('Country', 'wpsc')."', 'country', '1', '0', '', '1', 7,'billingcountry'),
 	( '".__('Postal Code', 'wpsc')."', 'text', '0', '0', '', '1', 8,'billingpostcode'),
 	( '".__('Email', 'wpsc')."', 'email', '1', '1', '', '1', 9,'billingemail'),
