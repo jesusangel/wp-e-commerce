@@ -1285,7 +1285,7 @@ function wpsc_product_image_forms($product_data='') {
    <div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
       <h3 class='hndle'> <?php echo __('Product Images', 'wpsc'); ?></h3>
       <div class='inside'>
-         <p><strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage your images"><?php echo __('Manage your thumbnails', 'wpsc');?></a></strong></p>
+         <p><strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage your images"><?php echo __('Product Images', 'wpsc');?></a></strong></p>
          <?php
          edit_multiple_image_gallery($product_data);
          ?>
