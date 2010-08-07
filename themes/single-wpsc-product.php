@@ -146,7 +146,7 @@ get_header();
 						</div>
 						<?php /** the variation group HTML and loop ends here */?>
 					</div>
-									
+						<br style="clear:both" />
 							<div class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>
 								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo __('Donation', 'wpsc'); ?>:</label>
@@ -210,11 +210,7 @@ get_header();
 			echo fancy_notifications();
 		}
 		?>		
-						<?php else : ?>
-							<p class='soldout'><?php echo __('This product has sold out.', 'wpsc'); ?></p>
-					<?php endif ; ?>
-					</form>
-										
+		
 					<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
 						<div class="wpsc_stock_count">
 							<strong><?php echo wpsc_the_vargrp_name(); ?></strong>
@@ -224,9 +220,22 @@ get_header();
 									<?php echo wpsc_the_variation_name(); ?>: <?php  echo wpsc_the_variation_stock(); ?> available
 								</div>
 							<?php endwhile; ?>
-							</select> 
 						</div>
 					<?php endwhile; ?>
+					<?php if(!wpsc_have_variations() && wpsc_product_remaining_stock()) : ?>
+					<div class="wpsc_stock_count">
+						<strong><?php echo wpsc_the_product_title(); ?></strong>
+						<div class="wpsc_stock_count_row">
+							<?php echo wpsc_product_remaining_stock(); ?> available
+						</div>
+					</div>
+					<?php endif; ?>
+						<?php else : ?>
+							<p class='soldout'><?php echo __('This product has sold out.', 'wpsc'); ?></p>
+					<?php endif ; ?>
+					</form>
+					
+					
 										
 					<?php if((get_option('hide_addtocart_button') == 0) && (get_option('addtocart_or_buynow')=='1')) : ?>
 						<?php echo wpsc_buy_now_button(wpsc_the_product_id()); ?>

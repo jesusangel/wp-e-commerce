@@ -162,21 +162,13 @@ div.product_and_button_settings {
   
 }
 
-div.themes_and_appearance {
+div#themes_and_appearance {
 	border: 1px solid #DFDFDF;
-  width: 254px;
-  padding: 11px 12px;
-  margin:30px 0px 0px -58px;
+  width: 360px;
   float: left;
 }
 
-
-div.themes_and_appearance h4{
-  margin: 0px 0px 0px 0px;
-  
-}
-
-div.themes_and_appearance p {
+div#themes_and_appearance p {
   font-size: 11px;
 }
 
@@ -184,12 +176,12 @@ span.display-path {
 color:#666666;
 }
 
-div.themes_and_appearance ol {
+div#themes_and_appearance ol {
   font-size: 11px;
   list-style-type:decimal;
   list-style-position:inside;
 }
 
-div.themes_and_appearance ol li {
+div#themes_and_appearance ol li {
   font-size: 11px;
 }

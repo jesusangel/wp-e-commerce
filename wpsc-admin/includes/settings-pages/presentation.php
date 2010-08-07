@@ -238,9 +238,12 @@ global $wpdb;
 			</table>
 		</div>
 
-
-		<div class='themes_and_appearance'>
-			<h4><?php	 _e("Theme Customisation", 'wpsc');	?></h4>
+<div id="poststuff" class="metabox-holder">
+		<div id="themes_and_appearance" class='postbox'>
+			<h3 class="hndle"><span><?php _e("Theme Settings", 'wpsc'); ?></span></h3>
+			<div class="inside"><?php
+				$style = (wpsc_count_themes_in_uploads_directory() > 0) ? 'padding:1px 2px; color:black' : 'padding:1px 2px; color:red';
+			?>
 			  <?php
 			  if(isset($_SESSION['wpsc_themes_copied']) && ($_SESSION['wpsc_themes_copied'] == true)) {
 					?>
@@ -251,19 +254,14 @@ global $wpdb;
 					$_SESSION['wpsc_themes_copied'] = false;
 			  }
 			  ?>
+			  <p><?php _e('The theme files for your shop are presently located in the following folder: ')?></p>
+			  <p style="<?php echo $style; ?>">URL: <?php echo "/".str_replace(ABSPATH, "", WPSC_THEMES_PATH).WPSC_THEME_DIR."/"; ?></p>
+			
 			<?php
-			if(wpsc_count_themes_in_uploads_directory() > 0) {
-				?>
-					<p><?php _e("Theming your stores appearance is easy.");?></p>
-					<p>
-						<?php _e("You just need to edit the appropriate files in the following location.", 'wpsc'); ?><br /><br />
-						<span class='display-path'><strong><?php _e("Path:", 'wpsc'); ?></strong> <?php echo str_replace(ABSPATH, "", WPSC_THEMES_PATH).WPSC_THEME_DIR."/"; ?> </span>
-					</p>
-					<p><strong><?php _e("To create a new theme:", 'wpsc'); ?></strong></p>
-					<ol>
-						<li><?php _e("Copy the default directory and rename it 'newTheme'"); ?></li>
-						<li><?php _e("Rename the default.css file inside the 'newTheme' directory to 'newTheme.css'"); ?></li>
-					</ol>
+				if(wpsc_count_themes_in_uploads_directory() > 0) {
+			?>
+				<p><?php _e('You have moved the default theme files to the WordPress themes folder.  Your theme files are locatable at the above URL.'); ?></p>
+				
 				<?php
 			} else if(!is_writable(WPSC_THEMES_PATH)) {
 				?>
@@ -272,14 +270,23 @@ global $wpdb;
 					<span class='display-path'><strong><?php _e("Path:", 'wpsc'); ?></strong> <?php echo str_replace(ABSPATH, "", WPSC_THEMES_PATH).WPSC_THEME_DIR."/"; ?> </span></p>
 				<?php
 			} else {
+					$class = '';
 				?>
-					<p><?php _e("Your theme files have not been moved. Until your theme files have been moved, we have disabled automatic upgrades.", 'wpsc');?>
-					<p><?php printf(__("Click here to <a href='%s'>Move your files</a> to a safe place", 'wpsc'), wp_nonce_url("admin.php?wpsc_admin_action=copy_themes", 'copy_themes') ); ?> </p>
+					<p><?php _e("To ensure that your theme files are safe from upgrades, we recommend moving them to the wp-content/themes folder.  We have made this incredibly easy for you, all you have to do is click the \"Move Theme Files\" button below.", 'wpsc');?>						
+<br style="clear:both" />
+<br style="clear:both" />
+
+					<p><?php printf(__("<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc'), wp_nonce_url("admin.php?wpsc_admin_action=copy_themes", 'copy_themes') ); ?> </p>			<br style="clear:both" />
+
 				<?php
 			}
 			?>
-			<p><a href='http://www.instinct.co.nz/e-commerce/docs/'><?php _e("Read Tutorials", 'wpsc'); ?></a></p>
+			
+			<!--<p><a href='http://www.instinct.co.nz/e-commerce/docs/'><?php _e("Read Tutorials", 'wpsc'); ?></a></p>-->
+			<br style="clear:both" />
+			</div>
 		</div>
+	</div>
 		
 		<div style='clear:both;'></div>
 		

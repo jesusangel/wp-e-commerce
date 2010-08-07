@@ -440,8 +440,9 @@ function wpsc_product_has_stock($id = null) {
 	} else {
 		$id = get_the_ID();
 	}
-	$is_limited_stock = get_post_meta($id, '_wpsc_limited_stock', true);
-	if($is_limited_stock == 1) {
+	$is_limited_stock = get_post_meta($id, '_wpsc_stock', true);
+	
+	if(is_numeric($is_limited_stock) && $is_limited_stock < 1) {
 		return false;
 	} else {
 		return true;
@@ -461,8 +462,9 @@ function wpsc_product_remaining_stock($id = null){
 	} else {
 		$id = get_the_ID();
 	}
-	$is_limited_stock = get_post_meta($id, '_wpsc_limited_stock', true);
-	if(($is_limited_stock == 1)) {
+	$is_limited_stock = get_post_meta($id, '_wpsc_stock', true);
+	
+	if(is_numeric($is_limited_stock)) {
 		$product_stock = get_post_meta($id, '_wpsc_stock', true);
 		return $product_stock;
 	} else {
