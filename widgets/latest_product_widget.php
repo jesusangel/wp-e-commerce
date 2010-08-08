@@ -42,7 +42,7 @@ class WP_Widget_Latest_Products extends WP_Widget {
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
-		nzshpcrt_latest_product();
+		nzshpcrt_latest_product( array( 'number' => $instance['number'] ) );
 		echo $after_widget;
 	
 	}
@@ -110,9 +110,8 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
  *
  * Displays the latest products.
  *
- * @todo Options need to be passed as a paramter from the widget - is the $input paramter is needed? Would be better if expect an array of arguments.
  * @todo Make this use wp_query and a theme file (if no theme file present there should be a default output).
- * @todo Remove marketplace theme specific code and maybe replce with a filter for the image output?
+ * @todo Remove marketplace theme specific code and maybe replce with a filter for the image output? (not required if themeable as above)
  * @todo Should this latest products function live in a different file, seperate to the widget logic?
  *
  * Changes made in 3.8 that may affect users:
@@ -121,14 +120,17 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
  * 2. <br /> tags have been ommitted. Padding and margins should be applied via css.
  * 3. Each product is enclosed in a <div> with a 'wpec-latest-product' class.
  * 4. The product list is enclosed in a <div> with a 'wpec-latest-products' class.
+ * 5. Function now expect a single paramter with an array of options (used to be a string which prepended the output).
  */
-function nzshpcrt_latest_product( $input = null ) {
+function nzshpcrt_latest_product( $args = null ) {
 	
 	global $wpdb;
 	
+	$args = wp_parse_args( (array)$args, array( 'number' => 5 ) );
+	
 	$siteurl = get_option( 'siteurl' );
 	$options = get_option( 'wpsc-widget_latest_products' );
-	$number  = ( $options['number'] == 0 ) ? 5 : $options['number'];
+	$number  = (int)$args['number'];
 	
 	$latest_products = get_posts( array(
 		'post_type'   => 'wpsc-product',
@@ -179,7 +181,7 @@ function nzshpcrt_latest_product( $input = null ) {
 		$output .= "</div>";
 	}
 	
-	echo $input . $output;
+	echo $output;
 	
 }
 
