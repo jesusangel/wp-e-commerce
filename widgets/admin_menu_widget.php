@@ -1,37 +1,118 @@
 <?php
-function widget_admin_menu($args){
-  global $wpdb, $table_prefix, $current_user;
-	get_currentuserinfo();
-  if($current_user->wp_capabilities['administrator'] == 1) {
-		extract($args);
-		//$options = get_option('widget_wp_shopping_cart');
-		$title = empty($options['title']) ? __(__('Admin Menu', 'wpsc')) : $options['title'];
-		echo $before_widget;
-		$full_title = $before_title . $title . $after_title;
-		echo $full_title;
-		admin_menu();
-		echo $after_widget;
-  
-  }
-}
 
-function widget_admin_menu_control() { return null; }
 
-function widget_admin_menu_init() {
-	if(function_exists('wp_register_sidebar_widget')) {
-		wp_register_sidebar_widget('widget_admin_menu', __('Admin Menu', 'wpsc'), 'widget_admin_menu');
-		#register_widget_control('Admin Menu', 'widget_admin_menu', 300, 90);
+
+/**
+ * Admin Menu widget class
+ *
+ * @since 3.8
+ */
+class WP_Widget_Admin_Menu extends WP_Widget {
+	
+	/**
+	 * Widget Constuctor
+	 */
+	function WP_Widget_Admin_Menu() {
+
+		$widget_ops = array(
+			'classname'   => 'widget_wpsc_admin_menu',
+			'description' => __( 'Admin Menu Widget', 'wpsc' )
+		);
+		
+		$this->WP_Widget( 'wpsc_admin_menu', __( 'Admin Menu', 'wpsc' ), $widget_ops );
+	
 	}
-	return;
- }
-add_action('plugins_loaded', 'widget_admin_menu_init');
 
-function admin_menu() {
-	$siteurl = get_option('siteurl');
-	echo "<ul id='set1'>";
-	echo "<li><a title='People come here to write new pages' href='".$siteurl."/wp-admin/page-new.php'>Add Pages</a></li>";
-	echo "<li><a title='People come here to add products' href='".$siteurl."/wp-admin/admin.php?page=wpsc-edit-products'>Add Products</a></li>";
-	echo "<li><a title='People come here to change themes and widgets settings' href='".$siteurl."/wp-admin/themes.php'>Presentation</a></li>";
-	echo "</ul>";
+	/**
+	 * Widget Output
+	 *
+	 * @param $args (array)
+	 * @param $instance (array) Widget values.
+	 *
+	 * @todo Add individual capability checks for each menu item rather than just manage_options.
+	 */
+	function widget( $args, $instance ) {
+		
+		global $wpdb, $table_prefix;
+		
+		extract( $args );
+	
+		if ( current_user_can( 'manage_options' ) ) {
+			echo $before_widget;
+			$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Admin Menu' ) : $instance['title'] );
+			if ( $title ) {
+				echo $before_title . $title . $after_title;
+			}
+			admin_menu();
+			echo $after_widget;
+		}
+	
+	}
+
+	/**
+	 * Update Widget
+	 *
+	 * @param $new_instance (array) New widget values.
+	 * @param $old_instance (array) Old widget values.
+	 *
+	 * @return (array) New values.
+	 */
+	function update( $new_instance, $old_instance ) {
+	
+		$instance = $old_instance;
+		$instance['title']  = strip_tags( $new_instance['title'] );
+
+		return $instance;
+		
+	}
+
+	/**
+	 * Widget Options Form
+	 *
+	 * @param $instance (array) Widget values.
+	 */
+	function form( $instance ) {
+		
+		global $wpdb;
+		
+		// Defaults
+		$instance = wp_parse_args( (array)$instance, array( 'title' => '' ) );
+		
+		// Values
+		$title  = esc_attr( $instance['title'] );
+		
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+		</p>
+		<?php
+		
+	}
+
 }
+
+add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Widget_Admin_Menu");' ) );
+
+/**
+ * Admin Menu Widget content function
+ *
+ * Displays admin links.
+ *
+ * @todo Add individual capability checks for each menu item.
+ */
+function admin_menu( $args = null ) {
+		
+	if ( current_user_can( 'manage_options' ) ) {
+		echo '<ul>';
+		echo '<li><a title="People come here to write new pages" href="' . admin_url( 'post-new.php?post_type=page' ) . '">Add Pages</a></li>';
+		echo '<li><a title="People come here to add products" href="' . admin_url( 'admin.php?page=wpsc-edit-products' ) . '">Add Products</a></li>';
+		echo '<li><a title="People come here to change themes and widgets settings" href="' . admin_url( 'themes.php' ) . '">Presentation</a></li>';
+		echo '</ul>';
+	}
+	
+}
+
+
+
 ?>
