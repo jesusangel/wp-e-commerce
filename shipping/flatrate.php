@@ -61,6 +61,7 @@ class flatrate {
 	 * @return unknown
 	 */
 	function getForm() {
+
 		$shipping = get_option('flat_rates');
 		$output = "<tr><td colspan='2'>" . __('If you do not wish to ship to a particular region, leave the field blank. To offer free shipping to a region, enter 0.', 'wpsc') . "</td>";
 		$output .= "<tr><td colspan='1'><strong>Base Local</strong></td>";
@@ -88,6 +89,7 @@ class flatrate {
 		$output .= "<tr class='rate_row'><td>Europe</td><td>$<input type='text' size='4' name='shipping[europe]'	value='{$shipping['europe']}'></td></tr>";
 		$output .= "<tr class='rate_row'><td>Africa</td><td>$<input type='text' size='4' name='shipping[africa]'	value='{$shipping['africa']}'></td></tr>";
 		return $output;
+
 	}
 
 
