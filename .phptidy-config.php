@@ -19,5 +19,6 @@
 	$add_doctags = TRUE;
 	$fix_docblock_format = TRUE;
 	$fix_docblock_space = TRUE;
+	$add_blank_lines = FALSE;
 	
 ?>
