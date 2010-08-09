@@ -1,44 +1,101 @@
 <?php
-include_once(WPSC_FILE_PATH.'/tagging_functions.php');
 
-function widget_product_tag($args)
-  {
-  global $wpdb, $table_prefix;
-  extract($args);
-  $options = get_option('wpsc-widget_product_tag');  
-  $title = empty($options['title']) ? __(__('Product Tags', 'wpsc')) : $options['title'];
-  echo $before_widget; 
-  $full_title = $before_title . $title . $after_title;
-  echo $full_title;
-  product_tag_cloud();
-  echo $after_widget;
-  }
 
-function widget_product_tag_control() {
-  $option_name = 'wpsc-widget_product_tag';  // because I want to only change this to reuse the code.
-	$options = $newoptions = get_option($option_name);
-	if ( isset($_POST[$option_name]) ) {
-		$newoptions['title'] = strip_tags(stripslashes($_POST[$option_name]));
-	}
-	if ( $options != $newoptions ) {
-		$options = $newoptions;
-		update_option($option_name, $options);
-	}
-	$title = htmlspecialchars($options['title'], ENT_QUOTES);
+
+include_once( WPSC_FILE_PATH . '/tagging_functions.php' );
+
+
+
+/**
+ * Product Tags widget class
+ *
+ * @since 3.8
+ */
+class WP_Widget_Product_Tags extends WP_Widget {
 	
-	echo "<p>\n\r";
-	echo "  <label for='{$option_name}'>"._e('Title:')."<input class='widefat' id='{$option_name}' name='{$option_name}' type='text' value='{$title}' /></label>\n\r";
-	echo "</p>\n\r";
+	/**
+	 * Widget Constuctor
+	 */
+	function WP_Widget_Product_Tags() {
+
+		$widget_ops = array(
+			'classname'   => 'widget_wpsc_product_tags',
+			'description' => __( 'Product Tags Widget', 'wpsc' )
+		);
+		
+		$this->WP_Widget( 'wpsc_product_tags', __( 'Product Tags', 'wpsc' ), $widget_ops );
+	
+	}
+
+	/**
+	 * Widget Output
+	 *
+	 * @param $args (array)
+	 * @param $instance (array) Widget values.
+	 *
+	 * @todo Add individual capability checks for each menu item rather than just manage_options.
+	 */
+	function widget( $args, $instance ) {
+		
+		global $wpdb, $table_prefix;
+		
+		extract( $args );
+	
+		echo $before_widget;
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Product Tags' ) : $instance['title'] );
+		if ( $title ) {
+			echo $before_title . $title . $after_title;
+		}
+		product_tag_cloud();
+		echo $after_widget;
+
+	}
+
+	/**
+	 * Update Widget
+	 *
+	 * @param $new_instance (array) New widget values.
+	 * @param $old_instance (array) Old widget values.
+	 *
+	 * @return (array) New values.
+	 */
+	function update( $new_instance, $old_instance ) {
+	
+		$instance = $old_instance;
+		$instance['title']  = strip_tags( $new_instance['title'] );
+
+		return $instance;
+		
+	}
+
+	/**
+	 * Widget Options Form
+	 *
+	 * @param $instance (array) Widget values.
+	 */
+	function form( $instance ) {
+		
+		global $wpdb;
+		
+		// Defaults
+		$instance = wp_parse_args( (array)$instance, array( 'title' => '' ) );
+		
+		// Values
+		$title  = esc_attr( $instance['title'] );
+		
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+		</p>
+		<?php
+		
+	}
+
 }
 
- function widget_product_tag_init() {
-   if(function_exists('wp_register_sidebar_widget')) {
-		//$widget_ops = array('classname' => 'widget_pages', 'description' => __( "Your blog's WordPress Pages") );
-		//wp_register_sidebar_widget('pages', __('Pages'), 'wp_widget_pages', $widget_ops);
-    wp_register_sidebar_widget('widget_product_tag', __('Product Tags', 'wpsc'), 'widget_product_tag');
-    wp_register_widget_control('widget_product_tag', __('Product Tags', 'wpsc'), 'widget_product_tag_control');
-	}
-	return;
-}
-add_action('plugins_loaded', 'widget_product_tag_init');
+add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Widget_Product_Tags");' ) );
+
+
+
 ?>
