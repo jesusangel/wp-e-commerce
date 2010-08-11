@@ -2069,7 +2069,6 @@ $custom_gateways = get_option('custom_gateway_options');
   //if($gateway['internalname'] == get_option('payment_gateway'))
   if(in_array($gateway['internalname'], $custom_gateways))
       {
-		print_r($gateway);
          if(isset($gateway['submit_function'])) {
             call_user_func_array($gateway['submit_function'], array());
             $changes_made = true;
