@@ -43,7 +43,13 @@ function wpsc_display_categories_page() {
 	
 	<div class="wrap">
 		<?php // screen_icon(); ?>
-		<h2><?php echo esc_html( __('Display categories', 'wpsc') ); ?> </h2>
+		<h2><?php echo esc_html( __('Display categories', 'wpsc') ); 
+			if ( isset( $_GET["category_id"] ) ) {
+				$sendback = remove_query_arg('category_id');
+				echo "<a class='button add-new-h2' href='".$sendback."' title='Add New'>".__('Add New', 'wpsc')."</a>";
+			}
+		
+		?> </h2>
 		<p>
 				<?php echo __('Categorizing your products into groups help your customers find them. '.
 				'For instance if you sell hats and trousers you	might want to setup a Group called clothes and add hats and trousers to that group.', 'wpsc');?>
@@ -87,7 +93,7 @@ function wpsc_display_categories_page() {
 				<div id='poststuff' class="col-wrap">
 				<?php if ( isset( $_GET["category_id"] ) ) {
 ?>
-<div class="postbox">
+
 <?php
 	  $product = get_term($_GET["category_id"], "wpsc_product_category" );
 
@@ -120,7 +126,7 @@ function wpsc_display_categories_page() {
 	</div>
 				
 				
-	</div>
+
 	<?php
 }
 
@@ -179,7 +185,7 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 							<?php } ?>
 							
 							<?php if($category_image !=null) { ?>
-								<img src='<?php echo WPSC_CATEGORY_URL.$category_image; ?>' title='".$category->name; ?>' alt='".$category->name; ?>' width='30' height='30' />
+								<img src='<?php echo WPSC_CATEGORY_URL.$category_image; ?>' title='<?php echo $category->name; ?>' alt='".$category->name; ?>' width='30' height='30' />
 							<?php } else { ?>
 								<img src='<?php echo WPSC_URL; ?>/images/no-image-uploaded.gif' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30'	/>
 							<?php } ?>
@@ -248,9 +254,12 @@ function wpsc_admin_category_forms($category_id =  null) {
 			</td>
 			<td>
 			<?php
+				//echo '<pre>'.print_r($category,true).'</pre>';
 				$taxonomies = array('wpsc_product_category');
 				$args = array('orderby'=>'name', 'hide_empty' => 0);
-				$select = wpsc_parent_category_list($taxonomies, $args);
+				$parent = $category['parent'];
+				$current_term_id = $category['term_id'];
+				$select = wpsc_parent_category_list($taxonomies, $args,$parent,$current_term_id);
 				echo $select;
 			?>
 		</td>

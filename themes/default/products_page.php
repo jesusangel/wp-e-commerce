@@ -184,7 +184,7 @@ global $wpsc_query, $wpdb;
 								<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 								<input type="hidden" name="wpsc_update_quantity" value="true"/>
 							<?php endif ;?>
-							<p class="wpsc_extras_forms"/>
+
 							<div class="wpsc_product_price">
 								<?php if(wpsc_product_is_donation()) : ?>
 									<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo __('Donation', 'wpsc'); ?>:</label>

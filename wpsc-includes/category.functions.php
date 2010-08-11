@@ -40,7 +40,26 @@ function wpsc_list_categories($callback_function, $parameters = null, $category_
 }
 
 
+/**
+* Gets the Function Parent Image link and checks whether Image should be displayed or not
+* 
+*/
+function wpsc_parent_category_image($show_thumbnails , $category_image , $width, $height, $grid=false){
 
+	if(!$show_thumbnails) return;
+	
+	if($category_image == WPSC_CATEGORY_URL){
+	?>
+	<span class='wpsc_category_image item_no_image ' style='width:<?php echo $width; ?>px; height: <?php echo $height; ?>px;'>
+		<span class='link_substitute' >
+			<span><?php _e('N/A', 'wpsc'); ?></span>
+		</span>
+	</span>
+	<?php
+	}else{
+	?><img src='<?php echo $category_image; ?>' width='<?php echo $width; ?>' height='<?php echo $height; ?>' /><?php	
+	}
+}
 /// category template tags start here
 
 /**
@@ -281,14 +300,14 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		// get the category images
 		$category_image = wpsc_place_category_image($category_row->term_id, $modified_query);
-		
-		$width = $query['image_size']['width'] - 4;
-		$height = $query['image_size']['height'] - 4;
-		
+
+		$width = $query['image_size']['width'];
+		$height = $query['image_size']['height'];
+		$category_image = wpsc_get_categorymeta($category_row->term_id, 'image');
 		$category_image_html = '';
 		if(($query['show_thumbnails'] == 1)) {
-			if(($category_row['image'] != '') && is_file(WPSC_CATEGORY_DIR.$category_row->image)) {
-				$category_image_html = "<img src='$category_image' alt='{$category_row->name}' title='{$category_row->name}' class='wpsc_category_image' />";
+			if(($category_image != '') && is_file(WPSC_CATEGORY_DIR.$category_image)) {
+				$category_image_html = "<img src='".WPSC_CATEGORY_URL."$category_image' alt='{$category_row->name}' title='{$category_row->name}' style='width: {$width}px; height: {$height}px;' class='wpsc_category_image' />";
 			} else {
 				$category_image_html  = "";
 				$category_image_html .= "				<span class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";

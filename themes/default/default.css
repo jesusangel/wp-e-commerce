@@ -276,10 +276,11 @@ div.single_product_display div.textcol{
 /*  width:41%; */
  margin-right: 0;
 }
-
+.wpsc_category_grid_item{
+float:left;
+}
 
 .item_no_image {
-  border: 2px solid #aaaaaa;
   background: #cccccc;
   display: block;
 }
@@ -1453,9 +1454,11 @@ div.wpsc_page_numbers a.selected {
 }
 
 .wpsc_category_grid a.wpsc_category_grid_item {
+/*
 	display: block;
-	margin: 0px 7px 7px 0px;
+	margin: 0px 7px 7px 0px; 
 	float: left;
+*/
 }
 
 

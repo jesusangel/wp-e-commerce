@@ -28,7 +28,7 @@ function nzshpcrt_region_list($selected_country = null, $selected_region = null)
 		$output .= "<option value=''>None</option>";
 		foreach($region_list as $region) {
 			if($selected_region == $region['id']) {
-				$selected = "selected='true'";
+				$selected = "selected='selected'";
 			} else {
 				$selected = "";
 			}
@@ -50,7 +50,7 @@ function nzshpcrt_form_field_list($selected_field = null) {
 	foreach ((array)$form_data as $form) {
 		$selected ='';
 		if($selected_field == $form['id']) {
-			$selected = "selected='true'";
+			$selected = "selected='selected'";
 		}
 		$output .= "<option value='".$form['id']."' $selected>".$form['name']."</option>";
 	}
@@ -58,17 +58,23 @@ function nzshpcrt_form_field_list($selected_field = null) {
 }
   
   
-function wpsc_parent_category_list($taxonomies, $args) {
-
+function wpsc_parent_category_list($taxonomies, $args , $parent , $current_term_id) {
 	$myterms = get_terms($taxonomies, $args);
 	$output ="<select name='category_parent'>";
+	$output .="<option value='0'>".__('No Parent','wpsc')."</option>";
 	foreach($myterms as $term){
-		$root_url = get_bloginfo('url');
-		$term_taxonomy=$term->taxonomy;
-		$term_slug=$term->slug;
-		$term_name =$term->name;
-		$term_id =$term->term_id;
-		$output .="<option value='".$term_id."'>".$term_name."</option>";
+		//$root_url = get_bloginfo('url');
+		if($current_term_id != $term->term_id){
+			$selected = '';
+			if(($term->term_id == $parent)&& $term->term_id != 0){
+				$selected = 'selected="selected"';
+			}
+			$term_taxonomy=$term->taxonomy;
+			$term_slug=$term->slug;
+			$term_name =$term->name;
+			$term_id =$term->term_id;
+			$output .="<option {$selected} value='".$term_id."'>".$term_name."</option>";
+		}
 	}
 	$output .="</select>";
 return $output;

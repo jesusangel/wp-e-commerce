@@ -266,9 +266,9 @@ function wpsc_save_category_set() {
 			$name = $_POST['name'];
 			
 			$category = get_term_by('id', $category_id, 'wpsc_product_category');
-			if($category->name != $name) {
+			if($category->name != $name || $category->parent != $parent_category) {
 				wp_update_term($category_id, 'wpsc_product_category', array(
-					'name' => $name
+					'name' => $name , 'parent' => $parent_category
 				));
 				$category = get_term($category_id, 'wpsc_product_category');
 				//$wp_rewrite->flush_rules(); 
