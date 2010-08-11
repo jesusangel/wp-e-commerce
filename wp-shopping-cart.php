@@ -12,6 +12,7 @@ Author URI: http://www.instinct.co.nz/e-commerce/
  * @package wp-e-commerce
 */
 // this is to make sure it sets up the table name constants correctly on activation
+
 global $wpdb, $wpsc_purchlog_statuses;
 define('WPSC_VERSION', '3.8');
 define('WPSC_MINOR_VERSION', ('00000'.microtime(true)));
@@ -41,28 +42,12 @@ define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
 
 
-
-$wpsc_siteurl = get_option('siteurl');
-if(is_ssl()) {
-	$wpsc_siteurl = str_replace("http://", "https://", $wpsc_siteurl);
-}
-
-$wpsc_plugin_url = WP_CONTENT_URL;
-if(is_ssl()) {
-  $plugin_url_parts = parse_url($wpsc_plugin_url);
-  $site_url_parts = parse_url($wpsc_siteurl);
-  if(stristr($plugin_url_parts['host'], $site_url_parts['host']) && stristr($site_url_parts['host'], $plugin_url_parts['host'])) {
-		$wpsc_plugin_url = str_replace("http://", "https://", $wpsc_plugin_url);
-	}
-}
-
-
 // the WPSC meta prefix, used for the product meta functions.
 define('WPSC_META_PREFIX', "_wpsc_");
 
 //Define the URL to the plugin folder
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
-define('WPSC_URL', $wpsc_plugin_url.'/plugins/'.WPSC_FOLDER);
+define('WPSC_URL', plugins_url('',__FILE__));
 
 
 if(isset($wpdb->blogid)) {
