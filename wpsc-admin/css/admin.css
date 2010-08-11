@@ -947,67 +947,6 @@ font-style: italic;
 	/*
 	* Display Products CSS ends here
 */
-/* jCrop styling starts here */
-/* Fixes issue here http://code.google.com/p/jcrop/issues/detail?id=1 */
-.jcrop-holder { text-align: left; }
-
-.jcrop-vline, .jcrop-hline
-{
-	font-size: 0;
-	position: absolute;
-	background: white url('Jcrop.gif') top left repeat;
-}
-.jcrop-vline { height: 100%; width: 1px !important; }
-.jcrop-hline { width: 100%; height: 1px !important; }
-.jcrop-handle {
-	font-size: 1px;
-	width: 7px !important;
-	height: 7px !important;
-	border: 1px #eee solid;
-	background-color: #333;
-	*width: 9px;
-	*height: 9px;
-}
-
-.jcrop-tracker { width: 100%; height: 100%; }
-
-.custom .jcrop-vline,
-.custom .jcrop-hline
-{
-	background: yellow;
-}
-.custom .jcrop-handle
-{
-	border-color: black;
-	background-color: #C7BB00;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-}
-#wpsc_thumbnail_preview{
-/* width:500px; */
-float:right;
-margin-right:4em;
-}
-
-#wpsc_thumbnail_preview_landscape{
-margin-top:1em;
-float:left;
-width:500px;
-
-}
-#wpsc_thumbnail_preview_landscape label{
-width:140px;
-float: left;
-}
-#wpsc_crop_preview{
- width:100px;
- height:100px;
- overflow:hidden;
- float:left;
- margin:1.5em;
-}
-
-/* jCrop styling ends here */
 
 /* shipping options start here */
 div.wpsc_shipping_options{
