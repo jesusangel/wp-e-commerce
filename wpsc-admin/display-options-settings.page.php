@@ -187,8 +187,8 @@ function wpsc_get_shipping_form($shippingname) {
  * Get Payment Form for wp-admin 
  */
 function wpsc_get_payment_form($paymentname) {
-  global $wpdb, $nzshpcrt_gateways;
-  $form = array();
+	global $wpdb, $nzshpcrt_gateways;
+	$form = array();
 	foreach($nzshpcrt_gateways as $gateway) {
 		if($gateway["internalname"] != $paymentname) {
 			continue;
@@ -196,46 +196,45 @@ function wpsc_get_payment_form($paymentname) {
 			$form = $gateway;
 		}
 	}
-if($form) {
+	if($form) {
 		$payment_forms = $form["form"]();
 		$payment_module_name = $form["name"];
-		
 		$output = array('name' => $payment_module_name, 'form_fields' => $payment_forms, 'has_submit_button' => 1);
-  } else {
+	} else {
 		$output = array('name' => '&nbsp;', 'form_fields' => __('To configure a payment module select one on the left.', 'wpsc'), 'has_submit_button' => 0);
-  }
-  return $output;
+	}
+	return $output;
 }
-
 
 function wpsc_settings_page_update_notification(){
-if (isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) ||  isset($_GET['shipadd']) ) { ?>
+	if( isset($_GET['skipped']) || isset($_GET['updated']) || isset($_GET['deleted']) || isset($_GET['shipadd']) ) { ?>
 			<div id="message" class="updated fade"><p>
-			<?php if ( isset($_GET['updated']) && (int) $_GET['updated'] ) {
-				printf( _n( ' Setting Options Updated. ' , ' %s Settings Options Updated. ', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
-				unset($_GET['updated']);
-			}
-						
-			if ( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
-				printf( _n( '%s Setting Option deleted. ', '%s Setting Option deleted. ', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
-				unset($_GET['deleted']);
-			}
-			if ( isset($_GET['shipadd']) && (int) $_GET['shipadd'] ) {
-				printf( _n( ' Shipping Option Updated.', ' Shipping Option Updated.', $_GET['shipadd'] ), number_format_i18n( $_GET['shipadd'] ) );
-				unset($_GET['shipadd']);
-			}
-			if ( isset($_GET['added']) && (int) $_GET['added'] ) {
-				printf( _n( '%s Checkout Field Added.', '%s Checkout Fields Added.', $_GET['added'] ), number_format_i18n( $_GET['added'] ) );
-				unset($_GET['added']);
-			}
-
-		
-			$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] );
-			?>
+<?php
+		if( isset($_GET['updated']) && (int) $_GET['updated'] ) {
+			printf( _n( ' Setting options updated.' , ' %s Settings options updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
+			unset($_GET['updated']);
+			$message = true;
+		}
+		if( isset($_GET['deleted']) && (int) $_GET['deleted'] ) {
+			printf( _n( '%s Setting option deleted.', '%s Setting option deleted.', $_GET['deleted'] ), number_format_i18n( $_GET['deleted'] ) );
+			unset($_GET['deleted']);
+			$message = true;
+		}
+		if( isset($_GET['shipadd']) && (int) $_GET['shipadd'] ) {
+			printf( _n( ' Shipping option updated.', ' Shipping option updated.', $_GET['shipadd'] ), number_format_i18n( $_GET['shipadd'] ) );
+			unset($_GET['shipadd']);
+			$message = true;
+		}
+		if( isset($_GET['added']) && (int) $_GET['added'] ) {
+			printf( _n( '%s Checkout field added.', '%s Checkout fields added.', $_GET['added'] ), number_format_i18n( $_GET['added'] ) );
+			unset($_GET['added']);
+			$message = true;
+		}
+		if( is_null( $message ) ) {
+			_e( 'Settings successfully updated.','wpec' );
+		}
+		$_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated', 'deleted','wpsc_downloadcsv','rss_key','start_timestamp','end_timestamp','email_buyer_id'), $_SERVER['REQUEST_URI'] ); ?>
 			</p></div>
 <?php
-
-}
-}
-
-?>
+	}
+} ?>

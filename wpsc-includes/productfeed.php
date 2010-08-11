@@ -130,12 +130,12 @@ function wpsc_generate_product_feed() {
 		if ($product['thumbnail_image'] != null) {
 			$image_file_name = $product['thumbnail_image'];
 			$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/thumbnails/{$image_file_name}";
-			$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/thumbnails/".rawurlencode($image_file_name);
+			$image_link = content_url()."/uploads"."/wpsc/product_images/thumbnails/".rawurlencode($image_file_name);
 
 		} else {
 			$image_file_name = $product['image'];
 			$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/{$image_file_name}";
-			$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/".rawurlencode($image_file_name);
+			$image_link = content_url()."/uploads"."/wpsc/product_images/".rawurlencode($image_file_name);
 		}
 
 		//$image_path = WP_CONTENT_DIR."/uploads"."/wpsc/product_images/thumbnails/{$image_file_name}";
@@ -143,7 +143,7 @@ function wpsc_generate_product_feed() {
 		if (is_file($image_path) && (filesize($image_path) > 0)) {
 
 			$image_data = @getimagesize($image_path);
-		//	$image_link = WP_CONTENT_URL."/uploads"."/wpsc/product_images/thumbnails/".urlencode($image_file_name);
+		//	$image_link = content_url()."/uploads"."/wpsc/product_images/thumbnails/".urlencode($image_file_name);
 
 			if ($_GET['xmlformat'] == 'google') {
 				$output .= "      <g:image_link>$image_link</g:image_link>\n\r";
