@@ -181,12 +181,10 @@ if (defined('TXT_WPSC_PROCESSING'))
 	$nzshpcrt_log_states[1]['name'] = TXT_WPSC_PROCESSING;
 $nzshpcrt_log_states[2]['name'] = __('Closed Order', 'wpsc');
 
-
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
 require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
 require_once(WPSC_FILE_PATH."/homepage_products_functions.php"); 
 require_once(WPSC_FILE_PATH."/transaction_result_functions.php"); 
-// include_once(WPSC_FILE_PATH.'/submit_checkout_function.php');
 require_once(WPSC_FILE_PATH."/admin-form-functions.php");
 require_once(WPSC_FILE_PATH."/shipwire_functions.php"); 
 
@@ -198,16 +196,10 @@ include_once(WPSC_FILE_PATH.'/widgets/specials_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/latest_product_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/price_range_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
-//include_once(WPSC_FILE_PATH.'/widgets/api_key_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/category_widget.php');
-
-
 include_once(WPSC_FILE_PATH.'/image_processing.php');
-
-
-// if we are in the admin section, include the admin code
-if(defined('WP_ADMIN') && (WP_ADMIN == true)) {
-	require_once(WPSC_FILE_PATH."/wpsc-admin/admin.php");
+if( is_admin() ) {
+	include_once(WPSC_FILE_PATH."/wpsc-admin/admin.php");
 }
 
 
