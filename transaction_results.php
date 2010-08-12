@@ -1,5 +1,5 @@
 <?php
-global $wpdb, $user_ID, $nzshpcrt_gateways;
+global $wpdb, $user_ID, $nzshpcrt_gateways, $sessionid, $cart_log_id;
 //$curgateway = get_option('payment_gateway');
 
 if(isset($_GET['sessionid'])) {
@@ -47,5 +47,6 @@ if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
 		//exit('<pre>sess - '.print_r($_SESSION, true).'</pre>');
 		echo transaction_results($sessionid, true);
 	}
+	$cart_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1" );
 }
 ?>

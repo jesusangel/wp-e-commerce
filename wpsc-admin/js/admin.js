@@ -997,13 +997,13 @@ jQuery(".wpsc-shipping-actions a").livequery(function(){
 jQuery(".wpsc-payment-actions a").livequery(function(){
 	jQuery(this).click( function ()  {
 		var module = jQuery(this).attr('rel');
-		console.log(module);
+		//console.log(module);
 		jQuery.ajax({
 			method: "post",
 			url: "index.php",
 			data: "wpsc_admin_action=get_payment_form&paymentname="+module,
 			success: function(returned_data){
-				console.log(returned_data);
+			//	console.log(returned_data);
 				eval(returned_data);
 				//jQuery(".gateway_settings").children(".form-table").html(html)
 				jQuery('.gateway_settings h3.hndle').html(payment_name_html);
