@@ -36,7 +36,6 @@ if(!empty($wpdb->prefix)) {
 } else if(!empty($table_prefix)) {
   $wp_table_prefix = $table_prefix;
 }
-
 // Define the database table names
 // These tables are required, either for speed, or because there are no existing wordpress tables suitable for the data stored in them.
 define('WPSC_TABLE_PURCHASE_LOGS', "{$wp_table_prefix}wpsc_purchase_logs");

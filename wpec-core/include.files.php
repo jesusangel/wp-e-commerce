@@ -57,8 +57,6 @@ include_once(WPSC_FILE_PATH.'/widgets/admin_menu_widget.php');
 include_once(WPSC_FILE_PATH.'/widgets/category_widget.php');
 include_once(WPSC_FILE_PATH.'/image_processing.php');
 
-include_once(WPSC_FILE_PATH."/wpsc-includes/install_and_update.functions.php");
-
 
 if( is_admin() ) {
 	include_once(WPSC_FILE_PATH."/wpsc-admin/admin.php");

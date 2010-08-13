@@ -11,6 +11,12 @@ Author URI: http://www.getshopped.org/
  * WP e-Commerce Main Plugin File
  * @package wp-e-commerce
 */
+global $wpdb;
+//Define the path to the plugin folder
+define('WPSC_FILE_PATH', dirname(__FILE__));
+define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
+//Define other constants used by wp-e-commerce
+require_once( WPSC_FILE_PATH. '/wpec-core/define.constants.php' );
 
 function wpsc_load_plugin(){
 	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version;
@@ -27,14 +33,9 @@ function wpsc_load_plugin(){
 	define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 	define('WPSC_URL', plugins_url('',__FILE__));
 	
-	//Define the path to the plugin folder
-	define('WPSC_FILE_PATH', dirname(__FILE__));
-	define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
 
 	do_action('wpsc_before_init');
 
-	//Define other constants used by wp-e-commerce
-	require_once( WPSC_FILE_PATH. '/wpec-core/define.constants.php' );
 	//Include the rest of the Plugin files
 	require_once( WPSC_FILE_PATH. '/wpec-core/include.files.php' );
 	
@@ -94,7 +95,7 @@ function wpsc_load_plugin(){
 	if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
 	  include_once(WPSC_FILE_PATH.'/themes/'.get_option('wpsc_selected_theme').'/'.get_option('wpsc_selected_theme').'.php');
 	}
-	register_activation_hook(__FILE__, 'wpsc_install');
+
 	//* heres where we start running our functions *//
 
 	add_action('init', 'widget_wp_shopping_cart_init', 10);
@@ -134,6 +135,11 @@ function wpsc_load_plugin(){
 
 add_action('plugins_loaded','wpsc_load_plugin', 8);
 add_action('plugins_loaded','wpsc_initialisation', 8);
+
+
+include_once(WPSC_FILE_PATH."/wpsc-includes/install_and_update.functions.php");
+
+register_activation_hook(__FILE__, 'wpsc_install');
 
 /**
  * Check to see if the session exists, if not, start it
