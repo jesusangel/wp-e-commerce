@@ -1,7 +1,7 @@
 <?php
 function wpsc_options_shipping(){
-global $wpdb,$external_shipping_modules,$internal_shipping_modules;
-
+global $wpdb,$wpsc_shipping_modules,$external_shipping_modules,$internal_shipping_modules;
+//exit('<pre>'.print_r($wpsc_shipping_modules,true).'</pre>');
 // sort into external and internal arrays.
 foreach($GLOBALS['wpsc_shipping_modules'] as $key => $module) 
 {

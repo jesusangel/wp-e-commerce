@@ -112,58 +112,6 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
    add_action('admin_init', 'wpsc_ajax_load_product');
 }
 
-function wpsc_crop_thumb() {
-   global $wpdb;
-   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $targ_w = $targ_h = $_POST['thumbsize'];
-      $jpeg_quality = $_POST['jpegquality'];
-      $product_id = $_POST['product_id'];
-
-      $image['x'] = absint($_POST['x']);
-      $image['y'] = absint($_POST['y']);
-      $image['w'] = absint($_POST['w']);
-      $image['h'] = absint($_POST['h']);
-
-
-      $imagename = basename($_POST['imagename']);
-      $source = WPSC_IMAGE_DIR.$imagename;
-      $destination =  WPSC_THUMBNAIL_DIR.$imagename;
-
-      if(is_file($source)) {
-         $imagetype = getimagesize($source);
-
-         switch($imagetype[2]) {
-            case IMAGETYPE_JPEG:
-            $img_r = imagecreatefromjpeg($source);
-            break;
-
-            case IMAGETYPE_GIF:
-            $img_r = imagecreatefromgif($source);
-            break;
-
-            case IMAGETYPE_PNG:
-            $img_r = imagecreatefrompng($source);
-            break;
-         }
-         $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
-         imagecopyresampled($dst_r,$img_r,0,0,$image['x'],$image['y'],$targ_w,$targ_h,$image['w'],$image['h']);
-         imagejpeg($dst_r,$destination,$jpeg_quality);
-         $cropped = true;
-      }
-      $sendback = wp_get_referer();
-      if($cropped){
-         $sendback = add_query_arg('product_id', $product_id, $sendback);
-      }
-      wp_redirect($sendback);
-      //exit();
-   }
-}
-
-
-if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'crop_thumb')) {
-   add_action('admin_init', 'wpsc_crop_thumb');
-}
-
 function wpsc_delete_file() {
    global $wpdb;
    $output = 0;
@@ -1595,19 +1543,6 @@ function wpsc_ajax_get_payment_form() {
       //echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
   exit();
 }
-
-function wpsc_crop_thumbnail_html() {
-  include(WPSC_FILE_PATH."/wpsc-admin/includes/crop.php");
-  exit();
-}
-
-
-
-if (isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'crop_image')) {
-   add_action('admin_init','wpsc_crop_thumbnail_html');
-}
-
-
 
 if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'get_shipping_form')) {
    add_action('admin_init', 'wpsc_ajax_get_shipping_form');

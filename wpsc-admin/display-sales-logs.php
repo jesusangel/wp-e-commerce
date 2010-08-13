@@ -7,11 +7,11 @@
  * @package wp-e-commerce
  * @since 3.7
  */
+global $purchlogs;
 if(!isset($purchlogs)){
 	$purchlogs = new wpsc_purchaselogs();	
 }
  function wpsc_display_sales_logs() {
- 	
  	$subpage ='';
  	if(isset($_GET['subpage']))
  		$subpage = $_GET['subpage'];
@@ -375,7 +375,6 @@ if(!isset($purchlogs)){
  }
  function wpsc_purchaselogs_displaylist(){
  	global $purchlogs;
- 	
   ?>
   	<form method='post' action=''>
   	  <div class='wpsc_purchaselogs_options'>
@@ -416,7 +415,9 @@ if(!isset($purchlogs)){
   		<select id='view_purchlogs_by_status' name='view_purchlogs_by_status'>
   			
   			<?php while(wpsc_have_purch_items_statuses()) : wpsc_the_purch_status(); ?>
+
   			<?php
+
 	  			    $current_status = wpsc_the_purch_status_id();
 					$is_selected = '';
 					if(isset($_GET['view_purchlogs_by_status']) && $_GET['view_purchlogs_by_status'] == $current_status) {

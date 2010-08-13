@@ -363,7 +363,6 @@ $sticky_checked = 'checked="checked" ';
         );
 
       $order = get_option('wpsc_product_page_order');
-
       $order = apply_filters( 'wpsc_products_page_forms', $order);
 
       if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 24 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {

@@ -7,7 +7,6 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-
 		
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-update.page.php");
@@ -20,6 +19,7 @@ require_once(WPSC_FILE_PATH."/wpsc-admin/includes/product-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/save-data.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/updating-functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-coupons.php");
+require_once(WPSC_FILE_PATH.'/wpsc-includes/purchaselogs.class.php');
 
 require_once(WPSC_FILE_PATH."/wpsc-admin/ajax-and-init.php");
 
@@ -73,15 +73,10 @@ function wpsc_admin_pages(){
 			$base_page = 'wpsc-sales-logs';
 
 		if ($userdata->user_level <= 2) {
-				if(file_exists(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php')) {
-					require_once(WPSC_UPGRADES_DIR.'gold_cart_files/affiliates.php');
-					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'subscriber',  WPSC_URL.'/gold_cart_files/affiliates.php','affiliate_page', WPSC_URL."/images/credit_cards.png");
+				if (function_exists('add_object_page')) {
+					add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page,array(), WPSC_URL."/images/credit_cards.png");
 				} else {
-					if (function_exists('add_object_page')) {
-						add_object_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page,array(), WPSC_URL."/images/credit_cards.png");
-					} else {
-						add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page);
-					}
+					add_menu_page(__('Store', 'wpsc'), __('Store', 'wpsc'), 'author', $base_page);
 				}
 
 			} else {
@@ -241,11 +236,7 @@ function  wpsc_admin_include_css_and_js() {
 		'add' => esc_attr(__('Add')),
 		'addTag' => esc_attr(__('Add new tag')),
 		'separate' => __('Separate tags with commas'),
-	));
-	if(defined('WPSC_GOLD_DIR_NAME') && WPSC_GOLD_DIR_NAME != ''){
-		wp_enqueue_style('gold_cart', WPSC_UPGRADES_URL . 'gold_cart_files/gold_cart.css',false, $version_identifier, 'all');
-	}
-	
+	));	
 	// Prototype breaks dragging and dropping, I need it gone
 	wp_deregister_script('prototype');
 	// remove the old javascript and CSS, we want it no more, it smells bad

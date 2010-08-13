@@ -700,19 +700,17 @@ class wpsc_purchaselogs{
                $this->allpurchaselogs = $newlogs;
             }
 
-
          }
       }
       $this->purch_item_count = count($this->allpurchaselogs);
       $statuses = $this->the_purch_item_statuses();
-
       if(isset($_SESSION['newlogs'])){
          $this->allpurchaselogs = $_SESSION['newlogs'];
          $this->purch_item_count = count( $_SESSION['newlogs']);
       }
-
+	  
       return;
-      //exit('<pre>'.print_r($this->purch_item_count, true).'</pre>');
+      
    }
 
    function get_purchlogs($dates, $status=''){
@@ -748,7 +746,7 @@ class wpsc_purchaselogs{
             exit('Else :'.print_r($purch));
          }
       }
-   //    exit('<pre>'.print_r($newarray,true).'<pre>');
+   //   exit('<pre>'.print_r($newarray,true).'<pre>');
          $this->allpurchaselogs = $newarray;
          $this->purch_item_count = count($this->allpurchaselogs);
      return $newarray;
@@ -899,7 +897,6 @@ class wpsc_purchaselogs{
    }
 
    function have_purch_status() {
-
       if ($this->currentstatus + 1 < $this->purch_status_count) {
          return true;
       } else if ($this->currentstatus + 1 == $this->purch_status_count && $this->purch_status_count > 0) {

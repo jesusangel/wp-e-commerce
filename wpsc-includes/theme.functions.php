@@ -408,12 +408,12 @@ function wpsc_display_products_page($query) {
   
 function wpsc_products_page($content = '') {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path, $wpsc_query_vars;
+
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-		remove_filter('the_content', 'wpsc_products_page');
+	remove_filter('the_content', 'wpsc_products_page');
 	$output = '';
 	if(preg_match("/\[productspage\]/",$content)) {	
-		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query object
-		
+		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query object		
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		ob_start();
 		if(count($wp_query->posts) == 1) {			
@@ -464,7 +464,6 @@ function wpsc_products_page($content = '') {
 				}
 			}
 	
-			
 			// switch the display type, based on the display type variable...
 			switch($display_type) {
 				case "grid":
@@ -491,9 +490,9 @@ function wpsc_products_page($content = '') {
 		$output = str_replace('$','\$', $output);
 		
 		$product_id = $wp_query->post->ID;
-		
+
 		list($wp_query, $wpsc_query) = array($wpsc_query, $wp_query); // swap the wpsc_query objects back
-		
+
 		
 		$product_meta = get_post_meta($product_id, '_wpsc_product_metadata', true);
 		
@@ -729,6 +728,120 @@ function wpsc_body_class( $classes ) {
 
 add_filter( 'body_class', 'wpsc_body_class' );
 
+/**
+ * Featured Product
+ *
+ * Refactoring Featured Product Plugin to utilize Sticky Post Status, available since WP 2.7
+ * also utilizes Featured Image functionality, available as post_thumbnail since 2.9, Featured Image since 3.0
+ * Main differences - Removed 3.8 conditions, removed meta box from admin, changed meta_values
+ * Removes shortcode, as it automatically ties in to top_of_page hook if sticky AND featured product exists.
+ *
+ * @package wp-e-commerce
+ * @since 3.8
+ */ 
 
+function wpsc_the_sticky_image($product_id) {
+global $wpdb;
+//Previously checked product_meta, now get_vars guid from attachment with this post_parent, checking against _thumbnail_id   
 
+$sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM wp_posts p, wp_postmeta pm WHERE p.post_parent = $product_id AND pm.post_id = $product_id AND pm.meta_value = p.ID"));
+
+	if($sticky_product_image != ''){
+		return $sticky_product_image;
+	}else{
+		return wpsc_the_product_image(340, 260);
+	}
+}
+
+/**
+ * wpsc_display_products_page function.
+ * 
+ * @access public
+ * @param mixed $query
+ * @return void
+ */
+function wpsc_display_featured_products_page() {
+	global $wpdb, $wpsc_query;	
+	
+	
+
+	if ( is_front_page() || is_home() ) {  
+ 	$query = get_posts(array(
+			'post__in'  => get_option('sticky_posts'),
+			'post_type' => 'wpsc-product',
+			'orderby' => 'rand',
+			'meta_key' => '_thumbnail_id',
+			'numberposts' => 1
+		));
+
+		if ( count($query) > 0 ) { 
+
+			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+			$image_width = get_option('product_image_width');
+			$image_height = get_option('product_image_height');
+			//Begin outputting featured product.  We can worry about templating later, or folks can just CSS it up.
+			 foreach($query as $product) :
+			setup_postdata($product);
+?>
+
+<div class="wpsc_container wpsc_featured">
+		<div class="product_grid_display">
+			<div class="product_grid_item product_view_<?php the_ID(); ?>">
+				<div class="item_text">
+						<h3>
+							<a href='<?php echo get_permalink($product->ID); ?>'><?php echo get_the_title($product->ID); ?></a>
+						</h3> 
+						<div class="pricedisplay"><?php echo wpsc_the_product_price(); ?></div> 
+						<div class='wpsc_description'>
+							<?php the_excerpt(); ?>
+							<a href='<?php echo get_permalink($product->ID); ?>'>
+							  More Information&hellip;
+							</a>
+						</div>
+				</div>
+			
+				<?php if(wpsc_the_product_thumbnail()) :?> 	   
+					<div class="item_image">
+						<a href="<?php echo get_permalink($product->ID); ?>" style='background-image: url(<?php echo wpsc_the_sticky_image(wpsc_the_product_id()); ?>);'>
+						</a>
+					</div>
+				<?php else: ?> 
+					<div class="item_no_image">
+						<a href="<?php echo get_the_title($product->ID); ?>">
+						<span>No Image Available</span>
+						</a>
+					</div>
+				<?php endif; ?>
+				<div class="wpsc_clear"></div>
+			</div>
+	</div>
+</div>
+<?php
+		endforeach;
+		//End output	
+		}
+	}
+}
+
+add_action('wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12);
+
+/**
+ * Checks to see whether theme files exist in the current WP theme folder, if it doesn't copies the templates to the theme. 
+ * @access public 
+ *
+ * @since 3.8
+ * @param None
+ * @return None
+ */
+function wpsc_check_for_theme() {
+
+	$file = get_stylesheet_directory()."/single-wpsc-product.php";
+	$wpsc_file = WPSC_FILE_PATH."/themes/single-wpsc-product.php";
+
+	//Check for single-wpsc-product.php in currently active theme dir
+	//If it doesn't exist, copy there from themes
+	if ( !file_exists($file) ) {
+		copy($wpsc_file, $file);
+	}
+}
 ?>

@@ -11,6 +11,19 @@
 	* @subpackage wpsc-merchants
 */
 
+/**
+ * A Function to sort through merchant gateways alphabetically
+ * @access public
+ *
+ * @since 3.7.*
+ * @param gateway array, gateway array
+ * @return name of gateway in alphabetical order
+ */
+if(!function_exists('wpsc_merchant_sort')) {
+	function wpsc_merchant_sort($a, $b) { 
+		return strnatcmp(strtolower($a['name']), strtolower($b['name']));
+	}
+}
 class wpsc_merchant {
   var $name = 'Base Merchant';
   
