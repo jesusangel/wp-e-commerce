@@ -15,25 +15,27 @@ global $wpdb;
 //Define the path to the plugin folder
 define('WPSC_FILE_PATH', dirname(__FILE__));
 define('WPSC_DIR_NAME', basename(WPSC_FILE_PATH));
+
+//Define Plugin version
+define('WPSC_VERSION', '3.8');	
+define('WPSC_MINOR_VERSION', ('00000'.microtime(true)));
+define('WPSC_PRESENTABLE_VERSION', '3.8 Development');
+
+//Define Debug Variables for developers
+define('WPSC_DEBUG', false);
+define('WPSC_GATEWAY_DEBUG', false);
+
+//Define the URL to the plugin folder
+define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
+define('WPSC_URL', plugins_url('',__FILE__));
+
+
 //Define other constants used by wp-e-commerce
 require_once( WPSC_FILE_PATH. '/wpec-core/define.constants.php' );
 
 function wpsc_load_plugin(){
 	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version;
 	
-	define('WPSC_VERSION', '3.8');	
-	define('WPSC_MINOR_VERSION', ('00000'.microtime(true)));
-	define('WPSC_PRESENTABLE_VERSION', '3.8 Development');
-
-	//Define Debug Variables for developers
-	define('WPSC_DEBUG', false);
-	define('WPSC_GATEWAY_DEBUG', false);
-
-	//Define the URL to the plugin folder
-	define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
-	define('WPSC_URL', plugins_url('',__FILE__));
-	
-
 	do_action('wpsc_before_init');
 
 	//Include the rest of the Plugin files
@@ -50,7 +52,7 @@ function wpsc_load_plugin(){
 	 */
 	$gateway_directory = WPSC_FILE_PATH.'/merchants';
 	$nzshpcrt_merchant_list = wpsc_list_dir($gateway_directory);
-	 //exit("<pre>".print_r($nzshpcrt_merchant_list,true)."</pre>");
+
 	$num=0;
 	foreach($nzshpcrt_merchant_list as $nzshpcrt_merchant) {
 	  if(stristr( $nzshpcrt_merchant , '.php' )) {
