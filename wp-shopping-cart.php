@@ -31,7 +31,7 @@ define('WPSC_URL', plugins_url('',__FILE__));
 
 
 //Define other constants used by wp-e-commerce
-require_once( WPSC_FILE_PATH. '/wpec-core/define.constants.php' );
+require_once( WPSC_FILE_PATH. '/wpsc-core/define.constants.php' );
 
 function wpsc_load_plugin(){
 	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version;
@@ -39,7 +39,7 @@ function wpsc_load_plugin(){
 	do_action('wpsc_before_init');
 
 	//Include the rest of the Plugin files
-	require_once( WPSC_FILE_PATH. '/wpec-core/include.files.php' );
+	require_once( WPSC_FILE_PATH. '/wpsc-core/include.files.php' );
 	
 	add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
 	add_action( 'init', 'wpsc_check_for_theme', 8 ); // highest priority
