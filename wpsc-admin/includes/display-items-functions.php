@@ -786,14 +786,14 @@ function wpsc_product_advanced_forms($product_data='') {
 		";
 		foreach((array)$custom_fields as $custom_field) {
 			$i = $custom_field['id'];
-			// for editing, the container needs an id, I can find no other tidyish method of passing a way to target this object through an ajax request
+			$custom_meta_value = stripslashes($custom_field['meta_value']);
 			$output .= "
 			<div class='product_custom_meta'  id='custom_meta_$i'>
 				".__('Name', 'wpsc')."
-				<input type='text' class='text'  value='{$custom_field['meta_key']}' name='custom_meta[$i][name]' id='custom_meta_name_$i'>
+				<input type='text' class='text' value='{$custom_field['meta_key']}' name='custom_meta[$i][name]' id='custom_meta_name_$i'>
 				
 				".__('Value', 'wpsc')."
-				<textarea class='text' name='custom_meta[$i][value]' id='custom_meta_value_$i'>{$custom_field['meta_value']}</textarea>
+				<textarea class='text' name='custom_meta[$i][value]' id='custom_meta_value_$i'>$custom_meta_value</textarea>
 				<a href='#' class='remove_meta' onclick='return remove_meta(this, $i)'>".__('Delete')."</a>
 				<br />
 			</div>
