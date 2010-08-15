@@ -24,6 +24,15 @@ if(!function_exists('wpsc_merchant_sort')) {
 		return strnatcmp(strtolower($a['name']), strtolower($b['name']));
 	}
 }
+
+
+/**
+ * This is the Merchant Gateway Class that all gateways should extend. It handles everything from collating user data, 
+ * cart data so all gateways have consistent data between them.
+ *
+ *
+ */
+ 
 class wpsc_merchant {
   var $name = 'Base Merchant';
   

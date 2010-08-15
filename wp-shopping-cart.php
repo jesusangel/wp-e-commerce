@@ -61,6 +61,7 @@ function wpsc_load_plugin(){
 		}
 	  $num++;
 	}
+
 	$nzshpcrt_gateways = apply_filters('wpsc_merchants_modules',$nzshpcrt_gateways);
 	uasort($nzshpcrt_gateways, 'wpsc_merchant_sort');
 	

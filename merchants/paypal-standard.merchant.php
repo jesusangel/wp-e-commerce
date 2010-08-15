@@ -1,7 +1,13 @@
 <?php
 /**
-
-*/
+ * This is the Paypal Payments Standard 2.0 Gateway. 
+ * It uses the wpsc_merchant class as a base class which is handy for collating user details and cart contents.
+ */
+ 
+ /*
+  * This is the gateway variable $nzshpcrt_gateways, it is used for displaying gateway information on the wp-admin pages and also
+  * for internal operations.
+  */
 $nzshpcrt_gateways[$num] = array(
 	'name' => 'Paypal Payments Standard 2.0',
 	'api_version' => 2.0,
@@ -304,7 +310,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		".print_r($this->cart_items, true)."
 		{$altered_count}
 		";
-		//mail('thomas.howard@gmail.com', "IPN Debugging", $message);
 	}
 
 

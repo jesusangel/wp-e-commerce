@@ -8,7 +8,6 @@
 	* @since 3.7.6
 	* @subpackage wpsc-merchants
 */
-
 $nzshpcrt_gateways[$num] = array(
 	'name' => 'Test Gateway',
 	'api_version' => 2.0,
