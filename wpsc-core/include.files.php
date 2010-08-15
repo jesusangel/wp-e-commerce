@@ -23,7 +23,7 @@ require_once(WPSC_FILE_PATH."/wpsc-includes/meta.functions.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/productfeed.php");
 
 //add taxes
-require_once(WPSC_FILE_PATH."/wpec-taxes/taxes_module.php");
+require_once(WPSC_FILE_PATH."/wpsc-taxes/taxes_module.php");
 require_once(WPSC_FILE_PATH."/wpsc-includes/upgrades.php");
 
 
