@@ -101,7 +101,8 @@ class wpec_taxes
       //first check if the region given is part of the country
       if(!empty($region_code))
       {
-         $region_country_code = $this->wpec_taxes_get_region_information($region_code, 'country_id');
+       $region_country_id = $this->wpec_taxes_get_region_information($region_code, 'country_id');
+       $region_country_code = $this->wpec_taxes_get_country_information('isocode', array('id'=>$region_country_id));
          if($region_country_code != $country_code)
          {
             //reset region code if region provided not in country provided

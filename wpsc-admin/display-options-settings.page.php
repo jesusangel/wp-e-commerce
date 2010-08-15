@@ -189,6 +189,7 @@ function wpsc_get_shipping_form($shippingname) {
 function wpsc_get_payment_form($paymentname) {
 	global $wpdb, $nzshpcrt_gateways;
 	$form = array();
+	$output = array('name' => '&nbsp;', 'form_fields' => __('To configure a payment module select one on the left.', 'wpsc'), 'has_submit_button' => 0);
 	foreach($nzshpcrt_gateways as $gateway) {
 		if($gateway["internalname"] != $paymentname) {
 			continue;
