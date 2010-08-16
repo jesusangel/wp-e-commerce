@@ -4,6 +4,9 @@
 /*
  *Start Flot CSS styling
  */
+ul.children {
+padding-left: 15px;
+}
 input[type="radio"]{
  outline:none;
  border:0;

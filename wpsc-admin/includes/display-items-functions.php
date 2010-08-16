@@ -338,12 +338,14 @@ $sticky_checked = 'checked="checked" ';
             ),
          "side" => array(
             "wpsc_product_category_and_tag_forms",
+            "wpsc_product_tag_forms",
             "wpsc_product_price_and_stock_forms",
             "wpsc_product_image_forms",
             "wpsc_product_download_forms"
             ),
          "closedboxes" => array(
             "wpsc_product_shipping_forms" => 1,
+            "wpsc_product_tag_forms" => 1,
             "wpsc_product_variation_forms" => 1,
             "wpsc_product_advanced_forms" => 1,
             "wpsc_product_category_and_tag_forms" => 1,
@@ -353,6 +355,7 @@ $sticky_checked = 'checked="checked" ';
          ),
          "hiddenboxes" => array(
             "wpsc_product_shipping_forms" => 1,
+            "wpsc_product_tag_forms" => 1,
             "wpsc_product_variation_forms" => 1,
             "wpsc_product_advanced_forms" => 1,
             "wpsc_product_category_and_tag_forms" => 1,
@@ -368,8 +371,16 @@ $sticky_checked = 'checked="checked" ';
       if ( ( $order == '' ) || ( count ( $order, COUNT_RECURSIVE ) < 24 ) || ( count ( $order ) == count ( $order, COUNT_RECURSIVE ) ) ) {
             $order = $default_order;
       }
-      $check_missing_items = array_diff($default_order, $order);
+      foreach($order as $key => $values){
+      	$check_missing_items = array_diff($default_order[$key], $values);	
+  
+	    if(count($check_missing_items) > 0) {
+        	$order[$key] = array_merge($check_missing_items, $order[$key]);
+      	}
 
+      }
+      $check_missing_items = array_diff($default_order, $order);
+  
       if(count($check_missing_items) > 0) {
         $order = array_merge($check_missing_items, $order);
       }
@@ -530,6 +541,48 @@ makeSlugeditClickable = null;
 </div>
    <?php
   }
+  
+  
+function wpsc_product_tag_forms($product_data=''){
+	global $closed_postboxes, $wpdb, $variations_processor;
+	$output = '';
+	$tag_array = array();
+	   if (!isset($product_data['tags'])) $product_data['tags'] = array();
+	   foreach((array)$product_data['tags'] as $tag) {
+	     $tag_array[] = $tag->name;
+	   }
+	   if ($product_data == 'empty') {
+	      $display = "style='visibility:hidden;'";
+	   }
+	   $output .= "<div id='wpsc_product_tag_forms' class=' postbox ".((array_search('wpsc_product_tag_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : '')."'><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+	
+	    if (IS_WP27) {
+	        $output .= "<h3 class='hndle'>";
+	    } else {
+	        $output .= "<h3>
+	       <a class='togbox'>+</a>";
+	    }
+	    $output .= __('Product Tags', 'wpsc');
+	
+	    $output .= "
+	   </h3>
+	    <div class='inside'>";
+	    $output .= "
+	            <p id='jaxtag'>
+	               <label for='tags-input' class='hidden'>".__('Product Tags', 'wpsc')."</label>
+	               <input type='text' value='".implode(',',$tag_array)."' tabindex='3' size='20' id='tags-input' class='tags-input' name='product_tags'/>
+	            <span class='howto'>".__('Separate tags with commas')."</span>
+	            </p>
+	            <div id='tagchecklist' class='tagchecklist' onload='tag_update_quickclicks();'></div>";
+	$output .= "
+	 </div>
+	</div>";
+	$output = apply_filters('wpsc_product_tag_forms_output', $output);
+	return $output;
+	
+
+
+}  
 function wpsc_product_category_and_tag_forms($product_data=''){
    global $closed_postboxes, $wpdb, $variations_processor;
 
@@ -551,16 +604,12 @@ function wpsc_product_category_and_tag_forms($product_data=''){
         $output .= "<h3>
        <a class='togbox'>+</a>";
     }
-    $output .= __('Categories and Tags', 'wpsc');
+    $output .= __('Categories', 'wpsc');
 
     $output .= "
    </h3>
-    <div class='inside'>
-    <table>";
+    <div class='inside'>";
     $output .= "
-      <tr>
-      <td class='itemfirstcol'>
-            <strong >".__('Product Categories', 'wpsc')." </strong>
             <div id='categorydiv' >";
                $search_sql = apply_filters('wpsc_product_category_and_tag_forms_group_search_sql', '');
                //$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
@@ -568,23 +617,8 @@ function wpsc_product_category_and_tag_forms($product_data=''){
                $output .= wpsc_category_list($product_data, 0, $product_data['id'], 'edit_');
 
 
-     $output .= "
-         </div>
-     </td>
-     <td class='itemfirstcol product_tags'>
-            <strong > ".__('Product Tags', 'wpsc')."</strong><br />
-            <p id='jaxtag'>
-               <label for='tags-input' class='hidden'>".__('Product Tags', 'wpsc')."</label>
-               <input type='text' value='".implode(',',$tag_array)."' tabindex='3' size='20' id='tags-input' class='tags-input' name='product_tags'/>
-            <span class='howto'>".__('Separate tags with commas')."</span>
-            </p>
-            <div id='tagchecklist' class='tagchecklist' onload='tag_update_quickclicks();'></div>
-
-      </td>
-
-    </tr>";
+     $output .= "</div>";
 $output .= "
-  </table>
  </div>
 </div>";
 $output = apply_filters('wpsc_product_category_and_tag_forms_output', $output);
@@ -1284,7 +1318,7 @@ function wpsc_product_image_forms($product_data='') {
    <div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
       <h3 class='hndle'> <?php echo __('Product Images', 'wpsc'); ?></h3>
       <div class='inside'>
-         <p><strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage your images"><?php echo __('Product Images', 'wpsc');?></a></strong></p>
+         <p><strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php echo __('Product Images', 'wpsc');?></a></strong></p>
          <?php
          edit_multiple_image_gallery($product_data);
          ?>
