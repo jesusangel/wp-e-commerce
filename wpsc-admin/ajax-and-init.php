@@ -7,7 +7,7 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-//exit('<pre>'.print_r($_POST, true).'</pre>');
+
 function wpsc_ajax_add_tracking() {
    global $wpdb;
    foreach($_POST as $key=>$value){
@@ -27,7 +27,8 @@ function wpsc_ajax_add_tracking() {
 if(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'Add Tracking ID')) {
    add_action('admin_init', 'wpsc_ajax_add_tracking');
 }
- function wpsc_delete_currency_layer() {
+
+function wpsc_delete_currency_layer() {
    global $wpdb;
    $meta_key = 'currency['.$_POST['currSymbol'].']';
    $sql= "DELETE FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key`='".$meta_key."' LIMIT 1";
@@ -609,7 +610,7 @@ if (isset($_GET['wpsc_admin_action']) && ($_GET['wpsc_admin_action'] == 'duplica
 
 
 function wpsc_purchase_log_csv() {
-  global $wpdb,$user_level,$wp_rewrite;
+  global $wpdb,$user_level,$wp_rewrite,$wpsc_purchlog_statuses;
   get_currentuserinfo();
   if(($_GET['rss_key'] == 'key') && is_numeric($_GET['start_timestamp']) && is_numeric($_GET['end_timestamp']) && ($user_level >= 7)) {
   //exit('in use');
@@ -656,10 +657,9 @@ function wpsc_purchase_log_csv() {
       if($purchase['processed'] < 1) {
         $purchase['processed'] = 1;
          }
-      $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
-      $stage_data = $wpdb->get_results($stage_sql,ARRAY_A);
-
-      $output .= "\"". $stage_data[0]['name'] ."\",";
+         
+      $status_name = wpsc_find_purchlog_status_name($purchase['processed']);
+      $output .= "\"". $status_name ."\",";
 
       $output .= "\"". date("jS M Y",$purchase['date']) ."\"";
 
@@ -860,11 +860,9 @@ function wpec_hide_box(&$value,$key, $p) {
             transaction_results($log_data['sessionid'],false);
          }
          //echo("*/");
-         $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$newvalue."' AND `active`='1' LIMIT 1";
-         $stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
 
-         echo "document.getElementById(\"form_group_".$_POST['id']."_text\").innerHTML = '".$stage_data['name']."';\n";
-         echo "document.getElementById(\"form_group_".$_POST['id']."_text\").style.color = '#".$stage_data['colour']."';\n";
+         $status_name = wpsc_find_purchlog_status_name($purchase['processed']);
+         echo "document.getElementById(\"form_group_".$_POST['id']."_text\").innerHTML = '".$status_name."';\n";
 
 
          $year = date("Y");

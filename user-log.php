@@ -1,5 +1,5 @@
 <?php
-global $wpdb, $user_ID;
+global $wpdb, $user_ID, $wpsc_purchlog_statuses;
 if(get_option('permalink_structure') != '') {
   $seperator ="?";
 } else {
@@ -132,20 +132,16 @@ $date_list[0]['end'] = $end_timestamp;
             }
         
             echo "</tr>\n\r";
-            
-            //$stage_list_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` ORDER BY `id` ASC";
-            //$stage_list_data = $wpdb->get_results($stage_list_sql,ARRAY_A);
-
             echo "<tr>\n\r";
             echo " <td colspan='$col_count' class='details'>\n\r";
             echo "  <div id='status_box_".$purchase['id']."' class='order_status' $status_style>\n\r";
             echo "  <div>\n\r";
 
-            //order status code lies heret
-            $stage_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_STATUSES."` WHERE `id`='".$purchase['processed']."' AND `active`='1' LIMIT 1";
-            $stage_data = $wpdb->get_row($stage_sql,ARRAY_A);
+            //order status code lies here
+            //check what $purchase['processed'] reflects in the $wpsc_purchlog_statuses array
+            $status_name = wpsc_find_purchlog_status_name($purchase['processed']);
             echo "  <strong class='form_group'>".__('Order Status', 'wpsc').":</strong>\n\r";
-            echo $stage_data['name']."<br /><br />";
+            echo $status_name."<br /><br />";
 
            //written by allen
 					$usps_id = get_option('usps_user_id');
@@ -228,29 +224,25 @@ $date_list[0]['end'] = $end_timestamp;
                 $j++;
                 if(($j % 2) != 0) {
                   $alternate = "class='alt'";
-								}
-                $productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
-                $product_data = $wpdb->get_results($productsql,ARRAY_A); 
-              
-								$variation_list = '';
-                
+				}
+          		$variation_list = '';
                                 
                 if($purch_data[0]['shipping_country'] != '') {
                   $billing_country = $purch_data[0]['billing_country'];
                   $shipping_country = $purch_data[0]['shipping_country'];
-								} else {
-									$country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
-									$country_data = $wpdb->get_results($country_sql,ARRAY_A);
-									$billing_country = $country_data[0]['value'];
-									$shipping_country = $country_data[0]['value'];
-								}
+				} else {
+					$country_sql = "SELECT * FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` WHERE `log_id` = '".$purchase['id']."' AND `form_id` = '".get_option('country_form_field')."' LIMIT 1";
+					$country_data = $wpdb->get_results($country_sql,ARRAY_A);
+					$billing_country = $country_data[0]['value'];
+					$shipping_country = $country_data[0]['value'];
+				}
                 
                 $shipping = $cart_row['pnp'];
                 $total_shipping += $shipping;
                 echo "<tr $alternate>";
             
                 echo " <td>";
-                echo $product_data[0]['name'];
+                echo $cart_row['name'];
                 echo $variation_list;
                 echo " </td>";
             

@@ -7,8 +7,24 @@
  * @package wp-e-commerce
  * @since 3.7
  */
- 
 
+
+/**
+ * WPSC find purchlog status name looksthrough the wpsc_purchlog_statuses variable to find the name of the given status
+ *
+ * @since 3.8
+ * $param int $id the id for the region
+ * @param string $return_value either 'name' or 'code' depending on what you want returned
+ */ 
+function wpsc_find_purchlog_status_name($purchlog_status){
+ global $wpsc_purchlog_statuses;
+ foreach($wpsc_purchlog_statuses as $status){
+  	if($status['order'] == $purchlog_status ){
+   		$status_name = $status['label'];
+  	}
+  }
+  return $status_name;
+}
 /**
  * WPSC get state by id function, gets either state code or state name depending on param
  *

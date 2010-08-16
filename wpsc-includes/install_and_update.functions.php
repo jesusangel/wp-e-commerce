@@ -85,6 +85,7 @@ function wpsc_install() {
 				
 	}
 	
+/*
 	$purchase_statuses_data	= $wpdb->get_results("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_PURCHASE_STATUSES."`",ARRAY_A);
 	if($purchase_statuses_data[0]['count'] == 0) {
 		$wpdb->query("INSERT INTO `".WPSC_TABLE_PURCHASE_STATUSES."` (`name` , `active` , `colour` ) 
@@ -94,6 +95,7 @@ function wpsc_install() {
 		('".__('Job Dispatched', 'wpsc')."', '1', ''),
 		('".__('Closed Order', 'wpsc')."', '1', '');");
 	}
+*/
 
 
 

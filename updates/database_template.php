@@ -298,13 +298,15 @@ $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}purchas
 
 
 // code to create or update the {$wpdb->prefix}wpsc_purchase_statuses table
-$table_name = WPSC_TABLE_PURCHASE_STATUSES;  /* !wpsc_purchase_statuses */
+//$table_name = WPSC_TABLE_PURCHASE_STATUSES;  /* !wpsc_purchase_statuses */
+/*
 $wpsc_database_template[$table_name]['columns']['id'] = "bigint(20) unsigned NOT NULL auto_increment";
 $wpsc_database_template[$table_name]['columns']['name'] = "varchar(128) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['columns']['active'] = "varchar(1) NOT NULL DEFAULT '0' ";
 $wpsc_database_template[$table_name]['columns']['colour'] = "varchar(6) NOT NULL DEFAULT '' ";
 $wpsc_database_template[$table_name]['indexes']['PRIMARY'] = "PRIMARY KEY  ( `id` )";
 $wpsc_database_template[$table_name]['previous_names'] = "{$wpdb->prefix}purchase_statuses";
+*/
 
 
 // code to create or update the {$wpdb->prefix}wpsc_region_tax table

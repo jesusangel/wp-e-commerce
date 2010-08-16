@@ -1,12 +1,14 @@
 <?php
-
-if(isset($_REQUEST['purchaselog_id'])){
-$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+add_action('wpsc_core_included','wpsc_instantiate_purchaselogitem');
+function wpsc_instantiate_purchaselogitem(){
+	global $purchlogitem;
+	if(isset($_REQUEST['purchaselog_id'])){
+		$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+	}
 }
 function wpsc_display_purchlog_howtheyfoundus(){
    global $purchlogitem;
    return $purchlogitem->extrainfo->find_us;
-// exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 
 }
 function wpsc_display_purchlog_display_howtheyfoundus(){
@@ -286,10 +288,7 @@ function wpsc_search_purchlog_view($search){
 
 function wpsc_have_purchaselog_details(){
    global $purchlogitem;
-   //exit('HERe<pre>'.print_r($purchlogitem->allcartcontent,true).'</pre>');
    return $purchlogitem->have_purch_item();
-
-
 }
 
 function wpsc_purchaselog_details_name(){
@@ -844,43 +843,10 @@ class wpsc_purchaselogs{
    }
 
    function the_purch_item_statuses(){
-      global $wpdb,$wpsc_purchase_log_statuses;
-      //$sql = "SELECT name,id FROM ".WPSC_TABLE_PURCHASE_STATUSES;
-      //$statuses = $wpdb->get_results($sql);
-      $wpsc_purchase_log_statuses = array(
-          array(
-             'internalname' => 'incomplete_sale'  ,
-              'label' => 'Incomplete Sale',
-              'order' => 1,
-           ),
-          array(
-              'internalname' =>'order_received',
-              'label' => 'Order Received',
-              'order' => 2,
-         ),
-
-         array(
-             'internalname' => 'accepted_payment',
-              'label' => 'Accepted Payment',
-              'is_transaction' => true,
-              'order' => 3,
-         ),
-          array(
-             'internalname' => 'job_dispatched',
-              'label' => 'Job Dispatched',
-              'is_transaction' => true,
-              'order' => 4,
-           ),
-           array(
-             'internalname' => 'closed_order',
-              'label' => 'Closed Order',
-            'is_transaction' => true,
-              'order' => 5,
-           ),
-         );
-      $this->purch_status_count = count($wpsc_purchase_log_statuses);
-      $this->allpurchaselogstatuses = $wpsc_purchase_log_statuses;
-      return $wpsc_purchase_log_statuses;
+      global $wpdb,$wpsc_purchlog_statuses;
+      $this->purch_status_count = count($wpsc_purchlog_statuses);
+      $this->allpurchaselogstatuses = $wpsc_purchlog_statuses;
+      return $wpsc_purchlog_statuses;
 
    }
    // purchase status loop functions

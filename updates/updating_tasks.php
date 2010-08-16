@@ -463,9 +463,11 @@ if((get_option('flat_rates') == null) || (count(get_option('flat_rates')) < 1)) 
 if(get_option('custom_shipping_options') == null ) {
 	update_option('custom_shipping_options',array('flatrate'));
 }
+/*
 if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_STATUSES."`") != 5){
 	$sql ="INSERT INTO `".WPSC_TABLE_PURCHASE_STATUSES."` (`name`,`active`) VALUES ('Failed Transaction','1')";
 //echo $sql;
 	$wpdb->query($sql);
 }
+*/
 ?>

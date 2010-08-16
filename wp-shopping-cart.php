@@ -34,13 +34,44 @@ define('WPSC_URL', plugins_url('',__FILE__));
 require_once( WPSC_FILE_PATH. '/wpsc-core/define.constants.php' );
 
 function wpsc_load_plugin(){
-	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version;
+	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version,$purchlogitem;
 	
-	do_action('wpsc_before_init');
 
+	do_action('wpsc_before_init');
+	$wpsc_purchlog_statuses = array(
+          array(
+             'internalname' => 'incomplete_sale'  ,
+              'label' => 'Incomplete Sale',
+              'order' => 1,
+           ),
+          array(
+              'internalname' =>'order_received',
+              'label' => 'Order Received',
+              'order' => 2,
+         ),
+
+         array(
+             'internalname' => 'accepted_payment',
+              'label' => 'Accepted Payment',
+              'is_transaction' => true,
+              'order' => 3,
+         ),
+          array(
+             'internalname' => 'job_dispatched',
+              'label' => 'Job Dispatched',
+              'is_transaction' => true,
+              'order' => 4,
+           ),
+           array(
+             'internalname' => 'closed_order',
+              'label' => 'Closed Order',
+            'is_transaction' => true,
+              'order' => 5,
+           ),
+         );
 	//Include the rest of the Plugin files
 	require_once( WPSC_FILE_PATH. '/wpsc-core/include.files.php' );
-	
+	do_action('wpsc_core_included');
 	add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
 	add_action( 'init', 'wpsc_check_for_theme', 8 ); // highest priority
 	add_action('template_redirect', 'wpsc_start_the_query', 8);
