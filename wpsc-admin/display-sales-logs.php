@@ -11,6 +11,7 @@ global $purchlogs;
 if(!isset($purchlogs)){
 	$purchlogs = new wpsc_purchaselogs();	
 }
+
  function wpsc_display_sales_logs() {
  	$subpage ='';
  	if(isset($_GET['subpage']))
@@ -28,6 +29,7 @@ if(!isset($purchlogs)){
 }
 
  function wpsc_display_sales_log_index() {
+
   	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
@@ -100,6 +102,10 @@ if(!isset($purchlogs)){
 			</div>
 		</div>
 		<?php }else{ //NOT IN GENERIC PURCHASE LOG PAGE, IN DETAILS PAGE PER PURCHASE LOG 
+						 
+				if(isset($_REQUEST['purchaselog_id'])){
+					$purchlogitem = new wpsc_purchaselogs_items((int)$_REQUEST['purchaselog_id']);
+				}
 			if (isset($_GET['cleared']) || isset($_GET['cleared'])) { ?>
 			<div id="message" class="updated fade"><p>
 			<?php 
@@ -539,7 +545,7 @@ if(!isset($purchlogs)){
  	<?php
  	endwhile;
  }
- function wpsc_purchaselogs_searchbox(){
+ function wpsc_purchaselogs_searchbox(){ 
  	?>
  	<form  action='' method='post'>
  		<input type='hidden' name='wpsc_admin_action' value='purchlogs_search' />
