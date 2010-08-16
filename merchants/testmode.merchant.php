@@ -31,7 +31,7 @@ class wpsc_merchant_testmode extends wpsc_merchant {
 	
 	function submit() {
 		$this->set_purchase_processed_by_purchid(2);
-		$this->set_transaction_details();
+		//$this->set_transaction_details();
 	 	$this->go_to_transaction_results($this->cart_data['session_id']);
 	
 	 	exit();
