@@ -10,20 +10,18 @@
  */
 function wpsc_currency_display($price_in, $args) {
 	global $wpdb, $wpsc_currency_data;
-	
+
 	$query = shortcode_atts(array(
 		'display_currency_symbol' => true,
 		'display_decimal_point' => true,
 		'display_currency_code' => true,
 		'display_as_html' => true
 	), $args);
-	//exit("<pre>".print_r($query,true)."</pre>");
 
-  
-  
 	
 	$currency_sign_location = get_option('currency_sign_location');
 	$currency_type = get_option('currency_type');
+
 	if(count($wpsc_currency_data) < 3) {
 		$wpsc_currency_data = $wpdb->get_row("
 		SELECT `symbol`, `symbol_html`, `code`
@@ -52,7 +50,7 @@ function wpsc_currency_display($price_in, $args) {
 	if($query['display_currency_code'] == true) {
 		$currency_code = $wpsc_currency_data['code'];
 	}
-	
+
 	if($query['display_currency_symbol'] == true) {
 		if($wpsc_currency_data['symbol'] != '') {
 			if($query['display_as_html'] == false) {
@@ -65,7 +63,7 @@ function wpsc_currency_display($price_in, $args) {
 			$currency_code = '';
 		}
 	}
-	
+
 		
 	switch($currency_sign_location) {
 		case 1:
@@ -85,12 +83,8 @@ function wpsc_currency_display($price_in, $args) {
 			$format_string = '%1$s %2$s%3$s';
 		break;
 	}
-	
+
 	$output = sprintf($format_string, $currency_code, $currency_sign, $price_out);
-	//$output = $currency_sign.$price_out;
-	if($query['display_currency_symbol'] == true) {
-		return $price_out;
-	}
 	return $output;
 }
 
@@ -112,7 +106,7 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
 	//_deprecated_function( __FUNCTION__, '3.8', 'wpsc_currency_display' );
 	$output = wpsc_currency_display($price_in, array(
 		'display_currency_symbol' => !(bool)$no_dollar_sign,
-		'display_as_html' => !(bool)$nohtml,
+		'display_as_html' => (bool)$nohtml,
 		'display_decimal_point' => true,
 		'display_currency_code' => false
 	));

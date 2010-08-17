@@ -494,7 +494,7 @@ function wpsc_update_featured_products() {
 	$is_ajax = (int)(bool)$_POST['ajax'];
 	$product_id = absint($_GET['product_id']);
 	check_admin_referer('feature_product_' . $product_id);
-	$status = get_option( 'sticky_posts' );
+	$status = get_option( 'sticky_products' );
 	
 	$new_status = (in_array($product_id, $status)) ? false : true;
 	
@@ -506,7 +506,7 @@ function wpsc_update_featured_products() {
 		$status = array_diff($status, array($product_id));
 		$status = array_values($status);
 	}
-	update_option('sticky_posts', $status);
+	update_option('sticky_products', $status);
 	
 	if($is_ajax == true) {
 		 if($new_status == true) :?>
@@ -540,7 +540,7 @@ function wpsc_featured_products_toggle($product_id) {
 	$featured_product_url = wp_nonce_url("admin.php?wpsc_admin_action=update_featured_product&amp;product_id=$product_id}", 'feature_product_'.$product_id);
 	?>
 	<a class="wpsc_featured_product_toggle featured_toggle_<?php echo $product_id; ?>" href='<?php echo $featured_product_url; ?>' >
-		<?php if (in_array($product_id, get_option( 'sticky_posts' ))) :?>
+		<?php if (in_array($product_id, get_option( 'sticky_products' ))) :?>
 			<img class='gold-star' src='<?php echo WPSC_URL; ?>/images/gold-star.gif' alt='<?php _e('Unmark as Featured', 'wpsc'); ?>' title='<?php _e('Unmark as Featured', 'wpsc'); ?>' />
 		<?php else: ?>
 			<img class='grey-star' src='<?php echo WPSC_URL; ?>/images/grey-star.gif' alt='<?php _e('Mark as Featured', 'wpsc'); ?>' title='<?php _e('Mark as Featured', 'wpsc'); ?>' />

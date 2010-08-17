@@ -65,6 +65,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 		$product_list='';
 	
 		if(($cart != null) && ($errorcode == 0)) {
+
 			foreach($cart as $row) {
 				$link = "";
 				if($purchase_log['email_sent'] != 1) {
@@ -102,6 +103,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					$previous_download_ids[] = $download_data['id'];
 				
 				}
+					
 				do_action('wpsc_confirm_checkout', $purchase_log['id']);
 				$total_shipping = '';
 				$total = '';
@@ -145,7 +147,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						}
 					$product_list.= " - ".$row['quantity']." ". $row['name']."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
-					$product_list_html.= " - ".$row['quantity']." ". $row['name']."  ". $message_price ."\n\r";
+					$product_list_html.= "\n\r - ".$row['quantity']." ". $row['name']."  ". $message_price ."\n\r";
 					if ($shipping > 0) $product_list_html .= " &nbsp; ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
 
 				}
@@ -153,7 +155,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$report_product_list = '';
 				$report_product_list.= " - ". $row['name']."  ".$message_price ."\n\r";
 			}
-			
+
 				// Decrement the stock here
 				if (($purchase_log['processed'] >= 3)) {
 					wpsc_decrement_claimed_stock($purchase_log['id']);
@@ -253,7 +255,7 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 						}
 					}
 				}
-	
+
 				$report_user .= "\n\r";
 				$report = $report_user. $report_id . $report;
 				
@@ -266,15 +268,15 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 					wp_mail(get_option('purch_log_email'), __('Purchase Report', 'wpsc'), $report);
 					
 				}
-
+				$wpsc_cart->submit_stock_claims($purchase_log['id']);
+				$wpsc_cart->empty_cart();
 				if($purchase_log['processed'] < 3) {
 					echo "<br />" . nl2br(str_replace("$",'\$',$message_html));
 					return;
 				}
 
 				/// Empty the cart
-				$wpsc_cart->submit_stock_claims($purchase_log['id']);
-				$wpsc_cart->empty_cart();
+			
 
 				if(true === $echo_to_screen) {
 					echo '<div class="wrap">';

@@ -769,7 +769,7 @@ $sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM wp_posts
 function wpsc_display_featured_products_page() {
 	global $wpdb, $wpsc_query;	
 	
-	$sticky_array =get_option('sticky_posts');
+	$sticky_array =get_option('sticky_products');
 	if ( (is_front_page() || is_home()) && !empty($sticky_array) ) {
 	
  	$query = get_posts(array(

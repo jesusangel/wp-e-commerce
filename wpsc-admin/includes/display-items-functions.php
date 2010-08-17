@@ -241,7 +241,7 @@ if(!isset($product->post_type)) $product->post_type = '';
 $nonce_action = 'update-' . $product->post_type . '_' . $product_data["id"];
 $form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr($product_data["id"]) . "' />";
 
-$sticky = get_option( 'sticky_posts' );
+$sticky = get_option( 'sticky_products' );
 if ( in_array ( $product_data["id"], $sticky ) )
 $sticky_checked = 'checked="checked" ';
 
@@ -1303,7 +1303,7 @@ function wpsc_product_image_forms($product_data='') {
       $display = "style='display:none;'";
    }
 
-      //echo "<pre>".print_r($product_data,true)."</pre>";
+
 /* Removing all this goodness in place of the Upload Image Above - justin - 5.20
    //As in WordPress,  If Mac and mod_security, no Flash
    $flash = true;
