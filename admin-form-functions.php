@@ -543,11 +543,10 @@ function wpsc_right_now($hidden = '') {
 		$output.="	</h3>";
 		
 		$output .= "<div class='inside'>";
+		$output .= "<div class='table'>";
 		$output .= "<p class='sub'>".__('At a Glance', 'wpsc')."</p>";
 		//$output.="<p class='youhave'>".__('You have <a href='admin.php?page=wpsc-edit-products'>:productcount:</a>, contained within <a href='admin.php?page=wpsc-edit-groups'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>";
-		$output .= "<div class='table'>";
-		$output .= "<table>";
-		
+		$output .= "<table style='border-top:1px solid #ececec;'>";
 		$output .= "<tr class='first'>";
 		$output .= "<td class='first b'>";
 		$output .= "<a href='?page=wpsc-edit-products'>".$product_count."</a>";
