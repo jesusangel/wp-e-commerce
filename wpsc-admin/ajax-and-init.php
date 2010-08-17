@@ -1255,7 +1255,7 @@ if($_REQUEST['wpsc_admin_action'] == 'clear_locks') {
  
   function wpsc_purchlog_search_by(){
 //  exit('<pre>'.print_r($_POST,true).'</pre>');
- 	//wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
+ 	wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
  } 
  
  if($_REQUEST['wpsc_admin_action'] == 'purchlogs_search') {
