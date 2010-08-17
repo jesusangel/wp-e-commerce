@@ -742,8 +742,14 @@ add_filter( 'body_class', 'wpsc_body_class' );
 
 function wpsc_the_sticky_image($product_id) {
 global $wpdb;
+	if(has_post_thumbnail($product_id)) {
+    	add_image_size( 'featured-product-thumbnails',540,260, TRUE);
+		$image = get_the_post_thumbnail($product_id, 'featured-product-thumbnails');
+		return $image;
+	} else {
+		return false;
+	}
 //Previously checked product_meta, now get_vars guid from attachment with this post_parent, checking against _thumbnail_id   
-
 $sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM wp_posts p, wp_postmeta pm WHERE p.post_parent = $product_id AND pm.post_id = $product_id AND pm.meta_value = p.ID"));
 
 	if($sticky_product_image != ''){
@@ -763,17 +769,16 @@ $sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM wp_posts
 function wpsc_display_featured_products_page() {
 	global $wpdb, $wpsc_query;	
 	
+	$sticky_array =get_option('sticky_posts');
+	if ( (is_front_page() || is_home()) && !empty($sticky_array) ) {
 	
-
-	if ( is_front_page() || is_home() ) {  
  	$query = get_posts(array(
-			'post__in'  => get_option('sticky_posts'),
+			'post__in'  => $sticky_array,
 			'post_type' => 'wpsc-product',
 			'orderby' => 'rand',
 			'meta_key' => '_thumbnail_id',
 			'numberposts' => 1
 		));
-
 		if ( count($query) > 0 ) { 
 
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
@@ -785,8 +790,8 @@ function wpsc_display_featured_products_page() {
 ?>
 
 <div class="wpsc_container wpsc_featured">
-		<div class="product_grid_display">
-			<div class="product_grid_item product_view_<?php the_ID(); ?>">
+		<div class="featured_product_display">
+			<div class="featured_product_display_item product_view_<?php the_ID(); ?>">
 				<div class="item_text">
 						<h3>
 							<a href='<?php echo get_permalink($product->ID); ?>'><?php echo get_the_title($product->ID); ?></a>
@@ -801,8 +806,9 @@ function wpsc_display_featured_products_page() {
 				</div>
 			
 				<?php if(wpsc_the_product_thumbnail()) :?> 	   
-					<div class="item_image">
-						<a href="<?php echo get_permalink($product->ID); ?>" style='background-image: url(<?php echo wpsc_the_sticky_image(wpsc_the_product_id()); ?>);'>
+					<div class="featured_item_image">
+						<a href="<?php echo get_permalink($product->ID); ?>" title="<?php echo get_the_title($product->ID); ?>">
+						<?php echo wpsc_the_sticky_image(wpsc_the_product_id()); ?>
 						</a>
 					</div>
 				<?php else: ?> 

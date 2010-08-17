@@ -1318,11 +1318,11 @@ function wpsc_product_image_forms($product_data='') {
    <div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search('wpsc_product_image_forms', $product_data['closed_postboxes']) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search('wpsc_product_image_forms', $product_data['hidden_postboxes']) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
       <h3 class='hndle'> <?php echo __('Product Images', 'wpsc'); ?></h3>
       <div class='inside'>
-         <p><strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php echo __('Product Images', 'wpsc');?></a></strong></p>
+         
          <?php
          edit_multiple_image_gallery($product_data);
-         ?>
-
+         ?><br />
+<strong <?php if(isset($display)) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php echo __('Manage Product Images', 'wpsc');?></a></strong>
       </div>
       <div style='clear:both'></div>
    </div>
@@ -1434,7 +1434,7 @@ function edit_multiple_image_gallery($product_data) {
    global $wpdb;
    $siteurl = get_option('siteurl');
    ?>
-   <ul id="gallery_list" class="ui-sortable" style="position: relative;">
+ 
    <?php
    if($product_data['id'] > 0) {
       $args = array(
@@ -1447,7 +1447,12 @@ function edit_multiple_image_gallery($product_data) {
       );
 
       $attached_images = (array)get_posts($args);
-      if($attached_images != null) {
+      if(has_post_thumbnail($product_data['id'])){
+		echo get_the_post_thumbnail($product_data['id'], 'admin-product-thumbnails');
+      }
+    
+      /*
+if($attached_images != null) {
          foreach($attached_images as $image) {
             $image_meta = get_post_meta($image->ID, '');
             foreach($image_meta as $meta_name => $meta_value) {
@@ -1471,6 +1476,7 @@ function edit_multiple_image_gallery($product_data) {
             }
          }
       }
+*/
       /*
       $main_image = $wpdb->get_row("SELECT `images`.*
       FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images`
@@ -1481,7 +1487,7 @@ function edit_multiple_image_gallery($product_data) {
       */
    }
    ?>
-   </ul>
+
    <?php
 }
 

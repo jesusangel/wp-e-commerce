@@ -599,18 +599,12 @@ function wpsc_product_normal_price() {
 * @return string - the URL to the thumbnail image
 */
 function wpsc_the_product_image() {
+	$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
+	$src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnail');
+	
+	if(!empty($src) && is_string($src[0])) {
 
-	$attached_images = (array)get_posts(array(
-		'post_type' => 'attachment',
-		'numberposts' => 1,
-		'post_status' => null,
-		'post_parent' => get_the_ID(),
-		'orderby' => 'menu_order',
-		'order' => 'ASC'
-	));
-	if($attached_images != null) {
-		$attached_image = $attached_images[0];
-		return wp_get_attachment_url($attached_image->ID);
+		return $src[0];
 	} else {
 		return false;
 	}
@@ -626,19 +620,11 @@ function wpsc_the_product_thumbnail($width = null, $height = null) {
 		$width  = get_option('product_image_width');
 		$height = get_option('product_image_height');
 	}
-	
-	$attached_images = (array)get_posts(array(
-		'post_type' => 'attachment',
-		'numberposts' => 1,
-		'post_status' => null,
-		'post_parent' => get_the_ID(),
-		'orderby' => 'menu_order',
-		'order' => 'ASC'
-	));
-	
-	if($attached_images != null) {
-		$attached_image = $attached_images[0];
-		return wpsc_product_image($attached_image->ID, $width, $height);
+
+	if(has_post_thumbnail(get_the_ID())) {
+	add_image_size( 'product-thumbnails', get_option('product_image_width'), get_option('product_image_height'), TRUE ); 
+		$image = get_the_post_thumbnail(get_the_ID(), 'product-thumbnails');
+		return $image;
 	} else {
 		return false;
 	}

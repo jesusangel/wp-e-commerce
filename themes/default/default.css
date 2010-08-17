@@ -10,7 +10,25 @@ Author URI: http://instinct.co.nz
  * If you delete this file, you can expect your WP e-Commerce installation to break in some manner
  * to create your own theme copy, and paste this file, change the names and alter to your tastes
 */
-
+.wpsc_clear{
+clear:both;
+padding-bottom: 30px;
+}
+.featured_item_image{
+width:60%;
+height:260px;
+float:right;
+overflow:hidden;
+-moz-border-radius: 10px;
+}
+.featured_item_image a img{
+overflow:hidden;
+-moz-border-radius: 10px;
+}
+.wpsc_featured .item_text{
+width:36%;
+float:left;
+}
 .wpsc_container{
   position: relative;
   _zoom: 1;

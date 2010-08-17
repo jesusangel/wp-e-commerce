@@ -196,34 +196,18 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			?>
 			<td class="product-image ">
 			<?php
-
-			$args = array(
-				'post_type' => 'attachment',
-				'numberposts' => 1,
-				'post_status' => null,
-				'post_parent' => $product->ID,
-				'orderby' => 'menu_order',
-				'order' => 'ASC'
-				);
-
-			$attachments = (array)get_posts($args);
-			$product_image = array_shift($attachments);
-			if (($product_image == null) && ($product->post_parent > 0)) {
-				$product_image = $parent_product['image'];
-			}
-			if ($product_image != null) {
-
-				$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$product_image->ID}&amp;width=38&amp;height=38&amp;crop=true";
-				?>
-					<img title='Drag to a new position' src=<?php echo $image_url; ?>' alt='<?php echo $title; ?>' />
-				<?php
-			} else {
-				$image_url = WPSC_URL."/images/no-image-uploaded.gif";
+		 	 if(has_post_thumbnail($product_data['id'])){
+				echo get_the_post_thumbnail($product_data['id'], 'admin-product-thumbnails');
+		      }else{
+		      	$image_url = WPSC_URL."/images/no-image-uploaded.gif";
 				?>
 					<img title='Drag to a new position' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
 				<?php
-				}
-				?>
+
+		      
+		      }
+		    
+		?>
 			</td>
 			<?php
 		break;
