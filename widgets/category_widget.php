@@ -26,7 +26,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		$grid = (bool)$instance['grid'];
 		$width = $instance['width'];
 		$height = $instance['height'];
-		foreach(array_keys($instance['categories']) as $category_id) {
+		foreach(array_keys((array)$instance['categories']) as $category_id) {
 			include(wpsc_get_theme_file_path("category_widget.php"));
 		}
 		if($grid){

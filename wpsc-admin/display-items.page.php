@@ -540,7 +540,7 @@ function wpsc_featured_products_toggle($product_id) {
 	$featured_product_url = wp_nonce_url("admin.php?wpsc_admin_action=update_featured_product&amp;product_id=$product_id}", 'feature_product_'.$product_id);
 	?>
 	<a class="wpsc_featured_product_toggle featured_toggle_<?php echo $product_id; ?>" href='<?php echo $featured_product_url; ?>' >
-		<?php if (in_array($product_id, get_option( 'sticky_products' ))) :?>
+		<?php if (in_array($product_id, (array)get_option( 'sticky_products' ))) :?>
 			<img class='gold-star' src='<?php echo WPSC_URL; ?>/images/gold-star.gif' alt='<?php _e('Unmark as Featured', 'wpsc'); ?>' title='<?php _e('Unmark as Featured', 'wpsc'); ?>' />
 		<?php else: ?>
 			<img class='grey-star' src='<?php echo WPSC_URL; ?>/images/grey-star.gif' alt='<?php _e('Mark as Featured', 'wpsc'); ?>' title='<?php _e('Mark as Featured', 'wpsc'); ?>' />
