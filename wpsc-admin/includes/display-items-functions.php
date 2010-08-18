@@ -1071,7 +1071,7 @@ function wpsc_product_shipping_forms($product_data=''){
             <option value='pound' ". (($product_meta['display_weight_as'] == 'pound') ? 'selected="selected"' : '') .">Pounds</option>
             <option value='ounce' ". ((preg_match("/o(u)?nce/",$product_meta['display_weight_as'])) ? 'selected="selected"' : '') .">Ounces</option>
             <option value='gram' ". (($product_meta['display_weight_as'] == 'gram') ? 'selected="selected"' : '') .">Grams</option>
-            <option value='kilogram' ". (($product_meta['display_weight_as'] == 'kilogram') ? 'selected="selected"' : '') .">Kilograms</option>
+            <option value='kilogram' ". (($product_meta['display_weight_as'] == 'kilogram' ||$product_meta['display_weight_as'] == 'kilograms') ? 'selected="selected"' : '') .">Kilograms</option>
          </select>
       </td>
     </tr>

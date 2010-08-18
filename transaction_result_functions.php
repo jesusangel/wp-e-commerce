@@ -203,16 +203,19 @@ function transaction_results($sessionid, $echo_to_screen = true, $transaction_id
 				$message = str_replace('%total_shipping%',$total_shipping_email,$message);
 				$message = str_replace('%total_price%',$total_price_email,$message);
 				$message = str_replace('%shop_name%',get_option('blogname'),$message);
+				$message = str_replace( '%find_us%', $purchase_log['find_us'], $message );
 				
 				$report = str_replace('%product_list%',$report_product_list,$report);
 				$report = str_replace('%total_shipping%',$total_shipping_email,$report);
 				$report = str_replace('%total_price%',$total_price_email,$report);
 				$report = str_replace('%shop_name%',get_option('blogname'),$report);
+				$report = str_replace( '%find_us%', $purchase_log['find_us'], $report );
 				
 				$message_html = str_replace('%product_list%',$product_list_html,$message_html);
 				$message_html = str_replace('%total_shipping%',$total_shipping_html,$message_html);
 				$message_html = str_replace('%total_price%',$total_price_email,$message_html);
 				$message_html = str_replace('%shop_name%',get_option('blogname'),$message_html);
+				$message_html = str_replace( '%find_us%', $purchase_log['find_us'], $message_html );
 				
 				if(($email != '') && ($purchase_log['email_sent'] != 1)) {
 				

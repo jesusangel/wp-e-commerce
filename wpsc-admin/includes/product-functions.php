@@ -286,7 +286,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 			}
 		}			
   } else {
-
 		$product_post_values += array(
 			'post_date' => $product['date_added']
 		);

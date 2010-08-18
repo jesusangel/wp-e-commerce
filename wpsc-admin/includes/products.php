@@ -19,7 +19,7 @@
  * @return string The translated / filtered text.
  */
 function wpsc_filter_feature_image_text($translation, $text, $domain){
-	if($text == 'Use as featured image' && isset($_REQUEST['post_id']) && (get_post_type($_REQUEST['post_id']) == 'wpsc-product')){
+	if('Use as featured image' == $text && isset($_REQUEST['post_id']) && ('wpsc-product' == get_post_type($_REQUEST['post_id']))){
 		$translations = &get_translations_for_domain($domain);
 		return $translations->translate('Use as Product Thumbnail') ;
 	}
@@ -282,6 +282,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 					$unit = " g";
 					break;
 				case "kilograms":
+				case "kilogram":				
 					$unit = " kgs.";
 					break;
 			}

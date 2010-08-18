@@ -1,4 +1,8 @@
 <?php
+/**
+ * This file handles the standard importing of products through a csv file upload. Access this page via WP-admin Settings>Import
+ * @package WP e-Commerce
+ */
 function wpsc_options_import(){
 global $wpdb;
 ?>
@@ -31,10 +35,10 @@ ini_set("auto_detect_line_endings", 1);
 				array_push($data1[$i], $csv_data[$i]);
 			}
 		}
-		//exit("<pre>".print_r($data1, 1)."</pre>");
+		
 		$_SESSION['cvs_data'] = $data1;
-		$categories_sql = "SELECT `id`,`name` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1'";
-		$categories = $wpdb->get_results($categories_sql, ARRAY_A);
+		$categories = get_terms('wpsc_product_category','hide_empty=0&parent='.$category_id);
+
 		?>
 		
 		<p>For each column, select the field it corresponds to in 'Belongs to'. You can upload as many products as you like.</p>
@@ -79,7 +83,7 @@ ini_set("auto_detect_line_endings", 1);
 		<select id='category' name='category'>
 		<?php
 		foreach($categories as $category){
-		echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+		echo '<option value="'.$category->term_id.'">'.$category->name.'</option>';
 		
 		}
 		?>
@@ -92,7 +96,7 @@ ini_set("auto_detect_line_endings", 1);
 
 	}
 }
-if(isset($_POST['csv_action']) && ($_POST['csv_action'] == 'import')) {
+if(isset($_POST['csv_action']) && ('import' == $_POST['csv_action'])) {
 	global $wpdb;
 
 	$cvs_data = $_SESSION['cvs_data'];
@@ -100,62 +104,55 @@ if(isset($_POST['csv_action']) && ($_POST['csv_action'] == 'import')) {
 	$column_data = $_POST['column'];
 	$value_data = $_POST['value_name'];
 	$name = array();
-/*
-	foreach ($value_data as $key => $value) {
-		$value_data[$key] = $cvs_data[$key];
-	}
-*/
-	//echo('<pre>'.print_r($value_data, true).'</pre><pre>'.print_r($column_data, true).'</pre>');
 	foreach ($value_data as $key => $value) {
 
 			$cvs_data2[$value] = $cvs_data[$key];
 
 	}
-	//exit('<pre>'.print_r($cvs_data2, true).'</pre>');
 	$num = count($cvs_data2['name']);
 	
 	for($i =0; $i < $num; $i++){
-		
-		 $cvs_data2['price'][$i] = str_replace('$','',$cvs_data2['price'][$i]);
-		//exit( $cvs_data2['price'][$i]);
-		
-	//	exit($key. ' ' . print_r($data));		
-		$query = "('".$cvs_data2['name'][$i]."', '".$cvs_data2['description'][$i]."', '".$cvs_data2['additional_description'][$i]."','".$cvs_data2['price'][$i]."','".$cvs_data2['weight'][$i]."','".$cvs_data2['weight_unit'][$i]."','".$cvs_data2['quantity'][$i]."','".$cvs_data2['quantity_limited'][$i]."')";
-		$query = "INSERT INTO `".WPSC_TABLE_PRODUCT_LIST."` (name, description, additional_description, price, weight, weight_unit, quantity, quantity_limited) VALUES ".$query;
-	//	echo($query);
-		$wpdb->query($query);
-		$id = $wpdb->get_var("SELECT LAST_INSERT_ID() as id FROM `".WPSC_TABLE_PRODUCT_LIST."`");
-		$meta_query = "INSERT INTO `".WPSC_TABLE_PRODUCTMETA."` VALUES ('', '$id', 'sku', '".$cvs_data2['sku'][$i]."', '0')";
-		$wpdb->query($meta_query);
-		$category_query = "INSERT INTO `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` VALUES ('','{$id}','".$wpdb->escape($_POST['category'])."')";
-		$wpdb->query($category_query);
-		$existing_name = get_product_meta($id, 'url_name');
-		// strip slashes, trim whitespace, convert to lowercase
-		$tidied_name = strtolower(trim(stripslashes($cvs_data2['name'][$i])));
-		// convert " - " to "-", all other spaces to dashes, and remove all foward slashes.
-		//$url_name = preg_replace(array("/(\s-\s)+/","/(\s)+/", "/(\/)+/"), array("-","-", ""), $tidied_name);
-		$url_name =  sanitize_title($tidied_name);
-		//exit('NAMES >>'.$url_name.' '.$existing_name);
-		// Select all similar names, using an escaped version of the URL name 
-		$similar_names = (array)$wpdb->get_col("SELECT `meta_value` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` NOT IN('{$id}}') AND `meta_key` IN ('url_name') AND `meta_value` REGEXP '^(".$wpdb->escape(preg_quote($url_name))."){1}[[:digit:]]*$' ");
+		$product_columns = array(
+			'post_title' => $cvs_data2['name'][$i],
+			'content' => $cvs_data2['description'][$i],
+			'additional_description' => $cvs_data2['additional_description'][$i],
+			'price' => str_replace('$','',$cvs_data2['price'][$i]),
+			'weight' => $cvs_data2['weight'][$i],
+			'weight_unit' => $cvs_data2['weight_unit'][$i],
+			'pnp' => null,
+			'international_pnp' => null,
+			'file' => null,
+			'image' => '0',
+			'quantity_limited' => $cvs_data2['quantity_limited'][$i],
+			'quantity' => $cvs_data2['quantity'][$i],
+			'special' => null,
+			'special_price' => null,
+			'display_frontpage' => null,
+			'notax' => null,
+			'publish' => null,
+			'active' => null,
+			'donation' => null,
+			'no_shipping' => null,
+			'thumbnail_image' => null,
+			'thumbnail_state' => null,
+			'category' => array(
+						esc_html__($_POST['category'])
+				),
+			'meta' => array(
+						'_wpsc_price'	=>  str_replace('$','',$cvs_data2['price'][$i]),
+						'_wpsc_sku' 	=>	$cvs_data2['sku'][$i],
+						'_wpsc_stock'	=>  $cvs_data2['quantity'][$i],
+						'_wpsc_product_metadata' => array(
+								'weight' =>  $cvs_data2['weight'][$i],
+								'weight_unit' =>  $cvs_data2['weight_unit'][$i],
+						
+						)
+			)
+		);
 
-		// Check desired name is not taken
-		if(array_search($url_name, $similar_names) !== false) {
-		  // If it is, try to add a number to the end, if that is taken, try the next highest number...
-			$j = 0;
-			do {
-				$j++;
-			} while(array_search(($url_name.$j), $similar_names) !== false);
-			// Concatenate the first number found that wasn't taken
-			$url_name .= $j;
-		}
-	  // If our URL name is the same as the existing name, do othing more.
-		if($existing_name != $url_name) {
-			update_product_meta($id, 'url_name', $url_name);
-		}
-		}
-
-/* 	$query = "INSERT INTO {$wpdb->prefix}product_list (name, description, addictional_description, price) VALUES ".$query; */
+	$product_columns = wpsc_sanitise_product_forms($product_columns);
+	wpsc_insert_product($product_columns);
+	}
 	echo "<br /><br />Success, your <a href='?page=wpsc-edit-products'>products</a> have been upload.";
 		
 }
