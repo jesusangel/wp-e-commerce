@@ -24,7 +24,6 @@ function wpsc_image_downsize($id, $size) {
 
 function wpsc_display_edit_products_page() {
   global $wpdb, $wp_query, $wpsc_products;
-
   
   $category_id = 0;
   if(isset($_GET['category_id']))

@@ -8,6 +8,26 @@
  * @since 3.8
  */
 
+/*
+ * This filter translatesstring before it is displayed 
+ * specifically for the words 'Use as featured image' with 'Use as Product Thumbnail' when the user is selecting a Product Thumbnail
+ * using media gallery.
+ * 
+ * @param $translation The current translation
+ * @param $text The text being translated
+ * @param $context The context for the translation
+ * @param $domain The domain for the translation
+ * @return string The translated / filtered text.
+ */
+function wpsc_filter_feature_image_text($translation, $text, $domain){
+	$translations = &get_translations_for_domain($domain);
+	if($text == 'Use as featured image' && get_post_type($_REQUEST['post_id']) == 'wpsc-product'){
+		return $translations->translate('Use as Product Thumbnail') ;
+	}
+	return $translation;
+
+}
+add_filter('gettext','wpsc_filter_feature_image_text',10,4);
 /**
  * wpsc_product_rows function, copies the functionality of the wordpress code for displaying posts and pages, but is for products
  * 
