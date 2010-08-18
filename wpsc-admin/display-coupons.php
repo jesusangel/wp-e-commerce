@@ -265,17 +265,17 @@ function wpsc_display_coupons_page(){
  <tr><td colspan="2">
    <p><span class='input_label'><?php _e('Active','wpsc'); ?></span><input type='hidden' value='0' name='add_active' />
    <input type='checkbox' value='1' checked='checked' name='add_active' />
-	<?php _e('Activate Coupon on Creation ', 'wpsc')?></p></td></tr>
+	<?php _e('Activate coupon on creation.', 'wpsc')?></p></td></tr>
  
  <tr><td colspan="2">
    <p><span class='input_label'><?php _e('Use Once','wpsc'); ?></span><input type='hidden' value='0' name='add_use-once' />
 	<input type='checkbox' value='1' name='add_use-once' />
-	<?php _e('Deactivate Coupon after it has been used', 'wpsc')?></td></tr>
+	<?php _e('Deactivate coupon after it has been used.', 'wpsc')?></td></tr>
 
  <tr><td colspan="2">
    <p><span class='input_label'><?php _e('Apply On All Products','wpsc'); ?></span><input type='hidden' value='0' name='add_every_product' />
 	<input type="checkbox" value="1" name='add_every_product'/>
-	<?php _e('This Coupon Effects All Products', 'wpsc')?></td></tr>
+	<?php _e('This coupon affects each product at checkout.', 'wpsc')?></td></tr>
 
 <tr><td colspan='3'><span id='table_header'>Conditions</span></td></tr>
 <tr><td colspan="8">
@@ -493,15 +493,11 @@ function wpsc_marketing_meta_box(){
 ?>
 <form name='cart_options' method='post' action=''>
 	<input type='hidden' value='true' name='change-settings' />        
-    <p><span class='input_label'><?php echo __('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' /><?php echo __('Creates a \' Users who bought this also bought\' system. ', 'wpsc');?></p>
- 
-   	<p><span class='input_label'><?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' />  <?php echo __('Adds a share this link on the single products page.', 'wpsc');?></p>
-
-	<p><span class='input_label'> <?php echo __('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' />  <?php echo __('Provides a \'How did you find out about us\' drop down box on checkout page.', 'wpsc')?></p>
-
-   	<p><input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' /></p>
+	<p><span class='input_label'><?php echo __('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' />  <?php echo __('Adds the \'Users who bought this also bought\' item to the single products page.', 'wpsc');?></p>
+	<p><span class='input_label'><?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' />  <?php echo __('Adds the \'Share this link\' item to the single products page.', 'wpsc');?></p>
+	<p><span class='input_label'> <?php echo __('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' />  <?php echo __('Adds the \'How did you find out about us\' drop-down option at checkout.', 'wpsc')?></p>
+	<p><input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' /></p>
 </form>
-
 <?php
 }
 function wpsc_rss_address_meta_box(){
