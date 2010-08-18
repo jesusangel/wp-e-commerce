@@ -335,18 +335,13 @@ function wpsc_cart_item_url() {
 */
 function wpsc_cart_item_image($width = null, $height = null) {
    global $wpsc_cart;
-   $image_data = $wpsc_cart->cart_item->thumbnail_image;
-// echo "<pre>".print_r($wpsc_cart->cart_item)."</pre>";
-
-   if(($width > 0) && ($height > 0)) {
-      $image_path = "index.php?wpsc_action=scale_image&amp;attachment_id={$image_data->ID}&amp;width=".$width."&amp;height=".$height."";
-   } else {
-      $image_path = WPSC_THUMBNAIL_URL.$wpsc_cart->cart_item->thumbnail_image;
-      if(is_ssl()) {
-         $image_path = str_replace("http://", "https://", $image_path);
-      }
-   }
-   return $image_path;
+   $post_thumbnail_id = get_post_thumbnail_id( $wpsc_cart->cart_item->product_id);
+   $src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnail');
+   if(!empty($src[0])){
+	return $src[0];
+	}else{
+	return 'index.php?image_id=0&amp;thumbnail=true&amp;width=48&amp;height=48';
+	}
 }
 
 /**

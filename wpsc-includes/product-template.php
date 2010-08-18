@@ -598,8 +598,11 @@ function wpsc_product_normal_price() {
 * wpsc product image function
 * @return string - the URL to the thumbnail image
 */
-function wpsc_the_product_image() {
-	$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
+function wpsc_the_product_image($product_id = '') {
+	if(empty($product_id)){
+		$product_id =  get_the_ID() ;
+	}
+	$post_thumbnail_id = get_post_thumbnail_id($product_id);
 	$src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnail');
 	
 	if(!empty($src) && is_string($src[0])) {
