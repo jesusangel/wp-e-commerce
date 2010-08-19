@@ -357,8 +357,8 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	// and the meta
 	wpsc_update_product_meta($product_id, $post_data['meta']);
 	
-	// the variations too
-	wpsc_edit_product_variations($product_id, $post_data);
+	// the variations too :jghazally commented this out cause it was OTT 20/8/2010
+	//wpsc_edit_product_variations($product_id, $post_data);
 	
 	// and the custom meta
 	wpsc_update_custom_meta($product_id, $post_data);
