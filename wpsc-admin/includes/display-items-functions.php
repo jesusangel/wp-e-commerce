@@ -379,18 +379,21 @@ function wpsc_product_basic_details_form( &$product_data ) {
 
 			update_option( 'wpsc_product_page_order', $order );
 
-			// if this is a child product, we need to filter out the variations box here
-			if ( isset( $product_data['product_object']->post_parent ) && $product_data['product_object']->post_parent > 0 ) {
-				$variation_box_key = array_search( 'wpsc_product_variation_forms', $order );
-				if ( is_numeric( $variation_box_key ) && isset( $order[$variation_box_key] ) ) {
-					unset( $order[$variation_box_key] );
-				}
-
-				$category_box_key = array_search( 'wpsc_product_category_and_tag_forms', $order );
-				if ( is_numeric( $category_box_key ) && isset( $order[$category_box_key] ) ) {
-					unset( $order[$category_box_key] );
-				}
-			}
+	        // if this is a child product, we need to filter out the variations box here
+	        if(isset($product_data['product_object']->post_parent) && $product_data['product_object']->post_parent > 0) {
+	          foreach($order as $key => $values){
+		          $variation_box_key = array_search('wpsc_product_variation_forms', $values);	  
+			      if(count($variation_box_key) > 0) 
+			         unset($order[$key][$variation_box_key]);
+		      	  
+	         	  $category_box_key = array_search('wpsc_product_category_and_tag_forms', $values);
+		          if(is_numeric($category_box_key) && isset($order[$key][$category_box_key])) 
+	             	unset($order[$key][$category_box_key]);
+	         	  
+	         		    
+		      }
+	
+	        }
 
 			foreach ( (array)$order["side"] as $key => $box_function_name ) {
 				if ( function_exists( $box_function_name ) ) {
