@@ -130,15 +130,15 @@ table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
 	border-bottom:1px solid #dfdfdf;
 }
 
-#wpsc_settings_nav_bar{
+#wpsc_settings_nav_bar {
 	width:100%;
 }
 
 #wpsc_settings_nav_bar ul {
-	width:100%;
+	width: 98%;
 	border-bottom: 1px solid #DFDFDF;
-	float:left;
-	margin:0 auto;
+	float: left;
+	margin: 0 auto;
 	padding-left: 15px;
 	margin-top: -1px;
 }
