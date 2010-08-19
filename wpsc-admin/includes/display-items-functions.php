@@ -513,16 +513,16 @@ function wpsc_product_basic_details_form( &$product_data ) {
 							</div>
 						</td>
 					</tr>
-
-					<tr>
-						<td class='itemfirstcol' colspan='2'>
-							<strong ><?php echo __( 'Additional Description', 'wpsc' ); ?> :</strong><br />
-							<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes( $product_data['additional_description'] ); ?></textarea>
-						</td>
-					</tr>
 				</table>
 			</div>
 			<div id="advanced-sortables" class="meta-box-sortables-wpec ui-sortable">
+				<div class="postbox">
+					<h3><?php echo __( 'Additional Description', 'wpsc' ); ?></h3>
+					<div class="inside">
+
+						<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes( $product_data['additional_description'] ); ?></textarea>
+					</div>
+				</div>
 <?php
 				foreach ( (array)$order["advanced"] as $key => $box_function_name ) {
 					if ( function_exists( $box_function_name ) ) {
