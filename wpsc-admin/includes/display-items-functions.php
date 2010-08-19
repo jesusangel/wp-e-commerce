@@ -865,8 +865,11 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 						'name' => 'meta[_wpsc_product_metadata][wpec_taxes_band]',
 						'label' => __( 'Custom Tax Band' )
 					);
-
-					echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $product_meta['wpec_taxes_band'] );
+					$wpec_taxes_band = '';
+					if(isset($product_meta['wpec_taxes_band'])){
+						$wpec_taxes_band = $product_meta['wpec_taxes_band'];
+					}
+					echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band );
 ?>
 				</p>
 				<!--<input type='checkbox' value='1' name='meta[_wpsc_product_metadata][custom_tax][state]' id='custom_tax_checkbox'  <?php echo ((is_numeric( $product_meta['custom_tax'] ) > 0) ? 'checked=\'checked\'' : ''); ?>  />

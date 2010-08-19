@@ -2503,10 +2503,10 @@ function variation_price_field( $variation ) {
 ?>
 
     <tr class="form-field">
-        <th scope="row" valign="top"><label for="variation_price"><?php _e('Variation Price') ?></label></th>
+        <th scope="row" valign="top"><label for="variation_price"><?php _e('Variation Price', 'wpsc'); ?></label></th>
         <td>
         	<input type="text" name="variation_price" id="variation_price" style="width:50px;" value="<?php echo $price; ?>"><br />
-            <span class="description">You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).</span>
+            <span class="description"><?php _e('You can list a default price here for this variation.  You can list a regular price (18.99), differential price (+1.99 / -2) or even a percentage-based price (+50% / -25%).','wpsc'); ?></span>
 	</div>
 	</td>
 	</tr>
