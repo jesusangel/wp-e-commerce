@@ -53,13 +53,12 @@ tr.checkout-placeholder {
 	padding: 0px 0px 0px 5px;
 }
 
-table#gateway_options tr td{
-	padding: 0 0 8px 2px;
+table#gateway_options tr td {
+	padding: 0;
 	vertical-align: top;
 }
-td.gateway_settings {
-	padding-top: 0px !important;
-	width:90%;
+table#gateway_options tr td.gateway_settings {
+	padding: 0 0 8px 8px;
 	width:394px;
 }
 td.gateway_settings input[type=text]{
