@@ -40,10 +40,6 @@ tr.checkout-placeholder {
 }
 
 #wpsc_options {
-	border-color:#EBEBEB rgb(204, 204, 204) rgb(204, 204, 204) rgb(235, 235, 235);
-	border-style:solid;
-	border-width:1px;
-	margin:0pt 15% 0pt 15px;
 	padding:2px;
 	position: relative;
 }
@@ -138,16 +134,21 @@ table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
 	width:100%;
 }
 
-#wpsc_settings_nav_bar ul{
+#wpsc_settings_nav_bar ul {
 	width:100%;
 	border-bottom: 1px solid #DFDFDF;
 	float:left;
 	margin:0 auto;
-	padding-left:0;
+	padding-left: 15px;
 	margin-top: -1px;
 }
 #wpsc_settings_nav_bar ul li a{
 	margin-bottom:-1px;
+}
+
+#wpsc_settings_nav_bar ul li a.current {
+	background-color: #f9f9f9 !important;
+	border-bottom-color: transparent !important;
 }
 
 h3.form_group {
