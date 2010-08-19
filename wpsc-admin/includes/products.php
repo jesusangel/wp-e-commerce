@@ -215,8 +215,8 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			?>
 			<td class="product-image ">
 			<?php
-		 	 if(isset($product_data['id']) && has_post_thumbnail($product_data['id'])){
-				echo get_the_post_thumbnail($product_data['id'], 'admin-product-thumbnails');
+		 	 if(isset($product->ID) && has_post_thumbnail($product->ID)){
+				echo get_the_post_thumbnail($product->ID, 'admin-product-thumbnails');
 		      }else{
 		      	$image_url = WPSC_URL."/images/no-image-uploaded.gif";
 				?>

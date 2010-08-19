@@ -56,7 +56,7 @@ Roadmap
 
 			$i=1; 
 			while (($file = readdir($dh)) !== false) {
-				if($file != "." && $file != ".." && !strstr($file, $theme_file_prefix)) {
+				if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && !strstr($file, $theme_file_prefix)) {
 					rename($path."/".$file, $path."/".$theme_file_prefix.$file); 
 					$i++; 
 				} 
