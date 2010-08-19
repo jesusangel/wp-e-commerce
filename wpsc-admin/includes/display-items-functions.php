@@ -1326,8 +1326,7 @@ function wpsc_product_image_forms( $product_data = '' ) {
 
 			<?php edit_multiple_image_gallery( $product_data ); ?>
 
-			<br />
-			<strong <?php if ( isset( $display ) ) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php echo __( 'Manage Product Images', 'wpsc' ); ?></a></strong>
+			<p><strong <?php if ( isset( $display ) ) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php echo __( 'Manage Product Images', 'wpsc' ); ?></a></strong></p>
 		</div>
 
 		<div style='clear:both'></div>
