@@ -16,6 +16,7 @@
 Roadmap
 
 1. If WP Theme has templates use those (only for new installs(i.e. no theme in uploads folder), theme files will be ported from plugin folder to active theme on init).
+
 2. If WP Theme doesn't have active theme and we're an upgrade, do the following(with option in settings>presentation page to move to WP Theme)
 	- check for active theme in /uploads/wpsc folder
 		- if exists, port active theme to wpsc theme and move from uploads/themes to wp-content/themes/activetheme
@@ -29,7 +30,7 @@ Roadmap
 */
 
  class wpsc_theming {
-//Note - use function wpsc_recursive_copy()
+
 	var $active_wp_theme;
 	var $active_wpsc_theme;
 	var $theme_file_prefix;
@@ -43,25 +44,14 @@ Roadmap
 		} else {
 		
 		
+		
 			//WP-WPSC theme doesn't exist, so let's figure out where we're porting from, either the plugin directory or the wpsc-themes directory
 			$theme_location = $this->theme_location();
 			$active_wp_theme = get_stylesheet_directory();
 			
 			//Now that we have the theme location, let's copy it over to the themes directory, we'll modify it from there.
 
-			wpsc_recursive_copy($theme_location, $active_wp_theme.'/wpsc');
-			
-			$path = $active_wp_theme.'/wpsc'; 
-			$dh = opendir($path); 
-
-			$i=1; 
-			while (($file = readdir($dh)) !== false) {
-				if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && !strstr($file, $theme_file_prefix)) {
-					rename($path."/".$file, $path."/".$theme_file_prefix.$file); 
-					$i++; 
-				} 
-			} 
-			closedir($dh);
+			$this->move_theme($theme_location, $active_wp_theme);
 			
 			/*
 				$file_data = "Stuff you want to add\n"
@@ -121,9 +111,35 @@ Roadmap
 			return $theme_location;
 	}
 	
+	
+ /* Determines the current theme location
+	 * @access public 
+	 *
+	 * @since 3.8
+	 * @param old - Current location of theme
+	 * @param new -New location for theme 
+	 * @return None
+*/
+
+	function move_theme($old, $new) {
+	
+	wpsc_recursive_copy($old, $new.'/wpsc');
+			
+			$path = $new.'/wpsc'; 
+			$dh = opendir($path); 
+
+			$i=1; 
+			while (($file = readdir($dh)) !== false) {
+				if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && !strstr($file, $theme_file_prefix)) {
+					rename($path."/".$file, $path."/".$theme_file_prefix.$file); 
+					$i++; 
+				} 
+			} 
+			closedir($dh);
+	
+	}
+	
  
  }
-
-$theming = new wpsc_theming;
 
 ?>
