@@ -12,6 +12,7 @@
  
 
 /* 
+
 Roadmap
 
 1. If WP Theme has templates use those (only for new installs(i.e. no theme in uploads folder), theme files will be ported from plugin folder to active theme on init).
@@ -20,7 +21,11 @@ Roadmap
 		- if exists, port active theme to wpsc theme and move from uploads/themes to wp-content/themes/activetheme
 		- if does not exist, then move plugin default theme from plugin to themes
 3. Provide a 'backup your theme' Option that copies your WP Theme to your uploads directory purely for backup purposes...
- 
+
+@TODO - 8.19
+	- Make sure this all runs on admin_init
+	- 
+	
 */
 
  class wpsc_theming {
@@ -41,6 +46,7 @@ Roadmap
 			//WP-WPSC theme doesn't exist, so let's figure out where we're porting from, either the plugin directory or the wpsc-themes directory
 			$theme_location = $this->theme_location();
 			$active_wp_theme = get_stylesheet_directory();
+			
 			//Now that we have the theme location, let's copy it over to the themes directory, we'll modify it from there.
 
 			wpsc_recursive_copy($theme_location, $active_wp_theme.'/wpsc');

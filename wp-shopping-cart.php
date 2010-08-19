@@ -75,8 +75,7 @@ function wpsc_load_plugin(){
 	//Include the rest of the Plugin files
 	require_once( WPSC_FILE_PATH. '/wpsc-core/include.files.php' );
 	do_action('wpsc_core_included');
-	add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
-	add_action( 'init', 'wpsc_check_for_theme', 8 ); // highest priority
+	add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority\
 	add_action('template_redirect', 'wpsc_start_the_query', 8);
 
 	
