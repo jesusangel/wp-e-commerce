@@ -831,23 +831,4 @@ function wpsc_display_featured_products_page() {
 
 add_action('wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12);
 
-/**
- * Checks to see whether theme files exist in the current WP theme folder, if it doesn't copies the templates to the theme. 
- * @access public 
- *
- * @since 3.8
- * @param None
- * @return None
- */
-function wpsc_check_for_theme() {
-
-	$file = get_stylesheet_directory()."/single-wpsc-product.php";
-	$wpsc_file = WPSC_FILE_PATH."/themes/single-wpsc-product.php";
-
-	//Check for single-wpsc-product.php in currently active theme dir
-	//If it doesn't exist, copy there from themes
-	if ( !file_exists($file) ) {
-		copy($wpsc_file, $file);
-	}
-}
 ?>

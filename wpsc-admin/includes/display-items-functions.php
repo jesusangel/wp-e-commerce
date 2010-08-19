@@ -459,11 +459,10 @@ makeSlugeditClickable = null;
 <?php 
 		if(isset($_GET["product_parent"]) && ($_GET["product_parent"] != '')) {
 				$parent_link = add_query_arg(array('page' => 'wpsc-edit-products', 'action' => 'wpsc_add_edit' ,'product' => $_GET["product_parent"]));
-				$parent_link = remove_query_arg('product_parent');
 				$parent_link = wp_nonce_url($parent_link, 'edit-product_'.$product->ID);
 			} 
 ?><?php 
-	if(isset($_GET["product_parent"]) && ($_GET["product_parent"] != '')) { 
+	if(isset($_GET["product_parent"]) && ($_GET["product_parent"] != '') && ($_GET["product_parent"] != $_GET["product"])) { 
 ?>
 			<a class="button preview update_variations" href="<?php echo $parent_link?>">Back to Main Product</a>
 	<?php } ?>
