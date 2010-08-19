@@ -34,7 +34,7 @@ define('WPSC_URL', plugins_url('',__FILE__));
 require_once( WPSC_FILE_PATH. '/wpsc-core/define.constants.php' );
 
 function wpsc_load_plugin(){
-	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version,$purchlogitem;
+	global $wp_query,$wpdb, $wpsc_query,$wpsc_purchlog_statuses,$wpsc_gateways,$wpsc_page_titles,$wpsc_shipping_modules,$nzshpcrt_gateways, $wp_version,$purchlogitem, $gateway_checkout_form_fields;
 	
 
 	do_action('wpsc_before_init');
