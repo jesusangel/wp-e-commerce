@@ -464,9 +464,9 @@ div.admin_product_name a.shorttag_toggle {
 div#icon_card
 {
 	float: left;
-	height: 45px;
+	height: 36px;
 	margin: 14px 6px 0px 0px;
-	width: 45px;
+	width: 36px;
 	background: url(../../images/icon32.png) no-repeat center center;
 }
 
