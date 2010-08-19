@@ -291,41 +291,42 @@ function nzshpcrt_chronopay_results()
 
 function submit_chronopay()
 {  
-	if($_POST['chronopay_product_id'] != null)
+	if(isset($_POST['chronopay_product_id']))
     {
     	update_option('chronopay_product_id', $_POST['chronopay_product_id']);
     }
     
-  	if($_POST['chronopay_product_name'] != null)
+  	if(isset($_POST['chronopay_product_name']))
     {
     	update_option('chronopay_product_name', $_POST['chronopay_product_name']);
     }
     
-  	if($_POST['chronopay_curcode'] != null)
+  	if(isset($_POST['chronopay_curcode']))
     {
     	update_option('chronopay_curcode', $_POST['chronopay_curcode']);
     }
     
-  	if($_POST['chronopay_language'] != null)
+  	if(isset($_POST['chronopay_language']))
     {
     	update_option('chronopay_language', $_POST['chronopay_language']);
     }
     
-  	if($_POST['chronopay_url'] != null)
+  	if(isset($_POST['chronopay_url']))
     {
     	update_option('chronopay_url', $_POST['chronopay_url']);
     }
 
- 	if($_POST['chronopay_salt'] != null)
+ 	if(isset($_POST['chronopay_salt']))
     {
     	update_option('chronopay_salt', $_POST['chronopay_salt']);
     }
 
-  	if($_POST['chronopay_debug'] != null)
+  	if(isset($_POST['chronopay_debug']))
     {
     	update_option('chronopay_debug', $_POST['chronopay_debug']);
     }
     
+    if (!isset($_POST['chronopay_form'])) $_POST['chronopay_form'] = array();
 	foreach((array)$_POST['chronopay_form'] as $form => $value)
     {
     	update_option(('chronopay_form_'.$form), $value);
@@ -352,7 +353,14 @@ function form_chronopay()
 			$chronopay_debug1 = "checked ='checked'";
 			break;
 	}
-
+	
+	if (!isset($select_currency['USD'])) $select_currency['USD'] = ''; 
+	if (!isset($select_currency['EUR'])) $select_currency['EUR'] = ''; 
+	if (!isset($select_language['EN'])) $select_language['EN'] = '';
+	if (!isset($select_language['ES'])) $select_language['ES'] = '';
+	if (!isset($select_language['NL'])) $select_language['NL'] = '';
+	if (!isset($select_language['RU'])) $select_language['RU'] = '';
+	
 	$output = "
 		<tr>
 			<td>Product ID</td>

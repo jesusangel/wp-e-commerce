@@ -330,16 +330,16 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 
 function submit_paypal_pro(){
 	//exit('<pre>'.print_r($_POST, true).'</pre>');
-	if($_POST['PayPalPro']['username'] != null) {
+	if(isset($_POST['PayPalPro']['username'])) {
 	update_option('paypal_pro_username', $_POST['PayPalPro']['username']);
 	}
-	if($_POST['PayPalPro']['password'] != null) {
+	if(isset($_POST['PayPalPro']['password'])) {
 	update_option('paypal_pro_password', $_POST['PayPalPro']['password']);
 	}
-	if($_POST['PayPalPro']['signature'] != null) {
+	if(isset($_POST['PayPalPro']['signature'])) {
 	update_option('paypal_pro_signature', $_POST['PayPalPro']['signature']);
 	}
-	if($_POST['PayPalPro']['testmode'] != null) {
+	if(isset($_POST['PayPalPro']['testmode'])) {
 	update_option('paypal_pro_testmode', $_POST['PayPalPro']['testmode']);
 	}
 	return true;

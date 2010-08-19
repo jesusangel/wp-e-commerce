@@ -250,26 +250,26 @@ function wpsc_google_checkout_page(){
 }
 add_action('wpsc_before_form_of_shopping_cart', 'wpsc_google_checkout_page');
 function submit_google() {
-	if($_POST['google_id'] != null) {
+	if(isset($_POST['google_id'])) {
 		update_option('google_id', $_POST['google_id']);
 	}
 
-	if($_POST['google_key'] != null) {
+	if(isset($_POST['google_key'])) {
 		update_option('google_key', $_POST['google_key']);
 	}
-	if($_POST['google_cur'] != null) {
+	if(isset($_POST['google_cur'])) {
 		update_option('google_cur', $_POST['google_cur']);
 	}
-	if($_POST['google_button_size'] != null) {
+	if(isset($_POST['google_button_size'])) {
 		update_option('google_button_size', $_POST['google_button_size']);
 	}
-	if($_POST['google_button_bg'] != null) {
+	if(isset($_POST['google_button_bg'])) {
 		update_option('google_button_bg', $_POST['google_button_bg']);
 	}
-	if($_POST['google_server_type'] != null) {
+	if(isset($_POST['google_server_type'])) {
 		update_option('google_server_type', $_POST['google_server_type']);
 	}
-	if($_POST['google_auto_charge'] != null) {
+	if(isset($_POST['google_auto_charge'])) {
 		update_option('google_auto_charge', $_POST['google_auto_charge']);
 	}
   return true;
@@ -302,6 +302,19 @@ function form_google()
 	} else {
 		$button_bg2="selected='selected'";
 	}
+	
+	if (!isset($google_auto_charge1)) $google_auto_charge1 = '';
+	if (!isset($google_auto_charge2)) $google_auto_charge2 = '';
+	if (!isset($google_server_type1)) $google_server_type1 = '';
+	if (!isset($google_server_type2)) $google_server_type2 = '';
+	
+	if (!isset($button_size1)) $button_size1 = '';
+	if (!isset($button_size2)) $button_size2 = '';
+	if (!isset($button_size3)) $button_size3 = '';
+	
+	if (!isset($button_bg1)) $button_bg1 = '';
+	if (!isset($button_bg2)) $button_bg2 = '';
+		
 	$output = "
 	<tr>
 		<td>Merchant ID		</td>

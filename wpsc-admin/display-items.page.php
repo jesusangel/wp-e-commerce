@@ -141,8 +141,11 @@ function wpsc_display_edit_products_page() {
 			$unwriteable_directories[] = WPSC_UPGRADES_DIR;
 		}
 
-		if ( count( $unwriteable_directories ) > 0 ) {
-			echo "<div class='error fade'>" . str_replace( ":directory:", "<ul><li>" . implode( $unwriteable_directories, "</li><li>" ) . "</li></ul>", __( 'The following directories are not writable: :directory: You won&#39;t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.', 'wpsc' ) ) . "</div>";
+		if ( count( $unwriteable_directories ) > 0 ) { 
+			// remember the user that the uploads directory needs to be writable
+			echo "<div class='error fade'>".WPSC_UPLOAD_ERR."<br/>";
+			
+			echo str_replace( ":directory:", "<ul><li>" . implode( $unwriteable_directories, "</li><li>" ) . "</li></ul>", __( 'The following directories are not writable: :directory: You won&#39;t be able to upload any images or files here. You will need to change the permissions on these directories to make them writable.', 'wpsc' ) ) . "</div>";
 		}
 		// class='stuffbox'
 		// Justin Sainton - 5.7.2010 - Re-ordered columns, applying jQuery to toggle divs on click.
@@ -168,6 +171,7 @@ function wpsc_display_edit_products_page() {
 			$_GET["action"] = '';
 		if ( ($_GET["action"] != "wpsc_add_edit" ) ) {
 ?>
+>>>>>>> .r278229
 			<div id="wpsc-col-left">
 				<div class="col-wrap">
 <?php

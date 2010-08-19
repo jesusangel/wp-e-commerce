@@ -542,31 +542,32 @@ $_SESSION['paypalExpressMessage'] = $output;
 }
 function submit_paypal_certified()
   {  
-  if($_POST['paypal_certified_apiuser'] != null)
+  if(isset($_POST['paypal_certified_apiuser']))
     {
     update_option('paypal_certified_apiuser', $_POST['paypal_certified_apiuser']);
     }
     
-  if($_POST['paypal_certified_apipass'] != null)
+  if(isset($_POST['paypal_certified_apipass']))
     {
     update_option('paypal_certified_apipass', $_POST['paypal_certified_apipass']);
     }
     
-  if($_POST['paypal_curcode'] != null)
+  if(isset($_POST['paypal_curcode']))
     {
     update_option('paypal_curcode', $_POST['paypal_curcode']);
     }
     
-  if($_POST['paypal_certified_apisign'] != null)
+  if(isset($_POST['paypal_certified_apisign']))
     {
     update_option('paypal_certified_apisign', $_POST['paypal_certified_apisign']);
     }
 
-  if($_POST['paypal_certified_server_type'] != null) {
+  if(isset($_POST['paypal_certified_server_type'])) {
   	
   	update_option('paypal_certified_server_type', $_POST['paypal_certified_server_type']);
   	    //exit(get_option('paypal_certified_server_type').'<pre>'.print_r($_POST, true).'</pre>');
   } 
+  if (!isset($_POST['paypal_form'])) $_POST['paypal_form'] = array();
   foreach((array)$_POST['paypal_form'] as $form => $value) {
     update_option(('paypal_form_'.$form), $value);
 	}
@@ -583,6 +584,9 @@ function form_paypal_certified()
 		$serverType2 ="checked='checked'";
 	}
 
+	if (!isset($serverType1)) $serverType1 = '';
+	if (!isset($serverType2)) $serverType2 = '';
+	
   $output = "
   <tr>
       <td>API Username
@@ -634,6 +638,7 @@ function form_paypal_certified()
 		$output .= "          <td>\n";
 		$output .= "            <select name='paypal_curcode'>\n";
 
+		if (!isset($wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'])) $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'] = array();
 		$paypal_currency_list = $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'];
 
 		$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);

@@ -24,6 +24,7 @@ global $wpdb;
 			}
 			echo "  <tr>\n\r";
 			echo "    <td><input $checked type='checkbox' id='google_shipping_".$country['id']."' name='google_shipping[".$country['id']."]'/></td>\n\r";
+			if (!isset($base_country)) $base_country = '';
 			if($country['id'] == $base_country){
 				echo "    <td><label for='google_shipping_".$country['id']."' style='text-decoration: underline;'>".$country['country'].":</label></td>\n\r";
 			} else {

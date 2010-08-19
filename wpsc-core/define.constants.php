@@ -78,10 +78,14 @@ define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wp_table_prefix}wpsc_variation_co
 define('WPSC_TABLE_REGION_TAX', "{$wp_table_prefix}wpsc_region_tax");
 define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
 
-
 $wp_upload_dir_data = wp_upload_dir();
 $upload_path = '';
 $upload_url = '';
+$error_msg = '';
+
+if (isset($wp_upload_dir_data['error'])) {
+	$error_msg = $wp_upload_dir_data['error'];
+}
 
 if (isset($wp_upload_dir_data['basedir'])) {
 	$upload_path = $wp_upload_dir_data['basedir'];
@@ -106,6 +110,7 @@ $wpsc_cache_dir = "{$wpsc_upload_dir}cache/";
 $wpsc_upgrades_dir = "{$wpsc_upload_dir}upgrades/";
 $wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
 
+define('WPSC_UPLOAD_ERR', $error_msg);
 define('WPSC_UPLOAD_DIR', $wpsc_upload_dir);
 define('WPSC_FILE_DIR', $wpsc_file_dir);
 define('WPSC_PREVIEW_DIR', $wpsc_preview_dir);

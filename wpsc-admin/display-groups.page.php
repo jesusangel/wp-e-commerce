@@ -217,9 +217,11 @@ function wpsc_admin_category_forms($category_id =  null) {
 	global $wpdb;
 	$category_value_count = 0;
 	$category_name = '';
+	$category = array();
+	
 	if($category_id > 0 ) {
 		$category_id = absint($category_id);		
-		
+			
 		$category = get_term($category_id, 'wpsc_product_category', ARRAY_A);
 		$category['nice-name'] = wpsc_get_categorymeta($category['term_id'], 'nice-name');
 		$category['description'] = wpsc_get_categorymeta($category['term_id'], 'description');
@@ -257,8 +259,12 @@ function wpsc_admin_category_forms($category_id =  null) {
 				//echo '<pre>'.print_r($category,true).'</pre>';
 				$taxonomies = array('wpsc_product_category');
 				$args = array('orderby'=>'name', 'hide_empty' => 0);
-				$parent = $category['parent'];
-				$current_term_id = $category['term_id'];
+				$parent = '';
+				$current_term_id = '';
+				if (isset($category['parent']))
+					$parent = $category['parent'];
+				if (isset($category['term_id']))
+					$current_term_id = $category['term_id'];
 				$select = wpsc_parent_category_list($taxonomies, $args,$parent,$current_term_id);
 				echo $select;
 			?>

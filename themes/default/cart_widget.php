@@ -1,7 +1,7 @@
 <?php
  //echo "<pre>".print_r($GLOBALS['wpsc_cart']->cart_items[0], true)."</pre>";
 ?>
-<?php if(count($cart_messages) > 0) { ?>
+<?php if(isset($cart_messages) && count($cart_messages) > 0) { ?>
   <p>
 	<?php foreach((array)$cart_messages as $cart_message) { ?>
 	  <span><?php echo $cart_message; ?></span><br />

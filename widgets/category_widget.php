@@ -23,13 +23,17 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		}
 		//echo wpsc_get_theme_file_path("category_widget.php");
 		$show_thumbnails = $instance['image'];
-		$grid = (bool)$instance['grid'];
-		$width = $instance['width'];
-		$height = $instance['height'];
+		if (isset($instance['grid']))
+			$grid = (bool)$instance['grid'];
+		if (isset($instance['width']))
+			$width = $instance['width'];
+		if (isset($instance['height']))
+			$height = $instance['height'];
+		if (!isset($instance['categories'])) $instance['categories'] = array();
 		foreach(array_keys((array)$instance['categories']) as $category_id) {
 			include(wpsc_get_theme_file_path("category_widget.php"));
 		}
-		if($grid){
+		if(isset($grid) && $grid){
 			echo "<div class='clear_category_group'></div>";
 		}
 		echo $after_widget;
