@@ -39,7 +39,6 @@ $form_types = get_option('wpsc_checkout_form_fields');
 
 <form name='cart_options' id='cart_options' method='post' action=''>
 	<div class="wrap">
-  		<h2><?php echo __('Checkout Options', 'wpsc');?></h2>  
 		<?php 
 		/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 		wpsc_settings_page_update_notification(); ?>
