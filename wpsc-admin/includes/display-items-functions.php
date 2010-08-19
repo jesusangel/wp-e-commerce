@@ -678,13 +678,13 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 					$product_data['meta']['_wpsc_special_price'] = $wpsc_product_defaults['special_price'];
 ?> :
 					<br />
-					<input type='text' class='text' size='13' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'], 2 ); ?>' />
+					<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'], 2 ); ?>' />
 				</div>
 				<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
 						); ?>; width:85px;; margin-left:30px;'>
 					<label for='add_form_special'><?php echo __( 'Sale Price :', 'wpsc' ); ?></label>
 					<div id='add_special'>
-						<input type='text' size='13' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2 ); ?>' name='meta[_wpsc_special_price]' />
+						<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2 ); ?>' name='meta[_wpsc_special_price]' />
 					</div>
 				</div>
 				<br style="clear:both" />
