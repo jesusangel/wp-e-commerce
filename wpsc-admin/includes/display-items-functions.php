@@ -874,7 +874,6 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 			</div>
 		</div>
 	</div></div>
-	<br style="clear:both" />
 
 <?php //return $output;
 }
