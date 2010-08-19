@@ -171,7 +171,6 @@ function wpsc_display_edit_products_page() {
 			$_GET["action"] = '';
 		if ( ($_GET["action"] != "wpsc_add_edit" ) ) {
 ?>
->>>>>>> .r278229
 			<div id="wpsc-col-left">
 				<div class="col-wrap">
 <?php
