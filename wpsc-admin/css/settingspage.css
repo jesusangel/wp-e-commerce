@@ -137,9 +137,8 @@ table#form_field_table tr th{ padding-left: 0px; padding-right: 0px;  }
 	width: 98%;
 	border-bottom: 1px solid #DFDFDF;
 	float: left;
-	margin: 0 auto;
+	margin: 10px auto 0;
 	padding-left: 15px;
-	margin-top: -1px;
 }
 #wpsc_settings_nav_bar ul li a{
 	margin-bottom:-1px;
