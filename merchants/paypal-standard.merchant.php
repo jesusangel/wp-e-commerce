@@ -249,9 +249,11 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		);
 		
 		$response = wp_remote_post($paypal_url, $options);
+		
 		if(strpos($response['body'], 'VERIFIED') !== false) {
 			$this->paypal_ipn_values = $received_values;
 			$this->session_id = $received_values['invoice'];
+			$this->set_purchase_processed_by_sessionid(3);
 		} else {
 			exit("IPN Request Failure");
 		}
@@ -625,6 +627,5 @@ $output .= "
   
   return $output;
 }
-
 
 ?>

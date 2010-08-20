@@ -263,7 +263,15 @@ class wpsc_merchant {
 	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."' WHERE `id` = ".absint($this->purchase_id)." LIMIT 1");
 
   }	
-  
+   /**
+   * set_purchase_processed_by_sessionid, this helps change the purchase log status
+   * $status = integer status order
+   */
+  function set_purchase_processed_by_sessionid($status=1){
+  	global $wpdb;
+	$wpdb->query("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."' WHERE `sessionid` = ".absint($this->session_id)." LIMIT 1");
+
+  }	
   /**
 	* set_transaction_details, maybe extended in merchant files
 	*/
