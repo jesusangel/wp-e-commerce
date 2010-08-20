@@ -39,9 +39,7 @@ if(wpsc_cart_item_count() > 0) :
 					<input type="submit" value="<?php echo __('Update', 'wpsc'); ?>" name="submit" />
 				</form>
 			</td>
-			<?php if(wpsc_uses_shipping()): ?>
-
-			<?php endif; ?>
+			
 			<td class='wpsc_product_price wpsc_product_price_<?php echo wpsc_the_cart_item_key(); ?>'><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
 			
 			<td class='wpsc_product_remove wpsc_product_remove_<?php echo wpsc_the_cart_item_key(); ?>'>
