@@ -851,9 +851,9 @@ function wpsc_the_vargrp_name() {
 */
 function wpsc_vargrp_form_id() {
  // generate the variation group form ID;
-	global $wpsc_variations;
+	global $wpsc_variations,$wpsc_variations;
 	$product_id = get_the_ID();
-	$form_id = "variation_select_{$product_id}_{$wpsc_query->variation_group->term_id}";
+	$form_id = "variation_select_{$product_id}_{$wpsc_variations->variation_group->term_id}";
 	return $form_id;
 }
 
@@ -897,7 +897,7 @@ function wpsc_the_variation_out_of_stock() {
 		$product_id = $wpsc_query->product['id'];
 		$variation_group_id = $wpsc_query->variation_group->term_id;
 		$variation_id = $wpsc_query->variation->term_id;
-		
+
 
 		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
 		
@@ -1126,7 +1126,7 @@ function wpsc_the_variation_price() {
 function wpsc_the_variation_stock() {
 	global $wpdb, $wpsc_variations;
 
-  if($wpsc_variations->variation_count > 1) {
+	if($wpsc_variations->variation_count > 1) {
 		
 		$product_id = get_the_ID();
 		$variation_id = $wpsc_variations->variation->term_id;
