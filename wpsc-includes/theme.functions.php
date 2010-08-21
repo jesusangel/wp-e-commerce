@@ -750,7 +750,7 @@ global $wpdb;
 		return false;
 	}
 //Previously checked product_meta, now get_vars guid from attachment with this post_parent, checking against _thumbnail_id   
-$sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM wp_posts p, wp_postmeta pm WHERE p.post_parent = $product_id AND pm.post_id = $product_id AND pm.meta_value = p.ID"));
+$sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM ".WP_POSTS," p, ".WP_POSTMETA." pm WHERE p.post_parent = $product_id AND pm.post_id = $product_id AND pm.meta_value = p.ID"));
 
 	if($sticky_product_image != ''){
 		return $sticky_product_image;

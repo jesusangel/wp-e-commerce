@@ -1107,7 +1107,7 @@ function wpsc_the_variation_price() {
 		$product_id = get_the_ID();
 		$variation_id = $wpsc_variations->variation->term_id;
 
-		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM wp_term_relationships AS rel LEFT JOIN wp_posts AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
+		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM ".WP_TERM_RELATIONSHIPS." AS rel LEFT JOIN ".WP_POSTS." AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
 		
 		$price = get_product_meta($variation_product_id, "price");
 		$price = $price[0];
@@ -1131,7 +1131,7 @@ function wpsc_the_variation_stock() {
 		$product_id = get_the_ID();
 		$variation_id = $wpsc_variations->variation->term_id;
 				
-		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM wp_term_relationships AS rel LEFT JOIN wp_posts AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
+		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM ".WP_TERM_RELATIONSHIPS." AS rel LEFT JOIN ".WP_POSTS." AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
 		
 		$stock = get_product_meta($variation_product_id, "stock");
 		$output = $stock[0];
