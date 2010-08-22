@@ -389,6 +389,10 @@ function wpsc_display_products_page($query) {
 
 //Better way (in my opinion) to handle single product templating, outside of the child theme system
 
+	function wpsc_theme_upgrade_notice() {
+			echo "<div id='wpsc-warning' class='error fade'><p><strong>".__('WP e-Commerce is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">update your themes</a> to WPEC\'s new theme system.  It\'s really easy!'), "admin.php?page=wpsc-settings&tab=presentation")."</p></div>";
+		}
+		
 function wpsc_single_template() {
      global $post, $wpsc_theme_path;
 
@@ -399,8 +403,10 @@ function wpsc_single_template() {
 
 $theme_moved = get_option("wpsc_theme_moved");
 
-if($theme_moved = "1") {
+if($theme_moved == "1") {
 	add_filter( "single_template", "wpsc_single_template" ) ;
+} else {
+	add_action('admin_notices', 'wpsc_theme_upgrade_notice');
 }
 //handles replacing the tags in the pages
   
