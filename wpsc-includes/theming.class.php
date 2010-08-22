@@ -140,9 +140,5 @@
 if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'copy_themes')) {
 	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming = new wpsc_theming();' ) );
 }
-   
-if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'backup_themes')) {
-	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming->move_theme($)' ) );
-}
-
+  
 ?>
