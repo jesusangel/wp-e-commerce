@@ -1941,36 +1941,59 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
    add_action('admin_init', 'wpsc_product_files_existing');
 }
 
-function prod_upload() {
-global $wpdb, $product_id;
-if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'product_files_upload'))  {
+function prod_upload(){
+	global $wpdb, $product_id;
+	$product_id = absint($_POST["product_id"]);
+	
+	foreach($_POST["select_product_file"] as $selected_file) {
+		// if we already use this file, there is no point doing anything more.	
+		
+		
+		$file_post_data = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE post_type = 'wpsc-product-file' AND post_title = '$selected_file'", ARRAY_A);
+		$selected_file_path = WPSC_FILE_DIR.basename($selected_file);
+		
+		if(isset($attached_files_by_file[$selected_file])) {
+			$file_is_attached = true;
+		}
+		
+		//if(is_file($selected_file_path)) {
+			if(empty($file_post_data)) {
+				$type = wpsc_get_mimetype($selected_file_path);
+				$attachment = array(
+					'post_mime_type' => $type,
+					'post_parent' => $product_id,
+					'post_title' => $selected_file,
+					'post_content' => '',
+					'post_type' => "wpsc-product-file",
+					'post_status' => 'inherit'
+				);
+				$id = wp_insert_post($attachment);
+			} else {
+				$type = $file_post_data["post_mime_type"];
+				$url = $file_post_data["guid"];
+				$title = $file_post_data["post_title"];
+				$content = $file_post_data["post_content"];
+				// Construct the attachment
+				$attachment = array(
+					'post_mime_type' => $type,
+					'guid' => $url,
+					'post_parent' => absint($product_id),
+					'post_title' => $title,
+					'post_content' => $content,
+					'post_type' => "wpsc-product-file",
+					'post_status' => 'inherit'
+				);
+				// Save the data
+				$id = wp_insert_post($attachment);
+			}
+		//}
+		echo "$id\n";  
+	}
+}
 
-   foreach ($_REQUEST["select_product_file"] as $file) {
-            $duplicate = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE post_type = 'wpsc-product-file' AND post_title = '$file'", ARRAY_A);
-
-            $type = $duplicate["post_mime_type"];
-            $url = $duplicate["guid"];
-            $title = $duplicate["post_title"];
-            $content = $duplicate["post_content"];
-
-            // Construct the attachment array
-            $attachment = array(
-               'post_mime_type' => $type,
-               'guid' => $url,
-               'post_parent' => $_REQUEST["product_id"],
-               'post_title' => $title,
-               'post_content' => $content,
-               'post_type' => "wpsc-product-file",
-               'post_status' => 'inherit'
-            );
-
-            // Save the data
-            $id = wp_insert_post($attachment);
-         }
-      }
-   }
-add_action('admin_init', 'prod_upload');
-
+if(isset($_GET['wpsc_admin_action']) && ($_GET['wpsc_admin_action'] == 'product_files_upload'))  {
+	add_action('admin_init', 'prod_upload');
+}
 //change the gateway settings
 function wpsc_gateway_settings(){
    global $wpdb;
