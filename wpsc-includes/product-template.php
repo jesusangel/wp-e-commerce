@@ -198,9 +198,9 @@ function wpsc_this_page_url() {
 * @return boolean - true, or false...
 */
 function wpsc_is_single_product() {
-	global $wpsc_query;
+	global $wp_query;
 	//echo "<pre>".print_r($wpsc_query->is_single,true)."</pre>";
-	if($wpsc_query->is_single === 1) {
+	if($wp_query->is_single === 1) {
 		$state = true;
 	} else {
 		$state = false;

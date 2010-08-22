@@ -312,7 +312,8 @@ function wpsc_display_products_page($query) {
 	
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
-	if(wpsc_is_single_product() == true) {
+	//Pretty sure this single_product code is legacy...but fixing it up just in case.
+	if(wpsc_is_single_product()) {
 		include($cur_wpsc_theme_folder."/wpsc-single_product.php");
 		$is_single = true;
 	} else {
@@ -385,6 +386,18 @@ function wpsc_display_products_page($query) {
 	}
 	return $output;
 }
+
+//Better way (in my opinion) to handle single product templating, outside of the child theme system
+
+function wpsc_single_template() {
+     global $post, $wpsc_theme_path;
+
+     if ($post->post_type == 'wpsc-product') {
+          return $wpsc_theme_path.'wpsc-single_product.php';
+     }
+}
+
+add_filter( "single_template", "wpsc_single_template" ) ;
 
 //handles replacing the tags in the pages
   
