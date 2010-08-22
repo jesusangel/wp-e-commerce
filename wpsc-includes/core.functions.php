@@ -775,7 +775,8 @@ function wpsc_get_template($template) {
  */
 function wpsc_template_fallback($template_path) {
 	global $wpsc_theme_path;
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	$prospective_file_name = basename("{$template_path}.php");
 	$prospective_file_path = trailingslashit($cur_wpsc_theme_folder).$prospective_file_name;
 	//exit($prospective_file_path);
@@ -867,8 +868,9 @@ function wpsc_get_theme_file_path($file) {
   */
 function wpsc_select_theme_functions() {
   global $wpsc_theme_path;
-  $theme_dir = WPSC_THEME_DIR; /* done by plugins_loaded */
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.$theme_dir);
+	$theme_dir = WPSC_THEME_DIR; /* done by plugins_loaded */
+//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.$theme_dir);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	
 	if((get_option('wpsc_selected_theme') != '') && (file_exists($cur_wpsc_theme_folder."/".$theme_dir.".php") )) { 
 		include_once($cur_wpsc_theme_folder.'/'.$theme_dir.'.php');

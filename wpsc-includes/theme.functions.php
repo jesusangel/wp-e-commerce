@@ -234,22 +234,6 @@ function wpsc_user_dynamic_css() {
 		}
       
     <?php
-	
-		/*
-		$product_image_size_list = $wpdb->get_results("SELECT `products`.`id`, 
-			`meta1`.`meta_value` AS `height`, 
-			`meta2`.`meta_value` AS `width` 
-		FROM `".WPSC_TABLE_PRODUCT_LIST."` AS `products` 
-		INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta1` 
-		INNER JOIN `".WPSC_TABLE_PRODUCTMETA."` AS `meta2` 
-		ON `products`.`id` = `meta1`.`product_id` 
-			AND  `products`.`id` = `meta2`.`product_id`  
-		WHERE `products`.`thumbnail_state` IN(0,2,3) 
-			AND `meta1`.`meta_key` IN ('thumbnail_height') 
-			AND `meta2`.`meta_key` IN ('thumbnail_width')",
-		ARRAY_A);
-		*/
-		//print_r($product_image_size_list);
 		foreach((array)$product_image_size_list as $product_image_sizes) {
 			$individual_thumbnail_height = $product_image_sizes['height']; 
 			$individual_thumbnail_width = $product_image_sizes['width'];     
@@ -306,9 +290,6 @@ if(isset($_GET['wpsc_user_dynamic_css']) && ($_GET['wpsc_user_dynamic_css'] == '
   add_action("init", 'wpsc_user_dynamic_css');  
 }
 
-
-
-
 // Template tags
 /**
 * wpsc display products function
@@ -322,7 +303,8 @@ function wpsc_display_products_page($query) {
 		exit('fail');
 	}
 	/// added by xiligroup.dev to be compatible with touchshop
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+		$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	/// end of added by xiligroup.dev to be compatible with touchshop
   
 	//$temp_wpsc_query = new wpsc_query($query);
@@ -331,7 +313,7 @@ function wpsc_display_products_page($query) {
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	if(wpsc_is_single_product() == true) {
-		include($cur_wpsc_theme_folder."/single_product.php");
+		include($cur_wpsc_theme_folder."/wpsc-single_product.php");
 		$is_single = true;
 	} else {
 		// get the display type for the selected category
@@ -375,20 +357,20 @@ function wpsc_display_products_page($query) {
 		// switch the display type, based on the display type variable...
 		switch($display_type) {
 			case "grid":
-			if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
-				include($cur_wpsc_theme_folder."/grid_view.php");
+			if(file_exists($cur_wpsc_theme_folder."/wpsc-grid_view.php")) {
+				include($cur_wpsc_theme_folder."/wpsc-grid_view.php");
 				break; // only break if we have the file;
 			}
 			
 			case "list":
-			if(file_exists($cur_wpsc_theme_folder."/list_view.php")) {
-				include($cur_wpsc_theme_folder."/list_view.php");
+			if(file_exists($cur_wpsc_theme_folder."/wpsc-list_view.php")) {
+				include($cur_wpsc_theme_folder."/wpsc-list_view.php");
 				break; // only break if we have the file;
 			}
 			
 			case "default":  // this may be redundant :D
 			default:
-				include($cur_wpsc_theme_folder."/products_page.php");
+				include($cur_wpsc_theme_folder."/wpsc-products_page.php");
 			break;
 		}
 			$is_single = false;
@@ -409,7 +391,8 @@ function wpsc_display_products_page($query) {
 function wpsc_products_page($content = '') {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path, $wpsc_query_vars;
 
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	remove_filter('the_content', 'wpsc_products_page');
 	$output = '';
 	if(preg_match("/\[productspage\]/",$content)) {	
@@ -417,7 +400,7 @@ function wpsc_products_page($content = '') {
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		ob_start();
 		if(count($wp_query->posts) == 1) {			
-			include($cur_wpsc_theme_folder."/single_product.php");
+			include($cur_wpsc_theme_folder."/wpsc-single_product.php");
 			$is_single = true;
 		} else {
 		$category_id = '';
@@ -467,20 +450,20 @@ function wpsc_products_page($content = '') {
 			// switch the display type, based on the display type variable...
 			switch($display_type) {
 				case "grid":
-				if(file_exists($cur_wpsc_theme_folder."/grid_view.php")) {
-					include($cur_wpsc_theme_folder."/grid_view.php");
+				if(file_exists($cur_wpsc_theme_folder."/wpsc-grid_view.php")) {
+					include($cur_wpsc_theme_folder."/wpsc-grid_view.php");
 					break; // only break if we have the function;
 				}
 				
 				case "list":
-				if(file_exists($cur_wpsc_theme_folder."/list_view.php")) {
-					include($cur_wpsc_theme_folder."/list_view.php");
+				if(file_exists($cur_wpsc_theme_folder."/wpsc-list_view.php")) {
+					include($cur_wpsc_theme_folder."/wpsc-list_view.php");
 					break; // only break if we have the file;
 				}
 				
 				case "default":  // this may be redundant :D
 				default:
-					include($cur_wpsc_theme_folder."/products_page.php");
+					include($cur_wpsc_theme_folder."/wpsc-products_page.php");
 				break;
 			}
 			$is_single = false;
@@ -512,7 +495,7 @@ function wpsc_products_page($content = '') {
  * wpsc_count_themes_in_uploads_directory, does exactly what the name says
 */
 function wpsc_count_themes_in_uploads_directory() {
-  $uploads_dir = @opendir(WPSC_THEMES_PATH); // might cause problems if dir doesnt exist
+if(is_dir(WPSC_THEMES_PATH))  $uploads_dir = @opendir(WPSC_THEMES_PATH); // might cause problems if dir doesnt exist
   if (!$uploads_dir) {
 	  return FALSE;
   }
@@ -529,14 +512,15 @@ function wpsc_count_themes_in_uploads_directory() {
 function wpsc_place_shopping_cart($content = '') {
   global $wpsc_theme_path;
 	/// added by xiligroup.dev to be compatible with touchshop
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	/// end of added by xiligroup.dev to be compatible with touchshop
 	
   if(preg_match("/\[shoppingcart\]/",$content)) {
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		define('DONOTCACHEPAGE', true);
 		ob_start();
-		include($cur_wpsc_theme_folder."/shopping_cart_page.php");
+		include($cur_wpsc_theme_folder."/wpsc-shopping_cart_page.php");
 		$output = ob_get_contents();
 		ob_end_clean();
 		$output = str_replace('$','\$', $output);
@@ -561,10 +545,13 @@ function wpsc_place_shopping_cart($content = '') {
 // }
 
 function wpsc_transaction_results($content = '') {
+  global $wpsc_theme_path;
+
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
   if(preg_match("/\[transactionresults\]/",$content)) {
 		define('DONOTCACHEPAGE', true);
     ob_start();
-    include(WPSC_FILE_PATH . "/transaction_results.php");
+	include($cur_wpsc_theme_folder."/wpsc-transaction_results.php");
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[transactionresults\](<\/p>)*/",$output, $content);
@@ -574,10 +561,14 @@ function wpsc_transaction_results($content = '') {
 }
   
 function wpsc_user_log($content = '') {
+  global $wpsc_theme_path;
+
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
   if(preg_match("/\[userlog\]/",$content)) {
 		define('DONOTCACHEPAGE', true);
     ob_start();
-    include(WPSC_FILE_PATH . '/user-log.php');
+	
+	include($cur_wpsc_theme_folder."/wpsc-user-log.php");
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[userlog\](<\/p>)*/",$output, $content);

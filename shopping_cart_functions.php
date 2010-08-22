@@ -82,8 +82,9 @@ function wpsc_shopping_basket_internals($cart,$quantity_limit = false, $no_title
 		$display_state = "style='display: none;'";
 	}
 	echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-	include_once($cur_wpsc_theme_folder."/cart_widget.php");
+//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
+	include_once($cur_wpsc_theme_folder."/wpsc-cart_widget.php");
 	echo "    </div>";
  return $output;
 }

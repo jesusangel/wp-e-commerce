@@ -46,7 +46,7 @@ function widget_wp_shopping_cart($args) {
 			echo "    </div>";
 		} else {
 			echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-			include(wpsc_get_theme_file_path("cart_widget.php"));
+			include(wpsc_get_theme_file_path("wpsc-cart_widget.php"));
 			echo "    </div>";
 		}
     echo $after_widget;

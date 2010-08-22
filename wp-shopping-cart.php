@@ -75,7 +75,7 @@ function wpsc_load_plugin(){
 	//Include the rest of the Plugin files
 	require_once( WPSC_FILE_PATH. '/wpsc-core/include.files.php' );
 	do_action('wpsc_core_included');
-	add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority\
+	add_action( 'init', 'wpsc_register_post_types', 8 ); // highest priority
 	add_action('template_redirect', 'wpsc_start_the_query', 8);
 
 	
@@ -126,7 +126,6 @@ function wpsc_load_plugin(){
 	// set page title array for important WPSC pages 
 	$wpsc_page_titles = wpsc_get_page_post_names();
 
-	
 	$theme_path = WPSC_FILE_PATH . '/themes/';
 	if((get_option('wpsc_selected_theme') != '') && (file_exists($theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".php") )) {    
 	  include_once(WPSC_FILE_PATH.'/themes/'.get_option('wpsc_selected_theme').'/'.get_option('wpsc_selected_theme').'.php');

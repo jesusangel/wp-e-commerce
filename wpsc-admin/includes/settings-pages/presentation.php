@@ -243,33 +243,44 @@ function wpsc_options_presentation() {
 		<div id="poststuff" class="metabox-holder">
 			<div id="themes_and_appearance" class='postbox'>
 				<h3 class="hndle"><span><?php _e( "Theme Settings", 'wpsc' ); ?></span></h3>
-					<div class="inside"><?php
+					<div class="inside">
+					<?php
 						$style = (wpsc_count_themes_in_uploads_directory() > 0) ? 'padding:1px 2px; color:black' : 'padding:1px 2px; color:red';
-						?>
-<?php
+
 						if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) {
-?>
+					?>
 							<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
 								<p><?php _e( "Thanks, the themes have been copied." ); ?></p>
 							</div>
 					<?php
 							$_SESSION['wpsc_themes_copied'] = false;
 						}
-					?>
+					?><?php
+						if ( wpsc_count_themes_in_uploads_directory() > 0 ) {
+?>
 						<p><?php _e( 'The theme files for your shop are presently located in the following folder: ' ) ?></p>
-						<p style="<?php echo $style; ?>">URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEMES_PATH ) . WPSC_THEME_DIR . "/"; ?></p>
+						<?php
+								} else {
+							?>
+								<p><?php _e( 'The theme files for your shop will be located in the following folder: ' ) ?></p>
+
+							<?php
+								}
+							?>
+						<p style="<?php echo $style; ?>">URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEMES_PATH ); ?></p>
 
 <?php
 						if ( wpsc_count_themes_in_uploads_directory() > 0 ) {
 ?>
 							<p><?php _e( 'You have moved the default theme files to the WordPress themes folder.  Your theme files are locatable at the above URL.' ); ?></p>
 
+							<p><?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?> </p>	
 <?php
-						} else if ( !is_writable( WPSC_THEMES_PATH ) ) {
+						} else if ( !is_writable( get_stylesheet_directory() ) ) {
 ?>
-							<p><?php _e( "The permissions on your themes directory are incorrect.", 'wpsc' ); ?> </p>
+							<p><?php _e( "The permissions on your WordPress themes directory are incorrect.", 'wpsc' ); ?> </p>
 							<p><?php _e( "Please set the permissions to 775 on the following directory.", 'wpsc' ); ?><br /><br />
-								<span class='display-path'><strong><?php _e( "Path:", 'wpsc' ); ?></strong> <?php echo str_replace( ABSPATH, "", WPSC_THEMES_PATH ) . WPSC_THEME_DIR . "/"; ?> </span></p>
+								<span class='display-path'><strong><?php _e( "Path:", 'wpsc' ); ?></strong> <?php echo WPSC_THEMES_PATH ; ?> </span></p>
 					<?php
 						} else {
 							$class = '';
@@ -281,7 +292,7 @@ function wpsc_options_presentation() {
 							<p><?php printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?> </p>			<br style="clear:both" />
 
 <?php
-						}
+	}
 ?>
 
 	<!--<p><a href='http://www.instinct.co.nz/e-commerce/docs/'><?php _e( "Read Tutorials", 'wpsc' ); ?></a></p>-->

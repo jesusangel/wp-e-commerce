@@ -116,8 +116,9 @@ function wpsc_add_to_cart() {
       }
 
       ob_start();
-      $cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-      include_once($cur_wpsc_theme_folder."/cart_widget.php");
+//   $cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+   $cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
+      include_once($cur_wpsc_theme_folder."/wpsc-cart_widget.php");
       $output = ob_get_contents();
       ob_end_clean();
       $output = str_replace(Array("\n","\r") , Array("\\n","\\r"),addslashes($output));

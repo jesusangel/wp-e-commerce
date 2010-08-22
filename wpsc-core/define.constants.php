@@ -101,7 +101,10 @@ if (isset($wp_upload_dir_data['baseurl'])) {
 if(is_ssl()) {
 	 $upload_url = str_replace("http://", "https://", $upload_url);
 }
-	
+
+$active_wp_theme = get_stylesheet_directory();
+$active_wp_theme = $active_wp_theme.'/wpsc/';
+
 $wpsc_upload_dir = "{$upload_path}/wpsc/";
 $wpsc_file_dir = "{$wpsc_upload_dir}downloadables/";
 $wpsc_preview_dir = "{$wpsc_upload_dir}previews/";
@@ -111,7 +114,8 @@ $wpsc_category_dir = "{$wpsc_upload_dir}category_images/";
 $wpsc_user_uploads_dir = "{$wpsc_upload_dir}user_uploads/";
 $wpsc_cache_dir = "{$wpsc_upload_dir}cache/";
 $wpsc_upgrades_dir = "{$wpsc_upload_dir}upgrades/";
-$wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
+//$wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
+$wpsc_themes_dir = $active_wp_theme;
 
 define('WPSC_UPLOAD_ERR', $error_msg);
 define('WPSC_UPLOAD_DIR', $wpsc_upload_dir);

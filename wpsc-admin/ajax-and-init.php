@@ -2253,22 +2253,6 @@ if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == '
 }
 
 
-function wpsc_trigger_copy_themes(){
-  global $wpdb;
-  check_admin_referer('copy_themes');
-  wpsc_copy_themes_to_uploads();
-
-  $_SESSION['wpsc_themes_copied'] = true;
-   $sendback = wp_get_referer();
-   $sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], remove_query_arg('tab', $sendback));
-   wp_redirect($sendback);
-   exit();
-}
-
-if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'copy_themes')) {
-   add_action('admin_init', 'wpsc_trigger_copy_themes');
-}
-
 function wpsc_mass_resize_thumbnails() {
   global $wpdb;
   check_admin_referer('mass_resize');
