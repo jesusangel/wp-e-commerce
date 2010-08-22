@@ -396,9 +396,9 @@ function wpsc_single_template() {
           return $wpsc_theme_path.'wpsc-single_product.php';
      }
 }
-
-add_filter( "single_template", "wpsc_single_template" ) ;
-
+if($_SESSION["wpsc_theme_moved"]) {
+	add_filter( "single_template", "wpsc_single_template" ) ;
+}
 //handles replacing the tags in the pages
   
 function wpsc_products_page($content = '') {

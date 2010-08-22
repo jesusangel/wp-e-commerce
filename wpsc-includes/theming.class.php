@@ -132,7 +132,8 @@
 			
 			//Add Transaction Results, User Log (Will be first time, so take from themes folder in PLUGIN)
 			
-			$this->move_trans_user();		
+			//$this->move_trans_user();		
+		$_SESSION["wpsc_theme_moved"] = true;
 	}
 
  }
