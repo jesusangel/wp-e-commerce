@@ -255,6 +255,15 @@ function wpsc_options_presentation() {
 					<?php
 							$_SESSION['wpsc_themes_copied'] = false;
 						}
+								if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) {
+					?>
+							<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+								<p><?php _e( "Thanks, you have made a succesful backup of your theme.  It is located at the URL below.  You can backup as often as you like." ); ?></p>
+								<p style="<?php echo $style; ?>">URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEME_BACKUP_DIR ); ?></p>
+							</div>
+					<?php
+							$_SESSION['wpsc_themes_backup'] = false;
+						}
 					?><?php
 						if ( wpsc_count_themes_in_uploads_directory() > 0 ) {
 ?>

@@ -113,6 +113,7 @@ $wpsc_thumbnail_dir = "{$wpsc_upload_dir}product_images/thumbnails/";
 $wpsc_category_dir = "{$wpsc_upload_dir}category_images/";
 $wpsc_user_uploads_dir = "{$wpsc_upload_dir}user_uploads/";
 $wpsc_cache_dir = "{$wpsc_upload_dir}cache/";
+$wpsc_theme_backup_dir = "{$wpsc_upload_dir}theme_backup/";
 $wpsc_upgrades_dir = "{$wpsc_upload_dir}upgrades/";
 $old_wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
 $wpsc_themes_dir = $active_wp_theme;
@@ -127,6 +128,7 @@ define('WPSC_CATEGORY_DIR', $wpsc_category_dir);
 define('WPSC_USER_UPLOADS_DIR', $wpsc_user_uploads_dir);
 define('WPSC_CACHE_DIR', $wpsc_cache_dir);
 define('WPSC_UPGRADES_DIR', $wpsc_upgrades_dir);
+define('WPSC_THEME_BACKUP_DIR', $wpsc_theme_backup_dir);
 define('WPSC_THEMES_PATH', $wpsc_themes_dir);
 
 

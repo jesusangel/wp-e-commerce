@@ -10,19 +10,6 @@
 	 * @since 3.8
  */
  
-
-/* 
-
-Roadmap
-
-Get theme engine to work properly
-
-3. Provide a 'backup your theme' Option that copies your WP Theme to your uploads directory purely for backup purposes...
-
-@TODO - 8.19
-	
-*/
-
  class wpsc_theming {
 
 	var $active_wp_theme;
@@ -144,11 +131,18 @@ Get theme engine to work properly
 			closedir($dh);
 			
 			//Add Transaction Results, User Log (Will be first time, so take from themes folder in PLUGIN)
+			
+			$this->move_trans_user();		
 	}
+
  }
    
 if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'copy_themes')) {
 	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming = new wpsc_theming();' ) );
+}
+   
+if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'backup_themes')) {
+	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming->move_theme($)' ) );
 }
 
 ?>
