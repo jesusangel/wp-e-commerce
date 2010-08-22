@@ -396,7 +396,10 @@ function wpsc_single_template() {
           return $wpsc_theme_path.'wpsc-single_product.php';
      }
 }
-if($_SESSION["wpsc_theme_moved"]) {
+
+$theme_moved = get_option("wpsc_theme_moved");
+
+if($theme_moved = "1") {
 	add_filter( "single_template", "wpsc_single_template" ) ;
 }
 //handles replacing the tags in the pages

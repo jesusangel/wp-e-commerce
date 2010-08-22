@@ -133,10 +133,9 @@
 			//Add Transaction Results, User Log (Will be first time, so take from themes folder in PLUGIN)
 			
 			//$this->move_trans_user();		
-		$_SESSION["wpsc_theme_moved"] = true;
+		update_option("wpsc_theme_moved", "1");
 	}
-
- }
+}
    
 if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'copy_themes')) {
 	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming = new wpsc_theming();' ) );
