@@ -92,9 +92,9 @@ Get theme engine to work properly
 	 * @return None
 */
 	function theme_location() {
-		global $wpsc_themes_dir;
+		global $old_wpsc_themes_dir;
 			$wpsc_theme_folder = get_option('wpsc_selected_theme');
-			$active_wpsc_dir = $wpsc_themes_dir.'/'.$wpsc_theme_folder;
+			$active_wpsc_dir = $old_wpsc_themes_dir.'/'.$wpsc_theme_folder;
 			
 			//First, check if theme exists in uploads folder, if so, that's theme location - if it's not there, then the theme location will be the plugins folder.
 			

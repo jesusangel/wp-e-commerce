@@ -114,7 +114,7 @@ $wpsc_category_dir = "{$wpsc_upload_dir}category_images/";
 $wpsc_user_uploads_dir = "{$wpsc_upload_dir}user_uploads/";
 $wpsc_cache_dir = "{$wpsc_upload_dir}cache/";
 $wpsc_upgrades_dir = "{$wpsc_upload_dir}upgrades/";
-//$wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
+$old_wpsc_themes_dir = "{$wpsc_upload_dir}themes/";
 $wpsc_themes_dir = $active_wp_theme;
 
 define('WPSC_UPLOAD_ERR', $error_msg);

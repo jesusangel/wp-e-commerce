@@ -34,7 +34,6 @@ if((isset($_SESSION['wpsc_activate_debug_page']) && ($_SESSION['wpsc_activate_de
 //settings pages include
 require_once(WPSC_FILE_PATH."/wpsc-admin/includes/settings-pages/general.php");
 
-
 if(get_option('wpsc_checkout_form_fields') == '') {
 	$form_types = 	Array("text","email","address","city","country","delivery_address","delivery_city","delivery_country","textarea","heading","select","radio","checkbox");
 	update_option('wpsc_checkout_form_fields', $form_types);
