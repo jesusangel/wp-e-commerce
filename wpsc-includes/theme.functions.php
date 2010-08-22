@@ -542,7 +542,11 @@ function wpsc_place_shopping_cart($content = '') {
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		define('DONOTCACHEPAGE', true);
 		ob_start();
-		include($cur_wpsc_theme_folder."/wpsc-shopping_cart_page.php");
+		if(file_exists($cur_wpsc_theme_folder."/wpsc-shopping_cart_page.php")) {
+			include($cur_wpsc_theme_folder."/wpsc-shopping_cart_page.php");
+		} else {
+			include(WPSC_FILE_PATH."/shopping_cart_page.php");
+		}
 		$output = ob_get_contents();
 		ob_end_clean();
 		$output = str_replace('$','\$', $output);
@@ -573,7 +577,11 @@ function wpsc_transaction_results($content = '') {
   if(preg_match("/\[transactionresults\]/",$content)) {
 		define('DONOTCACHEPAGE', true);
     ob_start();
-	include($cur_wpsc_theme_folder."/wpsc-transaction_results.php");
+	if(file_exists($cur_wpsc_theme_folder."/wpsc-transaction_results.php")) {
+		include($cur_wpsc_theme_folder."/wpsc-transaction_results.php");
+	} else {
+		include(WPSC_FILE_PATH."/transaction_results.php");
+	}
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[transactionresults\](<\/p>)*/",$output, $content);
@@ -590,7 +598,11 @@ function wpsc_user_log($content = '') {
 		define('DONOTCACHEPAGE', true);
     ob_start();
 	
-	include($cur_wpsc_theme_folder."/wpsc-user-log.php");
+	if(file_exists($cur_wpsc_theme_folder."/wpsc-user-log.php")) {
+		include($cur_wpsc_theme_folder."/wpsc-user-log.php");
+	} else {
+		include(WPSC_FILE_PATH."/user-log.php");
+	}
     $output = ob_get_contents();
     ob_end_clean();
     return preg_replace("/(<p>)*\[userlog\](<\/p>)*/",$output, $content);
