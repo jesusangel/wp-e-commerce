@@ -124,7 +124,7 @@ function selectgateway() {
 					  	if(!isset($_SESSION['previous_payment_name']))
 					  		$_SESSION['previous_payment_name'] = "";
 					  
-						$payment_data = wpsc_get_payment_form($_SESSION['previous_payment_name']);
+						$payment_data = wpsc_get_payment_form($_SESSION['previous_payment_name'],$selected_gateway_data);
 					  ?>
 						<h3 class='hndle'><?php echo $payment_data['name']; ?></h3>
 						<div class='inside'>

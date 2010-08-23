@@ -2019,14 +2019,14 @@ function wpsc_gateway_settings(){
 
    if(isset($_POST['user_defined_name']) && is_array($_POST['user_defined_name'])) {
       $payment_gateway_names = get_option('payment_gateway_names');
+	
       if(!is_array($payment_gateway_names)) {
         $payment_gateway_names = array();
       }
      $payment_gateway_names = array_merge($payment_gateway_names, (array)$_POST['user_defined_name']);
       update_option('payment_gateway_names', $payment_gateway_names);
    }
-$custom_gateways = get_option('custom_gateway_options');
- // exit('<pre>'.print_r($GLOBALS['nzshpcrt_gateways'],true).'</pre>');
+   $custom_gateways = get_option('custom_gateway_options');
 
    foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
   //if($gateway['internalname'] == get_option('payment_gateway'))
@@ -2558,7 +2558,7 @@ function variation_price_field_check( $variation ) {
 <tr class="form-field">
         <th scope="row" valign="top"><label for="apply_to_current"><?php _e('Apply to current variations?') ?></label></th>
         <td>
-            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" <?php echo $checked; ?> />By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created or edited from now on.  Take note, this will apply this rule to <strong>every</strong> product using this variation.  If you need to override it for any reason on a specific product, simply go to that product and change the price.</span>
+            <span class="description"><input type="checkbox" name="apply_to_current" id="apply_to_current" style="width:2%;" <?php echo $checked; ?> /><?php _e('By checking this box, the price rule you implement above will be applied to all variations that currently exist.  If you leave it unchecked, it will only apply to products that use this variation created or edited from now on.  Take note, this will apply this rule to <strong>every</strong> product using this variation.  If you need to override it for any reason on a specific product, simply go to that product and change the price.','wpsc'); ?></span>
         </td>
     </tr>
 <?php

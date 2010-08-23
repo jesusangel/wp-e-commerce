@@ -646,7 +646,6 @@ function wpsc_the_product_thumbnail($width = null, $height = null) {
 	   
 	  
 	if(has_post_thumbnail(get_the_ID())) {
-		add_image_size( 'product-thumbnails', get_option('product_image_width'), get_option('product_image_height'), TRUE ); 
 		$image = get_the_post_thumbnail(get_the_ID(), 'product-thumbnails');
 		return $image;
 	} if($attached_images != null) { 

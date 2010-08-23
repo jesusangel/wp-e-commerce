@@ -233,9 +233,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				
 				$src =wp_get_attachment_url($attached_image->ID);
 		     ?>
+		     	<div style='width:38px;height:38px;overflow:hidden;'>
 					<img title='Drag to a new position' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+				</div>
 				<?php
-
+			
 		     
 		     }else{
 		      	$image_url = WPSC_URL."/images/no-image-uploaded.gif";

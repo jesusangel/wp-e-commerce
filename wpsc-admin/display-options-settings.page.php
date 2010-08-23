@@ -191,21 +191,56 @@ function wpsc_get_shipping_form( $shippingname ) {
  * Get Payment Form for wp-admin 
  */
 
-function wpsc_get_payment_form( $paymentname ) {
+function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
 	global $wpdb, $nzshpcrt_gateways;
+	$payment_gateway_names = get_option('payment_gateway_names');
 	$form = array( );
 	$output = array( 'name' => '&nbsp;', 'form_fields' => __( 'To configure a payment module select one on the left.', 'wpsc' ), 'has_submit_button' => 0 );
 	foreach ( $nzshpcrt_gateways as $gateway ) {
 		if ( $gateway["internalname"] != $paymentname ) {
 			continue;
 		} else {
+			$selected_gateway_data	= $gateway;		
 			$form = $gateway;
 		}
 	}
-	if ( $form ) {
+	if ( $form ) { 
+		$output ='';
+		$output .="<tr>
+					  <td style='border-top: none;'>
+					  ".__("Display Name")."
+					  </td>
+					  <td style='border-top: none;'>";
+					    if($payment_gateway_names[$paymentname] != '') {
+								$display_name = $payment_gateway_names[$paymentname];					    
+					    } else {
+								switch($selected_gateway_data['payment_type']) {
+									case "paypal";
+										$display_name = "PayPal";
+									break;
+									
+									case "manual_payment":
+										$display_name = "Manual Payment";
+									break;
+									
+									case "google_checkout":
+										$display_name = "Google Checkout";
+									break;
+									
+									case "credit_card":
+									default:
+										$display_name = "Credit Card";
+									break;
+								}
+					    }
+		$output .="<input type='text' name='user_defined_name[".$paymentname."]' value='". $display_name ."' /><br />
+					<span class='small description'>".__('The text that people see when making a purchase')."</span>
+					</td>
+					</tr>";
 		$payment_forms = $form["form"]();
 		$payment_module_name = $form["name"];
-		$output = array( 'name' => $payment_module_name, 'form_fields' => $payment_forms, 'has_submit_button' => 1 );
+		
+		$output = array( 'name' => $payment_module_name, 'form_fields' => $output.$payment_forms, 'has_submit_button' => 1 );
 	} else {
 		$output = array( 'name' => '&nbsp;', 'form_fields' => __( 'To configure a payment module select one on the left.', 'wpsc' ), 'has_submit_button' => 0 );
 	}

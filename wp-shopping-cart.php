@@ -70,6 +70,7 @@ function wpsc_load_plugin(){
            ),
          );
     //  exit('With:'.get_option('product_image_width').' height'.get_option('product_image_height'));    
+	add_image_size( 'product-thumbnails', get_option('product_image_width'), get_option('product_image_height'), TRUE ); 
     add_image_size( 'admin-product-thumbnails', 38,38, TRUE ); 
     add_image_size( 'featured-product-thumbnails',540,260, TRUE);
 	//Include the rest of the Plugin files
