@@ -103,7 +103,7 @@ if(is_ssl()) {
 }
 
 $active_wp_theme = get_stylesheet_directory();
-$active_wp_theme = $active_wp_theme.'/wpsc';
+$active_wp_theme = $active_wp_theme.'/wpsc/';
 
 $wpsc_upload_dir = "{$upload_path}/wpsc/";
 $wpsc_file_dir = "{$wpsc_upload_dir}downloadables/";
