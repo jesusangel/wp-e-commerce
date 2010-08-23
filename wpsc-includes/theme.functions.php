@@ -393,12 +393,14 @@ function wpsc_display_products_page($query) {
 			echo "<div id='wpsc-warning' class='error fade'><p><strong>".__('WP e-Commerce is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">update your themes</a> to WPEC\'s new theme system.  It\'s really easy!'), "admin.php?page=wpsc-settings&tab=presentation")."</p></div>";
 		}
 		
-function wpsc_single_template() {
+function wpsc_single_template($template) {
      global $post, $wpsc_theme_path;
 
      if ($post->post_type == 'wpsc-product') {
           return $wpsc_theme_path.'wpsc-single_product.php';
-     }
+     } else {
+		return $template;
+	}
 }
 
 $theme_moved = get_option("wpsc_theme_moved");
