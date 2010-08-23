@@ -215,9 +215,29 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			?>
 			<td class="product-image ">
 			<?php
+		   $attached_images = (array)get_posts(array( 
+	          'post_type' => 'attachment', 
+	          'numberposts' => 1, 
+	          'post_status' => null, 
+	          'post_parent' => $product->ID, 
+	          'orderby' => 'menu_order', 
+	          'order' => 'ASC' 
+		    ));
+		     
+			
+
 		 	 if(isset($product->ID) && has_post_thumbnail($product->ID)){
 				echo get_the_post_thumbnail($product->ID, 'admin-product-thumbnails');
-		      }else{
+		     }elseif(!empty($attached_images)){
+			    $attached_image = $attached_images[0];
+				
+				$src =wp_get_attachment_url($attached_image->ID);
+		     ?>
+					<img title='Drag to a new position' src='<?php echo $src; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
+				<?php
+
+		     
+		     }else{
 		      	$image_url = WPSC_URL."/images/no-image-uploaded.gif";
 				?>
 					<img title='Drag to a new position' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
