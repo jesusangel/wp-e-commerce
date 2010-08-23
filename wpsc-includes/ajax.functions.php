@@ -1014,7 +1014,7 @@ function wpsc_download_file() {
 
       }
 
-      //exit($file_id. "-".$download_data['fileid']);
+      
 
       $file_data = get_post($file_id);
 
@@ -1031,13 +1031,11 @@ function wpsc_download_file() {
 
 
          $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `downloads` = '{$download_count}' WHERE `id` = '{$download_data['id']}' LIMIT 1");
-         $cart_contents = $wpdb->get_results('SELECT `'.WPSC_TABLE_CART_CONTENTS.'`.*,`'.WPSC_TABLE_PRODUCT_LIST.'`.`file` FROM `'.WPSC_TABLE_CART_CONTENTS.'` LEFT JOIN `'.WPSC_TABLE_PRODUCT_LIST.'` ON `'.WPSC_TABLE_CART_CONTENTS.'`.`prodid`= `'.WPSC_TABLE_PRODUCT_LIST.'`.`id` WHERE `purchaseid` ='.$download_data['purchid'], ARRAY_A);
+         $cart_contents = $wpdb->get_results("SELECT `".WPSC_TABLE_CART_CONTENTS."`.*, $wpdb->posts.`guid` FROM `".WPSC_TABLE_CART_CONTENTS."` LEFT JOIN $wpdb->posts ON `".WPSC_TABLE_CART_CONTENTS."`.`prodid`= $wpdb->posts.`post_parent` WHERE $wpdb->posts.`post_type` = 'wpsc-product-file' AND `purchaseid` =".$download_data['purchid'], ARRAY_A);
          $dl = 0;
 
-
-
          foreach($cart_contents as $cart_content) {
-            if($cart_content['file'] == 1) {
+            if($cart_content['guid'] == 1) {
                $dl++;
             }
          }
@@ -1049,8 +1047,8 @@ function wpsc_download_file() {
 
          do_action('wpsc_alter_download_action', $file_id);
 
-         //exit('<pre>'.print_r($cart_contents,true).'</pre>');
-         $file_path = WPSC_FILE_DIR.basename($file_data->post_name);
+
+         $file_path = WPSC_FILE_DIR.basename($file_data->guid);
          $file_name = basename($file_data->post_title);
 
 
