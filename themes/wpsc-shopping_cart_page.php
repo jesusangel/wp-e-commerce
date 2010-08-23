@@ -5,7 +5,7 @@ $wpsc_gateway = new wpsc_gateways();
 if(isset($_SESSION['coupon_numbers'])){
 	$wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 }
- //echo "<pre>".print_r($wpsc_cart, true)."</pre>";
+//echo "<pre>".print_r($wpsc_cart, true)."</pre>";
 // //echo "<pre>".print_r($wpsc_checkout, true)."</pre>";
 if(wpsc_cart_item_count() > 0) :
 ?>
@@ -251,7 +251,7 @@ if(wpsc_cart_item_count() > 0) :
 		  <?php else: ?>
 		  <?php if((!wpsc_uses_shipping()) && $wpsc_checkout->checkout_item->unique_name == 'shippingstate'): ?>
 		  
-		  <?php elseif(wpsc_checkout_form_element_id() =='wpsc_checkout_form_8'): ?>
+		  <?php elseif( $wpsc_checkout->checkout_item->unique_name == 'billingemail'): ?>
 				<div class='wpsc_email_address'>
 					<p class='<?php echo wpsc_checkout_form_element_id(); ?>'>
 						<label class='wpsc_email_address' for='<?php echo wpsc_checkout_form_element_id(); ?>'>
