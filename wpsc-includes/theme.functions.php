@@ -13,7 +13,7 @@
 * enqueue all javascript and CSS for wp ecommerce
 */
 function wpsc_enqueue_user_script_and_css() {
-  global $wp_styles, $wpsc_theme_url, $wpsc_theme_path, $wp_query;
+  global $wp_styles, $wpsc_theme_url, $wpsc_theme_path, $wpsc_themes_dir, $wp_query;
 	/**
 	* added by xiligroup.dev to be compatible with touchshop
 	*/
@@ -57,10 +57,10 @@ function wpsc_enqueue_user_script_and_css() {
 		
 		wp_enqueue_script('wpsc-thickbox',WPSC_URL.'/js/thickbox.js', array('jquery'), 'Instinct_e-commerce');
 
-		if(file_exists($wpsc_theme_path.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css")) {
-			$theme_url = $wpsc_theme_url.get_option('wpsc_selected_theme')."/".get_option('wpsc_selected_theme').".css";
+		if(file_exists($wpsc_themes_dir."/wpsc-".get_option('wpsc_selected_theme').".css")) {
+			$theme_url = WPSC_THEMES_URL."/wpsc/wpsc-".get_option('wpsc_selected_theme').".css";
 		} else {
-			$theme_url = $wpsc_theme_url. '/default/default.css';
+			$theme_url = $wpsc_theme_url. 'wpsc-default.css';
 		}
 		
 		wp_enqueue_style( 'wpsc-theme-css', $theme_url, false, $version_identifier, 'all');

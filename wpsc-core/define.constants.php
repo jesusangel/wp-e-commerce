@@ -103,7 +103,7 @@ if(is_ssl()) {
 }
 
 $active_wp_theme = get_stylesheet_directory();
-$active_wp_theme = $active_wp_theme.'/wpsc/';
+$active_wp_theme = $active_wp_theme.'/wpsc';
 
 $wpsc_upload_dir = "{$upload_path}/wpsc/";
 $wpsc_file_dir = "{$wpsc_upload_dir}downloadables/";
@@ -143,7 +143,8 @@ $wpsc_category_url = "{$wpsc_upload_url}category_images/";
 $wpsc_user_uploads_url = "{$wpsc_upload_url}user_uploads/";
 $wpsc_cache_url = "{$wpsc_upload_url}cache/";
 $wpsc_upgrades_url = "{$wpsc_upload_url}upgrades/";
-$wpsc_themes_url = "{$wpsc_upload_url}themes/";
+$old_wpsc_themes_url = "{$wpsc_upload_url}themes/";
+$wpsc_themes_url = get_stylesheet_directory_uri();
 
 define('WPSC_UPLOAD_URL', $wpsc_upload_url);
 define('WPSC_PREVIEW_URL', $wpsc_preview_url);
