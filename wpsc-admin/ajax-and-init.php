@@ -1112,36 +1112,43 @@ function wpsc_purchlog_resend_email(){
       if(($cart != null)) {
          foreach($cart as $row) {
             $link = "";
-            $productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$row['prodid']."";
+            $productsql= "SELECT * FROM $wpdb->posts WHERE `ID`=".$row['prodid']."";
             $product_data = $wpdb->get_results($productsql,ARRAY_A) ;
-
-            if($product_data[0]['file'] > 0) {
+    		$attachment = array(
+				'post_parent' => $row['prodid'],
+				'post_type' => "wpsc-product-file",
+				'post_status' => 'inherit'
+			);
+			$dl_data = (array)get_posts($attachment);
+/* /			exit('<pre>'.print_r($purchase_log,true).'</pre>'); */
+            if($dl_data[0]->ID > 0) {
                if($purchase_log['email_sent'] != 1) {
                   $wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
                }
-
+			
                if (($purchase_log['processed'] >= 2)) {
                   $download_data = $wpdb->get_results("SELECT *
-                  FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` INNER JOIN `".WPSC_TABLE_PRODUCT_FILES."`
-                  ON `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = `".WPSC_TABLE_PRODUCT_FILES."`.`id`
+                  FROM `".WPSC_TABLE_DOWNLOAD_STATUS."` INNER JOIN $wpdb->posts
+                  ON `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = $wpdb->posts.`ID`
                   WHERE `".WPSC_TABLE_DOWNLOAD_STATUS."`.`active`='1'
                   AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`purchid`='".$purchase_log['id']."'
                   AND (
                      `".WPSC_TABLE_DOWNLOAD_STATUS."`.`cartid` = '".$row['id']."'
                      OR (
                         `".WPSC_TABLE_DOWNLOAD_STATUS."`.`cartid` IS NULL
-                        AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = '{$product_data['file']}'
+                        AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`fileid` = '{$dl_data[0]->ID}'
                      )
                   )
                    AND `".WPSC_TABLE_DOWNLOAD_STATUS."`.`id` NOT IN ('".implode("','",$previous_download_ids)."')",ARRAY_A);
                   $link=array();
-                     //exit('IM HERE'.$errorcode.'<pre>'.print_r($download_data).'</pre>');
+                    
                   if(sizeof($download_data) != 0) {
+
                      foreach($download_data as $single_download){
                         if($single_download['uniqueid'] == null){// if the uniqueid is not equal to null, its "valid", regardless of what it is
-                           $link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" =>$single_download["filename"]);
+                           $link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" =>$single_download["post_title"]);
                         } else {
-                           $link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" =>$single_download["filename"]);
+                           $link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" =>$single_download["post_title"]);
                         }
               }
                   }
@@ -1171,8 +1178,8 @@ function wpsc_purchlog_resend_email(){
 
 
                   if($link != '') {
-                     $product_list .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
-                     $product_list_html .= " - ". $product_data['name'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
+                     $product_list .= " - ". $product_data['post_title'] . stripslashes($variation_list) ."  ".$message_price ." ".__('Click to download', 'wpsc').":";
+                     $product_list_html .= " - ". $product_data['post_title'] . stripslashes($variation_list) ."  ".$message_price ."&nbsp;&nbsp;".__('Click to download', 'wpsc').":\n\r";
                      foreach($link as $single_link) {
                         $product_list .= "\n\r ".$single_link["name"].": ".$single_link["url"]."\n\r";
                         $product_list_html .= "<a href='".$single_link["url"]."'>".$single_link["name"]."</a>\n";
@@ -1184,13 +1191,13 @@ function wpsc_purchlog_resend_email(){
                         $plural = "s";
                        }
 
-                     $product_list.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n";
+                     $product_list.= " - ".$row['quantity']." ". $product_data[0]['post_title'].$variation_list ."  ". $message_price ."\n";
                      if ($shipping > 0) $product_list .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
-                     $product_list_html.= " - ".$row['quantity']." ". $product_data[0]['name'].$variation_list ."  ". $message_price ."\n";
+                     $product_list_html.= " - ".$row['quantity']." ". $product_data[0]['post_title'].$variation_list ."  ". $message_price ."\n";
                      if ($shipping > 0) $product_list_html .= " - ". __('Shipping', 'wpsc').":".$shipping_price ."\n\r";
                   }
 
-                  $report.= " - ". $product_data[0]['name'] .$variation_list."  ".$message_price ."\n";
+                  $report.= " - ". $product_data[0]['post_title'] .$variation_list."  ".$message_price ."\n";
             }
 
             if($purchase_log['discount_data'] != '') {
@@ -1204,13 +1211,13 @@ function wpsc_purchlog_resend_email(){
 
             $total = (($total+$total_shipping) - $purchase_log['discount_value']);
          // $message.= "\n\r";
-         $product_list.= "Your Purchase No.: ".$purchase_log['id']."\n\r";
+         $product_list.= "Your Purchase # ".$purchase_log['id']."\n\r";
             if($purchase_log['discount_value'] > 0) {
                $discount_email.= __('Discount', 'wpsc').": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
             }
             $total_shipping_email.= __('Total Shipping', 'wpsc').": ".nzshpcrt_currency_display($total_shipping,1,true)."\n\r";
             $total_price_email.= __('Total', 'wpsc').": ".nzshpcrt_currency_display($total,1,true)."\n\r";
-            $product_list_html.= "Your Purchase No.: ".$purchase_log['id']."\n\n\r";
+            $product_list_html.= "Your Purchase # ".$purchase_log['id']."\n\n\r";
             if($purchase_log['discount_value'] > 0) {
                $discount_html.= __('Discount', 'wpsc').": ".nzshpcrt_currency_display($purchase_log['discount_value'], 1, true)."\n\r";
             }
@@ -1221,12 +1228,12 @@ function wpsc_purchlog_resend_email(){
                $message_html.= "\n\r".__('Your Transaction ID', 'wpsc').": " . $_GET['ti'];
                $report.= "\n\r".__('Transaction ID', 'wpsc').": " . $_GET['ti'];
             } else {
-               $report_id = "Purchase No.: ".$purchase_log['id']."\n\r";
+               $report_id = "Purchase # ".$purchase_log['id']."\n\r";
             }
 
 
 
-            $message = str_replace('%product_list%',$product_list,$message);
+        $message = str_replace('%product_list%',$product_list,$message);
         $message = str_replace('%total_shipping%',$total_shipping_email,$message);
         $message = str_replace('%total_price%',$total_price_email,$message);
         //$message = str_replace('%order_status%',get_option('blogname'),$message);
