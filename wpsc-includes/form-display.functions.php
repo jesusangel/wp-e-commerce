@@ -195,6 +195,7 @@ function wpsc_select_product_file($product_id = null) {
 	$output .= "var select_min_height = ".(25*3).";\n\r";
 	$output .= "var select_max_height = ".(25*($num+1)).";\n\r";  
 	$output .= "</script>";  
+	$output = apply_filters('wpsc_downloads_metabox', $output);
 	return $output;
 }
   
