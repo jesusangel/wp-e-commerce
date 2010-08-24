@@ -852,10 +852,10 @@ function wpsc_get_theme_file_path($file) {
 	global $wpsc_theme_path;
 	$file = basename($file);
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
-	if(is_file($cur_wpsc_theme_folder."/".$file)) {
-		$output = $cur_wpsc_theme_folder."/".$file;
+	if(is_file(WPSC_THEMES_PATH.$file)) {
+		$output = WPSC_THEMES_PATH.$file;
 	} else {
-		$wpsc_theme_path = WPSC_FILE_PATH . "/themes/".WPSC_THEME_DIR;
+		$wpsc_theme_path = WPSC_FILE_PATH . "/themes/";
 		$output =  $wpsc_theme_path."/".$file;
 	}
 	return $output;
