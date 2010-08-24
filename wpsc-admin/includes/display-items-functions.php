@@ -1380,7 +1380,7 @@ function wpsc_product_download_forms( $product_data='' ) {
 		$output .= "<input type='file' name='preview_file' value='' /><br />";
 		$output .= "<br />";
 	}
-
+	$output = apply_filters('wpsc_downloads_metabox', $output);
 	$output .="</div></div>";
 
 	return $output;
