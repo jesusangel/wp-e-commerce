@@ -2067,7 +2067,10 @@ function wpsc_check_form_options(){
    $sql = 'SELECT `options` FROM `'.WPSC_TABLE_CHECKOUT_FORMS.'` WHERE `id`='.$id;
    $options = $wpdb->get_var($sql);
    if($options != ''){
-      $options = unserialize($options);
+		$options = maybe_unserialize($options);
+		if(!is_array($options)){
+			$options = unserialize($options);		
+		}
       $output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options[".$id."]'>+ New Layer</a></td></tr>";
 
       foreach((array)$options as $key=>$value){
@@ -2097,20 +2100,23 @@ function wpsc_checkout_settings(){
      if($_POST['new_form_set'] != null) {
       $new_form_set = $wpdb->escape(stripslashes($_POST['new_form_set']));
       $form_set_key = sanitize_title($new_form_set);
-         $checkout_sets = get_option('wpsc_checkout_form_sets');
-
-         $checkout_sets[$form_set_key] = $new_form_set;
-         update_option('wpsc_checkout_form_sets', $checkout_sets);
+      $checkout_sets = get_option('wpsc_checkout_form_sets');
+      $checkout_sets[$form_set_key] = $new_form_set;
+      update_option('wpsc_checkout_form_sets', $checkout_sets);
      }
 
-      // Save checkout options
+      /*
+// Save checkout options
       if (!isset($_POST['wpsc_checkout_option_label'])) $_POST['wpsc_checkout_option_label'] = '';
-
+*/
+	   $options = array();
        if(is_array($_POST['wpsc_checkout_option_label'])){
          foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
-            $options = array();
+         
                foreach((array)$values as $key => $form_option){
-                  $options[$form_option] = $_POST['wpsc_checkout_option_value'][$form_id][$key];
+		    	$form_option = str_ireplace("'", "",$form_option);
+				$form_val = str_ireplace("'", "",sanitize_title($_POST['wpsc_checkout_option_value'][$form_id][$key]));
+                $options[$form_option] =$form_val;
                }
 
                $options = serialize($options);

@@ -159,7 +159,6 @@ $image_height = get_option('product_image_height');
 				<?php endif; ?> 				
 			</div>
 			
-			
 			<?php if((get_option('grid_number_per_row') > 0) && ((($wpsc_query->current_product +1) % get_option('grid_number_per_row')) == 0)) :?>
 			  <div class='grid_view_newline'></div>
 			<?php endif ; ?>
