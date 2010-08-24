@@ -69,10 +69,6 @@ function wpsc_load_plugin(){
               'order' => 5,
            ),
          );
-	if (!current_theme_supports('post-thumbnails')) {
-		add_theme_support( 'post-thumbnails' ); 
-		add_action('init','wpsc_remove_thumbnail_support',99);
-	}
     //  exit('With:'.get_option('product_image_width').' height'.get_option('product_image_height'));    
 	add_image_size( 'product-thumbnails', get_option('product_image_width'), get_option('product_image_height'), TRUE ); 
     add_image_size( 'admin-product-thumbnails', 38,38, TRUE ); 
@@ -176,7 +172,15 @@ function wpsc_load_plugin(){
 add_action('plugins_loaded','wpsc_load_plugin', 8);
 add_action('plugins_loaded','wpsc_initialisation', 8);
 
-function wpsc_remove_thumbnail_support() {
+function wpsc_check_thumbnail_support() {
+	if (!current_theme_supports('post-thumbnails')) {
+		add_theme_support( 'post-thumbnails' ); 
+		add_action('init','wpsc_remove_post_type_thumbnail_support');
+	}
+}
+add_action('after_setup_theme','wpsc_check_thumbnail_support',99);
+
+function wpsc_remove_post_type_thumbnail_support() {
 		remove_post_type_support('post','thumbnail');
 		remove_post_type_support('page','thumbnail');
 }
