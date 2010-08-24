@@ -92,7 +92,8 @@ global $wpsc_query, $wpdb, $wp_query;
 						<div class="imagecol">
 							<?php if(wpsc_the_product_thumbnail()) :
 							?>
-								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="<?php echo wpsc_the_product_image_link_classes(); ?>" href="<?php echo wpsc_the_product_image(); ?>">								<?php echo wpsc_the_product_thumbnail(); ?>
+								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="<?php echo wpsc_the_product_image_link_classes(); ?>" href="<?php echo wpsc_the_product_image(); ?>">
+								<?php echo wpsc_the_product_thumbnail(); ?>
 								
 								</a>
 							<?php else: ?>
