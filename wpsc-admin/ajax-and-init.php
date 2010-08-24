@@ -2112,7 +2112,7 @@ function wpsc_checkout_settings(){
 	   $options = array();
        if(is_array($_POST['wpsc_checkout_option_label'])){
          foreach($_POST['wpsc_checkout_option_label'] as $form_id=> $values){
-         
+			   $options = array();         
                foreach((array)$values as $key => $form_option){
 		    	$form_option = str_ireplace("'", "",$form_option);
 				$form_val = str_ireplace("'", "",sanitize_title($_POST['wpsc_checkout_option_value'][$form_id][$key]));
