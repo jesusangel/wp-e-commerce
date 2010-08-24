@@ -684,7 +684,7 @@ function wpsc_options_presentation() {
 					<?php
 						}
 
-						if ( function_exists( 'drag_and_drop_cart' ) ) {
+						if ( function_exists( 'drag_and_drop_cart_ajax' ) ) {
 					?>
 							<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='5' name='wpsc_options[cart_location]' id='cart5' <?php echo $cart5; ?> /> <label for='cart5'><?php echo __( 'DropShop', 'wpsc' ); ?></label> &nbsp;
 <?php
@@ -697,7 +697,7 @@ function wpsc_options_presentation() {
 ?>
 						<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='3' name='wpsc_options[cart_location]' id='cart3' <?php if ( isset( $cart3 ) )
 							echo $cart3; ?> /> <label for='cart3'><?php echo __( 'Manual', 'wpsc' ); ?> <span style='font-size: 7pt;'>(PHP code: &lt;?php echo nzshpcrt_shopping_basket(); ?&gt; )</span></label>
-						<div  style='display: <?php if ( isset( $cart5 ) ) {
+						<div  style='display: <?php if ( !empty( $cart5 ) ) {
 							echo "block";
 						} else {
 							echo "none";

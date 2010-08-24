@@ -769,21 +769,28 @@ add_filter( 'body_class', 'wpsc_body_class' );
 
 function wpsc_the_sticky_image($product_id) {
 global $wpdb;
+	 $attached_images = (array)get_posts(array( 
+	        'post_type' => 'attachment', 
+	        'numberposts' => 1, 
+	        'post_status' => null, 
+	        'post_parent' => $product_id, 
+	        'orderby' => 'menu_order', 
+	        'order' => 'ASC' 
+	 )); 
 	if(has_post_thumbnail($product_id)) {
     	add_image_size( 'featured-product-thumbnails',540,260, TRUE);
 		$image = get_the_post_thumbnail($product_id, 'featured-product-thumbnails');
 		return $image;
-	} else {
+	} elseif(!empty($attached_images)) {
+        $attached_image = $attached_images[0]; 
+        $image_link = wpsc_product_image($attached_image->ID, 540,260);
+        return '<img src="'.$image_link.'" alt="" />'; 
+
+	}else{
 		return false;
 	}
-//Previously checked product_meta, now get_vars guid from attachment with this post_parent, checking against _thumbnail_id   
-$sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM ".WP_POSTS," p, ".WP_POSTMETA." pm WHERE p.post_parent = $product_id AND pm.post_id = $product_id AND pm.meta_value = p.ID"));
+	
 
-	if($sticky_product_image != ''){
-		return $sticky_product_image;
-	}else{
-		return wpsc_the_product_image(340, 260);
-	}
 }
 
 /**
@@ -795,17 +802,17 @@ $sticky_product_image = $wpdb->get_var($wpdb->prepare("SELECT guid FROM ".WP_POS
  */
 function wpsc_display_featured_products_page() {
 	global $wpdb, $wpsc_query;	
-	
+
 	$sticky_array =get_option('sticky_products');
 	if ( (is_front_page() || is_home()) && !empty($sticky_array) ) {
 	
- 	$query = get_posts(array(
-			'post__in'  => $sticky_array,
-			'post_type' => 'wpsc-product',
-			'orderby' => 'rand',
-			'meta_key' => '_thumbnail_id',
-			'numberposts' => 1
-		));
+		$query = get_posts(array(
+				'post__in'  => $sticky_array,
+				'post_type' => 'wpsc-product',
+				'orderby' => 'rand',
+				'numberposts' => 1
+			));
+	
 		if ( count($query) > 0 ) { 
 
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
@@ -850,7 +857,7 @@ function wpsc_display_featured_products_page() {
 	</div>
 </div>
 <?php
-		endforeach;
+			endforeach;
 		//End output	
 		}
 	}
