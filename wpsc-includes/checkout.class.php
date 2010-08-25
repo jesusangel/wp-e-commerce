@@ -542,7 +542,8 @@ class wpsc_checkout {
    $any_bad_inputs = false;
    // Credit Card Number Validation for Paypal Pro and maybe others soon
    	  if(isset($_POST['card_number'])){
-   		if($_POST['card_number'] != ''){
+   		/*
+if($_POST['card_number'] != ''){
    			$ccregex='/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/';
    			if(!preg_match($ccregex, $_POST['card_number'])){
    				$any_bad_inputs = true;
@@ -561,7 +562,8 @@ class wpsc_checkout {
 			$_SESSION['wpsc_gateway_error_messages']['card_number'] = __('Please enter a valid', 'wpsc') . " " . strtolower('card number') . ".";
 			$_SESSION['wpsc_checkout_saved_values']['card_number'] = '';
 
-   		}   	
+   		}  
+*/ 	
    }else{
    		$_SESSION['wpsc_gateway_error_messages']['card_number'] = '';
    }

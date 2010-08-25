@@ -151,7 +151,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 	* @access public
 	*/
 	function submit() {
-		
 		if (get_option('paypal_pro_testmode') == "on"){
 			$paypal_url = "https://api-3t.beta-sandbox.paypal.com/nvp"; // Sandbox testing
 		}else{
@@ -164,12 +163,10 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 			'body' => $this->collected_gateway_data,
 			'user-agent' => $this->cart_data['software_name'] ." " . get_bloginfo( 'url' )
 		);
-		
 		$response = wp_remote_post($paypal_url, $options);
 		
 		// parse the response body
 		parse_str($response['body'], $parsed_response);
-		
 		$error_data = array();
 		if( is_wp_error( $response ) ) {
 			$error_data[0]['error_code'] = null;
@@ -393,7 +390,7 @@ if(in_array('wpsc_merchant_paypal_pro',(array)get_option('custom_gateway_options
 	$curryear = date('Y');
 	
 	//generate year options
-	for($i=0; $i < 7; $i++){
+	for($i=0; $i < 10; $i++){
 		$years .= "<option value='".$curryear."'>".$curryear."</option>\r\n";
 		$curryear++;
 	}

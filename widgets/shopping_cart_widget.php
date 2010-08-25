@@ -72,7 +72,7 @@ function widget_wp_shopping_cart_control() {
 
  function widget_wp_shopping_cart_init() {
    if(function_exists('wp_register_sidebar_widget')) {
-		$widget_ops['description'] = "Your most used tags in cloud format";
+		$widget_ops['description'] = "A Shopping Cart For Your WP e-Commerce Plugin";
     wp_register_sidebar_widget('widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart', $widget_ops);
     wp_register_widget_control('widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart_control');
     $GLOBALS['wpsc_cart_widget'] = true;

@@ -1639,3 +1639,10 @@ h3.wpsc_category_boundary {
 	margin: 0px 0px 5px 0px;
   font-size: 1.4em;
 }
+.wpsc_variation_forms{
+display:block;
+clear:left;
+}
+.wpsc_variation_forms p{
+padding:5px 0 ;
+}
