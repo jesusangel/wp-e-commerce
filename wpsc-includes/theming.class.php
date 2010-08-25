@@ -124,7 +124,7 @@
 						} else {
 							$file_data = "<?php\n\t get_header(); \n ?>\n";
 							$file_data .= file_get_contents($path."/".$file);
-							$file_data .= "\n<?php\n\t get_footer(); \n ?>";
+							$file_data .= "\n<?php\n\t get_sidebar(); \n\t get_footer(); \n ?>";
 						}
 						file_put_contents($path."/".$file, $file_data);
 					}
