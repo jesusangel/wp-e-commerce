@@ -430,7 +430,6 @@ function wpsc_product_creation_time($format = null) {
 
 /**
 * wpsc product has stock function
-* TODO this may need modifying to work with variations, test this
 * @return boolean - true if the product has stock or does not use stock, false if it does not
 */
 function wpsc_product_has_stock($id = null) {
@@ -439,10 +438,21 @@ function wpsc_product_has_stock($id = null) {
 	} else {
 		$id = get_the_ID();
 	}
-	$is_limited_stock = get_post_meta($id, '_wpsc_stock', true);
+	$stock = get_post_meta($id, '_wpsc_stock', true);
 	
-	if(is_numeric($is_limited_stock) && $is_limited_stock < 1) {
-		return false;
+	if(is_numeric($stock)) {
+		if ($stock > 0) {
+			return true;
+		}
+		$variations = get_children(array("post_type"=>"wpsc-product","post_parent"=>$id));
+		if (count($variations)) {
+			foreach($variations as $variation) {
+				$stock = get_post_meta($variation->ID,'_wpsc_stock',true);
+				if (is_numeric($stock) && $stock > 0) {
+					return true;
+				}
+			}
+		}
 	} else {
 		return true;
 	}
@@ -1160,7 +1170,7 @@ function wpsc_the_variation_price() {
 
 /**
 * wpsc the variation stock function
-* @return string - HTML attribute to disable select options and radio buttons
+* @return mixed - Stock level for the variation or FALSE if it can't be calculated
 */
 function wpsc_the_variation_stock() {
 	global $wpdb, $wpsc_variations;
