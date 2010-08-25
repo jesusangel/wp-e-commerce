@@ -155,9 +155,6 @@ function fancy_notification_content($cart_messages) {
   return $output;
 }
 
-
-
-
 /*
  * wpsc product url function, gets the URL of a product, 
  * Deprecated, all parameters past the first unused. use get_permalink  

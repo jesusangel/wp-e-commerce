@@ -4,9 +4,10 @@ $image_width = get_option('product_image_width');
 $image_height = get_option('product_image_height');
 ?>
 <div id='products_page_container' class="wpsc_container productdisplay example-category">
+	
 <?php if(wpsc_has_breadcrumbs()) : ?>
 		<div class='breadcrumb'>
-			<a href='<?php echo get_option('product_list_url'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
+			<a href='<?php echo get_option('home'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
 			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
 				<?php if(wpsc_breadcrumb_url()) :?> 	   
 					<a href='<?php echo wpsc_breadcrumb_url(); ?>'><?php echo wpsc_breadcrumb_name(); ?></a> &raquo;
@@ -83,12 +84,13 @@ $image_height = get_option('product_image_height');
 	<div class="product_grid_display">
 		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
 			<div class="product_grid_item product_view_<?php echo wpsc_the_product_id(); ?>">
-				  
+			
+			
 				<?php if(wpsc_the_product_thumbnail()) :?> 	   
 					<div class="item_image">
-						<a href="<?php echo wpsc_the_product_permalink(); ?>">
+<a href="<?php echo wpsc_the_product_permalink(); ?>">
 							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_image($image_width, $image_height); ?>" />
-						</a>
+						</a>						</a>
 					</div>
 				<?php else: ?> 
 					<div class="item_no_image">
@@ -102,19 +104,14 @@ $image_height = get_option('product_image_height');
 				<?php if(get_option('show_images_only') != 1): ?>
 					<div class="grid_product_info">
 						<div class="product_text">
+
+							<div id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_the_product_price(get_option('wpsc_hide_decimals')); ?></div> 
 							<strong><?php echo wpsc_the_product_title(); ?></strong>
 							
-						<?php if((wpsc_the_product_description() != '') && (get_option('display_description') == 1)): ?>
-							<p class='griddescription'><?php echo wpsc_the_product_description(); ?></p>
-						<?php endif; ?>
-							
-							<br/>
-							<span id="product_price_<?php echo wpsc_the_product_id(); ?>"  class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span>Price: 
-							
-						<?php if(get_option('display_moredetails') == 1) : ?>
-							<br />
-							<a href='<?php echo wpsc_the_product_permalink(); ?>'>More Details</a>
-						<?php endif; ?> 
+							<?php if(get_option('display_moredetails') == 1) : ?>
+								<br />
+								<a href='<?php echo wpsc_the_product_permalink(); ?>'>More Details</a>
+							<?php endif; ?> 
 						</div>
 					</div>
 					<div class="grid_more_info">
@@ -161,7 +158,7 @@ $image_height = get_option('product_image_height');
 			
 			
 			<?php if((get_option('grid_number_per_row') > 0) && ((($wpsc_query->current_product +1) % get_option('grid_number_per_row')) == 0)) :?>
-			  <div class='grid_view_newline'></div>
+			  <div class='the_grid_line_<?php echo wpsc_the_product_id(); ?> grid_view_newline'></div>
 			<?php endif ; ?>
 		
 			

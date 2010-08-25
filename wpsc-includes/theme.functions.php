@@ -371,7 +371,11 @@ function wpsc_display_products_page($query) {
 			
 			case "default":  // this may be redundant :D
 			default:
-				include($cur_wpsc_theme_folder."/wpsc-products_page.php");
+				if(file_exists($cur_wpsc_theme_folder."/wpsc-products_page.php")) {
+					include($cur_wpsc_theme_folder."/wpsc-products_page.php");
+				} else {
+					include($old_wpsc_themes_dir."/default/products_page.php");
+				}
 			break;
 		}
 			$is_single = false;
@@ -413,9 +417,9 @@ if($theme_moved == "1") {
 //handles replacing the tags in the pages
   
 function wpsc_products_page($content = '') {
-	global $wpdb, $wp_query, $wpsc_query, $wpsc_theme_path, $wpsc_query_vars;
+	global $wpdb, $wp_query, $wpsc_query, $old_wpsc_themes_dir, $wpsc_theme_path, $wpsc_query_vars;
 
-//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	$old_cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	remove_filter('the_content', 'wpsc_products_page');
 	$output = '';
@@ -470,24 +474,32 @@ function wpsc_products_page($content = '') {
 					break;
 				}
 			}
-	
 			// switch the display type, based on the display type variable...
 			switch($display_type) {
 				case "grid":
 				if(file_exists($cur_wpsc_theme_folder."/wpsc-grid_view.php")) {
 					include($cur_wpsc_theme_folder."/wpsc-grid_view.php");
-					break; // only break if we have the function;
+				} else {				
+					include($old_wpsc_themes_dir."/default/grid_view.php");
 				}
+					break; // only break if we have the function;
 				
 				case "list":
 				if(file_exists($cur_wpsc_theme_folder."/wpsc-list_view.php")) {
 					include($cur_wpsc_theme_folder."/wpsc-list_view.php");
-					break; // only break if we have the file;
+				} else {
+					include($old_wpsc_themes_dir."/default/list_view.php");
 				}
+					break; // only break if we have the file;
 				
 				case "default":  // this may be redundant :D
 				default:
+				
+				if(file_exists($cur_wpsc_theme_folder."/wpsc-products_page.php")) {
 					include($cur_wpsc_theme_folder."/wpsc-products_page.php");
+				} else {
+					include($old_wpsc_themes_dir."/default/products_page.php");
+				}
 				break;
 			}
 			$is_single = false;

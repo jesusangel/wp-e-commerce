@@ -107,6 +107,7 @@
 */
 
 	function move_theme($old, $new) {
+
 	$theme_file_prefix = "wpsc-";
 	wpsc_recursive_copy($old, $new.'/wpsc');
 			
@@ -118,9 +119,7 @@
 				if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && !strstr($file, $theme_file_prefix)) {
 					
 					if(!strstr($file, "functions") && !strstr($file, "css") && !strstr($file, "widget")) {
-						$file_data = "<?php\n\t get_header(); \n ?>\n";
-						$file_data .= file_get_contents($path."/".$file);
-						$file_data .= "\n<?php\n\t get_footer(); \n ?>";
+						$file_data = file_get_contents($path."/".$file);
 						file_put_contents($path."/".$file, $file_data);
 					}
 						rename($path."/".$file, $path."/".$theme_file_prefix.$file); 
@@ -131,8 +130,9 @@
 			closedir($dh);
 			
 			//Add Transaction Results, User Log (Will be first time, so take from themes folder in PLUGIN)
-			
-			//$this->move_trans_user();		
+			copy(WPSC_FILE_PATH.'/themes/'.$theme_file_prefix.'transaction_results.php',$path."/".$theme_file_prefix.'transaction_results.php');
+			copy(WPSC_FILE_PATH.'/themes/'.$theme_file_prefix.'user-log.php', $path."/".$theme_file_prefix.'user-log.php');
+
 		update_option("wpsc_theme_moved", "1");
 	}
 }

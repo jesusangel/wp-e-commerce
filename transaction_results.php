@@ -30,8 +30,8 @@ if(isset($_REQUEST['eway']) && $_REQUEST['eway']=='1') {
 	$_SESSION['payflow_message']='';
 }
 	//exit('getting here?<pre>'.print_r($_SESSION['wpsc_previous_selected_gateway'], true).'</pre>'.get_option('payment_gateway'));
-if($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified'){
-	echo $_SESSION['paypalExpressMessage'];
+if($_session['wpsc_previous_selected_gateway'] == 'paypal_certified'){
+	echo $_session['paypalexpressmessage'];
 
 } else {
 	if($_SESSION['wpsc_previous_selected_gateway']== 'dps') {

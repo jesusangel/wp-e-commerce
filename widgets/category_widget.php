@@ -31,7 +31,11 @@ class WP_Widget_Product_Categories extends WP_Widget {
 			$height = $instance['height'];
 		if (!isset($instance['categories'])) $instance['categories'] = array();
 		foreach(array_keys((array)$instance['categories']) as $category_id) {
-			include(wpsc_get_theme_file_path("wpsc-category_widget.php"));
+		if(file_exists(wpsc_get_theme_file_path("wpsc-category_widget.php"))) {
+				include(wpsc_get_theme_file_path("wpsc-category_widget.php"));
+			} else {
+				include(wpsc_get_theme_file_path("category_widget.php"));
+			}
 		}
 		if(isset($grid) && $grid){
 			echo "<div class='clear_category_group'></div>";
