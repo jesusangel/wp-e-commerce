@@ -913,28 +913,43 @@ function wpsc_the_variation_id() {
 * @return string - HTML attribute to disable select options and radio buttons
 */
 function wpsc_the_variation_out_of_stock() {
-	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query, $wpdb;
+	global $wpsc_query, $wpdb, $wpsc_variations;
 	$out_of_stock = false;
-	//$wpsc_query->the_variation();
-	if(($wpsc_query->variation_group_count == 1) && ($wpsc_query->product['quantity_limited'] == 1)) {
-		$product_id = $wpsc_query->product['id'];
-		$variation_group_id = $wpsc_query->variation_group->term_id;
-		$variation_id = $wpsc_query->variation->term_id;
 
+	// If there is more than one variation group we cannot determine a stock status for individual variations
+	// Also, if the item is not stock limited, there is no need to check variation stock status
+	$product_id = get_the_ID();
+    $stock = get_product_meta($product_id, 'stock');
+	if(($wpsc_variations->variation_group_count == 1) && (is_numeric($stock[0]))) {
 
-		$priceandstock_id = $wpdb->get_var("SELECT `priceandstock_id` FROM `".WPSC_TABLE_VARIATION_COMBINATIONS."` WHERE `product_id` = '{$product_id}' AND `value_id` IN ( '$variation_id' ) AND `all_variation_ids` IN('$variation_group_id') LIMIT 1");
-		
-		$variation_stock_data = $wpdb->get_var("SELECT `stock` FROM `".WPSC_TABLE_VARIATION_PROPERTIES."` WHERE `id` = '{$priceandstock_id}' LIMIT 1");
-		if($variation_stock_data < 1) {
+		$product_id = get_the_ID();
+		$variation_group_id = $wpsc_variations->variation_group->term_id;
+		$variation_id = $wpsc_variations->variation->term_id;
+
+		$wpq = array ('variations'=>$wpsc_variations->variation->slug,
+		              'post_status'=>'inherit',
+				      'post_type'=>'wpsc-product',
+					  'post_parent'=>$product_id);
+		$query = new WP_Query($wpq);
+
+		if ($query->post_count != 1) {
+			// Should never happen
+			return FALSE;
+		}
+
+		$variation_product_id = $query->posts[0]->ID;
+
+		$stock = get_product_meta($variation_product_id, "stock");
+		$stock = $stock[0];
+		if($stock < 1) {
 			$out_of_stock = true;
 		}
 	}
-  if($out_of_stock == true) {
+	if($out_of_stock == true) {
 		return "disabled='disabled'";
-  } else {
+	} else {
 		return '';
-  }
+	}
 }
 /**
 * wpsc product rater function
