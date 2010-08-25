@@ -119,7 +119,13 @@
 				if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && !strstr($file, $theme_file_prefix)) {
 					
 					if(!strstr($file, "functions") && !strstr($file, "css") && !strstr($file, "widget")) {
-						$file_data = file_get_contents($path."/".$file);
+						if(!strstr($file, "single_product")) {
+							$file_data = file_get_contents($path."/".$file);
+						} else {
+							$file_data = "<?php\n\t get_header(); \n ?>\n";
+							$file_data .= file_get_contents($path."/".$file);
+							$file_data .= "\n<?php\n\t get_footer(); \n ?>";
+						}
 						file_put_contents($path."/".$file, $file_data);
 					}
 						rename($path."/".$file, $path."/".$theme_file_prefix.$file); 
