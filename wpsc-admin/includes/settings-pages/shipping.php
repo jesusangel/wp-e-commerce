@@ -22,7 +22,7 @@ function wpsc_options_shipping() {
 ?>
 	<form name='cart_options' id='cart_options' method='post' action=''>
 
-		<script language='JavaScript' type='text/javascript'>
+	<script type='text/javascript'>
 			function selectgateway() {
 				document.forms.shippingopt.submit();
 			}
