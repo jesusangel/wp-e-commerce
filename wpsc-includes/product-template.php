@@ -1155,13 +1155,23 @@ function wpsc_product_count() {
 function wpsc_the_variation_price() {
 	global $wpdb, $wpsc_variations;
 
-    if($wpsc_variations->variation_count > 1) {
+    if($wpsc_variations->variation_count > 0) {
 		
 		$product_id = get_the_ID();
-		$variation_id = $wpsc_variations->variation->term_id;
 
-		$variation_product_id = $wpdb->get_var($wpdb->prepare("SELECT object_id FROM ".WP_TERM_RELATIONSHIPS." AS rel LEFT JOIN ".WP_POSTS." AS posts ON rel.object_id = posts.ID WHERE rel.term_taxonomy_id = %d AND posts.post_parent = %d", $variation_id, $product_id )) ;
-		
+		$wpq = array ('variations'=>$wpsc_variations->variation->slug,
+		              'post_status'=>'inherit',
+				      'post_type'=>'wpsc-product',
+					  'post_parent'=>$product_id);
+		$query = new WP_Query($wpq);
+
+		if ($query->post_count != 1) {
+			// Should never happen
+			return FALSE;
+		}
+
+		$variation_product_id = $query->posts[0]->ID;
+
 		$price = get_product_meta($variation_product_id, "price");
 		$price = $price[0];
 		
