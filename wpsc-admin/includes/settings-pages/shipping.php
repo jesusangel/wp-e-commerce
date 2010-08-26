@@ -23,10 +23,10 @@ function wpsc_options_shipping() {
 	<form name='cart_options' id='cart_options' method='post' action=''>
 
 	<script type='text/javascript'>
-			function selectgateway() {
-				document.forms.shippingopt.submit();
-			}
-		</script>
+		function selectgateway() {
+			document.forms.shippingopt.submit();
+		}
+	</script>
 		<div class="wrap">
 			<div class="metabox-holder">
 				<form name='shippingopt' method='post' id='shipping_options' action=''>
