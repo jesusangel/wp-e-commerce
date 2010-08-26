@@ -368,7 +368,11 @@ function wpsc_the_product_description() {
 * @return string - the additional description
 */
 function wpsc_the_product_additional_description() {
-	return get_the_excerpt();
+	global $post;
+	if(!empty($post->post_excerpt))
+		return get_the_excerpt();
+	else
+		return false;
 }
 
 
