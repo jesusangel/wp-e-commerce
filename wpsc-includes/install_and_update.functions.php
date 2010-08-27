@@ -51,31 +51,6 @@ function wpsc_install() {
 		update_option('wpsc_minor_version', WPSC_MINOR_VERSION);
 	}
 	
-	// Product categories, temporarily register them to create first default category if none exist
-	register_taxonomy('wpsc_product_category', 'wpsc-product', array(
-		'hierarchical' => true,
-		'rewrite' => array(
-			'with_front' => false
-		)
-	));
-	$category_list = get_terms('wpsc_product_category','hide_empty=0&parent=0');
-	if(count($category_list) == 0) {
-	
-		$new_category = wp_insert_term( __('Product Category', 'wpsc'), 'wpsc_product_category', "parent=0");
-		$category_id=$new_category['term_id'];
-		$term = get_term_by('id', $new_category['term_id'], 'wpsc_product_category');
-		$url_name=$term->slug;
-		
-		$wp_rewrite->flush_rules(); 
-		wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
-		wpsc_update_categorymeta($category_id, 'description', __("This is a description",'wpsc'));
-		wpsc_update_categorymeta($category_id, 'image', $image);
-		wpsc_update_categorymeta($category_id, 'fee', '0');
-		wpsc_update_categorymeta($category_id, 'active', '1');
-		wpsc_update_categorymeta($category_id, 'order', '0');	
-				
-	}
-	
 	add_option('show_thumbnails', 1, __('Show Thumbnails', 'wpsc'), "yes");
 	add_option('show_thumbnails_thickbox', 1, __('Use Thickbox Effect for product images', 'wpsc'), "yes");
 

@@ -11,7 +11,7 @@
 
 // Register the wpsc post types
 function wpsc_register_post_types() {
-	global $wpsc_page_titles;
+	global $wpsc_page_titles,$wp_rewrite;
 	// Products
 	register_post_type( 'wpsc-product', array(
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit&product=%d',
@@ -72,6 +72,24 @@ $labels = array(
 	$role = get_role('administrator');
 	$role->add_cap('read_wpsc-product');
 	$role->add_cap('read_wpsc-product-file');
+	// Product categories, temporarily register them to create first default category if none exist
+	$category_list = get_terms('wpsc_product_category','hide_empty=0&parent=0');
+	if(count($category_list) == 0) {
+		$new_category = wp_insert_term( __('Product Category', 'wpsc'), 'wpsc_product_category', "parent=0");
+		$category_id=$new_category['term_id'];
+		$term = get_term_by('id', $new_category['term_id'], 'wpsc_product_category');
+		$url_name=$term->slug;
+		
+		$wp_rewrite->flush_rules(); 
+		wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
+		wpsc_update_categorymeta($category_id, 'description', __("This is a description",'wpsc'));
+		wpsc_update_categorymeta($category_id, 'image', $image);
+		wpsc_update_categorymeta($category_id, 'fee', '0');
+		wpsc_update_categorymeta($category_id, 'active', '1');
+		wpsc_update_categorymeta($category_id, 'order', '0');	
+				
+	}
+
 }
 
 /*
