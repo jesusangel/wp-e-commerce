@@ -308,6 +308,7 @@ function wpsc_display_edit_products_page() {
 
 		$query = array(
 			'post_type' => 'wpsc-product',
+			'post_parent' => 0,
 			'orderby' => 'menu_order post_title',
 			'order' => "ASC",
 			'posts_per_page' => $itempp,
