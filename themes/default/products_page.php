@@ -147,36 +147,23 @@ global $wpsc_query, $wpdb, $wp_query;
 						<?php endif; ?>
 						
 						<form class='product_form'  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
-							<?php //do_action('wpsc_product_addon_after_descr', wpsc_the_product_id()); ?>
-							
-							<?php /** the custom meta HTML and loop */  /*?>
-							<div class="custom_meta">
-								<?php while (wpsc_have_custom_meta()) : wpsc_the_custom_meta(); 	?>
-									<strong><?php echo wpsc_custom_meta_name(); ?>: </strong><?php echo wpsc_custom_meta_value(); ?><br />
-								<?php endwhile; ?>
-							</div>
-							<?php /** the custom meta HTML and loop ends here */?>
-							
-							<?php /** add the comment link here */?>	
-							<?php //echo wpsc_product_comment_link();	?>
-							
-							
-							<?php /** the variation group HTML and loop */  /*?>	
+						
+							<?php /** the variation group HTML and loop */?>
 							<div class="wpsc_variation_forms">
 								<?php while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
-									<p>
-										<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
-										<?php /** the variation HTML and loop */  /*?>	
-										<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
-										<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
-											<option value="<?php echo wpsc_the_variation_id(); ?>" <?php echo wpsc_the_variation_out_of_stock(); ?> ><?php echo wpsc_the_variation_name(); ?></option>
-										<?php endwhile; ?>
-										</select> 
-									</p>
+								<span>
+									<label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label>
+									<?php /** the variation HTML and loop */?>
+									<select class='wpsc_select_variation' name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
+									<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
+										<option value="<?php echo wpsc_the_variation_id(); ?>" <?php echo wpsc_the_variation_out_of_stock(); ?>><?php echo wpsc_the_variation_name(); ?></option>
+									<?php endwhile; ?>
+									</select> 
+								</span>
 								<?php endwhile; ?>
 							</div>
-							<?php /** the variation group HTML and loop ends here */?>
 							
+							<?php /** the variation group HTML and loop ends here */?>							
 							<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
 							<?php if(wpsc_has_multi_adding()): ?>
 								<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo __('Quantity', 'wpsc'); ?>:</label>
