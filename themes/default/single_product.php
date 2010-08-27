@@ -3,8 +3,6 @@ global $wpsc_query, $wpdb, $wpsc_custom_meta;
 $image_width = get_option('single_view_image_width');
 $image_height = get_option('single_view_image_height');
 ?>
-<div id='container'>
-<div id='content'>
 <div id='products_page_container' class="wrap wpsc_container">
 	
 	<?php if(wpsc_has_breadcrumbs()) :?>
@@ -224,6 +222,4 @@ $image_height = get_option('single_view_image_height');
 		?>
 	
 
-</div>
-</div>
 </div>

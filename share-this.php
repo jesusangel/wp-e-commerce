@@ -1,4 +1,5 @@
 <?php
+global $social_sites;
 /*
 Modified to integrate with wp shopping cart
 */
@@ -499,7 +500,7 @@ function wpsc_akst_share_form() {
     <div id="wpsc_akst_social">
       <ul>
 <?php
-  foreach ($social_sites as $key => $data) {
+  foreach ((array)$social_sites as $key => $data) {
     print('       <li><a href="#" id="wpsc_akst_'.$key.'">'.$data['name'].'</a></li>'."\n");
   }
 ?>
