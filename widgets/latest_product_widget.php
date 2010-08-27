@@ -136,8 +136,8 @@ function nzshpcrt_latest_product( $args = null, $instance ) {
 	
 	$siteurl = get_option( 'siteurl' );
 	$options = get_option( 'wpsc-widget_latest_products' );
-	$number  = isset($instance['number'] ? (int)$instance['number'] : 5;
-	$hide_thumbnails  = isset($instance['hide_thumbnails'] ? (bool)$instance['hide_thumbnails'] : FALSE;
+	$number  = isset($instance['number']) ? (int)$instance['number'] : 5;
+	$hide_thumbnails  = isset($instance['hide_thumbnails']) ? (bool)$instance['hide_thumbnails'] : FALSE;
 	
 	$latest_products = get_posts( array(
 		'post_type'   => 'wpsc-product',
