@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name:WP e-Commerce
-Plugin URI: http://www.getshopped.org
-Description: A Plugin that provides a WordPress Shopping Cart. Visit the <a href='http://getshopped.org/forums'>Getshopped Forums</a> for support.
+Plugin Name: WP e-Commerce
+Plugin URI: http://getshopped.org/
+Description: A Plugin that provides a WordPress Shopping Cart. See also: <a href="http://getshopped.org" target="_blank">GetShopped.org</a> | <a href="http://getshopped.org/forums/" target="_blank">Support Forum</a> | <a href="http://getshopped.org/resources/docs/" target="_blank">Documentation</a>
 Version: 3.8 Development
 Author: Instinct Entertainment
-Author URI: http://www.getshopped.org/
+Author URI: http://getshopped.org/
 */
 /**
  * WP e-Commerce Main Plugin File
