@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: WP e-Commerce Plugin
-Plugin URI: http://www.getshopped.org
-Description: A plugin that provides a WordPress Shopping Cart. Visit the <a href='http://getshopped.org/forums'>getshopped forums</a> for support.
+Plugin Name: WP e-Commerce
+Plugin URI: http://getshopped.org
+Description: A plugin that provides a WordPress Shopping Cart. See also: <a href="http://getshopped.org" target="_blank">GetShopped.org</a> | <a href="http://getshopped.org/forums/" target="_blank">Support Forum</a> | <a href="http://getshopped.org/resources/docs/" target="_blank">Documentation</a>
 Version: 3.7.6.7
-Author: Instinct
-Author URI: http://www.getshopped.org
+Author: Instinct Entertainment
+Author URI: http://getshopped.org
 */
 /**
- * WP eCommerce Main Plugin File
+ * WP e-Commerce Main Plugin File
  * @package wp-e-commerce
 */
 // this is to make sure it sets up the table name constants correctly on activation
