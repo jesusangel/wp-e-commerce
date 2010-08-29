@@ -6,11 +6,11 @@ function wpsc_display_upgrades_page() {
 		<div class='metabox-holder wpsc_gold_side'>
 			<?php
 			/* ADDITIONAL GOLD CART MODULES SECTION
-			* ADDED 18-06-09
-			*/
+			 * ADDED 18-06-09
+			 */
 			?>
 			<strong><?php _e('WP e-Commerce Upgrades'); ?></strong><br />
-			<span><?php _e('Add more functionality to your e-Commerce site. Prices may be subject to change.'); ?><input type='button' class='button-primary' onclick='window.open ("http://www.instinct.co.nz/shop/","mywindow"); ' value='Buy Now' id='visitInstinct' name='visitInstinct' /></span>
+			<span><?php _e('Add more functionality to your e-Commerce site. Prices may be subject to change.'); ?><input type='button' class='button-primary' onclick='window.open ("http://getshopped.org/extend/premium-upgrades/","mywindow"); ' value='Buy Now' id='visitInstinct' name='visitInstinct' /></span>
 			
 			<br />
 			<div class='wpsc_gold_module'>
@@ -98,10 +98,7 @@ function wpsc_display_upgrades_page() {
 				
 				<h2><?php echo __("Upgrade Instructions", 'wpsc');?></h2>
 				<p>
-					<?php printf(__("Copy the gold_cart_files directory into the %s folder.", 'wpsc'),  WPSC_UPGRADES_DIR ); ?>
-				</p>
-				<p>
-					<?php _e("This folder should be automatically created when the e-commerce plugin is activated, but if it is not, you will have to create it yourself.", 'wpsc'); ?>
+					<?php __("Copy the gold_cart_files directory into your plugins folder.", 'wpsc'); ?>
 				</p>
 				<p>
 					<?php _e("Now a new panel should appear in the Upgrades page where you must enter your API Username and API Key. ", 'wpsc'); ?>
@@ -110,7 +107,7 @@ function wpsc_display_upgrades_page() {
 					<?php _e("For more information visit our documentation page.", 'wpsc'); ?>
 				</p>
 				<p>
-					<a href='http://www.instinct.co.nz/e-commerce/docs/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
+					<a href='http://getshopped.org/resources/docs/installation/gold-files/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
 				</p>
 				
 			</div> 

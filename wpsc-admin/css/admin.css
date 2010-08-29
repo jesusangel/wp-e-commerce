@@ -1298,6 +1298,7 @@ table.category_forms td.last_row {
 .wpsc_gold_text{
 	width:70%;
 	float:left;
+	clear:both;
 }
 
 .wpsc_gold_info{
@@ -1309,7 +1310,12 @@ table.category_forms td.last_row {
 .wpsc_gold_module{
 	width:100%;
 	float:left;
+
 	border-bottom: 1px solid #DFDFDF;
+}
+.wpsc_gold_module strong{
+width:auto;
+float:left;
 }
 #visitInstinct{
 	float:right;
