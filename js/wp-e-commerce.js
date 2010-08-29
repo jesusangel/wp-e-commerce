@@ -109,6 +109,7 @@ jQuery(document).ready(function () {
 		if(file_upload_elements.length > 0) {
 			return true;
 		} else {
+			jQuery("#dragdrop_spinner").css('display', 'block');
 			form_values = jQuery(this).serialize();
 			// Sometimes jQuery returns an object instead of null, using length tells us how many elements are in the object, which is more reliable than comparing the object to null
 			if(jQuery('#fancy_notification').length == 0) {
@@ -122,7 +123,7 @@ jQuery(document).ready(function () {
 					jQuery('#loading_animation').css("display", 'none');
 					//jQuery('#fancy_notificationimage').css("display", 'none');
 				}
-				
+				jQuery("#dragdrop_spinner").css('display', 'none');
 			});
 			wpsc_fancy_notification(this);
 			return false;

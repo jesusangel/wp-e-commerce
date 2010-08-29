@@ -679,7 +679,8 @@ global $wpdb;
 					<?php
 				}
 				
-				if(function_exists('drag_and_drop_cart')) {
+				if(function_exists('widget_wpec_dropshop') || function_exists('drag_and_drop_cart')) {
+
 					?>
 					<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='5' name='wpsc_options[cart_location]' id='cart5' <?php echo $cart5; ?> /> <label for='cart5'><?php echo __('DropShop', 'wpsc');?></label> &nbsp;
 					<?php
@@ -695,12 +696,15 @@ global $wpdb;
 		<input type="radio" id="drop1" value="all" <?php if (get_option('dropshop_display') == 'all') { echo "checked='checked'"; } ?> name="wpsc_options[dropshop_display]" /><label for="drop1"><?php echo __('Show Dropshop on every page', 'wpsc');?></label>
 		<input type="radio" id="drop2" value="product" <?php if (get_option('dropshop_display') == 'product') { echo "checked='checked'"; } ?> name="wpsc_options[dropshop_display]"/><label for="drop2"><?php echo __('Show Dropshop only on product page', 'wpsc');?></label>
 		</p>
-		<p>
+		<?php if (!function_exists('widget_wpec_dropshop')) { ?>
+        <p>
 		<input type="radio" id="wpsc_dropshop_theme1" value="light" <?php if (get_option('wpsc_dropshop_theme') != 'dark') { echo "checked='checked'"; } ?> name="wpsc_options[wpsc_dropshop_theme]" /><label for="wpsc_dropshop_theme1"><?php echo __('Use light Dropshop style', 'wpsc');?></label>
 		<input type="radio" id="wpsc_dropshop_theme2" value="dark" <?php if (get_option('wpsc_dropshop_theme') == 'dark') { echo "checked='checked'"; } ?> name="wpsc_options[wpsc_dropshop_theme]"/><label for="wpsc_dropshop_theme2"><?php echo __('Use dark Dropshop style', 'wpsc');?></label>
 		<input type="radio" id="wpsc_dropshop_theme3" value="craftyc" <?php if (get_option('wpsc_dropshop_theme') == 'craftyc') { echo "checked='checked'"; } ?> name="wpsc_options[wpsc_dropshop_theme]"/><label for="wpsc_dropshop_theme2"><?php echo __('Crafty', 'wpsc');?></label>
 		
 		</p>
+        <?php } ?>
+
 		</div>
 				</td>
 			</tr>
