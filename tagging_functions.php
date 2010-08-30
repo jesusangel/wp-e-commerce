@@ -138,11 +138,11 @@ function get_product_tag_link( $tag_id ) {
 	if ( empty($taglink) ) {
 		
 		$file = get_option('home') . '/';
-		$taglink = $file . '?page_id=3&ptag=' . $slug;
+		$taglink = $file . '?product_tag=' . $slug;
 	} else {
 	
 		$file = get_option('home') . '/';
-		$taglink = get_option('product_list_url') . '?ptag=' . $slug;
+		$taglink = get_option('product_list_url') . '?product_tag=' . $slug;
 /*	
 	  $taglink = get_option('product_list_url')."tag/%tag%";
 		$taglink = str_replace('%tag%', $slug, $taglink);
