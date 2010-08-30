@@ -29,6 +29,7 @@ class flatrate {
 	function getForm() {
 		$shipping = get_option('flat_rates');
 		$output = "<tr><td colspan='2'>" . __('If you do not wish to ship to a particular region, leave the field blank. To offer free shipping to a region, enter 0.', 'wpsc') . "</td>";
+		$output .= "<tr><td colspan='2'>" . __('Note: If you apply $0 to any region the postage and packaging applied to products will still be added on at checkout.', 'wpsc') . "</td>";
 		$output .= "<tr><td colspan='1'><strong>Base Local</strong></td>";
 		
 		switch(get_option('base_country')) {

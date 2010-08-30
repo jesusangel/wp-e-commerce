@@ -378,10 +378,14 @@ function form_google()
 		  </div>				
 			</td>
 	</tr>
-
+	
 	<tr>
 		<td colspan='2'>
-				Note: Please put this link to your Google API callback url field on your Google checkout account: <strong>".get_option('siteurl')."/index.php</strong>
+			<strong>".__('There is no integration between Google Checkout and the WP-e-Commerce sales log, this is due to Google Checkouts Terms and Conditions','wpsc')."</strong>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'>".__('Note: Please put this link to your Google API callback URL field on your Google checkout account:','wpsc')."<br /><code>".get_option('siteurl')."/index.php</code>
 		</td>
 	</tr>";
   return $output;

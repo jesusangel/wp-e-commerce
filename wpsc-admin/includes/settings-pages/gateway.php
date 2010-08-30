@@ -86,7 +86,7 @@ function selectgateway() {
 						<label for='<?php echo $gateway['internalname']; ?>_id'><?php echo $gateway['name']; ?></label></p>
 				<?php	}
 					}
-					?>
+					?>  
 						<div class='submit gateway_settings'>
 							<input type='hidden' value='true' name='update_gateways' />
 							<input type='submit' value='<?php echo __('Update &raquo;', 'wpsc')?>' name='updateoption' />
