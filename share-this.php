@@ -327,11 +327,22 @@ function wpsc_akst_xy(id) {
 }
 <?php
 foreach ($social_sites as $key => $data) {
+if($key != 'facebook'){
+
   print(
 '#wpsc_akst_'.$key.' {
   background-image: url(images/social_networking/'.$key.'.gif);
 }
 ');
+}else{
+  print(
+'#wpsc_akst_'.$key.' {
+  background-image: url(images/social_networking/'.$key.'.png);
+}
+');
+
+
+}
 }
 ?>
 #wpsc_akst_email {
