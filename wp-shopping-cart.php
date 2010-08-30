@@ -3,7 +3,7 @@
 Plugin Name: WP e-Commerce Plugin
 Plugin URI: http://getshopped.org
 Description: A plugin that provides a WordPress Shopping Cart. See also: <a href="http://getshopped.org" target="_blank">GetShopped.org</a> | <a href="http://getshopped.org/forums/" target="_blank">Support Forum</a> | <a href="http://getshopped.org/resources/docs/" target="_blank">Documentation</a>
-Version: 3.7.6.8
+Version: 3.7.6.7
 Author: Instinct Entertainment
 Author URI: http://getshopped.org
 */
@@ -17,7 +17,7 @@ if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < 6
 define('WPSC_VERSION', '3.7');
 define('WPSC_MINOR_VERSION', '57');
 
-define('WPSC_PRESENTABLE_VERSION', '3.7.6.8');
+define('WPSC_PRESENTABLE_VERSION', '3.7.6.7');
 
 define('WPSC_DEBUG', false);
 define('WPSC_GATEWAY_DEBUG', false);
