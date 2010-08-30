@@ -1359,7 +1359,7 @@ function wpsc_product_download_forms( $product_data='' ) {
 
 	$output .= "<h4>" . __( 'Upload New File', 'wpsc' ) . ":</h4>";
 	$output .= "<input type='file' name='file' value='' /><br />" . __( 'Max Upload Size', 'wpsc' ) . " : <span>" . $upload_max . "</span><br /><br />";
-	$output .= "<h4>" . __( '<a href="admin.php?wpsc_admin_action=product_files_existing&product_id=' . $product_data['id'] . '" class="thickbox" title="Select from all product files for ' . $product_data['name'] . '">Select from existing files</a>', 'wpsc' ) . "</h4>";
+	$output .= "<h4>" . __( '<a href="admin.php?wpsc_admin_action=product_files_existing&product_id=' . $product_data['id'] . '" class="thickbox" title="Select all downloadable files for ' . $product_data['name'] . '">'.__("Select from existing files").'</a>', 'wpsc' ) . "</h4>";
 
 	if ( isset( $product_data['file'] ) && $product_data['file'] > 0 ) {
 		$output .= __( 'Preview File', 'wpsc' ) . ": ";

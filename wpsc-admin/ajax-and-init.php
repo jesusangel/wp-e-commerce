@@ -1913,9 +1913,8 @@ function wpsc_product_files_existing() {
    }
 
    $output = "<span class='admin_product_notes select_product_note '>".__('Choose a downloadable file for this product:', 'wpsc')."</span><br>";
-   $output .= "<div class='ui-widget-content multiple-select select_product_file'>";
    $output .= "<form method='post' class='product_upload'>";
-
+   $output .= "<div class='ui-widget-content multiple-select select_product_file'>";
    $num = 0;
    foreach((array)$file_list as $file) {
       $num++;
@@ -1929,10 +1928,11 @@ function wpsc_product_files_existing() {
       $output .= "  <label for='select_product_file_$num'>".$file['display_filename']."</label>\n";
       $output .= "</p>\n";
    }
+
+   $output .= "</div>";
    $output .= "<input type='hidden' id='hidden_id' value='$product_id' />";
    $output .= "<input type='submit' name='save' name='product_files_submit' class='button-primary prdfil' value='Save Product Files' />";
    $output .= "</form>";
-   $output .= "</div>";
    $output .= "<div class='".((is_numeric($product_id)) ? "edit_" : "")."select_product_handle'><div></div></div>";
    $output .= "<script type='text/javascript'>\n\r";
    $output .= "var select_min_height = ".(25*3).";\n\r";
