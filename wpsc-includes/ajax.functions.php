@@ -101,7 +101,7 @@ function wpsc_add_to_cart() {
       } else if($wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']) > 0) {
          $cart_messages[] = str_replace("[number]", $wpsc_cart->get_remaining_quantity($product_id,$parameters['variation_values'], $parameters['quantity']), __('Sorry, but there are only [number] of this item in stock.', 'wpsc'));
       } else {
-         $cart_messages[] = str_replace("[product_name]", $product['name'], __('Sorry, but the item "[product_name]" is out of stock.', 'wpsc'));
+         $cart_messages[] = str_replace("[product_name]", $product->post_title, __('Sorry, but the item "[product_name]" is out of stock.', 'wpsc'));
       }
    }
 
@@ -410,7 +410,13 @@ function wpsc_update_product_price() {
          $variations[] = (int)$variation;
       }
    }
+   do_action('wpsc_update_variation_product', (int) $_POST['product_id'], $variations);
    $pm=$_POST['pm'];
+   $stock = wpsc_check_variation_stock_availability( (int) $_POST['product_id'], $variations);
+   if($stock == 0) {
+     echo  "product_msg=\"".__('Sorry, but this variation is out of stock.', 'wpsc')."\";\n";
+   
+   }
    echo "product_id=".(int)$_POST['product_id'].";\n";
 
 

@@ -130,29 +130,33 @@ jQuery(document).ready(function () {
   jQuery("div.wpsc_variation_forms .wpsc_select_variation").change(function() {
     parent_form = jQuery(this).parents("form.product_form");
     form_values =jQuery("input[name=product_id],div.wpsc_variation_forms .wpsc_select_variation",parent_form).serialize( );
-    
-		jQuery.post( 'index.php?update_product_price=true', form_values, function(returned_data) {
-			eval(returned_data);
-      if(product_id != null) {
-        target_id = "product_price_"+product_id;
-        second_target_id = "donation_price_"+product_id;
-        third_target_id = "old_product_price_"+product_id;
         
-        
-				buynow_id = "BB_BuyButtonForm"+product_id;
-				
-				//document.getElementById(target_id).firstChild.innerHTML = price;
-				if(jQuery("input#"+target_id).attr('type') == 'text') {
-					jQuery("input#"+target_id).val(numeric_price);
-				} else {
-					jQuery("#"+target_id+".pricedisplay").html(price);
-					jQuery("#"+third_target_id+".pricedisplay").html(old_price);
-				}
-				jQuery("input#"+second_target_id).val(numeric_price);
+	jQuery.post( 'index.php?update_product_price=true', form_values, function(returned_data) {
+		product_msg = '';
+		eval(returned_data);
+		if(product_id != null) {
+	      	if(product_msg != ''){
+	      		jQuery("input#product_"+product_id+"_submit_button").attr('disabled','disabled');
+	      		jQuery("input#product_"+product_id+"_submit_button").before('<span class="wpsc_variation_message_'+product_id+'"">'+product_msg+'</span>');
+	      	}else{
+	      		jQuery("input#product_"+product_id+"_submit_button").removeAttr('disabled');
+	      		jQuery('.wpsc_variation_message_'+product_id).css('display','none');
+	      	}
+	        target_id = "product_price_"+product_id;
+	        second_target_id = "donation_price_"+product_id;
+	        third_target_id = "old_product_price_"+product_id;
+			buynow_id = "BB_BuyButtonForm"+product_id;
+			if(jQuery("input#"+target_id).attr('type') == 'text') {
+				jQuery("input#"+target_id).val(numeric_price);
+			} else {
+				jQuery("#"+target_id+".pricedisplay").html(price);
+				jQuery("#"+third_target_id+".pricedisplay").html(old_price);
 			}
-		});
-		return false;
+			jQuery("input#"+second_target_id).val(numeric_price);
+		}
 	});
+	return false;
+  });
 	
 	// Object frame destroying code.
 	jQuery("div.shopping_cart_container").livequery(function(){

@@ -431,6 +431,38 @@ function wpsc_product_creation_time($format = null) {
 	return mysql2date($format, $wpsc_query->product['date_added']);
 }
 
+/**
+* wpsc check variation stock availability function
+* @return string - the product price
+*/
+function wpsc_check_variation_stock_availability($product_id, $variations){
+	$selected_post = (array)get_posts(array(
+					'post_parent' => $product_id,
+					'post_type' => "wpsc-product",
+					'post_status' => 'all',
+					'suppress_filters' => true
+				));
+	foreach($selected_post as $variation ){
+		$matches = 0;
+		$terms = wp_get_object_terms($variation->ID, 'wpsc-variation');
+		foreach($terms as $term){
+			if(in_array($term->term_id, $variations))
+				$matches++;
+			
+			if($matches == count($variations)){
+			 $the_selected_product = $variation->ID;
+			}
+		}
+
+	}
+	if(wpsc_product_has_stock($the_selected_product)){
+		
+		$stock = get_product_meta($the_selected_product, "stock");
+		if(0 < $stock[0]) return $stock[0];
+	
+	}
+	return 0;
+}
 
 /**
 * wpsc product has stock function
