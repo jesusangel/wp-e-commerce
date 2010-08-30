@@ -750,7 +750,7 @@ if($_REQUEST['wpsc_action'] == 'gateway_notification') {
 function wpsc_product_rss() {
 	global $wpsc_query, $wpdb;
 	header("Content-Type: application/xml; charset=UTF-8");
-	header('Content-Disposition: inline; filename="E-Commerce_Product_List.rss"');
+	header('Content-Disposition: inline; filename="e-Commerce_Product_List.rss"');
   //echo "<pre>".print_r($wpsc_query,true)."</pre>";
 	require_once(WPSC_FILE_PATH.'/wpsc-includes/rss_template.php');
 	exit();

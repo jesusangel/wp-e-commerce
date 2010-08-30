@@ -87,7 +87,7 @@ function wpsc_generate_product_feed() {
 	$product_list = $wpdb->get_results($sql, ARRAY_A);
 
 	header("Content-Type: application/xml; charset=UTF-8");
-	header('Content-Disposition: inline; filename="E-Commerce_Product_List.rss"');
+	header('Content-Disposition: inline; filename="e-Commerce_Product_List.rss"');
 
 	$output = "<?xml version='1.0' encoding='UTF-8' ?>\n\r";
 	$output .= "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'";
@@ -109,8 +109,8 @@ function wpsc_generate_product_feed() {
 	$output .= "  <channel>\n\r";
 	$output .= "    <title><![CDATA[".get_option('blogname')." Products]]></title>\n\r";
 	$output .= "    <link>".get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php</link>\n\r";
-	$output .= "    <description>This is the WP E-Commerce Product List RSS feed</description>\n\r";
-	$output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
+	$output .= "    <description>This is the WP e-Commerce Product List RSS feed</description>\n\r";
+	$output .= "    <generator>WP e-Commerce Plugin</generator>\n\r";
 	$output .= "    <atom:link href='$self' rel='self' type='application/rss+xml' />\n\r";
 
 	foreach ($product_list as $product) {

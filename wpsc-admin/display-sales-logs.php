@@ -85,7 +85,7 @@ if(!isset($purchlogs)){
 		<?php } 
 		
 			if(get_option('wpsc_purchaselogs_fixed')== false || (wpsc_check_uniquenames()) ){ ?>
-				<div class='error' style='padding:8px;line-spacing:8px;'><span ><?php _e('When upgrading the Wp-E-Commerce Plugin from 3.6.* to 3.7 it is required that you associate your checkout form fields with the new Purchase Logs system. To do so please '); ?> <a href='<?php echo $fixpage; ?>'>Click Here</a></span></div>
+				<div class='error' style='padding:8px;line-spacing:8px;'><span ><?php _e('When upgrading the WP e-Commerce Plugin from 3.6.* to 3.7 it is required that you associate your Checkout form fields with the new Purchase Logs system. To do so please.'); ?> <a href='<?php echo $fixpage; ?>'>Click Here</a></span></div>
 	<?php	 } 
 		///// end of update message section //////?>
 		

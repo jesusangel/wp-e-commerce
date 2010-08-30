@@ -3,8 +3,8 @@ Contributors: Dan Milward, Tom Howard, Jeffry Ghazally
 Donate link: http://getshopped.org/
 Tags: e-commerce, shop, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, ecommerce 
 Requires at least: 2.7
-Tested up to: 2.9
-Stable tag: 3.7.6.7
+Tested up to: 3.0.1
+Stable tag: 3.7.6.8
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -23,8 +23,8 @@ Perfect for:
 
 == Installation ==
 
-1. Upload the folder 'wp-e-commerce' to the '/wp-content/plugins/' directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+1. Upload the 'wp-e-commerce' folder to the '/wp-content/plugins/' directory
+2. Activate the Plugin through the 'Plugins' menu in the WordPress Administration
 
 = Updating =
 
@@ -34,8 +34,23 @@ When updating it is important that you do not overwrite the entire images folder
 
 If you experience database errors try de-activating and re-activating your plugin. 
 
-
 == Changelog == 
+
+= 3.7.6.8 =
+* Fixed e-Commerce Tracking integration with Google Analytics for WordPress
+* Use of site_url() within the Purchase Receipt/Admin Report for correct site URL
+* Fixed presentation of Current Month widget on Store > Sales page
+* Added stripslashes() to the output of custom Product meta on the front-end and within Sales > Products
+* Added Show Product List RSS option within Store > Settings > Presentation to toggle visibility of the Product List RSS
+* Fixed hourly reset of claimed stock
+* Fixed Sales search, can now seek orders based on Checkout field details as well as Transaction ID
+* Fixed implode issue on products tags
+* More fixes to Checkout options
+* Renamed "Last 30 Days" to "This Month" reflecting the behavior of the e-Commerce dashboard widget
+* Fixed Delete purchases within Sales for single and bulk purchases
+* Deleted categories are no longer visible within the tinyMCE Display Products panel
+* Updated support for the latest release of DropShop
+* Fix to force variation price to update on product page load
 
 = 3.7.6.7 =
 * Added back the hourly Cron Job for clearing the Claimed Stock  
@@ -50,7 +65,6 @@ If you experience database errors try de-activating and re-activating your plugi
 = 3.7.6.6 =
 * Edit Coupons Fixed and new Category Conditions added to the mix
 * Checkout Options for drop-down boxes, radio buttons Fixed
-
 
 = 3.7.6.5 =
 * Fix Problem with Deprecated Theme files showing WPSC_TXT instead of their proper values.
@@ -90,8 +104,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * Added %find_us% tag so you can include how the customer found the website in your purchase report
 * Fix pagination to work with search results.
 
-
-
 = 3.7.6.2 =
 * Paypal standard and Paypal standard 2.0 shipping send shipping details
 * Google Checkout do not send shipping if shipping is 0
@@ -106,7 +118,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * Encoded RSS URL so it validates
 * New update message display below the auto-upgrade link in the WordPress plugin page submitted by the awesome husobj
 * Image Cache fix should speed up those thumbnails
-
 
 = 3.7.6.1 = 
 * Bugfix release
@@ -142,7 +153,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * Category permalinks will now be regenerated properly on instalation
 * Category list bug preventing viewing a product when viewing a category fixed.
 
-
 = 3.7.5 =
 * Added code for upgrades/additions from nielo.info and lsdev.biz,  we will be using this for new modules in the future.
 * All In One SEO Pack compatibility bugfixes and improvements.
@@ -171,7 +181,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * HTML Tables can now be added to product descriptions
 * Flat Rate and Weight Rate improvements
 
-
 = 3.7.4 =  
 * Changes to shipping to fix the bugs from 3.7.3 with shipping and the new shipping_discount feature
 * Fixes for variations under grid view
@@ -195,11 +204,12 @@ From the BlogShop of course http://getshopped.org/extend/premium-upgrades/
 
 First of all you should check out the presentation settings which are in the Shop Options page.
 
-Advanced users can edit the CSS (and do just about anything). Not so advanced users can contact Instinct and either purchase professional support.
+Advanced users can edit the CSS (and do just about anything). Not so advanced users can contact Instinct and either purchase professional support through GetShopped.org
+
+http://getshopped.org
 
 == Screenshots ==
 
-We're taking this one step further. 
-
 Check out our flickr guides online
+
 http://www.flickr.com/photos/danmilward/sets/72157594425079473/detail/

@@ -382,9 +382,9 @@ function wpsc_duplicate_product() {
 				$new_product_category[] = "('".$new_id."','".$category."')";
 				
 				$check_existing = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `order` IN('0') LIMIT 1;",ARRAY_A);
-				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1")) {
-					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN('$category') AND `product_id` IN('$product_id') LIMIT 1;");
-				} else {				  
+				if($wpdb->get_var("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_ORDER."` WHERE `category_id` IN ('$category') AND `product_id` IN ('$product_id') LIMIT 1")) {
+					$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_ORDER."` SET `order` = '0' WHERE `category_id` IN ('$category') AND `product_id` IN ('$product_id') LIMIT 1;");
+				} else {
 					$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_ORDER."` (`category_id`, `product_id`, `order`) VALUES ('$category', '$product_id', 0)");
 				}
 				if($check_existing != null) {
@@ -788,15 +788,15 @@ function wpsc_admin_sale_rss() {
     $sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date`!='' ORDER BY `date` DESC";
     $purchase_log = $wpdb->get_results($sql,ARRAY_A);
     header("Content-Type: application/xml; charset=UTF-8"); 
-    header('Content-Disposition: inline; filename="WP_E-Commerce_Purchase_Log.rss"');
+    header('Content-Disposition: inline; filename="WP_e-Commerce_Purchase_Log.rss"');
     $output = '';
     $output .= "<?xml version='1.0'?>\n\r";
     $output .= "<rss version='2.0'>\n\r";
     $output .= "  <channel>\n\r";
-    $output .= "    <title>WP E-Commerce Product Log</title>\n\r";
+    $output .= "    <title>WP e-Commerce Product Log</title>\n\r";
     $output .= "    <link>".get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php</link>\n\r";
-    $output .= "    <description>This is the WP E-Commerce Product Log RSS feed</description>\n\r";
-    $output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
+    $output .= "    <description>This is the WP e-Commerce Product Log RSS feed</description>\n\r";
+    $output .= "    <generator>WP e-Commerce Plugin</generator>\n\r";
     
     foreach((array)$purchase_log as $purchase) {
       $purchase_link = get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchaseid=".$purchase['id'];

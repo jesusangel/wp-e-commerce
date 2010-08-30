@@ -186,7 +186,7 @@ function wpsc_admin_pages(){
 
 
 function wpsc_product_log_rss_feed() {
-  echo "<link type='application/rss+xml' href='".get_option('siteurl')."/wp-admin/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP E-Commerce Purchase Log RSS' rel='alternate'/>";
+  echo "<link type='application/rss+xml' href='".get_option('siteurl')."/wp-admin/index.php?rss=true&amp;rss_key=key&amp;action=purchase_log&amp;type=rss' title='WP e-Commerce Purchase Log RSS' rel='alternate'/>";
 }
 
 function wpsc_admin_include_coupon_js() {
@@ -532,7 +532,7 @@ function wpsc_dashboard_widget_setup() {
 	get_currentuserinfo();
 	if($current_user->user_level>9) {
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL.'/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-    wp_add_dashboard_widget('wpsc_dashboard_widget', __('E-Commerce'),'wpsc_dashboard_widget');
+    wp_add_dashboard_widget('wpsc_dashboard_widget', __('e-Commerce'),'wpsc_dashboard_widget');
 	}
 }
 /*
