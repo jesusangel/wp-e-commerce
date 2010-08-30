@@ -17,7 +17,6 @@ table.logdisplay tr.alt{ background-color: #eeeeee; }
 table.logdisplay tr.alt td{ background-color: #eeeeee;}
 
 ul.installation { list-style-type: decimal; }
-
 td.processed{ text-align: left; min-width: 140px; width: 140px; white-space: nowrap; }
 td.processed a{ border-bottom: none; }
 td.processed a img{ margin-left: 5px; }

@@ -755,6 +755,7 @@ function wpsc_admin_ajax() {
 						$limited_stock = false;
         		if($_POST['limited_stock'] == 'true') {
 							$limited_stock = true;
+							if(isset($_POST['current_stock'])) $current_stock = $_POST['current_stock'];
         		}
         		
         		$selected_variation_values = array();
@@ -764,7 +765,7 @@ function wpsc_admin_ajax() {
         		}
         		
 						////echo "/* ".print_r($selected_variation_values,true)." */\n\r";
-						echo "edit_variation_combinations_html = \"".__('Edit Variation Set', 'wpsc')."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view(0, (array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock)))."\";\n";
+						echo "edit_variation_combinations_html = \"".__('Edit Variation Set', 'wpsc')."<br />".str_replace(array("\n","\r"), array('\n','\r'), addslashes($variation_processor->variations_grid_view(0, (array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock,$current_stock)))."\";\n";
 
       		} else {
         		echo "edit_variation_combinations_html = \"\";\n";

@@ -140,6 +140,9 @@ width:55px;
 th#amount{
 width:75px;
 }
+.wpsc_error{ 
+color:red; 
+}
 th#name{
 width:220px;
 }

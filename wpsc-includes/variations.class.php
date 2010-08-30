@@ -172,7 +172,7 @@ class nzshpcrt_variations {
    * This is one part of the code that displays the variation combination forms in the add and edit product pages.
    * If this fails to find any data about the variation combinations, it runs "variations_add_grid_view" instead
    */
-  function variations_grid_view($product_id, $variation_ids = null,  $variation_values = null, $selected_price = null, $limited_stock = null) {
+  function variations_grid_view($product_id, $variation_ids = null,  $variation_values = null, $selected_price = null, $limited_stock = null, $current_stock=null) {
     global $wpdb;
     if($product_id > 0) { // if we have a product ID
 			$product_id = (int)$product_id;
@@ -192,7 +192,7 @@ class nzshpcrt_variations {
 			$associated_variations = $variation_ids;
 			
 			$product_data['price'] = $selected_price;
-			//$product_data['quantity'];
+			$product_data['quantity'] = $current_stock;
 		
 			$stock_column_state = '';
 			if($limited_stock != true) {
@@ -312,7 +312,6 @@ class nzshpcrt_variations {
 				$variation_settings_uniqueid = $product_id."_".str_replace(",","_",$variation_ids);
 				
 				$group_defining_class = '';
-				
 				$next_id_set = array_keys((array)$variation_sets[$key+1]);
 				//echo "<pre>".print_r($variation_set,true)."</pre>";
 				if($variation_id_array[0] != $next_id_set[0]) {

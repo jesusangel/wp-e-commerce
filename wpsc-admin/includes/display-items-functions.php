@@ -574,7 +574,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 							echo "            <div class='edit_stock' style='display: none;'>\n\r";
 							break;
 						}
-						echo "<p><strong>" .__('Note: If you are using variations please ensure you populate the stock under "Variation Control"', 'wpsc')."</strong></p>";
+						echo "<p><strong class='wpsc_error'>" .__('Note: If you are using variations please ensure you populate the stock under "Variation Control"', 'wpsc')."</strong></p>";
 						echo __('Stock Qty', 'wpsc') . " <input type='text' class='stock_limit_quantity' name='quantity' size='10' value='".$product_data['quantity']."' />";
 						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' " . $unpublish_oos . " class='inform_when_oos' name='inform_when_oos' /> " . __('If this product runs out of stock set status to Unpublished & email site owner', 'wpsc') . "</div>";
 						echo "              </div>\n\r";
@@ -583,7 +583,7 @@ function wpsc_product_price_and_stock_forms($product_data=''){
 						echo "
 					<div style='display: none;' class='edit_stock'>
 						"; 
-						echo "<p><strong class='delete_button'>" .__('Note: If you are using variations please ensure you populate the stock under "Variation Control"', 'wpsc')."</strong></p>";
+						echo "<p><strong class='wpsc_error'>" .__('Note: If you are using variations please ensure you populate the stock under "Variation Control"', 'wpsc')."</strong></p>";
 						echo __('Stock Qty', 'wpsc') . " <input type='text' name='quantity' value='0' size='10' />";
 						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' class='inform_when_oos' name='inform_when_oos' /> " . __('If this product runs out of stock set status to Unpublished & email site owner', 'wpsc') . "</div>";
 					echo "</div>";  
