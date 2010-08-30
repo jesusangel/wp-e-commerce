@@ -51,6 +51,9 @@ If you experience database errors try de-activating and re-activating your plugi
 * Deleted categories are no longer visible within the tinyMCE Display Products panel
 * Updated support for the latest release of DropShop
 * Fix to force variation price to update on product page load
+* Added new POT file for translations
+
+
 
 = 3.7.6.7 =
 * Added back the hourly Cron Job for clearing the Claimed Stock  

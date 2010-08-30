@@ -859,7 +859,7 @@ function wpsc_custom_meta_name() {
 */
 function wpsc_custom_meta_value() {
 	global $wpsc_query;
-	return	$wpsc_query->custom_meta_values['meta_value'];
+	return	stripslashes($wpsc_query->custom_meta_values['meta_value']);
 }
 
 /**
