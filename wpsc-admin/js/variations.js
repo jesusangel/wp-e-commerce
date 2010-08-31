@@ -80,8 +80,10 @@ function variation_value_list(id, parent_element) {
 	
 	selected_price = jQuery("input[name='price']",jQuery(parent_element).parents('form')).val();
 	limited_stock = jQuery("input.limited_stock_checkbox",jQuery(parent_element).parents('form')).attr('checked');
+	curent_stock_arg = '';
 	if(limited_stock){
 		current_stock = jQuery("input[name='quantity']").val();
+		curent_stock_arg = 	"&current_stock="+current_stock;	
 	}
 	//current_variations = jQuery("label.variation_checkbox"+id+" input[type='hidden'], label.variation_checkbox"+id+" input[type='checkbox']").serialize();
 	
@@ -97,7 +99,7 @@ function variation_value_list(id, parent_element) {
 	
 	
 	
-	post_values = "list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&limited_stock="+limited_stock+"&"+selected_variations+"&current_stock="+current_stock;
+	post_values = "list_variation_values=true&product_id="+id+"&selected_price="+selected_price+"&limited_stock="+limited_stock+"&"+selected_variations+curent_stock_arg;
 	
 	jQuery.post( 'index.php?admin=true&ajax=true', post_values, function(returned_data) {
 		jQuery("div.variation_box label input[type='checkbox']").removeAttr("disabled", "true"); 
