@@ -7,7 +7,14 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-		
+function print_admin_hook_to_source() {
+			global $hook_suffix;
+			echo "<!-- The hook for the current page is \"";
+			print_r( $hook_suffix );
+			echo "\" -->\n";
+}	
+add_action( 'admin_head', 'print_admin_hook_to_source' );
+	
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-update.page.php");
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-items.page.php");
@@ -93,7 +100,10 @@ function wpsc_admin_pages(){
 			$page_hooks[] = $purchase_log_page;
 			
 			global $show_update_page; //this global is set in /wpsc-admin/display-update.page.php
-			if($show_update_page !== FALSE) :
+			if(!isset($show_update_page))
+				$show_update_page = true;
+				
+			if((bool)$show_update_page !== FALSE) :
 				$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 'administrator', 'wpsc-update', 'wpsc_display_update_page');
 			endif;
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 'editor', 'wpsc-edit-products', 'wpsc_display_products_page');
@@ -113,20 +123,6 @@ function wpsc_admin_pages(){
 			foreach((array)$box_order as $box) {
 				$boxes[$box] = ucwords(str_replace("_"," ",$box));
 			}			//exit('-->'.$help);
-			if (function_exists('add_contextual_help')) {
-
-				add_contextual_help(WPSC_DIR_NAME.'/display-log',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/sales/'>About this page</a>");
-
-				add_contextual_help(WPSC_DIR_NAME.'/display-category',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/product-groups/'>About this page</a>");
-				add_contextual_help(WPSC_DIR_NAME.'/display_variations',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/variations/'>About this page</a>");
-				add_contextual_help(WPSC_DIR_NAME.'/display-coupons',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/marketing/'>About this page</a>");
-				add_contextual_help(WPSC_DIR_NAME.'/options',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/shop-settings-general/'>General Settings</a><br />
-																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/presentation/'>Presentation Options</a> <br />
-																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/admin-settings/'>Admin Options</a> <br />
-																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/shipping/'>Shipping Options</a> <br />
-																<a target='_blank' href='http://www.instinct.co.nz/e-commerce/payment-option/'>Payment Options</a> <br />");
-				add_contextual_help(WPSC_DIR_NAME.'/display-items',"<a target='_blank' href='http://www.instinct.co.nz/e-commerce/products/'>About this page</a>");
-			}
 
 			if(IS_WPMU || $GLOBALS['wp_version'] == '3.0'){
 				$page_hooks[] = add_submenu_page($base_page,__('Marketing', 'wpsc'), __('Marketing', 'wpsc'), 'administrator','wpsc_display_coupons_page','wpsc_display_coupons_page');
@@ -143,7 +139,24 @@ function wpsc_admin_pages(){
 			if( (isset($_SESSION['wpsc_activate_debug_page']) && ($_SESSION['wpsc_activate_debug_page'] == true)) || (defined('WPSC_ADD_DEBUG_PAGE') && (constant('WPSC_ADD_DEBUG_PAGE') == true))) {			  
 				$page_hooks[] = add_submenu_page($base_page,__('- Debug'), __('- Debug'), 'administrator', 'wpsc-debug', 'wpsc_debug_page');
 			}
+			if (function_exists('add_contextual_help')) {
+				$header = '<p><strong>'.__('For More Information','wpsc').'</strong></p>';
+				add_contextual_help('toplevel_page_wpsc-sales-logs',$header."<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/sales/'>About the Sales Page</a>");
 
+				add_contextual_help('store_page_wpsc-edit-groups',$header."<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/categories/'>About the Categories Page</a>");
+				//Contextual Help for edit-tags doesnt seem to want to work,, 
+				add_contextual_help('edit-tags.php', $header."<a target='_blank' href='http://www.instinct.co.nz/e-commerce/variations/'>About this page</a>");
+				add_contextual_help('store_page_wpsc_display_coupons_page',$header."<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>About the Marketing Page</a>");
+				
+				add_contextual_help('store_page_wpsc-settings',$header."<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/general/'>General Settings</a><br />
+																<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/presentation/'>Presentation Options</a> <br />
+																<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/admin/'>Admin Options</a> <br />
+																<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/shipping'>Shipping Options</a> <br />
+																<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/payment-options/'>Payment Options</a> <br />
+																<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/import/'>Import Options</a> <br />
+																<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />");
+				add_contextual_help('store_page_wpsc-edit-products',$header."<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/products'>About the Products Page</a>");
+			}
 			$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $base_page);
 			do_action('wpsc_add_submenu');
 		}
