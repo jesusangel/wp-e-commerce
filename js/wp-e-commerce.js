@@ -133,11 +133,17 @@ jQuery(document).ready(function () {
         
 	jQuery.post( 'index.php?update_product_price=true', form_values, function(returned_data) {
 		product_msg = '';
+		message_exists = null;
 		eval(returned_data);
 		if(product_id != null) {
 	      	if(product_msg != ''){
 	      		jQuery("input#product_"+product_id+"_submit_button").attr('disabled','disabled');
-	      		jQuery("input#product_"+product_id+"_submit_button").before('<span class="wpsc_variation_message_'+product_id+'"">'+product_msg+'</span>');
+				message_exists = jQuery(".wpsc_variation_message_"+product_id).html();
+				if(message_exists == null){
+		      		jQuery("input#product_"+product_id+"_submit_button").before('<span class="wpsc_variation_message_'+product_id+'"">'+product_msg+'</span>');
+	      		}else{
+		      		jQuery(".wpsc_variation_message_"+product_id).css('display','inline');
+	      		}
 	      	}else{
 	      		jQuery("input#product_"+product_id+"_submit_button").removeAttr('disabled');
 	      		jQuery('.wpsc_variation_message_'+product_id).css('display','none');

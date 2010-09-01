@@ -323,7 +323,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		case 'stock' :
 			$stock = get_post_meta($product->ID, '_wpsc_stock', true);
 			if($stock == ''){
-				$stock = '0';
+				$stock = 'N/A';
 			}
 			?>
 				<td  <?php echo $attributes ?>>
