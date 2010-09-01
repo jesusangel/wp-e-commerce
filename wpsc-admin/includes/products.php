@@ -47,7 +47,6 @@ function wpsc_admin_product_listing($parent_product = null) {
 		$product_ids[] = $product->ID;
 	}
 	
-	//	exit('<pre>'.print_r($wpsc_products, true).'</pre>');
 	foreach ( $wpsc_products as $product ) {
 		wpsc_product_row($product, $parent_product);
 	}

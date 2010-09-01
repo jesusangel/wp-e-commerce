@@ -311,6 +311,7 @@ function wpsc_display_edit_products_page() {
 			'post_parent' => 0,
 			'orderby' => 'menu_order post_title',
 			'order' => "ASC",
+			'post_status' => 'published inherit',
 			'posts_per_page' => $itempp,
 			'offset' => $start
 		);
