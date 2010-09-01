@@ -16,10 +16,10 @@ jQuery(document).ready(function () {
   	
   	//this bit of code runs on the checkout page. If the checkbox is selected it copies the valus in the billing country and puts it in the shipping country form fields. 23.07.09
 	//jQuery('.wpsc_shipping_forms').hide();
-     jQuery("#shippingSameBilling").click(function(){
-       				jQuery('.wpsc_shipping_forms').show();
+     jQuery("#billing_same_as_shipping").click(function(){
+
         // If checked
-        jQuery("#shippingSameBilling").livequery(function(){
+        jQuery("#billing_same_as_shipping").livequery(function(){
         
         	if(jQuery(this).is(":checked")){    
 	            var fname = jQuery("input[title='billingfirstname']").val();
@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
 	            var state = jQuery("select[title='billingregion'] :selected").text();
 				var country = jQuery("select[title='billingcountry'] :selected").text();
 				var countryID = jQuery("select[title='billingcountry'] :selected").val();             
-	
+				
 				jQuery("input[title='shippingfirstname']").val(fname);
 				jQuery("input[title='shippinglastname']").val(lname); 
 				jQuery("textarea[title='shippingaddress']").val(addr);
