@@ -7,13 +7,6 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-function print_admin_hook_to_source() {
-			global $hook_suffix;
-			echo "<!-- The hook for the current page is \"";
-			print_r( $hook_suffix );
-			echo "\" -->\n";
-}	
-add_action( 'admin_head', 'print_admin_hook_to_source' );
 	
 /// admin includes
 require_once(WPSC_FILE_PATH."/wpsc-admin/display-update.page.php");
