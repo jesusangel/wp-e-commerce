@@ -44,6 +44,16 @@ function wpsc_breadcrumb_name() {
 }
 
 /**
+* wpsc breadcrumb slug function
+* @return string - the breadcrumb slug - for use in the CSS ID 
+*/
+function wpsc_breadcrumb_slug() {
+	global $wpsc_query, $wpsc_breadcrumbs;	
+
+	return $wpsc_breadcrumbs->breadcrumb['slug'];
+}
+
+/**
 * wpsc breadcrumb URL function
 * @return string - the breadcrumb URL
 */
@@ -57,6 +67,39 @@ function wpsc_breadcrumb_url() {
 	}
 }
 
+/**
+* Output breadcrumbs if configured
+* @return None - outputs breadcrumb HTML
+*/
+function wpsc_output_breadcrumbs($options) {
+
+	if(!wpsc_has_breadcrumbs()) {
+		return;
+	}
+
+	echo isset($options['before-breadcrumbs']) ? $options['before-breadcrumbs'] : '<div class="wpsc-breadcrumbs">';
+	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
+	echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('home').'">'.get_option('blogname').'</a>';
+	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
+
+	while (wpsc_have_breadcrumbs()) {
+		wpsc_the_breadcrumb(); 
+		echo isset($options['crumb-separator']) ? $options['crumb-separator'] : '&raquo;';
+		echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
+		if(wpsc_breadcrumb_url()) {
+			echo '<a class="wpsc-crumb" id="wpsc-crumb-'.wpsc_breadcrumb_slug().'" href="'.wpsc_breadcrumb_url().'">'.wpsc_breadcrumb_name().'</a>';
+		} else {
+			echo wpsc_breadcrumb_name();
+		}
+		echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
+	}
+	if (isset($options['after-breadcrumbs'])) {
+		echo $options['after-breadcrumbs'];
+	} else {
+		echo '</div>';
+	}
+}
+	
 
 /**
  * wpsc_breadcrumbs class.
@@ -89,7 +132,8 @@ class wpsc_breadcrumbs {
 		if(!empty($query_data['product']) && !empty($wp_query->post)) {
 			$this->breadcrumbs[] = array(
 				'name' => htmlentities($wp_query->post->post_title, ENT_QUOTES, 'UTF-8'),
-				'url' => ''
+				'url' => '',
+				'slug' => $query_data['product']
 			);
 		}
 		
@@ -102,7 +146,8 @@ class wpsc_breadcrumbs {
 		if( $term_data != false) {
 			$this->breadcrumbs[] = array(
 				'name' => htmlentities( $term_data->name, ENT_QUOTES, 'UTF-8'),
-				'url' => get_term_link( $term_data->slug, 'wpsc_product_category')
+				'url' => get_term_link( $term_data->slug, 'wpsc_product_category'),
+				'slug' => $term_data->slug
 			);
 			
 			$i = 0;
