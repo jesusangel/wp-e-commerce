@@ -71,7 +71,7 @@ function wpsc_breadcrumb_url() {
 * Output breadcrumbs if configured
 * @return None - outputs breadcrumb HTML
 */
-function wpsc_output_breadcrumbs($options) {
+function wpsc_output_breadcrumbs($options = Array()) {
 
 	if(!wpsc_has_breadcrumbs()) {
 		return;
