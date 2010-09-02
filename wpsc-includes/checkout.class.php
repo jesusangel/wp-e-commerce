@@ -493,7 +493,7 @@ class wpsc_checkout {
 				}else{
 				$checkoutfields = true;
 				//$output = wpsc_shipping_country_list($checkoutfields);
-				$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_selected_country'], $_SESSION['wpsc_selected_region'], $this->form_element_id(), $checkoutfields);
+				$output = wpsc_country_region_list($this->checkout_item->id , false, $_SESSION['wpsc_delivery_country'], $_SESSION['wpsc_delivery_region'], $this->form_element_id(), $checkoutfields);
 				}
 			break;
 			case "select":
@@ -526,8 +526,21 @@ class wpsc_checkout {
 			case "email":
 			case "coupon":
 			default:
+				if($this->checkout_item->unique_name == 'shippingstate'){
+						$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode` IN('".$_SESSION['wpsc_delivery_country']."') LIMIT 1",ARRAY_A);
+					if(wpsc_uses_shipping()&&($country_data['has_regions'] == 1)){
+						$region_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_REGION_TAX."` WHERE `id`='".$_SESSION['wpsc_delivery_region']."' LIMIT 1");
+						$output = "<input title='".$this->checkout_item->unique_name."' type='hidden' id='".$this->form_element_id()."' class='shipping_region' name='collected_data[{$this->checkout_item->id}]' value='".$_SESSION['wpsc_delivery_region']."' size='4' /><span class='shipping_region_name'>".$region_name."</span> ";
+					
+					}else{
+						$output = "<input class='shipping_region' title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$saved_form_data."' name='collected_data[{$this->checkout_item->id}]".$an_array."' />";
+					
+					}
+				}else{
 				$output = "<input title='".$this->checkout_item->unique_name."' type='text' id='".$this->form_element_id()."' class='text' value='".$saved_form_data."' name='collected_data[{$this->checkout_item->id}]".$an_array."' />";
 				
+				}
+	                               				
 			break;
 		}
 		return $output;
@@ -722,11 +735,15 @@ if($_POST['card_number'] != ''){
 		  }	
    	      if($form_data->type != 'heading') {
 		 // echo '<pre>'.print_r($form_data,true).'</pre>';
-		  	if(is_array($value) &&($form_data->type == 'country' ||$form_data->type == 'delivery_country') ){
-			  	$value = $value[0];
-			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+		  	if(is_array($value) &&($form_data->unique_name == 'billingcountry' || $form_data->unique_name == 'shippingcountry') ){
+				$value = serialize($value);
+				if($form_data->unique_name == 'shippingcountry'){
+					exit('<pre>'.print_r($value, true).'</pre>');		  		
+				}
+		  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
+				
 			}elseif(is_array($value)) {
-			//	echo('<pre>'.print_r($value, true).'</pre>');
+	
 			  	foreach((array)$value as $v){
 			  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $v));
 			  	}

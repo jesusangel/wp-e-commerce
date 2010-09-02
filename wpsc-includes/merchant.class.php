@@ -110,8 +110,8 @@ class wpsc_merchant {
 
 		$collected_form_data = $wpdb->get_results("SELECT `data_names`.`id`, `data_names`.`unique_name`, `collected_data`.`value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` AS `collected_data` JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` AS `data_names` ON `collected_data`.`form_id` = `data_names`.`id` WHERE `log_id` = '".$purchase_id."'", ARRAY_A);
 
-
-
+		
+//exit('<pre>'.print_r($collected_form_data,true).'</pre>');
 		$address_keys = array(
 			'billing' => array(
 				'first_name'	=>	'billingfirstname',
@@ -140,19 +140,32 @@ class wpsc_merchant {
 		foreach($collected_form_data as $collected_form_row) {
 			$address_data_set = 'billing';
 			$address_key =  array_search($collected_form_row['unique_name'], $address_keys['billing']);
-			if($address_key === null) {
+			if($address_key == null) {
+
 				$address_data_set = 'shipping';
 				$address_key =  array_search($collected_form_row['unique_name'], $address_keys['shipping']);
 			}
 			if($address_key == null) {
+//				echo('<pre>'.print_r($collected_form_row,true).'</pre>');
 				continue;
 			}
-			$address_data[$address_data_set][$address_key] = $collected_form_row['value'];
+ 			if($collected_form_row['unique_name'] == 'billingcountry'){
+
+				$country = maybe_unserialize($collected_form_row['value']);
+
+				$address_data[$address_data_set][$address_key] =$country[0];
+				$address_data['billing']['state'] = wpsc_get_state_by_id($country[1], 'code');                   
+			}elseif($collected_form_row['unique_name'] == 'shippingstate'){
+			    $address_data[$address_data_set][$address_key] = wpsc_get_state_by_id($collected_form_row['value'], 'code');                   
+			}else{
+		
+			    $address_data[$address_data_set][$address_key] = $collected_form_row['value'];
+			}
 		}
 		if(count($address_data['shipping']) < 1) {
 			$address_data['shipping'] = $address_data['billing'];
 		}
-		
+		//exit('<pre>'.print_r($address_data,true).'</pre>');
 		$this->cart_data = array(
 			'software_name' => 'WP e-Commerce/'.WPSC_PRESENTABLE_VERSION.'',
 			// 'store_name' => '',  /// is this useful or needed?
