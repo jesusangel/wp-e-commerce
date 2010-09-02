@@ -887,6 +887,7 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 function wpsc_product_variation_forms( $product_data='' ) {
 	global $closed_postboxes, $variations_processor, $wp_query;
 
+//	exit('<pre>'.print_r($product_data,true).'</pre>');
 	$siteurl = get_option( 'siteurl' );
 	$output = '';
 
@@ -905,6 +906,14 @@ function wpsc_product_variation_forms( $product_data='' ) {
 		<h3 class='hndle'><?php echo __( 'Variation Control', 'wpsc' ); ?></h3>
 
 		<div class='inside'>
+<?php	if(empty($product_data['name'])) { ?>
+			<p><?php _e('You must first save this Product as a Draft before adding variations','wpsc'); ?></p>
+			</div>
+		</div>
+<?php	
+		return false;
+} 
+?>
 			<div id="product_variations">
 				<div class="variation_checkboxes">
 <?php
