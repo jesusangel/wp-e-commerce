@@ -458,7 +458,8 @@ function wpsc_check_variation_stock_availability($product_id, $variations){
 	if(wpsc_product_has_stock($the_selected_product)){
 		
 		$stock = get_product_meta($the_selected_product, "stock");
-		if(0 < $stock[0]) return $stock[0];
+		$stock = apply_filters('wpsc_product_variation_stock', $stock[0], $id);
+		if(0 < $stock) return $stock;
 	
 	}
 	return 0;
@@ -474,7 +475,9 @@ function wpsc_product_has_stock($id = null) {
 	} else {
 		$id = get_the_ID();
 	}
+	
 	$stock = get_post_meta($id, '_wpsc_stock', true);
+	$stock = apply_filters('wpsc_product_stock', $stock, $id);
 	
 	if(is_numeric($stock)) {
 		if ($stock > 0) {
@@ -1239,7 +1242,8 @@ function wpsc_the_variation_stock() {
 		$variation_product_id = $query->posts[0]->ID;
 
 		$stock = get_product_meta($variation_product_id, "stock");
-		$output = $stock[0];
+		$stock = apply_filters('wpsc_product_variation_stock', $stock[0], $id);
+		$output = $stock; 				
 				
     } else {
 

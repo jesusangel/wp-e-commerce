@@ -935,6 +935,7 @@ class wpsc_cart {
    function check_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
        global $wpdb;
       $stock = get_post_meta($product_id, '_wpsc_stock', true);
+	  $stock = apply_filters('wpsc_product_stock', $stock, $product_id);
       // check to see if the product uses stock
       if(is_numeric($stock)){
          $priceandstock_id = 0;
@@ -969,6 +970,7 @@ class wpsc_cart {
   function get_remaining_quantity($product_id, $variations = array(), $quantity = 1) {
     global $wpdb;
       $stock = get_post_meta($product_id, '_wpsc_stock', true);
+	  $stock = apply_filters('wpsc_product_stock', $stock, $product_id);
       // check to see if the product uses stock
       if(is_numeric($stock)){
         $priceandstock_id = 0;
