@@ -166,11 +166,13 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$response = wp_remote_post($paypal_url, $options);
 		
 		// parse the response body
-		parse_str($response['body'], $parsed_response);
+
 		$error_data = array();
 		if( is_wp_error( $response ) ) {
 			$error_data[0]['error_code'] = null;
 			$error_data[0]['error_message'] = __('There was a problem connecting to the payment gateway.', 'wpsc');
+		}else{
+			parse_str($response['body'], $parsed_response);
 		}
 		
 		// List of error codes that we need to convert to something more human readable

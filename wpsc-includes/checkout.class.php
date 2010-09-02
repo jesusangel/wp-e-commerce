@@ -736,9 +736,11 @@ if($_POST['card_number'] != ''){
    	      if($form_data->type != 'heading') {
 		 // echo '<pre>'.print_r($form_data,true).'</pre>';
 		  	if(is_array($value) &&($form_data->unique_name == 'billingcountry' || $form_data->unique_name == 'shippingcountry') ){
-				$value = serialize($value);
-				if($form_data->unique_name == 'shippingcountry'){
-					exit('<pre>'.print_r($value, true).'</pre>');		  		
+
+				if($form_data->unique_name != 'shippingcountry'){
+					$value = serialize($value);
+				}else{
+					$value = $value[0];
 				}
 		  		$prepared_query = $wpdb->query($wpdb->prepare("INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value));
 				
