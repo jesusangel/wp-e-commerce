@@ -220,6 +220,14 @@ if ( is_admin() ) {
 	add_action( 'in_plugin_update_message-' . plugin_basename( __FILE__ ), 'wpsc_update_notice' );
 }
 
+function wpsc_add_product_price_to_rss(){
+ global $post;
+ $price = get_post_meta($post->ID,'_wpsc_price', true);
+ echo '<price>'.$price.'</price>';
+}
 
+add_action('rss2_item', 'wpsc_add_product_price_to_rss');
+add_action('rss_item', 'wpsc_add_product_price_to_rss');
+add_action('rdf_item', 'wpsc_add_product_price_to_rss');
 
 ?>
