@@ -654,16 +654,14 @@ function wpsc_the_product_image($product_id = '') {
           'post_type' => 'attachment', 
           'numberposts' => 1, 
           'post_status' => null, 
-          'post_parent' => get_the_ID(), 
+          'post_parent' => $product_id, 
           'orderby' => 'menu_order', 
           'order' => 'ASC' 
     ));
      
 	$post_thumbnail_id = get_post_thumbnail_id($product_id);
 	$src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnail');
-	
 	if(!empty($src) && is_string($src[0])) {
-
 		return $src[0];
 	}elseif(!empty($attached_images)){
 		$attached_image = $attached_images[0];
