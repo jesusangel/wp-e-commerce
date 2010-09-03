@@ -650,6 +650,11 @@ function wpsc_the_product_image($product_id = '') {
 	if(empty($product_id)){
 		$product_id =  get_the_ID() ;
 	}
+	
+	$product = get_post($product_id);
+	if($product->post_parent > 0){
+		$product_id = $product->post_parent;
+	}
     $attached_images = (array)get_posts(array( 
           'post_type' => 'attachment', 
           'numberposts' => 1, 
