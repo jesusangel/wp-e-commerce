@@ -165,6 +165,8 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		);
 		$response = wp_remote_post($paypal_url, $options);
 		
+//		exit('<pre>'.print_r($options ,true).'</pre><pre>'.print_r($response,true).'</pre>');
+		
 		// parse the response body
 
 		$error_data = array();

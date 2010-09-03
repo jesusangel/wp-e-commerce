@@ -648,7 +648,7 @@ function wpsc_product_normal_price() {
 */
 function wpsc_the_product_image($product_id = '') {
 	if(empty($product_id)){
-		$product_id =  get_the_ID() ;
+		$product_id =  get_the_ID();
 	}
 	
 	$product = get_post($product_id);
@@ -663,14 +663,16 @@ function wpsc_the_product_image($product_id = '') {
           'orderby' => 'menu_order', 
           'order' => 'ASC' 
     ));
-     
+	
+
 	$post_thumbnail_id = get_post_thumbnail_id($product_id);
-	$src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnail');
+	$src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnails');
+	
 	if(!empty($src) && is_string($src[0])) {
 		return $src[0];
 	}elseif(!empty($attached_images)){
-		$attached_image = $attached_images[0];
-		return wp_get_attachment_url($attached_image->ID);
+		$attached_image =wp_get_attachment_image_src($attached_images[0]->ID, 'product-thumbnails');
+		return $attached_image[0];
 	} else {
 		return false;
 	}

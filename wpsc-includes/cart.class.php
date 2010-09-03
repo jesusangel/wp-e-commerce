@@ -335,7 +335,7 @@ function wpsc_cart_item_url() {
 * @param integer height
 * @return string url to the to the cart item thumbnail image
 */
-function wpsc_cart_item_image($width = null, $height = null) {
+function wpsc_cart_item_image() {
    global $wpsc_cart;
    return wpsc_the_product_image($wpsc_cart->cart_item->product_id);
 }

@@ -570,19 +570,6 @@ function wpsc_place_shopping_cart($content = '') {
 	}
  
 }
-  
-/// wpsc_checkout is an obsolete function
-// function wpsc_checkout($content = '') {
-//   if(preg_match("/\[checkout\]/",$content)) {
-//     ob_start();
-//     include_once(WPSC_FILE_PATH . "/checkout.php");
-//     $output = ob_get_contents();
-//     ob_end_clean();
-//     return preg_replace("/(<p>)*\[checkout\](<\/p>)*/",$output, $content);
-// 	} else {
-//     return $content;
-// 	}
-// }
 
 function wpsc_transaction_results($content = '') {
   global $wpsc_theme_path;
