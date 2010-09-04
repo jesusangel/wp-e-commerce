@@ -84,7 +84,7 @@ function wpsc_output_breadcrumbs($options = Array()) {
 
 	while (wpsc_have_breadcrumbs()) {
 		wpsc_the_breadcrumb(); 
-		echo isset($options['crumb-separator']) ? $options['crumb-separator'] : '&raquo;';
+		echo isset($options['crumb-separator']) ? $options['crumb-separator'] : ' &raquo; ';
 		echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
 		if(wpsc_breadcrumb_url()) {
 			echo '<a class="wpsc-crumb" id="wpsc-crumb-'.wpsc_breadcrumb_slug().'" href="'.wpsc_breadcrumb_url().'">'.wpsc_breadcrumb_name().'</a>';
