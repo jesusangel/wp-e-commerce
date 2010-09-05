@@ -1,5 +1,6 @@
 <?php
-global $wpsc_query, $wpdb, $wp_query;
+global $wpsc_query, $wpdb, $wp_query;	
+
 /*
  * Most functions called in this page can be found in the wpsc_query.php file
  */

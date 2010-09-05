@@ -10,8 +10,7 @@ function wpsc_display_coupons_page(){
 		$discount_type = (int)$_POST['add_discount_type'];
 		$use_once = (int)(bool)$_POST['add_use-once'];
 		$every_product = (int)(bool)$_POST['add_every_product'];
-// 		$start_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_start']['month'], (int)$_POST['add_start']['day'], (int)$_POST['add_start']['year']));
-// 		$end_date = date("Y-m-d H:i:s", mktime(0, 0, 0, (int)$_POST['add_end']['month'], (int)$_POST['add_end']['day'], (int)$_POST['add_end']['year']));
+		$is_active = (int)(bool)$_POST['add_active'];
 		$start_date = date('Y-m-d', strtotime($_POST['add_start'])) . " 00:00:00";
 		$end_date = date('Y-m-d', strtotime($_POST['add_end'])) . " 00:00:00";
 		$rules = $_POST['rules'];
@@ -25,7 +24,7 @@ function wpsc_display_coupons_page(){
 				unset($new_rule[$key]);
 			}
 		}
-		if($wpdb->query("INSERT INTO `".WPSC_TABLE_COUPON_CODES."` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '1', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
+		if($wpdb->query("INSERT INTO `".WPSC_TABLE_COUPON_CODES."` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '$is_active', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
 			echo "<div class='updated'><p align='center'>".__('Thanks, the coupon has been added.', 'wpsc')."</p></div>";
 		}
 	}
@@ -34,12 +33,14 @@ function wpsc_display_coupons_page(){
 			$coupon_id = (int)$coupon_id;
 			$coupon_data['start'] = $coupon_data['start']." 00:00:00";
 			$coupon_data['expiry'] = $coupon_data['expiry']." 00:00:00";
-			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id'", ARRAY_A);
+			$check_values = $wpdb->get_row("SELECT `id`, `coupon_code`, `value`, `is-percentage`, `use-once`, `active`, `start`, `expiry`,`every_product` FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id'", ARRAY_A);
 			//sort both arrays to make sure that if they contain the same stuff, that they will compare to be the same, may not need to do this, but what the heck
 	
 			if($check_values != null)
 				ksort($check_values); 
-			ksort($coupon_data);			
+			ksort($coupon_data);	
+			
+		//	exit('<pre>'.print_r($coupon_data,true).'</pre><pre>'.print_r($check_values,true).'</pre>');		
 			if($check_values != $coupon_data) 
 			{
 				$insert_array = array();
@@ -47,10 +48,15 @@ function wpsc_display_coupons_page(){
 				  if(($coupon_key == "submit_coupon") || ($coupon_key == "delete_coupon")) {
 				    continue;
 				  }
+			
 					if(isset($check_values[$coupon_key]) && $coupon_value != $check_values[$coupon_key]) {
 						$insert_array[] = "`$coupon_key` = '$coupon_value'";
 					}
 				}
+				if(isset($check_values['every_product']) && $coupon_data['add_every_product'] != $check_values['every_product'] ){
+						$insert_array[] = "`every_product` = '$coupon_data[add_every_product]'";
+				}
+
 				if(count($insert_array) > 0) {
 					$wpdb->query("UPDATE `".WPSC_TABLE_COUPON_CODES."` SET ".implode(", ", $insert_array)." WHERE `id` = '$coupon_id' LIMIT 1;");
 				}
@@ -262,20 +268,20 @@ function wpsc_display_coupons_page(){
    <input type='submit' value='Add Coupon' name='submit_coupon' class='button-primary' />
    </td>
  </tr>
- <tr><td colspan="2">
+ <tr><td colspan='3' scope="row">
    <p><span class='input_label'><?php _e('Active','wpsc'); ?></span><input type='hidden' value='0' name='add_active' />
    <input type='checkbox' value='1' checked='checked' name='add_active' />
-	<?php _e('Activate coupon on creation.', 'wpsc')?></p></td></tr>
+	<span class='description'><?php _e('Activate coupon on creation.', 'wpsc')?></span></p></td></tr>
  
- <tr><td colspan="2">
+ <tr><td colspan='3' scope="row">
    <p><span class='input_label'><?php _e('Use Once','wpsc'); ?></span><input type='hidden' value='0' name='add_use-once' />
 	<input type='checkbox' value='1' name='add_use-once' />
-	<?php _e('Deactivate coupon after it has been used.', 'wpsc')?></td></tr>
+	<span class='description'><?php _e('Deactivate coupon after it has been used.', 'wpsc')?></span></p></td></tr>
 
- <tr><td colspan="2">
+ <tr><td colspan='3' scope="row">
    <p><span class='input_label'><?php _e('Apply On All Products','wpsc'); ?></span><input type='hidden' value='0' name='add_every_product' />
 	<input type="checkbox" value="1" name='add_every_product'/>
-	<?php _e('This coupon affects each product at checkout.', 'wpsc')?></td></tr>
+	<span class='description'><?php _e('This coupon affects each product at checkout.', 'wpsc')?></span></p></td></tr>
 
 <tr><td colspan='3'><span id='table_header'>Conditions</span></td></tr>
 <tr><td colspan="8">
@@ -493,9 +499,9 @@ function wpsc_marketing_meta_box(){
 ?>
 <form name='cart_options' method='post' action=''>
 	<input type='hidden' value='true' name='change-settings' />        
-	<p><span class='input_label'><?php echo __('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' />  <?php echo __('Adds the \'Users who bought this also bought\' item to the single products page.', 'wpsc');?></p>
-	<p><span class='input_label'><?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' />  <?php echo __('Adds the \'Share this link\' item to the single products page.', 'wpsc');?></p>
-	<p><span class='input_label'> <?php echo __('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' />  <?php echo __('Adds the \'How did you find out about us\' drop-down option at checkout.', 'wpsc')?></p>
+	<p><span class='input_label'><?php echo __('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' /><span class='description'>  <?php echo __('Adds the \'Users who bought this also bought\' item to the single products page.', 'wpsc');?></span></p><br />
+	<p><span class='input_label'><?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' /><span class='description'>  <?php echo __('Adds the \'Share this link\' item to the single products page.', 'wpsc');?></span></p><br />
+	<p><span class='input_label'> <?php echo __('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' /><span class='description'>  <?php echo __('Adds the \'How did you find out about us\' drop-down option at checkout.', 'wpsc')?></span></p><br />
 	<p><input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' /></p>
 </form>
 <?php

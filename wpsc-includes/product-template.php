@@ -667,7 +667,6 @@ function wpsc_the_product_image($product_id = '') {
 
 	$post_thumbnail_id = get_post_thumbnail_id($product_id);
 	$src =wp_get_attachment_image_src($post_thumbnail_id, 'product-thumbnails');
-	
 	if(!empty($src) && is_string($src[0])) {
 		return $src[0];
 	}elseif(!empty($attached_images)){
