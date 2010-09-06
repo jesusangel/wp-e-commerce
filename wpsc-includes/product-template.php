@@ -359,7 +359,9 @@ function wpsc_the_product_title() {
 */
 function wpsc_the_product_description() {
 	global $wpsc_query, $allowedtags;
-	return get_the_content('Read the rest of this entry &raquo;');
+	$content = get_the_content('Read the rest of this entry &raquo;');
+	$content = apply_filters('the_content', $content);
+	return $content;
 }
 
 /**
