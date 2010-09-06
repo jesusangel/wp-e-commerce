@@ -27,7 +27,18 @@ if(wpsc_cart_item_count() > 0) :
 	<?php  //this displays the confirm your order html	?>
 		
 		<tr class="product_row product_row_<?php echo wpsc_the_cart_item_key(); ?>">
-			<td class="firstcol wpsc_product_image wpsc_product_image_<?php echo wpsc_the_cart_item_key(); ?>"><img src='<?php echo wpsc_cart_item_image(48,48); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' /></td>
+
+			<td class="firstcol wpsc_product_image wpsc_product_image_<?php echo wpsc_the_cart_item_key(); ?>">
+			<?php if('' != wpsc_cart_item_image()): ?>
+				<img src='<?php echo wpsc_cart_item_image(48,48); ?>' alt='<?php echo wpsc_cart_item_name(); ?>' title='<?php echo wpsc_cart_item_name(); ?>' />
+			<?php else: ?>
+				<div class="item_no_image">
+					<a href="<?php echo wpsc_the_product_permalink(); ?>">
+					<span>No Image Available</span>
+					</a>
+				</div>
+			<?php endif; ?>
+			</td>
 			<td class="firstcol wpsc_product_name wpsc_product_name_<?php echo wpsc_the_cart_item_key(); ?>">
 			<a href='<?php echo wpsc_cart_item_url();?>'><?php echo wpsc_cart_item_name(); ?></a>
 			</td>
