@@ -127,9 +127,9 @@ jQuery(document).ready(function () {
 	
 	
   // update the price when the variations are altered.
-  jQuery("div.wpsc_variation_forms .wpsc_select_variation").change(function() {
+  jQuery(".wpsc_select_variation").change(function() {
     parent_form = jQuery(this).parents("form.product_form");
-    form_values =jQuery("input[name=product_id],div.wpsc_variation_forms .wpsc_select_variation",parent_form).serialize( );
+    form_values =jQuery("input[name=product_id], .wpsc_select_variation",parent_form).serialize( );
         
 	jQuery.post( 'index.php?update_product_price=true', form_values, function(returned_data) {
 		product_msg = '';
