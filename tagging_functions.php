@@ -36,7 +36,6 @@ function wp_generate_product_tag_cloud( $tags, $args = '' ) {
 	$counts = $tag_links = array();
 	foreach ( (array) $tags as $tag ) {
 		$counts[$tag->name] = $tag->count;
-		echo __FILE__."<PRE>"; print_r($tag); echo "</PRE>\n<BR>";
 		$tag_links[$tag->name] = get_term_link ($tag->slug,$tag->taxonomy); //get_product_tag_link( $tag->term_id );
 		if ( is_wp_error( $tag_links[$tag->name] ) )
 			return $tag_links[$tag->name];
