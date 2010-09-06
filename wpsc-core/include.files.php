@@ -42,8 +42,8 @@ $wpsc_title_data = array();
 require_once(WPSC_FILE_PATH."/currency_converter.inc.php"); 
 require_once(WPSC_FILE_PATH."/shopping_cart_functions.php"); 
 require_once(WPSC_FILE_PATH."/homepage_products_functions.php"); 
-if(file_exists(WPSC_THEMES_PATH.'wpsc-transaction_result_functions.php')) {
-	require_once(WPSC_FILE_PATH."/themes/wpsc-transaction_result_functions.php"); 
+if(file_exists(WPSC_FILE_PATH.'/themes/wpsc-transaction_results_functions.php')) {
+	require_once(WPSC_FILE_PATH."/themes/wpsc-transaction_results_functions.php"); 
 } else {
 	require_once(WPSC_FILE_PATH."/transaction_result_functions.php"); 
 }

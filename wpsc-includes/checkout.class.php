@@ -340,14 +340,6 @@ function wpsc_shipping_country_list($shippingdetails = false) {
 	return $output;
 }
 
-
-
-
-
-
-
-
-
 /**
  * The WPSC Checkout class
  */
@@ -723,6 +715,7 @@ if($_POST['card_number'] != ''){
 	*/
   function save_forms_to_db($purchase_id) {
    global $wpdb;
+
    		$count = $this->get_count_checkout_fields()+1;
   		//exit($count.'<pre>'.print_r($this->checkout_items, true).'</pre>');
 		$i = 0;
@@ -733,6 +726,7 @@ if($_POST['card_number'] != ''){
 		  if($value == ''){
 		  	$value = $form_data->value;
 		  }	
+		  
    	      if($form_data->type != 'heading') {
 		 // echo '<pre>'.print_r($form_data,true).'</pre>';
 		  	if(is_array($value) &&($form_data->unique_name == 'billingcountry' || $form_data->unique_name == 'shippingcountry') ){

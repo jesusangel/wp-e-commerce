@@ -10,11 +10,9 @@
 	 * @since 3.8
  */
  
-class wpsc_transaction_theme {
- 
  function wpsc_transaction_theme() {
- //Construct
-	global $wpdb, $user_ID, $nzshpcrt_gateways, $sessionid, $cart_log_id;
+
+	global $wpdb, $user_ID, $nzshpcrt_gateways, $sessionid, $cart_log_id, $errorcode;
 	//$curgateway = get_option('payment_gateway');
 
 	if(isset($_GET['sessionid'])) {
@@ -53,13 +51,13 @@ class wpsc_transaction_theme {
 			$sessionid = decrypt_dps_response();
 			//exit($sessionid);
 			if($sessionid != ''){
-				return $this->transaction_results($sessionid, true); 
-			}else{
+				return transaction_results($sessionid, true); 
+			} else{
 				_e('Sorry your transaction was not accepted.<br /><a href='.get_option("shopping_cart_url").'>Click here to go back to checkout page.</a>');
 			}
 		} else {
 			//exit('<pre>sess - '.print_r($_SESSION, true).'</pre>');
-			return $this->transaction_results($sessionid, true);
+			return transaction_results($sessionid, true);
 		}
 			$cart_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1" );
 		}
@@ -67,18 +65,14 @@ class wpsc_transaction_theme {
 	
 	function transaction_results($sessionid, $echo_to_screen = true, $transaction_id = null) {
 
-	global $wpdb,$wpsc_cart;
+	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url, $message_html, $cart, $errorcode;
 
 	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
 	$errorcode = 0;
 	$order_status= 2;
 	$siteurl = get_option('siteurl');
-	
-	/*
-	 * {Notes} Double check that $Echo_To_Screen is a boolean value
-	 */
 	 
-	$echo_to_screen=(((!is_bool($echo_to_screen)))?((true)):(($echo_to_screen)));
+	$echo_to_screen = ( ( ( !is_bool( $echo_to_screen ) ) ) ? ( ( true ) ) : ( ( $echo_to_screen ) ) );
 
 	if(is_numeric($sessionid)) {
 		
@@ -98,8 +92,23 @@ class wpsc_transaction_theme {
 		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
 
 		// Checks for PayPal IPN
-		$this->check_paypal_ipn($purchase_log, $order_url);
-		
+	if((!isset($_GET['ipn_request']) || $_GET['ipn_request'] != 'true') && (get_option('paypal_ipn') == 1)) {
+	
+		if($purchase_log == null) {
+			
+			if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
+				wp_mail(get_option('purch_log_email'), __('New pending order', 'wpsc'), __('There is a new order awaiting processing:', 'wpsc').$order_url, "From: ".get_option('return_email')."");
+			}
+				_e('We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc');
+
+				return false;
+				
+		} else if ($purchase_log['processed'] < 3) { 
+			_e('Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc') . "<p style='margin: 1em 0px 0px 0px;' >".nl2br(stripslashes(get_option('payment_instructions')))."</p>";
+				return;
+				
+			}
+		}		
 		$cart = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='{$purchase_log['id']}'",ARRAY_A);
 		
 		if($purchase_log['shipping_country'] != '') {
@@ -332,22 +341,6 @@ class wpsc_transaction_theme {
 				}
 
 				/// Empty the cart
-			
-
-				if(true === $echo_to_screen) {
-					echo '<div class="wrap">';
-					if($sessionid != null) {
-						echo __('The Transaction was successful', 'wpsc')."<br />";
-						echo "<br />" . nl2br(str_replace("$",'\$',$message_html));
-					}
-					echo '</div>';
-				}
-			} else {
-				if(true === $echo_to_screen) {
-					echo '<div class="wrap">';
-					echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";
-					echo '</div>';
-				}
 			}
 
 		if(($purchase_log['email_sent'] != 1) and ($sessionid != '')) {
@@ -358,31 +351,6 @@ class wpsc_transaction_theme {
 			$wpdb->query($update_sql) ;
 		}
 	}
-}
-
-
-function check_paypal_ipn($purchase_log, $order_url) {
-
-	if((!isset($_GET['ipn_request']) || $_GET['ipn_request'] != 'true') && (get_option('paypal_ipn') == 1)) {
-	
-		if($purchase_log == null) {
-			
-			if((get_option('purch_log_email') != null) && ($purchase_log['email_sent'] != 1)) {
-				wp_mail(get_option('purch_log_email'), __('New pending order', 'wpsc'), __('There is a new order awaiting processing:', 'wpsc').$order_url, "From: ".get_option('return_email')."");
-			}
-				
-				return false;
-				
-		} else if ($purchase_log['processed'] < 3) { 
-			
-				return true;
-				
-			}
-		}
-	}
-	
-	
-	
 }
 
 ?>
