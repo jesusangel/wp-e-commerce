@@ -12,6 +12,7 @@
 // Register the wpsc post types
 function wpsc_register_post_types() {
 	global $wpsc_page_titles,$wp_rewrite;
+
 	// Products
 	register_post_type( 'wpsc-product', array(
 	    '_edit_link' => 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit&product=%d',
@@ -30,6 +31,7 @@ function wpsc_register_post_types() {
 			'with_front' => false
 		)
 	));
+
 	// Purchasable product files
 	register_post_type( 'wpsc-product-file', array(
 	    'capability_type' => 'post',
@@ -39,7 +41,22 @@ function wpsc_register_post_types() {
 	));
 	
 	// Product tags
-	register_taxonomy('product_tag', 'wpsc-product');
+	$labels = array ('name' => _x('Product Tags', 'taxonomy general name'),
+                     'singular_name' => _x('Product Tag', 'taxonomy singular name'),
+                     'search_items' => __('Product Search Tags'),
+                     'all_items' => __('All Product Tags'),
+                     'edit_item' => __('Edit Tag'),
+                     'update_item' => __('Update Tag'),
+                     'add_new_item' => __('Add new Product Tag'),
+					 'new_item_name' => __('New Product Tag Name'));
+
+	register_taxonomy('product_tag', 'wpsc-product', array(
+		'hierarchical' => false,
+		'labels' => $labels ,
+		'rewrite' => array(
+			'slug' => '/tagged',
+			'with_front' => false) 
+	));
 	
 	// Product categories, is heirarchical and can use permalinks
 	register_taxonomy('wpsc_product_category', 'wpsc-product', array(

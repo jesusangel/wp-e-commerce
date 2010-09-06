@@ -673,7 +673,6 @@ function wpsc_update_product_tags($product_id, $product_tags, $existing_tags) {
 	if(isset($product_tags) && $product_tags != 'Add new tag') {
 		
 		$tags = explode(',',$product_tags);
-		product_tag_init();
 		if(is_array($tags)) {
 			foreach((array)$tags as $tag){
 				$tt = wp_insert_term((string)$tag, 'product_tag');
