@@ -648,7 +648,7 @@ function wpsc_product_normal_price() {
 * wpsc product image function
 * @return string - the URL to the thumbnail image
 */
-function wpsc_the_product_image($product_id = '') {
+function wpsc_the_product_image($width='',$height='',$product_id='') {
 	if(empty($product_id)){
 		$product_id =  get_the_ID();
 	}

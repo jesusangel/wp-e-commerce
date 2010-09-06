@@ -1,5 +1,4 @@
 <?php
-get_header();
 global $wpsc_query, $wpdb, $wpsc_custom_meta;
 $image_width = get_option('single_view_image_width');
 $image_height = get_option('single_view_image_height');
