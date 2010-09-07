@@ -70,7 +70,6 @@
 	$curgateway = $wpdb->get_var("SELECT gateway FROM ".WPSC_TABLE_PURCHASE_LOGS." WHERE sessionid='$sessionid'");
 	$errorcode = 0;
 	$order_status= 2;
-	$siteurl = get_option('siteurl');
 	 
 	$echo_to_screen = ( ( ( !is_bool( $echo_to_screen ) ) ) ? ( ( true ) ) : ( ( $echo_to_screen ) ) );
 
@@ -89,7 +88,7 @@
 			$message = stripslashes(get_option('wpsc_email_receipt'));
 			$message_html = $message;
 		}
-		$order_url = $siteurl."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id'];
+		$order_url = site_url("/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php&amp;purchcaseid=".$purchase_log['id']);
 
 		// Checks for PayPal IPN
 	if((!isset($_GET['ipn_request']) || $_GET['ipn_request'] != 'true') && (get_option('paypal_ipn') == 1)) {
@@ -153,9 +152,9 @@
 						
 							//print('<pre>'.print_r($file_data, true).'</pre>');
 							if($single_download['uniqueid'] == null){// if the uniqueid is not equal to null, its "valid", regardless of what it is
-								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['id'], "name" => $file_data->post_title);	
+								$link[] = array("url"=>site_url("?downloadid=".$single_download['id']), "name" => $file_data->post_title);	
 							} else {
-								$link[] = array("url"=>$siteurl."?downloadid=".$single_download['uniqueid'], "name" => $file_data->post_title);
+								$link[] = array("url"=>site_url("?downloadid=".$single_download['uniqueid']), "name" => $file_data->post_title);
 							}
 						}
 						//$order_status= 4;
