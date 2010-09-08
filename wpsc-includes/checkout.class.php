@@ -751,8 +751,7 @@ class wpsc_checkout {
 			}
 		}
 
-		return array('is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message);
-  }
+		return apply_filters( 'wpsc_checkout_validate_forms', array('is_valid' => !$any_bad_inputs, 'error_messages' => $bad_input_message) );  }
   
 	/**
 	* validate_forms method, validates the input from the checkout page
