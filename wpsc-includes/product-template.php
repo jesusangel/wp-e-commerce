@@ -459,12 +459,12 @@ function wpsc_check_variation_stock_availability($product_id, $variations){
 	}
 	if(wpsc_product_has_stock($the_selected_product)){
 		
-		$stock = get_product_meta($the_selected_product, "stock");
+		$stock = get_product_meta($the_selected_product, "_wpsc_stock");
 		$stock = apply_filters('wpsc_product_variation_stock', $stock[0], $id);
 		if(0 < $stock) return $stock;
 	
 	}
-	return 0;
+	return '';
 }
 
 /**
