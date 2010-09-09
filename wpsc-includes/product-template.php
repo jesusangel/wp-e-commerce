@@ -1193,7 +1193,7 @@ function wpsc_product_count() {
 * wpsc the variation price function
 * @return string - the variation price
 */
-function wpsc_the_variation_price() {
+function wpsc_the_variation_price($return_as_numeric = FALSE) {
 	global $wpdb, $wpsc_variations;
 
     if($wpsc_variations->variation_count > 0) {
@@ -1216,10 +1216,18 @@ function wpsc_the_variation_price() {
 		$price = get_product_meta($variation_product_id, "price");
 		$price = $price[0];
 		
-		$output = nzshpcrt_currency_display($price, '', true);    		
+		if (!$return_as_numeric) {
+			$output = nzshpcrt_currency_display($price, '', true);    		
+		} else {
+			$output = $price;
+		}
+
     } else {
+
     	$output = false;
+
     }
+
 	return $output;
 }
 
