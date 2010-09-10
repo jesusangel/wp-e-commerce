@@ -55,7 +55,7 @@ function wpsc_register_post_types() {
 		'labels' => $labels ,
 		'rewrite' => array(
 			'slug' => '/tagged',
-			'with_front' => false) 
+			'with_front' => true) 
 	));
 	
 	// Product categories, is heirarchical and can use permalinks
@@ -66,18 +66,19 @@ function wpsc_register_post_types() {
 			'with_front' => false
 		)
 	));
-$labels = array(
-    'name' => _x( 'Variations', 'taxonomy general name' ),
-    'singular_name' => _x( 'Variation', 'taxonomy singular name' ),
-    'search_items' =>  __( 'Search Variations' ),
-    'all_items' => __( 'All Variations' ),
-    'parent_item' => __( 'Parent Variation' ),
-    'parent_item_colon' => __( 'Parent Variations:' ),
-    'edit_item' => __( 'Edit Variation' ), 
-    'update_item' => __( 'Update Variation' ),
-    'add_new_item' => __( 'Add New Variation' ),
-    'new_item_name' => __( 'New Variation Name' ),
-  ); 	
+	$labels = array(
+	    'name' => _x( 'Variations', 'taxonomy general name' ),
+	    'singular_name' => _x( 'Variation', 'taxonomy singular name' ),
+	    'search_items' =>  __( 'Search Variations' ),
+	    'all_items' => __( 'All Variations' ),
+	    'parent_item' => __( 'Parent Variation' ),
+	    'parent_item_colon' => __( 'Parent Variations:' ),
+	    'edit_item' => __( 'Edit Variation' ), 
+	    'update_item' => __( 'Update Variation' ),
+	    'add_new_item' => __( 'Add New Variation' ),
+	    'new_item_name' => __( 'New Variation Name' ),
+	);
+	 	
 	// Product Variations, is internally heirarchical, externally, two separate types of items, one containing the other
 	register_taxonomy('wpsc-variation', 'wpsc-product', array(
 		'hierarchical' => true,

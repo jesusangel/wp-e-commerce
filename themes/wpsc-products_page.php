@@ -1,6 +1,5 @@
 <?php
 global $wpsc_query, $wpdb, $wp_query;	
-
 /*
  * Most functions called in this page can be found in the wpsc_query.php file
  */
@@ -109,7 +108,7 @@ global $wpsc_query, $wpdb, $wp_query;
 						
 						
 						<?php							
-							do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product);
+							do_action('wpsc_product_before_description', wpsc_the_product_id(), $wp_query->post);
 							do_action('wpsc_product_addons', wpsc_the_product_id());
 						?>
 						

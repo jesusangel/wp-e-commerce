@@ -3,7 +3,8 @@
 /**
 	 * WP eCommerce theme porting class
 	 *
-	 * This class is responsible for moving all of the /theme folder from the plugin folder to the wp-themes folder on new installs
+	 * This class is responsible for moving all of the /theme folder from the plugin folder to the wp-themes 
+	 * folder on new installs
 	 * On upgrades, responsible for checking appropriate folders for themes, converting and porting to wp/themes folder
 	 *
 	 * @package wp-e-commerce
@@ -59,7 +60,6 @@
 	function theme_exists() {
 		global $wpsc_themes_dir;
 		$active_wpsc_theme = $wpsc_themes_dir;
-		
 		if(file_exists($active_wp_theme.'/wpsc/'.$theme_file_prefix.'functions.php') && !is_dir($active_wpsc_theme)) {
 		
 			//if theme already exists, we're set, do nothing - this should also indicate a new install
@@ -71,13 +71,14 @@
 	}
 	
 	
- /* Determines the current theme location
-	 * @access public 
-	 *
-	 * @since 3.8
-	 * @param None
-	 * @return None
-*/
+	 /* 
+	  * Determines the current theme location
+	  * @access public 
+	  *
+	  * @since 3.8
+	  * @param None
+	  * @return None
+	  */
 	function theme_location() {
 		global $old_wpsc_themes_dir;
 			$wpsc_theme_folder = get_option('wpsc_selected_theme');
