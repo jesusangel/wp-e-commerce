@@ -348,8 +348,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 	$category_id = '';	
 	if (isset($_GET["category_id"])) $category_id = $_GET["category_id"];		
 	$countrylist = $wpdb->get_results("SELECT id,country,visible FROM `".WPSC_TABLE_CURRENCY_LIST."` ORDER BY country ASC ",ARRAY_A);
-	$selectedCountries = $wpdb->get_col("SELECT countryid FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE categoryid=".$category_id." AND visible= 1");
-//	exit('<pre>'.print_r($countrylist,true).'</pre><br /><pre>'.print_r($selectedCountries,true).'</pre>');
+	$selectedCountries = wpsc_get_meta($category_id,'target_market','wpsc_category');
 	$output = '';
 	$output .= " <tr>\n\r";
 	$output .= " 	<td>\n\r";
@@ -365,8 +364,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 		$output .= "<span>Select: <a href='' class='wpsc_select_all'>All</a>&nbsp; <a href='' class='wpsc_select_none'>None</a></span><br />";
 		$output .= " 	<div id='resizeable' class='ui-widget-content multiple-select'>\n\r";
 		foreach($countrylist as $country){
-			if(in_array($country['id'], $selectedCountries))
-			/* if($country['visible'] == 1) */{
+			if(in_array($country['id'], (array)$selectedCountries)){
 			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  checked='".$country['visible']."' />".$country['country']."<br />\n\r";
 			}else{
 			$output .= " <input type='checkbox' name='countrylist2[]' value='".$country['id']."'  />".$country['country']."<br />\n\r";

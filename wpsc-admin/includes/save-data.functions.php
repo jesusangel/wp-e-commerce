@@ -136,9 +136,6 @@ function wpsc_save_category_set() {
 	
 	if(($_POST['submit_action'] == "add") || ($_POST['submit_action'] == "edit")) {
 		check_admin_referer('edit-category', 'wpsc-edit-category');
-		
-		//exit("<pre>".print_r($_POST,true)."</pre>"); 
-		  
 		/* Image Processing Code*/
 		if(($_FILES['image'] != null) && preg_match("/\.(gif|jp(e)*g|png){1}$/i",$_FILES['image']['name'])) {
 			if(function_exists("getimagesize")) {
@@ -216,47 +213,24 @@ function wpsc_save_category_set() {
 					$uses_additional_forms = false;
 				}
 			}
-				   
-    if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
-    	$AllSelected = false;
-    	
-			$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
-    	
-    	if(in_array('all',$_POST['countrylist2'])) {
-    		foreach($countryList as $country){
-					$wpdb->query("INSERT INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$country}', '{$category_id}' )");
-					//echo "REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$country}', '{$category_id}' )<br />";
-    		}
-				$AllSelected = true;
-    	}
-    	
-    	
-    	if(in_array('none', $_POST['countrylist2'])){
-    		foreach($countryList as $country){
-					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('0','{$country}', '{$category_id}' )");
-    		}
-				$AllSelected = true;
-    	}
-    			
-    			
-			if($AllSelected != true){
-				$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
-				foreach($unselectedCountries as $unselected){
-					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('0','{$unselected}', '{$category_id}' )");
-					//echo "REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('0','{$unselected}', '{$category_id}' )<br />";
-				} 
-		
-				//find the countries that are selected
-				$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
-				foreach($selectedCountries as $selected){
-					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$selected}', '{$category_id}' )");
-					//echo "REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$unselected}', '{$category_id}' )<br />";
+
+			if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
+		    	$AllSelected = false;
+				$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
+		    			
+				if($AllSelected != true){
+					$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
+					//find the countries that are selected
+					$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
+					 wpsc_update_meta( $category_id,   'target_market',$selectedCountries, 'wpsc_category'); 
 				}
+			}elseif(!isset($_POST['countrylist2'])){
+				wpsc_update_meta( $category_id,   'target_market','', 'wpsc_category'); 
+	  			$AllSelected = true;
+			
 			}
-		}
 		
 	}
-		
 		
 	    
 		/* edit category code */
@@ -317,32 +291,21 @@ function wpsc_save_category_set() {
 				$uses_additional_forms = false;
 			}	
 			
-			    if($_POST['countrylist2'] != null){
-			$countryList = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_CURRENCY_LIST."`");
-    	$AllSelected = false;
-    	if(in_array('all',$_POST['countrylist2'])){
-    		foreach($countryList as $country){
-					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$country}', '{$category_id}' )");
-    		}
-				$AllSelected = true;
-    	}
-    	if(in_array('none', $_POST['countrylist2'])){
-				$wpdb->query("UPDATE `".WPSC_TABLE_CATEGORY_TM."` SET `visible` = '0' WHERE `categoryid`='{$category_id}'");
-			$AllSelected = true;
-    	}
-			if($AllSelected != true){
-				$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
-				foreach($unselectedCountries as $unselected){
-    				$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."` (`visible`, `countryid`, `categoryid`) VALUES (0,'{$unselected}', '{$category_id}' )");
-				} 
-		
-				//find the countries that are selected
-				$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
-				foreach($selectedCountries as $selected){
-					$wpdb->query("REPLACE INTO `".WPSC_TABLE_CATEGORY_TM."`(`visible`, `countryid`, `categoryid`) VALUES ('1','{$selected}', '{$category_id}' )");
+		  	if(($_POST['countrylist2'] != null ) && ($category_id > 0)){
+		    	$AllSelected = false;
+				$countryList = $wpdb->get_col("SELECT `id` FROM  `".WPSC_TABLE_CURRENCY_LIST."`");
+		    			
+				if($AllSelected != true){
+					$unselectedCountries = array_diff($countryList, $_POST['countrylist2']);
+					//find the countries that are selected
+					$selectedCountries = array_intersect($countryList, $_POST['countrylist2']);
+					 wpsc_update_meta( $category_id,   'target_market',$selectedCountries, 'wpsc_category'); 
 				}
+			}elseif(!isset($_POST['countrylist2'])){
+				wpsc_update_meta( $category_id,   'target_market','', 'wpsc_category'); 
+	  			$AllSelected = true;
+			
 			}
-		}
 	}
 }
 	

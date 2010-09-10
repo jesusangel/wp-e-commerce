@@ -68,7 +68,6 @@ define('WPSC_TABLE_PRODUCT_LIST', "{$wp_table_prefix}wpsc_product_list");
 define('WPSC_TABLE_PRODUCT_ORDER', "{$wp_table_prefix}wpsc_product_order");
 define('WPSC_TABLE_PRODUCT_RATING', "{$wp_table_prefix}wpsc_product_rating");
 define('WPSC_TABLE_PRODUCT_VARIATIONS', "{$wp_table_prefix}wpsc_product_variations");
-//define('WPSC_TABLE_PURCHASE_STATUSES', "{$wp_table_prefix}wpsc_purchase_statuses");
 define('WPSC_TABLE_PRODUCTMETA', "{$wp_table_prefix}wpsc_productmeta");
 define('WPSC_TABLE_VARIATION_ASSOC', "{$wp_table_prefix}wpsc_variation_assoc");
 define('WPSC_TABLE_VARIATION_PROPERTIES', "{$wp_table_prefix}wpsc_variation_properties");
@@ -76,7 +75,6 @@ define('WPSC_TABLE_VARIATION_VALUES', "{$wp_table_prefix}wpsc_variation_values")
 define('WPSC_TABLE_VARIATION_VALUES_ASSOC', "{$wp_table_prefix}wpsc_variation_values_assoc");
 define('WPSC_TABLE_VARIATION_COMBINATIONS', "{$wp_table_prefix}wpsc_variation_combinations");
 define('WPSC_TABLE_REGION_TAX', "{$wp_table_prefix}wpsc_region_tax");
-define('WPSC_TABLE_CATEGORY_TM', "{$wp_table_prefix}wpsc_category_tm");
 define('WP_TERM_RELATIONSHIPS', "{$wp_table_prefix}term_relationships");
 define('WP_POSTS', "{$wp_table_prefix}posts");
 define('WP_POSTMETA', "{$wp_table_prefix}postmeta");

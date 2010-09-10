@@ -1032,13 +1032,6 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 	foreach($attached_files as $key => $attached_file) {
 		$attached_files_by_file[$attached_file->post_title] = $attached_files[$key];
 	}
-
-
-	//echo "<pre>\n";
-	//echo print_r($attached_files,true);
-	//echo wp_insert_post($attachment);
-	//echo "</pre>\n";
-	
 	
 	/* if we are editing, grab the current file and ID hash */ 
 	if(!$selected_files) {

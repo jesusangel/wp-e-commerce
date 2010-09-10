@@ -543,25 +543,18 @@ function wpsc_submit_checkout() {
       $is_valid = false;
    }
 
-
-    //exit('<pre>'.print_r($_POST, true).'</pre>');
-
    $selectedCountry = $wpdb->get_results("SELECT id, country FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE isocode='".$wpdb->escape($_SESSION['wpsc_delivery_country'])."'", ARRAY_A);
-
-// exit('valid >'.$is_valid.'\r\n'.$_SESSION['wpsc_delivery_country']);
-
+   
    foreach($wpsc_cart->cart_items as $cartitem){
-      // exit('<pre>'.print_r($cartitem, true).'</pre>');
-      $categoriesIDs = $wpdb->get_col("SELECT category_id FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` WHERE product_id=".$cartitem->product_id);
-
+   	  
+	  $categoriesIDs = $cartitem->category_id_list;
       foreach((array)$categoriesIDs as $catid){
          if(is_array($catid)){
-            $sql ="SELECT `countryid` FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE `visible`=0 AND `categoryid`=".$catid[0];
+			$countries = wpsc_get_meta( $catid[0], 'target_market', 'wpsc_category'); 
          }else{
-            $sql ="SELECT `countryid` FROM `".WPSC_TABLE_CATEGORY_TM."` WHERE `visible`=0 AND `categoryid`=".$catid;
+   			$countries = wpsc_get_meta( $catid, 'target_market', 'wpsc_category');
          }
-         $countries = $wpdb->get_col($sql);
-         if(in_array($selectedCountry[0]['id'], (array)$countries)){
+         if(!in_array($selectedCountry[0]['id'], (array)$countries)){
             $errormessage =sprintf(__('Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above.', 'wpsc'), $cartitem->product_name, $selectedCountry[0]['country']);
             $_SESSION['categoryAndShippingCountryConflict']= $errormessage;
             $is_valid = false;
@@ -576,10 +569,6 @@ function wpsc_submit_checkout() {
       }
    }
 
- // exit('valid >'.$is_valid);
-      //print('<pre>'.print_r($_SESSION['wpsc_gateway_error_messages'], true).'</pre>');
-      //print('<pre>'.print_r($_SESSION['wpsc_checkout_error_messages'], true).'</pre>');
-      //print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
    if(array_search($submitted_gateway,$selected_gateways) !== false) {
       $_SESSION['wpsc_previous_selected_gateway'] = $submitted_gateway;
    } else {
