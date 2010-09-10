@@ -316,7 +316,7 @@ class usps {
 		return $uspsQuote;
 	}
 	
-	function get_item_shipping() {
+	function get_item_shipping(&$cart_item) {
 	}
 }
 $usps = new usps();

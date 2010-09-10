@@ -735,7 +735,7 @@ class ups {
     }
 
     // Empty Function, this exists just b/c it is prototyped elsewhere
-    function get_item_shipping(){
+    function get_item_shipping(&$cart_item){
     }
 }
 $ups = new ups();
