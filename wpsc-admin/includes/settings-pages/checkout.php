@@ -15,9 +15,12 @@ $form_types = Array("Text" => "text",
 	"Radio Button" => "radio",
 	"Checkbox" => "checkbox"
 );
-
-$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
-
+$unique_names = get_option('wpsc_unique_names');
+if(empty($unique_names)){
+	$unique_names = Array('billingfirstname','billinglastname','billingaddress','billingcity','billingcountry','billingemail','billingphone','billingpostcode','delivertoafriend','shippingfirstname','shippinglastname','shippingaddress','shippingcity','shippingstate','shippingcountry','shippingpostcode');
+	update_option('wpsc_unique_names',$unique_names);
+}
+$unique_names = apply_filters('wpsc_unique_names',$unique_names);
 update_option('wpsc_checkout_form_fields', $form_types);
 if(get_option('wpsc_checkout_form_fields') == ''){
 	update_option('wpsc_checkout_form_fields', $form_types);
