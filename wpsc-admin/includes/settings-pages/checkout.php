@@ -74,102 +74,54 @@ $form_types = get_option('wpsc_checkout_form_fields');
 						<a title='<?php echo __('If yes then you must also turn on the wordpress option "Any one can register"', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
 					</td>
      		</tr>
-     				<tr>
-			<?php
-				$lock_tax = get_option('lock_tax');
-
-				switch($lock_tax) {
-					case 1:
-					$lock_tax1 = "checked ='checked'";
-					break;
-					
-					case 0:
-					$lock_tax2 = "checked ='checked'";
-					break;
-				}
-			?>
-			<td scope="row"><?php echo __('Lock Tax to Billing Country', 'wpsc'); ?>:</td>
-			<td>
-				<input type='radio' value='1' name='wpsc_options[lock_tax]' id='lock_tax1' <?php if (isset($lock_tax1)) echo $lock_tax1; ?> /> 
-				<label for='lock_tax1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[lock_tax]' id='lock_tax2' <?php if (isset($lock_tax2)) echo $lock_tax2; ?> /> 
-				<label for='lock_tax2'><?php echo __('No', 'wpsc');?></label>
-			</td>
+	  
+			<tr>
+						<?php
+					$shippingBilling = get_option('shippingsameasbilling');
+	
+					switch($shippingBilling) {
+						case 1:
+						$shippingBilling1 = "checked ='checked'";
+						break;
+						
+						case 0:
+						$shippingBilling2 = "checked ='checked'";
+						break;
+					}
+				?>
+				<td scope="row"><?php echo __('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
+				<td>
+				<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php if (isset($shippingBilling1)) echo $shippingBilling1; ?> /> 
+				<label for='shippingsameasbilling1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+				<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php if (isset($shippingBilling2)) echo $shippingBilling2; ?> /> 
+				<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
+				</td>
+				
 			</tr>
-		<tr>
-			<!-- Disregard Billing State for Tax Calculations -->
-			<?php
-				$lock_tax_to_shipping = get_option('lock_tax_to_shipping');
-
-				switch($lock_tax_to_shipping) {
-					case 1:
-					$lock_tax_to_shipping1 = "checked ='checked'";
-					break;
-					
-					case 0:
-					$lock_tax_to_shipping2 = "checked ='checked'";
-					break;
-				}
-			?>
-			<td scope="row"><?php echo __(' Disregard Billing State for Tax Calculations', 'wpsc'); ?>:</td>
-			<td>
-				<input type='radio' value='1' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax1' <?php if (isset($lock_tax_to_shipping1)) echo $lock_tax_to_shipping1; ?> /> 
-				<label for='lock_tax_to_shipping1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-				<input type='radio' value='0' name='wpsc_options[lock_tax_to_shipping]' id='lock_tax2' <?php if (isset($lock_tax_to_shipping2)) echo $lock_tax_to_shipping2; ?> /> 
-				<label for='lock_tax_to_shipping2'><?php echo __('No', 'wpsc');?></label>
-			</td>
-
-
-			
-		</tr>
-		<tr>
-					<?php
-				$shippingBilling = get_option('shippingsameasbilling');
-
-				switch($shippingBilling) {
-					case 1:
-					$shippingBilling1 = "checked ='checked'";
-					break;
-					
-					case 0:
-					$shippingBilling2 = "checked ='checked'";
-					break;
-				}
-			?>
-			<td scope="row"><?php echo __('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
-			<td>
-			<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php if (isset($shippingBilling1)) echo $shippingBilling1; ?> /> 
-			<label for='shippingsameasbilling1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-			<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php if (isset($shippingBilling2)) echo $shippingBilling2; ?> /> 
-			<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
-			</td>
-			
-		</tr>
-		<tr>
-<td><?php echo __('Force users to use SSL', 'wpsc'); ?>:</td>
-<td>
-	<?php
-		$wpsc_force_ssl = get_option('wpsc_force_ssl');
-		$wpsc_force_ssl1 = "";
-		$wpsc_force_ssl2 = "";
-		switch($wpsc_force_ssl) {
-			case 0:
-			$wpsc_force_ssl2 = "checked ='checked'";
-			break;
-
-			case 1:
-			$wpsc_force_ssl1 = "checked ='checked'";
-			break;
-		}
-	        ?>
-		<input type='radio' value='1' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl1' <?php echo $wpsc_force_ssl1; ?> /> 					<label for='wpsc_force_ssl1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-		<input type='radio' value='0' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl2' <?php echo $wpsc_force_ssl2; ?> /> 					<label for='wpsc_force_ssl2'><?php echo __('No', 'wpsc');?></label>
-	</td>
-	<td>
-		<a title='<?php echo __('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
-	</td>
-	</tr>
-
+			<tr>
+				<td><?php echo __('Force users to use SSL', 'wpsc'); ?>:</td>
+				<td>
+				<?php
+					$wpsc_force_ssl = get_option('wpsc_force_ssl');
+					$wpsc_force_ssl1 = "";
+					$wpsc_force_ssl2 = "";
+					switch($wpsc_force_ssl) {
+						case 0:
+						$wpsc_force_ssl2 = "checked ='checked'";
+						break;
+				
+						case 1:
+						$wpsc_force_ssl1 = "checked ='checked'";
+						break;
+					}
+				        ?>
+					<input type='radio' value='1' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl1' <?php echo $wpsc_force_ssl1; ?> /> 					<label for='wpsc_force_ssl1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl2' <?php echo $wpsc_force_ssl2; ?> /> 					<label for='wpsc_force_ssl2'><?php echo __('No', 'wpsc');?></label>
+				</td>
+				<td>
+					<a title='<?php echo __('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+				</td>
+			</tr>
 			</table>
 		</div>
 		</div>
