@@ -93,10 +93,10 @@ function wpsc_admin_pages(){
 			$page_hooks[] = $purchase_log_page;
 			
 			global $show_update_page; //this global is set in /wpsc-admin/display-update.page.php
-			if(!isset($show_update_page))
-				$show_update_page = true;
-				
-			if((bool)$show_update_page !== FALSE) :
+			if(!isset($show_update_page)){
+				$show_update_page = 1;
+			}	
+			if((int)$show_update_page !== 1) :
 				$page_hooks[] =  add_submenu_page($base_page, __('Update', 'wpsc'), __('Update', 'wpsc'), 'administrator', 'wpsc-update', 'wpsc_display_update_page');
 			endif;
 			//echo add_submenu_page($base_page,__("Products"), __("Products"), 'editor', 'wpsc-edit-products', 'wpsc_display_products_page');

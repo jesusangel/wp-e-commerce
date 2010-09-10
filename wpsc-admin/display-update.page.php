@@ -10,7 +10,7 @@
 
 global $show_update_page;
 global $wpdb;
-$show_update_page = FALSE;
+$show_update_page = 1;
 if (count(get_option("wpsc-variation_children")) == 0) : //if there's nothing in the children variation cache, refresh it, just to make sure.
 	delete_option("wpsc-variation_children");
 	_get_term_hierarchy('wpsc-variation');
@@ -22,7 +22,7 @@ if(get_option('wpsc_version') < 3.8 || !get_option('wpsc_version')) :
 
 	$product_count = $wpdb->get_var("SELECT COUNT(*) FROM " . WPSC_TABLE_PRODUCT_LIST);
 	if($product_count > 0) :
-		$show_update_page = TRUE;
+		$show_update_page = 0;
 		function wpsc_display_update_notice() {
 			echo "<div id='wpsc-warning' class='error fade'><p><strong>".__('WP e-Commerce is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">update your database</a> to import all of your products.'), "admin.php?page=wpsc-update")."</p></div>";
 		}
