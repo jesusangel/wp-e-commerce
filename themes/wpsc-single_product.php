@@ -31,7 +31,7 @@ $image_height = get_option('single_view_image_height');
 		
 		
 					<div class="producttext">
-						<h2 class="prodtitles"><span><?php echo wpsc_the_product_title(); ?></span><?php echo wpsc_edit_the_product_link(); ?></h2>
+						
 							<?php				
 								do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product);
 							?>
