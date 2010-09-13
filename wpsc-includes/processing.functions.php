@@ -8,52 +8,45 @@
  * @param mixed $args
  * @return void
  */
-function wpsc_currency_display($price_in, $args) {
+function wpsc_currency_display( $price_in, $args ) {
 	global $wpdb, $wpsc_currency_data;
 
-	$query = shortcode_atts(array(
-		'display_currency_symbol' => true,
-		'display_decimal_point' => true,
-		'display_currency_code' => true,
-		'display_as_html' => true
-	), $args);
-
-	
-	$currency_sign_location = get_option('currency_sign_location');
-	$currency_type = get_option('currency_type');
-
-	if(count($wpsc_currency_data) < 3) {
-		$wpsc_currency_data = $wpdb->get_row("
-		SELECT `symbol`, `symbol_html`, `code`
-		FROM `".WPSC_TABLE_CURRENCY_LIST."` 
-		WHERE `id`='".$currency_type."' 
-		LIMIT 1",
-		 ARRAY_A) ;
-	}
-	
-	
-	$price_out = null;
-	// default is 2
-	$decimals = 2;
-	
-	
-	
-	if($query['display_decimal_point'] == false) {
-		$decimals = 0;
-	}
-	
-	$price_out =  number_format($price_in, $decimals, '.', ',');
-	
-	
+	// Default variables
+	$price_out     = null;
 	$currency_sign = '';
 	$currency_code = '';
-	if($query['display_currency_code'] == true) {
-		$currency_code = $wpsc_currency_data['code'];
-	}
+	$decimals = 2; // default is 2
 
-	if($query['display_currency_symbol'] == true) {
-		if($wpsc_currency_data['symbol'] != '') {
-			if($query['display_as_html'] == false) {
+	$query = shortcode_atts( array(
+		'display_currency_symbol' => true,
+		'display_decimal_point'   => true,
+		'display_currency_code'   => true,
+		'display_as_html'         => true
+	), $args );
+
+	// Get currency settings
+	$currency_sign_location = get_option('currency_sign_location');
+	$currency_type          = get_option('currency_type');
+
+	// Load data if it is not set
+	if ( count( $wpsc_currency_data ) < 3 )
+		$wpsc_currency_data = $wpdb->get_row( "SELECT `symbol`, `symbol_html`, `code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . $currency_type . "' LIMIT 1", ARRAY_A );
+
+	// No decimal point, no decimals
+	if ( false == $query['display_decimal_point'] )
+		$decimals = 0;
+
+	// Format the price for output
+	$price_out = number_format( (double)$price_in, $decimals, '.', ',' );
+
+	// Figure out the currency code
+	if ( true == $query['display_currency_code'] )
+		$currency_code = $wpsc_currency_data['code'];
+
+	// Figure out the currency sign
+	if ( true == $query['display_currency_symbol'] ) {
+		if ( !empty( $wpsc_currency_data['symbol'] ) ) {
+			if ( false == $query['display_as_html'] ) {
 				$currency_sign = $wpsc_currency_data['symbol_html'];
 			} else {
 				$currency_sign = $wpsc_currency_data['symbol'];
@@ -64,28 +57,28 @@ function wpsc_currency_display($price_in, $args) {
 		}
 	}
 
-		
-	switch($currency_sign_location) {
+	// Rejig the currency sign location
+	switch ( $currency_sign_location ) {
 		case 1:
 			$format_string = '%3$s%1$s%2$s';
-		break;
+			break;
 		
 		case 2:
 			$format_string = '%3$s %1$s%2$s';
-		break;
+			break;
 		
 		case 4:
 			$format_string = '%1$s%2$s  %3$s';
-		break;
+			break;
 		
 		case 3:
 		default:
 			$format_string = '%1$s %2$s%3$s';
-		break;
+			break;
 	}
 
-	$output = sprintf($format_string, $currency_code, $currency_sign, $price_out);
-	return $output;
+	// Return results
+	return apply_filters( 'wpsc_currency_display', sprintf( $format_string, $currency_code, $currency_sign, $price_out ) );
 }
 
 
