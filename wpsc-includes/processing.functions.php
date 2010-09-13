@@ -11,6 +11,10 @@
 function wpsc_currency_display( $price_in, $args ) {
 	global $wpdb, $wpsc_currency_data;
 
+	// If price_in isn't
+	if ( empty( $price ) || !is_numeric( $price_in ) )
+		return __( 'N/A', 'wpsc' );
+
 	// Default variables
 	$price_out     = null;
 	$currency_sign = '';
