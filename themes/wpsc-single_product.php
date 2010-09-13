@@ -1,11 +1,9 @@
 <?php
-global $wpsc_query, $wpdb, $wpsc_custom_meta;
+global $wpsc_query, $wpdb, $wpsc_custom_meta, $wp_query;
 $image_width = get_option('single_view_image_width');
 $image_height = get_option('single_view_image_height');
 ?>
 
-<div id='container'>
-<div id='content'>
 <div id='products_page_container' class="wrap wpsc_container">
 	
 	<?php wpsc_output_breadcrumbs(); ?>
@@ -14,7 +12,7 @@ $image_height = get_option('single_view_image_height');
 	
 	<div class="productdisplay">
 	<?php /** start the product loop here, this is single products view, so there should be only one */?>
-		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
+		<?php while (wpsc_have_products()) : wpsc_the_product(); ?>
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
 					<div class="imagecol">
@@ -215,8 +213,3 @@ $image_height = get_option('single_view_image_height');
 	
 
 </div>
-</div>
-</div>
-<?php 
-get_sidebar();
-get_footer(); ?>

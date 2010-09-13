@@ -393,24 +393,30 @@ function wpsc_display_products_page($query) {
 
 //Better way (in my opinion) to handle single product templating, outside of the child theme system
 
-	function wpsc_theme_upgrade_notice() {
+function wpsc_theme_upgrade_notice() {
 			echo "<div id='wpsc-warning' class='error fade'><p><strong>".__('WP e-Commerce is almost ready.')."</strong> ".sprintf(__('You must <a href="%1$s">update your themes</a> to WPEC\'s new theme system.  It\'s really easy!'), "admin.php?page=wpsc-settings&tab=presentation")."</p></div>";
-		}
+}
 		
-function wpsc_single_template($template) {
-     global $post, $wpsc_theme_path;
-
-     if ($post->post_type == 'wpsc-product') {
-          return $wpsc_theme_path.'wpsc-single_product.php';
-     } else {
-		return $template;
-	}
+function wpsc_single_template($content) {
+    global $post, $wpsc_theme_path,$wp_query,$wpsc_query;
+    remove_filter( "the_content", "wpsc_single_template");
+    if ($post->post_type == 'wpsc-product') {
+    	$wpsc_temp_query = new WP_Query(array('post__in' => array($post->ID), 'post_type'=>'wpsc-product'));
+		list($wp_query, $wpsc_temp_query) = array($wpsc_temp_query, $wp_query); // swap the wpsc_query object		
+//		exit('Is this for real?<pre>'.print_r($wp_query,true).'</pre>');
+        ob_start();
+        include($wpsc_theme_path.'wpsc-single_product.php') ;
+        $content = ob_get_contents();
+		ob_end_clean();
+		list($wp_query, $wpsc_temp_query) = array($wpsc_temp_query, $wp_query); // swap the wpsc_query objects back
+    } 
+    return $content;
 }
 
 $theme_moved = get_option("wpsc_theme_moved");
 
 if($theme_moved == "1") {
-	add_filter( "single_template", "wpsc_single_template" ) ;
+	add_filter( "the_content", "wpsc_single_template") ;
 } else {
 	add_action('admin_notices', 'wpsc_theme_upgrade_notice');
 }
@@ -418,7 +424,7 @@ if($theme_moved == "1") {
   
 function wpsc_products_page($content = '') {
 	global $wpdb, $wp_query, $wpsc_query, $old_wpsc_themes_dir, $wpsc_theme_path, $wpsc_query_vars;
-
+	
 	$old_cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path);
 	remove_filter('the_content', 'wpsc_products_page');
@@ -672,6 +678,7 @@ function wpsc_enable_page_filters($excerpt = ''){
 function wpsc_disable_page_filters($excerpt = '') {
 	remove_filter('the_content', 'add_to_cart_shortcode');//Used for add_to_cart_button shortcode
 	remove_filter('the_content', 'wpsc_products_page');
+	remove_filter( "the_content", "wpsc_single_template") ;
 	remove_filter('the_content', 'wpsc_place_shopping_cart');
 	remove_filter('the_content', 'wpsc_transaction_results');
 	remove_filter('the_content', 'nszhpcrt_homepage_products');

@@ -1,28 +1,18 @@
 <?php
-global $wpsc_query, $wpdb, $wpsc_custom_meta;
+global $wpsc_query, $wpdb, $wpsc_custom_meta, $wp_query;
 $image_width = get_option('single_view_image_width');
 $image_height = get_option('single_view_image_height');
 ?>
+
 <div id='products_page_container' class="wrap wpsc_container">
 	
-	<?php if(wpsc_has_breadcrumbs()) :?>
-		<div class='breadcrumb'>
-			<a href='<?php echo get_option('product_list_url'); ?>'><?php echo get_option('blogname'); ?></a> &raquo;
-			<?php while (wpsc_have_breadcrumbs()) : wpsc_the_breadcrumb(); ?>
-				<?php if(wpsc_breadcrumb_url()) :?> 	   
-					<a href='<?php echo wpsc_breadcrumb_url(); ?>'><?php echo wpsc_breadcrumb_name(); ?></a> &raquo;
-				<?php else: ?> 
-					<?php echo wpsc_breadcrumb_name(); ?>
-				<?php endif; ?> 
-			<?php endwhile; ?>
-		</div>
-	<?php endif; ?>
+	<?php wpsc_output_breadcrumbs(); ?>
 	
 	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	
 	<div class="productdisplay">
 	<?php /** start the product loop here, this is single products view, so there should be only one */?>
-		<?php while (wpsc_have_products()) :  wpsc_the_product(); ?>
+		<?php while (wpsc_have_products()) : wpsc_the_product(); ?>
 			<div class="single_product_display product_view_<?php echo wpsc_the_product_id(); ?>">
 				<div class="textcol">
 					<div class="imagecol">
