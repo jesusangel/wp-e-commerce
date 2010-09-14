@@ -11,12 +11,6 @@
 function wpsc_currency_display( $price_in, $args ) {
 	global $wpdb, $wpsc_currency_data;
 
-	// Default variables
-	$price_out     = null;
-	$currency_sign = '';
-	$currency_code = '';
-	$decimals = 2; // default is 2
-
 	$query = shortcode_atts( array(
 		'display_currency_symbol' => true,
 		'display_decimal_point'   => true,
@@ -24,20 +18,21 @@ function wpsc_currency_display( $price_in, $args ) {
 		'display_as_html'         => true
 	), $args );
 
-	// Get currency settings
-	$currency_sign_location = get_option('currency_sign_location');
-	$currency_type          = get_option('currency_type');
-
-	// Load data if it is not set
-	if ( count( $wpsc_currency_data ) < 3 )
-		$wpsc_currency_data = $wpdb->get_row( "SELECT `symbol`, `symbol_html`, `code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . $currency_type . "' LIMIT 1", ARRAY_A );
-
 	// No decimal point, no decimals
 	if ( false == $query['display_decimal_point'] )
 		$decimals = 0;
+	else
+		$decimals = 2; // default is 2
 
 	// Format the price for output
 	$price_out = number_format( (double)$price_in, $decimals, '.', ',' );
+
+	// Get currency settings	
+	$currency_type = get_option( 'currency_type' );
+
+	// Load data if it is not set
+	if ( count( $wpsc_currency_data ) < 3 )
+		$wpsc_currency_data = $wpdb->get_row( "SELECT `symbol`, `symbol_html`, `code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id` = '" . $currency_type . "' LIMIT 1", ARRAY_A );
 
 	// Figure out the currency code
 	if ( true == $query['display_currency_code'] )
@@ -56,6 +51,8 @@ function wpsc_currency_display( $price_in, $args ) {
 			$currency_code = '';
 		}
 	}
+
+	$currency_sign_location = get_option( 'currency_sign_location' );
 
 	// Rejig the currency sign location
 	switch ( $currency_sign_location ) {
@@ -77,8 +74,11 @@ function wpsc_currency_display( $price_in, $args ) {
 			break;
 	}
 
+	// Compile the output
+	$output = sprintf( $format_string, $currency_code, $currency_sign, $price_out );
+
 	// Return results
-	return apply_filters( 'wpsc_currency_display', sprintf( $format_string, $currency_code, $currency_sign, $price_out ) );
+	return apply_filters( 'wpsc_currency_display', $output );
 }
 
 
