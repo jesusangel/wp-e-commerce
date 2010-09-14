@@ -884,107 +884,129 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 <?php //return $output;
 }
 
-function wpsc_product_variation_forms( $product_data='' ) {
+function wpsc_product_variation_forms( $product_data = '' ) {
 	global $closed_postboxes, $variations_processor, $wp_query;
 
 //	exit('<pre>'.print_r($product_data,true).'</pre>');
 	$siteurl = get_option( 'siteurl' );
-	$output = '';
+	$output  = '';
 
-	if ( $product_data == 'empty' )
+	// Hide if there is no product data
+	if ( 'empty' == $product_data )
 		$display = "style='display:none;'";
 
+	// Get variation data from WP Terms
 	$product_term_data = wp_get_object_terms( $product_data['id'], 'wpsc-variation' );
 
-	$product_terms = array();
-
-	foreach ( $product_term_data as $product_term )
+	foreach ( (array)$product_term_data as $product_term )
 		$product_terms[] = $product_term->term_id;
-?>
 
-	<div id='wpsc_product_variation_forms' class='postbox <?php echo ((array_search( 'wpsc_product_variation_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search( 'wpsc_product_variation_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : ''); ?>><div class="handlediv" title="Click to toggle"><br></div>
-		<h3 class='hndle'><?php echo __( 'Variation Control', 'wpsc' ); ?></h3>
+	$form_classes = array_search( 'wpsc_product_variation_forms', $product_data['closed_postboxes'] ) !== false ? 'closed' : '';
+	$form_style   = array_search( 'wpsc_product_variation_forms', $product_data['hidden_postboxes'] ) !== false ? 'style="display: none;"' : ''
 
-		<div class='inside'>
-<?php	if(empty($product_data['name'])) { ?>
-			<p><?php _e('You must first save this Product as a Draft before adding variations','wpsc'); ?></p>
-			</div>
-		</div>
-<?php	
-		return false;
-} 
-?>
-			<div id="product_variations">
-				<div class="variation_checkboxes">
-<?php
-	$variation_sets = get_terms( 'wpsc-variation', array (
-		'hide_empty' => 0,
-		'parent'     => 0
-	) );
+	?>
 
-	foreach ( (array)$variation_sets as $variation_set ) {
-		$set_checked_state = '';
+		<div id="wpsc_product_variation_forms" class="postbox <?php echo $form_classes; ?>" <?php echo $form_style; ?>>
+			<div class="handlediv" title="Click to toggle"><br></div>
 
-		if ( in_array( $variation_set->term_id, $product_terms ) )
-			$set_checked_state = "checked='checked'";
+			<h3 class="hndle"><?php _e( 'Variation Control', 'wpsc' ); ?></h3>
 
-		//$product_terms
-?>
-					<div class="variation_set">
-						<label class='set_label'>
-							<input type="checkbox" <?php echo $set_checked_state; ?> name="variations[<?php echo $variation_set->term_id; ?>]" value="1">
-<?php echo $variation_set->name; ?>
-						</label>
-<?php
-		$variations = get_terms( 'wpsc-variation', array (
-					'hide_empty' => 0,
-					'parent'     => $variation_set->term_id
-		) );
+			<div class="inside">
 
-		foreach ( (array)$variations as $variation ) {
-			$checked_state = '';
-			if ( in_array( $variation->term_id, $product_terms ) ) {
-				$checked_state = "checked='checked'";
-			}
-?>
-						<div class="variation">
-							<label>
-								<input type="checkbox" <?php echo $checked_state; ?> name="edit_var_val[<?php echo $variation_set->term_id; ?>][<?php echo $variation->term_id; ?>]" value="1">
-<?php echo $variation->name; ?>
-							</label>
-						</div>
-<?php	} ?>
+				<?php if( empty( $product_data['name'] ) ) : ?>
+
+					<p><?php _e( 'You must first save this Product as a Draft before adding variations', 'wpsc' ); ?></p>
+
+				<?php else : ?>
+
+					<div id="product_variations">
+						<div class="variation_checkboxes">
+
+							<?php
+
+							// Get the terms from variations
+							$variation_sets = get_terms( 'wpsc-variation', array (
+								'hide_empty' => 0,
+								'parent'     => 0
+							) );
+
+							// Loop through each variation set
+							foreach ( (array)$variation_sets as $variation_set ) :
+								$set_checked_state = '';
+
+								// If this product includes this variation, check it
+								if ( in_array( $variation_set->term_id, $product_terms ) )
+									$set_checked_state = "checked='checked'";
+
+							// Loop through the variations
+							?>
+
+								<div class="variation_set">
+
+									<label class='set_label'>
+										<input type="checkbox" <?php echo $set_checked_state; ?> name="variations[<?php echo $variation_set->term_id; ?>]" value="1">
+										<?php echo $variation_set->name; ?>
+									</label>
+
+										<?php
+
+										$variations = get_terms( 'wpsc-variation', array (
+											'hide_empty' => 0,
+											'parent'     => $variation_set->term_id
+										) );
+
+										foreach ( (array)$variations as $variation ) :
+											$checked_state = '';
+
+											if ( in_array( $variation->term_id, $product_terms ) )
+												$checked_state = "checked='checked'";
+
+										?>
+
+										<div class="variation">
+											<label>
+												<input type="checkbox" <?php echo $checked_state; ?> name="edit_var_val[<?php echo $variation_set->term_id; ?>][<?php echo $variation->term_id; ?>]" value="1">
+												<?php echo $variation->name; ?>
+											</label>
+										</div>
+
+										<?php endforeach; ?>
+
+								</div>
+
+							<?php endforeach; ?>
 
 					</div>
-<?php }	?>
+					<!-- <a href='<?php echo add_query_arg( array( 'page' => 'wpsc-edit-products', 'parent_product' => $product_data['id'] ), "admin.php" ); ?>'><?php _e( 'Edit Variations Products', 'wpsc' ); ?></a> -->
+					<a class="preview button update_variations_action" href='#'><?php _e( 'Update Variations &rarr;', 'wpsc' ); ?></a>
+
 				</div>
-			</div>
-<?php
-	$parent_product = $product_data['id'];
+	<?php
+		$parent_product = $product_data['id'];
 
-	$query = array(
-		'post_type' => 'wpsc-product',
-		'orderby' => 'menu_order post_title',
-		'post_parent' => $parent_product,
-		'post_status' => 'all',
-		'order' => "ASC"
-	);
-	$args = array(
-		'post_type' => 'attachment',
-		'numberposts' => 1,
-		'post_status' => null,
-		'post_parent' => $parent_product,
-		'orderby' => 'menu_order',
-		'order' => 'ASC'
-	);
+		$query = array(
+			'post_type'   => 'wpsc-product',
+			'orderby'     => 'menu_order post_title',
+			'post_parent' => $parent_product,
+			'post_status' => 'all',
+			'order'       => "ASC"
+		);
 
-	$image_data = (array)get_posts( $args );
-	$parent_product_data['image'] = array_shift( $image_data );
+		$args = array(
+			'post_type'   => 'attachment',
+			'numberposts' => 1,
+			'post_status' => null,
+			'post_parent' => $parent_product,
+			'orderby'     => 'menu_order',
+			'order'       => 'ASC'
+		);
 
-	add_filter( 'posts_request', 'wpsc_edit_variations_request_sql' );
-?>
-			<!--  <a href='<?php echo add_query_arg( array( 'page' => 'wpsc-edit-products', 'parent_product' => $product_data['id'] ), "admin.php" ); ?>'><?php _e( 'Edit Variations Products', 'wpsc' ); ?></a> -->
-			<a class="preview button update_variations_action" href='#'><?php _e( 'Update Variations &rarr;', 'wpsc' ); ?></a><br style="clear:both" />
+		$image_data                   = (array)get_posts( $args );
+		$parent_product_data['image'] = array_shift( $image_data );
+
+		add_filter( 'posts_request', 'wpsc_edit_variations_request_sql' );
+	?>
+
 			<p><?php _e( 'Check or uncheck variation boxes and then click Update Variations to add or remove variations.' ) ?></p>
 			<table class="widefat page" id='wpsc_product_list' cellspacing="0">
 				<thead>
@@ -1000,26 +1022,31 @@ function wpsc_product_variation_forms( $product_data='' ) {
 				</tfoot>
 
 				<tbody>
-<?php
-	$wp_query = new WP_Query( $query );
+	<?php
+		$wp_query = new WP_Query( $query );
 
-	if ( !isset( $parent_product_data ) )
-		$parent_product_data = null;
+		if ( !isset( $parent_product_data ) )
+			$parent_product_data = null;
 
-	wpsc_admin_product_listing( $parent_product_data );
-	//echo "<pre>".print_r($wp_query, true)."</pre>";
-	if ( count( $wp_query->posts ) < 1 ) {
-?>
+		wpsc_admin_product_listing( $parent_product_data );
+		//echo "<pre>".print_r($wp_query, true)."</pre>";
+		if ( count( $wp_query->posts ) < 1 ) :
+	?>
 					<tr>
-						<td colspan='5'>
-<?php _e( "You have no products added." ); ?>
+						<td colspan="8">
+							<?php _e( 'You have no products added.', 'wpsc' ); ?>
 						</td>
 					</tr>
-<?php } ?>
+
+	<?php endif; ?>
 				</tbody>
+
 			</table>
+
+	<?php endif; ?>
+
+			</div>
 		</div>
-	</div>
 
 <?php
 }
