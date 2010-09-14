@@ -399,11 +399,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				<td  <?php echo $attributes ?>>
 					<?php echo nzshpcrt_currency_display($price, 1); ?>
 					<div class='sales-price-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
-						<input type='text'  class='the-sale-price' name='sale_product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format($price,2,'.',''); ?>' />
+						<input type='text'  class='the-sale-price' name='sale_product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format( (double)$price, 2, '.', ''); ?>' />
 						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
 						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][nonce]' value='<?php echo wp_create_nonce('sale-edit-product_price-'.$product->ID); ?>' />
-
-
 					</div>
 				</td>
 			<?php
