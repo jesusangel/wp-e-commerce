@@ -421,7 +421,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 ?>
 			   $('#poststuff .postbox h3, .postbox div.handlediv').click( function() {
 				   $(this).parent().toggleClass('closed');
-				   wpsc_save_postboxes_state('store_page_wpsc-edit-products', '#poststuff');
+				   wpsc_save_postboxes_state('toplevel_page_wpsc-edit-products', '#poststuff');
 			   });
 
 <?php
