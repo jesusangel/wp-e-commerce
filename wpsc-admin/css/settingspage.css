@@ -39,9 +39,11 @@ tr.checkout-placeholder {
 	border-collapse:collapse;
 }
 
+/* Removed to prevent overlapping the Contextual Help tab
 #wpsc_options {
 	position: relative;
 }
+*/
 
 #wpsc_options a.about_this_page {
 	position: absolute;
