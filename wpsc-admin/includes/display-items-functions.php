@@ -243,7 +243,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 	$form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr( $product_data["id"] ) . "' />";
 
 	$sticky = get_option( 'sticky_products' );
-	if ( in_array( $product_data["id"], $sticky ) )
+	if ( in_array( $product_data["id"], (array)$sticky ) )
 		$sticky_checked = 'checked="checked" ';
 ?>
 	</h3>
