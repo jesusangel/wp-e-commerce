@@ -86,7 +86,7 @@ function wpsc_theme_presentation_page_metabox(){
 				 _e('To change the look of certain aspecs of your shop, you can edit the moved files found here:','wpsc'); 
 				 ?>
 				 </p>
-				 <p class="howto"><?php echo  get_template_directory(); ?></p>
+				 <p class="howto"><?php echo  get_stylesheet_directory(); ?></p>
 				<?php } ?>
 				<p><?php 
 					wp_nonce_field('wpsc_copy_themes');
