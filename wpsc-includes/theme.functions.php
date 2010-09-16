@@ -84,16 +84,38 @@ if(isset($_REQUEST['wpsc_notices']) && $_REQUEST['wpsc_notices'] == 'theme_ignor
  * @return PATH to the file
  */
 function wpsc_get_theme_url($file = ''){
+
 	global $wpsc_theme_url;
+
 	if(empty($file)) 
 		return;
-	
-	if(file_exists(get_template_directory().'/'.$file))
-		return get_template_directory_uri().'/';
-	elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file)))
-		return WPSC_OLD_THEMES_URL.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
-	else
-		return $wpsc_theme_url.$file;
+
+	// Use cache first if it exists
+	if (isset($_SESSION['wpsc_theme_url_cache'][$file]) && $_SESSION['wpsc_theme_url_cache'][$file] != '') {
+		return $_SESSION['wpsc_theme_url_cache'][$file];
+	}
+
+	if(file_exists(get_stylesheet_directory().'/'.$file)) {
+
+		$file_url = get_stylesheet_directory_uri().'/';
+
+	} elseif(file_exists(get_template_directory().'/'.$file)) {
+
+		$file_url = get_template_directory_uri().'/';
+
+	} elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file))) {
+
+		$file_url = WPSC_OLD_THEMES_URL.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
+
+	} else {
+
+		$file_url = $wpsc_theme_url.'/'.$file;
+
+	}
+
+	$_SESSION['wpsc_theme_url_cache'][$file] = $file_url;
+
+	return $file_url;
 
 }
 
@@ -108,16 +130,35 @@ function wpsc_get_theme_url($file = ''){
  */
 function wpsc_get_theme_path($file = ''){
 	global $wpsc_theme_path;
-	//exit(WPSC_OLD_THEMES_PATH.$file);
+
 	if(empty($file)) 
 		return;
 	
-	if(file_exists(get_template_directory().'/'.$file))
-		return get_template_directory().'/'.$file;
-	elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file)))
-		return WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
-	else
-		return $wpsc_theme_path.$file;
+	// Use cache first if it exists
+	if (isset($_SESSION['wpsc_theme_path_cache'][$file]) && $_SESSION['wpsc_theme_path_cache'][$file] != '') {
+		return $_SESSION['wpsc_theme_path_cache'][$file];
+	}
+
+	if(file_exists(get_stylesheet_directory().'/'.$file)) {
+
+		$template_file = get_stylesheet_directory().'/'.$file;
+
+	} elseif(file_exists(get_template_directory().'/'.$file)) {
+
+		$template_file = get_template_directory().'/'.$file;
+
+	} elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file))) {
+
+		$template_file = WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
+
+	} else {
+
+		$template_file = $wpsc_theme_path.$file;
+	}
+
+	$_SESSION['wpsc_theme_path_cache'][$file] = $template_file;
+
+	return $template_file;
 }
 /**
  * Checks if wpsc-single_product.php has been moved to the active theme, if it has then include the 
@@ -129,11 +170,15 @@ function wpsc_get_theme_path($file = ''){
  * @return $content with wpsc-single_product content if its a single product
  */
 function wpsc_single_template( $content ) {
+
 	global $post, $wpsc_theme_path, $wp_query, $wpsc_query;
+
 	$single_theme_path = wpsc_get_theme_path('wpsc-single_product.php');
-//	exit($single_theme_path);
+
 	remove_filter( "the_content", "wpsc_single_template" );
+
 	if ( 'wpsc-product' == $post->post_type ) {
+
 		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product' ) );
 		list($wp_query, $wpsc_temp_query) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
 		ob_start();
@@ -141,7 +186,9 @@ function wpsc_single_template( $content ) {
 		$content = ob_get_contents();
 		ob_end_clean();
 		list($wp_query, $wpsc_temp_query) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query objects back
+
 	}
+
 	return $content;
 }
 
