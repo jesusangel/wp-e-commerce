@@ -9,6 +9,149 @@
  */
 
 /**
+ * Check theme location, compares the active theme and the themes within wp-e-commerce/themes
+ * finds files of the same name. 
+ * @access public
+ *
+ * @since 3.8
+ * @param null
+ * @return $results (Array) of Files OR false if no similar files are found
+ */
+function wpsc_check_theme_location(){
+	$selected_theme = get_template_directory();
+	$templates = wpsc_list_product_templates($selected_theme.'/');
+	$path = WPSC_FILE_PATH.'/themes/';
+	$wpsc_templates = wpsc_list_product_templates($path);
+	$results = array_intersect($templates,$wpsc_templates);
+	if(count($results) > 0){
+		return $results;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * lists the files within the wp-e-commerce/themes directory
+ * @access public
+ *
+ * @since 3.8
+ * @param $path - you can provide a path to find the files within it by default path is wp-e-commerce/themes/
+ * @return $templates (Array) List of files
+ */
+function wpsc_list_product_templates($path = ''){
+	if(empty($path)){
+		if(file_exists(WPSC_OLD_THEMES_PATH.get_option( 'wpsc_selected_theme' ).'/'.get_option( 'wpsc_selected_theme' ).'.css'))
+			$path = WPSC_OLD_THEMES_PATH.get_option( 'wpsc_selected_theme' ).'/';		
+		else
+			$path = WPSC_FILE_PATH.'/themes/';		
+	}
+	$dh = opendir($path);
+	while (($file = readdir($dh)) !== false) {
+		if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && is_file($path.$file)) {
+				$templates[] = $file;
+		}
+	}
+	return $templates;
+
+}
+/**
+ * Displays the theme upgrade notice
+ * @access public
+ *
+ * @since 3.8
+ * @param null
+ * @return null
+ */
+function wpsc_theme_upgrade_notice() {
+ ?>
+	<div id="message" class="updated fade">
+		<p><?php printf( __( '<strong>WP e-Commerce is ready</strong>. If you plan on editing the look of your site, you should <a href="%1s">update your active theme</a> to include the additional WP e-Commerce files. <a href="%2s">Click here</a> to ignore and remove this box.', 'wpsc' ), admin_url( 'admin.php?page=wpsc-settings&tab=presentation' ),admin_url( 'admin.php?page=wpsc-settings&tab=presentation&wpsc_notices=theme_ignore' ) ) ?></p>
+	</div>
+<?php
+}
+
+if(isset($_REQUEST['wpsc_notices']) && $_REQUEST['wpsc_notices'] == 'theme_ignore'){
+	update_option('wpsc_ignore_theme',true);
+	wp_redirect(remove_query_arg('wpsc_notices'));
+}
+/**
+ * Checks the active theme folder for the particular file, if it exists then return the active theme url otherwise
+ * return the global wpsc_theme_url
+ * @access public
+ *
+ * @since 3.8
+ * @param $file string filename
+ * @return PATH to the file
+ */
+function wpsc_get_theme_url($file = ''){
+	global $wpsc_theme_url;
+	if(empty($file)) 
+		return;
+	
+	if(file_exists(get_template_directory().'/'.$file))
+		return get_template_directory_uri().'/';
+	elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file)))
+		return WPSC_OLD_THEMES_URL.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
+	else
+		return $wpsc_theme_url.$file;
+
+}
+
+/**
+ * Checks the active theme folder for the particular file, if it exists then return the active theme directory otherwise
+ * return the global wpsc_theme_path
+ * @access public
+ *
+ * @since 3.8
+ * @param $file string filename
+ * @return PATH to the file
+ */
+function wpsc_get_theme_path($file = ''){
+	global $wpsc_theme_path;
+	//exit(WPSC_OLD_THEMES_PATH.$file);
+	if(empty($file)) 
+		return;
+	
+	if(file_exists(get_template_directory().'/'.$file))
+		return get_template_directory().'/'.$file;
+	elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file)))
+		return WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
+	else
+		return $wpsc_theme_path.$file;
+}
+/**
+ * Checks if wpsc-single_product.php has been moved to the active theme, if it has then include the 
+ * template from the active theme.
+ * @access public
+ *
+ * @since 3.8
+ * @param $content content of the page
+ * @return $content with wpsc-single_product content if its a single product
+ */
+function wpsc_single_template( $content ) {
+	global $post, $wpsc_theme_path, $wp_query, $wpsc_query;
+	$single_theme_path = wpsc_get_theme_path('wpsc-single_product.php');
+//	exit($single_theme_path);
+	remove_filter( "the_content", "wpsc_single_template" );
+	if ( 'wpsc-product' == $post->post_type ) {
+		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product' ) );
+		list($wp_query, $wpsc_temp_query) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
+		ob_start();
+		include($single_theme_path);
+		$content = ob_get_contents();
+		ob_end_clean();
+		list($wp_query, $wpsc_temp_query) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query objects back
+	}
+	return $content;
+}
+
+//Check if some themes have been moved, if not display the theme upgrade notice 
+if ( !get_option('wpsc_ignore_theme') )
+	add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
+
+
+
+/**
  * wpsc_user_enqueues products function,
  * enqueue all javascript and CSS for wp ecommerce
  */
@@ -56,14 +199,8 @@ function wpsc_enqueue_user_script_and_css() {
 
 
 		wp_enqueue_script( 'wpsc-thickbox', WPSC_URL . '/js/thickbox.js', array( 'jquery' ), 'Instinct_e-commerce' );
-
-		if ( file_exists( $wpsc_themes_dir . "/wpsc-" . get_option( 'wpsc_selected_theme' ) . ".css" ) ) {
-			$theme_url = WPSC_THEMES_URL . "/wpsc/wpsc-" . get_option( 'wpsc_selected_theme' ) . ".css";
-		} else {
-			$theme_url = $wpsc_theme_url . 'wpsc-default.css';
-		}
-
-		wp_enqueue_style( 'wpsc-theme-css', $theme_url, false, $version_identifier, 'all' );
+		$the_wpsc_theme_path = wpsc_get_theme_url("wpsc-" . get_option( 'wpsc_selected_theme' ) . ".css");
+		wp_enqueue_style( 'wpsc-theme-css', $the_wpsc_theme_path, false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_URL . '/themes/compatibility.css', false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-product-rater', WPSC_URL . '/js/product_rater.css', false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wp-e-commerce-dynamic', $siteurl . "/index.php?wpsc_user_dynamic_css=true&category=$category_id", false, $version_identifier, 'all' );
@@ -303,15 +440,103 @@ function wpsc_display_products_page( $query ) {
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	//Pretty sure this single_product code is legacy...but fixing it up just in case.
-	if ( wpsc_is_single_product ( ) ) {
-		include($cur_wpsc_theme_folder . "/wpsc-single_product.php");
-		$is_single = true;
-	} else {
-		// get the display type for the selected category
-		if ( is_numeric( $wpsc_query->query_vars['category_id'] ) ) {
-			$category_id = (int)$wpsc_query->query_vars['category_id'];
-			$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
+	// get the display type for the selected category
+	if ( is_numeric( $wpsc_query->query_vars['category_id'] ) ) {
+		$category_id = (int)$wpsc_query->query_vars['category_id'];
+		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
+	}
+
+	if ( $display_type == '' ) {
+		$display_type = get_option( 'product_view' );
+	}
+
+	if ( isset( $_SESSION['wpsc_display_type'] ) ) {
+		$display_type = $_SESSION['wpsc_display_type'];
+	}
+
+	if ( isset( $_GET['view_type'] ) ) {
+		switch ( $_GET['view_type'] ) {
+			case 'grid':
+				$display_type = 'grid';
+				$_SESSION['wpsc_display_type'] = $display_type;
+				break;
+
+			case 'list':
+				$display_type = 'list';
+				$_SESSION['wpsc_display_type'] = $display_type;
+				break;
+
+			case 'default':
+				$display_type = 'default';
+				$_SESSION['wpsc_display_type'] = $display_type;
+				break;
+
+			default:
+				break;
 		}
+	}
+
+
+	//exit($display_type);
+	// switch the display type, based on the display type variable...
+	switch ( $display_type ) {
+		case "grid":
+			$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-grid_view.php');
+			include($the_wpsc_theme_path);
+			break; // only break if we have the file was in a condition but not anymore?;
+
+		case "list":
+			$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-list_view.php');
+			include($the_wpsc_theme_path);
+			break; // only break if we have the file was in a condition but not anymore?;
+
+		case "default":  // this may be redundant :D
+		default:
+			$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-products_page.php');
+			include($the_wpsc_theme_path);
+		
+			break;
+	}
+	$is_single = false;
+
+	$output = ob_get_contents();
+	ob_end_clean();
+	//$output = str_replace('$','\$', $output);
+
+	list($temp_wpsc_query, $wpsc_query) = array( $wpsc_query, $temp_wpsc_query ); // swap the wpsc_query objects back
+	if ( $is_single == false ) {
+		$GLOBALS['post'] = $wp_query->post;
+	}
+	return $output;
+}
+
+
+//handles replacing the tags in the pages  
+function wpsc_products_page( $content = '' ) {
+	global $wpdb, $wp_query, $wpsc_query, $old_wpsc_themes_dir, $wpsc_theme_path, $wpsc_query_vars;
+
+	$old_cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path . WPSC_THEME_DIR );
+	$cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path );
+
+	remove_filter( 'the_content', 'wpsc_products_page' );
+	$output = '';
+	if ( preg_match( "/\[productspage\]/", $content ) ) {
+		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
+		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
+		ob_start();
+		$category_id = '';
+		// get the display type for the selected category
+		if ( (isset( $_GET['category'] ) || isset( $wp_query->query_vars['category_id'] ) ) && ( is_numeric( $_GET['category'] ) || is_numeric( $wp_query->query_vars['category_id'] ) || is_numeric( get_option( 'wpsc_default_category' ) ) ) ) {
+			if ( is_numeric( $wp_query->query_vars['category_id'] ) ) {
+				$category_id = (int)$wp_query->query_vars['category_id'];
+			} else if ( is_numeric( $_GET['category'] ) ) {
+				$category_id = (int)$_GET['category'];
+			} else {
+				$category_id = (int)get_option( 'wpsc_default_category' );
+			}
+		}
+
+		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
 
 		if ( $display_type == '' ) {
 			$display_type = get_option( 'product_view' );
@@ -342,165 +567,25 @@ function wpsc_display_products_page( $query ) {
 					break;
 			}
 		}
-
-
-		//exit($display_type);
 		// switch the display type, based on the display type variable...
 		switch ( $display_type ) {
 			case "grid":
-				if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-grid_view.php" ) ) {
-					include($cur_wpsc_theme_folder . "/wpsc-grid_view.php");
-					break; // only break if we have the file;
-				}
+				$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-grid_view.php');
+				include($the_wpsc_theme_path);
+				break; // only break if we have the function;
 
 			case "list":
-				if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-list_view.php" ) ) {
-					include($cur_wpsc_theme_folder . "/wpsc-list_view.php");
-					break; // only break if we have the file;
-				}
+				$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-list_view.php');
+				include($the_wpsc_theme_path);
+				break; // only break if we have the file;
 
 			case "default":  // this may be redundant :D
 			default:
-				if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-products_page.php" ) ) {
-					include($cur_wpsc_theme_folder . "/wpsc-products_page.php");
-				} else {
-					include($old_wpsc_themes_dir . "/default/products_page.php");
-				}
+				$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-products_page.php');
+				include($the_wpsc_theme_path);
 				break;
 		}
 		$is_single = false;
-	}
-	$output = ob_get_contents();
-	ob_end_clean();
-	//$output = str_replace('$','\$', $output);
-
-	list($temp_wpsc_query, $wpsc_query) = array( $wpsc_query, $temp_wpsc_query ); // swap the wpsc_query objects back
-	if ( $is_single == false ) {
-		$GLOBALS['post'] = $wp_query->post;
-	}
-	return $output;
-}
-
-//Better way (in my opinion) to handle single product templating, outside of the child theme system
-
-function wpsc_theme_upgrade_notice() {
- ?>
-	<div id="message" class="updated fade">
-		<p><?php printf( __( '<strong>WP e-Commerce is almost ready</strong>. You should <a href="%s">update your active theme</a> to include the additional WP e-Commerce files.', 'wpsc' ), admin_url( 'admin.php?page=wpsc-settings&tab=presentation' ) ) ?></p>
-	</div>
-<?php
-}
-
-function wpsc_single_template( $content ) {
-	global $post, $wpsc_theme_path, $wp_query, $wpsc_query;
-	remove_filter( "the_content", "wpsc_single_template" );
-	if ( $post->post_type == 'wpsc-product' ) {
-		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product' ) );
-		list($wp_query, $wpsc_temp_query) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
-//		exit('Is this for real?<pre>'.print_r($wp_query,true).'</pre>');
-		ob_start();
-		include($wpsc_theme_path . 'wpsc-single_product.php');
-		$content = ob_get_contents();
-		ob_end_clean();
-		list($wp_query, $wpsc_temp_query) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query objects back
-	}
-	return $content;
-}
-
-if ( get_option( 'wpsc_theme_moved' ) )
-	add_filter( 'the_content', 'wpsc_single_template' );
-else
-	add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
-
-//handles replacing the tags in the pages  
-function wpsc_products_page( $content = '' ) {
-	global $wpdb, $wp_query, $wpsc_query, $old_wpsc_themes_dir, $wpsc_theme_path, $wpsc_query_vars;
-
-	$old_cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path . WPSC_THEME_DIR );
-	$cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path );
-	remove_filter( 'the_content', 'wpsc_products_page' );
-	$output = '';
-	if ( preg_match( "/\[productspage\]/", $content ) ) {
-		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
-		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-		ob_start();
-		if ( count( $wp_query->posts ) == 1 ) {
-			include($cur_wpsc_theme_folder . "/wpsc-single_product.php");
-			$is_single = true;
-		} else {
-			$category_id = '';
-			// get the display type for the selected category
-			if ( (isset( $_GET['category'] ) || isset( $wp_query->query_vars['category_id'] ) ) && ( is_numeric( $_GET['category'] ) || is_numeric( $wp_query->query_vars['category_id'] ) || is_numeric( get_option( 'wpsc_default_category' ) ) ) ) {
-				if ( is_numeric( $wp_query->query_vars['category_id'] ) ) {
-					$category_id = (int)$wp_query->query_vars['category_id'];
-				} else if ( is_numeric( $_GET['category'] ) ) {
-					$category_id = (int)$_GET['category'];
-				} else {
-					$category_id = (int)get_option( 'wpsc_default_category' );
-				}
-			}
-
-			$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
-
-			if ( $display_type == '' ) {
-				$display_type = get_option( 'product_view' );
-			}
-
-			if ( isset( $_SESSION['wpsc_display_type'] ) ) {
-				$display_type = $_SESSION['wpsc_display_type'];
-			}
-
-			if ( isset( $_GET['view_type'] ) ) {
-				switch ( $_GET['view_type'] ) {
-					case 'grid':
-						$display_type = 'grid';
-						$_SESSION['wpsc_display_type'] = $display_type;
-						break;
-
-					case 'list':
-						$display_type = 'list';
-						$_SESSION['wpsc_display_type'] = $display_type;
-						break;
-
-					case 'default':
-						$display_type = 'default';
-						$_SESSION['wpsc_display_type'] = $display_type;
-						break;
-
-					default:
-						break;
-				}
-			}
-			// switch the display type, based on the display type variable...
-			switch ( $display_type ) {
-				case "grid":
-					if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-grid_view.php" ) ) {
-						include($cur_wpsc_theme_folder . "/wpsc-grid_view.php");
-					} else {
-						include($old_wpsc_themes_dir . "/default/grid_view.php");
-					}
-					break; // only break if we have the function;
-
-				case "list":
-					if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-list_view.php" ) ) {
-						include($cur_wpsc_theme_folder . "/wpsc-list_view.php");
-					} else {
-						include($old_wpsc_themes_dir . "/default/list_view.php");
-					}
-					break; // only break if we have the file;
-
-				case "default":  // this may be redundant :D
-				default:
-
-					if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-products_page.php" ) ) {
-						include($cur_wpsc_theme_folder . "/wpsc-products_page.php");
-					} else {
-						include($old_wpsc_themes_dir . "/default/products_page.php");
-					}
-					break;
-			}
-			$is_single = false;
-		}
 		$output .= ob_get_contents();
 		ob_end_clean();
 		$output = str_replace( '$', '\$', $output );
@@ -527,14 +612,16 @@ function wpsc_products_page( $content = '' ) {
  * wpsc_count_themes_in_uploads_directory, does exactly what the name says
  */
 function wpsc_count_themes_in_uploads_directory() {
-	if ( is_dir( WPSC_THEMES_PATH ) )
-		$uploads_dir = @opendir( WPSC_THEMES_PATH ); // might cause problems if dir doesnt exist
- if ( !$uploads_dir ) {
+
+	if ( is_dir( WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/' ) )
+		$uploads_dir = @opendir( WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/' ); // might cause problems if dir doesnt exist
+
+	if ( !$uploads_dir )
 		return FALSE;
-	}
+
 	$file_names = array( );
 	while ( ($file = @readdir( $uploads_dir )) !== false ) {
-		if ( is_dir( WPSC_THEMES_PATH . $file ) && ($file != "..") && ($file != ".") && ($file != ".svn") ) {
+		if ( is_dir( WPSC_OLD_THEMES_PATH . get_option('wpsc_selected_theme') . '/' . $file ) && ($file != "..") && ($file != ".") && ($file != ".svn") ) {
 			$file_names[] = $file;
 		}
 	}
@@ -544,8 +631,8 @@ function wpsc_count_themes_in_uploads_directory() {
 
 function wpsc_place_shopping_cart( $content = '' ) {
 	global $wpsc_theme_path;
-	/// added by xiligroup.dev to be compatible with touchshop
-//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+	// added by xiligroup.dev to be compatible with touchshop
+	//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
 	$cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path );
 	/// end of added by xiligroup.dev to be compatible with touchshop
 
@@ -553,11 +640,9 @@ function wpsc_place_shopping_cart( $content = '' ) {
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		define( 'DONOTCACHEPAGE', true );
 		ob_start();
-		if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-shopping_cart_page.php" ) ) {
-			include($cur_wpsc_theme_folder . "/wpsc-shopping_cart_page.php");
-		} else {
-			include(WPSC_FILE_PATH . "/shopping_cart_page.php");
-		}
+		$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-shopping_cart_page.php');
+		include($the_wpsc_theme_path);
+
 		$output = ob_get_contents();
 		ob_end_clean();
 		$output = str_replace( '$', '\$', $output );
@@ -574,11 +659,8 @@ function wpsc_transaction_results( $content = '' ) {
 	if ( preg_match( "/\[transactionresults\]/", $content ) ) {
 		define( 'DONOTCACHEPAGE', true );
 		ob_start();
-		if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-transaction_results.php" ) ) {
-			include($cur_wpsc_theme_folder . "/wpsc-transaction_results.php");
-		} else {
-			include(WPSC_FILE_PATH . "/transaction_results.php");
-		}
+		$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-transaction_results.php');
+		include($the_wpsc_theme_path);
 		$output = ob_get_contents();
 		ob_end_clean();
 		return preg_replace( "/(<p>)*\[transactionresults\](<\/p>)*/", $output, $content );
@@ -594,12 +676,8 @@ function wpsc_user_log( $content = '' ) {
 	if ( preg_match( "/\[userlog\]/", $content ) ) {
 		define( 'DONOTCACHEPAGE', true );
 		ob_start();
-
-		if ( file_exists( $cur_wpsc_theme_folder . "/wpsc-user-log.php" ) ) {
-			include($cur_wpsc_theme_folder . "/wpsc-user-log.php");
-		} else {
-			include(WPSC_FILE_PATH . "/user-log.php");
-		}
+		$the_wpsc_theme_path = wpsc_get_theme_path('wpsc-user-log.php');
+		include($the_wpsc_theme_path);
 		$output = ob_get_contents();
 		ob_end_clean();
 		return preg_replace( "/(<p>)*\[userlog\](<\/p>)*/", $output, $content );
@@ -654,6 +732,7 @@ function wpsc_enable_page_filters( $excerpt = '' ) {
 	global $wp_query;
 	add_filter( 'the_content', 'add_to_cart_shortcode', 12 ); //Used for add_to_cart_button shortcode
 	add_filter( 'the_content', 'wpsc_products_page', 12 );
+	add_filter( 'the_content', 'wpsc_single_template' );
 	add_filter( 'the_content', 'wpsc_place_shopping_cart', 12 );
 	add_filter( 'the_content', 'wpsc_transaction_results', 12 );
 	add_filter( 'the_content', 'nszhpcrt_homepage_products', 12 );

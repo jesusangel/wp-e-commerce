@@ -155,7 +155,7 @@ function wpsc_convert_products_to_posts() {
   // Select all products
   
 	$product_data = $wpdb->get_results("SELECT `".WPSC_TABLE_PRODUCT_LIST."`. * , `".WPSC_TABLE_PRODUCT_ORDER."`.order FROM `".WPSC_TABLE_PRODUCT_LIST."` LEFT JOIN `".WPSC_TABLE_PRODUCT_ORDER."` ON `".WPSC_TABLE_PRODUCT_LIST."`.id = `".WPSC_TABLE_PRODUCT_ORDER."`.product_id WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`active` IN ( '1' )
-GROUP BY wp_wpsc_product_list.id", ARRAY_A);
+GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 	foreach((array)$product_data as $product) {
 		$post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product['id'] ));
 		

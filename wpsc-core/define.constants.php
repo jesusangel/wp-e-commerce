@@ -128,7 +128,7 @@ define('WPSC_CACHE_DIR', $wpsc_cache_dir);
 define('WPSC_UPGRADES_DIR', $wpsc_upgrades_dir);
 define('WPSC_THEME_BACKUP_DIR', $wpsc_theme_backup_dir);
 define('WPSC_THEMES_PATH', $wpsc_themes_dir);
-
+define('WPSC_OLD_THEMES_PATH', $old_wpsc_themes_dir);
 
 /**
 * files that are uploaded as part of digital products are not directly downloaded, therefore there is no need for a URL constant for them
@@ -153,7 +153,7 @@ define('WPSC_USER_UPLOADS_URL', $wpsc_user_uploads_url);
 define('WPSC_CACHE_URL', $wpsc_cache_url);
 define('WPSC_UPGRADES_URL', $wpsc_upgrades_url);
 define('WPSC_THEMES_URL', $wpsc_themes_url);
-
+define('WPSC_OLD_THEMES_URL', $old_wpsc_themes_url);
 
 
 

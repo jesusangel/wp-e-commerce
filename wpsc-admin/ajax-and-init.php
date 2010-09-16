@@ -2401,15 +2401,14 @@ function wpsc_delete_variation_set() {
 
 function wpsc_backup_theme() {
 
-$wpsc_theme_path = get_stylesheet_directory();
-	wpsc_recursive_copy($wpsc_theme_path.'/wpsc', WPSC_THEME_BACKUP_DIR);
-		$_SESSION['wpsc_themes_backup'] = true;
-			
-			$sendback = wp_get_referer();
-			$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], remove_query_arg('tab', $sendback));
-			wp_redirect($sendback);
-			
-			exit();
+	$wpsc_theme_path = get_stylesheet_directory();
+	wpsc_recursive_copy($wpsc_theme_path, WPSC_THEME_BACKUP_DIR);
+	$_SESSION['wpsc_themes_backup'] = true;		
+	$sendback = wp_get_referer();
+//	$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], remove_query_arg('tab', $sendback));
+	wp_redirect($sendback);
+	
+	exit();
 }
 
  if(isset($_REQUEST['wpsc_admin_action']) && ($_REQUEST['wpsc_admin_action'] == 'backup_themes')) {

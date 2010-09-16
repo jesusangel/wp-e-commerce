@@ -1,5 +1,116 @@
 <?php
+/**
+ * WP e Commerce Presentation page for WP-Admin : Settings > Presentation
+ *
+ * @package wp-e-commerce
+ * @since 3.7
+ */
 
+/**
+ * Metabox for theme moving 
+ * Location: Settings > Presentation page in WP-Admin 
+ * @access public
+ *
+ * @since 3.8
+ * @param null
+ * @return null
+ */
+function wpsc_theme_presentation_page_metabox(){
+	global $wpsc_themes_dir;
+	$wpsc_templates = wpsc_list_product_templates();
+	$themes_location = wpsc_check_theme_location(); 
+	$themes_copied = false; //Check to see whether themes have been copied to selected Theme Folder
+	$themes_backedup = false; //Check to see whether themes have recently been backedup
+	$themes_in_uploads = false; //Check to see whether themes live in the uploads directory
+	if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) $themes_copied = true;
+	if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) $themes_backedup = true;
+	if ( wpsc_count_themes_in_uploads_directory() > 0 ){
+		$themes_in_uploads = true;	
+		foreach((array)$themes_location as $location)
+			$new_location[] = str_ireplace('wpsc-','', $location);
+			
+		$themes_location = $new_location;	
+	} 
+?>
+	<div id="poststuff" class="metabox-holder">
+		<div id="themes_and_appearance" class='postbox'>
+			<h3 class="hndle"><span><?php _e( "Theme Settings", 'wpsc' ); ?></span></h3>
+				<div class="inside">
+				<?php
+				if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) {
+					?>
+						<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+							<p><?php _e( "Thanks, the themes have been copied." ); ?></p>
+						</div>
+					<?php
+						$_SESSION['wpsc_themes_copied'] = false;
+					}
+					if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) {
+					?>
+						<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
+							<p><?php _e( "Thanks, you have made a succesful backup of your theme.  It is located at the URL below.  Please note each backup you create will replace your previous backups." ); ?></p>
+							<p>URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEME_BACKUP_DIR ); ?></p>
+						</div>
+					<?php
+						$_SESSION['wpsc_themes_backup'] = false;
+					}
+				?>	
+				<p>
+				<?php if(false !== $themes_location){ 
+						//Some themes have been moved to the themes folder 
+					_e('Some Theme files have been moved to your WordPress Theme Folder.','wpsc');	
+				?>
+							
+				<?php }else{
+						//No themes have been moved to the theme folder
+					_e('No Theme files have been moved to your WordPress Theme Folder.','wpsc');						
+					}?>
+				
+				</p>
+				<p>
+					<?php _e('These are the template files, used for WP e-Commerce. If you anticipate changing the look of your site, select the files you would like to edit from the list bellow, and we will move them to your active WordPress Theme.','wpsc'); ?>
+				</p>
+				<ul>
+				<?php
+					foreach($wpsc_templates as $file){
+						$selected = '';	
+						if(false !== array_search($file, (array)$themes_location))
+							$selected = 'checked="checked"';							
+						?>
+						<input type='checkbox' <?php echo $selected; ?> value='<?php echo $file ?>' name='wpsc_templates_to_port[]' />
+						<?php echo $file; ?><br />
+				<?php }	 ?>							 	
+				 </ul>
+				 <p>
+				 <?php if(false !== $themes_location){ 
+				 _e('To change the look of certain aspecs of your shop, you can edit the moved files found here:','wpsc'); 
+				 ?>
+				 </p>
+				 <p class="howto"><?php echo  get_template_directory(); ?></p>
+				<?php } ?>
+				<p><?php 
+					wp_nonce_field('wpsc_copy_themes');
+					
+				//printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?> 
+					<input type='submit' value='Move Template Files' name='wpsc_move_themes' />
+					<?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?> 
+				</p>	
+				<br style="clear:both" />
+				<br style="clear:both" />
+				</div>
+		</div>
+	</div>
+<?php			
+}
+
+/**
+ * options categorylist provides a drop down of different options for displaying the products page
+ * @access public
+ *
+ * @since 3.7
+ * @param null
+ * @return $categorylist XHTML markup
+ */
 function options_categorylist() {
 	global $wpdb;
 	$categorylist = "";
@@ -53,6 +164,14 @@ function options_categorylist() {
 	return $categorylist;
 }
 
+/**
+ * options presentation is the main function for displaying the WP-Admin : Settings > Presentation page
+ * @access public
+ *
+ * @since 3.7
+ * @param null
+ * @return null
+ */
 function wpsc_options_presentation() {
 	global $wpdb;
 ?>
@@ -240,75 +359,7 @@ function wpsc_options_presentation() {
 			</table>
 		</div>
 
-		<div id="poststuff" class="metabox-holder">
-			<div id="themes_and_appearance" class='postbox'>
-				<h3 class="hndle"><span><?php _e( "Theme Settings", 'wpsc' ); ?></span></h3>
-					<div class="inside">
-					<?php
-						$style = (wpsc_count_themes_in_uploads_directory() > 0) ? 'padding:1px 2px; color:black' : 'padding:1px 2px; color:red';
-
-						if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) {
-					?>
-							<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
-								<p><?php _e( "Thanks, the themes have been copied." ); ?></p>
-							</div>
-					<?php
-							$_SESSION['wpsc_themes_copied'] = false;
-						}
-								if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) {
-					?>
-							<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
-								<p><?php _e( "Thanks, you have made a succesful backup of your theme.  It is located at the URL below.  You can backup as often as you like." ); ?></p>
-								<p style="<?php echo $style; ?>">URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEME_BACKUP_DIR ); ?></p>
-							</div>
-					<?php
-							$_SESSION['wpsc_themes_backup'] = false;
-						}
-					?><?php
-						if ( wpsc_count_themes_in_uploads_directory() > 0 ) {
-?>
-						<p><?php _e( 'The theme files for your shop are presently located in the following folder: ' ) ?></p>
-						<?php
-								} else {
-							?>
-								<p><?php _e( 'The theme files for your shop will be located in the following folder: ' ) ?></p>
-
-							<?php
-								}
-							?>
-						<p style="<?php echo $style; ?>">URL: <?php echo "/" . str_replace( ABSPATH, "", WPSC_THEMES_PATH ); ?></p>
-
-<?php
-						if ( wpsc_count_themes_in_uploads_directory() > 0 ) {
-?>
-							<p><?php _e( 'You have moved the default theme files to the WordPress themes folder.  Your theme files are locatable at the above URL.' ); ?></p>
-
-							<p><?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?> </p>	
-<?php
-						} else if ( !is_writable( get_stylesheet_directory() ) ) {
-?>
-							<p><?php _e( "The permissions on your WordPress themes directory are incorrect.", 'wpsc' ); ?> </p>
-							<p><?php _e( "Please set the permissions to 775 on the following directory.", 'wpsc' ); ?><br /><br />
-								<span class='display-path'><strong><?php _e( "Path:", 'wpsc' ); ?></strong> <?php echo WPSC_THEMES_PATH ; ?> </span></p>
-					<?php
-						} else {
-							$class = '';
-					?>
-							<p><?php _e( "To ensure that your theme files are safe from upgrades, we recommend moving them to the wp-content/themes folder.  We have made this incredibly easy for you, all you have to do is click the \"Move Theme Files\" button below.", 'wpsc' ); ?>
-								<br style="clear:both" />
-								<br style="clear:both" />
-
-							<p><?php printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?> </p>			<br style="clear:both" />
-
-<?php
-	}
-?>
-
-	<!--<p><a href='http://www.instinct.co.nz/e-commerce/docs/'><?php _e( "Read Tutorials", 'wpsc' ); ?></a></p>-->
-						<br style="clear:both" />
-					</div>
-				</div>
-			</div>
+		<?php wpsc_theme_presentation_page_metabox(); ?>
 
 			<div style='clear:both;'></div>
 

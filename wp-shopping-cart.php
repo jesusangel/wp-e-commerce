@@ -11,6 +11,7 @@ Author URI: http://getshopped.org/
  * WP e-Commerce Main Plugin File
  * @package wp-e-commerce
 */
+include_once('languages/en_EN.php');
 global $wpdb;
 //Define the path to the plugin folder
 define('WPSC_FILE_PATH', dirname(__FILE__));

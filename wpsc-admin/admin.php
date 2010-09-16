@@ -74,7 +74,7 @@ function wpsc_admin_pages() {
 		if ( !isset( $show_update_page ) )
 			$show_update_page = 1;
 
-		if ( 1 !== (int)$show_update_page )
+		if ( 1 === (int)$show_update_page )
 			$page_hooks[] = add_submenu_page( 'index.php', __( 'Update Store', 'wpsc' ), __( 'Store Update', 'wpsc' ), 'administrator', 'wpsc-update', 'wpsc_display_update_page' );
 
 		$page_hooks[] = add_submenu_page( 'index.php', __( 'Store Upgrades', 'wpsc' ), __( 'Store Upgrades', 'wpsc' ), 'administrator', 'wpsc-upgrades', 'wpsc_display_upgrades_page' );
