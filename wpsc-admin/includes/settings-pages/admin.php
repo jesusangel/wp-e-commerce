@@ -214,6 +214,7 @@ global $wpdb;
 		<?php
 		/* here end the admin options */						  
 	  ?>
+		<?php do_action('wpsc_admin_settings_page'); ?>
 		<div class="submit">
 			<input type='hidden' name='wpsc_admin_action' value='submit_options' />
 			

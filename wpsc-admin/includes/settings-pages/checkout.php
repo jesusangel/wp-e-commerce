@@ -122,6 +122,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 					<a title='<?php echo __('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
 				</td>
 			</tr>
+			<?php do_action('wpsc_checkout_settings_page'); ?>
 			</table>
 		</div>
 		</div>

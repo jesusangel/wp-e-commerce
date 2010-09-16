@@ -184,6 +184,7 @@ function wpsc_options_general() {
 					</td>
 				</tr>
 			</table>
+		<?php do_action('wpsc_general_settings_page'); ?>
 			<div class="submit">
 				<input type='hidden' name='wpsc_admin_action' value='submit_options' />
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>

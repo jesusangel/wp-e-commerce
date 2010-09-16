@@ -99,6 +99,7 @@ function wpsc_options_taxes() {
 			<p>
 				<a href=''><?php _e( 'Add New Tax Rate', 'wpsc' ); ?></a>
 			</p>
+			<?php do_action('wpsc_taxes_settings_page'); ?>
 			<p>
 				<input type='submit' class='button-primary' value='<?php _e( 'Save Changes', 'wpsc' ); ?>' name='submit_tax' />
 			</p>

@@ -175,6 +175,7 @@ function wpsc_options_shipping() {
 								</td>
 
 							</tr>
+							<?php do_action('wpsc_shipping_settings_page'); ?>
 						</table>
 						<?php if ( IS_WP27 ) {
  ?>
