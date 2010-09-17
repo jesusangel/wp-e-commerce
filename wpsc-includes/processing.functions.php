@@ -10,7 +10,7 @@
  */
 function wpsc_currency_display( $price_in, $args ) {
 	global $wpdb, $wpsc_currency_data;
-
+	$currency_code = '';
 	$query = shortcode_atts( array(
 		'display_currency_symbol' => true,
 		'display_decimal_point'   => true,

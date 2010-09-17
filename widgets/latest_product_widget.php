@@ -42,7 +42,7 @@ class WP_Widget_Latest_Products extends WP_Widget {
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
-		nzshpcrt_latest_product( &$args, &$instance );
+		nzshpcrt_latest_product( $args, $instance );
 		echo $after_widget;
 	
 	}
