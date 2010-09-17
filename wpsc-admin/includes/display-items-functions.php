@@ -898,7 +898,7 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 	// Get variation data from WP Terms
 	$product_term_data = wp_get_object_terms( $product_data['id'], 'wpsc-variation' );
 
-	if ( is_array( $product_term_data ) ) {
+	if ( !empty( $product_term_data ) ) {
 		foreach ( $product_term_data as $product_term ) {
 			$product_terms[] = $product_term->term_id;
 		}
