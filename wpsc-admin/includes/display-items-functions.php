@@ -898,9 +898,13 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 	// Get variation data from WP Terms
 	$product_term_data = wp_get_object_terms( $product_data['id'], 'wpsc-variation' );
 
-	foreach ( (array)$product_term_data as $product_term )
+	if ( is_array( $product_term_data ) ) {
+		foreach ( $product_term_data as $product_term ) {
+			$product_terms[] = $product_term->term_id;
+		}
+	} else {
 		$product_terms = array();
-		$product_terms[] = $product_term->term_id;
+	}
 
 	$form_classes = array_search( 'wpsc_product_variation_forms', $product_data['closed_postboxes'] ) !== false ? 'closed' : '';
 	$form_style   = array_search( 'wpsc_product_variation_forms', $product_data['hidden_postboxes'] ) !== false ? 'style="display: none;"' : ''
