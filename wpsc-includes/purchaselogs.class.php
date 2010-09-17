@@ -116,6 +116,7 @@ function wpsc_purchlogs_custommessages(){
 }
 function wpsc_purchlogs_customfiles(){
    global $purchlogitem;
+   $files = array();
    foreach($purchlogitem->allcartcontent as $cartitem){
       if($cartitem->files != 'N;'){
          $file = unserialize($cartitem->files);
@@ -575,8 +576,9 @@ function wpsc_has_purchlog_shipping(){
 }
 function wpsc_purchlog_is_checked_status(){
    global $purchlogitem, $purchlogs;
-   //exit('<pre>'.print_r($purchlogs,true).'</pre>');
-   if($purchlogs->purchstatus->id == $purchlogitem->extrainfo->processed){
+//   exit('<pre>'.print_r($purchlogs->purchstatus['order'],true).'</pre>');
+   
+   if($purchlogs->purchstatus['order'] == $purchlogitem->extrainfo->processed){
          return 'selected="selected"';
       }else{
          return '';

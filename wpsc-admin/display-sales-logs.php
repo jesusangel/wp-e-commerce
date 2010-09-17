@@ -195,7 +195,7 @@ if(!isset($purchlogs)){
 					
 						<tfoot>
 							<tr>
-						<?php// print_column_headers('display-purchaselog-details', false); ?>
+						<?php // print_column_headers('display-purchaselog-details', false); ?>
 							</tr>
 						</tfoot>
 					
