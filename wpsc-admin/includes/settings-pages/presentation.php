@@ -83,7 +83,7 @@ function wpsc_theme_presentation_page_metabox(){
 				 </ul>
 				 <p>
 				 <?php if(false !== $themes_location){ 
-				 _e('To change the look of certain aspecs of your shop, you can edit the moved files found here:','wpsc'); 
+				 _e('To change the look of certain aspects of your shop, you can edit the moved files found here:','wpsc'); 
 				 ?>
 				 </p>
 				 <p class="howto"><?php echo  get_stylesheet_directory(); ?></p>
@@ -92,7 +92,7 @@ function wpsc_theme_presentation_page_metabox(){
 					wp_nonce_field('wpsc_copy_themes');
 					
 				//printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?> 
-					<input type='submit' value='Move Template Files' name='wpsc_move_themes' />
+					<input type='submit' value='Move Template Files' class="button" name='wpsc_move_themes' />
 					<?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?> 
 				</p>	
 				<br style="clear:both" />
