@@ -77,8 +77,8 @@ function wpsc_theme_presentation_page_metabox(){
 						if(false !== array_search($file, (array)$themes_location))
 							$selected = 'checked="checked"';							
 						?>
-						<input type='checkbox' <?php echo $selected; ?> value='<?php echo $file ?>' name='wpsc_templates_to_port[]' />
-						<?php echo $file; ?><br />
+						<li><input type='checkbox' <?php echo $selected; ?> value='<?php echo $file ?>' name='wpsc_templates_to_port[]' />
+						<?php echo $file; ?></li>
 				<?php }	 ?>							 	
 				 </ul>
 				 <p>
