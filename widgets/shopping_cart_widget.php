@@ -1,87 +1,175 @@
 <?php
-function widget_wp_shopping_cart($args) {
-    global $wpsc_theme_path, $cache_enabled;
-    extract($args);
-    $options = get_option('widget_wp_shopping_cart');
-      
-		if(get_option('show_sliding_cart') == 1)	{
-			if(is_numeric($_SESSION['slider_state']))	{
-			if($_SESSION['slider_state'] == 0) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
-				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+
+
+
+/**
+ * Shopping Cart widget class
+ *
+ * @since 3.8
+ *
+ * @todo  Check if widget_wp_shopping_cart_init function is still required?
+ */
+class WP_Widget_Shopping_Cart extends WP_Widget {
+	
+	/**
+	 * Widget Constuctor
+	 */
+	function WP_Widget_Shopping_Cart() {
+
+		$widget_ops = array(
+			'classname'   => 'widget_wpsc_shopping_cart',
+			'description' => __( 'Shopping Cart Widget', 'wpsc' )
+		);
+		
+		$this->WP_Widget( 'wpsc_shopping_cart', __( 'Shopping Cart', 'wpsc' ), $widget_ops );
+	
+	}
+
+	/**
+	 * Widget Output
+	 *
+	 * @param $args (array)
+	 * @param $instance (array) Widget values.
+	 *
+	 */
+	function widget( $args, $instance ) {
+		
+		global $wpsc_theme_path, $cache_enabled;
+		
+		extract( $args );
+		
+		// Create fancy collapser
+		if ( get_option( 'show_sliding_cart' ) == 1 ) {
+			if ( is_numeric( $_SESSION['slider_state'] ) ) {
+				if ( $_SESSION['slider_state'] == 0 ) {
+					$collapser_image = 'plus.png';
+				} else {
+					$collapser_image = 'minus.png';
+				}
+				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_URL . '/images/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
 			} else {
-				if($_SESSION['nzshpcrt_cart'] == null) { $collapser_image = 'plus.png'; } else { $collapser_image = 'minus.png'; }
-				$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='".WPSC_URL."/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+				if ( $_SESSION['nzshpcrt_cart'] == null ) {
+					$collapser_image = 'plus.png';
+				} else {
+					$collapser_image = 'minus.png';
+				}
+				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_URL . '/images/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
 			}
 		} else {
-			$fancy_collapser = "";
+			$fancy_collapser = '';
 		}
-      
-      
-    
-    $title = empty($options['title']) ? __('Shopping Cart') : $options['title'];
-    echo $before_widget;
-    $full_title = $before_title . $title . $fancy_collapser . $after_title;    
-    echo $full_title;
-    
-		$display_state = "";
-
-		if(( (isset($_SESSION['slider_state']) && ($_SESSION['slider_state'] == 0)) || (wpsc_cart_item_count() < 1)) && (get_option('show_sliding_cart') == 1)) {
-			$display_state = "style='display: none;'";
+		
+		// Start widget output
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Shopping Cart' ) : $instance['title'] );
+		echo $before_widget;
+		if ( $title ) {  
+			echo $before_title . $title . $fancy_collapser . $after_title;
 		}
-
+		
+		// Set display state
+		$display_state = '';
+		if ( ( ( isset( $_SESSION['slider_state'] ) && ( $_SESSION['slider_state'] == 0 ) ) || ( wpsc_cart_item_count() < 1 ) ) && ( get_option( 'show_sliding_cart' ) == 1 ) ) {
+			$display_state = 'style="display: none;"';
+		}
+		
+		// Output ctart
 		$use_object_frame = false;
-		if(($cache_enabled == true) && (!defined('DONOTCACHEPAGE') || (constant('DONOTCACHEPAGE') !== true))) {
-			echo "    <div id='sliding_cart' class='shopping-cart-wrapper'>";
-			if((strstr($_SERVER['HTTP_USER_AGENT'], "MSIE") == false) && ($use_object_frame == true)) {
+		if ( ( $cache_enabled == true ) && ( !defined( 'DONOTCACHEPAGE' ) || ( constant( 'DONOTCACHEPAGE' ) !== true ) ) ) {
+			echo '<div id="sliding_cart" class="shopping-cart-wrapper">';
+			if ( ( strstr( $_SERVER['HTTP_USER_AGENT'], "MSIE" ) == false ) && ( $use_object_frame == true ) ) {
 				?>
-				<object codetype="text/html" type="text/html" data="index.php?wpsc_action=cart_html_page"  border='0px'>
-					<p><?php _e('Loading...', 'wpsc'); ?></p>
+				<object codetype="text/html" type="text/html" data="index.php?wpsc_action=cart_html_page" border="0">
+					<p><?php _e( 'Loading...', 'wpsc' ); ?></p>
 				</object>
 				<?php
 			} else {
-			?>
-			<div class='wpsc_cart_loading'><p><?php _e('Loading...', 'wpsc'); ?></p>
-			<?php
+				?>
+				<div class="wpsc_cart_loading"><p><?php _e( 'Loading...', 'wpsc' ); ?></p>
+				<?php
 			}
-			echo "    </div>";
+			echo '</div>';
 		} else {
-			echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-			include(wpsc_get_theme_file_path("wpsc-cart_widget.php"));
-			echo "    </div>";
+			echo '<div id="sliding_cart" class="shopping-cart-wrapper" ' . $display_state . '>';
+			include( wpsc_get_theme_file_path( 'wpsc-cart_widget.php' ) );
+			echo '</div>';
 		}
-    echo $after_widget;
-    }
+		
+		// End widget output
+		echo $after_widget;
+		
+	}
 
-function widget_wp_shopping_cart_control() {
-	$options = $newoptions = get_option('widget_wp_shopping_cart');
-	if ( $_POST["wp_shopping_cart-submit"] ) {
-		$newoptions['title'] = strip_tags(stripslashes($_POST["wp_shopping_cart-title"]));
-	}
-	if ( $options != $newoptions ) {
-		$options = $newoptions;
-		update_option('widget_wp_shopping_cart', $options);
-	}
-	$title = htmlspecialchars($options['title'], ENT_QUOTES);
+	/**
+	 * Update Widget
+	 *
+	 * @param $new_instance (array) New widget values.
+	 * @param $old_instance (array) Old widget values.
+	 *
+	 * @return (array) New values.
+	 */
+	function update( $new_instance, $old_instance ) {
 	
-	echo "<p>\n\r";
-	echo "  <label for='wp_shopping_cart-title'>"._e('Title:')."<input class='widefat' id='wp_shopping_cart-title' name='wp_shopping_cart-title' type='text' value='{$title}' />\n\r";
-	echo "    <input type='hidden' id='wp_shopping_cart-submit' name='wp_shopping_cart-submit' value='1' />\n\r";
-	echo "  </label>\n\r";
-	echo "</p>\n\r";
+		$instance = $old_instance;
+		$instance['title']  = strip_tags( $new_instance['title'] );
+
+		return $instance;
+		
+	}
+
+	/**
+	 * Widget Options Form
+	 *
+	 * @param $instance (array) Widget values.
+	 */
+	function form( $instance ) {
+		
+		global $wpdb;
+		
+		// Defaults
+		$instance = wp_parse_args( (array)$instance, array(
+			'title' => __( 'Shopping Cart', 'wpsc' )
+		) );
+		
+		// Values
+		$title = esc_attr( $instance['title'] );
+		
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+		</p>
+		<?php
+		
+	}
+
 }
 
- function widget_wp_shopping_cart_init() {
-   if(function_exists('wp_register_sidebar_widget')) {
-		$widget_ops['description'] = "A Shopping Cart For Your WP e-Commerce Plugin";
-    wp_register_sidebar_widget('widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart', $widget_ops);
-    wp_register_widget_control('widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart_control');
-    $GLOBALS['wpsc_cart_widget'] = true;
-    if(get_option('cart_location') == 1) {
-      update_option('cart_location', 4);
-      remove_action('wp_list_pages','nzshpcrt_shopping_basket');
+add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Widget_Shopping_Cart");' ) );
+
+
+
+/**
+ * Not sure that this init function is required?
+ * It is called on init from wp-shopping-cart.php
+ * Does it relate to the Sidebar setting in the admin?
+ */
+function widget_wp_shopping_cart_init() {
+	
+	if ( function_exists( 'wp_register_sidebar_widget' ) ) {
+		$widget_ops['description'] = 'A Shopping Cart For Your WP e-Commerce Plugin';
+		wp_register_sidebar_widget( 'widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart', $widget_ops );
+		// wp_register_widget_control( 'widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart_control' );
+		$GLOBALS['wpsc_cart_widget'] = true;
+		if ( get_option( 'cart_location' ) == 1) {
+			update_option( 'cart_location', 4 );
+			remove_action( 'wp_list_pages','nzshpcrt_shopping_basket' );
 		}
-    #wp_register_widget_control('Shopping Cart', 'widget_wp_shopping_cart_control', 300, 90);
 	}
+	
 	return;
+	
 }
+
+
+
 ?>
