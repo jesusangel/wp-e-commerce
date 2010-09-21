@@ -22,7 +22,7 @@ class wpsc_theming {
 		//Construct
 		global $theme_file_prefix;
 		check_admin_referer( 'wpsc_copy_themes' );
-		$template_dir            = get_template_directory() . '/';
+		$template_dir            = get_stylesheet_directory() . '/';
 		$this->templates_to_move = $_POST['wpsc_templates_to_port'];
 		$this->list_of_templates = wpsc_list_product_templates( $template_dir );
 		$theme_file_prefix       = 'wpsc-';
