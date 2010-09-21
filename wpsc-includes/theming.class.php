@@ -142,6 +142,8 @@ class wpsc_theming {
 			}
 		}
 		closedir( $dh );
+
+		do_action( 'wpsc_move_theme' );
 	}
 
 }
