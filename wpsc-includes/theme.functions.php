@@ -4,7 +4,7 @@ if ( !defined( WPEC_TRANSIENT_THEME_PATH_PREFIX ) )
 	define( 'WPEC_TRANSIENT_THEME_PATH_PREFIX', 'wpsc_theme_file_path_' );
 
 if ( !defined( WPEC_TRANSIENT_THEME_URL_PREFIX ) )
-	define( 'WPEC_TRANSIENT_THEME_URL_PREFIX', 'wpsc_theme_file_path_' );
+	define( 'WPEC_TRANSIENT_THEME_URL_PREFIX', 'wpsc_theme_file_url_' );
 
 /**
  * WP eCommerce theme functions
