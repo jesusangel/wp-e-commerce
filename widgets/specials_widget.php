@@ -40,25 +40,13 @@ class WP_Widget_Product_Specials extends WP_Widget {
 		
 		extract( $args );
 		
-		// Special count currently does not work - returns total product count
-		$special_count = $wpdb->get_var( "SELECT DISTINCT `p`.`ID`
-			FROM `" . $wpdb->postmeta . "` AS `m`
-			JOIN `" . $wpdb->posts . "` AS `p` ON `m`.`post_id` = `p`.`ID`
-			WHERE `m`.`meta_key`
-			IN ('_wpsc_special_price')
-			AND `m`.`meta_value` >0
-			AND `p`.`post_status` = 'publish'
-			" );
-		
-		if ( $special_count > 0 ) {
-			echo $before_widget;
-			$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Product Specials' ) : $instance['title'] );
-			if ( $title ) {
-				echo $before_title . $title . $after_title;
-			}
-			nzshpcrt_specials();
-			echo $after_widget;
+		echo $before_widget;
+		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Product Specials' ) : $instance['title'] );
+		if ( $title ) {
+			echo $before_title . $title . $after_title;
 		}
+		nzshpcrt_specials($args, $instance);
+		echo $after_widget;
 	
 	}
 
@@ -74,7 +62,9 @@ class WP_Widget_Product_Specials extends WP_Widget {
 	
 		$instance = $old_instance;
 		$instance['title']  = strip_tags( $new_instance['title'] );
-		$instance['show_description']  = absint( $new_instance['show_description'] );
+		$instance['number'] = (int)$new_instance['number'];
+		$instance['hide_thumbnails'] = (bool)$new_instance['hide_thumbnails'];
+		$instance['show_description']  = (bool)$new_instance['show_description'];
 
 		return $instance;
 		
@@ -92,12 +82,16 @@ class WP_Widget_Product_Specials extends WP_Widget {
 		// Defaults
 		$instance = wp_parse_args( (array)$instance, array(
 			'title' => '',
-			'show_description' => false
+			'show_description' => false,
+			'hide_thumbnails' => false,
+			'number' => 5
 		) );
 		
 		// Values
 		$title = esc_attr( $instance['title'] );
-		$show_description = $instance['show_description'] == 1 ? ' checked="checked"' : '';
+		$number = (int)$instance['number'];
+		$hide_thumbnails = (bool)$instance['hide_thumbnails'];
+		$show_description = (bool)$instance['show_description'];
 		
 		?>
 		<p>
@@ -105,9 +99,26 @@ class WP_Widget_Product_Specials extends WP_Widget {
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 		<p>
-			<input<?php echo $show_description; ?> id="<?php echo $this->get_field_id( 'show_description' ); ?>" name="<?php echo $this->get_field_name( 'show_description' ); ?>" type="checkbox" class="checkbox" value="1" />
-			<label for="<?php echo $this->get_field_id('show_description'); ?>"><?php _e( 'Show Description' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of products to show', 'wpsc' ); ?></label>
+			<select id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>">
+				<?php
+				for ( $i = 1; $i <= 10; $i++ ) {
+					$selected = '';
+					if ( $i == $number ) $selected = ' selected="selected"';
+					echo '<option' . $selected . ' value="' . $i . '">' . $i . '</option>';
+				}
+				?>
+			</select>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'hide_thumbnails' ); ?>"><?php _e( 'Hide Thumbnails', 'wpsc' ); ?></label>
+			<input type="checkbox" id="<?php echo $this->get_field_id( 'hide_thumbnails' ); ?>" name="<?php echo $this->get_field_name( 'hide_thumbnails' ); ?>" <?php echo $hide_thumbnails ? 'checked="checked"' : ""; ?>>
+		</p>
+			
+		<p>
+			<label for="<?php echo $this->get_field_id( 'show_description' ); ?>"><?php _e( 'Show Description', 'wpsc' ); ?></label>
+			<input type="checkbox" id="<?php echo $this->get_field_id( 'show_description' ); ?>" name="<?php echo $this->get_field_name( 'show_description' ); ?>" <?php echo $show_description ? 'checked="checked"' : ""; ?>>
+		</p>			
 		<?php
 		
 	}
@@ -119,80 +130,99 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
 
 
 /**
- * Specials Widget content function
- * Displays the products
+ * Product Specials Widget content function
  *
- * @todo make this use wp_query and a theme file
+ * Displays the latest products.
+ *
+ * @todo Remove marketplace theme specific code and maybe replce with a filter for the image output? (not required if themeable as above)
  *
  * Changes made in 3.8 that may affect users:
  *
- * 1. $input does not get prepended to output.
+ * 1. The product title link text does now not have a bold tag, it should be styled via css.
+ * 2. <br /> tags have been ommitted. Padding and margins should be applied via css.
+ * 3. Each product is enclosed in a <div> with a 'wpec-special-product' class.
+ * 4. The product list is enclosed in a <div> with a 'wpec-special-products' class.
+ * 5. Function now expect a single paramter with an array of options (used to be a string which prepended the output).
  */
-function nzshpcrt_specials( $args = null ) {
+ 
+function nzshpcrt_specials( $args = null, $instance ) {
 	
 	global $wpdb;
 	
-	// Args not used yet but this is ready for when it is
-	$args = wp_parse_args( (array)$args, array() );
+	$args = wp_parse_args( (array)$args, array( 'number' => 5 ) );
 	
-	$image_width = get_option( 'product_image_width' );
-	$image_height = get_option( 'product_image_height' );
 	$siteurl = get_option( 'siteurl' );
 	
-	$product = $wpdb->get_results( "SELECT DISTINCT `p` . * , `m`.`meta_value` AS `special_price`
-		FROM `" . $wpdb->postmeta . "` AS `m`
-		JOIN `" . $wpdb->posts . "` AS `p` ON `m`.`post_id` = `p`.`ID`
-		WHERE `m`.`meta_key`
-		IN ('_wpsc_special_price')
-		AND `m`.`meta_value` >0
-		AND `p`.`post_status` = 'publish'
-		AND `p`.`post_type` IN ('wpsc-product')
-		ORDER BY RAND( )
-		LIMIT 1", ARRAY_A );
+	if ( !$number = (int) $instance['number'] )
+		$number = 5;
+		
+	$hide_thumbnails  = isset($instance['hide_thumbnails']) ? (bool)$instance['hide_thumbnails'] : FALSE;
+	$show_description  = isset($instance['show_description']) ? (bool)$instance['show_description'] : FALSE;
 	
-	if ( $product != null ) {
-		$output = '<div>';
-		foreach ( $product as $special ) {
-			
+	$excludes = nzshpcrt_specials_excludes();
+		
+	$special_products = query_posts( array(
+		'post_type'   => 'wpsc-product',
+		'caller_get_posts' => 1,
+		'post_status' => 'publish',
+		'post__not_in' => $excludes,
+		'posts_per_page' => $number
+	) );
+	
+	$output = '';
+	
+	if ( count( $special_products ) > 0 ) {
+		$output .= '<div class="wpec-special-products">';		
+		foreach ( $special_products as $special_product ) {
 			$attached_images = (array)get_posts( array(
 				'post_type'   => 'attachment',
 				'numberposts' => 1,
 				'post_status' => null,
-				'post_parent' => $special['ID'],
+				'post_parent' => $special_product->ID,
 				'orderby'     => 'menu_order',
 				'order'       => 'ASC'
 			) );
+			
+			//Images are handled hee
 			$attached_image = $attached_images[0];
-			if ( ( $attached_image->ID > 0 ) ) {
-				$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $product['post_title'] . '" alt="' . $product['post_title'] . '" /><br />';
+			if ( ( $attached_image->ID > 0 ) && ($hide_thumbnails != 1) ) {
+				$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
 			}
 			
-			$special['name'] = htmlentities( stripslashes( $special['name'] ), ENT_QUOTES, 'UTF-8' );
-			$output .= '<strong><a class="wpsc_product_title" href="' . wpsc_product_url( $special['id'], false ) . '">' . $special['post_title'] . '</a></strong><br />';
+			//Product Title is here
+			$special_product->name = htmlentities( stripslashes( $special_product->name ), ENT_QUOTES, 'UTF-8' );
+			$output .= '<strong><a class="wpsc_product_title" href="' . wpsc_product_url( $special_product->id, false ) . '">' . $special_product->post_title . '</a></strong><br />';
 			
-			if ( get_option( 'wpsc_special_description' ) != '1' ) {
-				$output .= $special['post_content'] . '<br />';
+			//Description is handled here
+			if ( $show_description == 1 ) {
+				$output .= $special_product->post_content . '<br />';
 			}
 			
-			$output .= '<span id="special_product_price_' . $special['ID'] . '"><span class="pricedisplay">';
-			$output .= wpsc_calculate_price( $special['ID'] );
+			$output .= '<span id="special_product_price_' . $special_product->ID . '"><span class="pricedisplay">';
+			$output .= wpsc_calculate_price( $special_product->ID );
 			$output .= '</span></span><br />';
 			
-			$output .= '<form id="specials_' . $special['ID'] . '" method="post" action="" onsubmit="submitform(this, null); return false;">';
-			$output .= '<input type="hidden" name="product_id" value="' . $special['ID'] . '" />';
-			$output .= '<input type="hidden" name="item" value="' . $special['ID'] . '" />';
+			$output .= '<form id="specials_' . $special_product->ID . '" method="post" action="" onsubmit="submitform(this, null); return false;">';
+			$output .= '<input type="hidden" name="product_id" value="' . $special_product->ID . '" />';
+			$output .= '<input type="hidden" name="item" value="' . $special_product->ID . '" />';
 			$output .= '<input type="hidden" name="wpsc_ajax_action" value="special_widget" />';
 			$output .= '</form>';
 			
 		}
 		$output .= '</div>';
-	} else {
-		$output = '';
 	}
+	
 	echo $output;
 	
 }
+function nzshpcrt_specials_excludes(){
+	global $wpdb;
 
-
-
+	$exclude_products = $wpdb->get_results("SELECT ID FROM ".$wpdb->prefix."posts JOIN ".$wpdb->prefix."postmeta ON (".$wpdb->prefix."posts.ID = ".$wpdb->prefix."postmeta.post_id) WHERE 1=1  AND ".$wpdb->prefix."posts.post_type = 'wpsc-product' AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."postmeta.meta_key = '_wpsc_special_price' AND ".$wpdb->prefix."postmeta.meta_value = 0 GROUP BY wp_posts.ID ORDER BY ".$wpdb->prefix."posts.post_date DESC LIMIT 0, 10");
+	
+	foreach($exclude_products as $exclude_product){
+		$excludes[] = $exclude_product->ID;
+	}	
+	return $excludes;
+}
 ?>
