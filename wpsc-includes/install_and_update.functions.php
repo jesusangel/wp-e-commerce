@@ -134,9 +134,6 @@ function wpsc_install() {
 	if ( get_option( 'wpsc_selected_theme' ) == '' ) {
 		add_option( 'wpsc_selected_theme', 'default', 'Selected Theme', 'yes' );
 		update_option( 'wpsc_selected_theme', "default" );
-
-		// Used to flush transients - Added 3.8-development
-		do_action( 'wpsc_update_theme' );
 	}
 
 	if ( !get_option( 'product_image_height' ) ) {
