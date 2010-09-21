@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined( WPEC_TRANSIENT_THEME_PATH_PREFIX ) )
+	define( 'WPEC_TRANSIENT_THEME_PATH_PREFIX', 'wpsc_theme_file_path_' );
+
+if ( !defined( WPEC_TRANSIENT_THEME_URL_PREFIX ) )
+	define( 'WPEC_TRANSIENT_THEME_URL_PREFIX', 'wpsc_theme_file_path_' );
+
 /**
  * WP eCommerce theme functions
  *
@@ -9,6 +16,88 @@
  */
 
 /**
+ * wpsc_register_theme_file( $file_name )
+ *
+ * Adds a file name to a global list of
+ *
+ * @param string $file_name Name of file to add to global list of files
+ */
+function wpsc_register_theme_file( $file_name ) {
+	global $wpec_theme_files;
+
+	if ( !in_array( $file_name, (array)$wpec_theme_files ) )
+		$wpec_theme_files[] = $file_name;
+}
+
+/**
+ * wpsc_get_theme_files()
+ *
+ * Returns the global wpec_theme_files
+ *
+ * @global array $wpec_theme_files
+ * @return array
+ */
+function wpsc_get_theme_files() {
+	global $wpec_theme_files;
+
+	if ( empty( $wpec_theme_files ) )
+		return array();
+	else
+		return apply_filters( 'wpsc_get_theme_files', (array)array_values( $wpec_theme_files ) );
+}
+
+/**
+ * wpsc_register_core_theme_files()
+ *
+ * Registers the core WPEC files into the global array
+ */
+function wpsc_register_core_theme_files() {
+	wpsc_register_theme_file( 'wpsc-single_product.php' );
+	wpsc_register_theme_file( 'wpsc-grid_view.php' );
+	wpsc_register_theme_file( 'wpsc-list_view.php' );
+	wpsc_register_theme_file( 'wpsc-products_page.php' );
+	wpsc_register_theme_file( 'wpsc-shopping_cart_page.php' );
+	wpsc_register_theme_file( 'wpsc-transaction_results.php' );
+	wpsc_register_theme_file( 'wpsc-user_log.php' );
+
+	// Let other plugins register their theme files
+	do_action( 'wpsc_register_core_theme_files' );
+}
+add_action( 'init', 'wpsc_register_core_theme_files' );
+
+/**
+ * wpsc_flush_theme_transients()
+ *
+ * This function will delete the temporary values stored in WordPress transients
+ * for all of the additional WPEC theme files and their locations. This is
+ * mostly used when the active theme changes, or when files are moved around. It
+ * does a complete flush of all possible path/url combinations of files.
+ *
+ * @uses wpsc_get_theme_files
+ */
+function wpsc_flush_theme_transients( $force = false ) {
+
+	if ( true === $force || isset( $_REQUEST['wpsc_flush_theme_transients'] ) && !empty( $_REQUEST['wpsc_flush_theme_transients'] ) ) {
+
+		// Loop through current theme files and remove transients
+		if ( $theme_files = wpsc_get_theme_files() ) {
+			foreach( $theme_files as $file ) {
+				delete_transient( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file );
+				delete_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file );
+			}
+
+			return true;
+		}
+	}
+
+	// No files were registered so return false
+	return false;
+}
+add_action( 'wpsc_move_theme',   'wpsc_flush_theme_transients', 10, true );
+add_action( 'wpsc_switch_theme', 'wpsc_flush_theme_transients', 10, true );
+add_action( 'switch_theme',      'wpsc_flush_theme_transients', 10, true );
+
+/**
  * Check theme location, compares the active theme and the themes within wp-e-commerce/themes
  * finds files of the same name. 
  * @access public
@@ -17,17 +106,26 @@
  * @param null
  * @return $results (Array) of Files OR false if no similar files are found
  */
-function wpsc_check_theme_location(){
-	$selected_theme = get_template_directory();
-	$templates = wpsc_list_product_templates($selected_theme.'/');
-	$path = WPSC_FILE_PATH.'/themes/';
-	$wpsc_templates = wpsc_list_product_templates($path);
-	$results = array_intersect($templates,$wpsc_templates);
-	if(count($results) > 0){
+function wpsc_check_theme_location() {
+	// Get the current theme
+	$current_theme       = get_stylesheet_directory();
+
+	// Load up the files in the current theme
+	$current_theme_files = wpsc_list_product_templates( $current_theme . '/' );
+
+	// Load up the files in the wpec themes folder
+	$wpsc_template_files = wpsc_list_product_templates( WPSC_FILE_PATH . '/themes/' );
+
+	// Compare the two
+	$results             = array_intersect( $current_theme_files, $wpsc_template_files );
+
+	// Return the differences
+	if ( count( $results ) > 0 )
 		return $results;
-	}else{
+
+	// No differences so return false
+	else
 		return false;
-	}
 }
 
 /**
@@ -38,22 +136,28 @@ function wpsc_check_theme_location(){
  * @param $path - you can provide a path to find the files within it by default path is wp-e-commerce/themes/
  * @return $templates (Array) List of files
  */
-function wpsc_list_product_templates($path = ''){
-	if(empty($path)){
-		if(file_exists(WPSC_OLD_THEMES_PATH.get_option( 'wpsc_selected_theme' ).'/'.get_option( 'wpsc_selected_theme' ).'.css'))
-			$path = WPSC_OLD_THEMES_PATH.get_option( 'wpsc_selected_theme' ).'/';		
-		else
-			$path = WPSC_FILE_PATH.'/themes/';		
-	}
-	$dh = opendir($path);
-	while (($file = readdir($dh)) !== false) {
-		if($file != "." && $file != ".." && !strstr($file, ".svn") && !strstr($file, "images") && is_file($path.$file)) {
-				$templates[] = $file;
+function wpsc_list_product_templates( $path = '' ) {
+	// If no path, then try to make some assuptions
+	if ( empty( $path ) ) {
+		if ( file_exists( WPSC_OLD_THEMES_PATH . get_option( 'wpsc_selected_theme' ) . '/' . get_option( 'wpsc_selected_theme' ) . '.css' ) ) {
+			$path = WPSC_OLD_THEMES_PATH . get_option( 'wpsc_selected_theme' ) . '/';
+		} else {
+			$path = WPSC_FILE_PATH . '/themes/';
 		}
 	}
-	return $templates;
 
+	// Open the path and get the file names
+	$dh = opendir( $path );
+	while ( ( $file = readdir( $dh ) ) !== false ) {
+		if ( $file != "." && $file != ".." && !strstr( $file, ".svn" ) && !strstr( $file, "images" ) && is_file( $path . $file ) ) {
+			$templates[] = $file;
+		}
+	}
+
+	// Return template names
+	return $templates;
 }
+
 /**
  * Displays the theme upgrade notice
  * @access public
@@ -62,17 +166,20 @@ function wpsc_list_product_templates($path = ''){
  * @param null
  * @return null
  */
-function wpsc_theme_upgrade_notice() {
- ?>
+function wpsc_theme_upgrade_notice() { ?>
+
 	<div id="message" class="updated fade">
-		<p><?php printf( __( '<strong>WP e-Commerce is ready</strong>. If you plan on editing the look of your site, you should <a href="%1s">update your active theme</a> to include the additional WP e-Commerce files. <a href="%2s">Click here</a> to ignore and remove this box.', 'wpsc' ), admin_url( 'admin.php?page=wpsc-settings&tab=presentation' ),admin_url( 'admin.php?page=wpsc-settings&tab=presentation&wpsc_notices=theme_ignore' ) ) ?></p>
+		<p><?php printf( __( '<strong>WP e-Commerce is ready</strong>. If you plan on editing the look of your site, you should <a href="%1s">update your active theme</a> to include the additional WP e-Commerce files. <a href="%2s">Click here</a> to ignore and remove this box.', 'wpsc' ), admin_url( 'admin.php?page=wpsc-settings&tab=presentation' ), admin_url( 'admin.php?page=wpsc-settings&tab=presentation&wpsc_notices=theme_ignore' ) ) ?></p>
 	</div>
+
 <?php
 }
+if ( !get_option('wpsc_ignore_theme') )
+	add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
 
-if(isset($_REQUEST['wpsc_notices']) && $_REQUEST['wpsc_notices'] == 'theme_ignore'){
-	update_option('wpsc_ignore_theme',true);
-	wp_redirect(remove_query_arg('wpsc_notices'));
+if ( isset( $_REQUEST['wpsc_notices'] ) && $_REQUEST['wpsc_notices'] == 'theme_ignore' ) {
+	update_option( 'wpsc_ignore_theme', true );
+	wp_redirect( remove_query_arg( 'wpsc_notices' ) );
 }
 /**
  * Checks the active theme folder for the particular file, if it exists then return the active theme url otherwise
@@ -83,40 +190,50 @@ if(isset($_REQUEST['wpsc_notices']) && $_REQUEST['wpsc_notices'] == 'theme_ignor
  * @param $file string filename
  * @return PATH to the file
  */
-function wpsc_get_theme_url($file = ''){
-
+function wpsc_get_theme_url( $file = '' ) {
 	global $wpsc_theme_url;
 
-	if(empty($file)) 
+	// If we're not looking for a file, do not proceed
+	if ( empty( $file ) )
 		return;
 
-	// Use cache first if it exists
-	if (isset($_SESSION['wpsc_theme_url_cache'][$file]) && $_SESSION['wpsc_theme_url_cache'][$file] != '') {
-		return $_SESSION['wpsc_theme_url_cache'][$file];
+	// No cache, so find one and set it
+	if ( false === ( $file_url = get_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file ) ) ) {
+
+		// Look for file in stylesheet
+		if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
+			$file_url = get_stylesheet_directory_uri() . '/' . $file;
+
+		// Look for file in template
+		} elseif ( file_exists( get_template_directory() . '/' . $file ) ) {
+			$file_url = get_template_directory_uri() . '/' . $file;
+
+		// Backwards compatibility
+		} else {
+			// Look in old theme url
+			$selected_theme_check = WPSC_OLD_THEMES_URL . get_option( 'wpsc_selected_theme' ) . '/' . str_ireplace( 'wpsc-', '', $file );
+
+			// Check the selected theme
+			if ( file_exists( $selected_theme_check ) ) {
+				$file_url = $selected_theme_check;
+
+			// Check the global theme url
+			} elseif ( !empty( $wpsc_theme_url ) ) {
+				$file_url = $wpsc_theme_url . '/' . $file;
+
+			// Out of options
+			} else {
+				return false;
+			}
+		}
+
+		// Save the transient and update it every 12 hours
+		if ( !empty( $file_url ) )
+			set_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url, 60 * 60 * 12 );
 	}
 
-	if(file_exists(get_stylesheet_directory().'/'.$file)) {
-
-		$file_url = get_stylesheet_directory_uri().'/';
-
-	} elseif(file_exists(get_template_directory().'/'.$file)) {
-
-		$file_url = get_template_directory_uri().'/';
-
-	} elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file))) {
-
-		$file_url = WPSC_OLD_THEMES_URL.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
-
-	} else {
-
-		$file_url = $wpsc_theme_url.'/'.$file;
-
-	}
-
-	$_SESSION['wpsc_theme_url_cache'][$file] = $file_url;
-
-	return $file_url;
-
+	// Return filtered result
+	return apply_filters( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url );
 }
 
 /**
@@ -128,38 +245,53 @@ function wpsc_get_theme_url($file = ''){
  * @param $file string filename
  * @return PATH to the file
  */
-function wpsc_get_theme_path($file = ''){
+function wpsc_get_theme_path( $file = '' ){
 	global $wpsc_theme_path;
 
-	if(empty($file)) 
+	// If we're not looking for a file, do not proceed
+	if ( empty( $file ) )
 		return;
-	
-	// Use cache first if it exists
-	if (isset($_SESSION['wpsc_theme_path_cache'][$file]) && $_SESSION['wpsc_theme_path_cache'][$file] != '') {
-		return $_SESSION['wpsc_theme_path_cache'][$file];
+
+	// No cache, so find one and set it
+	if ( false === ( $file_path = get_transient( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file ) ) ) {
+
+		// Look for file in stylesheet
+		if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
+			$file_path = get_stylesheet_directory() . '/' . $file;
+
+		// Look for file in template
+		} elseif ( file_exists( get_template_directory() . '/' . $file ) ) {
+			$file_path = get_template_directory() . '/' . $file;
+
+		// Backwards compatibility
+		} else {
+			// Look in old theme path
+			$selected_theme_check = WPSC_OLD_THEMES_PATH . get_option( 'wpsc_selected_theme' ) . '/' . str_ireplace( 'wpsc-', '', $file );
+
+			// Check the selected theme
+			if ( file_exists( $selected_theme_check ) ) {
+				$file_path = $selected_theme_check;
+
+			// Check the global theme url
+			} elseif ( !empty( $wpsc_theme_path ) ) {
+				$file_path = $wpsc_theme_path . '/' . $file;
+
+			// Out of options
+			} else {
+				return false;
+			}
+		}
+
+		// Save the transient and update it every 12 hours
+		if ( !empty( $file_path ) )
+			set_transient( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file, $file_path, 60 * 60 * 12 );
+		
 	}
 
-	if(file_exists(get_stylesheet_directory().'/'.$file)) {
-
-		$template_file = get_stylesheet_directory().'/'.$file;
-
-	} elseif(file_exists(get_template_directory().'/'.$file)) {
-
-		$template_file = get_template_directory().'/'.$file;
-
-	} elseif(file_exists(WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file))) {
-
-		$template_file = WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme').'/'.str_ireplace('wpsc-','',$file);
-
-	} else {
-
-		$template_file = $wpsc_theme_path.$file;
-	}
-
-	$_SESSION['wpsc_theme_path_cache'][$file] = $template_file;
-
-	return $template_file;
+	// Return filtered result
+	return apply_filters( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file, $file_path );
 }
+
 /**
  * Checks if wpsc-single_product.php has been moved to the active theme, if it has then include the 
  * template from the active theme.
@@ -191,12 +323,6 @@ function wpsc_single_template( $content ) {
 
 	return $content;
 }
-
-//Check if some themes have been moved, if not display the theme upgrade notice 
-if ( !get_option('wpsc_ignore_theme') )
-	add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
-
-
 
 /**
  * wpsc_user_enqueues products function,
@@ -241,12 +367,11 @@ function wpsc_enqueue_user_script_and_css() {
 		wp_enqueue_script( 'livequery', WPSC_URL . '/wpsc-admin/js/jquery.livequery.js', array( 'jquery' ), '1.0.3' );
 		wp_enqueue_script( 'jquery-rating', WPSC_URL . '/js/jquery.rating.js', array( 'jquery' ), $version_identifier );
 
-
 		wp_enqueue_script( 'wp-e-commerce-legacy', WPSC_URL . '/js/user.js', array( 'jquery' ), WPSC_VERSION . WPSC_MINOR_VERSION );
 
-
 		wp_enqueue_script( 'wpsc-thickbox', WPSC_URL . '/js/thickbox.js', array( 'jquery' ), 'Instinct_e-commerce' );
-		$the_wpsc_theme_path = wpsc_get_theme_url("wpsc-" . get_option( 'wpsc_selected_theme' ) . ".css");
+		
+		$the_wpsc_theme_path = wpsc_get_theme_url( 'wpsc-' . get_option( 'wpsc_selected_theme' ) . '.css' );
 		wp_enqueue_style( 'wpsc-theme-css', $the_wpsc_theme_path, false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_URL . '/themes/compatibility.css', false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-product-rater', WPSC_URL . '/js/product_rater.css', false, $version_identifier, 'all' );
