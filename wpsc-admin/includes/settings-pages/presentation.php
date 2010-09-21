@@ -98,7 +98,8 @@ function wpsc_theme_presentation_page_metabox(){
 
 				//printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?>
 					<input type='submit' value='Move Template Files' class="button" name='wpsc_move_themes' />
-					<?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?>
+					<?php printf( __( '<a href="%s" class="button preview">Backup Your Theme</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_admin_action=backup_themes', 'backup_themes' ) ); ?>
+					<?php printf( __( '<a href="%s" class="button preview">Flush Theme Cache</a>', 'wpsc' ), wp_nonce_url( 'admin.php?wpsc_flush_theme_transients=true', 'wpsc_flush_theme_transients' ) ); ?>
 				</p>
 				<br style="clear:both" />
 				<br style="clear:both" />
