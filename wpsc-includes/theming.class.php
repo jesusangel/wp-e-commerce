@@ -93,7 +93,7 @@ class wpsc_theming {
 	function recursive_copy( $src, $dst ) {
 		$theme_file_prefix = '';
 
-		if ( $old != WPSC_FILE_PATH . '/themes/' )
+		if ( $src != WPSC_FILE_PATH . '/themes/' )
 			$theme_file_prefix = "wpsc-";
 
 		$dir = opendir( $src );
