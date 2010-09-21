@@ -2366,6 +2366,20 @@ function wpsc_delete_variation_set() {
 	exit();
 }
 
+function wpsc_force_flush_theme_transients() {
+
+	// Flush transients
+	wpsc_flush_theme_transients( true );
+
+	// Bounce back
+	$sendback = wp_get_referer();
+	wp_redirect( $sendback );
+
+	exit();
+}
+if ( isset( $_REQUEST['wpsc_flush_theme_transients'] ) && ( $_REQUEST['wpsc_flush_theme_transients'] == 'true' ) )
+	add_action( 'admin_init', 'wpsc_force_flush_theme_transients' );
+
 function wpsc_backup_theme() {
 
 	$wpsc_theme_path = get_stylesheet_directory();
