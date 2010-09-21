@@ -13,29 +13,36 @@
 class wpsc_theming {
 
 	var $active_wp_theme;
+	var $active_wp_style;
 	var $active_wpsc_theme;
 	var $theme_file_prefix;
 	var $templates_to_move;
 	var $list_of_templates;
 
+	/**
+	 * wpsc_theming
+	 *
+	 * Construct
+	 * 
+	 * @return
+	 */
 	function wpsc_theming() {
-		//Construct
-		global $theme_file_prefix;
 		check_admin_referer( 'wpsc_copy_themes' );
-		$template_dir            = get_stylesheet_directory() . '/';
+
+		$this->active_wp_style   = trailingslashit( get_stylesheet_directory() );
 		$this->templates_to_move = $_POST['wpsc_templates_to_port'];
-		$this->list_of_templates = wpsc_list_product_templates( $template_dir );
-		$theme_file_prefix       = 'wpsc-';
+		$this->list_of_templates = wpsc_list_product_templates( $this->active_wp_style );
+		$this->theme_file_prefix = 'wpsc-';
 
 		if ( $this->theme_exists() ) {
 			return;
 		} else {
 			//WP-WPSC theme doesn't exist, so let's figure out where we're porting from, either the plugin directory or the wpsc-themes directory
 			$theme_location  = $this->theme_location();
-			$active_wp_theme = get_stylesheet_directory();
+			$this->active_wp_theme = get_stylesheet_directory();
 
 			//Now that we have the theme location, let's copy it over to the themes directory and mod from there.
-			$this->move_theme( $theme_location, $active_wp_theme );
+			$this->move_theme( $theme_location, $this->active_wp_theme );
 
 			//The rest of this is ported from the previous copy_theme function
 			$_SESSION['wpsc_themes_copied'] = true;
@@ -59,7 +66,8 @@ class wpsc_theming {
 		global $wpsc_themes_dir;
 		$results = array_diff( $this->templates_to_move, $this->list_of_templates );
 
-		//if theme already exists, we're set, do nothing - this should also indicate a new install
+		// If theme already exists, we're set, do nothing
+		// This should also indicate a new install
 		if ( count( $results ) == 0 )
 			return true;
 		else
@@ -80,10 +88,11 @@ class wpsc_theming {
 		$wpsc_theme_folder = get_option( 'wpsc_selected_theme' );
 		$active_wpsc_dir   = $old_wpsc_themes_dir . $wpsc_theme_folder;
 
-		//First, check if theme exists in uploads folder, if so, that's theme location - if it's not there, then the theme location will be the plugins folder.
-
+		// Check if theme exists in uploads folder. If so, that's theme location.
 		if ( file_exists( $active_wpsc_dir . '/functions.php' ) )
 			$theme_location = $active_wpsc_dir;
+
+		// If it's not there, the theme location will be the plugins folder.
 		else
 			$theme_location = WPSC_FILE_PATH . '/themes';
 
@@ -91,13 +100,15 @@ class wpsc_theming {
 	}
 
 	function recursive_copy( $src, $dst ) {
-		$theme_file_prefix = '';
 
 		if ( $src != WPSC_FILE_PATH . '/themes/' )
-			$theme_file_prefix = "wpsc-";
+			$theme_file_prefix = $this->theme_file_prefix;
+		else
+			$theme_file_prefix = '';
 
 		$dir = opendir( $src );
 		@mkdir( $dst );
+
 		while ( false !== ( $file = readdir( $dir )) ) {
 			//exit($src.'<br /><pre>'.print_r($this->templates_to_move,true).'</pre>');
 			if ( in_array( $file, $this->templates_to_move ) ) {
@@ -119,17 +130,17 @@ class wpsc_theming {
 	 * @return None
 	 */
 	function move_theme( $old, $new ) {
-		$theme_file_prefix = '';
-
+		
 		if ( $old != WPSC_FILE_PATH . '/themes/' )
-			$theme_file_prefix = "wpsc-";
+			$theme_file_prefix = $this->theme_file_prefix;
+		else
+			$theme_file_prefix = '';
 
 		$this->recursive_copy( $old, $new );
 		$path = $new;
 		$dh   = opendir( $path );
 
-		$i = 1;
-		while ( ( $file = readdir( $dh ) ) !== false ) {
+		while ( false !== ( $file = readdir( $dh ) ) ) {
 			if ( $file != "." && $file != ".." && !strstr( $file, ".svn" ) && !strstr( $file, "images" ) && strstr( $file, 'wpsc-' ) ) {
 				if ( in_array( $file, $this->templates_to_move ) ) {
 					if ( !strstr( $file, "functions" ) && !strstr( $file, "css" ) && !strstr( $file, "widget" ) ) {
@@ -138,16 +149,13 @@ class wpsc_theming {
 						rename( $path . "/" . $file, $path . "/" . $theme_file_prefix . $file );
 					}
 				}
-				$i++;
 			}
 		}
 		closedir( $dh );
 
 		do_action( 'wpsc_move_theme' );
 	}
-
 }
-
 if ( isset( $_REQUEST['wpsc_move_themes'] ) && ( $_REQUEST['wpsc_move_themes'] == 'Move Template Files' ) )
 	add_action( 'admin_init', create_function( '', 'global $wpsc_theming; $wpsc_theming = new wpsc_theming();' ) );
 
