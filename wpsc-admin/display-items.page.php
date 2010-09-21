@@ -459,18 +459,19 @@ function wpsc_admin_category_dropdown() {
  */
 
 function wpsc_admin_category_options( $category, $subcategory_level = 0, $category_slug = null ) {
-	global $wpdb;
-	//echo "<pre>".print_r($category, true)."</pre>";
-	if ( $subcategory_level == 0 ) {
-		$output = array( "<optgroup label=" . stripslashes( $category->name ) . ">\n", "</optgroup>\n" );
+
+	if ( $category_slug == $category->slug ) {
+
+		$selected = "selected='selected'";
+
 	} else {
-		if ( $category_slug == $category->slug ) {
-			$selected = "selected='selected'";
-		} else {
-			$selected = '';
-		}
-		$output = "<option $selected value='{$category->slug}'>" . str_repeat( "-", $subcategory_level - 1 ) . stripslashes( $category->name ) . "</option>\n";
+
+		$selected = '';
+
 	}
+
+	$output = "<option $selected value='{$category->slug}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
+
 	return $output;
 }
 
