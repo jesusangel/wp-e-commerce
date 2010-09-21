@@ -1010,9 +1010,7 @@ function wpsc_download_file() {
          $file_id = $download_data['fileid'];
 
       }
-
-      
-
+	  
       $file_data = get_post($file_id);
 
       if($file_data == null) {
@@ -1045,9 +1043,8 @@ function wpsc_download_file() {
          do_action('wpsc_alter_download_action', $file_id);
 
 
-         $file_path = WPSC_FILE_DIR.basename($file_data->guid);
+         $file_path = WPSC_FILE_DIR.basename($file_data->post_title);
          $file_name = basename($file_data->post_title);
-
 
 
          if(is_file($file_path)) {
