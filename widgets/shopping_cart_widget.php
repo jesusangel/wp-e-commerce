@@ -148,28 +148,4 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
 
 
 
-/**
- * Not sure that this init function is required?
- * It is called on init from wp-shopping-cart.php
- * Does it relate to the Sidebar setting in the admin?
- */
-function widget_wp_shopping_cart_init() {
-	
-	if ( function_exists( 'wp_register_sidebar_widget' ) ) {
-		$widget_ops['description'] = 'A Shopping Cart For Your WP e-Commerce Plugin';
-		wp_register_sidebar_widget( 'widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart', $widget_ops );
-		// wp_register_widget_control( 'widget_wp_shopping_cart', 'Shopping Cart', 'widget_wp_shopping_cart_control' );
-		$GLOBALS['wpsc_cart_widget'] = true;
-		if ( get_option( 'cart_location' ) == 1) {
-			update_option( 'cart_location', 4 );
-			remove_action( 'wp_list_pages','nzshpcrt_shopping_basket' );
-		}
-	}
-	
-	return;
-	
-}
-
-
-
 ?>

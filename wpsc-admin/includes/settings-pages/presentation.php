@@ -693,16 +693,11 @@ function wpsc_options_presentation() {
 					<td>
 					<?php
 						$cart_location = get_option( 'cart_location' );
-						$cart1 = "";
 						$cart2 = "";
 						$cart3 = "";
 						$cart4 = "";
 						$cart5 = "";
 						switch ( $cart_location ) {
-							case 1:
-								$cart1 = "checked ='checked'";
-								break;
-
 							case 2:
 								$cart2 = "checked ='checked'";
 								break;
@@ -718,15 +713,6 @@ function wpsc_options_presentation() {
 							case 5:
 								$cart5 = "checked ='checked'";
 								break;
-						}
-						if ( function_exists( 'wp_register_sidebar_widget' ) ) {
-					?>
-							<input type='radio' value='1' onclick='hideelement1("dropshop_option", this.value)' disabled='disabled'  name='wpsc_options[cart_location]' id='cart1' <?php echo $cart1; ?> /> <label style='color: #666666;' for='cart1'><?php echo __( 'Sidebar', 'wpsc' ); ?></label> &nbsp;
-<?php
-						} else {
-?>
-							<input type='radio' value='1' name='wpsc_options[cart_location]' id='cart1' <?php echo $cart1; ?> /> <label for='cart1'><?php echo __( 'Sidebar', 'wpsc' ); ?></label> &nbsp;
-<?php
 						}
 ?>
 						<input type='radio' onclick='hideelement1("dropshop_option", this.value)' value='2' name='wpsc_options[cart_location]' id='cart2' <?php echo $cart2; ?> /> <label for='cart2'><?php echo __( 'Page', 'wpsc' ); ?></label> &nbsp;

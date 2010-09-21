@@ -133,18 +133,11 @@ function wpsc_load_plugin(){
 	}
 
 	//* heres where we start running our functions *//
-
-	add_action('init', 'widget_wp_shopping_cart_init', 10);
-	
 	
 	// refresh page urls when permalinks are turned on or altered
 	add_filter('mod_rewrite_rules', 'wpsc_refresh_page_urls');
 	
 	switch(get_option('cart_location')) {
-	  case 1:
-	  add_action('wp_list_pages','nzshpcrt_shopping_basket');
-	  break;
-	  
 	  case 2:
 	  add_action('the_content', 'nzshpcrt_shopping_basket' , 14);
 	  break;
