@@ -7,8 +7,8 @@
  */
 
 /**
- * Metabox for theme moving 
- * Location: Settings > Presentation page in WP-Admin 
+ * Metabox for theme moving
+ * Location: Settings > Presentation page in WP-Admin
  * @access public
  *
  * @since 3.8
@@ -18,19 +18,24 @@
 function wpsc_theme_presentation_page_metabox(){
 	global $wpsc_themes_dir;
 	$wpsc_templates = wpsc_list_product_templates();
-	$themes_location = wpsc_check_theme_location(); 
+	$themes_location = wpsc_check_theme_location();
 	$themes_copied = false; //Check to see whether themes have been copied to selected Theme Folder
 	$themes_backedup = false; //Check to see whether themes have recently been backedup
 	$themes_in_uploads = false; //Check to see whether themes live in the uploads directory
 	if ( isset( $_SESSION['wpsc_themes_copied'] ) && ($_SESSION['wpsc_themes_copied'] == true) ) $themes_copied = true;
 	if ( isset( $_SESSION['wpsc_themes_backup'] ) && ($_SESSION['wpsc_themes_backup'] == true) ) $themes_backedup = true;
 	if ( wpsc_count_themes_in_uploads_directory() > 0 ){
-		$themes_in_uploads = true;	
+		$themes_in_uploads = true;
 		foreach((array)$themes_location as $location)
 			$new_location[] = str_ireplace('wpsc-','', $location);
-			
-		$themes_location = $new_location;	
-	} 
+
+		$themes_location = $new_location;
+	}
+
+	// Used to flush transients - @since 3.8-development
+	if ( true === $themes_copied )
+		do_action( 'wpsc_move_theme' );
+
 ?>
 	<div id="poststuff" class="metabox-holder">
 		<div id="themes_and_appearance" class='postbox'>
@@ -54,18 +59,18 @@ function wpsc_theme_presentation_page_metabox(){
 					<?php
 						$_SESSION['wpsc_themes_backup'] = false;
 					}
-				?>	
-				<p>
-				<?php if(false !== $themes_location){ 
-						//Some themes have been moved to the themes folder 
-					_e('Some Theme files have been moved to your WordPress Theme Folder.','wpsc');	
 				?>
-							
+				<p>
+				<?php if(false !== $themes_location){
+						//Some themes have been moved to the themes folder
+					_e('Some Theme files have been moved to your WordPress Theme Folder.','wpsc');
+				?>
+
 				<?php }else{
 						//No themes have been moved to the theme folder
-					_e('No Theme files have been moved to your WordPress Theme Folder.','wpsc');						
+					_e('No Theme files have been moved to your WordPress Theme Folder.','wpsc');
 					}?>
-				
+
 				</p>
 				<p>
 					<?php _e('These are the template files, used for WP e-Commerce. If you anticipate changing the look of your site, select the files you would like to edit from the list bellow, and we will move them to your active WordPress Theme.','wpsc'); ?>
@@ -73,34 +78,34 @@ function wpsc_theme_presentation_page_metabox(){
 				<ul>
 				<?php
 					foreach($wpsc_templates as $file){
-						$selected = '';	
+						$selected = '';
 						if(false !== array_search($file, (array)$themes_location))
-							$selected = 'checked="checked"';							
+							$selected = 'checked="checked"';
 						?>
 						<li><input type='checkbox' <?php echo $selected; ?> value='<?php echo $file ?>' name='wpsc_templates_to_port[]' />
 						<?php echo $file; ?></li>
-				<?php }	 ?>							 	
+				<?php }	 ?>
 				 </ul>
 				 <p>
-				 <?php if(false !== $themes_location){ 
-				 _e('To change the look of certain aspects of your shop, you can edit the moved files found here:','wpsc'); 
+				 <?php if(false !== $themes_location){
+				 _e('To change the look of certain aspects of your shop, you can edit the moved files found here:','wpsc');
 				 ?>
 				 </p>
 				 <p class="howto"><?php echo  get_stylesheet_directory(); ?></p>
 				<?php } ?>
-				<p><?php 
+				<p><?php
 					wp_nonce_field('wpsc_copy_themes');
-					
-				//printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?> 
+
+				//printf( __( "<a href='%s' class='button preview'>Move Theme Files</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=copy_themes", 'copy_themes' ) ); ?>
 					<input type='submit' value='Move Template Files' class="button" name='wpsc_move_themes' />
-					<?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?> 
-				</p>	
+					<?php printf( __( "<a href='%s' class='button preview'>Backup Your Theme</a>", 'wpsc' ), wp_nonce_url( "admin.php?wpsc_admin_action=backup_themes", 'backup_themes' ) ); ?>
+				</p>
 				<br style="clear:both" />
 				<br style="clear:both" />
 				</div>
 		</div>
 	</div>
-<?php			
+<?php
 }
 
 /**
