@@ -6,7 +6,9 @@ function wpsc_options_gateway() {
 	$curgateway = get_option( 'payment_gateway' );
 
 	$payment_gateway_names = get_option( 'payment_gateway_names' );
-	$nzshpcrt_gateways     = nzshpcrt_get_gateways();
+	
+	if ( empty( $nzshpcrt_gateways ) )
+		$nzshpcrt_gateways     = nzshpcrt_get_gateways();
 
 	if ( is_array( $nzshpcrt_gateways ) ) {
 		$selected_gateways = get_option( 'custom_gateway_options' );
