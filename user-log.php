@@ -400,8 +400,11 @@ if ( $_GET['edit_profile'] == 'true' ) {
 			</p>
 		</form>
 	<?php
-	}
-}
-	?>
-
+	} ?>
 </div>
+
+<?php
+}
+
+?>
+
