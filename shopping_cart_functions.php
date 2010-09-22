@@ -89,7 +89,7 @@ function wpsc_shopping_basket_internals( $cart, $quantity_limit = false, $no_tit
 
 	$cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path );
 
-	include_once( $cur_wpsc_theme_folder . "/wpsc-cart_widget.php" );
+	include_once( $cur_wpsc_theme_folder . 'wpsc-cart_widget.php' );
 
 	echo "    </div>";
 }
