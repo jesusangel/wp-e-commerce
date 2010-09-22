@@ -159,7 +159,7 @@ function nzshpcrt_specials( $args = null, $instance ) {
 	$hide_thumbnails  = isset($instance['hide_thumbnails']) ? (bool)$instance['hide_thumbnails'] : FALSE;
 	$show_description  = isset($instance['show_description']) ? (bool)$instance['show_description'] : FALSE;
 	
-	$excludes = nzshpcrt_specials_excludes();
+	$excludes = wpsc_specials_excludes();
 		
 	$special_products = query_posts( array(
 		'post_type'   => 'wpsc-product',
@@ -191,7 +191,7 @@ function nzshpcrt_specials( $args = null, $instance ) {
 			
 			//Product Title is here
 			$special_product->name = htmlentities( stripslashes( $special_product->name ), ENT_QUOTES, 'UTF-8' );
-			$output .= '<strong><a class="wpsc_product_title" href="' . wpsc_product_url( $special_product->id, false ) . '">' . $special_product->post_title . '</a></strong><br />';
+			$output .= '<strong><a class="wpsc_product_title" href="' . wpsc_product_url( $special_product->ID, false ) . '">' . $special_product->post_title . '</a></strong><br />';
 			
 			//Description is handled here
 			if ( $show_description == 1 ) {
@@ -215,7 +215,7 @@ function nzshpcrt_specials( $args = null, $instance ) {
 	echo $output;
 	
 }
-function nzshpcrt_specials_excludes(){
+function wpsc_specials_excludes(){
 	global $wpdb;
 
 	$exclude_products = $wpdb->get_results("SELECT ID FROM ".$wpdb->prefix."posts JOIN ".$wpdb->prefix."postmeta ON (".$wpdb->prefix."posts.ID = ".$wpdb->prefix."postmeta.post_id) WHERE 1=1  AND ".$wpdb->prefix."posts.post_type = 'wpsc-product' AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."postmeta.meta_key = '_wpsc_special_price' AND ".$wpdb->prefix."postmeta.meta_value = 0 GROUP BY wp_posts.ID ORDER BY ".$wpdb->prefix."posts.post_date DESC LIMIT 0, 10");
