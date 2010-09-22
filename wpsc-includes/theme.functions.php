@@ -93,9 +93,9 @@ function wpsc_flush_theme_transients( $force = false ) {
 	// No files were registered so return false
 	return false;
 }
-add_action( 'wpsc_move_theme',   'wpsc_flush_theme_transients', 10, true );
+add_action( 'wpsc_move_theme', 'wpsc_flush_theme_transients', 10, true );
 add_action( 'wpsc_switch_theme', 'wpsc_flush_theme_transients', 10, true );
-add_action( 'switch_theme',      'wpsc_flush_theme_transients', 10, true );
+add_action( 'switch_theme', 'wpsc_flush_theme_transients', 10, true );
 
 /**
  * Check theme location, compares the active theme and the themes within wp-e-commerce/themes
