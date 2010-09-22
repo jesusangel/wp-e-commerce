@@ -381,11 +381,13 @@ function wpsc_packing_slip($purchase_id) {
 				echo "	<tr><td>".__('Email', 'wpsc').":</td><td>".$purch_data['email']."</td></tr>\n\r";
 			}
 			
-			if(get_option('payment_method') == 2) {
+			if ( 2 == get_option( 'payment_method' ) ) {
 				$gateway_name = '';
-				foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-					if($purch_data['gateway'] != 'testmode') {
-						if($gateway['internalname'] == $purch_data['gateway'] ) {
+				$nzshpcrt_gateways = nzshpcrt_get_gateways();
+
+				foreach( $nzshpcrt_gateways as $gateway ) {
+					if ( $purch_data['gateway'] != 'testmode' ) {
+						if ( $gateway['internalname'] == $purch_data['gateway'] ) {
 							$gateway_name = $gateway['name'];
 						}
 					} else {
@@ -393,6 +395,7 @@ function wpsc_packing_slip($purchase_id) {
 					}
 				}
 			}
+
 // 			echo "	<tr><td colspan='2'></td></tr>\n\r";
 // 			echo "	<tr><td>".__('Payment Method', 'wpsc').":</td><td>".$gateway_name."</td></tr>\n\r";
 // 			//echo "	<tr><td>".__('Purchase No.', 'wpsc').":</td><td>".$purch_data['id']."</td></tr>\n\r";

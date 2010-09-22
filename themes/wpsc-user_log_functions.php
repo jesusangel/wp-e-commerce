@@ -302,6 +302,8 @@ function wpsc_has_purchases_this_month() {
 function wpsc_user_details() {
 	global $wpdb, $user_ID, $wpsc_purchlog_statuses, $gateway_checkout_form_fields, $purchase_log, $col_count;
 
+	$nzshpcrt_gateways = nzshpcrt_get_gateways();
+
 	foreach ( (array)$purchase_log as $purchase ) {
 		$status_state = "expand";
 		$status_style = "";
@@ -352,7 +354,7 @@ function wpsc_user_details() {
 		if ( get_option( 'payment_method' ) == 2 ) {
 			echo " <td>";
 			$gateway_name = '';
-			foreach ( (array)$GLOBALS['nzshpcrt_gateways'] as $gateway ) {
+			foreach ( (array)$nzshpcrt_gateways as $gateway ) {
 				if ( $purchase['gateway'] != 'testmode' ) {
 					if ( $gateway['internalname'] == $purchase['gateway'] ) {
 						$gateway_name = $gateway['name'];
@@ -565,7 +567,7 @@ function wpsc_user_details() {
 			//if(get_option('payment_method') == 2)
 			//{
 			$gateway_name = '';
-			foreach ( (array)$GLOBALS['nzshpcrt_gateways'] as $gateway ) {
+			foreach ( (array)$nzshpcrt_gateways as $gateway ) {
 				if ( $purchase_log[0]['gateway'] != 'testmode' ) {
 					if ( $gateway['internalname'] == $purchase_log[0]['gateway'] ) {
 						$gateway_name = $gateway['name'];

@@ -105,6 +105,7 @@ function wpsc_core_load_gateways() {
 			require( WPSC_FILE_PATH . '/merchants/' . $nzshpcrt_merchant );
 		}
 	}
+	unset( $nzshpcrt_merchant );
 
 	$nzshpcrt_gateways = apply_filters( 'wpsc_merchants_modules', $nzshpcrt_gateways );
 	uasort( $nzshpcrt_gateways, 'wpsc_merchant_sort' );
@@ -113,6 +114,8 @@ function wpsc_core_load_gateways() {
 	$wpsc_gateways = array();
 	foreach ( (array)$nzshpcrt_gateways as $key => $gateway )
 		$wpsc_gateways[$gateway['internalname']] = &$nzshpcrt_gateways[$key];
+
+	unset( $key, $gateway );
 
 }
 

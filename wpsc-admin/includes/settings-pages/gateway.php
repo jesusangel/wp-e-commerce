@@ -2,36 +2,39 @@
 function wpsc_options_gateway(){
 global $wpdb;
 $curgateway = get_option('payment_gateway');
- 
-$payment_gateway_names = get_option('payment_gateway_names');
 
-if (is_array($GLOBALS['nzshpcrt_gateways'])) {
+$payment_gateway_names = get_option('payment_gateway_names');
+$nzshpcrt_gateways     = nzshpcrt_get_gateways();
+
+if ( is_array( $nzshpcrt_gateways ) ) {
 	$selected_gateways = get_option('custom_gateway_options');
-	foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-		if($gateway['internalname'] == $curgateway ) {
-			$selected = "selected='selected'";
-			$form = $gateway['form']();
+	foreach ( $nzshpcrt_gateways as $gateway ) {
+		if ( $gateway['internalname'] == $curgateway ) {
+			$selected              = "selected='selected'";
+			$form                  = $gateway['form']();
 			$selected_gateway_data = $gateway;
 			//exit($form);
 		} else {
 			$selected = '';
 		}
 				
-		if(isset($gateway['admin_name'])) {
+		if ( isset($gateway['admin_name'] ) )
 			$gateway['name'] = $gateway['admin_name'];
-		}
+
 		$disabled = '';
-		if (!in_array($gateway['internalname'], (array)$selected_gateways)) {
-		  $disabled = "disabled='disabled'";
-		}
+
+		if ( !in_array( $gateway['internalname'], (array)$selected_gateways ) )
+			$disabled = "disabled='disabled'";
 		
-		if (!isset($gateway['internalname'])) $gateway['internalname'] = '';
+		if ( !isset( $gateway['internalname'] ) )
+			$gateway['internalname'] = '';
+
 		$gatewaylist = '';
-		$gatewaylist .="<option $disabled value='".$gateway['internalname']."' ".$selected." >".$gateway['name']."</option>";
+		$gatewaylist .= "<option $disabled value='" . $gateway['internalname'] . "' " . $selected . " >" . $gateway['name'] . "</option>";
 	}
 }
 $nogw = '';
-$gatewaylist = "<option value='".$nogw."'>".__('Please Select A Payment Gateway', 'wpsc')."</option>" . $gatewaylist;
+$gatewaylist = "<option value='" . $nogw . "'>" . __( 'Please Select A Payment Gateway', 'wpsc' ) . "</option>" . $gatewaylist;
 
 ?>
 		
@@ -75,11 +78,11 @@ function selectgateway() {
 					<?php
 					$selected_gateways = get_option('custom_gateway_options');
 					//echo("<pre>".print_r($selected_gateways,true)."</pre>");
-					foreach($GLOBALS['nzshpcrt_gateways'] as $gateway) {
-					  if(isset($gateway['admin_name'])) {
-					    $gateway['name'] = $gateway['admin_name'];
-					  }
-						if (in_array($gateway['internalname'], (array)$selected_gateways)) {
+					foreach( $nzshpcrt_gateways as $gateway ) {
+						if ( isset( $gateway['admin_name'] ) )
+							$gateway['name'] = $gateway['admin_name'];
+
+						if ( in_array( $gateway['internalname'], (array)$selected_gateways ) ) {
 					?>
 					
 						<div class="wpsc_shipping_options">

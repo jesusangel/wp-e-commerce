@@ -615,7 +615,9 @@ function wpsc_purchase_log_csv() {
 
 			if ( get_option( 'payment_method' ) == 2 ) {
 				$gateway_name = '';
-				foreach ( $GLOBALS['nzshpcrt_gateways'] as $gateway ) {
+				$nzshpcrt_gateways = nzshpcrt_get_gateways();
+
+				foreach ( $nzshpcrt_gateways as $gateway ) {
 					if ( $purchase['gateway'] != 'testmode' ) {
 						if ( $gateway['internalname'] == $purchase['gateway'] ) {
 							$gateway_name = $gateway['name'];
@@ -1995,7 +1997,8 @@ function wpsc_gateway_settings() {
 	}
 	$custom_gateways = get_option( 'custom_gateway_options' );
 
-	foreach ( $GLOBALS['nzshpcrt_gateways'] as $gateway ) {
+	$nzshpcrt_gateways = nzshpcrt_get_gateways();
+	foreach ( $nzshpcrt_gateways as $gateway ) {
 		//if($gateway['internalname'] == get_option('payment_gateway'))
 		if ( in_array( $gateway['internalname'], $custom_gateways ) ) {
 			if ( isset( $gateway['submit_function'] ) ) {

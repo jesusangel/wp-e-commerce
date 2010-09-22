@@ -78,6 +78,7 @@ class WP_eCommerce {
 		// Uploads directory info
 		wpsc_core_constants_uploads();
 
+		// Any additional constants can hook in here
 		do_action( 'wpsc_constants' );
 	}
 
@@ -88,6 +89,9 @@ class WP_eCommerce {
 		require_once( WPSC_FILE_PATH . '/wpsc-core/wpsc-functions.php' );
 		require_once( WPSC_FILE_PATH . '/wpsc-core/wpsc-installer.php' );
 		require_once( WPSC_FILE_PATH . '/wpsc-core/wpsc-includes.php' );
+
+		// Any additional file includes can hook in here
+		do_action( 'wpsc_includes' );
 	}
 
 	/**
@@ -116,12 +120,23 @@ class WP_eCommerce {
 
 		// Set page title array for important WPSC pages
 		wpsc_core_load_page_titles();
+
+		// WPEC is fully loaded
+		do_action( 'wpsc_loaded' );
+	}
+
+	/**
+	 * WPEC Activation Hook
+	 */
+	function install() {
+		wpsc_install();
 	}
 }
 
 // Start WPEC
 $wpec = new WP_eCommerce();
 
-register_activation_hook( __FILE__, 'wpsc_install' );
+// Activation
+register_activation_hook( __FILE__, array( $wpec, 'install' ) );
 
 ?>
