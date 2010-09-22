@@ -504,15 +504,6 @@ function wpsc_options_presentation() {
 					?>
 
 				<tr>
-					<th scope="row"><?php echo __( 'Select Theme', 'wpsc' ); ?>:</th>
-					<td>
-<?php
-						echo wpsc_list_product_themes();
-?>
-					</td>
-				</tr>
-
-				<tr>
 					<th scope="row"><?php echo __( 'Select what product group you want to display on the products page', 'wpsc' ); ?>:</th>
 							<td>
 			<?php echo options_categorylist(); ?>
