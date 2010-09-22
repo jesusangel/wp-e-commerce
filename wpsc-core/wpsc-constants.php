@@ -33,6 +33,9 @@ function wpsc_core_constants() {
 	define( 'WPSC_DEBUG', false );
 	define( 'WPSC_GATEWAY_DEBUG', false );
 
+	// Require loading of deprecated functions for now. We will ween WPEC off
+	// of this in future versions.
+	define( 'WPEC_LOAD_DEPRECATED', true );
 }
 
 /**

@@ -1,5 +1,8 @@
 <?php
 
+if ( defined( 'WPEC_LOAD_DEPRECATED' ) )
+	require_once( WPSC_FILE_PATH . '/wpsc-core/wpsc-deprecated.php' );
+
 // Start including the rest of the plugin here
 require_once( WPSC_FILE_PATH . '/wpsc-includes/product-template.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/breadcrumbs.class.php' );
