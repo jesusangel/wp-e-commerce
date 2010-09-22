@@ -2,13 +2,15 @@
 
 function wpsc_auto_update() {
 	global $wpdb;
+
+	include( WPSC_FILE_PATH . '/updates/updating_tasks.php' );
+
 	wpsc_create_or_update_tables();
-	include(WPSC_FILE_PATH . '/updates/updating_tasks.php');
 	wpsc_create_upload_directories();
 	wpsc_product_files_htaccess();
 	wpsc_check_and_copy_files();
 
-	if ( (get_option( 'wpsc_version' ) < WPSC_VERSION) || (get_option( 'wpsc_version' ) == WPSC_VERSION) && (get_option( 'wpsc_minor_version' ) < WPSC_MINOR_VERSION) ) {
+	if ( ( get_option( 'wpsc_version' ) < WPSC_VERSION ) || ( get_option( 'wpsc_version' ) == WPSC_VERSION ) && ( get_option( 'wpsc_minor_version' ) < WPSC_MINOR_VERSION ) ) {
 		update_option( 'wpsc_version', WPSC_VERSION );
 		update_option( 'wpsc_minor_version', WPSC_MINOR_VERSION );
 	}
@@ -16,37 +18,36 @@ function wpsc_auto_update() {
 
 function wpsc_install() {
 	global $wpdb, $user_level, $wp_rewrite, $wp_version, $wpsc_page_titles;
-	$table_name = $wpdb->prefix . "wpsc_product_list";
+
+	$table_name    = $wpdb->prefix . "wpsc_product_list";
 	$first_install = false;
-	$result = mysql_list_tables( DB_NAME );
-	$tables = array( );
-	while ( $row = mysql_fetch_row( $result ) ) {
+	$result        = mysql_list_tables( DB_NAME );
+	$tables        = array();
+
+	while ( $row = mysql_fetch_row( $result ) )
 		$tables[] = $row[0];
-	}
+
 	if ( !in_array( $table_name, $tables ) ) {
 		$first_install = true;
 		add_option( 'wpsc_purchaselogs_fixed', true );
 	}
 
-	if ( get_option( 'wpsc_version' ) == null ) {
+	if ( get_option( 'wpsc_version' ) == null )
 		add_option( 'wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes' );
-	}
 
 	// run the create or update code here.
 	wpsc_create_or_update_tables();
 	wpsc_create_upload_directories();
 
-	if ( !wp_get_schedule( "wpsc_hourly_cron_tasks" ) ) {
+	if ( !wp_get_schedule( "wpsc_hourly_cron_tasks" ) )
 		wp_schedule_event( time(), 'hourly', 'wpsc_hourly_cron_tasks' );
-	}
 
-	if ( !wp_get_schedule( "wpsc_daily_cron_tasks" ) ) {
+	if ( !wp_get_schedule( "wpsc_daily_cron_tasks" ) )
 		wp_schedule_event( time(), 'daily', 'wpsc_daily_cron_tasks' );
-	}
+
 	//wp_get_schedule( $hook, $args )
 
-
-	/* all code to add new database tables and columns must be above here */
+	// All code to add new database tables and columns must be above here
 	if ( (get_option( 'wpsc_version' ) < WPSC_VERSION) || (get_option( 'wpsc_version' ) == WPSC_VERSION) && (get_option( 'wpsc_minor_version' ) < WPSC_MINOR_VERSION) ) {
 		update_option( 'wpsc_version', WPSC_VERSION );
 		update_option( 'wpsc_minor_version', WPSC_MINOR_VERSION );
@@ -66,17 +67,16 @@ function wpsc_install() {
 	add_option( 'checkout_url', '', __( 'The location of the checkout page', 'wpsc' ), 'yes' );
 	add_option( 'transact_url', '', __( 'The location of the transaction detail page', 'wpsc' ), 'yes' );
 	add_option( 'payment_gateway', '', __( 'The payment gateway to use', 'wpsc' ), 'yes' );
-	if ( function_exists( 'register_sidebar' ) ) {
-		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );
-	} else {
-		add_option( 'cart_location', '1', __( 'Cart Location', 'wpsc' ), 'yes' );
-	}
 
-	if ( function_exists( 'register_sidebar' ) ) {
+	if ( function_exists( 'register_sidebar' ) )
 		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );
-	} else {
+	else
 		add_option( 'cart_location', '1', __( 'Cart Location', 'wpsc' ), 'yes' );
-	}
+
+	if ( function_exists( 'register_sidebar' ) )
+		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );
+	else
+		add_option( 'cart_location', '1', __( 'Cart Location', 'wpsc' ), 'yes' );
 
 	//add_option('show_categorybrands', '0', __('Display categories or brands or both', 'wpsc'), 'yes');
 
@@ -110,11 +110,12 @@ function wpsc_install() {
 
 	add_option( 'nzshpcrt_first_load', '0', "", 'yes' );
 
-	if ( !((get_option( 'show_categorybrands' ) > 0) && (get_option( 'show_categorybrands' ) < 3)) ) {
+	if ( !((get_option( 'show_categorybrands' ) > 0) && (get_option( 'show_categorybrands' ) < 3)) )
 		update_option( 'show_categorybrands', 2 );
-	}
+
 	//add_option('show_categorybrands', '0', __('Display categories or brands or both', 'wpsc'), 'yes');
-	/* PayPal options */
+
+	// PayPal options
 	add_option( 'paypal_business', '', __( 'paypal business', 'wpsc' ), 'yes' );
 	add_option( 'paypal_url', '', __( 'paypal url', 'wpsc' ), 'yes' );
 	add_option( 'paypal_ipn', '1', __( 'paypal url', 'wpsc' ), 'yes' );
@@ -156,9 +157,8 @@ function wpsc_install() {
 		update_option( 'wpsc_gallery_image_width', '96' );
 	}
 
-	if ( !is_array( get_option( 'custom_gateway_options' ) ) ) {
+	if ( !is_array( get_option( 'custom_gateway_options' ) ) )
 		update_option( 'custom_gateway_options', array( 'testmode' ) );
-	}
 
 	add_option( "wpsc_category_url_cache", array( ), '', 'yes' );
 
@@ -204,14 +204,15 @@ function wpsc_install() {
 	$newpages = false;
 	$i = 0;
 	$post_parent = 0;
+
 	foreach ( $pages as $page ) {
 		$check_page = $wpdb->get_row( "SELECT * FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%" . $page['tag'] . "%'	AND `post_type` NOT IN('revision') LIMIT 1", ARRAY_A );
 		if ( $check_page == null ) {
-			if ( $i == 0 ) {
+
+			if ( $i == 0 )
 				$post_parent = 0;
-			} else {
+			else
 				$post_parent = $first_id;
-			}
 
 			if ( $wp_version >= 2.1 ) {
 				$sql = "INSERT INTO " . $wpdb->posts . "
@@ -226,14 +227,16 @@ function wpsc_install() {
 			}
 			$wpdb->query( $sql );
 			$post_id = $wpdb->insert_id;
-			if ( $i == 0 ) {
+
+			if ( $i == 0 )
 				$first_id = $post_id;
-			}
+
 			$wpdb->query( "UPDATE $wpdb->posts SET guid = '" . get_permalink( $post_id ) . "' WHERE ID = '$post_id'" );
 			update_option( $page['option'], get_permalink( $post_id ) );
-			if ( $page['option'] == 'shopping_cart_url' ) {
+
+			if ( $page['option'] == 'shopping_cart_url' )
 				update_option( 'checkout_url', get_permalink( $post_id ) );
-			}
+
 			$newpages = true;
 			$i++;
 		}

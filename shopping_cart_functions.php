@@ -77,11 +77,6 @@ function wpsc_shopping_cart( $input = null, $override_state = null ) {
 	return $input;
 }
 
-// preserved for backwards compatibility
-function nzshpcrt_shopping_basket( $input = null, $override_state = null ) {
-	return wpsc_shopping_cart( $input, $override_state );
-}
-
 function wpsc_shopping_basket_internals( $cart, $quantity_limit = false, $no_title=false ) {
 	global $wpdb, $wpsc_theme_path;
 	$display_state = "";

@@ -15,13 +15,15 @@ function wpsc_options_general() {
 				<th scope="row"><?php echo __( 'Base Country/Region', 'wpsc' ); ?>: </th>
 				<td>
 					<select name='wpsc_options[base_country]' onchange='submit_change_country();'>
-<?php echo country_list( get_option( 'base_country' ) ); ?>
+
+						<?php echo country_list( get_option( 'base_country' ) ); ?>
+
 					</select>
 					<span id='options_country'>
-						<?php
+					<?php
 						$region_list = $wpdb->get_results( "SELECT `" . WPSC_TABLE_REGION_TAX . "`.* FROM `" . WPSC_TABLE_REGION_TAX . "`, `" . WPSC_TABLE_CURRENCY_LIST . "`  WHERE `" . WPSC_TABLE_CURRENCY_LIST . "`.`isocode` IN('" . get_option( 'base_country' ) . "') AND `" . WPSC_TABLE_CURRENCY_LIST . "`.`id` = `" . WPSC_TABLE_REGION_TAX . "`.`country_id`", ARRAY_A );
-						if ( $region_list != null ) {
-						?>
+						if ( !empty( $region_list ) ) { ?>
+
 						<select name='wpsc_options[base_region]'>
 							<?php
 							foreach ( $region_list as $region ) {
@@ -32,8 +34,8 @@ function wpsc_options_general() {
 								}
 							?>
 								<option value='<?php echo $region['id']; ?>' <?php echo $selected; ?> ><?php echo $region['name']; ?></option> <?php
-							}
-							?>
+						}
+					?>
 						</select>
 
 <?php } ?>

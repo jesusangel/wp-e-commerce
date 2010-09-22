@@ -1,7 +1,5 @@
 <?php
 
-require_once( WPSC_FILE_PATH . '/wpsc-includes/install_and_update.functions.php' );
-
 // Start including the rest of the plugin here
 require_once( WPSC_FILE_PATH . '/wpsc-includes/product-template.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/breadcrumbs.class.php' );
@@ -28,9 +26,9 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/upgrades.php' );
 
 // Editor
 if ( !IS_WP25 )
-	require_once(WPSC_FILE_PATH . '/editor.php');
+	require_once( WPSC_FILE_PATH . '/editor.php' );
 else
-	require_once(WPSC_FILE_PATH . '/js/tinymce3/tinymce.php');
+	require_once( WPSC_FILE_PATH . '/js/tinymce3/tinymce.php' );
 
 // Share This
 if ( ( get_option( 'wpsc_share_this' ) == 1 ) && ( get_option( 'product_list_url' ) != '' ) )

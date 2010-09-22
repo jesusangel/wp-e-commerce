@@ -10,23 +10,132 @@
  * @since 3.8
  */
 
-function wpsc_check_thumbnail_support() {
-	if ( !current_theme_supports( 'post-thumbnails' ) ) {
-		add_theme_support( 'post-thumbnails' );
-		add_action( 'init', 'wpsc_remove_post_type_thumbnail_support' );
+/**
+ * wpsc_core_load_textdomain()
+ *
+ * Load up the WPEC textdomain
+ */
+function wpsc_core_load_textdomain() {
+	$locale = apply_filters( 'wpsc_locale', get_locale() );
+	$mofile = WPSC_FOLDER . "/languages/wpsc-$locale.mo";
+
+	if ( file_exists( $mofile ) )
+		load_textdomain( 'wpsc', $mofile );
+}
+add_action( 'init', 'wpsc_core_load_textdomain' );
+
+/**
+ * wpsc_core_load_thumbnail_sizes()
+ *
+ * Load up the WPEC core thumbnail sizes
+ */
+function wpsc_core_load_thumbnail_sizes() {
+	// Add image sizes for products
+	add_image_size( 'product-thumbnails', get_option( 'product_image_width' ), get_option( 'product_image_height' ), TRUE );
+	add_image_size( 'admin-product-thumbnails', 38, 38, TRUE );
+	add_image_size( 'featured-product-thumbnails', 540, 260, TRUE );
+}
+
+/**
+ * wpsc_core_load_purchase_log_statuses()
+ *
+ * @global array $wpsc_purchlog_statuses
+ */
+function wpsc_core_load_purchase_log_statuses() {
+	global $wpsc_purchlog_statuses;
+
+	$wpsc_purchlog_statuses = array(
+		array(
+			'internalname' => 'incomplete_sale',
+			'label'        => __( 'Incomplete Sale', 'wpsc' ),
+			'order'        => 1,
+		),
+		array(
+			'internalname' => 'order_received',
+			'label'        => __( 'Order Received', 'wpsc' ),
+			'order'        => 2,
+		),
+		array(
+			'internalname'   => 'accepted_payment',
+			'label'          => __( 'Accepted Payment', 'wpsc' ),
+			'is_transaction' => true,
+			'order'          => 3,
+		),
+		array(
+			'internalname'   => 'job_dispatched',
+			'label'          => __( 'Job Dispatched', 'wpsc' ),
+			'is_transaction' => true,
+			'order'          => 4,
+		),
+		array(
+			'internalname'   => 'closed_order',
+			'label'          => __( 'Closed Order', 'wpsc' ),
+			'is_transaction' => true,
+			'order'          => 5,
+		),
+	);
+}
+
+/**
+ * wpsc_core_load_page_titles()
+ *
+ * Load the WPEC page titles
+ *
+ * @global array $wpsc_page_titles
+ */
+function wpsc_core_load_page_titles() {
+	global $wpsc_page_titles;
+	$wpsc_page_titles = wpsc_get_page_post_names();
+}
+
+/***
+ * wpsc_core_load_gateways()
+ *
+ * Gets the merchants from the merchants directory and eeds to search the
+ * merchants directory for merchants, the code to do this starts here.
+ */
+function wpsc_core_load_gateways() {
+	global $nzshpcrt_gateways, $wpsc_gateways;
+
+	$gateway_directory      = WPSC_FILE_PATH . '/merchants';
+	$nzshpcrt_merchant_list = wpsc_list_dir( $gateway_directory );
+
+	foreach ( $nzshpcrt_merchant_list as $nzshpcrt_merchant ) {
+		if ( stristr( $nzshpcrt_merchant, '.php' ) ) {
+			require( WPSC_FILE_PATH . '/merchants/' . $nzshpcrt_merchant );
+		}
 	}
-}
-add_action( 'after_setup_theme', 'wpsc_check_thumbnail_support', 99 );
 
-function wpsc_remove_post_type_thumbnail_support() {
-	remove_post_type_support( 'post', 'thumbnail' );
-	remove_post_type_support( 'page', 'thumbnail' );
+	$nzshpcrt_gateways = apply_filters( 'wpsc_merchants_modules', $nzshpcrt_gateways );
+	uasort( $nzshpcrt_gateways, 'wpsc_merchant_sort' );
+
+	// make an associative array of references to gateway data.
+	$wpsc_gateways = array();
+	foreach ( (array)$nzshpcrt_gateways as $key => $gateway )
+		$wpsc_gateways[$gateway['internalname']] = &$nzshpcrt_gateways[$key];
+
 }
 
-function wpsc_load_textdomain() {
-	load_plugin_textdomain( 'wpsc', false, WPSC_FOLDER . '/languages' );
+/***
+ * wpsc_core_load_shipping_modules()
+ *
+ * Gets the shipping modules from the shipping directory and needs to search
+ * the shipping directory for modules.
+ */
+function wpsc_core_load_shipping_modules() {
+	global $wpsc_shipping_modules;
+
+	$shipping_directory     = WPSC_FILE_PATH . '/shipping';
+	$nzshpcrt_shipping_list = wpsc_list_dir( $shipping_directory );
+
+	foreach ( $nzshpcrt_shipping_list as $nzshpcrt_shipping ) {
+		if ( stristr( $nzshpcrt_shipping, '.php' ) ) {
+			require( WPSC_FILE_PATH . '/shipping/' . $nzshpcrt_shipping );
+		}
+	}
+
+	$wpsc_shipping_modules = apply_filters( 'wpsc_shipping_modules', $wpsc_shipping_modules );
 }
-add_action( 'init', 'wpsc_load_textdomain' );
 
 /**
  * Update Notice
@@ -160,6 +269,20 @@ function wpsc_register_post_types() {
 		wpsc_update_categorymeta( $category_id, 'order', '0' );
 	}
 }
+add_action( 'init', 'wpsc_register_post_types', 8 );
+
+function wpsc_check_thumbnail_support() {
+	if ( !current_theme_supports( 'post-thumbnails' ) ) {
+		add_theme_support( 'post-thumbnails' );
+		add_action( 'init', 'wpsc_remove_post_type_thumbnail_support' );
+	}
+}
+add_action( 'after_setup_theme', 'wpsc_check_thumbnail_support', 99 );
+
+function wpsc_remove_post_type_thumbnail_support() {
+	remove_post_type_support( 'post', 'thumbnail' );
+	remove_post_type_support( 'page', 'thumbnail' );
+}
 
 /*
  * initialize the wpsc query fats, must be a global variable as we cannot start it off from within the
@@ -216,6 +339,7 @@ if ( !function_exists( 'wpsc_initialisation' ) ) {
 			$GLOBALS['wpsc_cart'] = new wpsc_cart;
 		}
 	}
+	add_action( 'plugins_loaded', 'wpsc_initialisation', 8 );
 
 	$GLOBALS['wpsc_category_url_cache'] = get_option( 'wpsc_category_url_cache' );
 }
@@ -289,6 +413,7 @@ if ( !function_exists( 'wpsc_start_the_query' ) ) {
 		if ( get_option( 'shopping_cart_url' ) == $page_url )
 			$_SESSION['wpsc_has_been_to_checkout'] = true;
 	}
+	add_action( 'template_redirect', 'wpsc_start_the_query', 8 );
 }
 
 /**
@@ -869,10 +994,10 @@ function wpsc_checkout_template_fallback() {
  */
 function wpsc_get_page_post_names() {
 	global $wpdb;
-	$wpsc_page['products'] = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[productspage]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
-	$wpsc_page['checkout'] = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[shoppingcart]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
+	$wpsc_page['products']            = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[productspage]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
+	$wpsc_page['checkout']            = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[shoppingcart]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
 	$wpsc_page['transaction_results'] = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[transactionresults]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
-	$wpsc_page['userlog'] = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[userlog]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
+	$wpsc_page['userlog']             = $wpdb->get_var( "SELECT post_name FROM `" . $wpdb->posts . "` WHERE `post_content` LIKE '%[userlog]%'  AND `post_type` NOT IN('revision') LIMIT 1" );
 	return $wpsc_page;
 }
 
@@ -885,12 +1010,14 @@ function wpsc_get_page_post_names() {
  */
 function wpsc_template_loader() {
 	global $wp_query;
+
 	if ( wpsc_is_product() && $template = wpsc_get_template( 'products' ) ) {
-		include($template);
+		include( $template );
 		exit();
 	}
+
 	if ( wpsc_is_checkout() && $template = wpsc_get_template( 'checkout' ) ) {
-		include($template);
+		include( $template );
 		exit();
 	}
 }
@@ -898,16 +1025,19 @@ function wpsc_template_loader() {
 // add_action('template_redirect','wpsc_template_loader');
 
 /**
- * wpsc_get_theme_file_path function, gets the path to the theme file, uses the plugin themes folder if the file is not in the uploads one
+ * wpsc_get_theme_file_path
+ *
+ * gets the path to the theme file, uses the plugin themes folder if the
+ * file is not in the uploads one
  */
 function wpsc_get_theme_file_path( $file ) {
-	// get the theme folder here
 	global $wpsc_theme_path;
-	$file = basename( $file );
+
+	$file                  = basename( $file );
 	$cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path . WPSC_THEME_DIR );
-	$theme_path = wpsc_get_theme_path( $file );
-	$output = $theme_path;
-	return $output;
+	$theme_path            = wpsc_get_theme_path( $file );
+
+	return $theme_path;
 }
 
 /**
@@ -940,5 +1070,23 @@ function wpsc_force_ssl() {
 	}
 }
 add_action( 'get_header', 'wpsc_force_ssl' );
+
+/**
+ * wpsc_add_https_to_page_url_options( $url )
+ *
+ * Forces SSL onto option URLs
+ *
+ * @param string $url
+ * @return string
+ */
+function wpsc_add_https_to_page_url_options( $url ) {
+	return str_replace( 'http://', 'https://', $url );
+}
+if ( is_ssl() ) {
+	add_filter( 'option_product_list_url',  'wpsc_add_https_to_page_url_options' );
+	add_filter( 'option_shopping_cart_url', 'wpsc_add_https_to_page_url_options' );
+	add_filter( 'option_transact_url',      'wpsc_add_https_to_page_url_options' );
+	add_filter( 'option_user_account_url',  'wpsc_add_https_to_page_url_options' );
+}
 
 ?>
