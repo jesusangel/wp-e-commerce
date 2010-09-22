@@ -251,13 +251,9 @@ function wpsc_select_variation_file( $file_id, $variation_ids, $variation_combin
 
 function wpsc_list_product_themes( $theme_name = null ) {
 	global $wpdb, $wpsc_theme_path;
-
-	$output = '';
-	$selected_theme = get_option( 'wpsc_selected_theme' );
-
-	if ( $selected_theme == '' ) {
+	
+	if ( !$selected_theme = get_option( 'wpsc_selected_theme' ) )
 		$selected_theme = 'default';
-	}
 
 	$theme_path = $wpsc_theme_path;
 	$theme_list = wpsc_list_dir( $theme_path );
