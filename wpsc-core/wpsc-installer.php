@@ -160,7 +160,7 @@ function wpsc_install() {
 	if ( !is_array( get_option( 'custom_gateway_options' ) ) )
 		update_option( 'custom_gateway_options', array( 'testmode' ) );
 
-	add_option( "wpsc_category_url_cache", array( ), '', 'yes' );
+	add_option( 'wpsc_category_url_cache', array(), '', 'yes' );
 
 	wpsc_product_files_htaccess();
 

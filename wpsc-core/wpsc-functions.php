@@ -284,137 +284,75 @@ function wpsc_remove_post_type_thumbnail_support() {
 	remove_post_type_support( 'page', 'thumbnail' );
 }
 
-/*
- * initialize the wpsc query fats, must be a global variable as we cannot start it off from within the
- * wp query object,
- * starting it in wp_query results in intractable infinite loops in 3.0
- */
-if ( !function_exists( 'wpsc_initialisation' ) ) {
-
-	function wpsc_initialisation() {
-		global $wpsc_cart, $wpsc_theme_path, $wpsc_theme_url, $wpsc_category_url_cache, $wpsc_query_vars;
-
-		$wpsc_query_vars = array( );
-		// set the theme directory constant
-
-		$uploads_dir = @opendir( WPSC_THEMES_PATH );
-		$file_names = array( );
-
-		if ( $uploads_dir ) {
-			while ( ($file = @readdir( $uploads_dir )) !== false ) {
-				//echo "<br />test".WPSC_THEMES_PATH.$file;
-				if ( is_dir( WPSC_THEMES_PATH . $file ) && ($file != "..") && ($file != ".") && ($file != ".svn") ) {
-					$file_names[] = $file;
-				}
-			}
-		}
-
-		if ( count( $file_names ) > 0 ) {
-			$wpsc_theme_path = WPSC_THEMES_PATH;
-			$wpsc_theme_url = WPSC_THEMES_URL;
-		} else {
-			$wpsc_theme_path = WPSC_FILE_PATH . "/themes/";
-			$wpsc_theme_url = WPSC_URL . '/themes/';
-		}
-		//$theme_path = WPSC_FILE_PATH . "/themes/";
-		//exit(print_r($file_names,true));
-		if ( (get_option( 'wpsc_selected_theme' ) == null) || (!file_exists( $wpsc_theme_path . get_option( 'wpsc_selected_theme' ) )) ) {
-			$theme_dir = 'default';
-		} else {
-			$theme_dir = get_option( 'wpsc_selected_theme' );
-		}
-		define( 'WPSC_THEME_DIR', $theme_dir );
-
-		// initialise the cart session, if it exist, unserialize it, otherwise make it
-		if ( isset( $_SESSION['wpsc_cart'] ) ) {
-			if ( is_object( $_SESSION['wpsc_cart'] ) ) {
-				$GLOBALS['wpsc_cart'] = $_SESSION['wpsc_cart'];
-			} else {
-				$GLOBALS['wpsc_cart'] = unserialize( $_SESSION['wpsc_cart'] );
-			}
-			if ( !is_object( $GLOBALS['wpsc_cart'] ) || (get_class( $GLOBALS['wpsc_cart'] ) != "wpsc_cart") ) {
-				$GLOBALS['wpsc_cart'] = new wpsc_cart;
-			}
-		} else {
-			$GLOBALS['wpsc_cart'] = new wpsc_cart;
-		}
-	}
-	add_action( 'plugins_loaded', 'wpsc_initialisation', 8 );
-
-	$GLOBALS['wpsc_category_url_cache'] = get_option( 'wpsc_category_url_cache' );
-}
-
-
-
 /**
- * This serializes the shopping cart variable as a backup in case the unserialized one gets butchered by various things
+ * This serializes the shopping cart variable as a backup in case the
+ * unserialized one gets butchered by various things
  */
-if ( !function_exists( 'wpsc_serialize_shopping_cart' ) ) {
+function wpsc_serialize_shopping_cart() {
+	global $wpdb, $wpsc_start_time, $wpsc_cart;
 
-	function wpsc_serialize_shopping_cart() {
-		global $wpdb, $wpsc_start_time, $wpsc_cart, $wpsc_category_url_cache;
+	if ( is_object( $wpsc_cart ) )
+		$wpsc_cart->errors = array( );
 
-		if ( is_object( $wpsc_cart ) )
-			$wpsc_cart->errors = array( );
+	$_SESSION['wpsc_cart'] = serialize( $wpsc_cart );
 
-		$_SESSION['wpsc_cart'] = serialize( $wpsc_cart );
-
-		if ( $wpsc_category_url_cache != get_option( 'wpsc_category_url_cache' ) )
-			update_option( 'wpsc_category_url_cache', $wpsc_category_url_cache );
-
-		return true;
-	}
-	add_action( 'shutdown', 'wpsc_serialize_shopping_cart' );
+	return true;
 }
+add_action( 'shutdown', 'wpsc_serialize_shopping_cart' );
 
 /**
  * wpsc_start_the_query
  */
-if ( !function_exists( 'wpsc_start_the_query' ) ) {
+function wpsc_start_the_query() {
+	global $wp_query, $wpsc_query, $wpsc_query_vars;
 
-	function wpsc_start_the_query() {
-		global $wp_query, $wpsc_query, $wpsc_query_vars;
-		$post_id = 0;
-		if ( $wpsc_query == null ) {
-			if ( count( $wpsc_query_vars ) <= 1 ) {
-				$wpsc_query_vars = array(
-					'post_type' => 'wpsc-product',
-					'post_parent' => 0,
-					'order' => 'ASC'
-				);
-				$orderby = get_option( 'wpsc_sort_by' );
-				switch ( $orderby ) {
+	if ( null == $wpsc_query ) {
+		if ( count( $wpsc_query_vars ) <= 1 ) {
 
-					case "dragndrop":
-						$wpsc_query_vars["orderby"] = 'menu_order';
-						break;
-					case "name":
-						$wpsc_query_vars["orderby"] = 'title';
-						break;
-					case "price":
-						//This only works in WP 3.0.
-						$wpsc_query_vars["meta_key"] = '_wpsc_price';
-						$wpsc_query_vars["orderby"] = 'meta_value_num';
-						break;
-					case "id":
-						$wpsc_query_vars["orderby"] = 'ID';
-						break;
-				}
-				add_filter( 'pre_get_posts', 'wpsc_generate_product_query', 11 );
-				$wpsc_query = new WP_Query( $wpsc_query_vars );
+			$wpsc_query_vars = array(
+				'post_type'   => 'wpsc-product',
+				'post_parent' => 0,
+				'order'       => 'ASC'
+			);
+
+			$orderby = get_option( 'wpsc_sort_by' );
+
+			switch ( $orderby ) {
+
+				case "dragndrop":
+					$wpsc_query_vars["orderby"] = 'menu_order';
+					break;
+
+				case "name":
+					$wpsc_query_vars["orderby"] = 'title';
+					break;
+
+				//This only works in WP 3.0.
+				case "price":
+					$wpsc_query_vars["meta_key"] = '_wpsc_price';
+					$wpsc_query_vars["orderby"] = 'meta_value_num';
+					break;
+
+				case "id":
+					$wpsc_query_vars["orderby"] = 'ID';
+					break;
 			}
+
+			add_filter( 'pre_get_posts', 'wpsc_generate_product_query', 11 );
+
+			$wpsc_query = new WP_Query( $wpsc_query_vars );
 		}
-
-		if ( isset( $wp_query->post->ID ) )
-			$post_id = $wp_query->post->ID;
-
-		$page_url = get_permalink( $post_id );
-
-		if ( get_option( 'shopping_cart_url' ) == $page_url )
-			$_SESSION['wpsc_has_been_to_checkout'] = true;
 	}
-	add_action( 'template_redirect', 'wpsc_start_the_query', 8 );
+
+	if ( isset( $wp_query->post->ID ) )
+		$post_id = $wp_query->post->ID;
+	else
+		$post_id = 0;
+
+	if ( get_permalink( $post_id ) == get_option( 'shopping_cart_url' ) )
+		$_SESSION['wpsc_has_been_to_checkout'] = true;
 }
+add_action( 'template_redirect', 'wpsc_start_the_query', 8 );
 
 /**
  * wpsc_taxonomy_rewrite_rules function.

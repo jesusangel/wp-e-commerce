@@ -2396,6 +2396,7 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( $_REQUEST['wpsc_admin_action']
 
 function wpsc_delete_category() {
 	global $wpdb, $wp_rewrite;
+
 	check_admin_referer( 'delete-category' );
 
 	if ( is_numeric( $_GET['deleteid'] ) ) {
@@ -2405,7 +2406,7 @@ function wpsc_delete_category() {
 			wp_delete_term( $category_id, $taxonomy );
 			$wpdb->query( "DELETE FROM `" . WPSC_TABLE_META . "` WHERE object_id = '" . $category_id . "' AND object_type = 'wpsc_category'" );
 		}
-		update_option( 'wpsc_category_url_cache', array( ) );
+
 		$wp_rewrite->flush_rules();
 
 		$deleted = 1;

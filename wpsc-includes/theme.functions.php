@@ -137,10 +137,13 @@ function wpsc_check_theme_location() {
  * @return $templates (Array) List of files
  */
 function wpsc_list_product_templates( $path = '' ) {
+
+	$selected_theme = get_option( 'wpsc_selected_theme' );
+
 	// If no path, then try to make some assuptions
 	if ( empty( $path ) ) {
-		if ( file_exists( WPSC_OLD_THEMES_PATH . get_option( 'wpsc_selected_theme' ) . '/' . get_option( 'wpsc_selected_theme' ) . '.css' ) ) {
-			$path = WPSC_OLD_THEMES_PATH . get_option( 'wpsc_selected_theme' ) . '/';
+		if ( file_exists( WPSC_OLD_THEMES_PATH . $selected_theme . '/' . $selected_theme . '.css' ) ) {
+			$path = WPSC_OLD_THEMES_PATH . $selected_theme . '/';
 		} else {
 			$path = WPSC_FILE_PATH . '/themes/';
 		}

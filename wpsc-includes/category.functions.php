@@ -440,7 +440,7 @@ function display_subcategories($id) {
 * @param boolean permalink compatibility, adds a prefix to prevent permalink namespace conflicts
 */
 function wpsc_category_url($category_id, $permalink_compatibility = false) {
-  global $wpdb, $wp_rewrite, $wpsc_category_url_cache;
+  global $wpdb, $wp_rewrite;
   return get_term_link( $category_id, 'wpsc_product_category');
 }
 

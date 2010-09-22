@@ -33,8 +33,6 @@ class WP_eCommerce {
 		$this->constants();
 		$this->includes();
 		$this->setup();
-		$this->cart();
-		$this->theme();
 	}
 
 	/**
@@ -98,8 +96,14 @@ class WP_eCommerce {
 	function setup() {
 		do_action( 'wpsc_before_init' );
 
+		// Setup the core WPEC globals
+		wpsc_core_setup_globals();
+
+		// Setup the core WPEC cart
+		wpsc_core_setup_cart();
+
 		// Load the thumbnail sizes
-		wpsc_core_load_thumbnail_sizes;
+		wpsc_core_load_thumbnail_sizes();
 
 		// Load the purchase log statuses
 		wpsc_core_load_purchase_log_statuses();
@@ -112,22 +116,6 @@ class WP_eCommerce {
 
 		// Set page title array for important WPSC pages
 		wpsc_core_load_page_titles();
-	}
-
-	/**
-	 * Setup the cart location
-	 */
-	function cart() {
-		if ( 2 == get_option( 'cart_location' ) )
-			add_filter( 'the_content', 'wpsc_shopping_cart', 14 );
-	}
-
-	/**
-	 * Setup the theme
-	 */
-	function theme() {
-		if ( ( get_option( 'wpsc_selected_theme' ) != '' ) && ( file_exists( WPSC_FILE_PATH . '/themes/' . get_option( 'wpsc_selected_theme' ) . "/" . get_option( 'wpsc_selected_theme' ) . ".php" ) ) )
-			include_once( WPSC_FILE_PATH . '/themes/' . get_option( 'wpsc_selected_theme' ) . '/' . get_option( 'wpsc_selected_theme' ) . '.php' );
 	}
 }
 

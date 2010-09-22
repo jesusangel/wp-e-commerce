@@ -208,7 +208,7 @@ function wpsc_core_constants_uploads() {
 	define( 'WPSC_UPGRADES_DIR',     $wpsc_paths[7] );
 	define( 'WPSC_THEME_BACKUP_DIR', $wpsc_paths[8] );
 	define( 'WPSC_OLD_THEMES_PATH',  $wpsc_paths[9] );
-	define( 'WPSC_THEMES_PATH',      get_stylesheet_directory() );
+	define( 'WPSC_THEMES_PATH',      trailingslashit( get_stylesheet_directory() ) );
 
 	// Define urls
 	define( 'WPSC_FILE_URL',         $wpsc_urls[0] );
@@ -221,7 +221,81 @@ function wpsc_core_constants_uploads() {
 	define( 'WPSC_UPGRADES_URL',     $wpsc_urls[7] );
 	define( 'WPSC_THEME_BACKUP_DIR', $wpsc_urls[8] );
 	define( 'WPSC_OLD_THEMES_URL',   $wpsc_urls[9] );
-	define( 'WPSC_THEMES_URL',       get_stylesheet_directory_uri() );
+	define( 'WPSC_THEMES_URL',       trailingslashit( get_stylesheet_directory_uri() ) );
+}
+
+/**
+ * wpsc_core_setup_cart()
+ *
+ * Setup the cart
+ */
+function wpsc_core_setup_cart() {
+	global $wpsc_cart;
+
+	if ( 2 == get_option( 'cart_location' ) )
+		add_filter( 'the_content', 'wpsc_shopping_cart', 14 );
+
+	// Cart exists in Session, so attempt to unserialize it
+	if ( isset( $_SESSION['wpsc_cart'] ) ) {
+		if ( is_object( $_SESSION['wpsc_cart'] ) )
+			$wpsc_cart = $_SESSION['wpsc_cart'];
+		else
+			$wpsc_cart = unserialize( $_SESSION['wpsc_cart'] );
+
+		if ( !is_object( $wpsc_cart ) || ( 'wpsc_cart' != get_class( $wpsc_cart ) ) )
+			$wpsc_cart = new wpsc_cart;
+
+	// Cart doesn't exist in session, so create one
+	} else {
+		$wpsc_cart = new wpsc_cart;
+	}
+
+}
+
+/***
+ * wpsc_core_setup_globals()
+ *
+ * Initialize the wpsc query vars, must be a global variable as we
+ * cannot start it off from within the wp query object.
+ * Starting it in wp_query results in intractable infinite loops in 3.0
+ */
+function wpsc_core_setup_globals() {
+	global $wpsc_theme_path, $wpsc_theme_url;
+	global $wpsc_query_vars, $wpsc_cart;
+
+	// Setup some globals
+	$wpsc_query_vars = array();
+
+	// Open the themes directory and load up files
+	if ( $uploads_dir = @opendir( WPSC_THEMES_PATH ) ) {
+		while ( false !== ( $file = @readdir( $uploads_dir ) ) ) {
+			if ( !is_dir( WPSC_THEMES_PATH . '/' . $file ) && ( $file != ".." ) && ( $file != "." ) && ( $file != ".svn" ) ) {
+				$file_names[] = $file;
+			}
+		}
+	}
+
+	// Set globals
+	if ( count( (array)$file_names ) > 0 ) {
+		$wpsc_theme_path = WPSC_THEMES_PATH;
+		$wpsc_theme_url  = WPSC_THEMES_URL;
+	} else {
+		$wpsc_theme_path = WPSC_FILE_PATH . '/themes/';
+		$wpsc_theme_url  = WPSC_URL . '/themes/';
+	}
+
+	$selected_theme = get_option( 'wpsc_selected_theme' );
+
+	// Pick selected theme or fallback to default
+	if ( empty( $selected_theme ) || !file_exists( $wpsc_theme_path ) )
+		define( 'WPSC_THEME_DIR', 'default' );
+	else
+		define( 'WPSC_THEME_DIR', $selected_theme );
+
+	// Include a file named after the current theme, if one exists
+	if ( !empty( $selected_theme ) && file_exists( $wpsc_theme_path . $selected_theme . '/' . $selected_theme . '.php' ) )
+		include_once( $wpsc_theme_path . $selected_theme . '/' . $selected_theme . '.php' );
+
 }
 
 ?>

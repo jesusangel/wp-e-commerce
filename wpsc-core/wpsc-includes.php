@@ -42,10 +42,10 @@ require_once( WPSC_FILE_PATH . '/homepage_products_functions.php' );
 if ( file_exists( WPSC_FILE_PATH . '/themes/wpsc-transaction_results_functions.php' ) )
 	require_once( WPSC_FILE_PATH . '/themes/wpsc-transaction_results_functions.php' );
 else
-	require_once( WPSC_FILE_PATH . "/transaction_result_functions.php");
+	require_once( WPSC_FILE_PATH . '/transaction_result_functions.php');
 	
-if( file_exists( WPSC_FILE_PATH.'/themes/wpsc-user_log_functions.php' ) ) 
-	require_once( WPSC_FILE_PATH."/themes/wpsc-user_log_functions.php" ); 
+if ( file_exists( WPSC_FILE_PATH . '/themes/wpsc-user_log_functions.php' ) )
+	require_once( WPSC_FILE_PATH . '/themes/wpsc-user_log_functions.php' );
 
 require_once( WPSC_FILE_PATH . '/admin-form-functions.php' );
 require_once( WPSC_FILE_PATH . '/shipwire_functions.php' );

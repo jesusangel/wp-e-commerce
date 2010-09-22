@@ -79,20 +79,24 @@ function wpsc_shopping_cart( $input = null, $override_state = null ) {
 
 function wpsc_shopping_basket_internals( $cart, $quantity_limit = false, $no_title=false ) {
 	global $wpdb, $wpsc_theme_path;
-	$display_state = "";
-	if ( (( (isset( $_SESSION['slider_state'] ) && $_SESSION['slider_state'] == 0) ) || (wpsc_cart_item_count() < 1)) && (get_option( 'show_sliding_cart' ) == 1) ) {
+
+	$display_state = '';
+
+	if ( ( ( ( isset( $_SESSION['slider_state'] ) && $_SESSION['slider_state'] == 0) ) || ( wpsc_cart_item_count() < 1 ) ) && ( get_option( 'show_sliding_cart' ) == 1 ) )
 		$display_state = "style='display: none;'";
-	}
+
 	echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
-//	$cur_wpsc_theme_folder = apply_filters('wpsc_theme_folder',$wpsc_theme_path.WPSC_THEME_DIR);
+
 	$cur_wpsc_theme_folder = apply_filters( 'wpsc_theme_folder', $wpsc_theme_path );
-	include_once($cur_wpsc_theme_folder . "/wpsc-cart_widget.php");
+
+	include_once( $cur_wpsc_theme_folder . "/wpsc-cart_widget.php" );
+
 	echo "    </div>";
-	return $output;
 }
 
 function wpsc_country_region_list( $form_id = null, $ajax = false, $selected_country = null, $selected_region = null, $supplied_form_id = null, $checkoutfields = false ) {
 	global $wpdb;
+
 	$output = '';
 
 	if ( $selected_country == null )
