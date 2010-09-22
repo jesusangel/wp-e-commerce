@@ -93,17 +93,21 @@ function wpsc_core_load_page_titles() {
  *
  * Gets the merchants from the merchants directory and eeds to search the
  * merchants directory for merchants, the code to do this starts here.
+ *
+ * @todo Come up with a better way to do this than a global $num value
  */
 function wpsc_core_load_gateways() {
-	global $nzshpcrt_gateways, $wpsc_gateways;
+	global $nzshpcrt_gateways, $num, $wpsc_gateways;
 
 	$gateway_directory      = WPSC_FILE_PATH . '/merchants';
 	$nzshpcrt_merchant_list = wpsc_list_dir( $gateway_directory );
 
+	$num = 0;
 	foreach ( $nzshpcrt_merchant_list as $nzshpcrt_merchant ) {
 		if ( stristr( $nzshpcrt_merchant, '.php' ) ) {
 			require( WPSC_FILE_PATH . '/merchants/' . $nzshpcrt_merchant );
 		}
+		$num++;
 	}
 	unset( $nzshpcrt_merchant );
 
