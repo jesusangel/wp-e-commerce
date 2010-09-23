@@ -229,7 +229,7 @@ function wpsc_core_constants_uploads() {
 	define( 'WPSC_THEME_URL' , WPSC_URL       . '/wpsc-theme/' );
 
 	// No transient so look for the themes directory
-	if ( false === ( $wpsc_theme_path = get_transient( 'wpsc_theme_path' ) ) ) {
+	if ( false === ( $theme_path = get_transient( 'wpsc_theme_path' ) ) ) {
 
 		// Use the old path if it exists
 		if ( file_exists( WPSC_OLD_THEMES_PATH ) )
@@ -244,7 +244,7 @@ function wpsc_core_constants_uploads() {
 
 	// Transient exists, so use that
 	} else {
-		define( 'WPSC_THEMES_PATH', $wpsc_theme_path );
+		define( 'WPSC_THEMES_PATH', $theme_path );
 	}
 }
 
