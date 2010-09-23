@@ -27,7 +27,7 @@ function wpsc_display_settings_page() {
 		$_GET['isocode'] = '';
 
 	if ( preg_match( "/[a-zA-Z]{2,4}/", $_GET['isocode'] ) ) {
-		include(WPSC_FILE_PATH . '/wpsc-admin/tax_and_shipping.php');
+		include(WPSC_FILE_PATH . '/wpsc-admin/includes/tax_and_shipping.php');
 		return;
 	}
 	if ( isset( $_GET['googlecheckoutshipping'] ) ) {
