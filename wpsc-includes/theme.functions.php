@@ -674,7 +674,7 @@ function wpsc_display_products_page( $query ) {
 
 //handles replacing the tags in the pages  
 function wpsc_products_page( $content = '' ) {
-	global $wpdb, $wp_query, $wpsc_query, $old_wpsc_themes_dir, $wpsc_query_vars;
+	global $wpdb, $wp_query, $wpsc_query, $wpsc_query_vars;
 
 	remove_filter( 'the_content', 'wpsc_products_page' );
 

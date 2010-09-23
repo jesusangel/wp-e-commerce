@@ -40,7 +40,7 @@ class wpsc_theming {
 			return;
 		} else {
 			//WP-WPSC theme doesn't exist, so let's figure out where we're porting from, either the plugin directory or the wpsc-themes directory
-			$theme_location  = $this->theme_location();
+			$theme_location        = $this->theme_location();
 			$this->active_wp_theme = get_stylesheet_directory();
 
 			//Now that we have the theme location, let's copy it over to the themes directory and mod from there.
@@ -56,16 +56,17 @@ class wpsc_theming {
 	}
 
 	/**
+	 * theme_exists()
+	 *
 	 * Checks to see which theme files exist in the current WP theme folder
 	 * and which theme files that have been selected but have not been moved over
-	 * @access public
 	 *
+	 * @access public
 	 * @since 3.8
 	 * @param None
 	 * @return true if no templates need to be moved or false if some templates do need to be moved
 	 */
 	function theme_exists() {
-		global $wpsc_themes_dir;
 		$results = array_diff( $this->templates_to_move, $this->list_of_templates );
 
 		// If theme already exists, we're set, do nothing
@@ -85,10 +86,9 @@ class wpsc_theming {
 	 * @return None
 	 */
 	function theme_location() {
-		global $old_wpsc_themes_dir;
 
 		$selected_theme  = get_option( 'wpsc_selected_theme' );
-		$active_wpsc_dir = $old_wpsc_themes_dir . $selected_theme;
+		$active_wpsc_dir = WPSC_OLD_THEMES_PATH . $selected_theme;
 
 		// Check if theme exists in uploads folder. If so, that's theme location.
 		if ( file_exists( $active_wpsc_dir . '/functions.php' ) )
