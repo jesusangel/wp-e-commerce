@@ -151,7 +151,6 @@ function wpsc_core_constants_table_names() {
  * Set the Upload related constants
  */
 function wpsc_core_constants_uploads() {
-	global $wpsc_theme_path, $wpsc_theme_url;
 
 	$wp_upload_dir_data = wp_upload_dir();
 
@@ -285,25 +284,21 @@ function wpsc_core_setup_cart() {
  * Starting it in wp_query results in intractable infinite loops in 3.0
  */
 function wpsc_core_setup_globals() {
-	global $wpsc_theme_path;
 	global $wpsc_query_vars, $wpsc_cart;
 
 	// Setup some globals
 	$wpsc_query_vars = array();
-
-	$wpsc_theme_path = WPSC_THEMES_PATH;
-	$wpsc_theme_url  = WPSC_THEMES_URL;
 	$selected_theme  = get_option( 'wpsc_selected_theme' );
 
 	// Pick selected theme or fallback to default
-	if ( empty( $selected_theme ) || !file_exists( $wpsc_theme_path ) )
+	if ( empty( $selected_theme ) || !file_exists( WPSC_THEMES_PATH ) )
 		define( 'WPSC_THEME_DIR', 'default' );
 	else
 		define( 'WPSC_THEME_DIR', $selected_theme );
 
 	// Include a file named after the current theme, if one exists
-	if ( !empty( $selected_theme ) && file_exists( $wpsc_theme_path . $selected_theme . '/' . $selected_theme . '.php' ) )
-		include_once( $wpsc_theme_path . $selected_theme . '/' . $selected_theme . '.php' );
+	if ( !empty( $selected_theme ) && file_exists( WPSC_THEMES_PATH . $selected_theme . '/' . $selected_theme . '.php' ) )
+		include_once( WPSC_THEMES_PATH . $selected_theme . '/' . $selected_theme . '.php' );
 
 }
 
