@@ -335,7 +335,7 @@ function wpsc_single_template( $content ) {
  * enqueue all javascript and CSS for wp ecommerce
  */
 function wpsc_enqueue_user_script_and_css() {
-	global $wp_styles, $wpsc_theme_url, $wpsc_themes_dir, $wp_query;
+	global $wp_styles, $wpsc_theme_url, $wp_query;
 	/**
 	 * added by xiligroup.dev to be compatible with touchshop
 	 */
