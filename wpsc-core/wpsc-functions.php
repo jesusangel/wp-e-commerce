@@ -17,7 +17,7 @@
  */
 function wpsc_core_load_textdomain() {
 	$locale = apply_filters( 'wpsc_locale', get_locale() );
-	$mofile = WPSC_FOLDER . "/languages/wpsc-$locale.mo";
+	$mofile = WPSC_FOLDER . "/wpsc-languages/wpsc-$locale.mo";
 
 	if ( file_exists( $mofile ) )
 		load_textdomain( 'wpsc', $mofile );
