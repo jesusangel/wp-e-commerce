@@ -86,6 +86,8 @@ function wpsc_flush_theme_transients( $force = false ) {
 				delete_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file );
 			}
 
+			delete_transient( 'wpsc_theme_path' );
+
 			return true;
 		}
 	}
