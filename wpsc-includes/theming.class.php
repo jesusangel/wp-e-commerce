@@ -3,9 +3,11 @@
 /**
  * WP eCommerce theme porting class
  *
- * This class is responsible for moving all of the /theme folder from the plugin folder to the wp-themes
- * folder on new installs
- * On upgrades, responsible for checking appropriate folders for themes, converting and porting to wp/themes folder
+ * This class is responsible for moving all of the core template files from the
+ * plugin folder to the active theme folder on new installs.
+ *
+ * On upgrades, it is responsible for checking appropriate folders for themes,
+ * converting and porting to the active theme folder.
  *
  * @package wp-e-commerce
  * @since 3.8
@@ -94,14 +96,14 @@ class wpsc_theming {
 
 		// If it's not there, the theme location will be the plugins folder.
 		else
-			$theme_location = WPSC_FILE_PATH . '/themes';
+			$theme_location = WPSC_THEMES_PATH;
 
 		return $theme_location;
 	}
 
 	function recursive_copy( $src, $dst ) {
 
-		if ( $src != WPSC_FILE_PATH . '/themes/' )
+		if ( $src != WPSC_THEMES_PATH )
 			$theme_file_prefix = $this->theme_file_prefix;
 		else
 			$theme_file_prefix = '';
@@ -131,7 +133,7 @@ class wpsc_theming {
 	 */
 	function move_theme( $old, $new ) {
 		
-		if ( $old != WPSC_FILE_PATH . '/themes/' )
+		if ( $old != WPSC_THEMES_PATH )
 			$theme_file_prefix = $this->theme_file_prefix;
 		else
 			$theme_file_prefix = '';

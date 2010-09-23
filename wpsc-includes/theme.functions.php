@@ -98,10 +98,12 @@ add_action( 'wpsc_switch_theme', 'wpsc_flush_theme_transients', 10, true );
 add_action( 'switch_theme', 'wpsc_flush_theme_transients', 10, true );
 
 /**
- * Check theme location, compares the active theme and the themes within wp-e-commerce/themes
- * finds files of the same name. 
- * @access public
+ * wpsc_check_theme_location()
+ * 
+ * Check theme location, compares the active theme and the themes within WPSC_THEME_PATH
+ * finds files of the same name.
  *
+ * @access public
  * @since 3.8
  * @param null
  * @return $results (Array) of Files OR false if no similar files are found
@@ -114,7 +116,7 @@ function wpsc_check_theme_location() {
 	$current_theme_files = wpsc_list_product_templates( $current_theme . '/' );
 
 	// Load up the files in the wpec themes folder
-	$wpsc_template_files = wpsc_list_product_templates( WPSC_FILE_PATH . '/themes/' );
+	$wpsc_template_files = wpsc_list_product_templates( WPSC_THEME_PATH );
 
 	// Compare the two
 	$results             = array_intersect( $current_theme_files, $wpsc_template_files );
@@ -129,11 +131,13 @@ function wpsc_check_theme_location() {
 }
 
 /**
- * lists the files within the wp-e-commerce/themes directory
- * @access public
+ * wpsc_list_product_templates( $path = '' )
  *
+ * Lists the files within the WPSC_THEME_PATH directory
+ * 
+ * @access public
  * @since 3.8
- * @param $path - you can provide a path to find the files within it by default path is wp-e-commerce/themes/
+ * @param $path - you can provide a path to find the files within it
  * @return $templates (Array) List of files
  */
 function wpsc_list_product_templates( $path = '' ) {
@@ -145,7 +149,7 @@ function wpsc_list_product_templates( $path = '' ) {
 		if ( file_exists( WPSC_OLD_THEMES_PATH . $selected_theme . '/' . $selected_theme . '.css' ) ) {
 			$path = WPSC_OLD_THEMES_PATH . $selected_theme . '/';
 		} else {
-			$path = WPSC_FILE_PATH . '/themes/';
+			$path = WPSC_THEME_PATH;
 		}
 	}
 

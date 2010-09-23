@@ -166,25 +166,24 @@ function wpsc_debug_page() {
 }
 
 function wpsc_test_copying_themes() {
-	$old_theme_path = WPSC_FILE_PATH . "/themes/";
-	$new_theme_path = WPSC_THEMES_PATH;
-	$new_dir = @opendir( $new_theme_path );
-	$num = 0;
-	$file_names = array( );
 
-	while ( ($file = @readdir( $new_dir )) !== false ) {
-		if ( is_dir( $new_theme_path . $file ) && ($file != "..") && ($file != ".") ) {
+	$new_dir    = @opendir( WPSC_THEMES_PATH );
+	$num        = 0;
+	$file_names = array();
+
+	while ( false !== ( $file = @readdir( $new_dir ) ) ) {
+		if ( is_dir( WPSC_THEMES_PATH . $file ) && ( $file != ".." ) && ( $file != "." ) ) {
 			$file_names[] = $file;
 		}
 	}
 
 	if ( count( $file_names ) < 1 ) {
-		$old_dir = @opendir( $old_theme_path );
+		$old_dir = @opendir( WPSC_THEME_PATH );
 		while ( ($file = @readdir( $old_dir )) !== false ) {
-			if ( is_dir( $old_theme_path . $file ) && ($file != "..") && ($file != ".") ) {
-				$success = wpsc_recursive_copy( $old_theme_path . $file, $new_theme_path . $file );
-				echo "old_file:" . $old_theme_path . $file . "<br />";
-				echo "new_file:" . $new_theme_path . $file . "<br />";
+			if ( is_dir( WPSC_THEME_PATH . $file ) && ( $file != ".." ) && ( $file != "." ) ) {
+				$success = wpsc_recursive_copy( WPSC_THEME_PATH . $file, WPSC_THEMES_PATH . $file );
+				echo "old_file:" . WPSC_THEME_PATH . $file . "<br />";
+				echo "new_file:" . WPSC_THEMES_PATH . $file . "<br />";
 				echo "<pre>" . print_r( $success, true ) . "</pre>";
 			}
 		}

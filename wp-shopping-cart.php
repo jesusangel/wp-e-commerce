@@ -43,11 +43,11 @@ class WP_eCommerce {
 		define( 'WPSC_FILE_PATH', dirname( __FILE__ ) );
 
 		// Define the path to the plugin folder
-		define( 'WPSC_DIR_NAME', basename( WPSC_FILE_PATH ) );
+		define( 'WPSC_DIR_NAME',  basename( WPSC_FILE_PATH ) );
 
 		// Define the URL to the plugin folder
-		define( 'WPSC_FOLDER', dirname( plugin_basename( __FILE__ ) ) );
-		define( 'WPSC_URL', plugins_url( '', __FILE__ ) );
+		define( 'WPSC_FOLDER',    dirname( plugin_basename( __FILE__ ) ) );
+		define( 'WPSC_URL',       plugins_url( '', __FILE__ ) );
 
 		// Finished starting
 		do_action( 'wpsc_started' );
