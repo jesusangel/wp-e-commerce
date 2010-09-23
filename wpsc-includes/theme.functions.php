@@ -374,7 +374,7 @@ function wpsc_enqueue_user_script_and_css() {
 		wp_enqueue_script( 'wpsc-thickbox',               WPSC_URL . '/js/thickbox.js',                      array( 'jquery' ), 'Instinct_e-commerce' );
 		
 		wp_enqueue_style( 'wpsc-theme-css',               wpsc_get_template_file_url( 'wpsc-' . get_option( 'wpsc_selected_theme' ) . '.css' ), false, $version_identifier, 'all' );
-		wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_THEME_URL . '/compatibility.css',                                    false, $version_identifier, 'all' );
+		wp_enqueue_style( 'wpsc-theme-css-compatibility', WPSC_CORE_THEME_URL . '/compatibility.css',                                    false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-product-rater',           WPSC_URL . '/js/product_rater.css',                                       false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wp-e-commerce-dynamic',        $siteurl . "/index.php?wpsc_user_dynamic_css=true&category=$category_id", false, $version_identifier, 'all' );
 		wp_enqueue_style( 'wpsc-thickbox',                WPSC_URL . '/js/thickbox.css',                                            false, $version_identifier, 'all' );

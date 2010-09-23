@@ -226,7 +226,7 @@ function wpsc_core_constants_uploads() {
 
 	// Themes folder locations
 	define( 'WPSC_CORE_THEME_PATH', WPSC_FILE_PATH . '/wpsc-theme/' );
-	define( 'WPSC_THEME_URL' , WPSC_URL       . '/wpsc-theme/' );
+	define( 'WPSC_CORE_THEME_URL' , WPSC_URL       . '/wpsc-theme/' );
 
 	// No transient so look for the themes directory
 	if ( false === ( $theme_path = get_transient( 'wpsc_theme_path' ) ) ) {
