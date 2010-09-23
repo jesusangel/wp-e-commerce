@@ -28,30 +28,23 @@ require_once( WPSC_FILE_PATH . '/wpsc-taxes/taxes_module.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/upgrades.php' );
 
 // Editor
-if ( !IS_WP25 )
-	require_once( WPSC_FILE_PATH . '/editor.php' );
-else
-	require_once( WPSC_FILE_PATH . '/js/tinymce3/tinymce.php' );
+require_once( WPSC_FILE_PATH . '/js/tinymce3/tinymce.php' ); 
+	
 
 // Share This
 if ( ( get_option( 'wpsc_share_this' ) == 1 ) && ( get_option( 'product_list_url' ) != '' ) )
-	include_once( WPSC_FILE_PATH . '/share-this.php' );
+	include_once( WPSC_FILE_PATH . '/wpsc-includes/share-this.php' );
 
-require_once( WPSC_FILE_PATH . '/currency_converter.inc.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/currency_converter.inc.php' );
 require_once( WPSC_FILE_PATH . '/shopping_cart_functions.php' );
 require_once( WPSC_FILE_PATH . '/homepage_products_functions.php' );
 
 // Themes
-if ( file_exists( WPSC_FILE_PATH . '/themes/wpsc-transaction_results_functions.php' ) )
-	require_once( WPSC_FILE_PATH . '/themes/wpsc-transaction_results_functions.php' );
-else
-	require_once( WPSC_FILE_PATH . '/transaction_result_functions.php');
-	
-if ( file_exists( WPSC_FILE_PATH . '/themes/wpsc-user_log_functions.php' ) )
-	require_once( WPSC_FILE_PATH . '/themes/wpsc-user_log_functions.php' );
+require_once( WPSC_FILE_PATH . '/themes/wpsc-transaction_results_functions.php' );
+require_once( WPSC_FILE_PATH . '/themes/wpsc-user_log_functions.php' );
 
-require_once( WPSC_FILE_PATH . '/admin-form-functions.php' );
-require_once( WPSC_FILE_PATH . '/shipwire_functions.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-admin/admin-form-functions.php' );
+require_once( WPSC_FILE_PATH . '/shipping/library/shipwire_functions.php' );
 
 // Widgets
 include_once( WPSC_FILE_PATH . '/widgets/product_tag_widget.php' );

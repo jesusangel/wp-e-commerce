@@ -1,10 +1,6 @@
 <?php
 
-
-
-include_once( WPSC_FILE_PATH . '/tagging_functions.php' );
-
-
+include_once( WPSC_FILE_PATH . '/widgets/tagging_functions.php' );
 
 /**
  * Product Tags widget class

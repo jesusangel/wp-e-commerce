@@ -528,7 +528,7 @@ function wpsc_create_or_update_tables( $debug = false ) {
  */
 function wpsc_add_currency_list() {
 	global $wpdb;
-	require_once(WPSC_FILE_PATH . "/currency_list.php");
+	require_once(WPSC_FILE_PATH . "/updates/currency_list.php");
 	$currency_data = $wpdb->get_var( "SELECT COUNT(*) AS `count` FROM `" . WPSC_TABLE_CURRENCY_LIST . "`" );
 	if ( $currency_data == 0 ) {
 		$currency_array = explode( "\n", $currency_sql );
