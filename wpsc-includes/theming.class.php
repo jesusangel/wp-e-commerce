@@ -85,8 +85,8 @@ class wpsc_theming {
 	function theme_location() {
 		global $old_wpsc_themes_dir;
 
-		$wpsc_theme_folder = get_option( 'wpsc_selected_theme' );
-		$active_wpsc_dir   = $old_wpsc_themes_dir . $wpsc_theme_folder;
+		$selected_theme  = get_option( 'wpsc_selected_theme' );
+		$active_wpsc_dir = $old_wpsc_themes_dir . $selected_theme;
 
 		// Check if theme exists in uploads folder. If so, that's theme location.
 		if ( file_exists( $active_wpsc_dir . '/functions.php' ) )

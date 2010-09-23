@@ -151,6 +151,7 @@ function wpsc_core_constants_table_names() {
  * Set the Upload related constants
  */
 function wpsc_core_constants_uploads() {
+	global $wpsc_theme_path, $wpsc_theme_url;
 
 	$wp_upload_dir_data = wp_upload_dir();
 
@@ -196,8 +197,8 @@ function wpsc_core_constants_uploads() {
 
 	// Loop through sub directories
 	foreach ( $sub_dirs as $sub_directory ) {
-		$wpsc_paths[] = trailingslashit( $wpsc_upload_dir . '/' . $sub_directory );
-		$wpsc_urls[]  = trailingslashit( $wpsc_upload_url . '/' . $sub_directory );
+		$wpsc_paths[] = trailingslashit( $wpsc_upload_dir . $sub_directory );
+		$wpsc_urls[]  = trailingslashit( $wpsc_upload_url . $sub_directory );
 	}
 
 	// Define paths
@@ -211,7 +212,6 @@ function wpsc_core_constants_uploads() {
 	define( 'WPSC_UPGRADES_DIR',     $wpsc_paths[7] );
 	define( 'WPSC_THEME_BACKUP_DIR', $wpsc_paths[8] );
 	define( 'WPSC_OLD_THEMES_PATH',  $wpsc_paths[9] );
-	define( 'WPSC_THEMES_PATH',      trailingslashit( get_stylesheet_directory() ) );
 
 	// Define urls
 	define( 'WPSC_FILE_URL',         $wpsc_urls[0] );
@@ -222,9 +222,31 @@ function wpsc_core_constants_uploads() {
 	define( 'WPSC_USER_UPLOADS_URL', $wpsc_urls[5] );
 	define( 'WPSC_CACHE_URL',        $wpsc_urls[6] );
 	define( 'WPSC_UPGRADES_URL',     $wpsc_urls[7] );
-	define( 'WPSC_THEME_BACKUP_DIR', $wpsc_urls[8] );
+	define( 'WPSC_THEME_BACKUP_URL', $wpsc_urls[8] );
 	define( 'WPSC_OLD_THEMES_URL',   $wpsc_urls[9] );
-	define( 'WPSC_THEMES_URL',       trailingslashit( get_stylesheet_directory_uri() ) );
+
+	// Themes folder locations
+	define( 'WPSC_THEME_PATH', WPSC_FOLDER . '/themes/' );
+	define( 'WPSC_THEME_URL' , WPSC_URL    . '/themes/' );
+
+	// No transient so look for the themes directory
+	if ( false === ( $wpsc_theme_path = get_transient( 'wpsc_theme_path' ) ) ) {
+
+		// Use the old path if it exists
+		if ( file_exists( WPSC_OLD_THEMES_PATH ) )
+			define( 'WPSC_THEMES_PATH', WPSC_OLD_THEMES_PATH );
+
+		// Use the built in theme files
+		else
+			define( 'WPSC_THEMES_PATH', WPSC_FILE_PATH . '/themes/' );
+
+		// Store the theme directory in a transient for safe keeping
+		set_transient( 'wpsc_theme_path', WPSC_THEMES_PATH, 60 * 60 * 12 );
+
+	// Transient exists, so use that
+	} else {
+		define( 'WPSC_THEMES_PATH', $wpsc_theme_path );
+	}
 }
 
 /**
@@ -263,31 +285,15 @@ function wpsc_core_setup_cart() {
  * Starting it in wp_query results in intractable infinite loops in 3.0
  */
 function wpsc_core_setup_globals() {
-	global $wpsc_theme_path, $wpsc_theme_url;
+	global $wpsc_theme_path;
 	global $wpsc_query_vars, $wpsc_cart;
 
 	// Setup some globals
 	$wpsc_query_vars = array();
 
-	// Open the themes directory and load up files
-	if ( $uploads_dir = @opendir( WPSC_THEMES_PATH ) ) {
-		while ( false !== ( $file = @readdir( $uploads_dir ) ) ) {
-			if ( !is_dir( WPSC_THEMES_PATH . '/' . $file ) && ( $file != ".." ) && ( $file != "." ) && ( $file != ".svn" ) ) {
-				$file_names[] = $file;
-			}
-		}
-	}
-
-	// Set globals
-	if ( count( (array)$file_names ) > 0 ) {
-		$wpsc_theme_path = WPSC_THEMES_PATH;
-		$wpsc_theme_url  = WPSC_THEMES_URL;
-	} else {
-		$wpsc_theme_path = WPSC_FILE_PATH . '/themes/';
-		$wpsc_theme_url  = WPSC_URL . '/themes/';
-	}
-
-	$selected_theme = get_option( 'wpsc_selected_theme' );
+	$wpsc_theme_path = WPSC_THEMES_PATH;
+	$wpsc_theme_url  = WPSC_THEMES_URL;
+	$selected_theme  = get_option( 'wpsc_selected_theme' );
 
 	// Pick selected theme or fallback to default
 	if ( empty( $selected_theme ) || !file_exists( $wpsc_theme_path ) )

@@ -250,17 +250,16 @@ function wpsc_select_variation_file( $file_id, $variation_ids, $variation_combin
 }
 
 function wpsc_list_product_themes( $theme_name = null ) {
-	global $wpdb, $wpsc_theme_path;
+	global $wpdb;
 	
 	if ( !$selected_theme = get_option( 'wpsc_selected_theme' ) )
 		$selected_theme = 'default';
 
-	$theme_path = $wpsc_theme_path;
 	$theme_list = wpsc_list_dir( $theme_path );
 
 	foreach ( $theme_list as $theme_file ) {
-		if ( is_dir( $theme_path . $theme_file ) && is_file( $theme_path . $theme_file . "/" . $theme_file . ".css" ) ) {
-			$theme[$theme_file] = get_theme_data( $theme_path . $theme_file . "/" . $theme_file . ".css" );
+		if ( is_dir( WPSC_THEME_PATH . $theme_file ) && is_file( WPSC_THEME_PATH . $theme_file . "/" . $theme_file . ".css" ) ) {
+			$theme[$theme_file] = get_theme_data( WPSC_THEME_PATH . $theme_file . "/" . $theme_file . ".css" );
 		}
 	}
 

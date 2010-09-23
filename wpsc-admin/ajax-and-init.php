@@ -1016,10 +1016,12 @@ function wpsc_display_invoice() {
 	//wpsc_packing_slip($purchase_id);
 	exit();
 }
+//other actions are here
+if ( isset( $_GET['display_invoice'] ) && ( 'true' == $_GET['display_invoice'] ) )
+	add_action( 'admin_init', 'wpsc_display_invoice', 0 );
 
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_display_invoice') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_display_invoice' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_display_invoice' );
-}
 
 function wpsc_save_inline_price() {
 	global $wpdb;
@@ -1029,10 +1031,8 @@ function wpsc_save_inline_price() {
 	$wpdb->query( "UPDATE " . WPSC_TABLE_PRODUCT_LIST . " SET price='$new_price1' WHERE id='$pid'" );
 	exit( $new_price );
 }
-
-if ( isset( $_GET['inline_price'] ) && ($_GET['inline_price'] == 'true') ) {
+if ( isset( $_GET['inline_price'] ) && ($_GET['inline_price'] == 'true') )
 	add_action( 'admin_init', 'wpsc_save_inline_price', 0 );
-}
 
 /**
  * Purchase log ajax code starts here
@@ -1418,12 +1418,10 @@ function wpsc_save_checkout_order() {
 
 	exit( (string)$success );
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'save_checkout_order') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'save_checkout_order') )
 	add_action( 'admin_init', 'wpsc_save_checkout_order' );
-}
-/* Start Order Notes (by Ben) */
 
+/* Start Order Notes (by Ben) */
 function wpsc_purchlogs_update_notes( $purchlog_id = '', $purchlog_notes = '' ) {
 	global $wpdb;
 	if ( wp_verify_nonce( $_POST['wpsc_purchlogs_update_notes_nonce'], 'wpsc_purchlogs_update_notes' ) ) {
@@ -1434,10 +1432,9 @@ function wpsc_purchlogs_update_notes( $purchlog_id = '', $purchlog_notes = '' ) 
 		$wpdb->query( "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET notes='{$purchlog_notes}' WHERE id='{$purchlog_id}'" );
 	}
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' ) ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'purchlogs_update_notes' ) )
 	add_action( 'admin_init', 'wpsc_purchlogs_update_notes' );
-}
+
 /* End Order Notes (by Ben) */
 
 //delete a purchase log
@@ -1511,15 +1508,11 @@ function wpsc_ajax_get_payment_form() {
 	//echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') )
 	add_action( 'admin_init', 'wpsc_ajax_get_shipping_form' );
-}
 
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'get_payment_form') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'get_payment_form') )
 	add_action( 'admin_init', 'wpsc_ajax_get_payment_form' );
-}
-
 
 
 /*
@@ -1659,10 +1652,8 @@ function wpsc_submit_options( $selected='' ) {
 	wp_redirect( $sendback );
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'submit_options') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'submit_options') )
 	add_action( 'admin_init', 'wpsc_submit_options' );
-}
 
 function wpsc_change_currency() {
 	if ( is_numeric( $_POST['currencyid'] ) ) {
@@ -1676,10 +1667,8 @@ function wpsc_change_currency() {
 		echo $currency_sign;
 	}
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'change_currency') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'change_currency') )
 	add_action( 'admin_init', 'wpsc_change_currency' );
-}
 
 function wpsc_rearrange_images() {
 	global $wpdb;
@@ -1706,10 +1695,8 @@ function wpsc_rearrange_images() {
 	echo "image_id = '" . $new_main_image . "';\n\r";
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'rearrange_images') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'rearrange_images') )
 	add_action( 'admin_init', 'wpsc_rearrange_images' );
-}
 
 function wpsc_delete_images() {
 	global $wpdb;
@@ -1749,10 +1736,8 @@ function wpsc_delete_images() {
 
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'delete_images') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'delete_images') )
 	add_action( 'admin_init', 'wpsc_delete_images' );
-}
 
 function wpsc_update_page_urls() {
 	global $wpdb;
@@ -1790,10 +1775,8 @@ function wpsc_update_page_urls() {
 
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'update_page_urls') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'update_page_urls') )
 	add_action( 'admin_init', 'wpsc_update_page_urls' );
-}
 
 function wpsc_clean_categories() {
 	global $wpdb, $wp_rewrite;
@@ -1831,10 +1814,8 @@ function wpsc_clean_categories() {
 
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'clean_categories') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'clean_categories') )
 	add_action( 'admin_init', 'wpsc_clean_categories' );
-}
 
 //change the regions tax settings
 function wpsc_change_region_tax() {
@@ -1854,10 +1835,8 @@ function wpsc_change_region_tax() {
 		wp_redirect( $sendback );
 	}
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'change_region_tax') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'change_region_tax') )
 	add_action( 'admin_init', 'wpsc_change_region_tax' );
-}
 
 function wpsc_product_files_existing() {
 	global $wpdb;
@@ -1911,10 +1890,8 @@ function wpsc_product_files_existing() {
 
 	echo $output;
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'product_files_existing') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'product_files_existing') )
 	add_action( 'admin_init', 'wpsc_product_files_existing' );
-}
 
 function prod_upload() {
 	global $wpdb, $product_id;
@@ -1965,10 +1942,8 @@ function prod_upload() {
 		echo "$id\n";
 	}
 }
-
-if ( isset( $_GET['wpsc_admin_action'] ) && ($_GET['wpsc_admin_action'] == 'product_files_upload') ) {
+if ( isset( $_GET['wpsc_admin_action'] ) && ($_GET['wpsc_admin_action'] == 'product_files_upload') )
 	add_action( 'admin_init', 'prod_upload' );
-}
 
 //change the gateway settings
 function wpsc_gateway_settings() {
@@ -2024,10 +1999,8 @@ function wpsc_gateway_settings() {
 	wp_redirect( $sendback );
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_gateway_settings'] ) && ($_REQUEST['wpsc_gateway_settings'] == 'gateway_settings') ) {
+if ( isset( $_REQUEST['wpsc_gateway_settings'] ) && ($_REQUEST['wpsc_gateway_settings'] == 'gateway_settings') )
 	add_action( 'admin_init', 'wpsc_gateway_settings' );
-}
 
 function wpsc_check_form_options() {
 	global $wpdb;
@@ -2050,10 +2023,8 @@ function wpsc_check_form_options() {
 	}
 	exit( $output );
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'check_form_options') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'check_form_options') )
 	add_action( 'admin_init', 'wpsc_check_form_options' );
-}
 
 //handles the editing and adding of new checkout fields
 function wpsc_checkout_settings() {
@@ -2175,10 +2146,8 @@ function wpsc_checkout_settings() {
 	wp_redirect( $sendback );
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'checkout_settings') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'checkout_settings') )
 	add_action( 'admin_init', 'wpsc_checkout_settings' );
-}
 
 function wpsc_google_shipping_settings() {
 	if ( isset( $_POST['submit'] ) ) {
@@ -2260,10 +2229,8 @@ function wpsc_settings_page_ajax() {
 	$_SESSION['wpsc_settings_curr_page'] = $page_title;
 	exit( $html );
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') )
 	add_action( 'admin_init', 'wpsc_settings_page_ajax' );
-}
 
 function wpsc_mass_resize_thumbnails() {
 	global $wpdb;
@@ -2300,10 +2267,8 @@ function wpsc_mass_resize_thumbnails() {
 	wp_redirect( $sendback );
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails') )
 	add_action( 'admin_init', 'wpsc_mass_resize_thumbnails' );
-}
 
 function wpsc_update_variations() {
 	global $wpdb, $user_ID, $wp_query, $wpsc_products, $mode;
@@ -2324,10 +2289,8 @@ function wpsc_update_variations() {
 	return wpsc_admin_product_listing( $product_id );
 	//return $post_data;
 }
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations') )
 	add_action( 'admin_init', 'wpsc_update_variations', 50 );
-}
 
 function wpsc_delete_variation_set() {
 	global $wpdb;
@@ -2370,7 +2333,6 @@ function wpsc_delete_variation_set() {
 }
 
 function wpsc_force_flush_theme_transients() {
-
 	// Flush transients
 	wpsc_flush_theme_transients( true );
 
@@ -2384,12 +2346,10 @@ if ( isset( $_REQUEST['wpsc_flush_theme_transients'] ) && ( $_REQUEST['wpsc_flus
 	add_action( 'admin_init', 'wpsc_force_flush_theme_transients' );
 
 function wpsc_backup_theme() {
-
-	$wpsc_theme_path = get_stylesheet_directory();
-	wpsc_recursive_copy( $wpsc_theme_path, WPSC_THEME_BACKUP_DIR );
+	$wp_theme_path = get_stylesheet_directory();
+	wpsc_recursive_copy( $wp_theme_path, WPSC_THEME_BACKUP_DIR );
 	$_SESSION['wpsc_themes_backup'] = true;
 	$sendback = wp_get_referer();
-//	$sendback = add_query_arg('tab', $_SESSION['wpsc_settings_curr_page'], remove_query_arg('tab', $sendback));
 	wp_redirect( $sendback );
 
 	exit();
@@ -2428,50 +2388,34 @@ function wpsc_delete_category() {
 	exit();
 }
 
-//other actions are here
-if ( isset( $_GET['display_invoice'] ) && ($_GET['display_invoice'] == 'true') ) {
-	add_action( 'admin_init', 'wpsc_display_invoice', 0 );
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_add_image') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_add_image' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_swfupload_images' );
-}
 
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'edit_product') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'edit_product' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_admin_submit_product' );
-}
 
-
-if ( isset( $_GET['action'] ) && ($_GET['action'] == "purchase_log") ) {
+if ( isset( $_GET['action'] ) && ( 'purchase_log' == $_GET['action'] ) )
 	add_action( 'admin_init', 'wpsc_admin_sale_rss' );
-}
 
-
-if ( isset( $_GET['purchase_log_csv'] ) && ($_GET['purchase_log_csv'] == "true") ) {
+if ( isset( $_GET['purchase_log_csv'] ) && ( 'true' == $_GET['purchase_log_csv'] ) )
 	add_action( 'admin_init', 'wpsc_purchase_log_csv' );
-}
 
-if ( isset( $_REQUEST['ajax'] ) && isset( $_REQUEST['admin'] ) && ($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true") ) {
+if ( isset( $_REQUEST['ajax'] ) && isset( $_REQUEST['admin'] ) && ($_REQUEST['ajax'] == "true") && ($_REQUEST['admin'] == "true") )
 	add_action( 'admin_init', 'wpsc_admin_ajax' );
-}
 
 // Variation set deleting init code starts here
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-variation-set') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-variation-set' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_delete_variation_set' );
-}
 
 // Variation set deleting init code starts here
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-delete-category') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-category' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_delete_category' );
-}
 
 // Category modification init code starts here
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc-category-set') ) {
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-category-set' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_save_category_set' );
-}
 
 function flat_price( $price ) {
-
 	if ( isset( $price ) && !empty( $price ) && strchr( $price, '-' ) === false && strchr( $price, '+' ) === false && strchr( $price, '%' ) === false )
 		return true;
 }
@@ -2482,23 +2426,22 @@ function percentile_price( $price ) {
 }
 
 function differential_price( $price ) {
-
 	if ( isset( $price ) && !empty( $price ) && ( strchr( $price, '-' ) || strchr( $price, '+' ) ) && strchr( $price, '%' ) === false )
 		return true;
 }
 
-add_action( 'wpsc-variation_edit_form_fields', 'variation_price_field' );
-add_action( 'wpsc-variation_edit_form_fields', 'variation_price_field_check' );
-add_action( 'wpsc-variation_add_form_fields', 'variation_price_field' );
-
+/**
+ * If it doesn't exist, let's create a multi-dimensional associative array
+ * that will contain all of the term/price associations
+ *
+ * @param <type> $variation
+ */
 function variation_price_field( $variation ) {
-
-	//If it doesn't exist, let's create a multi-dimensional associative array that will contain all of the term/price associations
-
 	$term_prices = get_option( 'term_prices' );
-	if ( is_object( $variation ) ) {
+
+	if ( is_object( $variation ) )
 		$term_id = $variation->term_id;
-	}
+
 	if ( empty( $term_prices ) || !is_array( $term_prices ) ) {
 
 		$term_prices = array( );
@@ -2510,11 +2453,10 @@ function variation_price_field( $variation ) {
 		add_option( 'term_prices', $term_prices );
 	}
 
-	if ( isset( $term_id ) && is_array( $term_prices ) && array_key_exists( $term_id, $term_prices ) ) {
+	if ( isset( $term_id ) && is_array( $term_prices ) && array_key_exists( $term_id, $term_prices ) )
 		$price = $term_prices[$term_id]["price"];
-	} else {
+	else
 		$price = '';
-	}
 ?>
 
 	<div class="form-field">
@@ -2526,17 +2468,18 @@ function variation_price_field( $variation ) {
 
 <?php
 }
+add_action( 'wpsc-variation_edit_form_fields', 'variation_price_field' );
+add_action( 'wpsc-variation_add_form_fields', 'variation_price_field' );
 
 function variation_price_field_check( $variation ) {
 
 	$term_prices = get_option( 'term_prices' );
 
-	if ( is_array( $term_prices ) && array_key_exists( $variation->term_id, $term_prices ) ) {
+	if ( is_array( $term_prices ) && array_key_exists( $variation->term_id, $term_prices ) )
 		$checked = ($term_prices[$variation->term_id]["checked"] == 'checked') ? 'checked' : '';
-	} else {
-		$checked = '';
-	}
-?>
+	else
+		$checked = ''; ?>
+
 	<tr class="form-field">
 		<th scope="row" valign="top"><label for="apply_to_current"><?php _e( 'Apply to current variations?' ) ?></label></th>
 		<td>
@@ -2545,13 +2488,17 @@ function variation_price_field_check( $variation ) {
 	</tr>
 <?php
 }
+add_action( 'wpsc-variation_edit_form_fields', 'variation_price_field_check' );
 
-add_action( 'edited_wpsc-variation', 'save_term_prices' );
-add_action( 'created_wpsc-variation', 'save_term_prices' );
-
+/**
+ * @todo - Should probably refactor this at some point - very procedural,
+ *		   WAY too many foreach loops for my liking :)  But it does the trick
+ *
+ * @param <type> $term_id
+ */
 function save_term_prices( $term_id ) {
 
-// First - Saves options from input
+	// First - Saves options from input
 	if ( isset( $_POST['variation_price'] ) || isset( $_POST["apply_to_current"] ) ) {
 
 		$term_prices = get_option( 'term_prices' );
@@ -2562,34 +2509,29 @@ function save_term_prices( $term_id ) {
 		update_option( 'term_prices', $term_prices );
 	}
 
-// Second - If box was checked, let's then check whether or not it was flat, differential, or percentile, then let's apply the pricing to every product appropriately
-
+	// Second - If box was checked, let's then check whether or not it was flat, differential, or percentile, then let's apply the pricing to every product appropriately
 	if ( isset( $_POST["apply_to_current"] ) ) {
 
 		//Check for flat, percentile or differential
 		$var_price_type = '';
 
-		if ( flat_price( $_POST["variation_price"] ) ) {
+		if ( flat_price( $_POST["variation_price"] ) )
 			$var_price_type = 'flat';
-		} elseif ( differential_price( $_POST["variation_price"] ) ) {
+		elseif ( differential_price( $_POST["variation_price"] ) )
 			$var_price_type = 'differential';
-		} elseif ( percentile_price( $_POST["variation_price"] ) ) {
+		elseif ( percentile_price( $_POST["variation_price"] ) )
 			$var_price_type = 'percentile';
-		}
 
 		//Now, find all products with this term_id, update their pricing structure (terms returned include only parents at this point, we'll grab relevent children soon)
-
 		$products_to_mod = get_objects_in_term( $term_id, "wpsc-variation" );
-
 		$product_parents = array( );
 
 		foreach ( (array)$products_to_mod as $get_parent ) {
 
 			$post = get_post( $get_parent );
 
-			if ( !$post->post_parent ) {
+			if ( !$post->post_parent )
 				$product_parents[] = $post->ID;
-			}
 		}
 
 		//Now that we have all parent IDs with this term, we can get the children (only the ones that are also in $products_to_mod, we don't want to apply pricing to ALL kids)
@@ -2626,46 +2568,43 @@ function save_term_prices( $term_id ) {
 
 					//Are we decreasing or increasing the price?
 
-					if ( strchr( $_POST["variation_price"], '-' ) ) {
+					if ( strchr( $_POST["variation_price"], '-' ) )
 						$negative = true;
-					} else {
+					else
 						$positive = true;
-					}
 
 					//Now, let's get the parent product price, +/- by the percentage given
 					$percentage = (floatval( $_POST["variation_price"] ) / 100);
 
-					if ( $positive ) {
+					if ( $positive )
 						$price = $parent_pricing + ($parent_pricing * $percentage);
-					} elseif ( $negative ) {
+					elseif ( $negative )
 						$price = $parent_pricing - ($parent_pricing * $percentage);
-					}
 
 					update_product_meta( $kiddos, "price", $price );
 				} elseif ( $var_price_type == 'differential' ) {
 
 					//Are we decreasing or increasing the price?
-					if ( strchr( $_POST["variation_price"], '-' ) ) {
+					if ( strchr( $_POST["variation_price"], '-' ) )
 						$negative = true;
-					} else {
+					else
 						$positive = true;
-					}
 
 					//Now, let's get the parent product price, +/- by the differential given
 					$differential = (floatval( $_POST["variation_price"] ));
 
-					if ( $positive ) {
+					if ( $positive )
 						$price = $parent_pricing + $differential;
-					} elseif ( $negative ) {
+					elseif ( $negative )
 						$price = $parent_pricing - $differential;
-					}
 
 					update_product_meta( $kiddos, "price", $price );
 				}
 			}
 		}
-
-		//@todo - Should probably refactor this at some point - very procedural, WAY too many foreach loops for my liking :)  But it does the trick
 	}
 }
+add_action( 'edited_wpsc-variation', 'save_term_prices' );
+add_action( 'created_wpsc-variation', 'save_term_prices' );
+
 ?>

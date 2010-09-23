@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * Shopping Cart widget class
  *
@@ -34,7 +32,7 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 	 */
 	function widget( $args, $instance ) {
 
-		global $wpsc_theme_path, $cache_enabled;
+		global $cache_enabled;
 
 		extract( $args );
 
@@ -89,7 +87,7 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 			echo '</div>';
 		} else {
 			echo '<div id="sliding_cart" class="shopping-cart-wrapper" ' . $display_state . '>';
-			include( wpsc_get_theme_file_path( 'wpsc-cart_widget.php' ) );
+			include( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 			echo '</div>';
 		}
 
