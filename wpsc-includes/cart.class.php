@@ -1135,8 +1135,8 @@ class wpsc_cart {
    function calculate_total_tax()
    {
       //uses new wpec_taxes functionality
-      if(!isset($this->total_tax) || empty($this->total_tax))
-      {
+      //if(!isset($this->total_tax) || empty($this->total_tax))
+      //{
          $wpec_taxes_controller = new wpec_taxes_controller();
          $taxes_total = $wpec_taxes_controller->wpec_taxes_calculate_total();
          $this->total_tax = $taxes_total['total'];
@@ -1144,7 +1144,7 @@ class wpsc_cart {
          {
             $this->tax_percentage = $taxes_total['rate'];
          }// if
-      }// if
+      //}// if
 
       return $this->total_tax;
 

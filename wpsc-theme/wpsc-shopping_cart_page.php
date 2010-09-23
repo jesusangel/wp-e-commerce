@@ -177,7 +177,7 @@ if(wpsc_cart_item_count() > 0) :
 	<?php endif;  ?>
 	
 	<table class="productcart">
-	<?php if(wpsc_cart_tax(false) > 0) : ?>
+	<?php //if(wpsc_cart_tax(false) > 0) : ?>
 		<tr class="total_price total_tax">
 			<td colspan="3">
 				<?php echo wpsc_display_tax_label(true); ?>
@@ -187,7 +187,7 @@ if(wpsc_cart_item_count() > 0) :
 				<span id="checkout_tax" class="pricedisplay checkout-tax"><?php echo wpsc_cart_tax(); ?></span>
 			</td>
 		</tr>
-	<?php endif; ?>	
+	<?php //endif; ?>	
 	</table>
 		<?php do_action('wpsc_before_form_of_shopping_cart'); ?>
 	
