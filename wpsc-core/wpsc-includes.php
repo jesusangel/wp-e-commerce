@@ -36,8 +36,8 @@ if ( ( get_option( 'wpsc_share_this' ) == 1 ) && ( get_option( 'product_list_url
 	include_once( WPSC_FILE_PATH . '/wpsc-includes/share-this.php' );
 
 require_once( WPSC_FILE_PATH . '/wpsc-includes/currency_converter.inc.php' );
-require_once( WPSC_FILE_PATH . '/shopping_cart_functions.php' );
-require_once( WPSC_FILE_PATH . '/homepage_products_functions.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/shopping_cart_functions.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-includes/homepage_products_functions.php' );
 
 // Themes
 require_once( WPSC_CORE_THEME_PATH . 'functions/wpsc-transaction_results_functions.php' );
