@@ -100,7 +100,7 @@ add_action( 'switch_theme', 'wpsc_flush_theme_transients', 10, true );
 /**
  * wpsc_check_theme_location()
  * 
- * Check theme location, compares the active theme and the themes within WPSC_THEME_PATH
+ * Check theme location, compares the active theme and the themes within WPSC_CORE_THEME_PATH
  * finds files of the same name.
  *
  * @access public
@@ -116,7 +116,7 @@ function wpsc_check_theme_location() {
 	$current_theme_files = wpsc_list_product_templates( $current_theme . '/' );
 
 	// Load up the files in the wpec themes folder
-	$wpsc_template_files = wpsc_list_product_templates( WPSC_THEME_PATH );
+	$wpsc_template_files = wpsc_list_product_templates( WPSC_CORE_THEME_PATH );
 
 	// Compare the two
 	$results             = array_intersect( $current_theme_files, $wpsc_template_files );
@@ -133,7 +133,7 @@ function wpsc_check_theme_location() {
 /**
  * wpsc_list_product_templates( $path = '' )
  *
- * Lists the files within the WPSC_THEME_PATH directory
+ * Lists the files within the WPSC_CORE_THEME_PATH directory
  * 
  * @access public
  * @since 3.8
@@ -149,7 +149,7 @@ function wpsc_list_product_templates( $path = '' ) {
 		if ( file_exists( WPSC_OLD_THEMES_PATH . $selected_theme . '/' . $selected_theme . '.css' ) ) {
 			$path = WPSC_OLD_THEMES_PATH . $selected_theme . '/';
 		} else {
-			$path = WPSC_THEME_PATH;
+			$path = WPSC_CORE_THEME_PATH;
 		}
 	}
 
@@ -280,7 +280,7 @@ function wpsc_get_template_file_path( $file = '' ){
 
 			// Use the bundled file
 			} else {
-				$file_path = WPSC_THEME_PATH . '/' . $file;
+				$file_path = WPSC_CORE_THEME_PATH . '/' . $file;
 			}
 		}
 

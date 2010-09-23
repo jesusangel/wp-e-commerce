@@ -258,8 +258,8 @@ function wpsc_list_product_themes( $theme_name = null ) {
 	$theme_list = wpsc_list_dir( $theme_path );
 
 	foreach ( $theme_list as $theme_file ) {
-		if ( is_dir( WPSC_THEME_PATH . $theme_file ) && is_file( WPSC_THEME_PATH . $theme_file . "/" . $theme_file . ".css" ) ) {
-			$theme[$theme_file] = get_theme_data( WPSC_THEME_PATH . $theme_file . "/" . $theme_file . ".css" );
+		if ( is_dir( WPSC_CORE_THEME_PATH . $theme_file ) && is_file( WPSC_CORE_THEME_PATH . $theme_file . "/" . $theme_file . ".css" ) ) {
+			$theme[$theme_file] = get_theme_data( WPSC_CORE_THEME_PATH . $theme_file . "/" . $theme_file . ".css" );
 		}
 	}
 

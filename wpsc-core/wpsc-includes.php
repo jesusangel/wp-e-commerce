@@ -40,8 +40,8 @@ require_once( WPSC_FILE_PATH . '/shopping_cart_functions.php' );
 require_once( WPSC_FILE_PATH . '/homepage_products_functions.php' );
 
 // Themes
-require_once( WPSC_THEME_PATH . 'functions/wpsc-transaction_results_functions.php' );
-require_once( WPSC_THEME_PATH . 'functions/wpsc-user_log_functions.php' );
+require_once( WPSC_CORE_THEME_PATH . 'functions/wpsc-transaction_results_functions.php' );
+require_once( WPSC_CORE_THEME_PATH . 'functions/wpsc-user_log_functions.php' );
 
 require_once( WPSC_FILE_PATH . '/wpsc-admin/admin-form-functions.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-shipping/library/shipwire_functions.php' );

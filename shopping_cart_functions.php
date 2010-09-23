@@ -87,8 +87,8 @@ function wpsc_shopping_basket_internals( $cart, $quantity_limit = false, $no_tit
 
 	echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
 
-	if ( file_exists( WPSC_THEME_PATH . 'wpsc-cart_widget.php' ) )
-		include_once( WPSC_THEME_PATH . 'wpsc-cart_widget.php' );
+	if ( file_exists( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' ) )
+		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
 
 	echo "    </div>";
 }

@@ -906,7 +906,7 @@ function wpsc_get_template( $template ) {
 function wpsc_template_fallback( $template_path ) {
 
 	$prospective_file_name = basename( "{$template_path}.php" );
-	$prospective_file_path = trailingslashit( WPSC_THEME_PATH ) . $prospective_file_name;
+	$prospective_file_path = trailingslashit( WPSC_CORE_THEME_PATH ) . $prospective_file_name;
 
 	if ( !file_exists( $prospective_file_path ) )
 		exit( $prospective_file_path );
@@ -973,8 +973,8 @@ function wpsc_template_loader() {
  */
 function wpsc_select_theme_functions() {
 	$selected_theme = get_option( 'wpsc_selected_theme' );
-	if ( !empty( $selected_theme ) && file_exists( WPSC_THEME_PATH . '/' . WPSC_THEME_DIR . '.php' ) )
-		include_once( WPSC_THEME_PATH . '/' . WPSC_THEME_DIR . '.php' );
+	if ( !empty( $selected_theme ) && file_exists( WPSC_CORE_THEME_PATH . '/' . WPSC_THEME_DIR . '.php' ) )
+		include_once( WPSC_CORE_THEME_PATH . '/' . WPSC_THEME_DIR . '.php' );
 }
 add_action( 'wp', 'wpsc_select_theme_functions', 10, 1 );
 

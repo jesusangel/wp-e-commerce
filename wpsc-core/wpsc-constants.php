@@ -225,7 +225,7 @@ function wpsc_core_constants_uploads() {
 	define( 'WPSC_OLD_THEMES_URL',   $wpsc_urls[9] );
 
 	// Themes folder locations
-	define( 'WPSC_THEME_PATH', WPSC_FILE_PATH . '/wpsc-theme/' );
+	define( 'WPSC_CORE_THEME_PATH', WPSC_FILE_PATH . '/wpsc-theme/' );
 	define( 'WPSC_THEME_URL' , WPSC_URL       . '/wpsc-theme/' );
 
 	// No transient so look for the themes directory
@@ -237,7 +237,7 @@ function wpsc_core_constants_uploads() {
 
 		// Use the built in theme files
 		else
-			define( 'WPSC_THEMES_PATH', WPSC_THEME_PATH );
+			define( 'WPSC_THEMES_PATH', WPSC_CORE_THEME_PATH );
 
 		// Store the theme directory in a transient for safe keeping
 		set_transient( 'wpsc_theme_path', WPSC_THEMES_PATH, 60 * 60 * 12 );

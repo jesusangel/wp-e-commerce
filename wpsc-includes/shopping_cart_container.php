@@ -28,7 +28,7 @@
 	<body class='cart_html_page' style='background: none;' >
 		<div id="sliding_cart" class="shopping_cart_container shopping-cart-wrapper">
 
-			<?php include( WPSC_THEME_PATH . '/wpsc-cart_widget.php' ); ?>
+			<?php include( WPSC_CORE_THEME_PATH . '/wpsc-cart_widget.php' ); ?>
 
 		</div>
 	</body>

@@ -178,11 +178,11 @@ function wpsc_test_copying_themes() {
 	}
 
 	if ( count( $file_names ) < 1 ) {
-		$old_dir = @opendir( WPSC_THEME_PATH );
+		$old_dir = @opendir( WPSC_CORE_THEME_PATH );
 		while ( ($file = @readdir( $old_dir )) !== false ) {
-			if ( is_dir( WPSC_THEME_PATH . $file ) && ( $file != ".." ) && ( $file != "." ) ) {
-				$success = wpsc_recursive_copy( WPSC_THEME_PATH . $file, WPSC_THEMES_PATH . $file );
-				echo "old_file:" . WPSC_THEME_PATH . $file . "<br />";
+			if ( is_dir( WPSC_CORE_THEME_PATH . $file ) && ( $file != ".." ) && ( $file != "." ) ) {
+				$success = wpsc_recursive_copy( WPSC_CORE_THEME_PATH . $file, WPSC_THEMES_PATH . $file );
+				echo "old_file:" . WPSC_CORE_THEME_PATH . $file . "<br />";
 				echo "new_file:" . WPSC_THEMES_PATH . $file . "<br />";
 				echo "<pre>" . print_r( $success, true ) . "</pre>";
 			}

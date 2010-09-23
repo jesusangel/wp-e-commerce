@@ -328,7 +328,7 @@ function wpsc_create_upload_directories() {
 }
 
 function wpsc_copy_themes_to_uploads() {
-	$old_theme_path = WPSC_THEME_PATH;
+	$old_theme_path = WPSC_CORE_THEME_PATH;
 	$new_theme_path = WPSC_THEMES_PATH;
 	$new_dir = @ opendir( $new_theme_path );
 	$num = 0;
