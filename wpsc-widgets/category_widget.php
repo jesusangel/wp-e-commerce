@@ -38,6 +38,10 @@ class WP_Widget_Product_Categories extends WP_Widget {
 			$instance['categories'] = array();
 
 		foreach ( array_keys( (array)$instance['categories'] ) as $category_id ) {
+
+			if (!get_term($category_id, "wpsc_product_category")) 
+				continue;
+
 			if ( file_exists( wpsc_get_template_file_path( 'wpsc-category_widget.php' ) ) ) {
 				include( wpsc_get_template_file_path( 'wpsc-category_widget.php' ) );
 			} else {
