@@ -206,7 +206,7 @@ function wpsc_empty_cart() {
 	if ( $_REQUEST['ajax'] == 'true' ) {
 		ob_start();
 
-		include_once( WPSC_CORE_THEME_PATH . 'cart_widget.php' );
+		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
 		$output = ob_get_contents();
 
 		ob_end_clean();
@@ -304,7 +304,7 @@ function wpsc_update_item_quantity() {
 	if ( isset( $_REQUEST['ajax'] ) && $_REQUEST['ajax'] == 'true' ) {
 		ob_start();
 
-		include_once( WPSC_CORE_THEME_PATH . 'cart_widget.php' );
+		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
 		$output = ob_get_contents();
 
 		ob_end_clean();
@@ -764,18 +764,15 @@ function wpsc_change_tax() {
 		$wpsc_cart->update_shipping( $wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option );
 	}
 
-
-
-
-
 	$tax = $wpsc_cart->calculate_total_tax();
 	$total = wpsc_cart_total();
 	ob_start();
 
-	include_once( WPSC_CORE_THEME_PATH . 'cart_widget.php' );
+	include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
 	$output = ob_get_contents();
 
 	ob_end_clean();
+
 	//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 	$output = str_replace( Array( "\n", "\r" ), Array( "\\n", "\\r" ), addslashes( $output ) );
 	if ( get_option( 'lock_tax' ) == 1 ) {
