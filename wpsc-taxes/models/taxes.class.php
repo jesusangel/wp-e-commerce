@@ -1,325 +1,295 @@
 <?php
-class wpec_taxes
-{
-   /**
-    * WPEC Taxes Options - any of these can be retrieved by get_option
-    *
-    * @var array
-   **/
-   private $taxes_options = array(
-      'wpec_taxes_enabled' => 0,
-      'wpec_taxes_inprice' => 'exclusive',
-      'wpec_taxes_product' => 'add',
-      'wpec_taxes_logic'   => 'billing_shipping',
-      'wpec_billing_shipping_preference' => 'billing_address',
-      'wpec_taxes_rates'   => '',
-      'wpec_taxes_bands'   => ''
-   );
 
-   function __construct()
-   {
-      $this->wpec_taxes_set_options();
-   }// __construct
+class wpec_taxes {
 
-   /**
-    * Get Functions
-   **/
-   function wpec_taxes_get_enabled()
-   {
-      return $this->taxes_options['wpec_taxes_enabled'];
-   }
+	/**
+	 * WPEC Taxes Options - any of these can be retrieved by get_option
+	 *
+	 * @var array
+	 * */
+	private $taxes_options = array(
+		'wpec_taxes_enabled' => 0,
+		'wpec_taxes_inprice' => 'exclusive',
+		'wpec_taxes_product' => 'add',
+		'wpec_taxes_logic' => 'billing_shipping',
+		'wpec_billing_shipping_preference' => 'billing_address',
+		'wpec_taxes_rates' => '',
+		'wpec_taxes_bands' => ''
+	);
 
-   function wpec_taxes_get_inprice()
-   {
-      return $this->taxes_options['wpec_taxes_inprice'];
-   }
+	function __construct() {
+		$this->wpec_taxes_set_options();
+	} // __construct
 
-   function wpec_taxes_get_product()
-   {
-      return $this->taxes_options['wpec_taxes_product'];
-   }
+	/**
+	 * Get Functions
+	 * */
+	function wpec_taxes_get_enabled() {
+		return $this->taxes_options['wpec_taxes_enabled'];
+	}
 
-   function wpec_taxes_get_logic()
-   {
-      return $this->taxes_options['wpec_taxes_logic'];
-   }
-   
-   function wpec_taxes_get_billing_shipping_preference()
-   {
-      return $this->taxes_options['wpec_billing_shipping_preference'];
-   }
+	function wpec_taxes_get_inprice() {
+		return $this->taxes_options['wpec_taxes_inprice'];
+	}
 
-   function wpec_taxes_get_rates()
-   {
-      return $this->taxes_options['wpec_taxes_rates'];
-   }
+	function wpec_taxes_get_product() {
+		return $this->taxes_options['wpec_taxes_product'];
+	}
 
-   function wpec_taxes_get_bands()
-   {
-      return $this->taxes_options['wpec_taxes_bands'];
-   }
+	function wpec_taxes_get_logic() {
+		return $this->taxes_options['wpec_taxes_logic'];
+	}
 
-   function wpec_taxes_get_options()
-   {
-      return $this->taxes_options;
-   }
+	function wpec_taxes_get_billing_shipping_preference() {
+		return $this->taxes_options['wpec_billing_shipping_preference'];
+	}
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_set_options - retrieves option information
-    *                   from the database.
-    * @param: void
-    * @return: null
-   **/
-   function wpec_taxes_set_options()
-   {
-      foreach(array_keys($this->taxes_options) as $key)
-      {
-         $options[$key] = get_option($key);
-      }// foreach
+	function wpec_taxes_get_rates() {
+		return $this->taxes_options['wpec_taxes_rates'];
+	}
 
-      $returnable = wp_parse_args($options, $this->taxes_options);
-      extract($returnable, EXTR_SKIP);
+	function wpec_taxes_get_bands() {
+		return $this->taxes_options['wpec_taxes_bands'];
+	}
 
-      $this->taxes_options = $returnable;
-   }// wpec_taxes_set_options
+	function wpec_taxes_get_options() {
+		return $this->taxes_options;
+	}
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_get_rate - retrieves the tax rate for the given country
-    *                                     and, if specified, region.
-    *
-    * @param: country_code - the isocode for the country whose tax rate you wish to retrieve.
-    * @param: region_code (optional) - the region code for the region tax rate you wish to retrieve.
-    * @return: array or false
-   **/
-   function wpec_taxes_get_rate($country_code, $region_code='')
-   {
-      //initialize return variable
-      $returnable = false;
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_set_options - retrieves option information
+	 *                   from the database.
+	 * @param: void
+	 * @return: null
+	 * */
+	function wpec_taxes_set_options() {
+		foreach ( array_keys( $this->taxes_options ) as $key ) {
+			$options[$key] = get_option( $key );
+		}// foreach
 
-      //first check if the region given is part of the country
-      if(!empty($region_code))
-      {
-       $region_country_id = $this->wpec_taxes_get_region_information($region_code, 'country_id');
-       $region_country_code = $this->wpec_taxes_get_country_information('isocode', array('id'=>$region_country_id));
-         if($region_country_code != $country_code)
-         {
-            //reset region code if region provided not in country provided
-            $region_code = '';
-         }// if
-      }// if
+		$returnable = wp_parse_args( $options, $this->taxes_options );
+		extract( $returnable, EXTR_SKIP );
 
-      if(!empty($this->taxes_options['wpec_taxes_rates']))
-      {
-         foreach($this->taxes_options['wpec_taxes_rates'] as $tax_rate)
-         {
-            if($tax_rate['country_code']==$country_code)
-            {
-               if(($region_code=='' && !isset($tax_rate['region_code'])) || $region_code==$tax_rate['region_code'])
-               {
-                  $returnable = $tax_rate;
-                  break;
-               }// if
-            }// if
-         }// foreach
-      }// if
+		$this->taxes_options = $returnable;
+	} // wpec_taxes_set_options
 
-      return $returnable;
-   }// wpec_taxes_get_rate
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_get_rate - retrieves the tax rate for the given country
+	 *                                     and, if specified, region.
+	 *
+	 * @param: country_code - the isocode for the country whose tax rate you wish to retrieve.
+	 * @param: region_code (optional) - the region code for the region tax rate you wish to retrieve.
+	 * @return: array or false
+	 * */
+	function wpec_taxes_get_rate( $country_code, $region_code='' ) {
+		//initialize return variable
+		$returnable = false;
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_get_band_from_name - retrieves the tax band for the given name
-    *
-    * @param: name - the name of the tax band you wish to retrieve.
-    * @return: array or false
-   **/
-   function wpec_taxes_get_band_from_name($name)
-   {
-      //initialize return value
-      $returnable = false;
+		//first check if the region given is part of the country
+		if ( !empty( $region_code ) ) {
+			$region_country_id = $this->wpec_taxes_get_region_information( $region_code, 'country_id' );
+			$region_country_code = $this->wpec_taxes_get_country_information( 'isocode', array( 'id' => $region_country_id ) );
+			if ( $region_country_code != $country_code ) {
+				//reset region code if region provided not in country provided
+				$region_code = '';
+			}// if
+		}// if
 
-      //search bands for name
-      if(!empty($this->taxes_options['wpec_taxes_bands']))
-      {
-         foreach($this->taxes_options['wpec_taxes_bands'] as $tax_band)
-         {
-            if($tax_band['name']==$name)
-            {
-               $returnable = $tax_band;
-               break;
-            }// if
-         }// foreach
-      }// if
+		if ( !empty( $this->taxes_options['wpec_taxes_rates'] ) ) {
+			foreach ( $this->taxes_options['wpec_taxes_rates'] as $tax_rate ) {
+				if ( $tax_rate['country_code'] == $country_code ) {
+					if ( ($region_code == '' && !isset( $tax_rate['region_code'] )) || $region_code == $tax_rate['region_code'] ) {
+						$returnable = $tax_rate;
+						break;
+					}// if
+				}// if
+			}// foreach
+		}// if
 
-      return $returnable;
-   }// wpec_taxes_get_band_from_name
+		return $returnable;
+	} // wpec_taxes_get_rate
 
-   /**
-    * @description: wpec_taxes_get_included_rate - returns the precentage rate for the given tax band name,
-    *               country code and region code. This retrieves the rate based on the current
-    *               tax settings.
-    *
-    * @param: taxes_band_name - the name of the tax band you wish to retrieve a percentage rate for
-    * @param: country_code - isocode of the country that you wish to retrieve a percentage rate for
-    * @param: region_code(optional) - the code code for the region that you wish to retrieve a
-    *         percentage rate for
-   **/
-   function wpec_taxes_get_included_rate($taxes_band_name, $country_code, $region_code='')
-   {
-      //set the tax_rate
-      $tax_rate = 0;
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_get_band_from_name - retrieves the tax band for the given name
+	 *
+	 * @param: name - the name of the tax band you wish to retrieve.
+	 * @return: array or false
+	 * */
+	function wpec_taxes_get_band_from_name( $name ) {
+		//initialize return value
+		$returnable = false;
 
-      //get the tax band
-      $tax_band = $this->wpec_taxes_get_band_from_name($taxes_band_name);
+		//search bands for name
+		if ( !empty( $this->taxes_options['wpec_taxes_bands'] ) ) {
+			foreach ( $this->taxes_options['wpec_taxes_bands'] as $tax_band ) {
+				if ( $tax_band['name'] == $name ) {
+					$returnable = $tax_band;
+					break;
+				}// if
+			}// foreach
+		}// if
 
-      //set the tax rate depending on product rate settings
-      switch($this->wpec_taxes_get_product())
-      {
-         case 'add':
-            $rate_array = $this->wpec_taxes_get_rate($country_code, $region_code);
-            $tax_rate += $rate_array['rate'];
-         case 'replace':
-            $tax_rate += $tax_band['rate'];
-         break;
-      }// switch
+		return $returnable;
+	} // wpec_taxes_get_band_from_name
 
-      //return tax for this item
-      return $tax_rate;
-   }// wpec_taxes_get_included_rate
+	/**
+	 * @description: wpec_taxes_get_included_rate - returns the precentage rate for the given tax band name,
+	 *               country code and region code. This retrieves the rate based on the current
+	 *               tax settings.
+	 *
+	 * @param: taxes_band_name - the name of the tax band you wish to retrieve a percentage rate for
+	 * @param: country_code - isocode of the country that you wish to retrieve a percentage rate for
+	 * @param: region_code(optional) - the code code for the region that you wish to retrieve a
+	 *         percentage rate for
+	 * */
+	function wpec_taxes_get_included_rate( $taxes_band_name, $country_code, $region_code='' ) {
+		//set the tax_rate
+		$tax_rate = 0;
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_get_countries - retrieves an array of countries
-    *
-    * @param: visibility (optional) - set to 'visible' or 'hidden' to retrieve
-    *                                 visible or hidden countries. Default action
-    *                                 is to retrieve any country.
-    * @return: array or false
-   **/
-   function wpec_taxes_get_countries($visibility='any')
-   {
-      switch($visibility)
-      {
-         case 'visible': $where = array('visible'=>1); break;
-         case 'hidden': $where = array('visible'=>0); break;
-         default: $where = false;
-      }// switch
+		//get the tax band
+		$tax_band = $this->wpec_taxes_get_band_from_name( $taxes_band_name );
 
-      return $this->wpec_taxes_get_country_information(array('country', 'isocode'), $where, 'country');
-   }// wpec_taxes_get_countries
+		//set the tax rate depending on product rate settings
+		switch ( $this->wpec_taxes_get_product() ) {
+			case 'add':
+				$rate_array = $this->wpec_taxes_get_rate( $country_code, $region_code );
+				$tax_rate += $rate_array['rate'];
+			case 'replace':
+				$tax_rate += $tax_band['rate'];
+				break;
+		}// switch
+		//return tax for this item
+		return $tax_rate;
+	} // wpec_taxes_get_included_rate
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_get_country_information - retrieves information about a country.
-    *               Note: If only one column is specified this function will return the value
-    *                     of that column. If two or more columns are specified the results are
-    *                     returned in an array.
-    * @param: columns(optional) - specify a column name or multiple column names in an array.
-    *                             Default action is to return all columns.
-    * @param: where(optional) - specify where conditions in array format. Key is column
-    *                           and value is column value.
-    *                           Example: wpec_taxes_get_country_information('id', array('isocode'=>'CA'))
-    *                           Default action is to not limit results.
-    *                           Note: this function only compares using the equals sign (=).
-    * @param: order_by(optional) - specify a column name or multiple column names in an array.
-    *                              Default action is to not include an order by statement.
-    * @return: array, int, string or false
-   **/
-   function wpec_taxes_get_country_information($columns=false, $where=false, $order_by=false)
-   {
-      //database connection
-      global $wpdb;
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_get_countries - retrieves an array of countries
+	 *
+	 * @param: visibility (optional) - set to 'visible' or 'hidden' to retrieve
+	 *                                 visible or hidden countries. Default action
+	 *                                 is to retrieve any country.
+	 * @return: array or false
+	 * */
+	function wpec_taxes_get_countries( $visibility='any' ) {
+		switch ( $visibility ) {
+			case 'visible': $where = array( 'visible' => 1 );
+				break;
+			case 'hidden': $where = array( 'visible' => 0 );
+				break;
+			default: $where = false;
+		}// switch
 
-      //if columns are not set select everything
-      $columns = ($columns) ? $columns : array('*');
+		return $this->wpec_taxes_get_country_information( array( 'country', 'isocode' ), $where, 'country' );
+	} // wpec_taxes_get_countries
 
-      //change columns to array if not an array
-      if(!is_array($columns)){$columns = array($columns);}
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_get_country_information - retrieves information about a country.
+	 *               Note: If only one column is specified this function will return the value
+	 *                     of that column. If two or more columns are specified the results are
+	 *                     returned in an array.
+	 * @param: columns(optional) - specify a column name or multiple column names in an array.
+	 *                             Default action is to return all columns.
+	 * @param: where(optional) - specify where conditions in array format. Key is column
+	 *                           and value is column value.
+	 *                           Example: wpec_taxes_get_country_information('id', array('isocode'=>'CA'))
+	 *                           Default action is to not limit results.
+	 *                           Note: this function only compares using the equals sign (=).
+	 * @param: order_by(optional) - specify a column name or multiple column names in an array.
+	 *                              Default action is to not include an order by statement.
+	 * @return: array, int, string or false
+	 * */
+	function wpec_taxes_get_country_information( $columns=false, $where=false, $order_by=false ) {
+		//database connection
+		global $wpdb;
 
-      //if where is set then formulate conditions
-      if($where)
-      {
-         foreach($where as $column => $condition)
-         {
-            $where_query[] = (is_numeric($condition)) ? "{$column}={$condition}" : "{$column}='{$condition}'";
-         }// foreach
-      }// if
+		//if columns are not set select everything
+		$columns = ($columns) ? $columns : array( '*' );
 
-      //formulate query
-      $query = 'SELECT '.implode(',',$columns).' FROM '.WPSC_TABLE_CURRENCY_LIST;
-      if(isset($where_query))
-      {
-         $query .= ' WHERE '.implode(' AND ', $where_query);
-      }// if
+		//change columns to array if not an array
+		if ( !is_array( $columns ) ) {
+			$columns = array( $columns );
+		}
 
-      //if order_by is set, add to query
-      if($order_by)
-      {
-         if(!is_array($order_by)){$order_by = array($order_by);}
-         $query .= ' ORDER BY '.implode(',',$order_by);
-      }// if
+		//if where is set then formulate conditions
+		if ( $where ) {
+			foreach ( $where as $column => $condition ) {
+				$where_query[] = (is_numeric( $condition )) ? "{$column}={$condition}" : "{$column}='{$condition}'";
+			}// foreach
+		}// if
+		//formulate query
+		$query = 'SELECT ' . implode( ',', $columns ) . ' FROM ' . WPSC_TABLE_CURRENCY_LIST;
+		if ( isset( $where_query ) ) {
+			$query .= ' WHERE ' . implode( ' AND ', $where_query );
+		}// if
+		//if order_by is set, add to query
+		if ( $order_by ) {
+			if ( !is_array( $order_by ) ) {
+				$order_by = array( $order_by );
+			}
+			$query .= ' ORDER BY ' . implode( ',', $order_by );
+		}// if
+		//return the result
+		return (count( $columns ) > 1) ? $wpdb->get_results( $query, ARRAY_A ) : $wpdb->get_var( $query );
+	} // wpec_taxes_get_country_information
 
-      //return the result
-      return (count($columns)>1) ? $wpdb->get_results($query, ARRAY_A) : $wpdb->get_var($query);
-   }// wpec_taxes_get_country_information
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_get_region_information - given a region code and column
+	 *                   this function will return the resulting value.
+	 * @param: region_code - code for this region
+	 * @param: column(optional) - specify a column to retrieve
+	 *                            Default action is to retrieve the id column.
+	 * @return: int, string, or false
+	 * */
+	function wpec_taxes_get_region_information( $region_code, $column='id' ) {
+		global $wpdb;
+		$query = "SELECT {$column} FROM " . WPSC_TABLE_REGION_TAX . " WHERE code='{$region_code}'";
+		$result = $wpdb->get_var( $query );
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_get_region_information - given a region code and column
-    *                   this function will return the resulting value.
-    * @param: region_code - code for this region
-    * @param: column(optional) - specify a column to retrieve
-    *                            Default action is to retrieve the id column.
-    * @return: int, string, or false
-   **/
-   function wpec_taxes_get_region_information($region_code, $column='id')
-   {
-      global $wpdb;
-      $query = "SELECT {$column} FROM ".WPSC_TABLE_REGION_TAX." WHERE code='{$region_code}'";
-      $result = $wpdb->get_var($query);
+		return $result;
+	} // wpec_taxes_get_region_information
 
-      return $result;
-   }// wpec_taxes_get_region_information
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_get_regions - given a isocode, such as CA, this function
+	 *               will return an array of regions within that country.
+	 * @param: country - string variable containing isocode
+	 * @return: array or false
+	 * */
+	function wpec_taxes_get_regions( $country ) {
+		//database connection
+		global $wpdb;
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_get_regions - given a isocode, such as CA, this function
-    *               will return an array of regions within that country.
-    * @param: country - string variable containing isocode
-    * @return: array or false
-   **/
-   function wpec_taxes_get_regions($country)
-   {
-      //database connection
-      global $wpdb;
+		//get the id for the given country code
+		$country_id = $this->wpec_taxes_get_country_information( 'id', array( 'isocode' => $country ) );
 
-      //get the id for the given country code
-      $country_id = $this->wpec_taxes_get_country_information('id', array('isocode'=>$country));
+		//get a list of regions for the country id
+		$query = 'SELECT name, code AS region_code FROM ' . WPSC_TABLE_REGION_TAX . " WHERE country_id=$country_id";
+		$result = $wpdb->get_results( $query, ARRAY_A );
 
-      //get a list of regions for the country id
-      $query = 'SELECT name, code AS region_code FROM '.WPSC_TABLE_REGION_TAX." WHERE country_id=$country_id";
-      $result = $wpdb->get_results($query, ARRAY_A);
+		return $result;
+	} // wpec_taxes_get_regions
 
-      return $result;
-   }// wpec_taxes_get_regions
+	/**
+	 * @author: Jeremy Smith - www.dnawebagency.com
+	 * @description: wpec_taxes_get_region_code_by_id - given an id this funciton will
+	 * return the region code.
+	 * @param: id - a region id
+	 * @return: int or false
+	 * */
+	function wpec_taxes_get_region_code_by_id( $id ) {
+		//database connection
+		global $wpdb;
 
-   /**
-    * @author: Jeremy Smith - www.dnawebagency.com
-    * @description: wpec_taxes_get_region_code_by_id - given an id this funciton will
-                                                       return the region code.
-    * @param: id - a region id
-    * @return: int or false
-   **/
-   function wpec_taxes_get_region_code_by_id($id)
-   {
-      //database connection
-      global $wpdb;
+		//get the region code
+		$query = 'SELECT code AS region_code FROM ' . WPSC_TABLE_REGION_TAX . " WHERE id=$id";
+		return $wpdb->get_var( $query );
+	} // wpec_taxes_get_region_code_by_id
+} // wpec_taxes
 
-      //get the region code
-      $query = 'SELECT code AS region_code FROM '.WPSC_TABLE_REGION_TAX." WHERE id=$id";
-      return $wpdb->get_var($query);
-   }// wpec_taxes_get_region_code_by_id
-}// wpec_taxes
 ?>
