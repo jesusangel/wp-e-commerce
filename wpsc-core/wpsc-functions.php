@@ -99,13 +99,13 @@ function wpsc_core_load_page_titles() {
 function wpsc_core_load_gateways() {
 	global $nzshpcrt_gateways, $num, $wpsc_gateways;
 
-	$gateway_directory      = WPSC_FILE_PATH . '/merchants';
+	$gateway_directory      = WPSC_FILE_PATH . '/wpsc-merchants';
 	$nzshpcrt_merchant_list = wpsc_list_dir( $gateway_directory );
 
 	$num = 0;
 	foreach ( $nzshpcrt_merchant_list as $nzshpcrt_merchant ) {
 		if ( stristr( $nzshpcrt_merchant, '.php' ) ) {
-			require( WPSC_FILE_PATH . '/merchants/' . $nzshpcrt_merchant );
+			require( WPSC_FILE_PATH . '/wpsc-merchants/' . $nzshpcrt_merchant );
 		}
 		$num++;
 	}
@@ -132,12 +132,12 @@ function wpsc_core_load_gateways() {
 function wpsc_core_load_shipping_modules() {
 	global $wpsc_shipping_modules;
 
-	$shipping_directory     = WPSC_FILE_PATH . '/shipping';
+	$shipping_directory     = WPSC_FILE_PATH . '/wpsc-shipping';
 	$nzshpcrt_shipping_list = wpsc_list_dir( $shipping_directory );
 
 	foreach ( $nzshpcrt_shipping_list as $nzshpcrt_shipping ) {
 		if ( stristr( $nzshpcrt_shipping, '.php' ) ) {
-			require( WPSC_FILE_PATH . '/shipping/' . $nzshpcrt_shipping );
+			require( WPSC_FILE_PATH . '/wpsc-shipping/' . $nzshpcrt_shipping );
 		}
 	}
 

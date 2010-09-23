@@ -44,17 +44,17 @@ require_once( WPSC_FILE_PATH . '/themes/wpsc-transaction_results_functions.php' 
 require_once( WPSC_FILE_PATH . '/themes/wpsc-user_log_functions.php' );
 
 require_once( WPSC_FILE_PATH . '/wpsc-admin/admin-form-functions.php' );
-require_once( WPSC_FILE_PATH . '/shipping/library/shipwire_functions.php' );
+require_once( WPSC_FILE_PATH . '/wpsc-shipping/library/shipwire_functions.php' );
 
 // Widgets
-include_once( WPSC_FILE_PATH . '/widgets/product_tag_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/shopping_cart_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/donations_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/specials_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/latest_product_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/price_range_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/admin_menu_widget.php' );
-include_once( WPSC_FILE_PATH . '/widgets/category_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/product_tag_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/shopping_cart_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/donations_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/specials_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/latest_product_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/price_range_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/admin_menu_widget.php' );
+include_once( WPSC_FILE_PATH . '/wpsc-widgets/category_widget.php' );
 include_once( WPSC_FILE_PATH . '/image_processing.php' );
 
 // Admin

@@ -31,7 +31,7 @@ function wpsc_display_settings_page() {
 		return;
 	}
 	if ( isset( $_GET['googlecheckoutshipping'] ) ) {
-		include(WPSC_FILE_PATH . '/merchants/library/google_shipping_country.php');
+		include(WPSC_FILE_PATH . '/wpsc-merchants/library/google_shipping_country.php');
 		return;
 		exit();
 	}
