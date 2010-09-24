@@ -268,22 +268,36 @@ function wpsc_product_image_html( $image_name, $product_id ) {
  */
 
 function wpsc_add_to_cart_button( $product_id, $replaced_shortcode = false ) {
-	global $wpdb;
+	global $wpdb,$wpsc_variations;
 	if ( $product_id > 0 ) {
 		if ( function_exists( 'wpsc_theme_html' ) ) {
 			$product = $wpdb->get_row( "SELECT * FROM " . WPSC_TABLE_PRODUCT_LIST . " WHERE id = " . $product_id . " LIMIT 1", ARRAY_A );
 			//this needs the results from the product_list table passed to it, does not take just an ID
 			$wpsc_theme = wpsc_theme_html( $product );
 		}
+		
 
 		// grab the variation form fields here
-		$variations_processor = new nzshpcrt_variations;
-		$variations_output = $variations_processor->display_product_variations( $product_id, false, false, false );
-
+		$wpsc_variations = new wpsc_variations( $product_id );
+		
 		$output .= "<form onsubmit='submitform(this);return false;'  action='' method='post'>";
-		if ( $variations_output != '' ) { //will always be set, may sometimes be an empty string
-			$output .= "           <p>" . $variations_output . "</p>";
-		}
+		/** the variation group HTML and loop */
+		$output .= "<div class='wpsc_variation_forms'>";
+		while (wpsc_have_variation_groups()) : wpsc_the_variation_group();
+			$output .=  "<p>";
+			$output .=  "<label for='".wpsc_vargrp_form_id()."'>".wpsc_the_vargrp_name().":</label>";
+			/** the variation HTML and loop */
+			$output .=  "<select class='wpsc_select_variation' name='variation[".wpsc_vargrp_id()."]' id='".wpsc_vargrp_form_id()."'>";
+			while (wpsc_have_variations()) : wpsc_the_variation();
+				$output .=  "<option value='".wpsc_the_variation_id()."' ".wpsc_the_variation_out_of_stock().">". wpsc_the_variation_name()."</option>";
+			endwhile;
+			$output .=  "</select> ";
+			$output .=  "</p>";
+		endwhile;
+		$output .=  "</div>";
+		/** the variation group HTML and loop ends here */
+										
+
 		$output .= "<input type='hidden' name='wpsc_ajax_action' value='add_to_cart' />";
 		$output .= "<input type='hidden' name='product_id' value='" . $product_id . "' />";
 		$output .= "<input type='hidden' name='item' value='" . $product_id . "' />";

@@ -285,10 +285,12 @@ class wpec_taxes {
 	function wpec_taxes_get_region_code_by_id( $id ) {
 		//database connection
 		global $wpdb;
-
-		//get the region code
-		$query = 'SELECT code AS region_code FROM ' . WPSC_TABLE_REGION_TAX . " WHERE id=$id";
-		return $wpdb->get_var( $query );
+		if(!empty($id)){
+			//get the region code
+			$query = 'SELECT code AS region_code FROM ' . WPSC_TABLE_REGION_TAX . " WHERE id=$id";
+			return $wpdb->get_var( $query );
+		}
+		return false;
 	} // wpec_taxes_get_region_code_by_id
 } // wpec_taxes
 
