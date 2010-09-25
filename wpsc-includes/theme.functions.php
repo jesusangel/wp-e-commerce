@@ -228,11 +228,9 @@ function wpsc_get_template_file_url( $file = '' ) {
 			if ( file_exists( $selected_theme_check ) ) {
 				$file_url = $selected_theme_check;
 
-			} elseif ( file_exists( WPSC_THEME_DIR ) ) {
-
-			// Out of options
+			// Use the bundled theme CSS
 			} else {
-				return false;
+				$file_url = WPSC_CORE_THEME_URL . $file;
 			}
 		}
 
