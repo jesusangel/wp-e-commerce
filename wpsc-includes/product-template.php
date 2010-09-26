@@ -1004,7 +1004,7 @@ function wpsc_product_existing_rating( $product_id ) {
 	for ( $l = 1; $l <= $remainder; ++$l ) {
 		$output .= "<img class='goldstar' src='" . WPSC_URL . "/images/grey-star.gif' alt='$l' title='$l' />";
 	}
-	$output .= "<span class='vote_total'>&nbsp;(<span id='vote_total_$prodid'>" . $count . "</span>)</span> \r\n";
+	$output .= "<span class='vote_total'>&nbsp;(<span id='vote_total_{$product_id}'>" . $count . "</span>)</span> \r\n";
 	$output .= "</span> \r\n";
 	return $output;
 }

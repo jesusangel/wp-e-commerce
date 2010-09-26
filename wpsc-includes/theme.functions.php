@@ -207,7 +207,7 @@ function wpsc_get_template_file_url( $file = '' ) {
 	// If we're not looking for a file, do not proceed
 	if ( empty( $file ) )
 		return;
-
+		
 	// No cache, so find one and set it
 	if ( false === ( $file_url = get_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file ) ) ) {
 
@@ -402,6 +402,7 @@ if ( !is_admin() )
 
 function wpsc_product_list_rss_feed() {
 	$rss_url = add_query_arg( 'wpsc_action', 'rss' );
+	$rss_url = str_replace('&', '&amp;', $rss_url);
 	echo "<link rel='alternate' type='application/rss+xml' title='" . get_option( 'blogname' ) . " Product List RSS' href='{$rss_url}'/>";
 }
 add_action( 'wp_head', 'wpsc_product_list_rss_feed' );

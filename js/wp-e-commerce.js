@@ -120,7 +120,7 @@ jQuery(document).ready(function () {
   
   // Toggle the additional description content  
   jQuery("a.additional_description_link").click(function() {
-    parent_element = jQuery(this).parent('.additional_description_span');
+    parent_element = jQuery(this).parent(".additional_description_container, .additional_description_span");
     jQuery('.additional_description',parent_element).toggle();
 		return false;
 	});
