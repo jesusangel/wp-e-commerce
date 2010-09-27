@@ -1,4 +1,10 @@
 <?php
+//Make sure excerpts (additional details dont get cut off)
+function wpsc_excerpt_more($more) {
+       global $post;
+	return '<a href="'. get_permalink($post->ID) . '">' . 'Read the Rest...' . '</a>';
+}
+add_filter('excerpt_more', 'wpsc_excerpt_more');
 
 /**
  * WP eCommerce product functions and product utility function.
@@ -93,9 +99,10 @@ function wpsc_calculate_price( $product_id, $variations = null, $special = true 
 			$price = $special_price;
 		}
 	} else {
+		
 		$price = get_post_meta( $product_id, '_wpsc_price', true );
 	}
-	return $price;
+	return nzshpcrt_currency_display($price,'',true);
 }
 
 /**
@@ -353,7 +360,7 @@ function wpsc_the_product_additional_description() {
 	global $post;
 
 	if ( !empty( $post->post_excerpt ) )
-		return get_the_excerpt();
+		return $post->post_excerpt;
 	else
 		return false;
 }

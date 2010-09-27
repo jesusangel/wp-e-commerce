@@ -46,6 +46,13 @@ add_shortcode('wpsc_products', 'wpsc_products_shorttag');
 //add_shortcode('productspage', 'wpsc_products_shorttag');
 
 
+function wpsc_buy_now_shortcode($atts){
+	$output = wpsc_buy_now_button( $atts['product_id'], true );
+	return $output;
+}
+
+
+add_shortcode('buy_now_button', 'wpsc_buy_now_shortcode');
 
 
 

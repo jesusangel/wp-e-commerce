@@ -894,20 +894,6 @@ function wpsc_show_categories( $content = '' ) {
 	}
 }
 
-// substitutes in the buy now buttons where the shortcode is in a post.
-function wpsc_substitute_buy_now_button( $content = '' ) {
-	if ( preg_match_all( "/\[buy_now_button=([\d]+)\]/", $content, $matches ) ) {
-		//echo "<pre>".print_r($matches,true)."</pre>";
-		foreach ( $matches[1] as $key => $product_id ) {
-			$original_string = $matches[0][$key];
-			//print_r($matches);
-			$output = wpsc_buy_now_button( $product_id, true );
-			$content = str_replace( $original_string, $output, $content );
-		}
-	}
-	return $content;
-}
-
 /* 19-02-09
  * add to cart shortcode function used for shortcodes calls the function in
  * product_display_functions.php
@@ -936,7 +922,6 @@ function wpsc_enable_page_filters( $excerpt = '' ) {
 	add_filter( 'the_content', 'wpsc_user_log', 12 );
 	add_filter( 'the_content', 'nszhpcrt_category_tag', 12 );
 	add_filter( 'the_content', 'wpsc_show_categories', 12 );
-	add_filter( 'the_content', 'wpsc_substitute_buy_now_button', 12 );
 	return $excerpt;
 }
 

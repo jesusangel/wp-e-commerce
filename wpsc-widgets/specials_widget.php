@@ -45,7 +45,7 @@ class WP_Widget_Product_Specials extends WP_Widget {
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
-		nzshpcrt_specials($args, $instance);
+		wpsc_specials($args, $instance);
 		echo $after_widget;
 	
 	}
@@ -145,7 +145,7 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
  * 5. Function now expect a single paramter with an array of options (used to be a string which prepended the output).
  */
  
-function nzshpcrt_specials( $args = null, $instance ) {
+function wpsc_specials( $args = null, $instance ) {
 	
 	global $wpdb;
 	
