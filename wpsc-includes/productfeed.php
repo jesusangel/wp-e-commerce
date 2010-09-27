@@ -141,8 +141,6 @@ function wpsc_generate_product_feed() {
 			$google_elements = apply_filters('wpsc_google_elements', array('product_id'=>$product['id'],'elements'=>$google_elements));
 			$google_elements = $google_elements['elements'];
 
-			print_r($google_elements);
-
             $done_condition = FALSE;
             if (count($google_elements)) {
 				foreach ($google_elements as $gelement) {
