@@ -218,9 +218,7 @@ global $wpsc_query, $wpdb, $wp_query;
 
 		<?php endwhile; ?>
 		<?php /** end the product loop here */?>
-		
-		
-		<?php if(wpsc_product_count() < 1):?>
+		<?php if(wpsc_product_count() == 0):?>
 			<h3><?php  echo __('There are no products in this group.', 'wpsc'); ?></h3>
 		<?php endif ; ?>
 

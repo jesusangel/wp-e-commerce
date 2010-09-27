@@ -656,9 +656,15 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
  * wpsc product thumbnail function
  * @return string - the URL to the thumbnail image
  */
-function wpsc_the_product_thumbnail( $width = null, $height = null ) {
+function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id='' ) {
 	// show the thumbnail image for the product
-
+	if(empty($product_id))
+		$product_id = get_the_ID();
+	
+	$product = get_post($product_id);
+	if($product->post_parent != 0){
+		$product_id = $product->post_parent;
+	}
 	if ( ($width < 10) || ($width < 10) ) {
 		$width = get_option( 'product_image_width' );
 		$height = get_option( 'product_image_height' );
@@ -668,14 +674,14 @@ function wpsc_the_product_thumbnail( $width = null, $height = null ) {
 				'post_type' => 'attachment',
 				'numberposts' => 1,
 				'post_status' => null,
-				'post_parent' => get_the_ID(),
+				'post_parent' => $product_id ,
 				'orderby' => 'menu_order',
 				'order' => 'ASC'
 			) );
 
 
-	if ( has_post_thumbnail( get_the_ID() ) ) {
-		$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
+	if ( has_post_thumbnail( $product_id ) ) {
+		$post_thumbnail_id = get_post_thumbnail_id( $product_id  );
 		$image_link = wpsc_product_image( $post_thumbnail_id, $width, $height );
 		return $image_link;
 	} if ( $attached_images != null ) {
@@ -1137,7 +1143,7 @@ function wpsc_page_url() {
  */
 function wpsc_product_count() {
 	global $wp_query;
-	return $wp_query->found_posts;
+	return count($wp_query->post);
 }
 
 //The following code was removed from WP 3.8, present in 3.7 - Not sure why it was removed and not refactored. (JS)

@@ -596,22 +596,66 @@ if ( isset( $_GET['wpsc_user_dynamic_css'] ) && ($_GET['wpsc_user_dynamic_css'] 
  * @return string - html displaying one or more products
  */
 function wpsc_display_products_page( $query ) {
-	global $wpdb, $wpsc_query;
+	global $wpdb, $wpsc_query,$wp_query;
 	static $count = 0;
 	$count++;
 
 	if ( $count > 10 )
 		exit( 'fail' );
 
+	// If the data is coming from a shortcode parse the values into the args variable, 
+	// I did it this was to preserve backwards compatibility
+	if(!empty($query)){	
+		$args['post_type'] = 'wpsc-product';
+		if(!empty($query['product_id'])){
+			$args['post__in'] = $query['product_id'];
+		}
+		if(!empty($query['price']) && 'sale' != $query['price']){
+			$args['meta_key'] = '_wpsc_price';
+			$args['meta_value'] = $query['price'];
+		}elseif('sale' == $query['price']){
+			$args['meta_key'] = '_wpsc_special_price';
+			$args['meta_compare'] = '>=';
+			$args['meta_value'] = '1';
+		}
+		if(!empty($query['product_name'])){
+			$args['pagename'] = $query['product_name'];
+		}
+		if(!empty($query['category_id'])){
+			$args['wpsc_product_category__in'] = $query['category_id'];
+		}
+		if(!empty($query['category_url_name'])){
+			$args['wpsc_product_category'] = $query['category_url_name'];
+		}
+		if(!empty($query['sort_order'])){
+			$args['orderby'] = $query['sort_order'];
+		}
+		if(!empty($query['order'])){
+			$args['order'] = $query['order'];
+		}
+		if(!empty($query['limit_of_items'])){
+			$args['posts_per_page'] = $query['limit_of_items'];
+		}	
+		if(!empty($query['number_per_page'])){
+			$args['posts_per_page'] = $query['number_per_page'];
+		}	
+		if(!empty($query['tag'])){
+			$args['product_tag'] = $query['tag'];
+		}
+		$temp_wpsc_query = new WP_Query($args);
+	}
+	
+//exit('<pre>'.print_r($temp_wpsc_query,true).'</pre>');
 	// swap the wpsc_query objects
-	list( $wpsc_query, $temp_wpsc_query ) = array( $temp_wpsc_query, $wpsc_query ); 
-
+	list( $wp_query, $temp_wpsc_query ) = array( $temp_wpsc_query, $wp_query ); 
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 	ob_start();
 	//Pretty sure this single_product code is legacy...but fixing it up just in case.
 	// get the display type for the selected category
-	if ( is_numeric( $wpsc_query->query_vars['category_id'] ) ) {
-		$category_id = (int)$wpsc_query->query_vars['category_id'];
+	if ( !empty($wp_query->query_vars['wpsc_product_category']) && is_string( $wp_query->query_vars['wpsc_product_category']  ) ) {
+		$sql = 'SELECT `term_id` FROM '.$wpdb->terms.' WHERE name LIKE "%'.$wp_query->query_vars['wpsc_product_category'].'%"';
+		$category_id = $wpdb->get_var($sql);
+//		$category_id = (int)$wpsc_query->query_vars['category_id'];
 		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
 	}
 
@@ -644,7 +688,7 @@ function wpsc_display_products_page( $query ) {
 	}
 
 
-	//exit($display_type);
+	// exit($display_type);
 	// switch the display type, based on the display type variable...
 	switch ( $display_type ) {
 		case "grid":
@@ -666,8 +710,7 @@ function wpsc_display_products_page( $query ) {
 	$output = ob_get_contents();
 	ob_end_clean();
 	//$output = str_replace('$','\$', $output);
-
-	list($temp_wpsc_query, $wpsc_query) = array( $wpsc_query, $temp_wpsc_query ); // swap the wpsc_query objects back
+	list($temp_wpsc_query, $wp_query) = array( $wp_query, $temp_wpsc_query ); // swap the wpsc_query objects back
 	if ( $is_single == false ) {
 		$GLOBALS['post'] = $wp_query->post;
 	}

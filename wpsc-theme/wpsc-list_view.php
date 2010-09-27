@@ -170,7 +170,7 @@ global $wpsc_query, $wpdb;
 		</table>
 		
 		
-		<?php if(wpsc_product_count() < 1):?>
+		<?php if(wpsc_product_count() == 0):?>
 			<p><?php  echo __('There are no products in this group.', 'wpsc'); ?></p>
 		<?php endif ; ?>
 

@@ -76,7 +76,8 @@ $image_height = get_option('product_image_height');
 				<?php if(wpsc_the_product_thumbnail()) :?> 	   
 					<div class="item_image">
 						<a href="<?php echo wpsc_the_product_permalink(); ?>">
-						<?php echo wpsc_the_product_thumbnail(); ?>
+						<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+
 						</a>
 					</div>
 				<?php else: ?> 
@@ -156,7 +157,7 @@ $image_height = get_option('product_image_height');
 			
 		<?php endwhile; ?>
 		
-		<?php if(wpsc_product_count() < 1):?>
+		<?php if(wpsc_product_count() == 0):?>
 			<p><?php  echo __('There are no products in this group.', 'wpsc'); ?></p>
 		<?php endif ; ?>
 		

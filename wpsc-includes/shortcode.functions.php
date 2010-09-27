@@ -17,18 +17,28 @@
 */
 function wpsc_products_shorttag($atts) {
 	$query = shortcode_atts(array(
-		'product_id' => 0,
-		'product_url_name' => null,
-		'product_name' => null,
-		'category_id' => 0,
-		'category_url_name' => null,
-		'tag' => null,
-		'price' => 0,
-		'limit_of_items' => 0,
-		'sort_order' => null,
-		'number_per_page' => 0,
-		'page' => 0,
+		'product_id' => 0, //done
+		'product_url_name' => null, 
+		'product_name' => null, //done
+		'category_id' => 0, //done
+		'category_url_name' => null, //done
+		'tag' => null, //done
+		'price' => 0, //done + if price = 'sale' it shows all sale products
+		'limit_of_items' => 0, //done
+		'sort_order' => null, // author,date,title,modified,parent,ID,rand,comment_count
+		'order' => 'ASC', // ASC or DESC
+		'number_per_page' => 0, //done
+		'page' => 0, //done
 	), $atts);
+	//exit('Query <pre>'.print_r($query,true).'</pre>');
+	$post_id_array = explode(',',$query['product_id']);
+	$cat_id_array = explode(',',$query['category_id']);	
+	if(!empty($post_id_array) && count($post_id_array) > 1)
+		$query['product_id'] = $post_id_array;
+	
+	if(!empty($cat_id_array) && count($cat_id_array) > 1)
+		$query['category_id'] = $cat_id_array;
+
 
 	return wpsc_display_products_page($query);
 }
