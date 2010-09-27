@@ -641,11 +641,11 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
 
 
 	$post_thumbnail_id = get_post_thumbnail_id( $product_id );
-	$src = wp_get_attachment_image_src( $post_thumbnail_id, 'product-thumbnails' );
+	$src = wp_get_attachment_image_src( $post_thumbnail_id, 'large' );
 	if ( !empty( $src ) && is_string( $src[0] ) ) {
 		return $src[0];
 	} elseif ( !empty( $attached_images ) ) {
-		$attached_image = wp_get_attachment_image_src( $attached_images[0]->ID, 'product-thumbnails' );
+		$attached_image = wp_get_attachment_image_src( $attached_images[0]->ID, 'large' );
 		return $attached_image[0];
 	} else {
 		return false;

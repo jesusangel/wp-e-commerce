@@ -288,6 +288,9 @@ function wpsc_get_template_file_path( $file = '' ){
 		if ( !empty( $file_path ) )
 			set_transient( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file, $file_path, 60 * 60 * 12 );
 		
+	}elseif(!file_exists($file_path)){
+		delete_transient(WPEC_TRANSIENT_THEME_PATH_PREFIX . $file);
+		wpsc_get_template_file_path($file);
 	}
 
 	// Return filtered result
@@ -524,8 +527,7 @@ function wpsc_user_dynamic_css() {
 
 				div.single_product_display  div.textcol div.imagecol{
 					position:absolute;
-					top:0px;
-					left: 0px;
+
 					margin-left: -<?php echo $single_thumbnail_width + 10; ?>px !important;
 				}
 
