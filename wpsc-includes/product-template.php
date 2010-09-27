@@ -66,7 +66,6 @@ function wpsc_the_product_price( $no_decimals = false ) {
 	$full_price = get_post_meta( $product_id, '_wpsc_price', true );
 	$special_price = get_post_meta( $product_id, '_wpsc_special_price', true );
 
-
 	$price = $full_price;
 	if ( ($full_price > $special_price) && ($special_price > 0) )
 		$price = $special_price;
@@ -82,7 +81,7 @@ function wpsc_the_product_price( $no_decimals = false ) {
 function wpsc_calculate_price( $product_id, $variations = null, $special = true ) {
 	if ( count( $variations ) > 0 )
 		$product_id = wpsc_get_child_object_in_terms( $product_id, $variations, 'wpsc-variation' );
-	else
+	else if ( !$product_id )
 		$product_id = get_the_ID();
 
 	if ( $special == true ) {
