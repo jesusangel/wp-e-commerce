@@ -41,7 +41,7 @@ function wpsc_a_page_url($page=null) {
 	} else {
 		if( 1 < $wp_query->query_vars['paged']) {
 			if(get_option('permalink_structure'))
-				$output .= "paged/{$wp_query->query_vars['paged']}/";
+				$output .= "page/{$wp_query->query_vars['paged']}/";
 			else
 				$output = add_query_arg('paged', '', $output);
 			
@@ -84,7 +84,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		$seperator = '=';
 	}else{
 		$page_link = get_option('product_list_url');
-		$seperator = 'paged/';
+		$seperator = 'page/';
 	}
 
 	// If there's only one page, return now and don't bother
