@@ -1,11 +1,4 @@
 <?php
-//Make sure excerpts (additional details dont get cut off)
-function wpsc_excerpt_more($more) {
-       global $post;
-	return '<a href="'. get_permalink($post->ID) . '">' . 'Read the Rest...' . '</a>';
-}
-add_filter('excerpt_more', 'wpsc_excerpt_more');
-
 /**
  * WP eCommerce product functions and product utility function.
  *
@@ -15,6 +8,142 @@ add_filter('excerpt_more', 'wpsc_excerpt_more');
  * @since 3.8
  * @subpackage wpsc-template-functions
  */
+
+function wpsc_has_pages_top(){
+	if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 1) || (get_option('wpsc_page_number_position') == 3)))
+		return true;
+	else
+		return false;
+}
+function wpsc_has_pages_bottom(){
+	if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3)))
+		return true;
+	else
+		return false;
+}
+/**
+ * Used in wpsc_pagination to generate the links in pagination
+ * @access public
+ *
+ * @since 3.8
+ * @param $page int
+ * @return $output string, url
+ */
+function wpsc_a_page_url($page=null) {
+	global $wp_query;
+	$curpage = $wp_query->query_vars['paged'];
+	if($page != '')
+		$wp_query->query_vars['paged'] = $page;
+
+	if($wp_query->is_single === true) {
+		$wp_query->query_vars['paged'] = $curpage;
+		return wpsc_product_url($wp_query->post->ID);
+	} else {
+		if( 1 < $wp_query->query_vars['paged']) {
+			if(get_option('permalink_structure'))
+				$output .= "paged/{$wp_query->query_vars['paged']}/";
+			else
+				$output = add_query_arg('paged', '', $output);
+			
+		}
+	return $output;
+	}
+}
+/**
+ * wpsc_pagination generates and returns the urls for pagination
+ * @access public
+ *
+ * @since 3.8
+ * @param $totalpages (INT) Number of pages, 
+ * @param $per_page (INT) Number of products per page
+ * @param $current_page (INT) Current Product page number
+ * @param $page_link (STRING) URL of Page
+ *
+ * @return 
+ */
+function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $page_link = '') {
+	global $wp_query;
+	if(empty($totalpages))
+		$totalpages = $wp_query->max_num_pages;
+	if(empty($per_page))	
+		$per_page = $wp_query->query_vars['posts_per_page'];
+
+	$current_page = get_query_var('paged');	
+	if($current_page == 0)
+		$current_page = 1;
+
+	if(empty($page_link))
+		$page_link = wpsc_a_page_url();
+		
+	if(!get_option('permalink_structure')) {
+		$category = '';
+		if(isset($_GET['category']) && is_numeric($_GET['category']))
+			$category = '&category='.$_GET['category'];
+
+		$page_link = get_option('product_list_url').$category.'&paged';
+		$seperator = '=';
+	}else{
+		$page_link = get_option('product_list_url');
+		$seperator = 'paged/';
+	}
+
+	// If there's only one page, return now and don't bother
+	if($totalpages == 1) 
+		return;
+	// Pagination Prefix
+	$output = "Pages: ";
+	// Should we show the FIRST PAGE link?
+	if($current_page > 1)
+		$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> << First </a>";
+
+	// Should we show the PREVIOUS PAGE link?
+	if($current_page > 1 && ($current_page-1) != 1) {
+		$previous_page = $current_page - 1;	
+		$output .= " <a href=\"". $page_link .$seperator. $previous_page ."\" title=\"Previous Page\"> < Previous </a>";
+	}
+	$i =$current_page - $per_page;
+	$count = 0;
+	if($i > 0){
+		while(($i) < $current_page){
+			if($i > 0){
+				$output .= " <a href=\"". $page_link .$seperator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+				$i++;
+			}
+		}
+	}
+	// Current Page Number	
+	if($current_page > 0)
+		$output .= "<strong>[ ". $current_page ." ]</strong>";
+
+	$i = $current_page + 1;
+	$count = 0;
+	if($current_page + $per_page <= $totalpages){
+		while(($i) < $totalpages){
+			if($count <=4 ){
+				$output .= " <a href=\"". $page_link .$seperator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+				$i++;
+			}else{
+				break;
+			}
+			$count ++;
+
+		}
+
+	
+	}
+	
+	if($current_page < $totalpages) {
+		$next_page = $current_page + 1;
+		$output .= "<a href=\"". $page_link  .$seperator. $next_page ."\" title=\"Next Page\"> Next > </a>";
+	}
+	// Should we show the LAST PAGE link?
+	if($current_page < $totalpages) {
+		$output .= " <a href=\"". $page_link  .$seperator. $totalpages ."\" title=\"Last Page\"> Last >> </a>";
+	}
+	// Return the output.
+	echo $output;
+}
+
 
 /**
  * wpsc product image function
@@ -1071,8 +1200,7 @@ function wpsc_currency_sign() {
  */
 function wpsc_has_pages() {
 //	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
-	global $wpsc_query;
-	if ( isset( $wpsc_query->page_count ) && $wpsc_query->page_count > 0 )
+	if(1 == get_option('use_pagination'))
 		return true;
 	else
 		return false;

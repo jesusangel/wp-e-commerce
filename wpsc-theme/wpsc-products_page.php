@@ -52,12 +52,9 @@ global $wpsc_query, $wpdb, $wp_query;
 				<?php endif; ?>
 			</div><!--close wpsc_category_details-->
 		<?php endif; ?>
-		
-		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
+		<?php if(wpsc_has_pages_top()) : ?>
 			<div class="wpsc_page_numbers_top">
-				<?php
-				echo $wpsc_query->pagination($wpsc_query->page_count, $wpsc_query->prodcuts_per_page(), $wpsc_query->query_vars['page'],$wpsc_query->a_page_url());
-				 ?>
+				<?php wpsc_pagination(); ?>
 			</div><!--close wpsc_page_numbers_top-->
 		<?php endif; ?>		
 		
@@ -229,11 +226,9 @@ global $wpsc_query, $wpdb, $wp_query;
 	}
 	?>
 <?php //exit('<pre>'.print_r($wpsc_query->a_page_url(),true).'</pre>'); ?>
-		<?php if(wpsc_has_pages() &&  ((get_option('wpsc_page_number_position') == 2) || (get_option('wpsc_page_number_position') == 3))) : ?>
+		<?php if(wpsc_has_pages_bottom()) : ?>
 			<div class="wpsc_page_numbers_bottom">
-				<?php
-				echo $wpsc_query->pagination($wpsc_query->page_count, $wpsc_query->products_per_page(), $wpsc_query->query_vars['page'],$wpsc_query->a_page_url());
-				 ?>
+				<?php wpsc_pagination(); ?>
 			</div><!--close wpsc_page_numbers_bottom-->
 		<?php endif; ?>
 	<?php endif; ?>
