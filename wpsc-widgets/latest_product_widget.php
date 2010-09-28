@@ -173,7 +173,8 @@ function nzshpcrt_latest_product( $args = null, $instance ) {
 						$src = WPSC_IMAGE_URL . $special['image'];
 						$output .= '<img src="' . wpsc_product_image( $attached_image->ID, 100, 75 ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
 					} else {
-						$output .= '<img src="' . wpsc_product_image( $attached_image->ID, 45, 25 ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
+						$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option('product_image_width'), get_option('product_image_height') ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
+
 					}
 				}
 				$output .= '</a>';
