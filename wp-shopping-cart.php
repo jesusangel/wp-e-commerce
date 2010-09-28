@@ -129,6 +129,9 @@ class WP_eCommerce {
 	 * WPEC Activation Hook
 	 */
 	function install() {
+		define( 'WPSC_FILE_PATH', dirname( __FILE__ ) );
+		require_once( WPSC_FILE_PATH . '/wpsc-core/wpsc-installer.php' );
+		$this->constants();
 		wpsc_install();
 	}
 }
