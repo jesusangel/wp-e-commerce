@@ -134,7 +134,7 @@ function wpsc_generate_product_feed() {
 			$output .= "      <g:price>".$price."</g:price>\n\r";
 
 			$product_meta = get_post_meta( $post->ID, '_wpsc_product_metadata', true );
-			foreach ($product_meta as $meta_key) {
+			foreach (array_keys($product_meta) as $meta_key) {
 				if (stripos($meta_key,'g:') === 0)
 					$google_elements[$meta_key] = $product_meta[$meta_key];
 			}
