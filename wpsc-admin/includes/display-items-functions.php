@@ -287,9 +287,6 @@ function wpsc_product_basic_details_form( &$product_data ) {
 				<h3 class="hndle"><span>Publish</span></h3>
 				<div class="inside publish">
 					<div class="submitbox" id="submitpost"><br />
-						<span id="sticky-span" style="display: inline; "><input id="sticky" name="sticky" type="checkbox" <?php if ( isset( $sticky_checked ) ) echo $sticky_checked; ?>value="sticky" tabindex="4">
-							<label for="sticky" class="selectit">Stick this product to the front page</label><br>
-						</span>
 						<div id="minor-publishing">
 							<div id="minor-publishing-actions">
 								<div id="save-action">
@@ -307,8 +304,8 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					</div>
 					<div id="major-publishing-actions">
 						<div id="delete-action">
-							<a class='submitdelete deletion' title='<?php echo esc_attr( __( 'Delete this product' ) ); ?>' href='<?php echo wp_nonce_url( "page.php?wpsc_admin_action=trash&amp;product={$product_data['id']}", 'delete_product_' . $product_data['id'] ); ?>' onclick="if ( confirm(' <?php echo esc_js( sprintf( __( "You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete." ), $product_data['name'] ) ) ?>') ) { return true;}return false;"><?php _e( 'Move to Trash' ) ?>
-								</a><br />
+							<a class='submitdelete deletion' title='<?php echo esc_attr( __( 'Delete this product' ) ); ?>' href='<?php echo wp_nonce_url( admin_url("admin.php?wpsc_admin_action=trash&amp;product={$product_data['id']}&product_parent"), 'delete_product_' . $product_data['id'] ); ?>' onclick="if ( confirm(' <?php echo esc_js( sprintf( __( "You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete." ), $product_data['name'] ) ) ?>') ) { return true;}return false;"><?php _e( 'Move to Trash' ) ?>
+							</a><br />
 							</div>
 							<div id="publishing-action">
 							<?php if ( ($product->post_status == 'draft') || ($product->post_status == null) ) : ?>

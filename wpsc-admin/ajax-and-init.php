@@ -379,7 +379,7 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 function wpsc_delete_product() {
 	global $wpdb;
 
-	$deleted = 0;
+	$deleted = false;
 	$product_id = absint( $_GET['product'] );
 	check_admin_referer( 'delete_product_' . $product_id );
 
@@ -394,7 +394,8 @@ function wpsc_delete_product() {
 	$deleted = true;
 
 	$sendback = wp_get_referer();
-	if ( isset( $deleted ) ) {
+	if ( $deleted ) {
+		$sendback = remove_query_arg('action',$sendback);
 		$sendback = add_query_arg( 'deleted', $deleted, $sendback );
 	}
 	//exit($sendback);
