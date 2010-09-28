@@ -228,10 +228,9 @@ function wpsc_calculate_price( $product_id, $variations = null, $special = true 
 			$price = $special_price;
 		}
 	} else {
-		
 		$price = get_post_meta( $product_id, '_wpsc_price', true );
 	}
-	return nzshpcrt_currency_display($price,'',true);
+	return $price;
 }
 
 /**
