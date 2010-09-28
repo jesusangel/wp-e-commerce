@@ -183,7 +183,7 @@ function wpsc_specials( $args = null, $instance ) {
 				'order'       => 'ASC'
 			) );
 			
-			//Images are handled hee
+			//Images are handled here
 			$attached_image = $attached_images[0];
 			if ( ( $attached_image->ID > 0 ) && ($hide_thumbnails != 1) ) {
 				$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
@@ -199,7 +199,7 @@ function wpsc_specials( $args = null, $instance ) {
 			}
 			
 			$output .= '<span id="special_product_price_' . $special_product->ID . '"><span class="pricedisplay">';
-			$output .= wpsc_calculate_price( $special_product->ID );
+			$output .= nzshpcrt_currency_display(wpsc_calculate_price( $special_product->ID,null,true ),null,true);
 			$output .= '</span></span><br />';
 			
 			$output .= '<form id="specials_' . $special_product->ID . '" method="post" action="" onsubmit="submitform(this, null); return false;">';
@@ -218,7 +218,7 @@ function wpsc_specials( $args = null, $instance ) {
 function wpsc_specials_excludes(){
 	global $wpdb;
 
-	$exclude_products = $wpdb->get_results("SELECT ID FROM ".$wpdb->prefix."posts JOIN ".$wpdb->prefix."postmeta ON (".$wpdb->prefix."posts.ID = ".$wpdb->prefix."postmeta.post_id) WHERE 1=1  AND ".$wpdb->prefix."posts.post_type = 'wpsc-product' AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."postmeta.meta_key = '_wpsc_special_price' AND ".$wpdb->prefix."postmeta.meta_value = 0 GROUP BY wp_posts.ID ORDER BY ".$wpdb->prefix."posts.post_date DESC LIMIT 0, 10");
+	$exclude_products = $wpdb->get_results("SELECT ID FROM ".$wpdb->prefix."posts JOIN ".$wpdb->prefix."postmeta ON (".$wpdb->prefix."posts.ID = ".$wpdb->prefix."postmeta.post_id) WHERE 1=1  AND ".$wpdb->prefix."posts.post_type = 'wpsc-product' AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."postmeta.meta_key = '_wpsc_special_price' AND ".$wpdb->prefix."postmeta.meta_value = 0 GROUP BY ".$wpdb->prefix."posts.ID ORDER BY ".$wpdb->prefix."posts.post_date DESC LIMIT 0, 10");
 	
 	foreach($exclude_products as $exclude_product){
 		$excludes[] = $exclude_product->ID;
