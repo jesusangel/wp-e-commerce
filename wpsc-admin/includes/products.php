@@ -51,7 +51,30 @@ function wpsc_admin_product_listing($parent_product = null) {
 		wpsc_product_row($product, $parent_product);
 	}
 }
+/**
+ * Adds the -trash status in the product row of manage products page
+ * @access public
+ *
+ * @since 3.8
+ * @param $post_status (array) of current posts statuses
+ * @return $post_status (array) 
+ */
+function wpsc_trashed_post_status($post_status){
+	$post = get_post(get_the_ID());
+	if('wpsc-product' == $post->post_type && 'trash' == $post->post_status && !in_array('trash', $post_status))
+		$post_status[] = 'Trash';
 
+	return $post_status;
+}
+add_filter('display_post_states','wpsc_trashed_post_status');
+
+/**
+ * Spits out the current products details in a table row for manage products page and variations on edit product page.
+ * @access public
+ *
+ * @since 3.8
+ * @param $product (Object), $parent_product (Int) Note: I believe parent_product is unused 
+ */
 function wpsc_product_row(&$product, $parent_product = null) {
 	global $wp_query, $wpsc_products, $mode, $current_user;
 	static $rowclass;
@@ -171,7 +194,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 				if ( 'trash' == $product->post_status ) {
 					$actions['untrash'] = "<a title='" . esc_attr(__('Restore this product from the Trash', 'wpsc')) . "' href='" . wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=untrash&amp;product={$product->ID}", 'untrash-product_' . $product->ID) . "'>".__('Restore')."</a>";
 				} else if ( EMPTY_TRASH_DAYS ) {
-					$actions['trash'] = "<a class='submitdelete' title='".esc_attr(__('Move this product to the Trash', 'wpsc'))."' href='" . get_delete_post_link($product->ID) . "'>".__('Trash')."</a>";
+					$actions['trash'] = "<a class='submitdelete' title='".esc_attr(__('Move this product to the Trash', 'wpsc'))."' href='" .wp_nonce_url("admin.php?page=wpsc-edit-products&amp;wpsc_admin_action=trash&amp;product={$product->ID}", 'delete-product_'.$product->ID) . "'>".__('Trash')."</a>";
 				}
 				
 				if ( 'trash' == $product->post_status || !EMPTY_TRASH_DAYS ) {

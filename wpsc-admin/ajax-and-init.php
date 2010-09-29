@@ -137,6 +137,63 @@ function wpsc_delete_file() {
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'delete_file') ) {
 	add_action( 'admin_init', 'wpsc_delete_file' );
 }
+function wpsc_untrash_product(){
+	$product_id = $_GET['product'];
+
+	if ( !current_user_can( 'delete_post', $product_id ) )
+		wp_die( __( 'You are not allowed to restore this product from the trash.', 'wpsc' ) );
+
+	if ( !wp_untrash_post( $product_id ) )
+		wp_die( __( 'Error in restoring from trash...' ) );
+
+	$untrashed++;
+	$sendback = wp_get_referer();
+	$sendback = remove_query_arg( 'wpsc_admin_action', $sendback );
+	$sendback = add_query_arg( 'untrashed', $untrashed, $sendback );
+
+	wp_redirect($sendback);
+}
+
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'untrash') ) {
+	add_action( 'admin_init', 'wpsc_untrash_product' );
+}
+
+
+/**
+ * Delete a product from the DB , either moves it to trash or deletes it permanently
+ * @access public
+ *
+ * @since 3.8
+ * @return redirects to edit products page
+ */
+function wpsc_delete_product(){
+	global $wpdb;
+	$force_trash = false;
+	if ( 'delete' == $_REQUEST['wpsc_admin_action'])
+		$force_trash = true;	
+	$delete = 0;
+	$sendback = wp_get_referer();
+	$product_id = $_GET['product'];
+	if ( !current_user_can( 'delete_post', $product_id ) )
+		wp_die( __( 'You are not allowed to delete this post.' ) );
+
+	if($force_trash){
+		if ( !wp_delete_post( $product_id , $force_trash) )
+			wp_die( __( 'Error in deleting...' ) );
+	}else{
+		do_action( 'wpsc_delete_product', $product_id );
+		if ( !wp_trash_post( $product_id ) )
+			wp_die( __( 'Error placing product in trash...' ) );
+	}
+	$sendback = remove_query_arg( 'wpsc_admin_action', $sendback );
+	$sendback = add_query_arg( 'deleted', $deleted, $sendback );
+	wp_redirect( $sendback );
+	exit();
+
+}
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && (('delete' == $_REQUEST['wpsc_admin_action']) || ( 'trash' ==$_REQUEST['wpsc_admin_action']))) {
+	add_action( 'admin_init', 'wpsc_delete_product' );
+}
 
 function wpsc_bulk_modify_products() {
 	global $wpdb;
@@ -371,40 +428,6 @@ function wpsc_modify_stock() {
 
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'modify_stock') ) {
 	add_action( 'admin_init', 'wpsc_modify_stock' );
-}
-
-/**
-  Function and action for deleting single products
- */
-function wpsc_delete_product() {
-	global $wpdb;
-
-	$deleted = false;
-	$product_id = absint( $_GET['product'] );
-	check_admin_referer( 'delete_product_' . $product_id );
-
-
-	if ( !current_user_can( 'delete_post', $product_id ) ) {
-		wp_die( __( 'You are not allowed to move this product to the trash.', 'wpsc' ) );
-	}
-	if ( !wp_trash_post( $product_id ) ) {
-		wp_die( __( 'Error in moving to trash...' ) );
-	}
-	do_action( 'wpsc_delete_product', $product_id );
-	$deleted = true;
-
-	$sendback = wp_get_referer();
-	if ( $deleted ) {
-		$sendback = remove_query_arg('action',$sendback);
-		$sendback = add_query_arg( 'deleted', $deleted, $sendback );
-	}
-	//exit($sendback);
-	wp_redirect( $sendback );
-	exit();
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'trash') ) {
-	add_action( 'admin_init', 'wpsc_delete_product' );
 }
 
 /**

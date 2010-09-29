@@ -1242,7 +1242,9 @@ ul.categorisation_links{
 	clear: both;
 	padding: 0px;
 }
-
+.wpsc_add_new_currency{
+text-decoration: none;
+}
 ul.categorisation_links li{
 	display: block;
 	float: left;
@@ -1254,11 +1256,6 @@ ul.categorisation_links li{
 
 ul.categorisation_links li.selected a{
 	color: #D54E21;
-}
-
-#table_rate 
-{
-	display:none;
 }
 
 .multiple-select {

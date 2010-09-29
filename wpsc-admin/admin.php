@@ -292,9 +292,12 @@ function wpsc_meta_boxes() {
 	//$pagename = 'store_page_wpsc-edit-products';
 	
 	$pagename = 'toplevel_page_wpsc-edit-products';
+	add_meta_box('wpsc_price_control_forms','Price Control','wpsc_price_control_forms',$pagename,'normal','high');
+	add_meta_box('wpsc_stock_control_forms','Stock Control','wpsc_stock_control_forms',$pagename,'normal','high');
+	add_meta_box('wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'normal','high');
 	add_meta_box( 'wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_tag_forms', 'Product Tags', 'wpsc_product_tag_forms', $pagename, 'normal', 'high' );
-	add_meta_box( 'wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high' );
+//	add_meta_box( 'wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );

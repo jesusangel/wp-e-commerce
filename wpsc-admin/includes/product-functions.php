@@ -598,15 +598,19 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 
 function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	global $wpdb;
+	$old_curr = get_product_meta($product_id, 'currency',true);
 	$sql = "SELECT `isocode` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`=".$newCurrency;
 	$isocode = $wpdb->get_var($sql);
-	//exit($sql);
-	$newCurrency = 'currency['.$isocode.']';
 	
+	//echo('<pre>'.print_r($old_curr,true).'</pre>');
+	$newCurrency = 'currency';
+	$old_curr[$isocode] = $newPrice;
 	if(($newPrice != '') &&  ($newPrice > 0)){
-		update_product_meta($product_id, $newCurrency, $newPrice, $prev_value = '');
+		update_product_meta($product_id, $newCurrency, $old_curr);
 	} else {
-		delete_product_meta($product_id, $newCurrency);
+		unset($old_curr[$isocode]);
+		update_product_meta($product_id, $newCurrency, $old_curr);
+//		echo $isocode.' '.$newPrice.' <pre>'.print_r($old_curr,true).'</pre>';
 	}
 	
 	//exit('<pre>'.print_r($newCurrency, true).'</pre>'.$newPrice);

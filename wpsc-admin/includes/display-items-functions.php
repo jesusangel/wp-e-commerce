@@ -178,10 +178,12 @@ function wpsc_display_product_form( $product_id = 0 ) {
 	// we put the closed postboxes array into the product data to propagate it to each form without having it global.
 	$product_data['closed_postboxes'] = (array)get_user_meta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products' );
 	$product_data['hidden_postboxes'] = (array)get_user_meta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products' );
-
+//	echo '<pre>'.print_r($product_data,true).'</pre>';
 	if ( count( $product_data ) > 0 ) {
 		wpsc_product_basic_details_form( $product_data );
+	//	do_meta_boxes('wpsc-product', 'side', $product_data);
 	}
+	
 }
 
 /*
@@ -241,10 +243,6 @@ function wpsc_product_basic_details_form( &$product_data ) {
 		$product->post_type = '';
 	$nonce_action = 'update-' . $product->post_type . '_' . $product_data["id"];
 	$form_extra .= "<input type='hidden' id='post_ID' name='post_ID' value='" . esc_attr( $product_data["id"] ) . "' />";
-
-	$sticky = get_option( 'sticky_products' );
-	if ( in_array( $product_data["id"], (array)$sticky ) )
-		$sticky_checked = 'checked="checked" ';
 ?>
 	</h3>
 	<div id="side-info-column" class="inner-sidebar">
@@ -278,10 +276,6 @@ function wpsc_product_basic_details_form( &$product_data ) {
 			<input type='hidden' name='product_id' id='product_id' value='<?php echo (int)$product_data["id"]; ?>' />
 			<input type='hidden' name='wpsc_admin_action' value='edit_product' />
 		<?php wp_nonce_field( 'edit-product', 'wpsc-edit-product' ); ?>
-
-<?php /*
-		  <input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php if($product_data['id'] > 0) {  _e('Update Product', 'wpsc'); } else { _e('Add New Product', 'wpsc');   } ?>' />&nbsp;
-		 */ ?>
 			<div id="submitdiv" class="postbox">
 				<div class="handlediv" title="Click to toggle"><br></div>
 				<h3 class="hndle"><span>Publish</span></h3>
@@ -329,7 +323,9 @@ function wpsc_product_basic_details_form( &$product_data ) {
 				"side" => array(
 					"wpsc_product_category_and_tag_forms",
 					"wpsc_product_tag_forms",
-					"wpsc_product_price_and_stock_forms",
+					"wpsc_price_control_forms",
+					"wpsc_stock_control_forms",
+					"wpsc_product_taxes_forms",
 					"wpsc_product_image_forms",
 					"wpsc_product_download_forms"
 				),
@@ -339,7 +335,9 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					"wpsc_product_variation_forms" => 1,
 					"wpsc_product_advanced_forms" => 1,
 					"wpsc_product_category_and_tag_forms" => 1,
-					"wpsc_product_price_and_stock_forms" => 1,
+					"wpsc_price_control_forms" => 1,
+					"wpsc_stock_control_forms" => 1,
+					"wpsc_product_taxes_forms" => 1,
 					"wpsc_product_image_forms" => 1,
 					"wpsc_product_download_forms" => 1
 				),
@@ -349,7 +347,9 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					"wpsc_product_variation_forms" => 1,
 					"wpsc_product_advanced_forms" => 1,
 					"wpsc_product_category_and_tag_forms" => 1,
-					"wpsc_product_price_and_stock_forms" => 1,
+					"wpsc_price_control_forms" => 1,
+					"wpsc_stock_control_forms" => 1,
+					"wpsc_product_taxes_forms" => 1,
 					"wpsc_product_image_forms" => 1,
 					"wpsc_product_download_forms" => 1
 				)
@@ -357,8 +357,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 
 			$order = get_option( 'wpsc_product_page_order' );
 			$order = apply_filters( 'wpsc_products_page_forms', $order );
-
-			if ( ( $order == '' ) || ( count( $order, COUNT_RECURSIVE ) < 24 ) || ( count( $order ) == count( $order, COUNT_RECURSIVE ) ) ) {
+			if ( ( $order == '' ) || ( count( $order, COUNT_RECURSIVE ) < 32 ) || ( count( $order ) == count( $order, COUNT_RECURSIVE ) ) ) {
 				$order = $default_order;
 			}
 			foreach ( $order as $key => $values ) {
@@ -386,8 +385,6 @@ function wpsc_product_basic_details_form( &$product_data ) {
 	         	  $category_box_key = array_search('wpsc_product_category_and_tag_forms', $values);
 		          if(is_numeric($category_box_key) && isset($order[$key][$category_box_key])) 
 	             	unset($order[$key][$category_box_key]);
-	         	  
-	         		    
 		      }
 	
 	        }
@@ -397,7 +394,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					echo call_user_func( $box_function_name, $product_data );
 				}
 			}
-//    echo "<pre>"; print_r($order); echo "</pre>";
+
 ?>
 		</div>
 	</div>
@@ -537,7 +534,6 @@ function wpsc_product_basic_details_form( &$product_data ) {
 
 function wpsc_product_tag_forms( $product_data='' ) {
 	global $closed_postboxes, $wpdb, $variations_processor;
-
 	$output = '';
 	$tag_array = array( );
 
@@ -621,158 +617,107 @@ function wpsc_product_category_and_tag_forms( $product_data='' ) {
 
 	return $output;
 }
-
-function wpsc_product_price_and_stock_forms( $product_data='' ) {
+function wpsc_price_control_forms($product_data){
 	global $closed_postboxes, $wpdb, $variations_processor, $wpsc_product_defaults;
 	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
-
+	if( isset( $product_data['meta']['_wpsc_currency']))
+		$product_alt_currency = $product_data['meta']['_wpsc_currency'];
+		
 	if ( !isset( $product_data['meta']['_wpsc_table_rate_price'] ) )
 		$product_data['meta']['_wpsc_table_rate_price'] = $wpsc_product_defaults['meta']['table_rate_price'];
 	$table_rate_price = $product_data['meta']['_wpsc_table_rate_price'];
-
-	if ( !isset( $product_data['meta']['_wpsc_custom_tax'] ) )
-		$product_data['meta']['_wpsc_custom_tax'] = '';
-	$custom_tax = $product_data['meta']['_wpsc_custom_tax'];
-
+	
 	if ( !isset( $product_data['meta']['_wpsc_is_donation'] ) )
 		$product_data['meta']['_wpsc_is_donation'] = $wpsc_product_defaults['donation'];
+	
 	if ( !isset( $product_meta['table_rate_price']['state'] ) )
 		$product_meta['table_rate_price']['state'] = null;
-
-	if ( !isset( $product_meta['custom_tax'] ) )
-		$product_meta['custom_tax'] = 0.00;
-
+	
 	if ( !isset( $product_meta['table_rate_price']['quantity'] ) )
 		$product_meta['table_rate_price']['quantity'] = $wpsc_product_defaults['meta']['table_rate_price']['quantity'][0];
+	
+	if ( !isset( $product_data['meta']['_wpsc_price'] ) )
+		$product_data['meta']['_wpsc_price'] = $wpsc_product_defaults['price'];
+	
+	if ( !isset( $product_data['special'] ) )
+		$product_data['special'] = $wpsc_product_defaults['special'];
+	
+	if ( !isset( $product_data['meta']['_wpsc_special_price'] ) )
+		$product_data['meta']['_wpsc_special_price'] = $wpsc_product_defaults['special_price'];	
+		
+	$currency_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY `country` ASC", ARRAY_A );	
+	?>
+	
+	<div id='wpsc_price_control_forms' class='wpsc_price_control_forms postbox <?php if(array_search( 'wpsc_price_control_forms', $product_data['closed_postboxes'] ) !== false) echo 'closed'; else echo ''; ?>' <?php if(array_search( 'wpsc_price_control_forms', $product_data['hidden_postboxes'] ) !== false) echo 'style="display: none;"'; else echo '';?> ><div class="handlediv" title="Click to toggle"><br></div>
 
-	if ( !isset( $product_meta['unpublish_when_none_left'] ) )
-		$product_meta['unpublish_when_none_left'] = '';
-
-	if ( $product_data == 'empty' )
-		$display = "style='visibility:hidden;'";
-
-	echo "<div id='wpsc_product_price_and_stock_forms' class='wpsc_product_price_and_stock_forms postbox " . ((array_search( 'wpsc_product_price_and_stock_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : '') . "' " . ((array_search( 'wpsc_product_price_and_stock_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : '') . " ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
-
-	echo "<h3 class='hndle'>";
-
-	echo __( 'Price and Stock Control', 'wpsc' );
-
-	echo "</h3>"; ?>
-
+	<h3 class='hndle'><?php _e( 'Price Control', 'wpsc' ); ?></h3>
     <div class="inside">
-
-<?php // echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";?>
-		<br />
-
-		<div class="postbox" style="min-width:225px; width:96%">
-			<h3 class="hndle"><?php _e( 'Price' ) ?></h3>
-			<div class="inside">
-				<div class='wpsc_floatleft' style="width:85px;">
-<?php
-				echo __( 'Price', 'wpsc' );
-				if ( !isset( $product_data['meta']['_wpsc_price'] ) )
-					$product_data['meta']['_wpsc_price'] = $wpsc_product_defaults['price'];
-				if ( !isset( $product_data['special'] ) )
-					$product_data['special'] = $wpsc_product_defaults['special'];
-				if ( !isset( $product_data['meta']['_wpsc_special_price'] ) )
-					$product_data['meta']['_wpsc_special_price'] = $wpsc_product_defaults['special_price'];
-?> :
-					<br />
-					<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'], 2 ); ?>' />
-				</div>
-				<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
+    	<div class='wpsc_floatleft' style="width:85px;">
+			<?php _e( 'Price', 'wpsc' ); ?> :<br />
+			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'], 2 ); ?>' />
+		</div>
+		<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
 						); ?>; width:85px;; margin-left:30px;'>
-					<label for='add_form_special'><?php echo __( 'Sale Price :', 'wpsc' ); ?></label>
-					<div id='add_special'>
-						<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2 ); ?>' name='meta[_wpsc_special_price]' />
-					</div>
-				</div>
-				<br style="clear:both" />
-				<br style="clear:both" />
+			<label for='add_form_special'><?php echo __( 'Sale Price :', 'wpsc' ); ?></label>
+			<div id='add_special'>
+				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2 ); ?>' name='meta[_wpsc_special_price]' />
+			</div>
+		</div>
+		<br style="clear:both" />
+		<br style="clear:both" />
+		<a href='#' class='wpsc_add_new_currency'>+ <?php echo __( 'New Currency', 'wpsc' ); ?></a>
+		<br />
+		<!-- add new currency layer -->
+		<div class='new_layer'>
+			<label for='newCurrency[]'><?php echo __( 'Currency type', 'wpsc' ); ?>:</label><br />
+			<select name='newCurrency[]' class='newCurrency' style='width:42%'>
+			<?php
+				foreach ( (array)$currency_data as $currency ) {?>
+					<option value='<?php echo $currency['id']; ?>' >
+						<?php echo htmlspecialchars( $currency['country'] ); ?> (<?php echo $currency['currency']; ?>)
+					</option> <?php
+				} ?>
+			</select>
+			<?php echo __( 'Price', 'wpsc' ); ?> : 
+			<input type='text' class='text' size='8' name='newCurrPrice[]' value='0.00' style='display:inline' />
+			<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><img src='<?php echo WPSC_URL; ?>/images/cross.png' /></a>
 
-				<a href='#' class='wpsc_add_new_currency'>+ <?php echo __( 'New Currency', 'wpsc' ); ?></a>
-				<div class='new_layer'>
-
-					<br /> <label for='newCurrency[]'><?php echo __( 'Currency type', 'wpsc' ); ?>:</label><br />
-					<select name='newCurrency[]' class='newCurrency' style="width:42%">
+		</div> <!-- close new_layer -->
 <?php
-	$currency_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY `country` ASC", ARRAY_A );
-
-
-	$isocode = ''; //needs to
-	foreach ( (array)$currency_data as $currency ) {
-		if ( $isocode == $currency['isocode'] ) {
-			$selected = "selected='selected'";
-		} else {
-			$selected = "";
-		}
-?>
-						<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars( $currency['country'] ); ?> (<?php echo $currency['currency']; ?>)</option>
-<?php
-	}
-	$currency_data = $wpdb->get_row( "SELECT `symbol`,`symbol_html`,`code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . get_option( 'currency_type' ) . "' LIMIT 1", ARRAY_A );
-	if ( $currency_data['symbol'] != '' )
-		$currency_sign = $currency_data['symbol_html'];
-	else
-		$currency_sign = $currency_data['code'];
-?>
-					</select>
-
-<?php echo __( 'Price', 'wpsc' ); ?> : <input type='text' class='text' size='15' name='newCurrPrice[]' value='0.00' style="width:40px; display:inline" /><br />
-
-					<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><?php echo __( 'Delete Currency', 'wpsc' ); ?></a>
-
-				</div>
-<?php
-	if ( isset( $product_data['newCurr'] ) && count( $product_data['newCurr'] ) > 0 ) :
+	if ( isset( $product_alt_currency ) && count( $product_alt_currency ) > 0 ) :
 		$i = 0;
-		foreach ( $product_data['newCurr'] as $newCurr ) {
-			$i++;
-			$isocode = str_replace( "currency[", "", $newCurr['meta_key'] );
-			$isocode = str_replace( "]", "", $isocode );
-			// exit('ere<pre>'.print_r($isocode, true).'</pre>');
-?>
-				<br /><label for='newCurrency[]'><?php echo __( 'Currency type', 'wpsc' ); ?>:</label><br />
-				<select name='newCurrency[]' class='newCurrency' style="width:42%">
-<?php
-			$currency_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY `country` ASC", ARRAY_A );
-			foreach ( $currency_data as $currency ) {
-				if ( $isocode == $currency['isocode'] )
-					$selected = "selected='selected'";
-				else
-					$selected = "";
-
-?>
-					<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> ><?php echo htmlspecialchars( $currency['country'] ); ?> (<?php echo $currency['currency']; ?>)</option>
-<?php
-			}
-			$currency_data = $wpdb->get_row( "SELECT `symbol`,`symbol_html`,`code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . get_option( 'currency_type' ) . "' LIMIT 1", ARRAY_A );
-			if ( $currency_data['symbol'] != '' )
-				$currency_sign = $currency_data['symbol_html'];
-			else
-				$currency_sign = $currency_data['code'];
-?>
-				</select>
-
-				<?php echo __( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='15' name='newCurrPrice[]' value='<?php echo $newCurr['meta_value']; ?>' style="width:40px; display:inline" /><br />
-				<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $isocode; ?>'><?php echo __( 'Delete Currency', 'wpsc' ); ?></a>
+		foreach ( $product_alt_currency as $iso => $alt_price ) {
+			$i++; ?>
+			<br /><label for='newCurrency[]'><?php echo __( 'Currency type', 'wpsc' ); ?>:</label><br />
+			<select name='newCurrency[]' class='newCurrency' style='width:42%'> <?php
+				foreach ( $currency_data as $currency ) {
+					if ( $iso == $currency['isocode'] )
+						$selected = "selected='selected'";
+					else
+						$selected = ""; ?>
+					<option value='<?php echo $currency['id']; ?>' <?php echo $selected; ?> >
+						<?php echo htmlspecialchars( $currency['country'] ); ?> (<?php echo $currency['currency']; ?>)
+					</option> <?php
+				} ?>
+			</select>
+			<?php echo __( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
+			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_URL; ?>/images/cross.png' /></a><br />
 <?php	}
 
 		endif;
 
 		echo "<br style='clear:both' />
           <br/><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' " . (($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '') . " />&nbsp;<label for='add_form_donation'>" . __( 'This is a donation, checking this box populates the donations widget.', 'wpsc' ) . "</label>";
-
-		// echo "<pre>".print_r($product_data['meta']['_wpsc_product_metadata'],true)."</pre>";
 ?>
 				<br /><br /> <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo (((bool)$product_meta['table_rate_price']['state'] == true) ? 'checked=\'checked\'' : ''); ?> />
 				<label for='table_rate_price'><?php echo __( 'Table Rate Price', 'wpsc' ); ?></label>
 				<div id='table_rate'>
 					<a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
+					<br style='clear:both' />
 					<table>
 						<tr>
-							<td><br /><?php echo __( 'Quantity In Cart', 'wpsc' ); ?></td>
-							<td><?php echo __( 'Discounted Price', 'wpsc' ); ?></td>
+							<th><?php _e( 'Quantity In Cart', 'wpsc' ); ?></th>
+							<th colspan='2'><?php _e( 'Discounted Price', 'wpsc' ); ?></th>
 						</tr>
 <?php
 		if ( count( $product_meta['table_rate_price']['quantity'] ) > 0 ) {
@@ -782,7 +727,7 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 ?>
 						<tr>
 							<td>
-								<input type="text" size="10" value="<?php echo $quantity; ?>" name="table_rate_price[quantity][]"/> and above
+								<input type="text" size="5" value="<?php echo $quantity; ?>" name="table_rate_price[quantity][]"/><span class='description'>and above</span> 
 							</td>
 							<td>
 								<input type="text" size="10" value="<?php echo $table_price; ?>" name="table_rate_price[table_price][]" />
@@ -795,96 +740,103 @@ function wpsc_product_price_and_stock_forms( $product_data='' ) {
 			}
 ?>
 						<tr>
-							<td><input type='text' size='10' value='' name='table_rate_price[quantity][]'/> and above</td>
+							<td><input type="text" size="5" value="<?php echo $quantity; ?>" name="table_rate_price[quantity][]"/><span class='description'>and above</span> </td>
 							<td><input type='text' size='10' value='' name='table_rate_price[table_price][]'/></td>
 						</tr>
 					</table>
 				</div>
-				<br style="clear:both" />
 			</div>
-		</div>
-
-		<br style="clear:both" />
-		<div class="postbox" style="min-width:225px; width:96%">
-			<h3 class="hndle"><?php _e( 'Stock' ) ?></h3>
-				<div class="inside">
-					<div class='wpsc_floatleft'>
+			</div>
 <?php
-					echo __( 'Stock Keeping Unit', 'wpsc' );
-					if ( !isset( $product_data['meta']['_wpsc_sku'] ) )
-						$product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku'];
-?> :<br />
-							<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities( stripslashes( $product_data['meta']['_wpsc_sku'] ), ENT_QUOTES, 'UTF-8' ); ?>' />
-							<br style="clear:both" />
+}
+function wpsc_stock_control_forms( $product_data='' ) {
+	global $closed_postboxes, $wpdb, $variations_processor, $wpsc_product_defaults;
+	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
 
-<?php
-					if ( !isset( $product_data['meta']['_wpsc_stock'] ) )
-						$product_data['meta']['_wpsc_stock'] = '';
+	if ( !isset( $product_meta['unpublish_when_none_left'] ) )
+		$product_meta['unpublish_when_none_left'] = ''; ?>
+		
+	<div id='wpsc_stock_control_forms' class='wpsc_stock_control_forms postbox <?php  if(array_search( 'wpsc_stock_control_forms', $product_data['closed_postboxes'] ) !== false) echo 'closed'; else echo ''; ?>' <?php if(array_search( 'wpsc_stock_control_forms', $product_data['hidden_postboxes'] ) !== false) echo 'style="display: none;"'; else echo ''; ?> >
+		<div class="handlediv" title="Click to toggle"><br /></div>
+		<h3 class='hndle'><?php _e( 'Stock Control', 'wpsc' ); ?></h3>
+	    <div class="inside">
+		<?php _e( 'Stock Keeping Unit', 'wpsc' );
+		if ( !isset( $product_data['meta']['_wpsc_sku'] ) )
+			$product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku']; ?> :<br />
 
-					echo "<input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' " . ((is_numeric( $product_data['meta']['_wpsc_stock'] )) ? 'checked="checked"' : '') . " name='meta[_wpsc_limited_stock]'/>";
-					//onclick='hideelement(\"add_stock\")'
-					echo "&nbsp;<label for='add_form_quantity_limited' class='small'>" . __( 'I have a limited number of this item in stock. If the stock runs out, this product will not be available on the shop unless you untick this box or add more stock.', 'wpsc' ) . "</label>";
+			<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities( stripslashes( $product_data['meta']['_wpsc_sku'] ), ENT_QUOTES, 'UTF-8' ); ?>' />
+			<br style="clear:both" />
+			<?php
+			if ( !isset( $product_data['meta']['_wpsc_stock'] ) )
+				$product_data['meta']['_wpsc_stock'] = ''; ?>
+			<input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' <?php if(is_numeric( $product_data['meta']['_wpsc_stock'] )) echo 'checked="checked"'; else echo ''; ?> name='meta[_wpsc_limited_stock]'/> &nbsp;
+			<label for='add_form_quantity_limited' class='small'>
+				<?php _e( 'I have a limited number of this item in stock. If the stock runs out, this product will not be available on the shop unless you untick this box or add more stock.', 'wpsc' ); ?>
+			</label> <?php
+			if ( $product_data['id'] > 0 ){
+				if ( is_numeric( $product_data['meta']['_wpsc_stock'] ) ){?>
+					<div class='edit_stock' style='display: block;'> <?php 
+				} else { ?>
+					<div class='edit_stock' style='display: none;'> <?php
+				}
+				 _e( 'Stock Qty', 'wpsc' );?><input type='text' class='stock_limit_quantity' name='meta[_wpsc_stock]' size='10' value='<?php echo $product_data['meta']['_wpsc_stock']; ?>' />
 
-					if ( $product_data['id'] > 0 ) {
-						if ( is_numeric( $product_data['meta']['_wpsc_stock'] ) )
-							echo "            <div class='edit_stock' style='display: block;'>\n\r";
-						else
-							echo "            <div class='edit_stock' style='display: none;'>\n\r";
-
-						echo __( 'Stock Qty', 'wpsc' ) . " <input type='text' class='stock_limit_quantity' name='meta[_wpsc_stock]' size='10' value='" . $product_data['meta']['_wpsc_stock'] . "' />";
-
-						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' " . (($product_meta['unpublish_when_none_left'] == 1) ? 'checked="checked"' : '') . " class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> " . __( 'If this product runs out of stock set status to Unpublished & email site owner', 'wpsc' ) . "</div>";
-						echo "              </div>\n\r";
-					} else {
-						echo "<div style='display: none;' class='edit_stock'>
-							 " . __( 'Stock Qty', 'wpsc' ) . " <input type='text' name='meta[_wpsc_stock]' value='0' size='10' />";
-						echo "<div style='font-size:9px; padding:5px;'><input type='checkbox' class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> " . __( 'If this product runs out of stock set status to Unpublished & email site owner', 'wpsc' ) . "</div>";
-						echo "</div>";
-					}
-?>
+				<div style='font-size:9px; padding:5px;'>
+					<input type='checkbox' <?php if($product_meta['unpublish_when_none_left'] == 1) echo 'checked="checked"'; else echo ''; ?> class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> 
+					<?php _e( 'If this product runs out of stock set status to Unpublished & email site owner', 'wpsc' ); ?> 
 				</div>
-				<br style="clear:both" />
-			</div>
+				</div> <?php
+			} else { ?>
+				<div style='display: none;' class='edit_stock'>
+					 <?php _e( 'Stock Qty', 'wpsc' ); ?><input type='text' name='meta[_wpsc_stock]' value='0' size='10' />
+					<div style='font-size:9px; padding:5px;'>
+						<input type='checkbox' class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> <?php _e( 'If this product runs out of stock set status to Unpublished & email site owner', 'wpsc' ); ?>
+					</div>
+				</div><?php
+			}
+?>
 		</div>
-		<br style="clear:both" />
+	</div>	
+<?php	
+}
+function wpsc_product_taxes_forms($product_data=''){
+	global $closed_postboxes, $wpdb, $variations_processor, $wpsc_product_defaults;
+	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
+	
+	if ( !isset( $product_data['meta']['_wpsc_custom_tax'] ) )
+		$product_data['meta']['_wpsc_custom_tax'] = '';
+	$custom_tax = $product_data['meta']['_wpsc_custom_tax'];
 
-		<div class="postbox" style="min-width:225px; width:96%">
-			<h3 class="hndle"><?php _e( 'Taxes' ); ?></h3>
+	
+	if ( !isset( $product_meta['custom_tax'] ) )
+		$product_meta['custom_tax'] = 0.00;
+	//Add New WPEC-Taxes Bands Here
+	$wpec_taxes_controller = new wpec_taxes_controller();
+
+	//display tax bands
+	$band_select_settings = array(
+		'id' => 'wpec_taxes_band',
+		'name' => 'meta[_wpsc_product_metadata][wpec_taxes_band]',
+		'label' => __( 'Custom Tax Band' )
+	);
+	$wpec_taxes_band = '';
+	if(isset($product_meta['wpec_taxes_band']))
+		$wpec_taxes_band = $product_meta['wpec_taxes_band'];
+	
+	echo "<div id='wpsc_product_taxes_forms' class='wpsc_product_taxes_forms postbox " . ((array_search( 'wpsc_product_taxes_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : '') . "' " . ((array_search( 'wpsc_product_taxes_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : '') . " ><div class=\"handlediv\" title=\"Click to toggle\"><br></div>"; ?>
+		<h3 class="hndle"><?php _e( 'Taxes' ); ?></h3>
 			<div class="inside">
 				<p>
-<?php
-					//Add New WPEC-Taxes Bands Here
-					$wpec_taxes_controller = new wpec_taxes_controller();
-
-					//display tax bands
-					$band_select_settings = array(
-						'id' => 'wpec_taxes_band',
-						'name' => 'meta[_wpsc_product_metadata][wpec_taxes_band]',
-						'label' => __( 'Custom Tax Band' )
-					);
-					$wpec_taxes_band = '';
-					if(isset($product_meta['wpec_taxes_band'])){
-						$wpec_taxes_band = $product_meta['wpec_taxes_band'];
-					}
-					echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band );
-?>
+					<?php echo $wpec_taxes_controller->wpec_taxes_display_tax_bands( $band_select_settings, $wpec_taxes_band ); ?>
 				</p>
-				<!--<input type='checkbox' value='1' name='meta[_wpsc_product_metadata][custom_tax][state]' id='custom_tax_checkbox'  <?php echo ((is_numeric( $product_meta['custom_tax'] ) > 0) ? 'checked=\'checked\'' : ''); ?>  />
-				<label for='custom_tax_checkbox'><?php echo _e( "Custom Tax Rate", 'wpsc' ); ?></label>
-				<div style='display:<?php echo ((is_numeric( $product_meta['custom_tax'] )) ? 'block' : 'none'); ?>;' id='custom_tax'>
-					  <input type='text' size='10' value='<?php echo number_format( $product_meta['custom_tax'], 2, '.', '' ); ?>' name='meta[_wpsc_product_metadata][custom_tax][value]'/>
-				</div>-->
 			</div>
 		</div>
-	</div></div>
-
-<?php //return $output;
+<?php				
 }
 
 function wpsc_product_variation_forms( $product_data = '' ) {
 	global $closed_postboxes, $variations_processor, $wp_query;
 
-//	exit('<pre>'.print_r($product_data,true).'</pre>');
 	$siteurl = get_option( 'siteurl' );
 	$output  = '';
 
@@ -895,53 +847,38 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 	// Get variation data from WP Terms
 	$product_term_data = wp_get_object_terms( $product_data['id'], 'wpsc-variation' );
 	if ( !empty( $product_term_data ) ) {
-		foreach ( $product_term_data as $product_term ) {
+		foreach ( $product_term_data as $product_term )
 			$product_terms[] = $product_term->term_id;
-		}
 	} else {
 		$product_terms = array();
 	}
 
 	$form_classes = array_search( 'wpsc_product_variation_forms', $product_data['closed_postboxes'] ) !== false ? 'closed' : '';
 	$form_style   = array_search( 'wpsc_product_variation_forms', $product_data['hidden_postboxes'] ) !== false ? 'style="display: none;"' : ''
-
 	?>
 
-		<div id="wpsc_product_variation_forms" class="postbox <?php echo $form_classes; ?>" <?php echo $form_style; ?>>
-			<div class="handlediv" title="Click to toggle"><br></div>
-
+	<div id="wpsc_product_variation_forms" class="postbox <?php echo $form_classes; ?>" <?php echo $form_style; ?>>
+		<div class="handlediv" title="Click to toggle"><br></div>
 			<h3 class="hndle"><?php _e( 'Variation Control', 'wpsc' ); ?></h3>
-
 			<div class="inside">
-
 				<?php if( empty( $product_data['name'] ) ) : ?>
-
 					<p><?php _e( 'You must first save this Product as a Draft before adding variations', 'wpsc' ); ?></p>
-
 				<?php else : ?>
+				<div id="product_variations">
+					<div class="variation_checkboxes">
+						<?php
+						// Get the terms from variations
+						$variation_sets = get_terms( 'wpsc-variation', array (
+							'hide_empty' => 0,
+							'parent'     => 0
+						) );
+						// Loop through each variation set
+						foreach ( (array)$variation_sets as $variation_set ) :
+							$set_checked_state = '';
 
-					<div id="product_variations">
-						<div class="variation_checkboxes">
-
-							<?php
-
-							// Get the terms from variations
-							$variation_sets = get_terms( 'wpsc-variation', array (
-								'hide_empty' => 0,
-								'parent'     => 0
-							) );
-
-							// Loop through each variation set
-							foreach ( (array)$variation_sets as $variation_set ) :
-								$set_checked_state = '';
-
-								// If this product includes this variation, check it
-								if ( in_array( $variation_set->term_id, $product_terms ) )
-									$set_checked_state = "checked='checked'";
-
-							// Loop through the variations
-							?>
-
+							// If this product includes this variation, check it
+							if ( in_array( $variation_set->term_id, $product_terms ) )
+								$set_checked_state = "checked='checked'";	?>
 								<div class="variation_set">
 
 									<label class='set_label'>
@@ -950,12 +887,11 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 									</label>
 
 										<?php
-
 										$variations = get_terms( 'wpsc-variation', array (
 											'hide_empty' => 0,
 											'parent'     => $variation_set->term_id
 										) );
-
+										// Loop through the variations
 										foreach ( (array)$variations as $variation ) :
 											$checked_state = '';
 
@@ -1748,4 +1684,5 @@ function wpsc_the_editor( $content, $id = 'content', $prev_id = 'title', $media_
 	</script>
 <?php
 }
+
 ?>

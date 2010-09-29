@@ -933,6 +933,9 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 	
 	
 	jQuery("#table_rate_price").livequery(function(){
+ 	  if (!this.checked) {  
+ 	  	jQuery("#table_rate").hide();
+ 	  }
 	  jQuery(this).click( function() {
 			if (this.checked) {
 				jQuery("#table_rate").show();
@@ -1204,7 +1207,6 @@ function hideOptionElement(id, option) {
 
 
 function wpsc_save_postboxes_state(page, container) {
-  console.log(container);
 	var closed = jQuery(container+' .postbox').filter('.closed').map(function() { return this.id; }).get().join(',');
 	jQuery.post('index.php?admin=true&ajax=true', {
 		action: 'closed-postboxes',

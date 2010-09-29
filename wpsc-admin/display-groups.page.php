@@ -42,7 +42,6 @@ function wpsc_display_categories_page() {
 	</noscript>
 	
 	<div class="wrap">
-		<?php // screen_icon(); ?>
 		<h2><?php echo esc_html( __('Display categories', 'wpsc') ); 
 			if ( isset( $_GET["category_id"] ) ) {
 				$sendback = remove_query_arg('category_id');
