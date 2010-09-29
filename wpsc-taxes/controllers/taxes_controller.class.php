@@ -214,7 +214,7 @@ class wpec_taxes_controller {
 		} else {
 			$returnable = '<p>';
 			$returnable .= ( $this->wpec_taxes->wpec_taxes_get_enabled()) ? __( 'Product prices are Tax Exclusive. See Settings &gt; Taxes' ) :
-					__( 'Taxes are not enabled. See Settings &gt; Taxes' );
+					__( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' );
 			$returnable .= '</p>';
 		}// if
 
