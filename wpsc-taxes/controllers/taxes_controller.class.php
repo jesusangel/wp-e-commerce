@@ -209,11 +209,11 @@ class wpec_taxes_controller {
 				//echo select
 				$returnable = $this->wpec_taxes_build_select_options( $tax_bands, 'name', 'name', $default_option, $band_select_settings );
 			} else {
-				$returnable = '<p>' . __( 'No Tax Bands Setup. Set Tax Bands up in Settings &gt Taxes' ) . '</p>';
+				$returnable = '<p>' . __( 'No Tax Bands Setup. Set Tax Bands up in <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' ) . '</p>';
 			}// if
 		} else {
 			$returnable = '<p>';
-			$returnable .= ( $this->wpec_taxes->wpec_taxes_get_enabled()) ? __( 'Product prices are Tax Exclusive. See Settings &gt; Taxes' ) :
+			$returnable .= ( $this->wpec_taxes->wpec_taxes_get_enabled()) ? __( 'Product prices are Tax Exclusive. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>Settings &gt; Taxes</a>' ) :
 					__( 'Taxes are not enabled. See <a href="options-general.php?page=wpsc-settings&tab=taxes">Settings &gt; Taxes</a>' );
 			$returnable .= '</p>';
 		}// if
