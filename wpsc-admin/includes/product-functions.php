@@ -80,7 +80,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	
 	if(isset($post_data['save'])) {
-		$post_data['post_status'] = $post_data['post_status'];
+		$post_data['post_status'] = 'draft';
 	} else if(isset($post_data['publish'])) {
 		$post_data['post_status'] = 'publish';	
 	} else if(isset($post_data['unpublish'])) {
