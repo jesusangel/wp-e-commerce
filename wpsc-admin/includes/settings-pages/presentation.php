@@ -127,7 +127,7 @@ function options_categorylist() {
 	global $wpdb;
 
 	$current_default = get_option( 'wpsc_default_category' );
-	$group_data      = get_terms( 'wpsc_product_category', 'hide_empty=0&parent=0', ARRAY_A );
+	$group_data      = get_terms( 'wpsc_product_category', 'parent=0', ARRAY_A );
 	$categorylist    = "<select name='wpsc_options[wpsc_default_category]'>";
 
 	if ( get_option( 'wpsc_default_category' ) == 'all' )
@@ -150,27 +150,24 @@ function options_categorylist() {
 		$selected = '';
 
 	$categorylist .= "<option value='all+list' " . $selected . " >" . __( 'Show all products + list', 'wpsc' ) . "</option>";
-
+	$categorylist .= "<optgroup label='Product Categories'>";
 	foreach ( $group_data as $group ) {
 		$group = (array)$group;
+		if ( get_option( 'wpsc_default_category' ) == $group['term_id'] )
+			$selected = "selected='selected'";
+		else
+			$selected = "";
+		
+		$categorylist .= "<option value='" . $group['term_id'] . "' " . $selected . " >" . $group['name'] . "</option>";
 		$category_data = get_terms( 'wpsc_product_category', 'hide_empty=0&parent=' . $group['term_id'], ARRAY_A );
 		if ( $category_data != null ) {
-
-			$categorylist .= "<optgroup label='{$group['name']}'>";
-
 			foreach ( (array)$category_data as $category ) {
 				$category = (array)$category;
-				if ( get_option( 'wpsc_default_category' ) == $category['term_id'] ) {
-					$selected = "selected='selected'";
-				} else {
-					$selected = "";
-				}
 				$categorylist .= "<option value='" . $category['term_id'] . "' " . $selected . " >" . $category['name'] . "</option>";
 			}
-			$categorylist .= "</optgroup>";
 		}
 	}
-
+	$categorylist .= "</optgroup>";
 	$categorylist .= "</select>";
 	return $categorylist;
 }
@@ -499,7 +496,7 @@ function wpsc_options_presentation() {
 					?>
 
 				<tr>
-					<th scope="row"><?php echo __( 'Select what product group you want to display on the products page', 'wpsc' ); ?>:</th>
+					<th scope="row"><?php echo __( 'Select what product category you want to display on the products page', 'wpsc' ); ?>:</th>
 					<td>
 						<?php echo options_categorylist(); ?>
 					</td>
