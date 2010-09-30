@@ -142,7 +142,7 @@ function options_categorylist() {
 	else
 		$selected = '';
 
-	$categorylist .= "<option value='list' " . $selected . " >" . __( 'Show list of product groups', 'wpsc' ) . "</option>";
+	$categorylist .= "<option value='list' " . $selected . " >" . __( 'Show list of product categories', 'wpsc' ) . "</option>";
 
 	if ( get_option( 'wpsc_default_category' ) == 'all+list' )
 		$selected = "selected='selected'";
