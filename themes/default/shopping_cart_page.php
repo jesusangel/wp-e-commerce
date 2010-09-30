@@ -313,7 +313,8 @@ if(wpsc_cart_item_count() > 0) :
 				</select>
 			</td>
 		</tr>
-		<?php endif; ?>		
+		<?php endif; ?>	
+		<?php do_action('wpsc_inside_shopping_cart'); ?>	
 		<tr>
 			<td colspan='2' class='wpsc_gateway_container'>
 			
