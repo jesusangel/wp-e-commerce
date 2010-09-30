@@ -222,12 +222,10 @@ function wpsc_product_basic_details_form( &$product_data ) {
 ?>
 	<h3 class='form_heading' style="display:none;">
 <?php
-	if ( $product_data['id'] > 0 ) {
-		echo __( 'Edit Product', 'wpsc' );
-	} else {
-		echo __( 'Add New', 'wpsc' );
+	
+	if ( !isset( $_GET["product"] ) || $_GET["product"] <= 0 ) 
 		$product_data["id"] = $_GET["product"] = add_new_product_id();
-	}
+	
 	$form_extra = '';
 	if ( !isset( $product->post_status ) )
 		$product->post_status = '';
@@ -1001,7 +999,7 @@ function change_link( $product_data='' ) {
 	$uploading_iframe_ID = $_GET["product"];
 	$media_upload_iframe_src = "media-upload.php?post_id=$uploading_iframe_ID";
 
-	return $media_upload_iframe_src . "&amp;type=image";
+	return $media_upload_iframe_src . "&amp;type=image&parent_page=wpsc-edit-products";
 }
 
 if ( !isset( $_GET["product"] ) )
@@ -1014,6 +1012,75 @@ if ( isset( $_GET["page"] ) && ($_GET["page"] == "wpsc-edit-products" ) ) {
 	add_filter( 'media_buttons_context', 'change_context' );
 	add_filter( 'image_upload_iframe_src', "change_link" );
 }
+
+/*
+* Modifications to Media Gallery
+*/
+
+if ( isset( $_REQUEST["parent_page"] ) && ( $_REQUEST["parent_page"] == "wpsc-edit-products" ) ) {
+	add_action( 'admin_head_media_upload_gallery_form', 'wpsc_gallery_css_mods' );
+	add_filter('media_upload_tabs', 'wpsc_media_upload_tab_gallery', 12);
+	add_filter('gettext','wpsc_filter_delete_text',12,3);
+	add_filter('attachment_fields_to_edit', 'wpsc_attachment_fields', 12);
+}
+function wpsc_gallery_css_mods() {
+
+			print '<style type="text/css">
+			#gallery-settings *{
+			display:none;
+			}
+			a.wp-post-thumbnail {
+					color:green;
+			}
+			#media-upload a.del-link {
+				color:red
+			}	
+	</style>';
+	print '
+	<script type="text/javascript"> 
+	<!--
+	jQuery(function($){
+		$("td.A1B1").each(function(){
+		
+			var target = $(this).next();
+				$("p > input.button", this).appendTo(target);
+
+		})
+		
+		
+	});
+	-->
+	</script>';
+}
+
+
+function wpsc_media_upload_tab_gallery($tabs) {
+	
+		unset($tabs['gallery']);
+		$tabs['gallery'] = __('Product Image Gallery');
+
+	return $tabs;
+}
+
+
+function wpsc_attachment_fields($form_fields) {
+
+		unset($form_fields['post_excerpt'], $form_fields['url'], $form_fields['align'], $form_fields['image_alt']['helps']);
+		$form_fields['image_alt']['helps'] =  __('Alt text for the product image, e.g. &#8220;Rockstar T-Shirt&#8221;');
+
+	return $form_fields;
+}
+
+
+function wpsc_filter_delete_text($translation, $text, $domain){
+
+	if( 'Delete' == $text && isset( $_REQUEST['post_id'] ) && ( 'wpsc-product' == get_post_type( $_REQUEST['post_id'] ) ) ){
+		$translations = &get_translations_for_domain($domain);
+		return $translations->translate('Trash') ;
+	}
+	return $translation;
+}
+
 
 function wpsc_product_shipping_forms( $product_data='' ) {
 	global $closed_postboxes;

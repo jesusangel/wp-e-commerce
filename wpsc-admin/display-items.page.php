@@ -42,13 +42,19 @@ function wpsc_display_edit_products_page() {
 	register_column_headers( 'display-product-list', $columns );
 
 	$baseurl = includes_url( 'js/tinymce' );
+	
+	if ( isset( $_GET["product"] ) && $_GET["product"] > 0 ) {
+		$header = __( 'Edit Product', 'wpsc' );
+	} else {
+		$header = __( 'Add New', 'wpsc' );
+	}
 ?>
 	<div class="wrap">
 <?php // screen_icon();  ?>
 		<div id="icon_card"><br /></div>
 		<h2>
 			<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo esc_html( __( 'Manage Products', 'wpsc' ) ); ?></a>
-			<a href="<?php echo wp_nonce_url( "admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product" ); ?>" class="nav-tab" id="add"><?php echo (isset( $_GET['product'] )) ? __( 'Add New', 'wpsc' ) : __( 'Edit Product', 'wpsc' ); ?></a>
+			<a href="<?php echo wp_nonce_url( "admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product" ); ?>" class="nav-tab" id="add"><?php echo $header; ?></a>
 	</h2>
 <?php if ( isset( $_GET['ErrMessage'] ) && isset( $_SESSION['product_error_messages'] ) && is_array( $_SESSION['product_error_messages'] ) ) { ?>
 		<div id="message" class="error fade">

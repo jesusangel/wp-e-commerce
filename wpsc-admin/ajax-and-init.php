@@ -2631,4 +2631,6 @@ function save_term_prices( $term_id ) {
 add_action( 'edited_wpsc-variation', 'save_term_prices' );
 add_action( 'created_wpsc-variation', 'save_term_prices' );
 
+
+
 ?>
