@@ -334,8 +334,6 @@ if(wpsc_cart_item_count() > 0) :
  	   </tr>
 		<?php endif; ?>	
 		
-		<?php do_action('wpsc_inside_shopping_cart') ?>
-		
 		<tr>
 			<td colspan='2'>
 				<?php if(get_option('terms_and_conditions') == '') : ?>
