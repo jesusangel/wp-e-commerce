@@ -24,7 +24,7 @@
 			<ul class='wpsc_categories wpsc_top_level_categories <?php echo implode(" ", (array)$provided_classes); ?>'>
 				<li class='wpsc_category_<?php echo $curr_cat['term_id'];?>'>
 						<a href="<?php echo $link;?>" class='wpsc_category_image_link'>
-					<?php wpsc_parent_category_image($show_thumbnails, $category_image , $width, $height); ?>
+					<?php wpsc_parent_category_image($show_thumbnails, $category_image , $width, $height); ?></a>
 					<a href='<?php echo $link; ?>'><?php echo $curr_cat['name']; ?></a>
 					<ul class='wpsc_categories wpsc_second_level_categories <?php echo implode(" ", (array)$provided_classes); ?>'>
 					<?php
