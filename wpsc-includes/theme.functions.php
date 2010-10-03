@@ -492,6 +492,10 @@ function wpsc_user_dynamic_css() {
 					width: <?php echo $thumbnail_width - 2; ?>px;
 				}
 
+				div.default_product_display .imagecol img.no-image, #content div.default_product_display .imagecol img.no-image {
+					width: <?php echo $thumbnail_width; ?>px;
+					height: <?php echo $thumbnail_height; ?>px;                    
+                }
 
 		/*
 		* Grid View Styling
@@ -503,6 +507,22 @@ function wpsc_user_dynamic_css() {
 				div.product_grid_display div.item_no_image a  {
 					width: <?php echo $thumbnail_width - 2; ?>px;
 				}
+
+ 				.product_grid_display .product_grid_item  {
+					width: <?php echo $thumbnail_width; ?>px;
+				}
+				.product_grid_display .product_grid_item img.no-image, #content .product_grid_display .product_grid_item img.no-image {
+					width: <?php echo $thumbnail_width; ?>px;
+					height: <?php echo $thumbnail_height; ?>px;                    
+                }
+                <?php if(get_option('show_images_only') == 1): ?>
+                .product_grid_display .product_grid_item  {
+                	min-height:0 !important;
+					width: <?php echo $thumbnail_width; ?>px;
+					height: <?php echo $thumbnail_height; ?>px;
+                    
+				}
+				<?php endif; ?>
 
 
 

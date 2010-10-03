@@ -82,14 +82,14 @@ global $wpsc_query, $wpdb, $wp_query;
 								</a>
 							<?php else: ?>
 									<a href="<?php echo wpsc_the_product_permalink(); ?>">
-									<span class="no-image">No Image Available</span>
+									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
 									</a>
 							<?php endif; ?>
 						</div><!--close imagecol-->
 					<?php endif; ?>
 				
 					<div class="productcol">
-						<h2 class="prodtitles">
+						<h2 class="prodtitle">
 							<?php if(get_option('hide_name_link') == 1) : ?>
 								<?php echo wpsc_the_product_title(); ?>
 							<?php else: ?> 
@@ -126,7 +126,11 @@ global $wpsc_query, $wpdb, $wp_query;
 						<?php else: ?>
 						<?php $action = htmlentities(wpsc_this_page_url(),ENT_QUOTES); ?>					
 						<?php endif; ?>
-						
+						<?php
+						if(function_exists('gold_shpcrt_display_gallery')) :					
+							echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
+						endif;
+						?>						
 						<form class="product_form"  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 						<?php /** the variation group HTML and loop */?>
                         <?php if (wpsc_have_variation_groups()) { ?>
@@ -201,11 +205,6 @@ global $wpsc_query, $wpdb, $wp_query;
 						<?php endif ; ?>
 						
 						<?php echo wpsc_product_rater(); ?>
-						<?php
-						if(function_exists('gold_shpcrt_display_gallery')) :					
-							echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
-						endif;
-						?>
 						
 						
 					<?php // */ ?>
@@ -218,13 +217,13 @@ global $wpsc_query, $wpdb, $wp_query;
 		<?php if(wpsc_product_count() == 0):?>
 			<h3><?php  echo __('There are no products in this group.', 'wpsc'); ?></h3>
 		<?php endif ; ?>
-
 	<?php
 
 	if(function_exists('fancy_notifications')) {
 		echo fancy_notifications();
 	}
 	?>
+
 <?php //exit('<pre>'.print_r($wpsc_query->a_page_url(),true).'</pre>'); ?>
 		<?php if(wpsc_has_pages_bottom()) : ?>
 			<div class="wpsc_page_numbers_bottom">

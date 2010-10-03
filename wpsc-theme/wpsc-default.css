@@ -34,6 +34,7 @@ Author URI: http://instinct.co.nz
 /*-----DEFAULT PRODUCT DISPLAY-----*/
 #default_products_page_container {
 	width:650px;	
+	position:relative;
 }
 
 .default_product_display {
@@ -41,29 +42,37 @@ Author URI: http://instinct.co.nz
 	-moz-box-shadow:1px 1px 8px rgba(0,0,0,0.3);
 	-webkit-box-shadow:1px 1px 8px rgba(0,0,0,0.3);
 	padding:10px;
+	position:relative;
 }
 
 .default_product_display .imagecol {
 	margin-right:10px;
 	float:left;	
+	position:relative;
+}
+
+.default_product_display .imagecol img.no-image, #content .default_product_display .imagecol img.no-image {
+	background-color:#EFEFEF;
+	display:block;
 }
 
 .default_product_display .productcol {
 	float:left;
 	width:70%;
+	position:relative;
 }
 
-.default_product_display h2.prodtitles, #content .default_product_display h2.prodtitles {
-	font-size:1.6em;
+.default_product_display h2.prodtitle, #content .default_product_display h2.prodtitle {
+	font-size:1.4em;
 	margin-bottom:5px;	
 }
 
-.default_product_display h2.prodtitles a:link, #content .default_product_display h2.prodtitles a:link, .default_product_display h2.prodtitles a:visited, #content .default_product_display h2.prodtitles a:visited {
+.default_product_display h2.prodtitle a:link, #content .default_product_display h2.prodtitle a:link, .default_product_display h2.prodtitle a:visited, #content .default_product_display h2.prodtitle a:visited {
 	text-decoration:underline;
 	color:#006699;
 }
 
-.default_product_display h2.prodtitles a:hover, #content .default_product_display h2.prodtitles a:hover, .default_product_display h2.prodtitles a:active, #content .default_product_display h2.prodtitles a:active {
+.default_product_display h2.prodtitle a:hover, #content .default_product_display h2.prodtitle a:hover, .default_product_display h2.prodtitle a:active, #content .default_product_display h2.prodtitle a:active {
 	text-decoration:none;
 }
 
@@ -126,6 +135,7 @@ Author URI: http://instinct.co.nz
 }
 
 .default_product_display .wpsc_variation_forms label {
+	font-family: Georgia, "Bitstream Charter", serif;
 	color:#F60;
 	font-size:0.9em;	
 }
@@ -149,6 +159,7 @@ Author URI: http://instinct.co.nz
 
 
 .default_product_display .wpsc_quantity_update label, #content .default_product_display .wpsc_quantity_update label {
+	font-family: Georgia, "Bitstream Charter", serif;
 	margin:0;
 	line-height:1.2em;
 	font-size:0.9em;
@@ -202,4 +213,142 @@ Author URI: http://instinct.co.nz
 	clear:both;
 	font-size:0.8em;	
 	float:left;
+}
+
+.default_product_display .wpcart_gallery img, #content .default_product_display .wpcart_gallery img {
+	margin:5px;
+	padding:5px;
+	border:1px solid #ccc;	
+}
+
+.default_product_display .wpsc_buy_button {
+	background:url(images/addtocart.png) no-repeat scroll 0 0 transparent;
+	width:82px;
+	height:24px;
+	text-indent:-9999px;
+	*line-height:0;
+	border:none;
+	outline:none;
+	display:block;
+	cursor:pointer;	
+}
+
+/*-----LIST VIEW PRODUCT DISPLAY-----*/
+#list_view_products_page_container {
+	width:650px;	
+	position:relative;
+}
+
+#list_view_products_page_container p, #content #list_view_products_page_container p {
+	line-height:1.2em;
+	font-size:1.0em;
+	margin:0;
+	padding:0;	
+}
+
+#list_view_products_page_container input, #content #list_view_products_page_container input, #list_view_products_page_container textarea, #content #list_view_products_page_container textarea {
+	font-size:1.0em;
+	line-height:1.2em;
+	margin:0;
+	padding:0;
+}
+
+table.list_productdisplay, #content table.list_productdisplay {
+	border-collapse:collapse;
+	border:none;
+	padding:0;
+	margin:0;
+	width:100%;
+}
+
+table.list_productdisplay td, #content table.list_productdisplay td {
+	border:1px dashed #ccc;
+	padding:5px;
+}
+
+table.list_productdisplay form.product_form {
+	display:inline;
+}
+
+table.list_productdisplay .quantity_container {
+	display:inline;	
+}
+
+table.list_productdisplay .wpsc_buy_button_container {
+	float:right;	
+	display:inline;
+}
+
+table.list_productdisplay .wpsc_buy_button {
+	background:url(images/addtocart.png) no-repeat scroll 0 0 transparent;
+	width:82px;
+	height:24px;
+	text-indent:-9999px;
+	line-height:0;
+	border:none;
+	outline:none;
+	display:block;
+	cursor:pointer;	
+	color:#f0f;
+}
+
+table.list_productdisplay h2.prodtitle, #content table.list_productdisplay h2.prodtitle {
+	font-size:1.0em;
+}
+
+table.list_productdisplay h2.prodtitle a:link, #content table.list_productdisplay h2.prodtitle a:link, table.list_productdisplay h2.prodtitle a:visited, #content table.list_productdisplay h2.prodtitle a:visited {
+	text-decoration:underline;
+	color:#006699;
+}
+
+table.list_productdisplay h2.prodtitle a:hover, #content table.list_productdisplay h2.prodtitle a:hover, table.list_productdisplay h2.prodtitle a:active, #content table.list_productdisplay h2.prodtitle a:active {
+	text-decoration:none;
+}
+
+table.list_productdisplay td.stock {
+	text-align:center;	
+}
+
+table.list_productdisplay tr.alt {
+	background-color:#F8F8F8;	
+}
+
+table.list_productdisplay p.soldout {
+	font-size:0.8em;
+	color:#C33;	
+}
+
+
+/*-----FANCY NOTIFICATION STYLING-----*/
+#fancy_notification{
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #ffffff;
+	border: 4px solid #cccccc;
+	display: none;
+	height: auto;
+	z-index: 9;
+}
+#fancy_notification #loading_animation{
+	display: none;
+}
+#fancy_notification #fancy_notification_content{
+	display: none;
+	width: 300px;
+	padding: 8px;
+	height: auto;
+	text-align: left;
+	margin: 0 !important;
+}
+#fancy_notification #fancy_notification_content span{
+	margin: 0 0 6px 0;
+	display: block;
+	font-weight: normal;
+}
+#fancy_notification #fancy_notification_content a{
+	display: block;
+	float: left;
+	margin-right: 6px;
+	margin-bottom: 3px;
 }
