@@ -156,7 +156,12 @@ function fancy_notification_content( $cart_messages ) {
 
 function wpsc_product_url( $product_id, $category_id = null, $escape = true ) {
 	global $wpdb, $wp_rewrite, $wp_query;
-	return get_permalink( $product_id );
+	$post = get_post($product_id);
+	if ($post && isset($post->post_parent) && $post->post_parent) {
+		return wpsc_product_url($post->post_parent, $category_id, $escape);
+	} else {
+		return get_permalink($product_id);
+	}
 }
 
 function google_buynow( $product_id ) {
