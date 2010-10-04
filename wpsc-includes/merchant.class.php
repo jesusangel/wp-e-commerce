@@ -172,7 +172,9 @@ class wpsc_merchant {
 			'store_location' => get_option('base_country'),
 			'store_currency' => $currency_code,
 			'is_subscription' => false,
-			'has_discounts' => false,
+			'has_discounts' => $purchase_logs['discount_value'] > 0 ? true : false,
+			'cart_discount_value' => $purchase_logs['discount_value'],
+			'cart_discount_coupon' => $purchase_logs['discount_data'],
 			'notification_url' => add_query_arg('wpsc_action', 'gateway_notification', (get_option('siteurl')."/index.php")),
 			'transaction_results_url' => get_option('transact_url'),
 			'shopping_cart_url' => get_option('shopping_cart_url'),
@@ -185,6 +187,7 @@ class wpsc_merchant {
 			'billing_address' => $address_data['billing'],
 			'shipping_address' => $address_data['shipping'],
 		);
+
   }
 	
 	/**
