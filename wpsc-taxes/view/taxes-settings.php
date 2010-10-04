@@ -9,13 +9,13 @@ function wpec_options_taxes() {
 ?>
 	<form name='wpec_taxes_options' id='wpec_taxes_options' method='post' action=''>
 		<div class="wrap">
-			<h3><?php echo __( 'Tax Settings' ); ?></h3>
+			<h3><?php _e( 'Tax Settings' ); ?></h3>
 			<p>
 				<label for='wpec_taxes_enabled'>
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_enabled'] ) {
 		echo 'checked="checked"';
 	} ?> type="checkbox" id='wpec_taxes_enabled' name='wpsc_options[wpec_taxes_enabled]' />
-<?php echo __( 'Turn tax on' ); ?>
+<?php _e( 'Turn tax on' ); ?>
 			</label>
 		</p>
 		<p>
@@ -23,7 +23,7 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_inprice'] == 'exclusive' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='exclusive' id='wpec_taxes_inprice1' name='wpsc_options[wpec_taxes_inprice]' />
-<?php echo __( 'Product prices are tax exclusive - add tax to the price during checkout' ); ?>
+<?php _e( 'Product prices are tax exclusive - add tax to the price during checkout' ); ?>
 			</label>
 		</p>
 		<p>
@@ -31,16 +31,16 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_inprice'] == 'inclusive' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='inclusive' id='wpec_taxes_inprice2' name='wpsc_options[wpec_taxes_inprice]' />
-<?php echo __( "Product prices are tax inclusive - during checkout the total price doesn't increase but tax is shown as a line item" ); ?>
+<?php _e( "Product prices are tax inclusive - during checkout the total price doesn't increase but tax is shown as a line item" ); ?>
 			</label>
 		</p>
-		<h4><?php echo __( 'Product Specific Tax' ); ?></h4>
+		<h4><?php _e( 'Product Specific Tax' ); ?></h4>
 		<p>
 			<label for='wpec_taxes_product_1'>
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_product'] == 'add' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='add' id='wpec_taxes_product_1' name='wpsc_options[wpec_taxes_product]' />
-<?php echo __( 'Add per product tax to tax percentage if product has a specific tax rate' ); ?>
+<?php _e( 'Add per product tax to tax percentage if product has a specific tax rate' ); ?>
 			</label>
 		</p>
 		<p>
@@ -48,17 +48,17 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_product'] == 'replace' ) {
 		echo 'checked="checked"';
 	} ?> type="radio" value='replace' id='wpec_taxes_product_2' name='wpsc_options[wpec_taxes_product]' />
-<?php echo __( 'Replace tax percentage with product specific tax rate' ); ?>
+<?php _e( 'Replace tax percentage with product specific tax rate' ); ?>
 			</label>
 		</p>
 
-		<h4><?php echo __( 'Tax Logic' ); ?></h4>
+		<h4><?php _e( 'Tax Logic' ); ?></h4>
 		<p>
 			<label for='wpec_taxes_logic_1'>
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing_shipping' id='wpec_taxes_logic_1' name='wpsc_options[wpec_taxes_logic]' />
-					<?php echo __( 'Apply tax when Billing and Shipping Country is the same as Shops base location' ); ?>
+					<?php _e( 'Apply tax when Billing and Shipping Country is the same as Shops base location' ); ?>
 			</label>
 		<div id='billing_shipping_preference_container' style='margin-left: 20px;'>
             <p>
@@ -66,7 +66,7 @@ function wpec_options_taxes() {
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' && $wpec_taxes_options['wpec_billing_shipping_preference'] == 'billing_address' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing_address' id='wpec_billing_preference' name='wpsc_options[wpec_billing_shipping_preference]' />
-				<?php echo __( 'Apply tax to Billing Address' ); ?>
+				<?php _e( 'Apply tax to Billing Address' ); ?>
 					</label>
 	            </p>
 	            <p>
@@ -74,7 +74,7 @@ function wpec_options_taxes() {
 						<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' && $wpec_taxes_options['wpec_billing_shipping_preference'] == 'shipping_address' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='shipping_address' id='wpec_shipping_preference' name='wpsc_options[wpec_billing_shipping_preference]' />
-<?php echo __( 'Apply tax to Shipping Address' ); ?>
+<?php _e( 'Apply tax to Shipping Address' ); ?>
 					</label>
 	            </p>
 			</div>
@@ -84,7 +84,7 @@ function wpec_options_taxes() {
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing' id='wpec_taxes_logic_2' name='wpsc_options[wpec_taxes_logic]' />
-					<?php echo __( 'Apply tax when Billing Country is the same as Shops base location' ); ?>
+					<?php _e( 'Apply tax when Billing Country is the same as Shops base location' ); ?>
 			</label>
 		</p>
 		<p>
@@ -92,12 +92,12 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'shipping' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='shipping' id='wpec_taxes_logic_3' name='wpsc_options[wpec_taxes_logic]' />
-					<?php echo __( 'Apply tax when Shipping Country is the same as Shops base location' ); ?>
+					<?php _e( 'Apply tax when Shipping Country is the same as Shops base location' ); ?>
 			</label>
 		</p>
 		<div id='metabox-holder' class="metabox-holder">
 			<div id='wpec-taxes-rates-container' class='postbox'>
-				<h3 class='hndle' style='cursor: default'><?php echo __( 'Tax Rates' ); ?></h3>
+				<h3 class='hndle' style='cursor: default'><?php _e( 'Tax Rates' ); ?></h3>
 				<div id='wpec-taxes-rates' class='inside'>
 					<!--Start Taxes Output-->
 <?php
@@ -137,12 +137,12 @@ function wpec_options_taxes() {
 ?>
 					<!--End Taxes Output-->
 					<p>
-						<a id="add_taxes_rate" href="#"><?php echo __( 'Add New Tax Rate' ); ?></a>
+						<a id="add_taxes_rate" href="#"><?php _e( 'Add New Tax Rate' ); ?></a>
 					</p>
 				</div>
 			</div>
 			<div id='wpec-taxes-bands-container' class='postbox'>
-				<h3 class='hndle' style='cursor: default'><?php echo __( 'Tax Bands' ); ?></h3>
+				<h3 class='hndle' style='cursor: default'><?php _e( 'Tax Bands' ); ?></h3>
 				<div id='wpec-taxes-bands' class='inside'>
 
 <?php
@@ -163,7 +163,7 @@ function wpec_options_taxes() {
 					}// if
 ?>
 					<p>
-						<a id="add_taxes_band" href="#"><?php echo __( 'Add New Tax Band' ); ?></a>
+						<a id="add_taxes_band" href="#"><?php _e( 'Add New Tax Band' ); ?></a>
 								</p>
 							</div>
 						</div><!--wpec-taxes-bands-container-->

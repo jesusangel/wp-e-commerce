@@ -12,7 +12,7 @@ function wpsc_options_general() {
 		?>
 		<table class='wpsc_options form-table'>
 			<tr>
-				<th scope="row"><?php echo __( 'Base Country/Region', 'wpsc' ); ?>: </th>
+				<th scope="row"><?php _e( 'Base Country/Region', 'wpsc' ); ?>: </th>
 				<td>
 					<select name='wpsc_options[base_country]' onchange='submit_change_country();'>
 
@@ -40,13 +40,13 @@ function wpsc_options_general() {
 
 <?php } ?>
 					</span>
-					<br /><?php echo __( 'Select your primary business location.', 'wpsc' ); ?>
+					<br /><?php _e( 'Select your primary business location.', 'wpsc' ); ?>
 				</td>
 			</tr>
 			<?php
 						/* SEE TAX SETTINGS PAGE
 						  <tr>
-						  <th scope="row"><?php echo __('Tax Settings', 'wpsc');?>:</th>
+						  <th scope="row"><?php _e('Tax Settings', 'wpsc');?>:</th>
 						  <td>
 						  <span id='options_region'>
 						  <?php
@@ -75,9 +75,9 @@ function wpsc_options_general() {
 						  }
 						  ?>
 						  <input <?php echo $tax_inprice1; ?> type='radio' name='wpsc_options[tax_inprice]' value='1' id='tax_inprice1' />
-						  <label for='tax_inprice1'><?php echo __('Yes', 'wpsc'); ?></label>
+						  <label for='tax_inprice1'><?php _e('Yes', 'wpsc'); ?></label>
 						  <input <?php echo $tax_inprice0; ?> type='radio' name='wpsc_options[tax_inprice]' value='0' id='tax_inprice0' />
-						  <label for='tax_inprice1'><?php echo __('No', 'wpsc'); ?></label>
+						  <label for='tax_inprice1'><?php _e('No', 'wpsc'); ?></label>
 						  </td>
 						  </tr>
 						  END SEE TAX SETTINGS PAGE */
@@ -88,7 +88,7 @@ function wpsc_options_general() {
 			?>
 				<tr>
 					<th scope="row">
-					<?php echo __( 'Target Markets', 'wpsc' ); ?>:
+					<?php _e( 'Target Markets', 'wpsc' ); ?>:
 					</th>
 					<td>
 					<?php
@@ -121,10 +121,10 @@ function wpsc_options_general() {
 				</tr>
 			</table>
 
-			<h3 class="form_group"><?php echo __( 'Currency Settings', 'wpsc' ); ?>:</h3>
+			<h3 class="form_group"><?php _e( 'Currency Settings', 'wpsc' ); ?>:</h3>
 			<table class='wpsc_options form-table'>
 				<tr>
-					<th scope="row"><?php echo __( 'Currency type', 'wpsc' ); ?>:</th>
+					<th scope="row"><?php _e( 'Currency type', 'wpsc' ); ?>:</th>
 				<td>
 					<select name='wpsc_options[currency_type]' onchange='getcurrency(this.options[this.selectedIndex].value);'>
 						<?php
@@ -149,7 +149,7 @@ function wpsc_options_general() {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php echo __( 'Currency sign location', 'wpsc' ); ?>:</th>
+				<th scope="row"><?php _e( 'Currency sign location', 'wpsc' ); ?>:</th>
 					<td>
 					<?php
 						$currency_sign_location = get_option( 'currency_sign_location' );
@@ -190,7 +190,7 @@ function wpsc_options_general() {
 			<div class="submit">
 				<input type='hidden' name='wpsc_admin_action' value='submit_options' />
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
-						<input type="submit" value="<?php echo __( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption"/>
+						<input type="submit" value="<?php _e( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption"/>
 								</div>
 							</div>
 						</form>

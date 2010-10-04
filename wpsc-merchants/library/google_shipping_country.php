@@ -4,7 +4,7 @@ global $wpdb;
 ?>
 
 <div class="wrap">
-<h2><?php echo __('Google Shipping Country', 'wpsc');?></h2>
+<h2><?php _e('Google Shipping Country', 'wpsc');?></h2>
 <form action='' method='post'>
 <?php
 	$google_shipping_country = get_option("google_shipping_country");
@@ -41,6 +41,6 @@ global $wpdb;
 ?>
 	<a style="cursor:pointer;" onclick="jQuery('input[type=\'checkbox\']').each(function() {this.checked = true; });">Select All</a>&emsp; <a style="cursor:pointer;" onclick="jQuery('input[type=\'checkbox\']').each(function() {this.checked = false; });">Unselect All</a><br /><br />
 	<input type='hidden' name='wpsc_admin_action' value='google_shipping_settings' />
-		<input class='button-secondary' type='submit' name='submit' value='<?php echo __('Save Changes', 'wpsc');?>' /> <a href='?page=<?=$_GET['page']?>'>Go Back</a>
+		<input class='button-secondary' type='submit' name='submit' value='<?php _e('Save Changes', 'wpsc');?>' /> <a href='?page=<?=$_GET['page']?>'>Go Back</a>
 	</form>
 </div>

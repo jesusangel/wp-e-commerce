@@ -80,16 +80,16 @@ $image_height = get_option('single_view_image_height');
 						<form class='product_form' enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="1" id="product_<?php echo wpsc_the_product_id(); ?>">
 						<?php if(wpsc_product_has_personal_text()) : ?>
 							<div class='custom_text'>
-								<h4><?php echo __('Personalize your product', 'wpsc'); ?></h4>
-								<?php echo __('Complete this form to include a personalized message with your purchase.', 'wpsc'); ?><br />
+								<h4><?php _e('Personalize your product', 'wpsc'); ?></h4>
+								<?php _e('Complete this form to include a personalized message with your purchase.', 'wpsc'); ?><br />
 								<input type='text' name='custom_text' value=''  />
 							</div>
 						<?php endif; ?>
 						
 						<?php if(wpsc_product_has_supplied_file()) : ?>
 							<div class='custom_file'>
-								<h4><?php echo __('Upload a File', 'wpsc'); ?></h4>
-								<?php echo __('Select a file from your computer to include with this purchase.  ', 'wpsc'); ?><br />
+								<h4><?php _e('Upload a File', 'wpsc'); ?></h4>
+								<?php _e('Select a file from your computer to include with this purchase.  ', 'wpsc'); ?><br />
 								<input type='file' name='custom_file' value=''  />
 							</div>
 						<?php endif; ?>
@@ -114,7 +114,7 @@ $image_height = get_option('single_view_image_height');
 						
 						<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
 						<?php if(wpsc_has_multi_adding()): ?>
-							<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php echo __('Quantity', 'wpsc'); ?>:</label>
+							<label class='wpsc_quantity_update' for='wpsc_quantity_update'><?php _e('Quantity', 'wpsc'); ?>:</label>
 							
 							<input type="text" id='wpsc_quantity_update' name="wpsc_quantity_update" size="2" value="1"/>
 							<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
@@ -123,7 +123,7 @@ $image_height = get_option('single_view_image_height');
 					
 						<div class="wpsc_product_price">
 							<?php if(wpsc_product_is_donation()) : ?>
-								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php echo __('Donation', 'wpsc'); ?>:</label>
+								<label for='donation_price_<?php echo wpsc_the_product_id(); ?>'><?php _e('Donation', 'wpsc'); ?>:</label>
 								<input type='text' id='donation_price_<?php echo wpsc_the_product_id(); ?>' name='donation_price' value='<?php echo $wpsc_query->product['price']; ?>' size='6' />
 								<br />
 							
@@ -131,16 +131,16 @@ $image_height = get_option('single_view_image_height');
 							<?php else : ?>
 								<?php if(wpsc_product_on_special()) : ?>
 								
-										<span class='oldprice'><span id="old_product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span><?php echo __('Price', 'wpsc'); ?>:</span><br />
+										<span class='oldprice'><span id="old_product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_product_normal_price(); ?></span><?php _e('Price', 'wpsc'); ?>:</span><br />
 								<?php endif; ?>
-								<span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><?php echo __('Price', 'wpsc'); ?>:  <br/>
+								<span id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay"><?php echo wpsc_the_product_price(); ?></span><?php _e('Price', 'wpsc'); ?>:  <br/>
 								<!-- multi currency code -->
 								<?php if(wpsc_product_has_multicurrency()) : ?>
 								<?php echo wpsc_display_product_multicurrency(); ?>
 								<?php endif; ?>
 								<!-- end multi currency code -->
 								<?php if(get_option('display_pnp') == 1) : ?>
-									<span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><?php echo __('P&amp;P', 'wpsc'); ?>:  <br />
+									<span class="pricedisplay"><?php echo wpsc_product_postage_and_packaging(); ?></span><?php _e('P&amp;P', 'wpsc'); ?>:  <br />
 								<?php endif; ?>							
 							<?php endif; ?>
 						</div>
@@ -161,18 +161,18 @@ $image_height = get_option('single_view_image_height');
 						<?php if(wpsc_product_has_stock()) : ?>
 							<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 										<?php	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-										<input class="wpsc_buy_button" type='button' value='<?php echo __('Buy Now', 'wpsc'); ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
+										<input class="wpsc_buy_button" type='button' value='<?php _e('Buy Now', 'wpsc'); ?>' onclick='gotoexternallink("<?php echo $action; ?>")'>
 										<?php else: ?>
-									<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+									<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 										<?php endif; ?>
 							
 							<div class='wpsc_loading_animation'>
 								<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" class="loadingimage" />
-								<?php echo __('Updating cart...', 'wpsc'); ?>
+								<?php _e('Updating cart...', 'wpsc'); ?>
 							</div>
 							
 						<?php else : ?>
-							<p class='soldout'><?php echo __('This product has sold out.', 'wpsc'); ?></p>
+							<p class='soldout'><?php _e('This product has sold out.', 'wpsc'); ?></p>
 						<?php endif ; ?>
 					<?php endif ; ?>
 					</form>

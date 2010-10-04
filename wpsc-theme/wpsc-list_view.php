@@ -92,7 +92,7 @@ global $wpsc_query, $wpdb;
 													
 							<?php if(wpsc_has_multi_adding()): ?>
                             <div class="quantity_container">
-								<label class="wpsc_quantity_update" for="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>"><?php echo __('Quantity', 'wpsc'); ?>:</label>
+								<label class="wpsc_quantity_update" for="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>"><?php _e('Quantity', 'wpsc'); ?>:</label>
 								<input type="text" id="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>" name="wpsc_quantity_update" size="2" value="1" />
 								<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 								<input type="hidden" name="wpsc_update_quantity" value="true" />
@@ -109,17 +109,17 @@ global $wpsc_query, $wpdb;
 									<div class="wpsc_buy_button_container">
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-											<input class="wpsc_buy_button" type="button" value="<?php echo __('Buy Now', 'wpsc'); ?>' onclick='gotoexternallink("<?php echo $action; ?>")">
+											<input class="wpsc_buy_button" type="button" value="<?php _e('Buy Now', 'wpsc'); ?>' onclick='gotoexternallink("<?php echo $action; ?>")">
 											<?php else: ?>
-										<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
+										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
 											<?php endif; ?>
 										<div class="wpsc_loading_animation">
 											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" />
-											<?php echo __('Updating cart...', 'wpsc'); ?>
+											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
 									</div><!--close wpsc_buy_button_container-->
 								<?php else : ?>
-									<p class="soldout"><?php echo __('This product has sold out.', 'wpsc'); ?></p>
+									<p class="soldout"><?php _e('This product has sold out.', 'wpsc'); ?></p>
 								<?php endif ; ?>
 							<?php endif ; ?>
 							
@@ -132,7 +132,7 @@ global $wpsc_query, $wpdb;
 		
 		
 		<?php if(wpsc_product_count() == 0):?>
-			<p><?php  echo __('There are no products in this group.', 'wpsc'); ?></p>
+			<p><?php  _e('There are no products in this group.', 'wpsc'); ?></p>
 		<?php endif ; ?>
 
 	<?php

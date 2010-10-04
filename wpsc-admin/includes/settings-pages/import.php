@@ -9,7 +9,7 @@ function wpsc_options_import() {
 ?>
 	<form name='cart_options' enctype='multipart/form-data' id='cart_options' method='post' action='<?php echo 'admin.php?page=wpsc-settings&tab=import'; ?>'>
 		<div class="wrap">
-<?php echo __( '<p>You can import your products from a comma delimited text file.</p><p>An example of a cvs import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>', 'wpsc' ); ?>
+<?php _e( '<p>You can import your products from a comma delimited text file.</p><p>An example of a cvs import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>', 'wpsc' ); ?>
 
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
 		<input type='hidden' name='MAX_FILE_SIZE' value='5000000' />

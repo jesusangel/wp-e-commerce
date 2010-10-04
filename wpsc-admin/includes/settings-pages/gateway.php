@@ -73,11 +73,11 @@ function wpsc_options_gateway() {
 								<div class='inside'>
 <?php } else { ?>
 								<div class="categorisation_title">
-									<strong class="form_group"><?php echo __( 'Payment Gateways', 'wpsc' ); ?></strong>
+									<strong class="form_group"><?php _e( 'Payment Gateways', 'wpsc' ); ?></strong>
 								</div>
 <?php } ?>
 
-								<p><?php echo __( 'Activate the payment gateways that you want to make available to your customers by selecting them below.', 'wpsc' ); ?></p>
+								<p><?php _e( 'Activate the payment gateways that you want to make available to your customers by selecting them below.', 'wpsc' ); ?></p>
 								<br />
 								<?php
 								$selected_gateways = get_option( 'custom_gateway_options' );
@@ -113,13 +113,13 @@ function wpsc_options_gateway() {
 								?>
 								<div class='submit gateway_settings'>
 									<input type='hidden' value='true' name='update_gateways' />
-									<input type='submit' value='<?php echo __( 'Update &raquo;', 'wpsc' ) ?>' name='updateoption' />
+									<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ) ?>' name='updateoption' />
 								</div>
 <?php if ( IS_WP27 ) { ?>
 								</div>
 							</div>
 <?php } ?>
-								<h4><?php echo __( 'We Recommend', 'wpsc' ); ?></h4>
+								<h4><?php _e( 'We Recommend', 'wpsc' ); ?></h4>
 								<a style="border-bottom:none;" href="https://www.paypal.com/nz/mrb/pal=LENKCHY6CU2VY" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/paypal-referal.gif" border="0" alt="Sign up for PayPal and start accepting credit card payments instantly." /></a> <br /><br />
 								<a style="border-bottom:none;" href="http://checkout.google.com/sell/?promo=seinstinct" target="_blank"><img src="https://checkout.google.com/buyer/images/google_checkout.gif" border="0" alt="Sign up for Google Checkout" /></a>
 
@@ -147,7 +147,7 @@ function wpsc_options_gateway() {
 								?>
 								<div class='submit' <?php echo $update_button_css; ?>>
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
-									<input type='submit' value='<?php echo __( 'Update &raquo;', 'wpsc' ) ?>' name='updateoption' />
+									<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ) ?>' name='updateoption' />
 								</div>
 							</div>
 					</td>

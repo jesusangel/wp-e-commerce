@@ -27,7 +27,7 @@ function wpsc_display_categories_page() {
 	?>
 	<script language='javascript' type='text/javascript'>
 		function conf() {
-			var check = confirm("<?php echo __('Are you sure you want to delete this category?', 'wpsc');?>");
+			var check = confirm("<?php _e('Are you sure you want to delete this category?', 'wpsc');?>");
 			if(check) {
 				return true;
 			} else {
@@ -50,7 +50,7 @@ function wpsc_display_categories_page() {
 		
 		?> </h2>
 		<p>
-				<?php echo __('Categorizing your products into groups help your customers find them. '.
+				<?php _e('Categorizing your products into groups help your customers find them. '.
 				'For instance if you sell hats and trousers you	might want to setup a Group called clothes and add hats and trousers to that group.', 'wpsc');?>
 		</p>		
 		<?php if (isset($_GET['deleted']) || isset($_GET['message'])) { ?>
@@ -198,7 +198,7 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 					</td>
 					
 					<td class='manage-column column-edit'>
-						<a href='<?php echo add_query_arg('category_id', $category->term_id); ?>'><?php echo __('Edit', 'wpsc'); ?></a>
+						<a href='<?php echo add_query_arg('category_id', $category->term_id); ?>'><?php _e('Edit', 'wpsc'); ?></a>
 					</td>
 				</tr>
 			</table>
@@ -234,7 +234,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 	<table class='category_forms'>
 		<tr>
 			<td>
-				<?php echo __('Name', 'wpsc'); ?>:
+				<?php _e('Name', 'wpsc'); ?>:
 			</td>
 			<td>
 				<input type='text'  class="text" name='name' value='<?php if(isset($category['name'])) echo $category['name']; ?>' />
@@ -513,11 +513,11 @@ function wpsc_admin_category_forms($category_id =  null) {
 					?>
 					<input type='hidden' name='category_id' value='<?php echo $category_id; ?>' />
 					<input type='hidden' name='submit_action' value='edit' />
-					<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php echo __('Edit Category', 'wpsc'); ?>' />
-					<a class='delete_button' style="text-decoration:none;" href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php echo __('Delete', 'wpsc'); ?></a>
+					<input class='button-primary' style='float:left;'  type='submit' name='submit' value='<?php _e('Edit Category', 'wpsc'); ?>' />
+					<a class='delete_button' style="text-decoration:none;" href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php _e('Delete', 'wpsc'); ?></a>
 				<?php } else { ?>
 					<input type='hidden' name='submit_action' value='add' />
-					<input class='button-primary'  type='submit' name='submit' value='<?php echo __('Add Category', 'wpsc');?>' />
+					<input class='button-primary'  type='submit' name='submit' value='<?php _e('Add Category', 'wpsc');?>' />
 				<?php } ?>    
 			</td>
 		</tr>

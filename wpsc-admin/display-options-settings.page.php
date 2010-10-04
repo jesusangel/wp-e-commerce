@@ -13,7 +13,7 @@ function wpsc_display_settings_page() {
 ?>
 	<div id="wpsc_options" class="wrap">
 		<div id="icon_card"><br /></div>
-		<h2><?php echo __( 'Store Settings', 'wpsc' ); ?></h2>
+		<h2><?php _e( 'Store Settings', 'wpsc' ); ?></h2>
 <?php
 	wpsc_the_settings_tabs();
 

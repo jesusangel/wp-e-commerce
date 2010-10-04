@@ -51,7 +51,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<div class='inside'>
 			<table>
 			<tr>
-				<td><?php echo __('Users must register before checking out', 'wpsc'); ?>:</td>
+				<td><?php _e('Users must register before checking out', 'wpsc'); ?>:</td>
 				<td>
 					<?php
 						$require_register = get_option('require_register');
@@ -67,11 +67,11 @@ $form_types = get_option('wpsc_checkout_form_fields');
 							break;
 						}
 		        ?>
-						<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-						<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php echo __('No', 'wpsc');?></label>
+						<input type='radio' value='1' name='wpsc_options[require_register]' id='require_register1' <?php echo $require_register1; ?> /> 					<label for='require_register1'><?php _e('Yes', 'wpsc');?></label> &nbsp;
+						<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php _e('No', 'wpsc');?></label>
 					</td>
 					<td>
-						<a title='<?php echo __('If yes then you must also turn on the wordpress option "Any one can register"', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+						<a title='<?php _e('If yes then you must also turn on the wordpress option "Any one can register"', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
 					</td>
      		</tr>
 	  
@@ -89,17 +89,17 @@ $form_types = get_option('wpsc_checkout_form_fields');
 						break;
 					}
 				?>
-				<td scope="row"><?php echo __('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
+				<td scope="row"><?php _e('Enable Shipping Same as Billing Option: ', 'wpsc'); ?>:</td>
 				<td>
 				<input type='radio' value='1' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling1' <?php if (isset($shippingBilling1)) echo $shippingBilling1; ?> /> 
-				<label for='shippingsameasbilling1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
+				<label for='shippingsameasbilling1'><?php _e('Yes', 'wpsc');?></label> &nbsp;
 				<input type='radio' value='0' name='wpsc_options[shippingsameasbilling]' id='shippingsameasbilling2' <?php if (isset($shippingBilling2)) echo $shippingBilling2; ?> /> 
-				<label for='shippingsameasbilling2'><?php echo __('No', 'wpsc');?></label>
+				<label for='shippingsameasbilling2'><?php _e('No', 'wpsc');?></label>
 				</td>
 				
 			</tr>
 			<tr>
-				<td><?php echo __('Force users to use SSL', 'wpsc'); ?>:</td>
+				<td><?php _e('Force users to use SSL', 'wpsc'); ?>:</td>
 				<td>
 				<?php
 					$wpsc_force_ssl = get_option('wpsc_force_ssl');
@@ -115,11 +115,11 @@ $form_types = get_option('wpsc_checkout_form_fields');
 						break;
 					}
 				        ?>
-					<input type='radio' value='1' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl1' <?php echo $wpsc_force_ssl1; ?> /> 					<label for='wpsc_force_ssl1'><?php echo __('Yes', 'wpsc');?></label> &nbsp;
-					<input type='radio' value='0' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl2' <?php echo $wpsc_force_ssl2; ?> /> 					<label for='wpsc_force_ssl2'><?php echo __('No', 'wpsc');?></label>
+					<input type='radio' value='1' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl1' <?php echo $wpsc_force_ssl1; ?> /> 					<label for='wpsc_force_ssl1'><?php _e('Yes', 'wpsc');?></label> &nbsp;
+					<input type='radio' value='0' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl2' <?php echo $wpsc_force_ssl2; ?> /> 					<label for='wpsc_force_ssl2'><?php _e('No', 'wpsc');?></label>
 				</td>
 				<td>
-					<a title='<?php echo __('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+					<a title='<?php _e('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
 				</td>
 			</tr>
 			<?php do_action('wpsc_checkout_settings_page'); ?>
@@ -128,7 +128,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 		</div>
 		</div>
 			<h3>Form Fields</h3>
-  			<p><?php echo __('Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name...', 'wpsc');?></p>
+  			<p><?php _e('Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name...', 'wpsc');?></p>
   			
 				<p>
 					<label for='wpsc_form_set'>Select a Form Set:</label>
@@ -244,8 +244,8 @@ $form_types = get_option('wpsc_checkout_form_fields');
         <input type='hidden' name='wpsc_admin_action' value='checkout_settings' />
         
 				<?php wp_nonce_field('update-options', 'wpsc-update-options'); ?>
-        <input class='button-primary' type='submit' name='submit' value='<?php echo __('Save Changes', 'wpsc');?>' />
-        <a href='#' onclick='return add_form_field();'><?php echo __('Add New Form Field', 'wpsc');?></a>
+        <input class='button-primary' type='submit' name='submit' value='<?php _e('Save Changes', 'wpsc');?>' />
+        <a href='#' onclick='return add_form_field();'><?php _e('Add New Form Field', 'wpsc');?></a>
   </p>
   </form>
 </div>

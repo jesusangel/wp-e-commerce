@@ -218,7 +218,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 		$product_data['product_object'] = new stdClass();
 	$product = $product_data['product_object'];
 	$post_ID = (int)$product_data["id"];
-	/* <h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php echo __('(enter in your product details here)', 'wpsc'); ?></h3> */
+	/* <h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php _e('(enter in your product details here)', 'wpsc'); ?></h3> */
 ?>
 	<h3 class='form_heading' style="display:none;">
 <?php
@@ -512,7 +512,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 			</div>
 			<div id="advanced-sortables" class="meta-box-sortables-wpec ui-sortable">
 				<div class="postbox">
-					<h3><?php echo __( 'Additional Description', 'wpsc' ); ?></h3>
+					<h3><?php _e( 'Additional Description', 'wpsc' ); ?></h3>
 					<div class="inside">
 
 						<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes( $product_data['additional_description'] ); ?></textarea>
@@ -656,18 +656,18 @@ function wpsc_price_control_forms($product_data){
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
 						); ?>; width:85px;; margin-left:30px;'>
-			<label for='add_form_special'><?php echo __( 'Sale Price :', 'wpsc' ); ?></label>
+			<label for='add_form_special'><?php _e( 'Sale Price :', 'wpsc' ); ?></label>
 			<div id='add_special'>
 				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2 ); ?>' name='meta[_wpsc_special_price]' />
 			</div>
 		</div>
 		<br style="clear:both" />
 		<br style="clear:both" />
-		<a href='#' class='wpsc_add_new_currency'>+ <?php echo __( 'New Currency', 'wpsc' ); ?></a>
+		<a href='#' class='wpsc_add_new_currency'>+ <?php _e( 'New Currency', 'wpsc' ); ?></a>
 		<br />
 		<!-- add new currency layer -->
 		<div class='new_layer'>
-			<label for='newCurrency[]'><?php echo __( 'Currency type', 'wpsc' ); ?>:</label><br />
+			<label for='newCurrency[]'><?php _e( 'Currency type', 'wpsc' ); ?>:</label><br />
 			<select name='newCurrency[]' class='newCurrency' style='width:42%'>
 			<?php
 				foreach ( (array)$currency_data as $currency ) {?>
@@ -676,7 +676,7 @@ function wpsc_price_control_forms($product_data){
 					</option> <?php
 				} ?>
 			</select>
-			<?php echo __( 'Price', 'wpsc' ); ?> : 
+			<?php _e( 'Price', 'wpsc' ); ?> : 
 			<input type='text' class='text' size='8' name='newCurrPrice[]' value='0.00' style='display:inline' />
 			<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><img src='<?php echo WPSC_URL; ?>/images/cross.png' /></a>
 
@@ -686,7 +686,7 @@ function wpsc_price_control_forms($product_data){
 		$i = 0;
 		foreach ( $product_alt_currency as $iso => $alt_price ) {
 			$i++; ?>
-			<br /><label for='newCurrency[]'><?php echo __( 'Currency type', 'wpsc' ); ?>:</label><br />
+			<br /><label for='newCurrency[]'><?php _e( 'Currency type', 'wpsc' ); ?>:</label><br />
 			<select name='newCurrency[]' class='newCurrency' style='width:42%'> <?php
 				foreach ( $currency_data as $currency ) {
 					if ( $iso == $currency['isocode'] )
@@ -698,7 +698,7 @@ function wpsc_price_control_forms($product_data){
 					</option> <?php
 				} ?>
 			</select>
-			<?php echo __( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
+			<?php _e( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
 			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_URL; ?>/images/cross.png' /></a><br />
 <?php	}
 
@@ -708,7 +708,7 @@ function wpsc_price_control_forms($product_data){
           <br/><input id='add_form_donation' type='checkbox' name='meta[_wpsc_is_donation]' value='yes' " . (($product_data['meta']['_wpsc_is_donation'] == 1) ? 'checked="checked"' : '') . " />&nbsp;<label for='add_form_donation'>" . __( 'This is a donation, checking this box populates the donations widget.', 'wpsc' ) . "</label>";
 ?>
 				<br /><br /> <input type='checkbox' value='1' name='table_rate_price[state]' id='table_rate_price'  <?php echo (((bool)$product_meta['table_rate_price']['state'] == true) ? 'checked=\'checked\'' : ''); ?> />
-				<label for='table_rate_price'><?php echo __( 'Table Rate Price', 'wpsc' ); ?></label>
+				<label for='table_rate_price'><?php _e( 'Table Rate Price', 'wpsc' ); ?></label>
 				<div id='table_rate'>
 					<a class='add_level' style='cursor:pointer;'>+ Add level</a><br />
 					<br style='clear:both' />
@@ -1367,12 +1367,12 @@ function wpsc_product_image_forms( $product_data = '' ) {
  */
 ?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search( 'wpsc_product_image_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search( 'wpsc_product_image_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
-		<h3 class='hndle'> <?php echo __( 'Product Images', 'wpsc' ); ?></h3>
+		<h3 class='hndle'> <?php _e( 'Product Images', 'wpsc' ); ?></h3>
 		<div class='inside'>
 
 			<?php edit_multiple_image_gallery( $product_data ); ?>
 
-			<p><strong <?php if ( isset( $display ) ) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php echo __( 'Manage Product Images', 'wpsc' ); ?></a></strong></p>
+			<p><strong <?php if ( isset( $display ) ) echo $display; ?>><a href="media-upload.php?post_id=<?php echo $product_data['id']; ?>&type=image&tab=gallery&TB_iframe=1&width=640&height=566" class="thickbox" title="Manage Your Product Images"><?php _e( 'Manage Product Images', 'wpsc' ); ?></a></strong></p>
 		</div>
 
 		<div style='clear:both'></div>
@@ -1437,14 +1437,14 @@ function wpsc_product_label_forms() {
 
 			<?php endif; ?>
 
-			<?php echo __( 'Label Control', 'wpsc' ); ?>
+			<?php _e( 'Label Control', 'wpsc' ); ?>
 		</h3>
 		<div class='inside'>
 			<table>
 				<tr>
 					<td colspan='2'>
-<?php echo __( 'Add Label', 'wpsc' ); ?> :
-						<a id='add_label'><?php echo __( 'Add Label', 'wpsc' ); ?></a>
+<?php _e( 'Add Label', 'wpsc' ); ?> :
+						<a id='add_label'><?php _e( 'Add Label', 'wpsc' ); ?></a>
 					</td>
 				</tr>
 				<tr>
@@ -1522,7 +1522,7 @@ function edit_multiple_image_gallery( $product_data ) {
 			  <input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image->ID; ?>' />
 			  <div class='previewimage' id='gallery_image_<?php echo $image->ID; ?>'>
 			  <a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
-			  <img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' /><br />
+			  <img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php _e('Preview', 'wpsc'); ?>' title='<?php _e('Preview', 'wpsc'); ?>' /><br />
 			  </a>
 			  <?php //echo wpsc_main_product_image_menu($product_data['id']); ?>
 			  </div>
@@ -1579,25 +1579,25 @@ function edit_multiple_image_gallery( $product_data ) {
   <ul>
 
   <li>
-  <input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php echo __('use default size', 'wpsc'); ?>(<a href='<?php echo $presentation_link; ?>' title='<?php echo __('This is set on the Settings Page', 'wpsc'); ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</a>)
+  <input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php _e('use default size', 'wpsc'); ?>(<a href='<?php echo $presentation_link; ?>' title='<?php _e('This is set on the Settings Page', 'wpsc'); ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</a>)
   </label>
 
   </li>
 
   <li>
-  <input type='radio' <?php echo (($thumbnail_state != 2) ? "checked='checked'" : "") ;?> name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php echo __('do not resize thumbnail image', 'wpsc'); ?></label><br />
+  <input type='radio' <?php echo (($thumbnail_state != 2) ? "checked='checked'" : "") ;?> name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php _e('do not resize thumbnail image', 'wpsc'); ?></label><br />
   </li>
 
   <li>
-  <input type='radio' <?php echo (($thumbnail_state == 2) ? "checked='checked'" : "") ;?>  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php echo __('use specific size', 'wpsc'); ?> </label>
+  <input type='radio' <?php echo (($thumbnail_state == 2) ? "checked='checked'" : "") ;?>  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php _e('use specific size', 'wpsc'); ?> </label>
   <div class='heightWidth image_resize_extra_forms' <?php echo (($thumbnail_state == 2) ? "style='display: block;'" : "") ;?>>
-  <input id='gallery_image_width' type='text' size='4' name='gallery_width' value='<?php echo $thumbnail_image_width; ?>' /><label for='gallery_image_width'><?php echo __('px width', 'wpsc'); ?></label>
-  <input id='gallery_image_height' type='text' size='4' name='gallery_height' value='<?php echo $thumbnail_image_height; ?>' /><label for='gallery_image_height'><?php echo __('px height', 'wpsc'); ?> </label>
+  <input id='gallery_image_width' type='text' size='4' name='gallery_width' value='<?php echo $thumbnail_image_width; ?>' /><label for='gallery_image_width'><?php _e('px width', 'wpsc'); ?></label>
+  <input id='gallery_image_height' type='text' size='4' name='gallery_height' value='<?php echo $thumbnail_image_height; ?>' /><label for='gallery_image_height'><?php _e('px height', 'wpsc'); ?> </label>
   </div>
   </li>
 
   <li>
-  <input type='radio'  name='gallery_resize' value='3' id='gallery_resize3' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize3'> <?php echo __('use separate thumbnail', 'wpsc'); ?></label><br />
+  <input type='radio'  name='gallery_resize' value='3' id='gallery_resize3' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize3'> <?php _e('use separate thumbnail', 'wpsc'); ?></label><br />
   <div class='browseThumb image_resize_extra_forms'>
   <input type='file' name='gallery_thumbnailImage' size='15' value='' />
   </div>

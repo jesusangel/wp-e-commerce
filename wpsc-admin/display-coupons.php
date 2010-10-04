@@ -148,12 +148,12 @@ function wpsc_display_coupons_page(){
 	}
 </script>
 <div class="wrap">
-  <h2><?php echo __('Coupons', 'wpsc');?></h2>
+  <h2><?php _e('Coupons', 'wpsc');?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
   <!-- <a target="_blank" href="http://www.instinct.co.nz/e-commerce/marketing/" class="about_this_page"><span>About This Page</span> </a> -->
 
  	<form action='' method='post'>
-		<input id='add_coupon_box_link' type='submit' class=' add_item_link button' name='add_coupon_button' value='<?php echo __('Create Coupon', 'wpsc');?>' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");return false;' />
+		<input id='add_coupon_box_link' type='submit' class=' add_item_link button' name='add_coupon_button' value='<?php _e('Create Coupon', 'wpsc');?>' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");return false;' />
 	</form>
 </div>
 <!-- <form name='edit_coupon' method='post' action=''>   -->
@@ -167,26 +167,26 @@ function wpsc_display_coupons_page(){
 <table class='add-coupon' >
  <tr>
    <th>
-   <?php echo __('Coupon Code', 'wpsc'); ?>
+   <?php _e('Coupon Code', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo __('Discount', 'wpsc'); ?>
+   <?php _e('Discount', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo __('Start', 'wpsc'); ?>
+   <?php _e('Start', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo __('Expiry', 'wpsc'); ?>
+   <?php _e('Expiry', 'wpsc'); ?>
    </th>
 <!--
    <th>
-   <?php echo __('Use Once', 'wpsc'); ?>
+   <?php _e('Use Once', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo __('Active', 'wpsc'); ?>
+   <?php _e('Active', 'wpsc'); ?>
    </th>
    <th>
-   <?php echo __('Apply On All Products', 'wpsc'); ?>
+   <?php _e('Apply On All Products', 'wpsc'); ?>
    </th>
 -->
  </tr>
@@ -499,16 +499,16 @@ function wpsc_marketing_meta_box(){
 ?>
 <form name='cart_options' method='post' action=''>
 	<input type='hidden' value='true' name='change-settings' />        
-	<p><span class='input_label'><?php echo __('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' /><span class='description'>  <?php echo __('Adds the \'Users who bought this also bought\' item to the single products page.', 'wpsc');?></span></p><br />
-	<p><span class='input_label'><?php echo __('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' /><span class='description'>  <?php echo __('Adds the \'Share this link\' item to the single products page.', 'wpsc');?></span></p><br />
-	<p><span class='input_label'> <?php echo __('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' /><span class='description'>  <?php echo __('Adds the \'How did you find out about us\' drop-down option at checkout.', 'wpsc')?></span></p><br />
-	<p><input  type='submit' class='button-primary' value='<?php echo __('Submit', 'wpsc');?>' name='form_submit' /></p>
+	<p><span class='input_label'><?php _e('Display Cross Sales', 'wpsc');?></span><input <?php echo $wpsc_also_bought1; ?> type='checkbox' name='wpsc_also_bought' /><span class='description'>  <?php _e('Adds the \'Users who bought this also bought\' item to the single products page.', 'wpsc');?></span></p><br />
+	<p><span class='input_label'><?php _e('Show Share This (Social Bookmarks)', 'wpsc');?></span><input <?php echo $wpsc_share_this1; ?> type='checkbox' name='wpsc_share_this' /><span class='description'>  <?php _e('Adds the \'Share this link\' item to the single products page.', 'wpsc');?></span></p><br />
+	<p><span class='input_label'> <?php _e('Display How Customer Found Us Survey', 'wpsc')?></span><input <?php echo $display_find_us1; ?> type='checkbox' name='display_find_us' /><span class='description'>  <?php _e('Adds the \'How did you find out about us\' drop-down option at checkout.', 'wpsc')?></span></p><br />
+	<p><input  type='submit' class='button-primary' value='<?php _e('Submit', 'wpsc');?>' name='form_submit' /></p>
 </form>
 <?php
 }
 function wpsc_rss_address_meta_box(){
 ?>
-	<p><?php echo __('People can use this RSS feed to keep up to date with your product list.', 'wpsc');?></p>
+	<p><?php _e('People can use this RSS feed to keep up to date with your product list.', 'wpsc');?></p>
 	<p><?php _e('RSS Feed Address','wpsc') ?> :	<?php echo get_bloginfo('url')."/index.php?rss=true&amp;action=product_list"; ?></p>
 <?php
 }

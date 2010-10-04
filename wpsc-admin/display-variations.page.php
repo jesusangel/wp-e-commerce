@@ -18,7 +18,7 @@ function wpsc_display_variations_page() {
 	?>
 	<script language='javascript' type='text/javascript'>
 		function conf() {
-			var check = confirm("<?php echo __('Are you sure you want to delete this product?', 'wpsc');?>");
+			var check = confirm("<?php _e('Are you sure you want to delete this product?', 'wpsc');?>");
 			if(check) {
 				return true;
 			} else {
@@ -36,7 +36,7 @@ function wpsc_display_variations_page() {
 		<?php // screen_icon(); ?>
 		<h2><?php echo esc_html( __('Display Variations', 'wpsc') ); ?> </h2>
 		<p>	
-				<?php echo __('A variation can be anything "optional" about a product. ie: Size, Color, etc <br />For example: if you are selling t-shirts you might setup a variation set called size with the values small, medium, large...', 'wpsc');?>
+				<?php _e('A variation can be anything "optional" about a product. ie: Size, Color, etc <br />For example: if you are selling t-shirts you might setup a variation set called size with the values small, medium, large...', 'wpsc');?>
 		</p>
   
 		
@@ -119,7 +119,7 @@ function wpsc_admin_variation_group_list() {
 						<tr class="variation-edit" id="variation-<?php echo $variation->term_id; ?>">
 								<td class="variation-name"><?php echo htmlentities($variation->name, ENT_QUOTES, 'UTF-8'); ?></td>
 								<td class="edit-variation">
-								<a href='<?php echo add_query_arg('variation_id', $variation->term_id); ?>'><?php echo __('Edit', 'wpsc'); ?></a>
+								<a href='<?php echo add_query_arg('variation_id', $variation->term_id); ?>'><?php _e('Edit', 'wpsc'); ?></a>
 								</td>
 						</tr>
 					<?php
@@ -164,18 +164,18 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 	}
 	if($variation_name != '') {
 		?>
-		<h3><?php echo __('Edit Variation Set', 'wpsc'); ?><span> (<a href="admin.php?page=wpsc-edit-variations">Add new Variation Set</a>)</span></h3>
+		<h3><?php _e('Edit Variation Set', 'wpsc'); ?><span> (<a href="admin.php?page=wpsc-edit-variations">Add new Variation Set</a>)</span></h3>
 		<?php
 	} else {
 		?>
-		<h3><?php echo __('Add Variation Set', 'wpsc'); ?></h3>
+		<h3><?php _e('Add Variation Set', 'wpsc'); ?></h3>
 		<?php 
 	}
 	?>
 	<table class='category_forms'>
 		<tr>
 			<td>
-				<?php echo __('Name', 'wpsc'); ?>:
+				<?php _e('Name', 'wpsc'); ?>:
 			</td>
 			<td>
 				<input type='text'  class="text" name='name' value='<?php echo $variation_set['name']; ?>' />
@@ -183,7 +183,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 		</tr>
 		<tr>
 			<td>
-				<?php echo __('Variation Values', 'wpsc'); ?>:
+				<?php _e('Variation Values', 'wpsc'); ?>:
 			</td>
 			<td>
 				<div id='variation_values'>
@@ -199,7 +199,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 								<input type='hidden' class='variation_values_id' name='variation_values_id[]' value='<?php echo $variation->term_id; ?>' />
 								<?php if($variation_count > 1): ?>
 									<a class='image_link delete_variation_value' href='<?php echo $delete_url; ?>' >
-									  <img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo __('Delete', 'wpsc'); ?>' title='<?php echo __('Delete', 'wpsc'); ?>' />
+									  <img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php _e('Delete', 'wpsc'); ?>' title='<?php _e('Delete', 'wpsc'); ?>' />
 									</a>
 								<?php endif; ?>
 								</div>
@@ -212,7 +212,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 								<div class='variation_value'>
 									<input type='text' class="text" name='new_variation_values[]' value='' />
 										<a class='image_link delete_variation_value' href='#'>
-											<img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php echo __('Delete', 'wpsc'); ?>' title='<?php echo __('Delete', 'wpsc'); ?>' />
+											<img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php _e('Delete', 'wpsc'); ?>' title='<?php _e('Delete', 'wpsc'); ?>' />
 										</a>
 								</div>
 								<?php 
@@ -236,11 +236,11 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 					?>
 					<input type='hidden' name='variation_id' value='<?php echo $variation_id; ?>' />
 					<input type='hidden' name='submit_action' value='edit' />
-					<input class='button' style='float:left;'  type='submit' name='submit' value='<?php echo __('Edit', 'wpsc'); ?>' />
-					<a class='button delete_button' href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php echo __('Delete', 'wpsc'); ?></a>
+					<input class='button' style='float:left;'  type='submit' name='submit' value='<?php _e('Edit', 'wpsc'); ?>' />
+					<a class='button delete_button' href='<?php echo $nonced_url; ?>' onclick="return conf();" ><?php _e('Delete', 'wpsc'); ?></a>
 				<?php } else { ?>
 					<input type='hidden' name='submit_action' value='add' />
-					<input class='button'  type='submit' name='submit' value='<?php echo __('Add', 'wpsc');?>' />
+					<input class='button'  type='submit' name='submit' value='<?php _e('Add', 'wpsc');?>' />
 				<?php } ?>    
 			</td>
 		</tr>

@@ -31,14 +31,14 @@ get_header(); ?>
 				
 				if(wpsc_cart_item_count() > 0) :
 				?>
-				<p><?php echo __('Please review your order', 'wpsc'); ?></p>
+				<p><?php _e('Please review your order', 'wpsc'); ?></p>
 				<table class="productcart">
 					<tr class="firstrow">
 						<td class='firstcol'></td>
-						<td><?php echo __('Product', 'wpsc'); ?>:</td>
-						<td><?php echo __('Quantity', 'wpsc'); ?>:</td>
-						<td><?php echo __('Price', 'wpsc'); ?>:</td>
-						<td><?php echo __('Shipping', 'wpsc'); ?>:</td>
+						<td><?php _e('Product', 'wpsc'); ?>:</td>
+						<td><?php _e('Quantity', 'wpsc'); ?>:</td>
+						<td><?php _e('Price', 'wpsc'); ?>:</td>
+						<td><?php _e('Shipping', 'wpsc'); ?>:</td>
 						<td></td>
 					</tr>
 					<?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
@@ -57,7 +57,7 @@ get_header(); ?>
 									<input type="text" name="quantity" size="2" value="<?php echo wpsc_cart_item_quantity(); ?>" />
 									<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
 									<input type="hidden" name="wpsc_update_quantity" value="true" />
-									<input type="submit" value="<?php echo __('Update', 'wpsc'); ?>" name="submit" />
+									<input type="submit" value="<?php _e('Update', 'wpsc'); ?>" name="submit" />
 								</form>
 							</td>
 							<td><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
@@ -67,7 +67,7 @@ get_header(); ?>
 									<input type="hidden" name="quantity" value="0" />
 									<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
 									<input type="hidden" name="wpsc_update_quantity" value="true" />
-									<button class='remove_button' type="submit"><span><?php echo __('Remove', 'wpsc'); ?></span></button>
+									<button class='remove_button' type="submit"><span><?php _e('Remove', 'wpsc'); ?></span></button>
 								</form>
 							</td>
 						</tr>
@@ -76,14 +76,14 @@ get_header(); ?>
 					<?php if(wpsc_uses_coupons()): ?>
 						
 						<?php if(wpsc_coupons_error()): ?>
-							<tr><td><?php echo __('Coupon is not valid.', 'wpsc'); ?></td></tr>
+							<tr><td><?php _e('Coupon is not valid.', 'wpsc'); ?></td></tr>
 						<?php endif; ?>
 						<tr>
 							<td colspan="2"><?php _e('Enter your coupon number'); ?> :</td>
 							<td  colspan="3" align='left'>
 								<form  method='post' action="<?php echo get_option('shopping_cart_url'); ?>">
 									<input type='text' name='coupon_num' id='coupon_num' value='<?php echo $wpsc_cart->coupons_name; ?>' />
-									<input type='submit' value='<?php echo __('Update', 'wpsc') ?>' />
+									<input type='submit' value='<?php _e('Update', 'wpsc') ?>' />
 								</form>
 							</td>
 						</tr>
@@ -112,7 +112,7 @@ get_header(); ?>
 						<table class="productcart">
 							<tr>
 								<td colspan='5'>
-									<?php echo __('Please choose a country below to calculate your shipping costs', 'wpsc'); ?>
+									<?php _e('Please choose a country below to calculate your shipping costs', 'wpsc'); ?>
 								</td>
 							</tr>
 				
@@ -121,14 +121,14 @@ get_header(); ?>
 									<?php if ($_SESSION['wpsc_update_location'] == true) :?>
 										<tr>
 											<td colspan='5' class='shipping_error' >
-												<?php echo __('Please provide a Zipcode and click Calculate in order to continue.', 'wpsc'); ?>
+												<?php _e('Please provide a Zipcode and click Calculate in order to continue.', 'wpsc'); ?>
 											</td>
 										</tr>
 									<?php endif; ?>
 								<?php else: ?>
 									<tr>
 										<td colspan='5' class='shipping_error' >
-											<?php echo __('Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.', 'wpsc'); ?>
+											<?php _e('Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.', 'wpsc'); ?>
 										</td>
 									</tr>
 								<?php endif; ?>
@@ -195,7 +195,7 @@ get_header(); ?>
 					<?php if(wpsc_uses_shipping()) : ?>
 						<tr class="total_price total_shipping">
 							<td colspan="3">
-								<?php echo __('Total Shipping', 'wpsc'); ?>
+								<?php _e('Total Shipping', 'wpsc'); ?>
 							</td>
 							<td colspan="2">
 								<span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
@@ -206,7 +206,7 @@ get_header(); ?>
 					  <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
 					<tr class="total_price">
 						<td colspan="3">
-							<?php echo __('Discount', 'wpsc'); ?>
+							<?php _e('Discount', 'wpsc'); ?>
 						</td>
 						<td colspan="2">
 							<span id="coupons_amount" class="pricedisplay"><?php echo wpsc_coupon_amount(); ?></span>
@@ -218,7 +218,7 @@ get_header(); ?>
 					
 					<tr class='total_price'>
 						<td colspan='3'>
-						<?php echo __('Total Price', 'wpsc'); ?>
+						<?php _e('Total Price', 'wpsc'); ?>
 						</td>
 						<td colspan='2'>
 							<span id='checkout_total' class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
@@ -260,9 +260,9 @@ get_header(); ?>
 						</fieldset>
 					<?php endif; ?>
 				
-					<h2><?php echo __('Please enter your contact details:', 'wpsc'); ?></h2>
-					<?php/* echo __('Note, Once you press submit, you will need to have your Credit card handy.', 'wpsc'); <br /> */?>
-					<?php echo __('Fields marked with an asterisk must be filled in.', 'wpsc'); ?>
+					<h2><?php _e('Please enter your contact details:', 'wpsc'); ?></h2>
+					<?php/* _e('Note, Once you press submit, you will need to have your Credit card handy.', 'wpsc'); <br /> */?>
+					<?php _e('Fields marked with an asterisk must be filled in.', 'wpsc'); ?>
 					<?php
 					  if(count($_SESSION['wpsc_checkout_misc_error_messages']) > 0) {
 							echo "<div class='login_error'>\n\r";
@@ -337,7 +337,7 @@ get_header(); ?>
 							<?php  //this HTML displays activated payment gateways?>
 							  
 								<?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?>
-									<h3><?php echo __('Select a payment gateway', 'wpsc');?></h3>
+									<h3><?php _e('Select a payment gateway', 'wpsc');?></h3>
 									<?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
 										<div class="custom_gateway">
 											<?php if(wpsc_gateway_internal_name() == 'noca'){ ?>
@@ -371,8 +371,8 @@ get_header(); ?>
 						<?php if(get_option('terms_and_conditions') != '') : ?>
 						<tr>
 							<td colspan='2'>
-				     			 <input type='checkbox' value='yes' name='agree' /> <?php echo __('I agree to The ', 'wpsc');?><a class='thickbox' target='_blank' href='<?php
-				      echo get_option('siteurl')."?termsandconds=true&amp;width=360&amp;height=400'"; ?>' class='termsandconds'><?php echo __('Terms and Conditions', 'wpsc');?></a>
+				     			 <input type='checkbox' value='yes' name='agree' /> <?php _e('I agree to The ', 'wpsc');?><a class='thickbox' target='_blank' href='<?php
+				      echo get_option('siteurl')."?termsandconds=true&amp;width=360&amp;height=400'"; ?>' class='termsandconds'><?php _e('Terms and Conditions', 'wpsc');?></a>
 				   		   </td>
 				 	   </tr>
 						<?php endif; ?>	
@@ -384,11 +384,11 @@ get_header(); ?>
 								<?php //exit('<pre>'.print_r($wpsc_gateway->wpsc_gateways[0]['name'], true).'</pre>');
 								 if(count($wpsc_gateway->wpsc_gateways) == 1 && $wpsc_gateway->wpsc_gateways[0]['name'] == 'Noca'){}else{?>
 									<input type='hidden' value='submit_checkout' name='wpsc_action' />
-									<input type='submit' value='<?php echo __('Make Purchase', 'wpsc');?>' name='submit' class='make_purchase' />
+									<input type='submit' value='<?php _e('Make Purchase', 'wpsc');?>' name='submit' class='make_purchase' />
 								<?php }/* else: ?>
 								
-								<br /><strong><?php echo __('Please login or signup above to make your purchase', 'wpsc');?></strong><br />
-								<?php echo __('If you have just registered, please check your email and login before you make your purchase', 'wpsc');?>
+								<br /><strong><?php _e('Please login or signup above to make your purchase', 'wpsc');?></strong><br />
+								<?php _e('If you have just registered, please check your email and login before you make your purchase', 'wpsc');?>
 								</td>
 								<?php endif;  */?>				
 							</td>
@@ -398,7 +398,7 @@ get_header(); ?>
 				</div>
 				<?php
 				else:
-					echo __('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";
+					_e('Oops, there is nothing in your cart.', 'wpsc') . "<a href=".get_option("product_list_url").">" . __('Please visit our shop', 'wpsc') . "</a>";
 				endif;
 				do_action('wpsc_bottom_of_shopping_cart');
 ?>

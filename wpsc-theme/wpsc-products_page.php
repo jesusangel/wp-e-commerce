@@ -113,7 +113,7 @@ global $wpsc_query, $wpdb, $wp_query;
 						<?php if(wpsc_the_product_additional_description()) : ?>
 						<div class="additional_description_container">
 							
-								<img class="additional_description_button"  src="<?php echo WPSC_URL; ?>/images/icon_window_expand.gif" alt="Additional Description" /><a href="<?php echo wpsc_the_product_permalink(); ?>" class="additional_description_link"><?php echo __('More Details', 'wpsc'); ?>
+								<img class="additional_description_button"  src="<?php echo WPSC_URL; ?>/images/icon_window_expand.gif" alt="Additional Description" /><a href="<?php echo wpsc_the_product_permalink(); ?>" class="additional_description_link"><?php _e('More Details', 'wpsc'); ?>
 							</a>
 							<div class="additional_description">
 								<p><?php echo wpsc_the_product_additional_description(); ?></p>
@@ -153,7 +153,7 @@ global $wpsc_query, $wpdb, $wp_query;
 							<!-- THIS IS THE QUANTITY OPTION MUST BE ENABLED FROM ADMIN SETTINGS -->
 							<?php if(wpsc_has_multi_adding()): ?>
 								<div class="wpsc_quantity_update">
-                                <label for="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>"><?php echo __('Quantity', 'wpsc'); ?>:</label>
+                                <label for="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>"><?php _e('Quantity', 'wpsc'); ?>:</label>
 								<input type="text" id="wpsc_quantity_update_<?php echo wpsc_the_product_id(); ?>" name="wpsc_quantity_update" size="2" value="1" />
 								<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>"/>
 								<input type="hidden" name="wpsc_update_quantity" value="true" />
@@ -162,16 +162,16 @@ global $wpsc_query, $wpdb, $wp_query;
 
 							<div class="wpsc_product_price">
 								<?php if(wpsc_product_is_donation()) : ?>
-									<label for="donation_price_<?php echo wpsc_the_product_id(); ?>"><?php echo __('Donation', 'wpsc'); ?>:</label>
+									<label for="donation_price_<?php echo wpsc_the_product_id(); ?>"><?php _e('Donation', 'wpsc'); ?>:</label>
 									<input type="text" id="donation_price_<?php echo wpsc_the_product_id(); ?>" name="donation_price" value="<?php echo $wpsc_query->product['price']; ?>" size="6" />
 
 								<?php else : ?>
 									<?php if(wpsc_product_on_special()) : ?>
-										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php echo __('Price', 'wpsc'); ?>:<span class="oldprice"><?php echo wpsc_product_normal_price(); ?></span></p>
+										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="oldprice"><?php echo wpsc_product_normal_price(); ?></span></p>
 									<?php endif; ?>
-									<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php echo __('Price', 'wpsc'); ?>:<span class="currentprice"><?php echo wpsc_the_product_price(); ?></span></p>
+									<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="currentprice"><?php echo wpsc_the_product_price(); ?></span></p>
 									<?php if(get_option('display_pnp') == 1) : ?>
-										<p class="pricedisplay"><?php echo __('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
+										<p class="pricedisplay"><?php _e('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
 									<?php endif; ?>							
 								<?php endif; ?>
 							</div><!--close wpsc_product_price-->
@@ -185,17 +185,17 @@ global $wpsc_query, $wpdb, $wp_query;
 									<div class="wpsc_buy_button_container">
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-											<input class="wpsc_buy_button" type="submit" value="<?php echo __('Buy Now', 'wpsc'); ?>" onclick="gotoexternallink("<?php echo $action; ?>")">
+											<input class="wpsc_buy_button" type="submit" value="<?php _e('Buy Now', 'wpsc'); ?>" onclick="gotoexternallink("<?php echo $action; ?>")">
 											<?php else: ?>
-										<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
 										<div class="wpsc_loading_animation">
 											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" />
-											<?php echo __('Updating cart...', 'wpsc'); ?>
+											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
 									</div><!--close wpsc_buy_button_container-->
 								<?php else : ?>
-									<p class="soldout"><?php echo __('This product has sold out.', 'wpsc'); ?></p>
+									<p class="soldout"><?php _e('This product has sold out.', 'wpsc'); ?></p>
 								<?php endif ; ?>
 							<?php endif ; ?>
 						</form><!--close product_form-->
@@ -215,7 +215,7 @@ global $wpsc_query, $wpdb, $wp_query;
 		<?php endwhile; ?>
 		<?php /** end the product loop here */?>
 		<?php if(wpsc_product_count() == 0):?>
-			<h3><?php  echo __('There are no products in this group.', 'wpsc'); ?></h3>
+			<h3><?php  _e('There are no products in this group.', 'wpsc'); ?></h3>
 		<?php endif ; ?>
 	<?php
 

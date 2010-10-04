@@ -262,13 +262,13 @@ if(!isset($purchlogs)){
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
 <img src='<?php echo WPSC_URL; ?>/images/lock_open.png' alt='clear lock icon' />&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
 				<?php endif; ?>
-<img src='<?php echo WPSC_URL; ?>/images/printer.png' alt='printer icon' />&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php echo __('View Packing Slip', 'wpsc'); ?></a>
+<img src='<?php echo WPSC_URL; ?>/images/printer.png' alt='printer icon' />&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php _e('View Packing Slip', 'wpsc'); ?></a>
 		
-<br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php echo __('Resend Receipt to Buyer', 'wpsc'); ?></a>
+<br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php _e('Resend Receipt to Buyer', 'wpsc'); ?></a>
 		  
-<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php echo __('Remove this record', 'wpsc') ?></a>
+<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php _e('Remove this record', 'wpsc') ?></a>
 
-<br /><br class='small' />&emsp;&ensp; 	<a href='<?php echo $page_back ?>'><?php echo __('Go Back', 'wpsc'); ?></a>
+<br /><br class='small' />&emsp;&ensp; 	<a href='<?php echo $page_back ?>'><?php _e('Go Back', 'wpsc'); ?></a>
 <br /><br />
 			</div>
 			</div>
@@ -283,11 +283,11 @@ if(!isset($purchlogs)){
  	?>	
  	<div class="meta-box-sortables ui-sortable" style="position: relative;"> 
  		<div class='postbox'> 
-			<h3 class='hndle'><?php echo __('e-Commerce Admin Menu', 'wpsc'); ?></h3>
+			<h3 class='hndle'><?php _e('e-Commerce Admin Menu', 'wpsc'); ?></h3>
 			<div class='inside'>
-				<a href='admin.php?page=wpsc-settings'><?php echo __('Shop Settings', 'wpsc'); ?></a><br />
-				<a href='admin.php?page=wpsc-settings&amp;tab=gateway'><?php echo __('Checkout Settings', 'wpsc'); ?></a><br />
-				<a href='admin.php?page=wpsc-settings&amp;tab=checkout'><?php echo __('Checkout Settings', 'wpsc'); ?></a><br />
+				<a href='admin.php?page=wpsc-settings'><?php _e('Shop Settings', 'wpsc'); ?></a><br />
+				<a href='admin.php?page=wpsc-settings&amp;tab=gateway'><?php _e('Checkout Settings', 'wpsc'); ?></a><br />
+				<a href='admin.php?page=wpsc-settings&amp;tab=checkout'><?php _e('Checkout Settings', 'wpsc'); ?></a><br />
 			</div>
 		</div>		
 	</div>
@@ -302,7 +302,7 @@ if(!isset($purchlogs)){
 			if((string)get_option('wpsc_ecom_news_hash') !== (string)$current_hash ) {
 				?>
 				<div class='postbox'> 
-					<h3 class='hndle'><?php echo __('WP e-Commerce News', 'wpsc'); ?></h3>
+					<h3 class='hndle'><?php _e('WP e-Commerce News', 'wpsc'); ?></h3>
 					<div class='inside'>
 					<ul class='ecom_dashboard'>
 					<?php
@@ -324,11 +324,11 @@ if(!isset($purchlogs)){
     function wpsc_ordersummary(){
     ?>
     	<div class='postbox'> 
-    	<h3 class='hndle'><?php echo __('Order Summary', 'wpsc'); ?></h3>
+    	<h3 class='hndle'><?php _e('Order Summary', 'wpsc'); ?></h3>
     
    		 <div class='inside'> 
       <div class='order_summary_subsection'>
-      <strong><?php echo __('Last 30 Days', 'wpsc'); ?></strong>
+      <strong><?php _e('Last 30 Days', 'wpsc'); ?></strong>
       <p id='log_total_month'>
       <?php 
       $year = date("Y");
@@ -341,7 +341,7 @@ if(!isset($purchlogs)){
       </p>
       </div>
       <div class='order_summary_subsection'>
-      <strong><?php echo __('Life Time', 'wpsc'); ?></strong>
+      <strong><?php _e('Life Time', 'wpsc'); ?></strong>
       <p id='log_total_absolute'>
       <?php
        //$total_income = $wpdb->get_results($sql,ARRAY_A);
@@ -351,15 +351,15 @@ if(!isset($purchlogs)){
       </div> 
      
       <div class='order_summary_subsection'>
-      <strong><?php echo __('Subscribe to your orders', 'wpsc'); ?></strong>
+      <strong><?php _e('Subscribe to your orders', 'wpsc'); ?></strong>
       <p>
-        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='middle' src='<?php echo WPSC_URL; ?>/images/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php echo __('Subscribe to an RSS feed', 'wpsc'); ?></span></a> <?php echo __('of your orders', 'wpsc'); ?>      </p>
+        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='middle' src='<?php echo WPSC_URL; ?>/images/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php _e('Subscribe to an RSS feed', 'wpsc'); ?></span></a> <?php _e('of your orders', 'wpsc'); ?>      </p>
       </div>
          <div class='order_summary_subsection'>
-      <strong><?php echo __('Plugin News', 'wpsc'); ?></strong>
+      <strong><?php _e('Plugin News', 'wpsc'); ?></strong>
       <p>
-      <?php echo __('The <a href="http://instinct.co.nz/blogshop/products-page/" target="_blank">WP DropShop Module</a> is the latest and most cutting edge shopping cart available online. Coupled with Grid View then your site will be the talk of street! <br/><br/>The <a href="http://instinct.co.nz/blogshop/products-page/" target="_blank">GridView Module</a> is a visual module built to enhance the way your product page looks.<br/><br/><a href="http://www.instinct.co.nz/wp-campaign-monitor/100">WP Campaign Monitor</a> is an email newsletter tool built just for WP users who want to send campaigns, track the results and manage their subscribers. The latest version integrates with e-commerce lite meaning that you will be able to send buyers email newsletters and much more. ', 'wpsc'); ?>        
-        <br /><br /><?php echo __('This shop is powered by ', 'wpsc'); ?><a href='http://www.instinct.co.nz'>Instinct</a>
+      <?php _e('The <a href="http://instinct.co.nz/blogshop/products-page/" target="_blank">WP DropShop Module</a> is the latest and most cutting edge shopping cart available online. Coupled with Grid View then your site will be the talk of street! <br/><br/>The <a href="http://instinct.co.nz/blogshop/products-page/" target="_blank">GridView Module</a> is a visual module built to enhance the way your product page looks.<br/><br/><a href="http://www.instinct.co.nz/wp-campaign-monitor/100">WP Campaign Monitor</a> is an email newsletter tool built just for WP users who want to send campaigns, track the results and manage their subscribers. The latest version integrates with e-commerce lite meaning that you will be able to send buyers email newsletters and much more. ', 'wpsc'); ?>        
+        <br /><br /><?php _e('This shop is powered by ', 'wpsc'); ?><a href='http://www.instinct.co.nz'>Instinct</a>
       </p>
       </div>
     </div>
@@ -368,7 +368,7 @@ if(!isset($purchlogs)){
       ?>
       <div class='gold-cart_pesterer'> 
         <div>
-        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php echo __('Upgrade to Gold', 'wpsc'); ?></a><?php echo __(' and unleash more functionality into your shop.', 'wpsc'); ?>
+        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php _e('Upgrade to Gold', 'wpsc'); ?></a><?php _e(' and unleash more functionality into your shop.', 'wpsc'); ?>
         </div>
       </div>
       
@@ -479,7 +479,7 @@ if(!isset($purchlogs)){
 								 'end_timestamp'	=> $purchlogs->current_end_timestamp);
 		?>	
 		<br />	
-		<p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL; ?>/images/download.gif' alt='' title='' /> <span> <?php echo __('Download CSV', 'wpsc'); ?></span></a></p>
+		<p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL; ?>/images/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a></p>
 	</form>
 	<br />
 	<script type="text/javascript">

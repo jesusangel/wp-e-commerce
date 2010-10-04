@@ -51,7 +51,7 @@ function wpsc_display_upgrades_page() {
 			</div>
 		</div>
 
-		<h2><?php echo __('Upgrades', 'wpsc');?></h2>
+		<h2><?php _e('Upgrades', 'wpsc');?></h2>
 		<div class='wpsc_gold_float'>
 			<div class='metabox-holder'>
 				<form method='post' id='gold_cart_form' action=''>
@@ -68,26 +68,26 @@ function wpsc_display_upgrades_page() {
 					  </div>
 
 					  
-						<h2><?php echo __('API Key Reset', 'wpsc');?></h2>
+						<h2><?php _e('API Key Reset', 'wpsc');?></h2>
 					  <div class='form-wrap' >
 							<p>
-								<?php echo __('Enter your API name and key to release it from an old site that you no longer use.', 'wpsc');?> <br /><br />
+								<?php _e('Enter your API name and key to release it from an old site that you no longer use.', 'wpsc');?> <br /><br />
 							</p>
 					  </div>
 					  </div>
 						<div class='postbox'>
-							<h3 class='hndle'><?php echo __('API Key Reset', 'wpsc');?></h3>
+							<h3 class='hndle'><?php _e('API Key Reset', 'wpsc');?></h3>
 							<p>
-										<label for='activation_name'><?php echo __('Name', 'wpsc');?>:</label>
+										<label for='activation_name'><?php _e('Name', 'wpsc');?>:</label>
 										<input class='text' type='text' size='40' value='<?php echo get_option('activation_name'); ?>' name='activation_name' id='activation_name' />
 							</p>
 							<p>
-										<label for='activation_key'><?php echo __('API Key', 'wpsc');?>:</label>
+										<label for='activation_key'><?php _e('API Key', 'wpsc');?>:</label>
 										<input class='text' type='text' size='40' value='<?php echo get_option('activation_key'); ?>' name='activation_key' id='activation_key' />
 							</p>
 							<p>
 										<input type='hidden' value='true' name='reset_api_key' />
-										<input type='submit' class='button-primary' value='<?php echo __('Reset API Key', 'wpsc');?>' name='submit_values' />
+										<input type='submit' class='button-primary' value='<?php _e('Reset API Key', 'wpsc');?>' name='submit_values' />
 							</p>
 						</div>
 						<?php
@@ -96,7 +96,7 @@ function wpsc_display_upgrades_page() {
 				</form>
 
 				
-				<h2><?php echo __("Upgrade Instructions", 'wpsc');?></h2>
+				<h2><?php _e("Upgrade Instructions", 'wpsc');?></h2>
 				<p>
 					<?php __("Copy the gold_cart_files directory into your plugins folder.", 'wpsc'); ?>
 				</p>

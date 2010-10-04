@@ -45,7 +45,7 @@ get_header(); ?>
 					//$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$primary_image->ID}&amp;width=120&amp;height=120";
 					//echo wpsc_product_image($primary_image->ID, 120, 120);
 					?>
-					<img class='product-image' src='<?php echo wpsc_product_image($primary_image->ID, 120, 120); ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
+					<img class='product-image' src='<?php echo wpsc_product_image($primary_image->ID, 120, 120); ?>' alt='<?php _e('Preview', 'wpsc'); ?>' title='<?php _e('Preview', 'wpsc'); ?>' />
 					<?php
 				}
 				?>
@@ -57,7 +57,7 @@ get_header(); ?>
 						<?php the_content('Read the rest of this entry &raquo;'); ?>
 					
 					
-					<span class="product-price"><?php echo __('Price', 'wpsc'); ?>: <?php echo wpsc_the_product_price(); ?></span>
+					<span class="product-price"><?php _e('Price', 'wpsc'); ?>: <?php echo wpsc_the_product_price(); ?></span>
 					</div>
 					
 					

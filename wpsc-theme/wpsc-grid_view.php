@@ -86,11 +86,11 @@ $image_height = get_option('product_image_height');
 						<?php endif; ?>
                         	<div class="price_container">
 							<?php if(wpsc_product_on_special()) : ?>
-										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php echo __('Price', 'wpsc'); ?>:<span class="oldprice"><?php echo wpsc_product_normal_price(); ?></span></p>
+										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="oldprice"><?php echo wpsc_product_normal_price(); ?></span></p>
 									<?php endif; ?>
-									<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php echo __('Price', 'wpsc'); ?>:<span class="currentprice"><?php echo wpsc_the_product_price(); ?></span></p>
+									<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="currentprice"><?php echo wpsc_the_product_price(); ?></span></p>
 									<?php if(get_option('display_pnp') == 1) : ?>
-										<p class="pricedisplay"><?php echo __('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
+										<p class="pricedisplay"><?php _e('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
 									<?php endif; ?>	 
 							</div><!--close price_container-->
 						<?php if(get_option('display_moredetails') == 1) : ?>
@@ -123,16 +123,16 @@ $image_height = get_option('product_image_height');
 							
 							<?php if((get_option('display_addtocart') == 1) && (get_option('addtocart_or_buynow') !='1')) :?> 	   
 								<?php if(wpsc_product_has_stock()) : ?>
-									<input type="submit" value="<?php echo __('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+									<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 								<?php else : ?>
-									<p class="soldout"><?php echo __('This product has sold out.', 'wpsc'); ?></p>
+									<p class="soldout"><?php _e('This product has sold out.', 'wpsc'); ?></p>
 								<?php endif ; ?>
 							<?php endif; ?>
 							
 							
 										<div class="wpsc_loading_animation">
 											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" />
-											<?php echo __('Updating cart...', 'wpsc'); ?>
+											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
                     </form>                    
 					</div><!--close grid_more_info-->
@@ -152,7 +152,7 @@ $image_height = get_option('product_image_height');
 		<?php endwhile; ?>
 		
 		<?php if(wpsc_product_count() == 0):?>
-			<p><?php  echo __('There are no products in this group.', 'wpsc'); ?></p>
+			<p><?php  _e('There are no products in this group.', 'wpsc'); ?></p>
 		<?php endif ; ?>
 		
 		
