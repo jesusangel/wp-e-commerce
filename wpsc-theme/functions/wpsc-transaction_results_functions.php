@@ -76,7 +76,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 		$purchase_log = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1", ARRAY_A );
 
-		if ( ($purchase_log['gateway'] == "testmode") && ($purchase_log['processed'] < 3) ) {
+		if ( ($purchase_log['gateway'] == "wpsc_merchant_testmode") && ($purchase_log['processed'] < 3) ) {
 			$message = stripslashes( get_option( 'wpsc_email_receipt' ) );
 			$message_html = $message;
 		} else {
@@ -86,7 +86,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		$order_url = site_url( "/wp-admin/admin.php?page=" . WPSC_DIR_NAME . "/display-log.php&amp;purchcaseid=" . $purchase_log['id'] );
 
 		// Checks for PayPal IPN
-		if ( (!isset( $_GET['ipn_request'] ) || $_GET['ipn_request'] != 'true') && (get_option( 'paypal_ipn' ) == 1) ) {
+		if ( (!isset( $_GET['ipn_request'] ) || $_GET['ipn_request'] != 'true') &&
+			 ((get_option( 'paypal_ipn' ) == 1)  && ($purchase_log['gateway'] == 'wpsc_merchant_paypal_standard')) ) {
 
 			if ( $purchase_log == null ) {
 
@@ -143,7 +144,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 						foreach ( $download_data as $single_download ) {
 							$file_data = get_post( $single_download['fileid'] );
 
-							//print('<pre>'.print_r($file_data, true).'</pre>');
 							if ( $single_download['uniqueid'] == null ) {// if the uniqueid is not equal to null, its "valid", regardless of what it is
 								$link[] = array( "url" => site_url( "?downloadid=" . $single_download['id'] ), "name" => $file_data->post_title );
 							} else {
@@ -168,7 +168,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 				$shipping_price = nzshpcrt_currency_display( $shipping, 1, true );
 
-				if ( isset( $purchase['gateway'] ) && $purchase['gateway'] != 'testmode' ) {
+				if ( isset( $purchase['gateway'] ) && $purchase['gateway'] != 'wpsc_merchant_testmode' ) {
 					if ( $gateway['internalname'] == $purch_data[0]['gateway'] ) {
 						$gateway_name = $gateway['name'];
 					}
