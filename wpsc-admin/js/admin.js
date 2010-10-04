@@ -1388,3 +1388,16 @@ function toggle_display_options(state) {
     break;
   }
 } 
+
+function show_status_box(id,image_id) {
+  state = document.getElementById(id).style.display; 
+  if(state != 'block') {
+    document.getElementById(id).style.display = 'block';
+    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_collapse.gif';
+  } else {
+    document.getElementById(id).style.display = 'none';
+    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_expand.gif';
+  }
+  return false;
+}
+  

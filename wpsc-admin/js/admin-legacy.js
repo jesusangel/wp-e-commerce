@@ -467,23 +467,6 @@ function checkimageresize() {
 	document.getElementById('image_resize2').checked = true;
 }
    
-      
-  
-
-
-  
-function show_status_box(id,image_id) {
-  state = document.getElementById(id).style.display; 
-  if(state != 'block') {
-    document.getElementById(id).style.display = 'block';
-    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_collapse.gif';
-  } else {
-    document.getElementById(id).style.display = 'none';
-    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_expand.gif';
-  }
-  return false;
-}
-  
 function submit_status_form(id) {
   document.getElementById(id).submit();
 }
