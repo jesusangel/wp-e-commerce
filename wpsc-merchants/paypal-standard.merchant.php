@@ -99,7 +99,15 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			//'tax' => '',
 			//'custom' => '',
 			'invoice' => $this->cart_data['session_id']
+		);
+
+		if ($this->cart_data['has_discounts']) {
+			// Pass a cart discount to PayPal
+			$paypal_vars += array(
+					'discount_amount_cart' => $this->cart_data['cart_discount_value'],
+					'tax_cart' => $this->cart_data['cart_tax']
 			);
+		}
 
 			if($this->cart_data['is_subscription'] == true) {
 
@@ -177,12 +185,17 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 					$paypal_vars += array(
 						"item_name_$i" => $cart_row['name'],
 						"amount_$i" => $this->format_price($cart_row['price']),
-						"tax_$i" => $this->format_price($cart_row['tax']),
 						"quantity_$i" => $cart_row['quantity'],
 						"item_number_$i" => $cart_row['product_id'],
 						"shipping_$i" => $this->format_price($cart_row['shipping']), // additional shipping for the the (first item / total of the items)
 						"shipping2_$i" => $this->format_price($cart_row['shipping']), // additional shipping beyond the first item
 					);
+					// Don't pass item tax amounts if cart has discount
+					if (!$this->cart_data['has_discounts']) {
+						$paypal_vars += array(
+							"tax_$i" => $this->format_price($cart_row['tax'])
+						);
+					}
 					++$i;
 				}
 				$paypal_vars += array(
@@ -192,7 +205,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 
 		// Payment Type settings to be sent to paypal
 
-		
 		if($this->cart_data['is_subscription'] == true) {
 			$paypal_vars += array(
 				'cmd'=> '_xclick-subscriptions'
