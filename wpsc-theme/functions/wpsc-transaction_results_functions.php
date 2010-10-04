@@ -117,7 +117,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		$email = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_log['id'] . " AND `form_id` = '" . $email_form_field[0]['id'] . "' LIMIT 1" );
 		$stock_adjusted = false;
 		$previous_download_ids = array( 0 );
-		$product_list = '';
+		$product_list = $product_list_html = '';
 
 		if ( ($cart != null) && ($errorcode == 0) ) {
 
@@ -164,7 +164,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				$total_shipping += $shipping;
 
 				$total += ( $row['price'] * $row['quantity']);
-				$message_price = nzshpcrt_currency_display( ($row['price'] * $row['quantity'] ), true );
+				$message_price = nzshpcrt_currency_display( ($row['price'] * $row['quantity'] ), true,true );
+				$message_price_html = nzshpcrt_currency_display( ($row['price'] * $row['quantity'] ), true,false );
 
 				$shipping_price = nzshpcrt_currency_display( $shipping, 1, true );
 
@@ -184,7 +185,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 						$additional_content = '';
 					}
 					$product_list .= " - " . $row['name'] . "  " . $message_price . " " . __( 'Click to download', 'wpsc' ) . ":";
-					$product_list_html .= " - " . $row['name'] . "  " . $message_price . "&nbsp;&nbsp;" . __( 'Click to download', 'wpsc' ) . ":\n\r";
+					$product_list_html .= " - " . $row['name'] . "  " . $message_price_html . "&nbsp;&nbsp;" . __( 'Click to download', 'wpsc' ) . ":\n\r";
 					foreach ( $link as $single_link ) {
 						$product_list .= "\n\r " . $single_link["name"] . ": " . $single_link["url"] . "\n\r";
 						$product_list_html .= "<a href='" . $single_link["url"] . "'>" . $single_link["name"] . "</a>\n";
@@ -193,7 +194,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 					$product_list_html .= $additional_content;
 				} else {
 
-					$product_list_html = '';
 					$plural = '';
 					if ( $row['quantity'] > 1 ) {
 						$plural = "s";
@@ -201,7 +201,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 					$product_list.= " - " . $row['quantity'] . " " . $row['name'] . "  " . $message_price . "\n\r";
 					if ( $shipping > 0 )
 						$product_list .= " - " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
-					$product_list_html.= "\n\r - " . $row['quantity'] . " " . $row['name'] . "  " . $message_price . "\n\r";
+					$product_list_html.= "\n\r - " . $row['quantity'] . " " . $row['name'] . "  " . $message_price_html . "\n\r";
 					if ( $shipping > 0 )
 						$product_list_html .= " &nbsp; " . __( 'Shipping', 'wpsc' ) . ":" . $shipping_price . "\n\r";
 				}
@@ -228,6 +228,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			// echo $total;
 			// $message.= "\n\r";
 			$product_list.= "Your Purchase No.: " . $purchase_log['id'] . "\n\r";
+			$product_list_html.= "Your Purchase No.: " . $purchase_log['id'] . "<BR/>\n\r";
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$discount_email.= __( 'Discount', 'wpsc' ) . "\n\r: ";
 				$discount_email .=$purchase_log['discount_data'] . ' : ' . nzshpcrt_currency_display( $purchase_log['discount_value'], 1, true ) . "\n\r";
@@ -238,7 +239,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$total_shipping_email = '';
 			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total_shipping, 1, true ) . "\n\r";
 			$total_price_email.= __( 'Total', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total, 1, true ) . "\n\r";
-			$product_list_html.= "Your Purchase No.: " . $purchase_log['id'] . "\n\n\r";
 
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$report.= $discount_email . "\n\r";
@@ -328,13 +328,9 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				wp_mail( get_option( 'purch_log_email' ), __( 'Purchase Report', 'wpsc' ), $report );
 			}
 			$wpsc_cart->submit_stock_claims( $purchase_log['id'] );
-			$wpsc_cart->empty_cart();
-			if ( $purchase_log['processed'] < 3 ) {
-				echo "<br />" . nl2br( str_replace( "$", '\$', $message_html ) );
-				return;
-			}
 
 			/// Empty the cart
+			$wpsc_cart->empty_cart();
 		}
 
 		if ( ($purchase_log['email_sent'] != 1) and ($sessionid != '') ) {
