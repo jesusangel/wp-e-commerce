@@ -30,6 +30,8 @@ if(!isset($purchlogs)){
 
  function wpsc_display_sales_log_index() {
 
+	 global $purchlogitem;
+
   	?>
 	<div class="wrap">
 		<?php //screen_icon(); ?>
