@@ -79,7 +79,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	
 	
-	if(isset($post_data['save'])) {
+	if(isset($post_data['save']) && $product->post_status == 'inherit') {
 		$post_data['post_status'] = 'draft';
 	} else if(isset($post_data['publish'])) {
 		$post_data['post_status'] = 'publish';	
