@@ -3,15 +3,13 @@
 add_action( 'wpsc_core_included', 'wpsc_instantiate_purchaselogitem' );
 
 global $wpsc_purchlog_statuses;
-if (!isset($wpsc_purchlog_statuses) || !count($wpsc_purchlog_statuses)) {
+if (!isset($wpsc_purchlog_statuses) || !count($wpsc_purchlog_statuses))
 	wpsc_core_load_purchase_log_statuses();
-}
 
 function wpsc_instantiate_purchaselogitem() {
 	global $purchlogitem;
-	if ( isset( $_REQUEST['purchaselog_id'] ) ) {
+	if ( isset( $_REQUEST['purchaselog_id'] ) )
 		$purchlogitem = new wpsc_purchaselogs_items( (int)$_REQUEST['purchaselog_id'] );
-	}
 
 }
 
@@ -22,11 +20,11 @@ function wpsc_display_purchlog_howtheyfoundus() {
 
 function wpsc_display_purchlog_display_howtheyfoundus() {
 	global $purchlogitem;
-	if ( $purchlogitem->extrainfo->find_us != '' ) {
+	if ( $purchlogitem->extrainfo->find_us != '' )
 		return true;
-	} else {
+	else
 		return false;
-	}
+	
 // exit('<pre>'.print_r($purchlogitem, true).'</pre>');
 }
 

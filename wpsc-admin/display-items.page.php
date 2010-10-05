@@ -280,15 +280,13 @@ function wpsc_display_edit_products_page() {
 		// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
 		$itempp = 20;
 
-		$num_products = $wpdb->get_var( "SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= 0 $search_sql" );
+		//$num_products = $wpdb->get_var( "SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= 0 $search_sql" );
 		if ( isset( $_GET['product'] ) && (is_numeric( $_GET['product'] )) ) {
 			$parent_product = absint( $_GET['product'] );
-			$num_products = $wpdb->get_var( "SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= $parent_product $search_sql" );
+			//$num_products = $wpdb->get_var( "SELECT COUNT(DISTINCT `products`.`id`) FROM $wpdb->posts AS `products` WHERE `products`.`post_type`= 'wpsc-product' AND `products`.`post_parent`= $parent_product $search_sql" );
 		}
 
-		if ( isset( $itempp ) ) {
-			$num_pages = ceil( $num_products / $itempp );
-		}
+	
 
 		$search_input = '';
 		if ( isset( $_GET['search'] ) ) {
@@ -330,10 +328,11 @@ function wpsc_display_edit_products_page() {
 			$search = $_GET['search'];
 			$query['s'] = $search;
 		}
-
-		//$posts = get_posts( $query );
-		//wp($query);
 		$wp_query = new WP_Query( $query );
+
+		if ( isset( $itempp ) )
+			$num_pages = ceil( $wp_query->found_posts / $itempp );
+
 		remove_filter( 'posts_request', 'wpsc_edit_variations_request_sql' );
 
 		if ( $page !== null ) {
@@ -348,9 +347,6 @@ function wpsc_display_edit_products_page() {
 		}
 
 		$this_page_url = stripslashes( $_SERVER['REQUEST_URI'] );
-
-		//$posts = get_object_taxonomies('wpsc-product');
-		//echo "<pre>".print_r($posts, true)."</pre>";
 
 		$is_trash = isset( $_GET['post_status'] ) && $_GET['post_status'] == 'trash';
 

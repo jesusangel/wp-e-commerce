@@ -18,23 +18,6 @@ if ( isset( $_REQUEST['wpsc_ajax_action'] ) && ($_REQUEST['wpsc_ajax_action'] ==
 	add_action( 'init', 'wpsc_special_widget' );
 }
 
-
-// function wpsc_api_key_finder(){
-//    global $wpdb;
-//    $transactid = $wpdb->escape($_POST['wpsc_transaction_id']);
-//    $sql = 'SELECT `id` FROM `'.WPSC_TABLE_PURCHASE_LOGS.'` WHERE `transactid`='.$transactid;
-//    $id = $wpdb->get_var($sql);
-//    $sql = 'SELECT `name`, `key`, `first_name` FROM `'.$wpdb->prefix.'api_keys` WHERE `purchase_id`='.$id;
-//    $api_info = $wpdb->get_results($sql);
-//    $_SESSION['api_info'] = $api_info;
-//    //exit('ID<pre>'.print_r($id, true).'</pre>');
-//    exit();
-// }
-//
-// if($_REQUEST['wpsc_ajax_action'] == 'api_key_finder') {
-//    add_action('init', 'wpsc_api_key_finder');
-// }
-
 /**
  * add_to_cart function, used through ajax and in normal page loading.
  * No parameters, returns nothing
