@@ -1333,7 +1333,7 @@ function wpsc_the_variation_stock() {
 
 		$wpq = array( 'variations' => $wpsc_variations->variation->slug,
 			'post_status' => 'inherit',
-			'post_type' => 'wpsc-product',
+			'post_type'   => 'wpsc-product',
 			'post_parent' => $product_id );
 
 		$query = new WP_Query( $wpq );
@@ -1344,8 +1344,8 @@ function wpsc_the_variation_stock() {
 
 		$variation_product_id = $query->posts[0]->ID;
 		$stock                = get_product_meta( $variation_product_id, "stock" );
-		$stock                = apply_filters( 'wpsc_product_variation_stock', $stock[0], $id );
-		$output               = $stock;
+		$in_stock             = apply_filters( 'wpsc_product_variation_stock', $stock[0], $id );
+		$output               = (int)$in_stock;
 	} else {
 		$output = false;
 	}
