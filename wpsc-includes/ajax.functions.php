@@ -869,6 +869,10 @@ if ( isset( $_REQUEST['wpsc_ajax_action'] ) && ($_REQUEST['wpsc_ajax_action'] ==
  */
 function wpsc_scale_image() {
 	global $wpdb;
+
+	if ( !isset( $_REQUEST['wpsc_action'] ) || !isset( $_REQUEST['attachment_id'] ) || ( 'scale_image' != $_REQUEST['wpsc_action'] ) || !is_numeric( $_REQUEST['attachment_id'] ) )
+		return false;
+
 	require_once(ABSPATH . 'wp-admin/includes/image.php');
 	$attachment_id = absint( $_REQUEST['attachment_id'] );
 	$width = absint( $_REQUEST['width'] );
@@ -939,10 +943,7 @@ function wpsc_scale_image() {
 	}
 	exit();
 }
-
-if ( isset( $_REQUEST['wpsc_action'] ) && isset( $_REQUEST['attachment_id'] ) && ($_REQUEST['wpsc_action'] == 'scale_image') && is_numeric( $_REQUEST['attachment_id'] ) ) {
-	add_action( 'init', 'wpsc_scale_image' );
-}
+add_action( 'init', 'wpsc_scale_image' );
 
 function wpsc_download_file() {
 	global $wpdb, $user_level, $wp_rewrite;
