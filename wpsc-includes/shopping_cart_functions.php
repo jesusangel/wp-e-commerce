@@ -87,10 +87,7 @@ function wpsc_shopping_basket_internals( $cart, $quantity_limit = false, $no_tit
 
 	echo "    <div id='sliding_cart' class='shopping-cart-wrapper' $display_state>";
 
-	if ( file_exists( get_stylesheet_directory() . '/wpsc-cart_widget.php' ) )
-		include_once( get_stylesheet_directory() . '/wpsc-cart_widget.php' );
-	else
-		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
+	include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 
 	echo "    </div>";
 }

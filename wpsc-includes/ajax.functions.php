@@ -118,7 +118,7 @@ function wpsc_add_to_cart() {
 
 		ob_start();
 
-		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
+		include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 
 		$output = ob_get_contents();
 		ob_end_clean();
@@ -159,7 +159,7 @@ function wpsc_get_cart() {
 
 	ob_start();
 
-	include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
+	include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 	$output = ob_get_contents();
 
 	ob_end_clean();
@@ -206,7 +206,7 @@ function wpsc_empty_cart() {
 	if ( $_REQUEST['ajax'] == 'true' ) {
 		ob_start();
 
-		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
+		include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 		$output = ob_get_contents();
 
 		ob_end_clean();
@@ -304,7 +304,7 @@ function wpsc_update_item_quantity() {
 	if ( isset( $_REQUEST['ajax'] ) && $_REQUEST['ajax'] == 'true' ) {
 		ob_start();
 
-		include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
+		include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 		$output = ob_get_contents();
 
 		ob_end_clean();
@@ -768,7 +768,7 @@ function wpsc_change_tax() {
 	$total = wpsc_cart_total();
 	ob_start();
 
-	include_once( WPSC_CORE_THEME_PATH . 'wpsc-cart_widget.php' );
+	include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
 	$output = ob_get_contents();
 
 	ob_end_clean();
