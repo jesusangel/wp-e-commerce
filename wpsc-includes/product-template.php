@@ -788,43 +788,59 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
 
 /**
  * wpsc product thumbnail function
+ *
+ * Show the thumbnail image for the product
+ *
  * @return string - the URL to the thumbnail image
  */
-function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id='' ) {
-	// show the thumbnail image for the product
-	if(empty($product_id))
+function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id = 0 ) {
+
+	// Get the product ID if none was passed
+	if ( empty( $product_id ) )
 		$product_id = get_the_ID();
-	
-	$product = get_post($product_id);
-	if($product->post_parent != 0){
+
+	// Load the product
+	$product = get_post( $product_id );
+
+	// Get ID of parent product if one exists
+	if ( !empty( $product->post_parent ) )
 		$product_id = $product->post_parent;
-	}
-	if ( ($width < 10) || ($width < 10) ) {
-		$width = get_option( 'product_image_width' );
+
+	// Load image proportions if none were passed
+	if ( ( $width < 10 ) || ( $height < 10 ) ) {
+		$width  = get_option( 'product_image_width' );
 		$height = get_option( 'product_image_height' );
 	}
 
+	// Get all attached images to this product
 	$attached_images = (array)get_posts( array(
-				'post_type' => 'attachment',
-				'numberposts' => 1,
-				'post_status' => null,
-				'post_parent' => $product_id ,
-				'orderby' => 'menu_order',
-				'order' => 'ASC'
-			) );
+		'post_type'   => 'attachment',
+		'numberposts' => 1,
+		'post_status' => null,
+		'post_parent' => $product_id ,
+		'orderby'     => 'menu_order',
+		'order'       => 'ASC'
+	) );
 
-
+	// Figure out which thumbnail to use
 	if ( has_post_thumbnail( $product_id ) ) {
 		$post_thumbnail_id = get_post_thumbnail_id( $product_id  );
-		$image_link = wpsc_product_image( $post_thumbnail_id, $width, $height );
-		return $image_link;
-	} if ( $attached_images != null ) {
-		$attached_image = $attached_images[0];
-		$image_link = wpsc_product_image( $attached_image->ID, $width, $height );
-		return $image_link;
-	} else {
-		return false;
+
+		if ( $image_link = wpsc_product_image( $post_thumbnail_id, $width, $height ) ) {
+			return $image_link;
+		}
 	}
+
+	if ( null != $attached_images ) {
+		$attached_image = $attached_images[0];
+
+		if ( $image_link = wpsc_product_image( $attached_image->ID, $width, $height ) ) {
+			return $image_link;
+		}
+	}
+
+	// Return false as if no image was found
+	return false;
 }
 
 /**
