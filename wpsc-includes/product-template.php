@@ -1285,7 +1285,7 @@ function wpsc_product_count() {
  * wpsc the variation price function
  * @return string - the variation price
  */
-function wpsc_the_variation_price( $return_as_numeric = FALSE ) {
+function wpsc_the_variation_price( $return_as_numeric = false ) {
 	global $wpdb, $wpsc_variations;
 
 	if ( $wpsc_variations->variation_count > 0 ) {
@@ -1298,10 +1298,9 @@ function wpsc_the_variation_price( $return_as_numeric = FALSE ) {
 			'post_parent' => $product_id );
 		$query = new WP_Query( $wpq );
 
-		if ( $query->post_count != 1 ) {
-			// Should never happen
-			return FALSE;
-		}
+		// Should never happen
+		if ( $query->post_count != 1 )
+			return false;
 
 		$variation_product_id = $query->posts[0]->ID;
 
@@ -1344,8 +1343,8 @@ function wpsc_the_variation_stock() {
 		} else {
 			$vp_id     = $query->posts[0]->ID;
 			$stock     = get_product_meta( $vp_id, "stock" );
-			$in_stock  = apply_filters( 'wpsc_product_variation_stock', $stock[0], $id );
-			$output    = (int)$in_stock;
+			$stock[0]  = apply_filters( 'wpsc_product_variation_stock', $stock[0], $id );
+			$output    = $stock[0];
 		}
 	} else {
 		$output        = __( 'Unknown quantity', 'wpsc' );
