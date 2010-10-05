@@ -2054,8 +2054,8 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 function wpsc_checkout_settings() {
 	global $wpdb;
 	$wpdb->show_errors = true;
-	if ( isset( $_POST['selected_form_set'] ) ) {
-		$filter = $wpdb->escape( $_POST['selected_form_set'] );
+	if ( isset( $_POST['wpsc_form_set'] ) ) {
+		$filter = $wpdb->escape( $_POST['wpsc_form_set'] );
 	} else {
 		$filter = 0;
 	}
