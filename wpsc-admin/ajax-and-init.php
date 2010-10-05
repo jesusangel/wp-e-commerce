@@ -1033,7 +1033,7 @@ function wpsc_display_invoice() {
 
 	$body_id = 'wpsc-packing-slip';
 	$purchase_id = (int)$_GET['purchaselog_id'];
-	include_once(WPSC_FILE_PATH . "/admin-form-functions.php");
+	include_once(WPSC_FILE_PATH . "/wpsc-admin/admin-form-functions.php");
 	// echo "testing";
 	require_once(ABSPATH . 'wp-admin/includes/media.php');
 	wp_iframe( 'wpsc_packing_slip', $purchase_id );
