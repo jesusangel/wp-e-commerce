@@ -1339,15 +1339,16 @@ function wpsc_the_variation_stock() {
 		$query = new WP_Query( $wpq );
 
 		// Should never happen
-		if ( $query->post_count != 1 )
-			return FALSE;
-
-		$variation_product_id = $query->posts[0]->ID;
-		$stock                = get_product_meta( $variation_product_id, "stock" );
-		$in_stock             = apply_filters( 'wpsc_product_variation_stock', $stock[0], $id );
-		$output               = (int)$in_stock;
+		if ( $query->post_count != 1 ) {
+			$output    = __( 'Unknown quantity', 'wpsc' );
+		} else {
+			$vp_id     = $query->posts[0]->ID;
+			$stock     = get_product_meta( $vp_id, "stock" );
+			$in_stock  = apply_filters( 'wpsc_product_variation_stock', $stock[0], $id );
+			$output    = (int)$in_stock;
+		}
 	} else {
-		$output = false;
+		$output        = __( 'Unknown quantity', 'wpsc' );
 	}
 
 	return $output;
