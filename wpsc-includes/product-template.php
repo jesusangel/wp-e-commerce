@@ -812,34 +812,32 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 		$height = get_option( 'product_image_height' );
 	}
 
-	// Get all attached images to this product
-	$attached_images = (array)get_posts( array(
-		'post_type'   => 'attachment',
-		'numberposts' => 1,
-		'post_status' => null,
-		'post_parent' => $product_id ,
-		'orderby'     => 'menu_order',
-		'order'       => 'ASC'
-	) );
-
-	// Figure out which thumbnail to use
+	// Use product thumbnail
 	if ( has_post_thumbnail( $product_id ) ) {
-		$post_thumbnail_id = get_post_thumbnail_id( $product_id  );
+		$thumbnail_id = get_post_thumbnail_id( $product_id  );
 
-		if ( $image_link = wpsc_product_image( $post_thumbnail_id, $width, $height ) ) {
-			return $image_link;
-		}
+	// Use first product image
+	} else {
+
+		// Get all attached images to this product
+		$attached_images = (array)get_posts( array(
+			'post_type'   => 'attachment',
+			'numberposts' => 1,
+			'post_status' => null,
+			'post_parent' => $product_id ,
+			'orderby'     => 'menu_order',
+			'order'       => 'ASC'
+		) );
+
+		if ( !empty( $attached_images ) )
+			$thumbnail_id = $attached_images[0];
 	}
 
-	if ( null != $attached_images ) {
-		$attached_image = $attached_images[0];
+	// Return image link...
+	if ( !empty( $thumbnail_id ) && $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
+		return $image_link;
 
-		if ( $image_link = wpsc_product_image( $attached_image->ID, $width, $height ) ) {
-			return $image_link;
-		}
-	}
-
-	// Return false as if no image was found
+	// ... or false as if no image was found.
 	return false;
 }
 
