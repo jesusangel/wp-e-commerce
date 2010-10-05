@@ -830,7 +830,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 		) );
 
 		if ( !empty( $attached_images ) )
-			$thumbnail_id = $attached_images[0];
+			$thumbnail_id = $attached_images[0]->ID;
 	}
 
 	// Return image link...
