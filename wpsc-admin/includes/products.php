@@ -43,11 +43,11 @@ function wpsc_admin_product_listing($parent_product = null) {
 		$wpsc_products = &$wp_query->posts;
 	}
 	
-	foreach ( $wpsc_products as $product ) {
+	foreach ( (array)$wpsc_products as $product ) {
 		$product_ids[] = $product->ID;
 	}
 	
-	foreach ( $wpsc_products as $product ) {
+	foreach ( (array)$wpsc_products as $product ) {
 		wpsc_product_row($product, $parent_product);
 	}
 }
