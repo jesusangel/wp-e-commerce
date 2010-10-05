@@ -221,17 +221,19 @@ Author URI: http://instinct.co.nz
 	border:1px solid #ccc;	
 }
 
-.default_product_display .wpsc_buy_button {
+.default_product_display .wpsc_buy_button, #content .default_product_display .wpsc_buy_button {
 	background:url(images/addtocart.png) no-repeat scroll 0 0 transparent;
 	width:82px;
 	height:24px;
-	text-indent:-9999px;
-	*line-height:0;
+	font-size:13px;	
+	color:#ffffff;
 	border:none;
 	outline:none;
 	display:block;
-	cursor:pointer;	
+	cursor:pointer;
 }
+
+
 
 /*-----LIST VIEW PRODUCT DISPLAY-----*/
 #list_view_products_page_container {
@@ -279,18 +281,18 @@ table.list_productdisplay .wpsc_buy_button_container {
 	display:inline;
 }
 
-table.list_productdisplay .wpsc_buy_button {
+table.list_productdisplay .wpsc_buy_button, #content table.list_productdisplay .wpsc_buy_button {
 	background:url(images/addtocart.png) no-repeat scroll 0 0 transparent;
 	width:82px;
 	height:24px;
-	text-indent:-9999px;
-	line-height:0;
+	font-size:13px;
+	color:#ffffff;
 	border:none;
 	outline:none;
 	display:block;
 	cursor:pointer;	
-	color:#f0f;
 }
+
 
 table.list_productdisplay h2.prodtitle, #content table.list_productdisplay h2.prodtitle {
 	font-size:1.0em;
