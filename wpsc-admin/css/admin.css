@@ -1769,3 +1769,12 @@ a.update_variations, a.update_variations_action
 a.update_variations_action {
 	display:none;
 }
+#search-products{
+width:auto;
+float:right;
+}
+.productnav{
+height: 30px;
+margin: 6px 0px 4px;
+vertical-align: middle;
+}

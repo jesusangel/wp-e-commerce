@@ -372,8 +372,15 @@ function wpsc_display_edit_products_page() {
 		echo wpsc_admin_category_dropdown();
 		?>
 </form>
+<form id="search-products" action="admin.php?page=wpsc-edit-products" method="get">
+	<div class="alignright search-box">
+			<input type='hidden' name='page' value='wpsc-edit-products'  />
+			<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $search_input; ?>" />
+			<input type="submit" name='wpsc_search' value="<?php _e( 'Search Products' ); ?>" class="button" />
+		</div>
+		</form>
 <form id="posts-filter" action="admin.php?page=wpsc-edit-products" method="get">
-	<div class="tablenav">
+	<div class="productnav">
 		<div class="alignleft actions">
 
 			<select id="bulkaction" name="bulkAction">
@@ -394,11 +401,7 @@ function wpsc_display_edit_products_page() {
 				<input type="submit" value="<?php _e( 'Apply' ); ?>" name="doaction" id="doaction" class="button-secondary action" />
 <?php wp_nonce_field( 'bulk-products', 'wpsc-bulk-products' ); ?>
 		</div>
-		<div class="alignright search-box">
-			<input type='hidden' name='page' value='wpsc-edit-products'  />
-			<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $search_input; ?>" />
-			<input type="submit" name='wpsc_search' value="<?php _e( 'Search Products' ); ?>" class="button" />
-		</div>
+	
 	</div>
 
 	<input type='hidden' id='products_page_category_id'  name='category_id' value='<?php echo $category_id; ?>' />
