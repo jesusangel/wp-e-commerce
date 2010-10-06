@@ -150,7 +150,7 @@ class wpsc_merchant {
  			if($collected_form_row['unique_name'] == 'billingcountry'){
 				$country = maybe_unserialize($collected_form_row['value']);
 				$address_data[$address_data_set][$address_key] =$country[0];
-				if(!empty($country[1]))
+				if(isset($country[1]) && !empty($country[1]))
 					$address_data['billing']['state'] = wpsc_get_state_by_id($country[1], 'code');                   
 			}elseif($collected_form_row['unique_name'] == 'shippingstate'){
 			    if(!empty($collected_form_row['value']) && is_numeric($collected_form_row['value']))
