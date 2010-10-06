@@ -413,9 +413,9 @@ function wpsc_admin_category_forms($category_id =  null) {
 							
 							foreach((array)$checkout_sets as $key => $value) {
 								$selected_state = "";
-							if($used_additonal_form_set == $key) {
+							if($used_additonal_form_set == $key)
 								$selected_state = "selected='selected'";
-							} ?>
+							 ?>
 								<option <?php echo $selected_state; ?> value='<?php echo $key; ?>'><?php echo stripslashes($value); ?></option>
 							<?php 
 							} 

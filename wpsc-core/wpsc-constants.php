@@ -140,9 +140,13 @@ function wpsc_core_constants_table_names() {
 	define( 'WPSC_TABLE_VARIATION_VALUES_ASSOC', "{$wp_table_prefix}wpsc_variation_values_assoc" );
 	define( 'WPSC_TABLE_VARIATION_COMBINATIONS', "{$wp_table_prefix}wpsc_variation_combinations" );
 	define( 'WPSC_TABLE_REGION_TAX',             "{$wp_table_prefix}wpsc_region_tax" );
-	define( 'WP_TERM_RELATIONSHIPS',             "{$wp_table_prefix}term_relationships" );
-	define( 'WP_POSTS',                          "{$wp_table_prefix}posts" );
-	define( 'WP_POSTMETA',                       "{$wp_table_prefix}postmeta" );
+	
+	if ( !defined( WPEC_TRANSIENT_THEME_PATH_PREFIX ) )
+		define( 'WPEC_TRANSIENT_THEME_PATH_PREFIX', 'wpsc_theme_file_path_' );
+
+	if ( !defined( WPEC_TRANSIENT_THEME_URL_PREFIX ) )
+		define( 'WPEC_TRANSIENT_THEME_URL_PREFIX', 'wpsc_theme_file_url_' );
+
 }
 
 /**
