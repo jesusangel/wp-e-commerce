@@ -675,7 +675,6 @@ function wpsc_display_products_page( $query ) {
 	if ( !empty($wp_query->query_vars['wpsc_product_category']) && is_string( $wp_query->query_vars['wpsc_product_category']  ) ) {
 		$sql = 'SELECT `term_id` FROM '.$wpdb->terms.' WHERE name LIKE "%'.$wp_query->query_vars['wpsc_product_category'].'%"';
 		$category_id = $wpdb->get_var($sql);
-//		$category_id = (int)$wpsc_query->query_vars['category_id'];
 		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
 	}
 
@@ -746,6 +745,7 @@ function wpsc_products_page( $content = '' ) {
 
 	$output = '';
 	if ( preg_match( "/\[productspage\]/", $content ) ) {
+
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 		ob_start();

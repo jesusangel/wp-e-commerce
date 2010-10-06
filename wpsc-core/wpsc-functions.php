@@ -585,7 +585,6 @@ function wpsc_split_the_query( $query ) {
 function wpsc_generate_product_query( $query ) {
 	remove_filter( 'pre_get_posts', 'wpsc_generate_product_query', 11 );
 
-	//exit("<pre>".print_r($query, true)."</pre>");
 	$query->query_vars['taxonomy'] = null;
 	$query->query_vars['term'] = null;
 
@@ -622,8 +621,13 @@ function wpsc_generate_product_query( $query ) {
 		$query->is_singular = false;
 		$query->is_single   = false;
 	}
-
-	//exit("<pre>".print_r($query, true)."</pre>");
+	$default_category = get_option('wpsc_default_category');
+	if(!empty($default_category) && is_numeric($default_category)){
+		$default_term = get_term($default_category,'wpsc_product_category');
+		$query->query_vars['taxonomy'] = 'wpsc_product_category';
+		$query->query_vars['term'] = $default_term->name;
+		$query->is_tax = true;
+	}
 	if ( $query->is_tax == true )
 		new wpsc_products_by_category( $query );
 
@@ -659,7 +663,7 @@ class wpsc_products_by_category {
 		global $wpdb;
 		$q = $query->query_vars;
 
-		//echo "<pre>".print_r($q, true)."</pre>";
+		
 		// Category stuff for nice URLs
 		if ( ('' != $q['taxonomy']) && ('' != $q['term']) && !$query->is_singular ) {
 			$join = " INNER JOIN $wpdb->term_relationships
@@ -686,7 +690,6 @@ class wpsc_products_by_category {
 			$this->sql_components['fields']   = "{$wpdb->posts}.*, {$wpdb->term_taxonomy}.term_id";
 			$this->sql_components['order_by'] = "{$wpdb->term_taxonomy}.term_id";
 			$this->sql_components['group_by'] = $groupby;
-
 			add_filter( 'posts_join', array( &$this, 'join_sql' ) );
 			add_filter( 'posts_where', array( &$this, 'where_sql' ) );
 			add_filter( 'posts_fields', array( &$this, 'fields_sql' ) );
