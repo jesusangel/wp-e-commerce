@@ -28,11 +28,12 @@ function wpsc_display_edit_products_page() {
 		'image' => '',
 		'title' => 'Name',
 		'weight' => 'Weight',
-		'stock' => 'Stock Levels',
+		'stock' => 'Stock',
 		'price' => 'Price',
 		'sale_price' => 'Sale Price',
 		'SKU' => 'SKU',
-		'categories' => 'Categories'
+		'categories' => 'Categories',
+		'featured' => 'Featured',
 	);
 	if ( isset( $_GET["product"] ) && $_GET["product"] != '' ) {
 		unset( $columns["categories"] );
@@ -535,5 +536,5 @@ function wpsc_featured_products_toggle( $product_id ) {
 	</a>
 <?php
 }
-add_action( 'wpsc_admin_product_checkbox', 'wpsc_featured_products_toggle', 10, 1 );
+add_action( 'manage_posts_featured_column', 'wpsc_featured_products_toggle', 10, 1 );
 ?>

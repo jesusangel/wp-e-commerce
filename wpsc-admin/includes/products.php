@@ -478,8 +478,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		<?php
 		break;
 
-
-
+		case 'featured': /* !control featured case */
+		?>
+			<td><?php do_action('manage_posts_featured_column', $product->ID); ?></td>
+		<?php		
+		break;
 		default:   /* !default case */
 		?>
 		<td <?php echo $attributes ?>><?php do_action('manage_posts_custom_column', $column_name, $product->ID); ?></td>
