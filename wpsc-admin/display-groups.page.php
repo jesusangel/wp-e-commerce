@@ -215,6 +215,9 @@ function wpsc_admin_category_forms($category_id =  null) {
 		$category['fee'] = wpsc_get_categorymeta($category['term_id'], 'fee');
 		$category['active'] = wpsc_get_categorymeta($category['term_id'], 'active');
 		$category['order'] = wpsc_get_categorymeta($category['term_id'], 'order');	
+		$category['display_type'] = wpsc_get_categorymeta($category['term_id'], 'display_type');	
+		$category['image_height'] = wpsc_get_categorymeta($category['term_id'], 'image_height');	
+		$category['image_width'] = wpsc_get_categorymeta($category['term_id'], 'image_width');	
 	}
 	
 	?>
@@ -249,42 +252,78 @@ function wpsc_admin_category_forms($category_id =  null) {
 	<h3><?php _e('Advanced Settings', 'wpsc'); ?></h3>	
 
 	<div id="poststuff" class="postbox">
-		<h3 class="hndle"><?php _e('Category Image'); ?></h3>
+		<h3 class="hndle"><?php _e('Presentation Settings'); ?></h3>
 		
 		<div class="inside">
-			<input type='file' name='image' value='' /><br /><br /><?php
-					
-			if(function_exists("getimagesize")) {
-				if(isset($category['image']) && ($category['image'] != '')) {
-					$imagepath = WPSC_CATEGORY_DIR . $category['image'];
-					$imagetype = @getimagesize($imagepath); //previously exif_imagetype()
-					
-					_e('Height', 'wpsc'); ?>
-					<input type='text' size='6' name='height' value='<?php echo $imagetype[1]; ?>' />
-					<?php _e('Width', 'wpsc'); ?>
-					<input type='text' size='6' name='width' value='<?php echo $imagetype[0]; ?>' /><br />
-					<span class='wpscsmall description'><?php echo $nzshpcrt_imagesize_info; ?></span><br />
-
-					<span class='wpscsmall description'>
-						<?php _e('You can upload thumbnail images for each group.'.
-						'To display Group details in your shop you must configure '.
-						'these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings.</a><br /><br />', 'wpsc'); ?>
-					</span><?php
-				} else {
-					_e('Height', 'wpsc'); ?>
-					<input type='text' size='6' name='height' value='<?php echo get_option('product_image_height'); ?>' />
-					<?php _e('Width', 'wpsc'); ?>
-					<input type='text' size='6' name='width' value='<?php echo get_option('product_image_width'); ?>' /><br />
-					<span class='wpscsmall description'><?php if (isset($nzshpcrt_imagesize_info)) echo $nzshpcrt_imagesize_info; ?></span><br />
-
-					<span class='wpscsmall description'>
-						<?php _e('You can upload thumbnail images for each group.'.
-						'To display Group details in your shop you must configure '.
-						'these settings under <a href="admin.php?page=wpsc-settings&tab=presentation">Presentation Settings.</a><br /><br />', 'wpsc'); ?>
-					</span><?php
-					
-				}
-			}
+			<input type='file' name='image' value='' /><br /><br />
+		
+				<tr>
+					<td>
+						<?php _e('Catalog View', 'wpsc'); ?>
+					</td>
+					<td>
+						<?php
+					if (!isset($category['display_type'])) $category['display_type'] = '';
+						
+						if ($category['display_type'] == 'grid') {
+							$display_type1="selected='selected'";
+						} else if ($category['display_type'] == 'default') {
+							$display_type2="selected='selected'";
+						}
+						
+						switch($category['display_type']) {
+							case "default":
+								$category_view1 = "selected ='selected'";
+							break;
+							
+							case "grid":
+							if(function_exists('product_display_grid')) {
+								$category_view3 = "selected ='selected'";
+								break;
+							}
+							
+							case "list":
+							if(function_exists('product_display_list')) {
+								$category_view2 = "selected ='selected'";
+								break;
+							}
+							
+							default:
+								$category_view0 = "selected ='selected'";
+							break;
+						}?>
+							<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span><br /><br />
+	
+						<select name='display_type'>	
+							<option value=''<?php echo $category_view0; ?> ><?php _e('Please select', 'wpsc'); ?></option>	
+							<option value='default' <?php if (isset($category_view1)) echo $category_view1; ?> ><?php _e('Default View', 'wpsc'); ?></option>	
+							
+							<?php	if(function_exists('product_display_list')) {?> 
+										<option value='list' <?php echo  $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option> 
+							<?php	} else { ?>
+										<option value='list' disabled='disabled' <?php if (isset($category_view2)) echo $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option>
+							<?php	} ?>
+							<?php if(function_exists('product_display_grid')) { ?>
+										<option value='grid' <?php if (isset($category_view3)) echo  $category_view3; ?>><?php _e('Grid View', 'wpsc'); ?></option>
+							<?php	} else { ?>
+										<option value='grid' disabled='disabled' <?php if (isset($category_view3)) echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
+							<?php	} ?>	
+						</select><br /><br />
+					</td>
+				</tr>
+			
+			
+			<?php	if(function_exists("getimagesize")) { ?>
+			<tr>
+				<td>
+					<?php _e('Thumbnail&nbsp;Size', 'wpsc'); ?> 
+				</td>
+				<td>
+					<?php _e('Height', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_height'])) echo $category['image_height']; ?>' name='image_height' size='6'/> 
+			<?php _e('Width', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_width'])) echo $category['image_width']; ?>' name='image_width' size='6'/> <br/>
+				</td>
+			</tr>
+			<?php	} 
 			 _e('Delete Image', 'wpsc'); ?><input type='checkbox' name='deleteimage' value='1' /><br/><br/>
 		</div>
 	</div> 
@@ -350,84 +389,6 @@ function wpsc_admin_category_forms($category_id =  null) {
 		////////
 		echo $output;
 		?>
-	</div>
-</div>
-
-
-<!-- Presentation settings -->
-<div id="poststuff" class="postbox">
-	<h3 class="hndle"><?php _e('Presentation Settings', 'wpsc'); ?></h3>
-		<div class="inside">	
-			<span class='small'><?php _e('To over-ride the presentation settings for this group you can enter in your prefered settings here', 'wpsc'); ?></span><br /><br />
-			
-			<table class='category_forms'>
-				<tr>
-					<td>
-						<?php _e('Catalog View', 'wpsc'); ?>
-					</td>
-					<td>
-						<?php
-					if (!isset($category['display_type'])) $category['display_type'] = '';
-						
-						if ($category['display_type'] == 'grid') {
-							$display_type1="selected='selected'";
-						} else if ($category['display_type'] == 'default') {
-							$display_type2="selected='selected'";
-						}
-						
-						switch($category['display_type']) {
-							case "default":
-								$category_view1 = "selected ='selected'";
-							break;
-							
-							case "grid":
-							if(function_exists('product_display_grid')) {
-								$category_view3 = "selected ='selected'";
-								break;
-							}
-							
-							case "list":
-							if(function_exists('product_display_list')) {
-								$category_view2 = "selected ='selected'";
-								break;
-							}
-							
-							default:
-								$category_view0 = "selected ='selected'";
-							break;
-						}?>
-					
-						<select name='display_type'>	
-							<option value=''<?php echo $category_view0; ?> ><?php _e('Please select', 'wpsc'); ?></option>	
-							<option value='default' <?php if (isset($category_view1)) echo $category_view1; ?> ><?php _e('Default View', 'wpsc'); ?></option>	
-							
-							<?php	if(function_exists('product_display_list')) {?> 
-										<option value='list' <?php echo  $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option> 
-							<?php	} else { ?>
-										<option value='list' disabled='disabled' <?php if (isset($category_view2)) echo $category_view2; ?>><?php _e('List View', 'wpsc'); ?></option>
-							<?php	} ?>
-							<?php if(function_exists('product_display_grid')) { ?>
-										<option value='grid' <?php if (isset($category_view3)) echo  $category_view3; ?>><?php _e('Grid View', 'wpsc'); ?></option>
-							<?php	} else { ?>
-										<option value='grid' disabled='disabled' <?php if (isset($category_view3)) echo  $category_view3; ?>><?php  _e('Grid View', 'wpsc'); ?></option>
-							<?php	} ?>	
-						</select><br /><br />
-					</td>
-				</tr>
-			
-			
-			<?php	if(function_exists("getimagesize")) { ?>
-			<tr>
-				<td>
-					<?php _e('Thumbnail&nbsp;Size', 'wpsc'); ?> 
-				</td>
-				<td>
-					<?php _e('Height', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_height'])) echo $category['image_height']; ?>' name='product_height' size='6'/> 
-			<?php _e('Width', 'wpsc'); ?> <input type='text' value='<?php if (isset($category['image_width'])) echo $category['image_width']; ?>' name='product_width' size='6'/> <br/>
-				</td>
-			</tr>
-			<?php	} ?>
-		</table>
 	</div>
 </div>
 

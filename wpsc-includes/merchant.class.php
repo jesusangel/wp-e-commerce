@@ -92,7 +92,6 @@ class wpsc_merchant {
 	*/
 	function collate_data() {
 		global $wpdb;
-
 		// get purchase data, regardless of being fed the ID or the sessionid
 		if($this->purchase_id > 0) {
 			$purchase_id = & $this->purchase_id;
@@ -110,8 +109,6 @@ class wpsc_merchant {
 
 		$collected_form_data = $wpdb->get_results("SELECT `data_names`.`id`, `data_names`.`unique_name`, `collected_data`.`value` FROM `".WPSC_TABLE_SUBMITED_FORM_DATA."` AS `collected_data` JOIN `".WPSC_TABLE_CHECKOUT_FORMS."` AS `data_names` ON `collected_data`.`form_id` = `data_names`.`id` WHERE `log_id` = '".$purchase_id."'", ARRAY_A);
 
-		
-//exit('<pre>'.print_r($collected_form_data,true).'</pre>');
 		$address_keys = array(
 			'billing' => array(
 				'first_name'	=>	'billingfirstname',

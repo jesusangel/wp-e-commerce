@@ -159,7 +159,6 @@ function wpsc_save_category_set() {
 			$image = '';
 		}
 		
-	
 		/* Set the parent category ID variable*/
 		if(is_numeric($_POST['category_parent']) && absint($_POST['category_parent']) > 0) {
 			$parent_category = (int)$_POST['category_parent'];
@@ -198,7 +197,9 @@ function wpsc_save_category_set() {
 				wpsc_update_categorymeta($category_id, 'fee', '0');
 				wpsc_update_categorymeta($category_id, 'active', '1');
 				wpsc_update_categorymeta($category_id, 'order', '0');
-				
+				wpsc_update_categorymeta($category_id, 'display_type',$wpdb->escape(stripslashes($_POST['display_type'])));
+				wpsc_update_categorymeta($category_id, 'image_height', $wpdb->escape(stripslashes($_POST['image_height'])));
+				wpsc_update_categorymeta($category_id, 'image_width', $wpdb->escape(stripslashes($_POST['image_width'])));
 				if($_POST['use_additonal_form_set'] != '') {
 					wpsc_update_categorymeta($category_id, 'use_additonal_form_set', $_POST['use_additonal_form_set']);
 				} else {
@@ -275,6 +276,10 @@ function wpsc_save_category_set() {
 			wpsc_update_categorymeta($category_id, 'fee', '0');
 			wpsc_update_categorymeta($category_id, 'active', '1');
 			wpsc_update_categorymeta($category_id, 'order', '0');
+			
+			wpsc_update_categorymeta($category_id, 'display_type',$wpdb->escape(stripslashes($_POST['display_type'])));
+			wpsc_update_categorymeta($category_id, 'image_height', $wpdb->escape(stripslashes($_POST['image_height'])));
+			wpsc_update_categorymeta($category_id, 'image_width', $wpdb->escape(stripslashes($_POST['image_width'])));
 			
 			
 			if($_POST['use_additonal_form_set'] != '') {
