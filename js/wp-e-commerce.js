@@ -200,9 +200,7 @@ jQuery(document).ready(function () {
 			return false;
 		});
 	});
-
-	jQuery("form.wpsc_empty_the_cart span.emptycart a").livequery(function(){
-		jQuery(this).click(function() {
+	jQuery("form.wpsc_empty_the_cart span.emptycart a").live('click',function(){
 			parent_form = jQuery(this).parents("form.wpsc_empty_the_cart");
 			form_values = "ajax=true&";
 			form_values += jQuery(parent_form).serialize();
@@ -210,7 +208,7 @@ jQuery(document).ready(function () {
 				eval(returned_data);
 			});
 			return false;
-		});
+
 	}); 
 	//Shipping bug fix by James Collins
 	var radios = jQuery(".productcart input:radio[name=shipping_method]");
