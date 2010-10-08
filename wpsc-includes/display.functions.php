@@ -463,20 +463,19 @@ add_filter( 'mod_rewrite_rules', 'wpsc_refresh_page_urls' );
 function wpsc_obtain_the_title() {
 	global $wpdb, $wp_query, $wpsc_title_data;
 	$output = null;
-
 	if ( !isset( $wp_query->query_vars['category_id'] ) )
 		$wp_query->query_vars['category_id'] = 0;
 
-	if ( is_numeric( $wp_query->query_vars['category_id'] ) ) {
-		$category_id = $wp_query->query_vars['category_id'];
-	} else if ( $_GET['category'] ) {
-		$category_id = absint( $_GET['category'] );
+	if ( isset( $wp_query->query_vars['taxonomy'] ) && 'wpsc_product_category' ==  $wp_query->query_vars['taxonomy']) {
+		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
 	}
 	if ( $category_id > 0 ) {
+
 		if ( isset( $wpsc_title_data['category'][$category_id] ) ) {
 			$output = $wpsc_title_data['category'][$category_id];
 		} else {
-			$output = $wpdb->get_var( "SELECT `name` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id`='{$category_id}' LIMIT 1" );
+			$term = get_term($category_id, 'wpsc_product_category');
+			$output = $term->name;
 			$wpsc_title_data['category'][$category_id] = $output;
 		}
 	}

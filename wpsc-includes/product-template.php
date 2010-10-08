@@ -336,12 +336,8 @@ function wpsc_category_class() {
 	global $wpdb, $wp_query;
 
 	$category_nice_name = '';
-	if ( $wp_query->query_vars['product_category'] != null ) {
-		$catid = $wp_query->query_vars['product_category'];
-	} else if ( is_numeric( $_GET['category'] ) ) {
-		$catid = $_GET['category'];
-	} else if ( is_numeric( $GLOBALS['wpsc_category_id'] ) ) {
-		$catid = $GLOBALS['wpsc_category_id'];
+	if ( 'wpsc_product_category' == $wp_query->query_vars['taxonomy']  ) {
+		$catid = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
 	} else {
 		$catid = get_option( 'wpsc_default_category' );
 		if ( $catid == 'all+list' ) {
@@ -349,11 +345,13 @@ function wpsc_category_class() {
 		}
 	}
 
-	if ( (int)$catid > 0 )
-		$category_nice_name = $wpdb->get_var( "SELECT `nice-name` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` ='" . (int)$catid . "' LIMIT 1" );
-	else if ( $catid == 'all' )
+	if ( (int)$catid > 0 ){
+		//exit($catid);
+		$term = get_term($catid, 'wpsc_product_category');
+		$category_nice_name = $term->slug;
+	}else if ( $catid == 'all' ){
 		$category_nice_name = 'all-categories';
-
+}
 	//exit("<pre>".print_r(get_option('wpsc_default_category'),true)."</pre>");
 	return $category_nice_name;
 }
