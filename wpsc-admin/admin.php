@@ -130,7 +130,7 @@ function wpsc_admin_pages() {
 			add_contextual_help( 'toplevel_page_wpsc-edit-products',     $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/products'>About the Products Page</a>" );
 			add_contextual_help( 'products_page_wpsc-edit-groups',       $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/categories/'>About the Categories Page</a>" );
 			add_contextual_help( 'products_page_edit-tags',              $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/variations/'>About the Variations Page</a>" );
-			add_contextual_help( 'store_page_wpsc_display_coupons_page', $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>About the Marketing Page</a>" );
+			add_contextual_help( 'settings_page_wpsc_display_coupons_page', $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>About the Marketing Pages</a>" );
 			add_contextual_help( 'settings_page_wpsc-settings',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/general/'>General Settings</a><br />
 																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/presentation/'>Presentation Options</a> <br />
 																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/admin/'>Admin Options</a> <br />
@@ -167,7 +167,7 @@ function wpsc_admin_pages() {
 				add_action( 'admin_head', 'wpsc_product_log_rss_feed' );
 				break;
 
-			case 'store_page_wpsc_display_coupons_page' :
+			case 'settings_page_wpsc_display_coupons_page' :
 				add_action( "load-$page_hook", 'wpsc_admin_include_coupon_js' );
 				break;
 		}

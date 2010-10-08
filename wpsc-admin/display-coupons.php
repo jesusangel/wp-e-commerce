@@ -15,14 +15,12 @@ function wpsc_display_coupons_page(){
 		$end_date = date('Y-m-d', strtotime($_POST['add_end'])) . " 00:00:00";
 		$rules = $_POST['rules'];
 		foreach ($rules as $key => $rule) {
-			foreach ($rule as $k => $r) {
+			foreach ($rule as $k => $r)
 				$new_rule[$k][$key] = $r;
-			}
 		}
 		foreach($new_rule as $key => $rule) {
-			if ($rule['value'] == '') {
+			if ( ''  == $rule['value'] )
 				unset($new_rule[$key]);
-			}
 		}
 		if($wpdb->query("INSERT INTO `".WPSC_TABLE_COUPON_CODES."` ( `coupon_code` , `value` , `is-percentage` , `use-once` , `is-used` , `active` , `every_product` , `start` , `expiry`, `condition` ) VALUES ( '$coupon_code', '$discount', '$discount_type', '$use_once', '0', '$is_active', '$every_product', '$start_date' , '$end_date' , '".serialize($new_rule)."' );")) {  
 			echo "<div class='updated'><p align='center'>".__('Thanks, the coupon has been added.', 'wpsc')."</p></div>";
@@ -87,10 +85,6 @@ function wpsc_display_coupons_page(){
 				  $wpdb->query($sql);
 
 			}
-				
-			if(isset($coupon_data['delete_coupon']) && $coupon_data['delete_coupon'] != '') {
-				$wpdb->query("DELETE FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id' LIMIT 1;");
-			}
 		}
 	}
   if(isset($_POST['delete_condition'])){
@@ -140,6 +134,7 @@ function wpsc_display_coupons_page(){
 
 /*<strong><?php echo TXT_WPSC_ADD_COUPON; ?></strong>*/
 ?>
+
 <script type='text/javascript'>
 	jQuery(".pickdate").datepicker();
 		/* jQuery datepicker selector */
@@ -147,6 +142,7 @@ function wpsc_display_coupons_page(){
 		jQuery('.pickdate').datepicker({ dateFormat: 'yy-mm-dd' });
 	}
 </script>
+
 <div class="wrap">
   <h2><?php _e('Coupons', 'wpsc');?></h2>
   <div style='margin:0px;' class="tablenav wpsc_admin_nav">
@@ -397,11 +393,15 @@ foreach((array)$coupon_data as $coupon) {
   echo "    </td>\n\r";
   
   echo "    <td>\n\r";
-  if($coupon['is-percentage'] == 1){
+  if($coupon['is-percentage'] == 1)
     echo $coupon['value']."%";
-    } else {    
+     
+   else if($coupon['is-percentage'] == 2)
+    echo "Free Shipping";
+    
+    else   
     echo nzshpcrt_currency_display($coupon['value'], 1);
-    }
+    
   echo "    </td>\n\r";
   
   echo "    <td>\n\r";
@@ -441,7 +441,6 @@ foreach((array)$coupon_data as $coupon) {
   echo "    <td>\n\r";
   echo "<a title='".$coupon['coupon_code']."' href='#' rel='".$coupon['id']."' class='wpsc_edit_coupon'  >".__('Edit', 'wpsc')."</a>";
   echo "    </td>\n\r";
-  
   echo "  </tr>\n\r";
   echo "  <tr class='coupon_edit'>\n\r";
   echo "    <td colspan='7' style='padding-left:0px;'>\n\r";

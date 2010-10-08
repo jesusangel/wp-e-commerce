@@ -25,11 +25,12 @@ $conditions = unserialize($coupon['condition']);
   $output .= " <tr>\n\r";
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='true' name='is_edit_coupon' />\n\r";
-  $output .= "   <input type='text' size='8' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
+  $output .= "   <input type='text' size='11' value='".$coupon['coupon_code']."' name='edit_coupon[".$id."][coupon_code]' />\n\r";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
-  $output .= "   <input type='text' style='width:28px;' value='".$coupon['value']."'  name=edit_coupon[".$id."][value]' />";
-  $output .= "   <select style='width:20px;' name='edit_coupon[".$id."][is-percentage]'>";
+
+  $output .= "   <input type='text' size='3' value='".$coupon['value']."'  name=edit_coupon[".$id."][value]' />";
+  $output .= "   <select name='edit_coupon[".$id."][is-percentage]'>";
   $output .= "     <option value='0' ".(($coupon['is-percentage'] == 0) ? "selected='true'" : '')." >$</option>\n\r";//
   $output .= "     <option value='1' ".(($coupon['is-percentage'] == 1) ? "selected='true'" : '')." >%</option>\n\r";
   $output .= "     <option value='2' ".(($coupon['is-percentage'] == 2) ? "selected='true'" : '')." >Free shipping</option>\n\r";
@@ -37,11 +38,11 @@ $conditions = unserialize($coupon['condition']);
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $coupon_start = explode(" ",$coupon['start']);
-  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
+  $output .= "<input type='text' class='pickdate' size='11' name='edit_coupon[".$id."][start]' value='{$coupon_start[0]}'>";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $coupon_expiry = explode(" ",$coupon['expiry']);
-  $output .= "<input type='text' class='pickdate' size='8' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
+  $output .= "<input type='text' class='pickdate' size='11' name='edit_coupon[".$id."][expiry]' value='{$coupon_expiry[0]}'>";
   $output .= "  </td>\n\r";
   $output .= "  <td>\n\r";
   $output .= "   <input type='hidden' value='0' name='edit_coupon[".$id."][use-once]' />\n\r";
@@ -144,11 +145,18 @@ $output ='
 		</div>
 	</div>
 	</td>
+	<td>
+	</td>
 	<td colspan="3">
 	
-		<input type="submit" value="'.__("Update Coupon", "wpsc").'" class="button-primary" name="edit_coupon['.$id.'][submit_coupon]" />
- 		<input type="submit" value="'.__("Delete Coupon", "wpsc").'" name="edit_coupon['.$id.'][delete_coupon]" />
-	</td>
+		<input type="submit" value="'.__("Update Coupon", "wpsc").'" class="button-primary" name="edit_coupon['.$id.'][submit_coupon]" />';
+ 		
+ 		$nonced_url = wp_nonce_url("admin.php?wpsc_admin_action=wpsc-delete-coupon&amp;delete_id=$id", 'delete-coupon');
+		
+		$output.= "<a class='delete_button' style='text-decoration:none;' href=" .$nonced_url."> Delete</a>";	
+
+ 	$output.='	
+ 	</td>
 </tr>
 ';
 return $output;

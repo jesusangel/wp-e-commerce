@@ -2381,6 +2381,28 @@ function wpsc_backup_theme() {
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( $_REQUEST['wpsc_admin_action'] == 'backup_themes' ) )
 	add_action( 'admin_init', 'wpsc_backup_theme' );
 
+
+function wpsc_delete_coupon(){
+	global $wpdb;
+	
+	check_admin_referer( 'delete-coupon' );
+	$coupon_id = (int)$_GET['delete_id'];
+	
+	if(isset($coupon_id)) {
+			$wpdb->query("DELETE FROM `".WPSC_TABLE_COUPON_CODES."` WHERE `id` = '$coupon_id' LIMIT 1;");
+			
+			$deleted = 1;
+	}	
+	$sendback = wp_get_referer();	
+	if ( isset( $deleted ) ) 
+		$sendback = add_query_arg( 'deleted', $deleted, $sendback );
+	
+	$sendback = remove_query_arg( array('deleteid',), $sendback );
+	wp_redirect( $sendback );
+	exit();		
+}
+
+
 function wpsc_delete_category() {
 	global $wpdb, $wp_rewrite;
 
@@ -2434,6 +2456,10 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-variation-set' ==
 // Variation set deleting init code starts here
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-category' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_delete_category' );
+	
+//Delete Coupon	
+if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-delete-coupon' == $_REQUEST['wpsc_admin_action'] ) )
+	add_action( 'admin_init', 'wpsc_delete_coupon' );
 
 // Category modification init code starts here
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc-category-set' == $_REQUEST['wpsc_admin_action'] ) )
