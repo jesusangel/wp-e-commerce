@@ -1,4 +1,4 @@
-<?php global $wpsc_query, $wpdb; ?>
+
 <div id="list_view_products_page_container">
 
 	<?php wpsc_output_breadcrumbs(); ?>
