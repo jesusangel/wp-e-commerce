@@ -193,14 +193,14 @@ function wpsc_admin_include_coupon_js() {
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
 
 	// Coupon CSS
-	wp_enqueue_style( 'wp-e-commerce-admin_2.7',        WPSC_URL . '/wpsc-admin/css/settingspage.css', false, false, 'all' );
-	wp_enqueue_style( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin_2.7',        WPSC_URL         . '/wpsc-admin/css/settingspage.css', false, false, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin',            WPSC_URL         . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 
 	// Coupon JS
-	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false, $version_identifier );
-	wp_enqueue_script( 'livequery',                     WPSC_URL .  '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
-	wp_enqueue_script( 'datepicker-ui',                 WPSC_URL .  '/js/ui.datepicker.js',                           array( 'jquery-ui-core' ), $version_identifier );
-	wp_enqueue_script( 'wp-e-commerce-admin_legacy',    WPSC_URL .  '/wpsc-admin/js/admin-legacy.js',                 array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'datepicker-ui' ), $version_identifier );
+	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl        . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false, $version_identifier );
+	wp_enqueue_script( 'livequery',                     WPSC_URL         .  '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
+	wp_enqueue_script( 'datepicker-ui',                 WPSC_CORE_JS_URL .  '/ui.datepicker.js',                 array( 'jquery-ui-core' ), $version_identifier );
+	wp_enqueue_script( 'wp-e-commerce-admin_legacy',    WPSC_URL         .  '/wpsc-admin/js/admin-legacy.js',                 array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'datepicker-ui' ), $version_identifier );
 }
 
 /**
@@ -216,7 +216,7 @@ function wpsc_admin_include_css_and_js() {
 	wp_admin_css( 'media' );
 
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
-	wp_enqueue_script( 'livequery', WPSC_URL . '/wpsc-admin/js/jquery.livequery.js', array( 'jquery' ), '1.0.3' );
+	wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js', array( 'jquery' ), '1.0.3' );
 	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false, $version_identifier );
 	wp_enqueue_script( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/js/admin.js',                        array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier, false );
 	wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false, $version_identifier ); // needs removing
@@ -280,7 +280,7 @@ function wpsc_admin_edit_products_page_js() {
  */
 function wpsc_admin_include_optionspage_css_and_js() {
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
-	wp_enqueue_script( 'wp-e-commerce-js-ajax', WPSC_URL . '/js/ajax.js', false, $version_identifier );
+	wp_enqueue_script( 'wp-e-commerce-js-ajax', WPSC_URL . '/wpsc-core/js/ajax.js', false, $version_identifier );
 	wp_enqueue_script( 'wp-e-commerce-js-ui-tabs', WPSC_URL . '/wpsc-admin/js/jquery-ui.js', false, $version_identifier );
 	wp_enqueue_script( 'wp-e-commerce-js-dimensions', WPSC_URL . '/wpsc-admin/js/dimensions.js', false, $version_identifier );
 	wp_enqueue_style( 'wp-e-commerce-admin_2.7', WPSC_URL . '/wpsc-admin/css/settingspage.css', false, false, 'all' );
@@ -665,7 +665,7 @@ function wpsc_quarterly_setup() {
 	get_currentuserinfo();
 	if ( $current_user->user_level > 9 ) {
 		$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
-		wp_enqueue_script( 'datepicker-ui', WPSC_URL . "/js/ui.datepicker.js", array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier );
+		wp_enqueue_script( 'datepicker-ui', WPSC_URL . "/wpsc-core/js/ui.datepicker.js", array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier );
 		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter' ), 'wpsc_quarterly_dashboard_widget' );
 	}
 }

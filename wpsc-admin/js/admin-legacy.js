@@ -266,8 +266,8 @@ jQuery(".remove_line").click(
 	
 	if (typeof SWFUpload != "undefined") {
     var swfu = new SWFUpload({
-      flash_url : WPSC_URL+'/js/swfupload.swf',
-      upload_url: base_url+'/?action=wpsc_add_image',
+      flash_url : WPSC_CORE_JS_URL + '/swfupload.swf',
+      upload_url: base_url + '/?action=wpsc_add_image',
       button_placeholder_id : "spanButtonPlaceholder",
       button_width: 103,
       button_height: 24,
@@ -747,7 +747,7 @@ jQuery(document).ready(function(){
 // 	alert('test 1');
  	if (typeof SWFUpload != "undefined") {
 	  var swfu = new SWFUpload({
-      flash_url : WPSC_URL+'/js/swfupload.swf',
+      flash_url : WPSC_CORE_JS_URL + '/swfupload.swf',
       upload_url: base_url+'/?action=wpsc_add_image',
       button_placeholder_id : "spanButtonPlaceholder",
       button_width: 103,

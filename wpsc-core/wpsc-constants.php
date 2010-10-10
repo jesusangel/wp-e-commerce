@@ -34,9 +34,12 @@ function wpsc_core_constants() {
 	define( 'WPSC_GATEWAY_DEBUG', false );
 
 	// Images URL
-	define( 'WPSC_CORE_IMAGES_URL', WPSC_URL . '/wpsc-core/images' );
+	define( 'WPSC_CORE_IMAGES_URL',  WPSC_URL . '/wpsc-core/images' );
 	define( 'WPSC_CORE_IMAGES_PATH', WPSC_FILE_PATH . '/wpsc-core/images' );
 
+	// JS URL
+	define( 'WPSC_CORE_JS_URL',  WPSC_URL . '/wpsc-core/js' );
+	define( 'WPSC_CORE_JS_PATH', WPSC_FILE_PATH . '/wpsc-core/js' );
 
 	// Require loading of deprecated functions for now. We will ween WPEC off
 	// of this in future versions.
