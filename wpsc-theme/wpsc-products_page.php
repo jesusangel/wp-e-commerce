@@ -2,7 +2,7 @@
 /*
  * Most functions called in this page can be found in the wpsc_query.php file
  */
-global $wpsc_query, $wpdb, $wp_query; ?>
+global $wpsc_query, $wp_query; ?>
 
 <div id="default_products_page_container">
 
