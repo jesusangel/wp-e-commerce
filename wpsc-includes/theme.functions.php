@@ -378,43 +378,94 @@ function wpsc_single_template( $content ) {
 }
 
 /**
- * Checks and replaces the Page title with the category title if on a category page
- * @access public
+ * wpsc_the_category_title( $title, $id )
  *
+ * Checks and replaces the Page title with the category title if on a category page
+ *
+ * @access public
  * @since 3.8
  * @param $title (string) The Page Title
  * @param $id (int) The Page ID
  * @return $title (string) the new title
  */
-function wpsc_the_category_title($title, $id){
+function wpsc_the_category_title( $title, $id ) {
 	global $wp_query;
-	$post = get_post($id);
-	if('wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title){
-		remove_filter('the_title','wpsc_the_category_title');
-		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
-		$category = get_term($category_id, 'wpsc_product_category');
+
+	$post = get_post( $id );
+
+	if ( 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title ) {
+		remove_filter( 'the_title', 'wpsc_the_category_title' );
+		$category_id = wpsc_get_the_category_id( $wp_query->query_vars['term'], 'slug' );
+		$category    = get_term( $category_id, 'wpsc_product_category' );
 		return $category->name;
 	}
+
 	return $title;
 }
 
 /**
- * wpsc_the_category_template swaps the template used for product categories with pageif archive template is being used use
- * @access public
+ * wpsc_the_category_template( $template )
  *
+ * Swaps the template used for product categories with pageif archive template is being used use
+ *
+ * @access public
  * @since 3.8
  * @param $template (string) template path
  * @return $template (string)
  */
-function wpsc_the_category_template($template){
+function wpsc_the_category_template( $template ) {
 	global $wp_query;
-	if('wpsc_product_category' == $wp_query->query_vars['taxonomy'] && FALSE !== strpos($template,'archive')){
-		return str_ireplace('archive', 'page',$template);
-	}else{
+
+	if ( 'wpsc_product_category' == $wp_query->query_vars['taxonomy'] && false !== strpos( $template, 'archive' ) )
+		return str_ireplace( 'archive', 'page', $template );
+	else
 		return $template;
-	}
 }
 
+/**
+ * wpsc_form_action
+ *
+ * Echo the form action for use in the template files
+ *
+ * @global <type> $wpec_form_action
+ * @return <type>
+ */
+function wpsc_form_action() {
+	echo wpsc_get_form_action();
+}
+	/**
+	 * wpsc_get_form_action
+	 *
+	 * Return the form action for use in the template files
+	 *
+	 * @global <type> $wpec_form_action
+	 * @return <type>
+	 */
+	function wpsc_get_form_action() {
+		global $wpec_form_action;
+
+		$product_id = wpsc_the_product_id();
+
+		// Function has already ran in this page load
+		if ( isset( $wpec_form_action ) ) {
+			$action =  $wpec_form_action;
+
+		// No global so figure it out
+		} else {
+
+			// Use external if set
+			if ( wpsc_is_product_external() ) {
+				$action = wpsc_product_external_link( $product_id );
+
+			// Otherwise use this page
+			} else {
+				$action = wpsc_this_page_url();
+			}
+		}
+
+		// Return form action
+		return $action;
+	}
 
 /**
  * wpsc_user_enqueues products function,
@@ -466,7 +517,7 @@ function wpsc_enqueue_user_script_and_css() {
 	}
 
 
-	if ( !defined( 'WPSC_MP3_MODULE_USES_HOOKS' ) and function_exists( 'listen_button' ) ) {
+	if ( !defined( 'WPSC_MP3_MODULE_USES_HOOKS' ) && function_exists( 'listen_button' ) ) {
 
 		function wpsc_legacy_add_mp3_preview( $product_id, &$product_data ) {
 			global $wpdb;

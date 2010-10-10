@@ -609,6 +609,29 @@ function wpsc_product_has_stock( $id = null ) {
 }
 
 /**
+ * wpsc_is_product_external( $product_id = 0 )
+ *
+ * Checks if current product is external.
+ *
+ * @param int $product_id
+ */
+function wpsc_is_product_external( $product_id = 0 ) {
+
+	// Get product ID if incorrect value was passed
+	if ( empty( $product_id ) || !is_numeric( $product_id ) )
+		$product_id = wpsc_the_product_id();
+
+	// Get external link
+	$external_link = wpsc_product_external_link( $product_id );
+
+	// Use external if set
+	if ( !empty( $external_link ) )
+		return true;
+	else
+		return false;
+}
+
+/**
  * wpsc product remaining stock function
  * @return integer - the amount of remaining stock, or null if product is stockless
  */

@@ -137,6 +137,7 @@ function fancy_notifications() {
 	}
 	return $output;
 }
+add_action( 'wpsc_theme_footer', 'fancy_notifications' );
 
 function fancy_notification_content( $cart_messages ) {
 	global $wpdb;
