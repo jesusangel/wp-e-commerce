@@ -29,8 +29,7 @@ require_once( WPSC_FILE_PATH . '/wpsc-taxes/taxes_module.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-includes/upgrades.php' );
 
 // Editor
-require_once( WPSC_FILE_PATH . '/js/tinymce3/tinymce.php' ); 
-	
+require_once( WPSC_CORE_JS_PATH . '/tinymce3/tinymce.php' );
 
 // Share This
 if ( ( get_option( 'wpsc_share_this' ) == 1 ) && ( get_option( 'product_list_url' ) != '' ) )
