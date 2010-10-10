@@ -199,7 +199,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 								<input type='hidden' class='variation_values_id' name='variation_values_id[]' value='<?php echo $variation->term_id; ?>' />
 								<?php if($variation_count > 1): ?>
 									<a class='image_link delete_variation_value' href='<?php echo $delete_url; ?>' >
-									  <img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php _e('Delete', 'wpsc'); ?>' title='<?php _e('Delete', 'wpsc'); ?>' />
+									  <img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/trash.gif' alt='<?php _e('Delete', 'wpsc'); ?>' title='<?php _e('Delete', 'wpsc'); ?>' />
 									</a>
 								<?php endif; ?>
 								</div>
@@ -212,7 +212,7 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 								<div class='variation_value'>
 									<input type='text' class="text" name='new_variation_values[]' value='' />
 										<a class='image_link delete_variation_value' href='#'>
-											<img src='<?php echo WPSC_URL; ?>/images/trash.gif' alt='<?php _e('Delete', 'wpsc'); ?>' title='<?php _e('Delete', 'wpsc'); ?>' />
+											<img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/trash.gif' alt='<?php _e('Delete', 'wpsc'); ?>' title='<?php _e('Delete', 'wpsc'); ?>' />
 										</a>
 								</div>
 								<?php 

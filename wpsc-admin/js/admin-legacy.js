@@ -181,16 +181,16 @@ jQuery("#gallery_list").sortable({
 				img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 				
 				jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-				jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt='' /></a>");
+				jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='" + WPSC_CORE_IMAGES_URL + "/pencil.png' alt='' /></a>");
 				jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
 				//for(i=1;i<set.length;i++) {
 				//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-				//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+				//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "cross.png'/>");
 				//}
 				
 				for(i=1;i<set.length;i++) {
 					jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-					jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+					jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "/cross.png'/>");
 					
           			element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
 					if(element_id == 0) {
@@ -243,7 +243,7 @@ jQuery("#table_rate_price").click(
 
 jQuery(".add_level").click(
 	function() {
-		jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="'+WPSC_URL+'/images/cross.png" class="remove_line"></td></tr>');
+		jQuery(this).parent().children('table').append('<tr><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][quantity][]"/> and above</td><td><input type="text" size="10" value="" name="productmeta_values[table_rate_price][table_price][]"/></td><td><img src="' + WPSC_CORE_IMAGES_URL + '/cross.png" class="remove_line"></td></tr>');
 	}
 );
 
@@ -340,7 +340,7 @@ function filleditform(prodid)	{
    
 function fillvariationform(variation_id) {
   ajax.post("index.php",getresults,"ajax=true&admin=true&variation_id="+variation_id);
-	jQuery('.loadingimage').attr('src', WPSC_URL+'/images/indicator.gif');
+	jQuery('.loadingimage').attr('src',  WPSC_CORE_IMAGES_URL + 'indicator.gif');
 	jQuery('#loadingindicator_span').css('visibility','visible');
 }
    
@@ -436,7 +436,7 @@ function add_variation_value(value_type) {
         } else {
                 new_element_contents += "<input type='text' class='text' name='variation_values[]' value='' />";
         }
-  new_element_contents += " <a class='image_link' href='#' onclick='remove_variation_value_field(\""+new_element_id+"\")'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a><br />";
+  new_element_contents += " <a class='image_link' href='#' onclick='remove_variation_value_field(\""+new_element_id+"\")'><img src='" + WPSC_CORE_IMAGES_URL + "trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a><br />";
   //new_element_contents += "</span>";
 
   new_element = document.createElement('span');
@@ -870,7 +870,7 @@ function imageUploadSuccess (file, results) {
         var img = jQuery('<div class="previewimage" id="'+id+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
         set = jQuery("#gallery_list", context).sortable('toArray');
 
-        jQuery('#gallery_image_0', context).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+        jQuery('#gallery_image_0', context).append("<a class='editButton'>Edit   <img src='" + WPSC_IMAGE_URL + "pencil.png'/></a>");
         jQuery('#gallery_image_0', context).parent('li').addClass('first');
         jQuery('#gallery_image_0', context).parent('li').attr('id', 0);
         jQuery('#gallery_image_0 img.deleteButton', context).remove();
@@ -883,7 +883,7 @@ function imageUploadSuccess (file, results) {
 		jQuery(this.targetHolder).html('');
 		var img = jQuery('<div class="previewimage" id="'+div_id+'"><input type="hidden" name="images[]" value="'+src+'"><a href="'+WPSC_IMAGE_URL+src+'" rel="product_extra_image_'+id+'" class="thickbox"><img src="'+WPSC_IMAGE_URL+src+'" width="60" height="60" class="previewimage" /></a></div>').appendTo(this.targetHolder).hide();
 		
-    jQuery('#gallery_image_0', context).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+    jQuery('#gallery_image_0', context).append("<a class='editButton'>Edit   <img src='"+WPSC_CORE_IMAGES_URL+"/pencil.png'/></a>");
     jQuery('#gallery_image_0', context).parent('li').addClass('first');
     jQuery('#gallery_image_0', context).parent('li').attr('id', 0);
     jQuery('#gallery_image_0 img.deleteButton', context).remove();
@@ -918,7 +918,7 @@ function imageUploadSuccess (file, results) {
 		jQuery(this).parent().fadeOut(500,function() {
 			jQuery(this).remove();
 			jQuery(img).fadeIn('500');
-			jQuery(img).append('<img class="deleteButton" src="'+WPSC_URL+'/images/cross.png" alt="-" style="display: none;"/>');
+			jQuery(img).append('<img class="deleteButton" src="'+WPSC_CORE_IMAGES_URL+'/cross.png" alt="-" style="display: none;"/>');
 			enablebuttons()
 			//enableDeleteButton(deleteButton);
 		});
@@ -962,12 +962,12 @@ function enablebuttons(){
 				
 				set = jQuery("#gallery_list").sortable('toArray');
 				jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-				jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png'/></a>");
+				jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_CORE_IMAGES_URL+"/pencil.png'/></a>");
 				jQuery('#gallery_image_'+set[0]).parent('li').addClass('first');
 				jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
 				for(i=1;i<set.length;i++) {
 					jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-					jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+					jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_CORE_IMAGES_URL+"/cross.png'/>");
 					
 					if(element_id == 0) {
             jQuery('#gallery_image_'+set[i]).parent('li').attr('id', img_id);

@@ -15,14 +15,14 @@ function wpsc_shopping_cart( $input = null, $override_state = null ) {
 			} else {
 				$collapser_image = 'minus.png';
 			}
-			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='" . WPSC_URL . "/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='" . WPSC_CORE_IMAGES_URL . "/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 		} else {
 			if ( isset( $_SESSION['nzshpcrt_cart'] ) ) {
 				$collapser_image = 'minus.png';
 			} else {
 				$collapser_image = 'plus.png';
 			}
-			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='" . WPSC_URL . "/images/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
+			$fancy_collapser = "<a href='#' onclick='return shopping_cart_collapser()' id='fancy_collapser_link'><img src='" . WPSC_CORE_IMAGES_URL . "/$collapser_image' title='' alt='' id='fancy_collapser' /></a>";
 		}
 	} else {
 		$fancy_collapser = "";

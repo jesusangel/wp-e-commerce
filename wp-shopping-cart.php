@@ -29,10 +29,17 @@ class WP_eCommerce {
 	 * Takes care of loading up WPEC
 	 */
 	function init() {
+		// Previous to initializing
+		do_action( 'wpsc_pre_init' );
+
+		// Initialize
 		$this->start();
 		$this->constants();
 		$this->includes();
-		$this->setup();
+		$this->load();
+
+		// Finished initializing
+		do_action( 'wpsc_init' );
 	}
 
 	/**
@@ -97,7 +104,11 @@ class WP_eCommerce {
 	/**
 	 * Setup the WPEC core
 	 */
-	function setup() {
+	function load() {
+		// Before setup
+		do_action( 'wpsc_pre_load' );
+
+		// Legacy action
 		do_action( 'wpsc_before_init' );
 
 		// Setup the core WPEC globals

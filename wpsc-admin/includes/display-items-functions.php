@@ -678,7 +678,7 @@ function wpsc_price_control_forms($product_data){
 			</select>
 			<?php _e( 'Price', 'wpsc' ); ?> : 
 			<input type='text' class='text' size='8' name='newCurrPrice[]' value='0.00' style='display:inline' />
-			<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><img src='<?php echo WPSC_URL; ?>/images/cross.png' /></a>
+			<a href='' class='deletelayer' rel='<?php echo $isocode; ?>'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a>
 
 		</div> <!-- close new_layer -->
 <?php
@@ -699,7 +699,7 @@ function wpsc_price_control_forms($product_data){
 				} ?>
 			</select>
 			<?php _e( 'Price', 'wpsc' ); ?>:  <input type='text' class='text' size='8' name='newCurrPrice[]' value='<?php echo $alt_price; ?>' style=' display:inline' />
-			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_URL; ?>/images/cross.png' /></a><br />
+			<a href='' class='wpsc_delete_currency_layer' rel='<?php echo $iso; ?>'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png' /></a><br />
 <?php	}
 
 		endif;
@@ -730,7 +730,7 @@ function wpsc_price_control_forms($product_data){
 							<td>
 								<input type="text" size="10" value="<?php echo $table_price; ?>" name="table_rate_price[table_price][]" />
 							</td>
-							<td><img src="<?php echo WPSC_URL; ?>/images/cross.png" class="remove_line" /></td>
+							<td><img src="<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png" class="remove_line" /></td>
 						</tr>
 <?php
 					}
@@ -1404,7 +1404,7 @@ function wpsc_product_download_forms( $product_data='' ) {
 	if ( isset( $product_data['file'] ) && $product_data['file'] > 0 ) {
 		$output .= __( 'Preview File', 'wpsc' ) . ": ";
 
-		$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=" . $product_data['id'] . "' ><img align='absmiddle' src='" . WPSC_URL . "/images/download.gif' alt='' title='' /><span>" . __( 'Click to download', 'wpsc' ) . "</span></a>";
+		$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=" . $product_data['id'] . "' ><img align='absmiddle' src='" . WPSC_CORE_IMAGES_URL . "/download.gif' alt='' title='' /><span>" . __( 'Click to download', 'wpsc' ) . "</span></a>";
 
 		$file_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_FILES . "` WHERE `id`='" . $product_data['file'] . "' LIMIT 1", ARRAY_A );
 		if ( ($file_data != null) && (function_exists( 'listen_button' )) ) {
@@ -1570,7 +1570,7 @@ function edit_multiple_image_gallery( $product_data ) {
   ?>
   <div class='image_settings_box'>
   <div class='upper_settings_box'>
-  <div class='upper_image'><img src='<?php echo WPSC_URL; ?>/images/pencil.png' alt='' /></div>
+  <div class='upper_image'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/pencil.png' alt='' /></div>
   <div class='upper_txt'><?php _e('Thumbnail Settings'); ?><a class='closeimagesettings'>X</a></div>
   </div>
 
@@ -1613,7 +1613,7 @@ function edit_multiple_image_gallery( $product_data ) {
   </ul>
   </div>
   </div>
-  <a class='editButton'>Edit   <img src='<?php echo WPSC_URL; ?>/images/pencil.png' alt='' /></a>
+  <a class='editButton'>Edit   <img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/pencil.png' alt='' /></a>
   <?php
   $output = ob_get_contents();
   ob_end_clean();

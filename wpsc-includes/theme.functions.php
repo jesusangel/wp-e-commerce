@@ -507,9 +507,9 @@ function wpsc_user_dynamic_js() {
 		var WPSC_DIR_NAME = "<?php echo WPSC_DIR_NAME; ?>";
 
 		/* LightBox Configuration start*/
-		var fileLoadingImage = "<?php echo WPSC_URL; ?>/images/loading.gif";
-		var fileBottomNavCloseImage = "<?php echo WPSC_URL; ?>/images/closelabel.gif";
-		var fileThickboxLoadingImage = "<?php echo WPSC_URL; ?>/images/loadingAnimation.gif";
+		var fileLoadingImage = "<?php echo WPSC_CORE_IMAGES_URL; ?>/loading.gif";
+		var fileBottomNavCloseImage = "<?php echo WPSC_CORE_IMAGES_URL; ?>/closelabel.gif";
+		var fileThickboxLoadingImage = "<?php echo WPSC_CORE_IMAGES_URL; ?>/loadingAnimation.gif";
 		var resizeSpeed = 9;  // controls the speed of the image resizing (1=slowest and 10=fastest)
 		var borderSize = 10;  //if you adjust the padding in the CSS, you will need to update this variable
 <?php

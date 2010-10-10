@@ -447,7 +447,7 @@ function wpsc_akst_share_link($action = 'print') {
   ob_start();
  /*<?php bloginfo('siteurl'); ?>/?p=<?php print($post->ID); ?>&amp;wpsc_akst_action=share-this */
 ?>
-<a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'wpsc'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src='<?php echo WPSC_URL; ?>/images/social_networking/share-this-product.gif' title='Share This' alt='Share This' /></a>
+<a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'wpsc'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/social_networking/share-this-product.gif' title='Share This' alt='Share This' /></a>
 <?php
   $link = ob_get_contents();
   ob_end_clean();

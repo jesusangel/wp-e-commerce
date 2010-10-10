@@ -198,7 +198,7 @@ function wpsc_select_product_file( $product_id = null ) {
 
 		$output .= "<p " . ((($num % 2) > 0) ? '' : "class='alt'") . " id='select_product_file_row_$num'>\n";
 		$output .= "  <a class='file_delete_button' href='{$deletion_url}' >\n";
-		$output .= "    <img src='" . WPSC_URL . "/images/cross.png' />\n";
+		$output .= "    <img src='" . WPSC_CORE_IMAGES_URL . "/cross.png' />\n";
 		$output .= "  </a>\n";
 		$output .= "  <label for='select_product_file_$num'>" . $file->post_title . "</label>\n";
 		$output .= "</p>\n";

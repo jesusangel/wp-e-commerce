@@ -71,7 +71,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 						<input type='radio' value='0' name='wpsc_options[require_register]' id='require_register2' <?php echo $require_register2; ?> /> 					<label for='require_register2'><?php _e('No', 'wpsc');?></label>
 					</td>
 					<td>
-						<a title='<?php _e('If yes then you must also turn on the wordpress option "Any one can register"', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+						<a title='<?php _e('If yes then you must also turn on the wordpress option "Any one can register"', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/help.png' alt='' /> </a>
 					</td>
      		</tr>
 	  
@@ -119,7 +119,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 					<input type='radio' value='0' name='wpsc_options[wpsc_force_ssl]' id='wpsc_force_ssl2' <?php echo $wpsc_force_ssl2; ?> /> 					<label for='wpsc_force_ssl2'><?php _e('No', 'wpsc');?></label>
 				</td>
 				<td>
-					<a title='<?php _e('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_URL; ?>/images/help.png' alt='' /> </a>
+					<a title='<?php _e('This can cause warnings for your users if you do not have a properly configured SSL certificate', 'wpsc');?>' class='flag_email' href='#' ><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/help.png' alt='' /> </a>
 				</td>
 			</tr>
 			<?php do_action('wpsc_checkout_settings_page'); ?>
@@ -186,7 +186,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			<?php
 					foreach((array)$form_data as $form_field) {
 			    echo "<tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
-			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="'.WPSC_URL.'/images/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
+			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="' . WPSC_CORE_IMAGES_URL . '/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
 			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".htmlentities(stripslashes($form_field['name']), ENT_QUOTES, "UTF-8")."' /></td>";
 			  
 			    //echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
@@ -224,10 +224,10 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			    echo "      <td class='mandatorycol'><input $checked type='checkbox' name='form_mandatory[".$form_field['id']."]' value='1' /></td>";
 			   
 			    
-			    echo "      <td><a class='image_link' href='#' onclick='return remove_form_field(\"checkout_".$form_field['id']."\",".$form_field['id'].");'><img src='".WPSC_URL."/images/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
+			    echo "      <td><a class='image_link' href='#' onclick='return remove_form_field(\"checkout_".$form_field['id']."\",".$form_field['id'].");'><img src='" . WPSC_CORE_IMAGES_URL . "/trash.gif' alt='".__('Delete', 'wpsc')."' title='".__('Delete', 'wpsc')."' /></a>";
 		   
 			    if($email_form_field['id'] == $form_field['id']) {
-			      echo "<a title='".__('This will be the Email address that the Purchase Reciept is sent to.', 'wpsc')."' class='flag_email' href='#' ><img src='".WPSC_URL."/images/help.png' alt='' /> </a>";
+			      echo "<a title='".__('This will be the Email address that the Purchase Reciept is sent to.', 'wpsc')."' class='flag_email' href='#' ><img src='" . WPSC_CORE_IMAGES_URL . "/help.png' alt='' /> </a>";
 			    }
 			    echo "</td>";
 			    

@@ -1078,7 +1078,7 @@ function wpsc_options_presentation() {
 				<tr>
 					<th scope="row">
 						<?php _e( 'Use IntenseDebate Comments', 'wpsc' ); ?>:
-						<a href="http://intensedebate.com/" title="IntenseDebate comments enhance and encourage conversation on your blog or website" target="_blank"><img src="<?php echo WPSC_URL; ?>/images/intensedebate-logo.png" alt="intensedebate-logo" title="IntenseDebate"/></a>
+						<a href="http://intensedebate.com/" title="IntenseDebate comments enhance and encourage conversation on your blog or website" target="_blank"><img src="<?php echo WPSC_CORE_IMAGES_URL; ?>/intensedebate-logo.png" alt="intensedebate-logo" title="IntenseDebate"/></a>
 					</th>
 					<td>
 <?php

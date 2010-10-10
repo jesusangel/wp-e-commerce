@@ -113,7 +113,7 @@ global $wpsc_query, $wpdb, $wp_query;
 						<?php if(wpsc_the_product_additional_description()) : ?>
 						<div class="additional_description_container">
 							
-								<img class="additional_description_button"  src="<?php echo WPSC_URL; ?>/images/icon_window_expand.gif" alt="Additional Description" /><a href="<?php echo wpsc_the_product_permalink(); ?>" class="additional_description_link"><?php _e('More Details', 'wpsc'); ?>
+								<img class="additional_description_button"  src="<?php echo WPSC_CORE_IMAGES_URL; ?>/icon_window_expand.gif" alt="Additional Description" /><a href="<?php echo wpsc_the_product_permalink(); ?>" class="additional_description_link"><?php _e('More Details', 'wpsc'); ?>
 							</a>
 							<div class="additional_description">
 								<p><?php echo wpsc_the_product_additional_description(); ?></p>
@@ -190,7 +190,7 @@ global $wpsc_query, $wpdb, $wp_query;
 										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
 										<div class="wpsc_loading_animation">
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" />
+											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_IMAGES_URL; ?>/indicator.gif" />
 											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
 									</div><!--close wpsc_buy_button_container-->

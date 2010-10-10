@@ -153,7 +153,7 @@ function nszhpcrt_category_tag($content = '') {
 				
 						if($product['additional_description'] != '') {
 							$output .= "<a href='#' class='additional_description_link' onclick='return show_additional_description(\"additionaldescription".$product['id']."\",\"link_icon".$product['id']."\");'>";
-							$output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='".WPSC_URL."/images/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
+							$output .= "<img id='link_icon".$product['id']."' class='additional_description_button'  src='" . WPSC_CORE_IMAGES_URL . "/icon_window_expand.gif' title='".$product['name']."' alt='".$product['name']."' />";
 							$output .= __('More Details', 'wpsc')."</a>";
 						
 							$output .= "<span class='additional_description' id='additionaldescription".$product['id']."'><br />";

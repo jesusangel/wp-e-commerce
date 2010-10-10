@@ -85,13 +85,13 @@ function wpsc_admin_pages() {
 		// Add 'Products' top level menu
 		if ( $userdata->user_level <= 2 ) {
 			if ( function_exists( 'add_object_page' ) ) {
-				$edit_products_page = add_object_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'author', $products_page, array(), WPSC_URL . "/images/credit_cards.png" );
+				$edit_products_page = add_object_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'author', $products_page, array(), WPSC_CORE_IMAGES_URL . "/credit_cards.png" );
 			} else {
 				$edit_products_page = add_menu_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'author', $products_page );
 			}
 		} else {
 			if ( function_exists( 'add_object_page' ) ) {
-				$edit_products_page = add_object_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'administrator', $products_page, array(), WPSC_URL . "/images/credit_cards.png" );
+				$edit_products_page = add_object_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'administrator', $products_page, array(), WPSC_CORE_IMAGES_URL . "/credit_cards.png" );
 			} else {
 				$edit_products_page = add_menu_page( __( 'Products', 'wpsc' ), __( 'Products', 'wpsc' ), 'administrator', $products_page );
 			}
@@ -340,9 +340,9 @@ function wpsc_admin_dynamic_js() {
 	echo "var WPSC_IMAGE_URL = '" . WPSC_IMAGE_URL . "';\n\r";
 
 	// LightBox Configuration start
-	echo "var fileLoadingImage = '" . WPSC_URL . "/images/loading.gif';\n\r";
-	echo "var fileBottomNavCloseImage = '" . WPSC_URL . "/images/closelabel.gif';\n\r";
-	echo "var fileThickboxLoadingImage = '" . WPSC_URL . "/images/loadingAnimation.gif';\n\r";
+	echo "var fileLoadingImage = '" . WPSC_CORE_IMAGES_URL . "/loading.gif';\n\r";
+	echo "var fileBottomNavCloseImage = '" . WPSC_CORE_IMAGES_URL . "/closelabel.gif';\n\r";
+	echo "var fileThickboxLoadingImage = '" . WPSC_CORE_IMAGES_URL . "/loadingAnimation.gif';\n\r";
 
 	echo "var resizeSpeed = 9;\n\r";
 

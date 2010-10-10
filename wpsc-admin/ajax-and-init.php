@@ -2040,7 +2040,7 @@ function wpsc_check_form_options() {
 		$output = "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options[" . $id . "]'>+ New Layer</a></td></tr>";
 
 		foreach ( (array)$options as $key => $value ) {
-			$output .="<tr class='wpsc_grey'><td></td><td><input type='text' value='" . $key . "' name='wpsc_checkout_option_label[" . $id . "][]' /></td><td colspan='4'><input type='text' value='" . $value . "' name='wpsc_checkout_option_value[" . $id . "][]' />&nbsp;<a class='wpsc_delete_option' href='' <img src='" . WPSC_URL . "/images/trash.gif' alt='" . __( 'Delete', 'wpsc' ) . "' title='" . __( 'Delete', 'wpsc' ) . "' /></a></td></tr>";
+			$output .="<tr class='wpsc_grey'><td></td><td><input type='text' value='" . $key . "' name='wpsc_checkout_option_label[" . $id . "][]' /></td><td colspan='4'><input type='text' value='" . $value . "' name='wpsc_checkout_option_value[" . $id . "][]' />&nbsp;<a class='wpsc_delete_option' href='' <img src='" . WPSC_CORE_IMAGES_URL . "/trash.gif' alt='" . __( 'Delete', 'wpsc' ) . "' title='" . __( 'Delete', 'wpsc' ) . "' /></a></td></tr>";
 		}
 	} else {
 		$output = '';

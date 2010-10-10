@@ -72,9 +72,9 @@ global $wpsc_query, $wpdb;
 					
 					<td class="stock">
 						<?php if(wpsc_product_has_stock()) : ?>
-							<img src="<?php echo WPSC_URL; ?>/images/yes_stock.gif" alt="Yes" title="Yes" />
+							<img src="<?php echo WPSC_CORE_IMAGES_URL; ?>/yes_stock.gif" alt="Yes" title="Yes" />
 						<?php else: ?> 
-							<img src="<?php echo WPSC_URL; ?>/images/no_stock.gif" title='No' alt="No" />
+							<img src="<?php echo WPSC_CORE_IMAGES_URL; ?>/no_stock.gif" title='No' alt="No" />
 						<?php endif; ?> 
 					</td>
 					
@@ -114,7 +114,7 @@ global $wpsc_query, $wpdb;
 										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
 											<?php endif; ?>
 										<div class="wpsc_loading_animation">
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" />
+											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_IMAGES_URL; ?>/indicator.gif" />
 											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
 									</div><!--close wpsc_buy_button_container-->

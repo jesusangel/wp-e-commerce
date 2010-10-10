@@ -114,14 +114,14 @@ function wpsc_add_to_cart() {
 				$_SESSION['slider_state'] = 1;
 				echo "
                jQuery('#sliding_cart').slideDown('fast',function(){
-                  jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
+                  jQuery('#fancy_collapser').attr('src', (WPSC_CORE_IMAGES_URL+'/minus.png'));
                });
          ";
 			} else {
 				$_SESSION['slider_state'] = 0;
 				echo "
                jQuery('#sliding_cart').slideUp('fast',function(){
-                  jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+                  jQuery('#fancy_collapser').attr('src', (WPSC_CORE_IMAGES_URL+'/plus.png'));
                });
          ";
 			}
@@ -156,14 +156,14 @@ function wpsc_get_cart() {
 			$_SESSION['slider_state'] = 1;
 			echo "
             jQuery('#sliding_cart').slideDown('fast',function(){
-               jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/minus.png'));
+               jQuery('#fancy_collapser').attr('src', (WPSC_CORE_IMAGES_URL+'/minus.png'));
             });
       ";
 		} else {
 			$_SESSION['slider_state'] = 0;
 			echo "
             jQuery('#sliding_cart').slideUp('fast',function(){
-               jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+               jQuery('#fancy_collapser').attr('src', (WPSC_CORE_IMAGES_URL+'/plus.png'));
             });
       ";
 		}
@@ -201,7 +201,7 @@ function wpsc_empty_cart() {
 			$_SESSION['slider_state'] = 0;
 			echo "
             jQuery('#sliding_cart').slideUp('fast',function(){
-               jQuery('#fancy_collapser').attr('src', (WPSC_URL+'/images/plus.png'));
+               jQuery('#fancy_collapser').attr('src', (WPSC_CORE_IMAGES_URL+'/plus.png'));
             });
       ";
 		}

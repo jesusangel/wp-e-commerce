@@ -197,7 +197,7 @@ function wpsc_the_purch_item_name() {
 	global $purchlogs;
 	//exit('<pre>'.print_r($purchlogs->the_purch_item_name(), true).'</pre>');
 	if ( wpsc_purchlogs_has_customfields( wpsc_the_purch_item_id() ) ) {
-		return $purchlogs->the_purch_item_name() . '<img src="' . WPSC_URL . '/images/info_icon.jpg" title="This Purchase has custom user content" alt="exclamation icon" />';
+		return $purchlogs->the_purch_item_name() . '<img src="' . WPSC_CORE_IMAGES_URL . '/info_icon.jpg" title="This Purchase has custom user content" alt="exclamation icon" />';
 	} else {
 		return $purchlogs->the_purch_item_name();
 	}

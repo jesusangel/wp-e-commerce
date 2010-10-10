@@ -308,7 +308,7 @@ function wpsc_display_coupons_page(){
 				var coupon_number=1;
 				function add_another_property(this_button){
 					var new_property='<div class="coupon_condition">\n'+
-						'<div><img height="16" width="16" class="delete" alt="Delete" src="<?php echo WPSC_URL; ?>/images/cross.png" onclick="jQuery(this).parent().remove();"/> \n'+
+						'<div><img height="16" width="16" class="delete" alt="Delete" src="<?php echo WPSC_CORE_IMAGES_URL; ?>/cross.png" onclick="jQuery(this).parent().remove();"/> \n'+
 							'<select class="ruleprops" name="rules[property][]"> \n'+
 								'<option value="item_name" rel="order">Item name</option> \n'+
 								'<option value="item_quantity" rel="order">Item quantity</option>\n'+
@@ -415,11 +415,11 @@ foreach((array)$coupon_data as $coupon) {
   echo "    <td>\n\r";  
   switch($coupon['active']) {
     case 1:
-    echo "<img src='".WPSC_URL."/images/yes_stock.gif' alt='' title='' />";
+    echo "<img src='" . WPSC_CORE_IMAGES_URL . "/yes_stock.gif' alt='' title='' />";
     break;
     
     case 0: default:
-    echo "<img src='".WPSC_URL."/images/no_stock.gif' alt='' title='' />";
+    echo "<img src='" . WPSC_CORE_IMAGES_URL . "/no_stock.gif' alt='' title='' />";
     break;
     }
   echo "    </td>\n\r";
@@ -427,11 +427,11 @@ foreach((array)$coupon_data as $coupon) {
    echo "    <td>\n\r";
   switch($coupon['every_product']) {
 	  case 1:
-		  echo "<img src='".WPSC_URL."/images/yes_stock.gif' alt='' title='' />";
+		  echo "<img src='" . WPSC_CORE_IMAGES_URL . "/yes_stock.gif' alt='' title='' />";
 		  break;
     
 	  case 0: default:
-		  echo "<img src='".WPSC_URL."/images/no_stock.gif' alt='' title='' />";
+		  echo "<img src='" . WPSC_CORE_IMAGES_URL . "/no_stock.gif' alt='' title='' />";
 		  break;
   }
   echo "    </td>\n\r";

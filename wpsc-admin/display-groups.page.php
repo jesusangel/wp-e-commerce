@@ -159,13 +159,13 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 					<td class='manage-column column-img'>
 						<?php if($subcategory_level > 0) { ?>
 							<div class='category-image-container' style='margin-left: <?php echo (1*$subcategory_level) -1; ?>em;'>
-								<img class='category_indenter' src='<?php echo WPSC_URL; ?>/images/indenter.gif' alt='' title='' />
+								<img class='category_indenter' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/indenter.gif' alt='' title='' />
 							<?php } ?>
 							
 							<?php if($category_image !=null) { ?>
 								<img src='<?php echo WPSC_CATEGORY_URL.$category_image; ?>' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30' />
 							<?php } else { ?>
-								<img src='<?php echo WPSC_URL; ?>/images/no-image-uploaded.gif' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30'	/>
+								<img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/no-image-uploaded.gif' title='<?php echo $category->name; ?>' alt='<?php echo $category->name; ?>' width='30' height='30'	/>
 							<?php } ?>
 						<?php if($subcategory_level > 0) { ?>
 							</div>

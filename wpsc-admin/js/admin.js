@@ -134,7 +134,7 @@ jQuery('a.update_variations_action').click(function(){
 		jQuery(this).click(function(event){
 			form_id = jQuery(this).attr('title');	
 			id = form_id.replace('form_options', '');
-			output = "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label"+id+"[]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value"+id+"[]' />&nbsp;<a class='wpsc_delete_option' href='' ><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td></tr>";
+			output = "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label"+id+"[]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value"+id+"[]' />&nbsp;<a class='wpsc_delete_option' href='' ><img src='" + WPSC_CORE_IMAGES_URL + "/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td></tr>";
 			jQuery(this).parent().parent('tr').after(output);
   			event.preventDefault();
 		});
@@ -155,7 +155,7 @@ jQuery('a.update_variations_action').click(function(){
 							jQuery('#checkout_'+id).after(returned_data);
 						}else{
 					output =  "<tr class='wpsc_grey'><td></td><td colspan='5'>Please Save your changes before trying to Order your Checkout Forms again.</td></tr>\r\n<tr  class='wpsc_grey'><td></td><th>Label</th><th >Value</th><td colspan='3'><a href=''  class='wpsc_add_new_checkout_option'  title='form_options["+id+"]'>+ New Layer</a></td></tr>";
-					output += "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label["+id+"][]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value["+id+"][]' /><a class='wpsc_delete_option' href='' ><img src='"+WPSC_URL+"/images/trash.gif' alt='Delete' title='delete' /></a></td></tr>";
+					output += "<tr class='wpsc_grey'><td></td><td><input type='text' value='' name='wpsc_checkout_option_label["+id+"][]' /></td><td colspan='4'><input type='text' value='' name='wpsc_checkout_option_value["+id+"][]' /><a class='wpsc_delete_option' href='' ><img src='" + WPSC_CORE_IMAGES_URL + "trash.gif' alt='Delete' title='delete' /></a></td></tr>";
 					jQuery('#checkout_'+id).after(output);
 					
 					}
@@ -881,16 +881,16 @@ jQuery("table#wpsc_product_list tr").livequery(function(){
 						img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 						
 						jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt ='' /></a>");
+						jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='" + WPSC_CORE_IMAGES_URL + "/pencil.png' alt ='' /></a>");
 // 						jQuery('#gallery_image_'+set[0]).parent('li').attr('id',  "product_image_"+img_id);
 						//for(i=1;i<set.length;i++) {
 						//	jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-						//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+						//	jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "/cross.png'/>");
 						//}
 						
 						for(i=1;i<set.length;i++) {
 							jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-							jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+							jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "/cross.png'/>");
 							
 							element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
 							if(element_id == 0) {
@@ -1297,7 +1297,7 @@ function add_form_field() {
   new_element_contents += "<td class='typecol'><select class='wpsc_checkout_selectboxes' name='new_form_type["+new_element_number+"]'>"+HTML_FORM_FIELD_TYPES+"</select></td>\n\r"; 
    new_element_contents += "<td class='typecol'><select name='new_form_unique_name["+new_element_number+"]'>"+HTML_FORM_FIELD_UNIQUE_NAMES+"</select></td>\n\r"; 
   new_element_contents += "<td class='mandatorycol' style='text-align: center;'><input type='checkbox' name='new_form_mandatory["+new_element_number+"]' value='1' /></td>\n\r";
-   new_element_contents += "<td><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='"+WPSC_URL+"/images/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
+   new_element_contents += "<td><a class='image_link' href='#' onclick='return remove_new_form_field(\""+new_element_id+"\");'><img src='" + WPSC_CORE_IMAGES_URL + "/trash.gif' alt='"+TXT_WPSC_DELETE+"' title='"+TXT_WPSC_DELETE+"' /></a></td>\n\r";
  // new_element_contents += "</tr>";
   
   new_element = document.createElement('tr');
@@ -1393,10 +1393,10 @@ function show_status_box(id,image_id) {
   state = document.getElementById(id).style.display; 
   if(state != 'block') {
     document.getElementById(id).style.display = 'block';
-    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_collapse.gif';
+    document.getElementById(image_id).src =  WPSC_CORE_IMAGES_URL + '/icon_window_collapse.gif';
   } else {
     document.getElementById(id).style.display = 'none';
-    document.getElementById(image_id).src = WPSC_URL+'/images/icon_window_expand.gif';
+    document.getElementById(image_id).src =  WPSC_CORE_IMAGES_URL + '/icon_window_expand.gif';
   }
   return false;
 }

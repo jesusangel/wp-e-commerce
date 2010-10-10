@@ -262,7 +262,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			
 		     
 		     }else{
-		      	$image_url = WPSC_URL."/images/no-image-uploaded.gif";
+		      	$image_url = WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif";
 				?>
 					<img title='Drag to a new position' src='<?php echo $image_url; ?>' alt='<?php echo $title; ?>' width='38' height='38' />
 				<?php

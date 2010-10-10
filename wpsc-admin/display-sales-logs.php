@@ -260,13 +260,13 @@ if(!isset($purchlogs)){
 				<h3><?php _e('Actions','wpsc'); ?></h3>
 				<?php do_action( 'wpsc_purchlogitem_links_start' ); ?>
 				<?php if(wpsc_purchlogs_have_downloads_locked() != false): ?>
-<img src='<?php echo WPSC_URL; ?>/images/lock_open.png' alt='clear lock icon' />&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
+<img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/lock_open.png' alt='clear lock icon' />&ensp;<a href='<?php echo $_SERVER['REQUEST_URI'].'&amp;wpsc_admin_action=clear_locks'; ?>'><?php echo wpsc_purchlogs_have_downloads_locked(); ?></a><br /><br class='small' />
 				<?php endif; ?>
-<img src='<?php echo WPSC_URL; ?>/images/printer.png' alt='printer icon' />&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php _e('View Packing Slip', 'wpsc'); ?></a>
+<img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/printer.png' alt='printer icon' />&ensp;<a href='<?php echo add_query_arg('wpsc_admin_action','wpsc_display_invoice'); ?>'><?php _e('View Packing Slip', 'wpsc'); ?></a>
 		
-<br /><br class='small' /><img src='<?php echo WPSC_URL; ?>/images/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php _e('Resend Receipt to Buyer', 'wpsc'); ?></a>
+<br /><br class='small' /><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/email_go.png' alt='email icon' />&ensp;<a href='<?php echo add_query_arg('email_buyer_id',$_GET['purchaselog_id']); ?>'><?php _e('Resend Receipt to Buyer', 'wpsc'); ?></a>
 		  
-<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php _e('Remove this record', 'wpsc') ?></a>
+<br /><br class='small' /><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".$_GET['purchaselog_id'], 'delete_purchlog_' .$_GET['purchaselog_id']); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete.",'wpsc'),  wpsc_purchaselog_details_date() )) ?>') ) { return true;}return false;"><img src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' />               &nbsp;<?php _e('Remove this record', 'wpsc') ?></a>
 
 <br /><br class='small' />&emsp;&ensp; 	<a href='<?php echo $page_back ?>'><?php _e('Go Back', 'wpsc'); ?></a>
 <br /><br />
@@ -353,7 +353,7 @@ if(!isset($purchlogs)){
       <div class='order_summary_subsection'>
       <strong><?php _e('Subscribe to your orders', 'wpsc'); ?></strong>
       <p>
-        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='middle' src='<?php echo WPSC_URL; ?>/images/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php _e('Subscribe to an RSS feed', 'wpsc'); ?></span></a> <?php _e('of your orders', 'wpsc'); ?>      </p>
+        <a class='product_log_rss' href='index.php?rss=true&amp;rss_key=key&amp;action=purchase_log'><img align='middle' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/rss-icon.jpg' alt='' title='' />&nbsp;<span><?php _e('Subscribe to an RSS feed', 'wpsc'); ?></span></a> <?php _e('of your orders', 'wpsc'); ?>      </p>
       </div>
          <div class='order_summary_subsection'>
       <strong><?php _e('Plugin News', 'wpsc'); ?></strong>
@@ -368,7 +368,7 @@ if(!isset($purchlogs)){
       ?>
       <div class='gold-cart_pesterer'> 
         <div>
-        <img src='<?php echo WPSC_URL; ?>/images/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php _e('Upgrade to Gold', 'wpsc'); ?></a><?php _e(' and unleash more functionality into your shop.', 'wpsc'); ?>
+        <img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/gold-cart.png' alt='' title='' /><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php _e('Upgrade to Gold', 'wpsc'); ?></a><?php _e(' and unleash more functionality into your shop.', 'wpsc'); ?>
         </div>
       </div>
       
@@ -479,7 +479,7 @@ if(!isset($purchlogs)){
 								 'end_timestamp'	=> $purchlogs->current_end_timestamp);
 		?>	
 		<br />	
-		<p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL; ?>/images/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a></p>
+		<p><a class='admin_download' href='<?php echo htmlentities(add_query_arg($arr_params)) ; ?>' ><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL; ?>/download.gif' alt='' title='' /> <span> <?php _e('Download CSV', 'wpsc'); ?></span></a></p>
 	</form>
 	<br />
 	<script type="text/javascript">
@@ -521,10 +521,10 @@ if(!isset($purchlogs)){
  			<?php endwhile; ?>
  			</select>
  		<?php }else { ?>
- 			<a href='http://checkout.google.com/' rel=''><img class='google_checkout_logo' src='<?php echo WPSC_URL."/images/checkout_logo.jpg"; ?>' alt='google checkout' /></a>
+ 			<a href='http://checkout.google.com/' rel=''><img class='google_checkout_logo' src='<?php echo WPSC_CORE_IMAGES_URL . "/checkout_logo.jpg"; ?>' alt='google checkout' /></a>
  		<?php } ?>
  		</td><!-- Status -->
- 		<td><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_URL."/images/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
+ 		<td><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
  		<td>
  			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''>+ tracking id</a>
  		</td>

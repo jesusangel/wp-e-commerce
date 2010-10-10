@@ -97,9 +97,9 @@ function wpsc_also_bought( $product_id ) {
 					$output .= "</a>";
 				} else {
 					if ( get_option( 'product_image_width' ) != '' ) {
-						$output .= "<img src='" . WPSC_URL . "/images/no-image-uploaded.gif' title='" . $also_bought_data['name'] . "' alt='" . $also_bought_data['name'] . "' width='$image_display_height' height='$image_display_height' id='product_image_" . $also_bought_data['id'] . "' class='product_image' />";
+						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . $also_bought_data['name'] . "' alt='" . $also_bought_data['name'] . "' width='$image_display_height' height='$image_display_height' id='product_image_" . $also_bought_data['id'] . "' class='product_image' />";
 					} else {
-						$output .= "<img src='" . WPSC_URL . "/images/no-image-uploaded.gif' title='" . $also_bought_data['name'] . "' alt='" . htmlentities( stripslashes( $product['name'] ), ENT_QUOTES, 'UTF-8' ) . "' id='product_image_" . $also_bought_data['id'] . "' class='product_image' />";
+						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . $also_bought_data['name'] . "' alt='" . htmlentities( stripslashes( $product['name'] ), ENT_QUOTES, 'UTF-8' ) . "' id='product_image_" . $also_bought_data['id'] . "' class='product_image' />";
 					}
 				}
 			}
@@ -129,7 +129,7 @@ function fancy_notifications() {
 		$output = "";
 		$output .= "<div id='fancy_notification'>\n\r";
 		$output .= "  <div id='loading_animation'>\n\r";
-		$output .= '<img id="fancy_notificationimage" title="Loading" alt="Loading" src="' . WPSC_URL . '/images/indicator.gif" />' . __( 'Updating', 'wpsc' ) . "...\n\r";
+		$output .= '<img id="fancy_notificationimage" title="Loading" alt="Loading" src="' . WPSC_CORE_IMAGES_URL . '/indicator.gif" />' . __( 'Updating', 'wpsc' ) . "...\n\r";
 		$output .= "  </div>\n\r";
 		$output .= "  <div id='fancy_notification_content'>\n\r";
 		$output .= "  </div>\n\r";

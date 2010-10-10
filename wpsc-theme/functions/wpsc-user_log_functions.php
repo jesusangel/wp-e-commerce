@@ -322,7 +322,7 @@ function wpsc_user_details() {
 			$status_style = "style='display: block;'";
 		}
 
-		echo "<img class='log_expander_icon' id='log_expander_icon_" . $purchase['id'] . "' src='" . WPSC_URL . "/images/icon_window_$status_state.gif' alt='' title='' />";
+		echo "<img class='log_expander_icon' id='log_expander_icon_" . $purchase['id'] . "' src='" . WPSC_CORE_IMAGES_URL . "/icon_window_$status_state.gif' alt='' title='' />";
 
 		if ( $stage_data['colour'] != '' )
 			$colour = "style='color: #" . $stage_data['colour'] . ";'";

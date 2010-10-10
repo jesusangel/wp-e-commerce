@@ -165,7 +165,7 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 		output_html += "		<a class='thickbox' rel='product_extra_image_"+image_id+"' href='admin.php?wpsc_admin_action=crop_image&amp;imagename="+image_src+"&amp;imgheight=480&amp;imgwidth=600&amp;product_id=103&amp;width=640&amp;height=342' id='extra_preview_link_"+image_id+"'>\n";
 		output_html += "		<img title='Preview' alt='Preview' src='"+image_src+"' class='previewimage'/>\n";
 		output_html += "		</a>\n";
-		output_html += "	<img src='"+WPSC_URL+"/images/cross.png' class='deleteButton' alt='-' style='display: none;'/>\n";
+		output_html += "	<img src='" + WPSC_CORE_IMAGES_URL + "/cross.png' class='deleteButton' alt='-' style='display: none;'/>\n";
 		output_html += "	</div>\n";
 		output_html += "</li>\n";
 
@@ -189,12 +189,12 @@ function wpsc_uploadSuccess(fileObj, serverData) {
 			img_id = jQuery('#gallery_image_'+set[0]).parent('li').attr('id');
 
 			jQuery('#gallery_image_'+set[0]).children('img.deleteButton').remove();
-			jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='"+WPSC_URL+"/images/pencil.png' alt ='' /></a>");
+			jQuery('#gallery_image_'+set[0]).append("<a class='editButton'>Edit   <img src='" + WPSC_CORE_IMAGES_URL + "/pencil.png' alt ='' /></a>");
 // 			jQuery('#gallery_image_'+set[0]).parent('li').attr('id', 0);
 
 			for(i=1;i<set.length;i++) {
 				jQuery('#gallery_image_'+set[i]).children('a.editButton').remove();
-				jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='"+WPSC_URL+"/images/cross.png'/>");
+				jQuery('#gallery_image_'+set[i]).append("<img alt='-' class='deleteButton' src='" + WPSC_CORE_IMAGES_URL + "/cross.png'/>");
 
 				element_id = jQuery('#gallery_image_'+set[i]).parent('li').attr('id');
 				if(element_id == 0) {

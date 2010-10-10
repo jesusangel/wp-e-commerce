@@ -131,7 +131,7 @@ $image_height = get_option('product_image_height');
 							
 							
 										<div class="wpsc_loading_animation">
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL; ?>/images/indicator.gif" />
+											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_IMAGES_URL; ?>/indicator.gif" />
 											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
                     </form>                    

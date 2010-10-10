@@ -256,7 +256,7 @@
 										<?php endif; ?>
 							
 										<div class='wpsc_loading_animation'>
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_URL ;?>/images/indicator.gif" class="loadingimage" />
+											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_IMAGES_URL ;?>/indicator.gif" class="loadingimage" />
 											<?php _e( 'Updating cart...', 'wpsc' ); ?>
 										</div>
 							

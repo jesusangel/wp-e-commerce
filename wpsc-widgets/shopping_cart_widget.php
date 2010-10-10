@@ -44,14 +44,14 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 				} else {
 					$collapser_image = 'minus.png';
 				}
-				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_URL . '/images/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
+				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_CORE_IMAGES_URL . '/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
 			} else {
 				if ( $_SESSION['nzshpcrt_cart'] == null ) {
 					$collapser_image = 'plus.png';
 				} else {
 					$collapser_image = 'minus.png';
 				}
-				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_URL . '/images/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
+				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_CORE_IMAGES_URL . '/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
 			}
 		} else {
 			$fancy_collapser = '';
