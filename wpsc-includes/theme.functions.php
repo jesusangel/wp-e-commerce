@@ -563,6 +563,7 @@ function wpsc_user_dynamic_js() {
 		var WPSC_URL = "<?php echo WPSC_URL; ?>";
 		var WPSC_IMAGE_URL = "<?php echo WPSC_IMAGE_URL; ?>";
 		var WPSC_DIR_NAME = "<?php echo WPSC_DIR_NAME; ?>";
+		var WPSC_CORE_IMAGES_URL = "<?php echo WPSC_CORE_IMAGES_URL; ?>";
 
 		/* LightBox Configuration start*/
 		var fileLoadingImage = "<?php echo WPSC_CORE_IMAGES_URL; ?>/loading.gif";
@@ -883,6 +884,7 @@ function wpsc_include_products_page_template($display_type = 'default'){
 function wpsc_products_page( $content = '' ) {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_query_vars;
 	$output = '';
+	remove_filter( 'the_content', 'wpautop' );
 	if ( preg_match( "/\[productspage\]/", $content ) ) {
 		//	remove_filter( 'the_content', 'wpsc_products_page' );
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
