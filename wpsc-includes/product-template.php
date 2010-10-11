@@ -31,6 +31,7 @@ function wpsc_has_pages_bottom(){
  */
 function wpsc_a_page_url($page=null) {
 	global $wp_query;
+	$output = '';
 	$curpage = $wp_query->query_vars['paged'];
 	if($page != '')
 		$wp_query->query_vars['paged'] = $page;
@@ -373,16 +374,19 @@ function wpsc_current_category_name() {
  */
 function wpsc_category_transition() {
 	global $wpdb, $wp_query, $wpsc_query;
+	$current_category_id = null;
+	$previous_category_id = null;
 	$current_product_index = (int)$wp_query->current_post;
 	$previous_product_index = ((int)$wp_query->current_post - 1);
 
-	if ( $previous_product_index >= 0 )
+	if ( $previous_product_index >= 0 && isset($wp_query->posts[$previous_product_index]->term_id))
 		$previous_category_id = $wp_query->posts[$previous_product_index]->term_id;
 	else
 		$previous_category_id = 0;
 
-	$current_category_id = $wp_query->post->term_id;
-	if ( $current_category_id != $previous_category_id )
+	if(isset($wp_query->post->term_id))
+		$current_category_id = $wp_query->post->term_id;
+	if (( $current_category_id != $previous_category_id )&& $previous_category_id != null)
 		return true;
 	else
 		return false;
@@ -451,11 +455,14 @@ function wpsc_edit_the_product_link( $link = null, $before = '', $after = '', $i
 
 
 	$siteurl = get_option( 'siteurl' );
-	get_currentuserinfo();
-	$output = '';
-	if ( $current_user->{$table_prefix . 'capabilities'}['administrator'] == 1 )
-		$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit&amp;product={$product_id}'>" . $link . "</a>" . $after;
 
+	$output = '';
+	if(is_user_logged_in()){
+		get_currentuserinfo();
+		if ( $current_user->{$table_prefix . 'capabilities'}['administrator'] == 1 )
+			$output = $before . "<a class='wpsc_edit_product' href='{$siteurl}/wp-admin/admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit&amp;product={$product_id}'>" . $link . "</a>" . $after;
+
+	}
 	return $output;
 }
 
@@ -852,11 +859,9 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 		if ( !empty( $attached_images ) )
 			$thumbnail_id = $attached_images[0]->ID;
 	}
-
 	// Return image link...
 	if ( !empty( $thumbnail_id ) && $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
 		return $image_link;
-
 	// ... or false as if no image was found.
 	return false;
 }

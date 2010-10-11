@@ -125,6 +125,7 @@ function wpsc_also_bought( $product_id ) {
 
 function fancy_notifications() {
 	global $wpdb;
+	$output ='';
 	if ( get_option( 'fancy_notifications' ) == 1 ) {
 		$output = "";
 		$output .= "<div id='fancy_notification'>\n\r";
@@ -464,6 +465,7 @@ add_filter( 'mod_rewrite_rules', 'wpsc_refresh_page_urls' );
 function wpsc_obtain_the_title() {
 	global $wpdb, $wp_query, $wpsc_title_data;
 	$output = null;
+	$category_id = null;
 	if ( !isset( $wp_query->query_vars['category_id'] ) )
 		$wp_query->query_vars['category_id'] = 0;
 

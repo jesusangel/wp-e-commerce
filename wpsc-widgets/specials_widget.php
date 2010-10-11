@@ -42,9 +42,9 @@ class WP_Widget_Product_Specials extends WP_Widget {
 		
 		echo $before_widget;
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Product Specials' ) : $instance['title'] );
-		if ( $title ) {
+		if ( $title )
 			echo $before_title . $title . $after_title;
-		}
+
 		wpsc_specials($args, $instance);
 		echo $after_widget;
 	
@@ -184,19 +184,19 @@ function wpsc_specials( $args = null, $instance ) {
 			) );
 			
 			//Images are handled here
-			$attached_image = $attached_images[0];
-			if ( ( $attached_image->ID > 0 ) && ($hide_thumbnails != 1) ) {
-				$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
-			}
+			if(!empty($attached_image)){
+				$attached_image = $attached_images[0];
+				if ( ( $attached_image->ID > 0 ) && ($hide_thumbnails != 1) )
+					$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
 			
+			}
 			//Product Title is here
-			$special_product->name = htmlentities( stripslashes( $special_product->name ), ENT_QUOTES, 'UTF-8' );
+			$special_product->post_title = htmlentities( stripslashes( $special_product->post_title ), ENT_QUOTES, 'UTF-8' );
 			$output .= '<strong><a class="wpsc_product_title" href="' . wpsc_product_url( $special_product->ID, false ) . '">' . $special_product->post_title . '</a></strong><br />';
 			
 			//Description is handled here
-			if ( $show_description == 1 ) {
+			if ( $show_description == 1 )
 				$output .= $special_product->post_content . '<br />';
-			}
 			
 			$output .= '<span id="special_product_price_' . $special_product->ID . '"><span class="pricedisplay">';
 			$output .= nzshpcrt_currency_display(wpsc_calculate_price( $special_product->ID,null,true ),null,true);
@@ -220,9 +220,9 @@ function wpsc_specials_excludes(){
 
 	$exclude_products = $wpdb->get_results("SELECT ID FROM ".$wpdb->prefix."posts JOIN ".$wpdb->prefix."postmeta ON (".$wpdb->prefix."posts.ID = ".$wpdb->prefix."postmeta.post_id) WHERE 1=1  AND ".$wpdb->prefix."posts.post_type = 'wpsc-product' AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."postmeta.meta_key = '_wpsc_special_price' AND ".$wpdb->prefix."postmeta.meta_value = 0 GROUP BY ".$wpdb->prefix."posts.ID ORDER BY ".$wpdb->prefix."posts.post_date DESC LIMIT 0, 10");
 	
-	foreach($exclude_products as $exclude_product){
+	foreach($exclude_products as $exclude_product)
 		$excludes[] = $exclude_product->ID;
-	}	
+
 	return $excludes;
 }
 ?>

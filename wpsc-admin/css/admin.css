@@ -22,7 +22,7 @@ input[type="checkbox"]{
 	text-decoration: none;
 	height:32px;
 	width:15px;
-	background:transparent url(../../images/toolbar.png) no-repeat scroll left -32px;
+	background:transparent url(../../wpsc-includes/images/toolbar.png) no-repeat scroll left -32px;
 
 	padding-left:15px;
 
@@ -30,7 +30,7 @@ input[type="checkbox"]{
 #wpsc_tickets_link a:hover{
 	height:32px;
 	width:15px;
-	background:transparent url(../../images/toolbar.png) no-repeat scroll left 0;
+	background:transparent url(../../wpsc-includes/images/toolbar.png) no-repeat scroll left 0;
 }
 #flotplaceholder{
 	width: 100%;
@@ -453,7 +453,7 @@ div.admin_product_name a.shorttag_toggle {
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	background:url(../../images/info_icon.jpg) no-repeat scroll 5px 8px;
+	background:url(../../wpsc-core/images/info_icon.jpg) no-repeat scroll 5px 8px;
 	border-left:1px solid #DFDFDF;
 	display:block;
 	height:100%;
@@ -467,7 +467,7 @@ div#icon_card
 	height: 36px;
 	margin: 14px 6px 0px 0px;
 	width: 36px;
-	background: url(../../images/icon32.png) no-repeat center center;
+	background: url(../../wpsc-core/images/icon32.png) no-repeat center center;
 }
 
 div.admin_product_shorttags {

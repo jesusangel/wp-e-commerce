@@ -1,7 +1,7 @@
 <?php
 
 function product_tag_cloud(){
-
+	$args = array();
 	$defaults = array(
 		'smallest' => 8, 'largest' => 22, 'unit' => 'pt', 'number' => 45,
 		'format' => 'flat', 'orderby' => 'name', 'order' => 'ASC',
@@ -101,7 +101,7 @@ function &get_product_tags($args = '') {
 	$tags = get_terms('product_tag', $args);
 
 	if ( empty($tags) )
-		return array();
+		return $tags;
 
 	$cache[ $key ] = $tags;
 	wp_cache_set( 'get_product_tags', $cache, 'category' );
