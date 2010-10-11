@@ -136,12 +136,12 @@ function wpsc_display_coupons_page() {
 	</script>
 
 	<div class="wrap">
-		<h2><?php _e( 'Coupons', 'wpsc' ); ?></h2>
-		<div style='margin:0px;' class="tablenav wpsc_admin_nav">
-			<form action='' method='post'>
-				<input id='add_coupon_box_link' type='submit' class=' add_item_link button' name='add_coupon_button' value='<?php _e( 'Create Coupon', 'wpsc' ); ?>' onclick='return show_status_box("add_coupon_box","add_coupon_box_link");return false;' />
-			</form>
-		</div>
+		<h2>
+			<?php _e( 'Coupons', 'wpsc' ); ?>
+			<a href=""id="add_coupon_box_link" class="add_item_link button add-new-h2" onclick="return show_status_box( 'add_coupon_box', 'add_coupon_box_link' ); return false;">
+				<?php _e( 'Create Coupon', 'wpsc' ); ?>
+			</a>
+		</h2>
 		
 		<table style="width: 100%;">
 			<tr>
