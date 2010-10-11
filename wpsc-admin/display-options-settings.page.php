@@ -119,6 +119,7 @@ function wpsc_settings_tabs() {
 		'shipping'     => __( 'Shipping', 'wpsc' ),
 		'gateway'      => __( 'Payments', 'wpsc' ),
 		'checkout'     => __( 'Checkout', 'wpsc' ),
+		'marketing'    => __( 'Marketing', 'wpsc' ),
 		'import'       => __( 'Import', 'wpsc' )
 	);
 
