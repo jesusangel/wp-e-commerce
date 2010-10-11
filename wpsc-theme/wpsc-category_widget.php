@@ -7,23 +7,23 @@
 	$category_image = WPSC_CATEGORY_URL . $category_image;
 
 	if ( $grid ) : ?>
-	
+
 		<a href="<?php echo $link; ?>" style="padding: 4px 4px 0 0; width:<?php echo $width; ?>px; height:<?php echo $height; ?>px;" title="<?php echo $curr_cat['name']; ?>" class="wpsc_category_grid_item">
-			<?php wpsc_parent_category_image($show_thumbnails, $category_image , $width, $height, true); ?>
+			<?php wpsc_parent_category_image( $show_thumbnails, $category_image , $width, $height, true ); ?>
 		</a>
 
 		<?php wpsc_start_category_query( array( 'parent_category_id' => $category_id, 'show_thumbnails' => $show_thumbnails ) ); ?>
 
-		<a href="<?php wpsc_print_category_url();?>" style="padding: 4px 4px 0 0; width:<?php echo $width; ?>px; height:<?php echo $height; ?>px" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name();?>">
+		<a href="<?php wpsc_print_category_url(); ?>" style="padding: 4px 4px 0 0; width:<?php echo $width; ?>px; height:<?php echo $height; ?>px" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name(); ?>">
 			<?php wpsc_print_category_image( $width, $height ); ?>
 		</a>
 
-		<?php wpsc_print_subcategory('', ''); ?>
+		<?php wpsc_print_subcategory( '', '' ); ?>
 
 		<?php wpsc_end_category_query(); ?>
 
 <?php else : ?>
-		
+
 		<div class="wpsc_categorisation_group" id="categorisation_group_<?php echo $category_id; ?>">
 			<ul class="wpsc_categories wpsc_top_level_categories <?php echo implode( ' ', (array)$provided_classes ); ?>">
 				<li class="wpsc_category_<?php echo $curr_cat['term_id']; ?>">
@@ -56,7 +56,7 @@
 
 						<?php wpsc_end_category_query(); ?>
 
-					</ul>		
+					</ul>
 				</li>
 			</ul>
 
