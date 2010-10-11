@@ -126,14 +126,14 @@ function nzshpcrt_price_range( $args = null ) {
 		for ( $i = 0; $i < $final_count; $i++ ) {
 			$j = $i;
 			if ( $i == $final_count - 1 ) {
-				echo "<a href='" . add_query_arg( 'range', $j, $product_page ) . "'>Over " . $ranges[$i] . "</a><br/>";
+				echo "<a href='" . esc_url(add_query_arg( 'range', $j, $product_page )) . "'>Over " . $ranges[$i] . "</a><br/>";
 			} else if ( $ranges[$i] == 0 ) {
-				echo "<a href='" . add_query_arg( 'range', $j, $product_page ) . "'>Under " . $ranges[$i + 1] . "</a><br/>";
+				echo "<a href='" . esc_url(add_query_arg( 'range', $j, $product_page )) . "'>Under " . $ranges[$i + 1] . "</a><br/>";
 			} else {
-				echo "<a href='" . add_query_arg( 'range', $j, $product_page ) . "'>" . $ranges[$i] . " - " . $ranges[$i + 1] . "</a><br/>";
+				echo "<a href='" . esc_url(add_query_arg( 'range', $j, $product_page )) . "'>" . $ranges[$i] . " - " . $ranges[$i + 1] . "</a><br/>";
 			}
 		}
-		echo "<a href='" . add_query_arg( 'range', 'all', get_option( 'product_list_url' ) ) . "'>" . __( 'Show All', 'wpsc' ) . "</a><br/>";
+		echo "<a href='" . esc_url(add_query_arg( 'range', 'all', get_option( 'product_list_url' )) ) . "'>" . __( 'Show All', 'wpsc' ) . "</a><br/>";
 	}
 	
 }
