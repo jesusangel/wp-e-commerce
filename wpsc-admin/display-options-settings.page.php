@@ -151,9 +151,8 @@ function wpsc_the_settings_tabs() {
 		foreach ( $tabs as $callback => $text ) {
 			$class = '';
 
-			if ( $current == $callback ) {
+			if ( $current == $callback )
 				$class = " class='current'";
-			}
 
 			$href = add_query_arg( array( 'tab' => $callback, 's' => false, 'paged' => false, 'post_mime_type' => false, 'm' => false ) );
 			$href = remove_query_arg( 'isocode', $href );
@@ -179,9 +178,8 @@ function country_list( $selected_country = null ) {
 	foreach ( (array)$country_data as $country ) {
 		$selected = '';
 
-		if ( $selected_country == $country['isocode'] ) {
+		if ( $selected_country == $country['isocode'] )
 			$selected = "selected='selected'";
-		}
 
 		$output .= "<option value='" . $country['isocode'] . "' $selected>" . htmlspecialchars( $country['country'] ) . "</option>";
 	}
@@ -298,9 +296,10 @@ function wpsc_settings_page_update_notification() {
 			unset( $_GET['added'] );
 			$message = true;
 		}
-		if ( is_null( $message ) ) {
-			_e( 'Settings successfully updated.', 'wpec' );
-		}
+
+		if ( is_null( $message ) )
+			_e( 'Settings successfully updated.', 'wpsc' );
+
 		$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated', 'deleted', 'wpsc_downloadcsv', 'rss_key', 'start_timestamp', 'end_timestamp', 'email_buyer_id' ), $_SERVER['REQUEST_URI'] ); ?>
 	</p></div>
 
