@@ -138,7 +138,7 @@ function wpsc_display_coupons_page() {
 	<div class="wrap">
 		<h2>
 			<?php _e( 'Coupons', 'wpsc' ); ?>
-			<a href="" id="add_coupon_box_link" class="add_item_link button add-new-h2" onClick="return show_status_box( 'add_coupon_box', 'add_coupon_box_link' );">
+			<a href="#" id="add_coupon_box_link" class="add_item_link button add-new-h2" onClick="return show_status_box( 'add_coupon_box', 'add_coupon_box_link' );">
 				<?php _e( 'Add New', 'wpsc' ); ?>
 			</a>
 		</h2>
