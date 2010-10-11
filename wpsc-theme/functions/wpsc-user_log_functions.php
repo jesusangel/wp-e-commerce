@@ -120,6 +120,18 @@ function validate_form_data() {
 	return apply_filters( 'wpsc_profile_message', $message );
 }
 
+/**
+ * wpsc_display_form_fields()
+ *
+ * This function displays each of the form fields.  Each of them are filterable via 'wpsc_account_form_field_$tag' where tag is permalink-styled name or uniquename.
+ * i.e. First Name under Shipping would be 'wpsc_account_form_field_shippingfirstname' - while Your Billing Details would be filtered
+ * via 'wpsc_account_form_field_your-billing-details'.
+ *
+ * @global <type> $wpdb
+ * @global <type> $user_ID
+ * @global <type> $wpsc_purchlog_statuses
+ * @global <type> $gateway_checkout_form_fields
+ */
 function wpsc_display_form_fields() {
 // Field display and Data saving function
 
