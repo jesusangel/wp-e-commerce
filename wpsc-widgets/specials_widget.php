@@ -184,7 +184,8 @@ function wpsc_specials( $args = null, $instance ) {
 			) );
 			
 			//Images are handled here
-			if(!empty($attached_image)){
+
+			if(!empty($attached_images)){
 				$attached_image = $attached_images[0];
 				if ( ( $attached_image->ID > 0 ) && ($hide_thumbnails != 1) )
 					$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
