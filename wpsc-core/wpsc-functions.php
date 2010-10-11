@@ -196,7 +196,7 @@ function wpsc_register_post_types() {
 		'query_var' => true,
 		'register_meta_box_cb' => 'wpsc_meta_boxes',
 		'rewrite' => array(
-			'slug' => $wpsc_page_titles['products'] . '/%wpsc_product_category%',
+			'slug' => $wpsc_page_titles['products'] . '/cat/%wpsc_product_category%',
 			'with_front' => false
 		)
 	) );
@@ -224,14 +224,15 @@ function wpsc_register_post_types() {
 		'labels' => $labels,
 		'rewrite' => array(
 			'slug' => '/tagged',
-			'with_front' => true )
+			'with_front' => false )
 	) );
 
 	// Product categories, is heirarchical and can use permalinks
+	
 	register_taxonomy( 'wpsc_product_category', 'wpsc-product', array(
 		'hierarchical' => true,
 		'rewrite' => array(
-			'slug' => $wpsc_page_titles['products'],
+			'slug' => $wpsc_page_titles['products'].'/cat',
 			'with_front' => false
 		)
 	) );
@@ -457,83 +458,9 @@ function wpsc_split_the_query( $query ) {
 	$transaction_results_page = $wpsc_page_titles['transaction_results'];
 
 
-	// check if we are viewing the checkout page, if so, override the query and make sure we see that page
-	if ( (isset( $query->query_vars['products'] ) && ($query->query_vars['products'] == $checkout_page)) || (isset( $query->query_vars['wpsc_product_category'] ) && ($query->query_vars['wpsc_product_category'] == $checkout_page)) ) {
-		$query->is_checkout = true;
-
-		$query->query['pagename']       = "$products_page/$checkout_page";
-		$query->query_vars['pagename']  = "$products_page/$checkout_page";
-		$query->query_vars['name']      = '';
-		$query->query_vars['taxonomy']  = '';
-		$query->query_vars['term']      = '';
-		$query->query_vars['post_type'] = '';
-
-
-		$query->queried_object = & get_page_by_path( $query->query['pagename'] );
-
-		if ( !empty( $query->queried_object ) )
-			$query->queried_object_id = (int)$query->queried_object->ID;
-		else
-			unset( $query->queried_object );
-
-		$query->is_singular = true;
-		$query->is_page     = true;
-		$query->is_tax      = false;
-		$query->is_archive  = false;
-		$query->is_single   = false;
-
-		unset( $query->query_vars['products'] );
-	}
-	// check if we are viewing the transaction results page, if so, override the query and make sure we see that page
-	else if ( (isset( $query->query_vars['products'] ) && ($query->query_vars['products'] == $transaction_results_page)) || (isset( $query->query_vars['wpsc_product_category'] ) && ($query->query_vars['wpsc_product_category'] == $transaction_results_page)) ) {
-		$query->query['pagename']       = "$products_page/$transaction_results_page";
-		$query->query_vars['pagename']  = "$products_page/$transaction_results_page";
-		$query->query_vars['name']      = '';
-		$query->query_vars['taxonomy']  = '';
-		$query->query_vars['term']      = '';
-		$query->query_vars['post_type'] = '';
-
-
-		$query->queried_object = & get_page_by_path( $query->query['pagename'] );
-
-		if ( !empty( $query->queried_object ) )
-			$query->queried_object_id = (int)$query->queried_object->ID;
-		else
-			unset( $query->queried_object );
-
-		$query->is_singular = true;
-		$query->is_page     = true;
-		$query->is_tax      = false;
-		$query->is_archive  = false;
-		$query->is_single   = false;
-
-		unset( $query->query_vars['products'] );
-	} else if ( ((isset( $query->query_vars['products'] ) && ($query->query_vars['products'] == $userlog_page)) || (isset( $query->query_vars['wpsc_product_category'] ) && ($query->query_vars['wpsc_product_category'] == $userlog_page)) ) ) {
-		$query->query['pagename']       = "$products_page/$userlog_page";
-		$query->query_vars['pagename']  = "$products_page/$userlog_page";
-		$query->query_vars['name']      = '';
-		$query->query_vars['taxonomy']  = '';
-		$query->query_vars['term']      = '';
-		$query->query_vars['post_type'] = '';
-
-		$query->queried_object = & get_page_by_path( $query->query['pagename'] );
-
-		if ( !empty( $query->queried_object ) )
-			$query->queried_object_id = (int)$query->queried_object->ID;
-		else
-			unset( $query->queried_object );
-
-		$query->is_singular = true;
-		$query->is_page     = true;
-		$query->is_tax      = false;
-		$query->is_archive  = false;
-		$query->is_single   = false;
-
-		unset( $query->query_vars['products'] );
-	}
 	// otherwise, check if we are looking at a product, if so, duplicate the query and swap the old one out for a products page request
 	// JS - 6.4.1020 - Added is_admin condition, as the products condition broke categories in backend
-	else if ( ($query->query_vars['pagename'] == $products_page) || isset( $query->query_vars['products'] ) && !is_admin() ) {
+	if ( ($query->query_vars['pagename'] == $products_page) || isset( $query->query_vars['products'] ) && !is_admin() ) {
 		// store a copy of the wordpress query
 		$wpsc_query_data = $query->query;
 
@@ -827,7 +754,7 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 	$permalink_structure = get_option( 'permalink_structure' );
 	// This may become customiseable later
 
-	$our_permalink_structure = $wpsc_page_titles['products'] . "/%wpsc_product_category%/%postname%/";
+	$our_permalink_structure = $wpsc_page_titles['products'] . "/cat/%wpsc_product_category%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product "
 
 	if ( '' != $permalink_structure && !in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {

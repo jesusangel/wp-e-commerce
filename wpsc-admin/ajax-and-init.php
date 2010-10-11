@@ -477,13 +477,8 @@ function wpsc_duplicate_product() {
 }
 
 function wpsc_duplicate_this_dangit( $id ) {
-	global $wpdb;
-	$post = $wpdb->get_results( "SELECT * FROM $wpdb->posts WHERE ID=$id" );
-	if ( $post->post_type == "revision" ) {
-		$id = $post->post_parent;
-		$post = $wpdb->get_results( "SELECT * FROM $wpdb->posts WHERE ID=$id" );
-	}
-	return $post[0];
+	$post = get_post($id);
+	return $post;
 }
 
 function wpsc_duplicate_product_process( $post ) {
@@ -500,15 +495,25 @@ function wpsc_duplicate_product_process( $post ) {
 	$post_name = str_replace( "'", "''", $post->post_name );
 	$comment_status = str_replace( "'", "''", $post->comment_status );
 	$ping_status = str_replace( "'", "''", $post->ping_status );
-
+	
+	$defaults = array(
+		'post_status' 			=> $post->post_status, 
+		'post_type' 			=> $new_post_type,
+		'post_author' 			=> $user_ID,
+		'ping_status' 			=> $ping_status, 
+		'post_parent' 			=> $post->post_parent,
+		'menu_order' 			=> $post->menu_order,
+		'to_ping' 				=>  $post->to_ping,
+		'pinged' 				=> $post->pinged,
+		'post_excerpt' 			=> $post_excerpt,
+		'post_title' 			=> $post_title,
+		'post_content' 			=> $post_content,
+		'post_content_filtered' => $post_content_filtered,
+		'import_id' 			=> 0
+		);
 	// Insert the new template in the post table
-	$wpdb->query(
-			"INSERT INTO $wpdb->posts
-         (post_author, post_date, post_date_gmt, post_content, post_content_filtered, post_title, post_excerpt,  post_status, post_type, comment_status, ping_status, post_password, to_ping, pinged, post_modified, post_modified_gmt, post_parent, menu_order, post_mime_type)
-         VALUES
-         ('$post->post_author', '$new_post_date', '$new_post_date_gmt', '$post_content', '$post_content_filtered', '$post_title', '$post_excerpt', '$post->post_status', '$new_post_type', '$comment_status', '$ping_status', '$post->post_password', '$post->to_ping', '$post->pinged', '$new_post_date', '$new_post_date_gmt', '$post->post_parent', '$post->menu_order', '$post->post_mime_type')" );
-
-	$new_post_id = $wpdb->insert_id;
+	$new_post_id = wp_insert_post($defaults);
+	//$new_post_id = $wpdb->insert_id;
 
 	// Copy the taxonomies
 	wpsc_duplicate_taxonomies( $post->ID, $new_post_id, $post->post_type );

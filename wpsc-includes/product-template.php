@@ -64,10 +64,11 @@ function wpsc_a_page_url($page=null) {
  */
 function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $page_link = '') {
 	global $wp_query;
+
 	if(empty($totalpages))
 		$totalpages = $wp_query->max_num_pages;
 	if(empty($per_page))	
-		$per_page = $wp_query->query_vars['posts_per_page'];
+		$per_page = get_option('wpsc_products_per_page');
 
 	$current_page = get_query_var('paged');	
 	if($current_page == 0)
@@ -78,13 +79,14 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		
 	if(!get_option('permalink_structure')) {
 		$category = '';
-		if(isset($_GET['category']) && is_numeric($_GET['category']))
-			$category = '&category='.$_GET['category'];
+		if(isset($_GET['wpsc_product_category']) && is_numeric($_GET['wpsc_product_category']))
+			$category = '&wpsc_product_category='.$_GET['wpsc_product_category'];
 
 		$page_link = get_option('product_list_url').$category.'&paged';
 		$separator = '=';
 	}else{
-		$page_link = get_option('product_list_url');
+		// This will need changing when we get product categories sorted
+		$page_link = get_option('product_list_url').'cat/'.$wp_query->query_vars['term'].'/';
 		$separator = 'page/';
 	}
 
@@ -97,6 +99,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($current_page > 1)
 		$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> << First </a>";
 
+	//echo '<pre>'.print_r($current_page,true).'</pre>';
 	// Should we show the PREVIOUS PAGE link?
 	if($current_page > 1 && ($current_page-1) != 1) {
 		$previous_page = $current_page - 1;	
