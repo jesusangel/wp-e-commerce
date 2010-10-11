@@ -180,14 +180,14 @@ function wpsc_admin_include_coupon_js() {
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
 
 	// Coupon CSS
-	wp_enqueue_style( 'wp-e-commerce-admin_2.7',        WPSC_URL         . '/wpsc-admin/css/settingspage.css', false, false, 'all' );
-	wp_enqueue_style( 'wp-e-commerce-admin',            WPSC_URL         . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin_2.7',        WPSC_URL         . '/wpsc-admin/css/settingspage.css', false, false,               'all' );
+	wp_enqueue_style( 'wp-e-commerce-admin',            WPSC_URL         . '/wpsc-admin/css/admin.css',        false, $version_identifier, 'all' );
 
 	// Coupon JS
-	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl        . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false, $version_identifier );
-	wp_enqueue_script( 'livequery',                     WPSC_URL         .  '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
-	wp_enqueue_script( 'datepicker-ui',                 WPSC_CORE_JS_URL .  '/ui.datepicker.js',                 array( 'jquery-ui-core' ), $version_identifier );
-	wp_enqueue_script( 'wp-e-commerce-admin_legacy',    WPSC_URL         .  '/wpsc-admin/js/admin-legacy.js',                 array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'datepicker-ui' ), $version_identifier );
+	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl        . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false,                     $version_identifier );
+	wp_enqueue_script( 'livequery',                     WPSC_URL         . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ),         '1.0.3' );
+	wp_enqueue_script( 'datepicker-ui',                 WPSC_CORE_JS_URL . '/ui.datepicker.js',                              array( 'jquery-ui-core' ), $version_identifier );
+	wp_enqueue_script( 'wp-e-commerce-admin_legacy',    WPSC_URL         . '/wpsc-admin/js/admin-legacy.js',                 array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'datepicker-ui' ), $version_identifier );
 }
 
 /**
@@ -203,10 +203,10 @@ function wpsc_admin_include_css_and_js() {
 	wp_admin_css( 'media' );
 
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
-	wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js', array( 'jquery' ), '1.0.3' );
-	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false, $version_identifier );
+	wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
+	wp_enqueue_script( 'wp-e-commerce-admin-parameters', $siteurl . '/wp-admin/admin.php?wpsc_admin_dynamic_js=true', false,             $version_identifier );
 	wp_enqueue_script( 'wp-e-commerce-admin',            WPSC_URL . '/wpsc-admin/js/admin.js',                        array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier, false );
-	wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false, $version_identifier ); // needs removing
+	wp_enqueue_script( 'wp-e-commerce-legacy-ajax',      WPSC_URL . '/wpsc-admin/js/ajax.js',                         false,             $version_identifier ); // needs removing
 	wp_enqueue_script( 'wp-e-commerce-variations',       WPSC_URL . '/wpsc-admin/js/variations.js',                   array( 'jquery' ), $version_identifier );
 
 	// TODO - This should DEFINITELY come out when we convert to custom post types in the backend
