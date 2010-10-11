@@ -55,6 +55,9 @@ function wpsc_display_upgrades_page() {
 
 		<h2><?php _e( 'Upgrades', 'wpsc' ); ?></h2>
 		<div class='wpsc_gold_float'>
+			<p><?php _e( 'Enter your API Username and API Key below.', 'wpsc' ); ?></p>
+			<p><a href="http://getshopped.org/resources/docs/installation/gold-files/"><?php _e( 'For more information visit our documentation page.', 'wpsc' ); ?></a></p>
+
 			<div class='metabox-holder'>
 				<form method='post' id='gold_cart_form' action=''>
 
@@ -97,20 +100,6 @@ function wpsc_display_upgrades_page() {
 
 					<?php } ?>
 				</form>
-
-				<h2><?php _e( 'Upgrade Instructions', 'wpsc' ); ?></h2>
-				<p>
-					<?php __( 'Copy the gold_cart_files directory into your plugins folder.', 'wpsc' ); ?>
-				</p>
-				<p>
-					<?php _e( 'Now a new panel should appear in the Upgrades page where you must enter your API Username and API Key.', 'wpsc' ); ?>
-				</p>
-				<p>
-					<?php _e( 'For more information visit our documentation page.', 'wpsc' ); ?>
-				</p>
-				<p>
-					<a href="http://getshopped.org/resources/docs/installation/gold-files/"> <?php _e( 'For more information visit our documentation page.', 'wpsc' ); ?></a>
-				</p>
 			</div>
 		</div>
 	</div>
