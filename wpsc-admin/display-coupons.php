@@ -108,42 +108,22 @@ function wpsc_display_coupons_page() {
 
 			unset( $conditions[(int)$_POST['delete_condition']] );
 
-			//$conditions = array_values($conditions);
-			//  exit('<pre>'.print_r($_POST, true).'</pre><pre>'.print_r($conditions, true).'</pre>'.$sql);
 			$sql = "UPDATE `" . WPSC_TABLE_COUPON_CODES . "` SET `condition`='" . serialize( $conditions ) . "' WHERE `id` = '" . (int)$_POST['coupon_id'] . "' LIMIT 1";
-
 			$wpdb->query( $sql );
 		}
 
 		if ( isset( $_POST['submit_condition'] ) ) {
 			$conditions = $wpdb->get_var( "SELECT `condition` FROM `" . WPSC_TABLE_COUPON_CODES . "` WHERE `id` = '" . (int)$_POST['coupon_id'] . "' LIMIT 1" );
 			$conditions = unserialize( $conditions );
-			$new_cond = array( );
+
+			$new_cond             = array();
 			$new_cond['property'] = $_POST['rules']['property'][0];
-			$new_cond['logic'] = $_POST['rules']['logic'][0];
-			$new_cond['value'] = $_POST['rules']['value'][0];
-			$conditions [] = $new_cond;
+			$new_cond['logic']    = $_POST['rules']['logic'][0];
+			$new_cond['value']    = $_POST['rules']['value'][0];
+			$conditions[]         = $new_cond;
+
 			$sql = "UPDATE `" . WPSC_TABLE_COUPON_CODES . "` SET `condition`='" . serialize( $conditions ) . "' WHERE `id` = '" . (int)$_POST['coupon_id'] . "' LIMIT 1";
 			$wpdb->query( $sql );
-		}
-
-		if ( isset( $_POST['change-settings'] ) && $_POST['change-settings'] == 'true' ) {
-
-			if ( isset( $_POST['wpsc_also_bought'] ) && $_POST['wpsc_also_bought'] == 'on' )
-				update_option( 'wpsc_also_bought', 1 );
-			else
-				update_option( 'wpsc_also_bought', 0 );
-
-			if ( isset( $_POST['display_find_us'] ) && $_POST['display_find_us'] == 'on' )
-				update_option( 'display_find_us', 1 );
-			else
-				update_option( 'display_find_us', 0 );
-
-			if ( isset( $_POST['wpsc_share_this'] ) && $_POST['wpsc_share_this'] == 'on' )
-				update_option( 'wpsc_share_this', 1 );
-			else
-				update_option( 'wpsc_share_this', 0 );
-
 		}
 	} ?>
 

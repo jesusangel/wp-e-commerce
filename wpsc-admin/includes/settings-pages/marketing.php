@@ -1,6 +1,27 @@
 <?php
 
-function wpsc_options_marketing() { ?>
+function wpsc_options_marketing() {
+
+	if ( isset( $_POST['change-settings'] ) && 'true' == $_POST['change-settings'] ) {
+
+		if ( isset( $_POST['wpsc_also_bought'] ) && $_POST['wpsc_also_bought'] == 'on' )
+			update_option( 'wpsc_also_bought', 1 );
+		else
+			update_option( 'wpsc_also_bought', 0 );
+
+		if ( isset( $_POST['display_find_us'] ) && $_POST['display_find_us'] == 'on' )
+			update_option( 'display_find_us', 1 );
+		else
+			update_option( 'display_find_us', 0 );
+
+		if ( isset( $_POST['wpsc_share_this'] ) && $_POST['wpsc_share_this'] == 'on' )
+			update_option( 'wpsc_share_this', 1 );
+		else
+			update_option( 'wpsc_share_this', 0 );
+
+	}
+
+?>
 
 	<div class='metabox-holder'>
 
