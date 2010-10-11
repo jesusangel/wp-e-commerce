@@ -100,6 +100,9 @@ function wpsc_admin_pages() {
 		$page_hooks[] = add_submenu_page( $products_page, __( 'Categories', 'wpsc' ), __( 'Categories', 'wpsc' ), 'administrator', 'wpsc-edit-groups',   'wpsc_display_categories_page' );
 		$page_hooks[] = add_submenu_page( $products_page, __( 'Variations', 'wpsc' ), __( 'Variations', 'wpsc' ), 'administrator', 'edit-tags.php?taxonomy=wpsc-variation' );
 
+		// Add coupons page
+		$page_hooks[] = add_submenu_page( $products_page, __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
+
 		// Box order
 		$box_order = get_option( 'wpsc_product_page_order' );
 		if ( isset( $box_order['side'] ) && is_array( $box_order['side'] ) && is_array( $box_order['advanced'] ) )
