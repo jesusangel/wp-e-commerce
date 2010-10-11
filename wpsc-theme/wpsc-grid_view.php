@@ -2,14 +2,14 @@
 <div id="grid_view_products_page_container">
 
 	<?php wpsc_output_breadcrumbs(); ?>
-	
+
 	<?php
 
 	// Plugin hook for adding things to the top of the products page, like the live search
 	do_action( 'wpsc_top_of_products_page' );
 
 	?>
-	
+
 	<?php if ( wpsc_display_categories() ) : ?>
 
 		<?php if ( 1 == get_option( 'wpsc_category_grid_view' ) ) : ?>
@@ -27,8 +27,8 @@
 					<?php wpsc_print_subcategory( '', '' ); ?>
 
 				<?php wpsc_end_category_query(); ?>
-				
-			</div><!--close wpsc_categories-->
+
+			</div>
 
 		<?php else : ?>
 
@@ -77,18 +77,18 @@
 
 				<?php endif; ?>
 
-			</div><!--close wpsc_category_details-->
+			</div>
 
 		<?php endif; ?>
-	
-	
+
+
 		<?php if ( wpsc_has_pages_top() ) : ?>
 
 			<div class="wpsc_page_numbers_top">
 
 				<?php wpsc_pagination(); ?>
 
-			</div><!--close wpsc_page_numbers_top-->
+			</div>
 
 		<?php endif; ?>
 
@@ -104,7 +104,7 @@
 							<a href="<?php echo wpsc_the_product_permalink(); ?>">
 								<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>" />
 							</a>
-						</div><!--close item_image-->
+						</div>
 
 					<?php else : ?>
 
@@ -112,12 +112,12 @@
 							<a href="<?php echo wpsc_the_product_permalink(); ?>">
 								<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
 							</a>
-						</div><!--close item_no_image-->
+						</div>
 
 					<?php endif; ?>
 
 
-					<?php if ( get_option( 'show_images_only' ) != 1 ) : ?>
+					<?php if ( 1 != get_option( 'show_images_only' ) ) : ?>
 
 						<div class="grid_product_info">
 							<h2 class="prodtitle"><?php echo wpsc_the_product_title(); ?></h2>
@@ -138,13 +138,13 @@
 
 								<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e( 'Price', 'wpsc' ); ?>: <span class="currentprice"><?php echo wpsc_the_product_price(); ?></span></p>
 
-								<?php if ( get_option( 'display_pnp' ) == 1 ) : ?>
+								<?php if ( 1 == get_option( 'display_pnp' ) ) : ?>
 
-									<p class="pricedisplay"><?php _e('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
+									<p class="pricedisplay"><?php _e( 'P&amp;P', 'wpsc' ); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
 
 								<?php endif; ?>
 
-							</div><!--close price_container-->
+							</div>
 
 							<?php if ( 1 == get_option( 'display_moredetails' ) ) : ?>
 
@@ -152,14 +152,14 @@
 
 							<?php endif; ?>
 
-						</div><!--close grid_product_info-->
+						</div>
 
 						<div class="grid_more_info">
 							<form class="product_form"  enctype="multipart/form-data" action="<?php echo wpsc_this_page_url(); ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
-								<input type="hidden" value="add_to_cart" name="wpsc_ajax_action"/>
-								<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id"/>
+								<input type="hidden" value="add_to_cart" name="wpsc_ajax_action" />
+								<input type="hidden" value="<?php echo wpsc_the_product_id(); ?>" name="product_id" />
 
-								<?php if ( get_option( 'display_variations' ) == 1) : ?>
+								<?php if ( 1 == get_option( 'display_variations' ) ) : ?>
 
 									<div class="wpsc_variation_forms">
 										<table>
@@ -187,15 +187,15 @@
 											<?php endwhile; ?>
 
 										</table>
-									</div><!--close wpsc_variation_forms-->
+									</div>
 
 								<?php endif; ?>
 
-								<?php if ( ( 1 == get_option( 'display_addtocart' ) ) && ( '1' != get_option('addtocart_or_buynow') ) ) : ?>
+								<?php if ( ( 1 == get_option( 'display_addtocart' ) ) && ( '1' != get_option( 'addtocart_or_buynow' ) ) ) : ?>
 
 									<?php if ( wpsc_product_has_stock() ) : ?>
 
-										<input type="submit" value="<?php _e( 'Add To Cart', 'wpsc' ); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
+										<input type="submit" value="<?php _e( 'Add To Cart', 'wpsc' ); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button" />
 
 									<?php else : ?>
 
@@ -208,11 +208,11 @@
 								<div class="wpsc_loading_animation">
 									<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_IMAGES_URL; ?>/indicator.gif" />
 
-									<?php _e('Updating cart...', 'wpsc'); ?>
+									<?php _e( 'Updating cart...', 'wpsc' ); ?>
 
-								</div><!--close wpsc_loading_animation-->
+								</div>
 							</form>
-						</div><!--close grid_more_info-->
+						</div>
 
 						<?php if ( ( 1 == get_option( 'display_addtocart' ) ) && ( '1' == get_option( 'addtocart_or_buynow' ) ) ) : ?>
 
@@ -222,7 +222,7 @@
 
 					<?php endif; ?>
 
-				</div><!--close product_grid_item-->
+				</div>
 
 				<?php if ( ( get_option( 'grid_number_per_row' ) > 0 ) && ( ( ( $wp_query->current_post +1 ) % get_option( 'grid_number_per_row' ) ) == 0 ) ) : ?>
 
@@ -234,11 +234,11 @@
 
 			<?php if ( !wpsc_product_count() ) : ?>
 
-				<p><?php  _e('There are no products in this group.', 'wpsc'); ?></p>
+				<p><?php  _e( 'There are no products in this group.', 'wpsc' ); ?></p>
 
 			<?php endif ; ?>
 
-		</div><!--close product_grid_display-->
+		</div>
 
 		<?php if ( wpsc_has_pages_bottom() ) : ?>
 
@@ -246,11 +246,11 @@
 
 				<?php wpsc_pagination(); ?>
 
-			</div><!--close wpsc_page_numbers_bottom-->
+			</div>
 
 		<?php endif; ?>
 	<?php endif; ?>
 
 	<?php do_action( 'wpsc_theme_footer' ); ?>
-	
-</div><!--close grid_view_products_page_container-->
+
+</div>
