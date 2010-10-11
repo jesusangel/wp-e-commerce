@@ -463,7 +463,7 @@ function wpsc_display_coupons_page() {
 		</table>
 
 		<p style='margin: 10px 0px 5px 0px;'>
-			<?php _e( '<strong>Note:</strong> Due to a current limitation of PayPal, if your user makes a purchase and uses a coupon, we can not send a list of items through to paypal for processing. Rather, we must send the total amount of the purchase, so that within PayPal the user who purchases a product will see your shop name and the total amount of their purchase.', 'wpsc' ); ?>
+			<?php _e( '<strong>Note:</strong> Due to a current PayPal limitation, when a purchase is made using a coupon we cannot send a detailed list of items through for processing. Instead we send the total amount of the purchase so the customer will see your shop name and the total within PayPal.', 'wpsc' ); ?>
 		</p>
 
 	</div>
