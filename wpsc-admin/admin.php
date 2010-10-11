@@ -111,13 +111,6 @@ function wpsc_admin_pages() {
 		// Add Settings pages
 		$page_hooks[] = $edit_options_page = add_options_page( __( 'Store Settings', 'wpsc' ), __( 'Store', 'wpsc' ), 'administrator', 'wpsc-settings', 'wpsc_display_settings_page' );
 
-		/*
-		if ( IS_WPMU || $GLOBALS['wp_version'] == '3.0' )
-			$page_hooks[] = add_options_page( __( 'Marketing', 'wpsc' ), __( 'Marketing', 'wpsc' ), 'administrator', 'wpsc_display_coupons_page', 'wpsc_display_coupons_page' );
-		else
-			$page_hooks[] = add_options_page( __( 'Marketing', 'wpsc' ), __( 'Marketing', 'wpsc' ), 'administrator', 'wpsc_display_coupons_page', 'wpsc_display_coupons_page' );
-		*/
-
 		// Debug Page
 		if ( ( defined( 'WPSC_ADD_DEBUG_PAGE' ) && ( WPSC_ADD_DEBUG_PAGE == true ) ) || ( isset( $_SESSION['wpsc_activate_debug_page'] ) && ( true == $_SESSION['wpsc_activate_debug_page'] ) ) )
 			$page_hooks[] = add_submenu_page( $base_page, __( '- Debug' ), __( '- Debug' ), 'administrator', 'wpsc-debug', 'wpsc_debug_page' );
@@ -158,15 +151,11 @@ function wpsc_admin_pages() {
 
 			case $edit_options_page :
 				add_action( 'load-' . $page_hook, 'wpsc_admin_include_optionspage_css_and_js' );
-				//add_action('load-'.WPSC_DIR_NAME.'/display-coupons.php', 'wpsc_admin_include_coupon_js');
+				add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
 				break;
 
 			case $purchase_log_page :
 				add_action( 'admin_head', 'wpsc_product_log_rss_feed' );
-				break;
-
-			case 'settings_page_wpsc_display_coupons_page' :
-				add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
 				break;
 		}
 	}
