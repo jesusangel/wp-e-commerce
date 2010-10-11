@@ -11,7 +11,7 @@ $nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD',
 $nzshpcrt_gateways[$num]['supported_currencies']['option_name'] = 'paypal_curcode';
 
 
-function gateway_paypal_certified($seperator, $sessionid)
+function gateway_paypal_certified($separator, $sessionid)
   {
 $_SESSION['paypalExpressMessage']= '	<h4>Transaction Canceled</h4>';
 // ==================================
@@ -45,7 +45,7 @@ $paymentType = "Sale";
 //'------------------------------------
 //exit(get_option('transact_url'));
 $transact_url = get_option('transact_url');
-$returnURL =  $transact_url.$seperator."sessionid=".$sessionid."&gateway=paypal";
+$returnURL =  $transact_url.$separator."sessionid=".$sessionid."&gateway=paypal";
 
 //'------------------------------------
 //' The cancelURL is the location buyers are sent to when they hit the
@@ -311,14 +311,14 @@ $_SESSION['paypalExpressMessage']= '
 			*/
 		   if(get_option('permalink_structure') != '')
 			{
-			$seperator ="?";
+			$separator ="?";
 			}
 			else
 			  {
-			  $seperator ="&";
+			  $separator ="&";
 			  }
-		   $returnURL =urlencode(get_option('transact_url').$seperator.'currencyCodeType='.$currencyCodeType.'&paymentType='.$paymentType.'&paymentAmount='.$paymentAmount);
-		   $cancelURL =urlencode(get_option('transact_url').$seperator.'paymentType=$paymentType' );
+		   $returnURL =urlencode(get_option('transact_url').$separator.'currencyCodeType='.$currencyCodeType.'&paymentType='.$paymentType.'&paymentAmount='.$paymentAmount);
+		   $cancelURL =urlencode(get_option('transact_url').$separator.'paymentType=$paymentType' );
 	
 		 /* Construct the parameter string that describes the PayPal payment
 			the varialbes were set in the web form, and the resulting string
@@ -410,11 +410,11 @@ $resArray=$_SESSION['reshash'];
 
 if(get_option('permalink_structure') != '')
 {
-$seperator ="?";
+$separator ="?";
 }
 else
   {
-  $seperator ="&";
+  $separator ="&";
   }
 
 /* Display the  API response back to the browser .

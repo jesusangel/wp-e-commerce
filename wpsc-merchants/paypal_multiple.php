@@ -12,12 +12,12 @@ $nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD',
 $nzshpcrt_gateways[$num]['supported_currencies']['option_name'] = 'paypal_curcode';
 
 
-function gateway_paypal_multiple($seperator, $sessionid) {
+function gateway_paypal_multiple($separator, $sessionid) {
   global $wpdb, $wpsc_cart;
   $purchase_log = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1",ARRAY_A) ;
 
 	if ($purchase_log['totalprice']==0) {
-		header("Location: ".get_option('transact_url').$seperator."sessionid=".$sessionid);
+		header("Location: ".get_option('transact_url').$separator."sessionid=".$sessionid);
 		exit();
 	}
 	
@@ -33,7 +33,7 @@ function gateway_paypal_multiple($seperator, $sessionid) {
   $transact_url = get_option('transact_url');
   // paypal connection variables
   $data['business'] = get_option('paypal_multiple_business');
-  $data['return'] = urlencode($transact_url.$seperator."sessionid=".$sessionid."&gateway=paypal");
+  $data['return'] = urlencode($transact_url.$separator."sessionid=".$sessionid."&gateway=paypal");
   $data['cancel_return'] = urlencode($transact_url);
   $data['notify_url'] =urlencode(get_option('siteurl')."/?ipn_request=true");
   $data['rm'] = '2';

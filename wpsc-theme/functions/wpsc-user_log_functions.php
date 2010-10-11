@@ -8,12 +8,12 @@
  * @package wp-e-commerce
  * @since 3.8
  */
-global $wpdb, $user_ID, $wpsc_purchlog_statuses, $seperator;
+global $wpdb, $user_ID, $wpsc_purchlog_statuses, $separator;
 
 if ( get_option( 'permalink_structure' ) != '' )
-	$seperator = "?";
+	$separator = "?";
 else
-	$seperator = "&amp;";
+	$separator = "&amp;";
 
 $siteurl = site_url();
 

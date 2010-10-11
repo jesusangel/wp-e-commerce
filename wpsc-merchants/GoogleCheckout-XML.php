@@ -61,11 +61,11 @@ function gateway_google($fromcheckout = false){
 			}	
 			
 			if(get_option('permalink_structure') != '') {
-				$seperator = "?";
+				$separator = "?";
 			} else {
-				$seperator = "&";
+				$separator = "&";
 			}
-			Usecase($seperator, $_SESSION['wpsc_sessionid'], $fromcheckout);
+			Usecase($separator, $_SESSION['wpsc_sessionid'], $fromcheckout);
 			//exit();
 
 		}
@@ -73,7 +73,7 @@ function gateway_google($fromcheckout = false){
 		
 	}
 
- function Usecase($seperator, $sessionid, $fromcheckout) {
+ function Usecase($separator, $sessionid, $fromcheckout) {
 	global $wpdb, $wpsc_cart;
 	$purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";
 	$purchase_log = $wpdb->get_results($purchase_log_sql,ARRAY_A) ;
@@ -86,7 +86,7 @@ function gateway_google($fromcheckout = false){
 	$currency = get_option('google_cur');
 	$cart = new GoogleCart($merchant_id, $merchant_key, $server_type, $currency);
 	$transact_url = get_option('transact_url');
-	$returnURL =  $transact_url.$seperator."sessionid=".$sessionid."&gateway=google";
+	$returnURL =  $transact_url.$separator."sessionid=".$sessionid."&gateway=google";
 	$cart->SetContinueShoppingUrl($returnURL);
 	$cart->SetEditCartUrl(get_option('shopping_cart_url'));
 	$no=1;

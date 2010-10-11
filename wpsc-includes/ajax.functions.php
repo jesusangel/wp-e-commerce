@@ -609,9 +609,9 @@ function wpsc_submit_checkout() {
 		do_action( 'wpsc_submit_checkout', array( "purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id ) );
 
 		if ( get_option( 'permalink_structure' ) != '' ) {
-			$seperator = "?";
+			$separator = "?";
 		} else {
-			$seperator = "&";
+			$separator = "&";
 		}
 
 		/// submit to gateway
@@ -626,7 +626,7 @@ function wpsc_submit_checkout() {
 			if ( ($current_gateway_data['internalname'] == $submitted_gateway) && ($current_gateway_data['internalname'] != 'google') ) {
 				$gateway_used = $current_gateway_data['internalname'];
 				$wpdb->query( "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET `gateway` = '" . $gateway_used . "' WHERE `id` = '" . $log_id . "' LIMIT 1 ;" );
-				$current_gateway_data['function']( $seperator, $sessionid );
+				$current_gateway_data['function']( $separator, $sessionid );
 				//break;
 			} else if ( ($current_gateway_data['internalname'] == 'google') && ($current_gateway_data['internalname'] == $submitted_gateway) ) {
 				$gateway_used = $current_gateway_data['internalname'];

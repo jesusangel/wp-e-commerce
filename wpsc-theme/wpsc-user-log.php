@@ -9,13 +9,13 @@
  * @package WPSC
  * @since WPSC 3.8
  */
-global $files, $seperator, $purchase_log, $col_count, $siteurl, $products, $links; ?>
+global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $links; ?>
 
 <div class="wrap">
 	<div class="user-profile-links">
 		<a href="<?php echo get_option( 'user_account_url' ); ?>">Purchase History</a> |
-		<a href="<?php echo get_option( 'user_account_url' ) . $seperator . "edit_profile=true"; ?>">Your Details</a> |
-		<a href="<?php echo get_option( 'user_account_url' ) . $seperator . "downloads=true"; ?>">Your Downloads</a>
+		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "edit_profile=true"; ?>">Your Details</a> |
+		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "downloads=true"; ?>">Your Downloads</a>
 	</div>
 
 	<br />

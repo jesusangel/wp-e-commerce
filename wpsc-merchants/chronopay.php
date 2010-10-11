@@ -6,7 +6,7 @@ $nzshpcrt_gateways[$num]['form'] = "form_chronopay";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_chronopay";
 $nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 
-function gateway_chronopay($seperator, $sessionid)
+function gateway_chronopay($separator, $sessionid)
 {
 	global $wpdb;
 	$purchase_log_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `sessionid`= ".$sessionid." LIMIT 1";

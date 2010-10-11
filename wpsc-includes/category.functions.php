@@ -409,9 +409,9 @@ function wpsc_category_product_list($category_id) {
 function display_subcategories($id) {
   global $wpdb;  
   if(get_option('permalink_structure') != '') {
-    $seperator ="?";
+    $separator ="?";
   } else {
-    $seperator ="&amp;";
+    $separator ="&amp;";
 	}   
   $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".absint($id)."'  ORDER BY `nice-name`";
   $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);

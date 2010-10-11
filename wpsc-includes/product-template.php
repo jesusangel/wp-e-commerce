@@ -81,10 +81,10 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 			$category = '&category='.$_GET['category'];
 
 		$page_link = get_option('product_list_url').$category.'&paged';
-		$seperator = '=';
+		$separator = '=';
 	}else{
 		$page_link = get_option('product_list_url');
-		$seperator = 'page/';
+		$separator = 'page/';
 	}
 
 	// If there's only one page, return now and don't bother
@@ -99,14 +99,14 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	// Should we show the PREVIOUS PAGE link?
 	if($current_page > 1 && ($current_page-1) != 1) {
 		$previous_page = $current_page - 1;	
-		$output .= " <a href=\"". $page_link .$seperator. $previous_page ."\" title=\"Previous Page\"> < Previous </a>";
+		$output .= " <a href=\"". $page_link .$separator. $previous_page ."\" title=\"Previous Page\"> < Previous </a>";
 	}
 	$i =$current_page - $per_page;
 	$count = 0;
 	if($i > 0){
 		while(($i) < $current_page){
 			if($i > 0){
-				$output .= " <a href=\"". $page_link .$seperator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+				$output .= " <a href=\"". $page_link .$separator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
 				$i++;
 			}
 		}
@@ -120,7 +120,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($current_page + $per_page <= $totalpages){
 		while(($i) < $totalpages){
 			if($count <=4 ){
-				$output .= " <a href=\"". $page_link .$seperator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+				$output .= " <a href=\"". $page_link .$separator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
 				$i++;
 			}else{
 				break;
@@ -134,11 +134,11 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	
 	if($current_page < $totalpages) {
 		$next_page = $current_page + 1;
-		$output .= "<a href=\"". $page_link  .$seperator. $next_page ."\" title=\"Next Page\"> Next > </a>";
+		$output .= "<a href=\"". $page_link  .$separator. $next_page ."\" title=\"Next Page\"> Next > </a>";
 	}
 	// Should we show the LAST PAGE link?
 	if($current_page < $totalpages) {
-		$output .= " <a href=\"". $page_link  .$seperator. $totalpages ."\" title=\"Last Page\"> Last >> </a>";
+		$output .= " <a href=\"". $page_link  .$separator. $totalpages ."\" title=\"Last Page\"> Last >> </a>";
 	}
 	// Return the output.
 	echo $output;

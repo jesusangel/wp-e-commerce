@@ -3,9 +3,9 @@ function nszhpcrt_homepage_products($content = '') {
   global $wpdb;
   $siteurl = get_option('siteurl');
   if(get_option('permalink_structure') != '') {
-    $seperator ="?";
+    $separator ="?";
 	} else {
-		$seperator ="&amp;";
+		$separator ="&amp;";
 	}
   $sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `display_frontpage` IN('1') AND `active` IN('1')";
   //$product_list = $wpdb->get_results($sql,ARRAY_A);
@@ -76,9 +76,9 @@ function nszhpcrt_category_tag($content = '') {
 	//echo("<pre>".print_r($categories,true)."</pre>");
 	$siteurl = get_option('siteurl');
 	if(get_option('permalink_structure') != '') {
-		$seperator ="?";
+		$separator ="?";
 	} else {
-		$seperator ="&amp;";
+		$separator ="&amp;";
 	}
 
 		foreach((array)$activated_widgets as $widget_container) {
@@ -164,7 +164,7 @@ function nszhpcrt_category_tag($content = '') {
 					/*
 					adding to cart stuff
 					*/
-					$output .= "<form id='product_".$product['id']."' name='product_".$product['id']."' method='post' action='".get_option('product_list_url').$seperator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >";
+					$output .= "<form id='product_".$product['id']."' name='product_".$product['id']."' method='post' action='".get_option('product_list_url').$separator."category=".$_GET['category']."' onsubmit='submitform(this);return false;' >";
 					$output .= "<input type='hidden' name='prodid' value='".$product['id']."' />";
 					$output .= "<input type='hidden' name='item' value='".$product['id']."' />";
 					
