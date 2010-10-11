@@ -22,7 +22,7 @@ input[type="checkbox"]{
 	text-decoration: none;
 	height:32px;
 	width:15px;
-	background:transparent url(../../wpsc-includes/images/toolbar.png) no-repeat scroll left -32px;
+	background:transparent url(../../wpsc-core/images/toolbar.png) no-repeat scroll left -32px;
 
 	padding-left:15px;
 
@@ -30,7 +30,7 @@ input[type="checkbox"]{
 #wpsc_tickets_link a:hover{
 	height:32px;
 	width:15px;
-	background:transparent url(../../wpsc-includes/images/toolbar.png) no-repeat scroll left 0;
+	background:transparent url(../../wpsc-core/images/toolbar.png) no-repeat scroll left 0;
 }
 #flotplaceholder{
 	width: 100%;
