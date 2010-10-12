@@ -862,11 +862,14 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 		if ( !empty( $attached_images ) )
 			$thumbnail_id = $attached_images[0]->ID;
 	}
+
 	// Return image link...
-	if ( !empty( $thumbnail_id ) && $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
+	if ( $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
 		return $image_link;
+
 	// ... or false as if no image was found.
-	return false;
+	else
+		return false;
 }
 
 /**
