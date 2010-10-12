@@ -198,6 +198,12 @@ function wpsc_product_image( $attachment_id = 0, $width = null, $height = null )
 	return apply_filters( 'wpsc_product_image', $image_url );
 }
 
+function wpsc_product_no_image_fallback( $image_url = '' ) {
+	if ( empty( $image_url ) )
+		return WPSC_CORE_THEME_URL . '/images/noimage.png';
+}
+add_filter( 'wpsc_product_image', 'wpsc_product_no_image_fallback' );
+
 /**
  * wpsc product price function
  * @return string - the product price
