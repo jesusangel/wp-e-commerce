@@ -886,37 +886,45 @@ function wpsc_gateway_cc_check() {
 
 function wpsc_gateway_form_fields() {
 	global $wpsc_gateway, $gateway_checkout_form_fields;
-	//sprintf on paypalpro module
-	if ( $wpsc_gateway->gateway['internalname'] == 'paypal_pro' ) {
-		$output = sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
-						wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate'],
-						wpsc_the_checkout_CCcvv_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_code'],
-						wpsc_the_checkout_CCtype_validation_class(), $_SESSION['wpsc_gateway_error_messages']['cctype']
-		);
-		return $output;
-	}
-	if ( $wpsc_gateway->gateway['internalname'] == 'authorize' || $wpsc_gateway->gateway['internalname'] == 'paypal_payflow' ) {
-		$output = @sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
-						wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate'],
-						wpsc_the_checkout_CCcvv_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_code']
-		);
-		return $output;
+
+	// Match fields to gateway
+	switch ( $wpsc_gateway->gateway['internalname'] ) {
+
+		case 'paypal_pro' : // legacy
+		case 'wpsc_merchant_paypal_pro' :
+			$output = sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
+				wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate'],
+				wpsc_the_checkout_CCcvv_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_code'],
+				wpsc_the_checkout_CCtype_validation_class(), $_SESSION['wpsc_gateway_error_messages']['cctype']
+			);
+			break;
+
+		case 'authorize' :
+		case 'paypal_payflow' :
+			$output = @sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
+				wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate'],
+				wpsc_the_checkout_CCcvv_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_code']
+			);
+			break;
+
+		case 'eway' :
+		case 'bluepay' :
+			$output = sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
+				wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate']
+			);
+			break;
+		case 'linkpoint' :
+			$output = sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
+				wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate']
+			);
+			break;
+
 	}
 
-	if ( $wpsc_gateway->gateway['internalname'] == 'eway' || $wpsc_gateway->gateway['internalname'] == 'bluepay' ) {
-		$output = sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
-						wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate']
-		);
+	if ( isset( $output ) && !empty( $output ) )
 		return $output;
-	}
-	if ( $wpsc_gateway->gateway['internalname'] == 'linkpoint' ) {
-		$output = sprintf( $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']], wpsc_the_checkout_CC_validation_class(), $_SESSION['wpsc_gateway_error_messages']['card_number'],
-						wpsc_the_checkout_CCexpiry_validation_class(), $_SESSION['wpsc_gateway_error_messages']['expdate']
-		);
-		return $output;
-	}
-	//$output = sprintf($gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']] , $size['width'], $size['height']);
-	return $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']];
+	else
+		return $gateway_checkout_form_fields[$wpsc_gateway->gateway['internalname']];
 }
 
 function wpsc_gateway_form_field_style() {
