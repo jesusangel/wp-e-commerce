@@ -20,7 +20,6 @@ function getCheckedValue(radioObj) {
 }
 
 function insertWPSCLink() {
-
 	var tagtext;
 	var select_category=document.getElementById('wpsc_category_panel');
 	var category = document.getElementById('wpsc_category');
@@ -35,6 +34,7 @@ function insertWPSCLink() {
 		
 		
 		if (categoryid > 0 ) {
+		
 			if (items_per_page > 0)
 				tagtext = "[wpsc_products category_id='"+categoryid+"' number_per_page='"+items_per_page+"']";
 			else

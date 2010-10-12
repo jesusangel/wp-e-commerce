@@ -4,7 +4,9 @@
 /*
  *Start Flot CSS styling
 */
-ul.children {
+#link .panel_wrapper, #link div.current {
+overflow-y: scroll !important;
+}ul.children {
 	padding-left: 15px;
 }
 input[type="radio"]{
