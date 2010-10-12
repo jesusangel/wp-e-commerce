@@ -181,7 +181,7 @@ function wpsc_display_product_form( $product_id = 0 ) {
 //	echo '<pre>'.print_r($product_data,true).'</pre>';
 	if ( count( $product_data ) > 0 ) {
 		wpsc_product_basic_details_form( $product_data );
-	//	do_meta_boxes('wpsc-product', 'side', $product_data);
+		
 	}
 	
 }
@@ -528,6 +528,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 			</div>
 		</div>
 <?php
+	do_meta_boxes('wpsc-product', 'side', $product_data);
 }
 
 function wpsc_product_tag_forms( $product_data='' ) {
