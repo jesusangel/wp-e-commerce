@@ -199,7 +199,9 @@ function wpsc_product_image( $attachment_id = 0, $width = null, $height = null )
 }
 
 function wpsc_product_no_image_fallback( $image_url = '' ) {
-	if ( empty( $image_url ) )
+	if ( !empty( $image_url ) )
+		return $image_url;
+	else
 		return WPSC_CORE_THEME_URL . '/images/noimage.png';
 }
 add_filter( 'wpsc_product_image', 'wpsc_product_no_image_fallback' );
