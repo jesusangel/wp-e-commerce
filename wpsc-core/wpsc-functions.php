@@ -97,7 +97,7 @@ function wpsc_core_load_page_titles() {
  * @todo Come up with a better way to do this than a global $num value
  */
 function wpsc_core_load_gateways() {
-	global $nzshpcrt_gateways, $num, $wpsc_gateways;
+	global $nzshpcrt_gateways, $num, $wpsc_gateways,$gateway_checkout_form_fields;
 
 	$gateway_directory      = WPSC_FILE_PATH . '/wpsc-merchants';
 	$nzshpcrt_merchant_list = wpsc_list_dir( $gateway_directory );
