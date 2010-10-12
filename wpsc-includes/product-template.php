@@ -151,43 +151,51 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 
 /**
  * wpsc product image function
+ *
  * if no parameters are passed, the image is not resized, otherwise it is resized to the specified dimensions
+ * 
  * @param integer attachment_ID
  * @param integer width
  * @param integer height
  * @return string - the product image URL, or the URL of the resized version
  */
 function wpsc_product_image( $attachment_id = 0, $width = null, $height = null ) {
-	global $wp_query, $wpdb;
-	$image_exists = false;
 
-	if ( (($width >= 10) && ($height >= 10)) && (($width <= 1024) && ($height <= 1024)) )
+	// Do some dancing around the image size
+	if ( ( ( $width >= 10 ) && ( $height >= 10 ) ) && ( ( $width <= 1024 ) && ( $height <= 1024 ) ) )
 		$intermediate_size = "wpsc-{$width}x{$height}";
 
-	if ( ($attachment_id > 0) && ($intermediate_size != '') ) {
-		// Get all the required information about the attachment
-		$uploads = wp_upload_dir();
+	// Get image url if we have enough info
+	if ( ( $attachment_id > 0 ) && ( !empty( $intermediate_size ) ) ) {
 
+		// Get all the required information about the attachment
+		$uploads    = wp_upload_dir();
 		$image_meta = get_post_meta( $attachment_id, '' );
-		$file_path = get_attached_file( $attachment_id );
-		foreach ( $image_meta as $meta_name => $meta_value ) { // clean up the meta array
+		$file_path  = get_attached_file( $attachment_id );
+
+		// Clean up the meta array
+		foreach ( $image_meta as $meta_name => $meta_value )
 			$image_meta[$meta_name] = maybe_unserialize( array_pop( $meta_value ) );
-		}
+
 		$attachment_metadata = $image_meta['_wp_attachment_metadata'];
 
-		// determine if we already have an image of this size
-		if ( isset( $attachment_metadata['sizes'] ) && (count( $attachment_metadata['sizes'] ) > 0) && (isset( $attachment_metadata['sizes'][$intermediate_size] )) ) {
+		// Determine if we already have an image of this size
+		if ( isset( $attachment_metadata['sizes'] ) && (count( $attachment_metadata['sizes'] ) > 0) && ( isset( $attachment_metadata['sizes'][$intermediate_size] ) ) ) {
 			$intermediate_image_data = image_get_intermediate_size( $attachment_id, $intermediate_size );
-			$image_exists = true;
-			$image_url = $intermediate_image_data['url'];
+			$image_url               = $intermediate_image_data['url'];
+		}
+
+	// Not enough info so attempt to fallback
+	} else {
+		if ( !empty( $attachment_id ) ) {
+			$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$attachment_id}&amp;width=$width&amp;height=$height";
+		} else {
+			$image_url = false;
 		}
 	}
 
-
-	if ( $image_exists == false )
-		$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$attachment_id}&amp;width=$width&amp;height=$height";
-
-	return $image_url;
+	// @todo - put fallback 'No image' catcher here
+	return apply_filters( 'wpsc_product_image', $image_url );
 }
 
 /**
