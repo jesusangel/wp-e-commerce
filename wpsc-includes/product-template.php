@@ -157,7 +157,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
  * @param integer height
  * @return string - the product image URL, or the URL of the resized version
  */
-function wpsc_product_image( $attachment_id, $width = null, $height = null ) {
+function wpsc_product_image( $attachment_id = 0, $width = null, $height = null ) {
 	global $wp_query, $wpdb;
 	$image_exists = false;
 
