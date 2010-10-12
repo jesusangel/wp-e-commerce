@@ -1,6 +1,6 @@
 <?php
 
-require_once( dirname( dirname( dirname( dirname(__FILE__) ) ) ) . '/wpsc-config.php');
+require_once( dirname( dirname( dirname(__FILE__) ) ) . '/wpsc-config.php');
 $categorylist = get_terms('wpsc_product_category',array('hide_empty'=> 0));
 
 //Check capabilities
