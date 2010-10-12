@@ -50,7 +50,7 @@ class WP_Widget_Donations extends WP_Widget {
 			if ( $title ) {
 				echo $before_title . $title . $after_title;
 			}
-			nzshpcrt_donations();
+			wpsc_donations();
 			echo $after_widget;
 		}
 		
@@ -115,7 +115,7 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
  *
  * 1. $input does not get prepended to output.
  */
-function nzshpcrt_donations( $args = null ) {
+function wpsc_donations( $args = null ) {
 	
 	global $wpdb;
 	
@@ -134,7 +134,6 @@ function nzshpcrt_donations( $args = null ) {
 		LIMIT 1", ARRAY_A );
 	
 	if ( $products != null ) {
-		$output = "<div><div>";
 		foreach ( $products as $product ) {
 			$attached_images = (array)get_posts( array(
 				'post_type'   => 'attachment',
@@ -166,7 +165,6 @@ function nzshpcrt_donations( $args = null ) {
 			$output .= "</form>";
 			
 		}
-		$output .= "</div></div>";
 	} else {
 		$output = '';
 	}

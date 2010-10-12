@@ -25,5 +25,8 @@ function wpsc_purchlogitem_links_start_deprecated() {
 add_action( 'wpsc_purchlogitem_links_start', 'wpsc_purchlogitem_links_start_deprecated' );
 
 
+function nzshpcrt_donations($args){
+	wpsc_donations($args);
+}
 
 ?>
