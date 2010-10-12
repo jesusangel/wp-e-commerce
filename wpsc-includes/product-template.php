@@ -64,7 +64,7 @@ function wpsc_a_page_url($page=null) {
  */
 function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $page_link = '') {
 	global $wp_query;
-
+	$num_paged_links = 4; //amount of links to show on either side of current page
 	if(empty($totalpages))
 		$totalpages = $wp_query->max_num_pages;
 	if(empty($per_page))	
@@ -94,43 +94,43 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($totalpages == 1) 
 		return;
 	// Pagination Prefix
-	$output = "Pages: ";
+	$output = __('Pages: ','wpsc');
+	
 	// Should we show the FIRST PAGE link?
 	if($current_page > 1)
 		$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> &laquo; First </a>";
 
-	//echo '<pre>'.print_r($current_page,true).'</pre>';
 	// Should we show the PREVIOUS PAGE link?
-	if($current_page > 1 && ($current_page-1) != 1) {
+	if($current_page > 2) {
 		$previous_page = $current_page - 1;	
 		$output .= " <a href=\"". $page_link .$separator. $previous_page ."\" title=\"Previous Page\"> &lt; Previous </a>";
 	}
-	$i =$current_page - $per_page;
-	$count = 0;
-	if($i > 0){
-		while(($i) < $current_page){
-			if($i > 0){
-				$output .= " <a href=\"". $page_link .$separator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
-				$i++;
-			}
+	$i =$current_page - $num_paged_links;
+	$count = 1;
+	if($i <= 0) $i =1;
+	while($i < $current_page){
+		if($count <= $num_paged_links){
+			$output .= " <a href=\"". $page_link .$separator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
 		}
+		$i++;
+		$count++;
 	}
 	// Current Page Number	
 	if($current_page > 0)
-		$output .= "<span class='current'>[ ". $current_page ." ]</span>";
+		$output .= "<span class='current'> ". $current_page ." </span>";
 
-	$i = $current_page + 1;
-	$count = 0;
-	if($current_page + $per_page <= $totalpages){
-		while(($i) < $totalpages){
-			if($count <=4 ){
-				$output .= " <a href=\"". $page_link .$separator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
-				$i++;
+	//Links after Current Page
+	$i = $current_page + $num_paged_links;
+	$count = 1;
+	if($current_page < $totalpages){
+		while(($i) > $current_page){
+			if($count < $num_paged_links && ($count+$current_page) <= $totalpages){
+			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) ."\" title=\"Page ".($count+$current_page)." \"> ".($count+$current_page)."  </a>";
+			$i++;
 			}else{
-				break;
+			break;
 			}
 			$count ++;
-
 		}
 
 	
