@@ -305,6 +305,19 @@ function wpsc_cart_item_price($forDisplay = true) {
 }
 
 /**
+* cart item individual single price function, no parameters
+* @return string the cart individual single item price (1 quantity)
+*/
+function wpsc_cart_single_item_price($forDisplay = true) {
+   global $wpsc_cart;
+   if($forDisplay){
+      return $wpsc_cart->process_as_currency(($wpsc_cart->cart_item->total_price) / ($wpsc_cart->cart_item->quantity));
+   }else{
+      return ($wpsc_cart->cart_item->total_price / $wpsc_cart->cart_item->quantity);
+   }
+}
+
+/**
 * cart item shipping function, no parameters
 * @return string the cart item price multiplied by the quantity, with a currency sign
 */
@@ -316,8 +329,6 @@ function wpsc_cart_item_shipping($forDisplay = true) {
       return $wpsc_cart->cart_item->shipping;
    }
 }
-
-
 
 /**
 * cart item url function, no parameters

@@ -31,12 +31,12 @@ jQuery.fn.rating = function(){
         var selected_rating = jQuery("select option:selected", this).val();
         jQuery("select option", this).each(function(){
         		
-						class = '';
+						className = '';
 						//console.log(jQuery(this).attr('selected'));
 						if(this.value <= selected_rating) {
-							class = 'selected';
+							className = 'selected';
 						}
-            div.append( "<div class='star'><a class='" + class + "' href='#" + this.value + "' title='Give it a " + this.value + " Star Rating' rel="+product_id+">" + this.value + "</a></div>" );
+            div.append( "<div class='star'><a class='" + className + "' href='#" + this.value + "' title='Give it a " + this.value + " Star Rating' rel="+product_id+">" + this.value + "</a></div>" );
         });
 
         var averageRating = this.title,

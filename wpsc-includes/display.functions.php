@@ -125,7 +125,7 @@ function wpsc_also_bought( $product_id ) {
 
 function fancy_notifications() {
 	global $wpdb;
-	$output ='';
+	$output = "";
 	if ( get_option( 'fancy_notifications' ) == 1 ) {
 		$output = "";
 		$output .= "<div id='fancy_notification'>\n\r";
@@ -136,9 +136,13 @@ function fancy_notifications() {
 		$output .= "  </div>\n\r";
 		$output .= "</div>\n\r";
 	}
+	
 	return $output;
 }
-add_action( 'wpsc_theme_footer', 'fancy_notifications' );
+function wpsc_fancy_notifications(){
+	echo fancy_notifications();
+}
+add_action( 'wpsc_theme_footer', 'wpsc_fancy_notifications' );
 
 function fancy_notification_content( $cart_messages ) {
 	global $wpdb;

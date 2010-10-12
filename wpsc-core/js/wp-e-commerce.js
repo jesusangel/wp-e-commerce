@@ -121,9 +121,9 @@ jQuery(document).ready(function () {
   // Toggle the additional description content  
   jQuery("a.additional_description_link").click(function() {
     parent_element = jQuery(this).parent(".additional_description_container, .additional_description_span");
-    jQuery('.additional_description',parent_element).toggle();
-		return false;
-	});
+    jQuery('.additional_description',parent_element).slideToggle('fast');
+	return false;
+  });
 	
 	
   // update the price when the variations are altered.
@@ -200,7 +200,7 @@ jQuery(document).ready(function () {
 			return false;
 		});
 	});
-	jQuery("form.wpsc_empty_the_cart span.emptycart a").live('click',function(){
+	jQuery("form.wpsc_empty_the_cart a.emptycart").live('click',function(){
 			parent_form = jQuery(this).parents("form.wpsc_empty_the_cart");
 			form_values = "ajax=true&";
 			form_values += jQuery(parent_form).serialize();
