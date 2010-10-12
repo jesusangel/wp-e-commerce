@@ -418,7 +418,7 @@ if ( in_array( 'wpsc_merchant_paypal_pro', (array)get_option( 'custom_gateway_op
 		</td>
 	</tr>
 	<tr>
-		<td>Card Type *</td>
+		<td class='wpsc_CC_details'>Card Type *</td>
 		<td>
 		<select class='wpsc_ccBox' name='cctype'>
 			<option value='Visa'>Visa</option>
