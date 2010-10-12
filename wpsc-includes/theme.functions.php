@@ -1214,4 +1214,68 @@ function wpsc_display_featured_products_page() {
 }
 add_action( 'wpsc_top_of_products_page', 'wpsc_display_featured_products_page', 12 );
 
+
+/**
+ * wpsc_display_products_page class
+ *
+ * Shows only products from current category, but not from subcategories.
+ * 
+ * @access public
+ * @return void
+ */
+
+class WPSC_Hide_subcatsprods_in_cat {
+	var $q;
+
+	function get_posts( &$q ) {
+		$this->q =& $q;
+		
+		if ( "wpsc_product_category" != $q->query_vars['taxonomy'] )
+			return false;
+		
+		add_action( 'posts_where', array( &$this, 'where' ) );
+		add_action( 'posts_join', array( &$this, 'join' ) );
+	}
+
+	function where( $where ) {
+		global $wpdb;
+
+		remove_action( 'posts_where', array( &$this, 'where' ) );
+		
+		$term_id=$wpdb->get_var(' SELECT term_id FROM ' . $wpdb->terms . ' WHERE slug = "' . $this->q->query_vars['term'] . '"' );
+		
+		if ( !is_numeric( $term_id ) || $term_id < 1 )
+			return $where;
+
+		$field = preg_quote( "$wpdb->term_relationships.term_taxonomy_id", '#' );
+
+		$just_one = $wpdb->prepare( " AND $wpdb->term_relationships.term_taxonomy_id = %d ", $term_id );
+		if ( preg_match( "#AND\s+$field\s+IN\s*\(\s*(?:['\"]?\d+['\"]?\s*,\s*)*['\"]?\d+['\"]?\s*\)#", $where, $matches ) )
+			$where = str_replace( $matches[0], $just_one, $where );
+		else
+			$where .= $just_one;
+
+		return $where;
+	}
+	
+	function join($join){
+		global $wpdb;
+		remove_action( 'posts_where', array( &$this, 'where' ) );
+		if(strpos($join, "JOIN $wpdb->term_relationships ON $wpdb->posts.id =  $wpdb->term_relationships.object_id"))
+			return $join;
+		$join .= " JOIN $wpdb->term_relationships ON $wpdb->posts.id =  $wpdb->term_relationships.object_id ";
+		return $join;
+	}
+}
+
+function wpsc_hidesubcatprods_init() {
+	$hide_subcatsprods = new WPSC_Hide_subcatsprods_in_cat;
+	add_action( 'pre_get_posts', array( &$hide_subcatsprods, 'get_posts' ) );
+}
+
+
+$show_subcatsprods_in_cat = get_option( 'show_subcatsprods_in_cat' );
+if(!$show_subcatsprods_in_cat)
+	add_action( 'init', 'wpsc_hidesubcatprods_init' );
+
 ?>

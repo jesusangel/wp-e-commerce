@@ -587,6 +587,29 @@ function wpsc_options_presentation() {
 								<input type='radio' value='1' name='wpsc_options[catsprods_display_type]' id='catsprods_display_type2' <?php echo $catsprods_display_type2; ?> /> <label for='catsprods_display_type2'><?php _e( 'Sliding Product Groups (1 product per page)', 'wpsc' ); ?></label>
 							</td>
 						</tr>
+						
+						<tr>
+							<th scope="row">
+								<?php echo __( 'Show Subcategory Products in Parent Category', 'wpsc' ); ?>:
+							</th>
+							<td>
+								<?php
+								$show_subcatsprods_in_cat = get_option( 'show_subcatsprods_in_cat' );
+								$show_subcatsprods_in_cat_on = '';
+								$show_subcatsprods_in_cat_off = '';
+								switch ( $show_subcatsprods_in_cat ) {
+									case 1:
+										$show_subcatsprods_in_cat_on = 'checked="checked"';
+										break;
+									case 0:
+										$show_subcatsprods_in_cat_off = 'checked="checked"';
+										break;
+								}
+								?>
+								<input type="radio" value="1" name="wpsc_options[show_subcatsprods_in_cat]" id="show_subcatsprods_in_cat_on" <?php echo $show_subcatsprods_in_cat_on; ?> /> <label for="show_subcatsprods_in_cat_on"><?php echo __( 'Yes', 'wpsc' ); ?></label> &nbsp;
+								<input type="radio" value="0" name="wpsc_options[show_subcatsprods_in_cat]" id="show_subcatsprods_in_cat_off" <?php echo $show_subcatsprods_in_cat_off; ?> /> <label for="show_subcatsprods_in_cat_off"><?php echo __( 'No', 'wpsc' ); ?></label>
+							</td>
+						</tr>
 
 					<?php
 						if ( function_exists( 'gold_shpcrt_search_form' ) ) {
