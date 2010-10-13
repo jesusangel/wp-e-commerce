@@ -179,7 +179,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 				$variation_list = '';
 
-				if ( $link != '' ) {
+				if ( !empty( $link ) ) {
 					$additional_content = apply_filters( 'wpsc_transaction_result_content', array( "purchase_id" => $purchase_log['id'], "cart_item" => $row, "purchase_log" => $purchase_log ) );
 					if ( !is_string( $additional_content ) ) {
 						$additional_content = '';
