@@ -86,7 +86,8 @@ class wpsc_merchant {
 	 */
 	function collate_data() {
 		global $wpdb;
-		// get purchase data, regardless of being fed the ID or the sessionid
+
+		// Get purchase data, regardless of being fed the ID or the sessionid
 		if ( $this->purchase_id > 0 ) {
 			$purchase_id = & $this->purchase_id;
 			$purchase_logs = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `id` = {$purchase_id} LIMIT 1", ARRAY_A );
@@ -96,15 +97,12 @@ class wpsc_merchant {
 			$purchase_id = & $this->purchase_id;
 		}
 
-
-		$email_address = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` AS `form_field` INNER JOIN `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` AS `collected_data` ON `form_field`.`id` = `collected_data`.`form_id` WHERE `form_field`.`type` IN ( 'email' ) AND `collected_data`.`log_id` IN ( '{$purchase_id}' )" );
-
-		$currency_code = $wpdb->get_var( "SELECT `code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . get_option( 'currency_type' ) . "' LIMIT 1" );
-
+		$email_address       = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` AS `form_field` INNER JOIN `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` AS `collected_data` ON `form_field`.`id` = `collected_data`.`form_id` WHERE `form_field`.`type` IN ( 'email' ) AND `collected_data`.`log_id` IN ( '{$purchase_id}' )" );
+		$currency_code       = $wpdb->get_var( "SELECT `code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `id`='" . get_option( 'currency_type' ) . "' LIMIT 1" );
 		$collected_form_data = $wpdb->get_results( "SELECT `data_names`.`id`, `data_names`.`unique_name`, `collected_data`.`value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` AS `collected_data` JOIN `" . WPSC_TABLE_CHECKOUT_FORMS . "` AS `data_names` ON `collected_data`.`form_id` = `data_names`.`id` WHERE `log_id` = '" . $purchase_id . "'", ARRAY_A );
 
-		$address_keys = array(
-			'billing' => array(
+		$address_keys = array (
+			'billing' => array (
 				'first_name' => 'billingfirstname',
 				'last_name'  => 'billinglastname',
 				'address'    => 'billingaddress',
@@ -113,7 +111,7 @@ class wpsc_merchant {
 				'country'    => 'billingcountry',
 				'post_code'  => 'billingpostcode',
 			),
-			'shipping' => array(
+			'shipping' => array (
 				'first_name' => 'shippingfirstname',
 				'last_name'  => 'shippinglastname',
 				'address'    => 'shippingaddress',
@@ -125,12 +123,13 @@ class wpsc_merchant {
 		);
 
 		$address_data = array(
-			'billing' => array( ),
-			'shipping' => array( )
+			'billing'  => array(),
+			'shipping' => array()
 		);
+
 		foreach ( $collected_form_data as $collected_form_row ) {
 			$address_data_set = 'billing';
-			$address_key = array_search( $collected_form_row['unique_name'], $address_keys['billing'] );
+			$address_key      = array_search( $collected_form_row['unique_name'], $address_keys['billing'] );
 
 			if ( $address_key == null ) {
 				$address_data_set = 'shipping';
@@ -140,20 +139,25 @@ class wpsc_merchant {
 			if ( $address_key == null )
 				continue;
 
-			if ( $collected_form_row['unique_name'] == 'billingcountry' ) {
-				$country = maybe_unserialize( $collected_form_row['value'] );
-				$address_data[$address_data_set][$address_key] = $country[0];
+			switch ( $collected_form_row['unique_name'] ) {
+				case 'billingcountry' :
+					$country = maybe_unserialize( $collected_form_row['value'] );
+					$address_data[$address_data_set][$address_key] = $country[0];
 
-				if ( isset( $country[1] ) && !empty( $country[1] ) )
-					$address_data['billing']['state'] = wpsc_get_state_by_id( $country[1], 'code' );
+					if ( isset( $country[1] ) && !empty( $country[1] ) )
+						$address_data['billing']['state'] = wpsc_get_state_by_id( $country[1], 'code' );
 
-			} elseif ( $collected_form_row['unique_name'] == 'shippingstate' ) {
+					break;
 
-				if ( !empty( $collected_form_row['value'] ) && is_numeric( $collected_form_row['value'] ) )
-					$address_data[$address_data_set][$address_key] = wpsc_get_state_by_id( $collected_form_row['value'], 'code' );
+				case 'shippingstate' :
+					if ( !empty( $collected_form_row['value'] ) && is_numeric( $collected_form_row['value'] ) )
+						$address_data[$address_data_set][$address_key] = wpsc_get_state_by_id( $collected_form_row['value'], 'code' );
 
-			} else {
-				$address_data[$address_data_set][$address_key] = $collected_form_row['value'];
+					break;
+
+				default :
+					$address_data[$address_data_set][$address_key] = $collected_form_row['value'];
+					break;
 			}
 		}
 
@@ -195,18 +199,20 @@ class wpsc_merchant {
 		$original_cart_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `purchaseid` = {$purchase_id}", ARRAY_A );
 		//print_r($original_cart_data);
 		//return;
+
 		foreach ( $original_cart_data as $cart_row ) {
 			$is_downloadable = false;
-			if ( $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `cartid` = {$cart_row['id']}" ) ) {
+
+			if ( $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `cartid` = {$cart_row['id']}" ) )
 				$is_downloadable = true;
-			}
 
 			$is_recurring = (bool)wpsc_get_cartmeta( $cart_row['id'], 'is_recurring', true );
 
-			if ( $is_recurring == true ) {
+			if ( $is_recurring == true )
 				$this->cart_data['is_subscription'] = true;
-			}
+
 			$rebill_interval = wpsc_get_cartmeta( $cart_row['id'], 'rebill_interval', true );
+
 			$new_cart_item = array(
 				"cart_item_id"         => $cart_row['id'],
 				"product_id"           => $cart_row['prodid'],
@@ -228,6 +234,7 @@ class wpsc_merchant {
 					"times_to_rebill"  => wpsc_get_cartmeta( $cart_row['id'], 'times_to_rebill', true ),
 				)
 			);
+
 			$this->cart_items[] = $new_cart_item;
 		}
 	}
@@ -238,6 +245,7 @@ class wpsc_merchant {
 	 */
 	function set_error_message( $error_message ) {
 		global $wpdb;
+
 		$_SESSION['wpsc_checkout_misc_error_messages'][] = $error_message;
 	}
 
@@ -247,7 +255,9 @@ class wpsc_merchant {
 	 */
 	function return_to_checkout() {
 		global $wpdb;
+
 		wp_redirect( get_option( 'shopping_cart_url' ) );
+
 		exit(); // follow the redirect with an exit, just to be sure.
 	}
 
