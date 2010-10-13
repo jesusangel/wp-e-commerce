@@ -275,15 +275,14 @@ if(wpsc_cart_item_count() > 0) :
 						<?php echo wpsc_checkout_form_name();?>
 						
 						</label>
-					</span>
+					</p>
 					<p>
 						<?php echo wpsc_checkout_form_field();?>
-						
+					</p>
 				    <?php if(wpsc_the_checkout_item_error() != ''): ?>
-				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></span>
+				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
 				    
 					<?php endif; ?>
-					</p>
 				</div>
 		  <?php else : ?>
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
@@ -450,7 +449,6 @@ if(wpsc_cart_item_count() > 0) :
 			</span>
 		</div>
 </form>
-</div>
 </div><!--close checkout_page_container-->
 <?php
 else:
