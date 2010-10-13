@@ -42,7 +42,7 @@ class WP_Widget_Price_Range extends WP_Widget {
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
-		nzshpcrt_price_range();
+		wpsc_price_range();
 		echo $after_widget;
 	
 	}
@@ -99,7 +99,7 @@ add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Wid
  *
  * @param $args (array) Arguments.
  */
-function nzshpcrt_price_range( $args = null ) {
+function wpsc_price_range( $args = null ) {
 
 	global $wpdb;
 	
@@ -126,11 +126,11 @@ function nzshpcrt_price_range( $args = null ) {
 		for ( $i = 0; $i < $final_count; $i++ ) {
 			$j = $i;
 			if ( $i == $final_count - 1 ) {
-				echo "<a href='" . esc_url(add_query_arg( 'range', $j, $product_page )) . "'>Over " . $ranges[$i] . "</a><br/>";
+				echo "<a href='" . esc_url(add_query_arg( 'range', $ranges[$i] . '-', $product_page )) . "'>Over " . $ranges[$i] . "</a><br/>";
 			} else if ( $ranges[$i] == 0 ) {
-				echo "<a href='" . esc_url(add_query_arg( 'range', $j, $product_page )) . "'>Under " . $ranges[$i + 1] . "</a><br/>";
+				echo "<a href='" . esc_url(add_query_arg( 'range', '-' . ($ranges[$i+1]-1), $product_page )) . "'>Under " . $ranges[$i + 1] . "</a><br/>";
 			} else {
-				echo "<a href='" . esc_url(add_query_arg( 'range', $j, $product_page )) . "'>" . $ranges[$i] . " - " . $ranges[$i + 1] . "</a><br/>";
+				echo "<a href='" . esc_url(add_query_arg( 'range', $ranges[$i] . "-" . ($ranges[$i + 1]-1), $product_page )) . "'>" . $ranges[$i] . " - " . ($ranges[$i + 1]-1) . "</a><br/>";
 			}
 		}
 		echo "<a href='" . esc_url(add_query_arg( 'range', 'all', get_option( 'product_list_url' )) ) . "'>" . __( 'Show All', 'wpsc' ) . "</a><br/>";
@@ -138,6 +138,22 @@ function nzshpcrt_price_range( $args = null ) {
 	
 }
 
+if(isset($_GET['range'])){
+	add_filter( 'posts_where', 'wpsc_rage_where' );
+}
 
-
+function wpsc_rage_where( $where ) {
+	global $wpdb, $wp_query;
+	$range = explode('-', $_GET['range']);
+	if(!strpos($where,'wpsc-product'))
+		return $where;
+	if(!$range[0]){
+		$where .= " AND $wpdb->posts.id IN ( SELECT $wpdb->posts.id FROM $wpdb->posts JOIN $wpdb->postmeta on $wpdb->postmeta.post_id = $wpdb->posts.id WHERE $wpdb->postmeta.meta_key=\"_wpsc_price\" AND $wpdb->postmeta.meta_value < " . ( $range[1] + 1 ) . ") ";
+	}elseif(!$range[1]){
+		$where .= " AND $wpdb->posts.id IN ( SELECT $wpdb->posts.id FROM $wpdb->posts JOIN $wpdb->postmeta on $wpdb->postmeta.post_id = $wpdb->posts.id WHERE $wpdb->postmeta.meta_key=\"_wpsc_price\" AND $wpdb->postmeta.meta_value > " . ( $range[0]-1 ) . ") ";
+	}elseif($range[1] && $range[0]){
+		$where .= " AND $wpdb->posts.id IN ( SELECT $wpdb->posts.id FROM $wpdb->posts JOIN $wpdb->postmeta on $wpdb->postmeta.post_id = $wpdb->posts.id WHERE $wpdb->postmeta.meta_key=\"_wpsc_price\" AND $wpdb->postmeta.meta_value > " . ( $range[0]-1 ) . " AND $wpdb->postmeta.meta_value < " . ( $range[1] + 1 ) . ") ";	
+	}
+	return $where;
+}
 ?>
