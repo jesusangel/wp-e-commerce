@@ -1048,25 +1048,26 @@ function wpsc_product_has_multicurrency() {
 function wpsc_display_product_multicurrency() {
 	global $wpdb, $wpsc_query;
 
-	$output = '';
-	$sql = "SELECT `meta_key`, `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id`=" . get_the_ID() . " AND `meta_key` LIKE '_wpsc_currency%'";
+	$sql     = "SELECT `meta_key`, `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id`=" . get_the_ID() . " AND `meta_key` LIKE '_wpsc_currency%'";
 	$results = $wpdb->get_results( $sql, ARRAY_A );
+
 	if ( count( $results ) > 0 ) {
 		foreach ( (array)$results as $curr ) {
-			$isocode = str_ireplace( "currency[", "", $curr['meta_key'] );
-			$isocode = str_ireplace( "]", "", $isocode );
+			$isocode       = str_ireplace( "currency[", "", $curr['meta_key'] );
+			$isocode       = str_ireplace( "]", "", $isocode );
 			$currency_data = $wpdb->get_row( "SELECT `symbol`,`symbol_html`,`code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode`='" . $isocode . "' LIMIT 1", ARRAY_A );
-			if ( $currency_data['symbol'] != '' ) {
-				$currency_sign = $currency_data['symbol_html'];
-			} else {
-				$currency_sign = $currency_data['code'];
-			}
 
-			$output .='<span class="wpscsmall pricefloatright pricedisplay">' . $currency_sign . ' ' . nzshpcrt_currency_display( $curr["meta_value"], false, false, false, true ) . '</span><br />';
-			//exit('<pre>'.print_r($currency_sign, true).'</pre>');
+			if ( $currency_data['symbol'] != '' )
+				$currency_sign = $currency_data['symbol_html'];
+			else
+				$currency_sign = $currency_data['code'];
+
+			if ( !empty( $currency_sign ) )
+				return '<span class="wpscsmall pricefloatright pricedisplay">' . $currency_sign . ' ' . nzshpcrt_currency_display( $curr["meta_value"], false, false, false, true ) . '</span><br />';
 		}
 	}
-	return $output;
+
+	return false;
 }
 
 /**
