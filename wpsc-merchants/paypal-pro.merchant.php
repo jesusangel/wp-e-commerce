@@ -79,6 +79,11 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$data['SHIPTONAME']    = $this->cart_data['shipping_address']['first_name'] . " " . $this->cart_data['shipping_address']['last_name'];
 		$data['SHIPTOSTREET']  = $this->cart_data['shipping_address']['address'];
 		$data['SHIPTOCITY']    = $this->cart_data['shipping_address']['city'];
+
+		// Check the state for internal numeric ID and trap it
+		if ( is_numeric( $this->cart_data['shipping_address']['state'] ) )
+			$this->cart_data['shipping_address']['state'] = wpsc_get_state_by_id( $this->cart_data['shipping_address']['state'], 'code' );
+
 		$data['SHIPTOSTATE']   = $this->cart_data['shipping_address']['state'];
 		$data['SHIPTOCOUNTRY'] = $this->cart_data['shipping_address']['country'];
 		$data['SHIPTOZIP']     = $this->cart_data['shipping_address']['post_code'];
