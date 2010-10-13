@@ -101,7 +101,7 @@ function wpsc_admin_pages() {
 		$page_hooks[] = add_submenu_page( $products_page, __( 'Variations', 'wpsc' ), __( 'Variations', 'wpsc' ), 'administrator', 'edit-tags.php?taxonomy=wpsc-variation' );
 
 		// Add coupons page
-		$page_hooks[] = add_submenu_page( $products_page, __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
+		$page_hooks[] = $edit_coupons_page = add_submenu_page( $products_page, __( 'Coupons', 'wpsc' ), __( 'Coupons', 'wpsc' ), 'administrator', 'wpsc-edit-coupons', 'wpsc_display_coupons_page' );
 
 		// Box order
 		$box_order = get_option( 'wpsc_product_page_order' );
@@ -134,7 +134,7 @@ function wpsc_admin_pages() {
 																					<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a> <br />
 																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/import/'>Import Options</a> <br />
 																					<a target='_blank' href='http://getshopped.org/resources/docs/store-settings/checkout/'>Checkout Options</a> <br />" );
-			
+		add_contextual_help( 'products_page_wpsc-edit-coupons',          $header . "<a target='_blank' href='http://getshopped.org/resources/docs/building-your-store/marketing'>Marketing Options</a><br />");	
 		}
 
 		$page_hooks = apply_filters( 'wpsc_additional_pages', $page_hooks, $products_page );
@@ -154,12 +154,17 @@ function wpsc_admin_pages() {
 
 			case $edit_options_page :
 				add_action( 'load-' . $page_hook, 'wpsc_admin_include_optionspage_css_and_js' );
-				add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
 				break;
 
 			case $purchase_log_page :
 				add_action( 'admin_head', 'wpsc_product_log_rss_feed' );
 				break;
+				
+			case $edit_coupons_page :
+				add_action( 'load-' . $page_hook, 'wpsc_admin_include_coupon_js' );
+				break;
+				
+				
 		}
 	}
 

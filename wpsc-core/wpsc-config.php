@@ -1,4 +1,7 @@
 <?php
+
+/* This is used for the tinymce shortcode viewing box. */
+
 /**
  * Bootstrap file for getting the ABSPATH constant to wp-load.php
  * This is requried when a plugin requires access not via the admin screen.
@@ -8,7 +11,6 @@
  * @package WordPress
  * @since Version 2.6
  */
- 
 /** Define the server path to the file wp-config here, if you placed WP-CONTENT outside the classic file structure */
 
 $path  = ''; // It should be end with a trailing slash    
