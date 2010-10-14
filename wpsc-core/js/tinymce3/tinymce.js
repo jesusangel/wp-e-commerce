@@ -28,16 +28,30 @@ function insertWPSCLink() {
 	
 	// who is active ?
 	if (select_category.className.indexOf('current') != -1) {
+		
+		items_per_page = jQuery('#wpsc_perpage').val();
+	//work out which radio button is selected and get the value
+		for (var i=0; i < document.WPSC.wpsc_sale_shortcode.length; i++)
+		   {
+		   if (document.WPSC.wpsc_sale_shortcode[i].checked)
+		      {
+		      var shortcode = document.WPSC.wpsc_sale_shortcode[i].value;
+		      }
+		   }
+		
+		var shortcodeid = shortcode;
 		var categoryid = category.value;
 		var items_per_page = 0;
-		items_per_page = jQuery('#wpsc_perpage').val();
+
+		if (categoryid > 0 || shortcodeid == 1) {
 		
-		
-		if (categoryid > 0 ) {
-		
-			if (items_per_page > 0)
+			if (shortcodeid == 1)
+				tagtext = "[wpsc_products price='sale']";
+				else if (shortcodeid == 2)
+					tagtext = "[wpsc_products category_id='"+categoryid+"' price='sale']";
+				else	if (items_per_page > 0)
 				tagtext = "[wpsc_products category_id='"+categoryid+"' number_per_page='"+items_per_page+"']";
-			else
+			else	
 				tagtext = "[wpsc_products category_id='"+categoryid+"' ]";
 		} else {
 			tinyMCEPopup.close();
@@ -51,9 +65,9 @@ function insertWPSCLink() {
 		var visibles = visi.value;
 		if (categoryid > 0 ) {
 			if (visibles != '') {
-				tagtext = "[wpsc_product_slider category_id='"+categoryid+"' visible_items='"+visibles+"']";
+				tagtext = "[wpec_product_slider category_id='"+categoryid+"' visible_items='"+visibles+"']";
 			} else {
-				tagtext = "[wpsc_product_slider category_id='"+categoryid+"']";
+				tagtext = "[wpec_product_slider category_id='"+categoryid+"']";
 			}
 		} else {
 			tinyMCEPopup.close();
@@ -61,18 +75,28 @@ function insertWPSCLink() {
 	}
 	
 	if (add_product.className.indexOf('current') != -1) {
-		category = document.getElementById('add_product_category');
-		prod_name = document.getElementById('add_product_name');
-		prod_price = document.getElementById('add_product_price');
-		prod_desc = document.getElementById('add_product_description');
-		var categoryid = category.value;
-		var desc = prod_desc.value;
-		var product_name = prod_name.value;
-		var price = prod_price.value;
 		
-		if (product_name != '') {
-			ajax.post("index.php",noresults,"ajax=true&addfromtinymce=true&value=1");
-			tagtext='1';
+		product = document.getElementById('wpsc_product_name');
+		
+			for (var i=0; i < document.WPSC.wpsc_product_shortcode.length; i++)
+		   {
+		   if (document.WPSC.wpsc_product_shortcode[i].checked)
+		      {
+		      var shortcode = document.WPSC.wpsc_product_shortcode[i].value;
+		      }
+		   }
+		var productid = product.value;
+		var shortcodeid = shortcode ;
+		
+		if (productid > 0) {
+			if (shortcodeid == 1)
+				tagtext = "[buy_now_button product_id='"+productid+"']";
+			
+			if (shortcodeid == 2)
+				tagtext = "[add_to_cart="+productid+"]";
+			
+			if (shortcodeid == 3)
+				tagtext = "[wpsc_products product_id='"+productid+"']";
 		} else {
 			tinyMCEPopup.close();
 		}

@@ -2,6 +2,7 @@
 
 require_once( dirname( dirname( dirname(__FILE__) ) ) . '/wpsc-config.php');
 $categorylist = get_terms('wpsc_product_category',array('hide_empty'=> 0));
+$allProducts = get_posts('post_type=wpsc-product');
 
 //Check capabilities
 if ( !current_user_can('edit_pages') && !current_user_can('edit_posts') ) 
@@ -23,142 +24,184 @@ global $wpdb;
 			div.current{
 				overflow-y: auto !important;
 			}
+			
+			.description{
+				color:grey	!important;
+				font-style: italic !important;
+			}
+			
+			#product_slider_panel a{
+				color: blue	!important;
+			}
 		</style>
 	</head>
-	<body id="link" onload="tinyMCEPopup.executeOnLoad('init();'); document.body.style.display=''; document.getElementById('category').focus();" style="display:none;">
-		<form name="WPSC" action="#">
-			<div class="tabs">
-				<ul>
-					<li id="category" class="current"><span><a href="javascript:mcTabs.displayTab('category','wpsc_category_panel');" onmousedown="return false;"><?php _e("Category", 'wpsc'); ?></a></span></li>
-					<li id="add_product"><span><a href="javascript:mcTabs.displayTab('add_product','add_product_panel');" onmousedown="return false;"><?php _e("Products", 'wpsc'); ?></a></span></li>
-					<li id="product_slider"><span><a href="javascript:mcTabs.displayTab('product_slider','product_slider_panel');" onmousedown="return false;"><?php _e("Premium Upgrades", 'wpsc'); ?></a></span></li>
-				</ul>
-			</div>
-			
-<div class="panel_wrapper">
-	<div id="wpsc_category_panel" class="panel current">
-		<br />
-		<table border="0" cellpadding="4" cellspacing="0">
-			<tr valign="top">
-				<td><strong><label for="wpsc_category"><?php _e("Select Category: ", 'wpsc'); ?></label></strong></td>
+	
+<body id="link" onload="tinyMCEPopup.executeOnLoad('init();'); document.body.style.display=''; document.getElementById('category').focus();" style="display:none;">
+	<form name="WPSC" action="#">
+		<div class="tabs">
+		<ul>
+			<li id="category" class="current"><span><a href="javascript:mcTabs.displayTab('category','wpsc_category_panel');" onmousedown="return false;"><?php _e("Category", 'wpsc'); ?></a></span></li>
+			<li id="add_product"><span><a href="javascript:mcTabs.displayTab('add_product','add_product_panel');" onmousedown="return false;"><?php _e("Products", 'wpsc'); ?></a></span></li>
+			<li id="product_slider"><span><a href="javascript:mcTabs.displayTab('product_slider','product_slider_panel');" onmousedown="return false;"><?php _e("Premium Upgrades", 'wpsc'); ?></a></span></li>
+		</ul>
+		</div>
+		
+<!-- 	Add a category shortcode options -->
+	<div class="panel_wrapper">
+		<div id="wpsc_category_panel" class="panel current"><br />
+			<table border="0" cellpadding="4" cellspacing="0">
 				
-				<td><select id="wpsc_category" name="wpsc_category" style="width: 150px">
-						<option value="0"><?php _e("No Category", 'wpsc'); ?></option>
+				<tr valign="top">
+					<td><strong><label for="wpsc_category"><?php _e("Select Category: ", 'wpsc'); ?></label></strong></td>
+					<td>
+						<select id="wpsc_category" name="wpsc_category" style="width: 150px">
+							<option value="0"><?php _e("No Category", 'wpsc'); ?></option>
+							<?php 						
+								foreach($categorylist as $category) 
+									echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
+							?>
+						</select><br />
+						<span class="description"><?php _e('Select the category you would like to display with a Shortcode.') ?></span>
+					</td>
+				</tr>
 				
-						<?php 						
-							foreach($categorylist as $category) 
-							echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
-						?>
-				</select><br />
-				<em><span class="description"><?php _e('Select the category you would like to display with a Shortcode.') ?></em></span>
-				</td>
-			</tr>
+				<tr valign="top">
+					<td><strong><label for="wpsc_perpage"><?php _e("Number of products per Page: ", 'wpsc'); ?></label></strong></td>
+					<td>
+						<input name="number_per_page" id="wpsc_perpage" type="text" value="" style="width: 80px" /><br />
+						<span class="description"><?php _e('Select the number of products you would like to display per page.') ?></span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td><strong><label for="wpsc_saleprod"><?php _e("Sale Products:", 'wpsc'); ?></label></strong></td>
+				</tr>
+				<tr>
+				<td></td>	
+					<td>
+						<input type="radio" id="wpsc_sale_shortcode" name="wpsc_sale_shortcode" value="1"><?php _e('Add ALL sale products', 'wpsc');?>
+						<br /><span class="description"><?php _e('This will add all your products you have on sale to the page' , 'wpsc') ?></span>
+					</td>
+				</tr>
+				<tr>
+				<td></td>	
+					<td>
+						<input type="radio" id="wpsc_sale_shortcode" name="wpsc_sale_shortcode" value="2"><?php _e('Add sale products by category', 'wpsc');?>
+						<br /><span class="description"><?php _e('This will add all your products you have on sale from the selected category' , 'wpsc') ?></span>
+					</td>
+				</tr>
+				
+			</table>
+		</div>
+	
+	<!-- Premium upgrades, check is upgrade exists if so display short code. -->
+		<div id="product_slider_panel" class="panel"><br />
+			<table border="0" cellpadding="4" cellspacing="0">
 			
 			<tr valign="top">
-				<td><strong><label for="wpsc_perpage"><?php _e("Number of products per Page: ", 'wpsc'); ?></label></strong></td>
-				<td><input name="number_per_page" id="wpsc_perpage" type="text" value="6" style="width: 80px" /><br />
-				<span class="description"><em><?php _e('Select the number of products you would like to display per page.') ?></em></span>
-				</td>
+				<strong><label for="wpsc_product_slider"> <?php _e("Product Slider", 'wpsc'); ?></label></strong>
 			</tr>
-		</table>
+		<!-- check if product slider installed -->
+		<?php if (function_exists('product_slider_preload')){ ?>
+		
+				<tr valign="top">
+					<td><strong><label for="wpsc_category"> <?php _e("Select Category", 'wpsc'); ?></label></strong></td>
+					<td>
+						<select id="wpsc_slider_category" name="wpsc_category" style="width: 200px">
+							<option value="0"> <?php _e("No Category", 'wpsc'); ?></option>	
+							<?php
+								foreach($categorylist as $category) 
+								echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
+							?>
+						</select><br />
+						<span class="description"><?php _e('Select the category you would like to display with a Shortcode.') ?></span>
+					</td>
+				</tr>
+				
+				<tr valign="top">
+					<td><strong><label for="wpsc_perpage"><?php _e("Number of Products", 'wpsc_category'); ?>:</label></strong></td>
+					<td>
+						<input type='text' id='wpsc_slider_visibles' name='wpsc_slider_visibles'> <br />
+						<span class="description"><?php _e('Number of Products to be displayed in the slider.', 'wpsc') ?></span>
+					</td>
+				</tr>
+			
+		<?php }else{ ?>
+				<tr valign="top">
+					<td><?php _e('You don\'t have the product slider installed, for a cool way to display your shop check out the <a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/product-slider-2010/" target="_blank">Product Slider</a>','wpsc'); ?>
+					</td>
+				</tr>
+		<?php } ?>
+	</table>
+			
+			
+			<strong><label for="wpsc_members"><?php _e("Members and Capabilities", 'wpsc'); ?></label></strong>
+			<!-- check if members is installed -->
+				<?php if (function_exists('wpsc_display_purchasable_capabilities')){ ?>
+				
+					<span class="description"> <?php
+					_e('<p> To create a preview on your restricted page put this shortcode at the top of your page. you can include html within this short code to display things like images ','wpsc'); ?></span>
+					<code>[preview] Preview In Here [/preview]</code>
+					
+				<?php }else{ ?>
+				
+				<p>	<?php _e(' You don\'t have the Members and Capabilities plugin installed, to start managing your users and creating subscription for you site visit: <a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/product-slider-2010/" target="_blank">Premium Upgrades</a>','wpsc');		
+				}?> </p>
+		</div>
+	
+<!-- 	all these short codes relate to single products, the product id is used to generate all these codes. -->
+		<div id="add_product_panel" class="panel"><br />
+			<table border="0" cellpadding="4" cellspacing="0">
+			
+				<tr valign="top">
+					<td><strong><label for="wpsc_product_name"><?php _e("Select a Product", 'wpsc'); ?></label></strong></td>
+					<td>
+						<select id="wpsc_product_name" name="wpsc_product_name" style="width: 200px">
+							<option value="0"><?php _e("No Product", 'wpsc'); ?></option>	
+							<?php
+								foreach($allProducts as $product) 
+									echo "<option value=".$product->ID." >".$product->post_title."</option>"."\n";
+							?>
+						</select><br />
+						<span class="description"><?php _e('Select the product you would like to create a shortcode for.', 'wpsc') ?></span>
+					</td>
+				</tr>
+				
+			<tr valign="top">
+			<?php $selected_gateways = get_option( 'custom_gateway_options' );
+					if (in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways )) {?>
+			
+					<td><strong><label for="add_product_buynow"><?php _e("Shortcode:", 'wpsc'); ?></label></strong></td>
+					<td>
+						<input type="radio" id="wpsc_product_shortcode" name="wpsc_product_shortcode" value="1"><?php _e('Add a buy now button', 'wpsc');?>
+						<br /><span class="description"><?php _e('This adds a paypal buy now button for the product selected, this will take your customer straight to Paypal.', 'wpsc') ?></span>
+					</td>
+			<?php } ?>
+			
+				<tr>
+					<td></td>
+					<td>
+						<input type="radio" id="wpsc_product_shortcode" name="wpsc_product_shortcode" value="2"><?php _e('Add an add to cart button', 'wpsc');?>
+						<br /><span class="description"><?php _e('This adds an add to cart button for the product selected.' , 'wpsc') ?></span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td></td>
+					<td>
+						<input type="radio" id="wpsc_product_shortcode" name="wpsc_product_shortcode" value="3"><?php _e('Add product', 'wpsc');?>
+						<br /><span class="description"><?php _e('This will add the selected product to your page.' , 'wpsc') ?></span>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 	
-<!-- Premium upgrades, check is upgrade exists if so display short code. -->
-<div id="product_slider_panel" class="panel">
-	<br />
-	<table border="0" cellpadding="4" cellspacing="0">
-		<tr valign="top"><strong><?php _e("Product Slider", 'wpsc'); ?></strong></tr>
-			<?php if (function_exists('product_slider_preload')){?>
-				<td><strong><label for="wpsc_category"><?php _e("Select Category", 'wpsc'); ?></label></strong></td>
-					<td><select id="wpsc_slider_category" name="wpsc_category" style="width: 200px">
-						<option value="0"><?php _e("No Category", 'wpsc'); ?></option>	
-						<?php
-			
-							foreach($categorylist as $category) 
-								echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
-			
-						 ?>
-					</select><br />
-					<em><span class="description"><?php _e('Select the category you would like to display with a Shortcode.') ?></em></span>
-					</td>
-					<tr valign="top">
-					<td><strong><label for="wpsc_perpage"><?php _e("Number of Products", 'wpsc_category'); ?>:</label></strong></td>
-			
-		</td>
-		<td>
-			<input type='text' id='wpsc_slider_visibles' name='wpsc_slider_visibles'> <br />
-			<em><span class="description"><?php _e('Number of Products to be displayed in the slider.') ?></em></span>
-		</td>
-		</tr>
-
-			<?php }else{ ?>
-					<td><?php _e('You don\'t have the product slider installed, for a cool way to display your shop check out the <a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/product-slider-2010/" target="_blank">Product Slider</a>','wpsc'); ?>
-</td>
-				<?php	}?>	
-	</table>
-	<strong><?php _e("Members and Capabilities", 'wpsc'); ?></strong>
-	<?php if (function_exists('wpsc_display_purchasable_capabilities')){ ?>
-To create a preview on your restricted page put the following short code at the top of your page:
-	<code>[preview] Preview In Here [/preview]</code>
-	
-	<?php }else{ ?>
-		<p> You don't have the Members and Capabilities plugin installed, to start managing your users and creating subscription for you site visit: <a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/product-slider-2010/" target="_blank">Premium Upgrades</a> </p>
-	<?php }?>
-</div>
-
-
-				<div id="add_product_panel" class="panel">
-					<br />
-					<table border="0" cellpadding="4" cellspacing="0">
-			<tr valign="top">
-				<td><strong><label for="add_product_name"><?php _e("Name", 'wpsc'); ?></label></strong></td>
-				<td><input type="text" id="add_product_name" name="add_product_name" style="width: 200px"><br />
-				<span class="description"><em><?php _e('The name of the product') ?></em></span>
-				</td>
-			</tr>
-			<tr valign="top">
-				<td><strong><label for="add_product_description"><?php _e("Description", 'wpsc'); ?></label></strong></td>
-				<td><input type="text" id="add_product_description" name="add_product_description" style="width: 200px"><br />
-				<span class="description"><em><?php _e('Product Description') ?></em></span>
-				</td>
-			</tr>
-			<tr valign="top">
-				<td><strong><label for="add_product_description"><?php _e("Price", 'wpsc'); ?></label></strong></td>
-				<td><input type="text" id="add_product_price" name="add_product_price" style="width: 200px"><br />
-				</td>
-			</tr>
-				<tr valign="top">
-				<td><strong><label for="add_product_category"><?php _e("Category", 'wpsc'); ?></label></label></strong></td>
-				<td>				
-					<select id="add_product_category" name="add_product_category" style="width: 200px">
-						<option value="0"><?php _e("No Category", 'wpsc'); ?></option>
-						<?php
-						foreach($categorylist as $category) 
-							echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
-						?>
-					</select>
-				</td>
-			</tr><?php
-			$selected_gateways = get_option( 'custom_gateway_options' );
-			if (in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways )) {?>
-				<tr valign="top">
-				<td><strong><label for="add_product_description"><?php _e("Buy now button", 'wpsc'); ?></label></strong></td>
-				<td><code>short code needed in here</code><br />
-				[buy_now_button product_id=12]
-				<span class="description"><em><?php _e('Please note that this will only work with PayPal Standard 2.0') ?></em></span>
-				</td>
-			</tr>
-			<?php }
-				
-			?>
-			</table>
-				</div>
-				
-			</div>
 			<div class="mceActionPanel">
 				<div style="float: left">
 					<input type="button" id="cancel" name="cancel" value="<?php _e("Cancel", 'wpsc'); ?>" onclick="tinyMCEPopup.close();" />
 				</div>
+				
 				<div style="float: right">
 					<input type="submit" id="insert" name="insert" value="<?php _e("Insert", 'wpsc'); ?>" onclick="insertWPSCLink();" />
 				</div>
