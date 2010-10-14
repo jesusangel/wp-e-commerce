@@ -34,7 +34,7 @@ if(wpsc_cart_item_count() > 0) :
 
 			<td class="firstcol wpsc_product_image wpsc_product_image_<?php echo wpsc_the_cart_item_key(); ?>">
 			<?php if('' != wpsc_cart_item_image()): ?>
-				<img src="<?php echo wpsc_cart_item_image(48,48); ?>" alt="<?php echo wpsc_cart_item_name(); ?>" title="<?php echo wpsc_cart_item_name(); ?>" />
+				<img src="<?php echo wpsc_cart_item_image(48,48); ?>" alt="<?php echo wpsc_cart_item_name(); ?>" title="<?php echo wpsc_cart_item_name(); ?>" class="product_image" />
 			<?php else: ?>
 				<div class="item_no_image">
 					<a href="<?php echo wpsc_the_product_permalink(); ?>">
@@ -244,12 +244,11 @@ if(wpsc_cart_item_count() > 0) :
 		$_SESSION['wpsc_checkout_misc_error_messages'] =array();
 	//	wpsc_has_correct_region($_SESSION['wpsc_delivery_country'],$_SESSION['wpsc_delivery_region']);
 	?>
-    <div class="col1">
+	<table class='wpsc_checkout_table table-1'>
 		<?php $i = 0; while (wpsc_have_checkout_items()) : wpsc_the_checkout_item(); ?>
 		  <?php if(wpsc_checkout_form_is_header() == true) : $i++;?>
 			<?php if($i > 1):?>
-            </div><!--close col1-->
-            <div class="col2">
+			</table>
 				<table class='wpsc_checkout_table table-<?php echo $i; ?>'>
 			<?php endif; ?>
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
@@ -261,7 +260,7 @@ if(wpsc_cart_item_count() > 0) :
 				<tr class='same_as_shipping_row'>
 					<td colspan ='2'>
 						<input type='checkbox' value='true' name='billing_same_as_shipping' id='billing_same_as_shipping' />
-						<label for='billing_same_as_shipping'><?php _e('Same as billing address?','wpsc'); ?></label>
+						<label for='billing_same_as_shipping'><?php _e('Same as shipping address?','wpsc'); ?></label>
 					</td>
 				</tr>
 			<?php	} ?>
@@ -275,14 +274,15 @@ if(wpsc_cart_item_count() > 0) :
 						<?php echo wpsc_checkout_form_name();?>
 						
 						</label>
-					</p>
+					</span>
 					<p>
 						<?php echo wpsc_checkout_form_field();?>
-					</p>
+						
 				    <?php if(wpsc_the_checkout_item_error() != ''): ?>
-				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
+				    <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></span>
 				    
 					<?php endif; ?>
+					</p>
 				</div>
 		  <?php else : ?>
 		  		<tr <?php echo wpsc_the_checkout_item_error_class();?>>
@@ -357,7 +357,6 @@ if(wpsc_cart_item_count() > 0) :
 							<?php } ?>
 
 							
-
 							<?php if(wpsc_gateway_form_fields()): ?> 
 								<table class='<?php echo wpsc_gateway_form_field_style();?>'>
 									<?php echo wpsc_gateway_form_fields();?> 
@@ -389,7 +388,7 @@ if(wpsc_cart_item_count() > 0) :
  	   </tr>
 		<?php endif; ?>	
 		</table>
-		</div><!--close col2--><div class="group"></div>
+		
 	<table  class='wpsc_checkout_table table-4'>
 		<tr>
 			<td class='wpsc_total_price_and_shipping'colspan='2'>
@@ -448,7 +447,10 @@ if(wpsc_cart_item_count() > 0) :
 				<?php endif;  */?>				
 			</span>
 		</div>
+
+<div class='clear'></div>
 </form>
+</div>
 </div><!--close checkout_page_container-->
 <?php
 else:
