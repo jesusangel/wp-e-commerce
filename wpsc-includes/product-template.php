@@ -183,15 +183,19 @@ function wpsc_product_image( $attachment_id = 0, $width = null, $height = null )
 		if ( isset( $attachment_metadata['sizes'] ) && (count( $attachment_metadata['sizes'] ) > 0) && ( isset( $attachment_metadata['sizes'][$intermediate_size] ) ) ) {
 			$intermediate_image_data = image_get_intermediate_size( $attachment_id, $intermediate_size );
 			$image_url               = $intermediate_image_data['url'];
+		} else {
+			$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$attachment_id}&amp;width=$width&amp;height=$height";
 		}
 
 	// Not enough info so attempt to fallback
 	} else {
+
 		if ( !empty( $attachment_id ) ) {
 			$image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$attachment_id}&amp;width=$width&amp;height=$height";
 		} else {
 			$image_url = false;
 		}
+
 	}
 
 	// @todo - put fallback 'No image' catcher here
@@ -861,7 +865,6 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 	// Use product thumbnail
 	if ( has_post_thumbnail( $product_id ) ) {
 		$thumbnail_id = get_post_thumbnail_id( $product_id  );
-
 	// Use first product image
 	} else {
 
