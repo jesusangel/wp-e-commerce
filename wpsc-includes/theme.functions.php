@@ -810,7 +810,6 @@ function wpsc_display_products_page( $query ) {
 
 		$temp_wpsc_query = new WP_Query($args);
 	}
-	echo('<pre>'.print_r($temp_wpsc_query,true).'</pre>');
 	// swap the wpsc_query objects
 	list( $wp_query, $temp_wpsc_query ) = array( $temp_wpsc_query, $wp_query ); 
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
