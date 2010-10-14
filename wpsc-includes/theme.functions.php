@@ -765,11 +765,12 @@ function wpsc_display_products_page( $query ) {
 
 	// If the data is coming from a shortcode parse the values into the args variable, 
 	// I did it this was to preserve backwards compatibility
-
 	if(!empty($query)){	
 		$args['post_type'] = 'wpsc-product';
-		if(!empty($query['product_id'])){
+		if(!empty($query['product_id']) && is_array($query['product_id'])){
 			$args['post__in'] = $query['product_id'];
+		}elseif(is_string($query['product_id'])){
+			$args['post__in'] = (array)$query['product_id'];
 		}
 		if(!empty($query['price']) && 'sale' != $query['price']){
 			$args['meta_key'] = '_wpsc_price';
@@ -806,7 +807,7 @@ function wpsc_display_products_page( $query ) {
 
 		$temp_wpsc_query = new WP_Query($args);
 	}
-	
+	//exit('<pre>'.print_r($temp_wpsc_query,true).'</pre>');
 	// swap the wpsc_query objects
 	list( $wp_query, $temp_wpsc_query ) = array( $temp_wpsc_query, $wp_query ); 
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
@@ -824,7 +825,7 @@ function wpsc_display_products_page( $query ) {
 	
 	$output = ob_get_contents();
 	ob_end_clean();
-	$output = str_replace('$','\$', $output);
+	$output = str_replace('\$','$', $output);
 	list($temp_wpsc_query, $wp_query) = array( $wp_query, $temp_wpsc_query ); // swap the wpsc_query objects back
 	if ( $is_single == false ) {
 		$GLOBALS['post'] = $wp_query->post;
