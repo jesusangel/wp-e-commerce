@@ -401,7 +401,7 @@ function wpsc_is_viewable_taxonomy(){
 function wpsc_the_category_title($title, $id){
 	global $wp_query;
 	$post = get_post($id);
-	if('wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && isset($wp_query->query_vars['term']) && isset($wp_query->query_vars['taxonomy'])){
+	if('wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && isset($wp_query->query_vars['term']) && isset($wp_query->query_vars['taxonomy']) && !($wp_query->is_admin)){
 		remove_filter('the_title','wpsc_the_category_title');
 		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
 		$category = get_term($category_id, $wp_query->query_vars['taxonomy']);
