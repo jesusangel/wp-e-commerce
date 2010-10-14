@@ -1245,14 +1245,19 @@ class WPSC_Hide_subcatsprods_in_cat {
 
 		remove_action( 'posts_where', array( &$this, 'where' ) );
 		
-		$term_id=$wpdb->get_var(' SELECT term_id FROM ' . $wpdb->terms . ' WHERE slug = "' . $this->q->query_vars['term'] . '"' );
+		$term_id=$wpdb->get_var($wpdb->prepare('SELECT term_id FROM '.$wpdb->terms.' WHERE slug = %s ', $this->q->query_vars['term']));
 		
 		if ( !is_numeric( $term_id ) || $term_id < 1 )
 			return $where;
 
+		$term_taxonomy_id = $wpdb->get_var($wpdb->prepare('SELECT term_taxonomy_id FROM '.$wpdb->term_taxonomy.' WHERE term_id = %d and taxonomy = %s', $term_id, $this->q->query_vars['taxonomy']));
+
+		if ( !is_numeric($term_taxonomy_id) || $term_taxonomy_id < 1)
+			return $where;
+
 		$field = preg_quote( "$wpdb->term_relationships.term_taxonomy_id", '#' );
 
-		$just_one = $wpdb->prepare( " AND $wpdb->term_relationships.term_taxonomy_id = %d ", $term_id );
+		$just_one = $wpdb->prepare( " AND $wpdb->term_relationships.term_taxonomy_id = %d ", $term_taxonomy_id );
 		if ( preg_match( "#AND\s+$field\s+IN\s*\(\s*(?:['\"]?\d+['\"]?\s*,\s*)*['\"]?\d+['\"]?\s*\)#", $where, $matches ) )
 			$where = str_replace( $matches[0], $just_one, $where );
 		else
