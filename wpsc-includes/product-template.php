@@ -21,6 +21,7 @@ function wpsc_has_pages_bottom(){
 	else
 		return false;
 }
+
 /**
  * Used in wpsc_pagination to generate the links in pagination
  * @access public
@@ -42,7 +43,7 @@ function wpsc_a_page_url($page=null) {
 	} else {
 		if( 1 < $wp_query->query_vars['paged']) {
 			if(get_option('permalink_structure'))
-				$output .= "page/{$wp_query->query_vars['paged']}/";
+				$output .= "paged/{$wp_query->query_vars['paged']}/";
 			else
 				$output = add_query_arg('paged', '', $output);
 			
@@ -63,10 +64,15 @@ function wpsc_a_page_url($page=null) {
  * @return 
  */
 function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $page_link = '') {
-	global $wp_query;
+	global $wp_query,$wpsc_query;
 	$num_paged_links = 4; //amount of links to show on either side of current page
-	if(empty($totalpages))
-		$totalpages = $wp_query->max_num_pages;
+	if(empty($totalpages)){
+		if('wpsc-product' == $wp_query->query_vars['post_type'] && 'wpsc-product' != $wpsc_query->query_vars['post_type']){
+			$totalpages = $wp_query->max_num_pages;			
+		}else{
+			$totalpages = $wpsc_query->max_num_pages;	
+		}
+	}
 	if(empty($per_page))	
 		$per_page = get_option('wpsc_products_per_page');
 
@@ -79,14 +85,21 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		
 	if(!get_option('permalink_structure')) {
 		$category = '';
-		if(isset($_GET['wpsc_product_category']) && is_numeric($_GET['wpsc_product_category']))
-			$category = '&wpsc_product_category='.$_GET['wpsc_product_category'];
+		if(isset($wpsc_query->query_vars['wpsc_product_category']) && is_string($wpsc_query->query_vars['wpsc_product_category'])){
+			$category = '?wpsc_product_category='.$wpsc_query->query_vars['wpsc_product_category'];
+			$page_link = get_option('blogurl').$category.'&amp;page';
+		}else{
+			$page_link = get_option('product_list_url').$category.'&amp;page';
+		}
 
-		$page_link = get_option('product_list_url').$category.'&amp;paged';
 		$separator = '=';
 	}else{
 		// This will need changing when we get product categories sorted
-		$page_link = get_option('product_list_url').'cat/'.$wp_query->query_vars['term'].'/';
+		if(isset($wpsc_query->query_vars['term']))
+			$page_link = get_option('product_list_url').'cat/'.$wpsc_query->query_vars['term'].'/';
+		else
+			$page_link = get_option('product_list_url');
+		
 		$separator = 'page/';
 	}
 
