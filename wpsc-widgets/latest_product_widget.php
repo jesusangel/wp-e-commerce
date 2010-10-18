@@ -128,12 +128,7 @@ function wpsc_latest_product() {
 				) );
 				$attached_image = $attached_images[0]; 
 				if ( $attached_image->ID > 0 ) {
-					if ( get_option( 'wpsc_selected_theme' ) == 'marketplace' ) {
-						$src = WPSC_IMAGE_URL . $special['image'];
-						$output .= '<img src="' . wpsc_product_image( $attached_image->ID, 100, 75 ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
-					} else {
 						$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option('product_image_width'), get_option('product_image_height') ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
-					}
 				}
 				$output .= '</a>';
 				$output .= '</div>';
