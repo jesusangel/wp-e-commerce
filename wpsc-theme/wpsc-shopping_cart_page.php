@@ -109,7 +109,8 @@ endif;
 	
 	<?php if(wpsc_has_category_and_country_conflict()): ?>
 		<p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
-	<?php endif;
+		<?php unset($_SESSION['categoryAndShippingCountryConflict']);
+	endif;
 	
 	if(isset($_SESSION['WpscGatewayErrorMessage']) && $_SESSION['WpscGatewayErrorMessage'] != '') :?>
 		<p class="validation-error"><?php echo $_SESSION['WpscGatewayErrorMessage']; ?></p>
@@ -244,7 +245,7 @@ endif;
 			</div>
 		<?php	
 		endif;
-		 $_SESSION['wpsc_checkout_misc_error_messages'] =array(); ?>
+		 $_SESSION['wpsc_checkout_misc_error_messages'] = array(); ?>
 		
 	<table class='wpsc_checkout_table table-1'>
 		<?php $i = 0; 
@@ -321,7 +322,7 @@ endif;
 		<?php endif; ?>		
 		<?php do_action('wpsc_inside_shopping_cart'); ?>
 		
-		<?php  //this HTML displays activated payment gateways?>
+		<?php  //this HTML displays activated payment gateways	?>
 		<?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?>
 			<tr>
 			<td colspan='2' class='wpsc_gateway_container'>

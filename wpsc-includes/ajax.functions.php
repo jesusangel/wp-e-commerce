@@ -495,7 +495,6 @@ function wpsc_submit_checkout() {
 	$options = get_option( 'custom_shipping_options' );
 	$form_validity = $wpsc_checkout->validate_forms();
 
-	// exit('2<pre>'.print_r($_SESSION['wpsc_zipcode'], true).'</pre>');
 	extract( $form_validity ); // extracts $is_valid and $error_messages
 	// exit('<pre>'.print_r($results, true).'</pre>');
 	//print('<pre>'.print_r(array((int)$is_valid), true).'</pre>');
@@ -520,6 +519,7 @@ function wpsc_submit_checkout() {
 			} else {
 				$countries = wpsc_get_meta( $catid, 'target_market', 'wpsc_category' );
 			}
+
 			if ( !in_array( $selectedCountry[0]['id'], (array)$countries ) ) {
 				$errormessage = sprintf( __( 'Oops the product : %s cannot be shipped to %s. To continue with your transaction please remove this product from the list above.', 'wpsc' ), $cartitem->product_name, $selectedCountry[0]['country'] );
 				$_SESSION['categoryAndShippingCountryConflict'] = $errormessage;
@@ -534,7 +534,6 @@ function wpsc_submit_checkout() {
 			$use_shipping++;
 		}
 	}
-
 	if ( array_search( $submitted_gateway, $selected_gateways ) !== false ) {
 		$_SESSION['wpsc_previous_selected_gateway'] = $submitted_gateway;
 	} else {
