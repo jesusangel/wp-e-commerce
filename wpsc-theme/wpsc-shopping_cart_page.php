@@ -410,7 +410,7 @@ endif;
 <!-- div for make purchase button -->
 		<div class='wpsc_make_purchase'>
 			<span>
-				<?php if(wpsc_has_tnc()) : ?>
+				<?php if(!wpsc_has_tnc()) : ?>
 					<input type='hidden' value='yes' name='agree' />
 				<?php endif; ?>	
 				<?php //exit('<pre>'.print_r($wpsc_gateway->wpsc_gateways[0]['name'], true).'</pre>');
