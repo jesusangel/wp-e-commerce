@@ -303,14 +303,12 @@ function set_billing_country(html_form_id, form_id){
 	jQuery.post( 'index.php', form_values, function(returned_data) {
 		eval(returned_data);
 	});
-//ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
 }
 function set_shipping_country(html_form_id, form_id){
 	var shipping_region = '';
 	country = jQuery(("div#"+html_form_id+" select[class=current_country]")).val();
 
 	if(country == 'undefined'){
-		//      alert(country);
 		country =  jQuery("select[title='billingcountry']").val();
 	}
 

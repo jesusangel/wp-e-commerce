@@ -37,17 +37,6 @@ var getresults=function(results) {
 	//jQuery('#fancy_notificationimage').css("display", 'none');
 	}
 }
-/*
-function set_billing_country(html_form_id, form_id){
-  var billing_region = '';
-  country = jQuery(("div#"+html_form_id+" select[@class=current_country]")).val();
-  region = jQuery(("div#"+html_form_id+" select[@class=current_region]")).val();
-  if(/[\d]{1,6}/.test(region)) { // number over 6 digits for a region ID? yeah right, not in the lifetime of this code
-    billing_region = "&billing_region="+region;
-	}
-  ajax.post("index.php",getresults,("ajax=true&changetax=true&form_id="+form_id+"&billing_country="+country+billing_region));
-  //ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
-}*/
 
 function submitform(frm, show_notification)
 {
