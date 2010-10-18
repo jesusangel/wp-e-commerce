@@ -200,7 +200,7 @@ function wpsc_get_template_file_url( $file = '' ) {
 	// If we're not looking for a file, do not proceed
 	if ( empty( $file ) )
 		return;
-		
+	//echo get_stylesheet_directory().'/'.$file;
 	// No cache, so find one and set it
 	if ( false === ( $file_url = get_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file ) ) ) {
 
@@ -220,7 +220,6 @@ function wpsc_get_template_file_url( $file = '' ) {
 			// Check the selected theme
 			if ( file_exists( $selected_theme_check ) ) {
 				$file_url = $selected_theme_check;
-
 			// Use the bundled theme CSS
 			} else {
 				$file_url = WPSC_CORE_THEME_URL . $file;
@@ -230,6 +229,9 @@ function wpsc_get_template_file_url( $file = '' ) {
 		// Save the transient and update it every 12 hours
 		if ( !empty( $file_url ) )
 			set_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url, 60 * 60 * 12 );
+	}elseif(!file_exists($file_path)){
+		delete_transient(WPEC_TRANSIENT_THEME_URL_PREFIX . $file);
+		wpsc_get_template_file_url($file);
 	}
 
 	// Return filtered result
@@ -276,7 +278,6 @@ function wpsc_get_template_file_path( $file = '' ){
 				$file_path = WPSC_CORE_THEME_PATH . '/' . $file;
 			}
 		}
-
 		// Save the transient and update it every 12 hours
 		if ( !empty( $file_path ) )
 			set_transient( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file, $file_path, 60 * 60 * 12 );
