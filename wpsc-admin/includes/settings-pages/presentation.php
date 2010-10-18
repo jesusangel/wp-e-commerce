@@ -1156,7 +1156,7 @@ function wpsc_options_presentation() {
 		<?php do_action('wpsc_presentation_settings_page'); ?>
 		<div class="submit">
 			<input type='hidden' name='wpsc_admin_action' value='submit_options' />
-				<?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
+			<?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
 			<input type="submit" value="<?php _e( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption" />
 		</div>
 	</div>

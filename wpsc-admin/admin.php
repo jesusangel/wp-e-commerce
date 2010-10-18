@@ -7,7 +7,8 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-/// admin includes
+
+// admin includes
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-update.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-items.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-groups.page.php' );
@@ -446,7 +447,7 @@ function wpsc_admin_latest_activity() {
 	$currentMonthOrders = $wpdb->get_var( $sql );
 
 	//calculates amount of money made for the month
-	$currentMonthsSales = nzshpcrt_currency_display( admin_display_total_price( $start_timestamp, $end_timestamp ), 1 );
+	$currentMonthsSales = wpsc_currency_display( admin_display_total_price( $start_timestamp, $end_timestamp ) );
 	echo $currentMonthsSales;
 	echo "<span class='dashboardWidget'>" . __( 'Sales', 'wpsc' ) . "</span>";
 	echo "</p>";
@@ -461,7 +462,7 @@ function wpsc_admin_latest_activity() {
 	//calculates average sales amount per order for the month
 	if ( $currentMonthOrders > 0 ) {
 		$monthsAverage = ((int)admin_display_total_price( $start_timestamp, $end_timestamp ) / (int)$currentMonthOrders);
-		echo nzshpcrt_currency_display( $monthsAverage, 1 );
+		echo wpsc_currency_display( $monthsAverage );
 	}
 	//echo "</span>";
 	echo "<span class='dashboardWidget'>" . __( 'Avg Orders', 'wpsc' ) . "</span>";
@@ -477,7 +478,7 @@ function wpsc_admin_latest_activity() {
 	echo "<strong class='dashboardHeading'>" . __( 'Life Time', 'wpsc' ) . "</strong><br />";
 
 	echo "<p class='dashboardWidgetSpecial'>";
-	echo nzshpcrt_currency_display( admin_display_total_price(), 1 );
+	echo wpsc_currency_display( admin_display_total_price() );
 	echo "<span class='dashboardWidget'>" . __( 'Sales', 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
@@ -494,7 +495,7 @@ function wpsc_admin_latest_activity() {
 	} else {
 		$totalAverage = 0;
 	}
-	echo nzshpcrt_currency_display( $totalAverage, 1 );
+	echo wpsc_currency_display( $totalAverage );
 	//echo "</span>";
 	echo "<span class='dashboardWidget'>" . __( 'Avg Orders', 'wpsc' ) . "</span>";
 	echo "</p>";

@@ -109,7 +109,7 @@ function wp_generate_product_tag_cloud( $tags, $args = '' ) {
 			break;
 
 		default :
-			$return = join( "\n", $a );
+			$return = "<div id='product_tag_wrap'>".join( "\n", $a )."</div>";
 			break;
 
 	endswitch;

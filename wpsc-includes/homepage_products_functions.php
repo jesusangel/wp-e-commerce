@@ -20,10 +20,10 @@ function nszhpcrt_homepage_products($content = '') {
       $output .= stripslashes($product['name']);
       $output .= "<span class='front_page_price'>\n\r";
       if($product['special']==1) {
-        $output .= "<span class='oldprice'>".nzshpcrt_currency_display($product['price'], $product['notax'])."</span><br />\n\r";
-        $output .= nzshpcrt_currency_display(($product['price'] - $product['special_price']), $product['notax'],false,$product['id']);
+        $output .= "<span class='oldprice'>".wpsc_currency_display( $product['price'] )."</span><br />\n\r";
+        $output .= wpsc_currency_display( ( $product['price'] - $product['special_price'] ) );
 			} else {
-				$output .= "".nzshpcrt_currency_display($product['price'], $product['notax']);
+				$output .= "".wpsc_currency_display( $product['price'] );
 			}
       $output .= "</span>\n\r";
       $output .= "</p>\n\r";
@@ -177,10 +177,10 @@ function nszhpcrt_category_tag($content = '') {
 					}
 						
 					if(($product['special']==1) && ($variations_output[1] === null)) {
-						$output .= "<span class='oldprice'>".nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
-						$output .= nzshpcrt_currency_display(($product['price'] - $product['special_price']), $product['notax'],false,$product['id']) . "<br />";
+						$output .= "<span class='oldprice'>".wpsc_currency_display( $product['price'] ) . "</span><br />";
+						$output .= wpsc_currency_display( ( $product['price'] - $product['special_price'] ) ) . "<br />";
 					} else {
-						$output .= "<span id='product_price_".$product['id']."'>" . nzshpcrt_currency_display($product['price'], $product['notax']) . "</span><br />";
+						$output .= "<span id='product_price_".$product['id']."'>" . wpsc_currency_display( $product['price'] ) . "</span><br />";
 					}
 					if(((get_option('hide_addtocart_button') !='1') || (get_option('payment_gateway') !='google'))) {
 						if(isset($wpsc_theme) && is_array($wpsc_theme) && ($wpsc_theme['html'] !='')) {

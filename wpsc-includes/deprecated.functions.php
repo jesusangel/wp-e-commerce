@@ -50,4 +50,26 @@ function nzshpcrt_latest_product( $args = null, $instance ) {
 	echo wpsc_latest_product( $args, $instance );
 }
 
+/**
+ * nzshpcrt_currency_display function.
+ * Obsolete, preserved for backwards compatibility
+ *
+ * @access public
+ * @param mixed $price_in
+ * @param mixed $tax_status
+ * @param bool $nohtml deprecated 
+ * @param bool $id. deprecated
+ * @param bool $no_dollar_sign. (default: false)
+ * @return void
+ */
+function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
+	//_deprecated_function( __FUNCTION__, '3.8', 'wpsc_currency_display' );
+	$output = wpsc_currency_display($price_in, array(
+		'display_currency_symbol' => !(bool)$no_dollar_sign,
+		'display_as_html' => (bool)$nohtml,
+		'display_decimal_point' => true,
+		'display_currency_code' => false
+	));
+	return $output;
+}
 ?>

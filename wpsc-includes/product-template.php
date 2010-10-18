@@ -242,7 +242,7 @@ function wpsc_the_product_price( $no_decimals = false ) {
 	if ( ($full_price > $special_price) && ($special_price > 0) )
 		$price = $special_price;
 
-	$output = nzshpcrt_currency_display( $price, null, true );
+	$output = wpsc_currency_display( $price );
 
 	if ( $no_decimals == true )
 		$output = array_shift( explode( ".", $output ) );
@@ -796,9 +796,9 @@ function wpsc_product_postage_and_packaging() {
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
 	//echo "<pre>".print_r($product_meta, true)."</pre>";
 	if ( is_array( $product_meta['shipping'] ) )
-		return nzshpcrt_currency_display( $product_meta['shipping']['local'], 1, true );
+		return wpsc_currency_display( $product_meta['shipping']['local'] );
 	else
-		return nzshpcrt_currency_display( 0, 1, true );
+		return wpsc_currency_display( 0 );
 
 }
 
@@ -810,7 +810,7 @@ function wpsc_product_postage_and_packaging() {
 function wpsc_product_normal_price() {
 	global $wpsc_query;
 	$price = get_post_meta( get_the_ID(), '_wpsc_price', true );
-	$output = nzshpcrt_currency_display( $price, null, true );
+	$output = wpsc_currency_display( $price );
 	return $output;
 }
 
@@ -1079,7 +1079,7 @@ function wpsc_display_product_multicurrency() {
 				$currency_sign = $currency_data['code'];
 
 			if ( !empty( $currency_sign ) )
-				return '<span class="wpscsmall pricefloatright pricedisplay">' . $currency_sign . ' ' . nzshpcrt_currency_display( $curr["meta_value"], false, false, false, true ) . '</span><br />';
+				return '<span class="wpscsmall pricefloatright pricedisplay">' . $currency_sign . ' ' . wpsc_currency_display( $curr["meta_value"] ) . '</span><br />';
 		}
 	}
 
@@ -1386,7 +1386,7 @@ function wpsc_the_variation_price( $return_as_numeric = false ) {
 		$price = $price[0];
 
 		if ( !$return_as_numeric ) {
-			$output = nzshpcrt_currency_display( $price, '', true );
+			$output = wpsc_currency_display( $price,array( 'display_as_html' => false ) );
 		} else {
 			$output = $price;
 		}

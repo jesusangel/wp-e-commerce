@@ -409,7 +409,7 @@ function wpsc_display_coupons_page() {
 							echo "Free Shipping";
 
 						else
-							echo nzshpcrt_currency_display( $coupon['value'], 1 );
+							echo wpsc_currency_display( $coupon['value'] );
 
 						echo "    </td>\n\r";
 

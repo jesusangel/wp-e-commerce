@@ -107,7 +107,7 @@ function wpsc_populate_product_data( $product_id, $wpsc_product_defaults ) {
 	$product_data['post_status'] = $product->post_status;
 	$product_data['description'] = $product->post_content;
 	$product_data['additional_description'] = $product->post_excerpt;
-	// get the list of categories this product is associated with
+	// get the list of categories this Product is associated with
 
 	$product_data['categories'] = wp_get_product_categories( $product->ID );
 	$product_data['tags'] = wp_get_product_tags( $product->ID );
@@ -175,7 +175,7 @@ function wpsc_display_product_form( $product_id = 0 ) {
 
 	$current_user = wp_get_current_user();
 
-	// we put the closed postboxes array into the product data to propagate it to each form without having it global.
+	// we put the closed postboxes array into the Product data to propagate it to each form without having it global.
 	$product_data['closed_postboxes'] = (array)get_user_meta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products' );
 	$product_data['hidden_postboxes'] = (array)get_user_meta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products' );
 //	echo '<pre>'.print_r($product_data,true).'</pre>';
@@ -218,7 +218,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 		$product_data['product_object'] = new stdClass();
 	$product = $product_data['product_object'];
 	$post_ID = (int)$product_data["id"];
-	/* <h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php _e('(enter in your product details here)', 'wpsc'); ?></h3> */
+	/* <h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php _e('(enter in your Product details here)', 'wpsc'); ?></h3> */
 ?>
 	<h3 class='form_heading' style="display:none;">
 <?php
@@ -296,7 +296,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					</div>
 					<div id="major-publishing-actions">
 						<div id="delete-action">
-							<a class='submitdelete deletion' title='<?php echo esc_attr( __( 'Delete this product' ) ); ?>' href='<?php echo wp_nonce_url( admin_url("admin.php?wpsc_admin_action=trash&amp;product={$product_data['id']}&product_parent"), 'delete_product_' . $product_data['id'] ); ?>' onclick="if ( confirm(' <?php echo esc_js( sprintf( __( "You are about to delete this product '%s'\n 'Cancel' to stop, 'OK' to delete." ), $product_data['name'] ) ) ?>') ) { return true;}return false;"><?php _e( 'Move to Trash' ) ?>
+							<a class='submitdelete deletion' title='<?php echo esc_attr( __( 'Delete this Product' ) ); ?>' href='<?php echo wp_nonce_url( admin_url("admin.php?wpsc_admin_action=trash&amp;product={$product_data['id']}&product_parent"), 'delete_product_' . $product_data['id'] ); ?>' onclick="if ( confirm(' <?php echo esc_js( sprintf( __( "You are about to delete this Product '%s'\n 'Cancel' to stop, 'OK' to delete." ), $product_data['name'] ) ) ?>') ) { return true;}return false;"><?php _e( 'Move to Trash' ) ?>
 							</a><br />
 							</div>
 							<div id="publishing-action">
@@ -373,7 +373,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 
 			update_option( 'wpsc_product_page_order', $order );
 
-	        // if this is a child product, we need to filter out the variations box here
+	        // if this is a child Product, we need to filter out the variations box here
 	        if(isset($product_data['product_object']->post_parent) && $product_data['product_object']->post_parent > 0) {
 	          foreach($order as $key => $values){
 		          $variation_box_key = array_search('wpsc_product_variation_forms', $values);	  
@@ -482,7 +482,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 							</dl>
 
 <?php if ( $product_data['id'] > 0 ) : ?>
-							<p><a href="<?php echo wpsc_product_url( $product_data['id'] ); ?>" target="_blank" class="button">View product</a></p>
+							<p><a href="<?php echo wpsc_product_url( $product_data['id'] ); ?>" target="_blank" class="button">View Products</a></p>
 <?php endif; ?>
 
 							</div>
@@ -653,13 +653,13 @@ function wpsc_price_control_forms($product_data){
     <div class="inside">
     	<div class='wpsc_floatleft' style="width:85px;">
 			<?php _e( 'Price', 'wpsc' ); ?> :<br />
-			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'], 2 ); ?>' />
+			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'],2,'.','' ); ?>' />
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
 						); ?>; width:85px;; margin-left:30px;'>
 			<label for='add_form_special'><?php _e( 'Sale Price :', 'wpsc' ); ?></label>
 			<div id='add_special'>
-				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2 ); ?>' name='meta[_wpsc_special_price]' />
+				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2,'.','' ); ?>' name='meta[_wpsc_special_price]' />
 			</div>
 		</div>
 		<br style="clear:both" />
@@ -759,37 +759,37 @@ function wpsc_stock_control_forms( $product_data='' ) {
 		<div class="handlediv" title="Click to toggle"><br /></div>
 		<h3 class='hndle'><?php _e( 'Stock Control', 'wpsc' ); ?></h3>
 	    <div class="inside">
-		<?php _e( 'Stock Keeping Unit', 'wpsc' );
+				<label for="wpsc_sku"><abbr title="<?php _e( 'Stock Keeping Unit', 'wpsc' ); ?>">SKU:</abbr></label>
+<?php
 		if ( !isset( $product_data['meta']['_wpsc_sku'] ) )
-			$product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku']; ?> :<br />
-
-			<input size='17' type='text' class='text'  name='meta[_wpsc_sku]' value='<?php echo htmlentities( stripslashes( $product_data['meta']['_wpsc_sku'] ), ENT_QUOTES, 'UTF-8' ); ?>' />
+			$product_data['meta']['_wpsc_sku'] = $wpsc_product_defaults['meta']['sku']; ?><br />
+			<input size='32' type='text' class='text' id="wpsc_sku" name='meta[_wpsc_sku]' value='<?php echo htmlentities( stripslashes( $product_data['meta']['_wpsc_sku'] ), ENT_QUOTES, 'UTF-8' ); ?>' />
 			<br style="clear:both" />
 			<?php
 			if ( !isset( $product_data['meta']['_wpsc_stock'] ) )
 				$product_data['meta']['_wpsc_stock'] = ''; ?>
-			<input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' <?php if(is_numeric( $product_data['meta']['_wpsc_stock'] )) echo 'checked="checked"'; else echo ''; ?> name='meta[_wpsc_limited_stock]'/> &nbsp;
-			<label for='add_form_quantity_limited' class='small'>
-				<?php _e( 'I have a limited number of this item in stock. If the stock runs out, this product will not be available on the shop unless you untick this box or add more stock.', 'wpsc' ); ?>
-			</label> <?php
+			<br /><input class='limited_stock_checkbox' id='add_form_quantity_limited' type='checkbox' value='yes' <?php if(is_numeric( $product_data['meta']['_wpsc_stock'] )) echo 'checked="checked"'; else echo ''; ?> name='meta[_wpsc_limited_stock]' />
+			<label for='add_form_quantity_limited' class='small'><?php _e( 'I have limited stock for this Product', 'wpsc' ); ?></label>
+			<?php
 			if ( $product_data['id'] > 0 ){
 				if ( is_numeric( $product_data['meta']['_wpsc_stock'] ) ){?>
 					<div class='edit_stock' style='display: block;'> <?php 
 				} else { ?>
-					<div class='edit_stock' style='display: none;'> <?php
-				}
-				 _e( 'Stock Qty', 'wpsc' );?><input type='text' class='stock_limit_quantity' name='meta[_wpsc_stock]' size='10' value='<?php echo $product_data['meta']['_wpsc_stock']; ?>' />
-
-				<div style='font-size:9px; padding:5px;'>
-					<input type='checkbox' <?php if($product_meta['unpublish_when_none_left'] == 1) echo 'checked="checked"'; else echo ''; ?> class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> 
-					<?php _e( 'If this product runs out of stock set status to Unpublished & email site owner', 'wpsc' ); ?> 
-				</div>
+					<div class='edit_stock' style='display: none;'><?php
+				} ?>
+						<label for="stock_limit_quantity"><?php _e( 'Quantity:', 'wpsc' ); ?></label>
+						<input type='text' id="stock_limit_quantity" name='meta[_wpsc_stock]' size='3' value='<?php echo $product_data['meta']['_wpsc_stock']; ?>' class='stock_limit_quantity' />
+						<div class='unpublish_when_none_left'>
+							<input type='checkbox' id="inform_when_oos" name='meta[_wpsc_product_metadata][unpublish_when_none_left]' class='inform_when_oos'<?php if( $product_meta['unpublish_when_none_left'] == 1 ) echo ' checked="checked"'; ?> />
+							<label for="inform_when_oos"><?php _e( 'Notify site owner and unpublish this Product if stock runs out', 'wpsc' ); ?></label>
+						</div>
+						If stock runs out, this Product will not be available on the shop unless you untick this box or add more stock.
 				</div> <?php
 			} else { ?>
 				<div style='display: none;' class='edit_stock'>
 					 <?php _e( 'Stock Qty', 'wpsc' ); ?><input type='text' name='meta[_wpsc_stock]' value='0' size='10' />
 					<div style='font-size:9px; padding:5px;'>
-						<input type='checkbox' class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> <?php _e( 'If this product runs out of stock set status to Unpublished & email site owner', 'wpsc' ); ?>
+						<input type='checkbox' class='inform_when_oos' name='meta[_wpsc_product_metadata][unpublish_when_none_left]' /> <?php _e( 'If this Product runs out of stock set status to Unpublished & email site owner', 'wpsc' ); ?>
 					</div>
 				</div><?php
 			}
@@ -839,7 +839,7 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 	$siteurl = get_option( 'siteurl' );
 	$output  = '';
 
-	// Hide if there is no product data
+	// Hide if there is no Product data
 	if ( 'empty' == $product_data )
 		$display = "style='display:none;'";
 
@@ -875,7 +875,7 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 						foreach ( (array)$variation_sets as $variation_set ) :
 							$set_checked_state = '';
 
-							// If this product includes this variation, check it
+							// If this Product includes this variation, check it
 							if ( in_array( $variation_set->term_id, $product_terms ) )
 								$set_checked_state = "checked='checked'";	?>
 								<div class="variation_set">
@@ -970,7 +970,7 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 	?>
 					<tr>
 						<td colspan="8">
-							<?php _e( 'You have no products added.', 'wpsc' ); ?>
+							<?php _e( 'You have no Products added.', 'wpsc' ); ?>
 						</td>
 					</tr>
 
@@ -1067,7 +1067,7 @@ function wpsc_media_upload_tab_gallery($tabs) {
 function wpsc_attachment_fields($form_fields) {
 
 		unset($form_fields['post_excerpt'], $form_fields['url'], $form_fields['align'], $form_fields['image_alt']['helps']);
-		$form_fields['image_alt']['helps'] =  __('Alt text for the product image, e.g. &#8220;Rockstar T-Shirt&#8221;');
+		$form_fields['image_alt']['helps'] =  __('Alt text for the Product image, e.g. &#8220;Rockstar T-Shirt&#8221;');
 
 	return $form_fields;
 }
@@ -1191,7 +1191,7 @@ function wpsc_product_shipping_forms( $product_data='' ) {
 			<tr>
 				 <td>
 				 <br />
-				  <input id='add_form_no_shipping' type='checkbox' name='meta[_wpsc_product_metadata][no_shipping]' value='1' " . (($product_meta['no_shipping'] == 1) ? 'checked="checked"' : '') . "/>&nbsp;<label for='add_form_no_shipping'>" . __( 'Disregard Shipping for this product', 'wpsc' ) . "</label>
+				  <input id='add_form_no_shipping' type='checkbox' name='meta[_wpsc_product_metadata][no_shipping]' value='1' " . (($product_meta['no_shipping'] == 1) ? 'checked="checked"' : '') . "/>&nbsp;<label for='add_form_no_shipping'>" . __( 'Disregard Shipping for this Product', 'wpsc' ) . "</label>
 			   </td>
 			</tr>
 	    </table>
@@ -1283,7 +1283,7 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 			<strong>" . __( 'Personalisation Options', 'wpsc' ) . ":</strong><br />
 			<input type='hidden' name='meta[_wpsc_product_metadata][engraved]' value='0' />
 			<input type='checkbox' name='meta[_wpsc_product_metadata][engraved]' " . (($product_meta['engraved'] == true) ? 'checked="checked"' : '') . " id='add_engrave_text' />
-			<label for='add_engrave_text'> " . __( 'Users can personalize this product by leaving a message on single product page', 'wpsc' ) . "</label>
+			<label for='add_engrave_text'> " . __( 'Users can personalize this Product by leaving a message on single product page', 'wpsc' ) . "</label>
 			<br />
 		</td>
 	</tr>
@@ -1317,7 +1317,7 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 	<tr>
 		<td class='itemfirstcol' colspan='2'><br />
 			<strong>" . __( 'Off Site Product Link', 'wpsc' ) . ":</strong><br />
-			<small>" . __( 'If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.', 'wpsc' ) . "</small><br /><br />
+			<small>" . __( 'If this Product is for sale on another website enter the link here. For instance if your Product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.', 'wpsc' ) . "</small><br /><br />
 			<label for='external_link'>" . __( 'External Link', 'wpsc' ) . "</label>:<br />
 			<input type='text' class='text' name='meta[_wpsc_product_metadata][external_link]' value='";
 
@@ -1338,7 +1338,7 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 				<option value='1' " . ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '1') ? 'selected' : '') . ">Yes</option>
 				<option value='0' " . ((isset( $product_meta['enable_comments'] ) && $product_meta['enable_comments'] == '0') ? 'selected' : '') . ">No</option>
 			</select>
-			<br/>" . __( 'Allow users to comment on this product.', 'wpsc' ) . "
+			<br/>" . __( 'Allow users to comment on this Product.', 'wpsc' ) . "
 		</td>
 	</tr>";
 	//}
@@ -1622,7 +1622,7 @@ function edit_multiple_image_gallery( $product_data ) {
   } */
 
 /**
- * Displays the category forms for adding and editing products
+ * Displays the category forms for adding and editing Products
  * Recurses to generate the branched view for subcategories
  */
 function wpsc_category_list( &$product_data, $group_id, $unique_id = '', $category_id = null ) {

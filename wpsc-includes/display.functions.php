@@ -113,7 +113,7 @@ function wpsc_also_bought( $product_id ) {
 			}
 
 			$output .= "<a class='wpsc_product_name' href='" . wpsc_product_url( $also_bought_data['id'] ) . "'>" . $also_bought_data['name'] . "</a>";
-			$output .= nzshpcrt_currency_display( ($also_bought_data['price'] - $also_bought_data['special_price'] ), $also_bought_data['notax'], false, $also_bought_data['id'] );
+			$output .= wpsc_currency_display( ( $also_bought_data['price'] - $also_bought_data['special_price'] ) );
 			//$output .= "<a href='".wpsc_product_url($also_bought_data['id'])."'>".$also_bought_data['name']."</a>";
 			$output .= "</div>";
 		}

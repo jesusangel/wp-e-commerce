@@ -333,8 +333,6 @@ function wpsc_the_purchaselog_item() {
 
 function wpsc_purchaselog_details_SKU() {
 	global $purchlogitem;
-// exit('<pre>'.print_r($purchlogitem->purchitem,true).'</pre>');
-
 	$meta_value = wpsc_get_cartmeta( $purchlogitem->purchitem->id, 'sku' );
 	if ( $meta_value != null ) {
 		return $meta_value;
@@ -350,7 +348,6 @@ function wpsc_purchaselog_details_SKU() {
 
 function wpsc_purchaselog_details_quantity() {
 	global $purchlogitem;
-// exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
 	return $purchlogitem->purchitem->quantity;
 }
 
@@ -373,7 +370,7 @@ function wpsc_purchaselog_details_tax() {
 	/* OLD CODE PRESERVED
 	  // exit('<pre>'.print_r($purchlogitem->purchitem, true).'</pre>');
 	  if(wpsc_tax_isincluded() == false){
-	  return nzshpcrt_currency_display($purchlogitem->purchitem->tax_charged,true);
+	  return wpsc_currency_display( $purchlogitem->purchitem->tax_charged, array( 'display_as_html' => false ) );
 	  }else{
 	  //exit('<pre>'.print_r($purchlogitem,true).'</pre>');
 	  if($purchlogitem->purchitem->notax == 0){
@@ -461,7 +458,7 @@ function wpsc_display_purchlog_discount( $numeric = false ) {
 	if ( $numeric == true ) {
 		return $discount;
 	} else {
-		return nzshpcrt_currency_display( $discount, true );
+		return wpsc_currency_display( $discount,array( 'display_as_html' => false ) );
 	}
 }
 
@@ -482,7 +479,7 @@ function wpsc_display_purchlog_shipping( $numeric = false ) {
 	if ( $numeric == true ) {
 		return $total_shipping;
 	} else {
-		return nzshpcrt_currency_display( $total_shipping, true );
+		return wpsc_currency_display( $total_shipping,array( 'display_as_html' => false ) );
 	}
 }
 
@@ -492,7 +489,7 @@ function wpsc_display_purchlog_shipping( $numeric = false ) {
  * */
 function wpec_display_purchlog_taxes( $numeric=false ) {
 	global $purchlogitem;
-	return ($numeric) ? $purchlogitem->extrainfo->wpec_taxes_total : nzshpcrt_currency_display( $purchlogitem->extrainfo->wpec_taxes_total, true );
+	return ($numeric) ? $purchlogitem->extrainfo->wpec_taxes_total : wpsc_currency_display( $purchlogitem->extrainfo->wpec_taxes_total,array( 'display_as_html' => false ) );
 }
 
 // wpec_display_purchlog_taxes
@@ -504,7 +501,7 @@ function wpsc_display_purchlog_totalprice() {
 	$purchlogitem->totalAmount += wpsc_display_purchlog_shipping( true );
 	$purchlogitem->totalAmount += wpec_display_purchlog_taxes( true );
 	//$purchlogitem->totalAmount += $purchlogitem->extrainfo->base_shipping;
-	return nzshpcrt_currency_display( $purchlogitem->totalAmount, true );
+	return wpsc_currency_display( $purchlogitem->totalAmount,array( 'display_as_html' => false ) );
 }
 
 function wpsc_display_purchlog_buyers_name() {

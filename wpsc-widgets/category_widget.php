@@ -2,9 +2,12 @@
 /**
  * Product Categories widget class
  *
+ * Takes the settings, works out if there is anything to display, if so, displays it.
+ *
  * @since 3.7.1
  */
 class WP_Widget_Product_Categories extends WP_Widget {
+
 	/**
 	 * Widget Constuctor
 	 */
@@ -12,6 +15,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		$widget_ops = array( 'classname' => 'widget_wpsc_categorisation', 'description' => __( 'Product Grouping Widget', 'wpsc' ) );
 		$this->WP_Widget( 'wpsc_categorisation', __( 'Product Categories', 'wpsc' ), $widget_ops );
 	}
+
 	/**
 	 * Widget Output
 	 *
@@ -19,6 +23,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 	 * @param $instance (array) Widget values.
 	 */
 	function widget( $args, $instance ) {
+
 		global $wpdb;
 
 		extract( $args );
@@ -61,6 +66,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 
 		echo $after_widget;
 	}
+
 	/**
 	 * Update Widget
 	 *
@@ -70,6 +76,7 @@ class WP_Widget_Product_Categories extends WP_Widget {
 	 * @return (array) New values.
 	 */
 	function update( $new_instance, $old_instance ) {
+
 		$instance = $old_instance;
 		$instance['title']      = strip_tags( $new_instance['title'] );
 		$instance['image']      = $new_instance['image'] ? 1 : 0;
@@ -78,16 +85,22 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		$instance['height']     = (int)$new_instance['height'];
 		$instance['width']      = (int)$new_instance['width'];
 		return $instance;
+
 	}
+
 	/**
 	 * Widget Options Form
 	 *
 	 * @param $instance (array) Widget values.
 	 */
 	function form( $instance ) {
+
 		global $wpdb;
-		//Defaults
-		$instance = wp_parse_args((array) $instance, array( 'title' => ''));
+
+		// Defaults
+		$instance = wp_parse_args((array) $instance, array( 'title' => '' ));
+
+		// Values
 		$title    = esc_attr( $instance['title'] );
 		$image    = (bool) $instance['image'];
 		$width    = (int) $instance['width'];
@@ -95,22 +108,20 @@ class WP_Widget_Product_Categories extends WP_Widget {
 		$grid     = (bool) $instance['grid']; ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
-
 		<p>
-			<b>Include the following categories:</b><br/>
+			Show Categories:<br />
 			<?php wpsc_list_categories('wpsc_category_widget_admin_category_list', array("id"=>$this->get_field_id('categories'),"name"=>$this->get_field_name('categories'),"instance"=>$instance), 0); ?>
 		</p>
 
 		<p>
-			<b>Presentation:</b><br />
-			 <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('grid'); ?>" name="<?php echo $this->get_field_name('grid'); ?>"<?php checked( $grid ); ?> />
+			<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('grid'); ?>" name="<?php echo $this->get_field_name('grid'); ?>"<?php checked( $grid ); ?> />
 			<label for="<?php echo $this->get_field_id('grid'); ?>"><?php _e('Use Category Grid View', 'wpsc'); ?></label><br />
 			<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('image'); ?>" name="<?php echo $this->get_field_name('image'); ?>"<?php checked( $image ); ?> onclick="jQuery('.wpsc_category_image').toggle()" />
 			<label for="<?php echo $this->get_field_id('image'); ?>"><?php _e('Show Thumbnails', 'wpsc'); ?></label>
- 		</p>
+		</p>
 		<div class="wpsc_category_image"<?php if( !checked( $image ) ) { echo ' style="display:none;"'; } ?>>
 			<p>
 				<label for="<?php echo $this->get_field_id('width'); ?>"><?php _e('Width:', 'wpsc'); ?></label>
@@ -121,17 +132,13 @@ class WP_Widget_Product_Categories extends WP_Widget {
 				<input type="text" id="<?php echo $this->get_field_id('height'); ?>" name="<?php echo $this->get_field_name('height'); ?>" value="<?php echo $height ; ?>" size="3" />
 			</p>
 		</div>
-
-
-		</p>
 <?php
 	}
-
 }
+
 add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Widget_Product_Categories");' ) );
 
 function wpsc_category_widget_admin_category_list( $category, $level, $fieldconfig ) {
-
 	// Only let the user choose top-level categories
 	if ( $level )
 		return;
@@ -141,11 +148,8 @@ function wpsc_category_widget_admin_category_list( $category, $level, $fieldconf
 	else
 		$checked = ''; ?>
 
-	<input type="checkbox" class="checkbox" id="<?php echo $fieldconfig['id']; ?>-<?php echo $category->term_id; ?>" name="<?php echo $fieldconfig['name']; ?>[<?php echo $category->term_id; ?>]" <?php echo $checked; ?> /><label for="<?php echo $fieldconfig['id']; ?>-<?php echo $category->term_id; ?>"><?php echo htmlentities($category->name); ?></label><br />
- 
+	<input type="checkbox" class="checkbox" id="<?php echo $fieldconfig['id']; ?>-<?php echo $category->term_id; ?>" name="<?php echo $fieldconfig['name']; ?>[<?php echo $category->term_id; ?>]" <?php echo $checked; ?>></input> <label><?php echo htmlentities($category->name); ?></label><br />
 
 <?php 
 }
-add_action('widgets_init', create_function('', 'return register_widget("WP_Widget_Product_Categories");'));
-
 ?>

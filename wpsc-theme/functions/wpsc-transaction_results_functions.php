@@ -164,10 +164,10 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				$total_shipping += $shipping;
 
 				$total += ( $row['price'] * $row['quantity']);
-				$message_price = nzshpcrt_currency_display( ($row['price'] * $row['quantity'] ), true,true );
-				$message_price_html = nzshpcrt_currency_display( ($row['price'] * $row['quantity'] ), true,false );
+				$message_price = wpsc_currency_display( ($row['price'] * $row['quantity'] ), array( 'display_as_html' => false ) );
+				$message_price_html = wpsc_currency_display( ($row['price'] * $row['quantity'] ), array( 'display_as_html' => false ) );
 
-				$shipping_price = nzshpcrt_currency_display( $shipping, 1, true );
+				$shipping_price = wpsc_currency_display( $shipping, array( 'display_as_html' => false ) );
 
 				if ( isset( $purchase['gateway'] ) && $purchase['gateway'] != 'wpsc_merchant_testmode' ) {
 					if ( $gateway['internalname'] == $purch_data[0]['gateway'] ) {
@@ -231,22 +231,22 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$product_list_html.= "Your Purchase No.: " . $purchase_log['id'] . "<BR/>\n\r";
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$discount_email.= __( 'Discount', 'wpsc' ) . "\n\r: ";
-				$discount_email .=$purchase_log['discount_data'] . ' : ' . nzshpcrt_currency_display( $purchase_log['discount_value'], 1, true ) . "\n\r";
+				$discount_email .=$purchase_log['discount_data'] . ' : ' . wpsc_currency_display( $purchase_log['discount_value'], array( 'display_as_html' => false ) ) . "\n\r";
 			}
 			$total_price_email = '';
 			$total_price_html = '';
 			$total_shipping_html = '';
 			$total_shipping_email = '';
-			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total_shipping, 1, true ) . "\n\r";
-			$total_price_email.= __( 'Total', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total, 1, true ) . "\n\r";
+			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping, array( 'display_as_html' => false ) ) . "\n\r";
+			$total_price_email.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total, array( 'display_as_html' => false ) ) . "\n\r";
 
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$report.= $discount_email . "\n\r";
-				$total_shipping_html.= __( 'Discount', 'wpsc' ) . ": " . nzshpcrt_currency_display( $purchase_log['discount_value'], 1, true ) . "\n\r";
+				$total_shipping_html.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'], array( 'display_as_html' => false ) ) . "\n\r";
 			}
 
-			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total_shipping, 1, true ) . "\n\r";
-			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total, 1, true ) . "\n\r";
+			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping, array( 'display_as_html' => false ) ) . "\n\r";
+			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total,array( 'display_as_html' => false ) ) . "\n\r";
 
 			if ( isset( $_GET['ti'] ) ) {
 				$message.= "\n\r" . __( 'Your Transaction ID', 'wpsc' ) . ": " . $_GET['ti'];

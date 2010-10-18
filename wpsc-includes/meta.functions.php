@@ -19,15 +19,12 @@ function wpsc_get_meta( $object_id = 0, $meta_key, $type) {
 	$cache_object_id = $object_id = (int)$object_id;
 	$object_type = $type;
 	$value = wp_cache_get( $cache_object_id, $object_type );
-
 	$meta_key = wpsc_sanitize_meta_key( $meta_key );
-
 	$meta_tuple = compact( 'object_type', 'object_id', 'meta_key', 'meta_value', 'type' );
 	$meta_tuple = apply_filters( 'wpsc_update_meta', $meta_tuple );
 	extract( $meta_tuple, EXTR_OVERWRITE );
-
+	/* echo "SELECT `meta_value` FROM `".WPSC_TABLE_META."` WHERE `object_type` = ".$object_type." AND `object_id` = ".$object_id." AND `meta_key` = ".$meta_key; */
 	$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT `meta_value` FROM `".WPSC_TABLE_META."` WHERE `object_type` = %s AND `object_id` = %d AND `meta_key` = %s", $object_type, $object_id, $meta_key ) );
-
 	$meta_value = maybe_unserialize( $meta_value );
 	return $meta_value;
 }

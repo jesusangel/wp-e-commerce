@@ -283,7 +283,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
-					<?php echo nzshpcrt_currency_display($price, 1); ?>
+					<?php echo wpsc_currency_display( $price ); ?>
 					<div class='price-editing-fields' id='price-editing-fields-<?php echo $product->ID; ?>'>
 						<input type='text' class='the-product-price' name='product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format($price,2,'.',''); ?>' />
 						<input type='hidden' name='product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />
@@ -420,7 +420,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
-					<?php echo nzshpcrt_currency_display($price, 1); ?>
+					<?php echo wpsc_currency_display( $price ); ?>
 					<div class='sales-price-fields' id='sales-price-editing-fields-<?php echo $product->ID; ?>'>
 						<input type='text'  class='the-sale-price' name='sale_product_price[<?php echo $product->ID; ?>][price]' value='<?php echo number_format( (double)$price, 2, '.', ''); ?>' />
 						<input type='hidden' name='sale_product_price[<?php echo $product->ID; ?>][id]' value='<?php echo $product->ID; ?>' />

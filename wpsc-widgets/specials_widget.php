@@ -60,7 +60,7 @@ class WP_Widget_Product_Specials extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title']  = strip_tags( $new_instance['title'] );
 		$instance['number'] = (int)$new_instance['number'];
-		$instance['hide_thumbnails'] = (bool)$new_instance['hide_thumbnails'];
+		$instance['show_thumbnails'] = (bool)$new_instance['show_thumbnails'];
 		$instance['show_description']  = (bool)$new_instance['show_description'];
 
 		return $instance;
@@ -80,14 +80,14 @@ class WP_Widget_Product_Specials extends WP_Widget {
 		$instance = wp_parse_args( (array)$instance, array(
 			'title' => '',
 			'show_description' => false,
-			'hide_thumbnails' => false,
+			'show_thumbnails' => false,
 			'number' => 5
 		) );
 		
 		// Values
 		$title = esc_attr( $instance['title'] );
 		$number = (int)$instance['number'];
-		$hide_thumbnails = (bool)$instance['hide_thumbnails'];
+		$show_thumbnails = (bool)$instance['show_thumbnails'];
 		$show_description = (bool)$instance['show_description'];
 		
 		?>
@@ -96,28 +96,16 @@ class WP_Widget_Product_Specials extends WP_Widget {
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of products to show', 'wpsc' ); ?></label>
-			<select id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>">
-				<?php
-				for ( $i = 1; $i <= 10; $i++ ) {
-					$selected = '';
-					if ( $i == $number ) $selected = ' selected="selected"';
-					echo '<option' . $selected . ' value="' . $i . '">' . $i . '</option>';
-				}
-				?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of products to show:', 'wpsc' ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" value="<?php echo $number; ?>" size="3" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'hide_thumbnails' ); ?>"><?php _e( 'Hide Thumbnails', 'wpsc' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'hide_thumbnails' ); ?>" name="<?php echo $this->get_field_name( 'hide_thumbnails' ); ?>" <?php echo $hide_thumbnails ? 'checked="checked"' : ""; ?>>
-		</p>
-			
-		<p>
-			<label for="<?php echo $this->get_field_id( 'show_description' ); ?>"><?php _e( 'Show Description', 'wpsc' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'show_description' ); ?>" name="<?php echo $this->get_field_name( 'show_description' ); ?>" <?php echo $show_description ? 'checked="checked"' : ""; ?>>
+			<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id( 'show_description' ); ?>" name="<?php echo $this->get_field_name( 'show_description' ); ?>" <?php echo $show_description ? 'checked="checked"' : ""; ?>>
+			<label for="<?php echo $this->get_field_id( 'show_description' ); ?>"><?php _e( 'Show Description', 'wpsc' ); ?></label><br />
+			<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id( 'show_thumbnails' ); ?>" name="<?php echo $this->get_field_name( 'show_thumbnails' ); ?>" <?php echo $show_thumbnails ? 'checked="checked"' : ""; ?>>
+			<label for="<?php echo $this->get_field_id( 'show_thumbnails' ); ?>"><?php _e( 'Show Thumbnails', 'wpsc' ); ?></label>
 		</p>			
-		<?php
-		
+<?php
 	}
 
 }
@@ -153,7 +141,7 @@ function wpsc_specials( $args = null, $instance ) {
 	if ( !$number = (int) $instance['number'] )
 		$number = 5;
 		
-	$hide_thumbnails  = isset($instance['hide_thumbnails']) ? (bool)$instance['hide_thumbnails'] : FALSE;
+	$show_thumbnails  = isset($instance['show_thumbnails']) ? (bool)$instance['show_thumbnails'] : FALSE;
 	$show_description  = isset($instance['show_description']) ? (bool)$instance['show_description'] : FALSE;
 	
 	$excludes = wpsc_specials_excludes();
@@ -184,7 +172,7 @@ function wpsc_specials( $args = null, $instance ) {
 
 			if(!empty($attached_images)){
 				$attached_image = $attached_images[0];
-				if ( ( $attached_image->ID > 0 ) && ($hide_thumbnails != 1) )
+				if ( ( $attached_image->ID > 0 ) && ($show_thumbnails != 1) )
 					$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
 			
 			}
@@ -196,9 +184,9 @@ function wpsc_specials( $args = null, $instance ) {
 			if ( $show_description == 1 )
 				$output .= $special_product->post_content . '<br />';
 			
-			$output .= '<span id="special_product_price_' . $special_product->ID . '"><span class="pricedisplay">';
-			$output .= nzshpcrt_currency_display(wpsc_calculate_price( $special_product->ID,null,true ),null,true);
-			$output .= '</span></span><br />';
+			$output .= '<span id="special_product_price_' . $special_product->ID . '">';
+			$output .= wpsc_currency_display( wpsc_calculate_price( $special_product->ID,null,true ) );
+			$output .= '</span><br />';
 			
 			$output .= '<form id="specials_' . $special_product->ID . '" method="post" action="" onsubmit="submitform(this, null); return false;">';
 			$output .= '<input type="hidden" name="product_id" value="' . $special_product->ID . '" />';

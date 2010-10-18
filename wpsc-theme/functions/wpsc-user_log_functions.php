@@ -358,7 +358,7 @@ function wpsc_user_details() {
 			$billing_country = $country_data[0]['value'];
 			$shipping_country = $country_data[0]['value'];
 		}
-		echo nzshpcrt_currency_display( $purchase['totalprice'], 1 );
+		echo wpsc_currency_display( $purchase['totalprice'] );
 		$subtotal += $purchase['totalprice'];
 		echo " </td>\n\r";
 
@@ -498,23 +498,23 @@ function wpsc_user_details() {
 
 				echo " <td>";
 				$price = $cart_row['price'] * $cart_row['quantity'];
-				echo nzshpcrt_currency_display( $price, 1 );
+				echo wpsc_currency_display( $price );
 				echo " </td>";
 
 				echo " <td>";
 				$gst = $cart_row['tax_charged'];
 				$endtotal += $gst * $cart_row['quantity'];
 
-				echo nzshpcrt_currency_display( $gst, 1 );
+				echo wpsc_currency_display( $gst );
 				echo " </td>";
 
 				echo " <td>";
-				echo nzshpcrt_currency_display( $shipping, 1 );
+				echo wpsc_currency_display( $shipping );
 				echo " </td>";
 
 				echo " <td>";
 				$endtotal += $price;
-				echo nzshpcrt_currency_display( ($shipping + $price + ($gst * $cart_row['quantity']) ), 1 );
+				echo wpsc_currency_display( ( $shipping + $price + ( $gst * $cart_row['quantity'] ) ) );
 				echo " </td>";
 
 				echo '</tr>';
@@ -538,8 +538,8 @@ function wpsc_user_details() {
 			echo " <td>";
 			$total_shipping += $purchase['base_shipping'];
 			$endtotal += $total_shipping;
-			echo nzshpcrt_currency_display( $total_shipping, 1 ) . "<br />";
-			echo nzshpcrt_currency_display( $endtotal, 1 );
+			echo wpsc_currency_display( $total_shipping ) . "<br />";
+			echo wpsc_currency_display( $endtotal );
 			echo " </td>";
 
 			echo '</tr>';

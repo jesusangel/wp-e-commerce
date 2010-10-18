@@ -8,13 +8,14 @@
  * @param mixed $args
  * @return void
  */
-function wpsc_currency_display( $price_in, $args ) {
+function wpsc_currency_display( $price_in, $args = null ) {
 	global $wpdb, $wpsc_currency_data;
 	$currency_code = '';
+	$args = apply_filters( 'wpsc_toggle_display_currency_code', $args );
 	$query = shortcode_atts( array(
 		'display_currency_symbol' => true,
 		'display_decimal_point'   => true,
-		'display_currency_code'   => true,
+		'display_currency_code'   => false,
 		'display_as_html'         => true
 	), $args );
 
@@ -77,47 +78,15 @@ function wpsc_currency_display( $price_in, $args ) {
 	// Compile the output
 	$output = sprintf( $format_string, $currency_code, $currency_sign, $price_out );
 
-	// Return results
-	return apply_filters( 'wpsc_currency_display', $output );
-}
-
-
-
-/**
- * nzshpcrt_currency_display function.
- * Obsolete, preserved for backwards compatibility
- *
- * @access public
- * @param mixed $price_in
- * @param mixed $tax_status
- * @param bool $nohtml deprecated 
- * @param bool $id. deprecated
- * @param bool $no_dollar_sign. (default: false)
- * @return void
- */
-function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id = false, $no_dollar_sign = false) {
-	//_deprecated_function( __FUNCTION__, '3.8', 'wpsc_currency_display' );
-	$output = wpsc_currency_display($price_in, array(
-		'display_currency_symbol' => !(bool)$no_dollar_sign,
-		'display_as_html' => (bool)$nohtml,
-		'display_decimal_point' => true,
-		'display_currency_code' => false
-	));
-	if($nohtml == true) {
+	if ( false == $query['display_as_html'] ) {
 		$output = "".$output."";
 	} else {
 		$output = "<span class='pricedisplay'>".$output."</span>";
-	//$output = "".$output."";
 	}
-	return $output;
+
+	// Return results
+	return apply_filters( 'wpsc_currency_display', $output );
 }
-
-
-
-
-
-
-
 
 /**
 	* wpsc_decrement_claimed_stock method 

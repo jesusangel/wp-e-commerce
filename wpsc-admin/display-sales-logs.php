@@ -330,24 +330,18 @@ if(!isset($purchlogs)){
       <div class='order_summary_subsection'>
       <strong><?php _e('Last 30 Days', 'wpsc'); ?></strong>
       <p id='log_total_month'>
-      <?php 
+<?php 
       $year = date("Y");
       $month = date("m");
       $start_timestamp = mktime(0, 0, 0, $month, 1, $year);
       $end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
-      echo nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
-      echo " ".__('(accepted payments)', 'wpsc');
-      ?>
+      echo wpsc_currency_display( admin_display_total_price( $start_timestamp,$end_timestamp ) );
+      echo " ".__('(accepted payments)', 'wpsc'); ?>
       </p>
       </div>
       <div class='order_summary_subsection'>
-      <strong><?php _e('Life Time', 'wpsc'); ?></strong>
-      <p id='log_total_absolute'>
-      <?php
-       //$total_income = $wpdb->get_results($sql,ARRAY_A);
-       echo nzshpcrt_currency_display(admin_display_total_price(),1);
-       ?>
-      </p>
+  	    <strong><?php _e('Life Time', 'wpsc'); ?></strong>
+	      <p id='log_total_absolute'><?php echo wpsc_currency_display( admin_display_total_price() ); ?></p>
       </div> 
      
       <div class='order_summary_subsection'>
@@ -446,9 +440,8 @@ if(!isset($purchlogs)){
   		<input type='hidden' value='purchlog_filter_by' name='wpsc_admin_action' />
   		<input type="submit" value="<?php _e('Filter'); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
   	</div>
-  		<?php if(wpsc_have_purch_items() ==false):  ?>
-  		<p style='color:red;'><?php _e('Oops there are no purchase logs for your selection, please try again.'); ?></p>
-  		
+  		<?php if( isset( $_POST['purchlogs_searchbox'] ) && wpsc_have_purch_items() == false ):  ?>
+  	<div class="updated settings-error"><p><?php _e('There are no purchase logs for your selection, please try again.'); ?></p></div>
   		<?php endif;?>
 	 	<table class="widefat page fixed" cellspacing="0">
 			<thead>
@@ -456,19 +449,17 @@ if(!isset($purchlogs)){
 			<?php print_column_headers('display-sales-list'); ?>
 				</tr>
 			</thead>
-		
 			<tfoot>
 				<tr>
 			<?php print_column_headers('display-sales-list', false); ?>
 				</tr>
 			</tfoot>
-		
 			<tbody>
 			<?php get_purchaselogs_content(); ?>
 			</tbody>
 		</table>
-		<p><strong style='float:left' ><?php _e('Total:'); ?></strong>  <?php echo nzshpcrt_currency_display(wpsc_the_purch_total(), true); ?></p>
-		<?php 	
+		<p><strong style='float:left' ><?php _e('Total:'); ?></strong> <?php echo wpsc_currency_display( wpsc_the_purch_total() ); ?></p>
+<?php
 			if(!isset($purchlogs->current_start_timestamp) && !isset($purchlogs->current_end_timestamp)){
 				$purchlogs->current_start_timestamp = $purchlogs->earliest_timestamp;
 				$purchlogs->current_end_timestamp = $purchlogs->current_timestamp;
@@ -511,7 +502,7 @@ if(!isset($purchlogs)){
  		<td><?php echo wpsc_the_purch_item_id(); ?></td><!-- purchase ID -->
  		<td><?php echo wpsc_the_purch_item_date(); ?></td> <!--Date -->
  		<td><?php echo wpsc_the_purch_item_name(); ?></td> <!--Name/email -->
- 		<td><?php echo nzshpcrt_currency_display(wpsc_the_purch_item_price(), true); ?></td><!-- Amount -->
+ 		<td><?php echo wpsc_currency_display( wpsc_the_purch_item_price() ); ?></td><!-- Amount -->
  		<td><a href='<?php echo htmlentities(add_query_arg('purchaselog_id', wpsc_the_purch_item_id())) ; ?>'><?php echo wpsc_the_purch_item_details();?> Items</a></td><!-- Details -->
  		<td>
  		<?php if(!wpsc_purchlogs_is_google_checkout()){ ?>
@@ -558,21 +549,20 @@ if(!isset($purchlogs)){
  }
  
  function wpsc_display_purchlog_details(){
- 	while(wpsc_have_purchaselog_details()) : wpsc_the_purchaselog_item();
- 	?>
+ 	while( wpsc_have_purchaselog_details() ) : wpsc_the_purchaselog_item(); ?>
  	<tr>
- 	<td><?php echo wpsc_purchaselog_details_name(); ?></td> <!-- NAME! -->
- 	<td><?php echo wpsc_purchaselog_details_SKU(); ?></td> <!-- SKU! -->
- 	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY! -->
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_price(),true); ?></td> <!-- PRICE! -->
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_shipping(),true); ?></td> <!-- SHIPPING! -->
- 	<td><?php if(wpec_display_product_tax()) { echo wpsc_purchaselog_details_tax(); } ?></td> <!-- TAX! -->
- 	<?php /* <td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_discount(),true); ?></td> <!-- DISCOUNT! --> */ ?>
- 	<td><?php echo nzshpcrt_currency_display(wpsc_purchaselog_details_total(),true); ?></td> <!-- TOTAL! -->
+	 	<td><?php echo wpsc_purchaselog_details_name(); ?></td> <!-- NAME! -->
+	 	<td><?php echo wpsc_purchaselog_details_SKU(); ?></td> <!-- SKU! -->
+	 	<td><?php echo wpsc_purchaselog_details_quantity(); ?></td> <!-- QUANTITY! -->
+	 	<td><?php echo wpsc_currency_display( wpsc_purchaselog_details_price() ); ?></td> <!-- PRICE! -->
+	 	<td><?php echo wpsc_currency_display( wpsc_purchaselog_details_shipping() ); ?></td> <!-- SHIPPING! -->
+	 	<td><?php if(wpec_display_product_tax()) { echo wpsc_purchaselog_details_tax(); } ?></td> <!-- TAX! -->
+	 	<!-- <td><?php echo wpsc_currency_display( wpsc_purchaselog_details_discount() ); ?></td> --> <!-- DISCOUNT! -->
+	 	<td><?php echo wpsc_currency_display( wpsc_purchaselog_details_total() ); ?></td> <!-- TOTAL! -->
  	</tr>
- 	<?php
- 	endwhile;
- }
+<?php
+	endwhile;
+}
  
 function wpsc_purchlogs_custom_fields(){
 	if(wpsc_purchlogs_has_customfields()){?>

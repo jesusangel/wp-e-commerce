@@ -295,13 +295,14 @@ function wpsc_modify_product_price() {
 	$product_data = array_pop( $_POST['product_price'] );
 
 	$product_id = absint( $product_data['id'] );
-	$product_price = (float)$product_data['price'];
+	$product_price = $product_data['price'];
 	$product_nonce = $product_data['nonce'];
 
 	if ( wp_verify_nonce( $product_nonce, 'edit-product_price-' . $product_id ) ) {
+		$product_price = (float)str_replace( ',','',$product_price );
 		if ( update_post_meta( $product_id, '_wpsc_price', $product_price ) ) {
 			echo "success = 1;\n\r";
-			echo "new_price = '" . nzshpcrt_currency_display( $product_price, 1, true ) . "';\n\r";
+			echo "new_price = '" . wpsc_currency_display( $product_price,array( 'display_as_html' => false ) ) . "';\n\r";
 		} else {
 			echo "success = 0;\n\r";
 		}
@@ -317,17 +318,17 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 function wpsc_modify_sales_product_price() {
 	global $wpdb;
-// exit('<pre>'.print_r($_POST, true).'</pre>');
 	$product_data = array_pop( $_POST['sale_product_price'] );
 
 	$product_id = absint( $product_data['id'] );
-	$product_price = (float)$product_data['price'];
+	$product_price = $product_data['price'];
 	$product_nonce = $product_data['nonce'];
 
 	if ( wp_verify_nonce( $product_nonce, 'sale-edit-product_price-' . $product_id ) ) {
+		$product_price = (float)str_replace( ',','',$product_price );
 		if ( update_post_meta( $product_id, '_wpsc_special_price', $product_price ) ) {
 			echo "success = 1;\n\r";
-			echo "new_price = '" . nzshpcrt_currency_display( $product_price, 1, true ) . "';\n\r";
+			echo "new_price = '" . wpsc_currency_display( $product_price,array( 'display_as_html' => false ) ) . "';\n\r";
 		} else {
 			echo "success = 0;\n\r";
 		}
@@ -410,7 +411,7 @@ function wpsc_modify_stock() {
 	$product_data = array_pop( $_POST['stock_field'] );
 
 	$product_id = absint( $product_data['id'] );
-	$stock = $product_data['stock'];
+	$stock = (int)$product_data['stock'];
 	$product_nonce = $product_data['nonce'];
 
 	if ( wp_verify_nonce( $product_nonce, 'edit-stock-' . $product_id ) ) {
@@ -872,8 +873,8 @@ function wpsc_admin_ajax() {
 			$start_timestamp = mktime( 0, 0, 0, $month, 1, $year );
 			$end_timestamp = mktime( 0, 0, 0, ($month + 1 ), 0, $year );
 
-			echo "document.getElementById(\"log_total_month\").innerHTML = '" . addslashes( nzshpcrt_currency_display( admin_display_total_price( $start_timestamp, $end_timestamp ), 1 ) ) . "';\n";
-			echo "document.getElementById(\"log_total_absolute\").innerHTML = '" . addslashes( nzshpcrt_currency_display( admin_display_total_price(), 1 ) ) . "';\n";
+			echo "document.getElementById(\"log_total_month\").innerHTML = '" . addslashes( wpsc_currency_display( admin_display_total_price( $start_timestamp, $end_timestamp ) ) ) . "';\n";
+			echo "document.getElementById(\"log_total_absolute\").innerHTML = '" . addslashes( wpsc_currency_display( admin_display_total_price() ) ) . "';\n";
 			exit();
 		}
 	}
@@ -1165,9 +1166,9 @@ function wpsc_purchlog_resend_email() {
 				}
 
 				$total+= ( $row['price'] * $row['quantity']);
-				$message_price = nzshpcrt_currency_display( ($row['price'] * $row['quantity'] ), $product_data[0]['notax'], true );
+				$message_price = wpsc_currency_display( ( $row['price'] * $row['quantity'] ),array( 'display_as_html' => false ) );
 
-				$shipping_price = nzshpcrt_currency_display( $shipping, 1, true );
+				$shipping_price = wpsc_currency_display( $shipping,array( 'display_as_html' => false ) );
 
 
 
@@ -1209,16 +1210,16 @@ function wpsc_purchlog_resend_email() {
 			// $message.= "\n\r";
 			$product_list.= "Your Purchase # " . $purchase_log['id'] . "\n\r";
 			if ( $purchase_log['discount_value'] > 0 ) {
-				$discount_email.= __( 'Discount', 'wpsc' ) . ": " . nzshpcrt_currency_display( $purchase_log['discount_value'], 1, true ) . "\n\r";
+				$discount_email.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'],array( 'display_as_html' => false ) ) . "\n\r";
 			}
-			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total_shipping, 1, true ) . "\n\r";
-			$total_price_email.= __( 'Total', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total, 1, true ) . "\n\r";
+			$total_shipping_email.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping,array( 'display_as_html' => false ) ) . "\n\r";
+			$total_price_email.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total,array( 'display_as_html' => false ) ) . "\n\r";
 			$product_list_html.= "Your Purchase # " . $purchase_log['id'] . "\n\n\r";
 			if ( $purchase_log['discount_value'] > 0 ) {
-				$discount_html.= __( 'Discount', 'wpsc' ) . ": " . nzshpcrt_currency_display( $purchase_log['discount_value'], 1, true ) . "\n\r";
+				$discount_html.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'],array( 'display_as_html' => false ) ) . "\n\r";
 			}
-			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total_shipping, 1, true ) . "\n\r";
-			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . nzshpcrt_currency_display( $total, 1, true ) . "\n\r";
+			$total_shipping_html.= __( 'Total Shipping', 'wpsc' ) . ": " . wpsc_currency_display( $total_shipping,array( 'display_as_html' => false ) ) . "\n\r";
+			$total_price_html.= __( 'Total', 'wpsc' ) . ": " . wpsc_currency_display( $total,array( 'display_as_html' => false ) ) . "\n\r";
 			if ( isset( $_GET['ti'] ) ) {
 				$message.= "\n\r" . __( 'Your Transaction ID', 'wpsc' ) . ": " . $_GET['ti'];
 				$message_html.= "\n\r" . __( 'Your Transaction ID', 'wpsc' ) . ": " . $_GET['ti'];

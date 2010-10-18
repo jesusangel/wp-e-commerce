@@ -12,42 +12,42 @@ function wpsc_display_upgrades_page() {
 			<br />
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e( 'Pure Gold', 'wpsc' ); ?></strong>
+				<a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/gold-cart-plugin/" target="_blank"><strong><?php _e( 'Pure Gold', 'wpsc' ); ?></strong></a>
 				<p class='wpsc_gold_text'>Add product search, multiple image upload, gallery view, Grid View and multiple payment gateway options to your shop</p>
 				<span class='wpsc_gold_info'>$40</span>
 			</div>
 
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e( 'DropShop', 'wpsc' ); ?></strong>
+				<a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/dropshop-2010/" target="_blank"><strong><?php _e( 'DropShop', 'wpsc' ); ?></strong></a>
 				<p class='wpsc_gold_text'>Impress your customers with our AJAX powered DropShop that lets your customers drag and drop products into their shopping cart</p>
 				<span class='wpsc_gold_info'>$75</span>
 			</div>
 
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e( 'MP3 Player', 'wpsc' ); ?></strong>
+				<a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/mp3-audio-player/" target="_blank"><strong><?php _e( 'MP3 Player', 'wpsc' ); ?></strong></a>
 				<p class='wpsc_gold_text'>Adding this module lets you upload and manage MP3 preview files that can be associated with your digital downloads.</p>
 				<span class='wpsc_gold_info'>$10</span>
 			</div>
 
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e( 'Members Only Module', 'wpsc' ); ?> </strong>
+				<a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/members-only-module/" target="_blank"><strong><?php _e( 'Members Only Module', 'wpsc' ); ?></strong></a>
 				<p class='wpsc_gold_text'>The Members modules lets you set private pages and posts that are only available to paying customers. Activating this module also adds a new option under "WordPress Users" menu that shop owners can use to manage their subscribers.</p>
 				<span class='wpsc_gold_info'>$25</span>
 			</div>
 
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e( 'Product Slider', 'wpsc' ); ?> </strong>
+				<a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/product-slider-2010/" target="_blank"><strong><?php _e( 'Product Slider', 'wpsc' ); ?> </strong></a>
 				<p class='wpsc_gold_text'>Display your products in a new and fancy way using the "Product Slider" module.</p>
 				<span class='wpsc_gold_info'>$25</span>
 			</div>
 
 			<div class='wpsc_gold_module'>
 				<br />
-				<strong><?php _e( 'NextGen Gallery Buy Now Buttons', 'wpsc' ); ?> </strong>
+				<a href="http://getshopped.org/extend/premium-upgrades/premium-upgrades/nextgen-gallery-buy-now1/" target="_blank"><strong><?php _e( 'NextGen Gallery Buy Now Buttons', 'wpsc' ); ?> </strong></a>
 				<p class='wpsc_gold_text'>Make your Online photo gallery into an e-Commerce solution.</p>
 				<span class='wpsc_gold_info'>$10</span>
 			</div>

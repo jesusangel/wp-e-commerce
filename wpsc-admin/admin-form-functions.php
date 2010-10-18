@@ -187,56 +187,33 @@ function wpsc_right_now() {
 	$month = date("m");
 	$start_timestamp = mktime(0, 0, 0, $month, 1, $year);
 	$end_timestamp = mktime(0, 0, 0, ($month+1), 0, $year);
-	
-	
 	$product_count = $wpdb->get_var("SELECT COUNT(*)
 		FROM `".$wpdb->posts."` 
 		WHERE `post_status` = 'publish'
 		AND `post_type` IN ('wpsc-product')"
 	);
 	$replace_values[":productcount:"] = $product_count;
-	
-
 	$replace_values[":productcount:"] .= " ".(($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
 	$product_unit = (($replace_values[":productcount:"] == 1) ? __('product', 'wpsc') : __('products', 'wpsc'));
-	
-	
-	
 	$group_count = count(get_terms("wpsc_product_category"));
 	$replace_values[":groupcount:"] = $group_count;
-	
-	
-	
 	$replace_values[":groupcount:"] .= " ".(($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
 	$group_unit = (($replace_values[":groupcount:"] == 1) ? __('group', 'wpsc') : __('groups', 'wpsc'));
-	
-	
-	
 	$sales_count = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `date` BETWEEN '".$start_timestamp."' AND '".$end_timestamp."'");
 	$replace_values[":salecount:"] = $sales_count. " ".((isset($replace_values[":salecount:"]) && ($replace_values[":salecount:"] == 1)) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
 	$sales_unit = (($replace_values[":salecount:"] == 1) ? __('sale', 'wpsc') : __('sales', 'wpsc'));
-		
-	$replace_values[":monthtotal:"] = nzshpcrt_currency_display(admin_display_total_price($start_timestamp, $end_timestamp),1);
-	$replace_values[":overaltotal:"] = nzshpcrt_currency_display(admin_display_total_price(),1);
-	
-	
-	
-	
+	$replace_values[":monthtotal:"] = wpsc_currency_display( admin_display_total_price( $start_timestamp,$end_timestamp ) );
+	$replace_values[":overaltotal:"] = wpsc_currency_display( admin_display_total_price() );
 	$variation_count = count(get_terms("wpsc-variation", array('parent' => 0)));
 	$variation_unit = (($variation_count == 1) ? __('variation', 'wpsc') : __('variations', 'wpsc'));
-	
 	$replace_values[":pendingcount:"] = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
 	$pending_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('1')");
 	$replace_values[":pendingcount:"] .= " " . (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
 	$pending_sales_unit = (($replace_values[":pendingcount:"] == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
-	
 	$accept_sales = $wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `processed` IN ('2' ,'3', '4')");
 	$accept_sales_unit = (($accept_sales == 1) ? __('transaction', 'wpsc') : __('transactions', 'wpsc'));
-
-	
 	$replace_values[":theme:"] = get_option('wpsc_selected_theme');
 	$replace_values[":versionnumber:"] = WPSC_PRESENTABLE_VERSION;
-	
 	if (function_exists('add_object_page')) {
 		$output="";	
 		$output.="<div id='dashboard_right_now' class='postbox'>";
@@ -244,7 +221,6 @@ function wpsc_right_now() {
 		$output.="		<span>".__('Current Month', 'wpsc')."</span>";
 		$output.="		<br class='clear'/>";
 		$output.="	</h3>";
-		
 		$output .= "<div class='inside'>";
 		$output .= "<div class='table'>";
 		$output .= "<p class='sub'>".__('At a Glance', 'wpsc')."</p>";
@@ -264,7 +240,6 @@ function wpsc_right_now() {
 		$output .= ucfirst($sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
-		
 		$output .= "<tr>";
 		$output .= "<td class='first b'>";
 		$output .= "<a href='?page=wpsc-edit-groups'>".$group_count."</a>";
@@ -279,7 +254,6 @@ function wpsc_right_now() {
 		$output .= ucfirst($pending_sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
-		
 		$output .= "<tr>";
 		$output .= "<td class='first b'>";
 		$output .= "<a href='?page=wpsc-edit-variations'>".$variation_count."</a>";
@@ -294,7 +268,6 @@ function wpsc_right_now() {
 		$output .= ucfirst($accept_sales_unit);
 		$output .= "</td>";
 		$output .= "</tr>";
-		
 		$output .= "</table>";
 		$output .= "</div>";
 		$output .= "<div class='versions'>";
@@ -308,10 +281,8 @@ function wpsc_right_now() {
 		$output.="	<h3 class='reallynow'>\n\r";
 		$output.="		<a class='rbutton' href='admin.php?page=wpsc-edit-products'><strong>".__('Add New Product', 'wpsc')."</strong></a>\n\r";
 		$output.="		<span>"._('Right Now')."</span>\n\r";
-		
 		//$output.="		<br class='clear'/>\n\r";
 		$output.="	</h3>\n\r";
-		
 		$output.="<p class='youhave'>".__('You have <a href="admin.php?page=wpsc-edit-products">:productcount:</a>, contained within <a href="admin.php?page=wpsc-edit-groups">:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>\n\r";
 		$output.="	<p class='youare'>\n\r";
 		$output.="		".__('You are using the :theme: style. This is WP e-Commerce :versionnumber:.', 'wpsc')."\n\r";
@@ -322,7 +293,6 @@ function wpsc_right_now() {
 		$output.="<br />\n\r";
 		$output = str_replace(array_keys($replace_values), array_values($replace_values),$output);
 	}
-	
 	return $output;
 }
 
@@ -483,31 +453,31 @@ function wpsc_packing_slip($purchase_id) {
 				
 				
 				echo " <td>";
-				echo nzshpcrt_currency_display( $price, 1);
+				echo wpsc_currency_display( $price );
 				echo " </td>";
 				
 				echo " <td>";
-				echo nzshpcrt_currency_display($shipping, 1);
+				echo wpsc_currency_display($shipping );
 				echo " </td>";
 							
 	
 
 				echo '<td>';
-				echo nzshpcrt_currency_display($cart_row['tax_charged'],1);
+				echo wpsc_currency_display( $cart_row['tax_charged'] );
 				echo '<td>';
 				echo '</tr>';
 				}
 			echo "</table>";
 			
 			echo '<table class="packing-slip-totals">';
-			echo '<tr><th>Base Shipping</th><td>' . nzshpcrt_currency_display( $purch_data['base_shipping'], 1 ) . '</td></tr>';
-			echo '<tr><th>Total Shipping</th><td>' . nzshpcrt_currency_display( $purch_data['base_shipping'] + $total_shipping, 1 ) . '</td></tr>';
+			echo '<tr><th>Base Shipping</th><td>' . wpsc_currency_display( $purch_data['base_shipping'] ) . '</td></tr>';
+			echo '<tr><th>Total Shipping</th><td>' . wpsc_currency_display( $purch_data['base_shipping'] + $total_shipping ) . '</td></tr>';
          //wpec_taxes
          if($purch_data['wpec_taxes_total'] != 0.00)
          {
-            echo '<tr><th>Taxes</th><td>' . nzshpcrt_currency_display( $purch_data['wpec_taxes_total'], 1 ) . '</td></tr>';
+            echo '<tr><th>Taxes</th><td>' . wpsc_currency_display( $purch_data['wpec_taxes_total'] ) . '</td></tr>';
          }
-			echo '<tr><th>Total Price</th><td>' . nzshpcrt_currency_display( $purch_data['totalprice'], 1 ) . '</td></tr>';
+			echo '<tr><th>Total Price</th><td>' . wpsc_currency_display( $purch_data['totalprice'] ) . '</td></tr>';
 			echo '</table>';
 			
 			echo "</div>\n\r";

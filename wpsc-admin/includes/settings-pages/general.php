@@ -3,7 +3,7 @@
 function wpsc_options_general() {
 	global $wpdb;
 ?>
-	<form name='cart_options' id='cart_options' method='post' action=''>
+	<form method='post' action='' id='cart_options' name='cart_options'>
 		<div id="options_general">
 			<h3><?php _e( 'General Settings', 'wpsc' ); ?></h3>
 		<?php
@@ -173,8 +173,7 @@ function wpsc_options_general() {
 							case 4:
 								$csl4 = "checked ='checked'";
 								break;
-						}
-					?>
+						} ?>
 						<input type='radio' value='1' name='wpsc_options[currency_sign_location]' id='csl1' <?php echo $csl1; ?> />
 						<label for='csl1'>100<span id='cslchar1'><?php echo $currency_sign; ?></span></label> &nbsp;
 						<input type='radio' value='2' name='wpsc_options[currency_sign_location]' id='csl2' <?php echo $csl2; ?> />
@@ -189,11 +188,11 @@ function wpsc_options_general() {
 		<?php do_action('wpsc_general_settings_page'); ?>
 			<div class="submit">
 				<input type='hidden' name='wpsc_admin_action' value='submit_options' />
-<?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
-						<input type="submit" value="<?php _e( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption"/>
-								</div>
-							</div>
-						</form>
+				<?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
+				<input type="submit" value="<?php _e( 'Update &raquo;', 'wpsc' ); ?>" name="updateoption"/>
+			</div>
+		</div>
+	</form>
 <?php
 					}
 ?>
