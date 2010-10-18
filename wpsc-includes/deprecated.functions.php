@@ -29,4 +29,25 @@ function nzshpcrt_donations($args){
 	wpsc_donations($args);
 }
 
+/**
+ * Latest Product Widget content function
+ *
+ * Displays the latest products.
+ *
+ * @todo Make this use wp_query and a theme file (if no theme file present there should be a default output).
+ * @todo Remove marketplace theme specific code and maybe replce with a filter for the image output? (not required if themeable as above)
+ * @todo Should this latest products function live in a different file, seperate to the widget logic?
+ *
+ * Changes made in 3.8 that may affect users:
+ *
+ * 1. The product title link text does now not have a bold tag, it should be styled via css.
+ * 2. <br /> tags have been ommitted. Padding and margins should be applied via css.
+ * 3. Each product is enclosed in a <div> with a 'wpec-latest-product' class.
+ * 4. The product list is enclosed in a <div> with a 'wpec-latest-products' class.
+ * 5. Function now expects two arrays as per the standard Widget API.
+ */
+function nzshpcrt_latest_product( $args = null, $instance ) {
+	echo wpsc_latest_product( $args, $instance );
+}
+
 ?>
