@@ -93,6 +93,14 @@ class usps {
                                                 <input type='checkbox' ".$allServices['LIBRARY']." name='usps_services[]' value='LIBRARY' /> Library Mail<br />
 					</td>
 				</tr>
+                                <tr>
+					<td>
+						".__('Add amount to rates:','wpsc')."
+					</td>
+					<td>
+						<input type='text' name='usps_extra_cost' value='".get_option("usps_extra_cost")."' />
+					</td>
+				</tr>
 			
 				";
         return $output;
@@ -105,6 +113,9 @@ class usps {
         }
         if ($_POST['uspspw'] != '') {
             update_option('uspspw', $_POST['uspspw']);
+        }
+        if ($_POST['usps_extra_cost'] != '') {
+            update_option('usps_extra_cost', $_POST['usps_extra_cost']);
         }
         if($_POST['usps_test_server'] != '') {
             update_option('usps_test_server', $_POST['usps_test_server']);
@@ -347,6 +358,7 @@ class usps {
                     $service = $regs[1];
                     $postage = ereg('<Rate>(.*)</Rate>', $response[$i], $regs);
                     $postage = $regs[1];
+                    $postage = $postage + get_option('usps_extra_cost');
                     if($postage <= 0) {
                         continue;
                     }
@@ -437,6 +449,7 @@ class usps {
                         $time = preg_replace('/Days$/', 'Days', $time);
                         $time = preg_replace('/Day$/', 'Day', $time);
                         if( !in_array($service, $allowed_types) || ($postage < 0) ) continue;
+                        $postage = $postage + get_option('usps_extra_cost');
                         $rates += array($service => $postage);
                         if ($time != '') $transittime[$service] = ' (' . $time . ')';
                     }
@@ -446,7 +459,7 @@ class usps {
         }
         $uspsQuote=$rates;
         $wpsc_usps_quote = $rates;
-        //exit('<pre>'.print_r($uspsQuote,true).'</pre>');
+        //echo ('<pre>'.print_r($uspsQuote,true).'</pre>');
         return $uspsQuote;
     }
 
