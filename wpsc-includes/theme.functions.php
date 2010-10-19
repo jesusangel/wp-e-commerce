@@ -923,11 +923,6 @@ function wpsc_products_page( $content = '' ) {
 			$GLOBALS['post'] = $wp_query->post;
 		return preg_replace( "/(<p>)*\[productspage\](<\/p>)*/", $output, $content );
 	} elseif(is_archive() && wpsc_is_viewable_taxonomy()){	
-/*
-		$post_id = $wpdb->get_var( "SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%[productspage]%' LIMIT 1" );
-		//exit('the post id '.$post_id);
-		$wp_query = query_posts('page_id='.$post_id);
-*/
 		return wpsc_products_page('[productspage]');
 	} else {
 		return $content;
