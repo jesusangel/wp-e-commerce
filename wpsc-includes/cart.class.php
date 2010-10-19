@@ -1774,7 +1774,6 @@ class wpsc_cart_item {
 
       //wpec_taxes - calculate product tax and add to total price
       $wpec_taxes_controller = new wpec_taxes_controller();
-
       if($wpec_taxes_controller->wpec_taxes_isincluded())
       {
          $taxes = $wpec_taxes_controller->wpec_taxes_calculate_included_tax($this);

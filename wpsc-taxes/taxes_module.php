@@ -17,7 +17,7 @@ wp_enqueue_script( 'wp-e-commerce-taxes-functions', WPSC_URL . '/wpsc-taxes/view
  * @return: null;
  * */
 function wpec_taxes_settings_page() {
-	require_once 'view/taxes-settings.php';
+	require_once WPSC_FILE_PATH.'/wpsc-admin/includes/settings-pages/taxes.php';
 	wpec_options_taxes();
 }
 
