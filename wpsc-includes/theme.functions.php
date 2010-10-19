@@ -431,7 +431,6 @@ function wpsc_the_category_title($title, $id){
  * @return $template (string)
  */
 function wpsc_the_category_template($template){
-	global $wp_query;
 	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive')){
 		return str_ireplace('archive', 'page',$template);
 	}else{
@@ -923,11 +922,12 @@ function wpsc_products_page( $content = '' ) {
 		if ( ($is_single == false) || ($product_meta['enable_comments'] == '0') )
 			$GLOBALS['post'] = $wp_query->post;
 		return preg_replace( "/(<p>)*\[productspage\](<\/p>)*/", $output, $content );
-	} elseif(is_archive() && wpsc_is_viewable_taxonomy()){		
-	//	$wpsc_query = $wp_query;
-		wpsc_start_the_query();
-		//	list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query objects back
-		//  exit($content.'here<pre>'.print_r($wp_query,true).'</pre>And wpsc_query<pre>'.print_r($wpsc_query,true).'</pre>');
+	} elseif(is_archive() && wpsc_is_viewable_taxonomy()){	
+/*
+		$post_id = $wpdb->get_var( "SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_type` IN('page','post') AND `post_content` LIKE '%[productspage]%' LIMIT 1" );
+		//exit('the post id '.$post_id);
+		$wp_query = query_posts('page_id='.$post_id);
+*/
 		return wpsc_products_page('[productspage]');
 	} else {
 		return $content;
