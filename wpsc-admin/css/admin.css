@@ -1788,3 +1788,6 @@ vertical-align: middle;
 .wpsc_stock_control_forms .unpublish_when_none_left {
 	margin:0.5em 0;
 }
+#media-upload form p.help {
+	text-align:left;
+	clear:both;

@@ -1022,8 +1022,95 @@ if ( isset( $_REQUEST["parent_page"] ) && ( $_REQUEST["parent_page"] == "wpsc-ed
 	add_action( 'admin_head_media_upload_gallery_form', 'wpsc_gallery_css_mods' );
 	add_filter('media_upload_tabs', 'wpsc_media_upload_tab_gallery', 12);
 	add_filter('gettext','wpsc_filter_delete_text',12,3);
-	add_filter('attachment_fields_to_edit', 'wpsc_attachment_fields', 12);
+    add_filter('attachment_fields_to_edit', 'wpsc_attachment_fields', 12, 2);
+    add_filter('attachment_fields_to_save', 'wpsc_save_attachment_fields', 12, 2);
+    add_filter('media_upload_form_url', 'wpsc_media_upload_url', 12, 1);
 }
+
+function wpsc_attachment_fields($form_fields, $post) {
+
+        $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail'), 'medium-single-product' => __('Medium Single Product'), 'full' => __('Full Size'));
+			
+		$check = get_option( '_wpsc_selected_image_size', 'medium-single-product' );
+
+	//This loop attaches the custom thumbnail/single image sizes to this page
+        foreach ( $size_names as $size => $name ) {
+            $downsize = image_downsize($post->ID, $size);
+
+	        // is this size selectable?
+           $enabled = ( $downsize[3] || 'full' == $size );
+			$css_id = "image-size-{$size}-{$post->ID}";
+			// if this size is the default but that's not available, don't select it
+			
+			if ( $size == $check ) {
+				if ( $enabled ) 
+					$checked = " checked='checked'";
+				else 
+					$check = '';
+			}		
+            $html = "<div class='image-size-item'><input type='radio' " . disabled( $enabled, false, false ) . "name='attachments[$post->ID][image-size]' id='{$css_id}' value='{$size}'$checked />";
+
+            $html .= "<label for='{$css_id}'>" . __($name). "</label>";
+            // only show the dimensions if that choice is available
+            if ( $enabled )
+                $html .= " <label for='{$css_id}' class='help'>" . sprintf( __("(%d&nbsp;&times;&nbsp;%d)"), $downsize[1], $downsize[2] ). "</label>";
+
+            $html .= '</div>';
+
+            $out .= $html;
+	}
+		
+		unset($form_fields['post_excerpt'], $form_fields['url'], $form_fields['align'], $form_fields['image_alt']['helps'], $form_fields["image-size"]);
+		$form_fields['image_alt']['helps'] =  __('Alt text for the product image, e.g. &#8220;Rockstar T-Shirt&#8221;');
+
+		$form_fields["image-size"] = array(
+				 'label' => __('Size'),
+				 'input' => 'html',
+				 'html'  => $out,
+				 'helps' => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Thumbnail size for this image on the single product page</span>"
+		);
+		
+	//This is for the custom thumbnail size.	
+	
+		$custom_thumb_size_w = get_post_meta($post->ID, "_wpsc_custom_thumb_w", true);
+		$custom_thumb_size_h = get_post_meta($post->ID, "_wpsc_custom_thumb_h", true);
+		$custom_thumb_html = "
+			
+			<input style='width:50px; text-align:center' type='text' name='attachments[{$post->ID}][wpsc_custom_thumb_w]' value='{$custom_thumb_size_w}' /> X <input style='width:50px; text-align:center' type='text' name='attachments[{$post->ID}][wpsc_custom_thumb_h]' value='{$custom_thumb_size_h}' />
+		
+		";
+		$form_fields["wpsc_custom_thumb"] = array(
+		"label" => __("Custom Thumbnail Size"),
+		"input" => "html", // this is default if "input" is omitted
+		"helps" => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Custom thumbnail size for this image on the main Product Page</span>",
+		"html" => $custom_thumb_html
+	);
+	
+        return $form_fields;
+	}
+	
+function wpsc_save_attachment_fields($post, $attachment) {
+
+	if ( isset  ( $attachment['wpsc_custom_thumb_w']) ) 
+		update_post_meta($post['ID'], '_wpsc_custom_thumb_w', $attachment['wpsc_custom_thumb_w']);
+		
+	if ( isset  ( $attachment['wpsc_custom_thumb_h']) ) 
+		update_post_meta($post['ID'], '_wpsc_custom_thumb_h', $attachment['wpsc_custom_thumb_h']);
+		
+	if ( isset  ( $attachment['image-size']) ) 
+		update_post_meta($post['ID'], '_wpsc_selected_image_size', $attachment['image-size']);
+
+	return $post;
+}
+
+function wpsc_media_upload_url($form_action_url) {
+
+	$form_action_url = esc_url(add_query_arg(array('parent_page'=>'wpsc-edit-products')));
+
+return $form_action_url;
+
+}
+
 function wpsc_gallery_css_mods() {
 
 			print '<style type="text/css">

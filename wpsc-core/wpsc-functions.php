@@ -31,9 +31,11 @@ add_action( 'init', 'wpsc_core_load_textdomain' );
  */
 function wpsc_core_load_thumbnail_sizes() {
 	// Add image sizes for products
-	add_image_size( 'product-thumbnails', get_option( 'product_image_width' ), get_option( 'product_image_height' ), TRUE );
-	add_image_size( 'admin-product-thumbnails', 38, 38, TRUE );
-	add_image_size( 'featured-product-thumbnails', 540, 260, TRUE );
+	add_image_size( 'product-thumbnails', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false )  );
+	add_image_size( 'admin-product-thumbnails', 38, 38, get_option( 'wpsc_crop_thumbnails', true )  );
+	add_image_size( 'featured-product-thumbnails', 540, 260, get_option( 'wpsc_crop_thumbnails', true )  );
+	add_image_size( 'small-product-thumbnail', get_option( 'product_image_width' ), get_option( 'product_image_height' ), get_option( 'wpsc_crop_thumbnails', false ) );
+	add_image_size( 'medium-single-product', get_option( 'single_view_image_width' ), get_option( 'single_view_image_height' ), get_option( 'wpsc_crop_thumbnails', false) );
 }
 
 /**

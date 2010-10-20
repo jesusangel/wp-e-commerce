@@ -9,11 +9,12 @@
  */
 require_once(WPSC_FILE_PATH . '/wpsc-admin/includes/products.php');
 
-function wpsc_image_downsize( $id, $size ) {
+
+/*function wpsc_image_downsize( $id, $size ) {
 	echo "<pre>" . print_r( func_get_args(), true ) . "</pre>";
 	exit();
 }
-
+*/
 //add_filter('image_downsize', 'wpsc_image_downsize',2,3);
 
 function wpsc_display_edit_products_page() {
