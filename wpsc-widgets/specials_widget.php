@@ -147,16 +147,64 @@ function wpsc_specials( $args = null, $instance ) {
 	$excludes = wpsc_specials_excludes();
 		
 	$special_products = query_posts( array(
-		'post_type'   => 'wpsc-product',
-		'caller_get_posts' => 1,
-		'post_status' => 'publish',
-		'post__not_in' => $excludes,
-		'posts_per_page' => $number
+		'post_type'   		=> 'wpsc-product',
+		'caller_get_posts' 	=> 1,
+		'post_status' 		=> 'publish',
+		'post_parent'		=> 0,
+		'post__not_in' 		=> $excludes,
+		'posts_per_page' 	=> $number
 	) );
 	
 	$output = '';
-	
+	//exit('<pre>'.print_r($special_products,true).'</pre>');
 	if ( count( $special_products ) > 0 ) {
+		list( $wp_query, $special_products ) = array( $special_products, $wp_query ); // swap the wpsc_query object
+		while ( wpsc_have_products() ) : wpsc_the_product(); 
+				 if ( wpsc_the_product_thumbnail() ) : ?>
+						<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" href="<?php echo wpsc_the_product_permalink(); ?>">
+							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+						</a>
+				<?php else: ?>
+							<a href="<?php echo wpsc_the_product_permalink(); ?>">
+							<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_URL; ?>/wpsc-theme/images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
+							</a>
+				<?php endif; ?>
+				<br />
+				<span id="special_product_price_<?php echo $special_product->ID; ?>">
+				<!-- price display -->
+				<?php if(wpsc_have_variation_groups()):
+					while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
+								<?php /** the variation HTML and loop */?>
+								<?php $variation_outputs = Array(); ?>
+								<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
+										<?php
+										$variation_outputs[] = '';	
+										$variation_prices[] = wpsc_the_variation_price(true);
+									endwhile;
+
+									// Sort the variations into price order before outputting
+									$data[] = $variation_outputs;
+									$data[] = $variation_prices;
+									array_multisort($data[1],SORT_ASC,SORT_NUMERIC,
+											        $data[0],SORT_ASC,SORT_STRING);?>
+						<?php endwhile; 
+
+					 echo __('From', 'wpsc').' : '.wpsc_currency_display(  $data[1][0] ); ?>
+				<?php else: ?>
+				<?php echo wpsc_currency_display( wpsc_calculate_price( $special_product->ID,null,true ) ); ?>				
+				<?php endif; ?>
+				</span><br />			
+				<strong><a class="wpsc_product_title" href="<?php echo wpsc_product_url( $special_product->ID, false ); ?>"><?php echo wpsc_the_product_title(); ?></a></strong><br /> <?php
+				
+				
+				
+		endwhile;
+		list( $wp_query, $special_products ) = array( $special_products, $wp_query ); // swap the wpsc_query object
+		
+		
+		
+		/*
+
 		$output .= '<div class="wpec-special-products">';		
 		foreach ( $special_products as $special_product ) {
 			$attached_images = (array)get_posts( array(
@@ -186,19 +234,13 @@ function wpsc_specials( $args = null, $instance ) {
 			
 			$output .= '<span id="special_product_price_' . $special_product->ID . '">';
 			$output .= wpsc_currency_display( wpsc_calculate_price( $special_product->ID,null,true ) );
-			$output .= '</span><br />';
-			
-			$output .= '<form id="specials_' . $special_product->ID . '" method="post" action="" onsubmit="submitform(this, null); return false;">';
-			$output .= '<input type="hidden" name="product_id" value="' . $special_product->ID . '" />';
-			$output .= '<input type="hidden" name="item" value="' . $special_product->ID . '" />';
-			$output .= '<input type="hidden" name="wpsc_ajax_action" value="special_widget" />';
-			$output .= '</form>';
-			
+			$output .= '</span><br />';			
 		}
 		$output .= '</div>';
 	}
-	
-	echo $output;
+*/
+	}
+///	echo $output;
 	
 }
 function wpsc_specials_excludes(){

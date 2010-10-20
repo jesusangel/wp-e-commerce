@@ -683,9 +683,9 @@ function wpsc_price_control_forms($product_data){
 
 		</div> <!-- close new_layer -->
 <?php
-	if ( isset( $product_alt_currency ) && count( $product_alt_currency ) > 0 ) :
+	if ( isset( $product_alt_currency ) && is_array($product_alt_currency)) :
 		$i = 0;
-		foreach ( $product_alt_currency as $iso => $alt_price ) {
+		foreach ($product_alt_currency as $iso => $alt_price ) {
 			$i++; ?>
 			<br /><label for='newCurrency[]'><?php _e( 'Currency type', 'wpsc' ); ?>:</label><br />
 			<select name='newCurrency[]' class='newCurrency' style='width:42%'> <?php

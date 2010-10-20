@@ -608,9 +608,11 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	if(($newPrice != '') &&  ($newPrice > 0)){
 		update_product_meta($product_id, $newCurrency, $old_curr);
 	} else {
-		unset($old_curr[$isocode]);
+		if(!empty($old_curr[$isocode]) && is_array($old_curr))
+			unset($old_curr[$isocode]);
+
 		update_product_meta($product_id, $newCurrency, $old_curr);
-//		echo $isocode.' '.$newPrice.' <pre>'.print_r($old_curr,true).'</pre>';
+
 	}
 	
 	//exit('<pre>'.print_r($newCurrency, true).'</pre>'.$newPrice);

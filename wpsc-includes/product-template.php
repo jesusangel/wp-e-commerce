@@ -1366,26 +1366,27 @@ function wpsc_product_count() {
  */
 function wpsc_the_variation_price( $return_as_numeric = false ) {
 	global $wpdb, $wpsc_variations;
-
 	if ( $wpsc_variations->variation_count > 0 ) {
 
 		$product_id = get_the_ID();
-
 		$wpq = array( 'variations' => $wpsc_variations->variation->slug,
-			'post_status' => 'inherit',
+			'post_status' => 'inherit,publish',
 			'post_type' => 'wpsc-product',
 			'post_parent' => $product_id );
 		$query = new WP_Query( $wpq );
-
+	//	exit('<pre>'.print_r($query,true).'</pre>');
 		// Should never happen
 		if ( $query->post_count != 1 )
 			return false;
 
 		$variation_product_id = $query->posts[0]->ID;
 
-		$price = get_product_meta( $variation_product_id, "price" );
-		$price = $price[0];
-
+		$price = get_product_meta( $variation_product_id, "price",true );
+		$special_price = get_product_meta( $variation_product_id, "special_price", true );
+//exit($price .'<<<price');
+//		$price = $price[0];
+		if($special_price < $price && $special_price > 0)
+			$price = $special_price;
 		if ( !$return_as_numeric ) {
 			$output = wpsc_currency_display( $price,array( 'display_as_html' => false ) );
 		} else {
@@ -1394,7 +1395,6 @@ function wpsc_the_variation_price( $return_as_numeric = false ) {
 	} else {
 		$output = false;
 	}
-
 	return $output;
 }
 
