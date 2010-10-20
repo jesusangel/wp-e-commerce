@@ -1085,7 +1085,7 @@ function wpsc_attachment_fields($form_fields, $post) {
 		"helps" => "<span style='text-align:left; clear:both; display:block; padding-top:3px;'>Custom thumbnail size for this image on the main Product Page</span>",
 		"html" => $custom_thumb_html
 	);
-	
+		
         return $form_fields;
 	}
 	
@@ -1149,16 +1149,6 @@ function wpsc_media_upload_tab_gallery($tabs) {
 
 	return $tabs;
 }
-
-
-function wpsc_attachment_fields($form_fields) {
-
-		unset($form_fields['post_excerpt'], $form_fields['url'], $form_fields['align'], $form_fields['image_alt']['helps']);
-		$form_fields['image_alt']['helps'] =  __('Alt text for the Product image, e.g. &#8220;Rockstar T-Shirt&#8221;');
-
-	return $form_fields;
-}
-
 
 function wpsc_filter_delete_text($translation, $text, $domain){
 
