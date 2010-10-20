@@ -197,10 +197,10 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && (('delete' == $_REQUEST['wpsc_ad
 
 function wpsc_bulk_modify_products() {
 	global $wpdb;
-	$doaction = $_GET['bulkAction'];
+	$doaction = $_POST['bulkAction'];
 	$sendback = wp_get_referer();
-	$product_ids = $_GET['post'];
-	//exit( "<pre>".print_r($_GET,true)."</pre>");
+	$product_ids = $_POST['post'];
+	//exit( "<pre>".print_r($_POST,true)."</pre>");
 	switch ( $doaction ) {
 
 		case 'publish':
@@ -275,9 +275,9 @@ function wpsc_bulk_modify_products() {
 
 
 		default:
-			if ( isset( $_GET['search'] ) && !empty( $_GET['search'] ) ) {
+			if ( isset( $_POST['search'] ) && !empty( $_POST['search'] ) ) {
 				// urlencode the search query to allow for spaces, etc
-				$sendback = add_query_arg( 'search', urlencode( stripslashes( $_GET['search'] ) ), $sendback );
+				$sendback = add_query_arg( 'search', urlencode( stripslashes( $_POST['search'] ) ), $sendback );
 			}
 			break;
 	}

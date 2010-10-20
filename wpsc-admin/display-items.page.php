@@ -282,12 +282,12 @@ function wpsc_display_edit_products_page() {
 		// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
 		$itempp = 20;
 
-		if ( isset( $_GET['product'] ) && (is_numeric( $_GET['product'] )) ) 
-			$parent_product = absint( $_GET['product'] );
+		if ( isset( $_POST['product'] ) && (is_numeric( $_POST['product'] )) ) 
+			$parent_product = absint( $_POST['product'] );
 		
 		$search_input = '';
-		if ( isset( $_GET['search'] ) ) {
-			$search_input = stripslashes( $_GET['search'] );
+		if ( isset( $_POST['search'] ) ) {
+			$search_input = stripslashes( $_POST['search'] );
 
 			$search_string = "%" . $wpdb->escape( $search_input ) . "%";
 
@@ -298,8 +298,8 @@ function wpsc_display_edit_products_page() {
 
 		$search_sql = apply_filters( 'wpsc_admin_products_list_search_sql', $search_sql );
 
-		if ( isset( $_GET['pageno'] ) && ($_GET['pageno'] > 0) ) {
-			$page = absint( $_GET['pageno'] );
+		if ( isset( $_POST['pageno'] ) && ($_POST['pageno'] > 0) ) {
+			$page = absint( $_POST['pageno'] );
 		} else {
 			$page = 1;
 		}
@@ -315,14 +315,14 @@ function wpsc_display_edit_products_page() {
 			'offset' => $start
 		);
 
-		if ( isset( $_GET['category'] ) ) {
-			$category_id = $_GET['category'];
+		if ( isset( $_POST['category'] ) ) {
+			$category_id = $_POST['category'];
 			$query['wpsc_product_category'] = $category_id;
 		}
 
 
-		if ( isset( $_GET['search'] ) && (strlen( $_GET['search'] ) > 0 ) ) {
-			$search = $_GET['search'];
+		if ( isset( $_POST['search'] ) && (strlen( $_POST['search'] ) > 0 ) ) {
+			$search = $_POST['search'];
 			$query['s'] = $search;
 		}
 		$wp_query = new WP_Query( $query );
@@ -345,7 +345,7 @@ function wpsc_display_edit_products_page() {
 
 		$this_page_url = stripslashes( $_SERVER['REQUEST_URI'] );
 
-		$is_trash = isset( $_GET['post_status'] ) && $_GET['post_status'] == 'trash';
+		$is_trash = isset( $_POST['post_status'] ) && $_POST['post_status'] == 'trash';
 
 		// Justin Sainton - 5.7.2010 - Added conditional code below as blank space would show up if $page_links was NULL.  Now the area only shows up if page links exist.
 ?>	
@@ -360,19 +360,19 @@ function wpsc_display_edit_products_page() {
 				</div>
 			</div>
 <?php } ?>	
-		<form action="admin.php?page=wpsc-edit-products" method="get" id="filt_cat">
+		<form action="admin.php?page=wpsc-edit-products" method="post" id="filt_cat">
 		<?php
 		echo wpsc_admin_category_dropdown();
 		?>
 </form>
-<form id="search-products" action="admin.php?page=wpsc-edit-products" method="get">
+<form id="search-products" action="admin.php?page=wpsc-edit-products" method="post">
 	<div class="alignright search-box">
 			<input type='hidden' name='page' value='wpsc-edit-products'  />
 			<input type="text" class="search-input" id="page-search-input" name="search" value="<?php echo $search_input; ?>" />
 			<input type="submit" name='wpsc_search' value="<?php _e( 'Search Products' ); ?>" class="button" />
 		</div>
 		</form>
-<form id="posts-filter" action="admin.php?page=wpsc-edit-products" method="get">
+<form id="posts-filter" action="admin.php?page=wpsc-edit-products" method="post">
 	<div class="productnav">
 		<div class="alignleft actions">
 
@@ -438,8 +438,8 @@ function wpsc_admin_category_dropdown() {
 	global $wpdb, $category_data;
 	$siteurl = get_option( 'siteurl' );
 	$category_slug = 0;
-	if ( isset( $_GET['category'] ) )
-		$category_slug = $_GET['category'];
+	if ( isset( $_POST['category'] ) )
+		$category_slug = $_POST['category'];
 
 	$url = urlencode( remove_query_arg( array( 'product_id', 'category_id' ) ) );
 
@@ -447,7 +447,7 @@ function wpsc_admin_category_dropdown() {
 
 	$options .= wpsc_list_categories( 'wpsc_admin_category_options', $category_slug );
 
-	$concat = "<input type='hidden' name='page' value='{$_GET['page']}' />\r\n";
+	$concat = "<input type='hidden' name='page' value='{$_POST['page']}' />\r\n";
 	$concat .= "<select name='category' id='category_select'>" . $options . "</select>\r\n";
 	$concat .= "<input type='submit' value='Filter' class='button-secondary action' id='post-query-submit' />\r\n";
 	return $concat;
@@ -484,7 +484,7 @@ function wpsc_admin_category_options( $category, $subcategory_level = 0, $catego
 function wpsc_update_featured_products() {
 	global $wpdb;
 	$is_ajax = (int)(bool)$_POST['ajax'];
-	$product_id = absint( $_GET['product_id'] );
+	$product_id = absint( $_POST['product_id'] );
 	check_admin_referer( 'feature_product_' . $product_id );
 	$status = get_option( 'sticky_products' );
 
