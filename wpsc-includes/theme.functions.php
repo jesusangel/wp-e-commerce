@@ -1160,9 +1160,9 @@ function wpsc_the_sticky_image( $product_id ) {
  */
 function wpsc_display_featured_products_page() {
 	global $wpdb, $wpsc_query,$wp_query;
+//	echo('<pre>'.print_r($wp_query,true).'</pre>');
 	$sticky_array = get_option( 'sticky_products' );
-	if ( (is_front_page() || is_home()) && !empty( $sticky_array ) && $wp_query->found_posts > 1) {
-
+	if ( (is_front_page() || is_home()) && !empty( $sticky_array ) && $wp_query->post_count > 1) {
 		$query = get_posts( array(
 					'post__in' => $sticky_array,
 					'post_type' => 'wpsc-product',
