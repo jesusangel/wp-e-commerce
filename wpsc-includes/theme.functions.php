@@ -351,14 +351,13 @@ function wpsc_single_template( $content ) {
 
 	if ( 'wpsc-product' == $post->post_type && !is_archive()) {
 		remove_filter( "the_content", "wpsc_single_template" );
-		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product' ) );
+		$wpsc_temp_query = new WP_Query( array( 'post__in' => array( $post->ID ), 'post_type' => 'wpsc-product','posts_per_page'=>1 ) );
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query object
 		ob_start();
 		include( $single_theme_path );
 		$content = ob_get_contents();
 		ob_end_clean();
 		list( $wp_query, $wpsc_temp_query ) = array( $wpsc_temp_query, $wp_query ); // swap the wpsc_query objects back
-
 	}elseif(is_archive() && wpsc_is_viewable_taxonomy()){
 		remove_filter( "the_content", "wpsc_single_template" );		
 		list( $wp_query, $wpsc_query ) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
@@ -378,6 +377,7 @@ function wpsc_single_template( $content ) {
 
 	return $content;
 }
+
 function wpsc_remove_page_from_query_string($query_string)
 {
 	if ($query_string['name'] == 'page' && isset($query_string['page'])) {
@@ -391,6 +391,7 @@ function wpsc_remove_page_from_query_string($query_string)
 	return $query_string;
 }
 add_filter('request', 'wpsc_remove_page_from_query_string');
+
 
 function wpsc_is_viewable_taxonomy(){
 	global $wp_query;

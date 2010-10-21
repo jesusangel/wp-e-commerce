@@ -571,17 +571,18 @@ function wpsc_generate_product_query( $query ) {
 		$query->is_single   = false;
 
 	}
-	if( isset($wp_query->query_vars['wpsc_product_category'])){
-			$query->query_vars['wpsc_product_category'] = $wp_query->query_vars['wpsc_product_category'];
-			$query->query_vars['taxonomy'] = $wp_query->query_vars['taxonomy'];
-			$query->query_vars['term'] = $wp_query->query_vars['term'];
-	}elseif( '' != ($default_category = get_option('wpsc_default_category'))){
+
+	if( isset($wp_query->query_vars['wpsc_product_category']) && !isset($wp_query->query_vars['wpsc-product'])){
+
+		$query->query_vars['wpsc_product_category'] = $wp_query->query_vars['wpsc_product_category'];
+		$query->query_vars['taxonomy'] = $wp_query->query_vars['taxonomy'];
+		$query->query_vars['term'] = $wp_query->query_vars['term'];
+	}elseif( '' != ($default_category = get_option('wpsc_default_category')) && !isset($wp_query->query_vars['wpsc-product'])){
 		$default_term = get_term($default_category,'wpsc_product_category');
 		$query->query_vars['taxonomy'] = 'wpsc_product_category';
 		$query->query_vars['term'] = $default_term->name;
 		$query->is_tax = true;
 	}
-
 	$query->posts_per_page = get_option('wpsc_products_per_page');
 	if ( $query->is_tax == true )
 		new wpsc_products_by_category( $query );
