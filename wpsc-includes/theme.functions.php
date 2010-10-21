@@ -1159,16 +1159,16 @@ function wpsc_the_sticky_image( $product_id ) {
  * @return void
  */
 function wpsc_display_featured_products_page() {
-	global $wpdb, $wpsc_query;
-
+	global $wpdb, $wpsc_query,$wp_query;
 	$sticky_array = get_option( 'sticky_products' );
-	if ( (is_front_page() || is_home()) && !empty( $sticky_array ) ) {
+	if ( (is_front_page() || is_home()) && !empty( $sticky_array ) && $wp_query->found_posts > 1) {
 
 		$query = get_posts( array(
 					'post__in' => $sticky_array,
 					'post_type' => 'wpsc-product',
 					'orderby' => 'rand',
-					'numberposts' => 1
+					'numberposts' => 1,
+					'posts_per_page' => 1
 				) );
 
 		if ( count( $query ) > 0 ) {
@@ -1176,9 +1176,11 @@ function wpsc_display_featured_products_page() {
 			$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 			$image_width = get_option( 'product_image_width' );
 			$image_height = get_option( 'product_image_height' );
+
 			//Begin outputting featured product.  We can worry about templating later, or folks can just CSS it up.
 			foreach ( $query as $product ) :
 				setup_postdata( $product );
+
 ?>
 
 				<div class="wpsc_container wpsc_featured">

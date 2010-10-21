@@ -484,7 +484,7 @@ function wpsc_admin_category_options( $category, $subcategory_level = 0, $catego
 function wpsc_update_featured_products() {
 	global $wpdb;
 	$is_ajax = (int)(bool)$_POST['ajax'];
-	$product_id = absint( $_POST['product_id'] );
+	$product_id = absint( $_GET['product_id'] );
 	check_admin_referer( 'feature_product_' . $product_id );
 	$status = get_option( 'sticky_products' );
 
@@ -526,7 +526,7 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
  */
 function wpsc_featured_products_toggle( $product_id ) {
 	global $wpdb;
-	$featured_product_url = wp_nonce_url( "admin.php?wpsc_admin_action=update_featured_product&amp;product_id=$product_id}", 'feature_product_' . $product_id );
+	$featured_product_url = wp_nonce_url( "index.php?wpsc_admin_action=update_featured_product&amp;product_id=$product_id", 'feature_product_' . $product_id );
 ?>
 	<a class="wpsc_featured_product_toggle featured_toggle_<?php echo $product_id; ?>" href='<?php echo $featured_product_url; ?>' >
 <?php if ( in_array( $product_id, (array)get_option( 'sticky_products' ) ) ) : ?>
