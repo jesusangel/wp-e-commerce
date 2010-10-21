@@ -156,10 +156,13 @@ function wpsc_specials( $args = null, $instance ) {
 	) );
 	
 	$output = '';
-	//exit('<pre>'.print_r($special_products,true).'</pre>');
+	$product_ids[] = array();
 	if ( count( $special_products ) > 0 ) {
 		list( $wp_query, $special_products ) = array( $special_products, $wp_query ); // swap the wpsc_query object
 		while ( wpsc_have_products() ) : wpsc_the_product(); 
+				
+				if(!in_array(wpsc_the_product_id(),$product_ids)):
+				$product_ids[] = wpsc_the_product_id();
 				 if ( wpsc_the_product_thumbnail() ) : ?>
 						<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" href="<?php echo wpsc_the_product_permalink(); ?>">
 							<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
@@ -170,7 +173,7 @@ function wpsc_specials( $args = null, $instance ) {
 							</a>
 				<?php endif; ?>
 				<br />
-				<span id="special_product_price_<?php echo $special_product->ID; ?>">
+				<span id="special_product_price_<?php echo wpsc_the_product_id(); ?>">
 				<!-- price display -->
 				<?php if(wpsc_have_variation_groups()):
 					while (wpsc_have_variation_groups()) : wpsc_the_variation_group(); ?>
@@ -181,7 +184,6 @@ function wpsc_specials( $args = null, $instance ) {
 										$variation_outputs[] = '';	
 										$variation_prices[] = wpsc_the_variation_price(true);
 									endwhile;
-
 									// Sort the variations into price order before outputting
 									$data[] = $variation_outputs;
 									$data[] = $variation_prices;
@@ -191,57 +193,16 @@ function wpsc_specials( $args = null, $instance ) {
 
 					 echo __('From', 'wpsc').' : '.wpsc_currency_display(  $data[1][0] ); ?>
 				<?php else: ?>
-				<?php echo wpsc_currency_display( wpsc_calculate_price( $special_product->ID,null,true ) ); ?>				
+				<?php echo wpsc_currency_display( wpsc_calculate_price( wpsc_the_product_id(),null,true ) ); ?>				
 				<?php endif; ?>
 				</span><br />			
-				<strong><a class="wpsc_product_title" href="<?php echo wpsc_product_url( $special_product->ID, false ); ?>"><?php echo wpsc_the_product_title(); ?></a></strong><br /> <?php
+				<strong><a class="wpsc_product_title" href="<?php echo wpsc_product_url( wpsc_the_product_id(), false ); ?>"><?php echo wpsc_the_product_title(); ?></a></strong><br /> <?php
 				
 				
-				
+				endif; 
 		endwhile;
 		list( $wp_query, $special_products ) = array( $special_products, $wp_query ); // swap the wpsc_query object
-		
-		
-		
-		/*
-
-		$output .= '<div class="wpec-special-products">';		
-		foreach ( $special_products as $special_product ) {
-			$attached_images = (array)get_posts( array(
-				'post_type'   => 'attachment',
-				'numberposts' => 1,
-				'post_status' => null,
-				'post_parent' => $special_product->ID,
-				'orderby'     => 'menu_order',
-				'order'       => 'ASC'
-			) );
-			
-			//Images are handled here
-
-			if(!empty($attached_images)){
-				$attached_image = $attached_images[0];
-				if ( ( $attached_image->ID > 0 ) && ($show_thumbnails != 1) )
-					$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . '" title="' . $special_product->post_title . '" alt="' . $special_product->post_title . '" /><br />';
-			
-			}
-			//Product Title is here
-			$special_product->post_title = htmlentities( stripslashes( $special_product->post_title ), ENT_QUOTES, 'UTF-8' );
-			$output .= '<strong><a class="wpsc_product_title" href="' . wpsc_product_url( $special_product->ID, false ) . '">' . $special_product->post_title . '</a></strong><br />';
-			
-			//Description is handled here
-			if ( $show_description == 1 )
-				$output .= $special_product->post_content . '<br />';
-			
-			$output .= '<span id="special_product_price_' . $special_product->ID . '">';
-			$output .= wpsc_currency_display( wpsc_calculate_price( $special_product->ID,null,true ) );
-			$output .= '</span><br />';			
-		}
-		$output .= '</div>';
 	}
-*/
-	}
-///	echo $output;
-	
 }
 function wpsc_specials_excludes(){
 	global $wpdb;
