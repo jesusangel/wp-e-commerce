@@ -857,7 +857,7 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
  *
  * @return string - the URL to the thumbnail image
  */
-function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id = 0 ) {
+function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id = 0, $page = 'products-page' ) {
 
 	// Get the product ID if none was passed
 	if ( empty( $product_id ) )
@@ -895,7 +895,28 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 		if ( !empty( $attached_images ) )
 			$thumbnail_id = $attached_images[0]->ID;
 	}
+	
+	//Overwrite height & width if custom dimensions exist for thumbnail_id
+	if ( $page == 'products-page' || !isset( $page ) ) {
+		$custom_width = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_w', true );
+		$custom_height = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_h', true );
+		
+		if ( !empty( $custom_width ) && !empty( $custom_height ) ) {
+		
+			$width = $custom_width;
+			$height = $custom_height;
+		
+		}
+	} elseif( $page == 'single' ) {
+		$custom_thumbnail = get_post_meta( $thumbnail_id, '_wpsc_selected_image_size', true );
+		
+		$src = wp_get_attachment_image_src( $thumbnail_id, $custom_thumbnail );
 
+		if ( !empty( $src ) && is_string( $src[0] ) ) {
+			return $src[0];
+		}
+	} 
+	
 	// Return image link...
 	if ( $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
 		return $image_link;

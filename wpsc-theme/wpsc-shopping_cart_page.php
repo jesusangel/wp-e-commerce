@@ -39,7 +39,7 @@ endif;
 
 			<td class="firstcol wpsc_product_image wpsc_product_image_<?php echo wpsc_the_cart_item_key(); ?>">
 			<?php if('' != wpsc_cart_item_image()): ?>
-				<img src="<?php echo wpsc_cart_item_image(48,48); ?>" alt="<?php echo wpsc_cart_item_name(); ?>" title="<?php echo wpsc_cart_item_name(); ?>" class="product_image" />
+				<img src="<?php echo wpsc_cart_item_image(); ?>" alt="<?php echo wpsc_cart_item_name(); ?>" title="<?php echo wpsc_cart_item_name(); ?>" class="product_image" />
 			<?php else: ?>
 				<div class="item_no_image">
 					<a href="<?php echo wpsc_the_product_permalink(); ?>">

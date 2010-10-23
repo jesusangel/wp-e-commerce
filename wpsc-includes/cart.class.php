@@ -348,7 +348,7 @@ function wpsc_cart_item_url() {
 */
 function wpsc_cart_item_image() {
    global $wpsc_cart;
-   return wpsc_the_product_thumbnail("","",$wpsc_cart->cart_item->product_id);
+   return wpsc_the_product_thumbnail("","",$wpsc_cart->cart_item->product_id, "shopping_cart");
 }
 
 /**
