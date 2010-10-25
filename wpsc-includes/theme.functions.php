@@ -32,7 +32,6 @@ function wpsc_register_theme_file( $file_name ) {
  */
 function wpsc_get_theme_files() {
 	global $wpec_theme_files;
-
 	if ( empty( $wpec_theme_files ) )
 		return array();
 	else
@@ -52,6 +51,7 @@ function wpsc_register_core_theme_files() {
 	wpsc_register_theme_file( 'wpsc-shopping_cart_page.php' );
 	wpsc_register_theme_file( 'wpsc-transaction_results.php' );
 	wpsc_register_theme_file( 'wpsc-user_log.php' );
+	wpsc_register_theme_file( 'wpsc-cart_widget.php' );
 
 	// Let other plugins register their theme files
 	do_action( 'wpsc_register_core_theme_files' );
@@ -200,7 +200,7 @@ function wpsc_get_template_file_url( $file = '' ) {
 	// If we're not looking for a file, do not proceed
 	if ( empty( $file ) )
 		return;
-	//echo get_stylesheet_directory().'/'.$file;
+
 	// No cache, so find one and set it
 	if ( false === ( $file_url = get_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file ) ) ) {
 
@@ -255,7 +255,6 @@ function wpsc_get_template_file_path( $file = '' ){
 
 	// No cache, so find one and set it
 	if ( false === ( $file_path = get_transient( WPEC_TRANSIENT_THEME_PATH_PREFIX . $file ) ) ) {
-
 		// Look for file in stylesheet
 		if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
 			$file_path = get_stylesheet_directory() . '/' . $file;

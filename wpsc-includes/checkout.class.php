@@ -223,7 +223,7 @@ function wpsc_has_noca_message(){
  * @return (boolean) true or false
  */
 function wpsc_have_valid_shipping_zipcode(){
-	if(empty($_SESSION['wpsc_zipcode']) || ('Your Zipcode' == $_SESSION['wpsc_zipcode']))
+	if(empty($_SESSION['wpsc_zipcode']) || ('Your Zipcode' == $_SESSION['wpsc_zipcode']) && ($_SESSION['wpsc_update_location']))
 		return true;
 	else
 		return false;

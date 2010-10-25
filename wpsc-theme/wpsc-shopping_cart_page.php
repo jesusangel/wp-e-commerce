@@ -132,13 +132,11 @@ endif;
 
 			<?php if (!wpsc_have_shipping_quote()) : // No valid shipping quotes ?>
 				<?php if (wpsc_have_valid_shipping_zipcode()) : ?>
-					<?php if ($_SESSION['wpsc_update_location'] == true) :?>
 						<tr class='wpsc_update_location'>
 							<td colspan='5' class='shipping_error' >
 								<?php _e('Please provide a Zipcode and click Calculate in order to continue.', 'wpsc'); ?>
 							</td>
 						</tr>
-					<?php endif; ?>
 				<?php else: ?>
 					<tr class='wpsc_update_location_error'>
 						<td colspan='5' class='shipping_error' >
