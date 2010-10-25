@@ -1018,16 +1018,16 @@ if ( isset( $_GET["page"] ) && ($_GET["page"] == "wpsc-edit-products" ) ) {
 * Modifications to Media Gallery
 */
 
-if ( isset( $_REQUEST["parent_page"] ) && ( $_REQUEST["parent_page"] == "wpsc-edit-products" ) ) {
+if ( isset( $_REQUEST['parent_page'] ) && ( $_REQUEST['parent_page'] == 'wpsc-edit-products' ) ) {
 	add_action( 'admin_head_media_upload_gallery_form', 'wpsc_gallery_css_mods' );
-	add_filter('media_upload_tabs', 'wpsc_media_upload_tab_gallery', 12);
-	add_filter('gettext','wpsc_filter_delete_text',12,3);
-    add_filter('attachment_fields_to_save', 'wpsc_save_attachment_fields', 9, 2);
-    add_filter('media_upload_form_url', 'wpsc_media_upload_url', 9, 1);
+	add_filter( 'media_upload_tabs', 'wpsc_media_upload_tab_gallery', 12 );
+	add_filter( 'gettext','wpsc_filter_delete_text',12 , 3 );
+    add_filter( 'attachment_fields_to_save', 'wpsc_save_attachment_fields', 9, 2 );
+    add_filter( 'media_upload_form_url', 'wpsc_media_upload_url', 9, 1 );
 }
-    add_filter('attachment_fields_to_edit', 'wpsc_attachment_fields', 11, 2);
-	add_filter('gettext','wpsc_filter_feature_image_text',12,3);
-	
+    add_filter( 'attachment_fields_to_edit', 'wpsc_attachment_fields', 11, 2 );
+	add_filter( 'gettext','wpsc_filter_feature_image_text', 12, 3 );
+
 /*
  * This filter translates string before it is displayed 
  * specifically for the words 'Use as featured image' with 'Use as Product Thumbnail' when the user is selecting a Product Thumbnail
@@ -1038,7 +1038,7 @@ if ( isset( $_REQUEST["parent_page"] ) && ( $_REQUEST["parent_page"] == "wpsc-ed
  * @param $domain The domain for the translation
  * @return string The translated / filtered text.
  */
-function wpsc_filter_feature_image_text($translation, $text, $domain){
+function wpsc_filter_feature_image_text($translation, $text, $domain) {
 
 	if( 'Use as featured image' == $text && isset( $_REQUEST['post_id'] ) && isset( $_REQUEST["parent_page"] ) ){
 		$translations = &get_translations_for_domain($domain);
@@ -1048,10 +1048,10 @@ function wpsc_filter_feature_image_text($translation, $text, $domain){
 }
 
 function wpsc_attachment_fields($form_fields, $post) {
-	
+
 	$parent_post = get_post($post->post_parent);
-	//print_r($post);
-	if ($parent_post->post_type == "wpsc-product") {
+
+	if ($parent_post->post_type == "wpsc-product" || $parent_post->post_title == "stopgap") {
         $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail'), 'medium-single-product' => __('Medium Single Product'), 'full' => __('Full Size'));
 			
 		$check = get_post_meta( $post->ID, '_wpsc_selected_image_size', true );
@@ -1152,7 +1152,13 @@ function wpsc_gallery_css_mods() {
 			var target = $(this).next();
 				$("p > input.button", this).appendTo(target);
 
-		})
+		});
+		
+		var title = $("div.media-item span.title").text();
+		
+		if(title == "stopgap") {
+			$("div.media-item").hide();
+		}
 		
 		
 	});
