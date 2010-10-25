@@ -75,6 +75,11 @@ function wpsc_core_load_purchase_log_statuses() {
 			'is_transaction' => true,
 			'order'          => 5,
 		),
+		array(
+			'internalname'   => 'declined_payment',
+			'label'          => __( 'Payment Declined', 'wpsc' ),
+			'order'          => 6,
+		),
 	);
 }
 
