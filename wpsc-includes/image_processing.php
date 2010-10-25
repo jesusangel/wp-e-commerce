@@ -142,4 +142,5 @@ global $wpdb;
 	}
 	return false;
 }
+
 ?>

@@ -144,6 +144,7 @@ class WP_eCommerce {
 		require_once( WPSC_FILE_PATH . '/wpsc-core/wpsc-installer.php' );
 		$this->constants();
 		wpsc_install();
+		
 	}
 }
 

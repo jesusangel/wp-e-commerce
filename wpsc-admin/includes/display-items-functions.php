@@ -1026,11 +1026,31 @@ if ( isset( $_REQUEST["parent_page"] ) && ( $_REQUEST["parent_page"] == "wpsc-ed
     add_filter('media_upload_form_url', 'wpsc_media_upload_url', 9, 1);
 }
     add_filter('attachment_fields_to_edit', 'wpsc_attachment_fields', 11, 2);
+	add_filter('gettext','wpsc_filter_feature_image_text',12,3);
+	
+/*
+ * This filter translates string before it is displayed 
+ * specifically for the words 'Use as featured image' with 'Use as Product Thumbnail' when the user is selecting a Product Thumbnail
+ * using media gallery.
+ * 
+ * @param $translation The current translation
+ * @param $text The text being translated
+ * @param $domain The domain for the translation
+ * @return string The translated / filtered text.
+ */
+function wpsc_filter_feature_image_text($translation, $text, $domain){
+
+	if( 'Use as featured image' == $text && isset( $_REQUEST['post_id'] ) && isset( $_REQUEST["parent_page"] ) ){
+		$translations = &get_translations_for_domain($domain);
+		return $translations->translate('Use as Product Thumbnail') ;
+	}
+	return $translation;
+}
 
 function wpsc_attachment_fields($form_fields, $post) {
 	
 	$parent_post = get_post($post->post_parent);
-	
+	//print_r($post);
 	if ($parent_post->post_type == "wpsc-product") {
         $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail'), 'medium-single-product' => __('Medium Single Product'), 'full' => __('Full Size'));
 			
@@ -1151,7 +1171,7 @@ function wpsc_media_upload_tab_gallery($tabs) {
 
 function wpsc_filter_delete_text($translation, $text, $domain){
 
-	if( 'Delete' == $text && isset( $_REQUEST['post_id'] ) && ( 'wpsc-product' == get_post_type( $_REQUEST['post_id'] ) ) ){
+	if( 'Delete' == $text && isset( $_REQUEST['post_id'] ) && isset( $_REQUEST["parent_page"] ) ){
 		$translations = &get_translations_for_domain($domain);
 		return $translations->translate('Trash') ;
 	}
