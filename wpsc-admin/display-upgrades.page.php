@@ -106,13 +106,7 @@ function wpsc_display_upgrades_page() {
 				<h2><?php echo __("Upgrade Instructions", 'wpsc');?></h2>
 				<h4><?php _e(''); ?></h4>
 				<p>
-					<?php printf(__("If your gold cart files are called 'gold_cart_files': Copy the gold_cart_files directory into the %s folder.", 'wpsc'),  WPSC_UPGRADES_DIR ); ?>
-				</p>
-				<p>
-					<?php _e("This folder should be automatically created when the e-commerce plugin is activated, but if it is not, you will have to create it yourself.", 'wpsc'); ?>
-				</p>
-				<p>
-					<?php printf(__("Otherwise If your gold cart files are called 'gold_cart_files_plugin': Copy the gold_cart_files_plugin directory into the %s folder.", 'wpsc'),  WP_PLUGIN_DIR ); ?>
+					<?php printf(__("Your gold cart plugin should be installed into your %s folder.", 'wpsc'), WP_PLUGIN_DIR ); ?>
 				</p>
 				<p>
 					<?php _e('You can find more information on installing Gold Cart in your readme.txt inside the gold cart folder. ');?>
@@ -121,9 +115,15 @@ function wpsc_display_upgrades_page() {
 				<p>
 					<?php _e("Once you have done the above a new panel should appear on the Upgrades page where you must enter your API Username and API Key. ", 'wpsc'); ?>
 				</p>
+					<p>
+					<?php _e("If you are having problems activating your gold cart with your API key please check that you have reset your key (if your moving it from an old site) and that you have no white spaces in your API key or user name. ", 'wpsc'); ?>
+				</p>
 
 				<p>
 					<a href='http://getshopped.org/resources/docs/'> <?php _e("For more information visit our documentation page.", 'wpsc'); ?></a>
+				</p>
+				<p>
+					<a href='http://getshopped.org/resources/premium-support/'> <?php _e("For premium support visit the premium support forum.", 'wpsc'); ?></a>
 				</p>
 				
 			</div> 

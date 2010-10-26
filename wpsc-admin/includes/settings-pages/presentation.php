@@ -83,8 +83,12 @@ global $wpdb;
 				?>
 					<input type='radio' value='0' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow1' <?php echo $addtocart_or_buynow1; ?> /> 
 					<label for='addtocart_or_buynow1'><?php echo __('Add To Cart', 'wpsc');?></label> &nbsp;<br />
-					<input type='radio' value='1' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow2' <?php echo $addtocart_or_buynow2; ?> /> 
-					<label for='addtocart_or_buynow2'><?php echo __('Buy Now', 'wpsc');?></label>
+					
+					<?php $selected_gateways = get_option( 'custom_gateway_options' );
+					if (in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways )) {?>
+						<input type='radio' value='1' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow2' <?php echo $addtocart_or_buynow2; ?> /> 
+						<label for='addtocart_or_buynow2'><?php echo __('Buy Now', 'wpsc');?></label> 
+					<?php } ?>
 				</td>
 			</tr>
 			
