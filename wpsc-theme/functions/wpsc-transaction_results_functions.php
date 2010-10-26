@@ -66,8 +66,9 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 	$curgateway = $wpdb->get_var( "SELECT gateway FROM " . WPSC_TABLE_PURCHASE_LOGS . " WHERE sessionid='$sessionid'" );
 	$errorcode = 0;
 	$order_status = $purchase_log['processed'];
-
-	$echo_to_screen = ( ( (!is_bool( $echo_to_screen ) ) ) ? ( ( true ) ) : ( ( $echo_to_screen ) ) );
+	
+	if( !is_bool( $echo_to_screen )  )
+		$echo_to_screen = true;
 
 	if ( is_numeric( $sessionid ) ) {
 
