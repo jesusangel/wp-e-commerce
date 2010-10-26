@@ -55,6 +55,7 @@ if(is_ssl()) {
 define('WPSC_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WPSC_URL', $wpsc_plugin_url.'/plugins/'.WPSC_FOLDER);
 
+define( 'WPSC_CORE_IMAGES_URL',  WPSC_URL . '/images' );
 if(isset($wpdb->blogid)) {
    define('IS_WPMU', 1);
 } else {
