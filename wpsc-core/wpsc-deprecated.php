@@ -20,6 +20,20 @@ function nzshpcrt_get_gateways() {
 }
 
 /**
+ * wpsc_merchants_modules_deprecated()
+ *
+ * Deprecated function for merchants modules
+ *
+ */
+function wpsc_merchants_modules_deprecated($nzshpcrt_gateways){
+
+	$nzshpcrt_gateways = apply_filters( 'wpsc_gateway_modules', $nzshpcrt_gateways );
+	return $nzshpcrt_gateways;
+//	return apply_filters('wpsc_gateway_modules', $nzshpcrt_gateways);
+}
+add_filter('wpsc_merchants_modules','wpsc_merchants_modules_deprecated',1);
+
+/**
  * nzshpcrt_price_range()
  * Deprecated
  * Alias of Price Range Widget content function
