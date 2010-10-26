@@ -65,7 +65,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 	$curgateway = $wpdb->get_var( "SELECT gateway FROM " . WPSC_TABLE_PURCHASE_LOGS . " WHERE sessionid='$sessionid'" );
 	$errorcode = 0;
-	$order_status = 2;
+	$order_status = $purchase_log['processed'];
 
 	$echo_to_screen = ( ( (!is_bool( $echo_to_screen ) ) ) ? ( ( true ) ) : ( ( $echo_to_screen ) ) );
 
@@ -77,8 +77,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		$purchase_log = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1", ARRAY_A );
 
 		if ( ($purchase_log['gateway'] == "wpsc_merchant_testmode") && ($purchase_log['processed'] < 3) ) {
-			$message = stripslashes( get_option( 'wpsc_email_receipt' ) );
-			$message_html = $message;
+			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc') );
+			$message_html = __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc');
 		} else {
 			$message = stripslashes( get_option( 'wpsc_email_receipt' ) );
 			$message_html = $message;
