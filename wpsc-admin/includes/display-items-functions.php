@@ -1141,6 +1141,9 @@ function wpsc_gallery_css_mods() {
 			}
 			#media-upload a.del-link {
 				color:red
+			}
+			#media-upload a.wp-post-thumbnail {
+				margin-left:0px;
 			}	
 	</style>';
 	print '
@@ -1159,6 +1162,7 @@ function wpsc_gallery_css_mods() {
 		if(title == "stopgap") {
 			$("div.media-item").hide();
 		}
+		$("td.savesend input.button").hide();
 		
 		
 	});
