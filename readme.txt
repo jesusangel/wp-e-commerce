@@ -36,6 +36,15 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
+=3.7.7=
+*Fixed the Variation bug
+*Unique names in checkout turned into options for use with the new ticket plugin
+*Extra hooks and filters added for ticket plugin
+*Core images URL constant added
+*Install directions for gold Cart updated
+*Check for Paypal in relation to displaying the Buy Now button.
+*Removed wpsc_inside_shopping_cart duplicate action
+
 = 3.7.6.8 =
 * Fixed e-Commerce Tracking integration with Google Analytics for WordPress
 * Use of site_url() within the Purchase Receipt/Admin Report for correct site URL
