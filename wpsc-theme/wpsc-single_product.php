@@ -199,11 +199,10 @@
 
 							echo wpsc_also_bought( wpsc_the_product_id() );
 						
-						if(wpsc_show_fb_like()):	
-						?>
-                        <div class="FB_like">
-                        <iframe src="http://www.facebook.com/plugins/like.php?href=<?php echo wpsc_the_product_permalink(); ?>&amp;layout=standard&amp;show_faces=true&amp;width=435&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=80" frameborder="0"></iframe>
-                        </div><!--close FB_like-->
+						if(wpsc_show_fb_like()): ?>
+	                        <div class="FB_like">
+	                        <iframe src="http://www.facebook.com/plugins/like.php?href=<?php echo wpsc_the_product_permalink(); ?>&amp;layout=standard&amp;show_faces=true&amp;width=435&amp;action=like&amp;font=arial&amp;colorscheme=light" frameborder="0"></iframe>
+	                        </div><!--close FB_like-->
                         <?php endif; ?>
 					</div><!--close productcol-->
 		

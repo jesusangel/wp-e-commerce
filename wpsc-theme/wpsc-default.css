@@ -768,7 +768,7 @@ table.list_productdisplay p.soldout {
 .single_product_display .FB_like iframe {
 	border:none;
 	width:300px;
-	height:30px;
+	height:80px;
 	outline:none;
 	overflow:hidden;
 }
