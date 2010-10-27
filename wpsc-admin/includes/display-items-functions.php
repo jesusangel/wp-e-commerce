@@ -1018,15 +1018,16 @@ if ( isset( $_GET["page"] ) && ($_GET["page"] == "wpsc-edit-products" ) ) {
 * Modifications to Media Gallery
 */
 
-if ( isset( $_REQUEST['parent_page'] ) && ( $_REQUEST['parent_page'] == 'wpsc-edit-products' ) ) {
-	add_action( 'admin_head_media_upload_gallery_form', 'wpsc_gallery_css_mods' );
+if ( (isset( $_REQUEST['parent_page'] ) && ( $_REQUEST['parent_page'] == 'wpsc-edit-products' ) ) ) {
 	add_filter( 'media_upload_tabs', 'wpsc_media_upload_tab_gallery', 12 );
-	add_filter( 'gettext','wpsc_filter_delete_text',12 , 3 );
     add_filter( 'attachment_fields_to_save', 'wpsc_save_attachment_fields', 9, 2 );
     add_filter( 'media_upload_form_url', 'wpsc_media_upload_url', 9, 1 );
+	add_action( 'admin_head', 'wpsc_gallery_css_mods' );
 }
+	add_filter( 'gettext','wpsc_filter_delete_text',12 , 3 );
     add_filter( 'attachment_fields_to_edit', 'wpsc_attachment_fields', 11, 2 );
 	add_filter( 'gettext','wpsc_filter_feature_image_text', 12, 3 );
+
 
 /*
  * This filter translates string before it is displayed 
@@ -1040,7 +1041,7 @@ if ( isset( $_REQUEST['parent_page'] ) && ( $_REQUEST['parent_page'] == 'wpsc-ed
  */
 function wpsc_filter_feature_image_text($translation, $text, $domain) {
 
-	if( 'Use as featured image' == $text && isset( $_REQUEST['post_id'] ) && isset( $_REQUEST["parent_page"] ) ){
+	if( 'Use as featured image' == $text && isset( $_REQUEST['post_id'] ) ){
 		$translations = &get_translations_for_domain($domain);
 		return $translations->translate('Use as Product Thumbnail') ;
 	}
@@ -1052,6 +1053,30 @@ function wpsc_attachment_fields($form_fields, $post) {
 	$parent_post = get_post($post->post_parent);
 
 	if ($parent_post->post_type == "wpsc-product" || $parent_post->post_title == "stopgap") {
+	
+	//Unfortunate hack, as I'm not sure why the From Computer tab doesn't process filters the same way the Gallery does
+	
+	echo '	
+<script type="text/javascript"> 
+
+	jQuery(function($){
+	
+		var product_image = $("a.wp-post-thumbnail").text();
+		
+		if (product_image == "Use as featured image") {
+			$("a.wp-post-thumbnail").text("Use as Product Thumbnail");
+		}
+		
+		var trash = $("#media-upload a.del-link").text();
+		
+		if (trash == "Delete") {
+			$("#media-upload a.del-link").text("Trash");
+		}
+		
+		
+		});
+	
+</script>';
         $size_names = array('small-product-thumbnail' => __('Small Product Thumbnail'), 'medium-single-product' => __('Medium Single Product'), 'full' => __('Full Size'));
 			
 		$check = get_post_meta( $post->ID, '_wpsc_selected_image_size', true );
@@ -1140,15 +1165,18 @@ function wpsc_gallery_css_mods() {
 					color:green;
 			}
 			#media-upload a.del-link {
-				color:red
+				color:red;
 			}
 			#media-upload a.wp-post-thumbnail {
 				margin-left:0px;
 			}	
+			td.savesend input.button {
+				display:none;
+			}
 	</style>';
-	print '
+	print '	
 	<script type="text/javascript"> 
-	<!--
+
 	jQuery(function($){
 		$("td.A1B1").each(function(){
 		
@@ -1162,11 +1190,17 @@ function wpsc_gallery_css_mods() {
 		if(title == "stopgap") {
 			$("div.media-item").hide();
 		}
-		$("td.savesend input.button").hide();
+		
+		var product_image = $("a.wp-post-thumbnail").text();
+		
+		if (product_image == "Use as featured image") {
+			$("a.wp-post-thumbnail").text("Use as Product Thumbnail");
+		}
+		
 		
 		
 	});
-	-->
+	
 	</script>';
 }
 
