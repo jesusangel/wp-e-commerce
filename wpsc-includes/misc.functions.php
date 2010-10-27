@@ -603,14 +603,15 @@ function nzshpcrt_display_preview_image() {
 							ImageCopy( $dst_img, $temp_img, 0, 0, 0, 0, $temp_w, $temp_h );
 						break;
 					}
-
+					
+					$image_quality = wpsc_image_quality();
 
 					ImageAlphaBlending($dst_img, false);
 					switch($imagetype[2]) {
 						case IMAGETYPE_JPEG:
 						header("Content-type: image/jpeg");
-						ImagePNG($dst_img);
-						ImagePNG($dst_img, WPSC_CACHE_DIR.$cache_filename.".jpg");
+						imagejpeg($dst_img);
+						imagejpeg($dst_img, WPSC_CACHE_DIR.$cache_filename.".jpg", $image_quality);
 						@ chmod( WPSC_CACHE_DIR.$cache_filename.".jpg", 0775 );
 						break;
 
