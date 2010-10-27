@@ -1,7 +1,7 @@
 === WP e-Commerce ===
 Contributors: Dan Milward, Tom Howard, Jeffry Ghazally
 Donate link: http://getshopped.org/
-Tags: e-commerce, shop, ecommerce, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control  
+Tags: e-commerce, shop, ecommerce, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, e commerce,
 Requires at least: 2.7
 Tested up to: 3.0.1
 Stable tag: 3.7.6.9
@@ -36,14 +36,15 @@ If you experience database errors try de-activating and re-activating your plugi
 
 == Changelog == 
 
-=3.7.7=
-*Fixed the Variation bug
-*Unique names in checkout turned into options for use with the new ticket plugin
-*Extra hooks and filters added for ticket plugin
-*Core images URL constant added
-*Install directions for gold Cart updated
-*Check for Paypal in relation to displaying the Buy Now button.
-*Removed wpsc_inside_shopping_cart duplicate action
+= 3.7.7 =
+* Fixed the Variation bug
+* Unique names in checkout turned into options for use with the new ticket plugin
+* Extra hooks and filters added for ticket plugin
+* Core images URL constant added
+* Install directions for Gold Cart updated
+* Check for Paypal in relation to displaying the Buy Now button.
+* Removed wpsc_inside_shopping_cart duplicate action
+
 
 = 3.7.6.8 =
 * Fixed e-Commerce Tracking integration with Google Analytics for WordPress
@@ -61,8 +62,6 @@ If you experience database errors try de-activating and re-activating your plugi
 * Updated support for the latest release of DropShop
 * Fix to force variation price to update on product page load
 * Added new POT file for translations
-
-
 
 = 3.7.6.7 =
 * Added back the hourly Cron Job for clearing the Claimed Stock  
