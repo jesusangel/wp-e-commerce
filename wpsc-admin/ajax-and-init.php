@@ -1554,10 +1554,28 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 function wpsc_submit_options( $selected='' ) {
 	global $wpdb, $wpsc_gateways;
 	$updated = 0;
-
+	
 	//This is to change the Overall target market selection
 	check_admin_referer( 'update-options', 'wpsc-update-options' );
+//	exit('<pre>'.print_r($_POST,true).'</pre>');
+	if ( isset( $_POST['change-settings'] ) ) {
+		if ( isset( $_POST['wpsc_also_bought'] ) && $_POST['wpsc_also_bought'] == 'on' )
+			update_option( 'wpsc_also_bought', 1 );
+		else
+			update_option( 'wpsc_also_bought', 0 );
 
+		if ( isset( $_POST['display_find_us'] ) && $_POST['display_find_us'] == 'on' )
+			update_option( 'display_find_us', 1 );
+		else
+			update_option( 'display_find_us', 0 );
+
+		if ( isset( $_POST['wpsc_share_this'] ) && $_POST['wpsc_share_this'] == 'on' )
+			update_option( 'wpsc_share_this', 1 );
+		else
+			update_option( 'wpsc_share_this', 0 );
+
+	}
+	
 	if ( !isset( $_POST['countrylist2'] ) )
 		$_POST['countrylist2'] = '';
 	if ( !isset( $_POST['country_id'] ) )
@@ -1600,13 +1618,16 @@ function wpsc_submit_options( $selected='' ) {
 
 
 	$previous_currency = get_option( 'currency_type' );
-
+	
 	//To update options
 	if ( isset( $_POST['wpsc_options'] ) ) {
+
 		foreach ( $_POST['wpsc_options'] as $key => $value ) {
+
 			if ( $value != get_option( $key ) ) {
 				update_option( $key, $value );
 				$updated++;
+			
 			}
 		}
 	}

@@ -331,13 +331,13 @@ if($key != 'facebook'){
 
   print(
 '#wpsc_akst_'.$key.' {
-  background-image: url(images/social_networking/'.$key.'.gif);
+  background-image: url(wpsc-core/images/social_networking/'.$key.'.gif);
 }
 ');
 }else{
   print(
 '#wpsc_akst_'.$key.' {
-  background-image: url(images/social_networking/'.$key.'.png);
+  background-image: url(wpsc-core/images/social_networking/'.$key.'.png);
 }
 ');
 

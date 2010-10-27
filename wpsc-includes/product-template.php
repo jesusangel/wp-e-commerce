@@ -429,7 +429,17 @@ function wpsc_category_transition() {
 		return false;
 
 }
+/**
+ * wpsc show fb like function, check whether to show facebook like
+ * @return boolean true if option is on, otherwise, false
+ */
 
+function wpsc_show_fb_like(){
+	if('on' == get_option('wpsc_facebook_like'))
+		return true;
+	else
+		return false;
+}
 /**
  * wpsc have products function, the product loop
  * @return boolean true while we have products, otherwise, false
