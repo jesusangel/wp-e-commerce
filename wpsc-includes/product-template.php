@@ -97,7 +97,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	}else{
 		// This will need changing when we get product categories sorted
 		if(isset($wpsc_query->query_vars['term']))
-			$page_link = get_option('product_list_url').'cat/'.$wpsc_query->query_vars['term'].'/';
+			$page_link = get_option('product_list_url').$wpsc_query->query_vars['term'].'/';
 		else
 			$page_link = get_option('product_list_url');
 		

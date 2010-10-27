@@ -203,7 +203,7 @@ function wpsc_register_post_types() {
 		'query_var' => true,
 		'register_meta_box_cb' => 'wpsc_meta_boxes',
 		'rewrite' => array(
-			'slug' => $wpsc_page_titles['products'] . '/cat/%wpsc_product_category%',
+			'slug' => $wpsc_page_titles['products'] . '/%wpsc_product_category%',
 			'with_front' => false
 		)
 	) );
@@ -239,7 +239,7 @@ function wpsc_register_post_types() {
 	register_taxonomy( 'wpsc_product_category', 'wpsc-product', array(
 		'hierarchical' => true,
 		'rewrite' => array(
-			'slug' => $wpsc_page_titles['products'].'/cat',
+			'slug' => $wpsc_page_titles['products'],
 			'with_front' => false
 		)
 	) );
@@ -328,12 +328,18 @@ function wpsc_start_the_query() {
 				'post_parent' => 0,
 				'order'       => 'ASC'
 			);
-		if( isset($wp_query->query_vars['wpsc_product_category'])){
+		if( isset($wp_query->query_vars['wpsc_product_category']) ){
 			$wpsc_query_vars['wpsc_product_category'] = $wp_query->query_vars['wpsc_product_category'];
 			$wpsc_query_vars['taxonomy'] = $wp_query->query_vars['taxonomy'];
 			$wpsc_query_vars['term'] = $wp_query->query_vars['term'];
 		}else{
 			$wpsc_query_vars['post_type'] = 'wpsc-product';		
+			if(1 == get_option('use_pagination')){
+				$wpsc_query_vars['nopaging'] = false;
+				$wpsc_query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
+				$wpsc_query_vars['paged'] = get_query_var('paged');
+				$wpsc_query_vars['pagename'] = 'products-page';
+			}
 		}
 			$orderby = get_option( 'wpsc_sort_by' );
 
@@ -357,32 +363,12 @@ function wpsc_start_the_query() {
 					$wpsc_query_vars["orderby"] = 'ID';
 					break;
 			}
-			if(1 == get_option('use_pagination')){
-				$wpsc_query_vars['nopaging'] = false;
-				$wpsc_query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
-				$wpsc_query_vars['paged'] = get_query_var('paged');
-			}
-			
+	
+		
 			add_filter( 'pre_get_posts', 'wpsc_generate_product_query', 11 );
-
 			$wpsc_query = new WP_Query( $wpsc_query_vars );
-			//exit('<pre>'.print_r($wpsc_query,true).'</pre>');
-			$wpsc_query->posts_per_page = get_option('wpsc_products_per_page');
-			$wpsc_query->paged          =  isset( $_REQUEST['paged'] ) ? $_REQUEST['paged'] : 1;
-			if ( (int) $wpsc_query->found_posts && (int) get_option('wpsc_products_per_page') ) {
-				$wpsc_query->pagination_links = paginate_links( array(
-					'base'      => add_query_arg( 'paged', '%#%' ),
-					'format'    => '',
-					'total'     => ceil( (int) $wpsc_query->found_posts / (int) get_option('wpsc_products_per_page') ),
-					'current'   => (int) $wpsc_query->paged,
-					'prev_text' => '&larr;',
-					'next_text' => '&rarr;',
-					'mid_size'  => 3
-				));
-			}
 		}
 	}
-
 	if ( isset( $wp_query->post->ID ) )
 		$post_id = $wp_query->post->ID;
 	else
@@ -788,7 +774,7 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 	$permalink_structure = get_option( 'permalink_structure' );
 	// This may become customiseable later
 
-	$our_permalink_structure = $wpsc_page_titles['products'] . "/cat/%wpsc_product_category%/%postname%/";
+	$our_permalink_structure = $wpsc_page_titles['products'] . "/%wpsc_product_category%/%postname%/";
 	// Mostly the same conditions used for posts, but restricted to items with a post type of "wpsc-product "
 
 	if ( '' != $permalink_structure && !in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
