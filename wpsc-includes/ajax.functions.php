@@ -812,11 +812,29 @@ function wpsc_change_tax() {
 
 			$output = str_replace( Array( "\n", "\r" ), Array( "\\n", "\\r" ), addslashes( $output ) );
 			echo "jQuery('#region_select_$form_id').html(\"" . $output . "\");\n\r";
+			echo "
+				var wpsc_checkout_table_selector = jQuery('#region_select_$form_id').parents('.wpsc_checkout_table').attr('class');
+				wpsc_checkout_table_selector = wpsc_checkout_table_selector.replace(' ','.');
+				wpsc_checkout_table_selector = '.'+wpsc_checkout_table_selector;
+				jQuery(wpsc_checkout_table_selector + ' input.billing_region').attr('disabled', 'disabled');
+				jQuery(wpsc_checkout_table_selector + ' input.shipping_region').attr('disabled', 'disabled');
+				jQuery(wpsc_checkout_table_selector + ' .billing_region').parent().parent().hide();
+				jQuery(wpsc_checkout_table_selector + ' .shipping_region').parent().parent().hide();
+			";
 		} else {
 			if ( get_option( 'lock_tax' ) == 1 ) {
 				echo "jQuery('#region').hide();";
 			}
 			echo "jQuery('#region_select_$form_id').html('');\n\r";
+			echo "
+				var wpsc_checkout_table_selector = jQuery('#region_select_$form_id').parents('.wpsc_checkout_table').attr('class');
+				wpsc_checkout_table_selector = wpsc_checkout_table_selector.replace(' ','.');
+				wpsc_checkout_table_selector = '.'+wpsc_checkout_table_selector;
+				jQuery(wpsc_checkout_table_selector + ' input.billing_region').removeAttr('disabled');
+				jQuery(wpsc_checkout_table_selector + ' input.shipping_region').removeAttr('disabled');
+				jQuery(wpsc_checkout_table_selector + ' .billing_region').parent().parent().show();
+				jQuery(wpsc_checkout_table_selector + ' .shipping_region').parent().parent().show();
+			";
 		}
 	}
 

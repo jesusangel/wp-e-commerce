@@ -38,6 +38,10 @@ Author URI: http://instinct.co.nz
 	border:1px solid #ccc;
 }
 
+.wpsc_hidden{
+	display:none;
+}
+
 /*-----DEFAULT PRODUCT DISPLAY-----*/
 #default_products_page_container {
 	width:650px;	

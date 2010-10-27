@@ -280,7 +280,7 @@ function wpsc_show_find_us(){
  * @since 3.8
  * @return (boolean) true or false
  */
-function wpsc_disregard_state_fields(){
+function wpsc_disregard_shipping_state_fields(){
 	global $wpsc_checkout;
 	if(!wpsc_uses_shipping()):
 	 	if( 'shippingstate' == $wpsc_checkout->checkout_item->unique_name && wpsc_has_regions($_SESSION['wpsc_delivery_country'])) 
@@ -290,6 +290,13 @@ function wpsc_disregard_state_fields(){
 	 elseif('billingstate' == $wpsc_checkout->checkout_item->unique_name && wpsc_has_regions($_SESSION['wpsc_selected_country'])):
 	 	return true;
 	 endif;
+}
+
+function wpsc_disregard_billing_state_fields(){
+	global $wpsc_checkout;
+	if('billingstate' == $wpsc_checkout->checkout_item->unique_name && wpsc_has_regions($_SESSION['wpsc_selected_country']))
+		return true;
+	return false;
 }
 
 
@@ -696,13 +703,19 @@ class wpsc_checkout {
 						$region_name = $wpdb->get_var( "SELECT `name` FROM `" . WPSC_TABLE_REGION_TAX . "` WHERE `id`='" . $_SESSION['wpsc_delivery_region'] . "' LIMIT 1" );
 						$output = "<input title='" . $this->checkout_item->unique_name . "' type='hidden' id='" . $this->form_element_id() . "' class='shipping_region' name='collected_data[{$this->checkout_item->id}]' value='" . $_SESSION['wpsc_delivery_region'] . "' size='4' /><span class='shipping_region_name'>" . $region_name . "</span> ";
 					} else {
-						$output = "<input class='shipping_region' title='" . $this->checkout_item->unique_name . "' type='text' id='" . $this->form_element_id() . "' class='text' value='" . $saved_form_data . "' name='collected_data[{$this->checkout_item->id}]" . $an_array . "' />";
+						$disabled = '';
+						if(wpsc_disregard_shipping_state_fields())
+							$disabled = 'disabled = "disabled"';
+						$output = "<input class='shipping_region' title='" . $this->checkout_item->unique_name . "' type='text' id='" . $this->form_element_id() . "' class='text' value='" . $saved_form_data . "' name='collected_data[{$this->checkout_item->id}]" . $an_array . "' ".$disabled." />";
 					}
 				} elseif ( $this->checkout_item->unique_name == 'billingstate' ) {
 					if ( wpsc_uses_shipping() && wpsc_has_regions($_SESSION['wpsc_selected_country']) ) {
 						$output = '';
 					} else {
-						$output = "<input class='billing_region' title='" . $this->checkout_item->unique_name . "' type='text' id='" . $this->form_element_id() . "' class='text' value='" . $saved_form_data . "' name='collected_data[{$this->checkout_item->id}]" . $an_array . "' />";
+						$disabled = '';
+						if(wpsc_disregard_billing_state_fields())
+							$disabled = 'disabled = "disabled"';
+						$output = "<input class='billing_region' title='" . $this->checkout_item->unique_name . "' type='text' id='" . $this->form_element_id() . "' class='text' value='" . $saved_form_data . "' name='collected_data[{$this->checkout_item->id}]" . $an_array . "' ".$disabled." />";
 					}
 				} else {
 					$output = "<input title='" . $this->checkout_item->unique_name . "' type='text' id='" . $this->form_element_id() . "' class='text' value='" . $saved_form_data . "' name='collected_data[{$this->checkout_item->id}]" . $an_array . "' />";
