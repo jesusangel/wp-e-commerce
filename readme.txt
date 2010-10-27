@@ -4,7 +4,7 @@ Donate link: http://getshopped.org/
 Tags: e-commerce, shop, ecommerce, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, e commerce,
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 3.7.6.9
+Stable tag: 3.7.7
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
