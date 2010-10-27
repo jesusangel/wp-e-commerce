@@ -1,69 +1,10 @@
 /*
 * This is the new WPSC Admin CSS file 
+
 */
-/*
- *Start Flot CSS styling
-*/
-#link .panel_wrapper, #link div.current {
-overflow-y: scroll !important;
-}ul.children {
-	padding-left: 15px;
+.wpsc_trackingid_row{
+	margin-left:20px;
 }
-input[type="radio"]{
-	outline:none;
-	border:0;
-}
-input[type="checkbox"]{
-	outline:none;
-	border:0;
-}
-#wpsc_tickets_link{
-	margin-left:10px;
-}
-#wpsc_tickets_link a{
-	text-decoration: none;
-	height:32px;
-	width:15px;
-	background:transparent url(../../wpsc-core/images/toolbar.png) no-repeat scroll left -32px;
-
-	padding-left:15px;
-
-}
-#wpsc_tickets_link a:hover{
-	height:32px;
-	width:15px;
-	background:transparent url(../../wpsc-core/images/toolbar.png) no-repeat scroll left 0;
-}
-#flotplaceholder{
-	width: 100%;
-	height: 200px;
-	position: relative;
-	/* 	 margin-left:20px; */
-}
-#flotproductlist{
-	padding-left:43px;
-	padding-top: 20px;
-	padding-bottom:20px;
-}
-#flotHeader{
-	padding-left:50px;
-
-}
-span.wpscsmall{
-	font-size: 11px;
-}
-td.wpsc_gateway_table{
-	width:130px;
-	border-top: none;
-}
-
-#screen-meta .hidden {
-	height:inherit;
-	width:inherit;
-}
-/*
- *End of Flot CSS
-*/
 
 
 /**

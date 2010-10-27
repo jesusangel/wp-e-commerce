@@ -51,7 +51,7 @@ if(!isset($purchlogs)){
 					'details' => 'Details',
 					'status' => 'Status',
 					'delete' => 'Delete',
-					'track' => 'Track'
+					'track' => 'Tracking ID'
 				);
 				register_column_headers('display-sales-list', $columns);
 				///// start of update message section //////
@@ -515,16 +515,15 @@ if(!isset($purchlogs)){
  			<a href='http://checkout.google.com/' rel=''><img class='google_checkout_logo' src='<?php echo WPSC_CORE_IMAGES_URL . "/checkout_logo.jpg"; ?>' alt='google checkout' /></a>
  		<?php } ?>
  		</td><!-- Status -->
- 		<td><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' /><?php _e('Delete') ?></a></td><!-- Delete -->
+ 		<td><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' /></a></td><!-- Delete -->
  		<td>
- 			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''>+ tracking id</a>
+ 			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''><?php echo wpsc_trackingid_value(); ?></a>
  		</td>
  	</tr>
  	<tr class='log<?php echo wpsc_the_purch_item_id(); ?> wpsc_trackingid_row'>
- 		<td class='wpsc_trackingid_row' colspan='1'>
- 		</td>
- 		<td class='wpsc_trackingid_row' >
- 			<label for='wpsc_trackingid<?php echo wpsc_the_purch_item_id(); ?>'>Tracking ID:</label>
+ 		<td class='wpsc_trackingid_row' colspan='2'>
+
+ 			<label for='wpsc_trackingid<?php echo wpsc_the_purch_item_id(); ?>'><?php _e('Tracking ID','wpsc');?> :</label>
  		</td>
  		<td class='wpsc_trackingid_row' colspan='2'>
  			<input type='text' name='wpsc_trackingid<?php echo wpsc_the_purch_item_id(); ?>' value='<?php echo wpsc_trackingid_value(); ?>' size='20' />
