@@ -7,7 +7,7 @@ $nzshpcrt_gateways[$num]['form'] = "form_paypal_certified";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_certified";
 $nzshpcrt_gateways[$num]['payment_type'] = "paypal";
 
-$nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD', 'CAD', 'AUD', 'EUR', 'GBP', 'JPY', 'NZD', 'CHF', 'HKD', 'SGD', 'SEK', 'HUF', 'DKK', 'PLN', 'NOK', 'CZK', 'MXN');
+$nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD', 'CAD', 'AUD', 'EUR', 'GBP', 'JPY', 'NZD', 'CHF', 'HKD', 'SGD', 'SEK', 'HUF', 'DKK', 'PLN', 'NOK', 'CZK', 'MXN', 'MYR');
 $nzshpcrt_gateways[$num]['supported_currencies']['option_name'] = 'paypal_curcode';
 
 
