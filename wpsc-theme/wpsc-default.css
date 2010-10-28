@@ -208,6 +208,10 @@ Author URI: http://instinct.co.nz
 	margin-bottom:10px;
 }
 
+.wpsc_select_variation{
+	position:relative;
+}
+
 .default_product_display .wpsc_variation_forms table, #content .default_product_display .wpsc_variation_forms table, .default_product_display .wpsc_variation_forms table tr, #content .default_product_display .wpsc_variation_forms table tr, .default_product_display .wpsc_variation_forms table td, #content .default_product_display .wpsc_variation_forms table td {
 	border:none;
 	border-collapse:collapse;	
@@ -663,7 +667,8 @@ table.list_productdisplay p.soldout {
 
 .single_product_display .wpsc_variation_forms select {
 	margin:0;
-	width:100px;	
+	min-width:100px;	
+	max-width:200px;
 }
 
 .default_product_display .wpsc_quantity_update {

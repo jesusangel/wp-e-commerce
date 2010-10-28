@@ -137,6 +137,7 @@ global $wpsc_query, $wpdb, $wp_query;
 								<tr><td class="col1"><label for="<?php echo wpsc_vargrp_form_id(); ?>"><?php echo wpsc_the_vargrp_name(); ?>:</label></td>
 								<?php /** the variation HTML and loop */?>
 								<td class="col2"><select class="wpsc_select_variation" name="variation[<?php echo wpsc_vargrp_id(); ?>]" id="<?php echo wpsc_vargrp_form_id(); ?>">
+									<option value="0" ><?php _e('-- Please select --', 'wpsc'); ?></option>
 								<?php while (wpsc_have_variations()) : wpsc_the_variation(); ?>
 									<option value="<?php echo wpsc_the_variation_id(); ?>" <?php echo wpsc_the_variation_out_of_stock(); ?>><?php echo wpsc_the_variation_name(); ?></option>
 								<?php endwhile; ?>

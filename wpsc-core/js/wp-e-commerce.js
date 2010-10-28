@@ -335,3 +335,25 @@ jQuery(document).ready(function(){
 			jQuery(this).val(real_value).removeClass('intra-field-label');
 	});
 });
+
+//Javascript for variations: bounce the variatio box when nothing is selected and return false for add to cart button.
+jQuery(document).ready(function(){
+	jQuery('.productcol').each(function(){
+		jQuery('.wpsc_buy_button', this).click(function(){
+			jQuery(this).parents('form:first').find('select.wpsc_select_variation').each(function(){
+				if(jQuery(this).val()==0)
+					jQuery(this).animate({'left': '-=5px'}, 50, function(){
+						jQuery(this).animate({'left': '+=10px'}, 100, function(){
+							jQuery(this).animate({'left': '-=10px'}, 100, function(){
+								jQuery(this).animate({'left': '+=10px'}, 100, function(){
+									jQuery(this).animate({'left': '-=5px'}, 50);
+								});
+							});
+						});
+					});
+			});
+			if(jQuery(this).parents('form:first').find('select.wpsc_select_variation[value=0]:first').length)
+				return false;
+		});
+	});
+});
