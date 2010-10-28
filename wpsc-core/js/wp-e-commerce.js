@@ -323,3 +323,12 @@ function set_shipping_country(html_form_id, form_id){
 	});
 //ajax.post("index.php",changetaxntotal,("ajax=true&form_id="+form_id+"&billing_country="+country+billing_region));
 }
+
+jQuery(document).ready(function(){
+	jQuery('.wpsc_checkout_table input, .wpsc_checkout_table textarea').each(function(){
+		var real_value = jQuery(this).val();
+		jQuery(this).inlineFieldLabel({label:jQuery.trim(jQuery('label[for="'+jQuery(this).attr('id')+'"]').html())});
+		if(real_value != '')
+			jQuery(this).val(real_value).removeClass('intra-field-label');
+	});
+});

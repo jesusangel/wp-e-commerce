@@ -1059,3 +1059,7 @@ table.list_productdisplay p.soldout {
 	float:right;
 	width:320px;	
 }
+
+#checkout_page_container input.intra-field-label, #checkout_page_container textarea.intra-field-label{
+	color:#bbb;
+}
