@@ -224,6 +224,19 @@ function wpsc_product_no_image_fallback( $image_url = '' ) {
 }
 add_filter( 'wpsc_product_image', 'wpsc_product_no_image_fallback' );
 
+
+/**
+ * wpsc show pnp function
+ * @return boolean - true if display_pnp is 1 false otherwise
+ */
+function wpsc_show_pnp(){
+	global $post;
+	if(1 == get_option('display_pnp')){
+			return true;
+	}
+	return false;
+}
+
 /**
  * wpsc product price function
  * @return string - the product price
@@ -806,7 +819,7 @@ function wpsc_product_postage_and_packaging() {
 
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
 	//echo "<pre>".print_r($product_meta, true)."</pre>";
-	if ( is_array( $product_meta['shipping'] ) )
+	if ( is_array( $product_meta['shipping'] ) &&  1 != $product_meta['no_shipping'])
 		return wpsc_currency_display( $product_meta['shipping']['local'] );
 	else
 		return wpsc_currency_display( 0 );

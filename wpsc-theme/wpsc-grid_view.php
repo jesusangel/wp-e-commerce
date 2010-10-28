@@ -89,7 +89,7 @@ $image_height = get_option('product_image_height');
 										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="oldprice"><?php echo wpsc_product_normal_price(); ?></span></p>
 									<?php endif; ?>
 									<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="currentprice"><?php echo wpsc_the_product_price(); ?></span></p>
-									<?php if(get_option('display_pnp') == 1) : ?>
+									<?php if(wpsc_show_pnp()) : ?>
 										<p class="pricedisplay"><?php _e('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
 									<?php endif; ?>	 
 							</div><!--close price_container-->
