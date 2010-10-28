@@ -517,7 +517,7 @@ if(!isset($purchlogs)){
  		</td><!-- Status -->
  		<td><a class='submitdelete' title='<?php echo esc_attr(__('Delete this log')); ?>' href='<?php echo wp_nonce_url("admin.php?wpsc_admin_action=delete_purchlog&amp;purchlog_id=".wpsc_the_purch_item_id(), 'delete_purchlog_' . wpsc_the_purch_item_id()); ?>' onclick="if ( confirm(' <?php echo esc_js(sprintf( __("You are about to delete this log '%s'\n 'Cancel' to stop, 'OK' to delete."),  wpsc_the_purch_item_date() )) ?>') ) { return true;}return false;"><img class='wpsc_pushdown_img' src='<?php echo WPSC_CORE_IMAGES_URL . "/cross.png"; ?>' alt='delete icon' /></a></td><!-- Delete -->
  		<td>
- 			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''><?php echo wpsc_trackingid_value(); ?></a>
+ 			<a class='wpsc_show_trackingid' title='<?php echo wpsc_the_purch_item_id(); ?>' href=''><?php echo wpsc_display_tracking_id(); ?></a>
  		</td>
  	</tr>
  	<tr class='log<?php echo wpsc_the_purch_item_id(); ?> wpsc_trackingid_row'>

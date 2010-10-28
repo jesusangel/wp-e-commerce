@@ -13,6 +13,14 @@ function wpsc_instantiate_purchaselogitem() {
 
 }
 
+function wpsc_display_tracking_id(){
+	$value = wpsc_trackingid_value();
+	if(!empty($value))
+		return $value;
+	else
+		return __('Add New','wpsc');
+}
+
 function wpsc_display_purchlog_howtheyfoundus() {
 	global $purchlogitem;
 	return $purchlogitem->extrainfo->find_us;

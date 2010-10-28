@@ -66,7 +66,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 	$curgateway = $wpdb->get_var( "SELECT gateway FROM " . WPSC_TABLE_PURCHASE_LOGS . " WHERE sessionid='$sessionid'" );
 	$errorcode = 0;
 	$order_status = $purchase_log['processed'];
-	
+
 	if( !is_bool( $echo_to_screen )  )
 		$echo_to_screen = true;
 
@@ -338,8 +338,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			if ( preg_match( "/^[\w\s._,-]+$/", $transaction_id ) ) {
 				$transact_id_sql = "`transactid` = '" . $transaction_id . "',";
 			}
-			$update_sql = "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET $transact_id_sql `email_sent` = '1', `processed` = '$order_status' WHERE `sessionid` = " . $sessionid . " LIMIT 1";
-			$wpdb->query( $update_sql );
+		//	$update_sql = "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET $transact_id_sql `email_sent` = '1', `processed` = '$order_status' WHERE `sessionid` = " . $sessionid . " LIMIT 1";
+		//	$wpdb->query( $update_sql );
 		}
 	}
 }

@@ -33,19 +33,19 @@ jQuery(document).ready(function () {
 				var country = jQuery("select[title='billingcountry'] :selected").text();
 				var countryID = jQuery("select[title='billingcountry'] :selected").val();
 
-				jQuery("input[title='shippingfirstname']").val(fname);
-				jQuery("input[title='shippinglastname']").val(lname);
-				jQuery("textarea[title='shippingaddress']").val(addr);
-				jQuery("input[title='shippingcity']").val(city);
-				jQuery("input[title='shippingpostcode']").val(pcode);
-				jQuery("input[title='shippingphone']").val(phone);
-				jQuery("input[title='shippingemail']").val(email);
-				jQuery("input[title='shippingstate']").val(state);
-				jQuery("input.shipping_country").val(countryID);
-				jQuery("span.shipping_country_name").html(country);
-				jQuery("select#current_country").val(countryID);
+				jQuery("input[title='shippingfirstname']").val(fname).removeClass('intra-field-label');
+				jQuery("input[title='shippinglastname']").val(lname).removeClass('intra-field-label');
+				jQuery("textarea[title='shippingaddress']").val(addr).removeClass('intra-field-label');
+				jQuery("input[title='shippingcity']").val(city).removeClass('intra-field-label');
+				jQuery("input[title='shippingpostcode']").val(pcode).removeClass('intra-field-label');
+				jQuery("input[title='shippingphone']").val(phone).removeClass('intra-field-label');
+				jQuery("input[title='shippingemail']").val(email).removeClass('intra-field-label');
+				jQuery("input[title='shippingstate']").val(state).removeClass('intra-field-label');
+				jQuery("input.shipping_country").val(countryID).removeClass('intra-field-label');
+				jQuery("span.shipping_country_name").html(country).removeClass('intra-field-label');
+				jQuery("select#current_country").val(countryID).removeClass('intra-field-label');
 
-				jQuery("select[title='shippingcountry']").val(countryID);
+				jQuery("select[title='shippingcountry']").val(countryID).removeClass('intra-field-label');
 				var html_form_id = jQuery("select[title='shippingcountry']").attr('id');
 				var form_id =  jQuery("select[title='shippingcountry']").attr('name');
 				form_id = form_id.replace("collected_data[", "");
@@ -327,7 +327,10 @@ function set_shipping_country(html_form_id, form_id){
 jQuery(document).ready(function(){
 	jQuery('.wpsc_checkout_table input, .wpsc_checkout_table textarea').each(function(){
 		var real_value = jQuery(this).val();
-		jQuery(this).inlineFieldLabel({label:jQuery.trim(jQuery('label[for="'+jQuery(this).attr('id')+'"]').html())});
+		value = jQuery('label[for="'+jQuery(this).attr('id')+'"]').html();
+		value = value.replace(/\*/i,'');
+		
+		jQuery(this).inlineFieldLabel({label:jQuery.trim(value)});
 		if(real_value != '')
 			jQuery(this).val(real_value).removeClass('intra-field-label');
 	});

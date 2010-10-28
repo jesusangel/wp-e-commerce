@@ -365,7 +365,7 @@ endif;
 
 						
 						<?php if(wpsc_gateway_form_fields()): ?> 
-							<table class='<?php echo wpsc_gateway_form_field_style();?>'>
+							<table class='wpsc_checkout_table <?php echo wpsc_gateway_form_field_style();?>'>
 								<?php echo wpsc_gateway_form_fields();?> 
 							</table>		
 						<?php endif; ?>			
@@ -376,7 +376,7 @@ endif;
 					<input name='custom_gateway' value='<?php echo wpsc_gateway_internal_name();?>' type='hidden' />
 					
 						<?php if(wpsc_gateway_form_fields()): ?> 
-							<table>
+							<table class='wpsc_checkout_table <?php echo wpsc_gateway_form_field_style();?>'>
 								<?php echo wpsc_gateway_form_fields();?> 
 							</table>		
 						<?php endif; ?>	
