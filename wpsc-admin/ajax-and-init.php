@@ -1316,17 +1316,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 	add_action( 'admin_init', 'wpsc_purchlog_clear_download_items' );
 }
 
-//call to search purchase logs
-
-function wpsc_purchlog_search_by() {
-//  exit('<pre>'.print_r($_POST,true).'</pre>');
-	//wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
-}
-
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'purchlogs_search') ) {
-	add_action( 'admin_init', 'wpsc_purchlog_search_by' );
-}
-
 //call to change view for purchase log
 
 function wpsc_purchlog_filter_by() {

@@ -12,7 +12,7 @@ if(!isset($purchlogs)){
 	$purchlogs = new wpsc_purchaselogs();	
 }
 
- function wpsc_display_sales_logs() {
+function wpsc_display_sales_logs() {
  	$subpage ='';
  	if(isset($_GET['subpage']))
  		$subpage = $_GET['subpage'];
@@ -38,9 +38,12 @@ if(!isset($purchlogs)){
 		<h2><?php echo esc_html( __('Sales', 'wpsc') ); ?> </h2>
 		<?php //START OF PURCHASE LOG DEFAULT VIEW ?>
 		<?php
-		 if(isset($_GET['view_purchlogs_by']) || isset($_GET['view_purchlogs_by_status'])) {
+		 if(isset($_GET['view_purchlogs_by']) || isset($_GET['view_purchlogs_by_status']))
 			wpsc_change_purchlog_view($_GET['view_purchlogs_by'], $_GET['view_purchlogs_by_status']);
-			}
+
+			if(isset($_POST['purchlogs_searchbox']))
+				wpsc_search_purchlog_view($_POST['purchlogs_searchbox']);
+			
 			if(!isset($_REQUEST['purchaselog_id'])){
 				$columns = array(
 					'cb' => '<input type="checkbox" />',
@@ -135,7 +138,6 @@ if(!isset($purchlogs)){
 			'price' => __('Price','wpsc'),
 			'shipping' => __('Shipping','wpsc'),
 			'tax' => '',
-// 			'discount' => 'Discount',
 			'total' => __('Total','wpsc')
 		);
       
@@ -196,9 +198,6 @@ if(!isset($purchlogs)){
 						</thead>
 					
 						<tfoot>
-							<tr>
-						<?php // print_column_headers('display-purchaselog-details', false); ?>
-							</tr>
 						</tfoot>
 					
 						<tbody>
@@ -492,10 +491,10 @@ if(!isset($purchlogs)){
 <?php
  unset($_SESSION['newlogs']);
  }
+ 
  function get_purchaselogs_content(){
  	global $purchlogs,$wpsc_purchase_log_statuses;
  	while(wpsc_have_purch_items()) : wpsc_the_purch_item();	
- 	//exit('<pre>'.print_r($_SESSION, true).'</pre>');
  	?>
  	<tr>
  		<th class="check-column" scope="row"><input type='checkbox' name='purchlogids[]' class='editcheckbox' value='<?php echo wpsc_the_purch_item_id(); ?>' /></th>

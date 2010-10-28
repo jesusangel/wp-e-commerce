@@ -959,9 +959,9 @@ class wpsc_purchaselogs {
 
 	function search_purchlog_view( $searchterm ) {
 		global $wpdb;
-		$sql = "SELECT DISTINCT `" . WPSC_TABLE_PURCHASE_LOGS . "` . * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` LEFT JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` ON `" . WPSC_TABLE_SUBMITED_FORM_DATA . "`.`log_id` = `" . WPSC_TABLE_PURCHASE_LOGS . "`.`id` WHERE `" . WPSC_TABLE_SUBMITED_FORM_DATA . "`.`value` LIKE '%" . $wpdb->escape( $searchterm ) . "%' OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`transactid` =" . $wpdb->escape( $searchterm );
+		$sql = "SELECT DISTINCT `" . WPSC_TABLE_PURCHASE_LOGS . "` . * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` LEFT JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` ON `" . WPSC_TABLE_SUBMITED_FORM_DATA . "`.`log_id` = `" . WPSC_TABLE_PURCHASE_LOGS . "`.`id` WHERE `" . WPSC_TABLE_SUBMITED_FORM_DATA . "`.`value` LIKE '%" . $wpdb->escape( $searchterm ) . "%' OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`transactid` ='" . $wpdb->escape( $searchterm )."' OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`track_id` LIKE '%" . $wpdb->escape( $searchterm )."%'";
 		$newlogs = $wpdb->get_results( $sql );
-		// exit('<pre>'.print_r($newlogs,true).'</pre>');
+		$_SESSION['newlogs'] = $newlogs;
 		return $newlogs;
 	}
 
