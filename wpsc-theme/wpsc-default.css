@@ -236,7 +236,8 @@ Author URI: http://instinct.co.nz
 
 .default_product_display .wpsc_variation_forms select {
 	margin:0;
-	width:100px;	
+	min-width:100px;
+	max-width:200px;
 }
 
 .default_product_display .wpsc_quantity_update {
