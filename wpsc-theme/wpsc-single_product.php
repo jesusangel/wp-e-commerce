@@ -90,7 +90,7 @@
 								<fieldset class="custom_text">
 									<legend><?php _e( 'Personalize Your Product', 'wpsc' ); ?></legend>
 									<p><?php _e( 'Complete this form to include a personalized message with your purchase.', 'wpsc' ); ?></p>
-									<input type="text" name="custom_text" value="" class="input_custom_text" />
+									<textarea cols='55' rows='5' name="custom_text"></textarea>
 								</fieldset>
 							<?php endif; ?>
 						

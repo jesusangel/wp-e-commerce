@@ -1897,20 +1897,19 @@ class wpsc_cart_item {
       //$accepted_file_types['ext'][] = 'svg';
 
 
-      $can_have_uploaded_image = get_product_meta($this->product_id,'can_have_uploaded_image');
-      if ($can_have_uploaded_image=='on') {
-        $mime_type_data = wpsc_get_mimetype($file_data['tmp_name'], true);
+      $can_have_uploaded_image = get_product_meta($this->product_id,'product_metadata',true);
+	  $product = get_post($this->product_id);
+	  if(0 != $product->post_parent ){
+	  	$product = get_post($product->post_parent);
+	    $can_have_uploaded_image = get_product_meta($product->ID,'product_metadata',true);	  
+	  }
+	  $can_have_uploaded_image = $can_have_uploaded_image['can_have_uploaded_image'];
+      if ('on' == $can_have_uploaded_image || 1 == $can_have_uploaded_image) {
          $name_parts = explode('.',basename($file_data['name']));
          $extension = array_pop($name_parts);
-        if($mime_type_data['is_reliable'] == true) {
-          $mime_type = $mime_type_data['mime_type'];
-        } else {
-          // if we can't use what PHP provides us with, we have to trust the user as there aren't really any other choices.
-          $mime_type = $file_data['type'];
-        }
-        //echo( "<pre>".print_r($mime_type_data,true)."</pre>" );
-        //exit( "<pre>".print_r($file_data,true)."</pre>" );
-         if((   (array_search($mime_type, $accepted_file_types['mime']) !== false) || (get_option('wpsc_check_mime_types') == 1) ) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
+     
+         if((   (array_search($file_data['type'], $accepted_file_types['mime']) !== false) || (get_option('wpsc_check_mime_types') == 1) ) && (array_search($extension, $accepted_file_types['ext']) !== false) ) {
+
            if(is_file(WPSC_USER_UPLOADS_DIR.$file_data['name'])) {
                $name_parts = explode('.',basename($file_data['name']));
                $extension = array_pop($name_parts);
@@ -1920,17 +1919,20 @@ class wpsc_cart_item {
                //  loop till we find a free file name, first time I get to do a do loop in yonks
                do {
                   $test_name = "{$name_base}-{$num}.{$extension}";
-                  if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name)) {
-                     $file_data['name'] = $test_name;
-                  }
+                  if(!file_exists(WPSC_USER_UPLOADS_DIR.$test_name))
+					$file_data['name'] = $test_name;
                   $num++;
                } while ($file_data['name'] == null);
            }
-           //exit($file_data['name']);
+
            $unique_id =  sha1(uniqid(rand(), true));
-            if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) ) {
-               $this->custom_file = array('file_name' => $file_data['name'], 'mime_type' => $mime_type, "unique_id" => $unique_id );
-            }
+            if(move_uploaded_file($file_data['tmp_name'], WPSC_USER_UPLOADS_DIR.$file_data['name']) )
+              $this->custom_file = array(
+              	'file_name' => $file_data['name'],
+              	'mime_type' => $file_data['type'], 
+              	'unique_id' => $unique_id 
+              );
+            
          }
       }
    }
@@ -1969,15 +1971,15 @@ class wpsc_cart_item {
    function save_to_db($purchase_log_id) {
       global $wpdb, $wpsc_shipping_modules;
 
-       if($method === null) {
+      if($method === null) {
          $method = $this->cart->selected_shipping_method;
-       }
+      }
       if(method_exists( $wpsc_shipping_modules[$method], "get_item_shipping"  )) {
          $shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
       }
-       if($this->cart->has_total_shipping_discount()) {
+      if($this->cart->has_total_shipping_discount()) {
             $shipping = 0;
-       }
+      }
 
       //wpec_taxes
       $wpec_taxes_controller = new wpec_taxes_controller();
@@ -1989,26 +1991,11 @@ class wpsc_cart_item {
       //wpec_taxes - calculate product tax and add to total price
       $wpec_taxes_controller = new wpec_taxes_controller();
 
-      if($wpec_taxes_controller->wpec_taxes_isincluded())
-      {
+      if($wpec_taxes_controller->wpec_taxes_isincluded()){
          $taxes = $wpec_taxes_controller->wpec_taxes_calculate_included_tax($this);
          $tax_rate = $taxes['rate'];
          $tax = $taxes['tax'];
-      }// if
-
-/* OLD CODE PRESERVED
-      if($this->apply_tax == true && wpsc_tax_isincluded() == false) {
-         if(is_numeric($this->custom_tax_rate)) {
-            $tax_rate = $this->custom_tax_rate;
-         } else {
-            $tax_rate = $this->cart->tax_percentage;
-         }
-         $tax = $this->unit_price * ($tax_rate/100);
-      } else {
-         $tax = 0;
-         $tax_rate = 0;
       }
-*/
 
       $wpdb->query($wpdb->prepare(
       "INSERT INTO `".WPSC_TABLE_CART_CONTENTS."` (

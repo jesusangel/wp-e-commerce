@@ -134,13 +134,14 @@ function wpsc_purchlogs_custommessages() {
 function wpsc_purchlogs_customfiles() {
 	global $purchlogitem;
 	$files = array( );
+//exit('<pre>'.print_r($purchlogitem->allcartcontent,true).'</pre>');
 	foreach ( $purchlogitem->allcartcontent as $cartitem ) {
 		if ( $cartitem->files != 'N;' ) {
 			$file = unserialize( $cartitem->files );
-			//exit('<pre>'.var_dump($file,true).'</pre>');
+
 			if ( $file["mime_type"] == "image/jpeg" || $file["mime_type"] == "image/png" || $file["mime_type"] == "image/gif" ) {
 				$image = "<a href='" . WPSC_USER_UPLOADS_URL . $file['file_name'] . "' >";
-				$image .= "<img src='index.php?image_name=" . $file['file_name'] . "' alt='' />";
+				$image .= "<img width='150' src='".WPSC_USER_UPLOADS_URL . $file['file_name']. "' alt='' />";
 				$image .="</a>";
 				$files[] = $cartitem->name . ' :<br />' . $image;
 			} else {

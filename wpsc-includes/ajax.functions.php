@@ -38,14 +38,13 @@ function wpsc_add_to_cart() {
 
 	/// sanitise submitted values
 	$product_id = (int)$_POST['product_id'];
-	foreach ( (array)$_POST['variation'] as $key => $variation ) {
+	foreach ( (array)$_POST['variation'] as $key => $variation )
 		$provided_parameters['variation_values'][(int)$key] = (int)$variation;
-	}
+
 	if ( count( $provided_parameters['variation_values'] ) > 0 ) {
 		$variation_product_id = wpsc_get_child_object_in_terms( $product_id, $provided_parameters['variation_values'], 'wpsc-variation' );
-		if ( $variation_product_id > 0 ) {
+		if ( $variation_product_id > 0 )
 			$product_id = $variation_product_id;
-		}
 	}
 
 
@@ -56,7 +55,7 @@ function wpsc_add_to_cart() {
 		$wpsc_cart->remove_item( $_POST['key'] );
 		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
 	}
-// exit('<pre>'.print_r($_POST, true).'</pre>');
+
 	if ( $_POST['is_customisable'] == 'true' ) {
 		$provided_parameters['is_customisable'] = true;
 
@@ -72,7 +71,7 @@ function wpsc_add_to_cart() {
 	}
 	//exit();
 	$parameters = array_merge( $default_parameters, (array)$provided_parameters );
-	//echo "/*\n\r".print_r($parameters,true)."*/\n\r";
+
 	$state = $wpsc_cart->set_item( $product_id, $parameters );
 
 	$product = get_post( $product_id );
