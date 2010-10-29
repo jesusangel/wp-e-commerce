@@ -161,7 +161,24 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			<?php } else {
 				echo $title;
 			};
+			
 			 _post_states($product);
+			$product_alert = apply_filters('wpsc_product_alert', array(false, ''), $product);
+			if(!empty($product_alert['messages']))
+				$product_alert['messages'] = implode("\n",(array)$product_alert['messages']);
+			
+			if($product_alert['state'] === true) {
+				?>
+				<img alt='<?php echo $product_alert['messages'];?>' title='<?php echo $product_alert['messages'];?>' class='product-alert-image' src='<?php echo  WPSC_CORE_IMAGES_URL;?>/product-alert.jpg' alt='' />
+				<?php
+			}
+			
+			// If a product alert has stuff to display, show it.
+			// Can be used to add extra icons etc
+			if ( !empty( $product_alert['display'] ) ) {
+				echo $product_alert['display'];
+			}
+			
 			 ?>
 			</strong>
 			<?php
