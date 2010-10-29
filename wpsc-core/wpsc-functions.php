@@ -81,6 +81,7 @@ function wpsc_core_load_purchase_log_statuses() {
 			'order'          => 6,
 		),
 	);
+	$wpsc_purchlog_statuses = apply_filters('wpsc_set_purchlog_statuses',$wpsc_purchlog_statuses);
 }
 
 /**

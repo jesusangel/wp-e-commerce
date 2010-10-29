@@ -130,7 +130,7 @@ function wpsc_install() {
 	}
 
 	add_option( 'product_ratings', '0', __( 'Show Product Ratings', 'wpsc' ), 'yes' );
-	add_option( 'wpsc_email_receipt', __( 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.All prices include tax and postage and packaging where applicable.You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
+	add_option( 'wpsc_email_receipt', __( 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.All prices include tax and postage and packaging where applicable.\r\n You ordered these items:\r\n%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
 	add_option( 'wpsc_email_admin', __( '%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
 	if ( get_option( 'wpsc_selected_theme' ) == '' ) {
 		add_option( 'wpsc_selected_theme', 'default', 'Selected Theme', 'yes' );

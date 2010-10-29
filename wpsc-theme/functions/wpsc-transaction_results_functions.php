@@ -61,8 +61,8 @@ function wpsc_transaction_theme() {
 }
 
 function transaction_results( $sessionid, $echo_to_screen = true, $transaction_id = null ) {
-	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url, $message_html, $cart, $errorcode;
-
+	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url, $message_html, $cart, $errorcode,$wpsc_purchlog_statuses;
+	$is_transaction = true;
 	$curgateway = $wpdb->get_var( "SELECT gateway FROM " . WPSC_TABLE_PURCHASE_LOGS . " WHERE sessionid='$sessionid'" );
 	$errorcode = 0;
 	$order_status = $purchase_log['processed'];
@@ -76,6 +76,11 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			echo apply_filters( 'wpsc_pre_transaction_results', '' );
 
 		$purchase_log = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid`= " . $sessionid . " LIMIT 1", ARRAY_A );
+		foreach($wpsc_purchlog_statuses as $status)
+			if($status['order'] == $purchase_log['processed'] && isset($status['is_transaction']) && 1 == $status['is_transaction'] )
+				$is_transaction = true;
+			
+
 
 		if ( ($purchase_log['gateway'] == "wpsc_merchant_testmode") && ($purchase_log['processed'] < 3) ) {
 			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc') );
@@ -98,7 +103,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				_e( 'We&#39;re Sorry, your order has not been accepted, the most likely reason is that you have insufficient funds.', 'wpsc' );
 
 				return false;
-			} else if ( $purchase_log['processed'] < 3 ) {
+			} else if (!$is_transaction) {
 				_e( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "<p style='margin: 1em 0px 0px 0px;' >" . nl2br( stripslashes( get_option( 'payment_instructions' ) ) ) . "</p>";
 				return;
 			}
@@ -130,7 +135,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 				do_action( 'wpsc_transaction_result_cart_item', array( "purchase_id" => $purchase_log['id'], "cart_item" => $row, "purchase_log" => $purchase_log ) );
 
-				if ( ($purchase_log['processed'] >= 3 ) ) {
+				if ( $is_transaction ) {
 
 					$download_data = $wpdb->get_results( "SELECT *
 					FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "`
@@ -212,7 +217,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			}
 
 			// Decrement the stock here
-			if ( ($purchase_log['processed'] >= 3 ) ) {
+			if ( $is_transaction ) {
 				wpsc_decrement_claimed_stock( $purchase_log['id'] );
 			}
 
