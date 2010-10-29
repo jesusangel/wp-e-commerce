@@ -13,13 +13,13 @@ global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $link
 
 <div class="wrap">
 	<div class="user-profile-links">
-		<a href="<?php echo get_option( 'user_account_url' ); ?>">Purchase History</a> |
-		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "edit_profile=true"; ?>">Your Details</a> |
-		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "downloads=true"; ?>">Your Downloads</a>
+		<a href="<?php echo get_option( 'user_account_url' ); ?>"><?php _e('Purchase History','wpsc'); ?></a> |
+		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "edit_profile=true"; ?>"><?php _e('Your Details','wpsc'); ?></a> |
+		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "downloads=true"; ?>"><?php _e('Your Downloads','wpsc'); ?></a>
 	</div>
 
 	<br />
-
+	<!-- 	START OF PROFILE PAGE -->
 	<?php if ( is_wpsc_profile_page() ) : ?>
 
 		<form method="post">
@@ -39,7 +39,7 @@ global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $link
 				</tr>
 			</table>
 		</form>
-
+	<!-- 	START OF DOWNLOADS PAGE -->
 	<?php elseif ( is_wpsc_downloads_page() ) : ?>
 
 		<?php if ( wpsc_has_downloads() ) : ?>
@@ -86,9 +86,9 @@ global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $link
 			<?php _e( 'You have not purchased any downloadable products yet.', 'wpsc' ); ?>
 
 		<?php endif; ?>
-
+	<!-- 	START OF PURCHASE HISTORY PAGE -->
 	<?php else : ?>
-
+		
 		<?php if ( is_user_logged_in() ) : ?>
 
 			<?php if ( wpsc_has_purchases() ) : ?>

@@ -289,7 +289,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 								<?php endif; ?>
 							</div>
 							<div id="preview-action">
-								<a class="preview button" id="post-preview" href="<?php echo wpsc_product_url( $product_data['id'] ); ?>"><?php _e( 'View Product' ) ?></a>
+								<a class="preview button" target='_blank' href="<?php echo wpsc_product_url( $product->ID ); ?>"><?php _e( 'View Product' ) ?></a>
 							</div>
 							<div class="clear"></div>
 						</div>

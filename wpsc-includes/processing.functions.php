@@ -11,6 +11,7 @@
 function wpsc_currency_display( $price_in, $args = null ) {
 	global $wpdb, $wpsc_currency_data;
 	$currency_code = '';
+
 	$args = apply_filters( 'wpsc_toggle_display_currency_code', $args );
 	$query = shortcode_atts( array(
 		'display_currency_symbol' => true,
@@ -18,12 +19,12 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		'display_currency_code'   => false,
 		'display_as_html'         => true
 	), $args );
-
 	// No decimal point, no decimals
 	if ( false == $query['display_decimal_point'] )
 		$decimals = 0;
 	else
 		$decimals = 2; // default is 2
+
 
 	// Format the price for output
 	$price_out = number_format( (double)$price_in, $decimals, '.', ',' );
@@ -83,6 +84,7 @@ function wpsc_currency_display( $price_in, $args = null ) {
 	} else {
 		$output = "<span class='pricedisplay'>".$output."</span>";
 	}
+	$output = apply_filters( 'wpsc_currency_display', $output );
 
 	// Return results
 	return apply_filters( 'wpsc_currency_display', $output );
