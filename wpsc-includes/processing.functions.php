@@ -568,7 +568,7 @@ function wpsc_check_stock($state, $product) {
 	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
 	$stock_count = get_product_meta($product->ID, 'stock',true);
 	// only do anything if the quantity is limited.
-	if(($stock_count == 0)) // otherwise, use the stock from the products list table
+	if(($stock_count === '0')) // otherwise, use the stock from the products list table
 		$out_of_stock = true;
 
 	if($out_of_stock === true) {
@@ -588,6 +588,7 @@ function wpsc_check_weight($state, $product) {
 	global $wpdb;
 	$custom_shipping = (array)get_option('custom_shipping_options');
 	$has_no_weight = false;
+	$shipping_modules = array();
 	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
 	// only do anything if UPS is on and shipping is used
 	if(array_search('ups', $custom_shipping) !== false)
@@ -598,8 +599,8 @@ function wpsc_check_weight($state, $product) {
 		$shipping_modules[] = 'Weight Rate';
 	
 	
-	if($product_meta['no_shipping'] != 1) {
-		if($product_meta['weight'] == 0) // otherwise, use the stock from the products list table
+	if($product_meta['no_shipping'] != 1 && !empty($shipping_modules)) {
+		if($product_meta['weight'] == 0) // otherwise, use the weight from the products list table
 			$has_no_weight = true;
 		
 		if($has_no_weight === true) {
