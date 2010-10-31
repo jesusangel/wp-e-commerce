@@ -848,10 +848,22 @@ table.list_productdisplay p.soldout {
 	padding:2px;
 }
 
-.shopping-cart-wrapper .shoppingcart table tbody td {
+.shopping-cart-wrapper .shoppingcart table tbody td {	
 	padding:2px;
 	text-align:center;
+}
+
+.shopping-cart-wrapper .shoppingcart table .cart-widget-count{
+	width:70px;
+}
+
+.shopping-cart-wrapper .shoppingcart table tbody td a {
 	color:#0066CC;
+	text-decoration: none;
+}
+
+.shopping-cart-wrapper .shoppingcart table tbody td a:hover {
+	text-decoration: underline;
 }
 
 .shopping-cart-wrapper .remove_button {
@@ -861,15 +873,16 @@ table.list_productdisplay p.soldout {
 	border:none;
 	outline:none;
 	*line-height:1;
-	cursor:pointer;		
+	cursor:pointer;	
 }
 
-.shopping-cart-wrapper .checkout-shipping {
-	text-align: right;	
+.shopping-cart-wrapper .shoppingcart table tbody td.cart-widget-remove{
+	padding:0px;
 }
 
-.shopping-cart-wrapper .checkout-tax {
-	text-align: right;	
+.shopping-cart-wrapper .checkout-shipping, .shopping-cart-wrapper .checkout-tax {
+	text-align: right;
+	padding: 0px 6px 0px 0px;
 }
 
 .widget_wpsc_shopping_cart .checkout-total, .widget_wpsc_shopping_cart .pluspostagetax {
@@ -881,7 +894,7 @@ table.list_productdisplay p.soldout {
 	padding-left:10px;
 	background-image: url(images/bulletpoint.gif);
 	background-repeat: no-repeat;
-	background-position: 0 50%;
+	background-position: 0 12px;
 	text-align: left;
 	max-width: 90px;
 	word-wrap: break-word;
@@ -890,9 +903,8 @@ table.list_productdisplay p.soldout {
 
 .widget_wpsc_shopping_cart .cart-widget-total td {
 	border-top:solid 2px #000;
-	padding-top:3px;
 	background-color: #F5F5F5;
-	padding: 2px;
+	padding: 5px 6px 0px 5px;
 }
 
 .widget_wpsc_shopping_cart .shoppingcart{
@@ -913,18 +925,11 @@ table.list_productdisplay p.soldout {
 	color:#333;
 	padding:2px 5px;
 	text-decoration:none;
-	background-color: #dfdfdf;
-	background-image: -moz-linear-gradient(top, #efefef, #cfcfcf);
-	background-image: -webkit-gradient(linear, left top,left bottom, from(#eee), to(#cfcfcf));
-	background-image: linear-gradient(top, #efefef, #cfcfcf);
 	line-height: 2;
 }
 
-.shopping-cart-wrapper .gocheckout:hover {
-	background-color: #efefef;
-	background-image: -moz-linear-gradient(top, #efefef, #dfdfdf);
-	background-image: -webkit-gradient(linear, left top,left bottom, from(#eee), to(#dfdfdf));
-	background-image: linear-gradient(top, #efefef, #dfdfdf);
+.emptycart{
+	padding-right:5px;
 }
 
 .shopping-cart-wrapper .gocheckout:active {
@@ -932,7 +937,9 @@ table.list_productdisplay p.soldout {
 }
 
 .widget_wpsc_shopping_cart #cart-widget-links{
+	position: relative;
 	text-align: right;
+	left:20px;
 }
 
 .shopping-cart-wrapper .empty {

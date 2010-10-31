@@ -21,10 +21,10 @@
 		<tbody>
 		<?php while(wpsc_have_cart_items()): wpsc_the_cart_item(); ?>
 			<tr>
-					<td colspan='2' class='product-name'><?php echo wpsc_cart_item_name(); ?></td>
-					<td><?php echo wpsc_cart_item_quantity(); ?></td>
-					<td><?php echo wpsc_cart_item_price(); ?></td>
-                    <td><form action="" method="post" class="adjustform">
+					<td colspan='2' class='product-name'><a href="<?php echo wpsc_cart_item_url(); ?>"><?php echo wpsc_cart_item_name(); ?></a></td>
+					<td><a href="<?php echo wpsc_cart_item_url(); ?>"><?php echo wpsc_cart_item_quantity(); ?></a></td>
+					<td><a href="<?php echo wpsc_cart_item_url(); ?>"><?php echo wpsc_cart_item_price(); ?></a></td>
+                    <td class="cart-widget-remove"><form action="" method="post" class="adjustform">
 					<input type="hidden" name="quantity" value="0" />
 					<input type="hidden" name="key" value="<?php echo wpsc_the_cart_item_key(); ?>" />
 					<input type="hidden" name="wpsc_update_quantity" value="true" />
@@ -35,7 +35,7 @@
 		<tbody>
 		<tfoot>
 			<tr class="cart-widget-total">
-				<td>
+				<td class="cart-widget-count">
 					<?php printf( _n('%d item', '%d items', wpsc_cart_item_count(), 'wpsc'), wpsc_cart_item_count() ); ?>
 				</td>
 				<td class="pricedisplay checkout-total" colspan='4'>
