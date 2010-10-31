@@ -426,7 +426,6 @@ function wpsc_the_category_title($title, $id){
  * @return $template (string)
  */
 function wpsc_the_category_template($template){
-	echo $template;
 	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive')){
 		return str_ireplace('archive', 'page',$template);
 	}else{
@@ -1359,4 +1358,17 @@ $show_subcatsprods_in_cat = get_option( 'show_subcatsprods_in_cat' );
 if(!$show_subcatsprods_in_cat)
 	add_action( 'init', 'wpsc_hidesubcatprods_init' );
 
+
+function wpsc_the_featured_image_fix($stuff){
+	global $wp_query;
+	remove_action('post_thumbnail_html','wpsc_the_featured_image_fix');
+	if(isset($wp_query->query_vars['wpsc-product'])){
+		$stuff ='';	?>
+		<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" /><?php
+	}
+	return $stuff;
+
+}
+
+add_action('post_thumbnail_html','wpsc_the_featured_image_fix');
 ?>
