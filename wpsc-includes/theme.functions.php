@@ -400,7 +400,7 @@ function wpsc_is_viewable_taxonomy(){
 function wpsc_the_category_title($title, $id){
 	global $wp_query;
 	$post = get_post($id);
-	if(isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && isset($wp_query->query_vars['paged']) && $wp_query->current_post == 0 &&  $wp_query->posts[0]->post_title == $post->post_title ){
+	if(isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && isset($wp_query->query_vars['paged']) && $wp_query->current_post == 0 &&  $wp_query->posts[0]->post_title == $post->post_title && count($wp_query->posts) >1 ){
 		remove_filter('the_title','wpsc_the_category_title');
 		$id = wpec_get_the_post_id_by_shortcode('[productspage]');
 		$post = get_post($id);

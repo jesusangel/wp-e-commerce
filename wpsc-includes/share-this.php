@@ -108,7 +108,7 @@ $social_sites = array(
 // ============================================================
 
 @define('AK_WPROOT', '../../../');
-@define('wpsc_akst_FILEPATH', WPSC_URL.'/share-this.php');
+@define('wpsc_akst_FILEPATH', WPSC_URL.'/wpsc-includes/share-this.php');
 
 // if (function_exists('load_plugin_textdomain')) {
 //   load_plugin_textdomain('wpsc');
@@ -331,13 +331,13 @@ if($key != 'facebook'){
 
   print(
 '#wpsc_akst_'.$key.' {
-  background-image: url(wpsc-core/images/social_networking/'.$key.'.gif);
+  background-image: url(../wpsc-core/images/social_networking/'.$key.'.gif);
 }
 ');
 }else{
   print(
 '#wpsc_akst_'.$key.' {
-  background-image: url(wpsc-core/images/social_networking/'.$key.'.png);
+  background-image: url(../wpsc-core/images/social_networking/'.$key.'.png);
 }
 ');
 
