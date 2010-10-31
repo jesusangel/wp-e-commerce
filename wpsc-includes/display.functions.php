@@ -374,9 +374,9 @@ function wpsc_obtain_the_title() {
 	global $wpdb, $wp_query, $wpsc_title_data;
 	$output = null;
 	$category_id = null;
-	if('[productspage]' == $wp_query->post->post_content){
+	if( !isset( $wp_query->query_vars['wpsc_product_category']) &&  !isset( $wp_query->query_vars['wpsc-product']))
 		return;
-	}
+		
 	if ( !isset( $wp_query->query_vars['wpsc_product_category'] ) )
 		$wp_query->query_vars['wpsc_product_category'] = 0;
 
