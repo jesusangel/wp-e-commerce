@@ -125,6 +125,8 @@ function wpsc_add_to_cart() {
          ";
 			}
 		}
+		
+		echo "jQuery('.cart_message').delay(3000).slideUp(500);";
 
 		do_action( 'wpsc_alternate_cart_html', $cart_messages );
 		exit();
