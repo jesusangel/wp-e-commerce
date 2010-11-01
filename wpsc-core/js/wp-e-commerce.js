@@ -328,8 +328,9 @@ jQuery(document).ready(function(){
 	jQuery('.wpsc_checkout_table input, .wpsc_checkout_table textarea').each(function(){
 		var real_value = jQuery(this).val();
 		value = jQuery('label[for="'+jQuery(this).attr('id')+'"]').html();
-		value = value.replace(/\*/i,'');
-		
+		if(null != value){
+			value = value.replace(/\*/i,'');
+		}
 		jQuery(this).inlineFieldLabel({label:jQuery.trim(value)});
 		if(real_value != '')
 			jQuery(this).val(real_value).removeClass('intra-field-label');

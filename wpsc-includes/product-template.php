@@ -934,7 +934,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 	}
 	
 	//Overwrite height & width if custom dimensions exist for thumbnail_id
-	if ( 'grid' != $display ) {
+	if ( 'grid' != $display && 'products-page' == $page) {
 		$custom_width = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_w', true );
 		$custom_height = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_h', true );
 		
@@ -952,7 +952,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 		if ( !empty( $src ) && is_string( $src[0] ) ) {
 			return $src[0];
 		}
-	} 
+	}
 	
 	// Return image link...
 	if ( $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
