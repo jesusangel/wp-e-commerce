@@ -32,7 +32,7 @@
 				</form></td>
 			</tr>	
 		<?php endwhile; ?>
-		<tbody>
+		</tbody>
 		<tfoot>
 			<?php if( ( wpsc_cart_has_shipping() && !wpsc_cart_show_plus_postage() ) || ( (wpsc_cart_tax(false) >0) && !wpsc_cart_show_plus_postage() ) ) : ?>
 			<tr class="cart-widget-total cart-widget-shipping">
