@@ -515,13 +515,11 @@ function wpsc_submit_checkout() {
 			} else {
 				$countries = wpsc_get_meta( $catid, 'target_market', 'wpsc_category' );
 			}
-/*
-			if ( !in_array( $selectedCountry[0]['id'], (array)$countries ) ) {
+			if ( !empty($countries) && !in_array( $selectedCountry[0]['id'], (array)$countries ) ) {
 				$errormessage = sprintf( __( '%s cannot be shipped to %s. To continue with your transaction please remove this product from the list below.', 'wpsc' ), $cartitem->product_name, $selectedCountry[0]['country'] );
 				$_SESSION['categoryAndShippingCountryConflict'] = $errormessage;
 				$is_valid = false;
 			}
-*/
 		}
 		//count number of items, and number of items using shipping
 		$num_items++;

@@ -307,6 +307,7 @@ function wpsc_get_the_category_id($slug, $type = 'name'){
 		$taxonomy = 'wpsc_product_category';
 		
 	$sql = 'SELECT '.$wpdb->terms.'.`term_id` FROM '.$wpdb->terms.' LEFT JOIN '.$wpdb->term_taxonomy.' ON '.$wpdb->terms.'.term_id = '.$wpdb->term_taxonomy.'.term_taxonomy_id WHERE '.$wpdb->term_taxonomy.'.`taxonomy` = "'.$taxonomy.'" AND '.$wpdb->terms.'.'.$type.' LIKE "%'.$slug.'%"';
+
 	$category_id = $wpdb->get_var($sql);
 	return $category_id;
 }
@@ -324,9 +325,10 @@ function wpsc_get_the_category_id($slug, $type = 'name'){
 function wpsc_get_the_category_display($slug){
 	global $wpdb;
 	if ( !empty($slug) && is_string($slug) ) {
-		$category_id = wpsc_get_the_category_id($slug);
+		$category_id = wpsc_get_the_category_id($slug , 'slug');
 		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
 	}
+
 	if(!empty($display_type))
 		return $display_type;		
 	else
