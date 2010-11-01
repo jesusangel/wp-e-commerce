@@ -32,12 +32,15 @@ Author URI: http://instinct.co.nz
 }
 
 /*-----GENERAL-----*/
-#default_products_page_container .imagecol img, #list_view_products_page_container img, #grid_view_products_page_container img {
+#default_products_page_container .imagecol img{
+	width:150px;
+	height:150px;
+
+}
+#list_view_products_page_container img, #grid_view_products_page_container img {
 	margin:0;
 	padding:0;
 	border:1px solid #ccc;
-	width:150px;
-	height:150px;
 }
 
 .wpsc_hidden{
