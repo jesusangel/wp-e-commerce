@@ -539,7 +539,7 @@ function wpsc_the_product_title() {
  */
 function wpsc_the_product_description() {
 	$content = get_the_content( 'Read the rest of this entry &raquo;' );
-	return $content;
+	return wpautop($content,1);
 }
 
 /**

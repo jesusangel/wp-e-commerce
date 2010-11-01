@@ -127,9 +127,11 @@ function wpsc_latest_product() {
 					'order'       => 'ASC'
 				) );
 				$attached_image = $attached_images[0]; 
-				if ( $attached_image->ID > 0 ) {
+				if ( $attached_image->ID > 0 )
 						$output .= '<img src="' . wpsc_product_image( $attached_image->ID, get_option('product_image_width'), get_option('product_image_height') ) . '" title="' . $latest_product->post_title . '" alt="' . $latest_product->post_title . '" />';
-				}
+				else
+					$output .='<img class="no-image" id="product_image_'.wpsc_the_product_id().'" alt="No Image" title="'.wpsc_the_product_title().'" src="'.WPSC_URL.'/wpsc-theme/images/noimage.png" width="'. get_option('product_image_width').'" height="'.get_option('product_image_height').'" />';
+				
 				$output .= '</a>';
 				$output .= '</div>';
 			}

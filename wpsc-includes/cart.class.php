@@ -1992,7 +1992,6 @@ class wpsc_cart_item {
             'numberposts' => -1,
             'post_status' => 'inherit'
          ));
-
          foreach($product_files as $file){
             // if the file is downloadable, check that the file is real
             $unique_id = sha1(uniqid(mt_rand(), true));

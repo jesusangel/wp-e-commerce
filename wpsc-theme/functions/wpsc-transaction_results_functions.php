@@ -62,7 +62,7 @@ function wpsc_transaction_theme() {
 
 function transaction_results( $sessionid, $echo_to_screen = true, $transaction_id = null ) {
 	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url, $message_html, $cart, $errorcode,$wpsc_purchlog_statuses;
-	$is_transaction = true;
+	$is_transaction = false;
 	$curgateway = $wpdb->get_var( "SELECT gateway FROM " . WPSC_TABLE_PURCHASE_LOGS . " WHERE sessionid='$sessionid'" );
 	$errorcode = 0;
 	$order_status = $purchase_log['processed'];
@@ -142,7 +142,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 					WHERE `active`='1'
 					AND `purchid`='" . $purchase_log['id'] . "'
 					AND `cartid` = '" . $row['id'] . "'", ARRAY_A );
-
 
 					$link = array( );
 
