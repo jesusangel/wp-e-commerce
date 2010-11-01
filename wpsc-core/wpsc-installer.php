@@ -138,23 +138,23 @@ function wpsc_install() {
 	}
 
 	if ( !get_option( 'product_image_height' ) ) {
-		update_option( 'product_image_height', '96' );
-		update_option( 'product_image_width', '96' );
+		update_option( 'product_image_height', '150' );
+		update_option( 'product_image_width', '150' );
 	}
 
 	if ( !get_option( 'category_image_height' ) ) {
-		update_option( 'category_image_height', '96' );
-		update_option( 'category_image_width', '96' );
+		update_option( 'category_image_height', '150' );
+		update_option( 'category_image_width', '150' );
 	}
 
 	if ( !get_option( 'single_view_image_height' ) ) {
-		update_option( 'single_view_image_height', '128' );
-		update_option( 'single_view_image_width', '128' );
+		update_option( 'single_view_image_height', '150' );
+		update_option( 'single_view_image_width', '150' );
 	}
 
 	if ( !get_option( 'wpsc_gallery_image_height' ) ) {
-		update_option( 'wpsc_gallery_image_height', '96' );
-		update_option( 'wpsc_gallery_image_width', '96' );
+		update_option( 'wpsc_gallery_image_height', '34' );
+		update_option( 'wpsc_gallery_image_width', '34' );
 	}
 
 	if ( !is_array( get_option( 'custom_gateway_options' ) ) )
