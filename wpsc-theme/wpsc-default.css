@@ -824,7 +824,7 @@ table.list_productdisplay p.soldout {
 .shopping-cart-wrapper span.cart_message {
 	display:block;
 	padding:5px;
-	border:1px dashed #006699;
+	border:1px solid #dedede;
 	margin:10px 0;	
 }
 

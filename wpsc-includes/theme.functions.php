@@ -364,12 +364,15 @@ function wpsc_single_template( $content ) {
 //		echo 'Archive <pre>'.print_r($wp_query,true).'</pre>';
 		remove_filter( "the_content", "wpsc_single_template" );		
 		list( $wp_query, $wpsc_query ) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
-		$display_type = wpsc_get_the_category_display($wp_query->query_vars['term']);
-		if ( $display_type == '' )
+		if(isset($wp_query->query['pagename']))
 			$display_type = get_option( 'product_view' );
-	
+		else			
+			$display_type = wpsc_get_the_category_display($wp_query->query_vars['term'],'slug');
+
 		if ( isset( $_SESSION['wpsc_display_type'] ) )
 			$display_type = $_SESSION['wpsc_display_type'];
+			
+
 		ob_start();
 		wpsc_include_products_page_template($display_type);
 		$content = ob_get_contents();
@@ -903,7 +906,6 @@ function wpsc_products_page( $content = '' ) {
 
 		// get the display type for the productspage		
 		$display_type = get_option('product_view');
-		
 		if ( isset( $_SESSION['wpsc_display_type'] ) ) {
 			$display_type = $_SESSION['wpsc_display_type'];
 		}

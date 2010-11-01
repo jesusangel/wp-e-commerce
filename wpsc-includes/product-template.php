@@ -873,6 +873,21 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
 }
 
 /**
+ * wpsc check display type
+ *
+ * Check the display view for the selected category
+ *
+ * @return string - display type
+ */
+function wpsc_check_display_type(){
+	global $wpsc_query, $post;
+	if('wpsc_product_category' == $wpsc_query->query_vars['taxonomy'] && is_string($wpsc_query->query_vars['term']) && 1 < $wpsc_query->post_count)
+		$display_type =	wpsc_get_the_category_display($wpsc_query->query_vars['term']);
+	else
+		$display_type = get_option('product_view');
+	return $display_type;
+}
+/**
  * wpsc product thumbnail function
  *
  * Show the thumbnail image for the product
@@ -880,7 +895,7 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
  * @return string - the URL to the thumbnail image
  */
 function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id = 0, $page = 'products-page' ) {
-
+	$display = wpsc_check_display_type();
 	// Get the product ID if none was passed
 	if ( empty( $product_id ) )
 		$product_id = get_the_ID();
@@ -919,7 +934,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 	}
 	
 	//Overwrite height & width if custom dimensions exist for thumbnail_id
-	if ( $page == 'products-page' || !isset( $page ) ) {
+	if ( 'grid' != $display ) {
 		$custom_width = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_w', true );
 		$custom_height = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_h', true );
 		
