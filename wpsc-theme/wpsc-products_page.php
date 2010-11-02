@@ -79,9 +79,14 @@ global $wpsc_query, $wpdb, $wp_query;
 								</a>
 							<?php else: ?>
 									<a href="<?php echo wpsc_the_product_permalink(); ?>">
-									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_CORE_THEME_URL; ?>images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
+									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_CORE_THEME_URL; ?>images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />	
 									</a>
 							<?php endif; ?>
+							<?php
+							if(function_exists('gold_shpcrt_display_gallery')) :					
+								echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
+							endif;
+							?>	
 						</div><!--close imagecol-->
 					<?php endif; ?>
 				<?php if(wpsc_product_on_special()) : ?><span class="sale"><?php _e('Sale', 'wpsc'); ?></span><?php endif; ?>		
@@ -121,12 +126,7 @@ global $wpsc_query, $wpdb, $wp_query;
 							<?php $action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
 						<?php else: ?>
 						<?php $action = htmlentities(wpsc_this_page_url(),ENT_QUOTES); ?>					
-						<?php endif; ?>
-						<?php
-						if(function_exists('gold_shpcrt_display_gallery')) :					
-							echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
-						endif;
-						?>						
+						<?php endif; ?>					
 						<form class="product_form"  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>" id="product_<?php echo wpsc_the_product_id(); ?>" >
 						<?php /** the variation group HTML and loop */?>
                         <?php if (wpsc_have_variation_groups()) { ?>
@@ -184,16 +184,16 @@ global $wpsc_query, $wpdb, $wp_query;
 							<?php if((get_option('hide_addtocart_button') == 0) &&  (get_option('addtocart_or_buynow') !='1')) : ?>
 								<?php if(wpsc_product_has_stock()) : ?>
 									<div class="wpsc_buy_button_container">
+										<div class="wpsc_loading_animation">
+											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_THEME_URL; ?>images/indicator.gif" />
+											<?php _e('Updating cart...', 'wpsc'); ?>
+										</div><!--close wpsc_loading_animation-->
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
 											<input class="wpsc_buy_button" type="submit" value="<?php _e('Buy Now', 'wpsc'); ?>" onclick="gotoexternallink("<?php echo $action; ?>")">
 											<?php else: ?>
 										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
-										<div class="wpsc_loading_animation">
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_THEME_URL; ?>images/indicator.gif" />
-											<?php _e('Updating cart...', 'wpsc'); ?>
-										</div><!--close wpsc_loading_animation-->
 									</div><!--close wpsc_buy_button_container-->
 								<?php else : ?>
 									<p class="soldout"><?php _e('This product has sold out.', 'wpsc'); ?></p>
