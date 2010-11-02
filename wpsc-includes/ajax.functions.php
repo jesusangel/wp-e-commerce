@@ -508,13 +508,14 @@ function wpsc_submit_checkout() {
 	}
 	$selectedCountry = $wpdb->get_results( "SELECT id, country FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE isocode='" . $wpdb->escape( $_SESSION['wpsc_delivery_country'] ) . "'", ARRAY_A );
 	foreach ( $wpsc_cart->cart_items as $cartitem ) {
+		if($cartitem->meta[0]['no_shipping'] == 1) continue;
 		$categoriesIDs = $cartitem->category_id_list;
 		foreach ( (array)$categoriesIDs as $catid ) {
-			if ( is_array( $catid ) ) {
+			if ( is_array( $catid ) )
 				$countries = wpsc_get_meta( $catid[0], 'target_market', 'wpsc_category' );
-			} else {
+			else
 				$countries = wpsc_get_meta( $catid, 'target_market', 'wpsc_category' );
-			}
+			
 			if ( !empty($countries) && !in_array( $selectedCountry[0]['id'], (array)$countries ) ) {
 				$errormessage = sprintf( __( '%s cannot be shipped to %s. To continue with your transaction please remove this product from the list below.', 'wpsc' ), $cartitem->product_name, $selectedCountry[0]['country'] );
 				$_SESSION['categoryAndShippingCountryConflict'] = $errormessage;

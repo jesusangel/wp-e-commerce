@@ -31,27 +31,26 @@ function wpsc_transaction_theme() {
 	$errorcode = '';
 	$transactid = '';
 
-	if ( isset( $_REQUEST['eway'] ) && $_REQUEST['eway'] == '1' ) {
+	if ( isset( $_REQUEST['eway'] ) && $_REQUEST['eway'] == '1' )
 		$sessionid = $_GET['result'];
-	} elseif ( isset( $_REQUEST['eway'] ) && $_REQUEST['eway'] == '0' ) {
+	elseif ( isset( $_REQUEST['eway'] ) && $_REQUEST['eway'] == '0' )
 		echo $_SESSION['eway_message'];
-	} elseif ( isset( $_REQUEST['payflow'] ) && $_REQUEST['payflow'] == '1' ) {
+	elseif ( isset( $_REQUEST['payflow'] ) && $_REQUEST['payflow'] == '1' ){
 		echo $_SESSION['payflow_message'];
 		$_SESSION['payflow_message'] = '';
 	}
 
-	//exit('getting here?<pre>'.print_r($_SESSION['wpsc_previous_selected_gateway'], true).'</pre>'.get_option('payment_gateway'));
-	if ( $_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified' ) {
+	if (($_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified' || $_SESSION['wpsc_previous_selected_gateway'] == 'wpsc_merchant_paypal_express') && ($_SESSION['reshash']['ACK'] != 'Completed') && ( $_SESSION['reshash']['ACK'] != 'Success')) {
 		echo $_SESSION['paypalExpressMessage'];
 	} else {
 		if ( $_SESSION['wpsc_previous_selected_gateway'] == 'dps' ) {
 			$sessionid = decrypt_dps_response();
 			//exit($sessionid);
-			if ( $sessionid != '' ) {
+			if ( $sessionid != '' )
 				return transaction_results( $sessionid, true );
-			} else {
+			else
 				_e( 'Sorry your transaction was not accepted.<br /><a href=' . get_option( "shopping_cart_url" ) . '>Click here to go back to checkout page.</a>' );
-			}
+			
 		} else {
 			//exit('<pre>sess - '.print_r($_SESSION, true).'</pre>');
 			return transaction_results( $sessionid, true );
