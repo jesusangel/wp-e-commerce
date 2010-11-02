@@ -144,11 +144,11 @@ function wpsc_country_region_list( $form_id = null, $ajax = false, $selected_cou
 		$namevalue = "name='collected_data[" . $region_form_id . "]'";
 //  	$namevalue = "name='collected_data[".$form_id."][1]'";
 		$js = "onchange='set_shipping_country(\"$html_form_id\", \"$form_id\");'";
-		$title = 'shippingregion';
+		$title = 'shippingstate';
 	} else {
 		$namevalue = "name='collected_data[" . $form_id . "][1]'";
 		$js = "onchange='set_billing_country(\"$html_form_id\", \"$form_id\");'";
-		$title = 'billingregion';
+		$title = 'billingstate';
 	}
 
 	// exit('Not here? >'.$region_form_id.' ' .$sql);

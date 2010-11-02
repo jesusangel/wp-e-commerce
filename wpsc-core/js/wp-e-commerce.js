@@ -30,6 +30,12 @@ jQuery(document).ready(function () {
 				var phone = jQuery("input[title='billingphone']").val();
 				var email = jQuery("input[title='billingfirstname']").val();
 				var state = jQuery("select[title='billingregion'] :selected").text();
+				if( jQuery("select[title='billingstate']").val() ){
+					var state = jQuery("select[title='billingstate'] :selected").text();
+				}
+				if( jQuery("input[title='billingstate']").val()){
+					var state = jQuery("input[title='billingstate']").val();
+				}
 				var country = jQuery("select[title='billingcountry'] :selected").text();
 				var countryID = jQuery("select[title='billingcountry'] :selected").val();
 
