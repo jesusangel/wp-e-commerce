@@ -10,7 +10,7 @@ global $wpsc_query, $wpdb, $wp_query;
 	
 	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 	<?php if(wpsc_display_categories()): ?>
-	  <?php if(get_option('wpsc_category_grid_view') == 1) :?>
+	  <?php if(wpsc_category_grid_view()) :?>
 			<div class="wpsc_categories wpsc_category_grid group">
 				<?php wpsc_start_category_query(array('category_group'=> get_option('wpsc_default_category'), 'show_thumbnails'=> 1)); ?>
 					<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name(); ?>">
@@ -27,7 +27,7 @@ global $wpsc_query, $wpdb, $wp_query;
 							<?php wpsc_print_category_image(32, 32); ?>
 							
 							<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_link" title="<?php wpsc_print_category_name(); ?>"><?php wpsc_print_category_name(); ?></a>
-							<?php if(get_option('wpsc_category_description')) :?>
+							<?php if(wpsc_show_category_description()) :?>
 								<?php wpsc_print_category_description("<div class='wpsc_subcategory'>", "</div>"); ?>				
 							<?php endif;?>
 							
@@ -43,11 +43,11 @@ global $wpsc_query, $wpdb, $wp_query;
 		
 		<?php if(wpsc_is_in_category()) : ?>
 			<div class="wpsc_category_details">
-				<?php if(get_option('show_category_thumbnails') && wpsc_category_image()) : ?>
+				<?php if(wpsc_show_category_thumbnails()) : ?>
 					<img src="<?php echo wpsc_category_image(); ?>" alt="<?php echo wpsc_category_name(); ?>" />
 				<?php endif; ?>
 				
-				<?php if(get_option('wpsc_category_description') &&  wpsc_category_description()) : ?>
+				<?php if(wpsc_show_category_description() &&  wpsc_category_description()) : ?>
 					<?php echo wpsc_category_description(); ?>
 				<?php endif; ?>
 			</div><!--close wpsc_category_details-->
@@ -69,7 +69,7 @@ global $wpsc_query, $wpdb, $wp_query;
 			<?php endif; ?>
 		
 			<div class="default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?> group">      
-        			<?php if(get_option('show_thumbnails')) :?>
+        			<?php if(wpsc_show_thumbnails()) :?>
 						<div class="imagecol">
 							<?php if(wpsc_the_product_thumbnail()) :
 							?>
@@ -83,7 +83,7 @@ global $wpsc_query, $wpdb, $wp_query;
 									</a>
 							<?php endif; ?>
 							<?php
-							if(function_exists('gold_shpcrt_display_gallery')) :					
+							if(gold_cart_display_gallery()) :					
 								echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
 							endif;
 							?>	

@@ -1490,4 +1490,49 @@ function wpsc_the_variation_stock() {
 	return $output;
 }
 
+/**
+ * wpsc_category_grid_view function
+ * @return bool - whether the category is in grid view or not
+ */
+function wpsc_category_grid_view(){
+	if(get_option('wpsc_category_grid_view') == 1)
+		return true;
+	else
+		return false;
+}
+
+/**
+ * wpsc_show_category_description function
+ * @return bool - whether to show category description or not
+ */
+function wpsc_show_category_description(){
+	return get_option('wpsc_category_description');
+}
+
+/**
+ * wpsc_show_category_thumbnails function
+ * @return bool - whether to show category thumbnails or not
+ */
+function wpsc_show_category_thumbnails(){
+	if(get_option('show_category_thumbnails') && wpsc_category_image())
+		return true;
+	else
+		return false;
+}
+
+/**
+ * wpsc_show_thumbnails function
+ * @return bool - whether to show thumbnails or not
+ */
+function wpsc_show_thumbnails(){
+	return get_option('show_thumbnails');
+}
+
+/**
+ * gold_cart_display_gallery function
+ * @return bool - whether to show gold cart gallery or not
+ */
+function gold_cart_display_gallery(){
+	return function_exists('gold_shpcrt_display_gallery');
+}
 ?>
