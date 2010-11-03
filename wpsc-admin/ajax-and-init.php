@@ -694,19 +694,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 function wpsc_admin_ajax() {
 	global $wpdb, $user_level, $wp_rewrite;
 	get_currentuserinfo();
-	if ( is_numeric( $_POST['catid'] ) ) {
-		/* fill category form */
-		echo nzshpcrt_getcategoryform( $_POST['catid'] );
-		exit();
-	} else if ( is_numeric( $_POST['brandid'] ) ) {
-		/* fill brand form */
-		echo nzshpcrt_getbrandsform( $_POST['brandid'] );
-		exit();
-	} else if ( is_numeric( $_POST['variation_id'] ) ) {
-		echo nzshpcrt_getvariationform( $_POST['variation_id'] );
-		exit();
-	}
-
 
 	if ( $_POST['action'] == 'product-page-order' ) {
 		$current_order = get_option( 'wpsc_product_page_order' );

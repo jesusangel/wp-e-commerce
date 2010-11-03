@@ -131,6 +131,7 @@ jQuery(document).ready(function () {
 
 	// update the price when the variations are altered.
 	jQuery(".wpsc_select_variation").change(function() {
+		jQuery('option[value="0"]', this).attr('disabled', 'disabled');
 		parent_form = jQuery(this).parents("form.product_form");
 		form_values =jQuery("input[name=product_id], .wpsc_select_variation",parent_form).serialize( );
 
