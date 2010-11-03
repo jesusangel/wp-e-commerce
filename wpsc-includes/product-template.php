@@ -1553,6 +1553,7 @@ function wpsc_you_save($args){
 	$defaults = array(
 		'product_id' => false,
 		'type' => "percentage",
+		'variations' => false
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -1561,19 +1562,27 @@ function wpsc_you_save($args){
 	global $wpdb;
 	
 	if(!$product_id)
-		if(function_exists('wpsc_the_product_id'))
+		if(function_exists('wpsc_the_product_id')){
 			//select the variation ID with lovest price
 			$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . wpsc_the_product_id() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
+			if(!$product_id)
+				$product_id=wpsc_the_product_id();
+		}
 
 	if(!$product_id)
 		return false;
-	
-	$sale_price = get_product_meta($product_id, 'special_price', true);
+	if($variations)
+		$sale_price = wpsc_calculate_price( (int)$_POST['product_id'], $variations, true );
+	else
+		$sale_price = get_product_meta($product_id, 'special_price', true);
 	//if sale price is zero, false, or anything similar - return false
 	if(!$sale_price)
 		return false;
 	
-	$regular_price = get_product_meta($product_id, 'price', true);
+	if($variations)
+		$regular_price = wpsc_calculate_price( (int)$_POST['product_id'], $variations, false );
+	else
+		$regular_price = get_product_meta($product_id, 'price', true);
 	//if actual price is zero, false, or something similar, or is less than sale price - return false
 	if( !$regular_price || !( $sale_price < $regular_price ) )
 		return false;

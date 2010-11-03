@@ -155,12 +155,14 @@ jQuery(document).ready(function () {
 				target_id = "product_price_"+product_id;
 				second_target_id = "donation_price_"+product_id;
 				third_target_id = "old_product_price_"+product_id;
+				yousave_target_id = "yousave_"+product_id;
 				buynow_id = "BB_BuyButtonForm"+product_id;
 				if(jQuery("input#"+target_id).attr('type') == 'text') {
 					jQuery("input#"+target_id).val(numeric_price);
 				} else {
 					jQuery("#"+target_id+".pricedisplay").html(price);
 					jQuery("#"+third_target_id+" .pricedisplay").html(old_price);
+					jQuery("#"+yousave_target_id).html(you_save);
 				}
 				jQuery("input#"+second_target_id).val(numeric_price);
 			}
