@@ -835,9 +835,17 @@ function wpsc_product_postage_and_packaging() {
  * @return string - returns some form of product price
  */
 function wpsc_product_normal_price() {
-	global $wpsc_query;
-	$price = get_post_meta( get_the_ID(), '_wpsc_price', true );
-	$output = wpsc_currency_display( $price );
+	global $wpsc_query, $wpdb, $wpsc_variations;
+	if ( count( $wpsc_variations->first_variations ) > 0 ) {
+		//select the variation ID with lovest price
+		$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . get_the_ID() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
+		$from = ' from ';
+	} else {
+		$product_id = get_the_ID();
+		$from = '';
+	}
+	$price = get_product_meta( $product_id, 'price', true );
+	$output = $from.wpsc_currency_display( $price );
 	return $output;
 }
 
@@ -1538,5 +1546,45 @@ function wpsc_show_thumbnails(){
  */
 function gold_cart_display_gallery(){
 	return function_exists('gold_shpcrt_display_gallery');
+}
+
+function wpsc_you_save($args){
+
+	$defaults = array(
+		'product_id' => false,
+		'type' => "percentage",
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args, EXTR_SKIP );
+
+	global $wpdb;
+	
+	if(!$product_id)
+		if(function_exists('wpsc_the_product_id'))
+			//select the variation ID with lovest price
+			$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . wpsc_the_product_id() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
+
+	if(!$product_id)
+		return false;
+	
+	$sale_price = get_product_meta($product_id, 'special_price', true);
+	//if sale price is zero, false, or anything similar - return false
+	if(!$sale_price)
+		return false;
+	
+	$regular_price = get_product_meta($product_id, 'price', true);
+	//if actual price is zero, false, or something similar, or is less than sale price - return false
+	if( !$regular_price || !( $sale_price < $regular_price ) )
+		return false;
+		
+	switch($type){
+		case "amount":
+			return number_format ( $regular_price - $sale_price , 2 );
+			break;
+			
+		default:
+			return number_format ( ($regular_price - $sale_price) / $regular_price * 100 , 2 );
+	}
 }
 ?>
