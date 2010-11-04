@@ -140,13 +140,13 @@ class wpsc_theming {
 
 		$this->recursive_copy( $old, $new );
 		$path = $new;
-		$dh   = opendir( $path );
+		$dh   = opendir( $old );
 
 		while ( false !== ( $file = readdir( $dh ) ) ) {
-			if ( $file != "." && $file != ".." && !strstr( $file, ".svn" ) && !strstr( $file, "images" ) && strstr( $file, 'wpsc-' ) ) {
+			if ( $file != "." && $file != ".." && !strstr( $file, ".svn" ) && !strstr( $file, "images" ) && ( strstr( $file, 'wpsc-' ) || strstr($file, '.css') ) ) {
 				if ( in_array( $file, $this->templates_to_move ) ) {
-					if ( !strstr( $file, "functions" ) && !strstr( $file, "css" ) && !strstr( $file, "widget" ) ) {
-						$file_data = file_get_contents( $path . "/" . $file );
+					if ( !strstr( $file, "functions" ) && !strstr( $file, "widget" ) ) {
+						$file_data = file_get_contents( $old . "/" . $file );
 						file_put_contents( $path . "/" . $file, $file_data );
 						rename( $path . "/" . $file, $path . "/" . $theme_file_prefix . $file );
 					}
