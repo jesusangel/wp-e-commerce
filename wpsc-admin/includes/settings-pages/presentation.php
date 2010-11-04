@@ -127,7 +127,7 @@ function options_categorylist() {
 	global $wpdb;
 
 	$current_default = get_option( 'wpsc_default_category' );
-	$group_data      = get_terms( 'wpsc_product_category', 'parent=0', ARRAY_A );
+	$group_data      = get_terms( 'wpsc_product_category', 'hide_empty=0', ARRAY_A );
 	$categorylist    = "<select name='wpsc_options[wpsc_default_category]'>";
 
 	if ( get_option( 'wpsc_default_category' ) == 'all' )
