@@ -1548,7 +1548,7 @@ function gold_cart_display_gallery(){
 	return function_exists('gold_shpcrt_display_gallery');
 }
 
-function wpsc_you_save($args){
+function wpsc_you_save($args = null){
 
 	$defaults = array(
 		'product_id' => false,
