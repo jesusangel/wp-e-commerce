@@ -162,6 +162,11 @@ global $wpsc_query, $wpdb, $wp_query;
 							<?php endif ;?>
 
 							<div class="wpsc_product_price">
+								<?php if(wpsc_product_has_stock()) : ?>
+									<div class="in_stock"><?php _e('Product in stock', 'wpsc'); ?></div>
+								<?php else: ?>
+									<div class="out_of_stock"><?php _e('Product not in stock', 'wpsc'); ?></div>
+								<?php endif; ?>
 								<?php if(wpsc_product_is_donation()) : ?>
 									<label for="donation_price_<?php echo wpsc_the_product_id(); ?>"><?php _e('Donation', 'wpsc'); ?>:</label>
 									<input type="text" id="donation_price_<?php echo wpsc_the_product_id(); ?>" name="donation_price" value="<?php echo $wpsc_query->product['price']; ?>" size="6" />
@@ -198,8 +203,6 @@ global $wpsc_query, $wpdb, $wp_query;
 										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
 									</div><!--close wpsc_buy_button_container-->
-								<?php else : ?>
-									<p class="soldout"><?php _e('This product has sold out.', 'wpsc'); ?></p>
 								<?php endif ; ?>
 							<?php endif ; ?>
 						</form><!--close product_form-->

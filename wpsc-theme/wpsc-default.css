@@ -277,6 +277,23 @@ Author URI: http://instinct.co.nz
 	*zoom:1;
 }
 
+.default_product_display .in_stock {
+	position: relative;
+	background-image: url(images/yes_stock.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	left:-5px;
+}
+
+.default_product_display .out_of_stock {
+	position: relative;
+	background-image: url(images/outofstock.png);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	left:-5px;
+}
+
+
 .default_product_display .wpsc_product_price p, #content .default_product_display .wpsc_product_price p {
 	margin:0;
 }
