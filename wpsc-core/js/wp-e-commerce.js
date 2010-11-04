@@ -367,3 +367,11 @@ jQuery(document).ready(function(){
 		});
 	});
 });
+
+jQuery(document).ready(function(){
+	jQuery('.attachment-gold-thumbnails').click(function(){
+		jQuery('.product_image').attr('src', jQuery(this).parent().attr('rev'));
+		jQuery('.product_image').parent().attr('href', jQuery(this).parent().attr('href'));
+		return false;
+	});
+});
