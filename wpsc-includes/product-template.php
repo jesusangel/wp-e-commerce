@@ -243,7 +243,7 @@ function wpsc_show_pnp(){
 function wpsc_the_product_price( $no_decimals = false ) {
 	global $wpsc_query, $wpsc_variations, $wpdb;
 	if ( count( $wpsc_variations->first_variations ) > 0 ) {
-		//select the variation ID with lovest price
+		//select the variation ID with lowest price
 		$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . get_the_ID() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
 	} else {
 		$product_id = get_the_ID();
@@ -1563,7 +1563,7 @@ function wpsc_you_save($args){
 	
 	if(!$product_id)
 		if(function_exists('wpsc_the_product_id')){
-			//select the variation ID with lovest price
+			//select the variation ID with lowest price
 			$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . wpsc_the_product_id() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
 			if(!$product_id)
 				$product_id=wpsc_the_product_id();
@@ -1595,5 +1595,19 @@ function wpsc_you_save($args){
 		default:
 			return number_format ( ($regular_price - $sale_price) / $regular_price * 100 , 2 );
 	}
+}
+
+
+function wpsc_get_downloadable_files($product_id){
+	$args = array(
+		'post_type' => 'wpsc-product-file',
+		'post_parent' => $product_id,
+		'numberposts' => -1,
+		'post_status' => 'all',
+		
+	);
+
+	$attached_files = (array)get_posts( $args );
+	return $attached_files;
 }
 ?>

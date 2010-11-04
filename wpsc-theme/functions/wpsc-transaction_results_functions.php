@@ -146,7 +146,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 					if ( count( $download_data ) > 0 ) {
 						foreach ( $download_data as $single_download ) {
-							$file_data = get_post( $single_download['fileid'] );
+							$file_data = get_post( $single_download['product_id'] );
 
 							if ( $single_download['uniqueid'] == null ) {// if the uniqueid is not equal to null, its "valid", regardless of what it is
 								$link[] = array( "url" => site_url( "?downloadid=" . $single_download['id'] ), "name" => $file_data->post_title );

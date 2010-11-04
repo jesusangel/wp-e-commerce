@@ -965,19 +965,28 @@ function wpsc_download_file() {
 			}
 		}
 
-		if ( wpsc_get_meta( $download_data['id'], '_is_legacy', 'wpsc_downloads' ) == 'true' ) {
-			$file_id = wpsc_get_meta( $download_data['fileid'], '_new_file_id', 'wpsc_files' );
-		} else {
-			$file_id = $download_data['fileid'];
+		$file_id = $download_data['fileid'];
+		$file_data = wpsc_get_downloadable_files($download_data['product_id']);			
+	
+		if(($count =count($file_data)) >= 1){
+			$file_data = $file_data[$count-1];
+		}else{
+			$prod_name = $wpdb->get_var("SELECT `name` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `id`=".$download_data['product_id']);
+
+			$prod_id = $wpdb->get_var("SELECT `ID` FROM ".$wpdb->posts." WHERE `post_title` LIKE '%".$prod_name."%' AND `post_status` IN ('publish')");			
+			$file_data = wpsc_get_downloadable_files($prod_id);		
+
+			if(($count =count($file_data)) >= 1)
+				$file_data = $file_data[$count-1];
+
 		}
-
-		$file_data = get_post( $file_id );
-
+			
 		if ( $file_data == null ) {
 			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.' ) );
 		}
 
 		if ( $download_data != null ) {
+
 			if ( (int)$download_data['downloads'] >= 1 ) {
 				$download_count = (int)$download_data['downloads'] - 1;
 			} else {
@@ -1009,7 +1018,12 @@ function wpsc_download_file() {
 
 			$file_path = WPSC_FILE_DIR . basename( $file_data->post_title );
 			$file_name = basename( $file_data->post_title );
-
+			if(!is_file( $file_path )){
+				$sql = 'SELECT `idhash` FROM `'.WPSC_TABLE_PRODUCT_FILES.'` WHERE filename = "'.$file_name.'"';
+				$file_hash = $wpdb->get_var($sql);
+				if(!empty($file_name))
+					$file_path = WPSC_FILE_DIR . basename( $file_hash );
+			}
 
 			if ( is_file( $file_path ) ) {
 				header( 'Content-Type: ' . $file_data->post_mime_type );
