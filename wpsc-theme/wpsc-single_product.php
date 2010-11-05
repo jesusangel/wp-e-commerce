@@ -30,8 +30,12 @@
 					<div class="imagecol">
 						<?php if ( wpsc_the_product_thumbnail() ) : ?>
 								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="<?php echo wpsc_the_product_image_link_classes(); ?>" href="<?php echo wpsc_the_product_image(); ?>">
-									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail('','','','single'); ?>"/>
+									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(get_option('product_image_width'),get_option('product_image_height'),'','single'); ?>"/>
 								</a>
+								<?php 
+								if ( function_exists( 'gold_shpcrt_display_gallery' ) )
+									echo gold_shpcrt_display_gallery( wpsc_the_product_id() );
+								?>
 						<?php else: ?>
 									<a href="<?php echo wpsc_the_product_permalink(); ?>">
 									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_URL; ?>/wpsc-theme/images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
@@ -139,14 +143,22 @@
                                 </fieldset>
 							<?php endif ;?>
 							<div class="wpsc_product_price">
+								<?php if(wpsc_product_has_stock()) : ?>
+									<div class="in_stock"><?php _e('Product in stock', 'wpsc'); ?></div>
+								<?php else: ?>
+									<div class="out_of_stock"><?php _e('Product not in stock', 'wpsc'); ?></div>
+								<?php endif; ?>
 								<?php if(wpsc_product_is_donation()) : ?>
 									<label for="donation_price_<?php echo wpsc_the_product_id(); ?>"><?php _e('Donation', 'wpsc'); ?>:</label>
 									<input type="text" id="donation_price_<?php echo wpsc_the_product_id(); ?>" name="donation_price" value="<?php echo $wpsc_query->product['price']; ?>" size="6" />
 								<?php else : ?>
 									<?php if(wpsc_product_on_special()) : ?>
-										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="oldprice"><?php echo wpsc_product_normal_price(); ?></span></p>
+										<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span class="oldprice" id="old_product_price_<?php echo wpsc_the_product_id(); ?>"><?php echo wpsc_product_normal_price(); ?></span></p>
 									<?php endif; ?>
 									<p class="pricedisplay <?php echo wpsc_the_product_id(); ?>"><?php _e('Price', 'wpsc'); ?>:<span id='product_price_<?php echo wpsc_the_product_id(); ?>' class="currentprice pricedisplay"><?php echo wpsc_the_product_price(); ?></span></p>
+									<?php if(wpsc_product_on_special()) : ?>
+										<p class="pricedisplay product_<?php echo wpsc_the_product_id(); ?>"><?php _e('You save', 'wpsc'); ?>:<span class="yousave" id="yousave_<?php echo wpsc_the_product_id(); ?>"><?php echo wpsc_currency_display(wpsc_you_save('type=amount'), array('html' => false)); ?>! (<?php echo wpsc_you_save(); ?>%)</span></p>
+									<?php endif; ?>
 									<?php if(wpsc_show_pnp()) : ?>
 										<p class="pricedisplay"><?php _e('P&amp;P', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
 									<?php endif; ?>							
@@ -194,9 +206,6 @@
 								echo wpsc_buy_now_button( wpsc_the_product_id() );
 					
 							echo wpsc_product_rater();
-						
-							if ( function_exists( 'gold_shpcrt_display_gallery' ) )
-								echo gold_shpcrt_display_gallery( wpsc_the_product_id() );
 
 							echo wpsc_also_bought( wpsc_the_product_id() );
 						

@@ -161,7 +161,7 @@ jQuery(document).ready(function () {
 					jQuery("input#"+target_id).val(numeric_price);
 				} else {
 					jQuery("#"+target_id+".pricedisplay").html(price);
-					jQuery("#"+third_target_id+" .pricedisplay").html(old_price);
+					jQuery("#"+third_target_id).html(old_price);
 					jQuery("#"+yousave_target_id).html(you_save);
 				}
 				jQuery("input#"+second_target_id).val(numeric_price);

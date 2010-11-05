@@ -269,15 +269,13 @@ Author URI: http://instinct.co.nz
 .default_product_display .wpsc_product_price {
 	margin-bottom:10px;
 	font-size:16px;
-	border-radius:5px;
-	-webkit-border-radius:5px;
-	-moz-border-radius:5px;
 	padding:5px;
 	display:inline-block;
 	*zoom:1;
 }
 
-.default_product_display .in_stock {
+.default_product_display .in_stock,
+.single_product_display .in_stock {
 	position: relative;
 	background-image: url(images/yes_stock.png);
 	background-repeat: no-repeat;
@@ -285,7 +283,8 @@ Author URI: http://instinct.co.nz
 	left:-5px;
 }
 
-.default_product_display .out_of_stock {
+.default_product_display .out_of_stock,
+.single_product_display .out_of_stock {
 	position: relative;
 	background-image: url(images/outofstock.png);
 	background-repeat: no-repeat;
@@ -359,14 +358,20 @@ Author URI: http://instinct.co.nz
 	margin:0px;
 }
 
-.default_product_display .wpsc_buy_button_container, #content .default_product_display .wpsc_buy_button_container{
+.default_product_display .wpsc_buy_button_container,
+#content .default_product_display .wpsc_buy_button_container,
+.single_product_display form.product_form .wpsc_buy_button_container,
+#content .single_product_display form.product_form .wpsc_buy_button_container{
 	position:absolute;
 	bottom:0px;
 	right:0px;
 	text-align: right;
 }
 
-.default_product_display .wpsc_buy_button, #content .default_product_display .wpsc_buy_button {
+.default_product_display .wpsc_buy_button,
+#content .default_product_display .wpsc_buy_button,
+.single_product_display form.product_form input.wpsc_buy_button,
+#content .single_product_display form.product_form input.wpsc_buy_button {
 	cursor: pointer;
 	font-size:12px;
 	line-height: 1.5;
@@ -378,9 +383,13 @@ Author URI: http://instinct.co.nz
 	text-decoration:none;
 	background-color: #fff;
 	margin:10px 0px;
+	padding: 2px 6px 3px;
 }
 
-.default_product_display .wpsc_buy_button:active, #content .default_product_display .wpsc_buy_button:active{
+.default_product_display .wpsc_buy_button:active,
+#content .default_product_display .wpsc_buy_button:active,
+.single_product_display form.product_form input.wpsc_buy_button:active,
+#content .single_product_display form.product_form input.wpsc_buy_button:active {
 	border:1px solid #bbb;
 }
 
@@ -589,6 +598,7 @@ table.list_productdisplay p.soldout {
 
 .single_product_display .imagecol {
 	margin-right:10px;
+	width:150px;
 	float:left;	
 	position:relative;
 }
@@ -617,16 +627,14 @@ table.list_productdisplay p.soldout {
 }
 
 .single_product_display form.product_form fieldset, #content .single_product_display form.product_form fieldset {
-	margin:0 0 20px 0;
-	padding:5px;
-	border:1px solid #ccc;
+	border: none;
+	padding: 0px;
 }
 
 .single_product_display form.product_form fieldset legend, #content .single_product_display form.product_form fieldset legend {
-	padding:0 7px;
-	margin:0 8px;
-	font-size:16px;
-	color:#006699;
+	font-size: 18px;
+	font-weight: normal;
+	padding: 0px;
 }
 
 .single_product_display form.product_form input, #content .single_product_display form.product_form input {
@@ -661,7 +669,7 @@ table.list_productdisplay p.soldout {
 
 .single_product_display .wpsc_variation_forms table td.col1, #content .single_product_display .wpsc_variation_forms table tr td.col1 {
 	width:10%;	
-	text-align:right;
+	text-align:left;
 	margin:0;
 	padding:2px;
 }
@@ -674,9 +682,9 @@ table.list_productdisplay p.soldout {
 }
 
 .single_product_display .wpsc_variation_forms label {
-	font-family: Georgia, "Bitstream Charter", serif;
-	color:#F60;
-	font-size:12px;	
+	color: black;
+	font-family: Georgia, 'Bitstream Charter', serif;
+	font-size: 14px;
 }
 
 .single_product_display .wpsc_variation_forms select {
@@ -707,16 +715,10 @@ table.list_productdisplay p.soldout {
 }
 
 .single_product_display .wpsc_product_price {
-	margin-bottom:10px;
-	color:#F60;
-	font-size:16px;
-	border:1px solid #FC0;
-	border-radius:5px;
-	-webkit-border-radius:5px;
-	-moz-border-radius:5px;
-	padding:5px;
-	display:inline-block;
-	*zoom:1;
+	display: inline-block;
+	font-size: 16px;
+	margin-bottom: 10px;
+	padding: 5px;
 }
 
 .single_product_display .wpsc_product_price p, #content .single_product_display .wpsc_product_price p {
@@ -749,40 +751,12 @@ table.list_productdisplay p.soldout {
 }
 
 .single_product_display .wpcart_gallery img, #content .single_product_display .wpcart_gallery img {
-	margin:5px;
-	padding:5px;
+	margin-left:6px;
 	border:1px solid #ccc;	
 }
 
-.single_product_display form.product_form input.wpsc_buy_button, #content .single_product_display form.product_form input.wpsc_buy_button {
-	background-color:#006699;
-	background:-webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0.76, rgb(73,166,192)),
-    color-stop(1, rgb(125,195,215))
-	);
-	background:-moz-linear-gradient(
-    center bottom,
-    rgb(73,166,192) 76%,
-    rgb(125,195,215) 100%
-	);
-	color:#ffffff;
-	font-size:12px;
-	border-radius:3px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	border:1px solid #29bade;
-	text-shadow:1px 1px 1px rgba(0,0,0,0.8);
-	padding:5px;
-	*padding:1px;
-	cursor:pointer;
-	line-height:1.2em;
-}
-
-.single_product_display form.product_form input.wpsc_buy_button, #content .single_product_display form.product_form input.wpsc_buy_button:hover {
-	background:#369;
+.single_product_display .wpcart_gallery a:first-child img, #content .single_product_display .wpcart_gallery a:first-child img {
+	margin-left:0px;
 }
 
 .single_product_display .FB_like iframe {
