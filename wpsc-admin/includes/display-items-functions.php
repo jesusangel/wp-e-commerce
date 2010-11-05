@@ -1028,6 +1028,9 @@ if ( (isset( $_REQUEST['parent_page'] ) && ( $_REQUEST['parent_page'] == 'wpsc-e
     add_filter( 'attachment_fields_to_edit', 'wpsc_attachment_fields', 11, 2 );
 	add_filter( 'gettext','wpsc_filter_feature_image_text', 12, 3 );
 
+if( isset( $_REQUEST["save"] ) && is_array($_REQUEST["attachments"]) ) {
+	wpsc_regenerate_thumbnails();
+}	
 
 /*
  * This filter translates string before it is displayed 

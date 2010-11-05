@@ -38,15 +38,7 @@ function wpsc_display_settings_page() { ?>
 		if ( isset( $_GET['selected_all'] ) )
 			wpsc_submit_options( $_GET['selected_all'] );
 
-		if ( isset( $_SESSION['wpsc_thumbnails_resized'] ) && ($_SESSION['wpsc_thumbnails_resized'] == true) ) { ?>
-
-			<div class="updated fade below-h2" id="message" style="background-color: rgb(255, 251, 204);">
-				<p><?php _e( "Thanks, your thumbnail images have been resized." ); ?></p>
-			</div>
-
-		<?php
-			$_SESSION['wpsc_thumbnails_resized'] = false;
-		} ?>
+ ?>
 
 		<div id='wpsc_options_page'>
 
@@ -271,7 +263,7 @@ function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
 
 function wpsc_settings_page_update_notification() {
 
-	if ( isset( $_GET['skipped'] ) || isset( $_GET['updated'] ) || isset( $_GET['deleted'] ) || isset( $_GET['shipadd'] ) ) { ?>
+	if ( isset( $_GET['skipped'] ) || isset( $_GET['updated'] ) || isset( $_GET['regenerate'] ) || isset( $_GET['deleted'] ) || isset( $_GET['shipadd'] ) ) { ?>
 
 	<div id="message" class="updated fade"><p>
 		<?php
@@ -296,11 +288,17 @@ function wpsc_settings_page_update_notification() {
 			unset( $_GET['added'] );
 			$message = true;
 		}
+		if ( isset( $_GET['regenerate'] ) ) {
+			_e('Thumbnails regenerated.', 'wpsc');
+			unset( $_GET['regenerate'] );
+			$message = true;
+			wpsc_regenerate_thumbnails();
+		}
 
 		if ( is_null( $message ) )
 			_e( 'Settings successfully updated.', 'wpsc' );
 
-		$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'skipped', 'updated', 'deleted', 'wpsc_downloadcsv', 'rss_key', 'start_timestamp', 'end_timestamp', 'email_buyer_id' ), $_SERVER['REQUEST_URI'] ); ?>
+		$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'regenerate', 'skipped', 'updated', 'deleted', 'wpsc_downloadcsv', 'rss_key', 'start_timestamp', 'end_timestamp', 'email_buyer_id' ), $_SERVER['REQUEST_URI'] ); ?>
 	</p></div>
 
 <?php

@@ -31,6 +31,9 @@ function wpsc_install() {
 		$first_install = true;
 		add_option( 'wpsc_purchaselogs_fixed', true );
 	}
+	
+	if ( !$first_install )
+		wpsc_regenerate_thumbnails();
 
 	if ( get_option( 'wpsc_version' ) == null )
 		add_option( 'wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes' );
@@ -245,6 +248,59 @@ function wpsc_install() {
 		wp_cache_delete( 'all_page_ids', 'pages' );
 		$wp_rewrite->flush_rules();
 	}
+}
+
+/*
+
+Code borrowed with much gratitude from Viper007Bond.  Thanks for writing a great plugin, Alex!
+We've basically just removed the admin interface, we're just going to be hooking into the regeneration functions when new custom sizes are made or when the plugin is updated.  Fancy!
+
+**************************************************************************
+
+Plugin Name:  Regenerate Thumbnails
+Plugin URI:   http://www.viper007bond.com/wordpress-plugins/regenerate-thumbnails/
+Description:  Allows you to regenerate all thumbnails after changing the thumbnail sizes.
+Version:      2.0.3
+Author:       Viper007Bond
+Author URI:   http://www.viper007bond.com/
+
+**************************************************************************
+
+Copyright (C) 2008 Viper007Bond
+
+*************************************************************************
+*/
+
+function wpsc_regenerate_thumbnails() {
+global $wpdb;
+
+set_time_limit( 250);
+
+if ( !function_exists( 'wp_generate_attachment_metadata' ) ) {
+	require_once ( ABSPATH . 'wp-admin/includes/image.php' );
+}
+
+		// Just query for the IDs (specifically those that have products for parents) only to reduce memory usage
+		$images = $wpdb->get_results( "SELECT ID, post_parent FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'" );
+		
+		foreach ( $images as $image ) {
+			$id = $image->ID;
+			$post_parent_type = get_post_type( $image->post_parent );
+			
+			if ("wpsc-product" == $post_parent_type) {
+			
+			$fullsizepath = get_attached_file( $id );
+			
+			if ( false === $fullsizepath || !file_exists($fullsizepath) )
+			die ("Could not find path specified!");
+
+			if ( wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $fullsizepath ) ) ) {
+				$success = true;
+				} else {
+				$success = false;
+			}
+		}
+	}	
 }
 
 function wpsc_product_files_htaccess() {

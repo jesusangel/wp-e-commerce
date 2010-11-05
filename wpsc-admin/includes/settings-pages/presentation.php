@@ -181,7 +181,9 @@ function options_categorylist() {
  * @return null
  */
 function wpsc_options_presentation() {
-	global $wpdb; ?>
+	global $wpdb; 
+	
+?>
 
 	<form name='cart_options' id='cart_options' method='post' action=''>
 		<div id="options_presentation">
@@ -928,6 +930,7 @@ function wpsc_options_presentation() {
 
 
 			<h3 class="form_group"><a name='thumb_settings'><?php _e( 'Thumbnail Settings', 'wpsc' ); ?></a></h3>
+			<p><em>Note: Anytime you update any of the thumbnail settings, WPeC will automatically resize all of your thumbnails for you.  Depending on how many images you have, this could take awhile.</em></p>
 			<table class='wpsc_options form-table'>
 				<?php if ( function_exists( "getimagesize" ) ) { ?>
 					<tr>
@@ -935,8 +938,6 @@ function wpsc_options_presentation() {
 						<td>
 							<?php _e( 'Height', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[product_image_height]' class='wpsc_prod_thumb_option' value='<?php echo get_option( 'product_image_height' ); ?>' />
 							<?php _e( 'Width', 'wpsc' ); ?>:<input type='text' size='6' name='wpsc_options[product_image_width]' class='wpsc_prod_thumb_option' value='<?php echo get_option( 'product_image_width' ); ?>' />
-							<a href="<?php echo wp_nonce_url( "admin.php?wpsc_admin_action=mass_resize_thumbnails", 'mass_resize' ); ?>" style='visibility:hidden;' class='wpsc_mass_resize' ><?php _e( "Resize Existing Thumbnails", 'wpsc' ); ?></a>
-							<br />
 						</td>
 					</tr>
 					<tr>

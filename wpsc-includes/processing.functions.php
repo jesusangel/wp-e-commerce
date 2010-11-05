@@ -11,7 +11,6 @@
 function wpsc_currency_display( $price_in, $args = null ) {
 	global $wpdb, $wpsc_currency_data;
 	$currency_code = '';
-
 	$args = apply_filters( 'wpsc_toggle_display_currency_code', $args );
 	$query = shortcode_atts( array(
 		'display_currency_symbol' => true,
@@ -19,12 +18,12 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		'display_currency_code'   => false,
 		'display_as_html'         => true
 	), $args );
+
 	// No decimal point, no decimals
 	if ( false == $query['display_decimal_point'] )
 		$decimals = 0;
 	else
 		$decimals = 2; // default is 2
-
 
 	// Format the price for output
 	$price_out = number_format( (double)$price_in, $decimals, '.', ',' );
@@ -84,7 +83,6 @@ function wpsc_currency_display( $price_in, $args = null ) {
 	} else {
 		$output = "<span class='pricedisplay'>".$output."</span>";
 	}
-	$output = apply_filters( 'wpsc_currency_display', $output );
 
 	// Return results
 	return apply_filters( 'wpsc_currency_display', $output );
@@ -567,12 +565,12 @@ function wpsc_check_stock($state, $product) {
 	global $wpdb;
 	// if quantity is enabled and is zero
 	$out_of_stock = false;
-	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
-	$stock_count = get_product_meta($product->ID, 'stock',true);
 	// only do anything if the quantity is limited.
-	if(($stock_count === '0')) // otherwise, use the stock from the products list table
-		$out_of_stock = true;
-
+	if($product['quantity_limited'] == 1) {
+		if(($product['quantity'] == 0)) { // otherwise, use the stock from the products list table
+			$out_of_stock = true;
+		}
+	}
 	if($out_of_stock === true) {
 		$state['state'] = true;
 		$state['messages'][] = __('This product has no available stock', 'wpsc');
@@ -590,24 +588,14 @@ function wpsc_check_weight($state, $product) {
 	global $wpdb;
 	$custom_shipping = (array)get_option('custom_shipping_options');
 	$has_no_weight = false;
-	$shipping_modules = array();
-	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
 	// only do anything if UPS is on and shipping is used
-	if(array_search('ups', $custom_shipping) !== false)
-		$shipping_modules[] = 'UPS';
-	if(array_search('weightrate', $custom_shipping) !== false)
-		$shipping_modules[] = 'Weight Rate';
-	if(array_search('usps', $custom_shipping) !== false)
-		$shipping_modules[] = 'Weight Rate';
-	
-	
-	if($product_meta['no_shipping'] != 1 && !empty($shipping_modules)) {
-		if($product_meta['weight'] == 0) // otherwise, use the weight from the products list table
+	if((array_search('ups', $custom_shipping) !== false) && ($product['no_shipping'] != 1)) {
+		if(($product['weight'] == 0)) { // otherwise, use the stock from the products list table
 			$has_no_weight = true;
-		
+		}
 		if($has_no_weight === true) {
 			$state['state'] = true;
-			$state['messages'][] = implode(',',$shipping_modules). __(' does not support products without a weight set. Please either disable shipping for this product or give it a weight', 'wpsc');
+			$state['messages'][] = __('UPS does not support products without a weight set. Please either disable shipping for this product or give it a weight', 'wpsc');
 		}
 	}
 	return array('state' => $state['state'], 'messages' => $state['messages']);

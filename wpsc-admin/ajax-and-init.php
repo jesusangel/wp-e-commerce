@@ -1595,11 +1595,20 @@ function wpsc_submit_options( $selected='' ) {
 
 	$previous_currency = get_option( 'currency_type' );
 	
+	$regenerate = false;
+	
+	$regenerate_options = array('single_view_image_height', 'single_view_image_width','wpsc_gallery_image_width','wpsc_gallery_image_height', 'wpsc_crop_thumbnails','product_image_width','product_image_height');
+	
 	//To update options
+	
 	if ( isset( $_POST['wpsc_options'] ) ) {
 
 		foreach ( $_POST['wpsc_options'] as $key => $value ) {
-
+			
+			if ( in_array( $key, $regenerate_options ) && $value != get_option( $key )  ) {
+				$regenerate = true;
+			}
+	
 			if ( $value != get_option( $key ) ) {
 				update_option( $key, $value );
 				$updated++;
@@ -1658,8 +1667,12 @@ function wpsc_submit_options( $selected='' ) {
 			}
 		}
 	}
+	
 	$sendback = wp_get_referer();
 
+	if ( $regenerate ) {
+		$sendback = add_query_arg( array('regenerate' => 'true', 'updated' => $updated), $sendback );
+	}
 	if ( isset( $updated ) ) {
 		$sendback = add_query_arg( 'updated', $updated, $sendback );
 	}
@@ -2268,44 +2281,6 @@ function wpsc_settings_page_ajax() {
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'settings_page_ajax') )
 	add_action( 'admin_init', 'wpsc_settings_page_ajax' );
-
-function wpsc_mass_resize_thumbnails() {
-	global $wpdb;
-	check_admin_referer( 'mass_resize' );
-
-	if ( isset( $_GET['wpsc_options'] ) ) {
-		foreach ( $_GET['wpsc_options'] as $key => $value ) {
-			if ( ($value != get_option( $key )) and (absint( $value ) > 0) ) {
-				update_option( $key, absint( $value ) );
-			}
-		}
-	}
-
-	$height = get_option( 'product_image_height' );
-	$width = get_option( 'product_image_width' );
-
-	$product_data = $wpdb->get_results( "SELECT `product`.`id`, `product`.`image` AS `image_id`, `images`.`image` AS `file`  FROM `" . WPSC_TABLE_PRODUCT_LIST . "` AS `product` INNER JOIN  `" . WPSC_TABLE_PRODUCT_IMAGES . "` AS `images` ON `product`.`image` = `images`.`id` WHERE `product`.`image` > 0 ", ARRAY_A );
-	foreach ( (array)$product_data as $product ) {
-		$image_input = WPSC_IMAGE_DIR . $product['file'];
-		$image_output = WPSC_THUMBNAIL_DIR . $product['file'];
-		if ( ($product['file'] != '') and file_exists( $image_input ) ) {
-			image_processing( $image_input, $image_output, $width, $height );
-			update_product_meta( $product['id'], 'thumbnail_width', $width );
-			update_product_meta( $product['id'], 'thumbnail_height', $height );
-		} else {
-			$wpdb->query( "DELETE FROM `" . WPSC_TABLE_PRODUCT_IMAGES . "` WHERE `id` IN('{$product['image_id']}') LIMIT 1" );
-			$wpdb->query( "UPDATE `" . WPSC_TABLE_PRODUCT_LIST . "` SET `image` = NULL WHERE `id` = '" . $product['id'] . "' LIMIT 1" );
-		}
-	}
-
-	$_SESSION['wpsc_thumbnails_resized'] = true;
-	$sendback = wp_get_referer();
-	$sendback = add_query_arg( 'tab', $_SESSION['wpsc_settings_curr_page'], remove_query_arg( 'tab', $sendback ) );
-	wp_redirect( $sendback );
-	exit();
-}
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'mass_resize_thumbnails') )
-	add_action( 'admin_init', 'wpsc_mass_resize_thumbnails' );
 
 function wpsc_update_variations() {
 	global $wpdb, $user_ID, $wp_query, $wpsc_products, $mode;
