@@ -275,11 +275,13 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 			// construct the full image path
 			$full_image_path = WPSC_IMAGE_DIR.$image_row['image'];
 			$attached_file_path = str_replace($wp_upload_basedir."/", '', $full_image_path);
-
-
-			// construct the full image url
-			$image_url = WPSC_IMAGE_URL.$image_row['image'];
+			$upload_dir = wp_upload_dir();
+			$new_path = $upload_dir['path'].'/'.$image_name.'.'.$image_pathinfo['extension'];
+			copy($full_image_path, $new_path);
 			
+			// construct the full image url
+			$subdir = $upload_dir['subdir'].'/'.$image_name.'.'.$image_pathinfo['extension'];
+			$subdir = substr($subdir , 1);
 			$attachment_id = (int)$wpdb->get_var("SELECT `ID` FROM `{$wpdb->posts}` WHERE `post_title` IN('$image_name') AND `post_parent` IN('$post_id') LIMIT 1");
 
 			// get the image MIME type
@@ -297,20 +299,20 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 					'post_name' => sanitize_title($image_name),
 					'post_mime_type' => $mime_type_data['mime_type'],
 					'menu_order' => absint($image_row['image_order']),
-					'guid' => $image_url
+					'guid' => $new_path
 				);
 				$attachment_id = wp_insert_post($image_post_values);
 			}
-
+			//exit($new_path.' <br />'.$attached_file_path);
 			$image_size_data = @getimagesize($full_image_path);
 			$image_metadata = array(
 				'width' => $image_size_data[0],
 				'height' => $image_size_data[1],
-				'file' => $attached_file_path
+				'file' => $subdir
 			);
 			
 		
-			update_post_meta( $attachment_id, '_wp_attached_file', $attached_file_path );
+			update_post_meta( $attachment_id, '_wp_attached_file', $subdir );
 			update_post_meta( $attachment_id, '_wp_attachment_metadata', $image_metadata);
 
 		}
