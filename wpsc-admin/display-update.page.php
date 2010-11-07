@@ -18,6 +18,12 @@ if ( 0 == count( get_option( 'wpsc-variation_children' ) ) ) {
 	_get_term_hierarchy( 'wpsc-variation' );
 }
 
+// if there's nothing in the children variation cache, refresh it, just to make sure.
+if ( 0 == count( get_option( 'wpsc_product_category_children' ) ) ) {
+	delete_option( 'wpsc_product_category_children' );
+	_get_term_hierarchy( 'wpsc_product_category_children' );
+}
+
 // Check to see if there are any products.
 // if they don't have any, they don't need to update
 if ( get_option( 'wpsc_version' ) < 3.8 || !get_option( 'wpsc_version' ) ) {
@@ -65,12 +71,12 @@ function wpsc_display_update_page() { ?>
 			echo '<br /><br /><strong>WP e-Commerce updated successfully!</strong>';
 			update_option('wpsc_version', 3.8);
 		else:
-	?>
 
-		Your WP e-Commerce database needs to be updated for WP e-Commerce 3.8.  To perform this update, press the button below.  It is highly recommended that you back up your database before performing this update.
+
+		_e('Your WP e-Commerce database needs to be updated for WP e-Commerce 3.8.  To perform this update, press the button below.  It is highly recommended that you back up your database before performing this update.','wpsc'); 
+?>		<br />
 		<br />
-		<br />
-		<em>Note: If the server times out or runs out of memory, just reload this page, the server will pick up where it left off.</em>
+		<em><?php _e('Note: If the server times out or runs out of memory, just reload this page, the server will pick up where it left off.','wpsc'); ?></em>
 		<br />
 		
 		<form action="" method="post" id="setup">

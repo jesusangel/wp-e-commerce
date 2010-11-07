@@ -27,7 +27,7 @@ function wpsc_convert_category_groups() {
 		
 	foreach((array)$categorisation_groups as $cat_group) {
 		$category_id = wpsc_get_meta($cat_group->id, 'category_group_id', 'wpsc_category_group');
-		
+
 		if(!is_numeric($category_id) || ( $category_id < 1)) {
 			$new_category = wp_insert_term( $cat_group->name, 'wpsc_product_category', array('description' => $cat_group->description));
 				if(!is_wp_error($new_category))
@@ -42,10 +42,12 @@ function wpsc_convert_category_groups() {
 			wpsc_update_categorymeta($category_id, 'image', '');
 			wpsc_update_categorymeta($category_id, 'uses_billing_address', 0);
 		}	
+		
 		if(!is_wp_error($new_category))
 		wpsc_convert_categories($category_id, $cat_group->id);
 	}
-
+delete_option("wpsc_product_category_children");
+_get_term_hierarchy('wpsc_product_category');
 }
 
 /**
@@ -242,7 +244,7 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 		if(isset($post_data['meta'])) {
 			$post_data['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
 		}
-		/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax'];; */
+		/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax']; */
 		$post_data['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$product['no_shipping'];
 						
 		foreach($post_data as $meta_key => $meta_value) {
