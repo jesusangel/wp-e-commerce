@@ -1551,15 +1551,17 @@ function wpsc_submit_options( $selected='' ) {
 			update_option( 'wpsc_share_this', 0 );
 
 	}
-	
+	if (empty($_POST['countrylist2']))
+		$selected = 'all';
+		
 	if ( !isset( $_POST['countrylist2'] ) )
 		$_POST['countrylist2'] = '';
 	if ( !isset( $_POST['country_id'] ) )
 		$_POST['country_id'] = '';
 	if ( !isset( $_POST['country_tax'] ) )
 		$_POST['country_tax'] = '';
-
-	if ( $_POST['countrylist2'] != null || $selected != '' ) {
+	
+	if ( $_POST['countrylist2'] != null || !empty($selected) ) {
 		$AllSelected = false;
 		if ( $selected == 'all' ) {
 			$wpdb->query( "UPDATE `" . WPSC_TABLE_CURRENCY_LIST . "` SET visible = '1'" );
@@ -1585,14 +1587,7 @@ function wpsc_submit_options( $selected='' ) {
 				$wpdb->query( "UPDATE `" . WPSC_TABLE_CURRENCY_LIST . "` SET visible = 1  WHERE id = '" . $selected . "' LIMIT 1" );
 			}
 		}
-	}
-//this is to change the base country and tax code for the shop
-	/* OLD CODE PRESERVED - See new taxes system for taxes
-	 * if((is_numeric($_POST['country_id']) && is_numeric($_POST['country_tax']))) {
-	  $wpdb->query("UPDATE `".WPSC_TABLE_CURRENCY_LIST."` SET `tax` = '".$_POST['country_tax']."' WHERE `id` = '".$_POST['country_id']."' LIMIT 1 ;");
-	  } */
-
-
+	} 
 	$previous_currency = get_option( 'currency_type' );
 	
 	$regenerate = false;

@@ -128,7 +128,13 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	if(!isset($post_data['table_rate_price']['state'])) $post_data['table_rate_price']['state'] = '';
 	if($post_data['table_rate_price']['state'] != 1) {
 		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'] = null;
-		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_rate_price'] = null;
+		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] = null;
+	}
+	foreach($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] as $key => $value){
+		if(empty($value)){
+			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'][$key]); 
+			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'][$key]); 
+		} 
 	}
 	
 /*
