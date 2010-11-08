@@ -579,13 +579,20 @@ function wpsc_display_purchlog_shipping_option() {
 }
 
 function wpsc_display_purchlog_paymentmethod() {
-	global $purchlogitem;
-// exit('<pre>'.print_r($purchlogitem->extrainfo, true).'</pre>');
-	if ( $purchlogitem->extrainfo->gateway == 'testmode' ) {
+	global $purchlogitem, $nzshpcrt_gateways;
+	$gateway_name = '';
+	if('wpsc_merchant_testmode' == $purchlogitem->extrainfo->gateway)
 		return 'Manual Payment';
-	} else {
-		return $purchlogitem->extrainfo->gateway;
+		
+	foreach ( (array)$nzshpcrt_gateways as $gateway ) {
+		if ( $gateway['internalname'] == $purchlogitem->extrainfo->gateway )
+			$gateway_name = $gateway['name'];
 	}
+	if( !empty($gateway_name) )
+		return $gateway_name;
+	else
+		return $purchlogitem->extrainfo->gateway;
+
 }
 
 function wpsc_has_purchlog_shipping() {
