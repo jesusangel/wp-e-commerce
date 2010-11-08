@@ -17,6 +17,7 @@ $nzshpcrt_gateways[$num]['form'] = "form_google";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_google";
 $nzshpcrt_gateways[$num]['is_exclusive'] = true;
 $nzshpcrt_gateways[$num]['payment_type'] = "google_checkout";
+$nzshpcrt_gateways[$num]['display_name'] = 'Google Checkout';
 
 function gateway_google($fromcheckout = false){
 	global $wpdb, $wpsc_cart, $wpsc_checkout,$current_user,  $purchlogs;	

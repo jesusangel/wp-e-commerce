@@ -223,9 +223,11 @@ function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
 					  </td>
 					  <td style='border-top: none;'>";
 
-		if ( $payment_gateway_names[$paymentname] != '' ) {
+		if ( !empty($payment_gateway_names[$paymentname])) {
 			$display_name = $payment_gateway_names[$paymentname];
-		} else {
+		} elseif(!empty($selected_gateway_data['display_name'])){
+			$display_name =$selected_gateway_data['display_name'];
+		}else{
 			switch($selected_gateway_data['payment_type']) {
 				case "paypal";
 					$display_name = "PayPal";

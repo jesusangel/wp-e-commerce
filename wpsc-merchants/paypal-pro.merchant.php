@@ -1,11 +1,12 @@
 <?php
 
 $nzshpcrt_gateways[$num] = array(
-	'name'                   => 'Paypal Pro 2.0',
+	'name'                   => 'PayPal Pro 2.0',
 	'api_version'            => 2.0,
 	'class_name'             => 'wpsc_merchant_paypal_pro',
 	'has_recurring_billing'  => true,
 	'wp_admin_cannot_cancel' => true,
+	'display_name'			 => 'PayPal Pro',	
 	'requirements'           => array(
 		'php_version'        => 4.3,    // so that you can restrict merchant modules to PHP 5, if you use PHP 5 features
 		'extra_modules'      => array() // for modules that may not be present, like curl
@@ -34,7 +35,7 @@ $nzshpcrt_gateways[$num] = array(
  */
 class wpsc_merchant_paypal_pro extends wpsc_merchant {
 
-	var $name              = 'Paypal Payments Standard';
+	var $name              = 'PayPal Pro 2.0';
 	var $paypal_ipn_values = array( );
 
 	/**

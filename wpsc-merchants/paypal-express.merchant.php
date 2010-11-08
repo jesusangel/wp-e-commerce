@@ -14,6 +14,7 @@ $nzshpcrt_gateways[$num] = array(
 	'class_name' => 'wpsc_merchant_paypal_express',
 	'has_recurring_billing' => false,
 	'wp_admin_cannot_cancel' => true,
+	'display_name' => 'PayPal Express',
 	'requirements' => array(
 		/// so that you can restrict merchant modules to PHP 5, if you use PHP 5 features
 		'php_version' => 4.3,

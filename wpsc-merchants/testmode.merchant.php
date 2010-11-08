@@ -13,6 +13,7 @@ $nzshpcrt_gateways[$num] = array(
 	'api_version' => 2.0,
 	'class_name' => 'wpsc_merchant_testmode',
 	'has_recurring_billing' => true,
+	'display_name' => 'Manual Payment',	
 	'wp_admin_cannot_cancel' => false,
 	'requirements' => array(
 		 /// so that you can restrict merchant modules to PHP 5, if you use PHP 5 features
