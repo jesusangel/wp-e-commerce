@@ -265,11 +265,11 @@ endif;
 							<h4><?php echo wpsc_checkout_form_name();?></h4>
 						</td>
 					</tr>
-					<?php if(!wpsc_is_shipping_details() && $i <= 1):?>	
+					<?php if(wpsc_is_shipping_details()):?>	
 					<tr class='same_as_shipping_row'>
 						<td colspan ='2'>
 							<input type='checkbox' value='true' name='billing_same_as_shipping' id='billing_same_as_shipping' />
-							<label for='billing_same_as_shipping'><?php _e('Same as shipping address?','wpsc'); ?></label>
+							<label for='billing_same_as_shipping'><?php _e('Shipping address the same as Billing address?','wpsc'); ?></label>
 						</td>
 					</tr>
 					<?php endif;
