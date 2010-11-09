@@ -106,7 +106,7 @@ function admin_menu( $args = null ) {
 	if ( current_user_can( 'manage_options' ) ) {
 		echo '<ul>';
 		echo '<li><a title="People come here to write new pages" href="' . admin_url( 'post-new.php?post_type=page' ) . '">Add Pages</a></li>';
-		echo '<li><a title="People come here to add products" href="' . admin_url( 'admin.php?page=wpsc-edit-products' ) . '">Add Products</a></li>';
+		echo '<li><a title="People come here to add products" href="' . admin_url( 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit' ) . '">Add Products</a></li>';
 		echo '<li><a title="People come here to change themes and widgets settings" href="' . admin_url( 'themes.php' ) . '">Presentation</a></li>';
 		echo '</ul>';
 	}
