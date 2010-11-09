@@ -240,7 +240,7 @@ function wpsc_core_constants_uploads() {
 	if ( false === ( $theme_path = get_transient( 'wpsc_theme_path' ) ) ) {
 
 		// Use the old path if it exists
-		if ( file_exists( WPSC_OLD_THEMES_PATH ) )
+		if ( file_exists( WPSC_OLD_THEMES_PATH.get_option('wpsc_selected_theme') ) )
 			define( 'WPSC_THEMES_PATH', WPSC_OLD_THEMES_PATH );
 
 		// Use the built in theme files
