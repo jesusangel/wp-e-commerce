@@ -130,7 +130,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'] = null;
 		$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] = null;
 	}
-	foreach($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] as $key => $value){
+	foreach((array)$post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'] as $key => $value){
 		if(empty($value)){
 			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['table_price'][$key]); 
 			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'][$key]); 
