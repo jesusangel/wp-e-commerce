@@ -68,7 +68,7 @@ class wpsc_theming {
 	 */
 	function files_exist() {
 		$results = array_diff( $this->templates_to_move, $this->list_of_templates );
-
+		$this->templates_to_move = $results;
 		// If theme already exists, we're set, do nothing
 		// This should also indicate a new install
 		if ( count( $results ) == 0 )
