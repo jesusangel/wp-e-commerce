@@ -71,6 +71,10 @@ function wpsc_cart_total($forDisplay=true) {
    }
 
    $total -= $wpsc_cart->coupons_amount;
+   if ( $total < 0 ) {
+	    $wpsc_cart->coupons_amount += $total;
+	    $total = 0;
+   }
    if($forDisplay){
 // exit('abksd'.get_option('add_plustax'));
       return $wpsc_cart->process_as_currency($total);
@@ -1103,6 +1107,10 @@ class wpsc_cart {
       } else {
         $total = $this->total_price;
       }
+	    if ( $total < 0 ) {
+		    $wpsc_cart->coupons_amount += $total;
+		    $total = 0;
+	    }
       return $total;
   }
 
@@ -1575,6 +1583,11 @@ class wpsc_cart {
       $this->coupons_name = $coupons;
       $this->coupons_amount = $couponAmount;
       $this->calculate_total_price();
+			if ( $this->total_price < 0 ) {
+				$this->coupons_amount += $this->total_price;
+				$this->total_price = null;
+				$this->calculate_total_price();
+			}
    }
 
 }

@@ -741,6 +741,14 @@ function wpsc_change_tax() {
 
 	$tax = $wpsc_cart->calculate_total_tax();
 	$total = wpsc_cart_total();
+	if($wpsc_cart->coupons_amount >= wpsc_cart_total() && !empty($wpsc_cart->coupons_amount)){
+		$total = 0;
+	}
+	if ( $wpsc_cart->total_price < 0 ) { 
+		$wpsc_cart->coupons_amount += $wpsc_cart->total_price; 
+		$wpsc_cart->total_price = null; 
+		$wpsc_cart->calculate_total_price(); 
+	} 
 	ob_start();
 
 	include_once( wpsc_get_template_file_path( 'wpsc-cart_widget.php' ) );
