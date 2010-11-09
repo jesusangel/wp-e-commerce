@@ -340,13 +340,14 @@ class wpec_taxes_controller {
 
 		//begin the input html
 		$returnable = '<input ';
-
 		//loop through the defined settings and add them to the input
 		foreach ( $settings as $key => $setting ) {
 			if ( $key == 'label' ) {
 				continue;
+			}elseif($key == 'value'){
+				$setting = stripslashes($setting);
 			}
-			$returnable .= "{$key}='{$setting}'";
+			$returnable .= $key.'="'.$setting.'"';
 		}// foreach
 		//close the input
 		$returnable .= ' />';
@@ -375,22 +376,23 @@ class wpec_taxes_controller {
 	function wpec_taxes_build_select_options( $input_array, $option_value, $option_text, $option_selected=false, $select_settings='' ) {
 		$returnable = '';
 		$options = '';
-
+//			exit($option_value.'Now an <pre>'.print_r($input_array,1).'</pre>'.$option_selected);
 		foreach ( $input_array as $value ) {
 			//if the selected value exists in the input array skip it and continue processing
 			if ( is_array( $value ) ) {
-				if ( ($value[$option_value] == $option_selected[$option_value]) || ($value[$option_value] == $option_selected) )
 
+				if ( (stripslashes($value[$option_value]) == $option_selected[$option_value]) || (stripslashes($value[$option_value]) == $option_selected) )
 					continue;
 			}
-			$options .= ( is_array( $value )) ? "<option value='{$value[$option_value]}'>{$value[$option_text]}</option>" :
-					"<option value='{$value}'>{$value}</option>";
+			
+			$options .= ( is_array( $value )) ? '<option value="'.stripslashes($value[$option_value]).'">'.stripslashes($value[$option_text]).'</option>' :
+					'<option value="'.stripslashes($value).'">'.stripslashes($value).'</option>';
 		}// foreach
 		if ( !empty( $options ) ) {
 			//add default option - using !== operator so that blank values can be passed as the selected option
 			if ( $option_selected !== false ) {
-				$selected_option = (is_array( $option_selected )) ? "<option selected='selected' value='{$option_selected[$option_value]}'>{$option_selected[$option_text]}</option>" :
-						"<option selected='selected' value='{$option_selected}'>{$option_selected}</option>";
+				$selected_option = (is_array( $option_selected )) ? '<option selected="selected" value="'.stripslashes($option_selected[$option_value]).'">'.stripslashes($option_selected[$option_text]).'</option>' :
+						'<option selected="selected" value="'.$option_selected.'">'.$option_selected.'</option>';
 				$options = $selected_option . $options;
 			}
 			//create select if necessary or just return options
@@ -399,8 +401,10 @@ class wpec_taxes_controller {
 				foreach ( $select_settings as $key => $setting ) {
 					if ( $key == 'label' ) {
 						continue;
+					}elseif( $key == 'value'){
+						$setting = stripslashes($setting);
 					}
-					$returnable .= "{$key}='{$setting}'";
+					$returnable .= $key."='".$setting."'";
 				}// foreach
 				$returnable .= ">{$options}</select>";
 				if ( !empty( $select_settings['label'] ) ) {
