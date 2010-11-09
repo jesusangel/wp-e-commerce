@@ -282,7 +282,7 @@ function form_paypal_express() {
 		$store_currency_code = $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')");
 		$current_currency = get_option('paypal_curcode');
 
-		if(($current_currency == '') && in_array($store_currency_data['code'], $wpsc_gateways['wpsc_merchant_paypal_standard']['supported_currencies']['currency_list'])) {
+		if(($current_currency == '') && in_array($store_currency_data['code'], $wpsc_gateways['wpsc_merchant_paypal_express']['supported_currencies']['currency_list'])) {
 			update_option('paypal_curcode', $store_currency_data['code']);
 			$current_currency = $store_currency_data['code'];
 		}
@@ -295,12 +295,13 @@ function form_paypal_express() {
 			$output .= "<tr>\n <td>Convert to </td>\n ";
 			$output .= "<td>\n <select name='paypal_curcode'>\n";
 	
-			if (!isset($wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'])) 
-				$wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'] = array();
+			if (!isset($wpsc_gateways['wpsc_merchant_paypal_express']['supported_currencies']['currency_list'])) 
+				$wpsc_gateways['wpsc_merchant_paypal_express']['supported_currencies']['currency_list'] = array();
 			
-			$paypal_currency_list = $wpsc_gateways['paypal_multiple']['supported_currencies']['currency_list'];
+			$paypal_currency_list = $wpsc_gateways['wpsc_merchant_paypal_express']['supported_currencies']['currency_list'];
 	
 			$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
+	//		exit("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')".'<pre>'.print_r($wpsc_gateways,1).'</pre>');
 			foreach($currency_list as $currency_item) {
 				$selected_currency = '';
 				if($current_currency == $currency_item['code']) {
