@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the Paypal Payments Standard 2.0 Gateway. 
+ * This is the PayPal Payments Standard 2.0 Gateway. 
  * It uses the wpsc_merchant class as a base class which is handy for collating user details and cart contents.
  */
  
@@ -9,12 +9,12 @@
   * for internal operations.
   */
 $nzshpcrt_gateways[$num] = array(
-	'name' => 'Paypal Payments Standard 2.0',
+	'name' => 'PayPal Payments Standard 2.0',
 	'api_version' => 2.0,
 	'class_name' => 'wpsc_merchant_paypal_standard',
 	'has_recurring_billing' => true,
 	'wp_admin_cannot_cancel' => true,
-	'display_name' => 'Paypal Payments Standard',	
+	'display_name' => 'PayPal Payments Standard',	
 	'requirements' => array(
 		/// so that you can restrict merchant modules to PHP 5, if you use PHP 5 features
 		'php_version' => 4.3,
@@ -38,7 +38,7 @@ $nzshpcrt_gateways[$num] = array(
 
 
 /**
-	* WP eCommerce Paypal Standard Merchant Class
+	* WP eCommerce PayPal Standard Merchant Class
 	*
 	* This is the paypal standard merchant class, it extends the base merchant class
 	*
@@ -47,7 +47,7 @@ $nzshpcrt_gateways[$num] = array(
 	* @subpackage wpsc-merchants
 */
 class wpsc_merchant_paypal_standard extends wpsc_merchant {
-  var $name = 'Paypal Payments Standard';
+  var $name = 'PayPal Payments Standard';
   var $paypal_ipn_values = array();
 
 	/**

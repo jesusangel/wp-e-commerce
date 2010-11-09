@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the Paypal Certified 2.0 Gateway. 
+ * This is the PayPal Certified 2.0 Gateway. 
  * It uses the wpsc_merchant class as a base class which is handy for collating user details and cart contents.
  */
  
@@ -9,7 +9,7 @@
   * for internal operations.
   */
 $nzshpcrt_gateways[$num] = array(
-	'name' => 'Paypal Express Checkout 2.0',
+	'name' => 'PayPal Express Checkout 2.0',
 	'api_version' => 2.0,
 	'class_name' => 'wpsc_merchant_paypal_express',
 	'has_recurring_billing' => false,
@@ -38,7 +38,7 @@ $nzshpcrt_gateways[$num] = array(
 
 
 /**
-	* WP eCommerce Paypal Express Checkout Merchant Class
+	* WP eCommerce PayPal Express Checkout Merchant Class
 	*
 	* This is the paypal express checkout merchant class, it extends the base merchant class
 	*
@@ -47,7 +47,7 @@ $nzshpcrt_gateways[$num] = array(
 	* @subpackage wpsc-merchants
 */
 class wpsc_merchant_paypal_express extends wpsc_merchant {
-  var $name = 'Paypal Express';
+  var $name = 'PayPal Express';
   var $paypal_ipn_values = array();
 
 	/**
@@ -205,7 +205,7 @@ class wpsc_merchant_paypal_express extends wpsc_merchant {
 
 
 /**
- * Saving of Paypal Express Settings
+ * Saving of PayPal Express Settings
  * @access public
  *
  * @since 3.8
@@ -289,7 +289,7 @@ function form_paypal_express() {
 		if($current_currency != $store_currency_code) {
 			$output .= "<tr> <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td> </tr>
 			<tr>
-				<td colspan='2'>".__('If your website uses a currency not accepted by Paypal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using currency you choose below.')."</td>
+				<td colspan='2'>".__('If your website uses a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to PayPal using currency you choose below.')."</td>
 			</tr>\n";
 		
 			$output .= "<tr>\n <td>Convert to </td>\n ";

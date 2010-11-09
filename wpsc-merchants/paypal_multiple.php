@@ -2,7 +2,7 @@
 return;
 exit();
 /*
-$nzshpcrt_gateways[$num]['name'] = 'Paypal Payments Standard';
+$nzshpcrt_gateways[$num]['name'] = 'PayPal Payments Standard';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_multiple';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_multiple';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_multiple";
@@ -488,7 +488,7 @@ function form_paypal_multiple() {
   <tr>
   	<td colspan='2'>
   	<span  class='wpscsmall description'>
-  	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change Send shipping details option to No.</span>
+  	Note: If your checkout page does not have a shipping details section, or if you don't want to send PayPal shipping information. You should change Send shipping details option to No.</span>
   	</td>
   </tr>
   <tr>
@@ -524,7 +524,7 @@ function form_paypal_multiple() {
       <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
   </tr>
   <tr>
-		<td colspan='2'>".sprintf(__('Your website uses <strong>%s</strong>. This currency is not supported by PayPal, please  select a currency using the drop down menu below. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using the currency you choose below.', 'wpsc'), $store_currency_data['currency'])."</td>
+		<td colspan='2'>".sprintf(__('Your website uses <strong>%s</strong>. This currency is not supported by PayPal, please  select a currency using the drop down menu below. Buyers on your site will still pay in your local currency however we will send the order through to PayPal using the currency you choose below.', 'wpsc'), $store_currency_data['currency'])."</td>
 		</tr>\n";
 		
 		$output .= "    <tr>\n";

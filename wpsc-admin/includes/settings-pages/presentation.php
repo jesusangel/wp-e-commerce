@@ -1135,13 +1135,13 @@ function wpsc_options_presentation() {
 					<td>
 						<input type='radio' value='1' name='wpsc_options[wpsc_page_number_position]' id='wpsc_page_number_position1' <?php if ( get_option( 'wpsc_page_number_position' ) == 1 ) {
 							echo "checked='checked'";
-						} ?> /><label for='wpsc_page_number_position1'><?php _e( 'Top', 'wpsc' ); ?></label>&nbsp;
+						} ?> />&nbsp;<label for='wpsc_page_number_position1'><?php _e( 'Top', 'wpsc' ); ?></label> &nbsp;
 						<input type='radio' value='2' name='wpsc_options[wpsc_page_number_position]' id='wpsc_page_number_position2' <?php if ( get_option( 'wpsc_page_number_position' ) == 2 ) {
 							echo "checked='checked'";
-						} ?> /><label for='wpsc_page_number_position2'><?php _e( 'Bottom', 'wpsc' ); ?></label>&nbsp;
+						} ?> />&nbsp;<label for='wpsc_page_number_position2'><?php _e( 'Bottom', 'wpsc' ); ?></label>&nbsp;
 						<input type='radio' value='3' name='wpsc_options[wpsc_page_number_position]' id='wpsc_page_number_position3' <?php if ( get_option( 'wpsc_page_number_position' ) == 3 ) {
 							echo "checked='checked'";
-						} ?> /><label for='wpsc_page_number_position3'><?php _e( 'Both', 'wpsc' ); ?></label>
+						} ?> />&nbsp;<label for='wpsc_page_number_position3'><?php _e( 'Both', 'wpsc' ); ?></label>
 						<br />
 					</td>
 				</tr>

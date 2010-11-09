@@ -124,7 +124,7 @@ function wpsc_options_general() {
 			<h3 class="form_group"><?php _e( 'Currency Settings', 'wpsc' ); ?>:</h3>
 			<table class='wpsc_options form-table'>
 				<tr>
-					<th scope="row"><?php _e( 'Currency type', 'wpsc' ); ?>:</th>
+					<th scope="row"><?php _e( 'Currency Type', 'wpsc' ); ?>:</th>
 				<td>
 					<select name='wpsc_options[currency_type]' onchange='getcurrency(this.options[this.selectedIndex].value);'>
 						<?php
@@ -149,7 +149,7 @@ function wpsc_options_general() {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php _e( 'Currency sign location', 'wpsc' ); ?>:</th>
+				<th scope="row"><?php _e( 'Currency Sign Location', 'wpsc' ); ?>:</th>
 					<td>
 					<?php
 						$currency_sign_location = get_option( 'currency_sign_location' );

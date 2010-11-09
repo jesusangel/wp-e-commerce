@@ -1,5 +1,5 @@
 <?php
-$nzshpcrt_gateways[$num]['name'] = 'Chronopay';
+$nzshpcrt_gateways[$num]['name'] = 'ChronoPay';
 $nzshpcrt_gateways[$num]['internalname'] = 'chronopay';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_chronopay';
 $nzshpcrt_gateways[$num]['form'] = "form_chronopay";
@@ -16,7 +16,7 @@ function gateway_chronopay($separator, $sessionid)
 	$cart_sql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`='".$purchase_log[0]['id']."'";
 	$cart = $wpdb->get_results($cart_sql,ARRAY_A) ; 
   
-	// Chronopay post variables
+	// ChronoPay post variables
 	$chronopay_url = get_option('chronopay_url');
 	
 	$data['product_id'] = get_option('chronopay_product_id');
@@ -70,8 +70,8 @@ function gateway_chronopay($separator, $sessionid)
 	$local_currency_code = $currency_code[0]['code'];
 	$chronopay_currency_code = get_option('chronopay_curcode');
   
-	// Chronopay only processes in the set currency.  This is USD or EUR dependent on what the Chornopay account is set up with.  
-	// This must match the Chronopay settings set up in wordpress.  Convert to the chronopay currency and calculate total.
+	// ChronoPay only processes in the set currency.  This is USD or EUR dependent on what the Chornopay account is set up with.  
+	// This must match the ChronoPay settings set up in wordpress.  Convert to the chronopay currency and calculate total.
 	$curr=new CURRENCYCONVERTER();
 	$decimal_places = 2;
 	$total_price = 0;
@@ -166,7 +166,7 @@ function gateway_chronopay($separator, $sessionid)
 	}
 
 
-	// Create Form to post to Chronopay
+	// Create Form to post to ChronoPay
 	$output = "
 		<form id=\"chronopay_form\" name=\"chronopay_form\" method=\"post\" action=\"$chronopay_url\">\n";
 	
@@ -182,7 +182,7 @@ function gateway_chronopay($separator, $sessionid)
 	if( get_option('chronopay_debug') == 1)
 	{
 		echo ("DEBUG MODE ON!!<br/>");
-		echo("The following form is created and would be posted to Chronopay for processing.  Press submit to continue:<br/>");
+		echo("The following form is created and would be posted to ChronoPay for processing.  Press submit to continue:<br/>");
 		echo("<pre>".htmlspecialchars($output)."</pre>");
 	}
 	

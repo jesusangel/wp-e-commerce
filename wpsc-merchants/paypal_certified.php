@@ -1,11 +1,12 @@
 <?php
 
-$nzshpcrt_gateways[$num]['name'] = 'Paypal Express Checkout';
+$nzshpcrt_gateways[$num]['name'] = 'PayPal Express Checkout';
 $nzshpcrt_gateways[$num]['internalname'] = 'paypal_certified';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_paypal_certified';
 $nzshpcrt_gateways[$num]['form'] = "form_paypal_certified";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_paypal_certified";
 $nzshpcrt_gateways[$num]['payment_type'] = "paypal";
+$nzshpcrt_gateways[$num]['display_name'] = "PayPal Express";
 
 $nzshpcrt_gateways[$num]['supported_currencies']['currency_list'] = array('USD', 'CAD', 'AUD', 'EUR', 'GBP', 'JPY', 'NZD', 'CHF', 'HKD', 'SGD', 'SEK', 'HUF', 'DKK', 'PLN', 'NOK', 'CZK', 'MXN', 'MYR');
 $nzshpcrt_gateways[$num]['supported_currencies']['option_name'] = 'paypal_curcode';
@@ -627,7 +628,7 @@ function form_paypal_certified()
       <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
   </tr>
   <tr>
-		<td colspan='2'>".__('If your website uses a currency not accepted by Paypal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using currency you choose below.')."</td>
+		<td colspan='2'>".__('If your website uses a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to PayPal using currency you choose below.')."</td>
 		</tr>\n";
 		
 		$output .= "    <tr>\n";

@@ -174,7 +174,7 @@ global $wpdb;
 					<td><strong><label for="add_product_buynow"><?php _e("Shortcode:", 'wpsc'); ?></label></strong></td>
 					<td>
 						<input type="radio" id="wpsc_product_shortcode" name="wpsc_product_shortcode" value="1"><?php _e('Add a buy now button', 'wpsc');?>
-						<br /><span class="description"><?php _e('This adds a paypal buy now button for the product selected, this will take your customer straight to Paypal.', 'wpsc') ?></span>
+						<br /><span class="description"><?php _e('This adds a paypal buy now button for the product selected, this will take your customer straight to PayPal.', 'wpsc') ?></span>
 					</td>
 			<?php } ?>
 			

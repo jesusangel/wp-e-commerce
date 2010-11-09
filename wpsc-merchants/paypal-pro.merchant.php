@@ -25,7 +25,7 @@ $nzshpcrt_gateways[$num] = array(
 );
 
 /**
- * WP eCommerce Paypal Standard Merchant Class
+ * WP eCommerce PayPal Standard Merchant Class
  *
  * This is the paypal standard merchant class, it extends the base merchant class
  *
