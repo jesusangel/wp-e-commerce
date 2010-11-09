@@ -107,7 +107,7 @@ class wpsc_merchant_paypal_express extends wpsc_merchant {
 		$_SESSION['paypalExpressMessage']= '<h4>Transaction Canceled</h4>';
 
 		// PayPal Express Checkout Module		
-		$paymentAmount = wpsc_cart_total(false);
+		$paymentAmount = $this->cart_data['total_price'];
 		$_SESSION['paypalAmount'] = $paymentAmount;
 		$_SESSION['paypalexpresssessionid'] = $this->cart_data['session_id'];
 		paypal_express_currencyconverter();
@@ -123,7 +123,7 @@ class wpsc_merchant_paypal_express extends wpsc_merchant {
 		$transact_url = get_option('transact_url');
 		$returnURL =  $transact_url.$separator."sessionid=".$this->cart_data['session_id']."&gateway=paypal";
 		$cancelURL = get_option('shopping_cart_url');
-		$resArray = $this->CallShortcutExpressCheckout ($_SESSION['paypalAmount'], $currencyCodeType, $paymentType, $returnURL, $cancelURL);
+		$resArray = $this->CallShortcutExpressCheckout ($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL);
 		$ack = strtoupper($resArray["ACK"]);
 		
 		if($ack=="SUCCESS")	{
@@ -136,10 +136,10 @@ class wpsc_merchant_paypal_express extends wpsc_merchant {
 			$ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
 			
 			echo "SetExpressCheckout API call failed. ";
-			echo "Detailed Error Message: " . $ErrorLongMsg;
-			echo "Short Error Message: " . $ErrorShortMsg;
-			echo "Error Code: " . $ErrorCode;
-			echo "Error Severity Code: " . $ErrorSeverityCode;
+			echo "<br />Detailed Error Message: " . $ErrorLongMsg;
+			echo "<br />Short Error Message: " . $ErrorShortMsg;
+			echo "<br />Error Code: " . $ErrorCode;
+			echo "<br />Error Severity Code: " . $ErrorSeverityCode;
 		}
 	    exit();
 
