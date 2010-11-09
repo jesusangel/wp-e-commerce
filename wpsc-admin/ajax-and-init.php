@@ -1551,7 +1551,8 @@ function wpsc_submit_options( $selected='' ) {
 			update_option( 'wpsc_share_this', 0 );
 
 	}
-	if (empty($_POST['countrylist2']))
+//	exit('<pre>'.print_r($_POST,1).'</pre>');
+	if (empty($_POST['countrylist2']) && !empty($_POST['wpsc_options']['currency_sign_location']))
 		$selected = 'all';
 		
 	if ( !isset( $_POST['countrylist2'] ) )
@@ -1566,12 +1567,12 @@ function wpsc_submit_options( $selected='' ) {
 		if ( $selected == 'all' ) {
 			$wpdb->query( "UPDATE `" . WPSC_TABLE_CURRENCY_LIST . "` SET visible = '1'" );
 			$AllSelected = true;
-			return;
+			//return;
 		}
 		if ( $selected == 'none' ) {
 			$wpdb->query( "UPDATE `" . WPSC_TABLE_CURRENCY_LIST . "` SET visible = '0'" );
 			$AllSelected = true;
-			return;
+			//return;
 		}
 		if ( $AllSelected != true ) {
 			$countrylist = $wpdb->get_col( "SELECT id FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY country ASC " );
