@@ -67,16 +67,19 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			'currency_code' => $this->cart_data['store_currency'],
 			'lc' => $this->cart_data['store_currency'],
 			'bn' => $this->cart_data['software_name'],
-			'no_shipping' => (int)(bool)get_option('paypal_ship'),
+			
 			'no_note' => '1',
 			'charset' => 'utf-8'
 			);
 			
-		if(get_option('address_override') == 1) {
+		//used to send shipping
+		if((int)(bool)get_option('paypal_ship') == 1) {
 			$paypal_vars += array(
-				'address_override' => '1'
+				'address_override' => '1',
+				'no_shipping' => '0'
 			);
 		}
+
 
 		// User settings to be sent to paypal
 		$paypal_vars += array(
@@ -100,15 +103,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			//'tax' => '',
 			//'custom' => '',
 			'invoice' => $this->cart_data['session_id']
-		);
-
-		if ($this->cart_data['has_discounts']) {
-			// Pass a cart discount to PayPal
-			$paypal_vars += array(
-					'discount_amount_cart' => $this->cart_data['cart_discount_value'],
-					'tax_cart' => $this->cart_data['cart_tax']
 			);
-		}
 
 			if($this->cart_data['is_subscription'] == true) {
 
@@ -180,32 +175,28 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				
 			} else {
 				// Stick the cart item values together here
-				
 				$i = 1;
 				foreach($this->cart_items as $cart_row) {
 					$paypal_vars += array(
 						"item_name_$i" => $cart_row['name'],
 						"amount_$i" => $this->format_price($cart_row['price']),
+						"tax_$i" => $this->format_price($cart_row['tax']),
 						"quantity_$i" => $cart_row['quantity'],
 						"item_number_$i" => $cart_row['product_id'],
-						"shipping_$i" => $this->format_price($cart_row['shipping']), // additional shipping for the the (first item / total of the items)
-						"shipping2_$i" => $this->format_price($cart_row['shipping']), // additional shipping beyond the first item
+						"shipping_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping for the the (first item / total of the items)
+						"shipping2_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping beyond the first item
+						"handling_$i" => '',
 					);
-					// Don't pass item tax amounts if cart has discount
-					if (!$this->cart_data['has_discounts']) {
-						$paypal_vars += array(
-							"tax_$i" => $this->format_price($cart_row['tax'])
-						);
-					}
 					++$i;
 				}
-				$paypal_vars += array(
-				'handling_1' => $this->cart_data['base_shipping'],
-				);
 			}
-
+		
+		//set base shipping
+		$paypal_vars += array(
+			"handling_cart" => $this->cart_data['base_shipping']
+		);		
+		
 		// Payment Type settings to be sent to paypal
-
 		if($this->cart_data['is_subscription'] == true) {
 			$paypal_vars += array(
 				'cmd'=> '_xclick-subscriptions'
@@ -217,6 +208,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				'redirect_cmd' => '_cart'
 			);
 		}
+
 
 		$this->collected_gateway_data = $paypal_vars;
 	}
@@ -262,11 +254,11 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		);
 		
 		$response = wp_remote_post($paypal_url, $options);
-		
 		if(strpos($response['body'], 'VERIFIED') !== false) {
 			$this->paypal_ipn_values = $received_values;
 			$this->session_id = $received_values['invoice'];
 			$this->set_purchase_processed_by_sessionid(3);
+
 		} else {
 			exit("IPN Request Failure");
 		}
@@ -283,14 +275,14 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 				case 'cart':
 				case 'express_checkout':
 					if((float)$this->paypal_ipn_values['mc_gross'] == (float)$this->cart_data['total_price']) {
-						$this->set_transaction_details($this->paypal_ipn_values['txn_id'], 3);
+						$this->set_transaction_details($this->paypal_ipn_values['txn_id'], 2);
 						transaction_results($this->cart_data['session_id'],false);
 					}
 				break;
 
 				case 'subscr_signup':
 				case 'subscr_payment':
-					$this->set_transaction_details($this->paypal_ipn_values['subscr_id'], 3);
+					$this->set_transaction_details($this->paypal_ipn_values['subscr_id'], 2);
 					foreach($this->cart_items as $cart_row) {
 						if($cart_row['is_recurring'] == true) {
 							do_action('wpsc_activate_subscription', $cart_row['cart_item_id'], $this->paypal_ipn_values['subscr_id']);
@@ -350,295 +342,4 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 
 	
 }
-
-
-
-
-
-/**
- * submit_paypal_multiple function.
- * 
- * Use this for now, but it will eventually be replaced with a better form API for gateways
- * @access public
- * @return void
- */
-function submit_paypal_multiple(){
-  if(isset($_POST['paypal_multiple_business'])) {
-    update_option('paypal_multiple_business', $_POST['paypal_multiple_business']);
-	}
-    
-  if(isset($_POST['paypal_multiple_url'])) {
-    update_option('paypal_multiple_url', $_POST['paypal_multiple_url']);
-	}
-    
-  if(isset($_POST['paypal_curcode'])) {
-    update_option('paypal_curcode', $_POST['paypal_curcode']);
-	}
-    
-  if(isset($_POST['paypal_curcode'])) {
-    update_option('paypal_curcode', $_POST['paypal_curcode']);
-	}
-    
-  if(isset($_POST['paypal_ipn'])) {
-    update_option('paypal_ipn', (int)$_POST['paypal_ipn']);
-	}
-
-  if(isset($_POST['address_override'])) {
-    update_option('address_override', (int)$_POST['address_override']);
-	}
-  if(isset($_POST['paypal_ship'])) {
-    update_option('paypal_ship', (int)$_POST['paypal_ship']);
-	}  
-    
-  if (!isset($_POST['paypal_form'])) $_POST['paypal_form'] = array();
-  foreach((array)$_POST['paypal_form'] as $form => $value) {
-    update_option(('paypal_form_'.$form), $value);
-	}
-	
-  return true;
-}
-
-
-
-/**
- * form_paypal_multiple function.
- *
- * Use this for now, but it will eventually be replaced with a better form API for gateways 
- * @access public
- * @return void
- */
-function form_paypal_multiple() {
-  global $wpdb, $wpsc_gateways;
-  $output = "
-  <tr>
-      <td>Username:
-      </td>
-      <td>
-      <input type='text' size='40' value='".get_option('paypal_multiple_business')."' name='paypal_multiple_business' />
-      </td>
-  </tr>
-  <tr>
-      <td>Url:
-      </td>
-      <td>
-      <input type='text' size='40' value='".get_option('paypal_multiple_url')."' name='paypal_multiple_url' /> <br />
-   
-      </td>
-  </tr>
-  ";
-  
-  
-	$paypal_ipn = get_option('paypal_ipn');
-	$paypal_ipn1 = "";
-	$paypal_ipn2 = "";
-	switch($paypal_ipn) {
-		case 0:
-		$paypal_ipn2 = "checked ='checked'";
-		break;
-		
-		case 1:
-		$paypal_ipn1 = "checked ='checked'";
-		break;
-	}
-	$paypal_ship = get_option('paypal_ship');
-	$paypal_ship1 = "";
-	$paypal_ship2 = "";	
-	switch($paypal_ship){
-		case 1:
-		$paypal_ship1 = "checked='checked'";
-		break;
-		
-		case 0:
-		default:
-		$paypal_ship2 = "checked='checked'";
-		break;
-	
-	}
-	$address_override = get_option('address_override');
-	$address_override1 = "";
-	$address_override2 = "";
-	switch($address_override) {
-		case 1:
-		$address_override1 = "checked ='checked'";
-		break;
-		
-		case 0:
-		default:
-		$address_override2 = "checked ='checked'";
-		break;
-	}
-	$output .= "
-   <tr>
-     <td>IPN :
-     </td>
-     <td>
-       <input type='radio' value='1' name='paypal_ipn' id='paypal_ipn1' ".$paypal_ipn1." /> <label for='paypal_ipn1'>".__('Yes', 'wpsc')."</label> &nbsp;
-       <input type='radio' value='0' name='paypal_ipn' id='paypal_ipn2' ".$paypal_ipn2." /> <label for='paypal_ipn2'>".__('No', 'wpsc')."</label>
-     </td>
-  </tr>
-  <tr>
-     <td style='padding-bottom: 0px;'>Send shipping details:
-     </td>
-     <td style='padding-bottom: 0px;'>
-       <input type='radio' value='1' name='paypal_ship' id='paypal_ship1' ".$paypal_ship1." /> <label for='paypal_ship1'>".__('Yes', 'wpsc')."</label> &nbsp;
-       <input type='radio' value='0' name='paypal_ship' id='paypal_ship2' ".$paypal_ship2." /> <label for='paypal_ship2'>".__('No', 'wpsc')."</label>
-
-  	</td>
-  </tr>
-  <tr>
-  	<td colspan='2'>
-  	<span  class='wpscsmall description'>
-  	Note: If your checkout page does not have a shipping details section, or if you don't want to send Paypal shipping information. You should change Send shipping details option to No.</span>
-  	</td>
-  </tr>
-  <tr>
-     <td style='padding-bottom: 0px;'>
-      Address Override:
-     </td>
-     <td style='padding-bottom: 0px;'>
-       <input type='radio' value='1' name='address_override' id='address_override1' ".$address_override1." /> <label for='address_override1'>".__('Yes', 'wpsc')."</label> &nbsp;
-       <input type='radio' value='0' name='address_override' id='address_override2' ".$address_override2." /> <label for='address_override2'>".__('No', 'wpsc')."</label>
-     </td>
-   </tr>
-   <tr>
-  	<td colspan='2'>
-  	<span  class='wpscsmall description'>
-  	This setting affects your PayPal purchase log. If your customers already have a PayPal account PayPal will try to populate your PayPal Purchase Log with their PayPal address. This setting tries to replace the address in the PayPal purchase log with the Address customers enter on your Checkout page.
-  	</span>
-  	</td>
-   </tr>\n";
-
-
-
-	$store_currency_data = $wpdb->get_row("SELECT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id` IN ('".absint(get_option('currency_type'))."')", ARRAY_A);
-	$current_currency = get_option('paypal_curcode');
-	if(($current_currency == '') && in_array($store_currency_data['code'], $wpsc_gateways['wpsc_merchant_paypal_standard']['supported_currencies']['currency_list'])) {
-		update_option('paypal_curcode', $store_currency_data['code']);
-		$current_currency = $store_currency_data['code'];
-	}
-
-		//	exit($current_currency.'<br />'.$store_currency_data['code']);
-	if($current_currency != $store_currency_data['code']) {
-		$output .= "
-  <tr>
-      <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td>
-  </tr>
-  <tr>
-		<td colspan='2'>".sprintf(__('Your website uses <strong>%s</strong>. This currency is not supported by PayPal, please  select a currency using the drop down menu below. Buyers on your site will still pay in your local currency however we will send the order through to Paypal using the currency you choose below.', 'wpsc'), $store_currency_data['currency'])."</td>
-		</tr>\n";
-		
-		$output .= "    <tr>\n";
-
-		
-		
-		$output .= "    <td>Select Currency:</td>\n";
-		$output .= "          <td>\n";
-		$output .= "            <select name='paypal_curcode'>\n";
-
-		$paypal_currency_list = $wpsc_gateways['wpsc_merchant_paypal_standard']['supported_currencies']['currency_list'];
-
-		$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
-
-		foreach($currency_list as $currency_item) {
-			$selected_currency = '';
-			if($current_currency == $currency_item['code']) {
-				$selected_currency = "selected='selected'";
-			}
-			$output .= "<option ".$selected_currency." value='{$currency_item['code']}'>{$currency_item['currency']}</option>";
-		}
-		$output .= "            </select> \n";
-		$output .= "          </td>\n";
-		$output .= "       </tr>\n";
-	}
-
-     
-$output .= "
-   <tr class='update_gateway' >
-		<td colspan='2'>
-			<div class='submit'>
-			<input type='submit' value='".__('Update &raquo;', 'wpsc')."' name='updateoption'/>
-		</div>
-		</td>
-	</tr>
-	
-	<tr class='firstrowth'>
-		<td style='border-bottom: medium none;' colspan='2'>
-			<strong class='form_group'>Forms Sent to Gateway</strong>
-		</td>
-	</tr>
-   
-    <tr>
-      <td>
-      First Name Field
-      </td>
-      <td>
-      <select name='paypal_form[first_name]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_first_name'))."
-      </select>
-      </td>
-  </tr>
-    <tr>
-      <td>
-      Last Name Field
-      </td>
-      <td>
-      <select name='paypal_form[last_name]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_last_name'))."
-      </select>
-      </td>
-  </tr>
-    <tr>
-      <td>
-      Address Field
-      </td>
-      <td>
-      <select name='paypal_form[address]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_address'))."
-      </select>
-      </td>
-  </tr>
-  <tr>
-      <td>
-      City Field
-      </td>
-      <td>
-      <select name='paypal_form[city]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_city'))."
-      </select>
-      </td>
-  </tr>
-  <tr>
-      <td>
-      State Field
-      </td>
-      <td>
-      <select name='paypal_form[state]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_state'))."
-      </select>
-      </td>
-  </tr>
-  <tr>
-      <td>
-      Postal code/Zip code Field
-      </td>
-      <td>
-      <select name='paypal_form[post_code]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_post_code'))."
-      </select>
-      </td>
-  </tr>
-  <tr>
-      <td>
-      Country Field
-      </td>
-      <td>
-      <select name='paypal_form[country]'>
-      ".nzshpcrt_form_field_list(get_option('paypal_form_country'))."
-      </select>
-      </td>
-  </tr> ";
-  
-  return $output;
-}
-
 ?>
