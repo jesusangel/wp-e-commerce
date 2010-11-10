@@ -297,7 +297,7 @@ function wpsc_options_presentation() {
 
 
 				<tr>
-					<th scope="row"><?php _e( 'Show Postage and Packaging', 'wpsc' ); ?>:</th>
+					<th scope="row"><?php _e( 'Display per item shipping', 'wpsc' ); ?>:</th>
 					<td>
 						<?php
 						$display_pnp = get_option( 'display_pnp' );
