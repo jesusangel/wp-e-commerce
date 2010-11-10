@@ -1742,8 +1742,8 @@ class wpsc_cart_item {
 	  else
 		$this->uses_shipping = 1;
 	  
-	  if(isset($product_meta[0]['quantity_limited']))
-		$this->has_limited_stock = (bool)(int)$product_meta['quantity_limited'];
+	  $quantity_limited = get_product_meta($product_id, 'stock', true);
+	  $this->has_limited_stock = (bool)$quantity_limited;
 
       if($this->is_donation == 1)
          $this->unit_price = $this->provided_price;

@@ -756,7 +756,7 @@ function wpsc_stock_control_forms( $product_data='' ) {
 		$product_meta['unpublish_when_none_left'] = ''; ?>
 		
 	<div id='wpsc_stock_control_forms' class='wpsc_stock_control_forms postbox <?php  if(array_search( 'wpsc_stock_control_forms', $product_data['closed_postboxes'] ) !== false) echo 'closed'; else echo ''; ?>' <?php if(array_search( 'wpsc_stock_control_forms', $product_data['hidden_postboxes'] ) !== false) echo 'style="display: none;"'; else echo ''; ?> >
-		<div class="handlediv" title="Click to toggle"><br /></div>
+		<div class="handlediv" title="<?php _e('Click to toggle', 'wpsc'); ?>"><br /></div>
 		<h3 class='hndle'><?php _e( 'Stock Control', 'wpsc' ); ?></h3>
 	    <div class="inside">
 				<label for="wpsc_sku"><abbr title="<?php _e( 'Stock Keeping Unit', 'wpsc' ); ?>">SKU:</abbr></label>
@@ -783,7 +783,7 @@ function wpsc_stock_control_forms( $product_data='' ) {
 							<input type='checkbox' id="inform_when_oos" name='meta[_wpsc_product_metadata][unpublish_when_none_left]' class='inform_when_oos'<?php if( $product_meta['unpublish_when_none_left'] == 1 ) echo ' checked="checked"'; ?> />
 							<label for="inform_when_oos"><?php _e( 'Notify site owner and unpublish this Product if stock runs out', 'wpsc' ); ?></label>
 						</div>
-						If stock runs out, this Product will not be available on the shop unless you untick this box or add more stock.
+						<?php _e('If stock runs out, this Product will not be available on the shop unless you untick this box or add more stock.', 'wpsc'); ?>
 				</div> <?php
 			} else { ?>
 				<div style='display: none;' class='edit_stock'>

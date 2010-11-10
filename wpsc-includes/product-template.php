@@ -655,6 +655,8 @@ function wpsc_check_variation_stock_availability( $product_id, $variations ) {
  * @return boolean - true if the product has stock or does not use stock, false if it does not
  */
 function wpsc_product_has_stock( $id = null ) {
+	global $wpdb;
+	// maybe do wpsc_clear_stock_claims first?
 	if ( is_numeric( $id ) && ( $id > 0 ) )
 		$id = absint( $id );
 	else
@@ -665,13 +667,16 @@ function wpsc_product_has_stock( $id = null ) {
 
 	if ( is_numeric( $stock ) ) {
 		if ( $stock > 0 ) {
-			return true;
+			$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN($id)");
+			if($stock - $claimed_stock > 0)
+				return true;
 		}
 		$variations = get_children( array( "post_type" => "wpsc-product", "post_parent" => $id ) );
 		if ( count( $variations ) ) {
 			foreach ( $variations as $variation ) {
 				$stock = get_post_meta( $variation->ID, '_wpsc_stock', true );
-				if ( is_numeric( $stock ) && $stock > 0 ) {
+				$claimed_stock = $wpdb->get_var("SELECT SUM(`stock_claimed`) FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `product_id` IN($variation->ID)");
+				if ( is_numeric( $stock ) && ($stock - $claimed_stock) > 0 ) {
 					return true;
 				}
 			}
