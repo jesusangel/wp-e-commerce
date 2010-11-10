@@ -403,7 +403,7 @@ function wpsc_update_product_price() {
 
 	echo "old_price=\"" . wpsc_currency_display( wpsc_calculate_price( (int)$_POST['product_id'], $variations, false ), array( 'display_as_html' => false ) ) . "\";\n";
 	echo "numeric_old_price=\"" . number_format( wpsc_calculate_price( (int)$_POST['product_id'], $variations, false ) ) . "\";\n";
-	echo "you_save=\"" . wpsc_currency_display( wpsc_you_save( array( 'product_id' => (int)$_POST['product_id'], 'type' => 'amount', 'variations' => $variations ) ), array( 'display_as_html' => false ) ) . "! (".(int)wpsc_you_save( array( 'product_id' => (int)$_POST['product_id'], 'variations' => $variations ) ) . "%)\";\n";
+	echo "you_save=\"" . wpsc_currency_display( wpsc_you_save( array( 'product_id' => (int)$_POST['product_id'], 'type' => 'amount', 'variations' => $variations ) ), array( 'display_as_html' => false ) ) . "! (".wpsc_you_save( array( 'product_id' => (int)$_POST['product_id'], 'variations' => $variations ) ) . "%)\";\n";
 	echo "price=\"" . wpsc_currency_display( wpsc_calculate_price( (int)$_POST['product_id'], $variations, true ),array( 'display_as_html' => false ) ) . "\";\n";
 	echo "numeric_price=\"" . number_format( wpsc_calculate_price( (int)$_POST['product_id'], $variations, true ) ) . "\";\n";
 	exit();

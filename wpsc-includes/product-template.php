@@ -1580,14 +1580,14 @@ function wpsc_you_save($args = null){
 		}
 
 	if(!$product_id)
-		return false;
+		return 0;
 	if($variations)
 		$sale_price = wpsc_calculate_price( (int)$_POST['product_id'], $variations, true );
 	else
 		$sale_price = get_product_meta($product_id, 'special_price', true);
 	//if sale price is zero, false, or anything similar - return false
 	if(!$sale_price)
-		return false;
+		return 0;
 	
 	if($variations)
 		$regular_price = wpsc_calculate_price( (int)$_POST['product_id'], $variations, false );
@@ -1595,15 +1595,18 @@ function wpsc_you_save($args = null){
 		$regular_price = get_product_meta($product_id, 'price', true);
 	//if actual price is zero, false, or something similar, or is less than sale price - return false
 	if( !$regular_price || !( $sale_price < $regular_price ) )
-		return false;
+		return 0;
 		
 	switch($type){
 		case "amount":
-			return number_format ( $regular_price - $sale_price , 2 );
+			return $regular_price - $sale_price;
 			break;
 			
 		default:
-			return number_format ( ($regular_price - $sale_price) / $regular_price * 100 , 2 );
+			if(number_format ( ($regular_price - $sale_price) / $regular_price * 100 , 2 ) == 100)
+				return (99.99);
+			else
+				return number_format ( ($regular_price - $sale_price) / $regular_price * 100 , 2 );
 	}
 }
 
