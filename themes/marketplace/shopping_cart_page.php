@@ -216,7 +216,7 @@ if(wpsc_cart_item_count() > 0) :
 	<?php endif; ?>
 
 	<h2><?php echo __('Please enter your contact details:', 'wpsc'); ?></h2>
-	<?php/* echo __('Note, Once you press submit, you will need to have your Credit card handy.', 'wpsc'); <br /> */?>
+	<?php /* echo __('Note, Once you press submit, you will need to have your Credit card handy.', 'wpsc'); <br /> */ ?>
 	<?php echo __('Fields marked with an asterisk must be filled in.', 'wpsc'); ?>
 	<?php
 	  if(count($_SESSION['wpsc_checkout_misc_error_messages']) > 0) {
