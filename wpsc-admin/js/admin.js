@@ -522,7 +522,7 @@ jQuery(document).ready( function () {
 				
 			  post_values = "del_img_id="+img_id+"&product_id="+jQuery('#product_id').val();
 				jQuery.post( 'index.php?wpsc_admin_action=delete_images', post_values, function(returned_data) {
-				  console.log(returned_data);
+				  //console.log(returned_data);
 					eval(returned_data);
 					if(typeof(image_id) != "undefined") {
 						jQuery('#gallery_image_'+image_id).children('img.deleteButton').remove();
