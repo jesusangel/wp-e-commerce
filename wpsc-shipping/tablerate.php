@@ -193,11 +193,11 @@ class tablerate {
 
 
 
-
-	/**
+/**
 	 *
 	 *
 	 * @param unknown $cart_item (reference)
+	 * @return unknown
 	 */
 	function get_item_shipping(&$cart_item) {
 
@@ -208,14 +208,33 @@ class tablerate {
 		$weight = $cart_item->weight;
 		$product_id = $cart_item->product_id;
 
-		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1) && (isset($_SESSION['quote_shipping_method']) && $_SESSION['quote_shipping_method'] == 'flatrate')) {
+		$uses_billing_address = false;
+		foreach ($cart_item->category_id_list as $category_id) {
+			$uses_billing_address = (bool)wpsc_get_categorymeta($category_id, 'uses_billing_address');
+			if ($uses_billing_address === true) {
+				break; /// just one true value is sufficient
+			}
+		}
+
+		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+			if ($uses_billing_address == true) {
+				$country_code = $wpsc_cart->selected_country;
+			} else {
+				$country_code = $wpsc_cart->delivery_country;
+			}
+
 			if ($cart_item->uses_shipping == true) {
 				//if the item has shipping
-				$shipping_values = $cart_item->meta[0]['shipping'];
-				if ($country_code == get_option('base_country')) {
+				$additional_shipping = '';
+				if (isset($cart_item->meta[0]['shipping'])) {
+					$shipping_values = $cart_item->meta[0]['shipping'];
+				}
+				if (isset($shipping_values['local']) && $country_code == get_option('base_country')) {
 					$additional_shipping = $shipping_values['local'];
 				} else {
-					$additional_shipping = $shipping_values['international'];
+					if (isset($shipping_values['international'])) {
+						$additional_shipping = $shipping_values['international'];
+					}
 				}
 				$shipping = $quantity * $additional_shipping;
 			} else {
@@ -226,8 +245,8 @@ class tablerate {
 			//if the item is invalid or all items do not have shipping
 			$shipping = 0;
 		}
+		return $shipping;
 	}
-
 
 }
 

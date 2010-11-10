@@ -24,11 +24,6 @@
 * * @return boolean true or false depending on settings>general page
 */
 function wpsc_tax_isincluded() {
-   /*if(get_option('tax_inprice') == false || get_option('tax_inprice') == '0'){
-      return false;
-   }elseif(get_option('tax_inprice')=='1'){
-      return true;
-   }*/
    //uses new wpec_taxes functionality now
    $wpec_taxes_controller = new wpec_taxes_controller();
    return $wpec_taxes_controller->wpec_taxes_isincluded();
@@ -301,6 +296,7 @@ function wpsc_cart_item_quantity_single_prod($id) {
 */
 function wpsc_cart_item_price($forDisplay = true) {
    global $wpsc_cart;
+/*   	exit('<pre>'.print_r($wpsc_cart,1).'</pre>'); */
    if($forDisplay){
       return $wpsc_cart->process_as_currency($wpsc_cart->cart_item->total_price);
    }else{
@@ -668,7 +664,6 @@ class wpsc_cart {
    function wpsc_refresh_cart_items()
    {
       global $wpsc_cart;
-
       if(is_object($wpsc_cart->cart_items))
       {
          foreach($wpsc_cart->cart_items as &$cart_item)
@@ -1716,9 +1711,8 @@ class wpsc_cart_item {
       $weight = wpsc_convert_weight($product_meta[0]["weight"], 'gram', 'pound');
 
       $this->weight = $weight;
-      
       // if we are using table rate price
-      $levels = get_product_meta($this->product_id, 'table_rate_price');
+      $levels = $product_meta[0]['table_rate_price'];
       if (isset($levels["quantity"]) && $levels["quantity"] != '') {
          foreach((array)$levels['quantity'] as $key => $qty) {
             if ($this->quantity >= $qty) {
@@ -1810,8 +1804,7 @@ class wpsc_cart_item {
          $this->file_id = null;
          $this->is_downloadable = false;
       }
-
-
+		
       if ( is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) )
          $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 
