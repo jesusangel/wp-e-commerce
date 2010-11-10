@@ -1040,6 +1040,7 @@ span.rating_saved{
 
 #checkout_page_container p.validation-error {
 	clear:both;	
+	color:red;
 }
 
 #checkout_page_container h3 {

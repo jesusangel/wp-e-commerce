@@ -221,7 +221,7 @@ endif;
 			<p><?php _e('In order to buy from us, you\'ll need an account. Joining is free and easy. All you need is a username, password and valid email address.');?></p>
 			
 			<?php if(!empty($_SESSION['wpsc_checkout_user_error_messages'])): ?>
-				<div class="login_error"> 
+				<p class="validation-error"> 
 					<?php		  
 					foreach($_SESSION['wpsc_checkout_user_error_messages'] as $user_error )
 					  echo $user_error."<br />\n";
@@ -232,9 +232,32 @@ endif;
 			<?php endif; ?>
 					
 			<fieldset class='wpsc_registration_form'>
-				<label><?php _e('Username'); ?>:</label><input type="text" name="log" id="log" value="" size="20"/>
-				<label><?php _e('Password'); ?>:</label><input type="password" name="pwd" id="pwd" value="" size="20" />
-				<label><?php _e('E-mail'); ?>:</label><input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" />
+				<table>
+					<tr>
+						<td>
+							<label><?php _e('Username'); ?>:</label>
+						</td>
+						<td>
+							<input type="text" name="log" id="log" value="" size="20"/>
+						</td>
+					</tr>				
+					<tr>
+						<td>
+							<label><?php _e('Password'); ?>:</label>
+						</td>
+						<td>
+							<input type="password" name="pwd" id="pwd" value="" size="20" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label><?php _e('E-mail'); ?>:</label>
+						</td>
+						<td>
+							<input type="text" name="user_email" id="user_email" value="<?php echo attribute_escape(stripslashes($user_email)); ?>" size="20" />
+						</td>
+					</tr>
+				</table>
 			</fieldset>
 	<?php endif; // closes user login form
 	
