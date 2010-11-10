@@ -35,8 +35,7 @@ function wpsc_install() {
 	if ( !$first_install )
 		wpsc_regenerate_thumbnails();
 
-	if ( get_option( 'wpsc_version' ) == null )
-		add_option( 'wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes' );
+	add_option( 'wpsc_version', WPSC_VERSION, 'wpsc_version', 'yes' );
 
 	// run the create or update code here.
 	wpsc_create_or_update_tables();
@@ -93,7 +92,7 @@ function wpsc_install() {
 	add_option( 'display_pnp', '1', __( 'Display or hide postage and packaging', 'wpsc' ), 'yes' );
 
 	add_option( 'display_specials', '1', __( 'Display or hide specials on the sidebar', 'wpsc' ), 'yes' );
-	add_option( 'do_not_use_shipping', '0', 'do_not_use_shipping', 'yes' );
+	add_option( 'do_not_use_shipping', '1', 'do_not_use_shipping', 'yes' );
 
 	add_option( 'postage_and_packaging', '0', __( 'Default postage and packaging', 'wpsc' ), 'yes' );
 
@@ -127,41 +126,30 @@ function wpsc_install() {
 
 	add_option( 'paypal_multiple_business', '', __( 'paypal business', 'wpsc' ), 'yes' );
 
-	if ( get_option( 'paypal_multiple_url' ) == null ) {
-		add_option( 'paypal_multiple_url', __( 'paypal url', 'wpsc' ), 'yes' );
-		update_option( 'paypal_multiple_url', "https://www.paypal.com/cgi-bin/webscr" );
-	}
+	add_option( 'paypal_multiple_url', "https://www.paypal.com/cgi-bin/webscr" );
 
 	add_option( 'product_ratings', '0', __( 'Show Product Ratings', 'wpsc' ), 'yes' );
 	add_option( 'wpsc_email_receipt', __( 'Thank you for purchasing with %shop_name%, any items to be shipped will be processed as soon as possible, any items that can be downloaded can be downloaded using the links on this page.All prices include tax and postage and packaging where applicable.\r\n You ordered these items:\r\n%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
 	add_option( 'wpsc_email_admin', __( '%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
-	if ( get_option( 'wpsc_selected_theme' ) == '' ) {
-		add_option( 'wpsc_selected_theme', 'default', 'Selected Theme', 'yes' );
-		update_option( 'wpsc_selected_theme', "default" );
-	}
 
-	if ( !get_option( 'product_image_height' ) ) {
-		update_option( 'product_image_height', '148' );
-		update_option( 'product_image_width', '148' );
-	}
+	add_option( 'wpsc_selected_theme', 'default', '', 'yes' );
 
-	if ( !get_option( 'category_image_height' ) ) {
-		update_option( 'category_image_height', '148' );
-		update_option( 'category_image_width', '148' );
-	}
+	add_option( 'product_image_height', '148' );
+	add_option( 'product_image_width', '148' );
 
-	if ( !get_option( 'single_view_image_height' ) ) {
-		update_option( 'single_view_image_height', '148' );
-		update_option( 'single_view_image_width', '148' );
-	}
+	add_option( 'category_image_height', '148' );
+	add_option( 'category_image_width', '148' );
+	
+	add_option( 'single_view_image_height', '148' );
+	add_option( 'single_view_image_width', '148' );
 
-	if ( !get_option( 'wpsc_gallery_image_height' ) ) {
-		update_option( 'wpsc_gallery_image_height', '31' );
-		update_option( 'wpsc_gallery_image_width', '31' );
-	}
+	add_option( 'wpsc_gallery_image_height', '31' );
+	add_option( 'wpsc_gallery_image_width', '31' );
+	
+	add_option( 'wpsc_thousands_separator', ',' );
+	add_option( 'wpsc_decimal_separator', '.' );
 
-	if ( !is_array( get_option( 'custom_gateway_options' ) ) )
-		update_option( 'custom_gateway_options', array( 'testmode' ) );
+	add_option( 'custom_gateway_options', array('wpsc_merchant_testmode'), '', 'yes' );
 
 	add_option( 'wpsc_category_url_cache', array(), '', 'yes' );
 

@@ -26,7 +26,7 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		$decimals = 2; // default is 2
 
 	// Format the price for output
-	$price_out = number_format( (double)$price_in, $decimals, '.', ',' );
+	$price_out = number_format( (double)$price_in, $decimals, get_option('wpsc_decimal_separator'), get_option('wpsc_thousands_separator') );
 
 	// Get currency settings	
 	$currency_type = get_option( 'currency_type' );

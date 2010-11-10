@@ -184,6 +184,14 @@ function wpsc_options_general() {
 						<label for='csl4'><span id='cslchar4'><?php echo $currency_sign; ?></span> 100</label>
 					</td>
 				</tr>
+				<tr>
+				<th scope="row"><?php _e( 'Thousands and decimal separators', 'wpsc' ); ?>:</th>
+					<td>
+						<?php _e( 'Thousands separator', 'wpsc' ); ?>: <input name="wpsc_options[wpsc_thousands_separator]" type="text" maxlength="1" size="1" value="<?php echo get_option( 'wpsc_thousands_separator' ); ?>" /> <br />
+						<?php _e( 'Decimal separator', 'wpsc' ); ?>: <input name="wpsc_options[wpsc_decimal_separator]" type="text" maxlength="1" size="1" value="<?php echo get_option( 'wpsc_decimal_separator' ); ?>" /> <br />
+						<?php _e( 'Preview', 'wpsc' ); ?>: 10<?php echo get_option( 'wpsc_thousands_separator' ); ?>000<?php echo get_option( 'wpsc_decimal_separator' ); ?>00
+					</td>
+				</tr>
 			</table>
 		<?php do_action('wpsc_general_settings_page'); ?>
 			<div class="submit">

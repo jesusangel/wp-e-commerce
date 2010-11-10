@@ -71,16 +71,10 @@ function wpsc_options_shipping() {
 									//	exit($do_not_use_shipping);
 									$do_not_use_shipping1 = "";
 									$do_not_use_shipping2 = "";
-									switch ( $do_not_use_shipping ) {
-										case 1:
-											$do_not_use_shipping1 = "checked ='checked'";
-											break;
-
-										case 0:
-										default:
-											$do_not_use_shipping2 = "checked ='checked'";
-											break;
-									}
+									if( $do_not_use_shipping )
+										$do_not_use_shipping1 = "checked ='checked'";
+									else
+										$do_not_use_shipping2 = "checked ='checked'";
 									?>
 									<input type='radio' value='0' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping2' <?php echo $do_not_use_shipping2; ?> /> <label for='do_not_use_shipping2'><?php _e( 'Yes', 'wpsc' ); ?></label>&nbsp;
 									<input type='radio' value='1' name='wpsc_options[do_not_use_shipping]' id='do_not_use_shipping1' <?php echo $do_not_use_shipping1; ?> /> <label for='do_not_use_shipping1'><?php _e( 'No', 'wpsc' ); ?></label><br />
