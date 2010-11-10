@@ -453,7 +453,7 @@ function wpsc_user_details() {
 			echo " </td>";
 
 			echo " <td>";
-			_e( 'P&amp;P', 'wpsc' );
+			_e( 'Shipping', 'wpsc' );
 			echo " </td>";
 
 			echo " <td>";

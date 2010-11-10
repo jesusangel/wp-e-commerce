@@ -84,12 +84,13 @@ function wpsc_theme_presentation_page_metabox(){
 				<ul>
 				<?php
 					foreach($wpsc_templates as $file){
+						$id = str_ireplace('.', '_', $file);
 						$selected = '';
 						if(false !== array_search($file, (array)$themes_location))
 							$selected = 'checked="checked"';
 						?>
-						<li><input type='checkbox' <?php echo $selected; ?> value='<?php echo $file ?>' name='wpsc_templates_to_port[]' />
-						<?php echo $file; ?></li>
+						<li><input type='checkbox' id='<?php echo $id; ?>' <?php echo $selected; ?> value='<?php echo $file ?>' name='wpsc_templates_to_port[]' />
+						<label for='<?php echo $id; ?>'><?php echo $file; ?></label></li>
 				<?php }	 ?>
 				 </ul>
 				 <p>
