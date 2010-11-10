@@ -44,7 +44,6 @@ function wpsc_options_import() {
 				<div class='metabox-holder' style='width:90%'>
 					<input type='hidden' name='csv_action' value='import'>
 <?php
-				//	exit('<pre>'.print_r($_SESSION['cvs_data'], true).'</pre>');
 				foreach ( (array)$data1 as $key => $datum ) {
 ?>
 					<div style='width:100%;' class='postbox'>
@@ -96,7 +95,6 @@ function wpsc_options_import() {
 		global $wpdb;
 
 		$cvs_data = $_SESSION['cvs_data'];
-		//exit('<pre>'.print_r($_SESSION['cvs_data'], true).'</pre>');
 		$column_data = $_POST['column'];
 		$value_data = $_POST['value_name'];
 		$name = array( );
@@ -137,13 +135,13 @@ function wpsc_options_import() {
 					'_wpsc_price' => str_replace( '$', '', $cvs_data2['price'][$i] ),
 					'_wpsc_sku' => $cvs_data2['sku'][$i],
 					'_wpsc_stock' => $cvs_data2['quantity'][$i],
+					'_wpsc_limited_stock' => $cvs_data2['quantity_limited'][$i],
 					'_wpsc_product_metadata' => array(
 						'weight' => $cvs_data2['weight'][$i],
 						'weight_unit' => $cvs_data2['weight_unit'][$i],
 					)
 				)
 			);
-
 			$product_columns = wpsc_sanitise_product_forms( $product_columns );
 			wpsc_insert_product( $product_columns );
 		}
