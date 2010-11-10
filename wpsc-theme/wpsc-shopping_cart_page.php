@@ -65,9 +65,7 @@ endif;
             </form>
          </td>
 
-         <?php if(wpsc_uses_shipping()): ?>
-
-         <?php endif; ?>
+       
             <td><?php echo wpsc_cart_single_item_price(); ?></td>
          <td class="wpsc_product_price wpsc_product_price_<?php echo wpsc_the_cart_item_key(); ?>"><span class="pricedisplay"><?php echo wpsc_cart_item_price(); ?></span></td>
 
@@ -102,8 +100,9 @@ endif;
    <?php endif; ?>
    </table>
    <!-- cart contents table close -->
-
-   <p class="wpsc_cost_before"><?php _e('Cost before shipping = ','wpsc'); ?> <?php echo wpsc_cart_total_widget(false,false,false);?></p>
+  <?php if(wpsc_uses_shipping()): ?>
+	   <p class="wpsc_cost_before"><?php _e('Cost before shipping = ','wpsc'); ?> <?php echo wpsc_cart_total_widget(false,false,false);?></p>
+   <?php endif; ?>
    <?php  //this HTML dispalys the calculate your order HTML   ?>
 
    <?php if(wpsc_has_noca_message()): ?>
@@ -428,20 +427,21 @@ endif;
       </table>
 
    <table  class='wpsc_checkout_table table-4'>
-      <tr>
-         <td class='wpsc_total_price_and_shipping'colspan='2'>
-            <h4><?php _e('Total Price with Shipping','wpsc'); ?></h4>
-         </td>
-      </tr>
       <?php if(wpsc_uses_shipping()) : ?>
-      <tr class="total_price total_shipping">
-         <td class='wpsc_totals'>
-            <?php _e('Total Shipping', 'wpsc'); ?>
-         </td>
-         <td class='wpsc_totals'>
-            <span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
-         </td>
-      </tr>
+	      <tr>
+	         <td class='wpsc_total_price_and_shipping'colspan='2'>
+	            <h4><?php _e('Total Price with Shipping','wpsc'); ?></h4>
+	         </td>
+	      </tr>
+	
+	      <tr class="total_price total_shipping">
+	         <td class='wpsc_totals'>
+	            <?php _e('Total Shipping', 'wpsc'); ?>
+	         </td>
+	         <td class='wpsc_totals'>
+	            <span id="checkout_shipping" class="pricedisplay checkout-shipping"><?php echo wpsc_cart_shipping(); ?></span>
+	         </td>
+	      </tr>
       <?php endif; ?>
 
      <?php if(wpsc_uses_coupons() && (wpsc_coupon_amount(false) > 0)): ?>
