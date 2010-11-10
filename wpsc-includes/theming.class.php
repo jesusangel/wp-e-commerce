@@ -1,5 +1,14 @@
 <?php
-
+function wpsc_move_theme_images(){
+	$image_dir = WPSC_CORE_THEME_PATH.'wpsc-images';
+	$end_location = trailingslashit( get_stylesheet_directory() ).'wpsc-images';
+	@mkdir( $end_location );
+	$imgdr = opendir($image_dir);
+	while ( false !== ( $file = readdir( $imgdr )) ) {
+		@ copy( $image_dir . '/' . $file, $end_location . '/' . $file );
+	}
+	closedir( $imgdr );
+}
 /**
  * WP eCommerce theme porting class
  *
@@ -144,6 +153,8 @@ class wpsc_theming {
 
 		while ( false !== ( $file = readdir( $dh ) ) ) {
 			if ( $file != "." && $file != ".." && !strstr( $file, ".svn" ) && !strstr( $file, "images" ) && ( strstr( $file, 'wpsc-' ) || strstr($file, '.css') ) ) {
+				if('wpsc-default.css' == $file)
+					wpsc_move_theme_images();
 				if ( in_array( $file, $this->templates_to_move ) ) {
 					if ( !strstr( $file, "functions" ) && !strstr( $file, "widget" ) ) {
 						$file_data = file_get_contents( $old . "/" . $file );
