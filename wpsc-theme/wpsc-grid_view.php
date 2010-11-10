@@ -71,7 +71,7 @@ $image_height = get_option('product_image_height');
 				<?php else: ?> 
 					<div class="item_no_image">
 									<a href="<?php echo wpsc_the_product_permalink(); ?>">
-									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_CORE_THEME_URL; ?>images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
+									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />
 									</a>
 					</div><!--close item_no_image-->
 				<?php endif; ?> 
@@ -135,7 +135,7 @@ $image_height = get_option('product_image_height');
 							
 							
 										<div class="wpsc_loading_animation">
-											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_THEME_URL; ?>images/indicator.gif" />
+											<img title="Loading" alt="Loading" src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/indicator.gif" />
 											<?php _e('Updating cart...', 'wpsc'); ?>
 										</div><!--close wpsc_loading_animation-->
                     </form>                    

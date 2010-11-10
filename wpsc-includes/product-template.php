@@ -223,7 +223,7 @@ function wpsc_product_no_image_fallback( $image_url = '' ) {
 	if ( !empty( $image_url ) )
 		return $image_url;
 	else
-		return WPSC_CORE_THEME_URL . '/images/noimage.png';
+		return WPSC_CORE_THEME_URL . '/wpsc-images/noimage.png';
 }
 add_filter( 'wpsc_product_image', 'wpsc_product_no_image_fallback' );
 

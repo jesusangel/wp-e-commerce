@@ -135,7 +135,7 @@ Author URI: http://instinct.co.nz
 }
 
 .default_product_display span.sale {
-	background:url(images/sale.png) no-repeat scroll 0 0 transparent;
+	background:url(wpsc-images/sale.png) no-repeat scroll 0 0 transparent;
 	position:absolute;
 	top:-10px;
 	left:-10px;
@@ -277,7 +277,7 @@ Author URI: http://instinct.co.nz
 .default_product_display .in_stock,
 .single_product_display .in_stock {
 	position: relative;
-	background-image: url(images/yes_stock.png);
+	background-image: url(wpsc-images/yes_stock.png);
 	background-repeat: no-repeat;
 	padding-left: 20px;
 	left:-5px;
@@ -286,7 +286,7 @@ Author URI: http://instinct.co.nz
 .default_product_display .out_of_stock,
 .single_product_display .out_of_stock {
 	position: relative;
-	background-image: url(images/outofstock.png);
+	background-image: url(wpsc-images/outofstock.png);
 	background-repeat: no-repeat;
 	padding-left: 20px;
 	left:-5px;
@@ -314,7 +314,7 @@ Author URI: http://instinct.co.nz
 	font-weight:bold;
 	font-size:14px;
 	color:#C33;	
-	background:url(images/outofstock.png) no-repeat scroll 0 2px transparent;
+	background:url(wpsc-images/outofstock.png) no-repeat scroll 0 2px transparent;
 	padding-left:18px;
 	margin:0;
 }
@@ -457,7 +457,7 @@ Author URI: http://instinct.co.nz
 }
 
 #list_view_products_page_container span.sale {
-	background:url(images/sale.png) no-repeat scroll 0 0 transparent;
+	background:url(wpsc-images/sale.png) no-repeat scroll 0 0 transparent;
 	position:absolute;
 	top:-3px;
 	left:-14px;
@@ -742,7 +742,7 @@ table.list_productdisplay p.soldout {
 	font-weight:bold;
 	font-size:14px;
 	color:#C33;	
-	background:url(images/outofstock.png) no-repeat scroll 0 5px transparent;
+	background:url(wpsc-images/outofstock.png) no-repeat scroll 0 5px transparent;
 	padding-left:18px;
 }
 
@@ -780,16 +780,16 @@ table.list_productdisplay p.soldout {
 	background-position:0 0;
 	display:block;
 	height:100%;
-	background:transparent url(images/grey-star.gif) no-repeat scroll 0 0;
+	background:transparent url(wpsc-images/grey-star.gif) no-repeat scroll 0 0;
 	outline: none;
 }
 .wpsc_product_rating .star a:hover {
 	background-position:0 0;
-	background:transparent url(images/gold-star.gif) no-repeat scroll 0 0;
+	background:transparent url(wpsc-images/gold-star.gif) no-repeat scroll 0 0;
 }
 .wpsc_product_rating .star a.selected {
 	background-position:0 0;
-	background:transparent url(images/gold-star.gif) no-repeat scroll 0 0;
+	background:transparent url(wpsc-images/gold-star.gif) no-repeat scroll 0 0;
 }
 .wpsc_product_rating .star a, .wpsc_product_rating .star a:focus {
 	outline: none;
@@ -927,7 +927,7 @@ span.rating_saved{
 }
 
 .shopping-cart-wrapper .remove_button {
-	background:url(images/delete.png) no-repeat scroll 0 4px transparent;
+	background:url(wpsc-images/delete.png) no-repeat scroll 0 4px transparent;
 	width:14px;
 	text-indent:-9999px;
 	border:none;
@@ -954,7 +954,7 @@ span.rating_saved{
 
 .shopping-cart-wrapper .shoppingcart table tbody td.product-name{
 	padding-left:10px;
-	background-image: url(images/bulletpoint.gif);
+	background-image: url(wpsc-images/bulletpoint.gif);
 	background-repeat: no-repeat;
 	background-position: 0 12px;
 	text-align: left;
