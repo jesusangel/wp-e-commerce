@@ -37,21 +37,21 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 		extract( $args );
 
 		// Create fancy collapser
-		if ( get_option( 'show_sliding_cart' ) == 1 ) {
+		if ( $instance['show_sliding_cart'] == 1 ) {
 			if ( is_numeric( $_SESSION['slider_state'] ) ) {
 				if ( $_SESSION['slider_state'] == 0 ) {
 					$collapser_image = 'plus.png';
 				} else {
 					$collapser_image = 'minus.png';
 				}
-				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_CORE_IMAGES_URL . '/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
+				$fancy_collapser = ' <a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_CORE_IMAGES_URL . '/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
 			} else {
 				if ( $_SESSION['nzshpcrt_cart'] == null ) {
 					$collapser_image = 'plus.png';
 				} else {
 					$collapser_image = 'minus.png';
 				}
-				$fancy_collapser = '<a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_CORE_IMAGES_URL . '/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
+				$fancy_collapser = ' <a href="#" onclick="return shopping_cart_collapser()" id="fancy_collapser_link"><img src="' . WPSC_CORE_IMAGES_URL . '/' . $collapser_image . '" title="" alt="" id="fancy_collapser" /></a>';
 			}
 		} else {
 			$fancy_collapser = '';
@@ -108,7 +108,7 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 
 		$instance = $old_instance;
 		$instance['title']  = strip_tags( $new_instance['title'] );
-
+		$instance['show_sliding_cart']  = strip_tags( $new_instance['show_sliding_cart'] );
 		return $instance;
 	}
 
@@ -122,17 +122,29 @@ class WP_Widget_Shopping_Cart extends WP_Widget {
 
 		// Defaults
 		$instance = wp_parse_args( (array)$instance, array(
-			'title' => __( 'Shopping Cart', 'wpsc' )
+			'title' => __( 'Shopping Cart', 'wpsc' ),
+			'show_sliding_cart' => 0
 		) );
 
 		// Values
 		$title = esc_attr( $instance['title'] );
-
+		$show_sliding_cart = esc_attr( $instance['show_sliding_cart'] );
+		if( 1 == $show_sliding_cart)
+			$show_sliding_cart = 'checked="checked"';
+		else
+			$show_sliding_cart = '';
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
+		<input type='hidden' name="<?php echo $this->get_field_name( 'show_sliding_cart' ); ?>" value='0' />
+		<p>
+			
+			<label for="<?php echo $this->get_field_id('show_sliding_cart'); ?>"><?php _e( 'Use Sliding Cart:' ); ?></label>
+			<input id="<?php echo $this->get_field_id( 'show_sliding_cart' ); ?>" name="<?php echo $this->get_field_name( 'show_sliding_cart' ); ?>" type="checkbox" value="1" <?php echo $show_sliding_cart; ?> />
+		</p>
+		
 		<?php
 	}
 }

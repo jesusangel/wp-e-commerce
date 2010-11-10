@@ -215,10 +215,15 @@ function wpsc_options_presentation() {
 						<input type='radio' value='0' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow1' <?php echo $addtocart_or_buynow1; ?> />
 						<label for='addtocart_or_buynow1'><?php _e( 'Add To Cart', 'wpsc' ); ?></label> &nbsp;<br />			
 				<?php $selected_gateways = get_option( 'custom_gateway_options' );
-					if (in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways )){ ?>
-						<input type='radio' value='1' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow2' <?php echo $addtocart_or_buynow2; ?> />
-						<label for='addtocart_or_buynow2'><?php _e( 'Buy Now', 'wpsc' ); ?></label>
-				<?php  } ?>
+					$disable_buy_now = '';
+					$message = '';
+					if (!in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways )){ 
+							$disable_buy_now = 'disabled="disabled"';
+							$message = __('Buy Now Button only works for Paypal Standard, please activate Paypal Standard to enable this option.','wpsc');				
+					} ?>
+						<input <?php echo $disable_buy_now; ?> type='radio' value='1' name='wpsc_options[addtocart_or_buynow]' id='addtocart_or_buynow2' <?php echo $addtocart_or_buynow2; ?> />
+						<label for='addtocart_or_buynow2'><?php _e( 'Buy Now', 'wpsc' ); ?></label><br />
+						<?php echo $message; ?>
 					</td>
 				</tr>
 
@@ -777,31 +782,6 @@ function wpsc_options_presentation() {
 
 							</p>
 						</div>
-					</td>
-				</tr>
-
-
-				<tr>
-					<th scope="row">
-						<?php _e( 'Use Sliding Cart', 'wpsc' ); ?>:
-					</th>
-					<td>
-<?php
-						$display_pnp = get_option( 'show_sliding_cart' );
-						$show_sliding_cart1 = "";
-						$show_sliding_cart2 = "";
-						switch ( $display_pnp ) {
-							case 0:
-								$show_sliding_cart2 = "checked ='checked'";
-								break;
-
-							case 1:
-								$show_sliding_cart1 = "checked ='checked'";
-								break;
-						}
-?>
-						<input type='radio' value='1' name='wpsc_options[show_sliding_cart]' id='show_sliding_cart1' <?php echo $show_sliding_cart1; ?> /> <label for='show_sliding_cart1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
-						<input type='radio' value='0' name='wpsc_options[show_sliding_cart]' id='show_sliding_cart2' <?php echo $show_sliding_cart2; ?> /> <label for='show_sliding_cart2'><?php _e( 'No', 'wpsc' ); ?></label>
 					</td>
 				</tr>
 
