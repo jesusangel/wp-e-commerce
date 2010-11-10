@@ -289,7 +289,7 @@ function form_paypal_express() {
 		if($current_currency != $store_currency_code) {
 			$output .= "<tr> <td colspan='2'><strong class='form_group'>".__('Currency Converter')."</td> </tr>
 			<tr>
-				<td colspan='2'>".__('If your website uses a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will send the order through to PayPal using currency you choose below.')."</td>
+				<td colspan='2'>".__('Your website is using a currency not accepted by PayPal, select an accepted currency using the drop down menu bellow. Buyers on your site will still pay in your local currency however we will convert the currency and send the order through to PayPal using the currency you choose below.')."</td>
 			</tr>\n";
 		
 			$output .= "<tr>\n <td>Convert to </td>\n ";
