@@ -122,8 +122,8 @@ class wpsc_breadcrumbs {
 		$this->breadcrumbs = array();
 
 		$query_data = Array();
-		if ( isset($wp_query->query_vars['wpsc-product'])) {
-			$query_data['product'] = $wp_query->query_vars['wpsc-product'];
+		if ( isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && 1 == $wp_query->query_vars['posts_per_page']) {
+			$query_data['product'] = $wp_query->post->post_title;
 		}
 		if ( isset($wp_query->query_vars['term']) ) {
 			$query_data['category'] = $wp_query->query_vars['term']; 
@@ -136,6 +136,8 @@ class wpsc_breadcrumbs {
 				'slug' => $query_data['product']
 			);
 		}
+		$categories = wp_get_object_terms( $wp_query->post->ID , 'wpsc_product_category' );
+		$query_data['category'] = $categories[0]->slug;
 		
 		if(isset($query_data['category'])) {
 			$term_data = get_term_by('slug', $query_data['category'], 'wpsc_product_category');
