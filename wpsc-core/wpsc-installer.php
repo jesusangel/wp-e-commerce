@@ -58,12 +58,6 @@ function wpsc_install() {
 	add_option( 'show_thumbnails', 1, __( 'Show Thumbnails', 'wpsc' ), "yes" );
 	add_option( 'show_thumbnails_thickbox', 1, __( 'Use Thickbox Effect for product images', 'wpsc' ), "yes" );
 
-	add_option( 'product_image_width', '', __( 'product image width', 'wpsc' ), 'yes' );
-	add_option( 'product_image_height', '', __( 'product image height', 'wpsc' ), 'yes' );
-
-	add_option( 'category_image_width', '', __( 'product group image width', 'wpsc' ), 'yes' );
-	add_option( 'category_image_height', '', __( 'product group image height', 'wpsc' ), 'yes' );
-
 	add_option( 'product_list_url', '', __( 'The location of the product list', 'wpsc' ), 'yes' );
 	add_option( 'shopping_cart_url', '', __( 'The location of the shopping cart', 'wpsc' ), 'yes' );
 	add_option( 'checkout_url', '', __( 'The location of the checkout page', 'wpsc' ), 'yes' );
@@ -133,18 +127,18 @@ function wpsc_install() {
 	add_option( 'wpsc_email_admin', __( '%product_list%%total_shipping%%total_price%', 'wpsc' ), 'yes' );
 
 	add_option( 'wpsc_selected_theme', 'default', '', 'yes' );
-
-	add_option( 'product_image_height', '148' );
-	add_option( 'product_image_width', '148' );
-
-	add_option( 'category_image_height', '148' );
-	add_option( 'category_image_width', '148' );
 	
-	add_option( 'single_view_image_height', '148' );
-	add_option( 'single_view_image_width', '148' );
+	add_option( 'product_image_height', 148);
+	add_option( 'product_image_width', 148);
 
-	add_option( 'wpsc_gallery_image_height', '31' );
-	add_option( 'wpsc_gallery_image_width', '31' );
+	add_option( 'category_image_height', 148 );
+	add_option( 'category_image_width', 148 );
+	
+	add_option( 'single_view_image_height', 148 );
+	add_option( 'single_view_image_width', 148 );
+
+	add_option( 'wpsc_gallery_image_height', 31 );
+	add_option( 'wpsc_gallery_image_width', 31 );
 	
 	add_option( 'wpsc_thousands_separator', ',' );
 	add_option( 'wpsc_decimal_separator', '.' );

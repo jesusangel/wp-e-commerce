@@ -69,28 +69,51 @@ global $wpsc_query, $wpdb, $wp_query;
 			<?php endif; ?>
 		
 			<div class="default_product_display product_view_<?php echo wpsc_the_product_id(); ?> <?php echo wpsc_category_class(); ?> group">      
-        			<?php if(wpsc_show_thumbnails()) :?>
-						<div class="imagecol">
-							<?php if(wpsc_the_product_thumbnail()) :
-							?>
-								<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="<?php echo wpsc_the_product_image_link_classes(); ?>" href="<?php echo wpsc_the_product_image(); ?>">
-									<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
-
-								</a>
-							<?php else: ?>
-									<a href="<?php echo wpsc_the_product_permalink(); ?>">
-									<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />	
-									</a>
-							<?php endif; ?>
-							<?php
-							if(gold_cart_display_gallery()) :					
-								echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
-							endif;
-							?>	
-						</div><!--close imagecol-->
-					<?php endif; ?>
-				<?php if(wpsc_product_on_special()) : ?><span class="sale"><?php _e('Sale', 'wpsc'); ?></span><?php endif; ?>		
 					<div class="productcol">
+						<?php if(wpsc_show_thumbnails()) :?>
+							<div class="imagecol" id="imagecol_<?php echo wpsc_the_product_id(); ?>">
+								<?php if(wpsc_the_product_thumbnail()) :
+								?>
+									<a rel="<?php echo str_replace(array(" ", '"',"'", '&quot;','&#039;'), array("_", "", "", "",''), wpsc_the_product_title()); ?>" class="<?php echo wpsc_the_product_image_link_classes(); ?>" href="<?php echo wpsc_the_product_image(); ?>">
+										<img class="product_image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo wpsc_the_product_thumbnail(); ?>"/>
+	
+									</a>
+								<?php else: ?>
+										<a href="<?php echo wpsc_the_product_permalink(); ?>">
+										<img class="no-image" id="product_image_<?php echo wpsc_the_product_id(); ?>" alt="No Image" title="<?php echo wpsc_the_product_title(); ?>" src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/noimage.png" width="<?php echo get_option('product_image_width'); ?>" height="<?php echo get_option('product_image_height'); ?>" />	
+										</a>
+								<?php endif; ?>
+								<?php
+								if(gold_cart_display_gallery()) :					
+									echo gold_shpcrt_display_gallery(wpsc_the_product_id(), true);
+								endif;
+								?>	
+							</div><!--close imagecol-->
+							<style>
+								#imagecol_<?php echo wpsc_the_product_id(); ?> {
+									width: <?php echo get_option('product_image_width')+8; ?>px;
+									<?php
+									$args = array(
+										'post_type' => 'attachment',
+										'post_parent' => wpsc_the_product_id(),
+										'post_mime_type' => 'image',
+										'numberposts' => -1
+										); 
+									$attachments = get_posts($args);
+									if( gold_cart_display_gallery() )
+										$height = ( ceil ( count($attachments) * (get_option( 'wpsc_gallery_image_width' )+6) / (get_option('product_image_width')+6) ) * ( get_option( 'wpsc_gallery_image_width' ) + 3 ) ) + get_option('product_image_width') ;
+									else
+										$height = get_option('product_image_width');
+									?>
+									height: <?php echo $height; ?>px;
+									float:left;
+								}
+								#default_products_page_container .imagecol img, #list_view_products_page_container img, #grid_view_products_page_container img{
+									max-width:<?php echo get_option('product_image_width'); ?>px;
+									max-height:<?php echo get_option('product_image_height'); ?>px;
+								}
+							</style>
+						<?php endif; ?>
 						<h2 class="prodtitle">
 							<?php if(get_option('hide_name_link') == 1) : ?>
 								<?php echo wpsc_the_product_title(); ?>
@@ -216,6 +239,7 @@ global $wpsc_query, $wpdb, $wp_query;
 						
 					<?php // */ ?>
 				</div><!--close productcol-->
+			<?php if(wpsc_product_on_special()) : ?><span class="sale"><?php _e('Sale', 'wpsc'); ?></span><?php endif; ?>
 		</div><!--close default_product_display-->
 		<?php //exit(); ?>
 
