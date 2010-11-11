@@ -9,7 +9,7 @@ function wpsc_options_import() {
 ?>
 	<form name='cart_options' enctype='multipart/form-data' id='cart_options' method='post' action='<?php echo 'admin.php?page=wpsc-settings&tab=import'; ?>'>
 		<div class="wrap">
-<?php _e( '<p>You can import your products from a comma delimited text file.</p><p>An example of a cvs import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>', 'wpsc' ); ?>
+<?php _e( '<p>You can import your products from a comma delimited text file.</p><p>An example of a csv import file would look like this: </p><p>Description, Additional Description, Product Name, Price, SKU, weight, weight unit, stock quantity, is limited quantity</p>', 'wpsc' ); ?>
 
 <?php wp_nonce_field( 'update-options', 'wpsc-update-options' ); ?>
 		<input type='hidden' name='MAX_FILE_SIZE' value='5000000' />
@@ -43,6 +43,24 @@ function wpsc_options_import() {
 				<p>For each column, select the field it corresponds to in 'Belongs to'. You can upload as many products as you like.</p>
 				<div class='metabox-holder' style='width:90%'>
 					<input type='hidden' name='csv_action' value='import'>
+					
+					<div style='width:100%;' class='postbox'>
+						<h3 class='hndle'>Product Status</h3>
+						<div class='inside'>
+							<table>
+								<tr><td style='width:80%;'>
+							Select if you would like to import your products in as Drafts or Publish them right away.
+								<br />
+								</td><td>
+									<select name='post_status'>
+										<option value='publish'>Publish</option>
+										<option value='draft'>Draft</option>
+									</select>
+								</td></tr>
+							</table>
+						</div>
+					</div>
+
 <?php
 				foreach ( (array)$data1 as $key => $datum ) {
 ?>
@@ -93,10 +111,13 @@ function wpsc_options_import() {
 	}
 	if ( isset( $_POST['csv_action'] ) && ('import' == $_POST['csv_action']) ) {
 		global $wpdb;
-
 		$cvs_data = $_SESSION['cvs_data'];
 		$column_data = $_POST['column'];
 		$value_data = $_POST['value_name'];
+		
+		if ($_POST['post_status'] == 'publish')
+			$status = '1';
+				
 		$name = array( );
 		foreach ( $value_data as $key => $value ) {
 
@@ -122,7 +143,7 @@ function wpsc_options_import() {
 				'special_price' => null,
 				'display_frontpage' => null,
 				'notax' => null,
-				'publish' => null,
+				'publish' => $status,
 				'active' => null,
 				'donation' => null,
 				'no_shipping' => null,
@@ -130,6 +151,7 @@ function wpsc_options_import() {
 				'thumbnail_state' => null,
 				'category' => array(
 					esc_html__( $_POST['category'] )
+				
 				),
 				'meta' => array(
 					'_wpsc_price' => str_replace( '$', '', $cvs_data2['price'][$i] ),
