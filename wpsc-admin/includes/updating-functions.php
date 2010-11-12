@@ -517,7 +517,7 @@ function wpsc_update_files() {
 			'post_title' => $product_file->filename,
 			'post_name' => $product_file->idhash,
 			'post_content' => '',
-			'post_parent' => 0,
+			'post_parent' => $product_post_id,
 			'post_type' => "wpsc-product-file",
 			'post_status' => 'inherit'
 		);
@@ -530,7 +530,6 @@ function wpsc_update_files() {
 			$new_file_id = wp_insert_post($file_data);
 			wpsc_update_meta($product_file->id, '_new_file_id', $new_file_id, 'wpsc_files');
 		}
-		
 		if(count($variation_post_ids) > 0) {
 			foreach($variation_post_ids as $variation_post_id) {				
 				$old_file_id = get_product_meta($variation_post_id, 'old_file_id', true);
@@ -541,6 +540,21 @@ function wpsc_update_files() {
 					update_product_meta($variation_post_id, 'old_file_id', $product_file->id, 'wpsc_files');
 				}
 			}
+		}
+		
+		if(!empty($product_file->preview)){
+			$preview_template = array(
+			'post_mime_type' => $product_file->preview_mimetype,
+			'post_title' => $product_file->preview,
+			'post_name' => $product_file->filename,
+			'post_content' => '',
+			'post_parent' => $new_file_id,
+			'post_type' => "wpsc-product-preview",
+			'post_status' => 'inherit'
+			);
+			wp_insert_post($preview_template);
+		
+		
 		}
 	}
 		

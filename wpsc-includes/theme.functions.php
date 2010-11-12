@@ -215,11 +215,11 @@ function wpsc_get_template_file_url( $file = '' ) {
 		// Backwards compatibility
 		} else {
 			// Look in old theme url
-			$selected_theme_check = WPSC_OLD_THEMES_URL . get_option( 'wpsc_selected_theme' ) . '/' . str_ireplace( 'wpsc-', '', $file );
-
+			$selected_theme_check = WPSC_OLD_THEMES_PATH . get_option( 'wpsc_selected_theme' ) . '/' . str_ireplace( 'wpsc-', '', $file );
 			// Check the selected theme
 			if ( file_exists( $selected_theme_check ) ) {
-				$file_url = $selected_theme_check;
+				
+				$file_url = WPSC_OLD_THEMES_URL . get_option( 'wpsc_selected_theme' ) . '/' . str_ireplace( 'wpsc-', '', $file );
 			// Use the bundled theme CSS
 			} else {
 				$file_url = WPSC_CORE_THEME_URL . $file;
@@ -826,7 +826,11 @@ function wpsc_display_products_page( $query ) {
 
 	//Pretty sure this single_product code is legacy...but fixing it up just in case.
 	// get the display type for the selected category
-	$display_type = wpsc_get_the_category_display($temp_wpsc_query->query_vars['term']);	
+	if(!empty($temp_wpsc_query->query_vars['term']))
+		$display_type = wpsc_get_the_category_display($temp_wpsc_query->query_vars['term']);	
+	else
+		$display_type = wpsc_get_the_category_display($args['wpsc_product_category']);	
+
 
 	if ( isset( $_SESSION['wpsc_display_type'] ) )
 		$display_type = $_SESSION['wpsc_display_type'];
