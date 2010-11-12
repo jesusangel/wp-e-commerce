@@ -295,7 +295,7 @@ endif;
                <?php if(wpsc_is_shipping_details()):?>
                <tr class='same_as_shipping_row'>
                   <td colspan ='2'>
-                     <input type='checkbox' value='true' name='billing_same_as_shipping' id='billing_same_as_shipping' />
+                  <input type='checkbox' value='true' name='shippingSameBilling' id='shippingSameBilling' />
                      <label for='billing_same_as_shipping'><?php _e('Shipping address the same as Billing address?','wpsc'); ?></label>
                   </td>
                </tr>
