@@ -128,7 +128,6 @@ jQuery(document).ready(function () {
 		return false;
 	});
 
-
 	// update the price when the variations are altered.
 	jQuery(".wpsc_select_variation").change(function() {
 		jQuery('option[value="0"]', this).attr('disabled', 'disabled');
@@ -348,10 +347,11 @@ jQuery(document).ready(function(){
 
 //Javascript for variations: bounce the variatio box when nothing is selected and return false for add to cart button.
 jQuery(document).ready(function(){
-	jQuery('.productcol').each(function(){
+	jQuery('.productcol, .textcol').each(function(){
 		jQuery('.wpsc_buy_button', this).click(function(){
 			jQuery(this).parents('form:first').find('select.wpsc_select_variation').each(function(){
-				if(jQuery(this).val()==0)
+				if(jQuery(this).val() <= 0)
+					jQuery(this).css('position','relative');
 					jQuery(this).animate({'left': '-=5px'}, 50, function(){
 						jQuery(this).animate({'left': '+=10px'}, 100, function(){
 							jQuery(this).animate({'left': '-=10px'}, 100, function(){

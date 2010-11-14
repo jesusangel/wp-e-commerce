@@ -33,11 +33,17 @@ class wpsc_variations {
 		
 		foreach($product_terms as $product_term) {
 			if($product_term->parent > 0) {
+				if(empty($this->all_associated_variations[$product_term->parent])){
+					$this->all_associated_variations[$product_term->parent][0] =  new stdClass;
+					$this->all_associated_variations[$product_term->parent][0]->term_id = 0;
+					$this->all_associated_variations[$product_term->parent][0]->name = '-- Please Select --';
+				}
 				$this->all_associated_variations[$product_term->parent][] = $product_term;	
 			} else {
 				$this->variation_groups[] = $product_term;
 			}
 		}
+		//exit('<pre>'.print_r($this->all_associated_variations,1).'</pre>');
 		
 		foreach((array)$this->variation_groups as $variation_group) {
 			$variation_id = $variation_group->term_id;
@@ -97,6 +103,7 @@ class wpsc_variations {
 	function get_variations() {
 		global $wpdb;
 		//$this->variations	= $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
+
 		$this->variations = $this->all_associated_variations[$this->variation_group->term_id];
 		$this->variation_count = count($this->variations);
 		//echo "<pre>".print_r($this->all_associated_variations,true)."</pre>";

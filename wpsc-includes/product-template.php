@@ -1205,6 +1205,7 @@ function wpsc_vargrp_id() {
  */
 function wpsc_the_variation_name() {
 	global $wpsc_variations;
+	//exit('<pre>'.print_r($wpsc_variations,1).'</pre>');
 	return stripslashes( $wpsc_variations->variation->name );
 }
 
