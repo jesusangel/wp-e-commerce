@@ -25,8 +25,18 @@ function wpsc_currency_display( $price_in, $args = null ) {
 	else
 		$decimals = 2; // default is 2
 
+	if('' == get_option('wpsc_decimal_separator'))
+		$decimal_separator = '.';
+	else
+		$decimal_separator = get_option('wpsc_decimal_separator');
+
+	if('' == get_option('wpsc_thousands_separator'))
+		$thousands_separator = '.';
+	else
+		$thousands_separator = get_option('wpsc_thousands_separator');
+
 	// Format the price for output
-	$price_out = number_format( (double)$price_in, $decimals, get_option('wpsc_decimal_separator'), get_option('wpsc_thousands_separator') );
+	$price_out = number_format( (double)$price_in, $decimals, $decimal_separator, $thousands_separator );
 
 	// Get currency settings	
 	$currency_type = get_option( 'currency_type' );

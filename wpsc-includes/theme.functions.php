@@ -795,9 +795,17 @@ function wpsc_display_products_page( $query ) {
 		}
 		if(!empty($query['category_id'])){
 			//unset($args['post_type']);
-			$args['wpsc_product_category__in'] = $query['category_id'];
+
 			$term = get_term($query['category_id'],'wpsc_product_category');
-			$args['wpsc_product_category'] = $term->slug;
+			$id = wpsc_get_meta($query['category_id'], 'category_id','wpsc_old_category');
+			if( !empty($id)){
+				$term = get_term($id,'wpsc_product_category');
+				$args['wpsc_product_category'] = $term->slug;
+				$args['wpsc_product_category__in'] = $term->term_id;
+			}else{
+				$args['wpsc_product_category'] = $term->slug;
+				$args['wpsc_product_category__in'] = $term->term_id;
+			}
 		}
 		if(!empty($query['category_url_name'])){
 			$args['wpsc_product_category'] = $query['category_url_name'];
@@ -817,13 +825,14 @@ function wpsc_display_products_page( $query ) {
 		if(!empty($query['tag'])){
 			$args['product_tag'] = $query['tag'];
 		}
-
+	
 		$temp_wpsc_query = new WP_Query($args);
 	}
+	//	exit('<pre>'.print_r($temp_wpsc_query,1).'</pre>');
 	// swap the wpsc_query objects
 	list( $wp_query, $temp_wpsc_query ) = array( $temp_wpsc_query, $wp_query ); 
 	$GLOBALS['nzshpcrt_activateshpcrt'] = true;
-
+	
 	//Pretty sure this single_product code is legacy...but fixing it up just in case.
 	// get the display type for the selected category
 	if(!empty($temp_wpsc_query->query_vars['term']))
