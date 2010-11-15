@@ -350,7 +350,7 @@ jQuery(document).ready(function(){
 	jQuery('.productcol, .textcol').each(function(){
 		jQuery('.wpsc_buy_button', this).click(function(){
 			jQuery(this).parents('form:first').find('select.wpsc_select_variation').each(function(){
-				if(jQuery(this).val() <= 0)
+				if(jQuery(this).val() <= 0){
 					jQuery(this).css('position','relative');
 					jQuery(this).animate({'left': '-=5px'}, 50, function(){
 						jQuery(this).animate({'left': '+=10px'}, 100, function(){
@@ -361,6 +361,7 @@ jQuery(document).ready(function(){
 							});
 						});
 					});
+				}
 			});
 			if(jQuery(this).parents('form:first').find('select.wpsc_select_variation[value=0]:first').length)
 				return false;
