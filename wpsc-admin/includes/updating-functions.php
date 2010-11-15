@@ -184,36 +184,25 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 		}
 		
 		$product_meta = $wpdb->get_results("
-			SELECT $post_id AS `post_id`,
-				IF( ( `custom` != 1	),
+			SELECT 	IF( ( `custom` != 1	),
 					CONCAT( '_wpsc_', `meta_key` ) ,
 				`meta_key`
 				) AS `meta_key`,
 				`meta_value`
 			FROM `".WPSC_TABLE_PRODUCTMETA."`
-			WHERE `product_id` IN ( '{$product['id']}' )
-			AND `meta_value` NOT IN ( '' )
-			", ARRAY_A);
-
-		
+			WHERE `product_id` = " . $product['id'] . "
+			AND `meta_value` != ''", ARRAY_A);
+					
 		$post_data = array();
 		
 		foreach($product_meta as $k => $pm) :
-			switch ($pm['meta_value']) { //if any values have changed, we'll handle 'em
-				case 'on': //"on" is now "1"
-					$pm['meta_value'] = 1;
-					break;
-				default:
-					if(is_serialized($pm['meta_value'])) {
-						$pm['meta_value'] = unserialize($pm['meta_value']);
-					} else {
-						$pm['meta_value'] = $pm['meta_value'];
-					}
-					break;
-			}
-
-			$pm['meta_key'] = str_replace('_wpsc_','',$pm['meta_key']);
-			$post_data['_wpsc_product_metadata'][$pm['meta_key']] = $pm['meta_value'];
+			if($pm['meta_value'] == 'om')
+				$pm['meta_value'] = 1;
+			$pm['meta_value'] = maybe_unserialize($pm['meta_value']);
+			if(strpos($pm['meta_key'], '_wpsc_') === 0)
+				$post_data['_wpsc_product_metadata'][$pm['meta_key']] = $pm['meta_value'];
+			else
+				update_post_meta($post_id, $pm['meta_key'], $pm['meta_value']);
 		endforeach;
 
 

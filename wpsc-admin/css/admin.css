@@ -466,8 +466,6 @@ div.product_custom_meta a.add_more_meta {
 
 div.product_custom_meta a.remove_meta {
 	display: block;
-	float: left;
-	margin-top: 18px;
 	margin-left: 4px;
 }
 
