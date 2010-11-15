@@ -441,9 +441,9 @@ function wpsc_convert_variation_combinations() {
 				$post_data = array();
 				$post_data['_wpsc_price'] = (float)$variation_item->price;
 				$post_data['_wpsc_stock'] = (float)$variation_item->stock;
-				if($parent_stock === false || empty($parent_stock)) {
-				  $post_data['_wpsc_stock'] = false;
-				}
+				if( !is_numeric( $parent_stock ) )
+					$post_data['_wpsc_stock'] = false;
+				  
 				$post_data['_wpsc_original_variation_id'] = (float)$variation_item->id;
 			
 				// Product Weight
