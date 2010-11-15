@@ -268,7 +268,8 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 			$attached_file_path = str_replace($wp_upload_basedir."/", '', $full_image_path);
 			$upload_dir = wp_upload_dir();
 			$new_path = $upload_dir['path'].'/'.$image_name.'.'.$image_pathinfo['extension'];
-			copy($full_image_path, $new_path);
+			if(!is_dir($full_image_path))
+				copy($full_image_path, $new_path);
 			
 			// construct the full image url
 			$subdir = $upload_dir['subdir'].'/'.$image_name.'.'.$image_pathinfo['extension'];
