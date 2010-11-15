@@ -572,10 +572,12 @@ function wpsc_generate_product_query( $query ) {
 		$query->query_vars['term'] = $wp_query->query_vars['term'];
 	}elseif( '' != ($default_category = get_option('wpsc_default_category')) && !isset($wp_query->query_vars['wpsc-product'])){
 		$default_term = get_term($default_category,'wpsc_product_category');
-		$query->query_vars['taxonomy'] = 'wpsc_product_category';
-		//$query->query_vars['wpsc_product_category__in'] = $default_category;
-		$query->query_vars['term'] = $default_term->slug;
-		$query->is_tax = true;
+		if(!empty($default_term)){
+			$query->query_vars['taxonomy'] = 'wpsc_product_category';
+			//$query->query_vars['wpsc_product_category__in'] = $default_category;
+			$query->query_vars['term'] = $default_term->slug;
+			$query->is_tax = true;
+		}
 	}
 	if(get_option('wpsc_products_per_page'))
 		$query->query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
