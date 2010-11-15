@@ -355,9 +355,6 @@ function wpsc_convert_variation_combinations() {
 		// select the original product ID
 		$original_id = get_post_meta($post->ID, '_wpsc_original_id', true);
 		$parent_stock = get_post_meta($post->ID, '_wpsc_stock', true);
-		
-		if(!is_numeric($parent_stock))
-			$parent_stock = false;
 
 		// select the variation set associations
 		$variation_set_associations = $wpdb->get_col("SELECT `variation_id` FROM ".WPSC_TABLE_VARIATION_ASSOC." WHERE `associated_id` = '{$original_id}'");
@@ -443,7 +440,7 @@ function wpsc_convert_variation_combinations() {
 				$post_data = array();
 				$post_data['_wpsc_price'] = (float)$variation_item->price;
 				$post_data['_wpsc_stock'] = (float)$variation_item->stock;
-				if($parent_stock === false) {
+				if($parent_stock === false || empty($parent_stock)) {
 				  $post_data['_wpsc_stock'] = false;
 				}
 				$post_data['_wpsc_original_variation_id'] = (float)$variation_item->id;
