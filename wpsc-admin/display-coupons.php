@@ -174,76 +174,10 @@ function wpsc_display_coupons_page() {
 										</select>
 									</td>
 									<td>
-										<input type='text' class='pickdate' size='11' name='add_start' />
-										<!--<select name='add_start[day]'>
-											<?php
-												for ( $i = 1; $i <= 31; ++$i ) {
-													$selected = '';
-													if ( $i == date( "d" ) ) {
-														$selected = "selected='selected'";
-													}
-													echo "<option $selected value='$i'>$i</option>";
-												}
-											?>
-										</select>
-										<select name='add_start[month]'>
-											<?php
-												for ( $i = 1; $i <= 12; ++$i ) {
-													$selected = '';
-													if ( $i == (int)date( "m" ) ) {
-														$selected = "selected='selected'";
-													}
-													echo "<option $selected value='$i'>" . date( "M", mktime( 0, 0, 0, $i, 1, date( "Y" ) ) ) . "</option>";
-												}
-											?>
-										</select>
-										<select name='add_start[year]'>
-											<?php
-												for ( $i = date( "Y" ); $i <= (date( "Y" ) + 12); ++$i ) {
-													$selected = '';
-													if ( $i == date( "Y" ) ) {
-														$selected = "selected='true'";
-													}
-													echo "<option $selected value='$i'>" . $i . "</option>";
-												}
-											?>
-										</select>-->
+										<input type='text' class='pickdate' size='11' value="<?php echo date('Y-m-d'); ?>" name='add_start' />
 									</td>
 									<td>
-										<input type='text' class='pickdate' size='11' name='add_end'>
-										<!--<select name='add_end[day]'>
-											<?php
-												for ( $i = 1; $i <= 31; ++$i ) {
-													$selected = '';
-													if ( $i == date( "d" ) ) {
-														$selected = "selected='true'";
-													}
-													echo "<option $selected value='$i'>$i</option>";
-												}
-											?>
-										</select>
-										<select name='add_end[month]'>
-											<?php
-												for ( $i = 1; $i <= 12; ++$i ) {
-													$selected = '';
-													if ( $i == (int)date( "m" ) ) {
-														$selected = "selected='true'";
-													}
-													echo "<option $selected value='$i'>" . date( "M", mktime( 0, 0, 0, $i, 1, date( "Y" ) ) ) . "</option>";
-												}
-											?>
-										</select>
-										<select name='add_end[year]'>
-											<?php
-												for ( $i = date( "Y" ); $i <= (date( "Y" ) + 12); ++$i ) {
-													$selected = '';
-													if ( $i == (date( "Y" ) + 1) ) {
-														$selected = "selected='true'";
-													}
-													echo "<option $selected value='$i'>" . $i . "</option>";
-												}
-											?>
-										</select>-->
+										<input type='text' class='pickdate' size='11' name='add_end' value="<?php echo (date('Y')+1) . date('-m-d') ; ?>">
 									</td>
 									<td>
 										<input type='hidden' value='true' name='add_coupon' />
