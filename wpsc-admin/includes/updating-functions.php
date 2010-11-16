@@ -305,7 +305,6 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 				);
 				$attachment_id = wp_insert_post($image_post_values);
 			}
-			//exit($new_path.' <br />'.$attached_file_path);
 			$image_size_data = @getimagesize($full_image_path);
 			$image_metadata = array(
 				'width' => $image_size_data[0],
@@ -325,13 +324,19 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 	
 	$custom_gateways = get_option('custom_gateway_options');
 	array_walk($custom_gateways, "wpec_update_gateway");
-	
+	update_option('custom_gateway_options', $custom_gateways);
 }
 
 function wpec_update_gateway(&$value,$key) {
-		if ( $value == "testmode" ) {
+		if ( $value == "testmode" )
 			$value = "wpsc_merchant_testmode";
-		}	
+		if ( $value == "paypal_certified" )
+			$value = "wpsc_merchant_paypal_express";
+		if ( $value == "paypal_multiple" )
+			$value = "wpsc_merchant_paypal_standard";
+		if ( $value == "paypal_pro" )
+			$value = "wpsc_merchant_paypal_pro";
+		
 }
 function wpsc_convert_variation_combinations() {
 	global $wpdb, $user_ID, $current_version_number;
@@ -342,9 +347,9 @@ function wpsc_convert_variation_combinations() {
 	
 	
 	$posts = get_posts( array(
-	'post_type' => 'wpsc-product',
-	'post_status' => 'all',
-	'numberposts' => -1
+		'post_type' => 'wpsc-product',
+		'post_status' => 'all',
+		'numberposts' => -1
 	) );
     
     //return false;
