@@ -69,26 +69,12 @@ function nzshpcrt_form_field_list( $selected_field = null ) {
 	return $output;
 }
 
+
 function wpsc_parent_category_list( $taxonomies, $args, $parent, $current_term_id ) {
 	$myterms = get_terms( $taxonomies, $args );
 	$output = "<select name='category_parent'>";
 	$output .="<option value='0'>" . __( 'No Parent', 'wpsc' ) . "</option>";
-
-	foreach ( $myterms as $term ) {
-		//$root_url = get_bloginfo('url');
-		if ( $current_term_id != $term->term_id ) {
-			$selected = '';
-			if ( ($term->term_id == $parent) && $term->term_id != 0 ) {
-				$selected = 'selected="selected"';
-			}
-			$term_taxonomy = $term->taxonomy;
-			$term_slug = $term->slug;
-			$term_name = $term->name;
-			$term_id = $term->term_id;
-			$output .="<option {$selected} value='" . $term_id . "'>" . $term_name . "</option>";
-		}
-	}
-
+	$output .= wpsc_category_options(0, null, null, 0, $current_term_id );
 	$output .="</select>";
 
 	return $output;
