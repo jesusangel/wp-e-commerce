@@ -224,7 +224,7 @@ function wpsc_product_no_image_fallback( $image_url = '' ) {
 	if ( !empty( $image_url ) )
 		return $image_url;
 	else
-		return WPSC_CORE_THEME_URL . '/wpsc-images/noimage.png';
+		return apply_filters( 'wpsc_product_noimage', WPSC_CORE_THEME_URL . 'wpsc-images/noimage.png' );
 }
 add_filter( 'wpsc_product_image', 'wpsc_product_no_image_fallback' );
 
@@ -868,6 +868,7 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
 
 
 	$product = get_post( $product_id );
+
 	if ( $product->post_parent > 0 )
 		$product_id = $product->post_parent;
 
@@ -882,6 +883,7 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
 
 
 	$post_thumbnail_id = get_post_thumbnail_id( $product_id );
+
 	$src = wp_get_attachment_image_src( $post_thumbnail_id, 'large' );
 	if ( !empty( $src ) && is_string( $src[0] ) ) {
 		return $src[0];
@@ -889,7 +891,7 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
 		$attached_image = wp_get_attachment_image_src( $attached_images[0]->ID, 'large' );
 		return $attached_image[0];
 	} else {
-		return false;
+		return apply_filters( 'wpsc_product_image', false);
 	}
 }
 
