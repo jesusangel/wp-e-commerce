@@ -169,9 +169,17 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 				$post_status = "draft";
 			}
 			
+			//check the product added time with the current time to make sure its not out - this aviods the future post status
+			$product_added_time = strtotime($product['date_added']);
+			$current_time = time();
+			
+			if ((int)$current_time < (int)$product_added_time)
+				$post_date = date("Y-m-d H:i:s");
+			$post_date = $product['date_added'];
+			
 			$product_post_values = array(
 				'post_author' => $user_ID,
-				'post_date' => $product['date_added'],
+				'post_date' => $post_date,
 				'post_content' => $product['description'],
 				'post_excerpt' => $product['additional_description'],
 				'post_title' => $product['name'],
