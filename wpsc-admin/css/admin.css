@@ -6,7 +6,15 @@
 	margin-left:20px;
 }
 
+ul.children{
+padding-left:5px;
+}
+ul.children .category_indenter{
 
+	float:left;
+	width:auto;
+
+}
 /**
  *Dashboard Widget CSS
  *

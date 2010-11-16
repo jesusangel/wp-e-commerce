@@ -1782,11 +1782,14 @@ function wpsc_category_list( &$product_data, $group_id, $unique_id = '', $catego
 	else
 		$values = get_terms( 'wpsc_product_category', "hide_empty=0&parent=" . $group_id, ARRAY_A );
 
-	if ( $category_id < 1 )
+	if ( $category_id < 1 ){
 		$output .= "<ul class='list:category categorychecklist form-no-clear'>\n\r";
-	elseif ( (count( $values ) > 0 ) )
+		$indenter = "";	
+	}elseif ( (count( $values ) > 0 ) ){
 		$output .= "<ul class='children'>\n\r";
+		$indenter = "<img class='category_indenter' src='".WPSC_CORE_IMAGES_URL."/indenter.gif' alt='' title='' />";
 
+	}
 	//echo "<pre>".print_r($values, true)."</pre>";
 
 	foreach ( (array)$values as $option ) {
@@ -1799,7 +1802,7 @@ function wpsc_category_list( &$product_data, $group_id, $unique_id = '', $catego
 		}
 
 		$output .= "  <li id='category-" . $option['term_id'] . "'>\n\r";
-		$output .= "    <label class='selectit'>\n\r";
+		$output .= $indenter."    <label class='selectit'>\n\r";
 		$output .= "    <input id='" . $unique_id . "category_form_" . $option['term_id'] . "' type='checkbox' {$selected} name='category[]' value='" . $option['term_id'] . "' /></label>\n\r";
 		$output .= "    <label for='" . $unique_id . "category_form_" . $option['term_id'] . "' class='greytext' >" . stripslashes( $option['name'] ) . "</label>\n\r";
 		$output .= wpsc_category_list( $product_data, $group_id, $unique_id, $option['term_id'] );
