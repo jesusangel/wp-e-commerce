@@ -493,9 +493,13 @@ function wpsc_update_files() {
 	
 	foreach($product_files as $product_file) {
 		$variation_post_ids = array();
-
-		$product_post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product_file->product_id ));
-		
+		if(!empty($product_file->product_id)){
+			$product_post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product_file->product_id ));
+		}else{
+			$product_post_id = (int)$wpdb->get_var("SELECT `id` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE file=".$product_file->id);
+			$product_post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product_post_id ));
+		//	exit('Post ID'.$product_post_id);
+		}	
 		$variation_items = $wpdb->get_col("SELECT `id` FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE `file` = '{$product_file->id}'");
 		
 		if(count($variation_items) > 0) {
