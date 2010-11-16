@@ -23,7 +23,6 @@ function wpsc_admin_submit_product() {
 	
 	$sendback = wp_get_referer();
 	$post_data = wpsc_sanitise_product_forms();
-	//$post_data['category'] = 1;  /// remove this
 	if(isset($post_data['title']) && $post_data['title'] != '') {
 		$product_id = wpsc_insert_product($post_data, true);
 		if($product_id > 0) {
@@ -31,7 +30,6 @@ function wpsc_admin_submit_product() {
 		}
 		
 		$sendback = add_query_arg('message', 1, $sendback);
-		//exit('<pre>'.print_r($sendback,true).'</pre>');
 		wp_redirect($sendback);
 	} else {
 		$_SESSION['product_error_messages'] = array();	
@@ -54,7 +52,7 @@ function wpsc_admin_submit_product() {
 	* wpsc_sanitise_product_forms function 
 	* 
 	* @return array - Sanitised product details
-*/
+	*/
 function wpsc_sanitise_product_forms($post_data = null) {
 	if ( empty($post_data) ) {
 		$post_data = &$_POST;
@@ -62,14 +60,11 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	$product = get_post(absint($post_data['post_ID']));
 	
-	
-	// 	$post_data['product_id'] = isset($post_data['product_id']) ? $post_data['product_id'] : '';
 	$post_data['name'] = isset($post_data['post_title']) ? $post_data['post_title'] : '';
 	$post_data['title'] = $post_data['name'];
 	$post_data['description'] = isset($post_data['content']) ? $post_data['content'] : '';
 	$post_data['additional_description'] = isset($post_data['additional_description']) ? $post_data['additional_description'] : '';
 
-	//$post_data['publish'] = (int)(bool)$post_data['publish']; 
 	if($product != null) {
 		$post_data['post_status'] = $product->post_status;
 	} else {
@@ -77,9 +72,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	}
 	
-	
-	
-	if(isset($post_data['save']) && $product->post_status == 'inherit') {
+	if(isset($post_data['save']) && $product->post_status == 'inherit' && $product->post_parent == 0) {
 		$post_data['post_status'] = 'draft';
 	} else if(isset($post_data['publish'])) {
 		$post_data['post_status'] = 'publish';	
@@ -111,7 +104,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
 	$post_data['meta']['_wpsc_product_metadata']['quantity_limited'] = (int)(bool)$post_data['quantity_limited'];
 	$post_data['meta']['_wpsc_product_metadata']['special'] = (int)(bool)$post_data['special'];
-	/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax'];; */
 	$post_data['meta']['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['no_shipping'];
 	
 	// Product Weight
@@ -136,16 +128,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 			unset($post_data['meta']['_wpsc_product_metadata']['table_rate_price']['quantity'][$key]); 
 		} 
 	}
-	
-/*
-	if(!isset($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'])) $post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] = '';
-	if($post_data['meta']['_wpsc_product_metadata']['custom_tax']['state'] == 1) {
-		$custom_tax_value = (float)$post_data['meta']['_wpsc_product_metadata']['custom_tax']['value'];
-	} else {
-		$custom_tax_value = null;
-	}
-	$post_data['meta']['_wpsc_product_metadata']['custom_tax'] = $custom_tax_value;
-*/
+
    
 	$post_data['meta']['_wpsc_product_metadata']['shipping']['local'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['local'];
 	$post_data['meta']['_wpsc_product_metadata']['shipping']['international'] = (float)$post_data['meta']['_wpsc_product_metadata']['shipping']['international'];
@@ -160,31 +143,6 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	
 	$post_data['meta']['_wpsc_product_metadata']['enable_comments'] = $post_data['meta']['_wpsc_product_metadata']['enable_comments'];
 	$post_data['meta']['_wpsc_product_metadata']['merchant_notes'] = $post_data['meta']['_wpsc_product_metadata']['merchant_notes'];
-	
-
-
-
-
-
-	/*
-	if(is_numeric($post_data['special_price'])) {
-		$post_data['special_price'] = (float)($post_data['price'] - $post_data['special_price']);
-	} else {
-		$post_data['special_price'] = 0;
-	}
-	*/
-	
-	/*
-	// if special is unticked, wipe the special_price value
-	if($post_data['special'] !== 1) {
-	  $post_data['special_price'] = 0;
-	}
-	*/
-	//
-	
-	
-	
-
 	
 	$post_data['files'] = $_FILES;
 	return $post_data;
@@ -210,8 +168,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		$product_id	= absint($post_data['product_id']);
 		$update = true;
 	}
-  
-	//exit('<pre>'.print_r($product_id, true).'</pre>');
 	
 	$product_columns = array(
 		'name' => '',
@@ -249,8 +205,7 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 			$update_values[$column] = stripslashes($default);
 		}
 	}
-
-  
+	
 	$product_post_values = array(
 		'ID' => $product_id,
 		'post_author' => $user_ID,
@@ -268,7 +223,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 		$product_post_values["comment_status"] = "open";
 	}
 		
-	//exit("<pre>".print_r(wp_update_post($product_post_values) , true)."</pre>");
 	if(isset($sku) && ($sku != '')) {
 		$product_post_array['guid'] = $sku;
 	}
@@ -277,7 +231,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
   
    if($update === true) {
 		$where = array( 'id' => $product_id );
-	//	exit('<pre>'.print_r($product_post_values).'</pre>');
 		$product_id = wp_update_post($product_post_values);
 		 if ( isset ( $post_data["sticky"] ) ) {
 			stick_post($product_id);
@@ -309,22 +262,14 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 			}
 		}
 		$adding = true;
-		//$product_id = (int)$wpdb->insert_id;
-		//exit($product_id.' <-- IS the corresponding ID YAW');
   }
   
 	// if we succeed, we can do further editing
 	
 	// update the categories
-	/* 	wpsc_update_category_associations($product_id, $post_data['category']); */
-	//wp_set_post_categories($product_id, $post_data['category']);
 	
-	//echo "<pre>".print_r($post_data['category'], true)."</pre>";
 	if (!isset($post_data['category'])) $post_data['category'] = array();	
 	wp_set_product_categories($product_id, $post_data['category']);
-	
-	//echo "<pre>".print_r($test, true)."</pre>";
-	//exit();
 	
 
 	// and the tags
