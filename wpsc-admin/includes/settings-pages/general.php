@@ -106,10 +106,10 @@ function wpsc_options_general() {
 								$country['country'] = htmlspecialchars( $country['country'] );
 								if ( $country['visible'] == 1 ) {
  ?>
-									<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  checked='checked' /><?php echo $country['country']; ?><br />
+									<input type='checkbox' id="countrylist2-<?php echo $country['id']; ?>" name='countrylist2[]' value='<?php echo $country['id']; ?>' checked='checked' /> <label for="countrylist2-<?php echo $country['id']; ?>"><?php echo $country['country']; ?></label><br />
 						<?php } else {
  ?>
-									<input type='checkbox' name='countrylist2[]' value='<?php echo $country['id']; ?>'  /><?php echo $country['country']; ?><br />
+									<input type='checkbox' id="countrylist2-<?php echo $country['id']; ?>" name='countrylist2[]' value='<?php echo $country['id']; ?>'  /> <label for="countrylist2-<?php echo $country['id']; ?>"><?php echo $country['country']; ?></label><br />
 <?php }
 							} ?>
 							</div><br />
