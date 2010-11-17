@@ -73,7 +73,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			
 		if(get_option('paypal_ipn') == 1){
 			$notify_url = add_query_arg('gateway', 'wpsc_merchant_paypal_standard', $this->cart_data['notification_url']);
-			$notify_url = apply_filters('wpsc_paypal_standard_notify_url', $notif_url);
+			$notify_url = apply_filters('wpsc_paypal_standard_notify_url', $notify_url);
 			$paypal_vars += array(
 				'notify_url' => $notify_url
 			);

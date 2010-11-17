@@ -526,7 +526,7 @@ function wpsc_display_purchlog_buyers_email() {
 
 function wpsc_display_purchlog_buyers_address() {
    global $purchlogitem;
-   return htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES );
+   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES ), "\n\r"));
 }
 
 function wpsc_display_purchlog_buyers_phone() {
@@ -543,7 +543,7 @@ function wpsc_display_purchlog_shipping_name() {
 function wpsc_display_purchlog_shipping_address() {
    global $purchlogitem;
 // exit('<pre>'.print_r($purchlogitem->shippinginfo,true).'</pre>');
-   return htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingaddress']['value'] ), ENT_QUOTES );
+   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->shippinginfo['shippingaddress']['value'] ), ENT_QUOTES ), "\n\r"));
 }
 
 function wpsc_display_purchlog_shipping_city() {
