@@ -16,6 +16,7 @@ global $files, $separator, $purchase_log, $col_count, $siteurl, $products, $link
 		<a href="<?php echo get_option( 'user_account_url' ); ?>"><?php _e('Purchase History','wpsc'); ?></a> |
 		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "edit_profile=true"; ?>"><?php _e('Your Details','wpsc'); ?></a> |
 		<a href="<?php echo get_option( 'user_account_url' ) . $separator . "downloads=true"; ?>"><?php _e('Your Downloads','wpsc'); ?></a>
+		<?php do_action('wpsc_additional_user_profile_links', '|'); ?>
 	</div>
 
 	<br />
