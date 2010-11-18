@@ -72,7 +72,9 @@ function wpsc_breadcrumb_url() {
 * @return None - outputs breadcrumb HTML
 */
 function wpsc_output_breadcrumbs($options = Array()) {
-
+	$products_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
+	$products_page = get_post($products_page_id);
+	
 	if(!wpsc_has_breadcrumbs()) {
 		return;
 	}
@@ -81,6 +83,13 @@ function wpsc_output_breadcrumbs($options = Array()) {
 	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
 	echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('home').'">'.get_option('blogname').'</a>';
 	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
+	
+	echo isset($options['crumb-separator']) ? $options['crumb-separator'] : ' &raquo; ';
+	
+	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
+	echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('product_list_url').'">'.$products_page->post_title.'</a>';
+	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
+
 
 	while (wpsc_have_breadcrumbs()) {
 		wpsc_the_breadcrumb(); 

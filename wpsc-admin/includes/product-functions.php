@@ -587,7 +587,6 @@ function wpsc_update_category_associations($product_id, $categories = array()) {
 		$categories_to_delete[$key] = absint($category_to_delete);
   }
 
-	//exit('<pre>'.print_r($categories_to_delete, true).'</pre>');
 
   foreach($categories_to_add as $category_id) {
     $insert_sections[] = $wpdb->prepare("( %d, %d)", $product_id, $category_id);
