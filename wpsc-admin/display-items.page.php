@@ -382,11 +382,11 @@ function wpsc_display_edit_products_page() {
 					<option value="unpublish"><?php _e( 'Unpublish', 'wpsc' ); ?></option>
 <?php if ( $is_trash ) { ?>
 						<option value="untrash"><?php _e( 'Restore' ); ?></option>
-<?php } if ( $is_trash || !EMPTY_TRASH_DAYS ) { ?>
-						<option value="delete"><?php _e( 'Delete Permanently' ); ?></option>
-<?php } else { ?>
-						<option value="trash"><?php _e( 'Move to Trash' ); ?></option>
 <?php } ?>
+						<option value="delete"><?php _e( 'Delete Permanently' ); ?></option>
+
+						<option value="trash"><?php _e( 'Move to Trash' ); ?></option>
+
 
 
 				</select>
