@@ -44,21 +44,9 @@ function wpsc_options_shipping() {
 	}
 				/* wpsc_setting_page_update_notification displays the wordpress styled notifications */
 				wpsc_settings_page_update_notification(); ?>
-				<?php if ( IS_WP27 ) {
- ?>
 					<div class='postbox'>
 						<h3 class='hndle'><?php _e( 'General Settings', 'wpsc' ); ?></h3>
 						<div class='inside'>
-
-						<?php } else {
- ?>
-						<div class="categorisation_title">
-							<strong class="form_group">
-<?php _e( 'General Settings', 'wpsc' ); ?>
-							</strong>
-							<br class="clear"/>
-						</div>
-<?php } ?>
 
 						<table class='wpsc_options form-table'>
 							<tr>
@@ -171,14 +159,14 @@ function wpsc_options_shipping() {
 							</tr>
 							<?php do_action('wpsc_shipping_settings_page'); ?>
 						</table>
+								</div>
+									</div>
 										<table id='gateway_options' >
 											<tr>
 												<td class='select_gateway'>
-
-											<div class="categorisation_title">
-												<strong class="form_group"><?php _e( 'Shipping Modules', 'wpsc' ); ?></strong>
-											</div>
-
+											<div class='postbox'>
+												<h3 class='hndle'><?php _e( 'Shipping Modules', 'wpsc' ) ?></h3>
+												<div class='inside'>
 
 										<p>
 <?php _e( 'To enable shipping in WP e-Commerce you must select  which shipping methods you want to enable on your site', 'wpsc' ); ?>
@@ -269,6 +257,8 @@ function wpsc_options_shipping() {
 											<input type='submit' value='<?php _e( 'Update &raquo;', 'wpsc' ); ?>' name='updateoption'/>
 										</div>
 
+												</div>
+											</div>
 									</td>
 
 									<td class='gateway_settings' rowspan='2'>
