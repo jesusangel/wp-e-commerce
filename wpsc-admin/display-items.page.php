@@ -460,13 +460,16 @@ function wpsc_display_edit_products_page() {
 function wpsc_admin_category_dropdown() {
 	global $wpdb, $category_data;
 	$siteurl = get_option( 'siteurl' );
-	$category_slug = 0;
+	$category_slug = '';
 	if ( isset( $_POST['category'] ) )
 		$category_slug = $_POST['category'];
 
+	$selected ='';
+	if(empty($category_slug))
+		$selected = 'selected="selected"';
 	$url = urlencode( remove_query_arg( array( 'product_id', 'category_id' ) ) );
 
-	$options = "<option value=''>" . __( 'View All Categories', 'wpsc' ) . "</option>\r\n";
+	$options = "<option {$selected} value=''>" . __( 'View All Categories', 'wpsc' ) . "</option>\r\n";
 
 	$options .= wpsc_list_categories( 'wpsc_admin_category_options', $category_slug );
 
