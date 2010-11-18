@@ -49,16 +49,18 @@ function wpsc_display_categories_page() {
 			<div id="message" class="updated fade">
 				<p>
 					<?php		
-					if (isset($_GET['deleted']) ) {
+					if ( isset($_GET['deleted']) ) {
 						_e("Thanks, the category has been deleted", 'wpsc');
 						remove_query_arg('deleted');
 						unset($_GET['deleted']);
 					}
 					
 					
-					if (isset($_GET['message']) ) {
-						if ($_GET['message'] == 'empty_term_name')
+					if ( isset($_GET['message']) ) {
+						if ( 'empty_term_name' == $_GET['message'] )
 							_e("Please give a category name", 'wpsc');
+						elseif( 'term_exists' == $_GET['message'])
+							_e('A term with the name provided already exists with this parent.','wpsc');
 						else
 							_e("Thanks, the category has been edited", 'wpsc');
 						unset($_GET['message']);

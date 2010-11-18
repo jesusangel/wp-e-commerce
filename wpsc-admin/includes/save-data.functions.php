@@ -171,12 +171,12 @@ function wpsc_save_category_set() {
 			$name = $_POST['name'];			
 			$term = get_term_by('name', $name, 'wpsc_product_category', ARRAY_A);
 						
-			if(empty($term)) {
-				$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
-			}
+			$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
 
 			if (is_wp_error($term)) {
-				$_GET['message'] = $term->get_error_code();
+//				$_GET['message'] = $term->get_error_code();
+				$sendback = add_query_arg('message',$term->get_error_code());
+				wp_redirect($sendback);
 				return;
 			}
 			
