@@ -1052,30 +1052,7 @@ function wpsc_options_presentation() {
 
 								</td>
 							</tr>
-							<tr>
-								<th scope="row">
-								<?php
-							$cropthumbs = get_option( 'wpsc_crop_thumbnails' );
-							$crop1 = "";
-							$crop2 = "";
-							switch ( $cropthumbs ) {
-								case 0:
-									$crop2 = "checked ='checked'";
-									break;
-
-								case 1:
-									$crop1 = "checked ='checked'";
-									break;
-							}
-?>
-									<?php _e( "Crop Thumbnails?" ); ?>:
-								</th>
-								<td>
-											<input type='radio' value='1' name='wpsc_options[wpsc_crop_thumbnails]' id='wpsc_crop_thumbnails1' <?php echo $crop1; ?> /> <label for='crop1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
-									<input type='radio' value='0' name='wpsc_options[wpsc_crop_thumbnails]' id='wpsc_crop_thumbnails2' <?php echo $crop2; ?> /> <label for='crop2'><?php _e( 'No', 'wpsc' ); ?></label><br />
-									<?php _e( 'Choosing "Yes" means that thumbnails are cropped to exact dimensions (normally thumbnails are proportional)', 'wpsc' ); ?>
-								</td>
-							</tr>
+					
 					<?php
 						}
 					?>
