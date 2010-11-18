@@ -281,7 +281,6 @@ function wpsc_display_edit_products_page() {
 		$page = null;
 		// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
 		$itempp = 20;
-
 		if ( isset( $_POST['product'] ) && (is_numeric( $_POST['product'] )) ) 
 			$parent_product = absint( $_POST['product'] );
 		
@@ -304,13 +303,27 @@ function wpsc_display_edit_products_page() {
 			$page = 1;
 		}
 		$start = (int)($page * $itempp) - $itempp;
-
+		$all_products = '';
+		$trash_products = '';
+		$draft_products = '';
+		if('trash' == $_REQUEST['post_status']){
+			$post_status = 'trash';
+			$trash_products = 'class="current"';
+		}elseif('draft' == $_REQUEST['post_status']){
+			$post_status = 'draft';
+			$draft_products = 'class="current"';
+		
+		}else{
+			$all_products = 'class="current"';			
+			$post_status = 'published inherit';
+		}
+		
 		$query = array(
 			'post_type' => 'wpsc-product',
 			'post_parent' => 0,
 			'orderby' => 'menu_order post_title',
 			'order' => "ASC",
-			'post_status' => 'published inherit',
+			'post_status' => $post_status,
 			'posts_per_page' => $itempp,
 			'offset' => $start
 		);
@@ -373,6 +386,15 @@ function wpsc_display_edit_products_page() {
 		</div>
 		</form>
 <form id="posts-filter" action="admin.php?page=wpsc-edit-products" method="post">
+	<ul class='subsubsub'>
+		<li><a <?php echo $all_products; ?> href='<?php echo add_query_arg('post_status','all'); ?>' title='View All Products'><?php _e('All','wpsc'); ?></a></li>
+		<li> | </li>
+		<li><a <?php echo $draft_products; ?> href='<?php echo add_query_arg('post_status','draft'); ?>' title='View Draft Products'><?php _e('Draft','wpsc'); ?></a></li>
+		<li> | </li>
+		<li><a <?php echo $trash_products; ?> href='<?php echo add_query_arg('post_status','trash'); ?>' title='View Trashed Products'><?php _e('Trash','wpsc'); ?></a></li>
+	</ul>
+	<br />
+	<br />
 	<div class="productnav">
 		<div class="alignleft actions">
 
@@ -394,6 +416,7 @@ function wpsc_display_edit_products_page() {
 				<input type="submit" value="<?php _e( 'Apply' ); ?>" name="doaction" id="doaction" class="button-secondary action" />
 <?php wp_nonce_field( 'bulk-products', 'wpsc-bulk-products' ); ?>
 		</div>
+
 	
 	</div>
 
