@@ -109,7 +109,6 @@ function wpsc_save_variation_set() {
 			}
 		}
 	}
-	//http://sandbox.boiling-pukeko.geek.nz/wp-admin/admin.php?wpsc_admin_action=wpsc-variation-set&delete_value=true&value_id=20&_wpnonce=c1eab6de52
 	$sendback = remove_query_arg(array(
 		'wpsc_admin_action',
 		'delete_value',

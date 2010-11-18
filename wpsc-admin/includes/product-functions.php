@@ -408,12 +408,13 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 	$product_terms = wp_get_object_terms($product_id, 'wpsc-variation');
 	
-	$variation_sets_and_values = array_merge($variation_sets, $variation_values);
 	
+	$variation_sets_and_values = array_merge($variation_sets, $variation_values);
+	//echo 'Existing Product Terms<pre>'.print_r($product_terms,1).'</pre>';
 	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');
 	
-	//die('<pre>'.print_r($variation_sets_and_values, true).'</pre>');
-	
+	//echo('Variation Sets and Values<pre>'.print_r($variation_sets_and_values, true).'</pre>');
+	//echo('Combinations<pre>'.print_r($combinations, true).'</pre>');
 	$child_product_template = array(
 		'post_author' => $user_ID,
 		'post_content' => $post_data['description'],
@@ -461,11 +462,11 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		$selected_post = array_shift($selected_post);
 		
 		$child_product_id = wpsc_get_child_object_in_terms($product_id, $term_ids, 'wpsc-variation');
-	
-//	echo "<pre>".print_r($child_product_id, true)."</pre>";
+		$already_a_variation = true;
 		if($child_product_id == false) {
+			$already_a_variation = false;
 			if($selected_post != null) {
-				$child_product_id = $selected_post->ID;
+				$child_product_id = $selected_post->ID;	
 			} else {
 				$child_product_id = wp_update_post($product_values);
 			}
@@ -479,34 +480,36 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			wp_set_object_terms($child_product_id, $term_slugs, 'wpsc-variation');
 		}
 		//JS - 7.9 - Adding loop to include meta data in child product.
-			//die("<pre>".print_r($child_product_meta)."</pre>");
-		foreach ($child_product_meta as $meta_key => $meta_value ) :
-			if ($meta_key == "_wpsc_product_metadata") {
-				update_post_meta($child_product_id, $meta_key, unserialize($meta_value[0]));
-			} else {
-				update_post_meta($child_product_id, $meta_key, $meta_value[0]);
-			}
+		//echo("Child Product meta: <pre>".print_r($child_product_meta)."</pre>");
+		if(!$already_a_variation){
+			foreach ($child_product_meta as $meta_key => $meta_value ) :
+				if ($meta_key == "_wpsc_product_metadata") {
+					update_post_meta($child_product_id, $meta_key, unserialize($meta_value[0]));
+				} else {
+					update_post_meta($child_product_id, $meta_key, $meta_value[0]);
+				}
+				
+			endforeach;
 			
-		endforeach;
-		
-//Adding this to check for a price on variations.  Applying the highest price, seems to make the most sense.		
-		if ( is_array ($term_ids) ) {
-		$price = array();
-			foreach ($term_ids as $term_id_price) {
-				$price[] = term_id_price($term_id_price, $child_product_meta["_wpsc_price"][0]);
-				//$price[] = $term_id_price;
-			}
-			rsort($price);
-			$price = $price[0];	
-		
-			if($price > 0) {
-				update_post_meta($child_product_id, "_wpsc_price", $price);
+			//Adding this to check for a price on variations.  Applying the highest price, seems to make the most sense.		
+			if ( is_array ($term_ids) ) {
+			$price = array();
+				foreach ($term_ids as $term_id_price) {
+					$price[] = term_id_price($term_id_price, $child_product_meta["_wpsc_price"][0]);
+					//$price[] = $term_id_price;
+				}
+				rsort($price);
+				$price = $price[0];	
+			
+				if($price > 0) {
+					update_post_meta($child_product_id, "_wpsc_price", $price);
+				}
 			}
 		}
 	}
 	
 
-//For reasons unknown, this code did not previously deal with variation deletions.  Basically, we'll just check if any existing term associations are missing from the posted variables, delete if they are.
+	//For reasons unknown, this code did not previously deal with variation deletions.  Basically, we'll just check if any existing term associations are missing from the posted variables, delete if they are.
 	//Get posted terms (multi-dimensional array, first level = parent var, second level = child var)
 	$posted_term = $variations;
 	//Get currently associated terms
@@ -530,17 +533,15 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 		$post_ids_to_delete = array();
 		$term_ids_to_delete = array();
-		
 		$term_ids_to_delete = array_diff($currently_associated_vars, $posted_terms);
 
-	// Whatever remains, find child products of current product with that term, in the variation taxonomy, and delete
-	
+		// Whatever remains, find child products of current product with that term, in the variation taxonomy, and delete
 		$post_ids_to_delete = wpsc_get_child_object_in_terms_var($_REQUEST["product_id"], $term_ids_to_delete, 'wpsc-variation');	
 	if(is_array($post_ids_to_delete)) {
 		foreach($post_ids_to_delete as $object_ids) {
-				foreach($object_ids as $object_id) {
-					wp_delete_post($object_id);
-				}
+			foreach($object_ids as $object_id) {
+				wp_delete_post($object_id);
+			}
 		}
 	}
 }	
