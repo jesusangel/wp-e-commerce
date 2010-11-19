@@ -4,8 +4,9 @@
 * @return boolean - true if we have and use them, false otherwise
 */
 function wpsc_has_breadcrumbs() {
-	global $wpsc_query, $wpsc_breadcrumbs;	
+	global $wpsc_breadcrumbs;	
 	$wpsc_breadcrumbs = new wpsc_breadcrumbs();
+	
 	if(($wpsc_breadcrumbs->breadcrumb_count > 0) && (get_option("show_breadcrumbs") == 1)){
 		return true;
 	} else {
@@ -72,10 +73,11 @@ function wpsc_breadcrumb_url() {
 * @return None - outputs breadcrumb HTML
 */
 function wpsc_output_breadcrumbs($options = Array()) {
+	global $wpsc_query;
 	$products_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 	$products_page = get_post($products_page_id);
-	
-	if(!wpsc_has_breadcrumbs()) {
+		
+	if(!wpsc_has_breadcrumbs() && $products_page_id != $wpsc_query->post->ID) {
 		return;
 	}
 
@@ -129,12 +131,12 @@ class wpsc_breadcrumbs {
 	function wpsc_breadcrumbs() {
 		global $wp_query;
 		$this->breadcrumbs = array();
-
 		$query_data = Array();
 		if ( isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && 1 == $wp_query->query_vars['posts_per_page']) {
+
 			$query_data['product'] = $wp_query->post->post_title;
 		}
-		if ( isset($wp_query->query_vars['term']) ) {
+		if ( !empty($wp_query->query_vars['term']) ) {
 			$query_data['category'] = $wp_query->query_vars['term']; 
 		}
 		
@@ -145,9 +147,11 @@ class wpsc_breadcrumbs {
 				'slug' => $query_data['product']
 			);
 		}
-		$categories = wp_get_object_terms( $wp_query->post->ID , 'wpsc_product_category' );
-		$query_data['category'] = $categories[0]->slug;
-		
+		if(1 == $wp_query->post_count){
+			$categories = wp_get_object_terms( $wp_query->post->ID , 'wpsc_product_category' );
+			$query_data['category'] = $categories[0]->slug;
+		}
+		//	exit('Doh?<pre>'.print_r($query_data,1).'</pre>');		
 		if(isset($query_data['category'])) {
 			$term_data = get_term_by('slug', $query_data['category'], 'wpsc_product_category');
 		} else {
