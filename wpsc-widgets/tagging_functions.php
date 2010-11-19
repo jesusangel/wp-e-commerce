@@ -18,7 +18,6 @@ function product_tag_cloud( $args = '' ) {
 
 	// Always query top tags
 	$tags = get_product_tags( array_merge( $args, array( 'orderby' => 'count', 'order' => 'DESC' ) ) );
-
 	if ( empty( $tags ) )
 		return;
 
