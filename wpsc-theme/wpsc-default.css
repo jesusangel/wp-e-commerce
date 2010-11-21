@@ -116,9 +116,9 @@ Author URI: http://instinct.co.nz
 }
 
 .default_product_display .imagecol {
-	margin:0px 10px 0px 0px;
+	margin:0px 5px 0px 0px;
 	float:left;
-	width:150px;	
+	width:160px;	
 	position:relative;
 }
 
@@ -133,7 +133,7 @@ Author URI: http://instinct.co.nz
 
 .default_product_display .productcol {
 	float:left;
-	width:100%;
+	width:70%;
 	position:relative;
 }
 
@@ -603,8 +603,8 @@ table.list_productdisplay p.soldout {
 }
 
 .single_product_display .imagecol {
-	margin-right:10px;
-	width:150px;
+	margin-right:5px;
+	width:160px;
 	float:left;	
 	position:relative;
 }
@@ -757,12 +757,8 @@ table.list_productdisplay p.soldout {
 }
 
 .single_product_display .wpcart_gallery img, #content .single_product_display .wpcart_gallery img {
-	margin-left:6px;
+	margin-right:6px;
 	border:1px solid #ccc;	
-}
-
-.single_product_display .wpcart_gallery a:first-child img, #content .single_product_display .wpcart_gallery a:first-child img {
-	margin-left:0px;
 }
 
 .single_product_display .FB_like iframe {
