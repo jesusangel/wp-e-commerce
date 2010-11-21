@@ -203,6 +203,31 @@ function wpsc_bulk_modify_products() {
 	//exit( "<pre>".print_r($_POST,true)."</pre>");
 	switch ( $doaction ) {
 
+		case 'addgroup':
+
+			foreach ( (array)$product_ids as $product_id ) {
+				$product_id = absint( $product_id );
+				$current_product_categories = get_the_product_category($product_id);
+				$new_product_category = array();
+				if(isset($_POST['category']) && is_numeric($_POST['category'])){
+					 array_push($new_product_category,$_POST['category']);
+				}else{
+					//No Valid Group was selected for bulk assignment :(
+					$sendback = add_query_arg( 'addedgroup', 'quack', $sendback );
+					break;
+				}
+				if(isset($current_product_categories)){
+					foreach($current_product_categories as $category){
+						array_push($new_product_category,$category->term_id);
+					}
+				}
+				
+				wp_set_product_categories($product_id,$new_product_category);
+				$added++;
+			}
+			$sendback = add_query_arg( 'addedgroup', $added, $sendback );
+			break;
+
 		case 'publish':
 			foreach ( (array)$product_ids as $product_id ) {
 				$product_id = absint( $product_id );

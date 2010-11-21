@@ -66,7 +66,7 @@ function wpsc_display_edit_products_page() {
 			<?php $_SESSION['product_error_messages'] = ''; ?>
 <?php } ?>
 
-	<?php if ( isset( $_GET['published'] ) || isset( $_GET['skipped'] ) || isset( $_GET['updated'] ) || isset( $_GET['deleted'] ) || isset( $_GET['message'] ) || isset( $_GET['duplicated'] ) ) {
+	<?php if ( isset( $_GET['addedgroup'] ) || isset( $_GET['published'] ) || isset( $_GET['skipped'] ) || isset( $_GET['updated'] ) || isset( $_GET['deleted'] ) || isset( $_GET['message'] ) || isset( $_GET['duplicated'] ) ) {
  ?>
 			<div id="message" class="updated fade">
 				<p>
@@ -77,6 +77,15 @@ function wpsc_display_edit_products_page() {
 			if ( isset( $_GET['updated'] ) ) {
 				printf( _n( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
 				unset( $_GET['updated'] );
+			}
+
+			if ( isset( $_GET['addedgroup'] ) ) {
+				if(is_int($_GET['addedgroup']) && $_GET['addedgroup'] > 0){
+					printf( _n( '%s product updated.', '%s products updated.', $_GET['addedgroup'] ), number_format_i18n( $_GET['addedgroup'] ) );
+				}else{
+					printf( _n( 'Invalid Category Selected.', 'Invalid Category Selected.' ) );
+				}
+				unset( $_GET['addedgroup'] );
 			}
 
 			if ( isset( $_GET['published'] ) ) {
@@ -400,6 +409,7 @@ function wpsc_display_edit_products_page() {
 
 			<select id="bulkaction" name="bulkAction">
 				<option value="-1" selected="selected"><?php _e( 'Bulk Actions' ); ?></option>
+					<option value="addgroup"><?php _e( 'Add To Group' ); ?></option>
 					<option value="publish"><?php _e( 'Publish', 'wpsc' ); ?></option>
 					<option value="unpublish"><?php _e( 'Unpublish', 'wpsc' ); ?></option>
 <?php if ( $is_trash ) { ?>
@@ -412,6 +422,12 @@ function wpsc_display_edit_products_page() {
 
 
 				</select>
+				<?php 
+					$options = "<option selected='selected' value=''>" . __( 'Select a Category', 'wpsc' ) . "</option>\r\n";
+					$options .= wpsc_list_categories( 'wpsc_admin_category_options_byid' );
+					echo  "<select name='category' id='category_select'>" . $options . "</select>\r\n";
+				?>
+
 				<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
 				<input type="submit" value="<?php _e( 'Apply' ); ?>" name="doaction" id="doaction" class="button-secondary action" />
 <?php wp_nonce_field( 'bulk-products', 'wpsc-bulk-products' ); ?>
@@ -499,6 +515,18 @@ function wpsc_admin_category_options( $category, $subcategory_level = 0, $catego
 	$output = "<option $selected value='{$category->slug}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
 
 	return $output;
+}
+/*
+ * Displays the category forms for adding and editing products
+ * Recurses to generate the branched view for subcategories
+ */
+
+function wpsc_admin_category_options_byid( $category, $subcategory_level = 0 ) {
+
+
+        $output = "<option $selected value='{$category->term_id}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
+
+        return $output;
 }
 
 /**
