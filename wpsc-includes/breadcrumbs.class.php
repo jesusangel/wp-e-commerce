@@ -80,14 +80,15 @@ function wpsc_output_breadcrumbs($options = Array()) {
 	if(!wpsc_has_breadcrumbs() && $products_page_id != $wpsc_query->post->ID) {
 		return;
 	}
-
-	echo isset($options['before-breadcrumbs']) ? $options['before-breadcrumbs'] : '<div class="wpsc-breadcrumbs">';
-	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
-	echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('home').'">'.get_option('blogname').'</a>';
-	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
+	// If home if the same as products apge only show the products-page link and not the home link
+	if(get_option('home') != get_option('product_list_url')){
+		echo isset($options['before-breadcrumbs']) ? $options['before-breadcrumbs'] : '<div class="wpsc-breadcrumbs">';
+		echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
+		echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('home').'">'.get_option('blogname').'</a>';
+		echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
 	
-	echo isset($options['crumb-separator']) ? $options['crumb-separator'] : ' &raquo; ';
-	
+		echo isset($options['crumb-separator']) ? $options['crumb-separator'] : ' &raquo; ';
+	}	
 	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
 	echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('product_list_url').'">'.$products_page->post_title.'</a>';
 	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
