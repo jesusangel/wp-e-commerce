@@ -347,7 +347,6 @@ function wpsc_get_the_category_display($slug){
 function wpsc_single_template( $content ) {
 
 	global $wpdb, $post, $wp_query, $wpsc_query;
-	
 	$single_theme_path = wpsc_get_template_file_path( 'wpsc-single_product.php' );	
 	if ( 'wpsc-product' == $wp_query->post->post_type && !is_archive() && $wp_query->post_count <= 1) {
 		remove_filter( "the_content", "wpsc_single_template" );
@@ -402,18 +401,24 @@ function wpsc_is_viewable_taxonomy(){
 function wpsc_the_category_title($title, $id){
 	global $wp_query;
 	$post = get_post($id);
-		remove_filter('the_title','wpsc_the_category_title');
+
 	if(isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && isset($wp_query->query_vars['paged']) && $wp_query->current_post == 0 &&  $wp_query->posts[0]->post_title == $post->post_title && count($wp_query->posts) >1 ){
-		remove_filter('the_title','wpsc_the_category_title');
+	remove_filter('the_title','wpsc_the_category_title');
 		$id = wpec_get_the_post_id_by_shortcode('[productspage]');
 		$post = get_post($id);
 		return $post->post_title;
 	}
 	if('wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && isset($wp_query->query_vars['term']) && isset($wp_query->query_vars['taxonomy']) && !($wp_query->is_admin)){
-		remove_filter('the_title','wpsc_the_category_title');
+	remove_filter('the_title','wpsc_the_category_title');
 		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
 		$category = get_term($category_id, $wp_query->query_vars['taxonomy']);
 	}
+	if( isset($wp_query->query_vars['taxonomy']) && 'product_tag' == $wp_query->query_vars['taxonomy'] && $wp_query->posts[0]->post_title == $post->post_title ){
+	remove_filter('the_title','wpsc_the_category_title');
+		$category->name = $wp_query->query_vars['term'];
+	
+	}
+	//echo '<br />'.$category->name.'<pre>'.print_r($wp_query,1).'</pre>';
 	if(!empty($category->name))	
 		return $category->name;
 	else
@@ -429,6 +434,7 @@ function wpsc_the_category_title($title, $id){
  * @return $template (string)
  */
 function wpsc_the_category_template($template){
+
 	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive')){
 		return str_ireplace('archive', 'page',$template);
 	}else{
