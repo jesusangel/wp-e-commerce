@@ -632,9 +632,15 @@ function wpsc_user_dynamic_css() {
 			height: <?php echo $thumbnail_height; ?>px;
 		}
 
-		div.default_product_display div.item_no_image  {
+		.wpsc_category_grid_item  {
+			display:block;
+			float:left;
 			width: <?php echo $thumbnail_width - 2; ?>px;
 			height: <?php echo $thumbnail_height - 2; ?>px;
+		}
+		.wpsc_category_grid_item  span{
+			position:relative;
+			top:<?php echo ($thumbnail_height - 2)/9; ?>px;
 		}
 		div.default_product_display div.item_no_image a  {
 			width: <?php echo $thumbnail_width - 2; ?>px;
