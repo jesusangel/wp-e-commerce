@@ -1024,12 +1024,12 @@ class WPSC_Query {
 		$output = "Pages: ";
 		// Should we show the FIRST PAGE link?
 		if($current_page > 1) {
-			$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> << First </a>";
+			$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> &lt;&lt; First </a>";
 		}
 		// Should we show the PREVIOUS PAGE link?
 		if($current_page > 1 && ($current_page-1) != 1) {
 			$previous_page = $current_page - 1;	
-			$output .= " <a href=\"". $page_link .$separator. $previous_page ."\" title=\"Previous Page\"> < Previous </a>";
+			$output .= " <a href=\"". $page_link .$separator. $previous_page ."\" title=\"Previous Page\"> &lt; Previous </a>";
 		}
 		$i =$current_page - 5;
 		$count = 0;
@@ -1068,11 +1068,11 @@ class WPSC_Query {
 		
 		if($current_page < $totalpages) {
 			$next_page = $current_page + 1;
-			$output .= "<a href=\"". $page_link  .$separator. $next_page ."\" title=\"Next Page\"> Next > </a>";
+			$output .= "<a href=\"". $page_link  .$separator. $next_page ."\" title=\"Next Page\"> Next &gt; </a>";
 		}
 		// Should we show the LAST PAGE link?
 		if($current_page < $totalpages - 1) {
-			$output .= " <a href=\"". $page_link  .$separator. $totalpages ."\" title=\"Last Page\"> Last >> </a>";
+			$output .= " <a href=\"". $page_link  .$separator. $totalpages ."\" title=\"Last Page\"> Last &gt;&gt; </a>";
 		}
 		// Return the output.
 		return $output;
