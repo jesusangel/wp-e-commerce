@@ -615,6 +615,8 @@ function wpsc_user_dynamic_css() {
 		if ( $single_thumbnail_width <= 0 ) {
 			$single_thumbnail_width = 128;
 		}
+		$category_height = get_option('category_image_height');
+		$category_width = get_option('category_image_width');
 ?>
 
 		/*
@@ -641,8 +643,8 @@ function wpsc_user_dynamic_css() {
 		.wpsc_category_grid_item  {
 			display:block;
 			float:left;
-			width: <?php echo $thumbnail_width - 2; ?>px;
-			height: <?php echo $thumbnail_height - 2; ?>px;
+			width: <?php echo $category_width - 2; ?>px;
+			height: <?php echo $category_height - 2; ?>px;
 		}
 		.wpsc_category_grid_item  span{
 			position:relative;
