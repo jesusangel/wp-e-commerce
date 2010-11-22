@@ -330,6 +330,9 @@ function wpsc_start_the_query() {
 				'post_parent' => 0,
 				'order'       => 'ASC'
 			);
+			
+			if( isset( $_GET['product_order'] ) )
+				$wpsc_query_vars['order'] = $_GET['product_order'];
 		
 			if(isset($wp_query->query_vars['product_tag'])){
 				$wpsc_query_vars['product_tag'] = $wp_query->query_vars['product_tag'];
@@ -351,7 +354,9 @@ function wpsc_start_the_query() {
 				}
 			}
 			$orderby = get_option( 'wpsc_sort_by' );
-
+			if( isset( $_GET['product_order'] ) )
+				$orderby = 'title';
+			
 			switch ( $orderby ) {
 
 				case "dragndrop":
@@ -614,10 +619,13 @@ function wpsc_generate_product_query( $query ) {
 		$query->query_vars['taxonomy'] = 'product_tag';
 		$query->is_tax      = true;
 	}
-	if(get_option('wpsc_products_per_page'))
+	if(get_option('wpsc_products_per_page')){
 		$query->query_vars['posts_per_page'] = get_option('wpsc_products_per_page');
-	else
-		$query->query_vars['posts_per_page'] = '-1';	
+		if( isset( $_GET['items_per_page'] ) )
+			$query->query_vars['posts_per_page'] = (int)$_GET['items_per_page'];
+	} else {
+		$query->query_vars['posts_per_page'] = '-1';
+	}
 	if ( $query->is_tax == true )
 		new wpsc_products_by_category( $query );
 

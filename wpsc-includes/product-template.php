@@ -67,6 +67,22 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	global $wp_query,$wpsc_query;
 	$num_paged_links = 4; //amount of links to show on either side of current page
 	
+	//additional links, items per page and products order
+	if( get_option('permalink_structure') != '' ){
+		$additional_links_separator = '?';
+	}else{
+		$additional_links_separator = '&';
+	}
+	if( !empty( $_GET['items_per_page'] ) ){
+			$additional_links = $additional_links_separator . 'items_per_page=' . $_GET['items_per_page'];
+			$additional_links_separator = '&';
+	}
+	if( !empty( $_GET['product_order'] ) )
+		$additional_links .= $additional_links_separator . 'product_order=' . $_GET['product_order'];
+		
+	$additional_links = apply_filters('wpsc_pagination_additional_links', $additional_links);
+	//end of additional links
+	
 	if(empty($totalpages)){
 		if('wpsc-product' == $wp_query->query_vars['post_type'] && 'wpsc_product_category' != $wpsc_query->query_vars['taxonomy'])
 			$totalpages = $wp_query->max_num_pages;			
@@ -112,19 +128,19 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	
 	// Should we show the FIRST PAGE link?
 	if($current_page > 1)
-		$output .= "<a href=\"". $page_link ."\" title=\"First Page\"> &laquo; First </a>";
+		$output .= "<a href=\"". $page_link . $additional_links . "\" title=\"First Page\"> &laquo; First </a>";
 
 	// Should we show the PREVIOUS PAGE link?
 	if($current_page > 2) {
 		$previous_page = $current_page - 1;	
-		$output .= " <a href=\"". $page_link .$separator. $previous_page ."\" title=\"Previous Page\"> &lt; Previous </a>";
+		$output .= " <a href=\"". $page_link .$separator. $previous_page . $additional_links . "\" title=\"Previous Page\"> &lt; Previous </a>";
 	}
 	$i =$current_page - $num_paged_links;
 	$count = 1;
 	if($i <= 0) $i =1;
 	while($i < $current_page){
 		if($count <= $num_paged_links){
-			$output .= " <a href=\"". $page_link .$separator. $i ."\" title=\"Page ".$i." \"> ".$i."  </a>";
+			$output .= " <a href=\"". $page_link .$separator. $i . $additional_links . "\" title=\"Page ".$i." \"> ".$i."  </a>";
 		}
 		$i++;
 		$count++;
@@ -139,7 +155,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	if($current_page < $totalpages){
 		while(($i) > $current_page){
 			if($count < $num_paged_links && ($count+$current_page) <= $totalpages){
-			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) ."\" title=\"Page ".($count+$current_page)." \"> ".($count+$current_page)."  </a>";
+			$output .= " <a href=\"". $page_link .$separator. ($count+$current_page) .$additional_links . "\" title=\"Page ".($count+$current_page)." \"> ".($count+$current_page)."  </a>";
 			$i++;
 			}else{
 			break;
@@ -152,11 +168,11 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	
 	if($current_page < $totalpages) {
 		$next_page = $current_page + 1;
-		$output .= "<a href=\"". $page_link  .$separator. $next_page ."\" title=\"Next Page\"> Next &gt; </a>";
+		$output .= "<a href=\"". $page_link  .$separator. $next_page . $additional_links . "\" title=\"Next Page\"> Next &gt; </a>";
 	}
 	// Should we show the LAST PAGE link?
 	if($current_page < $totalpages) {
-		$output .= " <a href=\"". $page_link  .$separator. $totalpages ."\" title=\"Last Page\"> Last &raquo; </a>";
+		$output .= " <a href=\"". $page_link  .$separator. $totalpages . $additional_links . "\" title=\"Last Page\"> Last &raquo; </a>";
 	}
 	// Return the output.
 	echo $output;
