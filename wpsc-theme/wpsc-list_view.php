@@ -68,14 +68,15 @@ global $wpsc_query, $wpdb;
 					<td width="40%">
 						<h2 class="prodtitle"><a class="wpsc_product_title" href="<?php echo wpsc_the_product_permalink(); ?>"><?php echo wpsc_the_product_title(); ?></a></h2>
 					</td>
-					
-					<td class="stock">
-						<?php if(wpsc_product_has_stock()) : ?>
-							<img src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/yes_stock.gif" alt="Yes" title="Yes" />
-						<?php else: ?> 
-							<img src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/no_stock.gif" title='No' alt="No" />
-						<?php endif; ?> 
-					</td>
+					<?php if(wpsc_show_stock_availability()): ?>	
+						<td class="stock">
+							<?php if(wpsc_product_has_stock()) : ?>
+								<img src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/yes_stock.gif" alt="Yes" title="Yes" />
+							<?php else: ?> 
+								<img src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/no_stock.gif" title='No' alt="No" />
+							<?php endif; ?> 
+						</td>
+					<?php endif; ?>
 					
 					<td>
                     <?php if(wpsc_product_on_special()) : ?>
