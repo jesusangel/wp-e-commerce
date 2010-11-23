@@ -268,7 +268,7 @@ endif;
       if(!empty($_SESSION['wpsc_checkout_misc_error_messages'])): ?>
          <div class='login_error'>
             <?php foreach((array)$_SESSION['wpsc_checkout_misc_error_messages'] as $user_error ){?>
-               <?php echo $user_error; ?><br />
+               <p class='validation-error'><?php echo $user_error; ?></p>
                <?php } ?>
          </div>
       <?php

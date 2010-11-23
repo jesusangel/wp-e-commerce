@@ -312,7 +312,7 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 				$category_image_html  = "";
 				$category_image_html .= "				<span class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
 				$category_image_html .= "					<span class='link_substitute' >\n\r";
-				$category_image_html .= "						<span>".__('N/A', 'wpsc')."</span>\n\r";
+				$category_image_html .= "						<span>".$category_row->name."</span>\n\r";
 				$category_image_html .= "					</span>\n\r";
 				$category_image_html .= "				</span>\n\r";
 			}
