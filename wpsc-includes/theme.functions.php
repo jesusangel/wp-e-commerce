@@ -433,6 +433,11 @@ function wpsc_the_category_title($title, $id){
  * @return $template (string)
  */
 function wpsc_the_category_template($template){
+	global $wp_query;
+	//this little bit of code makes sure we dont get an empty content section if no posts are found for a wpec category
+	if(wpsc_is_viewable_taxonomy() && 0 == $wp_query->post_count)
+		$wp_query->post_count += 1;
+	//this bit of code makes sure we use a nice standard page template for our products
 	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive'))
 		return str_ireplace('archive', 'page',$template);
 	else
