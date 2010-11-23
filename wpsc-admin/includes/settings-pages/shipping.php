@@ -164,6 +164,7 @@ function wpsc_options_shipping() {
 										<table id='gateway_options' >
 											<tr>
 												<td class='select_gateway'>
+												<a name="gateway_options"></a>
 											<div class='postbox'>
 												<h3 class='hndle'><?php _e( 'Shipping Modules', 'wpsc' ) ?></h3>
 												<div class='inside'>
@@ -177,41 +178,22 @@ function wpsc_options_shipping() {
 									</p>
 									<?php
 										foreach ( $internal_shipping_modules as $shipping ) {
-// 						exit("<pre>".print_r($shipping,1)."</pre>");
 
-
-											if ( is_object( $shipping ) && in_array( $shipping->getInternalName(), (array)$selected_shippings ) ) {
+											$shipping->checked = '';
+											if ( is_object( $shipping ) && in_array( $shipping->getInternalName(), (array)$selected_shippings ) ) 
+												$shipping->checked = ' checked = "checked" ';
 									?>
 
 												<div class='wpsc_shipping_options'>
 													<div class='wpsc-shipping-actions'>
 												| <span class="edit">
-															<a class='edit-shipping-module' rel="<?php echo $shipping->internal_name; ?>" onclick="event.preventDefault();" title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg( 'shipping_module', $shipping->internal_name ) ); ?>' style="cursor:pointer;">Edit</a>
+															<a class='edit-shipping-module' rel="<?php echo $shipping->internal_name; ?>" title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg('tab', 'shipping' , add_query_arg('page', 'wpsc-settings'  , add_query_arg( 'shipping_module', $shipping->internal_name ) ) ) ); ?>#gateway_options' style="cursor:pointer;">Edit</a>
 												</span> |
 											</div>
 
-											<p><input name='custom_shipping_options[]' checked='checked' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
+											<p><input name='custom_shipping_options[]' <?php echo $shipping->checked; ?> type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
 												</div>
-<?php } else { ?>
-
-												<div class='wpsc_shipping_options'>
-													<div class='wpsc-shipping-actions'>
-												| <span class="edit">
-															<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php if ( isset( $shipping->internal_name ) )
-													echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php if ( isset( $shipping->internal_name ) )
-													echo htmlspecialchars( add_query_arg( 'shipping_module', $shipping->internal_name ) ); ?>' style="cursor:pointer;">Edit</a>
-												</span> |
-											</div>
-											<p><input name='custom_shipping_options[]' type='checkbox' value='<?php if ( isset( $shipping->internal_name ) )
-													echo $shipping->internal_name; ?>' id='<?php if ( isset( $shipping->internal_name ) )
-													echo $shipping->internal_name; ?>_id' /><label for='<?php if ( isset( $shipping->internal_name ) )
-													echo $shipping->internal_name; ?>_id'><?php if ( isset( $shipping->internal_name ) )
-													echo $shipping->name; ?></label></p>
-												</div>
-										<?php
-											}
-										}
-										?>
+										<?php }	?>
 									<br />
 									<p>
 										<strong><?php _e( 'External Shipping Calculators', 'wpsc' ); ?></strong>
@@ -227,30 +209,19 @@ function wpsc_options_shipping() {
 											if ( ($shipping->requires_curl == true) && !function_exists( 'curl_init' ) ) {
 												$disabled = "disabled='disabled'";
 											}
-
-											if ( in_array( $shipping->getInternalName(), (array)$selected_shippings ) ) {
+											$shipping->checked = '';
+											if ( in_array( $shipping->getInternalName(), (array)$selected_shippings ) )
+												$shipping->checked = " checked='checked' ";
 									?>
 										<div class='wpsc_shipping_options'>
 											<div class="wpsc-shipping-actions">
 										| <span class="edit">
-													<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg( 'shipping_module', $shipping->internal_name ) ); ?>' style="cursor:pointer;">Edit</a>
+													<a class='edit-shippping-module' rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg('tab', 'shipping' , add_query_arg('page', 'wpsc-settings'  , add_query_arg( 'shipping_module', $shipping->internal_name ) ) ) ); ?>#gateway_options' style="cursor:pointer;">Edit</a>
 														</span> |
 													</div>
-													<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' checked='checked' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
+													<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' <?php echo $shipping->checked; ?> type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
 												</div>
-<?php } else { ?>
-										<div class='wpsc_shipping_options'>
-											<div class="wpsc-shipping-actions">
-										| <span class="edit">
-													<a class='edit-shippping-module' onclick="event.preventDefault();" rel="<?php echo $shipping->internal_name; ?>"  title="Edit this Shipping Module" href='<?php echo htmlspecialchars( add_query_arg( 'shipping_module', $shipping->internal_name ) ); ?>' style="cursor:pointer;">Edit</a>
-												</span> |
-											</div>
-											<p><input <?php echo $disabled; ?> name='custom_shipping_options[]' type='checkbox' value='<?php echo $shipping->internal_name; ?>' id='<?php echo $shipping->internal_name; ?>_id' /><label for='<?php echo $shipping->internal_name; ?>_id'><?php echo $shipping->name; ?></label></p>
-												</div>
-<?php
-											}
-										}
-?>
+										<?php } ?>
 
 										<div class='submit gateway_settings'>
 											<input type='hidden' value='true' name='update_gateways'/>
