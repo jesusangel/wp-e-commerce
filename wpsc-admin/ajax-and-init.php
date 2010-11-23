@@ -303,6 +303,9 @@ function wpsc_bulk_modify_products() {
 			if ( isset( $_POST['search'] ) && !empty( $_POST['search'] ) ) {
 				// urlencode the search query to allow for spaces, etc
 				$sendback = add_query_arg( 'search', urlencode( stripslashes( $_POST['search'] ) ), $sendback );
+			}elseif( !empty( $_POST['category'] )){	
+				$sendback = add_query_arg( 'category_id', (int)$_POST['category'], $sendback);
+		
 			}
 			break;
 	}

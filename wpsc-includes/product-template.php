@@ -178,6 +178,18 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	echo $output;
 }
 
+/**
+ * wpsc_show_stock_availability
+ * 
+ * Checks to see whether stock symbols need to be shown
+ * @return boolean - true is the option has been checked false otherwise
+ */
+function wpsc_show_stock_availability(){
+	if( get_option('list_view_quantity') == 1 )
+		return true;
+	else
+		return false;
+}
 
 /**
  * wpsc product image function

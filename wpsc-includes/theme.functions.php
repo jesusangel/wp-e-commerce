@@ -324,15 +324,17 @@ function wpsc_get_the_category_id($slug, $type = 'name'){
 
 function wpsc_get_the_category_display($slug){
 	global $wpdb;
+	$default_display_type = get_option('product_view');
+ //echo 'Display View='.$display_type;
 	if ( !empty($slug) && is_string($slug) ) {
 		$category_id = wpsc_get_the_category_id($slug , 'slug');
 		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
 	}
-
+//	echo 'Display View='.$display_type;
 	if(!empty($display_type))
 		return $display_type;		
 	else
-		return 'default';
+		return  $default_display_type;
 }
 
 /**
