@@ -89,7 +89,7 @@ endif;
          <tr class="wpsc_coupon_error_row"><td><?php _e('Coupon is not valid.', 'wpsc'); ?></td></tr>
       <?php endif; ?>
       <tr class="wpsc_coupon_row">
-         <td colspan="2"><?php _e('Enter your coupon number'); ?> :</td>
+         <td colspan="3"><?php _e('Enter your coupon number'); ?> :</td>
          <td  colspan="3" align='left'>
             <form  method="post" action="<?php echo get_option('shopping_cart_url'); ?>">
                <input type="text" name="coupon_num" id="coupon_num" value="<?php echo $wpsc_cart->coupons_name; ?>" />
