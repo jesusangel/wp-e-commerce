@@ -76,12 +76,12 @@ function wpsc_output_breadcrumbs($options = Array()) {
 	global $wpsc_query;
 	$products_page_id = wpec_get_the_post_id_by_shortcode('[productspage]');
 	$products_page = get_post($products_page_id);
-		
-	if(!wpsc_has_breadcrumbs() && $products_page_id != $wpsc_query->post->ID) {
+	if(!wpsc_has_breadcrumbs()){	
 		return;
 	}
+	
 	// If home if the same as products apge only show the products-page link and not the home link
-	if(get_option('home') != get_option('product_list_url')){
+	if(get_option('page_on_front') != $products_page_id){
 		echo isset($options['before-breadcrumbs']) ? $options['before-breadcrumbs'] : '<div class="wpsc-breadcrumbs">';
 		echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
 		echo '<a class="wpsc-crumb" id="wpsc-crumb-home" href="'.get_option('home').'">'.get_option('blogname').'</a>';
@@ -151,14 +151,13 @@ class wpsc_breadcrumbs {
 		if(1 == $wp_query->post_count){
 			$categories = wp_get_object_terms( $wp_query->post->ID , 'wpsc_product_category' );
 			$query_data['category'] = $categories[0]->slug;
-		}
-		//	exit('Doh?<pre>'.print_r($query_data,1).'</pre>');		
+		}		
 		if(isset($query_data['category'])) {
 			$term_data = get_term_by('slug', $query_data['category'], 'wpsc_product_category');
 		} else {
 			$term_data = get_term_by('slug', 'uncategorized', 'wpsc_product_category');
 		}
-
+		//exit('<pre>'.print_r($term_data,1).'</pre>');
 		if( $term_data != false) {
 			$this->breadcrumbs[] = array(
 				'name' => htmlentities( $term_data->name, ENT_QUOTES, 'UTF-8'),

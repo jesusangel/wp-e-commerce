@@ -8,11 +8,11 @@ global $wpsc_query, $wpdb;
 	<?php do_action('wpsc_top_of_products_page'); // Plugin hook for adding things to the top of the products page, like the live search ?>
 
 	<?php if(wpsc_display_categories()): ?>
-	  <?php if(get_option('wpsc_category_grid_view') == 1) :?>
+	  <?php if(wpsc_category_grid_view()) :?>
 			<div class="wpsc_categories wpsc_category_grid group">
 				<?php wpsc_start_category_query(array('category_group'=> 1, 'show_thumbnails'=> 1)); ?>
 					<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_grid_item" title="<?php wpsc_print_category_name();?>">
-						<?php wpsc_print_category_image(45, 45); ?>
+						<?php wpsc_print_category_image(get_option('category_image_width'), get_option('category_image_height')); ?>
 					</a>
 					<?php wpsc_print_subcategory("", ""); ?>
 				<?php wpsc_end_category_query(); ?>
@@ -21,7 +21,7 @@ global $wpsc_query, $wpdb;
 			<ul class="wpsc_categories">
 				<?php wpsc_start_category_query(array('category_group'=> 1, 'show_thumbnails'=> get_option('show_category_thumbnails'))); ?>
 						<li>
-							<?php wpsc_print_category_image(32, 32); ?>
+							<?php wpsc_print_category_image(get_option('category_image_width'), get_option('category_image_height')); ?>
 							
 							<a href="<?php wpsc_print_category_url();?>" class="wpsc_category_link"><?php wpsc_print_category_name();?></a>
 							<?php if(get_option('wpsc_category_description')) :?>

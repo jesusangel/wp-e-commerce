@@ -643,8 +643,8 @@ function wpsc_user_dynamic_css() {
 		.wpsc_category_grid_item  {
 			display:block;
 			float:left;
-			width: <?php echo $category_width - 2; ?>px;
-			height: <?php echo $category_height - 2; ?>px;
+			width: <?php echo $category_width; ?>px;
+			height: <?php echo $category_height; ?>px;
 		}
 		.wpsc_category_grid_item  span{
 			position:relative;
@@ -933,7 +933,9 @@ function wpsc_products_page( $content = '' ) {
 		$display_type = get_option('product_view');
 		if ( isset( $_SESSION['wpsc_display_type'] ) ) {
 			$display_type = $_SESSION['wpsc_display_type'];
+			unset($_SESSION['wpsc_display_type']);
 		}
+		
 		ob_start();
 		wpsc_include_products_page_template($display_type);
 		$is_single = false;
