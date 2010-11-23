@@ -400,15 +400,15 @@ function autocomplete(event) {
 	}else if(event.which){
 		keyPressed=event.which;
 	}
-	str = document.getElementById('wpsc_search_autocomplete').value;
+	str = event.target.value;
 	if (str != '') {
 		ajax.post("index.php",autocomplete_results,"wpsc_live_search=true&keyword="+str);
 	} else {
-		jQuery('#blind_down').slideUp(100);
+		jQuery(event.target).parent().parent().find('#blind_down').slideUp(100);
 	}
 }
 
-var autocomplete_results=function(results) {
+function autocomplete_results(results) {
 	document.getElementById('blind_down').innerHTML=results;
 	if (document.getElementById('blind_down').style.display!='block') {
 		jQuery('#blind_down').slideDown(200);
