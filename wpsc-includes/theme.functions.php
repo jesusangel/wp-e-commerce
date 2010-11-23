@@ -325,12 +325,10 @@ function wpsc_get_the_category_id($slug, $type = 'name'){
 function wpsc_get_the_category_display($slug){
 	global $wpdb;
 	$default_display_type = get_option('product_view');
- //echo 'Display View='.$display_type;
 	if ( !empty($slug) && is_string($slug) ) {
 		$category_id = wpsc_get_the_category_id($slug , 'slug');
 		$display_type = wpsc_get_categorymeta( $category_id, 'display_type' );
 	}
-//	echo 'Display View='.$display_type;
 	if(!empty($display_type))
 		return $display_type;		
 	else
@@ -403,7 +401,6 @@ function wpsc_is_viewable_taxonomy(){
 function wpsc_the_category_title($title, $id){
 	global $wp_query;
 	$post = get_post($id);
-
 	if(isset($wp_query->query_vars['post_type']) && 'wpsc-product' == $wp_query->query_vars['post_type'] && isset($wp_query->query_vars['paged']) && $wp_query->current_post == 0 &&  $wp_query->posts[0]->post_title == $post->post_title && count($wp_query->posts) >1 ){
 	remove_filter('the_title','wpsc_the_category_title');
 		$id = wpec_get_the_post_id_by_shortcode('[productspage]');
@@ -436,12 +433,11 @@ function wpsc_the_category_title($title, $id){
  * @return $template (string)
  */
 function wpsc_the_category_template($template){
-
-	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive')){
+	if(wpsc_is_viewable_taxonomy() && false !== strpos($template,'archive'))
 		return str_ireplace('archive', 'page',$template);
-	}else{
+	else
 		return $template;
-	}	
+		
 }
 
 /**

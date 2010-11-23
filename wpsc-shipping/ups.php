@@ -1,5 +1,5 @@
 <?php
-/* Author : Greg Gullett and Instinct.co.uk
+/* Author : Greg Gullett and Instinct.co.nz
  * SVN : UPS Trunk : Revision 15 : July 31, 2010
  */
 class ups {

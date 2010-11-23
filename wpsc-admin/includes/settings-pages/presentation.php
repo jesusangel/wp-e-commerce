@@ -478,7 +478,7 @@ function wpsc_options_presentation() {
 						</select>
 					<?php
 						if ( !function_exists( 'product_display_grid' ) ) {
-					?><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php _e( 'Purchase unavailable options', 'wpsc' ); ?></a> <?php
+					?><a href='http://getshopped.org/extend/premium-upgrades'><?php _e( 'Purchase unavailable options', 'wpsc' ); ?></a> <?php
 						}
 					?>
 					
