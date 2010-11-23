@@ -279,7 +279,24 @@ function wpsc_options_presentation() {
 						<input type='radio' value='0' name='wpsc_options[product_ratings]' id='product_ratings2' <?php echo $product_ratings2; ?> /> <label for='product_ratings2'><?php _e( 'No', 'wpsc' ); ?></label>
 					</td>
 				</tr>
-
+				<tr>
+					<?php
+					$list_view_quantity_value1 = '';
+					$list_view_quantity_value2 = '';
+ 					if ( get_option( 'list_view_quantity' ) == 1 )
+                                                 $list_view_quantity_value1 = 'checked="checked"';
+                                         else
+                                                 $list_view_quantity_value2 = 'checked="checked"';
+                                        
+					?>
+					<th score="row">
+						<?php _e('Show Stock Availability','wpsc'); ?>
+					</th>
+					<td>
+						<input type='radio' value='1' name='wpsc_options[list_view_quantity]' id='list_view_quantity1' <?php echo $list_view_quantity_value1; ?> /> <label for='list_view_quantity1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
+						 <input type='radio' value='0' name='wpsc_options[list_view_quantity]' id='list_view_quantity2' <?php echo $list_view_quantity_value2; ?> /> <label for='list_view_quantity2'><?php _e( 'No', 'wpsc' ); ?></label> &nbsp;
+					</td>
+				</tr>
 				<tr>
 					<th scope="row">
 						<?php _e( 'Display Fancy Purchase Notifications', 'wpsc' ); ?>:
@@ -409,12 +426,6 @@ function wpsc_options_presentation() {
 								break;
 						}
 
-						if ( get_option( 'list_view_quantity' ) == 1 ) {
-							$list_view_quantity_value = "checked='checked'";
-						} else {
-							$list_view_quantity_value = '';
-						}
-
 						if ( get_option( 'show_images_only' ) == 1 ) {
 							$show_images_only_value = "checked='checked'";
 						} else {
@@ -470,12 +481,7 @@ function wpsc_options_presentation() {
 					?><a href='http://www.instinct.co.nz/e-commerce/shop/'><?php _e( 'Purchase unavailable options', 'wpsc' ); ?></a> <?php
 						}
 					?>
-						<div id='list_view_options' <?php if ( is_null( $product_view2 ) ) {
-							echo "style='display:none;'";
-						} ?> >
-							<input type='checkbox' value='1' name='wpsc_options[list_view_quantity]' id='list_view_quantity' <?php echo $list_view_quantity_value; ?> />
-							<label for='list_view_options'><?php _e( 'Show quantity form in list view', 'wpsc' ); ?></label>
-						</div>
+					
 						<div id='grid_view_options' <?php if ( isset( $list_view_quantity_style ) )
 							echo $list_view_quantity_style; ?> <?php if ( is_null( $product_view3 ) ) {
 							echo "style='display:none;'";
