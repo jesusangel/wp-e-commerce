@@ -407,10 +407,9 @@ function wpsc_the_category_title($title, $id){
 		$post = get_post($id);
 		return $post->post_title;
 	}
-	if('wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title && isset($wp_query->query_vars['term']) && isset($wp_query->query_vars['taxonomy']) && !($wp_query->is_admin)){
-	remove_filter('the_title','wpsc_the_category_title');
-		$category_id = wpsc_get_the_category_id($wp_query->query_vars['term'],'slug');
-		$category = get_term($category_id, $wp_query->query_vars['taxonomy']);
+	if( wpsc_is_viewable_taxonomy() && 'wpsc-product' == $post->post_type && $wp_query->posts[0]->post_title == $post->post_title ){
+		remove_filter('the_title','wpsc_the_category_title');
+		$category = get_term_by('slug',$wp_query->query_vars['term'],'wpsc_product_category');
 	}
 	if( isset($wp_query->query_vars['taxonomy']) && 'product_tag' == $wp_query->query_vars['taxonomy'] && $wp_query->posts[0]->post_title == $post->post_title ){
 	remove_filter('the_title','wpsc_the_category_title');

@@ -79,7 +79,10 @@ global $wpsc_query, $wpdb;
 					<?php endif; ?>
 					
 					<td>
-                    <?php if(wpsc_product_on_special()) : ?>
+ 						<?php do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product); ?>
+					</td>
+					<td>
+                  			<?php if(wpsc_product_on_special()) : ?>
 						<p class="oldprice"><?php echo wpsc_product_normal_price(); ?></p>
 					<?php endif; ?>
 						<p id="product_price_<?php echo wpsc_the_product_id(); ?>" class="pricedisplay currentprice"><?php echo wpsc_the_product_price(); ?></p>
