@@ -78,8 +78,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		foreach($wpsc_purchlog_statuses as $status)
 			if($status['order'] == $purchase_log['processed'] && isset($status['is_transaction']) && 1 == $status['is_transaction'] )
 				$is_transaction = true;
-			
-
 
 		if ( ($purchase_log['gateway'] == "wpsc_merchant_testmode") && ($purchase_log['processed'] < 3) ) {
 			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc') );
