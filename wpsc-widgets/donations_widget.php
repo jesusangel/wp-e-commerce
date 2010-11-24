@@ -144,6 +144,7 @@ function wpsc_donations( $args = null ) {
 				'order'       => 'ASC'
 			) );
 			$attached_image = $attached_images[0]; 
+			$output .= "<div class='wpsc_product_donation'>";
 			if ( ( $attached_image->ID > 0 ) ) {
 				$output .= "<img src='" . wpsc_product_image( $attached_image->ID, get_option( 'product_image_width' ), get_option( 'product_image_height' ) ) . "' title='" . $product['post_title'] . "' alt='" . $product['post_title'] . "' /><br />";
 			}
@@ -163,7 +164,7 @@ function wpsc_donations( $args = null ) {
 			$output .= "<label for='donation_widget_price_" . $product['ID'] . "'>" . __( 'Donation', 'wpsc' ) . ":</label> $currency_symbol<input type='text' id='donation_widget_price_" . $product['ID'] . "' name='donation_price' value='" . number_format( $price, 2 ) . "' size='6' /><br />";
 			$output .= "<input type='submit' name='Buy' class='wpsc_buy_button' value='" . __( 'Add To Cart', 'wpsc' ) . "' />";
 			$output .= "</form>";
-			
+			$output .= "</div>";
 		}
 	} else {
 		$output = '';
