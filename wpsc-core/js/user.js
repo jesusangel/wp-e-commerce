@@ -391,33 +391,6 @@ var return_store_list=function(results) {
 	return true;
 }
 
-function autocomplete(event) {
-	if(!event){
-		event=window.event;
-	}
-	if(event.keyCode){
-		keyPressed=event.keyCode;
-	}else if(event.which){
-		keyPressed=event.which;
-	}
-	str = event.target.value;
-	if (str != '') {
-		ajax.post("index.php",function(results){ 
-			autocomplete_results( results, jQuery(event.target).parent().parent().find('.blind_down') ); 
-		},"wpsc_live_search=true&keyword="+str);
-	} else {
-		jQuery(event.target).parent().parent().find('.blind_down').slideUp(100);
-	}
-}
-
-function autocomplete_results(results, element) {
-	element.html(results);
-	if (element.css('display')!='block') {
-		element.slideDown(200);
-	}
-	return true;
-}
-
 function statusTextKeyPress(event){
 	if(!event){
 		event=window.event;
