@@ -1000,7 +1000,7 @@ function wpsc_options_presentation() {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php _e( 'Use Thickbox Effect for product images', 'wpsc' ); ?>:</th>
+					<th scope="row"><?php _e( 'Use Lightbox Effect for product images', 'wpsc' ); ?>:</th>
 					<td>
 					<?php
 						$show_thumbnails_thickbox = get_option( 'show_thumbnails_thickbox' );
@@ -1018,9 +1018,26 @@ function wpsc_options_presentation() {
 					?>
 						<input type='radio' value='1' name='wpsc_options[show_thumbnails_thickbox]' id='show_thumbnails_thickbox1' <?php echo $show_thumbnails_thickbox1; ?> /> <label for='show_thumbnails_thickbox1'><?php _e( 'Yes', 'wpsc' ); ?></label> &nbsp;
 						<input type='radio' value='0' name='wpsc_options[show_thumbnails_thickbox]' id='show_thumbnails_thickbox2' <?php echo $show_thumbnails_thickbox2; ?> /> <label for='show_thumbnails_thickbox2'><?php _e( 'No', 'wpsc' ); ?></label><br />
-					<?php _e( 'Using thickbox means that when clicking on a product image, a larger version will be displayed in a "thickbox" style window. If you are using a plugin such as Shutter Reloaded, you may want to disable thickbox.', 'wpsc' ); ?>
+					<?php _e( 'Using lightbox means that when clicking on a product image, a larger version will be displayed in a "lightbox" style window. If you are using a plugin such as Shutter Reloaded, you may want to disable lightbox.', 'wpsc' ); ?>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php _e( 'Lightbox script to use', 'wpsc' ); ?>:</th>
+					<td>
+					<?php
+						$wpsc_lightbox = get_option( 'wpsc_lightbox', 'thickbox' );
+						$wpsc_lightbox_thickbox1 = "";
+						$wpsc_lightbox_thickbox2 = "";
+						if( $wpsc_lightbox == "thickbox" )
+							$wpsc_lightbox_thickbox2 = "checked ='checked'";
+						if( $wpsc_lightbox == "colorbox" )
+							$wpsc_lightbox_thickbox1 = "checked ='checked'";
+					?>
+						<input type='radio' value='colorbox' name='wpsc_options[wpsc_lightbox]' id='wpsc_lightbox_thickbox1' <?php echo $wpsc_lightbox_thickbox1; ?> /> <label for='show_thumbnails_thickbox1'><?php _e( 'Colorbox', 'wpsc' ); ?></label> &nbsp;
+						<input type='radio' value='thickbox' name='wpsc_options[wpsc_lightbox]' id='wpsc_lightbox_thickbox2' <?php echo $wpsc_lightbox_thickbox2; ?> /> <label for='show_thumbnails_thickbox2'><?php _e( 'Thickbox', 'wpsc' ); ?></label><br />
+					</td>
+				</tr>
+				
 					<?php
 						if ( function_exists( 'gold_shpcrt_display_gallery' ) ) {
 					?>
