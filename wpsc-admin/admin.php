@@ -114,6 +114,7 @@ function wpsc_admin_pages() {
 
 		// Add Settings pages
 		$page_hooks[] = $edit_options_page = add_options_page( __( 'Store Settings', 'wpsc' ), __( 'Store', 'wpsc' ), 'administrator', 'wpsc-settings', 'wpsc_display_settings_page' );
+		add_action('admin_print_scripts-' . $edit_options_page , 'wpsc_print_admin_scripts');
 
 		// Debug Page
 		if ( ( defined( 'WPSC_ADD_DEBUG_PAGE' ) && ( WPSC_ADD_DEBUG_PAGE == true ) ) || ( isset( $_SESSION['wpsc_activate_debug_page'] ) && ( true == $_SESSION['wpsc_activate_debug_page'] ) ) )
@@ -820,5 +821,9 @@ function wpsc_admin_notices() {
 }
 if ( isset( $_GET['page'] ) && (stristr( $_GET['page'], WPSC_DIR_NAME )) )
 	add_action( 'admin_notices', 'wpsc_admin_notices' );
+
+function wpsc_print_admin_scripts(){
+	wp_enqueue_script( 'wp-e-commerce-dynamic',       get_bloginfo('url')			. "/index.php?wpsc_user_dynamic_js=true", false,             $version_identifier );
+}
 
 ?>
