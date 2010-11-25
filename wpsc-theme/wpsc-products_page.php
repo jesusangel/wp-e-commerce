@@ -179,6 +179,12 @@ global $wpsc_query, $wpdb, $wp_query;
 									<?php if(wpsc_product_on_special()) : ?>
 										<p class="pricedisplay product_<?php echo wpsc_the_product_id(); ?>"><?php _e('You save', 'wpsc'); ?>:<span class="yousave" id="yousave_<?php echo wpsc_the_product_id(); ?>"><?php echo wpsc_currency_display(wpsc_you_save('type=amount'), array('html' => false)); ?>! (<?php echo wpsc_you_save(); ?>%)</span></p>
 									<?php endif; ?>
+									
+									<!-- multi currency code -->
+									<?php if(wpsc_product_has_multicurrency()) : ?>
+	                                	<?php echo wpsc_display_product_multicurrency(); ?>
+                                    <?php endif; ?>
+									
 									<?php if(wpsc_show_pnp()) : ?>
 										<p class="pricedisplay"><?php _e('Shipping', 'wpsc'); ?>:<span class="pp_price"><?php echo wpsc_product_postage_and_packaging(); ?></span></p>
 									<?php endif; ?>							

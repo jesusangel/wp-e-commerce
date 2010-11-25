@@ -1161,30 +1161,23 @@ function wpsc_the_variation() {
 	$wpsc_variations->the_variation();
 }
 
+
 function wpsc_product_has_multicurrency() {
 	global $wpdb, $wpsc_query;
-	//echo "<pre>".print_r($wpdb,true)."</pre>";
-
-	$sql = "SELECT `meta_key`, `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id`=" . get_the_ID() . " AND `meta_key` LIKE '_wpsc_currency%'";
-	$results = $wpdb->get_results( $sql, ARRAY_A );
-	if ( count( $results ) > 0 )
+	
+	$currency = get_product_meta(get_the_ID(),'currency',true);
+	if ( count( $currency ) > 0 )
 		return true;
 	else
 		return false;
-
-//	exit('<pre>'.print_r($results, true).'</pre>');
 }
 
 function wpsc_display_product_multicurrency() {
 	global $wpdb, $wpsc_query;
 
-	$sql     = "SELECT `meta_key`, `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id`=" . get_the_ID() . " AND `meta_key` LIKE '_wpsc_currency%'";
-	$results = $wpdb->get_results( $sql, ARRAY_A );
-
+	$results = get_product_meta(get_the_ID(),'currency',true);
 	if ( count( $results ) > 0 ) {
-		foreach ( (array)$results as $curr ) {
-			$isocode       = str_ireplace( "currency[", "", $curr['meta_key'] );
-			$isocode       = str_ireplace( "]", "", $isocode );
+		foreach ( (array)$results as $isocode => $curr ) {
 			$currency_data = $wpdb->get_row( "SELECT `symbol`,`symbol_html`,`code` FROM `" . WPSC_TABLE_CURRENCY_LIST . "` WHERE `isocode`='" . $isocode . "' LIMIT 1", ARRAY_A );
 
 			if ( $currency_data['symbol'] != '' )
@@ -1193,7 +1186,7 @@ function wpsc_display_product_multicurrency() {
 				$currency_sign = $currency_data['code'];
 
 			if ( !empty( $currency_sign ) )
-				return '<span class="wpscsmall pricefloatright pricedisplay">' . $currency_sign . ' ' . wpsc_currency_display( $curr["meta_value"] ) . '</span><br />';
+				return '<span class="wpscsmall pricefloatright pricedisplay">' . $isocode . ' ' . wpsc_currency_display( $curr["meta_value"] ) . '</span><br />';
 		}
 	}
 
