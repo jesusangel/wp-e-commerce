@@ -210,6 +210,17 @@ endif;
    <?php endif; ?>
    <?php do_action('wpsc_before_form_of_shopping_cart'); ?>
 
+	<?php if ( wpsc_show_user_login_form() && !is_user_logged_in() ): ?>
+	<h2><?php _e( 'Already Registered?' ); ?></h2>
+	<p><?php _e( 'Enter your login details below.' );?></p>
+	<fieldset class='wpsc_registration_form'>
+		<?php
+		$args = array( 'remember' => false );
+		wp_login_form( $args );
+		?>
+	</fieldset>
+	<?php endif; ?>
+         
    <form class='wpsc_checkout_forms' action='' method='post' enctype="multipart/form-data">
 
       <?php
@@ -263,6 +274,7 @@ endif;
                </tr>
             </table>
          </fieldset>
+        
    <?php endif; // closes user login form
 
       if(!empty($_SESSION['wpsc_checkout_misc_error_messages'])): ?>
