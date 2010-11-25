@@ -151,7 +151,9 @@ function wpsc_display_form_fields() {
 		} else {
 			$ff_tag = htmlentities( stripslashes( strtolower( str_replace( ' ', '-', $form_field['name'] ) ) ) );
 		}
-		$meta_data[$form_field['id']] = htmlentities( stripslashes( $meta_data[$form_field['id']] ), ENT_QUOTES );
+		if(!empty($meta_data[$form_field['id']]))
+			$meta_data[$form_field['id']] = htmlentities( stripslashes( $meta_data[$form_field['id']] ), ENT_QUOTES );
+		
 		if ( $form_field['type'] == 'heading' ) {
 			echo "
     <tr>
