@@ -29,7 +29,7 @@ function wpsc_transaction_theme() {
 	if ( 'paypal_certified' == $_SESSION['wpsc_previous_selected_gateway'] )
 		$sessionid = $_SESSION['paypalexpresssessionid'];
 
-	if ( isset( $_REQUEST['eway'] ) && $_REQUEST'1' == ['eway'] )
+	if ( isset( $_REQUEST['eway'] ) && '1' == $_REQUEST['eway'] )
 		$sessionid = $_GET['result'];
 	elseif ( isset( $_REQUEST['eway'] ) && '0' == $_REQUEST['eway'] )
 		echo $_SESSION['eway_message'];
