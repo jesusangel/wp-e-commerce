@@ -277,8 +277,10 @@ function wpsc_the_product_price( $no_decimals = false ) {
 	if ( count( $wpsc_variations->first_variations ) > 0 ) {
 		//select the variation ID with lowest price
 		$product_id = $wpdb->get_var('SELECT `posts`.`id` FROM ' . $wpdb->posts . ' `posts` JOIN ' . $wpdb->postmeta . ' `postmeta` ON `posts`.`id` = `postmeta`.`post_id` WHERE `posts`.`post_parent` = ' . get_the_ID() . ' AND `posts`.`post_type` = "wpsc-product" AND `posts`.`post_status` = "inherit" AND `postmeta`.`meta_key`="_wpsc_price" ORDER BY (`postmeta`.`meta_value`)+0 ASC LIMIT 1');
+		$from = ' from ';
 	} else {
 		$product_id = get_the_ID();
+		$from = '';
 	}
 
 	$full_price = get_post_meta( $product_id, '_wpsc_price', true );
@@ -293,7 +295,8 @@ function wpsc_the_product_price( $no_decimals = false ) {
 		
 	$output = wpsc_currency_display( $price, array('display_as_html' => false) );
 	//if product has variations - add 'from'
-	if ( count( $wpsc_variations->first_variations ) > 0 )
+	$from = apply_filters('wpsc_product_variation_text',$from);
+	if ( count( $wpsc_variations->first_variations ) > 0 && !empty($from))
 		$output = sprintf(__(' from %s', 'wpsc'), $output);
 		
 	return $output;
@@ -883,6 +886,7 @@ function wpsc_product_normal_price() {
 		$product_id = get_the_ID();
 		$from = '';
 	}
+	$from = apply_filters('wpsc_product_variation_text',$from);
 	$price = get_product_meta( $product_id, 'price', true );
 	$output = $from.wpsc_currency_display( $price );
 	return $output;
