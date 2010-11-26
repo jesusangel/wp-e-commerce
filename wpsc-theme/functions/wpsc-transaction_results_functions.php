@@ -10,6 +10,8 @@
  */
 function wpsc_transaction_theme() {
 	global $wpdb, $user_ID, $nzshpcrt_gateways, $sessionid, $cart_log_id, $errorcode;
+	$errorcode = '';
+	$transactid = '';
 
 	if ( isset( $_GET['sessionid'] ) )
 		$sessionid = $_GET['sessionid'];
@@ -17,24 +19,21 @@ function wpsc_transaction_theme() {
 	if ( !isset( $_GET['sessionid'] ) && isset( $_GET['ms'] ) )
 		$sessionid = $_GET['ms'];
 
-	if ( isset( $_GET['gateway'] ) && $_GET['gateway'] == 'google' ) {
+	if ( isset( $_GET['gateway'] ) && 'google' == $_GET['gateway'] ) {
 		wpsc_google_checkout_submit();
 		unset( $_SESSION['wpsc_sessionid'] );
-	} elseif ( isset( $_GET['gateway'] ) && $_GET['gateway'] == 'noca' ) {
-		wpsc_submit_checkout();
 	}
+	if ( isset( $_GET['gateway'] ) && 'noca' == $_GET['gateway'] )
+		wpsc_submit_checkout();
 
-	if ( $_SESSION['wpsc_previous_selected_gateway'] == 'paypal_certified' )
+	if ( 'paypal_certified' == $_SESSION['wpsc_previous_selected_gateway'] )
 		$sessionid = $_SESSION['paypalexpresssessionid'];
 
-	$errorcode = '';
-	$transactid = '';
-
-	if ( isset( $_REQUEST['eway'] ) && $_REQUEST['eway'] == '1' )
+	if ( isset( $_REQUEST['eway'] ) && $_REQUEST'1' == ['eway'] )
 		$sessionid = $_GET['result'];
-	elseif ( isset( $_REQUEST['eway'] ) && $_REQUEST['eway'] == '0' )
+	elseif ( isset( $_REQUEST['eway'] ) && '0' == $_REQUEST['eway'] )
 		echo $_SESSION['eway_message'];
-	elseif ( isset( $_REQUEST['payflow'] ) && $_REQUEST['payflow'] == '1' ){
+	elseif ( isset( $_REQUEST['payflow'] ) && '1' == $_REQUEST['payflow'] ){
 		echo $_SESSION['payflow_message'];
 		$_SESSION['payflow_message'] = '';
 	}
@@ -51,6 +50,7 @@ function wpsc_transaction_theme() {
 			$sessionid = decrypt_dps_response();
 		break;
 	}
+	
 	if ( $sessionid != '' )
 		return transaction_results( $sessionid, true );
 	else
@@ -73,7 +73,7 @@ function wpsc_transaction_theme() {
 function transaction_results( $sessionid, $echo_to_screen = true, $transaction_id = null ) {
 	// Do we seriously need this many globals?
 	global $wpdb, $wpsc_cart, $echo_to_screen, $purchase_log, $order_url; 
-	global $message_html, $cart, $errorcode,$wpsc_purchlog_statuses;
+	global $message_html, $cart, $errorcode,$wpsc_purchlog_statuses, $wpsc_gateways;
 	
 	$is_transaction = false;
 	$errorcode = 0;
@@ -137,6 +137,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$link = array( );
 			$total_shipping = '';
 			foreach ( $cart as $row ) {
+			
 				if ( $purchase_log['email_sent'] != 1 )
 					$wpdb->query( "UPDATE `" . WPSC_TABLE_DOWNLOAD_STATUS . "` SET `active`='1' WHERE `cartid` = '{$row['id']}' AND `purchid` = '{$purchase_log['id']}'" );
 
@@ -178,10 +179,9 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 
 				$shipping_price = wpsc_currency_display( $shipping, array( 'display_as_html' => false ) );
 
-				if ( isset( $purchase['gateway'] ) && $purchase['gateway'] != 'wpsc_merchant_testmode' ) {
-					if ( $gateway['internalname'] == $purch_data[0]['gateway'] ) {
+				if ( isset( $purchase['gateway'] ) && 'wpsc_merchant_testmode' != $purchase['gateway'] ) {
+					if ( $gateway['internalname'] == $purch_data[0]['gateway'] )
 						$gateway_name = $gateway['name'];
-					}
 				} else {
 					$gateway_name = "Manual Payment";
 				}

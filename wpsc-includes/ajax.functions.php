@@ -523,17 +523,17 @@ function wpsc_submit_checkout() {
 		}
 		//count number of items, and number of items using shipping
 		$num_items++;
-		if ( $cartitem->uses_shipping != 1 ) {
+		if ( $cartitem->uses_shipping != 1 )
 			$disregard_shipping++;
-		} else {
+		else
 			$use_shipping++;
-		}
+	
 	}
-	if ( array_search( $submitted_gateway, $selected_gateways ) !== false ) {
+	if ( array_search( $submitted_gateway, $selected_gateways ) !== false )
 		$_SESSION['wpsc_previous_selected_gateway'] = $submitted_gateway;
-	} else {
+	else
 		$is_valid = false;
-	}
+	
 	if ( (get_option( 'do_not_use_shipping' ) != 1) && (in_array( 'ups', (array)$options )) && $_SESSION['wpsc_zipcode'] == '' ) {
 		if ( $num_items != $disregard_shipping ) { //<-- new line of code
 			$_SESSION['categoryAndShippingCountryConflict'] = __( 'Please enter a Zipcode and click calculate to proceed' );
@@ -546,11 +546,11 @@ function wpsc_submit_checkout() {
 		$sessionid = (mt_rand( 100, 999 ) . time());
 		$_SESSION['wpsc_sessionid'] = $sessionid;
 		$subtotal = $wpsc_cart->calculate_subtotal();
-		if ( $wpsc_cart->has_total_shipping_discount() == false ) {
+		if ( $wpsc_cart->has_total_shipping_discount() == false )
 			$base_shipping = $wpsc_cart->calculate_base_shipping();
-		} else {
+		else
 			$base_shipping = 0;
-		}
+		
 		if ( wpsc_uses_shipping ( ) ) {
 			$shipping_method = $wpsc_cart->selected_shipping_method;
 			$shipping_option = $wpsc_cart->selected_shipping_option;
@@ -562,11 +562,11 @@ function wpsc_submit_checkout() {
 			$delivery_country = '';
 			$delivery_region = '';
 		}
-		if ( isset( $_POST['how_find_us'] ) ) {
+		if ( isset( $_POST['how_find_us'] ) )
 			$find_us = $_POST['how_find_us'];
-		} else {
+		else
 			$find_us = '';
-		}
+		
 		//keep track of tax if taxes are exclusive
 		$wpec_taxes_controller = new wpec_taxes_controller();
 		if ( !$wpec_taxes_controller->wpec_taxes_isincluded() ) {
@@ -602,18 +602,17 @@ function wpsc_submit_checkout() {
 		$wpsc_checkout->save_forms_to_db( $purchase_log_id );
 		$wpsc_cart->save_to_db( $purchase_log_id );
 		$wpsc_cart->submit_stock_claims( $purchase_log_id );
-		if ( get_option( 'wpsc_also_bought' ) == 1 ) {
+		if ( get_option( 'wpsc_also_bought' ) == 1 )
 			wpsc_populate_also_bought_list();
-		}
+
 		$wpsc_cart->log_id = $purchase_log_id; 
 		do_action( 'wpsc_submit_checkout', array( "purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id ) );
-		if ( get_option( 'permalink_structure' ) != '' ) {
+		if ( get_option( 'permalink_structure' ) != '' )
 			$separator = "?";
-		} else {
+		else
 			$separator = "&";
-		}
+		
 		// submit to gateway
-		//print_r( $current_gateway_data );
 		$current_gateway_data = &$wpsc_gateways[$submitted_gateway];		
 		if ( $current_gateway_data['api_version'] >= 2.0 ) {
 			$merchant_instance = new $current_gateway_data['class_name']( $purchase_log_id );
@@ -633,9 +632,8 @@ function wpsc_submit_checkout() {
 			$_SESSION['gateway'] = 'google';
 			wp_redirect(get_option( 'shopping_cart_url' ));
 		}
-		if ( isset( $_GET['gateway'] ) && $_GET['gateway'] == 'noca' ) {
+		if ( isset( $_GET['gateway'] ) && $_GET['gateway'] == 'noca' )
 			echo transaction_results( $sessionid, true );
-		}
 	}
 }
 
