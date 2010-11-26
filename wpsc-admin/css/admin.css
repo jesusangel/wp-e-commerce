@@ -206,6 +206,7 @@ div.search-box input#page-search-input {
 #wpsc_product_list tbody {
 	width: 400px;
 	border-collapse:collapse;
+	background-color: #eaeaea;
 }
 
 
