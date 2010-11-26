@@ -292,8 +292,12 @@ function wpsc_the_product_price( $no_decimals = false ) {
 		
 	if ( $no_decimals == true )
 		$price = array_shift( explode( ".", $price ) );
-		
-	$output = wpsc_currency_display( $price, array('display_as_html' => false) );
+	
+	$args = array(
+		'display_as_html' => false,
+		'display_decimal_point' => !$no_decimals
+	);	
+	$output = wpsc_currency_display( $price,$args );
 	//if product has variations - add 'from'
 	$from = apply_filters('wpsc_product_variation_text',$from);
 	if ( count( $wpsc_variations->first_variations ) > 0 && !empty($from))

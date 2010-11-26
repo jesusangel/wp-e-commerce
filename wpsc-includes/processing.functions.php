@@ -24,7 +24,8 @@ function wpsc_currency_display( $price_in, $args = null ) {
 		$decimals = 0;
 	else
 		$decimals = 2; // default is 2
-
+	
+	$decimals = apply_filters('wpsc_modify_decimals' , $decimals);
 	if('' == get_option('wpsc_decimal_separator'))
 		$decimal_separator = '.';
 	else
