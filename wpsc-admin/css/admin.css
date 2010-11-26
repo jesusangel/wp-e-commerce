@@ -206,7 +206,6 @@ div.search-box input#page-search-input {
 #wpsc_product_list tbody {
 	width: 400px;
 	border-collapse:collapse;
-	background-color: #eaeaea;
 }
 
 
@@ -318,7 +317,7 @@ tr.product-placeholder {
 	border-style: dashed;
 	z-index: 900;
 	border-color: #bbb;
-	background-color: #eaeaea;
+	background-color: #eaeaea !important;
 	margin: -2px 0 0 -2px;
 	height: 50px;
 }
