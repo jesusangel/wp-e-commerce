@@ -204,7 +204,7 @@ global $wpsc_query, $wpdb, $wp_query;
 										</div><!--close wpsc_loading_animation-->
 											<?php if(wpsc_product_external_link(wpsc_the_product_id()) != '') : ?>
 											<?php 	$action =  wpsc_product_external_link(wpsc_the_product_id()); ?>
-											<input class="wpsc_buy_button" type="submit" value="<?php _e('Buy Now', 'wpsc'); ?>" onclick="gotoexternallink("<?php echo $action; ?>")">
+											<input class="wpsc_buy_button" type="submit" value="<?php _e('Buy Now', 'wpsc'); ?>" onclick="gotoexternallink('<?php echo $action; ?>')">
 											<?php else: ?>
 										<input type="submit" value="<?php _e('Add To Cart', 'wpsc'); ?>" name="Buy" class="wpsc_buy_button" id="product_<?php echo wpsc_the_product_id(); ?>_submit_button"/>
 											<?php endif; ?>
