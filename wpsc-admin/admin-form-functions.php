@@ -374,17 +374,6 @@ function wpsc_packing_slip($purchase_id) {
 				}
 			}
 
-// 			echo "	<tr><td colspan='2'></td></tr>\n\r";
-// 			echo "	<tr><td>".__('Payment Method', 'wpsc').":</td><td>".$gateway_name."</td></tr>\n\r";
-// 			//echo "	<tr><td>".__('Purchase No.', 'wpsc').":</td><td>".$purch_data['id']."</td></tr>\n\r";
-// 			echo "	<tr><td>".__('How The Customer Found Us', 'wpsc').":</td><td>".$purch_data['find_us']."</td></tr>\n\r";
-// 			$engrave_line = explode(",",$purch_data['engravetext']);
-// 			echo "	<tr><td>".__('Engrave text', 'wpsc')."</td><td></td></tr>\n\r";
-// 			echo "	<tr><td>".__('Line 1', 'wpsc').":</td><td>".$engrave_line[0]."</td></tr>\n\r";
-// 			echo "	<tr><td>".__('Line 2', 'wpsc').":</td><td>".$engrave_line[1]."</td></tr>\n\r";
-// 			if($purch_data['transactid'] != '') {
-// 				echo "	<tr><td>".__('Transaction Id', 'wpsc').":</td><td>".$purch_data['transactid']."</td></tr>\n\r";
-// 			}
 			echo "</table>\n\r";
 			
 			

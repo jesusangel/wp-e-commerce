@@ -65,6 +65,40 @@ function wpsc_has_regions($country){
 }
 
 /**
+ * wpsc_check_purchase_processed checks the given processed number and checks it against the global wpsc_purchlog_statuses
+ * @access public
+ *
+ * @since 3.8
+ * @param $processed (int) generally comes from the purchase log table `processed` column
+ * @return $is_transaction (boolean) true if the process is a completed transaction false otherwise
+ */
+function wpsc_check_purchase_processed($processed){
+	global $wpsc_purchlog_statuses;
+	$is_transaction = false;
+	foreach($wpsc_purchlog_statuses as $status)
+		if($status['order'] == $purchase_log['processed'] && isset($status['is_transaction']) && 1 == $status['is_transaction'] )
+			$is_transaction = true;
+	
+	return $is_transaction;
+}
+
+/**
+ * get buyers email retrieves the email address associated to the checkout
+ * @access public
+ *
+ * @since 3.8
+ * @param purchase_id (int) the purchase id
+ * @return email (strong) email addess
+ */
+function wpsc_get_buyers_email($purchase_id){
+	global $wpdb;
+	$email_form_field = $wpdb->get_results( "SELECT `id`,`type` FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `type` IN ('email') AND `active` = '1' ORDER BY `order` ASC LIMIT 1", ARRAY_A );
+	$email = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_id . " AND `form_id` = '" . $email_form_field[0]['id'] . "' LIMIT 1" );
+	return $email;
+
+}
+
+/**
  * wpsc google checkout submit used for google checkout (unsure whether necessary in 3.8)
  * @access public
  *

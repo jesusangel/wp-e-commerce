@@ -1031,7 +1031,7 @@ define('TXT_WPSC_SHOPPING_CART', 'Shopping Cart');
 define('TXT_WPSC_SHOW_SLIDING_CART', 'Use Sliding Cart');
 define('TXT_WPSC_PREVIEW_FILE', 'Upload Preview');
 define('TXT_WPSC_PREVIEW_FILE_NOTE', 'Note: If you do not upload a preview file and your server has sox compiled with MP3 support then a preview file will be created for you.');
-define('TXT_WPSC_PURCHASE_NUMBER', 'Purchase No.');
+define('TXT_WPSC_PURCHASE_NUMBER', 'Purchase #');
 define('TXT_WPSC_FILTER_ORDER', 'Filter Orders');
 define('TXT_WPSC_SHOW_SEARCH', 'Show Search');
 define('TXT_WPSC_LOG_CURRENT_MONTH', 'Display results from current month');

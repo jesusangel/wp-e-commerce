@@ -987,7 +987,7 @@ function wpsc_admin_sale_rss() {
 		foreach ( (array)$purchase_log as $purchase ) {
 			$purchase_link = get_option( 'siteurl' ) . "/wp-admin/admin.php?page=" . WPSC_DIR_NAME . "/display-log.php&amp;purchaseid=" . $purchase['id'];
 			$output .= "    <item>\n\r";
-			$output .= "      <title>Purchase No. " . $purchase['id'] . "</title>\n\r";
+			$output .= "      <title>Purchase # " . $purchase['id'] . "</title>\n\r";
 			$output .= "      <link>$purchase_link</link>\n\r";
 			$output .= "      <description>This is an entry in the purchase log.</description>\n\r";
 			$output .= "      <pubDate>" . date( "r", $purchase['date'] ) . "</pubDate>\n\r";
@@ -1394,24 +1394,20 @@ function wpsc_purchlog_edit_status( $purchlog_id='', $purchlog_status='' ) {
 	}
 
 	// if the order is marked as failed, remove the claim on the stock
-	if ( $purchlog_status == 5 ) {
+	if ( $purchlog_status == 5 )
 		$wpdb->query( "DELETE FROM `" . WPSC_TABLE_CLAIMED_STOCK . "` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'" );
-		//echo "DELETE FROM `".WPSC_TABLE_CLAIMED_STOCK."` WHERE `cart_id` = '{$purchlog_id}' AND `cart_submitted` = '1'";
-	}
+
 
 	$wpdb->query( "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET processed='{$purchlog_status}' WHERE id='{$purchlog_id}'" );
 
 	if ( ($purchlog_id > $log_data['processed']) && ($log_data['processed'] <= 2) && $log_data['email_sent'] == 0 ) {
-		// transaction_results($log_data['sessionid'],false,null);
+		transaction_results($log_data['sessionid'],false,null);
 	}
 }
 
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'purchlog_edit_status') ) {
 	add_action( 'admin_init', 'wpsc_purchlog_edit_status' );
 }
-/*
-  SELECT DISTINCT `products`.*, `category`.`category_id`,`order`.`order`, IF(ISNULL(`order`.`order`), 0, 1) AS `order_state` FROM `wp_wpsc_product_list` AS `products` LEFT JOIN `wp_wpsc_item_category_assoc` AS `category` ON `products`.`id` = `category`.`product_id` LEFT JOIN `wp_wpsc_product_order` AS `order` ON ( ( `products`.`id` = `order`.`product_id` ) AND ( `category`.`category_id` = `order`.`category_id` ) ) WHERE `products`.`publish`='1' AND `products`.`active` = '1' AND `category`.`category_id` IN ('3') ORDER BY `order_state` DESC, `products`.`id` DESC,`order`.`order` ASC LIMIT 0, 8
- */
 
 function wpsc_save_product_order() {
 	global $wpdb;
@@ -1439,7 +1435,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 function wpsc_save_checkout_order() {
 	global $wpdb;
-	//exit('<pre>'.print_r($_POST, true).'</pre>');
 	$checkoutfields = $_POST['checkout'];
 	$order = 1;
 	foreach ( $checkoutfields as $checkoutfield ) {

@@ -266,7 +266,7 @@ function wpsc_redo_product_url_names() {
 				$i = 0;
 				do {
 					$i++;
-					echo "Proposed Name No.$i: " . ($url_name . $i) . "\n";
+					echo "Proposed Name #$i: " . ($url_name . $i) . "\n";
 				} while ( array_search( ($url_name . $i ), $similar_names ) !== false );
 				$url_name .= $i;
 			}
@@ -307,7 +307,7 @@ function wpsc_recreate_product_url_names() {
 				if ( $i > 100 ) {
 					break;
 				}
-				echo "Proposed Name No.$i: " . ($url_name . $i) . "\n";
+				echo "Proposed Name #$i: " . ($url_name . $i) . "\n";
 			} while ( array_search( ($url_name . $i ), $similar_names ) !== false );
 			// Concatenate the first number found that wasn't taken
 			$url_name .= $i;

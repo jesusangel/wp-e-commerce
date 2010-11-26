@@ -605,6 +605,7 @@ function wpsc_submit_checkout() {
 		if ( get_option( 'wpsc_also_bought' ) == 1 ) {
 			wpsc_populate_also_bought_list();
 		}
+		$wpsc_cart->log_id = $purchase_log_id; 
 		do_action( 'wpsc_submit_checkout', array( "purchase_log_id" => $purchase_log_id, "our_user_id" => $our_user_id ) );
 		if ( get_option( 'permalink_structure' ) != '' ) {
 			$separator = "?";
@@ -612,27 +613,25 @@ function wpsc_submit_checkout() {
 			$separator = "&";
 		}
 		// submit to gateway
-		print_r( $current_gateway_data );
-		$current_gateway_data = &$wpsc_gateways[$submitted_gateway];
+		//print_r( $current_gateway_data );
+		$current_gateway_data = &$wpsc_gateways[$submitted_gateway];		
 		if ( $current_gateway_data['api_version'] >= 2.0 ) {
 			$merchant_instance = new $current_gateway_data['class_name']( $purchase_log_id );
 			$merchant_instance->construct_value_array();
 			$merchant_instance->submit();
-		} else {
-			if ( ($current_gateway_data['internalname'] == $submitted_gateway) && ($current_gateway_data['internalname'] != 'google') ) {
-				$gateway_used = $current_gateway_data['internalname'];
-				$wpdb->update( WPSC_TABLE_PURCHASE_LOGS, array(
-				'gateway' => $gateway_used
-				), array( 'id' => $log_id ) );
-				$current_gateway_data['function']( $separator, $sessionid );
-			} else if ( ($current_gateway_data['internalname'] == 'google') && ($current_gateway_data['internalname'] == $submitted_gateway) ) {
-				$gateway_used = $current_gateway_data['internalname'];
-				$wpdb->update( WPSC_TABLE_PURCHASE_LOGS, array(
-				'gateway' => $gateway_used
-				), array( 'id' => $log_id ) );
-				$_SESSION['gateway'] = 'google';
-				header( 'Location: ' . get_option( 'shopping_cart_url' ) );
-			}
+		} elseif ( ($current_gateway_data['internalname'] == $submitted_gateway) && ($current_gateway_data['internalname'] != 'google') ) {
+			$gateway_used = $current_gateway_data['internalname'];
+			$wpdb->update( WPSC_TABLE_PURCHASE_LOGS, array(
+			'gateway' => $gateway_used
+			), array( 'id' => $log_id ) );
+			$current_gateway_data['function']( $separator, $sessionid );
+		} elseif ( ($current_gateway_data['internalname'] == 'google') && ($current_gateway_data['internalname'] == $submitted_gateway) ) {
+			$gateway_used = $current_gateway_data['internalname'];
+			$wpdb->update( WPSC_TABLE_PURCHASE_LOGS, array(
+			'gateway' => $gateway_used
+			), array( 'id' => $log_id ) );
+			$_SESSION['gateway'] = 'google';
+			wp_redirect(get_option( 'shopping_cart_url' ));
 		}
 		if ( isset( $_GET['gateway'] ) && $_GET['gateway'] == 'noca' ) {
 			echo transaction_results( $sessionid, true );

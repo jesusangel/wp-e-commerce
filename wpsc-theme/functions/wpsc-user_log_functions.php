@@ -593,7 +593,7 @@ function wpsc_user_details() {
 			}
 			//}
 			echo "  <tr><td>" . __( 'Payment Method', 'wpsc' ) . ":</td><td>" . $gateway_name . "</td></tr>";
-			echo "  <tr><td>" . __( 'Purchase No.', 'wpsc' ) . ":</td><td>" . $purchase['id'] . "</td></tr>";
+			echo "  <tr><td>" . __( 'Purchase #', 'wpsc' ) . ":</td><td>" . $purchase['id'] . "</td></tr>";
 			if ( $purchase['transactid'] != '' ) {
 				echo "  <tr><td>" . __( 'Transaction Id', 'wpsc' ) . ":</td><td>" . $purchase['transactid'] . "</td></tr>";
 			}

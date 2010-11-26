@@ -756,7 +756,7 @@ class ups {
             if ($quotes != false){
                 $rate_table = $this->_formatTable($quotes,$args['currency']);
             }else{
-                if ($wpsc_ups_settings['upsenvironment'] == '1'){
+                if ($wpsc_ups_settings['upsenvironment'] == '1' && 'true' == WP_DEBUG){
                     echo "<strong>:: GetQuote ::DEBUG OUTPUT::</strong><br />";
                     echo "Arguments sent to UPS";
                     print_r($args);

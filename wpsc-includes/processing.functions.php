@@ -110,9 +110,8 @@ function wpsc_decrement_claimed_stock($purchase_log_id) {
 	
 	foreach((array)$all_claimed_stock as $claimed_stock) {
 		// for people to have claimed stock, it must have been available to take, no need to look at the existing stock, just subtract from it
-		// If this is ever wrong, and you get negative stock, do not fix it here, go find the real cause of the problem 		if($claimed_stock['variation_stock_id'] > 0) {
+		// If this is ever wrong, and you get negative stock, do not fix it here, go find the real cause of the problem 				
 		$product_id = absint($claimed_stock['product_id']);	
-	
 		$product = get_post($product_id);
 		$current_stock = get_post_meta($product_id, '_wpsc_stock', true);
 		$remaining_stock = $current_stock - $claimed_stock['stock_claimed'];
