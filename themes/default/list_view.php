@@ -111,7 +111,7 @@ global $wpsc_query, $wpdb;
 						<?php else: ?>
 							<?php	$action =  wpsc_this_page_url(); ?>						
 						<?php endif; ?>
-						<form class='product_form'  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>">
+						<form id="product_<?php echo wpsc_the_product_id(); ?>" class='product_form'  enctype="multipart/form-data" action="<?php echo $action; ?>" method="post" name="product_<?php echo wpsc_the_product_id(); ?>">
 
 							<?php /** the variation group HTML and loop */?>
 							<div class="wpsc_variation_forms">
