@@ -58,7 +58,7 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing_shipping' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing_shipping' id='wpec_taxes_logic_1' name='wpsc_options[wpec_taxes_logic]' />
-					<?php _e( 'Apply tax when Billing and Shipping Country is the same as Shops base location' ); ?>
+					<?php _e( 'Apply tax when Billing and Shipping Country is the same as Tax Rate' ); ?>
 			</label>
 		<div id='billing_shipping_preference_container' style='margin-left: 20px;'>
             <p>
@@ -84,7 +84,7 @@ function wpec_options_taxes() {
 					<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'billing' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='billing' id='wpec_taxes_logic_2' name='wpsc_options[wpec_taxes_logic]' />
-					<?php _e( 'Apply tax when Billing Country is the same as Shops base location' ); ?>
+					<?php _e( 'Apply tax when Billing Country is the same as Tax Rate' ); ?>
 			</label>
 		</p>
 		<p>
@@ -92,7 +92,7 @@ function wpec_options_taxes() {
 				<input <?php if ( $wpec_taxes_options['wpec_taxes_logic'] == 'shipping' ) {
 						echo 'checked="checked"';
 					} ?> type="radio" value='shipping' id='wpec_taxes_logic_3' name='wpsc_options[wpec_taxes_logic]' />
-					<?php _e( 'Apply tax when Shipping Country is the same as Shops base location' ); ?>
+					<?php _e( 'Apply tax when Shipping Country is the same as Tax Rate' ); ?>
 			</label>
 		</p>
 		<div id='metabox-holder' class="metabox-holder">

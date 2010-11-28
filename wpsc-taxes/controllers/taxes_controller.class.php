@@ -50,7 +50,7 @@ class wpec_taxes_controller {
       //check if tax is enabled
       if ( $this->wpec_taxes->wpec_taxes_get_enabled() ) {
          //get base country code
-         $wpec_base_country = get_option( 'base_country' );
+         $wpec_selected_country = $this->wpec_taxes_retrieve_selected_country();
 
          //run tax logic and calculate tax
          if ( $this->wpec_taxes_run_logic() ) {
@@ -73,12 +73,12 @@ class wpec_taxes_controller {
                $returnable = array( 'total' => $total_tax );
             } else {
                //check if there are any rates setup for the base_country
-               if ( $this->wpec_taxes_rate_exists( $wpec_base_country ) ) {
+              // if ( $this->wpec_taxes_rate_exists( $wpec_base_country ) ) {
                   //calculate subtotal for the items
                   $taxable_total = $wpsc_cart->calculate_subtotal();
 
                   //get the rate for the country and region if set
-                  $tax_rate = $this->wpec_taxes->wpec_taxes_get_rate( $wpec_base_country, $region );
+                  $tax_rate = $this->wpec_taxes->wpec_taxes_get_rate( $wpec_selected_country, $region );
 
                   //is the region configured to apply tax on shipping? if so add shipping price to the taxable total
                   if ( $tax_rate['shipping'] ) {
@@ -86,7 +86,7 @@ class wpec_taxes_controller {
                   }// if
                   //calculate tax
                   $returnable = array( 'total' => $this->wpec_taxes_calculate_tax( $taxable_total, $tax_rate['rate'] ), 'rate' => $tax_rate['rate'] );
-               }// if
+             //  }// if
             }// if
          }// if
       } //if
@@ -94,6 +94,23 @@ class wpec_taxes_controller {
       return $returnable;
    } // wpec_taxes_calculate_total
 
+
+   function wpec_taxes_retrieve_selected_country(){
+	    global $wpsc_cart;
+	    switch ( $this->wpec_taxes->wpec_taxes_get_logic() ) {
+	         case 'billing_shipping':
+	            return $wpsc_cart->selected_country;
+	            break;
+	         case 'billing':
+	            return $wpsc_cart->selected_country;
+	            break;
+	         case 'shipping':
+				return $wpsc_cart->delivery_country;
+			    break;
+	         default:
+	            $returnable = false;
+	      }// switch
+   }
    /**
     * @description: wpec_taxes_run_logic - runs the tax logic as defined in the taxes settings page.
     *               returns true or false depending on whether taxes can be calculated.
@@ -104,30 +121,8 @@ class wpec_taxes_controller {
    function wpec_taxes_run_logic() {
       //initalize variables
       global $wpsc_cart;
-      $wpec_base_country = get_option( 'base_country' );
+	  return true;
 
-      //check the tax logic. Is the tax applied to the billing country or shipping country or to both?
-      switch ( $this->wpec_taxes->wpec_taxes_get_logic() ) {
-         case 'billing_shipping':
-            if ( ($wpsc_cart->selected_country == $wpec_base_country) && ($wpsc_cart->delivery_country == $wpec_base_country) ) {
-               $returnable = true;
-            }
-            break;
-         case 'billing':
-            if ( $wpsc_cart->selected_country == $wpec_base_country ) {
-               $returnable = true;
-            }
-            break;
-         case 'shipping':
-            if ( $wpsc_cart->delivery_country == $wpec_base_country ) {
-               $returnable = true;
-            }
-            break;
-         default:
-            $returnable = false;
-      }// switch
-
-      return $returnable;
    } // wpec_taxes_run_logic
 
    /**
@@ -263,7 +258,7 @@ class wpec_taxes_controller {
       $returnable = false;
 
       if ( $this->wpec_taxes_run_logic() ) {
-         $wpec_base_country = get_option( 'base_country' );
+         $wpec_base_country = $this->wpec_taxes_retrieve_selected_country();
          $region = $this->wpec_taxes_retrieve_region();
 
          //get the tax percentage rate
@@ -293,7 +288,7 @@ class wpec_taxes_controller {
 
       if ( $this->wpec_taxes_isincluded() ) {
          //get the base country
-         $wpec_base_country = get_option( 'base_country' );
+         $wpec_base_country = wpec_taxes_retrieve_selected_country();
 
          //get the region
          $region = $this->wpec_taxes_retrieve_region();
