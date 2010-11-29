@@ -18,20 +18,27 @@ function wpsc_get_max_upload_size(){
 *
 * @return $price (string) number formatted price
 */
-function wpsc_product_variation_price_available($id){
+function wpsc_product_variation_price_available($product_id){
 	global $wpdb;
-	$variant_ids = array();
-	$args = array(
-			'post_parent' => $id,
-			'post_type' => 'wpsc-product',
-			'post_status' => 'inherit publish'
-			);	
-	$children = get_children($args);
-	foreach( $children as $child)
-		$variant_ids[] = $child->ID;
-
-	$sql = "SELECT `meta_value` FROM ".$wpdb->postmeta." WHERE `meta_key` = '_wpsc_price' AND `post_id` IN (".implode(',',$variant_ids).") ORDER BY `meta_value` ASC LIMIT 1";
-	$price = $wpdb->get_var($sql);
+	$price = $wpdb->get_var('
+		SELECT 
+			`pm`.`meta_value`
+		FROM 
+			`' . $wpdb->postmeta . '` `pm` 
+		JOIN 
+			`' . $wpdb->posts . '` `p` 
+			ON 
+			`pm`.`post_id` = `p`.`id` 
+		WHERE 
+			`p`.`post_type`= "wpsc-product"
+			AND
+			`p`.`post_parent` = ' . $product_id . '
+			AND
+			`pm`.`meta_key` = "_wpsc_price"
+		ORDER BY 
+			`meta_value` ASC 
+		LIMIT 1
+	');
 	$price = wpsc_currency_display($price, array('display_as_html' => false));
 	return $price;
 }
@@ -1192,5 +1199,24 @@ function wpsc_variation_combinator($variation_sets) {
 	}
 }   
 
+function wpsc_variations_stock_remaining($product_id){
+	global $wpdb;
+	return $wpdb->get_var('
+		SELECT 
+			sum(`pm`.`meta_value`) 
+		FROM 
+			`' . $wpdb->postmeta . '` `pm` 
+		JOIN 
+			`' . $wpdb->posts . '` `p` 
+			ON 
+			`pm`.`post_id` = `p`.`id` 
+		WHERE 
+			`p`.`post_type`= "wpsc-product"
+			AND
+			`p`.`post_parent` = ' . $product_id . '
+			AND
+			`pm`.`meta_key` = "_wpsc_stock"
+	');
+}
 
 ?>

@@ -790,8 +790,14 @@ function wpsc_stock_control_forms( $product_data='' ) {
 				} else { ?>
 					<div class='edit_stock' style='display: none;'><?php
 				} ?>
+					<?php if( wpsc_product_has_children($product_data['id']) ) : ?>
+			    		<?php $stock = wpsc_variations_stock_remaining($product_data['id']); ?>
+						<p><?php _e( 'This Product has variations, to edit the quantity please use the Variation Controls bellow.' , 'wpsc' ); ?></p>
+						<p><?php printf(_n("%s variant item in stock.", "%s variant items in stock.", $stock), $stock); ?></p>
+					<?php else: ?>
 						<label for="stock_limit_quantity"><?php _e( 'Quantity:', 'wpsc' ); ?></label>
 						<input type='text' id="stock_limit_quantity" name='meta[_wpsc_stock]' size='3' value='<?php echo $product_data['meta']['_wpsc_stock']; ?>' class='stock_limit_quantity' />
+					<?php endif; ?>
 						<div class='unpublish_when_none_left'>
 							<input type='checkbox' id="inform_when_oos" name='meta[_wpsc_product_metadata][unpublish_when_none_left]' class='inform_when_oos'<?php if( $product_meta['unpublish_when_none_left'] == 1 ) echo ' checked="checked"'; ?> />
 							<label for="inform_when_oos"><?php _e( 'Notify site owner and unpublish this Product if stock runs out', 'wpsc' ); ?></label>
