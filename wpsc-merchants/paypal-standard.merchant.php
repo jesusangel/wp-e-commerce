@@ -230,7 +230,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		}
 		$gateway_values =  implode('&', $name_value_pairs);
 
-		
+
 		if(defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true) ) {
 			echo "<a href='".get_option('paypal_multiple_url')."?".$gateway_values."'>Test the URL here</a>";
 			//echo "<pre>".print_r($this->cart_items,true)."</pre>";
@@ -251,7 +251,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		$paypal_url = get_option('paypal_multiple_url');
 		$received_values = array();
 		$received_values['cmd'] = '_notify-validate';
-    $received_values += $_POST;
+  		$received_values += $_POST;
 		$options = array(
 			'timeout' => 5,
 			'body' => $received_values,

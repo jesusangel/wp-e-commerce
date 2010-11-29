@@ -954,7 +954,7 @@ function wpsc_download_file() {
 
 	if ( isset( $_GET['downloadid'] ) ) {
 		// strip out anything that isnt 'a' to 'z' or '0' to '9'
-		//ini_set('max_execution_time',10800);
+		ini_set('max_execution_time',10800);
 		$downloadid = preg_replace( "/[^a-z0-9]+/i", '', strtolower( $_GET['downloadid'] ) );
 		$download_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `uniqueid` = '" . $downloadid . "' AND `downloads` > '0' AND `active`='1' LIMIT 1", ARRAY_A );
 
@@ -977,7 +977,7 @@ function wpsc_download_file() {
 
 		$file_id = $download_data['fileid'];
 		$file_data = wpsc_get_downloadable_files($download_data['product_id']);			
-	
+		//echo '<pre>'.print_r($file_data,1).'</pre>';	
 		if(($count =count($file_data)) >= 1){
 			$file_data = $file_data[$count-1];
 		}else{
@@ -1033,9 +1033,14 @@ function wpsc_download_file() {
 				$file_hash = $wpdb->get_var($sql);
 				if(!empty($file_name))
 					$file_path = WPSC_FILE_DIR . basename( $file_hash );
+				$file_path = WPSC_FILE_DIR . $file_data->post_name;
+			//exit('damn its not a file?~'.$file_path);
 			}
 
 			if ( is_file( $file_path ) ) {
+set_time_limit(0);		
+
+//	exit('thanks freag it werks'.filesize($file_path));
 				header( 'Content-Type: ' . $file_data->post_mime_type );
 				header( 'Content-Length: ' . filesize( $file_path ) );
 				header( 'Content-Transfer-Encoding: binary' );
@@ -1054,6 +1059,9 @@ function wpsc_download_file() {
 				} else {
 					header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
 				}
+				header( "Pragma: public" );
+                                header( "Expires: 0" );
+
 				// destroy the session to allow the file to be downloaded on some buggy browsers and webservers
 				session_destroy();
 				wpsc_readfile_chunked( $file_path );
