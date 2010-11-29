@@ -387,11 +387,17 @@ if ( isset( $_REQUEST['get_rating_count'] ) && ($_REQUEST['get_rating_count'] ==
  */
 function wpsc_update_product_price() {
 	global $wpdb, $wpsc_cart;
+	$from = '';
 	foreach ( (array)$_POST['variation'] as $variation ) {
 		if ( is_numeric( $variation ) ) {
 			$variations[] = (int)$variation;
 		}
+		if($variation == 0){
+			$from = ' from ';
+			$from = apply_filters('wpsc_product_variation_text',$from);
+		}
 	}
+	//echo '<pre>'.print_r($variations,1).'</pre>';
 	do_action( 'wpsc_update_variation_product', (int)$_POST['product_id'], $variations );
 	$pm = $_POST['pm'];
 
@@ -404,12 +410,13 @@ function wpsc_update_product_price() {
 		echo "variation_msg=\"" . __( 'Product in stock', 'wpsc' ) . "\";\n";
 		echo "variation_status= true \n";
 	}
+
 	echo "product_id=" . (int)$_POST['product_id'] . ";\n";
 
 	echo "old_price=\"" . wpsc_currency_display( wpsc_calculate_price( (int)$_POST['product_id'], $variations, false ), array( 'display_as_html' => false ) ) . "\";\n";
 	echo "numeric_old_price=\"" . number_format( wpsc_calculate_price( (int)$_POST['product_id'], $variations, false ) ) . "\";\n";
 	echo "you_save=\"" . wpsc_currency_display( wpsc_you_save( array( 'product_id' => (int)$_POST['product_id'], 'type' => 'amount', 'variations' => $variations ) ), array( 'display_as_html' => false ) ) . "! (".wpsc_you_save( array( 'product_id' => (int)$_POST['product_id'], 'variations' => $variations ) ) . "%)\";\n";
-	echo "price=\"" . wpsc_currency_display( wpsc_calculate_price( (int)$_POST['product_id'], $variations, true ),array( 'display_as_html' => false ) ) . "\";\n";
+	echo "price=\"" . $from.wpsc_currency_display( wpsc_calculate_price( (int)$_POST['product_id'], $variations, true ),array( 'display_as_html' => false ) ) . "\";\n";
 	echo "numeric_price=\"" . number_format( wpsc_calculate_price( (int)$_POST['product_id'], $variations, true ) ) . "\";\n";
 	exit();
 }

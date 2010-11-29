@@ -307,11 +307,19 @@ function wpsc_the_product_price( $no_decimals = false ) {
 }
 
 function wpsc_calculate_price( $product_id, $variations = null, $special = true ) {
+	global $wpdb;
+	$p_id = $product_id;
 	if ( count( $variations ) > 0 )
 		$product_id = wpsc_get_child_object_in_terms( $product_id, $variations, 'wpsc-variation' );
 	else if ( !$product_id )
 		$product_id = get_the_ID();
 
+	if( !$product_id && count( $variations ) > 0){
+		$product_ids = wpsc_get_child_object_in_select_terms( $p_id, $variations, 'wpsc_variation' );
+		$sql = "SELECT `post_id` FROM ".$wpdb->postmeta." WHERE `meta_key` = '_wpsc_price' AND `post_id` IN (".implode(',',$product_ids).") ORDER BY `meta_value` ASC LIMIT 1";
+		$product_id = $wpdb->get_var($sql);
+	}
+	
 	if ( $special == true ) {
 		$full_price = get_post_meta( $product_id, '_wpsc_price', true );
 		$special_price = get_post_meta( $product_id, '_wpsc_special_price', true );
@@ -323,6 +331,7 @@ function wpsc_calculate_price( $product_id, $variations = null, $special = true 
 	} else {
 		$price = get_post_meta( $product_id, '_wpsc_price', true );
 	}
+
 	return $price;
 }
 

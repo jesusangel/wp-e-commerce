@@ -145,7 +145,19 @@ class wpsc_variations {
 	
 	
 }
+function wpsc_get_child_object_in_select_terms($parent_id, $terms, $taxonomy){
+	global $wpdb;
+//	echo '<pre>'.print_r($terms,1).'</pre>';
 
+	$sql = "SELECT tr.`object_id` 
+			FROM `".$wpdb->term_relationships."` AS tr
+			LEFT JOIN `".$wpdb->posts."` AS posts
+			ON posts.`ID` = tr.`object_id`				
+			WHERE tr.`term_taxonomy_id` IN (".implode(',',$terms).") and posts.`post_parent`=".$parent_id;
+	$products = $wpdb->get_col($sql);
+	return $products;
+	
+}
 
 /**
  * wpsc_get_child_objects_in_term function.
@@ -221,6 +233,7 @@ function wpsc_get_child_object_in_terms($parent_id, $terms, $taxonomies, $args =
 	if (count($object_ids) > 0) {
 		return $object_ids['object_id'];
 	} else {
+		
 		return false;
 	}
 }
