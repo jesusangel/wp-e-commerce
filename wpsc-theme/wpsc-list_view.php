@@ -70,11 +70,11 @@ global $wpsc_query, $wpdb;
 					</td>
 					<?php if(wpsc_show_stock_availability()): ?>	
 						<td class="stock">
-							<?php if(wpsc_product_has_stock()) : ?>
-								<img src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/yes_stock.gif" alt="Yes" title="Yes" />
-							<?php else: ?> 
-								<img src="<?php echo WPSC_CORE_THEME_URL; ?>wpsc-images/no_stock.gif" title='No' alt="No" />
-							<?php endif; ?> 
+						<?php if(wpsc_product_has_stock()) : ?>
+									<div id="stock_display_<?php echo wpsc_the_product_id(); ?>" class="in_stock"><?php _e('Product in stock', 'wpsc'); ?></div>
+							<?php else: ?>
+									<div id="stock_display_<?php echo wpsc_the_product_id(); ?>" class="out_of_stock"><?php _e('Product not in stock', 'wpsc'); ?></div>
+							<?php endif; ?>
 						</td>
 					<?php endif; ?>
 					

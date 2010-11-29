@@ -143,9 +143,9 @@
 							<?php endif ;?>
 							<div class="wpsc_product_price">
 								<?php if(wpsc_product_has_stock()) : ?>
-									<div class="in_stock"><?php _e('Product in stock', 'wpsc'); ?></div>
+									<div id="stock_display_<?php echo wpsc_the_product_id(); ?>" class="in_stock"><?php _e('Product in stock', 'wpsc'); ?></div>
 								<?php else: ?>
-									<div class="out_of_stock"><?php _e('Product not in stock', 'wpsc'); ?></div>
+									<div id="stock_display_<?php echo wpsc_the_product_id(); ?>" class="out_of_stock"><?php _e('Product not in stock', 'wpsc'); ?></div>
 								<?php endif; ?>
 								<?php if(wpsc_product_is_donation()) : ?>
 									<label for="donation_price_<?php echo wpsc_the_product_id(); ?>"><?php _e('Donation', 'wpsc'); ?>:</label>

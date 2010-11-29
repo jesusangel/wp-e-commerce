@@ -398,6 +398,11 @@ function wpsc_update_product_price() {
 	$stock = wpsc_check_variation_stock_availability( (int)$_POST['product_id'], $variations );
 	if ( is_numeric( $stock ) && $stock == 0 ) {
 		echo "product_msg=\"" . __( 'Sorry, but this variation is out of stock.', 'wpsc' ) . "\";\n";
+		echo "variation_msg=\"" . __( 'Variation not in stock', 'wpsc' ) . "\";\n";
+		echo "variation_status= false \n";
+	}else{
+		echo "variation_msg=\"" . __( 'Product in stock', 'wpsc' ) . "\";\n";
+		echo "variation_status= true \n";
 	}
 	echo "product_id=" . (int)$_POST['product_id'] . ";\n";
 

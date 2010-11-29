@@ -139,21 +139,20 @@ jQuery(document).ready(function () {
 		form_values =jQuery("input[name=product_id], .wpsc_select_variation",parent_form).serialize( );
 
 		jQuery.post( 'index.php?update_product_price=true', form_values, function(returned_data) {
-			product_msg = '';
-			message_exists = null;
+			variation_msg = '';
 			eval(returned_data);
-			if(product_id != null) {
-				if(product_msg != ''){
-					jQuery("input#product_"+product_id+"_submit_button").attr('disabled','disabled');
-					message_exists = jQuery(".wpsc_variation_message_"+product_id).html();
-					if(message_exists == null){
-						jQuery("input#product_"+product_id+"_submit_button").before('<span class="wpsc_variation_message_'+product_id+'"">'+product_msg+'</span>');
+			if( product_id != null ) {
+				if( variation_msg != '' ){
+					if(variation_status){
+						jQuery("div#stock_display_"+product_id).removeClass('out_of_stock');	
+						jQuery("div#stock_display_"+product_id).addClass('in_stock');	
 					}else{
-						jQuery(".wpsc_variation_message_"+product_id).css('display','inline');
+						jQuery("div#stock_display_"+product_id).removeClass('in_stock');	
+						jQuery("div#stock_display_"+product_id).addClass('out_of_stock');	
 					}
-				}else{
-					jQuery("input#product_"+product_id+"_submit_button").removeAttr('disabled');
-					jQuery('.wpsc_variation_message_'+product_id).css('display','none');
+					
+					jQuery("div#stock_display_"+product_id).html(variation_msg);
+				
 				}
 				target_id = "product_price_"+product_id;
 				second_target_id = "donation_price_"+product_id;
