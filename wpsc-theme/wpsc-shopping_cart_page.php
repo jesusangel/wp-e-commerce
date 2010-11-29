@@ -15,15 +15,14 @@ endif;
 <h3><?php _e('Please review your order', 'wpsc'); ?></h3>
 <table class="checkout_cart">
    <tr class="header">
-      <td>&nbsp;</td>
-      <td><?php _e('ITEM', 'wpsc'); ?></td>
-      <td><?php _e('QUANTITY', 'wpsc'); ?></td>
+      <th colspan="2" ><?php _e('Product', 'wpsc'); ?></th>
+      <th><?php _e('Quantity', 'wpsc'); ?></th>
       <?php if(wpsc_uses_shipping()): ?>
-      <!--  <td><?php //_e('Shipping', 'wpsc'); ?>:</td> -->
+      <!--  <th><?php //_e('Shipping', 'wpsc'); ?>:</th> -->
       <?php endif; ?>
-      <td><?php _e('PRICE', 'wpsc'); ?></td>
-        <td><?php _e('TOTAL', 'wpsc'); ?></td>
-        <td>&nbsp;</td>
+      <th><?php _e('Price', 'wpsc'); ?></th>
+      <th><?php _e('Total', 'wpsc'); ?></th>
+        <th>&nbsp;</th>
    </tr>
    <?php while (wpsc_have_cart_items()) : wpsc_the_cart_item(); ?>
       <?php
@@ -86,22 +85,26 @@ endif;
    if(wpsc_uses_coupons()): ?>
 
       <?php if(wpsc_coupons_error()): ?>
-         <tr class="wpsc_coupon_error_row"><td><?php _e('Coupon is not valid.', 'wpsc'); ?></td></tr>
+         <tr class="wpsc_coupon_row wpsc_coupon_error_row"><td><?php _e('Coupon is not valid.', 'wpsc'); ?></td></tr>
       <?php endif; ?>
       <tr class="wpsc_coupon_row">
-         <td colspan="3"><?php _e('Enter your coupon number'); ?> :</td>
-         <td  colspan="3" align='left'>
+         <td colspan="2"><?php _e('Enter coupon code'); ?> :</td>
+         <td  colspan="4" class="coupon_code">
             <form  method="post" action="<?php echo get_option('shopping_cart_url'); ?>">
                <input type="text" name="coupon_num" id="coupon_num" value="<?php echo $wpsc_cart->coupons_name; ?>" />
                <input type="submit" value="<?php _e('Update', 'wpsc') ?>" />
             </form>
          </td>
       </tr>
+      <tr class="wpsc_total_before_shipping">
+	      <td colspan="3"><?php _e('Cost before shipping:','wpsc'); ?></td>
+	      <td colspan="3" class="wpsc_total_amount_before_shipping"><?php echo wpsc_cart_total_widget(false,false,false);?></td>
+      </tr>
    <?php endif; ?>
    </table>
    <!-- cart contents table close -->
   <?php if(wpsc_uses_shipping()): ?>
-	   <p class="wpsc_cost_before"><?php _e('Cost before shipping = ','wpsc'); ?> <?php echo wpsc_cart_total_widget(false,false,false);?></p>
+	   <p class="wpsc_cost_before"></p>
    <?php endif; ?>
    <?php  //this HTML dispalys the calculate your order HTML   ?>
 
@@ -350,9 +353,10 @@ endif;
                <div class='wpsc_email_address'>
                   <p class='<?php echo wpsc_checkout_form_element_id(); ?>'>
                      <label class='wpsc_email_address' for='<?php echo wpsc_checkout_form_element_id(); ?>'>
-                     <?php echo wpsc_checkout_form_name();?>
+                     <?php _e('Enter your email address'); ?>
                      </label>
-                  <p>
+                  <p class="wpsc_email_address_p">
+                  <img src="http://www.gravatar.com/avatar/empty?s=60&d=mm" id="wpsc_checkout_gravatar" />
                   <?php echo wpsc_checkout_form_field();?>
                    <?php if(wpsc_the_checkout_item_error() != ''): ?>
                       <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
