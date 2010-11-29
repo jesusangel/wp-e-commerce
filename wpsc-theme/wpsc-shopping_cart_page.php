@@ -446,7 +446,7 @@ endif;
       <?php if(wpsc_uses_shipping()) : ?>
 	      <tr>
 	         <td class='wpsc_total_price_and_shipping'colspan='2'>
-	            <h4><?php _e('Total Price with Shipping','wpsc'); ?></h4>
+	            <h4><?php _e('Review and purchase','wpsc'); ?></h4>
 	         </td>
 	      </tr>
 	
@@ -475,10 +475,10 @@ endif;
 
    <tr class='total_price'>
       <td class='wpsc_totals'>
-      <?php _e('Total Price', 'wpsc'); ?>
+      <?php _e('Total Price', 'wpsc'); ?>:
       </td>
       <td class='wpsc_totals'>
-         <span id='checkout_total' class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
+         <span id='checkout_total' class="pricedisplay checkout-total"><?php //echo wpsc_cart_total(); ?></span>
       </td>
    </tr>
    </table>

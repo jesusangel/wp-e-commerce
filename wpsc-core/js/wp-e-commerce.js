@@ -13,7 +13,8 @@ function check_make_purchase_button(){
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
 // these functions are bound to events on elements when the page is fully loaded.
 jQuery(document).ready(function () {
-	jQuery('#wpsc_checkout_gravatar').attr('src', 'http://www.gravatar.com/avatar/'+MD5(jQuery('#checkout_page_container .wpsc_email_address input').val().split(' ').join(''))+'?s=60&d=mm');
+	if(jQuery('#checkout_page_container .wpsc_email_address input').val())
+		jQuery('#wpsc_checkout_gravatar').attr('src', 'http://www.gravatar.com/avatar/'+MD5(jQuery('#checkout_page_container .wpsc_email_address input').val().split(' ').join(''))+'?s=60&d=mm');
 	jQuery('#checkout_page_container .wpsc_email_address input').keyup(function(){
 		jQuery('#wpsc_checkout_gravatar').attr('src', 'http://www.gravatar.com/avatar/'+MD5(jQuery(this).val().split(' ').join(''))+'?s=60&d=mm');
 	});

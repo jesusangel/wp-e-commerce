@@ -1100,8 +1100,34 @@ span.rating_saved{
 	margin:0px 10px 10px 0px;
 }
 
-#checkout_page_container .wpsc_shipping_header{
+#checkout_page_container .wpsc_shipping_header {
 background-color: #f5f5f5;
+}
+
+#checkout_page_container .total_price.total_shipping, 
+#checkout_page_container .total_price {
+	background-color: #f5f5f5;
+}
+
+#checkout_page_container .total_price td.wpsc_totals{
+	border-bottom: 4px solid #000;
+	font-weight: bold;
+}
+
+#checkout_page_container .wpsc_make_purchase{
+	bottom: 20px;
+	float: right;
+	position: relative;
+}
+
+#checkout_page_container .total_price.total_shipping td{
+	border:none;
+	font-weight: normal;
+}
+
+#checkout_page_container .total_price.total_shipping td:first-child, 
+#checkout_page_container .total_price td:first-child {
+	padding-left: 50px;
 }
 
 #checkout_page_container .wpsc_shipping_quote_name, 
