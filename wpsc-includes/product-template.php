@@ -628,6 +628,45 @@ function wpsc_product_external_link( $id = null ) {
 }
 
 /**
+ * wpsc external link text function
+ * @return string - the product external link text
+ */
+function wpsc_product_external_link_text( $id = null, $default = null ) {
+	if ( is_numeric( $id ) && ( $id > 0 ) )
+		$id = absint( $id );
+	else
+		$id = get_the_ID();
+	
+	$external_link_text = __( 'Buy Now', 'wpsc' );
+	if ( $default != null ) {
+		$external_link_text = $default;
+	}
+	
+	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
+	if ( isset( $product_meta['external_link_text'] ) && !empty( $product_meta['external_link_text'] ) ) {
+		$external_link_text = $product_meta['external_link_text'];
+	}
+	return $external_link_text;
+}
+
+/**
+ * wpsc external link target function
+ * @return string - the product external link target
+ */
+function wpsc_product_external_link_target( $id = null, $external_link_target = '' ) {
+	if ( is_numeric( $id ) && ( $id > 0 ) )
+		$id = absint( $id );
+	else
+		$id = get_the_ID();
+	
+	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
+	if ( isset( $product_meta['external_link_target'] ) && !empty( $product_meta['external_link_target'] ) ) {
+		$external_link_target = $product_meta['external_link_target'];
+	}
+	return $external_link_target;
+}
+
+/**
  * wpsc product sku function
  * @return string - the product price
  */

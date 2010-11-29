@@ -38,6 +38,8 @@ $wpsc_product_defaults = array(
 	'meta' =>
 	array(
 		'external_link' => NULL,
+		'external_link_text' => NULL,
+		'external_link_target' => NULL,
 		'merchant_notes' => NULL,
 		'sku' => NULL,
 		'engrave' => '0',
@@ -316,6 +318,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 				"advanced" => array(
 					"wpsc_product_shipping_forms",
 					"wpsc_product_variation_forms",
+					"wpsc_product_external_link_forms",
 					"wpsc_product_advanced_forms"
 				),
 				"side" => array(
@@ -331,6 +334,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					"wpsc_product_shipping_forms" => 1,
 					"wpsc_product_tag_forms" => 1,
 					"wpsc_product_variation_forms" => 1,
+					"wpsc_product_external_link_forms" => 1,
 					"wpsc_product_advanced_forms" => 1,
 					"wpsc_product_category_and_tag_forms" => 1,
 					"wpsc_price_control_forms" => 1,
@@ -343,6 +347,7 @@ function wpsc_product_basic_details_form( &$product_data ) {
 					"wpsc_product_shipping_forms" => 1,
 					"wpsc_product_tag_forms" => 1,
 					"wpsc_product_variation_forms" => 1,
+					"wpsc_product_external_link_forms" => 1,
 					"wpsc_product_advanced_forms" => 1,
 					"wpsc_product_category_and_tag_forms" => 1,
 					"wpsc_price_control_forms" => 1,
@@ -1456,21 +1461,6 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 	$output .= ob_get_contents();
 	ob_end_clean();
 
-	$output .= "
-	<tr>
-		<td class='itemfirstcol' colspan='2'><br />
-			<strong>" . __( 'Off Site Product Link', 'wpsc' ) . ":</strong><br />
-			<small>" . __( 'If this Product is for sale on another website enter the link here. For instance if your Product is an MP3 file for sale on itunes you could put the link here. This option over rides the buy now and add to cart links and takes you to the site linked here.', 'wpsc' ) . "</small><br /><br />
-			<label for='external_link'>" . __( 'External Link', 'wpsc' ) . "</label>:<br />
-			<input type='text' class='text' name='meta[_wpsc_product_metadata][external_link]' value='";
-
-	if ( isset( $product_meta['external_link'] ) )
-		$output .= $product_meta['external_link'];
-
-	$output .= "' id='external_link' size='40' />
-		</td>
-	</tr>";
-
 	//if (get_option('wpsc_enable_comments') == 1) {
 	$output .= "
 	<tr>
@@ -1490,6 +1480,56 @@ function wpsc_product_advanced_forms( $product_data='' ) {
     </table></div></div>";
 
 	return $output;
+}
+
+function wpsc_product_external_link_forms( $product_data = '' ) {
+
+	global $closed_postboxes, $wpdb;
+	
+	$product_meta = &$product_data['meta']['_wpsc_product_metadata'];
+
+	$output = '';
+
+	if ( $product_data == 'empty' )
+		$display = "style='display:none;'";
+	
+	// Get External Link Values
+	$external_link_value        = isset( $product_meta['external_link'] ) ? $product_meta['external_link'] : '';
+	$external_link_text_value   = isset( $product_meta['external_link_text'] ) ? $product_meta['external_link_text'] : '';
+	$external_link_target_value = isset( $product_meta['external_link_target'] ) ? $product_meta['external_link_target'] : '';
+	$external_link_target_value_selected[$external_link_target_value] = ' selected="selected"';
+	
+	$output .= "<div id='wpsc_product_external_link_forms' class='postbox " . ((array_search( 'wpsc_product_external_link_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : '') . "' " . ((array_search( 'wpsc_product_external_link_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : '') . "><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+
+	$output .= "<h3 class='hndle'>";
+	$output .= __( 'Off Site Product Link', 'wpsc' );
+	$output .= '</h3>
+       <div class="inside">
+			<p>' . __( 'If this product is for sale on another website enter the link here. For instance if your product is an MP3 file for sale on itunes you could put the link here. This option overrides the buy now and add to cart links and takes you to the site linked here. You can also customise the Buy Now text and choose to open the link in a new window.', 'wpsc' ) . '</p>
+       <table class="form-table" style="width: 100%;" cellspacing="2" cellpadding="5">
+	<tbody><tr class="form-field">
+		<th valign="top" scope="row"><label for="external_link">' . __( 'External Link', 'wpsc' ) . '</label></th>
+		<td><input type="text" name="meta[_wpsc_product_metadata][external_link]" class="code" id="external_link" value="' . $external_link_value . '" size="50" style="width: 95%"></td>
+	</tr>
+	<tr class="form-field">
+		<th valign="top" scope="row"><label for="external_link_text">' . __( 'External Link Text', 'wpsc' ) . '</label></th>
+		<td><input type="text" name="meta[_wpsc_product_metadata][external_link_text]" class="code" id="external_link_text" value="' . $external_link_text_value . '" size="50" style="width: 95%"></td>
+	</tr>
+	<tr class="form-field">
+		<th valign="top" scope="row"><label for="external_link_target">' . __( 'External Link Target', 'wpsc' ) . '</label></th>
+		<td>
+			<select id="external_link_target" name="meta[_wpsc_product_metadata][external_link_target]">
+				<option value="">Default (set by theme)</option>
+				<option value="_self"' . $external_link_target_value_selected['_self'] . '>Open link in the same window</option>
+				<option value="_blank"' . $external_link_target_value_selected['_blank'] . '>Open link in a new window</option>
+			</select>
+		</td>
+	</tr>
+</tbody></table>
+</div></div>';
+
+	return $output;
+	
 }
 
 function wpsc_product_image_forms( $product_data = '' ) {

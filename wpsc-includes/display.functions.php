@@ -220,7 +220,8 @@ function external_link( $product_id ) {
 	if ( !stristr( $link, 'http://' ) ) {
 		$link = 'http://' . $link;
 	}
-	$output .= "<input type='button' value='" . __( 'Buy Now', 'wpsc' ) . "' onclick='gotoexternallink(\"$link\")'>";
+	$target = wpsc_product_external_link_target( $product_id );
+	$output .= "<input class='wpsc_buy_button' type='button' value='" . wpsc_product_external_link_text( $product_id, __( 'Buy Now', 'wpsc' ) ) . "' onclick='return gotoexternallink(\"$link\", \"$target\")'>";
 	return $output;
 }
 

@@ -323,8 +323,12 @@ function log_buynow(form){
 	ajax.post("index.php",noresults,"ajax=true&buynow=true&product_id="+id+"price="+price);
 }
 
-function gotoexternallink(link){
-	window.location = link;
+function gotoexternallink(link, target){
+	if (target == '') {
+		target = '_self';
+	}
+	window.open(link, target);
+	return false;
 }
 
 function manage_extras(product_id, extras_id, special) {
