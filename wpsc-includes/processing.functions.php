@@ -54,9 +54,9 @@ function wpsc_currency_display( $price_in, $args = null ) {
 	if ( true == $query['display_currency_symbol'] ) {
 		if ( !empty( $wpsc_currency_data['symbol'] ) ) {
 			if ( false == $query['display_as_html'] ) {
-				$currency_sign = $wpsc_currency_data['symbol_html'];
+					$currency_sign = html_entity_decode($wpsc_currency_data['symbol_html']);
 			} else {
-				$currency_sign = $wpsc_currency_data['symbol'];
+				$currency_sign = html_entity_decode($wpsc_currency_data['symbol']);
 			}
 		} else {
 			$currency_sign = $wpsc_currency_data['code'];
