@@ -12,6 +12,50 @@ function wpsc_get_max_upload_size(){
 	else $upload_max = __('N/A', 'wpsc');	
 	return $upload_max;
 }
+/**
+* wpsc_product_variation_price_available function 
+* Checks for the lowest price of a products variations 
+*
+* @return $price (string) number formatted price
+*/
+function wpsc_product_variation_price_available($id){
+	global $wpdb;
+	$variant_ids = array();
+	$args = array(
+			'post_parent' => $id,
+			'post_type' => 'wpsc-product',
+			'post_status' => 'inherit publish'
+			);	
+	$children = get_children($args);
+	foreach( $children as $child)
+		$variant_ids[] = $child->ID;
+
+	$sql = "SELECT `meta_value` FROM ".$wpdb->postmeta." WHERE `meta_key` = '_wpsc_price' AND `post_id` IN (".implode(',',$variant_ids).") ORDER BY `meta_value` ASC LIMIT 1";
+	$price = $wpdb->get_var($sql);
+	$price = wpsc_currency_display($price, array('display_as_html' => false));
+	return $price;
+}
+
+
+/**
+* wpsc_product_has_children function 
+* Checks whether a product has variations or not
+*
+* @return boolean true if product does have variations, false otherwise
+*/
+function wpsc_product_has_children($id){
+	$args = array(
+			'post_parent' => $id,
+			'post_type' => 'wpsc-product',
+			'post_status' => 'inherit publish'
+			);	
+	$children = get_children($args);
+	if( empty($children) )
+		return false;
+	else
+		return true;
+}
+
 
 /**
 * wpsc_admin_submit_product function 

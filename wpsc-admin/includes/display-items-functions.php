@@ -656,8 +656,15 @@ function wpsc_price_control_forms($product_data){
 
 	<h3 class='hndle'><?php _e( 'Price Control', 'wpsc' ); ?></h3>
     <div class="inside">
+    	<?php /* Check product if a product has variations */ ?>
+    	<?php if( wpsc_product_has_children($product_data['id']) ) : ?>
+    		<?php $price = wpsc_product_variation_price_available($product_data['id']); ?>
+			<p><?php _e( 'This Product has variations, to edit the price please use the Variation Controls bellow.' , 'wpsc' ); ?></p>
+			<p><?php printf( __( 'Price: %s and above.' ,'wpsc' ) , $price ); ?></p>
+		<?php else: ?>
+		
     	<div class='wpsc_floatleft' style="width:85px;">
-			<?php _e( 'Price', 'wpsc' ); ?> :<br />
+    		<?php _e( 'Price', 'wpsc' ); ?> :<br />
 			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'],2,'.','' ); ?>' />
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
@@ -749,6 +756,7 @@ function wpsc_price_control_forms($product_data){
 						</tr>
 					</table>
 				</div>
+				<?php endif; ?>
 			</div>
 			</div>
 <?php
@@ -965,7 +973,7 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 				<tbody>
 	<?php
 		$wp_query = new WP_Query( $query );
-
+		
 		if ( !isset( $parent_product_data ) )
 			$parent_product_data = null;
 
