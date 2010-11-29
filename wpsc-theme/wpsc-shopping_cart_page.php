@@ -478,7 +478,7 @@ endif;
       <?php _e('Total Price', 'wpsc'); ?>:
       </td>
       <td class='wpsc_totals'>
-         <span id='checkout_total' class="pricedisplay checkout-total"><?php //echo wpsc_cart_total(); ?></span>
+         <span id='checkout_total' class="pricedisplay checkout-total"><?php echo wpsc_cart_total(); ?></span>
       </td>
    </tr>
    </table>
