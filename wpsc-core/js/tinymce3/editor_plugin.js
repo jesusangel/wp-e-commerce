@@ -31,7 +31,7 @@
 			ed.addButton('WPSC', {
 				title : 'WPSC.desc',
 				cmd : 'WPSC',
-				image : url + '/cart.png'
+				image : url + '/credit_cards.png'
 			});
 
 			// Add a node change handler, selects the button in the UI when a image is selected
@@ -83,7 +83,7 @@
  
  	tinymce.create('tinymce.plugins.productspage_image', {
 		init : function(ed, url) {
-			var pb = '<img src="' + url + '/productspage.gif" class="productspage_image mceItemNoResize" />', cls = 'productspage_image', sep = ed.getParam('productspage_image', '[productspage]'), pbRE;
+			var pb = '<img style="border:1px dashed #888;padding:5% 25%;background-color:#F2F8FF;" src="' + url + '/productspage.jpg" class="productspage_image mceItemNoResize" title="Do not remove this image unless you know what you are doing." />', cls = 'productspage_image', sep = ed.getParam('productspage_image', '[productspage]'), pbRE;
 
 			pbRE = new RegExp(sep.replace(/[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, function(a) {return '\\' + a;}), 'g');
 			
