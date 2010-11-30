@@ -517,7 +517,8 @@ function wpsc_product_basic_details_form( &$product_data ) {
 			</div>
 			<div id="advanced-sortables" class="meta-box-sortables-wpec ui-sortable">
 				<div class="postbox">
-					<h3><?php _e( 'Additional Description', 'wpsc' ); ?></h3>
+					<div class="handlediv" title="Click to toggle"><br /></div>
+					<h3 class='hndle'><?php _e( 'Additional Description', 'wpsc' ); ?></h3>
 					<div class="inside">
 
 						<textarea name='additional_description' id='additional_description' cols='40' rows='5' ><?php echo stripslashes( $product_data['additional_description'] ); ?></textarea>
@@ -1387,7 +1388,7 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 	if ( $product_data == 'empty' )
 		$display = "style='display:none;'";
 
-	$output .= "<div id='wpsc_product_advanced_forms' class='postbox " . ((array_search( 'wpsc_product_advanced_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : '') . "' " . ((array_search( 'wpsc_product_advanced_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : '') . "><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
+	$output .= "<div id='wpsc_product_advanced_forms' class='postbox " . ((array_search( 'wpsc_product_advanced_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : '') . "' " . ((array_search( 'wpsc_product_advanced_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : '') . "><div class=\"handlediv\" title=\"Click to toggle\"><br /></div>";
 
 	$output .= "<h3 class='hndle'>";
 	$output .= __( 'Advanced Options', 'wpsc' );
