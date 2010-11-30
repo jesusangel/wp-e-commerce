@@ -670,7 +670,7 @@ function wpsc_price_control_forms($product_data){
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
 						); ?>; width:85px;; margin-left:30px;'>
-			<label for='add_form_special'><?php _e( 'Sale Price :', 'wpsc' ); ?></label>
+			<label for='add_form_special'><?php _e( 'Sale Price', 'wpsc' ); ?> :</label>
 			<div id='add_special'>
 				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2,'.','' ); ?>' name='meta[_wpsc_special_price]' />
 			</div>
