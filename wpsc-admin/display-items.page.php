@@ -172,7 +172,8 @@ function wpsc_display_edit_products_page() {
 							return showNotice.warn(m);
 						}
 					});
-					$('form#filt_cat').insertAfter('input#doaction').css("display", "inline")
+					$('form#filt_cat').insertAfter('input#doaction').css("display", "inline");
+                                     
 				});
 			})(jQuery);
 			/* ]]> */
