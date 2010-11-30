@@ -778,7 +778,7 @@ function wpsc_admin_ajax() {
 		array_walk( $current_order["closedboxes"], "wpec_close_box", $closed );
 
 		update_option( 'wpsc_product_page_order', $current_order );
-		print_r( $current_order );
+		//print_r( $current_order );
 	}
 
 	//    if ($_POST['del_prod'] == 'true') {

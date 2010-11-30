@@ -210,7 +210,7 @@ function wpsc_admin_include_css_and_js() {
 		$siteurl = str_replace( "http://", "https://", $siteurl );
 
 	wp_admin_css( 'dashboard' );
-	wp_admin_css( 'media' );
+	//wp_admin_css( 'media' );
 
 	$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
 	wp_enqueue_script( 'livequery',                      WPSC_URL . '/wpsc-admin/js/jquery.livequery.js',             array( 'jquery' ), '1.0.3' );
@@ -220,7 +220,7 @@ function wpsc_admin_include_css_and_js() {
 	wp_enqueue_script( 'wp-e-commerce-variations',       WPSC_URL . '/wpsc-admin/js/variations.js',                   array( 'jquery' ), $version_identifier );
 
 	// TODO - This should DEFINITELY come out when we convert to custom post types in the backend
-	//wp_deregister_script( 'postbox' );
+	wp_deregister_script( 'postbox' );
 
 	wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 	wp_enqueue_style( 'wp-e-commerce-admin-dynamic', $siteurl . "/wp-admin/admin.php?wpsc_admin_dynamic_css=true", false, $version_identifier, 'all' );
@@ -294,12 +294,12 @@ function wpsc_meta_boxes() {
 	add_meta_box('wpsc_product_taxes_forms','Taxes','wpsc_product_taxes_forms',$pagename,'normal','high');
 	add_meta_box( 'wpsc_product_category_and_tag_forms', 'Category and Tags', 'wpsc_product_category_and_tag_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_tag_forms', 'Product Tags', 'wpsc_product_tag_forms', $pagename, 'normal', 'high' );
-//	add_meta_box( 'wpsc_product_price_and_stock_forms', 'Price and Stock', 'wpsc_product_price_and_stock_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_download_forms', 'Product Download', 'wpsc_product_download_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_image_forms', 'Product Images', 'wpsc_product_image_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_variation_forms', 'Variation Control', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high' );
+	add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms'. $pagename, 'advanced');
 }
 
 add_action( 'admin_menu', 'wpsc_meta_boxes' );
