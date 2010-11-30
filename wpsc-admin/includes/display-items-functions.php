@@ -1524,11 +1524,11 @@ function wpsc_product_external_link_forms( $product_data = '' ) {
        <table class="form-table" style="width: 100%;" cellspacing="2" cellpadding="5">
 	<tbody><tr class="form-field">
 		<th valign="top" scope="row"><label for="external_link">' . __( 'External Link', 'wpsc' ) . '</label></th>
-		<td><input type="text" name="meta[_wpsc_product_metadata][external_link]" class="code" id="external_link" value="' . $external_link_value . '" size="50" style="width: 95%"></td>
+		<td><input type="text" name="meta[_wpsc_product_metadata][external_link]" id="external_link" value="' . $external_link_value . '" size="50" style="width: 95%"></td>
 	</tr>
 	<tr class="form-field">
 		<th valign="top" scope="row"><label for="external_link_text">' . __( 'External Link Text', 'wpsc' ) . '</label></th>
-		<td><input type="text" name="meta[_wpsc_product_metadata][external_link_text]" class="code" id="external_link_text" value="' . $external_link_text_value . '" size="50" style="width: 95%"></td>
+		<td><input type="text" name="meta[_wpsc_product_metadata][external_link_text]" id="external_link_text" value="' . $external_link_text_value . '" size="50" style="width: 95%"></td>
 	</tr>
 	<tr class="form-field">
 		<th valign="top" scope="row"><label for="external_link_target">' . __( 'External Link Target', 'wpsc' ) . '</label></th>
