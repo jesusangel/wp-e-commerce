@@ -299,7 +299,7 @@ function wpsc_meta_boxes() {
 	add_meta_box( 'wpsc_product_shipping_forms', 'Shipping', 'wpsc_product_shipping_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_variation_forms', 'Variation Control', 'wpsc_product_variation_forms', $pagename, 'normal', 'high' );
 	add_meta_box( 'wpsc_product_advanced_forms', 'Advanced Settings', 'wpsc_product_advanced_forms', $pagename, 'normal', 'high' );
-	add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms'. $pagename, 'advanced');
+	add_meta_box( 'wpsc_product_external_link_forms', 'Off Site Product link', 'wpsc_product_external_link_forms', $pagename, 'normal', 'high' );
 }
 
 add_action( 'admin_menu', 'wpsc_meta_boxes' );
