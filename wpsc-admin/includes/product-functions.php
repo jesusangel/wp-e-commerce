@@ -12,6 +12,7 @@ function wpsc_get_max_upload_size(){
 	else $upload_max = __('N/A', 'wpsc');	
 	return $upload_max;
 }
+
 /**
 * wpsc_product_variation_price_available function 
 * Checks for the lowest price of a products variations 
@@ -35,14 +36,18 @@ function wpsc_product_variation_price_available($product_id){
 			`p`.`post_parent` = ' . $product_id . '
 			AND
 			`pm`.`meta_key` = "_wpsc_price"
+			AND 
+			`p`.`ID` IN (
+				SELECT `' . $wpdb->postmeta . '`.`post_id` FROM `' . $wpdb->postmeta . '` WHERE `meta_key` = "_wpsc_stock" AND `meta_value` != "0"
+			)
 		ORDER BY 
 			`meta_value` ASC 
-		LIMIT 1
-	');
+		LIMIT 1'
+	);
+
 	$price = wpsc_currency_display($price, array('display_as_html' => false));
 	return $price;
 }
-
 
 /**
 * wpsc_product_has_children function 

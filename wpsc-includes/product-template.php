@@ -316,7 +316,9 @@ function wpsc_calculate_price( $product_id, $variations = null, $special = true 
 
 	if( !$product_id && count( $variations ) > 0){
 		$product_ids = wpsc_get_child_object_in_select_terms( $p_id, $variations, 'wpsc_variation' );
-		$sql = "SELECT `post_id` FROM ".$wpdb->postmeta." WHERE `meta_key` = '_wpsc_price' AND `post_id` IN (".implode(',',$product_ids).") ORDER BY `meta_value` ASC LIMIT 1";
+		$sql = "SELECT `post_id` FROM ".$wpdb->postmeta." WHERE `meta_key` = '_wpsc_stock' AND `meta_value` != '0' AND `post_id` IN (".implode(',' , $product_ids).")";
+		$stock_available = $wpdb->get_col($sql);
+		$sql = "SELECT `post_id` FROM ".$wpdb->postmeta." WHERE `meta_key` = '_wpsc_price' AND `post_id` IN (".implode(',',$stock_available).") ORDER BY `meta_value` ASC LIMIT 1";
 		$product_id = $wpdb->get_var($sql);
 	}
 	
