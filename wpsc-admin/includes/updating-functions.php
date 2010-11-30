@@ -173,9 +173,9 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 			$product_added_time = strtotime($product['date_added']);
 			$current_time = time();
 			
+			$post_date = $product['date_added'];
 			if ((int)$current_time < (int)$product_added_time)
 				$post_date = date("Y-m-d H:i:s");
-			$post_date = $product['date_added'];
 			
 			$product_post_values = array(
 				'post_author' => $user_ID,
