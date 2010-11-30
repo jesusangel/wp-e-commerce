@@ -266,6 +266,10 @@ div.wpsc_floatleft{
 	width:161px;
 	float:left;
 }
+div.wpsc_floatleft label {
+    line-height: 18px;
+    white-space: nowrap;
+}
 
 /*  Sortable product styling*/
 

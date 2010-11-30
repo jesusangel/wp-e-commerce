@@ -665,11 +665,11 @@ function wpsc_price_control_forms($product_data){
 		<?php else: ?>
 		
     	<div class='wpsc_floatleft' style="width:85px;">
-    		<?php _e( 'Price', 'wpsc' ); ?>:<br />
+    		<label><?php _e( 'Price', 'wpsc' ); ?>:</label><br />
 			<input type='text' class='text' size='10' name='meta[_wpsc_price]' value='<?php echo number_format( $product_data['meta']['_wpsc_price'],2,'.','' ); ?>' />
 		</div>
 		<div class='wpsc_floatleft' style='display:<?php if ( ($product_data['special'] == 1) ? 'block' : 'none'
-						); ?>; width:85px;; margin-left:30px;'>
+						); ?>; width:85px; margin-left:30px;'>
 			<label for='add_form_special'><?php _e( 'Sale Price', 'wpsc' ); ?>:</label>
 			<div id='add_special'>
 				<input type='text' size='10' value='<?php echo number_format( $product_data['meta']['_wpsc_special_price'], 2,'.','' ); ?>' name='meta[_wpsc_special_price]' />
