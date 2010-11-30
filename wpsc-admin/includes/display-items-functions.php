@@ -792,7 +792,7 @@ function wpsc_stock_control_forms( $product_data='' ) {
 				} ?>
 					<?php if( wpsc_product_has_children($product_data['id']) ) : ?>
 			    		<?php $stock = wpsc_variations_stock_remaining($product_data['id']); ?>
-						<p><?php _e( 'This Product has variations, to edit the quantity please use the Variation Controls bellow.' , 'wpsc' ); ?></p>
+						<p><?php _e( 'This Product has variations, to edit the quantity please use the Variation Controls below.' , 'wpsc' ); ?></p>
 						<p><?php printf(_n("%s variant item in stock.", "%s variant items in stock.", $stock), $stock); ?></p>
 					<?php else: ?>
 						<label for="stock_limit_quantity"><?php _e( 'Quantity:', 'wpsc' ); ?></label>
