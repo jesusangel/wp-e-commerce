@@ -1376,7 +1376,7 @@ a.variation_handle {
 	display:none;
 } 
 .meta-box-sortables-wpec .postbox:hover .handlediv {
-	background: transparent url(../../images/menu-bits.gif) no-repeat scroll 0% -111px;
+	background: transparent url(../../wpsc-core/images/menu-bits.gif) no-repeat scroll 0% -111px;
 }
 /* Main Flora Style Sheet for jQuery UI ui-datepicker */
 #ui-datepicker-div, .ui-datepicker-inline {
