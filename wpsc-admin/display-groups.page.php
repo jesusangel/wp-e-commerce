@@ -112,7 +112,7 @@ function wpsc_display_categories_page() {
 }
 
 /**
- * wpsc_admin_category_group_list, prints the left hand side of the edit categories page
+ * wpsc_admin_category_group_list, prints the right hand side of the edit categories page
  * @param nothing
  * @return nothing
  */
@@ -197,7 +197,7 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 }
 
 /*
- * wpsc_admin_category_group_list, prints the right hand side of the edit categories page
+ * wpsc_admin_category_group_list, prints the left hand side of the edit categories page
  * @param int $category_id the category ID
  * nothing returned
  */
