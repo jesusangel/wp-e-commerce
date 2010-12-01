@@ -506,7 +506,7 @@ function nzsc_googleResponse() {
 				$item_desc = $cart_item['item-description']['VALUE'];
 				$item_unit_price = $cart_item['unit-price']['VALUE'];
 				$item_quantity = $cart_item['quantity']['VALUE'];
-				$product_info = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE id='".$product_id."' LIMIT 1", ARRAY_A) ;
+				$product_info = $wpdb->get_results("SELECT * FROM `" . $wpdb->posts . "` WHERE id='".$product_id."' LIMIT 1", ARRAY_A) ;
 				$product_info = $product_info[0];
 				//mail("hanzhimeng@gmail.com","",print_r($product_info,1));
 				if($product_info['notax'] != 1) {

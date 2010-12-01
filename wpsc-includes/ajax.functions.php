@@ -988,14 +988,11 @@ function wpsc_download_file() {
 		if(($count =count($file_data)) >= 1){
 			$file_data = $file_data[$count-1];
 		}else{
-			$prod_name = $wpdb->get_var("SELECT `name` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE `id`=".$download_data['product_id']);
-
-			$prod_id = $wpdb->get_var("SELECT `ID` FROM ".$wpdb->posts." WHERE `post_title` LIKE '%".$prod_name."%' AND `post_status` IN ('publish')");			
+			$prod_id = $download_data['product_id'];		
 			$file_data = wpsc_get_downloadable_files($prod_id);		
 
 			if(($count =count($file_data)) >= 1)
 				$file_data = $file_data[$count-1];
-
 		}
 			
 		if ( $file_data == null ) {
@@ -1076,40 +1073,6 @@ set_time_limit(0);
 			}
 		} else {
 			exit( _e( 'This download is no longer valid, Please contact the site administrator for more information.' ) );
-		}
-	} else {
-		if ( isset( $_GET['admin_preview'] ) && ($_GET['admin_preview'] == "true") && is_numeric( $_GET['product_id'] ) && current_user_can( 'edit_plugins' ) ) {
-			$product_id = $_GET['product_id'];
-			$product_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `id` = '$product_id' LIMIT 1", ARRAY_A );
-			if ( is_numeric( $product_data[0]['file'] ) && ($product_data[0]['file'] > 0) ) {
-				$file_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_FILES . "` WHERE `id`='" . $product_data[0]['file'] . "' LIMIT 1", ARRAY_A );
-				$file_data = $file_data[0];
-
-				do_action( 'wpsc_alter_download_action', $file_id );
-
-				if ( is_file( WPSC_FILE_DIR . $file_data['idhash'] ) ) {
-					header( 'Content-Type: ' . $file_data['mimetype'] );
-					header( 'Content-Length: ' . filesize( WPSC_FILE_DIR . $file_data['idhash'] ) );
-					header( 'Content-Transfer-Encoding: binary' );
-					if ( $_GET['preview_track'] != 'true' ) {
-						header( 'Content-Disposition: attachment; filename="' . $file_data['filename'] . '"' );
-					} else {
-						header( 'Content-Disposition: inline; filename="' . $file_data['filename'] . '"' );
-					}
-					if ( isset( $_SERVER["HTTPS"] ) && ($_SERVER["HTTPS"] != '') ) {
-						header( "Pragma: public" );
-						header( "Expires: 0" );
-						header( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-						header( "Cache-Control: public" );
-					} else {
-						header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-					}
-					$filename = WPSC_FILE_DIR . $file_data['idhash'];
-					session_destroy();
-					wpsc_readfile_chunked( $filename );
-					exit();
-				}
-			}
 		}
 	}
 }

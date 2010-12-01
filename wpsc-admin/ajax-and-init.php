@@ -702,9 +702,8 @@ function wpsc_purchase_log_csv() {
 
 			foreach ( (array)$cart as $item ) {
 				$output .= ",";
-				$product = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `id`=" . $item['prodid'] . " LIMIT 1", ARRAY_A );
-				$skusql = "SELECT `meta_value` FROM `" . WPSC_TABLE_PRODUCTMETA . "` WHERE `meta_key`= 'sku' AND `product_id` = " . $item['prodid'];
-				$skuvalue = $wpdb->get_var( $skusql );
+				$product = $wpdb->get_row( "SELECT * FROM `" . $wpdb->posts . "` WHERE `id`=" . $item['prodid'] . " LIMIT 1", ARRAY_A );
+				$skuvalue = get_product_meta($item['prodid'], 'sku', true);
 				$output .= "\"" . $item['quantity'] . " " . str_replace( '"', '\"', $product['name'] ) . $variation_list . "\"";
 				$output .= "," . $skuvalue;
 			}
@@ -781,16 +780,6 @@ function wpsc_admin_ajax() {
 		//print_r( $current_order );
 	}
 
-	//    if ($_POST['del_prod'] == 'true') {
-	//       $ids = $_POST['del_prod_id'];
-	//       $ids = explode(',',$ids);
-	//       foreach ($ids as $id) {
-	//          $wpdb->query($wpdb->prepare("DELETE FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=%d", $id));
-	//       }
-	//       exit();
-	//    }
-
-
 	if ( ($_POST['save_image_upload_state'] == "true") && is_numeric( $_POST['image_upload_state'] ) ) {
 		//get_option('wpsc_image_upload_state');
 		$upload_state = (int)(bool)$_POST['image_upload_state'];
@@ -803,29 +792,6 @@ function wpsc_admin_ajax() {
 		echo wp_delete_term( $value_id, 'wpsc-variation' );
 		exit();
 	}
-
-
-	if ( ($_POST['edit_variation_value_list'] == 'true') && is_numeric( $_POST['variation_id'] ) && is_numeric( $_POST['product_id'] ) ) {
-		$variation_id = (int)$_POST['variation_id'];
-		$product_id = (int)$_POST['product_id'];
-		$variations_processor = new nzshpcrt_variations();
-		$variation_values = $variations_processor->falsepost_variation_values( $variation_id );
-		if ( is_array( $variation_values ) ) {
-			//echo(print_r($variation_values,true));
-			$check_variation_added = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_VARIATION_ASSOC . "` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}') AND `variation_id` IN ('{$variation_id}') LIMIT 1" );
-			//exit("<pre>".print_r($variation_values,true)."<pre>");
-			if ( $check_variation_added == null ) {
-				$variations_processor->add_to_existing_product( $product_id, $variation_values );
-			}
-			echo $variations_processor->display_attached_variations( $product_id );
-			echo $variations_processor->variations_grid_view( $product_id );
-		} else {
-			echo "false";
-		}
-		exit();
-	}
-
-
 
 	if ( ($_POST['remove_form_field'] == "true") && is_numeric( $_POST['form_id'] ) ) {
 		//exit(print_r($user,true));
@@ -893,73 +859,6 @@ function wpsc_admin_ajax() {
 			exit();
 		}
 	}
-
-	if ( ($_POST['list_variation_values'] == "true" ) ) {
-		// retrieve the forms for associating variations and their values with products
-		$variation_processor = new nzshpcrt_variations();
-
-		$variations_selected = array( );
-		foreach ( (array)$_POST['variations'] as $variation_id => $checked ) {
-			$variations_selected[] = (int)$variation_id;
-		}
-
-		if ( is_numeric( $_POST['product_id'] ) && ($_POST['product_id'] > 0) ) {
-			$product_id = absint( $_POST['product_id'] );
-			$selected_price = (float)$_POST['selected_price'];
-
-			// variation values housekeeping
-			$completed_variation_values = $variation_processor->edit_product_values( $product_id, $_POST['edit_var_val'], $selected_price );
-
-			// get all the currently associated variations from the database
-			$associated_variations = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_VARIATION_ASSOC . "` WHERE `type` IN ('product') AND `associated_id` IN ('{$product_id}')", ARRAY_A );
-
-			$variations_still_associated = array( );
-			foreach ( (array)$associated_variations as $associated_variation ) {
-				// remove variations not checked that are in the database
-				if ( array_search( $associated_variation['variation_id'], $variations_selected ) === false ) {
-					$wpdb->query( "DELETE FROM `" . WPSC_TABLE_VARIATION_ASSOC . "` WHERE `id` = '{$associated_variation['id']}' LIMIT 1" );
-					$wpdb->query( "DELETE FROM `" . WPSC_TABLE_VARIATION_VALUES_ASSOC . "` WHERE `product_id` = '{$product_id}' AND `variation_id` = '{$associated_variation['variation_id']}' " );
-				} else {
-					// make an array for adding in the variations next step, for efficiency
-					$variations_still_associated[] = $associated_variation['variation_id'];
-				}
-			}
-
-			foreach ( (array)$variations_selected as $variation_id ) {
-				// add variations not already in the database that have been checked.
-				$variation_values = $variation_processor->falsepost_variation_values( $variation_id );
-				if ( array_search( $variation_id, $variations_still_associated ) === false ) {
-					$variation_processor->add_to_existing_product( $product_id, $variation_values );
-				}
-			}
-			//echo "/* ".print_r($variation_values,true)." */\n\r";
-			echo "edit_variation_combinations_html = \"" . str_replace( array( "\n", "\r" ), array( '\n', '\r' ), addslashes( $variation_processor->variations_grid_view( $product_id, (array)$completed_variation_values ) ) ) . "\";\n";
-		} else {
-			if ( count( $variations_selected ) > 0 ) {
-				// takes an array of variations, returns a form for adding data to those variations.
-				if ( (float)$_POST['selected_price'] > 0 ) {
-					$selected_price = (float)$_POST['selected_price'];
-				}
-				$limited_stock = false;
-				if ( $_POST['limited_stock'] == 'true' ) {
-					$limited_stock = true;
-				}
-
-				$selected_variation_values = array( );
-				foreach ( $_POST['edit_var_val'] as $variation_value_array ) {
-					//echo "/* ".print_r($variation_value_array,true)." */\n\r";
-					$selected_variation_values = array_merge( array_keys( $variation_value_array ), $selected_variation_values );
-				}
-
-				////echo "/* ".print_r($selected_variation_values,true)." */\n\r";
-				echo "edit_variation_combinations_html = \"" . __( 'Edit Variation Set', 'wpsc' ) . "<br />" . str_replace( array( "\n", "\r" ), array( '\n', '\r' ), addslashes( $variation_processor->variations_grid_view( 0, (array)$variations_selected, (array)$selected_variation_values, $selected_price, $limited_stock ) ) ) . "\";\n";
-			} else {
-				echo "edit_variation_combinations_html = \"\";\n";
-			}
-		}
-		exit();
-	}
-
 
 	if ( isset( $_POST['language_setting'] ) && ($_GET['page'] = WPSC_DIR_NAME . '/wpsc-admin/display-options.page.php') ) {
 		if ( $user_level >= 7 ) {
@@ -1068,22 +967,12 @@ if ( isset( $_GET['display_invoice'] ) && ( 'true' == $_GET['display_invoice'] )
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ( 'wpsc_display_invoice' == $_REQUEST['wpsc_admin_action'] ) )
 	add_action( 'admin_init', 'wpsc_display_invoice' );
 
-function wpsc_save_inline_price() {
-	global $wpdb;
-	$pid = $_POST['id'];
-	$new_price = $_POST['value'];
-	$new_price1 = str_replace( '$', '', $new_price );
-	$wpdb->query( "UPDATE " . WPSC_TABLE_PRODUCT_LIST . " SET price='$new_price1' WHERE id='$pid'" );
-	exit( $new_price );
-}
-if ( isset( $_GET['inline_price'] ) && ($_GET['inline_price'] == 'true') )
-	add_action( 'admin_init', 'wpsc_save_inline_price', 0 );
-
 /**
  * Purchase log ajax code starts here
  */
 function wpsc_purchlog_resend_email() {
 	global $wpdb;
+	$shipping=0;
 	$siteurl = get_option( 'siteurl' );
 	$log_id = $_GET['email_buyer_id'];
 	if ( is_numeric( $log_id ) ) {
@@ -1168,7 +1057,8 @@ function wpsc_purchlog_resend_email() {
 				}
 				do_action( 'wpsc_confirm_checkout', $purchase_log['id'] );
 
-				$shipping = nzshpcrt_determine_item_shipping( $row['prodid'], $row['quantity'], $shipping_country );
+				$shipping = $row['pnp'] * $row['quantity'];
+				$total_shipping += $shipping;
 				if ( isset( $_SESSION['quote_shipping'] ) ) {
 					$shipping = $_SESSION['quote_shipping'];
 				}
@@ -1756,47 +1646,6 @@ function wpsc_rearrange_images() {
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'rearrange_images') )
 	add_action( 'admin_init', 'wpsc_rearrange_images' );
-
-function wpsc_delete_images() {
-	global $wpdb;
-	$product_id = absint( $_POST['product_id'] );
-	$element_id = $_POST['del_img_id'];
-	$image_id = absint( str_replace( "product_image_", '', $element_id ) );
-	if ( $image_id > 0 ) {
-		$deletion_success = $wpdb->query( "DELETE FROM `" . WPSC_TABLE_PRODUCT_IMAGES . "` WHERE `id`='{$image_id}' LIMIT 1" );
-		echo "element_id = '$element_id';\n";
-		//echo "/*\n";
-		//print_r($deletion_success);
-		//echo "*/\n";
-
-		if ( ($product_id > 0) && ($deletion_success == true) ) {
-			$next_image = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_IMAGES . "` WHERE `product_id` = '{$product_id}' ORDER BY `image_order` ASC LIMIT 1", ARRAY_A );
-			if ( count( $next_image ) > 0 ) {
-				$wpdb->query( "UPDATE `" . WPSC_TABLE_PRODUCT_LIST . "` SET `image` = '{$next_image['id']}' WHERE `id` = '{$product_id}' LIMIT 1" );
-				$output = wpsc_main_product_image_menu( $product_id );
-
-				$height = get_option( 'product_image_height' );
-				$width = get_option( 'product_image_width' );
-
-				$image_input = WPSC_IMAGE_DIR . $next_image['file'];
-				$image_output = WPSC_THUMBNAIL_DIR . $next_image['file'];
-				if ( ($product['file'] != '') and file_exists( $image_input ) ) {
-					image_processing( $image_input, $image_output, $width, $height );
-					update_product_meta( $product_id, 'thumbnail_width', $width );
-					update_product_meta( $product_id, 'thumbnail_height', $height );
-				}
-				echo "image_menu='" . str_replace( array( "\n", "\r" ), array( '\n', '\r' ), addslashes( $output ) ) . "';\n";
-				echo "image_id='" . $next_image['id'] . "';\n";
-			} else {
-				$wpdb->query( "UPDATE `" . WPSC_TABLE_PRODUCT_LIST . "` SET `image` = NULL WHERE `id` = '{$product_id}' LIMIT 1" );
-			}
-		}
-	}
-
-	exit();
-}
-if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'delete_images') )
-	add_action( 'admin_init', 'wpsc_delete_images' );
 
 function wpsc_update_page_urls() {
 	global $wpdb;

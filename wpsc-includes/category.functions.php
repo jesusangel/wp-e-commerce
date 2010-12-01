@@ -116,19 +116,6 @@ function wpsc_print_category_classes() {
 	echo "[wpsc_category_classes]";
 }
 
-/**
-* wpsc print product list function
-* places the shortcode for the product list
-* @param string starting HTML element
-* @param string ending HTML element
-*/
-function wpsc_print_product_list() {
-  global $wpsc_category_query;
-	if (get_option('catsprods_display_type') == 1) {
-		echo "[wpsc_category_product_list]";
-  }
-}
-
 
 /**
 * wpsc print subcategory function
@@ -321,7 +308,6 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		
 		// get the list of products associated with this category.
-		$category_product_list = wpsc_category_product_list($category_row->term_id);
 		$tags_to_replace = array('[wpsc_category_name]',
 		'[wpsc_category_description]',
 		'[wpsc_category_url]',
@@ -329,8 +315,7 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		'[wpsc_category_classes]',
 		'[wpsc_category_image]',
 		'[wpsc_subcategory]',
-		'[wpsc_category_products_count]',
-		'[wpsc_category_product_list]');
+		'[wpsc_category_products_count]');
 		
 		$content_to_place = array(
 		htmlentities($category_row->name,ENT_QUOTES, 'UTF-8'),
@@ -340,8 +325,7 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		$category_classes,
 		$category_image_html,
 		$sub_categories,
-		$category_count_html,
-		$category_product_list);
+		$category_count_html);
 		
 		// Stick all the category html together and concatenate it to the previously generated HTML
 		$output .= str_replace($tags_to_replace, $content_to_place ,$category_html);
@@ -372,67 +356,7 @@ function wpsc_place_category_image($category_id, $query) {
 		return htmlspecialchars($image_url);
 }
 
-
-function wpsc_category_product_list($category_id) {
-	global $wpdb;
-	$output = '';
-	$category_id = (int)$category_id;
-
-	if (get_option('catsprods_display_type') == 1) {
-		$product_data = $wpdb->get_results("SELECT `products`.`id`, `products`.`name`
-			FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `cats`
-			JOIN `".WPSC_TABLE_PRODUCT_LIST."` as `products`
-			ON  `cats`.`product_id` = `products`.`id`
-			WHERE `cats`.`category_id` = '$category_id'
-			AND `products`.`publish`='1'
-			AND `products`.`active` = '1'
-			ORDER BY `products`.`name` ASC
-			", ARRAY_A);
-		if(count($product_data) > 0){
-			$output .= "<ul class='category-product-list'>\n\r";
-			foreach($product_data as $product_row) {
-				$output .= "<li class='cat-item'><a class='productlink' href='".wpsc_product_url($product_row['id'],$category_id)."'>".$product_row['name']."</a></li>\n\r";
-			} //end foreach
-			$output .= "</ul>\n\r";
-		} //end if productsIDs
-	}
-	return $output;
-}
-
-
 /// category template tags end here
-
-
-// pe.{
-// To stick this in sidebar, main page (calling products_page.php) must be called before sidebar.php in the loop (think)
-  
-function display_subcategories($id) {
-  global $wpdb;  
-  if(get_option('permalink_structure') != '') {
-    $separator ="?";
-  } else {
-    $separator ="&amp;";
-	}   
-  $subcategory_sql = "SELECT * FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE `active`='1' AND `category_parent` = '".absint($id)."'  ORDER BY `nice-name`";
-  $subcategories = $wpdb->get_results($subcategory_sql,ARRAY_A);
-  if($subcategories != null) {
-    $output .= "<ul class='SubCategories'>";
-    foreach($subcategories as $subcategory) {
-			if (get_option('show_category_count') == 1) {
-				//show product count for each category
-				$count = $wpdb->get_var("SELECT COUNT(`p`.`id`) FROM `".WPSC_TABLE_ITEM_CATEGORY_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `p` ON `a`.`product_id` = `p`.`id` WHERE `a`.`category_id` IN ('{$subcategory['id']}') AND `p`.`active` IN ('1') AND `p`.`publish` IN('1')");
-				$addCount =  " (".$count.")";
-			} //end get_option
-      $output .= "<li class='cat-item'><a class='categorylink' href='".wpsc_category_url($subcategory['id'])."'>".stripslashes($subcategory['name'])."</a>$addCount".display_subcategories($subcategory['id'])."</li>";
-		} 
-    $output .= "</ul>";
-	} else {
-		return '';
-	}
-  return $output;
-  }
-
-
 
 /**
 * wpsc_category_url  function, makes permalink to the category or 

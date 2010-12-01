@@ -5,8 +5,6 @@
  * @package wp-e-commerce
  * @since 3.7
  */
-//$closed_postboxes = (array)get_user_meta( $current_user->ID, 'editproduct');
-//$variations_processor = new nzshpcrt_variations;
 
 global $wpsc_product_defaults;
 $wpsc_product_defaults = array(
@@ -1601,17 +1599,6 @@ function wpsc_product_download_forms( $product_data='' ) {
 	$output .= "<input type='file' name='file' value='' /><br />" . __( 'Max Upload Size', 'wpsc' ) . " : <span>" . $upload_max . "</span><br /><br />";
 	$output .= "<h4>" . __( '<a href="admin.php?wpsc_admin_action=product_files_existing&product_id=' . $product_data['id'] . '" class="thickbox" title="Select all downloadable files for ' . $product_data['name'] . '">'.__("Select from existing files").'</a>', 'wpsc' ) . "</h4>";
 
-	if ( isset( $product_data['file'] ) && $product_data['file'] > 0 ) {
-		$output .= __( 'Preview File', 'wpsc' ) . ": ";
-
-		$output .= "<a class='admin_download' href='index.php?admin_preview=true&product_id=" . $product_data['id'] . "' ><img align='absmiddle' src='" . WPSC_CORE_IMAGES_URL . "/download.gif' alt='' title='' /><span>" . __( 'Click to download', 'wpsc' ) . "</span></a>";
-
-		$file_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_PRODUCT_FILES . "` WHERE `id`='" . $product_data['file'] . "' LIMIT 1", ARRAY_A );
-		if ( ($file_data != null) && (function_exists( 'listen_button' )) ) {
-			$output .= "" . listen_button( $file_data['idhash'], $file_data['id'] ) . "<br style='clear: both;' /><br />";
-		}
-	}
-
 	if ( function_exists( "make_mp3_preview" ) || function_exists( "wpsc_media_player" ) ) {
 
 		$output .= "<br />";
@@ -1705,120 +1692,8 @@ function edit_multiple_image_gallery( $product_data ) {
 
 		if ( has_post_thumbnail( $product_data['id'] ) )
 			echo get_the_post_thumbnail( $product_data['id'], 'admin-product-thumbnails' );
-
-			/*
-			  if($attached_images != null) {
-			  foreach($attached_images as $image) {
-			  $image_meta = get_post_meta($image->ID, '');
-			  foreach($image_meta as $meta_name => $meta_value) {
-			  $image_meta[$meta_name] = maybe_unserialize(array_pop($meta_value));
-			  }
-
-			  if(function_exists("getimagesize")) {
-			  // $num++;
-			  $image_url = "index.php?wpsc_action=scale_image&amp;attachment_id={$image->ID}&amp;width=60&amp;height=60";
-			  ?>
-			  <li id="product_image_<?php echo $image->ID; ?>" class='gallery_image'>
-			  <input type='hidden' class='image-id'  name='gallery_image_id[]' value='<?php echo $image->ID; ?>' />
-			  <div class='previewimage' id='gallery_image_<?php echo $image->ID; ?>'>
-			  <a id='extra_preview_link_<?php echo $image->ID; ?>' onclick='return false;' href='' rel='product_extra_image_<?php echo $image->ID; ?>' >
-			  <img class='previewimage' src='<?php echo $image_url; ?>' alt='<?php _e('Preview', 'wpsc'); ?>' title='<?php _e('Preview', 'wpsc'); ?>' /><br />
-			  </a>
-			  <?php //echo wpsc_main_product_image_menu($product_data['id']); ?>
-			  </div>
-			  </li>
-			  <?php
-			  }
-			  }
-			  }
-			 */
-			/*
-			  $main_image = $wpdb->get_row("SELECT `images`.*
-			  FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images`
-			  JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product`
-			  ON `product`.`image` = `images`.`id`
-			  WHERE `product`.`id` = '{$product_data['id']}'
-			  LIMIT 1", ARRAY_A);
-			 */
 	}
 }
-
-/*
-  function wpsc_main_product_image_menu($product_id) {
-  global $wpdb;
-  $thumbnail_state = 0;
-  if($product_id > 0)
-  {
-  //$main_image = $wpdb->get_row("SELECT `images`.*,  `product`.`thumbnail_state` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` AS `images` JOIN `".WPSC_TABLE_PRODUCT_LIST."` AS `product` ON `product`.`image` = `images`.`id`  WHERE `product`.`id` = '{$product_id}' LIMIT 1", ARRAY_A);
-  $thumbnail_state = $main_image['thumbnail_state'];
-  } else {
-  $thumbnail_state = 1;
-  }
-
-  $sendback = wp_get_referer();
-  $presentation_link = add_query_arg('page','wpsc-settings', $sendback);
-  $presentation_link = add_query_arg('tab','presentation#thumb_settings', $presentation_link);
-  $thumbnail_image_height = get_product_meta($product_id, 'thumbnail_height');
-  $thumbnail_image_width = get_product_meta($product_id, 'thumbnail_width');
-
-
-
-  //    echo $thumbnail_image_height;
-  //    echo "|";
-  //    echo $thumbnail_image_width;
-  ob_start();
-  ?>
-  <div class='image_settings_box'>
-  <div class='upper_settings_box'>
-  <div class='upper_image'><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/pencil.png' alt='' /></div>
-  <div class='upper_txt'><?php _e('Thumbnail Settings'); ?><a class='closeimagesettings'>X</a></div>
-  </div>
-
-  <div class='lower_settings_box'>
-  <input type='hidden' id='current_thumbnail_image' name='current_thumbnail_image' value='S' />
-  <ul>
-
-  <li>
-  <input type='radio' name='gallery_resize' value='1' id='gallery_resize1' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize1'><?php _e('use default size', 'wpsc'); ?>(<a href='<?php echo $presentation_link; ?>' title='<?php _e('This is set on the Settings Page', 'wpsc'); ?>'><?php echo get_option('product_image_height'); ?>&times;<?php echo get_option('product_image_width'); ?>px</a>)
-  </label>
-
-  </li>
-
-  <li>
-  <input type='radio' <?php echo (($thumbnail_state != 2) ? "checked='checked'" : "") ;?> name='gallery_resize' value='0' id='gallery_resize0' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize0'> <?php _e('do not resize thumbnail image', 'wpsc'); ?></label><br />
-  </li>
-
-  <li>
-  <input type='radio' <?php echo (($thumbnail_state == 2) ? "checked='checked'" : "") ;?>  name='gallery_resize' value='2' id='gallery_resize2' class='image_resize' onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize2'><?php _e('use specific size', 'wpsc'); ?> </label>
-  <div class='heightWidth image_resize_extra_forms' <?php echo (($thumbnail_state == 2) ? "style='display: block;'" : "") ;?>>
-  <input id='gallery_image_width' type='text' size='4' name='gallery_width' value='<?php echo $thumbnail_image_width; ?>' /><label for='gallery_image_width'><?php _e('px width', 'wpsc'); ?></label>
-  <input id='gallery_image_height' type='text' size='4' name='gallery_height' value='<?php echo $thumbnail_image_height; ?>' /><label for='gallery_image_height'><?php _e('px height', 'wpsc'); ?> </label>
-  </div>
-  </li>
-
-  <li>
-  <input type='radio'  name='gallery_resize' value='3' id='gallery_resize3' class='image_resize'  onclick='image_resize_extra_forms(this)' /> <label for='gallery_resize3'> <?php _e('use separate thumbnail', 'wpsc'); ?></label><br />
-  <div class='browseThumb image_resize_extra_forms'>
-  <input type='file' name='gallery_thumbnailImage' size='15' value='' />
-  </div>
-  </li>
-  <li>
-  <a href='<?php echo htmlentities("admin.php?wpsc_admin_action=crop_image&imagename=".$main_image['image']."&imgheight=".$image_data[1]."&imgwidth=".$image_data[0]."&width=630&height=500&product_id=".$product_id); ?>' title='Crop Image' class='thickbox'>Crop This Image Using jCrop</a>
-
-  </li>
-  <li>
-  <a href='#' class='delete_primary_image delete_button'>Delete this Image</a>
-  </li>
-
-  </ul>
-  </div>
-  </div>
-  <a class='editButton'>Edit   <img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/pencil.png' alt='' /></a>
-  <?php
-  $output = ob_get_contents();
-  ob_end_clean();
-  return $output;
-  } */
 
 /**
  * Displays the category forms for adding and editing Products

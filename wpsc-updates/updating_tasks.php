@@ -7,30 +7,6 @@ if(get_option('wpsc_trackingid_subject') == ''){
 	update_option('wpsc_trackingid_subject', __('Your Order from %shop_name% has been dispatched', 'wpsc'));
 }     
 
-
-  /*
-if(!$wpdb->get_results("SELECT `id` FROM `".WPSC_TABLE_ALSO_BOUGHT."`")) {
-  // inserts data on what was bought with what however many times 
-  $product_ids = $wpdb->get_col("SELECT `id` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `active` IN('1')");
-  foreach((array)$product_ids as $prodid) {
-    $cart_ids = $wpdb->get_results("SELECT `purchaseid` FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `prodid` IN ('$prodid')", ARRAY_A);
-    $popular_array = array();
-    foreach((array)$cart_ids as $cart_id) {
-      $purchase_data = $wpdb->get_results("SELECT `prodid` FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid` IN ('".$cart_id['purchaseid']."') AND `prodid` NOT IN('$prodid')", ARRAY_A);
-      foreach((array)$purchase_data as $purchase_row) {
-        if(isset($popular_array[$purchase_row['prodid']])) {
-          $popular_array[$purchase_row['prodid']]++;
-        } else {
-          $popular_array[$purchase_row['prodid']] = 1;
-        }
-      }      
-    }
-    foreach((array)$popular_array as $assoc_prodid => $quantity) {
-      $wpdb->query("INSERT INTO `".WPSC_TABLE_ALSO_BOUGHT."` ( `id` , `selected_product` , `associated_product` , `quantity` ) VALUES ('', '$prodid', '".$assoc_prodid."', '".$quantity."' );");
-    }
-  }
-}*/
-
 if($wpdb->get_results("SHOW FULL COLUMNS FROM `".WPSC_TABLE_REGION_TAX."` LIKE 'code';",ARRAY_A)) {
 	//$wpdb->query("ALTER TABLE `".WPSC_TABLE_REGION_TAX."` ADD `code` char(2) NOT NULL default '' AFTER `name`;");    
 

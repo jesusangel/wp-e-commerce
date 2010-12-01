@@ -83,7 +83,7 @@ function gateway_chronopay($separator, $sessionid)
 	
 	foreach($cart as $item)
 	{
-		$product_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
+		$product_data = $wpdb->get_results("SELECT * FROM `" . $wpdb->posts . "` WHERE `id`='".$item['prodid']."' LIMIT 1",ARRAY_A);
 		$product_data = $product_data[0];
 		$variation_count = count($product_variations);
     
@@ -115,7 +115,7 @@ function gateway_chronopay($separator, $sessionid)
     
     	$local_currency_productprice = $item['price'];
 
-			$local_currency_shipping = nzshpcrt_determine_item_shipping($item['prodid'], 1, $_SESSION['delivery_country']);
+			$local_currency_shipping = $item['pnp'] * $item['quantity'];
     	
 
 			$chronopay_currency_productprice = $local_currency_productprice;
@@ -150,8 +150,7 @@ function gateway_chronopay($separator, $sessionid)
 
     	$i++;
 	}
-   
-  	$base_shipping = nzshpcrt_determine_base_shipping(0, $_SESSION['delivery_country']);
+  	$base_shipping = $purchase_log[0]['base_shipping'];
   	if(($base_shipping > 0) && ($all_donations == false) && ($all_no_shipping == false))
     {
 		$data['handling_cart'] = number_format($base_shipping,$decimal_places,'.','');

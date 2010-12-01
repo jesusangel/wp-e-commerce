@@ -828,31 +828,6 @@ jQuery(document).ready( function () {
 		});
 	});
 
-	jQuery('img.deleteButton, a.delete_primary_image').livequery(function(){
-		jQuery(this).click( function() {
-			var r=confirm("Please confirm deletion");
-			if (r==true) {
-				img_id = jQuery(this).parents("li.gallery_image").attr('id');
-
-				post_values = "del_img_id="+img_id+"&product_id="+jQuery('#product_id').val();
-				jQuery.post( 'index.php?wpsc_admin_action=delete_images', post_values, function(returned_data) {
-					//console.log(returned_data);
-					eval(returned_data);
-					if(typeof(image_id) != "undefined") {
-						jQuery('#gallery_image_'+image_id).children('img.deleteButton').remove();
-						jQuery('#gallery_image_'+image_id).children('a.editButton').remove();
-						jQuery('#gallery_image_'+image_id).children('div.image_settings_box').remove();
-					}
-					if(typeof(image_menu) != "undefined") {
-						jQuery('#gallery_image_'+image_id).append(image_menu);
-					}
-					jQuery("#"+element_id).remove();
-				});
-				return false;
-			}
-		});
-	});
-
 	jQuery('a.closeimagesettings').livequery(function(){
 		jQuery(this).click( function() {
 			jQuery('.image_settings_box').hide();

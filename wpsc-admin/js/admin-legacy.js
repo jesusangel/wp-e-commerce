@@ -1115,60 +1115,6 @@ jQuery(document).ready(function(){
 		}
 		);
 
-
-	//  	jQuery("table#itemlist .pricedisplay").editable(base_url+"/wp-admin/admin.php?inline_price=true", {
-	//          indicator : "Saving...",
-	//          tooltip   : 'Click to edit...'
-	//     });
-	/*
-    jQuery('.meta-box-sortables').sortable( {
-	    placeholder: 'sortable-placeholder',
-	    connectWith: [ '.meta-box-sortables' ],
-	    items: '> .postbox',
-	    handle: '.hndle',
-	    distance: 2,
-	    tolerance: 'pointer',
-	    sort: function(e,ui) {
-	    	if ( jQuery(document).width() - e.clientX < 300 ) {
-	    		if ( ! jQuery('#post-body').hasClass('has-sidebar') ) {
-	    			var pos = jQuery('#side-sortables').offset();
-
-	    			jQuery('#side-sortables').append(ui.item)
-	    			jQuery(ui.placeholder).css({'top':pos.top,'left':pos.left}).width(jQuery(ui.item).width())
-	    			postboxes.expandSidebar(1);
-	    		}
-	    	}
-	    },
-	    stop: function() {
-	    	var postVars = {
-	    		action: 'product-page-order',
-	    		ajax: 'true'
-	    	}
-	    	jQuery(this).each( function() {
-	    		postVars["order[" + this.id.split('-')[0] + "]"] = jQuery(this).sortable( 'toArray' ).join(',');
-	    	} );
-	    	jQuery.post( 'index.php?admin=true&ajax=true', postVars, function() {
-	    		postboxes.expandSidebar();
-	    	} );
-	    }
-	} );
-	var boxes = new Array;
-	if (hidden_boxes) {
-		hidden_boxes = hidden_boxes.split(',');
-		for (i=0;i<hidden_boxes.length;i++) {
-			jQuery('#'+hidden_boxes[i]+'-hide').removeAttr('checked');
-		}
-	}
-	boxes = ["price_and_stock", "shipping", "variation", "advanced", "product_image", "product_download"];
-
-	for (i=0;i<boxes.length;i++) {
-		if ( ! jQuery('#'+boxes[i]+'-hide').attr('checked')){
-			if (IS_WP27) {
-				jQuery('#'+boxes[i]).hide();
-			}
-		}
-	}
-*/
 	jQuery("#submit_category_select").click(
 		function() {
 			new_url = jQuery("#category_select").children("option:selected").val();

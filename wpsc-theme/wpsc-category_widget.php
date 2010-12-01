@@ -49,7 +49,6 @@
 
 								</a>
 
-								<?php wpsc_print_product_list(); ?>
 								<?php wpsc_print_subcategory( '<ul>', '</ul>' ); ?>
 
 							</li>

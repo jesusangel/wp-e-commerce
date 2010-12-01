@@ -19,9 +19,7 @@ function wpsc_buy_now_button( $product_id, $replaced_shortcode = false ) {
 	$product = get_post( $product_id );
 	$supported_gateways = array('wpsc_merchant_paypal_standard','paypal_multiple');
 	$selected_gateways = get_option( 'custom_gateway_options' );
-	if ( in_array( 'google', (array)$selected_gateways ) ) {
-		$output .= google_buynow( $product['id'] );
-	} else if ( in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways ) ) {
+	if ( in_array( 'wpsc_merchant_paypal_standard', (array)$selected_gateways ) ) {
 		if ( $product_id > 0 ) {
 			$post_meta = get_post_meta( $product_id, '_wpsc_product_metadata', true );
 			$shipping = $post_meta['shipping']['local'];
@@ -67,54 +65,51 @@ function wpsc_also_bought( $product_id ) {
 	 * most of it scarcely needs describing
 	 */
 	global $wpdb;
-	$siteurl = get_option( 'siteurl' );
 
 	if ( get_option( 'wpsc_also_bought' ) == 0 ) {
 		//returns nothing if this is off
 		return '';
 	}
+	
 
 	// to be made customiseable in a future release
 	$also_bought_limit = 3;
 	$element_widths = 96;
 	$image_display_height = 96;
 	$image_display_width = 96;
-
-	$also_bought = $wpdb->get_results( "SELECT `" . WPSC_TABLE_PRODUCT_LIST . "`.* FROM `" . WPSC_TABLE_ALSO_BOUGHT . "`, `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `selected_product`='" . $product_id . "' AND `" . WPSC_TABLE_ALSO_BOUGHT . "`.`associated_product` = `" . WPSC_TABLE_PRODUCT_LIST . "`.`id` AND `" . WPSC_TABLE_PRODUCT_LIST . "`.`active` IN('1') AND `" . WPSC_TABLE_PRODUCT_LIST . "`.`publish` IN ('1')ORDER BY `" . WPSC_TABLE_ALSO_BOUGHT . "`.`quantity` DESC LIMIT $also_bought_limit", ARRAY_A );
+	
+	$also_bought = $wpdb->get_results( "SELECT `" . $wpdb->posts . "`.* FROM `" . WPSC_TABLE_ALSO_BOUGHT . "`, `" . $wpdb->posts . "` WHERE `selected_product`='" . $product_id . "' AND `" . WPSC_TABLE_ALSO_BOUGHT . "`.`associated_product` = `" . $wpdb->posts . "`.`id` AND `" . $wpdb->posts . "`.`post_status` IN('publish','protected') ORDER BY `" . WPSC_TABLE_ALSO_BOUGHT . "`.`quantity` DESC LIMIT $also_bought_limit", ARRAY_A );
 	if ( count( $also_bought ) > 0 ) {
 		$output = "<h2 class='prodtitles wpsc_also_bought' >" . __( 'People who bought this item also bought', 'wpsc' ) . "</h2>";
 		$output .= "<div class='wpsc_also_bought'>";
 		foreach ( (array)$also_bought as $also_bought_data ) {
+			//$also_bought_data = $also_bought_data[0];
 			$output .= "<div class='wpsc_also_bought_item' style='width: " . $element_widths . "px;'>";
-
 			if ( get_option( 'show_thumbnails' ) == 1 ) {
 				if ( $also_bought_data['image'] != null ) {
+					$output .= "<a href='" . get_permalink($also_bought_data['ID']) . "' class='preview_link'  rel='" . str_replace( " ", "_", get_the_title($also_bought_data['ID']) ) . "'>";
+					$image_path = "index.php?productid=" . $also_bought_data['ID'] . "&amp;width=" . $image_display_width . "&amp;height=" . $image_display_height . "";
 
-					$output .= "<a href='" . wpsc_product_url( $also_bought_data['id'] ) . "' class='preview_link'  rel='" . str_replace( " ", "_", $also_bought_data['name'] ) . "'>";
-					$image_path = "index.php?productid=" . $also_bought_data['id'] . "&amp;width=" . $image_display_width . "&amp;height=" . $image_display_height . "";
-
-					$output .= "<img src='$image_path' id='product_image_" . $also_bought_data['id'] . "' class='product_image' style='margin-top: " . $margin_top . "px'/>";
+					$output .= "<img src='$image_path' id='product_image_" . $also_bought_data['ID'] . "' class='product_image' style='margin-top: " . $margin_top . "px'/>";
 					$output .= "</a>";
 				} else {
 					if ( get_option( 'product_image_width' ) != '' ) {
-						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . $also_bought_data['name'] . "' alt='" . $also_bought_data['name'] . "' width='$image_display_height' height='$image_display_height' id='product_image_" . $also_bought_data['id'] . "' class='product_image' />";
+						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . get_the_title($also_bought_data['ID']) . "' alt='" . $also_bought_data['name'] . "' width='$image_display_height' height='$image_display_height' id='product_image_" . $also_bought_data['ID'] . "' class='product_image' />";
 					} else {
-						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . $also_bought_data['name'] . "' alt='" . htmlentities( stripslashes( $product['name'] ), ENT_QUOTES, 'UTF-8' ) . "' id='product_image_" . $also_bought_data['id'] . "' class='product_image' />";
+						$output .= "<img src='" . WPSC_CORE_IMAGES_URL . "/no-image-uploaded.gif' title='" . get_the_title($also_bought_data['ID']) . "' alt='" . htmlentities( stripslashes( get_the_title($also_bought_data['ID']) ), ENT_QUOTES, 'UTF-8' ) . "' id='product_image_" . $also_bought_data['ID'] . "' class='product_image' />";
 					}
 				}
 			}
 
-			$variations_processor = new nzshpcrt_variations;
-			$variations_output = $variations_processor->display_product_variations( $also_bought_data['id'], true, false, true );
-			//$output .= $variations_output[0];
-			if ( $variations_output[1] !== null ) {
-				$also_bought_data['price'] = $variations_output[1];
-				$also_bought_data['special_price'] = 0;
+			$output .= "<a class='wpsc_product_name' href='" . get_permalink($also_bought_data['ID']) . "'>" . get_the_title($also_bought_data['ID']) . "</a>";
+			$price = get_product_meta($also_bought_data['ID'], 'price', true);
+			$special_price = get_product_meta($also_bought_data['ID'], 'special_price', true);
+			if(!empty($special_price)){
+				$output .= '<span style="text-decoration: line-through;">' . wpsc_currency_display( $price ) . '</span>';
+				$output .= wpsc_currency_display( $special_price );
+			} else {
+				$output .= wpsc_currency_display( $price );
 			}
-
-			$output .= "<a class='wpsc_product_name' href='" . wpsc_product_url( $also_bought_data['id'] ) . "'>" . $also_bought_data['name'] . "</a>";
-			$output .= wpsc_currency_display( ( $also_bought_data['price'] - $also_bought_data['special_price'] ) );
-			//$output .= "<a href='".wpsc_product_url($also_bought_data['id'])."'>".$also_bought_data['name']."</a>";
 			$output .= "</div>";
 		}
 		$output .= "</div>";
@@ -168,50 +163,6 @@ function wpsc_product_url( $product_id, $category_id = null, $escape = true ) {
 	} else {
 		return get_permalink($product_id);
 	}
-}
-
-
-function google_buynow( $product_id ) {
-	global $wpdb;
-	$output = "";
-	if ( $product_id > 0 ) {
-		$product_sql = "SELECT * FROM " . WPSC_TABLE_PRODUCT_LIST . " WHERE id = " . $product_id . " LIMIT 1";
-		$product_info = $wpdb->get_results( $product_sql, ARRAY_A );
-		$variation_sql = "SELECT * FROM " . WPSC_TABLE_VARIATION_PROPERTIES . " WHERE product_id = " . $product_id;
-		$variation_info = $wpdb->get_results( $variation_sql, ARRAY_A );
-		if ( count( $variation_info ) > 0 ) {
-			$variation = 1;
-			$price = $variation_info[0]['price'];
-		}
-		if ( get_option( 'google_server_type' ) == 'production' ) {
-			$action_target = "https://checkout.google.com/cws/v2/Merchant/" . get_option( 'google_id' ) . "/checkoutForm";
-		} else {
-			$action_target = "https://sandbox.google.com/checkout/cws/v2/Merchant/" . get_option( 'google_id' ) . "/checkoutForm";
-		}
-
-
-		$product_info = $product_info[0];
-		$output .= "<form id='BB_BuyButtonForm" . $product_id . "' onsubmit='log_buynow(this);return true;' action= '" . $action_target . "' method='post' name='BB_BuyButtonForm" . $product_id . "'>";
-		$output .= "<input name='product_id' type='hidden' value='" . $product_id . "'>";
-		$output .= "<input name='item_name_1' type='hidden' value='" . $product_info['name'] . "'>";
-		$output .= "<input name='item_description_1' type='hidden' value='" . $product_info['description'] . "'>";
-		$output .= "<input name='item_quantity_1' type='hidden' value='1'>";
-		if ( $variation == 1 ) {
-			$output .= "<input id='item_price' name='item_price_1' type='hidden' value='" . $price . "'>";
-		} else {
-			if ( $product_info['special'] == '0' ) {
-				$output .= "<input id='item_price' name='item_price_1' type='hidden' value='" . $product_info['price'] . "'>";
-			} else {
-				$output .= "<input name='item_price_1' type='hidden' value='" . $product_info['special_price'] . "'>";
-			}
-		}
-		$output .= "<input name='item_currency_1' type='hidden' value='" . get_option( 'google_cur' ) . "'>";
-		$output .= "<input type='hidden' name='checkout-flow-support.merchant-checkout-flow-support.continue-shopping-url' value='" . get_option( 'product_list_url' ) . "'>";
-		$output .= "<input type='hidden' name='checkout-flow-support.merchant-checkout-flow-support.edit-cart-url' value='" . get_option( 'shopping_cart_url' ) . "'>";
-		$output .= "<input alt='' src=' https://checkout.google.com/buttons/buy.gif?merchant_id=" . get_option( 'google_id' ) . "&w=117&h=48&style=trans&variant=text&loc=en_US' type='image'/>";
-		$output .="</form>";
-	}
-	return $output;
 }
 
 function external_link( $product_id ) {
@@ -283,13 +234,6 @@ function wpsc_product_image_html( $image_name, $product_id ) {
 function wpsc_add_to_cart_button( $product_id, $replaced_shortcode = false ) {
 	global $wpdb,$wpsc_variations;
 	if ( $product_id > 0 ) {
-		if ( function_exists( 'wpsc_theme_html' ) ) {
-			$product = $wpdb->get_row( "SELECT * FROM " . WPSC_TABLE_PRODUCT_LIST . " WHERE id = " . $product_id . " LIMIT 1", ARRAY_A );
-			//this needs the results from the product_list table passed to it, does not take just an ID
-			$wpsc_theme = wpsc_theme_html( $product );
-		}
-		
-
 		// grab the variation form fields here
 		$wpsc_variations = new wpsc_variations( $product_id );
 		
@@ -436,17 +380,13 @@ function wpsc_obtain_the_description() {
 	}
 
 	if ( is_numeric( $category_id ) ) {
-		$output = $wpdb->get_var( "SELECT `description` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id`='{$category_id}' LIMIT 1" );
+		$output = wpsc_get_categorymeta( $category_id, 'description' );
 	}
 
 
-	if ( isset( $wp_query->query_vars['product_url_name'] ) ) {
-		$product_name = $wp_query->query_vars['product_url_name'];
-		$product_id = $wpdb->get_var( "SELECT `product_id` FROM `" . WPSC_TABLE_PRODUCTMETA . "` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '{$wp_query->query_vars['product_url_name']}' ) ORDER BY `id` DESC LIMIT 1" );
-		$output = $wpdb->get_var( "SELECT `description` FROM `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `id`='{$product_id}' LIMIT 1" );
-	} else if ( is_numeric( $_GET['product_id'] ) ) {
+	if ( is_numeric( $_GET['product_id'] ) ) {
 		$product_id = absint( $_GET['product_id'] );
-		$output = $wpdb->get_var( "SELECT `description` FROM `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `id`='{$product_id}' LIMIT 1" );
+		$output = $wpdb->get_var( "SELECT `post_content` FROM `" . $wpdb->posts . "` WHERE `id`='{$product_id}' LIMIT 1" );
 	}
 	return $output;
 }

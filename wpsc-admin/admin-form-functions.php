@@ -403,8 +403,7 @@ function wpsc_packing_slip($purchase_id) {
 				if(($j % 2) != 0) {
 					$alternate = "class='alt'";
 				}
-				$productsql= "SELECT * FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `id`=".$cart_row['prodid']."";
-				$product_data = $wpdb->get_results($productsql,ARRAY_A);
+				//$cart_row['prodid']
 				
 				$variation_list = '';
 				

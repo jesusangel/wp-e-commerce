@@ -733,8 +733,6 @@ function wpsc_dashboard_4months_widget() {
 			GROUP BY `cart`.`prodid`"; //get the amount of income that current product has generaterd over current time range
 			$sale_totals[] = $wpdb->get_var( $prodsql ); //push amount to array
 		}
-		//$namesql = "SELECT `".WPSC_TABLE_PRODUCT_LIST."`.`name` FROM `".WPSC_TABLE_PRODUCT_LIST."` WHERE `".WPSC_TABLE_PRODUCT_LIST."`.`id` = ".$product['prodid'];
-		//$name = $wpdb->get_results($namesql,ARRAY_A);
 		$prod_data[] = array(
 			'sale_totals' => $sale_totals,
 			'product_name' => $product['name'] ); //result: array of 2: $prod_data[0] = array(income)

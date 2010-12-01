@@ -153,7 +153,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 			
 				foreach ($wpsc_cart->cart_items as $key => $item) {
 					
-					$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$item->product_id}'");
+					$product_data = $wpdb->get_results("SELECT * FROM ". $wpdb->posts ." WHERE id='{$item->product_id}'");
 					$product_data = $product_data[0];
 				
 					$match = true;
@@ -213,7 +213,7 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 		global $wpdb;
 		
 		if ($c['property'] == 'item_name') {
-			$product_data = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE id='{$product_obj->product_id}'");
+			$product_data = $wpdb->get_results("SELECT * FROM " . $wpdb->posts . " WHERE id='{$product_obj->product_id}'");
 			$product_data = $product_data[0];
 		
 			switch($c['logic']) {

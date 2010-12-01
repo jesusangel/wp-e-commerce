@@ -127,20 +127,6 @@ function wpsc_debug_page() {
 
 			break;
 
-
-
-		case 'test_variation_grid':
-			$variations_processor = new nzshpcrt_variations;
-			$product_data['id'] = 106;
-			$output = $variations_processor->variations_grid_view( $product_data['id'] );
-			echo "</pre>";
-			echo $output;
-			echo "<pre style='font-family:\"Lucida Grande\",Verdana,Arial,\"Bitstream Vera Sans\",sans-serif; font-size:8px;'>";
-			break;
-
-
-
-
 		case 'unicode_permalinks':
 			$original_string = "バンプ・オブ・チキン";
 			$sanitized_string = sanitize_title( $original_string );
