@@ -95,6 +95,8 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc') );
 			$message_html = __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc');
 		} else {
+			if( $is_transaction )
+				_e('The Transaction was successful', 'wpsc')."<br />";
 			$message = stripslashes( get_option( 'wpsc_email_receipt' ) );
 			$message_html = $message;
 		}

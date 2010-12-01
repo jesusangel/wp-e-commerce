@@ -76,7 +76,7 @@ function wpsc_check_purchase_processed($processed){
 	global $wpsc_purchlog_statuses;
 	$is_transaction = false;
 	foreach($wpsc_purchlog_statuses as $status)
-		if($status['order'] == $purchase_log['processed'] && isset($status['is_transaction']) && 1 == $status['is_transaction'] )
+		if($status['order'] == $processed && isset($status['is_transaction']) && 1 == $status['is_transaction'] )
 			$is_transaction = true;
 	
 	return $is_transaction;
