@@ -2645,7 +2645,7 @@ function save_term_prices( $term_id ) {
 						$positive = true;
 
 					//Now, let's get the parent product price, +/- by the percentage given
-					$percentage = (floatval( $_POST["variation_price"] ) / 100);
+					$percentage = (absint( $_POST["variation_price"] ) / 100);
 
 					if ( $positive )
 						$price = $parent_pricing + ($parent_pricing * $percentage);
