@@ -24,7 +24,6 @@ require_once( WPSC_FILE_PATH . '/wpsc-includes/theming.class.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/ajax-and-init.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-options-settings.page.php' );
 require_once( WPSC_FILE_PATH . '/wpsc-admin/display-sales-logs.php' );
-
 if ( (isset( $_SESSION['wpsc_activate_debug_page'] ) && ($_SESSION['wpsc_activate_debug_page'] == true)) || (defined( 'WPSC_ADD_DEBUG_PAGE' ) && (constant( 'WPSC_ADD_DEBUG_PAGE' ) == true)) )
 	require_once( WPSC_FILE_PATH . '/wpsc-admin/display-debug.page.php' );
 
@@ -118,7 +117,7 @@ function wpsc_admin_pages() {
 
 		// Debug Page
 		if ( ( defined( 'WPSC_ADD_DEBUG_PAGE' ) && ( WPSC_ADD_DEBUG_PAGE == true ) ) || ( isset( $_SESSION['wpsc_activate_debug_page'] ) && ( true == $_SESSION['wpsc_activate_debug_page'] ) ) )
-			$page_hooks[] = add_submenu_page( $base_page, __( '- Debug' ), __( '- Debug' ), 'administrator', 'wpsc-debug', 'wpsc_debug_page' );
+			$page_hooks[] = add_options_page( __( 'Store Debug' ), __( 'Store Debug' ), 'administrator', 'wpsc-debug', 'wpsc_debug_page' );
 
 		// Contextual help
 		if ( function_exists( 'add_contextual_help' ) ) {
