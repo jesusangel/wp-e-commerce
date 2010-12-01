@@ -89,7 +89,7 @@ function wpsc_display_categories_page() {
 
 						$product = get_term($_GET["category_id"], "wpsc_product_category" );
 						
-						$output .= "<h3 class='hndle'>".str_replace("[categorisation]", htmlentities(stripslashes($product->name)), __('You are editing the &quot;[categorisation]&quot; Category', 'wpsc'))."</h3>\n\r";	
+						$output .= "<h3 class='hndle'>".str_replace("[categorisation]", (stripslashes($product->name)), __('You are editing the &quot;[categorisation]&quot; Category', 'wpsc'))."</h3>\n\r";	
 						echo $output;
 						}else{
 							echo "<h3>" . __('Add New Category', 'wpsc')."</h3>";
@@ -175,7 +175,7 @@ function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
 					</td>
 					
 					<td class='manage-column column-title'>
-						<a class="row-title" href='<?php echo add_query_arg('category_id', $category->term_id); ?>'> <?php echo htmlentities(stripslashes($category->name), ENT_QUOTES, 'UTF-8'); ?></a>
+						<a class="row-title" href='<?php echo add_query_arg('category_id', $category->term_id); ?>'> <?php echo (stripslashes($category->name)); ?></a>
 						<div class="row-actions">
 							<span class="edit">
 											<a class='edit-product' style="cursor:pointer;" title="Edit this Category" href='<?php echo add_query_arg('category_id', $category->term_id); ?>'><?php _e('Edit', 'wpsc'); ?></a>
@@ -338,6 +338,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 			<h3 class="hndle"><?php _e('Shortcodes and Template Tags'); ?></h3>
 			<div class="inside">
 				<?php
+				$output = '';
 				$product = get_term($_GET["category_id"], "wpsc_product_category" );
 				$output .= " <span class='wpscsmall description'>Template tags and Shortcodes are used to display a particular category or group within your theme / template or any wordpress page or post.</span>\n\r";
 				$output .="<div class='inside'>\n\r";  
