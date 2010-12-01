@@ -31,6 +31,7 @@ class ups {
     private function _setServiceURL(){
         global $wpdb;
         $wpsc_ups_settings = get_option("wpsc_ups_settings");
+        $wpsc_ups_environment = '';
         if(!empty($wpsc_ups_settings))
         $wpsc_ups_environment = (array_key_exists("upsenvironment",$wpsc_ups_settings)) ? $wpsc_ups_settings["upsenvironment"] : "1";
         if ($wpsc_ups_environment == "1"){

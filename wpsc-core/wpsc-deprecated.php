@@ -113,7 +113,9 @@ function nzshpcrt_currency_display($price_in, $tax_status, $nohtml = false, $id 
 	return $output;
 }
 
-
-include_once(WPSC_FILE_PATH.'/wpsc-languages/EN_en.php');
-
+function wpsc_include_language_constants(){
+	if(!defined('TXT_WPSC_ABOUT_THIS_PAGE'))
+	include_once(WPSC_FILE_PATH.'/wpsc-languages/EN_en.php');
+}
+add_action('init','wpsc_include_language_constants');
 ?>

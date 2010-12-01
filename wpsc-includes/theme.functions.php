@@ -384,7 +384,7 @@ function wpsc_single_template( $content ) {
 
 function wpsc_is_viewable_taxonomy(){
 	global $wp_query;
-	if('wpsc_product_category' == $wp_query->query_vars['taxonomy'] ||  'product_tag' == $wp_query->query_vars['taxonomy'] )
+	if(isset($wp_query->query_vars['taxonomy']) && ('wpsc_product_category' == $wp_query->query_vars['taxonomy'] ||  'product_tag' == $wp_query->query_vars['taxonomy'] ))
 		return true;
 	else
 		return false;
@@ -1344,7 +1344,7 @@ class WPSC_Hide_subcatsprods_in_cat {
 	function get_posts( &$q ) {
 		$this->q =& $q;
 		
-		if ( "wpsc_product_category" != $q->query_vars['taxonomy'] )
+		if (isset($q->query_vars['taxonomy']) && ( "wpsc_product_category" != $q->query_vars['taxonomy'] ) )
 			return false;
 		
 		add_action( 'posts_where', array( &$this, 'where' ) );

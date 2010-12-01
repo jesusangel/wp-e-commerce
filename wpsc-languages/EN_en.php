@@ -52,7 +52,7 @@ define('TXT_WPSC_INSUFFICIENT_REMAINING', 'Sorry, but there are only [number] of
 define('TXT_WPSC_ZERO_QUANTITY_REQUESTED', 'Sorry, but you cannot add zero items to your cart');
 define('TXT_WPSC_PRODUCT_DISPLAY_SETTINGS', 'Product Settings');
 define('TXT_WPSC_BUTTON_SETTINGS', 'Button Settings');
-define('TXT_WPSC_UPDATING', 'Loading');
+
 define('TXT_WPSC_EDIT_GROUP', 'Edit Group');
 define('TXT_WPSC_ADD_GROUP', 'Add Group');
 define('TXT_SHOW_GRID_PER_ROW', 'Products Per Row');
@@ -61,7 +61,6 @@ define('TXT_WPSC_CATEGORISATION', 'Categories');
 define('TXT_WPSC_COUPONSINVALID', 'Coupon is not valid.');
 define('TXT_WPSC_NOITEMSINTHISGROUP', 'There are no products in this group.');
 
-define('TXT_WPSC_CLEAR_IP_LOCKS', 'Release downloads locked to this IP address %s');
 define('TXT_WPSC_EMAIL_BUYER', 'Resend Receipt to Buyer');
 
 
@@ -77,7 +76,6 @@ define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT', 'Personalize your product');
 define('TXT_WPSC_PERSONALIZE_YOUR_PRODUCT_DESCRIPTION', 'Complete this form to include a personalized message with your purchase.');
 
 define("TXT_WPSC_ADDITIONAL_INFO", "3. Additional Information"); 
-define('TXT_WPSC_ECOMMERCE', 'Products'); 
 define('TXT_WPSC_FLOT_ANNUAL_SALES_GRAPH','ANNUAL SALES GRAPH');
 
 define('TXT_WPSC_NO_SHIPPING_QUOTES','Sorry, online ordering is unavailable to this destination and/or weight. Please double check your destination details.');
@@ -102,7 +100,6 @@ define("TXT_WPSC_HOW_DID_YOU_FIND_US_INT", "Internet");
 define("TXT_WPSC_HOW_DID_YOU_FIND_US_EC", "Existing Customer");
 
 
-define("TXT_WPSC_ABOUT_THIS_PAGE", "About This Page");
 define("TXT_WPSC_LOADING", "Loading");
 
 define("TXT_WPSC_COMMA_SEPARATED", "Seperate with commas");
@@ -111,11 +108,9 @@ define("TXT_WPSC_AT_THIS_MOMENT_TRACE_ID", "Tracking ID");
 
 define("TXT_WPSC_AT_THIS_MOMENT_NO_TRANSACTION", "No transactions for this month.");
 define("TXT_WPSC_MAIL_RESENDED", "The folowing purchase receipt has has been resent");
-define("TXT_WPSC_ERROR_OCCURED_WHILE_SENDING_EMAIL", "An Error Occured While Sending Email");
 
 define("TXT_WPSC_UPDATE_BUTTON", "Update &raquo;");
 
-define("TXT_WPSC_ABOUT_THIS_PAGE", "About This Page");
 
 define("TXT_WPSC_PAGENUMBER_POSITION_TOP", "Top");
 define("TXT_WPSC_PAGENUMBER_POSITION_BOTTOM", "Bottom");
@@ -209,7 +204,6 @@ define('TXT_WPSC_CATEGORY_AND_TAG_CONTROL', 'Categories and Tags');
 define('TXT_WPSC_BASE_ZIPCODE', 'Base Zipcode/Postcode:');
 define('TXT_WPSC_USPS_DESC', 'If you are based in America then you need to set your own Zipcode for UPS and USPS to work. This should be the Zipcode for your Base of Operations.');
 
-define('TXT_WPSC_SHIPPING_DETAILS', 'Shipping Details');
 define('TXT_WPSC_SHIPPING_METHOD', 'Shipping Method');
 define('TXT_WPSC_SHIPPING_OPTION', 'Shipping Option');
 define('TXT_WPSC_CHOOSE_EXTERNAL_SHIPPING_MODULES', 'External Shipping Calculators');
@@ -247,8 +241,6 @@ define('TXT_WPSC_DEFAULT_PURCHASE_REPORT', '
 
 %total_price%');
 
-define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
-
 
 define('TXT_WPSC_CHOOSE_DOWNLOADABLE_VARIATIONS', 'Choose a downloadable file for this variation');
 define('TXT_WPSC_FLASH_UPLOADER', 'You are using the Flash uploader.  Problems?  Try the <a class=\'wpsc_upload_switcher\' onclick=\'wpsc_upload_switcher("browser")\'>Browser uploader</a> instead.');
@@ -267,7 +259,6 @@ define('TXT_WPSC_DOWNLOADS_LEFT', 'Downloads Left');
 
 
 define('TXT_WPSC_FILE', 'Files');
-define('TXT_WPSC_PDF', 'PDF');
 
 define('TXT_WPSC_LABEL', 'Label');
 define('TXT_WPSC_TABLE_RATED_PRICE', 'Table Rate Price');
@@ -357,7 +348,6 @@ define('TXT_WPSC_YOUAREUSING', 'You are using the :theme: style. This is WP e-Co
 define('TXT_WPSC_NO_SHORTCODE', 'This item product is still waiting to be added to your catalogue. There are no shortcodes or tags available at this point.');
 define('TXT_WPSC_SKU', 'SKU');
 define('TXT_WPSC_YOUR_ORDER', 'Your Order');
-define('TXT_WPSC_ABOUT_THIS_PAGE', 'About This Page');
 define('TXT_WPSC_ORDER_PENDING_PAYMENT_REQUIRED', 'Order Pending: Payment Required');
 define('TXT_WPSC_SELECTALLCATEGORIES', 'Show All Products');
 
@@ -372,9 +362,8 @@ define('TXT_WPSC_WE_RECOMMEND', 'We Recommend');
 define('TXT_WPSC_SELECT_PRODUCT_GROUP', 'Select a Group to Manage');
 define('TXT_WPSC_EDIT_THIS_GROUP', 'Edit This Group');
 
-define('TXT_WPSC_USPS_USERID', 'USPS ID');
+
 define('TXT_WPSC_PRODUCT_ID', 'Product ID');
-define('TXT_WPSC_USPS_PASSWORD', 'USPS Password');
 define('TXT_WPSC_OPTIONS_GENERAL_TAB', 'General');
 define('TXT_WPSC_OPTIONS_PRESENTATION_TAB', 'Presentation');
 define('TXT_WPSC_OPTIONS_SHIPPING_TAB', 'Shipping');
@@ -406,9 +395,6 @@ define('TXT_WPSC_OPTIONS_MARKETING_HEADER', 'Marketing Settings');
 define('TXT_WPSC_UPLOAD_IMAGE_FOR', 'Upload Image for');
 
 define('TXT_WPSC_THUMBNAILSETTINGS', 'Thumbnail Settings');
-
-
-define('TXT_WPSC_THANKS_UNLOCKED', 'Thanks, the downloads that were locked to this users IP number have been freed.');
 
 
 define('TXT_WPSC_SELECTGATEWAY', 'Select a payment gateway');
@@ -464,7 +450,7 @@ define('TXT_WPSC_SAVE', 'Save');
 
 define('TXT_WPSC_DISPLAY_PRODUCT_CATEGORIES', 'Display &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
-define('TXT_WPSC_PRODUCT_CATEGORIES', 'Select &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
+//define('TXT_WPSC_PRODUCT_CATEGORIES', 'Select &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
 define('TXT_WPSC_MANAGE_CATEGORISATION', 'Manage &quot;[categorisation]&quot;'); // The shortcode [categorisation] is replaced with the name of the currently select categorisation
 
@@ -516,7 +502,7 @@ define('TXT_WPSC_SHOWLIVESEARCH', 'Use Live Search');
 define('TXT_WPSC_USPS_USERID', 'USPS ID');
 define('TXT_WPSC_USPS_PASSWORD', 'USPS Password');
 
-define('TXT_WPSC_SHIPPING_DETAILS', 'Shipping Details');
+//define('TXT_WPSC_SHIPPING_DETAILS', 'Shipping Details');
 define('TXT_WPSC_SHOWADVANCEDSEARCH', 'Show Advanced Search');
 define('TXT_WPSC_GOOGLEMECHANTKEY', 'Google Merchant Key');
 define('TXT_WPSC_GOOGLEMECHANTID', "Google Merchant ID");
@@ -534,7 +520,6 @@ define('TXT_WPSC_OPTIONS', 'Settings');
 define('TXT_WPSC_ADDPRODUCTS', 'Add Products');
 define('TXT_WPSC_SENDSMS', 'Send SMS');
 define('TXT_WPSC_PRODUCTS', 'Products');
-define('TXT_WPSC_ADDCATEGORY', 'Add Product Group');
 define('TXT_WPSC_CATEGORIES', 'Categories');
 define('TXT_WPSC_BRANDS', 'Brands');
 define('TXT_WPSC_VARIATIONS', 'Variations');
@@ -542,9 +527,7 @@ define('TXT_WPSC_PURCHASELOG', 'Sales');
 define('TXT_WPSC_ORDER_LOG', 'Orders');
 define('TXT_WPSC_OLDER_ORDERS', 'Older Orders');
 define('TXT_WPSC_ORDER', 'Order');
-define('TXT_WPSC_TOTAL_THIS_MONTH', 'Total Money Earnt this Month');
 define('TXT_WPSC_MONTHLY_REPORT', 'Six Monthly Report');
-define('TXT_WPSC_TOTAL_INCOME', 'Total Income');
 define('TXT_WPSC_ACCEPTED_PAYMENTS', '(accepted payments)'); //text has changed slightly
 define('TXT_WPSC_PAYMENTGATEWAYOPTIONS', 'Payment Options');
 define('TXT_WPSC_HELPINSTALLATION', 'Help/Upgrade');
@@ -555,12 +538,8 @@ define('TXT_WPSC_PRODUCTIMAGEWIDTH', 'product image width');
 define('TXT_WPSC_PRODUCTIMAGEHEIGHT', 'product image height');
 define('TXT_WPSC_CATEGORYIMAGEWIDTH', 'product group image width');
 define('TXT_WPSC_CATEGORYIMAGEHEIGHT', 'product group image height');
-define('TXT_WPSC_PRODUCTLISTURL', 'The location of the product list');
-define('TXT_WPSC_SHOPPINGCARTURL', 'The location of the shopping cart');
-define('TXT_WPSC_CHECKOUTURL', 'The location of the checkout page');
 define('TXT_WPSC_TRANSACTURL', 'The location of the transaction detail page');
 define('TXT_WPSC_PAYMENTGATEWAY', 'The payment gateway to use');
-define('TXT_WPSC_CARTLOCATION', 'Cart Location');
 define('TXT_WPSC_SHOWCATEGORYBRANDS', 'Display categories or brands or both');
 define('TXT_WPSC_CURRENCYTYPE', 'Currency type');
 define('TXT_WPSC_CURRENCYSIGNLOCATION', 'Currency sign location');
@@ -571,7 +550,6 @@ define('TXT_WPSC_DISPLAYSPECIALS', 'Display or hide specials on the sidebar');
 define('TXT_WPSC_POSTAGEAND_PACKAGING', 'Default postage and packaging');
 define('TXT_WPSC_PURCHLOGEMAIL', 'Email address that purchase log is sent to');
 define('TXT_WPSC_RETURNEMAIL', 'Email address that purchase reports are sent from');
-define('TXT_WPSC_TERMSANDCONDITIONS', 'Checkout terms and conditions');
 define('TXT_WPSC_DEFAULTBRAND', 'Default Brand');
 
 
@@ -583,13 +561,10 @@ define('TXT_WPSC_PAYPALBUSINESS', 'paypal business');
 define('TXT_WPSC_PAYPALURL', 'paypal url');
 define('TXT_WPSC_SHOWPRODUCTRATINGS', 'Show Product Ratings');
 define('TXT_WPSC_PRODUCTSPAGE', 'Products Page');
-define('TXT_WPSC_CHECKOUT', 'Verify your Order');
 define('TXT_WPSC_ENTERDETAILS', 'Enter Your Details');
 define('TXT_WPSC_TRANSACTIONRESULTS', 'Transaction Results');
 define('TXT_WPSC_SELECTACATEGORY', 'Select a Product Group');
 define('TXT_WPSC_SELECTABRAND', 'Select a Brand');
-define('TXT_WPSC_PRODUCTNAME', 'Product Name');
-define('TXT_WPSC_PRODUCTDESCRIPTION', 'Product Description');
 define('TXT_WPSC_ADDITIONALDESCRIPTION', 'Additional Description');
 define('TXT_WPSC_PRICE', 'Price');
 define('TXT_WPSC_TAXALREADYINCLUDED', 'Do not include tax (tax is set in <a href="'. get_option('siteurl').'/wp-admin/admin.php?page=wpsc-settings">shop config</a>)'); // this text has changed and needs updating
@@ -646,12 +621,14 @@ define('TXT_WPSC_CATEGORY_PARENT', 'Group Parent');
 define('TXT_WPSC_IMAGE', 'Image');
 define('TXT_WPSC_HEIGHT', 'Height');
 define('TXT_WPSC_WIDTH', 'Width');
+/*
 define('TXT_WPSC_PLEASEENTERAVALID', 'Please enter a valid');
 define('TXT_WPSC_PLEASEENTERAVALIDNAME', 'Please enter a valid name');
 define('TXT_WPSC_PLEASEENTERAVALIDSURNAME', 'Please enter a valid surname');
 define('TXT_WPSC_PLEASEENTERAVALIDEMAILADDRESS', 'Please enter a valid email address');
 define('TXT_WPSC_PLEASEENTERAVALIDADDRESS', 'Please enter a valid address');
 define('TXT_WPSC_PLEASEENTERAVALIDPHONENUMBER', 'Please enter a valid phone number');
+*/
 define('TXT_WPSC_TERMSANDCONDITIONS', 'You have not agreed to the terms and conditions');
 define('TXT_WPSC_NOTHINGINYOURSHOPPINGCART', 'There is nothing in your shopping cart');
 
@@ -799,11 +776,8 @@ define('TXT_WPSC_SHOWPOSTAGEANDPACKAGING', 'Show Postage and Packaging');
 define('TXT_WPSC_YES', 'Yes');
 define('TXT_WPSC_NO', 'No');
 define('TXT_WPSC_SHOWSPECIALS', 'Show Specials in the Sidebar');
-define('TXT_WPSC_SHOWPRODUCTRATINGS', 'Show Product Ratings');
 define('TXT_WPSC_CURRENCYSETTINGS', 'Currency Settings');
 define('TXT_WPSC_GSTTAXRATE', 'GST/Tax Rate');
-define('TXT_WPSC_CURRENCYTYPE', 'Currency Type');
-define('TXT_WPSC_CURRENCYSIGNLOCATION', 'Currency Sign Location');
 define('TXT_WPSC_DEFAULTPOSTAGEPACKAGING', 'Default Postage &amp; Packaging');
 define('TXT_WPSC_ADMINISTRATIONSETTINGS', 'Administration Settings');
 define('TXT_WPSC_MAXDOWNLOADSPERFILE', 'Max downloads per file');
@@ -1029,7 +1003,7 @@ define('TXT_WPSC_DRAG_ITEM_HERE', 'Drag any item here to add it to your cart.');
 define('TXT_WPSC_SHOWCATEGORYTHUMBNAILS', 'Show Product Group Thumbnails');
 define('TXT_WPSC_SHOPPING_CART', 'Shopping Cart');
 define('TXT_WPSC_SHOW_SLIDING_CART', 'Use Sliding Cart');
-define('TXT_WPSC_PREVIEW_FILE', 'Upload Preview');
+//define('TXT_WPSC_PREVIEW_FILE', 'Upload Preview');
 define('TXT_WPSC_PREVIEW_FILE_NOTE', 'Note: If you do not upload a preview file and your server has sox compiled with MP3 support then a preview file will be created for you.');
 define('TXT_WPSC_PURCHASE_NUMBER', 'Purchase #');
 define('TXT_WPSC_FILTER_ORDER', 'Filter Orders');
@@ -1129,7 +1103,7 @@ define('TXT_WPSC_OPTION_ALSO_BOUGHT', 'Display Cross Sales');
 define('TXT_WPSC_MARKETING', 'Marketing');
 define('TXT_WPSC_DISPLAYCOUPONS', 'Coupons');
 define('TXT_WPSC_ADD_COUPON', 'Add Coupon');
-define('TXT_WPSC_COUPON', 'Coupon');
+//define('TXT_WPSC_COUPON', 'Coupon');
 define('TXT_WPSC_ADDCOUPONS', 'Add Coupon');
 define('TXT_WPSC_COUPON_CODE', 'Coupon Code');
 define('TXT_WPSC_DISCOUNT', 'Discount');
@@ -1164,7 +1138,7 @@ define('TXT_WPSC_DROPSHOP_DARK', 'Use dark Dropshop style');
 
 
 define('TXT_WPSC_MANUAL_PAYMENT', 'Manual Payment');
-define('TXT_WPSC_CREDIT_CARD', 'Credit Card');
+//define('TXT_WPSC_CREDIT_CARD', 'Credit Card');
 define('TXT_WPSC_CREDIT_CARD_AND_MANUAL_PAYMENT', 'Manual Payment and Credit Card');
 define('TXT_WPSC_PAYMENT_INSTRUCTIONS', 'Enter the manual payment instructions that you wish to display');
 

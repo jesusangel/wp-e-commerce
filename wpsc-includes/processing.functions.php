@@ -574,6 +574,8 @@ function wpsc_sanitise_keys($value) {
 function wpsc_check_stock($state, $product) {
 	global $wpdb;
 	// if quantity is enabled and is zero
+	$state['state'] = false;
+	$state['messages'] = array();
 	$out_of_stock = false;
 	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
 	$stock_count = get_product_meta($product->ID, 'stock',true);

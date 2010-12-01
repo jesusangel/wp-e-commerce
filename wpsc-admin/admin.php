@@ -823,6 +823,7 @@ if ( isset( $_GET['page'] ) && (stristr( $_GET['page'], WPSC_DIR_NAME )) )
 	add_action( 'admin_notices', 'wpsc_admin_notices' );
 
 function wpsc_print_admin_scripts(){
+	global $version_identifier;
 	wp_enqueue_script( 'wp-e-commerce-dynamic',       get_bloginfo('url')			. "/index.php?wpsc_user_dynamic_js=true", false,             $version_identifier );
 }
 

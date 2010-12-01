@@ -158,7 +158,7 @@ class wpsc_theming {
 				if ( in_array( $file, $this->templates_to_move ) ) {
 					if ( !strstr( $file, "functions" ) && !strstr( $file, "widget" ) ) {
 						$file_data = file_get_contents( $old . "/" . $file );
-						file_put_contents( $path . "/" . $file, $file_data );
+						@file_put_contents( $path . "/" . $file, $file_data );
 						rename( $path . "/" . $file, $path . "/" . $theme_file_prefix . $file );
 					}
 				}

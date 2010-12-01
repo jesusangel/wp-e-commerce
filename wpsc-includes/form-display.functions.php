@@ -92,7 +92,7 @@ function wpsc_category_options( $group_id, $this_category = null, $category_id =
 
 	foreach ( (array)$values as $option ) {
 		if ( $option->term_id != $this_category ) {
-			if ( $selected_term->parent == $option->term_id ) {
+			if ( isset($selected_term->parent) && $selected_term->parent == $option->term_id ) {
 				$selected = "selected='selected'";
 			}
 

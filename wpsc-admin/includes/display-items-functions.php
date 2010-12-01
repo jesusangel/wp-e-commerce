@@ -1513,7 +1513,8 @@ function wpsc_product_external_link_forms( $product_data = '' ) {
 	$external_link_text_value   = isset( $product_meta['external_link_text'] ) ? $product_meta['external_link_text'] : '';
 	$external_link_target_value = isset( $product_meta['external_link_target'] ) ? $product_meta['external_link_target'] : '';
 	$external_link_target_value_selected[$external_link_target_value] = ' selected="selected"';
-	
+	if( !isset($external_link_target_value_selected['_self']) ) $external_link_target_value_selected['_self'] = '';
+	if( !isset($external_link_target_value_selected['_blank']) ) $external_link_target_value_selected['_blank'] = '';
 	$output .= "<div id='wpsc_product_external_link_forms' class='postbox " . ((array_search( 'wpsc_product_external_link_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : '') . "' " . ((array_search( 'wpsc_product_external_link_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : '') . "><div class=\"handlediv\" title=\"Click to toggle\"><br></div>";
 
 	$output .= "<h3 class='hndle'>";

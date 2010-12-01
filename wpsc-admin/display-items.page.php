@@ -316,10 +316,14 @@ function wpsc_display_edit_products_page() {
 		$all_products = '';
 		$trash_products = '';
 		$draft_products = '';
-		if('trash' == $_REQUEST['post_status']){
+		if(!isset($_REQUEST['post_status']))
+			$post_status = '';
+		else
+			$post_status = $_REQUEST['post_status'];
+		if('trash' == $post_status){
 			$post_status = 'trash';
 			$trash_products = 'class="current"';
-		}elseif('draft' == $_REQUEST['post_status']){
+		}elseif('draft' == $post_status){
 			$post_status = 'draft';
 			$draft_products = 'class="current"';
 		
@@ -478,6 +482,7 @@ function wpsc_admin_category_dropdown() {
 	global $wpdb, $category_data;
 	$siteurl = get_option( 'siteurl' );
 	$category_slug = '';
+	$concat = '';
 	if ( isset( $_POST['category'] ) )
 		$category_slug = $_POST['category'];
 
@@ -489,8 +494,8 @@ function wpsc_admin_category_dropdown() {
 	$options = "<option {$selected} value=''>" . __( 'View All Categories', 'wpsc' ) . "</option>\r\n";
 
 	$options .= wpsc_list_categories( 'wpsc_admin_category_options', $category_slug );
-
-	$concat = "<input type='hidden' name='page' value='{$_POST['page']}' />\r\n";
+	if(isset($_POST['page']))
+		$concat .= "<input type='hidden' name='page' value='{$_POST['page']}' />\r\n";
 	$concat .= "<select name='category' id='category_select'>" . $options . "</select>\r\n";
 	$concat .= "<input type='submit' value='Filter' class='button-secondary action' id='post-query-submit' />\r\n";
 	return $concat;
@@ -525,7 +530,7 @@ function wpsc_admin_category_options( $category, $subcategory_level = 0, $catego
 function wpsc_admin_category_options_byid( $category, $subcategory_level = 0 ) {
 
 
-        $output = "<option $selected value='{$category->term_id}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
+        $output = "<option value='{$category->term_id}'>" . str_repeat( "-", $subcategory_level ) . stripslashes( $category->name ) . "</option>\n";
 
         return $output;
 }
