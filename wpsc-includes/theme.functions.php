@@ -229,7 +229,7 @@ function wpsc_get_template_file_url( $file = '' ) {
 		// Save the transient and update it every 12 hours
 		if ( !empty( $file_url ) )
 			set_transient( WPEC_TRANSIENT_THEME_URL_PREFIX . $file, $file_url, 60 * 60 * 12 );
-	}elseif(!file_exists($file_path)){
+	}elseif(!file_exists(get_stylesheet_directory() . '/' . $file)){
 		delete_transient(WPEC_TRANSIENT_THEME_URL_PREFIX . $file);
 		wpsc_get_template_file_url($file);
 	}
@@ -1344,7 +1344,7 @@ class WPSC_Hide_subcatsprods_in_cat {
 	function get_posts( &$q ) {
 		$this->q =& $q;
 		
-		if (isset($q->query_vars['taxonomy']) && ( "wpsc_product_category" != $q->query_vars['taxonomy'] ) )
+		if ( ( "wpsc_product_category" != $q->query_vars['taxonomy'] ) )
 			return false;
 		
 		add_action( 'posts_where', array( &$this, 'where' ) );
@@ -1353,7 +1353,7 @@ class WPSC_Hide_subcatsprods_in_cat {
 
 	function where( $where ) {
 		global $wpdb;
-
+		
 		remove_action( 'posts_where', array( &$this, 'where' ) );
 		
 		$term_id=$wpdb->get_var($wpdb->prepare('SELECT term_id FROM '.$wpdb->terms.' WHERE slug = %s ', $this->q->query_vars['term']));

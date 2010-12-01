@@ -202,6 +202,7 @@ function wpsc_specials( $args = null, $instance ) {
 				endif; 
 		endwhile;
 		list( $wp_query, $special_products ) = array( $special_products, $wp_query ); // swap the wpsc_query object
+		wp_reset_query();
 	}
 }
 function wpsc_specials_excludes(){
