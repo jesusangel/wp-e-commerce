@@ -2640,7 +2640,7 @@ function save_term_prices( $term_id ) {
 					//Are we decreasing or increasing the price?
 
 					if ( strchr( $_POST["variation_price"], '-' ) )
-						$negative = true;
+						$positive = false;
 					else
 						$positive = true;
 
@@ -2649,26 +2649,25 @@ function save_term_prices( $term_id ) {
 
 					if ( $positive )
 						$price = $parent_pricing + ($parent_pricing * $percentage);
-					elseif ( $negative )
+					else
 						$price = $parent_pricing - ($parent_pricing * $percentage);
 
 					update_product_meta( $kiddos, "price", $price );
 				} elseif ( $var_price_type == 'differential' ) {
-
+				
 					//Are we decreasing or increasing the price?
 					if ( strchr( $_POST["variation_price"], '-' ) )
-						$negative = true;
+						$positive = false;
 					else
 						$positive = true;
 
 					//Now, let's get the parent product price, +/- by the differential given
-					$differential = (floatval( $_POST["variation_price"] ));
+					$differential = (absint( $_POST["variation_price"] ));
 
 					if ( $positive )
 						$price = $parent_pricing + $differential;
-					elseif ( $negative )
+					else
 						$price = $parent_pricing - $differential;
-
 					update_product_meta( $kiddos, "price", $price );
 				}
 			}
