@@ -37,7 +37,7 @@ function validate_form_data() {
 
 	$any_bad_inputs = false;
 	$changes_saved = false;
-
+	//exit('<pre>'.print_r($_POST['collected_data'],1).'</pre>');
 	$_SESSION['collected_data'] = null;
 
 	if ( $_POST['collected_data'] != null ) {
@@ -145,13 +145,13 @@ function wpsc_display_form_fields() {
 	$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' ORDER BY `order`;";
 	$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
 	foreach ( $form_data as $form_field ) {
-
 		if ( !empty( $form_field['unique_name'] ) ) {
 			$ff_tag = $form_field['unique_name'];
 		} else {
 			$ff_tag = htmlentities( stripslashes( strtolower( str_replace( ' ', '-', $form_field['name'] ) ) ) );
 		}
-		if(!empty($meta_data[$form_field['id']]))
+		
+		if(!empty($meta_data[$form_field['id']]) && !is_array($meta_data[$form_field['id']]))
 			$meta_data[$form_field['id']] = htmlentities( stripslashes( $meta_data[$form_field['id']] ), ENT_QUOTES );
 		
 		if ( $form_field['type'] == 'heading' ) {
@@ -163,35 +163,55 @@ function wpsc_display_form_fields() {
       </td>
     </tr>\n\r";
 		} else {
-			if ( $form_field['type'] == "country" ) {
-				continue;
+			$continue = true;
+			if( $form_field['unique_name'] == 'billingstate'){
+				$selected_country_id = wpsc_get_country_form_id_by_type('country');
+				if(is_array($meta_data[$selected_country_id]) && isset($meta_data[$selected_country_id][1])){
+					$continue = false;
+				}else{
+					$continue = true;
+				}
+									
 			}
-
-			echo "
-      <tr>
-        <td align='left'>\n\r";
-			echo apply_filters( 'wpsc_account_form_field_' . $ff_tag, $form_field['name'] );
-			if ( $form_field['mandatory'] == 1 ) {
-				if ( !(($form_field['type'] == 'country') || ($form_field['type'] == 'delivery_country')) ) {
-					echo "*";
+			
+			if( $form_field['unique_name'] == 'shippingstate'){
+				$delivery_country_id = wpsc_get_country_form_id_by_type('delivery_country');
+				if(is_array($meta_data[$delivery_country_id]) && isset($meta_data[$delivery_country_id][1])){
+					$continue = false;
+				}else{
+					$continue = true;
 				}
 			}
-			echo "
-        </td>\n\r
-        <td  align='left'>\n\r";
+			
+			if($continue){
+				echo "
+			      <tr>
+	    		    <td align='left'>\n\r";
+						echo apply_filters( 'wpsc_account_form_field_' . $ff_tag, $form_field['name'] );
+						if ( $form_field['mandatory'] == 1 )
+						echo " *";
+						echo "
+	        		</td>\n\r
+	        		<td  align='left'>\n\r";
+        	}
 			switch ( $form_field['type'] ) {
-				case "text":
 				case "city":
 				case "delivery_city":
-					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
+				echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
 					break;
-
+					
 				case "address":
 				case "delivery_address":
 				case "textarea":
 					echo "<textarea name='collected_data[" . $form_field['id'] . "]'>" . $meta_data[$form_field['id']] . "</textarea>";
 					break;
-
+					
+				case "text":
+					if($continue){
+					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
+					
+					}
+					break;
 
 				case "region":
 				case "delivery_region":
@@ -200,16 +220,37 @@ function wpsc_display_form_fields() {
 
 
 				case "country":
+					if (is_array($meta_data[$form_field['id']]))
+						$country_code = ($meta_data[$form_field['id']][0]);
+					else	
+						$country_code = ($meta_data[$form_field['id']]);
+					//echo '<pre>'.print_r($country_code,1).'</pre>';
+					echo "<select name='collected_data[" . $form_field['id'] . "][0]' >" . nzshpcrt_country_list( $country_code ) . "</select>";
+					if( isset($meta_data[$form_field['id']][1]) )
+						echo "<br /><select name='collected_data[" . $form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$form_field['id']][1] ) . "</select>";
+
+
+				
 					break;
 
+				///don't forget this
 				case "delivery_country":
-					echo "<select name='collected_data[" . $form_field['id'] . "]' >" . nzshpcrt_country_list( $meta_data[$form_field['id']] ) . "</select>";
-					break;
 
+				if (is_array($meta_data[$form_field['id']]))
+					$country_code = ($meta_data[$form_field['id']][0]);
+				else	
+					$country_code = ($meta_data[$form_field['id']]);
+				//echo '<pre>'.print_r($country_code,1).'</pre>';
+				echo "<select name='collected_data[" . $form_field['id'] . "][0]' >" . nzshpcrt_country_list( $country_code ) . "</select>";
+					if( isset($meta_data[$form_field['id']][1]) )
+						echo "<br /><select name='collected_data[" . $form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$form_field['id']][1] ) . "</select>";
+
+					break;
+						
 				case "email":
 					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
 					break;
-
+					
 				default:
 					echo "<input type='text' value='" . $meta_data[$form_field['id']] . "' name='collected_data[" . $form_field['id'] . "]' />";
 					break;
@@ -217,6 +258,7 @@ function wpsc_display_form_fields() {
 			echo "
         </td>
       </tr>\n\r";
+
 		}
 	}
 	/* Returns an empty array at this point, empty in regards to fields, does show the internalname though.  Needs to be reconsidered, even if it did work, need to check

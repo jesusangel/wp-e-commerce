@@ -2,7 +2,7 @@
 
 function nzshpcrt_country_list( $selected_country = null ) {
 	global $wpdb;
-	$output = "<option value=''></option>";
+
 
 	if ( $selected_country == null )
 		$output = "<option value=''>" . __( 'Please select', 'wpsc' ) . "</option>";
@@ -11,10 +11,10 @@ function nzshpcrt_country_list( $selected_country = null ) {
 
 	foreach ( $country_data as $country ) {
 		$selected = '';
-		if ( $selected_country == $country['isocode'] ) {
-			$selected = "selected='true'";
-		}
-		$output .= "<option value='" . $country['isocode'] . "' $selected>" . $country['country'] . "</option>";
+		if ( $selected_country == $country['isocode'] )
+			$selected = "selected='selected'";
+		
+		$output .= "<option value='" . $country['isocode'] . "' ".$selected.">" . $country['country'] . "</option>";
 	}
 
 	return $output;
@@ -28,11 +28,9 @@ function nzshpcrt_region_list( $selected_country = null, $selected_region = null
 
 	$output = "";
 	$region_list = $wpdb->get_results( "SELECT `" . WPSC_TABLE_REGION_TAX . "`.* FROM `" . WPSC_TABLE_REGION_TAX . "`, `" . WPSC_TABLE_CURRENCY_LIST . "`  WHERE `" . WPSC_TABLE_CURRENCY_LIST . "`.`isocode` IN('" . $selected_country . "') AND `" . WPSC_TABLE_CURRENCY_LIST . "`.`id` = `" . WPSC_TABLE_REGION_TAX . "`.`country_id`", ARRAY_A );
-
+	
 	if ( $region_list != null ) {
-		$output .= "<select name='base_region'>\n\r";
 		$output .= "<option value=''>None</option>";
-
 		foreach ( $region_list as $region ) {
 			if ( $selected_region == $region['id'] ) {
 				$selected = "selected='selected'";
@@ -43,7 +41,7 @@ function nzshpcrt_region_list( $selected_country = null, $selected_region = null
 			$output .= "<option value='" . $region['id'] . "' $selected>" . $region['name'] . "</option>\n\r";
 		}
 
-		$output .= "</select>\n\r";
+//		$output .= "</select>\n\r";
 	} else {
 		$output .= "<select name='base_region' disabled='true'><option value=''>None</option></select>\n\r";
 	}

@@ -117,12 +117,12 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				return;
 			}
 		}
-		
 		if ( !empty($purchase_log['shipping_country']) ) {
 			$billing_country = $purchase_log['billing_country'];
 			$shipping_country = $purchase_log['shipping_country'];
 		} else {
 			$country = $wpdb->get_var( "SELECT `value` FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id`=" . $purchase_log['id'] . " AND `form_id` = '" . get_option( 'country_form_field' ) . "' LIMIT 1" );
+						
 			$billing_country = $country;
 			$shipping_country = $country;
 		}
@@ -296,23 +296,32 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$form_sql = "SELECT * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id` = '" . $purchase_log['id'] . "'";
 			$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
 
+			//echo('<pre> form data'.print_r($form_data,true).'</pre>');
+			
 			if ( $form_data != null ) {
 				foreach ( $form_data as $form_field ) {
 					$form_data = $wpdb->get_row( "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `id` = '" . $form_field['form_id'] . "' LIMIT 1", ARRAY_A );
-
+		
 					switch ( $form_data['type'] ) {
 						case "country":
-							$report_user .= $form_data['name'] . ": " . wpsc_get_country( $form_field['value'] ) . "\n";
-							$report_user .= __( 'State', 'wpsc' ) . ": " . wpsc_get_region( $purchase_log['billing_region'] ) . "\n";
+							$country_code = $form_field['value'];
+							$report_user .= $form_data['name'] . ": " . wpsc_get_country( $country_code ) . "\n";
+							//check if country has a state then display if it does.
+							$country_data = wpsc_country_has_state($country_code);
+							if(($country_data['has_regions'] == 1))
+								$report_user .= __( 'Billing State', 'wpsc' ) . ": " . wpsc_get_region( $purchase_log['billing_region'] ) . "\n";
 							break;
 
 						case "delivery_country":
-							$report_user .= $form_data['name'] . ": " . wpsc_get_country( $form_field['value'] ) . "\n";
-							$report_user .= __( 'Delivery State', 'wpsc' ) . ": " . wpsc_get_region( $purchase_log['shipping_region'] ) . "\n";
+							$report_user .= $form_data['name'] . ": " . wpsc_get_country( $form_field['value'] ) . "\n";			
 							break;
-
+					
 						default:
+							if ($form_data['name'] == 'State' && is_numeric($form_field['value'])){
+								$report_user .= __( 'Delivery State', 'wpsc' ) . ": " . wpsc_get_state_by_id( $form_field['value'], 'name' ) . "\n";
+							}else{
 							$report_user .= wp_kses( $form_data['name'], array( ) ) . ": " . $form_field['value'] . "\n";
+							}
 							break;
 					}
 				}

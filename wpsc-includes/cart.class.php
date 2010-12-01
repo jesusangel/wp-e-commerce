@@ -614,21 +614,16 @@ class wpsc_cart {
      $this->get_shipping_method();
   }
 
-
   /**
    * update_location method, updates the location
    * @access public
    */
    function update_location() {
-
-      if(get_option('lock_tax') == 1){
-         $_SESSION['wpsc_selected_country'] =& $_SESSION['wpsc_delivery_country'];
-         $_SESSION['wpsc_selected_region'] =& $_SESSION['wpsc_delivery_region'];
-         //exit('<pre>'.print_r($_SESSION, true).'</pre>');
-      }
+	
       if(!isset($_SESSION['wpsc_selected_country']) && !isset($_SESSION['wpsc_delivery_country'])) {
-         $_SESSION['wpsc_selected_country'] = get_option('base_country');
-         $_SESSION['wpsc_delivery_country'] = get_option('base_country');
+      	$_SESSION['wpsc_delivery_country'] = get_option('base_country');
+	    $_SESSION['wpsc_selected_country'] = get_option('base_country');
+        
       } else {
          if(!isset($_SESSION['wpsc_selected_country'])) {
             $_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_delivery_country'];
@@ -641,8 +636,7 @@ class wpsc_cart {
          $_SESSION['wpsc_selected_region'] = get_option('base_region');
          $_SESSION['wpsc_delivery_region'] = get_option('base_region');
       }
-
-      //exit('<pre>'.print_r($_SESSION, true).'</pre>');
+	  
       $this->delivery_country =& $_SESSION['wpsc_delivery_country'];
       $this->selected_country =& $_SESSION['wpsc_selected_country'];
       $this->delivery_region =& $_SESSION['wpsc_delivery_region'];

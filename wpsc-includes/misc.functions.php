@@ -40,6 +40,12 @@ function wpsc_get_state_by_id( $id, $return_value ) {
 	return $value;
 }
 
+function wpsc_country_has_state($country_code){
+	global $wpdb;
+	$country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`= '".$country_code."' LIMIT 1",ARRAY_A);
+	return $country_data;
+}
+
 /**
  * WPSC add new user function, validates and adds a new user, for the
  *
@@ -269,6 +275,13 @@ function wpsc_populate_also_bought_list() {
 		$wpdb->query( $insert_statement );
 		//echo $insert_statement;
 	}
+}
+
+function wpsc_get_country_form_id_by_type($type){
+	global $wpdb;
+	$sql = 'SELECT `id`	 FROM `'.WPSC_TABLE_CHECKOUT_FORMS.'` WHERE `type`="'.$type.'" LIMIT 1';
+	$id = $wpdb->get_var($sql);
+	return $id;
 }
 
 function wpsc_get_country( $country_code ) {

@@ -662,10 +662,34 @@ class wpsc_checkout {
 	 */
 	function form_field() {
 		global $wpdb, $user_ID;
-		if ( (count( $_SESSION['wpsc_checkout_saved_values'] ) <= 0) && ($user_ID > 0) )
+		if ( ($user_ID > 0) ){
 			$_SESSION['wpsc_checkout_saved_values'] = get_user_meta( $user_ID, 'wpshpcrt_usr_profile',1 );
-
-		$saved_form_data = @htmlentities( stripslashes( (string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id] ), ENT_QUOTES );
+			$saved_form_data = @htmlentities( stripslashes( (string)$_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id] ), ENT_QUOTES );
+			$delivery_country_id = wpsc_get_country_form_id_by_type('delivery_country');
+			if($this->checkout_item->id == $delivery_country_id){
+				if( is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) 
+					&& count($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) > 1){
+			 	
+			 		$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
+				 	$_SESSION['wpsc_delivery_region'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][1];
+			 	} else {
+				
+				 	$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
+				}
+     		}
+     		$billing_country_id = wpsc_get_country_form_id_by_type('country');
+			if($this->checkout_item->id == $billing_country_id){
+				if( is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) 
+					&& count($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) > 1){
+			 	
+			 		$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
+				 	$_SESSION['wpsc_selected_region'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][1];
+			 	} else {
+				
+				 	$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
+				}
+     		}
+		}
 		$an_array = '';
 		if ( function_exists( 'wpsc_get_ticket_checkout_set' ) ) {
 			if ( $this->checkout_item->checkout_set == wpsc_get_ticket_checkout_set() )
@@ -916,14 +940,10 @@ class wpsc_checkout {
 			}
 
 			if ( $form_data->type != 'heading' ) {
-				// echo '<pre>'.print_r($form_data,true).'</pre>';
+				//echo '<pre>'.print_r($form_data,true).'</pre>';
 				if ( is_array( $value ) && ($form_data->unique_name == 'billingcountry' || $form_data->unique_name == 'shippingcountry') ) {
-
-					if ( $form_data->unique_name != 'shippingcountry' ) {
-						$value = serialize( $value );
-					} else {
 						$value = $value[0];
-					}
+					
 					$prepared_query = $wpdb->query( $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value ) );
 				} elseif ( is_array( $value ) ) {
 
