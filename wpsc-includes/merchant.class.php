@@ -163,6 +163,10 @@ class wpsc_merchant {
 
 		if ( count( $address_data['shipping'] ) < 1 )
 			$address_data['shipping'] = $address_data['billing'];
+			if( !empty($purchase_logs['discount_value']) )
+			$has_discount = true;
+		else
+			$has_discount = false;
 
 		$this->cart_data = array(
 			'software_name'           => 'WP e-Commerce/' . WPSC_PRESENTABLE_VERSION . '',
@@ -170,7 +174,7 @@ class wpsc_merchant {
 			'store_location'          => get_option( 'base_country' ),
 			'store_currency'          => $currency_code,
 			'is_subscription'         => false,
-			'has_discounts'           => $purchase_logs['discount_value'] > 0 ? true : false,
+			'has_discounts'           => $has_discount,
 			'cart_discount_value'     => $purchase_logs['discount_value'],
 			'cart_discount_coupon'    => $purchase_logs['discount_data'],
 			'cart_tax'                => $purchase_logs['wpec_taxes_total'],
