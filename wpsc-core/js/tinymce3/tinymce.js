@@ -63,13 +63,19 @@ function insertWPSCLink() {
 		visi = document.getElementById('wpsc_slider_visibles');
 		var categoryid = category.value;
 		var visibles = visi.value;
-		if (categoryid > 0 ) {
+		
+		if (categoryid > 0) {
+		
 			if (visibles != '') {
 				tagtext = "[wpec_product_slider category_id='"+categoryid+"' visible_items='"+visibles+"']";
 			} else {
 				tagtext = "[wpec_product_slider category_id='"+categoryid+"']";
 			}
-		} else {
+		
+		} 	
+		else if(categoryid == 'all'){
+			tagtext = "[wpec_product_slider]";
+		}else {
 			tinyMCEPopup.close();
 		}
 	}

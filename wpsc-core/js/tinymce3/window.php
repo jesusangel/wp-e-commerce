@@ -35,7 +35,7 @@ global $wpdb;
 			}
 		</style>
 	</head>
-	
+
 <body id="link" onload="tinyMCEPopup.executeOnLoad('init();'); document.body.style.display=''; document.getElementById('category').focus();" style="display:none;">
 	<form name="WPSC" action="#">
 		<div class="tabs">
@@ -109,6 +109,7 @@ global $wpdb;
 					<td>
 						<select id="wpsc_slider_category" name="wpsc_category" style="width: 200px">
 							<option value="0"> <?php _e("No Category", 'wpsc'); ?></option>	
+							<option value="all"> <?php _e("All Categories", 'wpsc'); ?></option>
 							<?php
 								foreach($categorylist as $category) 
 								echo "<option value=".$category->term_id." >".$category->name."</option>"."\n";
