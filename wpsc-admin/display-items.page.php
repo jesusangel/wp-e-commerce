@@ -27,14 +27,14 @@ function wpsc_display_edit_products_page() {
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
 		'image' => '',
-		'title' => 'Name',
-		'weight' => 'Weight',
-		'stock' => 'Stock',
-		'price' => 'Price',
-		'sale_price' => 'Sale Price',
-		'SKU' => 'SKU',
-		'categories' => 'Categories',
-		'featured' => 'Featured',
+		'title' => __('Name'),
+		'weight' => __('Weight'),
+		'stock' => __('Stock'),
+		'price' => __('Price'),
+		'sale_price' => __('Sale Price'),
+		'SKU' => __('SKU'),
+		'categories' => __('Categories'),
+		'featured' => __('Featured'),
 	);
 	if ( isset( $_GET["product"] ) && $_GET["product"] != '' ) {
 		unset( $columns["categories"] );
