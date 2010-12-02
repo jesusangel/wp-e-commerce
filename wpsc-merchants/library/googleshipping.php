@@ -107,7 +107,6 @@
     var $type = "carrier-calculated-shipping";
     
     var $CarrierCalculatedShippingOptions = array();
-//    var $ShippingPackages = array();
     var $ShippingPackage;
 
     /**
@@ -129,7 +128,6 @@
      * @param GoogleShippingPackage $package
      */
     function addShippingPackage($package){
-//      $this->ShippingPackages[] = $package; 
       $this->ShippingPackage = $package; 
     }
   }
@@ -146,8 +144,6 @@
     var $carrier_pickup;
     var $additional_fixed_charge;
     var $additional_variable_charge_percent;
-//    var $shipping_restrictions;
-//    var $address_filters;
 
     /**
      * @param double $price the default shipping cost to be used if Google is 
@@ -189,14 +185,6 @@
         $this->additional_variable_charge_percent = (double)$additional_variable_charge_percent;
       }
     }
-
-//    function AddShippingRestrictions($restrictions) {
-//      $this->shipping_restrictions = $restrictions;
-//    }
-//
-//    function AddAddressFilters($filters) {
-//      $this->address_filters = $filters;
-//    }
   }
   
   /**
