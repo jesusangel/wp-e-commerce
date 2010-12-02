@@ -356,7 +356,7 @@ endif;
                      <?php _e('Enter your email address'); ?>
                      </label>
                   <p class="wpsc_email_address_p">
-                  <img src="http://www.gravatar.com/avatar/empty?s=60&d=mm" id="wpsc_checkout_gravatar" />
+                  <img src="https://secure.gravatar.com/avatar/empty?s=60&d=mm" id="wpsc_checkout_gravatar" />
                   <?php echo wpsc_checkout_form_field();?>
                    <?php if(wpsc_the_checkout_item_error() != ''): ?>
                       <p class='validation-error'><?php echo wpsc_the_checkout_item_error(); ?></p>
