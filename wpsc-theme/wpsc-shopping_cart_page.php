@@ -383,7 +383,7 @@ endif;
 
       <?php if (wpsc_show_find_us()) : ?>
       <tr>
-         <td><label for='how_find_us'><?php _e('How did you find us' , 'wpsc'); ?> :</label></td>
+         <td><label for='how_find_us'><?php _e('How did you find us' , 'wpsc'); ?></label></td>
          <td>
             <select name='how_find_us'>
                <option value='Word of Mouth'><?php _e('Word of mouth' , 'wpsc'); ?></option>
