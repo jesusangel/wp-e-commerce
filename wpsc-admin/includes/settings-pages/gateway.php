@@ -17,7 +17,6 @@ function wpsc_options_gateway() {
 				$selected = "selected='selected'";
 				$form = $gateway['form']();
 				$selected_gateway_data = $gateway;
-				//exit($form);
 			} else {
 				$selected = '';
 			}
@@ -48,7 +47,6 @@ function wpsc_options_gateway() {
 	</script>
 
 	<div class="wrap">
-	<?php // global $nzshpcrt_gateways; print_r($nzshpcrt_gateways);?>
 	<div class='metabox-holder'>
 		<form name='gatewayopt' method='post' id='gateway_opt' action='' >
 			<input type='hidden' name='gateway_submits' value='true' />
@@ -81,7 +79,6 @@ function wpsc_options_gateway() {
 								<br />
 								<?php
 								$selected_gateways = get_option( 'custom_gateway_options' );
-								//echo("<pre>".print_r($selected_gateways,true)."</pre>");
 								foreach ( $nzshpcrt_gateways as $gateway ) {
 									if ( isset( $gateway['admin_name'] ) )
 										$gateway['name'] = $gateway['admin_name'];

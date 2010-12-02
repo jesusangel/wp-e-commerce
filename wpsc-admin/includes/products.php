@@ -61,7 +61,6 @@ add_filter('display_post_states','wpsc_trashed_post_status');
 function wpsc_product_row(&$product, $parent_product = null) {
 	global $wp_query, $wpsc_products, $mode, $current_user;
 	static $rowclass;
-	//echo "<pre>".print_r($product, true)."</pre>";
 
 	$global_product = $product;
 	setup_postdata($product);
@@ -82,7 +81,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	$posts_columns = get_column_headers('display-product-list');
 	$posts_columns = apply_filters( 'manage_display-product-list_columns', $posts_columns );
 	$hidden = get_hidden_columns('display-product-list');
-	//exit('<pre>'.print_r($product,true).'</pre>');
 
 	foreach ( $posts_columns as $column_name=>$column_display_name ) {
 		$class = "class=\"$column_name column-$column_name\"";
@@ -93,7 +91,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 		$attributes = "$class$style";
 
-		//echo "<pre>".print_r($column_name,true)."</pre>".count($posts_columns);
 		switch ($column_name) {
 
 		case 'cb':
@@ -106,7 +103,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		<?php
 		break;
 
-		case 'date': /* !date case */
+		case 'date':
 			if ( '0000-00-00 00:00:00' == $product->post_date && 'date' == $column_name ) {
 				$t_time = $h_time = __('Unpublished');
 				$time_diff = 0;
@@ -144,7 +141,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'title': /* !title case */
+		case 'title':
 			$attributes = 'class="post-title column-title"' . $style;
 			$_GET["product_parent"]  = '';
 			if( isset($_GET["product"]) && ($_GET["product_parent"] == '' )){
@@ -233,7 +230,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'image':  /* !image case */
+		case 'image':
 			?>
 			<td class="product-image ">
 			<?php
@@ -277,10 +274,9 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		
 		
 		
-		case 'price':  /* !price case */
+		case 'price':
 	
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
@@ -362,7 +358,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 	<?php
 		break;
 
-		case 'categories':  /* !categories case */
+		case 'categories':
 		?>
 		<td <?php echo $attributes ?>><?php
 			$categories = get_the_product_category($product->ID);
@@ -380,7 +376,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'tags':  /* !tags case */
+		case 'tags':
 		?>
 		<td <?php echo $attributes ?>><?php
 			$tags = get_the_tags($product->ID);
@@ -400,7 +396,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			if($sku == ''){
 				$sku = 'N/A';
 			}
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="skudisplay"><?php echo $sku; ?></span>
@@ -417,7 +412,6 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		case 'sale_price':
 		
 			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
-		//	exit($product->ID.'PRICE IS: <pre>'.print_r($price, true).'</pre>');
 			?>
 				<td  <?php echo $attributes ?>>
 					<?php echo wpsc_currency_display( $price ); ?>
@@ -432,7 +426,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		break;
 
 
-		case 'comments':  /* !comments case */
+		case 'comments':
 		?>
 		<td <?php echo $attributes ?>><div class="post-com-count-wrapper">
 		<?php
@@ -449,14 +443,14 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'author':  /* !author case */
+		case 'author':
 		?>
 		<td <?php echo $attributes ?>><a href="edit.php?author=<?php the_author_meta('ID'); ?>"><?php the_author() ?></a></td>
 		<?php
 		break;
 
 		
-		case 'control_view':  /* !control view case */
+		case 'control_view':
 		?>
 		<td><a href="<?php the_permalink(); ?>" rel="permalink" class="view"><?php _e('View'); ?></a></td>
 		<?php
@@ -464,7 +458,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'control_edit':  /* !control edit case */
+		case 'control_edit':
 		?>
 		<td><?php if ( current_user_can('edit_post', $product->ID) ) { echo "<a href='$edit_link' class='edit'>" . __('Edit') . "</a>"; } ?></td>
 		<?php
@@ -472,18 +466,18 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 
 
-		case 'control_delete':  /* !control delete case */
+		case 'control_delete':
 		?>
 		<td><?php if ( current_user_can('delete_post', $product->ID) ) { echo "<a href='" . wp_nonce_url("post.php?action=delete&amp;post=$id", 'delete-post_' . $product->ID) . "' class='delete'>" . __('Delete') . "</a>"; } ?></td>
 		<?php
 		break;
 
-		case 'featured': /* !control featured case */
+		case 'featured':
 		?>
 			<td><?php do_action('manage_posts_featured_column', $product->ID); ?></td>
 		<?php		
 		break;
-		default:   /* !default case */
+		default:
 		?>
 		<td <?php echo $attributes ?>><?php do_action('manage_posts_custom_column', $column_name, $product->ID); ?></td>
 		<?php

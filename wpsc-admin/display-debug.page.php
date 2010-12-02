@@ -115,16 +115,8 @@ function wpsc_debug_page() {
 
 		case 'wp_get_object_terms':
 			global $wp_taxonomies;
-			//register_taxonomy('product_tag', 'product');
-			//print_r($wp_taxonomies);
 			$tags = wp_get_object_terms( 108, 'product_tag', array( 'fields' => 'names' ) );
-//  			 wp_set_object_terms(103, $tags, 'product_tag');
 			print_r( $tags );
-			break;
-
-		case 'create_also_bought_list':
-			//  wpsc_populate_also_bought_list();
-
 			break;
 
 		case 'unicode_permalinks':
@@ -272,7 +264,6 @@ function wpsc_recreate_product_url_names() {
 	global $wpdb;
 
 	$product_data = $wpdb->get_results( "SELECT `id`, `name` FROM `" . WPSC_TABLE_PRODUCT_LIST . "` WHERE `active` IN ('1')", ARRAY_A );
-	//echo "<pre>".print_r($product_data,true)."</pre>";
 	echo "<pre>";
 	foreach ( $product_data as $product_row ) {
 		$product_id = $product_row['id'];
@@ -319,7 +310,6 @@ function wpsc_mass_resize_thumbnails_and_clean_images() {
 	$width = get_option( 'product_image_width' );
 
 	$product_data = $wpdb->get_results( "SELECT `product`.`id`, `product`.`image` AS `image_id`, `images`.`image` AS `file`  FROM `" . WPSC_TABLE_PRODUCT_LIST . "` AS `product` INNER JOIN  `" . WPSC_TABLE_PRODUCT_IMAGES . "` AS `images` ON `product`.`image` = `images`.`id` WHERE `product`.`image` > 0 ", ARRAY_A );
-	//print_r($product_data);
 	foreach ( (array)$product_data as $product ) {
 		$image_input = WPSC_IMAGE_DIR . $product['file'];
 		$image_output = WPSC_THUMBNAIL_DIR . $product['file'];

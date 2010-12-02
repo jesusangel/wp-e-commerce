@@ -156,7 +156,6 @@ function wpsc_change_canonical_url( $url ) {
 			}
 		}
 	}
-	//echo "<pre>".print_r($wpsc_query->is_single,true)."</pre>";
 	return $url;
 }
 
@@ -175,7 +174,6 @@ function wpsc_canonical_url() {
 	}
 }
 
-//add_action( 'template_redirect', 'wpsc_canonical_url' );
 // check for all in one SEO pack and the is_static_front_page function
 if ( is_callable( array( "All_in_One_SEO_Pack", 'is_static_front_page' ) ) ) {
 
@@ -193,7 +191,6 @@ if ( is_callable( array( "All_in_One_SEO_Pack", 'is_static_front_page' ) ) ) {
 	}
 
 	add_filter( 'aioseop_home_page_title', 'wpsc_change_aioseop_home_title' );
-	//add_filter('aioseop_title_page', 'wpsc_change_aioseop_home_title');
 }
 
 function wpsc_set_aioseop_description( $data ) {
@@ -236,7 +233,6 @@ add_filter( 'aioseop_keywords', 'wpsc_set_aioseop_keywords' );
  */
 function wpsc_populate_also_bought_list() {
 	global $wpdb, $wpsc_cart, $wpsc_coupons;
-	//exit("<pre>".print_r($variations,true)."</pre>");
 	$new_also_bought_data = array( );
 	foreach ( $wpsc_cart->cart_items as $outer_cart_item ) {
 		$new_also_bought_data[$outer_cart_item->product_id] = array( );
@@ -273,7 +269,6 @@ function wpsc_populate_also_bought_list() {
 	if ( count( $insert_statement_parts ) > 0 ) {
 		$insert_statement = "INSERT INTO `" . WPSC_TABLE_ALSO_BOUGHT . "` (`selected_product`, `associated_product`, `quantity`) VALUES " . implode( ",\n ", $insert_statement_parts );
 		$wpdb->query( $insert_statement );
-		//echo $insert_statement;
 	}
 }
 
@@ -338,8 +333,6 @@ function nzshpcrt_display_preview_image() {
 			} else {
 				$cache_filename = basename( "product_img_{$image_id}_{$height}x{$width}" );
 			}
-			//echo "<pre>".print_r($_GET, true)."</pre>";
-			//exit($cache_filename);
 			$imagetype = @getimagesize( $imagepath );
 			$use_cache = false;
 			switch ( $imagetype[2] ) {
@@ -373,19 +366,16 @@ function nzshpcrt_display_preview_image() {
 			} else {
 				switch ( $imagetype[2] ) {
 					case IMAGETYPE_JPEG:
-						//$extension = ".jpg";
 						$src_img = imagecreatefromjpeg( $imagepath );
 						$pass_imgtype = true;
 						break;
 
 					case IMAGETYPE_GIF:
-						//$extension = ".gif";
 						$src_img = imagecreatefromgif( $imagepath );
 						$pass_imgtype = true;
 						break;
 
 					case IMAGETYPE_PNG:
-						//$extension = ".png";
 						$src_img = imagecreatefrompng( $imagepath );
 						$pass_imgtype = true;
 						break;
@@ -406,7 +396,6 @@ function nzshpcrt_display_preview_image() {
 					// select our scaling method
 					$scaling_method = 'cropping';
 
-					//list($source_h, $source_w) = array($source_w, $source_h);
 					// set both offsets to zero
 					$offset_x = $offset_y = 0;
 
@@ -446,9 +435,6 @@ function nzshpcrt_display_preview_image() {
 					$bgcolor = ImageColorAllocate( $dst_img, 255, 255, 255 );
 					ImageFilledRectangle( $dst_img, 0, 0, $width, $height, $bgcolor );
 					ImageAlphaBlending( $dst_img, TRUE );
-					if ( ($imagetype[2] == IMAGETYPE_PNG) || ($imagetype[2] == IMAGETYPE_GIF) ) {
-						//imagecolortransparent($dst_img, $bgcolor);
-					}
 
 					// X & Y Offset to crop image properly
 					if ( $temp_w < $width ) {
@@ -708,7 +694,6 @@ function wp_set_product_categories( $product_id, $post_categories = array( ) ) {
 	$product_id = (int)$product_id;
 	// If $post_categories isn't already an array, make it one:
 	if ( !is_array( $post_categories ) || 0 == count( $post_categories ) || empty( $post_categories ) ) {
-		//$post_categories = array(get_option('default_category'));
 		return;
 	} else if ( 1 == count( $post_categories ) && '' == $post_categories[0] ) {
 		return true;

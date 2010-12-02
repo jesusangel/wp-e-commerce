@@ -54,7 +54,6 @@ function wpsc_purchlog_email_trackid() {
 	$subject = get_option( 'wpsc_trackingid_subject' );
 	$subject = str_replace( '%shop_name%', get_option( 'blogname' ), $subject );
 	wp_mail( $email, $subject, $message, "From: " . get_option( 'return_email' ) . " <" . get_option( 'return_email' ) . ">" );
-	//exit($email.'<br /> '.$subject.'<br /> '. $message.'<br /> '."From: ".get_option('return_email')." <".get_option('return_email').">");
 	exit( true );
 }
 
@@ -73,7 +72,6 @@ function wpsc_ajax_sales_quarterly() {
 	if ( !isset( $date[2] ) )
 		$date[2] = 0;
 	$lastquart = mktime( 0, 0, 0, $date[1], $date[2], $date[0] );
-	//$lastdate = date('M d y', $lastquart);
 	if ( $lastquart != get_option( 'wpsc_last_quarter' ) ) {
 		update_option( 'wpsc_last_date', $lastdate );
 		update_option( 'wpsc_fourth_quart', $lastquart );
@@ -86,9 +84,6 @@ function wpsc_ajax_sales_quarterly() {
 		$finalquart = mktime( 0, 0, 0, $date[1], $date[2], $date[0] - 1 );
 		update_option( 'wpsc_final_quart', $finalquart );
 	}
-
-
-// exit($lastquart.' '.$firstquart.' '.$secondquart.' '.$thirdquart);
 }
 
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_quarterly') ) {
@@ -200,7 +195,6 @@ function wpsc_bulk_modify_products() {
 	$doaction = $_POST['bulkAction'];
 	$sendback = wp_get_referer();
 	$product_ids = $_POST['post'];
-	//exit( "<pre>".print_r($_POST,true)."</pre>");
 	switch ( $doaction ) {
 
 		case 'addgroup':
@@ -372,7 +366,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 function wpsc_modify_sku() {
 	global $wpdb;
-// exit('<pre>'.print_r($_POST, true).'</pre>');
 	$product_data = array_pop( $_POST['sku_field'] );
 
 	$product_id = absint( $product_data['id'] );
@@ -435,7 +428,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 function wpsc_modify_stock() {
 	global $wpdb;
-// exit('<pre>'.print_r($_POST, true).'</pre>');
 	$product_data = array_pop( $_POST['stock_field'] );
 
 	$product_id = absint( $product_data['id'] );
@@ -644,15 +636,12 @@ function wpsc_purchase_log_csv() {
 	global $wpdb, $user_level, $wp_rewrite, $wpsc_purchlog_statuses;
 	get_currentuserinfo();
 	if ( ($_GET['rss_key'] == 'key') && is_numeric( $_GET['start_timestamp'] ) && is_numeric( $_GET['end_timestamp'] ) && ($user_level >= 7) ) {
-		//exit('in use');
 		$form_sql = "SELECT * FROM `" . WPSC_TABLE_CHECKOUT_FORMS . "` WHERE `active` = '1' AND `display_log` = '1';";
 		$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
 
 		$start_timestamp = $_GET['start_timestamp'];
 		$end_timestamp = $_GET['end_timestamp'];
 		$data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `date` BETWEEN '$start_timestamp' AND '$end_timestamp' ORDER BY `date` DESC", ARRAY_A );
-		// exit('<pre>'.print_r($data, true).'</pre>');
-
 
 		header( 'Content-Type: text/csv' );
 		header( 'Content-Disposition: inline; filename="Purchase Log ' . date( "M-d-Y", $start_timestamp ) . ' to ' . date( "M-d-Y", $end_timestamp ) . '.csv"' );
@@ -698,7 +687,6 @@ function wpsc_purchase_log_csv() {
 
 			$cartsql = "SELECT * FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `purchaseid`=" . $purchase['id'] . "";
 			$cart = $wpdb->get_results( $cartsql, ARRAY_A );
-			//exit(nl2br(print_r($cart,true)));
 
 			foreach ( (array)$cart as $item ) {
 				$output .= ",";
@@ -777,11 +765,9 @@ function wpsc_admin_ajax() {
 		array_walk( $current_order["closedboxes"], "wpec_close_box", $closed );
 
 		update_option( 'wpsc_product_page_order', $current_order );
-		//print_r( $current_order );
 	}
 
 	if ( ($_POST['save_image_upload_state'] == "true") && is_numeric( $_POST['image_upload_state'] ) ) {
-		//get_option('wpsc_image_upload_state');
 		$upload_state = (int)(bool)$_POST['image_upload_state'];
 		update_option( 'wpsc_use_flash_uploader', $upload_state );
 		exit( "done" );
@@ -794,7 +780,6 @@ function wpsc_admin_ajax() {
 	}
 
 	if ( ($_POST['remove_form_field'] == "true") && is_numeric( $_POST['form_id'] ) ) {
-		//exit(print_r($user,true));
 		if ( current_user_can( 'level_7' ) ) {
 			$wpdb->query( $wpdb->prepare( "UPDATE `" . WPSC_TABLE_CHECKOUT_FORMS . "` SET `active` = '0' WHERE `id` = %d LIMIT 1 ;", $_POST['form_id'] ) );
 			exit( ' ' );
@@ -839,11 +824,9 @@ function wpsc_admin_ajax() {
 
 			$update_sql = "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET `processed` = '" . $newvalue . "' WHERE `id` = '" . $_POST['id'] . "' LIMIT 1";
 			$wpdb->query( $update_sql );
-			//echo("/*");
 			if ( ($newvalue > $log_data['processed']) && ($log_data['processed'] < 2) ) {
 				transaction_results( $log_data['sessionid'], false );
 			}
-			//echo("*/");
 
 			$status_name = wpsc_find_purchlog_status_name( $purchase['processed'] );
 			echo "document.getElementById(\"form_group_" . $_POST['id'] . "_text\").innerHTML = '" . $status_name . "';\n";
@@ -902,7 +885,6 @@ function wpsc_admin_sale_rss() {
 
 function wpsc_swfupload_images() {
 	global $wpdb, $current_user, $user_ID;
-	// xdebug_start_trace();
 	$file = $_FILES['async-upload'];
 	$product_id = absint( $_POST['product_id'] );
 	$nonce = $_POST['_wpnonce'];
@@ -927,13 +909,8 @@ function wpsc_swfupload_images() {
 
 	$id = media_handle_upload( 'async-upload', $product_id );
 
-	//$object = array('post_author' => $user_ID, 'ping_status' => get_option('default_ping_status'), 'post_parent' => $product_id);
-	//  wp_insert_attachment($object, $file = false, $parent = 0);
-
 	if ( !is_wp_error( $id ) ) {
-		//$src = $file['name'];
 		$src = wp_get_attachment_image_src( $id );
-		//print_r($src);
 		$output .= "upload_status=1;\n";
 		$output .= "image_src='" . $src[0] . "';\n";
 		$output .= "image_id='$id';\n";
@@ -954,10 +931,8 @@ function wpsc_display_invoice() {
 	$body_id = 'wpsc-packing-slip';
 	$purchase_id = (int)$_GET['purchaselog_id'];
 	include_once(WPSC_FILE_PATH . "/wpsc-admin/admin-form-functions.php");
-	// echo "testing";
 	require_once(ABSPATH . 'wp-admin/includes/media.php');
 	wp_iframe( 'wpsc_packing_slip', $purchase_id );
-	//wpsc_packing_slip($purchase_id);
 	exit();
 }
 //other actions are here
@@ -1019,7 +994,6 @@ function wpsc_purchlog_resend_email() {
 					'post_status' => 'inherit'
 				);
 				$dl_data = (array)get_posts( $attachment );
-				/* /			exit('<pre>'.print_r($purchase_log,true).'</pre>'); */
 				if ( $dl_data[0]->ID > 0 ) {
 					if ( $purchase_log['email_sent'] != 1 ) {
 						$wpdb->query( "UPDATE `" . WPSC_TABLE_DOWNLOAD_STATUS . "` SET `active`='1' WHERE `fileid`='" . $product_data[0]['file'] . "' AND `purchid` = '" . $purchase_log['id'] . "' LIMIT 1" );
@@ -1108,11 +1082,10 @@ function wpsc_purchlog_resend_email() {
 					$wpdb->query( "UPDATE `" . WPSC_TABLE_COUPON_CODES . "` SET `active`='0', `is-used`='1' WHERE `id`='" . $coupon_data['id'] . "' LIMIT 1" );
 				}
 			}
-			//$wpdb->query("UPDATE `".WPSC_TABLE_DOWNLOAD_STATUS."` SET `active`='1' WHERE `fileid`='".$product_data[0]['file']."' AND `purchid` = '".$purchase_log['id']."' LIMIT 1");
+
 			$total_shipping += $purchase_log['base_shipping'];
 
 			$total = (($total + $total_shipping) - $purchase_log['discount_value']);
-			// $message.= "\n\r";
 			$product_list.= "Your Purchase # " . $purchase_log['id'] . "\n\r";
 			if ( $purchase_log['discount_value'] > 0 ) {
 				$discount_email.= __( 'Discount', 'wpsc' ) . ": " . wpsc_currency_display( $purchase_log['discount_value'],array( 'display_as_html' => false ) ) . "\n\r";
@@ -1138,7 +1111,6 @@ function wpsc_purchlog_resend_email() {
 			$message = str_replace( '%product_list%', $product_list, $message );
 			$message = str_replace( '%total_shipping%', $total_shipping_email, $message );
 			$message = str_replace( '%total_price%', $total_price_email, $message );
-			//$message = str_replace('%order_status%',get_option('blogname'),$message);
 			$message = str_replace( '%shop_name%', get_option( 'blogname' ), $message );
 
 			$report = str_replace( '%product_list%', $report_product_list, $report );
@@ -1151,8 +1123,6 @@ function wpsc_purchlog_resend_email() {
 			$message_html = str_replace( '%total_price%', $total_price_email, $message_html );
 			$message_html = str_replace( '%shop_name%', get_option( 'blogname' ), $message_html );
 
-
-			// exit($message_html);
 			if ( ($email != '' ) ) {
 				add_filter( 'wp_mail_from', 'wpsc_replace_reply_address', 0 );
 				add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
@@ -1165,8 +1135,6 @@ function wpsc_purchlog_resend_email() {
 					$resent = (bool)wp_mail( $email, __( 'Purchase Receipt', 'wpsc' ), $message );
 					$sent = 1;
 				}
-				//echo "$message<br />";
-				//exit($email);
 				remove_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name' );
 				remove_filter( 'wp_mail_from', 'wpsc_replace_reply_address' );
 			}
@@ -1187,7 +1155,6 @@ if ( isset( $_REQUEST['email_buyer_id'] ) && is_numeric( $_REQUEST['email_buyer_
 
 function wpsc_purchlog_clear_download_items() {
 	global $wpdb;
-//exit('Just about to redirect');
 	if ( is_numeric( $_GET['purchaselog_id'] ) ) {
 		$purchase_id = (int)$_GET['purchaselog_id'];
 		$downloadable_items = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_DOWNLOAD_STATUS . "` WHERE `purchid` IN ('$purchase_id')", ARRAY_A );
@@ -1224,7 +1191,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 //call to change view for purchase log
 
 function wpsc_purchlog_filter_by() {
-	//exit('filter is triggered'.print_r($_POST, true));
 	wpsc_change_purchlog_view( $_POST['view_purchlogs_by'], $_POST['view_purchlogs_by_status'] );
 }
 
@@ -1237,7 +1203,6 @@ function wpsc_purchlog_bulk_modify() {
 	if ( $_POST['purchlog_multiple_status_change'] != -1 ) {
 		if ( is_numeric( $_POST['purchlog_multiple_status_change'] ) && $_POST['purchlog_multiple_status_change'] != 'delete' ) {
 			foreach ( (array)$_POST['purchlogids'] as $purchlogid ) {
-				//exit('<pre>'.print_r($purchlogid,true).'</pre>');
 				wpsc_purchlog_edit_status( $purchlogid, $_POST['purchlog_multiple_status_change'] );
 				$updated++;
 			}
@@ -1410,7 +1375,6 @@ function wpsc_ajax_get_shipping_form() {
 	echo "shipping_name_html = '$html_shipping_name'; \n\r";
 	echo "shipping_form_html = '$shipping_form'; \n\r";
 	echo "has_submit_button = '{$shipping_data['has_submit_button']}'; \n\r";
-	//echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
 	exit();
 }
 
@@ -1424,7 +1388,6 @@ function wpsc_ajax_get_payment_form() {
 	echo "payment_name_html = '$html_payment_name'; \n\r";
 	echo "payment_form_html = '$payment_form'; \n\r";
 	echo "has_submit_button = '{$payment_data['has_submit_button']}'; \n\r";
-	//echo "<script type='text/javascript'>jQuery('.gateway_settings h3.hndle').livequery(function(){ jQuery(this).html('".$wpsc_shipping_modules[$shippingname]->name."')})</script>";
 	exit();
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'get_shipping_form') )
@@ -1446,7 +1409,6 @@ function wpsc_submit_options( $selected='' ) {
 	
 	//This is to change the Overall target market selection
 	check_admin_referer( 'update-options', 'wpsc-update-options' );
-//	exit('<pre>'.print_r($_POST,true).'</pre>');
 	if ( isset( $_POST['change-settings'] ) ) {
 		if ( isset( $_POST['wpsc_also_bought'] ) && $_POST['wpsc_also_bought'] == 'on' )
 			update_option( 'wpsc_also_bought', 1 );
@@ -1464,7 +1426,6 @@ function wpsc_submit_options( $selected='' ) {
 			update_option( 'wpsc_share_this', 0 );
 
 	}
-//	exit('<pre>'.print_r($_POST,1).'</pre>');
 	if (empty($_POST['countrylist2']) && !empty($_POST['wpsc_options']['currency_sign_location']))
 		$selected = 'all';
 		
@@ -1480,12 +1441,10 @@ function wpsc_submit_options( $selected='' ) {
 		if ( $selected == 'all' ) {
 			$wpdb->query( "UPDATE `" . WPSC_TABLE_CURRENCY_LIST . "` SET visible = '1'" );
 			$AllSelected = true;
-			//return;
 		}
 		if ( $selected == 'none' ) {
 			$wpdb->query( "UPDATE `" . WPSC_TABLE_CURRENCY_LIST . "` SET visible = '0'" );
 			$AllSelected = true;
-			//return;
 		}
 		if ( $AllSelected != true ) {
 			$countrylist = $wpdb->get_col( "SELECT id FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY country ASC " );
@@ -1538,16 +1497,12 @@ function wpsc_submit_options( $selected='' ) {
 					$option_name = $wpsc_gateways[$selected_gateway]['supported_currencies']['option_name'];
 
 					if ( !in_array( $option_name, $already_changed ) ) {
-						//echo $option_name;
 						update_option( $option_name, $currency_code );
 						$already_changed[] = $option_name;
 					}
 				}
 			}
 		}
-
-
-		//exit("<pre>".print_r($selected_gateways,true)."</pre>");
 	}
 
 	foreach ( $GLOBALS['wpsc_shipping_modules'] as $shipping ) {
@@ -1568,9 +1523,7 @@ function wpsc_submit_options( $selected='' ) {
 
 		foreach ( $GLOBALS['wpsc_shipping_modules'] as $shipping ) {
 			foreach ( (array)$_POST['custom_shipping_options'] as $shippingoption ) {
-				//echo $shipping->internal_name.' == '.$shippingoption;
 				if ( $shipping->internal_name == $shippingoption ) {
-					//$shipping->submit_form();
 					$shipadd++;
 				}
 			}
@@ -1621,7 +1574,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 function wpsc_rearrange_images() {
 	global $wpdb;
-	//$wpdb->show_errors = true;
 	$images = explode( ",", $_POST['order'] );
 	$product_id = absint( $_POST['product_id'] );
 	$timestamp = time();
@@ -1636,10 +1588,6 @@ function wpsc_rearrange_images() {
 		}
 	}
 	$output = wpsc_main_product_image_menu( $product_id );
-	//echo "/*\n";
-	//echo print_r($_POST, true);
-	//echo print_r($images, true);
-	//echo "*/\n";
 	echo "image_menu = '';\n\r";
 	echo "image_id = '" . $new_main_image . "';\n\r";
 	exit();
@@ -1688,7 +1636,6 @@ if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] 
 
 function wpsc_clean_categories() {
 	global $wpdb, $wp_rewrite;
-	//exit("<pre>".print_r($check_category_names,true)."</pre>");
 	$sql_query = "SELECT `id`, `name`, `active` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "`";
 	$sql_data = $wpdb->get_results( $sql_query, ARRAY_A );
 	foreach ( (array)$sql_data as $datarow ) {
@@ -1739,7 +1686,6 @@ function wpsc_change_region_tax() {
 			}
 		}
 		$sendback = wp_get_referer();
-		//$sendback = remove_query_arg('isocode', $sendback);
 		wp_redirect( $sendback );
 	}
 }
@@ -1760,10 +1706,8 @@ function wpsc_product_files_existing() {
 		'numberposts' => -1,
 		'post_status' => 'all'
 	);
-	//echo "<pre>".print_r($file_list, true)."<pre>";
 	$attached_files = (array)get_posts( $args );
 
-	//echo "<pre>".print_r($attached_files, true)."<pre>";
 	foreach ( $attached_files as $key => $attached_file ) {
 		$attached_files_by_file[$attached_file->post_title] = & $attached_files[$key];
 	}
@@ -1861,7 +1805,6 @@ function wpsc_gateway_settings() {
 		foreach ( $_POST['wpsc_options'] as $key => $value ) {
 			if ( $value != get_option( $key ) ) {
 				update_option( $key, $value );
-				//$updated++;
 			}
 		}
 		unset( $_POST['wpsc_options'] );
@@ -1882,7 +1825,6 @@ function wpsc_gateway_settings() {
 
 	$nzshpcrt_gateways = nzshpcrt_get_gateways();
 	foreach ( $nzshpcrt_gateways as $gateway ) {
-		//if($gateway['internalname'] == get_option('payment_gateway'))
 		if ( in_array( $gateway['internalname'], $custom_gateways ) ) {
 			if ( isset( $gateway['submit_function'] ) ) {
 				call_user_func_array( $gateway['submit_function'], array( ) );
@@ -1902,8 +1844,6 @@ function wpsc_gateway_settings() {
 		$sendback = add_query_arg( 'page', 'wpsc-settings', $sendback );
 		$sendback = add_query_arg( 'tab', $_SESSION['wpsc_settings_curr_page'], $sendback );
 	}
-	//sexit($sendback);
-//   exit('<pre>'.print_r($_POST).'</pre>');
 	wp_redirect( $sendback );
 	exit();
 }
@@ -1954,7 +1894,6 @@ function wpsc_checkout_settings() {
 
 	/*
 	  // Save checkout options
-	  if (!isset($_POST['wpsc_checkout_option_label'])) $_POST['wpsc_checkout_option_label'] = '';
 	 */
 	$options = array( );
 	if ( is_array( $_POST['wpsc_checkout_option_label'] ) ) {
@@ -1989,10 +1928,7 @@ function wpsc_checkout_settings() {
 			if ( $_POST['unique_names'][$form_id] != '-1' ) {
 				$unique_name = $_POST['unique_names'][$form_id];
 			}
-			//  $form_order = $_POST['form_order'][$form_id];
 			$wpdb->query( "UPDATE `" . WPSC_TABLE_CHECKOUT_FORMS . "` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='" . $unique_name . "' WHERE `id` ='" . $form_id . "' LIMIT 1 ;" );
-			//echo "UPDATE `".WPSC_TABLE_CHECKOUT_FORMS."` SET `name` = '$form_name', `type` = '$form_type', `mandatory` = '$form_mandatory', `display_log` = '$form_display_log',`unique_name`='".$unique_name."', `checkout_set`='".$filter."' WHERE `id` ='".$form_id."' LIMIT 1 ;";
-			//echo "<br />";
 		}
 	}
 
@@ -2091,11 +2027,6 @@ function wpsc_settings_page_ajax() {
 	$page_title          = str_replace( "tab-", "", $modified_page_title );
 
 	check_admin_referer( $modified_page_title );
-
-	//require_once('includes/settings-pages/'.$functionname1.'.php');
-	//$functionname = "wpsc_options_".$functionname1;
-	//$html = $functionname();
-
 	switch ( $page_title ) {
 		case 'checkout' :
 			require_once( 'includes/settings-pages/checkout.php' );
@@ -2167,7 +2098,6 @@ function wpsc_update_variations() {
 
 	// return admin table listing
 	return wpsc_admin_product_listing( $product_id );
-	//return $post_data;
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'wpsc_update_variations') )
 	add_action( 'admin_init', 'wpsc_update_variations', 50 );
@@ -2194,8 +2124,6 @@ function wpsc_delete_variation_set() {
 		if ( !empty( $variation_set ) ) {
 			$return_value = wp_delete_term( $variation_set['term_id'], 'wpsc-variation' );
 		}
-		//echo "<pre>".print_r($variation_set, true)."</pre>";
-		//exit();
 		$deleted = 1;
 	}
 

@@ -2,7 +2,6 @@
 
 function wpsc_options_shipping() {
 	global $wpdb, $wpsc_shipping_modules, $external_shipping_modules, $internal_shipping_modules;
-//exit('<pre>'.print_r($wpsc_shipping_modules,true).'</pre>');
 // sort into external and internal arrays.
 	foreach ( $GLOBALS['wpsc_shipping_modules'] as $key => $module ) {
 		if ( isset( $module->is_external ) && ($module->is_external == true) ) {
@@ -56,7 +55,6 @@ function wpsc_options_shipping() {
 								<td>
 									<?php
 									$do_not_use_shipping = get_option( 'do_not_use_shipping' );
-									//	exit($do_not_use_shipping);
 									$do_not_use_shipping1 = "";
 									$do_not_use_shipping2 = "";
 									if( $do_not_use_shipping )

@@ -168,12 +168,7 @@ function wpsc_generate_product_feed() {
 
 	$output .= "  </channel>\n\r";
 	$output .= "</rss>";
-
 	echo $output;
-
 	exit();
-
 }
-
-
 ?>

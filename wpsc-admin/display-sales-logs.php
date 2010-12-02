@@ -34,7 +34,6 @@ function wpsc_display_sales_logs() {
 
    ?>
    <div class="wrap">
-      <?php //screen_icon(); ?>
       <h2><?php echo esc_html( __('Sales', 'wpsc') ); ?> </h2>
       <?php //START OF PURCHASE LOG DEFAULT VIEW ?>
       <?php
@@ -643,8 +642,6 @@ function wpsc_custom_checkout_fields(){
       </div>
       <?php
    }
-   //exit('<pre>'.print_r($purchlogitem, true).'</pre>');
-
 }
 
 /**

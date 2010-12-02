@@ -83,7 +83,6 @@ function wpsc_also_bought( $product_id ) {
 		$output = "<h2 class='prodtitles wpsc_also_bought' >" . __( 'People who bought this item also bought', 'wpsc' ) . "</h2>";
 		$output .= "<div class='wpsc_also_bought'>";
 		foreach ( (array)$also_bought as $also_bought_data ) {
-			//$also_bought_data = $also_bought_data[0];
 			$output .= "<div class='wpsc_also_bought_item' style='width: " . $element_widths . "px;'>";
 			if ( get_option( 'show_thumbnails' ) == 1 ) {
 				if ( $also_bought_data['image'] != null ) {
@@ -211,7 +210,6 @@ function wpsc_product_image_html( $image_name, $product_id ) {
 		$use_thumbnail_image = 'true';
 	}
 
-	//list($category['height'], $category['width']) =
 	if ( $category_id > 0 ) {
 		$category = $wpdb->get_row( "SELECT `image_height` AS `height`, `image_width` AS `width` FROM `" . WPSC_TABLE_PRODUCT_CATEGORIES . "` WHERE `id` IN ('{$category_id}') LIMIT 1", ARRAY_A );
 	}

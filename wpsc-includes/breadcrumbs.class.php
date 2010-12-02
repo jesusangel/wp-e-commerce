@@ -157,7 +157,6 @@ class wpsc_breadcrumbs {
 		} else {
 			$term_data = get_term_by('slug', 'uncategorized', 'wpsc_product_category');
 		}
-		//exit('<pre>'.print_r($term_data,1).'</pre>');
 		if( $term_data != false) {
 			$this->breadcrumbs[] = array(
 				'name' => htmlentities( $term_data->name, ENT_QUOTES, 'UTF-8'),
@@ -213,12 +212,8 @@ class wpsc_breadcrumbs {
 		if ($this->current_breadcrumb + 1 < $this->breadcrumb_count) {
 			return true;
 		} else if ($this->current_breadcrumb + 1 == $this->breadcrumb_count && $this->breadcrumb_count > 0) {
-			//do_action('wpsc_loop_end');
-			// Do some cleaning up after the loop,
 			$this->rewind_breadcrumbs();
 		}
-
-		//$this->in_the_loop = false;
 		return false;
 	}
 

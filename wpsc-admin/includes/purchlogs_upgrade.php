@@ -4,9 +4,7 @@
 	$numQueries = 0;
 	$purchlog =  "SELECT DISTINCT id FROM `".WPSC_TABLE_PURCHASE_LOGS."` LIMIT 1";
 	$id = $wpdb->get_var($purchlog);
-	//exit($id);
 	$usersql = "SELECT DISTINCT `".WPSC_TABLE_SUBMITED_FORM_DATA."`.value, `".WPSC_TABLE_CHECKOUT_FORMS."`.* FROM `".WPSC_TABLE_CHECKOUT_FORMS."` LEFT JOIN `".WPSC_TABLE_SUBMITED_FORM_DATA."` ON `".WPSC_TABLE_CHECKOUT_FORMS."`.id = `".WPSC_TABLE_SUBMITED_FORM_DATA."`.`form_id` WHERE `".WPSC_TABLE_SUBMITED_FORM_DATA."`.log_id=".$id." ORDER BY `".WPSC_TABLE_CHECKOUT_FORMS."`.`order`" ;
-	//exit($usersql);
 	$formfields = $wpdb->get_results($usersql);
 	
 	
@@ -16,15 +14,11 @@
 		$formfields = $wpdb->get_results($usersql);
 	
 	}	
-	//exit('<pre>'.print_r($formfields,true).'</pre>');
-	//echo '<pre>'.print_r($formfields, true).'</pre>';
 if(isset($_POST)){
-	//echo '<pre>'.print_r($_POST, true).'</pre>';
 	foreach($_POST as $key=>$value){
 		if($value != '-1'){
 			$sql = "UPDATE  `".WPSC_TABLE_CHECKOUT_FORMS."` SET `unique_name`='".$value."' WHERE id=".$key;
 			$complete = $wpdb->query($sql);
-	//	exit(' ' .$sql);
 		}
 		$numChaged++;
 		$numQueries ++;
@@ -102,7 +96,6 @@ function wpsc_select_options_purchlogs_fix($id){
 		}
 		
 	}
-	//exit('<pre>'.print_r($duplicate, true).'</pre>');
 	?>
 	<input type='submit' value='Apply' class='button-secondary action' />
 </form>

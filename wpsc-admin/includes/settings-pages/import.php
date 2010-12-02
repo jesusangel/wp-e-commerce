@@ -16,15 +16,11 @@ function wpsc_options_import() {
 		<input type='file' name='csv_file' />
 		<input type='submit' value='Import' class='button-primary'>
 <?php
-//exit('<pre>'.print_r($_FILES, true).'</pre>');
-
 		if ( isset( $_FILES['csv_file']['name'] ) && ($_FILES['csv_file']['name'] != '') ) {
 			ini_set( "auto_detect_line_endings", 1 );
 			$file = $_FILES['csv_file'];
-			//exit('<pre>'.print_r($file,true).'</pre>');
 			if ( move_uploaded_file( $file['tmp_name'], WPSC_FILE_DIR . $file['name'] ) ) {
 				$content = file_get_contents( WPSC_FILE_DIR . $file['name'] );
-				//exit('<pre>'.print_r(WPSC_FILE_DIR.$file['name'], true).'</pre>');
 				$handle = @fopen( WPSC_FILE_DIR . $file['name'], 'r' );
 				while ( ($csv_data = @fgetcsv( $handle, filesize( $handle ), "," )) !== false ) {
 					$fields = count( $csv_data );

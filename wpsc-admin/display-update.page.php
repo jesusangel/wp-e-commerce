@@ -50,7 +50,6 @@ if ( get_option( 'wpsc_version' ) < 3.8 || !get_option( 'wpsc_version' ) ) {
 function wpsc_display_update_page() { ?>
 
 	<div class="wrap">
-		<?php // screen_icon(); ?>
 		<h2><?php echo esc_html( __('Update WP e-Commerce', 'wpsc') ); ?> </h2>
 		<br />
 

@@ -17,20 +17,19 @@
 */
 function wpsc_products_shorttag($atts) {
 	$query = shortcode_atts(array(
-		'product_id' => 0, //done
+		'product_id' => 0,
 		'product_url_name' => null, 
-		'product_name' => null, //done
-		'category_id' => 0, //done
-		'category_url_name' => null, //done
-		'tag' => null, //done
-		'price' => 0, //done + if price = 'sale' it shows all sale products
-		'limit_of_items' => 0, //done
+		'product_name' => null,
+		'category_id' => 0,
+		'category_url_name' => null,
+		'tag' => null,
+		'price' => 0, //if price = 'sale' it shows all sale products
+		'limit_of_items' => 0,
 		'sort_order' => null, // author,date,title,modified,parent,ID,rand,comment_count
 		'order' => 'ASC', // ASC or DESC
-		'number_per_page' => 0, //done
-		'page' => 0, //done
+		'number_per_page' => 0,
+		'page' => 0,
 	), $atts);
-	//exit('Query <pre>'.print_r($query,true).'</pre>');
 	$post_id_array = explode(',',$query['product_id']);
 	$cat_id_array = explode(',',$query['category_id']);	
 	if(!empty($post_id_array) && count($post_id_array) > 1)
@@ -43,17 +42,11 @@ function wpsc_products_shorttag($atts) {
 	return wpsc_display_products_page($query);
 }
 add_shortcode('wpsc_products', 'wpsc_products_shorttag');
-//add_shortcode('productspage', 'wpsc_products_shorttag');
-
 
 function wpsc_buy_now_shortcode($atts){
 	$output = wpsc_buy_now_button( $atts['product_id'], true );
 	return $output;
 }
 
-
 add_shortcode('buy_now_button', 'wpsc_buy_now_shortcode');
-
-
-
 ?>

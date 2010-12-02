@@ -34,12 +34,6 @@ function wpsc_save_variation_set() {
 		}
 	}
 	
-	
-	
-	
-	 //print("<pre>".print_r($term,true)."</pre>");
-	 //exit("<pre>".print_r($_POST,true)."</pre>");
-	
 	if(($_POST['submit_action'] == "add") || ($_POST['submit_action'] == "edit")) {
 		check_admin_referer('edit-variation', 'wpsc-edit-variation');
 		  
@@ -51,8 +45,6 @@ function wpsc_save_variation_set() {
 				$term = wp_insert_term( $name, 'wpsc-variation',array('parent' => 0));
 			}
 			
-			//print("<pre>".print_r($term,true)."</pre>");
-			//exit("<pre>".print_r($_POST,true)."</pre>");
 		    if(!empty($term)) { 
 				$variation_id = $term['term_id'];
 				$variation_values = $_POST['new_variation_values'];
@@ -80,22 +72,15 @@ function wpsc_save_variation_set() {
 				));
 			}
 			
-			
-			
-			
-			//exit("<pre>".print_r($_POST, true)."</pre>");
 			foreach($_POST['variation_values'] as $variation_value_id => $variation_value_name) {
 				if(is_numeric($variation_value_id)) {
 					$variation_value_id = absint($variation_value_id);
 					wp_update_term($variation_value_id, 'wpsc-variation', array(
 						'name' => $variation_value_name
 					));
-					//$variation_value_state = $wpdb->get_results("SELECT `name` FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$variation_value_id' AND `variation_id` = '$variation_id' LIMIT 1",ARRAY_A);
-					//$variation_value_state = $variation_value_state[0]['name'];
 				}
 				
 				if($variation_value_state != $variation_value) {
-					//$wpdb->query("UPDATE `".WPSC_TABLE_VARIATION_VALUES."` SET `name` = '".$wpdb->escape($variation_value)."' WHERE `id` = '$variation_value_id' AND `variation_id` = '".$variation_id."' LIMIT 1;");
 				}
 			}
 			
@@ -120,7 +105,6 @@ function wpsc_save_variation_set() {
 		$sendback = add_query_arg('page', 'wpsc-edit-variations', $sendback);
 	}
 	$sendback = add_query_arg('message', 1, $sendback);
-	//exit($sendback);
 	wp_redirect($sendback);
 }
 
@@ -174,7 +158,6 @@ function wpsc_save_category_set() {
 			$term = wp_insert_term( $name, 'wpsc_product_category',array('parent' => $parent_category));
 
 			if (is_wp_error($term)) {
-//				$_GET['message'] = $term->get_error_code();
 				$sendback = add_query_arg('message',$term->get_error_code());
 				wp_redirect($sendback);
 				return;
@@ -185,14 +168,12 @@ function wpsc_save_category_set() {
 			$category = get_term_by('id', $category_id, 'wpsc_product_category');
 			$url_name=$category->slug;
 			
-			//$wp_rewrite->flush_rules(); 
 			if($category_id > 0) {
 				wpsc_update_categorymeta($category_id, 'nice-name', $url_name);
 				wpsc_update_categorymeta($category_id, 'description', $wpdb->escape(stripslashes($_POST['description'])));
 				if($image != '') {
 					wpsc_update_categorymeta($category_id, 'image', $image);
 				}
-				//wpsc_update_categorymeta($category_id, 'image', $image);
 				wpsc_update_categorymeta($category_id, 'fee', '0');
 				wpsc_update_categorymeta($category_id, 'active', '1');
 				wpsc_update_categorymeta($category_id, 'order', '0');
@@ -245,7 +226,6 @@ function wpsc_save_category_set() {
 					'name' => $name , 'parent' => $parent_category
 				));
 				$category = get_term($category_id, 'wpsc_product_category');
-				//$wp_rewrite->flush_rules(); 
 			}
 			
 			

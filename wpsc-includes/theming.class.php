@@ -121,7 +121,6 @@ class wpsc_theming {
 		@mkdir( $dst );
 
 		while ( false !== ( $file = readdir( $dir )) ) {
-			//exit($src.'<br /><pre>'.print_r($this->templates_to_move,true).'</pre>');
 			if ( in_array( $file, $this->templates_to_move ) ) {
 				if ( is_dir( $src . '/' . $file ) )
 					$this->recursive_copy( $src . '/' . $file, $dst . '/' . $file );

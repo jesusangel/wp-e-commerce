@@ -385,7 +385,6 @@ function wpsc_display_coupons_page() {
 						echo "  </tr>\n\r";
 						echo "  <tr class='coupon_edit'>\n\r";
 						echo "    <td colspan='7' style='padding-left:0px;'>\n\r";
-						//  $status_style = "style='display: block;'";
 						echo "      <div id='coupon_box_" . $coupon['id'] . "' class='displaynone modify_coupon' >\n\r";
 						coupon_edit_form( $coupon );
 						echo "      </div>\n\r";

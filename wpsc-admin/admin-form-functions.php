@@ -1,10 +1,7 @@
 <?php
-// ini_set('display_errors','1');
-
 function coupon_edit_form($coupon) {
 
 $conditions = unserialize($coupon['condition']);
-	//exit('<pre>'.print_r($coupon, true).'</pre>');
 
   $start_timestamp = strtotime($coupon['start']);
   $end_timestamp = strtotime($coupon['expiry']);
@@ -173,9 +170,7 @@ function setting_button(){
 	$output.="<li><a href='admin.php?page=wpsc-settings'>".__('Shop Settings', 'wpsc')."</a></li>";
 	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=gateway'>".__('Money and Payment', 'wpsc')."</a></li>";
 	$output.="<li><a href='admin.php?page=wpsc-settings&amp;tab=checkout'>".__('Checkout Page Settings', 'wpsc')."</a></li>";
-	//$output.="<li><a href='?page=".WPSC_DIR_NAME."/instructions.php'>Help/Upgrade</a></li>";
 	$output.="</ul>";
-//	$output.="<div>Checkout Settings</div>";
 	$output.="</span>&emsp;&emsp;</div>";
 	
 	return $output;
@@ -224,7 +219,6 @@ function wpsc_right_now() {
 		$output .= "<div class='inside'>";
 		$output .= "<div class='table'>";
 		$output .= "<p class='sub'>".__('At a Glance', 'wpsc')."</p>";
-		//$output.="<p class='youhave'>".__('You have <a href='admin.php?page=wpsc-edit-products'>:productcount:</a>, contained within <a href='admin.php?page=wpsc-edit-groups'>:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>";
 		$output .= "<table style='border-top:1px solid #ececec;'>";
 		$output .= "<tr class='first'>";
 		$output .= "<td class='first b'>";
@@ -281,13 +275,10 @@ function wpsc_right_now() {
 		$output.="	<h3 class='reallynow'>\n\r";
 		$output.="		<a class='rbutton' href='admin.php?page=wpsc-edit-products'><strong>".__('Add New Product', 'wpsc')."</strong></a>\n\r";
 		$output.="		<span>"._('Right Now')."</span>\n\r";
-		//$output.="		<br class='clear'/>\n\r";
 		$output.="	</h3>\n\r";
 		$output.="<p class='youhave'>".__('You have <a href="admin.php?page=wpsc-edit-products">:productcount:</a>, contained within <a href="admin.php?page=wpsc-edit-groups">:groupcount:</a>. This month you made :salecount: and generated a total of :monthtotal: and your total sales ever is :overaltotal:. You have :pendingcount: awaiting approval.', 'wpsc')."</p>\n\r";
 		$output.="	<p class='youare'>\n\r";
 		$output.="		".__('You are using the :theme: style. This is WP e-Commerce :versionnumber:.', 'wpsc')."\n\r";
-		//$output.="		<a class='rbutton' href='themes.php'>Change Theme</a>\n\r";
-		//$output.="<span id='wp-version-message'>This is WordPress version 2.6. <a class='rbutton' href='http://wordpress.org/download/'>Update to 2.6.1</a></span>\n\r";
 		$output.="		</p>\n\r";
 		$output.="</div>\n\r";
 		$output.="<br />\n\r";
@@ -301,7 +292,6 @@ function wpsc_packing_slip($purchase_id) {
 	global $wpdb;
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
-			
 					//echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
@@ -402,7 +392,7 @@ function wpsc_packing_slip($purchase_id) {
 				if(($j % 2) != 0) {
 					$alternate = "class='alt'";
 				}
-				//$cart_row['prodid']
+				// product ID will be $cart_row['prodid']. need to fetch name and stuff 
 				
 				$variation_list = '';
 				

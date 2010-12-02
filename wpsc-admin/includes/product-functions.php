@@ -212,8 +212,7 @@ function wpsc_sanitise_product_forms($post_data = null) {
 	*
 	* @param unknown 
 	* @return unknown
-*/
- // exit('Image height'.get_option('product_image_height'));	
+*/	
 function wpsc_insert_product($post_data, $wpsc_error = false) {
 	global $wpdb, $user_ID;
 	$adding = false;
@@ -337,9 +336,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	// and the meta
 	wpsc_update_product_meta($product_id, $post_data['meta']);
 	
-	// the variations too :jghazally commented this out cause it was OTT 20/8/2010
-	//wpsc_edit_product_variations($product_id, $post_data);
-	
 	// and the custom meta
 	wpsc_update_custom_meta($product_id, $post_data);
 	
@@ -355,7 +351,6 @@ function wpsc_insert_product($post_data, $wpsc_error = false) {
 	  	wpsc_item_reassign_file($product_id, $post_data['select_product_file']);
 	}
 	
-	//exit('<pre>'.print_r($post_data, true).'</pre>');
 	if(isset($post_data['files']['preview_file']['tmp_name']) && ($post_data['files']['preview_file']['tmp_name'] != '')) {
  		wpsc_item_add_preview_file($product_id, $post_data['files']['preview_file']);
 	}
@@ -464,11 +459,8 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 	
 	
 	$variation_sets_and_values = array_merge($variation_sets, $variation_values);
-	//echo 'Existing Product Terms<pre>'.print_r($product_terms,1).'</pre>';
 	wp_set_object_terms($product_id, $variation_sets_and_values, 'wpsc-variation');
 	
-	//echo('Variation Sets and Values<pre>'.print_r($variation_sets_and_values, true).'</pre>');
-	//echo('Combinations<pre>'.print_r($combinations, true).'</pre>');
 	$child_product_template = array(
 		'post_author' => $user_ID,
 		'post_content' => $post_data['description'],
@@ -503,10 +495,7 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 		$product_values['post_title'] .= " (".implode(", ", $term_names).")";
 		$product_values['post_name'] = sanitize_title($product_values['post_title']);
 
-		// wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array() ) {
-
 		$selected_post = get_posts(array(
-			//'numberposts' => 1,
 			'name' => $product_values['post_name'],
 			'post_parent' => $product_id,
 			'post_type' => "wpsc-product",
@@ -534,7 +523,6 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			wp_set_object_terms($child_product_id, $term_slugs, 'wpsc-variation');
 		}
 		//JS - 7.9 - Adding loop to include meta data in child product.
-		//echo("Child Product meta: <pre>".print_r($child_product_meta)."</pre>");
 		if(!$already_a_variation){
 			foreach ($child_product_meta as $meta_key => $meta_value ) :
 				if ($meta_key == "_wpsc_product_metadata") {
@@ -550,7 +538,6 @@ function wpsc_edit_product_variations($product_id, $post_data) {
 			$price = array();
 				foreach ($term_ids as $term_id_price) {
 					$price[] = term_id_price($term_id_price, $child_product_meta["_wpsc_price"][0]);
-					//$price[] = $term_id_price;
 				}
 				rsort($price);
 				$price = $price[0];	
@@ -608,7 +595,6 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 	$sql = "SELECT `isocode` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`=".$newCurrency;
 	$isocode = $wpdb->get_var($sql);
 	
-	//echo('<pre>'.print_r($old_curr,true).'</pre>');
 	$newCurrency = 'currency';
 	$old_curr[$isocode] = $newPrice;
 	if(($newPrice != '') &&  ($newPrice > 0)){
@@ -620,8 +606,6 @@ function wpsc_update_alt_product_currency($product_id, $newCurrency, $newPrice){
 		update_product_meta($product_id, $newCurrency, $old_curr);
 
 	}
-	
-	//exit('<pre>'.print_r($newCurrency, true).'</pre>'.$newPrice);
 }
 /**
  * wpsc_update_categories function 
@@ -774,7 +758,6 @@ function wpsc_ajax_toggle_publish() {
 	$status = (wpsc_toggle_publish_status($_REQUEST['productid'])) ? ('true') : ('false');
 	exit( $status );
 }
-//add_action('wp_ajax_wpsc_toggle_publish','wpsc_ajax_toggle_publish');
 /*
 /*  END - Publish /No Publish functions
 */
@@ -818,16 +801,13 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 			$time = $post->post_date;
 	}
 
-	//$name = basename($submitted_file['name']);
 	$file = wp_handle_upload($submitted_file, $overrides, $time);
 
 	if ( isset($file['error']) )
 		return new WP_Error( 'upload_error', $file['error'] );
 
 	$name_parts = pathinfo($file['file']);
-	//$name = trim( substr( $name, 0, -(1 + strlen($name_parts['extension'])) ) );
 	$name = $name_parts['basename'];
-	//echo "<pre>".print_r($name_parts,true)."</pre>"; exit();
 
 	$url = $file['url'];
 	$type = $file['type'];
@@ -849,12 +829,9 @@ function wpsc_item_process_file($product_id, $submitted_file, $preview_file = nu
 	// Save the data
 	$id = wp_insert_post($attachment, $file, $product_id);
 	remove_filter('upload_dir', 'wpsc_modify_upload_directory');
-	//return $id;
-	//exit($id);
 }
 
 function wpsc_modify_upload_directory($input) {
-	//echo "<pre>".print_r($input,true)."</pre>";
 	$previous_subdir = $input['subdir'];
 	$download_subdir = str_replace($input['basedir'], '', WPSC_FILE_DIR);
 	
@@ -862,7 +839,6 @@ function wpsc_modify_upload_directory($input) {
 	$input['url'] = str_replace($previous_subdir, $download_subdir, $input['url']);
 	$input['subdir'] = str_replace($previous_subdir, $download_subdir, $input['subdir']);
 	
-	//echo "<pre>".print_r($input,true)."</pre>";
 	return $input;
 }
   
@@ -910,26 +886,24 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 			$file_is_attached = true;
 		}
 		
-		//if(is_file($selected_file_path)) {
-			if($file_is_attached == false ) {
-				$type = wpsc_get_mimetype($selected_file_path);
-				$attachment = array(
-					'post_mime_type' => $type,
-					'post_parent' => $product_id,
-					'post_title' => $selected_file,
-					'post_content' => '',
-					'post_type' => "wpsc-product-file",
-					'post_status' => 'inherit'
-				);
-				wp_insert_post($attachment);
-			} else {
-				$product_post_values = array(
-					'ID' => $attached_files_by_file[$selected_file]->ID,
-					'post_status' => 'inherit'
-				);
-				wp_update_post($product_post_values);			
-			}
-		//}
+		if($file_is_attached == false ) {
+			$type = wpsc_get_mimetype($selected_file_path);
+			$attachment = array(
+				'post_mime_type' => $type,
+				'post_parent' => $product_id,
+				'post_title' => $selected_file,
+				'post_content' => '',
+				'post_type' => "wpsc-product-file",
+				'post_status' => 'inherit'
+			);
+			wp_insert_post($attachment);
+		} else {
+			$product_post_values = array(
+				'ID' => $attached_files_by_file[$selected_file]->ID,
+				'post_status' => 'inherit'
+			);
+			wp_update_post($product_post_values);			
+		}
 	}
 	
 	
@@ -942,11 +916,7 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 			wp_update_post($product_post_values);
 		}
 	}
-	
-	
-	//
-	//exit('<pre>'.print_r($attached_files, true).'</pre>');
-	//update_product_meta($product_id, 'product_files', $product_file_list);
+
 	return $fileid;
 }
 
@@ -965,7 +935,6 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
 	$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='{$current_file_id}' LIMIT 1",ARRAY_A);
 	
 	if(apply_filters( 'wpsc_filter_file', $preview_file['tmp_name'] )) {
-	  //echo "test?";
 		if(function_exists("make_mp3_preview"))	{
 			if($mimetype == "audio/mpeg" && (!isset($preview_file['tmp_name']))) {
 				// if we can generate a preview file, generate it (most can't due to sox being rare on servers and sox with MP3 support being even rarer), thus this needs to be enabled by editing code
@@ -977,13 +946,11 @@ function wpsc_item_add_preview_file($product_id, $preview_file) {
 				copy($preview_file['tmp_name'], (WPSC_PREVIEW_DIR.$preview_filename));
 				$preview_filepath = (WPSC_PREVIEW_DIR.$preview_filename);
 				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '{$file_data['id']}' LIMIT 1");
-				//exit("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '{$file_data['id']}' LIMIT 1");
 			}
 			$stat = stat( dirname($preview_filepath));
 			$perms = $stat['mode'] & 0000666;
 			@ chmod( $preview_filepath, $perms );	
 		}
-		//exit("<pre>".print_r($preview_file,true)."</pre>");
 		return $fileid;
    } else {
  		return $selected_files;
@@ -1025,7 +992,6 @@ function wpsc_variation_combinator($variation_sets) {
 	          
 	
 	function get_combinations($batch, $elements, $i)  {
-		//echo "<pre>".print_r($batch,true)."</pre>";
         if ($i >= count($elements)) {
             $this->combinations[] = $batch;
         } else {     

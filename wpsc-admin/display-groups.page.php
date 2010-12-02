@@ -151,7 +151,6 @@ function wpsc_admin_category_group_list() {
  */
 
 function wpsc_admin_display_category_row($category,$subcategory_level = 0) {
-	//echo "<pre>".print_r($category,true)."</pre>";
 	$category_image = wpsc_get_categorymeta($category->term_id, 'image');
 	?>
 	<tr>
@@ -389,7 +388,7 @@ function wpsc_admin_category_forms($category_id =  null) {
 		}
 		$output .= "   </td>\n\r";
 		$output .= " </tr>\n\r";
-		////////
+
 		echo $output;
 		?>
 	</div>

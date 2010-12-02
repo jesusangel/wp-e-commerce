@@ -44,45 +44,6 @@ function wpsc_options_general() {
 				</td>
 			</tr>
 			<?php
-						/* SEE TAX SETTINGS PAGE
-						  <tr>
-						  <th scope="row"><?php _e('Tax Settings', 'wpsc');?>:</th>
-						  <td>
-						  <span id='options_region'>
-						  <?php
-						  $country_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `isocode`='".get_option('base_country')."' LIMIT 1",ARRAY_A);
-						  echo $country_data['country'];
-						  $region_count = $wpdb->get_var("SELECT COUNT(*) AS `count` FROM `".WPSC_TABLE_REGION_TAX."`, `".WPSC_TABLE_CURRENCY_LIST."`  WHERE `".WPSC_TABLE_CURRENCY_LIST."`.`isocode` IN('".get_option('base_country')."') AND `".WPSC_TABLE_CURRENCY_LIST."`.`id` = `".WPSC_TABLE_REGION_TAX."`.`country_id`") ;
-						  if($country_data['has_regions'] == 1) {
-						  ?>&nbsp;&nbsp;&nbsp;&nbsp;<a href='<?php echo add_query_arg(array( 'page' => 'wpsc-settings', 'isocode' => get_option('base_country') )); ?>'><?php echo $region_count ?> Regions</a>
-						  <?php } else { ?>
-						  <input type='hidden' name='country_id' value='<?php echo $country_data['id']; ?>' />
-						  &nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='country_tax' class='tax_forms' maxlength='5' size='5' value='<?php echo $country_data['tax']; ?>' />%
-						  <?php }  ?>
-						  </span>
-						  </td>
-						  </tr>
-						  <tr>
-						  <th scope="row"><?php _e('Tax Included in prices','wpsc') ?>:</th>
-						  <td>
-						  <?php
-						  $tax_inprice0= '';
-						  $tax_inprice1= '';
-						  if(wpsc_tax_isincluded()){
-						  $tax_inprice1= 'checked="checked"';
-						  }else{
-						  $tax_inprice0= 'checked="checked"';
-						  }
-						  ?>
-						  <input <?php echo $tax_inprice1; ?> type='radio' name='wpsc_options[tax_inprice]' value='1' id='tax_inprice1' />
-						  <label for='tax_inprice1'><?php _e('Yes', 'wpsc'); ?></label>
-						  <input <?php echo $tax_inprice0; ?> type='radio' name='wpsc_options[tax_inprice]' value='0' id='tax_inprice0' />
-						  <label for='tax_inprice1'><?php _e('No', 'wpsc'); ?></label>
-						  </td>
-						  </tr>
-						  END SEE TAX SETTINGS PAGE */
-			?>
-			<?php
 						/* START OF TARGET MARKET SELECTION */
 						$countrylist = $wpdb->get_results( "SELECT id,country,visible FROM `" . WPSC_TABLE_CURRENCY_LIST . "` ORDER BY country ASC ", ARRAY_A );
 			?>

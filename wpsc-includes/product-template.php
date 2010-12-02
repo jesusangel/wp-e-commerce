@@ -162,8 +162,6 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 			}
 			$count ++;
 		}
-
-	
 	}
 	
 	if($current_page < $totalpages) {
@@ -221,7 +219,6 @@ function wpsc_product_image( $attachment_id = 0, $width = null, $height = null )
 
 
 		$attachment_metadata = $image_meta['_wp_attachment_metadata'];
-		//echo '<br style="clear:both" /><pre>'.print_r($image_meta,1).'</pre>';
 		// Determine if we already have an image of this size
 		if ( isset( $attachment_metadata['sizes'] ) && (count( $attachment_metadata['sizes'] ) > 0) && ( isset( $attachment_metadata['sizes'][$intermediate_size] ) ) ) {
 			$intermediate_image_data = image_get_intermediate_size( $attachment_id, $intermediate_size );
@@ -344,8 +341,6 @@ function wpsc_calculate_price( $product_id, $variations = null, $special = true 
  */
 function wpsc_display_categories() {
 	global $wp_query;
-
-	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	$output = false;
 	if ( !is_numeric( get_option( 'wpsc_default_category' ) ) ) {
 
@@ -395,15 +390,12 @@ function wpsc_display_products() {
  * @return string - the URL of the current page
  */
 function wpsc_this_page_url() {
-	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query, $wp_query;
-	//echo "<pr".print_r($wpsc_query->category,true)."</pre>";
 	if ( $wpsc_query->is_single === true ) {
 		$output = wpsc_product_url( $wp_query->post->ID );
 	} else if ( isset( $wpsc_query->category ) && $wpsc_query->category != null ) {
 		$output = wpsc_category_url( $wpsc_query->category );
 		if ( $wpsc_query->query_vars['page'] > 1 ) {
-			//
 			if ( get_option( 'permalink_structure' ) ) {
 				$output .= "page/{$wpsc_query->query_vars['page']}/";
 			} else {
@@ -424,7 +416,6 @@ function wpsc_this_page_url() {
  */
 function wpsc_is_single_product() {
 	global $wp_query;
-	//echo "<pre>".print_r($wpsc_query->is_single,true)."</pre>";
 	if ( $wp_query->is_single === 1 )
 		$state = true;
 	else
@@ -438,7 +429,6 @@ function wpsc_is_single_product() {
  * @return string - the class of the selected category
  */
 function wpsc_category_class() {
-	//_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpdb, $wp_query;
 
 	$category_nice_name = '';
@@ -452,13 +442,11 @@ function wpsc_category_class() {
 	}
 
 	if ( (int)$catid > 0 ){
-		//exit($catid);
 		$term = get_term($catid, 'wpsc_product_category');
 		$category_nice_name = $term->slug;
 	}else if ( $catid == 'all' ){
 		$category_nice_name = 'all-categories';
 }
-	//exit("<pre>".print_r(get_option('wpsc_default_category'),true)."</pre>");
 	return $category_nice_name;
 }
 
@@ -470,7 +458,7 @@ function wpsc_current_category_name() {
 	global $wp_query;
 	$term_data = get_term( $wp_query->post->term_id, 'wpsc_product_category' );
 
-	return $term_data->name; //$wpsc_query->product['category'];
+	return $term_data->name;
 }
 
 /**
@@ -730,7 +718,6 @@ function wpsc_check_variation_stock_availability( $product_id, $variations ) {
 	}
 
 	if ( wpsc_product_has_stock( $the_selected_product ) ) {
-		//exit('Stock Count is: '. $the_selected_product);
 		$stock = get_product_meta( $the_selected_product, "stock", true );
 		$stock = apply_filters( 'wpsc_product_variation_stock', $stock, $id );
 
@@ -927,7 +914,6 @@ function wpsc_product_postage_and_packaging() {
 		$id = get_the_ID();
 
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
-	//echo "<pre>".print_r($product_meta, true)."</pre>";
 	if ( is_array( $product_meta['shipping'] ) &&  1 != $product_meta['no_shipping'])
 		return wpsc_currency_display( $product_meta['shipping']['local'] );
 	else
@@ -1135,8 +1121,6 @@ function wpsc_product_comment_link() {
  * @return string - javascript for the intensedebate comments
  */
 function wpsc_product_comments() {
-//Commenting out deprecated functions - they aren't used properly, they need to specify the function that should be used.
-//	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	global $wpsc_query;
 	$output = '';
 	// add the product comments
@@ -1298,7 +1282,6 @@ function wpsc_vargrp_id() {
  */
 function wpsc_the_variation_name() {
 	global $wpsc_variations;
-	//exit('<pre>'.print_r($wpsc_variations,1).'</pre>');
 	return stripslashes( $wpsc_variations->variation->name );
 }
 
@@ -1416,10 +1399,7 @@ function wpsc_product_new_rating( $product_id ) {
 	if ( $vote_id > 0 )
 		$previous_vote = $wpdb->get_var( "SELECT `rated` FROM `" . WPSC_TABLE_PRODUCT_RATING . "` WHERE `id`='" . $vote_id . "' LIMIT 1" );
 
-	//print("<pre>".print_r($previous_vote, true)."</pre>");
-	//print("<pre>".print_r(func_get_args(), true)."</pre>");
 	$output = "<form class='wpsc_product_rating' method='post'>\n";
-	//$output .= "			<input type='hidden' name='product_id' value='{$product_id}' />\n";
 	$output .= "			<input type='hidden' name='wpsc_ajax_action' value='rate_product' />\n";
 	$output .= "			<input type='hidden' class='wpsc_rating_product_id' name='product_id' value='{$product_id}' />\n";
 	$output .= "			<select class='wpsc_select_product_rating' name='product_rating'>\n";
@@ -1452,7 +1432,6 @@ function wpsc_currency_sign() {
  * @return boolean - true if we have pages
  */
 function wpsc_has_pages() {
-//	_deprecated_function( __FUNCTION__, '3.8', 'the updated '.__FUNCTION__.'' );
 	if(1 == get_option('use_pagination'))
 		return true;
 	else
@@ -1549,7 +1528,6 @@ function wpsc_the_variation_price( $return_as_numeric = false ) {
 			'post_type' => 'wpsc-product',
 			'post_parent' => $product_id );
 		$query = new WP_Query( $wpq );
-	//	exit('<pre>'.print_r($query,true).'</pre>');
 		// Should never happen
 		if ( $query->post_count != 1 )
 			return false;
@@ -1558,8 +1536,6 @@ function wpsc_the_variation_price( $return_as_numeric = false ) {
 
 		$price = get_product_meta( $variation_product_id, "price",true );
 		$special_price = get_product_meta( $variation_product_id, "special_price", true );
-//exit($price .'<<<price');
-//		$price = $price[0];
 		if($special_price < $price && $special_price > 0)
 			$price = $special_price;
 		if ( !$return_as_numeric ) {

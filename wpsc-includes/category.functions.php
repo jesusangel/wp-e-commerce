@@ -177,46 +177,11 @@ function wpsc_end_category_query() {
 function wpsc_display_category_loop($query, $category_html, &$category_branch = null){
 	static $category_count_data = array(); // the array tree is stored in this
 	global $wpdb, $wpsc_query;
-	/*
-	$category_sql_segments = array();
-	
-	$category_sql_segments[] = "`active`='1'";
-	if(is_numeric($query['category_group']) ) {
-		$category_group = absint($query['category_group']);
-		$category_sql_segments[] = "`group_id`='$category_group'";
-	} elseif($query['category_group']=='all' || $query['category_group']=='all+list') {
-		$category_group = 1;
-	}
-	
-	
-	/// select by parent category
-	$category_sql_segments[] = "`category_parent` = '".absint($query['parent_category_id'])."'";
-	
-	// order by what in which direction
-	if(!isset($query['order_by'])) {
-		$query['order_by'] = array("column" => 'name', "direction" =>'asc');
-	}
-	
-	$column = $wpdb->escape($query['order_by']['column']);
-	
-	if(strtolower($query['order_by']['direction']) == "desc") {
-		$order = "DESC";
-	} else {
-		$order = "ASC";
-	}
-	
-	// filter for other plugins
-	$category_sql_segments = apply_filters('wpsc_display_category_loop_category_sql_segments', $category_sql_segments); 
-	$category_data = $wpdb->get_results("SELECT  `id`, `name`, `nice-name`, `description`, `image` FROM `".WPSC_TABLE_PRODUCT_CATEGORIES."` WHERE ".implode(" AND ", $category_sql_segments)." ORDER BY `{$column}` $order",ARRAY_A);
-	//*/
 	
 	
 	$category_id = absint($query['parent_category_id']);
 	
-
-	//exit("<pre>".print_r($category_data,true)."</pre>");
 	$category_data = get_terms('wpsc_product_category','hide_empty=0&parent='.$category_id, OBJECT, 'display');
-	//print("<pre>".print_r($category_data,true)."</pre>");
 	$output ='';
 	
 	// if the category branch is identical to null, make it a reference to $category_count_data
@@ -224,8 +189,6 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		$category_branch =& $category_count_data;
 	}
 
-	
-	//$current_category_level = array();
 	foreach((array)$category_data as $category_row) {
 	
 		// modifys the query for the next round
@@ -262,7 +225,6 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		// grab the product count from the subcategories		
 		foreach((array)$category_branch[$category_row->term_id]['children'] as $child_category) {
 			$category_branch[$category_row->term_id]['count'] += (int)$child_category['count'];
-			//echo "<pre>".print_r($child_category, true)."</pre>";
 		}
 		
 		// stick the category count array together here
@@ -330,12 +292,6 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		// Stick all the category html together and concatenate it to the previously generated HTML
 		$output .= str_replace($tags_to_replace, $content_to_place ,$category_html);
 	}
-	
-	if($_GET['debug'] == 'true') {
-		//echo "<pre>".print_r($category_count_data,true)."</pre>";
-		//phpinfo();
-	}
-
 	return $output;
 }
 
@@ -351,7 +307,6 @@ function wpsc_place_category_image($category_id, $query) {
 		global $wpsc_query, $wpdb;
 		$width = $query['image_size']['width'];
 		$height = $query['image_size']['height'];
-		//echo "<pre>".print_r($query, true)."</pre>";
 		$image_url = "index.php?wpsc_request_image=true&category_id=".$category_id."&width=".$width."&height=".$height;
 		return htmlspecialchars($image_url);
 }

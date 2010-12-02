@@ -10,14 +10,12 @@ function wpsc_uses_coupons() {
 		$wpsc_coupons = new wpsc_coupons();
 	}
 	if(is_object($wpsc_coupons)) {
-//	exit('<pre>'.print_r($wpsc_coupons,true).'</pre>');
 		return $wpsc_coupons->uses_coupons();
 	}
 	return false;
 }
 function wpsc_coupons_error(){
 	global $wpsc_coupons;
-	//exit('<pre>'.print_r($wpsc_coupons, true).'</pre>');
 	if(isset($wpsc_coupons->errormsg) && $wpsc_coupons->errormsg == false){
 		return true;
 	}else{
@@ -143,14 +141,6 @@ class wpsc_coupons {
 		
 			//Loop throught all products in the shopping cart, apply coupons on the ones match the conditions. 
 			$cart  =& $wpsc_cart->have_cart_items();
-		//	exit('<pre>'.print_r($cart->, true).'</pre>');
-			/*
-foreach($wpsc_cart->cart_items as $key => $cart_item) {
-				echo '<pre>'.print_r($cart_item, true).'</pre>';
-			}
-*/
-			//exit('<pre>'.print_r($this, true).'</pre>');
-			
 				foreach ($wpsc_cart->cart_items as $key => $item) {
 					
 					$product_data = $wpdb->get_results("SELECT * FROM ". $wpdb->posts ." WHERE id='{$item->product_id}'");
@@ -184,7 +174,6 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 							if($this->every_product == 1){
 								$return += $item->discount;
 							}else{
-								//exit('<pre>'.print_r($this,true).'</pre>');
 								return $item->discount;
 							}
 						}
@@ -306,7 +295,6 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				return false;
 			}
 		} else if ($c['property'] == 'total_quantity'){
-//			exit('<pre>'.print_r($product_obj, true).'</pre>');
 			$total_quantity = $product_obj->quantity;
 			switch($c['logic']) {
 				case 'equal'://Checks if the quantity of products in the cart equals condition value
@@ -330,7 +318,6 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 		
 		} else if ($c['property'] == 'subtotal_amount'){
 			$subtotal = wpsc_cart_total(false);
-			//exit('<pre>'.print_r($subtotal,true).'</pre>');
 			switch($c['logic']) {
 				case 'equal'://Checks if the subtotal of products in the cart equals condition value
 				if ($subtotal == $c['value'])
@@ -338,14 +325,12 @@ foreach($wpsc_cart->cart_items as $key => $cart_item) {
 				break;
 				
 				case 'greater'://Checks if the subtotal of the cart is greater than the condition value
-			//	exit('triggered here'.$subtotal.'>'.$c['value']);
 				if ($subtotal > $c['value'])
 					return true;
 				break;
 				
 				case 'less'://Checks if the subtotal of the cart is less than the condition value
 				if ($subtotal < $c['value']){
-					//exit('<pre>'.print_r($product_obj->cart->subtotal, true).'</pre>cValue'.$c['value']);
 					return true;
 				}else{
 					return false;

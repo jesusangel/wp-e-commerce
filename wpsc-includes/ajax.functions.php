@@ -11,7 +11,6 @@
 function wpsc_special_widget() {
 	global $wpdb;
 	wpsc_add_to_cart();
-	//exit();
 }
 
 if ( isset( $_REQUEST['wpsc_ajax_action'] ) && ($_REQUEST['wpsc_ajax_action'] == 'special_widget' || $_REQUEST['wpsc_ajax_action'] == 'donations_widget') ) {
@@ -69,7 +68,6 @@ function wpsc_add_to_cart() {
 	if ( ((float)$_POST['donation_price'] > 0 ) ) {
 		$provided_parameters['provided_price'] = (float)$_POST['donation_price'];
 	}
-	//exit();
 	$parameters = array_merge( $default_parameters, (array)$provided_parameters );
 
 	$state = $wpsc_cart->set_item( $product_id, $parameters );
@@ -310,7 +308,6 @@ if ( isset( $_REQUEST['wpsc_update_quantity'] ) && ($_REQUEST['wpsc_update_quant
 
 function wpsc_update_product_rating() {
 	global $wpdb;
-	//exit("<pre>".print_r($_POST, true)."</pre>");
 	$nowtime = time();
 	$product_id = absint( $_POST['product_id'] );
 	$ip_number = $wpdb->escape( $_SERVER['REMOTE_ADDR'] );
@@ -397,7 +394,6 @@ function wpsc_update_product_price() {
 			$from = apply_filters('wpsc_product_variation_text',$from);
 		}
 	}
-	//echo '<pre>'.print_r($variations,1).'</pre>';
 	do_action( 'wpsc_update_variation_product', (int)$_POST['product_id'], $variations );
 	$pm = $_POST['pm'];
 
@@ -469,12 +465,9 @@ function wpsc_update_location() {
 	$wpsc_cart->update_location();
 	$wpsc_cart->get_shipping_method();
 	$wpsc_cart->get_shipping_option();
-	//echo $wpsc_cart->shipping_method;
 	if ( $wpsc_cart->selected_shipping_method != '' ) {
 		$wpsc_cart->update_shipping( $wpsc_cart->selected_shipping_method, $wpsc_cart->selected_shipping_option );
 	}
-	//echo "<pre>".print_r($wpsc_cart, true)."</pre>";
-	//exit();
 
 	if ( isset( $_GET['ajax'] ) && $_GET['ajax'] == 'true' ) {
 		exit();
@@ -547,7 +540,7 @@ function wpsc_submit_checkout() {
 		$is_valid = false;
 	
 	if ( (get_option( 'do_not_use_shipping' ) != 1) && (in_array( 'ups', (array)$options )) && $_SESSION['wpsc_zipcode'] == '' ) {
-		if ( $num_items != $disregard_shipping ) { //<-- new line of code
+		if ( $num_items != $disregard_shipping ) {
 			$_SESSION['categoryAndShippingCountryConflict'] = __( 'Please enter a Zipcode and click calculate to proceed' );
 			$is_valid = false;
 		}
@@ -765,15 +758,11 @@ function wpsc_change_tax() {
 
 	ob_end_clean();
 
-	//exit("/*<pre>".print_r($wpsc_cart,true)."</pre>*/");
 	$output = str_replace( Array( "\n", "\r" ), Array( "\\n", "\\r" ), addslashes( $output ) );
 	if ( get_option( 'lock_tax' ) == 1 ) {
-		//echo "jQuery('#region').val(".$_SESSION['wpsc_delivery_region']."); \n";
 		echo "jQuery('#current_country').val('" . $_SESSION['wpsc_delivery_country'] . "'); \n";
 		if ( $_SESSION['wpsc_delivery_country'] == 'US' && get_option( 'lock_tax' ) == 1 ) {
-			//exit('<pre>'.print_r($_SESSION, true).'</pre>');
 			$output = wpsc_shipping_region_list( $_SESSION['wpsc_delivery_country'], $_SESSION['wpsc_delivery_region'] );
-			// echo 'jQuery("#change_country").append(\''.$output.'\');\n\r';
 			$output = str_replace( Array( "\n", "\r" ), Array( "\\n", "\\r" ), addslashes( $output ) );
 			echo "jQuery('#region').remove();\n\r";
 			echo "jQuery('#change_country').append(\"" . $output . "\");\n\r";
@@ -865,7 +854,6 @@ function wpsc_change_tax() {
 	}
 	echo "jQuery('#checkout_tax').html(\"<span class='pricedisplay'>" . wpsc_cart_tax() . "</span>\");\n\r";
 	echo "jQuery('#checkout_total').html(\"<span class='pricedisplay'>{$total}</span><input id='shopping_cart_total_price' type='hidden' value='{$total}' />\");\n\r";
-	//echo "\n\r/*\n\r{$wpsc_cart->tax_percentage}\n\r*/\n\r";
 	exit();
 }
 
@@ -927,7 +915,6 @@ function wpsc_scale_image() {
 					$generate_thumbnail = false;
 				}
 			}
-			//header("Location: ".$cache_url.$cache_filename.$extension);
 		}
 
 		if ( $generate_thumbnail == true ) {
@@ -938,9 +925,6 @@ function wpsc_scale_image() {
 			$intermediate_image_data = image_get_intermediate_size( $attachment_id, $intermediate_size );
 		}
 
-		//
-		//echo "<pre>".print_r((int)$generate_thumbnail,true)."</pre>";
-		//echo "<pre>".print_r($intermediate_image_data,true)."</pre>";
 		/// if we are serving the page using SSL, we have to use for the image too.
 		if ( is_ssl ( ) ) {
 			$output_url = str_replace( "http://", "https://", $intermediate_image_data['url'] );
@@ -983,8 +967,7 @@ function wpsc_download_file() {
 		}
 
 		$file_id = $download_data['fileid'];
-		$file_data = wpsc_get_downloadable_files($download_data['product_id']);			
-		//echo '<pre>'.print_r($file_data,1).'</pre>';	
+		$file_data = wpsc_get_downloadable_files($download_data['product_id']);				
 		if(($count =count($file_data)) >= 1){
 			$file_data = $file_data[$count-1];
 		}else{
@@ -1038,13 +1021,10 @@ function wpsc_download_file() {
 				if(!empty($file_name))
 					$file_path = WPSC_FILE_DIR . basename( $file_hash );
 				$file_path = WPSC_FILE_DIR . $file_data->post_name;
-			//exit('damn its not a file?~'.$file_path);
 			}
 
 			if ( is_file( $file_path ) ) {
-set_time_limit(0);		
-
-//	exit('thanks freag it werks'.filesize($file_path));
+				set_time_limit(0);		
 				header( 'Content-Type: ' . $file_data->post_mime_type );
 				header( 'Content-Length: ' . filesize( $file_path ) );
 				header( 'Content-Transfer-Encoding: binary' );

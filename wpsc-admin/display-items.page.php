@@ -9,14 +9,6 @@
  */
 require_once(WPSC_FILE_PATH . '/wpsc-admin/includes/products.php');
 
-
-/*function wpsc_image_downsize( $id, $size ) {
-	echo "<pre>" . print_r( func_get_args(), true ) . "</pre>";
-	exit();
-}
-*/
-//add_filter('image_downsize', 'wpsc_image_downsize',2,3);
-
 function wpsc_display_edit_products_page() {
 	global $wpdb, $wp_query, $wpsc_products;
 
@@ -46,7 +38,6 @@ function wpsc_display_edit_products_page() {
 	$baseurl = includes_url( 'js/tinymce' );
 ?>
 	<div class="wrap">
-<?php // screen_icon();  ?>
 		<div id="icon_card"><br /></div>
 		<h2>
 			<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo esc_html( __( 'Manage Products', 'wpsc' ) ); ?></a>
@@ -71,9 +62,6 @@ function wpsc_display_edit_products_page() {
 			<div id="message" class="updated fade">
 				<p>
 	<?php
-			//Not sure when or why this was added...seems to be the culprit for the constant deletion notice.  Just commenting out in case it's actually necessary.
-//   			if(!isset($_GET['deleted'])) $_GET['deleted'] = 0.00;
-
 			if ( isset( $_GET['updated'] ) ) {
 				printf( _n( '%s product updated.', '%s products updated.', $_GET['updated'] ), number_format_i18n( $_GET['updated'] ) );
 				unset( $_GET['updated'] );
@@ -255,8 +243,6 @@ function wpsc_display_edit_products_page() {
 			}
 
 			if ( count( $parent_terms ) > 0 ) {
-				//echo "<pre>".print_r($parent_terms, true)."</pre>";
-				//echo $sql;
 				$term_count = count( $parent_terms );
 				$child_terms = implode( ", ", $child_terms );
 
@@ -274,7 +260,6 @@ function wpsc_display_edit_products_page() {
 			
 			GROUP BY tr.object_id
 			HAVING `count` = {$term_count}";
-				//echo "<br /><br />". $new_sql;
 				return $new_sql;
 			}
 		}
@@ -461,7 +446,6 @@ function wpsc_display_edit_products_page() {
 			$parent_product_data = null;
 
 		wpsc_admin_product_listing( $parent_product_data );
-		//echo "<pre>".print_r($wp_query, true)."</pre>";
 		if ( count( $wp_query->posts ) < 1 ) {
 ?>
 			<tr>
@@ -568,7 +552,6 @@ function wpsc_update_featured_products() {
 		endif;
 		exit();
 	}
-	//$sendback = add_query_arg('featured', "1", wp_get_referer());
 	wp_redirect( wp_get_referer() );
 	exit();
 }

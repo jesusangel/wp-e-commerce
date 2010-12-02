@@ -110,10 +110,6 @@ $social_sites = array(
 @define('AK_WPROOT', '../../../');
 @define('wpsc_akst_FILEPATH', WPSC_URL.'/wpsc-includes/share-this.php');
 
-// if (function_exists('load_plugin_textdomain')) {
-//   load_plugin_textdomain('wpsc');
-// }
-
 $wpsc_akst_action = '';
 
 if (!function_exists('ak_check_email_address')) {
@@ -440,12 +436,10 @@ function wpsc_akst_share_link($action = 'print') {
 		} else {
 			$product_link = get_permalink(absint($_REQUEST['product_id']));
 		}
-// 		exit("<pre>".print_r($product_link,true)."</pre>");
 	$onclick = 'onclick="wpsc_akst_share(\''.$post->ID.'\', \''.urlencode($product_link).'\', \''.urlencode(get_the_title()).'\'); return false;"';
 	}
   global $post;
   ob_start();
- /*<?php bloginfo('siteurl'); ?>/?p=<?php print($post->ID); ?>&amp;wpsc_akst_action=share-this */
 ?>
 <a href="#" <?php print($onclick); ?> title="<?php _e('E-mail this, post to del.icio.us, etc.', 'wpsc'); ?>" id="wpsc_akst_link_<?php print($post->ID); ?>" class="wpsc_akst_share_link" rel="nofollow"><img src='<?php echo WPSC_CORE_IMAGES_URL; ?>/social_networking/share-this-product.gif' title='Share This' alt='Share This' /></a>
 <?php
@@ -474,8 +468,6 @@ function wpsc_akst_add_share_link_to_content($content) {
   }
   return $content;
 }
-//add_action('the_content', 'wpsc_akst_add_share_link_to_content');
-//add_action('the_content_rss', 'wpsc_akst_add_share_link_to_content');
 
 function wpsc_akst_share_form() {
   global $post, $social_sites, $current_user, $wp_query, $wpdb;
@@ -563,7 +555,6 @@ if (wpsc_akst_ADDTOFOOTER) {
 
 function wpsc_akst_send_mail() {
   global $wpdb, $wp_query;
-  //exit("<pre>".print_r($_REQUEST,true)."</pre>");
   $post_id = '';
   $to = '';
   $name = '';
@@ -622,7 +613,6 @@ function wpsc_akst_send_mail() {
     wp_die(__('Click your <strong>back button</strong> and make sure those e-mail addresses are valid then try again.', 'wpsc'));
   }
   
-//  $post = &get_post($post_id);
   $headers = "MIME-Version: 1.0\n" .
     'From: "'.$name.'" <'.$email.'>'."\n"
     .'Reply-To: "'.$name.'" <'.$email.'>'."\n"
@@ -636,7 +626,6 @@ function wpsc_akst_send_mail() {
     $permalink = get_option('product_list_url');    
     $message .= __('Greetings--', 'wpsc')."\n\n";
     $message .= $name.__(' thinks this will be of interest to you:', 'wpsc')."\n\n";
-    //$message .= ak_decode_entities(get_the_title($post_id))."\n\n";
     if($wp_query->query_vars['product_url_name'] != '') {
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 			$message .= get_permalink($product_id);

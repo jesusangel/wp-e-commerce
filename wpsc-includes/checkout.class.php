@@ -108,12 +108,9 @@ function wpsc_google_checkout_submit() {
 	global $wpdb, $wpsc_cart, $current_user;
 	$wpsc_checkout = new wpsc_checkout();
 	$purchase_log_id = $wpdb->get_var( "SELECT `id` FROM `" . WPSC_TABLE_PURCHASE_LOGS . "` WHERE `sessionid` IN('" . $_SESSION['wpsc_sessionid'] . "') LIMIT 1" );
-	//$purchase_log_id = 1;
 	get_currentuserinfo();
-	//	exit('<pre>'.print_r($current_user, true).'</pre>');
 	if ( $current_user->display_name != '' ) {
 		foreach ( $wpsc_checkout->checkout_items as $checkoutfield ) {
-			//	exit(print_r($checkoutfield,true));
 			if ( $checkoutfield->unique_name == 'billingfirstname' ) {
 				$checkoutfield->value = $current_user->display_name;
 			}
@@ -121,7 +118,6 @@ function wpsc_google_checkout_submit() {
 	}
 	if ( $current_user->user_email != '' ) {
 		foreach ( $wpsc_checkout->checkout_items as $checkoutfield ) {
-			//	exit(print_r($checkoutfield,true));
 			if ( $checkoutfield->unique_name == 'billingemail' ) {
 				$checkoutfield->value = $current_user->user_email;
 			}
@@ -372,10 +368,8 @@ function wpsc_the_checkout_item_error() {
 
 function wpsc_the_checkout_CC_validation() {
 	$output = '';
-	//exit('<pre>'.print_r($_SESSION['wpsc_gateway_error_messages'],true).'</pre>');
 	if ( $_SESSION['wpsc_gateway_error_messages']['card_number'] != '' ) {
 		$output = $_SESSION['wpsc_gateway_error_messages']['card_number'];
-		//	$_SESSION['wpsc_gateway_error_messages']['card_number'] = '';
 	}
 	return $output;
 }
@@ -400,7 +394,6 @@ function wpsc_the_checkout_CCexpiry_validation() {
 	$output = '';
 	if ( $_SESSION['wpsc_gateway_error_messages']['expdate'] != '' ) {
 		$output = $_SESSION['wpsc_gateway_error_messages']['expdate'];
-		//	$_SESSION['wpsc_gateway_error_messages']['expdate'] = '';
 	}
 	return $output;
 }
@@ -417,7 +410,6 @@ function wpsc_the_checkout_CCcvv_validation() {
 	$output = '';
 	if ( $_SESSION['wpsc_gateway_error_messages']['card_code'] != '' ) {
 		$output = $_SESSION['wpsc_gateway_error_messages']['card_code'];
-		//	$_SESSION['wpsc_gateway_error_messages']['card_code'] = '';
 	}
 	return $output;
 }
@@ -434,7 +426,6 @@ function wpsc_the_checkout_CCtype_validation() {
 	$output = '';
 	if ( $_SESSION['wpsc_gateway_error_messages']['cctype'] != '' ) {
 		$output = $_SESSION['wpsc_gateway_error_messages']['cctype'];
-		//$_SESSION['wpsc_gateway_error_messages']['cctype'] ='';
 	}
 	return $output;
 }
@@ -467,7 +458,6 @@ function wpsc_checkout_form_field() {
 function wpsc_shipping_region_list( $selected_country, $selected_region, $shippingdetails = false ) {
 	global $wpdb;
 	$output = '';
-	//$region_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_REGION_TAX."` WHERE country_id='136'",ARRAY_A);
 	$region_data = $wpdb->get_results( "SELECT `regions`.* FROM `" . WPSC_TABLE_REGION_TAX . "` AS `regions` INNER JOIN `" . WPSC_TABLE_CURRENCY_LIST . "` AS `country` ON `country`.`id` = `regions`.`country_id` WHERE `country`.`isocode` IN('" . $wpdb->escape( $selected_country ) . "')", ARRAY_A );
 	$js = '';
 	if ( !$shippingdetails ) {
@@ -738,7 +728,6 @@ class wpsc_checkout {
 					}
 					$output .="</select>";
 				}
-				//echo ('<pre>'.print_r($output, true).'</pre>');
 				break;
 			case "radio":
 				$options = $this->get_checkout_options( $this->checkout_item->id );
@@ -929,18 +918,14 @@ class wpsc_checkout {
 		global $wpdb;
 
 		$count = $this->get_count_checkout_fields() + 1;
-		//exit($count.'<pre>'.print_r($this->checkout_items, true).'</pre>');
 		$i = 0;
 		foreach ( $this->checkout_items as $form_data ) {
-
-			//  $value = wpsc_kill_xss($_POST['collected_data'][$form_data->id]);
 			$value = $_POST['collected_data'][$form_data->id];
 			if ( $value == '' ) {
 				$value = $form_data->value;
 			}
 
 			if ( $form_data->type != 'heading' ) {
-				//echo '<pre>'.print_r($form_data,true).'</pre>';
 				if ( is_array( $value ) && ($form_data->unique_name == 'billingcountry' || $form_data->unique_name == 'shippingcountry') ) {
 						$value = $value[0];
 					
@@ -953,8 +938,6 @@ class wpsc_checkout {
 				} else {
 					$prepared_query = $wpdb->query( $wpdb->prepare( "INSERT INTO `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` ( `log_id` , `form_id` , `value` ) VALUES ( %d, %d, %s)", $purchase_id, $form_data->id, $value ) );
 				}
-
-				//echo "INSERT INTO `".WPSC_TABLE_SUBMITED_FORM_DATA."` ( `log_id` , `form_id` , `value` ) VALUES ( '{$purchase_id}', '".(int)$form_data->id."', '".$value."');<br />";
 			}
 			if ( $i > $count ) {
 				break;

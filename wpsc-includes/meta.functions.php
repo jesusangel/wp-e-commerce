@@ -23,7 +23,6 @@ function wpsc_get_meta( $object_id = 0, $meta_key, $type) {
 	$meta_tuple = compact( 'object_type', 'object_id', 'meta_key', 'meta_value', 'type' );
 	$meta_tuple = apply_filters( 'wpsc_update_meta', $meta_tuple );
 	extract( $meta_tuple, EXTR_OVERWRITE );
-	/* echo "SELECT `meta_value` FROM `".WPSC_TABLE_META."` WHERE `object_type` = ".$object_type." AND `object_id` = ".$object_id." AND `meta_key` = ".$meta_key; */
 	$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT `meta_value` FROM `".WPSC_TABLE_META."` WHERE `object_type` = %s AND `object_id` = %d AND `meta_key` = %s", $object_type, $object_id, $meta_key ) );
 	$meta_value = maybe_unserialize( $meta_value );
 	return $meta_value;
@@ -261,12 +260,10 @@ class wpsc_custom_meta {
 	
 	function the_custom_meta() {
 		$this->custom_meta_values = $this->next_custom_meta();
-		//echo "<pre>".print_r($this,true)."</pre>";
 		return $this->custom_meta_values;
 	}
 
 	function rewind_custom_meta() {
-		//$this->current_custom_meta = -1;
 		if ($this->custom_meta_count > 0) {
 			$this->custom_meta_values = $this->custom_meta[0];
 		}

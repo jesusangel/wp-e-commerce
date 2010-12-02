@@ -62,7 +62,6 @@ class wpsc_merchant {
 	 */
 	function __construct( $purchase_id = null, $is_receiving = false ) {
 		global $wpdb;
-		//$purchase_logs = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id` = {$purchase_id} LIMIT 1") ;
 		if ( ($purchase_id == null) && ($is_receiving == true) ) {
 			$this->is_receiving = true;
 			$this->parse_gateway_notification();
@@ -170,7 +169,6 @@ class wpsc_merchant {
 
 		$this->cart_data = array(
 			'software_name'           => 'WP e-Commerce/' . WPSC_PRESENTABLE_VERSION . '',
-			// 'store_name' => '',  /// is this useful or needed?
 			'store_location'          => get_option( 'base_country' ),
 			'store_currency'          => $currency_code,
 			'is_subscription'         => false,
@@ -201,8 +199,6 @@ class wpsc_merchant {
 		global $wpdb;
 		$purchase_id = & $this->purchase_id;
 		$original_cart_data = $wpdb->get_results( "SELECT * FROM `" . WPSC_TABLE_CART_CONTENTS . "` WHERE `purchaseid` = {$purchase_id}", ARRAY_A );
-		//print_r($original_cart_data);
-		//return;
 
 		foreach ( $original_cart_data as $cart_row ) {
 			$is_downloadable = false;
@@ -306,7 +302,6 @@ class wpsc_merchant {
 
 		$transaction_id = $wpdb->escape( $transaction_id );
 		$wpdb->query( "UPDATE `" . WPSC_TABLE_PURCHASE_LOGS . "` SET `processed` = '" . absint( $status ) . "', `transactid` ='{$transaction_id}'  WHERE `id` = " . absint( $this->purchase_id ) . " LIMIT 1" );
-		//exit("UPDATE `".WPSC_TABLE_PURCHASE_LOGS."` SET `processed` = '".absint($status)."', `transactid` ='{$transaction_id}'  WHERE `id` IN ('".absint($this->purchase_id)."') LIMIT 1");
 	}
 
 	/**

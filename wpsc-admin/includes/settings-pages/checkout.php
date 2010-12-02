@@ -26,7 +26,6 @@ do_action('wpsc_checkout_form_fields_page');
 $columns = array(
 	'drag' => 'Drag',
 	'name' => 'Name',
-	//'alt_name' => 'Alternate Name',
 	'type' => 'Type',
 	'unique_names' => 'Unique Names',
 	'mandatory' => 'Mandatory',
@@ -188,8 +187,6 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			    echo "<tr id='checkout_".$form_field['id']."' class='checkout_form_field'>\n\r";
 			    echo '<td class="drag"><a href="" onclick="return false;" title="Click and Drag to Order Checkout Fields"><img src="' . WPSC_CORE_IMAGES_URL . '/roll-over-drag.jpg" alt="roll-over-drag" /></a></td>';
 			    echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".htmlentities(stripslashes($form_field['name']), ENT_QUOTES, "UTF-8")."' /></td>";
-			  
-			    //echo "<td class='namecol'><input type='text' name='form_name[".$form_field['id']."]' value='".$form_field['name']."' /></td>";
 			    
 			    echo "      <td class='typecol'>";
 			    echo "<select class='wpsc_checkout_selectboxes' name='form_type[".$form_field['id']."]'>";
@@ -198,7 +195,6 @@ $form_types = get_option('wpsc_checkout_form_fields');
 			      if($form_type === $form_field['type']) {
 			        $selected = "selected='selected'";
 			      }
-			       // define('__('Textarea', 'wpsc')', 'Textarea');
 			      echo "<option value='".$form_type."' ".$selected.">".__($form_type_name, 'wpsc')."</option>";
 			    }
 			 

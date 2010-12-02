@@ -33,7 +33,6 @@ function wpsc_display_variations_page() {
 	</noscript>
 	
 	<div class="wrap">
-		<?php // screen_icon(); ?>
 		<h2><?php echo esc_html( __('Display Variations', 'wpsc') ); ?> </h2>
 		<p>	
 				<?php _e('A variation can be anything "optional" about a product. ie: Size, Color, etc <br />For example: if you are selling t-shirts you might setup a variation set called size with the values small, medium, large...', 'wpsc');?>
@@ -62,8 +61,6 @@ function wpsc_display_variations_page() {
 				<div id='poststuff' class="col-wrap">
 					<form id="modify-variation-groups" method="post" action="" enctype="multipart/form-data" >
 					<?php
-						//$product_id = absint($_GET['product_id']);
-						//wpsc_display_product_form($product_id);
 						wpsc_admin_variation_forms($_GET['variation_id']);
 					?>
 					</form>
@@ -113,7 +110,6 @@ function wpsc_admin_variation_group_list() {
 					'hide_empty'=> 0,
 					'parent' => 0
 				));
-				// echo "<pre>".print_r($variations,true)."</pre>";
 				foreach((array)$variations as $variation) {
 					?>
 						<tr class="variation-edit" id="variation-<?php echo $variation->term_id; ?>">
@@ -142,18 +138,11 @@ function wpsc_admin_variation_forms($variation_id =  null) {
 	$variation_name = '';
 	if($variation_id > 0 ) {
 		$variation_id = absint($variation_id);
-		
-		//$variation_name = $wpdb->get_var("SELECT `name` FROM `".WPSC_TABLE_PRODUCT_VARIATIONS."` WHERE `id`='$variation_id' LIMIT 1");
-		//$variation_values = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `variation_id`='$variation_id' ORDER BY `id` ASC",ARRAY_A);
-		
 		$variation_set = get_term($variation_id, 'wpsc-variation', ARRAY_A);
-		
 		$variations = get_terms('wpsc-variation', array(
 			'hide_empty' => 0,
 			'parent' => $variation_id
 		));
-		//echo "<pre>".print_r($variations,true)."</pre>";
-		//exit();
 		$variation_count = count($variations);
 	}
 	if(($_GET['valuecount'] > 0)) { 

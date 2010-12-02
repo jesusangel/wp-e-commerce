@@ -423,7 +423,6 @@
             array('currency' => $this->currency));
         $xml_data->Element('quantity', $item->quantity);
         if($item->merchant_private_item_data != '') {
-//          echo get_class($item->merchant_private_item_data);
           if(is_a($item->merchant_private_item_data, 
                                               'merchantprivate')) {
             $item->merchant_private_item_data->AddMerchantPrivateToXML($xml_data);
@@ -479,7 +478,7 @@
       $xml_data->Push('checkout-flow-support');
       $xml_data->Push('merchant-checkout-flow-support');
 	$xml_data->Element('platform-id', $this->google_platform_id);
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       if($this->edit_cart_url != '')
         $xml_data->Element('edit-cart-url', $this->edit_cart_url);
       if($this->continue_shopping_url != '')
@@ -659,7 +658,6 @@
           $xml_data->Pop($ship->type);
         }
         else if ($ship->type == "carrier-calculated-shipping"){
-//          $xml_data->Push($ship->type, array('name' => $ship->name));
           $xml_data->Push($ship->type);
           $xml_data->Push('carrier-calculated-shipping-options');
           $CCSoptions = $ship->CarrierCalculatedShippingOptions;
@@ -682,7 +680,6 @@
             $xml_data->Pop('carrier-calculated-shipping-option');
           }
           $xml_data->Pop('carrier-calculated-shipping-options');
-//          $ShippingPackage = $ship->ShippingPackage;
           $xml_data->Push('shipping-packages');
           $xml_data->Push('shipping-package');
           $xml_data->Push('ship-from', array('id' => $ship->ShippingPackage->ship_from->id));
@@ -727,9 +724,10 @@
         $xml_data->Element('merchant-calculations-url', 
             $this->merchant_calculations_url);
         if($this->accept_merchant_coupons != "") {
-          $xml_data->Element('accept-merchant-coupons', 
-           //   "true");
-	               $this->accept_merchant_coupons);
+          $xml_data->Element(
+          	'accept-merchant-coupons', 
+	        $this->accept_merchant_coupons
+	      );
         }
         if($this->accept_gift_certificates != "") {
           $xml_data->Element('accept-gift-certificates', 
@@ -925,7 +923,6 @@
       $xml_data->Pop('merchant-checkout-flow-support');
       $xml_data->Pop('checkout-flow-support');
       $xml_data->Pop('checkout-shopping-cart');
-      //mail("hanzhimeng@gmail.com","",print_r($xml_data->GetXML(),1));
       return $xml_data->GetXML();
     }
     
@@ -1367,14 +1364,11 @@
      * @access private
      */
     function xml2html($data, $path = '', &$rta){
-//      global $multiple_tags,$ignore_tags;
-    //    $arr = gc_get_arr_result($data);  
       foreach($data as $tag_name => $tag) {
         if(isset($this->ignore_tags[$tag_name])){
           continue;
         }
         if(is_array($tag)){
-    //     echo print_r($tag, true) . $tag_name . "<- tag name\n";
           if(!$this->is_associative_array($data)) {
             $new_path = $path . '-' . ($tag_name +1);
           } else {

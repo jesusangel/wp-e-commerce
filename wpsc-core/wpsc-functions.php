@@ -424,10 +424,6 @@ function wpsc_taxonomy_rewrite_rules( $rewrite_rules ) {
 		}
 	}
 
-	//$new_rewrite_rules['products/.+?/[^/]+/attachment/([^/]+)/?$'] = 'index.php?attachment=$1';
-	//$new_rewrite_rules['products/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php??post_type=wpsc-product&products=$1&name=$2&cpage=$3';
-	//$new_rewrite_rules['products/.+?/([^/]+)/page/?([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&paged=$matches[2]';
-	//$new_rewrite_rules['(products/checkout)(/[0-9]+)?/?$'] = 'index.php?pagename=$1&page=$2';
 	$new_rewrite_rules[$products_page . '/(.+?)/product/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]&cpage=$matches[3]';
 	$new_rewrite_rules[$products_page . '/(.+?)/product/([^/]+)/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&name=$matches[2]';
 	$new_rewrite_rules[$products_page . '/(.+?)/([^/]+)/comment-page-([0-9]{1,})/?$'] = 'index.php?post_type=wpsc-product&products=$matches[1]&wpsc_item=$matches[2]&cpage=$matches[3]';
@@ -444,7 +440,6 @@ function wpsc_taxonomy_rewrite_rules( $rewrite_rules ) {
 		$rebuilt_rewrite_rules[$rewrite_key] = $rewrite_query;
 	}
 
-	//echo "<pre>".print_r($new_rewrite_rules, true)."</pre>";
 	return $rebuilt_rewrite_rules;
 }
 
@@ -479,7 +474,6 @@ add_filter( 'query_vars', 'wpsc_query_vars' );
  */
 function wpsc_split_the_query( $query ) {
 	global $wpsc_page_titles, $wpsc_query, $wpsc_query_vars;
-	//exit('Page Titles: <pre>'.print_r($wpsc_page_titles,true).'</pre>');
 	// These values are to be dynamically defined
 	$products_page = $wpsc_page_titles['products'];
 	$checkout_page = $wpsc_page_titles['checkout'];
@@ -518,8 +512,6 @@ function wpsc_split_the_query( $query ) {
 		$query->is_tax      = false;
 		$query->is_archive  = false;
 		$query->is_single   = false;
-		//$post = get_post($post_id);
-		//$query->get_posts();
 
 		if ( ($wpsc_query_vars == null ) ) {
 			unset( $wpsc_query_data['pagename'] );
@@ -694,7 +686,6 @@ class wpsc_products_by_category {
 			add_filter( 'posts_orderby', array( &$this, 'order_by_sql' ) );
 			add_filter( 'posts_groupby', array( &$this, 'group_by_sql' ) );
 		}
-		//add_filter('posts_request', array(&$this, 'request_sql'));
 	}
 
 	function join_sql( $sql ) {
@@ -753,7 +744,6 @@ class wpsc_products_by_category {
 function wpsc_break_canonical_redirects( $redirect_url, $requested_url ) {
 	global $wp_query;
 
-	//exit("<pre>".print_r($wp_query,true)."</pre>");
 	if ( ( isset( $wp_query->query_vars['products'] ) && ($wp_query->query_vars['products'] != '') ) || ( isset( $wp_query->query_vars['products'] ) && $wp_query->query_vars['products'] != 'wpsc_item') )
 		return false;
 
@@ -852,7 +842,6 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 				$product_categories[0] = '';
 
 			$product_category = $product_categories[0];
-			//if(!isset($product_category->slug)) $product_category->slug="";
 
 			if ( !is_object( $product_category ) )
 				$product_category = new stdClass();
@@ -865,7 +854,6 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 			$term_url = get_term_link( $category_slug, 'wpsc_product_category' );
 		}
 
-		//echo "'><pre>_".print_r($product_categories, true)."_</pre>";
 		$post_name = $post->post_name;
 		if ( in_array( $post_name, $product_category_slugs ) )
 			$post_name = "product/{$post_name}";
@@ -923,13 +911,9 @@ function wpsc_products_template_fallback() {
 	return wpsc_template_fallback( 'products' );
 }
 
-//add_filter("products_template", 'wpsc_products_template_fallback');
-
 function wpsc_checkout_template_fallback() {
 	return wpsc_template_fallback( 'checkout' );
 }
-
-//add_filter("checkout_template", 'wpsc_checkout_template_fallback');
 
 /**
  * wpsc_get_page_post_names function.
@@ -968,8 +952,6 @@ function wpsc_template_loader() {
 		exit();
 	}
 }
-
-// add_action('template_redirect','wpsc_template_loader');
 
 /**
  * select_wpsc_theme_functions function, provides a place to override the e-commece theme path

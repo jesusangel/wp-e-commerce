@@ -99,7 +99,6 @@ function wpsc_populate_product_data( $product_id, $wpsc_product_defaults ) {
 	$tt_ids = array( );
 	$term_ids = array( );
 	$product = get_post( $product_id );
-	//print("<pre>" . print_r($product, true) . "</pre>");
 
 	$product_data['id'] = $product->ID;
 	$product_data['name'] = $product->post_title;
@@ -128,15 +127,12 @@ function wpsc_populate_product_data( $product_id, $wpsc_product_defaults ) {
 			$product_data['meta'][$meta_name] = maybe_unserialize( array_pop( $meta_value ) );
 		}
 	}
-	//$sql ="SELECT `meta_key`, `meta_value` FROM ".WPSC_TABLE_PRODUCTMETA." WHERE `meta_key` LIKE 'currency%' AND `product_id`=".$product_id;
-	//$product_data['newCurr']= $wpdb->get_results($sql, ARRAY_A);
 	$product_data['dimensions'] = get_product_meta( $product_id, 'dimensions', true );
 
 	// Transformed Values have been altered in some way since being extracted from some data source
 	$product_data['transformed'] = array( );
 	$product_data['transformed']['weight'] = wpsc_convert_weight( $product_data['meta']['_wpsc_product_metadata']['weight'], "gram", $product_data['meta']['_wpsc_product_metadata']['display_weight_as'] );
 
-	//echo "<pre>".print_r($product_data,true)."</pre>";
 	if ( function_exists( 'wp_insert_term' ) ) {
 		$term_relationships = $wpdb->get_results( "SELECT * FROM `{$wpdb->term_relationships}` WHERE object_id = '{$product_data['id']}'", ARRAY_A );
 
@@ -178,7 +174,6 @@ function wpsc_display_product_form( $product_id = 0 ) {
 	// we put the closed postboxes array into the Product data to propagate it to each form without having it global.
 	$product_data['closed_postboxes'] = (array)get_user_meta( $current_user->ID, 'closedpostboxes_products_page_wpsc-edit-products' );
 	$product_data['hidden_postboxes'] = (array)get_user_meta( $current_user->ID, 'metaboxhidden_products_page_wpsc-edit-products' );
-//	echo '<pre>'.print_r($product_data,true).'</pre>';
 	if ( count( $product_data ) > 0 ) {
 		wpsc_product_basic_details_form( $product_data );
 		
@@ -218,7 +213,6 @@ function wpsc_product_basic_details_form( &$product_data ) {
 		$product_data['product_object'] = new stdClass();
 	$product = $product_data['product_object'];
 	$post_ID = (int)$product_data["id"];
-	/* <h3 class='hndle'><?php echo  __('Product Details', 'wpsc'); ?> <?php _e('(enter in your Product details here)', 'wpsc'); ?></h3> */
 ?>
 	<h3 class='form_heading' style="display:none;">
 <?php
@@ -580,7 +574,6 @@ function wpsc_product_category_and_tag_forms( $product_data='' ) {
 	global $closed_postboxes, $wpdb, $variations_processor;
 
 	$output = '';
-	//echo "<pre>".print_r($product_data['tags'], true)."</pre>";
 	$tag_array = array();
 
 	if ( !isset( $product_data['tags'] ) )
@@ -607,7 +600,6 @@ function wpsc_product_category_and_tag_forms( $product_data='' ) {
 	$output .= "<div id='categorydiv' >";
 
 	$search_sql = apply_filters( 'wpsc_product_category_and_tag_forms_group_search_sql', '' );
-	//$categorisation_groups = get_terms('wpsc_product_category', "hide_empty=0&parent=0", ARRAY_A);
 
 	$output .= wpsc_category_list( $product_data, 0, $product_data['id'], 'edit_' );
 
@@ -983,7 +975,6 @@ function wpsc_product_variation_forms( $product_data = '' ) {
 			$parent_product_data = null;
 
 		wpsc_admin_product_listing( $parent_product_data );
-		//echo "<pre>".print_r($wp_query, true)."</pre>";
 		if ( count( $wp_query->posts ) < 1 ) :
 	?>
 					<tr>
@@ -1381,8 +1372,6 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 
 	$output = '';
 
-	//$custom_fields =  $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `product_id` IN('{$product_data['id']}') AND `custom` IN('1') ",ARRAY_A);
-
 	if ( $product_data == 'empty' )
 		$display = "style='display:none;'";
 
@@ -1474,7 +1463,6 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 	$output .= ob_get_contents();
 	ob_end_clean();
 
-	//if (get_option('wpsc_enable_comments') == 1) {
 	$output .= "
 	<tr>
 		<td class='itemfirstcol' colspan='2'><br />
@@ -1487,7 +1475,6 @@ function wpsc_product_advanced_forms( $product_data='' ) {
 			<br/>" . __( 'Allow users to comment on this Product.', 'wpsc' ) . "
 		</td>
 	</tr>";
-	//}
 
 	$output .= "
     </table></div></div>";
@@ -1551,18 +1538,6 @@ function wpsc_product_image_forms( $product_data = '' ) {
 
 	if ( $product_data == 'empty' )
 		$display = "style='display:none;'";
-
-
-/* Removing all this goodness in place of the Upload Image Above - justin - 5.20
-  //As in WordPress,  If Mac and mod_security, no Flash
-  $flash = true;
-  if ( (false !== strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'mac')) && apache_mod_loaded('mod_security') ) {
-  $flash = false;
-  }
-
-  $flash_action_url = admin_url('async-upload.php');
-  $flash = apply_filters('flash_uploader', $flash);
- */
 ?>
 	<div id='wpsc_product_image_forms' class='postbox <?php echo ((array_search( 'wpsc_product_image_forms', $product_data['closed_postboxes'] ) !== false) ? 'closed' : ''); ?>' <?php echo ((array_search( 'wpsc_product_image_forms', $product_data['hidden_postboxes'] ) !== false) ? 'style="display: none;"' : ''); ?> ><div class="handlediv" title="Click to toggle"><br></div>
 		<h3 class='hndle'> <?php _e( 'Product Images', 'wpsc' ); ?></h3>
@@ -1577,7 +1552,6 @@ function wpsc_product_image_forms( $product_data = '' ) {
 
 	</div>
 <?php
-	// return $output;
 }
 
 function wpsc_product_download_forms( $product_data='' ) {
@@ -1721,7 +1695,6 @@ function wpsc_category_list( &$product_data, $group_id, $unique_id = '', $catego
 		$indenter = "<img class='category_indenter' src='".WPSC_CORE_IMAGES_URL."/indenter.gif' alt='' title='' />";
 
 	}
-	//echo "<pre>".print_r($values, true)."</pre>";
 
 	foreach ( (array)$values as $option ) {
 		$option = (array)$option;

@@ -47,8 +47,6 @@ function wpsc_install() {
 	if ( !wp_get_schedule( "wpsc_daily_cron_tasks" ) )
 		wp_schedule_event( time(), 'daily', 'wpsc_daily_cron_tasks' );
 
-	//wp_get_schedule( $hook, $args )
-
 	// All code to add new database tables and columns must be above here
 	if ( (get_option( 'wpsc_version' ) < WPSC_VERSION) || (get_option( 'wpsc_version' ) == WPSC_VERSION) && (get_option( 'wpsc_minor_version' ) < WPSC_MINOR_VERSION) ) {
 		update_option( 'wpsc_version', WPSC_VERSION );
@@ -73,8 +71,6 @@ function wpsc_install() {
 		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );
 	else
 		add_option( 'cart_location', '1', __( 'Cart Location', 'wpsc' ), 'yes' );
-
-	//add_option('show_categorybrands', '0', __('Display categories or brands or both', 'wpsc'), 'yes');
 
 	add_option( 'currency_type', '156', __( 'Currency type', 'wpsc' ), 'yes' );
 	add_option( 'currency_sign_location', '3', __( 'Currency sign location', 'wpsc' ), 'yes' );
@@ -109,13 +105,10 @@ function wpsc_install() {
 	if ( !((get_option( 'show_categorybrands' ) > 0) && (get_option( 'show_categorybrands' ) < 3)) )
 		update_option( 'show_categorybrands', 2 );
 
-	//add_option('show_categorybrands', '0', __('Display categories or brands or both', 'wpsc'), 'yes');
-
 	// PayPal options
 	add_option( 'paypal_business', '', __( 'paypal business', 'wpsc' ), 'yes' );
 	add_option( 'paypal_url', '', __( 'paypal url', 'wpsc' ), 'yes' );
 	add_option( 'paypal_ipn', '1', __( 'paypal url', 'wpsc' ), 'yes' );
-	//update_option('paypal_url', "https://www.sandbox.paypal.com/xclick");
 
 
 	add_option( 'paypal_multiple_business', '', __( 'paypal business', 'wpsc' ), 'yes' );
@@ -167,12 +160,6 @@ function wpsc_install() {
 	$pages[$num]['title'] = __( 'Checkout', 'wpsc' );
 	$pages[$num]['tag'] = '[shoppingcart]';
 	$pages[$num]['option'] = 'shopping_cart_url';
-
-//	 $num++;
-//	 $pages[$num]['name'] = 'enter-details';
-//	 $pages[$num]['title'] = __('Enter Your Details', 'wpsc');
-//	 $pages[$num]['tag'] = '[checkout]';
-//	 $pages[2$num]['option'] = 'checkout_url';
 
 	$num++;
 	$pages[$num]['name'] = 'transaction-results';
@@ -362,7 +349,6 @@ function wpsc_create_upload_directories() {
 		wp_mkdir_p( $folder );
 		@ chmod( $folder, 0775 );
 	}
-	//wpsc_copy_themes_to_uploads();
 }
 
 function wpsc_copy_themes_to_uploads() {
@@ -401,10 +387,6 @@ function wpsc_create_or_update_tables( $debug = false ) {
 	// Filter for adding to or altering the wpsc database template, make sure you return the array your function gets passed, else you will break updating the database tables
 	$wpsc_database_template = apply_filters( 'wpsc_alter_database_template', $wpsc_database_template );
 
-	if ( (get_option( 'wpsc_database_check' ) == $template_hash) && ($debug == false) ) {
-		//return true;
-	}
-
 	$failure_reasons = array( );
 	$upgrade_failed = false;
 	foreach ( (array)$wpsc_database_template as $table_name => $table_data ) {
@@ -440,12 +422,10 @@ function wpsc_create_or_update_tables( $debug = false ) {
 			if ( isset( $table_data['actions']['after']['all'] ) && is_callable( $table_data['actions']['after']['all'] ) ) {
 				$table_data['actions']['after']['all']();
 			}
-			//echo "<pre>$constructed_sql</pre>";
 		} else {
 			// check to see if the new table name is in use
 			if ( !$wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) && (isset( $table_data['previous_names'] ) && $wpdb->get_var( "SHOW TABLES LIKE '{$table_data['previous_names']}'" )) ) {
 				$wpdb->query( "ALTER TABLE	`{$table_data['previous_names']}` RENAME TO `{$table_name}`;" );
-				//$wpdb->query("RENAME TABLE `{$table_data['previous_names']}`	TO `{$table_name}`;");
 				$failure_reasons[] = $wpdb->last_error;
 			}
 
@@ -509,7 +489,6 @@ function wpsc_create_or_update_tables( $debug = false ) {
 							$failure_reasons[] = $wpdb->last_error;
 						}
 						// run updating functions to do more complex work with default values and the like
-						//exit($missing_or_extra_table_column);
 						if ( is_callable( $table_data['actions']['after'][$missing_or_extra_table_column] ) ) {
 							$table_data['actions']['after'][$missing_or_extra_table_column]( $missing_or_extra_table_column );
 						}
@@ -553,7 +532,6 @@ function wpsc_create_or_update_tables( $debug = false ) {
 	} else {
 		return false;
 	}
-	//echo "<pre>".print_r($missing_or_extra_table_indexes,true)."</pre>";
 }
 
 /**
@@ -583,7 +561,6 @@ function wpsc_add_currency_list() {
 function wpsc_add_region_list() {
 	global $wpdb;
 	$add_regions = $wpdb->get_var( "SELECT COUNT(*) AS `count` FROM `" . WPSC_TABLE_REGION_TAX . "`" );
-	// exit($add_regions);
 	if ( $add_regions < 1 ) {
 		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_REGION_TAX . "` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'Alberta', '', '0')" );
 		$wpdb->query( "INSERT INTO `" . WPSC_TABLE_REGION_TAX . "` ( `country_id` , `name` ,`code`, `tax` ) VALUES ( '100', 'British Columbia', '', '0')" );
@@ -695,7 +672,7 @@ function wpsc_add_checkout_fields() {
 	( '" . __( 'State', 'wpsc' ) . "', 'text', '0', '0', '', '1', 15,'shippingstate'),
 	( '" . __( 'Country', 'wpsc' ) . "', 'delivery_country', '0', '0', '', '1', 16,'shippingcountry'),
 	( '" . __( 'Postal Code', 'wpsc' ) . "', 'text', '0', '0', '', '1', 17,'shippingpostcode');";
-//	exit($sql);
+
 		$wpdb->query( $sql );
 		update_option( 'country_form_field', $country_form_id[0]['id'] );
 		update_option( 'email_form_field', $email_form_id[0]['id'] );

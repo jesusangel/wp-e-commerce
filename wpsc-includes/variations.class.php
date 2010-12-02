@@ -43,11 +43,9 @@ class wpsc_variations {
 				$this->variation_groups[] = $product_term;
 			}
 		}
-		//exit('<pre>'.print_r($this->all_associated_variations,1).'</pre>');
 		
 		foreach((array)$this->variation_groups as $variation_group) {
 			$variation_id = $variation_group->term_id;
-			//$this->all_associated_variations[$variation_id] = $wpdb->get_results("SELECT `v`.* FROM `".WPSC_TABLE_VARIATION_VALUES_ASSOC."` AS `a`JOIN `".WPSC_TABLE_VARIATION_VALUES."` AS `v` ON `a`.`value_id` = `v`.`id` WHERE `a`.`product_id` IN ('{$this->product['id']}') AND `a`.`variation_id` IN ('$variation_id') AND `a`.`visible` IN ('1') ORDER BY `v`.`id` ASC", ARRAY_A);
 			$this->first_variations[] = $this->all_associated_variations[$variation_id][0]->term_id;
 		}
 		
@@ -60,7 +58,6 @@ class wpsc_variations {
 	*/
 	function get_variation_groups() {
 		global $wpdb;
-		//$this->variation_groups = $wpdb->get_results("SELECT `v`.`id` AS `variation_id`,`v`.`name`	FROM `".WPSC_TABLE_VARIATION_ASSOC."` AS `a` JOIN `".WPSC_TABLE_PRODUCT_VARIATIONS."` AS `v` ON `a`.`variation_id` = `v`.`id` WHERE `a`.`type` IN ('product') AND `a`.`associated_id` IN ('{$this->product['id']}')", ARRAY_A);
 		$this->variation_group_count = count($this->variation_groups);
 		$this->get_first_variations();
 	}
@@ -102,11 +99,8 @@ class wpsc_variations {
 
 	function get_variations() {
 		global $wpdb;
-		//$this->variations	= $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_VARIATION_VALUES."` WHERE `id` = '$value_id' ORDER BY `id` ASC",ARRAY_A);
-
 		$this->variations = $this->all_associated_variations[$this->variation_group->term_id];
 		$this->variation_count = count($this->variations);
-		//echo "<pre>".print_r($this->all_associated_variations,true)."</pre>";
 	}
 	
 	
@@ -125,12 +119,9 @@ class wpsc_variations {
 		if ($this->current_variation + 1 < $this->variation_count) {
 			return true;
 		} else if ($this->current_variation + 1 == $this->variation_count && $this->variation_count > 0) {
-			//do_action('wpsc_loop_end');
 			// Do some cleaning up after the loop,
 			$this->rewind_variations();
 		}
-
-		//$this->in_the_loop = false;
 		return false;
 	}
 
@@ -147,8 +138,6 @@ class wpsc_variations {
 }
 function wpsc_get_child_object_in_select_terms($parent_id, $terms, $taxonomy){
 	global $wpdb;
-//	echo '<pre>'.print_r($terms,1).'</pre>';
-
 	$sql = "SELECT tr.`object_id` 
 			FROM `".$wpdb->term_relationships."` AS tr
 			LEFT JOIN `".$wpdb->posts."` AS posts
@@ -228,7 +217,6 @@ function wpsc_get_child_object_in_terms($parent_id, $terms, $taxonomies, $args =
 		) = {$term_count}
 	GROUP BY tr.object_id
 	HAVING `count` = {$term_count}";
-	//echo $object_sql;
 	$object_ids = $wpdb->get_row($object_sql, ARRAY_A);
 	if (count($object_ids) > 0) {
 		return $object_ids['object_id'];
@@ -295,7 +283,6 @@ function wpsc_get_child_object_in_terms_var($parent_id, $terms, $taxonomies, $ar
 		AND tt.term_id IN ({$terms})
 		AND tt.parent > 0
 	GROUP BY tr.object_id";
-	//echo $object_sql;
 	$object_ids = $wpdb->get_results($object_sql, ARRAY_A);
 	if (count($object_ids) > 0) {
 		return $object_ids;

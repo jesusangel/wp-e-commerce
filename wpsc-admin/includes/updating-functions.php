@@ -241,7 +241,6 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 		if(isset($post_data['meta'])) {
 			$post_data['_wpsc_product_metadata']['unpublish_when_none_left'] = (int)(bool)$post_data['meta']['_wpsc_product_metadata']['unpublish_when_none_left'];
 		}
-		/* $post_data['meta']['_wpsc_product_metadata']['notax'] = (int)(bool)$post_data['notax']; */
 		$post_data['_wpsc_product_metadata']['no_shipping'] = (int)(bool)$product['no_shipping'];
 						
 		foreach($post_data as $meta_key => $meta_value) {
@@ -263,7 +262,6 @@ GROUP BY ".WPSC_TABLE_PRODUCT_LIST.".id", ARRAY_A);
 		
 		$product_data = get_post($post_id);
 		$image_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN ('{$product['id']}') ORDER BY `image_order` ASC", ARRAY_A);
-		//echo "SELECT *  FROM `".WPSC_TABLE_PRODUCT_IMAGES."` WHERE `product_id` IN ('{$product['id']}') ORDER BY `image_order` ASC \n";
 		foreach((array)$image_data as $image_row) {
 			// Get the image path info
 			$image_pathinfo = pathinfo($image_row['image']);
@@ -352,7 +350,6 @@ function wpsc_convert_variation_combinations() {
 		'numberposts' => -1
 	) );
     
-    //return false;
 	foreach((array)$posts as $post) {
 	
 		$base_product_terms = array();
@@ -513,7 +510,6 @@ function wpsc_update_files() {
 		}else{
 			$product_post_id = (int)$wpdb->get_var("SELECT `id` FROM ".WPSC_TABLE_PRODUCT_LIST." WHERE file=".$product_file->id);
 			$product_post_id = (int)$wpdb->get_var($wpdb->prepare( "SELECT `post_id` FROM `{$wpdb->postmeta}` WHERE meta_key = %s AND `meta_value` = %d LIMIT 1", '_wpsc_original_id', $product_post_id ));
-		//	exit('Post ID'.$product_post_id);
 		}	
 		$variation_items = $wpdb->get_col("SELECT `id` FROM ".WPSC_TABLE_VARIATION_PROPERTIES." WHERE `file` = '{$product_file->id}'");
 		

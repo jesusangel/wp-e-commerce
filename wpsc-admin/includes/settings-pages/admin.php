@@ -173,16 +173,6 @@ global $wpdb;
 					<input class='text' type='text' size='50' value='<?php echo get_option('shopping_cart_url'); ?>' name='wpsc_options[shopping_cart_url]' />
 					</td>
 				</tr>
-				<?php /*
-				<tr class='merged'>
-					<th scope="row">
-					<?php _e('The location of the checkout page', 'wpsc');?>:
-					</th>
-					<td>
-					<input class='text' type='text' size='50' value='<?php echo get_option('checkout_url'); ?>' name='checkout_url' />
-					</td>
-				</tr>*/
-				?>
 				<tr class='merged'>
 					<th scope="row">
 					<?php _e('Transaction Details URL', 'wpsc');?>:

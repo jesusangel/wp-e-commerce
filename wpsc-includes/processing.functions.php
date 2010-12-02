@@ -139,25 +139,6 @@ function wpsc_get_currency_symbol(){
 	return  $wpsc_currency_data;
 }  
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 /**
 * All the code below here needs commenting and looking at to see if it needs to be altered or disposed of.
 * Correspondingly, all the code above here has been commented, uses the wpsc prefix, and has been made for or modified to work with the object oriented cart code.
@@ -216,8 +197,6 @@ function wpsc_convert_weights($weight, $unit) {
 	}
 	return $weight;
 }
-
-
 
 function wpsc_convert_weight($in_weight, $in_unit, $out_unit = 'gram') {
 	if (isset($weight) && is_array($weight)) {
@@ -381,12 +360,7 @@ add_filter('wpsc_product_alert', 'wpsc_check_weight', 10, 2);
  * @return (int) The image quality.
  */
 function wpsc_image_quality( $quality = 75 ) {
-	
 	$quality = apply_filters( 'jpeg_quality', $quality );
 	return apply_filters( 'wpsc_jpeg_quality', $quality );
-	
 }
-
-
-
 ?>

@@ -8,22 +8,17 @@ global $wpdb;
 	if(file_exists($image_input) && is_numeric($height) && is_numeric($width) && function_exists('imagecreatefrompng') && (($height != $imagetype[1]) && ($width != $imagetype[0]))) {
 		switch($imagetype[2]) {
 			case IMAGETYPE_JPEG:
-			//$extension = ".jpg";
 			$src_img = imagecreatefromjpeg($image_input);
 			$pass_imgtype = true;
 			break;
 	
 			case IMAGETYPE_GIF:
-			//$extension = ".gif";
 			$src_img = imagecreatefromgif($image_input);
 			$pass_imgtype = true;
 			break;
 	
 			case IMAGETYPE_PNG:
-			//$extension = ".png";
 			$src_img = imagecreatefrompng($image_input);
-			//  imagesavealpha($src_img,true);
-			//  ImageAlphaBlending($src_img, false);
 			$pass_imgtype = true;
 			break;
 	
@@ -49,13 +44,11 @@ global $wpdb;
 					} else {
 						$temp_w = ($height / $source_h) * $source_w;
 					}
-					//$temp_w = ($height / $source_h) * $source_w;
 				} else {
 					$temp_h = ($width / $source_w) * $source_h;
 				}
 	
 			// Create temp resized image
-//			exit(get_option('product_image_height'));
 			$temp_img = ImageCreateTrueColor( $temp_w, $temp_h );
 			$bgcolor = ImageColorAllocate( $temp_img, 255, 255, 255 );
 			ImageFilledRectangle( $temp_img, 0, 0, $width, $height, $bgcolor );
@@ -98,11 +91,9 @@ global $wpdb;
 				
 				
 			// Final thumbnail cropped from the center out.
-			//ImageCopyResampled( $dst_img, $temp_img, 0, 0, $w1, $h1, $width, $height, $width, $height );
 			if(!isset($h1))
 				$h1 = 0;
 			ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );
-			//mail('thomas.howard@gmail.com','lolwut',"ImageCopy( $dst_img, $temp_img, $w1, $h1, 0, 0, $temp_w, $temp_h );");
 			
 			$image_quality = wpsc_image_quality();
 			

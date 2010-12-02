@@ -39,7 +39,6 @@
 			if(!empty($from))
 				$this->_from=$from;
 
-			//$host="www.iraqidinar.org";
 			$host="www.xe.com";
 			$fp = @fsockopen($host, 80, $errno, $errstr, 30);
 			if (!$fp)
@@ -49,9 +48,7 @@
 			}
 			else
 			{
-				//$file="/conversiontool2.asp";
 				$file="/ucc/convert.cgi";
-				//$str = "?amount=".$this->_amt."&ConvertFrom=".$this->_from."&ConvertTo=".$this->_to;
 				$str = "?language=xe&Amount=".$this->_amt."&From=".$this->_from."&To=".$this->_to;
 				$out = "GET ".$file.$str." HTTP/1.0\r\n";
 			    $out .= "Host: $host\r\n";

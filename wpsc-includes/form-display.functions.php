@@ -40,8 +40,6 @@ function nzshpcrt_region_list( $selected_country = null, $selected_region = null
 
 			$output .= "<option value='" . $region['id'] . "' $selected>" . $region['name'] . "</option>\n\r";
 		}
-
-//		$output .= "</select>\n\r";
 	} else {
 		$output .= "<select name='base_region' disabled='true'><option value=''>None</option></select>\n\r";
 	}
@@ -160,7 +158,6 @@ function wpsc_uploaded_files() {
 // JS - For 3.8, function re-worked to only show files attached to product, separate thickbox with all products, to be associated with product.
 function wpsc_select_product_file( $product_id = null ) {
 	global $wpdb;
-	//return false;
 	$product_id = absint( $product_id );
 	$file_list = wpsc_uploaded_files();
 
@@ -205,8 +202,6 @@ function wpsc_select_product_file( $product_id = null ) {
 
 function wpsc_select_variation_file( $file_id, $variation_ids, $variation_combination_id = null ) {
 	global $wpdb;
-
-	//return false;
 	$file_list = wpsc_uploaded_files();
 	$unique_id_component = ((int)$variation_combination_id) . "_" . str_replace( ",", "_", $variation_ids );
 
