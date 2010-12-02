@@ -341,7 +341,7 @@ jQuery(document).ready(function(){
 		var real_value = jQuery(this).val();
 		value = jQuery('label[for="'+jQuery(this).attr('id')+'"]').html();
 		if(null != value){
-			value = value.replace(/<span class="asterix">\*<\/span>/i,'');
+			value = value.replace(/<span class="?asterix"?>\*<\/span>/i,'');
 		}
 		jQuery(this).inlineFieldLabel({label:jQuery.trim(value)});
 		if(real_value != '')
