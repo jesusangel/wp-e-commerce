@@ -385,23 +385,23 @@ function wpsc_admin_dynamic_css() {
 
 	if ( $flash = 1 ) {
 ?>
-				div.flash-image-uploader {
-					display: block;
-				}
+		div.flash-image-uploader {
+			display: block;
+		}
 
-				div.browser-image-uploader {
-					display: none;
-				}
+		div.browser-image-uploader {
+			display: none;
+		}
 <?php
 	} else {
 ?>
-				div.flash-image-uploader {
-					display: none;
-				}
+		div.flash-image-uploader {
+			display: none;
+		}
 
-				div.browser-image-uploader {
-					display: block;
-				}
+		div.browser-image-uploader {
+			display: block;
+		}
 <?php
 	}
 	exit();
@@ -411,26 +411,12 @@ if ( isset( $_GET['wpsc_admin_dynamic_css'] ) && ($_GET['wpsc_admin_dynamic_css'
 	add_action( "admin_init", 'wpsc_admin_dynamic_css' );
 }
 
-
-//add_action("admin_init", 'wpsc_admin_css_and_js');  
 add_action( 'admin_menu', 'wpsc_admin_pages' );
 
-
-/*
- * 	Inserts the summary box on the WordPress Dashboard
- */
-
-//if(function_exists('wp_add_dashboard_widget')) {
-if ( IS_WP27 ) {
-	add_action( 'wp_dashboard_setup', 'wpsc_dashboard_widget_setup' );
-} else {
-	add_action( 'activity_box_end', 'wpsc_admin_dashboard_rightnow' );
-}
 
 function wpsc_admin_latest_activity() {
 	global $wpdb;
 	$totalOrders = $wpdb->get_var( "SELECT COUNT(*) FROM `" . WPSC_TABLE_PURCHASE_LOGS . "`" );
-
 
 	/*
 	 * This is the right hand side for the past 30 days revenue on the wp dashboard
@@ -458,7 +444,6 @@ function wpsc_admin_latest_activity() {
 	echo "<span class='dashboardWidget'>" . __( 'Orders', 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
-	//echo "<span class='pricedisplay'>";
 	//calculates average sales amount per order for the month
 	if ( $currentMonthOrders > 0 ) {
 		$monthsAverage = ((int)admin_display_total_price( $start_timestamp, $end_timestamp ) / (int)$currentMonthOrders);
@@ -467,8 +452,6 @@ function wpsc_admin_latest_activity() {
 	//echo "</span>";
 	echo "<span class='dashboardWidget'>" . __( 'Avg Orders', 'wpsc' ) . "</span>";
 	echo "</p>";
-
-
 	echo "</div>";
 	/*
 	 * This is the left side for the total life time revenue on the wp dashboard
@@ -488,7 +471,6 @@ function wpsc_admin_latest_activity() {
 	echo "<span class='dashboardWidget'>" . __( 'Orders', 'wpsc' ) . "</span>";
 	echo "</p>";
 	echo "<p class='dashboardWidgetSpecial'>";
-	//echo "<span class='pricedisplay'>";
 	//calculates average sales amount per order for the month
 	if ( (admin_display_total_price() > 0) && ($totalOrders > 0) ) {
 		$totalAverage = ((int)admin_display_total_price() / (int)$totalOrders);
@@ -506,55 +488,59 @@ function wpsc_admin_latest_activity() {
 add_action( 'wpsc_admin_pre_activity', 'wpsc_admin_latest_activity' );
 
 
-
-
-
 /*
- * 	Pre-2.7 Dashboard Information
- */
-
-function wpsc_admin_dashboard_rightnow() {
-	$user = wp_get_current_user();
-	if ( $user->user_level > 9 ) {
-		echo "<div>";
-		echo "<h3>" . __( 'e-Commerce', 'wpsc' ) . "</h3>";
-		echo "<p>";
-		do_action( 'wpsc_admin_pre_activity' );
-//		wpsc_admin_latest_activity();
-		do_action( 'wpsc_admin_post_activity' );
-		echo "</div>";
-	}
-}
-
-/*
- * Dashboard Widget for 2.7 (TRansom)
+ * Dashboard Widget Setup
+ * Adds the dashboard widgets if the user is an admin
+ * Since 3.6
  */
 
 function wpsc_dashboard_widget_setup() {
 	global $current_user;
 	get_currentuserinfo();
-	if ( $current_user->user_level > 9 ) {
+	if ( is_admin() ) {
 		$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
+		// Enqueue the styles and scripts necessary
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
-		wp_add_dashboard_widget( 'wpsc_dashboard_widget', __( 'e-Commerce' ), 'wpsc_dashboard_widget' );
+		wp_enqueue_script( 'datepicker-ui', WPSC_URL . "/wpsc-core/js/ui.datepicker.js", array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier );
+		// Add the dashboard widgets
+		wp_add_dashboard_widget( 'wpsc_dashboard_widget', __( 'Sales Summary' ), 'wpsc_dashboard_widget' );
+		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter' ), 'wpsc_quarterly_dashboard_widget' );
+		wp_add_dashboard_widget( 'wpsc_dashboard_news', __( 'Getshopped News' ), 'wpsc_dashboard_news' );
+		wp_add_dashboard_widget( 'wpsc_dashboard_4months_widget', __( 'Sales by Month' ), 'wpsc_dashboard_4months_widget' );
+	
+		// Sort the Dashboard widgets so ours it at the top
+		global $wp_meta_boxes;
+		$normal_dashboard = $wp_meta_boxes['dashboard']['normal']['core'];
+		// Backup and delete our new dashbaord widget from the end of the array
+		$wpsc_widget_backup = array('wpsc_dashboard_news' => $normal_dashboard['wpsc_dashboard_news']);
+		$wpsc_widget_backup += array('wpsc_dashboard_widget' => $normal_dashboard['wpsc_dashboard_widget']);	
+
+
+		unset($normal_dashboard['wpsc_dashboard_news']);
+		unset($normal_dashboard['wpsc_dashboard_widget']);
+	
+		// Merge the two arrays together so our widget is at the beginning
+	
+		$sorted_dashboard = array_merge($wpsc_widget_backup, $normal_dashboard);
+	
+		// Save the sorted array back into the original metaboxes 
+	
+		$wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
 	}
 }
 
 /*
-  if(file_exists(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php")){
-  function wpsc_dashboard_quarterly_widget_setup() {
-  wp_enqueue_script('flot', WPSC_URL.'/wpsc-admin/js/jquery.flot.pack.js', array('jquery'), '0.9.8');
-  wp_enqueue_script('canvas', WPSC_URL.'/wpsc-admin/js/excanvas.pack.js', array('jquery', 'flot'), '0.9.8');
-
-  wp_add_dashboard_widget('wpsc_quarterly_dashboard_widget', __('Sales by Quarter'),'wpsc_quarterly_dashboard_widget');
-  }
-  function wpsc_quarterly_dashboard_widget(){
-  require_once(WPSC_FILE_PATH."/wpsc-admin/includes/flot_graphs.php");
-  $flot = new flot();
-
-  }
-  }
+ * 	Registers the widgets on the WordPress Dashboard
  */
+
+add_action( 'wp_dashboard_setup', 'wpsc_dashboard_widget_setup' );
+
+function wpsc_dashboard_news(){
+	$rss = fetch_feed('http://getshopped.org/category/wp-e-commerce-plugin/'); 
+	$args = array('show_author' => 1, 'show_date' => 1, 'show_summary' => 1, 'items'=>3 );
+	wp_widget_rss_output($rss, $args); 
+
+}
 
 function wpsc_get_quarterly_summary() {
 	global $wpdb;
@@ -632,8 +618,8 @@ function wpsc_quarterly_dashboard_widget() {
 ?>
 			<div id='box'>
 				<p class='atglance'>
-					<span class='wpsc_quart_left'>At a Glance</span>
-					<span class='wpsc_quart_right'>Revenue</span>
+					<span class='wpsc_quart_left'><?php _e('At a Glance' , 'wpsc'); ?></span>
+					<span class='wpsc_quart_right'><?php _e('Revenue' , 'wpsc'); ?></span>
 				</p>
 				<div style='clear:both'></div>
 				<p class='quarterly'>
@@ -656,17 +642,6 @@ function wpsc_quarterly_dashboard_widget() {
 	}
 }
 
-function wpsc_quarterly_setup() {
-	global $current_user;
-	get_currentuserinfo();
-	if ( $current_user->user_level > 9 ) {
-		$version_identifier = WPSC_VERSION . "." . WPSC_MINOR_VERSION;
-		wp_enqueue_script( 'datepicker-ui', WPSC_URL . "/wpsc-core/js/ui.datepicker.js", array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier );
-		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter' ), 'wpsc_quarterly_dashboard_widget' );
-	}
-}
-
-add_action( 'wp_dashboard_setup', 'wpsc_quarterly_setup' );
 
 function wpsc_dashboard_widget() {
 	global $current_user;
@@ -764,28 +739,6 @@ function wpsc_dashboard_4months_widget() {
 	echo $output;
 }
 
-function wpsc_dashboard_4months_widget_setup() {
-	global $current_user;
-	get_currentuserinfo();
-	if ( $current_user->user_level == 10 ) {
-		wp_add_dashboard_widget( 'wpsc_dashboard_4months_widget', __( 'Sales by' ), 'wpsc_dashboard_4months_widget' );
-	}
-}
-
-function wpsc_admin_4months_widget_rightnow() {
-	$user = wp_get_current_user();
-	if ( $user->user_level > 9 ) {
-		echo "<div>";
-		echo "<h3>" . __( 'e-Commerce', 'wpsc' ) . "</h3>";
-		echo "<p>";
-		wpsc_dashboard_4months_widget();
-		echo "</div>";
-	}
-}
-if ( IS_WP27 )
-	add_action( 'wp_dashboard_setup', 'wpsc_dashboard_4months_widget_setup' );
-else
-	add_action( 'activity_box_end', 'wpsc_admin_4months_widget_rightnow' );
 
 //Modification to allow for multiple column layout
 
@@ -802,22 +755,6 @@ function wpsc_fav_action( $actions ) {
 	return $actions;
 }
 add_filter( 'favorite_actions', 'wpsc_fav_action' );
-
-function wpsc_admin_notices() {
-	global $wpdb;
-//  exit(get_option('wpsc_default_category'));
-	if ( get_option( 'wpsc_default_category' ) != 'all+list' && get_option( 'wpsc_default_category' ) != 'all' && get_option( 'wpsc_default_category' ) != 'list' ) {
-		if ( (get_option( 'wpsc_default_category' ) < 1 ) ) {  // if there is no default category or it is deleted
-			if ( !$_POST['wpsc_default_category'] ) { // if we are not changing the default category
-				echo "<div id='message' class='updated fade' style='background-color: rgb(255, 251, 204);'>";
-				echo "<p>" . __( 'Your "products page" is not currently set to display any products. You need to select a product grouping to display by default. <br /> This is set in the Shop Settings page.', 'wpsc' ) . "</p>";
-				echo "</div>\n\r";
-			}
-		}
-	}
-}
-if ( isset( $_GET['page'] ) && (stristr( $_GET['page'], WPSC_DIR_NAME )) )
-	add_action( 'admin_notices', 'wpsc_admin_notices' );
 
 function wpsc_print_admin_scripts(){
 	global $version_identifier;
