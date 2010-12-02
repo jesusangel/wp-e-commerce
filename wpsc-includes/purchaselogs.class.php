@@ -346,7 +346,7 @@ function wpsc_purchaselog_details_SKU() {
    if ( $meta_value != null ) {
       return $meta_value;
    } else {
-      $meta_value = get_product_meta( $purchlogitem->purchitem->prodid, 'sku' );
+      $meta_value = get_product_meta( $purchlogitem->purchitem->prodid, 'sku', true );
       if ( $meta_value != null ) {
          return $meta_value;
       } else {

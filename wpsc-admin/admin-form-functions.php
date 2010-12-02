@@ -302,8 +302,7 @@ function wpsc_packing_slip($purchase_id) {
 	$purch_sql = "SELECT * FROM `".WPSC_TABLE_PURCHASE_LOGS."` WHERE `id`='".$purchase_id."'";
 		$purch_data = $wpdb->get_row($purch_sql,ARRAY_A) ;
 			
-
-		//echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
+					//echo "<p style='padding-left: 5px;'><strong>".__('Date', 'wpsc')."</strong>:".date("jS M Y", $purch_data['date'])."</p>";
 
 		$cartsql = "SELECT * FROM `".WPSC_TABLE_CART_CONTENTS."` WHERE `purchaseid`=".$purchase_id."";
 		$cart_log = $wpdb->get_results($cartsql,ARRAY_A) ; 
@@ -326,7 +325,7 @@ function wpsc_packing_slip($purchase_id) {
 			
 			if($input_data != null) {
 				$form_data = $wpdb->get_results("SELECT * FROM `".WPSC_TABLE_CHECKOUT_FORMS."` WHERE `active` = '1'",ARRAY_A);
-				
+
 				foreach($form_data as $form_field) {
 					switch($form_field['type']) {
 					case 'country':
@@ -418,7 +417,7 @@ function wpsc_packing_slip($purchase_id) {
 				} else {
 					$shipping = 0;
 				}
-				
+			
 				$price = $cart_row['price'] * $cart_row['quantity'];
 				$gst = $price - ($price	/ (1+($cart_row['gst'] / 100)));
 				
@@ -435,7 +434,7 @@ function wpsc_packing_slip($purchase_id) {
 				echo " </td>";
 				
 				echo " <td>";
-				echo $product_data[0]['name'];
+				echo $cart_row['name'];
 				echo stripslashes($variation_list);
 				echo " </td>";
 				
