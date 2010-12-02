@@ -75,8 +75,8 @@ function wpsc_generate_product_feed() {
 	$output .= "  <channel>\n\r";
 	$output .= "    <title><![CDATA[".get_option('blogname')." Products]]></title>\n\r";
 	$output .= "    <link>".get_option('siteurl')."/wp-admin/admin.php?page=".WPSC_DIR_NAME."/display-log.php</link>\n\r";
-	$output .= "    <description>This is the WP E-Commerce Product List RSS feed</description>\n\r";
-	$output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
+	$output .= "    <description>This is the WP e-Commerce Product List RSS feed</description>\n\r";
+	$output .= "    <generator>WP e-Commerce Plugin</generator>\n\r";
 	$output .= "    <atom:link href='$self' rel='self' type='application/rss+xml' />\n\r";
 
 	foreach ($products as $post) {

@@ -84,7 +84,7 @@ function wpsc_display_sales_logs() {
       <?php }
 
          if(get_option('wpsc_purchaselogs_fixed')== false || (wpsc_check_uniquenames()) ){ ?>
-            <div class='error' style='padding:8px;line-spacing:8px;'><span ><?php _e('When upgrading the Wp-E-Commerce Plugin from 3.6.* to 3.7 it is required that you associate your checkout form fields with the new Purchase Logs system. To do so please '); ?> <a href='<?php echo $fixpage; ?>'>Click Here</a></span></div>
+            <div class='error' style='padding:8px;line-spacing:8px;'><span ><?php _e('When upgrading the WP e-Commerce Plugin from 3.6.* to 3.7 it is required that you associate your checkout form fields with the new Purchase Logs system. To do so please '); ?> <a href='<?php echo $fixpage; ?>'>Click Here</a></span></div>
    <?php  }
       ///// end of update message section //////?>
       <div id='dashboard-widgets' style='min-width: 825px;'>
@@ -327,7 +327,7 @@ function wpsc_display_sales_logs() {
 
           <div class='inside'>
       <div class='order_summary_subsection'>
-      <strong><?php _e('Last 30 Days', 'wpsc'); ?></strong>
+      <strong><?php _e('Current Month', 'wpsc'); ?></strong>
       <p id='log_total_month'>
 <?php
       $year = date("Y");
@@ -339,7 +339,7 @@ function wpsc_display_sales_logs() {
       </p>
       </div>
       <div class='order_summary_subsection'>
-       <strong><?php _e('Life Time', 'wpsc'); ?></strong>
+       <strong><?php _e('Total Income', 'wpsc'); ?></strong>
          <p id='log_total_absolute'><?php echo wpsc_currency_display( admin_display_total_price() ); ?></p>
       </div>
 

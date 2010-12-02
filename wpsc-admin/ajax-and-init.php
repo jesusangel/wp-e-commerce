@@ -878,10 +878,10 @@ function wpsc_admin_sale_rss() {
 		$output .= "<?xml version='1.0'?>\n\r";
 		$output .= "<rss version='2.0'>\n\r";
 		$output .= "  <channel>\n\r";
-		$output .= "    <title>WP E-Commerce Product Log</title>\n\r";
+		$output .= "    <title>WP e-Commerce Product Log</title>\n\r";
 		$output .= "    <link>" . get_option( 'siteurl' ) . "/wp-admin/admin.php?page=" . WPSC_DIR_NAME . "/display-log.php</link>\n\r";
-		$output .= "    <description>This is the WP E-Commerce Product Log RSS feed</description>\n\r";
-		$output .= "    <generator>WP E-Commerce Plugin</generator>\n\r";
+		$output .= "    <description>This is the WP e-Commerce Product Log RSS feed</description>\n\r";
+		$output .= "    <generator>WP e-Commerce Plugin</generator>\n\r";
 
 		foreach ( (array)$purchase_log as $purchase ) {
 			$purchase_link = get_option( 'siteurl' ) . "/wp-admin/admin.php?page=" . WPSC_DIR_NAME . "/display-log.php&amp;purchaseid=" . $purchase['id'];
