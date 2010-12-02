@@ -656,27 +656,17 @@ class wpsc_checkout {
 			$_SESSION['wpsc_checkout_saved_values'] = get_user_meta( $user_ID, 'wpshpcrt_usr_profile',1 );
 			
 			$delivery_country_id = wpsc_get_country_form_id_by_type('delivery_country');
-			if($this->checkout_item->id == $delivery_country_id){
+     		$billing_country_id = wpsc_get_country_form_id_by_type('country');
+			if(($this->checkout_item->id == $delivery_country_id) || ($this->checkout_item->id == $billing_country_id)){
 				if( is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) 
 					&& count($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) > 1){
 			 	
 			 		$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
 				 	$_SESSION['wpsc_delivery_region'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][1];
-			 	} else {
-				
+			 	} elseif(is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id])) {				
 				 	$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
-				}
-     		}
-     		$billing_country_id = wpsc_get_country_form_id_by_type('country');
-			if($this->checkout_item->id == $billing_country_id){
-				if( is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) 
-					&& count($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) > 1){
-			 	
-			 		$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
-				 	$_SESSION['wpsc_selected_region'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][1];
-			 	} else {
-				
-				 	$_SESSION['wpsc_selected_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
+				}else{
+					$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id];
 				}
      		}
 		}
