@@ -383,13 +383,13 @@ endif;
 
       <?php if (wpsc_show_find_us()) : ?>
       <tr>
-         <td><?php _e('How did you find us' , 'wpsc'); ?> :</td>
+         <td><label for='how_find_us'><?php _e('How did you find us' , 'wpsc'); ?> :</label></td>
          <td>
             <select name='how_find_us'>
-               <option value='Word of Mouth'>Word of mouth</option>
-               <option value='Advertisement'>Advertising</option>
-               <option value='Internet'>Internet</option>
-               <option value='Customer'>Existing Customer</option>
+               <option value='Word of Mouth'><?php _e('Word of mouth' , 'wpsc'); ?></option>
+               <option value='Advertisement'><?php _e('Advertising' , 'wpsc'); ?></option>
+               <option value='Internet'><?php _e('Internet' , 'wpsc'); ?></option>
+               <option value='Customer'><?php _e('Existing Customer' , 'wpsc'); ?></option>
             </select>
          </td>
       </tr>

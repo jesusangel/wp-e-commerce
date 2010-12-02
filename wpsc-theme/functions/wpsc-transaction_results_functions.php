@@ -91,7 +91,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 		// New code to check whether transaction is processed, true if accepted false if pending or incomplete
 		$is_transaction = wpsc_check_purchase_processed($purchase_log['processed']);
 
-		if ( ( "wpsc_merchant_testmode" == $purchase_log['gateway'] ) && ($purchase_log['processed'] < 3) ) {
+		if ( (( "wpsc_merchant_testmode" == $purchase_log['gateway'] ) && (!$is_transaction) ) || !$is_transaction) {
 			$message = stripslashes( __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc') );
 			$message_html = __('Thank you, your purchase is pending, you will be sent an email once the order clears. All prices include tax and postage and packaging where applicable. You ordered these items:%product_list%%total_shipping%%total_price%', 'wpsc');
 		} else {
@@ -283,7 +283,7 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 				add_filter( 'wp_mail_from', 'wpsc_replace_reply_address', 0 );
 				add_filter( 'wp_mail_from_name', 'wpsc_replace_reply_name', 0 );
 
-				if ( $purchase_log['processed'] < 3 ) {
+				if ( !$is_transaction ) {
 					$payment_instructions = strip_tags( stripslashes( get_option( 'payment_instructions' ) ) );
 					$message = __( 'Thank you, your purchase is pending, you will be sent an email once the order clears.', 'wpsc' ) . "\n\r" . $payment_instructions . "\n\r" . $message;
 					wp_mail( $email, __( 'Order Pending: Payment Required', 'wpsc' ), $message );
