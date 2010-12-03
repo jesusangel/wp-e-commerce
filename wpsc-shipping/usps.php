@@ -107,7 +107,6 @@ class usps {
     }
 
     function submit_form() {
-        //	exit('<pre>'.print_r($_POST, true).'</pre>');
         if ($_POST['uspsid'] != '') {
             update_option('uspsid', $_POST['uspsid']);
         }
@@ -171,7 +170,6 @@ class usps {
                     "PRIORITY_REGULAR" => 0,
                     "PRIORITY_LARGE" => 0,
                     "EXPRESS" => 0,
-                    //"EXPRESS HFP" => 0,
                     "EXPRESS_REGULAR" => 0,
                     "PARCEL POST" => 0,
                     "MEDIA" => 0,
@@ -220,14 +218,6 @@ class usps {
                     $container = 'FLAT RATE ENVELOPE';
                 }
 
-                /*
-                if ($key == 'EXPRESS HFP') {
-                    echo 'alio alio';
-                    $container = 'FLAT RATE ENVELOPE';
-                }
-                 *
-                */
-
                 if ($key == 'EXPRESS_REGULAR') {
                     $key = 'EXPRESS';
                     $container = '';
@@ -261,7 +251,6 @@ class usps {
                         '<Size>' . $size . '</Size>' .
                         '<Machinable>' . $machinable . '</Machinable>' .
                         '</Package>';
-                //echo 'A<pre>'.$request.'</pre>A';
 
                 if ($transit) {
                     $transitreq  = 'USERID="' . MODULE_SHIPPING_USPS_USERID .
@@ -286,7 +275,6 @@ class usps {
                 $services_count++;
             }
             $request .= '</RateV3Request>'; //'</RateRequest>'; //Changed by Greg Deeth April 30, 2008
-            //exit($request);
             $request = 'API=RateV3&XML=' . urlencode($request);
         } else {
             $dest=$wpdb->get_var("SELECT country FROM ".WPSC_TABLE_CURRENCY_LIST." WHERE isocode='".$dest."'");
@@ -313,7 +301,6 @@ class usps {
         }else {
             $url = 'http://'.$usps_server.'/' . $api_dll . '?' . $request;
         }
-        //exit('URL '.$url);
         $ch=curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_NOPROGRESS, 1);
@@ -323,10 +310,7 @@ class usps {
         curl_setopt($ch, CURLOPT_USERAGENT, 'wp-e-commerce');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $body = curl_exec($ch);
-        //echo '<pre>'.print_r($body, true).'</pre>';
-        //exit('Response:<pre>'.print_r($body, true).'</pre>'.$url);
         curl_close($ch);
-        //exit($body);
         $rates=array();
         $response=array();
         while (true) {
@@ -347,7 +331,6 @@ class usps {
                     $number = $regs[1];
                     $description = ereg('<Description>(.*)</Description>', $response[0], $regs);
                     $description = $regs[1];
-                    //return array('error' => $number . ' - ' . $description);
                 }
             }
 
@@ -411,14 +394,12 @@ class usps {
                 }
             }
             $wpsc_usps_quote = $rates;
-            //return $rates;
         } else {
             if (ereg('<Error>', $response[0])) {
                 $number = ereg('<Number>(.*)</Number>', $response[0], $regs);
                 $number = $regs[1];
                 $description = ereg('<Description>(.*)</Description>', $response[0], $regs);
                 $description = $regs[1];
-                //return array('error' => $number . ' - ' . $description);
             } else {
                 $body = $response[0];
                 $services = array();
@@ -434,7 +415,6 @@ class usps {
                 }
 
                 $allowed_types = Array( 'EXPRESS MAIL INT' => "Express Mail International (EMS)", 'EXPRESS MAIL INT FLAT RATE ENV' => "Express Mail International (EMS) Flat-Rate Envelope", 'PRIORITY MAIL INT' => "Priority Mail International", 'PRIORITY MAIL INT FLAT RATE ENV' => "Priority Mail International Flat-Rate Envelope", 'PRIORITY MAIL INT FLAT RATE BOX' => "Priority Mail International Flat-Rate Box", 'FIRST-CLASS MAIL INT' => "First Class Mail International Letters" );
-                //foreach( explode(", ", MODULE_SHIPPING_USPS_TYPES_INTL) as $value ) $allowed_types[$value] = $this->intl_types[$value];
 
                 $size = sizeof($services);
                 for ($i=0, $n=$size; $i<$n; $i++) {
@@ -454,12 +434,10 @@ class usps {
                         if ($time != '') $transittime[$service] = ' (' . $time . ')';
                     }
                 }
-                //$uspsQuote=$rates;
             }
         }
         $uspsQuote=$rates;
         $wpsc_usps_quote = $rates;
-        //echo ('<pre>'.print_r($uspsQuote,true).'</pre>');
         return $uspsQuote;
     }
 

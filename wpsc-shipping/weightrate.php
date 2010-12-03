@@ -9,7 +9,6 @@
 class weightrate {
 	var $internal_name, $name;
 
-
 	/**
 	 *
 	 *
@@ -22,10 +21,6 @@ class weightrate {
 		return true;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -35,10 +30,6 @@ class weightrate {
 		return $this->name;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -47,10 +38,6 @@ class weightrate {
 	function getInternalName() {
 		return $this->internal_name;
 	}
-
-
-
-
 
 	/**
 	 *
@@ -78,12 +65,7 @@ class weightrate {
 		$output.="<tr class='addlayer'><td colspan='2'>Layers: <a style='cursor:pointer;' id='addweightlayer' >Add Layer</a></td></tr>";
 
 		return $output;
-
 	}
-
-
-
-
 
 	/**
 	 *
@@ -125,14 +107,8 @@ class weightrate {
 			update_option('weight_rate_layers', $new_layer);
 
 		}
-
 		return true;
-
 	}
-
-
-
-
 
 	/**
 	 *
@@ -189,9 +165,6 @@ class weightrate {
 
 	}
 
-
-
-
 	/**
 	 *
 	 *
@@ -246,11 +219,6 @@ class weightrate {
 		}
 		return $shipping;
 	}
-
-
-
-
-
 }
 
 
