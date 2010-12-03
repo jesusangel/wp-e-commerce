@@ -73,20 +73,18 @@ class wpec_taxes_controller {
                $returnable = array( 'total' => $total_tax );
             } else {
                //check if there are any rates setup for the base_country
-              // if ( $this->wpec_taxes_rate_exists( $wpec_base_country ) ) {
-                  //calculate subtotal for the items
-                  $taxable_total = $wpsc_cart->calculate_subtotal();
+              //calculate subtotal for the items
+              $taxable_total = $wpsc_cart->calculate_subtotal();
 
-                  //get the rate for the country and region if set
-                  $tax_rate = $this->wpec_taxes->wpec_taxes_get_rate( $wpec_selected_country, $region );
+              //get the rate for the country and region if set
+              $tax_rate = $this->wpec_taxes->wpec_taxes_get_rate( $wpec_selected_country, $region );
 
-                  //is the region configured to apply tax on shipping? if so add shipping price to the taxable total
-                  if ( $tax_rate['shipping'] ) {
-                     $taxable_total += $wpsc_cart->calculate_total_shipping();
-                  }// if
-                  //calculate tax
-                  $returnable = array( 'total' => $this->wpec_taxes_calculate_tax( $taxable_total, $tax_rate['rate'] ), 'rate' => $tax_rate['rate'] );
-             //  }// if
+              //is the region configured to apply tax on shipping? if so add shipping price to the taxable total
+              if ( $tax_rate['shipping'] ) {
+                 $taxable_total += $wpsc_cart->calculate_total_shipping();
+              }// if
+              //calculate tax
+              $returnable = array( 'total' => $this->wpec_taxes_calculate_tax( $taxable_total, $tax_rate['rate'] ), 'rate' => $tax_rate['rate'] );
             }// if
          }// if
       } //if
