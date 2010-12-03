@@ -58,10 +58,7 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$data['RETURNFMFDETAILS'] = "1"; // optional - return fraud management filter data
 
 		// Basic Cart Data
-		//$data['TRANSACTIONID'] = $this->cart_data['session_id'];
-		//$data['CURRENCYCODE']  = $this->cart_data['store_currency'];
 		$data['INVNUM']          = $this->cart_data['session_id'];
-		//$data['CUSTOM']        = $this->cart_data['session_id'];
 		$data['NOTIFYURL']       = add_query_arg( 'gateway', 'wpsc_merchant_paypal_pro', $this->cart_data['notification_url'] );
 		$data['IPADDRESS']       = $_SERVER["REMOTE_ADDR"];
 
@@ -69,7 +66,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$data['FIRSTNAME']   = $this->cart_data['billing_address']['first_name'];
 		$data['LASTNAME']    = $this->cart_data['billing_address']['last_name'];
 		$data['EMAIL']       = $this->cart_data['email_address'];
-		// $data['PHONENUM'] = $this->cart_data['billing_address'];
 		$data['STREET']      = $this->cart_data['billing_address']['address'];
 		$data['CITY']        = $this->cart_data['billing_address']['city'];
 		$data['STATE']       = $this->cart_data['billing_address']['state'];
@@ -96,12 +92,10 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$data['CVV2']           = $_POST['card_code'];
 
 		// Ordered Items
-		//$discount = $wpsc_cart->coupons_amount;
 
 		// Cart Item Data
 		$i = $item_total = $tax_total = 0;
 
-		//	$shipping_total = $this->cart_data['shipping_price'];
 		$shipping_total = $this->cart_data['base_shipping'];
 
 		foreach ( $this->cart_items as $cart_row ) {
@@ -110,10 +104,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 			$cart_items['L_NUMBER' . $i] = $i;
 			$cart_items['L_QTY' . $i] = $cart_row['quantity'];
 			$cart_items['L_TAXAMT' . $i] = $this->format_price( 0 );
-
-			//"item_number_$i" => $cart_row['product_id'],
-			//"shipping_$i" => $this->format_price($cart_row['shipping']), // additional shipping for the the (first item / total of the items)
-			//"shipping2_$i" => $this->format_price($cart_row['shipping']), // additional shipping beyond the first item
 
 			$item_total += $this->format_price( $cart_row['price'] * $cart_row['quantity'] );
 			$tax_total += $this->format_price( $cart_row['tax'] );
@@ -127,8 +117,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		$data['TAXAMT'] = number_format( $tax_total, 2 );
 
 		$data['AMT'] = number_format( $item_total + $tax_total + $shipping_total, 2 );
-
-//		exit("<pre>".print_r($data, true)."</pre><br /><br /><pre>".print_r($this->cart_data, true)."</pre>");
 
 		$this->collected_gateway_data = $data;
 	}
@@ -149,8 +137,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 			'user-agent' => $this->cart_data['software_name'] . " " . get_bloginfo( 'url' )
 		);
 		$response = wp_remote_post( $paypal_url, $options );
-
-		//exit( '<pre>' . print_r( $options, true ) . '</pre><pre>' . print_r( $response, true ) . '</pre>' );
 
 		// parse the response body
 
@@ -187,13 +173,10 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 			}
 		}
 
-		//exit("<pre>".print_r($parsed_response,true)."</pre>");
-
 		switch ( $parsed_response['ACK'] ) {
 			case 'Success':
 			case 'SuccessWithWarning':
 				$this->set_transaction_details( $parsed_response['TRANSACTIONID'], 3 );
-				//transaction_results($this->cart_data['session_id'], false);
 				$this->go_to_transaction_results( $this->cart_data['session_id'] );
 				break;
 
@@ -289,7 +272,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 		" . print_r( $this->cart_items, true ) . "
 		{$altered_count}
 		";
-		//mail('thomas.howard@gmail.com', "IPN Debugging", $message);
 	}
 
 	function format_price( $price ) {
@@ -316,7 +298,6 @@ class wpsc_merchant_paypal_pro extends wpsc_merchant {
 }
 
 function submit_paypal_pro() {
-	//exit('<pre>'.print_r($_POST, true).'</pre>');
 	if ( isset( $_POST['PayPalPro']['username'] ) )
 		update_option( 'paypal_pro_username', $_POST['PayPalPro']['username'] );
 

@@ -301,7 +301,6 @@ function form_paypal_express() {
 			$paypal_currency_list = $wpsc_gateways['wpsc_merchant_paypal_express']['supported_currencies']['currency_list'];
 	
 			$currency_list = $wpdb->get_results("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')", ARRAY_A);
-	//		exit("SELECT DISTINCT `code`, `currency` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `code` IN ('".implode("','",$paypal_currency_list)."')".'<pre>'.print_r($wpsc_gateways,1).'</pre>');
 			foreach($currency_list as $currency_item) {
 				$selected_currency = '';
 				if($current_currency == $currency_item['code']) {
@@ -466,7 +465,6 @@ function paypal_processingfunctions(){
 		$_SESSION['reshash']=$resArray;
 		if($ack!="SUCCESS"){
 			$location = get_option('transact_url')."&act=error";
-				// header("Location: $location");
 		}else{
 			$transaction_id = $wpdb->escape($resArray['TRANSACTIONID']);
 			switch($resArray['PAYMENTSTATUS']) {
@@ -485,7 +483,6 @@ function paypal_processingfunctions(){
 			
 			$_SESSION['paypalExpressMessage'] = null;
 			wp_redirect($location);
-//			header("Location: $location");
 			exit();
 		}
 	

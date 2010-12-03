@@ -32,7 +32,6 @@ class wpsc_merchant_testmode extends wpsc_merchant {
 	
 	function submit() {
 		$this->set_purchase_processed_by_purchid(2);
-		//$this->set_transaction_details();
 	 	$this->go_to_transaction_results($this->cart_data['session_id']);
 	
 	 	exit();
@@ -43,8 +42,6 @@ class wpsc_merchant_testmode extends wpsc_merchant {
 function form_testmode() {
 	$output = "<tr>\n\r";
 	$output .= "	<td colspan='2'>\n\r";
-	// $output = "	</td>\n\r";
-	// $output = "	<td>\n\r";
 	
 	$output .= "<strong>".__('Enter the payment instructions that you wish to display to your customers when they make a purchase', 'wpsc').":</strong><br />\n\r";
 	$output .= "<textarea cols='40' rows='9' name='wpsc_options[payment_instructions]'>".stripslashes(get_option('payment_instructions'))."</textarea><br />\n\r";

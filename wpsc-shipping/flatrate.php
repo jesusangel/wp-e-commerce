@@ -9,7 +9,6 @@
 class flatrate {
 	var $internal_name, $name;
 
-
 	/**
 	 *
 	 *
@@ -22,10 +21,6 @@ class flatrate {
 		return true;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -35,10 +30,6 @@ class flatrate {
 		return $this->name;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -47,13 +38,6 @@ class flatrate {
 	function getInternalName() {
 		return $this->internal_name;
 	}
-
-
-
-
-
-
-
 
 	/**
 	 *
@@ -89,12 +73,7 @@ class flatrate {
 		$output .= "<tr class='rate_row'><td>Europe</td><td>$<input type='text' size='4' name='shipping[europe]'	value='{$shipping['europe']}'></td></tr>";
 		$output .= "<tr class='rate_row'><td>Africa</td><td>$<input type='text' size='4' name='shipping[africa]'	value='{$shipping['africa']}'></td></tr>";
 		return $output;
-
 	}
-
-
-
-
 
 	/**
 	 *
@@ -111,10 +90,6 @@ class flatrate {
 		}
 		return true;
 	}
-
-
-
-
 
 	/**
 	 *
@@ -220,13 +195,6 @@ class flatrate {
 
 	}
 
-
-
-
-
-
-
-
 	/**
 	 *
 	 *
@@ -282,10 +250,6 @@ class flatrate {
 		return $shipping;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -296,8 +260,6 @@ class flatrate {
 	function get_cart_shipping($total_price, $weight) {
 		return $output;
 	}
-
-
 }
 
 

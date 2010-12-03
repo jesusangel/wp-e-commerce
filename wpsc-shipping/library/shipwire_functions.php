@@ -20,8 +20,6 @@ function shipwire_build_xml($log_id) {
 	}
 	
 	foreach ($form_info as $info) {
-		//echo "<pre>".print_r(array_flip($form_info),1)."</pre>";
-// 		exit (print_r(!array_search('delivery_address',$info),1));
 		if ((($info['type'] == 'delivery_address') && ($info['active']=='1')) || (!$delivery_address && ($info['type'] == 'address') && ($info['active']=='1'))) {
 			$address_key = $info['id'];
 		} else if((($info['type'] == 'delivery_city') && ($info['active']=='1')) || (!$delivery_city && ($info['type'] == 'city') && ($info['active']=='1'))) {
@@ -38,10 +36,8 @@ function shipwire_build_xml($log_id) {
 	}
 	
 	$user_infos = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_SUBMITED_FORM_DATA." WHERE log_id='".$log_id."'", ARRAY_A);
-	//echo (print_r($user_infos,1));
 	foreach ($user_infos as $user_info) {
 		if ($user_info['form_id'] == $address_key) {
-			//exit ($user_info['form_id']." ".$address_key);
 			$address = $user_info['value'];
 		}
 		if ($user_info['form_id'] == $city_key) {
@@ -67,7 +63,6 @@ function shipwire_build_xml($log_id) {
 	}
 	$full_name = $first_name." ".$last_name;
 	$products = $wpdb->get_results("SELECT * FROM ".WPSC_TABLE_CART_CONTENTS." WHERE purchaseid='".$log_id."'",ARRAY_A);
-	//return $log_id;
 	$xml = "<?xml version='1.0' encoding='utf-8'?>";
 	$xml .= "<OrderList>";
 	$xml .= "<EmailAddress>$email</EmailAddress>";

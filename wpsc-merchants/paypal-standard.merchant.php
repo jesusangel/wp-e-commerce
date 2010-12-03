@@ -107,8 +107,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 
 		// Order settings to be sent to paypal
 		$paypal_vars += array(
-			//'tax' => '',
-			//'custom' => '',
 			'invoice' => $this->cart_data['session_id']
 			);
 
@@ -258,7 +256,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 
 		if(defined('WPSC_ADD_DEBUG_PAGE') and (WPSC_ADD_DEBUG_PAGE == true) ) {
 			echo "<a href='".get_option('paypal_multiple_url')."?".$gateway_values."'>Test the URL here</a>";
-			//echo "<pre>".print_r($this->cart_items,true)."</pre>";
 			echo "<pre>".print_r($this->collected_gateway_data,true)."</pre>";
 			exit();
 		}
@@ -368,9 +365,6 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 		$price = number_format(sprintf("%01.2f",$price),$decimal_places,'.','');
 		return $price;
 	}
-
-
-	
 }
 
 
@@ -536,7 +530,6 @@ function form_paypal_multiple() {
 		$current_currency = $store_currency_data['code'];
 	}
 
-		//	exit($current_currency.'<br />'.$store_currency_data['code']);
 	if($current_currency != $store_currency_data['code']) {
 		$output .= "
   <tr>
