@@ -37,7 +37,6 @@ function validate_form_data() {
 
 	$any_bad_inputs = false;
 	$changes_saved = false;
-	//exit('<pre>'.print_r($_POST['collected_data'],1).'</pre>');
 	$_SESSION['collected_data'] = null;
 
 	if ( $_POST['collected_data'] != null ) {
@@ -224,7 +223,6 @@ function wpsc_display_form_fields() {
 						$country_code = ($meta_data[$form_field['id']][0]);
 					else	
 						$country_code = ($meta_data[$form_field['id']]);
-					//echo '<pre>'.print_r($country_code,1).'</pre>';
 					echo "<select name='collected_data[" . $form_field['id'] . "][0]' >" . nzshpcrt_country_list( $country_code ) . "</select>";
 					if( isset($meta_data[$form_field['id']][1]) )
 						echo "<br /><select name='collected_data[" . $form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$form_field['id']][1] ) . "</select>";
@@ -233,14 +231,12 @@ function wpsc_display_form_fields() {
 				
 					break;
 
-				///don't forget this
 				case "delivery_country":
 
 				if (is_array($meta_data[$form_field['id']]))
 					$country_code = ($meta_data[$form_field['id']][0]);
 				else	
 					$country_code = ($meta_data[$form_field['id']]);
-				//echo '<pre>'.print_r($country_code,1).'</pre>';
 				echo "<select name='collected_data[" . $form_field['id'] . "][0]' >" . nzshpcrt_country_list( $country_code ) . "</select>";
 					if( isset($meta_data[$form_field['id']][1]) )
 						echo "<br /><select name='collected_data[" . $form_field['id'] . "][1]'>" . nzshpcrt_region_list( $country_code, $meta_data[$form_field['id']][1] ) . "</select>";
@@ -401,7 +397,6 @@ function wpsc_user_details() {
 			$billing_country = $country_data[0]['value'];
 			$shipping_country = $country_data[0]['value'];
 		}
-		//exit('<pre>'.print_r($purchase,true).'</pre>');
 		echo wpsc_currency_display( $purchase['totalprice'], array('display_as_html' => false) );
 		$subtotal += $purchase['totalprice'];
 		echo " </td>\n\r";
@@ -439,7 +434,6 @@ function wpsc_user_details() {
 		$usps_id = get_option( 'usps_user_id' );
 		if ( $usps_id != null ) {
 			$XML1 = "<TrackFieldRequest USERID=\"$usps_id\"><TrackID ID=\"" . $purchase['track_id'] . "\"></TrackID></TrackFieldRequest>";
-			//eecho cho  "--->".$purchase['track_id'];
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, "http://secure.shippingapis.com/ShippingAPITest.dll?" );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -447,7 +441,6 @@ function wpsc_user_details() {
 			curl_setopt( $ch, CURLOPT_HEADER, 0 );
 			$postdata = "API=TrackV2&XML=" . $XML1;
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $postdata );
-			// 		$result = curl_exec($ch);
 
 			$parser = new xml2array;
 			$parsed = $parser->parse( $result );
@@ -621,8 +614,6 @@ function wpsc_user_details() {
 				echo "  <tr><td>" . __( 'Email', 'wpsc' ) . ":</td><td>" . $purchase['email'] . "</td></tr>";
 			}
 
-			//if(get_option('payment_method') == 2)
-			//{
 			$gateway_name = '';
 			foreach ( (array)$nzshpcrt_gateways as $gateway ) {
 				if ( $purchase_log[0]['gateway'] != 'testmode' ) {
@@ -633,14 +624,13 @@ function wpsc_user_details() {
 					$gateway_name = "Manual Payment";
 				}
 			}
-			//}
 			echo "  <tr><td>" . __( 'Payment Method', 'wpsc' ) . ":</td><td>" . $gateway_name . "</td></tr>";
 			echo "  <tr><td>" . __( 'Purchase #', 'wpsc' ) . ":</td><td>" . $purchase['id'] . "</td></tr>";
 			if ( $purchase['transactid'] != '' ) {
 				echo "  <tr><td>" . __( 'Transaction Id', 'wpsc' ) . ":</td><td>" . $purchase['transactid'] . "</td></tr>";
 			}
 			echo "</table>";
-		} // */
+		}
 		echo "  </div>\n\r";
 		echo "  </div>\n\r";
 		echo " </td>\n\r";
