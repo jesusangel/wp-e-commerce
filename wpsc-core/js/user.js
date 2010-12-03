@@ -40,75 +40,25 @@ var getresults=function(results) {
 
 function submitform(frm, show_notification)
 {
-	if(show_notification != false)
-	{
-		show_notification = true;
-	}
-	//alert(ajax.serialize(frm));
 	ajax.post("index.php?ajax=true&user=true",getresults,ajax.serialize(frm));
-	if(document.getElementById('loadingimage') != null)
-	{
+	if(document.getElementById('loadingimage') != null)	{
 		document.getElementById('loadingimage').src = WPSC_CORE_IMAGES_URL + '/indicator.gif';
 		document.getElementById('loadingindicator').style.visibility = 'visible';
-	}
-	else if(document.getElementById('alt_loadingimage') != null)
-	{
+	}else if(document.getElementById('alt_loadingimage') != null){
 		document.getElementById('alt_loadingimage').src = WPSC_CORE_IMAGES_URL + '/indicator.gif';
 		document.getElementById('alt_loadingindicator').style.visibility = 'visible';
 	}
-	if((show_notification == true) && (document.getElementById('fancy_notification') != null))
-	{
-		var options = {
-			margin: 1 ,
-			border: 1 ,
-			padding: 1 ,
-			scroll: 1
-		};
-
-		form_button_id = frm.id + "_submit_button";
-		//alert(form_button_id);
-
-		var container_offset = {};
-		new_container_offset = jQuery('#products_page_container').offset(options, container_offset);
-
-		if(container_offset['left'] == null) {
-			container_offset['left'] = new_container_offset.left;
-			container_offset['top'] = new_container_offset.top;
-		}
-
-
-		var button_offset = {};
-		new_button_offset = jQuery('#'+form_button_id).offset(options, button_offset)
-
-
-		if(button_offset['left'] == null) {
-			button_offset['left'] = new_button_offset.left;
-			button_offset['top'] = new_button_offset.top;
-		}
-
-
-		jQuery('#fancy_notification').css("left", (button_offset['left'] - container_offset['left'] + 10) + 'px');
-		jQuery('#fancy_notification').css("top", ((button_offset['top']  - container_offset['top']) -60) + 'px');
-
-
-
-		jQuery('#fancy_notification').css("display", 'block');
-		jQuery('#loading_animation').css("display", 'block');
-		jQuery('#fancy_notification_content').css("display", 'none');
-	}
+	
 	return false;
 }
 
 
 function prodgroupswitch(state)
 {
-	if(state == 'brands')
-	{
+	if(state == 'brands'){
 		jQuery('.categorydisplay').css("display", 'none');
 		jQuery('.branddisplay').css("display", 'block');
-	}
-	else if(state == 'categories')
-	{
+	}else if(state == 'categories'){
 		jQuery('.categorydisplay').css("display", 'block');
 		jQuery('.branddisplay').css("display", 'none');
 	}

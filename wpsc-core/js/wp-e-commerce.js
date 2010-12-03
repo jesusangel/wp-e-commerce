@@ -256,10 +256,8 @@ function wpsc_fancy_notification(parent_form){
 		};
 
 		form_button_id = jQuery(parent_form).attr('id') + "_submit_button";
-		//console.log(form_button_id);
-		//return;
 		var container_offset = {};
-		new_container_offset = jQuery('#products_page_container').offset(options, container_offset);
+		new_container_offset = jQuery('#default_products_page_container, #products_page_container, #list_view_products_page_container, #grid_view_products_page_container, #single_product_page_container').offset();
 
 		if(container_offset['left'] == null) {
 			container_offset['left'] = new_container_offset.left;
@@ -267,15 +265,13 @@ function wpsc_fancy_notification(parent_form){
 		}
 
 		var button_offset = {};
-		new_button_offset = jQuery('#'+form_button_id).offset(options, button_offset)
+		new_button_offset = jQuery('#'+form_button_id).offset()
 
-		if(button_offset['left'] == null) {
-			button_offset['left'] = new_button_offset.left;
-			button_offset['top'] = new_button_offset.top;
-		}
+		button_offset['left'] = new_button_offset.left;
+		button_offset['top'] = new_button_offset.top;
 
-		jQuery('#fancy_notification').css("left", (button_offset['left'] - container_offset['left'] + 10) + 'px');
-		jQuery('#fancy_notification').css("top", ((button_offset['top']  - container_offset['top']) -60) + 'px');
+		jQuery('#fancy_notification').css("left", (button_offset['left'] - container_offset['left'] - 140) + 'px');
+		jQuery('#fancy_notification').css("top", ((button_offset['top']  - container_offset['top']) + 40) + 'px');
 
 
 		jQuery('#fancy_notification').css("display", 'block');
@@ -349,7 +345,7 @@ jQuery(document).ready(function(){
 	});
 });
 
-//Javascript for variations: bounce the variatio box when nothing is selected and return false for add to cart button.
+//Javascript for variations: bounce the variation box when nothing is selected and return false for add to cart button.
 jQuery(document).ready(function(){
 	jQuery('.productcol, .textcol').each(function(){
 		jQuery('.wpsc_buy_button', this).click(function(){
