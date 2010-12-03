@@ -306,13 +306,9 @@ class ups {
         $xml = "";
         if (is_array($data)){
             foreach($data as $key=>$value){
-                //if(empty($value)){
-                //    $xml .= "<".trim($key)." />\n";
-                //}else{
-                    $xml .= "<".trim($key).">\n";
-                    $xml .= $this->array2xml($value);
-                    $xml .= "</".trim($key).">\n";
-               // }
+                $xml .= "<".trim($key).">\n";
+                $xml .= $this->array2xml($value);
+                $xml .= "</".trim($key).">\n";
             }
         }else if(is_bool($data)){
             if($data){$xml = "true\n";}
@@ -338,8 +334,8 @@ class ups {
 
         $access = array(
             "AccessLicenseNumber"=>base64_decode($args['api_id']),   // UPS API ID#
-            "UserId" =>base64_decode($args['username']), // UPS API Username
-            "Password" =>base64_decode($args['password'])  // UPS API Password
+            "UserId" =>base64_decode($args['username']), 			// UPS API Username
+            "Password" =>base64_decode($args['password'])  			// UPS API Password
         );
 
         $REQUEST .= $this->array2xml($access);
@@ -423,10 +419,9 @@ class ups {
 
         $Shipment["ShipTo"]= array(
             "Address"=>array(
-                "StateProvinceCode"=>$args['dest_state'], // The Destination State
-                "PostalCode"=>$args['dest_pcode'], // The Destination Postal Code
-                "CountryCode"=>$args['dest_ccode'], // The Destination Country
-                //"ResidentialAddress"=>"1"
+                "StateProvinceCode"=>$args['dest_state'], 	// The Destination State
+                "PostalCode"=>$args['dest_pcode'], 			// The Destination Postal Code
+                "CountryCode"=>$args['dest_ccode'], 		// The Destination Country
             ));
 
         if ($args['residential'] == '1'){ //ResidentialAddressIndicator orig - Indicator
@@ -461,8 +456,6 @@ class ups {
         $REQUEST .= "</RatingServiceSelectionRequest>";
 
         // Return the final XML document as a string to be used by _makeRateRequest
-        //$file = fopen('request-enhanced.'.time().'.log', 'w');
-        //fwrite($file, $REQUEST."\n");
         return $REQUEST;
     }
 
@@ -545,7 +538,6 @@ class ups {
                     $price = "";
                     $time = "";
 
-                    //if (array_key_exists('ups_negotiated_rates', $config)){
                     $getNegotiatedRateNode = $rate_block->getElementsByTagName("NegotiatedRates");
                     if ($getNegotiatedRateNode){
                         $negotiatedRateNode = $getNegotiatedRateNode->item(0);
@@ -568,15 +560,7 @@ class ups {
                     // Get the <TotalCharges> Node from the XML chunk
                     $getChargeNodes = $rate_block->getElementsByTagName("TotalCharges");
                     $chargeNode = $getChargeNodes->item(0);
-/*
-                    $getDeliveryNode = $rate_block->getElementsByTagName("GuaranteedDaysToDelivery");
-                    $deliveryDays = $getDeliveryNode->item(0)->nodeValue;
-                    if ($deliveryDays){
-                        $time = $this->futureDate($deliveryDays);
-                    }else{
-                        $time = $this->futureDate(6);
-                    }
-*/
+
                     // Get the <CurrencyCode> from the <TotalCharge> chunk
                     $getCurrNode= $chargeNode->getElementsByTagName("CurrencyCode");
                     // Get the value of <CurrencyCode>
@@ -744,15 +728,11 @@ class ups {
         }else{
             // Build the XML request
             $request = $this->_buildRateRequest($args);
-            //$file = fopen('logs/ups.request.'.time().'.log', 'w');
-            //fwrite($file, $request."\n");
             // Now that we have the message to send ... Send it!
             $raw_quote = $this->_makeRateRequest($request);
             // Now we have the UPS response .. unfortunately its not ready
             // to be viewed by normal humans ...
             $quotes = $this->_parseQuote($raw_quote);
-//                $file = fopen('logs/ups.response.'.time().'.log', 'w');
-//                fwrite($file, $raw_quote."\n");
             // If we actually have rates back from UPS we can use em!
             if ($quotes != false){
                 $rate_table = $this->_formatTable($quotes,$args['currency']);

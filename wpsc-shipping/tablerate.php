@@ -10,7 +10,6 @@ class tablerate {
 
 	var $internal_name, $name;
 
-
 	/**
 	 *
 	 *
@@ -23,10 +22,6 @@ class tablerate {
 		return true;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -36,10 +31,6 @@ class tablerate {
 		return $this->name;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -48,10 +39,6 @@ class tablerate {
 	function getInternalName() {
 		return $this->internal_name;
 	}
-
-
-
-
 
 	/**
 	 *
@@ -86,10 +73,6 @@ class tablerate {
 		return $output;
 	}
 
-
-
-
-
 	/**
 	 *
 	 *
@@ -121,10 +104,6 @@ class tablerate {
 		}
 		return true;
 	}
-
-
-
-
 
 	/**
 	 *
@@ -186,12 +165,6 @@ class tablerate {
 
 		}
 	}
-
-
-
-
-
-
 
 /**
 	 *
