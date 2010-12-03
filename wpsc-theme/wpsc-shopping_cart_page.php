@@ -17,9 +17,6 @@ endif;
    <tr class="header">
       <th colspan="2" ><?php _e('Product', 'wpsc'); ?></th>
       <th><?php _e('Quantity', 'wpsc'); ?></th>
-      <?php if(wpsc_uses_shipping()): ?>
-      <!--  <th><?php //_e('Shipping', 'wpsc'); ?>:</th> -->
-      <?php endif; ?>
       <th><?php _e('Price', 'wpsc'); ?></th>
       <th><?php _e('Total', 'wpsc'); ?></th>
         <th>&nbsp;</th>
@@ -80,7 +77,7 @@ endif;
    <?php endwhile; ?>
    <?php //this HTML displays coupons if there are any active coupons to use ?>
 
-   <?php //echo "<pre>"; print_r($wpsc_cart); echo "</pre>"; echo "total cart weight: ".wpsc_cart_weight_total();
+   <?php
 
    if(wpsc_uses_coupons()): ?>
 
@@ -489,7 +486,7 @@ endif;
             <?php if(!wpsc_has_tnc()) : ?>
                <input type='hidden' value='yes' name='agree' />
             <?php endif; ?>
-            <?php //exit('<pre>'.print_r($wpsc_gateway->wpsc_gateways[0]['name'], true).'</pre>');
+            <?php 
              if(wpsc_is_noca_gateway()){
 
              }else{?>
