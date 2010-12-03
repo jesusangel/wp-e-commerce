@@ -178,6 +178,19 @@ function wpsc_theme_upgrade_notice() { ?>
 }
 if ( !get_option('wpsc_ignore_theme') )
 	add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
+function wpsc_turn_on_wp_register() {?>
+
+	<div id="message" class="updated fade">
+		<p><?php printf( __( '<strong>Membership</strong>. You have set \'users must register before checkout\', for this to work you need to check \'Anyone can register\' in your WordPress <a href="%1s">General Settings</a>.', 'wpsc' ), admin_url( 'options-general.php' ) ) ?></p>
+	</div>
+
+<?php
+
+
+}
+
+if ( 1 == get_option( 'require_register' ) && 1 != get_option( 'users_can_register' ))
+	add_action( 'admin_notices', 'wpsc_turn_on_wp_register' );
 
 if ( isset( $_REQUEST['wpsc_notices'] ) && $_REQUEST['wpsc_notices'] == 'theme_ignore' ) {
 	update_option( 'wpsc_ignore_theme', true );
