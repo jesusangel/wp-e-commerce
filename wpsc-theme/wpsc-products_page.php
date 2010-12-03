@@ -224,7 +224,6 @@ global $wpsc_query, $wpdb, $wp_query;
 				</div><!--close productcol-->
 			<?php if(wpsc_product_on_special()) : ?><span class="sale"><?php _e('Sale', 'wpsc'); ?></span><?php endif; ?>
 		</div><!--close default_product_display-->
-		<?php //exit(); ?>
 
 		<?php endwhile; ?>
 		<?php /** end the product loop here */?>
@@ -233,7 +232,6 @@ global $wpsc_query, $wpdb, $wp_query;
 		<?php endif ; ?>
 	    <?php do_action( 'wpsc_theme_footer' ); ?> 	
 
-<?php //exit('<pre>'.print_r($wpsc_query->a_page_url(),true).'</pre>'); ?>
 		<?php if(wpsc_has_pages_bottom()) : ?>
 			<div class="wpsc_page_numbers_bottom">
 				<?php wpsc_pagination(); ?>
