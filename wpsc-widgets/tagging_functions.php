@@ -163,11 +163,6 @@ function get_product_tag_link( $tag_id ) {
 
 		$file = get_option( 'home' ) . '/';
 		$taglink = get_option( 'product_list_url' ) . '?product_tag=' . $slug;
-		/*
-		  $taglink = get_option('product_list_url')."tag/%tag%";
-		  $taglink = str_replace('%tag%', $slug, $taglink);
-		  $taglink = user_trailingslashit($taglink, 'category');
-		 */
 	}
 
 	return apply_filters( 'product_tag_link', $taglink, $tag_id );
