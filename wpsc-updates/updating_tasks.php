@@ -7,8 +7,7 @@ if(get_option('wpsc_trackingid_subject') == ''){
 	update_option('wpsc_trackingid_subject', __('Your Order from %shop_name% has been dispatched', 'wpsc'));
 }     
 
-if($wpdb->get_results("SHOW FULL COLUMNS FROM `".WPSC_TABLE_REGION_TAX."` LIKE 'code';",ARRAY_A)) {
-	//$wpdb->query("ALTER TABLE `".WPSC_TABLE_REGION_TAX."` ADD `code` char(2) NOT NULL default '' AFTER `name`;");    
+if($wpdb->get_results("SHOW FULL COLUMNS FROM `".WPSC_TABLE_REGION_TAX."` LIKE 'code';",ARRAY_A)) {   
 
   if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_REGION_TAX."` WHERE `code` NOT IN ('')") < 51) {
     $wpdb->query("UPDATE `".WPSC_TABLE_REGION_TAX."` SET `code` = 'AL' WHERE `name` IN ('Alabama') LIMIT 1 ;");
@@ -413,7 +412,7 @@ if($wpdb->get_var("SELECT `option_id` FROM `{$wpdb->options}` WHERE `option_name
 if((get_option('flat_rates') == null) || (count(get_option('flat_rates')) < 1)) {
 	$local_shipping = get_option('base_local_shipping');
 	$international_shipping = get_option('base_international_shipping');  
-// 	echo $international_shipping;
+
 	// Local Shipping Settings
 	$shipping['local'] = $local_shipping;
 	
@@ -431,19 +430,10 @@ if((get_option('flat_rates') == null) || (count(get_option('flat_rates')) < 1)) 
 	$shipping['europe'] = $international_shipping;
 	$shipping['africa'] = $international_shipping;
 	
-	//echo "<pre>".print_r($shipping,true)."</pre>";
-	
 	update_option('flat_rates',$shipping);
 }
 
 if(get_option('custom_shipping_options') == null ) {
 	update_option('custom_shipping_options',array('flatrate'));
 }
-/*
-if($wpdb->get_var("SELECT COUNT(*) FROM `".WPSC_TABLE_PURCHASE_STATUSES."`") != 5){
-	$sql ="INSERT INTO `".WPSC_TABLE_PURCHASE_STATUSES."` (`name`,`active`) VALUES ('Failed Transaction','1')";
-//echo $sql;
-	$wpdb->query($sql);
-}
-*/
 ?>
