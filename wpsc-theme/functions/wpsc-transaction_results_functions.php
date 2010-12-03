@@ -297,8 +297,6 @@ function transaction_results( $sessionid, $echo_to_screen = true, $transaction_i
 			$report_user = __( 'Customer Details', 'wpsc' ) . "\n\r";
 			$form_sql = "SELECT * FROM `" . WPSC_TABLE_SUBMITED_FORM_DATA . "` WHERE `log_id` = '" . $purchase_log['id'] . "'";
 			$form_data = $wpdb->get_results( $form_sql, ARRAY_A );
-
-			//echo('<pre> form data'.print_r($form_data,true).'</pre>');
 			
 			if ( $form_data != null ) {
 				foreach ( $form_data as $form_field ) {
