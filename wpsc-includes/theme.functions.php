@@ -181,7 +181,7 @@ if ( !get_option('wpsc_ignore_theme') )
 function wpsc_turn_on_wp_register() {?>
 
 	<div id="message" class="updated fade">
-		<p><?php printf( __( '<strong>Membership</strong>. You have set \'users must register before checkout\', for this to work you need to check \'Anyone can register\' in your WordPress <a href="%1s">General Settings</a>.', 'wpsc' ), admin_url( 'options-general.php' ) ) ?></p>
+		<p><?php printf( __( '<strong>Store Settings</strong>: You have set \'users must register before checkout\', for this to work you need to check \'Anyone can register\' in your WordPress <a href="%1s">General Settings</a>.', 'wpsc' ), admin_url( 'options-general.php' ) ) ?></p>
 	</div>
 
 <?php
