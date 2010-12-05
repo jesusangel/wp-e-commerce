@@ -503,9 +503,9 @@ function wpsc_dashboard_widget_setup() {
 		wp_enqueue_style( 'wp-e-commerce-admin', WPSC_URL . '/wpsc-admin/css/admin.css', false, $version_identifier, 'all' );
 		wp_enqueue_script( 'datepicker-ui', WPSC_URL . "/wpsc-core/js/ui.datepicker.js", array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $version_identifier );
 		// Add the dashboard widgets
+		wp_add_dashboard_widget( 'wpsc_dashboard_news', __( 'Getshopped News' ), 'wpsc_dashboard_news' );
 		wp_add_dashboard_widget( 'wpsc_dashboard_widget', __( 'Sales Summary' ), 'wpsc_dashboard_widget' );
 		wp_add_dashboard_widget( 'wpsc_quarterly_dashboard_widget', __( 'Sales by Quarter' ), 'wpsc_quarterly_dashboard_widget' );
-		wp_add_dashboard_widget( 'wpsc_dashboard_news', __( 'Getshopped News' ), 'wpsc_dashboard_news' );
 		wp_add_dashboard_widget( 'wpsc_dashboard_4months_widget', __( 'Sales by Month' ), 'wpsc_dashboard_4months_widget' );
 	
 		// Sort the Dashboard widgets so ours it at the top
@@ -514,10 +514,13 @@ function wpsc_dashboard_widget_setup() {
 		// Backup and delete our new dashbaord widget from the end of the array
 		$wpsc_widget_backup = array('wpsc_dashboard_news' => $normal_dashboard['wpsc_dashboard_news']);
 		$wpsc_widget_backup += array('wpsc_dashboard_widget' => $normal_dashboard['wpsc_dashboard_widget']);	
-
+		$wpsc_widget_backup += array('wpsc_quarterly_dashboard_widget' => $normal_dashboard['wpsc_quarterly_dashboard_widget']);
+		$wpsc_widget_backup += array('wpsc_dashboard_4months_widget' => $normal_dashboard['wpsc_dashboard_4months_widget']);
 
 		unset($normal_dashboard['wpsc_dashboard_news']);
 		unset($normal_dashboard['wpsc_dashboard_widget']);
+		unset($normal_dashboard['wpsc_quarterly_dashboard_widget']);
+		unset($normal_dashboard['wpsc_dashboard_4months_widget']);
 	
 		// Merge the two arrays together so our widget is at the beginning
 	
@@ -760,5 +763,17 @@ function wpsc_print_admin_scripts(){
 	global $version_identifier;
 	wp_enqueue_script( 'wp-e-commerce-dynamic',       get_bloginfo('url')			. "/index.php?wpsc_user_dynamic_js=true", false,             $version_identifier );
 }
+
+/**
+ * wpsc_update_permalinks update the product pages permalinks when WordPress permalinks are changed
+ * @public 
+ *
+ * @3.8 
+ * @returns nothing
+ */
+function wpsc_update_permalinks(){
+wpsc_update_page_urls(true);
+}
+add_action('permalink_structure_changed' ,'wpsc_update_permalinks');
 
 ?>

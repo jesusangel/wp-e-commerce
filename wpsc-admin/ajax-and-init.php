@@ -1595,7 +1595,15 @@ function wpsc_rearrange_images() {
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'rearrange_images') )
 	add_action( 'admin_init', 'wpsc_rearrange_images' );
 
-function wpsc_update_page_urls() {
+/**
+ * wpsc_update_page_urls gets the permalinks for products pages and stores them in the options for quick reference
+ * @public
+ *
+ * @since 3.6
+ * @param $auto (Boolean) true if coming from WordPress Permalink Page, false otherwise
+ * @return nothing
+ */
+function wpsc_update_page_urls($auto = false) {
 	global $wpdb;
 
 	$wpsc_pageurl_option['product_list_url'] = '[productspage]';
@@ -1627,9 +1635,10 @@ function wpsc_update_page_urls() {
 	if ( isset( $_SESSION['wpsc_settings_curr_page'] ) ) {
 		$sendback = add_query_arg( 'tab', $_SESSION['wpsc_settings_curr_page'], $sendback );
 	}
-	wp_redirect( $sendback );
-
-	exit();
+	if(!$auto){
+		wp_redirect( $sendback );
+		exit();
+	}
 }
 if ( isset( $_REQUEST['wpsc_admin_action'] ) && ($_REQUEST['wpsc_admin_action'] == 'update_page_urls') )
 	add_action( 'admin_init', 'wpsc_update_page_urls' );
