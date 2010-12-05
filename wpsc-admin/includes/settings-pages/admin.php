@@ -154,53 +154,7 @@ global $wpdb;
 					<td><textarea name="wpsc_options[wpsc_trackingid_message]" cols='' rows=''   style='width: 300px; height: 200px;'><?php echo stripslashes(get_option('wpsc_trackingid_message'));?></textarea></td>
 				</tr>
 			</table>
-			<h3 class="form_group"><?php _e('URL Settings', 'wpsc');?>:</h3>
-			<table class='wpsc_options form-table'>
-			
-				<tr class='merged'>
-					<th scope="row">
-					<?php _e('The location of the product list', 'wpsc');?>:
-					</th>
-					<td>
-					<input class='text' type='text' size='50' value='<?php echo get_option('product_list_url'); ?>' name='wpsc_options[product_list_url]' />
-					</td>
-				</tr>
-				<tr class='merged'>
-					<th scope="row">
-					<?php _e('The location of the shopping cart', 'wpsc');?>:
-					</th>
-					<td>
-					<input class='text' type='text' size='50' value='<?php echo get_option('shopping_cart_url'); ?>' name='wpsc_options[shopping_cart_url]' />
-					</td>
-				</tr>
-				<tr class='merged'>
-					<th scope="row">
-					<?php _e('Transaction Details URL', 'wpsc');?>:
-					</th>
-					<td>
-					<input class='text' type='text' size='50' value='<?php echo get_option('transact_url'); ?>' name='wpsc_options[transact_url]' />
-					</td>
-				</tr>
-			<?php
-			if(function_exists("nzshpcrt_user_log")) {
-			?>
-				<tr class='merged'>
-					<th scope="row">
-					<?php _e('User Account URL', 'wpsc');?>:
-					</th>
-					<td>
-					<input class='text' type='text' size='50' value='<?php echo get_option('user_account_url'); ?>' name='wpsc_options[user_account_url]' />
-					</td>
-				</tr>
-			<?php
-			}
-			?>
-				<tr class='merged'>
-					<td colspan="2"><a href='<?php echo wp_nonce_url("?wpsc_admin_action=update_page_urls"); ?>' ><?php _e('Update Page URLs', 'wpsc'); ?></a> &nbsp; | &nbsp;
-					<a href='<?php echo wp_nonce_url("?wpsc_admin_action=clean_categories"); ?>'><?php _e('Fix Product Group Permalinks', 'wpsc'); ?></a>
-					</td>
-				</tr>
-			</table>					  
+						  
 		<?php
 		/* here end the admin options */						  
 	  ?>
