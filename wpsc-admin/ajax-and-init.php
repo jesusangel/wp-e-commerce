@@ -1627,15 +1627,15 @@ function wpsc_update_page_urls($auto = false) {
 		update_option( $option_key, $the_new_link );
 		$updated;
 	}
-	$sendback = wp_get_referer();
-
-	if ( isset( $updated ) ) {
-		$sendback = add_query_arg( 'updated', $updated, $sendback );
-	}
-	if ( isset( $_SESSION['wpsc_settings_curr_page'] ) ) {
-		$sendback = add_query_arg( 'tab', $_SESSION['wpsc_settings_curr_page'], $sendback );
-	}
+	
 	if(!$auto){
+		$sendback = wp_get_referer();
+		if ( isset( $updated ) )
+			$sendback = add_query_arg( 'updated', $updated, $sendback );
+
+		if ( isset( $_SESSION['wpsc_settings_curr_page'] ) ) 
+			$sendback = add_query_arg( 'tab', $_SESSION['wpsc_settings_curr_page'], $sendback );
+			
 		wp_redirect( $sendback );
 		exit();
 	}

@@ -771,9 +771,10 @@ function wpsc_print_admin_scripts(){
  * @3.8 
  * @returns nothing
  */
-function wpsc_update_permalinks(){
+function wpsc_update_permalinks($return = ''){
 wpsc_update_page_urls(true);
+return $return;
 }
 add_action('permalink_structure_changed' ,'wpsc_update_permalinks');
-
+add_action('get_sample_permalink_html' ,'wpsc_update_permalinks');
 ?>
