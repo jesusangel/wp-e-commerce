@@ -293,17 +293,43 @@ function wpsc_check_stock($state, $product) {
 	$state['state'] = false;
 	$state['messages'] = array();
 	$out_of_stock = false;
-	$product_meta = get_product_meta($product->ID, 'product_metadata',true);
-	$stock_count = get_product_meta($product->ID, 'stock',true);
-	// only do anything if the quantity is limited.
-	if(($stock_count === '0')) // otherwise, use the stock from the products list table
-		$out_of_stock = true;
-
-	if($out_of_stock === true) {
-		$state['state'] = true;
-		$state['messages'][] = __('This product has no available stock', 'wpsc');
-	}
+	$is_parent = wpsc_product_has_children($product->ID);
+	if(!$is_parent){
+		$stock_count = get_product_meta($product->ID, 'stock',true);
+		// only do anything if the quantity is limited.
+		if(($stock_count === '0')) // otherwise, use the stock from the products list table
+			$out_of_stock = true;
 	
+		if($out_of_stock === true) {
+			$state['state'] = true;
+			$state['messages'][] = __('This product has no available stock', 'wpsc');
+		}
+	}else{
+		$no_stock = $wpdb->get_col('
+		SELECT 
+			`pm`.`post_id` 
+		FROM 
+			`' . $wpdb->postmeta . '` `pm` 
+		JOIN 
+			`' . $wpdb->posts . '` `p` 
+			ON 
+			`pm`.`post_id` = `p`.`id` 
+		WHERE 
+			`p`.`post_type`= "wpsc-product"
+			AND
+			`p`.`post_parent` = ' . $product->ID . '
+			AND
+			`pm`.`meta_key` = "_wpsc_stock"
+			AND
+			`pm`.`meta_value` = "0"
+	');
+		if(!empty($no_stock)){
+			$state['state'] = true;
+			$state['messages'][] = __('One or more of this products variations are out of stock.', 'wpsc');
+		}
+			
+
+	}
 	return array('state' => $state['state'], 'messages' => $state['messages']);
 }
 
