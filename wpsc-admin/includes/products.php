@@ -61,14 +61,15 @@ add_filter('display_post_states','wpsc_trashed_post_status');
 function wpsc_product_row(&$product, $parent_product = null) {
 	global $wp_query, $wpsc_products, $mode, $current_user;
 	static $rowclass;
-
+	$is_parent = false;
 	$global_product = $product;
 	setup_postdata($product);
 
 	$rowclass = 'alternate' == $rowclass ? '' : 'alternate';
 	$post_owner = ( $current_user->ID == $product->post_author ? 'self' : 'other' );
 	$edit_link = get_edit_post_link( $product->ID );
-
+	$is_parent = wpsc_product_has_children($product->ID);
+	if( !empty($children) ) $is_parent = true;
 	$title = get_the_title( $product->ID);
 	if ( empty($title) ) {
 		$title = __('(no title)');
@@ -275,7 +276,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 		
 		
 		case 'price':
-	
+			if(!$is_parent){
 			$price = get_post_meta($product->ID, '_wpsc_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
@@ -288,13 +289,30 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 					</div>
 				</td>
+			
 			<?php
+			
+			}else{
+				$price = wpsc_product_variation_price_available($product->ID);
+			?>
+					<td  >
+					<?php echo $price.'+' ; ?>
+					
+				</td>
+				<?php
+			}
 		break;
 
 	// 5.8.2010 - Justin Sainton - Addition of weight and stock cases to column header switch.
 	
 		case 'weight' :
-		
+			if($is_parent){ ?>
+				<td>
+				<?php _e( 'N/A', 'wpsc'); ?>
+				</td>
+			<?php	
+				break;
+			}
 			$product_data['meta'] = array();
 			$product_data['meta'] = get_post_meta($product->ID, '');
 				foreach($product_data['meta'] as $meta_name => $meta_value) {
@@ -344,6 +362,7 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			if($stock == ''){
 				$stock = 'N/A';
 			}
+			if(!$is_parent){
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="stockdisplay"><?php echo $stock; ?></span>
@@ -355,7 +374,13 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 					</div>
 				</td>
-	<?php
+			<?php
+			}else{
+			?>	<td>
+			<?php echo '~'.wpsc_variations_stock_remaining($product->ID); ?>
+				</td>
+			<?php
+			}
 		break;
 
 		case 'categories':
@@ -396,6 +421,13 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			if($sku == ''){
 				$sku = 'N/A';
 			}
+			if($is_parent) {
+			?>
+			<td> <?php echo $sku; ?></td>
+			<?php
+			break;
+			}
+
 			?>
 				<td  <?php echo $attributes ?>>
 					<span class="skudisplay"><?php echo $sku; ?></span>
@@ -410,7 +442,13 @@ function wpsc_product_row(&$product, $parent_product = null) {
 			<?php
 		break;
 		case 'sale_price':
-		
+			if( $is_parent ){ ?>
+				<td>
+					<?php _e('N/A' , 'wpsc'); ?>
+				</td>			
+			<?php	
+				break;
+			}
 			$price = get_post_meta($product->ID, '_wpsc_special_price', true);
 			?>
 				<td  <?php echo $attributes ?>>
