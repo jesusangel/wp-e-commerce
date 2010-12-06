@@ -68,10 +68,10 @@ function wpsc_display_edit_products_page() {
 			}
 
 			if ( isset( $_GET['addedgroup'] ) ) {
-				if(is_int($_GET['addedgroup']) && $_GET['addedgroup'] > 0){
+				if(is_numeric($_GET['addedgroup']) && $_GET['addedgroup'] > 0){
 					printf( _n( '%s product updated.', '%s products updated.', $_GET['addedgroup'] ), number_format_i18n( $_GET['addedgroup'] ) );
 				}else{
-					printf( _n( 'Invalid Category Selected.', 'Invalid Category Selected.' ) );
+					printf( __( 'Invalid Category Selected.', 'wpsc') );
 				}
 				unset( $_GET['addedgroup'] );
 			}
