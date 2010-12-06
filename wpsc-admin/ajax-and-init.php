@@ -504,6 +504,7 @@ function wpsc_duplicate_this_dangit( $id ) {
 
 function wpsc_duplicate_product_process( $post ) {
 	global $wpdb;
+        //Commit check
 
 	$new_post_date = $post->post_date;
 	$new_post_date_gmt = get_gmt_from_date( $new_post_date );
