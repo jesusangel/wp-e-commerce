@@ -794,14 +794,14 @@ function wpsc_38_message(){
 	$sendback = add_query_arg('wpsc_notices' , '38_ignore' , $sendback);
 ?>
 	<div id="message" class="updated fade">
-		<p><?php printf( __( '<strong>GetShopped News</strong>: Dear WP e-Commerce users, the new WP e-Commerce version 3.8 is available for public beta testing, please <a href="%1s">read here</a> for more information. <a href="%2s">Ignore this message</a>', 'wpsc' ), 'http://getshopped.org/news/3.8-betarelease', $sendback ); ?></p>
+		<p><?php printf( __( '<strong>GetShopped News</strong>: Dear friend of the WP e-Commerce Plugin Project. The new 3.8 beta Plugin is now available for public testing - for more information <a href="%1s">read our annoucement</a>. Otherwise feel free to <a href="%2s">ignore this message</a>.', 'wpsc' ), 'http://getshopped.org/news/wp-e-commerce-3-8-public-beta/', $sendback ); ?></p>
 	</div>
 
 
 
 <?php
 }
-	//update_option( 'wpsc_ignore_38_message', 0 );
+	update_option( 'wpsc_ignore_38_message', 0 );
 if( 1 != get_option('wpsc_ignore_38_message'))
 	add_action('admin_notices' , 'wpsc_38_message');
 	
