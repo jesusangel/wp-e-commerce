@@ -382,7 +382,7 @@ function wpsc_start_the_query() {
 			$wpsc_query = new WP_Query( $wpsc_query_vars );
 		}
 	}
-	
+
 	if($wp_query->is_404 && $wpsc_query->post_count > 0)
 		$wp_query = $wpsc_query;
 	if ( isset( $wp_query->post->ID ) )
@@ -618,7 +618,7 @@ function wpsc_generate_product_query( $query ) {
 	} else {
 		$query->query_vars['posts_per_page'] = '-1';
 	}
-	if ( $query->is_tax == true )
+	if ( $query->is_tax == true && !isset($query->query_vars['meta_key']))
 		new wpsc_products_by_category( $query );
 
 	return $query;
