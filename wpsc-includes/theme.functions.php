@@ -840,6 +840,16 @@ function wpsc_body_class( $classes ) {
 
 add_filter( 'body_class', 'wpsc_body_class' );
 
+function wpsc_ignore_38_message(){
+	$sendback = wp_get_referer();
+	$sendback = remove_query_arg('wpsc_notices', $sendback);
+	update_option( 'wpsc_ignore_38_message', 1 );
+	wp_redirect( $sendback );
 
+
+}
+if ( isset( $_REQUEST['wpsc_notices'] ) && $_REQUEST['wpsc_notices'] == '38_ignore' ) {
+	add_action('init','wpsc_ignore_38_message');
+}	
 
 ?>

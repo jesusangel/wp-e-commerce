@@ -788,4 +788,21 @@ function wpsc_admin_notices() {
 if(stristr($_GET['page'], WPSC_DIR_NAME)) {
   add_action('admin_notices', 'wpsc_admin_notices');
 }
+
+function wpsc_38_message(){
+	$sendback = wp_get_referer();
+	$sendback = add_query_arg('wpsc_notices' , '38_ignore' , $sendback);
+?>
+	<div id="message" class="updated fade">
+		<p><?php printf( __( '<strong>GetShopped News</strong>: Dear WP e-Commerce users, the new WP e-Commerce version 3.8 is available for public beta testing, please <a href="%1s">read here</a> for more information. <a href="%2s">Ignore this message</a>', 'wpsc' ), 'http://getshopped.org/news/3.8-betarelease', $sendback ); ?></p>
+	</div>
+
+
+
+<?php
+}
+	//update_option( 'wpsc_ignore_38_message', 0 );
+if( 1 != get_option('wpsc_ignore_38_message'))
+	add_action('admin_notices' , 'wpsc_38_message');
+	
 ?>
