@@ -184,8 +184,11 @@ function wpsc_product_row(&$product, $parent_product = null) {
 
 			$actions = array();
 			if ( current_user_can('edit_post', $product->ID) && 'trash' != $product->post_status ) {
-				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';				
-				$actions['quick_edit'] = "<a class='wpsc-quickedit' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
+				$actions['edit'] = '<a class="edit-product" href="'.$edit_link.'" title="' . esc_attr(__('Edit this product', 'wpsc')) . '">'. __('Edit', 'wpsc') . '</a>';	
+				if(!$is_parent)			
+					$actions['quick_edit'] = "<a class='wpsc-quickedit' title='".esc_attr(__('Quick Edit', 'wpsc'))."' href='#'>".__('Quick Edit')."</a>";
+				else
+					$actions['quick_edit'] = __('Quick Edit');
 			}
 
 			if ( current_user_can('delete_post', $product->ID) ) {
