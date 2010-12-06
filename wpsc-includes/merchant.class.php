@@ -139,14 +139,17 @@ class wpsc_merchant {
 		if(count($address_data['shipping']) < 1) {
 			$address_data['shipping'] = $address_data['billing'];
 		}
-		
+		if( !empty($purchase_logs['discount_value']) )
+			$has_discount = true;
+		else
+			$has_discount = false;
 		$this->cart_data = array(
 			'software_name' => 'WP e-Commerce/'.WPSC_PRESENTABLE_VERSION.'',
 			// 'store_name' => '',  /// is this useful or needed?
 			'store_location' => get_option('base_country'),
 			'store_currency' => $currency_code,
 			'is_subscription' => false,
-			'has_discounts' => false,
+			'has_discounts' => $has_discount,
 			'notification_url' => add_query_arg('wpsc_action', 'gateway_notification', (get_option('siteurl')."/index.php")),
 			'transaction_results_url' => get_option('transact_url'),
 			'shopping_cart_url' => get_option('shopping_cart_url'),

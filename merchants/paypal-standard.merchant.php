@@ -48,6 +48,7 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 	* @access public
 	*/
 	function construct_value_array() {
+		global $wpdb;
 		//$collected_gateway_data
 		$paypal_vars = array();
 		// Store settings to be sent to paypal
@@ -169,26 +170,54 @@ class wpsc_merchant_paypal_standard extends wpsc_merchant {
 			} else {
 				// Stick the cart item values together here
 				$i = 1;
-				foreach($this->cart_items as $cart_row) {
-					$paypal_vars += array(
-						"item_name_$i" => $cart_row['name'],
-						"amount_$i" => $this->format_price($cart_row['price']),
-						"tax_$i" => $this->format_price($cart_row['tax']),
-						"quantity_$i" => $cart_row['quantity'],
-						"item_number_$i" => $cart_row['product_id'],
-						"shipping_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping for the the (first item / total of the items)
-						"shipping2_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping beyond the first item
-						"handling_$i" => '',
-					);
-					++$i;
-				}
-			}
-		
-		//set base shipping
+				if( !$this->cart_data['has_discounts']){
+					foreach($this->cart_items as $cart_row) {
+						$paypal_vars += array(
+							"item_name_$i" => $cart_row['name'],
+							"amount_$i" => $this->format_price($cart_row['price']),
+							"tax_$i" => $this->format_price($cart_row['tax']),
+							"quantity_$i" => $cart_row['quantity'],
+							"item_number_$i" => $cart_row['product_id'],
+							"shipping_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping for the the (first item / total of the items)
+							"shipping2_$i" => $this->format_price($cart_row['shipping']/$cart_row['quantity']), // additional shipping beyond the first item
+							"handling_$i" => '',
+						);
+						++$i;
+					}
+						//set base shipping
 		$paypal_vars += array(
 			"handling_cart" => $this->cart_data['base_shipping']
 		);		
+
+				}else{
+					$decimal_places = 2;
+					$currency_code = $wpdb->get_var("SELECT `code` FROM `".WPSC_TABLE_CURRENCY_LIST."` WHERE `id`='".get_option('currency_type')."' LIMIT 1");
+					$local_currency_code = $currency_code;
+					$paypal_currency_code = get_option('paypal_curcode');
+				  
+					if( empty($paypal_currency_code) ) 
+						$paypal_currency_code = 'US';
+				  
+					$curr=new CURRENCYCONVERTER();
+					if($paypal_currency_code != $local_currency_code)
+						$paypal_currency_productprice = $curr->convert( $this->cart_data['total_price'],$paypal_currency_code,$local_currency_code);
+					else
+						$paypal_currency_productprice =  $this->cart_data['total_price'];
+					
+					$paypal_vars['item_name_'.$i] = "Your Shopping Cart";
+					$paypal_vars['amount_'.$i] = number_format(sprintf("%01.2f",$paypal_currency_productprice),$decimal_places,'.','');
+					$paypal_vars['quantity_'.$i] = 1;
+					$paypal_vars['shipping_'.$i] = 0;
+					$paypal_vars['shipping2_'.$i] = 0;
+					$paypal_vars['handling_'.$i] = 0;
+				
+				
+				
+				
+				}
+			}
 		
+			
 		// Payment Type settings to be sent to paypal
 		if($this->cart_data['is_subscription'] == true) {
 			$paypal_vars += array(
