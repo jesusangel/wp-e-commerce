@@ -801,7 +801,6 @@ function wpsc_38_message(){
 
 <?php
 }
-	update_option( 'wpsc_ignore_38_message', 0 );
 if( 1 != get_option('wpsc_ignore_38_message'))
 	add_action('admin_notices' , 'wpsc_38_message');
 	
