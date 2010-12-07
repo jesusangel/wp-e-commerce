@@ -193,7 +193,7 @@ INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (191, 'Senegal', 'SN', 'CFA Fr
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (192, 'Seychelles', 'SC', 'Seychelles Rupee', '', '', 'SCR', '0', '0','africa','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (193, 'Sierra Leone', 'SL', 'Sierra Leone Leone', '', '', 'SLL', '0', '0','africa','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (194, 'Singapore', 'SG', 'Singapore Dollar', '$', '&#036;', 'SGD', '0', '0','asiapacific','1');
-INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (195, 'Slovakia', 'SK', 'Slovak Koruna', '', '', 'SKK', '0', '0','europe','1');
+INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (195, 'Slovakia', 'SK', 'Euro', '€', '&#8364;', 'EUR', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (196, 'Slovenia', 'SI', 'Slovenian Tolar', '', '', 'SIT', '0', '0','europe','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (197, 'Solomon Islands', 'SB', 'Solomon Islands Dollar', '$', '&#036;', 'SBD', '0', '0','asiapacific','1');
 INSERT INTO `".WPSC_TABLE_CURRENCY_LIST."` VALUES (198, 'Somalia', 'SO', 'Somali Shilling', '', '', 'SOD', '0', '0','africa','1');
