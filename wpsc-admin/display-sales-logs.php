@@ -172,6 +172,7 @@ function wpsc_display_sales_logs() {
             </div>
             <?php } ?>
             <div id='wpsc_billing_details_box'>
+	           <?php do_action( 'wpsc_billing_details_top'); ?>
                <h3><?php _e('Billing Details','wpsc'); ?></h3>
                <p><strong><?php _e('Purchase Log Date:','wpsc'); ?> </strong><?php echo wpsc_purchaselog_details_date(); ?> </p>
                <p><strong><?php _e('Purchase Number:','wpsc'); ?> </strong><?php echo wpsc_purchaselog_details_purchnumber(); ?> </p>
@@ -184,6 +185,7 @@ function wpsc_display_sales_logs() {
                <?php if(wpsc_display_purchlog_display_howtheyfoundus()) : ?>
                <p><strong><?php _e('How User Found Us:','wpsc'); ?> </strong><?php echo wpsc_display_purchlog_howtheyfoundus(); ?></p>
                <?php endif; ?>
+               <?php do_action( 'wpsc_billing_details_bottom'); ?>
             </div>
 
             <div id='wpsc_items_ordered'>

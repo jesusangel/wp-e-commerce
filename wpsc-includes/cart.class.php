@@ -1634,6 +1634,7 @@ class wpsc_cart_item {
             }
          }
       }
+   	  $price = apply_filters('wpsc_price', $price, $product_id);
       // create the string containing the product name.
       $product_name = $product->post_title;
 
