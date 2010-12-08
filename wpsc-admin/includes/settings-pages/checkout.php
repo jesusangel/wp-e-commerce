@@ -126,11 +126,11 @@ $form_types = get_option('wpsc_checkout_form_fields');
 		</div>
 		</div>
 		</div>
-			<h3>Form Fields</h3>
+			<h3><?php _e('Form Fields', 'wpsc'); ?></h3>
   			<p><?php _e('Here you can customise the forms to be displayed in your checkout page. The checkout page is where you collect important user information that will show up in your purchase logs i.e. the buyers address, and name...', 'wpsc');?></p>
   			
 				<p>
-					<label for='wpsc_form_set'>Select a Form Set:</label>
+					<label for='wpsc_form_set'><?php _e('Select a Form Set' , 'wpsc'); ?>:</label>
 					<select id='wpsc_form_set' name='wpsc_form_set'>
 					<?php
 						$checkout_sets = get_option('wpsc_checkout_form_sets');
