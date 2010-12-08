@@ -41,7 +41,7 @@ function wpsc_display_edit_products_page() {
 		<div id="icon_card"><br /></div>
 		<h2>
 			<a href="admin.php?page=wpsc-edit-products" class="nav-tab nav-tab-active" id="manage"><?php echo esc_html( __( 'Manage Products', 'wpsc' ) ); ?></a>
-			<a href="<?php echo wp_nonce_url( "admin.php?page=wpsc-edit-products&action=wpsc_add_edit", "_add_product" ); ?>" class="nav-tab" id="add"><?php  _e( 'Add New', 'wpsc' ); ?></a>
+			<a href="<?php echo wp_nonce_url( "admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit", "_add_product" ); ?>" class="nav-tab" id="add"><?php  _e( 'Add New', 'wpsc' ); ?></a>
 	</h2>
 <?php if ( isset( $_GET['ErrMessage'] ) && isset( $_SESSION['product_error_messages'] ) && is_array( $_SESSION['product_error_messages'] ) ) { ?>
 		<div id="message" class="error fade">

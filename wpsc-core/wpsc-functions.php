@@ -193,7 +193,7 @@ function wpsc_register_post_types() {
 
 	// Products
 	register_post_type( 'wpsc-product', array(
-		'_edit_link' => 'admin.php?page=wpsc-edit-products&action=wpsc_add_edit&product=%d',
+		'_edit_link' => 'admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit&amp;product=%d',
 		'capability_type' => 'post',
 		'hierarchical' => true,
 		'exclude_from_search' => false,

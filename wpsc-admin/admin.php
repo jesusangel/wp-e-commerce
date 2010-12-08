@@ -754,7 +754,7 @@ function wpec_two_columns( $columns, $screen ) {
 add_filter( 'screen_layout_columns', 'wpec_two_columns', 10, 2 );
 
 function wpsc_fav_action( $actions ) {
-	$actions['admin.php?page=wpsc-edit-products&action=wpsc_add_edit'] = array( 'New Product', 'manage_options' );
+	$actions['admin.php?page=wpsc-edit-products&amp;action=wpsc_add_edit'] = array( 'New Product', 'manage_options' );
 	return $actions;
 }
 add_filter( 'favorite_actions', 'wpsc_fav_action' );
