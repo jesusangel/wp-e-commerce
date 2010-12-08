@@ -1021,7 +1021,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 	}
 
 	// Use product thumbnail
-	if ( has_post_thumbnail( $product_id ) ) {
+	if ( has_post_thumbnail( $product_id ) && 'single' != $page) {
 		$thumbnail_id = get_post_thumbnail_id( $product_id  );
 	// Use first product image
 	} else {
