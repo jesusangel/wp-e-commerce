@@ -319,13 +319,17 @@ function wpsc_display_edit_products_page() {
 		
 		$query = array(
 			'post_type' => 'wpsc-product',
-			'post_parent' => 0,
 			'orderby' => 'menu_order post_title',
 			'order' => "ASC",
 			'post_status' => $post_status,
 			'posts_per_page' => $itempp,
 			'offset' => $start
 		);
+
+                if( function_exists('wpec_post_parent_in') )
+                    $query["post_parent"] = '';
+                else
+                    $query["post_parent"] = 0;
 
 		if ( isset( $_POST['category'] ) ) {
 			$category_id = $_POST['category'];
