@@ -857,7 +857,7 @@ function wpsc_swfupload_images() {
 			}
 			$order++;
 			if ($success) {
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0',  '$order')");
+				$wpdb->query( $wpdb->prepare("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( %d, %s, '0', '0', %d)", $product_id, basename($file['name']), $order ) );
 				$id = $wpdb->get_var("SELECT LAST_INSERT_ID() AS `id` FROM `".WPSC_TABLE_PRODUCT_IMAGES."` LIMIT 1");
 
 				$src = $file['name'];
@@ -878,7 +878,7 @@ function wpsc_swfupload_images() {
 			} else {
 				$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
 				copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
-				$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
+				$wpdb->query( $wpdb->prepare("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( %d, %s, '0', '0', '0')", $product_id, basename($file['name'])) );
 				$src = basename($file['name']);
 			}
 			
@@ -911,7 +911,7 @@ function wpsc_swfupload_images() {
 		} else {
 			$success = move_uploaded_file($file['tmp_name'], WPSC_IMAGE_DIR.basename($file['name']));
 			copy(WPSC_IMAGE_DIR.basename($file['name']),WPSC_THUMBNAIL_DIR.basename($file['name']));
-			$wpdb->query("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( '$product_id','".basename($file['name'])."', '0', '0', '0')");
+			$wpdb->query( $wpdb->prepare("INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` ( `product_id` , `image` , `width` , `height` , `image_order` ) VALUES( %d, %s, '0', '0', '0')", $product_id, basename($file['name'])) );
 			$src = basename($file['name']);
 		}
 		//$src = wpsc_item_process_image($product_id, $file['tmp_name'], $file['name']);

@@ -422,8 +422,8 @@ function wpsc_item_process_image($id, $input_file, $output_filename, $width = 0,
 					}	     
 				image_processing($new_image_path, (WPSC_THUMBNAIL_DIR.$image_name), $width, $height);
 // 			}
-			$sql = "INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` (`product_id`, `image`, `width`, `height`) VALUES ('{$id}', '{$image_name}', '{$width}', '{$height}' )";
-			$wpdb->query($sql);
+			$sql = "INSERT INTO `".WPSC_TABLE_PRODUCT_IMAGES."` (`product_id`, `image`, `width`, `height`) VALUES (%d, %s, %d, %d)";
+			$wpdb->query( $wpdb->prepare($sql, $id, $image_name, $width, $height) );
 			$image_id = (int) $wpdb->insert_id;			
 			$updatelink_sql = "UPDATE `".WPSC_TABLE_PRODUCT_LIST."` SET `image` = '".$image_id."', `thumbnail_image` = '".$thumbnail_image."'  WHERE `id` = '$id'";
 			$wpdb->query($updatelink_sql);
