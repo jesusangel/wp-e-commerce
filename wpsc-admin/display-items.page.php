@@ -343,10 +343,9 @@ function wpsc_admin_products_list($category_id = 0) {
 								if(get_option('wpsc_sort_by') == 'dragndrop'){ 
 									$product['id'] = $product['product_id'];
 								}
+	?>		
 								
-								
-						?>
-							<tr class="product-edit <?php echo ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published'; ?>" id="product-<?php echo $product['id']?>" >
+ 							<tr class="product-edit <?php echo ( wpsc_publish_status($product['id']) ) ? ' wpsc_published' : ' wpsc_not_published'; ?>" id="product-<?php echo $product['id']?>" >
 									<th class="check-column" scope="row">
 										<input type='checkbox' name='product[]' class='deletecheckbox' value='<?php echo $product['id'];?>' title="ID #<?php echo $product['id']; ?>" />
 										<?php echo do_action('wpsc_admin_product_checkbox', $product['id']); ?>
@@ -354,7 +353,8 @@ function wpsc_admin_products_list($category_id = 0) {
 									
 									
 									<td class="product-image ">
-										<img title='Drag to a new position' src='<?php echo $image_path; ?>' alt='<?php echo $product['name']; ?>' width='38' height='38' />
+
+										<img title='Drag to a new position' src="<?php echo $image_path; ?>" alt="<?php echo $product['name']; ?>" width='38' height='38' />
 									</td>
 									<td class="product-title column-title">
 									  <?php

@@ -1129,7 +1129,7 @@ function edit_multiple_image_gallery($product_data) {
 					$image_data = getimagesize(WPSC_THUMBNAIL_DIR.$main_image['image']);
 					?>
 					<a id='extra_preview_link_0' href=''  title='' rel='product_extra_image_0'  >
-					  <img class='previewimage' onclick='return false;' src='<?php echo WPSC_THUMBNAIL_URL.$main_image['image']; ?>' alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
+					  <img class='previewimage' onclick='return false;' src="<?php echo WPSC_THUMBNAIL_URL.$main_image['image']; ?>" alt='<?php echo __('Preview', 'wpsc'); ?>' title='<?php echo __('Preview', 'wpsc'); ?>' />
 					</a>
 				<?php } ?>
 				<?php
