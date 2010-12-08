@@ -458,7 +458,7 @@ function wpsc_display_purchlog_buyers_email() {
 
 function wpsc_display_purchlog_buyers_address() {
    global $purchlogitem;
-   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES ), "\n\r"));
+   return nl2br(trim(htmlentities( stripslashes( $purchlogitem->userinfo['billingaddress']['value'] ), ENT_QUOTES ), "\n\r")).' '.htmlentities( stripslashes( $purchlogitem->userinfo['billingpostcode']['value'] ), ENT_QUOTES );
 }
 
 function wpsc_display_purchlog_buyers_phone() {
