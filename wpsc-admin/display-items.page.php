@@ -326,11 +326,13 @@ function wpsc_display_edit_products_page() {
 			'offset' => $start
 		);
 
-                if( function_exists('wpec_post_parent_in') )
+                if( function_exists('wpec_post_parent_in') ) {
                     $query["post_parent"] = '';
-                else
+                    add_filter( 'posts_where', 'wpec_post_parent_in' );
+                }
+                else {
                     $query["post_parent"] = 0;
-
+                }
 		if ( isset( $_POST['category'] ) ) {
 			$category_id = $_POST['category'];
 			$query['wpsc_product_category'] = $category_id;
