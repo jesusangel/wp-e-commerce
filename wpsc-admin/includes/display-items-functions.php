@@ -355,11 +355,12 @@ function wpsc_product_basic_details_form( &$product_data ) {
 			if ( ( $order == '' ) || ( count( $order, COUNT_RECURSIVE ) < 32 ) || ( count( $order ) == count( $order, COUNT_RECURSIVE ) ) ) {
 				$order = $default_order;
 			}
+
 			foreach ( $order as $key => $values ) {
-				$check_missing_items = array_diff( $default_order[$key], $values );
+				$check_missing_items = array_diff( (array)$default_order[$key], (array)$values );
 
 				if ( count( $check_missing_items ) > 0 ) {
-					$order[$key] = array_merge( $check_missing_items, $order[$key] );
+					$order[$key] = array_merge( $check_missing_items, (array)$order[$key] );
 				}
 			}
 			$check_missing_items = array_diff( $default_order, $order );

@@ -1896,9 +1896,8 @@ function wpsc_checkout_settings() {
 
 	if ( $_POST['new_form_set'] != null ) {
 		$new_form_set = $wpdb->escape( stripslashes( $_POST['new_form_set'] ) );
-		$form_set_key = sanitize_title( $new_form_set );
 		$checkout_sets = get_option( 'wpsc_checkout_form_sets' );
-		$checkout_sets[$form_set_key] = $new_form_set;
+		$checkout_sets[] = $new_form_set;
 		update_option( 'wpsc_checkout_form_sets', $checkout_sets );
 	}
 
