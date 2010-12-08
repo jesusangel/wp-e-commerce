@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-e-commerce\n"
-"POT-Creation-Date: 2010-10-27 01:15+0000\n"
+"POT-Creation-Date: 2010-12-08 04:02+0000\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -780,7 +780,7 @@ msgstr ""
 msgid "Update &raquo;"
 msgstr ""
 
-#: merchants/paypal-standard.merchant.php:137
+#: merchants/paypal-standard.merchant.php:138
 msgid "Your Subscription"
 msgstr ""
 
@@ -1832,6 +1832,15 @@ msgid ""
 "Your \"products page\" is not currently set to display any products. You "
 "need to select a product grouping to display by default. <br /> This is set "
 "in the Shop Settings page."
+msgstr ""
+
+#: wpsc-admin/admin.php:797
+#, php-format
+msgid ""
+"<strong>GetShopped News</strong>: Dear friend of the WP e-Commerce Plugin "
+"Project. The new 3.8 beta Plugin is now available for public testing - for "
+"more information <a href=\"%1s\">read our annoucement</a>. Otherwise feel "
+"free to <a href=\"%2s\">ignore this message</a>."
 msgstr ""
 
 #: wpsc-admin/ajax-and-init.php:768 wpsc-admin/display-variations.page.php:145

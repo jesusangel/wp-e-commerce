@@ -3,8 +3,8 @@ Contributors: Dan Milward, Tom Howard, Jeffry Ghazally
 Donate link: http://getshopped.org/
 Tags: e-commerce, shop, ecommerce, cart, dropshop, ajax, web2.0, paypal, authorize, exchange, stock control, e commerce,
 Requires at least: 2.7
-Tested up to: 3.0.1
-Stable tag: 3.7.7
+Tested up to: 3.0.2
+Stable tag: 3.7.8
 
 WP e-Commerce is a Web 2.0 application designed with usability, aesthetics, and presentation in mind. 
 
@@ -35,6 +35,15 @@ When updating it is important that you do not overwrite the entire images folder
 If you experience database errors try de-activating and re-activating your plugin. 
 
 == Changelog == 
+= 3.7.8 =
+* Fixed Paypal Standard not sending Coupon Discount Values
+* Added in recent Turkish and Russian Language Files
+* Added in notice about 3.8 Public Beta
+* Fixed List View to Prevent JS Error on add to cart
+* Fix theme core files from outputting "*/?>" - props James Collins
+* Fix Product Thumbnail Deletion for Browsers that don't have console defined. 
+* Fix product image upload so it works when uploading product images that contain apostrophes in their file names.
+* Make sure JPG cache images are created as JPGs not PNGs to reduce filesize
 
 = 3.7.7 =
 * Fixed the Variation bug
