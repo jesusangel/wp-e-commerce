@@ -1,15 +1,3 @@
-// This is the wp-e-commerce front end javascript "library"
-// empty the cart using ajax when the form is submitted,
-function check_make_purchase_button(){
-	toggle = jQuery('#noca_gateway').attr('checked');
-	if(toggle == true){
-		//jQuery('.make_purchase').hide();
-		jQuery('#OCPsubmit').show();
-	}else{
-		jQuery('.make_purchase').show();
-		jQuery('#OCPsubmit').hide();
-	}
-}
 // this function is for binding actions to events and rebinding them after they are replaced by AJAX
 // these functions are bound to events on elements when the page is fully loaded.
 jQuery(document).ready(function () {

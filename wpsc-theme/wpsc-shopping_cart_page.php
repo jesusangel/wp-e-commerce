@@ -105,10 +105,6 @@ endif;
    <?php endif; ?>
    <?php  //this HTML dispalys the calculate your order HTML   ?>
 
-   <?php if(wpsc_has_noca_message()): ?>
-      <p class="validation-error"><?php echo $_SESSION['nocamsg']; ?></p>
-   <?php endif; ?>
-
    <?php if(wpsc_has_category_and_country_conflict()): ?>
       <p class='validation-error'><?php echo $_SESSION['categoryAndShippingCountryConflict']; ?></p>
       <?php unset($_SESSION['categoryAndShippingCountryConflict']);
@@ -400,12 +396,7 @@ endif;
             <h3><?php _e('Select a payment gateway', 'wpsc');?></h3>
             <?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
                <div class="custom_gateway">
-                  <?php if(wpsc_gateway_internal_name() == 'noca'){ ?>
-                     <label><input type="radio" id='noca_gateway' value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
-                  <?php }else{ ?>
                      <label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
-                  <?php } ?>
-
 
                   <?php if(wpsc_gateway_form_fields()): ?>
                      <table class='wpsc_checkout_table <?php echo wpsc_gateway_form_field_style();?>'>
@@ -486,13 +477,8 @@ endif;
             <?php if(!wpsc_has_tnc()) : ?>
                <input type='hidden' value='yes' name='agree' />
             <?php endif; ?>
-            <?php 
-             if(wpsc_is_noca_gateway()){
-
-             }else{?>
                <input type='hidden' value='submit_checkout' name='wpsc_action' />
                <input type='submit' value='<?php _e('Purchase', 'wpsc');?>' name='submit' class='make_purchase wpsc_buy_button' />
-            <?php } ?>
          </span>
       </div>
 

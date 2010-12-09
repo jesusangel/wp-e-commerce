@@ -546,7 +546,7 @@ function wpsc_submit_checkout() {
 			$is_valid = false;
 		}
 	}
-	if ( $is_valid == true || $_GET['gateway'] == 'noca' ) {
+	if ( $is_valid == true ) {
 		$_SESSION['categoryAndShippingCountryConflict'] = '';
 		// check that the submitted gateway is in the list of selected ones
 		$sessionid = (mt_rand( 100, 999 ) . time());
@@ -638,8 +638,6 @@ function wpsc_submit_checkout() {
 			$_SESSION['gateway'] = 'google';
 			wp_redirect(get_option( 'shopping_cart_url' ));
 		}
-		if ( isset( $_GET['gateway'] ) && $_GET['gateway'] == 'noca' )
-			echo transaction_results( $sessionid, true );
 	}
 }
 

@@ -23,8 +23,6 @@ function wpsc_transaction_theme() {
 		wpsc_google_checkout_submit();
 		unset( $_SESSION['wpsc_sessionid'] );
 	}
-	if ( isset( $_GET['gateway'] ) && 'noca' == $_GET['gateway'] )
-		wpsc_submit_checkout();
 
 	if ( 'paypal_certified' == $_SESSION['wpsc_previous_selected_gateway'] )
 		$sessionid = $_SESSION['paypalexpresssessionid'];

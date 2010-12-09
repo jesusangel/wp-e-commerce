@@ -232,20 +232,6 @@ function wpsc_has_category_and_country_conflict(){
 }
 
 /**
- * checks to see whether noca messages need to be displayed
- * @access public
- *
- * @since 3.8
- * @return (boolean) true or false
- */
-function wpsc_has_noca_message(){
-	if(isset($_SESSION['nocamsg']) && isset($_GET['noca']) && $_GET['noca'] == 'confirm')
-		return true;
-	else
-		return false;
-}
-
-/**
  * Have valid shipping zipcode
  * @access public
  *
@@ -272,20 +258,6 @@ function wpsc_has_tnc(){
 		return false;
 	else
 		return true;
-}
-
-/**
- * checks to see whether noca is an available gateway and the ONLY gateway available
- * @access public
- *
- * @since 3.8
- * @return (boolean) true or false
- */
-function wpsc_is_noca_gateway(){
-	if(count($wpsc_gateway->wpsc_gateways) == 1 && $wpsc_gateway->wpsc_gateways[0]['name'] == 'Noca')
-		return true;
-	else
-		return false;
 }
 
 /**
