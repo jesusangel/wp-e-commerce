@@ -176,8 +176,34 @@ function wpsc_theme_upgrade_notice() { ?>
 
 <?php
 }
-if ( !get_option('wpsc_ignore_theme') )
-	add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
+
+
+/**
+ * Displays the database update notice
+ * @access public
+ *
+ * @since 3.8
+ * @param null
+ * @return null
+ */
+function wpsc_database_update_notice() { ?>
+
+	<div class="error fade">
+		<p><?php printf( __( '<strong>Your WP e-Commerce data needs to be updated</strong>. You\'ve upgraded from a previous version of the WP e-Commerce plugin, and your store needs updating.<br>You should <a href="%1s">update your database</a> for your store to continue working.', 'wpsc' ), admin_url( 'index.php?page=wpsc-update' ) ) ?></p>
+	</div>
+
+<?php
+}
+
+
+if ( get_option ( 'wpsc_version' ) < 3.8 ) {
+	add_action ( 'admin_notices', 'wpsc_database_update_notice' );
+} else {
+	if ( !get_option('wpsc_ignore_theme') ) {
+		add_action( 'admin_notices', 'wpsc_theme_upgrade_notice' );
+	}
+}
+
 function wpsc_turn_on_wp_register() {?>
 
 	<div id="message" class="updated fade">
