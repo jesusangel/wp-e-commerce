@@ -143,7 +143,7 @@ class wpsc_merchant {
 					$country = maybe_unserialize( $collected_form_row['value'] );
 					$address_data[$address_data_set][$address_key] = $country[0];
 
-					if ( isset( $country[1] ) && !empty( $country[1] ) )
+					if ( is_array( $country ) && !empty( $country[1] ) )
 						$address_data['billing']['state'] = wpsc_get_state_by_id( $country[1], 'code' );
 
 					break;
