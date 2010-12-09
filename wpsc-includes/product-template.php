@@ -67,6 +67,8 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	global $wp_query,$wpsc_query;
 	$num_paged_links = 4; //amount of links to show on either side of current page
 	
+	$additional_links = '';
+	
 	//additional links, items per page and products order
 	if( get_option('permalink_structure') != '' ){
 		$additional_links_separator = '?';
@@ -869,7 +871,7 @@ function wpsc_product_is_customisable() {
 	global $wpsc_query, $wpdb;
 	$id = get_the_ID();
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
-	if ( ($product_meta['engraved'] == true) || ($product_meta['can_have_uploaded_image'] == true) )
+	if ( (isset($product_meta['engraved']) && $product_meta['engraved'] == true) || (isset($product_meta['can_have_uploaded_image']) && $product_meta['can_have_uploaded_image'] == true) )
 		return true;
 
 	return false;
@@ -883,7 +885,7 @@ function wpsc_product_has_personal_text() {
 	global $wpsc_query, $wpdb;
 	$id = get_the_ID();
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
-	if ( $product_meta['engraved'] == true )
+	if ( isset($product_meta['engraved']) && $product_meta['engraved'] == true )
 		return true;
 
 	return false;
@@ -897,7 +899,7 @@ function wpsc_product_has_supplied_file() {
 	global $wpsc_query, $wpdb;
 	$id = get_the_ID();
 	$product_meta = get_post_meta( $id, '_wpsc_product_metadata', true );
-	if ( $product_meta['can_have_uploaded_image'] == true )
+	if ( isset($product_meta['can_have_uploaded_image']) && $product_meta['can_have_uploaded_image'] == true )
 		return true;
 
 	return false;
@@ -1373,7 +1375,7 @@ function wpsc_product_existing_rating( $product_id ) {
 	$get_average = $wpdb->get_results( "SELECT AVG(`rated`) AS `average`, COUNT(*) AS `count` FROM `" . WPSC_TABLE_PRODUCT_RATING . "` WHERE `productid`='" . $product_id . "'", ARRAY_A );
 	$average = floor( $get_average[0]['average'] );
 	$count = $get_average[0]['count'];
-	$output .= "  <span class='votetext'>";
+	$output  = "  <span class='votetext'>";
 	for ( $l = 1; $l <= $average; ++$l ) {
 		$output .= "<img class='goldstar' src='" . WPSC_CORE_IMAGES_URL . "/gold-star.gif' alt='$l' title='$l' />";
 	}
@@ -1389,10 +1391,14 @@ function wpsc_product_existing_rating( $product_id ) {
 function wpsc_product_new_rating( $product_id ) {
 	global $wpdb;
 
-	$cookie_data = explode( ",", $_COOKIE['voting_cookie'][$product_id] );
+	$cookie_data = '';
+	if (isset($_COOKIE['voting_cookie'][$product_id])) {
+		$cookie_data = explode( ",", $_COOKIE['voting_cookie'][$product_id] );
+	}
+
 	$vote_id = 0;
 
-	if ( is_numeric( $cookie_data[0] ) )
+	if ( isset($cookie_data[0]) &&  is_numeric( $cookie_data[0] ) )
 		$vote_id = absint( $cookie_data[0] );
 
 	$previous_vote = 1;

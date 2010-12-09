@@ -430,10 +430,11 @@ function wpsc_akst_share_link($action = 'print') {
     $onclick = '';
   } else {
 		$permalink = get_permalink($post->ID);
-		if($wp_query->query_vars['product_url_name'] != null){
+		$product_link = '';
+		if (isset($wp_query->query_vars['product_url_name']) && $wp_query->query_vars['product_url_name'] != null){
 			$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
 			$product_link = get_permalink(absint($product_id));
-		} else {
+		} else if (isset($_REQUEST['product_id'])) {
 			$product_link = get_permalink(absint($_REQUEST['product_id']));
 		}
 	$onclick = 'onclick="wpsc_akst_share(\''.$post->ID.'\', \''.urlencode($product_link).'\', \''.urlencode(get_the_title()).'\'); return false;"';
@@ -537,8 +538,10 @@ function wpsc_akst_share_form() {
           			if (!isset($wp_query->query_vars['product_url_name'])) $wp_query->query_vars['product_url_name'] = '';
 					if($wp_query->query_vars['product_url_name'] != '') {
 						$product_id = $wpdb->get_var("SELECT `product_id` FROM `".WPSC_TABLE_PRODUCTMETA."` WHERE `meta_key` IN ( 'url_name' ) AND `meta_value` IN ( '".$wp_query->query_vars['product_url_name']."' ) ORDER BY `product_id` DESC LIMIT 1");
-					} else if(is_numeric($_GET['product_id'])){
+					} else if( isset($_GET['product_id']) && is_numeric($_GET['product_id'])){
 					  $product_id = (int)$_GET['product_id'];
+					} else { 
+						$product_id = '';
 					}
 					echo "<input type=\"hidden\" name=\"wpsc_akst_product_id\" id=\"wpsc_akst_product_id\" value=\"".$product_id."\" />\n\r";
           ?>

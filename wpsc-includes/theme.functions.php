@@ -737,6 +737,7 @@ function wpsc_user_dynamic_css() {
 		}
 
 <?php
+if (isset($product_image_size_list)) {
 		foreach ( (array)$product_image_size_list as $product_image_sizes ) {
 			$individual_thumbnail_height = $product_image_sizes['height'];
 			$individual_thumbnail_width = $product_image_sizes['width'];
@@ -769,7 +770,8 @@ function wpsc_user_dynamic_css() {
 			}
 		}
 	}
-	if ( is_numeric( $_GET['brand'] ) || (get_option( 'show_categorybrands' ) == 3) ) {
+}
+	if ( (isset($_GET['brand']) && is_numeric( $_GET['brand'] )) || (get_option( 'show_categorybrands' ) == 3) ) {
 		$brandstate = 'block';
 		$categorystate = 'none';
 	} else {
@@ -972,7 +974,7 @@ function wpsc_products_page( $content = '' ) {
 function wpsc_all_products_on_page(){
 	global $wp_query,$wpsc_query;
 	if($wp_query->query_vars['post_type'] == 'wpsc-product'){
-		if(1 ==$wp_query->query_vars['post_count'] && file_exists(TEMPLATEPATH.'/single-wpsc-product.php'))
+		if (isset($wp_query->query_vars['post_count']) && 1 == $wp_query->query_vars['post_count'] && file_exists(TEMPLATEPATH.'/single-wpsc-product.php'))
 			include(TEMPLATEPATH. '/single-wpsc-product.php');
 		else
 			include(TEMPLATEPATH. '/page.php');
@@ -1087,30 +1089,30 @@ add_filter('request','wpec_remap_shop_subpages');
 function wpsc_remove_page_from_query_string($query_string)
 {
 	
-	if ($query_string['name'] == 'page' && isset($query_string['page'])) {
+	if ( isset($query_string['name']) && $query_string['name'] == 'page' && isset($query_string['page']) ) {
 		unset($query_string['name']);
 		list($delim, $page_index) = split('/', $query_string['page']);
 
 		$query_string['paged'] = $page_index;
 	}
 	
-	if('page' == $query_string['wpsc-product'])
+	if ( isset($query_string['wpsc-product']) && 'page' == $query_string['wpsc-product'] )
 		$query_string['wpsc-product'] = '';
 	
-	if(is_numeric($query_string['name'])){
+	if ( isset($query_string['name']) && is_numeric($query_string['name']) ) {
 		$query_string['paged'] = $query_string['name'];
 		$query_string['page'] = '/'.$query_string['name'];
 
 		$query_string['posts_per_page'] = get_option('wpsc_products_per_page');		
 	}
-	if(is_numeric($query_string['wpsc-product']))
+	if ( isset($query_string['wpsc-product']) && is_numeric($query_string['wpsc-product']) )
 		unset( $query_string['wpsc-product'] );
 		
-	if('page' ==$query_string['wpsc_product_category'])	
+	if ( isset($query_string['wpsc_product_category']) && 'page' == $query_string['wpsc_product_category'] )
 		unset( $query_string['wpsc_product_category'] );
-	if(is_numeric($query_string['name']))
+	if ( isset($query_string['name']) && is_numeric($query_string['name']) )
 		unset( $query_string['name'] );	
-	if('page' ==$query_string['term'])	{
+	if ( isset($query_string['term']) && 'page' == $query_string['term'] )	{
 		unset( $query_string['term'] );	
 		unset( $query_string['taxonomy'] );	
 	}

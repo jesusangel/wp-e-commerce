@@ -210,7 +210,7 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		
 		// Creates the list of classes on the category item
 		$category_classes = 'wpsc-cat-item wpsc-cat-item-' . $category_row->term_id;
-		if ( $wpsc_query->query_vars['category_id'] == $category_row->term_id) {
+		if ( isset($wpsc_query->query_vars['category_id']) && $wpsc_query->query_vars['category_id'] == $category_row->term_id) {
 			$category_classes .= ' wpsc-current-cat';
 		}
 		
@@ -232,9 +232,17 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 
 		$category_count = $category_branch[$category_row->term_id]['count'];
 		
+		$start_element = '';
+		$end_element = '';
 		
-		$start_element = $query['products_count']['start_element'];
-		$end_element = $query['products_count']['end_element'];
+		if (isset($query['products_count']['start_element'])) {
+			$start_element = $query['products_count']['start_element'];
+		}
+		
+		if (isset($query['products_count']['end_element'])) {
+			$end_element = $query['products_count']['end_element'];
+		}
+		
 		$category_count_html =  $start_element.$category_count.$end_element;
 		
 		
@@ -250,15 +258,14 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		// get the category images
 		$category_image = wpsc_place_category_image($category_row->term_id, $modified_query);
 
-		$width = $query['image_size']['width'];
-		$height = $query['image_size']['height'];
+		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : 150;
+		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : 150;
 		$category_image = wpsc_get_categorymeta($category_row->term_id, 'image');
 		$category_image_html = '';
 		if(($query['show_thumbnails'] == 1)) {
 			if(($category_image != '') && is_file(WPSC_CATEGORY_DIR.$category_image)) {
 				$category_image_html = "<img src='".WPSC_CATEGORY_URL."$category_image' alt='{$category_row->name}' title='{$category_row->name}' style='width: {$width}px; height: {$height}px;' class='wpsc_category_image' />";
 			} else {
-				$category_image_html  = "";
 				$category_image_html .= "				<span class='wpsc_category_image item_no_image ' style='width: {$width}px; height: {$height}px;'>\n\r";
 				$category_image_html .= "					<span class='link_substitute' >\n\r";
 				$category_image_html .= "						<span>".$category_row->name."</span>\n\r";
@@ -305,8 +312,8 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 function wpsc_place_category_image($category_id, $query) {
 	// show the full sized image for the product, if supplied with dimensions, will resize image to those.
 		global $wpsc_query, $wpdb;
-		$width = $query['image_size']['width'];
-		$height = $query['image_size']['height'];
+		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : 150;
+		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : 150;
 		$image_url = "index.php?wpsc_request_image=true&category_id=".$category_id."&width=".$width."&height=".$height;
 		return htmlspecialchars($image_url);
 }

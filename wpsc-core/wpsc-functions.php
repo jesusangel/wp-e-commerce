@@ -605,7 +605,7 @@ function wpsc_generate_product_query( $query ) {
 		}
 	}
 	//If Product Tag Taxonomy
-	if($wp_query->query_vars['product_tag']){
+	if (isset($wp_query->query_vars['product_tag']) && $wp_query->query_vars['product_tag']){
 		$query->query_vars['product_tag'] = $wp_query->query_vars['product_tag'];
 		$query->query_vars['term'] = $wp_query->query_vars['term'];
 		$query->query_vars['taxonomy'] = 'product_tag';

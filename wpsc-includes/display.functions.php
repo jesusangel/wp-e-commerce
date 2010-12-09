@@ -78,9 +78,10 @@ function wpsc_also_bought( $product_id ) {
 	$image_display_height = 96;
 	$image_display_width = 96;
 	
+	$output = '';
 	$also_bought = $wpdb->get_results( "SELECT `" . $wpdb->posts . "`.* FROM `" . WPSC_TABLE_ALSO_BOUGHT . "`, `" . $wpdb->posts . "` WHERE `selected_product`='" . $product_id . "' AND `" . WPSC_TABLE_ALSO_BOUGHT . "`.`associated_product` = `" . $wpdb->posts . "`.`id` AND `" . $wpdb->posts . "`.`post_status` IN('publish','protected') ORDER BY `" . WPSC_TABLE_ALSO_BOUGHT . "`.`quantity` DESC LIMIT $also_bought_limit", ARRAY_A );
 	if ( count( $also_bought ) > 0 ) {
-		$output = "<h2 class='prodtitles wpsc_also_bought' >" . __( 'People who bought this item also bought', 'wpsc' ) . "</h2>";
+		$output .= "<h2 class='prodtitles wpsc_also_bought' >" . __( 'People who bought this item also bought', 'wpsc' ) . "</h2>";
 		$output .= "<div class='wpsc_also_bought'>";
 		foreach ( (array)$also_bought as $also_bought_data ) {
 			$output .= "<div class='wpsc_also_bought_item' style='width: " . $element_widths . "px;'>";
