@@ -90,7 +90,7 @@ function wpsc_output_breadcrumbs($options = Array()) {
 		echo isset($options['crumb-separator']) ? $options['crumb-separator'] : ' &raquo; ';
 	}	
 	echo isset($options['before-crumb']) ? $options['before-crumb'] : '';
-	echo '<a class="wpsc-crumb" id="wpsc-crumb='.$products_page_id.'" href="'.get_option('product_list_url').'">'.$products_page->post_title.'</a>';
+	echo '<a class="wpsc-crumb" id="wpsc-crumb-'.$products_page_id.'" href="'.get_option('product_list_url').'">'.$products_page->post_title.'</a>';
 	echo isset($options['after-crumb']) ? $options['after-crumb'] : '';
 
 
