@@ -1169,6 +1169,7 @@ background-color: #f5f5f5;
 #content table.wpsc_checkout_table tr td {
 	border: none;
 	padding:0px;
+	vertical-align: top;
 }
 
 .wpsc-shopping-cart .asterix {
