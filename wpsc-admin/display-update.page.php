@@ -24,6 +24,11 @@ if ( 0 == count( get_option( 'wpsc_product_category_children' ) ) ) {
 	_get_term_hierarchy( 'wpsc_product_category_children' );
 }
 
+// If database is already updated, then no need to update
+if ( get_option( 'wpsc_version' ) >= 3.8 ) {
+	$show_update_page = 0;
+}
+
 // Check to see if there are any products.
 // if they don't have any, they don't need to update
 if ( get_option( 'wpsc_version' ) < 3.8 || !get_option( 'wpsc_version' ) ) {
