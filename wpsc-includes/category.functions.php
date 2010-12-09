@@ -258,8 +258,8 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 		// get the category images
 		$category_image = wpsc_place_category_image($category_row->term_id, $modified_query);
 
-		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : 150;
-		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : 150;
+		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : get_option('category_image_width');
+		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : get_option('category_image_height');
 		$category_image = wpsc_get_categorymeta($category_row->term_id, 'image');
 		$category_image_html = '';
 		if(($query['show_thumbnails'] == 1)) {
@@ -312,8 +312,8 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 function wpsc_place_category_image($category_id, $query) {
 	// show the full sized image for the product, if supplied with dimensions, will resize image to those.
 		global $wpsc_query, $wpdb;
-		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : 150;
-		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : 150;
+		$width = (isset($query['image_size']['width'])) ? ($query['image_size']['width']) : get_option('category_image_width');
+		$height = (isset($query['image_size']['height'])) ? ($query['image_size']['height']) : get_option('category_image_height');
 		$image_url = "index.php?wpsc_request_image=true&category_id=".$category_id."&width=".$width."&height=".$height;
 		return htmlspecialchars($image_url);
 }
