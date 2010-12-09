@@ -178,9 +178,10 @@ function wpsc_display_category_loop($query, $category_html, &$category_branch = 
 	static $category_count_data = array(); // the array tree is stored in this
 	global $wpdb, $wpsc_query;
 	
-	
-	$category_id = absint($query['parent_category_id']);
-	
+	if( isset($query['parent_category_id']) )		
+		$category_id = absint($query['parent_category_id']);
+	else
+		$category_id = 0;
 	$category_data = get_terms('wpsc_product_category','hide_empty=0&parent='.$category_id, OBJECT, 'display');
 	$output ='';
 	

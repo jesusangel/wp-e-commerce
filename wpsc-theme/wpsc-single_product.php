@@ -44,7 +44,7 @@
 					</div><!--close imagecol-->
 
 					<div class="productcol">			
-						<?php do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product); ?>
+						<?php do_action('wpsc_product_before_description', wpsc_the_product_id(), $wp_query->post); ?>
 						<div class="product_description">
 							<?php echo wpsc_the_product_description(); ?>
 						</div><!--close product_description -->

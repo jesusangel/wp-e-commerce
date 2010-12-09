@@ -990,7 +990,7 @@ function wpsc_the_product_image( $width='', $height='', $product_id='' ) {
  */
 function wpsc_check_display_type(){
 	global $wpsc_query, $post;
-	if('wpsc_product_category' == $wpsc_query->query_vars['taxonomy'] && is_string($wpsc_query->query_vars['term']) && 1 < $wpsc_query->post_count)
+	if(isset($wpsc_query->query_vars['taxonomy']) && 'wpsc_product_category' == $wpsc_query->query_vars['taxonomy'] && is_string($wpsc_query->query_vars['term']) && 1 < $wpsc_query->post_count)
 		$display_type =	wpsc_get_the_category_display($wpsc_query->query_vars['term']);
 	else
 		$display_type = get_option('product_view');

@@ -1372,7 +1372,7 @@ class WPSC_Hide_subcatsprods_in_cat {
 	function get_posts( &$q ) {
 		$this->q =& $q;
 		
-		if ( ( "wpsc_product_category" != $q->query_vars['taxonomy'] ) )
+		if ( !isset($q->query_vars['taxonomy']) || ( "wpsc_product_category" != $q->query_vars['taxonomy'] ) )
 			return false;
 		
 		add_action( 'posts_where', array( &$this, 'where' ) );

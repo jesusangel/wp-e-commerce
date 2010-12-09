@@ -1,5 +1,5 @@
 <?php
-global $wpsc_query, $wpdb;
+global $wp_query, $wpdb;
 ?>
 <div id="list_view_products_page_container">
 
@@ -79,7 +79,7 @@ global $wpsc_query, $wpdb;
 					<?php endif; ?>
 					
 					<td>
- 						<?php do_action('wpsc_product_before_description', wpsc_the_product_id(), $wpsc_query->product); ?>
+ 						<?php do_action('wpsc_product_before_description', wpsc_the_product_id(), $wp_query->post); ?>
 					</td>
 					<td>
                   			<?php if(wpsc_product_on_special()) : ?>

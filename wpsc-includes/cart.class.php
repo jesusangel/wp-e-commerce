@@ -164,7 +164,7 @@ function wpsc_cart_tax($forDisplay = true) {
 */
 function wpsc_cart_show_plus_postage() {
    global $wpsc_cart;
-   if(($_SESSION['wpsc_has_been_to_checkout'] == null ) && (get_option('add_plustax') == 1)) {
+   if(isset($_SESSION['wpsc_has_been_to_checkout']) && ($_SESSION['wpsc_has_been_to_checkout'] == null ) && (get_option('add_plustax') == 1)) {
 
       return true;
 
@@ -1716,7 +1716,7 @@ class wpsc_cart_item {
          $this->is_downloadable = false;
       }
 
-      if ( is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) )
+      if (isset($this->cart->selected_shipping_method) && is_callable( array( $wpsc_shipping_modules[$this->cart->selected_shipping_method], "get_item_shipping" ) ) )
          $this->shipping = $wpsc_shipping_modules[$this->cart->selected_shipping_method]->get_item_shipping($this);
 
      // update the claimed stock here

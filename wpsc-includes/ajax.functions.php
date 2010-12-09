@@ -34,28 +34,29 @@ function wpsc_add_to_cart() {
 	$default_parameters['is_customisable'] = false;
 	$default_parameters['meta'] = null;
 
-
+	$provided_parameters = array();
 	/// sanitise submitted values
 	$product_id = (int)$_POST['product_id'];
-	foreach ( (array)$_POST['variation'] as $key => $variation )
-		$provided_parameters['variation_values'][(int)$key] = (int)$variation;
-
-	if ( count( $provided_parameters['variation_values'] ) > 0 ) {
-		$variation_product_id = wpsc_get_child_object_in_terms( $product_id, $provided_parameters['variation_values'], 'wpsc-variation' );
-		if ( $variation_product_id > 0 )
-			$product_id = $variation_product_id;
+	if(isset($_POST['variation'])){
+		foreach ( (array)$_POST['variation'] as $key => $variation )
+			$provided_parameters['variation_values'][(int)$key] = (int)$variation;
+	
+		if ( count( $provided_parameters['variation_values'] ) > 0 ) {
+			$variation_product_id = wpsc_get_child_object_in_terms( $product_id, $provided_parameters['variation_values'], 'wpsc-variation' );
+			if ( $variation_product_id > 0 )
+				$product_id = $variation_product_id;
+		}
+	
 	}
-
-
-
-	if ( $_POST['quantity'] > 0 && (!isset( $_POST['wpsc_quantity_update'] )) ) {
+	
+	if ((isset($_POST['quantity']) && $_POST['quantity'] > 0) && (!isset( $_POST['wpsc_quantity_update'] )) ) {
 		$provided_parameters['quantity'] = (int)$_POST['quantity'];
 	} else if ( isset( $_POST['wpsc_quantity_update'] ) ) {
 		$wpsc_cart->remove_item( $_POST['key'] );
 		$provided_parameters['quantity'] = (int)$_POST['wpsc_quantity_update'];
 	}
 
-	if ( $_POST['is_customisable'] == 'true' ) {
+	if (isset( $_POST['is_customisable']) &&  $_POST['is_customisable'] == 'true' ) {
 		$provided_parameters['is_customisable'] = true;
 
 		if ( isset( $_POST['custom_text'] ) ) {
@@ -65,7 +66,7 @@ function wpsc_add_to_cart() {
 			$provided_parameters['file_data'] = $_FILES['custom_file'];
 		}
 	}
-	if ( ((float)$_POST['donation_price'] > 0 ) ) {
+	if ( isset($_POST['donation_price']) && ((float)$_POST['donation_price'] > 0 ) ) {
 		$provided_parameters['provided_price'] = (float)$_POST['donation_price'];
 	}
 	$parameters = array_merge( $default_parameters, (array)$provided_parameters );
@@ -215,7 +216,7 @@ function wpsc_empty_cart() {
 }
 
 // execute on POST and GET
-if ( isset( $_REQUEST['wpsc_ajax_action'] ) && (($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || ($_GET['sessionid'] > 0)) ) {
+if ( isset( $_REQUEST['wpsc_ajax_action'] ) && (($_REQUEST['wpsc_ajax_action'] == 'empty_cart') || (isset($_GET['sessionid'])  && ($_GET['sessionid'] > 0))) ) {
 	add_action( 'init', 'wpsc_empty_cart' );
 }
 
