@@ -367,8 +367,7 @@ function wpsc_start_the_query() {
 			$wpsc_query = new WP_Query( $wpsc_query_vars );
 		}
 	}
-
-	if($wp_query->is_404 && $wpsc_query->post_count > 0)
+	if($wp_query->is_404 && $wpsc_query->post_count > 0 && !is_front_page() && !bp_is_activity_front_page() )
 		$wp_query = $wpsc_query;
 	if ( isset( $wp_query->post->ID ) )
 		$post_id = $wp_query->post->ID;
