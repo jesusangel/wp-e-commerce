@@ -11,6 +11,7 @@ require_once('library/googlerequest.php');
 
 
 $nzshpcrt_gateways[$num]['name'] = 'Google Checkout';
+$nzshpcrt_gateways[$num]['image'] = WPSC_URL . '/images/google_checkout.gif';
 $nzshpcrt_gateways[$num]['internalname'] = 'google';
 $nzshpcrt_gateways[$num]['function'] = 'gateway_google';
 $nzshpcrt_gateways[$num]['form'] = "form_google";

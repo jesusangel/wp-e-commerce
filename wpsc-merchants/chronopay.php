@@ -6,6 +6,7 @@ $nzshpcrt_gateways[$num]['form'] = "form_chronopay";
 $nzshpcrt_gateways[$num]['submit_function'] = "submit_chronopay";
 $nzshpcrt_gateways[$num]['payment_type'] = "credit_card";
 $nzshpcrt_gateways[$num]['display_name'] = 'Credit Card';
+$nzshpcrt_gateways[$num]['image'] = WPSC_URL . '/images/cc.gif';
 
 function gateway_chronopay($separator, $sessionid)
 {

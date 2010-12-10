@@ -225,7 +225,7 @@ function wpsc_get_payment_form( $paymentname ,$selected_gateway_data='') {
 					  </td>
 					  <td style='border-top: none;'>";
 
-		if ( !empty($payment_gateway_names[$paymentname])) {
+		if ( isset($payment_gateway_names[$paymentname]) && !empty($selected_gateway_data['image']) ) {
 			$display_name = $payment_gateway_names[$paymentname];
 		} elseif(!empty($selected_gateway_data['display_name'])){
 			$display_name =$selected_gateway_data['display_name'];

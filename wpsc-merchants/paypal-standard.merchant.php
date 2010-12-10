@@ -11,6 +11,7 @@
 $nzshpcrt_gateways[$num] = array(
 	'name' => 'PayPal Payments Standard 2.0',
 	'api_version' => 2.0,
+	'image' => WPSC_URL . '/images/paypal.gif',
 	'class_name' => 'wpsc_merchant_paypal_standard',
 	'has_recurring_billing' => true,
 	'wp_admin_cannot_cancel' => true,

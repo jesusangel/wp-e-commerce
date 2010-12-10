@@ -978,16 +978,35 @@ function wpsc_the_gateway() {
 	return $wpsc_gateway->the_gateway();
 }
 
+//return true only when gateway has image set
+function wpsc_show_gateway_image(){
+	global $wpsc_gateway;
+	if( isset($wpsc_gateway->gateway['image']) && !empty($wpsc_gateway->gateway['image']) )
+		return true;
+	else
+		return false;
+}
+
+
+//return gateway image url (string) or false if none.
+function wpsc_gateway_image_url(){
+	global $wpsc_gateway;
+	if( wpsc_show_gateway_image() )
+		return $wpsc_gateway->gateway['image'];
+	else
+		return false;
+}
+
 function wpsc_gateway_name() {
 	global $wpsc_gateway;
 	$display_name = '';
 
 	$payment_gateway_names = get_option( 'payment_gateway_names' );
 
-	if ( isset( $payment_gateway_names[$wpsc_gateway->gateway['internalname']] ) && $payment_gateway_names[$wpsc_gateway->gateway['internalname']] != '' ) {
+	if ( isset( $payment_gateway_names[$wpsc_gateway->gateway['internalname']] ) && ( $payment_gateway_names[$wpsc_gateway->gateway['internalname']] != '' || wpsc_show_gateway_image() ) ) {
 		$display_name = $payment_gateway_names[$wpsc_gateway->gateway['internalname']];
-	} elseif ( isset( $selected_gateway_data['payment_type'] ) ) {
-		switch ( $selected_gateway_data['payment_type'] ) {
+	} elseif ( isset( $wpsc_gateway->gateway['payment_type'] ) ) {
+		switch ( $wpsc_gateway->gateway['payment_type'] ) {
 			case "paypal":
 			case "paypal_pro":
 			case "wpsc_merchant_paypal_pro";
@@ -1008,7 +1027,7 @@ function wpsc_gateway_name() {
 				break;
 		}
 	}
-	if ( $display_name == '' ) {
+	if ( $display_name == '' && !wpsc_show_gateway_image() ) {
 		$display_name = 'Credit Card';
 	}
 	return $display_name;

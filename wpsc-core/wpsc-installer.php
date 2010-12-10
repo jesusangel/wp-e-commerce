@@ -61,6 +61,18 @@ function wpsc_install() {
 	add_option( 'checkout_url', '', __( 'The location of the checkout page', 'wpsc' ), 'yes' );
 	add_option( 'transact_url', '', __( 'The location of the transaction detail page', 'wpsc' ), 'yes' );
 	add_option( 'payment_gateway', '', __( 'The payment gateway to use', 'wpsc' ), 'yes' );
+	
+	$default_payment_gateways_names = array(
+		'chronopay'						=> '',
+		'google'						=> '',
+		'wpsc_merchant_paypal_express'	=> '',
+		'wpsc_merchant_paypal_pro'		=> '',
+		'wpsc_merchant_paypal_standard'	=> ''
+	);
+	$existing_payment_gateways_names = get_option( 'payment_gateway_names' );
+	$new_payment_gatewats_name = array_merge($default_payment_gateways_names, (array)$existing_payment_gateways_names);
+	update_option( 'payment_gateway_names', $new_payment_gatewats_name );
+
 
 	if ( function_exists( 'register_sidebar' ) )
 		add_option( 'cart_location', '4', __( 'Cart Location', 'wpsc' ), 'yes' );

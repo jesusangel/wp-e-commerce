@@ -393,10 +393,14 @@ endif;
       <?php if(wpsc_gateway_count() > 1): // if we have more than one gateway enabled, offer the user a choice ?>
          <tr>
          <td colspan='2' class='wpsc_gateway_container'>
-            <h3><?php _e('Select a payment gateway', 'wpsc');?></h3>
+            <h3><?php _e('Payment Type', 'wpsc');?></h3>
             <?php while (wpsc_have_gateways()) : wpsc_the_gateway(); ?>
                <div class="custom_gateway">
-                     <label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name();?></label>
+                     <label><input type="radio" value="<?php echo wpsc_gateway_internal_name();?>" <?php echo wpsc_gateway_is_checked(); ?> name="custom_gateway" class="custom_gateway"/><?php echo wpsc_gateway_name(); ?> 
+                     	<?php if( wpsc_show_gateway_image() ): ?>
+                     	<img src="<?php echo wpsc_gateway_image_url(); ?>" alt="<?php echo wpsc_gateway_name(); ?>" style="position:relative; top:5px;" />
+                     	<?php endif; ?>
+                     </label>
 
                   <?php if(wpsc_gateway_form_fields()): ?>
                      <table class='wpsc_checkout_table <?php echo wpsc_gateway_form_field_style();?>'>
