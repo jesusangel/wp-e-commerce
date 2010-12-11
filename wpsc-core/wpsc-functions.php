@@ -796,6 +796,11 @@ function wpsc_product_link( $permalink, $post, $leavename ) {
 		$post = get_post( $post_id );
 	}
 
+	// Only applies to WPSC products, don't stop on permalinks of other CPTs
+	// Fixes http://code.google.com/p/wp-e-commerce/issues/detail?id=271
+	if ($post->post_type != 'wpsc-product') 
+		return $permalink;
+
 	$permalink_structure = get_option( 'permalink_structure' );
 	// This may become customiseable later
 
