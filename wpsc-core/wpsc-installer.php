@@ -704,7 +704,7 @@ function wpsc_add_checkout_fields() {
 
 	if ( $data_forms[0]['count'] == 0 ) {
 
-		$sql = " INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name`) VALUES ( '" . __( '1. Your billing/contact details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 1,''),
+		$sql = " INSERT INTO `" . WPSC_TABLE_CHECKOUT_FORMS . "` ( `name`, `type`, `mandatory`, `display_log`, `default`, `active`, `order`, `unique_name`) VALUES ( '" . __( 'Your billing/contact details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 1,''),
 	( '" . __( 'First Name', 'wpsc' ) . "', 'text', '1', '1', '', '1', 2,'billingfirstname'),
 	( '" . __( 'Last Name', 'wpsc' ) . "', 'text', '1', '1', '', '1', 3,'billinglastname'),
 	( '" . __( 'Address', 'wpsc' ) . "', 'address', '1', '0', '', '1', 4,'billingaddress'),
@@ -713,7 +713,7 @@ function wpsc_add_checkout_fields() {
 	( '" . __( 'Country', 'wpsc' ) . "', 'country', '1', '0', '', '1', 7,'billingcountry'),
 	( '" . __( 'Postal Code', 'wpsc' ) . "', 'text', '0', '0', '', '1', 8,'billingpostcode'),
 	( '" . __( 'Email', 'wpsc' ) . "', 'email', '1', '1', '', '1', 9,'billingemail'),
-	( '" . __( '2. Shipping details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
+	( '" . __( 'Shipping details', 'wpsc' ) . "', 'heading', '0', '0', '', '1', 10,'delivertoafriend'),
 	( '" . __( 'First Name', 'wpsc' ) . "', 'text', '0', '0', '', '1', 11,'shippingfirstname'),
 	( '" . __( 'Last Name', 'wpsc' ) . "', 'text', '0', '0', '', '1', 12,'shippinglastname'),
 	( '" . __( 'Address', 'wpsc' ) . "', 'address', '0', '0', '', '1', 13,'shippingaddress'),
