@@ -964,8 +964,9 @@ function wpsc_include_products_page_template($display_type = 'default'){
 function wpsc_products_page( $content = '' ) {
 	global $wpdb, $wp_query, $wpsc_query, $wpsc_query_vars;
 	$output = '';
-	remove_filter( 'the_content', 'wpautop' );
+
 	if ( preg_match( "/\[productspage\]/", $content ) ) {
+		remove_filter( 'the_content', 'wpautop' );
 		list($wp_query, $wpsc_query) = array( $wpsc_query, $wp_query ); // swap the wpsc_query object
 		$GLOBALS['nzshpcrt_activateshpcrt'] = true;
 
@@ -991,7 +992,7 @@ function wpsc_products_page( $content = '' ) {
 			$GLOBALS['post'] = $wp_query->post;
 		return preg_replace( "/(<p>)*\[productspage\](<\/p>)*/", $output, $content );
 	} elseif(is_archive() && wpsc_is_viewable_taxonomy()){	
-
+		remove_filter( 'the_content', 'wpautop' );
 		return wpsc_products_page('[productspage]');
 	} else {
 		return $content;
