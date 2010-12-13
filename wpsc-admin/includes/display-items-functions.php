@@ -249,6 +249,9 @@ function wpsc_product_basic_details_form( &$product_data ) {
 		$product->post_type = '';
 	if ( !isset( $product->post_status ) )
 		$product->post_status = '';
+	if ( !isset( $product->ID ) )
+		$product->ID = 0;
+	
 ?>
 			<input type="hidden" id="user-id" name="user_ID" value="<?php echo (int)$user_ID ?>" />
 			<input type="hidden" id="hiddenaction" name="action" value="<?php echo esc_attr( $form_action ) ?>" />

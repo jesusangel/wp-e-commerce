@@ -2,7 +2,7 @@
 global $wpsc_cart, $wpdb, $wpsc_checkout, $wpsc_gateway, $wpsc_coupons;
 $wpsc_checkout = new wpsc_checkout();
 $wpsc_gateway = new wpsc_gateways();
-
+$alt = 0;
 if(isset($_SESSION['coupon_numbers']))
    $wpsc_coupons = new wpsc_coupons($_SESSION['coupon_numbers']);
 

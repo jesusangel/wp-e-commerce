@@ -630,15 +630,15 @@ class wpsc_checkout {
 			
 			$delivery_country_id = wpsc_get_country_form_id_by_type('delivery_country');
      		$billing_country_id = wpsc_get_country_form_id_by_type('country');
-			if(($this->checkout_item->id == $delivery_country_id) || ($this->checkout_item->id == $billing_country_id)){
-				if( is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) 
+			if(is_array($_SESSION['wpsc_checkout_saved_values']) && ($this->checkout_item->id == $delivery_country_id) || ($this->checkout_item->id == $billing_country_id)){
+				if( isset($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) && is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) 
 					&& count($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) > 1){
 			 	
 			 		$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
 				 	$_SESSION['wpsc_delivery_region'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][1];
-			 	} elseif(is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id])) {				
+			 	} elseif(isset($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id]) &&  is_array($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id])) {				
 				 	$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id][0];
-				}else{
+				}elseif(isset($_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id])){
 					$_SESSION['wpsc_delivery_country'] = $_SESSION['wpsc_checkout_saved_values'][$this->checkout_item->id];
 				}
      		}
