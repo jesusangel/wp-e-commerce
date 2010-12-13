@@ -86,7 +86,7 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 	//end of additional links
 	
 	if(empty($totalpages)){
-		if('wpsc-product' == $wp_query->query_vars['post_type'] && 'wpsc_product_category' != $wpsc_query->query_vars['taxonomy'])
+		if(!isset($wpsc_query->query_vars['taxonomy']) && 'wpsc-product' == $wp_query->query_vars['post_type'])
 			$totalpages = $wp_query->max_num_pages;			
 		else
 			$totalpages = $wpsc_query->max_num_pages;	
@@ -103,7 +103,8 @@ function wpsc_pagination($totalpages = '', $per_page = '', $current_page = '', $
 		
 	if(!get_option('permalink_structure')) {
 		$category = '';
-		$category = '?wpsc_product_category='.$wp_query->query_vars['wpsc_product_category'];
+		if(isset($wpsc_query->query_vars['taxonomy']))
+			$category = '?wpsc_product_category='.$wp_query->query_vars['wpsc_product_category'];
 		if(isset($wpsc_query->query_vars['wpsc_product_category']) && is_string($wpsc_query->query_vars['wpsc_product_category'])){
 
 			$page_link = get_option('blogurl').$category.'&amp;paged';
