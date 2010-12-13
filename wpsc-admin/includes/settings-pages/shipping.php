@@ -168,7 +168,7 @@ function wpsc_options_shipping() {
 												<div class='inside'>
 
 										<p>
-<?php _e( 'To enable shipping in WP e-Commerce you must select which shipping methods you want to enable on your site.<br /> If you want to use fixed-price shipping options like "Pickup - $0, Overnight - $10, Same day - $20, etc." you can download a WprdPress plugin from plugins directory for <a href="http://wordpress.org/extend/plugins/wp-e-commerce-fixed-rate-shipping/">Simple shipping</a>. It will appear in the list as "Fixed rate".', 'wpsc' ); ?>
+<?php _e( 'To enable shipping in WP e-Commerce you must select which shipping methods you want to enable on your site.<br /> If you want to use fixed-price shipping options like "Pickup - $0, Overnight - $10, Same day - $20, etc." you can download a WordPress plugin from plugins directory for <a href="http://wordpress.org/extend/plugins/wp-e-commerce-fixed-rate-shipping/">Simple shipping</a>. It will appear in the list as "Fixed rate".', 'wpsc' ); ?>
 									</p>
 									<br />
 									<p>

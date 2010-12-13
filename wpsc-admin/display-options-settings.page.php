@@ -299,7 +299,7 @@ function wpsc_settings_page_update_notification() {
 			wpsc_regenerate_thumbnails();
 		}
 
-		if ( is_null( $message ) )
+		if ( !isset( $message ) )
 			_e( 'Settings successfully updated.', 'wpsc' );
 
 		$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'locked', 'regenerate', 'skipped', 'updated', 'deleted', 'wpsc_downloadcsv', 'rss_key', 'start_timestamp', 'end_timestamp', 'email_buyer_id' ), $_SERVER['REQUEST_URI'] ); ?>
