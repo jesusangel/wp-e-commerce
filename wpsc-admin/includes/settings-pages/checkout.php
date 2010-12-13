@@ -136,7 +136,7 @@ $form_types = get_option('wpsc_checkout_form_fields');
 						$checkout_sets = get_option('wpsc_checkout_form_sets');
 						foreach((array)$checkout_sets as $key => $value) {
 							$selected_state = "";
-							if($_GET['checkout-set'] == $key) {
+							if(isset($_GET['checkout-set']) && $_GET['checkout-set'] == $key) {
 								$selected_state = "selected='selected'";
 							}
 							echo "<option {$selected_state} value='{$key}'>".stripslashes($value)."</option>";

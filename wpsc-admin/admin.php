@@ -380,7 +380,7 @@ function wpsc_admin_dynamic_css() {
 	header( 'Expires: ' . gmdate( 'r', mktime( 0, 0, 0, date( 'm' ), (date( 'd' ) + 12 ), date( 'Y' ) ) ) . '' );
 	header( 'Cache-Control: public, must-revalidate, max-age=86400' );
 	header( 'Pragma: public' );
-
+	$flash = 0;
 	$flash = apply_filters( 'flash_uploader', $flash );
 
 	if ( $flash = 1 ) {
@@ -564,7 +564,7 @@ function wpsc_quarterly_dashboard_widget() {
 	if ( get_option( 'wpsc_business_year_start' ) == false ) {
 ?>
 		<form action='' method='post'>
-			<label for='date_start'>Financial Year End: </label>
+			<label for='date_start'><?php _e('Financial Year End' ,'wpsc'); ?>: </label>
 			<input id='date_start' type='text' class='pickdate' size='11' value='<?php echo get_option( 'wpsc_last_date' ); ?>' name='add_start' />
 			   <!--<select name='add_start[day]'>
 <?php

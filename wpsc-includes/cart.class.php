@@ -641,7 +641,7 @@ class wpsc_cart {
    function wpsc_refresh_cart_items()
    {
       global $wpsc_cart;
-      if(is_object($wpsc_cart->cart_items))
+      if(is_object($wpsc_cart) && is_object($wpsc_cart->cart_items))
       {
          foreach($wpsc_cart->cart_items as &$cart_item)
          {
