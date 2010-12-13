@@ -276,12 +276,12 @@ function wpsc_display_edit_products_page() {
 		$page = null;
 		// Justin Sainton - 5.11.2010 - Re-included these variables from 3.7.6.1, as they appear to have been removed.  Necessary for pagination.  Also re-wrote query for new table structure.
 		$itempp = 20;
-		if ( isset( $_POST['product'] ) && (is_numeric( $_POST['product'] )) ) 
-			$parent_product = absint( $_POST['product'] );
+		if ( isset( $_REQUEST['product'] ) && (is_numeric( $_REQUEST['product'] )) ) 
+			$parent_product = absint( $_REQUEST['product'] );
 		
 		$search_input = '';
-		if ( isset( $_POST['search'] ) ) {
-			$search_input = stripslashes( $_POST['search'] );
+		if ( isset( $_REQUEST['search'] ) ) {
+			$search_input = stripslashes( $_REQUEST['search'] );
 
 			$search_string = "%" . $wpdb->escape( $search_input ) . "%";
 
@@ -292,8 +292,8 @@ function wpsc_display_edit_products_page() {
 
 		$search_sql = apply_filters( 'wpsc_admin_products_list_search_sql', $search_sql );
 
-		if ( isset( $_POST['pageno'] ) && ($_POST['pageno'] > 0) ) {
-			$page = absint( $_POST['pageno'] );
+		if ( isset( $_REQUEST['pageno'] ) && ($_REQUEST['pageno'] > 0) ) {
+			$page = absint( $_REQUEST['pageno'] );
 		} else {
 			$page = 1;
 		}
@@ -333,14 +333,14 @@ function wpsc_display_edit_products_page() {
                 else {
                     $query["post_parent"] = 0;
                 }
-		if ( isset( $_POST['category'] ) ) {
-			$category_id = $_POST['category'];
+		if ( isset( $_REQUEST['category'] ) ) {
+			$category_id = $_REQUEST['category'];
 			$query['wpsc_product_category'] = $category_id;
 		}
 
 
-		if ( isset( $_POST['search'] ) && (strlen( $_POST['search'] ) > 0 ) ) {
-			$search = $_POST['search'];
+		if ( isset( $_REQUEST['search'] ) && (strlen( $_REQUEST['search'] ) > 0 ) ) {
+			$search = $_REQUEST['search'];
 			$query['s'] = $search;
 		}
 		$wp_query = new WP_Query( $query );
@@ -351,17 +351,16 @@ function wpsc_display_edit_products_page() {
 		remove_filter( 'posts_request', 'wpsc_edit_variations_request_sql' );
 
 		if ( $page !== null ) {
-			$page_links = paginate_links( array(
-						'base' => add_query_arg( 'pageno', '%#%' ),
-						'format' => '',
-						'prev_text' => __( '&laquo;' ),
-						'next_text' => __( '&raquo;' ),
-						'total' => $num_pages,
-						'current' => $page
-					) );
+			$page_query['base'] =add_query_arg( 'pageno', '%#%' );
+			$page_query['format'] = '';
+			$page_query['prev_text'] = __( '&laquo;' );
+			$page_query['next_text'] = __( '&raquo;' );
+			$page_query['total'] = $num_pages;
+			$page_query['current'] = $page;
+			
+			$page_links = paginate_links( $page_query );
 		}
 
-		$this_page_url = stripslashes( $_SERVER['REQUEST_URI'] );
 
 		$is_trash = isset( $_POST['post_status'] ) && $_POST['post_status'] == 'trash';
 
@@ -379,7 +378,16 @@ function wpsc_display_edit_products_page() {
 			</div>
 <?php } ?>	
 		<form action="admin.php?page=wpsc-edit-products" method="post" id="filt_cat">
-		<?php
+		<?php if(isset($search)){
+			echo "<input type='hidden' name='search' value='{$search}' />";
+		}
+		if(isset($category_id)){
+			echo "<input type='hidden' name='category' value='{$category_id}' />";
+			echo "<input type='hidden' name='category_id' value='{$category_id}' />";
+		}
+		if(isset($page)){
+			echo "<input type='hidden' name='page' value='{$page}' />";
+		}
 		echo wpsc_admin_category_dropdown();
 		?>
 </form>
@@ -425,6 +433,18 @@ function wpsc_display_edit_products_page() {
 				?>
 
 				<input type='hidden' name='wpsc_admin_action' value='bulk_modify' />
+				<?php if(isset($search)){
+					echo "<input type='hidden' name='search' value='{$search}' />";
+				}
+				if(isset($category_id)){
+					echo "<input type='hidden' name='category' value='{$category_id}' />";
+					echo "<input type='hidden' name='category_id' value='{$category_id}' />";
+				}
+				if(isset($page)){
+					echo "<input type='hidden' name='page' value='{$page}' />";
+				}
+				?>
+
 				<input type="submit" value="<?php _e( 'Apply' ); ?>" name="doaction" id="doaction" class="button-secondary action" />
 <?php wp_nonce_field( 'bulk-products', 'wpsc-bulk-products' ); ?>
 		</div>
