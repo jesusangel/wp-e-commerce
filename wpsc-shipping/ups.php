@@ -286,7 +286,7 @@ class ups {
         /* This function is called when the user hit "submit" in the
          * UPS settings area under Shipping to update the setttings.
          */
-        if ($_POST['wpsc_ups_settings'] != '') {
+        if (isset($_POST['wpsc_ups_settings']) && $_POST['wpsc_ups_settings'] != '') {
             $wpsc_ups_services = $_POST['wpsc_ups_services'];
             update_option('wpsc_ups_services',$wpsc_ups_services);
             $temp = $_POST['wpsc_ups_settings'];

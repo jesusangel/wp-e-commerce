@@ -107,21 +107,21 @@ class usps {
     }
 
     function submit_form() {
-        if ($_POST['uspsid'] != '') {
+        if (isset($_POST['uspsid']) && $_POST['uspsid'] != '') {
             update_option('uspsid', $_POST['uspsid']);
         }
-        if ($_POST['uspspw'] != '') {
+        if (isset($_POST['uspspw']) && $_POST['uspspw'] != '') {
             update_option('uspspw', $_POST['uspspw']);
         }
-        if ($_POST['usps_extra_cost'] != '') {
+        if (isset($_POST['usps_extra_cost']) && $_POST['usps_extra_cost'] != '') {
             update_option('usps_extra_cost', $_POST['usps_extra_cost']);
         }
-        if($_POST['usps_test_server'] != '') {
+        if(isset($_POST['usps_test_server']) && $_POST['usps_test_server'] != '') {
             update_option('usps_test_server', $_POST['usps_test_server']);
         }else {
             update_option('usps_test_server', '');
         }
-        if($_POST['usps_services'] != ''){
+        if(isset($_POST['usps_services']) && $_POST['usps_services'] != ''){
             $services = '';
             foreach($_POST['usps_services'] as $key){
                 $services .= $key.', ';
