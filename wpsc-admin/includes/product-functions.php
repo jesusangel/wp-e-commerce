@@ -842,7 +842,17 @@ function wpsc_modify_upload_directory($input) {
 	return $input;
 }
   
-  
+function wpsc_modify_preview_directory($input) {
+	$previous_subdir = $input['subdir'];
+	$download_subdir = str_replace($input['basedir'], '', WPSC_PREVIEW_DIR);
+	
+	$input['path'] = str_replace($previous_subdir, $download_subdir, $input['path']);
+	$input['url'] = str_replace($previous_subdir, $download_subdir, $input['url']);
+	$input['subdir'] = str_replace($previous_subdir, $download_subdir, $input['subdir']);
+	
+	return $input;
+}
+    
   
  /**
  * wpsc_item_reassign_file function 
@@ -931,30 +941,48 @@ function wpsc_item_reassign_file($product_id, $selected_files) {
 function wpsc_item_add_preview_file($product_id, $preview_file) {
   global $wpdb;
   
-	$current_file_id = $product_id;
-	$file_data = $wpdb->get_row("SELECT * FROM `".WPSC_TABLE_PRODUCT_FILES."` WHERE `id`='{$current_file_id}' LIMIT 1",ARRAY_A);
-	
-	if(apply_filters( 'wpsc_filter_file', $preview_file['tmp_name'] )) {
-		if(function_exists("make_mp3_preview"))	{
-			if($mimetype == "audio/mpeg" && (!isset($preview_file['tmp_name']))) {
-				// if we can generate a preview file, generate it (most can't due to sox being rare on servers and sox with MP3 support being even rarer), thus this needs to be enabled by editing code
-				make_mp3_preview((WPSC_FILE_DIR.$idhash), (WPSC_PREVIEW_DIR.$idhash.".mp3"));
-				$preview_filepath = (WPSC_PREVIEW_DIR.$idhash.".mp3");
-			} else if(file_exists($preview_file['tmp_name'])) {    
-				$preview_filename = basename($preview_file['name']);
-				$preview_mimetype = wpsc_get_mimetype($preview_file['tmp_name']);
-				copy($preview_file['tmp_name'], (WPSC_PREVIEW_DIR.$preview_filename));
-				$preview_filepath = (WPSC_PREVIEW_DIR.$preview_filename);
-				$wpdb->query("UPDATE `".WPSC_TABLE_PRODUCT_FILES."` SET `preview` = '".$wpdb->escape($preview_filename)."', `preview_mimetype` = '".$preview_mimetype."' WHERE `id` = '{$file_data['id']}' LIMIT 1");
-			}
-			$stat = stat( dirname($preview_filepath));
-			$perms = $stat['mode'] & 0000666;
-			@ chmod( $preview_filepath, $perms );	
-		}
-		return $fileid;
-   } else {
- 		return $selected_files;
-   }  
+  add_filter('upload_dir', 'wpsc_modify_preview_directory');
+	$overrides = array('test_form'=>false);
+
+	$time = current_time('mysql');
+	if ( $post = get_post($product_id) ) {
+		if ( substr( $post->post_date, 0, 4 ) > 0 )
+			$time = $post->post_date;
+	}
+
+	$file = wp_handle_upload($preview_file, $overrides, $time);
+
+	if ( isset($file['error']) )
+		return new WP_Error( 'upload_error', $file['error'] );
+
+	$name_parts = pathinfo($file['file']);
+	$name = $name_parts['basename'];
+
+	$url = $file['url'];
+	$type = $file['type'];
+	$file = $file['file'];
+	$title = $name;
+	$content = '';
+
+	// Construct the attachment array
+	$attachment = array(
+		'post_mime_type' => $type,
+		'guid' => $url,
+		'post_parent' => $product_id,
+		'post_title' => $title,
+		'post_content' => $content,
+		'post_type' => "wpsc-preview-file",
+		'post_status' => 'inherit'		
+	);
+
+	// Save the data
+	$id = wp_insert_post($attachment, $file, $product_id);
+	remove_filter('upload_dir', 'wpsc_modify_upload_directory');
+  	return $id;
+  
+  
+  ///OLD CODE replaced 13/12/2010
+
 }
 
 
