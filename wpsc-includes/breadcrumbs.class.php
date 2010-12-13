@@ -150,7 +150,8 @@ class wpsc_breadcrumbs {
 		}
 		if(1 == $wp_query->post_count){
 			$categories = wp_get_object_terms( $wp_query->post->ID , 'wpsc_product_category' );
-			$query_data['category'] = $categories[0]->slug;
+			if(count($categories) > 0)
+				$query_data['category'] = $categories[0]->slug;
 		}		
 		if(isset($query_data['category'])) {
 			$term_data = get_term_by('slug', $query_data['category'], 'wpsc_product_category');

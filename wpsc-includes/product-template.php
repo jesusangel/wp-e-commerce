@@ -1043,7 +1043,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 	}
 	
 	//Overwrite height & width if custom dimensions exist for thumbnail_id
-	if ( 'grid' != $display && 'products-page' == $page) {
+	if ( 'grid' != $display && 'products-page' == $page && isset($thumbnail_id)) {
 		$custom_width = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_w', true );
 		$custom_height = get_post_meta( $thumbnail_id, '_wpsc_custom_thumb_h', true );
 		
@@ -1053,7 +1053,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 			$height = $custom_height;
 		
 		}
-	} elseif( $page == 'single' ) {
+	} elseif( $page == 'single' && isset($thumbnail_id)) {
 		$custom_thumbnail = get_post_meta( $thumbnail_id, '_wpsc_selected_image_size', true );
 		if(!$custom_thumbnail)
 			$custom_thumbnail = array($width, $height);
@@ -1066,7 +1066,7 @@ function wpsc_the_product_thumbnail( $width = null, $height = null, $product_id 
 	}
 	
 	// Return image link...
-	if ( $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) )
+	if ( isset($thumbnail_id) &&( $image_link = wpsc_product_image( $thumbnail_id, $width, $height ) ))
 		return $image_link;
 
 	// ... or false as if no image was found.
