@@ -1003,9 +1003,10 @@ function wpsc_all_products_on_page(){
 	if($wp_query->query_vars['post_type'] == 'wpsc-product'){
 		if (isset($wp_query->query_vars['post_count']) && 1 == $wp_query->query_vars['post_count'] && file_exists(TEMPLATEPATH.'/single-wpsc-product.php'))
 			include(TEMPLATEPATH. '/single-wpsc-product.php');
-		else
+		elseif(file_exists(TEMPLATEPATH.'/page.php')){
 			include(TEMPLATEPATH. '/page.php');
-		exit();
+			exit();
+		}
 	}
 	return;
 
