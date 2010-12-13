@@ -16,11 +16,7 @@
  * Load up the WPEC textdomain
  */
 function wpsc_core_load_textdomain() {
-	$locale = apply_filters( 'wpsc_locale', get_locale() );
-	$mofile = WPSC_FILE_PATH . "/wpsc-languages/wpsc-$locale.mo";
-
-	if ( file_exists( $mofile ) )
-		load_textdomain( 'wpsc', $mofile );
+	load_plugin_textdomain( 'wpsc', false, dirname( plugin_basename( __FILE__ ) ) . '/../wpsc-languages/' );
 }
 add_action( 'init', 'wpsc_core_load_textdomain' );
 
